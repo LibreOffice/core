@@ -87,9 +87,9 @@ public:
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
     virtual OUString                GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const = 0;
 
-    virtual Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) = 0;
-    virtual Rectangle               calcTableRect( bool _bOnScreen = true ) = 0;
-    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, bool _bIsHeader, bool _bOnScreen = true ) = 0;
+    virtual tools::Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) = 0;
+    virtual tools::Rectangle               calcTableRect( bool _bOnScreen = true ) = 0;
+    virtual tools::Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, bool _bIsHeader, bool _bOnScreen = true ) = 0;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
@@ -114,13 +114,13 @@ public:
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector ) = 0;
 
     // Window
-    virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const = 0;
+    virtual tools::Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const = 0;
     virtual void                    GrabFocus() = 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() = 0;
     virtual vcl::Window*                 GetAccessibleParentWindow() const = 0;
     virtual vcl::Window*                 GetWindowInstance() = 0;
 
-    virtual Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) = 0;
+    virtual tools::Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) = 0;
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) = 0;
 
 protected:

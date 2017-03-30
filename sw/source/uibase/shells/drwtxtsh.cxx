@@ -162,9 +162,9 @@ void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 
 void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 {
-    Rectangle aNullRect;
+    tools::Rectangle aNullRect;
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-    Rectangle aOutRect = pOLV->GetOutputArea();
+    tools::Rectangle aOutRect = pOLV->GetOutputArea();
 
     if (aNullRect != aOutRect)
     {

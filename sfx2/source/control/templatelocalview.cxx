@@ -250,7 +250,7 @@ void TemplateLocalView::createContextMenu(const bool bIsDefault)
     maSelectedItem->setSelection(true);
     maItemStateHdl.Call(maSelectedItem);
     pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));
-    pItemMenu->Execute(this, Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
     Invalidate();
 }
 
@@ -840,7 +840,7 @@ void TemplateLocalView::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
-        Rectangle aRect( OutputToScreenPixel( GetPosPixel() ), GetSizePixel() );
+        tools::Rectangle aRect( OutputToScreenPixel( GetPosPixel() ), GetSizePixel() );
         Help::ShowQuickHelp( this, aRect, GetQuickHelpText(),
                              QuickHelpFlags::CtrlText | QuickHelpFlags::TipStyleBalloon );
         return;
@@ -878,7 +878,7 @@ void TemplateLocalView::Command( const CommandEvent& rCEvt )
                     deselectItems();
                     pItem->setSelection(true);
                     maItemStateHdl.Call(pItem);
-                    Rectangle aRect = pItem->getDrawArea();
+                    tools::Rectangle aRect = pItem->getDrawArea();
                     maPosition = aRect.Center();
                     maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
                     maCreateContextMenuHdl.Call(pItem);

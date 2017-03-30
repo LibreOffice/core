@@ -401,13 +401,13 @@ public:
 
 class ImpTextframeHdl: public SdrHdl
 {
-    const Rectangle maRect;
+    const tools::Rectangle maRect;
 
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 
 public:
-    explicit ImpTextframeHdl(const Rectangle& rRect);
+    explicit ImpTextframeHdl(const tools::Rectangle& rRect);
 };
 
 

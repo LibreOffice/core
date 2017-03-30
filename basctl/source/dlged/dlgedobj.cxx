@@ -127,7 +127,7 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     DlgEdForm* pForm = nullptr;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
-    Rectangle aFormRect = pForm->GetSnapRect();
+    tools::Rectangle aFormRect = pForm->GetSnapRect();
     Size aFormPos( aFormRect.Left(), aFormRect.Top() );
 
     // convert 100th_mm to pixel
@@ -345,7 +345,7 @@ void DlgEdObj::SetRectFromProps()
             // set rectangle position and size
             Point aPoint( nXOut, nYOut );
             Size aSize( nWidthOut, nHeightOut );
-            SetSnapRect( Rectangle( aPoint, aSize ) );
+            SetSnapRect( tools::Rectangle( aPoint, aSize ) );
         }
     }
 }
@@ -353,7 +353,7 @@ void DlgEdObj::SetRectFromProps()
 void DlgEdObj::SetPropsFromRect()
 {
     // get control position and size from rectangle
-    Rectangle aRect_ = GetSnapRect();
+    tools::Rectangle aRect_ = GetSnapRect();
     sal_Int32 nXIn = aRect_.Left();
     sal_Int32 nYIn = aRect_.Top();
     sal_Int32 nWidthIn = aRect_.GetWidth();
@@ -1229,7 +1229,7 @@ void DlgEdForm::SetRectFromProps()
             // set rectangle position and size
             Point aPoint( nXOut, nYOut );
             Size aSize( nWidthOut, nHeightOut );
-            SetSnapRect( Rectangle( aPoint, aSize ) );
+            SetSnapRect( tools::Rectangle( aPoint, aSize ) );
         }
     }
 }
@@ -1237,7 +1237,7 @@ void DlgEdForm::SetRectFromProps()
 void DlgEdForm::SetPropsFromRect()
 {
     // get form position and size from rectangle
-    Rectangle aRect_ = GetSnapRect();
+    tools::Rectangle aRect_ = GetSnapRect();
     sal_Int32 nXIn = aRect_.Left();
     sal_Int32 nYIn = aRect_.Top();
     sal_Int32 nWidthIn = aRect_.GetWidth();

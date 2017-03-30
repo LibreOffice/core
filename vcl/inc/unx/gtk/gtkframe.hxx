@@ -204,11 +204,11 @@ class GtkSalFrame : public SalFrame
 
     Size                            m_aMaxSize;
     Size                            m_aMinSize;
-    Rectangle                       m_aRestorePosSize;
+    tools::Rectangle                       m_aRestorePosSize;
 
 #if GTK_CHECK_VERSION(3,0,0)
     OUString                        m_aTooltip;
-    Rectangle                       m_aHelpArea;
+    tools::Rectangle                       m_aHelpArea;
     long                            m_nWidthRequest;
     long                            m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
@@ -341,7 +341,7 @@ class GtkSalFrame : public SalFrame
 
     enum class SetType { RetainSize, Fullscreen, UnFullscreen };
 
-    void SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *pSize = nullptr );
+    void SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle *pSize = nullptr );
 
 public:
 #if GTK_CHECK_VERSION(3,0,0)
@@ -457,7 +457,7 @@ public:
     virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
     virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
-    virtual void                GetWorkArea( Rectangle& rRect ) override;
+    virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
     virtual bool                GetWindowState( SalFrameState* pState ) override;
@@ -527,9 +527,9 @@ public:
 
 #if GTK_CHECK_VERSION(3,0,0)
     virtual void                SetModal(bool bModal) override;
-    virtual bool                ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpArea) override;
-    virtual sal_uIntPtr         ShowPopover(const OUString& rHelpText, const Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
-    virtual bool                UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const Rectangle& rHelpArea) override;
+    virtual bool                ShowTooltip(const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
+    virtual sal_uIntPtr         ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
+    virtual bool                UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
     virtual bool                HidePopover(sal_uIntPtr nId) override;
 #endif
 

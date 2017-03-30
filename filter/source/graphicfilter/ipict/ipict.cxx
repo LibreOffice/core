@@ -150,7 +150,7 @@ private:
 
     sal_uLong     nOrigPos;          // Initial position in pPict.
     bool          IsVersion2;        // If it is a version 2 Pictfile.
-    Rectangle     aBoundingRect;     // Min/Max-Rectangle for the whole drawing.
+    tools::Rectangle     aBoundingRect;     // Min/Max-Rectangle for the whole drawing.
 
     Point         aPenPosition;
     Point         aTextPosition;
@@ -183,21 +183,21 @@ private:
 
     Color ReadRGBColor();
 
-    void ReadRectangle(Rectangle & rRect);
+    void ReadRectangle(tools::Rectangle & rRect);
 
     sal_uLong ReadPolygon(tools::Polygon & rPoly);
 
     sal_uLong ReadPixPattern(Pattern &pattern);
 
-    Rectangle aLastRect;
+    tools::Rectangle aLastRect;
     sal_uLong ReadAndDrawRect(PictDrawingMethod eMethod);
     sal_uLong ReadAndDrawSameRect(PictDrawingMethod eMethod);
 
-    Rectangle aLastRoundRect;
+    tools::Rectangle aLastRoundRect;
     sal_uLong ReadAndDrawRoundRect(PictDrawingMethod eMethod);
     sal_uLong ReadAndDrawSameRoundRect(PictDrawingMethod eMethod);
 
-    Rectangle aLastOval;
+    tools::Rectangle aLastOval;
     sal_uLong ReadAndDrawOval(PictDrawingMethod eMethod);
     sal_uLong ReadAndDrawSameOval(PictDrawingMethod eMethod);
 
@@ -205,7 +205,7 @@ private:
     sal_uLong ReadAndDrawPolygon(PictDrawingMethod eMethod);
     sal_uLong ReadAndDrawSamePolygon(PictDrawingMethod eMethod);
 
-    Rectangle aLastArcRect;
+    tools::Rectangle aLastArcRect;
     sal_uLong ReadAndDrawArc(PictDrawingMethod eMethod);
     sal_uLong ReadAndDrawSameArc(PictDrawingMethod eMethod);
 
@@ -224,7 +224,7 @@ private:
     sal_uLong ReadAndDrawText();
 
     sal_uLong ReadPixMapEtc(Bitmap & rBitmap, bool bBaseAddr, bool bColorTable,
-                        Rectangle * pSrcRect, Rectangle * pDestRect,
+                        tools::Rectangle * pSrcRect, tools::Rectangle * pDestRect,
                         bool bMode, bool bMaskRgn);
 
     void ReadHeader();
@@ -443,13 +443,13 @@ Color PictReader::ReadRGBColor()
 }
 
 
-void PictReader::ReadRectangle(Rectangle & rRect)
+void PictReader::ReadRectangle(tools::Rectangle & rRect)
 {
     Point aTopLeft, aBottomRight;
 
     aTopLeft=ReadPoint();
     aBottomRight=ReadPoint();
-    rRect=Rectangle(aTopLeft,aBottomRight);
+    rRect=tools::Rectangle(aTopLeft,aBottomRight);
 
     SAL_INFO("filter.pict", "ReadRectangle: " << rRect);
 }
@@ -721,8 +721,8 @@ namespace
     }
 }
 
-sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColorTable, Rectangle* pSrcRect,
-                                    Rectangle* pDestRect, bool bMode, bool bMaskRgn )
+sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColorTable, tools::Rectangle* pSrcRect,
+                                    tools::Rectangle* pDestRect, bool bMode, bool bMaskRgn )
 {
     Bitmap     aBitmap;
     sal_uInt16 nPackType(0), nPixelSize(0), nCmpCount(0), nCmpSize(0);
@@ -805,7 +805,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     {
         sal_uInt16  nTop, nLeft, nBottom, nRight;
         pPict->ReadUInt16( nTop ).ReadUInt16( nLeft ).ReadUInt16( nBottom ).ReadUInt16( nRight );
-        *pSrcRect = Rectangle( (sal_uLong)nLeft, (sal_uLong)nTop, (sal_uLong)nRight, (sal_uLong)nBottom );
+        *pSrcRect = tools::Rectangle( (sal_uLong)nLeft, (sal_uLong)nTop, (sal_uLong)nRight, (sal_uLong)nBottom );
         nDataSize += 8;
     }
 
@@ -815,7 +815,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         Point aTL, aBR;
         aTL = ReadPoint();
         aBR = ReadPoint();
-        *pDestRect = Rectangle( aTL, aBR );
+        *pDestRect = tools::Rectangle( aTL, aBR );
         nDataSize += 8;
     }
 
@@ -1220,7 +1220,7 @@ void PictReader::ReadHeader()
         else if (x2 < x1+8 || y2 < y1+8) // a little dubious
           actualConfid-=1;
         if (st >= 3 && actualConfid != 20) continue;
-        aBoundingRect=Rectangle( x1,y1, x2, y2 );
+        aBoundingRect=tools::Rectangle( x1,y1, x2, y2 );
 
         if (pPict->IsEof() || pPict->GetError()) continue;
         // read version
@@ -1272,7 +1272,7 @@ void PictReader::ReadHeader()
         fVRes /= 65536;
         aHRes /= fHRes;
         aVRes /= fVRes;
-        aBoundingRect=Rectangle( x1,y1, x2, y2 );
+        aBoundingRect=tools::Rectangle( x1,y1, x2, y2 );
         pPict->SeekRel( 4 ); // 4 bytes reserved
         return;
           }
@@ -1344,7 +1344,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x0001: { // Clip
-        Rectangle aRect;
+        tools::Rectangle aRect;
         pPict->ReadUInt16( nUSHORT );
         nDataSize=nUSHORT;
         ReadRectangle(aRect);
@@ -1806,7 +1806,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 
     case 0x0090: { // BitsRect
         Bitmap aBmp;
-        Rectangle aSrcRect, aDestRect;
+        tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
@@ -1814,7 +1814,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     }
     case 0x0091: { // BitsRgn
         Bitmap aBmp;
-        Rectangle aSrcRect, aDestRect;
+        tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
@@ -1831,7 +1831,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 
     case 0x0098: { // PackBitsRect
         Bitmap aBmp;
-        Rectangle aSrcRect, aDestRect;
+        tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
@@ -1839,7 +1839,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     }
     case 0x0099: { // PackBitsRgn
         Bitmap aBmp;
-        Rectangle aSrcRect, aDestRect;
+        tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
@@ -1847,7 +1847,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     }
     case 0x009a: { // DirectBitsRect
         Bitmap aBmp;
-        Rectangle aSrcRect, aDestRect;
+        tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
@@ -1855,7 +1855,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     }
     case 0x009b: { // DirectBitsRgn
         Bitmap aBmp;
-        Rectangle aSrcRect, aDestRect;
+        tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);

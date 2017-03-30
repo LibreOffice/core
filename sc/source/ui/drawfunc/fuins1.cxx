@@ -150,7 +150,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
-    Rectangle aRect ( aInsertPos, aLogicSize );
+    tools::Rectangle aRect ( aInsertPos, aLogicSize );
 
     SdrGrafObj* pObj = new SdrGrafObj( rGraphic, aRect );
 
@@ -211,7 +211,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
         if (!bRet) { return; }
     }
 
-    SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
+    SdrMediaObj* pObj = new SdrMediaObj( tools::Rectangle( aInsertPos, aSize ) );
 
     pObj->SetModel(rData.GetDocument()->GetDrawLayer()); // set before setURL
     pObj->setURL( realURL, ""/*TODO?*/ );

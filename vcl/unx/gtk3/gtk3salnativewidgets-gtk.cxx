@@ -152,7 +152,7 @@ enum class RenderType {
     Focus
 };
 
-static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
+static void NWCalcArrowRect( const tools::Rectangle& rButton, tools::Rectangle& rArrow )
 {
     // Size the arrow appropriately
     Size aSize( rButton.GetWidth()/2, rButton.GetHeight()/2 );
@@ -164,7 +164,7 @@ static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
         ) );
 }
 
-Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect)
+tools::Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, tools::Rectangle aAreaRect)
 {
     gint w, h;
     gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
@@ -180,11 +180,11 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
     gint buttonHeight = icon_size + padding.top + padding.bottom +
         border.top + border.bottom;
 
-    Rectangle buttonRect;
+    tools::Rectangle buttonRect;
     buttonRect.SetSize(Size(buttonWidth, buttonHeight));
     buttonRect.setY(aAreaRect.Top());
     buttonRect.Bottom() = buttonRect.Top() + aAreaRect.GetHeight();
-    Rectangle partRect(buttonRect);
+    tools::Rectangle partRect(buttonRect);
     if ( nPart == ControlPart::ButtonUp )
     {
         if (AllSettings::GetLayoutRTL())
@@ -239,9 +239,9 @@ namespace
     }
 }
 
-Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
+tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools::Rectangle aAreaRect )
 {
-    Rectangle  buttonRect;
+    tools::Rectangle  buttonRect;
 
     gboolean has_forward;
     gboolean has_forward2;
@@ -398,14 +398,14 @@ namespace
         parent_styles_context_set_state(context, flags);
     }
 
-    Rectangle render_common(GtkStyleContext *pContext, cairo_t *cr, const Rectangle &rIn, GtkStateFlags flags)
+    tools::Rectangle render_common(GtkStyleContext *pContext, cairo_t *cr, const tools::Rectangle &rIn, GtkStateFlags flags)
     {
         if (!pContext)
             return rIn;
 
         gtk_style_context_set_state(pContext, flags);
 
-        Rectangle aRect(rIn);
+        tools::Rectangle aRect(rIn);
         GtkBorder margin;
         gtk_style_context_get_margin(pContext, gtk_style_context_get_state(pContext), &margin);
 
@@ -434,7 +434,7 @@ namespace
 
 void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     cairo_t *cr,
-                                    const Rectangle& rControlRectangle,
+                                    const tools::Rectangle& rControlRectangle,
                                     ControlType nType,
                                     ControlPart nPart,
                                     const ImplControlValue& rValue )
@@ -443,17 +443,17 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     {
         assert(rValue.getType() == ControlType::Scrollbar);
         const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(rValue);
-        Rectangle        scrollbarRect;
+        tools::Rectangle        scrollbarRect;
         GtkStateFlags    stateFlags;
         GtkOrientation    scrollbarOrientation;
-        Rectangle        thumbRect = rScrollbarVal.maThumbRect;
-        Rectangle        button11BoundRect = rScrollbarVal.maButton1Rect;   // backward
-        Rectangle        button22BoundRect = rScrollbarVal.maButton2Rect;   // forward
-        Rectangle        button12BoundRect = rScrollbarVal.maButton1Rect;   // secondary forward
-        Rectangle        button21BoundRect = rScrollbarVal.maButton2Rect;   // secondary backward
+        tools::Rectangle        thumbRect = rScrollbarVal.maThumbRect;
+        tools::Rectangle        button11BoundRect = rScrollbarVal.maButton1Rect;   // backward
+        tools::Rectangle        button22BoundRect = rScrollbarVal.maButton2Rect;   // forward
+        tools::Rectangle        button12BoundRect = rScrollbarVal.maButton1Rect;   // secondary forward
+        tools::Rectangle        button21BoundRect = rScrollbarVal.maButton2Rect;   // secondary backward
         gdouble          arrow1Angle;                                        // backward
         gdouble          arrow2Angle;                                        // forward
-        Rectangle        arrowRect;
+        tools::Rectangle        arrowRect;
         gint            slider_width = 0;
         gint            stepper_size = 0;
 
@@ -708,18 +708,18 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
         // ----------------- TROUGH
         // trackrect matches that of ScrollBar::ImplCalc
-        Rectangle aTrackRect(Point(0, 0), scrollbarRect.GetSize());
+        tools::Rectangle aTrackRect(Point(0, 0), scrollbarRect.GetSize());
         if (nPart == ControlPart::DrawBackgroundHorz)
         {
-            Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonLeft, aTrackRect);
-            Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonRight, aTrackRect);
+            tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonLeft, aTrackRect);
+            tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonRight, aTrackRect);
             aTrackRect.Left() = aBtn1Rect.Right();
             aTrackRect.Right() = aBtn2Rect.Left();
         }
         else
         {
-            Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonUp, aTrackRect);
-            Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonDown, aTrackRect);
+            tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonUp, aTrackRect);
+            tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonDown, aTrackRect);
             aTrackRect.Top() = aBtn1Rect.Bottom() + 1;
             aTrackRect.Bottom() = aBtn2Rect.Top();
         }
@@ -763,17 +763,17 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     (void)nType;
     OSL_ASSERT( rValue.getType() == ControlType::Scrollbar );
     const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(rValue);
-    Rectangle        scrollbarRect;
+    tools::Rectangle        scrollbarRect;
     GtkStateFlags    stateFlags;
     GtkOrientation    scrollbarOrientation;
-    Rectangle        thumbRect = rScrollbarVal.maThumbRect;
-    Rectangle        button11BoundRect = rScrollbarVal.maButton1Rect;   // backward
-    Rectangle        button22BoundRect = rScrollbarVal.maButton2Rect;   // forward
-    Rectangle        button12BoundRect = rScrollbarVal.maButton1Rect;   // secondary forward
-    Rectangle        button21BoundRect = rScrollbarVal.maButton2Rect;   // secondary backward
+    tools::Rectangle        thumbRect = rScrollbarVal.maThumbRect;
+    tools::Rectangle        button11BoundRect = rScrollbarVal.maButton1Rect;   // backward
+    tools::Rectangle        button22BoundRect = rScrollbarVal.maButton2Rect;   // forward
+    tools::Rectangle        button12BoundRect = rScrollbarVal.maButton1Rect;   // secondary forward
+    tools::Rectangle        button21BoundRect = rScrollbarVal.maButton2Rect;   // secondary backward
     gdouble          arrow1Angle;                                        // backward
     gdouble          arrow2Angle;                                        // forward
-    Rectangle        arrowRect;
+    tools::Rectangle        arrowRect;
     gint            slider_width = 0;
     gint            stepper_size = 0;
     gint            trough_border = 0;
@@ -1055,14 +1055,14 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
                                          cairo_t *cr,
                                          ControlType nType,
                                          ControlPart nPart,
-                                         Rectangle aAreaRect,
+                                         tools::Rectangle aAreaRect,
                                          ControlState nState )
 {
     (void)nType;
     GtkBorder            padding, border;
 
     GtkStateFlags stateFlags = NWConvertVCLStateToGTKState(nState);
-    Rectangle buttonRect = NWGetSpinButtonRect( nPart, aAreaRect );
+    tools::Rectangle buttonRect = NWGetSpinButtonRect( nPart, aAreaRect );
 
     gtk_style_context_set_state(context, stateFlags);
 
@@ -1087,7 +1087,7 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
 
     iconWidth = gdk_pixbuf_get_width(pixbuf);
     iconHeight = gdk_pixbuf_get_height(pixbuf);
-    Rectangle arrowRect;
+    tools::Rectangle arrowRect;
     arrowRect.SetSize(Size(iconWidth, iconHeight));
     arrowRect.setX( buttonRect.Left() + (buttonRect.GetWidth() - arrowRect.GetWidth()) / 2 );
     arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 );
@@ -1102,7 +1102,7 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
 
 void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
                                      cairo_t *cr,
-                                     const Rectangle& rControlRectangle,
+                                     const tools::Rectangle& rControlRectangle,
                                      ControlType nType,
                                      ControlPart nPart,
                                      const ImplControlValue& rValue )
@@ -1146,13 +1146,13 @@ void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
 
 #define FALLBACK_ARROW_SIZE 11 * 0.85
 
-Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
+tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
                                                    ControlPart nPart,
-                                                   Rectangle aAreaRect )
+                                                   tools::Rectangle aAreaRect )
 {
     (void)nType;
     (void)nPart;
-    Rectangle    aButtonRect;
+    tools::Rectangle    aButtonRect;
 
     GtkBorder padding;
     gtk_style_context_get_padding( mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
@@ -1196,14 +1196,14 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
 }
 
 void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
-                                    const Rectangle& rControlRectangle,
+                                    const tools::Rectangle& rControlRectangle,
                                     ControlType nType,
                                     ControlPart nPart,
                                     const ImplControlValue& /*rValue*/ )
 {
-    Rectangle        areaRect;
-    Rectangle        buttonRect;
-    Rectangle        arrowRect;
+    tools::Rectangle        areaRect;
+    tools::Rectangle        buttonRect;
+    tools::Rectangle        arrowRect;
 
     // Find the overall bounding rect of the buttons's drawing area,
     // plus its actual draw rect excluding adornment
@@ -1211,7 +1211,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
 
     buttonRect = NWGetComboBoxButtonRect( nType, ControlPart::ButtonDown, areaRect );
 
-    Rectangle        aEditBoxRect( areaRect );
+    tools::Rectangle        aEditBoxRect( areaRect );
     aEditBoxRect.SetSize( Size( areaRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
     if (AllSettings::GetLayoutRTL())
         aEditBoxRect.SetPos( Point( areaRect.Left() + buttonRect.GetWidth(), areaRect.Top() ) );
@@ -1238,7 +1238,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                              buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
 
 
-    Rectangle aRect(Point(0, 0), Size(areaRect.GetWidth(), areaRect.GetHeight()));
+    tools::Rectangle aRect(Point(0, 0), Size(areaRect.GetWidth(), areaRect.GetHeight()));
 
     if (nType == ControlType::Combobox)
     {
@@ -1246,7 +1246,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
         {
             render_common(mpComboboxStyle, cr, aRect, flags);
             render_common(mpComboboxBoxStyle, cr, aRect, flags);
-            Rectangle aEntryRect(Point(aEditBoxRect.Left() - areaRect.Left(),
+            tools::Rectangle aEntryRect(Point(aEditBoxRect.Left() - areaRect.Left(),
                                  aEditBoxRect.Top() - areaRect.Top()),
                                  Size(aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight()));
 
@@ -1259,7 +1259,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
             gtk_style_context_set_junction_sides(mpComboboxEntryStyle, eJuncSides);
         }
 
-        Rectangle aButtonRect(Point(buttonRect.Left() - areaRect.Left(), buttonRect.Top() - areaRect.Top()),
+        tools::Rectangle aButtonRect(Point(buttonRect.Left() - areaRect.Left(), buttonRect.Top() - areaRect.Top()),
                               Size(buttonRect.GetWidth(), buttonRect.GetHeight()));
         GtkJunctionSides eJuncSides = gtk_style_context_get_junction_sides(mpComboboxButtonStyle);
         if (AllSettings::GetLayoutRTL())
@@ -2121,7 +2121,7 @@ namespace
 }
 
 void GtkSalGraphics::PaintCheckOrRadio(cairo_t *cr, GtkStyleContext *context,
-                                       const Rectangle& rControlRectangle, bool bIsCheck, bool bInMenu)
+                                       const tools::Rectangle& rControlRectangle, bool bIsCheck, bool bInMenu)
 {
     gint indicator_size;
     gtk_style_context_get_style(context, "indicator-size", &indicator_size, nullptr);
@@ -2141,13 +2141,13 @@ void GtkSalGraphics::PaintCheckOrRadio(cairo_t *cr, GtkStyleContext *context,
 }
 
 void GtkSalGraphics::PaintCheck(cairo_t *cr, GtkStyleContext *context,
-                                const Rectangle& rControlRectangle, bool bInMenu)
+                                const tools::Rectangle& rControlRectangle, bool bInMenu)
 {
     PaintCheckOrRadio(cr, context, rControlRectangle, true, bInMenu);
 }
 
 void GtkSalGraphics::PaintRadio(cairo_t *cr, GtkStyleContext *context,
-                                const Rectangle& rControlRectangle, bool bInMenu)
+                                const tools::Rectangle& rControlRectangle, bool bInMenu)
 {
     PaintCheckOrRadio(cr, context, rControlRectangle, false, bInMenu);
 }
@@ -2160,7 +2160,7 @@ static gfloat getArrowSize(GtkStyleContext* context)
     return arrow_size;
 }
 
-bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& rValue,
                                             const OUString& )
 {
@@ -2547,7 +2547,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             nX += initial_gap/2;
             nWidth -= initial_gap;
         }
-        Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
+        tools::Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
         render_common(mpNotebookHeaderTabsTabStyle, cr, aRect, flags);
         break;
     }
@@ -2568,15 +2568,15 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     return true;
 }
 
-Rectangle GetWidgetSize(const Rectangle& rControlRegion, GtkWidget* widget)
+tools::Rectangle GetWidgetSize(const tools::Rectangle& rControlRegion, GtkWidget* widget)
 {
     GtkRequisition aReq;
     gtk_widget_get_preferred_size(widget, nullptr, &aReq);
     long nHeight = (rControlRegion.GetHeight() > aReq.height) ? rControlRegion.GetHeight() : aReq.height;
-    return Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
+    return tools::Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
 }
 
-Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContentWidth, long nContentHeight, const Rectangle& rControlRegion)
+tools::Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContentWidth, long nContentHeight, const tools::Rectangle& rControlRegion)
 {
     GtkBorder border;
     gtk_style_context_get_border(pStyle, gtk_style_context_get_state(pStyle), &border);
@@ -2590,17 +2590,17 @@ Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContent
     gint nWidgetWidth = nContentWidth + padding.left + padding.right + border.left + border.right;
     nWidgetWidth = std::max<gint>(nWidgetWidth, rControlRegion.GetWidth());
 
-    Rectangle aEditRect(rControlRegion.TopLeft(), Size(nWidgetWidth, nWidgetHeight));
+    tools::Rectangle aEditRect(rControlRegion.TopLeft(), Size(nWidgetWidth, nWidgetHeight));
 
     return aEditRect;
 }
 
-bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
+bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState,
                                                 const ImplControlValue& rValue, const OUString&,
-                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
+                                                tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion )
 {
     /* TODO: all this functions needs improvements */
-    Rectangle aEditRect = rControlRegion;
+    tools::Rectangle aEditRect = rControlRegion;
     gint indicator_size, indicator_spacing, point;
 
     if(((nType == ControlType::Checkbox) || (nType == ControlType::Radiobutton)) &&
@@ -2624,7 +2624,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
 
         indicator_size += 2*indicator_spacing + border.left + padding.left + border.right + padding.right;
-        Rectangle aIndicatorRect( Point( 0,
+        tools::Rectangle aIndicatorRect( Point( 0,
                                          (rControlRegion.GetHeight()-indicator_size)/2),
                                   Size( indicator_size, indicator_size ) );
         rNativeContentRegion = aIndicatorRect;
@@ -2646,7 +2646,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                          nullptr );
 
             point = MAX(0, rControlRegion.GetHeight() - indicator_size);
-            aEditRect = Rectangle( Point( 0, point / 2),
+            aEditRect = tools::Rectangle( Point( 0, point / 2),
                                    Size( indicator_size, indicator_size ) );
         }
         else if (nPart == ControlPart::Separator)
@@ -2659,13 +2659,13 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                          "separator-height", &separator_height,
                                          nullptr);
 
-            aEditRect = Rectangle( aEditRect.TopLeft(),
+            aEditRect = tools::Rectangle( aEditRect.TopLeft(),
                                    Size( aEditRect.GetWidth(), wide_separators ? separator_height : 1 ) );
         }
         else if (nPart == ControlPart::SubmenuArrow)
         {
             gfloat arrow_size = getArrowSize(mpMenuItemArrowStyle);
-            aEditRect = Rectangle( aEditRect.TopLeft(),
+            aEditRect = tools::Rectangle( aEditRect.TopLeft(),
                                    Size( arrow_size, arrow_size ) );
         }
     }
@@ -2687,7 +2687,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
               ((nPart==ControlPart::ButtonUp) || (nPart==ControlPart::ButtonDown) ||
                (nPart==ControlPart::SubEdit)) )
     {
-        Rectangle aControlRegion(GetWidgetSize(rControlRegion, gSpinBox));
+        tools::Rectangle aControlRegion(GetWidgetSize(rControlRegion, gSpinBox));
         aEditRect = NWGetSpinButtonRect(nPart, aControlRegion);
     }
     else if ( (nType==ControlType::Combobox) &&
@@ -2719,7 +2719,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     else if (nType == ControlType::TabItem && nPart == ControlPart::Entire)
     {
         const TabitemValue& rTabitemValue = static_cast<const TabitemValue&>(rValue);
-        const Rectangle& rTabitemRect = rTabitemValue.getContentRect();
+        const tools::Rectangle& rTabitemRect = rTabitemValue.getContentRect();
 
         aEditRect = AdjustRectForTextBordersPadding(mpNotebookHeaderTabsTabStyle, rTabitemRect.GetWidth(),
                                                     rTabitemRect.GetHeight(), rControlRegion);
@@ -2742,7 +2742,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             int y2 = aEditRect.Bottom();
 
             rNativeBoundingRegion = aEditRect;
-            rNativeContentRegion = Rectangle(x1 + (padding.left + border.left),
+            rNativeContentRegion = tools::Rectangle(x1 + (padding.left + border.left),
                                              y1 + (padding.top + border.top),
                                              x2 - (padding.right + border.right),
                                              y2 - (padding.bottom + border.bottom));

@@ -163,7 +163,7 @@ void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
     if ( bDrag && rMEvt.IsLeft() )
     {
         // released mouse over character map
-        if ( Rectangle(Point(), GetOutputSize()).IsInside(rMEvt.GetPosPixel()))
+        if ( tools::Rectangle(Point(), GetOutputSize()).IsInside(rMEvt.GetPosPixel()))
             aSelectHdl.Call( this );
         ReleaseMouse();
         bDrag = false;
@@ -317,7 +317,7 @@ void SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
 }
 
 
-void SvxShowCharSet::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void SvxShowCharSet::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     InitSettings(rRenderContext);
     RecalculateFont(rRenderContext);
@@ -337,7 +337,7 @@ void SvxShowCharSet::DeSelect()
 }
 
 // stretch a grid rectangle if its at the edge to fill unused space
-Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const Size &rOutputSize)
+tools::Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const Size &rOutputSize)
 {
     long x = rPointUL.X() - 1;
     long y = rPointUL.Y() - 1;
@@ -364,7 +364,7 @@ Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const Size &rO
     if (nXDistFromBottom <= 1)
         aGridSize.Height() += m_nYGap + nXDistFromBottom;
 
-    return Rectangle(aPointUL, aGridSize);
+    return tools::Rectangle(aPointUL, aGridSize);
 }
 
 void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2)
@@ -396,7 +396,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
     Color aShadowColor(rStyleSettings.GetShadowColor());
 
     int nTextHeight = rRenderContext.GetTextHeight();
-    Rectangle aBoundRect;
+    tools::Rectangle aBoundRect;
     for (i = n1; i <= n2; ++i)
     {
         Point pix = MapIndexToPixel(i);
@@ -736,7 +736,7 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
         buf.appendUtf32( mxFontCharMap->GetCharFromIndex( _nPos ) );
         aFind->second->maText = buf.makeStringAndClear();
         Point pix = MapIndexToPixel( _nPos );
-        aFind->second->maRect = Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
+        aFind->second->maRect = tools::Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
     }
 
     return aFind->second.get();

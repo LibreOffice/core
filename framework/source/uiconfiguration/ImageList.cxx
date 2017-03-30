@@ -86,10 +86,10 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     else
         aResult = BitmapEx( aPixels );
 
-    Rectangle aSrcRect( Point( 0, 0 ), mpImplData->maImageSize );
+    tools::Rectangle aSrcRect( Point( 0, 0 ), mpImplData->maImageSize );
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
     {
-        Rectangle aDestRect( Point( nIdx * mpImplData->maImageSize.Width(), 0 ),
+        tools::Rectangle aDestRect( Point( nIdx * mpImplData->maImageSize.Width(), 0 ),
                              mpImplData->maImageSize );
         ImageAryData *pData = mpImplData->maImages[ nIdx ];
         aResult.CopyPixel( aDestRect, aSrcRect, &pData->maBitmapEx);

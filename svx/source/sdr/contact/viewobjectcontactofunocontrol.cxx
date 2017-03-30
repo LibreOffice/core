@@ -193,8 +193,8 @@ namespace sdr { namespace contact {
 
         void     addWindowListener( const Reference< XWindowListener >& _l ) const    { m_xControlWindow->addWindowListener( _l );    }
         void     removeWindowListener( const Reference< XWindowListener >& _l ) const { m_xControlWindow->removeWindowListener( _l ); }
-               void     setPosSize( const Rectangle& _rPosSize ) const;
-               Rectangle
+               void     setPosSize( const tools::Rectangle& _rPosSize ) const;
+               tools::Rectangle
                         getPosSize() const;
                void     setZoom( const ::basegfx::B2DVector& _rScale ) const;
                ::basegfx::B2DVector
@@ -217,13 +217,13 @@ namespace sdr { namespace contact {
         return _rControl == Reference< XInterface >( _rxCompare, UNO_QUERY );
     }
 
-    void ControlHolder::setPosSize( const Rectangle& _rPosSize ) const
+    void ControlHolder::setPosSize( const tools::Rectangle& _rPosSize ) const
     {
         // no check whether we're valid, this is the responsibility of the caller
 
         // don't call setPosSize when pos/size did not change
         // #i104181# / 2009-08-18 / frank.schoenheit@sun.com
-        ::Rectangle aCurrentRect( getPosSize() );
+        ::tools::Rectangle aCurrentRect( getPosSize() );
         if ( aCurrentRect != _rPosSize )
         {
             m_xControlWindow->setPosSize(
@@ -234,7 +234,7 @@ namespace sdr { namespace contact {
     }
 
 
-    ::Rectangle ControlHolder::getPosSize() const
+    ::tools::Rectangle ControlHolder::getPosSize() const
     {
         // no check whether we're valid, this is the responsibility of the caller
         return VCLUnoHelper::ConvertToVCLRect( m_xControlWindow->getPosSize() );
@@ -283,7 +283,7 @@ namespace sdr { namespace contact {
 
     /** positions a control, and sets its zoom mode, using a given transformation and output device
      */
-    void adjustControlGeometry_throw( const ControlHolder& _rControl, const Rectangle& _rLogicBoundingRect,
+    void adjustControlGeometry_throw( const ControlHolder& _rControl, const tools::Rectangle& _rLogicBoundingRect,
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
         OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
@@ -306,7 +306,7 @@ namespace sdr { namespace contact {
         ::basegfx::B2DPoint aBottomRight( _rLogicBoundingRect.Right(), _rLogicBoundingRect.Bottom() );
         aBottomRight *= _rViewTransformation;
 
-        const Rectangle aPaintRectPixel( (long)aTopLeft.getX(), (long)aTopLeft.getY(), (long)aBottomRight.getX(), (long)aBottomRight.getY() );
+        const tools::Rectangle aPaintRectPixel( (long)aTopLeft.getX(), (long)aTopLeft.getY(), (long)aBottomRight.getX(), (long)aBottomRight.getY() );
         _rControl.setPosSize( aPaintRectPixel );
 
         // determine the scale from the current view transformation, and the normalization matrix
@@ -927,7 +927,7 @@ namespace sdr { namespace contact {
             if ( getUnoObject( pUnoObject ) )
             {
                 Point aGridOffset = pUnoObject->GetGridOffset();
-                Rectangle aRect( pUnoObject->GetLogicRect() );
+                tools::Rectangle aRect( pUnoObject->GetLogicRect() );
                 // Hack for calc, transform position of object according
                 // to current zoom so as objects relative position to grid
                 // appears stable
@@ -1097,7 +1097,7 @@ namespace sdr { namespace contact {
             // knit the model and the control
             _out_rControl.setModel( xControlModel );
             Point aGridOffset =  _rUnoObject.GetGridOffset();
-            Rectangle aRect( _rUnoObject.GetLogicRect() );
+            tools::Rectangle aRect( _rUnoObject.GetLogicRect() );
             // Hack for calc, transform position of object according
             // to current zoom so as objects relative position to grid
             // appears stable
@@ -1500,7 +1500,7 @@ namespace sdr { namespace contact {
         // Do use model data directly to create the correct geometry. Do NOT
         // use getBoundRect()/getSnapRect() here; these will use the sequence of
         // primitives themselves in the long run.
-        Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
+        tools::Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
         Point aGridOffset = _rVOC.GetSdrUnoObj().GetGridOffset();
         // Hack for calc, transform position of object according
         // to current zoom so as objects relative position to grid

@@ -55,7 +55,7 @@ protected:
     long                        nStartAngle;
     long                        nEndAngle;
 private:
-     SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
+     SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const;
     SVX_DLLPRIVATE static void ImpSetCreateParams(SdrDragStat& rStat);
     SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // copy values from pool
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // copy values into pool
@@ -69,25 +69,25 @@ protected:
 
 public:
     SdrCircObj(SdrObjKind eNewKind); // Circ, CArc, Sect or CCut
-    SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect);
+    SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect);
 
     // 0=0.00Deg=3h 9000=90.00Deg=12h 18000=180.00Deg=9h 27000=270.00Deg=6h
     // The circle is build up from StartAngle to EndWink anti-clockwise.
     // If nNewStartAngle==nNewEndWink, then arc has an angle of 0 degrees.
     // If nNewStartAngle+36000==nNewEndWink, then the arc has angle of 360 degrees.
-    SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewStartAngle, long nNewEndWink);
+    SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect, long nNewStartAngle, long nNewEndWink);
     virtual ~SdrCircObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const override;
+    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
     virtual SdrCircObj* Clone() const override;
     virtual void RecalcSnapRect() override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
     virtual sal_uInt32 GetSnapPointCount() const override;

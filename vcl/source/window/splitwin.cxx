@@ -412,7 +412,7 @@ static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, const Point& rPos,
         {
             Point       aPoint( rItems[i]->mnLeft, rItems[i]->mnTop );
             Size        aSize( rItems[i]->mnWidth, rItems[i]->mnHeight );
-            Rectangle   aRect( aPoint, aSize );
+            tools::Rectangle   aRect( aPoint, aSize );
             if ( bRows )
             {
                 if ( bDown )
@@ -823,7 +823,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
                      (rItems[i]->mnOldWidth     != rItems[i]->mnWidth)     ||
                      (rItems[i]->mnOldHeight    != rItems[i]->mnHeight) )
                 {
-                    Rectangle aRect;
+                    tools::Rectangle aRect;
 
                     // invalidate old rectangle
                     if ( bRows )
@@ -941,7 +941,7 @@ static void ImplCalcLogSize( std::vector< ImplSplitItem* > rItems, size_t nItems
     }
 }
 
-void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, const Rectangle& rRect,
+void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
                                const Wallpaper* pWall, const Bitmap* pBitmap)
 {
     if (pBitmap)
@@ -980,7 +980,7 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
     {
         if (pSet->mpBitmap)
         {
-            Rectangle aRect(mnLeftBorder, mnTopBorder,
+            tools::Rectangle aRect(mnLeftBorder, mnTopBorder,
                             mnDX - mnRightBorder - 1,
                             mnDY - mnBottomBorder - 1);
 
@@ -997,7 +997,7 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
             {
                 Point aPoint(rItems[i]->mnLeft, rItems[i]->mnTop);
                 Size aSize(rItems[i]->mnWidth, rItems[i]->mnHeight);
-                Rectangle aRect(aPoint, aSize);
+                tools::Rectangle aRect(aPoint, aSize);
                 ImplDrawBack(rRenderContext, aRect, pSet->mpWallpaper, pSet->mpBitmap);
             }
         }
@@ -1246,7 +1246,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
 
 void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     if (mnSplitTest & SPLIT_HORZ)
     {
@@ -1607,7 +1607,7 @@ void SplitWindow::ImplSplitMousePos( Point& rMousePos )
     }
 }
 
-void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) const
+void SplitWindow::ImplGetButtonRect( tools::Rectangle& rRect, long nEx, bool bTest ) const
 {
     long nSplitSize = mpMainSet->mnSplitSize-1;
     if (mbFadeOut || mbFadeIn)
@@ -1675,9 +1675,9 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) co
     }
 }
 
-void SplitWindow::ImplGetFadeInRect( Rectangle& rRect, bool bTest ) const
+void SplitWindow::ImplGetFadeInRect( tools::Rectangle& rRect, bool bTest ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     if ( mbFadeIn )
         ImplGetButtonRect( aRect, 0, bTest );
@@ -1685,9 +1685,9 @@ void SplitWindow::ImplGetFadeInRect( Rectangle& rRect, bool bTest ) const
     rRect = aRect;
 }
 
-void SplitWindow::ImplGetFadeOutRect( Rectangle& rRect, bool ) const
+void SplitWindow::ImplGetFadeOutRect( tools::Rectangle& rRect, bool ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     if ( mbFadeOut )
         ImplGetButtonRect( aRect, 0, false );
@@ -1695,7 +1695,7 @@ void SplitWindow::ImplGetFadeOutRect( Rectangle& rRect, bool ) const
     rRect = aRect;
 }
 
-void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bHorizontal, bool bLeft)
+void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bHorizontal, bool bLeft)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1780,7 +1780,7 @@ void SplitWindow::ImplDrawFadeIn(vcl::RenderContext& rRenderContext)
 {
     if (mbFadeIn)
     {
-        Rectangle aTempRect;
+        tools::Rectangle aTempRect;
         ImplGetFadeInRect(aTempRect);
 
         bool bLeft = true;
@@ -1805,7 +1805,7 @@ void SplitWindow::ImplDrawFadeOut(vcl::RenderContext& rRenderContext)
 {
     if (mbFadeOut)
     {
-        Rectangle aTempRect;
+        tools::Rectangle aTempRect;
         ImplGetFadeOutRect(aTempRect);
 
         bool bLeft = true;
@@ -2045,7 +2045,7 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     Point           aMousePosPixel = rMEvt.GetPosPixel();
-    Rectangle       aTestRect;
+    tools::Rectangle       aTestRect;
 
     mbFadeNoButtonMode = false;
 
@@ -2089,8 +2089,8 @@ void SplitWindow::MouseMove( const MouseEvent& rMEvt )
         sal_uInt16          nTempSplitPos;
         sal_uInt16          nSplitTest = ImplTestSplit( this, aPos, nTemp, &pTempSplitSet, nTempSplitPos );
         PointerStyle    eStyle = PointerStyle::Arrow;
-        Rectangle       aFadeInRect;
-        Rectangle       aFadeOutRect;
+        tools::Rectangle       aFadeInRect;
+        tools::Rectangle       aFadeOutRect;
 
         ImplGetFadeInRect( aFadeInRect );
         ImplGetFadeOutRect( aFadeOutRect );
@@ -2131,7 +2131,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         }
         else
         {
-            Rectangle aTestRect;
+            tools::Rectangle aTestRect;
             ImplGetFadeInRect( aTestRect, true );
             bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
             if ( bNewPressed != mbFadeInPressed )
@@ -2157,7 +2157,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         }
         else
         {
-            Rectangle aTestRect;
+            tools::Rectangle aTestRect;
             ImplGetFadeOutRect( aTestRect, true );
             bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
             if ( !bNewPressed )
@@ -2270,8 +2270,8 @@ bool SplitWindow::PreNotify( NotifyEvent& rNEvt )
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
             // trigger redraw if mouse over state has changed
-            Rectangle aFadeInRect;
-            Rectangle aFadeOutRect;
+            tools::Rectangle aFadeInRect;
+            tools::Rectangle aFadeOutRect;
             ImplGetFadeInRect( aFadeInRect );
             ImplGetFadeOutRect( aFadeOutRect );
 
@@ -2290,7 +2290,7 @@ bool SplitWindow::PreNotify( NotifyEvent& rNEvt )
     return Window::PreNotify( rNEvt );
 }
 
-void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     if (mnWinStyle & WB_BORDER)
         ImplDrawBorder(rRenderContext);
@@ -2326,7 +2326,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
     if ( rHEvt.GetMode() & (HelpEventMode::BALLOON | HelpEventMode::QUICK) && !rHEvt.KeyboardActivated() )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-        Rectangle   aHelpRect;
+        tools::Rectangle   aHelpRect;
         sal_uInt16      nHelpResId = 0;
 
         ImplGetFadeInRect( aHelpRect, true );

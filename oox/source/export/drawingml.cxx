@@ -1154,7 +1154,7 @@ void DrawingML::WriteStretch( const css::uno::Reference< css::beans::XPropertySe
     mpFS->endElementNS( XML_a, XML_stretch );
 }
 
-void DrawingML::WriteTransformation( const Rectangle& rRect,
+void DrawingML::WriteTransformation( const tools::Rectangle& rRect,
         sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, sal_Int32 nRotation )
 {
     mpFS->startElementNS( nXmlNamespace, XML_xfrm,
@@ -1214,7 +1214,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
             xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
     }
-    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
+    WriteTransformation( tools::Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
@@ -2630,7 +2630,7 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 
     mpFS->startElementNS( XML_a, XML_pathLst, FSEND );
 
-    const Rectangle aRect( rPolyPolygon.GetBoundRect() );
+    const tools::Rectangle aRect( rPolyPolygon.GetBoundRect() );
 
     // Put all polygons of rPolyPolygon in the same path elemnt
     // to subtract the overlapped areas.

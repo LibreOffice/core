@@ -64,7 +64,7 @@ class SfxInfoBarWindow : public vcl::Window
         virtual void dispose() override;
 
         const OUString& getId() const { return m_sId; }
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
         virtual void Resize( ) override;
         basegfx::BColor                m_aBackgroundColor;
         basegfx::BColor                m_aForegroundColor;

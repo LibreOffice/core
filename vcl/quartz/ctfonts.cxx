@@ -152,7 +152,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
-bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect ) const
+bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect ) const
 {
     CGGlyph nCGGlyph = rGlyph.maGlyphId;
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
@@ -170,7 +170,7 @@ bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect 
     long yMin = floor(aCGRect.origin.y);
     long xMax = ceil(aCGRect.origin.x + aCGRect.size.width);
     long yMax = ceil(aCGRect.origin.y + aCGRect.size.height);
-    rRect = Rectangle(xMin, -yMax, xMax, -yMin);
+    rRect = tools::Rectangle(xMin, -yMax, xMax, -yMin);
     return true;
 }
 

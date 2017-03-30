@@ -144,7 +144,7 @@ namespace dbaui
                                 ,OTableFieldDescRef& aInfo);
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect) override;
+        virtual void resizeDocumentView(tools::Rectangle& rRect) override;
         DECL_LINK( SplitHdl, Splitter*, void );
 
     private:

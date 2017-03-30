@@ -55,7 +55,7 @@ FramePainter::~FramePainter()
 
 void FramePainter::PaintFrame (
     OutputDevice& rDevice,
-    const Rectangle& rBox) const
+    const ::tools::Rectangle& rBox) const
 {
     if ( ! mbIsValid)
         return;
@@ -214,7 +214,7 @@ void FramePainter::OffsetBitmap::PaintSide (
 
 void FramePainter::OffsetBitmap::PaintCenter (
     OutputDevice& rDevice,
-    const Rectangle& rBox) const
+    const ::tools::Rectangle& rBox) const
 {
     const Size aBitmapSize (maBitmap.GetSizePixel());
     for (long nY=rBox.Top(); nY<=rBox.Bottom(); nY+=aBitmapSize.Height())

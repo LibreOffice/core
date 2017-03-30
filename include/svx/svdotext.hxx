@@ -90,7 +90,7 @@ namespace sdr { namespace table {
 class SdrTextObjGeoData : public SdrObjGeoData
 {
 public:
-    Rectangle                   aRect;
+    tools::Rectangle                   aRect;
     GeoStat                     aGeo;
 };
 
@@ -184,7 +184,7 @@ protected:
     // The "aRect" is also the rect of RectObj and CircObj.
     // When bTextFrame=sal_True the text will be formatted into this rect
     // When bTextFrame=sal_False the text will be centered around its middle
-    Rectangle maRect;
+    tools::Rectangle maRect;
 
     // The GeoStat contains the rotation and shear angles
     GeoStat                     aGeo;
@@ -266,9 +266,9 @@ private:
     // #101029#: Extracted from Paint()
     SVX_DLLPRIVATE void ImpSetupDrawOutlinerForPaint( bool bContourFrame,
                                        SdrOutliner&     rOutliner,
-                                       Rectangle&       rTextRect,
-                                       Rectangle&       rAnchorRect,
-                                       Rectangle&       rPaintRect,
+                                       tools::Rectangle&       rTextRect,
+                                       tools::Rectangle&       rAnchorRect,
+                                       tools::Rectangle&       rPaintRect,
                                        Fraction&        aFitXKorreg ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner ) const;
     static void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting );
@@ -290,14 +290,14 @@ protected:
     SdrObject* ImpConvertAddText(SdrObject* pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
     static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg);
-    static void ImpJustifyRect(Rectangle& rRect);
+    static void ImpJustifyRect(tools::Rectangle& rRect);
     void ImpCheckShear();
-    Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
+    tools::Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
     void ImpSetTextEditParams() const;
     void SetTextSizeDirty() { bTextSizeDirty=true; }
 
     // rAnchorRect ist InOut-Parameter!
-    void ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, bool bLineWidth ) const;
+    void ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle& rAnchorRect, bool bLineWidth ) const;
 
     virtual SdrObjGeoData* NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
@@ -311,11 +311,11 @@ protected:
 
     // constructors for labeled graphical objects
     SdrTextObj();
-    SdrTextObj(const Rectangle& rNewRect);
+    SdrTextObj(const tools::Rectangle& rNewRect);
 
     // constructors for text frames
     SdrTextObj(SdrObjKind eNewTextKind);
-    SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect);
+    SdrTextObj(SdrObjKind eNewTextKind, const tools::Rectangle& rNewRect);
 
     virtual ~SdrTextObj() override;
 
@@ -340,7 +340,7 @@ public:
     bool ReloadLinkedText(bool bForceLoad);
     bool LoadText(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
 
-    virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
+    virtual bool AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual bool AdjustTextFrameWidthAndHeight();
     bool IsTextFrame() const { return bTextFrame; }
@@ -395,9 +395,9 @@ public:
 
     // Simultaneously sets the text into the Outliner (possibly
     // the one of the EditOutliner) and sets the PaperSize.
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-        Rectangle* pAnchorRect, bool bLineWidth = true ) const;
-    virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
+        tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const;
+    virtual void TakeTextAnchorRect(::tools::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return aGeo; }
 
     // get corner radius
@@ -410,7 +410,7 @@ public:
     long GetMaxTextFrameWidth() const;
 
     SdrFitToSizeType GetFitToSize() const;
-    const Rectangle &GetGeoRect() const;
+    const tools::Rectangle &GetGeoRect() const;
 
     // check if it's a TextFontwork
     virtual bool IsFontwork() const;
@@ -444,7 +444,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
 
     // needed to determine text anchor area
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
+    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
     virtual SdrTextObj* Clone() const override;
@@ -452,9 +452,9 @@ public:
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual basegfx::B2DPolyPolygon TakeContour() const override;
     virtual void RecalcSnapRect() override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
-    virtual const Rectangle& GetLogicRect() const override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual const tools::Rectangle& GetLogicRect() const override;
     virtual long GetRotateAngle() const override;
     virtual long GetShearAngle(bool bVertical = false) const override;
 
@@ -485,7 +485,7 @@ public:
 
     virtual bool HasTextEdit() const override;
     virtual bool BegTextEdit(SdrOutliner& rOutl) override;
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
+    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const;
     virtual void EndTextEdit(SdrOutliner& rOutl) override;
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
 
@@ -520,7 +520,7 @@ public:
         The region to paint the outliner content into. This is useful
         to e.g. determine the top, left position of text in shapes.
      */
-    void SetupOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const;
+    void SetupOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const;
 
     /** Update given Outliner equivalently to SdrTextObj::Paint()
 
@@ -534,7 +534,7 @@ public:
         The region to paint the outliner content into. This is useful
         to e.g. determine the top, left position of text in shapes.
      */
-    void UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const;
+    void UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const;
     void ForceOutlinerParaObject();
     virtual bool IsVerticalWriting() const;
     virtual void SetVerticalWriting(bool bVertical);
@@ -568,7 +568,7 @@ public:
 
     // Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a
     // painting rectangle. Rotation is taken from the object.
-    GDIMetaFile* GetTextScrollMetaFileAndRectangle(Rectangle& rScrollRectangle, Rectangle& rPaintRectangle);
+    GDIMetaFile* GetTextScrollMetaFileAndRectangle(tools::Rectangle& rScrollRectangle, tools::Rectangle& rPaintRectangle);
 
     // Access to TextAnimationAllowed flag
     void SetTextAnimationAllowed(bool bNew);

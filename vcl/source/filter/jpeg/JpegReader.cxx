@@ -249,7 +249,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
             {
                 Bitmap::ScopedWriteAccess pAccess(maIncompleteAlpha);
                 pAccess->SetFillColor(Color(COL_BLACK));
-                pAccess->FillRect(Rectangle(Point(0, mnLastLines), Size(pAccess->Width(), nNewLines)));
+                pAccess->FillRect(tools::Rectangle(Point(0, mnLastLines), Size(pAccess->Width(), nNewLines)));
             }
 
             aGraphic = BitmapEx(maBitmap, maIncompleteAlpha);

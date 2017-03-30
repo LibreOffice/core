@@ -1754,7 +1754,7 @@ bool SwFEShell::ImpEndCreate()
 
     Imp()->GetDrawView()->UnmarkAll();
 
-    const Rectangle &rBound = rSdrObj.GetSnapRect();
+    const tools::Rectangle &rBound = rSdrObj.GetSnapRect();
     Point aPt( rBound.TopRight() );
 
     // alien identifier should end up on defaults
@@ -1783,7 +1783,7 @@ bool SwFEShell::ImpEndCreate()
 
             // The crsr should not be too far away
             bCharBound = true;
-            Rectangle aRect( aTmp.SVRect() );
+            tools::Rectangle aRect( aTmp.SVRect() );
             aRect.Left()  -= MM50*2;
             aRect.Top()   -= MM50*2;
             aRect.Right() += MM50*2;
@@ -2240,7 +2240,7 @@ void SwFEShell::DelSelectedObj()
 // For the statusline to request the current conditions
 Size SwFEShell::GetObjSize() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( Imp()->HasDrawView() )
     {
         if ( Imp()->GetDrawView()->IsAction() )
@@ -2256,7 +2256,7 @@ Point SwFEShell::GetAnchorObjDiff() const
     const SdrView *pView = Imp()->GetDrawView();
     OSL_ENSURE( pView, "GetAnchorObjDiff without DrawView?" );
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( Imp()->GetDrawView()->IsAction() )
         Imp()->GetDrawView()->TakeActionRect( aRect );
     else
@@ -2675,7 +2675,7 @@ void SwFEShell::CheckUnboundObjects()
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         if ( !GetUserCall(pObj) )
         {
-            const Rectangle &rBound = pObj->GetSnapRect();
+            const tools::Rectangle &rBound = pObj->GetSnapRect();
             const Point aPt( rBound.TopLeft() );
             const SwFrame *pPage = GetLayout()->Lower();
             const SwFrame *pLast = pPage;
@@ -2891,7 +2891,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
     return 0;
 }
 
- void SwFEShell::CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect,
+ void SwFEShell::CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const tools::Rectangle& rRect,
                 sal_uInt16 nSlotId)
 {
     SdrView* pDrawView = GetDrawView();
@@ -2902,19 +2902,19 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
 
     if(pObj)
     {
-        Rectangle aRect(rRect);
+        tools::Rectangle aRect(rRect);
         if(OBJ_CARC == eSdrObjectKind || OBJ_CCUT == eSdrObjectKind)
         {
             // force quadratic
             if(aRect.GetWidth() > aRect.GetHeight())
             {
-                aRect = Rectangle(
+                aRect = tools::Rectangle(
                     Point(aRect.Left() + ((aRect.GetWidth() - aRect.GetHeight()) / 2), aRect.Top()),
                     Size(aRect.GetHeight(), aRect.GetHeight()));
             }
             else
             {
-                aRect = Rectangle(
+                aRect = tools::Rectangle(
                     Point(aRect.Left(), aRect.Top() + ((aRect.GetHeight() - aRect.GetWidth()) / 2)),
                     Size(aRect.GetWidth(), aRect.GetWidth()));
             }

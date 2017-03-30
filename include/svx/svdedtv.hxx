@@ -153,8 +153,8 @@ protected:
     static bool ImpCanDismantle(const SdrObject* pObj, bool bMakeLines);
     void ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, size_t& rPos, SdrPageView* pPV, bool bMakeLines);
     static void ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad, SdrCrookMode eMode,
-        bool bVertical, bool bNoContortion, bool bRotate, const Rectangle& rMarkRect);
-    static void ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
+        bool bVertical, bool bNoContortion, bool bRotate, const tools::Rectangle& rMarkRect);
+    static void ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
     bool ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const;
     void ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID);
 
@@ -206,7 +206,7 @@ public:
     // Set a logical enclosing rectangle for all marked objects.
     // It is not guaranteed if this succeeds, as a horizontal
     // line has always a height of 0
-    void SetMarkedObjRect(const Rectangle& rRect);
+    void SetMarkedObjRect(const tools::Rectangle& rRect);
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bCopy, const bool bWdh, const bool bHgt);
@@ -218,11 +218,11 @@ public:
     long GetMarkedObjShear() const;
     void ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false);
     void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bCopy=false);
-    void DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy=false);
+    void DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy=false);
 
     // copy marked objects and mark them instead of the old ones
     void CopyMarkedObj();
-    void SetAllMarkedRect(const Rectangle& rRect) { SetMarkedObjRect(rRect); }
+    void SetAllMarkedRect(const tools::Rectangle& rRect) { SetMarkedObjRect(rRect); }
     void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj(rSiz,bCopy); }
     void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact) { ResizeMarkedObj(rRef,xFact,yFact); }
     void RotateAllMarked(const Point& rRef, long nAngle) { RotateMarkedObj(rRef,nAngle); }

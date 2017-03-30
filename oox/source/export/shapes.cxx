@@ -437,7 +437,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
 
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
-    Rectangle aRect( aPolyPolygon.GetBoundRect() );
+    tools::Rectangle aRect( aPolyPolygon.GetBoundRect() );
 
 #if OSL_DEBUG_LEVEL > 0
     awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
@@ -1190,7 +1190,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     }
     EscherConnectorListEntry aConnectorEntry( xShape, aStartPoint, rXShapeA, aEndPoint, rXShapeB );
 
-    Rectangle aRect( Point( aStartPoint.X, aStartPoint.Y ), Point( aEndPoint.X, aEndPoint.Y ) );
+    tools::Rectangle aRect( Point( aStartPoint.X, aStartPoint.Y ), Point( aEndPoint.X, aEndPoint.Y ) );
     if( aRect.getWidth() < 0 ) {
         bFlipH = true;
         aRect.setX( aEndPoint.X );

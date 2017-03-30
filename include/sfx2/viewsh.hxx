@@ -201,7 +201,7 @@ public:
     virtual void                UIDeactivated( SfxInPlaceClient* pClient );
 
     void                        JumpToMark( const OUString& rMark );
-    void                        VisAreaChanged(const Rectangle& rRect);
+    void                        VisAreaChanged(const tools::Rectangle& rRect);
 
     // Misc
 
@@ -249,7 +249,7 @@ public:
     virtual void                ReadUserData( const OUString&, bool bBrowse = false );
     virtual void                WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& );
     virtual void                ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& );
-    virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
+    virtual void                QueryObjAreaPixel( tools::Rectangle& rRect ) const;
 
     virtual SfxObjectShell*     GetObjectShell() override;
 
@@ -315,7 +315,7 @@ public:
     SAL_DLLPRIVATE void ExecPrint_Impl(SfxRequest &);
     SAL_DLLPRIVATE void ExecMisc_Impl(SfxRequest &);
     SAL_DLLPRIVATE void GetState_Impl(SfxItemSet&);
-    SAL_DLLPRIVATE void CheckIPClient_Impl(SfxInPlaceClient*, const Rectangle&);
+    SAL_DLLPRIVATE void CheckIPClient_Impl(SfxInPlaceClient*, const tools::Rectangle&);
     SAL_DLLPRIVATE void PushSubShells_Impl( bool bPush=true );
     SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( false ); }
     SAL_DLLPRIVATE void TakeOwnership_Impl();

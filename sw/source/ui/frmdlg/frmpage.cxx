@@ -2644,7 +2644,7 @@ Size BmpWindow::GetOptimalSize() const
 
 VCL_BUILDER_FACTORY_ARGS(BmpWindow, 0)
 
-void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     // Setup
     rRenderContext.SetBackground();
@@ -2685,7 +2685,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     }
 
     // #i119307# clear window background, the graphic might have transparency
-    rRenderContext.DrawRect(Rectangle(aPntPos, aPntSz));
+    rRenderContext.DrawRect(tools::Rectangle(aPntPos, aPntSz));
 
     if (bHorz || bVert)
     {

@@ -27,7 +27,7 @@ class ContourWindow : public GraphCtrl
 {
     tools::PolyPolygon         aPolyPoly;
     Color               aPipetteColor;
-    Rectangle           aWorkRect;
+    tools::Rectangle           aWorkRect;
     Link<ContourWindow&,void>  aPipetteLink;
     Link<ContourWindow&,void>  aPipetteClickLink;
     Link<ContourWindow&,void>  aWorkplaceClickLink;
@@ -42,7 +42,7 @@ protected:
     virtual void        MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void        SdrObjCreated( const SdrObject& rObj ) override;
     virtual void        InitSdrModel() override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual Size        GetOptimalSize() const override;
 
 public:
@@ -59,7 +59,7 @@ public:
     bool                IsContourChanged() const;
 
     void                SetWorkplaceMode( const bool bWorkplace ) { bWorkplaceMode = bWorkplace; }
-    const Rectangle&    GetWorkRect() const { return aWorkRect; }
+    const tools::Rectangle&    GetWorkRect() const { return aWorkRect; }
 
     void                SetPipetteHdl( const Link<ContourWindow&,void>& rLink ) { aPipetteLink = rLink; }
     void                SetPipetteClickHdl( const Link<ContourWindow&,void>& rLink ) { aPipetteClickLink = rLink; }

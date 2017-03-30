@@ -60,7 +60,7 @@ public:
     const Color&        GetBlankColor() const { return maShowBackground.GetColor(); }
 
     void            SetPreviewMode();
-    void            SetPresentationArea( const Rectangle& rPresArea );
+    void            SetPresentationArea( const ::tools::Rectangle& rPresArea );
 
     void            SetMouseAutoHide( bool bMouseAutoHide ) { mbMouseAutoHide = bMouseAutoHide; }
 
@@ -74,7 +74,7 @@ public:
     virtual void    MouseMove(const MouseEvent& rMEvt) override;
     virtual void    MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
     /// Override the sd::Window's CreateAccessible to create a different accessible object
     virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessible() override;
@@ -98,7 +98,7 @@ private:
     sal_Int32       mnRestartPageIndex;
     ShowWindowMode  meShowWindowMode;
     bool            mbShowNavigatorAfterSpecialMode;
-    Rectangle       maPresArea;
+    ::tools::Rectangle       maPresArea;
     bool            mbMouseAutoHide;
     bool            mbMouseCursorHidden;
     sal_uInt64      mnFirstMouseMove;

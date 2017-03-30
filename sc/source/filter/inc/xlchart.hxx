@@ -1400,7 +1400,7 @@ struct XclChRootData
 
     css::uno::Reference< css::chart2::XChartDocument >
                         mxChartDoc;             /// The chart document.
-    Rectangle           maChartRect;            /// Position and size of the chart shape.
+    tools::Rectangle           maChartRect;            /// Position and size of the chart shape.
     XclChTypeProvRef    mxTypeInfoProv;         /// Provides info about chart types.
     XclChFmtInfoProvRef mxFmtInfoProv;          /// Provides info about auto formatting.
     XclChObjectTableRef mxLineDashTable;        /// Container for line dash styles.
@@ -1420,7 +1420,7 @@ struct XclChRootData
     void                InitConversion(
                             const XclRoot& rRoot,
                             const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
-                            const Rectangle& rChartRect );
+                            const tools::Rectangle& rChartRect );
     /** Finishes the API chart document conversion. Must be called once before any API access. */
     void                FinishConversion();
 

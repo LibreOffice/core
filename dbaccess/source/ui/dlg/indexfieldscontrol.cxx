@@ -113,7 +113,7 @@ namespace dbaui
         return true;
     }
 
-    void IndexFieldsControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const
+    void IndexFieldsControl::PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect, sal_uInt16 _nColumnId ) const
     {
         Point aPos(_rRect.TopLeft());
         aPos.X() += 1;

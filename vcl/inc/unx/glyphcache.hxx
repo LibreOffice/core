@@ -100,14 +100,14 @@ class GlyphData
 public:
                             GlyphData() : mnLruValue(0) {}
 
-    const Rectangle&        GetBoundRect() const        { return maBoundRect; }
-    void                    SetBoundRect(Rectangle r)   { maBoundRect = r; }
+    const tools::Rectangle&        GetBoundRect() const        { return maBoundRect; }
+    void                    SetBoundRect(tools::Rectangle r)   { maBoundRect = r; }
 
     void                    SetLruValue( int n ) const  { mnLruValue = n; }
     long                    GetLruValue() const         { return mnLruValue;}
 
 private:
-    Rectangle               maBoundRect;
+    tools::Rectangle               maBoundRect;
 
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnLruValue;
@@ -136,7 +136,7 @@ public:
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    const Rectangle&        GetGlyphBoundRect(const GlyphItem& rGlyph);
+    const tools::Rectangle&        GetGlyphBoundRect(const GlyphItem& rGlyph);
     bool                    GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon&) const;
     bool                    GetAntialiasAdvice() const;
     hb_font_t*              GetHbFont() { return mpHbFont; }

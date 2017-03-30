@@ -184,7 +184,7 @@ bool lcl_IsFontwork( const SdrObject* pObj )
 
 } // namespace
 
-EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape, const Rectangle* pChildAnchor )
+EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape, const tools::Rectangle* pChildAnchor )
 {
     if ( nAdditionalText )
         nAdditionalText++;
@@ -405,7 +405,7 @@ void XclEscherEx::EndDocument()
     mpOutStrm->Seek( 0 );
 }
 
-std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< XShape > const & xShape, const Rectangle* pChildAnchor )
+std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< XShape > const & xShape, const tools::Rectangle* pChildAnchor )
 {
     ::std::unique_ptr< XclExpOcxControlObj > xOcxCtrl;
 
@@ -435,7 +435,7 @@ std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< X
     return xOcxCtrl;
 }
 
-std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< XShape > const & xShape, const Rectangle* pChildAnchor )
+std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< XShape > const & xShape, const tools::Rectangle* pChildAnchor )
 {
     ::std::unique_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
     if( xTbxCtrl->GetObjType() == EXC_OBJTYPE_UNKNOWN )

@@ -58,7 +58,7 @@ void DrawViewShell::GotoBookmark(const OUString& rBookmark)
 |*
 \************************************************************************/
 
-void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
+void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rWin)
 {
     // tdf#98646 check if Rectangle which contains the bounds of the region to
     // be shown eventually contains values that cause overflows when processing
@@ -87,7 +87,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
         rWin.Push(PushFlags::MAPMODE);
         rWin.EnableMapMode();
     }
-    Rectangle aVisArea(rWin.PixelToLogic(Rectangle(Point(0,0), aVisSizePixel)));
+    ::tools::Rectangle aVisArea(rWin.PixelToLogic(::tools::Rectangle(Point(0,0), aVisSizePixel)));
     if (bTiledRendering)
         rWin.Pop();
     Size aVisAreaSize(aVisArea.GetSize());
@@ -100,7 +100,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
 
         // allow a mode for move-only visibility without zooming.
         const sal_Int32 nPercentBorder(30);
-        const Rectangle aInnerRectangle(
+        const ::tools::Rectangle aInnerRectangle(
             aVisArea.Left() + ((aVisAreaSize.Width() * nPercentBorder) / 200),
             aVisArea.Top() + ((aVisAreaSize.Height() * nPercentBorder) / 200),
             aVisArea.Right() - ((aVisAreaSize.Width() * nPercentBorder) / 200),

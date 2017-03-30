@@ -562,7 +562,7 @@ double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
     return fExtraTextRotateAngle;
 }
 
-bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
+bool SdrObjCustomShape::GetTextBounds( tools::Rectangle& rTextBound ) const
 {
     bool bRet = false;
 
@@ -572,7 +572,7 @@ bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
         awt::Rectangle aR( xCustomShapeEngine->getTextBounds() );
         if ( aR.Width > 1 && aR.Height > 1 )
         {
-            rTextBound = Rectangle( Point( aR.X, aR.Y ), Size( aR.Width, aR.Height ) );
+            rTextBound = tools::Rectangle( Point( aR.X, aR.Y ), Size( aR.Width, aR.Height ) );
             bRet = true;
         }
     }
@@ -1407,7 +1407,7 @@ void SdrObjCustomShape::AdaptTextMinSize()
         else
         {
             // recreate from CustomShape-specific TextBounds
-            Rectangle aTextBound(maRect);
+            tools::Rectangle aTextBound(maRect);
 
             if(GetTextBounds(aTextBound))
             {
@@ -1427,7 +1427,7 @@ void SdrObjCustomShape::AdaptTextMinSize()
     }
 }
 
-void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
+void SdrObjCustomShape::NbcSetSnapRect( const tools::Rectangle& rRect )
 {
     maRect = rRect;
     ImpJustifyRect(maRect);
@@ -1440,9 +1440,9 @@ void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
     SetChanged();
 }
 
-void SdrObjCustomShape::SetSnapRect( const Rectangle& rRect )
+void SdrObjCustomShape::SetSnapRect( const tools::Rectangle& rRect )
 {
-    Rectangle aBoundRect0;
+    tools::Rectangle aBoundRect0;
     if ( pUserCall )
         aBoundRect0 = GetLastBoundRect();
     NbcSetSnapRect( rRect );
@@ -1450,7 +1450,7 @@ void SdrObjCustomShape::SetSnapRect( const Rectangle& rRect )
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
+void SdrObjCustomShape::NbcSetLogicRect( const tools::Rectangle& rRect )
 {
     maRect = rRect;
     ImpJustifyRect(maRect);
@@ -1462,9 +1462,9 @@ void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
     SetChanged();
 }
 
-void SdrObjCustomShape::SetLogicRect( const Rectangle& rRect )
+void SdrObjCustomShape::SetLogicRect( const tools::Rectangle& rRect )
 {
-    Rectangle aBoundRect0;
+    tools::Rectangle aBoundRect0;
     if ( pUserCall )
         aBoundRect0 = GetLastBoundRect();
     NbcSetLogicRect(rRect);
@@ -1476,7 +1476,7 @@ void SdrObjCustomShape::Move( const Size& rSiz )
 {
     if ( rSiz.Width() || rSiz.Height() )
     {
-        Rectangle aBoundRect0;
+        tools::Rectangle aBoundRect0;
         if ( pUserCall )
             aBoundRect0 = GetLastBoundRect();
         NbcMove(rSiz);
@@ -1510,7 +1510,7 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
 void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, const Fraction& ryFact )
 {
     // taking care of handles that should not been changed
-    Rectangle aOld( maRect );
+    tools::Rectangle aOld( maRect );
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
     SdrTextObj::NbcResize( rRef, rxFact, ryFact );
@@ -1750,7 +1750,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     if ( aGeo.nRotationAngle )
                         aPoly.Rotate( maRect.Center(), aGeo.nRotationAngle / 10 );
 
-                    Rectangle aBoundRect( aPoly.GetBoundRect() );
+                    tools::Rectangle aBoundRect( aPoly.GetBoundRect() );
                     sal_Int32 nXDiff = aBoundRect.Left() - maRect.Left();
                     sal_Int32 nYDiff = aBoundRect.Top() - maRect.Top();
 
@@ -1907,13 +1907,13 @@ bool SdrObjCustomShape::beginSpecialDrag(SdrDragStat& rDrag) const
     return true;
 }
 
-void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect )
+void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect )
 {
-    Rectangle   aOld( maRect );
+    tools::Rectangle   aOld( maRect );
     bool    bOldMirroredX( IsMirroredX() );
     bool    bOldMirroredY( IsMirroredY() );
 
-    Rectangle aNewRect( rNewRect );
+    tools::Rectangle aNewRect( rNewRect );
     aNewRect.Justify();
 
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
@@ -2087,7 +2087,7 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
 
 void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
 {
-    Rectangle aRect1;
+    tools::Rectangle aRect1;
     rStat.TakeCreateRect( aRect1 );
 
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
@@ -2099,7 +2099,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     {
         SetMirroredX( aRect1.Left() > aRect1.Right() );
 
-        aRect1 = Rectangle( rStat.GetNow(), Size( nDefaultObjectSizeWidth, nDefaultObjectSizeHeight ) );
+        aRect1 = tools::Rectangle( rStat.GetNow(), Size( nDefaultObjectSizeWidth, nDefaultObjectSizeHeight ) );
         // subtracting the horizontal difference of the latest handle from shape position
         if ( !aInteractionHandles.empty() )
         {
@@ -2200,7 +2200,7 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
             SdrTextVertAdjust eVert = static_cast<const SdrTextVertAdjustItem&>(rSet.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
 
             // rescue object size
-            Rectangle aObjectRect = GetSnapRect();
+            tools::Rectangle aObjectRect = GetSnapRect();
 
             // prepare ItemSet to set exchanged width and height items
             SfxItemSet aNewSet(*rSet.GetPool(),
@@ -2244,7 +2244,7 @@ void SdrObjCustomShape::SuggestTextFrameSize(Size aSuggestedTextFrameSize)
     m_aSuggestedTextFrameSize = aSuggestedTextFrameSize;
 }
 
-bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bWdt) const
+bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool bHgt, bool bWdt) const
 {
     // Either we have text or the application has native text and suggested its size to us.
     bool bHasText = HasText() || (m_aSuggestedTextFrameSize.Width() != 0 && m_aSuggestedTextFrameSize.Height() != 0);
@@ -2254,7 +2254,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
         bool bHgtGrow=bHgt && IsAutoGrowHeight();
         if ( bWdtGrow || bHgtGrow )
         {
-            Rectangle aR0(rR);
+            tools::Rectangle aR0(rR);
             long nHgt=0,nMinHgt=0,nMaxHgt=0;
             long nWdt=0,nMinWdt=0,nMaxWdt=0;
             Size aSiz(rR.GetSize()); aSiz.Width()--; aSiz.Height()--;
@@ -2397,16 +2397,16 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
     return false;
 }
 
-Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool bWdt )
+tools::Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool bWdt )
 {
-    Rectangle aReturnValue;
+    tools::Rectangle aReturnValue;
 
-    Rectangle aOldTextRect( maRect );        // <- initial text rectangle
+    tools::Rectangle aOldTextRect( maRect );        // <- initial text rectangle
 
-    Rectangle aNewTextRect( maRect );        // <- new text rectangle returned from the custom shape renderer,
+    tools::Rectangle aNewTextRect( maRect );        // <- new text rectangle returned from the custom shape renderer,
     GetTextBounds( aNewTextRect );          //    it depends to the current logical shape size
 
-    Rectangle aAdjustedTextRect( aNewTextRect );                            // <- new text rectangle is being tested by AdjustTextFrameWidthAndHeight to ensure
+    tools::Rectangle aAdjustedTextRect( aNewTextRect );                            // <- new text rectangle is being tested by AdjustTextFrameWidthAndHeight to ensure
     if ( AdjustTextFrameWidthAndHeight( aAdjustedTextRect, bHgt, bWdt ) )   //    that the new text rectangle is matching the current text size from the outliner
     {
         if (aAdjustedTextRect != aNewTextRect && aOldTextRect != aAdjustedTextRect &&
@@ -2430,7 +2430,7 @@ Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool 
 
 bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
-    Rectangle aNewTextRect = ImpCalculateTextFrame(bHgt, bWdt);
+    tools::Rectangle aNewTextRect = ImpCalculateTextFrame(bHgt, bWdt);
     const bool bRet = !aNewTextRect.IsEmpty() && aNewTextRect != maRect;
     if (bRet && !mbAdjustingTextFrameWidthAndHeight)
     {
@@ -2464,11 +2464,11 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 
 bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
 {
-    Rectangle aNewTextRect = ImpCalculateTextFrame( true/*bHgt*/, true/*bWdt*/ );
+    tools::Rectangle aNewTextRect = ImpCalculateTextFrame( true/*bHgt*/, true/*bWdt*/ );
     bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != maRect );
     if ( bRet )
     {
-        Rectangle aBoundRect0;
+        tools::Rectangle aBoundRect0;
         if ( pUserCall )
             aBoundRect0 = GetCurrentBoundRect();
 
@@ -2498,10 +2498,10 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
     }
     return bRet;
 }
-void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
+void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const
 {
     Size aPaperMin,aPaperMax;
-    Rectangle aViewInit;
+    tools::Rectangle aViewInit;
     TakeTextAnchorRect( aViewInit );
     if ( aGeo.nRotationAngle )
     {
@@ -2593,7 +2593,7 @@ void SdrObjCustomShape::EndTextEdit( SdrOutliner& rOutl )
     SdrTextObj::EndTextEdit( rOutl );
     InvalidateRenderGeometry();
 }
-void SdrObjCustomShape::TakeTextAnchorRect( Rectangle& rAnchorRect ) const
+void SdrObjCustomShape::TakeTextAnchorRect( tools::Rectangle& rAnchorRect ) const
 {
     if ( GetTextBounds( rAnchorRect ) )
     {
@@ -2618,10 +2618,10 @@ void SdrObjCustomShape::TakeTextAnchorRect( Rectangle& rAnchorRect ) const
     else
         SdrTextObj::TakeTextAnchorRect( rAnchorRect );
 }
-void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-                               Rectangle* pAnchorRect, bool /*bLineWidth*/) const
+void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
+                               tools::Rectangle* pAnchorRect, bool /*bLineWidth*/) const
 {
-    Rectangle aAnkRect; // Rect in which we anchor
+    tools::Rectangle aAnkRect; // Rect in which we anchor
     TakeTextAnchorRect(aAnkRect);
     SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
@@ -2751,7 +2751,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
         *pAnchorRect=aAnkRect;
 
     // using rTextRect together with ContourFrame doesn't always work correctly
-    rTextRect=Rectangle(aTextPos,aTextSiz);
+    rTextRect=tools::Rectangle(aTextPos,aTextSiz);
 }
 
 void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
@@ -2871,7 +2871,7 @@ void SdrObjCustomShape::SetPage( SdrPage* pNewPage )
         // invalidating rectangles by SetRectsDirty is not sufficient,
         // AdjustTextFrameWidthAndHeight() also has to be made, both
         // actions are done by NbcSetSnapRect
-        Rectangle aTmp( maRect );    //creating temporary rectangle #i61108#
+        tools::Rectangle aTmp( maRect );    //creating temporary rectangle #i61108#
         NbcSetSnapRect( aTmp );
     }
 }
@@ -2979,7 +2979,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     if( !aSize.Height() ) aSize.setHeight( 1 );
     if( !aSize.Width() ) aSize.setWidth( 1 );
 
-    Rectangle aBaseRect(aPoint, aSize);
+    tools::Rectangle aBaseRect(aPoint, aSize);
     SetSnapRect(aBaseRect);
 
     // shear?
@@ -3022,7 +3022,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
     double fShearX = (aGeo.nShearAngle / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
-    Rectangle aRectangle(maRect);
+    tools::Rectangle aRectangle(maRect);
 
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
@@ -3034,7 +3034,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
         if ( bMirroredX )
         {
             tools::Polygon aPol = Rect2Poly(maRect, aNewGeo);
-            Rectangle aBoundRect( aPol.GetBoundRect() );
+            tools::Rectangle aBoundRect( aPol.GetBoundRect() );
 
             Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
             Point aRef2( aRef1.X(), aRef1.Y() + 1000 );
@@ -3056,7 +3056,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
         if ( bMirroredY )
         {
             tools::Polygon aPol( Rect2Poly( aRectangle, aNewGeo ) );
-            Rectangle aBoundRect( aPol.GetBoundRect() );
+            tools::Rectangle aBoundRect( aPol.GetBoundRect() );
 
             Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
             Point aRef2( aRef1.X() + 1000, aRef1.Y() );

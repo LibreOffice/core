@@ -555,7 +555,7 @@ bool ImplSdPPTImport::Import()
             aVisAreaSize = aDocAtom.GetSlidesPageSize();
     }
     Scale( aVisAreaSize );
-    pDocShell->SetVisArea( Rectangle( Point(), aVisAreaSize ) );
+    pDocShell->SetVisArea( ::tools::Rectangle( Point(), aVisAreaSize ) );
 
     // create master pages:
 
@@ -805,7 +805,7 @@ bool ImplSdPPTImport::Import()
                                                 {
                                                     if ( nObjCount++ )      // skipping the first object
                                                     {
-                                                        Rectangle aEmpty;
+                                                        ::tools::Rectangle aEmpty;
                                                         if (!aHd2.SeekToBegOfRecord(rStCtrl))
                                                             break;
                                                         SdrObject* pImpObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aEmpty, aEmpty );
@@ -1436,7 +1436,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                 sal_uInt32 nPosition = pHFE->NeedToImportInstance( i, rSlidePersist );
                 if ( nPosition )
                 {
-                    Rectangle aEmpty;
+                    ::tools::Rectangle aEmpty;
                     bVisible = false;
                     rStCtrl.Seek( nPosition );
                     ProcessData aProcessData( rSlidePersist, SdPageCapsule(pPage) );
@@ -2449,8 +2449,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                 SdrObject* pTitleObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
                                 SdrObject* pOutlineObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
 
-                                Rectangle aTitleRect;
-                                Rectangle aOutlineRect;
+                                ::tools::Rectangle aTitleRect;
+                                ::tools::Rectangle aOutlineRect;
                                 Size      aOutlineSize;
 
                                 if ( pTitleObj )
@@ -2460,7 +2460,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                     aOutlineRect = pOutlineObj->GetLogicRect();
                                     aOutlineSize = aOutlineRect.GetSize();
                                 }
-                                Rectangle aLogicRect( pPresObj->GetLogicRect() );
+                                ::tools::Rectangle aLogicRect( pPresObj->GetLogicRect() );
                                 Size      aLogicSize( aLogicRect.GetSize() );
 
                                 switch ( nPlacementId )
@@ -2575,7 +2575,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     return pRet;
 }
 
-SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pRet )
+SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, ::tools::Rectangle& rTextRect, SdrObject* pRet )
 {
     SdrObject* pObj = SdrPowerPointImport::ProcessObj( rSt, rObjData, pData, rTextRect, pRet );
 

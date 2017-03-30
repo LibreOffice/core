@@ -398,7 +398,7 @@ void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rD
 
     Point aPos(0, rPos.Y());
 
-    Rectangle aOutRect(aPos, aSize);
+    ::tools::Rectangle aOutRect(aPos, aSize);
 
     // fill the background
     Color aColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
@@ -941,7 +941,7 @@ void CustomAnimationList::notify_change()
     mpController->onSelect();
 }
 
-void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     if( mbIgnorePaint )
         return;
@@ -955,7 +955,7 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const Rectan
         rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDisableColor());
         ::Point aOffset(rRenderContext.LogicToPixel(Point(6, 6), MapUnit::MapAppFont));
 
-        Rectangle aRect(Point(0,0), GetOutputSizePixel());
+        ::tools::Rectangle aRect(Point(0,0), GetOutputSizePixel());
 
         aRect.Left() += aOffset.X();
         aRect.Top() += aOffset.Y();

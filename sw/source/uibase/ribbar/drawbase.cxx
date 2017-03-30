@@ -602,7 +602,7 @@ void SwDrawBase::CreateDefaultObject()
     aStartPos.Y() -= 4 * MM50;
     aEndPos.X() += 8 * MM50;
     aEndPos.Y() += 4 * MM50;
-    Rectangle aRect(aStartPos, aEndPos);
+    tools::Rectangle aRect(aStartPos, aEndPos);
     m_pSh->CreateDefaultShape( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
 }
 

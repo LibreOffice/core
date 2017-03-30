@@ -340,12 +340,12 @@ OUString SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) cons
     return sRet;
 }
 
-void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
+void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     if (nAktPaintRow<0 || static_cast<std::size_t>(nAktPaintRow)>=aList.size()) {
         return;
     }
-    Rectangle aR(rRect);
+    tools::Rectangle aR(rRect);
     aR.Bottom()++;
     ImpItemListRow* pEntry=ImpGetEntry(nAktPaintRow);
     if (pEntry->bComment)
@@ -429,10 +429,10 @@ void SdrItemBrowserControl::SetDirty()
     aSetDirtyHdl.Call(*this);
 }
 
-Rectangle SdrItemBrowserControl::GetFieldCharacterBounds(sal_Int32 /*_nRow*/,sal_Int32 /*_nColumnPos*/,sal_Int32 /*nIndex*/)
+tools::Rectangle SdrItemBrowserControl::GetFieldCharacterBounds(sal_Int32 /*_nRow*/,sal_Int32 /*_nColumnPos*/,sal_Int32 /*nIndex*/)
 {
     // no accessibility implementation required
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 sal_Int32 SdrItemBrowserControl::GetFieldIndexAtPoint(sal_Int32 /*_nRow*/,sal_Int32 /*_nColumnPos*/,const Point& /*_rPoint*/)
@@ -496,7 +496,7 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
     if (pEntry!=nullptr && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
         pEditControl=VclPtr<ImpItemEdit>::Create(&GetDataWindow(),this,0);
-        Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
+        tools::Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
         aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
         aRect.Right()--;
         pEditControl->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());

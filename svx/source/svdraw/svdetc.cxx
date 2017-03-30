@@ -653,7 +653,7 @@ namespace
     }
 
     Color impCalcBackgroundColor(
-        const Rectangle& rArea,
+        const tools::Rectangle& rArea,
         const SdrPageView& rTextEditPV,
         const SdrPage& rPage)
     {
@@ -803,7 +803,7 @@ Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
 
                 if(pPg)
                 {
-                    Rectangle aSnapRect( pText->GetSnapRect() );
+                    tools::Rectangle aSnapRect( pText->GetSnapRect() );
                     aSnapRect.Move(aPvOfs.X(), aPvOfs.Y());
 
                     return impCalcBackgroundColor(aSnapRect, *pTextEditPV, *pPg);

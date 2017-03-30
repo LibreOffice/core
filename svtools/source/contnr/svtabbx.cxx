@@ -510,7 +510,7 @@ void SvHeaderTabListBox::dispose()
     SvTabListBox::dispose();
 }
 
-void SvHeaderTabListBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void SvHeaderTabListBox::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     if (m_bFirstPaint)
     {
@@ -776,9 +776,9 @@ OUString SvHeaderTabListBox::GetAccessibleCellText( long _nRow, sal_uInt16 _nCol
     return GetTabEntryText(_nRow, _nColumnPos);
 }
 
-Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen )
+tools::Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen )
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( _bIsColumnBar )
     {
         vcl::Window* pParent = nullptr;
@@ -790,36 +790,36 @@ Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScree
     return aRect;
 }
 
-Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
+tools::Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
 {
     vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
-    Rectangle aRect( GetWindowExtentsRelative( pParent ) );
+    tools::Rectangle aRect( GetWindowExtentsRelative( pParent ) );
     return aRect;
 }
 
-Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
+tools::Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
 {
     DBG_ASSERT( !_bIsHeader || 0 == _nRow, "invalid parameters" );
-    Rectangle aRect;
+    tools::Rectangle aRect;
     SvTreeListEntry* pEntry = GetEntry( _nRow );
     if ( pEntry )
     {
         aRect = _bIsHeader ? calcHeaderRect( true, false ) : GetBoundingRect( pEntry );
         Point aTopLeft = aRect.TopLeft();
         DBG_ASSERT( m_pImpl->m_pHeaderBar->GetItemCount() > _nColumn, "invalid column" );
-        Rectangle aItemRect = m_pImpl->m_pHeaderBar->GetItemRect( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) );
+        tools::Rectangle aItemRect = m_pImpl->m_pHeaderBar->GetItemRect( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) );
         aTopLeft.X() = aItemRect.Left();
         Size aSize = aItemRect.GetSize();
-        aRect = Rectangle( aTopLeft, aSize );
+        aRect = tools::Rectangle( aTopLeft, aSize );
         vcl::Window* pParent = nullptr;
         if ( !_bOnScreen )
             pParent = GetAccessibleParentWindow();
         aTopLeft = aRect.TopLeft();
         aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
-        aRect = Rectangle( aTopLeft, aRect.GetSize() );
+        aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
     }
 
     return aRect;
@@ -1095,7 +1095,7 @@ bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUStrin
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
 }
 
-Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
+tools::Rectangle SvHeaderTabListBox::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }
@@ -1141,9 +1141,9 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
     return xAccessible;
 }
 
-Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32,sal_Int32,sal_Int32)
+tools::Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32,sal_Int32,sal_Int32)
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     return aRect;
 }
 

@@ -1915,7 +1915,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
 
     if ( nAspect == ASPECT_THUMBNAIL )
     {
-        Rectangle aBoundRect = GetVisArea( ASPECT_THUMBNAIL );
+        tools::Rectangle aBoundRect = GetVisArea( ASPECT_THUMBNAIL );
         ScViewData aTmpData( this, nullptr );
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aBoundRect );
@@ -1924,7 +1924,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
     }
     else
     {
-        Rectangle aBoundRect = SfxObjectShell::GetVisArea();
+        tools::Rectangle aBoundRect = SfxObjectShell::GetVisArea();
         ScViewData aTmpData( this, nullptr );
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aBoundRect );
@@ -1935,14 +1935,14 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
     pDev->SetLayoutMode( nOldLayoutMode );
 }
 
-Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
+tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     SfxObjectCreateMode eShellMode = GetCreateMode();
     if ( eShellMode == SfxObjectCreateMode::ORGANIZER )
     {
         //  without contents we also don't know how large are the contents;
         //  return empty rectangle, it will then be calculated after the loading
-        return Rectangle();
+        return tools::Rectangle();
     }
 
     if( nAspect == ASPECT_THUMBNAIL )
@@ -1956,7 +1956,7 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
         Size aSize = aDocument.GetPageSize(nVisTab);
         const long SC_PREVIEW_SIZE_X = 10000;
         const long SC_PREVIEW_SIZE_Y = 12400;
-        Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X, SC_PREVIEW_SIZE_Y);
+        tools::Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X, SC_PREVIEW_SIZE_Y);
         if (aSize.Width() > aSize.Height())
         {
             aArea.Right() = SC_PREVIEW_SIZE_Y;
@@ -1989,7 +1989,7 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
             nStartCol = nEndCol;
         if (nStartRow>nEndRow)
             nStartRow = nEndRow;
-        Rectangle aNewArea = ((ScDocument&)aDocument)
+        tools::Rectangle aNewArea = ((ScDocument&)aDocument)
                                 .GetMMRect( nStartCol,nStartRow, nEndCol,nEndRow, nVisTab );
         //TODO/LATER: different methods for setting VisArea?!
         const_cast<ScDocShell*>(this)->SfxObjectShell::SetVisArea( aNewArea );
@@ -2059,7 +2059,7 @@ void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
 
 }
 
-void ScDocShell::SnapVisArea( Rectangle& rRect ) const
+void ScDocShell::SnapVisArea( tools::Rectangle& rRect ) const
 {
     SCTAB nTab = aDocument.GetVisibleTab();
     bool bNegativePage = aDocument.IsNegativePage( nTab );
@@ -2270,7 +2270,7 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
 
             const double fPPTX = pViewData->GetPPTX();
             const double fPPTY = pViewData->GetPPTY();
-            Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
+            tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
                             Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
 
             aAnnotation.put("cellPos", aRect.toString());

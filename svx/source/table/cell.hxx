@@ -67,14 +67,14 @@ public:
 
     SVX_DLLPRIVATE void cloneFrom( const CellRef& rCell );
 
-    SVX_DLLPRIVATE void setCellRect( ::Rectangle& rCellRect ) { maCellRect = rCellRect; }
-    SVX_DLLPRIVATE const ::Rectangle& getCellRect() const { return maCellRect; }
-    SVX_DLLPRIVATE ::Rectangle& getCellRect() { return maCellRect; }
+    SVX_DLLPRIVATE void setCellRect( ::tools::Rectangle& rCellRect ) { maCellRect = rCellRect; }
+    SVX_DLLPRIVATE const ::tools::Rectangle& getCellRect() const { return maCellRect; }
+    SVX_DLLPRIVATE ::tools::Rectangle& getCellRect() { return maCellRect; }
 
     OutlinerParaObject* GetEditOutlinerParaObject() const;
     SVX_DLLPRIVATE void SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
     SVX_DLLPRIVATE virtual SfxStyleSheet* GetStyleSheet() const override;
-    SVX_DLLPRIVATE void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
+    SVX_DLLPRIVATE void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const;
 
     SVX_DLLPRIVATE virtual const SfxItemSet& GetItemSet() const override;
     SVX_DLLPRIVATE void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems);
@@ -212,7 +212,7 @@ private:
     ::sal_Int32     mnRowSpan;
     ::sal_Int32     mnColSpan;
 
-    Rectangle       maCellRect;
+    tools::Rectangle       maCellRect;
 
     css::uno::Reference< css::table::XTable > mxTable;
 };

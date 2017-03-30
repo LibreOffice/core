@@ -281,8 +281,8 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
     {
         pView->HideCursor();
 
-        Rectangle aClipRect( aInvalidRect );
-        Rectangle aVisArea( pView->GetVisArea() );
+        tools::Rectangle aClipRect( aInvalidRect );
+        tools::Rectangle aVisArea( pView->GetVisArea() );
         aClipRect.Intersection( aVisArea );
 
         if ( !aClipRect.IsEmpty() )
@@ -300,7 +300,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         pCurView->ShowCursor( bGotoCursor );
     }
 
-    aInvalidRect = Rectangle();
+    aInvalidRect = tools::Rectangle();
     CallStatusHdl();
 }
 
@@ -372,7 +372,7 @@ void ImpEditEngine::FormatDoc()
     // Here already, so that not always in CreateLines...
     bool bMapChanged = ImpCheckRefMapMode();
 
-    aInvalidRect = Rectangle();  // make empty
+    aInvalidRect = tools::Rectangle();  // make empty
     for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
     {
         ParaPortion* pParaPortion = GetParaPortions()[nPara];
@@ -404,7 +404,7 @@ void ImpEditEngine::FormatDoc()
                 // For Paperwidth 0 (AutoPageSize) it would otherwise be Empty()...
                 long nWidth = std::max( (long)1, ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) );
                 Range aInvRange( GetInvalidYOffsets( pParaPortion ) );
-                aInvalidRect = Rectangle( Point( 0, nY+aInvRange.Min() ),
+                aInvalidRect = tools::Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
             }
             else
@@ -456,7 +456,7 @@ void ImpEditEngine::FormatDoc()
                         aSz.Height() = aMaxAutoPaperSize.Height();
                     else if ( aSz.Height() < aMinAutoPaperSize.Height() )
                         aSz.Height() = aMinAutoPaperSize.Height();
-                    pImpView->ResetOutputArea( Rectangle(
+                    pImpView->ResetOutputArea( tools::Rectangle(
                         pImpView->GetOutputArea().TopLeft(), aSz ) );
                 }
             }
@@ -545,7 +545,7 @@ void ImpEditEngine::CheckAutoPageSize()
             aSz.Width() = aInvSize.Height();
             aSz.Height() = aInvSize.Width();
         }
-        aInvalidRect = Rectangle( Point(), aSz );
+        aInvalidRect = tools::Rectangle( Point(), aSz );
 
 
         for (EditView* pView : aEditViews)
@@ -726,8 +726,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     EditLine* pLine = &pParaPortion->GetLines()[nLine];
 
-    static Rectangle aZeroArea = Rectangle( Point(), Point() );
-    Rectangle aBulletArea( aZeroArea );
+    static tools::Rectangle aZeroArea = tools::Rectangle( Point(), Point() );
+    tools::Rectangle aBulletArea( aZeroArea );
     if ( !nLine )
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
@@ -1645,7 +1645,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
     long nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBefore );
 
-    Rectangle aBulletArea = Rectangle( Point(), Point() );
+    tools::Rectangle aBulletArea = tools::Rectangle( Point(), Point() );
     if ( bLineBreak )
     {
         nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
@@ -2905,7 +2905,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     }
 }
 
-void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aStartPos, bool bStripOnly, short nOrientation )
+void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, short nOrientation )
 {
     if ( !GetUpdateMode() && !bStripOnly )
         return;
@@ -3162,7 +3162,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                 pOutDev->SetFillColor( COL_LIGHTGRAY );
                                                 pOutDev->SetLineColor( COL_LIGHTGRAY );
 
-                                                const Rectangle aBackRect( aTopLeftRectPos, aBottomRightRectPos );
+                                                const tools::Rectangle aBackRect( aTopLeftRectPos, aBottomRightRectPos );
                                                 pOutDev->DrawRect( aBackRect );
 
                                                 pOutDev->Pop();
@@ -3492,7 +3492,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                             aTopLeft.Y() -= pLine->GetMaxAscent();
                                             if ( nOrientation )
                                                 aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
-                                            Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
+                                            tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
                                             pOutDev->DrawRect( aRect );
                                         }
 
@@ -3511,7 +3511,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                         Point aTopLeft( aTmpPos );
                                                         aTopLeft.Y() -= pLine->GetMaxAscent();
 
-                                                        Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
+                                                        tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
                                                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
                                                         aBookmark.nLinkId = pPDFExtOutDevData->CreateLink( aRect );
                                                         aBookmark.aBookmark = static_cast<const SvxURLField*>(pFieldData)->GetURL();
@@ -3713,7 +3713,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
         pOutDev->SetFont( aOldFont );
 }
 
-void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice )
+void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     DBG_ASSERT( pView, "No View - No Paint!" );
 
@@ -3721,7 +3721,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
         return;
 
     // Intersection of paint area and output area.
-    Rectangle aClipRect( pView->GetOutputArea() );
+    tools::Rectangle aClipRect( pView->GetOutputArea() );
     aClipRect.Intersection( rRect );
 
     OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pView->GetWindow();
@@ -3860,7 +3860,7 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
         pPPortion->SetMustRepaint( true );
         if ( GetUpdateMode() && !IsInUndo() && !GetTextRanger() )
         {
-            aInvalidRect = Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
+            aInvalidRect = tools::Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
                                         Point( GetPaperSize().Width(), nCurTextHeight ) );
             UpdateViews( GetActiveView() );
         }
@@ -3892,7 +3892,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
         ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
         ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
 
-        aInvalidRect = Rectangle();  // make empty
+        aInvalidRect = tools::Rectangle();  // make empty
         aInvalidRect.Left() = 0;
         aInvalidRect.Right() = aPaperSize.Width();
         aInvalidRect.Top() = GetParaPortions().GetYOffset( pUpperPortion );
@@ -4122,7 +4122,7 @@ void ImpEditEngine::SetCharStretching( sal_uInt16 nX, sal_uInt16 nY )
     {
         FormatFullDoc();
         // (potentially) need everything redrawn
-        aInvalidRect=Rectangle(0,0,1000000,1000000);
+        aInvalidRect=tools::Rectangle(0,0,1000000,1000000);
         UpdateViews( GetActiveView() );
     }
 }

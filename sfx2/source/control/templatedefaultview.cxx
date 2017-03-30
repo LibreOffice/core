@@ -29,7 +29,7 @@ TemplateDefaultView::TemplateDefaultView( Window* pParent)
     : TemplateLocalView(pParent, WB_TABSTOP)
     , mnTextHeight(30)
 {
-    Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
+    tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
     ThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, gnItemPadding );
     updateThumbnailDimensions(mnItemMaxSize);
@@ -86,7 +86,7 @@ void TemplateDefaultView::createContextMenu()
     deselectItems();
     maSelectedItem->setSelection(true);
     pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));
-    pItemMenu->Execute(this, Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
     Invalidate();
 }
 

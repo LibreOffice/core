@@ -286,14 +286,14 @@ class SwMarkPreview : public vcl::Window
     Color m_aTextCol;    // text
     Color m_aPrintAreaCol; // frame for print area
 
-    Rectangle aPage;
-    Rectangle aLeftPagePrtArea;
-    Rectangle aRightPagePrtArea;
+    tools::Rectangle aPage;
+    tools::Rectangle aLeftPagePrtArea;
+    tools::Rectangle aRightPagePrtArea;
 
     sal_uInt16 nMarkPos;
 
-    void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
-    void PaintPage(vcl::RenderContext& rRenderContext, const Rectangle &rRect);
+    void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    void PaintPage(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
     void InitColors();
 
 protected:

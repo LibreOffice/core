@@ -215,7 +215,7 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
                 if (rView.IsLayerVisible(aLayerName))
                 {
                     // get the bounding box of the shape in logic units
-                    Rectangle aRect = pDlgEdObj->GetSnapRect();
+                    tools::Rectangle aRect = pDlgEdObj->GetSnapRect();
 
                     // transform coordinates relative to the parent
                     MapMode aMap = m_pDialogWindow->GetMapMode();
@@ -226,7 +226,7 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
                     aRect = m_pDialogWindow->LogicToPixel( aRect, MapMode(MapUnit::Map100thMM) );
 
                     // check, if the shape's bounding box intersects with the bounding box of its parent
-                    Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
+                    tools::Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
                     if ( aParentRect.IsOver( aRect ) )
                         bVisible = true;
                 }
@@ -463,7 +463,7 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds()
 {
     awt::Rectangle aBounds;
     if ( m_pDialogWindow )
-        aBounds = AWTRectangle( Rectangle( m_pDialogWindow->GetPosPixel(), m_pDialogWindow->GetSizePixel() ) );
+        aBounds = AWTRectangle( tools::Rectangle( m_pDialogWindow->GetPosPixel(), m_pDialogWindow->GetSizePixel() ) );
 
     return aBounds;
 }
@@ -761,7 +761,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
             Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
             if ( xComp.is() )
             {
-                Rectangle aRect = VCLRectangle( xComp->getBounds() );
+                tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
                 Point aPos = VCLPoint( rPoint );
                 if ( aRect.IsInside( aPos ) )
                 {

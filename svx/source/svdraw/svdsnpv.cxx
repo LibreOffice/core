@@ -240,10 +240,10 @@ void SdrSnapView::BrkAction()
     SdrPaintView::BrkAction();
 }
 
-void SdrSnapView::TakeActionRect(Rectangle& rRect) const
+void SdrSnapView::TakeActionRect(tools::Rectangle& rRect) const
 {
     if (IsSetPageOrg() || IsDragHelpLine()) {
-        rRect=Rectangle(maDragStat.GetNow(),maDragStat.GetNow());
+        rRect=tools::Rectangle(maDragStat.GetNow(),maDragStat.GetNow());
     } else {
         SdrPaintView::TakeActionRect(rRect);
     }
@@ -328,7 +328,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 
         while (aIter.IsMore() && (nMaxPointSnapCount>0 || nMaxFrameSnapCount>0)) {
             SdrObject* pO=aIter.Next();
-            Rectangle aRect(pO->GetCurrentBoundRect());
+            tools::Rectangle aRect(pO->GetCurrentBoundRect());
             aRect.Left  ()-=mx;
             aRect.Right ()+=mx;
             aRect.Top   ()-=my;
@@ -350,8 +350,8 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
                     }
                 }
                 if (bOFrmSnap && nMaxFrameSnapCount>0) {
-                    Rectangle aLog(pO->GetSnapRect());
-                    Rectangle aR1(aLog);
+                    tools::Rectangle aLog(pO->GetSnapRect());
+                    tools::Rectangle aR1(aLog);
                     aR1.Left  ()-=mx;
                     aR1.Right ()+=mx;
                     aR1.Top   ()-=my;

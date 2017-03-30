@@ -114,7 +114,7 @@ class SwContentTree
     static bool         bIsInDrag;
 
     bool                m_bIsKeySpace;
-    Rectangle           m_aOldRectangle;
+    tools::Rectangle           m_aOldRectangle;
 
     /**
      * Before any data will be deleted, the last active entry has to be found.
@@ -158,7 +158,7 @@ protected:
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     void            EditEntry( SvTreeListEntry* pEntry, EditEntryMode nMode );

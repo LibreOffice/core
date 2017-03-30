@@ -106,9 +106,9 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
             IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire ) )
         {
                 ImplControlValue aControlValue;
-                Rectangle aCtrlRegion( Point( 0, 0 ), Size( 20, mnDDHeight ) );
-                Rectangle aBoundingRgn( aCtrlRegion );
-                Rectangle aContentRgn( aCtrlRegion );
+                tools::Rectangle aCtrlRegion( Point( 0, 0 ), Size( 20, mnDDHeight ) );
+                tools::Rectangle aBoundingRgn( aCtrlRegion );
+                tools::Rectangle aContentRgn( aCtrlRegion );
                 if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire, aCtrlRegion,
                                             ControlState::ENABLED, aControlValue, OUString(),
                                             aBoundingRgn, aContentRgn ) )
@@ -347,7 +347,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
-        Rectangle aRect( aPos, aSize );
+        tools::Rectangle aRect( aPos, aSize );
         if ( bBorder )
         {
             ImplDrawFrame( pDev, aRect );
@@ -380,7 +380,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     const long nOnePixel = GetDrawPixel( pDev, 1 );
     const long nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
-    Rectangle aTextRect( aPos, aSize );
+    tools::Rectangle aTextRect( aPos, aSize );
 
     if ( GetStyle() & WB_CENTER )
         nTextStyle |= DrawTextFlags::Center;
@@ -404,7 +404,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
              ((nOffY+nTextHeight) > aSize.Height()) ||
              ((nOffX+nTextWidth) > aSize.Width()) )
         {
-            Rectangle aClip( aPos, aSize );
+            tools::Rectangle aClip( aPos, aSize );
             if ( nTextHeight > aSize.Height() )
                 aClip.Bottom() += nTextHeight-aSize.Height()+1;  // So that HP Printers don't optimize this away
             pDev->IntersectClipRegion( aClip );
@@ -416,7 +416,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     {
         long        nTextHeight = pDev->GetTextHeight();
         sal_uInt16  nLines = ( nTextHeight > 0 ) ? (sal_uInt16)(aSize.Height() / nTextHeight) : 1;
-        Rectangle   aClip( aPos, aSize );
+        tools::Rectangle   aClip( aPos, aSize );
 
         pDev->IntersectClipRegion( aClip );
 
@@ -430,7 +430,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
             if ( bSelected )
             {
                 pDev->SetFillColor( COL_BLACK );
-                pDev->DrawRect( Rectangle(  Point( aPos.X(), aPos.Y() + n*nTextHeight ),
+                pDev->DrawRect( tools::Rectangle(  Point( aPos.X(), aPos.Y() + n*nTextHeight ),
                                             Point( aPos.X() + aSize.Width(), aPos.Y() + (n+1)*nTextHeight + 2*nOnePixel ) ) );
                 pDev->SetFillColor();
                 pDev->SetTextColor( COL_WHITE );
@@ -580,10 +580,10 @@ void ListBox::Resize()
         vcl::Window *pBorder = GetWindow( GetWindowType::Border );
         ImplControlValue aControlValue;
         Point aPoint;
-        Rectangle aContent, aBound;
+        tools::Rectangle aContent, aBound;
 
         // Use the full extent of the control
-        Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+        tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
         if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::ButtonDown,
                     aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
@@ -1125,10 +1125,10 @@ bool ListBox::IsInDropDown() const
     return mpFloatWin && mpFloatWin->IsInPopupMode();
 }
 
-Rectangle ListBox::GetBoundingRectangle( sal_Int32 nItem ) const
+tools::Rectangle ListBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
-    Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
-    Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ListBox *>(this)) );
+    tools::Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
+    tools::Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ListBox *>(this)) );
     aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
     return aRect;
 }
@@ -1184,9 +1184,9 @@ Size ListBox::CalcMinimumSize() const
         // See how large the edit area inside is to estimate what is needed for the dropdown
         ImplControlValue aControlValue;
         Point aPoint;
-        Rectangle aContent, aBound;
+        tools::Rectangle aContent, aBound;
         Size aTestSize( 100, 20 );
-        Rectangle aArea( aPoint, aTestSize );
+        tools::Rectangle aArea( aPoint, aTestSize );
         if( GetNativeControlRegion( ControlType::Listbox, ControlPart::SubEdit, aArea, ControlState::NONE,
                     aControlValue, OUString(), aBound, aContent) )
         {
@@ -1202,8 +1202,8 @@ Size ListBox::CalcMinimumSize() const
     if (IsDropDownBox()) // Check minimum height of dropdown box
     {
         ImplControlValue aControlValue;
-        Rectangle aRect( Point( 0, 0 ), aSz );
-        Rectangle aContent, aBound;
+        tools::Rectangle aRect( Point( 0, 0 ), aSz );
+        tools::Rectangle aContent, aBound;
         if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire, aRect, ControlState::NONE,
                     aControlValue, OUString(), aBound, aContent) )
         {
@@ -1388,9 +1388,9 @@ void ListBox::EnableMirroring()
     mpImplLB->EnableMirroring();
 }
 
-Rectangle ListBox::GetDropDownPosSizePixel() const
+tools::Rectangle ListBox::GetDropDownPosSizePixel() const
 {
-    return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ListBox*>(this) ) : Rectangle();
+    return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ListBox*>(this) ) : tools::Rectangle();
 }
 
 const Wallpaper& ListBox::GetDisplayBackground() const

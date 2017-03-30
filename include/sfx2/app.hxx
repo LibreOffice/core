@@ -41,7 +41,7 @@ class BasicManager;
 class DdeService;
 class PrinterDialog;
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 class AppSettings;
 struct SfxChildWinContextFactory;
 class SfxAppData_Impl;

@@ -111,7 +111,7 @@ void DialogWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-void DialogWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void DialogWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     m_pEditor->Paint(rRenderContext, rRect);
 }
@@ -200,7 +200,7 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
             SdrView& rView = GetView();
             if( !rCEvt.IsMouseEvent() && rView.AreObjectsMarked() )
             {
-                Rectangle aMarkedRect( rView.GetMarkedRect() );
+                tools::Rectangle aMarkedRect( rView.GetMarkedRect() );
                 Point MarkedCenter( aMarkedRect.Center() );
                 Point PosPixel( LogicToPixel( MarkedCenter ) );
                 SfxDispatcher::ExecutePopup( this, &PosPixel );

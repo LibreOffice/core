@@ -69,7 +69,7 @@ private:
     SdrGrafObj*     m_pGraphicObj;
     Graphic         m_aGraphic;
     Size            m_aViewSize100mm;
-    Rectangle       m_aCropRectangle;
+    tools::Rectangle       m_aCropRectangle;
     SfxBindings&    m_rBindings;
 
     double          m_dResolution;
@@ -102,14 +102,14 @@ private:
 
 public:
     CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );
-    CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings );
+    CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, tools::Rectangle& rCropRectangle, SfxBindings& rBindings );
     virtual ~CompressGraphicsDialog() override;
     virtual void dispose() override;
 
     SdrGrafObj* GetCompressedSdrGrafObj();
     Graphic GetCompressedGraphic();
 
-    Rectangle GetScaledCropRectangle();
+    tools::Rectangle GetScaledCropRectangle();
 };
 
 #endif

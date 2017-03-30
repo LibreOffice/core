@@ -841,7 +841,7 @@ void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const 
     }
 }
 
-SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, bool _bAllObjects, SdrObject* _pIgnore, sal_Int16 _nIgnoreType)
+SdrObject* isOver(const tools::Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, bool _bAllObjects, SdrObject* _pIgnore, sal_Int16 _nIgnoreType)
 {
     SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(_rPage,SdrIterMode::DeepNoGroups);
@@ -860,7 +860,7 @@ SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, boo
 
             if (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr)
             {
-                Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
+                tools::Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
                 if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
                     pOverlappedObj = pObjIter;
             }
@@ -882,7 +882,7 @@ bool checkArrayForOccurrence(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int
     return false;
 }
 
-SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj * _pIgnoreList[], int _nIgnoreListLength)
+SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj * _pIgnoreList[], int _nIgnoreListLength)
 {
     SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(_rPage,SdrIterMode::DeepNoGroups);
@@ -898,7 +898,7 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
         if ( (_bAllObjects || !_rView.IsObjMarked(pObjIter))
              && (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr) )
         {
-            Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
+            tools::Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
                 pOverlappedObj = pObjIter;
         }
@@ -912,7 +912,7 @@ SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView)
     SdrObject* pOverlappedObj = nullptr;
     if (dynamic_cast<OUnoObject*>(_pObj) != nullptr || dynamic_cast<OOle2Obj*>(_pObj) != nullptr) // this doesn't need to be done for shapes
     {
-        Rectangle aRect = _pObj->GetCurrentBoundRect();
+        tools::Rectangle aRect = _pObj->GetCurrentBoundRect();
         pOverlappedObj = isOver(aRect,_rPage,_rView,false/*_bUnMarkedObjects*/,_pObj);
     }
     return pOverlappedObj;
@@ -950,20 +950,20 @@ uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet
     return aNames;
 }
 
-Rectangle getRectangleFromControl(SdrObject* _pControl)
+tools::Rectangle getRectangleFromControl(SdrObject* _pControl)
 {
     if (_pControl)
     {
         uno::Reference< report::XReportComponent > xComponent( _pControl->getUnoShape(), uno::UNO_QUERY);
         if (xComponent.is())
         {
-            Rectangle aRect(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
+            tools::Rectangle aRect(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
             aRect.setHeight(aRect.getHeight() + 1);
             aRect.setWidth(aRect.getWidth() + 1);
             return aRect;
         }
     }
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 // check overlapping
@@ -971,7 +971,7 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
 {
     OSectionView& rSectionView = _aReportSection.getSectionView();
     uno::Reference< report::XReportComponent> xComponent(_pControl->getUnoShape(),uno::UNO_QUERY);
-    Rectangle aRect = getRectangleFromControl(_pControl);
+    tools::Rectangle aRect = getRectangleFromControl(_pControl);
 
     bool bOverlapping = true;
     while ( bOverlapping )
@@ -980,7 +980,7 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
         bOverlapping = pOverlappedObj != nullptr;
         if ( bOverlapping )
         {
-            const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
+            const tools::Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
             aRect.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aRect.Top());
             xComponent->setPositionY(aRect.Top());
         }

@@ -165,7 +165,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
 }
 
-void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     long nTextHeight = maHorzDim->GetTextHeight();
     Size aSize(GetSizePixel());
@@ -178,7 +178,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
         rRenderContext.Push();
         Font aFont(rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
         SetZoomedPointFont(rRenderContext, aFont);
-        Rectangle aTextRect(aOffset + Point(2, 2), Size(maPreviewSize.Width() - 4, maPreviewSize.Height() - 4));
+        tools::Rectangle aTextRect(aOffset + Point(2, 2), Size(maPreviewSize.Width() - 4, maPreviewSize.Height() - 4));
         rRenderContext.DrawText(aTextRect, maReplacementString,
                                 DrawTextFlags::Center | DrawTextFlags::VCenter |
                                 DrawTextFlags::WordBreak | DrawTextFlags::MultiLine);
@@ -191,7 +191,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
         rRenderContext.DrawBitmap(aOffset, aPreviewBitmap);
     }
 
-    Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));
+    tools::Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));
     DecorationView aDecorationView(&rRenderContext);
     aDecorationView.DrawFrame(aFrameRect, DrawFrameStyle::Group);
 }
@@ -319,7 +319,7 @@ Size PrintDialog::ShowNupOrderWindow::GetOptimalSize() const
     return Size(70, 70);
 }
 
-void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rRect)
+void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& i_rRect)
 {
     Window::Paint(rRenderContext, i_rRect);
 
@@ -373,7 +373,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
                                       nY * aSubSize.Height() + nDeltaY), aPageText);
     }
     DecorationView aDecorationView(&rRenderContext);
-    aDecorationView.DrawFrame(Rectangle(Point(0, 0), aOutSize), DrawFrameStyle::Group);
+    aDecorationView.DrawFrame(tools::Rectangle(Point(0, 0), aOutSize), DrawFrameStyle::Group);
 }
 
 PrintDialog::NUpTabPage::NUpTabPage( VclBuilder *pUIBuilder )

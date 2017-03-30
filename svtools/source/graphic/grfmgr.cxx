@@ -241,7 +241,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 
     if( GetType() != GraphicType::NONE )
     {
-        tools::Polygon aClipPoly( Rectangle( rPt, rSz ) );
+        tools::Polygon aClipPoly( tools::Rectangle( rPt, rSz ) );
         const sal_uInt16 nRot10 = pAttr->GetRotation() % 3600;
         const Point     aOldOrigin( rPt );
         const MapMode   aMap100( MapUnit::Map100thMM );
@@ -458,7 +458,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     bool bRet;
 
     // #i29534# Provide output rects for PDF writer
-    Rectangle           aCropRect;
+    tools::Rectangle           aCropRect;
 
     if( !( GraphicManagerDrawFlags::USE_DRAWMODE_SETTINGS & nFlags ) )
         pOut->SetDrawMode( nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ) );
@@ -523,7 +523,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     return bRet;
 }
 
-void GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
+void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea, const Size& rSize,
                                const Size& rOffset, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
 {
     if( pOut == nullptr || rSize.Width() == 0 || rSize.Height() == 0 )
@@ -703,7 +703,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         {
             const MapMode aMtfMapMode( aMtf.GetPrefMapMode() );
 
-            Rectangle aClipRect( aMtfMapMode.GetOrigin().X() + aCropLeftTop.Width(),
+            tools::Rectangle aClipRect( aMtfMapMode.GetOrigin().X() + aCropLeftTop.Width(),
                                  aMtfMapMode.GetOrigin().Y() + aCropLeftTop.Height(),
                                  aMtfMapMode.GetOrigin().X() + aSrcSize.Width() - aCropRightBottom.Width(),
                                  aMtfMapMode.GetOrigin().Y() + aSrcSize.Height() - aCropRightBottom.Height() );
@@ -740,7 +740,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     else if( GraphicType::Bitmap == eType )
     {
         BitmapEx aBitmapEx( aTransGraphic.GetBitmapEx() );
-        Rectangle aCropRect;
+        tools::Rectangle aCropRect;
 
         // convert crops to pixel
         if(rAttr.IsCropped())
@@ -797,7 +797,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
             }
 
             // setup crop rectangle in pixel
-            aCropRect = Rectangle( aCropLeftTop.Width(), aCropLeftTop.Height(),
+            aCropRect = tools::Rectangle( aCropLeftTop.Width(), aCropLeftTop.Height(),
                                  aSrcSizePixel.Width() - aCropRightBottom.Width(),
                                  aSrcSizePixel.Height() - aCropRightBottom.Height() );
         }
@@ -811,10 +811,10 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
             {
                 AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
 
-                if( !aCropRect.IsInside( Rectangle(aAnimBmp.aPosPix, aAnimBmp.aSizePix) ) )
+                if( !aCropRect.IsInside( tools::Rectangle(aAnimBmp.aPosPix, aAnimBmp.aSizePix) ) )
                 {
                     // setup actual cropping (relative to frame position)
-                    Rectangle aCropRectRel( aCropRect );
+                    tools::Rectangle aCropRectRel( aCropRect );
                     aCropRectRel.Move( -aAnimBmp.aPosPix.X(),
                                        -aAnimBmp.aPosPix.Y() );
 

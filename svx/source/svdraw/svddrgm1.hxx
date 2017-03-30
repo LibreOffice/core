@@ -139,7 +139,7 @@ public:
 class SdrDragCrook : public SdrDragMethod
 {
 private:
-    Rectangle                   aMarkRect;
+    tools::Rectangle                   aMarkRect;
     Point                       aMarkCenter;
     Point                       aCenter;
     Point                       aStart;
@@ -187,7 +187,7 @@ public:
 class SdrDragDistort : public SdrDragMethod
 {
 private:
-    Rectangle                   aMarkRect;
+    tools::Rectangle                   aMarkRect;
     XPolygon                    aDistortedRect;
     sal_uInt16                  nPolyPt;
     bool                        bContortionAllowed;

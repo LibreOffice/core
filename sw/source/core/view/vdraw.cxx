@@ -198,8 +198,8 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
         GetPageView()->GetPage()->SetSize( rNewSz );
 
     // Limitation of the work area
-    const Rectangle aDocRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
-    const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
+    const tools::Rectangle aDocRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
+    const tools::Rectangle &rOldWork = GetDrawView()->GetWorkArea();
     bool bCheckDrawObjs = false;
     if ( aDocRect != rOldWork )
     {
@@ -251,7 +251,7 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
                 continue;
             }
 
-            const Rectangle aObjBound( pObj->GetCurrentBoundRect() );
+            const tools::Rectangle aObjBound( pObj->GetCurrentBoundRect() );
             if ( !aDocRect.IsInside( aObjBound ) )
             {
                 Size aSz;

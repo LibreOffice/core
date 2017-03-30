@@ -35,7 +35,7 @@
 // predefines
 
 class GDIMetaFile;
-class Rectangle;
+namespace tools { class Rectangle; }
 class Gradient;
 class SvtGraphicFill;
 class SvtGraphicStroke;
@@ -72,7 +72,7 @@ namespace drawinglayer
         {
         private:
             /// local helper(s)
-            Rectangle impDumpToMetaFile(
+            tools::Rectangle impDumpToMetaFile(
                 const primitive2d::Primitive2DContainer& rContent,
                 GDIMetaFile& o_rContentMetafile);
             void impConvertFillGradientAttributeToVCLGradient(

@@ -350,7 +350,7 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, ScrollFlags )
 
             // never scroll the scrollbars itself!
             Window::Scroll(-nDeltaX, -nDeltaY,
-                PixelToLogic( Rectangle( Point(0, 0), aOutPixSz ) ) );
+                PixelToLogic( tools::Rectangle( Point(0, 0), aOutPixSz ) ) );
         }
         else
         {

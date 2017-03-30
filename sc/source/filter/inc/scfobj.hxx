@@ -21,12 +21,12 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_SCFOBJ_HXX
 
 class ScDocument;
-class Rectangle;
+namespace tools { class Rectangle; }
 
 class Sc10InsertObject
 {
 public:
-    static void InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
+    static void InsertChart( ScDocument* pDoc, SCTAB nDestTab, const tools::Rectangle& rRect,
                                 SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 );
 };
 

@@ -34,7 +34,7 @@ class SdrPage;
 
 class SfxItemSet;
 class ScDocument;
-class Rectangle;
+namespace tools { class Rectangle; }
 struct ScCaptionInitData;
 
 /** Some desperate attempt to fight against the caption object ownership mess,
@@ -265,7 +265,7 @@ public:
     /** Creates and returns a caption object for a temporary caption. */
     static ScCaptionPtr CreateTempCaption( ScDocument& rDoc, const ScAddress& rPos,
                             SdrPage& rDrawPage, const OUString& rUserText,
-                            const Rectangle& rVisRect, bool bTailFront );
+                            const tools::Rectangle& rVisRect, bool bTailFront );
 
     /** Creates a cell note using the passed caption drawing object.
 
@@ -321,7 +321,7 @@ public:
     static ScPostIt*    CreateNoteFromObjectData(
                             ScDocument& rDoc, const ScAddress& rPos,
                             SfxItemSet* pItemSet, OutlinerParaObject* pOutlinerObj,
-                            const Rectangle& rCaptionRect, bool bShown,
+                            const tools::Rectangle& rCaptionRect, bool bShown,
                             bool bAlwaysCreateCaption );
 
     /** Creates a cell note based on the passed string and inserts it into the

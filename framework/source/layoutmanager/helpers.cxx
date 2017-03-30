@@ -128,7 +128,7 @@ SystemWindow* getTopSystemWindow( const uno::Reference< awt::XWindow >& xWindow 
         return nullptr;
 }
 
-void setZeroRectangle( ::Rectangle& rRect )
+void setZeroRectangle( ::tools::Rectangle& rRect )
 {
     rRect.setX(0);
     rRect.setY(0);
@@ -224,7 +224,7 @@ void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUS
     }
 }
 
-css::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect )
+css::awt::Rectangle putRectangleValueToAWT( const ::tools::Rectangle& rRect )
 {
     css::awt::Rectangle aRect;
     aRect.X = rRect.Left();
@@ -235,9 +235,9 @@ css::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect )
     return aRect;
 }
 
-::Rectangle putAWTToRectangle( const css::awt::Rectangle& rRect )
+::tools::Rectangle putAWTToRectangle( const css::awt::Rectangle& rRect )
 {
-    ::Rectangle aRect;
+    ::tools::Rectangle aRect;
     aRect.Left() = rRect.X;
     aRect.Top() = rRect.Y;
     aRect.Right() = rRect.Width;

@@ -325,27 +325,27 @@ namespace accessibility
         return false;
     }
 
-    Rectangle AccessibleGridControlTableCell::implGetBoundingBox()
+    tools::Rectangle AccessibleGridControlTableCell::implGetBoundingBox()
     {
         vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
         DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
-        Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( pParent );
+        tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( pParent );
         sal_Int32 nIndex = getAccessibleIndexInParent();
-        Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
+        tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
         long nX = aGridRect.Left() + aCellRect.Left();
         long nY = aGridRect.Top() + aCellRect.Top();
-        Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
+        tools::Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
         return aCell;
     }
 
-    Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
+    tools::Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
-        Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( nullptr );
         sal_Int32 nIndex = getAccessibleIndexInParent();
-        Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
+        tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
         long nX = aGridRect.Left() + aCellRect.Left();
         long nY = aGridRect.Top() + aCellRect.Top();
-        Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
+        tools::Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
         return aCell;
     }
 }

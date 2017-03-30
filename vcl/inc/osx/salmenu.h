@@ -69,10 +69,10 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) override;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) override;
     virtual void GetSystemMenuData( SystemMenuData* pData ) override;
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags) override;
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ) override;
     virtual void RemoveMenuBarButton( sal_uInt16 nId ) override;
-    virtual Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) override;
+    virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) override;
 
     int getItemIndexByPos( sal_uInt16 nPos ) const;
     const AquaSalFrame* getFrame() const;

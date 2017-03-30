@@ -98,7 +98,7 @@ void SvxPageWindow::dispose()
 
 VCL_BUILDER_FACTORY(SvxPageWindow)
 
-void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Fraction aXScale(aWinSize.Width(), std::max(long(aSize.Width() * 2 + aSize.Width() / 8), 1L));
     Fraction aYScale(aWinSize.Height(), std::max(aSize.Height(), 1L));
@@ -165,7 +165,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         rRenderContext.SetLineColor(Color(COL_TRANSPARENT));
         rRenderContext.SetFillColor(rDlgColor);
         Size winSize(rRenderContext.GetOutputSize());
-        rRenderContext.DrawRect(Rectangle(Point(0,0), winSize));
+        rRenderContext.DrawRect(tools::Rectangle(Point(0,0), winSize));
 
         if (bResetBackground)
             bResetBackground = false;
@@ -179,11 +179,11 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     if (!bEnabled)
     {
         rRenderContext.SetFillColor(rDisableColor);
-        rRenderContext.DrawRect(Rectangle(rOrg, aTempSize));
+        rRenderContext.DrawRect(tools::Rectangle(rOrg, aTempSize));
         return;
     }
     rRenderContext.SetFillColor(rFieldColor);
-    rRenderContext.DrawRect(Rectangle(rOrg, aTempSize));
+    rRenderContext.DrawRect(tools::Rectangle(rOrg, aTempSize));
 
     long nL = nLeft;
     long nR = nRight;
@@ -195,15 +195,15 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         nR = nLeft;
     }
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     aRect.Left() = rOrg.X() + nL;
     aRect.Right() = rOrg.X() + aTempSize.Width() - nR;
     aRect.Top() = rOrg.Y() + nTop;
     aRect.Bottom() = rOrg.Y() + aTempSize.Height() - nBottom;
 
-    Rectangle aHdRect(aRect);
-    Rectangle aFtRect(aRect);
+    tools::Rectangle aHdRect(aRect);
+    tools::Rectangle aFtRect(aRect);
 
     if (bHeader || bFooter)
     {
@@ -325,7 +325,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         long nTH = CELL_HEIGHT * 3;
         long _nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
         long _nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
-        Rectangle aCellRect(Point(_nLeft, _nTop),Size(CELL_WIDTH, CELL_HEIGHT));
+        tools::Rectangle aCellRect(Point(_nLeft, _nTop),Size(CELL_WIDTH, CELL_HEIGHT));
 
         for (sal_uInt16 i = 0; i < 3; ++i)
         {
@@ -346,8 +346,8 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
 
 void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
                                        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
-                                       const Rectangle& rPaintRange,
-                                       const Rectangle& rDefineRange)
+                                       const tools::Rectangle& rPaintRange,
+                                       const tools::Rectangle& rDefineRange)
 {
     const basegfx::B2DRange aPaintRange(
         rPaintRange.Left(),

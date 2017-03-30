@@ -790,8 +790,8 @@ public:
     void            GetEmbedded( ScRange& rRange ) const;
     void            SetEmbedded( const ScRange& rRange );
     void            ResetEmbedded();
-    Rectangle       GetEmbeddedRect() const;                        // 1/100 mm
-    void            SetEmbedded( SCTAB nTab, const Rectangle& rRect );          // from VisArea (1/100 mm)
+    tools::Rectangle       GetEmbeddedRect() const;                        // 1/100 mm
+    void            SetEmbedded( SCTAB nTab, const tools::Rectangle& rRect );          // from VisArea (1/100 mm)
 
     static SC_DLLPUBLIC bool ValidTabName( const OUString& rName );
 
@@ -942,8 +942,8 @@ public:
 
     void            StartAnimations( SCTAB nTab, vcl::Window* pWin );
 
-    bool            HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const;
-    bool            HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const;
+    bool            HasBackgroundDraw( SCTAB nTab, const tools::Rectangle& rMMRect ) const;
+    bool            HasAnyDraw( SCTAB nTab, const tools::Rectangle& rMMRect ) const;
 
     const ScSheetEvents* GetSheetEvents( SCTAB nTab ) const;
     void                 SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
@@ -1141,7 +1141,7 @@ public:
                                     SCCOL nEndCol, SCROW nEndRow,
                                     bool bLeftIsEmpty = false,
                                     ScRange* pLastRange = nullptr,
-                                    Rectangle* pLastMM = nullptr ) const;
+                                    tools::Rectangle* pLastMM = nullptr ) const;
 
     void            SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const;
     bool            IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
@@ -1834,9 +1834,9 @@ public:
     ScPrintRangeSaver*           CreatePrintRangeSaver() const;
     void                         RestorePrintRanges( const ScPrintRangeSaver& rSaver );
 
-    SC_DLLPUBLIC Rectangle       GetMMRect( SCCOL nStartCol, SCROW nStartRow,
+    SC_DLLPUBLIC tools::Rectangle       GetMMRect( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC ScRange         GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC ScRange         GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool bHiddenAsZero = true ) const;
 
     void                         UpdStlShtPtrsFrmNms();
     void                         StylesToNames();

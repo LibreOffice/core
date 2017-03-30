@@ -24,7 +24,7 @@ public:
 
         Returns rectangle that needs to be invalidated.
     */
-    virtual Rectangle updateHighlight(bool bVisible, const Point& rPoint) override;
+    virtual tools::Rectangle updateHighlight(bool bVisible, const Point& rPoint) override;
 
     /// Text to be used for the tooltip.
     virtual OUString getHelpText() const override;
@@ -39,7 +39,7 @@ public:
 
 protected:
     /// Return area where is the icon to remove document from the recent documents.
-    Rectangle getRemoveIconArea() const;
+    tools::Rectangle getRemoveIconArea() const;
 
 private:
     OUString maURL;

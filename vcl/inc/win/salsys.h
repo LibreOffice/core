@@ -31,11 +31,11 @@ public:
     struct DisplayMonitor
     {
         OUString        m_aName;
-        Rectangle       m_aArea;
+        tools::Rectangle       m_aArea;
 
         DisplayMonitor() {}
         DisplayMonitor( const OUString& rName,
-                        const Rectangle& rArea )
+                        const tools::Rectangle& rArea )
                         : m_aName( rName ),
                           m_aArea( rArea )
         {
@@ -51,7 +51,7 @@ public:
 
     virtual unsigned int GetDisplayScreenCount() override;
     virtual unsigned int GetDisplayBuiltInScreen() override;
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen )  override;
+    virtual tools::Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen )  override;
     virtual int ShowNativeMessageBox( const OUString& rTitle,
                                       const OUString& rMessage)  override;
     bool initMonitors();

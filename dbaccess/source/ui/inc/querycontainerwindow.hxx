@@ -93,10 +93,10 @@ namespace dbaui
 
     protected:
         // re-arrange the controls belonging to the document itself
-        virtual void resizeAll( const Rectangle& _rPlayground ) override;
+        virtual void resizeAll( const tools::Rectangle& _rPlayground ) override;
 
         // arrange derived classes controls in the rectangle given
-        virtual void resizeDocumentView(Rectangle& _rPlayground) override;
+        virtual void resizeDocumentView(tools::Rectangle& _rPlayground) override;
     };
     // end of temp classes
 

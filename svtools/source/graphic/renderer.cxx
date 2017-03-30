@@ -86,7 +86,7 @@ private:
     css::uno::Reference< css::awt::XDevice > mxDevice;
 
     VclPtr<OutputDevice>        mpOutDev;
-    Rectangle                   maDestRect;
+    tools::Rectangle                   maDestRect;
     css::uno::Any               maRenderData;
 };
 
@@ -230,7 +230,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
 
                 if( *pValues >>= aAWTRect )
                 {
-                    maDestRect = Rectangle( Point( aAWTRect.X, aAWTRect.Y ),
+                    maDestRect = tools::Rectangle( Point( aAWTRect.X, aAWTRect.Y ),
                                             Size( aAWTRect.Width, aAWTRect.Height ) );
                 }
             }

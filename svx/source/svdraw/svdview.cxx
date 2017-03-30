@@ -116,7 +116,7 @@ SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const SdrObject
         rObject.TakeXorPoly());
 }
 
-SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const Rectangle& rRectangle)
+SdrDropMarkerOverlay::SdrDropMarkerOverlay(const SdrView& rView, const tools::Rectangle& rRectangle)
 {
     basegfx::B2DPolygon aB2DPolygon;
 
@@ -454,8 +454,8 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 
             if (bTEHit)
             {
-                Rectangle aTextRect;
-                Rectangle aAnchor;
+                tools::Rectangle aTextRect;
+                tools::Rectangle aAnchor;
                 SdrOutliner* pOutliner = &pTextObj->ImpGetDrawOutliner();
                 if( pTextObj->GetModel() )
                     pOutliner = &pTextObj->GetModel()->GetHitTestOutliner();
@@ -499,7 +499,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         (IsTextTool() || (IsEditMode() && IsQuickTextEditMode())) && pHitObj->HasTextEdit())
     {
         // Around the TextEditArea there's a border to select without going into text edit mode.
-        Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
+        tools::Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
 
         // Force to SnapRect when Fontwork
         if( dynamic_cast<const SdrTextObj*>( pHitObj) != nullptr && static_cast<SdrTextObj*>(pHitObj)->IsFontwork())
@@ -1370,7 +1370,7 @@ void SdrView::UnmarkAll()
     else UnmarkAllObj();
 }
 
-const Rectangle& SdrView::GetMarkedRect() const
+const tools::Rectangle& SdrView::GetMarkedRect() const
 {
     if (IsGluePointEditMode() && HasMarkedGluePoints()) {
         return GetMarkedGluePointsRect();

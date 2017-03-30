@@ -70,13 +70,13 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
     DECL_LINK(EditStatusHdl, EditStatus&, void);
     DECL_LINK(ScrollHdl, ScrollBar*, void);
 
     void CreateEditView();
-    Rectangle AdjustScrollBars();
+    tools::Rectangle AdjustScrollBars();
     void SetScrollBarRanges();
     void InitScrollBars();
     void InvalidateSlots();

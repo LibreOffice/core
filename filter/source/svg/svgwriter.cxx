@@ -175,7 +175,7 @@ void SVGAttributeWriter::AddColorAttr( const char* pColorAttrName,
 
 
 void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
-                                       const Rectangle* pObjBoundRect, const Gradient* pFillGradient )
+                                       const tools::Rectangle* pObjBoundRect, const Gradient* pFillGradient )
 {
     // Fill
     if( pObjBoundRect && pFillGradient )
@@ -198,7 +198,7 @@ void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFi
 }
 
 
-void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradient& rGradient, OUString& rGradientId )
+void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const Gradient& rGradient, OUString& rGradientId )
 {
     if( rObjRect.GetWidth() && rObjRect.GetHeight() &&
         ( rGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial ||
@@ -212,7 +212,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
         static sal_Int32 nCurGradientId = 1;
 
         aPoly.Rotate( aObjRectCenter, nAngle );
-        Rectangle aRect( aPoly.GetBoundRect() );
+        tools::Rectangle aRect( aPoly.GetBoundRect() );
 
         // adjust start/end colors with intensities
         aStartColor.SetRed( (sal_uInt8)( ( aStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 ) );
@@ -1764,12 +1764,12 @@ Size& SVGActionWriter::ImplMap( const Size& rSz, Size& rDstSz ) const
 }
 
 
-void SVGActionWriter::ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const
+void SVGActionWriter::ImplMap( const tools::Rectangle& rRect, tools::Rectangle& rDstRect ) const
 {
     Point   aTL( rRect.TopLeft() );
     Size    aSz( rRect.GetSize() );
 
-    rDstRect = Rectangle( ImplMap( aTL, aTL ), ImplMap( aSz, aSz ) );
+    rDstRect = tools::Rectangle( ImplMap( aTL, aTL ), ImplMap( aSz, aSz ) );
 }
 
 
@@ -1903,9 +1903,9 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
 }
 
 
-void SVGActionWriter::ImplWriteRect( const Rectangle& rRect, long nRadX, long nRadY )
+void SVGActionWriter::ImplWriteRect( const tools::Rectangle& rRect, long nRadX, long nRadY )
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     ImplMap( rRect, aRect );
 
@@ -2023,7 +2023,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
     ImplMap( rShape.maShapePolyPoly, aPolyPoly );
 
     const bool  bLineOnly = ( rShape.maShapeFillColor == Color( COL_TRANSPARENT ) ) && ( !rShape.mapShapeGradient.get() );
-    Rectangle   aBoundRect( aPolyPoly.GetBoundRect() );
+    tools::Rectangle   aBoundRect( aPolyPoly.GetBoundRect() );
 
     maAttributeWriter.AddPaintAttr( rShape.maShapeLineColor, rShape.maShapeFillColor, &aBoundRect, rShape.mapShapeGradient.get() );
 
@@ -2167,7 +2167,7 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aPatternId );
 
-            Rectangle aRect;
+            tools::Rectangle aRect;
             ImplMap( rPolyPoly.GetBoundRect(), aRect );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aRect.Left() ) );
@@ -2238,7 +2238,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aGradientId );
             {
-                Rectangle aTmpRect, aRect;
+                tools::Rectangle aTmpRect, aRect;
                 Point aTmpCenter, aCenter;
 
                 rGradient.GetBoundRect( rPolyPoly.GetBoundRect(), aTmpRect, aTmpCenter );
@@ -2412,7 +2412,7 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
         {
             SvXMLElementExport aElemMask( mrExport, XML_NAMESPACE_NONE, "mask", true, true );
 
-            const tools::PolyPolygon aPolyPolygon( tools::PolyPolygon( Rectangle( rDestPt, rDestSize ) ) );
+            const tools::PolyPolygon aPolyPolygon( tools::PolyPolygon( tools::Rectangle( rDestPt, rDestSize ) ) );
             Gradient aGradient( rGradient );
 
             // swap gradient stops to adopt SVG mask
@@ -2718,8 +2718,8 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
     {
         BitmapEx aBmpEx( rBmpEx );
         Point    aPoint;
-        const Rectangle aBmpRect( aPoint, rBmpEx.GetSizePixel() );
-        const Rectangle aSrcRect( rSrcPt, rSrcSz );
+        const tools::Rectangle aBmpRect( aPoint, rBmpEx.GetSizePixel() );
+        const tools::Rectangle aSrcRect( rSrcPt, rSrcSz );
 
         if( aSrcRect != aBmpRect )
             aBmpEx.Crop( aSrcRect );
@@ -2901,7 +2901,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaEllipseAction*    pA = static_cast<const MetaEllipseAction*>(pAction);
-                    const Rectangle&            rRect = pA->GetRect();
+                    const tools::Rectangle&            rRect = pA->GetRect();
 
                     maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
                     ImplWriteEllipse( rRect.Center(), rRect.GetWidth() >> 1, rRect.GetHeight() >> 1 );

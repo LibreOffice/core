@@ -31,7 +31,7 @@
 #include <map>
 
 class Size;
-class Rectangle;
+namespace tools { class Rectangle; }
 
 namespace com { namespace sun { namespace star {
     namespace awt
@@ -100,7 +100,7 @@ public:
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
     void                InitConversion( css::uno::Reference< css::chart2::XChartDocument > const & xChartDoc,
-                                        const Rectangle& rChartRect ) const;
+                                        const tools::Rectangle& rChartRect ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion() const;
 
@@ -1127,7 +1127,7 @@ class XclExpChChart : public XclExpChGroupBase
 public:
     explicit            XclExpChChart( const XclExpRoot& rRoot,
                             css::uno::Reference< css::chart2::XChartDocument > const & xChartDoc,
-                            const Rectangle& rChartRect );
+                            const tools::Rectangle& rChartRect );
 
     /** Creates, registers and returns a new data series object. */
     XclExpChSeriesRef   CreateSeries();
@@ -1183,7 +1183,7 @@ class XclExpChart : public XclExpSubStream, protected XclExpRoot
 public:
     explicit            XclExpChart( const XclExpRoot& rRoot,
                             css::uno::Reference< css::frame::XModel > const & xModel,
-                            const Rectangle& rChartRect );
+                            const tools::Rectangle& rChartRect );
 };
 
 #endif

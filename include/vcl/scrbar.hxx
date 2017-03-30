@@ -41,12 +41,12 @@ struct ImplScrollBarData;
 class VCL_DLLPUBLIC ScrollBar : public Control
 {
 private:
-    Rectangle       maBtn1Rect;
-    Rectangle       maBtn2Rect;
-    Rectangle       maPage1Rect;
-    Rectangle       maPage2Rect;
-    Rectangle       maThumbRect;
-    Rectangle       maTrackRect;
+    tools::Rectangle       maBtn1Rect;
+    tools::Rectangle       maBtn2Rect;
+    tools::Rectangle       maPage1Rect;
+    tools::Rectangle       maPage2Rect;
+    tools::Rectangle       maThumbRect;
+    tools::Rectangle       maTrackRect;
     ImplScrollBarData* mpData;
     long            mnStartPos;
     long            mnMouseOff;
@@ -68,7 +68,7 @@ private:
     Link<ScrollBar*,void>       maScrollHdl;
     Link<ScrollBar*,void>       maEndScrollHdl;
 
-    SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
+    SAL_DLLPRIVATE tools::Rectangle*   ImplFindPartRect( const Point& rPt );
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
@@ -95,7 +95,7 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void Tracking(const TrackingEvent& rTEvt) override;
     virtual void KeyInput(const KeyEvent& rKEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags) override;
     virtual void Resize() override;
     virtual void StateChanged(StateChangedType nType) override;

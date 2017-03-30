@@ -240,8 +240,8 @@ namespace dbaui
         sal_Int32 nItemIndex = LISTBOX_ENTRY_NOTFOUND;
         if ( GetIndexForPoint( aRequestPos, nItemIndex ) != -1 )
         {
-            Rectangle aItemRect( GetBoundingRectangle( nItemIndex ) );
-            aItemRect = Rectangle(
+            tools::Rectangle aItemRect( GetBoundingRectangle( nItemIndex ) );
+            aItemRect = tools::Rectangle(
                 OutputToScreenPixel( aItemRect.TopLeft() ),
                 OutputToScreenPixel( aItemRect.BottomRight() ) );
             OUString sHelpText = impl_getDocumentAtIndex( nItemIndex, true ).first;

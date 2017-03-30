@@ -310,7 +310,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
         aText += "\n";
     aText += m_vEntries[ nPos ]->m_sDescription;
 
-    Rectangle aRect = GetTextRect( Rectangle( Point(), aSize ), aText,
+    tools::Rectangle aRect = GetTextRect( tools::Rectangle( Point(), aSize ), aText,
                                    DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
     aTextHeight += aRect.GetHeight();
 
@@ -323,7 +323,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
         m_nActiveHeight = aTextHeight + 2;
 }
 
-Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
+tools::Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
@@ -341,7 +341,7 @@ Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
     if ( m_bHasActive && ( nPos < m_nActive ) )
         aPos.Y() += m_nActiveHeight - m_nStdHeight;
 
-    return Rectangle( aPos, aSize );
+    return tools::Rectangle( aPos, aSize );
 }
 
 
@@ -419,7 +419,7 @@ void ExtensionBox_Impl::selectEntry( const long nPos )
 }
 
 
-void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TEntry_Impl& rEntry)
+void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -537,7 +537,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const Rectan
         if (rEntry->m_bHasButtons)
             nExtraHeight = m_nExtraHeight;
 
-        rRenderContext.DrawText(Rectangle(aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight),
+        rRenderContext.DrawText(tools::Rectangle(aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight),
                                 sDescription, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
     }
     else
@@ -587,7 +587,7 @@ void ExtensionBox_Impl::RecalcAll()
 
     if ( m_bHasActive )
     {
-        Rectangle aEntryRect = GetEntryRect( m_nActive );
+        tools::Rectangle aEntryRect = GetEntryRect( m_nActive );
 
         if ( m_bAdjustActive )
         {
@@ -674,7 +674,7 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 }
 
 
-void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rPaintRect*/)
+void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rPaintRect*/)
 {
     if ( !m_bInDelete )
         DeleteRemoved();
@@ -694,7 +694,7 @@ void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     for (ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
     {
         aSize.Height() = (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight;
-        Rectangle aEntryRect( aStart, aSize );
+        tools::Rectangle aEntryRect( aStart, aSize );
         DrawRow(rRenderContext, aEntryRect, *iIndex);
         aStart.Y() += aSize.Height();
     }
@@ -1170,7 +1170,7 @@ void ExtensionBox_Impl::DoScroll( long nDelta )
     m_nTopIndex += nDelta;
     Point aNewSBPt( m_pScrollBar->GetPosPixel() );
 
-    Rectangle aScrRect( Point(), GetOutputSizePixel() );
+    tools::Rectangle aScrRect( Point(), GetOutputSizePixel() );
     aScrRect.Right() -= m_pScrollBar->GetSizePixel().Width();
     Scroll( 0, -nDelta, aScrRect );
 

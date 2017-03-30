@@ -404,7 +404,7 @@ bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
             aClassName.GetByteSequence(), objArgs, aPersistName));
     if( xObj.is() )
     {
-        Rectangle aRect = pOle2Obj->GetLogicRect();
+        tools::Rectangle aRect = pOle2Obj->GetLogicRect();
         if ( aRect.GetWidth() == 101 && aRect.GetHeight() == 101 )
         {
             // TODO/LATER: is it possible that this method is used to create an iconified object?
@@ -472,7 +472,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
 
     if( xObj.is() )
     {
-        Rectangle aRect = pOle2Obj->GetLogicRect();
+        tools::Rectangle aRect = pOle2Obj->GetLogicRect();
         if ( aRect.GetWidth() == 101 && aRect.GetHeight() == 101 )
         {
             // default size

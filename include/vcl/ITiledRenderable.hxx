@@ -155,7 +155,7 @@ public:
      * @param rRectangle - if not empty, then limit the output only to the area of this rectangle
      * @return a JSON describing position/content of rows/columns
      */
-    virtual OUString getRowColumnHeaders(const Rectangle& rRectangle)
+    virtual OUString getRowColumnHeaders(const tools::Rectangle& rRectangle)
     {
         (void) rRectangle;
         return OUString();
@@ -201,7 +201,7 @@ public:
     }
 
     /// @see lok::Document::setClientVisibleArea().
-    virtual void setClientVisibleArea(const Rectangle& /*rRectangle*/)
+    virtual void setClientVisibleArea(const tools::Rectangle& /*rRectangle*/)
     {
     }
 

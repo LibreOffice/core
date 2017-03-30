@@ -509,7 +509,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
         eObjKind = PRESOBJ_MEDIA;
     }
 
-    Rectangle aRect( eObjKind == PRESOBJ_TITLE ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
+    ::tools::Rectangle aRect( eObjKind == PRESOBJ_TITLE ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
 
     const awt::Point aPos( aRect.Left(), aRect.Top() );
     xShape->setPosition( aPos );
@@ -1125,7 +1125,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         Point   aPoint;
                         Size    aSize( GetPage()->GetSize() );
                         xMetaFile->AddAction( static_cast<MetaAction*>(new MetaFillColorAction( COL_WHITE, true )), 0 );
-                        xMetaFile->AddAction( static_cast<MetaAction*>(new MetaRectAction( Rectangle( aPoint, aSize ) )), 1 );
+                        xMetaFile->AddAction( static_cast<MetaAction*>(new MetaRectAction( ::tools::Rectangle( aPoint, aSize ) )), 1 );
                         xMetaFile->SetPrefMapMode( MapUnit::Map100thMM );
                         xMetaFile->SetPrefSize( aSize );
 

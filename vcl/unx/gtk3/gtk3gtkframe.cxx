@@ -1663,16 +1663,16 @@ void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
         rWidth = rHeight = 0;
 }
 
-void GtkSalFrame::GetWorkArea( Rectangle& rRect )
+void GtkSalFrame::GetWorkArea( tools::Rectangle& rRect )
 {
     GdkScreen  *pScreen = gtk_window_get_screen(GTK_WINDOW(m_pWindow));
-    Rectangle aRetRect;
+    tools::Rectangle aRetRect;
     int max = gdk_screen_get_n_monitors (pScreen);
     for (int i = 0; i < max; ++i)
     {
         GdkRectangle aRect;
         gdk_screen_get_monitor_workarea(pScreen, i, &aRect);
-        Rectangle aMonitorRect(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
+        tools::Rectangle aMonitorRect(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
         aRetRect.Union(aMonitorRect);
     }
     rRect = aRetRect;
@@ -1706,7 +1706,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         updateScreenNumber();
 
         m_nState = GdkWindowState( m_nState | GDK_WINDOW_STATE_MAXIMIZED );
-        m_aRestorePosSize = Rectangle( Point( pState->mnX, pState->mnY ),
+        m_aRestorePosSize = tools::Rectangle( Point( pState->mnX, pState->mnY ),
                                        Size( pState->mnWidth, pState->mnHeight ) );
     }
     else if( pState->mnMask & (WindowStateMask::X | WindowStateMask::Y |
@@ -1766,11 +1766,11 @@ namespace
        rHeight = height;
     }
 
-    Rectangle GetPosAndSize(GtkWindow *pWindow)
+    tools::Rectangle GetPosAndSize(GtkWindow *pWindow)
     {
         long nX, nY, nWidth, nHeight;
         GetPosAndSize(pWindow, nX, nY, nWidth, nHeight);
-        return Rectangle(nX, nY, nX + nWidth, nY + nHeight);
+        return tools::Rectangle(nX, nY, nX + nWidth, nY + nHeight);
     }
 }
 
@@ -1808,7 +1808,7 @@ bool GtkSalFrame::GetWindowState( SalFrameState* pState )
     return true;
 }
 
-void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *pSize )
+void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle *pSize )
 {
     if( !m_pWindow )
         return;
@@ -2011,7 +2011,7 @@ void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
     {
         SetScreen( nScreen, SetType::UnFullscreen,
                    !m_aRestorePosSize.IsEmpty() ? &m_aRestorePosSize : nullptr );
-        m_aRestorePosSize = Rectangle();
+        m_aRestorePosSize = tools::Rectangle();
     }
 }
 
@@ -2460,7 +2460,7 @@ gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
     return true;
 }
 
-bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpArea)
+bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const tools::Rectangle& rHelpArea)
 {
     m_aTooltip = rHelpText;
     m_aHelpArea = rHelpArea;
@@ -2471,7 +2471,7 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpA
 #if GTK_CHECK_VERSION(3,12,0)
 namespace
 {
-    void set_pointing_to(GtkPopover *pPopOver, const Rectangle& rHelpArea)
+    void set_pointing_to(GtkPopover *pPopOver, const tools::Rectangle& rHelpArea)
     {
         GdkRectangle aRect;
         aRect.x = rHelpArea.Left();
@@ -2497,7 +2497,7 @@ namespace
 }
 #endif
 
-sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const Rectangle& rHelpArea, QuickHelpFlags nFlags)
+sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags)
 {
 #if GTK_CHECK_VERSION(3,12,0)
     GtkWidget *pWidget = gtk_popover_new(getMouseEventWidget());
@@ -2529,7 +2529,7 @@ sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const Rectangle&
 #endif
 }
 
-bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const Rectangle& rHelpArea)
+bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea)
 {
 #if GTK_CHECK_VERSION(3,12,0)
     GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
@@ -4097,7 +4097,7 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
 
 Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
 {
-    Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nDisplayScreen );
+    tools::Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nDisplayScreen );
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 

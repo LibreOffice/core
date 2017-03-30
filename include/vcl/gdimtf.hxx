@@ -116,7 +116,7 @@ public:
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
     void            Rotate( long nAngle10 );
-    void            Clip( const Rectangle& );
+    void            Clip( const tools::Rectangle& );
     /* get the bound rect of the contained actions
      * caveats:
      * - clip actions will limit the contained actions,
@@ -124,7 +124,7 @@ public:
      * - coordinates of actions will be transformed to preferred mapmode
      * - the returned rectangle is relative to the preferred mapmode of the metafile
     */
-    Rectangle       GetBoundRect( OutputDevice& i_rReference, Rectangle* pHairline = nullptr ) const;
+    tools::Rectangle       GetBoundRect( OutputDevice& i_rReference, tools::Rectangle* pHairline = nullptr ) const;
 
     void            Adjust( short nLuminancePercent, short nContrastPercent,
                             short nChannelRPercent = 0,  short nChannelGPercent = 0,

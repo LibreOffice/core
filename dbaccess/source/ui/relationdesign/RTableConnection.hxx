@@ -34,7 +34,7 @@ namespace dbaui
 
         ORelationTableConnection& operator=( const ORelationTableConnection& rConn );
 
-        virtual void Draw(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void Draw(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         using OTableConnection::Draw;
     };
 }

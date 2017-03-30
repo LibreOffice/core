@@ -215,7 +215,7 @@ void FuConstPolygon::Deactivate()
 }
 
 // Create default drawing objects via keyboard
-SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
 {
     // case SID_DRAW_XPOLYGON:
     // case SID_DRAW_XPOLYGON_NOFILL:

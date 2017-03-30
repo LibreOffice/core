@@ -84,8 +84,8 @@ public:
     Gradient        GetGradient() const;
     bool            IsGradient() const;
 
-    void            SetRect( const Rectangle& rRect );
-    Rectangle       GetRect() const;
+    void            SetRect( const tools::Rectangle& rRect );
+    tools::Rectangle       GetRect() const;
     bool            IsRect() const;
 
     bool            IsFixed() const;

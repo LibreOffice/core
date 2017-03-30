@@ -336,7 +336,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
             Point aPnt = pViewSh->GetInsertPos();
             if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
                 aPnt.X() -= aSize.Width();      // move position to left edge
-            Rectangle aRect (aPnt, aSize);
+            tools::Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
             SdrPageView* pPV = pView->GetSdrPageView();
             pView->InsertObjectAtView(pObj, *pPV);
@@ -472,7 +472,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         xChartModel->lockControllers();
 
     ScRangeListRef aDummy;
-    Rectangle aMarkDest;
+    tools::Rectangle aMarkDest;
     SCTAB nMarkTab;
     bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
@@ -581,7 +581,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     }
 
-    Rectangle aRect (aStart, aSize);
+    tools::Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
     SdrPageView* pPV = pView->GetSdrPageView();
 
@@ -747,7 +747,7 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Wind
 
     ScRange aPositionRange = pViewSh->GetViewData().GetCurPos();
     Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
-    Rectangle aRect (aStart, aSize);
+    tools::Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
 
     SdrPageView* pPV = pView->GetSdrPageView();

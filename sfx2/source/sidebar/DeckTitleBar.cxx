@@ -72,17 +72,17 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
     }
 }
 
-Rectangle DeckTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
+tools::Rectangle DeckTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBox)
 {
     Image aGripImage (Theme::GetImage(Theme::Image_Grip));
-    return Rectangle(
+    return tools::Rectangle(
         aGripImage.GetSizePixel().Width() + gaLeftGripPadding + gaRightGripPadding,
         rTitleBarBox.Top(),
         rTitleBarBox.Right(),
         rTitleBarBox.Bottom());
 }
 
-void DeckTitleBar::PaintDecoration(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rTitleBarBox*/)
+void DeckTitleBar::PaintDecoration(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /*rTitleBarBox*/)
 {
 }
 

@@ -608,7 +608,7 @@ bool MotionPathTag::OnTabHandles( const KeyEvent& rKEvt )
             if( pWindow )
             {
                 Point aHdlPosition(pHdl->GetPos());
-                Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
+                ::tools::Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
                 mrView.MakeVisible(aVisRect, *pWindow);
             }
         }
@@ -798,7 +798,7 @@ bool MotionPathTag::MarkPoint(SdrHdl& rHdl, bool bUnmark )
     return bRet;
 }
 
-bool MotionPathTag::MarkPoints(const Rectangle* pRect, bool bUnmark )
+bool MotionPathTag::MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark )
 {
     bool bChgd=false;
 
@@ -940,7 +940,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
             }
             else
             {
-                Rectangle aRect(mpPathObj->GetCurrentBoundRect());
+                ::tools::Rectangle aRect(mpPathObj->GetCurrentBoundRect());
 
                 if(!aRect.IsEmpty())
                 {

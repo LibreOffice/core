@@ -182,8 +182,8 @@ namespace dbaui
     protected:
         virtual bool                SeekRow( long nRow ) override;
 
-        virtual void                PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const override;
-        virtual void                PaintCell(OutputDevice& rDev, const Rectangle& rRect,
+        virtual void                PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const override;
+        virtual void                PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                                               sal_uInt16 nColumnId ) const override;
 
         virtual sal_Int8            AcceptDrop( const BrowserAcceptDropEvent& rEvt ) override;
@@ -219,7 +219,7 @@ namespace dbaui
             // rCol contains the Nummer of the first empty column (in pOTableFieldDescList)
 
         void            RemoveField( sal_uInt16 nId );
-        Rectangle       GetInvalidRect( sal_uInt16 nColId );
+        tools::Rectangle       GetInvalidRect( sal_uInt16 nColId );
         long            GetRealRow(long nRow) const;
         long            GetBrowseRow(long nRowId) const;
         bool            GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt);

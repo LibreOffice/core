@@ -298,7 +298,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds()
 
     const SolarMutexGuard aSolarGuard;
 
-    Rectangle aBBox (
+    ::tools::Rectangle aBBox (
         mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
             mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber),
             ::sd::slidesorter::view::PageObjectLayouter::Part::PageObject,
@@ -310,7 +310,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds()
         if (xParentComponent.is())
         {
             awt::Rectangle aParentBBox (xParentComponent->getBounds());
-            aBBox.Intersection(Rectangle(
+            aBBox.Intersection(::tools::Rectangle(
                 aParentBBox.X,
                 aParentBBox.Y,
                 aParentBBox.Width,

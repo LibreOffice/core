@@ -415,7 +415,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             mpOODragRect(),
             mpOOHeader(),
             mpOOShrink(),
-            mpAutoFillRect(static_cast<Rectangle*>(nullptr)),
+            mpAutoFillRect(static_cast<tools::Rectangle*>(nullptr)),
             pViewData( pData ),
             eWhich( eWhichPos ),
             mpNoteMarker(),
@@ -635,7 +635,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     long nSizeX  = 0;
     long nSizeY  = 0;
     pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
-    Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
+    tools::Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
 
     ScDBData* pDBData = pDoc->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
     if (!pDBData)
@@ -902,7 +902,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
     if ( bLayoutRTL )
         aPos.X() -= nSizeX;
-    Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
+    tools::Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
     aCellRect.Top()    -= nSizeY;
     aCellRect.Bottom() -= nSizeY - 1;
     //  Place the ListBox directly below the black line of the cell grid
@@ -1027,7 +1027,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     if ( bLayoutRTL )
         aPos.X() -= nSizeX;
 
-    Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
+    tools::Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
 
     aPos.X() -= 1;
     aPos.Y() += nSizeY - 1;
@@ -1393,7 +1393,7 @@ bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, S
 
     // obtain the bounding box of the text in first non-empty cell
     // to the left
-    Rectangle aRect(aOutputData.LayoutStrings(false, false, ScAddress(nNonEmptyX, nPosY, nTab)));
+    tools::Rectangle aRect(aOutputData.LayoutStrings(false, false, ScAddress(nNonEmptyX, nPosY, nTab)));
 
     SetMapMode(aCurrentMapMode);
 
@@ -1550,7 +1550,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         ScViewSelectionEngine* pSelEng = pViewData->GetView()->GetSelEngine();
         pSelEng->SetWindow(this);
         pSelEng->SetWhich(eWhich);
-        pSelEng->SetVisibleArea( Rectangle(Point(), GetOutputSizePixel()) );
+        pSelEng->SetVisibleArea( tools::Rectangle(Point(), GetOutputSizePixel()) );
     }
 
     if (bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()))
@@ -1697,7 +1697,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
         if ( bListValButton )
         {
-            Rectangle aButtonRect = GetListValButtonRect( aListValPos );
+            tools::Rectangle aButtonRect = GetListValButtonRect( aListValPos );
             if ( aButtonRect.IsInside( aPos ) )
             {
                 LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
@@ -1752,7 +1752,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         ScViewSelectionEngine* pSelEng = pViewData->GetView()->GetSelEngine();
         pSelEng->SetWindow(this);
         pSelEng->SetWhich(eWhich);
-        pSelEng->SetVisibleArea( Rectangle(Point(), GetOutputSizePixel()) );
+        pSelEng->SetVisibleArea( tools::Rectangle(Point(), GetOutputSizePixel()) );
 
         //  SelMouseButtonDown on the View is still setting the bMoveIsShift flag
         if ( pViewData->GetView()->SelMouseButtonDown( rMEvt ) )
@@ -2293,7 +2293,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     if (nMouseStatus == SC_GM_FILTER && mpFilterBox)
     {
         Point aRelPos = mpFilterBox->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
-        if ( Rectangle(Point(), mpFilterBox->GetOutputSizePixel()).IsInside(aRelPos) )
+        if ( tools::Rectangle(Point(), mpFilterBox->GetOutputSizePixel()).IsInside(aRelPos) )
         {
             nButtonDown = 0;
             nMouseStatus = SC_GM_NONE;
@@ -2623,7 +2623,7 @@ static void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, vcl:
 {
     SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();
-    Rectangle aEditArea = pViewData->GetEditArea( eWhich, nCol, nRow, pWin, nullptr, true );
+    tools::Rectangle aEditArea = pViewData->GetEditArea( eWhich, nCol, nRow, pWin, nullptr, true );
     aEditArea.Right() = aEditArea.Left();
     aEditArea = pWin->PixelToLogic( aEditArea );
     pWin->SetCursorRect( &aEditArea );
@@ -2895,7 +2895,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 if (pDrawView && pDrawView->AreObjectsMarked())
                 {
                     // #100442#; the context menu should open in the middle of the selected objects
-                    Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
+                    tools::Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
                     aMenuPos = aSelectRect.Center();
                 }
             }
@@ -2934,8 +2934,8 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
 
             EditView* pEditView = pViewData->GetEditView( eWhich );     // not NULL (HasEditView)
             EditEngine* pEditEngine = pEditView->GetEditEngine();
-            Rectangle aOutputArea = pEditView->GetOutputArea();
-            Rectangle aVisArea = pEditView->GetVisArea();
+            tools::Rectangle aOutputArea = pEditView->GetOutputArea();
+            tools::Rectangle aVisArea = pEditView->GetVisArea();
 
             Point aTextPos = PixelToLogic( rPosPixel );
             if ( pEditEngine->IsVertical() )            // have to manually transform position
@@ -2977,14 +2977,14 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
     if ( pDrawView && pDrawView->GetTextEditObject() && pDrawView->GetTextEditOutlinerView() )
     {
         OutlinerView* pOlView = pDrawView->GetTextEditOutlinerView();
-        Rectangle aOutputArea = pOlView->GetOutputArea();
+        tools::Rectangle aOutputArea = pOlView->GetOutputArea();
         if ( aOutputArea.IsInside( aLogicPos ) )
         {
             //  handle selection within the OutlinerView
 
             Outliner* pOutliner = pOlView->GetOutliner();
             const EditEngine& rEditEngine = pOutliner->GetEditEngine();
-            Rectangle aVisArea = pOlView->GetVisArea();
+            tools::Rectangle aVisArea = pOlView->GetVisArea();
 
             Point aTextPos = aLogicPos;
             if ( pOutliner->IsVertical() )              // have to manually transform position
@@ -4395,7 +4395,7 @@ void ScGridWindow::UpdateEditViewPos()
 
         if (bHide)
         {
-            Rectangle aRect = pView->GetOutputArea();
+            tools::Rectangle aRect = pView->GetOutputArea();
             long nHeight = aRect.Bottom() - aRect.Top();
             aRect.Top() = PixelToLogic(GetOutputSizePixel(), pViewData->GetLogicMode()).
                             Height() * 2;
@@ -4406,10 +4406,10 @@ void ScGridWindow::UpdateEditViewPos()
         else
         {
             // bForceToTop = sal_True for editing
-            Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this, nullptr, true );
+            tools::Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this, nullptr, true );
             Point aScrPos = PixelToLogic( aPixRect.TopLeft(), pViewData->GetLogicMode() );
 
-            Rectangle aRect = pView->GetOutputArea();
+            tools::Rectangle aRect = pView->GetOutputArea();
             aRect.SetPos( aScrPos );
             pView->SetOutputArea( aRect );
             pView->ShowCursor();
@@ -4447,7 +4447,7 @@ void ScGridWindow::UpdateFormulas()
         //  (then at least the MapMode would no longer be right)
 
         bNeedsRepaint = true;           // -> at end of paint run Invalidate on all
-        aRepaintPixel = Rectangle();    // All
+        aRepaintPixel = tools::Rectangle();    // All
         return;
     }
 
@@ -5062,7 +5062,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
     const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
     // bForceToTop = sal_False, use the cell's real position
-    Rectangle aEditRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
+    tools::Rectangle aEditRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
     if (rPos.Y() < aEditRect.Top())
         return false;
 
@@ -5082,7 +5082,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
 
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // without draw scaleing
-    Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
+    tools::Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
     long nThisColLogic = aLogicEdit.Right() - aLogicEdit.Left() + 1;
     Size aPaperSize( 1000000, 1000000 );
     if (aCell.meType == CELLTYPE_FORMULA)
@@ -5180,7 +5180,7 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
 
     const ScPatternAttr* pPattern = rDoc.GetPattern(nCol1, nRow, nTab);
 
-    Rectangle aEditRect = pViewData->GetEditArea(eWhich, nCol1, nRow, this, pPattern, false);
+    tools::Rectangle aEditRect = pViewData->GetEditArea(eWhich, nCol1, nRow, this, pPattern, false);
     if (rPos.Y() < aEditRect.Top())
         return false;
 
@@ -5197,7 +5197,7 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
     long nTextWidth = static_cast<long>(pEngine->CalcTextWidth());
 
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);
-    Rectangle aLogicEdit = PixelToLogic(aEditRect, aEditMode);
+    tools::Rectangle aLogicEdit = PixelToLogic(aEditRect, aEditMode);
     Point aLogicClick = PixelToLogic(rPos, aEditMode);
 
     aLogicEdit.setWidth(nTextWidth + 1);
@@ -5265,7 +5265,7 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
             else
                 aButtonPos.X() -= nBWidth - nHSpace;    // same for top or bottom
 
-            Rectangle aButRect( aButtonPos, Size(nBWidth,nBHeight) );
+            tools::Rectangle aButRect( aButtonPos, Size(nBWidth,nBHeight) );
             if ( aButRect.IsInside( rPosPixel ) )
             {
                 rScenRange = aRange;
@@ -5538,7 +5538,7 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
     double fPPTX = pViewData->GetPPTX();
     double fPPTY = pViewData->GetPPTY();
 
-    Rectangle aRect(Point(rtl::math::round(aScrPos.getX() / fPPTX), rtl::math::round(aScrPos.getY() / fPPTY)),
+    tools::Rectangle aRect(Point(rtl::math::round(aScrPos.getX() / fPPTX), rtl::math::round(aScrPos.getY() / fPPTY)),
                     Size(rtl::math::round(nSizeXPix / fPPTX), rtl::math::round(nSizeYPix / fPPTY)));
 
     pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
@@ -5657,11 +5657,11 @@ void ScGridWindow::UpdateCopySourceOverlay()
         long nSizeXPix = aClipEndScrPos.X() - aClipStartScrPos.X();
         long nSizeYPix = aClipEndScrPos.Y() - aClipStartScrPos.Y();
 
-        Rectangle aRect( aClipStartScrPos, Size(nSizeXPix, nSizeYPix) );
+        tools::Rectangle aRect( aClipStartScrPos, Size(nSizeXPix, nSizeYPix) );
 
         Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
 
-        Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
+        tools::Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
         ::basegfx::B2DRange aRange(aLogic.Left(), aLogic.Top(), aLogic.Right(), aLogic.Bottom());
         ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight);
         xOverlayManager->add(*pDashedBorder);
@@ -5677,7 +5677,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
  *
  * @param pLogicRects - if not 0, then don't invoke the callback, just collect the rectangles in the pointed vector.
  */
-static void updateLibreOfficeKitSelection(ScViewData* pViewData, const std::vector<Rectangle>& rRectangles, std::vector<Rectangle>* pLogicRects = nullptr)
+static void updateLibreOfficeKitSelection(ScViewData* pViewData, const std::vector<tools::Rectangle>& rRectangles, std::vector<tools::Rectangle>* pLogicRects = nullptr)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -5685,20 +5685,20 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, const std::vect
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
 
-    Rectangle aBoundingBox;
+    tools::Rectangle aBoundingBox;
     std::vector<OString> aRectangles;
 
     for (const auto& rRectangle : rRectangles)
     {
         // We explicitly create a copy, since we need to expand
         // the rectangle before coordinate conversion
-        Rectangle aRectangle(rRectangle);
+        tools::Rectangle aRectangle(rRectangle);
         aRectangle.Right() += 1;
         aRectangle.Bottom() += 1;
 
         aBoundingBox.Union(aRectangle);
 
-        Rectangle aRect(aRectangle.Left() / nPPTX, aRectangle.Top() / nPPTY,
+        tools::Rectangle aRect(aRectangle.Left() / nPPTX, aRectangle.Top() / nPPTY,
                 aRectangle.Right() / nPPTX, aRectangle.Bottom() / nPPTY);
         if (pLogicRects)
             pLogicRects->push_back(aRect);
@@ -5710,11 +5710,11 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, const std::vect
         return;
 
     // selection start handle
-    Rectangle aStart(aBoundingBox.Left() / nPPTX, aBoundingBox.Top() / nPPTY,
+    tools::Rectangle aStart(aBoundingBox.Left() / nPPTX, aBoundingBox.Top() / nPPTY,
             aBoundingBox.Left() / nPPTX, (aBoundingBox.Top() / nPPTY) + 256);
 
     // selection end handle
-    Rectangle aEnd(aBoundingBox.Right() / nPPTX, (aBoundingBox.Bottom() / nPPTY) - 256,
+    tools::Rectangle aEnd(aBoundingBox.Right() / nPPTX, (aBoundingBox.Bottom() / nPPTY) - 256,
             aBoundingBox.Right() / nPPTX, aBoundingBox.Bottom() / nPPTY);
 
     // the selection itself
@@ -5741,7 +5741,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     DeleteCursorOverlay();
 
-    std::vector<Rectangle> aPixelRects;
+    std::vector<tools::Rectangle> aPixelRects;
 
     //  determine the cursor rectangles in pixels (moved from ScGridWindow::DrawCursor)
 
@@ -5814,29 +5814,29 @@ void ScGridWindow::UpdateCursorOverlay()
                 aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
 
             // show the cursor as 4 (thin) rectangles
-            Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
+            tools::Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
 
             float fScaleFactor = GetDPIScaleFactor();
 
             long aCursorWidth = 1 * fScaleFactor;
 
-            Rectangle aLeft = Rectangle(aRect);
+            tools::Rectangle aLeft = tools::Rectangle(aRect);
             aLeft.Top()    -= aCursorWidth;
             aLeft.Bottom() += aCursorWidth;
             aLeft.Right()   = aLeft.Left();
             aLeft.Left()   -= aCursorWidth;
 
-            Rectangle aRight = Rectangle(aRect);
+            tools::Rectangle aRight = tools::Rectangle(aRect);
             aRight.Top()    -= aCursorWidth;
             aRight.Bottom() += aCursorWidth;
             aRight.Left()    = aRight.Right();
             aRight.Right()  += aCursorWidth;
 
-            Rectangle aTop = Rectangle(aRect);
+            tools::Rectangle aTop = tools::Rectangle(aRect);
             aTop.Bottom()  = aTop.Top();
             aTop.Top()    -= aCursorWidth;
 
-            Rectangle aBottom = Rectangle(aRect);
+            tools::Rectangle aBottom = tools::Rectangle(aRect);
             aBottom.Top()     = aBottom.Bottom();
             aBottom.Bottom() += aCursorWidth;
 
@@ -5868,7 +5868,7 @@ void ScGridWindow::UpdateCursorOverlay()
                 std::vector< basegfx::B2DRange > aRanges;
                 const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
-                for(const Rectangle & rRA : aPixelRects)
+                for(const tools::Rectangle & rRA : aPixelRects)
                 {
                     basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1);
                     aRB.transform(aTransform);
@@ -5895,9 +5895,9 @@ void ScGridWindow::UpdateCursorOverlay()
         SetMapMode( aOldMode );
 }
 
-void ScGridWindow::GetCellSelection(std::vector<Rectangle>& rLogicRects)
+void ScGridWindow::GetCellSelection(std::vector<tools::Rectangle>& rLogicRects)
 {
-    std::vector<Rectangle> aPixelRects;
+    std::vector<tools::Rectangle> aPixelRects;
     GetSelectionRects(aPixelRects);
     updateLibreOfficeKitSelection(pViewData, aPixelRects, &rLogicRects);
 }
@@ -5915,7 +5915,7 @@ void ScGridWindow::UpdateSelectionOverlay()
         SetMapMode( aDrawMode );
 
     DeleteSelectionOverlay();
-    std::vector<Rectangle> aPixelRects;
+    std::vector<tools::Rectangle> aPixelRects;
     GetSelectionRects( aPixelRects );
 
     if (!aPixelRects.empty() && pViewData->IsActive())
@@ -5931,7 +5931,7 @@ void ScGridWindow::UpdateSelectionOverlay()
             SCTAB nTab = pViewData->GetTabNo();
             bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-            for(const Rectangle & rRA : aPixelRects)
+            for(const tools::Rectangle & rRA : aPixelRects)
             {
                 if (bLayoutRTL)
                 {
@@ -6024,10 +6024,10 @@ void ScGridWindow::UpdateAutoFillOverlay()
         aFillPos.Y() += nSizeYPix;
         aFillPos.Y() -= (aFillHandleSize.Height() / 2);
 
-        Rectangle aFillRect(aFillPos, aFillHandleSize);
+        tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
 
         // expand rect to increase hit area
-        mpAutoFillRect.reset(new Rectangle(aFillRect.Left()   - fScaleFactor,
+        mpAutoFillRect.reset(new tools::Rectangle(aFillRect.Left()   - fScaleFactor,
                                            aFillRect.Top()    - fScaleFactor,
                                            aFillRect.Right()  + fScaleFactor,
                                            aFillRect.Bottom() + fScaleFactor));
@@ -6082,7 +6082,7 @@ void ScGridWindow::UpdateDragRectOverlay()
 
     if ( bDragRect || bPagebreakDrawn )
     {
-        std::vector<Rectangle> aPixelRects;
+        std::vector<tools::Rectangle> aPixelRects;
 
         SCCOL nX1 = bDragRect ? nDragStartX : aPagebreakDrag.aStart.Col();
         SCROW nY1 = bDragRect ? nDragStartY : aPagebreakDrag.aStart.Row();
@@ -6130,7 +6130,7 @@ void ScGridWindow::UpdateDragRectOverlay()
 
         aScrPos.X() -= 2 * nLayoutSign;
         aScrPos.Y() -= 2;
-        Rectangle aRect( aScrPos.X(), aScrPos.Y(),
+        tools::Rectangle aRect( aScrPos.X(), aScrPos.Y(),
                          aScrPos.X() + ( nSizeXPix + 2 ) * nLayoutSign, aScrPos.Y() + nSizeYPix + 2 );
         if ( bLayoutRTL )
         {
@@ -6140,24 +6140,24 @@ void ScGridWindow::UpdateDragRectOverlay()
 
         if ( meDragInsertMode == INS_CELLSDOWN )
         {
-            aPixelRects.push_back( Rectangle( aRect.Left()+1, aRect.Top()+3, aRect.Left()+1, aRect.Bottom()-2 ) );
-            aPixelRects.push_back( Rectangle( aRect.Right()-1, aRect.Top()+3, aRect.Right()-1, aRect.Bottom()-2 ) );
-            aPixelRects.push_back( Rectangle( aRect.Left()+1, aRect.Top(), aRect.Right()-1, aRect.Top()+2 ) );
-            aPixelRects.push_back( Rectangle( aRect.Left()+1, aRect.Bottom()-1, aRect.Right()-1, aRect.Bottom()-1 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left()+1, aRect.Top()+3, aRect.Left()+1, aRect.Bottom()-2 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Right()-1, aRect.Top()+3, aRect.Right()-1, aRect.Bottom()-2 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left()+1, aRect.Top(), aRect.Right()-1, aRect.Top()+2 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left()+1, aRect.Bottom()-1, aRect.Right()-1, aRect.Bottom()-1 ) );
         }
         else if ( meDragInsertMode == INS_CELLSRIGHT )
         {
-            aPixelRects.push_back( Rectangle( aRect.Left(), aRect.Top()+1, aRect.Left()+2, aRect.Bottom()-1 ) );
-            aPixelRects.push_back( Rectangle( aRect.Right()-1, aRect.Top()+1, aRect.Right()-1, aRect.Bottom()-1 ) );
-            aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Top()+1, aRect.Right()-2, aRect.Top()+1 ) );
-            aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Bottom()-1, aRect.Right()-2, aRect.Bottom()-1 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left(), aRect.Top()+1, aRect.Left()+2, aRect.Bottom()-1 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Right()-1, aRect.Top()+1, aRect.Right()-1, aRect.Bottom()-1 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left()+3, aRect.Top()+1, aRect.Right()-2, aRect.Top()+1 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left()+3, aRect.Bottom()-1, aRect.Right()-2, aRect.Bottom()-1 ) );
         }
         else
         {
-            aPixelRects.push_back( Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ) );
-            aPixelRects.push_back( Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ) );
-            aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ) );
-            aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ) );
+            aPixelRects.push_back( tools::Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ) );
         }
 
         // #i70788# get the OverlayManager safely
@@ -6168,7 +6168,7 @@ void ScGridWindow::UpdateDragRectOverlay()
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
-            for(const Rectangle & rRA : aPixelRects)
+            for(const tools::Rectangle & rRA : aPixelRects)
             {
                 basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1);
                 aRB.transform(aTransform);
@@ -6253,7 +6253,7 @@ void ScGridWindow::UpdateShrinkOverlay()
 
     //  get the rectangle in pixels
 
-    Rectangle aPixRect;
+    tools::Rectangle aPixRect;
     ScRange aRange;
     SCTAB nTab = pViewData->GetTabNo();
     if ( pViewData->IsRefMode() && nTab >= pViewData->GetRefStartZ() && nTab <= pViewData->GetRefEndZ() &&
@@ -6270,7 +6270,7 @@ void ScGridWindow::UpdateShrinkOverlay()
             aEnd.X() -= 1;
             aEnd.Y() -= 1;
 
-            aPixRect = Rectangle( aStart,aEnd );
+            aPixRect = tools::Rectangle( aStart,aEnd );
         }
     }
 

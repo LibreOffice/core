@@ -87,7 +87,7 @@ public:
 
     std::list<AquaBlinker*>         maBlinkers;
 
-    Rectangle                       maInvalidRect;
+    tools::Rectangle                       maInvalidRect;
 
     InputContextFlags               mnICOptions;
 
@@ -118,7 +118,7 @@ public:
     virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
     virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
-    virtual void                GetWorkArea( Rectangle& rRect ) override;
+    virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
     virtual bool                GetWindowState( SalFrameState* pState ) override;
@@ -130,7 +130,7 @@ public:
     virtual void                CaptureMouse( bool bMouse ) override;
     virtual void                SetPointerPos( long nX, long nY ) override;
     virtual void                Flush( void ) override;
-    virtual void                Flush( const Rectangle& ) override;
+    virtual void                Flush( const tools::Rectangle& ) override;
     virtual void                SetInputContext( SalInputContext* pContext ) override;
     virtual void                EndExtTextInput( EndExtTextInputFlags nFlags ) override;
     virtual OUString            GetKeyName( sal_uInt16 nKeyCode ) override;
@@ -161,7 +161,7 @@ public:
     void UpdateFrameGeometry();
 
     // trigger painting of the window
-    void SendPaintEvent( const Rectangle* pRect = nullptr );
+    void SendPaintEvent( const tools::Rectangle* pRect = nullptr );
 
     static bool isAlive( const AquaSalFrame* pFrame )
     { return GetSalData()->maFrameCheck.find( pFrame ) != GetSalData()->maFrameCheck.end(); }

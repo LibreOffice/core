@@ -118,13 +118,13 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrame *pPg )
 {
     SwRect aPrt( pPg->Prt() );
     aPrt += pPg->Frame().Pos();
-    const Rectangle aUser( aPrt.SVRect() );
-    const Rectangle aPaper( pPg->Frame().SVRect() );
+    const tools::Rectangle aUser( aPrt.SVRect() );
+    const tools::Rectangle aPaper( pPg->Frame().SVRect() );
     pLst->Insert( SdrPageGridFrame( aPaper, aUser ) );
 }
 
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
-                        const SdrPageView* pPV, const Rectangle *pRect ) const
+                        const SdrPageView* pPV, const tools::Rectangle *pRect ) const
 {
     SwViewShell* pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     if(pSh)
@@ -236,7 +236,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                 }
 
                 // then display the help:
-                Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
+                tools::Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                 if( rEvt.GetMode() & HelpEventMode::BALLOON )
                 {
                     Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), aRect, sText );

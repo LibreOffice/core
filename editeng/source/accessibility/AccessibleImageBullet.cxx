@@ -219,7 +219,7 @@ namespace accessibility
                    "AccessibleEditableTextPara::contains: index value overflow");
 
         awt::Rectangle aTmpRect = getBounds();
-        Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
+        tools::Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
         Point aPoint( rPoint.X, rPoint.Y );
 
         return aRect.IsInside( aPoint );
@@ -242,19 +242,19 @@ namespace accessibility
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
         EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo( GetParagraphIndex() );
-        Rectangle aParentRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
+        tools::Rectangle aParentRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
 
         if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
             aBulletInfo.bVisible &&
             aBulletInfo.nType == SVX_NUM_BITMAP )
         {
-            Rectangle aRect = aBulletInfo.aBounds;
+            tools::Rectangle aRect = aBulletInfo.aBounds;
 
             // subtract paragraph position (bullet pos is absolute in EditEngine/Outliner)
             aRect.Move( -aParentRect.Left(), -aParentRect.Top() );
 
             // convert to screen coordinates
-            Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
+            tools::Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
                                                                               rCacheTF.GetMapMode(),
                                                                               GetViewForwarder() );
 

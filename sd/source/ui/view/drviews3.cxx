@@ -334,7 +334,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             {
                 const SfxRectangleItem& rRect =
                     static_cast<const SfxRectangleItem&>(rReq.GetArgs()->Get(SID_OBJECTRESIZE));
-                Rectangle aRect( GetActiveWindow()->PixelToLogic( rRect.GetValue() ) );
+                ::tools::Rectangle aRect( GetActiveWindow()->PixelToLogic( rRect.GetValue() ) );
 
                 if ( mpDrawView->AreObjectsMarked() )
                 {
@@ -503,7 +503,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 if( mpDrawView->IsTextEdit() )
                 {
-                    Rectangle aRect = maMarkRect;
+                    ::tools::Rectangle aRect = maMarkRect;
                     aRect.SetPos(aRect.TopLeft() + aPagePos);
                     aRect.Left()  = rLRSpace.GetLeft();
                     aRect.Right() = aViewSize.Width() - rLRSpace.GetRight();
@@ -568,7 +568,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 if( mpDrawView->IsTextEdit() )
                 {
-                    Rectangle aRect = maMarkRect;
+                    ::tools::Rectangle aRect = maMarkRect;
                     aRect.SetPos(aRect.TopLeft() + aPagePos);
                     aRect.Top()  = rULSpace.GetUpper();
                     aRect.Bottom() = aViewSize.Height() - rULSpace.GetLower();
@@ -626,7 +626,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_RULER_OBJECT:
             if (pArgs)
             {
-                Rectangle aRect = maMarkRect;
+                ::tools::Rectangle aRect = maMarkRect;
                 aRect.SetPos(aRect.TopLeft() + aPagePos);
 
                 const SvxObjectItem& rOI = static_cast<const SvxObjectItem&>(
@@ -861,13 +861,13 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     const Point aPagePos( GetActiveWindow()->GetViewOrigin() );
     Size aPageSize = mpActualPage->GetSize();
 
-    Rectangle aRect(aPagePos, Point( aViewSize.Width() - (aPagePos.X() + aPageSize.Width()),
+    ::tools::Rectangle aRect(aPagePos, Point( aViewSize.Width() - (aPagePos.X() + aPageSize.Width()),
                                      aViewSize.Height() - (aPagePos.Y() + aPageSize.Height())));
 
     if( mpDrawView->IsTextEdit() )
     {
         Point aPnt1 = GetActiveWindow()->GetWinViewPos();
-        Rectangle aMinMaxRect = Rectangle( aPnt1, Size(ULONG_MAX, ULONG_MAX) );
+        ::tools::Rectangle aMinMaxRect = ::tools::Rectangle( aPnt1, Size(ULONG_MAX, ULONG_MAX) );
         rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aMinMaxRect) );
     }
     else
@@ -974,7 +974,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
             if( mpDrawView->IsResizeAllowed(true) )
             {
-                Rectangle aResizeRect( maMarkRect );
+                ::tools::Rectangle aResizeRect( maMarkRect );
 
                 aResizeRect.SetPos(aResizeRect.TopLeft() + aPagePos);
                 SvxObjectItem aObjItem(aResizeRect.Left(), aResizeRect.Right(),

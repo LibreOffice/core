@@ -398,7 +398,7 @@ void GenPspGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
 void GenPspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 {
-    m_pPrinterGfx->DrawRect (Rectangle(Point(nX, nY), Size(nDX, nDY)));
+    m_pPrinterGfx->DrawRect (tools::Rectangle(Point(nX, nY), Size(nDX, nDY)));
 }
 
 void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
@@ -468,7 +468,7 @@ void GenPspGraphics::invert( sal_uInt32,
 
 bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
-    return m_pPrinterGfx->DrawEPS( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
+    return m_pPrinterGfx->DrawEPS( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
 }
 
 void GenPspGraphics::copyBits( const SalTwoRect&,
@@ -484,9 +484,9 @@ void GenPspGraphics::copyArea ( long,long,long,long,long,long,bool )
 
 void GenPspGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
-    Rectangle aSrc (Point(rPosAry.mnSrcX, rPosAry.mnSrcY),
+    tools::Rectangle aSrc (Point(rPosAry.mnSrcX, rPosAry.mnSrcY),
                     Size(rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
-    Rectangle aDst (Point(rPosAry.mnDestX, rPosAry.mnDestY),
+    tools::Rectangle aDst (Point(rPosAry.mnDestX, rPosAry.mnDestY),
                     Size(rPosAry.mnDestWidth, rPosAry.mnDestHeight));
 
     BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(BitmapAccessMode::Read);
@@ -756,7 +756,7 @@ void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFal
         m_pFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
-bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
+bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
     const int nLevel = rGlyph.mnFallbackLevel;
     if( nLevel >= MAX_FALLBACK )

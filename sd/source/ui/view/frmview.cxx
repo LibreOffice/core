@@ -205,7 +205,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetActiveLayer( SD_RESSTR(STR_LAYER_LAYOUT) );
         mbNoColors = true;
         mbNoAttribs = false;
-        maVisArea = Rectangle( Point(), Size(0, 0) );
+        maVisArea = ::tools::Rectangle( Point(), Size(0, 0) );
         mePageKind = PageKind::Standard;
         mePageKindOnLoad = PageKind::Standard;
         mnSelectedPage = 0;
@@ -427,7 +427,7 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     // aUserData.addValue( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Handout ) ) );
 
     {
-        const Rectangle aVisArea = GetVisArea();
+        const ::tools::Rectangle aVisArea = GetVisArea();
 
         aUserData.addValue( sUNO_View_VisibleAreaTop, makeAny( (sal_Int32)aVisArea.Top() ) );
         aUserData.addValue( sUNO_View_VisibleAreaLeft, makeAny( (sal_Int32)aVisArea.Left() ) );
@@ -658,7 +658,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 sal_Int32 nTop = 0;
                 if( pValue->Value >>= nTop )
                 {
-                    Rectangle aVisArea( GetVisArea() );
+                    ::tools::Rectangle aVisArea( GetVisArea() );
                     aVisArea.Bottom() += nTop - aVisArea.Top();
                     aVisArea.Top() = nTop;
                     SetVisArea( aVisArea );
@@ -669,7 +669,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 sal_Int32 nLeft = 0;
                 if( pValue->Value >>= nLeft )
                 {
-                    Rectangle aVisArea( GetVisArea() );
+                    ::tools::Rectangle aVisArea( GetVisArea() );
                     aVisArea.Right() += nLeft - aVisArea.Left();
                     aVisArea.Left() = nLeft;
                     SetVisArea( aVisArea );
@@ -680,7 +680,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 sal_Int32 nWidth = 0;
                 if( pValue->Value >>= nWidth )
                 {
-                    Rectangle aVisArea( GetVisArea() );
+                    ::tools::Rectangle aVisArea( GetVisArea() );
                     aVisArea.Right() = aVisArea.Left() + nWidth - 1;
                     SetVisArea( aVisArea );
                 }
@@ -690,7 +690,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 sal_Int32 nHeight = 0;
                 if( pValue->Value >>= nHeight )
                 {
-                    Rectangle aVisArea( GetVisArea() );
+                    ::tools::Rectangle aVisArea( GetVisArea() );
                     aVisArea.Bottom() = nHeight + aVisArea.Top() - 1;
                     SetVisArea( aVisArea );
                 }

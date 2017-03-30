@@ -81,7 +81,7 @@ public:
     void                    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void            MouseMove( const MouseEvent& rMEvt ) override;
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) override;
+    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& ) override;
     virtual void            PopupModeEnd() override;
 
 private:
@@ -242,7 +242,7 @@ void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 
-void TableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const long nSelectionWidth = mnTablePosX + nCol * mnTableCellWidth;
     const long nSelectionHeight = mnTablePosY + nLine * mnTableCellHeight;
@@ -250,15 +250,15 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     // the non-selected parts of the table
     rRenderContext.SetLineColor(aLineColor);
     rRenderContext.SetFillColor(aFillColor);
-    rRenderContext.DrawRect(Rectangle(nSelectionWidth, mnTablePosY, mnTableWidth, nSelectionHeight));
-    rRenderContext.DrawRect(Rectangle(mnTablePosX, nSelectionHeight, nSelectionWidth, mnTableHeight));
-    rRenderContext.DrawRect(Rectangle(nSelectionWidth, nSelectionHeight, mnTableWidth, mnTableHeight));
+    rRenderContext.DrawRect(tools::Rectangle(nSelectionWidth, mnTablePosY, mnTableWidth, nSelectionHeight));
+    rRenderContext.DrawRect(tools::Rectangle(mnTablePosX, nSelectionHeight, nSelectionWidth, mnTableHeight));
+    rRenderContext.DrawRect(tools::Rectangle(nSelectionWidth, nSelectionHeight, mnTableWidth, mnTableHeight));
 
     // the selection
     if (nCol > 0 && nLine > 0)
     {
         rRenderContext.SetFillColor(aHighlightFillColor);
-        rRenderContext.DrawRect(Rectangle(mnTablePosX, mnTablePosY, nSelectionWidth, nSelectionHeight));
+        rRenderContext.DrawRect(tools::Rectangle(mnTablePosX, mnTablePosY, nSelectionWidth, nSelectionHeight));
     }
 
     // lines inside of the table
@@ -302,7 +302,7 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
         rRenderContext.SetLineColor(aLineColor);
         rRenderContext.SetFillColor(aBackgroundColor);
-        rRenderContext.DrawRect(Rectangle(nTextX - 2 * nTipBorder,
+        rRenderContext.DrawRect(tools::Rectangle(nTextX - 2 * nTipBorder,
                                           nTextY - 2 * nTipBorder,
                                           nTextX + aTextSize.Width() + nTipBorder,
                                           nTextY + aTextSize.Height() + nTipBorder));
@@ -345,7 +345,7 @@ void TableWindow::Update( long nNewCol, long nNewLine )
     {
         nCol = nNewCol;
         nLine = nNewLine;
-        Invalidate(Rectangle(mnTablePosX, mnTablePosY, mnTableWidth, mnTableHeight));
+        Invalidate(tools::Rectangle(mnTablePosX, mnTablePosY, mnTableWidth, mnTableHeight));
     }
 }
 
@@ -401,7 +401,7 @@ public:
     virtual void            MouseMove( const MouseEvent& rMEvt ) override;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) override;
+    virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& ) override;
     virtual void            PopupModeEnd() override;
 };
 
@@ -489,7 +489,7 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
         if ( nNewCol > nWidth )
             nNewCol = nWidth;
 
-        Invalidate( Rectangle( 0, aWinSize.Height()-nTextHeight+2,
+        Invalidate( tools::Rectangle( 0, aWinSize.Height()-nTextHeight+2,
                                aWinSize.Width(), aWinSize.Height() ) );
         SetOutputSizePixel( Size( nMX*nWidth-1, aWinSize.Height() ) );
     }
@@ -497,7 +497,7 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
 
     if ( nNewCol != nCol )
     {
-        Invalidate( Rectangle( 0, aWinSize.Height()-nTextHeight+2,
+        Invalidate( tools::Rectangle( 0, aWinSize.Height()-nTextHeight+2,
                                aWinSize.Width(), aWinSize.Height() ) );
 
         long nMinCol = 0, nMaxCol = 0;
@@ -513,7 +513,7 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
             nMaxCol = nNewCol;
         }
 
-        Invalidate( Rectangle( nMinCol*nMX-1, 0,
+        Invalidate( tools::Rectangle( nMinCol*nMX-1, 0,
                                nMaxCol*nMX+1, aWinSize.Height()-nTextHeight+2 ) );
         nCol  = nNewCol;
     }
@@ -591,7 +591,7 @@ void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 
-void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     long i;
     long nLineWidth;
@@ -610,7 +610,7 @@ void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
             rRenderContext.SetFillColor(aFillColor);
         }
 
-        rRenderContext.DrawRect(Rectangle(i * nMX - 1, -1, i * nMX + nMX, aSize.Height() - nTextHeight + 1));
+        rRenderContext.DrawRect(tools::Rectangle(i * nMX - 1, -1, i * nMX + nMX, aSize.Height() - nTextHeight + 1));
 
         long j = 4;
         while (j < aSize.Height() - nTextHeight - 4)
@@ -635,19 +635,19 @@ void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
     rRenderContext.DrawText(Point((aSize.Width() - aTextSize.Width()) / 2, aSize.Height() - nTextHeight + 2), aText);
 
-    rRenderContext.DrawRect(Rectangle(0,
+    rRenderContext.DrawRect(tools::Rectangle(0,
                                       aSize.Height() - nTextHeight + 2,
                                       (aSize.Width() - aTextSize.Width()) / 2 - 1,
                                       aSize.Height()));
 
-    rRenderContext.DrawRect(Rectangle((aSize.Width() - aTextSize.Width()) / 2 + aTextSize.Width(),
+    rRenderContext.DrawRect(tools::Rectangle((aSize.Width() - aTextSize.Width()) / 2 + aTextSize.Width(),
                                       aSize.Height() - nTextHeight + 2,
                                       aSize.Width(),
                                       aSize.Height()));
 
     rRenderContext.SetLineColor(aLineColor);
     rRenderContext.SetFillColor();
-    rRenderContext.DrawRect(Rectangle( 0, 0, aSize.Width() - 1, aSize.Height() - nTextHeight + 1));
+    rRenderContext.DrawRect(tools::Rectangle( 0, 0, aSize.Width() - 1, aSize.Height() - nTextHeight + 1));
 }
 
 

@@ -319,11 +319,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
 
         // calc position and size
-        Rectangle aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+        tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
         Point aPagePos = aVisArea.Center();
         aPagePos.X() -= nDefaultObjectSizeWidth / 2;
         aPagePos.Y() -= nDefaultObjectSizeHeight / 2;
-        Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+        tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
 
         ScDrawView* pDrView = GetScDrawView();
 

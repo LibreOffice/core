@@ -233,9 +233,9 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                 return DND_ACTION_NONE;
 
             // Scrolling Areas
-            Rectangle aBottomScrollArea( Point(0, aOutputSize.Height()-LISTBOX_SCROLLING_AREA),
+            tools::Rectangle aBottomScrollArea( Point(0, aOutputSize.Height()-LISTBOX_SCROLLING_AREA),
                                          Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
-            Rectangle aTopScrollArea( Point(0,0), Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
+            tools::Rectangle aTopScrollArea( Point(0,0), Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
 
              // scroll up if the pointer is on the upper scroll area
             if( aBottomScrollArea.IsInside(m_aMousePos) )

@@ -40,8 +40,8 @@ bool SFX2_DLLPUBLIC SAL_CALL IsDockingWindowVisible( const css::uno::Reference< 
 class SFX2_DLLPUBLIC SfxDockingWindow : public DockingWindow
 {
 private:
-    Rectangle               aInnerRect;
-    Rectangle               aOuterRect;
+    tools::Rectangle               aInnerRect;
+    tools::Rectangle               aOuterRect;
     SfxBindings*            pBindings;
     Size                    aFloatSize;
     SfxChildWindow*         pMgr;
@@ -51,7 +51,7 @@ private:
     void operator =(SfxDockingWindow &) = delete;
 
 protected:
-    SfxChildAlignment   CalcAlignment(const Point& rPos, Rectangle& rRect );
+    SfxChildAlignment   CalcAlignment(const Point& rPos, tools::Rectangle& rRect );
     virtual Size        CalcDockingSize(SfxChildAlignment);
     virtual SfxChildAlignment
                         CheckAlignment(SfxChildAlignment,SfxChildAlignment);
@@ -60,10 +60,10 @@ protected:
     virtual bool        PrepareToggleFloatingMode() override;
     virtual void        ToggleFloatingMode() override;
     virtual void        StartDocking() override;
-    virtual bool        Docking( const Point& rPos, Rectangle& rRect ) override;
-    virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode ) override;
+    virtual bool        Docking( const Point& rPos, tools::Rectangle& rRect ) override;
+    virtual void        EndDocking( const tools::Rectangle& rRect, bool bFloatMode ) override;
     virtual void        Resizing( Size& rSize ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual bool        Close() override;
     virtual void        Move() override;
 
@@ -85,10 +85,10 @@ public:
     virtual void        FillInfo(SfxChildWinInfo&) const;
     virtual void        StateChanged( StateChangedType nStateChange ) override;
 
-    void                SetDockingRects(const Rectangle& rOuter, const Rectangle& rInner)
+    void                SetDockingRects(const tools::Rectangle& rOuter, const tools::Rectangle& rInner)
                             { aInnerRect = rInner; aOuterRect = rOuter; }
-    const Rectangle&    GetInnerRect() const                    { return aInnerRect; }
-    const Rectangle&    GetOuterRect() const                    { return aOuterRect; }
+    const tools::Rectangle&    GetInnerRect() const                    { return aInnerRect; }
+    const tools::Rectangle&    GetOuterRect() const                    { return aOuterRect; }
     SfxBindings&        GetBindings() const                     { return *pBindings; }
     sal_uInt16              GetType() const                         { return pMgr->GetType(); }
     SfxChildAlignment   GetAlignment() const                    { return pMgr->GetAlignment(); }

@@ -30,7 +30,7 @@ public:
 
     virtual void Resize() SAL_OVERRIDE;
 
-    virtual Rectangle GetFocusRect( SvTreeListEntry*, long nEntryPos ) SAL_OVERRIDE;
+    virtual tools::Rectangle GetFocusRect( SvTreeListEntry*, long nEntryPos ) SAL_OVERRIDE;
 
     void ClearAll();
 

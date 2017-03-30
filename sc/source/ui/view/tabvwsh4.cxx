@@ -423,7 +423,7 @@ void ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoo
     SfxViewShell::SetZoomFactor( rZoomX, rZoomY );
 }
 
-void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
+void ScTabViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
 {
     // adjust to entire cells (in 1/100 mm)
 
@@ -439,7 +439,7 @@ void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     SCTAB nTab = rViewData.GetTabNo();
     bool bNegativePage = pDoc->IsNegativePage( nTab );
 
-    Rectangle aLogicRect = pDoc->GetMMRect( nCol, nRow, nCol, nRow, nTab );
+    tools::Rectangle aLogicRect = pDoc->GetMMRect( nCol, nRow, nCol, nRow, nTab );
     if ( bNegativePage )
     {
         // use right edge of aLogicRect, and aLogicSize
@@ -1464,7 +1464,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     if ( pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
         //TODO/LATER: is there a difference between the two GetVisArea methods?
-        Rectangle aVisArea = static_cast<const SfxObjectShell*>(pDocSh)->GetVisArea();
+        tools::Rectangle aVisArea = static_cast<const SfxObjectShell*>(pDocSh)->GetVisArea();
 
         SCTAB nVisTab = rDoc.GetVisibleTab();
         if (!rDoc.HasTable(nVisTab))
@@ -1825,7 +1825,7 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     // eNumType is known by the dialog
 }
 
-bool ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const
+bool ScTabViewShell::GetChartArea( ScRangeListRef& rSource, tools::Rectangle& rDest, SCTAB& rTab ) const
 {
     rSource = aChartSource;
     rDest   = aChartPos;

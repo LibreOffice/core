@@ -707,7 +707,7 @@ bool View::SdrBeginTextEdit(
         {
             if (OutlinerView* pView = GetTextEditOutlinerView())
             {
-                Rectangle aRectangle = pView->GetOutputArea();
+                ::tools::Rectangle aRectangle = pView->GetOutputArea();
                 if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
                     aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
                 OString sRectangle = aRectangle.toString();
@@ -894,7 +894,7 @@ void View::SetMarkedOriginalSize()
 
                     if ( bOK )
                     {
-                        Rectangle   aDrawRect( pObj->GetLogicRect() );
+                        ::tools::Rectangle   aDrawRect( pObj->GetLogicRect() );
 
                         pUndoGroup->AddAction( mrDoc.GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
                         pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
@@ -907,7 +907,7 @@ void View::SetMarkedOriginalSize()
                 const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
                 const Size aSize = pSdrGrafObj->getOriginalSize( );
                 pUndoGroup->AddAction( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj ) );
-                Rectangle aRect( pObj->GetLogicRect() );
+                ::tools::Rectangle aRect( pObj->GetLogicRect() );
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
                 bOK = true;
@@ -939,7 +939,7 @@ void View::DoConnect(SdrOle2Obj* pObj)
             if ( !pSdClient )
             {
                 pSdClient = new Client(pObj, mpViewSh, pWindow);
-                Rectangle aRect = pObj->GetLogicRect();
+                ::tools::Rectangle aRect = pObj->GetLogicRect();
                 {
                     // TODO/LEAN: working with visual area can switch object to running state
                     Size aDrawSize = aRect.GetSize();
@@ -1177,7 +1177,7 @@ bool View::MarkPoint(SdrHdl& rHdl, bool bUnmark )
         return FmFormView::MarkPoint( rHdl, bUnmark );
 }
 
-bool View::MarkPoints(const Rectangle* pRect, bool bUnmark)
+bool View::MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark)
 {
     if( maSmartTags.MarkPoints( pRect, bUnmark ) )
         return true;

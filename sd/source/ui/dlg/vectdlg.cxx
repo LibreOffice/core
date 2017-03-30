@@ -90,9 +90,9 @@ void SdVectorizeDlg::dispose()
     ModalDialog::dispose();
 }
 
-Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
+::tools::Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
 {
-    Rectangle aRect;
+    ::tools::Rectangle aRect;
 
     if( rBmpSize.Width() && rBmpSize.Height() && rDispSize.Width() && rDispSize.Height() )
     {
@@ -114,7 +114,7 @@ Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
         const Point aBmpPos( ( rDispSize.Width()  - aBmpSize.Width() ) >> 1,
                              ( rDispSize.Height() - aBmpSize.Height() ) >> 1 );
 
-        aRect = Rectangle( aBmpPos, aBmpSize );
+        aRect = ::tools::Rectangle( aBmpPos, aBmpSize );
     }
 
     return aRect;
@@ -122,7 +122,7 @@ Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
 
 void SdVectorizeDlg::InitPreviewBmp()
 {
-    const Rectangle aRect( GetRect( m_pBmpWin->GetSizePixel(), aBmp.GetSizePixel() ) );
+    const ::tools::Rectangle aRect( GetRect( m_pBmpWin->GetSizePixel(), aBmp.GetSizePixel() ) );
 
     aPreviewBmp = aBmp;
     aPreviewBmp.Scale( aRect.GetSize() );
@@ -136,7 +136,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 
     if( aSizePix.Width() > VECTORIZE_MAX_EXTENT || aSizePix.Height() > VECTORIZE_MAX_EXTENT )
     {
-        const Rectangle aRect( GetRect( Size( VECTORIZE_MAX_EXTENT, VECTORIZE_MAX_EXTENT ), aSizePix ) );
+        const ::tools::Rectangle aRect( GetRect( Size( VECTORIZE_MAX_EXTENT, VECTORIZE_MAX_EXTENT ), aSizePix ) );
         rScale = Fraction( aSizePix.Width(), aRect.GetWidth() );
         aNew.Scale( aRect.GetSize() );
     }
@@ -244,7 +244,7 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
                         (sal_uInt8) FRound( nSumG * fMult ),
                         (sal_uInt8) FRound( nSumB * fMult ) );
 
-    Rectangle   aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
+    ::tools::Rectangle   aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
     const Size& rMaxSize = rMtf.GetPrefSize();
 
     aRect = PixelToLogic( aRect, rMtf.GetPrefMapMode() );

@@ -93,7 +93,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
@@ -139,7 +139,7 @@ private:
     DECL_LINK(VscrollHdl, ScrollBar*, void);
 
     void            init();
-    Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize);
+    tools::Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize);
 };
 
 #endif

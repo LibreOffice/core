@@ -109,7 +109,7 @@ void PDFWriter::DrawStretchText(
 }
 
 void PDFWriter::DrawText(
-                         const Rectangle& rRect,
+                         const tools::Rectangle& rRect,
                          const OUString& rStr,
                          DrawTextFlags nStyle )
 {
@@ -136,32 +136,32 @@ void PDFWriter::DrawPolyLine( const tools::Polygon& rPoly )
     xImplementation->drawPolyLine( rPoly );
 }
 
-void PDFWriter::DrawRect( const Rectangle& rRect )
+void PDFWriter::DrawRect( const tools::Rectangle& rRect )
 {
     xImplementation->drawRectangle( rRect );
 }
 
-void PDFWriter::DrawRect( const Rectangle& rRect, sal_uLong nHorzRound, sal_uLong nVertRound )
+void PDFWriter::DrawRect( const tools::Rectangle& rRect, sal_uLong nHorzRound, sal_uLong nVertRound )
 {
     xImplementation->drawRectangle( rRect, nHorzRound, nVertRound );
 }
 
-void PDFWriter::DrawEllipse( const Rectangle& rRect )
+void PDFWriter::DrawEllipse( const tools::Rectangle& rRect )
 {
     xImplementation->drawEllipse( rRect );
 }
 
-void PDFWriter::DrawArc( const Rectangle& rRect, const Point& rStart, const Point& rStop )
+void PDFWriter::DrawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rStop )
 {
     xImplementation->drawArc( rRect, rStart, rStop, false, false );
 }
 
-void PDFWriter::DrawPie( const Rectangle& rRect, const Point& rStart, const Point& rStop )
+void PDFWriter::DrawPie( const tools::Rectangle& rRect, const Point& rStart, const Point& rStop )
 {
     xImplementation->drawArc( rRect, rStart, rStop, true, false );
 }
 
-void PDFWriter::DrawChord( const Rectangle& rRect, const Point& rStart, const Point& rStop )
+void PDFWriter::DrawChord( const tools::Rectangle& rRect, const Point& rStart, const Point& rStop )
 {
     xImplementation->drawArc( rRect, rStart, rStop, false, true );
 }
@@ -201,7 +201,7 @@ void PDFWriter::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHa
     xImplementation->drawHatch( rPolyPoly, rHatch );
 }
 
-void PDFWriter::DrawGradient( const Rectangle& rRect, const Gradient& rGradient )
+void PDFWriter::DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient )
 {
     xImplementation->drawGradient( rRect, rGradient );
 }
@@ -214,7 +214,7 @@ void PDFWriter::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradien
     xImplementation->pop();
 }
 
-void PDFWriter::DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper )
+void PDFWriter::DrawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWallpaper )
 {
     xImplementation->drawWallpaper( rRect, rWallpaper );
 }
@@ -229,7 +229,7 @@ void PDFWriter::BeginTransparencyGroup()
     xImplementation->beginTransparencyGroup();
 }
 
-void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, sal_uInt16 nTransparentPercent )
+void PDFWriter::EndTransparencyGroup( const tools::Rectangle& rRect, sal_uInt16 nTransparentPercent )
 {
     xImplementation->endTransparencyGroup( rRect, nTransparentPercent );
 }
@@ -279,7 +279,7 @@ void PDFWriter::IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
     xImplementation->intersectClipRegion( rRegion );
 }
 
-void PDFWriter::IntersectClipRegion( const Rectangle& rRect )
+void PDFWriter::IntersectClipRegion( const tools::Rectangle& rRect )
 {
     xImplementation->intersectClipRegion( rRect );
 }
@@ -334,31 +334,31 @@ void PDFWriter::SetTextAlign( ::TextAlign eAlign )
     xImplementation->setTextAlign( eAlign );
 }
 
-void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic )
+void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, bool bIsTrueColor, const Size& rSrcSizePixel, const tools::Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic )
 {
     xImplementation->drawJPGBitmap( rStreamData, bIsTrueColor, rSrcSizePixel, rTargetArea, rMask, rGraphic );
 }
 
-sal_Int32 PDFWriter::CreateLink( const Rectangle& rRect, sal_Int32 nPageNr )
+sal_Int32 PDFWriter::CreateLink( const tools::Rectangle& rRect, sal_Int32 nPageNr )
 {
     return xImplementation->createLink( rRect, nPageNr );
 }
 
-sal_Int32 PDFWriter::CreateScreen(const Rectangle& rRect, sal_Int32 nPageNr)
+sal_Int32 PDFWriter::CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr)
 {
     return xImplementation->createScreen(rRect, nPageNr);
 }
 
-sal_Int32 PDFWriter::RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType )
+sal_Int32 PDFWriter::RegisterDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType )
 {
     return xImplementation->registerDestReference( nDestId, rRect, nPageNr, eType );
 }
 //--->i56629
-sal_Int32 PDFWriter::CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFWriter::CreateNamedDest( const OUString& sDestName, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     return xImplementation->createNamedDest( sDestName, rRect, nPageNr, eType );
 }
-sal_Int32 PDFWriter::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFWriter::CreateDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     return xImplementation->createDest( rRect, nPageNr, eType );
 }
@@ -393,7 +393,7 @@ sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, const OUString& rText
     return xImplementation->createOutlineItem( nParent, rText, nDestID );
 }
 
-void PDFWriter::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+void PDFWriter::CreateNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
 {
     xImplementation->createNote( rRect, rNote, nPageNr );
 }
@@ -423,7 +423,7 @@ bool PDFWriter::SetStructureAttributeNumerical( enum StructAttribute eAttr, sal_
     return xImplementation->setStructureAttributeNumerical( eAttr, nValue );
 }
 
-void PDFWriter::SetStructureBoundingBox( const Rectangle& rRect )
+void PDFWriter::SetStructureBoundingBox( const tools::Rectangle& rRect )
 {
     xImplementation->setStructureBoundingBox( rRect );
 }

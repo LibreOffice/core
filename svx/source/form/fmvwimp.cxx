@@ -255,7 +255,7 @@ void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl 
     if ( xWindow.is() && m_pViewImpl->getView() && m_pWindow )
     {
         awt::Rectangle aRect = xWindow->getPosSize();
-        ::Rectangle aNewRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
+        ::tools::Rectangle aNewRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
         aNewRect = m_pWindow->PixelToLogic( aNewRect );
         m_pViewImpl->getView()->MakeVisible( aNewRect, *m_pWindow );
     }
@@ -1005,7 +1005,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
         if ( pCurrentWindow )
         {
             awt::Rectangle aRect = xControlWindow->getPosSize();
-            ::Rectangle aNonUnoRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
+            ::tools::Rectangle aNonUnoRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
             m_pView->MakeVisible( pCurrentWindow->PixelToLogic( aNonUnoRect ), *const_cast< vcl::Window* >( pCurrentWindow ) );
         }
     }
@@ -1490,7 +1490,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             controlSize.Width() = Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX();
             controlSize.Height() = Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY();
             ::Point controlPos( OutputDevice::LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
-            ::Rectangle controlRect( controlPos, OutputDevice::LogicToLogic( controlSize, eSourceMode, eTargetMode ) );
+            ::tools::Rectangle controlRect( controlPos, OutputDevice::LogicToLogic( controlSize, eSourceMode, eTargetMode ) );
             pControl->SetLogicRect(controlRect);
 
             // set the button label
@@ -1608,7 +1608,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
             xLabelModel->setPropertyValue(FM_PROP_NAME, makeAny(sObjectLabel));
         }
 
-        pLabel->SetLogicRect( ::Rectangle(
+        pLabel->SetLogicRect( ::tools::Rectangle(
             OutputDevice::LogicToLogic( ::Point( _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
             OutputDevice::LogicToLogic( aRealSize, eSourceMode, eTargetMode )
         ) );
@@ -1647,7 +1647,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     aControlSize.Width() = long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX());
     aControlSize.Height() = long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY());
 
-    pControl->SetLogicRect( ::Rectangle(
+    pControl->SetLogicRect( ::tools::Rectangle(
         OutputDevice::LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
         OutputDevice::LogicToLogic( aControlSize, eSourceMode, eTargetMode )
     ) );

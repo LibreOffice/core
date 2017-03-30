@@ -172,13 +172,13 @@ EditEngine* EditView::GetEditEngine() const
     return pImpEditView->pEditEngine;
 }
 
-Rectangle EditView::GetInvalidateRect() const
+tools::Rectangle EditView::GetInvalidateRect() const
 {
     if ( !pImpEditView->DoInvalidateMore() )
         return pImpEditView->aOutArea;
     else
     {
-        Rectangle aRect( pImpEditView->aOutArea );
+        tools::Rectangle aRect( pImpEditView->aOutArea );
         long nMore = pImpEditView->GetWindow()->PixelToLogic( Size( pImpEditView->GetInvalidateMore(), 0 ) ).Width();
         aRect.Left() -= nMore;
         aRect.Right() += nMore;
@@ -188,7 +188,7 @@ Rectangle EditView::GetInvalidateRect() const
     }
 }
 
-void EditView::InvalidateOtherViewWindows( const Rectangle& rInvRect )
+void EditView::InvalidateOtherViewWindows( const tools::Rectangle& rInvRect )
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -202,7 +202,7 @@ void EditView::InvalidateOtherViewWindows( const Rectangle& rInvRect )
 
 void EditView::Invalidate()
 {
-    const Rectangle& rInvRect = GetInvalidateRect();
+    const tools::Rectangle& rInvRect = GetInvalidateRect();
     pImpEditView->GetWindow()->Invalidate( rInvRect );
     InvalidateOtherViewWindows( rInvRect );
 }
@@ -283,12 +283,12 @@ SvtScriptType EditView::GetSelectedScriptType() const
     return pImpEditView->pEditEngine->GetScriptType( pImpEditView->GetEditSelection() );
 }
 
-void EditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const
+void EditView::GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects) const
 {
     return pImpEditView->GetSelectionRectangles(rLogicRects);
 }
 
-void EditView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
+void EditView::Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     pImpEditView->pEditEngine->pImpEditEngine->Paint( pImpEditView.get(), rRect, pTargetDevice );
 }
@@ -337,20 +337,20 @@ bool EditView::RemoveOtherViewWindow( vcl::Window* pWin )
     return true;
 }
 
-void EditView::SetVisArea( const Rectangle& rRect )
+void EditView::SetVisArea( const tools::Rectangle& rRect )
 {
     pImpEditView->SetVisDocStartPos( rRect.TopLeft() );
 }
 
-const Rectangle& EditView::GetVisArea() const
+const tools::Rectangle& EditView::GetVisArea() const
 {
     // Change return value to Rectangle in next incompatible build !!!
-    static Rectangle aRect;
+    static tools::Rectangle aRect;
     aRect = pImpEditView->GetVisDocArea();
     return aRect;
 }
 
-void EditView::SetOutputArea( const Rectangle& rRect )
+void EditView::SetOutputArea( const tools::Rectangle& rRect )
 {
     pImpEditView->SetOutputArea( rRect );
 
@@ -361,7 +361,7 @@ void EditView::SetOutputArea( const Rectangle& rRect )
     pImpEditView->ShowCursor( false, false );
 }
 
-const Rectangle& EditView::GetOutputArea() const
+const tools::Rectangle& EditView::GetOutputArea() const
 {
     return pImpEditView->GetOutputArea();
 }
@@ -978,10 +978,10 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
         aPopupMenu->RemoveDisabledEntries( true, true );
 
-        Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
+        tools::Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
         Point aScreenPos = pImpEditView->GetWindowPos( aTempRect.TopLeft() );
         aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
-        aTempRect = pImpEditView->GetWindow()->LogicToPixel( Rectangle(aScreenPos, aTempRect.GetSize() ));
+        aTempRect = pImpEditView->GetWindow()->LogicToPixel( tools::Rectangle(aScreenPos, aTempRect.GetSize() ));
 
         //tdf#106123 store and restore the EditPaM around the menu Execute
         //because the loss of focus in the current editeng causes writer

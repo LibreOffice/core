@@ -126,7 +126,7 @@ public:
     void DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA );
     void DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
-    void DrawRect( const Rectangle& rRect );
+    void DrawRect( const tools::Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawLineSegment(float x1, float y1, float x2, float y2);
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA = false );
@@ -139,9 +139,9 @@ public:
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
     void DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry );
     void DrawMask( OpenGLTexture& rTexture, SalColor nMaskColor, const SalTwoRect& rPosAry );
-    void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
-    void DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect );
-    void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
+    void DrawLinearGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
+    void DrawAxialGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
+    void DrawRadialGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
     void DeferredTextDraw(OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
 
     void FlushDeferredDrawing();

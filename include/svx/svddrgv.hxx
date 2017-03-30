@@ -34,7 +34,7 @@ protected:
     SdrHdl*                     mpDragHdl;
     SdrDragMethod*              mpCurrentSdrDragMethod;
     SdrUndoGeoObj*              mpInsPointUndo;
-    Rectangle                   maDragLimit;
+    tools::Rectangle                   maDragLimit;
     OUString                    maInsPointUndoStr;
     SdrHdlKind                  meDragHdl;
 
@@ -77,7 +77,7 @@ public:
     virtual void EndAction() override;
     virtual void BckAction() override;
     virtual void BrkAction() override;
-    virtual void TakeActionRect(Rectangle& rRect) const override;
+    virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
     // special implementation for Writer:
     // TakeDragObjAnchorPos() returns the position at which an object
@@ -205,8 +205,8 @@ public:
     // errors,...
     // Default=EmptyRect=no limitation
     // only partially implemented
-    void SetWorkArea(const Rectangle& rRect) { maMaxWorkArea=rRect; }
-    const Rectangle& GetWorkArea() const { return maMaxWorkArea; }
+    void SetWorkArea(const tools::Rectangle& rRect) { maMaxWorkArea=rRect; }
+    const tools::Rectangle& GetWorkArea() const { return maMaxWorkArea; }
 
 
     // The DragLimit refers to the Page of the object.
@@ -221,7 +221,7 @@ public:
     // occur, because of which the LimitRect might be exceeded by a
     // very small extent....
     // Implemented for Move and Resize
-    virtual bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
+    virtual bool TakeDragLimit(SdrDragMode eMode, tools::Rectangle& rRect) const;
 };
 
 #endif // INCLUDED_SVX_SVDDRGV_HXX

@@ -34,9 +34,9 @@ public:
 
     ZoomList(ViewShell* pViewShell);
 
-    void        InsertZoomRect(const Rectangle& rRect);
-    Rectangle   GetNextZoomRect();
-    Rectangle   GetPreviousZoomRect();
+    void        InsertZoomRect(const ::tools::Rectangle& rRect);
+    ::tools::Rectangle   GetNextZoomRect();
+    ::tools::Rectangle   GetPreviousZoomRect();
     bool        IsNextPossible() const;
     bool        IsPreviousPossible() const;
 
@@ -44,7 +44,7 @@ private:
     ViewShell*  mpViewShell;
     sal_uInt32  mnCurPos;
 
-    std::vector<Rectangle> maRectangles;
+    std::vector<::tools::Rectangle> maRectangles;
 };
 
 } // end of namespace sd

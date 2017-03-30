@@ -131,8 +131,8 @@ namespace accessibility
         sal_Int32       GetFieldCount( sal_Int32 ) const override { return 0; }
         EFieldInfo      GetFieldInfo( sal_Int32, sal_uInt16 ) const override { return EFieldInfo(); }
         EBulletInfo     GetBulletInfo( sal_Int32 ) const override { return EBulletInfo(); }
-        Rectangle       GetCharBounds( sal_Int32, sal_Int32 ) const override { return Rectangle(); }
-        Rectangle       GetParaBounds( sal_Int32 ) const override { return Rectangle(); }
+        tools::Rectangle       GetCharBounds( sal_Int32, sal_Int32 ) const override { return tools::Rectangle(); }
+        tools::Rectangle       GetParaBounds( sal_Int32 ) const override { return tools::Rectangle(); }
         MapMode         GetMapMode() const override { return MapMode(); }
         OutputDevice*   GetRefDevice() const override { return nullptr; }
         bool            GetIndexAtPoint( const Point&, sal_Int32&, sal_Int32& ) const override { return false; }
@@ -157,7 +157,7 @@ namespace accessibility
         sal_Int16       GetDepth( sal_Int32 ) const override { return -1; }
         bool            SetDepth( sal_Int32, sal_Int16 ) override { return true; }
 
-        Rectangle       GetVisArea() const override { return Rectangle(); }
+        tools::Rectangle       GetVisArea() const override { return tools::Rectangle(); }
         Point           LogicToPixel( const Point& rPoint, const MapMode& /*rMapMode*/ ) const override { return rPoint; }
         Point           PixelToLogic( const Point& rPoint, const MapMode& /*rMapMode*/ ) const override { return rPoint; }
 

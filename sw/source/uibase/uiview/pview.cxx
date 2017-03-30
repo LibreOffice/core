@@ -190,7 +190,7 @@ SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView 
     , mpViewShell(nullptr)
     , mrView(rPView)
     , mbCalcScaleForPreviewLayout(true)
-    , maPaintedPreviewDocRect(Rectangle(0,0,0,0))
+    , maPaintedPreviewDocRect(tools::Rectangle(0,0,0,0))
     , mpPgPreviewLayout(nullptr)
 {
     SetOutDevViewType( OutDevViewType::PrintPreview );
@@ -209,7 +209,7 @@ SwPagePreviewWin::~SwPagePreviewWin()
 {
 }
 
-void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!mpViewShell || !mpViewShell->GetLayout())
         return;
@@ -220,7 +220,7 @@ void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         if (!maPxWinSize.Height() || !maPxWinSize.Width())
             maPxWinSize = GetOutputSizePixel();
 
-        Rectangle aRect(rRenderContext.LogicToPixel(rRect));
+        tools::Rectangle aRect(rRenderContext.LogicToPixel(rRect));
         mpPgPreviewLayout->Prepare(1, Point(0,0), maPxWinSize,
                                    mnSttPage, maPaintedPreviewDocRect);
         SetSelectedPage(1);
@@ -1290,7 +1290,7 @@ void SwPagePreview::CreateScrollbar( bool bHori )
 
 bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
 {
-    Rectangle aPixVisArea( m_pViewWin->LogicToPixel( m_aVisArea ) );
+    tools::Rectangle aPixVisArea( m_pViewWin->LogicToPixel( m_aVisArea ) );
     bool bChg = m_pViewWin->MovePage( eMvMode ) ||
                eMvMode == SwPagePreviewWin::MV_CALC ||
                eMvMode == SwPagePreviewWin::MV_NEWWINSIZE;
@@ -1334,7 +1334,7 @@ void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize, bo
 {
     SvBorder aBorder;
     CalcAndSetBorderPixel( aBorder, true );
-    Rectangle aRect( rOfst, rSize );
+    tools::Rectangle aRect( rOfst, rSize );
     aRect += aBorder;
     ViewResizePixel( *m_pViewWin, aRect.TopLeft(), aRect.GetSize(),
                     m_pViewWin->GetOutputSizePixel(),
@@ -1353,7 +1353,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     Size aTmpSize( m_pViewWin->GetOutputSizePixel() );
     Point aBottomRight( m_pViewWin->PixelToLogic( Point( aTmpSize.Width(), aTmpSize.Height() ) ) );
-    SetVisArea( Rectangle( Point(), aBottomRight ) );
+    SetVisArea( tools::Rectangle( Point(), aBottomRight ) );
 
     // Call of the DocSzChgd-Methode of the scrollbars is necessary,
     // because from the maximum scroll range half the height of the
@@ -1369,11 +1369,11 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
                     *m_pVScrollbar, *m_pHScrollbar, *m_pScrollFill );
 }
 
-void SwPagePreview::SetVisArea( const Rectangle &rRect )
+void SwPagePreview::SetVisArea( const tools::Rectangle &rRect )
 {
     const Point aTopLeft(AlignToPixel(rRect.TopLeft()));
     const Point aBottomRight(AlignToPixel(rRect.BottomRight()));
-    Rectangle aLR(aTopLeft,aBottomRight);
+    tools::Rectangle aLR(aTopLeft,aBottomRight);
 
     if(aLR == m_aVisArea)
         return;
@@ -1436,7 +1436,7 @@ IMPL_LINK( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
         Point aPos = pScrollbar->GetParent()->OutputToScreenPixel(
                                         pScrollbar->GetPosPixel());
         aPos.Y() = pScrollbar->OutputToScreenPixel(pScrollbar->GetPointerPosPixel()).Y();
-        Rectangle aRect;
+        tools::Rectangle aRect;
         aRect.Left()    = aPos.X() -8;
         aRect.Right()   = aRect.Left();
         aRect.Top()     = aPos.Y();
@@ -1462,7 +1462,7 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
     if( !pScrollbar->IsHoriScroll() )       // scroll vertically
     {
         if ( Help::IsQuickHelpEnabled() )
-            Help::ShowQuickHelp(pScrollbar, Rectangle(), OUString());
+            Help::ShowQuickHelp(pScrollbar, tools::Rectangle(), OUString());
         if ( GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow() )
         {
             // Scroll how many pages ??
@@ -1608,7 +1608,7 @@ void SwPagePreview::ScrollViewSzChg()
         }
         else //vertical scrolling by pixel
         {
-            const Rectangle& rDocRect = m_pViewWin->GetPaintedPreviewDocRect();
+            const tools::Rectangle& rDocRect = m_pViewWin->GetPaintedPreviewDocRect();
             const Size& rPreviewSize =
                     GetViewShell()->PagePreviewLayout()->GetPreviewDocSize();
             m_pVScrollbar->SetRangeMax(rPreviewSize.Height()) ;
@@ -1628,7 +1628,7 @@ void SwPagePreview::ScrollViewSzChg()
     }
     if(m_pHScrollbar)
     {
-        const Rectangle& rDocRect = m_pViewWin->GetPaintedPreviewDocRect();
+        const tools::Rectangle& rDocRect = m_pViewWin->GetPaintedPreviewDocRect();
         const Size& rPreviewSize =
                 GetViewShell()->PagePreviewLayout()->GetPreviewDocSize();
         Range aRange(0,0);
@@ -1746,7 +1746,7 @@ void SwPagePreviewWin::RepaintCoreRect( const SwRect& rRect )
     // #i24183#
     if ( mpPgPreviewLayout->PreviewLayoutValid() )
     {
-        mpPgPreviewLayout->Repaint( Rectangle( rRect.Pos(), rRect.SSize() ) );
+        mpPgPreviewLayout->Repaint( tools::Rectangle( rRect.Pos(), rRect.SSize() ) );
     }
 }
 

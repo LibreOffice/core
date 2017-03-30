@@ -190,7 +190,7 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
                 aResId.SetRT( RSC_STRING );
 
                 OUString aHelpText( aResId );
-                Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
+                ::tools::Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
                 Help::ShowQuickHelp(static_cast< vcl::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText);
             }
             Touch();
@@ -319,7 +319,7 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
     {
         SdrObject* pPlaceholder = mxPlaceholderObj.get();
         SmartTagReference xThis( this );
-        const Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
+        const ::tools::Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
 
         OutputDevice* pDev = mrView.GetFirstOutputDevice();
         if( pDev == nullptr )
@@ -334,14 +334,14 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 
         aRet.SetSizePixel( Size( aSize.Width() << 1, aSize.Height() << 1 ) );
 
-        const Rectangle aRectSrc( Point( 0, 0 ), aSize );
+        const ::tools::Rectangle aRectSrc( Point( 0, 0 ), aSize );
 
         aRet = *(getButtonImage((nHighlight == 0) ? 4 : 0, bLarge));
         aRet.Expand( aSize.Width(), aSize.Height(), true );
 
-        aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
-        aRet.CopyPixel( Rectangle( Point( 0,             aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );
-        aRet.CopyPixel( Rectangle( Point( aSize.Width(), aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 3) ? 7 : 3, bLarge) );
+        aRet.CopyPixel( ::tools::Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
+        aRet.CopyPixel( ::tools::Rectangle( Point( 0,             aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );
+        aRet.CopyPixel( ::tools::Rectangle( Point( aSize.Width(), aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 3) ? 7 : 3, bLarge) );
     }
 
     return aRet;
@@ -353,7 +353,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
     {
         SdrObject* pPlaceholder = mxPlaceholderObj.get();
         SmartTagReference xThis( this );
-        const Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
+        const ::tools::Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
         const Point aPoint;
 
         OutputDevice* pDev = mrView.GetFirstOutputDevice();

@@ -107,7 +107,7 @@ void ToolTip::DoShow()
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (!msCurrentHelpText.isEmpty() && pWindow)
     {
-        Rectangle aBox (
+        ::tools::Rectangle aBox (
             mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
                 mpDescriptor,
                 PageObjectLayouter::Part::Preview,

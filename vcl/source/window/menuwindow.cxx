@@ -38,7 +38,7 @@ static sal_uLong ImplChangeTipTimeout( sal_uLong nTimeout, vcl::Window *pWindow 
 }
 
 bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
-        const HelpEvent& rHEvt, const Rectangle &rHighlightRect)
+        const HelpEvent& rHEvt, const tools::Rectangle &rHighlightRect)
 {
     if( ! pMenu )
         return false;
@@ -61,7 +61,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_
         else
             aPos = rHEvt.GetMousePosPixel();
 
-        Rectangle aRect( aPos, Size() );
+        tools::Rectangle aRect( aPos, Size() );
         if (!pMenu->GetHelpText(nId).isEmpty())
             Help::ShowBalloon( pMenuWindow, aPos, aRect, pMenu->GetHelpText( nId ) );
         else
@@ -77,7 +77,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_
     else if ( ( rHEvt.GetMode() &HelpEventMode::QUICK ) && pMenuWindow )
     {
         Point aPos = rHEvt.GetMousePosPixel();
-        Rectangle aRect( aPos, Size() );
+        tools::Rectangle aRect( aPos, Size() );
         // give user a chance to read the full filename
         sal_uLong oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
         // call always, even when strlen==0 to correctly remove tip

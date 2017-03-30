@@ -79,7 +79,7 @@ protected:
     void ImplCursorUpDown( bool bUp, bool bHomeEnd = false );
     void ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown );
     long ImplGetStartY() const;
-    Rectangle ImplGetItemRect( sal_uInt16 nPos );
+    tools::Rectangle ImplGetItemRect( sal_uInt16 nPos );
     void RenderHighlightItem( vcl::RenderContext& rRenderContext, sal_uInt16 nPos );
     long GetInitialItemY( long *pOptStartY = nullptr ) const;
     void InvalidateItem( sal_uInt16 nPos );
@@ -96,7 +96,7 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void KeyInput(const KeyEvent& rKEvent) override;
     virtual void Command(const CommandEvent& rCEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void Resize() override;
 

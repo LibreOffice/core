@@ -295,7 +295,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             if ( m_pActionListener->requestQuickHelp( pEntry, sQuickHelpText ) )
             {
                 Size aSize( GetOutputSizePixel().Width(), GetEntryHeight() );
-                Rectangle aScreenRect( OutputToScreenPixel( GetEntryPosition( pEntry ) ), aSize );
+                tools::Rectangle aScreenRect( OutputToScreenPixel( GetEntryPosition( pEntry ) ), aSize );
 
                 Help::ShowQuickHelp( this, aScreenRect,
                                      sQuickHelpText, QuickHelpFlags::Left | QuickHelpFlags::VCenter );

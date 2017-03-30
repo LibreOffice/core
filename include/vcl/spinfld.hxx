@@ -43,7 +43,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;
@@ -64,9 +64,9 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
 protected:
-    Rectangle       maUpperRect;
-    Rectangle       maLowerRect;
-    Rectangle       maDropDownRect; // noch nicht angebunden...
+    tools::Rectangle       maUpperRect;
+    tools::Rectangle       maLowerRect;
+    tools::Rectangle       maDropDownRect; // noch nicht angebunden...
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
@@ -76,12 +76,12 @@ protected:
     void            EndDropDown();
 
     virtual void    FillLayoutData() const override;
-    Rectangle *     ImplFindPartRect( const Point& rPt );
+    tools::Rectangle *     ImplFindPartRect( const Point& rPt );
 
 private:
     DECL_DLLPRIVATE_LINK( ImplTimeout, Timer*, void );
     SAL_DLLPRIVATE void   ImplInitSpinFieldData();
-    SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea );
+    SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, tools::Rectangle& rDDArea, tools::Rectangle& rSpinUpArea, tools::Rectangle& rSpinDownArea );
 
     VclPtr<Edit>    mpEdit;
     AutoTimer       maRepeatTimer;

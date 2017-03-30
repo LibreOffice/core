@@ -37,7 +37,7 @@ using namespace ::com::sun::star::text;
 
 namespace {
 
-void DrawRect_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect,
+void DrawRect_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
                    const Color &rFillColor, const Color &rLineColor)
 {
     rRenderContext.SetFillColor(rFillColor);
@@ -140,7 +140,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
         nTTxtBorder = 2;
         nBTxtBorder = 2;
     }
-    aPagePrtArea = Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
+    aPagePrtArea = tools::Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
 
     // Example text: Preparing for the text output
     // A line of text
@@ -232,7 +232,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     }
 }
 
-void SvxSwFrameExample::CalcBoundRect_Impl(Rectangle &rRect)
+void SvxSwFrameExample::CalcBoundRect_Impl(tools::Rectangle &rRect)
 {
     switch (nAnchor)
     {
@@ -444,19 +444,19 @@ void SvxSwFrameExample::CalcBoundRect_Impl(Rectangle &rRect)
     }
 }
 
-Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect,
+tools::Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
                                                  const Color &rFillColor, const Color &rBorderColor)
 {
     DrawRect_Impl(rRenderContext, rRect, rFillColor, rBorderColor);
 
     // Bereich, zu dem relativ positioniert wird, bestimmen
-    Rectangle aRect(rRect); // aPagePrtArea = Default
+    tools::Rectangle aRect(rRect); // aPagePrtArea = Default
     CalcBoundRect_Impl(aRect);
 
     if (nAnchor == TextContentAnchorType_AT_FRAME && &rRect == &aPagePrtArea)
     {
         // Testabsatz zeichnen
-        Rectangle aTxt(aTextLine);
+        tools::Rectangle aTxt(aTextLine);
         sal_Int32 nStep = aTxt.GetHeight() + 2;
         sal_uInt16 nLines = static_cast<sal_uInt16>(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
 
@@ -472,7 +472,7 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRenderCont
     return aRect;
 }
 
-void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetMapMode(MapUnit::MapPixel);
 
@@ -482,7 +482,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     DrawRect_Impl(rRenderContext, aPage, m_aBgCol, m_aBorderCol);
 
     // Draw PrintArea
-    Rectangle aRect = DrawInnerFrame_Impl(rRenderContext, aPagePrtArea, m_aTransColor, m_aPrintAreaCol);
+    tools::Rectangle aRect = DrawInnerFrame_Impl(rRenderContext, aPagePrtArea, m_aTransColor, m_aPrintAreaCol);
 
     if (nAnchor == TextContentAnchorType_AT_FRAME)
         aRect = DrawInnerFrame_Impl(rRenderContext, aFrameAtFrame, m_aBgCol, m_aBorderCol);
@@ -590,9 +590,9 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         }
     }
 
-    Rectangle aFrmRect(Point(lXPos, lYPos), aFrmSize);
+    tools::Rectangle aFrmRect(Point(lXPos, lYPos), aFrmSize);
 
-    Rectangle* pOuterFrame = &aPage;
+    tools::Rectangle* pOuterFrame = &aPage;
 
     if (nAnchor == TextContentAnchorType_AT_FRAME)
         pOuterFrame = &aFrameAtFrame;
@@ -609,7 +609,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
     // Draw Test paragraph
     const long nTxtLineHeight = aTextLine.GetHeight();
-    Rectangle aTxt(aTextLine);
+    tools::Rectangle aTxt(aTextLine);
     sal_Int32 nStep;
     sal_uInt16 nLines;
 

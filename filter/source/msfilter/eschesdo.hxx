@@ -37,7 +37,7 @@ class ImplEESdrObject
     css::uno::Reference< css::drawing::XShape >           mXShape;
 //  XTextRef            mXText; // TextRef des globalen Text
     css::uno::Any       mAny;
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     OUString            mType;
     sal_uInt32          mnShapeId;
     sal_uInt32          mnTextSize;
@@ -68,9 +68,9 @@ public:
     const OUString&     GetType() const         { return mType; }
     void                SetType( const OUString& rS ) { mType = rS; }
 
-    const Rectangle&    GetRect() const         { return maRect; }
+    const tools::Rectangle&    GetRect() const         { return maRect; }
     void                SetRect( const Point& rPos, const Size& rSz );
-    void                SetRect( const Rectangle& rRect )
+    void                SetRect( const tools::Rectangle& rRect )
                             { maRect = rRect; }
 
     sal_Int32           GetAngle() const        { return mnAngle; }
@@ -130,7 +130,7 @@ class ImplEESdrWriter
                             const Point& rTextRefPoint );
     sal_uInt32          ImplEnterAdditionalTextGroup(
                             const css::uno::Reference< css::drawing::XShape >& rShape,
-                            const Rectangle* pBoundRect );
+                            const tools::Rectangle* pBoundRect );
     void                ImplFlushSolverContainer();
 
 public:

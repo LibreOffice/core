@@ -113,7 +113,7 @@ public:
     SwCaptionPreview(vcl::Window* pParent, WinBits nStyle);
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     void SetPreviewText( const OUString& rText );
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual Size GetOptimalSize() const override;
 };
 

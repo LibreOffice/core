@@ -229,7 +229,7 @@ public:
         OUString            Text;       // user text to appear on the control
         DrawTextFlags       TextStyle;  // style flags
         bool                ReadOnly;
-        Rectangle           Location;   // describes the area filled by the control
+        tools::Rectangle           Location;   // describes the area filled by the control
         bool                Border;     // true: widget should have a border, false: no border
         Color               BorderColor;// COL_TRANSPARENT and Border=true means get color from application settings
         bool                Background; // true: widget shall draw its background, false: no background
@@ -737,7 +737,7 @@ The following structure describes the permissions used in PDF security
     void               SetClipRegion();
     void               SetClipRegion( const basegfx::B2DPolyPolygon& rRegion );
     void               MoveClipRegion( long nHorzMove, long nVertMove );
-    void               IntersectClipRegion( const Rectangle& rRect );
+    void               IntersectClipRegion( const tools::Rectangle& rRect );
     void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
     void               SetLayoutMode( ComplexTextLayoutFlags nMode );
@@ -777,7 +777,7 @@ The following structure describes the permissions used in PDF security
     void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                          const OUString& rStr,
                                          sal_Int32 nIndex, sal_Int32 nLen );
-    void                DrawText( const Rectangle& rRect,
+    void                DrawText( const tools::Rectangle& rRect,
                                   const OUString& rStr, DrawTextFlags nStyle );
 
     void                DrawPixel( const Point& rPt, const Color& rColor );
@@ -793,15 +793,15 @@ The following structure describes the permissions used in PDF security
     void                DrawPolyLine( const tools::Polygon& rPoly, const ExtLineInfo& rInfo );
     void                DrawPolygon( const tools::Polygon& rPoly );
     void                DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
-    void                DrawRect( const Rectangle& rRect );
-    void                DrawRect( const Rectangle& rRect,
+    void                DrawRect( const tools::Rectangle& rRect );
+    void                DrawRect( const tools::Rectangle& rRect,
                                   sal_uLong nHorzRount, sal_uLong nVertRound );
-    void                DrawEllipse( const Rectangle& rRect );
-    void                DrawArc( const Rectangle& rRect,
+    void                DrawEllipse( const tools::Rectangle& rRect );
+    void                DrawArc( const tools::Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );
-    void                DrawPie( const Rectangle& rRect,
+    void                DrawPie( const tools::Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );
-    void                DrawChord( const Rectangle& rRect,
+    void                DrawChord( const tools::Rectangle& rRect,
                                    const Point& rStartPt, const Point& rEndPt );
 
     void                DrawBitmap( const Point& rDestPt, const Size& rDestSize,
@@ -810,12 +810,12 @@ The following structure describes the permissions used in PDF security
     void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const BitmapEx& rBitmapEx );
 
-    void                DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
+    void                DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
     void                DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
     void                DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
 
-    void                DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
+    void                DrawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWallpaper );
     void                DrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                          sal_uInt16 nTransparencePercent );
 
@@ -850,7 +850,7 @@ The following structure describes the permissions used in PDF security
     @param nTransparencePercent
     The transparency factor
     */
-    void                EndTransparencyGroup( const Rectangle& rBoundRect, sal_uInt16 nTransparencePercent );
+    void                EndTransparencyGroup( const tools::Rectangle& rBoundRect, sal_uInt16 nTransparencePercent );
 
     /** Insert a JPG encoded image (optionally with mask)
 
@@ -871,7 +871,7 @@ The following structure describes the permissions used in PDF security
     the same pixel size as the image and
     be either 1 bit black&white or 8 bit grey
     */
-    void                DrawJPGBitmap( SvStream& rJPGData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic );
+    void                DrawJPGBitmap( SvStream& rJPGData, bool bIsTrueColor, const Size& rSrcSizePixel, const tools::Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic );
 
     /** Create a new named destination to be used in a link from another PDF document
 
@@ -892,7 +892,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
+    sal_Int32           CreateNamedDest( const OUString& sDestName, const tools::Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
     /** Create a new destination to be used in a link
 
     @param rRect
@@ -909,7 +909,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
+    sal_Int32           CreateDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
     /** Create a new link on a page
 
     @param rRect
@@ -924,10 +924,10 @@ The following structure describes the permissions used in PDF security
     the link id (to be used in SetLinkDest, SetLinkURL) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateLink( const Rectangle& rRect, sal_Int32 nPageNr );
+    sal_Int32           CreateLink( const tools::Rectangle& rRect, sal_Int32 nPageNr );
 
     /// Creates a screen annotation.
-    sal_Int32 CreateScreen(const Rectangle& rRect, sal_Int32 nPageNr);
+    sal_Int32 CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr);
 
     /** creates a destination which is not intended to be referred to by a link, but by a public destination Id.
 
@@ -951,7 +951,7 @@ The following structure describes the permissions used in PDF security
         @returns
             the internal destination Id.
     */
-    sal_Int32           RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
+    sal_Int32           RegisterDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
 
 
     /** Set the destination for a link
@@ -1039,7 +1039,7 @@ The following structure describes the permissions used in PDF security
     number of page the note is on (as returned by NewPage)
     or -1 in which case the current page is used
     */
-    void CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
+    void CreateNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
 
     /** begin a new logical structure element
 
@@ -1157,7 +1157,7 @@ The following structure describes the permissions used in PDF security
     @param rRect
     the new bounding box for the structural element
      */
-    void SetStructureBoundingBox( const Rectangle& rRect );
+    void SetStructureBoundingBox( const tools::Rectangle& rRect );
 
     /** set the ActualText attribute of a structural element
 

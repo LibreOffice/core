@@ -164,9 +164,9 @@ public:
                             ~SVGAttributeWriter();
 
     void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
-    void                    AddGradientDef( const Rectangle& rObjRect,const Gradient& rGradient, OUString& rGradientId );
+    void                    AddGradientDef( const tools::Rectangle& rObjRect,const Gradient& rGradient, OUString& rGradientId );
     void                    AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
-                                          const Rectangle* pObjBoundRect = nullptr, const Gradient* pFillGradient = nullptr );
+                                          const tools::Rectangle* pObjBoundRect = nullptr, const Gradient* pFillGradient = nullptr );
 
     void                    SetFontAttr( const vcl::Font& rFont );
     void                    startFontSettings();
@@ -336,12 +336,12 @@ private:
     long                    ImplMap( sal_Int32 nVal ) const;
     Point&                  ImplMap( const Point& rPt, Point& rDstPt ) const;
     Size&                   ImplMap( const Size& rSz, Size& rDstSz ) const;
-    void                    ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const;
+    void                    ImplMap( const tools::Rectangle& rRect, tools::Rectangle& rDstRect ) const;
     tools::Polygon&         ImplMap( const tools::Polygon& rPoly, tools::Polygon& rDstPoly ) const;
     tools::PolyPolygon&     ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
 
     void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = nullptr );
-    void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0 );
+    void                    ImplWriteRect( const tools::Rectangle& rRect, long nRadX = 0, long nRadY = 0 );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY );
     void                    ImplWritePattern( const tools::PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
     void                    ImplAddLineAttr( const LineInfo &rAttrs );

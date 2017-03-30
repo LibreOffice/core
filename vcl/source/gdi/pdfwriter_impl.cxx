@@ -1404,7 +1404,7 @@ void PDFWriterImpl::PDFPage::appendPixelPoint( const basegfx::B2DPoint& rPoint, 
     appendDouble( fValue, rBuffer, nLog10Divisor );
 }
 
-void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& rBuffer ) const
+void PDFWriterImpl::PDFPage::appendRect( const tools::Rectangle& rRect, OStringBuffer& rBuffer ) const
 {
     appendPoint( rRect.BottomLeft() + Point( 0, 1 ), rBuffer );
     rBuffer.append( ' ' );
@@ -1414,7 +1414,7 @@ void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& 
     rBuffer.append( " re" );
 }
 
-void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect ) const
+void PDFWriterImpl::PDFPage::convertRect( tools::Rectangle& rRect ) const
 {
     Point aLL = lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                              m_pWriter->m_aMapMode,
@@ -2934,7 +2934,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     aInfo.m_nAscent = 1000;
     aInfo.m_nDescent = 200;
     aInfo.m_nCapHeight = 1000;
-    aInfo.m_aFontBBox = Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
+    aInfo.m_aFontBBox = tools::Rectangle( Point( -200, -200 ), Size( 1700, 1700 ) );
     aInfo.m_aPSName = pFont->GetFamilyName();
     sal_Int32 pWidths[256];
     memset( pWidths, 0, sizeof(pWidths) );
@@ -4243,7 +4243,7 @@ Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
             if( nDelta < 1 )
                 nDelta = 1;
             setLineColor( Color( COL_TRANSPARENT ) );
-            Rectangle aRect = rIntern.m_aRect;
+            tools::Rectangle aRect = rIntern.m_aRect;
             setFillColor( rSettings.GetLightBorderColor() );
             drawRectangle( aRect );
             aRect.Left()  += nDelta; aRect.Top()     += nDelta;
@@ -4251,11 +4251,11 @@ Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
             setFillColor( rSettings.GetFieldColor() );
             drawRectangle( aRect );
             setFillColor( rSettings.GetLightColor() );
-            drawRectangle( Rectangle( Point( aRect.Left(), aRect.Bottom()-nDelta ), aRect.BottomRight() ) );
-            drawRectangle( Rectangle( Point( aRect.Right()-nDelta, aRect.Top() ), aRect.BottomRight() ) );
+            drawRectangle( tools::Rectangle( Point( aRect.Left(), aRect.Bottom()-nDelta ), aRect.BottomRight() ) );
+            drawRectangle( tools::Rectangle( Point( aRect.Right()-nDelta, aRect.Top() ), aRect.BottomRight() ) );
             setFillColor( rSettings.GetDarkShadowColor() );
-            drawRectangle( Rectangle( aRect.TopLeft(), Point( aRect.Left()+nDelta, aRect.Bottom() ) ) );
-            drawRectangle( Rectangle( aRect.TopLeft(), Point( aRect.Right(), aRect.Top()+nDelta ) ) );
+            drawRectangle( tools::Rectangle( aRect.TopLeft(), Point( aRect.Left()+nDelta, aRect.Bottom() ) ) );
+            drawRectangle( tools::Rectangle( aRect.TopLeft(), Point( aRect.Right(), aRect.Top()+nDelta ) ) );
         }
         else
         {
@@ -4395,7 +4395,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     if( nDelta < 1 )
         nDelta = 1;
 
-    Rectangle aCheckRect, aTextRect;
+    tools::Rectangle aCheckRect, aTextRect;
     {
         aCheckRect.Left()   = rBox.m_aRect.Left() + nDelta;
         aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
@@ -4499,7 +4499,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     if( nDelta < 1 )
         nDelta = 1;
 
-    Rectangle aCheckRect, aTextRect;
+    tools::Rectangle aCheckRect, aTextRect;
     {
         aCheckRect.Left()   = rBox.m_aRect.Left() + nDelta;
         aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
@@ -8727,7 +8727,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         // The rectangle is the bounding box of the text, but also includes
         // ascent / descent to match the on-screen rendering.
-        Rectangle aRectangle;
+        tools::Rectangle aRectangle;
         // This is the top left of the text without ascent / descent.
         aRectangle.SetPos(m_pReferenceDevice->PixelToLogic(rLayout.GetDrawPosition()));
         aRectangle.setY(aRectangle.getY() - aRefDevFontMetric.GetAscent());
@@ -8823,8 +8823,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     if( m_aCurrentPDFState.m_aFont.GetEmphasisMark() & FontEmphasisMark::Style )
     {
         tools::PolyPolygon             aEmphPoly;
-        Rectangle               aEmphRect1;
-        Rectangle               aEmphRect2;
+        tools::Rectangle               aEmphRect1;
+        tools::Rectangle               aEmphRect2;
         long                    nEmphYOff;
         long                    nEmphWidth;
         long                    nEmphHeight;
@@ -8906,7 +8906,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
 void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
                                       const tools::PolyPolygon& rPolyPoly, bool bPolyLine,
-                                      const Rectangle& rRect1, const Rectangle& rRect2 )
+                                      const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 )
 {
     // TODO: pass nWidth as width of this mark
     // long nWidth = 0;
@@ -8929,14 +8929,14 @@ void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
 
     if ( !rRect1.IsEmpty() )
     {
-        Rectangle aRect( Point( nX+rRect1.Left(),
+        tools::Rectangle aRect( Point( nX+rRect1.Left(),
                                 nY+rRect1.Top() ), rRect1.GetSize() );
         drawRectangle( aRect );
     }
 
     if ( !rRect2.IsEmpty() )
     {
-        Rectangle aRect( Point( nX+rRect2.Left(),
+        tools::Rectangle aRect( Point( nX+rRect2.Left(),
                                 nY+rRect2.Top() ), rRect2.GetSize() );
 
         drawRectangle( aRect );
@@ -8991,7 +8991,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const 
     }
 }
 
-void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle )
+void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle )
 {
     long        nWidth          = rRect.GetWidth();
     long        nHeight         = rRect.GetHeight();
@@ -9512,7 +9512,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
 
     push( PushFlags::CLIPREGION );
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
-    Rectangle aRect;
+    tools::Rectangle aRect;
     aRect.Left() = rPos.X();
     aRect.Right() = aRect.Left()+nWidth;
     aRect.Bottom() = rPos.Y()+aRefDevFontMetric.GetDescent();
@@ -9772,7 +9772,7 @@ void PDFWriterImpl::pushResource( ResourceKind eKind, const OString& rResource, 
     }
 }
 
-void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRect )
+void PDFWriterImpl::beginRedirect( SvStream* pStream, const tools::Rectangle& rTargetRect )
 {
     push( PushFlags::ALL );
 
@@ -9832,10 +9832,10 @@ void PDFWriterImpl::beginTransparencyGroup()
 {
     updateGraphicsState();
     if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
-        beginRedirect( new SvMemoryStream( 1024, 1024 ), Rectangle() );
+        beginRedirect( new SvMemoryStream( 1024, 1024 ), tools::Rectangle() );
 }
 
-void PDFWriterImpl::endTransparencyGroup( const Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent )
+void PDFWriterImpl::endTransparencyGroup( const tools::Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent )
 {
     SAL_WARN_IF( nTransparentPercent > 100, "vcl.pdfwriter", "invalid alpha value" );
     nTransparentPercent = nTransparentPercent % 100;
@@ -9875,7 +9875,7 @@ void PDFWriterImpl::endTransparencyGroup( const Rectangle& rBoundingBox, sal_uIn
     }
 }
 
-void PDFWriterImpl::drawRectangle( const Rectangle& rRect )
+void PDFWriterImpl::drawRectangle( const tools::Rectangle& rRect )
 {
     MARK( "drawRectangle" );
 
@@ -9899,7 +9899,7 @@ void PDFWriterImpl::drawRectangle( const Rectangle& rRect )
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawRectangle( const Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound )
+void PDFWriterImpl::drawRectangle( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound )
 {
     MARK( "drawRectangle with rounded edges" );
 
@@ -9989,7 +9989,7 @@ void PDFWriterImpl::drawRectangle( const Rectangle& rRect, sal_uInt32 nHorzRound
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawEllipse( const Rectangle& rRect )
+void PDFWriterImpl::drawEllipse( const tools::Rectangle& rRect )
 {
     MARK( "drawEllipse" );
 
@@ -10059,7 +10059,7 @@ void PDFWriterImpl::drawEllipse( const Rectangle& rRect )
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-static double calcAngle( const Rectangle& rRect, const Point& rPoint )
+static double calcAngle( const tools::Rectangle& rRect, const Point& rPoint )
 {
     Point aOrigin((rRect.Left()+rRect.Right()+1)/2,
                   (rRect.Top()+rRect.Bottom()+1)/2);
@@ -10078,7 +10078,7 @@ static double calcAngle( const Rectangle& rRect, const Point& rPoint )
     return atan2( fY, fX );
 }
 
-void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const Point& rStop, bool bWithPie, bool bWithChord )
+void PDFWriterImpl::drawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rStop, bool bWithPie, bool bWithChord )
 {
     MARK( "drawArc" );
 
@@ -10387,7 +10387,7 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
     if( rInfo.m_fTransparency != 0.0 )
     {
         // FIXME: actually this may be incorrect with bezier polygons
-        Rectangle aBoundRect( rPoly.GetBoundRect() );
+        tools::Rectangle aBoundRect( rPoly.GetBoundRect() );
         // avoid clipping with thick lines
         if( rInfo.m_fLineWidth > 0.0 )
         {
@@ -10582,7 +10582,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
         aDev->SetDrawMode( aDev->GetDrawMode() |
                           ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText |
                             DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
-    aDev->DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
+    aDev->DrawGradient( tools::Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
 
     Bitmap aSample = aDev->GetBitmap( Point( 0, 0 ), rObject.m_aSize );
     Bitmap::ScopedReadAccess pAccess(aSample);
@@ -10714,12 +10714,12 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 
     // Determination of shading axis
     // See: OutputDevice::ImplDrawLinearGradient for reference
-    Rectangle aRect;
+    tools::Rectangle aRect;
     aRect.Left() = aRect.Top() = 0;
     aRect.Right() = aSize.Width();
     aRect.Bottom() = aSize.Height();
 
-    Rectangle aBoundRect;
+    tools::Rectangle aBoundRect;
     Point     aCenter;
     sal_uInt16    nAngle = rObject.m_aGradient.GetAngle() % 3600;
     rObject.m_aGradient.GetBoundRect( aRect, aBoundRect, aCenter );
@@ -11573,7 +11573,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     rEmit.m_aPixelSize = rGraphic.GetBitmap().GetPrefSize();
 }
 
-void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic )
+void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic )
 {
     MARK( "drawJPGBitmap" );
 
@@ -11810,7 +11810,7 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
     return it->m_nObject;
 }
 
-void PDFWriterImpl::drawGradient( const Rectangle& rRect, const Gradient& rGradient )
+void PDFWriterImpl::drawGradient( const tools::Rectangle& rRect, const Gradient& rGradient )
 {
     MARK( "drawGradient (Rectangle)" );
 
@@ -11873,7 +11873,7 @@ void PDFWriterImpl::drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch&
     }
 }
 
-void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWall )
+void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWall )
 {
     MARK( "drawWallpaper" );
 
@@ -11891,7 +11891,7 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
                                 getMapMode(),
                                 getReferenceDevice(),
                                 aBitmap.GetPrefSize() );
-        Rectangle aRect( rRect );
+        tools::Rectangle aRect( rRect );
         if( rWall.IsRect() )
         {
             aRect = rWall.GetRect();
@@ -11949,7 +11949,7 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
 
                 // convert to page coordinates; this needs to be done here
                 // since the emit does not know the page anymore
-                Rectangle aConvertRect( aBmpPos, aBmpSize );
+                tools::Rectangle aConvertRect( aBmpPos, aBmpSize );
                 m_aPages.back().convertRect( aConvertRect );
 
                 OStringBuffer aNameBuf(16);
@@ -11968,7 +11968,7 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
 
                 m_aTilings.push_back( TilingEmit() );
                 m_aTilings.back().m_nObject         = createObject();
-                m_aTilings.back().m_aRectangle      = Rectangle( Point( 0, 0 ), aConvertRect.GetSize() );
+                m_aTilings.back().m_aRectangle      = tools::Rectangle( Point( 0, 0 ), aConvertRect.GetSize() );
                 m_aTilings.back().m_pTilingStream   = new SvMemoryStream();
                 m_aTilings.back().m_pTilingStream->WriteBytes(
                     aTilingStream.getStr(), aTilingStream.getLength() );
@@ -12249,7 +12249,7 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
     }
 }
 
-void PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
+void PDFWriterImpl::intersectClipRegion( const tools::Rectangle& rRect )
 {
     basegfx::B2DPolyPolygon aRect( basegfx::tools::createPolygonFromRect(
         basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
@@ -12275,7 +12275,7 @@ bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
     return true;
 }
 
-void PDFWriterImpl::createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
 {
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
@@ -12294,7 +12294,7 @@ void PDFWriterImpl::createNote( const Rectangle& rRect, const PDFNote& rNote, sa
     m_aPages[ nPageNr ].m_aAnnotations.push_back( m_aNotes.back().m_nObject );
 }
 
-sal_Int32 PDFWriterImpl::createLink( const Rectangle& rRect, sal_Int32 nPageNr )
+sal_Int32 PDFWriterImpl::createLink( const tools::Rectangle& rRect, sal_Int32 nPageNr )
 {
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
@@ -12317,7 +12317,7 @@ sal_Int32 PDFWriterImpl::createLink( const Rectangle& rRect, sal_Int32 nPageNr )
     return nRet;
 }
 
-sal_Int32 PDFWriterImpl::createScreen(const Rectangle& rRect, sal_Int32 nPageNr)
+sal_Int32 PDFWriterImpl::createScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr)
 {
     if (nPageNr < 0)
         nPageNr = m_nCurrentPage;
@@ -12340,7 +12340,7 @@ sal_Int32 PDFWriterImpl::createScreen(const Rectangle& rRect, sal_Int32 nPageNr)
     return nRet;
 }
 
-sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
@@ -12361,7 +12361,7 @@ sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const Recta
     return nRet;
 }
 
-sal_Int32 PDFWriterImpl::createDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFWriterImpl::createDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
@@ -12381,7 +12381,7 @@ sal_Int32 PDFWriterImpl::createDest( const Rectangle& rRect, sal_Int32 nPageNr, 
     return nRet;
 }
 
-sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     return m_aDestinationIdTranslation[ nDestId ] = createDest( rRect, nPageNr, eType );
 }
@@ -13206,7 +13206,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
     return bInsert;
 }
 
-void PDFWriterImpl::setStructureBoundingBox( const Rectangle& rRect )
+void PDFWriterImpl::setStructureBoundingBox( const tools::Rectangle& rRect )
 {
     sal_Int32 nPageNr = m_nCurrentPage;
     if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() || !m_aContext.Tagged )
@@ -13455,7 +13455,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         createDefaultRadioButtonAppearance( rNewWidget, rBtn );
 
         // union rect of radio group
-        Rectangle aRect = rNewWidget.m_aRect;
+        tools::Rectangle aRect = rNewWidget.m_aRect;
         m_aPages[ nPageNr ].convertRect( aRect );
         rRadioButton.m_aRect.Union( aRect );
     }
@@ -13539,7 +13539,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     {
         sigHidden = true;
 
-        rNewWidget.m_aRect = Rectangle(0, 0, 0, 0);
+        rNewWidget.m_aRect = tools::Rectangle(0, 0, 0, 0);
 
         m_nSignatureObject = createObject();
         rNewWidget.m_aValue = OUString::number( m_nSignatureObject );

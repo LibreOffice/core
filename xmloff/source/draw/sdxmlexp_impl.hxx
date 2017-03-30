@@ -30,7 +30,7 @@
 #include <set>
 #include <vector>
 
-class Rectangle;
+namespace tools { class Rectangle; }
 
 class ImpXMLEXPPageMasterInfo;
 class ImpXMLAutoLayoutInfo;
@@ -136,7 +136,7 @@ class SdXMLExport : public SvXMLExport
 
     bool ImpPrepAutoLayoutInfo(const css::uno::Reference< css::drawing::XDrawPage >& xPage, OUString& rName);
     void ImpWriteAutoLayoutInfos();
-    void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect);
+    void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const tools::Rectangle& rRect);
     void ImpWriteHeaderFooterDecls();
     void ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSettingsImpl& aSettings );
 

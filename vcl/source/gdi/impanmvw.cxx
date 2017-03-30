@@ -180,7 +180,7 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
 
     pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *aVDev.get() );
     if (pGuard)
-        pGuard->SetPaintRect(Rectangle(maDispPt, maDispSz));
+        pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 
     if (xOldClip)
         pRenderContext->SetClipRegion(*xOldClip);
@@ -198,10 +198,10 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         pRenderContext = pGuard->GetRenderContext();
     }
 
-    Rectangle aOutRect( pRenderContext->PixelToLogic( Point() ), pRenderContext->GetOutputSize() );
+    tools::Rectangle aOutRect( pRenderContext->PixelToLogic( Point() ), pRenderContext->GetOutputSize() );
 
     // check, if output lies out of display
-    if( aOutRect.Intersection( Rectangle( maDispPt, maDispSz ) ).IsEmpty() )
+    if( aOutRect.Intersection( tools::Rectangle( maDispPt, maDispSz ) ).IsEmpty() )
         setMarked( true );
     else if( !mbPause )
     {
@@ -292,7 +292,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
 
             pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *pDev );
             if (pGuard)
-                pGuard->SetPaintRect(Rectangle(maDispPt, maDispSz));
+                pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 
             if( xOldClip)
             {

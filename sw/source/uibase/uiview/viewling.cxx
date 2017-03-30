@@ -920,7 +920,7 @@ void SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
     m_pFieldPopup = VclPtr<SwFieldDialog>::Create( m_pEditWin, fieldBM );
     m_pFieldPopup->SetPopupModeEndHdl( LINK( this, SwView, FieldPopupModeEndHdl ) );
 
-    Rectangle aRect( m_pEditWin->OutputToScreenPixel( aPixPos ), Size( 0, 0 ) );
+    tools::Rectangle aRect( m_pEditWin->OutputToScreenPixel( aPixPos ), Size( 0, 0 ) );
     m_pFieldPopup->StartPopupMode( aRect, FloatWinPopupFlags::Down|FloatWinPopupFlags::GrabFocus );
 }
 

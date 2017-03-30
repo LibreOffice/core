@@ -95,7 +95,7 @@ public:
     AlternativesExtraData * GetExtraData( const SvTreeListEntry *pEntry );
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
 };
 
 class ReplaceEdit : public Edit

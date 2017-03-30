@@ -319,7 +319,7 @@ AquaSalMenu::~AquaSalMenu()
     }
 }
 
-bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags)
+bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags)
 {
     // do not use native popup menu when AQUA_NATIVE_MENUS is set to false
     if( ! VisibleMenuBar() ) {
@@ -854,26 +854,26 @@ void AquaSalMenu::RemoveMenuBarButton( sal_uInt16 i_nId )
         statusLayout();
 }
 
-Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame )
+tools::Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame )
 {
     if( ! i_pReferenceFrame || ! AquaSalFrame::isAlive( static_cast<AquaSalFrame*>(i_pReferenceFrame) ) )
-        return Rectangle();
+        return tools::Rectangle();
 
     MenuBarButtonEntry* pEntry = findButtonItem( i_nItemId );
 
     if( ! pEntry )
-        return Rectangle();
+        return tools::Rectangle();
 
     NSStatusItem* pItem = SalData::getStatusItem();
     if( ! pItem )
-        return Rectangle();
+        return tools::Rectangle();
 
     NSView* pNSView = [pItem view];
     if( ! pNSView )
-        return Rectangle();
+        return tools::Rectangle();
     NSWindow* pNSWin = [pNSView window];
     if( ! pNSWin )
-        return Rectangle();
+        return tools::Rectangle();
 
     NSRect aRect = [pNSWin convertRectToScreen:[pNSWin frame]];
 
@@ -882,7 +882,7 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
     aRect.origin.x -= i_pReferenceFrame->maGeometry.nX;
     aRect.origin.y -= i_pReferenceFrame->maGeometry.nY + aRect.size.height;
 
-    return Rectangle( Point(static_cast<long int>(aRect.origin.x),
+    return tools::Rectangle( Point(static_cast<long int>(aRect.origin.x),
                 static_cast<long int>(aRect.origin.y)
                 ),
               Size( static_cast<long int>(aRect.size.width),

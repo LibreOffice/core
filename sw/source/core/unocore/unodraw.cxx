@@ -2219,8 +2219,8 @@ awt::Point SAL_CALL SwXShape::getPosition()
             // to the determined attribute position
             // #i34750#:
             // consider the layout direction
-            const Rectangle aMemberObjRect = GetSvxShape()->GetSdrObject()->GetSnapRect();
-            const Rectangle aGroupObjRect = pTopGroupObj->GetSnapRect();
+            const tools::Rectangle aMemberObjRect = GetSvxShape()->GetSdrObject()->GetSnapRect();
+            const tools::Rectangle aGroupObjRect = pTopGroupObj->GetSnapRect();
             // #i53320# - relative position of group member and
             // top group object is always given in horizontal left-to-right layout.
             awt::Point aOffset( 0, 0 );
@@ -2400,7 +2400,7 @@ awt::Point SwXShape::GetAttrPosition()
              pObj->GetAnchorPos().Y() == 0 &&
              aAttrPos.X == 0 && aAttrPos.Y == 0 )
         {
-            const Rectangle aObjRect = pObj->GetSnapRect();
+            const tools::Rectangle aObjRect = pObj->GetSnapRect();
             aAttrPos.X = convertTwipToMm100(aObjRect.Left());
             aAttrPos.Y = convertTwipToMm100(aObjRect.Top());
         }

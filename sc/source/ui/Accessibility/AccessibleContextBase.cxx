@@ -146,7 +146,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoin
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return Rectangle (Point(), GetBoundingBox().GetSize()).IsInside(VCLPoint(rPoint));
+    return tools::Rectangle (Point(), GetBoundingBox().GetSize()).IsInside(VCLPoint(rPoint));
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtPoint(
@@ -194,8 +194,8 @@ bool SAL_CALL ScAccessibleContextBase::isShowing(  )
         uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
         if (xParentComponent.is())
         {
-            Rectangle aParentBounds(VCLRectangle(xParentComponent->getBounds()));
-            Rectangle aBounds(VCLRectangle(getBounds()));
+            tools::Rectangle aParentBounds(VCLRectangle(xParentComponent->getBounds()));
+            tools::Rectangle aBounds(VCLRectangle(getBounds()));
             bShowing = aBounds.IsOver(aParentBounds);
         }
     }
@@ -496,16 +496,16 @@ void ScAccessibleContextBase::CommitFocusLost() const
     vcl::unohelper::NotifyAccessibleStateEventGlobally(aEvent);
 }
 
-Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen() const
 {
     OSL_FAIL("not implemented");
-    return Rectangle();
+    return tools::Rectangle();
 }
 
-Rectangle ScAccessibleContextBase::GetBoundingBox() const
+tools::Rectangle ScAccessibleContextBase::GetBoundingBox() const
 {
     OSL_FAIL("not implemented");
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 void ScAccessibleContextBase::IsObjectValid() const

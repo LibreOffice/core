@@ -138,8 +138,8 @@ public:
     static ::Point /* VCLPoint */ ConvertToVCLPoint(css::awt::Point const& _aPoint);
     static css::awt::Point ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint);
 
-    static ::Rectangle ConvertToVCLRect( css::awt::Rectangle const & _rRect );
-    static css::awt::Rectangle ConvertToAWTRect( ::Rectangle const & _rRect );
+    static ::tools::Rectangle ConvertToVCLRect( css::awt::Rectangle const & _rRect );
+    static css::awt::Rectangle ConvertToAWTRect( ::tools::Rectangle const & _rRect );
 
     static css::awt::MouseEvent
         createMouseEvent(

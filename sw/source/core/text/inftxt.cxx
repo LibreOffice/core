@@ -1046,7 +1046,7 @@ void SwTextPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
         if ( GetTextFrame()->IsVertical() )
             GetTextFrame()->SwitchHorizontalToVertical( aTmpRect );
 
-        const Rectangle aRect( aTmpRect.SVRect() );
+        const tools::Rectangle aRect( aTmpRect.SVRect() );
         SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aRect, bScript );
     }
 }
@@ -1068,7 +1068,7 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
             pOut->Pop();
         }
         const int delta=10;
-        Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
+        tools::Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
         m_pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
         m_pOut->SetLineColor( Color(0, 0, 0));
         m_pOut->SetFillColor();

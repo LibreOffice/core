@@ -145,7 +145,7 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 #*
 #************************************************************************/
 
-void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     vcl::Font aDrawFont = rRenderContext.GetFont();
     Size aSzWnd(GetOutputSizePixel());

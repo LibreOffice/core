@@ -91,7 +91,7 @@ namespace dbaui
     protected:
 
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect) override;
+        virtual void resizeDocumentView(tools::Rectangle& rRect) override;
 
         // OEventListenerAdapter
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;

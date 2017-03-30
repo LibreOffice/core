@@ -36,7 +36,7 @@ class Client : public SfxInPlaceClient
     SdrGrafObj*     pSdrGrafObj;
 
     virtual void    ObjectAreaChanged() override;
-    virtual void    RequestNewObjectArea( Rectangle& ) override;
+    virtual void    RequestNewObjectArea( ::tools::Rectangle& ) override;
     virtual void    ViewChanged() override;
 
 public:

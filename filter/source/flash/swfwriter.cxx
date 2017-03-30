@@ -60,7 +60,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     mpFontsStream = maFontsTempFile.GetStream( StreamMode::WRITE|StreamMode::TRUNC );
 
     // define an invisible button with the size of a page
-    Rectangle aRect( 0, 0, (long)( mnDocWidth * mnDocXScale ), (long)( mnDocHeight * mnDocYScale ) );
+    tools::Rectangle aRect( 0, 0, (long)( mnDocWidth * mnDocXScale ), (long)( mnDocHeight * mnDocYScale ) );
     tools::Polygon aPoly( aRect );
     FillStyle aFill = FillStyle( Color(COL_WHITE) );
     mnWhiteBackgroundShapeId = defineShape( aPoly, aFill );
@@ -151,7 +151,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
 
     aHeader.WriteUInt32( 0 );
 
-    Rectangle aDocRect( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
+    tools::Rectangle aDocRect( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
 
     aHeader.addRect( aDocRect );
 

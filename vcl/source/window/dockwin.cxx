@@ -58,7 +58,7 @@ private:
     sal_uInt64      mnLastTicks;
     Idle            maDockIdle;
     Point           maDockPos;
-    Rectangle       maDockRect;
+    tools::Rectangle       maDockRect;
     bool            mbInMove;
     ImplSVEvent *   mnLastUserEvent;
 
@@ -160,7 +160,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl, void*, void)
 
         if( ! mpDockWin->IsDocking() )
             mpDockWin->StartDocking();
-        maDockRect = Rectangle( maDockPos, mpDockWin->GetSizePixel() );
+        maDockRect = tools::Rectangle( maDockPos, mpDockWin->GetSizePixel() );
 
         // mouse pos also in screen pixels
         Point aMousePos = mpDockWin->GetParent()->OutputToScreenPixel( aState.maPos );
@@ -420,7 +420,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
                 if ( rTEvt.IsTrackingCanceled() )
                 {
                     StartDocking();
-                    Rectangle aRect( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) );
+                    tools::Rectangle aRect( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) );
                     EndDocking( aRect, mbStartFloat );
                 }
             }
@@ -430,11 +430,11 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
                 if ( rTEvt.IsTrackingCanceled() )
                 {
                     mbDockCanceled = true;
-                    EndDocking( Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
+                    EndDocking( tools::Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
                     mbDockCanceled = false;
                 }
                 else
-                    EndDocking( Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
+                    EndDocking( tools::Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
             }
         }
         // dock only for non-synthetic MouseEvents
@@ -455,8 +455,8 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             aMousePos.X() -= maMouseOff.X();
             aMousePos.Y() -= maMouseOff.Y();
             Point aFramePos = ImplOutputToFrame( aMousePos );
-            Rectangle aTrackRect( aFramePos, Size( mnTrackWidth, mnTrackHeight ) );
-            Rectangle aCompRect = aTrackRect;
+            tools::Rectangle aTrackRect( aFramePos, Size( mnTrackWidth, mnTrackHeight ) );
+            tools::Rectangle aCompRect = aTrackRect;
             aFramePos.X()    += maMouseOff.X();
             aFramePos.Y()    += maMouseOff.Y();
             if ( mbDragFull )
@@ -502,7 +502,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
                     nTrackStyle = ShowTrackFlags::Big;
                 else
                     nTrackStyle = ShowTrackFlags::Object;
-                Rectangle aShowTrackRect = aTrackRect;
+                tools::Rectangle aShowTrackRect = aTrackRect;
                 aShowTrackRect.SetPos( ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
                 ShowTracking( aShowTrackRect, nTrackStyle );
 
@@ -578,12 +578,12 @@ void DockingWindow::StartDocking()
     mbDocking = true;
 }
 
-bool DockingWindow::Docking( const Point&, Rectangle& )
+bool DockingWindow::Docking( const Point&, tools::Rectangle& )
 {
     return IsFloatingMode();
 }
 
-void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
+void DockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
 {
     bool bOrigDockCanceled = mbDockCanceled;
     if (bFloatMode && !StyleSettings::GetDockingFloatsSupported())

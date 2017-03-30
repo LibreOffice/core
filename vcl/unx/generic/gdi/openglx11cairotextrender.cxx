@@ -26,7 +26,7 @@ cairo_t* OpenGLX11CairoTextRender::getCairoContext()
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
     if( pImpl )
     {
-        Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
+        tools::Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
         if( aClipRect.GetWidth() == 0 || aClipRect.GetHeight() == 0 )
         {
             aClipRect.setWidth( GetWidth() );
@@ -46,7 +46,7 @@ void OpenGLX11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
     if( pImpl )
     {
-        Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
+        tools::Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
         nDX = -aClipRect.Left();
         nDY = -aClipRect.Top();
     }
@@ -69,7 +69,7 @@ void OpenGLX11CairoTextRender::releaseCairoContext(cairo_t* cr)
     unsigned char *pSrc = cairo_image_surface_get_data( pSurface );
 
     // XXX: lfrb: GLES 2.0 doesn't support GL_UNSIGNED_INT_8_8_8_8_REV
-    Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
+    tools::Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
 
     SalTwoRect aRect(0, 0, nWidth, nHeight,
             aClipRect.Left(), aClipRect.Top(), nWidth, nHeight);

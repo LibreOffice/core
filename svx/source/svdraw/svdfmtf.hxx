@@ -44,7 +44,7 @@ class ImpSdrGDIMetaFileImport
 protected:
     ::std::vector< SdrObject* > maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
-    Rectangle                   maScaleRect;
+    tools::Rectangle                   maScaleRect;
     size_t                      mnMapScalingOfs; // from here on, not edited with MapScaling
     SfxItemSet*                 mpLineAttr;
     SfxItemSet*                 mpFillAttr;
@@ -161,7 +161,7 @@ public:
     ImpSdrGDIMetaFileImport(
         SdrModel& rModel,
         SdrLayerID nLay,
-        const Rectangle& rRect);
+        const tools::Rectangle& rRect);
     ~ImpSdrGDIMetaFileImport();
 
     size_t DoImport(

@@ -45,8 +45,8 @@ namespace accessibility
 
     protected:
         // AccessibleBrowseBoxBase overridables
-        virtual Rectangle implGetBoundingBox() override;
-        virtual Rectangle implGetBoundingBoxOnScreen() override;
+        virtual tools::Rectangle implGetBoundingBox() override;
+        virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
 
         // XAccessibleComponent
         virtual void SAL_CALL grabFocus() override;

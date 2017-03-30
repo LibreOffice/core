@@ -47,7 +47,7 @@ private:
 
     sal_uInt16 Offset2Zoom(long nOffset) const;
     long Zoom2Offset(sal_uInt16 nZoom) const;
-    void DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
 public:
     ScZoomSliderWnd(vcl::Window* pParent, const css::uno::Reference<css::frame::XDispatchProvider >& rDispatchProvider,
@@ -59,7 +59,7 @@ public:
 protected:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 };
 #endif
 

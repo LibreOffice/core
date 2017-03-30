@@ -65,12 +65,12 @@ Size SfxPreviewBase_Impl::GetOptimalSize() const
     return LogicToPixel(Size(127, 129), MapUnit::MapAppFont);
 }
 
-void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/, GDIMetaFile* pFile)
+void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/, GDIMetaFile* pFile)
 {
     rRenderContext.SetLineColor();
     Color aLightGrayCol(COL_LIGHTGRAY);
     rRenderContext.SetFillColor(aLightGrayCol);
-    rRenderContext.DrawRect(Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
 
     Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1, 1);
     DBG_ASSERT(aTmpSize.Height() != 0 && aTmpSize.Width() != 0, "size of first page is 0, override GetFirstPageSize or set visible-area!");
@@ -104,13 +104,13 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const Rect
         Color aWhiteCol(COL_WHITE);
         rRenderContext.SetLineColor(aBlackCol);
         rRenderContext.SetFillColor(aWhiteCol);
-        rRenderContext.DrawRect(Rectangle(aPoint + Point(FRAME, FRAME), bPoint + Point(FRAME, FRAME)));
+        rRenderContext.DrawRect(tools::Rectangle(aPoint + Point(FRAME, FRAME), bPoint + Point(FRAME, FRAME)));
         pFile->WindStart();
         pFile->Play(&rRenderContext, aPoint + Point(FRAME, FRAME), aSize);
     }
 }
 
-void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     ImpPaint(rRenderContext, rRect, xMetaFile.get());
 }

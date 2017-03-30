@@ -59,7 +59,7 @@ SdSnapLineDlg::SdSnapLineDlg(
     SetFieldUnit( *m_pMtrFldY, eUIUnit, true );
 
     // get WorkArea
-    Rectangle aWorkArea = pView->GetWorkArea();
+    ::tools::Rectangle aWorkArea = pView->GetWorkArea();
 
     // determine PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();

@@ -383,7 +383,7 @@ sal_Bool SAL_CALL ValueSetAcc::containsPoint( const awt::Point& aPoint )
     const Point             aSize( aRect.Width, aRect.Height );
     const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
 
-    return Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
+    return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
 }
 
 
@@ -954,7 +954,7 @@ sal_Bool SAL_CALL ValueItemAcc::containsPoint( const awt::Point& aPoint )
     const Point             aSize( aRect.Width, aRect.Height );
     const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
 
-    return Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
+    return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
 }
 
 uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAtPoint( const awt::Point& )
@@ -970,9 +970,9 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
 
     if( mpParent )
     {
-        Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
+        tools::Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
         Point       aOrigin;
-        Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        tools::Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

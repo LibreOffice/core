@@ -134,7 +134,7 @@ public:
         nothing had to be cropped, because e.g. the crop rectangle
         included the bitmap, false is returned, too!
      */
-    bool                Crop( const Rectangle& rRectPixel );
+    bool                Crop( const tools::Rectangle& rRectPixel );
 
     /** Expand the bitmap by pixel padding
 
@@ -178,8 +178,8 @@ public:
         empty.
      */
     bool                CopyPixel(
-                            const Rectangle& rRectDst,
-                            const Rectangle& rRectSrc,
+                            const tools::Rectangle& rRectDst,
+                            const tools::Rectangle& rRectSrc,
                             const BitmapEx* pBmpExSrc );
 
     /** Fill the entire bitmap with the given color

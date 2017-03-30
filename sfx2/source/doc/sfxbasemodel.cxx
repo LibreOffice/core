@@ -870,7 +870,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         Sequence< sal_Int32 > aWinExtent;
         if ( ( aArgs.get( "WinExtent" ) >>= aWinExtent )&& ( aWinExtent.getLength() == 4 ) )
         {
-            Rectangle aVisArea( aWinExtent[0], aWinExtent[1], aWinExtent[2], aWinExtent[3] );
+            tools::Rectangle aVisArea( aWinExtent[0], aWinExtent[1], aWinExtent[2], aWinExtent[3] );
             aVisArea = OutputDevice::LogicToLogic( aVisArea, MapUnit::Map100thMM, pObjectShell->GetMapUnit() );
             pObjectShell->SetVisArea( aVisArea );
         }
@@ -961,7 +961,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
         // "WinExtent" property should be updated always.
         // We can store it now to overwrite an old value
         // since it is not from ItemSet
-        Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
+        tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
         aTmpRect = OutputDevice::LogicToLogic( aTmpRect, m_pData->m_pObjectShell->GetMapUnit(), MapUnit::Map100thMM );
 
         Sequence< sal_Int32 > aRectSeq(4);
@@ -3561,7 +3561,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     }
     else
     {
-        Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
+        tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
         aTmpRect.SetSize( Size( aSize.Width, aSize.Height ) );
         m_pData->m_pObjectShell->SetVisArea( aTmpRect );
     }
@@ -3574,7 +3574,7 @@ awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 /*nAspect*/ )
     if ( !m_pData->m_pObjectShell.is() )
         throw Exception(); // TODO: error handling
 
-    Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
+    tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
 
     return awt::Size( aTmpRect.GetWidth(), aTmpRect.GetHeight() );
 }

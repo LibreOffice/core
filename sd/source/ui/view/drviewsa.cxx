@@ -249,7 +249,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         aVisAreaPos = pDocSh->GetVisArea(ASPECT_CONTENT).TopLeft();
     }
 
-    mpDrawView->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aSize));
+    mpDrawView->SetWorkArea(::tools::Rectangle(Point() - aVisAreaPos - aPageOrg, aSize));
 
     // objects can not grow bigger than ViewSize
     GetDoc()->SetMaxObjSize(aSize);
@@ -433,7 +433,7 @@ void DrawViewShell::SetupPage (Size &rSize,
         {
             if( bSize )
             {
-                Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
+                ::tools::Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
                 pPage->ScaleObjects(rSize, aBorderRect, bScaleAll);
                 pPage->SetSize(rSize);
 
@@ -466,7 +466,7 @@ void DrawViewShell::SetupPage (Size &rSize,
         {
             if( bSize )
             {
-                Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
+                ::tools::Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
                 pPage->ScaleObjects(rSize, aBorderRect, bScaleAll);
                 pPage->SetSize(rSize);
             }
@@ -509,7 +509,7 @@ void DrawViewShell::SetupPage (Size &rSize,
         aVisAreaPos = GetDocSh()->GetVisArea(ASPECT_CONTENT).TopLeft();
     }
 
-    GetView()->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aSize));
+    GetView()->SetWorkArea(::tools::Rectangle(Point() - aVisAreaPos - aPageOrg, aSize));
 
     UpdateScrollBars();
 
@@ -585,7 +585,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
                 aPagePos.X() -= aPageSize.Width()  / 2;
 
-                Rectangle aFullPageZoomRect( aPagePos, aPageSize );
+                ::tools::Rectangle aFullPageZoomRect( aPagePos, aPageSize );
                 aZoomItem.AddSnappingPoint( pActiveWindow->GetZoomForRect( aFullPageZoomRect ) );
             }
             aZoomItem.AddSnappingPoint(100);
@@ -605,7 +605,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         // position- and size items
         if ( mpDrawView->IsAction() )
         {
-            Rectangle aRect;
+            ::tools::Rectangle aRect;
             mpDrawView->TakeActionRect( aRect );
 
             if ( aRect.IsEmpty() )
@@ -627,7 +627,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         {
             if ( mpDrawView->AreObjectsMarked() )
             {
-                Rectangle aRect = mpDrawView->GetAllMarkedRect();
+                ::tools::Rectangle aRect = mpDrawView->GetAllMarkedRect();
                 pPageView->LogicToPagePos(aRect);
 
                 // Show the position of the selected shape(s)

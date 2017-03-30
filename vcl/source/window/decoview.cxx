@@ -32,7 +32,7 @@ using namespace std;
 
 namespace {
 
-long AdjustRectToSquare( Rectangle &rRect )
+long AdjustRectToSquare( tools::Rectangle &rRect )
 {
     const long nWidth = rRect.GetWidth();
     const long nHeight = rRect.GetHeight();
@@ -53,7 +53,7 @@ long AdjustRectToSquare( Rectangle &rRect )
     return nSide;
 }
 
-void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType  )
+void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolType eType  )
 {
     const long nSide = AdjustRectToSquare( nRect );
 
@@ -80,7 +80,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
                                 Point( aCenter.X()+i, nRect.Top() ) );
             }
-            pDev->DrawRect( Rectangle( aCenter.X()-n8, nRect.Top()+1,
+            pDev->DrawRect( tools::Rectangle( aCenter.X()-n8, nRect.Top()+1,
                                        aCenter.X()+n8, nRect.Bottom() ) );
             break;
 
@@ -92,7 +92,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
                                 Point( aCenter.X()+i, nRect.Bottom() ) );
             }
-            pDev->DrawRect( Rectangle( aCenter.X()-n8, nRect.Top(),
+            pDev->DrawRect( tools::Rectangle( aCenter.X()-n8, nRect.Top(),
                                        aCenter.X()+n8, nRect.Bottom()-1 ) );
             break;
 
@@ -104,7 +104,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                 pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-i ),
                                 Point( nRect.Left(), aCenter.Y()+i ) );
             }
-            pDev->DrawRect( Rectangle( nRect.Left()+1, aCenter.Y()-n8,
+            pDev->DrawRect( tools::Rectangle( nRect.Left()+1, aCenter.Y()-n8,
                                        nRect.Right(), aCenter.Y()+n8 ) );
             break;
 
@@ -116,7 +116,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                 pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-i ),
                                 Point( nRect.Right(), aCenter.Y()+i ) );
             }
-            pDev->DrawRect( Rectangle( nRect.Left(), aCenter.Y()-n8,
+            pDev->DrawRect( tools::Rectangle( nRect.Left(), aCenter.Y()-n8,
                                        nRect.Right()-1, aCenter.Y()+n8 ) );
             break;
 
@@ -270,7 +270,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                             Point( nRect.Right(), nRect.Bottom() ) );
             SAL_FALLTHROUGH;
         case SymbolType::ROLLUP:
-            pDev->DrawRect( Rectangle( nRect.Left(), nRect.Top(),
+            pDev->DrawRect( tools::Rectangle( nRect.Left(), nRect.Top(),
                                        nRect.Right(), nRect.Top()+n8 ) );
             break;
 
@@ -314,7 +314,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
         case SymbolType::FLOAT:
             nRect.Right() -= n4;
             nRect.Top() += n4+1;
-            pDev->DrawRect( Rectangle( nRect.Left(), nRect.Top(),
+            pDev->DrawRect( tools::Rectangle( nRect.Left(), nRect.Top(),
                                        nRect.Right(), nRect.Top()+n8 ) );
             pDev->DrawLine( Point( nRect.Left(), nRect.Top()+n8 ),
                             Point( nRect.Left(), nRect.Bottom() ) );
@@ -326,7 +326,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             nRect.Top() -= n4+1;
             nRect.Left() += n4;
             nRect.Bottom() -= n4+1;
-            pDev->DrawRect( Rectangle( nRect.Left(), nRect.Top(),
+            pDev->DrawRect( tools::Rectangle( nRect.Left(), nRect.Top(),
                                        nRect.Right(), nRect.Top()+n8 ) );
             pDev->DrawLine( Point( nRect.Left(), nRect.Top()+n8 ),
                             Point( nRect.Left(), nRect.Bottom() ) );
@@ -348,14 +348,14 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             break;
 
         case SymbolType::HIDE:
-            pDev->DrawRect( Rectangle( nRect.Left()+n8, nRect.Bottom()-n8,
+            pDev->DrawRect( tools::Rectangle( nRect.Left()+n8, nRect.Bottom()-n8,
                                        nRect.Right()-n8, nRect.Bottom() ) );
             break;
 
         case SymbolType::PLUS:
-            pDev->DrawRect( Rectangle( nRect.Left(), aCenter.Y()-n8/2,
+            pDev->DrawRect( tools::Rectangle( nRect.Left(), aCenter.Y()-n8/2,
                                        nRect.Right()+1, aCenter.Y()+n8/2+1 ) );
-            pDev->DrawRect( Rectangle( aCenter.X()-n8/2, nRect.Top(),
+            pDev->DrawRect( tools::Rectangle( aCenter.X()-n8/2, nRect.Top(),
                                        aCenter.X()+n8/2+1, nRect.Bottom()+1 ) );
             break;
         case SymbolType::DONTKNOW:
@@ -364,7 +364,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
     }
 }
 
-void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
+void ImplDrawDPILineRect( OutputDevice *const pDev, tools::Rectangle& rRect,
                           const Color *const pColor, const bool bRound = false )
 {
     long nLineWidth = pDev->GetDPIX()/300;
@@ -398,11 +398,11 @@ void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
             const long nHeight = rRect.GetHeight();
             pDev->SetLineColor();
             pDev->SetFillColor( *pColor );
-            pDev->DrawRect( Rectangle( rRect.TopLeft(), Size( nWidth, nLineHeight ) ) );
-            pDev->DrawRect( Rectangle( rRect.TopLeft(), Size( nLineWidth, nHeight ) ) );
-            pDev->DrawRect( Rectangle( Point( rRect.Left(), rRect.Bottom()-nLineHeight ),
+            pDev->DrawRect( tools::Rectangle( rRect.TopLeft(), Size( nWidth, nLineHeight ) ) );
+            pDev->DrawRect( tools::Rectangle( rRect.TopLeft(), Size( nLineWidth, nHeight ) ) );
+            pDev->DrawRect( tools::Rectangle( Point( rRect.Left(), rRect.Bottom()-nLineHeight ),
                                        Size( nWidth, nLineHeight ) ) );
-            pDev->DrawRect( Rectangle( Point( rRect.Right()-nLineWidth, rRect.Top() ),
+            pDev->DrawRect( tools::Rectangle( Point( rRect.Right()-nLineWidth, rRect.Top() ),
                                        Size( nLineWidth, nHeight ) ) );
         }
     }
@@ -413,7 +413,7 @@ void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
     rRect.Bottom() -= nLineHeight;
 }
 
-void ImplDraw2ColorFrame( OutputDevice *const pDev, Rectangle& rRect,
+void ImplDraw2ColorFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
                           const Color& rLeftTopColor, const Color& rRightBottomColor )
 {
     pDev->SetLineColor( rLeftTopColor );
@@ -430,7 +430,7 @@ void ImplDraw2ColorFrame( OutputDevice *const pDev, Rectangle& rRect,
     --rRect.Bottom();
 }
 
-void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
+void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
                      const DrawButtonFlags nStyle )
 {
     const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();
@@ -460,16 +460,16 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
 
         pDev->SetLineColor();
         pDev->SetFillColor( aBlackColor );
-        const Rectangle aOrigFillRect(aFillRect);
+        const tools::Rectangle aOrigFillRect(aFillRect);
         if ( nStyle & (DrawButtonFlags::Pressed | DrawButtonFlags::Checked) )
         {
             // shrink fill rect
             aFillRect.Left() += aBrdSize.Width();
             aFillRect.Top()  += aBrdSize.Height();
             // draw top and left borders (aOrigFillRect-aFillRect)
-            pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aOrigFillRect.Top(),
+            pDev->DrawRect( tools::Rectangle( aOrigFillRect.Left(), aOrigFillRect.Top(),
                                        aOrigFillRect.Right(), aFillRect.Top()-1 ) );
-            pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aOrigFillRect.Top(),
+            pDev->DrawRect( tools::Rectangle( aOrigFillRect.Left(), aOrigFillRect.Top(),
                                        aFillRect.Left()-1, aOrigFillRect.Bottom() ) );
         }
         else
@@ -478,9 +478,9 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
             aFillRect.Right()  -= aBrdSize.Width();
             aFillRect.Bottom() -= aBrdSize.Height();
             // draw bottom and right borders (aOrigFillRect-aFillRect)
-            pDev->DrawRect( Rectangle( aOrigFillRect.Left(), aFillRect.Bottom()+1,
+            pDev->DrawRect( tools::Rectangle( aOrigFillRect.Left(), aFillRect.Bottom()+1,
                                        aOrigFillRect.Right(), aOrigFillRect.Bottom() ) );
-            pDev->DrawRect( Rectangle( aFillRect.Right()+1, aOrigFillRect.Top(),
+            pDev->DrawRect( tools::Rectangle( aFillRect.Right()+1, aOrigFillRect.Top(),
                                        aOrigFillRect.Right(), aOrigFillRect.Bottom() ) );
         }
 
@@ -561,7 +561,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
     }
 }
 
-void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
+void ImplDrawFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
                     const StyleSettings& rStyleSettings, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
     vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : nullptr;
@@ -600,8 +600,8 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                                            DrawFrameFlags::BorderWindowBorder : DrawFrameFlags::NONE);
         ImplControlValue aControlValue( nControlFlags );
 
-        Rectangle aBound, aContent;
-        Rectangle aNatRgn( rRect );
+        tools::Rectangle aBound, aContent;
+        tools::Rectangle aNatRgn( rRect );
         if( pWin->GetNativeControlRegion(ControlType::Frame, ControlPart::Border,
             aNatRgn, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
@@ -684,10 +684,10 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                 case DrawFrameStyle::Group:
                     pDev->SetFillColor();
                     pDev->SetLineColor( rStyleSettings.GetLightColor() );
-                    pDev->DrawRect( Rectangle( rRect.Left()+1, rRect.Top()+1,
+                    pDev->DrawRect( tools::Rectangle( rRect.Left()+1, rRect.Top()+1,
                                             rRect.Right(), rRect.Bottom() ) );
                     pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-                    pDev->DrawRect( Rectangle( rRect.Left(), rRect.Top(),
+                    pDev->DrawRect( tools::Rectangle( rRect.Left(), rRect.Top(),
                                             rRect.Right()-1, rRect.Bottom()-1 ) );
 
                     // adjust target rectangle
@@ -776,11 +776,11 @@ DecorationView::DecorationView(OutputDevice* pOutDev) :
     mpOutDev(pOutDev)
 {}
 
-void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
+void DecorationView::DrawSymbol( const tools::Rectangle& rRect, SymbolType eType,
                                  const Color& rColor, DrawSymbolFlags nStyle )
 {
     const StyleSettings&    rStyleSettings  = mpOutDev->GetSettings().GetStyleSettings();
-    const Rectangle         aRect           = mpOutDev->LogicToPixel( rRect );
+    const tools::Rectangle         aRect           = mpOutDev->LogicToPixel( rRect );
     const Color             aOldLineColor   = mpOutDev->GetLineColor();
     const Color             aOldFillColor   = mpOutDev->GetFillColor();
     const bool              bOldMapMode     = mpOutDev->IsMapModeEnabled();
@@ -819,11 +819,11 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
-void DecorationView::DrawFrame( const Rectangle& rRect,
+void DecorationView::DrawFrame( const tools::Rectangle& rRect,
                                 const Color& rLeftTopColor,
                                 const Color& rRightBottomColor )
 {
-    Rectangle   aRect         = mpOutDev->LogicToPixel( rRect );
+    tools::Rectangle   aRect         = mpOutDev->LogicToPixel( rRect );
     const Color aOldLineColor = mpOutDev->GetLineColor();
     const bool  bOldMapMode   = mpOutDev->IsMapModeEnabled();
     mpOutDev->EnableMapMode( false );
@@ -832,7 +832,7 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
-void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
+void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
                                          DrawHighlightFrameStyle nStyle )
 {
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
@@ -880,9 +880,9 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
     DrawFrame( rRect, aLightColor, aShadowColor );
 }
 
-Rectangle DecorationView::DrawFrame( const Rectangle& rRect, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
+tools::Rectangle DecorationView::DrawFrame( const tools::Rectangle& rRect, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
-    Rectangle   aRect = rRect;
+    tools::Rectangle   aRect = rRect;
     bool        bOldMap = mpOutDev->IsMapModeEnabled();
     if ( bOldMap )
     {
@@ -913,14 +913,14 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, DrawFrameStyle nSty
     return aRect;
 }
 
-Rectangle DecorationView::DrawButton( const Rectangle& rRect, DrawButtonFlags nStyle )
+tools::Rectangle DecorationView::DrawButton( const tools::Rectangle& rRect, DrawButtonFlags nStyle )
 {
     if ( rRect.IsEmpty() )
     {
         return rRect;
     }
 
-    Rectangle aRect = rRect;
+    tools::Rectangle aRect = rRect;
     const bool bOldMap = mpOutDev->IsMapModeEnabled();
 
     if ( bOldMap )
@@ -1003,7 +1003,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
         bool nativeSupported = pWin->IsNativeControlSupported( ControlType::Fixedline, nPart );
         ImplControlValue    aValue;
         ControlState        nState = ControlState::NONE;
-        Rectangle aRect(rStart,rStop);
+        tools::Rectangle aRect(rStart,rStop);
         if(nativeSupported && pWin->DrawNativeControl(ControlType::Fixedline,nPart,aRect,nState,aValue,OUString()))
             return;
     }
@@ -1033,7 +1033,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
     mpOutDev->Pop();
 }
 
-void DecorationView::DrawHandle(const Rectangle& rRect)
+void DecorationView::DrawHandle(const tools::Rectangle& rRect)
 {
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
 
@@ -1054,8 +1054,8 @@ void DecorationView::DrawHandle(const Rectangle& rRect)
 
     for (long i = 1; i <= nNumberOfPoints; i++)
     {
-        Rectangle aLocation;
-        aLocation = Rectangle(nHalfWidth - nRadius,
+        tools::Rectangle aLocation;
+        aLocation = tools::Rectangle(nHalfWidth - nRadius,
                               round(fDistance * i) - nRadius,
                               nHalfWidth + nRadius,
                               round(fDistance * i) + nRadius);

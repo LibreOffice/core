@@ -228,7 +228,7 @@ namespace svt
         }
     }
 
-    void EditBrowseBox::PaintField( OutputDevice& rDev, const Rectangle& rRect,
+    void EditBrowseBox::PaintField( OutputDevice& rDev, const tools::Rectangle& rRect,
                                     sal_uInt16 nColumnId ) const
     {
         if (nColumnId == HandleColumnId)
@@ -294,7 +294,7 @@ namespace svt
         return Image(aBitmap);
     }
 
-    void EditBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const
+    void EditBrowseBox::PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const
     {
         if (nPaintRow < 0)
             return;
@@ -368,7 +368,7 @@ namespace svt
     {
         if ( IsEditing() )
         {
-            Rectangle aRect( GetCellRect( nEditRow, nEditCol, false ) );
+            tools::Rectangle aRect( GetCellRect( nEditRow, nEditCol, false ) );
             CellControllerRef aCellController( Controller() );
             ResizeController( aCellController, aRect );
             aCellController->GetWindow().GrabFocus();
@@ -845,7 +845,7 @@ namespace svt
             vcl::Window& rWindow = GetDataWindow();
             if ((nEditRow >= 0) && !(GetBrowserFlags() & EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT))
             {
-                Rectangle aRect = GetFieldRectPixel(nEditRow, 0, false );
+                tools::Rectangle aRect = GetFieldRectPixel(nEditRow, 0, false );
                 // status cell should be painted if and only if text is displayed
                 // note: bPaintStatus is mutable, but Solaris has problems with assigning
                 // probably because it is part of a bitfield
@@ -880,7 +880,7 @@ namespace svt
         BrowseBox::ColumnMoved(nId);
         if (IsEditing())
         {
-            Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
+            tools::Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
             CellControllerRef aControllerRef = Controller();
             ResizeController(aControllerRef, aRect);
             Controller()->GetWindow().GrabFocus();
@@ -921,7 +921,7 @@ namespace svt
     {
         if (IsEditing())
         {
-            Rectangle aRect = GetCellRect(nEditRow, nEditCol, false);
+            tools::Rectangle aRect = GetCellRect(nEditRow, nEditCol, false);
             ResizeController(aController,aRect);
             AsynchGetFocus();
         }
@@ -947,7 +947,7 @@ namespace svt
             aController = GetController(nRow, nCol);
             if (aController.is())
             {
-                Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
+                tools::Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
                 ResizeController(aController, aRect);
 
                 InitController(aController, nEditRow, nEditCol);
@@ -1015,9 +1015,9 @@ namespace svt
     }
 
 
-    Rectangle EditBrowseBox::GetCellRect(long nRow, sal_uInt16 nColId, bool bRel) const
+    tools::Rectangle EditBrowseBox::GetCellRect(long nRow, sal_uInt16 nColId, bool bRel) const
     {
-        Rectangle aRect( GetFieldRectPixel(nRow, nColId, bRel));
+        tools::Rectangle aRect( GetFieldRectPixel(nRow, nColId, bRel));
         if ((GetMode()  & BrowserMode::CURSOR_WO_FOCUS) == BrowserMode::CURSOR_WO_FOCUS)
         {
             aRect.Top() += 1;
@@ -1056,7 +1056,7 @@ namespace svt
     {
         if (IsEditing())
         {
-            Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
+            tools::Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
             CellControllerRef aControllerRef = Controller();
             ResizeController(aControllerRef, aRect);
             Controller()->GetWindow().GrabFocus();
@@ -1131,7 +1131,7 @@ namespace svt
     }
 
 
-    void EditBrowseBox::ResizeController(CellControllerRef& rController, const Rectangle& rRect)
+    void EditBrowseBox::ResizeController(CellControllerRef& rController, const tools::Rectangle& rRect)
     {
         rController->GetWindow().SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
     }
@@ -1192,14 +1192,14 @@ namespace svt
 
     void EditBrowseBox::InvalidateHandleColumn()
     {
-        Rectangle aHdlFieldRect( GetFieldRectPixel( 0, 0 ));
-        Rectangle aInvalidRect( Point(0,0), GetOutputSizePixel() );
+        tools::Rectangle aHdlFieldRect( GetFieldRectPixel( 0, 0 ));
+        tools::Rectangle aInvalidRect( Point(0,0), GetOutputSizePixel() );
         aInvalidRect.Right() = aHdlFieldRect.Right();
         Invalidate( aInvalidRect );
     }
 
 
-    void EditBrowseBox::PaintTristate(OutputDevice&, const Rectangle& rRect, const TriState& eState, bool _bEnabled) const
+    void EditBrowseBox::PaintTristate(OutputDevice&, const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled) const
     {
         pCheckBoxPaint->GetBox().SetState(eState);
         pCheckBoxPaint->SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());

@@ -686,7 +686,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
     // #i67283# since about all of the above changes are likely to change
     // the formula size we have to recalculate the vis-area now
-    pDocSh->SetVisArea( Rectangle( Point(0, 0), pDocSh->GetSize() ) );
+    pDocSh->SetVisArea( tools::Rectangle( Point(0, 0), pDocSh->GetSize() ) );
 }
 
 void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValue )
@@ -1028,7 +1028,7 @@ void SAL_CALL SmModel::render(
                                             static_cast<long>(aPrtPaperSize.Height() * 0.0214));
                 }
                 Point   aZeroPoint;
-                Rectangle OutputRect( aZeroPoint, aOutputSize );
+                tools::Rectangle OutputRect( aZeroPoint, aOutputSize );
 
 
                 // set minimum top and bottom border
@@ -1049,7 +1049,7 @@ void SAL_CALL SmModel::render(
                     m_pPrintUIOptions.reset(new SmPrintUIOptions);
                 m_pPrintUIOptions->processProperties( rxOptions );
 
-                pView->Impl_Print( *pOut, *m_pPrintUIOptions, Rectangle( OutputRect ), Point() );
+                pView->Impl_Print( *pOut, *m_pPrintUIOptions, tools::Rectangle( OutputRect ), Point() );
 
                 // release SmPrintUIOptions when everything is done.
                 // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.

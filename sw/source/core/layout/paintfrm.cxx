@@ -1248,7 +1248,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContex
                         gProp.pSFlyMetafileOut.get() : pRenderContext;
 
     // Hold original rectangle in pixel
-    const Rectangle aOrgPxRect = pOut->LogicToPixel( rRect.SVRect() );
+    const tools::Rectangle aOrgPxRect = pOut->LogicToPixel( rRect.SVRect() );
     // Determine pixel-center rectangle in twip
     const SwRect aPxCenterRect( pOut->PixelToLogic( aOrgPxRect ) );
 
@@ -1375,7 +1375,7 @@ static void lcl_CompPxPosAndAdjustPos( const vcl::RenderContext&  _rOut,
 */
 void SwAlignGrfRect( SwRect *pGrfRect, const vcl::RenderContext &rOut )
 {
-    Rectangle aPxRect = rOut.LogicToPixel( pGrfRect->SVRect() );
+    tools::Rectangle aPxRect = rOut.LogicToPixel( pGrfRect->SVRect() );
     pGrfRect->Pos( rOut.PixelToLogic( aPxRect.TopLeft() ) );
     pGrfRect->SSize( rOut.PixelToLogic( aPxRect.GetSize() ) );
 }
@@ -2308,18 +2308,18 @@ static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const vcl::RenderCont
 
     // local object of class <Rectangle> in Twip coordinates
     // calculated from given rectangle aligned to pixel centers.
-    const Rectangle aPxCenterRect = aOut.PixelToLogic(
+    const tools::Rectangle aPxCenterRect = aOut.PixelToLogic(
             aOut.LogicToPixel( io_aSwRect.SVRect() ) );
 
     // local constant object of class <Rectangle> representing given rectangle
     // in pixel.
-    const Rectangle aOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
+    const tools::Rectangle aOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
 
     // calculate adjusted rectangle from pixel centered rectangle.
     // Due to rounding differences <aPxCenterRect> doesn't exactly represents
     // the Twip-centers. Thus, adjust borders by half of pixel width/height plus 1.
     // Afterwards, adjust calculated Twip-positions of the all borders.
-    Rectangle aSizedRect = aPxCenterRect;
+    tools::Rectangle aSizedRect = aPxCenterRect;
     aSizedRect.Left() -= (aTwipToPxSize.Width()/2 + 1);
     aSizedRect.Right() += (aTwipToPxSize.Width()/2 + 1);
     aSizedRect.Top() -= (aTwipToPxSize.Height()/2 + 1);
@@ -2349,8 +2349,8 @@ static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const vcl::RenderCont
     io_aSwRect = SwRect( aSizedRect );
 
 #if OSL_DEBUG_LEVEL > 0
-    Rectangle aTestOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
-    Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
+    tools::Rectangle aTestOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
+    tools::Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect == aTestNewPxRect,
             "Error in lcl_AlignRectToPixelSize(..): Adjusted rectangle has incorrect position or size");
     // check Left()
@@ -3830,7 +3830,7 @@ void SwColumnFrame::PaintBreak( ) const
                     drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
                             aFontSize, aFont, false, false );
 
-                    Rectangle aTextRect;
+                    tools::Rectangle aTextRect;
                     pOut->GetTextBoundRect( aTextRect, aBreakText );
                     long nTextOff = ( nWidth - aTextRect.GetWidth() ) / 2;
 
@@ -6050,7 +6050,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // The problem is that if we get called multiple times and the color is
     // partly transparent, then the result will get darker and darker. To avoid
     // this, always paint the background color before doing the real paint.
-    Rectangle aRect(aPoint, aSize);
+    tools::Rectangle aRect(aPoint, aSize);
 
     switch (eArea)
     {
@@ -6247,18 +6247,18 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())  // do not show anything in print preview
     {
         sal_Int32 nScrollerHeight = pMgr->GetSidebarScrollerHeight();
-        const Rectangle &aVisRect = _pViewShell->VisArea().SVRect();
+        const tools::Rectangle &aVisRect = _pViewShell->VisArea().SVRect();
         //draw border and sidepane
         _pViewShell->GetOut()->SetLineColor();
         if (!bRight)
         {
             _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
-            _pViewShell->GetOut()->DrawRect(Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height())))    ;
+            _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height())))    ;
             if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                 _pViewShell->GetOut()->SetFillColor(COL_BLACK);
             else
                 _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
-            _pViewShell->GetOut()->DrawRect(Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarWidth()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height())))  ;
+            _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarWidth()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height())))  ;
         }
         else
         {
@@ -6282,8 +6282,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
             aPointTop = !bRight ?    Point(aPageRect.Left() - pMgr->GetSidebarWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height()) :
                                 Point(aPageRect.Right() + pMgr->GetSidebarBorderWidth() + _pViewShell->GetOut()->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + _pViewShell->GetOut()->PixelToLogic(Size(0,2)).Height());
             Size aSize(pMgr->GetSidebarWidth() - _pViewShell->GetOut()->PixelToLogic(Size(4,0)).Width(), _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()) ;
-            Rectangle aRectBottom(aPointBottom,aSize);
-            Rectangle aRectTop(aPointTop,aSize);
+            tools::Rectangle aRectBottom(aPointBottom,aSize);
+            tools::Rectangle aRectTop(aPointTop,aSize);
 
             if (aRectBottom.IsOver(aVisRect))
             {
@@ -6843,7 +6843,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
 
             //Is the Obj placed on the line
             const long nP1OthPt = !bHori ? rP1.X() : rP1.Y();
-            const Rectangle &rBound = pObj->GetCurrentBoundRect();
+            const tools::Rectangle &rBound = pObj->GetCurrentBoundRect();
             const Point aDrPt( rBound.TopLeft() );
             const long nDrOthPt = !bHori ? aDrPt.X() : aDrPt.Y();
             const Size  aDrSz( rBound.GetSize() );

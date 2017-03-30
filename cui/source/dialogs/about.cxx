@@ -242,7 +242,7 @@ void AboutDialog::Resize()
     }
 }
 
-void AboutDialog::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void AboutDialog::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     rRenderContext.SetClipRegion(vcl::Region(rRect));
 

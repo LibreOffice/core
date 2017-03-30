@@ -479,7 +479,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
                     aSize.Width() = GetSizePixel().Width() - aEntryPos.X();
 
                 aEntryPos = OutputToScreenPixel(aEntryPos);
-                Rectangle aItemRect( aEntryPos, aSize );
+                tools::Rectangle aItemRect( aEntryPos, aSize );
                 if(Help::IsBalloonHelpEnabled())
                 {
                     aEntryPos.X() += aSize.Width();

@@ -112,7 +112,7 @@ namespace dbaui
         using ORelationControl_Base::Init;
         virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
         virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
-        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const override;
+        virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId ) const override;
         virtual bool SeekRow( long nRow ) override;
         virtual bool SaveModified() override;
         virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const override;
@@ -335,7 +335,7 @@ namespace dbaui
         return true;
     }
 
-    void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
+    void ORelationControl::PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const
     {
         OUString aText = GetCellText( m_nDataPos, nColumnId );
 

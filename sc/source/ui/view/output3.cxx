@@ -38,7 +38,7 @@
 // #i72502#
 Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     SCCOL nCol;
     Point aOffset;
     long nLayoutSign(bLayoutRTL ? -1 : 1);

@@ -21,7 +21,7 @@
 
 #include <anchoredobject.hxx>
 
-class Rectangle;
+namespace tools { class Rectangle; }
 
 /** class for the positioning of drawing objects
 
@@ -35,7 +35,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         bool mbValidPos;
 
         // rectangle, keeping the last object rectangle after the positioning
-        std::unique_ptr<Rectangle> mpLastObjRect;
+        std::unique_ptr<tools::Rectangle> mpLastObjRect;
 
         // boolean, indicating that anchored drawing object hasn't been attached
         // to a anchor frame yet. Once, it is attached to a anchor frame the
@@ -140,9 +140,9 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         // accessors to the object area and its position
         virtual const SwRect GetObjRect() const override;
         // Return value can be NULL.
-        const Rectangle* GetLastObjRect() const { return mpLastObjRect.get();}
+        const tools::Rectangle* GetLastObjRect() const { return mpLastObjRect.get();}
 
-        void SetLastObjRect( const Rectangle& _rNewObjRect );
+        void SetLastObjRect( const tools::Rectangle& _rNewObjRect );
 
         /** adjust positioning and alignment attributes for new anchor frame
 

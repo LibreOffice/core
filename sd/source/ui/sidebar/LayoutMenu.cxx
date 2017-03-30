@@ -257,7 +257,7 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
     return ui::LayoutSize(nPreferredHeight,nPreferredHeight,nPreferredHeight);
 }
 
-void LayoutMenu::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void LayoutMenu::Paint (vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     if (mbSelectionUpdatePending)
     {
@@ -595,7 +595,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 {
                     if (GetSelectItemId() == (sal_uInt16)-1)
                         return;
-                    Rectangle aBBox (GetItemRect(GetSelectItemId()));
+                    ::tools::Rectangle aBBox (GetItemRect(GetSelectItemId()));
                     aMenuPosition = aBBox.Center();
                 }
 
@@ -616,7 +616,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     pMenu->EnableItem(SID_INSERTPAGE_LAYOUT_MENU, false);
 
                 // Show the menu.
-                pMenu->Execute(this, Rectangle(aMenuPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+                pMenu->Execute(this, ::tools::Rectangle(aMenuPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
             }
             break;
 

@@ -1771,7 +1771,7 @@ void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
         rWidth = rHeight = 0;
 }
 
-void GtkSalFrame::GetWorkArea( Rectangle& rRect )
+void GtkSalFrame::GetWorkArea( tools::Rectangle& rRect )
 {
     rRect = GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWorkArea( 0 );
 }
@@ -1808,7 +1808,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         updateScreenNumber();
 
         m_nState = GdkWindowState( m_nState | GDK_WINDOW_STATE_MAXIMIZED );
-        m_aRestorePosSize = Rectangle( Point( pState->mnX, pState->mnY ),
+        m_aRestorePosSize = tools::Rectangle( Point( pState->mnX, pState->mnY ),
                                        Size( pState->mnWidth, pState->mnHeight ) );
         CallCallback( SalEvent::Resize, nullptr );
     }
@@ -1893,7 +1893,7 @@ bool GtkSalFrame::GetWindowState( SalFrameState* pState )
     return true;
 }
 
-void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *pSize )
+void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle *pSize )
 {
     if( !m_pWindow )
         return;
@@ -2081,7 +2081,7 @@ void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 
     if( bFullScreen )
     {
-        m_aRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
+        m_aRestorePosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ),
                                        Size( maGeometry.nWidth, maGeometry.nHeight ) );
         SetScreen( nScreen, SetType::Fullscreen );
     }
@@ -2089,7 +2089,7 @@ void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
     {
         SetScreen( nScreen, SetType::UnFullscreen,
                    !m_aRestorePosSize.IsEmpty() ? &m_aRestorePosSize : nullptr );
-        m_aRestorePosSize = Rectangle();
+        m_aRestorePosSize = tools::Rectangle();
     }
 }
 
@@ -3268,7 +3268,7 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
         ! (pThis->m_nState & GDK_WINDOW_STATE_MAXIMIZED) )
     {
         pThis->m_aRestorePosSize =
-            Rectangle( Point( pThis->maGeometry.nX, pThis->maGeometry.nY ),
+            tools::Rectangle( Point( pThis->maGeometry.nX, pThis->maGeometry.nY ),
                        Size( pThis->maGeometry.nWidth, pThis->maGeometry.nHeight ) );
     }
     pThis->m_nState = pEvent->window_state.new_window_state;
@@ -3870,7 +3870,7 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
 
 Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
 {
-    Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nDisplayScreen );
+    tools::Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nDisplayScreen );
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 

@@ -25,7 +25,7 @@
 #include <rtl/strbuf.hxx>
 
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 class SvStream;
 
 #define IMAP_OBJ_NONE       ((sal_uInt16)0x0000)

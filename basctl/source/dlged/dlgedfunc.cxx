@@ -43,7 +43,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     vcl::Window& rWindow  = rParent.GetWindow();
 
     static Point aDefPoint;
-    Rectangle aOutRect( aDefPoint, rWindow.GetOutputSizePixel() );
+    tools::Rectangle aOutRect( aDefPoint, rWindow.GetOutputSizePixel() );
     aOutRect = rWindow.PixelToLogic( aOutRect );
 
     ScrollBar* pHScroll = rParent.GetHScroll();
@@ -161,7 +161,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 if (SdrHdl* pHdl = rHdlList.GetFocusHdl())
                 {
                     Point aHdlPosition( pHdl->GetPos() );
-                    Rectangle aVisRect( aHdlPosition - Point( 100, 100 ), Size( 200, 200 ) );
+                    tools::Rectangle aVisRect( aHdlPosition - Point( 100, 100 ), Size( 200, 200 ) );
                     rView.MakeVisible( aVisRect, rWindow );
                 }
 
@@ -227,11 +227,11 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     if ( rView.IsMoveAllowed() )
                     {
                         // restrict movement to work area
-                        const Rectangle& rWorkArea = rView.GetWorkArea();
+                        const tools::Rectangle& rWorkArea = rView.GetWorkArea();
 
                         if ( !rWorkArea.IsEmpty() )
                         {
-                            Rectangle aMarkRect( rView.GetMarkedObjRect() );
+                            tools::Rectangle aMarkRect( rView.GetMarkedObjRect() );
                             aMarkRect.Move( nX, nY );
 
                             if ( !rWorkArea.IsInside( aMarkRect ) )
@@ -291,7 +291,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                         }
 
                         // make moved handle visible
-                        Rectangle aVisRect( aEndPoint - Point( 100, 100 ), Size( 200, 200 ) );
+                        tools::Rectangle aVisRect( aEndPoint - Point( 100, 100 ), Size( 200, 200 ) );
                         rView.MakeVisible( aVisRect, rWindow );
                     }
                 }

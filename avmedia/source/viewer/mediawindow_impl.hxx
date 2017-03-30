@@ -98,7 +98,7 @@ public:
     void updateMediaItem( MediaItem& rItem ) const;
     void executeMediaItem( const MediaItem& rItem );
 
-    void setPosSize( const Rectangle& rRect );
+    void setPosSize( const tools::Rectangle& rRect );
 
     void setPointer( const Pointer& rPointer );
 
@@ -113,7 +113,7 @@ private:
     virtual void Command( const CommandEvent& rCEvt ) override;
     virtual void Resize() override;
     virtual void StateChanged( StateChangedType ) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override; // const
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override; // const
     virtual void GetFocus() override;
 
     // DropTargetHelper

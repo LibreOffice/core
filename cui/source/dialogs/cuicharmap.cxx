@@ -181,7 +181,7 @@ SvxShowText::SvxShowText(vcl::Window* pParent)
 
 VCL_BUILDER_FACTORY(SvxShowText)
 
-void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     rRenderContext.SetFont(maFont);
 
@@ -201,7 +201,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     bool bShrankFont = false;
     vcl::Font aOrigFont(rRenderContext.GetFont());
     Size aFontSize(aOrigFont.GetFontSize());
-    Rectangle aBoundRect;
+    ::tools::Rectangle aBoundRect;
 
     for (long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 5)
     {

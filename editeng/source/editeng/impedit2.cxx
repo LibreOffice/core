@@ -483,7 +483,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         if ( mpIMEInfos && mpIMEInfos->nLen )
         {
             EditPaM aPaM( pView->pImpEditView->GetEditSelection().Max() );
-            Rectangle aR1 = PaMtoEditCursor( aPaM );
+            tools::Rectangle aR1 = PaMtoEditCursor( aPaM );
 
             sal_Int32 nInputEnd = mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen;
 
@@ -495,8 +495,8 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             const EditLine& rLine = pParaPortion->GetLines()[nLine];
             if ( nInputEnd > rLine.GetEnd() )
                 nInputEnd = rLine.GetEnd();
-            Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GetCursorFlags::EndOfLine );
-            Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
+            tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GetCursorFlags::EndOfLine );
+            tools::Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
             pView->GetWindow()->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
         }
         else
@@ -551,13 +551,13 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
             sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
             const EditLine& rLine = pParaPortion->GetLines()[nLine];
-            std::unique_ptr<Rectangle[]> aRects(new Rectangle[ mpIMEInfos->nLen ]);
+            std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ mpIMEInfos->nLen ]);
             for (sal_Int32 i = 0; i < mpIMEInfos->nLen; ++i)
             {
                 sal_Int32 nInputPos = mpIMEInfos->aPos.GetIndex() + i;
                 if ( nInputPos > rLine.GetEnd() )
                     nInputPos = rLine.GetEnd();
-                Rectangle aR2 = GetEditCursor( pParaPortion, nInputPos );
+                tools::Rectangle aR2 = GetEditCursor( pParaPortion, nInputPos );
                 aRects[ i ] = pView->GetImpEditView()->GetWindowPos( aR2 );
             }
             pView->GetWindow()->SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
@@ -671,7 +671,7 @@ void ImpEditEngine::SetText(const OUString& rText)
         // => The text remains.
         if (rText.isEmpty() && GetUpdateMode())
         {
-            Rectangle aTmpRect( pView->GetOutputArea().TopLeft(),
+            tools::Rectangle aTmpRect( pView->GetOutputArea().TopLeft(),
                                 Size( aPaperSize.Width(), nCurTextHeight ) );
             aTmpRect.Intersection( pView->GetOutputArea() );
             pView->GetWindow()->Invalidate( aTmpRect );
@@ -1374,7 +1374,7 @@ EditPaM ImpEditEngine::CursorEndOfDoc()
 
 EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView* pView )
 {
-    Rectangle aRect = PaMtoEditCursor( rPaM );
+    tools::Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aTopLeft = aRect.TopLeft();
     aTopLeft.Y() -= pView->GetVisArea().GetHeight() *9/10;
     aTopLeft.X() += nOnePixelInRef;
@@ -1387,7 +1387,7 @@ EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView* pView )
 
 EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView* pView )
 {
-    Rectangle aRect = PaMtoEditCursor( rPaM );
+    tools::Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aBottomRight = aRect.BottomRight();
     aBottomRight.Y() += pView->GetVisArea().GetHeight() *9/10;
     aBottomRight.X() += nOnePixelInRef;
@@ -2976,11 +2976,11 @@ EditPaM ImpEditEngine::InsertLineBreak(const EditSelection& aCurSel)
 
 //  Helper functions
 
-Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags )
+tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags )
 {
     OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: PaMtoEditCursor" );
 
-    Rectangle aEditCursor;
+    tools::Rectangle aEditCursor;
     long nY = 0;
     for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
     {
@@ -4126,7 +4126,7 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
     }
 }
 
-Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, GetCursorFlags nFlags )
+tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, GetCursorFlags nFlags )
 {
     OSL_ENSURE( pPortion->IsVisible(), "Why GetEditCursor() for an invisible paragraph?" );
     OSL_ENSURE( IsFormatted() || GetTextRanger(), "GetEditCursor: Not formatted" );
@@ -4148,7 +4148,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex,
     sal_Int32 nLineCount = pPortion->GetLines().Count();
     OSL_ENSURE( nLineCount, "Empty ParaPortion in GetEditCursor!" );
     if (nLineCount == 0)
-        return Rectangle();
+        return tools::Rectangle();
     const EditLine* pLine = nullptr;
     bool bEOL( nFlags & GetCursorFlags::EndOfLine );
     for (sal_Int32 nLine = 0; nLine < nLineCount; ++nLine)
@@ -4176,7 +4176,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex,
             nY -= nSBL;
     }
 
-    Rectangle aEditCursor;
+    tools::Rectangle aEditCursor;
 
     aEditCursor.Top() = nY;
     nY += pLine->GetHeight();

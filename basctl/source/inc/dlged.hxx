@@ -127,7 +127,7 @@ private:
     bool                bFirstDraw;
     Size                aGridSize;
     bool                bCreateOK;
-    Rectangle           aPaintRect;
+    tools::Rectangle           aPaintRect;
     bool                bDialogModelChanged;
     Idle                aMarkIdle;
     long                mnPaintGuard;
@@ -181,7 +181,7 @@ public:
     void            MouseButtonDown( const MouseEvent& rMEvt );
     void            MouseButtonUp( const MouseEvent& rMEvt );
     void            MouseMove( const MouseEvent& rMEvt );
-    void            Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     bool            KeyInput( const KeyEvent& rKEvt );
 
     void            SetMode (Mode eMode);

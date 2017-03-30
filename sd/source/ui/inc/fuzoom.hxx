@@ -48,7 +48,7 @@ protected:
     Point       aBeginPosPix;
     Point       aBeginPos;
     Point       aEndPos;
-    Rectangle   aZoomRect;
+    ::tools::Rectangle   aZoomRect;
     bool        bVisible;
     bool        bStartDrag;
     Pointer     aPtr;

@@ -61,7 +61,7 @@ namespace dbaui
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
         virtual void KeyInput( const KeyEvent& rKEvt ) override;
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
@@ -72,7 +72,7 @@ namespace dbaui
 
     protected:
         virtual void        PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry) override;
-        virtual Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine ) override;
+        virtual tools::Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine ) override;
         virtual void        ModelHasCleared() override;
 
         // IMnemonicEntryList

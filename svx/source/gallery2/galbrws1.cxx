@@ -591,7 +591,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl, void*, void)
         aMenu->SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
         aMenu->RemoveDisabledEntries();
 
-        const Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
+        const tools::Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
         Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectEntryPos() ).Center() );
 
         aSelPos.X() = std::max( std::min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );

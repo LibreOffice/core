@@ -41,8 +41,8 @@ public:
                 const css::awt::Rectangle& aBounds,
                 const css::awt::Size& aSize );
 
-    void QueryObjAreaPixel( Rectangle & );
-    void RequestObjAreaPixel( const Rectangle & );
+    void QueryObjAreaPixel( tools::Rectangle & );
+    void RequestObjAreaPixel( const tools::Rectangle & );
     void InplaceDeactivate();
     void Activated();
     void Deactivated();

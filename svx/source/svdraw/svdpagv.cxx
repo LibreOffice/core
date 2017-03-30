@@ -237,17 +237,17 @@ void SdrPageView::Hide()
     }
 }
 
-Rectangle SdrPageView::GetPageRect() const
+tools::Rectangle SdrPageView::GetPageRect() const
 {
-    if (GetPage()==nullptr) return Rectangle();
-    return Rectangle(Point(),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
+    if (GetPage()==nullptr) return tools::Rectangle();
+    return tools::Rectangle(Point(),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
 }
 
 void SdrPageView::InvalidateAllWin()
 {
     if(IsVisible() && GetPage())
     {
-        Rectangle aRect(Point(0,0),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
+        tools::Rectangle aRect(Point(0,0),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
         aRect.Union(GetPage()->GetAllObjBoundRect());
         GetView().InvalidateAllWin(aRect);
     }
@@ -308,7 +308,7 @@ void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
 
 void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
         sdr::contact::ViewObjectContactRedirector* pRedirector,
-        const Rectangle& rRect, basegfx::B2IRectangle const*const pPageFrame)
+        const tools::Rectangle& rRect, basegfx::B2IRectangle const*const pPageFrame)
 {
     if(GetPage())
     {
@@ -405,7 +405,7 @@ void SdrPageView::SetDesignMode( bool _bDesignMode ) const
 }
 
 
-void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor)
+void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& rRect, Color aColor)
 {
     if (GetPage()==nullptr)
         return;
@@ -555,7 +555,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
                     {
                         // draw
                         rOut.DrawGrid(
-                            Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
+                            tools::Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
                             Size( nx1, ny1 ), nGridFlags );
 
                         // do a step
@@ -580,7 +580,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
                     {
                         // draw
                         rOut.DrawGrid(
-                            Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
+                            tools::Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
                             Size( nx1, ny1 ), nGridFlags );
 
                         // do a step
@@ -703,7 +703,7 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
             if(pCandidate->OutputToWindow())
             {
                 OutputDevice& rOutDev = pCandidate->GetOutputDevice();
-                Rectangle aR(rHL.GetBoundRect(rOutDev));
+                tools::Rectangle aR(rHL.GetBoundRect(rOutDev));
                 Size aSiz(rOutDev.PixelToLogic(Size(1,1)));
                 aR.Left() -= aSiz.Width();
                 aR.Right() += aSiz.Width();

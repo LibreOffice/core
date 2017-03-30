@@ -69,7 +69,7 @@ class SfxViewFrame;
 class SfxFrameDescriptor;
 class SfxFrameSetDescriptor;
 class SfxDispatcher;
-class Rectangle;
+namespace tools { class Rectangle; }
 class SfxRequest;
 class SystemWindow;
 class SfxFrameArr_Impl;
@@ -163,7 +163,7 @@ public:
     SAL_DLLPRIVATE bool OwnsBindings_Impl() const;
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void SetToolSpaceBorderPixel_Impl( const SvBorder& );
-    SAL_DLLPRIVATE Rectangle GetTopOuterRectPixel_Impl() const;
+    SAL_DLLPRIVATE tools::Rectangle GetTopOuterRectPixel_Impl() const;
     SAL_DLLPRIVATE void CreateWorkWindow_Impl();
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
 

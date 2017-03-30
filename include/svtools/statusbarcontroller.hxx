@@ -53,7 +53,7 @@ class SVT_DLLPUBLIC StatusbarController :
         css::uno::Reference< css::frame::XFrame > getFrameInterface() const;
         css::uno::Reference< css::util::XURLTransformer > getURLTransformer() const;
 
-        ::Rectangle getControlRect() const;
+        ::tools::Rectangle getControlRect() const;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;

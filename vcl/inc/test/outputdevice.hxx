@@ -36,7 +36,7 @@ class VCL_DLLPUBLIC OutputDeviceTestCommon
 protected:
 
     ScopedVclPtr<VirtualDevice> mpVirtualDevice;
-    Rectangle maVDRectangle;
+    tools::Rectangle maVDRectangle;
 
     static const Color constBackgroundColor;
     static const Color constLineColor;
@@ -55,16 +55,16 @@ public:
 
     static TestResult checkRectangles(Bitmap& rBitmap, std::vector<Color>& aExpectedColors);
 
-    static void createDiamondPoints(Rectangle rRect, int nOffset,
+    static void createDiamondPoints(tools::Rectangle rRect, int nOffset,
                                     Point& rPoint1, Point& rPoint2,
                                     Point& rPoint3, Point& rPoint4);
 
-    static void createHorizontalVerticalDiagonalLinePoints(Rectangle rRect,
+    static void createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
                                 Point& rHorizontalLinePoint1, Point& rHorizontalLinePoint2,
                                 Point& rVerticalLinePoint1, Point& rVerticalLinePoint2,
                                 Point& rDiagonalLinePoint1, Point& rDiagonalLinePoint2);
     // tools
-    static Rectangle alignToCenter(Rectangle aRect1, Rectangle aRect2);
+    static tools::Rectangle alignToCenter(tools::Rectangle aRect1, tools::Rectangle aRect2);
 
 };
 

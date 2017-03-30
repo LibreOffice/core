@@ -106,16 +106,16 @@ ControlLayoutData::ControlLayoutData() : m_pParent( nullptr )
 {
 }
 
-Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
+tools::Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
 {
-    return (nIndex >= 0 && nIndex < (long) m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : Rectangle();
+    return (nIndex >= 0 && nIndex < (long) m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : tools::Rectangle();
 }
 
-Rectangle Control::GetCharacterBounds( long nIndex ) const
+tools::Rectangle Control::GetCharacterBounds( long nIndex ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetCharacterBounds( nIndex ) : tools::Rectangle();
 }
 
 long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
@@ -289,10 +289,10 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     for( n = 1; n < nLines; n++ )
         mpControlData->mpLayoutData->m_aLineIndices.push_back( rSubControl.mpControlData->mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
     int nRectangles = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects.size();
-        Rectangle aRel = const_cast<Control&>(rSubControl).GetWindowExtentsRelative( const_cast<Control*>(this) );
+        tools::Rectangle aRel = const_cast<Control&>(rSubControl).GetWindowExtentsRelative( const_cast<Control*>(this) );
     for( n = 0; n < nRectangles; n++ )
     {
-        Rectangle aRect = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects[n];
+        tools::Rectangle aRect = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects[n];
         aRect.Move( aRel.Left(), aRel.Top() );
         mpControlData->mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
     }
@@ -329,7 +329,7 @@ void Control::ImplClearLayoutData() const
     mpControlData->mpLayoutData.reset();
 }
 
-void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
+void Control::ImplDrawFrame( OutputDevice* pDev, tools::Rectangle& rRect )
 {
     // use a deco view to draw the frame
     // However, since there happens a lot of magic there, we need to fake some (style) settings
@@ -413,7 +413,7 @@ void Control::ImplInitSettings(const bool, const bool)
     ApplySettings(*this);
 }
 
-Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& rRect, const OUString& _rStr,
+tools::Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const tools::Rectangle& rRect, const OUString& _rStr,
     DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize ) const
 {
     OUString rPStr = _rStr;
@@ -430,7 +430,7 @@ Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangl
 
     if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
     {
-        const Rectangle aRet = _rTargetDevice.GetTextRect(rRect, rPStr, nPStyle);
+        const tools::Rectangle aRet = _rTargetDevice.GetTextRect(rRect, rPStr, nPStyle);
         _rTargetDevice.DrawText(aRet, rPStr, nPStyle, _pVector, _pDisplayText);
         return aRet;
     }
@@ -439,7 +439,7 @@ Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangl
     return aRenderer.DrawText(rRect, rPStr, nPStyle, _pVector, _pDisplayText, i_pDeviceSize);
 }
 
-Rectangle Control::GetControlTextRect( OutputDevice& _rTargetDevice, const Rectangle & rRect,
+tools::Rectangle Control::GetControlTextRect( OutputDevice& _rTargetDevice, const tools::Rectangle & rRect,
                                        const OUString& _rStr, DrawTextFlags _nStyle, Size* o_pDeviceSize ) const
 {
     OUString rPStr = _rStr;
@@ -456,7 +456,7 @@ Rectangle Control::GetControlTextRect( OutputDevice& _rTargetDevice, const Recta
 
     if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
     {
-        Rectangle aRet = _rTargetDevice.GetTextRect( rRect, rPStr, nPStyle );
+        tools::Rectangle aRet = _rTargetDevice.GetTextRect( rRect, rPStr, nPStyle );
         if (o_pDeviceSize)
         {
             *o_pDeviceSize = aRet.GetSize();

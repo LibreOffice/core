@@ -348,7 +348,7 @@ namespace vcl
             return pointFromB2IPoint(basegfx::fround(rPoint));
         }
 
-        ::Rectangle rectangleFromB2DRectangle( const basegfx::B2DRange& rRect )
+        ::tools::Rectangle rectangleFromB2DRectangle( const basegfx::B2DRange& rRect )
         {
             return rectangleFromB2IRectangle(basegfx::fround(rRect));
         }
@@ -364,15 +364,15 @@ namespace vcl
             return basegfx::B2IPoint(rPoint.X(), rPoint.Y());
         }
 
-        Rectangle rectangleFromB2IRectangle( const basegfx::B2IRange& rRect )
+        tools::Rectangle rectangleFromB2IRectangle( const basegfx::B2IRange& rRect )
         {
-            return ::Rectangle( rRect.getMinX(),
+            return ::tools::Rectangle( rRect.getMinX(),
                                 rRect.getMinY(),
                                 rRect.getMaxX(),
                                 rRect.getMaxY() );
         }
 
-        basegfx::B2IRectangle b2IRectangleFromRectangle(Rectangle const& rRect)
+        basegfx::B2IRectangle b2IRectangleFromRectangle(tools::Rectangle const& rRect)
         {
             return basegfx::B2IRectangle(rRect.Left(), rRect.Top(),
                                          rRect.Right(), rRect.Bottom());
@@ -390,7 +390,7 @@ namespace vcl
                                         rPoint.Y() );
         }
 
-        basegfx::B2DRange b2DRectangleFromRectangle( const ::Rectangle& rRect )
+        basegfx::B2DRange b2DRectangleFromRectangle( const ::tools::Rectangle& rRect )
         {
             return basegfx::B2DRange( rRect.Left(),
                                         rRect.Top(),
@@ -416,9 +416,9 @@ namespace vcl
                           rPoint.Y );
         }
 
-        Rectangle rectangleFromIntegerRectangle2D( const geometry::IntegerRectangle2D& rRectangle )
+        tools::Rectangle rectangleFromIntegerRectangle2D( const geometry::IntegerRectangle2D& rRectangle )
         {
-            return Rectangle( rRectangle.X1, rRectangle.Y1,
+            return tools::Rectangle( rRectangle.X1, rRectangle.Y1,
                               rRectangle.X2, rRectangle.Y2 );
         }
 

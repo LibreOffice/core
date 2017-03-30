@@ -243,7 +243,7 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
 }
 
 SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
-    const SfxItemSet* pFlySet, const SfxItemSet *pGrfSet, const Rectangle& aVisArea )
+    const SfxItemSet* pFlySet, const SfxItemSet *pGrfSet, const tools::Rectangle& aVisArea )
 {
     ::SetProgressState(m_nProgress, m_pDocShell);     // Update
     SwFrameFormat* pFormat = nullptr;
@@ -331,7 +331,7 @@ bool SwWW8ImplReader::ImportOleWMF(tools::SvRef<SotStorage> xSrc1,GDIMetaFile &r
 }
 
 SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
-    const Graphic* pGrf, const SfxItemSet* pFlySet, const Rectangle& aVisArea )
+    const Graphic* pGrf, const SfxItemSet* pFlySet, const tools::Rectangle& aVisArea )
 {
     if (!m_pStg)
     {
@@ -377,7 +377,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         }
     }       // StorageStreams closed again
 
-    Rectangle aRect(0, 0, nX, nY);
+    tools::Rectangle aRect(0, 0, nX, nY);
 
     if (pFlySet)
     {

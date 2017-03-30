@@ -72,8 +72,8 @@ protected:
     virtual OUString SAL_CALL createAccessibleDescription() override;
     virtual OUString SAL_CALL createAccessibleName() override;
 
-    virtual Rectangle GetBoundingBoxOnScreen() const override;
-    virtual Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
+    virtual tools::Rectangle GetBoundingBox() const override;
 
 private:
     ScPreviewShell*     mpViewShell;

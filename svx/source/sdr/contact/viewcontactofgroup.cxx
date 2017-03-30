@@ -71,7 +71,7 @@ namespace sdr
             else
             {
                 // append an invisible outline for the cases where no visible content exists
-                Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
+                tools::Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
                 // Hack for calc, transform position of object according
                 // to current zoom so as objects relative position to grid
                 // appears stable

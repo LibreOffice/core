@@ -33,7 +33,7 @@ class SvxDoCapitals;
 class OutputDevice;
 class Printer;
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 class Size;
 
 class EDITENG_DLLPUBLIC SvxFont : public vcl::Font
@@ -102,7 +102,7 @@ public:
                    const Point &rPos, const OUString &rTxt,
                    const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
-    static void DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
+    static void DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
                            const Size& rSize, const Color& rCol, bool bLeft );
     SvxFont&    operator=( const SvxFont& rFont );
     SvxFont&    operator=( const Font& rFont );

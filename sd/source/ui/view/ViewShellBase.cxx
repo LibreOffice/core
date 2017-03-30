@@ -138,7 +138,7 @@ public:
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
 
     // contains the complete area of the current view relative to the frame window
-    Rectangle maClientArea;
+    ::tools::Rectangle maClientArea;
 
     // This is set to true when PrepareClose() is called.
     bool mbIsClosing;
@@ -931,7 +931,7 @@ std::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer()
     return mpImpl->mpEventMultiplexer;
 }
 
-const Rectangle& ViewShellBase::getClientRectangle() const
+const ::tools::Rectangle& ViewShellBase::getClientRectangle() const
 {
     return mpImpl->maClientArea;
 }
@@ -1020,7 +1020,7 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
         // Shape text lock.
         if (OutlinerView* pOutlinerView = pDrawView->GetTextEditOutlinerView())
         {
-            Rectangle aRectangle = pOutlinerView->GetOutputArea();
+            ::tools::Rectangle aRectangle = pOutlinerView->GetOutputArea();
             vcl::Window* pWin = pThisShell->GetActiveWindow();
             if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
                 aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
@@ -1157,7 +1157,7 @@ void ViewShellBase::Implementation::ResizePixel (
         rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom());
     mpViewWindow->SetPosSizePixel(aViewWindowPosition, aViewWindowSize);
 
-    maClientArea = Rectangle(Point(0,0), aViewWindowSize);
+    maClientArea = ::tools::Rectangle(Point(0,0), aViewWindowSize);
 }
 
 void ViewShellBase::Implementation::SetPaneVisibility (

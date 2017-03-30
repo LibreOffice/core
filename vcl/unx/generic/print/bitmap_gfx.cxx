@@ -407,7 +407,7 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
  */
 
 void
-PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
+PrinterGfx::DrawBitmap (const tools::Rectangle& rDest, const tools::Rectangle& rSrc,
                         const PrinterBmp& rBitmap)
 {
     double fScaleX = (double)rDest.GetWidth();
@@ -468,7 +468,7 @@ PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
  */
 
 void
-PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const tools::Rectangle& rArea)
 {
     sal_uInt32 nWidth  = rArea.GetWidth();
     sal_uInt32 nHeight = rArea.GetHeight();
@@ -515,7 +515,7 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
  */
 
 void
-PrinterGfx::writePS2ImageHeader (const Rectangle& rArea, psp::ImageType nType)
+PrinterGfx::writePS2ImageHeader (const tools::Rectangle& rArea, psp::ImageType nType)
 {
     sal_Int32 nChar = 0;
     sal_Char  pImage [512];
@@ -591,7 +591,7 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
 }
 
 void
-PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const tools::Rectangle& rArea)
 {
     writePS2Colorspace(rBitmap, psp::ImageType::GrayScaleImage);
     writePS2ImageHeader(rArea, psp::ImageType::GrayScaleImage);
@@ -609,7 +609,7 @@ PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 }
 
 void
-PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const tools::Rectangle& rArea)
 {
     writePS2Colorspace(rBitmap, psp::ImageType::MonochromeImage);
     writePS2ImageHeader(rArea, psp::ImageType::MonochromeImage);
@@ -640,7 +640,7 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 }
 
 void
-PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const tools::Rectangle& rArea)
 {
     writePS2Colorspace(rBitmap, psp::ImageType::PaletteImage);
     writePS2ImageHeader(rArea, psp::ImageType::PaletteImage);
@@ -658,7 +658,7 @@ PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const Rectangle& rAr
 }
 
 void
-PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const tools::Rectangle& rArea)
 {
     writePS2Colorspace(rBitmap, psp::ImageType::TrueColorImage);
     writePS2ImageHeader(rArea, psp::ImageType::TrueColorImage);

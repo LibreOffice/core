@@ -64,7 +64,7 @@ namespace DatabaseObject = css::sdb::application::DatabaseObject;
 
 namespace {
 
-void Draw3DBorder(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void Draw3DBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     // Use the System Style-Settings for my colours
     const StyleSettings& aSystemStyle = Application::GetSettings().GetStyleSettings();
@@ -328,16 +328,16 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
     }
 }
 
-void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    Rectangle aRect(Point(0,0), GetOutputSizePixel());
+    tools::Rectangle aRect(Point(0,0), GetOutputSizePixel());
     Window::Paint(rRenderContext, rRect);
     Draw3DBorder(rRenderContext, aRect);
 }
 
-Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const
+tools::Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const
 {
-    Rectangle aSizingRect = Rectangle( GetPosPixel(), GetSizePixel() );
+    tools::Rectangle aSizingRect = tools::Rectangle( GetPosPixel(), GetSizePixel() );
 
     if( m_nSizingFlags & SizingFlags::Top )
     {

@@ -490,9 +490,9 @@ void StatusbarController::bindListener()
     }
 }
 
-::Rectangle StatusbarController::getControlRect() const
+::tools::Rectangle StatusbarController::getControlRect() const
 {
-    ::Rectangle aRect;
+    ::tools::Rectangle aRect;
 
     {
         SolarMutexGuard aSolarMutexGuard;

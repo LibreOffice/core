@@ -101,8 +101,8 @@ namespace svx
         const OUString& getSecondaryText() const { return m_sSecondaryText; }
 
     public:
-        void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, DrawTextFlags _nTextStyle,
-            Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation );
+        void Paint( OutputDevice& _rDevice, const ::tools::Rectangle& _rRect, DrawTextFlags _nTextStyle,
+            ::tools::Rectangle* _pPrimaryLocation, ::tools::Rectangle* _pSecondaryLocation );
     };
 
     PseudoRubyText::PseudoRubyText()
@@ -118,8 +118,8 @@ namespace svx
     }
 
 
-    void PseudoRubyText::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect, DrawTextFlags _nTextStyle,
-                               Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation )
+    void PseudoRubyText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& _rRect, DrawTextFlags _nTextStyle,
+                               ::tools::Rectangle* _pPrimaryLocation, ::tools::Rectangle* _pSecondaryLocation )
     {
         Size aPlaygroundSize(_rRect.GetSize());
 
@@ -129,8 +129,8 @@ namespace svx
         aSmallerFont.SetFontHeight( (long)( 0.8 * aSmallerFont.GetFontHeight() ) );
 
         // let's calculate the size of our two texts
-        Rectangle aPrimaryRect = rRenderContext.GetTextRect( _rRect, m_sPrimaryText, _nTextStyle );
-        Rectangle aSecondaryRect;
+        ::tools::Rectangle aPrimaryRect = rRenderContext.GetTextRect( _rRect, m_sPrimaryText, _nTextStyle );
+        ::tools::Rectangle aSecondaryRect;
         {
             FontSwitch aFontRestore(rRenderContext, aSmallerFont);
             aSecondaryRect = rRenderContext.GetTextRect(_rRect, m_sSecondaryText, _nTextStyle);
@@ -212,7 +212,7 @@ namespace svx
         virtual Size    GetOptimalSize() const override;
 
     protected:
-        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect ) override;
+        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& _rRect ) override;
 
     private:
         PseudoRubyText m_aRubyText;
@@ -229,7 +229,7 @@ namespace svx
     }
 
 
-    void RubyRadioButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+    void RubyRadioButton::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
     {
         HideFocus();
 
@@ -239,10 +239,10 @@ namespace svx
         aImageSize.Width() = CalcZoom( aImageSize.Width() ) + 2;   // + 2 because otherwise the radiobuttons
         aImageSize.Height() = CalcZoom( aImageSize.Height() ) + 2; // appear a bit cut from right and top.
 
-        Rectangle aOverallRect( Point( 0, 0 ), GetOutputSizePixel() );
+        ::tools::Rectangle aOverallRect( Point( 0, 0 ), GetOutputSizePixel() );
         aOverallRect.Left() += aImageSize.Width() + 4;  // 4 is the separator between the image and the text
         // inflate the rect a little bit (because the VCL radio button does the same)
-        Rectangle aTextRect( aOverallRect );
+        ::tools::Rectangle aTextRect( aOverallRect );
         ++aTextRect.Left(); --aTextRect.Right();
         ++aTextRect.Top(); --aTextRect.Bottom();
 
@@ -269,19 +269,19 @@ namespace svx
             nTextStyle |= DrawTextFlags::Mnemonic;
 
         // paint the ruby text
-        Rectangle aPrimaryTextLocation;
-        Rectangle aSecondaryTextLocation;
+        ::tools::Rectangle aPrimaryTextLocation;
+        ::tools::Rectangle aSecondaryTextLocation;
 
         m_aRubyText.Paint(rRenderContext, aTextRect, nTextStyle, &aPrimaryTextLocation, &aSecondaryTextLocation);
 
         // the focus rectangle is to be painted around both texts
-        Rectangle aCombinedRect(aPrimaryTextLocation);
+        ::tools::Rectangle aCombinedRect(aPrimaryTextLocation);
         aCombinedRect.Union(aSecondaryTextLocation);
         SetFocusRect(aCombinedRect);
 
         // let the base class paint the radio button
         // for this, give it the proper location to paint the image (vertically centered, relative to our text)
-        Rectangle aImageLocation( Point( 0, 0 ), aImageSize );
+        ::tools::Rectangle aImageLocation( Point( 0, 0 ), aImageSize );
         sal_Int32 nTextHeight = aSecondaryTextLocation.Bottom() - aPrimaryTextLocation.Top();
         aImageLocation.Top() = aPrimaryTextLocation.Top() + ( nTextHeight - aImageSize.Height() ) / 2;
         aImageLocation.Bottom() = aImageLocation.Top() + aImageSize.Height();
@@ -306,7 +306,7 @@ namespace svx
     {
         vcl::Font aSmallerFont( GetFont() );
         aSmallerFont.SetFontHeight( static_cast<long>( 0.8 * aSmallerFont.GetFontHeight() ) );
-        Rectangle rect( Point(), Size( SAL_MAX_INT32, SAL_MAX_INT32 ) );
+        ::tools::Rectangle rect( Point(), Size( SAL_MAX_INT32, SAL_MAX_INT32 ) );
 
         Size aPrimarySize = GetTextRect( rect, m_aRubyText.getPrimaryText() ).GetSize();
         Size aSecondarySize;
@@ -343,7 +343,7 @@ namespace svx
     void SuggestionSet::UserDraw( const UserDrawEvent& rUDEvt )
     {
         vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
-        Rectangle aRect = rUDEvt.GetRect();
+        ::tools::Rectangle aRect = rUDEvt.GetRect();
         sal_uInt16  nItemId = rUDEvt.GetItemId();
 
         OUString sText = *static_cast< OUString* >( GetItemData( nItemId ) );

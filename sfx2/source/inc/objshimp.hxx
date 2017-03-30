@@ -118,7 +118,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     bool                m_bEnableSetModified;
     bool                m_bIsModified;
 
-    Rectangle           m_aVisArea;
+    tools::Rectangle           m_aVisArea;
     MapUnit             m_nMapUnit;
 
     bool                m_bCreateTempStor;

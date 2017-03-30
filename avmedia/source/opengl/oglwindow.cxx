@@ -188,7 +188,7 @@ IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent&, rEvent, void)
         if(pMouseEvt)
         {
             const Point& rMousePos = pMouseEvt->GetPosPixel();
-            const Rectangle aWinRect(m_rEventHandler.GetPosPixel(),m_rEventHandler.GetSizePixel());
+            const tools::Rectangle aWinRect(m_rEventHandler.GetPosPixel(),m_rEventHandler.GetSizePixel());
             // Grab focus to the OpenGL window when mouse pointer is over it
             if( aWinRect.IsInside(rMousePos) )
             {

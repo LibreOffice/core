@@ -55,10 +55,10 @@ private:
     sal_uInt16          nLineVal;
 
     OUString            aText;
-    Rectangle           Lines[9];
+    tools::Rectangle           Lines[9];
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual Size GetOptimalSize() const override;
 
     void DrawParagraph(vcl::RenderContext& rRenderContext);

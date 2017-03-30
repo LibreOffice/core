@@ -681,13 +681,13 @@ awt::Point PPTWriterBase::MapPoint( const awt::Point& rPoint )
     return awt::Point( aRet.X(), aRet.Y() );
 }
 
-Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
+::tools::Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
 {
     css::awt::Point    aPoint( rRect.X, rRect.Y );
     css::awt::Size     aSize( rRect.Width, rRect.Height );
     css::awt::Point    aP( MapPoint( aPoint ) );
     css::awt::Size     aS( MapSize( aSize ) );
-    return Rectangle( Point( aP.X, aP.Y ), Size( aS.Width, aS.Height ) );
+    return ::tools::Rectangle( Point( aP.X, aP.Y ), Size( aS.Width, aS.Height ) );
 }
 
 bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
@@ -714,7 +714,7 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
             break;
         maPosition = MapPoint( mXShape->getPosition() );
         maSize = MapSize( mXShape->getSize() );
-        maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+        maRect = ::tools::Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
 
         OStringBuffer aTypeBuffer(OUStringToOString(
             mXShape->getShapeType(), RTL_TEXTENCODING_UTF8));

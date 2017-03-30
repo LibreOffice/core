@@ -527,7 +527,7 @@ public:
     bool EndCreate  ( SdrCreateCmd eSdrCreateCmd );
     void BreakCreate();
     bool IsDrawCreate() const;
-    void CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect, sal_uInt16 nSlotId);
+    void CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const tools::Rectangle& rRect, sal_uInt16 nSlotId);
 
     /// Functions for Rubberbox, ti select Draw-Objects
     bool BeginMark( const Point &rPos );

@@ -102,7 +102,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     if ( pDoc->IsNegativePage(nTab) )
         aPos.X() -= aSize.Width();
 
-    pObj->SetLogicRect(Rectangle(aPos, aSize));
+    pObj->SetLogicRect(tools::Rectangle(aPos, aSize));
 
     // for the old VC-Button the position/size had to be set explicitly once more
     // that seems not to be needed with UnoControls

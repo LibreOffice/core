@@ -46,8 +46,8 @@ void SdrGluePoint::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
 Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const
 {
     if (bReallyAbsolute) return aPos;
-    Rectangle aSnap(rObj.GetSnapRect());
-    Rectangle aBound(rObj.GetSnapRect());
+    tools::Rectangle aSnap(rObj.GetSnapRect());
+    tools::Rectangle aBound(rObj.GetSnapRect());
     Point aPt(aPos);
 
     Point aOfs(aSnap.Center());
@@ -90,7 +90,7 @@ void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
         aPos=rNewPos;
         return;
     }
-    Rectangle aSnap(rObj.GetSnapRect());
+    tools::Rectangle aSnap(rObj.GetSnapRect());
     Point aPt(rNewPos);
 
     Point aOfs(aSnap.Center());
@@ -258,7 +258,7 @@ void SdrGluePoint::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
     rWin.EnableMapMode(false);
 
     Size aSiz( aGlueHalfSize );
-    Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),
+    tools::Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),
                     aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
 
     // do not erase background, that causes flicker (!)
@@ -271,7 +271,7 @@ bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrO
 {
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     Size aSiz=rOut.PixelToLogic(aGlueHalfSize);
-    Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
+    tools::Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
     return aRect.IsInside(rPnt);
 }
 

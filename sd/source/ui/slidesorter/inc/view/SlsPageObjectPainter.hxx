@@ -99,7 +99,7 @@ private:
     void PaintBorder (
         OutputDevice& rDevice,
         const Theme::GradientColorType eColorType,
-        const Rectangle& rBox) const;
+        const ::tools::Rectangle& rBox) const;
     void PaintBackgroundDetail(
         PageObjectLayouter *pPageObjectLayouter,
         OutputDevice& rDevice,

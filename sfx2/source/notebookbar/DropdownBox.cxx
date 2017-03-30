@@ -188,7 +188,7 @@ IMPL_LINK(DropdownBox, PBClickHdl, Button*, /*pButton*/, void)
 
     long x = GetPosPixel().getX();
     long y = GetPosPixel().getY() + NOTEBOOK_HEADER_HEIGHT + GetSizePixel().Height();
-    Rectangle aRect(x, y, x, y);
+    tools::Rectangle aRect(x, y, x, y);
 
     m_pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down
                                     |FloatWinPopupFlags::GrabFocus

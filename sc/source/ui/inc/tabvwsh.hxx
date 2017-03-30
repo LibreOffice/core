@@ -159,7 +159,7 @@ private:
     bool                    bInDispose;
 
     ScRangeListRef          aChartSource;
-    Rectangle               aChartPos;
+    tools::Rectangle               aChartPos;
     SCTAB                   nChartDestTab;
     sal_uInt16              nCurRefDlgId;
 
@@ -200,7 +200,7 @@ protected:
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
     virtual void    SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY ) override;
 
-    virtual void    QueryObjAreaPixel( Rectangle& rRect ) const override;
+    virtual void    QueryObjAreaPixel( tools::Rectangle& rRect ) const override;
 
     virtual OUString GetSelectionText( bool bWholeWord = false ) override;
     virtual bool     HasSelection( bool bText = true ) const override;
@@ -317,7 +317,7 @@ public:
 
     void            FillFieldData( ScHeaderFieldData& rData );
 
-    bool            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
+    bool            GetChartArea( ScRangeListRef& rSource, tools::Rectangle& rDest, SCTAB& rTab ) const;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

@@ -654,10 +654,10 @@ LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
     return &(mRangeCache.back().results);
 }
 
-const Rectangle& TextRanger::GetBoundRect_()
+const tools::Rectangle& TextRanger::GetBoundRect_()
 {
     DBG_ASSERT( nullptr == pBound, "Don't call twice." );
-    pBound = new Rectangle( mpPolyPolygon->GetBoundRect() );
+    pBound = new tools::Rectangle( mpPolyPolygon->GetBoundRect() );
     return *pBound;
 }
 

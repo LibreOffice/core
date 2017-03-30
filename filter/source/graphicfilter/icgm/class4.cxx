@@ -404,7 +404,7 @@ void CGM::ImplDoClass4()
 
                     if ( mbFigure )
                     {
-                        Rectangle aBoundingBox( Point( (long)( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
+                        tools::Rectangle aBoundingBox( Point( (long)( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
                             Size( ( static_cast< long >( 2 * fRadius ) ), (long)( 2 * fRadius) ) );
                         tools::Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), PolyStyle::Arc );
                         if ( nSwitch )
@@ -520,7 +520,7 @@ void CGM::ImplDoClass4()
 
                 if ( mbFigure )
                 {
-                    Rectangle aBoundingBox(
+                    tools::Rectangle aBoundingBox(
                         Point( (long)( aCenter.X - aRadius.X ), long( aCenter.Y - aRadius.X ) ),
                         Size( static_cast< long >( 2 * aRadius.X ), (long)( 2 * aRadius.X ) ) );
                     tools::Polygon aPolygon( aBoundingBox,

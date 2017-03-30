@@ -419,7 +419,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if ( RasterOp::Invert == meRasterOp )
     {
-        DrawRect( Rectangle( rDestPt, rDestSize ) );
+        DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
         return;
     }
 
@@ -454,7 +454,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
                            nDestWidth, nDestHeight);
 
-        const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+        const tools::Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                      Size( mnOutWidth, mnOutHeight ) );
 
         AdjustTwoRect( aPosAry, aSrcOutRect );
@@ -476,7 +476,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if ( RasterOp::Invert == meRasterOp )
     {
-        DrawRect( Rectangle( rDestPt, rDestSize ) );
+        DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
         return;
     }
 
@@ -520,7 +520,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
             drawOutDevDirect( &rOutDev, aPosAry );
 
             // #i32109#: make destination rectangle opaque - source has no alpha
-            mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
+            mpAlphaVDev->ImplFillOpaqueRectangle( tools::Rectangle(rDestPt, rDestSize) );
         }
     }
     else
@@ -570,7 +570,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
                            nSrcWidth, nSrcHeight);
 
-        const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+        const tools::Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                      Size( mnOutWidth, mnOutHeight ) );
 
         AdjustTwoRect( aPosAry, aSrcOutRect );
@@ -641,7 +641,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
     }
 
     // #102532# Offset only has to be pseudo window offset
-    const Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
+    const tools::Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
                                  Size( pSrcDev->mnOutWidth, pSrcDev->mnOutHeight ) );
 
     AdjustTwoRect( rPosAry, aSrcOutRect );
@@ -693,7 +693,7 @@ void    OutputDevice::ReMirror( Point &rPoint ) const
 {
     rPoint.X() = mnOutOffX + mnOutWidth - 1 - rPoint.X() + mnOutOffX;
 }
-void    OutputDevice::ReMirror( Rectangle &rRect ) const
+void    OutputDevice::ReMirror( tools::Rectangle &rRect ) const
 {
     long nWidth = rRect.Right() - rRect.Left();
 
@@ -754,7 +754,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     if( mbOutputClipped )
         return bDrawn;
 
-    Rectangle aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
+    tools::Rectangle aRect( ImplLogicToDevicePixel( tools::Rectangle( rPoint, rSize ) ) );
 
     if( !aRect.IsEmpty() )
     {

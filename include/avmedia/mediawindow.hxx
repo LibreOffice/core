@@ -65,7 +65,7 @@ namespace avmedia
 
         vcl::Window*             getWindow() const;
 
-        void                setPosSize( const Rectangle& rNewRect );
+        void                setPosSize( const tools::Rectangle& rNewRect );
 
         void                setPointer( const Pointer& rPointer );
 

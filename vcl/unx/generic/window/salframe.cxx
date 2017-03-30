@@ -514,7 +514,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                                    GetDisplay()->GetRootWindow( m_nXScreen ),
                                    &aRoot, &aChild,
                                    &root_x, &root_y, &lx, &ly, &mask );
-                    const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
+                    const std::vector< tools::Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
                     for(const auto & rScreen : rScreens)
                         if( rScreen.IsInside( Point( root_x, root_y ) ) )
                         {
@@ -1390,7 +1390,7 @@ void X11SalFrame::ToTop( SalFrameToTop nFlags )
     }
 }
 
-void X11SalFrame::GetWorkArea( Rectangle& rWorkArea )
+void X11SalFrame::GetWorkArea( tools::Rectangle& rWorkArea )
 {
     rWorkArea = pDisplay_->getWMAdaptor()->getWorkArea( 0 );
 }
@@ -1449,7 +1449,7 @@ void X11SalFrame::Center( )
                            &root_x, &root_y,
                            &x, &y,
                            &mask );
-        const std::vector< Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
+        const std::vector< tools::Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
         for(const auto & rScreen : rScreens)
             if( rScreen.IsInside( Point( root_x, root_y ) ) )
             {
@@ -1468,7 +1468,7 @@ void X11SalFrame::Center( )
             pFrame = pFrame->mpParent;
         if( pFrame->maGeometry.nWidth < 1  || pFrame->maGeometry.nHeight < 1 )
         {
-            Rectangle aRect;
+            tools::Rectangle aRect;
             pFrame->GetPosSize( aRect );
             pFrame->maGeometry.nX       = aRect.Left();
             pFrame->maGeometry.nY       = aRect.Top();
@@ -1529,7 +1529,7 @@ void X11SalFrame::Center( )
     }
 
     Point aPoint(nX, nY);
-    SetPosSize( Rectangle( aPoint, Size( maGeometry.nWidth, maGeometry.nHeight ) ) );
+    SetPosSize( tools::Rectangle( aPoint, Size( maGeometry.nWidth, maGeometry.nHeight ) ) );
 }
 
 void X11SalFrame::updateScreenNumber()
@@ -1537,7 +1537,7 @@ void X11SalFrame::updateScreenNumber()
     if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
     {
         Point aPoint( maGeometry.nX, maGeometry.nY );
-        const std::vector<Rectangle>& rScreenRects( GetDisplay()->GetXineramaScreens() );
+        const std::vector<tools::Rectangle>& rScreenRects( GetDisplay()->GetXineramaScreens() );
         size_t nScreens = rScreenRects.size();
         for( size_t i = 0; i < nScreens; i++ )
         {
@@ -1558,7 +1558,7 @@ void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         return;
 
     // relative positioning in X11SalFrame::SetPosSize
-    Rectangle aPosSize( Point( maGeometry.nX, maGeometry.nY ), Size( maGeometry.nWidth, maGeometry.nHeight ) );
+    tools::Rectangle aPosSize( Point( maGeometry.nX, maGeometry.nY ), Size( maGeometry.nWidth, maGeometry.nHeight ) );
     aPosSize.Justify();
 
     if( ! ( nFlags & SAL_FRAME_POSSIZE_X ) )
@@ -1578,7 +1578,7 @@ void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     if( ! ( nFlags & SAL_FRAME_POSSIZE_HEIGHT ) )
         nHeight = aPosSize.GetHeight();
 
-    aPosSize = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+    aPosSize = tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
     if( ! ( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) ) )
     {
@@ -1621,7 +1621,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
     // Request for position or size change
     if (pState->mnMask & FRAMESTATE_MASK_GEOMETRY)
     {
-        Rectangle aPosSize;
+        tools::Rectangle aPosSize;
 
         /* #i44325#
          * if maximized, set restore size and guess maximized size from last time
@@ -1771,7 +1771,7 @@ bool X11SalFrame::GetWindowState( SalFrameState* pState )
     else
         pState->mnState = WindowStateState::Normal;
 
-    Rectangle aPosSize;
+    tools::Rectangle aPosSize;
     if( maRestorePosSize.IsEmpty() )
         GetPosSize( aPosSize );
     else
@@ -1814,7 +1814,7 @@ void X11SalFrame::SetMenu( SalMenu* )
 {
 }
 
-void X11SalFrame::GetPosSize( Rectangle &rPosSize )
+void X11SalFrame::GetPosSize( tools::Rectangle &rPosSize )
 {
     if( maGeometry.nWidth < 1 || maGeometry.nHeight < 1 )
     {
@@ -1822,10 +1822,10 @@ void X11SalFrame::GetPosSize( Rectangle &rPosSize )
         long w = aScreenSize.Width()  - maGeometry.nLeftDecoration - maGeometry.nRightDecoration;
         long h = aScreenSize.Height() - maGeometry.nTopDecoration - maGeometry.nBottomDecoration;
 
-        rPosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ), Size( w, h ) );
+        rPosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ), Size( w, h ) );
     }
     else
-        rPosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
+        rPosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ),
                               Size( maGeometry.nWidth, maGeometry.nHeight ) );
 }
 
@@ -1872,7 +1872,7 @@ void X11SalFrame::SetSize( const Size &rSize )
     }
 }
 
-void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
+void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
 {
     XWindowChanges values;
     values.x        = rPosSize.Left();
@@ -2049,8 +2049,8 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
         if( nNewScreen >= GetDisplay()->GetXineramaScreens().size() )
             return;
 
-        Rectangle aOldScreenRect( GetDisplay()->GetXineramaScreens()[maGeometry.nDisplayScreenNumber] );
-        Rectangle aNewScreenRect( GetDisplay()->GetXineramaScreens()[nNewScreen] );
+        tools::Rectangle aOldScreenRect( GetDisplay()->GetXineramaScreens()[maGeometry.nDisplayScreenNumber] );
+        tools::Rectangle aNewScreenRect( GetDisplay()->GetXineramaScreens()[nNewScreen] );
         bool bVisible = bMapped_;
         if( bVisible )
             Show( false );
@@ -2108,11 +2108,11 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             return;
         if( bFullScreen )
         {
-            maRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
+            maRestorePosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ),
                                           Size( maGeometry.nWidth, maGeometry.nHeight ) );
-            Rectangle aRect;
+            tools::Rectangle aRect;
             if( nScreen < 0 || nScreen >= static_cast<int>(GetDisplay()->GetXineramaScreens().size()) )
-                aRect = Rectangle( Point(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
+                aRect = tools::Rectangle( Point(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
             else
                 aRect = GetDisplay()->GetXineramaScreens()[nScreen];
             nStyle_ |= SalFrameStyleFlags::PARTIAL_FULLSCREEN;
@@ -2139,8 +2139,8 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             mbFullScreen = false;
             nStyle_ &= ~SalFrameStyleFlags::PARTIAL_FULLSCREEN;
             bool bVisible = bMapped_;
-            Rectangle aRect = maRestorePosSize;
-            maRestorePosSize = Rectangle();
+            tools::Rectangle aRect = maRestorePosSize;
+            maRestorePosSize = tools::Rectangle();
             if( bVisible )
                 Show( false );
             createNewWindow( None, m_nXScreen );
@@ -3368,7 +3368,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
          XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToNone, CurrentTime );
 
     // width and height are extents, so they are of by one for rectangle
-    maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width+1, aRect.height+1) ) );
+    maPaintRegion.Union( tools::Rectangle( Point(aRect.x, aRect.y), Size(aRect.width+1, aRect.height+1) ) );
 
     if( nCount )
         // wait for last expose rectangle, do not wait for resize timer
@@ -3378,7 +3378,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
     SalPaintEvent aPEvt( maPaintRegion.Left(), maPaintRegion.Top(), maPaintRegion.GetWidth(), maPaintRegion.GetHeight() );
 
      CallCallback( SalEvent::Paint, &aPEvt );
-    maPaintRegion = Rectangle();
+    maPaintRegion = tools::Rectangle();
 
     return 1;
 }

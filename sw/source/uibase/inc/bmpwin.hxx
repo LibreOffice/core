@@ -35,7 +35,7 @@ private:
     bool        bVert : 1;
     bool        bGraphic : 1;
 
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect) override;
 
     virtual Size GetOptimalSize() const override;
 

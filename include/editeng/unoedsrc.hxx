@@ -233,7 +233,7 @@ public:
         left corner of text. The coordinates returned here are to be
         interpreted in the map mode given by GetMapMode().
     */
-    virtual Rectangle       GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const = 0;
+    virtual tools::Rectangle       GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const = 0;
 
     /** Query the bounding rectangle of the given paragraph
 
@@ -244,7 +244,7 @@ public:
         left corner of text. The coordinates returned here are to be
         interpreted in the map mode given by GetMapMode().
      */
-    virtual Rectangle       GetParaBounds( sal_Int32 nPara ) const = 0;
+    virtual tools::Rectangle       GetParaBounds( sal_Int32 nPara ) const = 0;
 
     /** Query the map mode of the underlying EditEngine/Outliner
 
@@ -461,7 +461,7 @@ public:
         values are already in screen coordinates (pixel), and have to
         be relative to the EditEngine/Outliner's upper left corner.
      */
-    virtual Rectangle   GetVisArea() const = 0;
+    virtual tools::Rectangle   GetVisArea() const = 0;
 
     /** Convert from logical, EditEngine-relative coordinates to screen coordinates
 

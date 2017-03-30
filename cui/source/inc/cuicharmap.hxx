@@ -50,7 +50,7 @@ public:
     virtual Size    GetOptimalSize() const override;
 
 protected:
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&) override;
 
 private:
     long            mnY;

@@ -46,7 +46,7 @@ class SmGraphicWindow : public ScrollableWindow
 {
     Point aFormulaDrawPos;
     // old style editing pieces
-    Rectangle aCursorRect;
+    tools::Rectangle aCursorRect;
     bool bIsCursorVisible;
     bool bIsLineVisible;
     AutoTimer aCaretBlinkTimer;
@@ -69,7 +69,7 @@ protected:
     }
     using Window::SetCursor;
     void SetCursor(const SmNode *pNode);
-    void SetCursor(const Rectangle &rRect);
+    void SetCursor(const tools::Rectangle &rRect);
     bool IsInlineEditEnabled() const;
 
 private:
@@ -79,7 +79,7 @@ private:
     sal_uInt16 nZoom;
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void KeyInput(const KeyEvent& rKEvt) override;
     virtual void Command(const CommandEvent& rCEvt) override;
     virtual void StateChanged( StateChangedType eChanged ) override;
@@ -172,7 +172,7 @@ protected:
     // Window
     virtual void    GetFocus() override;
     virtual void Resize() override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void StateChanged( StateChangedType nStateChange ) override;
 
     virtual Size CalcDockingSize(SfxChildAlignment eAlign) override;
@@ -264,7 +264,7 @@ protected:
     virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize) override;
     virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize, bool inplaceEditModeChange) override;
     virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize) override;
-    virtual void QueryObjAreaPixel( Rectangle& rRect ) const override;
+    virtual void QueryObjAreaPixel( tools::Rectangle& rRect ) const override;
     virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY ) override;
 
 public:
@@ -306,7 +306,7 @@ public:
     void GetState(SfxItemSet &);
 
     void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
-            Rectangle aOutRect, Point aZeroPoint );
+            tools::Rectangle aOutRect, Point aZeroPoint );
 
     /** Set bInsertIntoEditWindow so we know where to insert
      *

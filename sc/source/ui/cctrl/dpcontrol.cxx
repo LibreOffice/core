@@ -98,7 +98,7 @@ void ScDPFieldButton::draw()
     if (mbBaseButton)
     {
         // Background
-        Rectangle aRect(maPos, maSize);
+        tools::Rectangle aRect(maPos, maSize);
         mpOutDev->SetLineColor(mpStyle->GetFaceColor());
         mpOutDev->SetFillColor(mpStyle->GetFaceColor());
         mpOutDev->DrawRect(aRect);
@@ -176,7 +176,7 @@ void ScDPFieldButton::drawPopupButton()
     mpOutDev->SetLineColor(COL_BLACK);
     Color aBackgroundColor = mbPopupPressed ? mpStyle->GetShadowColor() : mpStyle->GetFaceColor();
     mpOutDev->SetFillColor(aBackgroundColor);
-    mpOutDev->DrawRect(Rectangle(aPos, aSize));
+    mpOutDev->DrawRect(tools::Rectangle(aPos, aSize));
 
     // the arrowhead
     Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightLinkColor() : mpStyle->GetButtonTextColor();
@@ -198,7 +198,7 @@ void ScDPFieldButton::drawPopupButton()
         // tiny little box to display in presence of hidden member(s).
         Point aBoxPos(aPos.X() + aSize.Width() - 5 * fScaleFactor, aPos.Y() + aSize.Height() - 5 * fScaleFactor);
         Size aBoxSize(3 * fScaleFactor, 3 * fScaleFactor);
-        mpOutDev->DrawRect(Rectangle(aBoxPos, aBoxSize));
+        mpOutDev->DrawRect(tools::Rectangle(aBoxPos, aBoxSize));
     }
 }
 

@@ -101,7 +101,7 @@ namespace sdr
 
         void OverlayManagerBuffered::ImpRestoreBackground() const
         {
-            const Rectangle aRegionRectanglePixel(
+            const tools::Rectangle aRegionRectanglePixel(
                 maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
                 maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
             const vcl::Region aRegionPixel(aRegionRectanglePixel);
@@ -175,7 +175,7 @@ namespace sdr
             }
 
             // also limit to buffer size
-            const Rectangle aBufferDeviceRectanglePixel(Point(), mpBufferDevice->GetOutputSizePixel());
+            const tools::Rectangle aBufferDeviceRectanglePixel(Point(), mpBufferDevice->GetOutputSizePixel());
             aRegion.Intersect(aBufferDeviceRectanglePixel);
 
             // MapModes off
@@ -256,7 +256,7 @@ namespace sdr
                     mpOutputBufferDevice->SetAntialiasing(mpBufferDevice->GetAntialiasing());
 
                     // calculate sizes
-                    Rectangle aRegionRectanglePixel(
+                    tools::Rectangle aRegionRectanglePixel(
                         maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
                         maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
 
@@ -347,7 +347,7 @@ namespace sdr
                 {
                     vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
 
-                    const Rectangle aRegionRectanglePixel(
+                    const tools::Rectangle aRegionRectanglePixel(
                         maBufferRememberedRangePixel.getMinX(),
                         maBufferRememberedRangePixel.getMinY(),
                         maBufferRememberedRangePixel.getMaxX(),

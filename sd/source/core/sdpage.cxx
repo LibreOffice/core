@@ -276,7 +276,7 @@ void SdPage::EnsureMasterPageDefaultBackground()
 
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
-SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool /* bInsert */ )
+SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool /* bInsert */ )
 {
     ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : nullptr;
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
@@ -340,7 +340,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
 
             Size aSize = aOutDev.PixelToLogic(aSizePix);
             Point aPnt (0, 0);
-            Rectangle aRect (aPnt, aSize);
+            ::tools::Rectangle aRect (aPnt, aSize);
             pSdrObj = new SdrGrafObj(aGraphic, aRect);
             aOutDev.Pop();
         }
@@ -719,7 +719,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 |*
 \************************************************************************/
 
-void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& )
+void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const ::tools::Rectangle& )
 {
     if (!maLockAutoLayoutArrangement.isLocked())
     {
@@ -832,11 +832,11 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
                 }
             }
 
-            std::vector< Rectangle > aAreas;
+            std::vector< ::tools::Rectangle > aAreas;
             CalculateHandoutAreas( *static_cast< SdDrawDocument* >(GetModel() ), pMasterPage->GetAutoLayout(), false, aAreas );
 
             const bool bSkip = pMasterPage->GetAutoLayout() == AUTOLAYOUT_HANDOUT3;
-            std::vector< Rectangle >::iterator iter( aAreas.begin() );
+            std::vector< ::tools::Rectangle >::iterator iter( aAreas.begin() );
 
             while( iter != aAreas.end() )
             {
@@ -971,17 +971,17 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
 
     if( eObjKind == PRESOBJ_TITLE )
     {
-        Rectangle aTitleRect( GetTitleRect() );
+        ::tools::Rectangle aTitleRect( GetTitleRect() );
         return CreatePresObj(PRESOBJ_TITLE, false, aTitleRect, true/*bInsert*/);
     }
     else if( eObjKind == PRESOBJ_OUTLINE )
     {
-        Rectangle aLayoutRect( GetLayoutRect() );
+        ::tools::Rectangle aLayoutRect( GetLayoutRect() );
         return CreatePresObj( PRESOBJ_OUTLINE, false, aLayoutRect, true/*bInsert*/);
     }
     else if( eObjKind == PRESOBJ_NOTES )
     {
-        Rectangle aLayoutRect( GetLayoutRect() );
+        ::tools::Rectangle aLayoutRect( GetLayoutRect() );
         return CreatePresObj( PRESOBJ_NOTES, false, aLayoutRect, true/*bInsert*/);
     }
     else if( (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_DATETIME) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_HEADER ) )
@@ -1014,7 +1014,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
             }
             else
             {
-                Rectangle aRect( aPos, aSize );
+                ::tools::Rectangle aRect( aPos, aSize );
                 return CreatePresObj( eObjKind, false, aRect, true/*bInsert*/ );
             }
         }
@@ -1041,7 +1041,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
             else
                 aPos.Y() = aPosition.Y() + long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT );
 
-            Rectangle aRect( aPos, aSize );
+            ::tools::Rectangle aRect( aPos, aSize );
             return CreatePresObj( eObjKind, false, aRect, true/*bInsert*/ );
         }
     }
@@ -1077,9 +1077,9 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
 |*
 \************************************************************************/
 
-Rectangle SdPage::GetTitleRect() const
+::tools::Rectangle SdPage::GetTitleRect() const
 {
-    Rectangle aTitleRect;
+    ::tools::Rectangle aTitleRect;
 
     if (mePageKind != PageKind::Handout)
     {
@@ -1163,9 +1163,9 @@ Rectangle SdPage::GetTitleRect() const
 |*
 \************************************************************************/
 
-Rectangle SdPage::GetLayoutRect() const
+::tools::Rectangle SdPage::GetLayoutRect() const
 {
-    Rectangle aLayoutRect;
+    ::tools::Rectangle aLayoutRect;
 
     if (mePageKind != PageKind::Handout)
     {
@@ -1338,10 +1338,10 @@ rtl::OUString enumtoString(AutoLayout aut)
     return retstr;
 }
 
-static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const rtl::OUString& sLayoutType )
+static void CalcAutoLayoutRectangles( SdPage& rPage,::tools::Rectangle* rRectangle ,const rtl::OUString& sLayoutType )
 {
-    Rectangle aTitleRect;
-    Rectangle aLayoutRect;
+    ::tools::Rectangle aTitleRect;
+    ::tools::Rectangle aLayoutRect;
 
     if( rPage.GetPageKind() != PageKind::Handout )
     {
@@ -1424,7 +1424,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
                         aSize.Width() = basegfx::fround(aSize.Width() * propvalue[1]);
                         Point aPos( basegfx::fround(aTitlePos.X() +(aSize.Width() * propvalue[2])),
                                     basegfx::fround(aTitlePos.Y() + (aSize.Height() * propvalue[3])) );
-                        rRectangle[count] = Rectangle(aPos, aSize);
+                        rRectangle[count] = ::tools::Rectangle(aPos, aSize);
                         count = count+1;
                     }
                     else
@@ -1433,7 +1433,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
                                     basegfx::fround(aLayoutSize.Height() * propvalue[0]) );
                         Point aPos( basegfx::fround(aLayoutPos.X() +(aSize.Width() * propvalue[2])),
                                     basegfx::fround(aLayoutPos.Y() + (aSize.Height() * propvalue[3])) );
-                        rRectangle[count] = Rectangle (aPos, aSize);
+                        rRectangle[count] = ::tools::Rectangle (aPos, aSize);
                         count = count+1;
                     }
                 }
@@ -1623,7 +1623,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
         return;
     }
 
-    Rectangle aRectangle[MAX_PRESOBJS];
+    ::tools::Rectangle aRectangle[MAX_PRESOBJS];
     const LayoutDescriptor& aDescriptor = GetLayoutDescriptor( meAutoLayout );
     rtl::OUString sLayoutName( enumtoString(meAutoLayout) );
     CalcAutoLayoutRectangles( *this, aRectangle, sLayoutName);
@@ -1840,7 +1840,7 @@ void SdPage::SetBackgroundFullSize( bool bIn )
 |*
 \************************************************************************/
 
-void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect, bool bScaleAllObj)
+void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rNewBorderRect, bool bScaleAllObj)
 {
     sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
 
@@ -1882,7 +1882,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
     Point aBackgroundPos(nLeft, nUpper);
     Size aBackgroundSize(aNewPageSize);
-    Rectangle aBorderRect (aBackgroundPos, aBackgroundSize);
+    ::tools::Rectangle aBorderRect (aBackgroundPos, aBackgroundSize);
 
     if (mbScaleObjects)
     {
@@ -2103,7 +2103,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     }
 }
 
-SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, const Rectangle& rRect)
+SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, const ::tools::Rectangle& rRect)
 {
     SdDrawDocument* pModel = static_cast< SdDrawDocument* >( rPage.GetModel() );
     DBG_ASSERT( pModel, "sd::convertPresentationObjectImpl(), no model on page!" );
@@ -2246,7 +2246,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
     @returns
         A presentation shape that was either found or created with the given parameters
 */
-SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool bInit)
+SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit)
 {
     ::svl::IUndoManager* pUndoManager = static_cast<SdDrawDocument*>(pModel)->GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
@@ -2939,7 +2939,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                         && pTextObj->GetOutlinerParaObject()
                         && pTextObj->GetOutlinerParaObject()->IsVertical() != (bool)bVertical)
                     {
-                        Rectangle aObjectRect = pTextObj->GetSnapRect();
+                        ::tools::Rectangle aObjectRect = pTextObj->GetSnapRect();
                         pTextObj->GetOutlinerParaObject()->SetVertical(bVertical);
                         pTextObj->SetSnapRect(aObjectRect);
                     }
@@ -2955,7 +2955,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
     return bRet;
 }
 
-void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< Rectangle >& rAreas )
+void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< ::tools::Rectangle >& rAreas )
 {
     SdPage& rHandoutMaster = *rModel.GetMasterSdPage( 0, PageKind::Handout );
 
@@ -3107,7 +3107,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
             aPos.X() = nStartX;
             for(sal_uInt16 nCol = 0; nCol < nColCnt; nCol++)
             {
-                rAreas[*pOffsets++] = Rectangle(aPos, aSize);
+                rAreas[*pOffsets++] = ::tools::Rectangle(aPos, aSize);
                 aPos.X() += nOffsetX;
             }
 

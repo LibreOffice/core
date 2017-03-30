@@ -54,7 +54,7 @@ public:
     virtual ~TabWin_Impl() override { disposeOnce(); }
     virtual void dispose() override { mpPage.clear(); vcl::Window::dispose(); }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
 
     void SetTabulatorTabPage(SvxTabulatorTabPage* pPage) { mpPage = pPage; }
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
@@ -79,7 +79,7 @@ void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
     }
 }
 
-void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     // Paint tabulators
     Point aPoint;

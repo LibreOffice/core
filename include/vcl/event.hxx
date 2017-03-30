@@ -221,23 +221,23 @@ private:
     /// RenderContext to which we should draw - can be a VirtualDevice or anything.
     VclPtr<vcl::RenderContext> mpRenderContext;
 
-    Rectangle           maOutRect;
+    tools::Rectangle           maOutRect;
     sal_uInt16          mnItemId;
     sal_uInt16          mnStyle;
 
 public:
     UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pRenderContext,
-            const Rectangle& rOutRect, sal_uInt16 nId, sal_uInt16 nStyle = 0);
+            const tools::Rectangle& rOutRect, sal_uInt16 nId, sal_uInt16 nStyle = 0);
 
     vcl::Window*        GetWindow() const { return mpWindow; }
     vcl::RenderContext* GetRenderContext() const { return mpRenderContext; }
-    const Rectangle&    GetRect() const { return maOutRect; }
+    const tools::Rectangle&    GetRect() const { return maOutRect; }
     sal_uInt16          GetItemId() const { return mnItemId; }
     sal_uInt16          GetStyle() const { return mnStyle; }
 };
 
 inline UserDrawEvent::UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pRenderContext,
-        const Rectangle& rOutRect, sal_uInt16 nId, sal_uInt16 nStyle)
+        const tools::Rectangle& rOutRect, sal_uInt16 nId, sal_uInt16 nStyle)
     : mpWindow(pWindow)
     , mpRenderContext(pRenderContext)
     , maOutRect( rOutRect )

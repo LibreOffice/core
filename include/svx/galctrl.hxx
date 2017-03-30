@@ -45,14 +45,14 @@ class SVX_DLLPUBLIC GalleryPreview : public vcl::Window, public DropTargetHelper
 private:
 
     GraphicObject       aGraphicObj;
-    Rectangle           aPreviewRect;
+    tools::Rectangle           aPreviewRect;
     GalleryTheme*       mpTheme;
 
-    SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+    SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
     SVX_DLLPRIVATE void             InitSettings();
 
     // Window
-    SVX_DLLPRIVATE virtual void     Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    SVX_DLLPRIVATE virtual void     Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     SVX_DLLPRIVATE virtual Size     GetOptimalSize() const override;
     SVX_DLLPRIVATE virtual void     MouseButtonDown(const MouseEvent& rMEvt) override;
     SVX_DLLPRIVATE virtual void     Command(const CommandEvent& rCEvt) override;
@@ -124,7 +124,7 @@ private:
 
     // BrowseBox
     virtual bool        SeekRow( long nRow ) override;
-    virtual void        PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const override;
+    virtual void        PaintField( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const override;
     virtual void        DoubleClick( const BrowserMouseEvent& rEvt ) override;
     virtual void        Select() override;
     virtual sal_Int8    AcceptDrop( const BrowserAcceptDropEvent& rEvt ) override;
@@ -155,7 +155,7 @@ public:
     virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const override;
 
     // from IAccessibleTableProvider
-    virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
+    virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 };
 

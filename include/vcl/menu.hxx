@@ -39,7 +39,7 @@ struct ImplSVEvent;
 struct MenuItemData;
 class Point;
 class Size;
-class Rectangle;
+namespace tools { class Rectangle; }
 class Menu;
 class MenuItemList;
 class HelpEvent;
@@ -178,7 +178,7 @@ protected:
     SAL_DLLPRIVATE void ImplPaint(vcl::RenderContext& rRenderContext,
                                   sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = nullptr,
                                   bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
-    SAL_DLLPRIVATE void ImplPaintMenuTitle(vcl::RenderContext&, const Rectangle& rRect) const;
+    SAL_DLLPRIVATE void ImplPaintMenuTitle(vcl::RenderContext&, const tools::Rectangle& rRect) const;
     SAL_DLLPRIVATE void ImplSelect();
     SAL_DLLPRIVATE void ImplCallHighlight( sal_uInt16 nHighlightItem );
     SAL_DLLPRIVATE void ImplCallEventListeners( VclEventId nEvent, sal_uInt16 nPos );
@@ -367,12 +367,12 @@ public:
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)
-    Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex ) const;
+    tools::Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex ) const;
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
     // returns the bounding rectangle for an item at pos nItemPos
-    Rectangle GetBoundingRectangle( sal_uInt16 nItemPos ) const;
+    tools::Rectangle GetBoundingRectangle( sal_uInt16 nItemPos ) const;
 
     css::uno::Reference<css::accessibility::XAccessible> GetAccessible();
     void SetAccessible(const css::uno::Reference<css::accessibility::XAccessible >& rxAccessible);
@@ -472,7 +472,7 @@ public:
     // returns the rectangle occupied by the additional button named nId
     // coordinates are relative to the systemwindow the menubar is attached to
     // if the menubar is unattached an empty rectangle is returned
-    Rectangle GetMenuBarButtonRectPixel( sal_uInt16 nId );
+    tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 nId );
     void RemoveMenuBarButton( sal_uInt16 nId );
     void LayoutChanged();
 };
@@ -496,7 +496,7 @@ private:
     SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
 
 protected:
-    SAL_DLLPRIVATE sal_uInt16 ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst );
+    SAL_DLLPRIVATE sal_uInt16 ImplExecute( const VclPtr<vcl::Window>& pW, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst );
     SAL_DLLPRIVATE void ImplFlushPendingSelect();
     SAL_DLLPRIVATE long ImplCalcHeight( sal_uInt16 nEntries ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible = nullptr ) const;
@@ -519,7 +519,7 @@ public:
     }
 
     sal_uInt16 Execute( vcl::Window* pWindow, const Point& rPopupPos );
-    sal_uInt16 Execute( vcl::Window* pWindow, const Rectangle& rRect, PopupMenuFlags nFlags = PopupMenuFlags::NONE );
+    sal_uInt16 Execute( vcl::Window* pWindow, const tools::Rectangle& rRect, PopupMenuFlags nFlags = PopupMenuFlags::NONE );
 
     // Fuer das TestTool
     void EndExecute();

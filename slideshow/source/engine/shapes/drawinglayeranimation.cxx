@@ -226,10 +226,10 @@ private:
     std::vector< ScrollTextAnimNode >           maVector;
 
     // the scroll rectangle
-    Rectangle                                   maScrollRectangleLogic;
+    tools::Rectangle                                   maScrollRectangleLogic;
 
     // the paint rectangle
-    Rectangle                                   maPaintRectangleLogic;
+    tools::Rectangle                                   maPaintRectangleLogic;
 };
 
 

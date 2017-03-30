@@ -54,12 +54,12 @@ namespace svx
     inline long Round(double a) { return a>0.0 ? (long)(a+0.5) : -(long)((-a)+0.5); }
 }
 
-inline void MoveRect(Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
+inline void MoveRect(tools::Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
 inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.X()+=S.Width(); rPnt.Y()+=S.Height(); }
 inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 
-SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+SVX_DLLPUBLIC void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, const Fraction& yFract);
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -97,15 +97,15 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
                         const Point& rRad, double& rSin, double& rCos, bool bVert);
 double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                           const Point& rRad, double& rSin, double& rCos, bool bVert,
-                          const Rectangle& rRefRect);
+                          const tools::Rectangle& rRefRect);
 
 void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
 void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
-void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect);
+void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const tools::Rectangle& rRefRect);
 
 void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
 void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
-void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect);
+void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const tools::Rectangle& rRefRect);
 
 /**************************************************************************************************/
 /*  Inline                                                                                        */
@@ -232,8 +232,8 @@ public:
     void RecalcTan();
 };
 
-tools::Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo);
-void Poly2Rect(const tools::Polygon& rPol, Rectangle& rRect, GeoStat& rGeo);
+tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo);
+void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGeo);
 
 SVX_DLLPUBLIC void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho);
 SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);

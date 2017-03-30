@@ -78,7 +78,7 @@ namespace frm
         }
 
         // ensure that it's initially scrolled to the upper left
-        m_pView->SetVisArea( Rectangle( Point( ), m_pViewport->GetOutputSize() ) );
+        m_pView->SetVisArea( tools::Rectangle( Point( ), m_pViewport->GetOutputSize() ) );
 
         ensureScrollbars();
 
@@ -432,8 +432,8 @@ namespace frm
             m_pEngine->SetPaperSize( Size( aViewportSizeLogic.Width(), m_pEngine->GetTextHeight() ) );
 
         // output area of the view
-        m_pView->SetOutputArea( Rectangle( Point( ), aViewportSizeLogic ) );
-        m_pView->SetVisArea( Rectangle( Point( ), aViewportSizeLogic ) );
+        m_pView->SetOutputArea( tools::Rectangle( Point( ), aViewportSizeLogic ) );
+        m_pView->SetVisArea( tools::Rectangle( Point( ), aViewportSizeLogic ) );
 
         if ( m_pVScroll )
         {
@@ -543,7 +543,7 @@ namespace frm
 
     namespace
     {
-        void lcl_inflate( Rectangle& _rRect, long _nInflateX, long _nInflateY )
+        void lcl_inflate( tools::Rectangle& _rRect, long _nInflateX, long _nInflateY )
         {
             _rRect.Left() -= _nInflateX;
             _rRect.Right() += _nInflateX;
@@ -592,7 +592,7 @@ namespace frm
             aSize = OutputDevice::LogicToLogic( _rSize, aOriginalMapMode, aNormalizedMapMode );
         }
 
-        Rectangle aPlayground( aPos, aSize );
+        tools::Rectangle aPlayground( aPos, aSize );
         Size aOnePixel( _pDev->PixelToLogic( Size( 1, 1 ) ) );
         aPlayground.Right() -= aOnePixel.Width();
         aPlayground.Bottom() -= aOnePixel.Height();

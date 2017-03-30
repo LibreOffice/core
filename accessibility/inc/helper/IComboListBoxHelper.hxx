@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer { namesp
 } } } } }
 
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 namespace accessibility
 {
@@ -39,9 +39,9 @@ namespace accessibility
         virtual ~IComboListBoxHelper() = 0;
 
         virtual OUString        GetEntry( sal_Int32  nPos ) const = 0;
-        virtual Rectangle       GetDropDownPosSizePixel( ) const = 0;
-        virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const = 0;
-        virtual Rectangle       GetWindowExtentsRelative() = 0;
+        virtual tools::Rectangle       GetDropDownPosSizePixel( ) const = 0;
+        virtual tools::Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const = 0;
+        virtual tools::Rectangle       GetWindowExtentsRelative() = 0;
         virtual bool            IsEnabled() const = 0;
         virtual bool            IsEntryVisible( sal_Int32  nPos ) const = 0;
         virtual sal_uInt16      GetDisplayLineCount() const = 0;
@@ -57,7 +57,7 @@ namespace accessibility
         virtual void            SetNoSelection() = 0;
         virtual sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex ) const = 0;
         virtual bool            IsInDropDown() const = 0;
-        virtual Rectangle       GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const = 0;
+        virtual tools::Rectangle       GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const = 0;
         virtual long            GetIndexForPoint( const Point& rPoint, sal_Int32 & nPos ) const = 0;
         virtual css::uno::Reference< css::datatransfer::clipboard::XClipboard >
                                 GetClipboard() = 0;

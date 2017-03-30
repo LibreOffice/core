@@ -1031,11 +1031,11 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     SdrPageView* pPV = mpView->GetSdrPageView();
     if (!pPV)
         return;
-    Rectangle aTmpRect(mpView->GetAllMarkedRect());
+    tools::Rectangle aTmpRect(mpView->GetAllMarkedRect());
     pPV->LogicToPagePos(aTmpRect);
     maRect = basegfx::B2DRange(aTmpRect.Left(), aTmpRect.Top(), aTmpRect.Right(), aTmpRect.Bottom());
 
-    Rectangle aTmpRect2(mpView->GetWorkArea());
+    tools::Rectangle aTmpRect2(mpView->GetWorkArea());
     pPV->LogicToPagePos(aTmpRect2);
     maWorkArea = basegfx::B2DRange(aTmpRect2.Left(), aTmpRect2.Top(), aTmpRect2.Right(), aTmpRect2.Bottom());
 

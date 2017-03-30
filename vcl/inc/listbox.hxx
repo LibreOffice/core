@@ -165,7 +165,7 @@ class ImplListBoxWindow : public Control, public vcl::ISearchableStringList
 {
 private:
     ImplEntryList*  mpEntryList;     ///< EntryList
-    Rectangle       maFocusRect;
+    tools::Rectangle       maFocusRect;
 
     Size            maUserItemSize;
 
@@ -230,14 +230,14 @@ protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 
     bool            SelectEntries( sal_Int32  nSelect, LB_EVENT_TYPE eLET, bool bShift = false, bool bCtrl = false, bool bSelectPosChange = false );
     void            ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos);
-    void            ImplDoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void            ImplDoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     void            ImplCalcMetrics();
     void            ImplUpdateEntryMetrics( ImplEntryType& rEntry );
     void            ImplCallSelect();
@@ -311,7 +311,7 @@ public:
     bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }
 
     Size            CalcSize(sal_Int32 nMaxLines) const;
-    Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
+    tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
     long            GetEntryHeight() const              { return mnMaxHeight; }
     long            GetMaxEntryWidth() const            { return mnMaxWidth; }
@@ -512,7 +512,7 @@ private:
     OUString        maString;
     Image           maImage;
 
-    Rectangle       maFocusRect;
+    tools::Rectangle       maFocusRect;
 
     Link<void*,void> maMBDownHdl;
     Link<UserDrawEvent*, void> maUserDrawHdl;
@@ -529,7 +529,7 @@ public:
                     ImplWin( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
@@ -554,7 +554,7 @@ public:
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
 
-    virtual void    ShowFocus(const Rectangle& rRect) override;
+    virtual void    ShowFocus(const tools::Rectangle& rRect) override;
 
     using Control::ImplInitSettings;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;

@@ -94,7 +94,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     int             nShowState_;        // show state
     int             nWidth_;            // client width
     int             nHeight_;           // client height
-    Rectangle       maRestorePosSize;
+    tools::Rectangle       maRestorePosSize;
     SalFrameStyleFlags nStyle_;
     SalExtStyle     mnExtStyle;
     bool            bAlwaysOnTop_;
@@ -108,7 +108,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     bool            m_bSetFocusOnMap;
 
     ScreenSaverInhibitor maScreenSaverInhibitor;
-    Rectangle       maPaintRegion;
+    tools::Rectangle       maPaintRegion;
 
     Timer           maAlwaysOnTopRaiseTimer;
 
@@ -138,10 +138,10 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
 
     bool mPendingSizeEvent;
 
-    void            GetPosSize( Rectangle &rPosSize );
+    void            GetPosSize( tools::Rectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
     void            Center();
-    void            SetPosSize( const Rectangle &rPosSize );
+    void            SetPosSize( const tools::Rectangle &rPosSize );
     void            Minimize();
     void            Maximize();
     void            Restore();
@@ -228,7 +228,7 @@ public:
     virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
     virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
-    virtual void                GetWorkArea( Rectangle& rRect ) override;
+    virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
     virtual bool                GetWindowState( SalFrameState* pState ) override;

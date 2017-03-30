@@ -85,7 +85,7 @@ class SmElementsControl : public Control
     static const sal_uInt16 aFormats[][2];
     static const sal_uInt16 aOthers[][2];
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual void RequestHelp(const HelpEvent& rHEvt) override;
@@ -151,7 +151,7 @@ public:
     virtual ~SmElementsDockingWindow() override;
     virtual void dispose() override;
 
-    virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) override;
+    virtual void EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode) override;
     virtual void ToggleFloatingMode() override;
 };
 

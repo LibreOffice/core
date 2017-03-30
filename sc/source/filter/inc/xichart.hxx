@@ -107,7 +107,7 @@ public:
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
     void                InitConversion(
                             const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc,
-                            const Rectangle& rChartRect ) const;
+                            const tools::Rectangle& rChartRect ) const;
 
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion( XclImpDffConverter& rDffConv ) const;
@@ -1298,7 +1298,7 @@ public:
         const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc,
         XclImpDffConverter& rDffConv,
         const OUString& rObjName,
-        const Rectangle& rChartRect ) const;
+        const tools::Rectangle& rChartRect ) const;
 
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
@@ -1352,15 +1352,15 @@ public:
     void                ConvertObjects(
                             XclImpDffConverter& rDffConv,
                             const css::uno::Reference< css::frame::XModel >& rxModel,
-                            const Rectangle& rChartRect );
+                            const tools::Rectangle& rChartRect );
 
     /** Calculate the resulting rectangle of the passed anchor. */
-    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const override;
+    virtual tools::Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const override;
     /** Called whenever an object has been inserted into the draw page. */
     virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj ) override;
 
 private:
-    Rectangle           maChartRect;        /// Position and size of the chart shape in 1/100 mm.
+    tools::Rectangle           maChartRect;        /// Position and size of the chart shape in 1/100 mm.
     SCTAB               mnScTab;            /// Index of the sheet that contains the chart.
     bool                mbOwnTab;           /// True = own sheet, false = embedded object.
 };
@@ -1389,7 +1389,7 @@ public:
     void                Convert( css::uno::Reference< css::frame::XModel > const & xModel,
                             XclImpDffConverter& rDffConv,
                             const OUString& rObjName,
-                            const Rectangle& rChartRect ) const;
+                            const tools::Rectangle& rChartRect ) const;
 
 private:
     /** Returns (initially creates) the drawing container for embedded shapes. **/

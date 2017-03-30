@@ -93,17 +93,17 @@ public:
     void Hide ();
 
 protected:
-    virtual bool Docking( const Point& rPos, Rectangle& rRect ) override;
-    virtual void     EndDocking( const Rectangle& rRect, bool bFloatMode ) override;
+    virtual bool Docking( const Point& rPos, tools::Rectangle& rRect ) override;
+    virtual void     EndDocking( const tools::Rectangle& rRect, bool bFloatMode ) override;
     virtual void     ToggleFloatingMode() override;
     virtual bool PrepareToggleFloatingMode() override;
     virtual void     StartDocking() override;
 
 private:
     // the position and the size of the floating window
-    Rectangle aFloatingRect;
+    tools::Rectangle aFloatingRect;
     // the position and the size of the docking window
-    Rectangle aDockingRect;
+    tools::Rectangle aDockingRect;
     // the parent layout window (only when docking)
     VclPtr<Layout> pLayout;
     // > 0: shown, <= 0: hidden, ++ by Show() and -- by Hide()

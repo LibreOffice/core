@@ -517,10 +517,10 @@ static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, l
     rMaxWidth = rCheckHeight = rRadioHeight = 0;
 
     ImplControlValue aVal;
-    Rectangle aNativeBounds;
-    Rectangle aNativeContent;
+    tools::Rectangle aNativeBounds;
+    tools::Rectangle aNativeContent;
     Point tmp( 0, 0 );
-    Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
+    tools::Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItemCheckMark))
     {
         if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::MenuItemCheckMark,
@@ -648,11 +648,11 @@ Size ToolbarMenu::implCalcSize()
 
                 pEntry->mpControl->SetPosPixel( aControlPos );
 
-                pEntry->maRect = Rectangle( aControlPos, aControlSize );
+                pEntry->maRect = tools::Rectangle( aControlPos, aControlSize );
             }
             else
             {
-                pEntry->maRect = Rectangle( Point( 0, nY ), pEntry->maSize );
+                pEntry->maRect = tools::Rectangle( Point( 0, nY ), pEntry->maSize );
             }
 
             nY += pEntry->maSize.Height();
@@ -774,7 +774,7 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
             Color oldLineColor;
             bool bDrawItemRect = true;
 
-            Rectangle aItemRect(Point(nX, nY), Size(aSz.Width(), pEntry->maSize.Height()));
+            tools::Rectangle aItemRect(Point(nX, nY), Size(aSz.Width(), pEntry->maSize.Height()));
             if (pEntry->mnBits & MenuItemBits::POPUPSELECT)
             {
                 long nFontHeight = GetTextHeight();
@@ -785,8 +785,8 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
             {
                 Size aPxSize(GetOutputSizePixel());
                 rRenderContext.Push(PushFlags::CLIPREGION);
-                rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(aSz.Width(), pEntry->maSize.Height())));
-                Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width() - nX, aPxSize.Height()));
+                rRenderContext.IntersectClipRegion(tools::Rectangle(Point(nX, nY), Size(aSz.Width(), pEntry->maSize.Height())));
+                tools::Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width() - nX, aPxSize.Height()));
                 rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::Entire, aCtrlRect,
                                                  ControlState::ENABLED, ImplControlValue(), OUString());
                 if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItem))
@@ -1135,7 +1135,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 }
 
 
-static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow, const Rectangle& i_rRect, bool i_bHighlight )
+static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow, const tools::Rectangle& i_rRect, bool i_bHighlight )
 {
     bool bNativeOk = false;
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button))
@@ -1214,7 +1214,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                     nImageStyle  |= DrawImageFlags::Disable;
                 }
 
-                Rectangle aOuterCheckRect(Point(aPos.X() + mpImpl->mnCheckPos, aPos.Y()),
+                tools::Rectangle aOuterCheckRect(Point(aPos.X() + mpImpl->mnCheckPos, aPos.Y()),
                                           Size(pEntry->maSize.Height(), pEntry->maSize.Height()));
                 aOuterCheckRect.Left()   += 1;
                 aOuterCheckRect.Right()  -= 1;
@@ -1224,7 +1224,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                 if (bTitle)
                 {
                     // fill the background
-                    Rectangle aRect(aTopLeft, Size(aOutSz.Width(), pEntry->maSize.Height()));
+                    tools::Rectangle aRect(aTopLeft, Size(aOutSz.Width(), pEntry->maSize.Height()));
                     rRenderContext.SetFillColor(rSettings.GetDialogColor());
                     rRenderContext.SetLineColor();
                     rRenderContext.DrawRect(aRect);
@@ -1269,7 +1269,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight) / 2;
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight) / 2;
 
-                            Rectangle aCheckRect(aTmpPos, Size(nCtrlHeight, nCtrlHeight));
+                            tools::Rectangle aCheckRect(aTmpPos, Size(nCtrlHeight, nCtrlHeight));
                             rRenderContext.DrawNativeControl(ControlType::MenuPopup, nPart, aCheckRect,
                                                              nState, ImplControlValue(), OUString());
                             aPos.setX(aPos.getX() + nCtrlHeight + gfxExtra);
@@ -1292,7 +1292,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                             }
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width())/2;
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height())/2;
-                            Rectangle aRect( aTmpPos, aSymbolSize );
+                            tools::Rectangle aRect( aTmpPos, aSymbolSize );
                             aDecoView.DrawSymbol(aRect, eSymbol, GetTextColor(), nSymbolStyle);
                             aPos.setX(aPos.getX() + aSymbolSize.getWidth( ) + gfxExtra);
                         }
@@ -1334,7 +1334,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
     }
 }
 
-void ToolbarMenu::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void ToolbarMenu::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
 

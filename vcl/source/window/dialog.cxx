@@ -1161,7 +1161,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dra
     else
     {
         pDev->SetFillColor( aWallpaper.GetColor() );
-        pDev->DrawRect( Rectangle( aPos, aSize ) );
+        pDev->DrawRect( tools::Rectangle( aPos, aSize ) );
     }
 
     if (!( GetStyle() & WB_NOBORDER ))
@@ -1172,7 +1172,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dra
         aImplWin->SetDisplayActive( true );
         aImplWin->InitView();
 
-        aImplWin->Draw( Rectangle( aPos, aSize ), pDev, aPos );
+        aImplWin->Draw( tools::Rectangle( aPos, aSize ), pDev, aPos );
     }
 
     pDev->Pop();

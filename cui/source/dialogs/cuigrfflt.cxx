@@ -46,7 +46,7 @@ Size GraphicPreviewWindow::GetOptimalSize() const
 }
 
 
-void GraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void GraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     Control::Paint(rRenderContext, rRect);
 

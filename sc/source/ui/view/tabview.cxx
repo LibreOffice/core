@@ -79,7 +79,7 @@ ScCornerButton::~ScCornerButton()
 {
 }
 
-void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     SetBackground(rStyleSettings.GetFaceColor());
@@ -109,14 +109,14 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
 
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(aCenter);
-        rRenderContext.DrawRect(Rectangle(nCenterX, nCenterY, nCenterX, nPosY));
-        rRenderContext.DrawRect(Rectangle(nCenterX, nCenterY, nDarkX, nCenterY));
+        rRenderContext.DrawRect(tools::Rectangle(nCenterX, nCenterY, nCenterX, nPosY));
+        rRenderContext.DrawRect(tools::Rectangle(nCenterX, nCenterY, nDarkX, nCenterY));
         rRenderContext.SetFillColor(aOuter);
-        rRenderContext.DrawRect(Rectangle(0, 0, nPosX, nCenterY - 1));
+        rRenderContext.DrawRect(tools::Rectangle(0, 0, nPosX, nCenterY - 1));
         if (bLayoutRTL)
-            rRenderContext.DrawRect(Rectangle(nCenterX + 1, nCenterY, nPosX, nPosY));
+            rRenderContext.DrawRect(tools::Rectangle(nCenterX + 1, nCenterY, nPosX, nPosY));
         else
-            rRenderContext.DrawRect(Rectangle(0, nCenterY, nCenterX - 1, nPosY));
+            rRenderContext.DrawRect(tools::Rectangle(0, nCenterY, nCenterX - 1, nPosY));
     }
 
     //  both buttons have the same look now - only dark right/bottom lines
@@ -533,10 +533,10 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     //  SetDragRectPixel also without Scrollbars etc., when already split
     if ( bHScroll || aViewData.GetHSplitMode() != SC_SPLIT_NONE )
         pHSplitter->SetDragRectPixel(
-            Rectangle( nPosX, nPosY, nPosX+nSizeX, nPosY+nSizeY ), pFrameWin );
+            tools::Rectangle( nPosX, nPosY, nPosX+nSizeX, nPosY+nSizeY ), pFrameWin );
     if ( bVScroll || aViewData.GetVSplitMode() != SC_SPLIT_NONE )
         pVSplitter->SetDragRectPixel(
-            Rectangle( nPosX, nPosY, nPosX+nSizeX, nPosY+nSizeY ), pFrameWin );
+            tools::Rectangle( nPosX, nPosY, nPosX+nSizeX, nPosY+nSizeY ), pFrameWin );
 
     if (bTabControl && ! bHScroll )
     {
@@ -1080,7 +1080,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
 
             OUString aHelpStr;
-            Rectangle aRect;
+            tools::Rectangle aRect;
             QuickHelpFlags nAlign;
             if (bHoriz)
             {
@@ -1728,7 +1728,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         //  get the visible rectangle in logic units
 
         MapMode aDrawMode = pWin->GetDrawMapMode();
-        Rectangle aVisible( pWin->PixelToLogic( Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
+        tools::Rectangle aVisible( pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
 
         ScDocument* pDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
@@ -1749,7 +1749,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
 
         //  get the logic position of the selection
 
-        Rectangle aSelection = pDoc->GetMMRect( rCellRange.aStart.Col(), rCellRange.aStart.Row(),
+        tools::Rectangle aSelection = pDoc->GetMMRect( rCellRange.aStart.Col(), rCellRange.aStart.Row(),
                                                 rCellRange.aEnd.Col(), rCellRange.aEnd.Row(), nTab );
 
         long nLeftSpace = aSelection.Left() - aVisible.Left();
@@ -1803,7 +1803,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
 
         // move the position if the object doesn't fit in the screen
 
-        Rectangle aCompareRect( aInsertPos, Size( nNeededWidth, nNeededHeight ) );
+        tools::Rectangle aCompareRect( aInsertPos, Size( nNeededWidth, nNeededHeight ) );
         if ( aCompareRect.Right() > aVisible.Right() )
             aInsertPos.X() -= aCompareRect.Right() - aVisible.Right();
         if ( aCompareRect.Bottom() > aVisible.Bottom() )
@@ -1823,7 +1823,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
     return aInsertPos;
 }
 
-Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rLogicChart )
+Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const tools::Rectangle& rLogicChart )
 {
     // rDialogSize must be in pixels, rLogicChart in 1/100 mm. Return value is in pixels.
 
@@ -1841,11 +1841,11 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rL
     if (pWin)
     {
         MapMode aDrawMode = pWin->GetDrawMapMode();
-        Rectangle aObjPixel = pWin->LogicToPixel( rLogicChart, aDrawMode );
-        Rectangle aObjAbs( pWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
+        tools::Rectangle aObjPixel = pWin->LogicToPixel( rLogicChart, aDrawMode );
+        tools::Rectangle aObjAbs( pWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
                            pWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
 
-        Rectangle aDesktop = pWin->GetDesktopRectPixel();
+        tools::Rectangle aDesktop = pWin->GetDesktopRectPixel();
         Size aSpace = pWin->LogicToPixel( Size( 8, 12 ), MapUnit::MapAppFont );
 
         ScDocument* pDoc = aViewData.GetDocument();
@@ -2154,7 +2154,7 @@ void ScTabView::SetNewVisArea()
     vcl::Window* pActive = pGridWin[aViewData.GetActivePart()];
     if (pActive)
         aViewData.GetViewShell()->VisAreaChanged(
-            pActive->PixelToLogic(Rectangle(Point(),pActive->GetOutputSizePixel())) );
+            pActive->PixelToLogic(tools::Rectangle(Point(),pActive->GetOutputSizePixel())) );
     if (pDrawView)
         pDrawView->VisAreaChanged();    // no window passed on -> for all windows
 
@@ -2305,7 +2305,7 @@ void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<ed
     }
 }
 
-OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
+OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 {
     ScDocument* pDoc = aViewData.GetDocument();
     if (!pDoc)
@@ -2395,7 +2395,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
 
             // New area extended to the bottom of the sheet after last row
             // excluding overlapping area with aNewColArea
-            Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
+            tools::Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
 
             // Only invalidate if spreadsheet extended to the bottom
             if (aNewRowArea.getHeight())
@@ -2521,7 +2521,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
 
             // New area extended to the right of the sheet after last column
             // including overlapping area with aNewRowArea
-            Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
+            tools::Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
 
             // Only invalidate if spreadsheet extended to the bottom
             if (aNewColArea.getWidth())

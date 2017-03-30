@@ -49,7 +49,7 @@ private:
     bool                        mbPosMTMoved;       /// Tracking: Anytime moved to another position?
 
     Size                        maWinSize;          /// Size of the control.
-    Rectangle                   maActiveRect;       /// The active area of the ruler.
+    tools::Rectangle                   maActiveRect;       /// The active area of the ruler.
     sal_Int32                   mnSplitSize;        /// Size of a split circle.
 
 public:
@@ -141,7 +141,7 @@ private:
 
     // painting ---------------------------------------------------------------
 protected:
-    virtual void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+    virtual void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
 public:
     /** Redraws the entire ruler. */

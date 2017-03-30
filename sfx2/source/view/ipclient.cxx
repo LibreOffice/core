@@ -100,7 +100,7 @@ class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper< embed::XEmbeddedCli
 {
 public:
     Timer                           m_aTimer;               // activation timeout, starts after object connection
-    Rectangle                       m_aObjArea;             // area of object in coordinate system of the container (without scaling)
+    tools::Rectangle                       m_aObjArea;             // area of object in coordinate system of the container (without scaling)
     Fraction                        m_aScaleWidth;          // scaling that was applied to the object when it was not active
     Fraction                        m_aScaleHeight;
     SfxInPlaceClient*               m_pClient;
@@ -390,7 +390,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
         throw uno::RuntimeException();
 
     // apply scaling to object area and convert to pixels
-    Rectangle aRealObjArea( m_aObjArea );
+    tools::Rectangle aRealObjArea( m_aObjArea );
     aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_aScaleWidth,
                                 Fraction( aRealObjArea.GetHeight() ) * m_aScaleHeight ) );
 
@@ -405,7 +405,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
         throw uno::RuntimeException();
 
     // currently(?) same as placement
-    Rectangle aRealObjArea( m_aObjArea );
+    tools::Rectangle aRealObjArea( m_aObjArea );
     aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_aScaleWidth,
                                 Fraction( aRealObjArea.GetHeight() ) * m_aScaleHeight ) );
 
@@ -438,14 +438,14 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
 
     // check if the change is at least one pixel in size
     awt::Rectangle aOldRect = getPlacement();
-    Rectangle aNewPixelRect = VCLRectangle( aPosRect );
-    Rectangle aOldPixelRect = VCLRectangle( aOldRect );
+    tools::Rectangle aNewPixelRect = VCLRectangle( aPosRect );
+    tools::Rectangle aOldPixelRect = VCLRectangle( aOldRect );
     if ( aOldPixelRect == aNewPixelRect )
         // nothing has changed
         return;
 
     // new scaled object area
-    Rectangle aNewLogicRect = m_pClient->GetEditWin()->PixelToLogic( aNewPixelRect );
+    tools::Rectangle aNewLogicRect = m_pClient->GetEditWin()->PixelToLogic( aNewPixelRect );
 
     // all the size changes in this method should happen without scaling
     // SfxBooleanFlagGuard aGuard( m_bResizeNoScale, sal_True );
@@ -677,7 +677,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
 }
 
 
-bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
+bool SfxInPlaceClient::SetObjArea( const tools::Rectangle& rArea )
 {
     if( rArea != m_xImp->m_aObjArea )
     {
@@ -692,14 +692,14 @@ bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
 }
 
 
-const Rectangle& SfxInPlaceClient::GetObjArea() const
+const tools::Rectangle& SfxInPlaceClient::GetObjArea() const
 {
     return m_xImp->m_aObjArea;
 }
 
-Rectangle SfxInPlaceClient::GetScaledObjArea() const
+tools::Rectangle SfxInPlaceClient::GetScaledObjArea() const
 {
-    Rectangle aRealObjArea( m_xImp->m_aObjArea );
+    tools::Rectangle aRealObjArea( m_xImp->m_aObjArea );
     aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_xImp->m_aScaleWidth,
                                 Fraction( aRealObjArea.GetHeight() ) * m_xImp->m_aScaleHeight ) );
     return aRealObjArea;
@@ -722,7 +722,7 @@ void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fractio
 }
 
 
-void SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
+void SfxInPlaceClient::SetObjAreaAndScale( const tools::Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
 {
     if( rArea != m_xImp->m_aObjArea || m_xImp->m_aScaleWidth != rScaleWidth || m_xImp->m_aScaleHeight != rScaleHeight )
     {
@@ -754,7 +754,7 @@ void SfxInPlaceClient::Invalidate()
     // TODO/LATER: do we need both?
 
     // the object area is provided in logical coordinates of the window but without scaling applied
-    Rectangle aRealObjArea( m_xImp->m_aObjArea );
+    tools::Rectangle aRealObjArea( m_xImp->m_aObjArea );
     aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_xImp->m_aScaleWidth,
                                 Fraction( aRealObjArea.GetHeight() ) * m_xImp->m_aScaleHeight ) );
     m_pEditWin->Invalidate( aRealObjArea );
@@ -903,7 +903,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                                 MapMode aClientMap( GetEditWin()->GetMapMode().GetMapUnit() );
                                 Size aNewSize = GetEditWin()->LogicToLogic( Size( aSize.Width, aSize.Height ), &aObjectMap, &aClientMap );
 
-                                Rectangle aScaledArea = GetScaledObjArea();
+                                tools::Rectangle aScaledArea = GetScaledObjArea();
                                 m_xImp->m_aObjArea.SetSize( aNewSize );
                                 m_xImp->m_aScaleWidth = Fraction( aScaledArea.GetWidth(), aNewSize.Width() );
                                 m_xImp->m_aScaleHeight = Fraction( aScaledArea.GetHeight(), aNewSize.Height() );
@@ -957,7 +957,7 @@ void SfxInPlaceClient::ObjectAreaChanged()
     // dummy implementation
 }
 
-void SfxInPlaceClient::RequestNewObjectArea( Rectangle& )
+void SfxInPlaceClient::RequestNewObjectArea( tools::Rectangle& )
 {
     // dummy implementation
 }

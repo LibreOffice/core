@@ -608,8 +608,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         aNewAttr.Put(*pNewItem);
     }
 
-    Rectangle aNullRect;
-    Rectangle aOutRect = pOLV->GetOutputArea();
+    tools::Rectangle aNullRect;
+    tools::Rectangle aOutRect = pOLV->GetOutputArea();
     if (aNullRect != aOutRect)
         pOLV->SetAttribs(aNewAttr);
 

@@ -602,9 +602,9 @@ void EMFWriter::ImplWriteSize( const Size& rSize)
      m_rStm.WriteInt32( aSize.Width() ).WriteInt32( aSize.Height() );
 }
 
-void EMFWriter::ImplWriteRect( const Rectangle& rRect )
+void EMFWriter::ImplWriteRect( const tools::Rectangle& rRect )
 {
-    const Rectangle aRect( OutputDevice::LogicToLogic ( rRect, maVDev->GetMapMode(), maDestMapMode ));
+    const tools::Rectangle aRect( OutputDevice::LogicToLogic ( rRect, maVDev->GetMapMode(), maDestMapMode ));
     m_rStm
        .WriteInt32( aRect.Left() )
        .WriteInt32( aRect.Top() )
@@ -780,7 +780,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         const Size      aBmpSizePixel( rBmp.GetSizePixel() );
 
         ImplBeginRecord( WIN_EMR_STRETCHDIBITS );
-        ImplWriteRect( Rectangle( rPt, rSz ) );
+        ImplWriteRect( tools::Rectangle( rPt, rSz ) );
         ImplWritePoint( rPt );
         m_rStm.WriteInt32( 0 ).WriteInt32( 0 ).WriteInt32( aBmpSizePixel.Width() ).WriteInt32( aBmpSizePixel.Height() );
 
@@ -872,7 +872,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
         // write text record
         ImplBeginRecord( WIN_EMR_EXTTEXTOUTW );
 
-        ImplWriteRect( Rectangle( rPos, Size( nNormWidth, maVDev->GetTextHeight() ) ) );
+        ImplWriteRect( tools::Rectangle( rPos, Size( nNormWidth, maVDev->GetTextHeight() ) ) );
         m_rStm.WriteUInt32( 1 );
         m_rStm.WriteInt32( 0 ).WriteInt32( 0 );
         ImplWritePoint( rPos );
@@ -1253,7 +1253,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                 Bitmap                          aTmp( pA->GetBitmap() );
 
-                if( aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
+                if( aTmp.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
                     ImplWriteBmpRecord( aTmp, pA->GetDestPoint(), pA->GetDestSize(), WIN_SRCCOPY );
             }
             break;
@@ -1298,7 +1298,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                 BitmapEx                        aBmpEx( pA->GetBitmapEx() );
-                aBmpEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+                aBmpEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                 Bitmap                          aBmp( aBmpEx.GetBitmap() );
                 Bitmap                          aMsk( aBmpEx.GetMask() );
 

@@ -29,22 +29,22 @@ bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
 }
 
 bool SalGraphics::hitTestNativeControl( ControlType, ControlPart,
-                                        const Rectangle&, const Point&, bool& )
+                                        const tools::Rectangle&, const Point&, bool& )
 {
     return false;
 }
 
 bool SalGraphics::drawNativeControl( ControlType, ControlPart,
-                                     const Rectangle&, ControlState,
+                                     const tools::Rectangle&, ControlState,
                                      const ImplControlValue&, const OUString& )
 {
     return false;
 }
 
 bool SalGraphics::getNativeControlRegion( ControlType, ControlPart,
-                                          const Rectangle&, ControlState,
+                                          const tools::Rectangle&, ControlState,
                                           const ImplControlValue&,
-                                          const OUString&, Rectangle&, Rectangle& )
+                                          const OUString&, tools::Rectangle&, tools::Rectangle& )
 {
     return false;
 }

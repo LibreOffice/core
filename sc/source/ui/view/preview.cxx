@@ -372,9 +372,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         Size aWinSize = GetOutputSize();
         if ( aOffset.X() < 0 )
-            DrawRect(Rectangle( 0, 0, -aOffset.X(), aWinSize.Height() ));
+            DrawRect(tools::Rectangle( 0, 0, -aOffset.X(), aWinSize.Height() ));
         if ( aOffset.Y() < 0 )
-            DrawRect(Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
+            DrawRect(tools::Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
     }
 
     long   nLeftMargin = 0;
@@ -430,9 +430,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         if ( bDoPrint && bPageMargin && pLocationData )     // don't make use of pLocationData while filling it
         {
-            Rectangle aPixRect;
-            Rectangle aRectCellPosition;
-            Rectangle aRectPosition;
+            tools::Rectangle aPixRect;
+            tools::Rectangle aRectCellPosition;
+            tools::Rectangle aRectPosition;
             pLocationData->GetMainCellRange( aPageArea, aPixRect );
             if( !bLayoutRTL )
             {
@@ -503,7 +503,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             // Draw background first.
             SetLineColor();
             SetFillColor(aBackColor);
-            DrawRect(Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
+            DrawRect(tools::Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
 
             const ScPatternAttr& rDefPattern =
                 static_cast<const ScPatternAttr&>(
@@ -565,7 +565,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 Point aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
                 SetLineColor( COL_BLACK );
                 SetFillColor( COL_BLACK );
-                DrawRect( Rectangle( Point( nRight[i] - 2, aColumnTop.Y() ),Point( nRight[i] + 2 , 4 + aColumnTop.Y()) ));
+                DrawRect( tools::Rectangle( Point( nRight[i] - 2, aColumnTop.Y() ),Point( nRight[i] + 2 , 4 + aColumnTop.Y()) ));
                 DrawLine( Point( nRight[i], aColumnTop.Y() ), Point( nRight[i],  10 + aColumnTop.Y()) );
             }
             SetMapMode( aMMMode );
@@ -577,13 +577,13 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             SetLineColor();
             SetFillColor(aBackColor);
             if (bRight)
-                DrawRect(Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
+                DrawRect(tools::Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
             if (bBottom)
             {
                 if (bRight)
-                    DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Corner not duplicated
+                    DrawRect(tools::Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Corner not duplicated
                 else
-                    DrawRect(Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
+                    DrawRect(tools::Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
             }
         }
 
@@ -598,7 +598,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 SetLineColor( aBorderColor );
                 SetFillColor();
 
-                Rectangle aPixel( LogicToPixel( Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
+                tools::Rectangle aPixel( LogicToPixel( tools::Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
                 --aPixel.Right();
                 --aPixel.Bottom();
                 DrawRect( PixelToLogic( aPixel ) );
@@ -609,15 +609,15 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             SetLineColor();
             SetFillColor( aBorderColor );
 
-            Rectangle aPixel;
+            tools::Rectangle aPixel;
 
-            aPixel = LogicToPixel( Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
+            aPixel = LogicToPixel( tools::Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
             aPixel.Top() += SC_PREVIEW_SHADOWSIZE;
             aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
             aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
             DrawRect( PixelToLogic( aPixel ) );
 
-            aPixel = LogicToPixel( Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
+            aPixel = LogicToPixel( tools::Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
             aPixel.Left() += SC_PREVIEW_SHADOWSIZE;
             aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
             aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
@@ -626,7 +626,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     }
 }
 
-void ScPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /* rRect */ )
+void ScPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
 {
     bool bWasInPaint = bInPaint;        // nested calls shouldn't be necessary, but allow for now
     bInPaint = true;
@@ -1082,17 +1082,17 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 if(( bLeftRulerChange || bRightRulerChange ) && ( aButtonUpPt.X() <= ( 0 - aOffset.X() ) || aButtonUpPt.X() > nWidth * HMM_PER_TWIPS - aOffset.X() ) )
                 {
                     bMoveRulerAction = false;
-                    Invalidate(Rectangle(0, 0, 10000, 10000));
+                    Invalidate(tools::Rectangle(0, 0, 10000, 10000));
                 }
                 else if( bLeftRulerChange && ( aButtonUpPt.X() / HMM_PER_TWIPS > nWidth - aLRItem.GetRight() - aOffset.X() / HMM_PER_TWIPS ) )
                 {
                     bMoveRulerAction = false;
-                    Invalidate(Rectangle(0, 0, 10000, 10000));
+                    Invalidate(tools::Rectangle(0, 0, 10000, 10000));
                 }
                 else if( bRightRulerChange && ( aButtonUpPt.X() / HMM_PER_TWIPS < aLRItem.GetLeft() - aOffset.X() / HMM_PER_TWIPS ) )
                 {
                     bMoveRulerAction = false;
-                    Invalidate(Rectangle(0, 0, 10000, 10000));
+                    Invalidate(tools::Rectangle(0, 0, 10000, 10000));
                 }
                 else if( aButtonDownPt.X() == aButtonUpPt.X() )
                 {
@@ -1130,7 +1130,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         aPrintFunc.UpdatePages();
                     }
 
-                    Rectangle aRect(0,0,10000,10000);
+                    tools::Rectangle aRect(0,0,10000,10000);
                     Invalidate(aRect);
                     aModificator.SetDocumentModified();
                     bLeftRulerChange = false;
@@ -1149,7 +1149,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             if( ( bTopRulerChange || bBottomRulerChange || bHeaderRulerChange || bFooterRulerChange ) && ( aButtonUpPt.Y() <= ( 0 - aOffset.Y() ) || aButtonUpPt.Y() > nHeight * HMM_PER_TWIPS -aOffset.Y() ) )
             {
                 bMoveRulerAction = false;
-                Invalidate(Rectangle(0, 0, 10000, 10000));
+                Invalidate(tools::Rectangle(0, 0, 10000, 10000));
             }
             else if( aButtonDownPt.Y() == aButtonUpPt.Y() )
             {
@@ -1232,7 +1232,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         aPrintFunc.UpdatePages();
                     }
 
-                    Rectangle aRect(0, 0, 10000, 10000);
+                    tools::Rectangle aRect(0, 0, 10000, 10000);
                     Invalidate(aRect);
                     aModificator.SetDocumentModified();
                     bTopRulerChange = false;
@@ -1289,7 +1289,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     ScPrintFunc aPrintFunc( this, pDocShell, nTab );
                     aPrintFunc.UpdatePages();
                 }
-                Rectangle aRect(0, 0, 10000, 10000);
+                tools::Rectangle aRect(0, 0, 10000, 10000);
                 Invalidate(aRect);
             }
             bColRulerMove = false;
@@ -1567,12 +1567,12 @@ void ScPreview::DrawInvert( long nDragPos, PointerStyle nFlags )
     long  nWidth = (long) lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Width();
     if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )
     {
-        Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,(long)( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));
+        tools::Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,(long)( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));
         Invert( aRect, InvertFlags::N50 );
     }
     else if( nFlags == PointerStyle::VSizeBar )
     {
-        Rectangle aRect( -aOffset.X(), nDragPos,(long)( ( nWidth * HMM_PER_TWIPS ) - aOffset.X() ), nDragPos + 1 );
+        tools::Rectangle aRect( -aOffset.X(), nDragPos,(long)( ( nWidth * HMM_PER_TWIPS ) - aOffset.X() ), nDragPos + 1 );
         Invert( aRect, InvertFlags::N50 );
     }
 }

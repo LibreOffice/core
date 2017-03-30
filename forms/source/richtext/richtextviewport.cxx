@@ -35,7 +35,7 @@ namespace frm
         SetPointer( _rView.GetPointer() );
     }
 
-    void RichTextViewPort::Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
+    void RichTextViewPort::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect )
     {
         m_pView->Paint(_rRect, &rRenderContext);
     }

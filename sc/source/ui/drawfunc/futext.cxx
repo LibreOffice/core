@@ -643,7 +643,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
 }
 
 // Create default drawing objects via keyboard
-SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
 {
     // case SID_DRAW_TEXT:
     // case SID_DRAW_TEXT_VERTICAL:

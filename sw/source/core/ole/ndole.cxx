@@ -890,7 +890,7 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         if ( !xObj.is() )
         {
             // We could not load this part (probably broken)
-            Rectangle aArea;
+            tools::Rectangle aArea;
             SwFrame *pFrame = pOLENd->getLayoutFrame(nullptr);
             if ( pFrame )
             {

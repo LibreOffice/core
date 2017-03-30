@@ -63,8 +63,8 @@ public:
     virtual sal_Int32       GetFieldCount( sal_Int32 nPara ) const override;
     virtual EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const override;
     virtual EBulletInfo     GetBulletInfo( sal_Int32 nPara ) const override;
-    virtual Rectangle       GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const override;
-    virtual Rectangle       GetParaBounds( sal_Int32 nPara ) const override;
+    virtual tools::Rectangle       GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const override;
+    virtual tools::Rectangle       GetParaBounds( sal_Int32 nPara ) const override;
     virtual MapMode         GetMapMode() const override;
     virtual OutputDevice*   GetRefDevice() const override;
     virtual bool            GetIndexAtPoint( const Point&, sal_Int32& nPara, sal_Int32& nIndex ) const override;
@@ -118,7 +118,7 @@ public:
 
     // SvxViewForwarder interface
     virtual bool        IsValid() const override;
-    virtual Rectangle   GetVisArea() const override;
+    virtual tools::Rectangle   GetVisArea() const override;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const override;
 

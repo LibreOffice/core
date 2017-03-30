@@ -123,10 +123,10 @@ void SdDocPreviewWin::ImpPaint( OutputDevice* pVDev )
 
     pVDev->SetLineColor();
     pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
-    pVDev->DrawRect(Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
+    pVDev->DrawRect(::tools::Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
 }
 
-void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect )
 {
     if( (!mxSlideShow.is()) || (!mxSlideShow->isRunning() ) )
     {

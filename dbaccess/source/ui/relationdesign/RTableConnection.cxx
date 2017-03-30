@@ -48,7 +48,7 @@ ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTa
     return *this;
 }
 
-void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     OTableConnection::Draw(rRenderContext, rRect);
     ORelationTableConnectionData* pData = static_cast< ORelationTableConnectionData* >(GetData().get());
@@ -56,7 +56,7 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const Re
         return;
 
     // search lines for top line
-    Rectangle aBoundingRect;
+    tools::Rectangle aBoundingRect;
     long nTop = GetBoundingRect().Bottom();
     long nTemp;
 
@@ -83,8 +83,8 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const Re
     if (!pTopLine)
         return;
 
-    Rectangle aSourcePos = pTopLine->GetSourceTextPos();
-    Rectangle aDestPos = pTopLine->GetDestTextPos();
+    tools::Rectangle aSourcePos = pTopLine->GetSourceTextPos();
+    tools::Rectangle aDestPos = pTopLine->GetDestTextPos();
 
     OUString aSourceText;
     OUString aDestText;

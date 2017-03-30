@@ -25,7 +25,7 @@
 
 #include <wall2.hxx>
 
-void OutputDevice::DrawWallpaper( const Rectangle& rRect,
+void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
                                   const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
@@ -38,7 +38,7 @@ void OutputDevice::DrawWallpaper( const Rectangle& rRect,
 
     if ( rWallpaper.GetStyle() != WallpaperStyle::NONE )
     {
-        Rectangle aRect = LogicToPixel( rRect );
+        tools::Rectangle aRect = LogicToPixel( rRect );
         aRect.Justify();
 
         if ( !aRect.IsEmpty() )
@@ -80,7 +80,7 @@ void OutputDevice::DrawColorWallpaper( long nX, long nY,
 
     bool bMap = mbMap;
     EnableMapMode( false );
-    DrawRect( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
+    DrawRect( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
     SetLineColor( aOldLineColor );
     SetFillColor( aOldFillColor );
     EnableMapMode( bMap );
@@ -170,7 +170,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     // calc pos and size
     if( rWallpaper.IsRect() )
     {
-        const Rectangle aBound( LogicToPixel( rWallpaper.GetRect() ) );
+        const tools::Rectangle aBound( LogicToPixel( rWallpaper.GetRect() ) );
         aPos = aBound.TopLeft();
         aSize = aBound.GetSize();
     }
@@ -183,7 +183,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     mpMetaFile = nullptr;
     EnableMapMode( false );
     Push( PushFlags::CLIPREGION );
-    IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
+    IntersectClipRegion( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
     switch( eStyle )
     {
@@ -286,11 +286,11 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
         {
             const Size aBmpSize( aBmpEx.GetSizePixel() );
             const Point aTmpPoint;
-            const Rectangle aOutRect( aTmpPoint, GetOutputSizePixel() );
-            const Rectangle aColRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            Rectangle aWorkRect;
+            const tools::Rectangle aOutRect( aTmpPoint, GetOutputSizePixel() );
+            const tools::Rectangle aColRect( Point( nX, nY ), Size( nWidth, nHeight ) );
+            tools::Rectangle aWorkRect;
 
-            aWorkRect = Rectangle( 0, 0, aOutRect.Right(), aPos.Y() - 1L );
+            aWorkRect = tools::Rectangle( 0, 0, aOutRect.Right(), aPos.Y() - 1L );
             aWorkRect.Justify();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
@@ -300,7 +300,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                     rWallpaper );
             }
 
-            aWorkRect = Rectangle( 0, aPos.Y(), aPos.X() - 1L, aPos.Y() + aBmpSize.Height() - 1L );
+            aWorkRect = tools::Rectangle( 0, aPos.Y(), aPos.X() - 1L, aPos.Y() + aBmpSize.Height() - 1L );
             aWorkRect.Justify();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
@@ -310,7 +310,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                     rWallpaper );
             }
 
-            aWorkRect = Rectangle( aPos.X() + aBmpSize.Width(), aPos.Y(),
+            aWorkRect = tools::Rectangle( aPos.X() + aBmpSize.Width(), aPos.Y(),
                                    aOutRect.Right(), aPos.Y() + aBmpSize.Height() - 1L );
             aWorkRect.Justify();
             aWorkRect.Intersection( aColRect );
@@ -321,7 +321,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                     rWallpaper );
             }
 
-            aWorkRect = Rectangle( 0, aPos.Y() + aBmpSize.Height(),
+            aWorkRect = tools::Rectangle( 0, aPos.Y() + aBmpSize.Height(),
                                    aOutRect.Right(), aOutRect.Bottom() );
             aWorkRect.Justify();
             aWorkRect.Intersection( aColRect );
@@ -349,16 +349,16 @@ void OutputDevice::DrawGradientWallpaper( long nX, long nY,
 {
     assert(!is_double_buffered_window());
 
-    Rectangle aBound;
+    tools::Rectangle aBound;
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     const bool bOldMap = mbMap;
 
-    aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+    aBound = tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
     mpMetaFile = nullptr;
     EnableMapMode( false );
     Push( PushFlags::CLIPREGION );
-    IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
+    IntersectClipRegion( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
     DrawGradient( aBound, rWallpaper.GetGradient() );
 

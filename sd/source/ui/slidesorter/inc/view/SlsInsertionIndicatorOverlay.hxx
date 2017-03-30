@@ -69,13 +69,13 @@ public:
 
     virtual void Paint (
         OutputDevice& rDevice,
-        const Rectangle& rRepaintArea) override;
+        const ::tools::Rectangle& rRepaintArea) override;
 
     bool IsVisible() const { return mbIsVisible;}
     void Hide();
     void Show();
 
-    Rectangle GetBoundingBox() const;
+    ::tools::Rectangle GetBoundingBox() const;
 
 private:
     SlideSorter& mrSlideSorter;

@@ -347,7 +347,7 @@ void SfxSplitWindow::StartSplit()
         pEmptyWin->bSplit = true;
     }
 
-    Rectangle aRect = pWorkWin->GetFreeArea( !bPinned );
+    tools::Rectangle aRect = pWorkWin->GetFreeArea( !bPinned );
     switch ( GetAlign() )
     {
         case WindowAlign::Left:
@@ -987,7 +987,7 @@ bool SfxSplitWindow::CursorIsOverRect() const
     Point aPos = pEmptyWin->GetParent()->OutputToScreenPixel( pEmptyWin->GetPosPixel() );
     Size aSize = pEmptyWin->GetSizePixel();
 
-    Rectangle aRect( aPos, aSize );
+    tools::Rectangle aRect( aPos, aSize );
 
     if ( bVisible )
     {
@@ -1000,7 +1000,7 @@ bool SfxSplitWindow::CursorIsOverRect() const
         aVisSize.Width() += 2 * nPixel;
         aVisSize.Height() += 2 * nPixel;
 
-        Rectangle aVisRect( aVisPos, aVisSize );
+        tools::Rectangle aVisRect( aVisPos, aVisSize );
         aRect = aRect.GetUnion( aVisRect );
     }
 

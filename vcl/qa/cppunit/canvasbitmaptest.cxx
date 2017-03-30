@@ -656,7 +656,7 @@ void CanvasBitmapTest::runTest()
                     aWhite = Color(COL_WHITE);
                 }
                 pAcc->SetFillColor(COL_GREEN);
-                pAcc->FillRect(Rectangle(0,0,100,100));
+                pAcc->FillRect(tools::Rectangle(0,0,100,100));
                 pAcc->SetPixel(0,0,aWhite);
                 pAcc->SetPixel(0,1,aBlack);
                 pAcc->SetPixel(0,2,aWhite);
@@ -674,7 +674,7 @@ void CanvasBitmapTest::runTest()
             if( pAcc.get() )
             {
                 pAcc->SetFillColor(COL_BLACK);
-                pAcc->FillRect(Rectangle(0,0,100,100));
+                pAcc->FillRect(tools::Rectangle(0,0,100,100));
                 pAcc->SetPixel(0,0,BitmapColor(1));
                 pAcc->SetPixel(0,1,BitmapColor(0));
                 pAcc->SetPixel(0,2,BitmapColor(1));
@@ -692,7 +692,7 @@ void CanvasBitmapTest::runTest()
             if( pAcc )
             {
                 pAcc->SetFillColor(COL_BLACK);
-                pAcc->FillRect(Rectangle(0,0,100,100));
+                pAcc->FillRect(tools::Rectangle(0,0,100,100));
                 pAcc->SetPixel(0,0,BitmapColor(255));
                 pAcc->SetPixel(0,1,BitmapColor(0));
                 pAcc->SetPixel(0,2,BitmapColor(255));

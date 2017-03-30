@@ -237,7 +237,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     rInfo.m_nFontType = FontType::SFNT_TTF;
     rInfo.m_aPSName = OUString( aTTInfo.psname, std::strlen(aTTInfo.psname),
                                 RTL_TEXTENCODING_UTF8 );
-    rInfo.m_aFontBBox = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
+    rInfo.m_aFontBBox = tools::Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                    Point( aTTInfo.xMax, aTTInfo.yMax ) );
     rInfo.m_nCapHeight = aTTInfo.yMax; // Well ...
     rInfo.m_nAscent = aTTInfo.winAscent;
@@ -895,7 +895,7 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     SAL_INFO( "vcl.cg", "CGContextDrawPath(" << mrContext << ",kCGPathStroke)" );
     CGContextDrawPath( mrContext, kCGPathStroke );
 
-    Rectangle aRefreshRect( nX1, nY1, nX2, nY2 );
+    tools::Rectangle aRefreshRect( nX1, nY1, nX2, nY2 );
     (void) aRefreshRect;
     // Is a call to RefreshRect( aRefreshRect ) missing here?
 

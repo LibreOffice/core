@@ -295,12 +295,12 @@ Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationId(
 
 // internal virtual methods ---------------------------------------------------
 
-Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBox()
+tools::Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBox()
 {
     return mpBrowseBox->calcHeaderRect(isColumnBar(), false);
 }
 
-Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBoxOnScreen()
+tools::Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBoxOnScreen()
 {
     return mpBrowseBox->calcHeaderRect(isColumnBar());
 }

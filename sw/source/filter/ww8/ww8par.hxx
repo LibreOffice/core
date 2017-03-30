@@ -747,8 +747,8 @@ private:
     // indicates, if the OLE object is imported inside a group object
     virtual SdrObject* ImportOLE( sal_uInt32 nOLEId,
                                   const Graphic& rGrf,
-                                  const Rectangle& rBoundRect,
-                                  const Rectangle& rVisArea,
+                                  const tools::Rectangle& rBoundRect,
+                                  const tools::Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const override;
 
@@ -762,7 +762,7 @@ public:
     void DisableFallbackStream();
     void EnableFallbackStream();
 protected:
-    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) override;
+    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
 };
 
 class wwSection
@@ -1439,7 +1439,7 @@ private:
     // them for now
     static bool SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
         short *pSizeArray=nullptr, sal_uInt8 nSetBorders=0xFF);
-    static void GetBorderDistance(const WW8_BRCVer9* pbrc, Rectangle& rInnerDist);
+    static void GetBorderDistance(const WW8_BRCVer9* pbrc, tools::Rectangle& rInnerDist);
     static sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
     static bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
         const WW8_BRCVer9& aRightBrc);
@@ -1452,7 +1452,7 @@ private:
         MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, sal_Int32 &rLineWidth,
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
-        MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, Rectangle &rInnerDist );
+        MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, tools::Rectangle &rInnerDist );
     static void AdjustLRWrapForWordMargins(const SvxMSDffImportRec &rRecord,
         SvxLRSpaceItem &rLR);
     static void AdjustULWrapForWordMargins(const SvxMSDffImportRec &rRecord,
@@ -1498,10 +1498,10 @@ private:
     SwFrameFormat* ImportGraf(SdrTextObj* pTextObj = nullptr, SwFrameFormat* pFlyFormat = nullptr);
 
     SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=nullptr,
-        const SfxItemSet* pFlySet=nullptr, const Rectangle& aVisArea = Rectangle() );
+        const SfxItemSet* pFlySet=nullptr, const tools::Rectangle& aVisArea = tools::Rectangle() );
 
     SwFrameFormat* ImportOle( const Graphic* = nullptr, const SfxItemSet* pFlySet = nullptr,
-        const SfxItemSet* pGrfSet = nullptr, const Rectangle& aVisArea = Rectangle() );
+        const SfxItemSet* pGrfSet = nullptr, const tools::Rectangle& aVisArea = tools::Rectangle() );
     SwFlyFrameFormat* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet,
         const SfxItemSet *rGrfSet);
 

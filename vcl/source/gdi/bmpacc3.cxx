@@ -85,7 +85,7 @@ void BitmapWriteAccess::Erase( const Color& rColor )
     // use the canonical method to clear the bitmap
     BitmapColor* pOldFillColor = mpFillColor ? new BitmapColor(*mpFillColor) : nullptr;
     const Point aPoint;
-    const Rectangle aRect(aPoint, maBitmap.GetSizePixel());
+    const tools::Rectangle aRect(aPoint, maBitmap.GetSizePixel());
 
     SetFillColor(rColor);
     FillRect(aRect);
@@ -229,13 +229,13 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
     }
 }
 
-void BitmapWriteAccess::FillRect( const Rectangle& rRect )
+void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
 {
     if (mpFillColor)
     {
         const BitmapColor& rFillColor = *mpFillColor.get();
         Point aPoint;
-        Rectangle aRect(aPoint, maBitmap.GetSizePixel());
+        tools::Rectangle aRect(aPoint, maBitmap.GetSizePixel());
 
         aRect.Intersection(rRect);
 
@@ -257,7 +257,7 @@ void BitmapWriteAccess::FillRect( const Rectangle& rRect )
     }
 }
 
-void BitmapWriteAccess::DrawRect( const Rectangle& rRect )
+void BitmapWriteAccess::DrawRect( const tools::Rectangle& rRect )
 {
     if (mpFillColor)
         FillRect(rRect);

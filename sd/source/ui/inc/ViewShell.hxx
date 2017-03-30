@@ -170,11 +170,11 @@ public:
             The rectangle is returned in screen coordinates, i.e. pixel
             values relative to the upper left corner of the screen?.
     */
-    const Rectangle& GetAllWindowRect();
+    const ::tools::Rectangle& GetAllWindowRect();
 
     // Mouse- & Key-Events
     virtual void PrePaint();
-    virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
+    virtual void Paint (const ::tools::Rectangle& rRect, ::sd::Window* pWin);
     virtual bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
@@ -202,7 +202,7 @@ public:
     void    ScrollLines(long nX, long nY);
     virtual void    SetZoom(long nZoom);
     long    GetZoom() const;
-    virtual void    SetZoomRect(const Rectangle& rZoomRect);
+    virtual void    SetZoomRect(const ::tools::Rectangle& rZoomRect);
     void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                         const Point& rWinPos, bool bUpdate = false);
     void    InvalidateWindows();
@@ -212,7 +212,7 @@ public:
     */
     virtual void UpdatePreview (SdPage* pPage, bool bInit = false);
 
-    void    DrawMarkRect(const Rectangle& rRect) const;
+    void    DrawMarkRect(const ::tools::Rectangle& rRect) const;
 
     void    ExecReq( SfxRequest &rReq );
 
@@ -282,7 +282,7 @@ public:
     virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse );
 
     /** this method is called when the visible area of the view from this viewshell is changed */
-    virtual void VisAreaChanged(const Rectangle& rRect);
+    virtual void VisAreaChanged(const ::tools::Rectangle& rRect);
 
     /** Create an accessible object representing the specified window.
         Override this method to provide view mode specific objects.  The
@@ -492,7 +492,7 @@ protected:
         GetAllWindowRectangle() into screen coordinates (relative to the
         upper left corner of the screen.
     */
-    Rectangle maAllWindowRectangle;
+    ::tools::Rectangle maAllWindowRectangle;
 
     /// The type of the shell.  Returned by GetShellType().
     ShellType meShellType;

@@ -101,7 +101,7 @@ sal_Int32 OStartMarker::getMinHeight() const
     return LogicToPixel(Size(0, m_aText->GetTextHeight())).Height() + long(aExtraWidth);
 }
 
-void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     Size aSize(GetOutputSizePixel());
     const long nCornerWidth = long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
@@ -115,11 +115,11 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
         const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
         long nSize = aSize.Width() - nVRulerWidth;
         aSize.Width() += nCornerWidth;
-        rRenderContext.SetClipRegion(vcl::Region(rRenderContext.PixelToLogic(Rectangle(Point(),
+        rRenderContext.SetClipRegion(vcl::Region(rRenderContext.PixelToLogic(tools::Rectangle(Point(),
                                                                              Size(nSize, aSize.Height())))));
     }
 
-    Rectangle aWholeRect(Point(), aSize);
+    tools::Rectangle aWholeRect(Point(), aSize);
     {
         const ColorChanger aColors(&rRenderContext, m_nTextBoundaries, m_nColor);
         tools::PolyPolygon aPoly;
@@ -141,7 +141,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
     if (m_bMarked)
     {
         const long nCornerHeight = long(CORNER_SPACE * double(GetMapMode().GetScaleY()));
-        Rectangle aRect(Point(nCornerWidth, nCornerHeight),
+        tools::Rectangle aRect(Point(nCornerWidth, nCornerHeight),
                         Size(aSize.Width() - nCornerWidth - nCornerWidth,
                              aSize.Height() - nCornerHeight - nCornerHeight));
         ColorChanger aColors(&rRenderContext, COL_WHITE, COL_WHITE);
@@ -170,7 +170,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     const Size aOutputSize = GetOutputSizePixel();
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
         return;
-    Rectangle aRect(m_aImage->GetPosPixel(),m_aImage->GetSizePixel());
+    tools::Rectangle aRect(m_aImage->GetPosPixel(),m_aImage->GetSizePixel());
     if ( rMEvt.GetClicks() == 2 || aRect.IsInside( aPos ) )
     {
         m_bCollapsed = !m_bCollapsed;
@@ -271,7 +271,7 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
     if( !m_aText->GetText().isEmpty())
     {
         // Hilfe anzeigen
-        Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
+        tools::Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
         aItemRect.Left()   = aPt.X();
         aItemRect.Top()    = aPt.Y();

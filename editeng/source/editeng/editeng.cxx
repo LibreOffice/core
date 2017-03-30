@@ -205,7 +205,7 @@ const SfxItemSet& EditEngine::GetEmptyItemSet()
     return pImpEditEngine->GetEmptyItemSet();
 }
 
-void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect )
+void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect )
 {
     Draw( pOutDev, rOutRect, Point( 0, 0 ) );
 }
@@ -214,7 +214,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOri
 {
     // Create with 2 points, as with positive points it will end up with
     // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
-    Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
+    tools::Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
     if( pOutDev->GetConnectMetaFile() )
         pOutDev->Push();
     Point aStartPos( rStartPos );
@@ -228,12 +228,12 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOri
         pOutDev->Pop();
 }
 
-void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos )
+void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos )
 {
     Draw( pOutDev, rOutRect, rStartDocPos, true );
 }
 
-void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
+void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip )
 {
 #if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
     if ( bDebugPaint )
@@ -242,7 +242,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
 
     // Align to the pixel boundary, so that it becomes exactly the same
     // as Paint ()
-    Rectangle aOutRect( pOutDev->LogicToPixel( rOutRect ) );
+    tools::Rectangle aOutRect( pOutDev->LogicToPixel( rOutRect ) );
     aOutRect = pOutDev->PixelToLogic( aOutRect );
 
     Point aStartPos;
@@ -276,7 +276,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
         {
             // Some printer drivers cause problems if characters graze the
             // ClipRegion, therefore rather add a pixel more ...
-            Rectangle aClipRect( aOutRect );
+            tools::Rectangle aClipRect( aOutRect );
             if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
             {
                 Size aPixSz( 1, 0 );
@@ -403,7 +403,7 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
                 pView->pImpEditView->RecalcOutputArea();
             else if ( pView->pImpEditView->DoAutoSize() )
             {
-                pView->pImpEditView->ResetOutputArea( Rectangle(
+                pView->pImpEditView->ResetOutputArea( tools::Rectangle(
                     pView->pImpEditView->GetOutputArea().TopLeft(), aNewSize ) );
             }
         }
@@ -1022,7 +1022,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                         P2.Y() += nH;
                         pEditView->GetWindow()->SetLineColor();
                         pEditView->GetWindow()->SetFillColor( Color( (n%2) ? COL_YELLOW : COL_LIGHTGREEN ) );
-                        pEditView->GetWindow()->DrawRect( Rectangle( P1, P2 ) );
+                        pEditView->GetWindow()->DrawRect( tools::Rectangle( P1, P2 ) );
                         aPos.Y() += nH;
                     }
                 }
@@ -1341,7 +1341,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                     aPos = pEditView->pImpEditView->GetWindow()->LogicToPixel( aPos );
                                     aPos = pEditView->GetWindow()->OutputToScreenPixel( aPos );
                                     aPos.Y() -= 3;
-                                    Help::ShowQuickHelp( pEditView->GetWindow(), Rectangle( aPos, Size( 1, 1 ) ), aComplete, QuickHelpFlags::Bottom|QuickHelpFlags::Left );
+                                    Help::ShowQuickHelp( pEditView->GetWindow(), tools::Rectangle( aPos, Size( 1, 1 ) ), aComplete, QuickHelpFlags::Bottom|QuickHelpFlags::Left );
                                 }
                             }
                         }
@@ -1774,7 +1774,7 @@ SvxFont EditEngine::GetStandardSvxFont( sal_Int32 nPara )
 void EditEngine::StripPortions()
 {
     ScopedVclPtrInstance< VirtualDevice > aTmpDev;
-    Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
+    tools::Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
     if ( IsVertical() )
     {
         aBigRect.Right() = 0;
@@ -2369,16 +2369,16 @@ EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
     return aPos;
 }
 
-Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
+tools::Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
 {
-    Rectangle aBounds;
+    tools::Rectangle aBounds;
     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( rPos.nPara );
 
     // Check against index, not paragraph
     if ( pNode && ( rPos.nIndex < pNode->Len() ) )
     {
         aBounds = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex ), GetCursorFlags::TextOnly );
-        Rectangle aR2 = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex+1 ), GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
+        tools::Rectangle aR2 = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex+1 ), GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
         if ( aR2.Right() > aBounds.Right() )
             aBounds.Right() = aR2.Right();
     }
@@ -2540,9 +2540,9 @@ OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
     return aComment;
 }
 
-Rectangle EditEngine::GetBulletArea( sal_Int32 )
+tools::Rectangle EditEngine::GetBulletArea( sal_Int32 )
 {
-    return Rectangle( Point(), Point() );
+    return tools::Rectangle( Point(), Point() );
 }
 
 OUString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& )

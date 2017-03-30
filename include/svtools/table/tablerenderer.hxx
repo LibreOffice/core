@@ -84,7 +84,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PaintHeaderArea(
-                            OutputDevice& _rDevice, const Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
                             const StyleSettings& _rStyle ) = 0;
 
@@ -106,7 +106,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
-                            OutputDevice& _rDevice, const Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** prepares a row for painting
@@ -141,7 +141,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
-                            OutputDevice& _rDevice, const Rectangle& _rRowArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rRowArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** paints the header of a row
@@ -170,7 +170,7 @@ namespace svt { namespace table
                 the style to be used for drawing
         */
         virtual void    PaintRowHeader( bool i_hasControlFocus, bool _bSelected,
-                            OutputDevice& _rDevice, Rectangle const & _rArea,
+                            OutputDevice& _rDevice, tools::Rectangle const & _rArea,
                             StyleSettings const & _rStyle ) = 0;
 
         /** paints a certain cell
@@ -201,7 +201,7 @@ namespace svt { namespace table
         */
         virtual void    PaintCell( ColPos const i_col,
                             bool i_hasControlFocus, bool _bSelected,
-                            OutputDevice& _rDevice, const Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** draws a cell cursor in the given rectangle
@@ -209,14 +209,14 @@ namespace svt { namespace table
             The cell cursor is used to indicate the active/current cell
             of a table control.
         */
-        virtual void    ShowCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) = 0;
+        virtual void    ShowCellCursor( vcl::Window& _rView, const tools::Rectangle& _rCursorRect) = 0;
 
         /** hides the cell cursor previously drawn into the given rectangle
 
             The cell cursor is used to indicate the active/current cell
             of a table control.
         */
-        virtual void    HideCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) = 0;
+        virtual void    HideCellCursor( vcl::Window& _rView, const tools::Rectangle& _rCursorRect) = 0;
 
         /** checks whether a given cell content fits into a given target area on a given device.
 
@@ -232,7 +232,7 @@ namespace svt { namespace table
         */
         virtual bool    FitsIntoCell(
                             css::uno::Any const & i_cellContent,
-                            OutputDevice& i_targetDevice, Rectangle const & i_targetArea
+                            OutputDevice& i_targetDevice, tools::Rectangle const & i_targetArea
                         ) const = 0;
 
         /** attempts to format the content of the given cell as string

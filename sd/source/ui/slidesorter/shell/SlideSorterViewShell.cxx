@@ -436,7 +436,7 @@ void SlideSorterViewShell::ExecStatusBar (SfxRequest& )
 }
 
 void SlideSorterViewShell::Paint (
-    const Rectangle& rBBox,
+    const ::tools::Rectangle& rBBox,
     ::sd::Window* pWindow)
 {
     SetActiveWindow (pWindow);
@@ -582,12 +582,12 @@ void SlideSorterViewShell::SetZoom (long int )
     // the window.
 }
 
-void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
+void SlideSorterViewShell::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 {
     OSL_ASSERT(mpSlideSorter.get()!=nullptr);
     Size aPageSize (mpSlideSorter->GetView().GetLayouter().GetPageObjectSize());
 
-    Rectangle aRect(rZoomRect);
+    ::tools::Rectangle aRect(rZoomRect);
 
     if (aRect.GetWidth()  < aPageSize.Width())
     {

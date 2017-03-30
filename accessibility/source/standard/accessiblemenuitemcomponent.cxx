@@ -258,7 +258,7 @@ awt::Rectangle OAccessibleMenuItemComponent::implGetBounds()
         vcl::Window* pWindow = m_pParent->GetWindow();
         if ( pWindow )
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
+            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
             awt::Point aWindowScreenLoc = AWTPoint( aRect.TopLeft() );
 
             // get position of accessible parent in screen coordinates

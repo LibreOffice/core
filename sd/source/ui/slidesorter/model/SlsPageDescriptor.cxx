@@ -209,9 +209,9 @@ void PageDescriptor::SetCoreSelection()
     }
 }
 
-Rectangle PageDescriptor::GetBoundingBox() const
+::tools::Rectangle PageDescriptor::GetBoundingBox() const
 {
-    Rectangle aBox (maBoundingBox);
+    ::tools::Rectangle aBox (maBoundingBox);
     const Point aOffset (maVisualState.GetLocationOffset());
     aBox.Move(aOffset.X(), aOffset.Y());
     return aBox;
@@ -225,7 +225,7 @@ Point PageDescriptor::GetLocation (const bool bIgnoreOffset) const
         return maBoundingBox.TopLeft() + maVisualState.GetLocationOffset();
 }
 
-void PageDescriptor::SetBoundingBox (const Rectangle& rBoundingBox)
+void PageDescriptor::SetBoundingBox (const ::tools::Rectangle& rBoundingBox)
 {
     maBoundingBox = rBoundingBox;
 }

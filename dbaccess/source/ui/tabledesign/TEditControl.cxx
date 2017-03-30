@@ -304,7 +304,7 @@ bool OTableEditorCtrl::SeekRow(long _nRow)
     return SetDataPtr(_nRow);
 }
 
-void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
+void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                                    sal_uInt16 nColumnId ) const
 {
     const OUString aText( GetCellText( m_nCurrentPos, nColumnId ));
@@ -1329,13 +1329,13 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     sal_uInt16 nSelId = GetColumnId(
                         sal::static_int_cast< sal_uInt16 >(
                             FirstSelectedColumn() ) );
-                    ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
+                    ::tools::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }
                 else if ( GetSelectRowCount() > 0 )
                 {
-                    ::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID ) );
+                    ::tools::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }

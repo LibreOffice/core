@@ -315,7 +315,7 @@ public:
         nothing had to be cropped, because e.g. the crop rectangle
         included the bitmap, false is returned, too!
      */
-    bool                    Crop( const Rectangle& rRectPixel );
+    bool                    Crop( const tools::Rectangle& rRectPixel );
 
     /** Expand the bitmap by pixel padding
 
@@ -359,13 +359,13 @@ public:
         empty.
      */
     bool                    CopyPixel(
-                                const Rectangle& rRectDst,
-                                const Rectangle& rRectSrc,
+                                const tools::Rectangle& rRectDst,
+                                const tools::Rectangle& rRectSrc,
                                 const Bitmap* pBmpSrc = nullptr );
 
     bool                    CopyPixel_AlphaOptimized(
-                                const Rectangle& rRectDst,
-                                const Rectangle& rRectSrc,
+                                const tools::Rectangle& rRectDst,
+                                const tools::Rectangle& rRectSrc,
                                 const Bitmap* pBmpSrc );
 
     /** Perform boolean operations with another bitmap
@@ -510,7 +510,7 @@ public:
 
         @return the generated region.
      */
-    vcl::Region                  CreateRegion( const Color& rColor, const Rectangle& rRect ) const;
+    vcl::Region                  CreateRegion( const Color& rColor, const tools::Rectangle& rRect ) const;
 
     /** Replace all pixel where the given mask is on with the specified color
 

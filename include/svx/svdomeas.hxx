@@ -91,7 +91,7 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const override;
+    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrMeasureObj* Clone() const override;
 
     virtual OUString TakeObjNameSingul() const override;
@@ -135,10 +135,10 @@ public:
 
     virtual bool BegTextEdit(SdrOutliner& rOutl) override;
     virtual const Size& GetTextSize() const override;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-        Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
-    virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const override;
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const override;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
+        tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
+    virtual void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const override;
+    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const override;
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
     virtual OutlinerParaObject* GetOutlinerParaObject() const override;

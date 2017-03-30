@@ -1022,7 +1022,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     return aPageSize;
 }
 
-static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GDIMetaFile& io_rSubPage, bool i_bDrawBorder )
+static void appendSubPage( GDIMetaFile& o_rMtf, const tools::Rectangle& i_rClipRect, GDIMetaFile& io_rSubPage, bool i_bDrawBorder )
 {
     // intersect all clipregion actions with our clip rect
     io_rSubPage.WindStart();
@@ -1048,7 +1048,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
         o_rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::CLIPREGION | PushFlags::MAPMODE ) );
         o_rMtf.AddAction( new MetaMapModeAction( MapMode( MapUnit::Map100thMM ) ) );
 
-        Rectangle aBorderRect( i_rClipRect );
+        tools::Rectangle aBorderRect( i_rClipRect );
         o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), true ) );
         o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), false ) );
         o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
@@ -1183,7 +1183,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                 aPageFile.Move( nX, nY, mpImplData->mxPrinter->GetDPIX(), mpImplData->mxPrinter->GetDPIY() );
                 aPageFile.WindStart();
                 // calculate border rectangle
-                Rectangle aSubPageRect( Point( nX, nY ),
+                tools::Rectangle aSubPageRect( Point( nX, nY ),
                                         Size( long(double(aPageSize.aSize.Width())*fScale),
                                               long(double(aPageSize.aSize.Height())*fScale) ) );
 

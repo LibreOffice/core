@@ -87,12 +87,12 @@ public:
                         Polygon( sal_uInt16 nSize );
                         Polygon( sal_uInt16 nPoints, const Point* pPtAry,
                                  const PolyFlags* pFlagAry = nullptr );
-                        Polygon( const Rectangle& rRect );
-                        Polygon( const Rectangle& rRect,
+                        Polygon( const tools::Rectangle& rRect );
+                        Polygon( const tools::Rectangle& rRect,
                                  sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
                         Polygon( const Point& rCenter,
                                  long nRadX, long nRadY );
-                        Polygon( const Rectangle& rBound,
+                        Polygon( const tools::Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
                                  PolyStyle ePolyStyle = PolyStyle::Arc,
                                  bool bWholeCircle = false );
@@ -117,10 +117,10 @@ public:
 
     void                Clear();
 
-    Rectangle           GetBoundRect() const;
+    tools::Rectangle           GetBoundRect() const;
     bool                IsInside( const Point& rPt ) const;
     double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 );
-    void                Clip( const Rectangle& rRect );
+    void                Clip( const tools::Rectangle& rRect );
     void                Optimize( PolyOptimizeFlags nOptimizeFlags );
 
     /** Adaptive subdivision of polygons with curves
@@ -210,8 +210,8 @@ public:
     void                Clear();
 
     sal_uInt16          Count() const;
-    Rectangle           GetBoundRect() const;
-    void                Clip( const Rectangle& rRect );
+    tools::Rectangle           GetBoundRect() const;
+    void                Clip( const tools::Rectangle& rRect );
     void                Optimize( PolyOptimizeFlags nOptimizeFlags );
 
     /** Adaptive subdivision of polygons with curves

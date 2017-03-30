@@ -83,9 +83,9 @@ public:
         @return
             The new zoom factor is returned as integral percent value.
     */
-    long SetZoomRect (const Rectangle& rZoomRect);
+    long SetZoomRect (const ::tools::Rectangle& rZoomRect);
 
-    long GetZoomForRect( const Rectangle& rZoomRect );
+    long GetZoomForRect( const ::tools::Rectangle& rZoomRect );
 
     void SetMinZoomAutoCalc (bool bAuto);
 
@@ -170,7 +170,7 @@ protected:
 
     virtual void Resize() override;
     virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
@@ -191,7 +191,7 @@ protected:
     OUString GetSurroundingText() const override;
     Selection GetSurroundingTextSelection() const override;
     /// @see OutputDevice::LogicInvalidate().
-    void LogicInvalidate(const Rectangle* pRectangle) override;
+    void LogicInvalidate(const ::tools::Rectangle* pRectangle) override;
 
     FactoryFunction GetUITestFactory() const override;
 };

@@ -176,12 +176,12 @@ public:
 
     void addRGBA( const Color& rColor );
     void addRGB( const Color& rColor );
-    void addRect( const Rectangle& rRect );
+    void addRect( const tools::Rectangle& rRect );
     void addMatrix( const ::basegfx::B2DHomMatrix& rMatrix ); // #i73264#
     void addStream( SvStream& rIn );
 
     static void writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ); // #i73264#
-    static void writeRect( SvStream& rOut, const Rectangle& rRect );
+    static void writeRect( SvStream& rOut, const tools::Rectangle& rRect );
 
 private:
     sal_uInt8 mnTagId;
@@ -215,7 +215,7 @@ public:
     explicit FillStyle( const Color& rSolidColor );
 
     /** this c'tor creates a linear or radial gradient fill style */
-    FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient );
+    FillStyle( const tools::Rectangle& rBoundRect, const Gradient& rGradient );
 
     /** this c'tor creates a tiled or clipped bitmap fill style */
     FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B2DHomMatrix& rMatrix ); // #i73264#
@@ -230,7 +230,7 @@ private:
     sal_uInt16      mnBitmapId;
     Color           maColor;
     Gradient        maGradient;
-    Rectangle       maBoundRect;
+    tools::Rectangle       maBoundRect;
 };
 
 
@@ -317,7 +317,7 @@ private:
     sal_uInt16 createID() { return mnNextId++; }
 
     void Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
-    void Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const Rectangle& rClipRect, bool bMap );
+    void Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const tools::Rectangle& rClipRect, bool bMap );
     void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
     void Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void Impl_writeActions( const GDIMetaFile& rMtf );
@@ -329,7 +329,7 @@ private:
     void Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor );
     void Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = nullptr );
-    void Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY );
+    void Impl_writeRect( const tools::Rectangle& rRect, long nRadX, long nRadY );
     void Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY );
     bool Impl_writeFilling( SvtGraphicFill& rFilling );
     bool Impl_writeStroke( SvtGraphicStroke& rStroke );

@@ -1685,7 +1685,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                 SdAnimationInfo* pInfo     = SdDrawDocument::GetAnimationInfo(pObject);
                 SdIMapInfo*      pIMapInfo = SdDrawDocument::GetIMapInfo(pObject);
 
-                Rectangle aRect(pObject->GetCurrentBoundRect());
+                ::tools::Rectangle aRect(pObject->GetCurrentBoundRect());
                 Point     aLogPos(aRect.TopLeft());
                 bool      bIsSquare = aRect.GetWidth() == aRect.GetHeight();
 
@@ -1740,7 +1740,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                         {
                             case IMAP_OBJ_RECTANGLE:
                             {
-                                Rectangle aArea(static_cast<IMapRectangleObject*>(pArea)->
+                                ::tools::Rectangle aArea(static_cast<IMapRectangleObject*>(pArea)->
                                                  GetRectangle(false));
 
                                 // conversion into pixel coordinates
@@ -2822,7 +2822,7 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
 }
 
 // create area for a rectangle; we expect pixel coordinates
-OUString HtmlExport::CreateHTMLRectArea( const Rectangle& rRect,
+OUString HtmlExport::CreateHTMLRectArea( const ::tools::Rectangle& rRect,
                                        const OUString& rHRef )
 {
     OUString aStr(

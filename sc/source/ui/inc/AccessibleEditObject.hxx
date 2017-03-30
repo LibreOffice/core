@@ -85,10 +85,10 @@ public:
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen() const override;
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBox() const override;
 
 public:
     ///=====  XAccessibleContext  ==============================================

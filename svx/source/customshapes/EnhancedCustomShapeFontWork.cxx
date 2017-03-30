@@ -62,19 +62,19 @@ using namespace com::sun::star::uno;
 struct FWCharacterData                  // representing a single character
 {
     std::vector< tools::PolyPolygon >   vOutlines;
-    Rectangle                           aBoundRect;
+    tools::Rectangle                           aBoundRect;
 };
 struct FWParagraphData                  // representing a single paragraph
 {
     OUString                            aString;
     std::vector< FWCharacterData >      vCharacters;
-    Rectangle                           aBoundRect;
+    tools::Rectangle                           aBoundRect;
     SvxFrameDirection                   nFrameDirection;
 };
 struct FWTextArea                       // representing multiple concluding paragraphs
 {
     std::vector< FWParagraphData >      vParagraphs;
-    Rectangle                           aBoundRect;
+    tools::Rectangle                           aBoundRect;
 };
 struct FWData                           // representing the whole text
 {
@@ -279,7 +279,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 // vertical _> each single character needs to be rotated by 90
                 sal_Int32 i;
                 sal_Int32 nHeight = 0;
-                Rectangle aSingleCharacterUnion;
+                tools::Rectangle aSingleCharacterUnion;
                 for ( i = 0; i < rText.getLength(); i++ )
                 {
                     FWCharacterData aCharacterData;
@@ -364,7 +364,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                         rPolyPoly.Move( 0, nVerticalOffset );
 
                     // retrieving the boundrect for the paragraph
-                    Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+                    tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
                     aParagraphIter->aBoundRect.Union( aBoundRect );
                 }
                 ++aCharacterIter;
@@ -374,13 +374,13 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
         if ( aParagraphIter->aBoundRect.IsEmpty() )
         {
             if ( rTextArea.aBoundRect.IsEmpty() )
-                rTextArea.aBoundRect = Rectangle( Point( 0, 0 ), Size( 1, rFWData.nSingleLineHeight ) );
+                rTextArea.aBoundRect = tools::Rectangle( Point( 0, 0 ), Size( 1, rFWData.nSingleLineHeight ) );
             else
                 rTextArea.aBoundRect.Bottom() += rFWData.nSingleLineHeight;
         }
         else
         {
-            Rectangle& rParagraphBoundRect = aParagraphIter->aBoundRect;
+            tools::Rectangle& rParagraphBoundRect = aParagraphIter->aBoundRect;
             rTextArea.aBoundRect.Union( rParagraphBoundRect );
 
             if ( bSameLetterHeights )
@@ -393,7 +393,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd( aCharacterIter->vOutlines.end() );
                     while( aOutlineIter != aOutlineIEnd )
                     {
-                        Rectangle aPolyPolyBoundRect( aOutlineIter->GetBoundRect() );
+                        tools::Rectangle aPolyPolyBoundRect( aOutlineIter->GetBoundRect() );
                         if (aPolyPolyBoundRect.GetHeight() != rParagraphBoundRect.GetHeight() && aPolyPolyBoundRect.GetHeight())
                             aOutlineIter->Scale( 1.0, (double)rParagraphBoundRect.GetHeight() / aPolyPolyBoundRect.GetHeight() );
                         aPolyPolyBoundRect = aOutlineIter->GetBoundRect();
@@ -552,7 +552,7 @@ void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& rDistanc
 }
 
 void InsertMissingOutlinePoints( const tools::Polygon& /*rOutlinePoly*/, const std::vector< double >& rDistances,
-                                 const Rectangle& rTextAreaBoundRect, tools::Polygon& rPoly )
+                                 const tools::Rectangle& rTextAreaBoundRect, tools::Polygon& rPoly )
 {
     sal_uInt16 nSize = rPoly.GetSize();
     if (nSize == 0)
@@ -641,7 +641,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
     sal_uInt16 nOutline2dIdx = 0;
     while( aTextAreaIter != aTextAreaIEnd )
     {
-        Rectangle rTextAreaBoundRect = aTextAreaIter->aBoundRect;
+        tools::Rectangle rTextAreaBoundRect = aTextAreaIter->aBoundRect;
         sal_Int32 nLeft = rTextAreaBoundRect.Left();
         sal_Int32 nTop = rTextAreaBoundRect.Top();
         sal_Int32 nWidth = rTextAreaBoundRect.GetWidth();
@@ -672,7 +672,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                             while( aOutlineIter != aOutlineIEnd )
                             {
                                 tools::PolyPolygon& rPolyPoly = *aOutlineIter;
-                                Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+                                tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
                                 double fx1 = aBoundRect.Left() - nLeft;
                                 double fx2 = aBoundRect.Right() - nLeft;
                                 double fy1, fy2;

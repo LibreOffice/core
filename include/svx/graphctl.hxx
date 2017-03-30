@@ -63,7 +63,7 @@ protected:
     SdrModel*           pModel;
     SdrView*            pView;
 
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        KeyInput(const KeyEvent& rKEvt) override;
     virtual void        MouseButtonDown(const MouseEvent& rMEvt) override;
@@ -125,7 +125,7 @@ public:
         : rWin(rGraphWin)
     {}
 
-    virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect) override;
+    virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& rOldBoundRect) override;
 };
 
 SdrObjUserCall* GraphCtrl::GetSdrUserCall()

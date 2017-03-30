@@ -156,11 +156,11 @@ protected:
     const SdrHdlList&  GetHdlList() const              { return getSdrDragView().GetHdlList(); }
     void               AddUndo(SdrUndoAction* pUndo)   { getSdrDragView().AddUndo(pUndo); }
     bool               IsDragLimit()                   { return getSdrDragView().mbDragLimit; }
-    const Rectangle&   GetDragLimitRect()              { return getSdrDragView().maDragLimit; }
+    const tools::Rectangle&   GetDragLimitRect()              { return getSdrDragView().maDragLimit; }
     const SdrMarkList& GetMarkedObjectList()                   { return getSdrDragView().GetMarkedObjectList(); }
     Point              GetSnapPos(const Point& rPt) const { return getSdrDragView().GetSnapPos(rPt,getSdrDragView().mpMarkedPV); }
     SdrSnap            SnapPos(Point& rPt) const       { return getSdrDragView().SnapPos(rPt,getSdrDragView().mpMarkedPV); }
-    inline const Rectangle& GetMarkedRect() const;
+    inline const tools::Rectangle& GetMarkedRect() const;
     SdrPageView*       GetDragPV() const;
     SdrObject*         GetDragObj() const;
     bool               IsDraggingPoints() const        { return getSdrDragView().IsDraggingPoints(); }
@@ -203,7 +203,7 @@ public:
     bool getSolidDraggingActive() const { return mbSolidDraggingActive; }
 };
 
-inline const Rectangle& SdrDragMethod::GetMarkedRect() const
+inline const tools::Rectangle& SdrDragMethod::GetMarkedRect() const
 {
     return getSdrDragView().meDragHdl==SdrHdlKind::Poly ? getSdrDragView().GetMarkedPointsRect() :
            getSdrDragView().meDragHdl==SdrHdlKind::Glue ? getSdrDragView().GetMarkedGluePointsRect() :

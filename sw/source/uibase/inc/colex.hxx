@@ -99,7 +99,7 @@ private:
     SwFormatCol    m_aCols;
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
     SwColumnOnlyExample(vcl::Window*);

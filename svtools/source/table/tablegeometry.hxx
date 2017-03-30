@@ -38,13 +38,13 @@ namespace svt { namespace table
     {
     protected:
         const TableControl_Impl&    m_rControl;
-        const Rectangle&            m_rBoundaries;
-        Rectangle                   m_aRect;
+        const tools::Rectangle&            m_rBoundaries;
+        tools::Rectangle                   m_aRect;
 
     protected:
         TableGeometry(
                 const TableControl_Impl& _rControl,
-                const Rectangle& _rBoundaries
+                const tools::Rectangle& _rBoundaries
             )
             :m_rControl( _rControl )
             ,m_rBoundaries( _rBoundaries )
@@ -57,7 +57,7 @@ namespace svt { namespace table
         const TableControl_Impl&    getControl() const      { return m_rControl; }
 
         // status
-        const Rectangle&    getRect() const { return m_aRect; }
+        const tools::Rectangle&    getRect() const { return m_aRect; }
         bool                isValid() const { return !m_aRect.GetIntersection( m_rBoundaries ).IsEmpty(); }
     };
 
@@ -73,7 +73,7 @@ namespace svt { namespace table
     public:
         TableRowGeometry(
             TableControl_Impl const & _rControl,
-            Rectangle const & _rBoundaries,
+            tools::Rectangle const & _rBoundaries,
             RowPos const _nRow,
             bool const i_allowVirtualRows = false
                 // allow rows >= getRowCount()?
@@ -100,7 +100,7 @@ namespace svt { namespace table
     public:
         TableColumnGeometry(
             TableControl_Impl const & _rControl,
-            Rectangle const & _rBoundaries,
+            tools::Rectangle const & _rBoundaries,
             ColPos const _nCol
         );
 
@@ -128,7 +128,7 @@ namespace svt { namespace table
     public:
         TableCellGeometry(
                 TableControl_Impl const & _rControl,
-                Rectangle const & _rBoundaries,
+                tools::Rectangle const & _rBoundaries,
                 ColPos const _nCol,
                 RowPos const _nRow
             )
@@ -146,7 +146,7 @@ namespace svt { namespace table
         {
         }
 
-        Rectangle   getRect() const     { return m_aRow.getRect().GetIntersection( m_aCol.getRect() ); }
+        tools::Rectangle   getRect() const     { return m_aRow.getRect().GetIntersection( m_aCol.getRect() ); }
         ColPos      getColumn() const   { return m_aCol.getCol(); }
         bool        isValid() const     { return !getRect().IsEmpty(); }
 

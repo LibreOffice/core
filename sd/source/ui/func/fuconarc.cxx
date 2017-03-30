@@ -84,7 +84,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
         const SfxUInt32Item* pPhiStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLESTART);
         const SfxUInt32Item* pPhiEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLEEND);
 
-        Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
+        ::tools::Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () - pAxisY->GetValue () / 2,
                                    pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () + pAxisY->GetValue () / 2);
@@ -198,7 +198,7 @@ void FuConstructArc::Activate()
     FuConstruct::Activate();
 }
 
-SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
 {
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
@@ -209,7 +209,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
     {
         if( dynamic_cast< const SdrCircObj *>( pObj ) !=  nullptr)
         {
-            Rectangle aRect(rRectangle);
+            ::tools::Rectangle aRect(rRectangle);
 
             if(SID_DRAW_ARC == nID ||
                 SID_DRAW_CIRCLEARC == nID ||

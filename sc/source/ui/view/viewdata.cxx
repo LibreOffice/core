@@ -959,7 +959,7 @@ void ScViewData::ResetOldCursor()
     pThisTab->mbOldCursorValid = false;
 }
 
-Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
+tools::Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
                                     vcl::Window* pWin, const ScPatternAttr* pPattern,
                                     bool bForceToTop )
 {
@@ -1046,7 +1046,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     bool bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
 
-    Rectangle aPixRect = ScEditUtil( pDoc, nNewX,nNewY,nTabNo, GetScrPos(nNewX,nNewY,eWhich),
+    tools::Rectangle aPixRect = ScEditUtil( pDoc, nNewX,nNewY,nTabNo, GetScrPos(nNewX,nNewY,eWhich),
                                         pWin, nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
                                             GetEditArea( pPattern, true );
 
@@ -1055,7 +1055,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     if ( GetEditAdjust() == SvxAdjust::Right || bAsianVertical )
         aPixRect.Right() += 1;
 
-    Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
+    tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
     pEditView[eWhich]->SetOutputArea( aOutputArea );
 
     if ( bActive && eWhich == GetActivePart() )
@@ -1118,7 +1118,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             //  (and same line breaks) as for output.
 
             Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( pDoc,nNewX,nNewY,nTabNo, Point(0,0), pWin,
+            tools::Rectangle aUtilRect = ScEditUtil( pDoc,nNewX,nNewY,nTabNo, Point(0,0), pWin,
                                     HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
             aPaperSize.Width() = aUtilRect.GetWidth();
         }
@@ -1126,7 +1126,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         // sichtbarer Ausschnitt
         Size aPaper = pNewEngine->GetPaperSize();
-        Rectangle aVis = pEditView[eWhich]->GetVisArea();
+        tools::Rectangle aVis = pEditView[eWhich]->GetVisArea();
         long nDiff = aVis.Right() - aVis.Left();
         if ( GetEditAdjust() == SvxAdjust::Right )
         {
@@ -1233,7 +1233,7 @@ void ScViewData::EditGrowX()
     SCCOL nRight = nLeft + VisibleCellsX(eHWhich);
 
     Size        aSize = pEngine->GetPaperSize();
-    Rectangle   aArea = pCurView->GetOutputArea();
+    tools::Rectangle   aArea = pCurView->GetOutputArea();
     long        nOldRight = aArea.Right();
 
     // Margin is already included in the original width.
@@ -1341,7 +1341,7 @@ void ScViewData::EditGrowX()
     {
         if ( bMoveArea || bGrowCentered || bGrowBackwards || bLayoutRTL )
         {
-            Rectangle aVis = pCurView->GetVisArea();
+            tools::Rectangle aVis = pCurView->GetVisArea();
 
             if ( bGrowCentered )
             {
@@ -1427,7 +1427,7 @@ void ScViewData::EditGrowY( bool bInitial )
     SCROW nBottom = GetPosY(eVWhich) + VisibleCellsY(eVWhich);
 
     Size        aSize = pEngine->GetPaperSize();
-    Rectangle   aArea = pCurView->GetOutputArea();
+    tools::Rectangle   aArea = pCurView->GetOutputArea();
     long        nOldBottom = aArea.Bottom();
     long        nTextHeight = pEngine->GetTextHeight();
 
@@ -1496,7 +1496,7 @@ void ScViewData::ResetEditView()
                 lcl_LOKRemoveWindow(GetViewShell(), (ScSplitPos)(i));
                 pEngine = pEditView[i]->GetEditEngine();
                 pEngine->RemoveView(pEditView[i]);
-                pEditView[i]->SetOutputArea( Rectangle() );
+                pEditView[i]->SetOutputArea( tools::Rectangle() );
             }
             bEditActive[i] = false;
         }
@@ -2164,7 +2164,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     SetCurY( nY1 );
 }
 
-void ScViewData::SetScreen( const Rectangle& rVisArea )
+void ScViewData::SetScreen( const tools::Rectangle& rVisArea )
 {
     SetScreenPos( rVisArea.TopLeft() );
 

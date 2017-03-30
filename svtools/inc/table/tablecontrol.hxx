@@ -132,7 +132,7 @@ namespace svt { namespace table
 
 
         // IAccessibleTable
-        virtual Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
+        virtual tools::Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
         virtual void GrabFocus() override;
         virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
         virtual vcl::Window* GetAccessibleParentWindow() const override;
@@ -142,11 +142,11 @@ namespace svt { namespace table
         virtual long GetRowCount() const override;
         virtual long GetColumnCount() const override;
         virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint ) override;
-        virtual Rectangle calcHeaderRect( bool _bIsColumnBar ) override;
-        virtual Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) override;
-        virtual Rectangle calcTableRect() override;
-        virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) override;
-        virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
+        virtual tools::Rectangle calcHeaderRect( bool _bIsColumnBar ) override;
+        virtual tools::Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) override;
+        virtual tools::Rectangle calcTableRect() override;
+        virtual tools::Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) override;
+        virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
         virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
         virtual OUString GetRowDescription( sal_Int32 _nRow ) const override;

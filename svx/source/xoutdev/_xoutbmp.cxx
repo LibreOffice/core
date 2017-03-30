@@ -520,12 +520,12 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 
 tools::Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const XOutFlags nFlags,
                                         const sal_uInt8 cEdgeDetectThreshold,
-                                        const Rectangle* pWorkRectPixel )
+                                        const tools::Rectangle* pWorkRectPixel )
 {
     Bitmap      aWorkBmp;
     tools::Polygon aRetPoly;
     Point       aTmpPoint;
-    Rectangle   aWorkRect( aTmpPoint, rBmp.GetSizePixel() );
+    tools::Rectangle   aWorkRect( aTmpPoint, rBmp.GetSizePixel() );
 
     if( pWorkRectPixel )
         aWorkRect.Intersection( *pWorkRectPixel );

@@ -677,11 +677,11 @@ void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
     }
 }
 
-Rectangle SfxFrame::GetTopOuterRectPixel_Impl() const
+tools::Rectangle SfxFrame::GetTopOuterRectPixel_Impl() const
 {
     Size aSize( GetWindow().GetOutputSizePixel() );
     Point aPoint;
-    return ( Rectangle ( aPoint, aSize ) );
+    return ( tools::Rectangle ( aPoint, aSize ) );
 }
 
 SfxWorkWindow* SfxFrame::GetWorkWindow_Impl() const

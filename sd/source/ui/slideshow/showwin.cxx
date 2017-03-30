@@ -248,7 +248,7 @@ void ShowWindow::MouseButtonUp(const MouseEvent& rMEvt)
 /**
  * if FuSlideShow is still available, forward it
  */
-void ShowWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void ShowWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect)
 {
     if( (meShowWindowMode == SHOWWINDOWMODE_NORMAL) || (meShowWindowMode == SHOWWINDOWMODE_PREVIEW) )
     {
@@ -576,7 +576,7 @@ IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent&, rEvent, void )
     }
 }
 
-void ShowWindow::SetPresentationArea( const Rectangle& rPresArea )
+void ShowWindow::SetPresentationArea( const ::tools::Rectangle& rPresArea )
 {
     maPresArea = rPresArea;
 }

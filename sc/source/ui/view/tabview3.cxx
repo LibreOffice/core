@@ -389,10 +389,10 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
                     // New area extended to the right of the sheet after last column
                     // including overlapping area with aNewRowArea
-                    Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
+                    tools::Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
                     // New area extended to the bottom of the sheet after last row
                     // excluding overlapping area with aNewColArea
-                    Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
+                    tools::Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
 
                     // Only invalidate if spreadsheet extended to the right
                     if (aNewColArea.getWidth())
@@ -903,7 +903,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             if (pCare)
             {
                 bool bLimit = false;
-                Rectangle aDlgPixel;
+                tools::Rectangle aDlgPixel;
                 Size aWinSize;
                 vcl::Window* pWin = GetActiveWin();
                 if (pWin)
@@ -922,7 +922,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                             Point aStart = aViewData.GetScrPos( nCurX, nCurY, eAlign );
                             long nCSX, nCSY;
                             aViewData.GetMergeSizePixel( nCurX, nCurY, nCSX, nCSY );
-                            Rectangle aCursor( aStart, Size( nCSX, nCSY ) );
+                            tools::Rectangle aCursor( aStart, Size( nCSX, nCSY ) );
                             if ( aCursor.IsOver( aDlgPixel ) )
                                 bLimit = true;      // cell is covered by the dialog
                         }
@@ -1873,7 +1873,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
             ScClient* pClient = static_cast<ScClient*>(aViewData.GetViewShell()->GetIPClient());
             if ( pClient && pClient->IsObjectInPlaceActive() )
             {
-                Rectangle aObjArea = pClient->GetObjArea();
+                tools::Rectangle aObjArea = pClient->GetObjArea();
                 if ( nTab == aViewData.GetRefTabNo() )
                 {
                     // move to its original position
@@ -1881,7 +1881,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
                     SdrOle2Obj* pDrawObj = pClient->GetDrawObj();
                     if ( pDrawObj )
                     {
-                        Rectangle aRect = pDrawObj->GetLogicRect();
+                        tools::Rectangle aRect = pDrawObj->GetLogicRect();
                         MapMode aMapMode( MapUnit::Map100thMM );
                         Size aOleSize = pDrawObj->GetOrigObjSize( &aMapMode );
                         aRect.SetSize( aOleSize );
@@ -2090,7 +2090,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     SCROW nRow2 = aViewData.GetEditEndRow();
     bool bPaint[4];
     bool bNotifyAcc = false;
-    Rectangle aRectangle[4];
+    tools::Rectangle aRectangle[4];
 
     bool bExtended = nRow1 != nRow2;                    // column is painted to the end anyway
 
@@ -2124,7 +2124,7 @@ void ScTabView::KillEditView( bool bNoPaint )
 
             if (comphelper::LibreOfficeKit::isActive())
             {
-                const Rectangle& rInvRect = aRectangle[i];
+                const tools::Rectangle& rInvRect = aRectangle[i];
                 pGridWin[i]->Invalidate(rInvRect);
 
                 // invalidate other views
@@ -2317,7 +2317,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             }
         }
 
-        pGridWin[i]->Invalidate( pGridWin[i]->PixelToLogic( Rectangle( aStart,aEnd ) ) );
+        pGridWin[i]->Invalidate( pGridWin[i]->PixelToLogic( tools::Rectangle( aStart,aEnd ) ) );
     }
 
     // #i79909# Calling UpdateAllOverlays here isn't necessary and would lead to overlay calls from a timer,
@@ -2560,7 +2560,7 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
             else
                 nEndX = aViewData.GetScrPos( nEndCol+1, 0, eWhich ).X() - nLayoutSign;
             pColBar[eWhich]->Invalidate(
-                    Rectangle( nStartX, 0, nEndX, aWinSize.Height()-1 ) );
+                    tools::Rectangle( nStartX, 0, nEndX, aWinSize.Height()-1 ) );
         }
         if (pColOutline[eWhich])
             pColOutline[eWhich]->Invalidate();
@@ -2612,7 +2612,7 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
             else
                 nEndY = aViewData.GetScrPos( 0, nEndRow+1, eWhich ).Y() - 1;
             pRowBar[eWhich]->Invalidate(
-                    Rectangle( 0, nStartY, aWinSize.Width()-1, nEndY ) );
+                    tools::Rectangle( 0, nStartY, aWinSize.Width()-1, nEndY ) );
         }
         if (pRowOutline[eWhich])
             pRowOutline[eWhich]->Invalidate();
@@ -2773,7 +2773,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 
         pSelEngine->SetWindow(pGridWin[eWhich]);
         pSelEngine->SetWhich(eWhich);
-        pSelEngine->SetVisibleArea( Rectangle(Point(), pGridWin[eWhich]->GetOutputSizePixel()) );
+        pSelEngine->SetVisibleArea( tools::Rectangle(Point(), pGridWin[eWhich]->GetOutputSizePixel()) );
 
         pGridWin[eOld]->MoveMouseStatus(*pGridWin[eWhich]);
 
@@ -2792,7 +2792,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
             pColBar[eNewH]->SetIgnoreMove(false);
             pHdrSelEng->SetWindow( pColBar[eNewH] );
             long nWidth = pColBar[eNewH]->GetOutputSizePixel().Width();
-            pHdrSelEng->SetVisibleArea( Rectangle( 0, LONG_MIN, nWidth-1, LONG_MAX ) );
+            pHdrSelEng->SetVisibleArea( tools::Rectangle( 0, LONG_MIN, nWidth-1, LONG_MAX ) );
             pColBar[eNewH]->CaptureMouse();
         }
         if ( bLeftCap && pRowBar[eNewV] )
@@ -2801,7 +2801,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
             pRowBar[eNewV]->SetIgnoreMove(false);
             pHdrSelEng->SetWindow( pRowBar[eNewV] );
             long nHeight = pRowBar[eNewV]->GetOutputSizePixel().Height();
-            pHdrSelEng->SetVisibleArea( Rectangle( LONG_MIN, 0, LONG_MAX, nHeight-1 ) );
+            pHdrSelEng->SetVisibleArea( tools::Rectangle( LONG_MIN, 0, LONG_MAX, nHeight-1 ) );
             pRowBar[eNewV]->CaptureMouse();
         }
         aHdrFunc.SetWhich(eWhich);

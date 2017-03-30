@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 namespace vcl {
 
-void Window::ShowFocus( const Rectangle& rRect )
+void Window::ShowFocus( const tools::Rectangle& rRect )
 {
     if( mpWindowImpl->mbInShowFocus )
         return;
@@ -77,7 +77,7 @@ void Window::ShowFocus( const Rectangle& rRect )
             ImplInvertFocus( rRect );
         }
         if ( !pWinData->mpFocusRect )
-            pWinData->mpFocusRect = new Rectangle( rRect );
+            pWinData->mpFocusRect = new tools::Rectangle( rRect );
         else
             *(pWinData->mpFocusRect) = rRect;
         mpWindowImpl->mbFocusVisible = true;
@@ -127,7 +127,7 @@ void Window::HideFocus()
     mpWindowImpl->mbInHideFocus = false;
 }
 
-void Window::ShowTracking( const Rectangle& rRect, ShowTrackFlags nFlags )
+void Window::ShowTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlags )
 {
     ImplWinData* pWinData = ImplGetWinData();
 
@@ -146,7 +146,7 @@ void Window::ShowTracking( const Rectangle& rRect, ShowTrackFlags nFlags )
     }
 
     if ( !pWinData->mpTrackRect )
-        pWinData->mpTrackRect = new Rectangle( rRect );
+        pWinData->mpTrackRect = new tools::Rectangle( rRect );
     else
         *(pWinData->mpTrackRect) = rRect;
     pWinData->mnTrackFlags      = nFlags;
@@ -164,10 +164,10 @@ void Window::HideTracking()
     }
 }
 
-void Window::InvertTracking( const Rectangle& rRect, ShowTrackFlags nFlags )
+void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlags )
 {
     OutputDevice *pOutDev = GetOutDev();
-    Rectangle aRect( pOutDev->ImplLogicToDevicePixel( rRect ) );
+    tools::Rectangle aRect( pOutDev->ImplLogicToDevicePixel( rRect ) );
 
     if ( aRect.IsEmpty() )
         return;
@@ -202,7 +202,7 @@ void Window::InvertTracking( const Rectangle& rRect, ShowTrackFlags nFlags )
         if ( nFlags & ShowTrackFlags::Clip )
         {
             Point aPoint( mnOutOffX, mnOutOffY );
-            vcl::Region aRegion( Rectangle( aPoint,
+            vcl::Region aRegion( tools::Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
             ImplClipBoundaries( aRegion, false, false );
             pOutDev->SelectClipRegion( aRegion, pGraphics );
@@ -266,7 +266,7 @@ void Window::InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags 
         if ( nFlags & ShowTrackFlags::Clip )
         {
             Point aPoint( mnOutOffX, mnOutOffY );
-            vcl::Region aRegion( Rectangle( aPoint,
+            vcl::Region aRegion( tools::Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
             ImplClipBoundaries( aRegion, false, false );
             pOutDev->SelectClipRegion( aRegion, pGraphics );

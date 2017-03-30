@@ -83,7 +83,7 @@ namespace dbaui
 
     protected:
         virtual void    Resize() override;
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
         virtual void    MouseMove( const MouseEvent& rEvt ) override;
         virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -172,7 +172,7 @@ namespace dbaui
 
         /** returns the new sizing
         */
-        Rectangle getSizingRect(const Point& _rPos,const Size& _rOutputSize) const;
+        tools::Rectangle getSizingRect(const Point& _rPos,const Size& _rOutputSize) const;
 
         // window override
         virtual void                StateChanged( StateChangedType nStateChange ) override;

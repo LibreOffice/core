@@ -130,7 +130,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     //determine the size of the object
                     if(pObj->IsGroupObject())
                     {
-                        const Rectangle& rBoundRect = static_cast<SdrObjGroup*>(pObj)->GetCurrentBoundRect();
+                        const tools::Rectangle& rBoundRect = static_cast<SdrObjGroup*>(pObj)->GetCurrentBoundRect();
                         aStartPos.X() -= rBoundRect.GetWidth()/2;
                         aStartPos.Y() -= rBoundRect.GetHeight()/2;
                     }

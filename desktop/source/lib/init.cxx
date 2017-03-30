@@ -346,7 +346,7 @@ namespace {
 /// Represents an invalidated rectangle inside a given document part.
 struct RectangleAndPart
 {
-    Rectangle m_aRectangle;
+    tools::Rectangle m_aRectangle;
     int m_nPart;
 
     RectangleAndPart()
@@ -382,7 +382,7 @@ struct RectangleAndPart
         RectangleAndPart aRet;
         if (rPayload.compare(0, 5, "EMPTY") == 0) // payload starts with "EMPTY"
         {
-            aRet.m_aRectangle = Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
+            aRet.m_aRectangle = tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
             if (comphelper::LibreOfficeKit::isPartInInvalidation())
                 aRet.m_nPart = std::stol(rPayload.substr(6));
 
@@ -420,7 +420,7 @@ struct RectangleAndPart
 
             if (nWidth > 0 && nHeight > 0)
             {
-                aRet.m_aRectangle = Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
+                aRet.m_aRectangle = tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
             }
         }
         // else leave empty rect.
@@ -940,7 +940,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                 }
                                 else
                                 {
-                                    const Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
+                                    const tools::Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
                                     const bool bOverlap = !rcOverlap.IsEmpty();
                                     SAL_WARN("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString() << " => " <<
                                             rcOverlap.toString() << " Overlap: " << bOverlap);
@@ -1846,7 +1846,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     if (bDebug)
     {
         // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
-        Rectangle aRect(0, 0, 5, 5);
+        tools::Rectangle aRect(0, 0, 5, 5);
         aRect = pDevice->PixelToLogic(aRect);
         pDevice->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
         pDevice->SetFillColor(COL_LIGHTRED);
@@ -2675,7 +2675,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             return nullptr;
         }
 
-        Rectangle aRectangle;
+        tools::Rectangle aRectangle;
         if (aCommand.getLength() > aViewRowColumnHeaders.getLength())
         {
             // Command has parameters.
@@ -2710,7 +2710,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
                     nHeight = aValue.toInt32();
             }
             while (nParamIndex >= 0);
-            aRectangle = Rectangle(nX, nY, nX + nWidth, nY + nHeight);
+            aRectangle = tools::Rectangle(nX, nY, nX + nWidth, nY + nHeight);
         }
 
         OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
@@ -2808,7 +2808,7 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
         return;
     }
 
-    Rectangle aRectangle(Point(nX, nY), Size(nWidth, nHeight));
+    tools::Rectangle aRectangle(Point(nX, nY), Size(nWidth, nHeight));
     pDoc->setClientVisibleArea(aRectangle);
 }
 
@@ -2885,7 +2885,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             auto aDevice(
                 VclPtr<VirtualDevice>::Create(
                     nullptr, Size(1, 1), DeviceFormat::DEFAULT));
-            ::Rectangle aRect;
+            ::tools::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
             aFont.SetFontSize(Size(0, 25));
             aDevice->SetFont(aFont);

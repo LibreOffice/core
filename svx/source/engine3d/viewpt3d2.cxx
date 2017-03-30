@@ -118,7 +118,7 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
     return aViewPoint;
 }
 
-void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
+void Viewport3D::SetDeviceWindow(const tools::Rectangle& rRect)
 {
     long nNewW = rRect.GetWidth();
     long nNewH = rRect.GetHeight();

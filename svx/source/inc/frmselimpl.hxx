@@ -69,9 +69,9 @@ public:
     void MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const;
 
     void ClearClickArea() { maClickArea.Clear(); }
-    void AddClickRect( const Rectangle& rRect );
+    void AddClickRect( const tools::Rectangle& rRect );
     bool ContainsClickPoint( const Point& rPos ) const;
-    Rectangle GetClickBoundRect() const;
+    tools::Rectangle GetClickBoundRect() const;
 
     void SetKeyboardNeighbors(FrameBorderType eLeft, FrameBorderType eRight,
                               FrameBorderType eTop, FrameBorderType eBottom);

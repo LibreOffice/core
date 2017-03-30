@@ -101,14 +101,14 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
     }
 }
 
-Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
+tools::Rectangle PanelTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBox)
 {
     if (mpPanel != nullptr)
     {
         Image aImage (mpPanel->IsExpanded()
             ? Theme::GetImage(Theme::Image_Expand)
             : Theme::GetImage(Theme::Image_Collapse));
-        return Rectangle(
+        return tools::Rectangle(
             aImage.GetSizePixel().Width() + gaLeftIconPadding + gaRightIconPadding,
             rTitleBarBox.Top(),
             rTitleBarBox.Right(),
@@ -118,7 +118,7 @@ Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
         return rTitleBarBox;
 }
 
-void PanelTitleBar::PaintDecoration (vcl::RenderContext& rRenderContext, const Rectangle& /*rTitleBarBox*/)
+void PanelTitleBar::PaintDecoration (vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rTitleBarBox*/)
 {
     if (mpPanel != nullptr)
     {

@@ -61,12 +61,12 @@ private:
 protected:
     virtual long GetRowCount() const override;
     virtual bool SeekRow(long nRow) override;
-    virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const override;
+    virtual void PaintField(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const override;
     virtual void DoubleClick(const BrowserMouseEvent&) override;
     virtual void KeyInput(const KeyEvent& rEvt) override;
     virtual void Select() override;
     void SetDirty(); // is called for example in mode switches
-    virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
+    virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 public:
     SdrItemBrowserControl(vcl::Window* pParent);

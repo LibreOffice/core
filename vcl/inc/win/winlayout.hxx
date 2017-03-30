@@ -44,7 +44,7 @@ const int GLYPH_OFFSET_RATIO = GLYPH_SPACE_RATIO * 2;
 
 struct OpenGLGlyphDrawElement
 {
-    Rectangle maLocation;
+    tools::Rectangle maLocation;
     int maLeftOverhangs;
     OpenGLTexture maTexture;
     int mnBaselineOffset;
@@ -217,7 +217,7 @@ public:
         SalGraphics &rGraphics,
         HDC hDC) override;
 
-    inline bool BindDC(HDC hDC, Rectangle const & rRect = Rectangle(0, 0, 0, 0)) {
+    inline bool BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 0, 0)) {
         RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
         return SUCCEEDED(mpRT->BindDC(hDC, &rc));
     }
@@ -225,7 +225,7 @@ public:
     bool BindFont(HDC hDC) /*override*/;
     bool ReleaseFont() /*override*/;
 
-    std::vector<Rectangle>  GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const /*override*/;
+    std::vector<tools::Rectangle>  GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const /*override*/;
     ID2D1RenderTarget * GetRenderTarget() const { return mpRT; }
     IDWriteFontFace   * GetFontFace() const { return mpFontFace; }
     float               GetEmHeight() const { return mlfEmHeight; }

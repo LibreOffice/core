@@ -1506,15 +1506,15 @@ SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
 {
 }
 
-Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* pCurrPage,
-    const Rectangle& rRectangle) const
+tools::Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* pCurrPage,
+    const tools::Rectangle& rRectangle) const
 {
     SwPostItMode nPostItMode = mrPrintData.GetPrintPostIts();
     if (nPostItMode != SwPostItMode::InMargins)
         return rRectangle;
     //the page has been scaled by 75% and vertically centered, so adjust these
     //rectangles equivalently
-    Rectangle aRect(rRectangle);
+    tools::Rectangle aRect(rRectangle);
     Size aRectSize(aRect.GetSize());
     double fScale = 0.75;
     aRectSize.Width() = (aRectSize.Width() * fScale);
@@ -1609,7 +1609,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             aNote.Contents = pField->GetText();
 
                             // Link Export
-                            Rectangle aRect(SwRectToPDFRect(pCurrPage, rNoteRect.SVRect()));
+                            tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rNoteRect.SVRect()));
                             pPDFExtOutDevData->CreateNote(aRect, aNote, aNotePageNum);
                         }
                     }
@@ -1683,7 +1683,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         // Destination Export
                         if ( -1 != nDestPageNum )
                         {
-                            Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                            tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                             nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
                         }
                     }
@@ -1707,7 +1707,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             for (sal_Int32 aLinkPageNum : aLinkPageNums)
                             {
                                 // Link Export
-                                Rectangle aRect(SwRectToPDFRect(pSelectionPage, rLinkRect.SVRect()));
+                                tools::Rectangle aRect(SwRectToPDFRect(pSelectionPage, rLinkRect.SVRect()));
                                 const sal_Int32 nLinkId =
                                     pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
@@ -1768,7 +1768,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // Destination Export
                     if ( -1 != nDestPageNum )
                     {
-                        Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                        tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                         nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
                     }
                 }
@@ -1784,7 +1784,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // Link Export
                     for (sal_Int32 aLinkPageNum : aLinkPageNums)
                     {
-                        Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
+                        tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                         const sal_Int32 nLinkId =
                             pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
@@ -1828,7 +1828,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         if (!aMediaURL.isEmpty())
                         {
                             const SwPageFrame* pCurrPage = mrSh.GetLayout()->GetPageAtPos(aSnapRect.Center());
-                            Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
+                            tools::Rectangle aPDFRect(SwRectToPDFRect(pCurrPage, aSnapRect.SVRect()));
                             for (sal_Int32 nScreenPageNum : aScreenPageNums)
                             {
                                 sal_Int32 nScreenId = pPDFExtOutDevData->CreateScreen(aPDFRect, nScreenPageNum);
@@ -1894,7 +1894,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     if ( -1 != nDestPageNum )
                     {
                         // Destination Export
-                        Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                        tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                         const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                         // #i44368# Links in Header/Footer
@@ -1994,7 +1994,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 for (sal_Int32 aLinkPageNum : aLinkPageNums)
                 {
                     // Link Export
-                    Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
+                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                     const sal_Int32 nLinkId =
                         pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
@@ -2060,7 +2060,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 if ( -1 != nDestPageNum )
                 {
                     // Destination Export
-                    Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                     const sal_Int32 nDestId =
                         pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
@@ -2109,7 +2109,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 // Destination Export
                 if ( -1 != nDestPageNum )
                 {
-                    Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                     pPDFExtOutDevData->CreateNamedDest(sBkName, aRect, nDestPageNum);
                 }
             }
@@ -2145,7 +2145,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                 if ( -1 != nDestPageNum )
                 {
-                    Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                     if ( aIBeg->nLinkId != -1 )
                     {
                         // Destination Export
@@ -2272,7 +2272,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                 for (sal_Int32 aHFLinkPageNum : aHFLinkPageNums)
                 {
                     // Link Export
-                    Rectangle aRect(SwRectToPDFRect(pPageFrame, aHFLinkRect.SVRect()));
+                    tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, aHFLinkRect.SVRect()));
                     const sal_Int32 nHFLinkId =
                         rPDFExtOutDevData.CreateLink(aRect, aHFLinkPageNum);
 

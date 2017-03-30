@@ -57,7 +57,7 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void KeyInput(const KeyEvent& rKEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     void addMenuItem(const OUString& rText, Action* pAction);
@@ -332,7 +332,7 @@ public:
 
     virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     void setMemberSize(size_t n);
@@ -344,7 +344,7 @@ public:
 
     bool isAllSelected() const;
     void getResult(ResultType& rResult);
-    void launch(const Rectangle& rRect);
+    void launch(const tools::Rectangle& rRect);
     void close(bool bOK);
 
     /**

@@ -137,7 +137,7 @@ public:
     virtual void        setPosSizePixel( long nX, long nY,
                                          long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
-    Rectangle           GetDropDownPosSizePixel() const;
+    tools::Rectangle           GetDropDownPosSizePixel() const;
 
     void                AdaptDropDownLineCountToMaximum();
     void                SetDropDownLineCount( sal_uInt16 nLines );
@@ -214,7 +214,7 @@ public:
     void                SetReadOnly( bool bReadOnly = true );
     bool                IsReadOnly() const;
 
-    Rectangle           GetBoundingRectangle( sal_Int32  nItem ) const;
+    tools::Rectangle           GetBoundingRectangle( sal_Int32  nItem ) const;
 
     void                EnableUserDraw( bool bUserDraw );
 

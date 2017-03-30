@@ -200,7 +200,7 @@ void ScGridMerger::Flush()
                     nVarStart = nVarEnd;
                     nVarEnd = nTemp;
                 }
-                pDev->DrawGrid( Rectangle( nVarStart, nFixStart, nVarEnd, nFixEnd ),
+                pDev->DrawGrid( tools::Rectangle( nVarStart, nFixStart, nVarEnd, nFixEnd ),
                                 Size( nVarDiff, nFixEnd - nFixStart ),
                                 DrawGridFlags::VertLines );
             }
@@ -212,7 +212,7 @@ void ScGridMerger::Flush()
             else
             {
                 long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
-                pDev->DrawGrid( Rectangle( nFixStart, nVarStart, nFixEnd, nVarEnd ),
+                pDev->DrawGrid( tools::Rectangle( nFixStart, nVarStart, nFixEnd, nVarEnd ),
                                 Size( nFixEnd - nFixStart, nVarDiff ),
                                 DrawGridFlags::HorzLines );
             }

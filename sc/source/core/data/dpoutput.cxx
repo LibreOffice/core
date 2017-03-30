@@ -1619,7 +1619,7 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient )
 
 bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop,
                                 long nDragDim,
-                                Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos )
+                                tools::Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos )
 {
     //  Rectangle instead of ScRange for rPosRect to allow for negative values
 
@@ -1646,7 +1646,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         }
         //TODO: find start of dimension
 
-        rPosRect = Rectangle( nDataStartCol, nMemberStartRow + nField,
+        rPosRect = tools::Rectangle( nDataStartCol, nMemberStartRow + nField,
                               nTabEndCol, nMemberStartRow + nField -1 );
 
         bool bFound = false;            // is this within the same orientation?
@@ -1700,7 +1700,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         long nField = nCol - nTabStartCol;
         //TODO: find start of dimension
 
-        rPosRect = Rectangle( nTabStartCol + nField, nDataStartRow - 1,
+        rPosRect = tools::Rectangle( nTabStartCol + nField, nDataStartRow - 1,
                               nTabStartCol + nField - 1, nTabEndRow );
 
         bool bFound = false;            // is this within the same orientation?
@@ -1756,7 +1756,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         }
         //TODO: find start of dimension
 
-        rPosRect = Rectangle( aStartPos.Col(), nPageStartRow + nField,
+        rPosRect = tools::Rectangle( aStartPos.Col(), nPageStartRow + nField,
                               nTabEndCol, nPageStartRow + nField - 1 );
 
         bool bFound = false;            // is this within the same orientation?

@@ -461,7 +461,7 @@ public:
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
-    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) override;
+    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
     virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj ) override;
     void                ImportHeaderFooterContainer( DffRecordHeader& rHeader, HeaderFooterEntry& rEntry );
 };
@@ -576,8 +576,8 @@ protected:
     virtual SdrObject*      ImportOLE(
                                 sal_uInt32 nOLEId,
                                 const Graphic& rGraf,
-                                const Rectangle& rBoundRect,
-                                const Rectangle& rVisArea,
+                                const tools::Rectangle& rBoundRect,
+                                const tools::Rectangle& rVisArea,
                                 const int _nCalledByGroup,
                                 sal_Int64 nAspect
                             ) const override;

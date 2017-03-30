@@ -49,7 +49,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
     if (bDoubleBuffering)
         pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
     vcl::RenderContext* pRenderContext = bDoubleBuffering ? pGuard->GetRenderContext() : pWindow;
-    Rectangle aPaintRect;
+    tools::Rectangle aPaintRect;
     bool    bMapMode = pRenderContext->IsMapModeEnabled();
     pRenderContext->EnableMapMode( false );
     InvertFlags nInvertStyle;
@@ -58,7 +58,7 @@ static void ImplCursorInvert( ImplCursorData* pData )
     else
         nInvertStyle = InvertFlags::NONE;
 
-    Rectangle aRect( pData->maPixPos, pData->maPixSize );
+    tools::Rectangle aRect( pData->maPixPos, pData->maPixSize );
     if ( pData->mnDirection != CursorDirection::NONE || pData->mnOrientation || pData->mnPixSlant )
     {
         tools::Polygon aPoly( aRect );

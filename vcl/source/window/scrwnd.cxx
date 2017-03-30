@@ -109,7 +109,7 @@ void ImplWheelWindow::ImplSetRegion( const Bitmap& rRegionBmp )
     Point           aPos( GetPointerPosPixel() );
     const Size      aSize( rRegionBmp.GetSizePixel() );
     Point           aPoint;
-    const Rectangle aRect( aPoint, aSize );
+    const tools::Rectangle aRect( aPoint, aSize );
 
     maCenter = maLastMousePos = aPos;
     aPos.X() -= aSize.Width() >> 1;
@@ -307,7 +307,7 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
     return eStyle;
 }
 
-void ImplWheelWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void ImplWheelWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ImplDrawWheel(rRenderContext);
 }

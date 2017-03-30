@@ -438,7 +438,7 @@ bool Bitmap::Erase(const Color& rFillColor)
         else
         {
             Point aTmpPoint;
-            const Rectangle aRect( aTmpPoint, Size( pWriteAcc->Width(), pWriteAcc->Height() ) );
+            const tools::Rectangle aRect( aTmpPoint, Size( pWriteAcc->Width(), pWriteAcc->Height() ) );
             pWriteAcc->SetFillColor( rFillColor );
             pWriteAcc->FillRect( aRect );
         }
@@ -638,11 +638,11 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
             else
             {
                 Point       aTmpPoint;
-                Rectangle   aTmpRectangle( aTmpPoint, aSizePix );
+                tools::Rectangle   aTmpRectangle( aTmpPoint, aSizePix );
                 tools::Polygon aPoly( aTmpRectangle );
                 aPoly.Rotate( aTmpPoint, (sal_uInt16) nAngle10 );
 
-                Rectangle           aNewBound( aPoly.GetBoundRect() );
+                tools::Rectangle           aNewBound( aPoly.GetBoundRect() );
                 const Size          aNewSizePix( aNewBound.GetSize() );
                 Bitmap              aNewBmp( aNewSizePix, GetBitCount(), &pReadAcc->GetPalette() );
                 ScopedWriteAccess   pWriteAcc(aNewBmp);
@@ -717,13 +717,13 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
     return bRet;
 };
 
-bool Bitmap::Crop( const Rectangle& rRectPixel )
+bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
 {
     const Size          aSizePix( GetSizePixel() );
-    Rectangle           aRect( rRectPixel );
+    tools::Rectangle           aRect( rRectPixel );
     bool                bRet = false;
 
-    aRect.Intersection( Rectangle( Point(), aSizePix ) );
+    aRect.Intersection( tools::Rectangle( Point(), aSizePix ) );
 
     if( !aRect.IsEmpty() && aSizePix != aRect.GetSize())
     {
@@ -732,7 +732,7 @@ bool Bitmap::Crop( const Rectangle& rRectPixel )
         if( pReadAcc )
         {
             Point               aTmpPoint;
-            const Rectangle     aNewRect( aTmpPoint, aRect.GetSize() );
+            const tools::Rectangle     aNewRect( aTmpPoint, aRect.GetSize() );
             Bitmap              aNewBmp( aNewRect.GetSize(), GetBitCount(), &pReadAcc->GetPalette() );
             ScopedWriteAccess   pWriteAcc(aNewBmp);
 
@@ -761,14 +761,14 @@ bool Bitmap::Crop( const Rectangle& rRectPixel )
     return bRet;
 };
 
-bool Bitmap::CopyPixel( const Rectangle& rRectDst,
-                        const Rectangle& rRectSrc, const Bitmap* pBmpSrc )
+bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
+                        const tools::Rectangle& rRectSrc, const Bitmap* pBmpSrc )
 {
     const Size  aSizePix( GetSizePixel() );
-    Rectangle   aRectDst( rRectDst );
+    tools::Rectangle   aRectDst( rRectDst );
     bool        bRet = false;
 
-    aRectDst.Intersection( Rectangle( Point(), aSizePix ) );
+    aRectDst.Intersection( tools::Rectangle( Point(), aSizePix ) );
 
     if( !aRectDst.IsEmpty() )
     {
@@ -776,7 +776,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
         {
             Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
-            Rectangle       aRectSrc( rRectSrc );
+            tools::Rectangle       aRectSrc( rRectSrc );
             const sal_uInt16    nSrcBitCount = pBmpSrc->GetBitCount();
             const sal_uInt16    nDstBitCount = GetBitCount();
 
@@ -829,7 +829,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                 }
             }
 
-            aRectSrc.Intersection( Rectangle( Point(), aCopySizePix ) );
+            aRectSrc.Intersection( tools::Rectangle( Point(), aCopySizePix ) );
 
             if( !aRectSrc.IsEmpty() )
             {
@@ -882,9 +882,9 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
         }
         else
         {
-            Rectangle aRectSrc( rRectSrc );
+            tools::Rectangle aRectSrc( rRectSrc );
 
-            aRectSrc.Intersection( Rectangle( Point(), aSizePix ) );
+            aRectSrc.Intersection( tools::Rectangle( Point(), aSizePix ) );
 
             if( !aRectSrc.IsEmpty() && ( aRectSrc != aRectDst ) )
             {
@@ -938,16 +938,16 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
     return bRet;
 }
 
-bool Bitmap::CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc,
                            const Bitmap* pBmpSrc )
 {
     // Note: this code is copied from Bitmap::CopyPixel but avoids any palette lookups
     // This optimization is possible because the palettes of AlphaMasks are always identical (8bit GreyPalette, see ctor)
     const Size  aSizePix( GetSizePixel() );
-    Rectangle   aRectDst( rRectDst );
+    tools::Rectangle   aRectDst( rRectDst );
     bool        bRet = false;
 
-    aRectDst.Intersection( Rectangle( Point(), aSizePix ) );
+    aRectDst.Intersection( tools::Rectangle( Point(), aSizePix ) );
 
     if( !aRectDst.IsEmpty() )
     {
@@ -955,9 +955,9 @@ bool Bitmap::CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangl
         {
             Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
-            Rectangle       aRectSrc( rRectSrc );
+            tools::Rectangle       aRectSrc( rRectSrc );
 
-            aRectSrc.Intersection( Rectangle( Point(), aCopySizePix ) );
+            aRectSrc.Intersection( tools::Rectangle( Point(), aCopySizePix ) );
 
             if( !aRectSrc.IsEmpty() )
             {
@@ -989,9 +989,9 @@ bool Bitmap::CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangl
         }
         else
         {
-            Rectangle aRectSrc( rRectSrc );
+            tools::Rectangle aRectSrc( rRectSrc );
 
-            aRectSrc.Intersection( Rectangle( Point(), aSizePix ) );
+            aRectSrc.Intersection( tools::Rectangle( Point(), aSizePix ) );
 
             if( !aRectSrc.IsEmpty() && ( aRectSrc != aRectDst ) )
             {
@@ -1299,13 +1299,13 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
     return aNewBmp;
 }
 
-vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
+vcl::Region Bitmap::CreateRegion( const Color& rColor, const tools::Rectangle& rRect ) const
 {
     vcl::Region         aRegion;
-    Rectangle           aRect( rRect );
+    tools::Rectangle           aRect( rRect );
     ScopedReadAccess    pReadAcc(const_cast<Bitmap&>(*this));
 
-    aRect.Intersection( Rectangle( Point(), GetSizePixel() ) );
+    aRect.Intersection( tools::Rectangle( Point(), GetSizePixel() ) );
     aRect.Justify();
 
     if( pReadAcc )
@@ -1356,7 +1356,7 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) 
                 // need to write aLine, it's different from the next line
                 if(aLine.size())
                 {
-                    Rectangle aSubRect;
+                    tools::Rectangle aSubRect;
 
                     // enter y values and proceed ystart
                     aSubRect.Top() = nYStart;
@@ -1379,7 +1379,7 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) 
         // write last line if used
         if(aLine.size())
         {
-            Rectangle aSubRect;
+            tools::Rectangle aSubRect;
 
             // enter y values
             aSubRect.Top() = nYStart;

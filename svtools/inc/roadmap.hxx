@@ -46,7 +46,7 @@ class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
 protected:
     std::unique_ptr<RoadmapImpl>    m_pImpl;
     // Window overridables
-    void            Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) override;
+    void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
     void            implInit(vcl::RenderContext& rRenderContext);
 
 public:

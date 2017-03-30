@@ -99,7 +99,7 @@ public:
             Return a position ignoring the slides' location, ie. as if
             we were the first slide.
     */
-    Rectangle GetBoundingBox (
+    ::tools::Rectangle GetBoundingBox (
         const model::SharedPageDescriptor& rpPageDescriptor,
         const Part ePart,
         const CoordinateSystem eCoordinateSystem,
@@ -115,7 +115,7 @@ public:
     const Image& GetCustomAnimationEffectIcon() const { return maCustomAnimationEffectIcon;}
 
 private:
-    Rectangle GetBoundingBox (
+    ::tools::Rectangle GetBoundingBox (
         const Point& rPageObjectLocation,
         const Part ePart,
         const CoordinateSystem eCoordinateSystem);
@@ -123,18 +123,18 @@ private:
 private:
     VclPtr<sd::Window> mpWindow;
     Size maPageObjectSize;
-    Rectangle maFocusIndicatorBoundingBox;
-    Rectangle maPageObjectBoundingBox;
-    Rectangle maPageNumberAreaBoundingBox;
-    Rectangle maPreviewBoundingBox;
-    Rectangle maTransitionEffectBoundingBox;
-    Rectangle maCustomAnimationEffectBoundingBox;
+    ::tools::Rectangle maFocusIndicatorBoundingBox;
+    ::tools::Rectangle maPageObjectBoundingBox;
+    ::tools::Rectangle maPageNumberAreaBoundingBox;
+    ::tools::Rectangle maPreviewBoundingBox;
+    ::tools::Rectangle maTransitionEffectBoundingBox;
+    ::tools::Rectangle maCustomAnimationEffectBoundingBox;
     const Image maTransitionEffectIcon;
     const Image maCustomAnimationEffectIcon;
     const std::shared_ptr<vcl::Font> mpPageNumberFont;
 
     Size GetPageNumberAreaSize (const int nPageCount);
-    Rectangle CalculatePreviewBoundingBox (
+    ::tools::Rectangle CalculatePreviewBoundingBox (
         Size& rPageObjectSize,
         const Size& rPreviewModelSize,
         const sal_Int32 nPageNumberAreaWidth,

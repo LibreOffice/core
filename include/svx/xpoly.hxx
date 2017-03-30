@@ -25,7 +25,7 @@
 #include <tools/poly.hxx>
 
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 class SvStream;
 namespace tools {
     class Polygon;
@@ -58,7 +58,7 @@ public:
     XPolygon( const XPolygon& rXPoly );
     XPolygon( XPolygon&& rXPoly );
     XPolygon( const tools::Polygon& rPoly );
-    XPolygon( const Rectangle& rRect, long nRx = 0, long nRy = 0 );
+    XPolygon( const tools::Rectangle& rRect, long nRx = 0, long nRy = 0 );
     XPolygon( const Point& rCenter, long nRx, long nRy,
               sal_uInt16 nStartAngle = 0, sal_uInt16 nEndAngle = 3600,
               bool bClose = true );
@@ -74,7 +74,7 @@ public:
     void        Insert( sal_uInt16 nPos, const XPolygon& rXPoly );
     void        Remove( sal_uInt16 nPos, sal_uInt16 nCount );
     void        Move( long nHorzMove, long nVertMove );
-    Rectangle   GetBoundRect() const;
+    tools::Rectangle   GetBoundRect() const;
 
     const Point&    operator[]( sal_uInt16 nPos ) const;
           Point&    operator[]( sal_uInt16 nPos );
@@ -97,7 +97,7 @@ public:
 
     // transformations
     void Scale(double fSx, double fSy);
-    void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
+    void Distort(const tools::Rectangle& rRefRect, const XPolygon& rDistortedRect);
 
     // #116512# convert to basegfx::B2DPolygon and return
     basegfx::B2DPolygon getB2DPolygon() const;
@@ -131,7 +131,7 @@ public:
     void            Clear();
     sal_uInt16          Count() const;
 
-    Rectangle       GetBoundRect() const;
+    tools::Rectangle       GetBoundRect() const;
 
     const XPolygon& operator[]( sal_uInt16 nPos ) const
                         { return GetObject( nPos ); }
@@ -141,7 +141,7 @@ public:
     XPolyPolygon&   operator=( XPolyPolygon&& rXPolyPoly );
 
     // transformations
-    void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
+    void Distort(const tools::Rectangle& rRefRect, const XPolygon& rDistortedRect);
 
     // #116512# convert to basegfx::B2DPolyPolygon and return
     basegfx::B2DPolyPolygon getB2DPolyPolygon() const;

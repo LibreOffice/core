@@ -61,7 +61,7 @@ RegionBand& RegionBand::operator=(const RegionBand& rRef)
     return *this;
 }
 
-RegionBand::RegionBand(const Rectangle& rRect)
+RegionBand::RegionBand(const tools::Rectangle& rRect)
 :   mpFirstBand(nullptr),
     mpLastCheckedBand(nullptr)
 {
@@ -1155,7 +1155,7 @@ bool RegionBand::Exclude(const RegionBand& rSource)
     return true;
 }
 
-Rectangle RegionBand::GetBoundRect() const
+tools::Rectangle RegionBand::GetBoundRect() const
 {
 
     // get the boundaries of the first band
@@ -1176,7 +1176,7 @@ Rectangle RegionBand::GetBoundRect() const
         pBand = pBand->mpNextBand;
     }
 
-    return Rectangle( nXLeft, nYTop, nXRight, nYBottom );
+    return tools::Rectangle( nXLeft, nYTop, nXRight, nYBottom );
 }
 
 void RegionBand::XOr(const RegionBand& rSource)
@@ -1234,7 +1234,7 @@ void RegionBand::GetRegionRectangles(RectangleVector& rTarget) const
     // clear result vector
     rTarget.clear();
     ImplRegionBand* pCurrRectBand = mpFirstBand;
-    Rectangle aRectangle;
+    tools::Rectangle aRectangle;
 
     while(pCurrRectBand)
     {

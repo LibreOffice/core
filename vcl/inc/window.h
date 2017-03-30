@@ -85,13 +85,13 @@ struct ImplWinData
 {
     OUString*           mpExtOldText;
     ExtTextInputAttr*   mpExtOldAttrAry;
-    Rectangle*          mpCursorRect;
+    tools::Rectangle*          mpCursorRect;
     long                mnCursorExtWidth;
     bool                mbVertical;
-    Rectangle*          mpCompositionCharRects;
+    tools::Rectangle*          mpCompositionCharRects;
     long                mnCompositionCharRects;
-    Rectangle*          mpFocusRect;
-    Rectangle*          mpTrackRect;
+    tools::Rectangle*          mpFocusRect;
+    tools::Rectangle*          mpTrackRect;
     ShowTrackFlags      mnTrackFlags;
     sal_uInt16          mnIsTopWindow;
     bool                mbMouseOver;            //< tracks mouse over for native widget paint effect
@@ -154,7 +154,7 @@ struct ImplFrameData
     bool                mbInternalDragGestureRecognizer;
     VclPtr<VirtualDevice> mpBuffer; ///< Buffer for the double-buffering
     bool mbInBufferedPaint; ///< PaintHelper is in the process of painting into this buffer.
-    Rectangle maBufferedRect; ///< Rectangle in the buffer that has to be painted to the screen.
+    tools::Rectangle maBufferedRect; ///< Rectangle in the buffer that has to be painted to the screen.
 
     ImplFrameData( vcl::Window *pWindow );
 };
@@ -378,12 +378,12 @@ class PaintBufferGuard
     AllSettings maSettings;
     long mnOutOffX;
     long mnOutOffY;
-    Rectangle m_aPaintRect;
+    tools::Rectangle m_aPaintRect;
 public:
     PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow);
     ~PaintBufferGuard();
     /// If this is called, then the dtor will also copy rRectangle to the window from the buffer, before restoring the state.
-    void SetPaintRect(const Rectangle& rRectangle);
+    void SetPaintRect(const tools::Rectangle& rRectangle);
     /// Returns either the frame's buffer or the window, in case of no buffering.
     vcl::RenderContext* GetRenderContext();
 };

@@ -310,7 +310,7 @@ sal_Bool SAL_CALL ThumbnailViewAcc::containsPoint( const awt::Point& aPoint )
     const Point             aSize( aRect.Width, aRect.Height );
     const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
 
-    return Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
+    return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
 }
 
 uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleAtPoint( const awt::Point& aPoint )
@@ -823,7 +823,7 @@ sal_Bool SAL_CALL ThumbnailViewItemAcc::containsPoint( const awt::Point& aPoint 
     const Point             aSize( aRect.Width, aRect.Height );
     const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
 
-    return Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
+    return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
 }
 
 uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleAtPoint( const awt::Point& )
@@ -839,9 +839,9 @@ awt::Rectangle SAL_CALL ThumbnailViewItemAcc::getBounds()
 
     if( mpParent )
     {
-        Rectangle   aRect( mpParent->getDrawArea() );
+        tools::Rectangle   aRect( mpParent->getDrawArea() );
         Point       aOrigin;
-        Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        tools::Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

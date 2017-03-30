@@ -961,7 +961,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     SolarMutexGuard aGuard;
 
     SwDoc *pDoc = getDoc();
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if( pDoc->GetDocShell() )
         aRect = pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
         //TODO/LATER: why that cast?!

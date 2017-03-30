@@ -232,7 +232,7 @@ XPolygon::XPolygon( const tools::Polygon& rPoly )
 }
 
 /// create a rectangle (also with rounded corners) as a Bézier polygon
-XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
+XPolygon::XPolygon(const tools::Rectangle& rRect, long nRx, long nRy)
     : pImpXPolygon( 17 )
 {
     long nWh = (rRect.GetWidth()  - 1) / 2;
@@ -407,10 +407,10 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
     }
 }
 
-Rectangle XPolygon::GetBoundRect() const
+tools::Rectangle XPolygon::GetBoundRect() const
 {
     pImpXPolygon->CheckPointDelete();
-    Rectangle aRetval;
+    tools::Rectangle aRetval;
 
     if(pImpXPolygon->nPoints)
     {
@@ -421,7 +421,7 @@ Rectangle XPolygon::GetBoundRect() const
         // correct and never was.
 
         const basegfx::B2DRange aPolygonRange(basegfx::tools::getRange(getB2DPolygon()));
-        aRetval = Rectangle(
+        aRetval = tools::Rectangle(
             FRound(aPolygonRange.getMinX()), FRound(aPolygonRange.getMinY()),
             FRound(aPolygonRange.getMaxX()), FRound(aPolygonRange.getMaxY()));
     }
@@ -781,7 +781,7 @@ void XPolygon::Scale(double fSx, double fSy)
  *     2: bottom right 3----2
  *     3: bottom left
  */
-void XPolygon::Distort(const Rectangle& rRefRect,
+void XPolygon::Distort(const tools::Rectangle& rRefRect,
                        const XPolygon& rDistortedRect)
 {
     pImpXPolygon->CheckPointDelete();
@@ -950,10 +950,10 @@ sal_uInt16 XPolyPolygon::Count() const
     return (sal_uInt16)(pImpXPolyPolygon->aXPolyList.size());
 }
 
-Rectangle XPolyPolygon::GetBoundRect() const
+tools::Rectangle XPolyPolygon::GetBoundRect() const
 {
     size_t nXPoly = pImpXPolyPolygon->aXPolyList.size();
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     for ( size_t n = 0; n < nXPoly; n++ )
     {
@@ -991,7 +991,7 @@ XPolyPolygon& XPolyPolygon::operator=( XPolyPolygon&& rXPolyPoly )
  *     2: bottom right 3----2
  *     3: bottom left
  */
-void XPolyPolygon::Distort(const Rectangle& rRefRect,
+void XPolyPolygon::Distort(const tools::Rectangle& rRefRect,
                            const XPolygon& rDistortedRect)
 {
     for (size_t i = 0; i < Count(); i++)

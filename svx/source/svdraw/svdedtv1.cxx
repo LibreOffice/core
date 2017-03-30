@@ -66,13 +66,13 @@
 // EditView
 
 
-void SdrEditView::SetMarkedObjRect(const Rectangle& rRect)
+void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
 {
     DBG_ASSERT(!rRect.IsEmpty(),"SetMarkedObjRect() with an empty Rect does not make sense.");
     if (rRect.IsEmpty()) return;
     const size_t nCount=GetMarkedObjectCount();
     if (nCount==0) return;
-    Rectangle aR0(GetMarkedObjRect());
+    tools::Rectangle aR0(GetMarkedObjRect());
     DBG_ASSERT(!aR0.IsEmpty(),"SetMarkedObjRect(): GetMarkedObjRect() is empty.");
     if (aR0.IsEmpty()) return;
     long x0=aR0.Left();
@@ -97,7 +97,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect)
         if( bUndo )
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
 
-        Rectangle aR1(pO->GetSnapRect());
+        tools::Rectangle aR1(pO->GetSnapRect());
         if (!aR1.IsEmpty())
         {
             if (aR1==aR0)
@@ -500,7 +500,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, b
 }
 
 void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad,
-    SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bRotate, const Rectangle& rMarkRect)
+    SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bRotate, const tools::Rectangle& rMarkRect)
 {
     SdrPathObj* pPath=dynamic_cast<SdrPathObj*>( pO );
     bool bDone = false;
@@ -580,7 +580,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
 void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode,
     bool bVertical, bool bNoContortion, bool bCopy)
 {
-    Rectangle aMarkRect(GetMarkedObjRect());
+    tools::Rectangle aMarkRect(GetMarkedObjRect());
     const bool bUndo = IsUndoEnabled();
 
     bool bRotate=bNoContortion && eMode==SdrCrookMode::Rotate && IsRotateAllowed();
@@ -621,7 +621,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
         EndUndo();
 }
 
-void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion)
+void SdrEditView::ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion)
 {
     SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pO );
 
@@ -655,7 +655,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPol
     }
 }
 
-void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy)
+void SdrEditView::DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy)
 {
     const bool bUndo = IsUndoEnabled();
 
@@ -679,7 +679,7 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
         if( bUndo )
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
 
-        Rectangle aRefRect(rRef);
+        tools::Rectangle aRefRect(rRef);
         const SdrObjList* pOL=pO->GetSubList();
         if (bNoContortion || pOL==nullptr) {
             ImpDistortObj(pO,aRefRect,rDistortedRect,bNoContortion);
@@ -699,7 +699,7 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
 void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
 {
     // bReplaceAll has no effect here
-    Rectangle aAllSnapRect(GetMarkedObjRect());
+    tools::Rectangle aAllSnapRect(GetMarkedObjRect());
     const SfxPoolItem *pPoolItem=nullptr;
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,true,&pPoolItem)==SfxItemState::SET) {
         long n=static_cast<const SdrTransformRef1XItem*>(pPoolItem)->GetValue();
@@ -739,7 +739,7 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bRep
         bAllHgt=true; bDoIt=true;
     }
     if (bDoIt) {
-        Rectangle aRect(aAllSnapRect); // TODO: change this for PolyPt's and GluePt's!!!
+        tools::Rectangle aRect(aAllSnapRect); // TODO: change this for PolyPt's and GluePt's!!!
         if (bAllPosX) aRect.Move(nAllPosX-aRect.Left(),0);
         if (bAllPosY) aRect.Move(0,nAllPosY-aRect.Top());
         if (bAllWdt)  aRect.Right()=aAllSnapRect.Left()+nAllWdt;
@@ -786,7 +786,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool /*bOnlyH
 {
     // bOnlyHardAttr has no effect here.
     // TODO: Take into account the origin and PvPos.
-    Rectangle aAllSnapRect(GetMarkedObjRect()); // TODO: change this for PolyPt's and GluePt's!!!
+    tools::Rectangle aAllSnapRect(GetMarkedObjRect()); // TODO: change this for PolyPt's and GluePt's!!!
     long nAllSnapPosX=aAllSnapRect.Left();
     long nAllSnapPosY=aAllSnapRect.Top();
     long nAllSnapWdt=aAllSnapRect.GetWidth()-1;
@@ -807,8 +807,8 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool /*bOnlyH
     long nLogicHgt=0;      bool bLogicHgtDC=false,bLogicHgtDiff=false;
     long nRotAngle=0;      bool bRotAngleDC=false;
     long nShrAngle=0;      bool bShrAngleDC=false;
-    Rectangle aSnapRect;
-    Rectangle aLogicRect;
+    tools::Rectangle aSnapRect;
+    tools::Rectangle aLogicRect;
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
         const SdrMark* pM=GetSdrMarkByIndex(nm);
@@ -819,8 +819,8 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool /*bOnlyH
             bSizProtect=pObj->IsResizeProtect();
             bPrintable =pObj->IsPrintable();
             bVisible = pObj->IsVisible();
-            Rectangle aSnapRect2(pObj->GetSnapRect());
-            Rectangle aLogicRect2(pObj->GetLogicRect());
+            tools::Rectangle aSnapRect2(pObj->GetSnapRect());
+            tools::Rectangle aLogicRect2(pObj->GetLogicRect());
             nSnapPosX=aSnapRect2.Left();
             nSnapPosY=aSnapRect2.Top();
             nSnapWdt=aSnapRect2.GetWidth()-1;
@@ -1133,7 +1133,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 
                 if(!aCharWhichIds.empty())
                 {
-                    Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
+                    tools::Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
 
                     // #110094#-14 pTextObj->SendRepaintBroadcast(pTextObj->GetBoundRect());
                     pTextObj->RemoveOutlinerCharacterAttribs( aCharWhichIds );
@@ -1284,7 +1284,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
     if (AreObjectsMarked())
     {
         SfxItemSet aMarkAttr(GetAttrFromMarked(false)); // because of AutoGrowHeight and corner radius
-        Rectangle aRect(GetMarkedObjRect());
+        tools::Rectangle aRect(GetMarkedObjRect());
         // restore position to that before calc hack
         aRect -= GetGridOffset();
 
@@ -1434,7 +1434,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
     return aRetSet;
 }
 
-Point ImpGetPoint(const Rectangle& rRect, RectPoint eRP)
+Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
 {
     switch(eRP) {
         case RectPoint::LT: return rRect.TopLeft();
@@ -1452,7 +1452,7 @@ Point ImpGetPoint(const Rectangle& rRect, RectPoint eRP)
 
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 {
-    Rectangle aRect(GetMarkedObjRect());
+    tools::Rectangle aRect(GetMarkedObjRect());
 
     if(GetSdrPageView())
     {
@@ -1790,7 +1790,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         BegUndo(aStr);
     }
 
-    Rectangle aBound;
+    tools::Rectangle aBound;
     const size_t nMarkCount=GetMarkedObjectCount();
     bool bHasFixed=false;
     for (size_t nm=0; nm<nMarkCount; ++nm)
@@ -1801,7 +1801,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         pObj->TakeObjInfo(aInfo);
         if (!aInfo.bMoveAllowed || pObj->IsMoveProtect())
         {
-            Rectangle aObjRect(pObj->GetSnapRect());
+            tools::Rectangle aObjRect(pObj->GetSnapRect());
             aBound.Union(aObjRect);
             bHasFixed=true;
         }
@@ -1825,7 +1825,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
             }
             else
             {
-                aBound=Rectangle(pPage->GetLftBorder(),pPage->GetUppBorder(),
+                aBound=tools::Rectangle(pPage->GetLftBorder(),pPage->GetUppBorder(),
                                  pPage->GetWdt()-pPage->GetRgtBorder(),
                                  pPage->GetHgt()-pPage->GetLwrBorder());
             }
@@ -1846,7 +1846,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         {
             long nXMov=0;
             long nYMov=0;
-            Rectangle aObjRect(pObj->GetSnapRect());
+            tools::Rectangle aObjRect(pObj->GetSnapRect());
             switch (eVert)
             {
                 case SdrVertAlign::Top   : nYMov=aBound.Top()   -aObjRect.Top()       ; break;

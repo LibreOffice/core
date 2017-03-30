@@ -31,7 +31,7 @@ class OutputDevice;
 class MouseEvent;
 class CommandEvent;
 class KeyEvent;
-class Rectangle;
+namespace tools { class Rectangle; }
 class Menu;
 
 namespace com {

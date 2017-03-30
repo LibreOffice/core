@@ -205,7 +205,7 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const css::awt::Point& rPoint )
 {
-    return Rectangle( Point(), getBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+    return tools::Rectangle( Point(), getBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
 awt::Rectangle SAL_CALL AccessibleBrowseBoxBase::getBounds()
@@ -383,12 +383,12 @@ void AccessibleBrowseBoxBase::ensureIsAlive() const
         throw lang::DisposedException();
 }
 
-Rectangle AccessibleBrowseBoxBase::getBoundingBox()
+tools::Rectangle AccessibleBrowseBoxBase::getBoundingBox()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    Rectangle aRect = implGetBoundingBox();
+    tools::Rectangle aRect = implGetBoundingBox();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
         SAL_WARN( "accessibility", "rectangle doesn't exist" );
@@ -396,12 +396,12 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBox()
     return aRect;
 }
 
-Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
+tools::Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    Rectangle aRect = implGetBoundingBoxOnScreen();
+    tools::Rectangle aRect = implGetBoundingBoxOnScreen();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
         SAL_WARN( "accessibility", "rectangle doesn't exist" );

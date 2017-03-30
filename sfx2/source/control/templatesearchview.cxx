@@ -111,7 +111,7 @@ void TemplateSearchView::Command( const CommandEvent& rCEvt )
                     deselectItems();
                     pItem->setSelection(true);
                     maItemStateHdl.Call(pItem);
-                    Rectangle aRect = pItem->getDrawArea();
+                    tools::Rectangle aRect = pItem->getDrawArea();
                     maPosition = aRect.Center();
                     maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
                     maCreateContextMenuHdl.Call(pItem);
@@ -140,7 +140,7 @@ void TemplateSearchView::createContextMenu( const bool bIsDefault)
     maSelectedItem->setSelection(true);
     maItemStateHdl.Call(maSelectedItem);
     pItemMenu->SetSelectHdl(LINK(this, TemplateSearchView, ContextMenuSelectHdl));
-    pItemMenu->Execute(this, Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
     Invalidate();
 }
 

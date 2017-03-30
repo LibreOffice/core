@@ -201,8 +201,8 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
     // Set defaults
     aCamera.SetViewWindow(-2, -2, 4, 4);
     aCameraSet.SetDeviceRectangle(-2, 2, -2, 2);
-    aCamera.SetDeviceWindow(Rectangle(0, 0, 10, 10));
-    Rectangle aRect(0, 0, 10, 10);
+    aCamera.SetDeviceWindow(tools::Rectangle(0, 0, 10, 10));
+    tools::Rectangle aRect(0, 0, 10, 10);
     aCameraSet.SetViewportRectangle(aRect);
 
     // set defaults for Camera from ItemPool
@@ -287,19 +287,19 @@ void E3dScene::SetBoundRectDirty()
     }
 }
 
-void E3dScene::NbcSetSnapRect(const Rectangle& rRect)
+void E3dScene::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     SetRectsDirty();
     E3dObject::NbcSetSnapRect(rRect);
     aCamera.SetDeviceWindow(rRect);
-    aCameraSet.SetViewportRectangle((Rectangle&)rRect);
+    aCameraSet.SetViewportRectangle((tools::Rectangle&)rRect);
 
     ImpCleanup3DDepthMapper();
 }
 
 void E3dScene::NbcMove(const Size& rSize)
 {
-    Rectangle aNewSnapRect = GetSnapRect();
+    tools::Rectangle aNewSnapRect = GetSnapRect();
     MoveRect(aNewSnapRect, rSize);
     NbcSetSnapRect(aNewSnapRect);
 }
@@ -307,7 +307,7 @@ void E3dScene::NbcMove(const Size& rSize)
 void E3dScene::NbcResize(const Point& rRef, const Fraction& rXFact,
                                             const Fraction& rYFact)
 {
-    Rectangle aNewSnapRect = GetSnapRect();
+    tools::Rectangle aNewSnapRect = GetSnapRect();
     ResizeRect(aNewSnapRect, rRef, rXFact, rYFact);
     NbcSetSnapRect(aNewSnapRect);
 }
@@ -336,7 +336,7 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
 
     // Set perspective
     GetCameraSet().SetPerspective(aCamera.GetProjection() == ProjectionType::Perspective);
-    GetCameraSet().SetViewportRectangle((Rectangle&)aCamera.GetDeviceWindow());
+    GetCameraSet().SetViewportRectangle((tools::Rectangle&)aCamera.GetDeviceWindow());
 
     ImpCleanup3DDepthMapper();
 }
@@ -662,7 +662,7 @@ basegfx::B2DPolyPolygon E3dScene::TakeCreatePoly(const SdrDragStat& /*rDrag*/) c
 bool E3dScene::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
-    Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
+    tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
@@ -671,7 +671,7 @@ bool E3dScene::BegCreate(SdrDragStat& rStat)
 
 bool E3dScene::MovCreate(SdrDragStat& rStat)
 {
-    Rectangle aRect1;
+    tools::Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
@@ -683,7 +683,7 @@ bool E3dScene::MovCreate(SdrDragStat& rStat)
 
 bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    Rectangle aRect1;
+    tools::Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
     aRect1.Justify();
     NbcSetSnapRect(aRect1);

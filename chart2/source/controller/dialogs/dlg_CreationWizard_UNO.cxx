@@ -281,7 +281,7 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyN
         if( m_pDialog )
         {
             m_pDialog->SetPosPixel( Point(0,0) );
-            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
+            tools::Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
 
             Point aNewOuterPos = Point( aPos.X - aRect.Left(), aPos.Y - aRect.Top() );
             m_pDialog->SetPosPixel( aNewOuterPos );
@@ -311,7 +311,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
         createDialogOnDemand();
         if( m_pDialog )
         {
-            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
+            tools::Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
             awt::Point aPoint(aRect.Left(),aRect.Top());
             aRet <<= aPoint;
         }
@@ -324,7 +324,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
         createDialogOnDemand();
         if( m_pDialog )
         {
-            Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
+            tools::Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
             awt::Size aSize(aRect.GetWidth(),aRect.GetHeight());
             aRet <<= aSize;
         }

@@ -527,7 +527,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                 aPos.Y() -= aSize.Height() / 2;
                 aSize = mpWindow->PixelToLogic(aSize);
                 aPos = mpWindow->PixelToLogic(aPos);
-                pTO->SetLogicRect(Rectangle(aPos, aSize));
+                pTO->SetLogicRect(::tools::Rectangle(aPos, aSize));
 
                 if (pDlg->IsLink())
                 {

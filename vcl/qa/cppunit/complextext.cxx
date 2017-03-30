@@ -85,20 +85,20 @@ void VclComplexTextTest::testArabic()
     // exact bounding rectangle, not essentially the same as text width/height
 #if defined(MACOSX) || defined(_WIN32)
     // FIXME: fails on some Linux tinderboxes, might be a FreeType issue.
-    Rectangle aBoundRect;
+    tools::Rectangle aBoundRect;
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
-    CPPUNIT_ASSERT_EQUAL(Rectangle(0, 1, 71, 15), aBoundRect);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 1, 71, 15), aBoundRect);
 #endif
 
     // normal orientation
-    Rectangle aInput;
-    Rectangle aRect = pOutDev->GetTextRect( aInput, aOneTwoThree );
+    tools::Rectangle aInput;
+    tools::Rectangle aRect = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
     // now rotate 270 degress
     vcl::Font aRotated( aFont );
     aRotated.SetOrientation( 2700 );
     pOutDev->SetFont( aRotated );
-    Rectangle aRectRot = pOutDev->GetTextRect( aInput, aOneTwoThree );
+    tools::Rectangle aRectRot = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
     // Check that we did do the rotation ...
 #if 0

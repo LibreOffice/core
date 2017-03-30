@@ -489,11 +489,11 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
             const int page_width = pPage->GetSize().Width();
             const int width = 1000;
             const int height = 800;
-            Rectangle aTagRect;
+            ::tools::Rectangle aTagRect;
 
             while( true )
             {
-                Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
+                ::tools::Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
                 bool bFree = true;
 
                 for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
@@ -1089,7 +1089,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
 }
 
-void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnnotation >& xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
+void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnnotation >& xAnnotation, vcl::Window* pParent, const ::tools::Rectangle& rContextRect, bool bButtonMenu /* = false */ )
 {
     SfxDispatcher* pDispatcher( getDispatcher( mrBase ) );
     if( !pDispatcher )

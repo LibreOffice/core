@@ -812,17 +812,17 @@ void ScOutputData::DrawDocumentBackground()
     Point aScreenPos  = mpDev->PixelToLogic(Point(nScrX, nScrY));
     Size  aScreenSize = mpDev->PixelToLogic(Size(nScrW - 1,nScrH - 1));
 
-    mpDev->DrawRect(Rectangle(aScreenPos, aScreenSize));
+    mpDev->DrawRect(tools::Rectangle(aScreenPos, aScreenSize));
 }
 
 namespace {
 
 static const double lclCornerRectTransparency = 40.0;
 
-void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldDataBarInfo, const Rectangle& rRect, long nOneX, long nOneY)
+void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldDataBarInfo, const tools::Rectangle& rRect, long nOneX, long nOneY)
 {
     long nPosZero = 0;
-    Rectangle aPaintRect = rRect;
+    tools::Rectangle aPaintRect = rRect;
     aPaintRect.Top() += 2 * nOneY;
     aPaintRect.Bottom() -= 2 * nOneY;
     aPaintRect.Left() += 2 * nOneX;
@@ -895,7 +895,7 @@ const BitmapEx& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType 
     return ScIconSetFormat::getBitmap(rIconSetBitmapMap, eType, nIndex);
 }
 
-void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const Rectangle& rRect, long nOneX, long nOneY,
+void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const tools::Rectangle& rRect, long nOneX, long nOneY,
         sc::IconSetBitmapMap & rIconSetBitmapMap)
 {
     //long nSize = 16;
@@ -907,7 +907,7 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
 }
 
 void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
-        Rectangle& rRect, long nPosX, long nLayoutSign, long nOneX, long nOneY, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
+        tools::Rectangle& rRect, long nPosX, long nLayoutSign, long nOneX, long nOneY, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
         const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo,
         sc::IconSetBitmapMap & rIconSetBitmapMap)
 {
@@ -1005,7 +1005,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
         nOneY = nOneYLogic;
     }
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
@@ -1046,7 +1046,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if ( bLayoutRTL )
                     nPosX += nMirrorW - nOneX;
 
-                aRect = Rectangle(nPosX, nPosY - nOneY, nPosX, nPosY - nOneY + nRowHeight);
+                aRect = tools::Rectangle(nPosX, nPosY - nOneY, nPosX, nPosY - nOneY + nRowHeight);
                 if (bWorksInPixels)
                     aRect = rRenderContext.PixelToLogic(aRect); // internal data in pixels, but we'll be drawing in logic units
 
@@ -1210,7 +1210,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                             }
 
                             // rectangle is in logical orientation
-                            Rectangle aRect( nPosX, nPosY,
+                            tools::Rectangle aRect( nPosX, nPosY,
                                              nPosX + ( nThisWidth - 1 ) * nLayoutSign,
                                              nPosY + pRowInfo[nArrY].nHeight - 1 );
 
@@ -1287,7 +1287,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
 
 void ScOutputData::DrawClear()
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
@@ -1318,7 +1318,7 @@ void ScOutputData::DrawClear()
                 nRowHeight += pRowInfo[nArrY+nSkip].nHeight;    // after incrementing
             }
 
-            aRect = Rectangle( Point( nScrX, nPosY ),
+            aRect = tools::Rectangle( Point( nScrX, nPosY ),
                     Size( nScrW+1-nOneX, nRowHeight+1-nOneY) );
             mpDev->DrawRect( aRect );
 
@@ -1558,7 +1558,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    Rectangle aClipRect( Point(nScrX, nScrY), Size(nScrW, nScrH) );
+    tools::Rectangle aClipRect( Point(nScrX, nScrY), Size(nScrW, nScrH) );
     if (bMetaFile)
     {
         rRenderContext.Push();
@@ -1903,7 +1903,7 @@ drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
 vcl::Region ScOutputData::GetChangedAreaRegion()
 {
     vcl::Region aRegion;
-    Rectangle aDrawingRect;
+    tools::Rectangle aDrawingRect;
     bool bHad(false);
     long nPosY = nScrY;
     SCSIZE nArrY;
@@ -1946,7 +1946,7 @@ bool ScOutputData::SetChangedClip()
 {
     tools::PolyPolygon aPoly;
 
-    Rectangle aDrawingRect;
+    tools::Rectangle aDrawingRect;
     aDrawingRect.Left() = nScrX;
     aDrawingRect.Right() = nScrX+nScrW-1;
 
@@ -2120,7 +2120,7 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
             if (bTop && bBottom && bLeft && bRight)
             {
                 mpDev->SetFillColor();
-                mpDev->DrawRect( Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
+                mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
             }
             else
             {
@@ -2151,10 +2151,10 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                 sal_Int32 aRectMinY2 = nMinY + aRadius;
 
                 // Draw corner rectangles
-                Rectangle aLowerRight( aRectMaxX1, aRectMaxY1, aRectMaxX2, aRectMaxY2 );
-                Rectangle aUpperLeft ( aRectMinX1, aRectMinY1, aRectMinX2, aRectMinY2 );
-                Rectangle aLowerLeft ( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 );
-                Rectangle aUpperRight( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 );
+                tools::Rectangle aLowerRight( aRectMaxX1, aRectMaxY1, aRectMaxX2, aRectMaxY2 );
+                tools::Rectangle aUpperLeft ( aRectMinX1, aRectMinY1, aRectMinX2, aRectMinY2 );
+                tools::Rectangle aLowerLeft ( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 );
+                tools::Rectangle aUpperRight( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 );
 
                 mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aLowerRight ) ), lclCornerRectTransparency );
                 mpDev->DrawTransparent( tools::PolyPolygon( tools::Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
@@ -2253,7 +2253,7 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
             if (bTop && bBottom && bLeft && bRight)
             {
                 mpDev->SetFillColor();
-                mpDev->DrawRect( Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
+                mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
             }
             else
             {
@@ -2278,7 +2278,7 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
             {
                 mpDev->SetLineColor();
                 mpDev->SetFillColor( rColor );
-                mpDev->DrawRect( Rectangle( nMinX+nLayoutSign, nMinY+1, nMinX+3*nLayoutSign, nMinY+3 ) );
+                mpDev->DrawRect( tools::Rectangle( nMinX+nLayoutSign, nMinY+1, nMinX+3*nLayoutSign, nMinY+3 ) );
             }
         }
     }
@@ -2411,7 +2411,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                         }
                     }
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
-                        rRenderContext.DrawRect( Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
+                        rRenderContext.DrawRect( tools::Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
                 }
 
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
@@ -2478,7 +2478,7 @@ void ScOutputData::AddPDFNotes()
                     }
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
                     {
-                        Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
+                        tools::Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
                         const ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
 
                         // Note title is the cell address (as on printed note pages)
@@ -2525,7 +2525,7 @@ void ScOutputData::DrawClipMarks()
         nInitPosX += nMirrorW - 1;              // always in pixels
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    Rectangle aCellRect;
+    tools::Rectangle aCellRect;
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -2575,7 +2575,7 @@ void ScOutputData::DrawClipMarks()
 
                         if ( bLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
-                        aCellRect = Rectangle( Point( nStartPosX, nStartPosY ), Size( nOutWidth, nOutHeight ) );
+                        aCellRect = tools::Rectangle( Point( nStartPosX, nStartPosY ), Size( nOutWidth, nOutHeight ) );
                     }
                     else
                     {
@@ -2599,7 +2599,7 @@ void ScOutputData::DrawClipMarks()
                         if ( bLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
                         // #i80447# create aCellRect from two points in case nOutWidth is 0
-                        aCellRect = Rectangle( Point( nStartPosX, nPosY ),
+                        aCellRect = tools::Rectangle( Point( nStartPosX, nPosY ),
                                                Point( nStartPosX+nOutWidth-1, nPosY+nOutHeight-1 ) );
                     }
 
@@ -2615,14 +2615,14 @@ void ScOutputData::DrawClipMarks()
                     if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Right : ScClipMark::Left ) )
                     {
                         //  visually left
-                        Rectangle aMarkRect = aCellRect;
+                        tools::Rectangle aMarkRect = aCellRect;
                         aMarkRect.Right() = aCellRect.Left()+nMarkPixel-1;
                         SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, true );
                     }
                     if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Left : ScClipMark::Right ) )
                     {
                         //  visually right
-                        Rectangle aMarkRect = aCellRect;
+                        tools::Rectangle aMarkRect = aCellRect;
                         aMarkRect.Left() = aCellRect.Right()-nMarkPixel+1;
                         SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, false );
                     }

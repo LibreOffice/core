@@ -348,7 +348,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[nIndex++].Value <<= xBox;
 
     SwDoc *pDoc = getDoc();
-    const Rectangle rRect =
+    const tools::Rectangle rRect =
         pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
     bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MapUnit::MapTwip;
 

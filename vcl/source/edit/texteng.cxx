@@ -841,11 +841,11 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM )
     return aPaM;
 }
 
-Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial )
+tools::Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial )
 {
     SAL_WARN_IF( !GetUpdateMode(), "vcl", "PaMtoEditCursor: GetUpdateMode()" );
 
-    Rectangle aEditCursor;
+    tools::Rectangle aEditCursor;
     long nY = 0;
 
     if ( !mbHasMultiLineParas )
@@ -867,7 +867,7 @@ Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial )
     return aEditCursor;
 }
 
-Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart )
+tools::Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart )
 {
     if ( !IsFormatted() && !IsFormatting() )
         FormatAndUpdate();
@@ -906,7 +906,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
         nY -= mnCharHeight;
     }
 
-    Rectangle aEditCursor;
+    tools::Rectangle aEditCursor;
 
     aEditCursor.Top() = nY;
     nY += mnCharHeight;
@@ -1475,9 +1475,9 @@ void TextEngine::UpdateViews( TextView* pCurView )
     {
         pView->HideCursor();
 
-        Rectangle aClipRect( maInvalidRect );
+        tools::Rectangle aClipRect( maInvalidRect );
         const Size aOutSz = pView->GetWindow()->GetOutputSizePixel();
-        const Rectangle aVisArea( pView->GetStartDocPos(), aOutSz );
+        const tools::Rectangle aVisArea( pView->GetStartDocPos(), aOutSz );
         aClipRect.Intersection( aVisArea );
         if ( !aClipRect.IsEmpty() )
         {
@@ -1496,7 +1496,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
         pCurView->ShowCursor( pCurView->IsAutoScroll() );
     }
 
-    maInvalidRect = Rectangle();
+    maInvalidRect = tools::Rectangle();
 }
 
 IMPL_LINK_NOARG(TextEngine, IdleFormatHdl, Timer *, void)
@@ -1532,7 +1532,7 @@ void TextEngine::FormatDoc()
     long nY = 0;
     bool bGrow = false;
 
-    maInvalidRect = Rectangle(); // clear
+    maInvalidRect = tools::Rectangle(); // clear
     for ( sal_uInt32 nPara = 0; nPara < mpTEParaPortions->Count(); ++nPara )
     {
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
@@ -1553,7 +1553,7 @@ void TextEngine::FormatDoc()
                     ? mnMaxTextWidth
                     : std::numeric_limits<long>::max();
                 const Range aInvRange( GetInvalidYOffsets( nPara ) );
-                maInvalidRect = Rectangle( Point( 0, nY+aInvRange.Min() ),
+                maInvalidRect = tools::Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
             }
             else
@@ -1904,7 +1904,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
     }
 }
 
-void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pSelection )
+void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools::Rectangle const* pPaintArea, TextSelection const* pSelection )
 {
     if ( !GetUpdateMode() )
         return;
@@ -2035,7 +2035,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                     // for HideSelection() only Range, pSelection = 0.
                                     if ( pSelStart )
                                     {
-                                        const Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
+                                        const tools::Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
                                         bool bDone = false;
                                         if ( pSelStart )
                                         {

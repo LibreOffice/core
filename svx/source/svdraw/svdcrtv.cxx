@@ -243,14 +243,14 @@ void SdrCreateView::BrkAction()
     BrkCreateObj();
 }
 
-void SdrCreateView::TakeActionRect(Rectangle& rRect) const
+void SdrCreateView::TakeActionRect(tools::Rectangle& rRect) const
 {
     if (pAktCreate!=nullptr)
     {
         rRect=maDragStat.GetActionRect();
         if (rRect.IsEmpty())
         {
-            rRect=Rectangle(maDragStat.GetPrev(),maDragStat.GetNow());
+            rRect=tools::Rectangle(maDragStat.GetPrev(),maDragStat.GetNow());
         }
     }
     else
@@ -376,7 +376,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
 }
 
 bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
-    short nMinMov, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject)
+    short nMinMov, const tools::Rectangle& rLogRect, SdrObject* pPreparedFactoryObject)
 {
     bool bRet=false;
     UnmarkAllObj();
@@ -459,7 +459,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
                 if (!rLogRect.IsEmpty()) pAktCreate->NbcSetLogicRect(rLogRect);
 
                 // make sure drag start point is inside WorkArea
-                const Rectangle& rWorkArea = GetWorkArea();
+                const tools::Rectangle& rWorkArea = GetWorkArea();
 
                 if(!rWorkArea.IsEmpty())
                 {
@@ -508,7 +508,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
 
 bool SdrCreateView::BegCreateObj(const Point& rPnt, OutputDevice* pOut, short nMinMov)
 {
-    return ImpBegCreateObj(nAktInvent,nAktIdent,rPnt,pOut,nMinMov,Rectangle(), nullptr);
+    return ImpBegCreateObj(nAktInvent,nAktIdent,rPnt,pOut,nMinMov,tools::Rectangle(), nullptr);
 }
 
 bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject)
@@ -522,14 +522,14 @@ bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov
         nIdent = pPreparedFactoryObject->GetObjIdentifier();
     }
 
-    return ImpBegCreateObj(nInvent, nIdent, rPnt, nullptr, nMinMov, Rectangle(), pPreparedFactoryObject);
+    return ImpBegCreateObj(nInvent, nIdent, rPnt, nullptr, nMinMov, tools::Rectangle(), pPreparedFactoryObject);
 }
 
 bool SdrCreateView::BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz,
     OutputDevice* pOut, short nMinMov)
 {
     return ImpBegCreateObj(SdrInventor::Default,OBJ_CAPTION,rPnt,pOut,nMinMov,
-        Rectangle(rPnt,Size(rObjSiz.Width()+1,rObjSiz.Height()+1)), nullptr);
+        tools::Rectangle(rPnt,Size(rObjSiz.Width()+1,rObjSiz.Height()+1)), nullptr);
 }
 
 void SdrCreateView::MovCreateObj(const Point& rPnt)
@@ -779,11 +779,11 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                 {
                     // ensure object has some size, necessary for SdrTextObj because
                     // there are still untested divisions by that sizes
-                    Rectangle aCurrentSnapRect(pAktCreate->GetSnapRect());
+                    tools::Rectangle aCurrentSnapRect(pAktCreate->GetSnapRect());
 
                     if(!(aCurrentSnapRect.GetWidth() > 1 && aCurrentSnapRect.GetHeight() > 1))
                     {
-                        Rectangle aNewRect(maDragStat.GetStart(), maDragStat.GetStart() + Point(2, 2));
+                        tools::Rectangle aNewRect(maDragStat.GetStart(), maDragStat.GetStart() + Point(2, 2));
                         pAktCreate->NbcSetSnapRect(aNewRect);
                     }
                 }

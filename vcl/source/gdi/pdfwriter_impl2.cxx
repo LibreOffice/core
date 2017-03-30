@@ -243,7 +243,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 }
             }
             if ( bUseJPGCompression )
-                m_rOuterFace.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, Rectangle( aPoint, aSize ), aMask, i_Graphic );
+                m_rOuterFace.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
             else if ( aBitmapEx.IsTransparent() )
                 m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
             else
@@ -423,7 +423,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         const sal_uInt16 nTransPercent = aTransCol.GetLuminance() * 100 / 255;
                         m_rOuterFace.BeginTransparencyGroup();
                         playMetafile( aTmpMtf, nullptr, i_rContext, pDummyVDev );
-                        m_rOuterFace.EndTransparencyGroup( Rectangle( rPos, rSize ), nTransPercent );
+                        m_rOuterFace.EndTransparencyGroup( tools::Rectangle( rPos, rSize ), nTransPercent );
                     }
                     else
                     {
@@ -476,7 +476,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 // create mask bitmap
                                 xVDev->SetLineColor( COL_BLACK );
                                 xVDev->SetFillColor( COL_BLACK );
-                                xVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
+                                xVDev->DrawRect( tools::Rectangle( aPoint, aDstSize ) );
                                 xVDev->SetDrawMode( DrawModeFlags::WhiteLine | DrawModeFlags::WhiteFill | DrawModeFlags::WhiteText |
                                                     DrawModeFlags::WhiteBitmap | DrawModeFlags::WhiteGradient );
                                 aTmpMtf.WindStart();
@@ -488,7 +488,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 // create alpha mask from gradient
                                 xVDev->SetDrawMode( DrawModeFlags::GrayGradient );
-                                xVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
+                                xVDev->DrawGradient( tools::Rectangle( aPoint, aDstSize ), rTransparenceGradient );
                                 xVDev->SetDrawMode( DrawModeFlags::Default );
                                 xVDev->EnableMapMode( false );
                                 xVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
@@ -812,7 +812,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmap() );
-                    aBitmapEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+                    aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
                 }
@@ -841,7 +841,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    aBitmapEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+                    aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
                 }

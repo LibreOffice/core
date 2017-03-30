@@ -1363,7 +1363,7 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    Rectangle aRect = rUDEvt.GetRect();
+    tools::Rectangle aRect = rUDEvt.GetRect();
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
     long nRectWidth = aRect.GetWidth();
     long nRectHeight = aRect.GetHeight();

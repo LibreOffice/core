@@ -681,7 +681,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     SdrObject *pTempObj = mpObj.get();
     pView->MarkObj(pTempObj,pPageView);
 
-    Rectangle aRect(pTempObj->GetCurrentBoundRect());
+    tools::Rectangle aRect(pTempObj->GetCurrentBoundRect());
     aRect.Justify();
     Size aSize(aRect.GetSize());
 
@@ -1093,7 +1093,7 @@ static bool svx_needLogicRectHack( SdrObject* pObj )
 }
 
 
-static Rectangle svx_getLogicRectHack( SdrObject* pObj )
+static tools::Rectangle svx_getLogicRectHack( SdrObject* pObj )
 {
     if(svx_needLogicRectHack(pObj))
     {
@@ -1106,7 +1106,7 @@ static Rectangle svx_getLogicRectHack( SdrObject* pObj )
 }
 
 
-static void svx_setLogicRectHack( SdrObject* pObj, const Rectangle& rRect )
+static void svx_setLogicRectHack( SdrObject* pObj, const tools::Rectangle& rRect )
 {
     if(svx_needLogicRectHack(pObj))
     {
@@ -1125,7 +1125,7 @@ awt::Point SAL_CALL SvxShape::getPosition()
 
     if( mpObj.is() && mpModel)
     {
-        Rectangle aRect( svx_getLogicRectHack(mpObj.get()) );
+        tools::Rectangle aRect( svx_getLogicRectHack(mpObj.get()) );
         Point aPt( aRect.Left(), aRect.Top() );
 
         // Position is relative to anchor, so recalc to absolute position
@@ -1152,7 +1152,7 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position )
         // transformation matrix
         if(dynamic_cast<const E3dCompoundObject* >(mpObj.get()) == nullptr)
         {
-            Rectangle aRect( svx_getLogicRectHack(mpObj.get()) );
+            tools::Rectangle aRect( svx_getLogicRectHack(mpObj.get()) );
             Point aLocalPos( Position.X, Position.Y );
             ForceMetricToItemPoolMetric(aLocalPos);
 
@@ -1178,7 +1178,7 @@ awt::Size SAL_CALL SvxShape::getSize()
 
     if( mpObj.is() && mpModel)
     {
-        Rectangle aRect( svx_getLogicRectHack(mpObj.get()) );
+        tools::Rectangle aRect( svx_getLogicRectHack(mpObj.get()) );
         Size aObjSize( aRect.getWidth(), aRect.getHeight() );
         ForceMetricTo100th_mm(aObjSize);
         return css::awt::Size( aObjSize.getWidth(), aObjSize.getHeight() );
@@ -1199,9 +1199,9 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
         // scenes it may recalculate the whole scene since in AOO this depends
         // on the contained geometry (layouted to show all content)
         const bool b3DConstruction(dynamic_cast< E3dObject* >(mpObj.get()) && mpModel->isLocked());
-        Rectangle aRect(
+        tools::Rectangle aRect(
             b3DConstruction ?
-                Rectangle(maPosition.X, maPosition.Y, maSize.Width, maSize.Height) :
+                tools::Rectangle(maPosition.X, maPosition.Y, maSize.Width, maSize.Height) :
                 svx_getLogicRectHack(mpObj.get()) );
         Size aLocalSize( rSize.Width, rSize.Height );
         ForceMetricToItemPoolMetric(aLocalSize);
@@ -2141,7 +2141,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             Size aObjSize( aUnoRect.Width, aUnoRect.Height );
             ForceMetricToItemPoolMetric(aTopLeft);
             ForceMetricToItemPoolMetric(aObjSize);
-            Rectangle aRect;
+            tools::Rectangle aRect;
             aRect.SetPos(aTopLeft);
             aRect.SetSize(aObjSize);
             mpObj->SetSnapRect(aRect);
@@ -2574,7 +2574,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_FRAMERECT:
     {
-        Rectangle aRect( mpObj->GetSnapRect() );
+        tools::Rectangle aRect( mpObj->GetSnapRect() );
         Point aTopLeft( aRect.TopLeft() );
         Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
         ForceMetricTo100th_mm(aTopLeft);
@@ -2588,7 +2588,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_BOUNDRECT:
     {
-        Rectangle aRect( mpObj->GetCurrentBoundRect() );
+        tools::Rectangle aRect( mpObj->GetCurrentBoundRect() );
         Point aTopLeft( aRect.TopLeft() );
         Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
         ForceMetricTo100th_mm(aTopLeft);

@@ -67,7 +67,7 @@
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
+static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVisible )
 {
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
     if ( rRect.Bottom() > rVisible.Bottom()+1 ) rRect.Bottom() = rVisible.Bottom()+1;
@@ -77,7 +77,7 @@ static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
     // When it is far away, then lcl_DrawOneFrame is not even called.
 }
 
-static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerPixel,
+static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& rInnerPixel,
                         const OUString& rTitle, const Color& rColor, bool bTextBelow,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
                         ScDocument* pDoc, ScViewData* pButtonViewData, bool bLayoutRTL )
@@ -85,17 +85,17 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerP
     // pButtonViewData is only used to set the button size,
     // can otherwise be NULL!
 
-    Rectangle aInner = rInnerPixel;
+    tools::Rectangle aInner = rInnerPixel;
     if ( bLayoutRTL )
     {
         aInner.Left() = rInnerPixel.Right();
         aInner.Right() = rInnerPixel.Left();
     }
 
-    Rectangle aVisible( Point(0,0), pDev->GetOutputSizePixel() );
+    tools::Rectangle aVisible( Point(0,0), pDev->GetOutputSizePixel() );
     lcl_LimitRect( aInner, aVisible );
 
-    Rectangle aOuter = aInner;
+    tools::Rectangle aOuter = aInner;
     long nHor = (long) ( SC_SCENARIO_HSPACE * nPPTX );
     long nVer = (long) ( SC_SCENARIO_VSPACE * nPPTY );
     aOuter.Left()   -= nHor;
@@ -125,10 +125,10 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerP
     pDev->SetLineColor();
     pDev->SetFillColor( rColor );
     //  left, top, right, bottom
-    pDev->DrawRect( Rectangle( aOuter.Left(),  aOuter.Top(),    aInner.Left(),  aOuter.Bottom() ) );
-    pDev->DrawRect( Rectangle( aOuter.Left(),  aOuter.Top(),    aOuter.Right(), aInner.Top()    ) );
-    pDev->DrawRect( Rectangle( aInner.Right(), aOuter.Top(),    aOuter.Right(), aOuter.Bottom() ) );
-    pDev->DrawRect( Rectangle( aOuter.Left(),  aInner.Bottom(), aOuter.Right(), aOuter.Bottom() ) );
+    pDev->DrawRect( tools::Rectangle( aOuter.Left(),  aOuter.Top(),    aInner.Left(),  aOuter.Bottom() ) );
+    pDev->DrawRect( tools::Rectangle( aOuter.Left(),  aOuter.Top(),    aOuter.Right(), aInner.Top()    ) );
+    pDev->DrawRect( tools::Rectangle( aInner.Right(), aOuter.Top(),    aOuter.Right(), aOuter.Bottom() ) );
+    pDev->DrawRect( tools::Rectangle( aOuter.Left(),  aInner.Bottom(), aOuter.Right(), aOuter.Bottom() ) );
 
     long nButtonY = bTextBelow ? aInner.Bottom() : aOuter.Top();
 
@@ -157,7 +157,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerP
         }
         long nClipStartX = bLayoutRTL ? aOuter.Left() + nBWidth : aInner.Left();
         long nClipEndX = bLayoutRTL ? aInner.Right() : aOuter.Right() - nBWidth;
-        pDev->SetClipRegion( vcl::Region(Rectangle( nClipStartX, nButtonY + nVer/2,
+        pDev->SetClipRegion( vcl::Region(tools::Rectangle( nClipStartX, nButtonY + nVer/2,
                             nClipEndX, nButtonY + nVer/2 + aTextSize.Height())) );
     }
 
@@ -243,7 +243,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
 
                 //! Own text "(None)" instead of "(Empty)" ???
 
-                lcl_DrawOneFrame( pDev, Rectangle( aStartPos, aEndPos ),
+                lcl_DrawOneFrame( pDev, tools::Rectangle( aStartPos, aEndPos ),
                                     aCurrent, aColor, bTextBelow,
                                     pViewData->GetPPTX(), pViewData->GetPPTY(), pViewData->GetZoomY(),
                                     pDoc, pViewData, bLayoutRTL );
@@ -270,10 +270,10 @@ static void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
     }
 }
 
-void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
+void ScGridWindow::DoInvertRect( const tools::Rectangle& rPixel )
 {
     if ( rPixel == aInvertRect )
-        aInvertRect = Rectangle();      // Cancel
+        aInvertRect = tools::Rectangle();      // Cancel
     else
     {
         OSL_ENSURE( aInvertRect.IsEmpty(), "DoInvertRect no pairs" );
@@ -300,7 +300,7 @@ void ScGridWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
     }
 }
 
-void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     if ( pDoc->IsInInterpreter() )
@@ -311,7 +311,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
         if ( bNeedsRepaint )
         {
             //! Merge Rectangle?
-            aRepaintPixel = Rectangle();            // multiple -> paint all
+            aRepaintPixel = tools::Rectangle();            // multiple -> paint all
         }
         else
         {
@@ -330,7 +330,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
 
     bIsInPaint = true;
 
-    Rectangle aPixRect = LogicToPixel( rRect );
+    tools::Rectangle aPixRect = LogicToPixel( rRect );
 
     SCCOL nX1 = pViewData->GetPosX(eHWhich);
     SCROW nY1 = pViewData->GetPosY(eVWhich);
@@ -340,7 +340,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
 
-    Rectangle aMirroredPixel = aPixRect;
+    tools::Rectangle aMirroredPixel = aPixRect;
     if ( pDoc->IsLayoutRTL( nTab ) )
     {
         //  mirror and swap
@@ -596,12 +596,12 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // See also ScGridWindow::GetDrawMapMode() for the rest of this hack
         aDrawMode.SetOrigin(PixelToLogic(Point(nScrX, nScrY), aDrawMode));
     }
-    Rectangle aDrawingRectLogic;
+    tools::Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
     {
         // get drawing pixel rect
-        Rectangle aDrawingRectPixel(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
+        tools::Rectangle aDrawingRectPixel(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
 
         // correct for border (left/right)
         if(MAXCOL == nX2)
@@ -666,12 +666,12 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         MapMode aCurrentMapMode(pContentDev->GetMapMode());
         pContentDev->SetMapMode(MapUnit::MapPixel);
 
-        Rectangle aPixRect = Rectangle( Point(), GetOutputSizePixel() );
+        tools::Rectangle aPixRect = tools::Rectangle( Point(), GetOutputSizePixel() );
         pContentDev->SetFillColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
         pContentDev->SetLineColor();
         if ( nX2==MAXCOL )
         {
-            Rectangle aDrawRect( aPixRect );
+            tools::Rectangle aDrawRect( aPixRect );
             if ( bLayoutRTL )
                 aDrawRect.Right() = nScrX - 1;
             else
@@ -681,7 +681,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
         if ( nY2==MAXROW )
         {
-            Rectangle aDrawRect( aPixRect );
+            tools::Rectangle aDrawRect( aPixRect );
             aDrawRect.Top() = nScrY + aOutputData.GetScrH();
             if ( nX2==MAXCOL )
             {
@@ -935,7 +935,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             aEnd.X() -= 2 * nLayoutSign;
                             aEnd.Y() -= 2;
 
-                            Rectangle aBackground(aStart, aEnd);
+                            tools::Rectangle aBackground(aStart, aEnd);
 
                             // Need to draw the background in absolute coords.
                             Point aOrigin = aOriginalMode.GetOrigin();
@@ -954,7 +954,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             // paint the background
                             rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
 
-                            Rectangle aEditRect(Point(nScreenX, nScreenY), Size(nScreenW, nScreenH));
+                            tools::Rectangle aEditRect(Point(nScreenX, nScreenY), Size(nScreenW, nScreenH));
                             pOtherEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
                             rDevice.SetMapMode(MapUnit::MapPixel);
                         }
@@ -998,7 +998,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             pCrsr->Hide();
 
         // set the correct mapmode
-        Rectangle aBackground(aStart, aEnd);
+        tools::Rectangle aBackground(aStart, aEnd);
         if (bIsTiledRendering)
         {
             // Need to draw the background in absolute coords.
@@ -1028,7 +1028,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
 
         // paint the editeng text
-        Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
+        tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
         pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
         rDevice.SetMapMode(MapUnit::MapPixel);
 
@@ -1205,14 +1205,14 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     rDevice.SetMapMode(aOriginalMode);
 }
 
-void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
+void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
     OString sRectangle;
     if (!pRectangle)
         sRectangle = "EMPTY";
     else
     {
-        Rectangle aRectangle(*pRectangle);
+        tools::Rectangle aRectangle(*pRectangle);
         // When dragging shapes the map mode is disabled.
         if (IsMapModeEnabled())
         {
@@ -1308,7 +1308,7 @@ void ScGridWindow::CheckNeedsRepaint()
             Invalidate();
         else
             Invalidate(PixelToLogic(aRepaintPixel));
-        aRepaintPixel = Rectangle();
+        aRepaintPixel = tools::Rectangle();
 
         // selection function in status bar might also be invalid
         SfxBindings& rBindings = pViewData->GetBindings();
@@ -1392,10 +1392,10 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 if ( aEnd.Y() > aWinSize.Height() + 10 )
                     aEnd.Y() = aWinSize.Height() + 10;
 
-                rRenderContext.DrawRect( Rectangle( aStart, Point(aEnd.X(),aStart.Y()+2) ) );
-                rRenderContext.DrawRect( Rectangle( aStart, Point(aStart.X()+2,aEnd.Y()) ) );
-                rRenderContext.DrawRect( Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
-                rRenderContext.DrawRect( Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
+                rRenderContext.DrawRect( tools::Rectangle( aStart, Point(aEnd.X(),aStart.Y()+2) ) );
+                rRenderContext.DrawRect( tools::Rectangle( aStart, Point(aStart.X()+2,aEnd.Y()) ) );
+                rRenderContext.DrawRect( tools::Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
+                rRenderContext.DrawRect( tools::Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
 
                 // Page breaks
                 //! Display differently (dashed ????)
@@ -1415,7 +1415,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             rRenderContext.SetFillColor( aAutomatic );
                         Point aBreak = pViewData->GetScrPos(
                                         nBreak, aRange.aStart.Row(), eWhich, true );
-                        rRenderContext.DrawRect( Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
+                        rRenderContext.DrawRect( tools::Rectangle( aBreak.X()-1, aStart.Y(), aBreak.X(), aEnd.Y() ) );
                     }
                 }
 
@@ -1434,7 +1434,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             rRenderContext.SetFillColor( aAutomatic );
                         Point aBreak = pViewData->GetScrPos(
                                         aRange.aStart.Col(), nBreak, eWhich, true );
-                        rRenderContext.DrawRect( Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
+                        rRenderContext.DrawRect( tools::Rectangle( aStart.X(), aBreak.Y()-1, aEnd.X(), aBreak.Y() ) );
                     }
                 }
 
@@ -1657,7 +1657,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
 
         if ( bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
         {
-            Rectangle aRect = GetListValButtonRect( aListValPos );
+            tools::Rectangle aRect = GetListValButtonRect( aListValPos );
             aComboButton.SetPosPixel( aRect.TopLeft() );
             aComboButton.SetSizePixel( aRect.GetSize() );
             pContentDev->SetClipRegion(vcl::Region(aRect));
@@ -1672,7 +1672,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
     aComboButton.SetOutputDevice( this );
 }
 
-Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
+tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
@@ -1719,7 +1719,7 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
     if ( bLayoutRTL )
         aPos.X() -= aBtnSize.Width()-1;     // align right edge of button with cell border
 
-    return Rectangle( aPos, aBtnSize );
+    return tools::Rectangle( aPos, aBtnSize );
 }
 
 bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -1759,7 +1759,7 @@ bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
     return ( bSimpleQuery && bColumnFound );
 }
 
-void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
+void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelRects )
 {
     ScMarkData aMultiMark( pViewData->GetMarkData() );
     aMultiMark.SetMarking( false );
@@ -1927,13 +1927,13 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                                             nThisY + pMerge->GetRowMerge(), eWhich );
                                     if ( aEndPos.X() * nLayoutSign > nScrX * nLayoutSign && aEndPos.Y() > nScrY )
                                     {
-                                        aInvert.AddRect( Rectangle( nScrX,nScrY,
+                                        aInvert.AddRect( tools::Rectangle( nScrX,nScrY,
                                                     aEndPos.X()-nLayoutSign,aEndPos.Y()-1 ) );
                                     }
                                 }
                                 else if ( nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
                                 {
-                                    aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                                    aInvert.AddRect( tools::Rectangle( nScrX,nScrY,nEndX,nEndY ) );
                                 }
                             }
                         }
@@ -1943,7 +1943,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                         if ( aMultiMark.IsCellMarked( nX, nY, true ) == bRepeat &&
                                                 nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
                         {
-                            aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                            aInvert.AddRect( tools::Rectangle( nScrX,nScrY,nEndX,nEndY ) );
                         }
                     }
 

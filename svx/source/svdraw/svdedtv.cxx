@@ -662,8 +662,8 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
     for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
-        Rectangle aObjRect(pObj->GetCurrentBoundRect());
-        Rectangle aPgRect(pM->GetPageView()->GetPageRect());
+        tools::Rectangle aObjRect(pObj->GetCurrentBoundRect());
+        tools::Rectangle aPgRect(pM->GetPageView()->GetPageRect());
         if (!aObjRect.IsOver(aPgRect)) {
             bool bFnd=false;
             SdrPageView* pPV = GetSdrPageView();

@@ -430,7 +430,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
             const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
             const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
 
-            Rectangle aScreenRect(GetBoundingBox());
+            tools::Rectangle aScreenRect(GetBoundingBox());
 
             awt::Point aMovedPoint = aPoint;
             aMovedPoint.X += aScreenRect.Left();
@@ -602,15 +602,15 @@ OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName()
     return sName;
 }
 
-Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
 {
-    Rectangle aCellRect(GetBoundingBox());
+    tools::Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
             aCellRect.setX(aCellRect.getX() + aRect.getX());
             aCellRect.setY(aCellRect.getY() + aRect.getY());
         }
@@ -618,11 +618,11 @@ Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
     return aCellRect;
 }
 
-Rectangle ScAccessiblePreviewTable::GetBoundingBox() const
+tools::Rectangle ScAccessiblePreviewTable::GetBoundingBox() const
 {
     FillTableInfo();
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( mpTableInfo )
     {
         SCCOL nColumns = mpTableInfo->GetCols();
@@ -632,7 +632,7 @@ Rectangle ScAccessiblePreviewTable::GetBoundingBox() const
             const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
             const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
 
-            aRect = Rectangle( pColInfo[0].nPixelStart,
+            aRect = tools::Rectangle( pColInfo[0].nPixelStart,
                                pRowInfo[0].nPixelStart,
                                pColInfo[nColumns-1].nPixelEnd,
                                pRowInfo[nRows-1].nPixelEnd );
@@ -656,7 +656,7 @@ void ScAccessiblePreviewTable::FillTableInfo() const
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
         Point aPoint;
-        Rectangle aVisRect( aPoint, aOutputSize );
+        tools::Rectangle aVisRect( aPoint, aOutputSize );
 
         mpTableInfo = new ScPreviewTableInfo;
         mpViewShell->GetLocationData().GetTableInfo( aVisRect, *mpTableInfo );

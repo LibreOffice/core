@@ -903,7 +903,7 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     mnTileTwipHeight = nTileTwipHeight_;
 }
 
-OUString ScModelObj::getRowColumnHeaders(const Rectangle& rRectangle)
+OUString ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
 
@@ -966,7 +966,7 @@ OUString ScModelObj::getTrackedChanges()
     return aRet;
 }
 
-void ScModelObj::setClientVisibleArea(const Rectangle& rRectangle)
+void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
@@ -1012,7 +1012,7 @@ OUString ScModelObj::getPostIts()
 
             double fPPTX = pViewData->GetPPTX();
             double fPPTY = pViewData->GetPPTY();
-            Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
+            tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
                             Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
 
             aAnnotation.put("cellPos", aRect.toString());
@@ -1263,7 +1263,7 @@ static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyVal
     return pRet;
 }
 
-static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, Rectangle& rTargetRect,
+static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, tools::Rectangle& rTargetRect,
                         bool& rIsSheet, ScDocument* pDoc, SCTAB nSourceTab )
 {
     // test in same order as in SID_CURRENTCELL execute
@@ -1456,7 +1456,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                         ScDocument& rDoc = pDocShell->GetDocument();
                         if( pSdrObj )
                         {
-                            Rectangle aObjRect = pSdrObj->GetCurrentBoundRect();
+                            tools::Rectangle aObjRect = pSdrObj->GetCurrentBoundRect();
                             SCTAB nCurrentTab = ScDocShell::GetCurTab();
                             ScRange aRange = rDoc.GetRange( nCurrentTab, aObjRect );
                             rMark.SetMarkArea( aRange );
@@ -1749,7 +1749,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         if ( pPDFData && pPDFData->GetIsExportBookmarks() )
         {
             // the sheet starts at the top of the page
-            Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
+            tools::Rectangle aArea( pDev->PixelToLogic( tools::Rectangle( 0,0,0,0 ) ) );
             sal_Int32 nDestID = pPDFData->CreateDest( aArea );
             OUString aTabName;
             rDoc.GetName( nTab, aTabName );
@@ -1759,7 +1759,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         // #i56629# add the named destination stuff
         if( pPDFData && pPDFData->GetIsExportNamedDestinations() )
         {
-            Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
+            tools::Rectangle aArea( pDev->PixelToLogic( tools::Rectangle( 0,0,0,0 ) ) );
             OUString aTabName;
             rDoc.GetName( nTab, aTabName );
             //need the PDF page number here
@@ -1788,20 +1788,20 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                 OUString aTarget( aBookmark.copy( 1 ) );
 
                 ScRange aTargetRange;
-                Rectangle aTargetRect;      // 1/100th mm
+                tools::Rectangle aTargetRect;      // 1/100th mm
                 bool bIsSheet = false;
                 bool bValid = lcl_ParseTarget( aTarget, aTargetRange, aTargetRect, bIsSheet, &rDoc, nTab );
 
                 if ( bValid )
                 {
                     sal_Int32 nPage = -1;
-                    Rectangle aArea;
+                    tools::Rectangle aArea;
                     if ( bIsSheet )
                     {
                         //  Get first page for sheet (if nothing from that sheet is printed,
                         //  this page can show a different sheet)
                         nPage = pPrintFuncCache->GetTabStart( aTargetRange.aStart.Tab() );
-                        aArea = pDev->PixelToLogic( Rectangle( 0,0,0,0 ) );
+                        aArea = pDev->PixelToLogic( tools::Rectangle( 0,0,0,0 ) );
                     }
                     else
                     {
@@ -1814,11 +1814,11 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
                             // get the rectangle of the page's cell range in 1/100th mm
                             ScRange aLocRange = aLocation.aCellRange;
-                            Rectangle aLocationMM = rDoc.GetMMRect(
+                            tools::Rectangle aLocationMM = rDoc.GetMMRect(
                                        aLocRange.aStart.Col(), aLocRange.aStart.Row(),
                                        aLocRange.aEnd.Col(),   aLocRange.aEnd.Row(),
                                        aLocRange.aStart.Tab() );
-                            Rectangle aLocationPixel = aLocation.aRectangle;
+                            tools::Rectangle aLocationPixel = aLocation.aRectangle;
 
                             // Scale and move the target rectangle from aLocationMM to aLocationPixel,
                             // to get the target rectangle in pixels.
@@ -1844,7 +1844,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                             // the time of the CreateDest call, so PixelToLogic can be used here,
                             // regardless of the MapMode that is actually selected.
 
-                            aArea = pDev->PixelToLogic( Rectangle( nX1, nY1, nX2, nY2 ) );
+                            aArea = pDev->PixelToLogic( tools::Rectangle( nX1, nY1, nX2, nY2 ) );
                         }
                     }
 

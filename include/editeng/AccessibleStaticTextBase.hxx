@@ -216,7 +216,7 @@ namespace accessibility
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint );
 
     protected:
-        Rectangle GetParagraphBoundingBox() const;
+        tools::Rectangle GetParagraphBoundingBox() const;
 
     private:
 

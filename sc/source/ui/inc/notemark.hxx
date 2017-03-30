@@ -38,13 +38,13 @@ private:
     ScDocument* pDoc;
     ScAddress   aDocPos;
     OUString    aUserText;
-    Rectangle   aVisRect;
+    tools::Rectangle   aVisRect;
     Timer       aTimer;
     MapMode     aMapMode;
     bool        bLeft;
     bool        bByKeyboard;
 
-    Rectangle       aRect;
+    tools::Rectangle       aRect;
     SdrModel*       pModel;
     ScCaptionPtr    mxObject;
     bool            bVisible;

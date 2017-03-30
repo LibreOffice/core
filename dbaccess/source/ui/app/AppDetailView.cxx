@@ -84,7 +84,7 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     EnableEntryMnemonics();
 }
 
-void OCreationList::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
+void OCreationList::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect )
 {
     SetBackground();
 
@@ -148,9 +148,9 @@ void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
         onSelected( pEntry );
 }
 
-Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
+tools::Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
 {
-    Rectangle aRect = SvTreeListBox::GetFocusRect( _pEntry, _nLine );
+    tools::Rectangle aRect = SvTreeListBox::GetFocusRect( _pEntry, _nLine );
     aRect.Left() = 0;
 
     // try to let the focus rect start before the bitmap item - this looks better

@@ -170,7 +170,7 @@ Image PreviewRenderer::RenderSubstitution (
         mpPreviewDevice->SetMapMode (aMapMode);
 
         // Clear the background.
-        const Rectangle aPaintRectangle (
+        const ::tools::Rectangle aPaintRectangle (
             Point(0,0),
             mpPreviewDevice->GetOutputSizePixel());
         mpPreviewDevice->EnableMapMode(false);
@@ -277,7 +277,7 @@ void PreviewRenderer::PaintPage (
     const bool bDisplayPresentationObjects)
 {
     // Paint the page.
-    Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
+    ::tools::Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
     vcl::Region aRegion (aPaintRectangle);
 
     // Turn off online spelling and redlining.
@@ -321,7 +321,7 @@ void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
         mpPreviewDevice->SetFont (aFont);
 
         // Paint the substitution text.
-        Rectangle aTextBox (
+        ::tools::Rectangle aTextBox (
             Point(0,0),
             mpPreviewDevice->PixelToLogic(
                 mpPreviewDevice->GetOutputSizePixel()));
@@ -342,7 +342,7 @@ void PreviewRenderer::PaintFrame()
     if (mbHasFrame)
     {
         // Paint a frame around the preview.
-        Rectangle aPaintRectangle (
+        ::tools::Rectangle aPaintRectangle (
             Point(0,0),
             mpPreviewDevice->GetOutputSizePixel());
         mpPreviewDevice->EnableMapMode(false);
@@ -454,7 +454,7 @@ Image PreviewRenderer::ScaleBitmap (
         // Paint a frame around the preview.
         mpPreviewDevice->SetLineColor (maFrameColor);
         mpPreviewDevice->SetFillColor ();
-        mpPreviewDevice->DrawRect (Rectangle(Point(0,0), aFrameSize));
+        mpPreviewDevice->DrawRect (::tools::Rectangle(Point(0,0), aFrameSize));
 
         // Paint the bitmap scaled to the desired width.
         BitmapEx aScaledBitmap (rBitmapEx.GetBitmap());

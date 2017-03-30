@@ -39,7 +39,7 @@ public:
 
     //from base class Window:
     virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Tracking( const TrackingEvent& rTEvt ) override;
@@ -56,7 +56,7 @@ public:
 
     void ForceInvalidate();
     virtual void Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
-    virtual void Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    virtual void Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
     virtual void Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;

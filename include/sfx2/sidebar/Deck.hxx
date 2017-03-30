@@ -47,7 +47,7 @@ public:
     const OUString& GetId() const { return msId; }
 
     VclPtr<DeckTitleBar> GetTitleBar() const;
-    Rectangle GetContentArea() const;
+    tools::Rectangle GetContentArea() const;
     void ResetPanels (const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels() const  { return maPanels; }
 
@@ -63,7 +63,7 @@ public:
     void ShowPanel (const Panel& rPanel);
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
     virtual bool EventNotify(NotifyEvent& rEvent) override;
 
@@ -75,7 +75,7 @@ public:
     {
     public:
         ScrollContainerWindow(vcl::Window* pParentWindow);
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
         void SetSeparators(const ::std::vector<sal_Int32>& rSeparators);
     private:
         std::vector<sal_Int32> maSeparators;

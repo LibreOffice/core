@@ -597,7 +597,7 @@ void SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMouseP
     bool bResizingCol = false;
     if (HEADERBAR_ITEM_NOTFOUND != nId)
     {
-        Rectangle aColRect = GetItemRect(nId);
+        tools::Rectangle aColRect = GetItemRect(nId);
         aColRect.Left() += nId ? 3 : 0; // the handle col (nId == 0) does not have a left margin for resizing
         aColRect.Right() -= 3;
         bResizingCol = !aColRect.IsInside(_rMousePos);
@@ -1265,7 +1265,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             // no valid cell under the mouse cursor
             break;
 
-        Rectangle aRect = GetCellRect(nRow, nCol, false);
+        tools::Rectangle aRect = GetCellRect(nRow, nCol, false);
         if (!aRect.IsInside(rEvt.maPosPixel))
             // not dropped within a cell (a cell isn't as wide as the column - the are small spaces)
             break;

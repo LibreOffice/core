@@ -234,8 +234,8 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
 
     // default desktops
     m_nDesktops = 1;
-    m_aWMWorkAreas = ::std::vector< Rectangle >
-        ( 1, Rectangle( Point(), m_pSalDisplay->GetScreenSize( m_pSalDisplay->GetDefaultXScreen() ) ) );
+    m_aWMWorkAreas = ::std::vector< tools::Rectangle >
+        ( 1, tools::Rectangle( Point(), m_pSalDisplay->GetScreenSize( m_pSalDisplay->GetDefaultXScreen() ) ) );
     m_bEqualWorkAreas = true;
 
     memset( m_aWMAtoms, 0, sizeof( m_aWMAtoms ) );
@@ -457,7 +457,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 && nItems == 4*(unsigned)m_nDesktops
                 )
             {
-                m_aWMWorkAreas = ::std::vector< Rectangle > ( m_nDesktops );
+                m_aWMWorkAreas = ::std::vector< tools::Rectangle > ( m_nDesktops );
                 long* pValues = reinterpret_cast<long*>(pProperty);
                 for( int i = 0; i < m_nDesktops; i++ )
                 {
@@ -465,7 +465,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                                   pValues[4*i+1] );
                     Size aSize( pValues[4*i+2],
                                 pValues[4*i+3] );
-                    Rectangle aWorkArea( aPoint, aSize );
+                    tools::Rectangle aWorkArea( aPoint, aSize );
                     m_aWMWorkAreas[i] = aWorkArea;
                     if( aWorkArea != m_aWMWorkAreas[0] )
                         m_bEqualWorkAreas = false;
@@ -1134,9 +1134,9 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
                 if( nCurrent < 0 )
                     nCurrent = 0;
             }
-            Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
+            tools::Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-            aPosSize = Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
+            aPosSize = tools::Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
                                          aPosSize.Top()  + rGeom.nTopDecoration ),
                                   Size( aPosSize.GetWidth()
                                         - rGeom.nLeftDecoration
@@ -1224,9 +1224,9 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
                 if( nCurrent < 0 )
                     nCurrent = 0;
             }
-            Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
+            tools::Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-            aPosSize = Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
+            aPosSize = tools::Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
                                          aPosSize.Top()  + rGeom.nTopDecoration ),
                                   Size( aPosSize.GetWidth()
                                         - rGeom.nLeftDecoration
@@ -1448,7 +1448,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
         if( m_pSalDisplay->IsXinerama() )
         {
             Point aMed( aTL.X() + rGeom.nWidth/2, aTL.Y() + rGeom.nHeight/2 );
-            const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
+            const std::vector< tools::Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
             for(const auto & rScreen : rScreens)
                 if( rScreen.IsInside( aMed ) )
                 {
@@ -1457,7 +1457,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
                     break;
                 }
         }
-        Rectangle aTarget( aTL,
+        tools::Rectangle aTarget( aTL,
                            Size( aScreenSize.Width() - rGeom.nLeftDecoration - rGeom.nTopDecoration,
                                  aScreenSize.Height() - rGeom.nTopDecoration - rGeom.nBottomDecoration )
                            );
@@ -1488,7 +1488,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
                 rGeom.nY : pFrame->maRestorePosSize.Top();
         }
 
-        Rectangle aRestore( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
+        tools::Rectangle aRestore( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         if( pFrame->bMapped_ )
         {
             XSetInputFocus( m_pDisplay,
@@ -1516,7 +1516,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
     else
     {
         pFrame->SetPosSize( pFrame->maRestorePosSize );
-        pFrame->maRestorePosSize = Rectangle();
+        pFrame->maRestorePosSize = tools::Rectangle();
         pFrame->nWidth_             = rGeom.nWidth;
         pFrame->nHeight_            = rGeom.nHeight;
     }
@@ -1577,12 +1577,12 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
             setNetWMState( pFrame );
         }
         if( !bHorizontal && !bVertical )
-            pFrame->maRestorePosSize = Rectangle();
+            pFrame->maRestorePosSize = tools::Rectangle();
         else if( pFrame->maRestorePosSize.IsEmpty() )
         {
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
             pFrame->maRestorePosSize =
-                Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
+                tools::Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         }
     }
     else
@@ -1631,12 +1631,12 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
             setGnomeWMState( pFrame );
 
         if( !bHorizontal && !bVertical )
-            pFrame->maRestorePosSize = Rectangle();
+            pFrame->maRestorePosSize = tools::Rectangle();
         else if( pFrame->maRestorePosSize.IsEmpty() )
         {
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
             pFrame->maRestorePosSize =
-                Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
+                tools::Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         }
     }
     else
@@ -1815,14 +1815,14 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
         }
 
         if( ! (pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert ) )
-            pFrame->maRestorePosSize = Rectangle();
+            pFrame->maRestorePosSize = tools::Rectangle();
         else
         {
             const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
             // the current geometry may already be changed by the corresponding
             // ConfigureNotify, but this cannot be helped
             pFrame->maRestorePosSize =
-                Rectangle( Point( rGeom.nX, rGeom.nY ),
+                tools::Rectangle( Point( rGeom.nX, rGeom.nY ),
                            Size( rGeom.nWidth, rGeom.nHeight ) );
         }
     }
@@ -1881,14 +1881,14 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
         }
 
         if( ! (pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert ) )
-            pFrame->maRestorePosSize = Rectangle();
+            pFrame->maRestorePosSize = tools::Rectangle();
         else
         {
             const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
             // the current geometry may already be changed by the corresponding
             // ConfigureNotify, but this cannot be helped
             pFrame->maRestorePosSize =
-                Rectangle( Point( rGeom.nX, rGeom.nY ),
+                tools::Rectangle( Point( rGeom.nX, rGeom.nY ),
                            Size( rGeom.nWidth, rGeom.nHeight ) );
         }
     }
@@ -2047,7 +2047,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
                 m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
                 &aRoot, &aChild,
                 &root_x, &root_y, &lx, &ly, &mask );
-                const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
+                const std::vector< tools::Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
                 Point aMousePoint( root_x, root_y );
                 for(const auto & rScreen : rScreens)
                 {

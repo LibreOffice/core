@@ -628,9 +628,9 @@ public:
     virtual Printer *       GetDocumentPrinter();
     virtual OutputDevice*   GetDocumentRefDev();
     virtual void            OnDocumentPrinterChanged( Printer * pNewPrinter );
-    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const;
-    virtual void      SetVisArea( const Rectangle & rVisArea );
-    const Rectangle & GetVisArea() const;
+    virtual tools::Rectangle GetVisArea( sal_uInt16 nAspect ) const;
+    virtual void      SetVisArea( const tools::Rectangle & rVisArea );
+    const tools::Rectangle & GetVisArea() const;
     void              SetVisAreaSize( const Size & rVisSize );
     virtual sal_uIntPtr GetMiscStatus() const;
 

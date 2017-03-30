@@ -86,7 +86,7 @@ void LineWidthValueSet::SetCusEnable(bool bEnable)
 
 void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    Rectangle aRect = rUDEvt.GetRect();
+    tools::Rectangle aRect = rUDEvt.GetRect();
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
 
@@ -113,7 +113,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         Point aImgStart(aBLPos.X() + 5,         aBLPos.Y() + ( nRectHeight - 23 ) / 2);
         pDev->DrawImage(aImgStart, imgCus);
     //  Point aStart(aImgStart.X() + 14 + 20 , aBLPos.Y() + nRectHeight/6);
-        Rectangle aStrRect = aRect;
+        tools::Rectangle aStrRect = aRect;
         aStrRect.Top() += nRectHeight/6;
         aStrRect.Bottom() -= nRectHeight/6;
         aStrRect.Left() += imgCus.GetSizePixel().Width() + 20;
@@ -130,7 +130,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         if( nSelItem ==  nItemId )
         {
             Color aBackColor(50,107,197);
-            Rectangle aBackRect = aRect;
+            tools::Rectangle aBackRect = aRect;
             aBackRect.Top() += 3;
             aBackRect.Bottom() -= 2;
             pDev->SetFillColor(aBackColor);

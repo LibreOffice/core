@@ -174,8 +174,8 @@ private:
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
     static void     UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
-    void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_Int32 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
-    static bool     AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
+    void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_Int32 nItem, const tools::Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
+    static bool     AdjustFontForItemHeight(OutputDevice* pDevice, tools::Rectangle& rTextRect, long nHeight);
     void            SetOptimalSize();
     DECL_LINK( MenuSelectHdl, Menu *, bool );
 };
@@ -603,7 +603,7 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     }
 }
 
-bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight)
+bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, tools::Rectangle& rTextRect, long nHeight)
 {
     if (rTextRect.Bottom() > nHeight)
     {
@@ -637,7 +637,7 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
     // italics is present
     const int nLeftDistance = 8;
 
-    Rectangle aTextRect;
+    tools::Rectangle aTextRect;
     pDevice->GetTextBoundRect(aTextRect, rStyleName);
 
     Point aPos( rUDEvt.GetRect().TopLeft() );
@@ -649,7 +649,7 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
     pDevice->DrawText(aPos, rStyleName);
 }
 
-void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_Int32 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected)
+void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_Int32 nItem, const tools::Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected)
 {
     unsigned int nId = rRect.GetHeight() != 0 ? (rRect.getY() / rRect.GetHeight()) : MAX_STYLES_ENTRIES;
     if (nItem == 0 || nItem == GetEntryCount() - 1)
@@ -813,7 +813,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     vcl::RenderContext *pDevice = rUDEvt.GetRenderContext();
     pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
 
-    const Rectangle& rRect(rUDEvt.GetRect());
+    const tools::Rectangle& rRect(rUDEvt.GetRect());
     bool bIsNotSelected = rUDEvt.GetItemId() != GetSelectEntryPos();
 
     SetupEntry(*pDevice, rUDEvt.GetWindow(), nItem, rRect, aStyleName, bIsNotSelected);
@@ -836,7 +836,7 @@ IMPL_LINK(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, event, v
     for (sal_Int32 i = 0; i < nEntryCount; ++i)
     {
         OUString sStyleName(GetEntry(i));
-        Rectangle aTextRectForDefaultFont;
+        tools::Rectangle aTextRectForDefaultFont;
         GetTextBoundRect(aTextRectForDefaultFont, sStyleName);
 
         const long nWidth = aTextRectForDefaultFont.GetWidth();
@@ -850,8 +850,8 @@ IMPL_LINK(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, event, v
         OUString sStyleName(GetEntry(i));
 
         Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
-        SetupEntry(*this /*FIXME rendercontext*/, this, i, Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), sStyleName, true);
-        Rectangle aTextRectForActualFont;
+        SetupEntry(*this /*FIXME rendercontext*/, this, i, tools::Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), sStyleName, true);
+        tools::Rectangle aTextRectForActualFont;
         GetTextBoundRect(aTextRectForActualFont, sStyleName);
         if (AdjustFontForItemHeight(this, aTextRectForActualFont, ITEM_HEIGHT))
         {
@@ -3262,7 +3262,7 @@ void SvxColorListBox::ShowPreview(const NamedColor &rColor)
 
     VclPtr<VirtualDevice> xDevice = VclPtr<VirtualDevice>::Create();
     xDevice->SetOutputSize(aImageSize);
-    const Rectangle aRect(Point(0, 0), aImageSize);
+    const tools::Rectangle aRect(Point(0, 0), aImageSize);
     if (m_bShowNoneButton && rColor.first == COL_NONE_COLOR)
     {
         const Color aW(COL_WHITE);

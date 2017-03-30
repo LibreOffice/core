@@ -32,9 +32,9 @@ using namespace ::com::sun::star;
 
 namespace
 {
-::Rectangle lcl_AWTRectToVCLRect( const css::awt::Rectangle & rAWTRect )
+::tools::Rectangle lcl_AWTRectToVCLRect( const css::awt::Rectangle & rAWTRect )
 {
-    ::Rectangle aResult;
+    ::tools::Rectangle aResult;
     aResult.setX( rAWTRect.X );
     aResult.setY( rAWTRect.Y );
     aResult.setWidth( rAWTRect.Width );
@@ -106,7 +106,7 @@ void ChartWindow::PrePaint(vcl::RenderContext& rRenderContext)
     }
 }
 
-void ChartWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ChartWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     m_bInPaint = true;
     if (m_pOpenGLWindow && m_pOpenGLWindow->IsVisible())
@@ -280,7 +280,7 @@ void ChartWindow::Invalidate( InvalidateFlags nFlags )
         m_pOpenGLWindow->Invalidate( nFlags );
     }
 }
-void ChartWindow::Invalidate( const Rectangle& rRect, InvalidateFlags nFlags )
+void ChartWindow::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;

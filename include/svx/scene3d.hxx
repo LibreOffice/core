@@ -118,7 +118,7 @@ public:
     bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
     virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual void    NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual void    NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void    NbcMove(const Size& rSize) override;
     virtual void    NbcResize(const Point& rRef, const Fraction& rXFact,
                                                  const Fraction& rYFact) override;

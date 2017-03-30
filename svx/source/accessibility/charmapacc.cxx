@@ -102,7 +102,7 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtual
     {
         const Point aOutPos( mpParent->getScrollBar().GetPosPixel() );
         const Size  aScrollBar = mpParent->getScrollBar().GetOutputSizePixel();
-        Rectangle aRect(aOutPos,aScrollBar);
+        tools::Rectangle aRect(aOutPos,aScrollBar);
 
         if ( aRect.IsInside(VCLPoint(aPoint)) )
             xRet = mpParent->getScrollBar().GetAccessible();
@@ -154,12 +154,12 @@ css::awt::Rectangle SvxShowCharSetVirtualAcc::implGetBounds(  )
     vcl::Window* pWindow = mpParent;
     if ( pWindow )
     {
-        Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
         aBounds = AWTRectangle( aRect );
         vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
-            Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
+            tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
             css::awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
@@ -750,9 +750,9 @@ awt::Rectangle SvxShowCharSetItemAcc::implGetBounds(  )
 
     if( mpParent )
     {
-        Rectangle   aRect( mpParent->maRect );
+        tools::Rectangle   aRect( mpParent->maRect );
         Point       aOrigin;
-        Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        tools::Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

@@ -145,7 +145,7 @@ void StyleLBoxString::Paint(
                     SvLBoxString::InitViewData( &rDevice, const_cast<SvTreeListEntry*>(&rEntry), mpViewData);
                 }
 
-                Rectangle aPaintRectangle = pView->GetPaintRectangle();
+                tools::Rectangle aPaintRectangle = pView->GetPaintRectangle();
                 bPainted = pStylePreviewRenderer->render(aPaintRectangle);
             }
         }

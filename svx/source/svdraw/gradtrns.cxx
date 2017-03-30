@@ -46,7 +46,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
     }
 
     // calc the basic positions
-    const Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
+    const tools::Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
     const basegfx::B2DRange aRange(aObjectSnapRectangle.Left(), aObjectSnapRectangle.Top(), aObjectSnapRectangle.Right(), aObjectSnapRectangle.Bottom());
     const basegfx::B2DPoint aCenter(aRange.getCenter());
     basegfx::B2DPoint aStartPos, aEndPos;
@@ -198,7 +198,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
     }
 
     // calc the basic positions
-    const Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
+    const tools::Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
     const basegfx::B2DRange aRange(aObjectSnapRectangle.Left(), aObjectSnapRectangle.Top(), aObjectSnapRectangle.Right(), aObjectSnapRectangle.Bottom());
     const basegfx::B2DPoint aCenter(aRange.getCenter());
     basegfx::B2DPoint aStartPos(rV.maPositionA);

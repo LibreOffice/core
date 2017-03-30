@@ -159,8 +159,8 @@ private:
     OUString        maDayText;
     OUString        maWeekText;
     CalendarWrapper maCalendarWrapper;
-    Rectangle       maPrevRect;
-    Rectangle       maNextRect;
+    tools::Rectangle       maPrevRect;
+    tools::Rectangle       maNextRect;
     OUString        maDayOfWeekText;
     long            mnDayOfWeekAry[7];
     Date            maOldFormatFirstDate;
@@ -255,7 +255,7 @@ public:
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
@@ -280,7 +280,7 @@ public:
     Date            GetLastMonth() const;
     sal_uInt16      GetMonthCount() const;
     bool            GetDate( const Point& rPos, Date& rDate ) const;
-    Rectangle       GetDateRect( const Date& rDate ) const;
+    tools::Rectangle       GetDateRect( const Date& rDate ) const;
 
     void            StartSelection();
     void            EndSelection();

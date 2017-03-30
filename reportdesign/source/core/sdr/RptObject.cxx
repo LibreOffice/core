@@ -387,7 +387,7 @@ void OObjectBase::EndListening(bool /*bRemoveListener*/)
     }
 }
 
-void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
+void OObjectBase::SetPropsFromRect(const tools::Rectangle& _rRect)
 {
     // set properties
     OReportPage* pPage = dynamic_cast<OReportPage*>(GetImplPage());
@@ -525,7 +525,7 @@ void OCustomShape::NbcResize(const Point& rRef, const Fraction& xFract, const Fr
     SetPropsFromRect(GetSnapRect());
 }
 
-void OCustomShape::NbcSetLogicRect(const Rectangle& rRect)
+void OCustomShape::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     SdrObjCustomShape::NbcSetLogicRect(rRect);
     SetPropsFromRect(rRect);
@@ -717,7 +717,7 @@ void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Frac
     OObjectBase::StartListening();
 }
 
-void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
+void OUnoObject::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     SdrUnoObj::NbcSetLogicRect(rRect);
     // stop listening
@@ -1002,7 +1002,7 @@ void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     OObjectBase::StartListening();
 }
 
-void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
+void OOle2Obj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     SdrOle2Obj::NbcSetLogicRect(rRect);
     // stop listening

@@ -80,7 +80,7 @@ public:
                                 const tools::PolyPolygon* pPolyPoly, void* pEditingObj );
 
     static tools::PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
-                                            const Rectangle* pRect = nullptr,
+                                            const tools::Rectangle* pRect = nullptr,
                                             const sal_uIntPtr nFlags = 0L );
 };
 

@@ -193,7 +193,7 @@ public:
     virtual bool IsPointMarkable(const SdrHdl& rHdl) const override;
     virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false) override;
     virtual void CheckPossibilities() override;
-    virtual bool MarkPoints(const ::Rectangle* pRect, bool bUnmark) override;
+    virtual bool MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark) override;
     using SdrMarkView::MarkPoints;
 
     bool ShouldToggleOn(

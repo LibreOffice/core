@@ -125,7 +125,7 @@ class BrowseEvent
 {
     VclPtr<vcl::Window>     pWin;
     long                    nRow;
-    Rectangle               aRect;
+    tools::Rectangle               aRect;
     sal_uInt16              nCol;
     sal_uInt16              nColId;
 
@@ -133,13 +133,13 @@ public:
                         BrowseEvent( vcl::Window* pWindow,
                                      long nAbsRow,
                                      sal_uInt16 nColumn, sal_uInt16 nColumnId,
-                                     const Rectangle& rRect );
+                                     const tools::Rectangle& rRect );
 
     vcl::Window*        GetWindow() const { return pWin; }
     long                GetRow() const { return nRow; }
     sal_uInt16          GetColumn() const { return nCol; }
     sal_uInt16          GetColumnId() const { return nColId; }
-    const Rectangle&    GetRect() const { return aRect; }
+    const tools::Rectangle&    GetRect() const { return aRect; }
 };
 
 
@@ -149,7 +149,7 @@ public:
     BrowserMouseEvent( BrowserDataWin* pWin, const MouseEvent& rEvt );
     BrowserMouseEvent( vcl::Window* pWin, const MouseEvent& rEvt,
                        long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
-                       const Rectangle& rRect );
+                       const tools::Rectangle& rRect );
 };
 
 
@@ -286,7 +286,7 @@ private:
     SVT_DLLPRIVATE void            AutoSizeLastColumn();
 
     SVT_DLLPRIVATE long            ImpGetDataRowHeight() const;
-    SVT_DLLPRIVATE Rectangle       ImplFieldRectPixel( long nRow, sal_uInt16 nColId ) const;
+    SVT_DLLPRIVATE tools::Rectangle       ImplFieldRectPixel( long nRow, sal_uInt16 nColId ) const;
     SVT_DLLPRIVATE sal_uInt16      FrozenColCount() const;
 
     SVT_DLLPRIVATE void            ColumnInserted( sal_uInt16 nPos );
@@ -302,7 +302,7 @@ private:
     bool            GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowColMove = false);
     void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect, bool bMakeVisible);
 
-    void            ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool _bForeignDevice, bool _bDrawSelections);
+    void            ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice, bool _bDrawSelections);
 
     bool            PaintCursorIfHiddenOnce() const { return !m_bFocusOnlyCursor && !HasFocus(); }
 
@@ -336,8 +336,8 @@ protected:
     */
     virtual bool    SeekRow( long nRow ) = 0;
     void            DrawCursor();
-    void            PaintData(vcl::Window& rWin, vcl::RenderContext& rRenderContext, const Rectangle& rRect);
-    virtual void    PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const = 0;
+    void            PaintData(vcl::Window& rWin, vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    virtual void    PaintField(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const = 0;
     // Advice for the subclass: the visible scope of rows has changed.
     // The subclass is able to announce changes of the model with the
     // help of the methods RowInserted and RowRemoved. Because of the
@@ -396,7 +396,7 @@ public:
     virtual void    LoseFocus() override;
     virtual void    GetFocus() override;
     virtual void    Resize() override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void    Command( const CommandEvent& rEvt ) override;
     virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
@@ -456,7 +456,7 @@ public:
 
     // access to dynamic values of cursor row
     OUString        GetColumnTitle( sal_uInt16 nColumnId ) const;
-    Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
+    tools::Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
     sal_uLong       GetColumnWidth( sal_uInt16 nColumnId ) const;
     sal_uInt16      GetColumnId( sal_uInt16 nPos ) const;
     sal_uInt16      GetColumnPos( sal_uInt16 nColumnId ) const;
@@ -499,8 +499,8 @@ public:
 
     // access to positions of fields, column and rows
     vcl::Window&    GetDataWindow() const;
-    Rectangle       GetRowRectPixel( long nRow ) const;
-    Rectangle       GetFieldRectPixel( long nRow, sal_uInt16 nColId,
+    tools::Rectangle       GetRowRectPixel( long nRow ) const;
+    tools::Rectangle       GetFieldRectPixel( long nRow, sal_uInt16 nColId,
                                        bool bRelToBrowser = true) const;
     bool            IsFieldVisible( long nRow, sal_uInt16 nColId,
                                     bool bComplete = false ) const;
@@ -517,7 +517,7 @@ public:
 
     // miscellaneous
     bool            ReserveControlArea(sal_uInt16 nWidth = USHRT_MAX);
-    Rectangle       GetControlArea() const;
+    tools::Rectangle       GetControlArea() const;
     bool            ProcessKey( const KeyEvent& rEvt );
     void            Dispatch( sal_uInt16 nId );
     void            SetMode( BrowserMode nMode );
@@ -538,7 +538,7 @@ public:
     struct BrowserColumnAccess { friend class BrowserColumn; private: BrowserColumnAccess() { } };
     /** public version of PaintField, with selected access rights for the BrowserColumn
     */
-    void            DoPaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId, BrowserColumnAccess ) const
+    void            DoPaintField( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId, BrowserColumnAccess ) const
                     { PaintField( rDev, rRect, nColumnId ); }
 
     /** suggests a default width for a column containing a given text
@@ -609,7 +609,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen = true) override;
+    virtual tools::Rectangle calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen = true) override;
 
     /** calculates the Rectangle of the table
         @param  _bOnScreen
@@ -617,7 +617,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle calcTableRect(bool _bOnScreen = true) override;
+    virtual tools::Rectangle calcTableRect(bool _bOnScreen = true) override;
 
     /**
         @param  _nRowId
@@ -629,7 +629,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen = true) override;
+    virtual tools::Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen = true) override;
 
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
     bool isAccessibleAlive( ) const;
@@ -757,7 +757,7 @@ public:
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual OUString                GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const override;
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector ) override;
-    virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
+    virtual tools::Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
     virtual void                    GrabFocus() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
     virtual vcl::Window*            GetAccessibleParentWindow() const override;

@@ -308,7 +308,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
         bool bActionItem = false;
         if ( pDrView->IsAction() )              // action rectangle
         {
-            Rectangle aRect;
+            tools::Rectangle aRect;
             pDrView->TakeActionRect( aRect );
             if ( !aRect.IsEmpty() )
             {
@@ -323,7 +323,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
         {
             if ( pDrView->AreObjectsMarked() )      // selected objects
             {
-                Rectangle aRect = pDrView->GetAllMarkedRect();
+                tools::Rectangle aRect = pDrView->GetAllMarkedRect();
                 pPV->LogicToPagePos(aRect);
                 rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );

@@ -57,7 +57,7 @@ public:
 
     virtual void Resize() override;
 protected:
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
 private:
     SwTableAutoFormat          aCurData;
@@ -82,7 +82,7 @@ private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
 
     void    Init();
-    void    DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void    DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     void    CalcCellArray(bool bFitWidth);
     void    CalcLineMap();
     void    PaintCells(vcl::RenderContext& rRenderContext);
@@ -706,7 +706,7 @@ MAKENUMSTR:
         SvtScriptedTextHelper aScriptedText(rRenderContext);
         Size aStrSize;
         sal_uInt8 nFormatIndex = GetFormatIndex( nCol, nRow );
-        Rectangle cellRect = maArray.GetCellRect( nCol, nRow );
+        tools::Rectangle cellRect = maArray.GetCellRect( nCol, nRow );
         Point aPos = cellRect.TopLeft();
         long nRightX = 0;
 
@@ -885,10 +885,10 @@ void AutoFormatPreview::NotifyChange( const SwTableAutoFormat& rNewData )
     bFitWidth = aCurData.IsJustify();  // true;  //???
     CalcCellArray( bFitWidth );
     CalcLineMap();
-    Invalidate(Rectangle(Point(0,0), GetSizePixel()));
+    Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }
 
-void AutoFormatPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void AutoFormatPreview::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
     if (rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
@@ -920,7 +920,7 @@ void AutoFormatPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectan
     aVD->SetOutputSizePixel(theWndSize);
     oldColor = aVD->GetLineColor();
     aVD->SetLineColor();
-    aVD->DrawRect(Rectangle(Point(0,0), theWndSize));
+    aVD->DrawRect(tools::Rectangle(Point(0,0), theWndSize));
 
     rRenderContext.SetLineColor(oldColor);
 
@@ -934,7 +934,7 @@ void AutoFormatPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectan
     aVD->SetDrawMode(nOldDrawMode);
 }
 
-void AutoFormatPreview::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void AutoFormatPreview::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     DoPaint(rRenderContext, rRect);
 }

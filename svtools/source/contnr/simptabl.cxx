@@ -192,7 +192,7 @@ void SvSimpleTable::SetTabs()
     }
 }
 
-void SvSimpleTable::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SvSimpleTable::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     SvHeaderTabListBox::Paint(rRenderContext, rRect);
 
@@ -344,7 +344,7 @@ void SvSimpleTable::HBarDrag()
     HideTracking();
     if(!aHeaderBar->IsItemMode())
     {
-        Rectangle aSizeRect(Point(0,0),
+        tools::Rectangle aSizeRect(Point(0,0),
             SvHeaderTabListBox::GetOutputSizePixel());
         aSizeRect.Left()=-GetXOffset()+aHeaderBar->GetDragPos();
         aSizeRect.Right()=-GetXOffset()+aHeaderBar->GetDragPos();
@@ -389,7 +389,7 @@ IMPL_LINK( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr, void)
     {
         if(!aHeaderBar->IsItemMode())
         {
-            Rectangle aSizeRect(Point(0,0),
+            tools::Rectangle aSizeRect(Point(0,0),
                 SvHeaderTabListBox::GetOutputSizePixel());
             aSizeRect.Left()=-GetXOffset()+aHeaderBar->GetDragPos();
             aSizeRect.Right()=-GetXOffset()+aHeaderBar->GetDragPos();

@@ -108,7 +108,7 @@ void MoreButton::Click()
 
         // Adapt dialogbox
         Point aPos( pParent->GetPosPixel() );
-        Rectangle aDeskRect( pParent->ImplGetFrameWindow()->GetDesktopRectPixel() );
+        tools::Rectangle aDeskRect( pParent->ImplGetFrameWindow()->GetDesktopRectPixel() );
 
         aSize.Height() += nDeltaPixel;
         if ( (aPos.Y()+aSize.Height()) > aDeskRect.Bottom() )

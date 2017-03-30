@@ -171,14 +171,14 @@ void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 /* nFirstColumn *
 
 // helpers --------------------------------------------------------------------
 
-Rectangle ScAccessibleCsvControl::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleCsvControl::GetBoundingBoxOnScreen() const
 {
     SolarMutexGuard aGuard;
     ensureAlive();
     return implGetControl().GetWindowExtentsRelative( nullptr );
 }
 
-Rectangle ScAccessibleCsvControl::GetBoundingBox() const
+tools::Rectangle ScAccessibleCsvControl::GetBoundingBox() const
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1466,16 +1466,16 @@ OUString SAL_CALL ScAccessibleCsvCell::getImplementationName()
 
 // helpers --------------------------------------------------------------------
 
-Rectangle ScAccessibleCsvCell::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleCsvCell::GetBoundingBoxOnScreen() const
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    Rectangle aRect( implGetBoundingBox() );
+    tools::Rectangle aRect( implGetBoundingBox() );
     aRect.SetPos( implGetAbsPos( aRect.TopLeft() ) );
     return aRect;
 }
 
-Rectangle ScAccessibleCsvCell::GetBoundingBox() const
+tools::Rectangle ScAccessibleCsvCell::GetBoundingBox() const
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1519,10 +1519,10 @@ Size ScAccessibleCsvCell::implGetRealSize() const
         (mnLine == CSV_LINE_HEADER) ? rGrid.GetHdrHeight() : rGrid.GetLineHeight() );
 }
 
-Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
+tools::Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
 {
     ScCsvGrid& rGrid = implGetGrid();
-    Rectangle aClipRect( Point( 0, 0 ), rGrid.GetSizePixel() );
+    tools::Rectangle aClipRect( Point( 0, 0 ), rGrid.GetSizePixel() );
     if( mnColumn != CSV_COLUMN_HEADER )
     {
         aClipRect.Left() = rGrid.GetFirstX();
@@ -1531,7 +1531,7 @@ Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
     if( mnLine != CSV_LINE_HEADER )
          aClipRect.Top() = rGrid.GetHdrHeight();
 
-    Rectangle aRect( implGetRealPos(), implGetRealSize() );
+    tools::Rectangle aRect( implGetRealPos(), implGetRealSize() );
     aRect.Intersection( aClipRect );
     if( (aRect.GetWidth() <= 0) || (aRect.GetHeight() <= 0) )
         aRect.SetSize( Size( -1, -1 ) );
@@ -1541,7 +1541,7 @@ Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
 ::std::unique_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
 {
     ScCsvGrid& rGrid = implGetGrid();
-    Rectangle aBoundRect( implGetBoundingBox() );
+    tools::Rectangle aBoundRect( implGetBoundingBox() );
     aBoundRect -= implGetRealPos();
 
     ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( o3tl::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, aBoundRect, implGetRealSize()) ) );

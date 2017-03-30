@@ -329,7 +329,7 @@ const XclChFormatInfo& XclExpChRoot::GetFormatInfo( XclChObjectType eObjType ) c
     return mxChData->mxFmtInfoProv->GetFormatInfo( eObjType );
 }
 
-void XclExpChRoot::InitConversion( css::uno::Reference< css::chart2::XChartDocument > const & xChartDoc, const Rectangle& rChartRect ) const
+void XclExpChRoot::InitConversion( css::uno::Reference< css::chart2::XChartDocument > const & xChartDoc, const tools::Rectangle& rChartRect ) const
 {
     mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
 }
@@ -3308,7 +3308,7 @@ static void lcl_getChartSubTitle(const Reference<XChartDocument>& xChartDoc,
 }
 
 XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
-        Reference< XChartDocument > const & xChartDoc, const Rectangle& rChartRect ) :
+        Reference< XChartDocument > const & xChartDoc, const tools::Rectangle& rChartRect ) :
     XclExpChGroupBase( XclExpChRoot( rRoot, *this ), EXC_CHFRBLOCK_TYPE_CHART, EXC_ID_CHCHART, 16 )
 {
     Size aPtSize = OutputDevice::LogicToLogic( rChartRect.GetSize(), MapMode( MapUnit::Map100thMM ), MapMode( MapUnit::MapPoint ) );
@@ -3468,7 +3468,7 @@ void XclExpChartDrawing::Save( XclExpStream& rStrm )
         mxObjRecs->Save( rStrm );
 }
 
-XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > const & xModel, const Rectangle& rChartRect ) :
+XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > const & xModel, const tools::Rectangle& rChartRect ) :
     XclExpSubStream( EXC_BOF_CHART ),
     XclExpRoot( rRoot )
 {

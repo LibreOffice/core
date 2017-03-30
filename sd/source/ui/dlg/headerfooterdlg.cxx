@@ -68,7 +68,7 @@ private:
     SdPage* mpMaster;
     HeaderFooterSettings maSettings;
     Size maPageSize;
-    Rectangle maOutRect;
+    ::tools::Rectangle maOutRect;
 
 private:
     void Paint(vcl::RenderContext& rRenderContext, SdrTextObj* pObj, bool bVisible, bool bDotted = false);
@@ -76,7 +76,7 @@ private:
 public:
     explicit PresLayoutPreview(vcl::Window* pParent);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual Size GetOptimalSize() const override;
 
     void init(SdPage* pMaster);
@@ -757,11 +757,11 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj* pO
     }
 }
 
-void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     rRenderContext.Push();
 
-    maOutRect = Rectangle(Point(0,0), rRenderContext.GetOutputSize());
+    maOutRect = ::tools::Rectangle(Point(0,0), rRenderContext.GetOutputSize());
 
     // calculate page size with correct aspect ratio
     int nWidth, nHeight;

@@ -389,7 +389,7 @@ void FuConstRectangle::Deactivate()
 }
 
 // Create default drawing objects via keyboard
-SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
@@ -397,7 +397,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
 
     if(pObj)
     {
-        Rectangle aRect(rRectangle);
+        tools::Rectangle aRect(rRectangle);
         Point aStart = aRect.TopLeft();
         Point aEnd = aRect.BottomRight();
 

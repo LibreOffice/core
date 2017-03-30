@@ -93,7 +93,7 @@ public:
 
     virtual EscherExHostAppData* StartShape(
                             const css::uno::Reference< css::drawing::XShape>& rxShape,
-                            const Rectangle* pChildAnchor ) override;
+                            const tools::Rectangle* pChildAnchor ) override;
     virtual void                EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID ) override;
     virtual EscherExHostAppData*    EnterAdditionalTextGroup() override;
 
@@ -103,14 +103,14 @@ public:
         @descr  Writes the form control data to the 'Ctls' stream. */
     std::unique_ptr<XclExpOcxControlObj> CreateOCXCtrlObj(
                             css::uno::Reference< css::drawing::XShape > const & xShape,
-                            const Rectangle* pChildAnchor );
+                            const tools::Rectangle* pChildAnchor );
 
 private:
     tools::SvRef<SotStorageStream>  mxCtlsStrm;         /// The 'Ctls' stream.
     /** Creates a TBX form control OBJ record from the passed form control. */
     std::unique_ptr<XclExpTbxControlObj> CreateTBXCtrlObj(
                             css::uno::Reference< css::drawing::XShape > const & xShape,
-                            const Rectangle* pChildAnchor );
+                            const tools::Rectangle* pChildAnchor );
 
 private:
     /** Tries to get the name of a Basic macro from a control. */

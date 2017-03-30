@@ -89,7 +89,7 @@ public:
     ~CoreTextStyle( void );
 
     void       GetFontMetric( ImplFontMetricDataRef& ) const;
-    bool       GetGlyphBoundRect(const GlyphItem&, Rectangle&) const;
+    bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) const;
     bool       GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) const;
     hb_font_t* GetHbFont() const { return mpHbFont; }
     void       SetHbFont(hb_font_t* pHbFont) const { mpHbFont = pHbFont; }
@@ -292,14 +292,14 @@ public:
 
     // native widget rendering methods that require mirroring
 #ifdef MACOSX
-    virtual bool            hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+    virtual bool            hitTestNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                   const Point& aPos, bool& rIsInside ) override;
-    virtual bool            drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+    virtual bool            drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const OUString& aCaption ) override;
-    virtual bool            getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
+    virtual bool            getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
                                                     const ImplControlValue& aValue, const OUString& aCaption,
-                                                    Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) override;
+                                                    tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 #endif
 
     // get device resolution
@@ -375,7 +375,7 @@ public:
                                             std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
 
-    virtual bool            GetGlyphBoundRect(const GlyphItem&, Rectangle&) override;
+    virtual bool            GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) override;
     virtual bool            GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;

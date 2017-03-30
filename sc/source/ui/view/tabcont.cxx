@@ -461,7 +461,7 @@ void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 
     if (!bDisable)
     {
-        vcl::Region aRegion( Rectangle(0,0,0,0) );
+        vcl::Region aRegion( tools::Rectangle(0,0,0,0) );
         CommandEvent aCEvt( rPosPixel, CommandEventId::StartDrag, true );   // needed for StartDrag
         if (TabBar::StartDrag( aCEvt, aRegion ))
             DoDrag( aRegion );
@@ -644,7 +644,7 @@ void ScTabControl::Mirror()
     TabBar::Mirror();
     if( nSelPageIdByMouse != TabBar::PAGE_NOT_FOUND )
     {
-        Rectangle aRect( GetPageRect( GetCurPageId() ) );
+        tools::Rectangle aRect( GetPageRect( GetCurPageId() ) );
         if( !aRect.IsEmpty() )
             SetPointerPosPixel( aRect.Center() );
         nSelPageIdByMouse = TabBar::PAGE_NOT_FOUND;  // only once after a Select()

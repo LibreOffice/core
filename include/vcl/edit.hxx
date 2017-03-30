@@ -104,13 +104,13 @@ private:
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE OUString    ImplGetText() const;
-    SAL_DLLPRIVATE void        ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle);
+    SAL_DLLPRIVATE void        ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle);
     SAL_DLLPRIVATE void        ImplInvalidateOrRepaint();
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection );
     SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = nullptr, bool bIsUserInput = false );
     SAL_DLLPRIVATE static OUString ImplGetValidString( const OUString& rString );
-    SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle, long nXStart, long nXEnd);
+    SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, long nXStart, long nXEnd);
     SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd);
     SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
     SAL_DLLPRIVATE void        ImplAlign();
@@ -167,7 +167,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void        GetFocus() override;

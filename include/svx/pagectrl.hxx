@@ -70,14 +70,14 @@ private:
     SvxPageUsage eUsage;
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
     virtual void DrawPage(vcl::RenderContext& rRenderContext, const Point& rPoint,
                           const bool bSecond, const bool bEnabled);
 
     void drawFillAttributes(vcl::RenderContext& rRenderContext,
                             const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
-                            const Rectangle& rPaintRange, const Rectangle& rDefineRange);
+                            const tools::Rectangle& rPaintRange, const tools::Rectangle& rDefineRange);
 
 public:
     SvxPageWindow(vcl::Window* pParent);

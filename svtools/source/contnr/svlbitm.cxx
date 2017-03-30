@@ -198,7 +198,7 @@ void SvLBoxString::Paint(
         nStyle |= DrawTextFlags::PathEllipsis | DrawTextFlags::Center;
         aSize.Width() = rDev.GetEntryWidth();
     }
-    rRenderContext.DrawText(Rectangle(rPos, aSize), maText, nStyle);
+    rRenderContext.DrawText(tools::Rectangle(rPos, aSize), maText, nStyle);
 }
 
 SvLBoxItem* SvLBoxString::Create() const
@@ -301,7 +301,7 @@ void SvLBoxButton::Paint(
         Size aSize(pData->Width(), pData->Height());
         ImplAdjustBoxSize(aSize, eCtrlType, rRenderContext);
         ImplControlValue aControlValue;
-        Rectangle aCtrlRegion( rPos, aSize );
+        tools::Rectangle aCtrlRegion( rPos, aSize );
         ControlState nState = ControlState::NONE;
 
         //states ControlState::DEFAULT, ControlState::PRESSED and ControlState::ROLLOVER are not implemented
@@ -340,12 +340,12 @@ void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::R
     if (rRenderContext.IsNativeControlSupported( i_eType, ControlPart::Entire) )
     {
         ImplControlValue    aControlValue;
-        Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
+        tools::Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
         ControlState        nState = ControlState::ENABLED;
 
         aControlValue.setTristateVal( ButtonValue::On );
 
-        Rectangle aNativeBounds, aNativeContent;
+        tools::Rectangle aNativeBounds, aNativeContent;
         bool bNativeOK = rRenderContext.GetNativeControlRegion( i_eType,
                                                             ControlPart::Entire,
                                                             aCtrlRegion,

@@ -94,7 +94,7 @@ SidebarController::SidebarController (
               mpParentWindow,
               rxFrame,
               [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
-              [this](const Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
+              [this](const tools::Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
               this)),
       mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
@@ -923,14 +923,14 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
 }
 
 void SidebarController::ShowPopupMenu (
-    const Rectangle& rButtonBox,
+    const tools::Rectangle& rButtonBox,
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
     VclPtr<PopupMenu> pMenu = CreatePopupMenu(rMenuData);
     pMenu->SetSelectHdl(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
 
     // pass toolbox button rect so the menu can stay open on button up
-    Rectangle aBox (rButtonBox);
+    tools::Rectangle aBox (rButtonBox);
     aBox.Move(mpTabBar->GetPosPixel().X(), 0);
     pMenu->Execute(mpParentWindow, aBox, PopupMenuFlags::ExecuteDown);
     pMenu.disposeAndClear();

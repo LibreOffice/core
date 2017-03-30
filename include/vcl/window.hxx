@@ -472,7 +472,7 @@ public:
     // + selection Color with a text color complementing the selection background
     // + rounded edge
     static void DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow,
-                                        const Rectangle& rRect, sal_uInt16 nHighlight,
+                                        const tools::Rectangle& rRect, sal_uInt16 nHighlight,
                                         bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
                                         Color* pSelectionTextColor = nullptr, long nCornerRadius = 0,
                                         Color* pPaintColor = nullptr);
@@ -564,7 +564,7 @@ public:
 
     SAL_DLLPRIVATE void                 ImplGrabFocus( GetFocusFlags nFlags );
     SAL_DLLPRIVATE void                 ImplGrabFocusToDocument( GetFocusFlags nFlags );
-    SAL_DLLPRIVATE void                 ImplInvertFocus( const Rectangle& rRect );
+    SAL_DLLPRIVATE void                 ImplInvertFocus( const tools::Rectangle& rRect );
 
     SAL_DLLPRIVATE PointerStyle         ImplGetMousePointer() const;
     SAL_DLLPRIVATE void                 ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged = false );
@@ -587,7 +587,7 @@ public:
     SAL_DLLPRIVATE void                 ImplIncModalCount();
     SAL_DLLPRIVATE void                 ImplDecModalCount();
 
-    SAL_DLLPRIVATE static void          ImplCalcSymbolRect( Rectangle& rRect );
+    SAL_DLLPRIVATE static void          ImplCalcSymbolRect( tools::Rectangle& rRect );
 
 protected:
 
@@ -601,8 +601,8 @@ protected:
     SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, ValidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplValidate();
-    SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
-    SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
+    SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const tools::Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
+    SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const tools::Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetBorderWindow() const;
 
@@ -612,7 +612,7 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplSetMouseTransparent( bool bTransparent );
 
-    SAL_DLLPRIVATE void                 ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, ScrollFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplScroll( const tools::Rectangle& rRect, long nHorzScroll, long nVertScroll, ScrollFlags nFlags );
 
     SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller );
     SAL_DLLPRIVATE bool                 ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
@@ -670,7 +670,7 @@ private:
     SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows( const vcl::Region& rInterRegion, vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows2( const vcl::Region& rInterRegion, vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplCalcOverlapRegionOverlaps( const vcl::Region& rInterRegion, vcl::Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplCalcOverlapRegion( const Rectangle& rSourceRect, vcl::Region& rRegion,
+    SAL_DLLPRIVATE void                 ImplCalcOverlapRegion( const tools::Rectangle& rSourceRect, vcl::Region& rRegion,
                                                                bool bChildren, bool bSiblings );
 
     /** Invoke the actual painting.
@@ -715,7 +715,7 @@ private:
 
     SAL_DLLPRIVATE static void          ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
 
-    SAL_DLLPRIVATE Rectangle            ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle& rRect ) const;
+    SAL_DLLPRIVATE tools::Rectangle            ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
 
     // retrieves the list of owner draw decorated windows for this window hiearchy
@@ -723,7 +723,7 @@ private:
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow();
 
-    SAL_DLLPRIVATE Rectangle            ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const;
+    SAL_DLLPRIVATE tools::Rectangle            ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const;
 
     SAL_DLLPRIVATE bool                 ImplStopDnd();
     SAL_DLLPRIVATE void                 ImplStartDnd();
@@ -754,7 +754,7 @@ protected:
     SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
 
     virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
-    virtual void                        ClipToPaintRegion( Rectangle& rDstRect ) override;
+    virtual void                        ClipToPaintRegion( tools::Rectangle& rDstRect ) override;
     virtual bool                        UsePolyPolygonForComplexGradient() override;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
@@ -777,7 +777,7 @@ public:
     virtual void                        KeyInput( const KeyEvent& rKEvt );
     virtual void                        KeyUp( const KeyEvent& rKEvt );
     virtual void                        PrePaint(vcl::RenderContext& rRenderContext);
-    virtual void                        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    virtual void                        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
 
     using OutputDevice::Erase;
@@ -878,11 +878,11 @@ public:
     void                                SetInputContext( const InputContext& rInputContext );
     const InputContext&                 GetInputContext() const;
     void                                EndExtTextInput();
-    void                                SetCursorRect( const Rectangle* pRect = nullptr, long nExtTextInputWidth = 0 );
-    const Rectangle*                    GetCursorRect() const;
+    void                                SetCursorRect( const tools::Rectangle* pRect = nullptr, long nExtTextInputWidth = 0 );
+    const tools::Rectangle*                    GetCursorRect() const;
     long                                GetCursorExtTextInputWidth() const;
 
-    void                                SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, bool bVertical = false );
+    void                                SetCompositionCharRect( const tools::Rectangle* pRect, long nCompositionLength, bool bVertical = false );
 
     using                               ::OutputDevice::SetSettings;
     virtual void                        SetSettings( const AllSettings& rSettings ) override;
@@ -1041,19 +1041,19 @@ public:
     Point                               NormalizedScreenToOutputPixel( const Point& rPos ) const;
     Point                               OutputToAbsoluteScreenPixel( const Point& rPos ) const;
     Point                               AbsoluteScreenToOutputPixel( const Point& rPos ) const;
-    Rectangle                           GetDesktopRectPixel() const;
+    tools::Rectangle                           GetDesktopRectPixel() const;
     //  window extents including border and decoration
-    Rectangle                           GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
+    tools::Rectangle                           GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
     // window extents of the client window, coordinates to be used in SetPosPixel
-    Rectangle                           GetClientWindowExtentsRelative() const;
+    tools::Rectangle                           GetClientWindowExtentsRelative() const;
 
     bool                                IsScrollable() const;
     virtual void                        Scroll( long nHorzScroll, long nVertScroll,
                                                 ScrollFlags nFlags = ScrollFlags::NONE );
     void                                Scroll( long nHorzScroll, long nVertScroll,
-                                                const Rectangle& rRect, ScrollFlags nFlags = ScrollFlags::NONE );
+                                                const tools::Rectangle& rRect, ScrollFlags nFlags = ScrollFlags::NONE );
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
-    virtual void                        Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
+    virtual void                        Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
     void                                Validate();
     bool                                HasPaintEvent() const;
@@ -1157,16 +1157,16 @@ public:
     /// Add all children to rAllChildren recursively.
     SAL_DLLPRIVATE void                 CollectChildren(::std::vector<vcl::Window *>& rAllChildren );
 
-    virtual void                        ShowFocus(const Rectangle& rRect);
+    virtual void                        ShowFocus(const tools::Rectangle& rRect);
     void                                HideFocus();
 
     // transparent background for selected or checked items in toolboxes etc.
-    void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder );
+    void                                DrawSelectionBackground( const tools::Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder );
 
-    void                                ShowTracking( const Rectangle& rRect,
+    void                                ShowTracking( const tools::Rectangle& rRect,
                                                       ShowTrackFlags nFlags = ShowTrackFlags::Small );
     void                                HideTracking();
-    void                                InvertTracking( const Rectangle& rRect, ShowTrackFlags nFlags );
+    void                                InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlags );
     void                                InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags );
 
     void                                StartTracking( StartTrackingFlags nFlags = StartTrackingFlags::NONE );
@@ -1296,7 +1296,7 @@ public:
     /*  records all DrawText operations within the passed rectangle;
      *  a synchronous paint is sent to achieve this
      */
-    void                                RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect );
+    void                                RecordLayoutData( vcl::ControlLayoutData* pLayout, const tools::Rectangle& rRect );
 
     // set and retrieve for Toolkit
     VCLXWindow*                         GetWindowPeer() const;

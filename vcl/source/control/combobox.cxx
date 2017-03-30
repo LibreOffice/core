@@ -151,8 +151,8 @@ void ComboBox::ImplCalcEditHeight()
     if ( !IsDropDownBox() )
         m_pImpl->m_nDDHeight += 4;
 
-    Rectangle aCtrlRegion( Point( 0, 0 ), Size( 10, 10 ) );
-    Rectangle aBoundRegion, aContentRegion;
+    tools::Rectangle aCtrlRegion( Point( 0, 0 ), Size( 10, 10 ) );
+    tools::Rectangle aBoundRegion, aContentRegion;
     ImplControlValue aControlValue;
     ControlType aType = IsDropDownBox() ? ControlType::Combobox : ControlType::Editbox;
     if( GetNativeControlRegion( aType, ControlPart::Entire,
@@ -1005,10 +1005,10 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
     vcl::Window *pBorder = GetWindow( GetWindowType::Border );
     ImplControlValue aControlValue;
     Point aPoint;
-    Rectangle aContent, aBound;
+    tools::Rectangle aContent, aBound;
 
     // use the full extent of the control
-    Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+    tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
     if ( GetNativeControlRegion(ControlType::Combobox, ControlPart::ButtonDown,
         aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
@@ -1161,7 +1161,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
     bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
-        Rectangle aRect( aPos, aSize );
+        tools::Rectangle aRect( aPos, aSize );
         // aRect.Top() += nEditHeight;
         if ( bBorder )
         {
@@ -1210,14 +1210,14 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
             }
         }
 
-        Rectangle aClip( aPos, aSize );
+        tools::Rectangle aClip( aPos, aSize );
         pDev->IntersectClipRegion( aClip );
         sal_Int32 nLines = static_cast<sal_Int32>( nTextHeight > 0 ? (aSize.Height()-nEditHeight)/nTextHeight : 1 );
         if ( !nLines )
             nLines = 1;
         const sal_Int32 nTEntry = IsReallyVisible() ? m_pImpl->m_pImplLB->GetTopEntry() : 0;
 
-        Rectangle aTextRect( aPos, aSize );
+        tools::Rectangle aTextRect( aPos, aSize );
 
         aTextRect.Left() += 3*nOnePixel;
         aTextRect.Right() -= 3*nOnePixel;
@@ -1323,11 +1323,11 @@ void ComboBox::SetProminentEntryType( ProminentEntry eType )
     m_pImpl->m_pImplLB->SetProminentEntryType( eType );
 }
 
-Rectangle ComboBox::GetDropDownPosSizePixel() const
+tools::Rectangle ComboBox::GetDropDownPosSizePixel() const
 {
     return m_pImpl->m_pFloatWin
         ? m_pImpl->m_pFloatWin->GetWindowExtentsRelative(const_cast<ComboBox*>(this))
-        : Rectangle();
+        : tools::Rectangle();
 }
 
 const Wallpaper& ComboBox::GetDisplayBackground() const
@@ -1380,10 +1380,10 @@ void ComboBox::SetNoSelection()
     m_pImpl->m_pSubEdit->SetText( OUString() );
 }
 
-Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
+tools::Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
-    Rectangle aRect = m_pImpl->m_pImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
-    Rectangle aOffset = m_pImpl->m_pImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
+    tools::Rectangle aRect = m_pImpl->m_pImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
+    tools::Rectangle aOffset = m_pImpl->m_pImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
     aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
     return aRect;
 }
@@ -1443,10 +1443,10 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     vcl::Window *pBorder = m_rThis.GetWindow( GetWindowType::Border );
     ImplControlValue aControlValue;
     Point aPoint;
-    Rectangle aContent, aBound;
+    tools::Rectangle aContent, aBound;
 
     // use the full extent of the control
-    Rectangle aArea( aPoint, rBorderOutSz );
+    tools::Rectangle aArea( aPoint, rBorderOutSz );
 
     if (m_rThis.GetNativeControlRegion(ControlType::Combobox, ControlPart::ButtonDown,
             aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )

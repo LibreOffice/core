@@ -119,7 +119,7 @@ void PageObjectPainter::PaintBackground (
     {
         rDevice.SetFillColor(pPage->GetPageBackgroundColor(nullptr));
         rDevice.SetLineColor(pPage->GetPageBackgroundColor(nullptr));
-        const Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
+        const ::tools::Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::Part::Preview,
             PageObjectLayouter::ModelCoordinateSystem));
@@ -132,7 +132,7 @@ void PageObjectPainter::PaintPreview (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
-    const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
+    const ::tools::Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::Part::Preview,
         PageObjectLayouter::ModelCoordinateSystem));
@@ -192,7 +192,7 @@ Bitmap PageObjectPainter::GetPreviewBitmap (
         PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
 
         Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage));
-        const Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
+        const ::tools::Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::Part::Preview,
             PageObjectLayouter::ModelCoordinateSystem));
@@ -218,7 +218,7 @@ void PageObjectPainter::PaintPageNumber (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
-    const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
+    const ::tools::Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::Part::PageNumber,
         PageObjectLayouter::ModelCoordinateSystem));
@@ -274,7 +274,7 @@ void PageObjectPainter::PaintTransitionEffect (
     const SdPage* pPage = rpDescriptor->GetPage();
     if (pPage!=nullptr && pPage->getTransitionType() > 0)
     {
-        const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
+        const ::tools::Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::Part::TransitionEffectIndicator,
             PageObjectLayouter::ModelCoordinateSystem));
@@ -296,7 +296,7 @@ void PageObjectPainter::PaintCustomAnimationEffect (
     EffectSequence::iterator aEnd = aMainSequence->getEnd();
     if ( aIter != aEnd )
     {
-        const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
+        const ::tools::Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::Part::CustomAnimationEffectIndicator,
             PageObjectLayouter::ModelCoordinateSystem));
@@ -364,12 +364,12 @@ void PageObjectPainter::PaintBackgroundDetail (
             break;
     }
 
-    const Rectangle aFocusSize (pPageObjectLayouter->GetBoundingBox(
+    const ::tools::Rectangle aFocusSize (pPageObjectLayouter->GetBoundingBox(
                                         rpDescriptor,
                                         PageObjectLayouter::Part::FocusIndicator,
                                         PageObjectLayouter::ModelCoordinateSystem));
 
-    const Rectangle aPageObjectBox (pPageObjectLayouter->GetBoundingBox(
+    const ::tools::Rectangle aPageObjectBox (pPageObjectLayouter->GetBoundingBox(
                                         rpDescriptor,
                                         PageObjectLayouter::Part::PageObject,
                                         PageObjectLayouter::ModelCoordinateSystem));
@@ -428,18 +428,18 @@ void PageObjectPainter::PaintBackgroundDetail (
 
     // Get bounding box of the preview around which a shadow is painted.
     // Compensate for the border around the preview.
-    const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
+    const ::tools::Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
                                 rpDescriptor,
                                 PageObjectLayouter::Part::Preview,
                                 PageObjectLayouter::ModelCoordinateSystem));
-    Rectangle aFrameBox (aBox.Left()-1,aBox.Top()-1,aBox.Right()+1,aBox.Bottom()+1);
+    ::tools::Rectangle aFrameBox (aBox.Left()-1,aBox.Top()-1,aBox.Right()+1,aBox.Bottom()+1);
     mpShadowPainter->PaintFrame(rDevice, aFrameBox);
 }
 
 void PageObjectPainter::PaintBorder (
     OutputDevice& rDevice,
     const Theme::GradientColorType eColorType,
-    const Rectangle& rBox) const
+    const ::tools::Rectangle& rBox) const
 {
     rDevice.SetFillColor();
     const sal_Int32 nBorderWidth (1);

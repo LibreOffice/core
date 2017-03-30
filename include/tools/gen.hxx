@@ -339,6 +339,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
 /// etc. methods interpret the interval as closed, while the lowercase
 /// getWidth() / getHeight() etc. methods interpret the interval as half-open.
 /// Ok, now is the time for despair.
+namespace tools
+{
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle
 {
 public:
@@ -379,31 +381,31 @@ public:
     /// Returns the difference between bottom and top, assuming the range is inclusive.
     inline long         GetHeight() const;
 
-    Rectangle&          Union( const Rectangle& rRect );
-    Rectangle&          Intersection( const Rectangle& rRect );
-    inline Rectangle    GetUnion( const Rectangle& rRect ) const;
-    inline Rectangle    GetIntersection( const Rectangle& rRect ) const;
+    tools::Rectangle&          Union( const tools::Rectangle& rRect );
+    tools::Rectangle&          Intersection( const tools::Rectangle& rRect );
+    inline tools::Rectangle    GetUnion( const tools::Rectangle& rRect ) const;
+    inline tools::Rectangle    GetIntersection( const tools::Rectangle& rRect ) const;
 
     void                Justify();
 
     bool                IsInside( const Point& rPOINT ) const;
-    bool                IsInside( const Rectangle& rRect ) const;
-    bool                IsOver( const Rectangle& rRect ) const;
+    bool                IsInside( const tools::Rectangle& rRect ) const;
+    bool                IsOver( const tools::Rectangle& rRect ) const;
 
     void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
     inline bool         IsEmpty() const;
 
-    inline bool         operator == ( const Rectangle& rRect ) const;
-    inline bool         operator != ( const Rectangle& rRect ) const;
+    inline bool         operator == ( const tools::Rectangle& rRect ) const;
+    inline bool         operator != ( const tools::Rectangle& rRect ) const;
 
-    inline Rectangle&   operator += ( const Point& rPt );
-    inline Rectangle&   operator -= ( const Point& rPt );
+    inline tools::Rectangle&   operator += ( const Point& rPt );
+    inline tools::Rectangle&   operator -= ( const Point& rPt );
 
-    friend inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt );
-    friend inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt );
+    friend inline tools::Rectangle operator + ( const tools::Rectangle& rRect, const Point& rPt );
+    friend inline tools::Rectangle operator - ( const tools::Rectangle& rRect, const Point& rPt );
 
-    TOOLS_DLLPUBLIC friend SvStream&    ReadRectangle( SvStream& rIStream, Rectangle& rRect );
-    TOOLS_DLLPUBLIC friend SvStream&    WriteRectangle( SvStream& rOStream, const Rectangle& rRect );
+    TOOLS_DLLPUBLIC friend SvStream&    ReadRectangle( SvStream& rIStream, tools::Rectangle& rRect );
+    TOOLS_DLLPUBLIC friend SvStream&    WriteRectangle( SvStream& rOStream, const tools::Rectangle& rRect );
 
     // ONE
     long                getX() const { return nLeft; }
@@ -433,14 +435,15 @@ private:
     long                nRight;
     long                nBottom;
 };
+}
 
-inline Rectangle::Rectangle()
+inline tools::Rectangle::Rectangle()
 {
     nLeft = nTop = 0;
     nRight = nBottom = RECT_EMPTY;
 }
 
-inline Rectangle::Rectangle( const Point& rLT, const Point& rRB )
+inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
 {
     nLeft   = rLT.X();
     nTop    = rLT.Y();
@@ -448,7 +451,7 @@ inline Rectangle::Rectangle( const Point& rLT, const Point& rRB )
     nBottom = rRB.Y();
 }
 
-inline Rectangle::Rectangle( long _nLeft,  long _nTop,
+inline tools::Rectangle::Rectangle( long _nLeft,  long _nTop,
                              long _nRight, long _nBottom )
 {
     nLeft   = _nLeft;
@@ -457,7 +460,7 @@ inline Rectangle::Rectangle( long _nLeft,  long _nTop,
     nBottom = _nBottom;
 }
 
-inline Rectangle::Rectangle( const Point& rLT, const Size& rSize )
+inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
 {
     nLeft   = rLT.X();
     nTop    = rLT.Y();
@@ -465,33 +468,33 @@ inline Rectangle::Rectangle( const Point& rLT, const Size& rSize )
     nBottom = rSize.Height() ? nTop+rSize.Height()-1 : RECT_EMPTY;
 }
 
-inline bool Rectangle::IsEmpty() const
+inline bool tools::Rectangle::IsEmpty() const
 {
     return (nRight == RECT_EMPTY) || (nBottom == RECT_EMPTY);
 }
 
-inline Point Rectangle::TopLeft() const
+inline Point tools::Rectangle::TopLeft() const
 {
     return Point( nLeft, nTop );
 }
 
-inline Point Rectangle::TopRight() const
+inline Point tools::Rectangle::TopRight() const
 {
     return Point( (nRight == RECT_EMPTY) ? nLeft : nRight, nTop );
 }
 
-inline Point Rectangle::BottomLeft() const
+inline Point tools::Rectangle::BottomLeft() const
 {
     return Point( nLeft, (nBottom == RECT_EMPTY) ? nTop : nBottom );
 }
 
-inline Point Rectangle::BottomRight() const
+inline Point tools::Rectangle::BottomRight() const
 {
     return Point( (nRight  == RECT_EMPTY) ? nLeft : nRight,
                   (nBottom == RECT_EMPTY) ? nTop  : nBottom );
 }
 
-inline Point Rectangle::TopCenter() const
+inline Point tools::Rectangle::TopCenter() const
 {
     if ( IsEmpty() )
         return Point( nLeft, nTop );
@@ -500,7 +503,7 @@ inline Point Rectangle::TopCenter() const
                       std::min( nTop,  nBottom) );
 }
 
-inline Point Rectangle::BottomCenter() const
+inline Point tools::Rectangle::BottomCenter() const
 {
     if ( IsEmpty() )
         return Point( nLeft, nTop );
@@ -509,7 +512,7 @@ inline Point Rectangle::BottomCenter() const
                       std::max( nTop,  nBottom) );
 }
 
-inline Point Rectangle::LeftCenter() const
+inline Point tools::Rectangle::LeftCenter() const
 {
     if ( IsEmpty() )
         return Point( nLeft, nTop );
@@ -517,7 +520,7 @@ inline Point Rectangle::LeftCenter() const
         return Point( std::min( nLeft, nRight ), nTop + (nBottom - nTop)/2 );
 }
 
-inline Point Rectangle::RightCenter() const
+inline Point tools::Rectangle::RightCenter() const
 {
     if ( IsEmpty() )
         return Point( nLeft, nTop );
@@ -525,7 +528,7 @@ inline Point Rectangle::RightCenter() const
         return Point( std::max( nLeft, nRight ), nTop + (nBottom - nTop)/2 );
 }
 
-inline Point Rectangle::Center() const
+inline Point tools::Rectangle::Center() const
 {
     if ( IsEmpty() )
         return Point( nLeft, nTop );
@@ -533,7 +536,7 @@ inline Point Rectangle::Center() const
         return Point( nLeft+(nRight-nLeft)/2 , nTop+(nBottom-nTop)/2 );
 }
 
-inline void Rectangle::Move( long nHorzMove, long nVertMove )
+inline void tools::Rectangle::Move( long nHorzMove, long nVertMove )
 {
     nLeft += nHorzMove;
     nTop  += nVertMove;
@@ -543,7 +546,7 @@ inline void Rectangle::Move( long nHorzMove, long nVertMove )
         nBottom += nVertMove;
 }
 
-inline void Rectangle::SetPos( const Point& rPoint )
+inline void tools::Rectangle::SetPos( const Point& rPoint )
 {
     if ( nRight != RECT_EMPTY )
         nRight += rPoint.X() - nLeft;
@@ -553,7 +556,7 @@ inline void Rectangle::SetPos( const Point& rPoint )
     nTop  = rPoint.Y();
 }
 
-inline long Rectangle::GetWidth() const
+inline long tools::Rectangle::GetWidth() const
 {
     long n;
     if ( nRight == RECT_EMPTY )
@@ -570,7 +573,7 @@ inline long Rectangle::GetWidth() const
     return n;
 }
 
-inline long Rectangle::GetHeight() const
+inline long tools::Rectangle::GetHeight() const
 {
     long n;
     if ( nBottom == RECT_EMPTY )
@@ -587,24 +590,24 @@ inline long Rectangle::GetHeight() const
     return n;
 }
 
-inline Size Rectangle::GetSize() const
+inline Size tools::Rectangle::GetSize() const
 {
     return Size( GetWidth(), GetHeight() );
 }
 
-inline Rectangle Rectangle::GetUnion( const Rectangle& rRect ) const
+inline tools::Rectangle tools::Rectangle::GetUnion( const tools::Rectangle& rRect ) const
 {
-    Rectangle aTmpRect( *this );
+    tools::Rectangle aTmpRect( *this );
     return aTmpRect.Union( rRect );
 }
 
-inline Rectangle Rectangle::GetIntersection( const Rectangle& rRect ) const
+inline tools::Rectangle tools::Rectangle::GetIntersection( const tools::Rectangle& rRect ) const
 {
-    Rectangle aTmpRect( *this );
+    tools::Rectangle aTmpRect( *this );
     return aTmpRect.Intersection( rRect );
 }
 
-inline bool Rectangle::operator == ( const Rectangle& rRect ) const
+inline bool tools::Rectangle::operator == ( const tools::Rectangle& rRect ) const
 {
     return (nLeft   == rRect.nLeft   ) &&
            (nTop    == rRect.nTop    ) &&
@@ -612,7 +615,7 @@ inline bool Rectangle::operator == ( const Rectangle& rRect ) const
            (nBottom == rRect.nBottom );
 }
 
-inline bool Rectangle::operator != ( const Rectangle& rRect ) const
+inline bool tools::Rectangle::operator != ( const tools::Rectangle& rRect ) const
 {
     return (nLeft   != rRect.nLeft   ) ||
            (nTop    != rRect.nTop    ) ||
@@ -620,7 +623,7 @@ inline bool Rectangle::operator != ( const Rectangle& rRect ) const
            (nBottom != rRect.nBottom );
 }
 
-inline Rectangle& Rectangle::operator +=( const Point& rPt )
+inline tools::Rectangle& tools::Rectangle::operator +=( const Point& rPt )
 {
     nLeft += rPt.X();
     nTop  += rPt.Y();
@@ -631,7 +634,7 @@ inline Rectangle& Rectangle::operator +=( const Point& rPt )
     return *this;
 }
 
-inline Rectangle& Rectangle::operator -= ( const Point& rPt )
+inline tools::Rectangle& tools::Rectangle::operator -= ( const Point& rPt )
 {
     nLeft -= rPt.X();
     nTop  -= rPt.Y();
@@ -642,6 +645,8 @@ inline Rectangle& Rectangle::operator -= ( const Point& rPt )
     return *this;
 }
 
+namespace tools
+{
 inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt )
 {
     Rectangle aRect( rRect.nLeft  + rPt.X(), rRect.nTop    + rPt.Y(),
@@ -658,8 +663,9 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
                      (rRect.nBottom == RECT_EMPTY) ? RECT_EMPTY : rRect.nBottom - rPt.Y() );
     return aRect;
 }
+}
 
-inline void Rectangle::expand(long nExpandBy)
+inline void tools::Rectangle::expand(long nExpandBy)
 {
     nLeft   -= nExpandBy;
     nTop    -= nExpandBy;
@@ -667,7 +673,7 @@ inline void Rectangle::expand(long nExpandBy)
     nBottom += nExpandBy;
 }
 
-inline void Rectangle::shrink(long nShrinkBy)
+inline void tools::Rectangle::shrink(long nShrinkBy)
 {
     nLeft   += nShrinkBy;
     nTop    += nShrinkBy;
@@ -677,7 +683,7 @@ inline void Rectangle::shrink(long nShrinkBy)
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const Rectangle& rectangle )
+    std::basic_ostream<charT, traits> & stream, const tools::Rectangle& rectangle )
 {
     if (rectangle.IsEmpty())
         return stream << "EMPTY";

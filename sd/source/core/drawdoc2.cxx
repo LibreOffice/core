@@ -1047,7 +1047,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         Size                aGraphSize;
         Point               aRelPoint( rWinPoint );
         ImageMap&           rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
-        const Rectangle&    rRect = pObj->GetLogicRect();
+        const ::tools::Rectangle&    rRect = pObj->GetLogicRect();
         bool                bObjSupported = false;
 
         // execute HitTest

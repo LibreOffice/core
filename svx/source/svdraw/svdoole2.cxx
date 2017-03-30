@@ -134,7 +134,7 @@ public:
     void setWindow(const uno::Reference< awt::XWindow >& _xWindow);
 
 private:
-    Rectangle impl_getScaledRect_nothrow() const;
+    tools::Rectangle impl_getScaledRect_nothrow() const;
     // XStateChangeListener
     virtual void SAL_CALL changingState( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
     virtual void SAL_CALL stateChanged( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
@@ -172,9 +172,9 @@ SdrLightEmbeddedClient_Impl::SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj )
 : mpObj( pObj )
 {
 }
-Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
+tools::Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
 {
-    Rectangle aLogicRect( mpObj->GetLogicRect() );
+    tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
     // apply scaling to object area and convert to pixels
     aLogicRect.SetSize( Size( Fraction( aLogicRect.GetWidth() ) * m_aScaleWidth,
                                 Fraction( aLogicRect.GetHeight() ) * m_aScaleHeight ) );
@@ -236,7 +236,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
 
             MapUnit aObjMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpObj->GetObjRef()->getMapUnit( mpObj->GetAspect() ) );
 
-            Rectangle          aVisArea;
+            tools::Rectangle          aVisArea;
             awt::Size aSz;
             try
             {
@@ -259,7 +259,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
             aVisArea = OutputDevice::LogicToLogic( aVisArea, aObjMapUnit, aContainerMapUnit );
             Size aScaledSize( static_cast< long >( m_aScaleWidth * Fraction( aVisArea.GetWidth() ) ),
                                 static_cast< long >( m_aScaleHeight * Fraction( aVisArea.GetHeight() ) ) );
-            Rectangle aLogicRect( mpObj->GetLogicRect() );
+            tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
 
             // react to the change if the difference is bigger than one pixel
             Size aPixelDiff =
@@ -269,7 +269,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
                     aContainerMapUnit );
             if( aPixelDiff.Width() || aPixelDiff.Height() )
             {
-                mpObj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
+                mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
                 mpObj->BroadcastObjectChange();
             }
             else
@@ -311,13 +311,13 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( sal_Bool /*bVisibl
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
     if ( mpObj )
     {
-        Rectangle aLogicRect( mpObj->GetLogicRect() );
+        tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
         Size aLogicSize( aLogicRect.GetWidth(), aLogicRect.GetHeight() );
 
         if( mpObj->IsChart() )
         {
             //charts never should be stretched see #i84323# for example
-            mpObj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aLogicSize ) );
+            mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aLogicSize ) );
             mpObj->BroadcastObjectChange();
         } // if( mpObj->IsChart() )
     }
@@ -442,7 +442,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     if ( !mpObj )
         throw uno::RuntimeException();
 
-    Rectangle aLogicRect = impl_getScaledRect_nothrow();
+    tools::Rectangle aLogicRect = impl_getScaledRect_nothrow();
     MapUnit aContainerMapUnit( MapUnit::Map100thMM );
     uno::Reference< embed::XVisualObject > xParentVis( mpObj->GetParentXModel(), uno::UNO_QUERY );
     if ( xParentVis.is() )
@@ -475,8 +475,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
 
     // check if the change is at least one pixel in size
     awt::Rectangle aOldRect = getPlacement();
-    Rectangle aNewPixelRect = VCLRectangle( aPosRect );
-    Rectangle aOldPixelRect = VCLRectangle( aOldRect );
+    tools::Rectangle aNewPixelRect = VCLRectangle( aPosRect );
+    tools::Rectangle aOldPixelRect = VCLRectangle( aOldRect );
     if ( aOldPixelRect == aNewPixelRect )
         // nothing has changed
         return;
@@ -487,8 +487,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
     if ( xParentVis.is() )
         aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
 
-    Rectangle aNewLogicRect = Application::GetDefaultDevice()->PixelToLogic(aNewPixelRect,aContainerMapUnit);
-    Rectangle aLogicRect = impl_getScaledRect_nothrow();
+    tools::Rectangle aNewLogicRect = Application::GetDefaultDevice()->PixelToLogic(aNewPixelRect,aContainerMapUnit);
+    tools::Rectangle aLogicRect = impl_getScaledRect_nothrow();
 
     if ( aNewLogicRect != aLogicRect )
     {
@@ -510,7 +510,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
                 aContainerMapUnit );
         if( aPixelDiff.Width() || aPixelDiff.Height() )
         {
-            mpObj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aNewObjSize ) );
+            mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aNewObjSize ) );
             mpObj->BroadcastObjectChange();
         }
         else
@@ -700,7 +700,7 @@ SdrOle2Obj::SdrOle2Obj( bool bFrame_ ) :
 {
 }
 
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect) :
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const tools::Rectangle& rNewRect) :
     SdrRectObj(rNewRect),
     mpImpl(new SdrOle2ObjImpl(false/*bFrame_*/, rNewObjRef))
 {
@@ -1644,7 +1644,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 catch( embed::NoVisualAreaSizeException& )
                 {}
 
-                Rectangle aAcceptedVisArea;
+                tools::Rectangle aAcceptedVisArea;
                 aAcceptedVisArea.SetSize( Size( (long)( Fraction( long( aSz.Width ) ) * aScaleWidth ),
                                                 (long)( Fraction( long( aSz.Height ) ) * aScaleHeight ) ) );
                 if (aVisSize != aAcceptedVisArea.GetSize())
@@ -1680,7 +1680,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 {
                     if ( pClient )
                     {
-                        Rectangle aScaleRect(maRect.TopLeft(), aObjAreaSize);
+                        tools::Rectangle aScaleRect(maRect.TopLeft(), aObjAreaSize);
                         pClient->SetObjAreaAndScale( aScaleRect, aScaleWidth, aScaleHeight);
                     }
                     else
@@ -1703,7 +1703,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 Point aBR( maRect.BottomRight() );
                 Point aTL2( OutputDevice::LogicToLogic( aTL, pModel->GetScaleUnit(), aMapUnit) );
                 Point aBR2( OutputDevice::LogicToLogic( aBR, pModel->GetScaleUnit(), aMapUnit) );
-                Rectangle aNewRect( aTL2, aBR2 );
+                tools::Rectangle aNewRect( aTL2, aBR2 );
                 xVisualObject->setVisualAreaSize( GetAspect(), awt::Size( aNewRect.GetWidth(), aNewRect.GetHeight() ) );
             }
         }
@@ -1737,7 +1737,7 @@ void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
         ImpSetVisAreaSize();
 }
 
-void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
+void SdrOle2Obj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     SdrRectObj::NbcSetSnapRect(rRect);
 
@@ -1753,7 +1753,7 @@ void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
     }
 }
 
-void SdrOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
+void SdrOle2Obj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
 

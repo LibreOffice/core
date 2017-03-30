@@ -648,7 +648,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
 }
 
 bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
-                                            Rectangle& rRect ) const
+                                            tools::Rectangle& rRect ) const
 {
     const SdrMarkList &rMrkList = GetMarkedObjectList();
     bool bRet = false;
@@ -676,7 +676,7 @@ const SwFrame* SwDrawView::CalcAnchor()
     //Search for paragraph bound objects, otherwise only the
     //current anchor. Search only if we currently drag.
     const SwFrame* pAnch;
-    Rectangle aMyRect;
+    tools::Rectangle aMyRect;
     const bool bFly = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr;
     if ( bFly )
     {
@@ -712,7 +712,7 @@ const SwFrame* SwDrawView::CalcAnchor()
     }
     else
     {
-        Rectangle aRect = pObj->GetSnapRect();
+        tools::Rectangle aRect = pObj->GetSnapRect();
         aPt = bTopRight ? aRect.TopRight() : aRect.TopLeft();
     }
 
@@ -796,7 +796,7 @@ void SwDrawView::ModelHasChanged()
     }
 }
 
-void SwDrawView::MakeVisible( const Rectangle &rRect, vcl::Window & )
+void SwDrawView::MakeVisible( const tools::Rectangle &rRect, vcl::Window & )
 {
     OSL_ENSURE( rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
     rImp.GetShell()->MakeVisible( SwRect( rRect ) );

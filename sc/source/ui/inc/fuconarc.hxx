@@ -38,7 +38,7 @@ class FuConstArc : public FuConstruct
     virtual void Deactivate() override;
 
     // Create default drawing objects via keyboard
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;
 };
 
 #endif      // _SD_FUCONARC_HXX

@@ -5889,7 +5889,7 @@ void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
             if (pDocSh)
             {
                 //  GetMMRect converts using HMM_PER_TWIPS, like the DrawingLayer
-                Rectangle aMMRect(pDocSh->GetDocument().GetMMRect(
+                tools::Rectangle aMMRect(pDocSh->GetDocument().GetMMRect(
                                         aRange.aStart.Col(), aRange.aStart.Row(),
                                         aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() ));
                 awt::Point aPos( aMMRect.Left(), aMMRect.Top() );
@@ -5902,7 +5902,7 @@ void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
             if (pDocSh)
             {
                 //  GetMMRect converts using HMM_PER_TWIPS, like the DrawingLayer
-                Rectangle aMMRect = pDocSh->GetDocument().GetMMRect(
+                tools::Rectangle aMMRect = pDocSh->GetDocument().GetMMRect(
                                         aRange.aStart.Col(), aRange.aStart.Row(),
                                         aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() );
                 Size aSize(aMMRect.GetSize());

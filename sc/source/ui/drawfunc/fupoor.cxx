@@ -255,23 +255,23 @@ void FuPoor::StopDragTimer()
 |*
 \************************************************************************/
 
-SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& /* rRectangle */)
+SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& /* rRectangle */)
 {
     // empty base implementation
     return nullptr;
 }
 
-void FuPoor::ImpForceQuadratic(Rectangle& rRect)
+void FuPoor::ImpForceQuadratic(tools::Rectangle& rRect)
 {
     if(rRect.GetWidth() > rRect.GetHeight())
     {
-        rRect = Rectangle(
+        rRect = tools::Rectangle(
             Point(rRect.Left() + ((rRect.GetWidth() - rRect.GetHeight()) / 2), rRect.Top()),
             Size(rRect.GetHeight(), rRect.GetHeight()));
     }
     else
     {
-        rRect = Rectangle(
+        rRect = tools::Rectangle(
             Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)),
             Size(rRect.GetWidth(), rRect.GetWidth()));
     }

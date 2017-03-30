@@ -126,7 +126,7 @@ void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
         OUString sText = SW_RESSTR( nResId ) + ": " +
                         aContentAtPos.aFnd.pRedl->GetAuthorString() + " - " +
                         GetAppLangDateTimeString( aContentAtPos.aFnd.pRedl->GetTimeStamp() );
-        Help::ShowQuickHelp( this,PixelToLogic(Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sText);
+        Help::ShowQuickHelp( this,PixelToLogic(tools::Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sText);
     }
 }
 
@@ -138,7 +138,7 @@ void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& 
 
     if ( GetTextView() )
     {
-        GetTextView()->GetOutliner()->Draw(pDev, Rectangle(rPt, aSize));
+        GetTextView()->GetOutliner()->Draw(pDev, tools::Rectangle(rPt, aSize));
     }
 
     if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
@@ -155,18 +155,18 @@ void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& 
     }
 }
 
-void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         if (mrSidebarWin.IsMouseOverSidebarWin() || HasFocus())
         {
-            rRenderContext.DrawGradient(Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
+            rRenderContext.DrawGradient(tools::Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
                                         Gradient(GradientStyle::Linear, mrSidebarWin.ColorDark(), mrSidebarWin.ColorDark()));
         }
         else
         {
-            rRenderContext.DrawGradient(Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
+            rRenderContext.DrawGradient(tools::Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
                            Gradient(GradientStyle::Linear, mrSidebarWin.ColorLight(), mrSidebarWin.ColorDark()));
         }
     }
@@ -189,15 +189,15 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectang
     }
 }
 
-void SidebarTextControl::LogicInvalidate(const Rectangle* pRectangle)
+void SidebarTextControl::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    Rectangle aRectangle;
+    tools::Rectangle aRectangle;
 
     if (!pRectangle)
     {
         Push(PushFlags::MAPMODE);
         EnableMapMode();
-        aRectangle = Rectangle(Point(0, 0), PixelToLogic(GetSizePixel()));
+        aRectangle = tools::Rectangle(Point(0, 0), PixelToLogic(GetSizePixel()));
         Pop();
     }
     else
@@ -314,7 +314,7 @@ void SidebarTextControl::MouseMove( const MouseEvent& rMEvt )
                     sURL = SwViewShell::GetShellRes()->aLinkCtrlClick + ": " + sURL;
                 else
                     sURL = SwViewShell::GetShellRes()->aLinkClick + ": " + sURL;
-                Help::ShowQuickHelp( this,PixelToLogic(Rectangle(GetPosPixel(),Size(50,10))),sURL);
+                Help::ShowQuickHelp( this,PixelToLogic(tools::Rectangle(GetPosPixel(),Size(50,10))),sURL);
             }
         }
     }

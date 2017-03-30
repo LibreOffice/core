@@ -295,9 +295,9 @@ void SvpSalFrame::GetClientSize( long& rWidth, long& rHeight )
     rHeight = maGeometry.nHeight;
 }
 
-void SvpSalFrame::GetWorkArea( Rectangle& rRect )
+void SvpSalFrame::GetWorkArea( tools::Rectangle& rRect )
 {
-    rRect = Rectangle( Point( 0, 0 ),
+    rRect = tools::Rectangle( Point( 0, 0 ),
                        Size( VIRTUAL_DESKTOP_WIDTH, VIRTUAL_DESKTOP_HEIGHT ) );
 }
 

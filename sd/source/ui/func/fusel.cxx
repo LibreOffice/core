@@ -955,7 +955,7 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
                 }
 
                 Point centerPoint;
-                Rectangle rect = mpView->GetMarkedObjRect();
+                ::tools::Rectangle rect = mpView->GetMarkedObjRect();
                 centerPoint = mpWindow->LogicToPixel(rect.Center());
                 Point aPoint = bMovedToCenterPoint? oldPoint:centerPoint;
                 Point ePoint = aPoint + Point(nX,nY);

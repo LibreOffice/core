@@ -139,7 +139,7 @@ lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
     if (rShell.GetWin())
     {
         vcl::Window& rWindow = *(rShell.GetWin());
-        const Rectangle aRectanglePixel(rShell.GetOut()->LogicToPixel(rRect.SVRect()));
+        const tools::Rectangle aRectanglePixel(rShell.GetOut()->LogicToPixel(rRect.SVRect()));
         PaintTransparentChildren(rWindow, aRectanglePixel);
     }
 }
@@ -342,9 +342,9 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                         bool bSizeOK = true;
 
-                        Rectangle aTmp1( aRect.SVRect() );
+                        tools::Rectangle aTmp1( aRect.SVRect() );
                         aTmp1 = GetOut()->LogicToPixel( aTmp1 );
-                        Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
+                        tools::Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
                         if ( aTmp2.Left() > aRect.Left() )
                             aTmp1.Left() = std::max( 0L, aTmp1.Left() - 1L );
                         if ( aTmp2.Top() > aRect.Top() )
@@ -1135,7 +1135,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                             // ignore objects that are not actually placed on the page
                             if (pObj->IsFormatPossible())
                             {
-                                const Rectangle &rBound = pObj->GetObjRect().SVRect();
+                                const tools::Rectangle &rBound = pObj->GetObjRect().SVRect();
                                 if (rBound.Left() != FAR_AWAY) {
                                     // OD 03.03.2003 #107927# - use correct datatype
                                     const SwTwips nL = std::max( 0L, rBound.Left() - nOfst );
@@ -1150,7 +1150,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                 }
                 pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
             }
-            Rectangle aRect( aPrevArea.SVRect() );
+            tools::Rectangle aRect( aPrevArea.SVRect() );
             aRect.Left()  = nMinLeft;
             aRect.Right() = nMaxRight;
             if( VisArea().IsOver( aPrevArea ) && !mnLockPaint )
@@ -1211,7 +1211,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
         Imp()->UpdateAccessible();
 }
 
-bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
+bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle *pRect )
 {
 #if !defined(MACOSX) && !defined(ANDROID) && !defined(IOS)
     // #i98766# - disable smooth scrolling for Mac
@@ -1354,7 +1354,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                 lScroll = aTmpOldVis.Top() - VisArea().Top();
                 if ( pRect )
                 {
-                    Rectangle aTmp( aTmpOldVis.SVRect() );
+                    tools::Rectangle aTmp( aTmpOldVis.SVRect() );
                     aTmp.Left() = pRect->Left();
                     aTmp.Right()= pRect->Right();
                     GetWin()->Scroll( 0, lScroll, aTmp, ScrollFlags::Children);
@@ -1392,12 +1392,12 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                     if(!Imp()->m_bStopSmooth)
                     {
                             // start paint on logic base
-                            const Rectangle aTargetLogic(Imp()->m_aSmoothRect.SVRect());
+                            const tools::Rectangle aTargetLogic(Imp()->m_aSmoothRect.SVRect());
                             DLPrePaint2(vcl::Region(aTargetLogic));
 
                             // get target rectangle in discrete pixels
                             OutputDevice& rTargetDevice = mpTargetPaintWindow->GetTargetOutputDevice();
-                            const Rectangle aTargetPixel(rTargetDevice.LogicToPixel(aTargetLogic));
+                            const tools::Rectangle aTargetPixel(rTargetDevice.LogicToPixel(aTargetLogic));
 
                             // get source top-left in discrete pixels
                             const Point aSourceTopLeft(pVout->LogicToPixel(aTargetLogic.TopLeft()));
@@ -1534,7 +1534,7 @@ void SwViewShell::PaintDesktop_(vcl::RenderContext& /*rRenderContext*/, const Sw
 
     for ( auto &rRgn : rRegion )
     {
-        const Rectangle aRectangle(rRgn.SVRect());
+        const tools::Rectangle aRectangle(rRgn.SVRect());
 
         // #i93170#
         // Here we have a real Problem. On the one hand we have the buffering for paint
@@ -1720,7 +1720,7 @@ public:
 };
 }
 
-void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
+void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
 {
     RenderContextGuard aGuard(mpOut, &rRenderContext, this);
     if ( mnLockPaint )
@@ -1890,7 +1890,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
         GetWin()->EnableMapMode(false);
     }
 
-    Rectangle aOutRect = Rectangle(Point(tilePosX, tilePosY),
+    tools::Rectangle aOutRect = tools::Rectangle(Point(tilePosX, tilePosY),
                                    rDevice.PixelToLogic(Size(contextWidth, contextHeight)));
 
     // Make the requested area visible -- we can't use MakeVisible as that will

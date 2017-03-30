@@ -1211,9 +1211,9 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
         // of control sizes, if yes, make app font scalings larger
         // so dialog positioning is not completely off
         ImplControlValue aControlValue;
-        Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
-        Rectangle aBoundingRgn( aCtrlRegion );
-        Rectangle aContentRgn( aCtrlRegion );
+        tools::Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
+        tools::Rectangle aBoundingRgn( aCtrlRegion );
+        tools::Rectangle aContentRgn( aCtrlRegion );
         if( pWindow->GetNativeControlRegion( ControlType::Editbox, ControlPart::Entire, aCtrlRegion,
                                              ControlState::ENABLED, aControlValue, OUString(),
                                              aBoundingRgn, aContentRgn ) )
@@ -1248,7 +1248,7 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
 
     if (bWindowInvalidate)
     {
-        const Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
+        const tools::Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
                 Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
 
         ImplMoveAllInvalidateRegions(aSrcRect,
@@ -1454,7 +1454,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 
     if ( IsReallyVisible() )
     {
-        Rectangle aOldWinRect( Point( nOldOutOffX, nOldOutOffY ),
+        tools::Rectangle aOldWinRect( Point( nOldOutOffX, nOldOutOffY ),
                                Size( nOldOutWidth, nOldOutHeight ) );
         pOldRegion = new vcl::Region( aOldWinRect );
         if ( mpWindowImpl->mbWinRegion )
@@ -1542,7 +1542,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             if ( bCopyBits && !pOverlapRegion )
             {
                 pOverlapRegion = new vcl::Region();
-                ImplCalcOverlapRegion( Rectangle( Point( mnOutOffX, mnOutOffY ),
+                ImplCalcOverlapRegion( tools::Rectangle( Point( mnOutOffX, mnOutOffY ),
                                                   Size( mnOutWidth, mnOutHeight ) ),
                                        *pOverlapRegion, false, true );
             }
@@ -1560,7 +1560,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             if ( bCopyBits && !pOverlapRegion )
             {
                 pOverlapRegion = new vcl::Region();
-                ImplCalcOverlapRegion( Rectangle( Point( mnOutOffX, mnOutOffY ),
+                ImplCalcOverlapRegion( tools::Rectangle( Point( mnOutOffX, mnOutOffY ),
                                                   Size( mnOutWidth, mnOutHeight ) ),
                                        *pOverlapRegion, false, true );
             }
@@ -1646,7 +1646,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                     if ( bCopyBits && bParentPaint && !HasPaintEvent() )
                     {
                         Point aPoint( mnOutOffX, mnOutOffY );
-                        vcl::Region aRegion( Rectangle( aPoint,
+                        vcl::Region aRegion( tools::Rectangle( aPoint,
                                                    Size( mnOutWidth, mnOutHeight ) ) );
                         if ( mpWindowImpl->mbWinRegion )
                             aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
@@ -1659,7 +1659,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                         if ( !aRegion.IsEmpty() )
                         {
                             // adapt Paint areas
-                            ImplMoveAllInvalidateRegions( Rectangle( Point( nOldOutOffX, nOldOutOffY ),
+                            ImplMoveAllInvalidateRegions( tools::Rectangle( Point( nOldOutOffX, nOldOutOffY ),
                                                                      Size( nOldOutWidth, nOldOutHeight ) ),
                                                           mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY,
                                                           true );
@@ -1698,7 +1698,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 else
                 {
                     Point aPoint( mnOutOffX, mnOutOffY );
-                    vcl::Region aRegion( Rectangle( aPoint,
+                    vcl::Region aRegion( tools::Rectangle( aPoint,
                                                Size( mnOutWidth, mnOutHeight ) ) );
                     aRegion.Exclude( *pOldRegion );
                     if ( mpWindowImpl->mbWinRegion )
@@ -1875,7 +1875,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
             Point aPos = GetPosPixel();
             if ( ImplGetParent() && !ImplIsOverlapWindow() )
                 aPos = ImplGetParent()->OutputToScreenPixel( aPos );
-            Rectangle   aRect( aPos, GetSizePixel() );
+            tools::Rectangle   aRect( aPos, GetSizePixel() );
 
             Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aRect, rStr );
         }
@@ -1890,7 +1890,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
             Point aPos = GetPosPixel();
             if ( ImplGetParent() && !ImplIsOverlapWindow() )
                 aPos = ImplGetParent()->OutputToScreenPixel( aPos );
-            Rectangle   aRect( aPos, GetSizePixel() );
+            tools::Rectangle   aRect( aPos, GetSizePixel() );
             OUString      aHelpText;
             if ( !rStr.isEmpty() )
                 aHelpText = GetHelpText();
@@ -2102,7 +2102,7 @@ void Window::EndExtTextInput()
         ImplGetFrame()->EndExtTextInput( EndExtTextInputFlags::Complete );
 }
 
-void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
+void Window::SetCursorRect( const tools::Rectangle* pRect, long nExtTextInputWidth )
 {
 
     ImplWinData* pWinData = ImplGetWinData();
@@ -2119,14 +2119,14 @@ void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
     else
     {
         if ( pRect )
-            pWinData->mpCursorRect = new Rectangle( *pRect );
+            pWinData->mpCursorRect = new tools::Rectangle( *pRect );
     }
 
     pWinData->mnCursorExtWidth = nExtTextInputWidth;
 
 }
 
-const Rectangle* Window::GetCursorRect() const
+const tools::Rectangle* Window::GetCursorRect() const
 {
 
     ImplWinData* pWinData = ImplGetWinData();
@@ -2140,7 +2140,7 @@ long Window::GetCursorExtTextInputWidth() const
     return pWinData->mnCursorExtWidth;
 }
 
-void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, bool bVertical ) {
+void Window::SetCompositionCharRect( const tools::Rectangle* pRect, long nCompositionLength, bool bVertical ) {
 
     ImplWinData* pWinData = ImplGetWinData();
     delete[] pWinData->mpCompositionCharRects;
@@ -2149,7 +2149,7 @@ void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLe
     pWinData->mnCompositionCharRects = nCompositionLength;
     if ( pRect && (nCompositionLength > 0) )
     {
-        pWinData->mpCompositionCharRects = new Rectangle[nCompositionLength];
+        pWinData->mpCompositionCharRects = new tools::Rectangle[nCompositionLength];
         for (long i = 0; i < nCompositionLength; ++i)
             pWinData->mpCompositionCharRects[i] = pRect[i];
     }
@@ -2252,7 +2252,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                     * invalidated. Workaround: invalidate an area on the parent, too
                     */
                     const int workaround_border = 5;
-                    Rectangle aBounds( aInvRegion.GetBoundRect() );
+                    tools::Rectangle aBounds( aInvRegion.GetBoundRect() );
                     aBounds.Left()      -= workaround_border;
                     aBounds.Top()       -= workaround_border;
                     aBounds.Right()     += workaround_border;
@@ -2759,7 +2759,7 @@ void Window::setPosSizePixel( long nX, long nY,
             if( pParent && pParent->ImplIsAntiparallel() )
             {
                 // --- RTL --- (re-mirror at parent window)
-                Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
+                tools::Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
                 const OutputDevice *pParentOutDev = pParent->GetOutDev();
                 pParentOutDev->ReMirror( aRect );
                 nX = aRect.Left();
@@ -2845,9 +2845,9 @@ Point Window::GetPosPixel() const
     return mpWindowImpl->maPos;
 }
 
-Rectangle Window::GetDesktopRectPixel() const
+tools::Rectangle Window::GetDesktopRectPixel() const
 {
-    Rectangle rRect;
+    tools::Rectangle rRect;
     mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrame->GetWorkArea( rRect );
     return rRect;
 }
@@ -2921,7 +2921,7 @@ Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
     return p;
 }
 
-Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rRect ) const
+tools::Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle &rRect ) const
 {
     // this method creates unmirrored screen coordinates to be compared with the desktop
     // and is used for positioning of RTL popup windows correctly on the screen
@@ -2935,22 +2935,22 @@ Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rR
     p2.X() = g.nX+g.nWidth-p2.X();
     p2.Y() += g.nY;
 
-    return Rectangle( p1, p2 );
+    return tools::Rectangle( p1, p2 );
 }
 
-Rectangle Window::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
+tools::Rectangle Window::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
 {
     // with decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, false );
 }
 
-Rectangle Window::GetClientWindowExtentsRelative() const
+tools::Rectangle Window::GetClientWindowExtentsRelative() const
 {
     // without decoration
     return ImplGetWindowExtentsRelative( nullptr, true );
 }
 
-Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const
+tools::Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const
 {
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     // make sure we use the extent of our border window,
@@ -2975,23 +2975,23 @@ Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bo
         vcl::Window *pRelWin = (!bClientOnly && pRelativeWindow->mpWindowImpl->mpBorderWindow) ? pRelativeWindow->mpWindowImpl->mpBorderWindow.get() : pRelativeWindow;
         aPos = pRelWin->AbsoluteScreenToOutputPixel( aPos );
     }
-    return Rectangle( aPos, aSize );
+    return tools::Rectangle( aPos, aSize );
 }
 
 void Window::Scroll( long nHorzScroll, long nVertScroll, ScrollFlags nFlags )
 {
 
-    ImplScroll( Rectangle( Point( mnOutOffX, mnOutOffY ),
+    ImplScroll( tools::Rectangle( Point( mnOutOffX, mnOutOffY ),
                            Size( mnOutWidth, mnOutHeight ) ),
                 nHorzScroll, nVertScroll, nFlags & ~ScrollFlags::Clip );
 }
 
 void Window::Scroll( long nHorzScroll, long nVertScroll,
-                     const Rectangle& rRect, ScrollFlags nFlags )
+                     const tools::Rectangle& rRect, ScrollFlags nFlags )
 {
     OutputDevice *pOutDev = GetOutDev();
-    Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
-    aRect.Intersection( Rectangle( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) ) );
+    tools::Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
+    aRect.Intersection( tools::Rectangle( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) ) );
     if ( !aRect.IsEmpty() )
         ImplScroll( aRect, nHorzScroll, nVertScroll, nFlags );
 }
@@ -2999,7 +2999,7 @@ void Window::Scroll( long nHorzScroll, long nVertScroll,
 void Window::Flush()
 {
 
-    const Rectangle aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+    const tools::Rectangle aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
     mpWindowImpl->mpFrame->Flush( aWinRect );
 }
 
@@ -3295,7 +3295,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
     return static_cast < XClipboard * > (nullptr);
 }
 
-void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect )
+void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const tools::Rectangle& rRect )
 {
     assert(mpOutDevData);
     mpOutDevData->mpRecordLayout = pLayout;
@@ -3304,7 +3304,7 @@ void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle&
     mpOutDevData->mpRecordLayout = nullptr;
 }
 
-void Window::DrawSelectionBackground( const Rectangle& rRect,
+void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
                                       sal_uInt16 highlight,
                                       bool bChecked,
                                       bool bDrawBorder
@@ -3336,7 +3336,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
         aSelectionBorderCol = aSelectionFillCol;
     }
 
-    Rectangle aRect( rRect );
+    tools::Rectangle aRect( rRect );
     Color oldFillCol = GetFillColor();
     Color oldLineCol = GetLineColor();
 

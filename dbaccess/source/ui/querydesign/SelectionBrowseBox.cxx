@@ -1206,7 +1206,7 @@ bool OSelectionBrowseBox::SeekRow(long nRow)
     return nRow < m_nVisibleCount;
 }
 
-void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
+void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     rDev.SetClipRegion(vcl::Region(rRect));
 
@@ -1227,9 +1227,9 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
     rDev.SetClipRegion( );
 }
 
-void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const
+void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const
 {
-    Rectangle aRect(rRect);
+    tools::Rectangle aRect(rRect);
     aRect.TopLeft().Y() -= 2;
     OUString  aLabel(ModuleRes(STR_QUERY_HANDLETEXT));
 
@@ -1262,7 +1262,7 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 _nColumnId)
     InsertDataColumn( _nColumnId , OUString(), DEFAULT_SIZE );
 
     // Neuzeichnen
-    Rectangle aInvalidRect = GetInvalidRect( _nColumnId );
+    tools::Rectangle aInvalidRect = GetInvalidRect( _nColumnId );
     Invalidate( aInvalidRect );
 
     ActivateCell( nCurrentRow, nCurCol );
@@ -1458,13 +1458,13 @@ void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
         ActivateCell(GetCurRow(), GetCurColumnId());
 }
 
-Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
+tools::Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 {
     // The rectangle is the full output area of the window
-    Rectangle aInvalidRect( Point(0,0), GetOutputSizePixel() );
+    tools::Rectangle aInvalidRect( Point(0,0), GetOutputSizePixel() );
 
     // now update the left side
-    Rectangle aFieldRect(GetCellRect( 0, nColId )); // used instead of GetFieldRectPixel
+    tools::Rectangle aFieldRect(GetCellRect( 0, nColId )); // used instead of GetFieldRectPixel
     aInvalidRect.Left() = aFieldRect.Left();
 
     return aInvalidRect;
@@ -1523,7 +1523,7 @@ void OSelectionBrowseBox::InsertColumn(const OTableFieldDescRef& pEntry, sal_uIn
 
     SetColWidth(nColumnId,getDesignView()->getColWidth(GetColumnPos(nColumnId)-1));
     // redraw
-    Rectangle aInvalidRect = GetInvalidRect( nColumnId );
+    tools::Rectangle aInvalidRect = GetInvalidRect( nColumnId );
     Invalidate( aInvalidRect );
 
     ActivateCell( nCurrentRow, nCurCol );
@@ -1916,7 +1916,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                     sal_uInt16 nSelId = GetColumnId(
                         sal::static_int_cast< sal_uInt16 >(
                             FirstSelectedColumn() ) );
-                    ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
+                    ::tools::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }

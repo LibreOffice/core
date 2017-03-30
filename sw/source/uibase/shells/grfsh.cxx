@@ -157,7 +157,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 SwMirrorGrf aMirror( static_cast<const SwMirrorGrf&>( aSet.Get(RES_GRFATR_MIRRORGRF)) );
                 SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF)) );
 
-                Rectangle aCropRectangle(
+                tools::Rectangle aCropRectangle(
                     convertTwipToMm100(aCrop.GetLeft()),
                     convertTwipToMm100(aCrop.GetTop()),
                     convertTwipToMm100(aCrop.GetRight()),
@@ -170,7 +170,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 {
                     rSh.StartAllAction();
                     rSh.StartUndo(SwUndoId::START);
-                    Rectangle aScaledCropedRectangle = aDialog->GetScaledCropRectangle();
+                    tools::Rectangle aScaledCropedRectangle = aDialog->GetScaledCropRectangle();
 
                     aCrop.SetLeft(   convertMm100ToTwip( aScaledCropedRectangle.Left() ));
                     aCrop.SetTop(    convertMm100ToTwip( aScaledCropedRectangle.Top() ));
@@ -876,7 +876,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     SfxItemSet aSet( rShell.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
     rShell.GetCurAttr( aSet );
     SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF) ) );
-    Rectangle aCropRectangle(aCrop.GetLeft(),  aCrop.GetTop(), aCrop.GetRight(), aCrop.GetBottom());
+    tools::Rectangle aCropRectangle(aCrop.GetLeft(),  aCrop.GetTop(), aCrop.GetRight(), aCrop.GetBottom());
 
     if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
     {

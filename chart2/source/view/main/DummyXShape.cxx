@@ -786,7 +786,7 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
         ScopedVclPtrInstance< VirtualDevice > pDevice(*Application::GetDefaultDevice(),
                                                       DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
         pDevice->Erase();
-        Rectangle aRect;
+        tools::Rectangle aRect;
         pDevice->SetFont(aFont);
         pDevice->GetTextBoundRect(aRect, rText);
         int screenWidth = (aRect.BottomRight().X());

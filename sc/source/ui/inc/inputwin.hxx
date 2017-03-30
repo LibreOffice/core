@@ -106,7 +106,7 @@ public:
     DECL_LINK(ModifyHdl, LinkParamNone*, void);
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -228,7 +228,7 @@ public:
     virtual         ~ScInputWindow() override;
     virtual void    dispose() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    Select() override;
 

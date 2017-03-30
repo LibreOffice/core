@@ -50,7 +50,7 @@ public:
     void SetAttributes(SfxItemSet& rAttr, SdrObject* pObj);
     void SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj);
 
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
 protected:
     FuConstructRectangle (

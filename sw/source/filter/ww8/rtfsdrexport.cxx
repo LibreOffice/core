@@ -81,7 +81,7 @@ void RtfSdrExport::CloseContainer()
     EscherEx::CloseContainer();
 }
 
-sal_uInt32 RtfSdrExport::EnterGroup(const OUString& /*rShapeName*/, const Rectangle* /*pRect*/)
+sal_uInt32 RtfSdrExport::EnterGroup(const OUString& /*rShapeName*/, const tools::Rectangle* /*pRect*/)
 {
     return GenerateShapeId();
 }
@@ -129,7 +129,7 @@ inline sal_Int32 impl_GetPointComponent(const sal_uInt8*& pVal, std::size_t& rVe
     return nRet;
 }
 
-void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRect)
+void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangle& rRect)
 {
     if (m_nShapeType == ESCHER_ShpInst_Nil)
         return;
@@ -399,7 +399,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRec
     }
 }
 
-void RtfSdrExport::AddLineDimensions(const Rectangle& rRectangle)
+void RtfSdrExport::AddLineDimensions(const tools::Rectangle& rRectangle)
 {
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>("posrelh", "3"));
@@ -425,7 +425,7 @@ void RtfSdrExport::AddLineDimensions(const Rectangle& rRectangle)
     m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
 }
 
-void RtfSdrExport::AddRectangleDimensions(OStringBuffer& rBuffer, const Rectangle& rRectangle)
+void RtfSdrExport::AddRectangleDimensions(OStringBuffer& rBuffer, const tools::Rectangle& rRectangle)
 {
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>("posrelh", "3"));

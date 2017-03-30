@@ -41,7 +41,7 @@ namespace svt {
 class DataChangedEvent;
 class FixedLine;
 class NotifyEvent;
-class Rectangle;
+namespace tools { class Rectangle; }
 
 namespace dbaui
 {
@@ -82,13 +82,13 @@ namespace dbaui
         void attachFrame(const css::uno::Reference< css::frame::XFrame >& _xFrame);
     protected:
         // window overridables
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect ) override;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect ) override;
 
         /// re-arrange all controls, including the toolbox, it's separator, and the "real view"
-        virtual void resizeAll( const Rectangle& _rPlayground );
+        virtual void resizeAll( const tools::Rectangle& _rPlayground );
 
         // re-arrange the controls belonging to the document itself
-        virtual void resizeDocumentView( Rectangle& _rPlayground );
+        virtual void resizeDocumentView( tools::Rectangle& _rPlayground );
     };
 }
 #endif // INCLUDED_DBACCESS_DATAVIEW_HXX

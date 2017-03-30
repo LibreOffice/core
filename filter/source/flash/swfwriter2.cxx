@@ -220,13 +220,13 @@ void Tag::addRGB( const Color& rColor )
 }
 
 
-void Tag::addRect( const Rectangle& rRect )
+void Tag::addRect( const tools::Rectangle& rRect )
 {
     writeRect( *this, rRect );
 }
 
 
-void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
+void Tag::writeRect( SvStream& rOut, const tools::Rectangle& rRect )
 {
     BitStream aBits;
 
@@ -509,7 +509,7 @@ FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
 
 
 /** this c'tor creates a linear or radial gradient fill style */
-FillStyle::FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient )
+FillStyle::FillStyle( const tools::Rectangle& rBoundRect, const Gradient& rGradient )
     : meType(Impl_getFillStyleType(rGradient))
     , mnBitmapId(0)
     , maGradient(rGradient)

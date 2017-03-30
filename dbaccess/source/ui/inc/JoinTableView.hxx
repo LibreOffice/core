@@ -88,8 +88,8 @@ namespace dbaui
         std::vector<VclPtr<OTableConnection> >    m_vTableConnection;
 
         Idle                m_aDragScrollIdle;
-        Rectangle           m_aDragRect;
-        Rectangle           m_aSizingRect;
+        tools::Rectangle           m_aDragRect;
+        tools::Rectangle           m_aSizingRect;
         Point               m_aDragOffset;
         Point               m_aScrollOffset;
         Point               m_ptPrevDraggingPos;
@@ -128,7 +128,7 @@ namespace dbaui
         ScrollBar& GetVScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetVScrollBar(); }
         DECL_LINK( ScrollHdl, ScrollBar*, void );
 
-        void DrawConnections(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+        void DrawConnections(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
         void InvalidateConnections();
 
         void BeginChildMove( OTableWindow* pTabWin, const Point& rMousePos );
@@ -270,7 +270,7 @@ namespace dbaui
         virtual void MouseButtonUp( const MouseEvent& rEvt ) override;
         virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
         virtual void Tracking( const TrackingEvent& rTEvt ) override;
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
         virtual void ConnDoubleClicked(VclPtr<OTableConnection>& rConnection);
         void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;

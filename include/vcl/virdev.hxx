@@ -66,7 +66,7 @@ private:
 
         @since \#i32109#
      */
-    SAL_DLLPRIVATE void ImplFillOpaqueRectangle( const Rectangle& rRect );
+    SAL_DLLPRIVATE void ImplFillOpaqueRectangle( const tools::Rectangle& rRect );
 
 protected:
     virtual bool AcquireGraphics() const override;

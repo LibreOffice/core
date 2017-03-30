@@ -377,7 +377,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
 // #i32109#: Fill opaque areas correctly (without relying on
 // fill/linecolor state)
-void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
+void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
 {
     // Set line and fill color to black (->opaque),
     // fill rect with that (linecolor, too, because of

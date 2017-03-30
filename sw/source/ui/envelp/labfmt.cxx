@@ -144,7 +144,7 @@ Size SwLabPreview::GetOptimalSize() const
 
 VCL_BUILDER_FACTORY(SwLabPreview)
 
-void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const Size aSz(GetOutputSizePixel());
 
@@ -202,7 +202,7 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     const long lY3 = lY0 + ROUND(f * (m_aItem.m_lUpper + m_aItem.m_lVDist ));
 
     // draw outline (area)
-    rRenderContext.DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
+    rRenderContext.DrawRect(tools::Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
 
     // draw outline (border)
     rRenderContext.SetLineColor(rFieldTextColor);
@@ -214,13 +214,13 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         rRenderContext.DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
     // Labels
-    rRenderContext.SetClipRegion(vcl::Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
+    rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
     rRenderContext.SetFillColor(COL_LIGHTGRAYBLUE);
     const sal_Int32 nRows = std::min<sal_Int32>(2, m_aItem.m_nRows);
     const sal_Int32 nCols = std::min<sal_Int32>(2, m_aItem.m_nCols);
     for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
         for (sal_Int32 nCol = 0; nCol < nCols; ++nCol)
-            rRenderContext.DrawRect(Rectangle(Point(lX0 + ROUND(f * (m_aItem.m_lLeft  + nCol * m_aItem.m_lHDist)),
+            rRenderContext.DrawRect(tools::Rectangle(Point(lX0 + ROUND(f * (m_aItem.m_lLeft  + nCol * m_aItem.m_lHDist)),
                                                     lY0 + ROUND(f * (m_aItem.m_lUpper + nRow * m_aItem.m_lVDist))),
                                               Size(ROUND(f * m_aItem.m_lWidth),
                                                    ROUND(f * m_aItem.m_lHeight))));

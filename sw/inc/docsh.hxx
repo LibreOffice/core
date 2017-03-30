@@ -174,8 +174,8 @@ public:
     DECL_LINK( Ole2ModifiedHdl, bool, void );
 
     /// OLE-stuff.
-    virtual void      SetVisArea( const Rectangle &rRect ) override;
-    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const override;
+    virtual void      SetVisArea( const tools::Rectangle &rRect ) override;
+    virtual tools::Rectangle GetVisArea( sal_uInt16 nAspect ) const override;
     virtual Printer  *GetDocumentPrinter() override;
     virtual OutputDevice* GetDocumentRefDev() override;
     virtual void      OnDocumentPrinterChanged( Printer * pNewPrinter ) override;

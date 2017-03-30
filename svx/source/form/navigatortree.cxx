@@ -2077,7 +2077,7 @@ namespace svxform
             }
         } // while ( aIter.IsMore() )
         // make the mark visible
-        ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
+        ::tools::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
         for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         {
             SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
@@ -2145,7 +2145,7 @@ namespace svxform
         if ( bPaint )
         {
             // make the mark visible
-            ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
+            ::tools::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
             for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
             {
                 SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );

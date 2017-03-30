@@ -112,7 +112,7 @@ vcl::Region Window::GetWindowClipRegionPixel() const
         const_cast<vcl::Window*>(this)->ImplInitWinClipRegion();
     aWinClipRegion = mpWindowImpl->maWinClipRegion;
 
-    Rectangle     aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+    tools::Rectangle     aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
     vcl::Region   aWinRegion( aWinRect );
 
     if ( aWinRegion == aWinClipRegion )
@@ -140,7 +140,7 @@ vcl::Region Window::GetActiveClipRegion() const
     return PixelToLogic( aRegion );
 }
 
-void Window::ClipToPaintRegion(Rectangle& rDstRect)
+void Window::ClipToPaintRegion(tools::Rectangle& rDstRect)
 {
     const vcl::Region aPaintRgn(GetPaintRegion());
 
@@ -165,7 +165,7 @@ void Window::ImplClipBoundaries( vcl::Region& rRegion, bool bThis, bool bOverlap
     {
         // clip to frame if required
         if ( !mpWindowImpl->mbFrame )
-            rRegion.Intersect( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
+            rRegion.Intersect( tools::Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
 
         if ( bOverlaps && !rRegion.IsEmpty() )
         {
@@ -242,7 +242,7 @@ void Window::ImplClipSiblings( vcl::Region& rRegion )
 void Window::ImplInitWinClipRegion()
 {
     // Build Window Region
-    mpWindowImpl->maWinClipRegion = Rectangle( Point( mnOutOffX, mnOutOffY ),
+    mpWindowImpl->maWinClipRegion = tools::Rectangle( Point( mnOutOffX, mnOutOffY ),
                                  Size( mnOutWidth, mnOutHeight ) );
     if ( mpWindowImpl->mbWinRegion )
         mpWindowImpl->maWinClipRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
@@ -319,7 +319,7 @@ bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
                 }
 
                 vcl::Region      aRegion = *pWinChildClipRegion;
-                Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+                tools::Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 vcl::Region      aWinRectRegion( aWinRect );
 
                 if ( aRegion == aWinRectRegion )
@@ -504,7 +504,7 @@ void Window::ImplIntersectWindowClipRegion( vcl::Region& rRegion )
 
 void Window::ImplIntersectWindowRegion( vcl::Region& rRegion )
 {
-    rRegion.Intersect( Rectangle( Point( mnOutOffX, mnOutOffY ),
+    rRegion.Intersect( tools::Rectangle( Point( mnOutOffX, mnOutOffY ),
                                   Size( mnOutWidth, mnOutHeight ) ) );
     if ( mpWindowImpl->mbWinRegion )
         rRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
@@ -515,7 +515,7 @@ void Window::ImplExcludeWindowRegion( vcl::Region& rRegion )
     if ( mpWindowImpl->mbWinRegion )
     {
         Point aPoint( mnOutOffX, mnOutOffY );
-        vcl::Region aRegion( Rectangle( aPoint,
+        vcl::Region aRegion( tools::Rectangle( aPoint,
                                    Size( mnOutWidth, mnOutHeight ) ) );
         aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
         rRegion.Exclude( aRegion );
@@ -523,7 +523,7 @@ void Window::ImplExcludeWindowRegion( vcl::Region& rRegion )
     else
     {
         Point aPoint( mnOutOffX, mnOutOffY );
-        rRegion.Exclude( Rectangle( aPoint,
+        rRegion.Exclude( tools::Rectangle( aPoint,
                                     Size( mnOutWidth, mnOutHeight ) ) );
     }
 }
@@ -606,7 +606,7 @@ void Window::ImplCalcOverlapRegionOverlaps( const vcl::Region& rInterRegion, vcl
         ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
 }
 
-void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, vcl::Region& rRegion,
+void Window::ImplCalcOverlapRegion( const tools::Rectangle& rSourceRect, vcl::Region& rRegion,
                                     bool bChildren, bool bSiblings )
 {
     vcl::Region  aRegion( rSourceRect );
@@ -636,7 +636,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, vcl::Region& r
     if ( pWindow && !pWindow->mpWindowImpl->mbFrame )
     {
         aTempRegion = aRegion;
-        aTempRegion.Exclude( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
+        aTempRegion.Exclude( tools::Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
         rRegion.Union( aTempRegion );
     }
 
@@ -682,7 +682,7 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         const Point aPixPos( LogicToPixel( rPos ) );
 
         aClip.Move( -mnOutOffX, -mnOutOffY );
-        aClip.Intersect( Rectangle( aPixPos, LogicToPixel( rSize ) ) );
+        aClip.Intersect( tools::Rectangle( aPixPos, LogicToPixel( rSize ) ) );
 
         if ( !aClip.IsEmpty() )
         {

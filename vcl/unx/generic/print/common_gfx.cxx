@@ -160,21 +160,21 @@ void
 PrinterGfx::UnionClipRegion (sal_Int32 nX,sal_Int32 nY,sal_Int32 nDX,sal_Int32 nDY)
 {
     if( nDX && nDY )
-        maClipRegion.push_back (Rectangle(Point(nX,nY ), Size(nDX,nDY)));
+        maClipRegion.push_back (tools::Rectangle(Point(nX,nY ), Size(nDX,nDY)));
 }
 
 bool
-PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
+PrinterGfx::JoinVerticalClipRectangles( std::list< tools::Rectangle >::iterator& it,
                                         Point& rOldPoint, sal_Int32& rColumn )
 {
     bool bSuccess = false;
 
-    std::list< Rectangle >::iterator tempit, nextit;
+    std::list< tools::Rectangle >::iterator tempit, nextit;
     nextit = it;
     ++nextit;
     std::list< Point > leftside, rightside;
 
-    Rectangle aLastRect( *it );
+    tools::Rectangle aLastRect( *it );
     leftside.push_back( Point( it->Left(), it->Top() ) );
     rightside.push_back( Point( it->Right()+1, it->Top() ) );
     while( nextit != maClipRegion.end() )
@@ -274,7 +274,7 @@ PrinterGfx::EndSetClipRegion()
     Point aOldPoint (0, 0);
     sal_Int32 nColumn = 0;
 
-    std::list< Rectangle >::iterator it = maClipRegion.begin();
+    std::list< tools::Rectangle >::iterator it = maClipRegion.begin();
     while( it != maClipRegion.end() )
     {
         // try to concatenate adjacent rectangles
@@ -301,7 +301,7 @@ PrinterGfx::EndSetClipRegion()
  */
 
 void
-PrinterGfx::DrawRect (const Rectangle& rRectangle )
+PrinterGfx::DrawRect (const tools::Rectangle& rRectangle )
 {
     char pRect [128];
     sal_Int32 nChar = 0;
@@ -1053,7 +1053,7 @@ PrinterGfx::PSShowGlyph (const unsigned char nGlyphId)
 }
 
 bool
-PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize )
+PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize )
 {
     if( nSize == 0 )
         return true;

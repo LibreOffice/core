@@ -30,9 +30,9 @@ SidebarScrollBar::SidebarScrollBar(SwSidebarWin& rSidebarWin, WinBits nStyle, Sw
 {
 }
 
-void SidebarScrollBar::LogicInvalidate(const Rectangle* pRectangle)
+void SidebarScrollBar::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    Rectangle aRectangle;
+    tools::Rectangle aRectangle;
 
     if (!pRectangle)
     {
@@ -41,7 +41,7 @@ void SidebarScrollBar::LogicInvalidate(const Rectangle* pRectangle)
         MapMode aMapMode = GetMapMode();
         aMapMode.SetMapUnit(MapUnit::MapTwip);
         SetMapMode(aMapMode);
-        aRectangle = Rectangle(Point(0, 0), PixelToLogic(GetSizePixel()));
+        aRectangle = tools::Rectangle(Point(0, 0), PixelToLogic(GetSizePixel()));
         Pop();
     }
     else

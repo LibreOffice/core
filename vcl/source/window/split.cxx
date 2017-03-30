@@ -110,7 +110,7 @@ void Splitter::ImplSplitMousePos( Point& rPos )
 
 void Splitter::ImplDrawSplitter()
 {
-    Rectangle aInvRect( maDragRect );
+    tools::Rectangle aInvRect( maDragRect );
 
     if ( mbHorzSplit )
     {
@@ -443,7 +443,7 @@ void Splitter::EndSplit()
     maEndSplitHdl.Call( this );
 }
 
-void Splitter::SetDragRectPixel( const Rectangle& rDragRect, vcl::Window* _pRefWin )
+void Splitter::SetDragRectPixel( const tools::Rectangle& rDragRect, vcl::Window* _pRefWin )
 {
     maDragRect = rDragRect;
     if ( !_pRefWin )
@@ -669,7 +669,7 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void Splitter::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect)
+void Splitter::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rPaintRect)
 {
     rRenderContext.DrawRect(rPaintRect);
 

@@ -1348,7 +1348,7 @@ void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
     if ( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Size aSize( GetSizePixel() );
-        Rectangle aItemRect( rHEvt.GetMousePosPixel(), aSize );
+        tools::Rectangle aItemRect( rHEvt.GetMousePosPixel(), aSize );
         if (Help::IsBalloonHelpEnabled())
             Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aItemRect, GetText() );
         else
@@ -1719,7 +1719,7 @@ bool CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
     sal_uInt16 nPos = 0;
     while ( *pCurrent )
     {
-        Rectangle aRect = pHeaderBar->GetItemRect( pHeaderBar->GetItemId( nPos++ ) );
+        tools::Rectangle aRect = pHeaderBar->GetItemRect( pHeaderBar->GetItemId( nPos++ ) );
         Size aOrigSize = (*pCurrent)->GetSizePixel();
         Point aOrigPos = (*pCurrent)->GetPosPixel();
         Size aSize(aOrigSize);

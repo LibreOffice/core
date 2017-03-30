@@ -249,7 +249,7 @@ awt::Point SvxPixelCtlAccessible::getLocation(  )
 awt::Point SvxPixelCtlAccessible::getLocationOnScreen(  )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    Rectangle rect = mrPixelCtl.GetWindowExtentsRelative(nullptr);
+    tools::Rectangle rect = mrPixelCtl.GetWindowExtentsRelative(nullptr);
     return awt::Point(rect.Left(),rect.Top() );
 }
 
@@ -460,7 +460,7 @@ uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Poin
     uno::Reference<XAccessible> xChild;
     xChild = new SvxPixelCtlAccessibleChild(mrPixelCtl,
                 bPixelColorOrBG,
-                Rectangle(mPoint,size),
+                tools::Rectangle(mPoint,size),
                 this,
                 nIndex);
 
@@ -523,14 +523,14 @@ void SvxPixelCtlAccessibleChild::FireAccessibleEvent (
 SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
     SvxPixelCtl& rWindow,
     bool bPixelColorOrBG,
-    const Rectangle& rBoundingBox,
+    const tools::Rectangle& rBoundingBox,
     const uno::Reference<XAccessible>&  rxParent,
     long nIndexInParent ) :
     SvxPixelCtlAccessibleChild_BASE( m_aMutex ),
     mrParentWindow( rWindow ),
     mxParent(rxParent),
     m_bPixelColorOrBG(bPixelColorOrBG),
-    mpBoundingBox( new Rectangle( rBoundingBox ) ),
+    mpBoundingBox( new tools::Rectangle( rBoundingBox ) ),
     mnIndexInParent( nIndexInParent ),
     mnClientId( 0 )
 {
@@ -557,7 +557,7 @@ sal_Bool SAL_CALL SvxPixelCtlAccessibleChild::containsPoint( const awt::Point& r
 {
     // no guard -> done in getBounds()
 //  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
-    return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+    return tools::Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
 uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleAtPoint( const awt::Point& )
@@ -782,17 +782,17 @@ void SvxPixelCtlAccessibleChild::ThrowExceptionIfNotAlive()
         throw lang::DisposedException();
 }
 
-Rectangle SvxPixelCtlAccessibleChild::GetBoundingBoxOnScreen()
+tools::Rectangle SvxPixelCtlAccessibleChild::GetBoundingBoxOnScreen()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     // no ThrowExceptionIfNotAlive() because its done in GetBoundingBox()
-    Rectangle           aRect( GetBoundingBox() );
+    tools::Rectangle           aRect( GetBoundingBox() );
 
-    return Rectangle( mrParentWindow.OutputToAbsoluteScreenPixel( aRect.TopLeft() ), aRect.GetSize() );
+    return tools::Rectangle( mrParentWindow.OutputToAbsoluteScreenPixel( aRect.TopLeft() ), aRect.GetSize() );
 }
 
-Rectangle const & SvxPixelCtlAccessibleChild::GetBoundingBox()
+tools::Rectangle const & SvxPixelCtlAccessibleChild::GetBoundingBox()
 {
     // no guard necessary, because no one changes mpBoundingBox after creating it
     ThrowExceptionIfNotAlive();

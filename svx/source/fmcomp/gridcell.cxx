@@ -450,7 +450,7 @@ Reference< css::sdb::XColumn >  DbGridColumn::GetCurrentFieldValue() const
 
 
 void DbGridColumn::Paint(OutputDevice& rDev,
-                         const Rectangle& rRect,
+                         const tools::Rectangle& rRect,
                          const DbGridRow* pRow,
                          const Reference< XNumberFormatter >& xFormatter)
 {
@@ -951,7 +951,7 @@ void DbCellControl::AlignControl(sal_Int16 nAlignment)
 }
 
 
-void DbCellControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect )
+void DbCellControl::PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect )
 {
     if ( m_pPainter->GetParent() == &_rDev )
     {
@@ -978,7 +978,7 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect )
 }
 
 
-void DbCellControl::PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
+void DbCellControl::PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
 {
     m_pPainter->SetText( GetFormatText( _rxField, _rxFormatter ) );
     PaintCell( _rDev, _rRect );
@@ -1141,7 +1141,7 @@ CellControllerRef DbTextField::CreateController() const
 }
 
 
-void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
+void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
 {
     if ( m_pPainterImplementation )
         m_pPainterImplementation->SetText( GetFormatText( _rxField, _rxFormatter ) );
@@ -1680,7 +1680,7 @@ void DbCheckBox::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField,
 }
 
 
-void DbCheckBox::PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
+void DbCheckBox::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                           const Reference< css::sdb::XColumn >& _rxField,
                           const Reference< XNumberFormatter >& xFormatter)
 {
@@ -2677,7 +2677,7 @@ DbFilterField::~DbFilterField()
 }
 
 
-void DbFilterField::PaintCell(OutputDevice& rDev, const Rectangle& rRect)
+void DbFilterField::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
 {
     static const DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::VCenter | DrawTextFlags::Left;
     switch (m_nControlClass)
@@ -3486,7 +3486,7 @@ void FmXGridCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& 
 }
 
 
-void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
+void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                         const Reference< css::sdb::XColumn >& _rxField,
                         const Reference< XNumberFormatter >& xFormatter)
 {
@@ -3510,7 +3510,7 @@ FmXTextCell::FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl )
 
 
 void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
-                        const Rectangle& rRect,
+                        const tools::Rectangle& rRect,
                         const Reference< css::sdb::XColumn >& _rxField,
                         const Reference< XNumberFormatter >& xFormatter)
 {
@@ -4563,7 +4563,7 @@ const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
 }
 
 
-void FmXFilterCell::PaintCell( OutputDevice& rDev, const Rectangle& rRect )
+void FmXFilterCell::PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect )
 {
     static_cast< DbFilterField* >( m_pCellControl )->PaintCell( rDev, rRect );
 }

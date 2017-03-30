@@ -51,7 +51,7 @@ public:
     void NotifyChange( ScAutoFormatData* pNewData );
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
 
 private:
@@ -76,7 +76,7 @@ private:
     SvNumberFormatter*      pNumFmt;
 
     SAL_DLLPRIVATE void Init();
-    SAL_DLLPRIVATE void DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    SAL_DLLPRIVATE void DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     SAL_DLLPRIVATE void CalcCellArray(bool bFitWidth);
     SAL_DLLPRIVATE void CalcLineMap();
     SAL_DLLPRIVATE void PaintCells(vcl::RenderContext& rRenderContext);

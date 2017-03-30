@@ -241,7 +241,7 @@ void ScCondFormatList::RecalcAll()
 void ScCondFormatList::DoScroll(long nDelta)
 {
     Point aNewPoint = mpScrollBar->GetPosPixel();
-    Rectangle aRect(Point(), GetOutputSize());
+    tools::Rectangle aRect(Point(), GetOutputSize());
     aRect.Right() -= mpScrollBar->GetSizePixel().Width();
     Scroll( 0, -nDelta, aRect );
     mpScrollBar->SetPosPixel(aNewPoint);

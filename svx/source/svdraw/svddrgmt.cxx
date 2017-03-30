@@ -450,7 +450,7 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
     if(bNoPolygons)
     {
-        const Rectangle aR(getSdrDragView().GetSdrPageView()->MarkSnap());
+        const tools::Rectangle aR(getSdrDragView().GetSdrPageView()->MarkSnap());
         const basegfx::B2DRange aNewRectangle(aR.Left(), aR.Top(), aR.Right(), aR.Bottom());
         basegfx::B2DPolygon aNewPolygon(basegfx::tools::createPolygonFromRect(aNewRectangle));
 
@@ -800,7 +800,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
     // add DragStripes if necessary (help lines cross the page when dragging)
     if(getSdrDragView().IsDragStripes())
     {
-        Rectangle aActionRectangle;
+        tools::Rectangle aActionRectangle;
         getSdrDragView().TakeActionRect(aActionRectangle);
 
         const basegfx::B2DPoint aTopLeft(aActionRectangle.Left(), aActionRectangle.Top());
@@ -965,12 +965,12 @@ bool SdrDragMovHdl::BeginSdrDrag()
             return false;
         }
 
-        DragStat().SetActionRect(Rectangle(pH1->GetPos(),pH2->GetPos()));
+        DragStat().SetActionRect(tools::Rectangle(pH1->GetPos(),pH2->GetPos()));
     }
     else
     {
         Point aPt(GetDragHdl()->GetPos());
-        DragStat().SetActionRect(Rectangle(aPt,aPt));
+        DragStat().SetActionRect(tools::Rectangle(aPt,aPt));
     }
 
     return true;
@@ -1017,7 +1017,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                     pHM->Touch();
 
                 Show();
-                DragStat().SetActionRect(Rectangle(pH1->GetPos(),pH2->GetPos()));
+                DragStat().SetActionRect(tools::Rectangle(pH1->GetPos(),pH2->GetPos()));
             }
         }
         else
@@ -1083,7 +1083,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                     pHM->Touch();
 
                 Show();
-                DragStat().SetActionRect(Rectangle(aPnt,aPnt));
+                DragStat().SetActionRect(tools::Rectangle(aPnt,aPnt));
             }
         }
     }
@@ -1377,7 +1377,7 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
         // in its SdrTableObj::endSpecialDrag, so currently not possible. OTOH it uses
         // a CreateUndoGeoObject(), so maybe setting SetEndDragChangesAttributes is okay. I
         // will test this now
-        Rectangle aBoundRect0;
+        tools::Rectangle aBoundRect0;
 
         if(pObj->GetUserCall())
         {
@@ -1561,7 +1561,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
     bXSnapped=false;
     bYSnapped=false;
     Point aNoSnapPnt(rNoSnapPnt_);
-    const Rectangle& aSR=GetMarkedRect();
+    const tools::Rectangle& aSR=GetMarkedRect();
     long nMovedx=aNoSnapPnt.X()-DragStat().GetStart().X();
     long nMovedy=aNoSnapPnt.Y()-DragStat().GetStart().Y();
     Point aLO(aSR.TopLeft());      aLO.X()+=nMovedx; aLO.Y()+=nMovedy;
@@ -1586,18 +1586,18 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
     if (DragStat().CheckMinMoved(aNoSnapPnt))
     {
         Point aPt1(aPnt);
-        Rectangle aLR(getSdrDragView().GetWorkArea());
+        tools::Rectangle aLR(getSdrDragView().GetWorkArea());
         bool bWorkArea=!aLR.IsEmpty();
         bool bDragLimit=IsDragLimit();
 
         if (bDragLimit || bWorkArea)
         {
-            Rectangle aSR2(GetMarkedRect());
+            tools::Rectangle aSR2(GetMarkedRect());
             Point aD(aPt1-DragStat().GetStart());
 
             if (bDragLimit)
             {
-                Rectangle aR2(GetDragLimitRect());
+                tools::Rectangle aR2(GetDragLimitRect());
 
                 if (bWorkArea)
                     aLR.Intersection(aR2);
@@ -1653,7 +1653,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
                 {
                     const SdrObject* pObj=pM->GetMarkedSdrObj();
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
-                    Rectangle aBound(pObj->GetCurrentBoundRect());
+                    tools::Rectangle aBound(pObj->GetCurrentBoundRect());
 
                     for (SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
                     {
@@ -1683,7 +1683,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
         {
             Hide();
             DragStat().NextMove(aPt1);
-            Rectangle aAction(GetMarkedRect());
+            tools::Rectangle aAction(GetMarkedRect());
             aAction.Move(DragStat().GetDX(),DragStat().GetDY());
             DragStat().SetActionRect(aAction);
             Show();
@@ -1819,7 +1819,7 @@ bool SdrDragResize::BeginSdrDrag()
 
         if (pRef1!=nullptr && pRef2!=nullptr)
         {
-            DragStat().Ref1()=Rectangle(pRef1->GetPos(),pRef2->GetPos()).Center();
+            DragStat().Ref1()=tools::Rectangle(pRef1->GetPos(),pRef2->GetPos()).Center();
         }
         else
         {
@@ -1848,17 +1848,17 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
     Fraction aMaxFact(0x7FFFFFFF,1);
-    Rectangle aLR(getSdrDragView().GetWorkArea());
+    tools::Rectangle aLR(getSdrDragView().GetWorkArea());
     bool bWorkArea=!aLR.IsEmpty();
     bool bDragLimit=IsDragLimit();
 
     if (bDragLimit || bWorkArea)
     {
-        Rectangle aSR(GetMarkedRect());
+        tools::Rectangle aSR(GetMarkedRect());
 
         if (bDragLimit)
         {
-            Rectangle aR2(GetDragLimitRect());
+            tools::Rectangle aR2(GetDragLimitRect());
 
             if (bWorkArea)
                 aLR.Intersection(aR2);
@@ -2812,14 +2812,14 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
 #define DRAG_CROOK_RASTER_MAXIMUM   (15)
 #define DRAG_CROOK_RASTER_DISTANCE  (30)
 
-basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectangle& rMarkRect)
+basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const tools::Rectangle& rMarkRect)
 {
     basegfx::B2DPolyPolygon aRetval;
 
     if(rPageView.PageWindowCount())
     {
         OutputDevice& rOut = (rPageView.GetPageWindow(0)->GetPaintWindow().GetOutputDevice());
-        Rectangle aPixelSize = rOut.LogicToPixel(rMarkRect);
+        tools::Rectangle aPixelSize = rOut.LogicToPixel(rMarkRect);
         sal_uInt32 nHorDiv(aPixelSize.GetWidth() / DRAG_CROOK_RASTER_DISTANCE);
         sal_uInt32 nVerDiv(aPixelSize.GetHeight() / DRAG_CROOK_RASTER_DISTANCE);
 
@@ -2946,7 +2946,7 @@ void SdrDragCrook::MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
                 {
                     nLast=n1st;
                     while (nLast<nPolyCount && aTempPolyPoly[nLast].GetPointCount()!=0) nLast++;
-                    Rectangle aBound(aTempPolyPoly[n1st].GetBoundRect());
+                    tools::Rectangle aBound(aTempPolyPoly[n1st].GetBoundRect());
                     sal_uInt16 i;
 
                     for (i=n1st+1; i<nLast; i++)
@@ -3295,7 +3295,7 @@ void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
         if (bDoCrook)
         {
-            const Rectangle aLocalMarkRect(getSdrDragView().GetMarkedObjRect());
+            const tools::Rectangle aLocalMarkRect(getSdrDragView().GetMarkedObjRect());
             const bool bLocalRotate(!bContortion && eMode == SdrCrookMode::Rotate && getSdrDragView().IsRotateAllowed());
 
             SdrEditView::ImpCrookObj(&rTarget,aCenter,aRad,eMode,bVertical,!bContortion,bLocalRotate,aLocalMarkRect);
@@ -3624,7 +3624,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         if (pRef1==nullptr || pRef2==nullptr)
             return false;
 
-        Rectangle rect(pRef1->GetPos(),pRef2->GetPos());
+        tools::Rectangle rect(pRef1->GetPos(),pRef2->GetPos());
 
         Point aEnd(DragStat().GetNow());
         Point aStart(DragStat().GetStart());
@@ -3940,12 +3940,12 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     aRangeNewNoShearNoRotate.transform(aMatrixOriginalNoShearNoRotate * aDiscreteChangeMatrix);
 
     // extract the old Rectangle structures
-    Rectangle aOldRect(
+    tools::Rectangle aOldRect(
         basegfx::fround(aRangeOriginalNoShearNoRotate.getMinX()),
         basegfx::fround(aRangeOriginalNoShearNoRotate.getMinY()),
         basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxX()),
         basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxY()));
-    Rectangle aNewRect(
+    tools::Rectangle aNewRect(
         basegfx::fround(aRangeNewNoShearNoRotate.getMinX()),
         basegfx::fround(aRangeNewNoShearNoRotate.getMinY()),
         basegfx::fround(aRangeNewNoShearNoRotate.getMaxX()),

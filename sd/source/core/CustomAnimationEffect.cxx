@@ -1550,7 +1550,7 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
                 aPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix((double)aPageSize.Width(), (double)aPageSize.Height()));
             }
 
-            const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
+            const ::tools::Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const Point aCenter( aBoundRect.Center() );
             aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(aCenter.X(), aCenter.Y()));
         }
@@ -1566,7 +1566,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
     SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
     if( pObj )
     {
-        Rectangle aBoundRect(0,0,0,0);
+        ::tools::Rectangle aBoundRect(0,0,0,0);
 
         const drawinglayer::primitive2d::Primitive2DContainer xPrimitives(pObj->GetViewContact().getViewIndependentPrimitive2DContainer());
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
@@ -1574,7 +1574,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
 
         if(!aRange.isEmpty())
         {
-            aBoundRect = Rectangle(
+            aBoundRect = ::tools::Rectangle(
                     (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
                     (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
         }

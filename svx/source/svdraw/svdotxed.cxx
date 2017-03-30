@@ -102,8 +102,8 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
     if (bFitToSize)
     {
-        Rectangle aAnchorRect;
-        Rectangle aTextRect;
+        tools::Rectangle aAnchorRect;
+        tools::Rectangle aTextRect;
         TakeTextRect(rOutl, aTextRect, false,
             &aAnchorRect);
         Fraction aFitXKorreg(1,1);
@@ -134,7 +134,7 @@ void ImpUpdateOutlParamsForOverflow(SdrOutliner *pOutl, SdrTextObj *pTextObj)
      // Code from ImpSetTextEditParams
     Size aPaperMin;
     Size aPaperMax;
-    Rectangle aEditArea;
+    tools::Rectangle aEditArea;
     pTextObj->TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
 
     pOutl->SetMinAutoPaperSize(aPaperMin);
@@ -142,11 +142,11 @@ void ImpUpdateOutlParamsForOverflow(SdrOutliner *pOutl, SdrTextObj *pTextObj)
     pOutl->SetPaperSize(Size());
 }
 
-void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
+void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const
 {
     bool bFitToSize(IsFitToSize());
     Size aPaperMin,aPaperMax;
-    Rectangle aViewInit;
+    tools::Rectangle aViewInit;
     TakeTextAnchorRect(aViewInit);
     if (aGeo.nRotationAngle!=0) {
         Point aCenter(aViewInit.Center());
@@ -383,14 +383,14 @@ void SdrTextObj::ImpSetTextEditParams() const
         if (bUpdMerk) pEdtOutl->SetUpdateMode(false);
         Size aPaperMin;
         Size aPaperMax;
-        Rectangle aEditArea;
+        tools::Rectangle aEditArea;
         TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
         bool bContourFrame=IsContourTextFrame();
         pEdtOutl->SetMinAutoPaperSize(aPaperMin);
         pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
         pEdtOutl->SetPaperSize(Size());
         if (bContourFrame) {
-            Rectangle aAnchorRect;
+            tools::Rectangle aAnchorRect;
             TakeTextAnchorRect(aAnchorRect);
             ImpSetContourPolygon(*pEdtOutl,aAnchorRect, true);
         }

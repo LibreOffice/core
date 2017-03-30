@@ -126,7 +126,7 @@ public:
     gboolean SignalKey(GdkEventKey* pEvent);
     void ReturnFocus();
 
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags) override;
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void ShowCloseButton(bool bShow) override;
     virtual bool CanGetFocus() const override;
     virtual bool TakeFocus() override;

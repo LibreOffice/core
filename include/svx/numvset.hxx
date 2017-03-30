@@ -58,7 +58,7 @@ enum class NumberingPageType
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
     NumberingPageType ePageType;
-    Rectangle       aOrgRect;
+    tools::Rectangle       aOrgRect;
     VclPtr<VirtualDevice> pVDev;
 
     css::uno::Reference<css::text::XNumberingFormatter> xFormatter;

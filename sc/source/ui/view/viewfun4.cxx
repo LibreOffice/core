@@ -97,7 +97,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             pEngine->SetPaperSize(Size(100000,100000));
             ScopedVclPtrInstance< vcl::Window > aWin( pActWin );
             EditView aEditView( pEngine.get(), aWin.get() );
-            aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
+            aEditView.SetOutputArea(tools::Rectangle(0,0,100000,100000));
 
             // same method now for clipboard or drag&drop
             // mba: clipboard always must contain absolute URLs (could be from alien source)
@@ -519,7 +519,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
                                         // simulate dummy cell:
     pEditView = rViewData.GetEditView( rViewData.GetActivePart() );
     rViewData.SetSpellingView( pEditView );
-    Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
+    tools::Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
     pEditView->SetOutputArea( aRect );
     pEngine->SetControlWord( EEControlBits::USECHARATTRIBS );
     pEngine->EnableUndo( false );
@@ -639,7 +639,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
     if (bLink)                      // for bLink everything, which is not graphics, as URL
     {
-        Rectangle aRect( rPos, Size(0,0) );
+        tools::Rectangle aRect( rPos, Size(0,0) );
         ScRange aRange = GetViewData().GetDocument()->
                             GetRange( GetViewData().GetTabNo(), aRect );
         SCCOL nPosX = aRange.aStart.Col();

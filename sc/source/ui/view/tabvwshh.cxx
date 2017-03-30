@@ -113,7 +113,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                         if (rMarkList.GetMarkCount() == 1)
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            Rectangle aRect = pObj->GetLogicRect();
+                            tools::Rectangle aRect = pObj->GetLogicRect();
 
                             if ( nSlotId == SID_OBJECT_LEFT )
                                 pDrView->MoveMarkedObj( Size( nNewVal - aRect.Left(), 0 ) );
@@ -194,7 +194,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                         if (rMarkList.GetMarkCount() == 1)
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            Rectangle aRect = pObj->GetLogicRect();
+                            tools::Rectangle aRect = pObj->GetLogicRect();
 
                             long nVal;
                             if ( nWhich == SID_OBJECT_LEFT )

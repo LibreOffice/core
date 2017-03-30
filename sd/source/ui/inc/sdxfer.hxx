@@ -127,7 +127,7 @@ private:
     INetBookmark*                   mpBookmark;
     Graphic*                        mpGraphic;
     ImageMap*                       mpImageMap;
-    Rectangle                       maVisArea;
+    ::tools::Rectangle                       maVisArea;
     Point                           maStartPos;
     bool                            mbInternalMove               : 1;
     bool                            mbOwnDocument                : 1;

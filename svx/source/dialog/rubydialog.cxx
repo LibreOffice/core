@@ -778,7 +778,7 @@ void RubyPreview::dispose()
 
 VCL_BUILDER_FACTORY(RubyPreview)
 
-void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     rRenderContext.Push(PushFlags::MAPMODE);
 
@@ -790,7 +790,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
     aSaveFont.SetFontHeight(aWinSize.Height() / 4);
     rRenderContext.SetFont(aSaveFont);
 
-    Rectangle aRect(Point(0, 0), aWinSize);
+    tools::Rectangle aRect(Point(0, 0), aWinSize);
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(aSaveFont.GetFillColor());
     rRenderContext.DrawRect(aRect);

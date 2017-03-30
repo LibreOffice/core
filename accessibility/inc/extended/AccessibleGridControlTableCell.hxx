@@ -69,8 +69,8 @@ namespace accessibility
         virtual OUString                        implGetText() override;
         virtual css::lang::Locale               implGetLocale() override;
         virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
-        virtual Rectangle implGetBoundingBox() override;
-        virtual Rectangle implGetBoundingBoxOnScreen() override;
+        virtual tools::Rectangle implGetBoundingBox() override;
+        virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
 
     public:
         AccessibleGridControlTableCell( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,

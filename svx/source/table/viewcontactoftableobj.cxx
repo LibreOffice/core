@@ -520,7 +520,7 @@ namespace sdr
 
                     // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
                     // GetGeoRect() to not trigger any calculations. It's the unrotated geometry.
-                    const Rectangle& rObjectRectangle(rTableObj.GetGeoRect());
+                    const tools::Rectangle& rObjectRectangle(rTableObj.GetGeoRect());
                     const basegfx::B2DRange aObjectRange(rObjectRectangle.Left(), rObjectRectangle.Top(), rObjectRectangle.Right(), rObjectRectangle.Bottom());
 
                     // for each cell we need potentially a cell primitive and a border primitive
@@ -680,7 +680,7 @@ namespace sdr
             else
             {
                 // take unrotated snap rect (direct model data) for position and size
-                const Rectangle& rRectangle = rTableObj.GetGeoRect();
+                const tools::Rectangle& rRectangle = rTableObj.GetGeoRect();
                 const basegfx::B2DRange aObjectRange(
                     rRectangle.Left(), rRectangle.Top(),
                     rRectangle.Right(), rRectangle.Bottom());

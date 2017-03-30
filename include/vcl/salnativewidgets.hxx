@@ -291,9 +291,9 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
         long            mnMax;
         long            mnCur;
         long            mnVisibleSize;
-        Rectangle       maThumbRect;
-        Rectangle       maButton1Rect;
-        Rectangle       maButton2Rect;
+        tools::Rectangle       maThumbRect;
+        tools::Rectangle       maButton1Rect;
+        tools::Rectangle       maButton2Rect;
         ControlState    mnButton1State;
         ControlState    mnButton2State;
         ControlState    mnThumbState;
@@ -317,7 +317,7 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
         long            mnMin;
         long            mnMax;
         long            mnCur;
-        Rectangle       maThumbRect;
+        tools::Rectangle       maThumbRect;
         ControlState    mnThumbState;
 
         SliderValue()
@@ -351,9 +351,9 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
 {
     public:
         TabitemFlags    mnAlignment;
-        Rectangle       maContentRect;
+        tools::Rectangle       maContentRect;
 
-        TabitemValue(const Rectangle &rContentRect)
+        TabitemValue(const tools::Rectangle &rContentRect)
             : ImplControlValue( ControlType::TabItem, 0 )
             , mnAlignment(TabitemFlags::NONE)
             , maContentRect(rContentRect)
@@ -368,7 +368,7 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         bool isNotAligned() const   { return !(mnAlignment & (TabitemFlags::LeftAligned | TabitemFlags::RightAligned)); }
         bool isFirst() const        { return bool(mnAlignment & TabitemFlags::FirstInGroup); }
         bool isLast() const         { return bool(mnAlignment & TabitemFlags::LastInGroup); }
-        const Rectangle& getContentRect() const { return maContentRect; }
+        const tools::Rectangle& getContentRect() const { return maContentRect; }
 };
 
 /* SpinbuttonValue:
@@ -380,8 +380,8 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
 class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
 {
     public:
-        Rectangle       maUpperRect;
-        Rectangle       maLowerRect;
+        tools::Rectangle       maUpperRect;
+        tools::Rectangle       maLowerRect;
         ControlState    mnUpperState;
         ControlState    mnLowerState;
         ControlPart     mnUpperPart;
@@ -411,7 +411,7 @@ public:
     { mbIsTopDockingArea = false; }
     virtual ~ToolbarValue() override;
     virtual ToolbarValue* clone() const override;
-    Rectangle           maGripRect;
+    tools::Rectangle           maGripRect;
     bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
                                             // adjacent to the menubar
 };
@@ -438,13 +438,13 @@ public:
 class VCL_DLLPUBLIC MenupopupValue : public ImplControlValue
 {
 public:
-    MenupopupValue( long i_nGutterWidth, const Rectangle& i_rItemRect )
+    MenupopupValue( long i_nGutterWidth, const tools::Rectangle& i_rItemRect )
     : ImplControlValue( ControlType::MenuPopup, i_nGutterWidth )
     , maItemRect( i_rItemRect )
     {}
     virtual ~MenupopupValue() override;
     virtual MenupopupValue* clone() const override;
-    Rectangle       maItemRect;
+    tools::Rectangle       maItemRect;
 };
 
 /*  PushButtonValue:

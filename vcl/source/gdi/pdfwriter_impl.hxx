@@ -164,9 +164,9 @@ public:
         // appends a B2DPoint without further transformation
         void appendPixelPoint( const basegfx::B2DPoint& rPoint, OStringBuffer& rBuffer ) const;
         // appends a rectangle
-        void appendRect( const Rectangle& rRect, OStringBuffer& rBuffer ) const;
+        void appendRect( const tools::Rectangle& rRect, OStringBuffer& rBuffer ) const;
         // converts a rectangle to 10th points page space
-        void convertRect( Rectangle& rRect ) const;
+        void convertRect( tools::Rectangle& rRect ) const;
         // appends a polygon optionally closing it
         void appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polygon optionally closing it
@@ -282,7 +282,7 @@ public:
     struct TilingEmit
     {
         sal_Int32                   m_nObject;
-        Rectangle                   m_aRectangle;
+        tools::Rectangle                   m_aRectangle;
         Size                        m_aCellSize;
         SvtGraphicFill::Transform   m_aTransform;
         ResourceDict                m_aResources;
@@ -300,7 +300,7 @@ public:
         sal_Int32           m_nObject;
         sal_Int32           m_nExtGStateObject;
         double              m_fAlpha;
-        Rectangle           m_aBoundRect;
+        tools::Rectangle           m_aBoundRect;
         SvMemoryStream*     m_pContentStream;
         SvMemoryStream*     m_pSoftMaskStream;
 
@@ -378,7 +378,7 @@ public:
     {
         sal_Int32                   m_nPage;
         PDFWriter::DestAreaType     m_eType;
-        Rectangle                   m_aRect;
+        tools::Rectangle                   m_aRect;
     };
 
 //--->i56629
@@ -387,7 +387,7 @@ public:
         OUString               m_aDestName;
         sal_Int32                   m_nPage;
         PDFWriter::DestAreaType     m_eType;
-        Rectangle                   m_aRect;
+        tools::Rectangle                   m_aRect;
     };
 
     struct PDFOutlineEntry
@@ -412,7 +412,7 @@ public:
     struct PDFAnnotation
     {
         sal_Int32                   m_nObject;
-        Rectangle                   m_aRect;
+        tools::Rectangle                   m_aRect;
         sal_Int32                   m_nPage;
 
         PDFAnnotation()
@@ -563,7 +563,7 @@ public:
         std::list< sal_Int32 >                              m_aChildren; // indexes into structure vector
         std::list< PDFStructureElementKid >                 m_aKids;
         PDFStructAttributes                                 m_aAttributes;
-        Rectangle                                           m_aBBox;
+        tools::Rectangle                                           m_aBBox;
         OUString                                            m_aActualText;
         OUString                                            m_aAltText;
         css::lang::Locale                                   m_aLocale;
@@ -731,7 +731,7 @@ private:
     {
         SvStream*       m_pStream;
         MapMode         m_aMapMode;
-        Rectangle       m_aTargetRect;
+        tools::Rectangle       m_aTargetRect;
         ResourceDict    m_aResourceDict;
     };
     std::list< StreamRedirect >         m_aOutputStreams;
@@ -995,7 +995,7 @@ i12626
     bool writeBuffer( const void* pBuffer, sal_uInt64 nBytes );
     void beginCompression();
     void endCompression();
-    void beginRedirect( SvStream* pStream, const Rectangle& );
+    void beginRedirect( SvStream* pStream, const tools::Rectangle& );
     SvStream* endRedirect();
 
     void endPage();
@@ -1013,7 +1013,7 @@ i12626
     bool checkEmitStructure();
 
     /* draws an emphasis mark */
-    void drawEmphasisMark(  long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    void drawEmphasisMark(  long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 );
 
     /* true if PDF/A-1a or PDF/A-1b is output */
     bool            m_bIsPDF_A1;
@@ -1174,7 +1174,7 @@ public:
 
     void moveClipRegion( sal_Int32 nX, sal_Int32 nY );
 
-    void intersectClipRegion( const Rectangle& rRect );
+    void intersectClipRegion( const tools::Rectangle& rRect );
 
     bool intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
@@ -1201,7 +1201,7 @@ public:
     void drawTextArray( const Point& rPos, const OUString& rText, const long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen );
     void drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText,
                           sal_Int32 nIndex, sal_Int32 nLen  );
-    void drawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle );
+    void drawText( const tools::Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle );
     void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontLineStyle eUnderline, FontLineStyle eOverline, bool bUnderlineAbove );
     void drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     void drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
@@ -1218,28 +1218,28 @@ public:
 
     void drawPixel( const Point& rPt, const Color& rColor );
 
-    void drawRectangle( const Rectangle& rRect );
-    void drawRectangle( const Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
-    void drawEllipse( const Rectangle& rRect );
-    void drawArc( const Rectangle& rRect, const Point& rStart, const Point& rStop, bool bWithPie, bool bWidthChord );
+    void drawRectangle( const tools::Rectangle& rRect );
+    void drawRectangle( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
+    void drawEllipse( const tools::Rectangle& rRect );
+    void drawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rStop, bool bWithPie, bool bWidthChord );
 
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Graphic& rGraphic );
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
-    void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic );
+    void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic );
     /// Stores the original PDF data from rGraphic as an embedded file.
     void createEmbeddedFile(const Graphic& rGraphic, ReferenceXObjectEmit& rEmit, sal_Int32 nBitmapObject);
 
-    void drawGradient( const Rectangle& rRect, const Gradient& rGradient );
+    void drawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
     void drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
-    void drawWallpaper( const Rectangle& rRect, const Wallpaper& rWall );
+    void drawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWall );
     void drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent );
     void beginTransparencyGroup();
-    void endTransparencyGroup( const Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent );
+    void endTransparencyGroup( const tools::Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent );
 
     void emitComment( const char* pComment );
 
     //--->i56629 named destinations
-    sal_Int32 createNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
+    sal_Int32 createNamedDest( const OUString& sDestName, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
 
     //--->i59651
     //emits output intent
@@ -1249,15 +1249,15 @@ public:
     sal_Int32   emitDocumentMetadata();
 
     // links
-    sal_Int32 createLink( const Rectangle& rRect, sal_Int32 nPageNr );
-    sal_Int32 createDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
-    sal_Int32 registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
+    sal_Int32 createLink( const tools::Rectangle& rRect, sal_Int32 nPageNr );
+    sal_Int32 createDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
+    sal_Int32 registerDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     void      setLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
 
     // screens
-    sal_Int32 createScreen(const Rectangle& rRect, sal_Int32 nPageNr);
+    sal_Int32 createScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr);
     void setScreenURL(sal_Int32 nScreenId, const OUString& rURL);
     void setScreenStream(sal_Int32 nScreenId, const OUString& rURL);
 
@@ -1268,14 +1268,14 @@ public:
     void      setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
 
     // notes
-    void createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
+    void createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
     // structure elements
     sal_Int32 beginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias );
     void endStructureElement();
     bool setCurrentStructureElement( sal_Int32 nElement );
     bool setStructureAttribute( enum PDFWriter::StructAttribute eAttr, enum PDFWriter::StructAttributeValue eVal );
     bool setStructureAttributeNumerical( enum PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
-    void setStructureBoundingBox( const Rectangle& rRect );
+    void setStructureBoundingBox( const tools::Rectangle& rRect );
     void setActualText( const OUString& rText );
     void setAlternateText( const OUString& rText );
 

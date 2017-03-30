@@ -123,7 +123,7 @@ void SvxModifyControl::_repaint()
  *
  * @return Point top-left corner of the centered image position
  */
-Point centerImage(const Rectangle& rBoundingRect, const Image& rImg)
+Point centerImage(const tools::Rectangle& rBoundingRect, const Image& rImg)
 {
     Size aImgSize = rImg.GetSizePixel();
     Size aRectSize = rBoundingRect.GetSize();
@@ -137,7 +137,7 @@ Point centerImage(const Rectangle& rBoundingRect, const Image& rImg)
 void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
-    Rectangle aRect(rUsrEvt.GetRect());
+    tools::Rectangle aRect(rUsrEvt.GetRect());
 
     ImplData::ModificationState state = mxImpl->mnModState;
     Point aPt = centerImage(aRect, mxImpl->maImages[state]);

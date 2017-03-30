@@ -83,7 +83,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
                      const css::uno::Reference< css::container::XNameAccess >& xPersistentWindowState );
 
         void setParentWindow( const css::uno::Reference< css::awt::XWindowPeer >& xParentWindow );
-        void setDockingAreaOffsets(const ::Rectangle& rOffsets);
+        void setDockingAreaOffsets(const ::tools::Rectangle& rOffsets);
 
         void resetDockingArea();
 
@@ -194,7 +194,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         // internal helper methods
 
         bool             implts_isParentWindowVisible() const;
-        ::Rectangle      implts_calcDockingArea();
+        ::tools::Rectangle      implts_calcDockingArea();
         void             implts_sortUIElements();
         void             implts_reparentToolbars();
         OUString         implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const;
@@ -227,26 +227,26 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
 
         // internal docking methods
 
-        ::Rectangle      implts_calcHotZoneRect( const ::Rectangle& rRect, sal_Int32 nHotZoneOffset );
-        void             implts_calcDockingPosSize( UIElement& aUIElement, DockingOperation& eDockOperation, ::Rectangle& rTrackingRect, const Point& rMousePos );
-        DockingOperation implts_determineDockingOperation( css::ui::DockingArea DockingArea, const ::Rectangle& rRowColRect, const Point& rMousePos );
-        ::Rectangle      implts_getWindowRectFromRowColumn( css::ui::DockingArea DockingArea, const SingleRowColumnWindowData& rRowColumnWindowData, const ::Point& rMousePos, const OUString& rExcludeElementName );
-        ::Rectangle      implts_determineFrontDockingRect( css::ui::DockingArea eDockingArea,
+        ::tools::Rectangle      implts_calcHotZoneRect( const ::tools::Rectangle& rRect, sal_Int32 nHotZoneOffset );
+        void             implts_calcDockingPosSize( UIElement& aUIElement, DockingOperation& eDockOperation, ::tools::Rectangle& rTrackingRect, const Point& rMousePos );
+        DockingOperation implts_determineDockingOperation( css::ui::DockingArea DockingArea, const ::tools::Rectangle& rRowColRect, const Point& rMousePos );
+        ::tools::Rectangle      implts_getWindowRectFromRowColumn( css::ui::DockingArea DockingArea, const SingleRowColumnWindowData& rRowColumnWindowData, const ::Point& rMousePos, const OUString& rExcludeElementName );
+        ::tools::Rectangle      implts_determineFrontDockingRect( css::ui::DockingArea eDockingArea,
                                                            sal_Int32 nRowCol,
-                                                           const ::Rectangle& rDockedElementRect,
+                                                           const ::tools::Rectangle& rDockedElementRect,
                                                            const OUString& rMovedElementName,
-                                                           const ::Rectangle& rMovedElementRect );
-        ::Rectangle      implts_calcTrackingAndElementRect( css::ui::DockingArea eDockingArea,
+                                                           const ::tools::Rectangle& rMovedElementRect );
+        ::tools::Rectangle      implts_calcTrackingAndElementRect( css::ui::DockingArea eDockingArea,
                                                             sal_Int32 nRowCol,
                                                             UIElement& rUIElement,
-                                                            const ::Rectangle& rTrackingRect,
-                                                            const ::Rectangle& rRowColumnRect,
+                                                            const ::tools::Rectangle& rTrackingRect,
+                                                            const ::tools::Rectangle& rRowColumnRect,
                                                             const ::Size& rContainerWinSize );
 
         void             implts_getDockingAreaElementInfos( css::ui::DockingArea DockingArea, std::vector< SingleRowColumnWindowData >& rRowColumnsWindowData );
         void             implts_getDockingAreaElementInfoOnSingleRowCol( css::ui::DockingArea, sal_Int32 nRowCol, SingleRowColumnWindowData& rRowColumnWindowData );
         void             implts_findNextDockingPos( css::ui::DockingArea DockingArea, const ::Size& aUIElementSize, css::awt::Point& rVirtualPos, ::Point& rPixelPos );
-        void             implts_setTrackingRect( css::ui::DockingArea eDockingArea, const ::Point& rMousePos, ::Rectangle& rTrackingRect );
+        void             implts_setTrackingRect( css::ui::DockingArea eDockingArea, const ::Point& rMousePos, ::tools::Rectangle& rTrackingRect );
 
         // creation methods
 
@@ -278,8 +278,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         UIElementVector                                                      m_aUIElements;
         UIElement                                                            m_aDockUIElement;
         Point                                                                m_aStartDockMousePos;
-        Rectangle                                                            m_aDockingArea;
-        Rectangle                                                            m_aDockingAreaOffsets;
+        tools::Rectangle                                                            m_aDockingArea;
+        tools::Rectangle                                                            m_aDockingAreaOffsets;
         DockingOperation                                                     m_eDockOperation;
         PreviewFrameDetection                                                m_ePreviewDetection;
 

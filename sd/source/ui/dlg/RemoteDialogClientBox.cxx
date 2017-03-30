@@ -168,7 +168,7 @@ void ClientBox::CalcActiveHeight( const long nPos )
     m_nActiveHeight = aTextHeight + 2;
 }
 
-Rectangle ClientBox::GetEntryRect( const long nPos ) const
+::tools::Rectangle ClientBox::GetEntryRect( const long nPos ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
@@ -186,7 +186,7 @@ Rectangle ClientBox::GetEntryRect( const long nPos ) const
     if ( m_bHasActive && ( nPos < m_nActive ) )
         aPos.Y() += m_nActiveHeight - m_nStdHeight;
 
-    return Rectangle( aPos, aSize );
+    return ::tools::Rectangle( aPos, aSize );
 }
 
 void ClientBox::DeleteRemoved()
@@ -273,7 +273,7 @@ void ClientBox::selectEntry( const long nPos )
     guard.clear();
 }
 
-void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TClientBoxEntry& rEntry)
+void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, const TClientBoxEntry& rEntry)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -359,7 +359,7 @@ void ClientBox::RecalcAll()
     }
     else
     {
-        Rectangle aEntryRect = GetEntryRect( m_nActive );
+        ::tools::Rectangle aEntryRect = GetEntryRect( m_nActive );
 
         Size  aPinBoxSize( m_aPinBox->GetSizePixel() );
         Point aPos( aEntryRect.Left(),
@@ -369,7 +369,7 @@ void ClientBox::RecalcAll()
 
         if ( !bAlreadyAuthorised )
         {
-            m_sPinTextRect = Rectangle( aPos.X(), aPos.Y(),
+            m_sPinTextRect = ::tools::Rectangle( aPos.X(), aPos.Y(),
                                         aEntryRect.Right(),
                                         aEntryRect.Bottom() - TOP_OFFSET);
 
@@ -474,7 +474,7 @@ bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
     return true;
 }
 
-void ClientBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rPaintRect*/)
+void ClientBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle &/*rPaintRect*/)
 {
     if (!m_bInDelete)
         DeleteRemoved();
@@ -494,7 +494,7 @@ void ClientBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rPa
     for (ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
     {
         aSize.Height() = (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight;
-        Rectangle aEntryRect(aStart, aSize);
+        ::tools::Rectangle aEntryRect(aStart, aSize);
         DrawRow(rRenderContext, aEntryRect, *iIndex);
         aStart.Y() += aSize.Height();
     }
@@ -701,7 +701,7 @@ void ClientBox::DoScroll( long nDelta )
     m_nTopIndex += nDelta;
     Point aNewSBPt( m_aScrollBar->GetPosPixel() );
 
-    Rectangle aScrRect( Point(), GetOutputSizePixel() );
+    ::tools::Rectangle aScrRect( Point(), GetOutputSizePixel() );
     aScrRect.Right() -= m_aScrollBar->GetSizePixel().Width();
     Scroll( 0, -nDelta, aScrRect );
 

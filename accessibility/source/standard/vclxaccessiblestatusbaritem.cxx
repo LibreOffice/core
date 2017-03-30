@@ -134,7 +134,7 @@ OUString VCLXAccessibleStatusBarItem::GetItemText()
     vcl::ControlLayoutData aLayoutData;
     if ( m_pStatusBar )
     {
-        Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
+        tools::Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
         m_pStatusBar->RecordLayoutData( &aLayoutData, aItemRect );
         sText = aLayoutData.m_aDisplayText;
     }
@@ -503,9 +503,9 @@ awt::Rectangle VCLXAccessibleStatusBarItem::getCharacterBounds( sal_Int32 nIndex
     if ( m_pStatusBar )
     {
         vcl::ControlLayoutData aLayoutData;
-        Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
+        tools::Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
         m_pStatusBar->RecordLayoutData( &aLayoutData, aItemRect );
-        Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
+        tools::Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
         aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
         aBounds = AWTRectangle( aCharRect );
     }
@@ -522,7 +522,7 @@ sal_Int32 VCLXAccessibleStatusBarItem::getIndexAtPoint( const awt::Point& aPoint
     if ( m_pStatusBar )
     {
         vcl::ControlLayoutData aLayoutData;
-        Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
+        tools::Rectangle aItemRect = m_pStatusBar->GetItemRect( m_nItemId );
         m_pStatusBar->RecordLayoutData( &aLayoutData, aItemRect );
         Point aPnt( VCLPoint( aPoint ) );
         aPnt += aItemRect.TopLeft();

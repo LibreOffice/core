@@ -126,28 +126,28 @@ void ScAccessibleFilterMenuItem::setEnabled(bool bEnabled)
     mbEnabled = bEnabled;
 }
 
-Rectangle ScAccessibleFilterMenuItem::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleFilterMenuItem::GetBoundingBoxOnScreen() const
 {
     if (!mpWindow->IsVisible())
-        return Rectangle();
+        return tools::Rectangle();
 
     Point aPos = mpWindow->OutputToAbsoluteScreenPixel(Point(0,0));
     Point aMenuPos;
     Size aMenuSize;
     mpWindow->getMenuItemPosSize(mnMenuPos, aMenuPos, aMenuSize);
-    Rectangle aRect(aPos + aMenuPos, aMenuSize);
+    tools::Rectangle aRect(aPos + aMenuPos, aMenuSize);
     return aRect;
 }
 
-Rectangle ScAccessibleFilterMenuItem::GetBoundingBox() const
+tools::Rectangle ScAccessibleFilterMenuItem::GetBoundingBox() const
 {
     if (!mpWindow->IsVisible())
-        return Rectangle();
+        return tools::Rectangle();
 
     Point aMenuPos;
     Size aMenuSize;
     mpWindow->getMenuItemPosSize(mnMenuPos, aMenuPos, aMenuSize);
-    Rectangle aRect(aMenuPos, aMenuSize);
+    tools::Rectangle aRect(aMenuPos, aMenuSize);
     return aRect;
 }
 

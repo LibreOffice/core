@@ -511,18 +511,18 @@ Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
                                    maThresRes.mnThresLogToPixY ) );
 }
 
-Rectangle OutputDevice::ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const
+tools::Rectangle OutputDevice::ImplLogicToDevicePixel( const tools::Rectangle& rLogicRect ) const
 {
     if ( rLogicRect.IsEmpty() )
         return rLogicRect;
 
     if ( !mbMap )
     {
-        return Rectangle( rLogicRect.Left()+mnOutOffX, rLogicRect.Top()+mnOutOffY,
+        return tools::Rectangle( rLogicRect.Left()+mnOutOffX, rLogicRect.Top()+mnOutOffY,
                           rLogicRect.Right()+mnOutOffX, rLogicRect.Bottom()+mnOutOffY );
     }
 
-    return Rectangle( ImplLogicToPixel( rLogicRect.Left()+maMapRes.mnMapOfsX, mnDPIX,
+    return tools::Rectangle( ImplLogicToPixel( rLogicRect.Left()+maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX,
                       ImplLogicToPixel( rLogicRect.Top()+maMapRes.mnMapOfsY, mnDPIY,
@@ -619,18 +619,18 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
     return aInfo;
 }
 
-Rectangle OutputDevice::ImplDevicePixelToLogic( const Rectangle& rPixelRect ) const
+tools::Rectangle OutputDevice::ImplDevicePixelToLogic( const tools::Rectangle& rPixelRect ) const
 {
     if ( rPixelRect.IsEmpty() )
         return rPixelRect;
 
     if ( !mbMap )
     {
-        return Rectangle( rPixelRect.Left()-mnOutOffX, rPixelRect.Top()-mnOutOffY,
+        return tools::Rectangle( rPixelRect.Left()-mnOutOffX, rPixelRect.Top()-mnOutOffY,
                           rPixelRect.Right()-mnOutOffX, rPixelRect.Bottom()-mnOutOffY );
     }
 
-    return Rectangle( ImplPixelToLogic( rPixelRect.Left()-mnOutOffX-mnOutOffOrigX, mnDPIX,
+    return tools::Rectangle( ImplPixelToLogic( rPixelRect.Left()-mnOutOffX-mnOutOffOrigX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresPixToLogX )-maMapRes.mnMapOfsX,
                       ImplPixelToLogic( rPixelRect.Top()-mnOutOffY-mnOutOffOrigY, mnDPIY,
@@ -985,13 +985,13 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize ) const
                                    maThresRes.mnThresLogToPixY ) );
 }
 
-Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect ) const
+tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect ) const
 {
 
     if ( !mbMap || rLogicRect.IsEmpty() )
         return rLogicRect;
 
-    return Rectangle( ImplLogicToPixel( rLogicRect.Left() + maMapRes.mnMapOfsX, mnDPIX,
+    return tools::Rectangle( ImplLogicToPixel( rLogicRect.Left() + maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresLogToPixX )+mnOutOffOrigX,
                       ImplLogicToPixel( rLogicRect.Top() + maMapRes.mnMapOfsY, mnDPIY,
@@ -1132,7 +1132,7 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize,
                                    aThresRes.mnThresLogToPixY ) );
 }
 
-Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect,
+tools::Rectangle OutputDevice::LogicToPixel( const tools::Rectangle& rLogicRect,
                                       const MapMode& rMapMode ) const
 {
 
@@ -1144,7 +1144,7 @@ Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect,
     ImplThresholdRes    aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    return Rectangle( ImplLogicToPixel( rLogicRect.Left() + aMapRes.mnMapOfsX, mnDPIX,
+    return tools::Rectangle( ImplLogicToPixel( rLogicRect.Left() + aMapRes.mnMapOfsX, mnDPIX,
                                         aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
                                         aThresRes.mnThresLogToPixX )+mnOutOffOrigX,
                       ImplLogicToPixel( rLogicRect.Top() + aMapRes.mnMapOfsY, mnDPIY,
@@ -1230,13 +1230,13 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
                                    maThresRes.mnThresPixToLogY ) );
 }
 
-Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect ) const
+tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect ) const
 {
 
     if ( !mbMap || rDeviceRect.IsEmpty() )
         return rDeviceRect;
 
-    return Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
+    return tools::Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
                       ImplPixelToLogic( rDeviceRect.Top(), mnDPIY,
@@ -1379,7 +1379,7 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
                                    aThresRes.mnThresPixToLogY ) );
 }
 
-Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
+tools::Rectangle OutputDevice::PixelToLogic( const tools::Rectangle& rDeviceRect,
                                       const MapMode& rMapMode ) const
 {
 
@@ -1392,7 +1392,7 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
     ImplThresholdRes    aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    return Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
+    return tools::Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
                                         aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
                                         aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
                       ImplPixelToLogic( rDeviceRect.Top(), mnDPIY,
@@ -1735,13 +1735,13 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
                       aMapResSource.mnMapScDenomY, aMapResDest.mnMapScNumY ) );
 }
 
-Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
+tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource,
                                       const MapMode* pMapModeSource,
                                       const MapMode* pMapModeDest ) const
 {
     ENTER1( rRectSource, pMapModeSource, pMapModeDest );
 
-    return Rectangle( fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
+    return tools::Rectangle( fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
                            aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
                            aMapResSource.mnMapScDenomX, aMapResDest.mnMapScNumX ) -
                       aMapResDest.mnMapOfsX,
@@ -1878,7 +1878,7 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
     return aTransform;
 }
 
-Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
+tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource,
                                       const MapMode& rMapModeSource,
                                       const MapMode& rMapModeDest )
 {
@@ -1893,7 +1893,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
     {
         ENTER3( eUnitSource, eUnitDest );
 
-        return Rectangle( fn3( rRectSource.Left(), nNumerator, nDenominator ),
+        return tools::Rectangle( fn3( rRectSource.Left(), nNumerator, nDenominator ),
                           fn3( rRectSource.Top(), nNumerator, nDenominator ),
                           fn3( rRectSource.Right(), nNumerator, nDenominator ),
                           fn3( rRectSource.Bottom(), nNumerator, nDenominator ) );
@@ -1902,7 +1902,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
     {
         ENTER4( rMapModeSource, rMapModeDest );
 
-        return Rectangle( fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
+        return tools::Rectangle( fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
                                aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
                                aMapResSource.mnMapScDenomX, aMapResDest.mnMapScNumX ) -
                           aMapResDest.mnMapOfsX,

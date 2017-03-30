@@ -222,7 +222,7 @@ public:
 
     void        Scroll( long nHorzScroll, long nVertScroll );
 
-    void        Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
+    void        Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin = nullptr );
     bool        MouseButtonDown( const MouseEvent& );
     bool        MouseButtonUp( const MouseEvent& );
@@ -240,10 +240,10 @@ public:
     void        SetReadOnly( bool bReadOnly );
     bool        IsReadOnly() const;
 
-    void        SetOutputArea( const Rectangle& rRect );
-    Rectangle   GetOutputArea() const;
+    void        SetOutputArea( const tools::Rectangle& rRect );
+    tools::Rectangle   GetOutputArea() const;
 
-    Rectangle   GetVisArea() const;
+    tools::Rectangle   GetVisArea() const;
 
     void        CreateSelectionList (std::vector<Paragraph*> &aSelList) ;
 
@@ -305,9 +305,9 @@ public:
 
     SvtScriptType   GetSelectedScriptType() const;
 
-    void        SetVisArea( const Rectangle& rRect );
+    void        SetVisArea( const tools::Rectangle& rRect );
     void        SetSelection( const ESelection& );
-    void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const;
+    void GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects) const;
 
     void        RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages = false );
     void        RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
@@ -561,7 +561,7 @@ struct EBulletInfo
     SvxFont     aFont;
     Graphic     aGraphic;
     sal_Int32   nParagraph;
-    Rectangle   aBounds;
+    tools::Rectangle   aBounds;
 
     EBulletInfo() : bVisible( false ), nType( 0 ), nParagraph( EE_PARA_NOT_FOUND ) {}
 };
@@ -650,7 +650,7 @@ private:
 
     void        ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount );
     vcl::Font   ImpCalcBulletFont( sal_Int32 nPara ) const;
-    Rectangle   ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bReturnPaperPos );
+    tools::Rectangle   ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bReturnPaperPos );
     bool        ImpCanIndentSelectedPages( OutlinerView* pCurView );
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 nFirstPage, sal_Int32 nPages );
@@ -800,7 +800,7 @@ public:
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink );
     Link<EditStatus&, void> GetStatusEventHdl() const;
 
-    void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
+    void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos );
 
     const Size&     GetPaperSize() const;

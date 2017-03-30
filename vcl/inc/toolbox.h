@@ -44,8 +44,8 @@ struct ImplToolItem
     OUString            maHelpText;
     OUString            maCommandStr;
     OString             maHelpId;
-    Rectangle           maRect;
-    Rectangle           maCalcRect;
+    tools::Rectangle           maRect;
+    tools::Rectangle           maCalcRect;
     /// Widget layout may request size; set it as the minimal size (like, the item will always have at least this size).
     Size                maMinimalItemSize;
     /// The overall horizontal item size, including one or more of [image size + textlength + dropdown arrow]
@@ -87,7 +87,7 @@ struct ImplToolItem
     // returns the rectangle which contains the drop down arrow
     // or an empty rect if there is none
     // bHorz denotes the toolbox alignment
-    Rectangle   GetDropDownRect( bool bHorz ) const;
+    tools::Rectangle   GetDropDownRect( bool bHorz ) const;
 
     // returns sal_True if the toolbar item is currently clipped, which can happen for docked toolbars
     bool IsClipped() const;
@@ -128,7 +128,7 @@ struct ImplToolBoxPrivateData
 
     // the optional custom menu
     VclPtr<PopupMenu>   mpMenu;
-    Rectangle       maMenuRect;
+    tools::Rectangle       maMenuRect;
     ToolBoxMenuType maMenuType;
     ImplSVEvent *   mnEventId;
 

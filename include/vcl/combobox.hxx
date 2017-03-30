@@ -68,7 +68,7 @@ public:
 
     virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
-    Rectangle       GetDropDownPosSizePixel() const;
+    tools::Rectangle       GetDropDownPosSizePixel() const;
 
     void            AdaptDropDownLineCountToMaximum();
     void            SetDropDownLineCount( sal_uInt16 nLines );
@@ -146,7 +146,7 @@ public:
     bool            IsEntryPosSelected( sal_Int32  nPos ) const;
     void            SelectEntryPos( sal_Int32  nPos, bool bSelect = true );
     void            SetNoSelection();
-    Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
+    tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
     /** checks whether a certain point lies within the bounds of
         a list item and returns the item as well as the character position

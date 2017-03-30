@@ -122,7 +122,7 @@ void SvxConfigFunctionListBox::MouseMove( const MouseEvent& rMEvt )
         aTimer.Start();
     else
     {
-        Rectangle aRect(GetPosPixel(), GetSizePixel());
+        ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
         Help::ShowBalloon( this, aMousePos, aRect, OUString() );
         aTimer.Stop();
     }
@@ -136,7 +136,7 @@ IMPL_LINK_NOARG(SvxConfigFunctionListBox, TimerHdl, Timer *, void)
     SvTreeListEntry *pEntry = GetCurEntry();
     if ( pEntry && GetEntry( aMousePos ) == pEntry && pCurEntry == pEntry )
     {
-        Rectangle aRect(GetPosPixel(), GetSizePixel());
+        ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
         Help::ShowBalloon( this, OutputToScreenPixel(aMousePos), aRect, GetHelpText( pEntry ) );
     }
 }
@@ -173,7 +173,7 @@ OUString SvxConfigFunctionListBox::GetHelpText( SvTreeListEntry *pEntry )
 
 void SvxConfigFunctionListBox::FunctionSelected()
 {
-    Help::ShowBalloon( this, Point(), Rectangle(), OUString() );
+    Help::ShowBalloon( this, Point(), ::tools::Rectangle(), OUString() );
 }
 
 // drag and drop support

@@ -37,7 +37,7 @@ namespace rptui
         virtual ~OEndMarker() override;
 
         // windows
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
         virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     };
 }

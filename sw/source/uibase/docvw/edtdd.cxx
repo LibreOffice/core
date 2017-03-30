@@ -198,7 +198,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     if( pObj && nullptr != ( pOLV = rSh.GetDrawView()->GetTextEditOutlinerView() ))
     {
-        Rectangle aRect( pOLV->GetOutputArea() );
+        tools::Rectangle aRect( pOLV->GetOutputArea() );
         aRect.Union( pObj->GetLogicRect() );
         const Point aPos = pOLV->GetWindow()->PixelToLogic(rEvt.maPosPixel);
         if ( aRect.IsInside(aPos) )
@@ -258,7 +258,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
         OutlinerView* pOLV = rSh.GetDrawView()->GetTextEditOutlinerView();
         if ( pOLV )
         {
-            Rectangle aRect( pOLV->GetOutputArea() );
+            tools::Rectangle aRect( pOLV->GetOutputArea() );
             aRect.Union( pObj->GetLogicRect() );
             const Point aPos = pOLV->GetWindow()->PixelToLogic( rPixPnt );
             if( aRect.IsInside( aPos ) )
@@ -335,7 +335,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     // If the cursor is near the inner boundary
     // we attempt to scroll towards the desired direction.
     Point aPoint;
-    Rectangle aWin(aPoint,GetOutputSizePixel());
+    tools::Rectangle aWin(aPoint,GetOutputSizePixel());
     const int nMargin = 10;
     aWin.Left() += nMargin;
     aWin.Top() += nMargin;

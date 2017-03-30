@@ -236,7 +236,7 @@ const OUString& FuConstructCustomShape::GetShapeType() const
     return aCustomShape;
 }
 
-SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
+SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
@@ -244,7 +244,7 @@ SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const R
 
     if( pObj )
     {
-        Rectangle aRect( rRectangle );
+        ::tools::Rectangle aRect( rRectangle );
         if ( doConstructOrthogonal() )
             ImpForceQuadratic( aRect );
         pObj->SetLogicRect( aRect );

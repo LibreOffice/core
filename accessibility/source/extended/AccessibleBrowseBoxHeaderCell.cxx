@@ -117,7 +117,7 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
 
 namespace
 {
-    Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, bool _bOnScreen,bool _bRowBar)
+    tools::Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, bool _bOnScreen,bool _bRowBar)
     {
         sal_Int32 nRow  = 0;
         sal_uInt16 nCol =  (sal_uInt16)_nRowColIndex;
@@ -127,18 +127,18 @@ namespace
             nCol = 0;
         }
 
-        Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, true, _bOnScreen));
-        return Rectangle(aRet.TopLeft() - Point(0,aRet.GetHeight()),aRet.GetSize());
+        tools::Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, true, _bOnScreen));
+        return tools::Rectangle(aRet.TopLeft() - Point(0,aRet.GetHeight()),aRet.GetSize());
     }
 }
 
-Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
+tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 {
     return getRectangle(mpBrowseBox,m_nColumnRowId,false,isRowBarCell());
 }
 
 
-Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
+tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 {
     return getRectangle(mpBrowseBox,m_nColumnRowId,true,isRowBarCell());
 }

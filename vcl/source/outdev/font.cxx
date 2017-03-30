@@ -287,7 +287,7 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
 #endif // ENABLE_CAIRO_CANVAS
 
 void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine,
-                                        Rectangle& rRect1, Rectangle& rRect2,
+                                        tools::Rectangle& rRect1, tools::Rectangle& rRect2,
                                         long& rYOff, long& rWidth,
                                         FontEmphasisMark eEmphasis,
                                         long nHeight, short /*nOrient*/ )
@@ -349,7 +349,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             if ( !nDotSize )
                 nDotSize = 1;
             if ( nDotSize <= 2 )
-                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+                rRect1 = tools::Rectangle( Point(), Size( nDotSize, nDotSize ) );
             else
             {
                 long nRad = nDotSize/2;
@@ -366,7 +366,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             if ( !nDotSize )
                 nDotSize = 1;
             if ( nDotSize <= 2 )
-                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+                rRect1 = tools::Rectangle( Point(), Size( nDotSize, nDotSize ) );
             else
             {
                 long nRad = nDotSize/2;
@@ -392,7 +392,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             if ( !nDotSize )
                 nDotSize = 1;
             if ( nDotSize <= 2 )
-                rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+                rRect1 = tools::Rectangle( Point(), Size( nDotSize, nDotSize ) );
             else
             {
                 long nRad = nDotSize/2;
@@ -411,13 +411,13 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             {
                 if ( nDotSize == 1 )
                 {
-                    rRect1 = Rectangle( Point(), Size( nDotSize, nDotSize ) );
+                    rRect1 = tools::Rectangle( Point(), Size( nDotSize, nDotSize ) );
                     rWidth = nDotSize;
                 }
                 else
                 {
-                    rRect1 = Rectangle( Point(), Size( 1, 1 ) );
-                    rRect2 = Rectangle( Point( 1, 1 ), Size( 1, 1 ) );
+                    rRect1 = tools::Rectangle( Point(), Size( 1, 1 ) );
+                    rRect2 = tools::Rectangle( Point( 1, 1 ), Size( 1, 1 ) );
                 }
             }
             else
@@ -429,7 +429,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                 aPoly.Scale( dScale, dScale );
                 tools::Polygon aTemp;
                 aPoly.AdaptiveSubdivide( aTemp );
-                Rectangle aBoundRect = aTemp.GetBoundRect();
+                tools::Rectangle aBoundRect = aTemp.GetBoundRect();
                 rWidth = aBoundRect.GetWidth();
                 nDotSize = aBoundRect.GetHeight();
                 rPolyPoly.Insert( aTemp );
@@ -1193,7 +1193,7 @@ void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontInstance 
 
 void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
                                          const tools::PolyPolygon& rPolyPoly, bool bPolyLine,
-                                         const Rectangle& rRect1, const Rectangle& rRect2 )
+                                         const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 )
 {
     if( IsRTLEnabled() )
         // --- RTL --- mirror at basex
@@ -1220,14 +1220,14 @@ void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
 
     if ( !rRect1.IsEmpty() )
     {
-        Rectangle aRect( Point( nX+rRect1.Left(),
+        tools::Rectangle aRect( Point( nX+rRect1.Left(),
                                 nY+rRect1.Top() ), rRect1.GetSize() );
         DrawRect( aRect );
     }
 
     if ( !rRect2.IsEmpty() )
     {
-        Rectangle aRect( Point( nX+rRect2.Left(),
+        tools::Rectangle aRect( Point( nX+rRect2.Left(),
                                 nY+rRect2.Top() ), rRect2.GetSize() );
 
         DrawRect( aRect );
@@ -1245,8 +1245,8 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
     FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
     tools::PolyPolygon  aPolyPoly;
-    Rectangle           aRect1;
-    Rectangle           aRect2;
+    tools::Rectangle           aRect1;
+    tools::Rectangle           aRect2;
     long                nEmphasisYOff;
     long                nEmphasisWidth;
     long                nEmphasisHeight;
@@ -1286,7 +1286,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     aOffset += Point( nEmphasisWidth2, nEmphasisHeight2 );
 
     Point aOutPoint;
-    Rectangle aRectangle;
+    tools::Rectangle aRectangle;
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (rSalLayout.GetNextGlyphs(1, &pGlyph, aOutPoint, nStart))
@@ -1477,7 +1477,7 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
         nLen = rStr.getLength() - nIndex;
     }
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
     for( int i = 0; i < nLen; i++ )
     {
         if( !GetTextBoundRect( aRect, rStr, nIndex, nIndex + i, 1 ) )

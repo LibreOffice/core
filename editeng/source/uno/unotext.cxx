@@ -2439,14 +2439,14 @@ EBulletInfo SvxDummyTextSource::GetBulletInfo( sal_Int32 ) const
     return EBulletInfo();
 }
 
-Rectangle SvxDummyTextSource::GetCharBounds( sal_Int32, sal_Int32 ) const
+tools::Rectangle SvxDummyTextSource::GetCharBounds( sal_Int32, sal_Int32 ) const
 {
-    return Rectangle();
+    return tools::Rectangle();
 }
 
-Rectangle SvxDummyTextSource::GetParaBounds( sal_Int32 ) const
+tools::Rectangle SvxDummyTextSource::GetParaBounds( sal_Int32 ) const
 {
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 MapMode SvxDummyTextSource::GetMapMode() const

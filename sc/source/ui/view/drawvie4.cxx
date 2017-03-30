@@ -92,7 +92,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
     {
         BrkAction();
 
-        Rectangle aMarkedRect = GetAllMarkedRect();
+        tools::Rectangle aMarkedRect = GetAllMarkedRect();
         vcl::Region aRegion( aMarkedRect );
 
         aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
@@ -522,7 +522,7 @@ void ScDrawView::SetMarkedOriginalSize()
 
         if ( bDo )
         {
-            Rectangle aDrawRect = pObj->GetLogicRect();
+            tools::Rectangle aDrawRect = pObj->GetLogicRect();
 
             pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
             pObj->Resize( aDrawRect.TopLeft(), Fraction( aOriginalSize.Width(), aDrawRect.GetWidth() ),

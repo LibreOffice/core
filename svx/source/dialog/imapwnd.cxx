@@ -184,7 +184,7 @@ void IMapWindow::SetTargetList( TargetList& rTargetList )
 SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 {
     Point       aPoint;
-    Rectangle   aClipRect( aPoint, GetGraphicSize() );
+    tools::Rectangle   aClipRect( aPoint, GetGraphicSize() );
     SdrObject*  pSdrObj = nullptr;
     IMapObjectPtr pCloneIMapObj;
 
@@ -193,7 +193,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         case IMAP_OBJ_RECTANGLE:
         {
             const IMapRectangleObject* pIMapRectObj = static_cast<const IMapRectangleObject*>(pIMapObj);
-            Rectangle               aDrawRect( pIMapRectObj->GetRectangle( false ) );
+            tools::Rectangle               aDrawRect( pIMapRectObj->GetRectangle( false ) );
 
             // clipped on CanvasPane
             aDrawRect.Intersection( aClipRect );
@@ -209,7 +209,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             const Point         aCenter( pIMapCircleObj->GetCenter( false ) );
             const long          nRadius = pIMapCircleObj->GetRadius( false );
             const Point         aOffset( nRadius, nRadius );
-            Rectangle           aCircle( aCenter - aOffset, aCenter + aOffset );
+            tools::Rectangle           aCircle( aCenter - aOffset, aCenter + aOffset );
 
             // limited to CanvasPane
             aCircle.Intersection( aClipRect );
@@ -226,7 +226,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // If it actually is an ellipse, then another ellipse is created again
             if ( pIMapPolyObj->HasExtraEllipse() )
             {
-                Rectangle aDrawRect( pIMapPolyObj->GetExtraEllipse() );
+                tools::Rectangle aDrawRect( pIMapPolyObj->GetExtraEllipse() );
 
                 // clipped on CanvasPane
                 aDrawRect.Intersection( aClipRect );
@@ -427,7 +427,7 @@ SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
     SdrObject*  pObj = nullptr;
     Point       aPt = PixelToLogic( rPosPixel );
 
-    if ( Rectangle( Point(), GetGraphicSize() ).IsInside( aPt ) )
+    if ( tools::Rectangle( Point(), GetGraphicSize() ).IsInside( aPt ) )
     {
         SdrPage* pPage = pModel->GetPage( 0 );
         if ( pPage )
@@ -563,8 +563,8 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 
             if ( pIMapObj && !( aStr = pIMapObj->GetURL() ).isEmpty() )
             {
-                Rectangle   aLogicPix( LogicToPixel( Rectangle( Point(), GetGraphicSize() ) ) );
-                Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
+                tools::Rectangle   aLogicPix( LogicToPixel( tools::Rectangle( Point(), GetGraphicSize() ) ) );
+                tools::Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
                                          OutputToScreenPixel( aLogicPix.BottomRight() ) );
 
                 if ( Help::IsBalloonHelpEnabled() )
@@ -775,7 +775,7 @@ void IMapWindow::CreateDefaultObject()
         sal_uInt32 nDefaultObjectSizeHeight = aPageSize.Height() / 4;
         aPagePos.X() += (aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2);
         aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
-        Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+        tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
 
         SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), nullptr, pModel);
         pObj->SetLogicRect(aNewObjectRectangle);

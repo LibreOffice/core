@@ -48,7 +48,7 @@ class KeyEvent;
 class MouseEvent;
 class DropEvent;
 class CommandEvent;
-class Rectangle;
+namespace tools { class Rectangle; }
 class Pair;
 class Point;
 class Range;
@@ -114,9 +114,9 @@ public:
     bool            AddOtherViewWindow( vcl::Window* pWin );
     bool            RemoveOtherViewWindow( vcl::Window* pWin );
 
-    void            Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
-    Rectangle       GetInvalidateRect() const;
-    void            InvalidateOtherViewWindows( const Rectangle& rInvRect );
+    void            Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
+    tools::Rectangle       GetInvalidateRect() const;
+    void            InvalidateOtherViewWindows( const tools::Rectangle& rInvRect );
     void            Invalidate();
     Pair            Scroll( long nHorzScroll, long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
@@ -133,7 +133,7 @@ public:
     void            SetSelection( const ESelection& rNewSel );
     void            SelectCurrentWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     /// Returns the rectangles of the current selection in TWIPs.
-    void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const;
+    void GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects) const;
 
     bool            IsInsertMode() const;
     void            SetInsertMode( bool bInsert );
@@ -145,13 +145,13 @@ public:
 
                         // VisArea position of the Output window.
                         // A size change also affects the VisArea
-    void                SetOutputArea( const Rectangle& rRect );
-    const Rectangle&    GetOutputArea() const;
+    void                SetOutputArea( const tools::Rectangle& rRect );
+    const tools::Rectangle&    GetOutputArea() const;
 
                         // Document position.
                         // A size change also affects the VisArea
-    void                SetVisArea( const Rectangle& rRect );
-    const Rectangle&    GetVisArea() const;
+    void                SetVisArea( const tools::Rectangle& rRect );
+    const tools::Rectangle&    GetVisArea() const;
 
     const Pointer&  GetPointer() const;
 

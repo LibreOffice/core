@@ -882,7 +882,7 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrame( const SwFrame& _rAnchorFra
     return pRetDrawObj;
 }
 
-void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const Rectangle* pOldBoundRect)
+void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const tools::Rectangle* pOldBoundRect)
 {
     for(auto& rpDrawVirtObj : maDrawVirtObjs)
     {
@@ -916,7 +916,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const Rectangle* pOldBoundRect)
 /// local method to notify the background for a drawing object - #i26791#
 static void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
                                 const SdrObject& _rObj,
-                                const Rectangle* _pOldObjRect )
+                                const tools::Rectangle* _pOldObjRect )
 {
     // #i34640#
     SwAnchoredObject* pAnchoredObj =
@@ -950,7 +950,7 @@ static void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
 
 void SwDrawContact::Changed( const SdrObject& rObj,
                              SdrUserCallType eType,
-                             const Rectangle& rOldBoundRect )
+                             const tools::Rectangle& rOldBoundRect )
 {
     // #i26791# - no event handling, if existing <SwViewShell>
     // is in construction
@@ -1085,7 +1085,7 @@ void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 
 void SwDrawContact::Changed_( const SdrObject& rObj,
                               SdrUserCallType eType,
-                              const Rectangle* pOldBoundRect )
+                              const tools::Rectangle* pOldBoundRect )
 {
     // suppress handling of nested <SdrObjUserCall> events
     NestedUserCallHdl aNestedUserCallHdl( this, eType );
@@ -1203,7 +1203,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
             {
                 // #i34748# - If no last object rectangle is
                 // provided by the anchored object, use parameter <pOldBoundRect>.
-                const Rectangle& aOldObjRect = pAnchoredDrawObj->GetLastObjRect()
+                const tools::Rectangle& aOldObjRect = pAnchoredDrawObj->GetLastObjRect()
                                                ? *(pAnchoredDrawObj->GetLastObjRect())
                                                : *(pOldBoundRect);
                 // #i79400#
@@ -1373,8 +1373,8 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 {
                     // determine old object rectangle of 'master' drawing object
                     // for notification
-                    const Rectangle* pOldRect = nullptr;
-                    Rectangle aOldRect;
+                    const tools::Rectangle* pOldRect = nullptr;
+                    tools::Rectangle aOldRect;
                     if(GetAnchorFrame())
                     {
                         // --> #i36181# - include spacing in object
@@ -1606,7 +1606,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
          !(GetFormat()->GetDoc()->IsInDtor()) &&
          GetAnchorFrame() && !GetAnchorFrame()->IsInDtor() )
     {
-        const Rectangle aOldRect( maAnchoredDrawObj.GetObjRectWithSpaces().SVRect() );
+        const tools::Rectangle aOldRect( maAnchoredDrawObj.GetObjRectWithSpaces().SVRect() );
         lcl_NotifyBackgroundOfObj( *this, *GetMaster(), &aOldRect );
         NotifyBackgrdOfAllVirtObjs( &aOldRect );
     }
@@ -2267,7 +2267,7 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
 // #i97197#
 // the methods relevant for positioning
 
-const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
+const tools::Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
 {
     if(aOutRect.IsEmpty())
     {
@@ -2277,7 +2277,7 @@ const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
     return aOutRect;
 }
 
-const Rectangle& SwDrawVirtObj::GetLastBoundRect() const
+const tools::Rectangle& SwDrawVirtObj::GetLastBoundRect() const
 {
     return aOutRect;
 }
@@ -2286,7 +2286,7 @@ const Point SwDrawVirtObj::GetOffset() const
 {
     // do NOT use IsEmpty() here, there is already a useful offset
     // in the position
-    if(aOutRect == Rectangle())
+    if(aOutRect == tools::Rectangle())
     {
         return Point();
     }
@@ -2382,7 +2382,7 @@ void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fract
 {
     if(xFact.GetNumerator() != xFact.GetDenominator() || yFact.GetNumerator() != yFact.GetDenominator())
     {
-        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);
         SetRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
@@ -2393,7 +2393,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     if(nAngle)
     {
-        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Rotate(rRef - GetOffset(), nAngle, sn, cs);
         SetRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
@@ -2402,7 +2402,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 
 void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 {
-    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
     rRefObj.Mirror(rRef1 - GetOffset(), rRef2 - GetOffset());
     SetRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
@@ -2412,7 +2412,7 @@ void SwDrawVirtObj::Shear(const Point& rRef, long nAngle, double tn, bool bVShea
 {
     if(nAngle)
     {
-        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Shear(rRef - GetOffset(), nAngle, tn, bVShear);
         SetRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
@@ -2425,7 +2425,7 @@ void SwDrawVirtObj::RecalcSnapRect()
     aSnapRect += GetOffset();
 }
 
-const Rectangle& SwDrawVirtObj::GetSnapRect() const
+const tools::Rectangle& SwDrawVirtObj::GetSnapRect() const
 {
     const_cast<SwDrawVirtObj*>(this)->aSnapRect = rRefObj.GetSnapRect();
     const_cast<SwDrawVirtObj*>(this)->aSnapRect += GetOffset();
@@ -2433,25 +2433,25 @@ const Rectangle& SwDrawVirtObj::GetSnapRect() const
     return aSnapRect;
 }
 
-void SwDrawVirtObj::SetSnapRect(const Rectangle& rRect)
+void SwDrawVirtObj::SetSnapRect(const tools::Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-    Rectangle aR(rRect);
+    tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+    tools::Rectangle aR(rRect);
     aR -= GetOffset();
     rRefObj.SetSnapRect(aR);
     SetRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
-void SwDrawVirtObj::NbcSetSnapRect(const Rectangle& rRect)
+void SwDrawVirtObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    Rectangle aR(rRect);
+    tools::Rectangle aR(rRect);
     aR -= GetOffset();
     SetRectsDirty();
     rRefObj.NbcSetSnapRect(aR);
 }
 
-const Rectangle& SwDrawVirtObj::GetLogicRect() const
+const tools::Rectangle& SwDrawVirtObj::GetLogicRect() const
 {
     const_cast<SwDrawVirtObj*>(this)->aSnapRect = rRefObj.GetLogicRect();
     const_cast<SwDrawVirtObj*>(this)->aSnapRect += GetOffset();
@@ -2459,19 +2459,19 @@ const Rectangle& SwDrawVirtObj::GetLogicRect() const
     return aSnapRect;
 }
 
-void SwDrawVirtObj::SetLogicRect(const Rectangle& rRect)
+void SwDrawVirtObj::SetLogicRect(const tools::Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-    Rectangle aR(rRect);
+    tools::Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
+    tools::Rectangle aR(rRect);
     aR -= GetOffset();
     rRefObj.SetLogicRect(aR);
     SetRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
-void SwDrawVirtObj::NbcSetLogicRect(const Rectangle& rRect)
+void SwDrawVirtObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
-    Rectangle aR(rRect);
+    tools::Rectangle aR(rRect);
     aR -= GetOffset();
     rRefObj.NbcSetLogicRect(aR);
     SetRectsDirty();

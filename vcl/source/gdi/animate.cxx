@@ -161,7 +161,7 @@ void Animation::Clear()
 bool Animation::IsTransparent() const
 {
     Point       aPoint;
-    Rectangle   aRect( aPoint, maGlobalSize );
+    tools::Rectangle   aRect( aPoint, maGlobalSize );
     bool        bRet = false;
 
     // If some small bitmap needs to be replaced by the background,
@@ -171,7 +171,7 @@ bool Animation::IsTransparent() const
     for(const AnimationBitmap* pAnimBmp : maList)
     {
         if(  Disposal::Back == pAnimBmp->eDisposal
-          && Rectangle( pAnimBmp->aPosPix, pAnimBmp->aSizePix ) != aRect
+          && tools::Rectangle( pAnimBmp->aPosPix, pAnimBmp->aSizePix ) != aRect
           )
         {
             bRet = true;
@@ -466,9 +466,9 @@ bool Animation::Insert( const AnimationBitmap& rStepBmp )
     if( !IsInAnimation() )
     {
         Point       aPoint;
-        Rectangle   aGlobalRect( aPoint, maGlobalSize );
+        tools::Rectangle   aGlobalRect( aPoint, maGlobalSize );
 
-        maGlobalSize = aGlobalRect.Union( Rectangle( rStepBmp.aPosPix, rStepBmp.aSizePix ) ).GetSize();
+        maGlobalSize = aGlobalRect.Union( tools::Rectangle( rStepBmp.aPosPix, rStepBmp.aSizePix ) ).GetSize();
         maList.push_back( new AnimationBitmap( rStepBmp ) );
 
         // As a start, we make the first BitmapEx the replacement BitmapEx

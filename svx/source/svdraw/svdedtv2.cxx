@@ -91,7 +91,7 @@ void SdrEditView::MovMarkedToTop()
                 pOL0=pOL;
             }
             const size_t nNowPos = pObj->GetOrdNumDirect();
-            const Rectangle& rBR=pObj->GetCurrentBoundRect();
+            const tools::Rectangle& rBR=pObj->GetCurrentBoundRect();
             size_t nCmpPos = nNowPos+1;
             SdrObject* pMaxObj=GetMaxToTopObj(pObj);
             if (pMaxObj!=nullptr)
@@ -178,7 +178,7 @@ void SdrEditView::MovMarkedToBtm()
                 pOL0=pOL;
             }
             const size_t nNowPos = pObj->GetOrdNumDirect();
-            const Rectangle& rBR=pObj->GetCurrentBoundRect();
+            const tools::Rectangle& rBR=pObj->GetCurrentBoundRect();
             size_t nCmpPos = nNowPos;
             if (nCmpPos>0)
                 --nCmpPos;
@@ -1207,7 +1207,7 @@ void SdrEditView::EqualizeMarkedObjects(bool bWidth)
             continue;
         SdrMark* pM = rMarkList.GetMark(a);
         SdrObject* pObj = pM->GetMarkedSdrObj();
-        Rectangle aLogicRect(pObj->GetLogicRect());
+        tools::Rectangle aLogicRect(pObj->GetLogicRect());
         Size aLogicRectSize(aLogicRect.GetSize());
         if (bWidth)
             aLogicRectSize.Width() = aLastRectSize.Width();
@@ -1622,7 +1622,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     aTargetItemSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
                     // get the text bounds and set at text object
-                    Rectangle aTextBounds = pCustomShape->GetSnapRect();
+                    tools::Rectangle aTextBounds = pCustomShape->GetSnapRect();
                     if(pCustomShape->GetTextBounds(aTextBounds))
                     {
                         pTextObj->SetSnapRect(aTextBounds);
@@ -2038,7 +2038,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SdrGrafObj*  pGraf= dynamic_cast<SdrGrafObj*>( pObj );
         SdrOle2Obj*  pOle2= dynamic_cast<SdrOle2Obj*>( pObj );
         sal_uIntPtr        nInsAnz=0;
-        Rectangle aLogicRect;
+        tools::Rectangle aLogicRect;
 
         if (pGraf && (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedSvg()))
         {

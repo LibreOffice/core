@@ -148,7 +148,7 @@ static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_
     long nXLeft = nLeftMargin-nBorder;
     long nXRight = aSz.Width()-RMARGPRN+nBorder;
 
-    rOutDev.DrawRect( Rectangle(
+    rOutDev.DrawRect( tools::Rectangle(
         Point( nXLeft, nYTop ),
         Size( nXRight-nXLeft, aSz.Height() - nYTop - BMARGPRN + nBorder ) ) );
 

@@ -34,7 +34,7 @@
 namespace {
 
 bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
-                         const OUString &rText, Rectangle &rRect)
+                         const OUString &rText, tools::Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
 {
@@ -77,7 +77,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
 
     long nTextWidth = rDev.GetTextWidth(rText);
     Point aPoint;
-    Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
+    tools::Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
                 aTmp;
 
     bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText);
@@ -86,7 +86,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
 
     if (!aTmp.IsEmpty())
     {
-        aResult = Rectangle(aTmp.Left() * nScaleFactor, aTmp.Top() * nScaleFactor,
+        aResult = tools::Rectangle(aTmp.Left() * nScaleFactor, aTmp.Top() * nScaleFactor,
                             aTmp.Right() * nScaleFactor, aTmp.Bottom() * nScaleFactor);
         if (&rDev != pGlyphDev) /* only when rDev is a printer... */
         {
@@ -223,7 +223,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     }
 
     // get GlyphBoundRect
-    Rectangle  aGlyphRect;
+    tools::Rectangle  aGlyphRect;
     bool bSuccess = SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
     if (!bSuccess)
         SAL_WARN("starmath", "Ooops... (Font missing?)");

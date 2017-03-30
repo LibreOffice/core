@@ -88,7 +88,7 @@ void ThumbnailView::MouseMove(const MouseEvent& rMEvt)
             aHelp = pItem->getHelpText();
         }
 
-        Rectangle aToInvalidate(pItem->updateHighlight(pItem->mbVisible && !rMEvt.IsLeaveWindow(), aPoint));
+        ::tools::Rectangle aToInvalidate(pItem->updateHighlight(pItem->mbVisible && !rMEvt.IsLeaveWindow(), aPoint));
 
         if (!aToInvalidate.IsEmpty() && IsReallyVisible() && IsUpdateMode())
             Invalidate(aToInvalidate);
@@ -208,7 +208,7 @@ void ThumbnailView::DrawItem(ThumbnailViewItem *pItem)
 {
     if (pItem->isVisible())
     {
-        Rectangle aRect = pItem->getDrawArea();
+        ::tools::Rectangle aRect = pItem->getDrawArea();
 
         if ((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0))
             Invalidate(aRect);
@@ -351,7 +351,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
                 maItemStateHdl.Call(pItem);
             }
 
-            pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
+            pItem->setDrawArea(::tools::Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
             pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs);
 
             if ( !((nCurCount+1) % mnCols) )
@@ -824,7 +824,7 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
     Control::Command( rCEvt );
 }
 
-void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     size_t nItemCount = mItemList.size();
 
@@ -832,7 +832,7 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
     drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
             new PolyPolygonColorPrimitive2D(
-                    B2DPolyPolygon( ::tools::Polygon(Rectangle(Point(), GetOutputSizePixel()), 0, 0).getB2DPolygon()),
+                    B2DPolyPolygon( ::tools::Polygon(::tools::Rectangle(Point(), GetOutputSizePixel()), 0, 0).getB2DPolygon()),
                     maFillColor.getBColor()));
 
     // Create the processor and process the primitives

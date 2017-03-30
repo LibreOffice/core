@@ -37,7 +37,7 @@ public:
 
 
                                     SdrMediaObj();
-                                    SdrMediaObj( const Rectangle& rRect );
+                                    SdrMediaObj( const tools::Rectangle& rRect );
 
         virtual                     ~SdrMediaObj() override;
 
@@ -52,7 +52,7 @@ public:
         virtual SdrMediaObj*            Clone() const override;
         SdrMediaObj&                operator=(const SdrMediaObj& rObj);
 
-        virtual void                AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
+        virtual void                AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
 public:
 

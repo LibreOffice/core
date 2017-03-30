@@ -69,7 +69,7 @@ namespace rptui
         virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) override;
 
         // window overrides
-        virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
         virtual void        MouseMove( const MouseEvent& rMEvt ) override;
         virtual void        Command( const CommandEvent& rCEvt ) override;
 

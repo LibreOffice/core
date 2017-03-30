@@ -1092,7 +1092,7 @@ void SfxViewFrame::SetBorderPixelImpl
     else
     {
         Point aPoint;
-        Rectangle aEditArea( aPoint, GetWindow().GetOutputSizePixel() );
+        tools::Rectangle aEditArea( aPoint, GetWindow().GetOutputSizePixel() );
         aEditArea.Left() += rBorder.Left();
         aEditArea.Right() -= rBorder.Right();
         aEditArea.Top() += rBorder.Top();

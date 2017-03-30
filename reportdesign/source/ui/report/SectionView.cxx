@@ -67,13 +67,13 @@ void OSectionView::MarkListHasChanged()
 }
 
 
-void OSectionView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
+void OSectionView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin )
 {
     // visible area
     MapMode aMap( rWin.GetMapMode() );
     const Point aOrg( aMap.GetOrigin() );
     const Size aVisSize( rWin.GetOutputSize() );
-    const Rectangle aVisRect( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
+    const tools::Rectangle aVisRect( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
 
     // check, if rectangle is inside visible area
     if ( !aVisRect.IsInside( rRect ) )

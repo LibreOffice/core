@@ -76,7 +76,7 @@ using namespace com::sun::star;
 ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     SdrModel& rModel,
     SdrLayerID nLay,
-    const Rectangle& rRect)
+    const tools::Rectangle& rRect)
 :   maTmpList(),
     mpVD(VclPtr<VirtualDevice>::Create()),
     maScaleRect(rRect),
@@ -994,7 +994,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     else if ( eAlg == ALIGN_BOTTOM )
         aPos.Y() -= nTextHeight;
 
-    Rectangle aTextRect( aPos, aSize );
+    tools::Rectangle aTextRect( aPos, aSize );
     SdrRectObj* pText =new SdrRectObj( OBJ_TEXT, aTextRect );
 
     pText->SetMergedItem ( makeSdrTextUpperDistItem (0));
@@ -1062,7 +1062,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaStretchTextAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpAction& rAct)
 {
-    Rectangle aRect(rAct.GetPoint(),rAct.GetBitmap().GetSizePixel());
+    tools::Rectangle aRect(rAct.GetPoint(),rAct.GetBitmap().GetSizePixel());
     aRect.Right()++; aRect.Bottom()++;
     SdrGrafObj* pGraf=new SdrGrafObj(Graphic(rAct.GetBitmap()),aRect);
 
@@ -1074,7 +1074,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScaleAction& rAct)
 {
-    Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
+    tools::Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
     aRect.Right()++; aRect.Bottom()++;
     SdrGrafObj* pGraf=new SdrGrafObj(Graphic(rAct.GetBitmap()),aRect);
 
@@ -1086,7 +1086,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScaleAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExAction& rAct)
 {
-    Rectangle aRect(rAct.GetPoint(),rAct.GetBitmapEx().GetSizePixel());
+    tools::Rectangle aRect(rAct.GetPoint(),rAct.GetBitmapEx().GetSizePixel());
     aRect.Right()++; aRect.Bottom()++;
     SdrGrafObj* pGraf=new SdrGrafObj( rAct.GetBitmapEx(), aRect );
 
@@ -1098,7 +1098,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScaleAction& rAct)
 {
-    Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
+    tools::Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
     aRect.Right()++; aRect.Bottom()++;
     SdrGrafObj* pGraf=new SdrGrafObj( rAct.GetBitmapEx(), aRect );
 
@@ -1274,12 +1274,12 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTextRectAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction& rAct)
 {
-    Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
+    tools::Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
     Bitmap aBitmap(rAct.GetBitmap());
 
     aRect.Right()++;
     aRect.Bottom()++;
-    aBitmap.Crop(Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+    aBitmap.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
     SdrGrafObj* pGraf = new SdrGrafObj(aBitmap, aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1290,12 +1290,12 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction& rAct)
 {
-    Rectangle aRect(rAct.GetDestPoint(),rAct.GetDestSize());
+    tools::Rectangle aRect(rAct.GetDestPoint(),rAct.GetDestSize());
     BitmapEx aBitmapEx(rAct.GetBitmapEx());
 
     aRect.Right()++;
     aRect.Bottom()++;
-    aBitmapEx.Crop(Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+    aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
     SdrGrafObj* pGraf = new SdrGrafObj(aBitmapEx, aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1306,7 +1306,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction& rAct)
 {
-    Rectangle aRect(rAct.GetPoint(), rAct.GetBitmap().GetSizePixel());
+    tools::Rectangle aRect(rAct.GetPoint(), rAct.GetBitmap().GetSizePixel());
     BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
 
     aRect.Right()++; aRect.Bottom()++;
@@ -1320,7 +1320,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction& rAct)
 {
-    Rectangle aRect(rAct.GetPoint(), rAct.GetSize());
+    tools::Rectangle aRect(rAct.GetPoint(), rAct.GetSize());
     BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
 
     aRect.Right()++; aRect.Bottom()++;
@@ -1334,11 +1334,11 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScalePartAction& rAct)
 {
-    Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
+    tools::Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
     BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
 
     aRect.Right()++; aRect.Bottom()++;
-    aBitmapEx.Crop(Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+    aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
     SdrGrafObj* pGraf = new SdrGrafObj(aBitmapEx, aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1385,7 +1385,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction& rAct)
         aRange.transform(aTransform);
         const Gradient& rGradient = rAct.GetGradient();
         SdrRectObj* pRect = new SdrRectObj(
-            Rectangle(
+            tools::Rectangle(
                 floor(aRange.getMinX()),
                 floor(aRange.getMinY()),
                 ceil(aRange.getMaxX()),
@@ -1492,7 +1492,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
 
     if(rMtf.GetActionSize())
     {
-        const Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
+        const tools::Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
 
         // convert metafile sub-content to BitmapEx
         BitmapEx aBitmapEx(
@@ -1553,7 +1553,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
             ScopedVclPtrInstance< VirtualDevice > pVDev;
 
             pVDev->SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
-            pVDev->DrawGradient(Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
+            pVDev->DrawGradient(tools::Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
 
             aNewMask = AlphaMask(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
             bHasNewMask = true;

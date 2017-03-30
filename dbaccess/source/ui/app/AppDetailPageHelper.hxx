@@ -50,7 +50,7 @@ namespace dbaui
     class OPreviewWindow : public vcl::Window
     {
         GraphicObject       m_aGraphicObj;
-        Rectangle           m_aPreviewRect;
+        tools::Rectangle           m_aPreviewRect;
 
         /** gets the graphic center rect
             @param  rGraphic
@@ -61,7 +61,7 @@ namespace dbaui
             @return
                 <TRUE/> when successful
         */
-        bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+        bool ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
         void ImplInitSettings();
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
@@ -69,7 +69,7 @@ namespace dbaui
         explicit OPreviewWindow(vcl::Window* _pParent);
 
         // Window overrides
-        virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
+        virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect) override;
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
     };

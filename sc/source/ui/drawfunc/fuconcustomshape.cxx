@@ -159,14 +159,14 @@ void FuConstCustomShape::Deactivate()
 }
 
 // Create default drawing objects via keyboard
-SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
+SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
         nullptr, pDrDoc);
     if( pObj )
     {
-        Rectangle aRectangle( rRectangle );
+        tools::Rectangle aRectangle( rRectangle );
         SetAttributes( pObj );
         if ( SdrObjCustomShape::doConstructOrthogonal( aCustomShape ) )
             ImpForceQuadratic( aRectangle );

@@ -422,7 +422,7 @@ void ScFiltersTest::testSheetNamesXLSX()
     xDocSh->DoClose();
 }
 
-void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
+void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, tools::Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
 {
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
@@ -431,7 +431,7 @@ void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, Rectangle& aRect
     CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), pPage->GetObjCount() );
 
     SdrObject* pObj = pPage->GetObj(0);
-    const Rectangle& aSnap = pObj->GetSnapRect();
+    const tools::Rectangle& aSnap = pObj->GetSnapRect();
     printf("expected height %ld actual %ld\n", aRect.GetHeight(), aSnap.GetHeight() );
     CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
     printf("expected width %ld actual %ld\n", aRect.GetWidth(), aSnap.GetWidth() );
@@ -463,7 +463,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
 
         ScDocument& rDoc = xDocSh->GetDocument();
         // ensure the imported legacy rotated shape is in the expected position
-        Rectangle aRect( 6000, -2000, 8000, 4000 );
+        tools::Rectangle aRect( 6000, -2000, 8000, 4000 );
         // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
         // terms of the rotated shape ) is more or less contains the correct info
         ScDrawObjData aAnchor;
@@ -493,7 +493,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // ( same but different error happens pre-patch ) - we should do better here, I regard it
         // as a pre-existing bug though (#FIXME)
         //Rectangle aRect( 6000, -2000, 8000, 4000 ); // proper dimensions
-        Rectangle aRect( 6000, -2000, 7430, 4000 );
+        tools::Rectangle aRect( 6000, -2000, 7430, 4000 );
         // ensure the imported (and converted) anchor (note we internally now store the anchor in
         // terms of the rotated shape) is more or less contains the correct info
         ScDrawObjData aAnchor;
@@ -516,7 +516,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
 
         ScDocument& rDoc = xDocSh->GetDocument();
         // ensure the imported legacy rotated shape is in the expected position
-        Rectangle aRect( 6000, 3000, 8000, 9000 );
+        tools::Rectangle aRect( 6000, 3000, 8000, 9000 );
         // ensure the imported (and converted) anchor (note we internally now store the anchor in
         // terms of the rotated shape) more or less contains the correct info
 

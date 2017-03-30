@@ -37,7 +37,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
     SdrObject&                  rRefObj; // Referenced drawing object
-    Rectangle                   aSnapRect;
+    tools::Rectangle                   aSnapRect;
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
@@ -59,8 +59,8 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrObjList* GetSubList() const override;
 
-    virtual const Rectangle& GetCurrentBoundRect() const override;
-    virtual const Rectangle& GetLastBoundRect() const override;
+    virtual const tools::Rectangle& GetCurrentBoundRect() const override;
+    virtual const tools::Rectangle& GetLastBoundRect() const override;
     virtual void RecalcBoundRect() override;
     virtual SdrVirtObj* Clone() const override;
     SdrVirtObj& operator=(const SdrVirtObj& rObj);
@@ -106,13 +106,13 @@ public:
     virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
 
     virtual void RecalcSnapRect() override;
-    virtual const Rectangle& GetSnapRect() const override;
-    virtual void SetSnapRect(const Rectangle& rRect) override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual const tools::Rectangle& GetSnapRect() const override;
+    virtual void SetSnapRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
 
-    virtual const Rectangle& GetLogicRect() const override;
-    virtual void SetLogicRect(const Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual const tools::Rectangle& GetLogicRect() const override;
+    virtual void SetLogicRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
 
     virtual long GetRotateAngle() const override;
     virtual long GetShearAngle(bool bVertical = false) const override;
@@ -134,7 +134,7 @@ public:
     virtual bool HasMacro() const override;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const override;
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const override;
-    virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const override;
+    virtual void PaintMacro (OutputDevice& rOut, const tools::Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const override;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec) override;
     virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const override;
 

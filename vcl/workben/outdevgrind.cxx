@@ -71,7 +71,7 @@ class TestWindow : public Dialog
             Show();
         }
 
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 typedef std::function<void (OutputDevice*)>   functor_type;
@@ -95,8 +95,8 @@ void setupMethodStubs( functor_vector_type& res )
     const Point aPt3(0,0);
     const Point aPt4(450,450);
 
-    const Rectangle aRect(aPt1,aPt2);
-    const Rectangle   aRect2(aPt3,aPt4);
+    const tools::Rectangle aRect(aPt1,aPt2);
+    const tools::Rectangle   aRect2(aPt3,aPt4);
     const tools::Polygon aPoly(aRect);
     const tools::Polygon aPoly2(aRect2);
     tools::PolyPolygon aPolyPoly(aPoly);
@@ -614,7 +614,7 @@ void outDevGrind(vcl::RenderContext& rTarget)
     functor_vector_type aMethods;
     setupMethodStubs( aMethods );
 
-    const Rectangle aClipRect(10,10,1000,1000);
+    const tools::Rectangle aClipRect(10,10,1000,1000);
     const tools::Polygon aPoly1( aClipRect );
     tools::Polygon aPoly2( aClipRect );
     aPoly2.Rotate(aClipRect.Center(),450);
@@ -665,7 +665,7 @@ void outDevGrind(vcl::RenderContext& rTarget)
     }
 }
 
-void TestWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void TestWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     outDevGrind(rRenderContext);
     fflush(stdout);

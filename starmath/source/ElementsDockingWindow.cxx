@@ -308,7 +308,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
                 x += boxX;
                 y = 0;
 
-                Rectangle aSelectionRectangle(x + 5 - 1, y + 5,
+                tools::Rectangle aSelectionRectangle(x + 5 - 1, y + 5,
                                               x + 5 + 1, nControlHeight - 5);
 
                 if (pContext)
@@ -320,7 +320,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
                 x = 0;
                 y += boxY;
 
-                Rectangle aSelectionRectangle(x + 5, y + 5 - 1,
+                tools::Rectangle aSelectionRectangle(x + 5, y + 5 - 1,
                                               nControlWidth - 5, y + 5 + 1);
 
                 if (pContext)
@@ -355,7 +355,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
                 pContext->SetFillColor(Color(230, 230, 230));
                 pContext->SetLineColor(Color(230, 230, 230));
 
-                pContext->DrawRect(PixelToLogic(Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
+                pContext->DrawRect(PixelToLogic(tools::Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
                 pContext->Pop();
             }
 
@@ -394,7 +394,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
     }
 }
 
-void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push();
     LayoutOrPaintContents(&rRenderContext);
@@ -413,7 +413,7 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
             for (std::unique_ptr<SmElement> & i : maElementList)
             {
                 SmElement* pElement = i.get();
-                Rectangle aRect(pElement->mBoxLocation, pElement->mBoxSize);
+                tools::Rectangle aRect(pElement->mBoxLocation, pElement->mBoxSize);
                 if (aRect.IsInside(aHelpEventPos))
                 {
                     pHelpElement = pElement;
@@ -425,7 +425,7 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
         if (!pHelpElement)
             return;
 
-        Rectangle aHelpRect(pHelpElement->mBoxLocation, pHelpElement->mBoxSize);
+        tools::Rectangle aHelpRect(pHelpElement->mBoxLocation, pHelpElement->mBoxSize);
         Point aPt = OutputToScreenPixel( aHelpRect.TopLeft() );
         aHelpRect.Left() = aPt.X();
         aHelpRect.Top()= aPt.Y();
@@ -457,12 +457,12 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
         Invalidate();
         return;
     }
-    if (Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
+    if (tools::Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {
         for (std::unique_ptr<SmElement> & i : maElementList)
         {
             SmElement* element = i.get();
-            Rectangle rect(element->mBoxLocation, element->mBoxSize);
+            tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
                 if (pPrevElement != element)
@@ -484,12 +484,12 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
     GrabFocus();
 
-    if (rMouseEvent.IsLeft() && Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
+    if (rMouseEvent.IsLeft() && tools::Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
     {
         for (std::unique_ptr<SmElement> & i : maElementList)
         {
             SmElement* element = i.get();
-            Rectangle rect(element->mBoxLocation, element->mBoxSize);
+            tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
                 maSelectHdlLink.Call(*element);
@@ -511,7 +511,7 @@ IMPL_LINK_NOARG( SmElementsControl, ScrollHdl, ScrollBar*, void )
 void SmElementsControl::DoScroll(long nDelta)
 {
     Point aNewPoint = mxScroll->GetPosPixel();
-    Rectangle aRect(Point(), GetOutputSize());
+    tools::Rectangle aRect(Point(), GetOutputSize());
     aRect.Right() -= mxScroll->GetSizePixel().Width();
     Scroll( 0, -nDelta, aRect );
     mxScroll->SetPosPixel(aNewPoint);
@@ -765,7 +765,7 @@ void SmElementsDockingWindow::ToggleFloatingMode()
     Invalidate();
 }
 
-void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, bool bFloatMode)
+void SmElementsDockingWindow::EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode)
 {
     SfxDockingWindow::EndDocking(rReactangle, bFloatMode);
     bool bVertical = ( GetAlignment() == SfxChildAlignment::TOP || GetAlignment() == SfxChildAlignment::BOTTOM );

@@ -65,7 +65,7 @@ class TabBarControl : public ::TabControl
 {
 public:
     TabBarControl (vcl::Window* pParentWindow, const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual void ActivatePage() override;
 private:
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
@@ -550,7 +550,7 @@ TabBarControl::TabBarControl (
 {
 }
 
-void TabBarControl::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void TabBarControl::Paint (vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     Color aOriginalFillColor(rRenderContext.GetFillColor());
     Color aOriginalLineColor(rRenderContext.GetLineColor());

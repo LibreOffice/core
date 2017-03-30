@@ -173,7 +173,7 @@ OUString Outliner::GetWord( sal_Int32 nPara, sal_Int32 nIndex )
     return pEditEngine->GetWord( nPara, nIndex );
 }
 
-void Outliner::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect )
+void Outliner::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect )
 {
     pEditEngine->Draw( pOutDev, rOutRect );
 }
@@ -444,7 +444,7 @@ bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBu
         sal_Int32 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
         if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasNumberFormat( nPara ) )
         {
-            Rectangle aBulArea = ImpCalcBulletArea( nPara, true, true );
+            tools::Rectangle aBulArea = ImpCalcBulletArea( nPara, true, true );
             if ( aBulArea.IsInside( rPaperPos ) )
             {
                 bTextPos = true;

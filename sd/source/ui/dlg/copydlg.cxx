@@ -221,7 +221,7 @@ IMPL_LINK_NOARG(CopyDlg, SelectColorHdl, SvxColorListBox&, void)
  */
 IMPL_LINK_NOARG(CopyDlg, SetViewData, Button*, void)
 {
-    Rectangle aRect = mpView->GetAllMarkedRect();
+    ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
 
     SetMetricValue( *m_pMtrFldMoveX, Fraction( aRect.GetWidth() ) /
                                     maUIScale, MapUnit::Map100thMM);

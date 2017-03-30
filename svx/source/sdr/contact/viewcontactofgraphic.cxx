@@ -320,7 +320,7 @@ namespace sdr
 
             // take unrotated snap rect for position and size. Directly use model data, not getBoundRect() or getSnapRect()
             // which will use the primitive data we just create in the near future
-            Rectangle rRectangle = GetGrafObject().GetGeoRect();
+            tools::Rectangle rRectangle = GetGrafObject().GetGeoRect();
             // Hack for calc, transform position of object according
             // to current zoom so as objects relative position to grid
             // appears stable

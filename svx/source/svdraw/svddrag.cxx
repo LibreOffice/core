@@ -53,7 +53,7 @@ void SdrDragStat::Reset()
     mbEndDragChangesLayout=false;
     bMouseIsUp=false;
     Clear(true);
-    aActionRect=Rectangle();
+    aActionRect=tools::Rectangle();
 }
 
 void SdrDragStat::Reset(const Point& rPnt)
@@ -124,9 +124,9 @@ Fraction SdrDragStat::GetYFact() const
     return Fraction(nMul,nDiv);
 }
 
-void SdrDragStat::TakeCreateRect(Rectangle& rRect) const
+void SdrDragStat::TakeCreateRect(tools::Rectangle& rRect) const
 {
-    rRect=Rectangle(GetStart(),GetNow());
+    rRect=tools::Rectangle(GetStart(),GetNow());
     if (GetPointCount()>=2) {
         Point aBtmRgt(GetPoint(1));
         rRect.Right()=aBtmRgt.X();

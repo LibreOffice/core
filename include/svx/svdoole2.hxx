@@ -68,7 +68,7 @@ public:
     OUString GetStyleString();
 
     SdrOle2Obj( bool bFrame_ = false );
-    SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect );
+    SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const tools::Rectangle& rNewRect );
     virtual ~SdrOle2Obj() override;
 
     const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const;
@@ -135,8 +135,8 @@ public:
 
     virtual void NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
     virtual void SetGeoData(const SdrObjGeoData& rGeo) override;
 
     static bool CanUnloadRunningObj( const css::uno::Reference< css::embed::XEmbeddedObject >& xObj,

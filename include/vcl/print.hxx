@@ -242,7 +242,7 @@ protected:
     void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) override { };
 
 public:
-    void                        DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect,
+    void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
                                     const Gradient& rGradient );
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
 

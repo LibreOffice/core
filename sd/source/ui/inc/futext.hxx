@@ -57,7 +57,7 @@ public:
     void    DeleteDefaultText();
     SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also

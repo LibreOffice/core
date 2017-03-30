@@ -59,7 +59,7 @@ public:
 
     virtual void    Command( const CommandEvent& rCEvt ) override;
 
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    Resize() override;
 
     virtual void    GetFocus() override;
@@ -805,7 +805,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
         Window::KeyInput( rKEvent );
 }
 
-void TextWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void TextWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     mpExtTextView->Paint(rRenderContext, rRect);
 }
@@ -1393,7 +1393,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
-        Rectangle aRect( aPos, aSize );
+        tools::Rectangle aRect( aPos, aSize );
         if ( bBorder )
         {
             DecorationView aDecoView( pDev );
@@ -1435,7 +1435,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     // Clipping?
     if ( ( nOffY < 0  ) || ( (nOffY+aTextSz.Height()) > aSize.Height() ) || ( (nOffX+aTextSz.Width()) > aSize.Width() ) )
     {
-        Rectangle aClip( aPos, aSize );
+        tools::Rectangle aClip( aPos, aSize );
         if ( aTextSz.Height() > aSize.Height() )
             aClip.Bottom() += aTextSz.Height() - aSize.Height() + 1;  // so that HP-printer does not 'optimize-away'
         pDev->IntersectClipRegion( aClip );

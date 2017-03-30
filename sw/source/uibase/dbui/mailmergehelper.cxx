@@ -302,12 +302,12 @@ void SwAddressPreview::UpdateScrollBar()
     }
 }
 
-void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetFillColor(rSettings.GetWindowColor());
     rRenderContext.SetLineColor(Color(COL_TRANSPARENT));
-    rRenderContext.DrawRect(Rectangle(Point(0, 0), GetOutputSizePixel()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
     Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
     rRenderContext.SetLineColor(aPaintColor);
     vcl::Font aFont(rRenderContext.GetFont());
@@ -430,12 +430,12 @@ void SwAddressPreview::StateChanged( StateChangedType nStateChange )
 void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
                                      const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
-    rRenderContext.SetClipRegion(vcl::Region(Rectangle(rTopLeft, rSize)));
+    rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(rTopLeft, rSize)));
     if (bIsSelected)
     {
         //selection rectangle
         rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
-        rRenderContext.DrawRect(Rectangle(rTopLeft, rSize));
+        rRenderContext.DrawRect(tools::Rectangle(rTopLeft, rSize));
     }
     sal_Int32 nHeight = GetTextHeight();
     Point aStart = rTopLeft;

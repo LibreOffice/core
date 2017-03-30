@@ -361,7 +361,7 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
                 maStartOffset[nIndex] = pDescriptor->GetVisualState().GetLocationOffset();
             else
             {
-                const Rectangle aOldBoundingBox (pDescriptor->GetBoundingBox());
+                const ::tools::Rectangle aOldBoundingBox (pDescriptor->GetBoundingBox());
                 pDescriptor->GetVisualState().SetLocationOffset(Point(0,0));
                 rView.RequestRepaint(aOldBoundingBox);
                 rView.RequestRepaint(pDescriptor);
@@ -409,7 +409,7 @@ void PageObjectRun::operator () (const double nGlobalTime)
         model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
         if ( ! pDescriptor)
             continue;
-        const Rectangle aOldBoundingBox (pDescriptor->GetBoundingBox());
+        const ::tools::Rectangle aOldBoundingBox (pDescriptor->GetBoundingBox());
         pDescriptor->GetVisualState().SetLocationOffset(
             Blend(
                 maStartOffset[nIndex-mnStartIndex],

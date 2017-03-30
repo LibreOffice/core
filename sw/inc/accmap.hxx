@@ -39,7 +39,7 @@
 
 class SwAccessibleParagraph;
 class SwViewShell;
-class Rectangle;
+namespace tools { class Rectangle; }
 class SwFrame;
 class SwTextFrame;
 class SwPageFrame;
@@ -271,7 +271,7 @@ public:
 
     // IAccessibleViewForwarder
 
-    virtual Rectangle GetVisibleArea() const override;
+    virtual tools::Rectangle GetVisibleArea() const override;
     virtual Point LogicToPixel (const Point& rPoint) const override;
     virtual Size LogicToPixel (const Size& rSize) const override;
 
@@ -290,7 +290,7 @@ public:
     // additional Core/Pixel conversions for internal use; also works
     // for preview
     Point PixelToCore (const Point& rPoint) const;
-    Rectangle CoreToPixel (const Rectangle& rRect) const;
+    tools::Rectangle CoreToPixel (const tools::Rectangle& rRect) const;
 
 private:
     /** get mapping mode for LogicToPixel and PixelToLogic conversions

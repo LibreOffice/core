@@ -110,7 +110,7 @@ private:
     css::uno::Reference< css::i18n::XBreakIterator > mxBreakIterator;
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
 
-    Rectangle           maInvalidRect;
+    tools::Rectangle           maInvalidRect;
 
     LocaleDataWrapper*  mpLocaleDataWrapper;
 
@@ -189,12 +189,12 @@ protected:
     bool                IsFormatting() const { return mbIsFormatting; }
     void                UpdateViews( TextView* pCurView = nullptr );
 
-    void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pSelection = nullptr );
+    void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, tools::Rectangle const* pPaintArea, TextSelection const* pSelection = nullptr );
 
     bool                IsFormatted() const { return mbFormatted; }
 
     sal_Int32           GetCharPos( sal_uInt32 nPara, std::vector<TextLine>::size_type nLine, long nDocPosX, bool bSmart = false );
-    Rectangle           GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
+    tools::Rectangle           GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
     sal_Int32           ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara, bool bSmart );
     long                ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, std::size_t nTextPortion );
     long                ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
@@ -290,7 +290,7 @@ public:
     bool                Write( SvStream& rOutput, const TextSelection* pSel = nullptr, bool bHTML = false );
 
     TextPaM             GetPaM( const Point& rDocPos, bool bSmart = true );
-    Rectangle           PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );
+    tools::Rectangle           PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );
     OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = nullptr );
 
     bool                HasAttrib( sal_uInt16 nWhich ) const;

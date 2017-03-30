@@ -922,7 +922,7 @@ awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectang
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
-        Rectangle aTmpRect = VCLRectangle( aPreliminaryRectangle );
+        tools::Rectangle aTmpRect = VCLRectangle( aPreliminaryRectangle );
         m_pData->m_pViewShell->QueryObjAreaPixel( aTmpRect );
         return AWTRectangle( aTmpRect );
     }

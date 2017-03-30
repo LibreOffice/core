@@ -718,7 +718,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
 
     Point aPos;
     Size aSize;
-    Rectangle aTmp( aClientArea );
+    tools::Rectangle aTmp( aClientArea );
 
     for (sal_uInt16 n : aSortedList)
     {
@@ -1602,9 +1602,9 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if (nPos == USHRT_MAX || !pDockWin)
                 return;
 
-            Rectangle aOuterRect( GetTopRect_Impl() );
+            tools::Rectangle aOuterRect( GetTopRect_Impl() );
             aOuterRect.SetPos( pWorkWin->OutputToScreenPixel( aOuterRect.TopLeft() ));
-            Rectangle aInnerRect( aOuterRect );
+            tools::Rectangle aInnerRect( aOuterRect );
 
             // The current affected window is included in the calculation of
             // the inner rectangle!
@@ -2165,7 +2165,7 @@ void SfxWorkWindow::ResetChildWindows_Impl()
 // returns the size of the area (client area) of the
 // parent windows, in which the ChildWindow can be fitted.
 
-Rectangle SfxWorkWindow::GetTopRect_Impl()
+tools::Rectangle SfxWorkWindow::GetTopRect_Impl()
 {
     return pMasterFrame->GetTopOuterRectPixel_Impl();
 }
@@ -2346,7 +2346,7 @@ void SfxWorkWindow::EndAutoShow_Impl( Point aPos )
         {
             Point aLocalPos = p->ScreenToOutputPixel( aPos );
             Point aEmptyPoint;
-            Rectangle aRect( aEmptyPoint, p->GetSizePixel() );
+            tools::Rectangle aRect( aEmptyPoint, p->GetSizePixel() );
             if ( !aRect.IsInside( aLocalPos ) )
                 p->FadeOut();
         }
@@ -2361,7 +2361,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
     if ( pParent )
         pParent->ArrangeAutoHideWindows( pActSplitWin );
 
-    Rectangle aArea( aUpperClientArea );
+    tools::Rectangle aArea( aUpperClientArea );
     for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         // Either dummy window or window in the auto-show-mode are processed
@@ -2481,11 +2481,11 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
     }
 }
 
-Rectangle SfxWorkWindow::GetFreeArea( bool bAutoHide ) const
+tools::Rectangle SfxWorkWindow::GetFreeArea( bool bAutoHide ) const
 {
     if ( bAutoHide )
     {
-        Rectangle aArea( aClientArea );
+        tools::Rectangle aArea( aClientArea );
         for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
         {
             if ( pSplit[n]->IsPinned() || !pSplit[n]->IsVisible() )

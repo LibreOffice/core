@@ -63,7 +63,7 @@ public:
         bool mbIsEnabled;
     };
     typedef ::std::function<void (
-            const Rectangle&,
+            const tools::Rectangle&,
             const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
     TabBar (
         vcl::Window* pParentWindow,
@@ -75,7 +75,7 @@ public:
     virtual ~TabBar() override;
     virtual void dispose() override;
 
-    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea) override;
+    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rUpdateArea) override;
     virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) override;
     virtual bool EventNotify (NotifyEvent& rEvent) override;
 

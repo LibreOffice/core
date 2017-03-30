@@ -268,7 +268,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     ImplInitSettings( true, true, true );
 
     // Setup the default size
-    Rectangle aRect;
+    tools::Rectangle aRect;
     GetTextBoundRect( aRect, "0123456789" );
     long nDefHeight = aRect.GetHeight() + RULER_OFF * 2 + ruler_tab.textoff * 2 + mnBorderWidth;
 
@@ -372,14 +372,14 @@ void Ruler::ImplVDrawRect(vcl::RenderContext& rRenderContext, long nX1, long nY1
     }
 
     if ( mnWinStyle & WB_HORZ )
-        rRenderContext.DrawRect(Rectangle(nX1, nY1, nX2, nY2));
+        rRenderContext.DrawRect(tools::Rectangle(nX1, nY1, nX2, nY2));
     else
-        rRenderContext.DrawRect(Rectangle(nY1, nX1, nY2, nX2));
+        rRenderContext.DrawRect(tools::Rectangle(nY1, nX1, nY2, nX2));
 }
 
 void Ruler::ImplVDrawText(vcl::RenderContext& rRenderContext, long nX, long nY, const OUString& rText, long nMin, long nMax)
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     rRenderContext.GetTextBoundRect(aRect, rText);
 
     long nShiftX = ( aRect.GetWidth() / 2 ) + aRect.Left();
@@ -405,7 +405,7 @@ void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
         long nY          = (RULER_OFF * 2) + mnVirHeight - 1;
 
         // Calculate rectangle
-        Rectangle aRect;
+        tools::Rectangle aRect;
         if (mnWinStyle & WB_HORZ)
             aRect.Bottom() = nY;
         else
@@ -427,7 +427,7 @@ void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
                     aRect.Top()    = n;
                     aRect.Bottom() = n;
                 }
-                Rectangle aTempRect = aRect;
+                tools::Rectangle aTempRect = aRect;
 
                 if (mnWinStyle & WB_HORZ)
                     aTempRect.Bottom() = RULER_OFF - 1;
@@ -868,11 +868,11 @@ static void ImplCenterTabPos(Point& rPos, sal_uInt16 nTabStyle)
     }
 }
 
-static void lcl_RotateRect_Impl(Rectangle& rRect, const long nReference, bool bRightAligned)
+static void lcl_RotateRect_Impl(tools::Rectangle& rRect, const long nReference, bool bRightAligned)
 {
     if (!rRect.IsEmpty())
     {
-        Rectangle aTmp(rRect);
+        tools::Rectangle aTmp(rRect);
         rRect.Top()    = aTmp.Left();
         rRect.Bottom() = aTmp.Right();
         rRect.Left()   = aTmp.Top();
@@ -901,9 +901,9 @@ static void ImplDrawRulerTab(vcl::RenderContext& rRenderContext, const Point& rP
     // drawn become asymmetric due to the +1 offsets
     sal_uInt16 DPIOffset = rRenderContext.GetDPIScaleFactor() - 1;
 
-    Rectangle aRect1;
-    Rectangle aRect2;
-    Rectangle aRect3;
+    tools::Rectangle aRect1;
+    tools::Rectangle aRect2;
+    tools::Rectangle aRect3;
 
     aRect3.SetEmpty();
 
@@ -1377,7 +1377,7 @@ void Ruler::ImplDraw(vcl::RenderContext& rRenderContext)
 void Ruler::ImplDrawExtra(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    Rectangle aRect = maExtraRect;
+    tools::Rectangle aRect = maExtraRect;
     bool bEraseRect = false;
 
     aRect.Left()   += 2;
@@ -1510,7 +1510,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
     pHitTest->eType = RulerType::DontKnow;
 
     // first test the tabs
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( !mpData->pTabs.empty() )
     {
         aRect.Bottom()  = nHitBottom;
@@ -2096,7 +2096,7 @@ void Ruler::Tracking( const TrackingEvent& rTEvt )
         ImplDrag( rTEvt.GetMouseEvent().GetPosPixel() );
 }
 
-void Ruler::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void Ruler::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(rRenderContext);
 
@@ -2159,7 +2159,7 @@ void Ruler::Resize()
         else if ( mpData->bAutoPageWidth )
         {
             // only at AutoPageWidth muss we redraw
-            Rectangle aRect;
+            tools::Rectangle aRect;
 
             if ( mnWinStyle & WB_HORZ )
             {

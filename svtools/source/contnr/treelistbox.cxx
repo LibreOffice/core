@@ -883,7 +883,7 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable )
 // InplaceEditing
 // ******************************************************************
 
-void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
+void SvTreeListBox::EditText( const OUString& rStr, const tools::Rectangle& rRect,
     const Selection& rSel )
 {
     delete pEdCtrl;
@@ -2397,7 +2397,7 @@ void SvTreeListBox::AdjustEntryHeightAndRecalc()
     RecalcViewData();
 }
 
-void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Control::Paint(rRenderContext, rRect);
     if (nTreeFlags & SvTreeFlags::RECALCTABS)
@@ -2410,7 +2410,7 @@ void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
         if (HasFocus())
         {
             long nHeight = rRenderContext.GetTextHeight();
-            Rectangle aRect(Point(0, 0), Size(GetSizePixel().Width(), nHeight));
+            tools::Rectangle aRect(Point(0, 0), Size(GetSizePixel().Width(), nHeight));
             ShowFocus(aRect);
         }
         else
@@ -2538,7 +2538,7 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
     Point aOrigin( GetMapMode().GetOrigin() );
     aPos += aOrigin; // convert to win coordinates
     aSize.Width() -= aOrigin.X();
-    Rectangle aRect( aPos, aSize );
+    tools::Rectangle aRect( aPos, aSize );
     EditText( pItem->GetText(), aRect, rSelection );
 }
 
@@ -2704,7 +2704,7 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
 void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext)
 {
 
-    Rectangle aRect; // multi purpose
+    tools::Rectangle aRect; // multi purpose
 
     bool bHorSBar = pImpl->HasHorScrollBar();
     PreparePaint(rRenderContext, rEntry);
@@ -2959,7 +2959,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
                 if (rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
                 {
                     ImplControlValue aControlValue;
-                    Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
+                    tools::Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
                     ControlState nState = ControlState::NONE;
 
                     if (IsEnabled())
@@ -3000,10 +3000,10 @@ void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeL
 {
 }
 
-Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
+tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
 {
     Size aSize;
-    Rectangle aRect;
+    tools::Rectangle aRect;
     aRect.Top() = nLine;
     aSize.Height() = GetEntryHeight();
 
@@ -3343,7 +3343,7 @@ void SvTreeListBox::Invalidate( InvalidateFlags nInvalidateFlags )
     pImpl->Invalidate();
 }
 
-void SvTreeListBox::Invalidate( const Rectangle& rRect, InvalidateFlags nInvalidateFlags )
+void SvTreeListBox::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nInvalidateFlags )
 {
     if( nFocusWidth == -1 )
         // to make sure that the control doesn't show the wrong focus rectangle
@@ -3668,7 +3668,7 @@ void SvTreeListBox::EnableList( bool _bEnable )
     // call base class method
     Window::Enable(_bEnable);
     // then invalidate
-    Invalidate(Rectangle(Point(), GetSizePixel()));
+    Invalidate(tools::Rectangle(Point(), GetSizePixel()));
 }
 
 css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
@@ -3718,10 +3718,10 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl:
     }
 }
 
-Rectangle SvTreeListBox::GetBoundingRect( SvTreeListEntry* pEntry )
+tools::Rectangle SvTreeListBox::GetBoundingRect( SvTreeListEntry* pEntry )
 {
     Point aPos = GetEntryPosition( pEntry );
-    Rectangle aRect = GetFocusRect( pEntry, aPos.Y() );
+    tools::Rectangle aRect = GetFocusRect( pEntry, aPos.Y() );
     return aRect;
 }
 

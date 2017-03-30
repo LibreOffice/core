@@ -56,7 +56,7 @@ class SVX_DLLPUBLIC Viewport3D
     double          fVPD;           // View Plane Distance
 
     ProjectionType  eProjection;    // kind of the projection
-    Rectangle aDeviceRect;          // position and size of the output area
+    tools::Rectangle aDeviceRect;          // position and size of the output area
 
     struct
     {
@@ -88,8 +88,8 @@ class SVX_DLLPUBLIC Viewport3D
 
     void SetViewWindow(double fX, double fY, double fW, double fH);
 
-    void SetDeviceWindow(const Rectangle& rRect);
-    const Rectangle& GetDeviceWindow() const { return aDeviceRect; }
+    void SetDeviceWindow(const tools::Rectangle& rRect);
+    const tools::Rectangle& GetDeviceWindow() const { return aDeviceRect; }
 
     // returns observers position in world coordinates
     const basegfx::B3DPoint&    GetViewPoint();

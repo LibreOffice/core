@@ -194,7 +194,7 @@ namespace sdr
                     // OD 2009-03-05 #i99876# perform the same also for SW on printing.
                     // fdo#78149 same thing also needed for plain MetaFile
                     //           export, so why not do it always
-                    const Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
+                    const tools::Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
 
                     aViewRange = basegfx::B2DRange(
                         aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
@@ -209,7 +209,7 @@ namespace sdr
                 if(!rDisplayInfo.GetRedrawArea().IsEmpty())
                 {
                     // get logic clip range and create discrete one
-                    const Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
+                    const tools::Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
                     basegfx::B2DRange aLogicClipRange(
                         aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
                         aLogicClipRectangle.Right(), aLogicClipRectangle.Bottom());

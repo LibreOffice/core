@@ -79,7 +79,7 @@ class VCL_DLLPUBLIC SelectionEngine
 private:
     FunctionSet*        pFunctionSet;
     VclPtr<vcl::Window> pWin;
-    Rectangle           aArea;
+    tools::Rectangle           aArea;
     Timer               aWTimer; // generate fake mouse moves
     MouseEvent          aLastMove;
     SelectionMode       eSelMode;
@@ -113,7 +113,7 @@ public:
 
     // is needed to generate a Move event via a Timer
     // when the mouse is outside the area
-    void                SetVisibleArea( const Rectangle& rNewArea )
+    void                SetVisibleArea( const tools::Rectangle& rNewArea )
                             { aArea = rNewArea; }
 
     void                SetAddMode( bool);

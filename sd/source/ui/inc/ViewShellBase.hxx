@@ -199,7 +199,7 @@ public:
     /** returns the complete area of the current view relative to the frame
         window
     */
-    const Rectangle& getClientRectangle() const;
+    const ::tools::Rectangle& getClientRectangle() const;
 
     std::shared_ptr<ToolBarManager> GetToolBarManager() const;
     std::shared_ptr<FormShellManager> GetFormShellManager() const;

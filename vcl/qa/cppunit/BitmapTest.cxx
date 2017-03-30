@@ -112,8 +112,8 @@ void BitmapTest::testScale()
         Bitmap::ScopedWriteAccess aWriteAccess(aBitmap24Bit);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(COL_BLACK);
-        aWriteAccess->DrawRect(Rectangle(1, 1, 8, 8));
-        aWriteAccess->DrawRect(Rectangle(3, 3, 6, 6));
+        aWriteAccess->DrawRect(tools::Rectangle(1, 1, 8, 8));
+        aWriteAccess->DrawRect(tools::Rectangle(3, 3, 6, 6));
     }
 
     BitmapSymmetryCheck aBitmapSymmetryCheck;

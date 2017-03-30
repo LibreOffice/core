@@ -1894,7 +1894,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
             if (pGridWindow)
             {
-                std::vector<Rectangle> aLogicRects;
+                std::vector<tools::Rectangle> aLogicRects;
                 pGridWindow->GetCellSelection(aLogicRects);
 
                 boost::property_tree::ptree aTree;
@@ -1902,7 +1902,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 aTree.put("highlightAll", nCommand == SvxSearchCmd::FIND_ALL);
 
                 boost::property_tree::ptree aSelections;
-                for (const Rectangle& rLogicRect : aLogicRects)
+                for (const tools::Rectangle& rLogicRect : aLogicRects)
                 {
                     boost::property_tree::ptree aSelection;
                     aSelection.put("part", OString::number(nTab).getStr());

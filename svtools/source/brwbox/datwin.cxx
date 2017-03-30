@@ -144,7 +144,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
         rDev.SetLineColor( aOldLineColor );
 
         rBox.DoPaintField( rDev,
-            Rectangle(
+            tools::Rectangle(
                 Point( rPos.X() + 2, rPos.Y() + 2 ),
                 Size( Width()-1, rBox.GetDataRowHeight()-1 ) ),
             GetId(),
@@ -156,7 +156,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
         long nWidth = Width() == LONG_MAX ? rBox.GetDataWindow().GetSizePixel().Width() : Width();
 
         rBox.DoPaintField( rDev,
-            Rectangle(
+            tools::Rectangle(
                 Point( rPos.X() + MIN_COLUMNWIDTH, rPos.Y() ),
                 Size( nWidth-2*MIN_COLUMNWIDTH, rBox.GetDataRowHeight()-1 ) ),
             GetId(),
@@ -217,7 +217,7 @@ void BrowserDataWin::dispose()
 {
     bInDtor = true;
 
-    for (Rectangle* i : aInvalidRegion)
+    for (tools::Rectangle* i : aInvalidRegion)
         delete i;
     aInvalidRegion.clear();
     pHeaderBar.clear();
@@ -284,13 +284,13 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!nUpdateLock && GetUpdateMode())
     {
         if (bInPaint)
         {
-            aInvalidRegion.push_back(new Rectangle(rRect));
+            aInvalidRegion.push_back(new tools::Rectangle(rRect));
             return;
         }
         bInPaint = true;
@@ -300,7 +300,7 @@ void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
     }
     else
     {
-        aInvalidRegion.push_back(new Rectangle(rRect));
+        aInvalidRegion.push_back(new tools::Rectangle(rRect));
     }
 }
 
@@ -333,11 +333,11 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
         nColId = pBox->pCols[ nCol ]->GetId();
 
     // compute the field rectangle and field relative MouseEvent
-    Rectangle aFieldRect;
+    tools::Rectangle aFieldRect;
     if ( nCol < pBox->pCols.size() )
     {
         nColX -= pBox->pCols[ nCol ]->Width();
-        aFieldRect = Rectangle(
+        aFieldRect = tools::Rectangle(
             Point( nColX, nRelRow * pBox->GetDataRowHeight() ),
             Size( pBox->pCols[ nCol ]->Width(),
                   pBox->GetDataRowHeight() ) );
@@ -522,7 +522,7 @@ void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
     GetParent()->bRowDividerDrag = true;
     GetParent()->ImplStartTracking();
 
-    Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
+    tools::Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
     ShowTracking( aDragSplitRect );
 
     StartTracking();
@@ -565,7 +565,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
         if ( nDragRowDividerCurrentPos < m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight() )
             nDragRowDividerCurrentPos = m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight();
 
-        Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
+        tools::Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
         ShowTracking( aDragSplitRect );
     }
 }
@@ -589,7 +589,7 @@ void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 
 BrowseEvent::BrowseEvent( vcl::Window* pWindow,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
-                          const Rectangle& rRect ):
+                          const tools::Rectangle& rRect ):
     pWin(pWindow),
     nRow(nAbsRow),
     aRect(rRect),
@@ -609,7 +609,7 @@ BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
 
 BrowserMouseEvent::BrowserMouseEvent( vcl::Window *pWindow, const MouseEvent& rEvt,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
-                          const Rectangle& rRect ):
+                          const tools::Rectangle& rRect ):
     MouseEvent(rEvt),
     BrowseEvent( pWindow, nAbsRow, nColumn, nColumnId, rRect )
 {
@@ -644,7 +644,7 @@ void BrowserDataWin::SetUpdateMode( bool bMode )
 
 void BrowserDataWin::DoOutstandingInvalidations()
 {
-    for (Rectangle* i : aInvalidRegion) {
+    for (tools::Rectangle* i : aInvalidRegion) {
         Control::Invalidate( *i );
         delete i;
     }
@@ -656,20 +656,20 @@ void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
     {
-        for (Rectangle* i : aInvalidRegion)
+        for (tools::Rectangle* i : aInvalidRegion)
             delete i;
         aInvalidRegion.clear();
-        aInvalidRegion.push_back( new Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        aInvalidRegion.push_back( new tools::Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
     }
     else
         Window::Invalidate( nFlags );
 }
 
 
-void BrowserDataWin::Invalidate( const Rectangle& rRect, InvalidateFlags nFlags )
+void BrowserDataWin::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
-        aInvalidRegion.push_back( new Rectangle( rRect ) );
+        aInvalidRegion.push_back( new tools::Rectangle( rRect ) );
     else
         Window::Invalidate( rRect, nFlags );
 }
@@ -697,7 +697,7 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
         else
             aTip += OUString::number(GetRangeMax());
 
-        Rectangle aRect(GetPointerPosPixel(), Size(GetTextWidth(aTip), GetTextHeight()));
+        tools::Rectangle aRect(GetPointerPosPixel(), Size(GetTextWidth(aTip), GetTextHeight()));
         Help::ShowQuickHelp(this, aRect, aTip);
         _nLastPos = nPos;
     }

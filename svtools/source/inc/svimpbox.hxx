@@ -197,7 +197,7 @@ private:
     void                UpdateContextBmpWidthMax( SvTreeListEntry* pEntry );
     void                UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEntry );
 
-    void                CalcCellFocusRect( SvTreeListEntry* pEntry, Rectangle& rRect );
+    void                CalcCellFocusRect( SvTreeListEntry* pEntry, tools::Rectangle& rRect );
 
     bool AreChildrenTransient() const { return bAreChildrenTransient; }
     void         SetChildrenNotTransient() { bAreChildrenTransient = false; }
@@ -229,7 +229,7 @@ protected:
     virtual void        AdjustScrollBars( Size& rSize );
     virtual void        InvalidateEntry( long nY ) const;
 
-    Rectangle           GetVisibleArea() const;
+    tools::Rectangle           GetVisibleArea() const;
     void                SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
     void                BeginScroll();
     void                EndScroll();
@@ -262,7 +262,7 @@ public:
     void                CollapsingEntry( SvTreeListEntry* pEntry );
     void                EntrySelected( SvTreeListEntry* pEntry, bool bSelect );
 
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     void                MouseButtonDown( const MouseEvent& );
     void                MouseButtonUp( const MouseEvent& );
     void                MouseMove( const MouseEvent&);
@@ -326,7 +326,7 @@ public:
     void EnableAsyncDrag( bool b ) { bAsyncBeginDrag = b; }
     void SetUpdateMode( bool bMode );
     bool GetUpdateMode() const { return bUpdateMode; }
-    Rectangle           GetClipRegionRect() const;
+    tools::Rectangle           GetClipRegionRect() const;
     bool HasHorScrollBar() const { return aHorSBar->IsVisible(); }
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );

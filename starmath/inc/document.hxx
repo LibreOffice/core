@@ -201,7 +201,7 @@ public:
     void        Execute( SfxRequest& rReq );
     void        GetState(SfxItemSet &);
 
-    virtual void SetVisArea (const Rectangle & rVisArea) override;
+    virtual void SetVisArea (const tools::Rectangle & rVisArea) override;
     virtual void SetModified(bool bModified = true) override;
 
     /** Get a cursor for modifying this document

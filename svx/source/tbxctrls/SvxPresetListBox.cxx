@@ -67,7 +67,7 @@ void SvxPresetListBox::Command( const CommandEvent& rEvent )
                     pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
                 }
                 pMenu->SetSelectHdl( LINK(this, SvxPresetListBox, OnMenuItemSelected) );
-                pMenu->Execute(this,Rectangle(aPos,Size(1,1)),PopupMenuFlags::ExecuteDown);
+                pMenu->Execute(this,tools::Rectangle(aPos,Size(1,1)),PopupMenuFlags::ExecuteDown);
             }
         }
         break;

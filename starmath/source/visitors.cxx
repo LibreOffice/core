@@ -410,7 +410,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     Point aBarOffset( pNode->GetWidth( ), +pNode->GetBorderWidth( ) );
     Point aBarPos( maPosition + aBarOffset );
 
-    Rectangle  aBar( aBarPos, Size( nBarWidth, nBarHeight ) );
+    tools::Rectangle  aBar( aBarPos, Size( nBarWidth, nBarHeight ) );
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.
     //  This is done by shifting its output-position to a point that
@@ -455,7 +455,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     sal_uLong  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
 
     // get rectangle and remove borderspace
-    Rectangle  aTmp ( pNode->AsRectangle( ) + maPosition - pNode->GetTopLeft( ) );
+    tools::Rectangle  aTmp ( pNode->AsRectangle( ) + maPosition - pNode->GetTopLeft( ) );
     aTmp.Left( )   += nTmpBorderWidth;
     aTmp.Right( )  -= nTmpBorderWidth;
     aTmp.Top( )    += nTmpBorderWidth;
@@ -1866,7 +1866,7 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
     }
 }
 
-void SmSelectionDrawingVisitor::ExtendSelectionArea(const Rectangle& rArea)
+void SmSelectionDrawingVisitor::ExtendSelectionArea(const tools::Rectangle& rArea)
 {
     if ( ! mbHasSelectionArea ) {
         maSelectionArea = rArea;
@@ -1905,7 +1905,7 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
         long right  = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionEnd( ) );
         long top    = Position.getY( );
         long bottom = top + pNode->GetHeight( );
-        Rectangle rect( left, top, right, bottom );
+        tools::Rectangle rect( left, top, right, bottom );
 
         ExtendSelectionArea( rect );
 

@@ -210,7 +210,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, sal_uLong nLayer )
     }
 }
 
-void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev )
+void ScGridWindow::DrawSdrGrid( const tools::Rectangle& rDrawingRect, OutputDevice* pContentDev )
 {
     // Draw grid lines
 
@@ -342,7 +342,7 @@ void ScGridWindow::UpdateStatusPosSize()
     bool bActionItem = false;
     if ( pDrView->IsAction() ) // action rectangle
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         pDrView->TakeActionRect( aRect );
         if ( !aRect.IsEmpty() )
         {
@@ -361,7 +361,7 @@ void ScGridWindow::UpdateStatusPosSize()
     {
         if ( pDrView->AreObjectsMarked() ) // selected objects
         {
-            Rectangle aRect = pDrView->GetAllMarkedRect();
+            tools::Rectangle aRect = pDrView->GetAllMarkedRect();
             // mouse position will have been adjusted for offset
             // at current position and zoom, restore that adjustment here
             // so status shows correct value

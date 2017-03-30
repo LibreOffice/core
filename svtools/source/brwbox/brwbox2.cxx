@@ -161,7 +161,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
             )
             // we draw the text in our header bar in a color dependent on the enabled state. So if this state changed
             // -> redraw
-            Invalidate(Rectangle(Point(0, 0), Size(GetOutputSizePixel().Width(), GetTitleHeight() - 1)));
+            Invalidate(tools::Rectangle(Point(0, 0), Size(GetOutputSizePixel().Width(), GetTitleHeight() - 1)));
     }
 }
 
@@ -261,20 +261,20 @@ void BrowseBox::ToggleSelection()
         if ( nRow < nTopRow )
             continue;
 
-        Rectangle aAddRect(
+        tools::Rectangle aAddRect(
             Point( nOfsX, (nRow-nTopRow)*GetDataRowHeight() ),
             Size( pDataWin->GetSizePixel().Width(), GetDataRowHeight() ) );
         if ( aHighlightList.size() && nLastRowInRect == ( nRow - 1 ) )
             aHighlightList[ 0 ]->Union( aAddRect );
         else
-            aHighlightList.insert( aHighlightList.begin(), new Rectangle( aAddRect ) );
+            aHighlightList.insert( aHighlightList.begin(), new tools::Rectangle( aAddRect ) );
         nLastRowInRect = nRow;
     }
 
     // unhighlight the old selection (if any)
     for ( size_t i = aHighlightList.size(); i > 0; )
     {
-        Rectangle *pRect = aHighlightList[ --i ];
+        tools::Rectangle *pRect = aHighlightList[ --i ];
         pDataWin->Invalidate( *pRect );
         delete pRect;
     }
@@ -285,7 +285,7 @@ void BrowseBox::ToggleSelection()
           nColId != BROWSER_ENDOFSELECTION;
           nColId = pColSel->NextSelected() )
     {
-        Rectangle aRect( GetFieldRectPixel(nCurRow,
+        tools::Rectangle aRect( GetFieldRectPixel(nCurRow,
                                            pCols[ nColId ]->GetId(),
                                            false ) );
         aRect.Left() -= MIN_COLUMNWIDTH;
@@ -324,7 +324,7 @@ void BrowseBox::DrawCursor()
         nCurColId = GetColumnId(1);
 
     // calculate cursor rectangle
-    Rectangle aCursor;
+    tools::Rectangle aCursor;
     if ( bColumnCursor )
     {
         aCursor = GetFieldRectPixel( nCurRow, nCurColId, false );
@@ -333,7 +333,7 @@ void BrowseBox::DrawCursor()
         aCursor.Bottom() += 1;
     }
     else
-        aCursor = Rectangle(
+        aCursor = tools::Rectangle(
             Point( ( !pCols.empty() && pCols[ 0 ]->GetId() == 0 ) ?
                         pCols[ 0 ]->Width() : 0,
                         (nCurRow - nTopRow) * GetDataRowHeight() + 1 ),
@@ -528,7 +528,7 @@ void BrowseBox::Resize()
     UpdateScrollbars();
 
     // Control-Area
-    Rectangle aInvalidArea( GetControlArea() );
+    tools::Rectangle aInvalidArea( GetControlArea() );
     aInvalidArea.Right() = GetOutputSizePixel().Width();
     aInvalidArea.Left() = 0;
     Invalidate( aInvalidArea );
@@ -548,7 +548,7 @@ void BrowseBox::Resize()
 }
 
 
-void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
 
     // initializations
@@ -615,7 +615,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
             {
                 rRenderContext.Push(PushFlags::FILLCOLOR);
                 rRenderContext.SetFillColor(Color(COL_BLACK));
-                rRenderContext.DrawRect(Rectangle(Point(nX, 0), Size(pCol->Width(), GetTitleHeight() - 1)));
+                rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0), Size(pCol->Width(), GetTitleHeight() - 1)));
                 rRenderContext.Pop();
             }
 
@@ -631,7 +631,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
             rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
             rRenderContext.SetFillColor(aColFace);
             rRenderContext.SetLineColor(aColFace);
-            rRenderContext.DrawRect(Rectangle(Point(nX, 0),
+            rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0),
                                               Point(rRect.Right(), GetTitleHeight() - 2 )));
             rRenderContext.Pop();
         }
@@ -749,19 +749,19 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
     }
 
     // draw our own content (with clipping)
-    vcl::Region aRegion(Rectangle(aRealPos, aRealSize));
+    vcl::Region aRegion(tools::Rectangle(aRealPos, aRealSize));
     pDev->SetClipRegion( pDev->PixelToLogic( aRegion ) );
 
     // do we have to paint the background
     bool bBackground = !(nFlags & DrawFlags::NoBackground) && pDataWin->IsControlBackground();
     if ( bBackground )
     {
-        Rectangle aRect( aRealPos, aRealSize );
+        tools::Rectangle aRect( aRealPos, aRealSize );
         pDev->SetFillColor( pDataWin->GetControlBackground() );
         pDev->DrawRect( aRect );
     }
 
-    ImplPaintData( *pDev, Rectangle( aRealPos, aRealSize ), true, bDrawSelection );
+    ImplPaintData( *pDev, tools::Rectangle( aRealPos, aRealSize ), true, bDrawSelection );
 
     // restore the column widths/data row height
     nDataRowHeight = nOriginalHeight;
@@ -781,7 +781,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 }
 
 
-void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool _bForeignDevice, bool _bDrawSelections)
+void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice, bool _bDrawSelections)
 {
     Point aOverallAreaPos = _bForeignDevice ? _rRect.TopLeft() : Point(0,0);
     Size aOverallAreaSize = _bForeignDevice ? _rRect.GetSize() : pDataWin->GetOutputSizePixel();
@@ -835,7 +835,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
 
         // #73325# don't paint the row outside the painting rectangle (DG)
         // prepare auto-highlight
-        Rectangle aRowRect( Point( _rRect.TopLeft().X(), aPos.Y() ),
+        tools::Rectangle aRowRect( Point( _rRect.TopLeft().X(), aPos.Y() ),
                 Size( _rRect.GetSize().Width(), nDataRowHeigt ) );
 
         bool bRowSelected   =   _bDrawSelections
@@ -884,7 +884,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
                 _rOut.SetTextColor( rHighlightTextColor );
                 _rOut.SetFillColor( rHighlightFillColor );
                 _rOut.SetLineColor();
-                Rectangle aFieldRect( aPos,
+                tools::Rectangle aFieldRect( aPos,
                         Size( pCol->Width(), nDataRowHeigt ) );
                 _rOut.DrawRect( aFieldRect );
             }
@@ -912,7 +912,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
                         aFieldSize.Height() = aOverallAreaBRPos.Y() + 1 - aPos.Y();
                     }
 
-                    vcl::Region aClipToField(Rectangle(aPos, aFieldSize));
+                    vcl::Region aClipToField(tools::Rectangle(aPos, aFieldSize));
                     _rOut.SetClipRegion(aClipToField);
                 }
                 pCol->Draw( *this, _rOut, aPos );
@@ -971,7 +971,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
         // fill rectangle gray below handle column
         // DG: fill it only until the end of the drawing rect and not to the end, as this may overpaint handle columns
         _rOut.SetLineColor( Color( COL_BLACK ) );
-        _rOut.DrawRect( Rectangle(
+        _rOut.DrawRect( tools::Rectangle(
             Point( aOverallAreaPos.X() - 1, aPos.Y() - 1 ),
             Point( aOverallAreaPos.X() + pCols[ 0 ]->Width() - 1,
                    _rRect.Bottom() + 1) ) );
@@ -1025,7 +1025,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
     _rOut.SetLineColor( aOldLineColor );
 }
 
-void BrowseBox::PaintData( vcl::Window& rWin, vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void BrowseBox::PaintData( vcl::Window& rWin, vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     if (!bBootstrapped && IsReallyVisible())
         BrowseBox::StateChanged(StateChangedType::InitShow);
@@ -1356,7 +1356,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
             else if ( nX < rEvtPos.X() && nR > rEvtPos.X() )
             {
                 MouseButtonDown( BrowserMouseEvent(
-                    this, rEvt, -1, nCol, pCol->GetId(), Rectangle() ) );
+                    this, rEvt, -1, nCol, pCol->GetId(), tools::Rectangle() ) );
                 return;
             }
             nX = nR + 1;
@@ -1410,7 +1410,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                              + nResizeX - nOldWidth;
 
                     // draw new auxiliary line
-                    pDataWin->ShowTracking( Rectangle( Point( nDragX, 0 ),
+                    pDataWin->ShowTracking( tools::Rectangle( Point( nDragX, 0 ),
                             Size( 1, pDataWin->GetSizePixel().Height() ) ),
                             ShowTrackFlags::Split|ShowTrackFlags::TrackWindow );
                 }
@@ -1936,7 +1936,7 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
     DoShowCursor("SetCursorColor");
 }
 
-Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
+tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
 {
     vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )
@@ -1957,37 +1957,37 @@ Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
         nHeight = GetWindowExtentsRelative( pParent ).GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
     }
     aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
-    return Rectangle(aTopLeft,Size(nWidth,nHeight));
+    return tools::Rectangle(aTopLeft,Size(nWidth,nHeight));
 }
 
-Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
+tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
 {
     vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
-    Rectangle aRect( GetWindowExtentsRelative( pParent ) );
-    Rectangle aRowBar = calcHeaderRect(false, pParent == nullptr);
+    tools::Rectangle aRect( GetWindowExtentsRelative( pParent ) );
+    tools::Rectangle aRowBar = calcHeaderRect(false, pParent == nullptr);
 
     long nX = aRowBar.Right() - aRect.Left();
     long nY = aRowBar.Top() - aRect.Top();
     Size aSize(aRect.GetSize());
 
-    return Rectangle(aRowBar.TopRight(), Size(aSize.Width() - nX, aSize.Height() - nY - aHScroll->GetSizePixel().Height()) );
+    return tools::Rectangle(aRowBar.TopRight(), Size(aSize.Width() - nX, aSize.Height() - nY - aHScroll->GetSizePixel().Height()) );
 }
 
-Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
+tools::Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
 {
     vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
-    Rectangle aRect = GetFieldRectPixel(_nRowId,_nColId,_bOnScreen);
+    tools::Rectangle aRect = GetFieldRectPixel(_nRowId,_nColId,_bOnScreen);
 
     Point aTopLeft = aRect.TopLeft();
     aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
 
-    return Rectangle(aTopLeft,aRect.GetSize());
+    return tools::Rectangle(aTopLeft,aRect.GetSize());
 }
 
 // ------------------------------------------------------------------------- EOF

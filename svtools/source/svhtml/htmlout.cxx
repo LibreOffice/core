@@ -646,7 +646,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     const IMapRectangleObject* pRectObj =
                         static_cast<const IMapRectangleObject *>(pObj);
                     pShape = OOO_STRING_SVTOOLS_HTML_SH_rect;
-                    Rectangle aRect( pRectObj->GetRectangle() );
+                    tools::Rectangle aRect( pRectObj->GetRectangle() );
 
                     aCoords = OStringBuffer()
                         .append(static_cast<sal_Int32>(aRect.Left()))

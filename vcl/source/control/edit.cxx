@@ -473,7 +473,7 @@ long Edit::ImplGetTextYPosition() const
     return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
 }
 
-void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle)
+void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle)
 {
     if (!IsReallyVisible())
         return;
@@ -522,7 +522,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
         rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(GetControlBackground());
-        rRenderContext.DrawRect(Rectangle(aPos, Size(GetOutputSizePixel().Width() - 2 * mnXOffset, GetOutputSizePixel().Height())));
+        rRenderContext.DrawRect(tools::Rectangle(aPos, Size(GetOutputSizePixel().Width() - 2 * mnXOffset, GetOutputSizePixel().Height())));
         rRenderContext.Pop();
 
         rRenderContext.SetTextFillColor(GetControlBackground());
@@ -557,7 +557,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
         // selection is highlighted
         for(sal_Int32 i = 0; i < nLen; ++i)
         {
-            Rectangle aRect(aPos, Size(10, nTH));
+            tools::Rectangle aRect(aPos, Size(10, nTH));
             aRect.Left() = pDX[2 * i] + mnXOffset + ImplGetExtraXOffset();
             aRect.Right() = pDX[2 * i + 1] + mnXOffset + ImplGetExtraXOffset();
             aRect.Justify();
@@ -635,7 +635,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
                     int nIndex = i;
                     while (nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
                     {
-                        Rectangle aRect( aPos, Size( 10, nTH ) );
+                        tools::Rectangle aRect( aPos, Size( 10, nTH ) );
                         aRect.Left() = pDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset();
                         aRect.Right() = pDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraXOffset();
                         aRect.Justify();
@@ -983,13 +983,13 @@ ControlType Edit::ImplGetNativeControlType() const
     return nCtrl;
 }
 
-void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle, long nXStart, long nXEnd )
+void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, long nXStart, long nXEnd )
 {
     /*
     * note: at this point the cursor must be switched off already
     */
     Point aTmpPoint;
-    Rectangle aRect(aTmpPoint, GetOutputSizePixel());
+    tools::Rectangle aRect(aTmpPoint, GetOutputSizePixel());
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
 
@@ -1011,7 +1011,7 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
         return;
 
     Point aTmpPoint;
-    Rectangle aRect(aTmpPoint, GetOutputSizePixel());
+    tools::Rectangle aRect(aTmpPoint, GetOutputSizePixel());
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
 
@@ -1040,7 +1040,7 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
                     // need to mirror in case border is not RTL but edit is (or vice versa)
 
                     // mirror
-                    Rectangle aBounds(aClipRgn.GetBoundRect());
+                    tools::Rectangle aBounds(aClipRgn.GetBoundRect());
                     int xNew = GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
                     aClipRgn.Move(xNew - aBounds.Left(), 0);
 
@@ -1060,13 +1060,13 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
                 vcl::Region oldRgn(pBorder->GetClipRegion());
                 pBorder->SetClipRegion(aClipRgn);
 
-                pBorder->Paint(*pBorder, Rectangle());
+                pBorder->Paint(*pBorder, tools::Rectangle());
 
                 pBorder->SetClipRegion(oldRgn);
             }
             else
             {
-                pBorder->Paint(*pBorder, Rectangle());
+                pBorder->Paint(*pBorder, tools::Rectangle());
             }
         }
     }
@@ -1719,7 +1719,7 @@ void Edit::FillLayoutData() const
     const_cast<Edit*>(this)->Invalidate();
 }
 
-void Edit::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle)
+void Edit::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle)
 {
     if (!mpSubEdit)
         ImplRepaint(rRenderContext, rRectangle);
@@ -1759,7 +1759,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
-        Rectangle aRect( aPos, aSize );
+        tools::Rectangle aRect( aPos, aSize );
         if ( bBorder )
         {
             ImplDrawFrame( pDev, aRect );
@@ -1790,7 +1790,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     const long nOnePixel = GetDrawPixel( pDev, 1 );
     const long nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
-    Rectangle aTextRect( aPos, aSize );
+    tools::Rectangle aTextRect( aPos, aSize );
 
     if ( GetStyle() & WB_CENTER )
         nTextStyle |= DrawTextFlags::Center;
@@ -1812,7 +1812,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
          ((nOffY+nTextHeight) > aSize.Height()) ||
          ((nOffX+nTextWidth) > aSize.Width()) )
     {
-        Rectangle aClip( aPos, aSize );
+        tools::Rectangle aClip( aPos, aSize );
         if ( nTextHeight > aSize.Height() )
             aClip.Bottom() += nTextHeight-aSize.Height()+1;  // prevent HP printers from 'optimizing'
         pDev->IntersectClipRegion( aClip );
@@ -2146,10 +2146,10 @@ void Edit::Command( const CommandEvent& rCEvt )
             long    nTH = GetTextHeight();
             Point   aPos( mnXOffset, ImplGetTextYPosition() );
 
-            std::unique_ptr<Rectangle[]> aRects(new Rectangle[ mpIMEInfos->nLen ]);
+            std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ mpIMEInfos->nLen ]);
             for ( int nIndex = 0; nIndex < mpIMEInfos->nLen; ++nIndex )
             {
-                Rectangle aRect( aPos, Size( 10, nTH ) );
+                tools::Rectangle aRect( aPos, Size( 10, nTH ) );
                 aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset();
                 aRects[ nIndex ] = aRect;
             }
@@ -2282,7 +2282,7 @@ void Edit::ImplShowDDCursor()
     {
         long nTextWidth = GetTextWidth( maText.toString(), 0, mpDDInfo->nDropPos );
         long nTextHeight = GetTextHeight();
-        Rectangle aCursorRect( Point( nTextWidth + mnXOffset, (GetOutputSize().Height()-nTextHeight)/2 ), Size( 2, nTextHeight ) );
+        tools::Rectangle aCursorRect( Point( nTextWidth + mnXOffset, (GetOutputSize().Height()-nTextHeight)/2 ), Size( 2, nTextHeight ) );
         mpDDInfo->aCursor.SetWindow( this );
         mpDDInfo->aCursor.SetPos( aCursorRect.TopLeft() );
         mpDDInfo->aCursor.SetSize( aCursorRect.GetSize() );
@@ -2725,8 +2725,8 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
 
     // ask NWF what if it has an opinion, too
     ImplControlValue aControlValue;
-    Rectangle aRect( Point( 0, 0 ), aSize );
-    Rectangle aContent, aBound;
+    tools::Rectangle aRect( Point( 0, 0 ), aSize );
+    tools::Rectangle aContent, aBound;
     if (GetNativeControlRegion(eCtrlType, ControlPart::Entire, aRect, ControlState::NONE,
                                aControlValue, OUString(), aBound, aContent))
     {

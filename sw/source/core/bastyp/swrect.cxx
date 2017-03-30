@@ -26,7 +26,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-SwRect::SwRect( const Rectangle &rRect ) :
+SwRect::SwRect( const tools::Rectangle &rRect ) :
     m_Point( rRect.Left(), rRect.Top() )
 {
     m_Size.setWidth(rRect.Right() == RECT_EMPTY ? 0 :

@@ -233,9 +233,9 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
         aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
 
-        Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ),
+        Invalidate( tools::Rectangle( aPtLast - Point( nRadius, nRadius ),
                                aPtLast + Point( nRadius, nRadius ) ) );
-        Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ),
+        Invalidate( tools::Rectangle( aPtNew - Point( nRadius, nRadius ),
                                aPtNew + Point( nRadius, nRadius ) ) );
         eRP = GetRPFromPoint( aPtNew );
 
@@ -355,7 +355,7 @@ void SvxRectCtl::DataChanged( const DataChangedEvent& rDCEvt )
 
 // the control (rectangle with 9 circles)
 
-void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     InitSettings(rRenderContext);
 
@@ -365,7 +365,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     rRenderContext.SetLineColor(rStyles.GetDialogColor());
     rRenderContext.SetFillColor(rStyles.GetDialogColor());
-    rRenderContext.DrawRect(Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
 
     if (IsEnabled())
         rRenderContext.SetLineColor(rStyles.GetLabelTextColor());
@@ -378,10 +378,10 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     {
         Color aOldCol = rRenderContext.GetLineColor();
         rRenderContext.SetLineColor(rStyles.GetLightColor());
-        rRenderContext.DrawRect(Rectangle(aPtLT + aPtDiff, aPtRB + aPtDiff));
+        rRenderContext.DrawRect(tools::Rectangle(aPtLT + aPtDiff, aPtRB + aPtDiff));
         rRenderContext.SetLineColor(aOldCol);
     }
-    rRenderContext.DrawRect(Rectangle(aPtLT, aPtRB));
+    rRenderContext.DrawRect(tools::Rectangle(aPtLT, aPtRB));
 
     rRenderContext.SetFillColor(rRenderContext.GetBackground().GetColor());
 
@@ -575,8 +575,8 @@ void SvxRectCtl::SetActualRP( RectPoint eNewRP )
 {
     Point aPtLast( SetActualRPWithoutInvalidate( eNewRP ) );
 
-    Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ), aPtLast + Point( nRadius, nRadius ) ) );
-    Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ), aPtNew + Point( nRadius, nRadius ) ) );
+    Invalidate( tools::Rectangle( aPtLast - Point( nRadius, nRadius ), aPtLast + Point( nRadius, nRadius ) ) );
+    Invalidate( tools::Rectangle( aPtNew - Point( nRadius, nRadius ), aPtNew + Point( nRadius, nRadius ) ) );
 
     // notify accessibility object about change
     if( pAccContext.is() )
@@ -604,15 +604,15 @@ void SvxRectCtl::SetState( CTL_STATE nState )
         static_cast<SvxTabPage*>(pTabPage)->PointChanged(this, eRP);
 }
 
-Rectangle SvxRectCtl::CalculateFocusRectangle() const
+tools::Rectangle SvxRectCtl::CalculateFocusRectangle() const
 {
     Size        aDstBtnSize( PixelToLogic( Size( 15, 15 ) ) );
-    return Rectangle( aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
+    return tools::Rectangle( aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
 }
 
-Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) const
+tools::Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) const
 {
-    Rectangle   aRet;
+    tools::Rectangle   aRet;
     RectPoint  eOldRectPoint = GetActualRP();
 
     if( eOldRectPoint == eRectPoint )
@@ -713,7 +713,7 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
     //Invalidate( Rectangle( aPtTl, aPtBr ) );
     aFocusPosition.setX(nX);
     aFocusPosition.setY(nY);
-    Invalidate(Rectangle(Point(0,0),aRectSize));
+    Invalidate(tools::Rectangle(Point(0,0),aRectSize));
 
     vcl::Window *pTabPage = getNonLayoutParent(this);
     if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
@@ -796,7 +796,7 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
 // Draws the Control (Rectangle with nine circles)
 
-void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     if (!aRectSize.Width() || !aRectSize.Height())
         return;
@@ -838,7 +838,7 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
                     // Change color: 0 -> Background color
                     rRenderContext.SetFillColor(nLastPixel ? aPixelColor : aBackgroundColor);
                 }
-                rRenderContext.DrawRect(Rectangle(aPtTl, aPtBr));
+                rRenderContext.DrawRect(tools::Rectangle(aPtTl, aPtBr));
             }
         }
         //Draw visual focus when has focus
@@ -857,7 +857,7 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 }
 
 //Calculate visual focus rectangle via focus position
-Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
+tools::Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
 {
     long nLeft,nTop,nRight,nBottom;
     long i,j;
@@ -867,7 +867,7 @@ Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
     nRight = aRectSize.Width() * (j + 1) / nLines - 1;
     nTop = aRectSize.Height() * i / nLines + 1;
     nBottom = aRectSize.Height() * (i + 1) / nLines - 1;
-    return Rectangle(nLeft,nTop,nRight,nBottom);
+    return tools::Rectangle(nLeft,nTop,nRight,nBottom);
 }
 
 //Solution:Keyboard function
@@ -883,7 +883,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                              aRectSize.Height() *( aFocusPosition.getY() - 1)/ nLines -1
                             );
         Size  aRepaintSize( aRectSize.Width() *3/ nLines + 2,aRectSize.Height() *3/ nLines + 2);
-        Rectangle aRepaintRect( aRepaintPoint, aRepaintSize );
+        tools::Rectangle aRepaintRect( aRepaintPoint, aRepaintSize );
         bool bFocusPosChanged=false;
         switch(nCode)
         {
@@ -1693,7 +1693,7 @@ void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
 }
 
 
-void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     LocalPrePaint(rRenderContext);
 
@@ -1728,14 +1728,14 @@ SvxXRectPreview::SvxXRectPreview(vcl::Window* pParent)
     InitSettings(true, true);
 
     // create RectangleObject
-    const Rectangle aObjectSize(Point(), GetOutputSize());
+    const tools::Rectangle aObjectSize(Point(), GetOutputSize());
     mpRectangleObject = new SdrRectObj(aObjectSize);
     mpRectangleObject->SetModel(&getModel());
 }
 
 void SvxXRectPreview::Resize()
 {
-    const Rectangle aObjectSize(Point(), GetOutputSize());
+    const tools::Rectangle aObjectSize(Point(), GetOutputSize());
     SdrObject *pOrigObject = mpRectangleObject;
     if (pOrigObject)
     {
@@ -1766,7 +1766,7 @@ void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
     mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 }
 
-void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     LocalPrePaint(rRenderContext);
 
@@ -1795,12 +1795,12 @@ SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
     aSize.Height() = aSize.Height() / 3;
 
     // create RectangleObject
-    const Rectangle aObjectSize( Point( aSize.Width(), aSize.Height() ), aSize );
+    const tools::Rectangle aObjectSize( Point( aSize.Width(), aSize.Height() ), aSize );
     mpRectangleObject = new SdrRectObj(aObjectSize);
     mpRectangleObject->SetModel(&getModel());
 
     // create ShadowObject
-    const Rectangle aShadowSize( Point( aSize.Width(), aSize.Height() ), aSize );
+    const tools::Rectangle aShadowSize( Point( aSize.Width(), aSize.Height() ), aSize );
     mpRectangleShadow = new SdrRectObj(aShadowSize);
     mpRectangleShadow->SetModel(&getModel());
 }
@@ -1836,7 +1836,7 @@ void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
     maShadowOffset = rPos;
 }
 
-void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     LocalPrePaint(rRenderContext);
 
@@ -1845,7 +1845,7 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     aSize.Width() = aSize.Width() / 3;
     aSize.Height() = aSize.Height() / 3;
 
-    Rectangle aObjectRect(Point(aSize.Width(), aSize.Height()), aSize);
+    tools::Rectangle aObjectRect(Point(aSize.Width(), aSize.Height()), aSize);
     mpRectangleObject->SetSnapRect(aObjectRect);
     aObjectRect.Move(maShadowOffset.X(), maShadowOffset.Y());
     mpRectangleShadow->SetSnapRect(aObjectRect);

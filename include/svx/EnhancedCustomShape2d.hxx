@@ -81,7 +81,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         sal_Int32                   nCoordHeightG;
         sal_Int32                   nCoordWidth;
         sal_Int32                   nCoordHeight;
-        Rectangle                   aLogicRect;
+        tools::Rectangle                   aLogicRect;
 
         double                      fXScale;
         double                      fYScale;
@@ -178,8 +178,8 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SdrObject*              CreateLineGeometry();
         SdrObject*              CreateObject( bool bLineGeometryNeededOnly );
         void                    ApplyGluePoints( SdrObject* pObj );
-        Rectangle               GetTextRect() const;
-        const Rectangle&        GetLogicRect() const { return aLogicRect; }
+        tools::Rectangle               GetTextRect() const;
+        const tools::Rectangle&        GetLogicRect() const { return aLogicRect; }
 
         sal_uInt32              GetHdlCount() const;
         bool                    GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;

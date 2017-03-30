@@ -776,7 +776,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
             SwFormatAnchor aNewAnch( _eAnchorType );
             SwAnchoredObject *pAnchoredObj = pContact->GetAnchoredObj(pObj);
-            Rectangle aObjRect(pAnchoredObj->GetObjRect().SVRect());
+            tools::Rectangle aObjRect(pAnchoredObj->GetObjRect().SVRect());
             const Point aPt( aObjRect.TopLeft() );
 
             switch ( _eAnchorType )

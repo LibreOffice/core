@@ -66,7 +66,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
     , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
 {
-    Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
+    tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
 
     SetStyle(GetStyle() | WB_VSCROLL);
@@ -264,7 +264,7 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
         pRecentItem->OpenDocument();
 }
 
-void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const Rectangle &aRect)
+void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &aRect)
 {
     // Set preferred width
     if (mFilteredItemList.empty())

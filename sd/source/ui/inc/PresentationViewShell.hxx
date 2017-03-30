@@ -57,10 +57,10 @@ protected:
     virtual VclPtr<SvxRuler> CreateVRuler(::sd::Window* pWin) override;
 
 private:
-    Rectangle       maOldVisArea;
+    ::tools::Rectangle       maOldVisArea;
 
     virtual void Activate (bool bIsMDIActivate) override;
-    virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin) override;
+    virtual void Paint (const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
 };
 
 } // end of namespace sd

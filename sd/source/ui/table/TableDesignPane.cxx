@@ -635,7 +635,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                 if( xCellInfo.get() )
                 {
                     // fill cell background
-                    const Rectangle aRect( nX, nY, nX + nCellWidth - 1, nY + nCellHeight - 1 );
+                    const ::tools::Rectangle aRect( nX, nY, nX + nCellWidth - 1, nY + nCellHeight - 1 );
 
                     if( xCellInfo->maCellColor.GetColor() != COL_TRANSPARENT )
                     {

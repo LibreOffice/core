@@ -128,7 +128,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     Point aPopupPos;
     Size aPopupSize;
     mpFilterButton->getPopupBoundingBox(aPopupPos, aPopupSize);
-    Rectangle aRect(aPopupPos, aPopupSize);
+    tools::Rectangle aRect(aPopupPos, aPopupSize);
     if (aRect.IsInside(rMEvt.GetPosPixel()))
     {
         if ( DoPageFieldSelection( nCol, nRow ) )
@@ -256,7 +256,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
         nDy = 1;
     if ( nDx != 0 || nDy != 0 )
     {
-        UpdateDragRect( false, Rectangle() );
+        UpdateDragRect( false, tools::Rectangle() );
 
         if ( nDx  != 0)
             pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
@@ -275,7 +275,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 
     ScAddress aPos( nPosX, nPosY, pViewData->GetTabNo() );
 
-    Rectangle aPosRect;
+    tools::Rectangle aPosRect;
     sal_uInt16 nOrient;
     long nDimPos;
     bool bHasRange = pDragDPObj->GetHeaderDrag( aPos, bMouseLeft, bMouseTop, nDPField,
@@ -360,7 +360,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     Point aPopupPos;
     Size aPopupSize;
     aBtn.getPopupBoundingBox(aPopupPos, aPopupSize);
-    Rectangle aRect(aPopupPos, aPopupSize);
+    tools::Rectangle aRect(aPopupPos, aPopupSize);
     if (aRect.IsInside(rMEvt.GetPosPixel()))
     {
         // Mouse cursor inside the popup arrow box.  Launch the field menu.
@@ -527,7 +527,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
         }
     }
 
-    Rectangle aCellRect(rScrPos, rScrSize);
+    tools::Rectangle aCellRect(rScrPos, rScrSize);
 
     mpDPFieldPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
     ScCheckListMenuWindow::Config aConfig;
@@ -655,7 +655,7 @@ void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
     SetPointer( Pointer( PointerStyle::Arrow ) );
 }
 
-void ScGridWindow::UpdateDragRect( bool bShowRange, const Rectangle& rPosRect )
+void ScGridWindow::UpdateDragRect( bool bShowRange, const tools::Rectangle& rPosRect )
 {
     SCCOL nStartX = ( rPosRect.Left()   >= 0 ) ? static_cast<SCCOL>(rPosRect.Left())   : SCCOL_MAX;
     SCROW nStartY = ( rPosRect.Top()    >= 0 ) ? static_cast<SCROW>(rPosRect.Top())    : SCROW_MAX;

@@ -82,7 +82,7 @@ void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
     }
 }
 
-void SdDisplay::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SdDisplay::Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& )
 {
     Point aPt;
     Size aSize = GetOutputSize();
@@ -530,7 +530,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
         if( pObject )
         {
             ScopedVclPtrInstance< VirtualDevice > pVD;
-            Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
+            ::tools::Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
             Size            aObjSize( aObjRect.GetSize() );
             Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
             MapMode         aMap( pVD->GetMapMode() );
@@ -1005,7 +1005,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         SdrGrafObj* pGrafObj = new SdrGrafObj( Graphic( aAnimation ) );
         const Point aOrg( aWindowCenter.X() - ( aMaxSizeLog.Width() >> 1 ), aWindowCenter.Y() - ( aMaxSizeLog.Height() >> 1 ) );
 
-        pGrafObj->SetLogicRect( Rectangle( aOrg, aMaxSizeLog ) );
+        pGrafObj->SetLogicRect( ::tools::Rectangle( aOrg, aMaxSizeLog ) );
         rView.InsertObjectAtView( pGrafObj, *pPV, SdrInsertFlags::SETDEFLAYER);
     }
     else
@@ -1018,7 +1018,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         for (size_t i = 0; i < nCount; ++i)
         {
             pClone = pPage->GetObj(i);
-            Rectangle aRect( pClone->GetSnapRect() );
+            ::tools::Rectangle aRect( pClone->GetSnapRect() );
 
             switch( eBA )
             {

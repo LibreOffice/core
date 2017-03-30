@@ -145,7 +145,7 @@ SdrObjUserCall::~SdrObjUserCall()
 {
 }
 
-void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*/, const Rectangle& /*rOldBoundRect*/)
+void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*/, const tools::Rectangle& /*rOldBoundRect*/)
 {
 }
 
@@ -284,7 +284,7 @@ void SdrObject::ActionChanged() const
 
 void SdrObject::SetBoundRectDirty()
 {
-    aOutRect = Rectangle();
+    aOutRect = tools::Rectangle();
 }
 
 
@@ -826,7 +826,7 @@ void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 // expensive and sometimes problematic (inside a bigger object change you will get
 // non-useful BoundRects sometimes) I rename that method from GetBoundRect() to
 // GetCurrentBoundRect().
-const Rectangle& SdrObject::GetCurrentBoundRect() const
+const tools::Rectangle& SdrObject::GetCurrentBoundRect() const
 {
     if(aOutRect.IsEmpty())
     {
@@ -840,7 +840,7 @@ const Rectangle& SdrObject::GetCurrentBoundRect() const
 // the first rectangle for repaints (old and new need to be used) without forcing
 // a RecalcBoundRect (which may be problematical and expensive sometimes) I add here
 // a new method for accessing the last BoundRect.
-const Rectangle& SdrObject::GetLastBoundRect() const
+const tools::Rectangle& SdrObject::GetLastBoundRect() const
 {
     return aOutRect;
 }
@@ -864,7 +864,7 @@ void SdrObject::RecalcBoundRect()
 
             if(!aRange.isEmpty())
             {
-                aOutRect = Rectangle(
+                aOutRect = tools::Rectangle(
                     static_cast<long>(floor(aRange.getMinX())),
                     static_cast<long>(floor(aRange.getMinY())),
                     static_cast<long>(ceil(aRange.getMaxX())),
@@ -1061,7 +1061,7 @@ OUString SdrObject::GetMetrStr(long nVal) const
 basegfx::B2DPolyPolygon SdrObject::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval;
-    const Rectangle aR(GetCurrentBoundRect());
+    const tools::Rectangle aR(GetCurrentBoundRect());
     const basegfx::B2DRange aRange(aR.Left(), aR.Top(), aR.Right(), aR.Bottom());
     aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
 
@@ -1163,7 +1163,7 @@ sal_uInt32 SdrObject::GetHdlCount() const
 SdrHdl* SdrObject::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pH=nullptr;
-    const Rectangle& rR=GetSnapRect();
+    const tools::Rectangle& rR=GetSnapRect();
     switch (nHdlNum) {
         case 0: pH=new SdrHdl(rR.TopLeft(),     SdrHdlKind::UpperLeft); break;
         case 1: pH=new SdrHdl(rR.TopCenter(),   SdrHdlKind::Upper); break;
@@ -1204,10 +1204,10 @@ void SdrObject::addCropHandles(SdrHdlList& /*rTarget*/) const
     // SdrGrafObj and SwVirtFlyDrawObj
 }
 
-Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
+tools::Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
-    Rectangle aTmpRect(GetSnapRect());
-    Rectangle aRect(aTmpRect);
+    tools::Rectangle aTmpRect(GetSnapRect());
+    tools::Rectangle aRect(aTmpRect);
     const SdrHdl* pHdl=rDrag.GetHdl();
     SdrHdlKind eHdl=pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind();
     bool bEcke=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::LowerLeft || eHdl==SdrHdlKind::LowerRight);
@@ -1308,7 +1308,7 @@ bool SdrObject::beginSpecialDrag(SdrDragStat& rDrag) const
 
 bool SdrObject::applySpecialDrag(SdrDragStat& rDrag)
 {
-    Rectangle aNewRect(ImpDragCalcRect(rDrag));
+    tools::Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
     if(aNewRect != GetSnapRect())
     {
@@ -1334,7 +1334,7 @@ basegfx::B2DPolyPolygon SdrObject::getSpecialDragPoly(const SdrDragStat& /*rDrag
 bool SdrObject::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
-    Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
+    tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     aOutRect = aRect1;
@@ -1369,7 +1369,7 @@ bool SdrObject::BckCreate(SdrDragStat& /*rStat*/)
 
 basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
-    Rectangle aRect1;
+    tools::Rectangle aRect1;
     rDrag.TakeCreateRect(aRect1);
     aRect1.Justify();
 
@@ -1416,7 +1416,7 @@ void SdrObject::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
     aOutRect.Move(-rRef.X(),-rRef.Y());
-    Rectangle R(aOutRect);
+    tools::Rectangle R(aOutRect);
     if (sn==1.0 && cs==0.0) { // 90deg
         aOutRect.Left()  =-R.Bottom();
         aOutRect.Right() =-R.Top();
@@ -1444,7 +1444,7 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
     aOutRect.Move(-rRef1.X(),-rRef1.Y());
-    Rectangle R(aOutRect);
+    tools::Rectangle R(aOutRect);
     long dx=rRef2.X()-rRef1.X();
     long dy=rRef2.Y()-rRef1.Y();
     if (dx==0) {          // vertical axis
@@ -1481,7 +1481,7 @@ void SdrObject::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear
 void SdrObject::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcMove(rSiz);
         SetChanged();
         BroadcastObjectChange();
@@ -1503,7 +1503,7 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
             mpImpl->meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
             mpImpl->mnRelativeHeight.reset();
         }
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcResize(rRef,xFact,yFact);
         SetChanged();
         BroadcastObjectChange();
@@ -1513,7 +1513,7 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
 
 void SdrObject::Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcCrop(rRef, xFact, yFact);
     SetChanged();
     BroadcastObjectChange();
@@ -1523,7 +1523,7 @@ void SdrObject::Crop(const Point& rRef, const Fraction& xFact, const Fraction& y
 void SdrObject::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     if (nAngle!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcRotate(rRef,nAngle,sn,cs);
         SetChanged();
         BroadcastObjectChange();
@@ -1533,7 +1533,7 @@ void SdrObject::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 
 void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcMirror(rRef1,rRef2);
     SetChanged();
     BroadcastObjectChange();
@@ -1543,7 +1543,7 @@ void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
 void SdrObject::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     if (nAngle!=0) {
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcShear(rRef,nAngle,tn,bVShear);
         SetChanged();
         BroadcastObjectChange();
@@ -1561,7 +1561,7 @@ void SdrObject::NbcSetRelativePos(const Point& rPnt)
 void SdrObject::SetRelativePos(const Point& rPnt)
 {
     if (rPnt!=GetRelativePos()) {
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetRelativePos(rPnt);
         SetChanged();
         BroadcastObjectChange();
@@ -1589,7 +1589,7 @@ void SdrObject::NbcSetAnchorPos(const Point& rPnt)
 void SdrObject::SetAnchorPos(const Point& rPnt)
 {
     if (rPnt!=aAnchor) {
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetAnchorPos(rPnt);
         SetChanged();
         BroadcastObjectChange();
@@ -1606,43 +1606,43 @@ void SdrObject::RecalcSnapRect()
 {
 }
 
-const Rectangle& SdrObject::GetSnapRect() const
+const tools::Rectangle& SdrObject::GetSnapRect() const
 {
     return aOutRect;
 }
 
-void SdrObject::NbcSetSnapRect(const Rectangle& rRect)
+void SdrObject::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     aOutRect=rRect;
 }
 
-const Rectangle& SdrObject::GetLogicRect() const
+const tools::Rectangle& SdrObject::GetLogicRect() const
 {
     return GetSnapRect();
 }
 
-void SdrObject::NbcSetLogicRect(const Rectangle& rRect)
+void SdrObject::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     NbcSetSnapRect(rRect);
 }
 
-void SdrObject::AdjustToMaxRect( const Rectangle& rMaxRect, bool /* bShrinkOnly = false */ )
+void SdrObject::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool /* bShrinkOnly = false */ )
 {
     SetLogicRect( rMaxRect );
 }
 
-void SdrObject::SetSnapRect(const Rectangle& rRect)
+void SdrObject::SetSnapRect(const tools::Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetSnapRect(rRect);
     SetChanged();
     BroadcastObjectChange();
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrObject::SetLogicRect(const Rectangle& rRect)
+void SdrObject::SetLogicRect(const tools::Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetLogicRect(rRect);
     SetChanged();
     BroadcastObjectChange();
@@ -1686,7 +1686,7 @@ Point SdrObject::GetPoint(sal_uInt32 /*i*/) const
 
 void SdrObject::SetPoint(const Point& rPnt, sal_uInt32 i)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetPoint(rPnt, i);
     SetChanged();
     BroadcastObjectChange();
@@ -1763,7 +1763,7 @@ void SdrObject::EndTextEdit(SdrOutliner& /*rOutl*/)
 
 void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetOutlinerParaObject(pTextObject);
     SetChanged();
     BroadcastObjectChange();
@@ -1787,7 +1787,7 @@ void SdrObject::NbcReformatText()
 
 void SdrObject::ReformatText()
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcReformatText();
     SetChanged();
     BroadcastObjectChange();
@@ -1821,7 +1821,7 @@ Pointer SdrObject::GetMacroPointer(const SdrObjMacroHitRec&) const
     return Pointer(PointerStyle::RefHand);
 }
 
-void SdrObject::PaintMacro(OutputDevice& rOut, const Rectangle& , const SdrObjMacroHitRec& ) const
+void SdrObject::PaintMacro(OutputDevice& rOut, const tools::Rectangle& , const SdrObjMacroHitRec& ) const
 {
     const RasterOp eRop(rOut.GetRasterOp());
     const basegfx::B2DPolyPolygon aPolyPolygon(TakeXorPoly());
@@ -1920,7 +1920,7 @@ SdrObjGeoData* SdrObject::GetGeoData() const
 
 void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     RestGeoData(rGeo);
     SetChanged();
     BroadcastObjectChange();
@@ -1987,7 +1987,7 @@ void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClear
 
 void SdrObject::ApplyNotPersistAttr(const SfxItemSet& rAttr)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcApplyNotPersistAttr(rAttr);
     SetChanged();
     BroadcastObjectChange();
@@ -1996,8 +1996,8 @@ void SdrObject::ApplyNotPersistAttr(const SfxItemSet& rAttr)
 
 void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
 {
-    const Rectangle& rSnap=GetSnapRect();
-    const Rectangle& rLogic=GetLogicRect();
+    const tools::Rectangle& rSnap=GetSnapRect();
+    const tools::Rectangle& rLogic=GetLogicRect();
     Point aRef1(rSnap.Center());
     Point aRef2(aRef1); aRef2.Y()++;
     const SfxPoolItem *pPoolItem=nullptr;
@@ -2014,7 +2014,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         aRef2.Y()=static_cast<const SdrTransformRef2YItem*>(pPoolItem)->GetValue();
     }
 
-    Rectangle aNewSnap(rSnap);
+    tools::Rectangle aNewSnap(rSnap);
     if (rAttr.GetItemState(SDRATTR_MOVEX,true,&pPoolItem)==SfxItemState::SET) {
         long n=static_cast<const SdrMoveXItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(n,0);
@@ -2127,7 +2127,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         OUString aName=static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
         SetName(aName);
     }
-    Rectangle aNewLogic(rLogic);
+    tools::Rectangle aNewLogic(rLogic);
     if (rAttr.GetItemState(SDRATTR_LOGICSIZEWIDTH,true,&pPoolItem)==SfxItemState::SET) {
         long n=static_cast<const SdrLogicSizeWidthItem*>(pPoolItem)->GetValue();
         aNewLogic.Right()=aNewLogic.Left()+n;
@@ -2160,8 +2160,8 @@ static void lcl_SetItem(SfxItemSet& rAttr, bool bMerge, const SfxPoolItem& rItem
 
 void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr) const
 {
-    const Rectangle& rSnap=GetSnapRect();
-    const Rectangle& rLogic=GetLogicRect();
+    const tools::Rectangle& rSnap=GetSnapRect();
+    const tools::Rectangle& rLogic=GetLogicRect();
     lcl_SetItem(rAttr,false,SdrYesNoItem(SDRATTR_OBJMOVEPROTECT, IsMoveProtect()));
     lcl_SetItem(rAttr,false,SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, IsResizeProtect()));
     lcl_SetItem(rAttr,false,SdrObjPrintableItem(IsPrintable()));
@@ -2208,7 +2208,7 @@ SfxStyleSheet* SdrObject::GetStyleSheet() const
 
 void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
 {
-    Rectangle aBoundRect0;
+    tools::Rectangle aBoundRect0;
 
     if(pUserCall)
         aBoundRect0 = GetLastBoundRect();
@@ -2239,7 +2239,7 @@ bool SdrObject::IsNode() const
 SdrGluePoint SdrObject::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
     // #i41936# Use SnapRect for default GluePoints
-    const Rectangle aR(GetSnapRect());
+    const tools::Rectangle aR(GetSnapRect());
     Point aPt;
 
     switch(nPosNum)
@@ -2259,7 +2259,7 @@ SdrGluePoint SdrObject::GetVertexGluePoint(sal_uInt16 nPosNum) const
 
 SdrGluePoint SdrObject::GetCornerGluePoint(sal_uInt16 nPosNum) const
 {
-    Rectangle aR(GetCurrentBoundRect());
+    tools::Rectangle aR(GetCurrentBoundRect());
     Point aPt;
     switch (nPosNum) {
         case 0 : aPt=aR.TopLeft();     break;
@@ -2622,7 +2622,7 @@ void SdrObject::SetInserted(bool bIns)
 {
     if (bIns!=IsInserted()) {
         bInserted=bIns;
-        Rectangle aBoundRect0(GetLastBoundRect());
+        tools::Rectangle aBoundRect0(GetLastBoundRect());
         if (bIns) SendUserCall(SdrUserCallType::Inserted,aBoundRect0);
         else SendUserCall(SdrUserCallType::Removed,aBoundRect0);
 
@@ -2731,7 +2731,7 @@ void SdrObject::SetUserCall(SdrObjUserCall* pUser)
 }
 
 
-void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect) const
+void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& rBoundRect) const
 {
     SdrObject* pGroup = nullptr;
 
@@ -2936,7 +2936,7 @@ void SdrObject::notifyShapePropertyChange( const svx::ShapeProperty _eProperty )
 bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // any kind of SdrObject, just use SnapRect
-    Rectangle aRectangle(GetSnapRect());
+    tools::Rectangle aRectangle(GetSnapRect());
 
     // convert to transformation values
     basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());
@@ -3037,7 +3037,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
 
     // build BaseRect
     Point aPoint(FRound(aTranslate.getX()), FRound(aTranslate.getY()));
-    Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
+    tools::Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
 
     // set BaseRect
     SetSnapRect(aBaseRect);
@@ -3070,7 +3070,7 @@ bool SdrObject::HasLineStyle() const
 // might be resized
 
 
-void SdrObject::SetBLIPSizeRectangle( const Rectangle& aRect )
+void SdrObject::SetBLIPSizeRectangle( const tools::Rectangle& aRect )
 {
     maBLIPSizeRectangle = aRect;
 }
@@ -3189,7 +3189,7 @@ SdrObject* SdrObjFactory::MakeNewObject(SdrInventor nInvent, sal_uInt16 nIdent, 
 }
 
 SdrObject* SdrObjFactory::MakeNewObject(
-    SdrInventor nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage )
+    SdrInventor nInventor, sal_uInt16 nIdentifier, const tools::Rectangle& rSnapRect, SdrPage* pPage )
 {
     SdrModel* pModel = pPage ? pPage->GetModel() : nullptr;
 

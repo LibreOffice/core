@@ -1619,7 +1619,7 @@ ScDocShell::PrepareSaveGuard::PrepareSaveGuard( ScDocShell& rDocShell )
         }
     }
     if (mrDocShell.GetCreateMode()== SfxObjectCreateMode::STANDARD)
-        mrDocShell.SfxObjectShell::SetVisArea( Rectangle() );   // "Normally" worked on => no VisArea.
+        mrDocShell.SfxObjectShell::SetVisArea( tools::Rectangle() );   // "Normally" worked on => no VisArea.
 }
 
 ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
@@ -2231,7 +2231,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow(); // Execute template timeouts now
     if (GetCreateMode()== SfxObjectCreateMode::STANDARD)
-        SfxObjectShell::SetVisArea( Rectangle() ); // Edited normally -> no VisArea
+        SfxObjectShell::SetVisArea( tools::Rectangle() ); // Edited normally -> no VisArea
 
     OSL_ENSURE( rMed.GetFilter(), "Filter == 0" );
 

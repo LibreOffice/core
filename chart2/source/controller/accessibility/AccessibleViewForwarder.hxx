@@ -37,7 +37,7 @@ public:
     virtual ~AccessibleViewForwarder() override;
 
     // ________ IAccessibleViewforwarder ________
-    virtual Rectangle GetVisibleArea() const override;
+    virtual tools::Rectangle GetVisibleArea() const override;
     virtual Point LogicToPixel( const Point& rPoint ) const override;
     virtual Size LogicToPixel( const Size& rSize ) const override;
 

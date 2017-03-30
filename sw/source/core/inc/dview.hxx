@@ -92,8 +92,8 @@ public:
 
     virtual void         ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
                                             sal_uLong nNewPos ) override;
-    virtual bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const override;
-    virtual void MakeVisible( const Rectangle&, vcl::Window &rWin ) override;
+    virtual bool TakeDragLimit(SdrDragMode eMode, tools::Rectangle& rRect) const override;
+    virtual void MakeVisible( const tools::Rectangle&, vcl::Window &rWin ) override;
     virtual void CheckPossibilities() override;
 
     const SwViewShellImp &Imp() const { return rImp; }

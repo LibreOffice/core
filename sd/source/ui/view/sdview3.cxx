@@ -114,11 +114,11 @@ SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContaine
 }
 
 // restrict movement to WorkArea
-void ImpCheckInsertPos(Point& rPos, const Size& rSize, const Rectangle& rWorkArea)
+void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rectangle& rWorkArea)
 {
     if(!rWorkArea.IsEmpty())
     {
-        Rectangle aMarkRect(Point(rPos.X() - (rSize.Width() / 2), rPos.Y() - (rSize.Height() / 2)), rSize);
+        ::tools::Rectangle aMarkRect(Point(rPos.X() - (rSize.Width() / 2), rPos.Y() - (rSize.Height() / 2)), rSize);
 
         if(!aMarkRect.IsInside(rWorkArea))
         {
@@ -465,7 +465,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 // source objects, if necessary (#103207)
                                 if( pOwnData == SD_MOD()->pTransferSelection )
                                 {
-                                    Rectangle aCurBoundRect;
+                                    ::tools::Rectangle aCurBoundRect;
 
                                     if( pMarkList->TakeBoundRect( pPV, aCurBoundRect ) )
                                         aCurPos = aCurBoundRect.TopLeft();
@@ -715,10 +715,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         {
                             // replace object
                             SdrObject*  pNewObj = pObj->Clone();
-                            Rectangle   aPickObjRect( pPickObj2->GetCurrentBoundRect() );
+                            ::tools::Rectangle   aPickObjRect( pPickObj2->GetCurrentBoundRect() );
                             Size        aPickObjSize( aPickObjRect.GetSize() );
                             Point       aVec( aPickObjRect.TopLeft() );
-                            Rectangle   aObjRect( pNewObj->GetCurrentBoundRect() );
+                            ::tools::Rectangle   aObjRect( pNewObj->GetCurrentBoundRect() );
                             Size        aObjSize( aObjRect.GetSize() );
 
                             Fraction aScaleWidth( aPickObjSize.Width(), aObjSize.Width() );
@@ -841,7 +841,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pObj )
             {
-                Rectangle   aRect( pObj->GetLogicRect() );
+                ::tools::Rectangle   aRect( pObj->GetLogicRect() );
                 Size        aSize( aRect.GetSize() );
 
                 maDropPos.X() -= ( aSize.Width() >> 1 );
@@ -994,7 +994,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     maDropPos.X() -= std::min( aSize.Width(), aMaxSize.Width() ) >> 1;
                     maDropPos.Y() -= std::min( aSize.Height(), aMaxSize.Height() ) >> 1;
 
-                    Rectangle       aRect( maDropPos, aSize );
+                    ::tools::Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
                     SdrPageView*    pPV = GetSdrPageView();
                     SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
@@ -1164,7 +1164,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     maDropPos.X() -= std::min( aSize.Width(), aMaxSize.Width() ) >> 1;
                     maDropPos.Y() -= std::min( aSize.Height(), aMaxSize.Height() ) >> 1;
 
-                    Rectangle       aRect( maDropPos, aSize );
+                    ::tools::Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
                     SdrPageView*    pPV = GetSdrPageView();
                     SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
@@ -1404,7 +1404,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pOLV )
             {
-                Rectangle   aRect( pOLV->GetOutputArea() );
+                ::tools::Rectangle   aRect( pOLV->GetOutputArea() );
                    Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
 
                 if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
@@ -1440,7 +1440,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if( pOLV )
                 {
-                    Rectangle   aRect( pOLV->GetOutputArea() );
+                    ::tools::Rectangle   aRect( pOLV->GetOutputArea() );
                        Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
 
                     if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )

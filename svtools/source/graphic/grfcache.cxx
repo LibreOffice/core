@@ -811,10 +811,10 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
     {
         if( maAttr.IsRotated() )
         {
-            tools::Polygon aPoly( Rectangle( rPt, rSz ) );
+            tools::Polygon aPoly( tools::Rectangle( rPt, rSz ) );
 
             aPoly.Rotate( rPt, maAttr.GetRotation() % 3600 );
-            const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+            const tools::Rectangle aRotBoundRect( aPoly.GetBoundRect() );
             pOut->DrawBitmapEx( aRotBoundRect.TopLeft(), aRotBoundRect.GetSize(), *mpBmpEx );
         }
         else

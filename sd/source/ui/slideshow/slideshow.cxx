@@ -987,7 +987,7 @@ bool SlideShow::keyInput(const KeyEvent& rKEvt)
     return mxController.is() && mxController->keyInput(rKEvt);
 }
 
-void SlideShow::paint( const Rectangle& rRect )
+void SlideShow::paint( const ::tools::Rectangle& rRect )
 {
     if( mxController.is() )
         mxController->paint( rRect );

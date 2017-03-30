@@ -119,7 +119,7 @@ public:
 
                             SdrGrafObj();
                             SdrGrafObj(const Graphic& rGrf);
-                            SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect);
+                            SdrGrafObj(const Graphic& rGrf, const tools::Rectangle& rRect);
     virtual                 ~SdrGrafObj() override;
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
@@ -190,7 +190,7 @@ public:
 
     virtual SdrObject*      DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
+    virtual void            AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

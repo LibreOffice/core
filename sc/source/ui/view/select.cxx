@@ -64,7 +64,7 @@ sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Poi
 {
     sal_uLong nUpdateInterval = SELENG_AUTOREPEAT_INTERVAL_MAX;
     vcl::Window* pWin = pEngine->GetWindow();
-    Rectangle aScrRect = pWin->GetDesktopRectPixel();
+    tools::Rectangle aScrRect = pWin->GetDesktopRectPixel();
     Point aRootPos = pWin->OutputToAbsoluteScreenPixel(Point(0,0));
     if (bRightScroll)
     {
@@ -318,7 +318,7 @@ bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     pViewData->GetPosFromPixel( aEffPos.X(), aEffPos.Y(), GetWhich(),
                                 nPosX, nPosY, true, true );     // with Repair
 
-    Rectangle aEditArea = pViewData->GetEditArea(GetWhich(), nPosX, nPosY,
+    tools::Rectangle aEditArea = pViewData->GetEditArea(GetWhich(), nPosX, nPosY,
                                                  pEngine->GetWindow(),
                                                  nullptr, false);
 

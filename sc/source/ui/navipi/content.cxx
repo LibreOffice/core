@@ -699,7 +699,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
                     aPos = OutputToScreenPixel(aPos);
                     Size aSize( pItem->GetSize( this, pEntry ) );
 
-                    Rectangle aItemRect( aPos, aSize );
+                    tools::Rectangle aItemRect( aPos, aSize );
                     Help::ShowQuickHelp( this, aItemRect, aHelpText );
                     bDone = true;
                 }

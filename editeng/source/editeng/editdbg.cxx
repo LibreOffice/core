@@ -465,7 +465,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         EditView* pV = pEE->GetView( nView );
         DBG_ASSERT( pV, "View not found!" );
         fprintf( fp, "\nView %zu: Focus=%i", nView, pV->GetWindow()->HasFocus() );
-        Rectangle aR( pV->GetOutputArea() );
+        tools::Rectangle aR( pV->GetOutputArea() );
         fprintf( fp, "\n  OutputArea: nX=%li, nY=%li, dX=%li, dY=%li, MapMode = %i", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() , int( pV->GetWindow()->GetMapMode().GetMapUnit() ) );
         aR = pV->GetVisArea();
         fprintf( fp, "\n  VisArea: nX=%li, nY=%li, dX=%li, dY=%li", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() );

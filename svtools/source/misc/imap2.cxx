@@ -270,7 +270,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  
             const Point     aTopLeft( ImpReadCERNCoords( &pStr ) );
             const Point     aBottomRight( ImpReadCERNCoords( &pStr ) );
             const OUString  aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
-            const Rectangle aRect( aTopLeft, aBottomRight );
+            const tools::Rectangle aRect( aTopLeft, aBottomRight );
 
             IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
@@ -411,7 +411,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
             const OUString  aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             const Point     aTopLeft( ImpReadNCSACoords( &pStr ) );
             const Point     aBottomRight( ImpReadNCSACoords( &pStr ) );
-            const Rectangle aRect( aTopLeft, aBottomRight );
+            const tools::Rectangle aRect( aTopLeft, aBottomRight );
 
             IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );

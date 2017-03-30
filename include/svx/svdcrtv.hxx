@@ -61,7 +61,7 @@ private:
 
 protected:
     bool ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
-        sal_Int16 nMinMov, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject);
+        sal_Int16 nMinMov, const tools::Rectangle& rLogRect, SdrObject* pPreparedFactoryObject);
 
     void ShowCreateObj(/*OutputDevice* pOut, bool bFull*/);
     void HideCreateObj(/*OutputDevice* pOut, bool bFull*/);
@@ -78,7 +78,7 @@ public:
     virtual void EndAction() override;
     virtual void BckAction() override;
     virtual void BrkAction() override;
-    virtual void TakeActionRect(Rectangle& rRect) const override;
+    virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
     virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) override;
 

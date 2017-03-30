@@ -116,7 +116,7 @@ private:
     TextSelection GetLastHighlightPortionTextSelection();
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
     virtual void    Resize() override;
     virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
@@ -175,7 +175,7 @@ private:
     void setBackgroundColor(Color aColor);
 
 protected:
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     BreakPoint*     FindBreakPoint( const Point& rMousePos );
     void ShowMarker(vcl::RenderContext& rRenderContext);
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -231,7 +231,7 @@ private:
 
 protected:
     virtual void    Resize() override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
     DECL_LINK( ButtonHdl, Button *, void );
     DECL_LINK(TreeListHdl, SvTreeListBox*, void);
@@ -258,7 +258,7 @@ private:
 
 protected:
     virtual void    Resize() override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
 public:
     explicit StackWindow (Layout* pParent);
@@ -316,7 +316,7 @@ private:
 protected:
     virtual void    Resize() override;
     virtual void    GetFocus() override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
     virtual void    DoInit() override;
     virtual void    DoScroll( ScrollBar* pCurScrollBar ) override;
 
@@ -432,7 +432,7 @@ public:
 
 protected:
     // Window:
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     // Layout:
     virtual void OnFirstSize (long nWidth, long nHeight) override;
 

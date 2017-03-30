@@ -214,11 +214,11 @@ protected:
     /** Derived classes return the bounding box relative to the parent window.
         @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) relative to the parent window. */
-    virtual Rectangle implGetBoundingBox() = 0;
+    virtual tools::Rectangle implGetBoundingBox() = 0;
     ///** Derived classes return the bounding box in screen coordinates.
     //    @attention  This method requires locked mutex's and a living object.
     //    @return  The bounding box (VCL rect.) in screen coordinates. */
-    virtual Rectangle implGetBoundingBoxOnScreen() = 0;
+    virtual tools::Rectangle implGetBoundingBoxOnScreen() = 0;
 
     /** Creates a new AccessibleStateSetHelper and fills it with states of the
         current object. This method calls FillStateSet at the GridControl which
@@ -242,12 +242,12 @@ protected:
         @return  The bounding box (VCL rect.) relative to the parent object.
         @throws css::lang::DisposedException
     */
-    Rectangle getBoundingBox();
+    tools::Rectangle getBoundingBox();
     ///** Locks all mutex's and calculates the bounding box in screen
     //    coordinates.
     //    @return  The bounding box (VCL rect.) in screen coordinates. */
     /// @throws css::lang::DisposedException
-    Rectangle getBoundingBoxOnScreen();
+    tools::Rectangle getBoundingBoxOnScreen();
 
     ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
     void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }

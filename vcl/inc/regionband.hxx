@@ -41,7 +41,7 @@ public:
     RegionBand();
     RegionBand(const RegionBand&);
     RegionBand& operator=(const RegionBand&);
-    RegionBand(const Rectangle&);
+    RegionBand(const tools::Rectangle&);
     ~RegionBand();
 
     bool operator==( const RegionBand& rRegionBand ) const;
@@ -70,7 +70,7 @@ public:
     void Intersect(const RegionBand& rSource);
     bool Exclude(const RegionBand& rSource);
     void XOr(const RegionBand& rSource);
-    Rectangle GetBoundRect() const;
+    tools::Rectangle GetBoundRect() const;
     bool IsInside(const Point& rPoint) const;
     sal_uInt32 getRectangleCount() const; // only users are Region::Intersect, Region::IsRectangle and PSWriter::ImplBmp
     void GetRegionRectangles(RectangleVector& rTarget) const;

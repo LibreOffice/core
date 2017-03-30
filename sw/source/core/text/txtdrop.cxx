@@ -753,7 +753,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
             // reset pCurrPart to first part
             pCurrPart = pDrop->GetPart();
             bool bFirstGlyphRect = true;
-            Rectangle aCommonRect, aRect;
+            tools::Rectangle aCommonRect, aRect;
 
             while ( pCurrPart )
             {
@@ -802,7 +802,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                     {
                         // We do not have a window or our window could not
                         // give us glyph boundaries.
-                        aRect = Rectangle( Point( 0, 0 ), Size( 0, nAscent ) );
+                        aRect = tools::Rectangle( Point( 0, 0 ), Size( 0, nAscent ) );
                     }
                 }
 

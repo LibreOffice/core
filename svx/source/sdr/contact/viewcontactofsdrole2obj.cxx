@@ -60,7 +60,7 @@ ViewContactOfSdrOle2Obj::~ViewContactOfSdrOle2Obj()
 basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
 {
     // take unrotated snap rect (direct model data) for position and size
-    Rectangle rRectangle = GetOle2Obj().GetGeoRect();
+    tools::Rectangle rRectangle = GetOle2Obj().GetGeoRect();
     // Hack for calc, transform position of object according
     // to current zoom so as objects relative position to grid
     // appears stable

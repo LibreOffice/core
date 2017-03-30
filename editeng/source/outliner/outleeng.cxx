@@ -64,9 +64,9 @@ const SvxNumberFormat* OutlinerEditEng::GetNumberFormat( sal_Int32 nPara ) const
 }
 
 
-Rectangle OutlinerEditEng::GetBulletArea( sal_Int32 nPara )
+tools::Rectangle OutlinerEditEng::GetBulletArea( sal_Int32 nPara )
 {
-    Rectangle aBulletArea = Rectangle( Point(), Point() );
+    tools::Rectangle aBulletArea = tools::Rectangle( Point(), Point() );
     if ( nPara < pOwner->pParaList->GetParagraphCount() )
     {
         if ( pOwner->ImplHasNumberFormat( nPara ) )

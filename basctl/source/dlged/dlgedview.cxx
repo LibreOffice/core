@@ -53,14 +53,14 @@ void DlgEdView::MarkListHasChanged()
     rDlgEditor.UpdatePropertyBrowserDelayed();
 }
 
-void DlgEdView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
+void DlgEdView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin )
 {
     // visible area
     MapMode aMap( rWin.GetMapMode() );
     Point aOrg( aMap.GetOrigin() );
     Size aVisSize( rWin.GetOutputSize() );
-    Rectangle RectTmp( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
-    Rectangle aVisRect( RectTmp );
+    tools::Rectangle RectTmp( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
+    tools::Rectangle aVisRect( RectTmp );
 
     // check, if rectangle is inside visible area
     if ( !aVisRect.IsInside( rRect ) )
@@ -144,7 +144,7 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
         {
             // use direct model data; it's a DlgEdObj, so GetLastBoundRect()
             // will access aOutRect directly
-            const Rectangle aOuterRectangle(pDlgEdObj->GetLastBoundRect());
+            const tools::Rectangle aOuterRectangle(pDlgEdObj->GetLastBoundRect());
 
             if(!aOuterRectangle.IsEmpty())
             {

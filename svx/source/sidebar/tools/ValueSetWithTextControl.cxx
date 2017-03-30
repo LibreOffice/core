@@ -53,7 +53,7 @@ void ValueSetWithTextControl::AddItem(
 
 void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    const Rectangle aRect = rUDEvt.GetRect();
+    const tools::Rectangle aRect = rUDEvt.GetRect();
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     pDev->Push();
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
@@ -71,7 +71,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         //draw background
         if ( GetSelectItemId() == nItemId )
         {
-            Rectangle aBackRect = aRect;
+            tools::Rectangle aBackRect = aRect;
             aBackRect.Top() += 3;
             aBackRect.Bottom() -= 2;
             pDev->SetFillColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_Highlight ) );
@@ -92,7 +92,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
             aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
         }
 
-        Rectangle aStrRect = aRect;
+        tools::Rectangle aStrRect = aRect;
         aStrRect.Top() += nRectHeight/4;
         aStrRect.Bottom() -= nRectHeight/4;
 

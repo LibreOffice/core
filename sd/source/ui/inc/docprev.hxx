@@ -43,7 +43,7 @@ protected:
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
     virtual Size    GetOptimalSize() const override;
     static void     CalcSizeAndPos( Size& rSize, Point& rPoint );
     static void     ImpPaint( OutputDevice* pVDev );

@@ -274,7 +274,7 @@ private:
 
     bool SVT_DLLPRIVATE     ImplDrawTiled(
                                 OutputDevice* pOut,
-                                const Rectangle& rArea,
+                                const tools::Rectangle& rArea,
                                 const Size& rSizePixel,
                                 const Size& rOffset,
                                 const GraphicAttr* pAttr,
@@ -297,7 +297,7 @@ private:
                                 const GraphicAttr&  rAttr,
                                 const Size&         rCropLeftTop,
                                 const Size&         rCropRightBottom,
-                                const Rectangle&    rCropRect,
+                                const tools::Rectangle&    rCropRect,
                                 const Size&         rDstSize,
                                 bool                bEnlarge
                             ) const;
@@ -449,7 +449,7 @@ public:
      */
     void                    DrawTiled(
                                 OutputDevice* pOut,
-                                const Rectangle& rArea,
+                                const tools::Rectangle& rArea,
                                 const Size& rSize,
                                 const Size& rOffset,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD,

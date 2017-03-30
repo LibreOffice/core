@@ -294,7 +294,7 @@ namespace svt
     }
 
 
-    void CheckBoxControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rClientRect)
+    void CheckBoxControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rClientRect)
     {
         Control::Paint(rRenderContext, rClientRect);
         if (HasFocus())

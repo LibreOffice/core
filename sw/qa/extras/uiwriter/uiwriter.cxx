@@ -3213,7 +3213,7 @@ void SwUiWriterTest::testShapeAnchorUndo()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
-    Rectangle aOrigLogicRect(pObject->GetLogicRect());
+    tools::Rectangle aOrigLogicRect(pObject->GetLogicRect());
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     rUndoManager.StartUndo(SwUndoId::START, nullptr);

@@ -869,10 +869,10 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
     }
     else
     {
-        ::Rectangle aLeft(
+        ::tools::Rectangle aLeft(
             m_rEngine.PaMtoEditCursor(::TextPaM(nNumber, nIndex)));
             // XXX  numeric overflow
-        ::Rectangle aRight(
+        ::tools::Rectangle aRight(
             m_rEngine.PaMtoEditCursor(::TextPaM(nNumber, nIndex + 1)));
             // XXX  numeric overflow (2x)
         // FIXME  If the vertical extends of the two cursors do not match, assume

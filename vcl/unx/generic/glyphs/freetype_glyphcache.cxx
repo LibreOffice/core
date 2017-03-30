@@ -650,7 +650,7 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
     FT_BBox aBbox;
     FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
 
-    rGD.SetBoundRect(Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin));
+    rGD.SetBoundRect(tools::Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin));
 
     FT_Done_Glyph( pGlyphFT );
 }

@@ -40,7 +40,7 @@ public:
      * Paint the ruler.
      * \param rRect ignored
      */
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
 protected:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
@@ -82,7 +82,7 @@ protected:
      * It is horizontally aligned to the SideBar panel.
      * \return The area where the comment control is.
      */
-    Rectangle GetCommentControlRegion();
+    tools::Rectangle GetCommentControlRegion();
 
     /**
      * Paint the comment control on VirtualDevice.

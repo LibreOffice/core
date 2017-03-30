@@ -223,8 +223,8 @@ namespace {
 
                 // get hairline and full bound rect to evtl. reduce given target pixel size when
                 // it is known that it will be expanded to get the right and bottom hairlines right
-                Rectangle aHairlineRect;
-                const Rectangle aRect(rMtf.GetBoundRect(*Application::GetDefaultDevice(), &aHairlineRect));
+                tools::Rectangle aHairlineRect;
+                const tools::Rectangle aRect(rMtf.GetBoundRect(*Application::GetDefaultDevice(), &aHairlineRect));
 
                 if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
                 {
@@ -432,7 +432,7 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
         pView->SetHlplVisible( false );
         pView->SetGlueVisible( false );
         pView->ShowSdrPage(pPage);
-        vcl::Region aRegion (Rectangle( aPoint, aPageSize ) );
+        vcl::Region aRegion (tools::Rectangle( aPoint, aPageSize ) );
 
         ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
@@ -636,7 +636,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 
             if(pCorrectProperties)
             {
-                pTempBackgroundShape = new SdrRectObj(Rectangle(Point(0,0), pPage->GetSize()));
+                pTempBackgroundShape = new SdrRectObj(tools::Rectangle(Point(0,0), pPage->GetSize()));
                 pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
                 pTempBackgroundShape->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
                 pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
@@ -740,7 +740,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
                 aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
                                  aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
-                const Rectangle aClipRect( aNewOrg, aNewSize );
+                const tools::Rectangle aClipRect( aNewOrg, aNewSize );
                 MapMode         aVMap( aMap );
 
                 aVDev->Push();
@@ -751,7 +751,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 // Use new StandardCheckVisisbilityRedirector
                 ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-                pView->CompleteRedraw(aVDev, vcl::Region(Rectangle(aNewOrg, aNewSize)), &aRedirector);
+                pView->CompleteRedraw(aVDev, vcl::Region(tools::Rectangle(aNewOrg, aNewSize)), &aRedirector);
 
                 aVDev->Pop();
 
@@ -849,8 +849,8 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 if( pObj && dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr
                     && static_cast<SdrTextObj*>(pObj)->HasText() )
                 {
-                    Rectangle aScrollRectangle;
-                    Rectangle aPaintRectangle;
+                    tools::Rectangle aScrollRectangle;
+                    tools::Rectangle aPaintRectangle;
 
                     const std::unique_ptr< GDIMetaFile > pMtf(
                         static_cast<SdrTextObj*>(pObj)->GetTextScrollMetaFileAndRectangle(
@@ -859,7 +859,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     // take the larger one of the two rectangles (that
                     // should be the bound rect of the retrieved
                     // metafile)
-                    Rectangle aTextRect;
+                    tools::Rectangle aTextRect;
 
                     if( aScrollRectangle.IsInside( aPaintRectangle ) )
                         aTextRect = aScrollRectangle;
@@ -880,11 +880,11 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     pMtf->AddAction( new MetaCommentAction(
                                          "XTEXT_SCROLLRECT", 0,
                                          reinterpret_cast<sal_uInt8 const*>(&aScrollRectangle),
-                                         sizeof( Rectangle ) ) );
+                                         sizeof( tools::Rectangle ) ) );
                     pMtf->AddAction( new MetaCommentAction(
                                          "XTEXT_PAINTRECT", 0,
                                          reinterpret_cast<sal_uInt8 const*>(&aPaintRectangle),
-                                         sizeof( Rectangle ) ) );
+                                         sizeof( tools::Rectangle ) ) );
 
                     aGraphic = Graphic( *pMtf );
 
@@ -899,7 +899,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             ScopedVclPtrInstance< VirtualDevice > aOut;
 
             // calculate bound rect for all shapes
-            Rectangle aBound;
+            tools::Rectangle aBound;
 
             {
                 std::vector< SdrObject* >::iterator aIter = aShapes.begin();
@@ -908,7 +908,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 while( aIter != aEnd )
                 {
                     SdrObject* pObj = (*aIter++);
-                    Rectangle aR1(pObj->GetCurrentBoundRect());
+                    tools::Rectangle aR1(pObj->GetCurrentBoundRect());
                     if (aBound.IsEmpty())
                         aBound=aR1;
                     else

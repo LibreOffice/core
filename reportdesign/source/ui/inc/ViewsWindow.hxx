@@ -44,13 +44,13 @@ namespace rptui
     class OSectionView;
 
 
-    struct RectangleLess : public ::std::binary_function< Rectangle, Rectangle, bool>
+    struct RectangleLess : public ::std::binary_function< tools::Rectangle, tools::Rectangle, bool>
     {
         enum CompareMode { POS_LEFT,POS_RIGHT,POS_UPPER,POS_DOWN,POS_CENTER_HORIZONTAL,POS_CENTER_VERTICAL };
         CompareMode m_eCompareMode;
         Point       m_aRefPoint;
         RectangleLess(CompareMode _eCompareMode,const Point& _rRefPoint ) : m_eCompareMode(_eCompareMode),m_aRefPoint(_rRefPoint){}
-        bool operator() (const Rectangle& lhs, const Rectangle& rhs) const
+        bool operator() (const tools::Rectangle& lhs, const tools::Rectangle& rhs) const
         {
             switch(m_eCompareMode)
             {
@@ -75,7 +75,7 @@ namespace rptui
                         ,   public utl::ConfigurationListener
                         ,   public IMarkedSection
     {
-        typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
+        typedef ::std::multimap<tools::Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
     public:
         typedef ::std::vector< VclPtr<OSectionWindow> >                                TSectionsMap;
 
@@ -91,7 +91,7 @@ namespace rptui
         */
         TSectionsMap::iterator getIteratorAtPos(sal_uInt16 _nPos);
         void collectRectangles(TRectangleMap& _rMap);
-        static void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,Rectangle& _rBound,Rectangle& _rResize);
+        static void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,tools::Rectangle& _rBound,tools::Rectangle& _rResize);
         void impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet);
 
         OViewsWindow(OViewsWindow&) = delete;
@@ -102,7 +102,7 @@ namespace rptui
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-        virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
+        virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
         virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
     public:
         OViewsWindow(
@@ -241,7 +241,7 @@ namespace rptui
         void BegMarkObj(const Point& _aPnt,const OSectionView* _pSection);
 
     private:
-        void BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView& _rSection);
+        void BegDragObj_createInvisibleObjectAtPosition(const tools::Rectangle& _aRect, const OSectionView& _rSection);
         void EndDragObj_removeInvisibleObjects();
         Point m_aDragDelta;
         ::std::vector<SdrObject*> m_aBegDragTempList;

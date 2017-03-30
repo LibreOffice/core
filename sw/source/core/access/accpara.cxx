@@ -1389,7 +1389,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
 
         SwRect aTmpRect(0, 0, tabs[0].Position, 0);
 
-        Rectangle aScreenRect( GetMap()->CoreToPixel( aTmpRect.SVRect() ));
+        tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aTmpRect.SVRect() ));
         SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
 
         Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds.SVRect() ).TopLeft() );
@@ -2372,7 +2372,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
+    tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
     SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
 
     Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds.SVRect() ).TopLeft() );
@@ -3551,7 +3551,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
                     throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
                 }
 
-                Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect.SVRect() ));
+                tools::Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect.SVRect() ));
 
                 SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
                 Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds.SVRect() ).TopLeft() );

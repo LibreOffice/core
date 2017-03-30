@@ -141,7 +141,7 @@ private:
     SwXTextDocument* createDoc(const char* pName = nullptr);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
-    Rectangle m_aInvalidation;
+    tools::Rectangle m_aInvalidation;
     Size m_aDocumentSize;
     OString m_aTextSelection;
     bool m_bFound;
@@ -277,7 +277,7 @@ void SwTiledRenderingTest::testRegisterCallback()
 
     // Check that the top left 256x256px tile would be invalidated.
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
-    Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
+    tools::Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
     comphelper::LibreOfficeKit::setActive(false);
 }
@@ -388,11 +388,11 @@ void SwTiledRenderingTest::testSetGraphicSelection()
     // Take the bottom center one.
     SdrHdl* pHdl = pObject->GetHdl(6);
     CPPUNIT_ASSERT_EQUAL((int)SdrHdlKind::Lower, (int)pHdl->GetKind());
-    Rectangle aShapeBefore = pObject->GetSnapRect();
+    tools::Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
     pXTextDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, pHdl->GetPos().getX(), pHdl->GetPos().getY());
     pXTextDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, pHdl->GetPos().getX(), pHdl->GetPos().getY() + 1000);
-    Rectangle aShapeAfter = pObject->GetSnapRect();
+    tools::Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getHeight() + 1000, aShapeAfter.getHeight());
@@ -646,9 +646,9 @@ class ViewCallback
 public:
     bool m_bOwnCursorInvalidated;
     bool m_bOwnCursorAtOrigin;
-    Rectangle m_aOwnCursor;
+    tools::Rectangle m_aOwnCursor;
     bool m_bViewCursorInvalidated;
-    Rectangle m_aViewCursor;
+    tools::Rectangle m_aViewCursor;
     bool m_bOwnSelectionSet;
     bool m_bViewSelectionSet;
     OString m_aViewSelection;
@@ -1305,7 +1305,7 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering({});
     ViewCallback aView2;
-    aView2.m_aViewCursor = Rectangle();
+    aView2.m_aViewCursor = tools::Rectangle();
     aView2.m_bViewSelectionSet = false;
     aView2.m_bViewLock = false;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
@@ -1570,7 +1570,7 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Rectangle aBodyCursor = aView1.m_aOwnCursor;
+    tools::Rectangle aBodyCursor = aView1.m_aOwnCursor;
 
     // Create a comment and type a character there as well.
     const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';

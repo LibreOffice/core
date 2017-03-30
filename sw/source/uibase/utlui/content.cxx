@@ -2486,7 +2486,7 @@ void SwContentTree::ShowTree()
 }
 
 void SwContentTree::Paint( vcl::RenderContext& rRenderContext,
-                           const Rectangle& rRect )
+                           const tools::Rectangle& rRect )
 {
     // Start the update timer on the first paint; avoids
     // flicker on the first reveal.
@@ -2947,7 +2947,7 @@ void SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                         aSize.Width() = GetSizePixel().Width() - aPos.X();
 
                     aPos = OutputToScreenPixel(aPos);
-                    Rectangle aItemRect( aPos, aSize );
+                    tools::Rectangle aItemRect( aPos, aSize );
                     if(bBalloon)
                     {
                         aPos.X() += aSize.Width();
@@ -2961,7 +2961,7 @@ void SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             }
             else
             {
-                Help::ShowQuickHelp( this, Rectangle(), OUString() );
+                Help::ShowQuickHelp( this, tools::Rectangle(), OUString() );
                 bCallBase = false;
             }
         }

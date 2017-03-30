@@ -214,7 +214,7 @@ public:
 
     protected:
         virtual void Resize() override;
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void StateChanged( StateChangedType nType ) override;
 
     private:
@@ -307,7 +307,7 @@ protected:
 protected:
     virtual bool SeekRow(long nRow) override;
     virtual void VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows) override;
-    virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const override;
+    virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const override;
     virtual RowStatus GetRowStatus(long nRow) const override;
     virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) override;
     virtual void CursorMoved() override;

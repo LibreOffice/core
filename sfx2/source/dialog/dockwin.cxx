@@ -652,7 +652,7 @@ void SfxDockingWindow::StartDocking()
     is used, the behavior can be influenced by the derived classes (see below).
     This method should if possible not be overwritten.
 */
-bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
+bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
 {
     if ( Application::IsInModalMode() )
         return true;
@@ -749,7 +749,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     the parent window. If this method is overridden by a derived class, then
     SfxDockingWindow::EndDocking() must be called first.
 */
-void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
+void SfxDockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
 {
     if ( !pImpl || !pImpl->bConstructed || IsDockingCanceled() || !pMgr )
         return;
@@ -1152,7 +1152,7 @@ void SfxDockingWindow::ReleaseChildWindow_Impl()
 
     is overridden (see below).
 */
-SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& rRect)
+SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rectangle& rRect)
 {
     // calculate hypothetical sizes for different modes
     Size aFloatingSize(CalcDockingSize(SfxChildAlignment::NOALIGNMENT));
@@ -1194,7 +1194,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         nTBBorder = MAX_TOGGLEAREA_WIDTH;
 
     // shrink area for floating mode if possible
-    Rectangle aInRect = GetInnerRect();
+    tools::Rectangle aInRect = GetInnerRect();
     if ( aInRect.GetWidth() > nLRBorder )
         aInRect.Left()   += nLRBorder/2;
     if ( aInRect.GetWidth() > nLRBorder )
@@ -1207,7 +1207,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
     // calculate alignment resulting from docking rectangle
     bool bBecomesFloating = false;
     SfxChildAlignment eDockAlign = pImpl->GetDockAlignment();
-    Rectangle aDockingRect( rRect );
+    tools::Rectangle aDockingRect( rRect );
     if ( !IsFloatingMode() )
     {
         // don't use tracking rectangle for alignment check, because it will be too large
@@ -1221,7 +1221,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
     }
 
     Point aPos = aDockingRect.TopLeft();
-    Rectangle aIntersect = GetOuterRect().GetIntersection( aDockingRect );
+    tools::Rectangle aIntersect = GetOuterRect().GetIntersection( aDockingRect );
     if ( aIntersect.IsEmpty() )
         // docking rectangle completely outside docking area -> floating mode
         bBecomesFloating = true;
@@ -1229,13 +1229,13 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
     {
         // create a small test rect around the mouse position and use this one
         // instead of the passed rRect to not dock too easily or by accident
-        Rectangle aSmallDockingRect;
+        tools::Rectangle aSmallDockingRect;
         aSmallDockingRect.SetSize( Size( MAX_TOGGLEAREA_WIDTH, MAX_TOGGLEAREA_HEIGHT ) );
         Point aNewPos(rPos);
         aNewPos.X() -= aSmallDockingRect.GetWidth()/2;
         aNewPos.Y() -= aSmallDockingRect.GetHeight()/2;
         aSmallDockingRect.SetPos(rPos);
-        Rectangle aIntersectRect = aInRect.GetIntersection( aSmallDockingRect );
+        tools::Rectangle aIntersectRect = aInRect.GetIntersection( aSmallDockingRect );
         if ( aIntersectRect == aSmallDockingRect )
             // docking rectangle completely inside (shrunk) inner area -> floating mode
             bBecomesFloating = true;
@@ -1568,12 +1568,12 @@ bool SfxDockingWindow::Close()
 /** Returns a boundary line to the docked edge and a frame when the Window is in
     a docked state. In this way SVLOOK is considered.
 */
-void SfxDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void SfxDockingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     if (pImpl->bSplitable || IsFloatingMode())
         return;
 
-    Rectangle aRect(Point(0, 0), GetOutputSizePixel());
+    tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
     switch (GetAlignment())
     {
         case SfxChildAlignment::TOP:

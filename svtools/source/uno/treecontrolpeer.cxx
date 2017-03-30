@@ -834,7 +834,7 @@ awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( i_Node );
 
-    ::Rectangle aEntryRect( rTree.GetFocusRect( pEntry, rTree.GetEntryPosition( pEntry ).Y() ) );
+    ::tools::Rectangle aEntryRect( rTree.GetFocusRect( pEntry, rTree.GetEntryPosition( pEntry ).Y() ) );
     return VCLUnoHelper::ConvertToAWTRect( aEntryRect );
 }
 
@@ -1507,7 +1507,7 @@ void UnoTreeListItem::Paint(
         aPos.X() += nWidth;
         aSize.Width() -= nWidth;
     }
-    rRenderContext.DrawText(Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable);
+    rRenderContext.DrawText(tools::Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable);
 }
 
 

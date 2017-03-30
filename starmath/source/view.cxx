@@ -321,10 +321,10 @@ void SmGraphicWindow::SetCursor(const SmNode *pNode)
     aTLPos.X() -= pNode->GetItalicLeftSpace();
     Size  aSize   (pNode->GetItalicSize());
 
-    SetCursor(Rectangle(aTLPos, aSize));
+    SetCursor(tools::Rectangle(aTLPos, aSize));
 }
 
-void SmGraphicWindow::SetCursor(const Rectangle &rRect)
+void SmGraphicWindow::SetCursor(const tools::Rectangle &rRect)
     // sets cursor to new position (rectangle) 'rRect'.
     // The old cursor will be removed, and the new one will be shown if
     // that is activated in the ConfigItem
@@ -366,7 +366,7 @@ const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
     return pNode;
 }
 
-void SmGraphicWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SmGraphicWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ApplyColorConfigValues(SM_MOD()->GetColorConfig());
 
@@ -701,7 +701,7 @@ SmViewShell * SmCmdBoxWindow::GetView()
 
 void SmCmdBoxWindow::Resize()
 {
-     Rectangle aRect(Point(0, 0), GetOutputSizePixel());
+     tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
      aRect.Left()   += CMD_BOX_PADDING;
      aRect.Top()    += CMD_BOX_PADDING_TOP;
      aRect.Right()  -= CMD_BOX_PADDING;
@@ -715,9 +715,9 @@ void SmCmdBoxWindow::Resize()
     Invalidate();
 }
 
-void SmCmdBoxWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void SmCmdBoxWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    Rectangle aRect(Point(0, 0), GetOutputSizePixel());
+    tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
     aRect.Left()   += CMD_BOX_PADDING;
     aRect.Top()    += CMD_BOX_PADDING_TOP;
     aRect.Right()  -= CMD_BOX_PADDING;
@@ -816,7 +816,7 @@ IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 void SmCmdBoxWindow::AdjustPosition()
 {
     Point aPt;
-    const Rectangle aRect( aPt, GetParent()->GetOutputSizePixel() );
+    const tools::Rectangle aRect( aPt, GetParent()->GetOutputSizePixel() );
     Point aTopLeft( Point( aRect.Left(),
                            aRect.Bottom() - GetSizePixel().Height() ) );
     Point aPos( GetParent()->OutputToScreenPixel( aTopLeft ) );
@@ -910,7 +910,7 @@ void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
     rWin.Update();
 }
 
-void SmViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
+void SmViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
 {
     rRect.SetSize( GetGraphicWindow().GetSizePixel() );
 }
@@ -1093,7 +1093,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     while ( nPos >= 0 );
 }
 
-void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions, Rectangle aOutRect, Point aZeroPoint )
+void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions, tools::Rectangle aOutRect, Point aZeroPoint )
 {
     const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, true );
     const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, true );
@@ -1126,7 +1126,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
         Size aDescSize (GetTextSize(rOutDev, GetDoc()->GetComment(), aOutRect.GetWidth() - 200));
 
         if (bIsPrintFrame)
-            rOutDev.DrawRect(Rectangle(aOutRect.TopLeft(),
+            rOutDev.DrawRect(tools::Rectangle(aOutRect.TopLeft(),
                                Size(aOutRect.GetWidth(), 100 + aTitleSize.Height() + 200 + aDescSize.Height() + 100)));
         aOutRect.Top() += 200;
 
@@ -1166,7 +1166,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
         aOutRect.Bottom() -= aSize.Height() + 600;
 
         if (bIsPrintFrame)
-            rOutDev.DrawRect(Rectangle(aOutRect.BottomLeft(),
+            rOutDev.DrawRect(tools::Rectangle(aOutRect.BottomLeft(),
                                Size(aOutRect.GetWidth(), 200 + aSize.Height() + 200)));
 
         Point aPoint (aOutRect.Left() + (aOutRect.GetWidth()  - aSize.Width())  / 2,
@@ -2042,7 +2042,7 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
             const MapMode aMap( MapUnit::Map100thMM );
             SfxPrinter *pPrinter = GetPrinter( true );
             Point aPoint;
-            Rectangle  OutputRect(aPoint, pPrinter->GetOutputSize());
+            tools::Rectangle  OutputRect(aPoint, pPrinter->GetOutputSize());
             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                               OutputRect.GetHeight()), aMap));
             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));

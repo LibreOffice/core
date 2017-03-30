@@ -43,7 +43,7 @@ public:
     void                DrawElements( const OUString& rText, sal_Int32 nAngle );
 
 protected:
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     bool                mbEnabled;
 
 private:
@@ -79,7 +79,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControl : public Control
 public:
     explicit            DialControl( vcl::Window* pParent, WinBits nBits );
 
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;

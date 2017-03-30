@@ -25,7 +25,7 @@
 #include <deque>
 
 namespace tools { class PolyPolygon; }
-class Rectangle;
+namespace tools { class Rectangle; }
 
 namespace basegfx {
     class B2DPolyPolygon;
@@ -45,7 +45,7 @@ class EDITENG_DLLPUBLIC TextRanger
     std::deque<RangeCache> mRangeCache; //!< Cached range calculations.
     tools::PolyPolygon *mpPolyPolygon; // Surface polygon
     tools::PolyPolygon *mpLinePolyPolygon; // Line polygon
-    Rectangle *pBound;  // Comprehensive rectangle
+    tools::Rectangle *pBound;  // Comprehensive rectangle
     sal_uInt16 nCacheSize;  // Cache-Size
     sal_uInt16 nRight;      // Distance Contour-Text
     sal_uInt16 nLeft;       // Distance Text-Contour
@@ -58,7 +58,7 @@ class EDITENG_DLLPUBLIC TextRanger
     bool       bVertical :1;// for vertical writing mode
 
     TextRanger( const TextRanger& ) = delete;
-    const Rectangle& GetBoundRect_();
+    const tools::Rectangle& GetBoundRect_();
 public:
     TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const basegfx::B2DPolyPolygon* pLinePolyPolygon,
@@ -74,8 +74,8 @@ public:
     bool IsSimple() const { return bSimple; }
     bool IsInner() const { return bInner; }
     bool IsVertical() const { return bVertical; }
-    const Rectangle& GetBoundRect()
-        { return pBound ? static_cast< const Rectangle& >(*pBound) : GetBoundRect_(); }
+    const tools::Rectangle& GetBoundRect()
+        { return pBound ? static_cast< const tools::Rectangle& >(*pBound) : GetBoundRect_(); }
     void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }
     void SetLower( sal_uInt16 nNew ){ nLower = nNew; }
     void SetVertical( bool bNew );

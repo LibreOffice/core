@@ -610,7 +610,7 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
     Scale( t );
     Scale( r );
     Scale( b );
-    rObj.aChildAnchor = Rectangle( l, t, r, b );
+    rObj.aChildAnchor = tools::Rectangle( l, t, r, b );
     rObj.bChildAnchor = true;
     return;
 };
@@ -732,7 +732,7 @@ sal_uLong DffPropSet::SanitizeEndPos(SvStream &rIn, sal_uLong nEndRecPos)
    The parameter pOriginalObj is the object as it was imported by our general escher import, it must either
    be deleted or it can be returned to be inserted into the sdr page.
 */
-SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pOriginalObj )
+SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, tools::Rectangle& rTextRect, SdrObject* pOriginalObj )
 {
     if ( dynamic_cast<const SdrObjCustomShape* >(pOriginalObj) !=  nullptr )
         pOriginalObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
@@ -1243,7 +1243,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     {
         if ( rObjData.nSpFlags & SP_FBACKGROUND )
         {
-            pRet->NbcSetSnapRect( Rectangle( Point(), rData.pPage.page->GetSize() ) );   // set size
+            pRet->NbcSetSnapRect( tools::Rectangle( Point(), rData.pPage.page->GetSize() ) );   // set size
         }
         if ( rPersistEntry.pSolverContainer )
         {
@@ -1782,8 +1782,8 @@ bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32
 // #i32596# - add new parameter <_nCalledByGroup>
 SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                            const Graphic& rGraf,
-                                           const Rectangle& rBoundRect,
-                                           const Rectangle& rVisArea,
+                                           const tools::Rectangle& rBoundRect,
+                                           const tools::Rectangle& rVisArea,
                                            const int /*_nCalledByGroup*/,
                                            sal_Int64 /*nAspect*/ ) const
 {
@@ -2796,7 +2796,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             {
                                 case DFF_msofbtSpContainer :
                                 {
-                                    Rectangle aPageSize( Point(), pRet->GetSize() );
+                                    tools::Rectangle aPageSize( Point(), pRet->GetSize() );
                                     if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background?
                                     {
                                         if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
@@ -2876,7 +2876,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             ReadDffRecordHeader( rStCtrl, aShapeHd );
                                             if ( ( aShapeHd.nRecType == DFF_msofbtSpContainer ) || ( aShapeHd.nRecType == DFF_msofbtSpgrContainer ) )
                                             {
-                                                Rectangle aEmpty;
+                                                tools::Rectangle aEmpty;
                                                 aShapeHd.SeekToBegOfRecord( rStCtrl );
                                                 sal_Int32 nShapeId;
                                                 aProcessData.pTableRowProperties.reset();
@@ -3037,7 +3037,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                         mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
                         sal_uInt32 nColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
                         pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
-                        DffObjData aObjData( aEscherObjectHd, Rectangle( 0, 0, 28000, 21000 ), 0 );
+                        DffObjData aObjData( aEscherObjectHd, tools::Rectangle( 0, 0, 28000, 21000 ), 0 );
                         ApplyAttributes( rStCtrl, *pSet, aObjData );
                         Color aColor( MSO_CLR_ToColor( nColor ) );
                         pSet->Put( XFillColorItem( OUString(), aColor ) );
@@ -3053,7 +3053,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
     pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-    Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
+    tools::Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
     pRet = new SdrRectObj( aRect );
     pRet->SetModel( pSdrModel );
 
@@ -7192,7 +7192,7 @@ bool IsLine( const SdrObject* pObj )
 bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
                             sal_Int32& nTableIndex, sal_Int32& nRow, sal_Int32& nRowCount, sal_Int32& nColumn, sal_Int32& nColumnCount )
 {
-    Rectangle aSnapRect( pObj->GetSnapRect() );
+    tools::Rectangle aSnapRect( pObj->GetSnapRect() );
     bool bCellObject = ( aSnapRect.GetWidth() > 1 ) && ( aSnapRect.GetHeight() > 1 );
     if ( bCellObject )
     {
@@ -7232,7 +7232,7 @@ bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows,
 #define LinePositionBLTR    0x20000000
 
 
-void GetRowPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >& rRows,
+void GetRowPositions( const tools::Rectangle& rSnapRect, const std::set< sal_Int32 >& rRows,
                         const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nColumn, sal_Int32 nFlags )
 {
     std::set< sal_Int32 >::const_iterator aRow( rRows.find( rSnapRect.Top() ) );
@@ -7253,7 +7253,7 @@ void GetRowPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >& r
 }
 
 
-void GetColumnPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >& /* rRows */,
+void GetColumnPositions( const tools::Rectangle& rSnapRect, const std::set< sal_Int32 >& /* rRows */,
                         const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nRow, sal_Int32 nFlags )
 {
     std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( rSnapRect.Left() ) );
@@ -7274,9 +7274,9 @@ void GetColumnPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >
 }
 
 void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
-                        std::vector< sal_Int32 >& rPositions, const Rectangle& rGroupSnap )
+                        std::vector< sal_Int32 >& rPositions, const tools::Rectangle& rGroupSnap )
 {
-    Rectangle aSnapRect( pObj->GetSnapRect() );
+    tools::Rectangle aSnapRect( pObj->GetSnapRect() );
     if ( aSnapRect.Left() == aSnapRect.Right() )
     {
         std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( aSnapRect.Left() ) );
@@ -7592,7 +7592,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
         const SdrObject* pObj( aGroupIter.Next() );
         if ( !IsLine( pObj ) )
         {
-            Rectangle aSnapRect( pObj->GetSnapRect() );
+            tools::Rectangle aSnapRect( pObj->GetSnapRect() );
             aRows.insert( aSnapRect.Top() );
             aColumns.insert( aSnapRect.Left() );
         }

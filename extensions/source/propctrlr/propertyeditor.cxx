@@ -114,7 +114,7 @@ namespace pcr
             sal_uInt16 nFirstID = m_aTabControl->GetPageId( 0 );
 
             // reserve space for the tabs themself
-            Rectangle aTabArea( m_aTabControl->GetTabBounds( nFirstID ) );
+            tools::Rectangle aTabArea( m_aTabControl->GetTabBounds( nFirstID ) );
             nMinHeight += aTabArea.GetHeight();
 
             // ask the page how much it requires
@@ -201,7 +201,7 @@ namespace pcr
 
     void OPropertyEditor::Resize()
     {
-        Rectangle aPlayground(
+        tools::Rectangle aPlayground(
             Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ),
             Size(
                 GetOutputSizePixel().Width() - LAYOUT_BORDER_LEFT - LAYOUT_BORDER_RIGHT,
@@ -209,7 +209,7 @@ namespace pcr
             )
         );
 
-        Rectangle aTabArea( aPlayground );
+        tools::Rectangle aTabArea( aPlayground );
         m_aTabControl->SetPosSizePixel( aTabArea.TopLeft(), aTabArea.GetSize() );
     }
 

@@ -1237,7 +1237,7 @@ XclChRootData::~XclChRootData()
 {
 }
 
-void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const Rectangle& rChartRect )
+void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const tools::Rectangle& rChartRect )
 {
     // remember chart document reference and chart shape position/size
     OSL_ENSURE( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );

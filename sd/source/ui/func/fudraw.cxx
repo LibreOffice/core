@@ -285,7 +285,7 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( bDragHelpLine )
     {
-        Rectangle aOutputArea(Point(0,0), mpWindow->GetOutputSizePixel());
+        ::tools::Rectangle aOutputArea(Point(0,0), mpWindow->GetOutputSizePixel());
 
         if (mpView && !aOutputArea.IsInside(rMEvt.GetPosPixel()))
             mpView->GetSdrPageView()->DeleteHelpLine(nHelpLine);
@@ -917,8 +917,8 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
     if (!aHelpText.isEmpty())
     {
         bSet = true;
-        Rectangle aLogicPix = mpWindow->LogicToPixel(pObj->GetLogicRect());
-        Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
+        ::tools::Rectangle aLogicPix = mpWindow->LogicToPixel(pObj->GetLogicRect());
+        ::tools::Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
                               mpWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
 
         if (Help::IsBalloonHelpEnabled())

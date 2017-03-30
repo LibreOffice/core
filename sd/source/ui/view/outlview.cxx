@@ -114,7 +114,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     }
 
     mpOutlinerView[0] = new OutlinerView(&mrOutliner, pWindow);
-    Rectangle aNullRect;
+    ::tools::Rectangle aNullRect;
     mpOutlinerView[0]->SetOutputArea(aNullRect);
     mrOutliner.SetUpdateMode(false);
     mrOutliner.InsertView(mpOutlinerView[0], EE_APPEND);
@@ -213,7 +213,7 @@ void OutlineView::DisconnectFromApplication()
     Application::RemoveEventListener(LINK(this, OutlineView, AppEventListenerHdl));
 }
 
-void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
+void OutlineView::Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin)
 {
     OutlinerView* pOlView = GetViewByWindow(pWin);
 
@@ -232,7 +232,7 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow)
 {
     bool bAdded = false;
     bool bValidArea = false;
-    Rectangle aOutputArea;
+    ::tools::Rectangle aOutputArea;
     const Color aWhiteColor( COL_WHITE );
     sal_uInt16 nView = 0;
 
@@ -770,11 +770,11 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl, EditStatus&, void)
 {
     ::sd::Window*   pWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
-    Rectangle       aVis          = pOutlinerView->GetVisArea();
-    Rectangle       aText = Rectangle(Point(0,0),
+    ::tools::Rectangle       aVis          = pOutlinerView->GetVisArea();
+    ::tools::Rectangle       aText = ::tools::Rectangle(Point(0,0),
                                       Size(mnPaperWidth,
                                       mrOutliner.GetTextHeight()));
-    Rectangle aWin(Point(0,0), pWin->GetOutputSizePixel());
+    ::tools::Rectangle aWin(Point(0,0), pWin->GetOutputSizePixel());
     aWin = pWin->PixelToLogic(aWin);
 
     if (!aVis.IsEmpty())        // not when opening

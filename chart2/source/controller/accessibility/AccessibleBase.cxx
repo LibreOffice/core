@@ -650,7 +650,7 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
         awt::Rectangle aLogicRect( pExplicitValueProvider->getRectangleOfObject( m_aAccInfo.m_aOID.getObjectCID() ));
         if( pWindow )
         {
-            Rectangle aRect( aLogicRect.X, aLogicRect.Y,
+            tools::Rectangle aRect( aLogicRect.X, aLogicRect.Y,
                              aLogicRect.X + aLogicRect.Width,
                              aLogicRect.Y + aLogicRect.Height );
             SolarMutexGuard aSolarGuard;

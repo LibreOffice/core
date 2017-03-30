@@ -230,7 +230,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
         // aTmpOutArea: if OutputArea > Paper width and
         // Text > Paper width ( over large fields )
-        Rectangle aTmpOutArea( aOutArea );
+        tools::Rectangle aTmpOutArea( aOutArea );
         if ( aTmpOutArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
             aTmpOutArea.Right() = aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width();
         pTarget->IntersectClipRegion( aTmpOutArea );
@@ -294,7 +294,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
             if ( nEndIndex < nStartIndex )
                 nEndIndex = nStartIndex;
 
-            Rectangle aTmpRect( pEditEngine->pImpEditEngine->GetEditCursor( pTmpPortion, nStartIndex ) );
+            tools::Rectangle aTmpRect( pEditEngine->pImpEditEngine->GetEditCursor( pTmpPortion, nStartIndex ) );
             Point aTopLeft( aTmpRect.TopLeft() );
             Point aBottomRight( aTmpRect.BottomRight() );
 
@@ -380,21 +380,21 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
             // If we are not in selection mode, then the exported own selection should be empty.
             if (pEditEngine->pImpEditEngine->IsInSelectionMode() || mpOtherShell)
             {
-                std::vector<Rectangle> aRectangles;
+                std::vector<tools::Rectangle> aRectangles;
                 pRegion->GetRegionRectangles(aRectangles);
 
                 if (!aRectangles.empty())
                 {
-                    Rectangle& rStart = aRectangles.front();
-                    Rectangle aStart = Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
+                    tools::Rectangle& rStart = aRectangles.front();
+                    tools::Rectangle aStart = tools::Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
                     if (bMm100ToTwip)
                         aStart = OutputDevice::LogicToLogic(aStart, MapUnit::Map100thMM, MapUnit::MapTwip);
                     aStart.Move(aOrigin.getX(), aOrigin.getY());
 
                     mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
-                    Rectangle& rEnd = aRectangles.back();
-                    Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
+                    tools::Rectangle& rEnd = aRectangles.back();
+                    tools::Rectangle aEnd = tools::Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
                     if (bMm100ToTwip)
                         aEnd = OutputDevice::LogicToLogic(aEnd, MapUnit::Map100thMM, MapUnit::MapTwip);
                     aEnd.Move(aOrigin.getX(), aOrigin.getY());
@@ -403,7 +403,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 }
 
                 std::vector<OString> v;
-                for (Rectangle & rRectangle : aRectangles)
+                for (tools::Rectangle & rRectangle : aRectangles)
                 {
                     if (bMm100ToTwip)
                         rRectangle = OutputDevice::LogicToLogic(rRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
@@ -442,14 +442,14 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     }
 }
 
-void ImpEditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects)
+void ImpEditView::GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects)
 {
     bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
     vcl::Region aRegion;
     DrawSelection(aEditSelection, &aRegion);
     aRegion.GetRegionRectangles(rLogicRects);
 
-    for (Rectangle& rRectangle : rLogicRects)
+    for (tools::Rectangle& rRectangle : rLogicRects)
     {
         if (bMm100ToTwip)
             rRectangle = OutputDevice::LogicToLogic(rRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
@@ -476,7 +476,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
             lcl_AllignToPixel( aPnt2, _pTarget, ( bPixelMode ? 0 : +1 ), 0 );
         }
 
-        Rectangle aRect( aPnt1, aPnt2 );
+        tools::Rectangle aRect( aPnt1, aPnt2 );
         if ( pPolyPoly )
         {
             tools::Polygon aTmpPoly( 4 );
@@ -513,9 +513,9 @@ bool ImpEditView::IsVertical() const
     return pEditEngine->pImpEditEngine->IsVertical();
 }
 
-Rectangle ImpEditView::GetVisDocArea() const
+tools::Rectangle ImpEditView::GetVisDocArea() const
 {
-    return Rectangle( GetVisDocLeft(), GetVisDocTop(), GetVisDocRight(), GetVisDocBottom() );
+    return tools::Rectangle( GetVisDocLeft(), GetVisDocTop(), GetVisDocRight(), GetVisDocBottom() );
 }
 
 Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
@@ -556,20 +556,20 @@ Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
     return aPoint;
 }
 
-Rectangle ImpEditView::GetWindowPos( const Rectangle& rDocRect ) const
+tools::Rectangle ImpEditView::GetWindowPos( const tools::Rectangle& rDocRect ) const
 {
     // Document position => window position
     Point aPos( GetWindowPos( rDocRect.TopLeft() ) );
     Size aSz = rDocRect.GetSize();
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( !pEditEngine->pImpEditEngine->IsVertical() )
     {
-        aRect = Rectangle( aPos, aSz );
+        aRect = tools::Rectangle( aPos, aSz );
     }
     else
     {
         Point aNewPos( aPos.X()-aSz.Height(), aPos.Y() );
-        aRect = Rectangle( aNewPos, Size( aSz.Height(), aSz.Width() ) );
+        aRect = tools::Rectangle( aNewPos, Size( aSz.Height(), aSz.Width() ) );
     }
     return aRect;
 }
@@ -584,10 +584,10 @@ void ImpEditView::SetSelectionMode( EESelectionMode eNewMode )
     }
 }
 
-void ImpEditView::SetOutputArea( const Rectangle& rRect )
+void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
 {
     // should be better be aligned on pixels!
-    Rectangle aNewRect( pOutWin->LogicToPixel( rRect ) );
+    tools::Rectangle aNewRect( pOutWin->LogicToPixel( rRect ) );
     aNewRect = pOutWin->PixelToLogic( aNewRect );
     aOutArea = aNewRect;
     if ( aOutArea.Right() < aOutArea.Left() )
@@ -601,10 +601,10 @@ void ImpEditView::SetOutputArea( const Rectangle& rRect )
         SetScrollDiffX( (sal_uInt16)aOutArea.GetWidth() * 2 / 10 );
 }
 
-void ImpEditView::ResetOutputArea( const Rectangle& rRect )
+void ImpEditView::ResetOutputArea( const tools::Rectangle& rRect )
 {
     // remember old out area
-    const Rectangle aOldArea(aOutArea);
+    const tools::Rectangle aOldArea(aOutArea);
 
     // apply new one
     SetOutputArea(rRect);
@@ -617,38 +617,38 @@ void ImpEditView::ResetOutputArea( const Rectangle& rRect )
 
         if(aOldArea.Left() > aOutArea.Left())
         {
-            GetWindow()->Invalidate(Rectangle(aOutArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Left(), aOldArea.Bottom() + nMore));
+            GetWindow()->Invalidate(tools::Rectangle(aOutArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Left(), aOldArea.Bottom() + nMore));
         }
         else if(aOldArea.Left() < aOutArea.Left())
         {
-            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOutArea.Left(), aOldArea.Bottom() + nMore));
+            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOutArea.Left(), aOldArea.Bottom() + nMore));
         }
 
         if(aOldArea.Right() > aOutArea.Right())
         {
-            GetWindow()->Invalidate(Rectangle(aOutArea.Right(), aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Bottom() + nMore));
+            GetWindow()->Invalidate(tools::Rectangle(aOutArea.Right(), aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Bottom() + nMore));
         }
         else if(aOldArea.Right() < aOutArea.Right())
         {
-            GetWindow()->Invalidate(Rectangle(aOldArea.Right(), aOldArea.Top() - nMore, aOutArea.Right() + nMore, aOldArea.Bottom() + nMore));
+            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Right(), aOldArea.Top() - nMore, aOutArea.Right() + nMore, aOldArea.Bottom() + nMore));
         }
 
         if(aOldArea.Top() > aOutArea.Top())
         {
-            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOutArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Top()));
+            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOutArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Top()));
         }
         else if(aOldArea.Top() < aOutArea.Top())
         {
-            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOutArea.Top()));
+            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOutArea.Top()));
         }
 
         if(aOldArea.Bottom() > aOutArea.Bottom())
         {
-            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOutArea.Bottom(), aOldArea.Right() + nMore, aOldArea.Bottom() + nMore));
+            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOutArea.Bottom(), aOldArea.Right() + nMore, aOldArea.Bottom() + nMore));
         }
         else if(aOldArea.Bottom() < aOutArea.Bottom())
         {
-            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOldArea.Bottom(), aOldArea.Right() + nMore, aOutArea.Bottom() + nMore));
+            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOldArea.Bottom(), aOldArea.Right() + nMore, aOutArea.Bottom() + nMore));
         }
     }
 }
@@ -719,7 +719,7 @@ void ImpEditView::RecalcOutputArea()
             break;
         }
     }
-    ResetOutputArea( Rectangle( aNewTopLeft, aNewSz ) );
+    ResetOutputArea( tools::Rectangle( aNewTopLeft, aNewSz ) );
 }
 
 void ImpEditView::SetAnchorMode( EVAnchorMode eMode )
@@ -827,7 +827,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         nShowCursorFlags |= GetCursorFlags::PreferPortionStart;
     }
 
-    Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nShowCursorFlags );
+    tools::Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nShowCursorFlags );
     if ( !IsInsertMode() && !aEditSelection.HasRange() )
     {
         if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
@@ -844,7 +844,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             else
             {
                 EditPaM aNext = pEditEngine->CursorRight( aPaM );
-                Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly );
+                tools::Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly );
                 if ( aTmpRect.Top() != aEditCursor.Top() )
                     aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
                 aEditCursor.Right() = aTmpRect.Left();
@@ -863,7 +863,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         long nDocDiffX = 0;
         long nDocDiffY = 0;
 
-        Rectangle aTmpVisArea( GetVisDocArea() );
+        tools::Rectangle aTmpVisArea( GetVisDocArea() );
         // aTmpOutArea: if OutputArea > Paper width and
         // Text > Paper width ( over large fields )
         long nMaxTextWidth = !IsVertical() ? pEditEngine->pImpEditEngine->GetPaperSize().Width() : pEditEngine->pImpEditEngine->GetPaperSize().Height();
@@ -971,7 +971,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
          ( aEditCursor.Left() + nOnePixel >= GetVisDocLeft() ) &&
          ( aEditCursor.Right() - nOnePixel <= GetVisDocRight() ) ) )
     {
-        Rectangle aCursorRect = GetWindowPos( aEditCursor );
+        tools::Rectangle aCursorRect = GetWindowPos( aEditCursor );
         GetCursor()->SetPos( aCursorRect.TopLeft() );
         Size aCursorSz( aCursorRect.GetSize() );
         // Rectangle is inclusive
@@ -1004,7 +1004,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         if (comphelper::LibreOfficeKit::isActive() && mpViewShell)
         {
             const Point& rPos = GetCursor()->GetPos();
-            Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
+            tools::Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
 
             // LOK output is always in twips, convert from mm100 if necessary.
             if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
@@ -1071,13 +1071,13 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         return Pair( 0, 0 );
 
 #ifdef DBG_UTIL
-    Rectangle aR( aOutArea );
+    tools::Rectangle aR( aOutArea );
     aR = pOutWin->LogicToPixel( aR );
     aR = pOutWin->PixelToLogic( aR );
     SAL_WARN_IF( aR != aOutArea, "editeng", "OutArea before Scroll not aligned" );
 #endif
 
-    Rectangle aNewVisArea( GetVisDocArea() );
+    tools::Rectangle aNewVisArea( GetVisDocArea() );
 
     // Vertical:
     if ( !IsVertical() )
@@ -1144,7 +1144,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         // rectangle ...
         aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
         aVisDocStartPos = pOutWin->PixelToLogic( aVisDocStartPos );
-        Rectangle aRect( aOutArea );
+        tools::Rectangle aRect( aOutArea );
         pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, ScrollFlags::Clip );
 
         if (comphelper::LibreOfficeKit::isActive())
@@ -1157,7 +1157,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         pCrsr->SetPos( pCrsr->GetPos() + Point( nRealDiffX, nRealDiffY ) );
         if ( bVisCursor )
         {
-            Rectangle aCursorRect( pCrsr->GetPos(), pCrsr->GetSize() );
+            tools::Rectangle aCursorRect( pCrsr->GetPos(), pCrsr->GetSize() );
             if ( aOutArea.IsInside( aCursorRect ) )
                 pCrsr->Show();
         }
@@ -1405,7 +1405,7 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
     if ( aPaM.GetIndex() == 0 )
     {
         sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
-        Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
+        tools::Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
         long nY = pEditEngine->GetDocPosTopLeft( nPara ).Y();
         const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
         nY += pParaPortion->GetFirstLineOffset();
@@ -1659,7 +1659,7 @@ void ImpEditView::HideDDCursor()
     }
 }
 
-void ImpEditView::ShowDDCursor( const Rectangle& rRect )
+void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
 {
     if ( pDragAndDropInfo && !pDragAndDropInfo->bVisCursor )
     {
@@ -1670,7 +1670,7 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
         GetWindow()->SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
 
         // Save background ...
-        Rectangle aSaveRect( GetWindow()->LogicToPixel( rRect ) );
+        tools::Rectangle aSaveRect( GetWindow()->LogicToPixel( rRect ) );
         // prefer to save some more ...
         aSaveRect.Right() += 1;
         aSaveRect.Bottom() += 1;
@@ -2076,7 +2076,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
             }
             if ( bAccept )
             {
-                Rectangle aEditCursor;
+                tools::Rectangle aEditCursor;
                 if ( pDragAndDropInfo->bOutlinerMode )
                 {
                     long nDDYPos;
@@ -2093,7 +2093,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     aStartPos = GetWindowPos( aStartPos );
                     Point aEndPos( GetOutputArea().GetWidth(), nDDYPos );
                     aEndPos = GetWindowPos( aEndPos );
-                    aEditCursor = GetWindow()->LogicToPixel( Rectangle( aStartPos, aEndPos ) );
+                    aEditCursor = GetWindow()->LogicToPixel( tools::Rectangle( aStartPos, aEndPos ) );
                     if ( !pEditEngine->IsVertical() )
                     {
                         aEditCursor.Top()--;

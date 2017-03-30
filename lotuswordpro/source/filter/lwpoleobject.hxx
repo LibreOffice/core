@@ -124,7 +124,7 @@ public:
 private:
     sal_uInt16 cPersistentFlags;
 
-    Rectangle m_SizeRect;
+    tools::Rectangle m_SizeRect;
 };
 
 #endif

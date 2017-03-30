@@ -629,12 +629,12 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
     // Resize objects with relative width or height
     if ( !bGroupShape && GetPageFrame( ) && ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) ) )
     {
-        Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();
+        tools::Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();
 
         long nTargetWidth = aCurrObjRect.GetWidth( );
         if ( GetDrawObj( )->GetRelativeWidth( ) )
         {
-            Rectangle aPageRect;
+            tools::Rectangle aPageRect;
             if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
                 aPageRect = GetPageFrame()->Prt().SVRect();
@@ -646,7 +646,7 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
         long nTargetHeight = aCurrObjRect.GetHeight( );
         if ( GetDrawObj( )->GetRelativeHeight( ) )
         {
-            Rectangle aPageRect;
+            tools::Rectangle aPageRect;
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
                 aPageRect = GetPageFrame()->Prt().SVRect();
@@ -722,11 +722,11 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrame* _pNewAnchorFram
 
 // --> #i34748# - change return type.
 // If member <mpLastObjRect> is NULL, create one.
-void SwAnchoredDrawObject::SetLastObjRect( const Rectangle& _rNewLastRect )
+void SwAnchoredDrawObject::SetLastObjRect( const tools::Rectangle& _rNewLastRect )
 {
     if ( !mpLastObjRect )
     {
-        mpLastObjRect.reset( new Rectangle );
+        mpLastObjRect.reset( new tools::Rectangle );
     }
     *(mpLastObjRect) = _rNewLastRect;
 }

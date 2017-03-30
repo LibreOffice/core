@@ -142,7 +142,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
             !SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) )
     {
         Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
-        const Rectangle& rRect = mpViewShell->GetAllWindowRect();
+        const ::tools::Rectangle& rRect = mpViewShell->GetAllWindowRect();
 
         if ( bNoScrollUntilInside )
         {
@@ -296,7 +296,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 if(pHdl)
                 {
                     Point aHdlPosition(pHdl->GetPos());
-                    Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
+                    ::tools::Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
                     mpView->MakeVisible(aVisRect, *mpWindow);
                 }
 
@@ -692,11 +692,11 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         if(mpView->IsMoveAllowed())
                         {
                             // restrict movement to WorkArea
-                            const Rectangle& rWorkArea = mpView->GetWorkArea();
+                            const ::tools::Rectangle& rWorkArea = mpView->GetWorkArea();
 
                             if(!rWorkArea.IsEmpty())
                             {
-                                Rectangle aMarkRect(mpView->GetMarkedObjRect());
+                                ::tools::Rectangle aMarkRect(mpView->GetMarkedObjRect());
                                 aMarkRect.Move(nX, nY);
 
                                 if(!aMarkRect.IsInside(rWorkArea))
@@ -767,7 +767,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             }
 
                             // make moved handle visible
-                            Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
+                            ::tools::Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
                             mpView->MakeVisible(aVisRect, *mpWindow);
                         }
                     }
@@ -939,7 +939,7 @@ void FuPoor::DoPasteUnformatted()
         if (aDataHelper.GetTransferable().is())
         {
             mpView->InsertData( aDataHelper,
-                                mpWindow->PixelToLogic( Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
+                                mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
                                 nAction, false, SotClipboardFormatId::STRING);
         }
     }
@@ -1046,23 +1046,23 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
     }
 }
 
-SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const Rectangle& )
+SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& )
 {
     // empty base implementation
     return nullptr;
 }
 
-void FuPoor::ImpForceQuadratic(Rectangle& rRect)
+void FuPoor::ImpForceQuadratic(::tools::Rectangle& rRect)
 {
     if(rRect.GetWidth() > rRect.GetHeight())
     {
-        rRect = Rectangle(
+        rRect = ::tools::Rectangle(
             Point(rRect.Left() + ((rRect.GetWidth() - rRect.GetHeight()) / 2), rRect.Top()),
             Size(rRect.GetHeight(), rRect.GetHeight()));
     }
     else
     {
-        rRect = Rectangle(
+        rRect = ::tools::Rectangle(
             Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)),
             Size(rRect.GetWidth(), rRect.GetWidth()));
     }

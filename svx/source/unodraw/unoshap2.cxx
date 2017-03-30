@@ -1639,8 +1639,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition()
             bMirroredY = static_cast<SdrObjCustomShape*>(mpObj.get())->IsMirroredY();
         }
         // get aRect, this is the unrotated snaprect
-        Rectangle aRect(static_cast<SdrObjCustomShape*>(mpObj.get())->GetLogicRect());
-        Rectangle aRectangle( aRect );
+        tools::Rectangle aRect(static_cast<SdrObjCustomShape*>(mpObj.get())->GetLogicRect());
+        tools::Rectangle aRectangle( aRect );
 
         if ( bMirroredX || bMirroredY )
         {   // we have to retrieve the unmirrored rect
@@ -1649,7 +1649,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition()
             if ( bMirroredX )
             {
                 tools::Polygon aPol( Rect2Poly( aRect, aNewGeo ) );
-                Rectangle aBoundRect( aPol.GetBoundRect() );
+                tools::Rectangle aBoundRect( aPol.GetBoundRect() );
 
                 Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
                 Point aRef2( aRef1.X(), aRef1.Y() + 1000 );
@@ -1671,7 +1671,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition()
             if ( bMirroredY )
             {
                 tools::Polygon aPol( Rect2Poly( aRectangle, aNewGeo ) );
-                Rectangle aBoundRect( aPol.GetBoundRect() );
+                tools::Rectangle aBoundRect( aPol.GetBoundRect() );
 
                 Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
                 Point aRef2( aRef1.X() + 1000, aRef1.Y() );
@@ -1743,7 +1743,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     if ( bCustomShapeGeometry )
     {
         static_cast<SdrObjCustomShape*>(pObject)->MergeDefaultAttributes();
-        Rectangle aRect( pObject->GetSnapRect() );
+        tools::Rectangle aRect( pObject->GetSnapRect() );
 
         // #i38892#
         bool bNeedsMirrorX = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredX() != bMirroredX;

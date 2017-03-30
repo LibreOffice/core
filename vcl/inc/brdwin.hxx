@@ -124,7 +124,7 @@ public:
     virtual void            MouseMove( const MouseEvent& rMEvt ) override;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void            Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void            Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void            Activate() override;
     virtual void            Deactivate() override;
     virtual void            Resize() override;
@@ -138,7 +138,7 @@ public:
     void                    InvalidateBorder();
 
     using Window::Draw;
-    void                    Draw( const Rectangle& rRect, OutputDevice* pDev, const Point& rPos );
+    void                    Draw( const tools::Rectangle& rRect, OutputDevice* pDev, const Point& rPos );
 
     void                    SetDisplayActive( bool bActive );
     void                    SetTitleType( BorderWindowTitleType nTitleType, const Size& rSize );
@@ -167,7 +167,7 @@ public:
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
     long                    CalcTitleWidth() const;
 
-    Rectangle               GetMenuRect() const;
+    tools::Rectangle               GetMenuRect() const;
 
     virtual Size            GetOptimalSize() const override;
 };
@@ -176,13 +176,13 @@ struct ImplBorderFrameData
 {
     VclPtr<ImplBorderWindow> mpBorderWindow;
     VclPtr<OutputDevice>     mpOutDev;
-    Rectangle                maTitleRect;
-    Rectangle                maCloseRect;
-    Rectangle                maRollRect;
-    Rectangle                maDockRect;
-    Rectangle                maMenuRect;
-    Rectangle                maHideRect;
-    Rectangle                maHelpRect;
+    tools::Rectangle                maTitleRect;
+    tools::Rectangle                maCloseRect;
+    tools::Rectangle                maRollRect;
+    tools::Rectangle                maDockRect;
+    tools::Rectangle                maMenuRect;
+    tools::Rectangle                maHideRect;
+    tools::Rectangle                maHelpRect;
     Point                    maMouseOff;
     long                     mnWidth;
     long                     mnHeight;
@@ -218,19 +218,19 @@ public:
     virtual bool            MouseMove( const MouseEvent& rMEvt );
     virtual bool            MouseButtonDown( const MouseEvent& rMEvt );
     virtual bool            Tracking( const TrackingEvent& rTEvt );
-    virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect );
+    virtual OUString        RequestHelp( const Point& rPos, tools::Rectangle& rHelpRect );
 
     virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) = 0;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const = 0;
     virtual long            CalcTitleWidth() const = 0;
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) = 0;
-    virtual Rectangle       GetMenuRect() const;
+    virtual tools::Rectangle       GetMenuRect() const;
 
     static void             ImplInitTitle( ImplBorderFrameData* pData );
     static BorderWindowHitTest ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
     static bool             ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    static OUString         ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
+    static OUString         ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, tools::Rectangle& rHelpRect );
     static long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
 };
 
@@ -281,8 +281,8 @@ public:
     virtual bool        MouseMove( const MouseEvent& rMEvt ) override;
     virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool        Tracking( const TrackingEvent& rTEvt ) override;
-    virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect ) override;
-    virtual Rectangle       GetMenuRect() const override;
+    virtual OUString        RequestHelp( const Point& rPos, tools::Rectangle& rHelpRect ) override;
+    virtual tools::Rectangle       GetMenuRect() const override;
 
     virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) override;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,

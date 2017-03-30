@@ -142,7 +142,7 @@ void FuConstUnoControl::Deactivate()
 }
 
 // Create default drawing objects via keyboard
-SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
+SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
 

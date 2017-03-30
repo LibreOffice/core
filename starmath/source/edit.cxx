@@ -293,7 +293,7 @@ void SmEditWindow::Resize()
                                       pEditView->GetOutputArea().GetHeight();
         if (pEditView->GetVisArea().Top() > nMaxVisAreaStart)
         {
-            Rectangle aVisArea(pEditView->GetVisArea() );
+            tools::Rectangle aVisArea(pEditView->GetVisArea() );
             aVisArea.Top() = (nMaxVisAreaStart > 0 ) ? nMaxVisAreaStart : 0;
             aVisArea.SetSize(pEditView->GetOutputArea().GetSize());
             pEditView->SetVisArea(aVisArea);
@@ -528,7 +528,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     }
 }
 
-void SmEditWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SmEditWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!pEditView)
         CreateEditView();
@@ -584,18 +584,18 @@ IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/, void )
     OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
     {
-        pEditView->SetVisArea(Rectangle(Point(pHScrollBar->GetThumbPos(),
+        pEditView->SetVisArea(tools::Rectangle(Point(pHScrollBar->GetThumbPos(),
                                             pVScrollBar->GetThumbPos()),
                                         pEditView->GetVisArea().GetSize()));
         pEditView->Invalidate();
     }
 }
 
-Rectangle SmEditWindow::AdjustScrollBars()
+tools::Rectangle SmEditWindow::AdjustScrollBars()
 {
     const Size aOut( GetOutputSizePixel() );
     Point aPoint;
-    Rectangle aRect( aPoint, aOut );
+    tools::Rectangle aRect( aPoint, aOut );
 
     if (pVScrollBar && pHScrollBar && pScrollBox)
     {

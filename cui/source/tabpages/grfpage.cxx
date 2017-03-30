@@ -779,16 +779,16 @@ Size SvxCropExample::GetOptimalSize() const
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxCropExample, 0)
 
-void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     Size aWinSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     rRenderContext.SetRasterOp(RasterOp::OverPaint);
-    rRenderContext.DrawRect(Rectangle(Point(), aWinSize));
+    rRenderContext.DrawRect(::tools::Rectangle(Point(), aWinSize));
 
     rRenderContext.SetLineColor(Color(COL_WHITE));
-    Rectangle aRect(Point((aWinSize.Width() - aFrameSize.Width())/2,
+    ::tools::Rectangle aRect(Point((aWinSize.Width() - aFrameSize.Width())/2,
                           (aWinSize.Height() - aFrameSize.Height())/2),
                           aFrameSize);
     aGrf.Draw(&rRenderContext, aRect.TopLeft(), aRect.GetSize());

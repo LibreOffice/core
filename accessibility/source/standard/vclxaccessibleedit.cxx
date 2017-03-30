@@ -371,7 +371,7 @@ awt::Rectangle VCLXAccessibleEdit::getCharacterBounds( sal_Int32 nIndex )
             // #108914# calculate virtual bounding rectangle
             for ( sal_Int32 i = 0; i < nLength; ++i )
             {
-                Rectangle aRect = pControl->GetCharacterBounds( i );
+                tools::Rectangle aRect = pControl->GetCharacterBounds( i );
                 sal_Int32 nHeight = aRect.GetHeight();
                 if ( aBounds.Height < nHeight )
                 {

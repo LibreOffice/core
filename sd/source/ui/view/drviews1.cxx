@@ -287,7 +287,7 @@ void DrawViewShell::SetZoom( long nZoom )
  * Set zoom rectangle for active window
  */
 
-void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
+void DrawViewShell::SetZoomRect( const ::tools::Rectangle& rZoomRect )
 {
     ViewShell::SetZoomRect( rZoomRect );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
@@ -932,7 +932,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             // !!! only if we are not in presentation mode (#96279) !!!
             OSL_ASSERT (GetViewShell()!=nullptr);
             GetViewShell()->DisconnectAllClients();
-            VisAreaChanged(Rectangle(Point(), Size(1, 1)));
+            VisAreaChanged(::tools::Rectangle(Point(), Size(1, 1)));
         }
 
         if (meEditMode == EditMode::Page)
@@ -1090,7 +1090,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         }
 
         Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-        Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+        ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
         VisAreaChanged(aVisAreaWin);
         mpDrawView->VisAreaChanged(GetActiveWindow());
 

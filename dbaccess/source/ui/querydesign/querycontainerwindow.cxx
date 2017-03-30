@@ -88,9 +88,9 @@ namespace dbaui
         return m_pViewSwitch->forceInitialView();
     }
 
-    void OQueryContainerWindow::resizeAll( const Rectangle& _rPlayground )
+    void OQueryContainerWindow::resizeAll( const tools::Rectangle& _rPlayground )
     {
-        Rectangle aPlayground( _rPlayground );
+        tools::Rectangle aPlayground( _rPlayground );
 
         if ( m_pBeamer && m_pBeamer->IsVisible() )
         {
@@ -120,7 +120,7 @@ namespace dbaui
         ODataView::resizeAll( aPlayground );
     }
 
-    void OQueryContainerWindow::resizeDocumentView( Rectangle& _rPlayground )
+    void OQueryContainerWindow::resizeDocumentView( tools::Rectangle& _rPlayground )
     {
         m_pViewSwitch->SetPosSizePixel( _rPlayground.TopLeft(), Size( _rPlayground.GetWidth(), _rPlayground.GetHeight() ) );
 

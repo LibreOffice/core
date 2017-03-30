@@ -125,30 +125,30 @@ OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
     return OUString( "com.sun.star.accessibility.AccessibleGridControlHeaderCell" );
 }
 
-Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
+tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
     sal_Int32 nIndex = getAccessibleIndexInParent();
-    Rectangle aCellRect;
+    tools::Rectangle aCellRect;
     if(m_eObjType == TCTYPE_COLUMNHEADERCELL)
         aCellRect = m_aTable.calcHeaderCellRect(true, nIndex);
     else
         aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);
-    return Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
+    return tools::Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
 
 
-Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
+tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
 {
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
     sal_Int32 nIndex = getAccessibleIndexInParent();
-    Rectangle aCellRect;
+    tools::Rectangle aCellRect;
     if(m_eObjType == TCTYPE_COLUMNHEADERCELL)
         aCellRect = m_aTable.calcHeaderCellRect(true, nIndex);
     else
         aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);
-    return Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
+    return tools::Rectangle(Point(aGridRect.Left()+aCellRect.Left(),aGridRect.Top()+aCellRect.Top()), aCellRect.GetSize());
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()

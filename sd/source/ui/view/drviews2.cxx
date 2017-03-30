@@ -738,7 +738,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OSL_ENSURE(pPageView, "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP without SdrPageView (!)");
 
                 // fit rectangle of new graphic object to selection's mark rect
-                Rectangle aAllMarkedRect;
+                ::tools::Rectangle aAllMarkedRect;
                 rMarkList.TakeBoundRect(pPageView, aAllMarkedRect);
                 pGraphicObj->SetLogicRect(aAllMarkedRect);
 
@@ -1940,13 +1940,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pOutl->SetUpdateMode( false );
 
                 Point aPos;
-                Rectangle aRect( aPos, GetActiveWindow()->GetOutputSizePixel() );
+                ::tools::Rectangle aRect( aPos, GetActiveWindow()->GetOutputSizePixel() );
                 aPos = aRect.Center();
                 aPos = GetActiveWindow()->PixelToLogic(aPos);
                 aPos.X() -= aSize.Width() / 2;
                 aPos.Y() -= aSize.Height() / 2;
 
-                Rectangle aLogicRect(aPos, aSize);
+                ::tools::Rectangle aLogicRect(aPos, aSize);
                 pRectObj->SetLogicRect(aLogicRect);
                 pRectObj->SetOutlinerParaObject( pOutlParaObject );
                 mpDrawView->InsertObjectAtView(pRectObj, *mpDrawView->GetSdrPageView());

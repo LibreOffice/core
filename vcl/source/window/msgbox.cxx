@@ -175,8 +175,8 @@ void MessBox::ImplPosControls()
     }
 
     TextRectInfo    aTextInfo;
-    Rectangle       aRect( 0, 0, 30000, 30000 );
-    Rectangle       aFormatRect;
+    tools::Rectangle       aRect( 0, 0, 30000, 30000 );
+    tools::Rectangle       aFormatRect;
     Point           aTextPos( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+IMPL_MSGBOX_OFFSET_EXTRA_Y );
     Size            aImageSize;
     Size            aPageSize;

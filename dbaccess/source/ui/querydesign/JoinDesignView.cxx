@@ -86,7 +86,7 @@ void OJoinDesignView::initialize()
 {
 }
 
-void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)
+void OJoinDesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
 {
     m_pScrollWindow->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 

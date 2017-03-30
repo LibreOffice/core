@@ -96,7 +96,7 @@ namespace sw
             // Get sure that the whole layout is processed: set a visible area
             // even though there isn't any need of it
             pXDoc->GetDocShell()->GetWrtShell()->StartAction();
-            Rectangle aRect( 0, 0, 26000, 21000 );
+            tools::Rectangle aRect( 0, 0, 26000, 21000 );
             pXDoc->GetDocShell()->SetVisArea( aRect );
             pLayout->InvalidateAllContent( SwInvalidateFlags::Size );
             pXDoc->GetDocShell()->GetWrtShell()->EndAction();

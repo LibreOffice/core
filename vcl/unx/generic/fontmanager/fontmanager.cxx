@@ -1090,7 +1090,7 @@ bool PrintFontManager::createFontSubset(
 
     int xMin, yMin, xMax, yMax;
     getFontBoundingBox( nFont, xMin, yMin, xMax, yMax );
-    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
+    rInfo.m_aFontBBox   = tools::Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
     rInfo.m_nCapHeight  = yMax; // Well ...
 
     // fill in glyph advance widths

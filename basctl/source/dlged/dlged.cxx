@@ -226,7 +226,7 @@ DlgEditor::DlgEditor (
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
     pDlgEdView->SetLayerVisible( "HiddenLayer", false );
     pDlgEdView->SetMoveSnapOnlyTopLeft(true);
-    pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
+    pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 
     pDlgEdView->SetGridCoarse( aGridSize );
     pDlgEdView->SetSnapGridWidth(Fraction(aGridSize.Width(), 1), Fraction(aGridSize.Height(), 1));
@@ -469,7 +469,7 @@ bool DlgEditor::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     aPaintRect = rRect;
     mnPaintGuard++;
@@ -517,7 +517,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
                 }
 
                 // set dialog position and size
-                pDlgEdForm->SetSnapRect( Rectangle( aPos, aSize ) );
+                pDlgEdForm->SetSnapRect( tools::Rectangle( aPos, aSize ) );
                 pDlgEdForm->EndListening(false);
                 pDlgEdForm->SetPropsFromRect();
                 pDlgEdForm->GetDlgEditor().SetDialogModelChanged();
@@ -621,7 +621,7 @@ void DlgEditor::CreateDefaultObject()
         Point aPoint = (pDlgEdForm->GetSnapRect()).Center();
         aPoint.X() -= aSize.Width() / 2;
         aPoint.Y() -= aSize.Height() / 2;
-        pDlgEdObj->SetSnapRect( Rectangle( aPoint, aSize ) );
+        pDlgEdObj->SetSnapRect( tools::Rectangle( aPoint, aSize ) );
 
         // set default property values
         pDlgEdObj->SetDefaults();
@@ -1120,7 +1120,7 @@ void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working
     long const nXLeft = Print::nLeftMargin - Print::nBorder;
     long const nXRight = aSz.Width() - Print::nRightMargin + Print::nBorder;
 
-    pPrinter->DrawRect(Rectangle(
+    pPrinter->DrawRect(tools::Rectangle(
         Point(nXLeft, nYTop),
         Size(nXRight - nXLeft, aSz.Height() - nYTop - Print::nBottomMargin + Print::nBorder)
     ));
@@ -1237,7 +1237,7 @@ bool DlgEditor::AdjustPageSize()
                 {
                     Size aNewPageSize( nNewPageWidth, nNewPageHeight );
                     pDlgEdPage->SetSize( aNewPageSize );
-                    pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), aNewPageSize ) );
+                    pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), aNewPageSize ) );
                     bAdjustedPageSize = true;
                 }
             }

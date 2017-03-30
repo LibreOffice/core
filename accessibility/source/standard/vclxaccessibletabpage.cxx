@@ -423,7 +423,7 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
             Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
             if ( xComp.is() )
             {
-                Rectangle aRect = VCLRectangle( xComp->getBounds() );
+                tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
                 Point aPos = VCLPoint( rPoint );
                 if ( aRect.IsInside( aPos ) )
                 {
@@ -575,8 +575,8 @@ awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex )
     awt::Rectangle aBounds( 0, 0, 0, 0 );
     if ( m_pTabControl )
     {
-        Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
-        Rectangle aCharRect = m_pTabControl->GetCharacterBounds( m_nPageId, nIndex );
+        tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
+        tools::Rectangle aCharRect = m_pTabControl->GetCharacterBounds( m_nPageId, nIndex );
         aCharRect.Move( -aPageRect.Left(), -aPageRect.Top() );
         aBounds = AWTRectangle( aCharRect );
     }
@@ -593,7 +593,7 @@ sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& aPoint )
     if ( m_pTabControl )
     {
         sal_uInt16 nPageId = 0;
-        Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
+        tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
         Point aPnt( VCLPoint( aPoint ) );
         aPnt += aPageRect.TopLeft();
         sal_Int32 nI = m_pTabControl->GetIndexForPoint( aPnt, nPageId );

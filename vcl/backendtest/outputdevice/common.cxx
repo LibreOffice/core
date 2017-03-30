@@ -226,7 +226,7 @@ OutputDeviceTestCommon::OutputDeviceTestCommon()
 
 void OutputDeviceTestCommon::initialSetup(long nWidth, long nHeight, Color aColor)
 {
-    maVDRectangle = Rectangle(Point(), Size (nWidth, nHeight));
+    maVDRectangle = tools::Rectangle(Point(), Size (nWidth, nHeight));
     mpVirtualDevice->SetOutputSizePixel(maVDRectangle.GetSize());
     mpVirtualDevice->SetBackground(Wallpaper(aColor));
     mpVirtualDevice->Erase();
@@ -282,12 +282,12 @@ TestResult OutputDeviceTestCommon::checkRectangles(Bitmap& aBitmap, std::vector<
     return aReturnValue;
 }
 
-Rectangle OutputDeviceTestCommon::alignToCenter(Rectangle aRect1, Rectangle aRect2)
+tools::Rectangle OutputDeviceTestCommon::alignToCenter(tools::Rectangle aRect1, tools::Rectangle aRect2)
 {
     Point aPoint((aRect1.GetWidth()  / 2.0) - (aRect2.GetWidth()  / 2.0),
                  (aRect1.GetHeight() / 2.0) - (aRect2.GetHeight() / 2.0));
 
-    return Rectangle(aPoint, aRect2.GetSize());
+    return tools::Rectangle(aPoint, aRect2.GetSize());
 }
 
 TestResult OutputDeviceTestCommon::checkDiamond(Bitmap& rBitmap)
@@ -295,7 +295,7 @@ TestResult OutputDeviceTestCommon::checkDiamond(Bitmap& rBitmap)
     return checkDiamondLine(rBitmap, 1, constLineColor);
 }
 
-void OutputDeviceTestCommon::createDiamondPoints(Rectangle rRect, int nOffset,
+void OutputDeviceTestCommon::createDiamondPoints(tools::Rectangle rRect, int nOffset,
                                                  Point& rPoint1, Point& rPoint2,
                                                  Point& rPoint3, Point& rPoint4)
 {
@@ -308,7 +308,7 @@ void OutputDeviceTestCommon::createDiamondPoints(Rectangle rRect, int nOffset,
     rPoint4 = Point(midPointX - nOffset, midPointY         );
 }
 
-void OutputDeviceTestCommon::createHorizontalVerticalDiagonalLinePoints(Rectangle rRect,
+void OutputDeviceTestCommon::createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
                                 Point& rHorizontalLinePoint1, Point& rHorizontalLinePoint2,
                                 Point& rVerticalLinePoint1, Point& rVerticalLinePoint2,
                                 Point& rDiagonalLinePoint1, Point& rDiagonalLinePoint2)

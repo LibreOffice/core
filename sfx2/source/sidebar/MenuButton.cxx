@@ -38,13 +38,13 @@ MenuButton::MenuButton (vcl::Window* pParentWindow)
 #endif
 }
 
-void MenuButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
+void MenuButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rUpdateArea*/)
 {
     const bool bIsSelected (IsChecked());
     const bool bIsHighlighted (IsMouseOver() || HasFocus());
     DrawHelper::DrawRoundedRectangle(
                 rRenderContext,
-                Rectangle(Point(0,0), GetSizePixel()),
+                tools::Rectangle(Point(0,0), GetSizePixel()),
                 3,
                 (bIsHighlighted || bIsSelected
                     ? Theme::GetColor(Theme::Color_TabItemBorder)

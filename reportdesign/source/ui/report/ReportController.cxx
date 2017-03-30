@@ -3144,13 +3144,13 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         if ( sCustomShapeType.isEmpty() )
             sCustomShapeType = "diamond";
         OReportSection::createDefault(sCustomShapeType,pNewControl);
-        pNewControl->SetLogicRect(Rectangle(3000,500,6000,3500)); // switch height and width
+        pNewControl->SetLogicRect(tools::Rectangle(3000,500,6000,3500)); // switch height and width
     }
     else if ( _nObjectId == OBJ_OLE2 || OBJ_DLG_SUBREPORT == _nObjectId  )
     {
         pNewControl = SdrObjFactory::MakeNewObject( SdrInventor::ReportDesign, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
 
-        pNewControl->SetLogicRect(Rectangle(3000,500,8000,5500)); // switch height and width
+        pNewControl->SetLogicRect(tools::Rectangle(3000,500,8000,5500)); // switch height and width
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY_THROW);
         OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pNewControl);
         if ( pObj && !pObj->IsEmpty() )
@@ -3558,11 +3558,11 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     {
                         if ( pSectionViews[0] == pSectionViews[1] )
                         {
-                            Rectangle aLabel = getRectangleFromControl(pControl[0]);
-                            Rectangle aTextfield = getRectangleFromControl(pControl[1]);
+                            tools::Rectangle aLabel = getRectangleFromControl(pControl[0]);
+                            tools::Rectangle aTextfield = getRectangleFromControl(pControl[1]);
 
                             // create a Union of the given Label and Textfield
-                            Rectangle aLabelAndTextfield( aLabel );
+                            tools::Rectangle aLabelAndTextfield( aLabel );
                             aLabelAndTextfield.Union(aTextfield);
 
                             // check if there exists other fields and if yes, move down
@@ -3574,7 +3574,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                                 bOverlapping = pOverlappedObj != nullptr;
                                 if ( bOverlapping )
                                 {
-                                    const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
+                                    const tools::Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
                                     aLabelAndTextfield.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aLabelAndTextfield.Top());
                                     bHasToMove = true;
                                 }

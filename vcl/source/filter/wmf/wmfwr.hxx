@@ -123,7 +123,7 @@ private:
     sal_Int32 ScaleWidth( sal_Int32 nDX );
     void WriteSize(const Size & rSize);
     void WriteHeightWidth(const Size & rSize);
-    void WriteRectangle(const Rectangle & rRect);
+    void WriteRectangle(const tools::Rectangle & rRect);
     void WriteColor(const Color & rColor);
 
     void WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType);
@@ -135,13 +135,13 @@ private:
         // nSizeWords was unknown upon calling WriteRecordHeader(..)
         // if needed it inserts a BYTE 0 to make number of bytes even
 
-    void WMFRecord_Arc(const Rectangle& rRect, const Point& rStartPt, const Point& rEndPt);
-    void WMFRecord_Chord(const Rectangle& rRect, const Point& rStartPt, const Point& rEndPt);
+    void WMFRecord_Arc(const tools::Rectangle& rRect, const Point& rStartPt, const Point& rEndPt);
+    void WMFRecord_Chord(const tools::Rectangle& rRect, const Point& rStartPt, const Point& rEndPt);
     void WMFRecord_CreateBrushIndirect(const Color& rColor);
     void WMFRecord_CreateFontIndirect(const vcl::Font& rFont);
     void WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo& rLineInfo );
     void WMFRecord_DeleteObject(sal_uInt16 nObjectHandle);
-    void WMFRecord_Ellipse(const Rectangle& rRect);
+    void WMFRecord_Ellipse(const tools::Rectangle& rRect);
     void WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData );
     bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, const long* pDXAry );
     void WMFRecord_ExtTextOut(const Point& rPoint, const OUString& rString, const long* pDXAry);
@@ -151,13 +151,13 @@ private:
     void TrueTextOut(const Point& rPoint, const OString& rString);
     void WMFRecord_LineTo(const Point & rPoint);
     void WMFRecord_MoveTo(const Point & rPoint);
-    void WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
+    void WMFRecord_Pie(const tools::Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
     void WMFRecord_Polygon(const tools::Polygon & rPoly);
     void WMFRecord_PolyLine(const tools::Polygon & rPoly);
     void WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly);
-    void WMFRecord_Rectangle(const Rectangle & rRect);
+    void WMFRecord_Rectangle(const tools::Rectangle & rRect);
     void WMFRecord_RestoreDC();
-    void WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, long nVertRound);
+    void WMFRecord_RoundRect(const tools::Rectangle & rRect, long nHorzRound, long nVertRound);
     void WMFRecord_SaveDC();
     void WMFRecord_SelectObject(sal_uInt16 nObjectHandle);
     void WMFRecord_SetBkMode(bool bTransparent);
@@ -170,7 +170,7 @@ private:
     void WMFRecord_SetWindowOrg(const Point & rPoint);
     void WMFRecord_StretchDIB(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap, sal_uInt32 nROP = 0UL );
     void WMFRecord_TextOut(const Point & rPoint, const OUString & rString);
-    void WMFRecord_IntersectClipRect( const Rectangle& rRect);
+    void WMFRecord_IntersectClipRect( const tools::Rectangle& rRect);
 
     sal_uInt16 AllocHandle();
     void FreeHandle(sal_uInt16 nObjectHandle);

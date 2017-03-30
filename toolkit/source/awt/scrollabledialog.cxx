@@ -95,7 +95,7 @@ void ScrollableDialog::lcl_Scroll( long nX, long nY )
     long nYScroll = mnScrollPos.Y() - nY;
     mnScrollPos = Point( nX, nY );
 
-    Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
+    tools::Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
     Scroll(nXScroll, nYScroll, aScrollableArea );
     // Manually scroll all children ( except the scrollbars )
     for ( int index = 0; index < GetChildCount(); ++index )

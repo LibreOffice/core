@@ -1648,7 +1648,7 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
     if ( aPos.X() < 0 || aPos.Y() < 0 ) // TODO: have to check size with pos aka || (aPos.X() + aAwtSize.Width) > m_xSection->getReportDefinition()->
         throw beans::PropertyVetoException(ModuleRes(RID_STR_ILLEGAL_POSITION),xSourceReportComponent);
 
-    ::Rectangle aSourceRect(aPos,VCLSize(_aSize));
+    ::tools::Rectangle aSourceRect(aPos,VCLSize(_aSize));
 
     const sal_Int32 nCount = xSection->getCount();
     for (sal_Int32 i = 0; i < nCount ; ++i)
@@ -1656,8 +1656,8 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
         const uno::Reference< report::XReportComponent> xReportComponent(xSection->getByIndex(i),uno::UNO_QUERY);
         if ( xReportComponent.is() && xReportComponent != xSourceReportComponent )
         {
-            const ::Rectangle aBoundRect(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
-            const ::Rectangle aRect = aSourceRect.GetIntersection(aBoundRect);
+            const ::tools::Rectangle aBoundRect(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
+            const ::tools::Rectangle aRect = aSourceRect.GetIntersection(aBoundRect);
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
                 throw beans::PropertyVetoException(ModuleRes( RID_STR_OVERLAP_OTHER_CONTROL),xSourceReportComponent);
         }

@@ -180,7 +180,7 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
     {
         if ( rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON) )
         {
-            Rectangle aItemRect = GetItemRect( nItemId );
+            tools::Rectangle aItemRect = GetItemRect( nItemId );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
             aItemRect.Left()   = aPt.X();
             aItemRect.Top()    = aPt.Y();
@@ -1058,7 +1058,7 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
             {
                 sal_uInt16 nSelId = GetColumnId(
                     sal::static_int_cast< sal_uInt16 >( FirstSelectedColumn() ) );
-                ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
+                ::tools::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
 
                 Point aRelativePos( pMyHeader->ScreenToOutputPixel( OutputToScreenPixel( aColRect.TopCenter() ) ) );
                 pMyHeader->triggerColumnContextMenu(aRelativePos);

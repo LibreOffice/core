@@ -302,7 +302,7 @@ awt::Rectangle SAL_CALL
     ThrowIfDisposed ();
 
     // Transform visible area into screen coordinates.
-    ::Rectangle aVisibleArea (
+    ::tools::Rectangle aVisibleArea (
         maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
     ::Point aPixelTopLeft (
         maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
@@ -354,7 +354,7 @@ awt::Size SAL_CALL
     ThrowIfDisposed ();
 
     // Transform visible area into screen coordinates.
-    ::Rectangle aVisibleArea (
+    ::tools::Rectangle aVisibleArea (
         maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
     ::Point aPixelTopLeft (
         maShapeTreeInfo.GetViewForwarder()->LogicToPixel (

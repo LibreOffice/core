@@ -301,7 +301,7 @@ protected:
 
     // In-place editing
     SvInplaceEdit2*  pEdCtrl;
-    void            EditText( const OUString&, const Rectangle&,const Selection&);
+    void            EditText( const OUString&, const tools::Rectangle&,const Selection&);
     void            CancelTextEditing();
     bool            EditingCanceled() const;
 
@@ -508,7 +508,7 @@ public:
         @param pEntry
             The entry.
         @return  The bounding rectangle of an entry. */
-    Rectangle           GetBoundingRect( SvTreeListEntry* pEntry );
+    tools::Rectangle           GetBoundingRect( SvTreeListEntry* pEntry );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     void                EnableCellFocus();
@@ -665,7 +665,7 @@ public:
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
@@ -715,7 +715,7 @@ public:
 
     SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 
-    virtual Rectangle GetFocusRect( SvTreeListEntry*, long nLine );
+    virtual tools::Rectangle GetFocusRect( SvTreeListEntry*, long nLine );
     // Respects indentation
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
     void            InvalidateEntry( SvTreeListEntry* );
@@ -736,7 +736,7 @@ public:
 
     using Window::Invalidate;
     virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE) override;
-    virtual void    Invalidate( const Rectangle&, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    virtual void    Invalidate( const tools::Rectangle&, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
 
     void            SetHighlightRange(sal_uInt16 nFirstTab=0, sal_uInt16 nLastTab=0xffff);
 

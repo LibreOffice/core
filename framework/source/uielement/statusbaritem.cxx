@@ -131,7 +131,7 @@ css::awt::Rectangle SAL_CALL StatusbarItem::getItemRect()
     css::awt::Rectangle aAWTRect;
     if ( m_pStatusBar )
     {
-        Rectangle aRect = m_pStatusBar->GetItemRect( m_nId );
+        tools::Rectangle aRect = m_pStatusBar->GetItemRect( m_nId );
         return css::awt::Rectangle( aRect.Left(),
                                                  aRect.Top(),
                                                  aRect.GetWidth(),

@@ -115,7 +115,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
     long nXRight = aSz.Width() - Print::nRightMargin + Print::nBorder;
 
     if( bOutput )
-        pPrinter->DrawRect(Rectangle(
+        pPrinter->DrawRect(tools::Rectangle(
             Point(nXLeft, nYTop),
             Size(nXRight - nXLeft, aSz.Height() - nYTop - Print::nBottomMargin + Print::nBorder)
         ));
@@ -246,7 +246,7 @@ void ModulWindow::DoInit()
     GetEditorWindow().InitScrollBars();
 }
 
-void ModulWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void ModulWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle&)
 {
 }
 
@@ -1434,7 +1434,7 @@ void ModulWindowLayout::UpdateDebug (bool bBasicStopped)
     aStackWindow->UpdateCalls();
 }
 
-void ModulWindowLayout::Paint (vcl::RenderContext& rRenderContext, Rectangle const&)
+void ModulWindowLayout::Paint (vcl::RenderContext& rRenderContext, tools::Rectangle const&)
 {
     rRenderContext.DrawText(Point(), IDEResId(RID_STR_NOMODULE).toString());
 }

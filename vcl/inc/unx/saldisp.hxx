@@ -287,7 +287,7 @@ protected:
     vcl_sal::WMAdaptor* m_pWMAdaptor;
 
     bool            m_bXinerama;
-    std::vector< Rectangle > m_aXineramaScreens;
+    std::vector< tools::Rectangle > m_aXineramaScreens;
     std::vector< int > m_aXineramaScreenIndexMap;
     std::list<SalObject*> m_aSalObjects;
 
@@ -370,7 +370,7 @@ public:
     { mpKbdExtension = pKbdExtension; }
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
     bool            IsXinerama() const { return m_bXinerama; }
-    const std::vector< Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
+    const std::vector< tools::Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
     ::Window        GetRootWindow( SalX11Screen nXScreen ) const
             { return getDataForScreen( nXScreen ).m_aRoot; }
     unsigned int GetXScreenCount() const { return m_aScreens.size(); }

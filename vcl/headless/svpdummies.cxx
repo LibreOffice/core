@@ -50,11 +50,11 @@ unsigned int SvpSalSystem::GetDisplayScreenCount()
     return 1;
 }
 
-Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+tools::Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if( nScreen == 0 )
-        aRect = Rectangle( Point(0,0), Size(VIRTUAL_DESKTOP_WIDTH,VIRTUAL_DESKTOP_HEIGHT) );
+        aRect = tools::Rectangle( Point(0,0), Size(VIRTUAL_DESKTOP_WIDTH,VIRTUAL_DESKTOP_HEIGHT) );
     return aRect;
 }
 

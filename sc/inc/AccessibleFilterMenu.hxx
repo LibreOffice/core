@@ -127,9 +127,9 @@ protected:
 
     sal_Int32 getMenuItemCount() const;
 
-    virtual Rectangle GetBoundingBoxOnScreen() const override;
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
 
-    virtual Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBox() const override;
 
 private:
     bool isSelected() const;

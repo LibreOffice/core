@@ -101,7 +101,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOHeader;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOShrink;
 
-    std::unique_ptr<Rectangle> mpAutoFillRect;
+    std::unique_ptr<tools::Rectangle> mpAutoFillRect;
 
     struct MouseEventState;
 
@@ -172,12 +172,12 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     Point                   aCurMousePos;
 
     sal_uInt16              nPaintCount;
-    Rectangle               aRepaintPixel;
+    tools::Rectangle               aRepaintPixel;
 
     ScAddress               aAutoMarkPos;
     ScAddress               aListValPos;
 
-    Rectangle               aInvertRect;
+    tools::Rectangle               aInvertRect;
 
     RfCorner                aRFSelectedCorned;
 
@@ -220,7 +220,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     void            PagebreakMove( const MouseEvent& rMEvt, bool bUp );
 
-    void            UpdateDragRect( bool bShowRange, const Rectangle& rPosRect );
+    void            UpdateDragRect( bool bShowRange, const tools::Rectangle& rPosRect );
 
     bool            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            FilterSelect( sal_uLong nSel );
@@ -250,9 +250,9 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     bool            IsMyModel(SdrEditView* pSdrView);
 
     void            DrawRedraw( ScOutputData& rOutputData, sal_uLong nLayer );
-    void            DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev );
+    void            DrawSdrGrid( const tools::Rectangle& rDrawingRect, OutputDevice* pContentDev );
     void            DrawAfterScroll();
-    Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
+    tools::Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
     void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext);
 
@@ -279,12 +279,12 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     void            SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY );
 
-    void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
+    void            GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelRects );
 
 
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 
@@ -321,14 +321,14 @@ public:
                                long nTileWidth, long nTileHeight );
 
     /// @see OutputDevice::LogicInvalidate().
-    void LogicInvalidate(const Rectangle* pRectangle) override;
+    void LogicInvalidate(const tools::Rectangle* pRectangle) override;
 
     /// Update the cell selection according to what handles have been dragged.
     /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.
     /// Coordinates are in pixels.
     void SetCellSelectionPixel(int nType, int nPixelX, int nPixelY);
     /// Get the cell selection, coordinates are in logic units.
-    void GetCellSelection(std::vector<Rectangle>& rLogicRects);
+    void GetCellSelection(std::vector<tools::Rectangle>& rLogicRects);
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
@@ -391,7 +391,7 @@ public:
 
     bool            NeedsRepaint() { return bNeedsRepaint; }
 
-    void            DoInvertRect( const Rectangle& rPixel );
+    void            DoInvertRect( const tools::Rectangle& rPixel );
 
     void            CheckNeedsRepaint();
 

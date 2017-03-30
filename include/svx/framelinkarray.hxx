@@ -247,7 +247,7 @@ public:
     void                SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow );
 
     /** Returns the rectangle (output coordinates) of the current clipping range. */
-    Rectangle           GetClipRangeRectangle() const;
+    tools::Rectangle           GetClipRangeRectangle() const;
 
     // cell coordinates -------------------------------------------------------
 
@@ -301,7 +301,7 @@ public:
 
     /** Returns the output rectangle of the cell (nCol,nRow).
         Returns total output rectangle of merged ranges. */
-    Rectangle           GetCellRect( size_t nCol, size_t nRow ) const;
+    tools::Rectangle           GetCellRect( size_t nCol, size_t nRow ) const;
 
     // diagonal frame borders -------------------------------------------------
 

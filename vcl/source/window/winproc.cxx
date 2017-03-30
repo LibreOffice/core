@@ -1240,7 +1240,7 @@ static bool ImplHandleEndExtTextInput( vcl::Window* /* pWindow */ )
 }
 
 static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
-                                       Rectangle& rRect, long& rInputWidth,
+                                       tools::Rectangle& rRect, long& rInputWidth,
                                        bool * pVertical )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1259,7 +1259,7 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
     {
         const OutputDevice *pChildOutDev = pChild->GetOutDev();
         ImplCallCommand( pChild, CommandEventId::CursorPos );
-        const Rectangle* pRect = pChild->GetCursorRect();
+        const tools::Rectangle* pRect = pChild->GetCursorRect();
         if ( pRect )
             rRect = pChildOutDev->ImplLogicToDevicePixel( *pRect );
         else
@@ -1271,10 +1271,10 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
                 Size aSize = pChild->LogicToPixel( pCursor->GetSize() );
                 if ( !aSize.Width() )
                     aSize.Width() = pChild->GetSettings().GetStyleSettings().GetCursorSize();
-                rRect = Rectangle( aPos, aSize );
+                rRect = tools::Rectangle( aPos, aSize );
             }
             else
-                rRect = Rectangle( Point( pChild->GetOutOffXPixel(), pChild->GetOutOffYPixel() ), Size() );
+                rRect = tools::Rectangle( Point( pChild->GetOutOffXPixel(), pChild->GetOutOffYPixel() ), Size() );
         }
         rInputWidth = pChild->ImplLogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
         if ( !rInputWidth )
@@ -1573,7 +1573,7 @@ static bool ImplHandleLongPress(vcl::Window *pWindow, const SalLongPressEvent& r
     return aHandler.HandleEvent();
 }
 
-static void ImplHandlePaint( vcl::Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
+static void ImplHandlePaint( vcl::Window* pWindow, const tools::Rectangle& rBoundRect, bool bImmediateUpdate )
 {
     // system paint events must be checked for re-mirroring
     pWindow->ImplGetWindowImpl()->mnPaintFlags |= ImplPaintFlags::CheckRtl;
@@ -2157,7 +2157,7 @@ static void ImplHandleSalSettings( SalEvent nEvent )
 
 static void ImplHandleSalExtTextInputPos( vcl::Window* pWindow, SalExtTextInputPosEvent* pEvt )
 {
-    Rectangle aCursorRect;
+    tools::Rectangle aCursorRect;
     ImplHandleExtTextInputPos( pWindow, aCursorRect, pEvt->mnExtWidth, &pEvt->mbVertical );
     if ( aCursorRect.IsEmpty() )
     {
@@ -2283,8 +2283,8 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
         if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < static_cast<sal_uLong>( pWinData->mnCompositionCharRects ) )
         {
             const OutputDevice *pChildOutDev = pChild->GetOutDev();
-            const Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
-            Rectangle aDeviceRect = pChildOutDev->ImplLogicToDevicePixel( aRect );
+            const tools::Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
+            tools::Rectangle aDeviceRect = pChildOutDev->ImplLogicToDevicePixel( aRect );
             Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
             pEvt->mnCursorBoundX = aAbsScreenPos.X();
             pEvt->mnCursorBoundY = aAbsScreenPos.Y();
@@ -2429,7 +2429,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
                 const_cast<SalPaintEvent *>(pPaintEvt)->mnBoundX = pSalFrame->maGeometry.nWidth-pPaintEvt->mnBoundWidth-pPaintEvt->mnBoundX;
             }
 
-            Rectangle aBoundRect( Point( pPaintEvt->mnBoundX, pPaintEvt->mnBoundY ),
+            tools::Rectangle aBoundRect( Point( pPaintEvt->mnBoundX, pPaintEvt->mnBoundY ),
                                   Size( pPaintEvt->mnBoundWidth, pPaintEvt->mnBoundHeight ) );
             ImplHandlePaint( pWindow, aBoundRect, pPaintEvt->mbImmediateUpdate );
             }

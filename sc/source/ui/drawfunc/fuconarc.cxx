@@ -152,7 +152,7 @@ void FuConstArc::Deactivate()
 }
 
 // Create default drawing objects via keyboard
-SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
 {
     // case SID_DRAW_ARC:
     // case SID_DRAW_PIE:
@@ -166,7 +166,7 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
     {
         if(dynamic_cast<const SdrCircObj*>( pObj) !=  nullptr)
         {
-            Rectangle aRect(rRectangle);
+            tools::Rectangle aRect(rRectangle);
 
             if(SID_DRAW_ARC == nID || SID_DRAW_CIRCLECUT == nID)
             {

@@ -55,7 +55,7 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
         aSizePixel.Width() += pRightWin->GetOutputSizePixel().Width();
     if( pBottomWin )
         aSizePixel.Height() += pBottomWin->GetOutputSizePixel().Height();
-    Rectangle aVisPixel( Point( 0, 0 ), aSizePixel );
+    tools::Rectangle aVisPixel( Point( 0, 0 ), aSizePixel );
     aVisRect = pWindow->PixelToLogic( aVisPixel, aMapMode );
 
     aTimer.SetInvokeHandler( LINK( this, ScNoteMarker, TimeHdl ) );

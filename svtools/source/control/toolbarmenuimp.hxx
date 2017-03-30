@@ -72,7 +72,7 @@ public:
     OUString maText;
     Image maImage;
     VclPtr<Control> mpControl;
-    Rectangle maRect;
+    tools::Rectangle maRect;
 
     css::uno::Reference< css::accessibility::XAccessibleContext > mxAccContext;
 

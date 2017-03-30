@@ -153,7 +153,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void CalcActiveHeight( const long nPos );
     long GetTotalHeight() const;
     void SetupScrollBar();
-    void DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TEntry_Impl& rEntry);
+    void DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry);
     bool HandleCursorKey( sal_uInt16 nKeyCode );
     bool FindEntryPos( const TEntry_Impl& rEntry, long nStart, long nEnd, long &nFound );
     void DeleteRemoved();
@@ -168,14 +168,14 @@ public:
     virtual void dispose() override;
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle &rPaintRect ) override;
     virtual void Resize() override;
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     virtual Size GetOptimalSize() const override;
 
     TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long            GetEntryCount() { return (long) m_vEntries.size(); }
-    Rectangle       GetEntryRect( const long nPos ) const;
+    tools::Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }
     long            PointToPos( const Point& rPos );
     void            DoScroll( long nDelta );

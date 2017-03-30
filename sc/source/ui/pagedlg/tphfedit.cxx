@@ -94,7 +94,7 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
         pEdEngine->SetDefaultHorizontalTextDirection(EE_HTEXTDIR_R2L);
 
     pEdView = new EditView( pEdEngine, this );
-    pEdView->SetOutputArea( Rectangle( Point(0,0), GetOutputSize() ) );
+    pEdView->SetOutputArea( tools::Rectangle( Point(0,0), GetOutputSize() ) );
 
     pEdView->SetBackgroundColor( aBgColor );
     pEdEngine->InsertView( pEdView );
@@ -106,7 +106,7 @@ void ScEditWindow::Resize()
     Size aSize(aOutputSize);
     aSize.Height() *= 4;
     pEdEngine->SetPaperSize(aSize);
-    pEdView->SetOutputArea(Rectangle(Point(0,0), aOutputSize));
+    pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
     Control::Resize();
 }
 
@@ -216,7 +216,7 @@ void ScEditWindow::SetCharAttributes()
     }
 }
 
-void ScEditWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void ScEditWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();

@@ -345,7 +345,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     if(pHdl)
                     {
                         Point aHdlPosition(pHdl->GetPos());
-                        Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
+                        tools::Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
                         pView->MakeVisible(aVisRect, *pWindow);
                     }
 
@@ -489,11 +489,11 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                             if(pView->IsMoveAllowed())
                             {
                                 // restrict movement to WorkArea
-                                const Rectangle& rWorkArea = pView->GetWorkArea();
+                                const tools::Rectangle& rWorkArea = pView->GetWorkArea();
 
                                 if(!rWorkArea.IsEmpty())
                                 {
-                                    Rectangle aMarkRect(pView->GetMarkedObjRect());
+                                    tools::Rectangle aMarkRect(pView->GetMarkedObjRect());
                                     aMarkRect.Move(nX, nY);
 
                                     if(!aMarkRect.IsInside(rWorkArea))
@@ -564,7 +564,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                                 }
 
                                 // make moved handle visible
-                                Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
+                                tools::Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
                                 pView->MakeVisible(aVisRect, *pWindow);
 
                                 bReturn = true;

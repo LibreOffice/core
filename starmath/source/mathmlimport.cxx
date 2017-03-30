@@ -3082,7 +3082,7 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     if ( !pDocShell )
         return;
 
-    Rectangle aRect( pDocShell->GetVisArea() );
+    tools::Rectangle aRect( pDocShell->GetVisArea() );
 
     sal_Int32 nCount = aViewProps.getLength();
     const PropertyValue *pValue = aViewProps.getConstArray();

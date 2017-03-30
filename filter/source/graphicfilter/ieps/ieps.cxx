@@ -470,7 +470,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     pVDev->Push( PushFlags::FONT );
     pVDev->SetFont( aFont );
 
-    Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
+    tools::Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
     pVDev->DrawRect( aRect );
 
     OUString aString;

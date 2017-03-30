@@ -354,7 +354,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         {
             // It has, so look up its text rectangle, and adjust the position
             // of the textbox accordingly.
-            Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
+            tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
 
             SwFormatHoriOrient aHori(pTextBox->GetHoriOrient());
             aHori.SetHoriOrient(css::text::HoriOrientation::NONE);

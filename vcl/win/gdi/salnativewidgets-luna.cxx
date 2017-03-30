@@ -335,7 +335,7 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 
 bool WinSalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
-                              const Rectangle&,
+                              const tools::Rectangle&,
                               const Point&,
                               bool& )
 {
@@ -358,19 +358,19 @@ bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
     return (hr == S_OK);
 }
 
-Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
+tools::Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const tools::Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
     HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, nullptr, eTS, &aSz ); // TS_TRUE returns optimal size
     if( hr == S_OK )
-        return Rectangle( 0, 0, aSz.cx, aSz.cy );
+        return tools::Rectangle( 0, 0, aSz.cx, aSz.cy );
     else
-        return Rectangle();
+        return tools::Rectangle();
 }
 
 // Helper functions
 
-void ImplConvertSpinbuttonValues( ControlPart nControlPart, const ControlState& rState, const Rectangle& rRect,
+void ImplConvertSpinbuttonValues( ControlPart nControlPart, const ControlState& rState, const tools::Rectangle& rRect,
                                  int* pLunaPart, int *pLunaState, RECT *pRect )
 {
     if( nControlPart == ControlPart::ButtonDown )
@@ -1001,7 +1001,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         iPart = (nPart == ControlPart::TrackHorzArea) ? TKP_TRACK : TKP_TRACKVERT;
         iState = (nPart == ControlPart::TrackHorzArea) ? static_cast<int>(TRS_NORMAL) : static_cast<int>(TRVS_NORMAL);
 
-        Rectangle aTrackRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, Rectangle() );
+        tools::Rectangle aTrackRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, tools::Rectangle() );
         RECT aTRect = rc;
         if( nPart == ControlPart::TrackHorzArea )
         {
@@ -1120,8 +1120,8 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     rc.right -= aValue.getNumericVal()+1;
                 else
                     rc.left += aValue.getNumericVal()+1;
-                Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
-                    MENU_POPUPSEPARATOR, 0, Rectangle( rc.left, rc.top, rc.right, rc.bottom ) ) );
+                tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
+                    MENU_POPUPSEPARATOR, 0, tools::Rectangle( rc.left, rc.top, rc.right, rc.bottom ) ) );
                 // center the separator inside the passed rectangle
                 long nDY = ((rc.bottom - rc.top + 1) - aRect.GetHeight()) / 2;
                 rc.top += nDY;
@@ -1136,7 +1136,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
 bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         ControlPart nPart,
-                                        const Rectangle& rControlRegion,
+                                        const tools::Rectangle& rControlRegion,
                                         ControlState nState,
                                         const ImplControlValue& aValue,
                                         const OUString& aCaption )
@@ -1144,8 +1144,8 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     bool bOk = false;
     HTHEME hTheme = nullptr;
 
-    Rectangle buttonRect = rControlRegion;
-    Rectangle cacheRect = rControlRegion;
+    tools::Rectangle buttonRect = rControlRegion;
+    tools::Rectangle cacheRect = rControlRegion;
     Size keySize = cacheRect.GetSize();
 
     WinOpenGLSalGraphicsImpl* pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
@@ -1153,8 +1153,8 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     // tdf#95618 - A few controls render outside the region they're given.
     if (pImpl && nType == ControlType::TabItem)
     {
-        Rectangle rNativeBoundingRegion;
-        Rectangle rNativeContentRegion;
+        tools::Rectangle rNativeBoundingRegion;
+        tools::Rectangle rNativeContentRegion;
         if (getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, aCaption,
                                    rNativeBoundingRegion, rNativeContentRegion))
         {
@@ -1296,12 +1296,12 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
 
 bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
-                                const Rectangle& rControlRegion,
+                                const tools::Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& rControlValue,
                                 const OUString&,
-                                Rectangle &rNativeBoundingRegion,
-                                Rectangle &rNativeContentRegion )
+                                tools::Rectangle &rNativeBoundingRegion,
+                                tools::Rectangle &rNativeContentRegion )
 {
     bool bRet = FALSE;
 
@@ -1320,11 +1320,11 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             HTHEME hTheme = getThemeHandle( mhWnd, L"Rebar");
             if( hTheme )
             {
-                Rectangle aRect( ImplGetThemeRect( hTheme, hDC, nPart == ControlPart::ThumbHorz ? RP_GRIPPERVERT : RP_GRIPPER,
+            tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, nPart == ControlPart::ThumbHorz ? RP_GRIPPERVERT : RP_GRIPPER,
                     0, rControlRegion.GetBoundRect() ) );
                 if( nPart == ControlPart::ThumbHorz && !aRect.IsEmpty() )
                 {
-                    Rectangle aVertRect( 0, 0, aRect.getHeight(), aRect.getWidth() );
+                    tools::Rectangle aVertRect( 0, 0, aRect.getHeight(), aRect.getWidth() );
                     rNativeContentRegion = aVertRect;
                 }
                 else
@@ -1340,7 +1340,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             HTHEME hTheme = getThemeHandle( mhWnd, L"Toolbar");
             if( hTheme )
             {
-                Rectangle aRect( ImplGetThemeRect( hTheme, hDC, TP_SPLITBUTTONDROPDOWN,
+                tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, TP_SPLITBUTTONDROPDOWN,
                     TS_HOT, rControlRegion ) );
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
@@ -1354,7 +1354,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         HTHEME hTheme = getThemeHandle( mhWnd, L"Progress");
         if( hTheme )
         {
-            Rectangle aRect( ImplGetThemeRect( hTheme, hDC, PP_BAR,
+            tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, PP_BAR,
                 0, rControlRegion ) );
             rNativeContentRegion = aRect;
             rNativeBoundingRegion = rNativeContentRegion;
@@ -1367,8 +1367,8 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         HTHEME hTheme = getThemeHandle( mhWnd, L"Combobox");
         if( hTheme )
         {
-            Rectangle aBoxRect( rControlRegion );
-            Rectangle aRect( ImplGetThemeRect( hTheme, hDC, CP_DROPDOWNBUTTON,
+            tools::Rectangle aBoxRect( rControlRegion );
+            tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, CP_DROPDOWNBUTTON,
                                                CBXS_NORMAL, aBoxRect ) );
             if( aRect.GetHeight() > aBoxRect.GetHeight() )
                 aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
@@ -1387,8 +1387,8 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         if( hTheme )
         {
             // get border size
-            Rectangle aBoxRect( rControlRegion );
-            Rectangle aRect( ImplGetThemeRect( hTheme, hDC, EP_BACKGROUNDWITHBORDER,
+            tools::Rectangle aBoxRect( rControlRegion );
+            tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, EP_BACKGROUNDWITHBORDER,
                                                EBWBS_HOT, aBoxRect ) );
             // ad app font height
             NONCLIENTMETRICSW aNonClientMetrics;
@@ -1423,8 +1423,8 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 nPart == ControlPart::MenuItemRadioMark )
             {
                 HTHEME hTheme = getThemeHandle( mhWnd, L"Menu");
-                Rectangle aBoxRect( rControlRegion );
-                Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
+                tools::Rectangle aBoxRect( rControlRegion );
+                tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
                     MENU_POPUPCHECK,
                     MC_CHECKMARKNORMAL,
                     aBoxRect ) );
@@ -1445,11 +1445,11 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         {
             int iPart = (nPart == ControlPart::ThumbHorz) ? TKP_THUMB : TKP_THUMBVERT;
             int iState = (nPart == ControlPart::ThumbHorz) ? static_cast<int>(TUS_NORMAL) : static_cast<int>(TUVS_NORMAL);
-            Rectangle aThumbRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, Rectangle() );
+            tools::Rectangle aThumbRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, tools::Rectangle() );
             if( nPart == ControlPart::ThumbHorz )
             {
                 long nW = aThumbRect.GetWidth();
-                Rectangle aRect( rControlRegion );
+                tools::Rectangle aRect( rControlRegion );
                 aRect.Right() = aRect.Left() + nW - 1;
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
@@ -1457,7 +1457,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             else
             {
                 long nH = aThumbRect.GetHeight();
-                Rectangle aRect( rControlRegion );
+                tools::Rectangle aRect( rControlRegion );
                 aRect.Bottom() = aRect.Top() + nH - 1;
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
@@ -1468,7 +1468,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
 
     if ( ( nType == ControlType::TabItem ) && ( nPart == ControlPart::Entire ) )
     {
-        Rectangle aControlRect( rControlRegion );
+        tools::Rectangle aControlRect( rControlRegion );
         rNativeContentRegion = aControlRect;
 
         --aControlRect.Bottom();

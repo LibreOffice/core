@@ -240,7 +240,7 @@ void OApplicationView::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void OApplicationView::resizeDocumentView(Rectangle& _rPlayground)
+void OApplicationView::resizeDocumentView(tools::Rectangle& _rPlayground)
 {
     if ( m_pWin && !_rPlayground.IsEmpty() )
     {

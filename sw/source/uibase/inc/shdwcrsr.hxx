@@ -45,7 +45,7 @@ public:
 
     void Paint();
 
-    Rectangle GetRect() const;
+    tools::Rectangle GetRect() const;
 };
 
 #endif

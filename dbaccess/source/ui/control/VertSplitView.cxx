@@ -134,7 +134,7 @@ void OSplitterView::Resize()
 
         //set the size of the splitter
         m_pSplitter->SetPosSizePixel( aSplitPos, Size( aPlaygroundSize.Width(), aSplitSize.Height() ) );
-        m_pSplitter->SetDragRectPixel( Rectangle(aPlaygroundPos,aPlaygroundSize) );
+        m_pSplitter->SetDragRectPixel( tools::Rectangle(aPlaygroundPos,aPlaygroundSize) );
     }
 
     if ( m_pRight )

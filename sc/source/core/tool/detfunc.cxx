@@ -337,16 +337,16 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
     return aPos;
 }
 
-Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+tools::Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {
-    Rectangle aRect(
+    tools::Rectangle aRect(
         GetDrawPos( ::std::min( nCol1, nCol2 ), ::std::min( nRow1, nRow2 ), DrawPosMode::TopLeft ),
         GetDrawPos( ::std::max( nCol1, nCol2 ), ::std::max( nRow1, nRow2 ), DrawPosMode::BottomRight ) );
     aRect.Justify();    // reorder left/right in RTL sheets
     return aRect;
 }
 
-Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol, SCROW nRow ) const
+tools::Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol, SCROW nRow ) const
 {
     return GetDrawRect( nCol, nRow, nCol, nRow );
 }
@@ -381,8 +381,8 @@ bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
         return true;
     }
 
-    Rectangle aStartRect;
-    Rectangle aEndRect;
+    tools::Rectangle aStartRect;
+    tools::Rectangle aEndRect;
     if (!bStartAlien)
         aStartRect = GetDrawRect( rStart.Col(), rStart.Row() );
     if (!bEndAlien)
@@ -455,7 +455,7 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     {
         // insert the rectangle before the arrow - this is relied on in FindFrameForObject
 
-        Rectangle aRect = GetDrawRect( nRefStartCol, nRefStartRow, nRefEndCol, nRefEndRow );
+        tools::Rectangle aRect = GetDrawRect( nRefStartCol, nRefStartRow, nRefEndCol, nRefEndRow );
         SdrRectObj* pBox = new SdrRectObj( aRect );
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
@@ -498,7 +498,7 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
     SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
-    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //TODO: needed ???
+    pArrow->NbcSetLogicRect(tools::Rectangle(aStartPos,aEndPos));  //TODO: needed ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pArrow->SetLayer( SC_LAYER_INTERN );
@@ -528,7 +528,7 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     bool bArea = ( nStartCol != nEndCol || nStartRow != nEndRow );
     if (bArea)
     {
-        Rectangle aRect = GetDrawRect( nStartCol, nStartRow, nEndCol, nEndRow );
+        tools::Rectangle aRect = GetDrawRect( nStartCol, nStartRow, nEndCol, nEndRow );
         SdrRectObj* pBox = new SdrRectObj( aRect );
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
@@ -563,7 +563,7 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
     SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
-    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //TODO: needed ???
+    pArrow->NbcSetLogicRect(tools::Rectangle(aStartPos,aEndPos));  //TODO: needed ???
 
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
@@ -622,7 +622,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
 
-    Rectangle aRect = GetDrawRect( nCol, nRow );
+    tools::Rectangle aRect = GetDrawRect( nCol, nRow );
     aRect.Left()    -= 250;
     aRect.Right()   += 250;
     aRect.Top()     -= 70;
@@ -647,7 +647,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
 
 void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
 {
-    Rectangle aRect = GetDrawRect( nCol, nRow );
+    tools::Rectangle aRect = GetDrawRect( nCol, nRow );
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
@@ -701,7 +701,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
 
 #define SC_DET_TOLERANCE    50
 
-inline bool RectIsPoints( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
+inline bool RectIsPoints( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
     return rRect.Left()   >= rStart.X() - SC_DET_TOLERANCE
         && rRect.Left()   <= rStart.X() + SC_DET_TOLERANCE
@@ -717,10 +717,10 @@ inline bool RectIsPoints( const Rectangle& rRect, const Point& rStart, const Poi
 
 void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
-    Rectangle aCornerRect = GetDrawRect( nCol1, nRow1, nCol2, nRow2 );
+    tools::Rectangle aCornerRect = GetDrawRect( nCol1, nRow1, nCol2, nRow2 );
     Point aStartCorner = aCornerRect.TopLeft();
     Point aEndCorner = aCornerRect.BottomRight();
-    Rectangle aObjRect;
+    tools::Rectangle aObjRect;
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));

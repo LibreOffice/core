@@ -68,7 +68,7 @@ class SwAddressControl_Impl : public Control
     DECL_LINK(GotFocusHdl_Impl, Control&, void);
     DECL_LINK(EditModifyHdl_Impl, Edit&, void);
 
-    void                MakeVisible(const Rectangle& aRect);
+    void                MakeVisible(const tools::Rectangle& aRect);
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
     virtual void        Command( const CommandEvent& rCEvt ) override;
@@ -275,12 +275,12 @@ IMPL_LINK(SwAddressControl_Impl, GotFocusHdl_Impl, Control&, rControl, void)
     Edit* pEdit = static_cast<Edit*>(&rControl);
     if(GetFocusFlags::Tab & pEdit->GetGetFocusFlags())
     {
-        Rectangle aRect(pEdit->GetPosPixel(), pEdit->GetSizePixel());
+        tools::Rectangle aRect(pEdit->GetPosPixel(), pEdit->GetSizePixel());
         MakeVisible(aRect);
     }
 }
 
-void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
+void SwAddressControl_Impl::MakeVisible(const tools::Rectangle & rRect)
 {
     long nThumb = m_pScrollBar->GetThumbPos();
     //determine range of visible positions
@@ -320,7 +320,7 @@ void SwAddressControl_Impl::SetCursorTo(std::size_t nElement)
     {
         Edit* pEdit = m_aEdits[nElement].get();
         pEdit->GrabFocus();
-        Rectangle aRect(pEdit->GetPosPixel(), pEdit->GetSizePixel());
+        tools::Rectangle aRect(pEdit->GetPosPixel(), pEdit->GetSizePixel());
         MakeVisible(aRect);
     }
 

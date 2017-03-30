@@ -71,7 +71,7 @@ public:
 
     static tools::Polygon GetCountour( const Bitmap& rBmp, const XOutFlags nContourFlags,
                                        const sal_uInt8 cEdgeDetectThreshold,
-                                       const Rectangle* pWorkRect );
+                                       const tools::Rectangle* pWorkRect );
 };
 
 SVX_DLLPUBLIC bool DitherBitmap( Bitmap& rBitmap );

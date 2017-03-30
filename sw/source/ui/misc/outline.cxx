@@ -251,7 +251,7 @@ IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn, void )
     }
 
     pFormMenu->SetSelectHdl(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
-    pFormMenu->Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), PopupMenuFlags::ExecuteDown);
+    pFormMenu->Execute(pBtn, tools::Rectangle(Point(0,0), pBtn->GetSizePixel()), PopupMenuFlags::ExecuteDown);
 }
 
 IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
@@ -903,7 +903,7 @@ static long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat &rForma
 VCL_BUILDER_FACTORY(NumberingPreview)
 
 // paint numbering's preview
-void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     const Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 
@@ -914,7 +914,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
     // #101524# OJ
     pVDev->SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     pVDev->SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor());
-    pVDev->DrawRect(Rectangle(Point(0,0), aSize));
+    pVDev->DrawRect(tools::Rectangle(Point(0,0), aSize));
 
     if (pActNum)
     {
@@ -1044,11 +1044,11 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
                     nXStart = rFormat.GetIndentAt() / nWidthRelation;
                 }
 
-                Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
+                tools::Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
                 pVDev->SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor()); // Color( COL_BLACK ) );
                 pVDev->DrawRect(aRect1);
 
-                Rectangle aRect2(Point(nXStart, nYStart + nLineHeight + nFontHeight / 2), Size(aSize.Width() / 2, 2));
+                tools::Rectangle aRect2(Point(nXStart, nYStart + nLineHeight + nFontHeight / 2), Size(aSize.Width() / 2, 2));
                 pVDev->DrawRect(aRect2);
                 nYStart += 2 * nLineHeight;
             }

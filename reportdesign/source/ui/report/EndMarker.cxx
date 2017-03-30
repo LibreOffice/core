@@ -42,7 +42,7 @@ OEndMarker::~OEndMarker()
 {
 }
 
-void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     Fraction aCornerSpace(long(CORNER_SPACE));
     aCornerSpace *= rRenderContext.GetMapMode().GetScaleX();
@@ -50,7 +50,7 @@ void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rR
 
     Size aSize = GetSizePixel();
     aSize.Width() += nCornerSpace;
-    Rectangle aWholeRect(Point(-nCornerSpace,0),aSize);
+    tools::Rectangle aWholeRect(Point(-nCornerSpace,0),aSize);
     tools::PolyPolygon aPoly;
     aPoly.Insert( tools::Polygon(aWholeRect,nCornerSpace,nCornerSpace));
 
@@ -68,7 +68,7 @@ void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rR
     rRenderContext.DrawGradient(PixelToLogic(aPoly), aGradient);
     if (m_bMarked)
     {
-        Rectangle aRect(Point(-nCornerSpace, nCornerSpace),
+        tools::Rectangle aRect(Point(-nCornerSpace, nCornerSpace),
                          Size(aSize.Width() - nCornerSpace,
                               aSize.Height() - nCornerSpace - nCornerSpace));
         ColorChanger aColors(this, COL_WHITE, COL_WHITE);

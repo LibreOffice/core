@@ -1693,7 +1693,7 @@ class ViewCallback
 {
 public:
     bool m_bTilesInvalidated;
-    Rectangle m_aOwnCursor;
+    tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
 
     ViewCallback()
@@ -1802,7 +1802,7 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
-    Rectangle aBodyCursor = aView2.m_aOwnCursor;
+    tools::Rectangle aBodyCursor = aView2.m_aOwnCursor;
 
     // Now insert a comment and make sure that the comment's cursor is shown,
     // not the body text's one.

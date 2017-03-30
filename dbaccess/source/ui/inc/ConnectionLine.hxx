@@ -52,15 +52,15 @@ namespace dbaui
 
         OConnectionLine& operator=( const OConnectionLine& rLine );
 
-        Rectangle           GetBoundingRect();
+        tools::Rectangle           GetBoundingRect();
         bool                RecalcLine();
         void                Draw( OutputDevice* pOutDev );
         bool                CheckHit( const Point& rMousePos ) const;
 
         bool                IsValid() const;
 
-        Rectangle           GetSourceTextPos() const;
-        Rectangle           GetDestTextPos() const;
+        tools::Rectangle           GetSourceTextPos() const;
+        tools::Rectangle           GetDestTextPos() const;
 
         const OConnectionLineDataRef& GetData() const { return m_pData; }
 

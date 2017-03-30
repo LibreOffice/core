@@ -188,7 +188,7 @@ class SwSidebarWin : public vcl::Window
         virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
         virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;
         virtual void MouseMove(const MouseEvent& rMouseEvent) override;
-        void PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+        void PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
         /// Is there a matching sub-widget inside this sidebar widget for rPointLogic?
         bool IsHitWindow(const Point& rPointLogic);
         /// Allows adjusting the point or mark of the selection to a document coordinate.
@@ -196,7 +196,7 @@ class SwSidebarWin : public vcl::Window
 
     protected:
         virtual void    LoseFocus() override;
-        virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void    GetFocus() override;
         virtual VclPtr<MenuButton> CreateMenuButton() = 0;
 
@@ -242,7 +242,7 @@ class SwSidebarWin : public vcl::Window
 
         sw::sidebarwindows::SidebarPosition meSidebarPosition;
 
-        Rectangle       mPosSize;
+        tools::Rectangle       mPosSize;
         SwRect          mAnchorRect;
         long            mPageBorder;
         bool            mbAnchorRectChanged;

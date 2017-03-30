@@ -23,8 +23,8 @@ Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap()
         Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(constFillColor);
         aWriteAccess->SetLineColor(COL_YELLOW);
-        aWriteAccess->DrawRect(Rectangle(0, 0,  8, 8));
-        aWriteAccess->DrawRect(Rectangle(2, 2,  6, 6));
+        aWriteAccess->DrawRect(tools::Rectangle(0, 0,  8, 8));
+        aWriteAccess->DrawRect(tools::Rectangle(2, 2,  6, 6));
     }
 
     initialSetup(13, 13, constBackgroundColor);
@@ -48,8 +48,8 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmap()
         Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(constFillColor);
         aWriteAccess->SetLineColor(COL_YELLOW);
-        aWriteAccess->DrawRect(Rectangle(0, 0,  8, 8));
-        aWriteAccess->DrawRect(Rectangle(2, 2,  6, 6));
+        aWriteAccess->DrawRect(tools::Rectangle(0, 0,  8, 8));
+        aWriteAccess->DrawRect(tools::Rectangle(2, 2,  6, 6));
     }
 
     initialSetup(13, 13, constBackgroundColor);
@@ -70,8 +70,8 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha()
         Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(Color(0xFF, 0xFF, 0x00));
-        aWriteAccess->DrawRect(Rectangle(0, 0, 8, 8));
-        aWriteAccess->DrawRect(Rectangle(3, 3, 5, 5));
+        aWriteAccess->DrawRect(tools::Rectangle(0, 0, 8, 8));
+        aWriteAccess->DrawRect(tools::Rectangle(3, 3, 5, 5));
     }
 
     AlphaMask aAlpha(aBitmapSize);
@@ -79,13 +79,13 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha()
         AlphaMask::ScopedWriteAccess aWriteAccess(aAlpha);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(Color(0x44, 0x44, 0x44));
-        aWriteAccess->DrawRect(Rectangle(0, 0, 8, 8));
-        aWriteAccess->DrawRect(Rectangle(3, 3, 5, 5));
+        aWriteAccess->DrawRect(tools::Rectangle(0, 0, 8, 8));
+        aWriteAccess->DrawRect(tools::Rectangle(3, 3, 5, 5));
     }
 
     initialSetup(13, 13, constBackgroundColor);
 
-    Point aPoint(alignToCenter(maVDRectangle, Rectangle(Point(), aBitmapSize)).TopLeft());
+    Point aPoint(alignToCenter(maVDRectangle, tools::Rectangle(Point(), aBitmapSize)).TopLeft());
 
     mpVirtualDevice->DrawBitmapEx(aPoint, BitmapEx(aBitmap, aAlpha));
 
@@ -100,8 +100,8 @@ Bitmap OutputDeviceTestBitmap::setupDrawMask()
         Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(COL_BLACK);
-        aWriteAccess->DrawRect(Rectangle(0, 0,  8, 8));
-        aWriteAccess->DrawRect(Rectangle(3, 3,  5, 5));
+        aWriteAccess->DrawRect(tools::Rectangle(0, 0,  8, 8));
+        aWriteAccess->DrawRect(tools::Rectangle(3, 3,  5, 5));
     }
 
     initialSetup(13, 13, constBackgroundColor);

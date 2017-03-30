@@ -36,7 +36,7 @@ AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, 
 {
 }
 
-void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect )
+void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, tools::Rectangle& rRect )
 {
     DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
                "SvxAccessibleStringWrap::GetCharacterBounds: index value overflow");
@@ -65,7 +65,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRec
     if( mrFont.IsVertical() )
     {
         // #101701# Rotate to vertical
-        rRect = Rectangle( Point(-rRect.Top(), rRect.Left()),
+        rRect = tools::Rectangle( Point(-rRect.Top(), rRect.Left()),
                            Point(-rRect.Bottom(), rRect.Right()));
     }
 }
@@ -73,7 +73,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRec
 sal_Int32 AccessibleStringWrap::GetIndexAtPoint( const Point& rPoint )
 {
     // search for character bounding box containing given point
-    Rectangle aRect;
+    tools::Rectangle aRect;
     sal_Int32 i, nLen = maText.getLength();
     for( i=0; i<nLen; ++i )
     {

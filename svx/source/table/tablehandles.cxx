@@ -238,7 +238,7 @@ drawinglayer::primitive2d::Primitive2DContainer OverlayTableEdge::createOverlayO
 
 
 TableBorderHdl::TableBorderHdl(
-    const Rectangle& rRect,
+    const tools::Rectangle& rRect,
     bool bAnimate)
 :   SdrHdl(rRect.TopLeft(), SdrHdlKind::Move),
     maRectangle(rRect),

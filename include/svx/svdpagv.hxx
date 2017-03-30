@@ -64,8 +64,8 @@ private:
     SdrPage*     mpPage;
     Point        aPgOrg;   // The Page's point of origin
 
-    Rectangle    aMarkBound;
-    Rectangle    aMarkSnap;
+    tools::Rectangle    aMarkBound;
+    tools::Rectangle    aMarkSnap;
     bool         mbHasMarked;
     bool         mbVisible;
 
@@ -162,11 +162,11 @@ public:
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
 
     void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr,
-                   const Rectangle& rRect = Rectangle(),
+                   const tools::Rectangle& rRect = tools::Rectangle(),
                    basegfx::B2IRange const* pPageFrame = nullptr);
-    void DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
+    void DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
 
-    Rectangle GetPageRect() const;
+    tools::Rectangle GetPageRect() const;
     SdrPage* GetPage() const { return mpPage; }
 
     /// Return current List
@@ -181,10 +181,10 @@ public:
     bool HasMarkedObjPageView() const { return mbHasMarked; }
     void SetHasMarkedObj(bool bOn) { mbHasMarked = bOn; }
 
-    const Rectangle& MarkBound() const { return aMarkBound; }
-    const Rectangle& MarkSnap() const { return aMarkSnap; }
-    Rectangle& MarkBound() { return aMarkBound; }
-    Rectangle& MarkSnap() { return aMarkSnap; }
+    const tools::Rectangle& MarkBound() const { return aMarkBound; }
+    const tools::Rectangle& MarkSnap() const { return aMarkSnap; }
+    tools::Rectangle& MarkBound() { return aMarkBound; }
+    tools::Rectangle& MarkSnap() { return aMarkSnap; }
 
     void SetLayerVisible(const OUString& rName, bool bShow) {
         SetLayer(rName, aLayerVisi, bShow);
@@ -207,7 +207,7 @@ public:
     void SetPageOrigin(const Point& rOrg);
 
     void LogicToPagePos(Point& rPnt) const { rPnt-=aPgOrg; }
-    void LogicToPagePos(Rectangle& rRect) const { rRect.Move(-aPgOrg.X(),-aPgOrg.Y()); }
+    void LogicToPagePos(tools::Rectangle& rRect) const { rRect.Move(-aPgOrg.X(),-aPgOrg.Y()); }
     void PagePosToLogic(Point& rPnt) const { rPnt+=aPgOrg; }
 
     void SetVisibleLayers(const SetOfByte& rSet) { aLayerVisi=rSet; }

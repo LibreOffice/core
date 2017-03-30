@@ -191,26 +191,26 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
 
 // internal virtual methods ---------------------------------------------------
 
-Rectangle AccessibleGridControlHeader::implGetBoundingBox()
+tools::Rectangle AccessibleGridControlHeader::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
-    Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
+    tools::Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())
-        return Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));
+        return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));
     else
-        return Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
+        return tools::Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
 
 }
 
-Rectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
+tools::Rectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
 {
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
-    Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
+    tools::Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())
-        return Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));
+        return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));
     else
-        return Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
+        return tools::Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
 }
 
 // internal helper methods ----------------------------------------------------

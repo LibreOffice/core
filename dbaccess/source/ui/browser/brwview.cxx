@@ -186,7 +186,7 @@ void UnoDataBrowserView::hideStatus()
     Update();
 }
 
-void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
+void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)
 {
     Point   aSplitPos;
     Size    aSplitSize;

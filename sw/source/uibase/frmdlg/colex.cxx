@@ -230,14 +230,14 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
     }
 
     rRenderContext.SetFillColor(Color(COL_LIGHTGRAY));
-    Rectangle aRect;
+    tools::Rectangle aRect;
     aRect.Right() = rOrg.X() + GetSize().Width() - nR;
     aRect.Left()  = rOrg.X() + nL;
     aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
     aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
     rRenderContext.DrawRect(aRect);
 
-    const Rectangle aDefineRect(aRect);
+    const tools::Rectangle aDefineRect(aRect);
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes = getPageFillAttributes();
 
     if (!rFillAttributes.get() || !rFillAttributes->isUsed())
@@ -373,7 +373,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
 
 VCL_BUILDER_FACTORY(SwColumnOnlyExample)
 
-void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
@@ -384,7 +384,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectan
         aGrayColor.Invert();
 
     Size aLogSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
-    Rectangle aCompleteRect(Point(0,0), aLogSize);
+    tools::Rectangle aCompleteRect(Point(0,0), aLogSize);
     rRenderContext.SetLineColor(rDlgColor);
     rRenderContext.SetFillColor(rDlgColor);
     rRenderContext.DrawRect(aCompleteRect);
@@ -392,11 +392,11 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectan
     rRenderContext.SetLineColor(rFieldTextColor);
     Point aTL((aLogSize.Width() - m_aFrameSize.Width()) / 2,
               (aLogSize.Height() - m_aFrameSize.Height()) / 2);
-    Rectangle aRect(aTL, m_aFrameSize);
+    tools::Rectangle aRect(aTL, m_aFrameSize);
 
     //draw a shadow rectangle
     rRenderContext.SetFillColor(Color(COL_GRAY));
-    Rectangle aShadowRect(aRect);
+    tools::Rectangle aShadowRect(aRect);
     aShadowRect.Move(aTL.Y(), aTL.Y());
     rRenderContext.DrawRect(aShadowRect);
 
@@ -438,7 +438,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectan
     {
         rRenderContext.DrawRect(aRect);
         rRenderContext.SetFillColor(rFieldColor);
-        Rectangle aFrameRect(aTL, m_aFrameSize);
+        tools::Rectangle aFrameRect(aTL, m_aFrameSize);
         long nSum = aTL.X();
         for (sal_uInt16 i = 0; i < nColCount; i++)
         {
@@ -547,7 +547,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
             nR = GetLeft();
         }
 
-        Rectangle aRect;
+        tools::Rectangle aRect;
         aRect.Right() = rOrg.X() + GetSize().Width() - nR;
         aRect.Left()  = rOrg.X() + nL;
         aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
@@ -558,11 +558,11 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
         sal_Int32 nRubyHeight = pGridItem->GetRubyHeight() * 3;
 
         //detect height of rectangles
-        Rectangle aRubyRect(aRect.TopLeft(),
+        tools::Rectangle aRubyRect(aRect.TopLeft(),
                     m_bVertical ?
                     Size(nRubyHeight, aRect.GetHeight()) :
                     Size(aRect.GetWidth(), nRubyHeight));
-        Rectangle aCharRect(aRect.TopLeft(),
+        tools::Rectangle aCharRect(aRect.TopLeft(),
                     m_bVertical ?
                     Size(nBaseHeight, aRect.GetHeight()) :
                     Size(aRect.GetWidth(), nBaseHeight));

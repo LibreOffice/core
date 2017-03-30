@@ -462,7 +462,7 @@ void OSQLMessageBox::impl_positionControls()
     m_aTitle->SetText( sPrimary );
     m_aTitle->Show();
 
-    Rectangle aPrimaryRect( m_aTitle->GetPosPixel(), m_aTitle->GetSizePixel() );
+    tools::Rectangle aPrimaryRect( m_aTitle->GetPosPixel(), m_aTitle->GetSizePixel() );
 
     // secondary text (if applicable)
     m_aMessage->SetStyle( m_aMessage->GetStyle() | WB_NOLABEL );
@@ -470,7 +470,7 @@ void OSQLMessageBox::impl_positionControls()
     m_aMessage->SetText( sSecondary );
 
     lcl_positionInAppFont( *this, *m_aMessage.get(), TEXT_POS_X, OUTER_MARGIN + 16 + 3, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 8 );
-    Rectangle aSecondaryRect( m_aMessage->GetPosPixel(), m_aMessage->GetSizePixel() );
+    tools::Rectangle aSecondaryRect( m_aMessage->GetPosPixel(), m_aMessage->GetSizePixel() );
 
     bool bHaveSecondaryText = !sSecondary.isEmpty();
 
@@ -487,13 +487,13 @@ void OSQLMessageBox::impl_positionControls()
     // if there's no secondary text ...
     if ( !bHaveSecondaryText )
     {   // then give the primary text as much horizontal space as it needs
-        Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sPrimary, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::Center ) );
+        tools::Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sPrimary, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::Center ) );
         aPrimaryRect.Right() = aPrimaryRect.Left() + aSuggestedRect.GetWidth();
         aPrimaryRect.Bottom() = aPrimaryRect.Top() + aSuggestedRect.GetHeight();
         // and center it horizontally
         m_aTitle->SetStyle( ( m_aTitle->GetStyle() & ~WB_LEFT ) | WB_CENTER );
 
-        Rectangle aInfoRect( m_aInfoImage->GetPosPixel(), m_aInfoImage->GetSizePixel() );
+        tools::Rectangle aInfoRect( m_aInfoImage->GetPosPixel(), m_aInfoImage->GetSizePixel() );
         // also, if it's not as high as the image ...
         if ( aPrimaryRect.GetHeight() < m_aInfoImage->GetSizePixel().Height() )
         {   // ... make it fit the image height
@@ -511,7 +511,7 @@ void OSQLMessageBox::impl_positionControls()
     }
 
     // adjust dialog size accordingly
-    const Rectangle& rBottomTextRect( bHaveSecondaryText ? aSecondaryRect : aPrimaryRect );
+    const tools::Rectangle& rBottomTextRect( bHaveSecondaryText ? aSecondaryRect : aPrimaryRect );
     Size aBorderSize = LogicToPixel( Size( OUTER_MARGIN, OUTER_MARGIN ), MapUnit::MapAppFont );
     Size aDialogSize( LogicToPixel( Size( DIALOG_WIDTH, 30 ), MapUnit::MapAppFont ) );
     aDialogSize.Height() = rBottomTextRect.Bottom() + aBorderSize.Height();

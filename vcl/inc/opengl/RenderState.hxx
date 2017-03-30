@@ -153,13 +153,13 @@ class RenderState
     StencilState maStencil;
     BlendState   maBlend;
 
-    Rectangle maCurrentViewport;
+    tools::Rectangle maCurrentViewport;
 
 public:
     RenderState()
     {}
 
-    void viewport(Rectangle aViewPort)
+    void viewport(tools::Rectangle aViewPort)
     {
         if (aViewPort != maCurrentViewport)
         {

@@ -51,7 +51,7 @@
 
 using namespace css;
 
-void drawBitmapCentered(Rectangle& rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext)
+void drawBitmapCentered(tools::Rectangle& rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext)
 {
     long nWidth = rRect.GetWidth();
     long nHeight = rRect.GetHeight();
@@ -66,7 +66,7 @@ void drawBitmapCentered(Rectangle& rRect, Bitmap aBitmap, vcl::RenderContext& rR
     rRenderContext.DrawBitmap(aPoint, aBitmap);
 }
 
-void drawBitmapScaledAndCentered(Rectangle& rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext, BmpScaleFlag aFlag = BmpScaleFlag::Fast)
+void drawBitmapScaledAndCentered(tools::Rectangle& rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext, BmpScaleFlag aFlag = BmpScaleFlag::Fast)
 {
     long nWidth = rRect.GetWidth();
     long nHeight = rRect.GetHeight();
@@ -80,7 +80,7 @@ void drawBitmapScaledAndCentered(Rectangle& rRect, Bitmap aBitmap, vcl::RenderCo
     drawBitmapCentered(rRect, aBitmap, rRenderContext);
 }
 
-void drawBackgroundRect(Rectangle& rRect, Color aColor, vcl::RenderContext& rRenderContext)
+void drawBackgroundRect(tools::Rectangle& rRect, Color aColor, vcl::RenderContext& rRenderContext)
 {
     rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
     rRenderContext.SetFillColor(aColor);
@@ -89,7 +89,7 @@ void drawBackgroundRect(Rectangle& rRect, Color aColor, vcl::RenderContext& rRen
     rRenderContext.Pop();
 }
 
-void assertAndSetBackground(vcl::test::TestResult eResult, Rectangle& rRect, vcl::RenderContext& rRenderContext)
+void assertAndSetBackground(vcl::test::TestResult eResult, tools::Rectangle& rRect, vcl::RenderContext& rRenderContext)
 {
     if (eResult == vcl::test::TestResult::Passed)
         drawBackgroundRect(rRect, COL_GREEN, rRenderContext);
@@ -157,9 +157,9 @@ public:
         }
     }
 
-    static std::vector<Rectangle> setupRegions(int nPartitionsX, int nPartitionsY, int nWidth, int nHeight)
+    static std::vector<tools::Rectangle> setupRegions(int nPartitionsX, int nPartitionsY, int nWidth, int nHeight)
     {
-        std::vector<Rectangle> aRegions;
+        std::vector<tools::Rectangle> aRegions;
 
         for (int y = 0; y < nPartitionsY; y++)
         {
@@ -170,7 +170,7 @@ public:
                 long x2 = (x+1) * (nWidth  / nPartitionsX);
                 long y2 = (y+1) * (nHeight / nPartitionsY);
 
-                aRegions.push_back(Rectangle(x1 + 1, y1 + 1, x2 - 2, y2 - 2));
+                aRegions.push_back(tools::Rectangle(x1 + 1, y1 + 1, x2 - 2, y2 - 2));
             }
         }
         return aRegions;
@@ -178,10 +178,10 @@ public:
 
     static void testRectangles(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
-        Rectangle aRectangle;
+        tools::Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
+        std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -234,10 +234,10 @@ public:
 
     static void testFilledRectangles(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
-        Rectangle aRectangle;
+        tools::Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
+        std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -288,10 +288,10 @@ public:
 
     static void testLines(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
-        Rectangle aRectangle;
+        tools::Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
+        std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -339,10 +339,10 @@ public:
 
     static void testBitmaps(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
-        Rectangle aRectangle;
+        tools::Rectangle aRectangle;
         size_t index = 0;
 
-        std::vector<Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
+        std::vector<tools::Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
 
         aRectangle = aRegions[index++];
         {
@@ -374,7 +374,7 @@ public:
         }
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/) override
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
         if (mnTest % mnNumberOfTests == mnNumberOfTests - 1)
         {
@@ -427,7 +427,7 @@ public:
 
             mpVDev->DrawPolyPolygon(polyPolygon);
 
-            Rectangle aGradientRect(Point(200, 200), Size(200 + fTime * 300, 200 + fTime * 300));
+            tools::Rectangle aGradientRect(Point(200, 200), Size(200 + fTime * 300, 200 + fTime * 300));
             mpVDev->DrawGradient(aGradientRect, Gradient(GradientStyle::Linear, COL_YELLOW, COL_BLUE));
 
             rRenderContext.DrawOutDev(Point(), mpVDev->GetOutputSizePixel(),
@@ -445,7 +445,7 @@ public:
         long nWidth = aSize.Width();
         long nHeight = aSize.Height();
 
-        Rectangle aRectangle;
+        tools::Rectangle aRectangle;
         size_t index = 0;
 
         if (mnTest % mnNumberOfTests == 0)
@@ -466,7 +466,7 @@ public:
         }
         else if (mnTest % mnNumberOfTests == 4)
         {
-            std::vector<Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
+            std::vector<tools::Rectangle> aRegions = setupRegions(3, 2, nWidth, nHeight);
 
             aRectangle = aRegions[index++];
             {

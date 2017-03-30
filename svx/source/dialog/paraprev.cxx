@@ -50,7 +50,7 @@ Size SvxParaPrevWindow::GetOptimalSize() const
     return getParagraphPreviewOptimalSize(this);
 }
 
-void SvxParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     DrawParagraph(rRenderContext);
 }
@@ -71,7 +71,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
     Color aGrayColor(COL_LIGHTGRAY);
 
     rRenderContext.SetFillColor(Color(rWinColor));
-    rRenderContext.DrawRect(Rectangle(Point(), aWinSize));
+    rRenderContext.DrawRect(tools::Rectangle(Point(), aWinSize));
 
     rRenderContext.SetLineColor();
 
@@ -192,7 +192,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
             aSiz.Width() = nLW;
         }
 
-        Rectangle aRect(aPnt, aSiz);
+        tools::Rectangle aRect(aPnt, aSiz);
 
         rRenderContext.DrawRect( aRect );
         Lines[i] = aRect;

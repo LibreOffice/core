@@ -80,7 +80,7 @@ namespace cppcanvas
             }
 
             ::basegfx::B2DPolyPolygon                                                clip;
-            ::Rectangle                                                              clipRect;
+            ::tools::Rectangle                                                              clipRect;
             css::uno::Reference< css::rendering::XPolyPolygon2D >                    xClipPoly;
 
             css::uno::Sequence< double >                                             lineColor;
