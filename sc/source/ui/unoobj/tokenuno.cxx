@@ -468,9 +468,10 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                 default:
                     SAL_WARN("sc",  "ScTokenConversion::ConvertToTokenSequence: unhandled token type " << StackVarEnumToString(rToken.GetType()));
                     SAL_FALLTHROUGH;
-                case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
                 case svJump:    // occurs with ocIf, ocChoose
+                case svError:   // seems to be fairly common, and probably not exceptional and not worth a warning?
                 case svMissing: // occurs with ocMissing
+                case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
                     rAPI.Data.clear();      // no data
             }
             rAPI.OpCode = static_cast<sal_Int32>(eOpCode);      //! assuming equal values for the moment
