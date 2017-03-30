@@ -156,8 +156,8 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
     nYValue = Fraction( GetCoreValue( *m_pMtrFldY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
 
     rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (sal_uInt16)eKind));
-    rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_X, nXValue));
-    rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_Y, nYValue));
+    rOutAttrs.Put(SfxInt32Item(ATTR_SNAPLINE_X, nXValue));
+    rOutAttrs.Put(SfxInt32Item(ATTR_SNAPLINE_Y, nYValue));
 }
 
 void SdSnapLineDlg::HideRadioGroup()
