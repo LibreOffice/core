@@ -277,6 +277,23 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         }
         break;
 
+        case SID_HANGING_INDENT:
+        {
+            SfxItemSet aLRSpaceSet( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+            mpView->GetAttributes( aLRSpaceSet );
+            SvxLRSpaceItem aParaMargin( static_cast<const SvxLRSpaceItem&>( aLRSpaceSet.Get( EE_PARA_LRSPACE ) ) );
+
+            SvxLRSpaceItem aNewMargin( EE_PARA_LRSPACE );
+            aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOfst() );
+            aNewMargin.SetRight( aParaMargin.GetRight() );
+            aNewMargin.SetTextFirstLineOfst( ( aParaMargin.GetTextFirstLineOfst() ) * (-1) );
+            aLRSpaceSet.Put( aNewMargin );
+            mpView->SetAttributes( aLRSpaceSet );
+
+            Invalidate(SID_ATTR_PARA_LRSPACE);
+        }
+        break;
+
         case SID_OUTLINE_UP:
         {
             if (pOLV)
