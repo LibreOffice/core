@@ -199,7 +199,7 @@ public:
     bool      bPageToggle;
     sal_Int16 nVertOrient;
     sal_Int16 nVertRelation;
-    sal_Int32 nWrap;
+    text::WrapTextMode nWrap;
     bool      bLayoutInCell;
     bool      bOpaque;
     bool      bContour;
@@ -269,7 +269,7 @@ public:
         ,bPageToggle( false )
         ,nVertOrient(  text::VertOrientation::NONE )
         ,nVertRelation( text::RelOrientation::FRAME )
-        ,nWrap(0)
+        ,nWrap(text::WrapTextMode_NONE)
         ,bLayoutInCell(false)
         ,bOpaque( true )
         ,bContour(false)
@@ -842,7 +842,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         m_pImpl->applyMargins(xShapeProps);
                         bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
                         xShapeProps->setPropertyValue("Opaque", uno::makeAny(bOpaque));
-                        xShapeProps->setPropertyValue("Surround", uno::makeAny(m_pImpl->nWrap));
+                        xShapeProps->setPropertyValue("Surround", uno::makeAny<sal_Int32>(m_pImpl->nWrap));
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
 
@@ -1264,7 +1264,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                         uno::makeAny(bOpaque));
                 }
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
-                    uno::makeAny(m_pImpl->nWrap));
+                    uno::makeAny<sal_Int32>(m_pImpl->nWrap));
                 if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGHT )
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::makeAny(true));
