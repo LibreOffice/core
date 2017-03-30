@@ -1380,14 +1380,14 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                     if ( aPersistHd.nRecType == PPT_PST_PersistPtrIncrementalBlock )
                     {
                         sal_uLong nPibLen = aPersistHd.GetRecEndFilePos();
-                        while ( bOk && ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPibLen ) )
+                        while (bOk && rStCtrl.good() && (rStCtrl.Tell() < nPibLen))
                         {
                             sal_uInt32 nOfs(0);
                             rStCtrl.ReadUInt32( nOfs );
                             sal_uInt32 nAnz = nOfs;
                             nOfs &= 0x000FFFFF;
                             nAnz >>= 20;
-                            while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs <= nPersistPtrAnz ) )
+                            while (bOk && rStCtrl.good() && (nAnz > 0) && (nOfs <= nPersistPtrAnz))
                             {
                                 sal_uInt32 nPt(0);
                                 rStCtrl.ReadUInt32( nPt );
