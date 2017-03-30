@@ -328,7 +328,7 @@ bool XMLDoublePercentPropHdl::importXML( const OUString& rStrImpValue, Any& rVal
 
     double fValue = 1.0;
 
-    if( rStrImpValue.indexOf( (sal_Unicode)'%' ) == -1 )
+    if( rStrImpValue.indexOf( '%' ) == -1 )
     {
         fValue = rStrImpValue.toDouble();
     }

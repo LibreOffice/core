@@ -150,7 +150,7 @@ namespace stoc_connector
                     throw ConnectionSetupException(message);
                 }
 
-                sal_Int32 index = sConnectionDescription.indexOf((sal_Unicode) ',');
+                sal_Int32 index = sConnectionDescription.indexOf(',');
 
                 r = xConnector->connect(sConnectionDescription.copy(index + 1).trim());
             }

@@ -1199,7 +1199,7 @@ void ElementDescriptor::readEvents()
                     if ( descr.ScriptType == "StarBasic" )
                     {
                         // separate optional location
-                        sal_Int32 nIndex = descr.ScriptCode.indexOf( (sal_Unicode)':' );
+                        sal_Int32 nIndex = descr.ScriptCode.indexOf( ':' );
                         if (nIndex >= 0)
                         {
                             pElem->addAttribute( XMLNS_SCRIPT_PREFIX ":location", descr.ScriptCode.copy( 0, nIndex ) );

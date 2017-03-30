@@ -180,7 +180,7 @@ void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& b
     if( nPos==-1 )
     {
         ShiftString( sStrg, 0 );
-        sStrg[0] = (sal_Unicode)'1';
+        sStrg[0] = '1';
         bOverflow = true;
     }
     else
@@ -190,7 +190,7 @@ void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& b
         {
             if( c2 == '9' )
             {
-                sStrg[nPos] = (sal_Unicode)'0';
+                sStrg[nPos] = '0';
                 StrRoundDigit( sStrg, nPos - 1, bOverflow );
             }
             else
@@ -201,7 +201,7 @@ void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& b
         else
         {
             ShiftString( sStrg,nPos+1 );
-            sStrg[nPos + 1] = (sal_Unicode)'1';
+            sStrg[nPos + 1] = '1';
             bOverflow = true;
         }
     }
@@ -218,7 +218,7 @@ void SbxBasicFormater::ParseBack( OUStringBuffer& sStrg, const OUString& sFormat
                                   short nFormatPos )
 {
     for( sal_Int32 i = nFormatPos;
-         i>0 && sFormatStrg[ i ]  == (sal_Unicode)'#' && sStrg[sStrg.getLength() - 1] == (sal_Unicode)'0';
+         i>0 && sFormatStrg[ i ]  == '#' && sStrg[sStrg.getLength() - 1] == '0';
          i-- )
     {
         sStrg.setLength(sStrg.getLength() - 1 );

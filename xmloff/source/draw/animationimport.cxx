@@ -471,7 +471,7 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
     // do we have any value at all?
     if( !rValue.isEmpty() )
     {
-        sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';') + 1; // a non empty string has at least one value
+        sal_Int32 nElements = count_codes( rValue, ';') + 1; // a non empty string has at least one value
 
         // prepare the sequence
         aValues.realloc( nElements );
@@ -496,7 +496,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
     if( !rValue.isEmpty() )
     {
         // count the values
-        sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+        sal_Int32 nElements = count_codes( rValue, ';' ) + 1; // a non empty string has at least one value
 
         if( nElements == 1 )
         {
@@ -520,7 +520,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
 
                 OUString aEventTrigger;
 
-                sal_Int32 nPos = rValue.indexOf( (sal_Unicode)'+' );
+                sal_Int32 nPos = rValue.indexOf( '+' );
                 if( nPos == -1 )
                 {
                     aEventTrigger = rValue;
@@ -533,7 +533,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
                     aEvent.Offset = convertTiming( rValue.copy( nPos + 1 ) );
                 }
 
-                nPos = aEventTrigger.indexOf( (sal_Unicode)'.' );
+                nPos = aEventTrigger.indexOf( '.' );
                 if( nPos != -1 )
                 {
                     aEvent.Source <<= mrImport.getInterfaceToIdentifierMapper().getReference( aEventTrigger.copy( 0, nPos ) );
@@ -573,7 +573,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& 
     sal_Int32 nElements = 0;
 
     if( !rValue.isEmpty() )
-        nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+        nElements = count_codes( rValue, ';' ) + 1; // a non empty string has at least one value
 
     Sequence< double > aKeyTimes( nElements );
 
@@ -593,7 +593,7 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const 
     sal_Int32 nElements = 0;
 
     if( !rValue.isEmpty() )
-        nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+        nElements = count_codes( rValue, ';' ) + 1; // a non empty string has at least one value
 
     Sequence< TimeFilterPair > aTimeFilter( nElements );
 

@@ -134,7 +134,7 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
         {
         case XML_TOK_COLUMN_WIDTH:
             {
-                sal_Int32 nPos = rValue.indexOf( (sal_Unicode)'*' );
+                sal_Int32 nPos = rValue.indexOf( '*' );
                 if( nPos != -1 && nPos+1 == rValue.getLength() )
                 {
                     OUString sTmp( rValue.copy( 0, nPos ) );

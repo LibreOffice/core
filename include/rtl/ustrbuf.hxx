@@ -1504,7 +1504,7 @@ public:
        @return   The number of characters stripped
 
     */
-    sal_Int32 stripStart(sal_Unicode c = (sal_Unicode)' ')
+    sal_Int32 stripStart(sal_Unicode c = ' ')
     {
         sal_Int32 index;
         for(index = 0; index < getLength() ; index++)
@@ -1530,7 +1530,7 @@ public:
        @return   The number of characters stripped
 
     */
-    sal_Int32 stripEnd(sal_Unicode c = (sal_Unicode)' ')
+    sal_Int32 stripEnd(sal_Unicode c = ' ')
     {
         sal_Int32 result = getLength();
         sal_Int32 index;
@@ -1556,7 +1556,7 @@ public:
        @return   The number of characters stripped
 
     */
-    sal_Int32 strip(sal_Unicode c = (sal_Unicode)' ')
+    sal_Int32 strip(sal_Unicode c = ' ')
     {
         return stripStart(c) + stripEnd(c);
     }

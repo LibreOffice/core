@@ -2031,10 +2031,10 @@ void FilterCache::impl_interpretDataVal4Type(const OUString& sValue,
         case 2:     rItem[PROPNAME_CLIPBOARDFORMAT] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
                     break;
         // URLPattern
-        case 3:     rItem[PROPNAME_URLPATTERN] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, (sal_Unicode)';'));
+        case 3:     rItem[PROPNAME_URLPATTERN] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, ';'));
                     break;
         // Extensions
-        case 4:     rItem[PROPNAME_EXTENSIONS] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, (sal_Unicode)';'));
+        case 4:     rItem[PROPNAME_EXTENSIONS] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, ';'));
                     break;
     }
 }
@@ -2069,7 +2069,7 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
         case 4:     rItem[PROPNAME_FLAGS] <<= sValue.toInt32();
                     break;
         // UserData
-        case 5:     rItem[PROPNAME_USERDATA] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, (sal_Unicode)';'));
+        case 5:     rItem[PROPNAME_USERDATA] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, ';'));
                     break;
         // FileFormatVersion
         case 6:     rItem[PROPNAME_FILEFORMATVERSION] <<= sValue.toInt32();
@@ -2154,7 +2154,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     OUString sData;
     OUStringList    lData;
     xItem->getByName( "Data" ) >>= sData;
-    lData = impl_tokenizeString(sData, (sal_Unicode)',');
+    lData = impl_tokenizeString(sData, ',');
     if (
         (sData.isEmpty()) ||
         (lData.size()<1    )

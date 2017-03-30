@@ -137,15 +137,15 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale & )
         {
             nRes = SpellFailure::IS_NEGATIVE_WORD;
         }
-        else if (-1 != aTmp.indexOf( (sal_Unicode) 'x' )  ||
-                 -1 != aTmp.indexOf( (sal_Unicode) 'X' ))
+        else if (-1 != aTmp.indexOf( 'x' )  ||
+                 -1 != aTmp.indexOf( 'X' ))
         {
             nRes = SpellFailure::SPELLING_ERROR;
         }
         else
         {
             sal_Unicode cChar = aTmp.GetChar( 0 );
-            if (cChar == (sal_Unicode) 's'  ||  cChar == (sal_Unicode) 'S')
+            if (cChar == 's'  ||  cChar == 'S')
                 nRes = SpellFailure::CAPTION_ERROR;
         }
     }
@@ -220,15 +220,15 @@ Reference< XSpellAlternatives >
             xRes = new SpellAlternatives( aTmp, nLang,
                         SpellFailure::IS_NEGATIVE_WORD, css::uno::Sequence< OUString >() );
         }
-        else if (-1 != aTmp.indexOf( (sal_Unicode) 'x' )  ||
-                 -1 != aTmp.indexOf( (sal_Unicode) 'X' ))
+        else if (-1 != aTmp.indexOf( 'x' )  ||
+                 -1 != aTmp.indexOf( 'X' ))
         {
             Sequence< OUString > aStr( 2 );
             OUString *pStr = aStr.getArray();
             String  aAlt1( aTmp ),
                     aAlt2( aTmp );
-            aAlt1.SearchAndReplaceAll( (sal_Unicode) 'x', (sal_Unicode) 'u');
-            aAlt1.SearchAndReplaceAll( (sal_Unicode) 'X', (sal_Unicode) 'U');
+            aAlt1.SearchAndReplaceAll( 'x', 'u');
+            aAlt1.SearchAndReplaceAll( 'X', 'U');
             aAlt2 = aAlt2.replaceAll("x", "").replaceAll("X", "");
             pStr[0] = aAlt1;
             pStr[1] = aAlt2;
@@ -243,10 +243,10 @@ Reference< XSpellAlternatives >
         else
         {
             sal_Unicode cChar = aTmp.GetChar( 0 );
-            if (cChar == (sal_Unicode) 's'  ||  cChar == (sal_Unicode) 'S')
+            if (cChar == 's'  ||  cChar == 'S')
             {
-                sal_Unicode cNewChar = cChar == (sal_Unicode) 's' ?
-                        (sal_Unicode) 'S': (sal_Unicode) 's';
+                sal_Unicode cNewChar = cChar == 's' ?
+                        'S': 's';
                 aTmp.GetBufferAccess()[0] = cNewChar;
                 xRes = new SpellAlternatives( aTmp, nLang,
                         SpellFailure::CAPTION_ERROR, css::uno::Sequence< OUString >() );

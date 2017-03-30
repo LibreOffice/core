@@ -1781,7 +1781,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         while ( aIter != aIEnd )
         {
             OUString aBookmark = aIter->aBookmark;
-            if ( aBookmark.toChar() == (sal_Unicode) '#' )
+            if ( aBookmark.toChar() == '#' )
             {
                 //  try to resolve internal link
 

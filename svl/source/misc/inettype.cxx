@@ -638,7 +638,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
     if (!aToken.isEmpty())
     {
         if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_FILE))
-            if (rURL[ rURL.getLength() - 1 ] == (sal_Unicode)'/') // folder
+            if (rURL[ rURL.getLength() - 1 ] == '/') // folder
                 if (rURL.getLength() > RTL_CONSTASCII_LENGTH("file:///"))
                     if (WildCard("*/{*}/").Matches(rURL)) // special folder
                         eTypeID = CONTENT_TYPE_X_CNT_FSYSSPECIALFOLDER;
@@ -725,15 +725,15 @@ bool INetContentTypes::GetExtensionFromURL(OUString const & rURL,
     while (i >= 0)
     {
         nSlashPos = i;
-        i = rURL.indexOf((sal_Unicode)'/', i + 1);
+        i = rURL.indexOf('/', i + 1);
     }
     if (nSlashPos != 0)
     {
-        sal_Int32 nLastDotPos = i = rURL.indexOf((sal_Unicode)'.', nSlashPos);
+        sal_Int32 nLastDotPos = i = rURL.indexOf('.', nSlashPos);
         while (i >= 0)
         {
             nLastDotPos = i;
-            i = rURL.indexOf((sal_Unicode)'.', i + 1);
+            i = rURL.indexOf('.', i + 1);
         }
         if (nLastDotPos >- 0)
             rExtension = rURL.copy(nLastDotPos + 1);

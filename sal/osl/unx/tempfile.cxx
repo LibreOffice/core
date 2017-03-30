@@ -206,7 +206,7 @@ static oslFileError osl_create_temp_file_impl_(
 
     /* ensure that the last character is a '/' */
 
-    if ((sal_Unicode)'/' != puchr[len_base_dir - 1])
+    if ('/' != puchr[len_base_dir - 1])
     {
         rtl_uStringbuffer_insert_ascii(
             &tmp_file_path,

@@ -147,8 +147,8 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
             {
                 aDescription += ": ";
 
-                aText = aText.replace( (sal_Unicode)'\n', (sal_Unicode)' ' );
-                aText = aText.replace( (sal_Unicode)'\r', (sal_Unicode)' ' );
+                aText = aText.replace( '\n', ' ' );
+                aText = aText.replace( '\r', ' ' );
 
                 aDescription += aText;
             }

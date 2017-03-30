@@ -472,13 +472,13 @@ bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
             ImpGetIntntlSep( cDecimalSep, cThousandSep );
             aNewString = rSrc;
 
-            if( cDecimalSep != (sal_Unicode)'.' )
+            if( cDecimalSep != '.' )
             {
                 sal_Int32 nPos = aNewString.indexOf( cDecimalSep );
                 if( nPos != -1 )
                 {
                     sal_Unicode* pStr = const_cast<sal_Unicode*>(aNewString.getStr());
-                    pStr[nPos] = (sal_Unicode)'.';
+                    pStr[nPos] = '.';
                     bChanged = true;
                 }
             }

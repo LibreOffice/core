@@ -166,7 +166,7 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& )
             OUString aText = m_xPopupMenu->getItemText( nItemId );
 
             // TODO: must be replaced by implementation of VCL, when available
-            sal_Int32 nIndex = aText.indexOf( (sal_Unicode)'~' );
+            sal_Int32 nIndex = aText.indexOf( '~' );
             if ( nIndex >= 0 )
                 aText = aText.replaceAt( nIndex, 1, "" );
             // TODO: must be replaced by implementation of VCL, when available

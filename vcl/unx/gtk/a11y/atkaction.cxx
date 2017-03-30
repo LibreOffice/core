@@ -235,7 +235,7 @@ action_wrapper_get_keybinding (AtkAction *action,
                     appendKeyStrokes( aRet,  xBinding->getAccessibleKeyBinding( n ) );
 
                     if( n < 2 )
-                        aRet.append( (sal_Char) ';' );
+                        aRet.append( ';' );
                 }
 
                 // !! FIXME !! remember keystroke in wrapper object ?

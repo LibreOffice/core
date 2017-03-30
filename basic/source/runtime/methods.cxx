@@ -2711,8 +2711,8 @@ RTLFUNC(IsMissing)
 // Function looks for wildcards, removes them and always returns the pure path
 OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
 {
-    static sal_Char cDelim1 = (sal_Char)'/';
-    static sal_Char cDelim2 = (sal_Char)'\\';
+    static sal_Char cDelim1 = '/';
+    static sal_Char cDelim2 = '\\';
     static sal_Char cWild1 = '*';
     static sal_Char cWild2 = '?';
 
@@ -2807,7 +2807,7 @@ bool isRootDir( const OUString& aDirURLStr )
     {
         OUString aSeg1 = aDirURLObj.getName( 0, true,
                                              INetURLObject::DecodeMechanism::WithCharset );
-        if( aSeg1[1] == (sal_Unicode)':' )
+        if( aSeg1[1] == ':' )
         {
             bRoot = true;
         }

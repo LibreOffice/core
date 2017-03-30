@@ -313,7 +313,7 @@ sal_uInt32 SvParser::GetNextChar()
                                        "there is a converted character, but an error" );
                                     // There are still errors, but nothing we can
                                     // do
-                                    c = (sal_uInt32)'?';
+                                    c = '?';
                                     nChars = 1;
                                 }
                             }
@@ -391,7 +391,7 @@ sal_uInt32 SvParser::GetNextChar()
     }
 
     if ( ! rtl::isUnicodeCodePoint( c ) )
-        c = (sal_uInt32) '?' ;
+        c = '?' ;
 
     if( bErr )
     {

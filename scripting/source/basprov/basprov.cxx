@@ -331,13 +331,13 @@ namespace basprov
             nIndex = sProjectName.getLength() + 1;
         }
         else
-            aLibrary = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+            aLibrary = aDescription.getToken( 0, '.', nIndex );
         OUString aModule;
         if ( nIndex != -1 )
-            aModule = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+            aModule = aDescription.getToken( 0, '.', nIndex );
         OUString aMethod;
         if ( nIndex != -1 )
-            aMethod = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+            aMethod = aDescription.getToken( 0, '.', nIndex );
 
         if ( !aLibrary.isEmpty() && !aModule.isEmpty() && !aMethod.isEmpty() && !aLocation.isEmpty() )
         {

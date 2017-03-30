@@ -96,8 +96,8 @@ namespace dbaccess
     {
         virtual void appendNonEmptyToNonEmpty( const OUString& lhs ) override
         {
-            m_aBuffer.insert( 0, (sal_Unicode)' ' );
-            m_aBuffer.insert( 0, (sal_Unicode)'(' );
+            m_aBuffer.insert( 0, ' ' );
+            m_aBuffer.insert( 0, '(' );
             m_aBuffer.append( " ) AND ( " );
             m_aBuffer.append( lhs );
             m_aBuffer.append( " )" );

@@ -98,12 +98,12 @@ namespace osl_Security
         }
 
         CPPUNIT_TEST_SUITE( logonUser );
-        if  ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) ==  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
+        if  ( !aStringForward.isEmpty() && aStringForward.indexOf( ' ' ) != -1 && ( aStringForward.indexOf( ' ' ) ==  aStringForward.lastIndexOf( ' ' ) ) )
         /// if user name and passwd are forwarded
         {
             CPPUNIT_TEST( logonUser_user_pwd );
         }
-        if  ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) !=  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
+        if  ( !aStringForward.isEmpty() && aStringForward.indexOf( ' ' ) != -1 && ( aStringForward.indexOf( ' ' ) !=  aStringForward.lastIndexOf( ' ' ) ) )
         /// if user name and passwd and file server are forwarded
         {
             CPPUNIT_TEST( logonUser_user_pwd_server );

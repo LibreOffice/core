@@ -575,7 +575,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
                 return xBI = listItem->xBI;
         }
 
-        sal_Unicode under = (sal_Unicode)'_';
+        sal_Unicode under = '_';
 
         sal_Int32 l = rLocale.Language.getLength();
         sal_Int32 c = rLocale.Country.getLength();

@@ -4080,8 +4080,8 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
     }
     else
     {
-        if ( aSymbol.indexOf( (sal_Unicode)'-' ) >= 0 ||
-             aSymbol.indexOf( (sal_Unicode)']' ) >= 0)
+        if ( aSymbol.indexOf( '-' ) >= 0 ||
+             aSymbol.indexOf( ']' ) >= 0)
         {
             aBuf.append('"').append(aSymbol).append('"');
         }

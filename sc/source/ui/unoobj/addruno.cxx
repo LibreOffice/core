@@ -187,13 +187,13 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
             OUString aUIString(sRepresentation);
 
             //  cell or range: strip a single "." at the start
-            if ( aUIString[0]== (sal_Unicode) '.' )
+            if ( aUIString[0]== '.' )
                 aUIString = aUIString.copy( 1 );
 
             if ( bIsRange )
             {
                 //  range: also strip a "." after the last colon
-                sal_Int32 nColon = aUIString.lastIndexOf( (sal_Unicode) ':' );
+                sal_Int32 nColon = aUIString.lastIndexOf( ':' );
                 if ( nColon >= 0 && nColon < aUIString.getLength() - 1 &&
                      aUIString[nColon+1] == '.' )
                     aUIString = aUIString.replaceAt( nColon+1, 1, "" );

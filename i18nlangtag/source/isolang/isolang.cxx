@@ -1430,9 +1430,9 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
     OString  aCountry;
     OString  aAtString;
 
-    sal_Int32  nLangSepPos    = rString.indexOf( (sal_Char)'_' );
-    sal_Int32  nCountrySepPos = rString.indexOf( (sal_Char)'.' );
-    sal_Int32  nAtPos         = rString.indexOf( (sal_Char)'@' );
+    sal_Int32  nLangSepPos    = rString.indexOf( '_' );
+    sal_Int32  nCountrySepPos = rString.indexOf( '.' );
+    sal_Int32  nAtPos         = rString.indexOf( '@' );
 
     if (nCountrySepPos < 0)
         nCountrySepPos = nAtPos;

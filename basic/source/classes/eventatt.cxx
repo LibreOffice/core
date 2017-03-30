@@ -192,9 +192,9 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         if( comphelper::string::getTokenCount(aMacro, '.') == 3 )
         {
             sal_Int32 nLast = 0;
-            OUString aFullLibName = aMacro.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
+            OUString aFullLibName = aMacro.getToken( (sal_Int32)0, '.', nLast );
 
-            sal_Int32 nIndex = aFullLibName.indexOf( (sal_Unicode)':' );
+            sal_Int32 nIndex = aFullLibName.indexOf( ':' );
             if (nIndex >= 0)
             {
                 aLocation = aFullLibName.copy( 0, nIndex );

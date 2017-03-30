@@ -135,7 +135,7 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
 void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& aPair )
 {
     OUString aExt;
-    if ( aPair.First.toChar() == (sal_Unicode)'.' )
+    if ( aPair.First.toChar() == '.' )
         aExt = aPair.First;
     else
         aExt = "." + aPair.First;

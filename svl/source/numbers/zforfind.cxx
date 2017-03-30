@@ -1090,7 +1090,7 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
         {
             // "-Jan-"
             const OUString& rM = sStrArray[ nNums[ 0 ] + 1 ];
-            if (rM.getLength() >= 3 && rM[0] == (sal_Unicode)'-' && rM[ rM.getLength() - 1] == (sal_Unicode)'-')
+            if (rM.getLength() >= 3 && rM[0] == '-' && rM[ rM.getLength() - 1] == '-')
             {
                 // Check year length assuming at least 3 digits (including
                 // leading zero). Two digit years 1..31 are out of luck here
@@ -1320,7 +1320,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
             {
                 const sal_Int32 nLen = sStrArray[nNext].getLength();
                 bool bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
-                if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext][ nLen - 1 ] == (sal_Unicode)' '))
+                if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext][ nLen - 1 ] == ' '))
                 {
                     // The same ugly trailing blanks check as in
                     // IsAcceptedDatePattern().
@@ -2130,7 +2130,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
                     if ( nTempDayOfWeek < 0 )
                     {
                         // abbreviated
-                        if ( rString[ nPos ] == (sal_Unicode)'.' )
+                        if ( rString[ nPos ] == '.' )
                         {
                             ++nPos;
                         }
@@ -2810,7 +2810,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
             {
                 if ( nTempDayOfWeek < 0 )
                 {   // short
-                    if ( rString[ nPos ] == (sal_Unicode)'.' )
+                    if ( rString[ nPos ] == '.' )
                     {
                         ++nPos;
                     }
@@ -2826,7 +2826,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
 
 #if NF_RECOGNIZE_ISO8601_TIMEZONES
     if (nPos == 0 && eScannedType == css::util::NumberFormat::DATETIME &&
-        rString.getLength() == 1 && rString[ 0 ] == (sal_Unicode)'Z' && MayBeIso8601())
+        rString.getLength() == 1 && rString[ 0 ] == 'Z' && MayBeIso8601())
     {
         // ISO 8601 timezone UTC yyyy-mm-ddThh:mmZ
         ++nPos;
@@ -3375,7 +3375,7 @@ void ImpSvNumberInputScan::InitText()
 void ImpSvNumberInputScan::ChangeIntl()
 {
     sal_Unicode cDecSep = pFormatter->GetNumDecimalSep()[0];
-    bDecSepInDateSeps = ( cDecSep == (sal_Unicode)'-' ||
+    bDecSepInDateSeps = ( cDecSep == '-' ||
                           cDecSep == pFormatter->GetDateSep()[0] );
     bTextInitialized = false;
     aUpperCurrSymbol.clear();

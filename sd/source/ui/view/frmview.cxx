@@ -472,13 +472,13 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
 
         switch( *pStr )
         {
-        case (sal_Unicode)'P':
+        case 'P':
             aNewHelpLine.SetKind( SdrHelpLineKind::Point );
             break;
-        case (sal_Unicode)'V':
+        case 'V':
             aNewHelpLine.SetKind( SdrHelpLineKind::Vertical );
             break;
-        case (sal_Unicode)'H':
+        case 'H':
             aNewHelpLine.SetKind( SdrHelpLineKind::Horizontal );
             break;
         default:

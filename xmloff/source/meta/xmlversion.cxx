@@ -226,7 +226,7 @@ bool XMLVersionContext::ParseISODateTimeString(
     bool bSuccess = true;
 
     OUString aDateStr, aTimeStr;
-    sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
+    sal_Int32 nPos = rString.indexOf( 'T' );
     if ( nPos >= 0 )
     {
         aDateStr = rString.copy( 0, nPos );

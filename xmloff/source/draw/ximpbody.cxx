@@ -189,7 +189,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         uno::Reference< beans::XPropertySet > xProps( xShapeDrawPage, uno::UNO_QUERY );
         if( xProps.is() )
         {
-            sal_Int32 nIndex = maHREF.lastIndexOf( (sal_Unicode)'#' );
+            sal_Int32 nIndex = maHREF.lastIndexOf( '#' );
             if( nIndex != -1 )
             {
                 OUString aFileName( maHREF.copy( 0, nIndex ) );

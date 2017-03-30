@@ -375,7 +375,7 @@ OUString ManifestImport::ConvertNameWithNamespace( const OUString& aName, const 
     OUString aNsAlias;
     OUString aPureName = aName;
 
-    sal_Int32 nInd = aName.indexOf( ( sal_Unicode )':' );
+    sal_Int32 nInd = aName.indexOf( ':' );
     if ( nInd != -1 && nInd < aName.getLength() ) {
         aNsAlias = aName.copy( 0, nInd );
         aPureName = aName.copy( nInd + 1 );

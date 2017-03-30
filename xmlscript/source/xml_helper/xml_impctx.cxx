@@ -305,7 +305,7 @@ inline void DocumentHandlerImpl::popPrefix(
 inline void DocumentHandlerImpl::getElementName(
     OUString const & rQName, sal_Int32 * pUid, OUString * pLocalName )
 {
-    sal_Int32 nColonPos = rQName.indexOf( (sal_Unicode)':' );
+    sal_Int32 nColonPos = rQName.indexOf( ':' );
     *pLocalName = (nColonPos >= 0 ? rQName.copy( nColonPos +1 ) : rQName);
     *pUid = getUidByPrefix(
         nColonPos >= 0 ? rQName.copy( 0, nColonPos ) : OUString() );
@@ -495,7 +495,7 @@ void DocumentHandlerImpl::startElement(
                 pPrefixes[ nPos ]      = m_sXMLNS;
                 pLocalNames[ nPos ]    = aDefNamespacePrefix;
             }
-            else if ((sal_Unicode)':' == rQAttributeName[ 5 ]) // set prefix
+            else if (':' == rQAttributeName[ 5 ]) // set prefix
             {
                 OUString aPrefix( rQAttributeName.copy( 6 ) );
                 pushPrefix( aPrefix, xAttribs->getValueByIndex( nPos ) );
@@ -517,7 +517,7 @@ void DocumentHandlerImpl::startElement(
             SAL_WARN_IF(rQAttributeName.startsWith( "xmlns:" ), "xmlscript.xmlhelper", "### unexpected xmlns!" );
 
             // collect attribute's uid and current prefix
-            sal_Int32 nColonPos = rQAttributeName.indexOf( (sal_Unicode) ':' );
+            sal_Int32 nColonPos = rQAttributeName.indexOf( ':' );
             if (nColonPos >= 0)
             {
                 pPrefixes[ nPos ] = rQAttributeName.copy( 0, nColonPos );

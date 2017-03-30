@@ -80,16 +80,16 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
     const sal_Unicode* pString = aString.getStr();
     while( *pString )
     {
-        if ( *pString == (sal_Unicode)'\\' )
+        if ( *pString == '\\' )
         {
             pString++;
 
-            if ( *pString == (sal_Unicode)'\\' )
+            if ( *pString == '\\' )
             {
                 aPattern[nInd] += "\\";
                 pString++;
             }
-            else if ( *pString == (sal_Unicode)'*' )
+            else if ( *pString == '*' )
             {
                 aPattern[nInd] += "*";
                 pString++;
@@ -100,7 +100,7 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
                 aPattern[nInd] += "\\";
             }
         }
-        else if ( *pString == (sal_Unicode)'*' )
+        else if ( *pString == '*' )
         {
             aPattern.realloc( ( ++nInd ) + 1 );
             pString++;

@@ -2274,9 +2274,9 @@ FileDialogHelper::FileDialogHelper(
 {
     // the wildcard here is expected in form "*.extension"
     OUString aWildcard;
-    if ( aExtName.indexOf( (sal_Unicode)'*' ) != 0 )
+    if ( aExtName.indexOf( '*' ) != 0 )
     {
-        if ( !aExtName.isEmpty() && aExtName.indexOf( (sal_Unicode)'.' ) != 0 )
+        if ( !aExtName.isEmpty() && aExtName.indexOf( '.' ) != 0 )
             aWildcard = "*.";
         else
             aWildcard = "*";

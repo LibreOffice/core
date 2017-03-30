@@ -188,10 +188,10 @@ static void createSlideFile( const Reference< XComponent >& xDoc, PlacewareZipFi
     aTemp = xDocProps->getTitle();
     if( aTemp.isEmpty() )
     {
-        sal_Int32 nPos1 = rURL.lastIndexOf( (sal_Unicode)'/' );
+        sal_Int32 nPos1 = rURL.lastIndexOf( '/' );
         if( -1 != nPos1 )
         {
-            sal_Int32 nPos2 = rURL.lastIndexOf( (sal_Unicode)'.' );
+            sal_Int32 nPos2 = rURL.lastIndexOf( '.' );
             if( nPos2 > nPos1 )
             {
                 aTemp = rURL.copy( nPos1 + 1, nPos2 - nPos1 - 1 );

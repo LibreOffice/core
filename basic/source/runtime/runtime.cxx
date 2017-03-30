@@ -2757,7 +2757,7 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     // #57844 use localized function
     OUString aStr = pImg->GetString( static_cast<short>( nOp1 ) );
     // also allow , !!!
-    sal_Int32 iComma = aStr.indexOf((sal_Unicode)',');
+    sal_Int32 iComma = aStr.indexOf(',');
     if( iComma >= 0 )
     {
         aStr = aStr.replaceAt(iComma, 1, ".");
