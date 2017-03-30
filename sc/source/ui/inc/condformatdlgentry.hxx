@@ -296,6 +296,8 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
     // icon set ui elements
     VclPtr<ListBox> maLbIconSetType;
 
+    VclPtr<VclContainer> maIconParent;
+
     typedef std::vector<VclPtr<ScIconSetFrmtDataEntry>> ScIconSetFrmtDataEntriesType;
     ScIconSetFrmtDataEntriesType maEntries;
 

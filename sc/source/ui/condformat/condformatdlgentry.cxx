@@ -1389,11 +1389,15 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(vcl::Window* pParent, ScIconSetTy
 
 Size ScIconSetFrmtDataEntry::calculateRequisition() const
 {
+    if (!maGrid) //during dispose
+        return Size();
     return getLayoutRequisition(*maGrid);
 }
 
 void ScIconSetFrmtDataEntry::setAllocation(const Size &rAllocation)
 {
+    if (!maGrid) //during dispose
+        return;
     setLayoutPosSize(*maGrid, Point(0, 0), rAllocation);
 }
 
@@ -1461,6 +1465,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, c
 {
     get(maLbColorFormat, "colorformat");
     get(maLbIconSetType, "iconsettype");
+    get(maIconParent, "iconparent");
 
     Init();
     maLbColorFormat->SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
@@ -1475,12 +1480,9 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, c
         for (size_t i = 0, n = pIconSetFormatData->m_Entries.size();
                 i < n; ++i)
         {
-            maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create(
-                this, eType, pDoc, i, pIconSetFormatData->m_Entries[i].get()));
-            Size aSize(maEntries[0]->get_preferred_size());
-            Point aPos(0, LogicToPixel(Size(0, 35), MapMode(MapUnit::MapAppFont)).getHeight());
-            aPos.Y() += aSize.Height() * i * 1.2;
-            maEntries[i]->SetPosSizePixel(aPos, aSize);
+            maEntries.push_back(VclPtr<ScIconSetFrmtDataEntry>::Create(
+                maIconParent, eType, pDoc, i, pIconSetFormatData->m_Entries[i].get()));
+            maEntries[i]->set_grid_top_attach(i);
         }
         maEntries[0]->SetFirstEntry();
     }
@@ -1498,6 +1500,7 @@ void ScIconSetFrmtEntry::dispose()
     for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
         it->disposeAndClear();
     maEntries.clear();
+    maIconParent.clear();
     maLbColorFormat.clear();
     maLbIconSetType.clear();
     ScCondFrmtEntry::dispose();
@@ -1525,11 +1528,8 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl, ListBox&, void )
 
     for(size_t i = 0; i < nElements; ++i)
     {
-        maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create( this, static_cast<ScIconSetType>(nPos), mpDoc, i ) );
-        Size aSize(maEntries[0]->get_preferred_size());
-        Point aPos(0, LogicToPixel(Size(0, 35), MapMode(MapUnit::MapAppFont)).getHeight());
-        aPos.Y() += aSize.Height() * i * 1.2;
-        maEntries[i]->SetPosSizePixel(aPos, aSize);
+        maEntries.push_back(VclPtr<ScIconSetFrmtDataEntry>::Create(maIconParent, static_cast<ScIconSetType>(nPos), mpDoc, i));
+        maEntries[i]->set_grid_top_attach(i);
         maEntries[i]->Show();
     }
     maEntries[0]->SetFirstEntry();
