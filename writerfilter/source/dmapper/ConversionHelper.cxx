@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/text/RubyAdjust.hpp>
 #include <editeng/borderline.hxx>
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -424,9 +423,9 @@ sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t)
     return convertTwipToMM100( _t );
 }
 
-sal_Int16 convertRubyAlign( sal_Int32 nIntValue )
+text::RubyAdjust convertRubyAlign( sal_Int32 nIntValue )
 {
-    sal_Int16 rubyAdjust = text::RubyAdjust_LEFT;
+    text::RubyAdjust rubyAdjust = text::RubyAdjust_LEFT;
     switch( nIntValue )
     {
         case NS_ooxml::LN_Value_ST_RubyAlign_center:

@@ -19,6 +19,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
@@ -146,7 +147,7 @@ public:
     sal_Int16 nVertOrientRelation; ///< Vertical text::RelOrientation for drawinglayer shapes.
     sal_uInt32 nHoriOrientRelationToken; ///< Horizontal dmapper token for Writer pictures.
     sal_uInt32 nVertOrientRelationToken; ///< Vertical dmapper token for Writer pictures.
-    int nWrap;
+    css::text::WrapTextMode nWrap;
     /// If shape is below text (true) or text is below shape (false).
     bool bInBackground;
     /// Wrap polygon, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().

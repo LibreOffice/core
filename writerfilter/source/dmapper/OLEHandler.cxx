@@ -57,7 +57,7 @@ OLEHandler::OLEHandler(DomainMapper& rDomainMapper) :
 LoggedProperties("OLEHandler"),
 m_nDxaOrig(0),
 m_nDyaOrig(0),
-    m_nWrapMode(1),
+    m_nWrapMode(text::WrapTextMode_THROUGHT),
     m_rDomainMapper(rDomainMapper)
 {
 }
@@ -165,7 +165,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 
                     xShapeProps->setPropertyValue(
                         getPropertyName( PROP_SURROUND ),
-                        uno::makeAny( m_nWrapMode ) );
+                        uno::makeAny( (sal_Int32)m_nWrapMode ) );
 
                     // Through shapes in the header or footer(that spill into the body) should be in the background.
                     // It is just assumed that all shapes will spill into the body.
