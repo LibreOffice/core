@@ -319,7 +319,7 @@ oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
         }
 
         /* Save current position */
-        off_t const nCurPos = (off_t)lseek (m_fd, (off_t)0, SEEK_CUR);
+        off_t const nCurPos = lseek (m_fd, (off_t)0, SEEK_CUR);
         if (nCurPos == (off_t)(-1))
             return result;
 
