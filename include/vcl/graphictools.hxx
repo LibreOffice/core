@@ -248,7 +248,7 @@ public:
         hatchTriple
     };
     /// Type of gradient used
-    enum GradientType {gradientLinear=0, gradientRadial, gradientRectangular};
+    enum class GradientType {Linear, Radial, Rectangular};
     /// Special values for gradient step count
     enum { gradientStepsInfinite=0 };
     /** Homogeneous 2D transformation matrix

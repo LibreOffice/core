@@ -3124,8 +3124,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     ReadSvtGraphicFill( aMemStm, aFill );
 
                     bool bGradient = SvtGraphicFill::fillGradient == aFill.getFillType() &&
-                                     ( SvtGraphicFill::gradientLinear == aFill.getGradientType() ||
-                                       SvtGraphicFill::gradientRadial == aFill.getGradientType() );
+                                     ( SvtGraphicFill::GradientType::Linear == aFill.getGradientType() ||
+                                       SvtGraphicFill::GradientType::Radial == aFill.getGradientType() );
                     bool bSkip = ( SvtGraphicFill::fillSolid == aFill.getFillType() || bGradient );
 
                     if( bSkip )

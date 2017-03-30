@@ -1263,7 +1263,7 @@ void WinMtfOutput::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
                                                            true,
                                                            SvtGraphicFill::hatchSingle,
                                                            Color(),
-                                                           SvtGraphicFill::gradientLinear,
+                                                           SvtGraphicFill::GradientType::Linear,
                                                            Color(),
                                                            Color(),
                                                            0,
