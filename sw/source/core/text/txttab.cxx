@@ -378,7 +378,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             case POR_TABLEFT:
             {
                 // handle this case in PostFormat
-                if( bTabOverMargin && GetTabPos() > rInf.Width() )
+                if( bTabOverMargin && !bAutoTabStop && GetTabPos() > rInf.Width() )
                 {
                     rInf.SetLastTab( this );
                     break;

@@ -227,6 +227,7 @@ public:
     void testTdf104814();
     void testTdf66405();
     void testTdf35021_tabOverMarginDemo();
+    void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
     void testTdf105417();
     void testTdf105625();
@@ -349,6 +350,7 @@ public:
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf66405);
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
+    CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
@@ -4413,6 +4415,19 @@ void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
     // decimal tab was 266
     nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABDECIMAL']", "nWidth").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
+}
+
+void SwUiWriterTest::testTdf106701_tabOverMarginAutotab()
+{
+    createDoc("tdf106701_tabOverMarginAutotab.doc");
+    calcLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // The right margin is ~3378
+    sal_Int32 nRightMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
+    // Automatic tabstops should never be affected by tabOverMargin compatibility
+    // The 1st line's width previously was ~9506
+    sal_Int32 nWidth = getXPath(pXmlDoc, "//LineBreak[1]", "nWidth").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("1st line's width is less than the right margin", nWidth < nRightMargin);
 }
 
 void SwUiWriterTest::testTdf104492()
