@@ -64,7 +64,7 @@ void sal_detail_initialize(int argc, char ** argv) {
         openMax = 1024;
     }
     assert(openMax >= 0 && openMax <= std::numeric_limits< int >::max());
-    for (int fd = 3; fd < openMax; ++fd) {
+    for (int fd = 3; fd < int(openMax); ++fd) {
         struct stat s;
         if (fstat(fd, &s) != -1 && S_ISREG(s.st_mode))
             close(fd);
