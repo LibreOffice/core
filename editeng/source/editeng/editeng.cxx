@@ -1226,7 +1226,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                             }
                             else
                             {
-                                DBG_ASSERT( !aCurSel.HasRange(), "Selektion bei Complete?!" );
+                                DBG_ASSERT( !aCurSel.HasRange(), "Selction on complete?!" );
                                 EditPaM aStart( pImpEditEngine->WordLeft( aCurSel.Max() ) );
                                 aCurSel = pImpEditEngine->InsertText(
                                                 EditSelection( aStart, aCurSel.Max() ), aAutoText );

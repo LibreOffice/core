@@ -95,7 +95,7 @@ bool EditUndoManager::Redo()
             mpEditEngine->SetActiveView(mpEditEngine->GetEditViews()[0]);
         else
         {
-            OSL_FAIL( "Redo in Engine ohne View nicht moeglich!" );
+            OSL_FAIL( "Redo in Engine without View not possible!" );
             return false;
         }
     }
@@ -317,7 +317,7 @@ void EditUndoInsertChars::Undo()
 
 void EditUndoInsertChars::Redo()
 {
-    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     GetEditEngine()->InsertText(EditSelection(aPaM, aPaM), aText);
     EditPaM aNewPaM( aPaM );
@@ -349,7 +349,7 @@ EditUndoRemoveChars::EditUndoRemoveChars(
 
 void EditUndoRemoveChars::Undo()
 {
-    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
+    DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
     GetEditEngine()->InsertText(aSel, aText);

@@ -1859,7 +1859,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
                 aRange.nEndPos  = aRange.nStartPos;
 
                 pRange->SetSelection( aRange );
-                const OUString aText( (sal_Unicode)13 );  // '\r' geht auf'm Mac nicht
+                const OUString aText( (sal_Unicode)13 );  // '\r' does not work on Mac
                 pRange->setString( aText );
 
                 aRange.nStartPos = 0;

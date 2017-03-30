@@ -1140,8 +1140,6 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
             aVisDocStartPos.Move( -nRealDiffX, -nRealDiffY );
         else
             aVisDocStartPos.Move( -nRealDiffY, nRealDiffX );
-        // Das Move um den allignten Wert ergibt nicht unbedingt ein
-        // alligntes Rechteck...
         // Aligned value of the move does not necessarily result in aligned
         // rectangle ...
         aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
