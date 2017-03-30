@@ -33,7 +33,7 @@ void ThreadPoolTest::testPreferredConcurrency() {
     sal_Int32 nExpected = 4; // UTs are capped to 4.
     CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
 
-#ifndef _WIN32_WINNT
+#ifndef _WIN32
     // The result should be cached, so this should change anything.
     nThreads = std::thread::hardware_concurrency() * 2;
     setenv("MAX_CONCURRENCY", std::to_string(nThreads).c_str(), true);
