@@ -574,7 +574,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 void ScUnoAddInCollection::LoadComponent( const ScUnoAddInFuncData& rFuncData )
 {
     const OUString& aFullName = rFuncData.GetOriginalName();
-    sal_Int32 nPos = aFullName.lastIndexOf( (sal_Unicode) '.' );
+    sal_Int32 nPos = aFullName.lastIndexOf( '.' );
     if ( nPos > 0 )
     {
         OUString aServiceName = aFullName.copy( 0, nPos );

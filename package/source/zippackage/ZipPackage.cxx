@@ -443,7 +443,7 @@ void ZipPackage::parseContentType()
                     for ( nInd = 0; nInd < aContentTypeInfo[1].getLength(); nInd++ )
                     {
                         OUString aPath;
-                        if ( aContentTypeInfo[1][nInd].First.toChar() == ( sal_Unicode )'/' )
+                        if ( aContentTypeInfo[1][nInd].First.toChar() == '/' )
                             aPath = aContentTypeInfo[1][nInd].First.copy( 1 );
                         else
                             aPath = aContentTypeInfo[1][nInd].First;

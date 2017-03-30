@@ -308,10 +308,10 @@ namespace dlgprov
 
             sal_Int32 nIndex = 0;
 
-            OUString sLibName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+            OUString sLibName = sDescription.getToken( 0, '.', nIndex );
             OUString sDlgName;
             if ( nIndex != -1 )
-                sDlgName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+                sDlgName = sDescription.getToken( 0, '.', nIndex );
 
             OUString sLocation = sfUri->getParameter( "location" );
 

@@ -927,7 +927,7 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
     {
         sal_Int32 indexOfTab = 0;
         sal_Int32 numberOfTabs = theTabStops.getLength();
-        sal_Unicode lastFillChar = (sal_Unicode) ' ';
+        sal_Unicode lastFillChar = ' ';
 
         for( ; indexOfTab < numberOfTabs; ++indexOfTab )
         {
@@ -965,19 +965,19 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
                 lastFillChar = theTabStops[indexOfTab].FillChar;
                 switch (lastFillChar)
                 {
-                    case (sal_Unicode) ' ':
+                    case ' ':
                         lead_char = "blank ";
                         break;
 
-                    case (sal_Unicode) '.':
+                    case '.':
                         lead_char = "dotted ";
                         break;
 
-                    case (sal_Unicode) '-':
+                    case '-':
                         lead_char = "dashed ";
                         break;
 
-                    case (sal_Unicode) '_':
+                    case '_':
                         lead_char = "lined ";
                         break;
 

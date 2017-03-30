@@ -314,7 +314,7 @@ sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource)
     // cut off leading 0 eventually ( eg. 0.567 -> .567)
     (void)sSource.startsWith("0", &sNumber);
 
-    sal_Int32 nDotIndex = sNumber.indexOf((sal_Unicode)'.');
+    sal_Int32 nDotIndex = sNumber.indexOf('.');
 
     if( nDotIndex < 0)
     {

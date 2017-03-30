@@ -758,18 +758,18 @@ bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttr
                 aString = aString.copy( 4, aString.getLength() - 5 );
                 Color aColor;
                 sal_Int32 index = 0;
-                aColor.SetRed( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
-                aColor.SetGreen( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
-                aColor.SetRed( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
+                aColor.SetRed( (sal_uInt8)aString.getToken( 0, ',', index ).toInt32() );
+                aColor.SetGreen( (sal_uInt8)aString.getToken( 0, ',', index ).toInt32() );
+                aColor.SetRed( (sal_uInt8)aString.getToken( 0, ',', index ).toInt32() );
                 rValue <<= (sal_Int32)aColor.GetColor();
                 bRet = true;
             }
             else if( aString.startsWith( "hsl(" ) )
             {
                 sal_Int32 index = 0;
-                sal_Int32 nA = aString.getToken( 0, (sal_Unicode)',', index ).toInt32();
-                sal_Int32 nB = aString.getToken( 0, (sal_Unicode)',', index ).toInt32();
-                sal_Int32 nC = aString.getToken( 0, (sal_Unicode)',', index ).toInt32();
+                sal_Int32 nA = aString.getToken( 0, ',', index ).toInt32();
+                sal_Int32 nB = aString.getToken( 0, ',', index ).toInt32();
+                sal_Int32 nC = aString.getToken( 0, ',', index ).toInt32();
                 dump( "hsl(%ld", nA );
                 dump( ",%ld", nB );
                 dump( ",%ld)", nC );
@@ -1097,7 +1097,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
                 sal_Int32 fromIndex = 0;
                 while(true)
                 {
-                    fromIndex = aString.indexOf( (sal_Unicode)';', fromIndex );
+                    fromIndex = aString.indexOf( ';', fromIndex );
                     if( fromIndex == -1 )
                         break;
 

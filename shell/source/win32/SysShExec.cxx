@@ -175,7 +175,7 @@ namespace
 
     const OUString    JUMP_MARK_HTM(".htm#");
     const OUString    JUMP_MARK_HTML(".html#");
-    const sal_Unicode HASH_MARK      = (sal_Unicode)'#';
+    const sal_Unicode HASH_MARK      = '#';
 
     bool has_jump_mark(const OUString& system_path, sal_Int32* jmp_mark_start = nullptr)
     {

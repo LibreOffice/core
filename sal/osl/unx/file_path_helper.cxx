@@ -24,9 +24,9 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-const sal_Unicode FPH_CHAR_PATH_SEPARATOR = (sal_Unicode)'/';
-const sal_Unicode FPH_CHAR_DOT            = (sal_Unicode)'.';
-const sal_Unicode FPH_CHAR_COLON          = (sal_Unicode)':';
+const sal_Unicode FPH_CHAR_PATH_SEPARATOR = '/';
+const sal_Unicode FPH_CHAR_DOT            = '.';
+const sal_Unicode FPH_CHAR_COLON          = ':';
 
 inline const rtl::OUString FPH_PATH_SEPARATOR()
 { return rtl::OUString(FPH_CHAR_PATH_SEPARATOR); }
@@ -47,7 +47,7 @@ void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
         while ((pustrPath->length > 1) && (pustrPath->buffer[pustrPath->length - 1] == FPH_CHAR_PATH_SEPARATOR))
         {
             pustrPath->length--;
-            pustrPath->buffer[pustrPath->length] = (sal_Unicode)'\0';
+            pustrPath->buffer[pustrPath->length] = '\0';
         }
 
         SAL_WARN_IF( !((0 == pustrPath->length) || (1 == pustrPath->length) ||

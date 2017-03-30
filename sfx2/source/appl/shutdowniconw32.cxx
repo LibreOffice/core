@@ -786,7 +786,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
 
     OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
-    int i = aOfficepath.lastIndexOf((sal_Char) '\\');
+    int i = aOfficepath.lastIndexOf('\\');
     if( i != -1 )
         aOfficepath = aOfficepath.copy(0, i);
 
@@ -802,7 +802,7 @@ void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
     GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
 
     OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
-    int i = aOfficepath.lastIndexOf((sal_Char) '\\');
+    int i = aOfficepath.lastIndexOf('\\');
     if( i != -1 )
         aOfficepath = aOfficepath.copy(0, i);
 

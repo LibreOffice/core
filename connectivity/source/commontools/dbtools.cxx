@@ -891,7 +891,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
 
     if ( aNameComps.bSchemas )
     {
-        sal_Int32 nIndex = sName.indexOf((sal_Unicode)'.');
+        sal_Int32 nIndex = sName.indexOf('.');
         //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
         if ( nIndex != -1 )
             _rSchema = sName.copy(0, nIndex);

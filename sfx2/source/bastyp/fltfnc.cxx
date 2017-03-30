@@ -712,7 +712,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Extension( const OU
                 if (sExt.isEmpty())
                     continue;
 
-                if (sExt[0] != (sal_Unicode)'.')
+                if (sExt[0] != '.')
                     sExt = "." + sExt;
 
                 WildCard aCheck(sWildCard, ';');

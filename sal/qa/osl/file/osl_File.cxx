@@ -137,14 +137,14 @@ inline bool compareFileName( const ::rtl::OUString & ustr1, const ::rtl::OUStrin
 //on Windows, the separator is '\', so here change to '/', then compare
 #if defined(_WIN32)
     ::rtl::OUString ustr1new,ustr2new;
-    sal_Unicode reverseSlash = (sal_Unicode)'\\';
+    sal_Unicode reverseSlash = '\\';
 
     if (ustr1.lastIndexOf(reverseSlash) != -1)
-        ustr1new = ustr1.replace(reverseSlash,(sal_Unicode)'/');
+        ustr1new = ustr1.replace(reverseSlash,'/');
     else
         ustr1new = ustr1;
     if (ustr2.lastIndexOf(reverseSlash) != -1)
-        ustr2new = ustr2.replace(reverseSlash,(sal_Unicode)'/');
+        ustr2new = ustr2.replace(reverseSlash,'/');
     else
         ustr2new = ustr2;
     bOk = ustr1new.equalsIgnoreAsciiCase( ustr2new )  ;

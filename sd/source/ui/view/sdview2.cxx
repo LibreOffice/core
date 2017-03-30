@@ -732,7 +732,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
 
                                 presentation::ClickAction eClickAction = presentation::ClickAction_DOCUMENT;
 
-                                sal_Int32 nIndex = aBookmark.indexOf( (sal_Unicode)'#' );
+                                sal_Int32 nIndex = aBookmark.indexOf( '#' );
                                 if( nIndex != -1 )
                                 {
                                     const OUString aDocName( aBookmark.copy( 0, nIndex ) );
@@ -815,7 +815,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, void*, p, void )
             aPos = pSdNavigatorDropEvent->mpTargetWindow->PixelToLogic( pSdNavigatorDropEvent->maPosPixel );
 
         const OUString aURL( aINetBookmark.GetURL() );
-        sal_Int32 nIndex = aURL.indexOf( (sal_Unicode)'#' );
+        sal_Int32 nIndex = aURL.indexOf( '#' );
         if( nIndex != -1 )
             aBookmark = aURL.copy( nIndex+1 );
 

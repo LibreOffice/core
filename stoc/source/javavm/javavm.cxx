@@ -331,7 +331,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         if(nonProxies_name.is() && !nonProxies_name->getStringValue().isEmpty()) {
             OUString value = nonProxies_name->getStringValue();
             // replace the separator ";" by "|"
-            value = value.replace((sal_Unicode)';', (sal_Unicode)'|');
+            value = value.replace(';', '|');
 
             OUString httpNonProxyHosts = "http.nonProxyHosts=" + value;
             OUString ftpNonProxyHosts = "ftp.nonProxyHosts=" + value;
@@ -1435,7 +1435,7 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                 for( C_IT i= Props.begin(); i != Props.end(); ++i)
                 {
                     OUString prop= *i;
-                    sal_Int32 index= prop.indexOf( (sal_Unicode)'=');
+                    sal_Int32 index= prop.indexOf( '=');
                     OUString propName= prop.copy( 0, index);
                     OUString propValue= prop.copy( index + 1);
 

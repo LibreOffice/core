@@ -751,11 +751,11 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             {
                 if( nPass == 1 )
                 {
-                    pLibInfoInetObj.reset(new INetURLObject( maLibraryPath.getToken(0, (sal_Unicode)';') ));
+                    pLibInfoInetObj.reset(new INetURLObject( maLibraryPath.getToken(0, ';') ));
                 }
                 else
                 {
-                    pLibInfoInetObj.reset(new INetURLObject( maLibraryPath.getToken(1, (sal_Unicode)';') ));
+                    pLibInfoInetObj.reset(new INetURLObject( maLibraryPath.getToken(1, ';') ));
                 }
                 pLibInfoInetObj->insertName( maInfoFileName, false, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
                 pLibInfoInetObj->setExtension( "xlc" );
@@ -775,7 +775,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             // Old variant?
             if( !xInput.is() && nPass == 0 )
             {
-                INetURLObject aLibInfoInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
+                INetURLObject aLibInfoInetObj( maLibraryPath.getToken(1, ';') );
                 aLibInfoInetObj.insertName( maOldInfoFileName, false, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
                 aLibInfoInetObj.setExtension( "xli" );
                 aFileName = aLibInfoInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
@@ -833,7 +833,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     }
                     else
                     {
-                        aLibraryPath = maLibraryPath.getToken(1, (sal_Unicode)';');
+                        aLibraryPath = maLibraryPath.getToken(1, ';');
                     }
                     INetURLObject aInetObj( aLibraryPath );
 
@@ -848,7 +848,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     else if( rLib.bLink )
                     {
                         // Check "share" path
-                        INetURLObject aShareInetObj( maLibraryPath.getToken(0, (sal_Unicode)';') );
+                        INetURLObject aShareInetObj( maLibraryPath.getToken(0, ';') );
                         aShareInetObj.insertName( rLib.aName, true, INetURLObject::LAST_SEGMENT,
                                                   INetURLObject::EncodeMechanism::All );
                         OUString aShareLibDirPath = aShareInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
@@ -993,7 +993,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
     if( meInitMode == DEFAULT )
     {
-        INetURLObject aUserBasicInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
+        INetURLObject aUserBasicInetObj( maLibraryPath.getToken(1, ';') );
         OUString aStandardStr("Standard");
 
         INetURLObject aPrevUserBasicInetObj_1( aUserBasicInetObj );
@@ -1347,7 +1347,7 @@ OUString SfxLibraryContainer::createAppLibraryFolder( SfxLibrary* pLib, const OU
     OUString aLibDirPath = pLib->maStorageURL;
     if( aLibDirPath.isEmpty() )
     {
-        INetURLObject aInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
+        INetURLObject aInetObj( maLibraryPath.getToken(1, ';') );
         aInetObj.insertName( aName, true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
         checkStorageURL( aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), pLib->maLibInfoFileURL,
                          pLib->maStorageURL, pLib->maUnexpandedStorageURL );
@@ -2093,7 +2093,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     else
     {
         // Create Output stream
-        INetURLObject aLibInfoInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
+        INetURLObject aLibInfoInetObj( maLibraryPath.getToken(1, ';') );
         aLibInfoInetObj.insertName( maInfoFileName, false, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
         aLibInfoInetObj.setExtension( "xlc" );
         OUString aLibInfoPath( aLibInfoInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
@@ -2286,7 +2286,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
         catch(const Exception& ) {}
 
         // Delete folder if empty
-        INetURLObject aInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
+        INetURLObject aInetObj( maLibraryPath.getToken(1, ';') );
         aInetObj.insertName( Name, true, INetURLObject::LAST_SEGMENT,
                              INetURLObject::EncodeMechanism::All );
         OUString aLibDirPath = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
@@ -2545,7 +2545,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
         OUString aLibDirPath = pImplLib->maStorageURL;
 
-        INetURLObject aDestInetObj( maLibraryPath.getToken(1, (sal_Unicode)';'));
+        INetURLObject aDestInetObj( maLibraryPath.getToken(1, ';'));
         aDestInetObj.insertName( NewName, true, INetURLObject::LAST_SEGMENT,
                                  INetURLObject::EncodeMechanism::All );
         OUString aDestDirPath = aDestInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );

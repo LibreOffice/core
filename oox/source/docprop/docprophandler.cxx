@@ -99,25 +99,25 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
     {
         aOslDTime.Year = (sal_Int16)aChars.copy( 0, 4 ).toInt32();
 
-        if ( nLen >= 7 && aChars[4] == (sal_Unicode)'-' )
+        if ( nLen >= 7 && aChars[4] == '-' )
         {
             aOslDTime.Month = (sal_uInt16)aChars.copy( 5, 2 ).toInt32();
 
-            if ( nLen >= 10 && aChars[7] == (sal_Unicode)'-' )
+            if ( nLen >= 10 && aChars[7] == '-' )
             {
                 aOslDTime.Day = (sal_uInt16)aChars.copy( 8, 2 ).toInt32();
 
-                if ( nLen >= 16 && aChars[10] == (sal_Unicode)'T' && aChars[13] == (sal_Unicode)':' )
+                if ( nLen >= 16 && aChars[10] == 'T' && aChars[13] == ':' )
                 {
                     aOslDTime.Hours = (sal_uInt16)aChars.copy( 11, 2 ).toInt32();
                     aOslDTime.Minutes = (sal_uInt16)aChars.copy( 14, 2 ).toInt32();
 
                     sal_Int32 nOptTime = 0;
-                    if ( nLen >= 19 && aChars[16] == (sal_Unicode)':' )
+                    if ( nLen >= 19 && aChars[16] == ':' )
                     {
                         aOslDTime.Seconds = (sal_uInt16)aChars.copy( 17, 2 ).toInt32();
                         nOptTime += 3;
-                        if ( nLen >= 20 && aChars[19] == (sal_Unicode)'.' )
+                        if ( nLen >= 20 && aChars[19] == '.' )
                         {
                             nOptTime += 1;
                             sal_Int32 digitPos = 20;
@@ -158,12 +158,12 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                     sal_Int32 nModif = 0;
                     if ( nLen >= 16 + nOptTime + 6 )
                     {
-                        if ( ( aChars[16 + nOptTime] == (sal_Unicode)'+' || aChars[16 + nOptTime] == (sal_Unicode)'-' )
-                          && aChars[16 + nOptTime + 3] == (sal_Unicode)':' )
+                        if ( ( aChars[16 + nOptTime] == '+' || aChars[16 + nOptTime] == '-' )
+                          && aChars[16 + nOptTime + 3] == ':' )
                         {
                             nModif = aChars.copy( 16 + nOptTime + 1, 2 ).toInt32() * 3600;
                             nModif += aChars.copy( 16 + nOptTime + 4, 2 ).toInt32() * 60;
-                            if ( aChars[16 + nOptTime] == (sal_Unicode)'-' )
+                            if ( aChars[16 + nOptTime] == '-' )
                                 nModif *= -1;
                         }
                     }

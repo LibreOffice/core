@@ -189,11 +189,11 @@ namespace comphelper
             rBoundary.startPos = 0;
             rBoundary.endPos = sText.getLength();
 
-            sal_Int32 nFound = sText.lastIndexOf( (sal_Unicode)'\n', nIndex );
+            sal_Int32 nFound = sText.lastIndexOf( '\n', nIndex );
             if ( nFound != -1 )
                 rBoundary.startPos = nFound + 1;
 
-            nFound = sText.indexOf( (sal_Unicode)'\n', nIndex );
+            nFound = sText.indexOf( '\n', nIndex );
             if ( nFound != -1 )
                 rBoundary.endPos = nFound + 1;
         }

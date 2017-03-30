@@ -382,17 +382,17 @@ escape_path( rtl_uString *pToEscape )
         sal_Unicode c = pToEscape->buffer[i];
         switch ( c )
         {
-            case (sal_Unicode)'\0':
+            case '\0':
                 rtl_uStringbuffer_insert_ascii( &pBuffer, &nCapacity,
                         rtl_uString_getLength( pBuffer ),
                         RTL_CONSTASCII_STRINGPARAM( "\\0" ) );
                 break;
-            case (sal_Unicode)',':
+            case ',':
                 rtl_uStringbuffer_insert_ascii( &pBuffer, &nCapacity,
                         rtl_uString_getLength( pBuffer ),
                         RTL_CONSTASCII_STRINGPARAM( "\\," ) );
                 break;
-            case (sal_Unicode)'\\':
+            case '\\':
                 rtl_uStringbuffer_insert_ascii( &pBuffer, &nCapacity,
                         rtl_uString_getLength( pBuffer ),
                         RTL_CONSTASCII_STRINGPARAM( "\\\\" ) );

@@ -515,7 +515,7 @@ std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData 
         if ( ! aDataHelper.GetINetBookmark(SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark))
             break;
         const OUString sURL (aINetBookmark.GetURL());
-        const sal_Int32 nIndex (sURL.indexOf((sal_Unicode)'#'));
+        const sal_Int32 nIndex (sURL.indexOf('#'));
         if (nIndex == -1)
             break;
         OUString sBookmark (sURL.copy(nIndex+1));

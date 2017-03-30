@@ -44,7 +44,7 @@ void test::oustringbuffer::ToString::testToString() {
     rtl::OUString str = sb.toString();
     CPPUNIT_ASSERT_EQUAL( rtl::OUString("test string"), str );
     // returned OUString must be independent from sb
-    sb.append( (sal_Unicode)'a' );
+    sb.append( 'a' );
     CPPUNIT_ASSERT_EQUAL( rtl::OUString("test string"), str );
     sb.setLength(0);
     CPPUNIT_ASSERT_EQUAL( rtl::OUString("test string"), str );

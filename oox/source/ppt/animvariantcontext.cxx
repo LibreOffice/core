@@ -68,28 +68,28 @@ namespace oox { namespace ppt {
                 {
                     switch(rString[nIndex + 4])
                     {
-                    case (sal_Unicode)'h': // we found ppt_h
+                    case 'h': // we found ppt_h
                         // if it was #ppt_h we already copied the #
                         // which we do not want in the target, so remove it
-                        if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
+                        if(nIndex && (rString[nIndex - 1] == '#'))
                         {
                             sRes.remove(sRes.getLength() - 1, 1);
                         }
                         sRes.append("height");
                         bRet = true;
                         break;
-                    case (sal_Unicode)'w':
-                        if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
+                    case 'w':
+                        if(nIndex && (rString[nIndex - 1] == '#'))
                         {
                             sRes.remove(sRes.getLength() - 1, 1);
                         }
                         sRes.append("width");
                         bRet = true;
                         break;
-                    case (sal_Unicode)'x':
-                        if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
+                    case 'x':
+                        if(nIndex && (rString[nIndex - 1] == '#'))
                         {
-                            sRes[sRes.getLength() - 1] = (sal_Unicode)'x';
+                            sRes[sRes.getLength() - 1] = 'x';
                         }
                         else
                         {
@@ -97,10 +97,10 @@ namespace oox { namespace ppt {
                         }
                         bRet = true;
                         break;
-                    case (sal_Unicode)'y':
-                        if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
+                    case 'y':
+                        if(nIndex && (rString[nIndex - 1] == '#'))
                         {
-                            sRes[sRes.getLength() - 1] = (sal_Unicode)'y';
+                            sRes[sRes.getLength() - 1] = 'y';
                         }
                         else
                         {

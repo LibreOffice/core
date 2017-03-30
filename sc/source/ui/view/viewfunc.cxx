@@ -2548,7 +2548,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 
         nPrecision = 0;
         // 'E' for exponential is fixed in Numberformatter
-        sal_Int32 nIndexE = aOut.indexOf((sal_Unicode)'E');
+        sal_Int32 nIndexE = aOut.indexOf('E');
         if ( nIndexE >= 0 )
         {
           sExponentialStandardFormat = aOut.copy( nIndexE ).replace( '-', '+' );
