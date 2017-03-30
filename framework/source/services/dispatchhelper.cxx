@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/profilezone.hxx>
 
 namespace framework{
 
@@ -113,6 +114,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
                                  bool                                                   SyncronFlag ,
                                  const css::uno::Sequence< css::beans::PropertyValue >& lArguments  )
 {
+    ::comphelper::ProfileZone aZone("executeDispatch");
     css::uno::Reference< css::uno::XInterface > xTHIS(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     m_aResult.clear();
 

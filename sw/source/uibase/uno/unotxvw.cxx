@@ -74,6 +74,7 @@
 #include "swdtflvr.hxx"
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -481,6 +482,7 @@ void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool DesignMode )
 uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor()
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("getViewCursor");
     if(GetView())
     {
         if(!mxTextViewCursor.is())
@@ -1139,6 +1141,7 @@ void SwXTextViewCursor::gotoRange(
 void SwXTextViewCursor::gotoStart(sal_Bool bExpand)
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SwXTextViewCursor::gotoStart");
     if(m_pView)
     {
         if (!IsTextSelection())
@@ -1153,6 +1156,7 @@ void SwXTextViewCursor::gotoStart(sal_Bool bExpand)
 void SwXTextViewCursor::gotoEnd(sal_Bool bExpand)
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SwXTextViewCursor::gotoEnd");
     if(m_pView)
     {
         if (!IsTextSelection())
@@ -1548,6 +1552,7 @@ Any  SwXTextViewCursor::getPropertyDefault( const OUString& rPropertyName )
 sal_Bool SwXTextViewCursor::goDown(sal_Int16 nCount, sal_Bool bExpand)
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SwXTextViewCursor::goDown");
     bool bRet = false;
     if(m_pView)
     {
@@ -1564,6 +1569,7 @@ sal_Bool SwXTextViewCursor::goDown(sal_Int16 nCount, sal_Bool bExpand)
 sal_Bool SwXTextViewCursor::goUp(sal_Int16 nCount, sal_Bool bExpand)
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SwXTextViewCursor::goUp");
     bool bRet = false;
     if(m_pView)
     {

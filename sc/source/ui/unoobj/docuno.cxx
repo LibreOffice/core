@@ -68,6 +68,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1989,7 +1990,10 @@ void SAL_CALL ScModelObj::calculate()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
+    {
+        ::comphelper::ProfileZone aZone("calculate");
         pDocShell->DoRecalc(true);
+    }
     else
     {
         OSL_FAIL("no DocShell");     //! throw exception?
@@ -2000,7 +2004,10 @@ void SAL_CALL ScModelObj::calculateAll()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
+    {
+        ::comphelper::ProfileZone aZone("calculateAll");
         pDocShell->DoHardRecalc();
+    }
     else
     {
         OSL_FAIL("no DocShell");     //! throw exception?

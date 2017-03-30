@@ -24,6 +24,7 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -2361,6 +2362,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
 void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& xMasterPage )
 {
     ::SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("setMasterPage");
 
     throwIfDisposed();
 

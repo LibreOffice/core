@@ -59,6 +59,7 @@
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/profilezone.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/scene3d.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -2338,6 +2339,8 @@ awt::Size SAL_CALL SwXShape::getSize()
 
 void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
 {
+    ::comphelper::ProfileZone aZone("SwXShape::setSize");
+
     if ( mxShape.is() )
     {
         mxShape->setSize( aSize );

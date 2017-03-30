@@ -25,6 +25,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
+#include <comphelper/profilezone.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -93,6 +94,7 @@ void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, cons
 void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SvxUnoNameItemTable::insertByName");
 
     if( hasByName( aApiName ) )
         throw container::ElementExistException();
@@ -106,6 +108,7 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const
 void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SvxUnoNameItemTable::removeByName");
 
     // a little quickfix for 2.0 to let applications clear api
     // created items that are not used
@@ -191,6 +194,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
 uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SvxUnoNameItemTable::getByName");
 
     OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 

@@ -127,6 +127,10 @@ void QueueProcessor::ProcessRequests()
         ::osl::MutexGuard aGuard (mrQueue.GetMutex());
         if ( ! mrQueue.IsEmpty())
             Start(mrQueue.GetFrontPriorityClass());
+        else
+        {
+            ::comphelper::ProfileZone aZone("QueueProcessor finished processing all elements");
+        }
     }
 }
 
