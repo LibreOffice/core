@@ -157,7 +157,7 @@ static bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
     return bRet;
 }
 
-static vcl::Font& lcl_GetDefaultBulletFont()
+static const vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
     static vcl::Font aDefBulletFont("OpenSymbol", "", Size(0, 14));
@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         bPreset = false;
         bModified = true;
         sal_Unicode cChar = aBulletTypes[m_pExamplesVS->GetSelectItemId() - 1];
-        vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+        const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
         sal_uInt16 nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -695,7 +695,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 
         SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_pExamplesVS->GetSelectItemId() - 1];
 
-        vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+        const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
         SvxNumSettings_Impl* pLevelSettings = nullptr;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {

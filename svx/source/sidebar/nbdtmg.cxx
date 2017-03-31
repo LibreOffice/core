@@ -63,7 +63,7 @@ using namespace com::sun::star::style;
 
 namespace svx { namespace sidebar {
 
-vcl::Font& lcl_GetDefaultBulletFont()
+const vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
     static vcl::Font aDefBulletFont("OpenSymbol", "", Size(0, 14));
@@ -260,7 +260,7 @@ BulletsTypeMgr& BulletsTypeMgr::GetInstance()
 
 void BulletsTypeMgr::Init()
 {
-    vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
     for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
     {
@@ -374,32 +374,9 @@ void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
 
 void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool /*isDefault*/, bool isResetSize)
 {
-    //if ( mLevel == (sal_uInt16)0xFFFF )
-    //  return sal_False;
-
-    sal_Unicode cChar;
-    //sal_uInt16 nLength = 0;
-    /*if( AllSettings::GetLayoutRTL() )
-    {
-        nLength = sizeof(aDynamicRTLBulletTypes)/sizeof(sal_Unicode);
-
-        if ( nIndex >= nLength )
-            return sal_False;
-
-        cChar = aDynamicRTLBulletTypes[nIndex];
-    }else
-    {
-        nLength = sizeof(aDynamicBulletTypes)/sizeof(sal_Unicode);
-
-        if ( nIndex >= nLength )
-            return sal_False;
-
-        cChar = aDynamicBulletTypes[nIndex];
-    }*/
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
-    cChar = pActualBullets[nIndex]->cBulletChar;
-    //vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    sal_Unicode cChar = pActualBullets[nIndex]->cBulletChar;
     vcl::Font rActBulletFont = pActualBullets[nIndex]->aFont;
 
     sal_uInt16 nMask = 1;
@@ -863,7 +840,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             break;
 
         SvxNumberFormat aFmt(aNum.GetLevel(i));
-        vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+        const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
         if (pLevelSettings->nNumberType !=aFmt.GetNumberingType()) isResetSize=true;
         aFmt.SetNumberingType( pLevelSettings->nNumberType );
         sal_uInt16 nUpperLevelOrChar = (sal_uInt16)pLevelSettings->nParentNumbering;
