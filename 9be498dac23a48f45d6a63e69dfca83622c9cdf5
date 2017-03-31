@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_f2d1d0fc",
+        "filename": "sw/source/uibase/uiview/uivwimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-31T10:34:01Z",
+      "side": 0,
+      "message": "but doesn\u0027t it leak an existing instance without that?",
+      "revId": "9be498dac23a48f45d6a63e69dfca83622c9cdf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
