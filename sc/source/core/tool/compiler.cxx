@@ -4708,8 +4708,8 @@ bool ScCompiler::HandleRange()
             // in short: if it isn't a self-contained expression.
             FormulaToken* p1 = pArr->PeekPrevNoSpaces();
             FormulaToken* p2 = pArr->PeekNextNoSpaces();
-            OpCode eOp1 = (p1 ? p1->GetOpCode() : static_cast<OpCode>( ocSep ) );
-            OpCode eOp2 = (p2 ? p2->GetOpCode() : static_cast<OpCode>( ocSep ) );
+            OpCode eOp1 = (p1 ? p1->GetOpCode() : ocSep);
+            OpCode eOp2 = (p2 ? p2->GetOpCode() : ocSep);
             bool bBorder1 = (eOp1 == ocSep || eOp1 == ocOpen);
             bool bBorder2 = (eOp2 == ocSep || eOp2 == ocClose);
             bool bAddPair = !(bBorder1 && bBorder2);
@@ -5353,8 +5353,8 @@ bool ScCompiler::HandleColRowName()
             FormulaToken* p1 = pArr->PeekPrevNoSpaces();
             FormulaToken* p2 = pArr->PeekNextNoSpaces();
             // begin/end of a formula => single
-            OpCode eOp1 = p1 ? p1->GetOpCode() : static_cast<OpCode>( ocAdd );
-            OpCode eOp2 = p2 ? p2->GetOpCode() : static_cast<OpCode>( ocAdd );
+            OpCode eOp1 = p1 ? p1->GetOpCode() : ocAdd;
+            OpCode eOp2 = p2 ? p2->GetOpCode() : ocAdd;
             if ( eOp1 != ocColRowName && eOp1 != ocIntersect
                 && eOp2 != ocColRowName && eOp2 != ocIntersect )
             {
