@@ -360,7 +360,9 @@ void PrinterInfoManager::initialize()
                                     aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
                             }
                             else
+                            {
                                 aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, nullptr );
+                            }
                         }
                     }
 
