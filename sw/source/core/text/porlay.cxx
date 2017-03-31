@@ -2247,9 +2247,9 @@ void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
         sal_Int32 nNext = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nStt,
                         rLocale,
                         i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
-        for ( sal_Int32 nI = 0; nI < nLen ; ++nI )
+        for ( sal_Int32 nI = nStt; nI < nLen ; ++nI )
         {
-            if ( nI + nStt == nNext )
+            if ( nI == nNext )
             {
                 nNext = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nNext,
                         rLocale,
