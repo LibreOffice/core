@@ -58,9 +58,9 @@ public:
 
 // class SdrCaptionEscRelItem
 // Relativer Linienaustritt
-//     0 =   0.00% = oben bzw. links,
-// 10000 = 100.00% = rechts bzw. unten
-// nur wenn SdrCaptionEscIsRelItem=TRUE
+//     0 =   0.00% = up resp. left,
+// 10000 = 100.00% = right resp. down
+// only when SdrCaptionEscIsRelItem=TRUE
 
 class SVX_DLLPUBLIC SdrCaptionEscRelItem: public SfxInt32Item {
 public:
@@ -72,9 +72,9 @@ public:
 
 // class SdrCaptionEscAbsItem
 // Absoluter Linienaustritt
-// 0  = oben bzw. links,
-// >0 = in Richtung rechts bzw. unten
-// nur wenn SdrCaptionEscIsRelItem=FALSE
+// 0  = up resp. left,
+// >0 = in direction right resp. down
+// only when SdrCaptionEscIsRelItem=FALSE
 
 class SdrCaptionEscAbsItem: public SdrMetricItem {
 public:

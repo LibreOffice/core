@@ -128,7 +128,7 @@ public:
                     that does not belong to the local file system.
                     The caller of the SetTempNameBase is responsible for deleting this folder and all temporary files in it.
                     The return value of both methods is the complete "physical" name of the tempname base folder.
-                    It is not a URL because alle URLs must be "UCB compatible", so there may be no suitable URL at all.
+                    It is not a URL because all URLs must be "UCB compatible", so there may be no suitable URL at all.
                     */
     static OUString SetTempNameBaseDirectory( const OUString &rBaseName );
 };
