@@ -32,7 +32,7 @@ public:
     virtual SalSystem* CreateSalSystem();
 
     // frame management
-    void GetWorkArea( Rectangle& rRect );
+    void GetWorkArea( tools::Rectangle& rRect );
     SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
     SalFrame* CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle );
 
