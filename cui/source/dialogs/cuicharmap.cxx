@@ -380,6 +380,13 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
     // like "Times New Roman;Times" resolved
     vcl::Font aTmp( GetFontMetric( rFont ) );
 
+    if (aTmp.GetFamilyName() == "StarSymbol" && m_pFontLB->GetEntryPos(aTmp.GetFamilyName()) == LISTBOX_ENTRY_NOTFOUND)
+    {
+        //if for some reason, like font in an old document, StarSymbol is requested and its not available, then
+        //try OpenSymbol instead
+        aTmp.SetFamilyName("OpenSymbol");
+    }
+
     if ( m_pFontLB->GetEntryPos( aTmp.GetFamilyName() ) == LISTBOX_ENTRY_NOTFOUND )
         return;
 
