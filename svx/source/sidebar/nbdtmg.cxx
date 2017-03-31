@@ -266,7 +266,7 @@ void BulletsTypeMgr::Init()
     {
         pActualBullets[i] = new BulletsSettings;
         pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
-        pActualBullets[i]->aFont =rActBulletFont;
+        pActualBullets[i]->aFont = rActBulletFont;
         pActualBullets[i]->sDescription = SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );
     }
 }
@@ -377,7 +377,7 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
     sal_Unicode cChar = pActualBullets[nIndex]->cBulletChar;
-    vcl::Font rActBulletFont = pActualBullets[nIndex]->aFont;
+    const vcl::Font& rActBulletFont = pActualBullets[nIndex]->aFont;
 
     sal_uInt16 nMask = 1;
     OUString sBulletCharFormatName = GetBulCharFmtName();
