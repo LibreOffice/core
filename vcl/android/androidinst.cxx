@@ -36,9 +36,9 @@ public:
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
 
-void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
+void AndroidSalInstance::GetWorkArea(tools::Rectangle& rRect)
 {
-    rRect = Rectangle( Point( 0, 0 ),
+    rRect = tools::Rectangle( Point( 0, 0 ),
                        Size( viewWidth, viewHeight ) );
 }
 
@@ -105,7 +105,7 @@ public:
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
 
-    virtual void GetWorkArea( Rectangle& rRect )
+    virtual void GetWorkArea(tools::Rectangle& rRect)
     {
         AndroidSalInstance::getInstance()->GetWorkArea( rRect );
     }
