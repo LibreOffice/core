@@ -61,7 +61,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -1907,7 +1906,7 @@ sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >
     return 0;
 }
 
-const char* DrawingML::GetAlignment( sal_Int32 nAlignment )
+const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment )
 {
     const char* sAlignment = nullptr;
 
@@ -1957,8 +1956,9 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
 
-    sal_Int16 nAlignment( style::ParagraphAdjust_LEFT );
-    GET( nAlignment, ParaAdjust );
+    sal_Int16 nTmp( (sal_Int16)style::ParagraphAdjust_LEFT );
+    GET( nTmp, ParaAdjust );
+    style::ParagraphAdjust nAlignment = (style::ParagraphAdjust)nTmp;
 
     bool bHasLinespacing = false;
     LineSpacing aLineSpacing;
