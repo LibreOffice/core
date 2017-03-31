@@ -47,6 +47,7 @@ void WpftImpressFilterTest::test()
         {"PowerPoint_2.ppt", REQUIRE_MWAW_VERSION(0, 3, 10)},
         {"PowerPoint_3.ppt", REQUIRE_MWAW_VERSION(0, 3, 9)},
         {"PowerPoint_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10)},
+        {"PowerPoint_7.ppt", REQUIRE_MWAW_VERSION(0, 3, 11)},
     };
 
     doTest("org.libreoffice.comp.Impress.KeynoteImportFilter", "/writerperfect/qa/unit/data/impress/libetonyek/", aEtonyekOptional);
