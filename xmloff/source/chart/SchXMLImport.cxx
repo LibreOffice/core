@@ -591,6 +591,19 @@ void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XCompon
         // prevent rebuild of view during load (necesarry especially if loaded not
         // via load api, which is the case for example if binary files are loaded)
         xChartDoc->lockControllers();
+
+        uno::Reference<container::XChild> xChild(xChartDoc, uno::UNO_QUERY);
+        uno::Reference<chart2::data::XDataReceiver> xDataReceiver(xChartDoc, uno::UNO_QUERY);
+        if (xChild.is() && xDataReceiver.is())
+        {
+            Reference<lang::XMultiServiceFactory> xFact(xChild->getParent(), uno::UNO_QUERY);
+            if (xFact.is())
+            {
+                //if the parent has a number formatter we will use the numberformatter of the parent
+                Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(xFact, uno::UNO_QUERY);
+                xDataReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
+            }
+        }
     }
     catch (const uno::Exception & rEx)
     {

@@ -257,10 +257,6 @@ void lcl_setDataProvider(uno::Reference<chart2::XChartDocument> xChartDoc, OUStr
             Reference<lang::XMultiServiceFactory> xFact(xChild->getParent(), uno::UNO_QUERY);
             if (xFact.is())
             {
-                //if the parent has a number formatter we will use the numberformatter of the parent
-                Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(xFact, uno::UNO_QUERY);
-                xDataReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
-
                 if (!xChartDoc->getDataProvider().is())
                 {
                     bool bHasDataPilotSource = !sDataPilotSource.isEmpty();
