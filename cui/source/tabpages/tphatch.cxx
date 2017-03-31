@@ -253,13 +253,13 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 {
     std::unique_ptr<XHatch> pXHatch;
     OUString  aString;
-    size_t nPos = m_pHatchLB->GetSelectItemPos();
+    size_t nPos = m_pHatchLB->IsNoSelection() ? VALUESET_ITEM_NOTFOUND : m_pHatchLB->GetSelectItemPos();
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
         aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );
     }
-    // gradient has been (unidentified) passed
+    // unidentified hatch has been passed
     else
     {
         pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
@@ -309,11 +309,14 @@ VclPtr<SfxTabPage> SvxHatchTabPage::Create( vcl::Window* pWindow,
 IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
+    // hatch params have changed, it is no longer one of the presets
+    m_pHatchLB->SetNoSelection();
 }
 
 IMPL_LINK( SvxHatchTabPage, ModifiedColorListBoxHdl_Impl, SvxColorListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
+    m_pHatchLB->SetNoSelection();
 }
 
 IMPL_LINK_NOARG( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, CheckBox&, void )
@@ -344,11 +347,13 @@ IMPL_LINK_NOARG( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, SvxColorListBox&, 
 IMPL_LINK( SvxHatchTabPage, ModifiedEditHdl_Impl, Edit&, rEdit, void )
 {
     ModifiedHdl_Impl(&rEdit);
+    m_pHatchLB->SetNoSelection();
 }
 
 IMPL_LINK( SvxHatchTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
 {
     ModifiedHdl_Impl(rSlider);
+    m_pHatchLB->SetNoSelection();
 }
 void SvxHatchTabPage::ModifiedHdl_Impl( void* p )
 {
