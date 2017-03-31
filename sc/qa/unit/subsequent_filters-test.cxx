@@ -374,6 +374,16 @@ std::ostream& operator<<(std::ostream& os, SvxBorderLineStyle n)
     return os;
 }
 
+namespace com { namespace sun { namespace star { namespace sheet {
+
+std::ostream& operator<<(std::ostream& rStrm, DataPilotFieldOrientation n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
@@ -1882,11 +1892,11 @@ void ScFiltersTest::testPivotTableNamedRangeSourceODS()
     CPPUNIT_ASSERT(pDesc);
     CPPUNIT_ASSERT_EQUAL(OUString("MyRange"), pDesc->GetRangeName());
 
-    sal_uInt16 nOrient;
+    css::sheet::DataPilotFieldOrientation nOrient;
     long nDim = pDP->GetHeaderDim(ScAddress(0,1,1), nOrient);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to detect header dimension.", long(0), nDim);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This dimension should be a page dimension.",
-                           static_cast<sal_uInt16>(sheet::DataPilotFieldOrientation_PAGE), nOrient);
+                           sheet::DataPilotFieldOrientation_PAGE, nOrient);
 
     xDocSh->DoClose();
 }

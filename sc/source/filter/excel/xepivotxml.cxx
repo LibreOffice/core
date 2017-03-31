@@ -473,8 +473,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 continue;
         }
 
-        sheet::DataPilotFieldOrientation eOrient =
-            static_cast<sheet::DataPilotFieldOrientation>(rDim.GetOrientation());
+        sheet::DataPilotFieldOrientation eOrient = rDim.GetOrientation();
 
         switch (eOrient)
         {
@@ -565,8 +564,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             continue;
         }
 
-        sheet::DataPilotFieldOrientation eOrient =
-            static_cast<sheet::DataPilotFieldOrientation>(pDim->GetOrientation());
+        sheet::DataPilotFieldOrientation eOrient = pDim->GetOrientation();
 
         if (eOrient == sheet::DataPilotFieldOrientation_HIDDEN)
         {

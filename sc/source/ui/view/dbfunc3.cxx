@@ -32,7 +32,6 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
@@ -1337,7 +1336,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
     ScDPSaveData aData( *pDPObj->GetSaveData() );
     bool bChange = false;
 
-    sal_uInt16 nOrient = DataPilotFieldOrientation_HIDDEN;
+    DataPilotFieldOrientation nOrient = DataPilotFieldOrientation_HIDDEN;
     long nField = pDPObj->GetHeaderDim( rPos, nOrient );
     if ( nField >= 0 )
     {
@@ -1841,7 +1840,7 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
     return bRet;
 }
 
-bool ScDBFunc::HasSelectionForDrillDown( sal_uInt16& rOrientation )
+bool ScDBFunc::HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& rOrientation )
 {
     bool bRet = false;
 
@@ -1863,7 +1862,7 @@ bool ScDBFunc::HasSelectionForDrillDown( sal_uInt16& rOrientation )
                 ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName( aDimName );
                 if ( pDim )
                 {
-                    sal_uInt16 nDimOrient = pDim->GetOrientation();
+                    css::sheet::DataPilotFieldOrientation nDimOrient = pDim->GetOrientation();
                     ScDPSaveDimension* pInner = pSaveData->GetInnermostDimension( nDimOrient );
                     if ( pDim == pInner )
                     {
@@ -1910,7 +1909,7 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName
                         pDuplicated = aData.DuplicateDimension( *pNewDimensionName );
                     }
 
-                    sal_uInt16 nOrientation = pDim->GetOrientation();
+                    css::sheet::DataPilotFieldOrientation nOrientation = pDim->GetOrientation();
                     pNewDim->SetOrientation( nOrientation );
 
                     long nPosition = LONG_MAX;

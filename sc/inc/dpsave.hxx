@@ -98,7 +98,7 @@ private:
     std::unique_ptr<OUString> mpSubtotalName;
     bool bIsDataLayout;
     bool bDupFlag;
-    sal_uInt16 nOrientation;
+    css::sheet::DataPilotFieldOrientation nOrientation;
     ScGeneralFunction nFunction; // for data dimensions
     long nUsedHierarchy;
     sal_uInt16 nShowEmptyMode; //! at level
@@ -145,7 +145,7 @@ public:
 
     void SetName( const OUString& rNew ); // used if the source dim was renamed (groups)
 
-    void SetOrientation(sal_uInt16 nNew);
+    void SetOrientation(css::sheet::DataPilotFieldOrientation nNew);
     void SetSubTotals(std::vector<ScGeneralFunction> const & rFuncs);
     long GetSubTotalsCount() const
         { return maSubTotalFuncs.size(); }
@@ -200,7 +200,7 @@ public:
     void SetCurrentPage( const OUString* pPage ); // NULL = no selection (all)
     OUString GetCurrentPage() const; // only for ODF compatibility
 
-    sal_uInt16 GetOrientation() const
+    css::sheet::DataPilotFieldOrientation GetOrientation() const
         { return nOrientation; }
 
     ScDPSaveMember* GetExistingMemberByName(const OUString& rName);
@@ -314,7 +314,7 @@ public:
 
     void RemoveDimensionByName(const OUString& rName);
 
-    ScDPSaveDimension* GetInnermostDimension(sal_uInt16 nOrientation);
+    ScDPSaveDimension* GetInnermostDimension(css::sheet::DataPilotFieldOrientation nOrientation);
     ScDPSaveDimension* GetFirstDimension(css::sheet::DataPilotFieldOrientation eOrientation);
     long GetDataDimensionCount() const;
 
