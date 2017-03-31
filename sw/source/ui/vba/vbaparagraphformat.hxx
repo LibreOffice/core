@@ -23,6 +23,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XParagraphFormat > SwVbaParagraphFormat_BASE;
 
@@ -38,8 +39,8 @@ private:
     static sal_Int32 getMSWordLineSpacingRule( css::style::LineSpacing& rLineSpacing );
     /// @throws css::uno::RuntimeException
     sal_Int16 getCharHeight();
-    static sal_Int32 getOOoAlignment( sal_Int32 _alignment );
-    static sal_Int32 getMSWordAlignment( sal_Int32 _alignment );
+    static css::style::ParagraphAdjust getOOoAlignment( sal_Int32 _alignment );
+    static sal_Int32 getMSWordAlignment( css::style::ParagraphAdjust _alignment );
 
 public:
     SwVbaParagraphFormat( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::beans::XPropertySet >& rParaProps );
