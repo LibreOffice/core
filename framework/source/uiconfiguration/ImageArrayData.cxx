@@ -70,21 +70,8 @@ void ImageAryData::Load(const OUString &rPrefix)
 
     bool bSuccess = ImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
 
-    if (bSuccess)
-    {}
-#if OSL_DEBUG_LEVEL > 0
-    else
-    {
-        OStringBuffer aMessage;
-        aMessage.append( "ImageAryData::Load: failed to load image '" );
-        aMessage.append( OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
-        aMessage.append( "'" );
-        aMessage.append( " from icon theme '" );
-        aMessage.append( OUStringToOString( aIconTheme, RTL_TEXTENCODING_UTF8 ).getStr() );
-        aMessage.append( "'" );
-        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
-    }
-#endif
+    SAL_WARN_IF(!bSuccess, "fwk.uiconfiguration", "Failed to load image '" << aFileName
+              << "' from icon theme '" << aIconTheme << "'");
 }
 
 
