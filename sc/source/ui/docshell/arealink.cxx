@@ -497,7 +497,6 @@ IMPL_LINK_NOARG(ScAreaLink, AreaEndEditHdl, Dialog&, void)
         sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
         SetName( aNewLinkName );
     }
-    pImpl->m_pDialog.clear();    // dialog is deleted with parent
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
