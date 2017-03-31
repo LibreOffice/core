@@ -49,7 +49,7 @@ protected:
     void ScanText();
     void SkipGroup();
 
-    // scanne das naechste Token,
+    // scan the next Token
     virtual int GetNextToken_() override;
 
     void ReadUnknownData();

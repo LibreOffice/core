@@ -69,12 +69,12 @@ protected:
 
     css::uno::Reference< css::frame::XModel >               mxModel;
 
-    // gecachte Interfaces
+    // cached interfaces
     css::uno::Reference< css::drawing::XDrawPage >          xDrawPage;
     css::uno::Reference< css::drawing::XShapes >            xShapes;
     css::uno::Reference< css::lang::XMultiServiceFactory >  xServiceFactory;
 
-    // das einzige Formular
+    // the only form
     css::uno::Reference< css::container::XIndexContainer >  xFormComps;
 
     virtual void GetDrawPage();

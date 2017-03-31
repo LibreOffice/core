@@ -36,7 +36,7 @@ class E3dDefaultAttributes;
 /*************************************************************************
 |*
 |*                                                              |
-|* Create a 3D cuboid; aPos: Center oder left, bottom, behind   |__
+|* Create a 3D cuboid; aPos: Center or left, bottom, behind     |__
 |*                           (depending on bPosIsCenter)       /
 |* nSideFlags indicates, if only some of the cuboid surfaces can
 |* be created; the corresponding bits are defined in the enum.

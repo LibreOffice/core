@@ -57,7 +57,7 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     mutable bool        bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
-    // wird nur von Create benutzt
+    // only used by Create
     SvxBrushItem( SvStream& rStrm,
                   sal_uInt16 nVersion, sal_uInt16 nWhich  );
 

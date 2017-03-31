@@ -204,7 +204,7 @@ private:
  *  in all others
  *
  *  It should be possible to distinguish the record from Drawing Engine
- *  ones. These start with 'DRMD' und 'DRVW'.
+ *  ones. These start with 'DRMD' and 'DRVW'.
  *  <BR>
  *  =>  Mini-Records with Pre-Tag 'D' can only be up to 4MB in size,
  *  to avoid confusion.

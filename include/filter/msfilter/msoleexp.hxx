@@ -34,7 +34,7 @@ namespace svt {
 class SotStorage;
 
 // for the CreateSdrOLEFromStorage we need the information, how we handle
-// convert able OLE-Objects - this ist stored in
+// convert able OLE-Objects - this is stored in
 #define OLE_STARMATH_2_MATHTYPE             0x0001
 #define OLE_STARWRITER_2_WINWORD            0x0002
 #define OLE_STARCALC_2_EXCEL                0x0004

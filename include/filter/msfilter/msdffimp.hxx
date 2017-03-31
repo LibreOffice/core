@@ -143,7 +143,7 @@ typedef ::std::multiset< std::shared_ptr<SvxMSDffShapeInfo>,
 #define SP_FBACKGROUND  0x400   ///< Background shape
 
 // for the CreateSdrOLEFromStorage we need the information, how we handle
-// convert able OLE-Objects - this ist stored in
+// convert able OLE-Objects - this is stored in
 #define OLE_MATHTYPE_2_STARMATH             0x0001
 #define OLE_WINWORD_2_STARWRITER            0x0002
 #define OLE_EXCEL_2_STARCALC                0x0004
