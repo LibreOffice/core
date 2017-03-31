@@ -104,7 +104,12 @@ using namespace std;
 #define EMR_SELECTCLIPPATH              67
 #define EMR_ABORTPATH                   68
 
-#define EMR_GDICOMMENT                  70
+#define EMR_COMMENT                     70          // Contains arbitrary private data.
+// Comment Identifiers:
+#define EMR_COMMENT_EMFPLUS             0x2B464D45  // Contains embedded EMF+ records.
+#define EMR_COMMENT_EMFSPOOL            0x00000000  // Contains embedded EMFSPOOL records.
+#define EMR_COMMENT_PUBLIC              0x43494447  // Specify extensions to EMF processing.
+
 #define EMR_FILLRGN                     71
 #define EMR_FRAMERGN                    72
 #define EMR_INVERTRGN                   73
@@ -240,7 +245,7 @@ record_type_name(sal_uInt32 nRecType)
     case EMR_WIDENPATH: return "WIDENPATH";
     case EMR_SELECTCLIPPATH: return "SELECTCLIPPATH";
     case EMR_ABORTPATH: return "ABORTPATH";
-    case EMR_GDICOMMENT: return "GDICOMMENT";
+    case EMR_COMMENT: return "COMMENT";
     case EMR_FILLRGN: return "FILLRGN";
     case EMR_FRAMERGN: return "FRAMERGN";
     case EMR_INVERTRGN: return "INVERTRGN";
@@ -454,8 +459,10 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 
         SAL_INFO ("vcl.emf", "\t\tEMF+ record type: " << std::hex << type << std::dec);
 
-        // GetDC
-        if( type == 16388 ) {
+        // Get Device Context
+        // TODO We should use  EmfPlusRecordType::GetDC instead
+        if( type == 0x4004 )
+        {
             bHaveDC = true;
             SAL_INFO ("vcl.emf", "\t\tEMF+ lock DC (device context)");
         }
@@ -675,7 +682,7 @@ bool EnhWMFReader::ReadEnhWMF()
 
         SAL_INFO ("vcl.emf", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " " << record_type_name(nRecType) << " size: " <<  nRecSize << std::dec);
 
-        if( bEnableEMFPlus && nRecType == EMR_GDICOMMENT ) {
+        if( bEnableEMFPlus && nRecType == EMR_COMMENT ) {
             sal_uInt32 length;
 
             pWMF->ReadUInt32( length );
@@ -683,22 +690,30 @@ bool EnhWMFReader::ReadEnhWMF()
             SAL_INFO("vcl.emf", "\tGDI comment, length: " << length);
 
             if( pWMF->good() && length >= 4 && length <= pWMF->remainingSize() ) {
-                sal_uInt32 id;
+                sal_uInt32 nCommentId;
 
-                pWMF->ReadUInt32( id );
+                pWMF->ReadUInt32( nCommentId );
 
-                SAL_INFO ("vcl.emf", "\t\tbegin " << (char)(id & 0xff) << (char)((id & 0xff00) >> 8) << (char)((id & 0xff0000) >> 16) << (char)((id & 0xff000000) >> 24) << " id: 0x" << std::hex << id << std::dec);
+                SAL_INFO ("vcl.emf", "\t\tbegin " << (char)(nCommentId & 0xff) << (char)((nCommentId & 0xff00) >> 8) << (char)((nCommentId & 0xff0000) >> 16) << (char)((nCommentId & 0xff000000) >> 24) << " id: 0x" << std::hex << nCommentId << std::dec);
 
-                // EMF+ comment (FIXME: BE?)
-                if( id == 0x2B464D45 && nRecSize >= 12 )
+                if( nCommentId == EMR_COMMENT_EMFPLUS && nRecSize >= 12 )
+                {
                     // [MS-EMF] 2.3.3: DataSize includes both CommentIdentifier and CommentRecordParm fields.
                     // We have already read 4-byte CommentIdentifier, so reduce length appropriately
                     ReadEMFPlusComment( length-4, bHaveDC );
-                // GDIC comment, doesn't do anything useful yet
-                else if( id == 0x43494447 && nRecSize >= 12 ) {
+                }
+                else if( nCommentId == EMR_COMMENT_PUBLIC && nRecSize >= 12 )
+                {
                     // TODO: ReadGDIComment()
-                } else {
-                    SAL_INFO ("vcl.emf", "\t\tunknown id: 0x" << std::hex << id << std::dec);
+                }
+                else if( nCommentId == EMR_COMMENT_EMFSPOOL && nRecSize >= 12 )
+                {
+                    // TODO Implement reading EMFSPOOL comment
+
+                }
+                else
+                {
+                    SAL_INFO ("vcl.emf", "\t\tunknown id: 0x" << std::hex << nCommentId << std::dec);
                 }
             }
         }
@@ -1800,7 +1815,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 case EMR_ALPHADIBBLEND :            SAL_INFO("vcl.emf", "not implemented 'AlphaDibBlend'");             break;
                 case EMR_SETTEXTJUSTIFICATION :     SAL_INFO("vcl.emf", "not implemented 'SetTextJustification'");      break;
 
-                case EMR_GDICOMMENT :
+                case EMR_COMMENT :
                 case EMR_HEADER :               // has already been read at ReadHeader()
                 break;
 
