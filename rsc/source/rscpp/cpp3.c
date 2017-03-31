@@ -96,21 +96,20 @@ void setincdirs()
 
 #if HOST == SYS_UNKNOWN
 /*
- * Kontext: GenMake
- * Unter DOS wird nun auch die Environment-Variable INCLUDE ausgewetet.
- * Es kommt erschwerend hinzu, dass alle Eintraege, die mit ';' getrennt
- * sind, mit in die Liste aufenommen werden muessen.
- * Dies wird mit der Funktion strtok() realisiert.
- * Vorsicht bei der Benutzung von malloc !!!
- * In savestring wird naemlich getmem() verwendet. Vermutlich kommen sich
- * die beiden Funktion in die Quere. Als ich malloc statt savestring
- * verwendete knallte es in strcpy() !
+ * Context: GenMake
+ * Under DOS also the environment variable INCLUDE is used.
+ * To make it difficult all entries separated by ';' have to be
+ * included in the list and this is done with strtok().
+ * Be careful using malloc() !!!
+ * In savestring() as a matter of fact getmem() is used and probably these
+ * two functions are getting in the way of each other.
+ * When I used malloc() instead of savestring() an error occured in strcpy().
  */
 
 #if !defined(_WIN32) && !defined(UNX)
     extern char* getenv( char *pStr ); /* BP */
 #endif
-    char* pIncGetEnv = NULL;    /* Pointer auf INCLUDE   */
+    char* pIncGetEnv = NULL;    /* Pointer to INCLUDE   */
 
     if ( ( pIncGetEnv = getenv("INCLUDE") ) != NULL )
         AddInclude( pIncGetEnv );
@@ -120,18 +119,18 @@ void setincdirs()
 
 }
 
-/* Kontext: Erweiterung des INCLUDE-Services
- * Bislang konnte der cpp keine Include-Angaben in der Kommandozeile
- * vertragen, bei denen die directries mit ';' getrennt wurden.
- * Dies ist auch verstaendlich, da dieses cpp fuer UNIX-Systeme
- * massgeschneidert wurde und in UNI die ';' als Zeichen zum Abschluss
- * von Kommandos gilt.
+
+/* Context: Extension of the INCLUDE service
+ * So far the cpp couldn't use include statements in the command line
+ * where the directories are separated with ';'.
+ * This totally understandable because this cpp is fitted to UNIX
+ * systems and under UNIX ';' is used to terminate commandos.
  */
 
 int AddInclude( char* pIncStr )
 {
-    char* pIncEnv    = NULL;    /* Kopie des INCLUDE     */
-    char* pIncPos;              /* wandert zum naechsten */
+    char* pIncEnv    = NULL;    /* copy of INCLUDE     */
+    char* pIncPos;              /* goes to the next */
 
     pIncEnv = savestring( pIncStr );
     pIncPos = strtok( pIncEnv, ";" );

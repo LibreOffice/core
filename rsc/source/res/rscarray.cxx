@@ -152,7 +152,7 @@ ERRTYPE RscArray::GetValueEle( const RSCINST & rInst,
 
     Atom  nId;
     if( !pTypeClass->GetValueConst( sal_uInt32(lValue), &nId ) )
-    { // nicht gefunden
+    { // not found
         return ERR_ARRAY_INVALIDINDEX;
     }
 
@@ -187,7 +187,7 @@ ERRTYPE RscArray::GetArrayEle( const RSCINST & rInst,
 {
     sal_Int32  lValue;
     if( !pTypeClass->GetConstValue( nId, &lValue ) )
-    { // nicht gefunden
+    { // not found
         return ERR_ARRAY_INVALIDINDEX;
     }
 
@@ -309,7 +309,7 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
     pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
     if( pTC->IsSrsDefault() )
-    { // nur einen Wert schreiben
+    { // only write one value
         RscInstNode *   pNode = nullptr;
         if( pClassData->pNode )
         {

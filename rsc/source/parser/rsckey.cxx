@@ -58,7 +58,7 @@ void RscNameTable::SetSort( bool bSorted )
     bSort = bSorted;
     if( bSort && pTable)
     {
-        // Schluesselwort Feld sortieren
+        // sort keyword field
         qsort( static_cast<void *>(pTable), nEntries,
                sizeof( KEY_STRUCT ), KeyCompare );
     }
@@ -111,7 +111,7 @@ bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle )
 
     if( bSort )
     {
-        // Suche nach dem Schluesselwort
+        // search for the keyword
         aSearchName.nName = nName;
         pKey = static_cast<KEY_STRUCT *>(bsearch(
                 &aSearchName, pTable,
@@ -130,7 +130,6 @@ bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle )
 
     if( pKey )
     {
-        // Schluesselwort gefunden
         *pEle = *pKey;
         return true;
     }

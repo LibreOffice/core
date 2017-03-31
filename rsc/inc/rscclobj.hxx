@@ -26,9 +26,9 @@
 /******************* O b j N o d e ***************************************/
 class ObjNode : public IdNode
 {
-    RscId       aRscId; // Id der Resource
-    CLASS_DATA  pRscObj;// pointer to a resourceobject
-    RscFileTab::Index lFileKey;// Dateischluessel
+    RscId       aRscId;         // resource ID
+    CLASS_DATA  pRscObj;        // pointer to a resourceobject
+    RscFileTab::Index lFileKey;
 protected:
     using NameNode::Search;
 
@@ -67,7 +67,7 @@ protected:
 public:
     using NameNode::Insert;
 
-    ObjNode*    pObjBiTree; // Zeiger auf Objektbaum
+    ObjNode*    pObjBiTree; // pointer to object tree
                 RefNode( Atom nTyp );
     sal_uInt32  GetId() const override;
     void        Insert( RefNode* pTN ) //< insert a new node in the b-tree
@@ -81,7 +81,6 @@ public:
 
     ObjNode *   GetObjNode() const
                     {
-                        // hole  pObjBiTree
                         return pObjBiTree;
                     }
 };

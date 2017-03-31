@@ -27,7 +27,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 /******************* T y p e s *******************************************/
-typedef char * CLASS_DATA;  // Zeiger auf die Daten einer Klasse
+typedef char * CLASS_DATA;  // Pointer to the data of a class
 
 /******************* C l a s s e s   F o r w a r d s *********************/
 class RscCompiler;
@@ -47,16 +47,16 @@ extern AtomContainer*   pHS;
 
 enum class CommandFlags {
     NONE         = 0x0000,
-    Help         = 0x0001,  // Hilfe anzeigen
-    NoPrePro     = 0x0002,  // kein Preprozesor
-    NoSyntax     = 0x0004,  // keine Syntaxanalyse
-    NoLink       = 0x0008,  // nicht linken
-    NoResFile    = 0x0010,  // keine .res-Datei erzeugen
-    Define       = 0x0020,  // es wurde Definitionen angegeben
-    Include      = 0x0040,  // der Include-Pfad wurde erweitert
-    Preload      = 0x0200,  // Alle Resourcen Preloaden
-    SrsDefault   = 0x1000,  // immer der Default geschrieben
-    NoSysResTest = 0x2000   // ueberprueft nicht die Richtigkeit von (bmp, ico, cur)
+    Help         = 0x0001,  // show help
+    NoPrePro     = 0x0002,  // no preprocessor
+    NoSyntax     = 0x0004,  // no parsing
+    NoLink       = 0x0008,  // no linking
+    NoResFile    = 0x0010,  // do not create .res file
+    Define       = 0x0020,  // definitions stated
+    Include      = 0x0040,  // include path extended
+    Preload      = 0x0200,  // preload all resources
+    SrsDefault   = 0x1000,  // always wrote the default
+    NoSysResTest = 0x2000   // do not check the correctness of (bmp, ico, cur)
 };
 namespace o3tl {
     template<> struct typed_flags<CommandFlags> : is_typed_flags<CommandFlags, 0x327f> {};
@@ -88,9 +88,9 @@ struct RSCINST
 struct SUBINFO_STRUCT
 {
     SUBINFO_STRUCT(){ nPos = 0; pClass = nullptr; };
-    RscId        aId;    // Identifier der Resource
-    sal_uInt32   nPos;   // Position der Resource
-    RscTop *     pClass; // Klasse des Eintrages
+    RscId        aId;    // resource identifier
+    sal_uInt32   nPos;   // position of resource
+    RscTop *     pClass; // class of entry
 };
 
 /******************* F u n c t i o n *************************************/

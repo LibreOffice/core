@@ -25,7 +25,7 @@
 #define FALSE           0
 #endif
 
-/* in cpp1.c: file-pointer auf stdout oder file */
+/* in cpp1.c: file-pointer on stdout file file */
 extern FILE* pCppOut;                                   /* BP */
 #define PUTCHAR( d )   fprintf( pCppOut, "%c", (d) )    /* BP */
 #if OSL_DEBUG_LEVEL > 1
