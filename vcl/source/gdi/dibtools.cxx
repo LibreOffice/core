@@ -337,6 +337,14 @@ namespace
 
         return nIndex;
     }
+
+    BitmapColor SanitizeColor(const BitmapColor &rColor, bool bForceToMonoWhileReading)
+    {
+        if (!bForceToMonoWhileReading)
+            return rColor;
+        return BitmapColor(static_cast<sal_uInt8>(rColor.GetLuminance() >= 255));
+    }
+
 }
 
 bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapPalette& rPalette, bool bForceToMonoWhileReading, bool bRLE4)
@@ -661,7 +669,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         for( long nX = 0; nX < nWidth; nX++ )
                         {
                             aMask.GetColorFor16BitLSB( aColor, reinterpret_cast<sal_uInt8*>(pTmp16++) );
-                            rAcc.SetPixel( nY, nX, aColor );
+                            rAcc.SetPixel(nY, nX, SanitizeColor(aColor, bForceToMonoWhileReading));
                         }
                     }
                 }
@@ -685,7 +693,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                             aPixelColor.SetBlue( *pTmp++ );
                             aPixelColor.SetGreen( *pTmp++ );
                             aPixelColor.SetRed( *pTmp++ );
-                            rAcc.SetPixel( nY, nX, aPixelColor );
+                            rAcc.SetPixel(nY, nX, SanitizeColor(aPixelColor, bForceToMonoWhileReading));
                         }
                     }
                 }
@@ -723,7 +731,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                             for( long nX = 0; nX < nWidth; nX++ )
                             {
                                 aMask.GetColorAndAlphaFor32Bit( aColor, aAlpha, reinterpret_cast<sal_uInt8*>(pTmp32++) );
-                                rAcc.SetPixel( nY, nX, aColor );
+                                rAcc.SetPixel(nY, nX, SanitizeColor(aColor, bForceToMonoWhileReading));
                                 pAccAlpha->SetPixelIndex(nY, nX, sal_uInt8(0xff) - aAlpha);
                                 rAlphaUsed |= bool(0xff != aAlpha);
                             }
@@ -743,7 +751,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                             for( long nX = 0; nX < nWidth; nX++ )
                             {
                                 aMask.GetColorFor32Bit( aColor, reinterpret_cast<sal_uInt8*>(pTmp32++) );
-                                rAcc.SetPixel( nY, nX, aColor );
+                                rAcc.SetPixel(nY, nX, SanitizeColor(aColor, bForceToMonoWhileReading));
                             }
                         }
                     }
