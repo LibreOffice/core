@@ -36,14 +36,14 @@ public:
     virtual bool IsNativeControlSupported( ControlType, ControlPart ) override;
 
     virtual bool hitTestNativeControl( ControlType, ControlPart,
-                                       const Rectangle&, const Point&, bool& ) override;
+                                       const tools::Rectangle&, const Point&, bool& ) override;
 
-    virtual bool drawNativeControl( ControlType, ControlPart, const Rectangle&,
+    virtual bool drawNativeControl( ControlType, ControlPart, const tools::Rectangle&,
                                     ControlState, const ImplControlValue&, const OUString& ) override;
 
-    virtual bool getNativeControlRegion( ControlType, ControlPart, const Rectangle&,
+    virtual bool getNativeControlRegion( ControlType, ControlPart, const tools::Rectangle&,
                                          ControlState, const ImplControlValue&,
-                                         const OUString&, Rectangle&, Rectangle& ) override;
+                                         const OUString&, tools::Rectangle&, tools::Rectangle& ) override;
 
 private:
     std::unique_ptr<QImage> m_image;

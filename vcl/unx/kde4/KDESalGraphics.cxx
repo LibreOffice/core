@@ -63,11 +63,11 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
 }
 
 /**
- Convert VCL Rectangle to QRect.
- @param rControlRegion The Rectangle to convert.
+ Convert tools::Rectangle to QRect.
+ @param rControlRegion The tools::Rectangle to convert.
  @return The matching QRect
 */
-QRect region2QRect( const Rectangle& rControlRegion )
+QRect region2QRect( const tools::Rectangle& rControlRegion )
 {
     return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 }
@@ -200,7 +200,7 @@ static QRegion XRegionToQRegion( Region xr )
 #endif
 
 bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
-                                        const Rectangle& rControlRegion, ControlState nControlState,
+                                        const tools::Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& value,
                                         const OUString& )
 {
@@ -662,10 +662,10 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 }
 
 bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
-                                             const Rectangle& controlRegion, ControlState controlState,
+                                             const tools::Rectangle& controlRegion, ControlState controlState,
                                              const ImplControlValue& val,
                                              const OUString&,
-                                             Rectangle &nativeBoundingRegion, Rectangle &nativeContentRegion )
+                                             tools::Rectangle &nativeBoundingRegion, tools::Rectangle &nativeContentRegion )
 {
     bool retVal = false;
 
@@ -958,12 +958,12 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         // Bounding region
         Point aBPoint( boundingRect.x(), boundingRect.y() );
         Size aBSize( boundingRect.width(), boundingRect.height() );
-        nativeBoundingRegion = Rectangle( aBPoint, aBSize );
+        nativeBoundingRegion = tools::Rectangle( aBPoint, aBSize );
 
         // vcl::Region of the content
         Point aPoint( contentRect.x(), contentRect.y() );
         Size  aSize( contentRect.width(), contentRect.height() );
-        nativeContentRegion = Rectangle( aPoint, aSize );
+        nativeContentRegion = tools::Rectangle( aPoint, aSize );
     }
 
     return retVal;
@@ -975,7 +975,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
     nType/nPart combination.
 */
 bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
-                                           const Rectangle& rControlRegion, const Point& rPos,
+                                           const tools::Rectangle& rControlRegion, const Point& rPos,
                                            bool& rIsInside )
 {
     if ( nType == ControlType::Scrollbar )
