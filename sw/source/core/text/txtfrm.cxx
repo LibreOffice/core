@@ -1029,7 +1029,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 InvalidateRange_( SwCharRange( nPos, nLen) );
                 const sal_uInt16 nTmp = static_cast<const SwUpdateAttr*>(pNew)->getWhichAttr();
 
-                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
+                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_INETFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
                     lcl_SetWrong( *this, nPos, nPos + nLen, false );
