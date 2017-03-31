@@ -192,7 +192,7 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
             {
                 auto opcode(pHashMap->find(element));
                 if (opcode != pHashMap->end())
-                    result->insert(static_cast<OpCode>(opcode->second));
+                    result->insert(opcode->second);
                 else
                     SAL_WARN("sc.opencl", "Unrecognized OpCode " << element << " in OpCode set string");
             }

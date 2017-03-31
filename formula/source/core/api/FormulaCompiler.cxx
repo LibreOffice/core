@@ -964,7 +964,7 @@ OpCode FormulaCompiler::GetEnglishOpCode( const OUString& rName ) const
 
     formula::OpCodeHashMap::const_iterator iLook( xMap->getHashMap()->find( rName ) );
     bool bFound = (iLook != xMap->getHashMap()->end());
-    return bFound ? (*iLook).second : OpCode(ocNone);
+    return bFound ? (*iLook).second : ocNone;
 }
 
 bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
@@ -2306,7 +2306,7 @@ void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal ) const
 
 void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal ) const
 {
-    rBuffer.append( mxSymbols->getSymbol( static_cast<OpCode>(bVal ? ocTrue : ocFalse)) );
+    rBuffer.append( mxSymbols->getSymbol( bVal ? ocTrue : ocFalse ) );
 }
 
 void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rStr )
