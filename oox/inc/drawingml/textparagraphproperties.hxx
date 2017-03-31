@@ -24,6 +24,7 @@
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/textcharacterproperties.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <drawingml/textfont.hxx>
 #include <drawingml/textspacing.hxx>
 #include <boost/optional.hpp>
@@ -93,8 +94,8 @@ public:
     boost::optional< sal_Int32 >&       getParaLeftMargin(){ return moParaLeftMargin; }
     boost::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; }
 
-    boost::optional< sal_Int16 >&       getParaAdjust() { return moParaAdjust; }
-    void                                setParaAdjust( sal_Int16 nParaAdjust ) { moParaAdjust = nParaAdjust; }
+    boost::optional< css::style::ParagraphAdjust >&       getParaAdjust() { return moParaAdjust; }
+    void                                setParaAdjust( css::style::ParagraphAdjust nParaAdjust ) { moParaAdjust = nParaAdjust; }
 
     void                                apply( const TextParagraphProperties& rSourceProps );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
@@ -123,7 +124,7 @@ protected:
     TextSpacing                     maParaBottomMargin;
     boost::optional< sal_Int32 >    moParaLeftMargin;
     boost::optional< sal_Int32 >    moFirstLineIndentation;
-    boost::optional< sal_Int16 >    moParaAdjust;
+    boost::optional< css::style::ParagraphAdjust >    moParaAdjust;
     sal_Int16                       mnLevel;
 };
 
