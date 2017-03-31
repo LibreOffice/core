@@ -75,7 +75,7 @@ enum StackVarEnum
     svSingleVectorRef,
     svDoubleVectorRef,
     svError,                            // error token
-    svMissing = 0x70,                   // 0 or ""
+    svMissing,                          // 0 or ""
     svSep,                              // separator, ocSep, ocOpen, ocClose
     svUnknown                           // unknown StackType
 };
