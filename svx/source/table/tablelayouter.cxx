@@ -916,35 +916,39 @@ bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine
     }
 }
 
-
 void TableLayouter::SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const SvxBorderLine* pLine )
 {
-    if( pLine == nullptr )
+    if (!pLine)
         pLine = &gEmptyBorder;
 
-    SvxBorderLine *pOld = bHorizontal ? maHorizontalBorders[nCol][nRow] : maVerticalBorders[nCol][nRow];
+    BorderLineMap& rMap = bHorizontal ? maHorizontalBorders : maVerticalBorders;
 
-    if( HasPriority( pLine, pOld ) )
+    if( (nCol >= 0) && (nCol < sal::static_int_cast<sal_Int32>(rMap.size())) &&
+        (nRow >= 0) && (nRow < sal::static_int_cast<sal_Int32>(rMap[nCol].size())) )
     {
-        if( (pOld != nullptr) && (pOld != &gEmptyBorder) )
-            delete pOld;
+        SvxBorderLine *pOld = rMap[nCol][nRow];
 
-        SvxBorderLine* pNew = ( pLine != &gEmptyBorder ) ?  new SvxBorderLine(*pLine) : &gEmptyBorder;
+        if (HasPriority(pLine, pOld))
+        {
+            if (pOld && pOld != &gEmptyBorder)
+                delete pOld;
 
-        if( bHorizontal )
-            maHorizontalBorders[nCol][nRow] = pNew;
-        else
-            maVerticalBorders[nCol][nRow]  = pNew;
+            SvxBorderLine* pNew = (pLine != &gEmptyBorder) ?  new SvxBorderLine(*pLine) : &gEmptyBorder;
+
+            rMap[nCol][nRow] = pNew;
+        }
+    }
+    else
+    {
+        OSL_FAIL( "sdr::table::TableLayouter::SetBorder(), invalid border!" );
     }
 }
-
 
 void TableLayouter::ClearBorderLayout()
 {
     ClearBorderLayout(maHorizontalBorders);
     ClearBorderLayout(maVerticalBorders);
 }
-
 
 void TableLayouter::ClearBorderLayout(BorderLineMap& rMap)
 {
@@ -966,7 +970,6 @@ void TableLayouter::ClearBorderLayout(BorderLineMap& rMap)
         }
     }
 }
-
 
 void TableLayouter::ResizeBorderLayout()
 {
