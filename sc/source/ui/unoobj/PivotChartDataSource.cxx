@@ -35,7 +35,7 @@ PivotChartDataSource::~PivotChartDataSource()
 {
 }
 
-void PivotChartDataSource::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+void PivotChartDataSource::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
 }
 

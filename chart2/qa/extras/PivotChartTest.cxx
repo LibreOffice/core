@@ -188,7 +188,6 @@ void PivotChartTest::testChangePivotTable()
         uno::Reference<sheet::XDataPilotTables> xDataPilotTables = xDataPilotTablesSupplier->getDataPilotTables();
         uno::Reference<sheet::XDataPilotTable> xDataPilotTable(xDataPilotTables->getByName("DataPilot1"), UNO_QUERY_THROW);
         uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, UNO_QUERY_THROW);
-        uno::Reference<container::XIndexAccess> xPilotIndexAccess(xDataPilotDescriptor->getDataPilotFields(), UNO_QUERY_THROW);
 
         lclModifyOrientation(xDataPilotDescriptor, "Service Month", sheet::DataPilotFieldOrientation_ROW);
         lclModifyOrientation(xDataPilotDescriptor, "Group Segment", sheet::DataPilotFieldOrientation_COLUMN);
