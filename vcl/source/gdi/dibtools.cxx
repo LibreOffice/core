@@ -772,6 +772,10 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     if (!ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
         return false;
 
+    //BI_BITCOUNT_0 jpeg/png is unsupported
+    if (aHeader.nBitCount == 0)
+        return false;
+
     // In case ImplReadDIB() didn't call ImplReadDIBFileHeader() before
     // this method, nOffset is 0, that's OK.
     if (nOffset && aHeader.nSize > nOffset)
