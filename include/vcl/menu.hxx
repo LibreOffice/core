@@ -133,7 +133,7 @@ class VCL_DLLPUBLIC Menu : public Resource, public VclReferenceBase
     friend struct ImplMenuDelData;
 private:
     ImplMenuDelData* mpFirstDel;
-    MenuItemList* pItemList; // Liste mit den MenuItems
+    MenuItemList* pItemList; // list with MenuItems
     MenuLogo* pLogo;
     VclPtr<Menu> pStartedFrom;
     VclPtr<vcl::Window> pWindow;
@@ -521,7 +521,7 @@ public:
     sal_uInt16 Execute( vcl::Window* pWindow, const Point& rPopupPos );
     sal_uInt16 Execute( vcl::Window* pWindow, const tools::Rectangle& rRect, PopupMenuFlags nFlags = PopupMenuFlags::NONE );
 
-    // Fuer das TestTool
+    // for the TestTool
     void EndExecute();
     virtual void SelectItem(sal_uInt16 nId) override;
     void SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only

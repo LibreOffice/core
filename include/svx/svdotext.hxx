@@ -296,8 +296,8 @@ protected:
     void ImpSetTextEditParams() const;
     void SetTextSizeDirty() { bTextSizeDirty=true; }
 
-    // rAnchorRect ist InOut-Parameter!
-    void ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle& rAnchorRect, bool bLineWidth ) const;
+    // rAnchorRect is InOut-Parameter!
+    void ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, bool bLineWidth ) const;
 
     virtual SdrObjGeoData* NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
