@@ -130,7 +130,7 @@ static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValu
     return pNew;
 }
 
-// the selection of bullets from the StarSymbol
+// the selection of bullets from the OpenSymbol
 static const sal_Unicode aBulletTypes[] =
 {
     0x2022,
@@ -160,7 +160,7 @@ static bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
 static vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
-    static vcl::Font aDefBulletFont( "StarSymbol", OUString(), Size( 0, 14 ) );
+    static vcl::Font aDefBulletFont("OpenSymbol", "", Size(0, 14));
     if(!bInit)
     {
         aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );

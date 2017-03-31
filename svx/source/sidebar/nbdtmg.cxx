@@ -66,7 +66,7 @@ namespace svx { namespace sidebar {
 vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
-    static vcl::Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
+    static vcl::Font aDefBulletFont("OpenSymbol", "", Size(0, 14));
     if(!bInit)
     {
         aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
