@@ -227,7 +227,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
     std::unique_ptr<XGradient> pXGradient;
     OUString      aString;
-    size_t        nPos = m_pGradientLB->GetSelectItemPos();
+    size_t nPos = m_pGradientLB->IsNoSelection() ? VALUESET_ITEM_NOTFOUND : m_pGradientLB->GetSelectItemPos();
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
@@ -236,6 +236,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
     else
     // gradient was passed (unidentified)
     {
+        aString = "gradient";
         pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
                     m_pLbColorTo->GetSelectEntryColor(),
                     (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
@@ -282,21 +283,26 @@ VclPtr<SfxTabPage> SvxGradientTabPage::Create( vcl::Window* pWindow,
 IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
+    // gradient params changed, it is no longer one of the presets
+    m_pGradientLB->SetNoSelection();
 }
 
 IMPL_LINK( SvxGradientTabPage, ModifiedColorListBoxHdl_Impl, SvxColorListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
+    m_pGradientLB->SetNoSelection();
 }
 
 IMPL_LINK( SvxGradientTabPage, ModifiedEditHdl_Impl, Edit&, rBox, void )
 {
     ModifiedHdl_Impl(&rBox);
+    m_pGradientLB->SetNoSelection();
 }
 
 IMPL_LINK( SvxGradientTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
 {
     ModifiedHdl_Impl(rSlider);
+    m_pGradientLB->SetNoSelection();
 }
 
 IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, CheckBox&, void )
@@ -312,6 +318,7 @@ IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, CheckBox&, void )
         m_pMtrIncrement->Enable();
     }
     ModifiedHdl_Impl(m_pMtrIncrement);
+    m_pGradientLB->SetNoSelection();
 }
 
 void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
