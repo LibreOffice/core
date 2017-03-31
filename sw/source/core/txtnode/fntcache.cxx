@@ -1244,7 +1244,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if (!MsLangId::isKorean(aLang))
                     {
                         SwScriptInfo::CJKJustify( rInf.GetText(), pKernArray.get(), nullptr,
-                                rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd );
+                                rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd, rInf.IsSpaceStop() );
 
                         bSpecialJust = true;
                         nSpaceAdd = 0;
@@ -1449,7 +1449,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if (!MsLangId::isKorean(aLang))
                 {
                     SwScriptInfo::CJKJustify( rInf.GetText(), pKernArray.get(), pScrArray.get(),
-                            rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd );
+                            rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd, rInf.IsSpaceStop() );
 
                     nSpaceAdd = 0;
                 }
@@ -2042,7 +2042,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
             if (!MsLangId::isKorean(aLang))
             {
                 SwScriptInfo::CJKJustify( rInf.GetText(), pKernArray, nullptr,
-                        rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd );
+                        rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd, rInf.IsSpaceStop() );
 
                 nSpaceAdd = 0;
             }
