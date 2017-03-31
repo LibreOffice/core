@@ -364,19 +364,19 @@ class WidgetPainter
 
         @return valid push button.
     */
-    QPushButton  *pushButton( const Rectangle& rControlRegion, bool bDefault );
+    QPushButton  *pushButton( const tools::Rectangle& rControlRegion, bool bDefault );
 
     /** 'Get' method for radio button.
 
         @see pushButton()
     */
-    QRadioButton *radioButton( const Rectangle& rControlRegion );
+    QRadioButton *radioButton( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for check box.
 
         @see pushButton()
     */
-    QCheckBox    *checkBox( const Rectangle& rControlRegion );
+    QCheckBox    *checkBox( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for combo box.
 
@@ -385,79 +385,79 @@ class WidgetPainter
 
         @see pushButton(), m_pEditableComboBox
     */
-    QComboBox    *comboBox( const Rectangle& rControlRegion, bool bEditable );
+    QComboBox    *comboBox( const tools::Rectangle& rControlRegion, bool bEditable );
 
     /** 'Get' method for line edit box.
 
         @see pushButton()
     */
-    QLineEdit    *lineEdit( const Rectangle& rControlRegion );
+    QLineEdit    *lineEdit( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for spin box.
 
         @see pushButton()
     */
-    QSpinWidget  *spinWidget( const Rectangle& rControlRegion );
+    QSpinWidget  *spinWidget( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for tab bar.
 
         @see pushButton()
     */
-    QTabBar      *tabBar( const Rectangle& rControlRegion );
+    QTabBar      *tabBar( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for tab widget.
 
         @see pushButton()
     */
-    QTabWidget   *tabWidget( const Rectangle& rControlRegion );
+    QTabWidget   *tabWidget( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for list view.
 
         @see pushButton()
     */
-    QListView    *listView( const Rectangle& rControlRegion );
+    QListView    *listView( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for scroll bar.
 
         @see pushButton()
     */
-    QScrollBar   *scrollBar( const Rectangle& rControlRegion,
+    QScrollBar   *scrollBar( const tools::Rectangle& rControlRegion,
         bool bHorizontal, const ImplControlValue& aValue );
 
     /** 'Get' method for tool bar.
 
       @see pushButton()
     */
-    QToolBar     *toolBar( const Rectangle& rControlRegion, bool bHorizontal );
+    QToolBar     *toolBar( const tools::Rectangle& rControlRegion, bool bHorizontal );
 
     /** 'Get' method for tool button.
 
       @see pushButton()
     */
-    QToolButton  *toolButton( const Rectangle& rControlRegion );
+    QToolButton  *toolButton( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for menu bar.
 
       @see pushButton()
     */
-    QMenuBar     *menuBar( const Rectangle& rControlRegion );
+    QMenuBar     *menuBar( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for popup menu.
 
       @see pushButton()
     */
-    QPopupMenu   *popupMenu( const Rectangle& rControlRegion );
+    QPopupMenu   *popupMenu( const tools::Rectangle& rControlRegion );
 
     /** 'Get' method for progress bar
 
       @see pushButton()
     */
-    QProgressBar *progressBar( const Rectangle& rControlRegion );
+    QProgressBar *progressBar( const tools::Rectangle& rControlRegion );
 
     // TODO other widgets
 
     public:
-    /** Convert VCL Rectangle to QRect.
+    /** Convert tools::Rectangle to QRect.
 
         @param rControlRegion
         The region to convert.
@@ -465,7 +465,7 @@ class WidgetPainter
         @return
         The bounding box of the region.
     */
-    static QRect region2QRect( const Rectangle& rControlRegion );
+    static QRect region2QRect( const tools::Rectangle& rControlRegion );
 };
 
 WidgetPainter::WidgetPainter()
@@ -885,7 +885,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     return true;
 }
 
-QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
+QPushButton *WidgetPainter::pushButton( const tools::Rectangle& rControlRegion,
     bool bDefault )
 {
     if ( !m_pPushButton )
@@ -922,7 +922,7 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     return m_pPushButton;
 }
 
-QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
+QRadioButton *WidgetPainter::radioButton( const tools::Rectangle& rControlRegion )
 {
     if ( !m_pRadioButton )
         m_pRadioButton = new QRadioButton( nullptr, "radio_button" );
@@ -951,7 +951,7 @@ QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
     return m_pRadioButton;
 }
 
-QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
+QCheckBox *WidgetPainter::checkBox( const tools::Rectangle& rControlRegion )
 {
     if ( !m_pCheckBox )
         m_pCheckBox = new QCheckBox( nullptr, "check_box" );
@@ -980,7 +980,7 @@ QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
     return m_pCheckBox;
 }
 
-QComboBox *WidgetPainter::comboBox( const Rectangle& rControlRegion,
+QComboBox *WidgetPainter::comboBox( const tools::Rectangle& rControlRegion,
     bool bEditable )
 {
     QComboBox *pComboBox = nullptr;
@@ -1005,7 +1005,7 @@ QComboBox *WidgetPainter::comboBox( const Rectangle& rControlRegion,
     return pComboBox;
 }
 
-QLineEdit *WidgetPainter::lineEdit( const Rectangle& rControlRegion )
+QLineEdit *WidgetPainter::lineEdit( const tools::Rectangle& rControlRegion )
 {
     if ( !m_pLineEdit )
         m_pLineEdit = new QLineEdit( nullptr, "line_edit" );
@@ -1018,7 +1018,7 @@ QLineEdit *WidgetPainter::lineEdit( const Rectangle& rControlRegion )
     return m_pLineEdit;
 }
 
-QSpinWidget *WidgetPainter::spinWidget( const Rectangle& rControlRegion )
+QSpinWidget *WidgetPainter::spinWidget( const tools::Rectangle& rControlRegion )
 {
     if ( !m_pSpinWidget )
     {
@@ -1036,7 +1036,7 @@ QSpinWidget *WidgetPainter::spinWidget( const Rectangle& rControlRegion )
     return m_pSpinWidget;
 }
 
-QTabBar *WidgetPainter::tabBar( const Rectangle& rControlRegion )
+QTabBar *WidgetPainter::tabBar( const tools::Rectangle& rControlRegion )
 {
     if ( !m_pTabBar )
     {
@@ -1065,7 +1065,7 @@ QTabBar *WidgetPainter::tabBar( const Rectangle& rControlRegion )
     return m_pTabBar;
 }
 
-QTabWidget *WidgetPainter::tabWidget( const Rectangle& rControlRegion )
+QTabWidget *WidgetPainter::tabWidget( const tools::Rectangle& rControlRegion )
 {
     if ( !m_pTabWidget )
         m_pTabWidget = new QTabWidget( nullptr, "tab_widget" );
@@ -1079,7 +1079,7 @@ QTabWidget *WidgetPainter::tabWidget( const Rectangle& rControlRegion )
     return m_pTabWidget;
 }
 
-QListView *WidgetPainter::listView( const Rectangle& rControlRegion )
+QListView *WidgetPainter::listView( const tools::Rectangle& rControlRegion )
 {
     if ( !m_pListView )
         m_pListView = new QListView( nullptr, "list_view" );
@@ -1092,7 +1092,7 @@ QListView *WidgetPainter::listView( const Rectangle& rControlRegion )
     return m_pListView;
 }
 
-QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
+QScrollBar *WidgetPainter::scrollBar( const tools::Rectangle& rControlRegion,
     bool bHorizontal, const ImplControlValue& aValue )
 {
     if ( !m_pScrollBar )
@@ -1120,7 +1120,7 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
     return m_pScrollBar;
 }
 
-QToolBar *WidgetPainter::toolBar( const Rectangle& rControlRegion, bool bHorizontal )
+QToolBar *WidgetPainter::toolBar( const tools::Rectangle& rControlRegion, bool bHorizontal )
 {
     if ( !m_pMainWindow )
         m_pMainWindow = new QMainWindow( nullptr, "main_window" );
@@ -1153,7 +1153,7 @@ QToolBar *WidgetPainter::toolBar( const Rectangle& rControlRegion, bool bHorizon
     return pToolBar;
 }
 
-QToolButton *WidgetPainter::toolButton( const Rectangle& rControlRegion)
+QToolButton *WidgetPainter::toolButton( const tools::Rectangle& rControlRegion)
 {
     if ( !m_pToolButton )
         m_pToolButton = new QToolButton( nullptr, "tool_button" );
@@ -1166,7 +1166,7 @@ QToolButton *WidgetPainter::toolButton( const Rectangle& rControlRegion)
     return m_pToolButton;
 }
 
-QMenuBar *WidgetPainter::menuBar( const Rectangle& rControlRegion)
+QMenuBar *WidgetPainter::menuBar( const tools::Rectangle& rControlRegion)
 {
     if ( !m_pMenuBar )
     {
@@ -1187,7 +1187,7 @@ QMenuBar *WidgetPainter::menuBar( const Rectangle& rControlRegion)
     return m_pMenuBar;
 }
 
-QPopupMenu *WidgetPainter::popupMenu( const Rectangle& rControlRegion)
+QPopupMenu *WidgetPainter::popupMenu( const tools::Rectangle& rControlRegion)
 {
     if ( !m_pPopupMenu )
     {
@@ -1208,7 +1208,7 @@ QPopupMenu *WidgetPainter::popupMenu( const Rectangle& rControlRegion)
     return m_pPopupMenu;
 }
 
-QProgressBar *WidgetPainter::progressBar( const Rectangle& rControlRegion )
+QProgressBar *WidgetPainter::progressBar( const tools::Rectangle& rControlRegion )
 {
     if ( !m_pProgressBar )
         m_pProgressBar = new QProgressBar( nullptr, "progress_bar" );
@@ -1221,7 +1221,7 @@ QProgressBar *WidgetPainter::progressBar( const Rectangle& rControlRegion )
     return m_pProgressBar;
 }
 
-QRect WidgetPainter::region2QRect( const Rectangle& rControlRegion )
+QRect WidgetPainter::region2QRect( const tools::Rectangle& rControlRegion )
 {
     return QRect( QPoint( rControlRegion.Left(), rControlRegion.Top() ),
                   QPoint( rControlRegion.Right(), rControlRegion.Bottom() ) );
@@ -1239,17 +1239,17 @@ class KDESalGraphics : public X11SalGraphics
     KDESalGraphics() {}
     virtual bool IsNativeControlSupported( ControlType nType, ControlPart nPart ) override;
     virtual bool hitTestNativeControl( ControlType nType, ControlPart nPart,
-                                       const Rectangle& rControlRegion, const Point& aPos,
+                                       const tools::Rectangle& rControlRegion, const Point& aPos,
                                        bool& rIsInside ) override;
     virtual bool drawNativeControl( ControlType nType, ControlPart nPart,
-                                    const Rectangle& rControlRegion, ControlState nState,
+                                    const tools::Rectangle& rControlRegion, ControlState nState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption ) override;
     virtual bool getNativeControlRegion( ControlType nType, ControlPart nPart,
-                                         const Rectangle& rControlRegion, ControlState nState,
+                                         const tools::Rectangle& rControlRegion, ControlState nState,
                                          const ImplControlValue& aValue,
                                          const OUString& aCaption,
-                                         Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) override;
+                                         tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 };
 
 bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
@@ -1280,7 +1280,7 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 }
 
 bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
-                                           const Rectangle& rControlRegion, const Point& rPos,
+                                           const tools::Rectangle& rControlRegion, const Point& rPos,
                                            bool& rIsInside )
 {
     if ( nType == ControlType::Scrollbar )
@@ -1375,7 +1375,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
 }
 
 bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
-                                        const Rectangle& rControlRegion, ControlState nState,
+                                        const tools::Rectangle& rControlRegion, ControlState nState,
                                         const ImplControlValue& aValue,
                                         const OUString& )
 {
@@ -1482,10 +1482,10 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
 }
 
 bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
-                                             const Rectangle& rControlRegion, ControlState nState,
+                                             const tools::Rectangle& rControlRegion, ControlState nState,
                                              const ImplControlValue&,
                                              const OUString&,
-                                             Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
+                                             tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion )
 {
     bool bReturn = false;
     QRect qBoundingRect = WidgetPainter::region2QRect( rControlRegion );
@@ -1676,12 +1676,12 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     // Bounding region
     Point aBPoint( qBoundingRect.x(), qBoundingRect.y() );
     Size aBSize( qBoundingRect.width(), qBoundingRect.height() );
-    rNativeBoundingRegion = Rectangle( aBPoint, aBSize );
+    rNativeBoundingRegion = tools::Rectangle( aBPoint, aBSize );
 
     // vcl::Region of the content
     Point aPoint( qRect.x(), qRect.y() );
     Size  aSize( qRect.width(), qRect.height() );
-    rNativeContentRegion = Rectangle( aPoint, aSize );
+    rNativeContentRegion = tools::Rectangle( aPoint, aSize );
     }
 
     return bReturn;
