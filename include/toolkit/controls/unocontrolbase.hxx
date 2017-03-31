@@ -51,12 +51,12 @@ protected:
     css::util::Date ImplGetPropertyValue_Date( sal_uInt16 nProp );
     css::util::Time ImplGetPropertyValue_Time( sal_uInt16 nProp );
 
-    // XLayoutConstrains (nur wenn das Control es unterstuetzt!)
+    // XLayoutConstrains (only when the Control supporting it)
     css::awt::Size Impl_getMinimumSize();
     css::awt::Size Impl_getPreferredSize();
     css::awt::Size Impl_calcAdjustedSize( const css::awt::Size& rNewSize );
 
-    // XTextLayoutConstrains (nur wenn das Control es unterstuetzt!)
+    // XTextLayoutConstrains (only when the Control supporting it)
     css::awt::Size Impl_getMinimumSize( sal_Int16 nCols, sal_Int16 nLines );
     void                        Impl_getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines );
 };

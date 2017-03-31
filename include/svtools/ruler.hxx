@@ -265,7 +265,7 @@ it has been dragged. There are the following query methods:
     - GetDragSize()
         If Borders are dragged, this can be used to query whether the size
         resp. which side or the position should be changed.
-            RulerDragSize::Move oder 0      - Move
+            RulerDragSize::Move or 0      - Move
             RulerDragSize::N1                - left/upper border
             RulerDragSize::N2                - right/bottom border
 

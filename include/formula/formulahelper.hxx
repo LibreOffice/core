@@ -52,7 +52,7 @@ namespace formula
 
         bool                GetNextFunc( const OUString&     rFormula,
                                                bool          bBack,
-                                               sal_Int32&    rFStart, // Ein- und Ausgabe
+                                               sal_Int32&    rFStart, // input and output
                                                sal_Int32*    pFEnd = nullptr,
                                          const IFunctionDescription** ppFDesc = nullptr,
                                                ::std::vector< OUString>*      pArgs = nullptr ) const;

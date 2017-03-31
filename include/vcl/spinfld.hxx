@@ -66,7 +66,7 @@ public:
 protected:
     Rectangle       maUpperRect;
     Rectangle       maLowerRect;
-    Rectangle       maDropDownRect; // noch nicht angebunden...
+    Rectangle       maDropDownRect; // not yet attached ...
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
