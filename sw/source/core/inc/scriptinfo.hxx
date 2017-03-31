@@ -357,7 +357,7 @@ public:
     static void CJKJustify( const OUString& rText, long* pKernArray,
                                   long* pScrArray, sal_Int32 nStt,
                                   sal_Int32 nLen, LanguageType aLang,
-                                  long nSpaceAdd );
+                                  long nSpaceAdd, bool bIsSpaceStop );
 
     static SwScriptInfo* GetScriptInfo( const SwTextNode& rNode,
                                         bool bAllowInvalid = false );

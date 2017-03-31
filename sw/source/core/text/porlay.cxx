@@ -2236,17 +2236,15 @@ sal_Int32 SwScriptInfo::CountCJKCharacters( const OUString &rText, sal_Int32 nPo
 void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
                                      long* pScrArray, sal_Int32 nStt,
                                      sal_Int32 nLen, LanguageType aLang,
-                                     long nSpaceAdd )
+                                     long nSpaceAdd, bool bIsSpaceStop )
 {
     assert( pKernArray != nullptr && nStt >= 0 );
     if ( nLen > 0 && g_pBreakIt->GetBreakIter().is() )
     {
-        long nSpaceSum = nSpaceAdd;
+        long nSpaceSum = 0;
         const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
         sal_Int32 nDone = 0;
-        sal_Int32 nNext = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nStt,
-                        rLocale,
-                        i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
+        sal_Int32 nNext = nStt;
         for ( sal_Int32 nI = 0; nI < nLen ; ++nI )
         {
             if ( nI + nStt == nNext )
@@ -2254,7 +2252,8 @@ void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
                 nNext = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nNext,
                         rLocale,
                         i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
-                nSpaceSum += nSpaceAdd;
+                if (nNext < nStt + nLen || !bIsSpaceStop)
+                    nSpaceSum += nSpaceAdd;
             }
             pKernArray[ nI ] += nSpaceSum;
             if ( pScrArray )
