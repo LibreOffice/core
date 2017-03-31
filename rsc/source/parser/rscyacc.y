@@ -117,7 +117,7 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
 
     if( bMember )
     {
-        // Angabe von Superklassen oder abgeleiteten Klassen ist jetzt erlaubt
+        // specification of superclasses or derived classes is now allowed
         if( S.Top().pClass->InHierarchy( pHeader->pClass ) ||
             pHeader->pClass->InHierarchy( S.Top().pClass) )
         {
@@ -200,7 +200,7 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
 }
 
 RSCINST GetFirstTupelEle( const RSCINST & rTop )
-{ // Aufwaertskompatible, Tupel probieren
+{ // upward compatible, test Tupel
     RSCINST aInst;
     ERRTYPE aErr;
 
@@ -768,7 +768,7 @@ var_list_header
       if( aError.IsError() || aError.IsWarning() )
           pTC->pEH->Error( aError, S.Top().pClass, RscId() );
       if( aError.IsError() )
-      { // unbedingt Instanz auf den Stack bringen
+      { // implicit to get instance on the stack
           aInst = S.Top().pClass->Create( nullptr, RSCINST() );
       }
       S.Push( aInst );
@@ -818,11 +818,11 @@ var_bodysimple
               aError = S.Top().pClass->SetNumber( S.Top(), l );
           }
           if( aError.IsError() )
-          { // Aufwaertskompatible, Tupel probieren
+          { // upward compatible, test Tupel
               RSCINST aInst = GetFirstTupelEle( S.Top() );
               if( aInst.pData )
               {
-                  aError.Clear(); // Fehler zuruecksetzen
+                  aError.Clear(); // reset error
                   aError = aInst.pClass->SetRef( aInst, RscId( $1 ) );
                   if( aError.IsError() )
                   {
@@ -844,11 +844,11 @@ var_bodysimple
       ERRTYPE aError;
       aError = S.Top().pClass->SetConst( S.Top(), $1.hashid, $1.nValue );
       if( aError.IsError() )
-      { // Aufwaertskompatible, Tupel probieren
+      { // upward compatible, test Tupel
           RSCINST aInst = GetFirstTupelEle( S.Top() );
           if( aInst.pData )
           {
-              aError.Clear(); // Fehler zuruecksetzen
+              aError.Clear(); // reset error
               aError = aInst.pClass->SetConst( aInst, $1.hashid, $1.nValue );
           }
       }
@@ -861,11 +861,11 @@ var_bodysimple
       ERRTYPE aError;
       aError = S.Top().pClass->SetNotConst( S.Top(), $2.hashid );
       if( aError.IsError() )
-      { // Aufwaertskompatible, Tupel probieren
+      { // upward compatible, test Tupel
           RSCINST aInst = GetFirstTupelEle( S.Top() );
           if( aInst.pData )
           {
-              aError.Clear(); // Fehler zuruecksetzen
+              aError.Clear(); // reset error
               aError = aInst.pClass->SetNotConst( aInst, $2.hashid );
           }
       }
@@ -878,11 +878,11 @@ var_bodysimple
       ERRTYPE aError;
       aError = S.Top().pClass->SetBool( S.Top(), $1 );
       if( aError.IsError() )
-      { // Aufwaertskompatible, Tupel probieren
+      { // upward compatible, test Tupel
           RSCINST aInst = GetFirstTupelEle( S.Top() );
           if( aInst.pData )
           {
-              aError.Clear(); // Fehler zuruecksetzen
+              aError.Clear(); // reset error
               aError = aInst.pClass->SetBool( aInst, $1 );
           }
       }
@@ -895,11 +895,11 @@ var_bodysimple
       ERRTYPE aError;
       aError = S.Top().pClass->SetString( S.Top(), $1 );
       if( aError.IsError() )
-      { // Aufwaertskompatible, Tupel probieren
+      { // upward compatible, test Tupel
           RSCINST aInst = GetFirstTupelEle( S.Top() );
           if( aInst.pData )
           {
-              aError.Clear(); // Fehler zuruecksetzen
+              aError.Clear(); // reset error
               aError = aInst.pClass->SetString( aInst, $1 );
           }
       }
@@ -1090,7 +1090,7 @@ macro_expression
 id_expression
   : id_expression line_number
   | macro_expression
-  {  // pExpession auswerten und loeschen
+  {  // evaluate pExpession and delete it
       if( RSCEXP_EXP == $1.cType )
       {
           sal_Int32       lValue;

@@ -27,11 +27,11 @@ FILE* pCppOut = NULL;
 static FILE* pCppIn  = NULL;
 
 #if OSL_DEBUG_LEVEL > 1
-FILE* pDefOut = NULL;       /* ER  evtl. #define's dump */
+FILE* pDefOut = NULL;       /* ER  possible #define's dump */
 #endif
 
 #ifdef B200
-/* einzige Moeglichkeit unter BC Stack und Heap festzusetzen */
+/* only possibility under BC to set stack and head */
 extern unsigned _stklen  = 24000;
 extern unsigned _heaplen = 30000;
 #endif
@@ -191,7 +191,7 @@ static int nRunde = 0;
 void InitCpp1()
 {
     int i;
-    /* in der LIB-Version muessen alle Variablen initialisiert werden */
+    /* in LIB-Version all variables must be initialized */
 
     line = wrongline = errors = recursion = 0;
     for( i = 0; i < IDMAX; i++ )

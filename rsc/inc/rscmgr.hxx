@@ -31,7 +31,7 @@ class RscMgr : public RscClass
     struct RscMgrInst
     {
         RscId   aRefId; // nRefId = Referenz Identifier
-        bool    bDflt;  // Ist Default
+        bool    bDflt;  // default
         void Create(){ aRefId.Create(); bDflt = true; }
         void Destroy(){ aRefId.Destroy(); }
     };

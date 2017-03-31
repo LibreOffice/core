@@ -138,8 +138,8 @@ public:
     void            LstOut( const char * );
     void            Error( const ERRTYPE& rError, RscTop* pClass, const RscId &aId,
                            const char * pMessage = nullptr );
-    // Dieser Fehler sollte nur im Compilermodus auftreten,
-    // das Programm wird mit exit() verlassen
+    // The error should only happen in compile mode,
+    // the program will terminated with exit()
     void            FatalError( const ERRTYPE& rError, const RscId &aId,
                                 const char * pMessage = nullptr );
 };

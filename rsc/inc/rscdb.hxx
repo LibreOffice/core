@@ -60,7 +60,7 @@ struct RscSysEntry
 class RscTypCont
 {
     rtl_TextEncoding    nSourceCharSet;
-    RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
+    RSCBYTEORDER_TYPE   nByteOrder;         // Intel or
     OString             aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
     OString             aSearchPath;        // search path for bitmap, icon and pointer

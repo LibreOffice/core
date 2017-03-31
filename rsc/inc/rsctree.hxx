@@ -30,7 +30,7 @@ protected:
     NameNode*     pLeft;    // left subtree
     NameNode*     pRight;   // right subtree
 
-                        // pCmp ist Zeiger auf Namen
+                        // pCmp is pointer to names
             NameNode*   Search( const void * pCmp ) const;
 
                          // convert a double linked list into a binary tree
