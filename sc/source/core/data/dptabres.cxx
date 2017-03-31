@@ -43,7 +43,6 @@
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
@@ -763,7 +762,7 @@ ScDPResultData::~ScDPResultData()
 
 void ScDPResultData::SetMeasureData(
     std::vector<ScSubTotalFunc>& rFunctions, std::vector<sheet::DataPilotFieldReference>& rRefs,
-    std::vector<sal_uInt16>& rRefOrient, std::vector<OUString>& rNames )
+    std::vector<sheet::DataPilotFieldOrientation>& rRefOrient, std::vector<OUString>& rNames )
 {
     // We need to have at least one measure data at all times.
 
@@ -784,7 +783,7 @@ void ScDPResultData::SetMeasureData(
         maMeasureNames.push_back(ScGlobal::GetRscString(STR_EMPTYDATA));
 }
 
-void ScDPResultData::SetDataLayoutOrientation( sal_uInt16 nOrient )
+void ScDPResultData::SetDataLayoutOrientation( sheet::DataPilotFieldOrientation nOrient )
 {
     bDataAtCol = ( nOrient == sheet::DataPilotFieldOrientation_COLUMN );
     bDataAtRow = ( nOrient == sheet::DataPilotFieldOrientation_ROW );
@@ -823,7 +822,7 @@ const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(long nMea
     return maMeasureRefs[nMeasure];
 }
 
-sal_uInt16 ScDPResultData::GetMeasureRefOrient(long nMeasure) const
+sheet::DataPilotFieldOrientation ScDPResultData::GetMeasureRefOrient(long nMeasure) const
 {
     OSL_ENSURE((size_t) nMeasure < maMeasureRefOrients.size(), "bumm");
     return maMeasureRefOrients[nMeasure];
@@ -2342,7 +2341,7 @@ void ScDPDataMember::UpdateRunningTotals(
                         OUString aRefFieldName = aReferenceValue.ReferenceField;
 
                         //TODO: aLocalSubState?
-                        sal_uInt16 nRefOrient = pResultData->GetMeasureRefOrient( nMemberMeasure );
+                        sheet::DataPilotFieldOrientation nRefOrient = pResultData->GetMeasureRefOrient( nMemberMeasure );
                         bool bRefDimInCol = ( nRefOrient == sheet::DataPilotFieldOrientation_COLUMN );
                         bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
 

@@ -25,7 +25,6 @@
 #include "document.hxx"
 #include "dpobject.hxx"
 
-#include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
 using namespace com::sun::star;

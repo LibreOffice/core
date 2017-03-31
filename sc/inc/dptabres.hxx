@@ -26,6 +26,7 @@
 
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <map>
@@ -285,7 +286,7 @@ class ScDPResultData
 
     std::vector<ScSubTotalFunc> maMeasureFuncs;
     std::vector<css::sheet::DataPilotFieldReference> maMeasureRefs;
-    std::vector<sal_uInt16> maMeasureRefOrients;
+    std::vector<css::sheet::DataPilotFieldOrientation> maMeasureRefOrients;
     std::vector<OUString> maMeasureNames;
 
     bool                    bLateInit:1;
@@ -301,9 +302,10 @@ public:
     void SetMeasureData(
         std::vector<ScSubTotalFunc>& rFunctions,
         std::vector<css::sheet::DataPilotFieldReference>& rRefs,
-        std::vector<sal_uInt16>& rRefOrient, std::vector<OUString>& rNames );
+        std::vector<css::sheet::DataPilotFieldOrientation>& rRefOrient,
+        std::vector<OUString>& rNames );
 
-    void                SetDataLayoutOrientation( sal_uInt16 nOrient );
+    void                SetDataLayoutOrientation( css::sheet::DataPilotFieldOrientation nOrient );
     void                SetLateInit( bool bSet );
 
     long                GetMeasureCount() const { return maMeasureFuncs.size(); }
@@ -311,7 +313,7 @@ public:
     OUString            GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
     OUString            GetMeasureDimensionName(long nMeasure) const;
     const css::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
-    sal_uInt16          GetMeasureRefOrient(long nMeasure) const;
+    css::sheet::DataPilotFieldOrientation      GetMeasureRefOrient(long nMeasure) const;
 
     bool                IsLateInit() const              { return bLateInit; }
 

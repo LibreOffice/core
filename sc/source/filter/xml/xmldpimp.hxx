@@ -101,7 +101,8 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
     sal_uInt32      mnColFieldCount;
     sal_uInt32      mnPageFieldCount;
     sal_uInt32      mnDataFieldCount;
-    sal_uInt16 mnDataLayoutType;
+    css::sheet::DataPilotFieldOrientation
+                    mnDataLayoutType;
     bool            bIsNative:1;
     bool            bIgnoreEmptyRows:1;
     bool            bIdentifyCategories:1;
@@ -293,7 +294,8 @@ class ScXMLDataPilotFieldContext : public ScXMLImportContext
     sal_Int32                   nUsedHierarchy;
     sal_Int32                   nGroupPart;
     ScGeneralFunction           nFunction;
-    sal_Int16                   nOrientation;
+    css::sheet::DataPilotFieldOrientation
+                                nOrientation;
     bool                        bSelectedPage:1;
     bool                        bIsGroupField:1;
     bool                        bDateValue:1;

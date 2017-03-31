@@ -33,6 +33,7 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -118,7 +119,7 @@ private:
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
-    void                    FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*> &rList );
+    void                    FillLevelList( css::sheet::DataPilotFieldOrientation nOrientation, std::vector<ScDPLevel*> &rList );
     void                    FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
 
     /**
@@ -151,8 +152,9 @@ public:
 
     const OUString*  GetGrandTotalName() const;
 
-    sal_uInt16                  GetOrientation(long nColumn);
-    void                    SetOrientation(long nColumn, sal_uInt16 nNew);
+    css::sheet::DataPilotFieldOrientation
+                            GetOrientation(long nColumn);
+    void                    SetOrientation(long nColumn, css::sheet::DataPilotFieldOrientation nNew);
     long                    GetPosition(long nColumn);
 
     long                    GetDataDimensionCount();
@@ -161,7 +163,8 @@ public:
     const ScDPCache* GetCache();
     const ScDPItemData*         GetItemDataById( long nDim, long nId );
     bool                        IsDataLayoutDimension(long nDim);
-    sal_uInt16                  GetDataLayoutOrientation();
+    css::sheet::DataPilotFieldOrientation
+                                GetDataLayoutOrientation();
 
     bool                        IsDateDimension(long nDim);
 
@@ -329,7 +332,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    sal_uInt16 getOrientation() const;
+    css::sheet::DataPilotFieldOrientation getOrientation() const;
     bool getIsDataLayoutDimension() const;
     ScGeneralFunction getFunction() const { return nFunction;}
     void setFunction(ScGeneralFunction nNew);       // for data dimension

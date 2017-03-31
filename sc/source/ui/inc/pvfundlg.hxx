@@ -22,6 +22,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
@@ -188,7 +189,8 @@ private:
 class ScDPShowDetailDlg : public ModalDialog
 {
 public:
-    explicit            ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
+    explicit            ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj,
+                                           css::sheet::DataPilotFieldOrientation nOrient );
     virtual             ~ScDPShowDetailDlg() override;
     virtual void        dispose() override;
     virtual short       Execute() override;

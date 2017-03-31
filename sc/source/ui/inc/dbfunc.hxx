@@ -88,7 +88,7 @@ public:
     void            DataPilotSort(ScDPObject* pDPObject, long nDimIndex, bool bAscending, sal_uInt16* pUserListId = nullptr);
     bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
-    bool HasSelectionForDrillDown( sal_uInt16& rOrientation );
+    bool HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& rOrientation );
     void SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName = nullptr);
 
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
