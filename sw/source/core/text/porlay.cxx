@@ -2254,7 +2254,8 @@ void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
                 nNext = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nNext,
                         rLocale,
                         i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
-                nSpaceSum += nSpaceAdd;
+                if (nNext < nLen)
+                    nSpaceSum += nSpaceAdd;
             }
             pKernArray[ nI ] += nSpaceSum;
             if ( pScrArray )
