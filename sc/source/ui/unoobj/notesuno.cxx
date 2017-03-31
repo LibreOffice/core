@@ -83,7 +83,7 @@ void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -104,8 +104,8 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent()
 
 void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>& /* Parent */ )
 {
-    //  hamma nich
-    //! Exception oder so ??!
+    //  ain't there
+    //! exception or what ??!
 }
 
 // XSimpleText

@@ -167,7 +167,7 @@ class ScUnoEditEngine : public ScEditEngineDefaulter
     sal_uInt16          nFieldCount;
     sal_Int32           mnFieldType;
     std::unique_ptr<SvxFieldData>
-                        pFound;         // lokale Kopie
+                        pFound;         // local copy
     sal_Int32           nFieldPar;
     sal_Int32           nFieldPos;
     sal_uInt16          nFieldIndex;
@@ -489,7 +489,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
     sal_Int32 nPos = aTempEngine.GetFieldPos();
-    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
+    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field size is 1 character
 
     sal_Int32 eRealType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
@@ -705,11 +705,11 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
 
     if (mpEditSource)
     {
-        //! Feld-Funktionen muessen an den Forwarder !!!
+        //! Field functions have to be passed to the forwarder !!!
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        //  don't care about the type (only URLs can be found in the cells)
         const SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
         OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
@@ -730,7 +730,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
         else
             throw beans::UnknownPropertyException();
     }
-    else        // noch nicht eingefuegt
+    else        // not inserted yet
     {
         const SvxFieldData* pField = getData();
         if (!pField)
@@ -1023,7 +1023,7 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        //  don't care about the type (only URLs can be found in the cells)
         SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
         OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
@@ -1132,8 +1132,8 @@ void ScEditFieldObj::DeleteField()
         aSelection.nEndPara = aSelection.nStartPara;
         aSelection.nEndPos  = aSelection.nStartPos;
 
-        //! Broadcast, um Selektion in anderen Objekten anzupassen
-        //! (auch bei anderen Aktionen)
+        //! Broadcast in order to adjust selection in other objects
+        //! (also for other actions)
     }
 }
 
@@ -1151,11 +1151,11 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     if (!mpEditSource)
         return OUString();
 
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //! Field functions have to be passed to the forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    //  Typ egal (in Zellen gibts nur URLs)
+    //  don't care about the type (only URLs can be found in the cells)
     const SvxFieldData* pField = aTempEngine.FindByPos(
         aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
     OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
