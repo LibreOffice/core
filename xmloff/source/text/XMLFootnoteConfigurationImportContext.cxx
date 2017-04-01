@@ -264,8 +264,8 @@ void XMLFootnoteConfigurationImportContext::StartElement(
                 break;
             case XML_TOK_FTNCONFIG_START_AT:
             {
-                SvXMLUnitConverter::convertEnum(nNumbering, sValue,
-                                                    aFootnoteNumberingMap);
+                (void)SvXMLUnitConverter::convertEnum(nNumbering, sValue,
+                                                      aFootnoteNumberingMap);
                 break;
             }
             case XML_TOK_FTNCONFIG_POSITION:

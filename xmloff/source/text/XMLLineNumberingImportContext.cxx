@@ -190,8 +190,8 @@ void XMLLineNumberingImportContext::ProcessAttribute(
                 { XML_TOKEN_INVALID, 0 }
             };
 
-            SvXMLUnitConverter::convertEnum(nNumberPosition, sValue,
-                                                aLineNumberPositionMap);
+            (void)SvXMLUnitConverter::convertEnum(nNumberPosition, sValue,
+                                                  aLineNumberPositionMap);
             break;
         }
 
