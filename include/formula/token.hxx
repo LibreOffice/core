@@ -44,7 +44,7 @@ enum class FormulaError : sal_uInt16;
 namespace formula
 {
 
-enum StackVarEnum
+enum StackVar : sal_uInt8
 {
     svByte,
     svDouble,
@@ -79,14 +79,6 @@ enum StackVarEnum
     svSep,                              // separator, ocSep, ocOpen, ocClose
     svUnknown                           // unknown StackType
 };
-
-#ifndef DBG_UTIL
-// save memory since compilers tend to int an enum
-typedef sal_uInt8 StackVar;
-#else
-// have enum names in debugger
-typedef StackVarEnum StackVar;
-#endif
 
 // Only to be used for debugging output. No guarantee of stability of the
 // return value.

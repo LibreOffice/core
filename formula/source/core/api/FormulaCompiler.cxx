@@ -318,7 +318,7 @@ bool isPotentialRangeType( FormulaToken* pToken, bool bRPN, bool bRight )
             return true;
         default:
             // Separators are not part of RPN and right opcodes need to be
-            // other StackVarEnum types or functions and thus svByte.
+            // other StackVar types or functions and thus svByte.
             return !bRPN && !bRight && isPotentialRangeLeftOp( pToken->GetOpCode());
     }
 }
