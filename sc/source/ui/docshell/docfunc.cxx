@@ -28,6 +28,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
@@ -2670,7 +2671,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     SCTAB nDestEndTab = nDestTab+nSrcTabCount-1;
     SCTAB nTab;
 
-    ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+    std::unique_ptr<ScDocument> pClipDoc = o3tl::make_unique<ScDocument>(SCDOCMODE_CLIP);
 
     ScMarkData aSourceMark;
     for (nTab=nStartTab; nTab<=nEndTab; nTab++)
@@ -2686,7 +2687,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
 
     ScClipParam aClipParam(ScRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nStartTab), bCut);
-    rDoc.CopyToClip(aClipParam, pClipDoc, &aSourceMark, bScenariosAdded, true);
+    rDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark, bScenariosAdded, true);
 
     ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
@@ -2726,7 +2727,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_PASTE_FULL);
-        delete pClipDoc;
         return false;
     }
 
@@ -2743,7 +2743,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     {
         if (!bApi)
             rDocShell.ErrorMessage(aTester.GetMessageId());
-        delete pClipDoc;
         return false;
     }
 
@@ -2755,7 +2754,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         {       // "Merge of already merged cells not possible"
             if (!bApi)
                 rDocShell.ErrorMessage(STR_MSSG_MOVEBLOCKTO_0);
-            delete pClipDoc;
             return false;
         }
 
@@ -2811,7 +2809,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                     nUndoEndCol,nUndoEndRow,nDestEndTab,
                                     HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
             {
-                rDoc.CopyFromClip( rSource, aSourceMark, InsertDeleteFlags::ALL, nullptr, pClipDoc );
+                rDoc.CopyFromClip( rSource, aSourceMark, InsertDeleteFlags::ALL, nullptr, pClipDoc.get() );
                 for (nTab=nStartTab; nTab<=nEndTab; nTab++)
                 {
                     SCCOL nTmpEndCol = nEndCol;
@@ -2824,7 +2822,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                     rDocShell.ErrorMessage(STR_MSSG_MOVEBLOCKTO_0);
 
                 delete pUndoDoc;
-                delete pClipDoc;
                 return false;
             }
 
@@ -2843,7 +2840,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         ScDrawLayer::MoveCells() which may move away inserted objects to wrong
         positions (e.g. if source and destination range overlaps).*/
     rDoc.CopyFromClip( aPasteDest, aDestMark, InsertDeleteFlags::ALL & ~(InsertDeleteFlags::OBJECTS),
-                        nullptr, pClipDoc, true, false, bIncludeFiltered );
+                        nullptr, pClipDoc.get(), true, false, bIncludeFiltered );
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
@@ -2858,7 +2855,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         clipdoc does not contain a drawing layer.*/
     if ( pClipDoc->GetDrawLayer() )
         rDoc.CopyFromClip( aPasteDest, aDestMark, InsertDeleteFlags::OBJECTS,
-                           nullptr, pClipDoc, true, false, bIncludeFiltered );
+                           nullptr, pClipDoc.get(), true, false, bIncludeFiltered );
 
     if (bRecord)
     {
@@ -2954,7 +2951,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 
-    delete pClipDoc;
     return true;
 }
 
