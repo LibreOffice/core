@@ -1785,7 +1785,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         return false;
     }
 
-    WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important due to TrackFormulas at UpdateReference
 
     ScDocument* pRefUndoDoc = nullptr;
     ScRefUndoData* pUndoData = nullptr;
@@ -4635,7 +4635,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
             aDestArea.aStart.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aStart.Col() - nCount ) );
             break;
         default:
-            OSL_FAIL("Falsche Richtung bei FillAuto");
+            OSL_FAIL("Wrong direction with FillAuto");
             break;
     }
 
@@ -5068,7 +5068,7 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, CreateNameFlags nFlags, bool
     SCCOL nEndCol = rRange.aEnd.Col();
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nTab = rRange.aStart.Tab();
-    OSL_ENSURE(rRange.aEnd.Tab() == nTab, "CreateNames: mehrere Tabellen geht nicht");
+    OSL_ENSURE(rRange.aEnd.Tab() == nTab, "CreateNames: multiple tables not possible");
 
     bool bValid = true;
     if ( nFlags & ( CreateNameFlags::Top | CreateNameFlags::Bottom ) )

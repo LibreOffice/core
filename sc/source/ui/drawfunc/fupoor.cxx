@@ -77,8 +77,7 @@ void FuPoor::Deactivate()
 
 /*************************************************************************
 |*
-|* Scrollen bei Erreichen des Fensterrandes; wird von
-|* MouseMove aufgerufen
+|* Scroll when reached the window border; is called from MouseMove
 |*
 \************************************************************************/
 
@@ -155,10 +154,9 @@ bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* Tastaturereignisse bearbeiten
+|* Handle keyboard events
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* FALSE.
+|* If we handle a KeyEvent, then the return value is sal_True else FALSE.
 |*
 \************************************************************************/
 
@@ -172,8 +170,8 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
     if ( CommandEventId::StartDrag == rCEvt.GetCommand() )
     {
         //!!! sollte Joe eigentlich machen:
-        // nur, wenn im Outliner was selektiert ist, darf
-        // Command sal_True zurueckliefern:
+        // Only if a selection is in Outliner, then Command is allowed
+        // to return sal_True
 
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
 
@@ -188,17 +186,17 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
 
 /*************************************************************************
 |*
-|* Timer-Handler fuer Drag&Drop
+|* Timer-Handler for Drag&Drop
 |*
 \************************************************************************/
 IMPL_LINK_NOARG(FuPoor, DragTimerHdl, Timer *, void)
 {
-    //  ExecuteDrag (und das damit verbundene Reschedule) direkt aus dem Timer
-    //  aufzurufen, bringt die VCL-Timer-Verwaltung durcheinander, wenn dabei
-    //  (z.B. im Drop) wieder ein Timer gestartet wird (z.B. ComeBack-Timer der
-    //  DrawView fuer Solid Handles / ModelHasChanged) - der neue Timer laeuft
-    //  dann um die Dauer des Drag&Drop zu spaet ab.
-    //  Darum Drag&Drop aus eigenem Event:
+    //  Calling ExecuteDrag (and that associated reschedule) directly from
+    //  the Timer, will confuse the VCL-Timer-Management, if (e.g during Drop)
+    //  a new timer is started (e.g ComeBack-Timer of DrawView for
+    //  Solid Handles / ModelHasChanged) - the new timer will end with a delay
+    //  of the duration of the Drag&Drop.
+    //  Therefore Drag&Drop from own event:
 
     Application::PostUserEvent( LINK( this, FuPoor, DragHdl ) );
 }

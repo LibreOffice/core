@@ -575,7 +575,7 @@ FltError ImportExcel::Read()
                 {
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Biff5W;
-                        aIn.SeekGlobalPosition();  // und zurueck an alte Position
+                        aIn.SeekGlobalPosition();  // and back to old position
                         break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5]
                     case 0x2F:                          // FILEPASS     [ 2345]
@@ -633,7 +633,7 @@ FltError ImportExcel::Read()
                         case 0x08:  Row25(); break;         // ROW          [ 2  5]
                         case 0x0A:                          // EOF          [ 2345]
                             eAkt = Z_Biff5T;
-                            aIn.SeekGlobalPosition(); // und zurueck an alte Position
+                            aIn.SeekGlobalPosition(); // and back to old position
                             break;
                         case 0x12:  SheetProtect(); break;       // SHEET PROTECTION
                         case 0x1A:

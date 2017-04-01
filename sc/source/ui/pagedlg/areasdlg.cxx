@@ -54,7 +54,7 @@ enum {
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ScopedVclPtrInstance<MessageDialog>(this, ScGlobal::GetRscString(nId))->Execute()
 
-// globale Funktionen (->am Ende der Datei):
+// global functions (->at the end of the file):
 
 static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
 static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr );
@@ -132,7 +132,7 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Win
 
     Impl_Reset();
 
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
+    //@BugID 54702 Enable/Disable only in base class
     //SFX_APPWINDOW->Enable();
 }
 
@@ -174,8 +174,8 @@ bool ScPrintAreasDlg::Close()
 
 bool ScPrintAreasDlg::IsTableLocked() const
 {
-    //  Druckbereiche gelten pro Tabelle, darum macht es keinen Sinn,
-    //  bei der Eingabe die Tabelle umzuschalten
+    //  Printing areas are per table, therefore it makes no sense,
+    //  to switch the table during input
 
     return true;
 }
@@ -396,7 +396,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 void ScPrintAreasDlg::Impl_FillLists()
 {
 
-    // Selektion holen und String in PrintArea-ListBox merken
+    // Get selection and remember String in PrintArea-ListBox
 
     ScRange  aRange;
     OUString aStrRange;
@@ -418,7 +418,7 @@ void ScPrintAreasDlg::Impl_FillLists()
 
     pLbPrintArea->SetEntryData( SC_AREASDLG_PR_SELECT, new OUString( aStrRange ) );
 
-    // Ranges holen und in ListBoxen merken
+    // Get ranges and remember in ListBoxen
 
     ScRangeName* pRangeNames = pDoc->GetRangeName();
 

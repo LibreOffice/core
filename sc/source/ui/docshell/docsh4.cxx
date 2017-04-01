@@ -209,7 +209,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
 
                             ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, ScGetDBSelection::Keep );
-                            OSL_ENSURE(pDBData, "kann DB-Daten nicht anlegen");
+                            OSL_ENSURE(pDBData, "Cannot create DB-Daten");
                             sTarget = pDBData->GetName();
                         }
                     }
@@ -370,13 +370,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    OSL_FAIL("UpdateChartArea: keine ViewShell oder falsche Daten");
+                    OSL_FAIL("UpdateChartArea: no ViewShell or wrong data");
                 }
                 rReq.Done();
             }
             else
             {
-                OSL_FAIL("SID_CHART_SOURCE ohne Argumente");
+                OSL_FAIL("SID_CHART_SOURCE without arguments");
             }
             break;
 
@@ -491,7 +491,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     ScRange aRange;
                     ScTabViewShell* pViewSh = GetBestViewShell();
-                    OSL_ENSURE(pViewSh,"SID_REIMPORT_AFTER_LOAD: keine View");
+                    OSL_ENSURE(pViewSh,"SID_REIMPORT_AFTER_LOAD: no View");
                     if (pViewSh && pDBColl)
                     {
                         ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),

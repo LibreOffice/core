@@ -391,7 +391,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( pView->MouseButtonUp(rMEvt, pWindow) )
-        return true; // Event von der SdrView ausgewertet
+        return true; // Event evaluted by SdrView
 
     if ( pView->IsDragObj() )
     {

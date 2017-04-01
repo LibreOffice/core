@@ -193,7 +193,7 @@ ScHFEditActiveDlg::ScHFEditActiveDlg(
 
 void ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
 {
-    // kann ja nur ne ScHFEditPage sein...
+    // Can only be a ScHFEditPage...
 
     static_cast<ScHFEditPage&>(rPage).SetNumType(eNumType);
 }

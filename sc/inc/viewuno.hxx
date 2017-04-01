@@ -59,7 +59,7 @@ class ScViewPaneBase : public css::sheet::XViewPane,
 {
 private:
     ScTabViewShell*         pViewShell;
-    sal_uInt16                  nPane;          // ScSplitPos oder SC_VIEWPANE_ACTIVE
+    sal_uInt16                  nPane;          // ScSplitPos or SC_VIEWPANE_ACTIVE
 
 protected:
     css::awt::Rectangle GetVisArea() const;

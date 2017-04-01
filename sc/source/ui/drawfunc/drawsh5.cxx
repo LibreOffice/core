@@ -171,7 +171,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                             {
                                 uno::Reference<awt::XControlModel> xControlModel =
                                                         pUnoCtrl->GetUnoControlModel();
-                                OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
+                                OSL_ENSURE( xControlModel.is(), "UNO-Control without model" );
                                 if( !xControlModel.is() )
                                     return;
 
@@ -180,10 +180,9 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 
                                 OUString sPropTargetURL( "TargetURL" );
 
-                                // Darf man eine URL an dem Objekt setzen?
+                                // Is it possible to set a URL in the object?
                                 if (xInfo->hasPropertyByName( sPropTargetURL ))
                                 {
-                                    // Ja!
 
                                     OUString sPropButtonType( "ButtonType");
                                     OUString sPropTargetFrame( "TargetFrame" );
@@ -225,16 +224,16 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                         pViewData->GetViewShell()->
                             InsertURL( rName, rURL, rTarget, (sal_uInt16) eMode );
 
-                    //  InsertURL an der ViewShell schaltet bei "Text" die DrawShell ab !!!
+                    //  If "text" is received by InsertURL of ViewShell, then the DrawShell is turned off !!!
                 }
             }
             break;
         default:
-            OSL_FAIL("falscher Slot");
+            OSL_FAIL("wrong slot");
     }
 }
 
-//          Funktionen auf Drawing-Objekten
+//          Functions on Drawing-Objects
 
 void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 {

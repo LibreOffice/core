@@ -783,7 +783,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     {   // turn on
         aDocument.StartChangeTracking();
         pThisTrack = aDocument.GetChangeTrack();
-        OSL_ENSURE(pThisTrack,"ChangeTracking nicht angeschaltet?");
+        OSL_ENSURE(pThisTrack,"ChangeTracking not enabled?");
         if ( !bShared )
         {
             // turn on visual RedLining

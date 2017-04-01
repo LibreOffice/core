@@ -247,7 +247,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
         {
             case SID_INSERT_OBJECT :
                 aServerLst.FillInsertObjects();
-                aServerLst.Remove( ScDocShell::Factory().GetClassId() );   // Starcalc nicht anzeigen
+                aServerLst.Remove( ScDocShell::Factory().GetClassId() );   // Do not show Starcalc
                 //TODO/LATER: currently no inserting of ClassId into SfxRequest!
                 SAL_FALLTHROUGH; //TODO ???
             case SID_INSERT_FLOATINGFRAME :
@@ -267,7 +267,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
 
                     if ( xObj.is() )
                         pViewSh->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
-                    // damit DrawShell eingeschaltet wird (Objekt aktivieren ist unnoetig):
+                    // to activate DrawShell (no need to activate Object)
                     bIsFromFile = !pDlg->IsCreateNew();
                 }
 
@@ -276,7 +276,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
         }
     }
 
-    //  SvInsertObjectDialog (alles in einem Dialog) wird nicht mehr benutzt
+    //  SvInsertObjectDialog (everything in one Dialog) are not used anymore
     if (xObj.is())
     {
         pView->UnmarkAll();
@@ -366,10 +366,10 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
 
             if ( !rReq.IsAPI() )
             {
-                // XXX Activate aus Makro ist toedlich !!! ???
+                // XXX Activate from macro is deadly !!! ???
                 if (bIsFromFile)
                 {
-                    // Objekt ist selektiert, also Draw-Shell aktivieren
+                    // Objekt selected, activate Draw-Shell
                     pViewShell->SetDrawShell( true );
                 }
                 else

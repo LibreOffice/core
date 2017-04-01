@@ -473,7 +473,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
     {
-        OSL_FAIL( "Sort: keine DBData" );
+        OSL_FAIL( "Sort: no DBData" );
         return false;
     }
 
@@ -620,7 +620,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                                     rQueryParam.nCol2, rQueryParam.nRow2 );
     if (!pDBData)
     {
-        OSL_FAIL( "Query: keine DBData" );
+        OSL_FAIL( "Query: no DBData" );
         return false;
     }
 
@@ -809,7 +809,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             if ( nFormulaCols > 0 )
             {
                 //  fill in formulas
-                //! Undo (Query und Repeat) !!!
+                //! Undo (Query and Repeat) !!!
 
                 ScRange aNewForm( aLocalParam.nCol2+1, aLocalParam.nRow1, nDestTab,
                                   aLocalParam.nCol2+nFormulaCols, aLocalParam.nRow2, nDestTab );
@@ -850,7 +850,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             {
                 const ScPatternAttr* pSrcPattern = pAttribDoc->GetPattern(
                                                     nCol, nAttrRow, nDestTab );
-                OSL_ENSURE(pSrcPattern,"Pattern ist 0");
+                OSL_ENSURE(pSrcPattern,"Pattern is 0");
                 if (pSrcPattern)
                 {
                     rDoc.ApplyPatternAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
@@ -902,7 +902,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         }
         else
         {
-            OSL_FAIL("Zielbereich nicht da");
+            OSL_FAIL("Target are not available");
         }
     }
 
@@ -967,7 +967,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                                 rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
     {
-        OSL_FAIL( "SubTotals: keine DBData" );
+        OSL_FAIL( "SubTotals: no DBData" );
         return;
     }
 

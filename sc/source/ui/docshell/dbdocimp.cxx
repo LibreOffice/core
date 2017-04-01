@@ -508,13 +508,13 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
             ScRange aDelRange( rParam.nCol1, rParam.nRow1, nTab,
                                 rParam.nCol2, rParam.nRow2, nTab );
-            rDoc.DeleteAreaTab( aDelRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE );  // ohne die Formeln
+            rDoc.DeleteAreaTab( aDelRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE );  // without the formulas
 
             ScRange aOld( rParam.nCol1, rParam.nRow1, nTab,
                             rParam.nCol2+nFormulaCols, rParam.nRow2, nTab );
             ScRange aNew( rParam.nCol1, rParam.nRow1, nTab,
                             nEndCol+nFormulaCols, nEndRow, nTab );
-            rDoc.FitBlock( aOld, aNew, false );        // Formeln nicht loeschen
+            rDoc.FitBlock( aOld, aNew, false );        // Do not delete formulas
         }
         else if ( nEndCol < rParam.nCol2 )      // DeleteArea calls PutInOrder
             rDoc.DeleteArea( nEndCol+1, rParam.nRow1, rParam.nCol2, rParam.nRow2,

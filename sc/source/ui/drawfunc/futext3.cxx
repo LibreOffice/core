@@ -43,9 +43,9 @@
 #include "drawview.hxx"
 #include "undocell.hxx"
 
-//  Editieren von Notiz-Legendenobjekten muss immer ueber StopEditMode beendet werden,
-//  damit die Aenderungen ins Dokument uebernommen werden!
-//  (Fontwork-Execute in drawsh und drtxtob passiert nicht fuer Legendenobjekte)
+//  Editing of Note-Key-Objects has to be stopped always via StopEditMode,
+//  so that changes are taken over into the document!
+//  (Fontwork-Execute in drawsh and drtxtob does not happen for Key-Objects)
 
 void FuText::StopEditMode()
 {

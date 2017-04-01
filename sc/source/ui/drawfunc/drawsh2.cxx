@@ -152,10 +152,10 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     if ( !pView->IsGroupEntered() )
         rSet.DisableItem( SID_LEAVE_GROUP );
 
-    if ( nMarkCount <= 1 )                      // nichts oder nur ein Objekt selektiert
+    if ( nMarkCount <= 1 )                      // Nothing or only one object selected
     {
-            //  Ausrichtung
-        rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );      // keine Ausrichtung an der Seite
+            //  alignment
+        rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );      // no alignment on the side
         rSet.DisableItem( SID_OBJECT_ALIGN_CENTER );
         rSet.DisableItem( SID_OBJECT_ALIGN_RIGHT );
         rSet.DisableItem( SID_OBJECT_ALIGN_UP );

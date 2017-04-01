@@ -22,7 +22,7 @@ Base for the evaluation is LibreOffice master (commit  [bbfeab3b13b48c99cfa2f94c
 
                            EXCEL                                      ||                         LIBREOFFICE
 Excel-Line Name                                      Value            ||        LO-Line  Name                                      Value
-  Keine    EXC_LINE_NONE                               0              ||          none   table::BorderLineStyle::NONE              32767 (-1)
+  None     EXC_LINE_NONE                               0              ||          none   table::BorderLineStyle::NONE              32767 (-1)
     1      EXC_LINE_HAIR                               7              ||           1     table::BorderLineStyle::SOLID                 0
     2      EXC_LINE_DOTTED                             4              ||           2     table::BorderLineStyle::DOTTED                1
     3      EXC_LINE_THIN_DASHDOTDOT                    11             ||           3     table::BorderLineStyle::DASHED                2
