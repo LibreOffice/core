@@ -134,6 +134,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     get(m_pMergeWithNextCB, "mergewithnext");
     get(m_pMergeAdjacentBordersCB, "mergeadjacent");
     get(m_pRemoveAdjcentCellBordersCB, "rmadjcellborders");
+    get(m_pRemoveAdjcentCellBordersFT, "rmadjcellbordersft");
 
     static const sal_uInt16 pnBorderImgIds[] =
     {
@@ -349,7 +350,10 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         m_pRemoveAdjcentCellBordersCB->Enable( false );
     }
     else
+    {
         m_pRemoveAdjcentCellBordersCB->Hide();
+        m_pRemoveAdjcentCellBordersFT->Hide();
+    }
 }
 
 SvxBorderTabPage::~SvxBorderTabPage()
@@ -385,6 +389,7 @@ void SvxBorderTabPage::dispose()
     m_pMergeWithNextCB.clear();
     m_pMergeAdjacentBordersCB.clear();
     m_pRemoveAdjcentCellBordersCB.clear();
+    m_pRemoveAdjcentCellBordersFT.clear();
     SfxTabPage::dispose();
 }
 
