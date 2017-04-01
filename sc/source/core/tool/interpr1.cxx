@@ -3994,9 +3994,9 @@ void ScInterpreter::ScColumn()
             {
                 case svSingleRef :
                 {
-                    SCCOL nCol1;
-                    SCROW nRow1;
-                    SCTAB nTab1;
+                    SCCOL nCol1(0);
+                    SCROW nRow1(0);
+                    SCTAB nTab1(0);
                     PopSingleRef( nCol1, nRow1, nTab1 );
                     nVal = (double) (nCol1 + 1);
                 }
@@ -4075,9 +4075,9 @@ void ScInterpreter::ScRow()
             {
                 case svSingleRef :
                 {
-                    SCCOL nCol1;
-                    SCROW nRow1;
-                    SCTAB nTab1;
+                    SCCOL nCol1(0);
+                    SCROW nRow1(0);
+                    SCTAB nTab1(0);
                     PopSingleRef( nCol1, nRow1, nTab1 );
                     nVal = (double) (nRow1 + 1);
                 }
@@ -4142,10 +4142,10 @@ void ScInterpreter::ScSheet()
                 break;
                 case svSingleRef :
                 {
-                    SCCOL nCol1;
-                    SCROW nRow1;
-                    SCTAB nTab1;
-                    PopSingleRef( nCol1, nRow1, nTab1 );
+                    SCCOL nCol1(0);
+                    SCROW nRow1(0);
+                    SCTAB nTab1(0);
+                    PopSingleRef(nCol1, nRow1, nTab1);
                     nVal = nTab1 + 1;
                 }
                 break;
