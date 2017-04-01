@@ -33,7 +33,6 @@
 
 #include "../../ui/inc/DrawDocShell.hxx"
 
-#define CGM_EXPORT_IMPRESS  0x00000100
 #define CGM_BIG_ENDIAN      0x00020000
 
 using namespace ::com::sun::star;
@@ -96,7 +95,7 @@ bool SdCGMFilter::Import()
 
         CreateStatusIndicator();
         std::unique_ptr<SvStream> xIn(::utl::UcbStreamHelper::CreateStream(aFileURL, StreamMode::READ));
-        nRetValue = xIn ? FncImportCGM(*xIn, mxModel, CGM_BIG_ENDIAN | CGM_EXPORT_IMPRESS, mxStatusIndicator) : 0;
+        nRetValue = xIn ? FncImportCGM(*xIn, mxModel, CGM_BIG_ENDIAN, mxStatusIndicator) : 0;
 
         if( nRetValue )
         {
@@ -134,7 +133,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCGM(SvStream &rStream)
 
     CGMPointer aPointer;
 
-    bool bRet = aPointer.get()(rStream, xDocShRef->GetModel(), CGM_BIG_ENDIAN | CGM_EXPORT_IMPRESS, css::uno::Reference<css::task::XStatusIndicator>()) == 0;
+    bool bRet = aPointer.get()(rStream, xDocShRef->GetModel(), CGM_BIG_ENDIAN, css::uno::Reference<css::task::XStatusIndicator>()) == 0;
 
     xDocShRef->DoClose();
 

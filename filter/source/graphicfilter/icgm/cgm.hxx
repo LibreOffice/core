@@ -22,8 +22,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
-#define CGM_EXPORT_IMPRESS  0x00000100
-
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <vcl/vclptr.hxx>

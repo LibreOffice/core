@@ -76,25 +76,22 @@ void CGM::ImplDoClass7()
                     break;
                     case 0x2BE : /*AppData - SHWSLIDEREC*/
                     {
-                        if ( mnMode & CGM_EXPORT_IMPRESS )
+                        if ( pAppData[ 16 ] == 0 )      // a blank template ?
                         {
-                            if ( pAppData[ 16 ] == 0 )      // a blank template ?
+                            if ( pAppData[ 2 ] == 46 )
                             {
-                                if ( pAppData[ 2 ] == 46 )
-                                {
-                                    // this starts the document -> maybe we could insert a new document
-                                }
-                                else if ( pAppData[ 2 ] & 0x80 )
-                                {
-                                    // this is a template
-                                }
-                                else
-                                {
-                                    mpOutAct->InsertPage();
-                                }
+                                // this starts the document -> maybe we could insert a new document
                             }
-                            mpChart->ResetAnnotation();
+                            else if ( pAppData[ 2 ] & 0x80 )
+                            {
+                                // this is a template
+                            }
+                            else
+                            {
+                                mpOutAct->InsertPage();
+                            }
                         }
+                        mpChart->ResetAnnotation();
                     }
                     break;
                     case 0x2C0 : /*AppData - SHWKEYTABLE */break;
