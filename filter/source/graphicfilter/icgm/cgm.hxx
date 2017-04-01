@@ -83,7 +83,6 @@ class CGM
         sal_uInt8*              mpBuf;          // source stream operation -> then this is allocated for
                                             //                            the temp input buffer
 
-        sal_uInt32              mnMode;         // source description
         sal_uInt32              mnEscape;
         sal_uInt32              mnElementClass;
         sal_uInt32              mnElementID;
@@ -134,7 +133,7 @@ class CGM
 
                             ~CGM();
 
-                            CGM( sal_uInt32 nMode, css::uno::Reference< css::frame::XModel > const & rModel );
+                            CGM(css::uno::Reference< css::frame::XModel > const & rModel);
         GDIMetaFile*        mpGDIMetaFile;
         sal_uInt32          GetBackGroundColor();
         bool                IsValid() const { return mbStatus; };

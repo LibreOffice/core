@@ -33,18 +33,16 @@
 
 #include "../../ui/inc/DrawDocShell.hxx"
 
-#define CGM_BIG_ENDIAN      0x00020000
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )(SvStream&, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const &);
+typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )(SvStream&, Reference< XModel > const &, Reference< XStatusIndicator > const &);
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" sal_uInt32 ImportCGM(SvStream&, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const &);
+extern "C" sal_uInt32 ImportCGM(SvStream&, Reference< XModel > const &, Reference< XStatusIndicator > const &);
 
 #endif
 
@@ -95,7 +93,7 @@ bool SdCGMFilter::Import()
 
         CreateStatusIndicator();
         std::unique_ptr<SvStream> xIn(::utl::UcbStreamHelper::CreateStream(aFileURL, StreamMode::READ));
-        nRetValue = xIn ? FncImportCGM(*xIn, mxModel, CGM_BIG_ENDIAN, mxStatusIndicator) : 0;
+        nRetValue = xIn ? FncImportCGM(*xIn, mxModel, mxStatusIndicator) : 0;
 
         if( nRetValue )
         {
@@ -133,7 +131,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCGM(SvStream &rStream)
 
     CGMPointer aPointer;
 
-    bool bRet = aPointer.get()(rStream, xDocShRef->GetModel(), CGM_BIG_ENDIAN, css::uno::Reference<css::task::XStatusIndicator>()) == 0;
+    bool bRet = aPointer.get()(rStream, xDocShRef->GetModel(), css::uno::Reference<css::task::XStatusIndicator>()) == 0;
 
     xDocShRef->DoClose();
 

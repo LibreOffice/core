@@ -31,7 +31,7 @@
 
 using namespace ::com::sun::star;
 
-CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > const & rModel )
+CGM::CGM(uno::Reference< frame::XModel > const & rModel)
     : mnOutdx(28000)
     , mnOutdy(21000)
     , mnVDCXadd(0)
@@ -60,7 +60,6 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > const & rModel )
     , mnParaSize(0)
     , mnActCount(0)
     , mpBuf(nullptr)
-    , mnMode(nMode)
     , mnEscape(0)
     , mnElementClass(0)
     , mnElementID(0)
@@ -706,7 +705,7 @@ bool CGM::Write( SvStream& rIStm )
 
 // GraphicImport - the exported function
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL
-ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, sal_uInt32 nMode, css::uno::Reference<css::task::XStatusIndicator> const & aXStatInd)
+ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::uno::Reference<css::task::XStatusIndicator> const & aXStatInd)
 {
 
     sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR
@@ -716,7 +715,7 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, sal_uI
     {
         try
         {
-            std::unique_ptr<CGM> pCGM(new CGM( nMode, rXModel ));
+            std::unique_ptr<CGM> pCGM(new CGM(rXModel));
             if (pCGM && pCGM->IsValid())
             {
                 rIn.SetEndian(SvStreamEndian::BIG);
