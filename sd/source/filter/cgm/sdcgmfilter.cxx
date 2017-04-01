@@ -26,14 +26,15 @@
 #include <svx/xflclit.hxx>
 #include <svx/xfillit0.hxx>
 
+#include "sddll.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "sdcgmfilter.hxx"
 
+#include "../../ui/inc/DrawDocShell.hxx"
+
 #define CGM_IMPORT_CGM      0x00000001
-
 #define CGM_EXPORT_IMPRESS  0x00000100
-
 #define CGM_BIG_ENDIAN      0x00020000
 
 using namespace ::com::sun::star;
@@ -58,24 +59,36 @@ SdCGMFilter::~SdCGMFilter()
 {
 }
 
+namespace
+{
+    class CGMPointer
+    {
+        ImportCGMPointer m_pPointer;
+#ifndef DISABLE_DYNLOADING
+        std::unique_ptr<osl::Module> m_xLibrary;
+#endif
+    public:
+        CGMPointer()
+        {
+#ifdef DISABLE_DYNLOADING
+            m_pPointer = ImportCGM;
+#else
+            m_xLibrary.reset(SdFilter::OpenLibrary("icg"));
+            m_pPointer = m_xLibrary ? reinterpret_cast<ImportCGMPointer>(m_xLibrary->getFunctionSymbol("ImportCGM")) : nullptr;
+#endif
+        }
+        ImportCGMPointer get() { return m_pPointer; }
+    };
+}
+
 bool SdCGMFilter::Import()
 {
-#ifndef DISABLE_DYNLOADING
-    ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-#endif
     bool        bRet = false;
 
-    if(
-#ifndef DISABLE_DYNLOADING
-       pLibrary &&
-#endif
-       mxModel.is() )
+    CGMPointer aPointer;
+    ImportCGMPointer FncImportCGM = aPointer.get();
+    if (FncImportCGM && mxModel.is())
     {
-#ifndef DISABLE_DYNLOADING
-        ImportCGMPointer FncImportCGM = reinterpret_cast< ImportCGMPointer >( pLibrary->getFunctionSymbol(  "ImportCGM" ) );
-#else
-        ImportCGMPointer FncImportCGM = ImportCGM;
-#endif
         OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         sal_uInt32          nRetValue;
 
@@ -105,9 +118,6 @@ bool SdCGMFilter::Import()
             }
         }
     }
-#ifndef DISABLE_DYNLOADING
-    delete pLibrary;
-#endif
     return bRet;
 }
 
@@ -115,6 +125,21 @@ bool SdCGMFilter::Export()
 {
     // No ExportCGM function exists(!)
     return false;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCGM(SvStream &rStream)
+{
+    SdDLL::Init();
+
+    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false);
+
+    CGMPointer aPointer;
+
+    bool bRet = aPointer.get()(rStream, xDocShRef->GetModel(), CGM_IMPORT_CGM | CGM_BIG_ENDIAN | CGM_EXPORT_IMPRESS, css::uno::Reference<css::task::XStatusIndicator>()) == 0;
+
+    xDocShRef->DoClose();
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
