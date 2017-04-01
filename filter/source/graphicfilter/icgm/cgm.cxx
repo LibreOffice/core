@@ -717,42 +717,39 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, sal_uI
         try
         {
             std::unique_ptr<CGM> pCGM(new CGM( nMode, rXModel ));
-            if ( pCGM && pCGM->IsValid() )
+            if (pCGM && pCGM->IsValid())
             {
-                if ( nMode & CGM_IMPORT_CGM )
+                rIn.SetEndian(SvStreamEndian::BIG);
+                sal_uInt64 const nInSize = rIn.remainingSize();
+                rIn.Seek(0);
+
+                sal_uInt32  nNext = 0;
+                sal_uInt32  nAdd = nInSize / 20;
+                bool bProgressBar = aXStatInd.is();
+                if ( bProgressBar )
+                    aXStatInd->start( "CGM Import" , nInSize );
+
+                while (pCGM->IsValid() && (rIn.Tell() < nInSize) && !pCGM->IsFinished())
                 {
-                    rIn.SetEndian(SvStreamEndian::BIG);
-                    sal_uInt64 const nInSize = rIn.remainingSize();
-                    rIn.Seek(0);
-
-                    sal_uInt32  nNext = 0;
-                    sal_uInt32  nAdd = nInSize / 20;
-                    bool bProgressBar = aXStatInd.is();
                     if ( bProgressBar )
-                        aXStatInd->start( "CGM Import" , nInSize );
-
-                    while (pCGM->IsValid() && (rIn.Tell() < nInSize) && !pCGM->IsFinished())
                     {
-                        if ( bProgressBar )
+                        sal_uInt32 nCurrentPos = rIn.Tell();
+                        if ( nCurrentPos >= nNext )
                         {
-                            sal_uInt32 nCurrentPos = rIn.Tell();
-                            if ( nCurrentPos >= nNext )
-                            {
-                                aXStatInd->setValue( nCurrentPos );
-                                nNext = nCurrentPos + nAdd;
-                            }
+                            aXStatInd->setValue( nCurrentPos );
+                            nNext = nCurrentPos + nAdd;
                         }
+                    }
 
-                        if (!pCGM->Write(rIn))
-                            break;
-                    }
-                    if ( pCGM->IsValid() )
-                    {
-                        nStatus = pCGM->GetBackGroundColor() | 0xff000000;
-                    }
-                    if ( bProgressBar )
-                        aXStatInd->end();
+                    if (!pCGM->Write(rIn))
+                        break;
                 }
+                if ( pCGM->IsValid() )
+                {
+                    nStatus = pCGM->GetBackGroundColor() | 0xff000000;
+                }
+                if ( bProgressBar )
+                    aXStatInd->end();
             }
         }
         catch (const css::uno::Exception&)
