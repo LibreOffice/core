@@ -20,6 +20,7 @@
 #include "basiccharclass.hxx"
 #include "scanner.hxx"
 #include "sbintern.hxx"
+#include "../sbx/sbxconv.hxx"
 
 #include <vcl/svapp.hxx>
 
@@ -245,13 +246,22 @@ bool SbiScanner::NextSym()
 
     if(nCol < aLine.getLength() && aLine[nCol] == '#')
     {
-        ++pLine;
-        ++nCol;
-        //ignore compiler directives (# is first non-space character)
-        if( nOldCol2 == 0 )
-            bCompilerDirective = true;
-        else
-            bHash = true;
+        const sal_Unicode* pLineTemp = pLine;
+        do
+        {
+            pLineTemp++;
+        } while (*pLineTemp && !BasicCharClass::isWhitespace(*pLineTemp) && *pLineTemp != '#');
+        // leave it if it's date literal - it will be handled later
+        if (*pLineTemp != '#')
+        {
+            ++pLine;
+            ++nCol;
+            //ignore compiler directives (# is first non-space character)
+            if (nOldCol2 == 0)
+                bCompilerDirective = true;
+            else
+                bHash = true;
+        }
     }
 
     // copy character if symbol
@@ -483,8 +493,8 @@ bool SbiScanner::NextSym()
             GenError( ERRCODE_BASIC_MATH_OVERFLOW );
     }
 
-    // Strings:
-    else if( *pLine == '"' || *pLine == '[' )
+    // Strings or date:
+    else if( *pLine == '"' || *pLine == '[' || *pLine == '#')
     {
         sal_Unicode cSep = *pLine;
         if( cSep == '[' )
@@ -521,7 +531,18 @@ bool SbiScanner::NextSym()
                     }
                     aSym = aSymBuf.makeStringAndClear();
                     if( cSep != ']' )
-                        eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
+                    {
+                        eScanType = SbxSTRING;
+                        if( cSep == '#' )
+                        {
+                            SbxValues aTmp;
+                            aTmp.eType = SbxSTRING;
+                            aTmp.pOUString = &aSym;
+                            nVal = ImpGetDate(&aTmp);
+                            bNumber = true;
+                            eScanType = SbxDOUBLE;
+                        }
+                    }
                     break;
                 }
             }
