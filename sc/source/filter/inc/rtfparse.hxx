@@ -30,8 +30,8 @@ struct ScRTFCellDefault
 {
     SfxItemSet          aItemSet;
     SCCOL               nCol;
-    sal_uInt16          nTwips;         // rechter Rand der Zelle
-    SCCOL               nColOverlap;    // MergeCell wenn >1, merged cells wenn 0
+    sal_uInt16          nTwips;         // right border of cell
+    SCCOL               nColOverlap;    // MergeCell if >1, merged cells if 0
 
     ScRTFCellDefault( SfxItemPool* pPool )
         : aItemSet(*pPool)

@@ -2352,7 +2352,7 @@ void Sc10Import::LoadObjects()
                         Sc10ImageHeader ImageHeader;
                         lcl_ReadImageHeaer(rStream, ImageHeader);
 
-                        // Attention: here come the data (Bitmap oder Metafile)
+                        // Attention: here come the data (Bitmap or Metafile)
                         // Typ = 1 Device-dependent Bitmap DIB
                         // Typ = 2 MetaFile
                         rStream.SeekRel(ImageHeader.Size);

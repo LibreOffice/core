@@ -124,7 +124,7 @@ void ScNameDlg::Init()
 {
     ScRange aRange;
 
-    OSL_ENSURE( mpViewData && mpDoc, "ViewData oder Document nicht gefunden!" );
+    OSL_ENSURE( mpViewData && mpDoc, "ViewData or Document not found!" );
 
     //init UI
     m_pFtInfo->SetStyle(WB_VCENTER);

@@ -784,7 +784,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
 
     bool bHasFieldNames = true;
     for ( SCCOL nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
-    {   // nur Strings in erster Zeile => sind Feldnamen
+    {   // only Strings in first row => are field names
         if ( !aDocument.HasStringData( nDocCol, nFirstRow, nTab ) )
             bHasFieldNames = false;
     }

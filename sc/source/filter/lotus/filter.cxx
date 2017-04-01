@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//  Discover WKS, WK1 und WK3; s.a op.cpp
+//  Discover WKS, WK1 and WK3; s.a op.cpp
 
 #include <string.h>
 #include <map>

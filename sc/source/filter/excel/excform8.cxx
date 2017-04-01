@@ -293,7 +293,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 break;
             case 0x17: // String Constant                       [314 266]
             {
-                sal_uInt8 nLen = aIn.ReaduInt8();        // und?
+                sal_uInt8 nLen = aIn.ReaduInt8();        // Why?
                 OUString aString = aIn.ReadUniString( nLen );            // reads Grbit even if nLen==0
 
                 aStack << aPool.Store( aString );
@@ -1016,7 +1016,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
             case 0x16: // Missing Argument                      [314 266]
                 break;
             case 0x17: // String Constant                       [314 266]
-                nLen = aIn.ReaduInt8();        // und?
+                nLen = aIn.ReaduInt8();        // Why?
 
                 aIn.IgnoreUniString( nLen );        // reads Grbit even if nLen==0
                 break;
