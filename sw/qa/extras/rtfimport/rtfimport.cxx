@@ -912,7 +912,7 @@ DECLARE_RTFIMPORT_TEST(testInk, "ink.rtf")
             rProp.Value >>= aSegments;
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int16(10), aSegments[1].Count);
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo52389, "fdo52389.rtf")
@@ -1137,7 +1137,7 @@ DECLARE_RTFIMPORT_TEST(testFdo57678, "fdo57678.rtf")
 DECLARE_RTFIMPORT_TEST(testFdo45183, "fdo45183.rtf")
 {
     // Was text::WrapTextMode_PARALLEL, i.e. shpfblwtxt didn't send the shape below text.
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -2103,7 +2103,7 @@ DECLARE_RTFIMPORT_TEST(testBehindDoc, "behind-doc.rtf")
 {
     // The problem was that "behind doc" didn't result in the shape being in the background, only in being wrapped as "through".
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xShape, "Surround"));
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(xShape, "Surround"));
     // This was true.
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xShape, "Opaque"));
 }
@@ -2438,7 +2438,7 @@ DECLARE_RTFIMPORT_TEST(testFdo49893_3, "fdo49893-3.rtf")
     }
 
     // Correct wrapping for shape
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(getShape(2), "Surround"));
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(2), "Surround"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo89496, "fdo89496.rtf")

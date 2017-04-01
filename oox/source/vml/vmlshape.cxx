@@ -539,7 +539,7 @@ void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, co
     if (nMarginTop < -35277) // Less than 1000 points.
         aWrapType.clear();
 
-    css::text::WrapTextMode nSurround = css::text::WrapTextMode_THROUGHT;
+    css::text::WrapTextMode nSurround = css::text::WrapTextMode_THROUGH;
     if ( aWrapType == "square" || aWrapType == "tight" ||
          aWrapType == "through" )
     {

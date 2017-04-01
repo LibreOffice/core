@@ -308,8 +308,8 @@ bool SwFormatSurround::GetPresentation
         case css::text::WrapTextMode_NONE:
             nId = STR_SURROUND_NONE;
         break;
-        case css::text::WrapTextMode_THROUGHT:
-            nId = STR_SURROUND_THROUGHT;
+        case css::text::WrapTextMode_THROUGH:
+            nId = STR_SURROUND_THROUGH;
         break;
         case css::text::WrapTextMode_PARALLEL:
             nId = STR_SURROUND_PARALLEL;

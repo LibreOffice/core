@@ -1095,8 +1095,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 case RndStdIds::FLY_AT_FLY:
                 case RndStdIds::FLY_AT_PAGE:
                     //Wrap through, left or from left, top, from top
-                    if(eSurround != css::text::WrapTextMode_THROUGHT)
-                        aSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
+                    if(eSurround != css::text::WrapTextMode_THROUGH)
+                        aSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGH));
 
                     if( eVOrient != text::VertOrientation::TOP && eVOrient != text::VertOrientation::NONE)
                         aSet.Put(SwFormatVertOrient(0, text::VertOrientation::TOP));
@@ -1119,8 +1119,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 case RndStdIds::FLY_AT_CHAR:
                     // left, from left, right, top, wrap through
-                    if(eSurround != css::text::WrapTextMode_THROUGHT)
-                        aSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
+                    if(eSurround != css::text::WrapTextMode_THROUGH)
+                        aSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGH));
 
                     if( eVOrient != text::VertOrientation::TOP)
                         aSet.Put(SwFormatVertOrient(0, text::VertOrientation::TOP));
@@ -1734,21 +1734,21 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                  && (nAnchorType != RndStdIds::FLY_AT_CHAR)
                                  && (nAnchorType != RndStdIds::FLY_AT_PAGE)));
                             if(bObj)
-                                bSet = nSurround == css::text::WrapTextMode_THROUGHT && rSh.GetLayerId();
+                                bSet = nSurround == css::text::WrapTextMode_THROUGH && rSh.GetLayerId();
                             else
-                                bSet = nSurround == css::text::WrapTextMode_THROUGHT && bOpaque;
+                                bSet = nSurround == css::text::WrapTextMode_THROUGH && bOpaque;
                         break;
                         case FN_FRAME_WRAPTHRU_TRANSP:
                             bDisable |= bHtmlMode;
                             if(bObj)
-                                bSet = nSurround == css::text::WrapTextMode_THROUGHT && !rSh.GetLayerId();
+                                bSet = nSurround == css::text::WrapTextMode_THROUGH && !rSh.GetLayerId();
                             else
-                                bSet = nSurround == css::text::WrapTextMode_THROUGHT && !bOpaque;
+                                bSet = nSurround == css::text::WrapTextMode_THROUGH && !bOpaque;
                         break;
                         case FN_FRAME_WRAP_CONTOUR:
                             bDisable |= bHtmlMode;
                             //no contour available whenn no wrap or wrap through is set
-                            bDisable |= (nSurround == css::text::WrapTextMode_NONE || nSurround == css::text::WrapTextMode_THROUGHT);
+                            bDisable |= (nSurround == css::text::WrapTextMode_NONE || nSurround == css::text::WrapTextMode_THROUGH);
                             if( !bDisable )
                             {
                                 SelectionType nSel = rSh.GetSelectionType();
@@ -1899,7 +1899,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                     aWrap.SetContour(false);
                 SAL_FALLTHROUGH;
             case FN_FRAME_WRAPTHRU:
-                nSurround = css::text::WrapTextMode_THROUGHT;
+                nSurround = css::text::WrapTextMode_THROUGH;
                 break;
 
             case FN_FRAME_WRAP_LEFT:
@@ -1919,7 +1919,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
         {
             // Defaulting the contour wrap on draw objects.
             if (bObj && nOldSurround != nSurround &&
-                (nOldSurround == css::text::WrapTextMode_NONE || nOldSurround == css::text::WrapTextMode_THROUGHT))
+                (nOldSurround == css::text::WrapTextMode_NONE || nOldSurround == css::text::WrapTextMode_THROUGH))
             {
                 aWrap.SetContour(true);
             }

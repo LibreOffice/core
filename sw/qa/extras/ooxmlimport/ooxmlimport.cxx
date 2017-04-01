@@ -427,7 +427,7 @@ DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
     xPropertySet.set(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue("Surround") >>= eValue;
-    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_THROUGHT);
+    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_THROUGH);
 
     /*
      * 5th problem: anchor type of the second textbox was wrong.
@@ -874,8 +874,8 @@ DECLARE_OOXMLIMPORT_TEST(testOleAnchor, "ole-anchor.docx")
 {
     // This was AS_CHARACTER, even if the VML style explicitly contains "position:absolute".
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
-    // This was DYNAMIC, even if the default is THROUGHT and there is no w10:wrap element in the bugdoc.
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+    // This was DYNAMIC, even if the default is THROUGH and there is no w10:wrap element in the bugdoc.
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf48658_transparentOLEheader, "tdf48658_transparentOLEheader.docx")

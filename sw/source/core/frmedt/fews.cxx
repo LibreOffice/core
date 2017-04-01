@@ -731,7 +731,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     {
         SwFlyFrameFormat* pFormat = const_cast<SwFlyFrameFormat*>(pFly->GetFormat());
         const SwFormatSurround& rSurround = pFormat->GetSurround();
-        bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGHT;
+        bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGH;
     }
 
     const SwPageFrame* pPage = pFrame->FindPageFrame();

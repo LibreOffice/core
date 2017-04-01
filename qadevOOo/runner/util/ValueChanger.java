@@ -191,7 +191,7 @@ public class ValueChanger {
             com.sun.star.text.WrapTextMode WTM3 = com.sun.star.text.WrapTextMode.NONE;
             com.sun.star.text.WrapTextMode WTM4 = com.sun.star.text.WrapTextMode.PARALLEL;
             com.sun.star.text.WrapTextMode WTM5 = com.sun.star.text.WrapTextMode.RIGHT;
-            com.sun.star.text.WrapTextMode WTM6 = com.sun.star.text.WrapTextMode.THROUGHT;
+            com.sun.star.text.WrapTextMode WTM6 = com.sun.star.text.WrapTextMode.THROUGH;
             if (oldValue.equals(WTM1))
                 newValue = WTM2;
             if (oldValue.equals(WTM2))

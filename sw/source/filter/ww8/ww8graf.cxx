@@ -1347,7 +1347,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
 
     if( rLeft >= SVBT16ToShort(aHd.cb) )    // Vorsichtsmassmahme
     {
-        rSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
+        rSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGH));
         switch (SVBT16ToShort(aHd.dpk) & 0xff )
         {
             case 0:
@@ -2541,7 +2541,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             eSurround = css::text::WrapTextMode_NONE;
             break;
         case 3: // 3 wrap as if no object present
-            eSurround = css::text::WrapTextMode_THROUGHT;
+            eSurround = css::text::WrapTextMode_THROUGH;
             break;
         case 4: // 4 wrap tightly around object
         case 5: // 5 wrap tightly, but allow holes
@@ -2612,7 +2612,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     // #i18732# - Switch on 'follow text flow', if object is laid out
     // inside table cell and its wrapping isn't 'SURROUND_THROUGH'
-    if (bLayoutInTableCell && eSurround != css::text::WrapTextMode_THROUGHT)
+    if (bLayoutInTableCell && eSurround != css::text::WrapTextMode_THROUGH)
     {
         SwFormatFollowTextFlow aFollowTextFlow( true );
         aFlySet.Put( aFollowTextFlow );

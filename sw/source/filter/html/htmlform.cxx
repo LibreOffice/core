@@ -1091,7 +1091,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             nYPos = convertTwipToMm100( rCSS1PropInfo.m_nTop ) + nUpperSpace;
             bSetPos = true;
 
-            nSurround = text::WrapTextMode_THROUGHT;
+            nSurround = text::WrapTextMode_THROUGH;
             bSetSurround = true;
         }
         else if( SvxAdjust::Left == rCSS1PropInfo.m_eFloat ||

@@ -4487,7 +4487,7 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
                         bFound = false;
                         break;
                     }
-                    else if( css::text::WrapTextMode_THROUGHT!=eSurround )
+                    else if( css::text::WrapTextMode_THROUGH!=eSurround )
                     {
                         bFound = true;
                         // weitersuchen: Es koennten ja noch welche ohne

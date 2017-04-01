@@ -274,7 +274,7 @@ void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
     // automatically anchored frames must be moved forward by one position
     if( RES_DRAWFRMFMT != pFlyFormat->Which() &&
         (RndStdIds::FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()) &&
-        css::text::WrapTextMode_THROUGHT == pFlyFormat->GetSurround().GetSurround() )
+        css::text::WrapTextMode_THROUGH == pFlyFormat->GetSurround().GetSurround() )
     {
         m_aMoveFlyFrames.push_back( pFlyFormat );
         m_aMoveFlyCnts.push_back( m_pPam->GetPoint()->nContent.GetIndex() );

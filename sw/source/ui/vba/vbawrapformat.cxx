@@ -56,7 +56,7 @@ void SwVbaWrapFormat::makeWrap()
             case word::WdWrapType::wdWrapNone:
             case word::WdWrapType::wdWrapThrough:
             {
-                eTextMode = text::WrapTextMode_THROUGHT;
+                eTextMode = text::WrapTextMode_THROUGH;
                 break;
             }
             case word::WdWrapType::wdWrapInline:
@@ -98,7 +98,7 @@ void SwVbaWrapFormat::makeWrap()
             nType = word::WdWrapType::wdWrapTopBottom;
             break;
         }
-        case text::WrapTextMode_THROUGHT:
+        case text::WrapTextMode_THROUGH:
         {
             nType = word::WdWrapType::wdWrapNone;
             break;

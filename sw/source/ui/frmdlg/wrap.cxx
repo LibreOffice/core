@@ -232,7 +232,7 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
             break;
         }
 
-        case css::text::WrapTextMode_THROUGHT:
+        case css::text::WrapTextMode_THROUGH:
         {
             // transparent ?
             pBtn = m_pWrapThroughRB;
@@ -317,7 +317,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
         aSur.SetSurround(css::text::WrapTextMode_PARALLEL);
     else if (m_pWrapThroughRB->IsChecked())
     {
-        aSur.SetSurround(css::text::WrapTextMode_THROUGHT);
+        aSur.SetSurround(css::text::WrapTextMode_THROUGH);
         if (m_pWrapTransparentCB->IsChecked() && !m_bDrawMode)
             aOp.SetValue(false);
     }
@@ -498,7 +498,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet.Get(RES_SURROUND));
     css::text::WrapTextMode nSur = rSurround.GetSurround();
 
-    m_pWrapTransparentCB->Enable( bEnable && !m_bHtmlMode && nSur == css::text::WrapTextMode_THROUGHT );
+    m_pWrapTransparentCB->Enable( bEnable && !m_bHtmlMode && nSur == css::text::WrapTextMode_THROUGH );
     if(m_bHtmlMode)
     {
         const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));

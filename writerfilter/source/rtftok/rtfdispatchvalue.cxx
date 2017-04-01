@@ -768,7 +768,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aShape.nWrap = text::WrapTextMode_PARALLEL;
             break;
         case 3:
-            m_aStates.top().aShape.nWrap = text::WrapTextMode_THROUGHT;
+            m_aStates.top().aShape.nWrap = text::WrapTextMode_THROUGH;
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapNone, std::make_shared<RTFValue>());
             break;
         case 4:
@@ -776,7 +776,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_WrapType_wrapTight, std::make_shared<RTFValue>());
             break;
         case 5:
-            m_aStates.top().aShape.nWrap = text::WrapTextMode_THROUGHT;
+            m_aStates.top().aShape.nWrap = text::WrapTextMode_THROUGH;
             break;
         }
     }
