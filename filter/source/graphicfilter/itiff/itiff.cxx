@@ -629,9 +629,9 @@ bool TIFFReader::ReadMap()
                 //if the buffer for this line didn't change, then just copy the
                 //previous scanline instead of painfully decoding and setting
                 //each pixel one by one again
-                pAcc->CopyScanline(ny, pAcc->GetScanline(ny-1),
-                                       pAcc->GetScanlineFormat(),
-                                       pAcc->GetScanlineSize());
+                Scanline pScanline = pAcc->GetScanline(ny);
+                Scanline pPrevline = pAcc->GetScanline(ny-1);
+                memcpy(pScanline, pPrevline, pAcc->GetScanlineSize());
             }
             else
             {
