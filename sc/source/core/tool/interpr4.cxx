@@ -2716,7 +2716,7 @@ void ScInterpreter::ScExternal()
                 continue;   // while
             }
 
-            sal_uInt8 nStackType = sal::static_int_cast<sal_uInt8>( GetStackType() );
+            StackVar nStackType = GetStackType();
             ScAddInArgumentType eType = aCall.GetArgType( nPar );
             switch (eType)
             {
@@ -3204,8 +3204,7 @@ void ScInterpreter::ScMacro()
     for( short i = nParamCount; i && bOk ; i-- )
     {
         SbxVariable* pPar = refPar->Get( (sal_uInt16) i );
-        sal_uInt8 nStackType = sal::static_int_cast<sal_uInt8>( GetStackType() );
-        switch( nStackType )
+        switch( GetStackType() )
         {
             case svDouble:
                 pPar->PutDouble( GetDouble() );
