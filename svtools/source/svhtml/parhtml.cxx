@@ -1161,7 +1161,7 @@ int HTMLParser::GetNextToken_()
                 {
                     if( bOffState )
                     {
-                        // einfach alles wegschmeissen
+                        // simply throw away everything
                         ScanText( '>' );
                         if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
                         {

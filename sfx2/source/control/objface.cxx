@@ -394,7 +394,7 @@ sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
 {
     if ( pGenoType )
     {
-        // Are there ChildWindows in der Superklasse?
+        // Are there ChildWindows in the superclass?
         sal_uInt16 nBaseCount = pGenoType->GetChildWindowCount();
         if ( nNo < nBaseCount )
             // The Super class comes first
@@ -415,7 +415,7 @@ SfxShellFeature SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
 {
     if ( pGenoType )
     {
-        // Are there ChildWindows in der Superklasse?
+        // Are there ChildWindows in the superclass?
         sal_uInt16 nBaseCount = pGenoType->GetChildWindowCount();
         if ( nNo < nBaseCount )
             // The Super class comes first

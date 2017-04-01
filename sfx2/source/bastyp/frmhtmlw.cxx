@@ -93,7 +93,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
                  eDestEnc, pNonConvertableChars );
     }
 
-    // Titel (auch wenn er leer ist)
+    // Title (regardless if empty)
     rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
     if( pIndent )
         rStrm.WriteCharPtr( pIndent );

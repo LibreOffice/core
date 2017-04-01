@@ -87,7 +87,7 @@ void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo const *pDcr)
 {
     DynamicErrorInfo **ppDcr = TheEDcrData::get().ppDcr;
     sal_uIntPtr lIdx = (((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
-    DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error nicht gefunden");
+    DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error not found");
     if(ppDcr[lIdx]==pDcr)
         ppDcr[lIdx]=nullptr;
 }
@@ -152,9 +152,9 @@ public:
 
 static void aDspFunc(const OUString &rErr, const OUString &rAction)
 {
-    OStringBuffer aErr("Aktion: ");
+    OStringBuffer aErr("Action: ");
     aErr.append(OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
-    aErr.append(" Fehler: ");
+    aErr.append(" Error: ");
     aErr.append(OUStringToOString(rErr, RTL_TEXTENCODING_ASCII_US));
     OSL_FAIL(aErr.getStr());
 }
@@ -307,7 +307,7 @@ ErrorHandlerFlags ErrorHandler::HandleError_Impl(
             }
         }
     }
-    OSL_FAIL("Error nicht behandelt");
+    OSL_FAIL("Error not handled");
     // Error 1 is General Error in the Sfx
     if(pInfo->GetErrorCode()!=1)
     {
@@ -315,7 +315,7 @@ ErrorHandlerFlags ErrorHandler::HandleError_Impl(
     }
     else
     {
-        OSL_FAIL("Error 1 nicht gehandeled");
+        OSL_FAIL("Error 1 not handled");
     }
     delete pInfo;
     return ErrorHandlerFlags::NONE;

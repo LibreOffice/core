@@ -950,7 +950,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WindowType::MODALDIALOG:
             case WindowType::MODELESSDIALOG:
             {
-                // Modal/Modeless nur durch Show/Execute
+                // Modal/Modeless only via Show/Execute
                 if ( (pParent == nullptr ) && ( rDescriptor.ParentIndex == -1 ) )
                     pNewWindow = VclPtr<toolkit::ScrollableDialog>::Create( nullptr, nWinBits, Dialog::InitFlag::NoParent );
                 else

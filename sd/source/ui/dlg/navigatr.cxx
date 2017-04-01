@@ -136,7 +136,7 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
     OUString aDocName = pDocShell->GetMedium()->GetName();
     maTlbObjects->SetSaveTreeItemStateFlag(true); //Added by yanjun for sym2_6385
     maTlbObjects->Clear();
-    maTlbObjects->Fill( pDoc, false, aDocName ); // Nur normale Seiten
+    maTlbObjects->Fill( pDoc, false, aDocName ); // Only normal pages
     maTlbObjects->SetSaveTreeItemStateFlag(false); //Added by yanjun for sym2_6385
     RefreshDocumentLB();
     maLbDocs->SelectEntry( aDocShName );

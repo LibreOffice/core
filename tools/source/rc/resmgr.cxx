@@ -542,7 +542,7 @@ bool InternalResMgr::Create()
 
 bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
 {
-    // Anfang der Strings suchen
+    // search beginning of string
     ImpContent aValue;
     aValue.nTypeAndId = ((sal_uInt64(sal_uInt32(nRT)) << 32) | nId);
     ImpContent * pFind = ::std::lower_bound(pContent,

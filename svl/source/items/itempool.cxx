@@ -309,7 +309,7 @@ void SfxItemPool::ReleaseDefaults
 
 
 /**
- * Frees the specified static Defaults und also deletes them, if so
+ * Frees the specified static Defaults and also deletes them, if so
  * specified.
  *
  * This method MUST be called AFTER all SfxItemPool instances (which

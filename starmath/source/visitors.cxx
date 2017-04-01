@@ -484,7 +484,7 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
 
     Point  aPos ( maPosition );
     aPos.Y( ) += pNode->GetBaselineOffset( );
-    // auf Pixelkoordinaten runden
+    // round to pixel coordinate
     aPos = mrDev.PixelToLogic( mrDev.LogicToPixel( aPos ) );
 
     mrDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );

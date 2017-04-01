@@ -108,7 +108,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
                 OSL_ENSURE(xObj.is(),"Embedded Object could not be created!");
 
                 /**************************************************
-                * Das leere OLE-Objekt bekommt ein neues IPObj
+                * The empty OLE object gets a new IPObj
                 **************************************************/
                 pObj->SetEmptyPresObj(false);
                 rOle2Obj.SetOutlinerParaObject(nullptr);

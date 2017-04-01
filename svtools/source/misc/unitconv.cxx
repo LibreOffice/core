@@ -145,7 +145,7 @@ long GetCoreValue( const MetricField& rField, MapUnit eUnit )
 
 long CalcToUnit( float nIn, MapUnit eUnit )
 {
-    // nIn ist in Points
+    // nIn is in Points
 
     DBG_ASSERT( eUnit == MapUnit::MapTwip       ||
                 eUnit == MapUnit::Map100thMM   ||

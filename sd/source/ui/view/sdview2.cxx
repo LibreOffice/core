@@ -87,7 +87,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDataObject( View*, vcl::Window& )
 {
     // since SdTransferable::CopyToClipboard is called, this
-    // dynamically created object ist destroyed automatically
+    // dynamically created object is destroyed automatically
     SdTransferable* pTransferable = new SdTransferable( &mrDoc, nullptr, false );
     css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
 

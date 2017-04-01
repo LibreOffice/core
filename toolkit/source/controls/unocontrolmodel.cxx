@@ -921,7 +921,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                         if ( !pFD )
                         {
                             pFD = new css::awt::FontDescriptor;
-                            if ( maData.find( BASEPROPERTY_FONTDESCRIPTOR ) != maData.end() ) // wegen den Defaults...
+                            if ( maData.find( BASEPROPERTY_FONTDESCRIPTOR ) != maData.end() ) // due to defaults...
                                 maData[ BASEPROPERTY_FONTDESCRIPTOR ] >>= *pFD;
                         }
                         pFD->Name = InStream->readUTF();
@@ -1176,7 +1176,7 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const
     const css::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
     ENSURE_OR_RETURN_VOID( pProp, "UnoControlModel::setFastPropertyValue_NoBroadcast: invalid property id!" );
 
-    DBG_ASSERT( ( rValue.getValueType().getTypeClass() != css::uno::TypeClass_VOID ) || ( GetPropertyAttribs( (sal_uInt16)nPropId ) & css::beans::PropertyAttribute::MAYBEVOID ), "Property darf nicht VOID sein!" );
+    DBG_ASSERT( ( rValue.getValueType().getTypeClass() != css::uno::TypeClass_VOID ) || ( GetPropertyAttribs( (sal_uInt16)nPropId ) & css::beans::PropertyAttribute::MAYBEVOID ), "Property should not be VOID!" );
     maData[ nPropId ] = rValue;
 }
 

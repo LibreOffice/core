@@ -177,7 +177,7 @@ Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups
 
     const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
 
-    // Gruppe anw"ahlen ( Gruppe 0 ist intern )
+    // Select group ( group 0 is internal )
     for (sal_uInt16 i=0; i< rAppSlotPool.GetGroupCount(); ++i)
     {
         rAppSlotPool.SeekGroup(i);
@@ -207,7 +207,7 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
     const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
     OUString aCmdPrefix( ".uno:" );
 
-    // Gruppe anw"ahlen ( Gruppe 0 ist intern )
+    // Select group ( group 0 is internal )
     for (sal_uInt16 i=0; i< rAppSlotPool.GetGroupCount(); ++i)
     {
         rAppSlotPool.SeekGroup(i);

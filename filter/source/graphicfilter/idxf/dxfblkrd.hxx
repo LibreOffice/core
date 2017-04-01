@@ -23,7 +23,7 @@
 #include <dxfentrd.hxx>
 
 
-//---------------- Ein Block (= Menge von Entities) --------------------------
+//---------------- A Block (= Set of Entities) --------------------------
 
 
 class DXFBlock : public DXFEntities {
@@ -49,7 +49,7 @@ public:
 };
 
 
-//---------------- Eine Menge von Bloecken -----------------------------------
+//---------------- A set of blocks -----------------------------------
 
 
 class DXFBlocks {

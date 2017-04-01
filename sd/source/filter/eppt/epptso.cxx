@@ -1806,7 +1806,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         nLength = maRect.GetHeight();
                     nLength >>= 1;
                     if ( nRadius >= nLength )
-                        nRadius = 0x2a30;                           // 0x2a30 ist PPTs maximum radius
+                        nRadius = 0x2a30;                           // 0x2a30 is PPTs maximum radius
                     else
                         nRadius = ( 0x2a30 * nRadius ) / nLength;
                     aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nRadius );

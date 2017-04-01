@@ -2927,7 +2927,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
 enum XMLTokenEnum XMLTextFieldExport::MapAuthorFieldName(
     const Reference<XPropertySet> & xPropSet)
 {
-    // Initalen oder voller Name?
+    // Initials or full name?
     return GetBoolProperty(sPropertyFullName, xPropSet)
         ? XML_AUTHOR_NAME : XML_AUTHOR_INITIALS;
 }

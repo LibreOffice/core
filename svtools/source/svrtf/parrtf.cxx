@@ -41,7 +41,7 @@ SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     , eCodeSet(RTL_TEXTENCODING_MS_1252)
     , nUCharOverread(1)
 {
-    // default ist ANSI-CodeSet
+    // default is ANSI-CodeSet
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
     bRTF_InTextRead = false;
 }

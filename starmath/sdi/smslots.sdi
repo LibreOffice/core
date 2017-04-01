@@ -55,13 +55,13 @@ interface FormulaDocument
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menuepunkt , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_LOADSYMBOLS //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menuepunkt , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_SAVESYMBOLS //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
@@ -92,19 +92,19 @@ interface FormulaDocument
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_MODIFYSTATUS //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_TEXT //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
         SID_GAPHIC_SM //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
@@ -179,13 +179,13 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-        //idlpp kein Menueeintrag , also keine Texte
+        //idlpp no menu entry, so no texts
         SID_COPYOBJECT //idlpp ole : no , status : no
         [
                 ExecMethod = Execute ;
                 StateMethod = GetState ;
         ]
-        //idlpp kein Menueeintrag , also keine Texte
+        //idlpp no menu entry, so no texts
         SID_PASTEOBJECT //idlpp ole : no , status : no
         [
                 ExecMethod = Execute ;
@@ -216,7 +216,7 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_INSERTCOMMAND //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
@@ -227,7 +227,7 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_INSERTSYMBOL //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
@@ -245,7 +245,7 @@ interface FormulaView
         StateMethod = GetState ;
         Export = FALSE ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_ATTR_ZOOM //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
@@ -256,19 +256,19 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_TEXTSTATUS //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_GETEDITTEXT //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
+    //idlpp no menu entry, so no texts
     SID_CMDBOXWINDOW //idlpp ole : no , status : no
     [
         ExecMethod = NoExec ;
