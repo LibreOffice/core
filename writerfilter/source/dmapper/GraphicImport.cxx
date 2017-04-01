@@ -1089,7 +1089,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             break;
         case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
             //depending on the behindDoc attribute text wraps through behind or in front of the object
-            m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
+            m_pImpl->nWrap = text::WrapTextMode_THROUGH;
         break;
         case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
             m_pImpl->nWrap = text::WrapTextMode_NONE;
@@ -1265,7 +1265,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 }
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
                     uno::makeAny((sal_Int32)m_pImpl->nWrap));
-                if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGHT )
+                if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGH )
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::makeAny(true));
 

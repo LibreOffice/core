@@ -1464,7 +1464,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                                 // Prevent oscillation
                                 SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
                                 SwFormatSurround aAttr( rFormat.GetSurround() );
-                                if( css::text::WrapTextMode_THROUGHT != aAttr.GetSurround() )
+                                if( css::text::WrapTextMode_THROUGH != aAttr.GetSurround() )
                                 {
                                     // When on auto position, we can only set it to
                                     // flow through
@@ -1473,7 +1473,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                                         (css::text::WrapTextMode_PARALLEL ==
                                             aAttr.GetSurround()))
                                     {
-                                        aAttr.SetSurround( css::text::WrapTextMode_THROUGHT );
+                                        aAttr.SetSurround( css::text::WrapTextMode_THROUGH );
                                     }
                                     else
                                     {

@@ -1332,7 +1332,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SvxOpaqueItem( RES_OPAQUE, false ));
-            aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGHT ));
+            aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ));
         }
         break;
     case RES_POOLFRM_LABEL:

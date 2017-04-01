@@ -843,14 +843,14 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
              over the following dummy 0x01 graphic
             */
             if (rFrameFormat.IsInline())
-                eSurround = css::text::WrapTextMode_THROUGHT;
+                eSurround = css::text::WrapTextMode_THROUGH;
 
             switch (eSurround)
             {
                 case css::text::WrapTextMode_NONE:
                     nFlags |= 0x0020;
                     break;
-                case css::text::WrapTextMode_THROUGHT:
+                case css::text::WrapTextMode_THROUGH:
                     nFlags |= 0x0060;
                     break;
                 case css::text::WrapTextMode_PARALLEL:
@@ -2124,7 +2124,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     // SwWW8ImplReader::Read_GrafLayer() imports these as opaque
     // unconditionally, so if both are true, don't export the property.
     bool bIsInHeader = sw::IsFlyFrameFormatInHeader(rFormat);
-    bool bIsThrought = rFormat.GetSurround().GetValue() == css::text::WrapTextMode_THROUGHT;
+    bool bIsThrought = rFormat.GetSurround().GetValue() == css::text::WrapTextMode_THROUGH;
 
     if (bIsInHeader)
     {
