@@ -43,6 +43,10 @@ public:
     bool                    IsDraw() const { return mbIsDraw; }
     virtual bool            Export() = 0;
 
+#ifndef DISABLE_DYNLOADING
+    static ::osl::Module*       OpenLibrary( const OUString& rLibraryName );
+#endif
+
 protected:
     css::uno::Reference< css::frame::XModel >             mxModel;
     css::uno::Reference< css::task::XStatusIndicator >    mxStatusIndicator;
@@ -51,9 +55,6 @@ protected:
     ::sd::DrawDocShell&         mrDocShell;
     SdDrawDocument&             mrDocument;
     bool                        mbIsDraw : 1;
-#ifndef DISABLE_DYNLOADING
-    static ::osl::Module*       OpenLibrary( const OUString& rLibraryName );
-#endif
     void                        CreateStatusIndicator();
 
 private:
