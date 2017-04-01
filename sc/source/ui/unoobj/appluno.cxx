@@ -42,20 +42,20 @@
 
 using namespace com::sun::star;
 
-//  Anzahl der Funktionen, die als zuletzt benutzt gespeichert werden
-//! Define mit funcpage.hxx und dwfunctr.hxx zusammenfassen !!!
+//  Number of last used functions, which are saved
+//! Combine define with funcpage.hxx and dwfunctr.hxx !!!
 #define LRU_MAX 10
 
-//  Spezial-Werte fuer Zoom
-//! irgendwo zentral
+//  Special value for zoom
+//! somewhere central
 #define SC_ZOOMVAL_OPTIMAL      (-1)
 #define SC_ZOOMVAL_WHOLEPAGE    (-2)
 #define SC_ZOOMVAL_PAGEWIDTH    (-3)
 
-//  Anzahl der PropertyValues in einer Function-Description
+//  Number of PropertyValues in a function description
 #define SC_FUNCDESC_PROPCOUNT   5
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+//  everything without Which-ID, map only for PropertySetInfo
 
 static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 {
@@ -345,10 +345,10 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         uno::Sequence<OUString> aSeq;
         if ( pUserList && ( aValue >>= aSeq ) )
         {
-            //  es wird direkt die "lebende" Liste veraendert,
-            //  mehr tut ScGlobal::SetUserList auch nicht
+            //  directly change the active list
+            //  ScGlobal::SetUseTabCol does not do much else
 
-            pUserList->clear();                 // alle Eintraege raus
+            pUserList->clear();
             sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
             const OUString* pAry = aSeq.getConstArray();
             for (sal_uInt16 i=0; i<nCount; i++)
@@ -357,7 +357,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
                 ScUserListData* pData = new ScUserListData(aEntry);
                 pUserList->push_back(pData);
             }
-            bSaveApp = true;    // Liste wird mit den App-Optionen gespeichert
+            bSaveApp = true;    // List with App-Options are saved
         }
     }
     else if (aPropertyName == SC_UNONAME_PRALLSH)
@@ -490,7 +490,7 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
 
     std::unique_ptr<sal_uInt16[]> pFuncs(nCount ? new sal_uInt16[nCount] : nullptr);
     for (sal_uInt16 i=0; i<nCount; i++)
-        pFuncs[i] = (sal_uInt16)pAry[i];        //! auf gueltige Werte testen?
+        pFuncs[i] = (sal_uInt16)pAry[i];        //! check for valid values?
 
     ScModule* pScMod = SC_MOD();
     ScAppOptions aNewOpts(pScMod->GetAppOptions());

@@ -518,8 +518,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
                 nToTable = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             else if ( dynamic_cast<const SfxBoolItem*>( pItem) !=  nullptr )
             {
-                //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
-                //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
+                //  In IDL for Basic FN_PARAM_4 means SfxBoolItem
+                //  -> if set new table, else current table
 
                 if ( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
                     nToTable = static_cast<sal_uInt16>(rScDoc.GetTableCount());
@@ -534,10 +534,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
             rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
         }
 
-        // auf neue Tabelle ausgeben?
+        // Output on new table?
         if ( nToTable == rScDoc.GetTableCount() )
         {
-            // dann los...
+            // Let's go...
             OUString      aTabName;
             SCTAB       nNewTab = rScDoc.GetTableCount();
 
