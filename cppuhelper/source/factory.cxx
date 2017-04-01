@@ -182,8 +182,7 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
     Reference< XInterface > xRet( createInstanceWithContext( xContext ) );
 
     Reference< lang::XInitialization > xInit( xRet, UNO_QUERY );
-    // always call initialize, even if there are no arguments.
-    // #i63511# / 2006-03-27 / frank.schoenheit@sun.com
+    // always call initialize, even if there are no arguments. #i63511#
     if (xInit.is())
     {
         xInit->initialize( rArguments );

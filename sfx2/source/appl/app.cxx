@@ -343,8 +343,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
     // even if the frame actually didn't change, ensure its document is forwarded
     // to SfxObjectShell::SetCurrentComponent.
     // Otherwise, the CurrentComponent might not be correct, in case it has meanwhile
-    // been reset to some other document, by some non-SFX component.
-    // #i49133# / 2007-12-19 / frank.schoenheit@sun.com
+    // been reset to some other document, by some non-SFX component. #i49133#
     if ( pFrame && pFrame->GetViewShell() )
         pFrame->GetViewShell()->SetCurrentDocument();
 }

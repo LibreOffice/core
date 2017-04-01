@@ -18,12 +18,6 @@
  */
 
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "cppuhelper/weak.hxx"
@@ -107,10 +101,10 @@ OfficeDocumentsManager::OfficeDocumentsManager(
 OfficeDocumentsManager::~OfficeDocumentsManager()
 {
     //OSL_ENSURE( m_aDocs.empty(), "document list not empty!" );
-    // no need to assert this: Normal shutdown of OOo could already trigger it, since the order in which
-    // objects are actually released/destroyed upon shutdown is not defined. And when we arrive *here*,
-    // OOo *is* shutting down currently, since we're held by the TDOC provider, which is disposed
-    // upon shutdown.
+    // no need to assert this: Normal shutdown of LibreOffice could already trigger it, since the order
+    // in which objects are actually released/destroyed upon shutdown is not defined. And when we
+    // arrive *here*, LibreOffice *is* shutting down currently, since we're held by the TDOC provider,
+    // which is disposed upon shutdown.
     m_xDocCloseListener->Dispose();
 }
 
@@ -248,7 +242,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
         {
             // Document has been closed (unloaded)
 
-            // #163732# - Official event "OnUnload" does not work here. Event
+            // Official event "OnUnload" does not work here. Event
             // gets fired to early. Other OnUnload listeners called after this
             // listener may still need TDOC access to the document. Remove the
             // document from TDOC docs list on XCloseListener::notifyClosing.
@@ -418,8 +412,6 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
             // *after* OnUnload and all other On* events.
             // In agreement with MBA, the implementation for SfxBaseModel::Close should be changed to also send notifyClosing
             // as last event. When this happens, the assertion here must be enabled, again.
-            // There is no bug for this, yet - IZ is currently down due to the Kenai migration.
-            // 2011-02-23 / frank.schoenheit@sun.com
         }
     }
 }

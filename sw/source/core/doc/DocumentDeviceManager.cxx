@@ -73,8 +73,7 @@ void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDe
          mpPrt = pP;
 
         // our printer should always use TWIP. Don't rely on this being set in SwViewShell::InitPrt, there
-        // are situations where this isn't called.
-        // #i108712# / 2010-02-26 / frank.schoenheit@sun.com
+        // are situations where this isn't called. #i108712#
         if ( mpPrt )
         {
             MapMode aMapMode( mpPrt->GetMapMode() );

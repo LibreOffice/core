@@ -155,8 +155,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         pDev->DrawLine( Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, nTop ) );
 
         bool bIsPrinter = OUTDEV_PRINTER == pDev->GetOutDevType();
-        // if we're drawing onto a printer, spare the 3D effect
-        // #i46986# / 2005-04-13 / frank.schoenheit@sun.com
+        // if we're drawing onto a printer, spare the 3D effect #i46986#
 
         if ( !bIsPrinter && !(nDrawFlags & DrawFlags::Mono) )
         {

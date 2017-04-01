@@ -334,8 +334,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
 
     OSQLParseTreeIterator aSubQueryIterator( *this, m_rParser, pSubQueryNode.get() );
     aSubQueryIterator.impl_traverse( TraversalParts::Parameters | TraversalParts::SelectColumns );
-        // SelectColumns might also contain parameters
-        // #i77635# - 2007-07-23 / frank.schoenheit@sun.com
+        // SelectColumns might also contain parameters #i77635#
     pSubQueryParameterColumns = aSubQueryIterator.getParameters();
     aSubQueryIterator.dispose();
 
@@ -574,13 +573,13 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
                 if ( SQL_ISRULE( pQueryExpression, select_statement ) )
                 {
                     getSelect_statement( *m_pImpl->m_pSubTables, pQueryExpression );
-                    // LEM TODO: now, we need to setup a OSQLTable from pQueryExpression in some way
-                    //           and stick it in _rTables[rTableRange]. Probably fake it by
-                    //           setting up a full OSQLParseTreeIterator on pQueryExpression
-                    //           and using its m_aSelectColumns
-                    //           This is necessary in stuff like "SELECT * FROM tbl1 INNER JOIN (SELECT foo, bar FROM tbl2) AS tbl3"
-                    //           so that setSelectColumnName() can expand the "*" correctly.
-                    //           See e.g. R_UserAndLastSubscription query of https://bugs.libreoffice.org/attachment.cgi?id=71871
+                    // TODO: now, we need to setup a OSQLTable from pQueryExpression in some way
+                    //       and stick it in _rTables[rTableRange]. Probably fake it by
+                    //       setting up a full OSQLParseTreeIterator on pQueryExpression
+                    //       and using its m_aSelectColumns
+                    //       This is necessary in stuff like "SELECT * FROM tbl1 INNER JOIN (SELECT foo, bar FROM tbl2) AS tbl3"
+                    //       so that setSelectColumnName() can expand the "*" correctly.
+                    //       See e.g. R_UserAndLastSubscription query of https://bugs.libreoffice.org/attachment.cgi?id=71871
                 }
                 else
                 {
@@ -989,9 +988,9 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
 
                     if ( pColumnRef->isRule() )
                     {
-                        // LEM FIXME: the if condition is not quite right
-                        //            many expressions are rules, e.g. "5+3"
-                        //            or even: "colName + 1"
+                        // FIXME: the if condition is not quite right
+                        //        many expressions are rules, e.g. "5+3"
+                        //        or even: "colName + 1"
                         bFkt = true;
                         nType = getFunctionReturnType(pColumnRef);
                     }
