@@ -427,7 +427,7 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
         const SwFormatAnchor& rAnchor = rObjFormat.GetAnchor();
         if ( ((rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
               (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)) &&
-             rObjFormat.GetSurround().GetSurround() != css::text::WrapTextMode_THROUGHT )
+             rObjFormat.GetSurround().GetSurround() != css::text::WrapTextMode_THROUGH )
         {
             // --> #i34520# - text also wraps around anchored
             // objects in the layer Hell - see the text formatting.

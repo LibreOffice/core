@@ -9758,7 +9758,7 @@ module com {
     };
     published enum WrapTextMode {
      NONE = 0,
-     THROUGHT = 1,
+     THROUGH = 1,
      PARALLEL = 2,
      DYNAMIC = 3,
      LEFT = 4,

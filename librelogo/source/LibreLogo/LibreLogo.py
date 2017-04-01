@@ -118,7 +118,7 @@ from com.sun.star.drawing import LineDash as __LineDash__
 from com.sun.star.drawing import Hatch as __Hatch__
 from com.sun.star.drawing import PolyPolygonBezierCoords as __Bezier__
 from com.sun.star.text.TextContentAnchorType import AT_PAGE as __AT_PAGE__
-from com.sun.star.text.WrapTextMode import THROUGHT as __THROUGHT__
+from com.sun.star.text.WrapTextMode import THROUGH as __THROUGH__
 from com.sun.star.drawing.LineCap import BUTT as __Cap_NONE__
 from com.sun.star.drawing.LineCap import ROUND as __Cap_ROUND__
 from com.sun.star.drawing.LineCap import SQUARE as __Cap_SQUARE__
@@ -488,7 +488,7 @@ def __initialize__():
     if not shape:
         shape = _.doc.createInstance( "com.sun.star.drawing.PolyPolygonShape" )
         shape.AnchorType = __AT_PAGE__
-        shape.TextWrap = __THROUGHT__
+        shape.TextWrap = __THROUGH__
         shape.Opaque = True
         _.drawpage.add(shape) 
         shape.PolyPolygon = __TURTLESHAPE__[0]
@@ -862,7 +862,7 @@ def __dots__(n, pos, dx, dy, r = -1, q = 0): # dots for dotted polyline or circl
 def __draw__(d, count = True):
     shape = _.doc.createInstance( "com.sun.star.drawing." + d)
     shape.AnchorType = __AT_PAGE__
-    shape.TextWrap = __THROUGHT__
+    shape.TextWrap = __THROUGH__
     __visible__(shape, False)
     while __zoom__(): # temporary fix program halt with continuous zoom
         while __zoom__():
@@ -1459,7 +1459,7 @@ def __groupend__(name = ""):
             g.setPosition(p)
         else:
             g = _.drawpage.group(__group__)
-        g.TextWrap = __THROUGHT__
+        g.TextWrap = __THROUGH__
     elif __group__.getCount() == 1:
         g = __group__.getByIndex(0)
     __grouplefthang__ = min(__groupstack__.pop(), __grouplefthang__)

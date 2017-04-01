@@ -1947,7 +1947,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
     sal_Int16 eHoriRel = text::RelOrientation::FRAME;
     sal_Int16 eVertRel = text::RelOrientation::FRAME;
     SwTwips nHoriPos = 0, nVertPos = 0;
-    css::text::WrapTextMode eSurround = css::text::WrapTextMode_THROUGHT;
+    css::text::WrapTextMode eSurround = css::text::WrapTextMode_THROUGH;
     if( SVX_CSS1_POS_ABSOLUTE == rPropInfo.m_ePosition )
     {
         if( SVX_CSS1_LTYPE_TWIP == rPropInfo.m_eLeftType &&

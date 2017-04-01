@@ -170,7 +170,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                     // Through shapes in the header or footer(that spill into the body) should be in the background.
                     // It is just assumed that all shapes will spill into the body.
                     if( m_rDomainMapper.IsInHeaderFooter() )
-                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(m_nWrapMode != text::WrapTextMode_THROUGHT));
+                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(m_nWrapMode != text::WrapTextMode_THROUGH));
                 }
                 catch( const uno::Exception& e )
                 {

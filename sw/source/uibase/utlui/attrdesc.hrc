@@ -37,7 +37,7 @@
 #define STR_HEADER                      (RC_ATTR_BEGIN + 13)
 #define STR_NO_HEADER                   (RC_ATTR_BEGIN + 14)
 #define STR_SURROUND_NONE               (RC_ATTR_BEGIN + 15)
-#define STR_SURROUND_THROUGHT           (RC_ATTR_BEGIN + 16)
+#define STR_SURROUND_THROUGH            (RC_ATTR_BEGIN + 16)
 #define STR_SURROUND_PARALLEL           (RC_ATTR_BEGIN + 17)
 #define STR_SURROUND_LEFT               (RC_ATTR_BEGIN + 19)
 #define STR_SURROUND_RIGHT              (RC_ATTR_BEGIN + 20)

@@ -1900,7 +1900,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                     if( aBound.IsOver( aRect ) )
                     {
                         const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-                        if( css::text::WrapTextMode_THROUGHT != rFormat.GetSurround().GetSurround() )
+                        if( css::text::WrapTextMode_THROUGH != rFormat.GetSurround().GetSurround() )
                         {
                             const SwFrame* pAnchor = pAnchoredObj->GetAnchorFrame();
                             if ( pAnchor && pAnchor->FindFooterOrHeader() == GetUpper() )
@@ -3087,7 +3087,7 @@ static void InvaPercentFlys( SwFrame *pFrame, SwTwips nDiff )
                     if( pFly->Frame().Height()*10 >
                         ( nDiff + pRel->Prt().Height() )*9 &&
                         pFly->GetFormat()->GetSurround().GetSurround() !=
-                        css::text::WrapTextMode_THROUGHT )
+                        css::text::WrapTextMode_THROUGH )
                        bNotify = false;
                 }
                 if( bNotify )

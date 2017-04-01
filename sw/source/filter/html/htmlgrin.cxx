@@ -279,7 +279,7 @@ void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
     // nach vorne verschoben werden.
     if( RES_DRAWFRMFMT != pFlyFormat->Which() &&
         (RndStdIds::FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()) &&
-        css::text::WrapTextMode_THROUGHT == pFlyFormat->GetSurround().GetSurround() )
+        css::text::WrapTextMode_THROUGH == pFlyFormat->GetSurround().GetSurround() )
     {
         m_aMoveFlyFrames.push_back( pFlyFormat );
         m_aMoveFlyCnts.push_back( m_pPam->GetPoint()->nContent.GetIndex() );

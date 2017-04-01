@@ -33,7 +33,7 @@ published enum WrapTextMode
 
     /** text flow ignores the object.
      */
-    THROUGHT,
+    THROUGH,
 
     /** text flows to the left and right of the object.
      */

@@ -1314,7 +1314,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                     const SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
                     const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround& rSurround = rFormat.GetSurround();
-                    if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGHT )
+                    if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
                     {
                         bObjInBackground = true;
                     }
@@ -1991,7 +1991,7 @@ bool SwFEShell::ImpEndCreate()
             aRelNullPt = rBound.TopLeft();
 
         aSet.Put( aAnch );
-        aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGHT ) );
+        aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ) );
         // OD 2004-03-30 #i26791# - set horizontal position
         SwFormatHoriOrient aHori( nXOffset, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
         aSet.Put( aHori );
@@ -2719,7 +2719,7 @@ void SwFEShell::CheckUnboundObjects()
                 aRelNullPt = rBound.TopLeft();
 
             aSet.Put( aAnch );
-            aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGHT ) );
+            aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ) );
             SwFrameFormat* pFormat = getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::DRAW_OBJECT, &aSet );
 
             SwDrawContact *pContact = new SwDrawContact(

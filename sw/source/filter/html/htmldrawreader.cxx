@@ -173,7 +173,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.m_nLeft + nLeftSpace,
                                            rCSS1PropInfo.m_nTop + nUpperSpace) );
-        aFrameSet.Put( SwFormatSurround(css::text::WrapTextMode_THROUGHT) );
+        aFrameSet.Put( SwFormatSurround(css::text::WrapTextMode_THROUGH) );
     }
     else if( SvxAdjust::Left == rCSS1PropInfo.m_eFloat ||
              text::HoriOrientation::LEFT == eHoriOri )

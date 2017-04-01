@@ -720,7 +720,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         case css::text::WrapTextMode_NONE:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapTopAndBottom, FSEND);
             break;
-        case css::text::WrapTextMode_THROUGHT:
+        case css::text::WrapTextMode_THROUGH:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapNone, FSEND);
             break;
         case css::text::WrapTextMode_PARALLEL:

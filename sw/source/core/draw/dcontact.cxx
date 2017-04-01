@@ -139,7 +139,7 @@ bool HasWrap( const SdrObject* pObj )
         const SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
         if ( pFormat )
         {
-            return css::text::WrapTextMode_THROUGHT != pFormat->GetSurround().GetSurround();
+            return css::text::WrapTextMode_THROUGH != pFormat->GetSurround().GetSurround();
         }
     }
 
@@ -1101,7 +1101,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
     // improvement: determine as-character anchored object flag only once.
     const bool bAnchoredAsChar = ObjAnchoredAsChar();
     const bool bNotify = !(GetFormat()->GetDoc()->IsInDtor()) &&
-                         ( css::text::WrapTextMode_THROUGHT != GetFormat()->GetSurround().GetSurround() ) &&
+                         ( css::text::WrapTextMode_THROUGH != GetFormat()->GetSurround().GetSurround() ) &&
                          !bAnchoredAsChar;
     switch( eType )
     {

@@ -3058,7 +3058,7 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
         case css::text::WrapTextMode_NONE:
             nWr = 1; // top and bottom
             break;
-        case css::text::WrapTextMode_THROUGHT:
+        case css::text::WrapTextMode_THROUGH:
             nWr = 3; // none
             break;
         case css::text::WrapTextMode_PARALLEL:
