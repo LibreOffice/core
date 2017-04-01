@@ -1216,7 +1216,7 @@ DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
     // Left margin was 0, instead of 114300 EMU's.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, "LeftMargin"));
     // Wrap type was PARALLEL.
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(xShape, "Surround"));
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(xShape, "Surround"));
 
     // This should be in front of text.
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xShape, "Opaque")));

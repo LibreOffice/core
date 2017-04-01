@@ -315,7 +315,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
                     xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, uno::makeAny(false));
                     xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::makeAny(nHeight));
                     xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::makeAny(nWidth));
-                    xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGHT));
+                    xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGH));
                     xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
                     xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(OUString("Liberation Sans")));
                     xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));

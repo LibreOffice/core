@@ -90,7 +90,7 @@ String STR_SURROUND_NONE
 {
     Text [ en-US ] = "No wrap" ;
 };
-String STR_SURROUND_THROUGHT
+String STR_SURROUND_THROUGH
 {
     Text [ en-US ] = "Through" ;
 };

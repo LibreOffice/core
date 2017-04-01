@@ -29,7 +29,7 @@ from com.sun.star.text.VertOrientation import NONE as NONEVERT
 from com.sun.star.text.RelOrientation import PAGE_FRAME
 from com.sun.star.text.TextContentAnchorType import AT_PAGE
 from com.sun.star.text.SizeType import FIX
-from com.sun.star.text.WrapTextMode import THROUGHT
+from com.sun.star.text.WrapTextMode import THROUGH
 from com.sun.star.awt.FontWeight import BOLD
 from com.sun.star.beans import UnknownPropertyException
 
@@ -184,7 +184,7 @@ class BusinessPaperObject(object):
             self.xFrame.AnchorType = AT_PAGE
             self.xFrame.SizeType = FIX
 
-            self.xFrame.TextWrap = THROUGHT
+            self.xFrame.TextWrap = THROUGH
             self.xFrame.Opaque = True
             self.xFrame.BackColor = 15790320
 

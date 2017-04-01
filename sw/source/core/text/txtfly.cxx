@@ -508,7 +508,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
                     // Only the ones who are opaque and more to the top
                     if( ! rFly.IsBackgroundTransparent() &&
-                        css::text::WrapTextMode_THROUGHT == rSur.GetSurround() &&
+                        css::text::WrapTextMode_THROUGH == rSur.GetSurround() &&
                         ( !rSur.IsAnchorOnly() ||
                           // #i68520#
                           GetMaster() == rFly.GetAnchorFrame() ||
@@ -599,7 +599,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
                 // #i47804# - consider transparent graphics
                 // and OLE objects.
                 bool bClipFlyArea =
-                        ( ( css::text::WrapTextMode_THROUGHT == rSur.GetSurround() )
+                        ( ( css::text::WrapTextMode_THROUGH == rSur.GetSurround() )
                           // #i68520#
                           ? (pAnchoredObjTmp->GetDrawObj()->GetLayer() != nHellId)
                           : !rSur.IsContour() ) &&
@@ -1026,7 +1026,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                     // formatting. In LineIter::DrawText() it is "just"
                     // necessary to cleverly set the ClippingRegions
                     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-                    if( ( css::text::WrapTextMode_THROUGHT == rSur.GetSurround() &&
+                    if( ( css::text::WrapTextMode_THROUGH == rSur.GetSurround() &&
                           ( !rSur.IsAnchorOnly() ||
                             // #i68520#
                             GetMaster() == pAnchoredObj->GetAnchorFrame() ||
@@ -1128,7 +1128,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
         if ( pNext == mpCurrAnchoredObj )
             continue;
         eSurroundForTextWrap = GetSurroundForTextWrap( pNext );
-        if( css::text::WrapTextMode_THROUGHT == eSurroundForTextWrap )
+        if( css::text::WrapTextMode_THROUGH == eSurroundForTextWrap )
             continue;
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
@@ -1220,7 +1220,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
         if( pNext == mpCurrAnchoredObj )
             continue;
         css::text::WrapTextMode eSurroundForTextWrap = GetSurroundForTextWrap( pNext );
-        if( css::text::WrapTextMode_THROUGHT == eSurroundForTextWrap )
+        if( css::text::WrapTextMode_THROUGH == eSurroundForTextWrap )
             continue;
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
@@ -1323,7 +1323,7 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
     }
 
     // in cause of run-through and nowrap ignore smartly
-    if( css::text::WrapTextMode_THROUGHT == eSurroundForTextWrap ||
+    if( css::text::WrapTextMode_THROUGH == eSurroundForTextWrap ||
         css::text::WrapTextMode_NONE == eSurroundForTextWrap )
         return eSurroundForTextWrap;
 

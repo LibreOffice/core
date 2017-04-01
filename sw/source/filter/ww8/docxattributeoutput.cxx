@@ -399,7 +399,7 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     case css::text::WrapTextMode_NONE:
         attrList->add( FSNS( XML_w, XML_wrap), "none");
         break;
-    case css::text::WrapTextMode_THROUGHT:
+    case css::text::WrapTextMode_THROUGH:
         attrList->add( FSNS( XML_w, XML_wrap), "through");
         break;
     case css::text::WrapTextMode_PARALLEL:
@@ -7519,8 +7519,8 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
                 sType = "square";
                 sSide = "right";
                 break;
-            case css::text::WrapTextMode_THROUGHT:
-                /* empty type and side means throught */
+            case css::text::WrapTextMode_THROUGH:
+                /* empty type and side means through */
             default:
                 break;
         }
@@ -7544,7 +7544,7 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
             case css::text::WrapTextMode_NONE:
                 sWrap = OString( "none" );
                 break;
-            case css::text::WrapTextMode_THROUGHT:
+            case css::text::WrapTextMode_THROUGH:
                 sWrap = OString( "through" );
                 break;
             case css::text::WrapTextMode_DYNAMIC:
