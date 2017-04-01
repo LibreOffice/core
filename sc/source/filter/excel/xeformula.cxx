@@ -59,7 +59,7 @@ struct XclExpScToken
 
     explicit     XclExpScToken() : mpScToken( nullptr ), mnSpaces( 0 ) {}
     bool         Is() const { return mpScToken != nullptr; }
-    StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svUnknown ); }
+    StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : svUnknown; }
     OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : ocNone; }
 };
 
