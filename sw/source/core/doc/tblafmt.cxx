@@ -25,6 +25,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svx/dialmgr.hxx>
@@ -1286,6 +1287,8 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
 
 bool SwTableAutoFormatTable::Load()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return false;
     bool bRet = false;
     OUString sNm(AUTOTABLE_FORMAT_NAME);
     SvtPathOptions aOpt;
@@ -1301,6 +1304,8 @@ bool SwTableAutoFormatTable::Load()
 
 bool SwTableAutoFormatTable::Save() const
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return false;
     SvtPathOptions aPathOpt;
     const OUString sNm( aPathOpt.GetUserConfigPath() + "/" AUTOTABLE_FORMAT_NAME );
     SfxMedium aStream(sNm, StreamMode::STD_WRITE );
