@@ -19,6 +19,7 @@
 
 #include <osl/module.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -40,11 +41,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )( OUString const &, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const & );
+typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )(SvStream&, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const &);
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" sal_uInt32 ImportCGM( OUString const &, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const & );
+extern "C" sal_uInt32 ImportCGM(SvStream&, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const &);
 
 #endif
 
@@ -82,7 +83,8 @@ bool SdCGMFilter::Import()
             mrDocument.CreateFirstPages();
 
         CreateStatusIndicator();
-        nRetValue = FncImportCGM( aFileURL, mxModel, CGM_IMPORT_CGM | CGM_BIG_ENDIAN | CGM_EXPORT_IMPRESS, mxStatusIndicator );
+        std::unique_ptr<SvStream> xIn(::utl::UcbStreamHelper::CreateStream(aFileURL, StreamMode::READ));
+        nRetValue = xIn ? FncImportCGM(*xIn, mxModel, CGM_IMPORT_CGM | CGM_BIG_ENDIAN | CGM_EXPORT_IMPRESS, mxStatusIndicator) : 0;
 
         if( nRetValue )
         {
