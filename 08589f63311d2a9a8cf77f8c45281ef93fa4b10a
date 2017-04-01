@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_86bf69cf",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2017-04-01T14:16:18Z",
+      "side": 1,
+      "message": "It seems natural to set eScanType to SbxDATE, but it does not work. I tried adjusting conditions in token.cxx without success. Any tips how to solve it or can it be left as double?",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 543,
+        "endChar": 50
+      },
+      "revId": "08589f63311d2a9a8cf77f8c45281ef93fa4b10a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
