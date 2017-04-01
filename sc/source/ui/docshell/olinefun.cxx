@@ -631,7 +631,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDoOutline( &rDocShell,
-                                    nStart, nEnd, nTab, pUndoDoc,       //! start und end berechnen
+                                    nStart, nEnd, nTab, pUndoDoc,       //! calc start and end
                                     bColumns, nLevel, nEntry, true ) );
     }
 

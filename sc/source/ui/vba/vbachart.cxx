@@ -295,7 +295,7 @@ try
             break;
 
         case xlPieOfPie:                            // not possible
-        case xlPieExploded: // SegmentOffset an ChartDataPointProperties ->am XDiagram abholen //wie macht Excel das?
+        case xlPieExploded: // SegmentOffset on ChartDataPointProperties -> get from XDiagram //How does Excel do this?
         case xl3DPieExploded:
         case xl3DPie:
         case xlPie:

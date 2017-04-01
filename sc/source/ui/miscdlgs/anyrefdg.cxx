@@ -925,7 +925,7 @@ bool ScRefHandler::IsTableLocked() const
 }
 
 //  RefInputStart/Done: Zoom-In (AutoHide) on single field
-//  (using button oder movement)
+//  (using button or movement)
 
 void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {

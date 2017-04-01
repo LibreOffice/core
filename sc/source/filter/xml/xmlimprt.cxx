@@ -2759,9 +2759,9 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const OUString& r
             }
             catch ( const util::MalformedNumberFormatException& rException )
             {
-                OUString sErrorMessage("Fehler im Formatstring ");
+                OUString sErrorMessage("Error in Formatstring ");
                 sErrorMessage += sFormatString;
-                sErrorMessage += " an Position ";
+                sErrorMessage += " at position ";
                 sErrorMessage += OUString::number(rException.CheckPos);
                 uno::Sequence<OUString> aSeq { sErrorMessage };
                 uno::Reference<xml::sax::XLocator> xLocator;

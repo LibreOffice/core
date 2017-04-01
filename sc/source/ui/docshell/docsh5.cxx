@@ -734,7 +734,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
     }
     else
     {
-        OSL_FAIL( "UseScenario auf Szenario-Blatt" );
+        OSL_FAIL( "UseScenario on Szenario-Sheet" );
     }
 }
 

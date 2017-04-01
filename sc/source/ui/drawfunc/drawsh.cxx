@@ -74,7 +74,7 @@ void ScDrawShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
 }
 
-// abschalten der nicht erwuenschten Acceleratoren:
+// disable the unwanted Accelerators
 
 void ScDrawShell::StateDisableItems( SfxItemSet &rSet )
 {
@@ -254,10 +254,10 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             if( pObj->GetObjIdentifier() == OBJ_CAPTION )
                             {
-                                // --------- Itemset fuer Caption --------
+                                // Caption Itemset
                                 SfxItemSet aNewAttr(pDoc->GetItemPool());
                                 pView->GetAttributes(aNewAttr);
-                                // --------- Itemset fuer Groesse und Position --------
+                                // Size and Position Itemset
                                 SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
 
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

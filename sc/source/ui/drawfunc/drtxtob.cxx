@@ -97,7 +97,7 @@ void ScDrawTextObjectBar::InitInterface_Impl()
 }
 
 
-// abschalten der nicht erwuenschten Acceleratoren:
+// diable not wanted accelerators
 
 void ScDrawTextObjectBar::StateDisableItems( SfxItemSet &rSet )
 {
@@ -118,7 +118,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
 {
     SetPool( pViewData->GetScDrawView()->GetDefaultAttr().GetPool() );
 
-    //  UndoManager wird beim Umschalten in den Edit-Modus umgesetzt...
+    //  At the switching-over the UndoManager is changed to edit mode
     ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
@@ -142,7 +142,7 @@ ScDrawTextObjectBar::~ScDrawTextObjectBar()
     }
 }
 
-//          Funktionen
+//          Functions
 
 void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 {
@@ -152,7 +152,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
     if (!pOutView || !pOutliner)
     {
-        ExecuteGlobal( rReq );              // auf ganze Objekte
+        ExecuteGlobal( rReq );              // on whole objects
         return;
     }
 
@@ -227,7 +227,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     if ( pFontItem )
                     {
                         OUString aFontName(pFontItem->GetValue());
-                        vcl::Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
+                        vcl::Font aFont(aFontName, Size(1,1)); // Size only because of CTOR
                         aNewItem = SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
                                     aFont.GetCharSet(), ATTR_FONT  );
@@ -242,7 +242,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 {
                     SfxItemSet aSet( pOutliner->GetEmptyItemSet() );
                     aSet.Put( aNewItem );
-                    //  SetAttribs an der View selektiert ein Wort, wenn nichts selektiert ist
+                    //  If nothing is selected, then SetAttribs of the View selects a word
                     pOutView->GetOutliner()->QuickSetAttribs( aSet, pOutView->GetSelection() );
                     pOutView->InsertText(aString);
                 }
@@ -272,7 +272,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                             const SvxFieldData* pField = pFieldItem->GetField();
                             if ( pField && dynamic_cast<const SvxURLField*>( pField) !=  nullptr )
                             {
-                                //  altes Feld selektieren
+                                //  select old field
 
                                 ESelection aSel = pOutView->GetSelection();
                                 aSel.Adjust();
@@ -282,7 +282,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                             }
                         }
 
-                        //  neues Feld einfuegen
+                        //  insert new field
 
                         SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
                         aURLField.SetTargetFrame( rTarget );
@@ -304,9 +304,9 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     }
 
                     if (!bDone)
-                        ExecuteGlobal( rReq );      // normal an der View
+                        ExecuteGlobal( rReq );      // normal at View
 
-                    //  InsertURL an der ViewShell schaltet bei "Text" die DrawShell ab !!!
+                    //  If "text" is received by InsertURL of ViewShell, the the DrawShell is turned off !!!
                 }
             }
             break;
@@ -836,7 +836,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
             case SID_CHAR_DLG_EFFECT:
             case SID_CHAR_DLG:                      // Dialog-Button
-            case SID_ATTR_CHAR_FONT:                // Controller nicht angezeigt
+            case SID_ATTR_CHAR_FONT:                // Controller not shown
             case SID_ATTR_CHAR_FONTHEIGHT:
                 bDone = ExecuteCharDlg( aEditAttr, aNewAttr , nSlot);
                 break;

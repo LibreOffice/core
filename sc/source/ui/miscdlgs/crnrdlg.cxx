@@ -503,7 +503,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl, Button*, void)
 {
     AddBtnHdl( nullptr );
 
-    // assign RangeLists to the den references in the document
+    // assign RangeLists to the references in the document
     pDoc->GetColNameRangesRef() = xColNameRanges;
     pDoc->GetRowNameRangesRef() = xRowNameRanges;
     // changed ranges need to take effect

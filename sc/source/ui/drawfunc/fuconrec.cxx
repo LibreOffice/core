@@ -124,7 +124,7 @@ bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
             bReturn = pView->BegCreateCaptionObj( aPos, aCaptionSize );
 
-            // wie stellt man den Font ein, mit dem geschrieben wird
+            // How do you set the font for writing
         }
         else
             bReturn = pView->BegCreateObj(aPos);

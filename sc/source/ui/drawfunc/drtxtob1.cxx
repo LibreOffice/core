@@ -81,8 +81,8 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
                             0 );
     aNewAttr.Put( rArgs );
 
-    // Die Werte sind erst einmal uebernommen worden, um den Dialog anzuzeigen.
-    // Muss natuerlich noch geaendert werden
+    // Values have been taken over once to show the dialog.
+    // Has to be changed
     // aNewAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
 
     aNewAttr.Put( SvxHyphenZoneItem( false, SID_ATTR_PARA_HYPHENZONE ) );

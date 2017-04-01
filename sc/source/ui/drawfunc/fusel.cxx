@@ -489,8 +489,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 pObj = pMark->GetMarkedSdrObj();
 
-                //  aktivieren nur, wenn die Maus auch (noch) ueber dem
-                //  selektierten Objekt steht
+                //  only activate, when the mouse also is over the selected object
 
                 SdrViewEvent aVEvt;
                 SdrHitKind eHit = pView->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
@@ -498,7 +497,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
-                    //  OLE: aktivieren
+                    //  OLE: activate
 
                     if (nSdrObjKind == OBJ_OLE2)
                     {
@@ -524,9 +523,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         pViewShell->GetViewData().GetDispatcher().
                             Execute(nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
-                        // jetzt den erzeugten FuText holen und in den EditModus setzen
+                        // Get the created FuText now and change into EditModus
                         FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
-                        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
+                        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // has no RTTI
                         {
                             FuText* pText = static_cast<FuText*>(pPoor);
                             Point aMousePixel = rMEvt.GetPosPixel();
