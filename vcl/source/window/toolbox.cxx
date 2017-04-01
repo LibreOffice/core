@@ -4822,8 +4822,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             //  leave toolbox and move focus to document
             if( mnHighItemId )
             {
-                ImplToolItem *pItem = ImplGetItem( mnHighItemId );
-                if( !pItem->mbEnabled )
+                ImplToolItem *pItem = ImplGetItem(mnHighItemId);
+                if (!pItem || !pItem->mbEnabled)
                 {
                     bGrabFocusToDocument = true;
                 }
@@ -5208,7 +5208,7 @@ void ToolBox::ImplShowFocus()
     if( mnHighItemId && HasFocus() )
     {
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-        if( pItem->mpWindow && !pItem->mpWindow->IsDisposed() )
+        if (pItem && pItem->mpWindow && !pItem->mpWindow->IsDisposed())
         {
             vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow.get() : pItem->mpWindow.get();
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = true;
