@@ -100,6 +100,7 @@ private:
     // #i29550#
     VclPtr<CheckBox>           m_pMergeAdjacentBordersCB;
     VclPtr<CheckBox>           m_pRemoveAdjcentCellBordersCB;
+    VclPtr<FixedText>          m_pRemoveAdjcentCellBordersFT;
 
     std::vector<BitmapEx>      m_aShadowImgVec;
     std::vector<BitmapEx>      m_aBorderImgVec;
