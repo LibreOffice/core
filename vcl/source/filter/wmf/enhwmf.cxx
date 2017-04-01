@@ -411,6 +411,7 @@ EnhWMFReader::EnhWMFReader(SvStream& rStream,GDIMetaFile& rGDIMetaFile,FilterCon
     , bRecordPath(false)
     , nRecordCount(0)
     , bEMFPlus(false)
+    , bEMFPlusDualMode(false)
 {}
 
 EnhWMFReader::~EnhWMFReader()
@@ -418,23 +419,6 @@ EnhWMFReader::~EnhWMFReader()
 
 void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 {
-    if (!bEMFPlus) {
-        pOut->PassEMFPlusHeaderInfo();
-
-#if OSL_DEBUG_LEVEL > 1
-        // debug code - write the stream to debug file /tmp/emf-stream.emf
-        sal_uInt64 const pos = pWMF->Tell();
-        pWMF->Seek(0);
-        SvFileStream file( OUString( "/tmp/emf-stream.emf" ), StreamMode::WRITE | StreamMode::TRUNC );
-
-        pWMF->WriteStream(file);
-        file.Flush();
-        file.Close();
-
-        pWMF->Seek( pos );
-#endif
-
-    }
     bEMFPlus = true;
 
     sal_uInt64 const pos = pWMF->Tell();
@@ -459,6 +443,13 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 
         SAL_INFO ("vcl.emf", "\t\tEMF+ record type: " << std::hex << type << std::dec);
 
+        // EmfPlusHeader
+        if( type == 0x4001 )
+        {
+            if( flags & 0x0001 )
+                bEMFPlusDualMode = true;
+        }
+
         // Get Device Context
         // TODO We should use  EmfPlusRecordType::GetDC instead
         if( type == 0x4004 )
@@ -467,14 +458,8 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
             SAL_INFO ("vcl.emf", "\t\tEMF+ lock DC (device context)");
         }
 
-        // Get the length of the remaining data of this record based
-        // on the alleged size
-        sal_uInt32 nRemainingRecordData = size >= nRequiredHeaderSize ?
-            size-nRequiredHeaderSize : 0;
-        // clip to available size
-        nRemainingRecordData = std::min(nRemainingRecordData, nRemainder);
-        pWMF->SeekRel(nRemainingRecordData);
-        nRemainder -= nRemainingRecordData;
+        pWMF->SeekRel(dataSize);
+        nRemainder -= dataSize;
     }
     pWMF->SeekRel(nRemainder);
 }
@@ -717,7 +702,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 }
             }
         }
-        else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )
+        else if( !bEMFPlus || bHaveDC || bEMFPlusDualMode || nRecType == EMR_EOF )
         {
             switch( nRecType )
             {
