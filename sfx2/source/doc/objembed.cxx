@@ -252,7 +252,7 @@ comphelper::EmbeddedObjectContainer& SfxObjectShell::GetEmbeddedObjectContainer(
 
 void SfxObjectShell::ClearEmbeddedObjects()
 {
-    // frees alle space taken by embedded objects
+    // frees all space taken by embedded objects
     DELETEZ( pImpl->mpObjectContainer );
 }
 

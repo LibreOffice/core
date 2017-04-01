@@ -610,7 +610,7 @@ void SfxItemSet::PutExtended
             {
                 if ( IsInvalidItem( *ppFnd ) )
                 {
-                    // Item ist DontCare:
+                    // Item is DontCare:
                     switch ( eDontCareAs )
                     {
                         case SfxItemState::SET:

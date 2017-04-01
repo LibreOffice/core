@@ -184,10 +184,10 @@ tools::Rectangle LayoutPanels (
 
     // We are now in one of three modes.
     // - The preferred height fits into the available size:
-    //   Use the preferred size, distribute the remaining height bei
+    //   Use the preferred size, distribute the remaining height by
     //   enlarging panels.
     // - The total minimum height fits into the available size:
-    //   Use the minimum size, distribute the remaining height bei
+    //   Use the minimum size, distribute the remaining height by
     //   enlarging panels.
     // - The total minimum height does not fit into the available
     //   size:

@@ -1348,7 +1348,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         SfxShell *pShell = GetShell( nShell-1 );
         SfxInterface *pIFace = pShell->GetInterface();
 
-        // don't consider shells if "Hidden" oder "Quiet"
+        // don't consider shells if "Hidden" or "Quiet"
         bool bReadOnlyShell = IsReadOnlyShell_Impl( nShell-1 );
         sal_uInt16 nNo;
         for ( nNo = 0; pIFace && nNo<pIFace->GetObjectBarCount(); ++nNo )
@@ -1622,7 +1622,7 @@ void SfxDispatcher::FlushImpl()
     overturned by the use of 'bEnable == 2', so this will be displayed again.
     On the other slots it has no effect.
 
-    // HACK(hier muss mal ein enum rein) ???
+    // HACK(here should be used an enum) ???
     @param nEnable  1==true: only enable specified slots, disable all other
                     0==false: disable specified slots, first enable all other
     @param nCount Number of SIDs in the following Array

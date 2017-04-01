@@ -775,7 +775,7 @@ SvTreeListEntry* SvImpLBox::GetClickedEntry( const Point& rPoint ) const
 
 
 //  checks if the entry was hit "the right way"
-//  (Focusrect+ ContextBitmap bei TreeListBox)
+//  (Focusrect+ ContextBitmap at TreeListBox)
 
 bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPosPixel, long nLine)
 {

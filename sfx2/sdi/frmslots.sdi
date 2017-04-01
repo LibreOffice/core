@@ -180,7 +180,7 @@ interface Window
     [
         StateMethod = MiscState_Impl ;
     ]
-    // Stringlist mit den Verben( SFX only )
+    // Stringlist with the verbs ( SFX only )
     SID_OBJECT // ole(no) api(no)
     [
         StateMethod = GetState_Impl ;

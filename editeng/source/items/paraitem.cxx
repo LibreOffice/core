@@ -109,8 +109,8 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
 
 /* Who does still know why the LineSpacingItem is so complicated?
    We can not use it for UNO since there are only two values:
-      - ein sal_uInt16 for the mode
-      - ein sal_uInt32 for all values (distance, height, rel. detail)
+      - a sal_uInt16 for the mode
+      - a sal_uInt32 for all values (distance, height, rel. detail)
 */
 bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {

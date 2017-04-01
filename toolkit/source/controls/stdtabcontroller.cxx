@@ -143,7 +143,7 @@ void StdTabController::ImplActivateControl( bool bFirst ) const
     for ( sal_uInt32 n = bFirst ? 0 : nCount; bFirst ? n < nCount : n != 0; )
     {
         sal_uInt32 nCtrl = bFirst ? n++ : --n;
-        DBG_ASSERT( pControls[nCtrl].is(), "Control nicht im Container!" );
+        DBG_ASSERT( pControls[nCtrl].is(), "Control not in Container!" );
         if ( pControls[nCtrl].is() )
         {
             Reference< XWindowPeer >  xCP = pControls[nCtrl]->getPeer();

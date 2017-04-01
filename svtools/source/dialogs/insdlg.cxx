@@ -164,7 +164,7 @@ void SvObjectServerList::FillInsertObjects()
                     if( aClassName.MakeId( aClassID) )
                     {
                         if( !Get( aClassName ) )
-                            // noch nicht eingetragen
+                            // not entered yet
                             aObjectServerList.push_back( SvObjectServer( aClassName, aUIName ) );
                     }
                 }

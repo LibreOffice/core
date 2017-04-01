@@ -1188,7 +1188,7 @@ void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
         break;
         default:
             pField->EnableEmptyField(true);
-                // nur noch void erlaubt
+                // only void accecpted
             break;
     }
 }

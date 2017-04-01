@@ -215,7 +215,7 @@ protected:
     SelectionEngine         aSelEng;
     sal_uLong               nVisibleCount;  // Number of lines in control
     bool                    bInVScrollHdl : 1;
-    bool                    bSimpleTravel : 1; // ist true bei SelectionMode::Single
+    bool                    bSimpleTravel : 1; // is true if SelectionMode::Single
     long                    nNextVerVisSize;
     long                    nNodeBmpTabDistance; // typical smaller than 0
 
@@ -224,7 +224,7 @@ protected:
     virtual void        CursorUp();
     virtual void        PageDown( sal_uInt16 nDelta );
     virtual void        PageUp( sal_uInt16 nDelta );
-    // setzt Thumb auf FirstEntryToDraw
+    // set Thumb to FirstEntryToDraw
     virtual void        SyncVerThumb();
     virtual void        AdjustScrollBars( Size& rSize );
     virtual void        InvalidateEntry( long nY ) const;

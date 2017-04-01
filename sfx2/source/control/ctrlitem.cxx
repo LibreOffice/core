@@ -223,9 +223,6 @@ void SfxControllerItem::StateChanged
     switched or when the slot was invalidated explicitly with
     <SfxBindings::Invalidate()>.
 
-    Achtung! Die Methode wird nicht gerufen, wenn der Slot ung"ultig wurde,
-    danach jedoch wieder denselben Wert angenommen hat.
-
     Beware! The method is not called when the slot is invalid, however
     has again assumed the same value.
 

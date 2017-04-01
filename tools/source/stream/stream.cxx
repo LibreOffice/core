@@ -1656,7 +1656,7 @@ sal_uInt64 SvMemoryStream::GetSize()
 void SvMemoryStream::SetBuffer( void* pNewBuf, std::size_t nCount,
                                  std::size_t nEOF )
 {
-    SetBufferSize( 0 ); // Buffering in der Basisklasse initialisieren
+    SetBufferSize( 0 ); // Init buffering in the base class
     Seek( 0 );
     if( bOwnsData )
     {

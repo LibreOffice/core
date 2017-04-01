@@ -392,7 +392,7 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Ref
 
 void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
-    // This paint method ist not buffered !!
+    // This paint method is not buffered !!
     // Every request paint the completely control. ( but only, if peer exist )
      if ( rGraphics.is () )
     {

@@ -150,7 +150,7 @@ SvtMatchContext_Impl::~SvtMatchContext_Impl()
 
 void SvtMatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
 {
-    // Einlesung der Historypickliste
+    // Read the history of picks
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
     sal_uInt32 nCount = seqPicklist.getLength();
 

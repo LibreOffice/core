@@ -1583,7 +1583,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     return true;
 }
 
-// Handler der Listbox der Filter
+// Handler Listbox of Filter
 void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
 {
     if (bEnable)

@@ -34,11 +34,10 @@
 #define MYLISTENER_SERVICENAME         "vnd.My.NewDocListener"
 
 /**
- * Registriert sich in der Office Konfiguration als Job.
- * Dieser wird dann für alle neu geöffneten Dokumente automatisch
- * gerufen. Man bekommt eine Reference auf das geöffnete Dokument
- * überreicht und kann dann prüfen, ob es ein unterstütztes Format
- * hat. (Wir interessieren uns ja schließlich nur für Writer/Calc Dokumente.)
+ * Register in the Office configuration as job.
+ * This is called automatically for all new opened documents. You receive
+ * a reference of the opened document and then you can check if it's a
+ * supported format. (We are only interested in Writer/Calc documents.)
  *
  * @see CalcListener
  * @see WriterListener

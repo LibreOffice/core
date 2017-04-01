@@ -2745,15 +2745,15 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
         nPos = nOldLen;
 
     sal_uInt16 n;
-    // Items vor der Einfuege-Position
+    // Items before the Paste-Position
     for ( n = 0; n < nPos; n++ )
         pNewData[n] = pOldData[n];
 
-    // Neue Items
+    // New Items
     for ( n = 0; n < nNewItems; n++ )
         pNewData[nPos+n] = aItems.getConstArray()[n];
 
-    // Rest der alten Items
+    // Rest of old Items
     for ( n = nPos; n < nOldLen; n++ )
         pNewData[nNewItems+n] = pOldData[n];
 
@@ -2778,11 +2778,11 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
         OUString* pOldData = aSeq.getArray();
 
         sal_uInt16 n;
-        // Items vor der Entfern-Position
+        // Items before the Remove-Position
         for ( n = 0; n < nPos; n++ )
             pNewData[n] = pOldData[n];
 
-        // Rest der Items
+        // Rest of Items
         for ( n = nPos; n < (nOldLen-nCount); n++ )
             pNewData[n] = pOldData[n+nCount];
 

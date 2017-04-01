@@ -326,7 +326,7 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
     // save impossible cases
     DBG_ASSERT ( rGraphics.is(), "ProgressBar::paint()\nCalled with invalid Reference< XGraphics > ." );
 
-    // This paint method ist not buffered !!
+    // This paint method is not buffered !!
     // Every request paint the completely control. ( but only, if peer exist )
      if ( rGraphics.is () )
     {
