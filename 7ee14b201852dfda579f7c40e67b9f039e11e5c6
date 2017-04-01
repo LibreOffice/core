@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_a6e70de3",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-04-01T18:54:16Z",
+      "side": 1,
+      "message": "would be better to change these to svByte, since that\u0027s what the 0 value represents",
+      "revId": "7ee14b201852dfda579f7c40e67b9f039e11e5c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
