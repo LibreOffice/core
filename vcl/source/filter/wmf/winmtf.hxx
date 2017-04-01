@@ -656,9 +656,10 @@ class EnhWMFReader : public WinMtf
     bool        bRecordPath;
     sal_Int32   nRecordCount;
     bool        bEMFPlus;
+    bool        bEMFPlusDualMode;
 
     bool        ReadHeader();
-                    // reads and converts the rectangle
+    // reads and converts the rectangle
     static tools::Rectangle ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
 
 public:
