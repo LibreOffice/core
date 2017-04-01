@@ -51,7 +51,6 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const OUString& rBaseURL, SvKeyVa
     nInCell(0),
     nDefListLevel(0)
 {
-    DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW == GetSrcEncoding( ), "EditHTMLParser::EditHTMLParser: Where does the encoding come from?" );
     DBG_ASSERT( !IsSwitchToUCS2(), "EditHTMLParser::::EditHTMLParser: Switch to UCS2?" );
 
     // Although the real default encoding is ISO8859-1, we use MS-1252
