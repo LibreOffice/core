@@ -1068,11 +1068,11 @@ void Test::testFormulaCompilerJumpReordering()
         TokenCheck aCheckRPN[] =
         {
             { ocPush,  svSingleRef },
-            { ocIf,    static_cast<formula::StackVar>(0) },
+            { ocIf,    svUnknown   }, // type is context dependent, don't test it
             { ocPush,  svDouble    },
-            { ocSep,   static_cast<formula::StackVar>(0) },
+            { ocSep,   svSep       },
             { ocPush,  svString    },
-            { ocClose, static_cast<formula::StackVar>(0) },
+            { ocClose, svSep       },
         };
 
         sal_uInt16 nLen = pCode->GetCodeLen();
@@ -1083,7 +1083,7 @@ void Test::testFormulaCompilerJumpReordering()
         {
             const FormulaToken* p = ppTokens[i];
             CPPUNIT_ASSERT_EQUAL(aCheckRPN[i].meOp, p->GetOpCode());
-            if (aCheckRPN[i].meOp == ocPush)
+            if (aCheckRPN[i].meOp != ocIf )
                 CPPUNIT_ASSERT_EQUAL(static_cast<int>(aCheckRPN[i].meType), static_cast<int>(p->GetType()));
         }
 
@@ -1099,7 +1099,7 @@ void Test::testFormulaCompilerJumpReordering()
             { ocPush,  svSingleRef },
             { ocPush,  svDouble    },
             { ocPush,  svString    },
-            { ocIf,    static_cast<formula::StackVar>(0) },
+            { ocIf,    svUnknown   }, // type is context dependent, don't test it
         };
 
         nLen = pCode->GetCodeLen();
