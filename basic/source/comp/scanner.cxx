@@ -21,6 +21,9 @@
 #include "scanner.hxx"
 #include "sbintern.hxx"
 
+#include <i18nlangtag/lang.h>
+#include <comphelper/processfactory.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 
 SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
@@ -245,13 +248,22 @@ bool SbiScanner::NextSym()
 
     if(nCol < aLine.getLength() && aLine[nCol] == '#')
     {
-        ++pLine;
-        ++nCol;
-        //ignore compiler directives (# is first non-space character)
-        if( nOldCol2 == 0 )
-            bCompilerDirective = true;
-        else
-            bHash = true;
+        const sal_Unicode* pLineTemp = pLine;
+        do
+        {
+            pLineTemp++;
+        } while (*pLineTemp && !BasicCharClass::isWhitespace(*pLineTemp) && *pLineTemp != '#');
+        // leave it if it is a date literal - it will be handled later
+        if (*pLineTemp != '#')
+        {
+            ++pLine;
+            ++nCol;
+            //ignore compiler directives (# is first non-space character)
+            if (nOldCol2 == 0)
+                bCompilerDirective = true;
+            else
+                bHash = true;
+        }
     }
 
     // copy character if symbol
@@ -521,7 +533,7 @@ bool SbiScanner::NextSym()
                     }
                     aSym = aSymBuf.makeStringAndClear();
                     if( cSep != ']' )
-                        eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
+                        eScanType = SbxSTRING;
                     break;
                 }
             }
@@ -530,6 +542,45 @@ bool SbiScanner::NextSym()
                 aError = OUString(cSep);
                 GenError( ERRCODE_BASIC_EXPECTED );
             }
+        }
+    }
+
+    // Date:
+    else if( *pLine == '#' )
+    {
+        sal_Int32 n = nCol + 1;
+        do
+        {
+            pLine++;
+            nCol++;
+        }
+        while( *pLine && ( *pLine != '#' ) );
+        if( *pLine == '#' )
+        {
+            pLine++; nCol++;
+            aSym = aLine.copy( n, nCol - n - 1 );
+
+            // parse date literal
+            SvNumberFormatter aFormatter(comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US);
+            sal_uInt32 nIndex = 0;
+            bool bSuccess = aFormatter.IsNumberFormat(aSym, nIndex, nVal);
+            if( bSuccess )
+            {
+                short nType_ = aFormatter.GetType(nIndex);
+                if( !(nType_ & css::util::NumberFormat::DATE) )
+                    bSuccess = false;
+            }
+
+            if (!bSuccess)
+                GenError( ERRCODE_BASIC_CONVERSION );
+
+            bNumber = true;
+            eScanType = SbxDOUBLE;
+        }
+        else
+        {
+            aError = OUString('#');
+            GenError( ERRCODE_BASIC_EXPECTED );
         }
     }
     // invalid characters:
