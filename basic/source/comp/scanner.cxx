@@ -21,6 +21,9 @@
 #include "scanner.hxx"
 #include "sbintern.hxx"
 
+#include <i18nlangtag/lang.h>
+#include <comphelper/processfactory.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 
 SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
@@ -245,13 +248,22 @@ bool SbiScanner::NextSym()
 
     if(nCol < aLine.getLength() && aLine[nCol] == '#')
     {
-        ++pLine;
-        ++nCol;
-        //ignore compiler directives (# is first non-space character)
-        if( nOldCol2 == 0 )
-            bCompilerDirective = true;
-        else
-            bHash = true;
+        const sal_Unicode* pLineTemp = pLine;
+        do
+        {
+            pLineTemp++;
+        } while (*pLineTemp && !BasicCharClass::isWhitespace(*pLineTemp) && *pLineTemp != '#');
+        // leave it if it's date literal - it will be handled later
+        if (*pLineTemp != '#')
+        {
+            ++pLine;
+            ++nCol;
+            //ignore compiler directives (# is first non-space character)
+            if (nOldCol2 == 0)
+                bCompilerDirective = true;
+            else
+                bHash = true;
+        }
     }
 
     // copy character if symbol
@@ -483,8 +495,8 @@ bool SbiScanner::NextSym()
             GenError( ERRCODE_BASIC_MATH_OVERFLOW );
     }
 
-    // Strings:
-    else if( *pLine == '"' || *pLine == '[' )
+    // Strings or date:
+    else if( *pLine == '"' || *pLine == '[' || *pLine == '#')
     {
         sal_Unicode cSep = *pLine;
         if( cSep == '[' )
@@ -521,7 +533,28 @@ bool SbiScanner::NextSym()
                     }
                     aSym = aSymBuf.makeStringAndClear();
                     if( cSep != ']' )
-                        eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
+                    {
+                        eScanType = SbxSTRING;
+                        if( cSep == '#' )
+                        {
+                            // parse date literal
+                            std::unique_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter(comphelper::getProcessComponentContext(), LANGUAGE_NONE));
+                            sal_uInt32 nIndex = 0;
+                            bool bSuccess = pFormatter->IsNumberFormat(aSym, nIndex, nVal);
+                            if( bSuccess )
+                            {
+                                short nType_ = pFormatter->GetType(nIndex);
+                                if( !(nType_ & (css::util::NumberFormat::DATE | css::util::NumberFormat::DEFINED)) )
+                                    bSuccess = false;
+                            }
+
+                            if( !bSuccess )
+                                GenError( ERRCODE_BASIC_CONVERSION );
+
+                            bNumber = true;
+                            eScanType = SbxDOUBLE;
+                        }
+                    }
                     break;
                 }
             }
