@@ -265,9 +265,8 @@ namespace dbtools
             if ( pMasterFields->isEmpty() || pDetailFields->isEmpty() )
                 continue;
 
-            // if not even the master part of the relationship exists in the parent , the
-            // link is invalid as a whole
-            // #i63674# / 2006-03-28 / frank.schoenheit@sun.com
+            // if not even the master part of the relationship exists in the parent, the
+            // link is invalid as a whole #i63674#
             if ( !_rxParentColumns->hasByName( *pMasterFields ) )
             {
                 bNeedExchangeLinks = true;

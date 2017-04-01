@@ -524,8 +524,7 @@ namespace comphelper
         // (Note that this probably would belong into the base class. However, this would mean we would need
         // to check all existent usages of the base class, where MAYBEDEFAULT is *not* set, but
         // a default is nonetheless supplied/used. This is hard to accomplish reliably, in the
-        // current phase.
-        // #i78593# / 2007-07-07 / frank.schoenheit@sun.com
+        // current phase. #i78593#
 
         ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
         sal_Int16 nAttributes(0);

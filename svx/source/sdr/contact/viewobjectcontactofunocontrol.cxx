@@ -93,12 +93,6 @@ repaint error in form wizard in bugdoc database
 http://www.openoffice.org/issues/show_bug.cgi?id=72694
 form control artifacts when scrolling a text fast
 
-
-issues in the old (Sun-internal) bug tracking system:
-
-#110592#
-form controls being in redlining or in hidden section are visible in alive-mode
-
 */
 
 
@@ -221,8 +215,7 @@ namespace sdr { namespace contact {
     {
         // no check whether we're valid, this is the responsibility of the caller
 
-        // don't call setPosSize when pos/size did not change
-        // #i104181# / 2009-08-18 / frank.schoenheit@sun.com
+        // don't call setPosSize when pos/size did not change #i104181#
         ::tools::Rectangle aCurrentRect( getPosSize() );
         if ( aCurrentRect != _rPosSize )
         {
@@ -497,7 +490,7 @@ namespace sdr { namespace contact {
         public ViewObjectContactOfUnoControl_Impl_Base
     {
     private:
-        // fdo#41935 note that access to members is protected with SolarMutex;
+        // tdf#41935 note that access to members is protected with SolarMutex;
         // the class previously had its own mutex but that is prone to deadlock
 
         /// the instance whose IMPL we are
@@ -1010,8 +1003,7 @@ namespace sdr { namespace contact {
             // which it is not really prepared for.
 
             // /me thinks that re-entrance should be caught on a higher level, i.e. the Drawing Layer should not allow
-            // reentrant paint requests. For the moment, until /me can discuss this with AW, catch it here.
-            // 2009-08-27 / #i104544# frank.schoenheit@sun.com
+            // reentrant paint requests. For the moment, until /me can discuss this with AW, catch it here. #i104544#
             return false;
         }
 
@@ -1028,8 +1020,7 @@ namespace sdr { namespace contact {
             // - we don't belong to a page view, and are simply painted onto different devices
             // The first sounds strange (doesn't it?), the second means we could perhaps
             // optimize this in the future - there is no need to re-create the control every time,
-            // is it?
-            // #i74523# / 2007-02-15 / frank.schoenheit@sun.com
+            // is it? #i74523#
             if ( m_xContainer.is() )
                 impl_switchContainerListening_nothrow( false );
             impl_switchControlListening_nothrow( false );
@@ -1305,8 +1296,7 @@ namespace sdr { namespace contact {
             // some code below - in particular our disposal - might trigger actions which require the
             // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
-            // is the real bug. Toolkit really is infested with solar mutex usage ... :(
-            // #i82169# / 2007-11-14 / frank.schoenheit@sun.com
+            // is the real bug. Toolkit really is infested with solar mutex usage ... :( #i82169#
 
         if ( !m_aControl.is() )
             return;
@@ -1406,8 +1396,7 @@ namespace sdr { namespace contact {
             // some code below - in particular our disposal - might trigger actions which require the
             // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
-            // is the real bug. Toolkit really is infested with solar mutex usage ... :(
-            // #i82169# / 2007-11-14 / frank.schoenheit@sun.com
+            // is the real bug. Toolkit really is infested with solar mutex usage ... :( #i82169#
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementRemoved: where did this come from?" );
 
         if ( m_aControl == Event.Element )
@@ -1680,8 +1669,7 @@ namespace sdr { namespace contact {
             // remove this when #i115754# is fixed
             return drawinglayer::primitive2d::Primitive2DContainer();
 
-        // ignore existing controls which are in alive mode and manually switched to "invisible"
-        // #102090# / 2009-06-05 / frank.schoenheit@sun.com
+        // ignore existing controls which are in alive mode and manually switched to "invisible" #i102090#
         const ControlHolder& rControl( m_pImpl->getExistentControl() );
         if ( rControl.is() && !rControl.isDesignMode() && !rControl.isVisible() )
             return drawinglayer::primitive2d::Primitive2DContainer();

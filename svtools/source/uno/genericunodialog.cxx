@@ -104,7 +104,7 @@ sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName
 
 void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
-    // TODO : need some handling if we're currently executing ...
+    // TODO: need some handling if we're currently executing ...
 
     OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
 
@@ -185,8 +185,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     if ( !m_bTitleAmbiguous )
         pDialog->SetText( sTitle );
 
-    // be notified when the dialog is killed by somebody else
-    // #i65958# / 2006-07-07 / frank.schoenheit@sun.com
+    // be notified when the dialog is killed by somebody else #i65958#
     pDialog->AddEventListener( LINK( this, OGenericUnoDialog, OnDialogDying ) );
 
     m_pDialog = pDialog;
