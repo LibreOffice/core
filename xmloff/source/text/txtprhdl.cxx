@@ -424,7 +424,7 @@ bool XMLParagraphOnlyPropHdl_Impl::exportXML(
 SvXMLEnumMapEntry<WrapTextMode> const pXML_Wrap_Enum[] =
 {
     { XML_NONE,         WrapTextMode_NONE },
-    { XML_RUN_THROUGH,  WrapTextMode_THROUGHT },
+    { XML_RUN_THROUGH,  WrapTextMode_THROUGH },
     { XML_PARALLEL,     WrapTextMode_PARALLEL },
     { XML_DYNAMIC,      WrapTextMode_DYNAMIC },
     { XML_LEFT,         WrapTextMode_LEFT },

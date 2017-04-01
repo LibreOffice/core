@@ -214,7 +214,7 @@ text::WrapTextMode WrapHandler::getWrapMode( )
 {
     // The wrap values do not map directly to our wrap mode,
     // e.g. none in .docx actually means through in LO.
-    text::WrapTextMode nMode = text::WrapTextMode_THROUGHT;
+    text::WrapTextMode nMode = text::WrapTextMode_THROUGH;
 
     switch ( m_nType )
     {
@@ -241,7 +241,7 @@ text::WrapTextMode WrapHandler::getWrapMode( )
             break;
         case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapType_none:
         default:
-            nMode = text::WrapTextMode_THROUGHT;
+            nMode = text::WrapTextMode_THROUGH;
     }
 
     return nMode;

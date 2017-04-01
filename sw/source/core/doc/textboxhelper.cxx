@@ -229,7 +229,7 @@ void SwTextBoxHelper::getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& r
 {
     SwFrameFormat* pShape = SwTextBoxHelper::getOtherTextBoxFormat(pTextBox, RES_FLYFRMFMT);
     if (pShape)
-        rWrapThrough = pShape->GetSurround().GetSurround() == css::text::WrapTextMode_THROUGHT;
+        rWrapThrough = pShape->GetSurround().GetSurround() == css::text::WrapTextMode_THROUGH;
 }
 
 SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType)
@@ -467,7 +467,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     uno::Reference<beans::XPropertySet> const xPropertySet(
                         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat),
                         uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGHT));
+                    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGH));
                     return;
                 }
                 break;

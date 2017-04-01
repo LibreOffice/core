@@ -988,7 +988,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             if( pWrapParagraphOnlyState )
                 pWrapParagraphOnlyState->mnIndex = -1;
             SAL_FALLTHROUGH;
-        case WrapTextMode_THROUGHT:
+        case WrapTextMode_THROUGH:
             // wrap through: disable only contour
             if( pWrapContourState )
                 pWrapContourState->mnIndex = -1;

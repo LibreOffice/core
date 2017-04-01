@@ -2311,7 +2311,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
     const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet.Get(RES_SURROUND));
     m_pExampleWN->SetWrap( rSurround.GetSurround() );
 
-    if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGHT )
+    if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
     {
         const SvxOpaqueItem& rOpaque = static_cast<const SvxOpaqueItem&>(rSet.Get(RES_OPAQUE));
         m_pExampleWN->SetTransparent(!rOpaque.GetValue());
