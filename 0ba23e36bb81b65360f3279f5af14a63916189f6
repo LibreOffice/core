@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_c681714c",
+        "filename": "sc/source/ui/docshell/arealink.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-04-01T06:41:31Z",
+      "side": 0,
+      "message": "I think you should just move this one line up, to be inside the if statement",
+      "revId": "0ba23e36bb81b65360f3279f5af14a63916189f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
