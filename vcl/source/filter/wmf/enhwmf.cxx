@@ -411,6 +411,7 @@ EnhWMFReader::EnhWMFReader(SvStream& rStream,GDIMetaFile& rGDIMetaFile,FilterCon
     , bRecordPath(false)
     , nRecordCount(0)
     , bEMFPlus(false)
+    , bEMFPlusDualMode(false)
 {}
 
 EnhWMFReader::~EnhWMFReader()
@@ -433,7 +434,6 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 
         pWMF->Seek( pos );
 #endif
-
     }
     bEMFPlus = true;
 
@@ -459,9 +459,15 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 
         SAL_INFO ("vcl.emf", "\t\tEMF+ record type: " << std::hex << type << std::dec);
 
+        if( type == 0x4001 ) // EmfPlusHeader
+        {
+            if( flags & 0x0001 )
+                bEMFPlusDualMode = true;
+        }
+
         // Get Device Context
-        // TODO We should use  EmfPlusRecordType::GetDC instead
-        if( type == 0x4004 )
+        // TODO We should use EmfPlusRecordType::GetDC instead of magic number
+        if( type == 0x4004 ) // EmfPlusGetDC
         {
             bHaveDC = true;
             SAL_INFO ("vcl.emf", "\t\tEMF+ lock DC (device context)");
@@ -717,7 +723,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 }
             }
         }
-        else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )
+        else if( !bEMFPlus || bHaveDC || bEMFPlusDualMode || nRecType == EMR_EOF )
         {
             switch( nRecType )
             {
