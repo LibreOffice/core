@@ -27,7 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <editeng/unoprnms.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -741,13 +741,13 @@ struct FontAttribSetter
         else if(rPropName == "CharWeight")
         {
             float fWeight = rProp.second.get<float>();
-            FontWeight eFontWeight = VCLUnoHelper::ConvertFontWeight(fWeight);
+            FontWeight eFontWeight = vcl::unohelper::ConvertFontWeight(fWeight);
             mrFont.SetWeight(eFontWeight);
         }
         else if(rPropName == "ChartWidth")
         {
             float fWidth = rProp.second.get<float>();
-            FontWidth eFontWidth = VCLUnoHelper::ConvertFontWidth(fWidth);
+            FontWidth eFontWidth = vcl::unohelper::ConvertFontWidth(fWidth);
             mrFont.SetAverageFontWidth(eFontWidth);
         }
     }

@@ -29,6 +29,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 
@@ -421,7 +422,7 @@ namespace
         if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARSCALE_W,true,&pItem) && dynamic_cast< const SvxCharScaleWidthItem *>( pItem ) !=  nullptr)
         {
             const SvxCharScaleWidthItem* pCharItem = static_cast<const SvxCharScaleWidthItem*>(pItem);
-            aNewFont.SetWidthType(VCLUnoHelper::ConvertFontWidth(pCharItem->GetValue()));
+            aNewFont.SetWidthType(vcl::unohelper::ConvertFontWidth(pCharItem->GetValue()));
         }
         if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_UNDERLINE,true,&pItem) && dynamic_cast< const SvxUnderlineItem *>( pItem ) !=  nullptr)
         {
