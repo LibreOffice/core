@@ -541,27 +541,27 @@ template <class T>
 void EnhWMFReader::ReadAndDrawPolyLine()
 {
     sal_uInt32  nPoints;
-    sal_Int32   i, nPoly(0), nGesPoints(0);
-    pWMF->SeekRel( 0x10 );
-    // Number of Polygons:
-    pWMF->ReadInt32( nPoly ).ReadInt32( nGesPoints );
+    sal_uInt32  i, nNumberOfPolylines( 0 ), nCount( 0 );
+    pWMF->SeekRel( 0x10 ); // TODO Skipping Bounds. A 128-bit WMF RectL object (specifies the bounding rectangle in device units.)
+    pWMF->ReadUInt32( nNumberOfPolylines );
+    pWMF->ReadUInt32( nCount ); // total number of points in all polylines
 
     // taking the amount of points of each polygon, retrieving the total number of points
     if ( pWMF->good() &&
-         ( static_cast< sal_uInt32 >(nPoly) < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) &&
-         ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() )
+         ( nNumberOfPolylines < SAL_MAX_UINT32 / sizeof( sal_uInt16 ) ) &&
+         ( nNumberOfPolylines * sizeof( sal_uInt16 ) ) <= ( nEndPos - pWMF->Tell() )
        )
     {
-        std::unique_ptr<sal_uInt16[]> pnPoints(new sal_uInt16[ nPoly ]);
-        for ( i = 0; i < nPoly && pWMF->good(); i++ )
+        std::unique_ptr< sal_uInt32[] > pnPolylinePointCount( new sal_uInt32[ nNumberOfPolylines ] );
+        for ( i = 0; i < nNumberOfPolylines && pWMF->good(); i++ )
         {
             pWMF->ReadUInt32( nPoints );
-            pnPoints[ i ] = (sal_uInt16)nPoints;
+            pnPolylinePointCount[ i ] = nPoints;
         }
-        // Get polygon points:
-        for ( i = 0; ( i < nPoly ) && pWMF->good(); i++ )
+        // Get polyline points:
+        for ( i = 0; ( i < nNumberOfPolylines ) && pWMF->good(); i++ )
         {
-            tools::Polygon aPolygon = ReadPolygon<T>(0, pnPoints[i]);
+            tools::Polygon aPolygon = ReadPolygon< T >( 0, pnPolylinePointCount[ i ] );
             pOut->DrawPolyLine( aPolygon, false, bRecordPath );
         }
     }
