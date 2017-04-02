@@ -805,7 +805,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         uno::Any aFirstQuery( maXShape->queryInterface( cppu::UnoType<text::XText>::get()));
         if( aFirstQuery >>= xText )
         {
-            OUString aStr( OUString::createFromAscii( pString ) );
+            OUString aStr(pString, rtl_str_getLength(pString), RTL_TEXTENCODING_ASCII_US);
 
             uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
             {
