@@ -176,8 +176,11 @@ void CGM::ImplDoClass1()
         {
             while ( mnParaSize < mnElementSize )
             {
-                sal_uInt32 nSize;
-                nSize = ImplGetUI( 1 );
+                sal_uInt32 nSize = ImplGetUI(1);
+
+                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                    throw css::uno::Exception("attempt to read past end of input", nullptr);
+
                 pElement->aFontList.InsertName( mpSource + mnParaSize, nSize );
                 mnParaSize += nSize;
             }
@@ -187,10 +190,12 @@ void CGM::ImplDoClass1()
         {
             while ( mnParaSize < mnElementSize )
             {
-                sal_uInt32 nCharSetType;
-                sal_uInt32 nSize;
-                nCharSetType = ImplGetUI16();
-                nSize = ImplGetUI( 1 );
+                sal_uInt32 nCharSetType = ImplGetUI16();
+                sal_uInt32 nSize = ImplGetUI(1);
+
+                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                    throw css::uno::Exception("attempt to read past end of input", nullptr);
+
                 pElement->aFontList.InsertCharSet( (CharSetType)nCharSetType, mpSource + mnParaSize, nSize );
                 mnParaSize += nSize;
             }
