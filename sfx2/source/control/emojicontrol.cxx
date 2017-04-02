@@ -18,12 +18,16 @@
  */
 
 #include <sfx2/emojiview.hxx>
+#include <sfx2/recentemojiview.hxx>
 #include <sfx2/emojiviewitem.hxx>
 #include <sfx2/emojicontrol.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <cppu/unotype.hxx>
 
+const char FILTER_RECENT[]    = "recent";
 const char FILTER_PEOPLE[]    = "people";
 const char FILTER_NATURE[]    = "nature";
 const char FILTER_FOOD[]      = "food";
@@ -37,13 +41,20 @@ const char FILTER_UNICODE9[]  = "unicode9";
 using namespace com::sun::star;
 
 SfxEmojiControl::SfxEmojiControl(sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame)
-    : SfxPopupWindow(nId, "emojictrl", "sfx/ui/emojicontrol.ui", rFrame)
+    : SfxPopupWindow(nId, "emojictrl", "sfx/ui/emojicontrol.ui", rFrame),
+    m_context(comphelper::getProcessComponentContext())
 {
     get(mpTabControl, "tab_control");
     get(mpEmojiView, "emoji_view");
+    get(mpRecentEmojiView, "recent_emoji_view");
 
-    sal_uInt16 nCurPageId = mpTabControl->GetPageId(FILTER_PEOPLE);
+    sal_uInt16 nCurPageId = mpTabControl->GetPageId(FILTER_RECENT);
     TabPage *pTabPage = mpTabControl->GetTabPage(nCurPageId);
+    ConvertLabelToUnicode(nCurPageId);
+    pTabPage->Show();
+
+    nCurPageId = mpTabControl->GetPageId(FILTER_PEOPLE);
+    mpTabControl->SetTabPage(nCurPageId, pTabPage);
     ConvertLabelToUnicode(nCurPageId);
     pTabPage->Show();
 
@@ -85,6 +96,7 @@ SfxEmojiControl::SfxEmojiControl(sal_uInt16 nId, const css::uno::Reference< css:
     nCurPageId = mpTabControl->GetPageId(FILTER_UNICODE9);
     mpTabControl->SetTabPage(nCurPageId, pTabPage);
     ConvertLabelToUnicode(nCurPageId);
+    pTabPage->Show();
 
     vcl::Font rFont = mpTabControl->GetControlFont();
     rFont.SetFontHeight(TAB_FONT_SIZE);
@@ -95,12 +107,20 @@ SfxEmojiControl::SfxEmojiControl(sal_uInt16 nId, const css::uno::Reference< css:
     mpEmojiView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
     mpEmojiView->setItemDimensions(ITEM_MAX_WIDTH, 0, ITEM_MAX_HEIGHT, ITEM_PADDING);
 
+    mpRecentEmojiView->SetStyle(mpEmojiView->GetStyle() | WB_VSCROLL);
+    mpRecentEmojiView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
+    mpRecentEmojiView->setItemDimensions(ITEM_MAX_WIDTH, 0, ITEM_MAX_HEIGHT, ITEM_PADDING);
+
     mpEmojiView->Populate();
     mpEmojiView->filterItems(ViewFilter_Category(FILTER_CATEGORY::PEOPLE));
+    mpRecentEmojiView->Populate();
 
     mpEmojiView->setInsertEmojiHdl(LINK(this, SfxEmojiControl, InsertHdl));
-    mpEmojiView->Show();
     mpEmojiView->ShowTooltips(true);
+
+    mpRecentEmojiView->setInsertEmojiHdl(LINK(this, SfxEmojiControl, InsertHdl));
+    mpRecentEmojiView->Show();
+    mpRecentEmojiView->ShowTooltips(true);
 
     mpTabControl->SetActivatePageHdl(LINK(this, SfxEmojiControl, ActivatePageHdl));
 }
@@ -150,21 +170,64 @@ FILTER_CATEGORY SfxEmojiControl::getCurrentFilter()
     else if (nCurPageId == mpTabControl->GetPageId(FILTER_UNICODE9))
         return FILTER_CATEGORY::UNICODE9;
 
-    return FILTER_CATEGORY::PEOPLE;
+    return FILTER_CATEGORY::RECENT;
+}
+
+void SfxEmojiControl::AddRecentEmoji(OUString sTitle)
+{
+    std::deque<OUString> rRecentEmojiList = mpRecentEmojiView->getRecentEmojiList();
+
+    auto itEmoji = std::find_if(rRecentEmojiList.begin(),
+         rRecentEmojiList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    // if recent emoji to be added is already in list, remove it
+    if( itEmoji != rRecentEmojiList.end() )
+        rRecentEmojiList.erase( itEmoji );
+
+    if (rRecentEmojiList.size() == 20)
+        rRecentEmojiList.pop_back();
+
+    rRecentEmojiList.push_front(sTitle);
+
+    css::uno::Sequence< OUString > aEmojiList(rRecentEmojiList.size());
+
+    for (size_t i = 0; i < rRecentEmojiList.size(); ++i)
+    {
+        aEmojiList[i] = rRecentEmojiList[i];
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+    officecfg::Office::Common::RecentEmoji::RecentEmojiCodes::set(aEmojiList, batch);
+    batch->commit();
+
+    mpRecentEmojiView->Populate();
 }
 
 IMPL_LINK_NOARG(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
 {
-    mpEmojiView->filterItems(ViewFilter_Category(getCurrentFilter()));
+    if(getCurrentFilter() != FILTER_CATEGORY::RECENT)
+    {
+        mpRecentEmojiView->Hide();
+        mpEmojiView->Show();
+        mpEmojiView->filterItems(ViewFilter_Category(getCurrentFilter()));
+    }
+    else
+    {
+        mpEmojiView->Hide();
+        mpRecentEmojiView->Show();
+    }
+
 }
 
-IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 {
     OUStringBuffer sHexText = "";
     sHexText.appendUtf32(OUString(pItem->getTitle()).toUInt32(16));
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
+    AddRecentEmoji(pItem->getTitle());
 
     uno::Sequence<beans::PropertyValue> aArgs(2);
     aArgs[0].Name = OUString::fromUtf8("Symbols");

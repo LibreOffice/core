@@ -159,6 +159,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/thumbnailview \
     sfx2/source/control/emojiviewitem \
     sfx2/source/control/emojiview \
+    sfx2/source/control/recentemojiview \
     sfx2/source/control/emojicontrol \
     sfx2/source/control/emojipopup \
     sfx2/source/control/unoctitm \
