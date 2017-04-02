@@ -32,6 +32,7 @@ public:
     virtual ~SfxEmojiControl() override;
 
     virtual void dispose() override;
+    void AddRecentEmoji(OUString sTitle);
 
 private:
     void ConvertLabelToUnicode(sal_uInt16 nPageId);
@@ -40,10 +41,11 @@ private:
     FILTER_CATEGORY getCurrentFilter();
 
     DECL_LINK(ActivatePageHdl, TabControl*, void);
-    DECL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);
+    DECL_LINK(InsertHdl, ThumbnailViewItem*, void);
 
     VclPtr<TabControl>   mpTabControl;
     VclPtr<EmojiView>    mpEmojiView;
+    css::uno::Reference < css::uno::XComponentContext > m_context;
 };
 
 #endif

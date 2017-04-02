@@ -30,6 +30,8 @@
 #include <vcl/builderfactory.hxx>
 using namespace ::com::sun::star;
 
+const char FILTER_RECENT[]  = "recent";
+
 bool ViewFilter_Category::isFilteredCategory(FILTER_CATEGORY filter, const OUString &rCategory)
 {
     bool bRet = true;
@@ -103,6 +105,8 @@ void EmojiView::Populate()
         return;
     }
 
+    insertRecentEmoji();
+
     // Populate view using the orcus json parser
     using node = orcus::json_document_tree::node;
 
@@ -160,6 +164,34 @@ void EmojiView::Populate()
             }
         }
     }
+}
+
+void EmojiView::insertRecentEmoji()
+{
+    //retrieve recent emoji list
+    css::uno::Sequence< OUString > rRecentEmojiList( officecfg::Office::Common::RecentEmoji::RecentEmojiCodes::get() );
+    for (int i = 0; i < rRecentEmojiList.getLength(); ++i)
+    {
+        maRecentEmoji.push_back(OUString(rRecentEmojiList[i]));
+    }
+
+    for( int i = 0;i < rRecentEmojiList.getLength();i++ )
+    {
+        EmojiViewItem *pItem = new EmojiViewItem(*this, getNextItemId());
+
+        pItem->maTitle = OUString(rRecentEmojiList[i]);
+        pItem->setCategory(FILTER_RECENT);
+        pItem->setHelpText(pItem->maTitle);
+
+        ThumbnailView::AppendItem(pItem);
+
+        CalculateItemPositions();
+    }
+}
+
+std::deque<OUString> EmojiView::getRecentEmojiList()
+{
+    return maRecentEmoji;
 }
 
 void EmojiView::ApplySettings(vcl::RenderContext& rRenderContext)
