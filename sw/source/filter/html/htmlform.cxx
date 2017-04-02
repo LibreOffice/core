@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/urihelper.hxx>
@@ -1030,7 +1030,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            float fVal = VCLUnoHelper::ConvertFontWeight(
+            float fVal = vcl::unohelper::ConvertFontWeight(
                     static_cast<const SvxWeightItem *>(pItem)->GetWeight() );
             aTmp <<= fVal;
             rFCompPropSet->setPropertyValue( sPropName, aTmp );

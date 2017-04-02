@@ -38,7 +38,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svl/urihelper.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
 #include <editeng/brushitem.hxx>
@@ -1108,7 +1108,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             if( auto x = o3tl::tryAccess<float>(aTmp) )
             {
                 FontWeight eWeight =
-                    VCLUnoHelper::ConvertFontWeight( *x );
+                    vcl::unohelper::ConvertFontWeight( *x );
                 if( eWeight != WEIGHT_DONTKNOW && eWeight != WEIGHT_NORMAL )
                     aItemSet.Put( SvxWeightItem( eWeight, RES_CHRATR_WEIGHT ) );
             }

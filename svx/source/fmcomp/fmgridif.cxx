@@ -54,7 +54,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/macros.h>
 
@@ -89,9 +89,9 @@ css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
     aFD.Family = (sal_Int16)rFont.GetFamilyType();
     aFD.CharSet = rFont.GetCharSet();
     aFD.Pitch = (sal_Int16)rFont.GetPitch();
-    aFD.CharacterWidth = VCLUnoHelper::ConvertFontWidth( rFont.GetWidthType() );
-    aFD.Weight= VCLUnoHelper::ConvertFontWeight( rFont.GetWeight() );
-    aFD.Slant = VCLUnoHelper::ConvertFontSlant( rFont.GetItalic() );
+    aFD.CharacterWidth = vcl::unohelper::ConvertFontWidth( rFont.GetWidthType() );
+    aFD.Weight= vcl::unohelper::ConvertFontWeight( rFont.GetWeight() );
+    aFD.Slant = vcl::unohelper::ConvertFontSlant( rFont.GetItalic() );
     aFD.Underline = (sal_Int16)rFont.GetUnderline();
     aFD.Strikeout = (sal_Int16)rFont.GetStrikeout();
     aFD.Orientation = rFont.GetOrientation();
@@ -111,8 +111,8 @@ vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
     aFont.SetFamily( (FontFamily)rDescr.Family );
     aFont.SetCharSet( (rtl_TextEncoding)rDescr.CharSet );
     aFont.SetPitch( (FontPitch)rDescr.Pitch );
-    aFont.SetWidthType( VCLUnoHelper::ConvertFontWidth( rDescr.CharacterWidth ) );
-    aFont.SetWeight( VCLUnoHelper::ConvertFontWeight( rDescr.Weight ) );
+    aFont.SetWidthType( vcl::unohelper::ConvertFontWidth( rDescr.CharacterWidth ) );
+    aFont.SetWeight( vcl::unohelper::ConvertFontWeight( rDescr.Weight ) );
     aFont.SetItalic( (FontItalic)rDescr.Slant );
     aFont.SetUnderline( (::FontLineStyle)rDescr.Underline );
     aFont.SetStrikeout( (::FontStrikeout)rDescr.Strikeout );

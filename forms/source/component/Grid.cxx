@@ -33,7 +33,7 @@
 #include <comphelper/container.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -823,7 +823,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     if ( nAnyMask & FONTDESCRIPTOR )
     {
         // Attrib
-        _rxOutStream->writeShort( sal::static_int_cast< sal_Int16 >( VCLUnoHelper::ConvertFontWeight( aFont.Weight ) ) );
+        _rxOutStream->writeShort( sal::static_int_cast< sal_Int16 >( vcl::unohelper::ConvertFontWeight( aFont.Weight ) ) );
         _rxOutStream->writeShort( sal::static_int_cast< sal_Int16 >( aFont.Slant ) );
         _rxOutStream->writeShort( aFont.Underline );
         _rxOutStream->writeShort( aFont.Strikeout );
@@ -833,7 +833,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         // Size
         _rxOutStream->writeLong( aFont.Width );
         _rxOutStream->writeLong( aFont.Height );
-        _rxOutStream->writeShort( sal::static_int_cast< sal_Int16 >( VCLUnoHelper::ConvertFontWidth( aFont.CharacterWidth ) ) );
+        _rxOutStream->writeShort( sal::static_int_cast< sal_Int16 >( vcl::unohelper::ConvertFontWidth( aFont.CharacterWidth ) ) );
         // Type
         _rxOutStream->writeUTF( aFont.Name );
         _rxOutStream->writeUTF( aFont.StyleName );
@@ -933,7 +933,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     FontDescriptor aFont( getFont() );
     if ( nAnyMask & FONTATTRIBS )
     {
-        aFont.Weight = (float)VCLUnoHelper::ConvertFontWeight( _rxInStream->readShort() );
+        aFont.Weight = (float)vcl::unohelper::ConvertFontWeight( _rxInStream->readShort() );
         aFont.Slant = (FontSlant)_rxInStream->readShort();
         aFont.Underline = _rxInStream->readShort();
         aFont.Strikeout = _rxInStream->readShort();
@@ -945,7 +945,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     {
         aFont.Width = (sal_Int16)_rxInStream->readLong();
         aFont.Height = (sal_Int16)_rxInStream->readLong();
-        aFont.CharacterWidth = (float)VCLUnoHelper::ConvertFontWidth( _rxInStream->readShort() );
+        aFont.CharacterWidth = (float)vcl::unohelper::ConvertFontWidth( _rxInStream->readShort() );
     }
     if ( nAnyMask & FONTTYPE )
     {

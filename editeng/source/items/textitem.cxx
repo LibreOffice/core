@@ -22,11 +22,11 @@
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <vcl/bitmapex.hxx>
 #include <tools/stream.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <math.h>
 #include <rtl/math.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/unohelp.hxx>
 #include <editeng/eeitem.hxx>
 #include <svtools/unitconv.hxx>
 
@@ -512,7 +512,7 @@ bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (bool)GetBoolValue();
             break;
         case MID_POSTURE:
-            rVal <<= VCLUnoHelper::ConvertFontSlant(GetValue());
+            rVal <<= vcl::unohelper::ConvertFontSlant(GetValue());
             break;
     }
     return true;
@@ -537,7 +537,7 @@ bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
                 eSlant = (awt::FontSlant)nValue;
             }
-            SetValue(VCLUnoHelper::ConvertFontSlant(eSlant));
+            SetValue(vcl::unohelper::ConvertFontSlant(eSlant));
         }
     }
     return true;
@@ -649,7 +649,7 @@ bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_WEIGHT:
         {
-            rVal <<= (float)( VCLUnoHelper::ConvertFontWeight( GetValue() ) );
+            rVal <<= (float)( vcl::unohelper::ConvertFontWeight( GetValue() ) );
         }
         break;
     }
@@ -674,7 +674,7 @@ bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     return false;
                 fValue = (float)nValue;
             }
-            SetValue( VCLUnoHelper::ConvertFontWeight((float)fValue) );
+            SetValue( vcl::unohelper::ConvertFontWeight((float)fValue) );
         }
         break;
     }
