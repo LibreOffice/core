@@ -46,8 +46,8 @@ class CGMImpressOutAct
     sal_uInt32*                 mpGroupLevel;
 
     sal_uInt16                  mnIndex;                // figure
-    PolyFlags*                  mpFlags;
-    Point*                      mpPoints;
+    std::vector<PolyFlags>      maFlags;
+    std::vector<Point>          maPoints;
     tools::PolyPolygon          maPolyPolygon;
     css::awt::Gradient*         mpGradient;
 
