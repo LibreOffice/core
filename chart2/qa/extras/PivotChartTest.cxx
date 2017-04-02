@@ -17,6 +17,9 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
+#include <com/sun/star/table/XTablePivotChart.hpp>
+#include <com/sun/star/table/XTablePivotCharts.hpp>
+#include <com/sun/star/table/XTablePivotChartsSupplier.hpp>
 
 #include <rtl/strbuf.hxx>
 
@@ -73,6 +76,12 @@ bool lclCheckSequence(std::vector<double> const & reference,
     return true;
 }
 
+OUString lclGetLabel(Reference<chart2::XChartDocument> xChartDoc, sal_Int32 nSeriesIndex)
+{
+    Reference<chart2::data::XDataSequence> xLabelDataSequence = getLabelDataSequenceFromDoc(xChartDoc, nSeriesIndex);
+    return xLabelDataSequence->getData()[0].get<OUString>();
+}
+
 void PivotChartTest::testRoundtrip()
 {
     uno::Sequence<uno::Any> xSequence;
@@ -80,7 +89,7 @@ void PivotChartTest::testRoundtrip()
 
     load("/chart2/qa/extras/data/ods/", "PivotChart.ods");
 
-    xChartDoc = Reference<chart2::XChartDocument>(getChartDocFromSheet(1, mxComponent), uno::UNO_QUERY);
+    xChartDoc = Reference<chart2::XChartDocument>(getPivotChartDocFromSheet(1, mxComponent), uno::UNO_QUERY);
 
     std::vector<double> aReference1 { 10162.033139, 16614.523063, 27944.146101 };
     OUString aExpectedLabel1("Exp.");
@@ -114,7 +123,7 @@ void PivotChartTest::testRoundtrip()
 
     reload("calc8");
 
-    xChartDoc = Reference<chart2::XChartDocument>(getChartDocFromSheet(1, mxComponent), uno::UNO_QUERY);
+    xChartDoc = Reference<chart2::XChartDocument>(getPivotChartDocFromSheet(1, mxComponent), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
     {
         Reference<chart2::data::XDataSequence> xDataSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0);
@@ -140,17 +149,28 @@ void PivotChartTest::testRoundtrip()
     }
 }
 
-
 void PivotChartTest::testChangePivotTable()
 {
     uno::Sequence<uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
-    load("/chart2/qa/extras/data/ods/", "PivotChart2.ods");
+    load("/chart2/qa/extras/data/ods/", "PivotChart_PivotTableOnly.ods");
 
-    xChartDoc = Reference<chart2::XChartDocument>(getChartDocFromSheet(1, mxComponent), uno::UNO_QUERY);
+    // Check that we don't have any pivot chart in the document
+    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(1, mxComponent);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTablePivotCharts, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(0, xIndexAccess->getCount());
+
+    // Create a new pivot chart
+    xTablePivotCharts->addNewByName("Chart", awt::Rectangle{0, 0, 9000, 9000}, "DataPilot1");
+    CPPUNIT_ASSERT_EQUAL(1, xIndexAccess->getCount());
+
+    // Get the pivot chart document so we ca access its data
+    xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
 
     CPPUNIT_ASSERT(xChartDoc.is());
+
+    // Check first data series
     {
         std::vector<double> aReference { 10162.033139, 16614.523063, 27944.146101 };
         OUString aExpectedLabel("Exp.");
@@ -159,10 +179,10 @@ void PivotChartTest::testChangePivotTable()
         xSequence = xDataSequence->getData();
         CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-4));
 
-        Reference<chart2::data::XDataSequence> xLabelDataSequence = getLabelDataSequenceFromDoc(xChartDoc, 0);
-        xSequence = xLabelDataSequence->getData();
-        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, xSequence[0].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 0));
     }
+
+    // Check second data series
     {
         std::vector<double> aReference { 101879.458079, 178636.929704, 314626.484864 };
         OUString aExpectedLabel("Rev.");
@@ -171,13 +191,10 @@ void PivotChartTest::testChangePivotTable()
         xSequence = xDataSequence->getData();
         CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-4));
 
-        Reference<chart2::data::XDataSequence> xLabelDataSequence = getLabelDataSequenceFromDoc(xChartDoc, 1);
-        xSequence = xLabelDataSequence->getData();
-        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, xSequence[0].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 1));
     }
 
-    // modify the pivot table
-
+    // Modify the pivot table
     {
         uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
         uno::Reference<container::XIndexAccess> xSheetIndexAccess(xDoc->getSheets(), UNO_QUERY_THROW);
@@ -194,10 +211,11 @@ void PivotChartTest::testChangePivotTable()
         lclModifyOrientation(xDataPilotDescriptor, "Rev.", sheet::DataPilotFieldOrientation_HIDDEN);
     }
 
-    // check again
+    // Check the pivot chart again as we expect it has been updated when we updated the pivot table
 
-    xChartDoc = Reference<chart2::XChartDocument>(getChartDocFromSheet(1, mxComponent), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
+
+    // Check the first data series
     {
         std::vector<double> aReference { 2855.559, 1780.326, 2208.713, 2130.064, 1187.371 };
         OUString aExpectedLabel("Big");
@@ -206,10 +224,10 @@ void PivotChartTest::testChangePivotTable()
         xSequence = xDataSequence->getData();
         CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
 
-        Reference<chart2::data::XDataSequence> xLabelDataSequence = getLabelDataSequenceFromDoc(xChartDoc, 0);
-        xSequence = xLabelDataSequence->getData();
-        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, xSequence[0].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 0));
     }
+
+    // Check the second data series
     {
         std::vector<double> aReference { 4098.908, 2527.286, 4299.716, 2362.225, 3326.389 };
         OUString aExpectedLabel("Medium");
@@ -218,10 +236,10 @@ void PivotChartTest::testChangePivotTable()
         xSequence = xDataSequence->getData();
         CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
 
-        Reference<chart2::data::XDataSequence> xLabelDataSequence = getLabelDataSequenceFromDoc(xChartDoc, 1);
-        xSequence = xLabelDataSequence->getData();
-        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, xSequence[0].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 1));
     }
+
+    // Check the third data series
     {
         std::vector<double> aReference { 4926.303, 5684.060, 4201.398, 7290.795, 5841.591 };
         OUString aExpectedLabel("Small");
@@ -230,9 +248,7 @@ void PivotChartTest::testChangePivotTable()
         xSequence = xDataSequence->getData();
         CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
 
-        Reference<chart2::data::XDataSequence> xLabelDataSequence = getLabelDataSequenceFromDoc(xChartDoc, 2);
-        xSequence = xLabelDataSequence->getData();
-        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, xSequence[0].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 2));
     }
 }
 
