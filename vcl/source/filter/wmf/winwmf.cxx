@@ -1131,18 +1131,25 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             }
                             nEMFRec++;
 
-                            if( pEMFStream && nCurRecSize + 34 > nLen )
+                            if (pEMFStream && nCurRecSize + 34 > nLen)
                             {
                                 nEMFRecCount = 0xFFFFFFFF;
                                 pEMFStream.reset();
                             }
 
-                            if( pEMFStream )
+                            if (pEMFStream && nCurRecSize > pWMF->remainingSize())
                             {
-                                std::unique_ptr<sal_Int8[]> pBuf(new sal_Int8[ nCurRecSize ]);
-                                sal_uInt32 nCount = pWMF->ReadBytes(pBuf.get(), nCurRecSize);
+                                SAL_WARN("vcl.wmf", "emf record size claims to be larger than remaining data");
+                                nEMFRecCount = 0xFFFFFFFF;
+                                pEMFStream.reset();
+                            }
+
+                            if (pEMFStream)
+                            {
+                                std::vector<sal_Int8> aBuf(nCurRecSize);
+                                sal_uInt32 nCount = pWMF->ReadBytes(aBuf.data(), nCurRecSize);
                                 if( nCount == nCurRecSize )
-                                    pEMFStream->WriteBytes(pBuf.get(), nCount);
+                                    pEMFStream->WriteBytes(aBuf.data(), nCount);
                             }
                         }
                     }
