@@ -543,7 +543,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                  pReqArgs->HasItem( FN_PARAM_2, &pHeight ) )
                 {
                     std::vector<sc::ColRowSpan> aRanges;
-                    SCCOLROW nRow = static_cast<const SfxUInt16Item*>(pRow)->GetValue() - 1;
+                    SCCOLROW nRow = static_cast<const SfxInt32Item*>(pRow)->GetValue() - 1;
                     sal_uInt16 nHeight = static_cast<const SfxUInt16Item*>(pHeight)->GetValue();
                     ScMarkData& rMark = GetViewData()->GetMarkData();
 
