@@ -22,6 +22,7 @@
 #include "formresid.hrc"
 #include "modulepcr.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
@@ -226,8 +227,8 @@ namespace pcr
             nFontHeight = (float)OutputDevice::LogicToLogic(Size(0, (sal_Int32)nFontHeight), MapUnit::MapPoint, MapUnit::MapTwip).Height();
             SvxFontHeightItem aSvxFontHeightItem((sal_uInt32)nFontHeight,100,CFID_HEIGHT);
 
-            FontWeight      eWeight=VCLUnoHelper::ConvertFontWeight(nFontWeight);
-            FontItalic      eItalic=VCLUnoHelper::ConvertFontSlant(nFontSlant);
+            FontWeight      eWeight=vcl::unohelper::ConvertFontWeight(nFontWeight);
+            FontItalic      eItalic=vcl::unohelper::ConvertFontSlant(nFontSlant);
             FontLineStyle    eUnderline=(FontLineStyle)nFontLineStyle;
             FontStrikeout   eStrikeout=(FontStrikeout)nFontStrikeout;
 
@@ -341,7 +342,7 @@ namespace pcr
                 const SvxWeightItem& rWeightItem =
                     static_cast<const SvxWeightItem&>(_rSet.Get(CFID_WEIGHT));
 
-                float nWeight = VCLUnoHelper::ConvertFontWeight(rWeightItem.GetWeight());
+                float nWeight = vcl::unohelper::ConvertFontWeight(rWeightItem.GetWeight());
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_WEIGHT,makeAny(nWeight));
             }
 
@@ -354,7 +355,7 @@ namespace pcr
                 const SvxPostureItem& rPostureItem =
                     static_cast<const SvxPostureItem&>(_rSet.Get(CFID_POSTURE));
 
-                css::awt::FontSlant eSlant = VCLUnoHelper::ConvertFontSlant(rPostureItem.GetPosture());
+                css::awt::FontSlant eSlant = vcl::unohelper::ConvertFontSlant(rPostureItem.GetPosture());
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
             }
 

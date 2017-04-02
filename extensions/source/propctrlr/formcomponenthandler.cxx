@@ -93,7 +93,7 @@
 #include <svx/numinf.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/resary.hxx>
 #include <vcl/msgbox.hxx>
@@ -760,7 +760,7 @@ namespace pcr
                 displayName.append( ", " );
 
                 // font style
-                ::FontWeight  eWeight = VCLUnoHelper::ConvertFontWeight( aFont.Weight );
+                ::FontWeight  eWeight = vcl::unohelper::ConvertFontWeight( aFont.Weight );
                 sal_uInt16 nStyleResID = RID_STR_FONTSTYLE_REGULAR;
                 if ( aFont.Slant == FontSlant_ITALIC )
                 {

@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
 #include <vcl/bitmapex.hxx>
@@ -104,12 +103,6 @@ public:
     static vcl::Font                                CreateFont( const css::awt::FontDescriptor& rDescr, const vcl::Font& rInitFont );
     static vcl::Font                                CreateFont( const css::uno::Reference< css::awt::XFont >& rxFont );
     static css::awt::SimpleFontMetric  CreateFontMetric( const FontMetric& rFontMetric );
-    static float                                    ConvertFontWidth( FontWidth eWidth );
-    static FontWidth                                ConvertFontWidth( float f );
-    static float                                    ConvertFontWeight( FontWeight eWeight );
-    static FontWeight                               ConvertFontWeight( float f );
-    static css::awt::FontSlant                      ConvertFontSlant( FontItalic eWeight );
-    static FontItalic                               ConvertFontSlant( css::awt::FontSlant );
 
     // Rectangle
     static bool                                     IsZero(const css::awt::Rectangle& rRect);

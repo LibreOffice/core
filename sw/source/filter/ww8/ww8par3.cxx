@@ -21,7 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -2353,7 +2353,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
             break;
 
         case RES_CHRATR_WEIGHT:
-            aTmp <<= (float)VCLUnoHelper::ConvertFontWeight(
+            aTmp <<= (float)vcl::unohelper::ConvertFontWeight(
                                         static_cast<const SvxWeightItem*>(pItem)->GetWeight() );
             aFont.SetWeight( static_cast<const SvxWeightItem*>(pItem)->GetWeight() );
             break;

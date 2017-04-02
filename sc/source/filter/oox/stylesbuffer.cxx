@@ -53,7 +53,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <tools/fontenum.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <oox/core/filterbase.hxx>
@@ -903,7 +903,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
     // font weight
     if( maUsedFlags.mbWeightUsed )
     {
-        ::FontWeight fWeight = VCLUnoHelper::ConvertFontWeight( maApiData.maDesc.Weight );
+        ::FontWeight fWeight = vcl::unohelper::ConvertFontWeight( maApiData.maDesc.Weight );
         SvxWeightItem aWeightItem( fWeight, ATTR_FONT_WEIGHT );
         ScfTools::PutItem( rItemSet, aWeightItem, bEditEngineText ? EE_CHAR_WEIGHT : ATTR_FONT_WEIGHT, bSkipPoolDefs );
         ScfTools::PutItem( rItemSet, aWeightItem, bEditEngineText ? EE_CHAR_WEIGHT_CTL : ATTR_CTL_FONT_WEIGHT, bSkipPoolDefs );

@@ -28,7 +28,7 @@
 #include <sal/macros.h>
 #include <rtl/tencinfo.h>
 #include <svtools/colorcfg.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <editeng/svxfont.hxx>
 #include "global.hxx"
 #include "xlroot.hxx"
@@ -417,7 +417,7 @@ Awt::FontSlant XclFontData::GetApiPosture() const
 
 float XclFontData::GetApiWeight() const
 {
-    return VCLUnoHelper::ConvertFontWeight( GetScWeight() );
+    return vcl::unohelper::ConvertFontWeight( GetScWeight() );
 }
 
 sal_Int16 XclFontData::GetApiUnderline() const
@@ -479,7 +479,7 @@ void XclFontData::SetApiPosture( Awt::FontSlant eApiPosture )
 
 void XclFontData::SetApiWeight( float fApiWeight )
 {
-    SetScWeight( VCLUnoHelper::ConvertFontWeight( fApiWeight ) );
+    SetScWeight( vcl::unohelper::ConvertFontWeight( fApiWeight ) );
 }
 
 void XclFontData::SetApiUnderline( sal_Int16 nApiUnderl )
