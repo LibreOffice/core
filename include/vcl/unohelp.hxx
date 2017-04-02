@@ -21,7 +21,9 @@
 #define INCLUDED_VCL_UNOHELP_HXX
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <rtl/ustring.hxx>
+#include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 
 namespace com {
@@ -53,6 +55,12 @@ namespace unohelper
 VCL_DLLPUBLIC css::uno::Reference < css::i18n::XBreakIterator > CreateBreakIterator();
 VCL_DLLPUBLIC css::uno::Reference < css::i18n::XCharacterClassification> CreateCharacterClassification();
 VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const css::accessibility::AccessibleEventObject& rEventObject );
+VCL_DLLPUBLIC float               ConvertFontWidth( FontWidth eWidth );
+VCL_DLLPUBLIC FontWidth           ConvertFontWidth( float f );
+VCL_DLLPUBLIC float               ConvertFontWeight( FontWeight eWeight );
+VCL_DLLPUBLIC FontWeight          ConvertFontWeight( float f );
+VCL_DLLPUBLIC css::awt::FontSlant ConvertFontSlant( FontItalic eWeight );
+VCL_DLLPUBLIC FontItalic          ConvertFontSlant( css::awt::FontSlant );
 }}  // namespace vcl::unohelper
 
 #endif // INCLUDED_VCL_UNOHELP_HXX
