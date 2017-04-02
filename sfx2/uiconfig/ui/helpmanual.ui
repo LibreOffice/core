@@ -4,16 +4,18 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMessageDialog" id="onlinehelpmanual">
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="title" translatable="yes">%PRODUCTNAME Help Not Installed</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
-    <property name="message_type">question</property>
-    <property name="text" translatable="yes"> %PRODUCTNAME  built-in help is not installed</property>
+    <property name="text" translatable="yes">The %PRODUCTNAME built-in help is not installed on your computer.</property>
+    <property name="secondary_text" translatable="yes">You may either install it from our website or your system’s repositories, or read an online version.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="internal_box">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="btnbox">
             <property name="can_focus">False</property>
