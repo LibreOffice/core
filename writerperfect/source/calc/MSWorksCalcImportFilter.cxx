@@ -16,6 +16,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sfx2/passwd.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -90,7 +91,7 @@ public:
     /*! \brief seeks to a offset position, from actual, beginning or ending position
      * \return 0 if ok
      */
-    int seek(long , librevenge::RVNG_SEEK_TYPE) override
+    int seek(long, librevenge::RVNG_SEEK_TYPE) override
     {
         return 1;
     }
@@ -191,8 +192,10 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
     bool needEncoding;
     const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind, creator, needEncoding);
 
+    if ((kind != libwps::WPS_SPREADSHEET && kind != libwps::WPS_DATABASE) || (confidence == libwps::WPS_CONFIDENCE_NONE))
+        return false;
     std::string fileEncoding("");
-    if ((kind == libwps::WPS_SPREADSHEET || kind == libwps::WPS_DATABASE) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
+    if (needEncoding)
     {
         OUString title, encoding;
         if (creator == libwps::WPS_MSWORKS)
@@ -232,7 +235,25 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
             SAL_WARN("writerperfect", "ignoring Exception in MSWorksCalcImportFilter::doImportDocument");
         }
     }
-    return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator, "", fileEncoding.c_str());
+    OString aUtf8Passwd;
+    if (confidence==libwps::WPS_CONFIDENCE_SUPPORTED_ENCRYPTION)
+    {
+        // try to ask for a password
+        try
+        {
+            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(nullptr);
+            aPasswdDlg->SetMinLen(1);
+            if (!aPasswdDlg->Execute())
+                return false;
+            OUString aPasswd = aPasswdDlg->GetPassword();
+            aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+    return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator, confidence==libwps::WPS_CONFIDENCE_SUPPORTED_ENCRYPTION ? aUtf8Passwd.getStr() : nullptr, fileEncoding.c_str());
 }
 
 //XExtendedFilterDetection
@@ -326,12 +347,12 @@ sal_Bool MSWorksCalcImportFilter::filter(const css::uno::Sequence< css::beans::P
                     structuredInput.addFile(sWM3Name,"WK3");
                     structuredInput.addFile(sFM3Name,"FM3");
 
-                    // If the file is valid and libwps is at least 0.4.4, doImportDocument will convert it.
-                    // If libwps is at most 0.4.3, doImportDocument will fail when checking if the file is supported
-                    //    and it is ok to call again doImportDocument with the main input.
-                    // If the file is corrupted beyond all retrieval, doImportDocument will fail two times :-~
-                    if (this->doImportDocument(structuredInput, exporter, aDescriptor))
-                        return true;
+                    libwps::WPSKind kind = libwps::WPS_TEXT;
+                    libwps::WPSCreator creator;
+                    bool needEncoding;
+                    const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&structuredInput, kind, creator, needEncoding);
+                    if (confidence!=libwps::WPS_CONFIDENCE_NONE)
+                        return this->doImportDocument(structuredInput, exporter, aDescriptor);
                 }
             }
         }
@@ -350,7 +371,7 @@ bool MSWorksCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput
     bool needEncoding;
     const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind, creator, needEncoding);
 
-    if ((kind == libwps::WPS_SPREADSHEET || kind == libwps::WPS_DATABASE) && confidence == libwps::WPS_CONFIDENCE_EXCELLENT)
+    if ((kind == libwps::WPS_SPREADSHEET || kind == libwps::WPS_DATABASE) && confidence != libwps::WPS_CONFIDENCE_NONE)
     {
         if (creator == libwps::WPS_MSWORKS)
         {

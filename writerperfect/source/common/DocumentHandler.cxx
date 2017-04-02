@@ -111,10 +111,10 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 
 DocumentHandler::DocumentHandler(Reference < XDocumentHandler > &xHandler) :
-    mxHandler( xHandler )
+    mxHandler(xHandler)
 {
-    if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(mxHandler.get()))
-        mxHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
+    if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport *>(mxHandler.get()))
+        mxHandler.set(new SvXMLLegacyToFastDocHandler(pFastHandler));
 }
 
 void DocumentHandler::startDocument()
