@@ -21,13 +21,10 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
-#include <ucbhelper/content.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <memory>
 #include <o3tl/make_shared.hxx>
 
@@ -269,22 +266,15 @@ std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
 
     std::shared_ptr<sal_uInt8> pData;
 
-    std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( mpSwapOutData->maURL, StreamMode::READWRITE ));
-    if( xIStm )
-    {
-        pData = o3tl::make_shared_array<sal_uInt8>(mnSwapInDataSize);
-        xIStm->ReadBytes( pData.get(), mnSwapInDataSize );
-        bool bError = ( ERRCODE_NONE != xIStm->GetError() );
-        sal_uInt64 const nActReadSize = xIStm->Tell();
-        if (nActReadSize != mnSwapInDataSize)
-        {
-            bError = true;
-        }
-        xIStm.reset();
-
-        if( bError )
-            pData.reset();
-    }
+    SvFileStream aFileStream(mpSwapOutData->maURL, StreamMode::READWRITE);
+    pData = o3tl::make_shared_array<sal_uInt8>(mnSwapInDataSize);
+    aFileStream.ReadBytes(pData.get(), mnSwapInDataSize);
+    bool bError = (ERRCODE_NONE != aFileStream.GetError());
+    sal_uInt64 const nActReadSize = aFileStream.Tell();
+    if (nActReadSize != mnSwapInDataSize)
+        bError = true;
+    if (bError)
+        pData.reset();
     return pData;
 }
 
