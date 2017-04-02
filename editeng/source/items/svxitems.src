@@ -889,6 +889,14 @@ String RID_SVXITEMS_CHARROTATE_FITLINE
 {
     Text [ en-US ] = "Fit to line";
 };
+String RID_SVXITEMS_TEXTROTATE_OFF
+{
+    Text [ en-US ] = "Text is not rotated";
+};
+String RID_SVXITEMS_TEXTROTATE
+{
+    Text [ en-US ] = "Text is rotated by $(ARG1)°";
+};
 String RID_SVXITEMS_CHARSCALE
 {
     Text [ en-US ] = "Characters scaled $(ARG1)%";

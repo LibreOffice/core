@@ -2833,13 +2833,114 @@ sal_uInt16 SvxTwoLinesItem::GetVersion( sal_uInt16 nFFVer ) const
 
 
 /*************************************************************************
+|*    class SvxTextRotateItem
+*************************************************************************/
+
+SvxTextRotateItem::SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nW)
+    : SfxUInt16Item(nW, nValue)
+{
+}
+
+SfxPoolItem* SvxTextRotateItem::Clone(SfxItemPool*) const
+{
+    return new SvxTextRotateItem(GetValue(), Which());
+}
+
+SfxPoolItem* SvxTextRotateItem::Create(SvStream& rStrm, sal_uInt16) const
+{
+    sal_uInt16 nVal;
+    rStrm.ReadUInt16(nVal);
+    return new SvxTextRotateItem(nVal, Which());
+}
+
+SvStream& SvxTextRotateItem::Store(SvStream & rStrm, sal_uInt16) const
+{
+    rStrm.WriteUInt16(GetValue());
+    return rStrm;
+}
+
+sal_uInt16 SvxTextRotateItem::GetVersion(sal_uInt16 nFFVer) const
+{
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
+}
+
+bool SvxTextRotateItem::GetPresentation(
+    SfxItemPresentation /*ePres*/,
+    MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
+    OUString &rText, const IntlWrapper*) const
+{
+    if (!GetValue())
+        rText = EditResId::GetString(RID_SVXITEMS_TEXTROTATE_OFF);
+    else
+    {
+        rText = EditResId::GetString(RID_SVXITEMS_TEXTROTATE);
+        rText = rText.replaceFirst("$(ARG1)",
+            OUString::number(GetValue() / 10));
+    }
+    return true;
+}
+
+bool SvxTextRotateItem::QueryValue(css::uno::Any& rVal,
+    sal_uInt8 nMemberId) const
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    bool bRet = true;
+    switch (nMemberId)
+    {
+    case MID_ROTATE:
+        rVal <<= (sal_Int16)GetValue();
+        break;
+    default:
+        bRet = false;
+        break;
+    }
+    return bRet;
+}
+
+bool SvxTextRotateItem::PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    bool bRet = true;
+    switch (nMemberId)
+    {
+    case MID_ROTATE:
+    {
+        sal_Int16 nVal = 0;
+        if ((rVal >>= nVal) && (0 == nVal || 900 == nVal || 2700 == nVal))
+            SetValue((sal_uInt16)nVal);
+        else
+            bRet = false;
+        break;
+    }
+    default:
+        bRet = false;
+    }
+    return bRet;
+}
+
+bool SvxTextRotateItem::operator==(const SfxPoolItem& rItem) const
+{
+    assert(SfxPoolItem::operator==(rItem));
+    return SfxUInt16Item::operator==(rItem);
+}
+
+void SvxTextRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTextRotateItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
+
+/*************************************************************************
 |*    class SvxCharRotateItem
 *************************************************************************/
 
 SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
                                        bool bFitIntoLine,
                                        const sal_uInt16 nW )
-    : SfxUInt16Item( nW, nValue ), bFitToLine( bFitIntoLine )
+    : SvxTextRotateItem(nValue, nW), bFitToLine( bFitIntoLine )
 {
 }
 
@@ -2889,12 +2990,11 @@ bool SvxCharRotateItem::GetPresentation(
 bool SvxCharRotateItem::QueryValue( css::uno::Any& rVal,
                                 sal_uInt8 nMemberId ) const
 {
-    nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
-    switch( nMemberId )
+    switch(nMemberId & ~CONVERT_TWIPS)
     {
     case MID_ROTATE:
-        rVal <<= (sal_Int16)GetValue();
+        SvxTextRotateItem::QueryValue(rVal, nMemberId);
         break;
     case MID_FITTOLINE:
         rVal <<= (bool) IsFitToLine();
@@ -2909,17 +3009,12 @@ bool SvxCharRotateItem::QueryValue( css::uno::Any& rVal,
 bool SvxCharRotateItem::PutValue( const css::uno::Any& rVal,
                                     sal_uInt8 nMemberId )
 {
-    nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
-    switch( nMemberId )
+    switch(nMemberId & ~CONVERT_TWIPS)
     {
     case MID_ROTATE:
         {
-            sal_Int16 nVal = 0;
-            if((rVal >>= nVal) && (0 == nVal || 900 == nVal || 2700 == nVal))
-                SetValue( (sal_uInt16)nVal );
-            else
-                bRet = false;
+            bRet = SvxTextRotateItem::PutValue(rVal, nMemberId);
             break;
         }
 
@@ -2935,7 +3030,7 @@ bool SvxCharRotateItem::PutValue( const css::uno::Any& rVal,
 bool SvxCharRotateItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
-    return SfxUInt16Item::operator==( rItem ) &&
+    return SvxTextRotateItem::operator==( rItem ) &&
            IsFitToLine() == static_cast<const SvxCharRotateItem&>(rItem).IsFitToLine();
 }
 
