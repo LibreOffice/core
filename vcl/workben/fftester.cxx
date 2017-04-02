@@ -323,26 +323,47 @@ try_again:
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
             }
-            else if ( (strcmp(argv[2], "doc") == 0) ||
-                      (strcmp(argv[2], "ww8") == 0) ||
-                      (strcmp(argv[2], "ww6") == 0) ||
-                      (strcmp(argv[2], "ww2") == 0) )
+            else if ((strcmp(argv[2], "doc") == 0) || (strcmp(argv[2], "ww8") == 0))
             {
-                static WFilterCall pfnImport(nullptr);
+                static FFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
                     aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
-                    pfnImport = reinterpret_cast<WFilterCall>(
-                        aLibrary.getFunctionSymbol("TestImportDOC"));
+                    pfnImport = reinterpret_cast<FFilterCall>(
+                        aLibrary.getFunctionSymbol("TestImportWW8"));
                     aLibrary.release();
                 }
-                if (strcmp(argv[2], "ww6") == 0)
-                    ret = (int) (*pfnImport)(out, OUString("CWW6"));
-                else if (strcmp(argv[2], "ww2") == 0)
-                    ret = (int) (*pfnImport)(out, OUString("WW6"));
-                else
-                    ret = (int) (*pfnImport)(out, OUString("CWW8"));
+                SvFileStream aFileStream(out, StreamMode::READ);
+                ret = (int) (*pfnImport)(aFileStream);
+            }
+            else if (strcmp(argv[2], "ww6") == 0)
+            {
+                static FFilterCall pfnImport(nullptr);
+                if (!pfnImport)
+                {
+                    osl::Module aLibrary;
+                    aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
+                    pfnImport = reinterpret_cast<FFilterCall>(
+                        aLibrary.getFunctionSymbol("TestImportWW6"));
+                    aLibrary.release();
+                }
+                SvFileStream aFileStream(out, StreamMode::READ);
+                ret = (int) (*pfnImport)(aFileStream);
+            }
+            else if (strcmp(argv[2], "ww2") == 0)
+            {
+                static FFilterCall pfnImport(nullptr);
+                if (!pfnImport)
+                {
+                    osl::Module aLibrary;
+                    aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
+                    pfnImport = reinterpret_cast<FFilterCall>(
+                        aLibrary.getFunctionSymbol("TestImportWW2"));
+                    aLibrary.release();
+                }
+                SvFileStream aFileStream(out, StreamMode::READ);
+                ret = (int) (*pfnImport)(aFileStream);
             }
             else if (strcmp(argv[2], "rtf") == 0)
             {

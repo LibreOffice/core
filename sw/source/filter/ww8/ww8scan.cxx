@@ -87,7 +87,7 @@ namespace
 const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
 {
     //double lock me
-    // WW7- Sprms
+    // WW2 Sprms
     static const SprmInfoRow aSprms[] =
     {
         {  0, { 0, L_FIX} }, // "Default-sprm", will be skipped

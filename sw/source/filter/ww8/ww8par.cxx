@@ -6190,16 +6190,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
     return new WW8Reader;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL, const OUString &rFltName)
+bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
 {
     Reader *pReader = ImportDOC();
 
-    SvFileStream aFileStream(rURL, StreamMode::READ);
     tools::SvRef<SotStorage> xStorage;
-    pReader->pStrm = &aFileStream;
+    pReader->pStrm = &rStream;
     if (rFltName != "WW6")
     {
-        xStorage = tools::SvRef<SotStorage>(new SotStorage(aFileStream));
+        xStorage = tools::SvRef<SotStorage>(new SotStorage(rStream));
         pReader->pStg = xStorage.get();
     }
     pReader->SetFltName(rFltName);
@@ -6221,6 +6220,21 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL
     bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
     delete pReader;
     return bRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWW8(SvStream &rStream)
+{
+    return TestImportDOC(rStream, "CWW8");
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWW6(SvStream &rStream)
+{
+    return TestImportDOC(rStream, "CWW6");
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWW2(SvStream &rStream)
+{
+    return TestImportDOC(rStream, "WW6");
 }
 
 sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )
