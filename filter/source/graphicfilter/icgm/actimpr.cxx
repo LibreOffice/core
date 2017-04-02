@@ -60,10 +60,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
     mnCurrentPage = 0;
     mnGroupActCount = mnGroupLevel = 0;
     mpGroupLevel = new sal_uInt32[CGM_OUTACT_MAX_GROUP_LEVEL] ();
-    maPoints.resize(0x2000);
-    maFlags.resize(0x2000);
 
-    mnIndex = 0;
     mpGradient = nullptr;
 
     if ( mpCGM->mbStatus )
@@ -893,16 +890,17 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
 
 void CGMImpressOutAct::BeginFigure()
 {
-    if ( mnIndex )
+    if (!maPoints.empty())
         EndFigure();
 
     BeginGroup();
-    mnIndex = 0;
+    maPoints.clear();
+    maFlags.clear();
 }
 
 void CGMImpressOutAct::CloseRegion()
 {
-    if ( mnIndex > 2 )
+    if (maPoints.size() > 2)
     {
         NewRegion();
         DrawPolyPolygon( maPolyPolygon );
@@ -912,12 +910,13 @@ void CGMImpressOutAct::CloseRegion()
 
 void CGMImpressOutAct::NewRegion()
 {
-    if ( mnIndex > 2 )
+    if (maPoints.size() > 2)
     {
-        tools::Polygon aPolygon(mnIndex, maPoints.data(), maFlags.data());
+        tools::Polygon aPolygon(maPoints.size(), maPoints.data(), maFlags.data());
         maPolyPolygon.Insert( aPolygon );
     }
-    mnIndex = 0;
+    maPoints.clear();
+    maFlags.clear();
 }
 
 void CGMImpressOutAct::EndFigure()
@@ -926,7 +925,8 @@ void CGMImpressOutAct::EndFigure()
     DrawPolyPolygon( maPolyPolygon );
     maPolyPolygon.Clear();
     EndGroup();
-    mnIndex = 0;
+    maPoints.clear();
+    maFlags.clear();
 }
 
 void CGMImpressOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
@@ -938,19 +938,18 @@ void CGMImpressOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
         {
             for ( sal_uInt16 i = 0; i <  nPoints; i++ )
             {
-                maPoints[ mnIndex + i ] = rPolygon.GetPoint( nPoints - i - 1 );
-                maFlags[ mnIndex + i ] = rPolygon.GetFlags( nPoints - i - 1 );
+                maPoints.push_back(rPolygon.GetPoint(nPoints - i - 1));
+                maFlags.push_back(rPolygon.GetFlags(nPoints - i - 1));
             }
         }
         else
         {
             for ( sal_uInt16 i = 0; i <  nPoints; i++ )
             {
-                maPoints[ mnIndex + i ] = rPolygon.GetPoint( i );
-                maFlags[ mnIndex + i ] = rPolygon.GetFlags( i );
+                maPoints.push_back(rPolygon.GetPoint(i));
+                maFlags.push_back(rPolygon.GetFlags(i));
             }
         }
-        mnIndex = mnIndex + nPoints;
     }
 }
 
