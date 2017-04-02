@@ -113,7 +113,7 @@ sal_uInt8 CGM::ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision )
 sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
-    if (mpEndValidSource - pSource < nPrecision)
+    if (static_cast<sal_uIntPtr>(mpEndValidSource - pSource) < nPrecision)
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
@@ -145,7 +145,7 @@ sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
-    if (mpEndValidSource - pSource < nPrecision)
+    if (static_cast<sal_uIntPtr>(mpEndValidSource - pSource) < nPrecision)
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
@@ -200,7 +200,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     const bool bCompatible = false;
 #endif
 
-    if (mpEndValidSource - (mpSource + mnParaSize) < nRealSize)
+    if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nRealSize)
         throw css::uno::Exception("attempt to read past end of input", nullptr);
 
     if ( bCompatible )
