@@ -141,7 +141,7 @@ void GfxLink::SwapOut()
         if (!aURL.isEmpty())
         {
             std::shared_ptr<GfxLink::SwapOutData> pSwapOut = std::make_shared<SwapOutData>(aURL);    // aURL is removed in the destructor
-            SvStream* pOStm = aTempFile.GetStream(StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
+            SvStream* pOStm = aTempFile.GetStream(StreamMode::STD_WRITE);
             if (pOStm)
             {
                 pOStm->WriteBytes(mpSwapInData.get(), mnSwapInDataSize);
@@ -266,7 +266,7 @@ std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
 
     std::shared_ptr<sal_uInt8> pData;
 
-    SvFileStream aFileStream(mpSwapOutData->maURL, StreamMode::READWRITE);
+    SvFileStream aFileStream(mpSwapOutData->maURL, StreamMode::STD_READ);
     pData = o3tl::make_shared_array<sal_uInt8>(mnSwapInDataSize);
     aFileStream.ReadBytes(pData.get(), mnSwapInDataSize);
     bool bError = (ERRCODE_NONE != aFileStream.GetError());
