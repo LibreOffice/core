@@ -938,9 +938,6 @@ Sc10Import::Sc10Import(SvStream& rStr, ScDocument* pDocument ) :
 
 Sc10Import::~Sc10Import()
 {
-    pDoc->CalcAfterLoad();
-    pDoc->UpdateAllCharts();
-
     delete pFontCollection;
     delete pNameCollection;
     delete pPatternCollection;
@@ -987,6 +984,9 @@ sal_uLong Sc10Import::Import()
 #if OSL_DEBUG_LEVEL > 0
     pPrgrsBar = nullptr;
 #endif
+
+    pDoc->CalcAfterLoad();
+    pDoc->UpdateAllCharts();
 
     return nError;
 }
