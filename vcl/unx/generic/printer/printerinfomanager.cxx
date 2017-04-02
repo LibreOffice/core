@@ -78,32 +78,6 @@ namespace psp
 *  class PrinterInfoManager
 */
 
-PrinterInfoManager& PrinterInfoManager::get()
-{
-    SalData* pSalData = GetSalData();
-
-    if( ! pSalData->m_pPIManager )
-    {
-        pSalData->m_pPIManager = CUPSManager::tryLoadCUPS();
-        if( ! pSalData->m_pPIManager )
-            pSalData->m_pPIManager = new PrinterInfoManager();
-
-        pSalData->m_pPIManager->initialize();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pSalData->m_pPIManager->getType() );
-#endif
-    }
-
-    return *pSalData->m_pPIManager;
-}
-
-void PrinterInfoManager::release()
-{
-    SalData* pSalData = GetSalData();
-    delete pSalData->m_pPIManager;
-    pSalData->m_pPIManager = nullptr;
-}
-
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_pQueueInfo( nullptr ),
     m_eType( eType ),
@@ -117,6 +91,8 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_aSystemDefaultPaper = OStringToOUString(
         PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()),
         RTL_TEXTENCODING_UTF8);
+
+    initialize();
 }
 
 PrinterInfoManager::~PrinterInfoManager()

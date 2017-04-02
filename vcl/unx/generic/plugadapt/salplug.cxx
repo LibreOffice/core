@@ -26,6 +26,7 @@
 #include "salinst.hxx"
 #include "unx/gensys.h"
 #include "unx/gendata.hxx"
+#include "unx/cupsmgr.hxx"
 #include "headless/svpinst.hxx"
 #include "unx/desktops.hxx"
 #include <vcl/printerinfomanager.hxx>
@@ -317,14 +318,16 @@ const OUString& SalGetDesktopEnvironment()
 
 SalData::SalData() :
     m_pInstance(nullptr),
-    m_pPlugin(nullptr),
-    m_pPIManager(nullptr)
+    m_pPlugin(nullptr)
 {
+    m_pPIManager = psp::CUPSManager::tryLoadCUPS();
+    if (!m_pPIManager)
+        m_pPIManager = new psp::PrinterInfoManager();
 }
 
 SalData::~SalData()
 {
-    psp::PrinterInfoManager::release();
+    delete m_pPIManager;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

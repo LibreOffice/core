@@ -92,8 +92,6 @@ protected:
     bool                              m_bUseJobPatch;
     OUString                          m_aSystemDefaultPaper;
 
-    PrinterInfoManager( Type eType = Type::Default );
-
     virtual void initialize();
 
     // fill default paper if not configured in config file
@@ -103,8 +101,8 @@ protected:
 
 public:
 
-    // there can only be one
-    static PrinterInfoManager& get();
+    PrinterInfoManager( Type eType = Type::Default );
+
     // only called by SalData destructor, frees the global instance
     static void release();
 

@@ -23,6 +23,7 @@
 
 #include "psputil.hxx"
 #include "glyphset.hxx"
+#include "saldatabasic.hxx"
 
 #include "unx/printergfx.hxx"
 #include "unx/printerjob.hxx"
@@ -63,7 +64,9 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
 
     mnDpi = rPrinterJob.GetResolution();
     rPrinterJob.GetScale (mfScaleX, mfScaleY);
-    const JobData& rInfo( PrinterInfoManager::get().getPrinterInfo( rPrinterJob.GetPrinterName() ) );
+
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+    const JobData& rInfo( rManager.getPrinterInfo( rPrinterJob.GetPrinterName() ) );
     mbUploadPS42Fonts = rInfo.m_pParser && rInfo.m_pParser->isType42Capable();
 }
 
@@ -79,7 +82,9 @@ PrinterGfx::Init (const JobData& rData)
     mnDpi           = nRes;
     mfScaleX        = (double)72.0 / (double)mnDpi;
     mfScaleY        = (double)72.0 / (double)mnDpi;
-    const JobData& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
+
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+    const JobData& rInfo( rManager.getPrinterInfo( rData.m_aPrinterName ) );
     mbUploadPS42Fonts = rInfo.m_pParser && rInfo.m_pParser->isType42Capable();
 }
 

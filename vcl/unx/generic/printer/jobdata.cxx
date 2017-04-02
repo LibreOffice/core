@@ -25,6 +25,8 @@
 #include <rtl/strbuf.hxx>
 #include <memory>
 
+#include "saldatabasic.hxx"
+
 using namespace psp;
 
 JobData& JobData::operator=(const JobData& rRight)
@@ -46,7 +48,7 @@ JobData& JobData::operator=(const JobData& rRight)
 
     if( !m_pParser && !m_aPrinterName.isEmpty() )
     {
-        PrinterInfoManager& rMgr = PrinterInfoManager::get();
+        PrinterInfoManager& rMgr = *(GetSalData()->m_pPIManager);
         rMgr.setupJobContextData( *this );
     }
     return *this;
@@ -268,7 +270,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         {
             if( bPrinter )
             {
-                PrinterInfoManager& rManager = PrinterInfoManager::get();
+                PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
                 const JobData& rInfo = rManager.getPrinterInfo( rJobData.m_aPrinterName );
                 rJobData.m_pParser = PPDParser::getParser( rInfo.m_aDriverName );
                 if( rJobData.m_pParser )

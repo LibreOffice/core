@@ -25,6 +25,7 @@
 
 #include "psputil.hxx"
 #include "glyphset.hxx"
+#include "saldatabasic.hxx"
 
 #include "unx/printerjob.hxx"
 #include "unx/printergfx.hxx"
@@ -477,7 +478,7 @@ PrinterJob::EndJob()
     }
     else
     {
-        PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get ();
+        PrinterInfoManager& rPrinterInfoManager = *(GetSalData()->m_pPIManager);
         pDestFILE = rPrinterInfoManager.startSpool( m_aLastJobData.m_aPrinterName, m_bQuickJob );
         if (pDestFILE == nullptr)
             return false;
@@ -530,7 +531,8 @@ PrinterJob::EndJob()
         fclose (pDestFILE);
     else
     {
-        PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get();
+
+        PrinterInfoManager& rPrinterInfoManager = *(GetSalData()->m_pPIManager);
         if (!rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName,
             maJobTitle, pDestFILE, m_aDocumentJobData, true, OUString()))
         {
@@ -754,7 +756,9 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
                         if( bHavePS2 )
                             continue;
                     }
-                    bSuccess = writeFeature( pFile, pKey, pValue, PrinterInfoManager::get().getUseIncludeFeature() );
+
+                    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+                    bSuccess = writeFeature( pFile, pKey, pValue, rManager.getUseIncludeFeature() );
                 }
             }
         }
@@ -813,7 +817,8 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob, bool bWr
 
 void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
 {
-    if( ! PrinterInfoManager::get().getUseJobPatch() )
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+    if( ! rManager.getUseJobPatch() )
         return;
 
     const PPDKey* pKey = nullptr;
@@ -983,7 +988,8 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     bool bSuccess = true;
     // in case of external print dialog the number of copies is prepended
     // to the job, let us not complicate things by emitting our own copy count
-    bool bExternalDialog = PrinterInfoManager::get().checkFeatureToken( GetPrinterName(), "external_dialog" );
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+    bool bExternalDialog = rManager.checkFeatureToken( GetPrinterName(), "external_dialog" );
     if( ! bExternalDialog && rJob.m_nCopies > 1 )
     {
         // setup code

@@ -180,13 +180,18 @@ const OUString& SalGetDesktopEnvironment()
 
 SalData::SalData() :
     m_pInstance( 0 ),
-    m_pPlugin( 0 ),
-    m_pPIManager(0 )
+    m_pPlugin( 0 )
 {
+    m_pPIManager = CUPSManager::tryLoadCUPS();
+    if (!m_pPIManager)
+        m_pPIManager = new PrinterInfoManager();
+
+    pSalData->m_pPIManager->initialize();
 }
 
 SalData::~SalData()
 {
+    delete m_pPIManager;
 }
 
 // This is our main entry point:

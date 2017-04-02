@@ -41,6 +41,8 @@
 #include <sal/macros.h>
 #include <salhelper/linkhelper.hxx>
 
+#include "saldatabasic.hxx"
+
 #include "com/sun/star/lang/Locale.hpp"
 
 #include <unordered_map>
@@ -566,7 +568,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
         pNewParser = new PPDParser( aFile );
     else
     {
-        PrinterInfoManager& rMgr = PrinterInfoManager::get();
+        PrinterInfoManager& rMgr = *(GetSalData()->m_pPIManager);
         if( rMgr.getType() == PrinterInfoManager::Type::CUPS )
         {
 #ifdef ENABLE_CUPS

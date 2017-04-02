@@ -63,11 +63,11 @@ class CUPSManager : public PrinterInfoManager
     CUPSManager();
     virtual ~CUPSManager() override;
 
-    virtual void initialize() override;
-
     static void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions );
     void runDests();
     OString threadedCupsGetPPD(const char* pPrinter);
+
+    virtual void initialize() override;
 public:
     static void runDestThread(void* pMgr);
 

@@ -165,7 +165,7 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
 
     if( pJobSetup )
     {
-        PrinterInfoManager& rManager( PrinterInfoManager::get() );
+        PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
         JobData aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
         pPrinter->m_aJobData = aInfo;
         pPrinter->m_aPrinterGfx.Init( pPrinter->m_aJobData );
@@ -204,7 +204,7 @@ void SvpSalInstance::DestroyPrinter( SalPrinter* pPrinter )
 
 void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
-    PrinterInfoManager& rManager( PrinterInfoManager::get() );
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
     static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
     if( ! pNoSyncDetection || ! *pNoSyncDetection )
     {
@@ -251,7 +251,7 @@ void SvpSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 
 OUString SvpSalInstance::GetDefaultPrinter()
 {
-    PrinterInfoManager& rManager( PrinterInfoManager::get() );
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
     return rManager.getDefaultPrinter();
 }
 

@@ -370,7 +370,7 @@ void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
 {
     if( pJobSetup )
     {
-        PrinterInfoManager& rManager( PrinterInfoManager::get() );
+        PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
         JobData aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
         pPrinter->m_aJobData = aInfo;
         pPrinter->m_aPrinterGfx.Init( pPrinter->m_aJobData );
@@ -419,7 +419,7 @@ void SalGenericInstance::DestroyPrinter( SalPrinter* pPrinter )
 void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
     mbPrinterInit = true;
-    PrinterInfoManager& rManager( PrinterInfoManager::get() );
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
     static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
     if( ! pNoSyncDetection || ! *pNoSyncDetection )
     {
@@ -468,7 +468,7 @@ void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 OUString SalGenericInstance::GetDefaultPrinter()
 {
     mbPrinterInit = true;
-    PrinterInfoManager& rManager( PrinterInfoManager::get() );
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
     return rManager.getDefaultPrinter();
 }
 
@@ -545,7 +545,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
     if( ! pFrame || ! pJobSetup )
         return false;
 
-    PrinterInfoManager& rManager = PrinterInfoManager::get();
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
 
     JobData aInfo( rManager.getPrinterInfo( pJobSetup->GetPrinterName() ) );
     if ( pJobSetup->GetDriverData() )
@@ -776,6 +776,8 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
 
 sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, PrinterCapType nType )
 {
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+
     switch( nType )
     {
         case PrinterCapType::SupportDialog:
@@ -798,7 +800,7 @@ sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pr
             {
                 // see if the PPD contains the fax4CUPS "Dial" option and that it's not set
                 // to "manually"
-                JobData aData = PrinterInfoManager::get().getPrinterInfo(pJobSetup->GetPrinterName());
+                JobData aData = rManager.getPrinterInfo(pJobSetup->GetPrinterName());
                 if( pJobSetup->GetDriverData() )
                     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
                 const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey(OUString("Dial")) : nullptr;
@@ -809,22 +811,24 @@ sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pr
             }
 
         case PrinterCapType::PDF:
-            if( PrinterInfoManager::get().checkFeatureToken( pJobSetup->GetPrinterName(), "pdf" ) )
+            if( rManager.checkFeatureToken( pJobSetup->GetPrinterName(), "pdf" ) )
+            {
                 return 1;
+            }
             else
             {
                 // see if the PPD contains a value to set PDF device
-                JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->GetPrinterName() );
+                JobData aData = rManager.getPrinterInfo( pJobSetup->GetPrinterName() );
                 if( pJobSetup->GetDriverData() )
                     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
                 return aData.m_nPDFDevice > 0 ? 1 : 0;
             }
         case PrinterCapType::ExternalDialog:
-            return PrinterInfoManager::get().checkFeatureToken( pJobSetup->GetPrinterName(), "external_dialog" ) ? 1 : 0;
+            return rManager.checkFeatureToken( pJobSetup->GetPrinterName(), "external_dialog" ) ? 1 : 0;
         case PrinterCapType::UsePullModel:
         {
             // see if the PPD contains a value to set PDF device
-            JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->GetPrinterName() );
+            JobData aData = rManager.getPrinterInfo( pJobSetup->GetPrinterName() );
             if( pJobSetup->GetDriverData() )
                 JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
             return aData.m_nPDFDevice > 0 ? 1 : 0;
@@ -892,7 +896,9 @@ bool PspSalPrinter::StartJob(
     int nMode = 0;
     // check whether this printer is configured as fax
     sal_Int32 nIndex = 0;
-    const JobData& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
+
+    PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+    const JobData& rInfo( rManager.getPrinterInfo( m_aJobData.m_aPrinterName ) );
     while( nIndex != -1 )
     {
         OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
@@ -930,7 +936,8 @@ bool PspSalPrinter::EndJob()
 
         if( bSuccess && m_bPdf )
         {
-            const JobData& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
+            PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+            const JobData& rInfo( rManager.getPrinterInfo( m_aJobData.m_aPrinterName ) );
             bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
         }
     }
@@ -1208,7 +1215,8 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                         m_aJobData.setPaperBin( aPDFFiles[i].maParameters.mnPaperBin );
 
                         // spool current file
-                        FILE* fp = PrinterInfoManager::get().startSpool(xPrinter->GetName(), i_rController.isDirectPrint());
+                        PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
+                        FILE* fp = rManager.startSpool(xPrinter->GetName(), i_rController.isDirectPrint());
                         if( fp )
                         {
                             sal_uInt64 nBytesRead = 0;
@@ -1231,7 +1239,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                                 aBuf.append( sal_Int32( i + nCurJob * aPDFFiles.size() ) );
                             }
                             bSuccess &=
-                            PrinterInfoManager::get().endSpool(xPrinter->GetName(), aBuf.makeStringAndClear(), fp, m_aJobData, bFirstJob, sFaxNumber);
+                            rManager.endSpool(xPrinter->GetName(), aBuf.makeStringAndClear(), fp, m_aJobData, bFirstJob, sFaxNumber);
                             bFirstJob = false;
                         }
                     }
@@ -1269,7 +1277,7 @@ class PrinterUpdate
     static void doUpdate();
     DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, Timer*, void );
 public:
-    static void update(SalGenericInstance &rInstance);
+    static void update();
     static void jobStarted() { nActiveJobs++; }
     static void jobEnded();
 };
@@ -1279,7 +1287,8 @@ int PrinterUpdate::nActiveJobs = 0;
 
 void PrinterUpdate::doUpdate()
 {
-    ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
+
+    psp::PrinterInfoManager& rManager = *(GetSalData()->m_pPIManager);
     SalGenericInstance *pInst = static_cast<SalGenericInstance *>( GetSalData()->m_pInstance );
     if( pInst && rManager.checkPrintersChanged( false ) )
         pInst->PostPrintersChanged();
@@ -1297,17 +1306,10 @@ IMPL_STATIC_LINK_NOARG( PrinterUpdate, UpdateTimerHdl, Timer*, void )
         pPrinterUpdateIdle->Start();
 }
 
-void PrinterUpdate::update(SalGenericInstance &rInstance)
+void PrinterUpdate::update()
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
-
-    if( ! rInstance.isPrinterInit() )
-    {
-        // #i45389# start background printer detection
-        psp::PrinterInfoManager::get();
-        return;
-    }
 
     if( nActiveJobs < 1 )
         doUpdate();
@@ -1322,7 +1324,7 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
 
 void SalGenericInstance::updatePrinterUpdate()
 {
-    PrinterUpdate::update(*this);
+    PrinterUpdate::update();
 }
 
 void SalGenericInstance::jobStartedPrinterUpdate()

@@ -33,21 +33,6 @@ using namespace psp;
 using namespace osl;
 
 
-PrinterInfoManager& PrinterInfoManager::get()
-{
-    SalData* pSalData = GetSalData();
-    if( ! pSalData->m_pPIManager )
-        pSalData->m_pPIManager = new PrinterInfoManager();
-    return *pSalData->m_pPIManager;
-}
-
-void PrinterInfoManager::release()
-{
-    SalData* pSalData = GetSalData();
-    delete pSalData->m_pPIManager;
-    pSalData->m_pPIManager = nullptr;
-}
-
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_pQueueInfo( nullptr ),
     m_eType( eType ),

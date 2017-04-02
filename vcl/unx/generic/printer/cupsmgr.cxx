@@ -38,6 +38,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 
+#include "saldatabasic.hxx"
+
 #include <algorithm>
 #include <mutex>
 #include <condition_variable>
@@ -156,7 +158,7 @@ static const char* setPasswordCallback( const char* pIn )
 {
     const char* pRet = nullptr;
 
-    PrinterInfoManager& rMgr = PrinterInfoManager::get();
+    PrinterInfoManager& rMgr = *(GetSalData()->m_pPIManager);
     if( rMgr.getType() == PrinterInfoManager::Type::CUPS ) // sanity check
         pRet = static_cast<CUPSManager&>(rMgr).authenticateUser( pIn );
     return pRet;
@@ -193,57 +195,12 @@ CUPSManager::CUPSManager() :
         m_bPPDThreadRunning( false )
 {
     m_aDestThread = osl_createThread( run_dest_thread_stub, this );
-}
 
-CUPSManager::~CUPSManager()
-{
-    if( m_aDestThread )
-    {
-        // if the thread is still running here, then
-        // cupsGetDests is hung; terminate the thread instead of joining
-        osl_terminateThread( m_aDestThread );
-        osl_destroyThread( m_aDestThread );
-    }
-
-    if (m_nDests && m_pDests)
-        cupsFreeDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
-}
-
-void CUPSManager::runDestThread( void* pThis )
-{
-    static_cast<CUPSManager*>(pThis)->runDests();
-}
-
-void CUPSManager::runDests()
-{
-    SAL_INFO("vcl.unx.print", "starting cupsGetDests");
-    cups_dest_t* pDests = nullptr;
-
-    // n#722902 - do a fast-failing check for cups working *at all* first
-    http_t* p_http;
-    if( (p_http=httpConnectEncrypt(
-             cupsServer(),
-             ippPort(),
-             cupsEncryption())) != nullptr )
-    {
-        int nDests = cupsGetDests2(p_http,  &pDests);
-        SAL_INFO("vcl.unx.print", "came out of cupsGetDests");
-
-        osl::MutexGuard aGuard( m_aCUPSMutex );
-        m_nDests = nDests;
-        m_pDests = pDests;
-        m_bNewDests = true;
-        SAL_INFO("vcl.unx.print", "finished cupsGetDests");
-
-        httpClose(p_http);
-    }
+    initialize();
 }
 
 void CUPSManager::initialize()
 {
-    // get normal printers, clear printer list
-    PrinterInfoManager::initialize();
-
     // check whether thread has completed
     // if not behave like old printing system
     osl::MutexGuard aGuard( m_aCUPSMutex );
@@ -374,6 +331,50 @@ void CUPSManager::initialize()
     }
 
     cupsSetPasswordCB( setPasswordCallback );
+}
+
+CUPSManager::~CUPSManager()
+{
+    if( m_aDestThread )
+    {
+        // if the thread is still running here, then
+        // cupsGetDests is hung; terminate the thread instead of joining
+        osl_terminateThread( m_aDestThread );
+        osl_destroyThread( m_aDestThread );
+    }
+
+    if (m_nDests && m_pDests)
+        cupsFreeDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
+}
+
+void CUPSManager::runDestThread( void* pThis )
+{
+    static_cast<CUPSManager*>(pThis)->runDests();
+}
+
+void CUPSManager::runDests()
+{
+    SAL_INFO("vcl.unx.print", "starting cupsGetDests");
+    cups_dest_t* pDests = nullptr;
+
+    // n#722902 - do a fast-failing check for cups working *at all* first
+    http_t* p_http;
+    if( (p_http=httpConnectEncrypt(
+             cupsServer(),
+             ippPort(),
+             cupsEncryption())) != nullptr )
+    {
+        int nDests = cupsGetDests2(p_http,  &pDests);
+        SAL_INFO("vcl.unx.print", "came out of cupsGetDests");
+
+        osl::MutexGuard aGuard( m_aCUPSMutex );
+        m_nDests = nDests;
+        m_pDests = pDests;
+        m_bNewDests = true;
+        SAL_INFO("vcl.unx.print", "finished cupsGetDests");
+
+        httpClose(p_http);
+    }
 }
 
 static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PPDContext& rContext )
