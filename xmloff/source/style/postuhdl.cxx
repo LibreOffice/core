@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <tools/fontenum.hxx>
+#include <vcl/unohelp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -50,7 +51,7 @@ bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     FontItalic ePosture;
     bool bRet = SvXMLUnitConverter::convertEnum( ePosture, rStrImpValue, aPostureGenericMapping );
     if( bRet )
-        rValue <<= (awt::FontSlant)ePosture;
+        rValue <<= vcl::unohelper::ConvertFontSlant(ePosture);
 
     return bRet;
 }
@@ -70,7 +71,7 @@ bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     }
 
     OUStringBuffer aOut;
-    bool bRet = SvXMLUnitConverter::convertEnum( aOut, (FontItalic)eSlant, aPostureGenericMapping );
+    bool bRet = SvXMLUnitConverter::convertEnum(aOut, vcl::unohelper::ConvertFontSlant(eSlant), aPostureGenericMapping);
     if( bRet )
         rStrExpValue = aOut.makeStringAndClear();
 
