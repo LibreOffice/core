@@ -47,6 +47,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <uno/data.h>
 
 #include <memory>
@@ -733,13 +734,13 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                 OutStream->writeLong( aFD.Height );
                 OutStream->writeShort(
                     sal::static_int_cast< sal_Int16 >(
-                        VCLUnoHelper::ConvertFontWidth( aFD.CharacterWidth )) );
+                        vcl::unohelper::ConvertFontWidth(aFD.CharacterWidth)) );
             }
             else if ( n == BASEPROPERTY_FONT_ATTRIBS )
             {
                 OutStream->writeShort(
                     sal::static_int_cast< sal_Int16 >(
-                        VCLUnoHelper::ConvertFontWeight( aFD.Weight )) );
+                        vcl::unohelper::ConvertFontWeight(aFD.Weight)) );
                 OutStream->writeShort(
                     sal::static_int_cast< sal_Int16 >(aFD.Slant) );
                 OutStream->writeShort( aFD.Underline );
@@ -957,7 +958,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                             if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
                                 maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
                         }
-                        pFD->Weight = VCLUnoHelper::ConvertFontWeight( (FontWeight) InStream->readShort() );
+                        pFD->Weight = vcl::unohelper::ConvertFontWeight((FontWeight) InStream->readShort());
                         pFD->Slant =  (css::awt::FontSlant)InStream->readShort();
                         pFD->Underline = InStream->readShort();
                         pFD->Strikeout = InStream->readShort();
