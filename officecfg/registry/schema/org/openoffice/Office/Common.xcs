@@ -3432,6 +3432,16 @@
         </info>
       </prop>
     </group>
+    <group oor:name="RecentEmoji">
+      <info>
+        <desc>Contains recent emojis</desc>
+      </info>
+      <prop oor:name="RecentEmojiCodes" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Contains recent emoji unicodes</desc>
+        </info>
+        <value/>                                                                         </prop>
+    </group>
     <group oor:name="UserColors">
       <info>
         <desc>Contains recent colors and custom colors</desc>

@@ -22,6 +22,7 @@ class EmojiViewItem;
 
 enum class FILTER_CATEGORY
 {
+    RECENT,
     PEOPLE,
     NATURE,
     FOOD,
@@ -62,6 +63,8 @@ public:
     // Fill view with emojis
     void Populate ();
 
+    std::deque<OUString> getRecentEmojiList();
+
     void setInsertEmojiHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
     void AppendItem(const OUString &rTitle, const OUString &rCategory, const OUString &rName );
@@ -75,6 +78,7 @@ protected:
 
 protected:
     std::string msJSONData;
+    std::deque<OUString> maRecentEmoji;
 
     Link<ThumbnailViewItem*, void> maInsertEmojiHdl;
 };
