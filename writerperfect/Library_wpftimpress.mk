@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_externals,wpftimpress,\
 	etonyek \
 	mwaw \
 	odfgen \
+	staroffice \
 	revenge \
 	zlib \
 	libxml2 \
@@ -57,6 +58,7 @@ $(eval $(call gb_Library_use_externals,wpftimpress,\
 $(eval $(call gb_Library_add_exception_objects,wpftimpress,\
 	writerperfect/source/impress/KeynoteImportFilter \
 	writerperfect/source/impress/MWAWPresentationImportFilter \
+	writerperfect/source/impress/StarOfficePresentationImportFilter \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -105,7 +105,7 @@ const rtl::OUString concatPath(const rtl::OUString &lhs, const rtl::OUString &rh
 
 struct OLEStreamData
 {
-    explicit OLEStreamData(const rtl::OString &rName);
+    OLEStreamData(const rtl::OString &rName, const rtl::OString &rvngName);
 
     SotStorageStreamRefWrapper stream;
 
@@ -115,6 +115,12 @@ struct OLEStreamData
       * produce const char* from it.
       */
     rtl::OString name;
+    /** librevenge name of the stream.
+      *
+      * This is not @c rtl::OUString, because we need to be able to
+      * produce const char* from it.
+      */
+    rtl::OString RVNGname;
 };
 
 typedef std::unordered_map<rtl::OUString, std::size_t, rtl::OUStringHash> NameMap_t;
@@ -158,9 +164,10 @@ public:
     bool mbInitialized;
 };
 
-OLEStreamData::OLEStreamData(const rtl::OString &rName)
+OLEStreamData::OLEStreamData(const rtl::OString &rName, const rtl::OString &rvngName)
     : stream()
     , name(rName)
+    , RVNGname(rvngName)
 {
 }
 
@@ -197,7 +204,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const rtl::OUString &rP
         return tools::SvRef<SotStorageStream>();
 
     if (!maStreams[aIt->second].stream.ref.is())
-        maStreams[aIt->second].stream.ref = createStream(aPath);
+        maStreams[aIt->second].stream.ref = createStream(rtl::OStringToOUString(maStreams[aIt->second].name, RTL_TEXTENCODING_UTF8));
 
     return maStreams[aIt->second].stream.ref;
 }
@@ -220,8 +227,13 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage> &rStorage, const rt
     {
         if (aIt->IsStream())
         {
-            maStreams.push_back(OLEStreamData(rtl::OUStringToOString(concatPath(rPath, aIt->GetName()), RTL_TEXTENCODING_UTF8)));
-            maNameMap[concatPath(rPath, aIt->GetName())] = maStreams.size() - 1;
+            rtl::OUString baseName=aIt->GetName(), rvngName=baseName;
+            // librevenge::RVNGOLEStream ignores the first character when is a control code, so ...
+            if (!rvngName.isEmpty() && rvngName.toChar()<32)
+                rvngName=rvngName.copy(1);
+            maStreams.push_back(OLEStreamData(rtl::OUStringToOString(concatPath(rPath, baseName), RTL_TEXTENCODING_UTF8),
+                                              rtl::OUStringToOString(concatPath(rPath, rvngName), RTL_TEXTENCODING_UTF8)));
+            maNameMap[concatPath(rPath, rvngName)] = maStreams.size() - 1;
         }
         else if (aIt->IsStorage())
         {
@@ -590,7 +602,7 @@ const char *WPXSvInputStreamImpl::subStreamName(const unsigned id)
         if (mpOLEStorage->maStreams.size() <= id)
             return nullptr;
 
-        return mpOLEStorage->maStreams[id].name.getStr();
+        return mpOLEStorage->maStreams[id].RVNGname.getStr();
     }
 
     mxSeekable->seek(0);

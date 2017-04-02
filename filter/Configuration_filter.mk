@@ -600,6 +600,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xc
 	impress_OOXML_Presentation_Template \
 	impress_OOXML_Presentation_AutoPlay \
 	impress_ClarisWorks \
+	StarOffice_Presentation \
 	MWAW_Presentation \
 	impress_PowerPoint3 \
 ))
@@ -625,6 +626,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filter
 	impress_OOXML_Template \
 	impress_OOXML_AutoPlay \
 	ClarisWorks_Impress \
+	StarOffice_Presentation \
 	MWAW_Presentation \
 	PowerPoint3 \
 ))
