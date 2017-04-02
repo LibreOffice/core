@@ -99,7 +99,7 @@ sal_uInt32 CGM::GetBackGroundColor()
 sal_uInt32 CGM::ImplGetUI16( sal_uInt32 /*nAlign*/ )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
-    if (pSource + 2 > mpEndValidSource)
+    if (mpEndValidSource - pSource < 2)
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += 2;
     return ( pSource[ 0 ] << 8 ) +  pSource[ 1 ];
@@ -113,7 +113,7 @@ sal_uInt8 CGM::ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision )
 sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
-    if (pSource + nPrecision > mpEndValidSource)
+    if (mpEndValidSource - pSource < nPrecision)
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
@@ -145,7 +145,7 @@ sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
-    if (pSource + nPrecision > mpEndValidSource)
+    if (mpEndValidSource - pSource < nPrecision)
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
@@ -200,7 +200,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     const bool bCompatible = false;
 #endif
 
-    if (mpSource + mnParaSize + nRealSize > mpEndValidSource)
+    if (mpEndValidSource - (mpSource + mnParaSize) < nRealSize)
         throw css::uno::Exception("attempt to read past end of input", nullptr);
 
     if ( bCompatible )
