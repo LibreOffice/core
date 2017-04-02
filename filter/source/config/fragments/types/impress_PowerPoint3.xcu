@@ -11,7 +11,7 @@
         <value>com.sun.star.comp.Impress.MWAWPresentationImportFilter</value>
     </prop>
     <prop oor:name="Extensions">
-        <value>ppt</value>
+        <value>ppt pot</value>
     </prop>
     <prop oor:name="PreferredFilter">
         <value>PowerPoint 3</value>

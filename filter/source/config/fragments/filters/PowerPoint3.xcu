@@ -14,7 +14,7 @@
         <value>com.sun.star.comp.Impress.MWAWPresentationImportFilter</value>
     </prop>
     <prop oor:name="UIName">
-        <value xml:lang="en-US">Microsoft PowerPoint 1-4</value>
+        <value xml:lang="en-US">Microsoft PowerPoint 1-4 and 95's</value>
     </prop>
     <prop oor:name="FileFormatVersion">
         <value>0</value>
