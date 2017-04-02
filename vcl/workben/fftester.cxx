@@ -115,8 +115,6 @@ try_again:
                 GDIMetaFile aGDIMetaFile;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) ReadWindowMetafile(aFileStream, aGDIMetaFile);
-                BitmapEx aTarget;
-                (void)aGDIMetaFile.CreateThumbnail(aTarget);
             }
             else if (strcmp(argv[2], "jpg") == 0)
             {
