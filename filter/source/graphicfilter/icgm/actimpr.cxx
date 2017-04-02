@@ -60,7 +60,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
     mnCurrentPage = 0;
     mnGroupActCount = mnGroupLevel = 0;
     mpGroupLevel = new sal_uInt32[CGM_OUTACT_MAX_GROUP_LEVEL] ();
-    mpPoints = reinterpret_cast<Point*>(new sal_Int8[ 0x2000 * sizeof( Point ) ]);
+    mpPoints = new Point[ 0x2000 ];
     mpFlags = new PolyFlags[ 0x2000 ];
 
     mnIndex = 0;
@@ -91,7 +91,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
 
 CGMImpressOutAct::~CGMImpressOutAct()
 {
-    delete[] reinterpret_cast<sal_Int8*>(mpPoints);
+    delete[] mpPoints;
     delete[] mpFlags;
     delete[] mpGroupLevel;
     delete mpGradient;
