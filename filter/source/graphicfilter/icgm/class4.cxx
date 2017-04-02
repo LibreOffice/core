@@ -178,15 +178,18 @@ void CGM::ImplDoClass4()
             case 0x04 : /*Text*/
             {
                 FloatPoint  aFloatPoint;
-                sal_uInt32      nType, nSize;
 
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
                 ImplGetPoint ( aFloatPoint, true );
-                nType = ImplGetUI16( 4 );
-                nSize = ImplGetUI( 1 );
-                mpSource[ mnParaSize + nSize ] = 0;
+                sal_uInt32 nType = ImplGetUI16( 4 );
+                sal_uInt32 nSize = ImplGetUI( 1 );
+
+                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                    throw css::uno::Exception("attempt to read past end of input", nullptr);
+
+                mpSource[mnParaSize + nSize] = 0;
 
                 awt::Size aSize;
                 awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
@@ -200,7 +203,6 @@ void CGM::ImplDoClass4()
             {
                 double      dx, dy;
                 FloatPoint  aFloatPoint;
-                sal_uInt32      nType, nSize;
 
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -219,8 +221,11 @@ void CGM::ImplDoClass4()
                 ImplMapDouble( dy );
 
                 ImplGetPoint ( aFloatPoint, true );
-                nType = ImplGetUI16( 4 );
-                nSize = ImplGetUI( 1 );
+                sal_uInt32 nType = ImplGetUI16(4);
+                sal_uInt32 nSize = ImplGetUI(1);
+
+                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                    throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 mpSource[ mnParaSize + nSize ] = 0;
 
@@ -234,10 +239,12 @@ void CGM::ImplDoClass4()
 
             case 0x06 : /*Append Text*/
             {
-                sal_uInt32 nSize;
                 sal_uInt32 nType = ImplGetUI16( 4 );
+                sal_uInt32 nSize = ImplGetUI( 1 );
 
-                nSize = ImplGetUI( 1 );
+                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                    throw css::uno::Exception("attempt to read past end of input", nullptr);
+
                 mpSource[ mnParaSize + nSize ] = 0;
 
                 mpOutAct->AppendText( reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, (FinalFlag)nType );
