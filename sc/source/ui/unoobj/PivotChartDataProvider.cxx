@@ -564,10 +564,12 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
 
     {
         std::vector<PivotChartItem> aFirstCategories;
-        std::copy (m_aCategoriesColumnOrientation[0].begin(),
-                   m_aCategoriesColumnOrientation[0].end(),
-                   std::back_inserter(aFirstCategories));
-
+        if (!m_aCategoriesColumnOrientation.empty())
+        {
+            std::copy(m_aCategoriesColumnOrientation[0].begin(),
+                      m_aCategoriesColumnOrientation[0].end(),
+                      std::back_inserter(aFirstCategories));
+        }
         uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
         setLabeledDataSequenceValues(xResult, "categories", "Categories", aFirstCategories);
         aLabeledSequences.push_back(xResult);

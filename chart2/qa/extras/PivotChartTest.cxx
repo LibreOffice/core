@@ -64,7 +64,11 @@ bool lclCheckSequence(std::vector<double> const & reference,
                       double delta)
 {
     if (reference.size() != size_t(values.getLength()))
+    {
+        printf ("Sequence size differs - reference is %ld but actual is %ld\n",
+                reference.size(), size_t(values.getLength()));
         return false;
+    }
 
     for (size_t i = 0; i < reference.size(); ++i)
     {
@@ -232,6 +236,40 @@ void PivotChartTest::testChangePivotTable()
         CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
 
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 2));
+    }
+
+    // Modify the pivot table
+    {
+        uno::Reference<sheet::XDataPilotTable> xDataPilotTable = lclGetPivotTableByName(1, "DataPilot1", mxComponent);
+        uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, UNO_QUERY_THROW);
+
+        lclModifyOrientation(xDataPilotDescriptor, "Service Month", sheet::DataPilotFieldOrientation_HIDDEN);
+    }
+
+    // Check the pivot chart again as we expect it has been updated when we updated the pivot table
+
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    // Check the first data series
+    {
+        std::vector<double> aReference { 10162.033139 };
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
+        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        CPPUNIT_ASSERT_EQUAL(OUString("Big"), lclGetLabel(xChartDoc, 0));
+    }
+    // Check the second data series
+    {
+        std::vector<double> aReference { 16614.523063 };
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
+        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        CPPUNIT_ASSERT_EQUAL(OUString("Medium"), lclGetLabel(xChartDoc, 1));
+    }
+    // Check the third data series
+    {
+        std::vector<double> aReference { 27944.146101 };
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 2)->getData();
+        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        CPPUNIT_ASSERT_EQUAL(OUString("Small"), lclGetLabel(xChartDoc, 2));
     }
 }
 
