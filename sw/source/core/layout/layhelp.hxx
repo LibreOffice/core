@@ -109,7 +109,7 @@ class SwLayHelper
     sal_uLong nMaxParaPerPage;
     sal_uLong nParagraphCnt;
     sal_uLong nStartOfContent;
-    sal_uInt16 nIndex;                      // the index in the page break array
+    size_t nIndex;                          // the index in the page break array
     size_t nFlyIdx;                         // the index in the fly cache array
     bool bFirst : 1;
     void CheckFlyCache_( SwPageFrame* pPage );

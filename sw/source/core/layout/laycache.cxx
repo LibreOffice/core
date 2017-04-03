@@ -42,6 +42,7 @@
 #include <flyfrm.hxx>
 #include <sortedobjs.hxx>
 
+#include <limits>
 #include <set>
 
 using namespace ::com::sun::star;
@@ -320,7 +321,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
     const SwRootFrame *pRootFrame = rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRootFrame )
     {
-        sal_uInt16 nIndex = 0;
+        size_t nIndex = 0;
         sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
         const SwPageFrame* pPage = static_cast<const SwPageFrame*>(pRootFrame->Lower());
@@ -534,13 +535,13 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* 
         {
             pDoc->GetLayoutCache()->UnlockImpl();
             pImpl = nullptr;
-            nIndex = USHRT_MAX;
+            nIndex = std::numeric_limits<size_t>::max();
             nStartOfContent = USHRT_MAX;
         }
     }
     else
     {
-        nIndex = USHRT_MAX;
+        nIndex = std::numeric_limits<size_t>::max();
         nStartOfContent = ULONG_MAX;
     }
 }
