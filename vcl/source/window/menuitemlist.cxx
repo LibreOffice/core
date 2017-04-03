@@ -135,6 +135,13 @@ void MenuItemList::Remove( size_t nPos )
     }
 }
 
+void MenuItemList::Clear()
+{
+    for (MenuItemData* i : maItemList)
+        delete i;
+    maItemList.resize(0);
+}
+
 MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
 {
     for( size_t i = 0, n = maItemList.size(); i < n; ++i )

@@ -133,7 +133,7 @@ class VCL_DLLPUBLIC Menu : public Resource, public VclReferenceBase
     friend struct ImplMenuDelData;
 private:
     ImplMenuDelData* mpFirstDel;
-    MenuItemList* pItemList; // list with MenuItems
+    std::unique_ptr<MenuItemList> pItemList; // list with MenuItems
     MenuLogo* pLogo;
     VclPtr<Menu> pStartedFrom;
     VclPtr<vcl::Window> pWindow;
@@ -355,7 +355,7 @@ public:
     // Fuer Menu-'Funktionen'
     MenuItemList* GetItemList() const
     {
-        return pItemList;
+        return pItemList.get();
     }
 
     // returns the system's menu handle if native menus are supported
