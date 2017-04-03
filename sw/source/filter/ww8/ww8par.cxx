@@ -2951,6 +2951,20 @@ sal_Unicode SwWW8ImplReader::TranslateToHindiNumbers(sal_Unicode nChar)
     return nChar;
 }
 
+namespace
+{
+    OUString makeOUString(rtl_uString *pStr, sal_Int32 nAllocLen)
+    {
+        //if read len was in or around that of allocated len, just reuse pStr
+        if (nAllocLen < pStr->length + 256)
+            return OUString(pStr, SAL_NO_ACQUIRE);
+        //otherwise copy the shorter used section to release extra mem
+        OUString sRet(pStr->buffer, pStr->length);
+        rtl_uString_release(pStr);
+        return sRet;
+    }
+}
+
 /**
  * Return value: true for non special chars
  */
@@ -3125,7 +3139,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         pStr->buffer[nEndUsed] = 0;
         pStr->length = nEndUsed;
 
-        emulateMSWordAddTextToParagraph(OUString(pStr, SAL_NO_ACQUIRE));
+        emulateMSWordAddTextToParagraph(makeOUString(pStr, nStrLen));
         pStr = nullptr;
         rPos += nL2;
         if (!m_aApos.back()) // a para end in apo doesn't count
