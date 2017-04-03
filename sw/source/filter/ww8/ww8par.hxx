@@ -1215,8 +1215,8 @@ private:
 
     WW8PLCF_HdFt* m_pHdFt;        // pointer to Header / Footer - scanner class
 
-    WW8FlyPara* m_pWFlyPara;      // WW-parameter
-    WW8SwFlyPara* m_pSFlyPara;    // Sw parameters created from previous
+    std::unique_ptr<WW8FlyPara> m_xWFlyPara;      // WW-parameter
+    std::unique_ptr<WW8SwFlyPara> m_xSFlyPara;    // Sw parameters created from previous
 
     WW8TabDesc* m_pTableDesc;     // description of table properties
     //Keep track of tables within tables

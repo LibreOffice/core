@@ -277,11 +277,11 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
             aSizeTwip.Height() ) );
         pTempSet->Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
 
-        if( m_pSFlyPara )
+        if (m_xSFlyPara)
         {
             // Resize the frame to the picture size if there is an OLE object
             // in the frame (only if auto-width)
-            m_pSFlyPara->BoxUpWidth( aSizeTwip.Width() );
+            m_xSFlyPara->BoxUpWidth(aSizeTwip.Width());
         }
     }
 

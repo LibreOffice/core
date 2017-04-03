@@ -2484,22 +2484,22 @@ void WW8TabDesc::CreateSwTable()
 
     if (text::HoriOrientation::LEFT_AND_WIDTH == m_eOri)
     {
-        if (!m_pIo->m_nInTable && m_pIo->InLocalApo() && m_pIo->m_pSFlyPara->pFlyFormat &&
+        if (!m_pIo->m_nInTable && m_pIo->InLocalApo() && m_pIo->m_xSFlyPara->pFlyFormat &&
             GetMinLeft())
         {
             //If we are inside a frame and we have a border, the frames
             //placement does not consider the tables border, which word
             //displays outside the frame, so adjust here.
-            SwFormatHoriOrient aHori(m_pIo->m_pSFlyPara->pFlyFormat->GetHoriOrient());
+            SwFormatHoriOrient aHori(m_pIo->m_xSFlyPara->pFlyFormat->GetHoriOrient());
             sal_Int16 eHori = aHori.GetHoriOrient();
             if ((eHori == text::HoriOrientation::NONE) || (eHori == text::HoriOrientation::LEFT) ||
                 (eHori == text::HoriOrientation::LEFT_AND_WIDTH))
             {
                 //With multiple table, use last table settings. Perhaps
                 //the maximum is what word does ?
-                aHori.SetPos(m_pIo->m_pSFlyPara->nXPos + GetMinLeft());
+                aHori.SetPos(m_pIo->m_xSFlyPara->nXPos + GetMinLeft());
                 aHori.SetHoriOrient(text::HoriOrientation::NONE);
-                m_pIo->m_pSFlyPara->pFlyFormat->SetFormatAttr(aHori);
+                m_pIo->m_xSFlyPara->pFlyFormat->SetFormatAttr(aHori);
             }
         }
         else

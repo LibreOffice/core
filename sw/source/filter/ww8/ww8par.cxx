@@ -2040,8 +2040,8 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     mpOldAnchorStck(pRdr->m_pAnchorStck),
     mpOldRedlines(pRdr->m_pRedlineStack),
     mpOldPlcxMan(pRdr->m_pPlcxMan),
-    mpWFlyPara(pRdr->m_pWFlyPara),
-    mpSFlyPara(pRdr->m_pSFlyPara),
+    mpWFlyPara(pRdr->m_xWFlyPara.release()),
+    mpSFlyPara(pRdr->m_xSFlyPara.release()),
     mpPreviousNumPaM(pRdr->m_pPreviousNumPaM),
     mpPrevNumRule(pRdr->m_pPrevNumRule),
     mpTableDesc(pRdr->m_pTableDesc),
@@ -2065,8 +2065,6 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
         = pRdr->m_bHasBorder = false;
     pRdr->m_bFirstPara = true;
     pRdr->m_nInTable = 0;
-    pRdr->m_pWFlyPara = nullptr;
-    pRdr->m_pSFlyPara = nullptr;
     pRdr->m_pPreviousNumPaM = nullptr;
     pRdr->m_pPrevNumRule = nullptr;
     pRdr->m_pTableDesc = nullptr;
@@ -2097,8 +2095,8 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 {
-    pRdr->m_pWFlyPara = mpWFlyPara;
-    pRdr->m_pSFlyPara = mpSFlyPara;
+    pRdr->m_xWFlyPara.reset(mpWFlyPara);
+    pRdr->m_xSFlyPara.reset(mpSFlyPara);
     pRdr->m_pPreviousNumPaM = mpPreviousNumPaM;
     pRdr->m_pPrevNumRule = mpPrevNumRule;
     pRdr->m_pTableDesc = mpTableDesc;
@@ -4186,8 +4184,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pDfltTextFormatColl(nullptr)
     , m_pStandardFormatColl(nullptr)
     , m_pHdFt(nullptr)
-    , m_pWFlyPara(nullptr)
-    , m_pSFlyPara(nullptr)
     , m_pTableDesc(nullptr)
     , m_pNumOlst(nullptr)
     , m_pDrawModel(nullptr)

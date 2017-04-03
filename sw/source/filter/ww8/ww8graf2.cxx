@@ -356,13 +356,13 @@ SwFlyFrameFormat* SwWW8ImplReader::MakeGrafNotInContent(const WW8PicDesc& rPD,
 
     // Vertical shift through line spacing
     sal_Int32 nNetHeight = nHeight + rPD.nCT + rPD.nCB;
-    if( m_pSFlyPara->nLineSpace && m_pSFlyPara->nLineSpace > nNetHeight )
-        m_pSFlyPara->nYPos =
-            (sal_uInt16)( m_pSFlyPara->nYPos + m_pSFlyPara->nLineSpace - nNetHeight );
+    if (m_xSFlyPara->nLineSpace && m_xSFlyPara->nLineSpace > nNetHeight)
+        m_xSFlyPara->nYPos =
+            (sal_uInt16)( m_xSFlyPara->nYPos + m_xSFlyPara->nLineSpace - nNetHeight );
 
-    WW8FlySet aFlySet(*this, m_pWFlyPara, m_pSFlyPara, true);
+    WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), true);
 
-    SwFormatAnchor aAnchor(m_pSFlyPara->eAnchor);
+    SwFormatAnchor aAnchor(m_xSFlyPara->eAnchor);
     aAnchor.SetAnchor(m_pPaM->GetPoint());
     aFlySet.Put(aAnchor);
 
@@ -401,8 +401,8 @@ SwFrameFormat* SwWW8ImplReader::MakeGrafInContent(const WW8_PIC& rPic,
 
     // Resize the frame to the size of the picture if graphic is inside a frame
     // (only if auto-width)
-    if( m_pSFlyPara )
-        m_pSFlyPara->BoxUpWidth( rPD.nWidth );
+    if (m_xSFlyPara)
+        m_xSFlyPara->BoxUpWidth( rPD.nWidth );
     return pFlyFormat;
 }
 
@@ -433,7 +433,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
         aGrfSet.Put( aCrop );
     }
 
-    if( m_pWFlyPara && m_pWFlyPara->bGrafApo )
+    if (m_xWFlyPara && m_xWFlyPara->bGrafApo)
         pRet = MakeGrafNotInContent(aPD,pGraph,aFileName,aGrfSet);
     else
         pRet = MakeGrafInContent(rPic,aPD,pGraph,aFileName,aGrfSet);
@@ -589,11 +589,11 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     // A graphic of this type in this location is always
                     // inline, and uses the pic in the same module as ww6
                     // graphics.
-                    if (m_pWFlyPara && m_pWFlyPara->bGrafApo)
+                    if (m_xWFlyPara && m_xWFlyPara->bGrafApo)
                     {
-                        WW8FlySet aFlySet(*this, m_pWFlyPara, m_pSFlyPara, true);
+                        WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), true);
 
-                        SwFormatAnchor aAnchor(m_pSFlyPara->eAnchor);
+                        SwFormatAnchor aAnchor(m_xSFlyPara->eAnchor);
                         aAnchor.SetAnchor(m_pPaM->GetPoint());
                         aFlySet.Put(aAnchor);
 

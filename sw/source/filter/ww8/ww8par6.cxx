@@ -2309,16 +2309,17 @@ bool SwWW8ImplReader::IsDropCap()
 
 bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos)
 {
-    if (nullptr == (m_pWFlyPara = ConstructApo(rApo, pTabPos)))
+    m_xWFlyPara.reset(ConstructApo(rApo, pTabPos));
+    if (!m_xWFlyPara)
         return false;
 
     // <WW8SwFlyPara> constructor has changed - new 4th parameter
     // containing WW8 page top margin.
-    m_pSFlyPara = new WW8SwFlyPara( *m_pPaM, *this, *m_pWFlyPara,
+    m_xSFlyPara.reset(new WW8SwFlyPara( *m_pPaM, *this, *m_xWFlyPara,
                                   m_aSectionManager.GetWWPageTopMargin(),
                                   m_aSectionManager.GetPageLeft(),
                                   m_aSectionManager.GetTextAreaWidth(),
-                                  m_nIniFlyDx, m_nIniFlyDy);
+                                  m_nIniFlyDx, m_nIniFlyDy));
 
     // If this paragraph is a Dropcap set the flag and we will deal with it later
     if (IsDropCap())
@@ -2328,7 +2329,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         return false;
     }
 
-    if( !m_pWFlyPara->bGrafApo )
+    if (!m_xWFlyPara->bGrafApo)
     {
 
         // Within the GrafApo text attributes have to be ignored, because
@@ -2337,45 +2338,45 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         // frame, pWFlyPara and pSFlyPara are retained and the resulting
         // attributes applied to the image when inserting the image.
 
-        WW8FlySet aFlySet(*this, m_pWFlyPara, m_pSFlyPara, false);
+        WW8FlySet aFlySet(*this, m_xWFlyPara.get(), m_xSFlyPara.get(), false);
 
         if (pTabPos && pTabPos->bNoFly)
         {
-            m_pSFlyPara->pFlyFormat = nullptr;
+            m_xSFlyPara->pFlyFormat = nullptr;
         }
         else
         {
-            m_pSFlyPara->pFlyFormat = m_rDoc.MakeFlySection( m_pSFlyPara->eAnchor,
-                    m_pPaM->GetPoint(), &aFlySet );
-            OSL_ENSURE(m_pSFlyPara->pFlyFormat->GetAnchor().GetAnchorId() ==
-                    m_pSFlyPara->eAnchor, "Not the anchor type requested!");
+            m_xSFlyPara->pFlyFormat = m_rDoc.MakeFlySection(m_xSFlyPara->eAnchor,
+                    m_pPaM->GetPoint(), &aFlySet);
+            OSL_ENSURE(m_xSFlyPara->pFlyFormat->GetAnchor().GetAnchorId() ==
+                    m_xSFlyPara->eAnchor, "Not the anchor type requested!");
         }
 
-        if (m_pSFlyPara->pFlyFormat)
+        if (m_xSFlyPara->pFlyFormat)
         {
             if (!m_pDrawModel)
                 GrafikCtor();
 
-            SdrObject* pOurNewObject = CreateContactObject(m_pSFlyPara->pFlyFormat);
+            SdrObject* pOurNewObject = CreateContactObject(m_xSFlyPara->pFlyFormat);
             m_pWWZOrder->InsertTextLayerObject(pOurNewObject);
         }
 
-        if (RndStdIds::FLY_AS_CHAR != m_pSFlyPara->eAnchor && m_pSFlyPara->pFlyFormat)
+        if (RndStdIds::FLY_AS_CHAR != m_xSFlyPara->eAnchor && m_xSFlyPara->pFlyFormat)
         {
-            m_pAnchorStck->AddAnchor(*m_pPaM->GetPoint(),m_pSFlyPara->pFlyFormat);
+            m_pAnchorStck->AddAnchor(*m_pPaM->GetPoint(), m_xSFlyPara->pFlyFormat);
         }
 
         // remember Pos in body text
-        m_pSFlyPara->pMainTextPos = new SwPosition( *m_pPaM->GetPoint() );
+        m_xSFlyPara->pMainTextPos = new SwPosition( *m_pPaM->GetPoint() );
 
         //remove fltanchors, otherwise they will be closed inside the
         //frame, which makes no sense, restore them after the frame is
         //closed
-        m_pSFlyPara->pOldAnchorStck = m_pAnchorStck;
+        m_xSFlyPara->pOldAnchorStck = m_pAnchorStck;
         m_pAnchorStck = new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags);
 
-        if (m_pSFlyPara->pFlyFormat)
-            MoveInsideFly(m_pSFlyPara->pFlyFormat);
+        if (m_xSFlyPara->pFlyFormat)
+            MoveInsideFly(m_xSFlyPara->pFlyFormat);
 
         // 1) ReadText() is not called recursively because the length of
         //    the Apo is unknown at that  time, and ReadText() needs it.
@@ -2444,10 +2445,10 @@ void SwWW8ImplReader::StripNegativeAfterIndent(SwFrameFormat *pFlyFormat)
 
 void SwWW8ImplReader::StopApo()
 {
-    OSL_ENSURE(m_pWFlyPara, "no pWFlyPara to close");
-    if (!m_pWFlyPara)
+    OSL_ENSURE(m_xWFlyPara, "no pWFlyPara to close");
+    if (!m_xWFlyPara)
         return;
-    if (m_pWFlyPara->bGrafApo)
+    if (m_xWFlyPara->bGrafApo)
     {
         // image frame that has not been inserted: delete empty paragraph + attr
         JoinNode(*m_pPaM, true);
@@ -2455,10 +2456,9 @@ void SwWW8ImplReader::StopApo()
     }
     else
     {
-        if (!m_pSFlyPara->pMainTextPos || !m_pWFlyPara)
+        if (!m_xSFlyPara->pMainTextPos)
         {
-            OSL_ENSURE( m_pSFlyPara->pMainTextPos, "StopApo: pMainTextPos ist 0" );
-            OSL_ENSURE( m_pWFlyPara, "StopApo: pWFlyPara ist 0" );
+            OSL_ENSURE( m_xSFlyPara->pMainTextPos, "StopApo: pMainTextPos ist 0" );
             return;
         }
 
@@ -2479,14 +2479,14 @@ void SwWW8ImplReader::StopApo()
         SwNodeIndex aPref(m_pPaM->GetPoint()->nNode, -1);
 
         SwTwips nNewWidth =
-            MoveOutsideFly(m_pSFlyPara->pFlyFormat, *m_pSFlyPara->pMainTextPos);
+            MoveOutsideFly(m_xSFlyPara->pFlyFormat, *m_xSFlyPara->pMainTextPos);
         if (nNewWidth)
-            m_pSFlyPara->BoxUpWidth(nNewWidth);
+            m_xSFlyPara->BoxUpWidth(nNewWidth);
 
         Color aBg(0xFE, 0xFF, 0xFF, 0xFF);  //Transparent by default
 
         SwTextNode* pNd = aPref.GetNode().GetTextNode();
-        if (pNd && m_pSFlyPara->pFlyFormat)
+        if (pNd && m_xSFlyPara->pFlyFormat)
         {
             /*
             #i582#
@@ -2518,22 +2518,22 @@ void SwWW8ImplReader::StopApo()
             pNd->JoinNext();
         }
 
-        if (m_pSFlyPara->pFlyFormat)
-            m_pSFlyPara->pFlyFormat->SetFormatAttr(SvxBrushItem(aBg, RES_BACKGROUND));
+        if (m_xSFlyPara->pFlyFormat)
+            m_xSFlyPara->pFlyFormat->SetFormatAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
         DeleteAnchorStack();
-        m_pAnchorStck = m_pSFlyPara->pOldAnchorStck;
+        m_pAnchorStck = m_xSFlyPara->pOldAnchorStck;
 
         // When inserting a graphic into the fly frame using the auto
         // function, the extension of the SW-fly has to be set
         // manually as the SW fly has no auto function to adjust the
         // frame´s size.
-        if(m_pSFlyPara->nNewNetWidth > MINFLY && m_pSFlyPara->pFlyFormat)    // BoxUpWidth ?
+        if (m_xSFlyPara->nNewNetWidth > MINFLY && m_xSFlyPara->pFlyFormat)    // BoxUpWidth ?
         {
-            long nW = m_pSFlyPara->nNewNetWidth;
-            nW += m_pSFlyPara->nWidth - m_pSFlyPara->nNetWidth;   // border for it
-            m_pSFlyPara->pFlyFormat->SetFormatAttr(
-                SwFormatFrameSize( m_pSFlyPara->eHeightFix, nW, m_pSFlyPara->nHeight ) );
+            long nW = m_xSFlyPara->nNewNetWidth;
+            nW += m_xSFlyPara->nWidth - m_xSFlyPara->nNetWidth;   // border for it
+            m_xSFlyPara->pFlyFormat->SetFormatAttr(
+                SwFormatFrameSize(m_xSFlyPara->eHeightFix, nW, m_xSFlyPara->nHeight));
         }
         /*
         Word set *no* width meaning it's an automatic width. The
@@ -2543,48 +2543,48 @@ void SwWW8ImplReader::StopApo()
         #i27204# Added AutoWidth setting. Left the old CalculateFlySize in place
         so that if the user unselects autowidth, the width doesn't max out
         */
-        else if( !m_pWFlyPara->nSp28 && m_pSFlyPara->pFlyFormat)
+        else if (!m_xWFlyPara->nSp28 && m_xSFlyPara->pFlyFormat)
         {
             using namespace sw::util;
-            SfxItemSet aFlySet( m_pSFlyPara->pFlyFormat->GetAttrSet() );
+            SfxItemSet aFlySet( m_xSFlyPara->pFlyFormat->GetAttrSet() );
 
             SwFormatFrameSize aSize(ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE));
 
             aFlySet.ClearItem(RES_FRM_SIZE);
 
-            CalculateFlySize(aFlySet, m_pSFlyPara->pMainTextPos->nNode,
-                m_pSFlyPara->nWidth);
+            CalculateFlySize(aFlySet, m_xSFlyPara->pMainTextPos->nNode,
+                m_xSFlyPara->nWidth);
 
             nNewWidth = ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE).GetWidth();
 
             aSize.SetWidth(nNewWidth);
             aSize.SetWidthSizeType(ATT_VAR_SIZE);
 
-            m_pSFlyPara->pFlyFormat->SetFormatAttr(aSize);
+            m_xSFlyPara->pFlyFormat->SetFormatAttr(aSize);
         }
 
-        delete m_pSFlyPara->pMainTextPos;
-        m_pSFlyPara->pMainTextPos = nullptr;
+        delete m_xSFlyPara->pMainTextPos;
+        m_xSFlyPara->pMainTextPos = nullptr;
 // To create the SwFrames when inserting into an existing document, fltshell.cxx
 // will call pFlyFrame->MakeFrames() when setting the FltAnchor attribute
 
     }
 
     //#i8062#
-    if (m_pSFlyPara && m_pSFlyPara->pFlyFormat)
-        m_pFormatOfJustInsertedApo = m_pSFlyPara->pFlyFormat;
+    if (m_xSFlyPara && m_xSFlyPara->pFlyFormat)
+        m_pFormatOfJustInsertedApo = m_xSFlyPara->pFlyFormat;
 
-    DELETEZ( m_pSFlyPara );
-    DELETEZ( m_pWFlyPara );
+    m_xSFlyPara.reset();
+    m_xWFlyPara.reset();
 }
 
 // TestSameApo() returns if it's the same Apo or a different one
 bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
     const WW8_TablePos *pTabPos)
 {
-    if( !m_pWFlyPara )
+    if (!m_xWFlyPara)
     {
-        OSL_ENSURE( m_pWFlyPara, " Where is my pWFlyPara ? " );
+        OSL_ENSURE(m_xWFlyPara, " Where is my pWFlyPara ? ");
         return true;
     }
 
@@ -2600,7 +2600,7 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
         aF.Read(rApo.m_nSprm29, m_pPlcxMan->GetPapPLCF());
     aF.ApplyTabPos(pTabPos);
 
-    return aF == *m_pWFlyPara;
+    return aF == *m_xWFlyPara;
 }
 
 void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
@@ -4189,8 +4189,8 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
         aLSpc.SetLineSpaceRule( eLnSpc);
     }
     NewAttr( aLSpc );
-    if( m_pSFlyPara )
-        m_pSFlyPara->nLineSpace = nSpaceTw;   // linespace for graphics APOs
+    if (m_xSFlyPara)
+        m_xSFlyPara->nLineSpace = nSpaceTw;   // linespace for graphics APOs
 }
 
 //#i18519# AutoSpace value depends on Dop fDontUseHTMLAutoSpacing setting
@@ -4821,8 +4821,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
         if( nBorder )                                   // Border
         {
             bool bIsB = IsBorder(aBrcs, true);
-            if (!InLocalApo() || !bIsB ||
-                (m_pWFlyPara && !m_pWFlyPara->bBorderLines ))
+            if (!InLocalApo() || !bIsB || (m_xWFlyPara && !m_xWFlyPara->bBorderLines))
             {
                 // Do not turn *on* borders in APO, since otherwise
                 // I get the Fly border twice;
