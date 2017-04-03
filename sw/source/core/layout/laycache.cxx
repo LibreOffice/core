@@ -454,6 +454,51 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
     }
 }
 
+namespace {
+
+bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
+        SwNodes const& rNodes, sal_uLong nNodeIndex)
+{
+    auto const nStartOfContent(rNodes.GetEndOfContent().StartOfSectionNode()->GetIndex());
+    nNodeIndex -= nStartOfContent;
+    auto const nMaxIndex(rNodes.GetEndOfContent().GetIndex() - nStartOfContent);
+    for (sal_uInt16 nIndex = 0; nIndex < rCache.size(); ++nIndex)
+    {
+        auto const nBreakIndex(rCache.GetBreakIndex(nIndex));
+        if (nBreakIndex < nNodeIndex || nMaxIndex <= nBreakIndex)
+        {
+            SAL_WARN("sw.core.layout",
+                "invalid node index in layout-cache: " << nBreakIndex);
+            return false;
+        }
+        auto const nBreakType(rCache.GetBreakType(nIndex));
+        switch (nBreakType)
+        {
+            case SW_LAYCACHE_IO_REC_PARA:
+                if (!rNodes[nBreakIndex + nStartOfContent]->IsTextNode())
+                {
+                    SAL_WARN("sw.core.layout",
+                        "invalid node of type 'P' in layout-cache");
+                    return false;
+                }
+                break;
+            case SW_LAYCACHE_IO_REC_TABLE:
+                if (!rNodes[nBreakIndex + nStartOfContent]->IsTableNode())
+                {
+                    SAL_WARN("sw.core.layout",
+                        "invalid node of type 'T' in layout-cache");
+                    return false;
+                }
+                break;
+            default:
+                assert(false); // Read shouldn't have inserted that
+        }
+    }
+    return true;
+}
+
+} // namespace
+
 /** helper class, which utilizes the layout cache information
  *  to distribute the document content to the right pages.
  * It's used by the InsertCnt_(..)-function.
@@ -478,19 +523,19 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* 
     pImpl = pDoc->GetLayoutCache() ? pDoc->GetLayoutCache()->LockImpl() : nullptr;
     if( pImpl )
     {
-        nMaxParaPerPage = 1000;
-        nStartOfContent = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()
-                          ->GetIndex();
-        nNodeIndex -= nStartOfContent;
-        nIndex = 0;
-        while( nIndex < pImpl->size() && pImpl->GetBreakIndex( nIndex ) < nNodeIndex )
+        SwNodes const& rNodes(pDoc->GetNodes());
+        if (sanityCheckLayoutCache(*pImpl, rNodes, nNodeIndex))
         {
-            ++nIndex;
+            nIndex = 0;
+            nStartOfContent = rNodes.GetEndOfContent().StartOfSectionNode()->GetIndex();
+            nMaxParaPerPage = 1000;
         }
-        if( nIndex >= pImpl->size() )
+        else
         {
             pDoc->GetLayoutCache()->UnlockImpl();
             pImpl = nullptr;
+            nIndex = USHRT_MAX;
+            nStartOfContent = USHRT_MAX;
         }
     }
     else
