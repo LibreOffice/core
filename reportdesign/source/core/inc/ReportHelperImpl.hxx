@@ -226,12 +226,12 @@ void SAL_CALL clazz::setCharScaleWidth(::sal_Int16 the_value) \
 sal_Int16 SAL_CALL clazz::getParaAdjust() \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
-    return varName.nAlign; \
+    return (sal_Int16)varName.nAlign; \
 } \
  \
 void SAL_CALL clazz::setParaAdjust( sal_Int16 _align ) \
 { \
-    set(PROPERTY_PARAADJUST,_align,varName.nAlign); \
+    set(PROPERTY_PARAADJUST,(css::style::ParagraphAdjust)_align,varName.nAlign); \
 } \
  \
 awt::FontDescriptor SAL_CALL clazz::getFontDescriptor() \

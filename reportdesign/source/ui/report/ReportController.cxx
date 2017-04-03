@@ -859,7 +859,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 ::sal_Int16 nParaAdjust = 0;
                 if ( aReturn.aValue >>= nParaAdjust )
                 {
-                    switch(nParaAdjust)
+                    switch((style::ParagraphAdjust)nParaAdjust)
                     {
                         case style::ParagraphAdjust_LEFT:
                             aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_LEFT;
@@ -874,6 +874,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                         case style::ParagraphAdjust_CENTER:
                             aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_CENTER;
                             break;
+                        default: break;
                     }
                 }
                 aReturn.aValue.clear();
@@ -1481,7 +1482,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_ATTR_PARA_ADJUST_RIGHT:
         case SID_ATTR_PARA_ADJUST_BLOCK:
             {
-                sal_Int16 eParagraphAdjust = style::ParagraphAdjust_LEFT;
+                style::ParagraphAdjust eParagraphAdjust = style::ParagraphAdjust_LEFT;
                 switch(_nId)
                 {
                     case SID_ATTR_PARA_ADJUST_LEFT:
@@ -1497,7 +1498,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                         eParagraphAdjust = style::ParagraphAdjust_BLOCK;
                         break;
                 }
-                impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::makeAny(eParagraphAdjust),aArgs);
+                impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::makeAny((sal_Int16)eParagraphAdjust),aArgs);
 
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_LEFT);
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_CENTER);

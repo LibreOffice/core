@@ -184,7 +184,7 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
     case typelib_TypeClass_ANY:
         return new IdlClassImpl( this, pTypeDescr->pTypeName, pTypeDescr->eTypeClass, pTypeDescr );
 
-    case TypeClass_ENUM:
+    case typelib_TypeClass_ENUM:
         return new EnumIdlClassImpl( this, pTypeDescr->pTypeName, pTypeDescr->eTypeClass, pTypeDescr );
 
     case typelib_TypeClass_STRUCT:
