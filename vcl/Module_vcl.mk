@@ -132,6 +132,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_pptfuzzer \
     Executable_rtffuzzer \
     Executable_cgmfuzzer \
+    Executable_ww2fuzzer \
 ))
 endif
 

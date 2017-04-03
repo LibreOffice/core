@@ -118,6 +118,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,pptfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,rtffuzzer) \
 	$(call gb_Helper_optional,FUZZERS,cgmfuzzer) \
+	$(call gb_Helper_optional,FUZZERS,ww2fuzzer) \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
