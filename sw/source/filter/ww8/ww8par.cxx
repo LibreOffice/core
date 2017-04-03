@@ -6215,6 +6215,7 @@ bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
     aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
     bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
     delete pReader;
+
     return bRet;
 }
 
