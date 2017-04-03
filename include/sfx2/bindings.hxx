@@ -105,12 +105,10 @@ private:
                                     SfxCallMode nCall, const SfxPoolItem **pInternalArgs, bool bGlobalOnly=false);
     SAL_DLLPRIVATE void SetSubBindings_Impl( SfxBindings* );
     SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // Update SlotServer
-    SAL_DLLPRIVATE SfxItemSet* CreateSet_Impl( SfxStateCache* &pCache,
-                                    const SfxSlot* &pRealSlot,
-                                    const SfxSlotServer**,
-                                    SfxFoundCacheArr_Impl& );
+    SAL_DLLPRIVATE SfxItemSet* CreateSet_Impl(SfxStateCache& rCache, const SfxSlot* &pRealSlot,
+                                              const SfxSlotServer**, SfxFoundCacheArr_Impl&);
     SAL_DLLPRIVATE std::size_t GetSlotPos( sal_uInt16 nId, std::size_t nStartSearchAt = 0 );
-    SAL_DLLPRIVATE void Update_Impl( SfxStateCache* pCache );
+    SAL_DLLPRIVATE void Update_Impl(SfxStateCache& rCache);
     static SAL_DLLPRIVATE void UpdateControllers_Impl(
                             const SfxFoundCache_Impl& rFound,
                             const SfxPoolItem *pItem,
