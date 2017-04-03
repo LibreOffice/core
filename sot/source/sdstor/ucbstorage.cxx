@@ -46,6 +46,7 @@
 #include <memory>
 #include <rtl/digest.h>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <unotools/streamhelper.hxx>
@@ -124,8 +125,8 @@ FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
 #endif
     }
 
-    if ( !m_aURL.isEmpty() )
-        ::utl::UCBContentHelper::Kill( m_aURL );
+    if (!m_aURL.isEmpty())
+        osl::File::remove(m_aURL);
 }
 
 
@@ -227,7 +228,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput()
 #if OSL_DEBUG_LEVEL > 0
     --nOpenFiles;
 #endif
-    ::utl::UCBContentHelper::Kill( m_aURL );
+    osl::File::remove(m_aURL);
     m_aURL.clear();
 }
 
@@ -683,8 +684,8 @@ UCBStorageStream_Impl::~UCBStorageStream_Impl()
 
     delete m_pStream;
 
-    if ( !m_aTempURL.isEmpty() )
-        ::utl::UCBContentHelper::Kill( m_aTempURL );
+    if (!m_aTempURL.isEmpty())
+        osl::File::remove(m_aTempURL);
 
     delete m_pContent;
 }
@@ -1125,7 +1126,7 @@ void UCBStorageStream_Impl::Revert()
     Free();
     if ( !m_aTempURL.isEmpty() )
     {
-        ::utl::UCBContentHelper::Kill( m_aTempURL );
+        osl::File::remove(m_aTempURL);
         m_aTempURL.clear();
     }
 
@@ -1211,7 +1212,7 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
 
         if ( !m_aTempURL.isEmpty() )
         {
-            ::utl::UCBContentHelper::Kill( m_aTempURL );
+            osl::File::remove(m_aTempURL);
             m_aTempURL.clear();
         }
     }
