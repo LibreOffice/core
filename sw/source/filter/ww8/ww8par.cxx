@@ -6216,6 +6216,8 @@ bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
     bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
     delete pReader;
 
+    FlushFontCache();
+
     return bRet;
 }
 

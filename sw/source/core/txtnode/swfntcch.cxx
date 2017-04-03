@@ -60,4 +60,9 @@ SwCacheObj *SwFontAccess::NewObj( )
     return new SwFontObj( m_pOwner, pShell );
 }
 
+SAL_DLLPUBLIC_EXPORT void FlushFontCache()
+{
+    pSwFontCache->Flush();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
