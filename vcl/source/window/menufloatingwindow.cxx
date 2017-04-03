@@ -152,6 +152,12 @@ long MenuFloatingWindow::ImplGetStartY() const
     long nY = 0;
     if( pMenu )
     {
+        // avoid crash if somehow menu got disposed, and MenuItemList is empty (workaround for tdf#104686)
+        if ( nFirstEntry > 0 && !pMenu->GetItemList()->GetDataFromPos(nFirstEntry - 1) )
+        {
+            return 0;
+        }
+
         for ( sal_uInt16 n = 0; n < nFirstEntry; n++ )
             nY += pMenu->GetItemList()->GetDataFromPos( n )->aSz.Height();
         nY -= pMenu->GetTitleHeight();
@@ -592,45 +598,55 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
         nFirstEntry = pMenu->ImplGetPrevVisible( nFirstEntry );
         DBG_ASSERT( nFirstEntry != ITEMPOS_INVALID, "Scroll?!" );
 
-        long nScrollEntryHeight = pMenu->GetItemList()->GetDataFromPos( nFirstEntry )->aSz.Height();
-
-        if ( !bScrollDown )
+        // avoid crash if somehow menu got disposed, and MenuItemList is empty (workaround for tdf#104686)
+        const auto pItemData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry );
+        if ( pItemData )
         {
-            bScrollDown = true;
-            Invalidate();
-        }
+            long nScrollEntryHeight = pItemData->aSz.Height();
 
-        if ( pMenu->ImplGetPrevVisible( nFirstEntry ) == ITEMPOS_INVALID )
-        {
-            bScrollUp = false;
-            Invalidate();
-        }
+            if ( !bScrollDown )
+            {
+                bScrollDown = true;
+                Invalidate();
+            }
 
-        Scroll( 0, nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), ScrollFlags::Clip );
+            if ( pMenu->ImplGetPrevVisible( nFirstEntry ) == ITEMPOS_INVALID )
+            {
+                bScrollUp = false;
+                Invalidate();
+            }
+
+            Scroll( 0, nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), ScrollFlags::Clip );
+        }
     }
     else if ( bScrollDown && !bUp )
     {
-        long nScrollEntryHeight = pMenu->GetItemList()->GetDataFromPos( nFirstEntry )->aSz.Height();
-
-        nFirstEntry = pMenu->ImplGetNextVisible( nFirstEntry );
-        DBG_ASSERT( nFirstEntry != ITEMPOS_INVALID, "Scroll?!" );
-
-        if ( !bScrollUp )
+        // avoid crash if somehow menu got disposed, and MenuItemList is empty (workaround for tdf#104686)
+        const auto pItemData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry );
+        if ( pItemData )
         {
-            bScrollUp = true;
-            Invalidate();
-        }
+            long nScrollEntryHeight = pItemData->aSz.Height();
 
-        long nHeight = GetOutputSizePixel().Height();
-        sal_uInt16 nLastVisible;
-        static_cast<PopupMenu*>(pMenu)->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
-        if ( pMenu->ImplGetNextVisible( nLastVisible ) == ITEMPOS_INVALID )
-        {
-            bScrollDown = false;
-            Invalidate();
-        }
+            nFirstEntry = pMenu->ImplGetNextVisible( nFirstEntry );
+            DBG_ASSERT( nFirstEntry != ITEMPOS_INVALID, "Scroll?!" );
 
-        Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), ScrollFlags::Clip );
+            if ( !bScrollUp )
+            {
+                bScrollUp = true;
+                Invalidate();
+            }
+
+            long nHeight = GetOutputSizePixel().Height();
+            sal_uInt16 nLastVisible;
+            static_cast<PopupMenu*>(pMenu)->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
+            if ( pMenu->ImplGetNextVisible( nLastVisible ) == ITEMPOS_INVALID )
+            {
+                bScrollDown = false;
+                Invalidate();
+            }
+
+            Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), ScrollFlags::Clip );
+        }
     }
 
     Invalidate();
