@@ -246,20 +246,20 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     VclPtr<Button> m_pLeftScrollWin;
     VclPtr<vcl::Window> m_pCtrlParentWin;
     VclPtr<Button> m_pRightScrollWin;
-    std::vector<VclPtr<Control> >   aControlList;
-    SwForm*         pForm;
-    sal_uInt16      nLevel;
-    bool            bValid;
-    OUString        aButtonTexts[TOKEN_END]; // Text of the buttons
-    OUString        aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
-    OUString        sCharStyle;
-    Link<SwFormToken&,void>   aButtonSelectedHdl;
-    VclPtr<Control>           pActiveCtrl;
-    Link<LinkParamNone*,void> aModifyHdl;
-    OUString        accessibleName;
-    OUString        sAdditionalAccnameString1;
-    OUString        sAdditionalAccnameString2;
-    OUString        sAdditionalAccnameString3;
+    std::vector<VclPtr<Control> >   m_aControlList;
+    SwForm*         m_pForm;
+    sal_uInt16      m_nLevel;
+    bool            m_bValid;
+    OUString        m_aButtonTexts[TOKEN_END]; // Text of the buttons
+    OUString        m_aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
+    OUString        m_sCharStyle;
+    Link<SwFormToken&,void>   m_aButtonSelectedHdl;
+    VclPtr<Control>           m_pActiveCtrl;
+    Link<LinkParamNone*,void> m_aModifyHdl;
+    OUString        m_sAccessibleName;
+    OUString        m_sAdditionalAccnameString1;
+    OUString        m_sAdditionalAccnameString2;
+    OUString        m_sAdditionalAccnameString3;
 
     VclPtr<SwTOXEntryTabPage>  m_pParent;
 
@@ -285,20 +285,20 @@ public:
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
 
     void        SetForm(SwForm& rForm, sal_uInt16 nLevel);
-    sal_uInt16      GetLastLevel()const {return nLevel;};
+    sal_uInt16      GetLastLevel()const {return m_nLevel;};
 
-    bool        IsValid() const {return bValid;}
+    bool        IsValid() const {return m_bValid;}
 
-    void        SetInvalid() {bValid = false;}
+    void        SetInvalid() {m_bValid = false;}
 
     OUString    GetPattern() const;
 
     void        SetButtonSelectedHdl(const Link<SwFormToken&,void>& rLink)
-                { aButtonSelectedHdl = rLink;}
+                { m_aButtonSelectedHdl = rLink;}
 
-    void        SetModifyHdl(const Link<LinkParamNone*,void>& rLink){aModifyHdl = rLink;}
+    void        SetModifyHdl(const Link<LinkParamNone*,void>& rLink){m_aModifyHdl = rLink;}
 
-    Control*    GetActiveControl() { return pActiveCtrl; }
+    Control*    GetActiveControl() { return m_pActiveCtrl; }
 
     void        InsertAtSelection(const OUString& rText, const SwFormToken& aToken);
     void        RemoveControl(SwTOXButton* pDel, bool bInternalCall = false);
