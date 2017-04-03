@@ -32,13 +32,6 @@ struct SfxAllEnumValue_Impl
 class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl> {};
 
 
-SfxAllEnumItem::SfxAllEnumItem() :
-    SfxAllEnumItem_Base(0, 0),
-    pValues( nullptr ),
-    pDisabledValues( nullptr )
-{
-}
-
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
     SfxAllEnumItem_Base(which, nVal),
     pValues( nullptr ),

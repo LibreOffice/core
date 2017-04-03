@@ -32,12 +32,6 @@ namespace vcl
         return ImageTree::get().loadImage( _rName, sIconTheme, _out_rImage, _bSearchLanguageDependent );
     }
 
-    bool ImageRepository::loadDefaultImage( BitmapEx& _out_rImage)
-    {
-        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-        return ImageTree::get().loadDefaultImage( sIconTheme,_out_rImage);
-    }
-
 } // namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

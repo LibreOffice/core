@@ -49,7 +49,6 @@ class SVL_DLLPUBLIC SfxAllEnumItem: public SfxAllEnumItem_Base
     std::size_t             GetPosByValue_( sal_uInt16 nValue ) const;
 
 public:
-                            SfxAllEnumItem();
     explicit                SfxAllEnumItem( sal_uInt16 nWhich);
                             SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );
                             SfxAllEnumItem( sal_uInt16 nWhich, SvStream &rStream );

@@ -51,10 +51,6 @@ namespace vcl
             BitmapEx& _out_rImage,
             bool bSearchLanguageDependent
         );
-
-        static bool loadDefaultImage(
-            BitmapEx& _out_rImage
-        );
     };
 
 
