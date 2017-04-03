@@ -548,6 +548,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         }
     }
 
+    assert(pNextSlot);
 
     rOutStm.WriteCharPtr( "&a" ).WriteOString( rShellName ).WriteCharPtr( "Slots_Impl[" )
        .WriteOString( OString::number(pNextSlot->GetListPos()) )
