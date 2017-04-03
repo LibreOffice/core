@@ -26,9 +26,6 @@ public:
     explicit TokenMap();
             ~TokenMap();
 
-    /** Returns the token identifier for the passed OUString (UTF-16) token name. */
-    static sal_Int32 getTokenFromUnicode( const OUString& rUnicodeName );
-
     /** Returns the UTF-8 name of the passed token identifier as byte sequence. */
     css::uno::Sequence< sal_Int8 > getUtf8TokenName( sal_Int32 nToken ) const
     {

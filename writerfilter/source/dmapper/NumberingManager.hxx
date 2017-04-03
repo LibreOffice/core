@@ -86,7 +86,6 @@ public:
 
     // Getters
     const OUString& GetBulletChar( ) { return m_sBulletChar; };
-    const css::awt::Size& GetGraphicSize( ) { return m_aGraphicSize; };
     const std::shared_ptr< StyleSheetEntry >& GetParaStyle( ) { return m_pParaStyle; };
     bool isOutlineNumbering() const { return m_outline; }
 

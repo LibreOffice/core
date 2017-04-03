@@ -34,8 +34,6 @@
 class EDITENG_DLLPUBLIC SvxTextRotateItem : public SfxUInt16Item
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nId);
 
     virtual SfxPoolItem*    Clone(SfxItemPool *pPool = nullptr) const override;
