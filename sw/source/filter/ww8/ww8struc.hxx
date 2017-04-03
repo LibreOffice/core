@@ -660,7 +660,7 @@ struct WW8_ANLD
     sal_uInt8 fNumberAcross;    // 0x11     number across cells in table rows(instead of down)
     sal_uInt8 fRestartHdn;  // 0x12     restart heading number on section boundary
     sal_uInt8 fSpareX;      // 0x13     unused( should be 0)
-    sal_uInt8  rgchAnld[32]; // 0x14 characters displayed before/after autonumber
+    sal_uInt8 rgchAnld[32]; // 0x14 characters displayed before/after autonumber
 };
 
 struct WW8_OLST
