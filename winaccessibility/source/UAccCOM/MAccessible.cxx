@@ -2838,7 +2838,6 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
     case TypeClass_CONSTANT:
     case TypeClass_CONSTANTS:
     case TypeClass_SINGLETON:
-    case TypeClass_MAKE_FIXED_SIZE:
         break;
     default:
         break;
@@ -3017,7 +3016,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
         case TypeClass_CONSTANT:
         case TypeClass_CONSTANTS:
         case TypeClass_SINGLETON:
-        case TypeClass_MAKE_FIXED_SIZE:
+        case TypeClass::TypeClass_MAKE_FIXED_SIZE:
             // Output the type string, if there is other uno value type.
             pvData->vt = VT_BSTR;
             pvData->bstrVal = SysAllocString(rAnyVal.getValueTypeName().getStr());

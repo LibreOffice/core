@@ -387,7 +387,7 @@ Adjust2Justification(const uno::Any& rAny)
 {
     const gchar * value = nullptr;
 
-    switch( rAny.get<short>() )
+    switch( (style::ParagraphAdjust)rAny.get<short>() )
     {
         case style::ParagraphAdjust_LEFT:
             value = "left";
@@ -419,7 +419,7 @@ Adjust2Justification(const uno::Any& rAny)
 static bool
 Justification2Adjust( uno::Any& rAny, const gchar * value )
 {
-    short nParagraphAdjust;
+    style::ParagraphAdjust nParagraphAdjust;
 
     if( strncmp( value, STRNCMP_PARAM( "left" ) ) == 0 )
         nParagraphAdjust = style::ParagraphAdjust_LEFT;
@@ -432,7 +432,7 @@ Justification2Adjust( uno::Any& rAny, const gchar * value )
     else
         return false;
 
-    rAny <<= nParagraphAdjust;
+    rAny <<= (short)nParagraphAdjust;
     return true;
 }
 
