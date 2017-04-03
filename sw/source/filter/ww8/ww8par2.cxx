@@ -645,8 +645,14 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
 }
 
 void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
-    const sal_uInt8* pText, bool bOutline)
+    const sal_uInt8* pText, size_t nStart, size_t nElements, bool bOutline)
 {
+    if (nStart > nElements)
+        return;
+
+    pText += nStart;
+    nElements -= nStart;
+
     bool bInsert = false;                       // Default
     rtl_TextEncoding eCharSet = m_eStructCharSet;
 
@@ -654,13 +660,26 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
     bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
 
     OUString sText;
+    sal_uInt32 nLen = rAV.cbTextBefore + rAV.cbTextAfter;
     if (m_bVer67)
     {
-        sText = OUString(reinterpret_cast<char const *>(pText), rAV.cbTextBefore + rAV.cbTextAfter, eCharSet);
+        if (nLen > nElements)
+        {
+            SAL_WARN("sw.ww8", "SetAnlvStrings: ignoring out of range "
+                << nLen << " vs " << nElements << " max");
+            return;
+        }
+        sText = OUString(reinterpret_cast<char const *>(pText), nLen, eCharSet);
     }
     else
     {
-        for(sal_Int32 i = 0; i < rAV.cbTextBefore + rAV.cbTextAfter; ++i, pText += 2)
+        if (nLen > nElements / 2)
+        {
+            SAL_WARN("sw.ww8", "SetAnlvStrings: ignoring out of range "
+                << nLen << " vs " << nElements / 2 << " max");
+            return;
+        }
+        for(sal_uInt32 i = 0; i < nLen; ++i, pText += 2)
         {
             sText += OUString(sal_Unicode(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pText))));
         }
@@ -745,7 +764,7 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 
         m_bAktAND_fNumberAcross = 0 != pAD->fNumberAcross;
         WW8_ANLV const &rAV = pAD->eAnlv;
         SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
-        SetAnlvStrings(aNF, rAV, pAD->rgchAnld, bOutLine ); // set the rest
+        SetAnlvStrings(aNF, rAV, pAD->rgchAnld, 0, SAL_N_ELEMENTS(pAD->rgchAnld), bOutLine); // set the rest
     }
     pNumR->Set(nSwLevel, aNF);
 }
@@ -875,7 +894,7 @@ void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLe
 
     if (!m_bVer67)
         nTextOfs *= 2;
-    SetAnlvStrings(aNF, rAV, pO->rgch + nTextOfs, true); // and apply
+    SetAnlvStrings(aNF, rAV, pO->rgch, nTextOfs, SAL_N_ELEMENTS(pO->rgch), true); // and apply
     pNumR->Set(nSwLevel, aNF);
 }
 
