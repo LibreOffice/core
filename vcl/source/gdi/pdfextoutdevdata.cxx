@@ -828,6 +828,8 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
     // FIXME: ideally we'd also pre-empt the DPI related scaling too.
 
     Size aSize = rGraphic.GetSizePixel();
+    if (rGraphic.GetLink().GetDataSize() == 0)
+        return false;
     sal_Int32 nCurrentRatio = (100 * aSize.Width() * aSize.Height() * 4) /
                                rGraphic.GetLink().GetDataSize();
 
