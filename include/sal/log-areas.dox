@@ -474,6 +474,7 @@ certain functionality.
 @li @c sw
 @li @c sw.a11y - accessibility
 @li @c sw.core - Writer core
+@li @c sw.layout - Writer core view: document layout
 @li @c sw.createcopy
 @li @c sw.doc
 @li @c sw.docappend
