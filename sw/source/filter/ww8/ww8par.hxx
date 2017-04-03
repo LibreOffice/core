@@ -1554,7 +1554,7 @@ private:
 // the corresponding structures are: LSTF, LVLF, LFO LFOLVL
 
     void SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV, const sal_uInt8* pText,
-        bool bOutline);
+        size_t nStart, size_t nElements, bool bOutline);
     void SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 nSwLevel, bool bOutLine);
     void SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLevel );
     SwNumRule* GetStyRule();
