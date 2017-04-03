@@ -86,12 +86,12 @@ struct SfxFoundCache_Impl
 {
     sal_uInt16      nWhichId;  // If available: Which-Id, else: nSlotId
     const SfxSlot*  pSlot;     // Pointer to <Master-Slot>
-    SfxStateCache*  pCache;    // Pointer to StatusCache, if possible NULL
+    SfxStateCache&  rCache;    // Pointer to StatusCache
 
-    SfxFoundCache_Impl(sal_uInt16 nW, const SfxSlot *pS, SfxStateCache *pC ):
-        nWhichId(nW),
-        pSlot(pS),
-        pCache(pC)
+    SfxFoundCache_Impl(sal_uInt16 nW, const SfxSlot *pS, SfxStateCache& rC)
+        : nWhichId(nW)
+        , pSlot(pS)
+        , rCache(rC)
     {}
 };
 
@@ -296,16 +296,12 @@ void SfxBindings::HidePopupCtrls_Impl( bool bHide )
     pImpl->ePopupAction = SfxPopupAction::DELETE;
 }
 
-
-void SfxBindings::Update_Impl
-(
-    SfxStateCache*  pCache      // The up to date SfxStatusCache
-)
+void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCache*/)
 {
-    if( pCache->GetDispatch().is() && pCache->GetItemLink() )
+    if (rCache.GetDispatch().is() && rCache.GetItemLink())
     {
-        pCache->SetCachedState(true);
-        if ( !pCache->GetInternalController() )
+        rCache.SetCachedState(true);
+        if (!rCache.GetInternalController())
             return;
     }
 
@@ -317,7 +313,7 @@ void SfxBindings::Update_Impl
     const SfxSlot *pRealSlot = nullptr;
     const SfxSlotServer* pMsgServer = nullptr;
     SfxFoundCacheArr_Impl aFound;
-    SfxItemSet *pSet = CreateSet_Impl( pCache, pRealSlot, &pMsgServer, aFound );
+    SfxItemSet *pSet = CreateSet_Impl(rCache, pRealSlot, &pMsgServer, aFound);
     bool bUpdated = false;
     if ( pSet )
     {
@@ -341,16 +337,12 @@ void SfxBindings::Update_Impl
         delete pSet;
     }
 
-    if ( !bUpdated && pCache )
+    if (!bUpdated)
     {
-        // When pCache == NULL and no SlotServer
-        // (for example due to locked Dispatcher! ),
-        // obviously do not try to update
-        SfxFoundCache_Impl aFoundCache(0, pRealSlot, pCache );
+        SfxFoundCache_Impl aFoundCache(0, pRealSlot, rCache);
         UpdateControllers_Impl( aFoundCache, nullptr, SfxItemState::DISABLED);
     }
 }
-
 
 void SfxBindings::InvalidateSlotsInMap_Impl()
 {
@@ -418,7 +410,7 @@ void SfxBindings::Update
                     return;
                 }
 
-                Update_Impl(pCache);
+                Update_Impl(*pCache);
             }
 
             pImpl->bAllDirty = false;
@@ -1166,7 +1158,7 @@ void SfxBindings::UpdateSlotServer_Impl()
 
 SfxItemSet* SfxBindings::CreateSet_Impl
 (
-    SfxStateCache*&         pCache,     // in: Status-Cache from nId
+    SfxStateCache&          rCache,     // in: Status-Cache from nId
     const SfxSlot*&         pRealSlot,  // out: RealSlot to nId
     const SfxSlotServer**   pMsgServer, // out: Slot-Server to nId
     SfxFoundCacheArr_Impl&  rFound      // out: List of Caches for Siblings
@@ -1175,7 +1167,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     DBG_ASSERT( !pImpl->bMsgDirty, "CreateSet_Impl with dirty MessageServer" );
     assert(pDispatcher);
 
-    const SfxSlotServer* pMsgSvr = pCache->GetSlotServer(*pDispatcher, pImpl->xProv);
+    const SfxSlotServer* pMsgSvr = rCache.GetSlotServer(*pDispatcher, pImpl->xProv);
     if (!pMsgSvr)
         return nullptr;
 
@@ -1189,17 +1181,15 @@ SfxItemSet* SfxBindings::CreateSet_Impl
 
     SfxItemPool &rPool = pShell->GetPool();
 
-    // get the status method, which is served by the pCache
+    // get the status method, which is served by the rCache
     SfxStateFunc pFnc = nullptr;
     pRealSlot = pMsgSvr->GetSlot();
-
-    // Note: pCache can be NULL!
 
     pFnc = pRealSlot->GetStateFnc();
 
     // the RealSlot is always on
     SfxFoundCache_Impl *pFound = new SfxFoundCache_Impl(
-        pRealSlot->GetWhich(rPool), pRealSlot, pCache );
+        pRealSlot->GetWhich(rPool), pRealSlot, rCache);
     rFound.push_back( pFound );
 
     // Search through the bindings for slots served by the same function. This ,    // will only affect slots which are present in the found interface.
@@ -1233,7 +1223,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         {
             SfxFoundCache_Impl *pFoundCache = new SfxFoundCache_Impl(
                 pSibling->GetWhich(rPool),
-                pSibling, pSiblingCache );
+                pSibling, *pSiblingCache);
 
             rFound.push_back( pFoundCache );
         }
@@ -1268,29 +1258,29 @@ void SfxBindings::UpdateControllers_Impl
     SfxItemState                eState  // state of item
 )
 {
-    SfxStateCache* pCache = rFound.pCache;
+    SfxStateCache& rCache = rFound.rCache;
     const SfxSlot* pSlot = rFound.pSlot;
-    DBG_ASSERT( !pCache || !pSlot || pCache->GetId() == pSlot->GetSlotId(), "SID mismatch" );
+    DBG_ASSERT( !pSlot || rCache.GetId() == pSlot->GetSlotId(), "SID mismatch" );
 
     // bound until now, the Controller to update the Slot.
-    if ( pCache && pCache->IsControllerDirty() )
+    if (rCache.IsControllerDirty())
     {
         if ( SfxItemState::DONTCARE == eState )
         {
             // ambiguous
-            pCache->SetState( SfxItemState::DONTCARE, INVALID_POOL_ITEM );
+            rCache.SetState( SfxItemState::DONTCARE, INVALID_POOL_ITEM );
         }
         else if ( SfxItemState::DEFAULT == eState &&
                   SfxItemPool::IsSlot(rFound.nWhichId) )
         {
             // no Status or Default but without Pool
             SfxVoidItem aVoid(0);
-            pCache->SetState( SfxItemState::UNKNOWN, &aVoid );
+            rCache.SetState( SfxItemState::UNKNOWN, &aVoid );
         }
         else if ( SfxItemState::DISABLED == eState )
-            pCache->SetState(SfxItemState::DISABLED, nullptr);
+            rCache.SetState(SfxItemState::DISABLED, nullptr);
         else
-            pCache->SetState(SfxItemState::DEFAULT, pItem);
+            rCache.SetState(SfxItemState::DEFAULT, pItem);
     }
 }
 
@@ -1351,9 +1341,8 @@ bool SfxBindings::NextJob_Impl(Timer * pTimer)
             bool bWasDirty = pCache->IsControllerDirty();
             if ( bWasDirty )
             {
-                    Update_Impl( pCache );
-                    DBG_ASSERT( nCount == pImpl->pCaches.size(),
-                            "Reschedule in StateChanged => buff" );
+                Update_Impl(*pCache);
+                DBG_ASSERT(nCount == pImpl->pCaches.size(), "Reschedule in StateChanged => buff");
             }
 
             // skip to next function binding
