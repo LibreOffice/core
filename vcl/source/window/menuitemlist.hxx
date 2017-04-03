@@ -116,6 +116,7 @@ public:
                     );
     void            InsertSeparator(const OString &rIdent, size_t nPos);
     void            Remove( size_t nPos );
+    void            Clear();
 
     MenuItemData*   GetData( sal_uInt16 nSVId, size_t& rPos ) const;
     MenuItemData*   GetData( sal_uInt16 nSVId ) const

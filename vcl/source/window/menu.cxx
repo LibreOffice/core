@@ -188,9 +188,11 @@ void Menu::dispose()
 
     bKilled = true;
 
-    delete pItemList;
+    pItemList->Clear();
     delete pLogo;
+    pLogo = nullptr;
     delete mpLayoutData;
+    mpLayoutData = nullptr;
 
     // Native-support: destroy SalMenu
     ImplSetSalMenu( nullptr );
