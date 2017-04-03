@@ -461,7 +461,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         nBottom = aVal.nMaxHeight - aVal.nHeight;
 
         {
-            if (aVal.nAnchorType == (css::text::TextContentAnchorType)RndStdIds::FLY_AS_CHAR)
+            if (aVal.nAnchorType == css::text::TextContentAnchorType_AS_CHARACTER)
             {
                 nLeft = nRight;
 

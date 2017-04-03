@@ -1147,6 +1147,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyClickHdl, Button*, void)
 {
     RangeModifyHdl(*m_pWidthMF);
 }
+
 IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
 {
     if(m_bPositioningDisabled)
