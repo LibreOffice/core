@@ -2680,11 +2680,11 @@ OUString SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
 
 SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
     : VclHBox(pParent)
-    , pForm(nullptr)
-    , nLevel(0)
-    , bValid(false)
-    , sCharStyle(SW_RESSTR(STR_CHARSTYLE))
-    , pActiveCtrl(nullptr)
+    , m_pForm(nullptr)
+    , m_nLevel(0)
+    , m_bValid(false)
+    , m_sCharStyle(SW_RESSTR(STR_CHARSTYLE))
+    , m_pActiveCtrl(nullptr)
     , m_pParent(nullptr)
 {
     m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(),
@@ -2699,18 +2699,18 @@ SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
         sal_uInt32 nTextId = STR_BUTTON_TEXT_START + i;
         if( STR_TOKEN_ENTRY_TEXT == nTextId )
             nTextId = STR_TOKEN_ENTRY;
-        aButtonTexts[i] = SW_RESSTR(nTextId);
+        m_aButtonTexts[i] = SW_RESSTR(nTextId);
 
         sal_uInt32 nHelpId = STR_BUTTON_HELP_TEXT_START + i;
         if(STR_TOKEN_HELP_ENTRY_TEXT == nHelpId)
             nHelpId = STR_TOKEN_HELP_ENTRY;
-        aButtonHelpTexts[i] = SW_RESSTR(nHelpId);
+        m_aButtonHelpTexts[i] = SW_RESSTR(nHelpId);
     }
 
-    accessibleName = SW_RESSTR(STR_STRUCTURE);
-    sAdditionalAccnameString1 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING1);
-    sAdditionalAccnameString2 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING2);
-    sAdditionalAccnameString3 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING3);
+    m_sAccessibleName = SW_RESSTR(STR_STRUCTURE);
+    m_sAdditionalAccnameString1 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING1);
+    m_sAdditionalAccnameString2 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING2);
+    m_sAdditionalAccnameString3 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING3);
 
     Link<Button*,void> aLink(LINK(this, SwTokenWindow, ScrollHdl));
     m_pLeftScrollWin->SetClickHdl(aLink);
@@ -2723,11 +2723,11 @@ void SwTokenWindow::setAllocation(const Size &rAllocation)
 {
     VclHBox::setAllocation(rAllocation);
 
-    if (aControlList.empty())
+    if (m_aControlList.empty())
         return;
 
     Size aControlSize(m_pCtrlParentWin->GetSizePixel());
-    for (VclPtr<Control> const & pControl : aControlList)
+    for (VclPtr<Control> const & pControl : m_aControlList)
     {
         Size aSize(pControl->GetSizePixel());
         aSize.Height() = aControlSize.Height();
@@ -2743,18 +2743,18 @@ SwTokenWindow::~SwTokenWindow()
 
 void SwTokenWindow::dispose()
 {
-    for (VclPtr<Control> & pControl : aControlList)
+    for (VclPtr<Control> & pControl : m_aControlList)
     {
         pControl->SetGetFocusHdl( Link<Control&,void>() );
         pControl->SetLoseFocusHdl( Link<Control&,void>() );
         pControl.disposeAndClear();
     }
-    aControlList.clear();
+    m_aControlList.clear();
     disposeBuilder();
     m_pLeftScrollWin.clear();
     m_pCtrlParentWin.clear();
     m_pRightScrollWin.clear();
-    pActiveCtrl.clear();
+    m_pActiveCtrl.clear();
     m_pParent.clear();
     VclHBox::dispose();
 }
@@ -2762,25 +2762,25 @@ void SwTokenWindow::dispose()
 void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 {
     SetActiveControl(nullptr);
-    bValid = true;
+    m_bValid = true;
 
-    if(pForm)
+    if(m_pForm)
     {
-        for (ctrl_iterator iter = aControlList.begin(); iter != aControlList.end(); ++iter)
+        for (ctrl_iterator iter = m_aControlList.begin(); iter != m_aControlList.end(); ++iter)
             iter->disposeAndClear();
         //apply current level settings to the form
-        for (auto it = aControlList.begin(); it != aControlList.end(); ++it)
+        for (auto it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
              it->disposeAndClear();
-        aControlList.clear();
+        m_aControlList.clear();
     }
 
-    nLevel = nL;
-    pForm = &rForm;
+    m_nLevel = nL;
+    m_pForm = &rForm;
     //now the display
-    if(nLevel < MAXLEVEL || rForm.GetTOXType() == TOX_AUTHORITIES)
+    if(m_nLevel < MAXLEVEL || rForm.GetTOXType() == TOX_AUTHORITIES)
     {
         // #i21237#
-        SwFormTokens aPattern = pForm->GetPattern(nLevel + 1);
+        SwFormTokens aPattern = m_pForm->GetPattern(m_nLevel + 1);
         SwFormTokens::iterator aIt = aPattern.begin();
         bool bLastWasText = false; //assure alternating text - code - text
 
@@ -2842,21 +2842,21 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
 void SwTokenWindow::SetActiveControl(Control* pSet)
 {
-    if( pSet != pActiveCtrl )
+    if( pSet != m_pActiveCtrl )
     {
-        pActiveCtrl = pSet;
-        if( pActiveCtrl )
+        m_pActiveCtrl = pSet;
+        if( m_pActiveCtrl )
         {
-            pActiveCtrl->GrabFocus();
+            m_pActiveCtrl->GrabFocus();
             //it must be a SwTOXEdit
             const SwFormToken* pFToken;
-            if( WindowType::EDIT == pActiveCtrl->GetType() )
-                pFToken = &static_cast<SwTOXEdit*>(pActiveCtrl.get())->GetFormToken();
+            if( WindowType::EDIT == m_pActiveCtrl->GetType() )
+                pFToken = &static_cast<SwTOXEdit*>(m_pActiveCtrl.get())->GetFormToken();
             else
-                pFToken = &static_cast<SwTOXButton*>(pActiveCtrl.get())->GetFormToken();
+                pFToken = &static_cast<SwTOXButton*>(m_pActiveCtrl.get())->GetFormToken();
 
             SwFormToken aTemp( *pFToken );
-            aButtonSelectedHdl.Call( aTemp );
+            m_aButtonSelectedHdl.Call( aTemp );
         }
     }
 }
@@ -2867,9 +2867,9 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
     Size aControlSize(m_pCtrlParentWin->GetSizePixel());
     Point aControlPos;
 
-    if(!aControlList.empty())
+    if(!m_aControlList.empty())
     {
-        Control* pLast = aControlList.rbegin()->get();
+        Control* pLast = m_aControlList.rbegin()->get();
 
         aControlSize = pLast->GetSizePixel();
         aControlPos = pLast->GetPosPixel();
@@ -2881,19 +2881,19 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         VclPtr<SwTOXEdit> pEdit = VclPtr<SwTOXEdit>::Create(m_pCtrlParentWin, this, rToken);
         pEdit->SetPosPixel(aControlPos);
 
-        aControlList.push_back(pEdit);
+        m_aControlList.push_back(pEdit);
 
         pEdit->SetText(rText);
         sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT );
-        OUString strName(accessibleName + OUString::number(nIndex));
+        OUString strName(m_sAccessibleName + OUString::number(nIndex));
         if ( nIndex == 1 )
         {
             /*Press left or right arrow to choose the structure controls*/
-            strName += " (" + sAdditionalAccnameString2 + ", "
+            strName += " (" + m_sAdditionalAccnameString2 + ", "
             /*Press Ctrl+Alt+A to move focus for more operations*/
-                     + sAdditionalAccnameString1 + ", "
+                     + m_sAdditionalAccnameString1 + ", "
             /*Press Ctrl+Alt+B to move focus back to the current structure control*/
-                     + sAdditionalAccnameString3 + ")";
+                     + m_sAdditionalAccnameString3 + ")";
         }
         pEdit->SetAccessibleName(strName);
         Size aEditSize(aControlSize);
@@ -2910,7 +2910,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         VclPtr<SwTOXButton> pButton = VclPtr<SwTOXButton>::Create(m_pCtrlParentWin, this, rToken);
         pButton->SetPosPixel(aControlPos);
 
-        aControlList.push_back(pButton);
+        m_aControlList.push_back(pButton);
 
         Size aEditSize(aControlSize);
         aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
@@ -2919,7 +2919,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
 
         if(TOKEN_AUTHORITY != rToken.eTokenType)
-            pButton->SetText(aButtonTexts[rToken.eTokenType]);
+            pButton->SetText(m_aButtonTexts[rToken.eTokenType]);
         else
         {
             //use the first two chars as symbol
@@ -2929,7 +2929,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         }
 
         sal_uInt32 nIndex = GetControlIndex( rToken.eTokenType );
-        OUString sAccName = aButtonHelpTexts[rToken.eTokenType];
+        OUString sAccName = m_aButtonHelpTexts[rToken.eTokenType];
         if ( nIndex )
         {
             sAccName += " " + OUString::number(nIndex);
@@ -2945,9 +2945,9 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
 
 void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& rToken)
 {
-    OSL_ENSURE(pActiveCtrl, "no active control!");
+    OSL_ENSURE(m_pActiveCtrl, "no active control!");
 
-    if(!pActiveCtrl)
+    if(!m_pActiveCtrl)
         return;
 
     SwFormToken aToInsertToken(rToken);
@@ -2969,8 +2969,8 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         const Control* pControl = nullptr;
         const Control* pExchange = nullptr;
 
-        ctrl_const_iterator it = aControlList.begin();
-        for( ; it != aControlList.end() && pActiveCtrl != (*it); ++it )
+        ctrl_const_iterator it = m_aControlList.begin();
+        for( ; it != m_aControlList.end() && m_pActiveCtrl != (*it); ++it )
         {
             pControl = *it;
 
@@ -3001,11 +3001,11 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
 
         if(!bPreStartLinkFound && !bPreEndLinkFound)
         {
-            for( ; it != aControlList.end(); ++it )
+            for( ; it != m_aControlList.end(); ++it )
             {
                 pControl = *it;
 
-                if( pControl != pActiveCtrl &&
+                if( pControl != m_pActiveCtrl &&
                     WindowType::EDIT != pControl->GetType())
                 {
                     const SwFormToken& rNewToken =
@@ -3034,7 +3034,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         if(bPreStartLinkFound)
         {
             aToInsertToken.eTokenType = TOKEN_LINK_END;
-            aToInsertToken.sText =  aButtonTexts[TOKEN_LINK_END];
+            aToInsertToken.sText =  m_aButtonTexts[TOKEN_LINK_END];
         }
 
         if(bPostLinkStartFound)
@@ -3043,7 +3043,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
             if(pExchange)
             {
                 const_cast<SwTOXButton*>(static_cast<const SwTOXButton*>(pExchange))->SetLinkEnd();
-                const_cast<SwTOXButton*>(static_cast<const SwTOXButton*>(pExchange))->SetText(aButtonTexts[TOKEN_LINK_END]);
+                const_cast<SwTOXButton*>(static_cast<const SwTOXButton*>(pExchange))->SetText(m_aButtonTexts[TOKEN_LINK_END]);
             }
         }
 
@@ -3054,52 +3054,52 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
             if(pExchange)
             {
                 const_cast<SwTOXButton*>(static_cast<const SwTOXButton*>(pExchange))->SetLinkStart();
-                const_cast<SwTOXButton*>(static_cast<const SwTOXButton*>(pExchange))->SetText(aButtonTexts[TOKEN_LINK_START]);
+                const_cast<SwTOXButton*>(static_cast<const SwTOXButton*>(pExchange))->SetText(m_aButtonTexts[TOKEN_LINK_START]);
             }
         }
     }
 
     //if the active control is text then insert a new button at the selection
     //else replace the button
-    ctrl_iterator iterActive = std::find(aControlList.begin(),
-                                         aControlList.end(), pActiveCtrl);
+    ctrl_iterator iterActive = std::find(m_aControlList.begin(),
+                                         m_aControlList.end(), m_pActiveCtrl);
 
-    assert(iterActive != aControlList.end());
-    if (iterActive == aControlList.end())
+    assert(iterActive != m_aControlList.end());
+    if (iterActive == m_aControlList.end())
         return;
 
     Size aControlSize(GetOutputSizePixel());
 
-    if( WindowType::EDIT == pActiveCtrl->GetType())
+    if( WindowType::EDIT == m_pActiveCtrl->GetType())
     {
         ++iterActive;
 
-        Selection aSel = static_cast<SwTOXEdit*>(pActiveCtrl.get())->GetSelection();
+        Selection aSel = static_cast<SwTOXEdit*>(m_pActiveCtrl.get())->GetSelection();
         aSel.Justify();
 
-        const OUString sEditText = static_cast<SwTOXEdit*>(pActiveCtrl.get())->GetText();
+        const OUString sEditText = static_cast<SwTOXEdit*>(m_pActiveCtrl.get())->GetText();
         const OUString sLeft = sEditText.copy( 0, aSel.Min() );
         const OUString sRight = sEditText.copy( aSel.Max() );
 
-        static_cast<SwTOXEdit*>(pActiveCtrl.get())->SetText(sLeft);
-        static_cast<SwTOXEdit*>(pActiveCtrl.get())->AdjustSize();
+        static_cast<SwTOXEdit*>(m_pActiveCtrl.get())->SetText(sLeft);
+        static_cast<SwTOXEdit*>(m_pActiveCtrl.get())->AdjustSize();
 
         SwFormToken aTmpToken(TOKEN_TEXT);
         VclPtr<SwTOXEdit> pEdit = VclPtr<SwTOXEdit>::Create(m_pCtrlParentWin, this, aTmpToken);
 
-        iterActive = aControlList.insert(iterActive, pEdit);
+        iterActive = m_aControlList.insert(iterActive, pEdit);
 
         pEdit->SetText(sRight);
         sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT );
-        OUString strName(accessibleName + OUString::number(nIndex));
+        OUString strName(m_sAccessibleName + OUString::number(nIndex));
         if ( nIndex == 1)
         {
             /*Press left or right arrow to choose the structure controls*/
-            strName += " (" + sAdditionalAccnameString2 + ", "
+            strName += " (" + m_sAdditionalAccnameString2 + ", "
             /*Press Ctrl+Alt+A to move focus for more operations*/
-                     + sAdditionalAccnameString1 + ", "
+                     + m_sAdditionalAccnameString1 + ", "
             /*Press Ctrl+Alt+B to move focus back to the current structure control*/
-                     + sAdditionalAccnameString3 + ")";
+                     + m_sAdditionalAccnameString3 + ")";
         }
         pEdit->SetAccessibleName(strName);
         pEdit->SetSizePixel(aControlSize);
@@ -3111,22 +3111,22 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     }
     else
     {
-        iterActive = aControlList.erase(iterActive);
-        pActiveCtrl->Hide();
-        pActiveCtrl.disposeAndClear();
+        iterActive = m_aControlList.erase(iterActive);
+        m_pActiveCtrl->Hide();
+        m_pActiveCtrl.disposeAndClear();
     }
 
     //now the new button
     VclPtr<SwTOXButton> pButton = VclPtr<SwTOXButton>::Create(m_pCtrlParentWin, this, aToInsertToken);
 
-    aControlList.insert(iterActive, pButton);
+    m_aControlList.insert(iterActive, pButton);
 
     pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
     pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
 
     if(TOKEN_AUTHORITY != aToInsertToken.eTokenType)
     {
-        pButton->SetText(aButtonTexts[aToInsertToken.eTokenType]);
+        pButton->SetText(m_aButtonTexts[aToInsertToken.eTokenType]);
     }
     else
     {
@@ -3148,19 +3148,19 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
 
 void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
 {
-    if(bInternalCall && TOX_AUTHORITIES == pForm->GetTOXType())
+    if(bInternalCall && TOX_AUTHORITIES == m_pForm->GetTOXType())
         m_pParent->PreTokenButtonRemoved(pDel->GetFormToken());
 
-    ctrl_iterator it = std::find(aControlList.begin(), aControlList.end(), pDel);
+    ctrl_iterator it = std::find(m_aControlList.begin(), m_aControlList.end(), pDel);
 
-    assert(it != aControlList.end()); //Control does not exist!
-    if (it == aControlList.end())
+    assert(it != m_aControlList.end()); //Control does not exist!
+    if (it == m_aControlList.end())
         return;
 
     // the two neighbours of the box must be merged
     // the properties of the right one will be lost
-    assert(it != aControlList.begin() && it != aControlList.end() - 1); //Button at first or last position?
-    if (it == aControlList.begin() || it == aControlList.end() - 1)
+    assert(it != m_aControlList.begin() && it != m_aControlList.end() - 1); //Button at first or last position?
+    if (it == m_aControlList.begin() || it == m_aControlList.end() - 1)
         return;
 
     ctrl_iterator itLeft = it, itRight = it;
@@ -3173,30 +3173,30 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
                                      static_cast<SwTOXEdit*>(pRightEdit.get())->GetText());
     static_cast<SwTOXEdit*>(pLeftEdit.get())->AdjustSize();
 
-    aControlList.erase(itRight);
+    m_aControlList.erase(itRight);
     pRightEdit.disposeAndClear();
 
-    aControlList.erase(it);
-    pActiveCtrl->Hide();
-    pActiveCtrl.disposeAndClear();
+    m_aControlList.erase(it);
+    m_pActiveCtrl->Hide();
+    m_pActiveCtrl.disposeAndClear();
 
     SetActiveControl(pLeftEdit);
     AdjustPositions();
-    aModifyHdl.Call(nullptr);
+    m_aModifyHdl.Call(nullptr);
 }
 
 void SwTokenWindow::AdjustPositions()
 {
-    if(aControlList.size() > 1)
+    if(m_aControlList.size() > 1)
     {
-        ctrl_iterator it = aControlList.begin();
+        ctrl_iterator it = m_aControlList.begin();
         Control* pCtrl = it->get();
         ++it;
 
         Point aNextPos = pCtrl->GetPosPixel();
         aNextPos.X() += pCtrl->GetSizePixel().Width();
 
-        for(; it != aControlList.end(); ++it)
+        for(; it != m_aControlList.end(); ++it)
         {
             pCtrl = it->get();
             pCtrl->SetPosPixel(aNextPos);
@@ -3210,7 +3210,7 @@ void SwTokenWindow::AdjustPositions()
 void SwTokenWindow::MoveControls(long nOffset)
 {
     // move the complete list
-    for (VclPtr<Control> const & pCtrl : aControlList)
+    for (VclPtr<Control> const & pCtrl : m_aControlList)
     {
         Point aPos = pCtrl->GetPosPixel();
         aPos.X() += nOffset;
@@ -3221,11 +3221,11 @@ void SwTokenWindow::MoveControls(long nOffset)
 
 void SwTokenWindow::AdjustScrolling()
 {
-    if(aControlList.size() > 1)
+    if(m_aControlList.size() > 1)
     {
         //validate scroll buttons
-        Control* pFirstCtrl = aControlList.begin()->get();
-        Control* pLastCtrl = aControlList.rbegin()->get();
+        Control* pFirstCtrl = m_aControlList.begin()->get();
+        Control* pLastCtrl = m_aControlList.rbegin()->get();
 
         long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
         long nWidth = pLastCtrl->GetPosPixel().X() - pFirstCtrl->GetPosPixel().X()
@@ -3233,16 +3233,16 @@ void SwTokenWindow::AdjustScrolling()
         bool bEnable = nWidth > nSpace;
 
         //the active control must be visible
-        if(bEnable && pActiveCtrl)
+        if(bEnable && m_pActiveCtrl)
         {
-            Point aActivePos(pActiveCtrl->GetPosPixel());
+            Point aActivePos(m_pActiveCtrl->GetPosPixel());
 
             long nMove = 0;
 
             if(aActivePos.X() < 0)
                 nMove = -aActivePos.X();
-            else if((aActivePos.X() + pActiveCtrl->GetSizePixel().Width())  > nSpace)
-                nMove = -(aActivePos.X() + pActiveCtrl->GetSizePixel().Width() - nSpace);
+            else if((aActivePos.X() + m_pActiveCtrl->GetSizePixel().Width())  > nSpace)
+                nMove = -(aActivePos.X() + m_pActiveCtrl->GetSizePixel().Width() - nSpace);
 
             if(nMove)
                 MoveControls(nMove);
@@ -3267,7 +3267,7 @@ void SwTokenWindow::AdjustScrolling()
 
 IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
 {
-    if(aControlList.empty())
+    if(m_aControlList.empty())
         return;
 
     const long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
@@ -3290,7 +3290,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
     if(pBtn == m_pLeftScrollWin)
     {
         //find the first completely visible control (left edge visible)
-        for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+        for (ctrl_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
         {
             Control *pCtrl = it->get();
 
@@ -3298,7 +3298,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
 
             if (nXPos >= 0)
             {
-                if (it == aControlList.begin())
+                if (it == m_aControlList.begin())
                 {
                     //move the current control to the left edge
                     nMove = -nXPos;
@@ -3320,7 +3320,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
     else
     {
         //find the first completely visible control (right edge visible)
-        for (ctrl_reverse_iterator it = aControlList.rbegin(); it != aControlList.rend(); ++it)
+        for (ctrl_reverse_iterator it = m_aControlList.rbegin(); it != m_aControlList.rend(); ++it)
         {
             Control *pCtrl = it->get();
 
@@ -3329,7 +3329,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
 
             if (nXPos <= nSpace)
             {
-                if (it != aControlList.rbegin())
+                if (it != m_aControlList.rbegin())
                 {
                     //move the right neighbor  to the right edge right aligned
                     ctrl_reverse_iterator itRight = it;
@@ -3352,10 +3352,10 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
 
         Control *pCtrl = nullptr;
 
-        pCtrl = aControlList.begin()->get();
+        pCtrl = m_aControlList.begin()->get();
         m_pLeftScrollWin->Enable(pCtrl->GetPosPixel().X() < 0);
 
-        pCtrl = aControlList.rbegin()->get();
+        pCtrl = m_aControlList.rbegin()->get();
         m_pRightScrollWin->Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
     }
 }
@@ -3364,7 +3364,7 @@ OUString SwTokenWindow::GetPattern() const
 {
     OUString sRet;
 
-    for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    for (ctrl_const_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
     {
         const Control *pCtrl = *it;
 
@@ -3384,7 +3384,7 @@ bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     bool bRet = false;
 
-    for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    for (ctrl_const_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
     {
         const Control *pCtrl = *it;
 
@@ -3412,7 +3412,7 @@ bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
         bool bBalloon = Help::IsBalloonHelpEnabled();
         OUString sEntry;
         if(bBalloon || rToken.eTokenType != TOKEN_AUTHORITY)
-            sEntry = (aButtonHelpTexts[rToken.eTokenType]);
+            sEntry = (m_aButtonHelpTexts[rToken.eTokenType]);
         if(rToken.eTokenType == TOKEN_AUTHORITY )
         {
              sEntry += SwAuthorityFieldType::GetAuthFieldName(
@@ -3426,7 +3426,7 @@ bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
             if (!rToken.sCharStyleName.isEmpty())
             {
                 sEntry += OUString(bBalloon ? '\n' : ' ')
-                        + sCharStyle + rToken.sCharStyleName;
+                        + m_sCharStyle + rToken.sCharStyleName;
             }
         }
         if(bBalloon)
@@ -3445,21 +3445,21 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit&, rEdit, void)
 {
     static_cast<SwTOXEdit*>(&rEdit)->AdjustSize();
     AdjustPositions();
-    aModifyHdl.Call(nullptr);
+    m_aModifyHdl.Call(nullptr);
 }
 
 IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit&, rEdit, void)
 {
-    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),&rEdit);
+    ctrl_iterator it = std::find(m_aControlList.begin(),m_aControlList.end(),&rEdit);
 
-    if (it == aControlList.end())
+    if (it == m_aControlList.end())
         return;
 
     ctrl_iterator itTest = it;
     ++itTest;
 
-    if ((it != aControlList.begin() && !rEdit.IsNextControl()) ||
-        (itTest != aControlList.end() && rEdit.IsNextControl()))
+    if ((it != m_aControlList.begin() && !rEdit.IsNextControl()) ||
+        (itTest != m_aControlList.end() && rEdit.IsNextControl()))
     {
         ctrl_iterator iterFocus = it;
         rEdit.IsNextControl() ? ++iterFocus : --iterFocus;
@@ -3475,7 +3475,7 @@ IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit&, rEdit, void)
 IMPL_LINK(SwTokenWindow, TbxFocusHdl, Control&, rControl, void)
 {
     SwTOXEdit* pEdit = static_cast<SwTOXEdit*>(&rControl);
-    for (VclPtr<Control> const & pCtrl : aControlList)
+    for (VclPtr<Control> const & pCtrl : m_aControlList)
     {
         if (pCtrl && pCtrl->GetType() != WindowType::EDIT)
             static_cast<SwTOXButton*>(pCtrl.get())->Check(false);
@@ -3486,15 +3486,15 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, Control&, rControl, void)
 
 IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
 {
-    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),&rBtn);
+    ctrl_iterator it = std::find(m_aControlList.begin(),m_aControlList.end(),&rBtn);
 
-    if (it == aControlList.end())
+    if (it == m_aControlList.end())
         return;
 
     ctrl_iterator itTest = it;
     ++itTest;
 
-    if (!rBtn.IsNextControl() || (itTest != aControlList.end() && rBtn.IsNextControl()))
+    if (!rBtn.IsNextControl() || (itTest != m_aControlList.end() && rBtn.IsNextControl()))
     {
         bool isNext = rBtn.IsNextControl();
 
@@ -3524,7 +3524,7 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, Control&, rControl, void )
 {
     SwTOXButton* pBtn = static_cast<SwTOXButton*>(&rControl);
-    for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    for (ctrl_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
     {
         Control *pControl = it->get();
 
@@ -3539,9 +3539,9 @@ void SwTokenWindow::GetFocus()
 {
     if(GetFocusFlags::Tab & GetGetFocusFlags())
     {
-        if (!aControlList.empty())
+        if (!m_aControlList.empty())
         {
-            Control *pFirst = aControlList.begin()->get();
+            Control *pFirst = m_aControlList.begin()->get();
 
             if (pFirst)
             {
@@ -3571,7 +3571,7 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
     }
 
     sal_uInt32 nIndex = 0;
-    for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    for (ctrl_const_iterator it = m_aControlList.begin(); it != m_aControlList.end(); ++it)
     {
         const Control* pControl = *it;
         const SwFormToken& rNewToken = WindowType::EDIT == pControl->GetType()
