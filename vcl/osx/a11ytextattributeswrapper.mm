@@ -141,7 +141,7 @@ using namespace ::com::sun::star::uno;
 
 +(int)convertItalicStyle:(PropertyValue)property {
     int italicStyle = NSUnitalicFontMask;
-    sal_Int16 value = property.Value.get< ::css_awt::FontSlant>();
+    ::css_awt::FontSlant value = property.Value.get< ::css_awt::FontSlant>();
     if ( value == ::css_awt::FontSlant_ITALIC ) {
         italicStyle = NSItalicFontMask;
     }
@@ -279,7 +279,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     // 'NSJustifiedTextAlignment' is deprecated: first deprecated in macOS 10.12
     // 'NSLeftTextAlignment' is deprecated: first deprecated in macOS 10.12
     // 'NSRightTextAlignment' is deprecated: first deprecated in macOS 10.12
-                switch(alignment) {
+                switch((css::style::ParagraphAdjust)alignment) {
                     case css::style::ParagraphAdjust_RIGHT : textAlignment = [NSNumber numberWithInteger:NSRightTextAlignment]    ; break;
                     case css::style::ParagraphAdjust_CENTER: textAlignment = [NSNumber numberWithInteger:NSCenterTextAlignment]   ; break;
                     case css::style::ParagraphAdjust_BLOCK : textAlignment = [NSNumber numberWithInteger:NSJustifiedTextAlignment]; break;

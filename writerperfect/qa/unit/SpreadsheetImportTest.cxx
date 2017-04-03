@@ -24,6 +24,16 @@
 #include "WpftLoader.hxx"
 #include "wpftimport.hxx"
 
+namespace com { namespace sun { namespace star { namespace table {
+
+std::ostream& operator<<(std::ostream& rStrm, CellContentType n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 namespace
 {
 

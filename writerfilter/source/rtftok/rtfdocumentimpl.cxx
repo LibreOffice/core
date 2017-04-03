@@ -3272,7 +3272,7 @@ RTFShape::RTFShape()
       nVertOrientRelation(0),
       nHoriOrientRelationToken(0),
       nVertOrientRelationToken(0),
-      nWrap(text::WrapTextMode_MAKE_FIXED_SIZE),
+      nWrap(text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE),
       bInBackground(false)
 {
 }
