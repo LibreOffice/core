@@ -462,7 +462,7 @@ bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
     auto const nStartOfContent(rNodes.GetEndOfContent().StartOfSectionNode()->GetIndex());
     nNodeIndex -= nStartOfContent;
     auto const nMaxIndex(rNodes.GetEndOfContent().GetIndex() - nStartOfContent);
-    for (sal_uInt16 nIndex = 0; nIndex < rCache.size(); ++nIndex)
+    for (size_t nIndex = 0; nIndex < rCache.size(); ++nIndex)
     {
         auto const nBreakIndex(rCache.GetBreakIndex(nIndex));
         if (nBreakIndex < nNodeIndex || nMaxIndex <= nBreakIndex)
