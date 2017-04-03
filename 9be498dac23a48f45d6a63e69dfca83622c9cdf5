@@ -16,6 +16,24 @@
       "revId": "9be498dac23a48f45d6a63e69dfca83622c9cdf5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_491e72bb",
+        "filename": "sw/source/uibase/uiview/uivwimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2017-04-03T07:12:10Z",
+      "side": 0,
+      "message": "Yes, it does, and its removal was not intentional. I\u0027ll put it back.",
+      "parentUuid": "9a57fde8_f2d1d0fc",
+      "revId": "9be498dac23a48f45d6a63e69dfca83622c9cdf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

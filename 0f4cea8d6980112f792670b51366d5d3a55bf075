@@ -16,6 +16,24 @@
       "revId": "0f4cea8d6980112f792670b51366d5d3a55bf075",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_29212efc",
+        "filename": "sfx2/source/dialog/filedlghelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2017-04-03T07:12:10Z",
+      "side": 1,
+      "message": "Yes, indeed.\nI will fix that (and the following one).",
+      "parentUuid": "9a57fde8_7204007e",
+      "revId": "0f4cea8d6980112f792670b51366d5d3a55bf075",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
