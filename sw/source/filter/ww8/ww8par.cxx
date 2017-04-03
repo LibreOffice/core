@@ -3118,7 +3118,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
 
         if (m_bRegardHindiDigits && m_bBidi && LangUsesHindiNumbers(nCTLLang))
         {
-            for (sal_Int32 nI = 0; nI < nStrLen; ++nI, ++pBuffer)
+            for (sal_Int32 nI = 0; nI < nEndUsed; ++nI, ++pBuffer)
                 *pBuffer = TranslateToHindiNumbers(*pBuffer);
         }
 
