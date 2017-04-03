@@ -66,9 +66,9 @@ public:
 
     bool Read( SvStream& rStream );
 
-    sal_uLong GetBreakIndex( sal_uInt16 nIdx ) const { return mIndices[ nIdx ]; }
+    sal_uLong GetBreakIndex( size_t nIdx ) const { return mIndices[ nIdx ]; }
     sal_Int32 GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
-    sal_uInt16 GetBreakType( sal_uInt16 nIdx ) const { return aType[ nIdx ]; }
+    sal_uInt16 GetBreakType( size_t nIdx ) const { return aType[ nIdx ]; }
 
     size_t GetFlyCount() const { return m_FlyCache.size(); }
     SwFlyCache& GetFlyCache( size_t nIdx ) { return m_FlyCache[ nIdx ]; }
