@@ -848,6 +848,13 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         return;
     }
 
+    if (static_cast<size_t>(nLen) < sizeof(WW8_ANLD))
+    {
+        SAL_WARN("sw.ww8", "ANLevelDesc property is " << nLen << " long, needs to be at least " << sizeof(WW8_ANLD));
+        m_nSwNumLevel = 0xff;
+        return;
+    }
+
     if( m_nSwNumLevel <= MAXLEVEL         // Value range mapping WW:1..9 -> SW:0..8
         && m_nSwNumLevel <= 9 ){          // No Bullets or Numbering
 
