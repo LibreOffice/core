@@ -3116,9 +3116,11 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
             ? Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nStrLen)
             : nL2;
 
-        for( sal_Int32 nI = 0; nI < nStrLen; ++nI, ++pBuffer )
-            if (m_bRegardHindiDigits && m_bBidi && LangUsesHindiNumbers(nCTLLang))
+        if (m_bRegardHindiDigits && m_bBidi && LangUsesHindiNumbers(nCTLLang))
+        {
+            for (sal_Int32 nI = 0; nI < nStrLen; ++nI, ++pBuffer)
                 *pBuffer = TranslateToHindiNumbers(*pBuffer);
+        }
 
         pStr->buffer[nEndUsed] = 0;
         pStr->length = nEndUsed;
