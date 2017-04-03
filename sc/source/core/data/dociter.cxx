@@ -57,8 +57,16 @@ namespace
         rStr = ScGlobal::pCharClass->uppercase(rStr.trim());
     }
 
-    void lcl_FillBlankCells( std::vector<ColEntry> &rSrcCols, std::vector<ColEntry> &rDestCols, SCROW nLastRow )
+    void lcl_FillBlankCells( std::vector<ColEntry> &rSrcCols, std::vector<ColEntry> &rDestCols, SCROW nLastRow, bool bMatchEmpty )
     {
+        rDestCols.clear();
+
+        if (!bMatchEmpty)
+        {
+            rDestCols = rSrcCols;
+            return;
+        }
+
         for( SCROW i = 0, n = 0; i <= nLastRow; ++i )
         {
             rDestCols.push_back(ColEntry());
@@ -1214,13 +1222,8 @@ bool ScQueryCellIterator::GetThis()
     bool bMatchEmpty = ( rItem.mbMatchEmpty && rEntry.GetQueryItems().size() == 1 );
 
     std::vector<ColEntry> rColItems;
-    if ( !bMatchEmpty )
-        rColItems = pCol->maItems;
-    else
-    {
-       SCROW nLastRow = pCol->maItems.back().nRow;
-       lcl_FillBlankCells( pCol->maItems, rColItems, std::max(nLastRow, mpParam->nRow2) );
-    }
+    SCROW nLastRow = pCol->GetLastDataPos();
+    lcl_FillBlankCells( pCol->maItems, rColItems, std::max(nLastRow, mpParam->nRow2), bMatchEmpty );
 
     for ( ;; )
     {
@@ -1238,7 +1241,10 @@ bool ScQueryCellIterator::GetThis()
                     AdvanceQueryParamEntryField();
                     nFirstQueryField = rEntry.nField;
                 }
+
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
+                nLastRow = pCol->GetLastDataPos();
+                lcl_FillBlankCells( pCol->maItems, rColItems, std::max(nLastRow, mpParam->nRow2), bMatchEmpty );
             } while ( pCol->maItems.empty() );
             pCol->Search( nRow, nColRow );
             bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
