@@ -467,7 +467,7 @@ bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
         auto const nBreakIndex(rCache.GetBreakIndex(nIndex));
         if (nBreakIndex < nNodeIndex || nMaxIndex <= nBreakIndex)
         {
-            SAL_WARN("sw.core.layout",
+            SAL_WARN("sw.core",
                 "invalid node index in layout-cache: " << nBreakIndex);
             return false;
         }
@@ -477,7 +477,7 @@ bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
             case SW_LAYCACHE_IO_REC_PARA:
                 if (!rNodes[nBreakIndex + nStartOfContent]->IsTextNode())
                 {
-                    SAL_WARN("sw.core.layout",
+                    SAL_WARN("sw.core",
                         "invalid node of type 'P' in layout-cache");
                     return false;
                 }
@@ -485,7 +485,7 @@ bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
             case SW_LAYCACHE_IO_REC_TABLE:
                 if (!rNodes[nBreakIndex + nStartOfContent]->IsTableNode())
                 {
-                    SAL_WARN("sw.core.layout",
+                    SAL_WARN("sw.core",
                         "invalid node of type 'T' in layout-cache");
                     return false;
                 }
