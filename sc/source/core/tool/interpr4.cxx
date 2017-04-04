@@ -2723,7 +2723,7 @@ void ScInterpreter::ScExternal()
                     break;
 
                 case SC_ADDINARG_DOUBLE:
-                    aParam <<= (double) GetDouble();
+                    aParam <<= GetDouble();
                     break;
 
                 case SC_ADDINARG_STRING:
@@ -2835,7 +2835,7 @@ void ScInterpreter::ScExternal()
                             {
                                 uno::Any aElem;
                                 if ( nStackType == svDouble )
-                                    aElem <<= (double) GetDouble();
+                                    aElem <<= GetDouble();
                                 else if ( nStackType == svString )
                                     aElem <<= GetString().getString();
                                 else
@@ -2881,7 +2881,7 @@ void ScInterpreter::ScExternal()
                     switch( nStackType )
                     {
                         case svDouble:
-                            aParam <<= (double) GetDouble();
+                            aParam <<= GetDouble();
                             break;
                         case svString:
                             aParam <<= GetString().getString();
