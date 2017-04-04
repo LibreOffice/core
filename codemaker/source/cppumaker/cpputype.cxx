@@ -554,8 +554,8 @@ void CppuType::dumpHFileContent(
     dumpHeaderDefine(out, "HDL");
     out << "\n";
     includes.dump(out, nullptr, false);
-    // 'exceptions = false' would be wrong for services/singletons, but
-    // those don't dump .hdl files anyway
+        // 'exceptions = false' would be wrong for services/singletons, but
+        // those don't dump .hdl files anyway
     out << ("\nnamespace com { namespace sun { namespace star { namespace uno"
             " { class Type; } } } }\n\n");
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
