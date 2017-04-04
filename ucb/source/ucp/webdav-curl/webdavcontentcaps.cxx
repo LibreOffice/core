@@ -319,10 +319,13 @@ uno::Sequence< beans::Property > Content::getProperties(
                     props = aPropsNames.getPropertiesNames();
                 }
 
-                // Note: vector always contains exactly one resource info, because
+                // Note: vector should contain exactly one resource info, because
                 //       we used a depth of DAVZERO for PROPFIND.
-                aPropSet.insert( (*props.begin()).properties.begin(),
-                                 (*props.begin()).properties.end() );
+                if (props.size() == 1)
+                {
+                    aPropSet.insert( (*props.begin()).properties.begin(),
+                                     (*props.begin()).properties.end() );
+                }
             }
             catch ( DAVException const & )
             {
