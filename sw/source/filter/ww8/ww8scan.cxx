@@ -6825,8 +6825,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     }
 
     // allocate Font Array
-    std::unique_ptr<sal_uInt8[]> pA( new sal_uInt8[nFFn] );
-    memset(pA.get(), 0, nFFn);
+    std::vector<sal_uInt8> aA(nFFn);
+    memset(aA.data(), 0, nFFn);
 
     ww::WordVersion eVersion = rFib.GetFIBVersion();
 
@@ -6842,9 +6842,9 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     rSt.SeekRel( 2 );
 
     // read all font information
-    nFFn = rSt.ReadBytes(pA.get(), nFFn);
-    sal_uInt8 * const pEnd = pA.get() + nFFn;
-    const sal_uInt16 nCalcMax = calcMaxFonts(pA.get(), nFFn);
+    nFFn = rSt.ReadBytes(aA.data(), nFFn);
+    sal_uInt8 * const pEnd = aA.data() + nFFn;
+    const sal_uInt16 nCalcMax = calcMaxFonts(aA.data(), nFFn);
 
     if (eVersion < ww::eWW8)
         nMax = nCalcMax;
@@ -6863,7 +6863,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
         if( eVersion <= ww::eWW2 )
         {
-            sal_uInt8 const * pVer2 = pA.get();
+            sal_uInt8 const * pVer2 = aA.data();
             sal_uInt16 i = 0;
             for(; i<nMax; ++i, ++p)
             {
@@ -6904,7 +6904,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
         }
         else if( eVersion < ww::eWW8 )
         {
-            sal_uInt8 const * pVer6 = pA.get();
+            sal_uInt8 const * pVer6 = aA.data();
             sal_uInt16 i = 0;
             for(; i<nMax; ++i, ++p)
             {
@@ -6986,7 +6986,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
             const sal_uInt8 cbMinFFNPayload = 41;
             sal_uInt16 nValidFonts = 0;
             sal_Int32 nRemainingFFn = nFFn;
-            sal_uInt8* pRaw = pA.get();
+            sal_uInt8* pRaw = aA.data();
             for (sal_uInt16 i=0; i < nMax && nRemainingFFn; ++i, ++p)
             {
                 //pRaw[0] is cbFfnM1, the alleged total length of FFN - 1
