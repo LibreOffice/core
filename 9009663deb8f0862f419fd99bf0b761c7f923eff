@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_df3f7023",
+        "filename": "offapi/com/sun/star/chart2/data/XDataReceiver.idl",
+        "patchSetId": 14
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-04-04T20:45:45Z",
+      "side": 1,
+      "message": "Right, everything else is new. But I removed XPopupRequest and PopupRequest, however they were never included in a LO release",
+      "parentUuid": "9a57fde8_bf0e2c32",
+      "revId": "9009663deb8f0862f419fd99bf0b761c7f923eff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_df13f05a",
         "filename": "offapi/com/sun/star/chart2/data/XPivotTableDataProvider.idl",
         "patchSetId": 14
@@ -30,6 +48,24 @@
       "writtenOn": "2017-04-04T14:29:38Z",
       "side": 1,
       "message": "if a whole interface is documented @since LibreOffice 5.4, no need to also add it to individual methods etc.",
+      "revId": "9009663deb8f0862f419fd99bf0b761c7f923eff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3f479cbc",
+        "filename": "offapi/com/sun/star/chart2/data/XPivotTableDataProvider.idl",
+        "patchSetId": 14
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-04-04T20:45:45Z",
+      "side": 1,
+      "message": "OK, good to know for future. I thought it is odd but I looked at some new interface which also had them on methods, so I just followed that.",
+      "parentUuid": "9a57fde8_df13f05a",
       "revId": "9009663deb8f0862f419fd99bf0b761c7f923eff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
