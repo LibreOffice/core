@@ -572,7 +572,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
             const uno::Any& strikeval, const uno::Any& put_call )
 {
     bs::types::PutCall pc=bs::types::Call;
-    double  K;
+    double  K = 0;
 
     // read and check input values
     if( spot<=0.0 || vol<=0.0 || T<0.0 ||
