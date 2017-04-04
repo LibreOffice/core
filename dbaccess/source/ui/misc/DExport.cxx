@@ -139,8 +139,6 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
 ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
                                  const Reference< css::uno::XComponentContext >& _rxContext,
-                                 const TColumnVector* pList,
-                                 const OTypeInfoMap* _pInfoMap,
                                  SvStream& _rInputStream)
     :m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_xConnection(_rxConnection)
@@ -279,7 +277,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     }
     if ( !m_pTypeInfo )
         m_pTypeInfo = std::make_shared<OTypeInfo>();
-    SetColumnTypes(pList,_pInfoMap);
 }
 
 ODatabaseExport::~ODatabaseExport()

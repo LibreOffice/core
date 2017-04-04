@@ -202,10 +202,10 @@ struct MSDffTxId
 {
     sal_uInt16 nTxBxS;
     sal_uInt16 nSequence;
-    MSDffTxId( sal_uInt16 nTxBxS_, sal_uInt16 nSequence_ )
-        : nTxBxS( nTxBxS_ ), nSequence( nSequence_ ){}
+    MSDffTxId()
+        : nTxBxS( 0 ), nSequence( 0 ) {}
     MSDffTxId( const MSDffTxId& rCopy )
-        : nTxBxS( rCopy.nTxBxS ), nSequence( rCopy.nSequence ){}
+        : nTxBxS( rCopy.nTxBxS ), nSequence( rCopy.nSequence ) {}
 };
 
 struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
@@ -690,8 +690,7 @@ public:
     void StoreShapeOrder(sal_uLong      nId,
                          sal_uLong      nTxBx,
                          SdrObject*     pObject,
-                         SwFlyFrameFormat*   pFly = nullptr,
-                         short          nHdFtSection = 0) const;
+                         SwFlyFrameFormat*   pFly = nullptr) const;
 
     void ExchangeInShapeOrder(SdrObject*    pOldObject,
                               sal_uLong     nTxBx,

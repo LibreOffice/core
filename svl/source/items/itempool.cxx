@@ -523,7 +523,7 @@ void SfxItemPool::Delete()
                 if (rItemPtr)
                 {
 #ifdef DBG_UTIL
-                    SetRefCount(*rItemPtr, 0);
+                    ClearRefCount(*rItemPtr);
 #endif
                     delete rItemPtr;
                     rItemPtr = nullptr;
@@ -553,7 +553,7 @@ void SfxItemPool::Delete()
         if (rItemPtr)
         {
 #ifdef DBG_UTIL
-            SetRefCount(*rItemPtr, 0);
+            ClearRefCount(*rItemPtr);
 #endif
             delete rItemPtr;
             rItemPtr = nullptr;

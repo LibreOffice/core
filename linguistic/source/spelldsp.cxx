@@ -734,7 +734,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     // no xRes but Proposals found from the user-dictionaries.
                     // Thus we need to create an xRes...
                     xRes = new linguistic::SpellAlternatives( rWord, nLanguage,
-                            SpellFailure::IS_NEGATIVE_WORD, comphelper::containerToSequence(aProposals) );
+                            comphelper::containerToSequence(aProposals) );
                 }
             }
         }

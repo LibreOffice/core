@@ -144,29 +144,23 @@ public:
     OUString     readNulUnicodeArray();
 
     /** Reads a byte character array and returns the string.
+        NUL characters are replaced by question marks.
 
         @param nChars
             Number of characters (bytes) to read from the stream.
-
-        @param bAllowNulChars
-            True = NUL characters are inserted into the imported string.
-            False = NUL characters are replaced by question marks (default).
      */
-    OString      readCharArray( sal_Int32 nChars, bool bAllowNulChars );
+    OString      readCharArray( sal_Int32 nChars );
 
     /** Reads a byte character array and returns a Unicode string.
+        NUL characters are replaced by question marks.
 
         @param nChars
             Number of characters (bytes) to read from the stream.
 
         @param eTextEnc
             The text encoding used to create the Unicode string.
-
-        @param bAllowNulChars
-            True = NUL characters are inserted into the imported string.
-            False = NUL characters are replaced by question marks (default).
      */
-    OUString     readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
+    OUString     readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc );
 
     /** Reads a Unicode character array and returns the string.
 

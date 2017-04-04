@@ -268,7 +268,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
             OUString aUserName = SvTabListBox::GetEntryText( pEntry, 1 );
 
             ::comphelper::SimplePasswordRequest* pPasswordRequest
-                  = new ::comphelper::SimplePasswordRequest( task::PasswordRequestMode_PASSWORD_CREATE );
+                  = new ::comphelper::SimplePasswordRequest;
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
             uno::Reference< task::XInteractionHandler > xInteractionHandler(

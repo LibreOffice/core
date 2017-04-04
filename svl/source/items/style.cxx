@@ -60,13 +60,12 @@ static DbgStyleSheetReferences aDbgStyleSheetReferences;
 #endif
 
 
-SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
+SfxStyleSheetModifiedHint::SfxStyleSheetModifiedHint
 (
-    SfxHintId           nAction,
     const OUString&     rOldName,
     SfxStyleSheetBase&  rStyleSheet     // Remains with the caller
 )
-:   SfxStyleSheetHint( nAction, rStyleSheet ),
+:   SfxStyleSheetHint( SfxHintId::StyleSheetModified, rStyleSheet ),
     aName( rOldName )
 {}
 
@@ -185,8 +184,7 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
         if (bReIndexNow)
             pPool->Reindex();
         pPool->SetSearchMask(eTmpFam, nTmpMask);
-        pPool->Broadcast( SfxStyleSheetHintExtended(
-            SfxHintId::StyleSheetModified, aOldName, *this ) );
+        pPool->Broadcast( SfxStyleSheetModifiedHint( aOldName, *this ) );
     }
     return true;
 }

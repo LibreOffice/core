@@ -139,8 +139,6 @@ namespace dbaui
             const SharedConnection& _rxConnection,
             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            const TColumnVector* rList,
-            const OTypeInfoMap* _pInfoMap,
             SvStream& _rInputStream
         );
 

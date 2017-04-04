@@ -21,11 +21,15 @@
 #include <vcl/settings.hxx>
 
 
-void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
+ScrollableWindow::ScrollableWindow( vcl::Window* pParent ) :
+    Window( pParent, WB_CLIPCHILDREN ),
+    aVScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL | WB_DRAG)) ),
+    aHScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL | WB_DRAG)) ),
+    aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
 {
-    bHandleDragging = bool( nFlags & ScrollableWindowFlags::THUMBDRAGGING );
-    bVCenter = bool(nFlags & ScrollableWindowFlags::VCENTER);
-    bHCenter = bool(nFlags & ScrollableWindowFlags::HCENTER);
+    bHandleDragging = true;
+    bVCenter = true;
+    bHCenter = true;
     bScrolling = false;
 
     // set the handlers for the scrollbars
@@ -35,16 +39,6 @@ void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
     aHScroll->SetEndScrollHdl( LINK(this, ScrollableWindow, EndScrollHdl) );
 
     nColumnPixW = nLinePixH = GetSettings().GetStyleSettings().GetScrollBarSize();
-}
-
-
-ScrollableWindow::ScrollableWindow( vcl::Window* pParent ) :
-    Window( pParent, WB_CLIPCHILDREN ),
-    aVScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL | WB_DRAG)) ),
-    aHScroll( VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL | WB_DRAG)) ),
-    aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
-{
-    ImpInitialize( ScrollableWindowFlags::DEFAULT );
 }
 
 

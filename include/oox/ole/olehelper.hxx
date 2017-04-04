@@ -77,10 +77,7 @@ struct StdFontInfo
     explicit            StdFontInfo();
     explicit            StdFontInfo(
                             const OUString& rName,
-                            sal_uInt32 nHeight,
-                            sal_uInt16 nWeight = OLE_STDFONT_NORMAL,
-                            sal_uInt16 nCharSet = WINDOWS_CHARSET_ANSI,
-                            sal_uInt8 nFlags = 0 );
+                            sal_uInt32 nHeight );
 };
 
 

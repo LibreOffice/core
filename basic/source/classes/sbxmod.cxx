@@ -1777,14 +1777,10 @@ bool SbModule::HasExeCode()
 }
 
 // Store only image, no source
-void SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
+void SbModule::StoreBinaryData( SvStream& rStrm )
 {
     if (!Compile())
         return;
-    bool bFixup = ( !nVer && !pImage->ExceedsLegacyLimits() );// save in old image format, fix up method starts
-
-    if ( bFixup ) // save in old image format, fix up method starts
-        fixUpMethodStart( true );
 
     if (!SbxObject::StoreData(rStrm))
         return;
@@ -1794,12 +1790,7 @@ void SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
     pImage->aName = GetName();
 
     rStrm.WriteUChar(1);
-    if (nVer)
-        pImage->Save(rStrm);
-    else
-        pImage->Save(rStrm, B_LEGACYVERSION);
-    if (bFixup)
-        fixUpMethodStart(false); // restore method starts
+    pImage->Save(rStrm);
 
     pImage->aOUSource = aOUSource;
 }

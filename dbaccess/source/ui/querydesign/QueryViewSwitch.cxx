@@ -277,13 +277,13 @@ Reference< XComponentContext > OQueryViewSwitch::getORB() const
     return m_pDesignView->getORB();
 }
 
-bool OQueryViewSwitch::reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )
+bool OQueryViewSwitch::reset()
 {
     m_pDesignView->reset();
-    if ( !m_pDesignView->initByParseIterator( _pErrorInfo ) )
+    if ( !m_pDesignView->initByParseIterator( nullptr ) )
         return false;
 
-    if ( switchView( _pErrorInfo ) )
+    if ( switchView( nullptr ) )
         return false;
 
     return true;

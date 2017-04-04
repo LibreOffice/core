@@ -45,18 +45,11 @@ namespace CodecHelper
 
 /** Encodes and decodes data from/to protected MS Office documents.
 
-    Implements a simple XOR encoding/decoding algorithm used in MS Office
+    Implements a simple XOR encoding/decoding algorithm used in MS Excel Office
     versions up to MSO 95.
  */
 class OOX_DLLPUBLIC BinaryCodec_XOR
 {
-public:
-    /** Enumerates codec types supported by this XOR codec implementation. */
-    enum CodecType
-    {
-        Excel     ///< MS Excel XOR codec.
-    };
-
 public:
     /** Default constructor.
 
@@ -64,7 +57,7 @@ public:
         functions allows to try to initialize with different passwords (e.g.
         built-in default password used for Excel workbook protection).
      */
-    explicit            BinaryCodec_XOR( CodecType eCodecType );
+    explicit            BinaryCodec_XOR();
 
                         ~BinaryCodec_XOR();
 
@@ -126,7 +119,6 @@ public:
     bool                skip( sal_Int32 nBytes );
 
 private:
-    CodecType           meCodecType;        ///< Codec type.
     sal_uInt8           mpnKey[ 16 ];       ///< Encryption key.
     sal_Int32           mnOffset;           ///< Key offset.
     sal_uInt16          mnBaseKey;          ///< Base key from password.

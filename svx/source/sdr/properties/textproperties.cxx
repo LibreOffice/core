@@ -594,7 +594,7 @@ namespace sdr
                 }
                 else if(dynamic_cast<const SfxStyleSheetBasePool *>(&rBC) != nullptr)
                 {
-                    const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint);
+                    const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
 
                     if(pExtendedHint
                         && SfxHintId::StyleSheetModified == pExtendedHint->GetId())

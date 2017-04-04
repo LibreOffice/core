@@ -102,7 +102,7 @@
 using namespace ::com::sun::star;
 
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium )
-    : maParam(rDocStream, 0)
+    : maParam(rDocStream)
 {
 #ifdef DBG_UTIL
     PropRead* pSummaryInformation = new PropRead( rStorage, "\005SummaryInformation" );

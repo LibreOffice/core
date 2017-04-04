@@ -112,8 +112,7 @@ sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int3
     return static_cast< sal_uInt16 >( ((0 <= nPasswordHash) && (nPasswordHash <= SAL_MAX_UINT16)) ? nPasswordHash : 0 );
 }
 
-BinaryCodec_XOR::BinaryCodec_XOR( CodecType eCodecType ) :
-    meCodecType( eCodecType ),
+BinaryCodec_XOR::BinaryCodec_XOR() :
     mnOffset( 0 ),
     mnBaseKey( 0 ),
     mnHash( 0 )
@@ -147,13 +146,7 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
     for (sal_Int32 nIndex = nLen; nIndex < static_cast<sal_Int32>(sizeof(mpnKey)); ++nIndex, ++pnFillChar )
         mpnKey[ nIndex ] = *pnFillChar;
 
-    // rotation of key values is application dependent
-    size_t nRotateSize = 0;
-    switch( meCodecType )
-    {
-        case CodecType::Excel:   nRotateSize = 2;    break;
-        // compiler will warn, if new codec type is introduced and not handled here
-    }
+    size_t nRotateSize = 2;
 
     // use little-endian base key to create key array
     sal_uInt8 pnBaseKeyLE[ 2 ];

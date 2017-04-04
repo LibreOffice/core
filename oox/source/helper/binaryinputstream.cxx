@@ -52,7 +52,7 @@ OUString BinaryInputStream::readNulUnicodeArray()
     return aBuffer.makeStringAndClear();
 }
 
-OString BinaryInputStream::readCharArray( sal_Int32 nChars, bool bAllowNulChars )
+OString BinaryInputStream::readCharArray( sal_Int32 nChars )
 {
     if( nChars <= 0 )
         return OString();
@@ -63,15 +63,15 @@ OString BinaryInputStream::readCharArray( sal_Int32 nChars, bool bAllowNulChars 
         return OString();
 
     aBuffer.resize( static_cast< size_t >( nCharsRead ) );
-    if( !bAllowNulChars )
-        ::std::replace( aBuffer.begin(), aBuffer.end(), '\0', '?' );
+    // NUL characters are replaced by question marks.
+    ::std::replace( aBuffer.begin(), aBuffer.end(), '\0', '?' );
 
     return OString(reinterpret_cast<sal_Char*>(aBuffer.data()), nCharsRead);
 }
 
-OUString BinaryInputStream::readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc, bool bAllowNulChars )
+OUString BinaryInputStream::readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc )
 {
-    return OStringToOUString( readCharArray( nChars, bAllowNulChars ), eTextEnc );
+    return OStringToOUString( readCharArray( nChars ), eTextEnc );
 }
 
 OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars )

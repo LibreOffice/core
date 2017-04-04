@@ -376,7 +376,7 @@ ScDocumentPool::~ScDocumentPool()
 
     for ( sal_uInt16 i=0; i < ATTR_ENDINDEX-ATTR_STARTINDEX+1; i++ )
     {
-        SetRefCount( *(*mpPoolDefaults)[i], 0 );
+        ClearRefCount( *(*mpPoolDefaults)[i] );
         delete (*mpPoolDefaults)[i];
     }
 

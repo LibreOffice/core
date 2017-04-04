@@ -76,10 +76,10 @@ private:
 };
 
 
-SimplePasswordRequest::SimplePasswordRequest( PasswordRequestMode eMode )
+SimplePasswordRequest::SimplePasswordRequest()
 {
     PasswordRequest aRequest( OUString(), Reference< XInterface >(),
-        InteractionClassification_QUERY, eMode );
+        InteractionClassification_QUERY, css::task::PasswordRequestMode_PASSWORD_CREATE );
     maRequest <<= aRequest;
 
     mxAbort = new AbortContinuation;

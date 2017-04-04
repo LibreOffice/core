@@ -179,11 +179,11 @@ SpellAlternatives::SpellAlternatives()
 
 
 SpellAlternatives::SpellAlternatives(
-        const OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
+        const OUString &rWord, sal_Int16 nLang,
         const Sequence< OUString > &rAlternatives ) :
     aAlt        (rAlternatives),
     aWord       (rWord),
-    nType       (nFailureType),
+    nType       (SpellFailure::IS_NEGATIVE_WORD),
     nLanguage   (nLang)
 {
 }

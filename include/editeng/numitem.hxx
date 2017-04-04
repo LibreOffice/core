@@ -142,8 +142,7 @@ private:
     OUString            sCharStyleName;     // Character Style
 
 public:
-    explicit SvxNumberFormat( SvxNumType nNumberingType,
-                     SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
+    explicit SvxNumberFormat( SvxNumType nNumberingType );
     SvxNumberFormat(const SvxNumberFormat& rFormat);
     SvxNumberFormat( SvStream & rStream );
 

@@ -627,7 +627,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                         throw uno::RuntimeException("null returned from openStreamElement");
                     }
                     SvMemoryStream aMemStream;
-                    /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream, B_CURVERSION );
+                    /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
                     sal_Int32 const nSize = aMemStream.Tell();
                     if (nSize < 0) { abort(); }
@@ -765,7 +765,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                                             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
                         SvMemoryStream aMemStream;
-                        /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream, B_CURVERSION );
+                        /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
                         sal_Int32 const nSize = aMemStream.Tell();
                         if (nSize < 0) { abort(); }

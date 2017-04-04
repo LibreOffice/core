@@ -134,7 +134,7 @@ public:
     void                readVbaModules( StorageBase& rVbaPrjStrg );
     /** Imports (and creates) vba modules and user forms from the vba project records previously read.
       Note: ( expects that readVbaModules was already called ) */
-    void                importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr = true );
+    void                importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper );
     /** Registers a macro attacher object. For details, see description of the
         VbaMacroAttacherBase class. */
     void                registerMacroAttacher( const VbaMacroAttacherRef& rxAttacher );
@@ -159,9 +159,9 @@ private:
     /** Returns the Basic or dialog library container. */
     css::uno::Reference< css::script::XLibraryContainer >
                         getLibraryContainer( sal_Int32 nPropId );
-    /** Opens a Basic or dialog library (creates missing if specified). */
+    /** Opens a Basic or dialog library, creates missing if not found. */
     css::uno::Reference< css::container::XNameContainer >
-                        openLibrary( sal_Int32 nPropId, bool bCreateMissing );
+                        openLibrary( sal_Int32 nPropId );
     /** Creates and returns the Basic library of the document used for import. */
     css::uno::Reference< css::container::XNameContainer > const &
                         createBasicLibrary();

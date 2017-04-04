@@ -917,7 +917,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
                         OUString sUserName = aURLEntries.UserList[0].UserName;
 
                         ::comphelper::SimplePasswordRequest* pPasswordRequest
-                            = new ::comphelper::SimplePasswordRequest( PasswordRequestMode_PASSWORD_CREATE );
+                            = new ::comphelper::SimplePasswordRequest;
                         Reference< XInteractionRequest > rRequest( pPasswordRequest );
 
                         xInteractionHandler->handle( rRequest );

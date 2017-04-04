@@ -308,12 +308,12 @@ public:
                         { return pStyleSh; }
 };
 
-class SVL_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
+class SVL_DLLPUBLIC SfxStyleSheetModifiedHint: public SfxStyleSheetHint
 {
     OUString            aName;
 
 public:
-                        SfxStyleSheetHintExtended( SfxHintId, const OUString& rOld,
+                        SfxStyleSheetModifiedHint( const OUString& rOld,
                                                    SfxStyleSheetBase& );
     const OUString&     GetOldName() const { return aName; }
 };

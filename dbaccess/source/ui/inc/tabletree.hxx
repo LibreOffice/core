@@ -48,7 +48,7 @@ protected:
 public:
     OTableTreeListBox(vcl::Window* pParent, WinBits nWinStyle);
 
-    void init(bool bVirtualRoot) { m_bVirtualRoot = bVirtualRoot; }
+    void init() { m_bVirtualRoot = true; }
 
     typedef std::pair< OUString, bool > TTableViewName;
     typedef std::vector< TTableViewName >         TNames;

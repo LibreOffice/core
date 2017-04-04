@@ -367,8 +367,8 @@ DdeRequest::DdeRequest( DdeConnection& d, const OUString& i, long n )
     nType = XTYP_REQUEST;
 }
 
-DdeHotLink::DdeHotLink( DdeConnection& d, const OUString& i, long n )
-    : DdeLink( d, i, n )
+DdeHotLink::DdeHotLink( DdeConnection& d, const OUString& i )
+    : DdeLink( d, i, 0 )
 {
     nType = XTYP_ADVSTART;
 }

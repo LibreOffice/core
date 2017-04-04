@@ -204,13 +204,12 @@ StdFontInfo::StdFontInfo() :
 {
 }
 
-StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
-        sal_uInt16 nWeight, sal_uInt16 nCharSet, sal_uInt8 nFlags ) :
+StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight ) :
     maName( rName ),
     mnHeight( nHeight ),
-    mnWeight( nWeight ),
-    mnCharSet( nCharSet ),
-    mnFlags( nFlags )
+    mnWeight( OLE_STDFONT_NORMAL ),
+    mnCharSet( WINDOWS_CHARSET_ANSI ),
+    mnFlags( 0 )
 {
 }
 

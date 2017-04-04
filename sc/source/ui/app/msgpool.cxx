@@ -84,7 +84,7 @@ ScMessagePool::~ScMessagePool()
     SetSecondaryPool( nullptr ); // before deleting defaults (accesses defaults)
 
     for ( sal_uInt16 i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
-        SetRefCount( *(*mpPoolDefaults)[i], 0 );
+        ClearRefCount( *(*mpPoolDefaults)[i] );
 
     delete mpPoolDefaults;
 
