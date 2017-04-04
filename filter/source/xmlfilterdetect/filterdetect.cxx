@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <svl/inettype.hxx>
 #include <memory>
 
 using namespace com::sun::star::container;
@@ -47,6 +48,25 @@ OUString supportedByType( const OUString& clipBoardFormat,  const OUString& resu
         }
     }
     return sTypeName;
+}
+
+bool IsMediaTypeXML( const OUString& mediaType )
+{
+    if (!mediaType.isEmpty())
+    {
+        OUString sType, sSubType;
+        INetContentTypes::parse(mediaType, sType, sSubType);
+        if (sType.equalsIgnoreAsciiCase("application"))
+        {
+            // RFC 3023: application/xml; don't detect text/xml
+            if (sSubType.equalsIgnoreAsciiCase("xml"))
+                return true;
+            // Registered media types: application/XXXX+xml
+            if (sSubType.endsWithIgnoreAsciiCase("+xml"))
+                return true;
+        }
+    }
+    return false;
 }
 
 }
@@ -125,9 +145,30 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
             resultString = read_uInt16s_ToOUString( *pInStream, nSize );
 
         if ( !resultString.startsWith( "<?xml" ) )
-            // This is not an XML stream.  It makes no sense to try to detect
-            // a non-XML file type here.
-            return OUString();
+        {
+            // Check the content type; XML declaration is optional in XML files according to XML 1.0 ch.2.8
+            // (see https://www.w3.org/TR/2008/REC-xml-20081126/#sec-prolog-dtd)
+            OUString sMediaType;
+            try
+            {
+                ::ucbhelper::Content aContent(
+                    sUrl, Reference< css::ucb::XCommandEnvironment >(),
+                    mxCtx);
+                aContent.getPropertyValue("MediaType") >>= sMediaType;
+                if (sMediaType.isEmpty())
+                {
+                    aContent.getPropertyValue("Content-Type") >>= sMediaType;
+                }
+            }
+            catch (...) {}
+
+            if (!IsMediaTypeXML(sMediaType))
+            {
+                // This is not an XML stream.  It makes no sense to try to detect
+                // a non-XML file type here.
+                return OUString();
+            }
+        }
 
         // test typedetect code
         Reference <XNameAccess> xTypeCont(mxCtx->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxCtx), UNO_QUERY);
