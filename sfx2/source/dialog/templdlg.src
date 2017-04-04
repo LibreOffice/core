@@ -47,4 +47,19 @@ String STR_STYLE_FILTER_HIERARCHICAL
     Text [ en-US ] = "Hierarchical" ;
 };
 
+String STR_STYLE_FILL_FORMAT_MODE
+{
+    Text [ en-US ] = "Fill Format Mode" ;
+};
+
+String STR_STYLE_NEW_STYLE_FROM_SELECTION
+{
+    Text [ en-US ] = "New Style from Selection" ;
+};
+
+String STR_STYLE_UPDATE_STYLE
+{
+    Text [ en-US ] = "Update Style" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

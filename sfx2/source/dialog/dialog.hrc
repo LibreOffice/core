@@ -54,7 +54,9 @@
 #define STR_CANCEL_RECORDING            ( RC_DIALOG_BEGIN + 108 )
 
 #define STR_PDF_EXPORT_SEND             ( RC_DIALOG_BEGIN + 120 )
-//free
+#define STR_STYLE_FILL_FORMAT_MODE      ( RC_DIALOG_BEGIN + 121 )
+#define STR_STYLE_NEW_STYLE_FROM_SELECTION ( RC_DIALOG_BEGIN + 122 )
+#define STR_STYLE_UPDATE_STYLE          ( RC_DIALOG_BEGIN + 123 )
 #define SFX_ST_EDIT                     ( RC_DIALOG_BEGIN + 124 )
 #define STR_STYLE_ELEMTLIST             ( RC_DIALOG_BEGIN + 125 )
 #define STR_FONT_TABPAGE                ( RC_DIALOG_BEGIN + 126 )
