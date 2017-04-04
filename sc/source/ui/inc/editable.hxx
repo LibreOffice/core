@@ -64,6 +64,7 @@ public:
     void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
 
     bool IsEditable() const { return mbIsEditable; }
+    bool OnlyMatrix() const { return mbOnlyMatrix; }
     bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }
     sal_uInt16  GetMessageId() const;
 };

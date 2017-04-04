@@ -1290,6 +1290,10 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
 
 bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const
 {
+    // If we check for HasAttrFlags::Protected, the behavior is different because the default
+    // value of cells is Protected
+    if ( nMask == HasAttrFlags::Protected && !pData && pDocument->IsTabProtected(nTab) )
+        return true;
     if ( !pData )
         return false;
 
