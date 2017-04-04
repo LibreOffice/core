@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_bfec6cc8",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-04T19:55:22Z",
+      "side": 1,
+      "message": "but this checks whether the configuration property happens to have the value false, not whether it is marked as oor:finalized\u003d\"true\"; for the latter, you need to obtain css::beans::Property information about that configuration property (via css::beans::XPropertySetInfo::getPropertyByName, css::beans::XProperty::getAsProperty, or css::beans::XHierarchicalPropertySetInfo::getPropertyByHierarchicalName) and check for the css::beans::PropertyAttribute::READONLY attribute",
+      "revId": "f1f6bcf42a9485432bcda7ecf7b62ea480d00feb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
