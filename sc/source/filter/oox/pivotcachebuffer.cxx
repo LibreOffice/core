@@ -957,10 +957,9 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
     maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
 }
 
-PivotCacheField& PivotCache::createCacheField( bool bInitDatabaseField )
+PivotCacheField& PivotCache::createCacheField()
 {
-    bool bIsDatabaseField = !bInitDatabaseField;
-    PivotCacheFieldVector::value_type xCacheField( new PivotCacheField( *this, bIsDatabaseField ) );
+    PivotCacheFieldVector::value_type xCacheField( new PivotCacheField( *this, true/*bIsDatabaseField*/ ) );
     maFields.push_back( xCacheField );
     return *xCacheField;
 }

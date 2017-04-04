@@ -1263,7 +1263,7 @@ void SwRangeRedline::MoveToSection()
             SwNodeIndex aNdIdx( *pTextNd );
             SwPosition aPos( aNdIdx, SwIndex( pTextNd ));
             if( pCSttNd && pCEndNd )
-                pDoc->getIDocumentContentOperations().MoveAndJoin( aPam, aPos, SwMoveFlags::DEFAULT );
+                pDoc->getIDocumentContentOperations().MoveAndJoin( aPam, aPos );
             else
             {
                 if( pCSttNd && !pCEndNd )

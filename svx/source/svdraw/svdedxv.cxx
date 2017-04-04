@@ -2382,7 +2382,7 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
     {
         auto pTable = static_cast<sdr::table::SdrTableObj*>(pObj);
         if (pTable->getActiveCell().is()) {
-            pTable->SetMergedItemSetAndBroadcastOnActiveCell(rFormatSet, false/*bClearAllItems*/);
+            pTable->SetMergedItemSetAndBroadcastOnActiveCell(rFormatSet);
         }
     }
 }

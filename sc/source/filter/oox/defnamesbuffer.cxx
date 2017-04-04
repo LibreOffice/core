@@ -360,7 +360,7 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
         {
             Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
             ScRangeList aPrintRanges;
-            getFormulaParser().extractCellRangeList( aPrintRanges, aFTokenSeq, false, mnCalcSheet );
+            getFormulaParser().extractCellRangeList( aPrintRanges, aFTokenSeq, mnCalcSheet );
             if( xPrintAreas.is() && !aPrintRanges.empty() )
                 xPrintAreas->setPrintAreas( AddressConverter::toApiSequence(aPrintRanges) );
         }
@@ -369,7 +369,7 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
         {
             Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( mnCalcSheet ), UNO_QUERY );
             ScRangeList aTitleRanges;
-            getFormulaParser().extractCellRangeList( aTitleRanges, aFTokenSeq, false, mnCalcSheet );
+            getFormulaParser().extractCellRangeList( aTitleRanges, aFTokenSeq, mnCalcSheet );
             if( xPrintAreas.is() && !aTitleRanges.empty() )
             {
                 bool bHasRowTitles = false;
@@ -408,7 +408,7 @@ bool DefinedName::getAbsoluteRange( ScRange& orRange ) const
     ScTokenArray* pTokenArray = mpScRangeData->GetCode();
     Sequence< FormulaToken > aFTokenSeq;
     ScTokenConversion::ConvertToTokenSequence(getScDocument(), aFTokenSeq, *pTokenArray);
-    return getFormulaParser().extractCellRange( orRange, aFTokenSeq, false );
+    return getFormulaParser().extractCellRange( orRange, aFTokenSeq );
 }
 
 

@@ -13,7 +13,10 @@
 #include "defaultsoptions.hxx"
 #include "miscuno.hxx"
 #include "global.hxx"
+#include "attrib.hxx"
+#include "scitems.hxx"
 #include "globstr.hrc"
+#include "sc.hrc"
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -54,8 +57,12 @@ bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
         && rOpt.aInitTabPrefix == aInitTabPrefix;
 }
 
-ScTpDefaultsItem::ScTpDefaultsItem( sal_uInt16 nWhichP, const ScDefaultsOptions& rOpt ) :
-    SfxPoolItem ( nWhichP ),
+ScTableListItem::ScTableListItem()
+    : SfxPoolItem(ATTR_PAGE_PRINTTABLES), nCount(0), pTabArr(nullptr)
+{}
+
+ScTpDefaultsItem::ScTpDefaultsItem( const ScDefaultsOptions& rOpt ) :
+    SfxPoolItem ( SID_SCDEFAULTSOPTIONS ),
     theOptions  ( rOpt )
 {
 }

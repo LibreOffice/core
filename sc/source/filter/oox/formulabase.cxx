@@ -1481,13 +1481,13 @@ bool lclConvertToCellRange( ScRange& orRange, const ComplexReference& rComplexRe
 
 enum TokenToRangeListState { STATE_REF, STATE_SEP, STATE_OPEN, STATE_CLOSE, STATE_ERROR };
 
-TokenToRangeListState lclProcessRef( ScRangeList& orRanges, const Any& rData, bool bAllowRelative, sal_Int32 nFilterBySheet )
+TokenToRangeListState lclProcessRef( ScRangeList& orRanges, const Any& rData, sal_Int32 nFilterBySheet )
 {
     using namespace ::com::sun::star::sheet::ReferenceFlags;
-    const sal_Int32 FORBIDDEN_FLAGS_DEL = COLUMN_DELETED | ROW_DELETED | SHEET_DELETED;
-    const sal_Int32 FORBIDDEN_FLAGS_REL = FORBIDDEN_FLAGS_DEL | COLUMN_RELATIVE | ROW_RELATIVE | SHEET_RELATIVE | RELATIVE_NAME;
+    const sal_Int32 FORBIDDEN_FLAGS_REL = COLUMN_DELETED | ROW_DELETED | SHEET_DELETED |
+                                          COLUMN_RELATIVE | ROW_RELATIVE | SHEET_RELATIVE | RELATIVE_NAME;
 
-    sal_Int32 nForbiddenFlags = bAllowRelative ? FORBIDDEN_FLAGS_DEL : FORBIDDEN_FLAGS_REL;
+    sal_Int32 nForbiddenFlags = FORBIDDEN_FLAGS_REL;
     SingleReference aSingleRef;
     if( rData >>= aSingleRef )
     {
@@ -1599,10 +1599,10 @@ Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) co
 }
 
 bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
-        const ApiTokenSequence& rTokens, bool bAllowRelative ) const
+        const ApiTokenSequence& rTokens ) const
 {
     ScRangeList aRanges;
-    lclProcessRef( aRanges, extractReference( rTokens ), bAllowRelative, -1 );
+    lclProcessRef( aRanges, extractReference( rTokens ), -1 );
     if( !aRanges.empty() )
     {
         orRange = *aRanges.front();
@@ -1612,7 +1612,7 @@ bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
 }
 
 void FormulaProcessorBase::extractCellRangeList( ScRangeList& orRanges,
-        const ApiTokenSequence& rTokens, bool bAllowRelative, sal_Int32 nFilterBySheet ) const
+        const ApiTokenSequence& rTokens, sal_Int32 nFilterBySheet ) const
 {
     orRanges.RemoveAll();
     TokenToRangeListState eState = STATE_OPEN;
@@ -1630,7 +1630,7 @@ void FormulaProcessorBase::extractCellRangeList( ScRangeList& orRanges,
                 else                               eState = STATE_ERROR;
             break;
             case STATE_SEP:
-                     if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, bAllowRelative, nFilterBySheet );
+                     if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, nFilterBySheet );
                 else if( nOpCode == OPCODE_SEP )   eState = STATE_SEP;
                 else if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
                 else if( nOpCode == OPCODE_OPEN )  eState = lclProcessOpen( nParenLevel );
@@ -1638,7 +1638,7 @@ void FormulaProcessorBase::extractCellRangeList( ScRangeList& orRanges,
                 else                               eState = STATE_ERROR;
             break;
             case STATE_OPEN:
-                     if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, bAllowRelative, nFilterBySheet );
+                     if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, nFilterBySheet );
                 else if( nOpCode == OPCODE_SEP )   eState = STATE_SEP;
                 else if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
                 else if( nOpCode == OPCODE_OPEN )  eState = lclProcessOpen( nParenLevel );

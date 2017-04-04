@@ -59,7 +59,7 @@ bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)
         aOpt.SetInitTabCount( nTabCount );
         aOpt.SetInitTabPrefix( aSheetPrefix );
 
-        rCoreSet->Put( ScTpDefaultsItem( SID_SCDEFAULTSOPTIONS, aOpt ) );
+        rCoreSet->Put( ScTpDefaultsItem( aOpt ) );
         bRet = true;
     }
     return bRet;

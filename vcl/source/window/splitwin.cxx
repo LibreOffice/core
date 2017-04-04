@@ -1607,7 +1607,7 @@ void SplitWindow::ImplSplitMousePos( Point& rMousePos )
     }
 }
 
-void SplitWindow::ImplGetButtonRect( tools::Rectangle& rRect, long nEx, bool bTest ) const
+void SplitWindow::ImplGetButtonRect( tools::Rectangle& rRect, bool bTest ) const
 {
     long nSplitSize = mpMainSet->mnSplitSize-1;
     if (mbFadeOut || mbFadeIn)
@@ -1623,6 +1623,7 @@ void SplitWindow::ImplGetButtonRect( tools::Rectangle& rRect, long nEx, bool bTe
         nCenterEx += ((mnDX-mnLeftBorder-mnRightBorder)-nButtonSize)/2;
     else
         nCenterEx += ((mnDY-mnTopBorder-mnBottomBorder)-nButtonSize)/2;
+    long nEx = 0;
     if ( nCenterEx > 0 )
         nEx += nCenterEx;
 
@@ -1680,7 +1681,7 @@ void SplitWindow::ImplGetFadeInRect( tools::Rectangle& rRect, bool bTest ) const
     tools::Rectangle aRect;
 
     if ( mbFadeIn )
-        ImplGetButtonRect( aRect, 0, bTest );
+        ImplGetButtonRect( aRect, bTest );
 
     rRect = aRect;
 }
@@ -1690,7 +1691,7 @@ void SplitWindow::ImplGetFadeOutRect( tools::Rectangle& rRect, bool ) const
     tools::Rectangle aRect;
 
     if ( mbFadeOut )
-        ImplGetButtonRect( aRect, 0, false );
+        ImplGetButtonRect( aRect, false );
 
     rRect = aRect;
 }

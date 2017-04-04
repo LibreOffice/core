@@ -5235,17 +5235,13 @@ void SAL_CALL ScCellRangeObj::setTableOperation( const table::CellRangeAddress& 
         bool bError = false;
         ScTabOpParam aParam;
         aParam.aRefFormulaCell = ScRefAddress( (SCCOL)aFormulaRange.StartColumn,
-                                              (SCROW)aFormulaRange.StartRow, aFormulaRange.Sheet,
-                                              false, false, false );
+                                              (SCROW)aFormulaRange.StartRow, aFormulaRange.Sheet );
         aParam.aRefFormulaEnd  = ScRefAddress( (SCCOL)aFormulaRange.EndColumn,
-                                              (SCROW)aFormulaRange.EndRow, aFormulaRange.Sheet,
-                                              false, false, false );
+                                              (SCROW)aFormulaRange.EndRow, aFormulaRange.Sheet );
         aParam.aRefRowCell     = ScRefAddress( (SCCOL)aRowCell.Column,
-                                              (SCROW)aRowCell.Row, aRowCell.Sheet,
-                                              false, false, false );
+                                              (SCROW)aRowCell.Row, aRowCell.Sheet );
         aParam.aRefColCell     = ScRefAddress( (SCCOL)aColumnCell.Column,
-                                              (SCROW)aColumnCell.Row, aColumnCell.Sheet,
-                                              false, false, false );
+                                              (SCROW)aColumnCell.Row, aColumnCell.Sheet );
 
         switch (nMode)
         {

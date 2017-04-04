@@ -242,8 +242,8 @@ void SvxLineBox::FillControl()
 }
 
 SvxMetricField::SvxMetricField(
-    vcl::Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits )
-    : MetricField(pParent, nBits)
+    vcl::Window* pParent, const Reference< XFrame >& rFrame )
+    : MetricField(pParent, WB_BORDER | WB_SPIN | WB_REPEAT)
     , aCurTxt()
     , ePoolUnit(MapUnit::MapCM)
     , mxFrame(rFrame)

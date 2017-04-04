@@ -69,7 +69,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        DrawEntry( rUDEvt, true, false );
+        DrawEntry( rUDEvt );
     }
 }
 

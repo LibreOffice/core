@@ -44,8 +44,7 @@ public:
 class SC_DLLPUBLIC ScTpDefaultsItem : public SfxPoolItem
 {
 public:
-    ScTpDefaultsItem( sal_uInt16 nWhich,
-                   const ScDefaultsOptions& rOpt );
+    ScTpDefaultsItem( const ScDefaultsOptions& rOpt );
     ScTpDefaultsItem( const ScTpDefaultsItem& rItem );
     virtual ~ScTpDefaultsItem() override;
 

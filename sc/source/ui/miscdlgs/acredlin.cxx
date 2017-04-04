@@ -361,9 +361,9 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     return bFlag;
 }
 
-SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
+SvTreeListEntry* ScAcceptChgDlg::AppendChangeAction(
     const ScChangeAction* pScChangeAction, ScChangeActionState /*eState*/,
-    SvTreeListEntry* pParent, bool bDelMaster,bool bDisabled, sal_uLong nPos)
+    SvTreeListEntry* pParent, bool bDelMaster,bool bDisabled)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
@@ -486,12 +486,12 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
     if(!bFlag&& bUseColor&& pParent==nullptr)
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear() ,pNewData, Color(COL_LIGHTBLUE), pParent, nPos);
+            aBuf.makeStringAndClear() ,pNewData, Color(COL_LIGHTBLUE), pParent, TREELIST_APPEND);
     }
     else if(bFlag&& bUseColor&& pParent!=nullptr)
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear(), pNewData, Color(COL_GREEN), pParent, nPos);
+            aBuf.makeStringAndClear(), pNewData, Color(COL_GREEN), pParent, TREELIST_APPEND);
         SvTreeListEntry* pExpEntry=pParent;
 
         while(pExpEntry!=nullptr && !pTheView->IsExpanded(pExpEntry))
@@ -506,14 +506,14 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
     else
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear(), pNewData, pParent, nPos);
+            aBuf.makeStringAndClear(), pNewData, pParent, TREELIST_APPEND);
     }
     return pEntry;
 }
 
-SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
+SvTreeListEntry* ScAcceptChgDlg::AppendFilteredAction(
     const ScChangeAction* pScChangeAction, ScChangeActionState eState,
-    SvTreeListEntry* pParent, bool bDelMaster, bool bDisabled, sal_uLong nPos)
+    SvTreeListEntry* pParent, bool bDelMaster, bool bDisabled)
 {
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
@@ -626,7 +626,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
         if (pTheView->IsValidComment(aComment))
         {
             aString+=aComment;
-            pEntry=pTheView->InsertEntry(aString,pNewData,pParent,nPos);
+            pEntry=pTheView->InsertEntry(aString,pNewData,pParent,TREELIST_APPEND);
         }
         else
             delete pNewData;
@@ -784,9 +784,9 @@ void ScAcceptChgDlg::UpdateView()
                 if(pScChangeAction->IsDialogRoot())
                 {
                     if(pScChangeAction->IsDialogParent())
-                        pParent=InsertChangeAction(pScChangeAction,SC_CAS_VIRGIN);
+                        pParent=AppendChangeAction(pScChangeAction,SC_CAS_VIRGIN);
                     else
-                        pParent=InsertFilteredAction(pScChangeAction,SC_CAS_VIRGIN);
+                        pParent=AppendFilteredAction(pScChangeAction,SC_CAS_VIRGIN);
                 }
                 else
                     pParent=nullptr;
@@ -1217,7 +1217,7 @@ bool ScAcceptChgDlg::InsertAcceptedORejected(SvTreeListEntry* pParent)
     while(pScChangeAction!=nullptr)
     {
         if(pScChangeAction->GetState()==eState &&
-            InsertFilteredAction(pScChangeAction,eState,pParent)!=nullptr)
+            AppendFilteredAction(pScChangeAction,eState,pParent)!=nullptr)
             bTheTestFlag=false;
         pScChangeAction=pScChangeAction->GetNext();
     }
@@ -1232,7 +1232,7 @@ bool ScAcceptChgDlg::InsertChildren(ScChangeActionMap* pActionMap,SvTreeListEntr
 
     for( itChangeAction = pActionMap->begin(); itChangeAction != pActionMap->end(); ++itChangeAction )
     {
-        SvTreeListEntry* pEntry=InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
+        SvTreeListEntry* pEntry=AppendChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
 
         if(pEntry!=nullptr)
         {
@@ -1262,9 +1262,9 @@ bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction
     {
 
         if( pScChangeAction != itChangeAction->second )
-            pEntry = InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
+            pEntry = AppendChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
         else
-            pEntry = InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, true, true );
+            pEntry = AppendChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, true, true );
 
         if(pEntry!=nullptr)
         {
@@ -1414,9 +1414,9 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
                     if(pScChangeAction->IsDialogRoot())
                     {
                         if(pScChangeAction->IsDialogParent())
-                            pParent=InsertChangeAction(pScChangeAction,SC_CAS_VIRGIN);
+                            pParent=AppendChangeAction(pScChangeAction,SC_CAS_VIRGIN);
                         else
-                            pParent=InsertFilteredAction(pScChangeAction,SC_CAS_VIRGIN);
+                            pParent=AppendFilteredAction(pScChangeAction,SC_CAS_VIRGIN);
                     }
                     else
                         pParent=nullptr;

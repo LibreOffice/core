@@ -37,10 +37,9 @@ bool ImageTree::loadImage(OUString const & rName, OUString const & rStyle,
     return mpImplImageTree->loadImage(rName, rStyle, rBitmap, bLocalized, eFlags);
 }
 
-bool ImageTree::loadDefaultImage(OUString const & rStyle, BitmapEx& rBitmap,
-                                 const ImageLoadFlags eFlags)
+bool ImageTree::loadDefaultImage(OUString const & rStyle, BitmapEx& rBitmap)
 {
-    return mpImplImageTree->loadDefaultImage(rStyle, rBitmap, eFlags);
+    return mpImplImageTree->loadDefaultImage(rStyle, rBitmap, ImageLoadFlags::NONE);
 }
 
 css::uno::Reference<css::container::XNameAccess> ImageTree::getNameAccess()

@@ -81,8 +81,7 @@ protected:
 
 public:
     SvxMetricField( vcl::Window* pParent,
-                    const css::uno::Reference< css::frame::XFrame >& rFrame,
-                    WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
+                    const css::uno::Reference< css::frame::XFrame >& rFrame );
 
     void            Update( const XLineWidthItem* pItem );
     void            SetCoreUnit( MapUnit eUnit );

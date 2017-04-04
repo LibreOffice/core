@@ -32,8 +32,8 @@
 
 using namespace ::com::sun::star::uno;
 
-SwUndoField::SwUndoField(const SwPosition & rPos, SwUndoId _nId )
-    : SwUndo(_nId, rPos.GetDoc())
+SwUndoField::SwUndoField(const SwPosition & rPos )
+    : SwUndo(SwUndoId::FIELD, rPos.GetDoc())
 {
     nNodeIndex = rPos.nNode.GetIndex();
     nOffset = rPos.nContent.GetIndex();
@@ -58,7 +58,7 @@ SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
                          const SwField & rOldField,
                          const SwField & rNewField,
                          SwMsgPoolItem * _pHint, bool _bUpdate)
-    : SwUndoField(rPos,SwUndoId::FIELD)
+    : SwUndoField(rPos)
     , pOldField(rOldField.CopyField())
     , pNewField(rNewField.CopyField())
     , pHint(_pHint)

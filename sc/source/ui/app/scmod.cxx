@@ -1983,7 +1983,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         pRet->Put( ScTpCalcItem( SID_SCDOCOPTIONS, aCalcOpt ) );
 
         // TP_VIEW
-        pRet->Put( ScTpViewItem( SID_SCVIEWOPTIONS, aViewOpt ) );
+        pRet->Put( ScTpViewItem( aViewOpt ) );
         pRet->Put( SfxBoolItem( SID_SC_OPT_SYNCZOOM, rAppOpt.GetSynchronizeZoom() ) );
 
         // TP_INPUT
@@ -2011,7 +2011,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                     rInpOpt.GetLegacyCellSelection() ) );
 
         // RID_SC_TP_PRINT
-        pRet->Put( ScTpPrintItem( SID_SCPRINTOPTIONS, GetPrintOptions() ) );
+        pRet->Put( ScTpPrintItem( GetPrintOptions() ) );
 
         // TP_GRID
         SvxGridItem* pSvxGridItem = aViewOpt.CreateGridItem();
@@ -2030,7 +2030,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                                    rAppOpt.GetKeyBindingType() ) );
 
         // TP_DEFAULTS
-        pRet->Put( ScTpDefaultsItem( SID_SCDEFAULTSOPTIONS, GetDefaultsOptions() ) );
+        pRet->Put( ScTpDefaultsItem( GetDefaultsOptions() ) );
 
         // TP_FORMULA
         ScFormulaOptions aOptions = GetFormulaOptions();
@@ -2040,7 +2040,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
             aConfig.MergeDocumentSpecific( pDocSh->GetDocument().GetCalcConfig());
             aOptions.SetCalcConfig( aConfig);
         }
-        pRet->Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOptions ) );
+        pRet->Put( ScTpFormulaItem( aOptions ) );
     }
     return pRet;
 }

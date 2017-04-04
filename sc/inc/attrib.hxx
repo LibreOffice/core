@@ -192,7 +192,7 @@ inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
 class ScTableListItem : public SfxPoolItem
 {
 public:
-    inline  ScTableListItem( const sal_uInt16 nWhich );
+            ScTableListItem();
             ScTableListItem( const ScTableListItem& rCpy );
             virtual ~ScTableListItem() override;
 
@@ -211,10 +211,6 @@ public:
     sal_uInt16  nCount;
     std::unique_ptr<SCTAB[]>  pTabArr;
 };
-
-inline ScTableListItem::ScTableListItem( const sal_uInt16 nWhichP )
-    : SfxPoolItem(nWhichP), nCount(0), pTabArr(nullptr)
-{}
 
 // page format item: contents of header and footer
 

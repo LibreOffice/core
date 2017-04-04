@@ -183,13 +183,11 @@ public:
 class SwTrnsfrActionAndUndo
 {
     SwWrtShell *pSh;
-    SwUndoId eUndoId;
 public:
-    SwTrnsfrActionAndUndo( SwWrtShell *pS, SwUndoId nId,
-                           bool bDelSel = false)
-        : pSh( pS ), eUndoId( nId )
+    SwTrnsfrActionAndUndo( SwWrtShell *pS, bool bDelSel = false)
+        : pSh( pS )
     {
-        pSh->StartUndo( eUndoId );
+        pSh->StartUndo( SwUndoId::PASTE_CLIPBOARD );
         if( bDelSel )
             pSh->DelRight();
         pSh->StartAllAction();
@@ -1250,7 +1248,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
         if( bDelSel )
             // #i34830#
-            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, SwUndoId::PASTE_CLIPBOARD, true ));
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, true ));
     }
 
     SwTransferable *pTrans=nullptr, *pTunneledTrans=GetSwTransferable( rData );
@@ -1295,7 +1293,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     {
         if( !pAction )
         {
-            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, SwUndoId::PASTE_CLIPBOARD));
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh ));
         }
 
         // in Drag&Drop MessageBoxes must not be showed
@@ -3247,7 +3245,7 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 
     const int nSelection = rShell.GetSelectionType();
 
-    SwTrnsfrActionAndUndo aAction( &rShell, SwUndoId::PASTE_CLIPBOARD);
+    SwTrnsfrActionAndUndo aAction( &rShell );
 
     bool bKillPaMs = false;
 

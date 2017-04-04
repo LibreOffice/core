@@ -498,7 +498,7 @@ protected:
     bool                pushExternalFuncOperand( const FunctionInfo& rFuncInfo );
     bool                pushDdeLinkOperand( const OUString& rDdeServer, const OUString& rDdeTopic, const OUString& rDdeItem );
     bool                pushExternalNameOperand( const ExternalNameRef& rxExtName, const ExternalLink& rExtLink );
-    bool                pushSpecialTokenOperand( const BinAddress& rBaseAddr, bool bTable );
+    bool                pushSpecialTokenOperand( const BinAddress& rBaseAddr );
 
     bool                pushUnaryPreOperator( sal_Int32 nOpCode );
     bool                pushUnaryPostOperator( sal_Int32 nOpCode );
@@ -1005,10 +1005,10 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
 
-bool FormulaParserImpl::pushSpecialTokenOperand( const BinAddress& rBaseAddr, bool bTable )
+bool FormulaParserImpl::pushSpecialTokenOperand( const BinAddress& rBaseAddr )
 {
     CellAddress aBaseAddr( maBaseAddr.Tab(), rBaseAddr.mnCol, rBaseAddr.mnRow );
-    ApiSpecialTokenInfo aTokenInfo( aBaseAddr, bTable );
+    ApiSpecialTokenInfo aTokenInfo( aBaseAddr, false );
     return mbSpecialTokens && (getFormulaSize() == 0) && pushValueOperand( aTokenInfo, OPCODE_BAD );
 }
 
@@ -1681,7 +1681,7 @@ bool OoxFormulaParserImpl::importExpToken( SequenceInputStream& rStrm )
     swapStreamPosition( rStrm );
     aBaseAddr.mnCol = rStrm.readInt32();
     swapStreamPosition( rStrm );
-    return pushSpecialTokenOperand( aBaseAddr, false );
+    return pushSpecialTokenOperand( aBaseAddr );
 }
 
 LinkSheetRange OoxFormulaParserImpl::readSheetRange( SequenceInputStream& rStrm )

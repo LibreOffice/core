@@ -154,7 +154,7 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
     {
         NamedColor aNamedColor = pColorLB->GetSelectEntry();
         pLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
-        rCoreSet->Put(ScTpViewItem(SID_SCVIEWOPTIONS, *pLocalOptions));
+        rCoreSet->Put(ScTpViewItem(*pLocalOptions));
         bRet = true;
     }
     if(pRangeFindCB->IsValueChangedFromSaved())

@@ -189,26 +189,22 @@ void FilterConfigItem::WriteModifiedConfig()
     }
 }
 
-bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XPropertySet >& rXPropSet, const OUString& rString, bool bTestPropertyAvailability )
+bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XPropertySet >& rXPropSet, const OUString& rString )
 {
     bool bRetValue = true;
 
     if ( rXPropSet.is() )
     {
-        if ( bTestPropertyAvailability )
+        bRetValue = false;
+        try
         {
-            bRetValue = false;
-            try
-            {
-                Reference< XPropertySetInfo >
-                    aXPropSetInfo( rXPropSet->getPropertySetInfo() );
-                if ( aXPropSetInfo.is() )
-                    bRetValue = aXPropSetInfo->hasPropertyByName( rString );
-            }
-            catch( css::uno::Exception& )
-            {
-
-            }
+            Reference< XPropertySetInfo >
+                aXPropSetInfo( rXPropSet->getPropertySetInfo() );
+            if ( aXPropSetInfo.is() )
+                bRetValue = aXPropSetInfo->hasPropertyByName( rString );
+        }
+        catch( css::uno::Exception& )
+        {
         }
         if ( bRetValue )
         {
@@ -281,7 +277,7 @@ bool FilterConfigItem::ReadBool( const OUString& rKey, bool bDefault )
     {
         pPropVal->Value >>= bRetValue;
     }
-    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey, true ) )
+    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey ) )
     {
         aAny >>= bRetValue;
     }
@@ -301,7 +297,7 @@ sal_Int32 FilterConfigItem::ReadInt32( const OUString& rKey, sal_Int32 nDefault 
     {
         pPropVal->Value >>= nRetValue;
     }
-    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey, true ) )
+    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey ) )
     {
         aAny >>= nRetValue;
     }
@@ -321,7 +317,7 @@ OUString FilterConfigItem::ReadString( const OUString& rKey, const OUString& rDe
     {
         pPropVal->Value >>= aRetValue;
     }
-    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey, true ) )
+    else if ( ImplGetPropertyValue( aAny, xPropSet, rKey ) )
     {
         aAny >>= aRetValue;
     }
@@ -342,7 +338,7 @@ void FilterConfigItem::WriteBool( const OUString& rKey, bool bNewValue )
     if ( xPropSet.is() )
     {
         Any aAny;
-        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, true ) )
+        if ( ImplGetPropertyValue( aAny, xPropSet, rKey ) )
         {
             bool bOldValue(true);
             if ( aAny >>= bOldValue )
@@ -375,7 +371,7 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
     {
         Any aAny;
 
-        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, true ) )
+        if ( ImplGetPropertyValue( aAny, xPropSet, rKey ) )
         {
             sal_Int32 nOldValue = 0;
             if ( aAny >>= nOldValue )

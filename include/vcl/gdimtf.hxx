@@ -190,9 +190,8 @@ public:
     friend VCL_DLLPUBLIC SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
     friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
-    /// Creates an antialiased thumbnail, with maximum width or height of nMaximumExtent.
+    /// Creates an antialiased thumbnail
     bool            CreateThumbnail(BitmapEx& rBitmapEx,
-                                    sal_uInt32 nMaximumExtent = 256,
                                     BmpConversion nColorConversion = BmpConversion::N24Bit,
                                     BmpScaleFlag nScaleFlag = BmpScaleFlag::BestQuality) const;
 

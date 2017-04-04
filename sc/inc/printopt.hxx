@@ -54,8 +54,7 @@ public:
 class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
-                ScTpPrintItem( sal_uInt16 nWhich,
-                               const ScPrintOptions& rOpt );
+                ScTpPrintItem( const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );
                 virtual ~ScTpPrintItem() override;
 

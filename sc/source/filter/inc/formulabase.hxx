@@ -673,6 +673,7 @@ public:
                         extractReference( const ApiTokenSequence& rTokens ) const;
 
     /** Tries to extract a cell range address from a formula token sequence.
+        Only real absolute references will be accepted.
 
         @param orAddress  (output parameter) If the token sequence is valid,
             this parameter will contain the extracted cell range address. If
@@ -683,19 +684,15 @@ public:
             one cell range address token. The token sequence may contain
             whitespace tokens.
 
-        @param bAllowRelative  True = it is allowed that rTokens contains
-            relative references (based on cell A1 of the current sheet).
-            False = only real absolute references will be accepted.
-
         @return  True, if the token sequence contains a valid cell range
             address which has been extracted to orRange, false otherwise.
      */
     bool                extractCellRange(
                             ScRange& orRange,
-                            const ApiTokenSequence& rTokens,
-                            bool bAllowRelative ) const;
+                            const ApiTokenSequence& rTokens ) const;
 
     /** Tries to extract a cell range list from a formula token sequence.
+        Only real absolute references will be accepted.
 
         @param orRanges  (output parameter) If the token sequence is valid,
             this parameter will contain the extracted cell range list. Deleted
@@ -708,10 +705,6 @@ public:
             standard function parameter separator token. The token sequence may
             contain parentheses and whitespace tokens.
 
-        @param bAllowRelative  True = it is allowed that rTokens contains
-            relative references (based on cell A1 of the current sheet).
-            False = only real absolute references will be accepted.
-
         @param nFilterBySheet  If non-negative, this function returns only cell
             ranges located in the specified sheet, otherwise returns all cell
             ranges contained in the token sequence.
@@ -719,7 +712,6 @@ public:
     void                extractCellRangeList(
                             ScRangeList& orRanges,
                             const ApiTokenSequence& rTokens,
-                            bool bAllowRelative,
                             sal_Int32 nFilterBySheet ) const;
 
     /** Tries to extract a string from a formula token sequence.

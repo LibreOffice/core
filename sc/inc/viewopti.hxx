@@ -110,12 +110,12 @@ private:
     ScGridOptions   aGridOpt;
 };
 
-// Item for the options dialoge - View
+// Item for the options dialog - View
 
 class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
 public:
-                ScTpViewItem( sal_uInt16 nWhich, const ScViewOptions& rOpt );
+                ScTpViewItem( const ScViewOptions& rOpt );
                 ScTpViewItem( const ScTpViewItem&  rItem );
                 virtual ~ScTpViewItem() override;
 

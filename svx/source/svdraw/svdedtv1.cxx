@@ -241,7 +241,6 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
 void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     const Fraction& xFact,
     const Fraction& yFact,
-    const bool bCopy,
     const bool bWdh,
     const bool bHgt)
 {
@@ -250,13 +249,8 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     {
         OUString aStr;
         ImpTakeDescriptionStr(STR_EditResize,aStr);
-        if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);
     }
-
-    if (bCopy)
-        CopyMarkedObj();
 
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm)
@@ -1613,7 +1607,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
             GetSdrPageView()->PagePosToLogic(aRef);
         }
 
-        ResizeMultMarkedObj(aRef, aWdt, aHgt, false, bChgWdh, bChgHgt);
+        ResizeMultMarkedObj(aRef, aWdt, aHgt, bChgWdh, bChgHgt);
     }
 
     // rotate

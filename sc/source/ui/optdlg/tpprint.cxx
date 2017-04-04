@@ -109,7 +109,7 @@ bool ScTpPrintOptions::FillItemSet( SfxItemSet* rCoreAttrs )
         aOpt.SetSkipEmpty( m_pSkipEmptyPagesCB->IsChecked() );
         aOpt.SetAllSheets( !m_pSelectedSheetsCB->IsChecked() );
         aOpt.SetForceBreaks( m_pForceBreaksCB->IsChecked() );
-        rCoreAttrs->Put( ScTpPrintItem( SID_SCPRINTOPTIONS, aOpt ) );
+        rCoreAttrs->Put( ScTpPrintItem( aOpt ) );
         if ( bSelectedSheetsChanged )
         {
             rCoreAttrs->Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, m_pSelectedSheetsCB->IsChecked() ) );

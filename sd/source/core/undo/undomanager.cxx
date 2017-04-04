@@ -24,8 +24,7 @@
 using namespace sd;
 
 UndoManager::UndoManager()
-  : SdrUndoManager( 20/*nMaxUndoActionCount*/ )
-  , mpLinkedUndoManager(nullptr)
+  : mpLinkedUndoManager(nullptr)
   , mpViewShell(nullptr)
 {
 }
