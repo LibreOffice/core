@@ -397,7 +397,7 @@ static void lclDumpAnyValue( const Any& value)
                 fprintf (stderr, "empty reference\n");
             }
         } else if( value >>= aWritingMode )
-            fprintf (stderr, "%d writing mode\n", aWritingMode);
+            fprintf(stderr, "%d writing mode\n", static_cast<int>(aWritingMode));
         else if( value >>= aTextVertAdj ) {
             const char* s = "unknown";
             switch( aTextVertAdj ) {
@@ -823,7 +823,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         }
     }
     else if( value >>= aWritingMode )
-        fprintf (stderr, "%d writing mode\n", aWritingMode);
+        fprintf (stderr, "%d writing mode\n", static_cast<int>(aWritingMode));
     else if( value >>= aTextVertAdj ) {
         const char* s = "unknown";
         switch( aTextVertAdj ) {
