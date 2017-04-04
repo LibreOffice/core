@@ -5512,8 +5512,7 @@ SdrObject* SvxMSDffManager::FinalizeObj(DffObjData& /* rObjData */, SdrObject* p
 void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
                                       sal_uLong         nTxBx,
                                       SdrObject*    pObject,
-                                      SwFlyFrameFormat*  pFly,
-                                      short         nHdFtSection) const
+                                      SwFlyFrameFormat*  pFly) const
 {
     sal_uInt16 nShpCnt = m_pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
@@ -5525,7 +5524,7 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
             rOrder.nTxBxComp = nTxBx;
             rOrder.pObj      = pObject;
             rOrder.pFly      = pFly;
-            rOrder.nHdFtSection = nHdFtSection;
+            rOrder.nHdFtSection = 0;
         }
     }
 }
@@ -6578,7 +6577,7 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
     sal_uInt16 nAspect = ASPECT_CONTENT;
     sal_uLong nAdviseModes = 2;
 
-    Impl_OlePres aEle( SotClipboardFormatId::GDIMETAFILE );
+    Impl_OlePres aEle;
     // Convert the size in 1/100 mm
     // If a not applicable MapUnit (device dependent) is used,
     // SV tries to guess a best match for the right value
@@ -7290,7 +7289,7 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       nCropFromBottom( 0 ),
       nCropFromLeft( 0 ),
       nCropFromRight( 0 ),
-      aTextId( 0, 0 ),
+      aTextId(),
       nNextShapeId( 0 ),
       nShapeId( 0 ),
       eShapeType( mso_sptNil ),

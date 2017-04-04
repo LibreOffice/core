@@ -1324,7 +1324,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
-            const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint); // Name geaendert?
+            const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint); // Name geaendert?
             if (pExtendedHint)
                 aOldName = pExtendedHint->GetOldName();
 
@@ -1362,7 +1362,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
         {
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
-            const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint);
+            const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint);
             if (pExtendedHint)
                 aOldName = pExtendedHint->GetOldName();
             if ( aNewName != aOldName )

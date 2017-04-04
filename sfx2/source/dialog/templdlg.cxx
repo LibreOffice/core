@@ -1481,7 +1481,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
     if(!bDontUpdate && nId != SfxHintId::Dying &&
        (dynamic_cast<const SfxStyleSheetPoolHint*>(&rHint) ||
         dynamic_cast<const SfxStyleSheetHint*>(&rHint) ||
-        dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint)))
+        dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint)))
     {
         if(!pIdle)
         {

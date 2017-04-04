@@ -103,10 +103,9 @@ DocumentEntry::~DocumentEntry()
 LibEntry::LibEntry (
     ScriptDocument const& rDocument,
     LibraryLocation eLocation,
-    OUString const& rLibName,
-    EntryType eType
+    OUString const& rLibName
 ) :
-    DocumentEntry(rDocument, eLocation, eType),
+    DocumentEntry(rDocument, eLocation, OBJ_TYPE_LIBRARY),
     m_aLibName(rLibName)
 { }
 

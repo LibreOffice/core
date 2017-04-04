@@ -3028,15 +3028,14 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 
 VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
                                                const OUString& sMessage,
-                                               InfoBarType aInfoBarType,
-                                               WinBits nMessageStyle)
+                                               InfoBarType aInfoBarType)
 {
     SfxChildWindow* pChild = GetChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     if (!pChild)
         return nullptr;
 
     SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
-    auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, aInfoBarType, nMessageStyle);
+    auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, aInfoBarType, WB_LEFT | WB_VCENTER);
     ShowChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     return pInfoBar;
 }

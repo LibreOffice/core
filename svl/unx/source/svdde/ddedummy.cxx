@@ -317,8 +317,8 @@ void DdeLink::Notify()
 {
 }
 
-DdeHotLink::DdeHotLink( DdeConnection& rConnection, const OUString& rString, long l )
-    : DdeLink( rConnection, rString, l )
+DdeHotLink::DdeHotLink( DdeConnection& rConnection, const OUString& rString )
+    : DdeLink( rConnection, rString, 0 )
 {
 }
 

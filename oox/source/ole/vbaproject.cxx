@@ -209,34 +209,34 @@ Reference< XLibraryContainer > VbaProject::getLibraryContainer( sal_Int32 nPropI
     return xLibContainer;
 }
 
-Reference< XNameContainer > VbaProject::openLibrary( sal_Int32 nPropId, bool bCreateMissing )
+Reference< XNameContainer > VbaProject::openLibrary( sal_Int32 nPropId )
 {
     Reference< XNameContainer > xLibrary;
     try
     {
         Reference< XLibraryContainer > xLibContainer( getLibraryContainer( nPropId ), UNO_SET_THROW );
-        if( bCreateMissing && !xLibContainer->hasByName( maPrjName ) )
+        if( !xLibContainer->hasByName( maPrjName ) )
             xLibContainer->createLibrary( maPrjName );
         xLibrary.set( xLibContainer->getByName( maPrjName ), UNO_QUERY_THROW );
     }
     catch(const Exception& )
     {
     }
-    OSL_ENSURE( !bCreateMissing || xLibrary.is(), "VbaProject::openLibrary - cannot create library" );
+    OSL_ENSURE( xLibrary.is(), "VbaProject::openLibrary - cannot create library" );
     return xLibrary;
 }
 
 Reference< XNameContainer > const & VbaProject::createBasicLibrary()
 {
     if( !mxBasicLib.is() )
-        mxBasicLib = openLibrary( PROP_BasicLibraries, true );
+        mxBasicLib = openLibrary( PROP_BasicLibraries );
     return mxBasicLib;
 }
 
 Reference< XNameContainer > const & VbaProject::createDialogLibrary()
 {
     if( !mxDialogLib.is() )
-        mxDialogLib = openLibrary( PROP_DialogLibraries, true );
+        mxDialogLib = openLibrary( PROP_DialogLibraries );
     return mxDialogLib;
 }
 
@@ -406,7 +406,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
     }
 }
 
-void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )
+void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper )
 {
     StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( "VBA", false );
     OSL_ENSURE( xVbaStrg.get(), "VbaProject::importModulesAndForms - cannot open 'VBA' substorage" );
@@ -487,7 +487,7 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
 
                 // create and import the form
                 Reference< XNameContainer > xDialogLib( createDialogLibrary(), UNO_SET_THROW );
-                VbaUserForm aForm( mxContext, mxDocModel, rGraphicHelper, bDefaultColorBgr );
+                VbaUserForm aForm( mxContext, mxDocModel, rGraphicHelper, true/*bDefaultColorBgr*/ );
                 aForm.importForm( xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
             catch(const Exception& )

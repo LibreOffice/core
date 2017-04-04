@@ -572,8 +572,7 @@ public:
 
     sal_uInt32  GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = nullptr ) const;
     void        WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = nullptr  );
-    void        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
-                    bool bWritePictureOffset, sal_uInt32 nResize);
+    void        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId, sal_uInt32 nResize);
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
                     const OString& rGraphicId,
@@ -945,7 +944,7 @@ public:
 class MSFILTER_DLLPUBLIC EscherExGlobal : public EscherGraphicProvider
 {
 public:
-    explicit            EscherExGlobal( EscherGraphicProviderFlags nGraphicProvFlags = EscherGraphicProviderFlags::NONE );
+    explicit            EscherExGlobal();
     virtual             ~EscherExGlobal() override;
 
     /** Returns a new drawing ID for a new drawing container (DGCONTAINER). */

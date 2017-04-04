@@ -173,8 +173,7 @@ public:
       */
     VclPtr<SfxInfoBarWindow> AppendInfoBar(const OUString& sId,
                                     const OUString& sMessage,
-                                    InfoBarType aInfoBarType,
-                                    WinBits nMessageStyle = WB_LEFT|WB_VCENTER);
+                                    InfoBarType aInfoBarType);
     void              RemoveInfoBar(const OUString& sId);
 
     SAL_DLLPRIVATE void GetDocNumber_Impl();

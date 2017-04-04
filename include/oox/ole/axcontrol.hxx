@@ -398,8 +398,7 @@ class ComCtlModelBase : public ControlModelBase
 {
 public:
     explicit            ComCtlModelBase(
-                            sal_uInt32 nDataPartId5, sal_uInt32 nDataPartId6, sal_uInt16 nVersion,
-                            bool bCommonPart, bool bComplexPart );
+                            sal_uInt32 nDataPartId5, sal_uInt32 nDataPartId6, sal_uInt16 nVersion );
 
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;

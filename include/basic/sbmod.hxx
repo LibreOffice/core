@@ -115,7 +115,7 @@ public:
     void ClearAllBP();
 
     // Store only image, no source (needed for new password protection)
-    void     StoreBinaryData( SvStream&, sal_uInt16 nVer );
+    void     StoreBinaryData( SvStream& );
     void     LoadBinaryData( SvStream& );
     bool     ExceedsLegacyModuleSize();
     void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = nullptr ) const;

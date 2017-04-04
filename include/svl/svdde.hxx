@@ -148,7 +148,7 @@ public:
 class SVL_DLLPUBLIC DdeHotLink : public DdeLink
 {
 public:
-            DdeHotLink( DdeConnection&, const OUString&, long = 0 );
+            DdeHotLink( DdeConnection&, const OUString& );
 };
 
 

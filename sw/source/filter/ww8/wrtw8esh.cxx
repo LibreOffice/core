@@ -2274,7 +2274,7 @@ void SwBasicEscherEx::WritePictures()
     {
         // set the blip - entries to the correct stream pos
         sal_Int32 nEndPos = pPicStrm->Tell();
-        mxGlobal->WriteBlibStoreEntry(*pEscherStrm, 1, true, nEndPos);
+        mxGlobal->WriteBlibStoreEntry(*pEscherStrm, 1, nEndPos);
 
         pPicStrm->Seek(0);
         pEscherStrm->WriteStream( *pPicStrm );

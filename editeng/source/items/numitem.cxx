@@ -147,8 +147,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLoca
     return OUString();
 }
 
-SvxNumberFormat::SvxNumberFormat( SvxNumType eType,
-                                  SvxNumPositionAndSpaceMode ePositionAndSpaceMode )
+SvxNumberFormat::SvxNumberFormat( SvxNumType eType )
     : SvxNumberType(eType),
       eNumAdjust(SvxAdjust::Left),
       nInclUpperLevels(0),
@@ -156,7 +155,7 @@ SvxNumberFormat::SvxNumberFormat( SvxNumType eType,
       cBullet(SVX_DEF_BULLET),
       nBulletRelSize(100),
       nBulletColor(COL_BLACK),
-      mePositionAndSpaceMode( ePositionAndSpaceMode ),
+      mePositionAndSpaceMode( LABEL_WIDTH_AND_POSITION ),
       nFirstLineOffset(0),
       nAbsLSpace(0),
       nCharTextDistance(0),

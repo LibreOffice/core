@@ -647,14 +647,14 @@ void ControlModelBase::convertSize( PropertyMap& rPropMap, const ControlConverte
 }
 
 ComCtlModelBase::ComCtlModelBase( sal_uInt32 nDataPartId5, sal_uInt32 nDataPartId6,
-        sal_uInt16 nVersion, bool bCommonPart, bool bComplexPart ) :
+        sal_uInt16 nVersion ) :
     maFontData( "Tahoma", 82500 ),
     mnFlags( 0 ),
     mnVersion( nVersion ),
     mnDataPartId5( nDataPartId5 ),
     mnDataPartId6( nDataPartId6 ),
-    mbCommonPart( bCommonPart ),
-    mbComplexPart( bComplexPart )
+    mbCommonPart( true ),
+    mbComplexPart( true )
 {
 }
 
@@ -749,7 +749,7 @@ bool ComCtlModelBase::importComplexPart( BinaryInputStream& rInStrm )
 }
 
 ComCtlScrollBarModel::ComCtlScrollBarModel( sal_uInt16 nVersion ) :
-    ComCtlModelBase( SAL_MAX_UINT32, COMCTL_ID_SCROLLBAR_60, nVersion, true, true ),
+    ComCtlModelBase( SAL_MAX_UINT32, COMCTL_ID_SCROLLBAR_60, nVersion ),
     mnScrollBarFlags( 0x00000011 ),
     mnLargeChange( 1 ),
     mnSmallChange( 1 ),
@@ -783,7 +783,7 @@ void ComCtlScrollBarModel::importControlData( BinaryInputStream& rInStrm )
 }
 
 ComCtlProgressBarModel::ComCtlProgressBarModel( sal_uInt16 nVersion ) :
-    ComCtlModelBase( COMCTL_ID_PROGRESSBAR_50, COMCTL_ID_PROGRESSBAR_60, nVersion, true, true ),
+    ComCtlModelBase( COMCTL_ID_PROGRESSBAR_50, COMCTL_ID_PROGRESSBAR_60, nVersion ),
     mfMin( 0.0 ),
     mfMax( 100.0 ),
     mnVertical( 0 ),

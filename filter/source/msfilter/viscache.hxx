@@ -35,8 +35,8 @@ class Impl_OlePres
     sal_uInt32      nAdvFlags;
     Size            aSize;      // size in 100TH_MM
 public:
-    explicit Impl_OlePres( SotClipboardFormatId nF )
-        : nFormat( nF )
+    explicit Impl_OlePres()
+        : nFormat( SotClipboardFormatId::GDIMETAFILE )
         , nAspect( ASPECT_CONTENT )
         , pMtf( nullptr )
         , nAdvFlags( 0x2 )  // found in document

@@ -107,8 +107,7 @@ public:
     LibEntry (
         ScriptDocument const& rDocument,
         LibraryLocation eLocation,
-        OUString       const& rLibName,
-        EntryType eType = OBJ_TYPE_LIBRARY
+        OUString       const& rLibName
     );
     virtual ~LibEntry () override;
 

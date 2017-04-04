@@ -63,7 +63,7 @@ ORTFReader::ORTFReader( SvStream& rIn,
                         const Reference< css::util::XNumberFormatter >& _rxNumberF,
                         const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
     :SvRTFParser(rIn)
-    ,ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, nullptr, nullptr, rIn )
+    ,ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, rIn )
 {
     m_bAppendFirstLine = false;
 }

@@ -99,7 +99,7 @@ struct MSFILTER_DLLPUBLIC PowerPointImportParam
     sal_uInt32          nImportFlags;
     PptCurrentUserAtom  aCurrentUserAtom;
 
-    PowerPointImportParam( SvStream& rDocStream, sal_uInt32 nImportFlags );
+    PowerPointImportParam( SvStream& rDocStream );
 };
 
 struct SdHyperlinkEntry

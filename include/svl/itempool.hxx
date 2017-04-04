@@ -80,7 +80,7 @@ public:
     const sal_uInt16*               GetFrozenIdRanges() const;
 
 protected:
-    static inline void              SetRefCount(SfxPoolItem& rItem, sal_uInt32 n);
+    static inline void              ClearRefCount(SfxPoolItem& rItem);
     static inline void              AddRef(const SfxPoolItem& rItem, sal_uInt32 n = 1);
     static inline sal_uInt32        ReleaseRef(const SfxPoolItem& rItem, sal_uInt32 n = 1);
     static inline void              SetKind( SfxPoolItem& rItem, SfxItemKind nRef );
@@ -217,9 +217,9 @@ private:
 };
 
 // only the pool may manipulate the reference counts
-inline void SfxItemPool::SetRefCount(SfxPoolItem& rItem, sal_uInt32 n)
+inline void SfxItemPool::ClearRefCount(SfxPoolItem& rItem)
 {
-    rItem.SetRefCount(n);
+    rItem.SetRefCount(0);
 }
 
 // only the pool may manipulate the reference counts

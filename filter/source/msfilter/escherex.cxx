@@ -4113,11 +4113,11 @@ sal_uInt32 EscherGraphicProvider::GetBlibStoreContainerSize( SvStream* pMergePic
 }
 
 void EscherGraphicProvider::WriteBlibStoreEntry(SvStream& rSt,
-    sal_uInt32 nBlipId, bool bWritePictureOffSet, sal_uInt32 nResize)
+    sal_uInt32 nBlipId, sal_uInt32 nResize)
 {
     if (nBlipId > mnBlibEntrys || nBlipId == 0)
         return;
-    mpBlibEntrys[nBlipId-1]->WriteBlibEntry(rSt, bWritePictureOffSet, nResize);
+    mpBlibEntrys[nBlipId-1]->WriteBlibEntry(rSt, true/*bWritePictureOffSet*/, nResize);
 }
 
 void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pMergePicStreamBSE )
@@ -4794,8 +4794,8 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
     }
 }
 
-EscherExGlobal::EscherExGlobal( EscherGraphicProviderFlags nGraphicProvFlags ) :
-    EscherGraphicProvider( nGraphicProvFlags ),
+EscherExGlobal::EscherExGlobal() :
+    EscherGraphicProvider( EscherGraphicProviderFlags::NONE ),
     mpPicStrm( nullptr ),
     mbHasDggCont( false ),
     mbPicStrmQueried( false )
