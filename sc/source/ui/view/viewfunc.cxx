@@ -244,20 +244,30 @@ sal_uInt16 ScViewFunc::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula
 
 bool ScViewFunc::SelectionEditable( bool* pOnlyNotBecauseOfMatrix /* = NULL */ )
 {
-    bool bRet;
+    // If document is marked, we can use the function IsSelectionEditable,
+    // else we must do it manually
     ScDocument* pDoc = GetViewData().GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
     if (rMark.IsMarked() || rMark.IsMultiMarked())
-        bRet = pDoc->IsSelectionEditable( rMark, pOnlyNotBecauseOfMatrix );
-    else
+        return pDoc->IsSelectionEditable( rMark, pOnlyNotBecauseOfMatrix );
+
+    // If document is not marked, we check all selected tables.
+    // As soon as a table is not editable, we return false.
+    // If all tables are editable, we return true.
+    SCCOL nCol = GetViewData().GetCurX();
+    SCROW nRow = GetViewData().GetCurY();
+
+    SCTAB nTab;
+    ScMarkData::MarkedTabsType::const_iterator it;
+    ScMarkData::MarkedTabsType selectedTabs = rMark.GetSelectedTabs();
+    for (it=selectedTabs.begin(); it!=selectedTabs.end(); ++it)
     {
-        SCCOL nCol = GetViewData().GetCurX();
-        SCROW nRow = GetViewData().GetCurY();
-        SCTAB nTab = GetViewData().GetTabNo();
-        bRet = pDoc->IsBlockEditable( nTab, nCol, nRow, nCol, nRow,
-            pOnlyNotBecauseOfMatrix );
+        nTab = *it;
+        if (!pDoc->IsBlockEditable( nTab, nCol, nRow, nCol, nRow, pOnlyNotBecauseOfMatrix))
+            return false;
     }
-    return bRet;
+
+    return true;
 }
 
 #ifndef LRU_MAX
