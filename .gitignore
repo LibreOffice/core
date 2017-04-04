@@ -136,8 +136,7 @@ DerivedData
 *.v11*
 *.v12*
 *.opensdf
-!windows/*.sln
-!windows/*.vcxproj*
+*.vcxproj*
 
 # QtCreator specific
 *.pro
