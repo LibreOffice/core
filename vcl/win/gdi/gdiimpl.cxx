@@ -73,7 +73,6 @@ void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const P
 {
     if( nPoints )
     {
-        sal_uInt16 i;
         // TODO: profile whether the following options are faster:
         // a) look ahead and draw consecutive bezier or line segments by PolyBezierTo/PolyLineTo resp.
         // b) convert our flag array to window's and use PolyDraw
@@ -81,7 +80,7 @@ void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const P
         MoveToEx( hdc, pPtAry->mnX, pPtAry->mnY, nullptr );
         ++pPtAry; ++pFlgAry;
 
-        for( i=1; i<nPoints; ++i, ++pPtAry, ++pFlgAry )
+        for( sal_uLong i=1; i<nPoints; ++i, ++pPtAry, ++pFlgAry )
         {
             if( *pFlgAry != PolyFlags::Control )
             {

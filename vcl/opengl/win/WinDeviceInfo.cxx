@@ -409,8 +409,7 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(std::vector<wgl::DriverInf
 
     wgl::OperatingSystem eOS = WindowsVersionToOperatingSystem(nWindowsVersion);
     bool match = false;
-    uint32_t i = 0;
-    for (; i < aDeviceInfos.size(); i++)
+    for (std::vector<wgl::DriverInfo>::size_type i = 0; i < aDeviceInfos.size(); i++)
     {
         if (aDeviceInfos[i].meOperatingSystem != wgl::DRIVER_OS_ALL &&
                 aDeviceInfos[i].meOperatingSystem != eOS)
