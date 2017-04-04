@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,dnd,\
 	cppu \
 	cppuhelper \
 	sal \
-	vcl \
 	$(gb_UWINAPI) \
 ))
 
@@ -48,10 +47,6 @@ $(eval $(call gb_Library_use_system_win32_libs,dnd,\
 $(eval $(call gb_Library_use_static_libraries,dnd,\
 	dtobj \
 ))
-
-$(eval $(call gb_Library_use_externals,dnd,\
-	epoxy \
- ))
 
 $(eval $(call gb_Library_add_exception_objects,dnd,\
 	dtrans/source/win32/dnd/dndentry \

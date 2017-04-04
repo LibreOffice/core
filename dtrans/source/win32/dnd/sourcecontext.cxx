@@ -19,9 +19,6 @@
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
-#include <epoxy/wgl.h>
-#include <vcl/opengl/OpenGLWrapper.hxx>
-
 #include "sourcecontext.hxx"
 
 using namespace com::sun::star::datatransfer::dnd;
@@ -74,8 +71,6 @@ void SAL_CALL SourceContext::transferablesFlavorsChanged(  )
 // Fires XDragSourceListener::dragDropEnd events.
 void SourceContext::fire_dragDropEnd( bool success, sal_Int8 effect)
 {
-    if( OpenGLWrapper::isVCLOpenGLEnabled() )
-        epoxy_handle_external_wglMakeCurrent();
 
     DragSourceDropEvent e;
 
