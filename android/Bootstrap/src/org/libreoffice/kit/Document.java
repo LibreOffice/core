@@ -64,9 +64,9 @@ public class Document {
     public static final int CALLBACK_GRAPHIC_SELECTION = 6;
     public static final int CALLBACK_HYPERLINK_CLICKED = 7;
     public static final int CALLBACK_STATE_CHANGED = 8;
-    public static final int CALLBACK_STATUS_INTICATOR_START = 9;
-    public static final int CALLBACK_STATUS_INTICATOR_SET_VALUE = 10;
-    public static final int CALLBACK_STATUS_INTICATOR_FINISH = 11;
+    public static final int CALLBACK_STATUS_INDICATOR_START = 9;
+    public static final int CALLBACK_STATUS_INDICATOR_SET_VALUE = 10;
+    public static final int CALLBACK_STATUS_INDICATOR_FINISH = 11;
     public static final int CALLBACK_SEARCH_NOT_FOUND = 12;
     public static final int CALLBACK_DOCUMENT_SIZE_CHANGED = 13;
     public static final int CALLBACK_SET_PART = 14;
