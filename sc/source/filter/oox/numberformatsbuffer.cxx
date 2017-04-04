@@ -1953,7 +1953,7 @@ void NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNumFmts,
 sal_uLong NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
     const ScDocument& rDoc = getScDocument();
-    static sal_uLong  nDflt = rDoc.GetFormatTable()->GetStandardFormat( ScGlobal::eLnge );
+    static sal_uLong  nDflt = rDoc.GetFormatTable()->GetStandardIndex( ScGlobal::eLnge );
     sal_uLong nScNumFmt = nDflt;
     if ( maApiData.mnIndex )
         nScNumFmt = maApiData.mnIndex;
