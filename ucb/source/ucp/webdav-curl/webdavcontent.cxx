@@ -1260,6 +1260,45 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     return uno::Reference<sdbc::XRow>(xRow);
 }
 
+namespace {
+void GetPropsUsingHeadRequest(DAVResource& resource,
+                              const std::unique_ptr< DAVResourceAccess >& xResAccess,
+                              const std::vector< OUString >& aHTTPNames,
+                              const uno::Reference< ucb::XCommandEnvironment >& xEnv)
+{
+    if (!aHTTPNames.empty())
+    {
+        DAVOptions aDAVOptions;
+        OUString   aTargetURL = xResAccess->getURL();
+        // retrieve the cached options if any
+        aStaticDAVOptionsCache.getDAVOptions(aTargetURL, aDAVOptions);
+
+        // clean cached value of PROPFIND property names
+        // PROPPATCH can change them
+        Content::removeCachedPropertyNames(aTargetURL);
+        // test if HEAD allowed, if not, throw, should be catched immediately
+        // SC_GONE used internally by us, see comment in Content::getPropertyValues
+        // in the catch scope
+        if (aDAVOptions.getHttpResponseStatusCode() != SC_GONE &&
+            !aDAVOptions.isHeadAllowed())
+        {
+            throw DAVException(DAVException::DAV_HTTP_ERROR, "405 Not Implemented", SC_METHOD_NOT_ALLOWED);
+        }
+        // if HEAD is enabled on this site
+        // check if there is a relevant HTTP response status code cached
+        if (aDAVOptions.getHttpResponseStatusCode() != SC_NONE)
+        {
+            // throws exception as if there was a server error, a DAV exception
+            throw DAVException(DAVException::DAV_HTTP_ERROR,
+                aDAVOptions.getHttpResponseStatusText(),
+                aDAVOptions.getHttpResponseStatusCode());
+            // Unreachable
+        }
+
+        xResAccess->HEAD(aHTTPNames, resource, xEnv);
+    }
+}
+}
 
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Sequence< beans::Property >& rProperties,
@@ -1449,117 +1488,89 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     aHeaderNames.push_back( "Content-Type" );
                 }
 
-                if ( !aHeaderNames.empty() )
+                if (!aHeaderNames.empty()) try
                 {
-                    DAVOptions aDAVOptions;
-                    OUString   aTargetURL = xResAccess->getURL();
-                    // retrieve the cached options if any
-                    aStaticDAVOptionsCache.getDAVOptions( aTargetURL, aDAVOptions );
-                    try
+                    DAVResource resource;
+                    GetPropsUsingHeadRequest(resource, xResAccess, aHeaderNames, xEnv);
+                    m_bDidGetOrHead = true;
+
+                    if (xProps)
+                        xProps->addProperties(
+                            aMissingProps,
+                            ContentProperties( resource ) );
+                    else
+                        xProps.reset ( new ContentProperties( resource ) );
+
+                    if (m_eResourceType == NON_DAV)
+                        xProps->addProperties(aMissingProps,
+                            ContentProperties(
+                                aUnescapedTitle,
+                                false));
+                }
+                catch ( DAVException const & e )
+                {
+                    // non "general-purpose servers" may not support HEAD requests
+                    // see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.1
+                    // In this case, perform a partial GET only to get the header info
+                    // vid. http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
+                    // WARNING if the server does not support partial GETs,
+                    // the GET will transfer the whole content
+                    bool bError = true;
+                    DAVException aLastException = e;
+                    OUString aTargetURL = xResAccess->getURL();
+
+                    if ( e.getError() == DAVException::DAV_HTTP_ERROR )
                     {
-                        DAVResource resource;
-                        // clean cached value of PROPFIND property names
-                        // PROPPATCH can change them
-                        removeCachedPropertyNames( aTargetURL );
-                        // test if HEAD allowed, if not, throw, will be catched immediately
-                        // SC_GONE used internally by us, see comment below
-                        // in the catch scope
-                        if ( aDAVOptions.getHttpResponseStatusCode() != SC_GONE &&
-                             !aDAVOptions.isHeadAllowed() )
+                        // According to the spec. the origin server SHOULD return
+                        // * 405 (Method Not Allowed):
+                        //      the method is known but not allowed for the requested resource
+                        // * 501 (Not Implemented):
+                        //      the method is unrecognized or not implemented
+                        // * 404 (SC_NOT_FOUND)
+                        //      is for google-code server and for MS IIS 10.0 Web server
+                        //      when only GET is enabled
+                        if ( aLastException.getStatus() == SC_NOT_IMPLEMENTED ||
+                             aLastException.getStatus() == SC_METHOD_NOT_ALLOWED ||
+                             aLastException.getStatus() == SC_NOT_FOUND )
                         {
-                            throw DAVException( DAVException::DAV_HTTP_ERROR, "405 Not Implemented", SC_METHOD_NOT_ALLOWED );
+                            SAL_WARN( "ucb.ucp.webdav", "HEAD probably not implemented: fall back to a partial GET" );
+                            aStaticDAVOptionsCache.setHeadAllowed( aTargetURL, false );
+                            lcl_sendPartialGETRequest( bError,
+                                                       aLastException,
+                                                       aMissingProps,
+                                                       aHeaderNames,
+                                                       xResAccess,
+                                                       xProps,
+                                                       xEnv );
+                            m_bDidGetOrHead = !bError;
                         }
-                        // if HEAD is enabled on this site
-                        // check if there is a relevant HTTP response status code cached
-                        if ( aDAVOptions.getHttpResponseStatusCode() != SC_NONE )
-                        {
-                            // throws exception as if there was a server error, a DAV exception
-                            throw DAVException( DAVException::DAV_HTTP_ERROR,
-                                                aDAVOptions.getHttpResponseStatusText(),
-                                                aDAVOptions.getHttpResponseStatusCode() );
-                            // Unreachable
-                        }
-
-                        xResAccess->HEAD( aHeaderNames, resource, xEnv );
-                        m_bDidGetOrHead = true;
-
-                        if (xProps)
-                            xProps->addProperties(
-                                aMissingProps,
-                                ContentProperties( resource ) );
-                        else
-                            xProps.reset ( new ContentProperties( resource ) );
-
-                        if ( m_eResourceType == NON_DAV )
-                            xProps->addProperties( aMissingProps,
-                                                   ContentProperties(
-                                                       aUnescapedTitle,
-                                                       false ) );
                     }
-                    catch ( DAVException const & e )
+
+                    if ( bError )
                     {
-                        // non "general-purpose servers" may not support HEAD requests
-                        // see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.1
-                        // In this case, perform a partial GET only to get the header info
-                        // vid. http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
-                        // WARNING if the server does not support partial GETs,
-                        // the GET will transfer the whole content
-                        bool bError = true;
-                        DAVException aLastException = e;
+                        DAVOptions aDAVOptionsException;
 
-                        if ( e.getError() == DAVException::DAV_HTTP_ERROR )
+                        aDAVOptionsException.setURL( aTargetURL );
+                        // check if the error was SC_NOT_FOUND, meaning that the
+                        // GET fall back didn't succeeded and the element is really missing
+                        // we will consider the resource SC_GONE (410) for some time
+                        // we use SC_GONE because has the same meaning of SC_NOT_FOUND (404)
+                        // see:
+                        // <https://tools.ietf.org/html/rfc7231#section-6.5.9> (retrieved 2016-10-09)
+                        // apparently it's not used to mark the missing HEAD method (so far...)
+                        sal_uInt16 ResponseStatusCode =
+                            ( aLastException.getStatus() == SC_NOT_FOUND ) ?
+                            SC_GONE :
+                            aLastException.getStatus();
+                        aDAVOptionsException.setHttpResponseStatusCode( ResponseStatusCode );
+                        aDAVOptionsException.setHttpResponseStatusText( aLastException.getData() );
+                        aStaticDAVOptionsCache.addDAVOptions( aDAVOptionsException,
+                                                              m_nOptsCacheLifeNotFound );
+
+                        if ( !shouldAccessNetworkAfterException( aLastException ) )
                         {
-                            // According to the spec. the origin server SHOULD return
-                            // * 405 (Method Not Allowed):
-                            //      the method is known but not allowed for the requested resource
-                            // * 501 (Not Implemented):
-                            //      the method is unrecognized or not implemented
-                            // * 404 (SC_NOT_FOUND)
-                            //      is for google-code server and for MS IIS 10.0 Web server
-                            //      when only GET is enabled
-                            if ( aLastException.getStatus() == SC_NOT_IMPLEMENTED ||
-                                 aLastException.getStatus() == SC_METHOD_NOT_ALLOWED ||
-                                 aLastException.getStatus() == SC_NOT_FOUND )
-                            {
-                                SAL_WARN( "ucb.ucp.webdav", "HEAD probably not implemented: fall back to a partial GET" );
-                                aStaticDAVOptionsCache.setHeadAllowed( aTargetURL, false );
-                                lcl_sendPartialGETRequest( bError,
-                                                           aLastException,
-                                                           aMissingProps,
-                                                           aHeaderNames,
-                                                           xResAccess,
-                                                           xProps,
-                                                           xEnv );
-                                m_bDidGetOrHead = !bError;
-                            }
-                        }
-
-                        if ( bError )
-                        {
-                            DAVOptions aDAVOptionsException;
-
-                            aDAVOptionsException.setURL( aTargetURL );
-                            // check if the error was SC_NOT_FOUND, meaning that the
-                            // GET fall back didn't succeeded and the element is really missing
-                            // we will consider the resource SC_GONE (410) for some time
-                            // we use SC_GONE because has the same meaning of SC_NOT_FOUND (404)
-                            // see:
-                            // <https://tools.ietf.org/html/rfc7231#section-6.5.9> (retrieved 2016-10-09)
-                            // apparently it's not used to mark the missing HEAD method (so far...)
-                            sal_uInt16 ResponseStatusCode =
-                                ( aLastException.getStatus() == SC_NOT_FOUND ) ?
-                                SC_GONE :
-                                aLastException.getStatus();
-                            aDAVOptionsException.setHttpResponseStatusCode( ResponseStatusCode );
-                            aDAVOptionsException.setHttpResponseStatusText( aLastException.getData() );
-                            aStaticDAVOptionsCache.addDAVOptions( aDAVOptionsException,
-                                                                  m_nOptsCacheLifeNotFound );
-
-                            if ( !shouldAccessNetworkAfterException( aLastException ) )
-                            {
-                                cancelCommandExecution( aLastException, xEnv );
-                                // unreachable
-                            }
+                            cancelCommandExecution( aLastException, xEnv );
+                            // unreachable
                         }
                     }
                 }
@@ -1640,6 +1651,22 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xProps->addProperty(
                     (*it),
                     uno::makeAny( aDate ),
+                    true );
+            }
+            // If WebDAV didn't return the resource type, assume default
+            // This happens e.g. for lists exported by SharePoint
+            else if ( (*it) == "IsFolder" )
+            {
+                xProps->addProperty(
+                    (*it),
+                    uno::makeAny( false ),
+                    true );
+            }
+            else if ( (*it) == "IsDocument" )
+            {
+                xProps->addProperty(
+                    (*it),
+                    uno::makeAny( true ),
                     true );
             }
         }
@@ -2981,8 +3008,6 @@ Content::ResourceType Content::resourceTypeForLocks(
         std::unique_ptr< ContentProperties > xProps;
         if (m_xCachedProps)
         {
-            std::unique_ptr< ContentProperties > xCachedProps;
-            xCachedProps.reset( new ContentProperties(*m_xCachedProps) );
             uno::Sequence< ucb::LockEntry > aSupportedLocks;
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
                  >>= aSupportedLocks )            //get the cached value for supportedlock
@@ -3072,6 +3097,42 @@ Content::ResourceType Content::resourceTypeForLocks(
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+                            // PROPFIND failed; check if HEAD contains Content-Disposition: attachment (RFC1806, HTTP/1.1 19.5.1),
+                            // which supposedly means no lock for the resource (happens e.g. with SharePoint exported lists)
+                            OUString sContentDisposition;
+                            // First, check cached properties
+                            if (m_xCachedProps)
+                            {
+                                if ((m_xCachedProps->getValue("Content-Disposition") >>= sContentDisposition)
+                                    && sContentDisposition.startsWithIgnoreAsciiCase("attachment"))
+                                {
+                                    eResourceTypeForLocks = DAV_NOLOCK;
+                                    wasSupportedlockFound = true;
+                                }
+                            }
+                            // If no data in cache, try HEAD request
+                            if (sContentDisposition.isEmpty() && !m_bDidGetOrHead) try
+                            {
+                                DAVResource resource;
+                                GetPropsUsingHeadRequest(resource, rResAccess, {"Content-Disposition"}, Environment);
+                                m_bDidGetOrHead = true;
+                                for (const auto& it : resource.properties)
+                                {
+                                    if (it.Name.equalsIgnoreAsciiCase("Content-Disposition"))
+                                    {
+                                        if ((it.Value >>= sContentDisposition) && sContentDisposition.equalsIgnoreAsciiCase("attachment"))
+                                        {
+                                            eResourceTypeForLocks = DAV_NOLOCK;
+                                            wasSupportedlockFound = true;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            catch (...){}
                         }
                         // check if this is still only a DAV_NOLOCK
                         // a fallback for resources that do not have DAVProperties::SUPPORTEDLOCK property
