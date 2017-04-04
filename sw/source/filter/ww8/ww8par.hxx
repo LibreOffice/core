@@ -1862,7 +1862,7 @@ public:     // really private, but can only be done public
 
     void DeleteFormImpl();
 
-    short ImportSprm( const sal_uInt8* pPos, sal_uInt16 nId = 0 );
+    short ImportSprm(const sal_uInt8* pPos, sal_Int32 nMemLen, sal_uInt16 nId = 0);
 
     bool SearchRowEnd(WW8PLCFx_Cp_FKP* pPap,WW8_CP &rStartCp, int nLevel) const;
 

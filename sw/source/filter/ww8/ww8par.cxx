@@ -3795,7 +3795,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
             if( bStartAttr ) // WW attributes
             {
                 if( aRes.nMemLen >= 0 )
-                    ImportSprm(aRes.pMemPos, aRes.nSprmId);
+                    ImportSprm(aRes.pMemPos, aRes.nMemLen, aRes.nSprmId);
             }
             else
                 EndSprm( aRes.nSprmId ); // Switch off Attr
@@ -6410,7 +6410,7 @@ bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
                         while (nLen >= 2 && !nPictureId)
                         {
                             sal_uInt16 nId = aSprmParser.GetSprmId(pSprm);
-                            sal_uInt16 nSL = aSprmParser.GetSprmSize(nId, pSprm);
+                            sal_uInt16 nSL = aSprmParser.GetSprmSize(nId, pSprm, nLen);
 
                             if( nLen < nSL )
                                 break; // Not enough Bytes left

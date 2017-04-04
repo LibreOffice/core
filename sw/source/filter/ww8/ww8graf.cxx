@@ -623,7 +623,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                 // off and convert them later
                 if (bStartAttr)
                 {
-                    ImportSprm(aRes.pMemPos, aRes.nSprmId);
+                    ImportSprm(aRes.pMemPos, aRes.nMemLen, aRes.nSprmId);
                     if (!bDoingSymbol && m_bSymbol)
                     {
                         bDoingSymbol = true;
