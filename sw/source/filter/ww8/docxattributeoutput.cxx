@@ -3428,17 +3428,76 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 pJcVal = "left";
             else
                 pJcVal = "start";
-            nIndent = sal_Int32( pTableFormat->GetLRSpace( ).GetLeft( ) );
+
+            // tdf#106742
+            bool      bWordCompatibilityModeFound = false;
+            sal_Int32 nWordCompatibilityModeValue;
+
+            uno::Reference< beans::XPropertySet >     xPropSet( m_rExport.m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+            OUString                                  aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+            if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
+            {
+                uno::Sequence< beans::PropertyValue > propList;
+                xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
+                for ( sal_Int32 i = 0; i < propList.getLength(); ++i )
+                {
+                    OUString sNametest = propList[i].Name;
+                    if ( propList[i].Name == "CompatSettings" )
+                    {
+                        css::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
+                        propList[i].Value >>= aCurrentCompatSettings;
+
+                        for ( sal_Int32 j = 0; j < aCurrentCompatSettings.getLength(); ++j )
+                        {
+                            uno::Sequence< beans::PropertyValue > aCompatSetting;
+                            aCurrentCompatSettings[j].Value >>= aCompatSetting;
+
+                            OUString sName;
+                            OUString sUri;
+                            OUString sVal;
+
+                            for ( sal_Int32 k = 0; k < aCompatSetting.getLength(); ++k )
+                            {
+                                if ( aCompatSetting[k].Name == "name" )
+                                    aCompatSetting[k].Value >>= sName;
+                                else if ( aCompatSetting[k].Name == "uri" )
+                                    aCompatSetting[k].Value >>= sUri;
+                                else if ( aCompatSetting[k].Name == "val" )
+                                    aCompatSetting[k].Value >>= sVal;
+                            }
+
+                            if ( sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word" )
+                            {
+                                bWordCompatibilityModeFound = true;
+                                nWordCompatibilityModeValue = sVal.toInt32();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
             // Table indentation has different meaning in Word, depending if the table is nested or not.
             // If nested, tblInd is added to parent table's left spacing and defines left edge position
             // If not nested, text position of left-most cell must be at absolute X = tblInd
             // so, table_spacing + table_spacing_to_content = tblInd
-            if (m_tableReference->m_nTableDepth == 0)
+
+            // tdf#106742: It does not work in MS Word 2013+
+            if ( bWordCompatibilityModeFound && nWordCompatibilityModeValue <= 14 )
             {
-                const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
-                const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
-                nIndent += sal_Int32( pFrameFormat->GetBox( ).GetDistance( SvxBoxItemLine::LEFT ) );
+                if ( m_tableReference->m_nTableDepth == 0 )
+                {
+                    const SwTableBox*    pTabBox = pTableTextNodeInfoInner->getTableBox();
+                    const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();
+                    nIndent += sal_Int32( pFrameFormat->GetBox().GetDistance( SvxBoxItemLine::LEFT ) );
+                }
             }
+            else
+            {
+                nIndent = sal_Int32( pTableFormat->GetLRSpace().GetLeft() );
+            }
+
             break;
         }
     }

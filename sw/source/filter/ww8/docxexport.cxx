@@ -939,6 +939,7 @@ void DocxExport::WriteSettings()
                 {
                     uno::Sequence< beans::PropertyValue > aCompatSetting;
                     aCompatSettingsSequence[j].Value >>= aCompatSetting;
+
                     OUString aName;
                     OUString aUri;
                     OUString aValue;
