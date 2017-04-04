@@ -4484,7 +4484,7 @@ SfxVoidItem EditAnnotation SID_EDIT_POSTIT
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
+    GroupId = GID_EDIT;
 ]
 
 SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
