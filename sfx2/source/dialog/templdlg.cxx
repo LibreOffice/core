@@ -2175,36 +2175,14 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     , m_aActionTbL(VclPtrInstance<DropToolBox_Impl>(pDlgWindow, this))
     , m_aActionTbR(VclPtrInstance<ToolBox>(pDlgWindow))
 {
-    try
-    {
-        uno::Reference< container::XNameAccess > xNameAccess(
-                frame::theUICommandDescription::get(
-                    ::comphelper::getProcessComponentContext()) );
-        uno::Reference< container::XNameAccess > xUICommands;
-        OUString sTextDoc("com.sun.star.text.TextDocument");
-        if (xNameAccess->hasByName(sTextDoc))
-        {
-            uno::Any a = xNameAccess->getByName(sTextDoc);
-            a >>= xUICommands;
-        }
-        if (xUICommands.is())
-        {
-            uno::Any aCommand = xUICommands->getByName(".uno:StyleApply");
-            m_aActionTbR->InsertItem(SID_STYLE_WATERCAN, Image(BitmapEx(SfxResId(RID_SFXBMP_WATERCAN))), SfxResId(STR_STYLE_FILL_FORMAT_MODE).toString());
-            m_aActionTbR->SetHelpId(SID_STYLE_WATERCAN, HID_TEMPLDLG_WATERCAN);
+    m_aActionTbR->InsertItem(SID_STYLE_WATERCAN, Image(BitmapEx(SfxResId(RID_SFXBMP_WATERCAN))), SfxResId(STR_STYLE_FILL_FORMAT_MODE).toString());
+    m_aActionTbR->SetHelpId(SID_STYLE_WATERCAN, HID_TEMPLDLG_WATERCAN);
 
-            aCommand = xUICommands->getByName(".uno:StyleNewByExample");
-            m_aActionTbR->InsertItem(SID_STYLE_NEW_BY_EXAMPLE, Image(BitmapEx(SfxResId(RID_SFXBMP_NEW_BY_EXAMPLE))), SfxResId(STR_STYLE_NEW_STYLE_FROM_SELECTION).toString());
-            m_aActionTbR->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
+    m_aActionTbR->InsertItem(SID_STYLE_NEW_BY_EXAMPLE, Image(BitmapEx(SfxResId(RID_SFXBMP_NEW_BY_EXAMPLE))), SfxResId(STR_STYLE_NEW_STYLE_FROM_SELECTION).toString());
+    m_aActionTbR->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(".uno:StyleUpdateByExample");
-            m_aActionTbR->InsertItem(SID_STYLE_UPDATE_BY_EXAMPLE, Image(BitmapEx(SfxResId(RID_SFXBMP_UPDATE_BY_EXAMPLE))), SfxResId(STR_STYLE_UPDATE_STYLE).toString());
-            m_aActionTbR->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
-        }
-    }
-    catch (const uno::Exception&)
-    {
-    }
+    m_aActionTbR->InsertItem(SID_STYLE_UPDATE_BY_EXAMPLE, Image(BitmapEx(SfxResId(RID_SFXBMP_UPDATE_BY_EXAMPLE))), SfxResId(STR_STYLE_UPDATE_STYLE).toString());
+    m_aActionTbR->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
     Initialize();
 }
