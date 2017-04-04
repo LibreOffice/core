@@ -6817,6 +6817,13 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
     sal_Int32 nFFn = rFib.m_lcbSttbfffn - 2;
 
+    const sal_uInt64 nMaxPossible = rSt.remainingSize();
+    if (static_cast<sal_uInt64>(nFFn) > nMaxPossible)
+    {
+        SAL_WARN("sw.ww8", "FFN structure longer than available data");
+        nFFn = nMaxPossible;
+    }
+
     // allocate Font Array
     std::unique_ptr<sal_uInt8[]> pA( new sal_uInt8[nFFn] );
     memset(pA.get(), 0, nFFn);
