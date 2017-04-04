@@ -145,7 +145,7 @@ std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
             SetError(::GetSvError( nTestError ) );
         }
     }
-    return (DWORD)nCount;
+    return nCount;
 }
 
 std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )

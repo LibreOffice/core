@@ -2510,7 +2510,7 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
     if ( nSysCode )
     {
-        nSysCode = MapVirtualKey( (UINT)nSysCode, 0 );
+        nSysCode = MapVirtualKey( nSysCode, 0 );
         if ( nSysCode )
             nSysCode = (nSysCode << 16) | nSysCode2;
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, pReplace );

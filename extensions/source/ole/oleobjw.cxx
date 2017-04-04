@@ -1828,7 +1828,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                 OUStringBuffer buf(256);
                 buf.append("ole automation bridge: The called function expects an argument at"
                                 "position: "); //a different number of arguments")),
-                buf.append(OUString::number((sal_Int32) i));
+                buf.append(OUString::number(i));
                 buf.append(" (index starting at 0).");
                 throw IllegalArgumentException( buf.makeStringAndClear(),
                                                 Reference<XInterface>(), (sal_Int16) i);

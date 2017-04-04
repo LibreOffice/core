@@ -357,7 +357,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                                 if(posComma != -1)
                                 {
                                     ouSubValue = ouValue.copy(pos + 11, posComma - pos - 11);
-                                    tabStop.DecimalChar = (sal_Unicode)ouSubValue.toChar();
+                                    tabStop.DecimalChar = ouSubValue.toChar();
                                     pos = posComma + 1;
 
                                     // FillChar.
@@ -368,7 +368,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                                         if(posComma != -1)
                                         {
                                             ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
-                                            tabStop.DecimalChar = (sal_Unicode)ouSubValue.toChar();
+                                            tabStop.DecimalChar = ouSubValue.toChar();
                                             pos = posComma + 1;
 
                                             // Complete TabStop element.
