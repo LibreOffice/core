@@ -300,7 +300,6 @@ namespace pcr
         return aPropertyValue;
     }
 
-
     Any SAL_CALL FormComponentPropertyHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         if( _rPropertyName == PROPERTY_ROWSET )
@@ -309,7 +308,6 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         return impl_getPropertyValue_throw( _rPropertyName );
     }
-
 
     void SAL_CALL FormComponentPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
@@ -483,7 +481,6 @@ namespace pcr
         }
     }
 
-
     Any SAL_CALL FormComponentPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -616,7 +613,6 @@ namespace pcr
 
         return aPropertyValue;
     }
-
 
     Any SAL_CALL FormComponentPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType )
     {
@@ -797,7 +793,6 @@ namespace pcr
         return aControlValue;
     }
 
-
     PropertyState SAL_CALL FormComponentPropertyHandler::getPropertyState( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -805,7 +800,6 @@ namespace pcr
             return m_xPropertyState->getPropertyState( _rPropertyName );
         return PropertyState_DIRECT_VALUE;
     }
-
 
     void SAL_CALL FormComponentPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
@@ -815,7 +809,6 @@ namespace pcr
             m_xComponent->addPropertyChangeListener( OUString(), _rxListener );
     }
 
-
     void SAL_CALL FormComponentPropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -823,7 +816,6 @@ namespace pcr
             m_xComponent->removePropertyChangeListener( OUString(), _rxListener );
         FormComponentPropertyHandler_Base::removePropertyChangeListener( _rxListener );
     }
-
 
     Sequence< Property > SAL_CALL FormComponentPropertyHandler::doDescribeSupportedProperties() const
     {
@@ -897,12 +889,10 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getSupersededProperties( )
     {
         return Sequence< OUString >( );
     }
-
 
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getActuatingProperties( )
     {
@@ -932,7 +922,6 @@ namespace pcr
         aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_TOGGLE) );
         return Sequence< OUString >( &(*aInterestingProperties.begin()), aInterestingProperties.size() );
     }
-
 
     LineDescriptor SAL_CALL FormComponentPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
@@ -1382,7 +1371,6 @@ namespace pcr
         return aDescriptor;
     }
 
-
     InteractiveSelectionResult SAL_CALL FormComponentPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
@@ -1473,7 +1461,6 @@ namespace pcr
         return eResult;
     }
 
-
     namespace
     {
         void lcl_rebuildAndResetCommand( const Reference< XObjectInspectorUI >& _rxInspectorUI, const Reference< XPropertyHandler >& _rxHandler )
@@ -1484,7 +1471,6 @@ namespace pcr
             _rxHandler->setPropertyValue( PROPERTY_COMMAND, makeAny( OUString() ) );
         }
     }
-
 
     void SAL_CALL FormComponentPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit )
     {
@@ -1774,7 +1760,6 @@ namespace pcr
         }
     }
 
-
     void FormComponentPropertyHandler::impl_updateDependentProperty_nothrow( PropertyId _nPropId, const Reference< XObjectInspectorUI >& _rxInspectorUI ) const
     {
         try
@@ -1987,14 +1972,12 @@ namespace pcr
         }
     }
 
-
     void SAL_CALL FormComponentPropertyHandler::disposing()
     {
         FormComponentPropertyHandler_Base::disposing();
         if ( m_xCommandDesigner.is() && m_xCommandDesigner->isActive() )
             m_xCommandDesigner->dispose();
     }
-
 
     sal_Bool SAL_CALL FormComponentPropertyHandler::suspend( sal_Bool _bSuspend )
     {
@@ -2004,7 +1987,6 @@ namespace pcr
                 return m_xCommandDesigner->suspend();
         return true;
     }
-
 
     void FormComponentPropertyHandler::onNewComponent()
     {
@@ -2066,7 +2048,6 @@ namespace pcr
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-
 
     void FormComponentPropertyHandler::impl_classifyControlModel_throw( )
     {
@@ -2151,7 +2132,6 @@ namespace pcr
         }
     }
 
-
     void FormComponentPropertyHandler::impl_normalizePropertyValue_nothrow( Any& _rValue, PropertyId _nPropId ) const
     {
         switch ( _nPropId )
@@ -2184,7 +2164,6 @@ namespace pcr
             break;
         }
     }
-
 
     bool FormComponentPropertyHandler::impl_shouldExcludeProperty_nothrow( const Property& _rProperty ) const
     {
@@ -2263,10 +2242,7 @@ namespace pcr
 
         // don't show experimental properties unless allowed to do so
         if ( ( nPropertyUIFlags & PROP_FLAG_EXPERIMENTAL ) != 0 )
-        {
-            if ( true ) // TODO
-                return true;
-        }
+            return true;
 
         // no data properties if no Base is installed.
         if ( ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0 )
@@ -2275,7 +2251,6 @@ namespace pcr
 
         return false;
     }
-
 
     Reference< XRowSet > FormComponentPropertyHandler::impl_getRowSet_throw( ) const
     {
