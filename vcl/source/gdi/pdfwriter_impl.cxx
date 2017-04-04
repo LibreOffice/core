@@ -7104,7 +7104,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         aTsPara.cExtension = 0;
         aTsPara.rgExtension = nullptr;
 
-        if (!(*crts)(rContext.m_aSignTSA.getStr(),
+        if (!(*crts)(SAL_W(rContext.m_aSignTSA.getStr()),
                      0,
                      10000,
                      szOID_NIST_sha256,

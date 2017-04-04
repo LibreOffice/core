@@ -1848,7 +1848,7 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
                 PROPVARIANT pv;
                 if ( !rApplicationID.isEmpty() )
                 {
-                    hr = InitPropVariantFromString( rApplicationID.getStr(), &pv );
+                    hr = InitPropVariantFromString( SAL_W(rApplicationID.getStr()), &pv );
                     mbPropertiesStored = TRUE;
                 }
                 else
@@ -4467,7 +4467,7 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
             aStr += " ";
             aStr += pSalMenuItem->mAccelText;
         }
-        GetTextExtentPoint32W( hdc, aStr.getStr(),
+        GetTextExtentPoint32W( hdc, SAL_W(aStr.getStr()),
                                 aStr.getLength(), &strSize );
 
         // image
@@ -4604,7 +4604,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         SIZE strSize;
         OUString aStr( pSalMenuItem->mText );
-        GetTextExtentPoint32W( pDI->hDC, aStr.getStr(),
+        GetTextExtentPoint32W( pDI->hDC, SAL_W(aStr.getStr()),
                                 aStr.getLength(), &strSize );
 
         if(!DrawStateW( pDI->hDC, nullptr, nullptr,
@@ -4617,7 +4617,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         {
             SIZE strSizeA;
             aStr = pSalMenuItem->mAccelText;
-            GetTextExtentPoint32W( pDI->hDC, aStr.getStr(),
+            GetTextExtentPoint32W( pDI->hDC, SAL_W(aStr.getStr()),
                                     aStr.getLength(), &strSizeA );
             TEXTMETRIC tm;
             GetTextMetrics( pDI->hDC, &tm );

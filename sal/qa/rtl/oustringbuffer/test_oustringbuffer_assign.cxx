@@ -44,8 +44,6 @@ private:
         b2 = "1234567890123456";
         CPPUNIT_ASSERT_EQUAL(s3, b2.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(32), b2.getCapacity());
-#if !defined SAL_W32
-    // sal_Unicode is still wchar_t not char16_t even for MSVC 2015
         OUStringBuffer b3;
         b3 = u"123456789012345";
         CPPUNIT_ASSERT_EQUAL(s1, b3.toString());
@@ -56,7 +54,6 @@ private:
         b3 = u"1234567890123456";
         CPPUNIT_ASSERT_EQUAL(s3, b3.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(32), b3.getCapacity());
-#endif
         OUStringBuffer b4;
         b4 = OUStringLiteral("1") + "23456789012345";
         CPPUNIT_ASSERT_EQUAL(s1, b4.toString());

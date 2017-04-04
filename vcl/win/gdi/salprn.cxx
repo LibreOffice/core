@@ -409,13 +409,13 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     // fill up string buffers with 0 so they do not influence a JobSetup's memcmp
     if( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmSize >= 64 )
     {
-        sal_Int32 nLen = rtl_ustr_getLength( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName );
+        sal_Int32 nLen = rtl_ustr_getLength( SAL_U(reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName) );
         if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName ) )
             memset( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName+nLen, 0, sizeof( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName )-(nLen*sizeof(sal_Unicode)) );
     }
     if( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmSize >= 166 )
     {
-        sal_Int32 nLen = rtl_ustr_getLength( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName );
+        sal_Int32 nLen = rtl_ustr_getLength( SAL_U(reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName) );
         if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName ) )
             memset( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName+nLen, 0, sizeof( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName )-(nLen*sizeof(sal_Unicode)) );
     }
@@ -1516,12 +1516,12 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     DOCINFOW aInfo;
     memset( &aInfo, 0, sizeof( DOCINFOW ) );
     aInfo.cbSize = sizeof( aInfo );
-    aInfo.lpszDocName = rJobName.getStr();
+    aInfo.lpszDocName = SAL_W(rJobName.getStr());
     if ( pFileName || aOutFileName.getLength() )
     {
         if ( (pFileName && !pFileName->isEmpty()) || aOutFileName.getLength() )
         {
-            aInfo.lpszOutput = (pFileName && !pFileName->isEmpty()) ? pFileName->getStr() : aOutFileName.getStr();
+            aInfo.lpszOutput = SAL_W((pFileName && !pFileName->isEmpty()) ? pFileName->getStr() : aOutFileName.getStr());
         }
         else
             aInfo.lpszOutput = L"FILE:";

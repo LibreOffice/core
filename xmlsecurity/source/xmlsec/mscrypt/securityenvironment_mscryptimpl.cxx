@@ -308,7 +308,7 @@ extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
                                                          void *,
                                                          void *)
 {
-    OUString name(pwszStoreName);
+    OUString name(SAL_U(pwszStoreName));
     if (dwFlags & CERT_PHYSICAL_STORE_PREDEFINED_ENUM_FLAG)
         name += " (implicitly created)";
     SAL_INFO("xmlsecurity.xmlsec", "  Physical store: " << name);
@@ -325,7 +325,7 @@ extern "C" BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore
     LPCWSTR pwszSystemStore;
 
     get_system_name(pvSystemStore, dwFlags, &pwszSystemStore);
-    SAL_INFO("xmlsecurity.xmlsec", "System store: " << OUString(pwszSystemStore));
+    SAL_INFO("xmlsecurity.xmlsec", "System store: " << OUString(SAL_U(pwszSystemStore)));
 
     if (!CertEnumPhysicalStore(pvSystemStore,
                                dwFlags,

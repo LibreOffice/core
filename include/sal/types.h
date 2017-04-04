@@ -132,15 +132,14 @@ typedef signed char sal_sChar;
 */
 typedef unsigned char sal_uChar;
 
-#if defined(SAL_W32)
+#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+    #define SAL_UNICODE_NOTEQUAL_WCHAR_T
+    typedef char16_t sal_Unicode;
+#elif defined(SAL_W32)
     typedef wchar_t sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
-#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
-    typedef char16_t sal_Unicode;
-#else
     typedef sal_uInt16 sal_Unicode;
-#endif
 #endif
 
 typedef void *                   sal_Handle;
@@ -672,6 +671,21 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #endif
 
 /// @endcond
+
+#if defined LIBO_INTERNAL_ONLY && defined __cplusplus && defined SAL_W32
+/// @cond INTERNAL
+// Temporary scaffolding for the MSVC sal_Unicode wchar_t -> char16_t change; to
+// be removed again:
+inline wchar_t * SAL_W(char16_t * p)
+{ return reinterpret_cast<wchar_t *>(p); }
+inline wchar_t const * SAL_W(char16_t const * p)
+{ return reinterpret_cast<wchar_t const *>(p); }
+inline char16_t * SAL_U(wchar_t * p)
+{ return reinterpret_cast<char16_t *>(p); }
+inline char16_t const * SAL_U(wchar_t const * p)
+{ return reinterpret_cast<char16_t const *>(p); }
+/// @endcond
+#endif
 
 #endif // INCLUDED_SAL_TYPES_H
 

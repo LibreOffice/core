@@ -403,7 +403,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     SID_NAME_USE eSidType;
     DWORD dwErrorCode = 0;
 
-    LPCWSTR wszAccName = strUserName.getStr( );
+    LPCWSTR wszAccName = SAL_W(strUserName.getStr( ));
 
     // Create buffers for the SID and the domain name.
     PSID pSid = static_cast<PSID>(new BYTE[dwSidBufferSize]);

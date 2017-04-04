@@ -427,7 +427,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
 // the Win32 SDK 8.1 deprecates inet_addr()
 #if _WIN32_WINNT >= _WIN32_WINNT_VISTA
         IN_ADDR addr;
-        INT ret = InetPtonW(AF_INET, strDottedAddr->buffer, & addr);
+        INT ret = InetPtonW(AF_INET, SAL_W(strDottedAddr->buffer), & addr);
         if (1 == ret)
         {
             nAddr = addr.S_un.S_addr;
@@ -490,7 +490,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
 // the Win32 SDK 8.1 deprecates inet_addr()
 #if _WIN32_WINNT >= _WIN32_WINNT_VISTA
     IN_ADDR addr;
-    INT ret = InetPtonW(AF_INET, strDottedAddr->buffer, & addr);
+    INT ret = InetPtonW(AF_INET, SAL_W(strDottedAddr->buffer), & addr);
     Addr = ret == 1 ? addr.S_un.S_addr : OSL_INADDR_NONE;
 #else
     rtl_String  *pDottedAddr=NULL;
@@ -674,7 +674,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
 #else
     PADDRINFOW pAddrInfo = nullptr;
     int ret = GetAddrInfoW(
-                strHostname->buffer, nullptr, nullptr, & pAddrInfo);
+                SAL_W(strHostname->buffer), nullptr, nullptr, & pAddrInfo);
     if (0 == ret)
     {
         oslHostAddr pRet = nullptr;
@@ -684,7 +684,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
             {
                 pRet = static_cast<oslHostAddr>(
                     rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-                rtl_uString_newFromStr(&pRet->pHostName, pIter->ai_canonname);
+                rtl_uString_newFromStr(&pRet->pHostName, SAL_U(pIter->ai_canonname));
                 pRet->pSockAddr = osl_createSocketAddr_();
                 memcpy(& pRet->pSockAddr->m_sockaddr,
                        pIter->ai_addr, pIter->ai_addrlen);
@@ -1003,7 +1003,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
         SAL_INFO("sal.osl", "InetNtopW failed: " << WSAGetLastError());
         return osl_Socket_Error;
     }
-    rtl_uString_newFromStr(strDottedInetAddr, ret);
+    rtl_uString_newFromStr(strDottedInetAddr, SAL_U(ret));
 #endif // _WIN32_WINNT
     OSL_ASSERT(*strDottedInetAddr != nullptr);
 

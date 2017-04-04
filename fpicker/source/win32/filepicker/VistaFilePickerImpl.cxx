@@ -62,7 +62,7 @@ bool createFolderItem(OUString const & url, ComPtr<IShellItem> & folder) {
         return false;
     }
     HRESULT res = SHCreateItemFromParsingName(
-        path.getStr(), nullptr, IID_PPV_ARGS(&folder));
+        SAL_W(path.getStr()), nullptr, IID_PPV_ARGS(&folder));
     return SUCCEEDED(res);
 }
 

@@ -2736,7 +2736,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
         {
             ::rtl::OUString val;
             pAny >>= val;
-            wcscpy(pChar, val.getStr());
+            wcscpy(pChar, SAL_W(val.getStr()));
             break;
         }
     case TypeClass_SEQUENCE:
@@ -2754,7 +2754,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
                 {
                     pString += val[iIndex];
                 }
-                wcscpy(pChar, pString.getStr());
+                wcscpy(pChar, SAL_W(pString.getStr()));
             }
             else if (pAny.getValueType() == cppu::UnoType<Sequence< css::style::TabStop >>::get())
             {
@@ -2817,7 +2817,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
                 css::accessibility::TextSegment val;
                 pAny >>= val;
                 ::rtl::OUString realVal(val.SegmentText);
-                wcscpy(pChar, realVal.getStr());
+                wcscpy(pChar, SAL_W(realVal.getStr()));
             }
             break;
         }
@@ -2966,7 +2966,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
                 pvData->vt = VT_BSTR;
                 ::rtl::OUString val;
                 rAnyVal >>= val;
-                pvData->bstrVal = SysAllocString(val.getStr());
+                pvData->bstrVal = SysAllocString(SAL_W(val.getStr()));
                 break;
             }
 
@@ -3019,7 +3019,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
         case TypeClass::TypeClass_MAKE_FIXED_SIZE:
             // Output the type string, if there is other uno value type.
             pvData->vt = VT_BSTR;
-            pvData->bstrVal = SysAllocString(rAnyVal.getValueTypeName().getStr());
+            pvData->bstrVal = SysAllocString(SAL_W(rAnyVal.getValueTypeName().getStr()));
             break;
 
         default:
@@ -3133,9 +3133,9 @@ STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
         return E_FAIL;
 
     css::lang::Locale unoLoc = m_xContext.get()->getLocale();
-    locale->language = SysAllocString(unoLoc.Language.getStr());
-    locale->country = SysAllocString(unoLoc.Country.getStr());
-    locale->variant = SysAllocString(unoLoc.Variant.getStr());
+    locale->language = SysAllocString(SAL_W(unoLoc.Language.getStr()));
+    locale->country = SysAllocString(SAL_W(unoLoc.Country.getStr()));
+    locale->variant = SysAllocString(SAL_W(unoLoc.Variant.getStr()));
 
     return S_OK;
 
@@ -3222,7 +3222,7 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 
         if(*pAttr)
             SAFE_SYSFREESTRING(*pAttr);
-        *pAttr = SysAllocString(val.getStr());
+        *pAttr = SysAllocString(SAL_W(val.getStr()));
 
         return S_OK;
     }

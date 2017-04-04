@@ -735,7 +735,7 @@ SAL_CALL osl_openFile(
         dwCreation |= OPEN_EXISTING;
 
     HANDLE hFile = CreateFileW(
-        rtl_uString_getStr( strSysPath ),
+        SAL_W(rtl_uString_getStr( strSysPath )),
         dwAccess, dwShare, nullptr, dwCreation, dwAttributes, nullptr );
 
     // @@@ ERROR HANDLING @@@
@@ -1107,7 +1107,7 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 
     if ( osl_File_E_None == error )
     {
-        if ( DeleteFile( rtl_uString_getStr( strSysPath ) ) )
+        if ( DeleteFile( SAL_W(rtl_uString_getStr( strSysPath )) ) )
             error = osl_File_E_None;
         else
             error = oslTranslateFileError( GetLastError() );
@@ -1127,8 +1127,8 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPa
 
     if ( osl_File_E_None == error )
     {
-        LPCWSTR src = rtl_uString_getStr( strSysPath );
-        LPCWSTR dst = rtl_uString_getStr( strSysDestPath );
+        LPCWSTR src = SAL_W(rtl_uString_getStr( strSysPath ));
+        LPCWSTR dst = SAL_W(rtl_uString_getStr( strSysDestPath ));
 
         if ( CopyFileW( src, dst, FALSE ) )
             error = osl_File_E_None;
@@ -1154,8 +1154,8 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* strPath, rtl_uString *strDestPa
 
     if ( osl_File_E_None == error )
     {
-        LPCWSTR src = rtl_uString_getStr( strSysPath );
-        LPCWSTR dst = rtl_uString_getStr( strSysDestPath );
+        LPCWSTR src = SAL_W(rtl_uString_getStr( strSysPath ));
+        LPCWSTR dst = SAL_W(rtl_uString_getStr( strSysDestPath ));
 
         if ( MoveFileEx( src, dst, MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING ) )
             error = osl_File_E_None;

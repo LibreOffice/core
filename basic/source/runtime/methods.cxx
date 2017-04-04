@@ -416,7 +416,7 @@ RTLFUNC(CurDir)
     wchar_t pBuffer[ _MAX_PATH ];
     if ( _wgetdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr )
     {
-        rPar.Get(0)->PutString( OUString( pBuffer ) );
+        rPar.Get(0)->PutString( OUString( SAL_U(pBuffer) ) );
     }
     else
     {

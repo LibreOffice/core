@@ -163,7 +163,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
         {
             strAttrs+=L";";
         }
-        strAttrs += pValue.Name.getStr();
+        strAttrs += SAL_W(pValue.Name.getStr());
         strAttrs += L":";
 
         OLECHAR pTemp[2048] = {0};
@@ -499,7 +499,7 @@ STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * tex
     }
 
     SysFreeString(*text);
-    *text = SysAllocString(ouStr.getStr());
+    *text = SysAllocString(SAL_W(ouStr.getStr()));
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -584,7 +584,7 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
     TextSegment segment = GetXInterface()->getTextBeforeIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(ouStr.getStr());
+    *text = SysAllocString(SAL_W(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 
@@ -670,7 +670,7 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
     TextSegment segment = GetXInterface()->getTextBehindIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(ouStr.getStr());
+    *text = SysAllocString(SAL_W(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 
@@ -757,7 +757,7 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
     TextSegment segment = GetXInterface()->getTextAtIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(ouStr.getStr());
+    *text = SysAllocString(SAL_W(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 

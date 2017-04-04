@@ -135,13 +135,13 @@ void VBATest::testMiscOLEStuff()
 
     const int nBufSize = 1024 * 4;
     sal_Unicode sBuf[nBufSize];
-    SQLGetInstalledDriversW( sBuf, nBufSize, nullptr );
+    SQLGetInstalledDriversW( SAL_W(sBuf), nBufSize, nullptr );
 
     const sal_Unicode *pODBCDriverName = sBuf;
     bool bFound = false;
-    for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 ) {
-        if( wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls)" ) == 0 ||
-            wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)" ) == 0 ) {
+    for (; wcslen( SAL_W(pODBCDriverName) ) != 0; pODBCDriverName += wcslen( SAL_W(pODBCDriverName) ) + 1 ) {
+        if( wcscmp( SAL_W(pODBCDriverName), L"Microsoft Excel Driver (*.xls)" ) == 0 ||
+            wcscmp( SAL_W(pODBCDriverName), L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)" ) == 0 ) {
             bFound = true;
             break;
         }

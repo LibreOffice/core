@@ -113,7 +113,7 @@ bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destS
                     wCharValue[strLen-1] = '\0';
 
                     if (isValid)
-                        destString = OUString(wCharValue);
+                        destString = OUString(SAL_U(wCharValue));
 
                 }
                 else
@@ -597,10 +597,10 @@ void WinOpenGLDeviceInfo::GetData()
     }
 
     // chop off DEVICE_KEY_PREFIX
-    maDeviceKey = displayDevice.DeviceKey + ArrayLength(DEVICE_KEY_PREFIX)-1;
+    maDeviceKey = SAL_U(displayDevice.DeviceKey) + ArrayLength(DEVICE_KEY_PREFIX)-1;
 
-    maDeviceID = displayDevice.DeviceID;
-    maDeviceString = displayDevice.DeviceString;
+    maDeviceID = SAL_U(displayDevice.DeviceID);
+    maDeviceString = SAL_U(displayDevice.DeviceString);
 
     if (maDeviceID.isEmpty() &&
         (maDeviceString == "RDPDD Chained DD" ||
@@ -613,7 +613,7 @@ void WinOpenGLDeviceInfo::GetData()
     }
 
     /* create a device information set composed of the current display device */
-    HDEVINFO devinfo = SetupDiGetClassDevsW(nullptr, maDeviceID.getStr(), nullptr,
+    HDEVINFO devinfo = SetupDiGetClassDevsW(nullptr, SAL_W(maDeviceID.getStr()), nullptr,
             DIGCF_PRESENT | DIGCF_PROFILE | DIGCF_ALLCLASSES);
 
     if (devinfo != INVALID_HANDLE_VALUE)
@@ -640,8 +640,8 @@ void WinOpenGLDeviceInfo::GetData()
                         nullptr))
             {
                 OUString  driverKey(aDriverKeyPre);
-                driverKey += value;
-                result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, driverKey.getStr(), 0, KEY_QUERY_VALUE, &key);
+                driverKey += SAL_U(value);
+                result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, SAL_W(driverKey.getStr()), 0, KEY_QUERY_VALUE, &key);
                 if (result == ERROR_SUCCESS)
                 {
                     /* we've found the driver we're looking for */
@@ -650,7 +650,7 @@ void WinOpenGLDeviceInfo::GetData()
                             reinterpret_cast<LPBYTE>(value), &dwcbData);
                     if (result == ERROR_SUCCESS)
                     {
-                        maDriverVersion = OUString(value);
+                        maDriverVersion = OUString(SAL_U(value));
                     }
                     else
                     {
@@ -662,7 +662,7 @@ void WinOpenGLDeviceInfo::GetData()
                             reinterpret_cast<LPBYTE>(value), &dwcbData);
                     if (result == ERROR_SUCCESS)
                     {
-                        maDriverDate = value;
+                        maDriverDate = SAL_U(value);
                     }
                     else
                     {
@@ -729,8 +729,8 @@ void WinOpenGLDeviceInfo::GetData()
                             nullptr))
                 {
                     OUString driverKey2(aDriverKeyPre);
-                    driverKey2 += value;
-                    result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, driverKey2.getStr(), 0, KEY_QUERY_VALUE, &key);
+                    driverKey2 += SAL_U(value);
+                    result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, SAL_W(driverKey2.getStr()), 0, KEY_QUERY_VALUE, &key);
                     if (result == ERROR_SUCCESS)
                     {
                         dwcbData = sizeof(value);
@@ -740,7 +740,7 @@ void WinOpenGLDeviceInfo::GetData()
                         {
                             continue;
                         }
-                        aDeviceID2 = value;
+                        aDeviceID2 = SAL_U(value);
                         OUString aAdapterVendorID2String;
                         OUString aAdapterDeviceID2String;
                         adapterVendorID2 = ParseIDFromDeviceID(aDeviceID2, "VEN_", 4);
@@ -756,7 +756,7 @@ void WinOpenGLDeviceInfo::GetData()
 
                         // If this device is missing driver information, it is unlikely to
                         // be a real display adapter.
-                        if (!GetKeyValue(driverKey2.getStr(), L"InstalledDisplayDrivers",
+                        if (!GetKeyValue(SAL_W(driverKey2.getStr()), L"InstalledDisplayDrivers",
                                         aAdapterDriver2, REG_MULTI_SZ))
                         {
                             RegCloseKey(key);
@@ -770,7 +770,7 @@ void WinOpenGLDeviceInfo::GetData()
                             RegCloseKey(key);
                             continue;
                         }
-                        aDriverVersion2 = value;
+                        aDriverVersion2 = SAL_U(value);
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"DriverDate", nullptr, nullptr,
                                 reinterpret_cast<LPBYTE>(value), &dwcbData);
@@ -779,7 +779,7 @@ void WinOpenGLDeviceInfo::GetData()
                             RegCloseKey(key);
                             continue;
                         }
-                        aDriverDate2 = value;
+                        aDriverDate2 = SAL_U(value);
                         dwcbData = sizeof(value);
                         result = RegQueryValueExW(key, L"Device Description", nullptr,
                                 nullptr, reinterpret_cast<LPBYTE>(value), &dwcbData);
@@ -793,7 +793,7 @@ void WinOpenGLDeviceInfo::GetData()
                         if (result == ERROR_SUCCESS)
                         {
                             mbHasDualGPU = true;
-                            maDeviceString2 = value;
+                            maDeviceString2 = SAL_U(value);
                             maDeviceID2 = aDeviceID2;
                             maDeviceKey2 = driverKey2;
                             maDriverVersion2 = aDriverVersion2;

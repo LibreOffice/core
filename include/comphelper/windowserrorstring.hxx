@@ -35,7 +35,7 @@ inline OUString WindowsErrorString(DWORD nErrorCode)
     if (pMsgBuf[wcslen(pMsgBuf)-1] == '\r')
         pMsgBuf[wcslen(pMsgBuf)-1] = '\0';
 
-    OUString result(pMsgBuf);
+    OUString result(SAL_U(pMsgBuf));
 
     LocalFree(pMsgBuf);
 

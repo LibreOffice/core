@@ -425,7 +425,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
                     hr = WriteFmtUserTypeStg( pStg,
                                             cf,                         // ???
-                                            const_cast<sal_Unicode *>(aCurType.getStr()) );
+                                            SAL_W(const_cast<sal_Unicode *>(aCurType.getStr())) );
 
                     if ( hr == S_OK )
                     {
@@ -753,7 +753,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
                             cf,                         // ???
-                            const_cast<sal_Unicode *>(aCurType.getStr()) );
+                            SAL_W(const_cast<sal_Unicode *>(aCurType.getStr())) );
     if ( FAILED( hr ) ) return E_FAIL;
 
     hr = m_pMasterStorage->SetClass( m_guid );
@@ -804,7 +804,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
             cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
                                     cf,                         // ???
-                                    const_cast<sal_Unicode *>(aCurType.getStr()) );
+                                    SAL_W(const_cast<sal_Unicode *>(aCurType.getStr())) );
 
             if ( SUCCEEDED( hr ) )
             {
