@@ -231,6 +231,7 @@ public:
     void testTdf104492();
     void testTdf105417();
     void testTdf105625();
+    void testTdf106736();
     void testMsWordCompTrailingBlanks();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -354,6 +355,7 @@ public:
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
+    CPPUNIT_TEST(testTdf106736);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST_SUITE_END();
 
@@ -4485,6 +4487,16 @@ void SwUiWriterTest::testTdf105625()
     pWrtShell->DelLeft();
     sal_Int32 nMarksAfter = pMarksAccess->getAllMarksCount();
     CPPUNIT_ASSERT_EQUAL(nMarksBefore, nMarksAfter + 1);
+}
+
+void SwUiWriterTest::testTdf106736()
+{
+    createDoc("tdf106736-grid.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nWidth = getXPath(pXmlDoc, "(//Text[@nType='POR_TABLEFT'])[1]", "nWidth").toInt32();
+    // In tdf106736, width of tab overflow so that it got
+    // width value around 9200, expected value is around 103
+    CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~103", nWidth < 150);
 }
 
 void SwUiWriterTest::testMsWordCompTrailingBlanks()
