@@ -928,14 +928,12 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 
 void SfxObjectShell::SetActivateEvent_Impl(SfxEventHintId nId )
 {
-    if ( GetFactory().GetFlags() & SfxObjectShellFlags::HASOPENDOC )
-        pImpl->nEventId = nId;
+    pImpl->nEventId = nId;
 }
 
 void SfxObjectShell::PrepareReload( )
-/*  [Description]
-
-    Is called before the Reload and gives the opportunity to clear any caches.
+/*
+  Is called before the Reload and gives the opportunity to clear any caches.
 */
 {
 }

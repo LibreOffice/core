@@ -40,14 +40,13 @@ namespace vcl { class Region; }
 
 enum class InitOutDevFlags
 {
+    NONE         = 0x0000,
     FONT         = 0x0001,
     COLORS       = 0x0002,
-    RASTEROP     = 0x0004,
-    CLIPREGION   = 0x0008,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<InitOutDevFlags> : is_typed_flags<InitOutDevFlags, 0x0f> {};
+    template<> struct typed_flags<InitOutDevFlags> : is_typed_flags<InitOutDevFlags, 0x03> {};
 }
 
 
@@ -70,7 +69,7 @@ private:
     Color           maLineColor;
     Color           maFillColor;
     RasterOp        meRasterOp;
-    vcl::Region*         mpClipRegion;
+    vcl::Region*    mpClipRegion;
 
     void initAttrs();
 

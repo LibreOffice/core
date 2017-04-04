@@ -119,16 +119,15 @@ namespace com { namespace sun { namespace star {
 
 enum class SfxObjectShellFlags
 {
-    HASOPENDOC      = 0x01L,
-    HASMENU         = 0x04L,
-    DONTCLOSE       = 0x10L,
-    NODOCINFO       = 0x20L,
-    STD_NORMAL      = HASOPENDOC,
+    STD_NORMAL      = 0x0000000,
+    HASMENU         = 0x0000004,
+    DONTCLOSE       = 0x0000010,
+    NODOCINFO       = 0x0000020,
     UNDEFINED       = 0xf000000
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SfxObjectShellFlags> : is_typed_flags<SfxObjectShellFlags, 0xf000035> {};
+    template<> struct typed_flags<SfxObjectShellFlags> : is_typed_flags<SfxObjectShellFlags, 0xf000034> {};
 }
 
 #define SFX_TITLE_TITLE    0

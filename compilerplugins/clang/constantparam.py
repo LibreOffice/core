@@ -4,7 +4,7 @@ import sys
 import re
 import io
 
-callDict = dict()
+callDict = dict() # callInfo tuple -> callValue
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
 # so I need to substitute them to ensure we can match correctly.
@@ -38,7 +38,7 @@ for callInfo, callValues in callDict.iteritems():
     sourceLoc = callInfo[4]
     functionSig = callInfo[0] + " " + callInfo[1]
 
-    # try and ignore setter methods
+    # try to ignore setter methods
     if ("," not in nameAndParams) and (("::set" in nameAndParams) or ("::Set" in nameAndParams)):
         continue
     # ignore code that follows a common pattern
@@ -67,4 +67,67 @@ with open("loplugin.constantparam.report", "wt") as f:
         f.write("    " + v[1] + "\n")
         f.write("    " + v[2] + "\n")
 
+# -------------------------------------------------------------
+# Now a fun set of heuristics to look for methods that
+# take bitmask parameters where one or more of the bits in the
+# bitmask is always one or always zero
 
+# integer to hext str
+def hex(i):
+    return "0x%x" % i
+# I can't use python's ~ operator, because that produces negative numbers
+def negate(i):
+    return (1 << 32) - 1 - i
+
+tmp2list = list()
+for callInfo, callValues in callDict.iteritems():
+    nameAndParams = callInfo[1]
+    if len(callValues) < 2:
+        continue
+    # we are only interested in enum parameters
+    if not "enum" in callInfo[3]: continue
+    if not "Flag" in callInfo[3] and not "flag" in callInfo[3] and not "Bit" in callInfo[3] and not "State" in callInfo[3]: continue
+    # try to ignore setter methods
+    if ("," not in nameAndParams) and (("::set" in nameAndParams) or ("::Set" in nameAndParams)):
+        continue
+
+    setBits = 0
+    clearBits = 0
+    continue_flag = False
+    first = True
+    for callValue in callValues:
+        if "unknown" == callValue or not callValue.isdigit():
+            continue_flag = True
+            break
+        if first:
+            setBits = int(callValue)
+            clearBits = negate(int(callValue))
+            first = False
+        else:
+            setBits = setBits & int(callValue)
+            clearBits = clearBits & negate(int(callValue))
+
+    # estimate allBits by using the highest bit we have seen
+    # TODO dump more precise information about the allBits values of enums
+    allBits = (1 << setBits.bit_length()) - 1
+    clearBits = clearBits & allBits
+    if continue_flag or (setBits == 0 and clearBits == 0): continue
+
+    sourceLoc = callInfo[4]
+    functionSig = callInfo[0] + " " + callInfo[1]
+
+    v2 = callInfo[3] + " " + callInfo[2]
+    if setBits != 0: v2 += " setBits=" + hex(setBits)
+    if clearBits != 0: v2 += " clearBits=" + hex(clearBits)
+    tmp2list.append((sourceLoc, functionSig, v2))
+
+
+# sort results by filename:lineno
+tmp2list.sort(key=lambda v: natural_sort_key(v[0]))
+
+# print out the results
+with open("loplugin.constantparam.report-bitmask-params", "wt") as f:
+    for v in tmp2list:
+        f.write(v[0] + "\n")
+        f.write("    " + v[1] + "\n")
+        f.write("    " + v[2] + "\n")

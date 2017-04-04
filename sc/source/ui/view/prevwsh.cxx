@@ -148,7 +148,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
-    SfxViewShell( pViewFrame, SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::HAS_PRINTOPTIONS ),
+    SfxViewShell( pViewFrame, SfxViewShellFlags::HAS_PRINTOPTIONS ),
     pDocShell( static_cast<ScDocShell*>(pViewFrame->GetObjectShell()) ),
     mpFrameWindow(nullptr),
     nSourceDesignMode( TRISTATE_INDET ),

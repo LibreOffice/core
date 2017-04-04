@@ -371,9 +371,8 @@ void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
 
     // Add/SaveToBookmark at BASIC-IDE, QUERY-EDITOR etc. disable
     SfxObjectShell *pDocSh = GetObjectShell();
-    bool bPseudo = pDocSh && !( pDocSh->GetFactory().GetFlags() & SfxObjectShellFlags::HASOPENDOC );
     bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
-    if ( !pDocSh || bPseudo || bEmbedded || !pDocSh->HasName() )
+    if ( !pDocSh || bEmbedded || !pDocSh->HasName() )
         rItemSet.DisableItem( SID_CREATELINK );
 }
 

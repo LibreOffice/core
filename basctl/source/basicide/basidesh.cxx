@@ -150,7 +150,7 @@ void basctl_Shell::InitInterface_Impl()
 unsigned Shell::nShellCount = 0;
 
 Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
-    SfxViewShell( pFrame_, SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::NO_NEWWINDOW ),
+    SfxViewShell( pFrame_, SfxViewShellFlags::NO_NEWWINDOW ),
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
     aHScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG )) ),
     aVScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG )) ),

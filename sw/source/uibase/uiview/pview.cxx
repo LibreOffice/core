@@ -100,7 +100,7 @@ void SwPagePreview::InitInterface_Impl()
 }
 
 
-#define SWVIEWFLAGS ( SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::HAS_PRINTOPTIONS )
+#define SWVIEWFLAGS SfxViewShellFlags::HAS_PRINTOPTIONS
 
 #define MIN_PREVIEW_ZOOM 25
 #define MAX_PREVIEW_ZOOM 600
