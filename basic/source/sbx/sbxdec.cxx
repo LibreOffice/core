@@ -147,7 +147,7 @@ void SbxDecimal::setChar( sal_Unicode val )
 
 void SbxDecimal::setByte( sal_uInt8 val )
 {
-    VarDecFromUI1( (sal_uInt8)val, &maDec );
+    VarDecFromUI1( val, &maDec );
 }
 
 void SbxDecimal::setShort( sal_Int16 val )
@@ -162,7 +162,7 @@ void SbxDecimal::setLong( sal_Int32 val )
 
 void SbxDecimal::setUShort( sal_uInt16 val )
 {
-    VarDecFromUI2( (sal_uInt16)val, &maDec );
+    VarDecFromUI2( val, &maDec );
 }
 
 void SbxDecimal::setULong( sal_uInt32 val )

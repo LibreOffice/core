@@ -517,7 +517,7 @@ void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
     mi.cbSize = sizeof(mi);
     mi.fMask = MIIM_DATA;
     if(GetMenuItemInfoW(hOrig,origPos,TRUE,&mi))
-        SetMenuItemInfoW(hDest,(WORD)destPos,TRUE,&mi);
+        SetMenuItemInfoW(hDest,destPos,TRUE,&mi);
 }
 
 BOOL DocumentHolder::InPlaceMenuCreate()
