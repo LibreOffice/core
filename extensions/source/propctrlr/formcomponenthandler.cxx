@@ -877,17 +877,13 @@ namespace pcr
                 break;
 
             case PROPERTY_ID_LISTSOURCE:
-                // no cursor source if no Base is installed. #124939#
-                // This fix is not intended to appear on the main trunk. If you find it there,
-                // please tell me! frank.schoenheit@sun.com
+                // no cursor source if no Base is installed.
                 if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
                     const_cast< FormComponentPropertyHandler* >( this )->m_bHaveListSource = true;
                 break;
 
             case PROPERTY_ID_COMMAND:
-                // no cursor source if no Base is installed. #124939#
-                // This fix is not intended to appear on the main trunk. If you find it there,
-                // please tell me! frank.schoenheit@sun.com
+                // no cursor source if no Base is installed.
                 if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
                     const_cast< FormComponentPropertyHandler* >( this )->m_bHaveCommand = true;
                 break;
@@ -2272,9 +2268,7 @@ namespace pcr
                 return true;
         }
 
-        // no data properties if no Base is installed. #124939#
-        // This fix is not intended to appear on the main trunk. If you find it there,
-        // please tell me! frank.schoenheit@sun.com
+        // no data properties if no Base is installed.
         if ( ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0 )
             if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
                 return true;
