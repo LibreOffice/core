@@ -1585,13 +1585,13 @@ ScopedFont::~ScopedFont()
 class ScopedTrueTypeFont
 {
 public:
-    inline ScopedTrueTypeFont(): m_pFont(nullptr) {}
+    ScopedTrueTypeFont(): m_pFont(nullptr) {}
 
     ~ScopedTrueTypeFont();
 
     int open(void const * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum);
 
-    inline TrueTypeFont * get() const { return m_pFont; }
+    TrueTypeFont * get() const { return m_pFont; }
 
 private:
     TrueTypeFont * m_pFont;

@@ -217,7 +217,7 @@ public:
         SalGraphics &rGraphics,
         HDC hDC) override;
 
-    inline bool BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 0, 0)) {
+    bool BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 0, 0)) {
         RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
         return SUCCEEDED(mpRT->BindDC(hDC, &rc));
     }
@@ -230,12 +230,12 @@ public:
     IDWriteFontFace   * GetFontFace() const { return mpFontFace; }
     float               GetEmHeight() const { return mlfEmHeight; }
 
-    inline HRESULT CreateRenderTarget() {
+    HRESULT CreateRenderTarget() {
         if (mpRT) mpRT->Release(); mpRT = nullptr;
         return mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT);
     }
 
-    inline bool Ready() const { return mpGdiInterop && mpRT; }
+    bool Ready() const { return mpGdiInterop && mpRT; }
 
 private:
     static void CleanupModules();

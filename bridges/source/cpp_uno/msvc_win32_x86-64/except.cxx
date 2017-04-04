@@ -330,7 +330,7 @@ class type_info_
 public:
     virtual ~type_info_() throw ();
 
-    inline type_info_( void * m_data, const char * m_d_name ) throw ()
+    type_info_( void * m_data, const char * m_d_name ) throw ()
         : _m_data( m_data )
         { ::strcpy( _m_d_name, m_d_name ); } // #100211# - checked
 
@@ -352,7 +352,7 @@ private:
 
 public:
 
-    inline type_info_descriptor(void * m_data, const char * m_d_name) throw ()
+    type_info_descriptor(void * m_data, const char * m_d_name) throw ()
         : info(m_data, m_d_name)
     {
         type_info_size = sizeof(type_info_) + strlen(m_d_name);
@@ -497,7 +497,7 @@ struct ExceptionType
     type_info_   type_info;
 
 
-    inline ExceptionType(
+    ExceptionType(
         unsigned char * pCode,
         sal_uInt64 pCodeBase,
         typelib_TypeDescription * pTD ) throw ()

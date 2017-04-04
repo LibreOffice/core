@@ -79,7 +79,7 @@ namespace connectivity
             WpADOView(ADOView* pInt=nullptr)   :   WpOLEBase<ADOView>(pInt){}
             WpADOView(const WpADOView& rhs) : WpOLEBase<ADOView>(rhs) {}
 
-            inline WpADOView& operator=(const WpADOView& rhs)
+            WpADOView& operator=(const WpADOView& rhs)
                 {WpOLEBase<ADOView>::operator=(rhs); return *this;}
 
             OUString get_Name() const;
@@ -93,7 +93,7 @@ namespace connectivity
             WpADOGroup(ADOGroup* pInt=nullptr) :   WpOLEBase<ADOGroup>(pInt){}
             WpADOGroup(const WpADOGroup& rhs) : WpOLEBase<ADOGroup>(rhs) {}
 
-            inline WpADOGroup& operator=(const WpADOGroup& rhs)
+            WpADOGroup& operator=(const WpADOGroup& rhs)
                 {WpOLEBase<ADOGroup>::operator=(rhs); return *this;}
 
             void Create();
@@ -117,7 +117,7 @@ namespace connectivity
             WpADOUser(_ADOUser* pInt=nullptr)  :   WpOLEBase<_ADOUser>(pInt){}
             WpADOUser(const WpADOUser& rhs) : WpOLEBase<_ADOUser>(rhs) {}
 
-            inline WpADOUser& operator=(const WpADOUser& rhs)
+            WpADOUser& operator=(const WpADOUser& rhs)
                 {WpOLEBase<_ADOUser>::operator=(rhs); return *this;}
 
             void Create();

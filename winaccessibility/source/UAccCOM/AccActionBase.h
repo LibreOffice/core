@@ -73,7 +73,7 @@ protected:
     css::uno::Reference<css::accessibility::XAccessibleAction> pRXAct;
 
 private:
-    inline css::accessibility::XAccessibleAction* GetXInterface()
+    css::accessibility::XAccessibleAction* GetXInterface()
     {
         return pRXAct.get();
     }

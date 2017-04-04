@@ -33,7 +33,7 @@ namespace connectivity
             WpADOTable(_ADOTable* pInt=nullptr)    :   WpOLEBase<_ADOTable>(pInt){}
             WpADOTable(const WpADOTable& rhs) : WpOLEBase<_ADOTable>(rhs) {}
 
-            inline WpADOTable& operator=(const WpADOTable& rhs)
+            WpADOTable& operator=(const WpADOTable& rhs)
                 {WpOLEBase<_ADOTable>::operator=(rhs); return *this;}
 
             void Create();

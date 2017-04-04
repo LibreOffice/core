@@ -59,7 +59,7 @@ protected:
 
     css::uno::Reference<css::accessibility::XAccessibleComponent> pRXComp;
 
-    inline css::accessibility::XAccessibleComponent* GetXInterface()
+    css::accessibility::XAccessibleComponent* GetXInterface()
     {
         return pRXComp.get();
     }

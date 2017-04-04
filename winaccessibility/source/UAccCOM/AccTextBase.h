@@ -103,7 +103,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessibleText> pRXText;
 
-    inline css::accessibility::XAccessibleText* GetXInterface()
+    css::accessibility::XAccessibleText* GetXInterface()
     {
         return pRXText.get();
     }

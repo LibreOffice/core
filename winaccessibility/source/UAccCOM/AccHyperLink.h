@@ -127,7 +127,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessibleHyperlink> pRXLink;
 
-    inline css::accessibility::XAccessibleHyperlink* GetXInterface()
+    css::accessibility::XAccessibleHyperlink* GetXInterface()
     {
         return pRXLink.get();
     }

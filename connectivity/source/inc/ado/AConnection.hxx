@@ -38,7 +38,7 @@ namespace connectivity
             ::connectivity::OTypeInfo       aSimpleType;    // the general type info
             DataTypeEnum                    eType;
 
-            inline OUString getDBName() const { return aSimpleType.aTypeName; }
+            OUString getDBName() const { return aSimpleType.aTypeName; }
         };
 
         class WpADOConnection;
