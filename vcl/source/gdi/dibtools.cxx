@@ -946,7 +946,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     const BitmapPalette* pPal = &aPalette;
     //ofz#948 match the surrounding logic of case TransparentType::Bitmap of
     //ReadDIBBitmapEx but do it while reading for performance
-    const bool bIsAlpha = (nBitCount == 8 && aPalette.IsGreyPalette());
+    const bool bIsAlpha = (nBitCount == 8 && !!aPalette && aPalette.IsGreyPalette());
     const bool bForceToMonoWhileReading = (bIsMask && !bIsAlpha && nBitCount != 1);
     if (bForceToMonoWhileReading)
     {
