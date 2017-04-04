@@ -50,7 +50,7 @@ interface Tables
 
 interface BaseSelection
 {
-    // Einfuegen von Objekten {
+    // insert objects {
 
     SID_INSERT_GRAPHIC          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_FRAME            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; Export = FALSE; ]
@@ -131,7 +131,7 @@ interface BaseSelection
     SID_INSERT_DIAGRAM_FROM_FILE [ ExecMethod = ExecDrawIns; StateMethod = GetDrawState; ]
     SID_FM_CREATE_FIELDCONTROL [ ExecMethod = ExecDrawIns ; ]
 
-    // } Einfuegen von Objekten
+    // } insert objects
 
 }
 
@@ -159,7 +159,7 @@ interface TableEditView
         StateMethod = GetSaveState ;
         Export = FALSE ;
     ]
-     // hat zwar ein SW im Namen, wird aber im Calc auch gebraucht
+    // has indeed a SW in his name but is also used in Calc
     SID_CREATE_SW_DRAWVIEW [ ExecMethod = Execute; ]
     SID_ATTR_ZOOM       [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_ATTR_ZOOMSLIDER [ ExecMethod = Execute; StateMethod = GetState; ]
@@ -186,11 +186,11 @@ interface TableEditView
     SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; ]
 
 
-         // Suchen/Eersetzen:
+    // search/replace
     FID_SEARCH_NOW      [ ExecMethod = ExecSearch; StateMethod = NoState;  ]
     SID_SEARCH_ITEM     [ ExecMethod = ExecSearch;  StateMethod = GetState; ]
     SID_SEARCH_OPTIONS  [ ExecMethod = NoExec;      StateMethod = GetState; ]
-     // Suchen/Ersetzen von Basic aus:
+    // search/replace from Basic:
     FID_SEARCH          [ ExecMethod = ExecSearch; ]
     FID_REPLACE         [ ExecMethod = ExecSearch; ]
     FID_SEARCH_ALL      [ ExecMethod = ExecSearch; ]

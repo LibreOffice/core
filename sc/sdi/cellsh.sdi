@@ -19,7 +19,7 @@
 
 interface CellSelection
 {
-    // Slot's die in der DrawShell disabled werden. {
+    // slots which are disabled in the DrawShell {
     FID_DEFINE_NAME             [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_ADD_NAME                [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DEFINE_COLROWNAMERANGES [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
@@ -38,7 +38,7 @@ interface CellSelection
     // no Exec/StateMethod needed, but SfxDispatcher complains if the slot is not included in the shell
     SID_VALIDITY_REFERENCE []
 
-    // Datenbank-Operationen {
+    // database operations {
     SID_SORT_ASCENDING      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SORT_DESCENDING     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_REIMPORT_DATA       [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
@@ -60,7 +60,7 @@ interface CellSelection
     FID_VALIDATION          [ ExecMethod = ExecuteDB; StateMethod = GetBlockState; ]
     SID_TEXT_TO_COLUMNS     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
 
-    // } Datenbank-Operationen
+    // } database operations
 
 
     SID_RANGE_ADDRESS   [ StateMethod = GetState; ]
@@ -403,7 +403,7 @@ interface CellMovement
     SID_ATTR_POSITION   [ StateMethod = GetState; ]
     SID_TABLE_CELL
     [
-         // "Tabellenzelle" soll nicht im Anpassen-Dialog auftauchen:
+        // "table cell" should not appear in change dialog
         StateMethod = GetState ;
     ]
     SID_DATA_SELECT         [ ExecMethod = Execute; StateMethod = GetState; ]
