@@ -2527,8 +2527,8 @@ void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
     }
 }
 
-VclVPaned::VclVPaned(vcl::Window *pParent, WinBits nStyle)
-    : VclContainer(pParent, nStyle)
+VclVPaned::VclVPaned(vcl::Window *pParent)
+    : VclContainer(pParent, WB_HIDE | WB_CLIPCHILDREN)
     , m_pSplitter(VclPtr<Splitter>::Create(this, WB_VSCROLL))
     , m_nPosition(-1)
 {

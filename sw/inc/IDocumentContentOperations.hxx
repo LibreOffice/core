@@ -137,7 +137,7 @@ public:
 
     /** Move a range.
     */
-    virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags) = 0;
+    virtual bool MoveAndJoin(SwPaM&, SwPosition&) = 0;
 
     /** Overwrite string in an existing text node.
     */

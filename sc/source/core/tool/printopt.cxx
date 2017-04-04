@@ -23,6 +23,7 @@
 
 #include "printopt.hxx"
 #include "miscuno.hxx"
+#include "sc.hrc"
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -66,8 +67,8 @@ bool ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
         && bForceBreaks == rOpt.bForceBreaks;
 }
 
-ScTpPrintItem::ScTpPrintItem( sal_uInt16 nWhichP, const ScPrintOptions& rOpt ) :
-    SfxPoolItem ( nWhichP ),
+ScTpPrintItem::ScTpPrintItem( const ScPrintOptions& rOpt ) :
+    SfxPoolItem ( SID_SCPRINTOPTIONS ),
     theOptions  ( rOpt )
 {
 }

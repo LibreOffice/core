@@ -93,7 +93,7 @@ struct ConnectionModel
 class Connection : public WorkbookHelper
 {
 public:
-    explicit            Connection( const WorkbookHelper& rHelper, sal_Int32 nConnId = -1 );
+    explicit            Connection( const WorkbookHelper& rHelper );
 
     /** Imports connection settings from the connection element. */
     void                importConnection( const AttributeList& rAttribs );

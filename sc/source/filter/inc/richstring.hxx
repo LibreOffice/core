@@ -85,8 +85,7 @@ struct FontPortionModel
     sal_Int32           mnFontId;       /// Font identifier for the next characters.
 
     explicit FontPortionModel() : mnPos( 0 ), mnFontId( -1 ) {}
-    explicit FontPortionModel( sal_Int32 nPos, sal_Int32 nFontId ) :
-                            mnPos( nPos ), mnFontId( nFontId ) {}
+    explicit FontPortionModel( sal_Int32 nPos ) : mnPos( nPos ), mnFontId( -1 ) {}
 
     void                read( SequenceInputStream& rStrm );
 };
@@ -232,12 +231,10 @@ public:
                             OUString& orString,
                             const oox::xls::Font* pFirstPortionFont ) const;
 
-    /** Converts the string and writes it into the passed XText.
+    /** Converts the string and writes it into the passed XText, replace old contents of the text object,.
         @param rxText  The XText interface of the target object.
-        @param bReplaceOld  True = replace old contents of the text object. */
-    void                convert(
-                            const css::uno::Reference< css::text::XText >& rxText,
-                            bool bReplaceOld ) const;
+     */
+    void                convert( const css::uno::Reference< css::text::XText >& rxText ) const;
     ::EditTextObject*   convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont ) const;
 
 private:

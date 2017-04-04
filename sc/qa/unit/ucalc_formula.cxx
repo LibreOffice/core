@@ -3507,9 +3507,9 @@ void Test::testMultipleOperations()
 
     // Set multiple operations range.
     ScTabOpParam aParam;
-    aParam.aRefFormulaCell = ScRefAddress(1,0,0,false,false,false);
+    aParam.aRefFormulaCell = ScRefAddress(1,0,0);
     aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
-    aParam.aRefColCell = ScRefAddress(0,0,0,false,false,false);
+    aParam.aRefColCell = ScRefAddress(0,0,0);
     ScMarkData aMark;
     aMark.SetMarkArea(ScRange(0,2,0,1,4,0)); // Select A3:B5.
     m_pDoc->InsertTableOp(aParam, 0, 2, 1, 4, aMark);

@@ -89,7 +89,7 @@ private:
     SAL_DLLPRIVATE void ImplUpdate();
     SAL_DLLPRIVATE void ImplSetWindowSize( long nDelta );
     SAL_DLLPRIVATE void ImplSplitMousePos( Point& rMousePos );
-    SAL_DLLPRIVATE void ImplGetButtonRect( tools::Rectangle& rRect, long nEx, bool bTest ) const;
+    SAL_DLLPRIVATE void ImplGetButtonRect( tools::Rectangle& rRect, bool bTest ) const;
     SAL_DLLPRIVATE void ImplGetFadeInRect( tools::Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplGetFadeOutRect( tools::Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplDrawFadeIn(vcl::RenderContext& rRenderContext);

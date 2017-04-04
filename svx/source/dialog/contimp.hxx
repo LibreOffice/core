@@ -39,7 +39,7 @@ protected:
 
 public:
 
-    SvxContourDlgItem( sal_uInt16 nId, SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
+    SvxContourDlgItem( SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
 };
 
 class SvxSuperContourDlg : public SvxContourDlg

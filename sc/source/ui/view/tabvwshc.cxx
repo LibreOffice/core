@@ -308,8 +308,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
             ScViewData&   rViewData  = GetViewData();
             ScRefAddress  aCurPos   ( rViewData.GetCurX(),
                                       rViewData.GetCurY(),
-                                      rViewData.GetTabNo(),
-                                      false, false, false );
+                                      rViewData.GetTabNo());
 
             pResult = VclPtr<ScTabOpDlg>::Create( pB, pCW, pParent, rViewData.GetDocument(), aCurPos );
         }

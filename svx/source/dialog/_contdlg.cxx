@@ -48,8 +48,8 @@
 
 SFX_IMPL_FLOATINGWINDOW_WITHID( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
-SvxContourDlgItem::SvxContourDlgItem( sal_uInt16 _nId, SvxSuperContourDlg& rContourDlg, SfxBindings& rBindings ) :
-            SfxControllerItem   ( _nId, rBindings ),
+SvxContourDlgItem::SvxContourDlgItem( SvxSuperContourDlg& rContourDlg, SfxBindings& rBindings ) :
+            SfxControllerItem   ( SID_CONTOUR_EXEC, rBindings ),
             rDlg                ( rContourDlg )
 {
 }
@@ -217,7 +217,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
         aCreateIdle         ( "SvxSuperContourDlg CreateIdle" ),
         pUpdateEditingObject( nullptr ),
         pCheckObj           ( nullptr ),
-        aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
+        aContourItem        ( *this, *_pBindings ),
         nGrfChanged         ( 0UL ),
         bExecState          ( false ),
         bUpdateGraphicLinked( false ),

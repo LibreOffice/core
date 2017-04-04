@@ -15,6 +15,7 @@
 #include "miscuno.hxx"
 #include "global.hxx"
 #include "formulagroup.hxx"
+#include "sc.hrc"
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -147,8 +148,8 @@ bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
     return !(operator==(rOpt));
 }
 
-ScTpFormulaItem::ScTpFormulaItem( sal_uInt16 nWhichP, const ScFormulaOptions& rOpt ) :
-    SfxPoolItem ( nWhichP ),
+ScTpFormulaItem::ScTpFormulaItem( const ScFormulaOptions& rOpt ) :
+    SfxPoolItem ( SID_SCFORMULAOPTIONS ),
     theOptions  ( rOpt )
 {
 }

@@ -119,15 +119,15 @@ protected:
 
     OUString* MakeTypeString(ScChangeActionType eType);
 
-    SvTreeListEntry* InsertChangeAction(
+    SvTreeListEntry* AppendChangeAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,
         SvTreeListEntry* pParent=nullptr,bool bDelMaster = false,
-        bool bDisabled = false,sal_uLong nPos = TREELIST_APPEND);
+        bool bDisabled = false);
 
-    SvTreeListEntry* InsertFilteredAction(
+    SvTreeListEntry* AppendFilteredAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,
         SvTreeListEntry* pParent = nullptr,bool bDelMaster = false,
-        bool bDisabled = false, sal_uLong nPos = TREELIST_APPEND);
+        bool bDisabled = false);
 
     SvTreeListEntry*    InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,
                                               SvTreeListEntry* pParent,sal_uLong nSpecial);

@@ -38,7 +38,7 @@ void ENTRY_STRUCT::Destroy()
 RscBaseCont::RscBaseCont( Atom nId, RESOURCE_TYPE nTypeId,
                           bool bNoIdent )
     : RscTop(nId, nTypeId, nullptr)
-    , pTypeClass(nullptr), pTypeClass1(nullptr)
+    , pTypeClass(nullptr)
     , bNoId(bNoIdent), nOffInstData(RscTop::Size())
     , nSize(nOffInstData + ALIGNED_SIZE(sizeof(RscBaseContInst)))
 
@@ -176,17 +176,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
     {
         if( !pCreateClass->InHierarchy( pTypeClass ) )
         {
-            if( pTypeClass1 )
-            {
-                if( !pCreateClass->InHierarchy( pTypeClass1 ) )
-                {
-                    return ERR_CONT_INVALIDTYPE;
-                }
-            }
-            else
-            {
-                return ERR_CONT_INVALIDTYPE;
-            }
+             return ERR_CONT_INVALIDTYPE;
         }
     }
     else
@@ -357,7 +347,7 @@ ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
         {
             aError.Clear();
             DeletePos( rInst, pClassData->nEntries -1 );
-            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = GetElement( rInst, RscId(), nullptr, RSCINST(), &aTmpI );
             aError = aTmpI.pClass->GetString( aTmpI, &pTmpStr );
             if( aError.IsOk() )
                 aError = aTmpI.pClass->SetString( aTmpI, pStr );
@@ -393,7 +383,7 @@ ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue )
         {
             aError.Clear();
             DeletePos( rInst, pClassData->nEntries -1 );
-            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = GetElement( rInst, RscId(), nullptr, RSCINST(), &aTmpI );
             aError = aTmpI.pClass->GetNumber( aTmpI, &lNumber );
             if( aError.IsOk() )
                 aError = aTmpI.pClass->SetNumber( aTmpI, lValue );
@@ -429,7 +419,7 @@ ERRTYPE RscBaseCont::SetBool( const RSCINST & rInst,
         {
             aError.Clear();
             DeletePos( rInst, pClassData->nEntries -1 );
-            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = GetElement( rInst, RscId(), nullptr, RSCINST(), &aTmpI );
             aError = aTmpI.pClass->GetBool( aTmpI, &bBool );
             if( aError.IsOk() )
                 aError = aTmpI.pClass->SetBool( aTmpI, bValue );
@@ -467,7 +457,7 @@ ERRTYPE RscBaseCont::SetConst( const RSCINST & rInst,
         {
             aError.Clear();
             DeletePos( rInst, pClassData->nEntries -1 );
-            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = GetElement( rInst, RscId(), nullptr, RSCINST(), &aTmpI );
             aError = aTmpI.pClass->GetConst( aTmpI, &nConst );
             if( aError.IsOk() )
                 aError = aTmpI.pClass->SetConst( aTmpI, nValueId, lValue );
@@ -503,7 +493,7 @@ ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId )
         {
             aError.Clear();
             DeletePos( rInst, pClassData->nEntries -1 );
-            aError = GetElement( rInst, RscId(), pTypeClass1, RSCINST(), &aTmpI );
+            aError = GetElement( rInst, RscId(), nullptr, RSCINST(), &aTmpI );
             aError = aTmpI.pClass->GetRef( aTmpI, &aId );
             if( aError.IsOk() )
                 aError = aTmpI.pClass->SetNumber( aTmpI, rRefId.GetNumber() );

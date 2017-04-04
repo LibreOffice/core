@@ -776,10 +776,9 @@ public:
     ScRefAddress() :
         bRelCol(false), bRelRow(false), bRelTab(false)
     {}
-    ScRefAddress( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                         bool bRelColP, bool bRelRowP, bool bRelTabP ) :
+    ScRefAddress( SCCOL nCol, SCROW nRow, SCTAB nTab ) :
         aAdr(nCol, nRow, nTab),
-        bRelCol(bRelColP), bRelRow(bRelRowP), bRelTab(bRelTabP)
+        bRelCol(false), bRelRow(false), bRelTab(false)
     {}
     ScRefAddress( const ScRefAddress& rRef ) :
         aAdr(rRef.aAdr), bRelCol(rRef.bRelCol), bRelRow(rRef.bRelRow),

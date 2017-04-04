@@ -41,7 +41,6 @@ class RscBaseCont : public RscTop
 {
 protected:
     RscTop *        pTypeClass; // type of entries
-    RscTop *        pTypeClass1;// two different types may exist
     bool            bNoId;      // whether there is no identifier
     const sal_uInt32 nOffInstData;// offset of own instance data
     const sal_uInt32 nSize;      // size of this class and super classes instance data
@@ -58,10 +57,9 @@ public:
                                  bool bNoId );
                     virtual ~RscBaseCont() override;
     virtual RSCCLASS_TYPE   GetClassType() const override;
-    void            SetTypeClass( RscTop * pClass, RscTop * pClass1 = nullptr )
+    void            SetTypeClass( RscTop * pClass )
                         {
                             pTypeClass = pClass;
-                            pTypeClass1 = pClass1;
                         }
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     void            Destroy( const RSCINST & rInst ) override;

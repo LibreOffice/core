@@ -2811,7 +2811,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     return rOStm;
 }
 
-bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, sal_uInt32 nMaximumExtent, BmpConversion eColorConversion, BmpScaleFlag nScaleFlag) const
+bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConversion, BmpScaleFlag nScaleFlag) const
 {
     // initialization seems to be complicated but is used to avoid rounding errors
     ScopedVclPtrInstance< VirtualDevice > aVDev;
@@ -2820,6 +2820,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, sal_uInt32 nMaximumExtent
     const Point     aBRPix( aVDev->LogicToPixel( Point( GetPrefSize().Width() - 1, GetPrefSize().Height() - 1 ), GetPrefMapMode() ) );
     Size            aDrawSize( aVDev->LogicToPixel( GetPrefSize(), GetPrefMapMode() ) );
     Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
+    sal_uInt32      nMaximumExtent = 256;
 
     if (!rBitmapEx.IsEmpty())
         rBitmapEx.SetEmpty();

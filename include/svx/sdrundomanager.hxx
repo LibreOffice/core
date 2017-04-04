@@ -39,7 +39,7 @@ protected:
     bool isTextEditActive() const;
 
 public:
-    SdrUndoManager(sal_uInt16 nMaxUndoActionCount = 20);
+    SdrUndoManager();
     virtual ~SdrUndoManager() override;
 
     /// react depending on edit mode and if no more undo is possible

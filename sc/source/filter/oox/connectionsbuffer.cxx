@@ -104,10 +104,10 @@ WebPrModel& ConnectionModel::createWebPr()
     return *mxWebPr;
 }
 
-Connection::Connection( const WorkbookHelper& rHelper, sal_Int32 nConnId ) :
+Connection::Connection( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
-    maModel.mnId = nConnId;
+    maModel.mnId = -1;
 }
 
 void Connection::importConnection( const AttributeList& rAttribs )

@@ -61,8 +61,7 @@ public:
 
     bool loadDefaultImage(
         OUString const & style,
-        BitmapEx& bitmap,
-        const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
+        BitmapEx& bitmap);
 
     VCL_DLLPUBLIC css::uno::Reference<css::container::XNameAccess> getNameAccess();
 

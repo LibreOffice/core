@@ -40,7 +40,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 // SdPagesField
 SdPagesField::SdPagesField( vcl::Window* pParent,
                             const uno::Reference< frame::XFrame >& rFrame ) :
-    SvxMetricField  ( pParent, rFrame, WB_BORDER | WB_SPIN | WB_REPEAT ),
+    SvxMetricField  ( pParent, rFrame ),
     m_xFrame        ( rFrame )
 {
     OUString aStr( SD_RESSTR( STR_SLIDE_PLURAL ) );

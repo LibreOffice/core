@@ -370,7 +370,7 @@ bool RichString::extractPlainString( OUString& orString, const oox::xls::Font* p
     return false;
 }
 
-void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld ) const
+void RichString::convert( const Reference< XText >& rxText ) const
 {
     if (maTextPortions.size() == 1)
     {
@@ -382,6 +382,7 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld ) c
         return;
     }
 
+    bool bReplaceOld = true;
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->convert( rxText, bReplaceOld );
@@ -435,9 +436,9 @@ void RichString::createTextPortions( const OUString& rText, FontPortionModelList
          sal_Int32 nStrLen = rText.getLength();
         // add leading and trailing string position to ease the following loop
         if( rPortions.empty() || (rPortions.front().mnPos > 0) )
-            rPortions.insert( rPortions.begin(), FontPortionModel( 0, -1 ) );
+            rPortions.insert( rPortions.begin(), FontPortionModel( 0 ) );
         if( rPortions.back().mnPos < nStrLen )
-            rPortions.push_back( FontPortionModel( nStrLen, -1 ) );
+            rPortions.push_back( FontPortionModel( nStrLen ) );
 
         // create all string portions according to the font id vector
         for( ::std::vector< FontPortionModel >::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )

@@ -193,8 +193,8 @@ SvxGridItem* ScViewOptions::CreateGridItem() const
 
 //      ScTpViewItem - data for the ViewOptions TabPage
 
-ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
-    :   SfxPoolItem ( nWhichP ),
+ScTpViewItem::ScTpViewItem( const ScViewOptions& rOpt )
+    :   SfxPoolItem ( SID_SCVIEWOPTIONS ),
         theOptions  ( rOpt )
 {
 }

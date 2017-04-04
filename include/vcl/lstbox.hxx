@@ -218,7 +218,7 @@ public:
 
     void                EnableUserDraw( bool bUserDraw );
 
-    void                DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawTextAtImagePos );
+    void                DrawEntry( const UserDrawEvent& rEvt );
 
     void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
     const Link<ListBox&,void>& GetSelectHdl() const                    { return maSelectHdl; }

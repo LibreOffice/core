@@ -1339,12 +1339,12 @@ void ListBox::UserDraw( const UserDrawEvent& )
 {
 }
 
-void ListBox::DrawEntry(const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawTextAtImagePos)
+void ListBox::DrawEntry(const UserDrawEvent& rEvt)
 {
     if (rEvt.GetWindow() == mpImplLB->GetMainWindow())
-        mpImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), bDrawImage, true/*bDrawText*/, bDrawTextAtImagePos );
+        mpImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), true/*bDrawImage*/, true/*bDrawText*/, false/*bDrawTextAtImagePos*/ );
     else if (rEvt.GetWindow() == mpImplWin)
-        mpImplWin->DrawEntry(*rEvt.GetRenderContext(), bDrawImage, bDrawTextAtImagePos);
+        mpImplWin->DrawEntry(*rEvt.GetRenderContext(), true/*bDrawImage*/, false/*bDrawTextAtImagePos*/);
 }
 
 void ListBox::EnableUserDraw( bool bUserDraw )

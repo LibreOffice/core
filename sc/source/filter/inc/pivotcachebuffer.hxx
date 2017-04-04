@@ -361,7 +361,7 @@ public:
     void                importPCDSheetSource( SequenceInputStream& rStrm, const ::oox::core::Relations& rRelations );
 
     /** Creates and returns a new pivot cache field. */
-    PivotCacheField&    createCacheField( bool bInitDatabaseField = false );
+    PivotCacheField&    createCacheField();
     /** Checks validity of source data and creates a dummy data sheet for external sheet sources. */
     void                finalizeImport();
 

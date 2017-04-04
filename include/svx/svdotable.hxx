@@ -141,7 +141,7 @@ public:
     void getCellBounds( const sdr::table::CellPos& rPos, ::tools::Rectangle& rCellRect );
 
     const SfxItemSet& GetActiveCellItemSet() const;
-    void SetMergedItemSetAndBroadcastOnActiveCell(const SfxItemSet& rSet, bool bClearAllItems);
+    void SetMergedItemSetAndBroadcastOnActiveCell(const SfxItemSet& rSet);
 
      void setTableStyle( const css::uno::Reference< css::container::XIndexAccess >& xAutoFormatStyle );
      const css::uno::Reference< css::container::XIndexAccess >& getTableStyle() const;

@@ -376,7 +376,7 @@ private:
     DECL_LINK(SplitHdl, Splitter*, void);
     void arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight);
 public:
-    VclVPaned(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN);
+    VclVPaned(vcl::Window *pParent);
     virtual ~VclVPaned() override { disposeOnce(); }
     virtual void dispose() override;
     virtual Size calculateRequisition() const override;

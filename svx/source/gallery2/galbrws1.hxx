@@ -96,7 +96,7 @@ private:
     void                    ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec);
     void                    ImplExecute( sal_uInt16 nId );
     void                    ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew );
-    void                    ImplEndGalleryThemeProperties(Dialog* pDialog, bool bCreateNew);
+    void                    ImplEndGalleryThemeProperties(bool bCreateNew);
 
     // Control
     virtual void            Resize() override;

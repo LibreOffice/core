@@ -281,7 +281,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
     }
 }
 
-void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* /*pDialog*/, bool bCreateNew)
+void GalleryBrowser1::ImplEndGalleryThemeProperties(bool bCreateNew)
 {
     long nRet = mpThemePropertiesDialog->GetResult();
 
@@ -325,12 +325,12 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* /*pDialog*/, bool bC
 
 IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, Dialog&, /*rDialog*/, void )
 {
-    ImplEndGalleryThemeProperties(nullptr, true);
+    ImplEndGalleryThemeProperties(true);
 }
 
 IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, /*rDialog*/, void )
 {
-    ImplEndGalleryThemeProperties(nullptr, false);
+    ImplEndGalleryThemeProperties(false);
 }
 
 IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, /*p*/, void )

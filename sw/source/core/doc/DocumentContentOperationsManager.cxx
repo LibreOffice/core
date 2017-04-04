@@ -2322,14 +2322,14 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     return true;
 }
 
-bool DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
+bool DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos )
 {
     SwNodeIndex aIdx( rPaM.Start()->nNode );
     bool bJoinText = aIdx.GetNode().IsTextNode();
     bool bOneNode = rPaM.GetPoint()->nNode == rPaM.GetMark()->nNode;
     aIdx--;             // in front of the move area!
 
-    bool bRet = MoveRange( rPaM, rPos, eMvFlags );
+    bool bRet = MoveRange( rPaM, rPos, SwMoveFlags::DEFAULT );
     if( bRet && !bOneNode )
     {
         if( bJoinText )
