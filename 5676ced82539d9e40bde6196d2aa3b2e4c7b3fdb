@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_fc8602b8",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-04T12:39:09Z",
+      "side": 1,
+      "message": "what I failed to mention previously: mixing in such pointless cosmetic changes is a poor waste of reviewers\u0027 time",
+      "revId": "5676ced82539d9e40bde6196d2aa3b2e4c7b3fdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
