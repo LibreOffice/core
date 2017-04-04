@@ -62,7 +62,7 @@ sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel eZoomLevel )
             meZoomLevel = eZoomLevel;
         }
 
-        switch ( static_cast<int>( eZoomLevel ) )
+        switch ( eZoomLevel )
         {
         case media::ZoomLevel_ORIGINAL:
         case media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT:
@@ -73,6 +73,8 @@ sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel eZoomLevel )
             break;
         case media::ZoomLevel_ZOOM_2_TO_1:
             mPlayer.setVideoSize( mSize.Width * 2, mSize.Height * 2 );
+            break;
+        default:
             break;
         }
 
