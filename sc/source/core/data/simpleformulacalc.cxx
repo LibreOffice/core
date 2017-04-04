@@ -18,7 +18,6 @@
 ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const ScAddress& rAddr,
         const OUString& rFormula, bool bMatrixFormula, formula::FormulaGrammar::Grammar eGram )
     : mnFormatType(0)
-    , mnFormatIndex(0)
     , mbCalculated(false)
     , maAddr(rAddr)
     , mpDoc(pDoc)
@@ -80,7 +79,6 @@ void ScSimpleFormulaCalculator::Calculate()
         maMatrixFormulaResult = aStr.makeStringAndClear();
     }
     mnFormatType = aInt.GetRetFormatType();
-    mnFormatIndex = aInt.GetRetFormatIndex();
     maResult.SetToken(aInt.GetResultToken().get());
 }
 

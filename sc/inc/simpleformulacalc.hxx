@@ -23,7 +23,6 @@ class ScSimpleFormulaCalculator
 {
 private:
     short mnFormatType;
-    sal_uLong mnFormatIndex;
 
     bool mbCalculated;
     std::unique_ptr<ScTokenArray> mpCode;
