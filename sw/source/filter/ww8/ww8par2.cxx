@@ -917,6 +917,14 @@ void SwWW8ImplReader::Read_OLST( sal_uInt16, const sal_uInt8* pData, short nLen 
         m_pNumOlst = nullptr;
         return;
     }
+
+    if (static_cast<size_t>(nLen) < sizeof(WW8_OLST))
+    {
+        SAL_WARN("sw.ww8", "WW8_OLST property is " << nLen << " long, needs to be at least " << sizeof(WW8_OLST));
+        m_pNumOlst = nullptr;
+        return;
+    }
+
     m_pNumOlst = new WW8_OLST;
     if( nLen < sal::static_int_cast< sal_Int32 >(sizeof( WW8_OLST )) )   // fill if to short
         memset( m_pNumOlst, 0, sizeof( *m_pNumOlst ) );
