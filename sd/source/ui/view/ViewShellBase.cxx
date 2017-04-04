@@ -241,9 +241,7 @@ void ViewShellBase::InitInterface_Impl()
 ViewShellBase::ViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell*)
-    : SfxViewShell (_pFrame,
-          SfxViewShellFlags::CAN_PRINT
-        | SfxViewShellFlags::HAS_PRINTOPTIONS),
+    : SfxViewShell (_pFrame, SfxViewShellFlags::HAS_PRINTOPTIONS),
       mpImpl(),
       mpDocShell (nullptr),
       mpDocument (nullptr)

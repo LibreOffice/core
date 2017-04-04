@@ -96,13 +96,12 @@ enum class SfxViewShellFlags
 {
     NONE              = 0x0000,
     HAS_PRINTOPTIONS  = 0x0010, /* Options-Button and Options-Dialog in PrintDialog */
-    CAN_PRINT         = 0x0020, /* Printing enabled without having to create a Printer */
     NO_SHOW           = 0x0040, /* Window of the ViewShell shall not be showed automatically */
     NO_NEWWINDOW      = 0x0100, /* Allow N View */
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SfxViewShellFlags> : is_typed_flags<SfxViewShellFlags, 0x0170> {};
+    template<> struct typed_flags<SfxViewShellFlags> : is_typed_flags<SfxViewShellFlags, 0x0150> {};
 }
 
 /*  [Description]

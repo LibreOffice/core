@@ -1634,7 +1634,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
-    SfxViewShell( pViewFrame, SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::HAS_PRINTOPTIONS ),
+    SfxViewShell( pViewFrame, SfxViewShellFlags::HAS_PRINTOPTIONS ),
     ScDBFunc( &pViewFrame->GetWindow(), static_cast<ScDocShell&>(*pViewFrame->GetObjectShell()), this ),
     eCurOST(OST_NONE),
     nDrawSfxId(0),

@@ -122,7 +122,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
 
-#define SWVIEWFLAGS ( SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::HAS_PRINTOPTIONS)
+#define SWVIEWFLAGS SfxViewShellFlags::HAS_PRINTOPTIONS
 
 // Statics. OMG.
 

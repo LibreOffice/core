@@ -138,18 +138,12 @@ void VCLXGraphics::InitOutputDevice( InitOutDevFlags nFlags )
             mpOutputDevice->SetFillColor( maFillColor );
         }
 
-        if ( nFlags & InitOutDevFlags::RASTEROP )
-        {
-            mpOutputDevice->SetRasterOp( meRasterOp );
-        }
+        mpOutputDevice->SetRasterOp( meRasterOp );
 
-        if ( nFlags & InitOutDevFlags::CLIPREGION )
-        {
-            if( mpClipRegion )
-                mpOutputDevice->SetClipRegion( *mpClipRegion );
-            else
-                mpOutputDevice->SetClipRegion();
-        }
+        if( mpClipRegion )
+            mpOutputDevice->SetClipRegion( *mpClipRegion );
+        else
+            mpOutputDevice->SetClipRegion();
     }
 }
 
@@ -293,7 +287,7 @@ void VCLXGraphics::copy( const uno::Reference< awt::XDevice >& rxSource, sal_Int
         DBG_ASSERT( pFromDev, "VCLXGraphics::copy - invalid device" );
         if ( pFromDev )
         {
-            InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP );
+            InitOutputDevice( InitOutDevFlags::NONE );
             mpOutputDevice->DrawOutDev( Point( nDestX, nDestY ), Size( nDestWidth, nDestHeight ),
                                     Point( nSourceX, nSourceY ), Size( nSourceWidth, nSourceHeight ), *pFromDev->GetOutputDevice() );
         }
@@ -306,7 +300,7 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP);
+        InitOutputDevice( InitOutDevFlags::NONE);
         uno::Reference< awt::XBitmap > xBitmap( rxBitmapHandle, uno::UNO_QUERY );
         BitmapEx aBmpEx = VCLUnoHelper::GetBitmap( xBitmap );
 
@@ -338,7 +332,7 @@ void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y )
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawPixel( Point( x, y ) );
     }
 }
@@ -349,7 +343,7 @@ void VCLXGraphics::drawLine( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawLine( Point( x1, y1 ), Point( x2, y2 ) );
     }
 }
@@ -360,7 +354,7 @@ void VCLXGraphics::drawRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int3
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawRect( tools::Rectangle( Point( x, y ), Size( width, height ) ) );
     }
 }
@@ -371,7 +365,7 @@ void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, s
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawRect( tools::Rectangle( Point( x, y ), Size( width, height ) ), nHorzRound, nVertRound );
     }
 }
@@ -382,7 +376,7 @@ void VCLXGraphics::drawPolyLine( const uno::Sequence< sal_Int32 >& DataX, const 
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawPolyLine( VCLUnoHelper::CreatePolygon( DataX, DataY ) );
     }
 }
@@ -393,7 +387,7 @@ void VCLXGraphics::drawPolygon( const uno::Sequence< sal_Int32 >& DataX, const u
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawPolygon( VCLUnoHelper::CreatePolygon( DataX, DataY ) );
     }
 }
@@ -404,7 +398,7 @@ void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int3
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         sal_uInt16 nPolys = (sal_uInt16) DataX.getLength();
         tools::PolyPolygon aPolyPoly( nPolys );
         for ( sal_uInt16 n = 0; n < nPolys; n++ )
@@ -420,7 +414,7 @@ void VCLXGraphics::drawEllipse( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_I
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawEllipse( tools::Rectangle( Point( x, y ), Size( width, height ) ) );
     }
 }
@@ -431,7 +425,7 @@ void VCLXGraphics::drawArc( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawArc( tools::Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
     }
 }
@@ -442,7 +436,7 @@ void VCLXGraphics::drawPie( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawPie( tools::Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
     }
 }
@@ -453,7 +447,7 @@ void VCLXGraphics::drawChord( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         mpOutputDevice->DrawChord( tools::Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
     }
 }
@@ -464,7 +458,7 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+        InitOutputDevice( InitOutDevFlags::COLORS );
         Gradient aGradient((GradientStyle)rGradient.Style, rGradient.StartColor, rGradient.EndColor);
         aGradient.SetAngle(rGradient.Angle);
         aGradient.SetBorder(rGradient.Border);
@@ -483,7 +477,7 @@ void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const OUString& rText )
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS |InitOutDevFlags::FONT);
+        InitOutputDevice( InitOutDevFlags::COLORS |InitOutDevFlags::FONT);
         mpOutputDevice->DrawText( Point( x, y ), rText );
     }
 }
@@ -494,7 +488,7 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
 
     if( mpOutputDevice )
     {
-        InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS|InitOutDevFlags::FONT );
+        InitOutputDevice( InitOutDevFlags::COLORS|InitOutDevFlags::FONT );
         std::unique_ptr<long []> pDXA(new long[rText.getLength()]);
         for(int i = 0; i < rText.getLength(); i++)
         {
@@ -514,7 +508,7 @@ void VCLXGraphics::drawImage( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int
         Image aImage( xGraphic );
         if ( !!aImage )
         {
-            InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
+            InitOutputDevice( InitOutDevFlags::COLORS );
             mpOutputDevice->DrawImage( Point( x, y ), Size( width, height ), aImage, static_cast<DrawImageFlags>(nStyle) );
         }
     }

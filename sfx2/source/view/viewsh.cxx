@@ -233,7 +233,6 @@ sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
 SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 : aInterceptorContainer( aMutex )
 ,   m_bControllerSet(false)
-,   m_bCanPrint(nFlags & SfxViewShellFlags::CAN_PRINT)
 ,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
 ,   m_bIsShowView(!(nFlags & SfxViewShellFlags::NO_SHOW))
 ,   m_bGotOwnership(false)
@@ -699,8 +698,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             case SID_SETUPPRINTER:
             case SID_PRINTER_NAME:
             {
-                bool bEnabled = pImpl->m_bCanPrint
-                              && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
+                bool bEnabled = !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {
                     SfxPrinter *pPrinter = GetPrinter();

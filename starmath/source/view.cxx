@@ -1921,7 +1921,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 }
 
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
-    : SfxViewShell(pFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS | SfxViewShellFlags::CAN_PRINT)
+    : SfxViewShell(pFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS)
     , mpImpl(new SmViewShell_Impl)
     , mpGraphic(VclPtr<SmGraphicWindow>::Create(this))
     , maGraphicController(*mpGraphic.get(), SID_GAPHIC_SM, pFrame_->GetBindings())

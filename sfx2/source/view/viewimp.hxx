@@ -45,7 +45,6 @@ struct SfxViewShell_Impl
     bool                        m_bControllerSet;
     SfxShellArr_Impl            aArr;
     Size                        aMargin;
-    bool                        m_bCanPrint;
     bool                        m_bHasPrintOptions;
     bool                        m_bIsShowView;
     bool                        m_bGotOwnership;
