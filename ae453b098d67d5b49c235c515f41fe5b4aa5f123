@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_dff8507f",
+        "filename": "svx/inc/gallery.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-04T20:05:51Z",
+      "side": 1,
+      "message": "translation of German \"Lokale Defines\" would be \"local ...\" not \"locale ...\"",
+      "revId": "ae453b098d67d5b49c235c515f41fe5b4aa5f123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
