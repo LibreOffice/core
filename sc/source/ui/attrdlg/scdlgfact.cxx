@@ -90,7 +90,6 @@ IMPL_ABSTDLG_BASE(AbstractScInsertCellDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScInsertTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScSelEntryDlg_Impl);
-IMPL_ABSTDLG2_BASE(AbstractScLinkedAreaDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScMetricInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScMoveTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScNameCreateDlg_Impl);
@@ -109,6 +108,14 @@ IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
+
+AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
+{
+}
+short AbstractScLinkedAreaDlg_Impl::Execute()
+{
+    return pDlg->Execute();
+}
 
 void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
