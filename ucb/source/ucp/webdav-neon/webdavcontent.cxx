@@ -1203,6 +1203,18 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     return uno::Reference< sdbc::XRow >( xRow.get() );
 }
 
+namespace {
+void GetPropsUsingHeadRequest(DAVResource& resource,
+                              const std::unique_ptr< DAVResourceAccess >& xResAccess,
+                              const std::vector< OUString >& aHTTPNames,
+                              const uno::Reference< ucb::XCommandEnvironment >& xEnv)
+{
+    if (!aHTTPNames.empty())
+    {
+        xResAccess->HEAD(aHTTPNames, resource, xEnv);
+    }
+}
+}
 
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Sequence< beans::Property >& rProperties,
@@ -1382,28 +1394,38 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     rProperties,
                     aHeaderNames );
 
-                if ( !aHeaderNames.empty() )
+                if ( !aHeaderNames.empty() ) try
                 {
-                    try
-                    {
-                        DAVResource resource;
-                        xResAccess->HEAD( aHeaderNames, resource, xEnv );
-                        m_bDidGetOrHead = true;
+                    DAVResource resource;
+                    GetPropsUsingHeadRequest(resource, xResAccess, aHeaderNames, xEnv);
+                    m_bDidGetOrHead = true;
 
-                        if ( xProps.get() )
-                            xProps->addProperties(
-                                aMissingProps,
-                                ContentProperties( resource ) );
-                        else
-                            xProps.reset ( new ContentProperties( resource ) );
+                    if (xProps.get())
+                        xProps->addProperties(
+                            aMissingProps,
+                            ContentProperties(resource));
+                    else
+                        xProps.reset(new ContentProperties(resource));
 
-                        if ( m_eResourceType == NON_DAV )
-                            xProps->addProperties( aMissingProps,
-                                                   ContentProperties(
-                                                       aUnescapedTitle,
-                                                       false ) );
-                    }
-                    catch ( DAVException const & e )
+                    if (m_eResourceType == NON_DAV)
+                        xProps->addProperties(aMissingProps,
+                            ContentProperties(
+                                aUnescapedTitle,
+                                false));
+                }
+                catch ( DAVException const & e )
+                {
+                    // non "general-purpose servers" may not support HEAD requests
+                    // see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.1
+                    // In this case, perform a partial GET only to get the header info
+                    // vid. http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
+                    // WARNING if the server does not support partial GETs,
+                    // the GET will transfer the whole content
+                    bool bError = true;
+                    DAVException aLastException = e;
+                    OUString aTargetURL = xResAccess->getURL();
+
+                    if ( e.getError() == DAVException::DAV_HTTP_ERROR )
                     {
                         bNetworkAccessAllowed
                             = shouldAccessNetworkAfterException( e );
@@ -1467,6 +1489,46 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         if (m_bTransient)
             xProps.reset( new ContentProperties( aUnescapedTitle,
                                                  m_bCollection ) );
+    }
+
+    // Add a default for the properties requested but not found.
+    // Determine still missing properties, add a default.
+    // Some client function doesn't expect a void uno::Any,
+    // but instead wants some sort of default.
+    std::vector< OUString > aMissingProps;
+    if ( !xProps->containsAllNames(
+                rProperties, aMissingProps ) )
+    {
+        //
+        for ( std::vector< rtl::OUString >::const_iterator it = aMissingProps.begin();
+              it != aMissingProps.end(); ++it )
+        {
+            // For the time being only a couple of properties need to be added
+            if ( (*it) == "DateModified"  || (*it) == "DateCreated" )
+            {
+                util::DateTime aDate;
+                xProps->addProperty(
+                    (*it),
+                    uno::makeAny( aDate ),
+                    true );
+            }
+            // If WebDAV didn't return the resource type, assume default
+            // This happens e.g. for lists exported by SharePoint
+            else if ( (*it) == "IsFolder" )
+            {
+                xProps->addProperty(
+                    (*it),
+                    uno::makeAny( false ),
+                    true );
+            }
+            else if ( (*it) == "IsDocument" )
+            {
+                xProps->addProperty(
+                    (*it),
+                    uno::makeAny( true ),
+                    true );
+            }
+        }
     }
 
     sal_Int32 nCount = rProperties.getLength();
@@ -2756,8 +2818,6 @@ Content::ResourceType Content::resourceTypeForLocks(
         std::unique_ptr< ContentProperties > xProps;
         if ( m_xCachedProps.get() )
         {
-            std::unique_ptr< ContentProperties > xCachedProps;
-            xCachedProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
             uno::Sequence< ucb::LockEntry > aSupportedLocks;
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
                  >>= aSupportedLocks )            //get the cached value for supportedlock
@@ -2843,6 +2903,40 @@ Content::ResourceType Content::resourceTypeForLocks(
                             }
                         }
                     }
+                }
+                else
+                {
+                    // PROPFIND failed; check if HEAD contains Content-Disposition: attachment (RFC1806, HTTP/1.1 19.5.1),
+                    // which supposedly means no lock for the resource (happens e.g. with SharePoint exported lists)
+                    OUString sContentDisposition;
+                    // First, check cached properties
+                    if (m_xCachedProps.get())
+                    {
+                        if ((m_xCachedProps->getValue("Content-Disposition") >>= sContentDisposition)
+                            && sContentDisposition.startsWithIgnoreAsciiCase("attachment"))
+                        {
+                            eResourceTypeForLocks = DAV_NOLOCK;
+                        }
+                    }
+                    // If no data in cache, try HEAD request
+                    if (sContentDisposition.isEmpty() && !m_bDidGetOrHead) try
+                    {
+                        DAVResource resource;
+                        GetPropsUsingHeadRequest(resource, xResAccess, {"Content-Disposition"}, Environment);
+                        m_bDidGetOrHead = true;
+                        for (const auto& it : resource.properties)
+                        {
+                            if (it.Name.equalsIgnoreAsciiCase("Content-Disposition"))
+                            {
+                                if ((it.Value >>= sContentDisposition) && sContentDisposition.equalsIgnoreAsciiCase("attachment"))
+                                {
+                                    eResourceTypeForLocks = DAV_NOLOCK;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    catch (...){}
                 }
             }
             catch ( DAVException const & e )
