@@ -47,6 +47,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
@@ -2094,6 +2095,81 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99140, "tdf99140.docx")
     uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(1), uno::UNO_QUERY);
     // This was text::HoriOrientation::NONE, the second table was too wide due to this.
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTableProperties, "HoriOrient"));
+}
+
+DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
+{
+    sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
+
+    uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
+    uno::Reference< frame::XModel >             xModel( mxComponent, uno::UNO_QUERY );
+    uno::Reference< container::XIndexAccess >   xTables( xTablesSupplier->getTextTables(), uno::UNO_QUERY );
+
+    for ( int i = 0; i < 4; i++ )
+    {
+        uno::Reference< text::XTextTable > xTable1( xTables->getByIndex( i ), uno::UNO_QUERY );
+
+        // Verify left margin of 1st cell :
+        //  * Office left margins are measured relative to the right of the border
+        //  * LO left spacing is measured from the center of the border
+        uno::Reference< table::XCell > xCell = xTable1->getCellByName( "A1" );
+        uno::Reference< beans::XPropertySet > xPropSet( xCell, uno::UNO_QUERY_THROW );
+        sal_Int32 aLeftMargin = -1;
+        xPropSet->getPropertyValue( "LeftBorderDistance" ) >>= aLeftMargin;
+        uno::Any aLeftBorder = xPropSet->getPropertyValue( "LeftBorder" );
+        table::BorderLine2 aLeftBorderLine;
+        aLeftBorder >>= aLeftBorderLine;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Incorrect left spacing computed from docx cell margin",
+            cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1 );
+    }
+}
+
+// tdf#106742 for DOCX with compatibility level <= 14 (MS Word up to and incl. ver.2010), we should use cell margins when calculating table left border position
+DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx" )
+{
+    sal_Int32 aXCoordsFromOffice[] = { 2500, -1000, 0, 0 };
+
+    uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
+    uno::Reference< frame::XModel >             xModel( mxComponent, uno::UNO_QUERY );
+    uno::Reference< container::XIndexAccess >   xTables( xTablesSupplier->getTextTables(), uno::UNO_QUERY );
+
+    for ( int i = 0; i < 4; i++ )
+    {
+        uno::Reference< text::XTextTable > xTable1( xTables->getByIndex( i ), uno::UNO_QUERY );
+
+        // Verify X coord
+        uno::Reference< view::XSelectionSupplier > xCtrl( xModel->getCurrentController(), uno::UNO_QUERY );
+        xCtrl->select( uno::makeAny( xTable1 ) );
+        uno::Reference< text::XTextViewCursorSupplier > xTextViewCursorSupplier( xCtrl, uno::UNO_QUERY );
+        uno::Reference< text::XTextViewCursor > xCursor( xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY );
+        awt::Point pos = xCursor->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Incorrect X coord computed from docx",
+            aXCoordsFromOffice[i], pos.X, 1 );
+    }
+}
+
+// tdf#106742 for DOCX with compatibility level > 14 (MS Word since ver.2013), we should NOT use cell margins when calculating table left border position
+DECLARE_OOXMLEXPORT_TEST( testTablePosition15, "table-position-15.docx" )
+{
+    sal_Int32 aXCoordsFromOffice[] = { 2751, -899, 1, 106 };
+
+    uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
+    uno::Reference< frame::XModel >             xModel( mxComponent, uno::UNO_QUERY );
+    uno::Reference< container::XIndexAccess >   xTables( xTablesSupplier->getTextTables(), uno::UNO_QUERY );
+
+    for ( int i = 0; i < 4; i++ )
+    {
+        uno::Reference< text::XTextTable > xTable1( xTables->getByIndex( i ), uno::UNO_QUERY );
+
+        // Verify X coord
+        uno::Reference< view::XSelectionSupplier > xCtrl( xModel->getCurrentController(), uno::UNO_QUERY );
+        xCtrl->select( uno::makeAny( xTable1 ) );
+        uno::Reference< text::XTextViewCursorSupplier > xTextViewCursorSupplier( xCtrl, uno::UNO_QUERY );
+        uno::Reference< text::XTextViewCursor > xCursor( xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY );
+        awt::Point pos = xCursor->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Incorrect X coord computed from docx",
+            aXCoordsFromOffice[i], pos.X, 1 );
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
