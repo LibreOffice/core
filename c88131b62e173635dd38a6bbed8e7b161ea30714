@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_3fd95c22",
+        "filename": "filter/source/xmlfilterdetect/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-04T20:02:29Z",
+      "side": 1,
+      "message": "there\u0027s INetContentTypes::parse (svl/inettype.hxx) to help determine it\u0027s actually the subtype that ends in \"+xml\"",
+      "revId": "c88131b62e173635dd38a6bbed8e7b161ea30714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
