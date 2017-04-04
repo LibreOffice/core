@@ -1057,7 +1057,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         {
             if ((nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE))
             {
-                SAL_INFO("vcl.gdi", "Unsupported printer font ignored: " << OUString(pLogFont->elfLogFont.lfFaceName));
+                SAL_INFO("vcl.gdi", "Unsupported printer font ignored: " << OUString(SAL_U(pLogFont->elfLogFont.lfFaceName)));
                 return 1;
             }
         }
@@ -1066,7 +1066,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
                  !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
                  !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
         {
-            SAL_INFO("vcl.gdi", "Unsupported font ignored: " << OUString(pLogFont->elfLogFont.lfFaceName));
+            SAL_INFO("vcl.gdi", "Unsupported font ignored: " << OUString(SAL_U(pLogFont->elfLogFont.lfFaceName)));
             return 1;
         }
 

@@ -45,7 +45,7 @@ OUString getAdoDatalink(long hWnd,OUString& oldLink)
     OUString dataLink;
     if (!oldLink.isEmpty())
     {
-        dataLink=PromptEdit(hWnd,oldLink.getStr());
+        dataLink=SAL_U(PromptEdit(hWnd,SAL_W(oldLink.getStr())));
     }
     else
         dataLink=reinterpret_cast<sal_Unicode *>(PromptNew(hWnd));

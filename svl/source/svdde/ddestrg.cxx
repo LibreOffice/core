@@ -26,14 +26,14 @@
 DdeString::DdeString( DWORD hDdeInst, const sal_Unicode* p )
     : m_aString(p)
 {
-    hString = DdeCreateStringHandle( hDdeInst, p, CP_WINUNICODE );
+    hString = DdeCreateStringHandle( hDdeInst, SAL_W(p), CP_WINUNICODE );
     hInst = hDdeInst;
 }
 
 DdeString::DdeString( DWORD hDdeInst, const OUString& r)
     : m_aString(r)
 {
-    hString = DdeCreateStringHandle( hDdeInst, r.getStr(), CP_WINUNICODE );
+    hString = DdeCreateStringHandle( hDdeInst, SAL_W(r.getStr()), CP_WINUNICODE );
     hInst = hDdeInst;
 }
 

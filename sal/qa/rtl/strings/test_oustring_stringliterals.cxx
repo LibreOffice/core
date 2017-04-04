@@ -353,8 +353,6 @@ void test::oustring::StringLiterals::checkOUStringLiteral1()
 }
 
 void test::oustring::StringLiterals::checkUtf16() {
-#if !defined SAL_W32
-        // sal_Unicode is still wchar_t not char16_t even for MSVC 2015
     rtl::OUString s1(u"abc");
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), s1);
     s1 = u"de";
@@ -420,7 +418,6 @@ void test::oustring::StringLiterals::checkUtf16() {
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("abgababcdef"), b.toString());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), b.indexOf(u"ab", 1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), b.lastIndexOf(u"ab"));
-#endif
 }
 
 }} // namespace

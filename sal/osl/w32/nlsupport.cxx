@@ -189,10 +189,10 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     /* copy in parameters to structure */
     if( pLocale && pLocale->Language && pLocale->Language->length < ELP_LANGUAGE_FIELD_LENGTH )
     {
-        wcscpy( params.Language, pLocale->Language->buffer );
+        wcscpy( params.Language, SAL_W(pLocale->Language->buffer) );
 
         if( pLocale->Country && pLocale->Country->length < ELP_COUNTRY_FIELD_LENGTH )
-            wcscpy( params.Country, pLocale->Country->buffer );
+            wcscpy( params.Country, SAL_W(pLocale->Country->buffer) );
 
         /* save pointer to local structure in TLS */
         TlsSetValue( g_dwTLSLocaleEncId, &params );
@@ -226,11 +226,11 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH )  &&
         GetLocaleInfo( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
     {
-        *ppLocale = rtl_locale_register( langCode, ctryCode, L"" );
+        *ppLocale = rtl_locale_register( SAL_U(langCode), SAL_U(ctryCode), u"" );
     }
     else
     {
-        *ppLocale = rtl_locale_register( L"C", L"", L"" );
+        *ppLocale = rtl_locale_register( u"C", u"", u"" );
     }
 }
 

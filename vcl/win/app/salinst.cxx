@@ -920,7 +920,7 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
             {
                 IShellItem* pShellItem = nullptr;
 
-                HRESULT hr = pSHCreateItemFromParsingName ( system_path.getStr(), nullptr, IID_PPV_ARGS(&pShellItem) );
+                HRESULT hr = pSHCreateItemFromParsingName ( SAL_W(system_path.getStr()), nullptr, IID_PPV_ARGS(&pShellItem) );
 
                 if ( SUCCEEDED(hr) && pShellItem )
                 {
@@ -965,7 +965,7 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
                         DummyShardAppIDInfo info;
                         info.psi = pShellItem;
-                        info.pszAppID = sApplicationID.getStr();
+                        info.pszAppID = SAL_W(sApplicationID.getStr());
 
                         SHAddToRecentDocs ( SHARD_APPIDINFO, &info );
                         return;

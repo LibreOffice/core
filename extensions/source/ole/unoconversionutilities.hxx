@@ -1993,7 +1993,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         for( sal_Int32 i= 0; i< length; i++)
         {
             OUString ousIndex=OUString::number( i);
-            OLECHAR* sindex = const_cast<sal_Unicode *>(ousIndex.getStr());
+            OLECHAR* sindex = SAL_W(const_cast<sal_Unicode *>(ousIndex.getStr()));
 
             if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, &sindex , 1, LOCALE_USER_DEFAULT, &dispid)))
             {

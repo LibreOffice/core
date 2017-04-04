@@ -272,16 +272,16 @@ void  AccObject::UpdateName( )
     }
 
     if( ( TEXT_FRAME == m_accRole   ) && ( m_pParentObj !=nullptr )&& ( SCROLL_PANE == m_pParentObj -> m_accRole ) )
-        m_pIMAcc->Put_XAccName( m_pParentObj->m_xAccContextRef->getAccessibleName().getStr() );
+        m_pIMAcc->Put_XAccName( SAL_W(m_pParentObj->m_xAccContextRef->getAccessibleName().getStr()) );
     //IAccessibility2 Implementation 2009-----
     if ( PARAGRAPH == m_accRole)
     {
         ::rtl::OUString emptyStr("");
-        m_pIMAcc->Put_XAccName(emptyStr.getStr());
+        m_pIMAcc->Put_XAccName(SAL_W(emptyStr.getStr()));
     }
     //-----IAccessibility2 Implementation 2009
     else
-        m_pIMAcc->Put_XAccName(m_xAccContextRef->getAccessibleName().getStr());
+        m_pIMAcc->Put_XAccName(SAL_W(m_xAccContextRef->getAccessibleName().getStr()));
 
     return ;
 }
@@ -298,7 +298,7 @@ void AccObject::UpdateDescription()
         return;
     }
 
-    m_pIMAcc->Put_XAccDescription(m_xAccContextRef->getAccessibleDescription().getStr());
+    m_pIMAcc->Put_XAccDescription(SAL_W(m_xAccContextRef->getAccessibleDescription().getStr()));
     return ;
 }
 
@@ -367,7 +367,7 @@ void AccObject::UpdateDefaultAction( )
     case CHECK_BOX:
     case TREE_ITEM:
     case BUTTON_DROPDOWN:
-        m_pIMAcc->Put_ActionDescription( m_xAccActionRef->getAccessibleActionDescription((sal_Int32)0).getStr() );
+        m_pIMAcc->Put_ActionDescription( SAL_W(m_xAccActionRef->getAccessibleActionDescription((sal_Int32)0).getStr()) );
         return;
     }
 }
@@ -403,19 +403,19 @@ void  AccObject::SetValue( Any pAny )
         {
             val = pRText->getText();
         }
-        m_pIMAcc->Put_XAccValue( val.getStr() );
+        m_pIMAcc->Put_XAccValue( SAL_W(val.getStr()) );
         break;
     case TREE_ITEM:
     //case CHECK_BOX:   //Commented by Li Xing to disable the value for general checkbox
     case COMBO_BOX:
     case NOTE:
     case SCROLL_BAR:
-        m_pIMAcc->Put_XAccValue( GetMAccessibleValueFromAny(pAny).getStr() );
+        m_pIMAcc->Put_XAccValue( SAL_W(GetMAccessibleValueFromAny(pAny).getStr()) );
         break ;
     // Added by Li Xing, only the checkbox in tree should have the value.
     case CHECK_BOX:
         if( ( m_pParentObj !=nullptr ) && (TREE == m_pParentObj->m_accRole || TREE_ITEM == m_pParentObj->m_accRole ))
-            m_pIMAcc->Put_XAccValue( GetMAccessibleValueFromAny(pAny).getStr() );
+            m_pIMAcc->Put_XAccValue( SAL_W(GetMAccessibleValueFromAny(pAny).getStr()) );
         break;
     default:
         break;
@@ -501,7 +501,7 @@ void  AccObject::SetName( Any pAny)
     if( nullptr == m_pIMAcc )
         return ;
 
-    m_pIMAcc->Put_XAccName( GetMAccessibleValueFromAny(pAny).getStr() );
+    m_pIMAcc->Put_XAccName( SAL_W(GetMAccessibleValueFromAny(pAny).getStr()) );
 
 }
 
@@ -514,7 +514,7 @@ void  AccObject::SetDescription( Any pAny )
 {
     if( nullptr == m_pIMAcc )
         return ;
-    m_pIMAcc->Put_XAccDescription( GetMAccessibleValueFromAny(pAny).getStr() );
+    m_pIMAcc->Put_XAccDescription( SAL_W(GetMAccessibleValueFromAny(pAny).getStr()) );
 }
 
 /**
@@ -756,7 +756,7 @@ void AccObject::UpdateActionDesc()
     }
 
     ::rtl::OUString pXString = m_xAccContextRef->getAccessibleDescription();
-    m_pIMAcc->Put_XAccDescription(pXString.getStr());
+    m_pIMAcc->Put_XAccDescription(SAL_W(pXString.getStr()));
     long Role = m_accRole;
 
     if(  Role == PUSH_BUTTON || Role == RADIO_BUTTON || Role == MENU_ITEM ||
@@ -778,7 +778,7 @@ void AccObject::UpdateActionDesc()
                     pXString = m_xAccActionRef->getAccessibleActionDescription( 0 );
                     //Solution: if string length is more than zero, action is set.
                     if( pXString.getLength() > 0)
-                        m_pIMAcc->Put_ActionDescription( pXString.getStr() );
+                        m_pIMAcc->Put_ActionDescription( SAL_W(pXString.getStr()) );
                 }
             }
         }

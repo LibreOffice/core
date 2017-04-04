@@ -85,7 +85,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
 {
     HKEY hCurKey;
 
-    if(RegOpenKeyExW(hKey, aKeyName.getStr(), 0, KEY_READ, &hCurKey) == ERROR_SUCCESS)
+    if(RegOpenKeyExW(hKey, SAL_W(aKeyName.getStr()), 0, KEY_READ, &hCurKey) == ERROR_SUCCESS)
     {
         DWORD nSubKeys = 0;
         DWORD nValues = 0;
@@ -106,9 +106,9 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
 
                 //Make up full key name
                 if(aKeyName.isEmpty())
-                    aSubkeyName = aKeyName + OUString(buffKeyName);
+                    aSubkeyName = aKeyName + OUString(SAL_U(buffKeyName));
                 else
-                    aSubkeyName = aKeyName + "\\" + OUString(buffKeyName);
+                    aSubkeyName = aKeyName + "\\" + OUString(SAL_U(buffKeyName));
 
                 //Recursion, until no more subkeys are found
                 dumpWindowsRegistryKey(hKey, aSubkeyName, aFileHandle);
@@ -137,9 +137,9 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 const wchar_t wsType[] = L"Type";
 
                 if(!wcscmp(pValueName.get(), wsValue))
-                    aValue = OUString(pValue.get());
+                    aValue = OUString(SAL_U(pValue.get()));
                 if (!wcscmp(pValueName.get(), wsType))
-                    aType = OUString(pValue.get());
+                    aType = OUString(SAL_U(pValue.get()));
                 if(!wcscmp(pValueName.get(), wsFinal) && *reinterpret_cast<DWORD*>(pValue.get()) == 1)
                     bFinal = true;
             }

@@ -173,7 +173,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     {
         SetLastError( ERROR_SUCCESS );
 
-        pPipe->m_NamedObject = CreateMutexW( nullptr, FALSE, name->buffer );
+        pPipe->m_NamedObject = CreateMutexW( nullptr, FALSE, SAL_W(name->buffer) );
 
         if ( pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject != nullptr )
         {
@@ -184,7 +184,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
                 /* try to open system pipe */
                 pPipe->m_File = CreateNamedPipeW(
-                    path->buffer,
+                    SAL_W(path->buffer),
                     PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
                     PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
                     PIPE_UNLIMITED_INSTANCES,
@@ -214,13 +214,13 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
         do
         {
             /* free instance should be available first */
-            fPipeAvailable = WaitNamedPipeW(path->buffer, NMPWAIT_WAIT_FOREVER);
+            fPipeAvailable = WaitNamedPipeW(SAL_W(path->buffer), NMPWAIT_WAIT_FOREVER);
 
             /* first try to open system pipe */
             if ( fPipeAvailable )
             {
                 pPipe->m_File = CreateFileW(
-                    path->buffer,
+                    SAL_W(path->buffer),
                     GENERIC_READ|GENERIC_WRITE,
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
                     nullptr,
@@ -353,7 +353,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 
     // prepare for next accept
     pPipe->m_File =
-        CreateNamedPipeW(path->buffer,
+        CreateNamedPipeW(SAL_W(path->buffer),
             PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
             PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
             PIPE_UNLIMITED_INSTANCES,

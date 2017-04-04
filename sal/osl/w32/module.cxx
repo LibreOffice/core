@@ -47,7 +47,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     oslModule ret = nullptr;
     oslFileError    nError;
 
-    SAL_INFO( "sal.osl", "osl_loadModule: " << OUString(strModuleName->buffer, wcslen(strModuleName->buffer)) );
+    SAL_INFO( "sal.osl", "osl_loadModule: " << OUString(strModuleName->buffer, wcslen(SAL_W(strModuleName->buffer))) );
     OSL_ASSERT(strModuleName);
 
     nError = osl_getSystemPathFromFileURL(strModuleName, &Module);

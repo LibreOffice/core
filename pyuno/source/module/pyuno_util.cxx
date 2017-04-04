@@ -48,7 +48,7 @@ PyRef ustring2PyUnicode( const OUString & str )
     // Hack to avoid that error
     ret = PyRef( PyUnicode_FromUnicode( (const unsigned short *)str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
 #else
-    ret = PyRef( PyUnicode_FromUnicode( str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
+    ret = PyRef( PyUnicode_FromUnicode( SAL_W(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
 #endif
 #else
     OString sUtf8(OUStringToOString(str, RTL_TEXTENCODING_UTF8));
@@ -76,7 +76,7 @@ OUString pyString2ustring( PyObject *pystr )
     // Hack to avoid that error
     ret = OUString( (sal_Unicode *)PyUnicode_AS_UNICODE( pystr ) );
 #else
-    ret = OUString( PyUnicode_AS_UNICODE( pystr ) );
+    ret = OUString( SAL_U(PyUnicode_AS_UNICODE( pystr )) );
 #endif
 #else
 #if PY_MAJOR_VERSION >= 3

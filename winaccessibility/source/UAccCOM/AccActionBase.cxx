@@ -117,7 +117,7 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString(ouStr.getStr());
+    *description = SysAllocString(SAL_W(ouStr.getStr()));
 
     return S_OK;
 
@@ -235,7 +235,7 @@ void CAccActionBase::GetkeyBindingStrByXkeyBinding( const Sequence< KeyStroke > 
         KeyStroke stroke = keySet[iIndex];
         OLECHAR wString[64] = {NULL};
         wcscat(wString, OLESTR("\n"));
-        wcscat(wString, &stroke.KeyChar);
+        wcscat(wString, SAL_W(&stroke.KeyChar));
 
         wcscat( pString, wString);
     }

@@ -15,9 +15,6 @@
 // In C++, find implicit conversions from char16_t (aka sal_Unicode) to char.
 // Such places are probably meant to properly work on char16_t instead.
 
-// (This does not work for clang-cl/MSVC yet, where sal_Unicode is still a
-// typedef for wchar_t, but that is intended to be changed eventually.)
-
 namespace {
 
 class Visitor final:

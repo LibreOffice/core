@@ -208,9 +208,7 @@ public:
 #ifdef OSL_BIGENDIAN
     static void  convertLittleEndian( sal_Int8& ) {}     // present for usage in templates
     static void  convertLittleEndian( sal_uInt8& ) {}    // present for usage in templates
-#if !defined SAL_W32 // cf. sal/types.h sal_Unicode
     static void  convertLittleEndian( char16_t& rnValue )   { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
-#endif
     static void  convertLittleEndian( sal_Int16& rnValue )  { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
     static void  convertLittleEndian( sal_uInt16& rnValue ) { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
     static void  convertLittleEndian( sal_Int32& rnValue )  { swap4( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }

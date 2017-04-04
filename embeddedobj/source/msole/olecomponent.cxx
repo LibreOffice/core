@@ -922,7 +922,7 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
             hr = pOleLink->GetSourceDisplayName( &pOleStr );
             if ( SUCCEEDED( hr ) && pOleStr )
             {
-                OUString aFilePath( pOleStr );
+                OUString aFilePath( SAL_U(pOleStr) );
                 if ( pMalloc )
                     pMalloc->Free( pOleStr );
 

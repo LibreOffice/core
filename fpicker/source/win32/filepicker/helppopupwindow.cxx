@@ -335,7 +335,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 
     DrawTextW(
         hdc,
-        m_HelpText.getStr( ),
+        SAL_W(m_HelpText.getStr( )),
         m_HelpText.getLength( ),
         &rect,
         nFormat );
