@@ -542,17 +542,57 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         lcl_debug_TableBorder(aTableBorder);
 #endif
 
+        // tdf#106742
+        sal_Int32                                              nWordCompatibilityModeValue = 15;
+        const css::uno::Sequence< css::beans::PropertyValue >& rCompatSettings = m_rDMapper_Impl.GetSettingsTable()->GetCompatSettings();
+
+        for ( int i = 0; i < rCompatSettings.getLength(); ++i )
+        {
+            const css::beans::PropertyValue& rProp = rCompatSettings[i];
+
+            if ( rProp.Name == "compatSetting" )
+            {
+                css::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
+                rProp.Value >>= aCurrentCompatSettings;
+
+                OUString sName;
+                OUString sUri;
+                OUString sVal;
+
+                aCurrentCompatSettings[0].Value >>= sName;
+                aCurrentCompatSettings[1].Value >>= sUri;
+                aCurrentCompatSettings[2].Value >>= sVal;
+
+                if ( sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word" )
+                {
+                    sal_Int32 nVal = sVal.toInt32();
+                    if ( nVal > 0 )
+                        nWordCompatibilityModeValue = nVal;
+                    break;
+                }
+            }
+        }
+
         // Table position in Office is computed in 2 different ways :
         // - top level tables: the goal is to have in-cell text starting at table indent pos (tblInd),
         //   so table's position depends on table's cells margin
         // - nested tables: the goal is to have left-most border starting at table_indent pos
-        if (rInfo.nNestLevel > 1)
+
+        // tdf#106742: It does not work in MS Word 2013+
+        if ( nWordCompatibilityModeValue <= 14 )
         {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf ));
+            if ( rInfo.nNestLevel > 1 )
+            {
+                m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf ) );
+            }
+            else
+            {
+                m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ) );
+            }
         }
         else
         {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ));
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf ) );
         }
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
