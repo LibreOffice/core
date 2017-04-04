@@ -1021,7 +1021,7 @@ void ElementDescriptor::readImageScaleModeAttr( OUString const & rPropName, OUSt
 
         if (aImageScaleMode.getValueTypeClass() == TypeClass_SHORT)
         {
-            sal_Int16 nImageScaleMode;
+            sal_Int16 nImageScaleMode = 0;
             aImageScaleMode >>= nImageScaleMode;
 
             switch(nImageScaleMode)
