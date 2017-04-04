@@ -192,6 +192,12 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     if (!officecfg::Office::Common::Security::EnableExpertConfiguration::get())
         m_pExpertConfigBtn->Disable();
 
+    if (!officecfg::Office::Common::Misc::MacroRecorderMode::get())
+        m_pMacroCB->Disable();
+
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
+        m_pExperimentalCB->Disable();
+
     xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
 
     EnableHdl_Impl(m_pJavaEnableCB);
