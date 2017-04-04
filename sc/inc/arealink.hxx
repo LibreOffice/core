@@ -75,7 +75,6 @@ public:
     const ScRange&  GetDestArea() const     { return aDestArea;     }
 
     DECL_LINK( RefreshHdl, Timer*, void );
-    DECL_LINK( AreaEndEditHdl, Dialog&, void );
 };
 
 #endif
