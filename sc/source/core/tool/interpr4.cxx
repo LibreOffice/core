@@ -1899,15 +1899,9 @@ StackVar ScInterpreter::GetStackType( sal_uInt8 nParam )
 void ScInterpreter::ReverseStack( sal_uInt8 nParamCount )
 {
     //reverse order of parameter stack
-    const FormulaToken* p;
     assert( sp >= nParamCount && " less stack elements than parameters");
-    short nStackParams = std::min<short>( sp, nParamCount);
-    for ( short i = 0; i < short( nStackParams / 2 ); i++ )
-    {
-        p = pStack[ sp - ( nStackParams - i ) ];
-        pStack[ sp - ( nStackParams - i ) ] = pStack[ sp - 1 - i ];
-        pStack[ sp - 1 - i ] = p;
-    }
+    sal_uInt16 nStackParams = std::min<sal_uInt16>( sp, nParamCount);
+    std::reverse( pStack+(sp-nStackParams), pStack+sp );
 }
 
 bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr )
