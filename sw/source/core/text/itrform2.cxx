@@ -377,6 +377,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
     // the width of the kerning portion has to be adjusted
+    // Inserting a SwKernPortion before a SwTabPortion isn't necessary
+    // and will break the SwTabPortion.
     SwKernPortion* pGridKernPortion = nullptr;
 
     bool bFull = false;
@@ -458,7 +460,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 nLstHeight /= 5;
                 // does the kerning portion still fit into the line?
                 if( bAllowBefore && ( nLstActual != nNxtActual ) &&
-                    nLstHeight && rInf.X() + nLstHeight <= rInf.Width() )
+                    nLstHeight && rInf.X() + nLstHeight <= rInf.Width() &&
+                    ! pPor->InTabGrp() )
                 {
                     SwKernPortion* pKrn =
                         new SwKernPortion( *rInf.GetLast(), nLstHeight,
@@ -469,7 +472,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 }
             }
         }
-        else if ( bHasGrid && ! pGridKernPortion && ! pMulti )
+        else if ( bHasGrid && ! pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
         {
             // insert a grid kerning portion
             if ( ! pGridKernPortion )
@@ -615,7 +618,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             }
         }
 
-        if ( bHasGrid && pPor != pGridKernPortion && ! pMulti )
+        if ( bHasGrid && pPor != pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
         {
             sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
