@@ -1814,7 +1814,7 @@ void SwFramePage::RangeModifyHdl()
     SwFlyFrameAttrMgr aMgr( m_bNew, pSh, static_cast<const SwAttrSet&>(GetItemSet()) );
     SvxSwFrameValidation        aVal;
 
-    aVal.nAnchorType = (css::text::TextContentAnchorType)GetAnchor();
+    aVal.nAnchorType = GetAnchor();
     aVal.bAutoHeight = m_pAutoHeightCB->IsChecked();
     aVal.bAutoWidth = m_pAutoWidthCB->IsChecked();
     aVal.bMirror = m_pMirrorPagesCB->IsChecked();
@@ -1911,9 +1911,9 @@ void SwFramePage::RangeModifyHdl()
     if ( aVal.nHPos != nAtHorzPosVal )
         m_pAtHorzPosED->SetValue(m_pAtHorzPosED->Normalize(aVal.nHPos), FUNIT_TWIP);
 
-    const SwTwips nUpperOffset = (aVal.nAnchorType == css::text::TextContentAnchorType_AS_CHARACTER)
+    const SwTwips nUpperOffset = (aVal.nAnchorType == RndStdIds::FLY_AS_CHAR)
         ? m_nUpperBorder : 0;
-    const SwTwips nLowerOffset = (aVal.nAnchorType == css::text::TextContentAnchorType_AS_CHARACTER)
+    const SwTwips nLowerOffset = (aVal.nAnchorType == RndStdIds::FLY_AS_CHAR)
         ? m_nLowerBorder : 0;
 
     m_pAtVertPosED->SetMin(m_pAtVertPosED->Normalize(aVal.nMinVPos + nLowerOffset + nUpperOffset), FUNIT_TWIP);
@@ -2144,7 +2144,7 @@ void SwFramePage::UpdateExample()
     long nYPos = static_cast< long >(m_pAtVertPosED->Denormalize(m_pAtVertPosED->GetValue(FUNIT_TWIP)));
     m_pExampleWN->SetRelPos(Point(nXPos, nYPos));
 
-    m_pExampleWN->SetAnchor( (css::text::TextContentAnchorType)GetAnchor() );
+    m_pExampleWN->SetAnchor(GetAnchor());
     m_pExampleWN->Invalidate();
 }
 

@@ -24,7 +24,6 @@
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/swframeexample.hxx>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -55,7 +54,7 @@ SvxSwFrameExample::SvxSwFrameExample( vcl::Window *pParent, WinBits nStyle ) :
     nVAlign     (VertOrientation::TOP),
     nVRel       (RelOrientation::PRINT_AREA),
     nWrap       (WrapTextMode_NONE),
-    nAnchor     (TextContentAnchorType_AT_PAGE),
+    nAnchor     (RndStdIds::FLY_AT_PAGE),
     bTrans      (false),
     aRelPos     (Point(0,0))
 {
@@ -115,7 +114,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     sal_uInt32 nTTxtBorder;
     sal_uInt32 nBTxtBorder;
 
-    if (nAnchor != TextContentAnchorType_AS_CHARACTER)
+    if (nAnchor != RndStdIds::FLY_AS_CHAR)
     {
         nLBorder = 14;
         nRBorder = 10;
@@ -163,7 +162,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     aParaPrtArea.Top()      += nTTxtBorder;
     aParaPrtArea.Bottom()   -= nBTxtBorder;
 
-    if (nAnchor == TextContentAnchorType_AS_CHARACTER || nAnchor == TextContentAnchorType_AT_CHARACTER)
+    if (nAnchor == RndStdIds::FLY_AS_CHAR || nAnchor == RndStdIds::FLY_AT_CHAR)
     {
         vcl::Font aFont = OutputDevice::GetDefaultFont(
                                 DefaultFontType::LATIN_TEXT, Application::GetSettings().GetLanguageTag().getLanguageType(),
@@ -172,7 +171,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
         aFont.SetFillColor( m_aBgCol );
         aFont.SetWeight(WEIGHT_NORMAL);
 
-        if (nAnchor == TextContentAnchorType_AS_CHARACTER)
+        if (nAnchor == RndStdIds::FLY_AS_CHAR)
         {
             aFont.SetFontSize(Size(0, aParaPrtArea.GetHeight() - 2));
             SetFont(aFont);
@@ -196,10 +195,10 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     aFrameAtFrame.SetPos(Point(aFrameAtFrame.Left() + 2, (aPagePrtArea.Bottom() - aFrameAtFrame.GetHeight()) / 2 + 5));
 
     // Size of the frame to be positioned
-    if (nAnchor != TextContentAnchorType_AS_CHARACTER)
+    if (nAnchor != RndStdIds::FLY_AS_CHAR)
     {
-        sal_uInt32 nLFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nLBorder : nLTxtBorder;
-        sal_uInt32 nRFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nRBorder : nRTxtBorder;
+        sal_uInt32 nLFBorder = nAnchor == RndStdIds::FLY_AT_PAGE ? nLBorder : nLTxtBorder;
+        sal_uInt32 nRFBorder = nAnchor == RndStdIds::FLY_AT_PAGE ? nRBorder : nRTxtBorder;
 
         switch (nHRel)
         {
@@ -235,7 +234,7 @@ void SvxSwFrameExample::CalcBoundRect_Impl(tools::Rectangle &rRect)
 {
     switch (nAnchor)
     {
-        case TextContentAnchorType_AT_PAGE:
+        case RndStdIds::FLY_AT_PAGE:
         {
             switch (nHRel)
             {
@@ -279,7 +278,7 @@ void SvxSwFrameExample::CalcBoundRect_Impl(tools::Rectangle &rRect)
         }
         break;
 
-        case TextContentAnchorType_AT_FRAME:
+        case RndStdIds::FLY_AT_FLY:
         {
             switch (nHRel)
             {
@@ -322,8 +321,8 @@ void SvxSwFrameExample::CalcBoundRect_Impl(tools::Rectangle &rRect)
             }
         }
         break;
-        case TextContentAnchorType_AT_PARAGRAPH:
-        case TextContentAnchorType_AT_CHARACTER:
+        case RndStdIds::FLY_AT_PARA:
+        case RndStdIds::FLY_AT_CHAR:
         {
             switch (nHRel)
             {
@@ -402,7 +401,7 @@ void SvxSwFrameExample::CalcBoundRect_Impl(tools::Rectangle &rRect)
         }
         break;
 
-        case TextContentAnchorType_AS_CHARACTER:
+        case RndStdIds::FLY_AS_CHAR:
             rRect.Left() = aParaPrtArea.Left();
             rRect.Right() = aParaPrtArea.Right();
 
@@ -452,7 +451,7 @@ tools::Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRen
     tools::Rectangle aRect(rRect); // aPagePrtArea = Default
     CalcBoundRect_Impl(aRect);
 
-    if (nAnchor == TextContentAnchorType_AT_FRAME && &rRect == &aPagePrtArea)
+    if (nAnchor == RndStdIds::FLY_AT_FLY && &rRect == &aPagePrtArea)
     {
         // Testabsatz zeichnen
         tools::Rectangle aTxt(aTextLine);
@@ -483,14 +482,14 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
     // Draw PrintArea
     tools::Rectangle aRect = DrawInnerFrame_Impl(rRenderContext, aPagePrtArea, m_aTransColor, m_aPrintAreaCol);
 
-    if (nAnchor == TextContentAnchorType_AT_FRAME)
+    if (nAnchor == RndStdIds::FLY_AT_FLY)
         aRect = DrawInnerFrame_Impl(rRenderContext, aFrameAtFrame, m_aBgCol, m_aBorderCol);
 
     long lXPos = 0;
     long lYPos = 0;
 
     // Horizontal alignment
-    if (nAnchor != TextContentAnchorType_AS_CHARACTER)
+    if (nAnchor != RndStdIds::FLY_AS_CHAR)
     {
         switch (nHAlign)
         {
@@ -521,7 +520,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
     }
 
     // Vertical Alignment
-    if (nAnchor != TextContentAnchorType_AS_CHARACTER)
+    if (nAnchor != RndStdIds::FLY_AS_CHAR)
     {
         switch (nVAlign)
         {
@@ -593,7 +592,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
     tools::Rectangle* pOuterFrame = &aPage;
 
-    if (nAnchor == TextContentAnchorType_AT_FRAME)
+    if (nAnchor == RndStdIds::FLY_AT_FLY)
         pOuterFrame = &aFrameAtFrame;
 
     if (aFrmRect.Left() < pOuterFrame->Left())
@@ -612,7 +611,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
     sal_Int32 nStep;
     sal_uInt16 nLines;
 
-    if (nAnchor == TextContentAnchorType_AT_FRAME)
+    if (nAnchor == RndStdIds::FLY_AT_FLY)
     {
         aTxt.Left() = aFrameAtFrame.Left() + FLYINFLY_BORDER;
         aTxt.Right() = aFrameAtFrame.Right() - FLYINFLY_BORDER;
@@ -629,14 +628,14 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
         nLines = (sal_uInt16)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
     }
 
-    if (nAnchor != TextContentAnchorType_AS_CHARACTER)
+    if (nAnchor != RndStdIds::FLY_AS_CHAR)
     {
         // Simulate text
         const long nOldR = aTxt.Right();
         const long nOldL = aTxt.Left();
 
         // #i22341#
-        const bool bIgnoreWrap = nAnchor == TextContentAnchorType_AT_CHARACTER &&
+        const bool bIgnoreWrap = nAnchor == RndStdIds::FLY_AT_CHAR &&
                            ( nHRel == RelOrientation::CHAR || nVRel == RelOrientation::CHAR ||
                              nVRel == RelOrientation::TEXT_LINE );
 
@@ -645,7 +644,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
             if (i == (nLines - 1))
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
 
-            if (aTxt.IsOver(aFrmRect) && nAnchor != TextContentAnchorType_AS_CHARACTER && !bIgnoreWrap)
+            if (aTxt.IsOver(aFrmRect) && nAnchor != RndStdIds::FLY_AS_CHAR && !bIgnoreWrap)
             {
                 switch(nWrap)
                 {
@@ -673,7 +672,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
         }
         aTxt.Move(0, -nStep);
 
-        if (nAnchor != TextContentAnchorType_AT_FRAME && aTxt.Bottom() > aParaPrtArea.Bottom())
+        if (nAnchor != RndStdIds::FLY_AT_FLY && aTxt.Bottom() > aParaPrtArea.Bottom())
         {
             // Text has been replaced by frame, so adjust parameters height
             sal_uInt32 nDiff = aTxt.Bottom() - aParaPrtArea.Bottom();
@@ -685,7 +684,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
             aParaPrtArea.Bottom() -= nDiff;
             aPara.Bottom() -= nDiff;
         }
-        if (nAnchor == TextContentAnchorType_AT_CHARACTER && bIgnoreWrap)
+        if (nAnchor == RndStdIds::FLY_AT_CHAR && bIgnoreWrap)
             rRenderContext.DrawText(aAutoCharFrame, OUString('A'));
     }
     else
@@ -698,7 +697,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::R
     DrawRect_Impl(rRenderContext, aRect, m_aTransColor, m_aAlignColor);
 
     // Frame View
-    bool bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) || bTrans;
+    bool bDontFill = (nAnchor == RndStdIds::FLY_AT_CHAR && aFrmRect.IsOver(aAutoCharFrame)) || bTrans;
     DrawRect_Impl(rRenderContext, aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor);
 }
 

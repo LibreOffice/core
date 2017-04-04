@@ -422,7 +422,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));
         const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(rSet.Get(RES_VERT_ORIENT));
 
-        aVal.nAnchorType = static_cast< css::text::TextContentAnchorType >(m_nAnchorId);
+        aVal.nAnchorType = m_nAnchorId;
         aVal.bAutoHeight = rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE;
         aVal.bAutoWidth = rFrameSize.GetWidthSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
@@ -461,7 +461,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         nBottom = aVal.nMaxHeight - aVal.nHeight;
 
         {
-            if (aVal.nAnchorType == css::text::TextContentAnchorType_AS_CHARACTER)
+            if (aVal.nAnchorType == RndStdIds::FLY_AS_CHAR)
             {
                 nLeft = nRight;
 

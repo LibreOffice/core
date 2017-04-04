@@ -772,7 +772,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation,
 
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
-    const RndStdIds eAnchorType = static_cast<RndStdIds >(rValidation.nAnchorType);
+    const RndStdIds eAnchorType = rValidation.nAnchorType;
     const SwPosition* pContentPos = nullptr;
     SdrView*  pSdrView = pSh->GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();

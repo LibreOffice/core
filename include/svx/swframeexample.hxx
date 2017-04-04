@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -24,7 +23,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <svx/swframetypes.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
 // class SwFrmPagePreview -------------------------------------------------------
@@ -57,10 +56,8 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public vcl::Window
     short       nVAlign;
     short       nVRel;
 
-    css::text::WrapTextMode
-                nWrap;
-    css::text::TextContentAnchorType
-                nAnchor;
+    css::text::WrapTextMode nWrap;
+    RndStdIds   nAnchor;
     bool        bTrans;
 
     Point       aRelPos;
@@ -87,7 +84,7 @@ public:
     void SetVertRel(short nR)         { nVRel     = nR; }
 
     void SetTransparent(bool bT)      { bTrans    = bT; }
-    void SetAnchor(css::text::TextContentAnchorType nA) { nAnchor   = nA; }
+    void SetAnchor(RndStdIds nA) { nAnchor   = nA; }
 
     void SetRelPos(const Point& rP);
 };

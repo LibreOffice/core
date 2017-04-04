@@ -28,6 +28,7 @@
 #include "swdllapi.h"
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <svx/swframetypes.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{
@@ -132,30 +133,6 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 // Count of predefined Seq-field types. It is always the last
 // fields before INIT_FLDTYPES.
 #define INIT_SEQ_FLDTYPES   4
-
-// The former Rendezvous-IDs live on:
-// There are IDs for the anchors (SwFormatAnchor) and some others
-// that are only of importance for interfaces (SwDoc).
-enum class RndStdIds
-{
-    UNKNOWN = -1,       // return value used by SwFEShell::GetAnchorId
-
-    // the following 5 values are deliberately the same as the values in css::text::TextContentAnchorType
-    FLY_AT_PARA = 0,    // Anchored at paragraph.
-    FLY_AS_CHAR,        // Anchored as character.
-    FLY_AT_PAGE,        // Anchored at page.
-    FLY_AT_FLY,         // Anchored at frame.
-    FLY_AT_CHAR,        // Anchored at character.
-
-    HEADER,
-    FOOTER,
-    HEADERL,
-    HEADERR,
-    FOOTERL,
-    FOOTERR,
-
-    DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
-};
 
 extern ResMgr* pSwResMgr;
     // defined in sw/source/uibase/app/swmodule.cxx for the sw library and in
