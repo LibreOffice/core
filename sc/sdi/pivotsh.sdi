@@ -17,7 +17,7 @@
  */
 interface Pivot
 {
-    //  von Basic aus nicht erreichbar, darum alles mit Export = FALSE
+    // not accessible from Basic, therefore everything with Export = FALSE
 
     SID_PIVOT_RECALC    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PIVOT_KILL      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]

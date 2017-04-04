@@ -38,7 +38,7 @@ interface TableFont
 
 interface FormatForSelection
 {
-    // Slot's die in der DrawShell disabled werden. {
+    // slots which are disabled in the DrawShell {{
     SID_STYLE_FAMILY2           [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     SID_STYLE_APPLY             [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     SID_STYLE_WATERCAN          [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
@@ -53,7 +53,7 @@ interface FormatForSelection
     SID_STYLE_PREVIEW           [ ExecMethod = ExecuteStyle; ]
     SID_STYLE_END_PREVIEW           [ ExecMethod = ExecuteStyle; ]
     SID_CLASSIFICATION_APPLY [ ExecMethod = ExecuteStyle; ]
-    // } Slot's die in der DrawShell disabled werden.
+    // } slots which are disabled in the DrawShell {{
 
     SID_ATTR_ALIGN_HOR_JUSTIFY    [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
     SID_ATTR_ALIGN_VER_JUSTIFY    [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
