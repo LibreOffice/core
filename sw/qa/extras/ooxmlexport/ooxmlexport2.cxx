@@ -430,7 +430,7 @@ DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTablePosition, "table-position.docx")
 {
-    sal_Int32 aXCoordsFromOffice[] = { 2500, -1000, 0, 0 };
+    sal_Int32 aXCoordsFromOffice[] = { 2752, -900, 1, 106 }; // tdf#106742
     sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);

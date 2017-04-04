@@ -3428,17 +3428,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 pJcVal = "left";
             else
                 pJcVal = "start";
+            // tdf#106742
             nIndent = sal_Int32( pTableFormat->GetLRSpace( ).GetLeft( ) );
-            // Table indentation has different meaning in Word, depending if the table is nested or not.
-            // If nested, tblInd is added to parent table's left spacing and defines left edge position
-            // If not nested, text position of left-most cell must be at absolute X = tblInd
-            // so, table_spacing + table_spacing_to_content = tblInd
-            if (m_tableReference->m_nTableDepth == 0)
-            {
-                const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
-                const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
-                nIndent += sal_Int32( pFrameFormat->GetBox( ).GetDistance( SvxBoxItemLine::LEFT ) );
-            }
             break;
         }
     }

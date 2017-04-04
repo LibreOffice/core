@@ -542,18 +542,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         lcl_debug_TableBorder(aTableBorder);
 #endif
 
-        // Table position in Office is computed in 2 different ways :
-        // - top level tables: the goal is to have in-cell text starting at table indent pos (tblInd),
-        //   so table's position depends on table's cells margin
-        // - nested tables: the goal is to have left-most border starting at table_indent pos
-        if (rInfo.nNestLevel > 1)
-        {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf ));
-        }
-        else
-        {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ));
-        }
+        // tdf#106742
+        m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf ) );
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType );
