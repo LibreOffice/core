@@ -93,7 +93,14 @@ public:
     }
 };
 
-namespace com { namespace sun { namespace star { namespace awt {
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace awt
+{
 
 std::ostream& operator<<(std::ostream& rStrm, GradientStyle n)
 {
@@ -101,9 +108,19 @@ std::ostream& operator<<(std::ostream& rStrm, GradientStyle n)
     return rStrm;
 }
 
-} } } }
+}
+}
+}
+}
 
-namespace com { namespace sun { namespace star { namespace drawing {
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace drawing
+{
 
 std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
 {
@@ -111,9 +128,19 @@ std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
     return rStrm;
 }
 
-} } } }
+}
+}
+}
+}
 
-namespace com { namespace sun { namespace star { namespace style {
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace style
+{
 
 std::ostream& operator<<(std::ostream& rStrm, PageStyleLayout n)
 {
@@ -121,9 +148,19 @@ std::ostream& operator<<(std::ostream& rStrm, PageStyleLayout n)
     return rStrm;
 }
 
-} } } }
+}
+}
+}
+}
 
-namespace com { namespace sun { namespace star { namespace text {
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace text
+{
 
 std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
 {
@@ -131,9 +168,19 @@ std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
     return rStrm;
 }
 
-} } } }
+}
+}
+}
+}
 
-namespace com { namespace sun { namespace star { namespace table {
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace table
+{
 
 std::ostream& operator<<(std::ostream& rStrm, ShadowLocation n)
 {
@@ -141,7 +188,10 @@ std::ostream& operator<<(std::ostream& rStrm, ShadowLocation n)
     return rStrm;
 }
 
-} } } }
+}
+}
+}
+}
 
 DECLARE_RTFEXPORT_TEST(testZoom, "zoom.rtf")
 {
