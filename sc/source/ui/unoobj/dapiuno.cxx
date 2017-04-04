@@ -271,7 +271,7 @@ static OUString lcl_CreatePivotName( ScDocShell* pDocShell )
         if ( pColl )
             return pColl->CreateNewName();
     }
-    return OUString();                    // shouldnt' happen
+    return OUString();                    // shouldn't happen
 }
 
 static sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier& rFieldId )

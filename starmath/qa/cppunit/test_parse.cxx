@@ -94,7 +94,7 @@ void ParseTest::testMinus()
 
 /*
  * This shows that "nospace" turns off the expression's IsUseExtraSpaces(),
- * but leaves its decendants' flag on.
+ * but leaves its descendants' flag on.
  */
 void ParseTest::testNospace()
 {
