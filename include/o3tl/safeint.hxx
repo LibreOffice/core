@@ -11,7 +11,7 @@
 #define INCLUDED_O3TL_SAFEINT_HXX
 
 #include <limits>
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && !defined __clang__
 #include <safeint.h>
 #else
 #ifndef __has_builtin
@@ -22,7 +22,7 @@
 namespace o3tl
 {
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && !defined __clang__
 
 template<typename T> inline bool checked_multiply(T a, T b, T& result)
 {
