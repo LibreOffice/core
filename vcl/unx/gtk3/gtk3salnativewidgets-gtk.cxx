@@ -1124,11 +1124,17 @@ void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
 
     if (nPart == ControlPart::Entire)
     {
+        gtk_style_context_set_state(mpWindowStyle, flags);
+
+        gtk_render_background(mpWindowStyle, cr,
+                              0, 0,
+                              rControlRectangle.GetWidth(), rControlRectangle.GetHeight());
+
         gtk_style_context_set_state(mpSpinStyle, flags);
 
         gtk_render_background(mpSpinStyle, cr,
                               0, 0,
-                              rControlRectangle.GetWidth(), rControlRectangle.GetHeight() );
+                              rControlRectangle.GetWidth(), rControlRectangle.GetHeight());
     }
 
     cairo_translate(cr, -rControlRectangle.Left(), -rControlRectangle.Top());
@@ -1511,11 +1517,11 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         }
         case GtkControlPart::SpinButton:
         {
-            GtkWidgetPath *path = gtk_widget_path_new();
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
             set_object_name(path, -1, "spinbutton");
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
-            return makeContext(path, nullptr);
+            return makeContext(path, mpWindowStyle);
         }
         case GtkControlPart::SpinButtonEntry:
         {
