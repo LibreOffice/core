@@ -245,20 +245,22 @@ sal_uInt16 ScViewFunc::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula
 
 bool ScViewFunc::SelectionEditable( bool* pOnlyNotBecauseOfMatrix /* = NULL */ )
 {
-    bool bRet;
     ScDocument* pDoc = GetViewData().GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
+    SCCOL nCol = GetViewData().GetCurX();
+    SCROW nRow = GetViewData().GetCurY();
+    ScEditableTester aTester;
+
     if (rMark.IsMarked() || rMark.IsMultiMarked())
-        bRet = pDoc->IsSelectionEditable( rMark, pOnlyNotBecauseOfMatrix );
+        aTester = ScEditableTester(pDoc, rMark);
     else
-    {
-        SCCOL nCol = GetViewData().GetCurX();
-        SCROW nRow = GetViewData().GetCurY();
-        SCTAB nTab = GetViewData().GetTabNo();
-        bRet = pDoc->IsBlockEditable( nTab, nCol, nRow, nCol, nRow,
-            pOnlyNotBecauseOfMatrix );
-    }
-    return bRet;
+        aTester = ScEditableTester(pDoc, nCol, nRow, nCol, nRow, rMark);
+
+
+    if (pOnlyNotBecauseOfMatrix)
+        *pOnlyNotBecauseOfMatrix = aTester.OnlyMatrix();
+
+    return aTester.IsEditable();
 }
 
 #ifndef LRU_MAX
