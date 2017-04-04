@@ -2538,16 +2538,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_EXTERNAL_SOURCE:
             {
-                OUString aFile;
-                OUString aFilter;
-                OUString aOptions;
-                OUString aSource;
-                sal_uLong nRefresh=0;
-
                 const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
                 const SfxStringItem* pSource = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
                 if ( pFile && pSource )
                 {
+                    OUString aFile;
+                    OUString aFilter;
+                    OUString aOptions;
+                    OUString aSource;
+                    sal_uLong nRefresh=0;
+
                     aFile = pFile->GetValue();
                     aSource = pSource->GetValue();
                     const SfxStringItem* pFilter = rReq.GetArg<SfxStringItem>(SID_FILTER_NAME);
@@ -2559,6 +2559,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxUInt32Item* pRefresh = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
                     if ( pRefresh )
                         nRefresh = pRefresh->GetValue();
+
+                    ExecuteExternalSource( aFile, aFilter, aOptions, aSource, nRefresh, rReq );
                 }
                 else
                 {
@@ -2571,11 +2573,29 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OSL_ENSURE(pImpl->m_pLinkedDlg, "Dialog create fail!");
                     delete pImpl->m_pRequest;
                     pImpl->m_pRequest = new SfxRequest( rReq );
-                    pImpl->m_pLinkedDlg->StartExecuteModal( LINK( this, ScCellShell, DialogClosed ) );
-                    return;
-                }
+                    OUString sFile, sFilter, sOptions, sSource;
+                    sal_uLong nRefresh = 0;
+                    if (pImpl->m_pLinkedDlg->Execute() == RET_OK)
+                    {
+                        sFile = pImpl->m_pLinkedDlg->GetURL();
+                        sFilter = pImpl->m_pLinkedDlg->GetFilter();
+                        sOptions = pImpl->m_pLinkedDlg->GetOptions();
+                        sSource = pImpl->m_pLinkedDlg->GetSource();
+                        nRefresh = pImpl->m_pLinkedDlg->GetRefresh();
+                        if ( !sFile.isEmpty() )
+                            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILE_NAME, sFile ) );
+                        if ( !sFilter.isEmpty() )
+                            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILTER_NAME, sFilter ) );
+                        if ( !sOptions.isEmpty() )
+                            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
+                        if ( !sSource.isEmpty() )
+                            pImpl->m_pRequest->AppendItem( SfxStringItem( FN_PARAM_1, sSource ) );
+                        if ( nRefresh )
+                            pImpl->m_pRequest->AppendItem( SfxUInt32Item( FN_PARAM_2, nRefresh ) );
+                    }
 
-                ExecuteExternalSource( aFile, aFilter, aOptions, aSource, nRefresh, rReq );
+                    ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefresh, *(pImpl->m_pRequest) );
+                }
             }
             break;
 
@@ -2990,35 +3010,6 @@ void ScCellShell::ExecuteFillSingleEdit()
     }
 
     SC_MOD()->SetInputMode(SC_INPUT_TABLE, &aInit);
-}
-
-IMPL_LINK_NOARG(ScCellShell, DialogClosed, Dialog&, void)
-{
-    assert(pImpl->m_pLinkedDlg && "ScCellShell::DialogClosed(): invalid request");
-    assert(pImpl->m_pRequest && "ScCellShell::DialogClosed(): invalid request");
-    OUString sFile, sFilter, sOptions, sSource;
-    sal_uLong nRefresh = 0;
-
-    if ( pImpl->m_pLinkedDlg->GetResult() == RET_OK )
-    {
-        sFile = pImpl->m_pLinkedDlg->GetURL();
-        sFilter = pImpl->m_pLinkedDlg->GetFilter();
-        sOptions = pImpl->m_pLinkedDlg->GetOptions();
-        sSource = pImpl->m_pLinkedDlg->GetSource();
-        nRefresh = pImpl->m_pLinkedDlg->GetRefresh();
-        if ( !sFile.isEmpty() )
-            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILE_NAME, sFile ) );
-        if ( !sFilter.isEmpty() )
-            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILTER_NAME, sFilter ) );
-        if ( !sOptions.isEmpty() )
-            pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
-        if ( !sSource.isEmpty() )
-            pImpl->m_pRequest->AppendItem( SfxStringItem( FN_PARAM_1, sSource ) );
-        if ( nRefresh )
-            pImpl->m_pRequest->AppendItem( SfxUInt32Item( FN_PARAM_2, nRefresh ) );
-    }
-
-    ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefresh, *(pImpl->m_pRequest) );
 }
 
 CellShell_Impl::CellShell_Impl() :

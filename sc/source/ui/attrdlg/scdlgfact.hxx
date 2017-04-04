@@ -258,8 +258,12 @@ class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg
 
 class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg
 {
-    DECL_ABSTDLG2_BASE( AbstractScLinkedAreaDlg_Impl, ScLinkedAreaDlg)
-
+    ScopedVclPtr<ScLinkedAreaDlg> pDlg;
+public:
+    explicit                AbstractScLinkedAreaDlg_Impl( ScLinkedAreaDlg* p)
+                              : pDlg(p) {}
+    virtual                 ~AbstractScLinkedAreaDlg_Impl() override;
+    virtual short           Execute() override;
     virtual void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh ) override;
