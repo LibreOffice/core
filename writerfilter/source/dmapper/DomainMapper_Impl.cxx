@@ -242,7 +242,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bFrameBtLr(false),
         m_bIsSplitPara(false),
         m_vTextFramesForChaining(),
-        m_bParaHadField(false)
+        m_bParaHadField(false),
+        m_bParaAutoBefore(false)
 
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
@@ -1171,7 +1172,48 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                         appendTextPortion(sMarker, pEmpty);
                     }
 
+                    // Check if top / bottom margin has to be updated, now that we know the numbering status of both the previous and
+                    // the current text node.
+                    auto itNumberingRules = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
+                    {
+                        return rValue.Name == "NumberingRules";
+                    });
+                    if (itNumberingRules != aProperties.end())
+                    {
+                        // This textnode has numbering.
+                        if (m_xPreviousParagraph.is() && m_xPreviousParagraph->getPropertyValue("NumberingRules").hasValue())
+                        {
+                            // There was a previous textnode and it had numbering.
+                            if (m_bParaAutoBefore)
+                            {
+                                // This before spacing is set to auto, set before space to 0.
+                                auto itParaTopMargin = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
+                                {
+                                    return rValue.Name == "ParaTopMargin";
+                                });
+                                if (itParaTopMargin != aProperties.end())
+                                    itParaTopMargin->Value <<= static_cast<sal_Int32>(0);
+                                else
+                                    aProperties.push_back(comphelper::makePropertyValue("ParaTopMargin", static_cast<sal_Int32>(0)));
+                            }
+                            uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
+                            m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
+                            auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
+                            auto itPrevParaAutoAfter = std::find_if(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                            {
+                                return rValue.Name == "ParaBottomMarginAfterAutoSpacing";
+                            });
+                            bool bPrevParaAutoAfter = itPrevParaAutoAfter != aPrevProperties.end();
+                            if (bPrevParaAutoAfter)
+                            {
+                                // Previous after spacing is set to auto, set previous after space to 0.
+                                m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::makeAny(static_cast<sal_Int32>(0)));
+                            }
+                        }
+                    }
+
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
+                    m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
 
                     if (xCursor.is())
                     {
@@ -1229,6 +1271,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 
     SetIsOutsideAParagraph(true);
     m_bParaHadField = false;
+    m_bParaAutoBefore = false;
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().endElement();
 #endif

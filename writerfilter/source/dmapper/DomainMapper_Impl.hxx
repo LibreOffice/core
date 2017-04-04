@@ -880,11 +880,16 @@ public:
 
     bool IsDiscardHeaderFooter();
 
+    void SetParaAutoBefore(bool bParaAutoBefore) { m_bParaAutoBefore = bParaAutoBefore; }
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
     /// Current paragraph had at least one field in it.
     bool m_bParaHadField;
+    css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
+    /// Current paragraph has automatic before spacing.
+    bool m_bParaAutoBefore;
 };
 
 } //namespace dmapper
