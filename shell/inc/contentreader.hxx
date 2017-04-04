@@ -41,7 +41,7 @@ public:
         @return
         the chunkbuffer of the document.
     */
-    inline ChunkBuffer_t const & getChunkBuffer( ) const{ return m_ChunkBuffer; };
+    ChunkBuffer_t const & getChunkBuffer( ) const{ return m_ChunkBuffer; };
 
 protected: // protected because its only an implementation relevant class
 
@@ -92,7 +92,7 @@ protected:
         @return
         the Style-Locale map
     */
-    inline StyleLocaleMap_t const & getStyleMap( ) const{ return m_StyleMap; };
+    StyleLocaleMap_t const & getStyleMap( ) const{ return m_StyleMap; };
 
     /** get style of the current content.
 

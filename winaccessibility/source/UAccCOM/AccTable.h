@@ -170,7 +170,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessibleTable> pRXTable;
 
-    inline css::accessibility::XAccessibleTable* GetXInterface()
+    css::accessibility::XAccessibleTable* GetXInterface()
     {
         return pRXTable.get();
     }

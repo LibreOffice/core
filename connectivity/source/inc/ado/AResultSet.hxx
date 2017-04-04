@@ -127,7 +127,7 @@ namespace connectivity
 
             // late constructor
             void construct();
-            inline void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
+            void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             virtual OUString SAL_CALL getImplementationName(  ) override;
             virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;

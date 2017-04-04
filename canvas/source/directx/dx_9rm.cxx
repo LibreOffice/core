@@ -225,7 +225,7 @@ namespace dxcanvas
             ::basegfx::B2IVector                        maPageSize;
             D3DPRESENT_PARAMETERS                       mad3dpp;
 
-            inline bool isDisposed() const { return (mhWnd==nullptr); }
+            bool isDisposed() const { return (mhWnd==nullptr); }
 
             struct dxvertex
             {

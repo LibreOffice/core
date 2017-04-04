@@ -106,7 +106,7 @@ private:
 
     static void get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const ::rtl::OUString &ouValue, css::uno::Any &rAny);
 
-    inline css::accessibility::XAccessibleEditableText* GetXInterface()
+    css::accessibility::XAccessibleEditableText* GetXInterface()
     {
         return pRXEdtTxt.get();
     }

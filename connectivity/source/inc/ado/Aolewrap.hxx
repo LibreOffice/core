@@ -130,19 +130,19 @@ namespace connectivity
             // They only call the superclass
             WpOLECollection(Ts* pInt=nullptr):WpOLEBase<Ts>(pInt){}
             WpOLECollection(const WpOLECollection& rhs) : WpOLEBase<Ts>(rhs) {}
-            inline WpOLECollection& operator=(const WpOLECollection& rhs)
+            WpOLECollection& operator=(const WpOLECollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
 
 
-            inline void Refresh(){pInterface->Refresh();}
+            void Refresh(){pInterface->Refresh();}
 
-            inline sal_Int32 GetItemCount() const
+            sal_Int32 GetItemCount() const
             {
                 sal_Int32 nCount = 0;
                 return pInterface ? (SUCCEEDED(pInterface->get_Count(&nCount)) ? nCount : sal_Int32(0)) : sal_Int32(0);
             }
 
-            inline WrapT GetItem(sal_Int32 index) const
+            WrapT GetItem(sal_Int32 index) const
             {
                 OSL_ENSURE(index >= 0 && index<GetItemCount(),"Wrong index for field!");
                 T* pT = NULL;
@@ -152,7 +152,7 @@ namespace connectivity
                 return aRet;
             }
 
-            inline WrapT GetItem(const OLEVariant& index) const
+            WrapT GetItem(const OLEVariant& index) const
             {
                 T* pT = NULL;
                 WrapT aRet(NULL);
@@ -161,7 +161,7 @@ namespace connectivity
                 return aRet;
             }
 
-            inline WrapT GetItem(const OUString& sStr) const
+            WrapT GetItem(const OUString& sStr) const
             {
                 WrapT aRet(NULL);
                 T* pT = NULL;
@@ -177,7 +177,7 @@ namespace connectivity
                     aRet.setWithOutAddRef(pT);
                 return aRet;
             }
-            inline void fillElementNames(TStringVector& _rVector)
+            void fillElementNames(TStringVector& _rVector)
             {
                 if(IsValid())
                 {
@@ -204,16 +204,16 @@ namespace connectivity
             using WpOLEBase<Ts>::pInterface;
             WpOLEAppendCollection(Ts* pInt=nullptr):WpOLECollection<Ts,T,WrapT>(pInt){}
             WpOLEAppendCollection(const WpOLEAppendCollection& rhs) : WpOLECollection<Ts, T, WrapT>(rhs) {}
-            inline WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
+            WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
 
 
-            inline bool Append(const WrapT& aWrapT)
+            bool Append(const WrapT& aWrapT)
             {
                 return SUCCEEDED(pInterface->Append(OLEVariant(static_cast<T*>(aWrapT))));
             };
 
-            inline bool Delete(const OUString& sName)
+            bool Delete(const OUString& sName)
             {
                 return SUCCEEDED(pInterface->Delete(OLEVariant(sName)));
             };

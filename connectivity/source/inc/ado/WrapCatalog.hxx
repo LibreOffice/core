@@ -31,7 +31,7 @@ namespace connectivity
             WpADOCatalog(_ADOCatalog* pInt = nullptr)  :   WpOLEBase<_ADOCatalog>(pInt){}
             WpADOCatalog(const WpADOCatalog& rhs) : WpOLEBase<_ADOCatalog>(rhs) {}
 
-            inline WpADOCatalog& operator=(const WpADOCatalog& rhs)
+            WpADOCatalog& operator=(const WpADOCatalog& rhs)
                 {WpOLEBase<_ADOCatalog>::operator=(rhs); return *this;}
 
             OUString GetObjectOwner(const OUString& _rName, ObjectTypeEnum _eNum);

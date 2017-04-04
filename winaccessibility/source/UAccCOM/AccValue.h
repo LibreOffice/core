@@ -93,7 +93,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessibleValue> pRXVal;
 
-    inline css::accessibility::XAccessibleValue* GetXInterface()
+    css::accessibility::XAccessibleValue* GetXInterface()
     {
         return pRXVal.get();
     }

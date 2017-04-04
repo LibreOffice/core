@@ -37,7 +37,7 @@ namespace connectivity
 
             void Create();
 
-            inline WpADOColumn& operator=(const WpADOColumn& rhs)
+            WpADOColumn& operator=(const WpADOColumn& rhs)
                 {WpOLEBase<_ADOColumn>::operator=(rhs); return *this;}
 
             OUString get_Name() const;

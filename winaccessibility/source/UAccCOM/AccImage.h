@@ -91,7 +91,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessibleImage> pRXImg;
 
-    inline css::accessibility::XAccessibleImage* GetXInterface()
+    css::accessibility::XAccessibleImage* GetXInterface()
     {
         return pRXImg.get();
     }
