@@ -1354,7 +1354,7 @@ XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
         The effective result here is class String (*)[54*1] */
     mxFormatter( new SvNumberFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US ) ),
     mpKeywordTable( new NfKeywordTable ),
-    mnStdFmt( GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
+    mnStdFmt( GetFormatter().GetStandardIndex( ScGlobal::eLnge ) )
 {
     switch( GetBiff() )
     {

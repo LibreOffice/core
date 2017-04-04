@@ -1449,7 +1449,7 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
 
 XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
     meSysLang( rRoot.GetSysLanguage() ),
-    mnStdScNumFmt( rRoot.GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
+    mnStdScNumFmt( rRoot.GetFormatter().GetStandardIndex( ScGlobal::eLnge ) )
 {
     // *** insert default formats (BIFF5+ only)***
 
