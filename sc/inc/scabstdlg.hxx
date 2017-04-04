@@ -223,7 +223,7 @@ public:
     virtual OUString GetSelectEntry() const = 0;
 };
 
-class AbstractScLinkedAreaDlg : public VclAbstractDialog2
+class AbstractScLinkedAreaDlg : public VclAbstractDialog
 {
 protected:
     virtual             ~AbstractScLinkedAreaDlg() override = default;

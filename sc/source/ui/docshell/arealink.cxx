@@ -92,7 +92,18 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEn
     OSL_ENSURE(pDlg, "Dialog create fail!");
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
     pImpl->m_pDialog = pDlg;
-    pDlg->StartExecuteModal( LINK( this, ScAreaLink, AreaEndEditHdl ) );
+    if ( pDlg->Execute() == RET_OK )
+    {
+        aOptions = pImpl->m_pDialog->GetOptions();
+        Refresh( pImpl->m_pDialog->GetURL(), pImpl->m_pDialog->GetFilter(),
+                 pImpl->m_pDialog->GetSource(), pImpl->m_pDialog->GetRefresh() );
+
+        //  copy source data from members (set in Refresh) into link name for dialog
+        OUString aNewLinkName;
+        sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
+        SetName( aNewLinkName );
+    }
+    pImpl->m_pDialog.clear();    // dialog is deleted with parent
 }
 
 ::sfx2::SvBaseLink::UpdateResult ScAreaLink::DataChanged(
@@ -479,25 +490,6 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 IMPL_LINK_NOARG(ScAreaLink, RefreshHdl, Timer *, void)
 {
     Refresh( aFileName, aFilterName, aSourceArea, GetRefreshDelay() );
-}
-
-IMPL_LINK_NOARG(ScAreaLink, AreaEndEditHdl, Dialog&, void)
-{
-    //  #i76514# can't use link argument to access the dialog,
-    //  because it's the ScLinkedAreaDlg, not AbstractScLinkedAreaDlg
-
-    if ( pImpl->m_pDialog && pImpl->m_pDialog->GetResult() == RET_OK )
-    {
-        aOptions = pImpl->m_pDialog->GetOptions();
-        Refresh( pImpl->m_pDialog->GetURL(), pImpl->m_pDialog->GetFilter(),
-                 pImpl->m_pDialog->GetSource(), pImpl->m_pDialog->GetRefresh() );
-
-        //  copy source data from members (set in Refresh) into link name for dialog
-        OUString aNewLinkName;
-        sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
-        SetName( aNewLinkName );
-    }
-    pImpl->m_pDialog.clear();    // dialog is deleted with parent
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
