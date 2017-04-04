@@ -49,6 +49,19 @@ OUString supportedByType( const OUString& clipBoardFormat,  const OUString& resu
     return sTypeName;
 }
 
+bool IsContentTypeXML( const OUString& contentType )
+{
+    // RFC 3023: application/xml, text/xml
+    if (contentType.startsWithIgnoreAsciiCase("application/xml"))
+        return true;
+    if (contentType.startsWithIgnoreAsciiCase("text/xml"))
+        return true;
+    // Registered media types: application/XXXX+xml
+    if (contentType.endsWithIgnoreAsciiCase("+xml"))
+        return true;
+    return false;
+}
+
 }
 
 OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::PropertyValue >& aArguments )
@@ -125,9 +138,25 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
             resultString = read_uInt16s_ToOUString( *pInStream, nSize );
 
         if ( !resultString.startsWith( "<?xml" ) )
-            // This is not an XML stream.  It makes no sense to try to detect
-            // a non-XML file type here.
-            return OUString();
+        {
+            // Check the content type; XML declaration is optional in XML files according to XML 1.0 ch.2.8
+            // (see https://www.w3.org/TR/2008/REC-xml-20081126/#sec-prolog-dtd)
+            OUString sContentType;
+            try
+            {
+                ::ucbhelper::Content aContent(
+                    sUrl, Reference< css::ucb::XCommandEnvironment >(),
+                    mxCtx);
+                aContent.getPropertyValue("Content-Type") >>= sContentType;
+            }
+            catch (...) {}
+            if (!IsContentTypeXML(sContentType))
+            {
+                // This is not an XML stream.  It makes no sense to try to detect
+                // a non-XML file type here.
+                return OUString();
+            }
+        }
 
         // test typedetect code
         Reference <XNameAccess> xTypeCont(mxCtx->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxCtx), UNO_QUERY);
