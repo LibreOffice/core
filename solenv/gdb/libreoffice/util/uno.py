@@ -97,7 +97,7 @@ class TemplateType(object):
         self.args = args
 
     def __str__(self):
-        argtypes = [str(gdb.lookup_type(arg).strip_typedefs()) for arg in self.args]
+        argtypes = [str(gdb.lookup_type(str(arg)).strip_typedefs()) for arg in self.args]
         return self.template + '<' + ', '.join(argtypes) + '>'
 
 class Type(object):
