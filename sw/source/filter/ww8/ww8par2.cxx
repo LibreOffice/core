@@ -3688,7 +3688,7 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
 #ifdef DEBUGSPRMREADER
         fprintf(stderr, "id is %x\n", aIter.GetAktId());
 #endif
-        pIo->ImportSprm(pSprm);
+        pIo->ImportSprm(pSprm, aSprmIter.GetRemLen(), aSprmIter.GetAktId());
         aSprmIter.advance();
     }
 
