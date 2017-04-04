@@ -96,6 +96,8 @@ void WinOpenGLContext::makeCurrent()
 
     clearCurrent();
 
+    epoxy_handle_external_wglMakeCurrent();
+
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
         g_bAnyCurrent = false;
