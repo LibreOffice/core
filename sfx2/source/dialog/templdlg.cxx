@@ -2196,18 +2196,15 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
         if (xUICommands.is())
         {
             uno::Any aCommand = xUICommands->getByName(".uno:StyleApply");
-            OUString sLabel = lcl_GetLabel( aCommand );
-            m_aActionTbR->InsertItem( SID_STYLE_WATERCAN, sLabel );
+            m_aActionTbR->InsertItem( SID_STYLE_WATERCAN, SfxResId(STR_STYLE_FILL_FORMAT_MODE).toString() );
             m_aActionTbR->SetHelpId(SID_STYLE_WATERCAN, HID_TEMPLDLG_WATERCAN);
 
             aCommand = xUICommands->getByName(".uno:StyleNewByExample");
-            sLabel = lcl_GetLabel( aCommand );
-            m_aActionTbR->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
+            m_aActionTbR->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, SfxResId(STR_STYLE_NEW_STYLE_FROM_SELECTION).toString() );
             m_aActionTbR->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
             aCommand = xUICommands->getByName(".uno:StyleUpdateByExample");
-            sLabel = lcl_GetLabel( aCommand );
-            m_aActionTbR->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
+            m_aActionTbR->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, SfxResId(STR_STYLE_UPDATE_STYLE).toString() );
             m_aActionTbR->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
         }
     }
