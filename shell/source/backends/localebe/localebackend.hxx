@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SHELL_SOURCE_BACKENDS_LOCALEBE_LOCALEBACKEND_HXX
 #define INCLUDED_SHELL_SOURCE_BACKENDS_LOCALEBE_LOCALEBACKEND_HXX
 
+#include <sal/config.h>
+
+#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -104,13 +107,13 @@ class LocaleBackend : public ::cppu::WeakImplHelper <
 
     private:
         // Returns the user locale
-        static OUString getLocale();
+        static css::beans::Optional<css::uno::Any> getLocale();
 
         // Returns the user UI locale
-        static OUString getUILocale();
+        static css::beans::Optional<css::uno::Any> getUILocale();
 
         // Returns the system default locale
-        static OUString getSystemLocale();
+        static css::beans::Optional<css::uno::Any> getSystemLocale();
 } ;
 
 
