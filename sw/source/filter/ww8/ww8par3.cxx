@@ -714,7 +714,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
             maSprmParser);
         while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
         {
-            rReader.ImportSprm(pSprm);
+            rReader.ImportSprm(pSprm, aSprmIter.GetRemLen(), aSprmIter.GetAktId());
             aSprmIter.advance();
         }
 
@@ -1900,7 +1900,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
                     sal_uInt8* pSprms1  = &aParaSprms[0];
                     while (0 < nLen)
                     {
-                        sal_uInt16 nL1 = ImportSprm(pSprms1);
+                        sal_uInt16 nL1 = ImportSprm(pSprms1, nLen);
                         nLen = nLen - nL1;
                         pSprms1 += nL1;
                     }
