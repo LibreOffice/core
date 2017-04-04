@@ -4886,6 +4886,11 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     {
         // Length of actual sprm
         pRes->nMemLen = maSprmParser.GetSprmSize(pRes->nSprmId, pRes->pMemPos);
+        if (pRes->nMemLen > p->nSprmsLen)
+        {
+            SAL_WARN("sw.ww8", "Short sprm, len " << pRes->nMemLen << " claimed, max possible is " << p->nSprmsLen);
+            pRes->nMemLen = p->nSprmsLen;
+        }
     }
 }
 
