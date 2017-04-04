@@ -363,41 +363,6 @@ DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
     assertXPath(parseExport("word/styles.xml"), "//w:style[@w:styleId='Normal']/w:qFormat", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTablePosition, "table-position.docx")
-{
-    sal_Int32 aXCoordsFromOffice[] = { 2500, -1000, 0, 0 };
-    sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
-
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
-
-    for (int i=0; i<4; i++) {
-        uno::Reference<text::XTextTable> xTable1 (xTables->getByIndex(i), uno::UNO_QUERY);
-        // Verify X coord
-        uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
-        xCtrl->select(uno::makeAny(xTable1));
-        uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY);
-        uno::Reference<text::XTextViewCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-        awt::Point pos = xCursor->getPosition();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect X coord computed from docx",
-            aXCoordsFromOffice[i], pos.X, 1);
-
-        // Verify left margin of 1st cell :
-        //  * Office left margins are measured relative to the right of the border
-        //  * LO left spacing is measured from the center of the border
-        uno::Reference<table::XCell> xCell = xTable1->getCellByName("A1");
-        uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
-        sal_Int32 aLeftMargin = -1;
-        xPropSet->getPropertyValue("LeftBorderDistance") >>= aLeftMargin;
-        uno::Any aLeftBorder = xPropSet->getPropertyValue("LeftBorder");
-        table::BorderLine2 aLeftBorderLine;
-        aLeftBorder >>= aLeftBorderLine;
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect left spacing computed from docx cell margin",
-            cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1);
-    }
-}
-
 struct SingleLineBorders {
     sal_Int16 top, bottom, left, right;
     SingleLineBorders(int t=0, int b=0, int l=0, int r=0)
