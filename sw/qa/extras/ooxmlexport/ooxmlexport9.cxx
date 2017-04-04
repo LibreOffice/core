@@ -61,6 +61,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(3), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106690, "tdf106690.docx")
+{
+    // This was 0, numbering rules with automatic spacing meant 0
+    // before/autospacing for all text nodes, even for ones at the start/end of
+    // a numbered text node block.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(2), "ParaTopMargin"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.docx")
 {
     // the paragraph style should set table's text-flow break-before-page
