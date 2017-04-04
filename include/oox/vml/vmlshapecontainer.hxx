@@ -55,10 +55,10 @@ public:
     Drawing&     getDrawing() { return mrDrawing; }
 
     /** Creates and returns a new shape template object. */
-    ShapeType&          createShapeType();
+    std::shared_ptr<ShapeType> createShapeType();
     /** Creates and returns a new shape object of the specified type. */
     template< typename ShapeT >
-    ShapeT&             createShape();
+    std::shared_ptr<ShapeT> createShape();
 
     /** Final processing after import of the drawing fragment. */
     void                finalizeFragmentImport();
@@ -117,11 +117,11 @@ private:
 
 
 template< typename ShapeT >
-ShapeT& ShapeContainer::createShape()
+std::shared_ptr<ShapeT> ShapeContainer::createShape()
 {
     std::shared_ptr< ShapeT > xShape( new ShapeT( mrDrawing ) );
     maShapes.push_back( xShape );
-    return *xShape;
+    return xShape;
 }
 
 template< typename Functor >

@@ -266,9 +266,12 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& r
     return nullptr;
 }
 
-ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& rShapeType, const AttributeList& rAttribs ) :
-    ShapeContextBase( rParent ),
-    mrTypeModel( rShapeType.getTypeModel() )
+ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper& rParent,
+        std::shared_ptr<ShapeType> const& pShapeType,
+        const AttributeList& rAttribs)
+    : ShapeContextBase(rParent)
+    , m_pShapeType(pShapeType) // tdf#112311 keep it alive
+    , mrTypeModel( pShapeType->getTypeModel() )
 {
     // shape identifier and shape name
     bool bHasOspid = rAttribs.hasAttribute( O_TOKEN( spid ) );
@@ -429,10 +432,11 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
     }
 }
 
-ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, const AttributeList& rAttribs ) :
-    ShapeTypeContext( rParent, rShape, rAttribs ),
-    mrShape( rShape ),
-    mrShapeModel( rShape.getShapeModel() )
+ShapeContext::ShapeContext(ContextHandler2Helper& rParent,
+        std::shared_ptr<ShapeBase> pShape, const AttributeList& rAttribs)
+    : ShapeTypeContext( rParent, pShape, rAttribs )
+    , mrShape( *pShape )
+    , mrShapeModel( pShape->getShapeModel() )
 {
     // collect shape specific attributes
     mrShapeModel.maType = rAttribs.getXString( XML_type, OUString() );
@@ -538,9 +542,10 @@ void ShapeContext::setVmlPath( const OUString& rPath )
         mrShapeModel.maVmlPath = rPath;
 }
 
-GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent, GroupShape& rShape, const AttributeList& rAttribs ) :
-    ShapeContext( rParent, rShape, rAttribs ),
-    mrShapes( rShape.getChildren() )
+GroupShapeContext::GroupShapeContext(ContextHandler2Helper& rParent,
+        std::shared_ptr<GroupShape> pShape, const AttributeList& rAttribs)
+    : ShapeContext( rParent, pShape, rAttribs )
+    , mrShapes( pShape->getChildren() )
 {
 }
 
@@ -552,8 +557,9 @@ ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const 
     return xContext.get() ? xContext : ShapeContext::onCreateContext( nElement, rAttribs );
 }
 
-RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, RectangleShape& rShape ) :
-    ShapeContext( rParent, rShape, rAttribs )
+RectangleShapeContext::RectangleShapeContext(ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs, std::shared_ptr<RectangleShape> pShape)
+    : ShapeContext( rParent, pShape, rAttribs )
 {
 }
 

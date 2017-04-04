@@ -363,6 +363,7 @@ class SwWW8FltControlStack : public SwFltControlStack
 {
 private:
     SwWW8ImplReader& rReader;
+    std::unique_ptr<SfxItemSet> m_xScratchSet;
     sal_uInt16 nToggleAttrFlags;
     sal_uInt16 nToggleBiDiAttrFlags;
     SwWW8FltControlStack(const SwWW8FltControlStack&) = delete;
@@ -982,11 +983,10 @@ struct ApoTestResults
 
 struct ANLDRuleMap
 {
-    SwNumRule* mpOutlineNumRule;    // WinWord 6 numbering, variant 1
-    SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, variant 2
-    SwNumRule* GetNumRule(sal_uInt8 nNumType);
-    void SetNumRule(SwNumRule*, sal_uInt8 nNumType);
-    ANLDRuleMap() : mpOutlineNumRule(nullptr), mpNumberingNumRule(nullptr) {}
+    OUString msOutlineNumRule;    // WinWord 6 numbering, variant 1
+    OUString msNumberingNumRule;  // WinWord 6 numbering, variant 2
+    SwNumRule* GetNumRule(SwDoc& rDoc, sal_uInt8 nNumType);
+    void SetNumRule(const OUString& rNumRule, sal_uInt8 nNumType);
 };
 
 struct SprmReadInfo;
@@ -1359,6 +1359,8 @@ private:
     bool m_bLoadingTOXHyperlink;
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
     SwPaM* m_pPosAfterTOC;
+    // used for some dropcap tweaking
+    SwTextNode* m_pPreviousNode;
 
     std::unique_ptr< SwPosition > m_pLastAnchorPos;
 
@@ -1862,7 +1864,7 @@ public:     // really private, but can only be done public
 
     void DeleteFormImpl();
 
-    short ImportSprm( const sal_uInt8* pPos, sal_uInt16 nId = 0 );
+    short ImportSprm(const sal_uInt8* pPos, sal_Int32 nMemLen, sal_uInt16 nId = 0);
 
     bool SearchRowEnd(WW8PLCFx_Cp_FKP* pPap,WW8_CP &rStartCp, int nLevel) const;
 
