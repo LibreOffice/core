@@ -1100,60 +1100,6 @@ void AppendConfigToken( OUString& _rURL, bool _bQuestionMark )
     _rURL += SvtHelpOptions().GetSystem();
 }
 
-namespace
-{
-
-    bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
-    {
-        bool bRet = false;
-        OUString sAnchor;
-
-        try
-        {
-            ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                                 Reference< css::ucb::XCommandEnvironment >(),
-                                 comphelper::getProcessComponentContext() );
-            if ( ( aCnt.getPropertyValue("AnchorName") >>= sAnchor ) )
-            {
-
-                if ( !sAnchor.isEmpty() )
-                {
-                    _rAnchor = sAnchor;
-                    bRet = true;
-                }
-            }
-            else
-            {
-                SAL_WARN( "dbaccess.ui", "Property 'AnchorName' is missing" );
-            }
-        }
-        catch( Exception& )
-        {
-        }
-
-        return bRet;
-    }
-} // anonymous
-
-css::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
-{
-    css::util::URL aURL;
-    aURL.Complete = "vnd.sun.star.help://" +
-        _sModuleName + "/" + OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
-
-    OUString sAnchor;
-    OUString sTempURL = aURL.Complete;
-    AppendConfigToken( sTempURL, true );
-    bool bHasAnchor = GetHelpAnchor_Impl( sTempURL, sAnchor );
-    AppendConfigToken(aURL.Complete,true);
-    if ( bHasAnchor )
-    {
-        aURL.Complete += "#";
-        aURL.Complete += sAnchor;
-    }
-    return aURL;
-}
-
 void setEvalDateFormatForFormatter(Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
     OSL_ENSURE( _rxFormatter.is(),"setEvalDateFormatForFormatter: Formatter is NULL!");
