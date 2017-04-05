@@ -630,11 +630,9 @@ uno::Reference< XAccessible> SAL_CALL
     return xChild;
 }
 
-uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent()
+uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParentImpl()
 {
     SolarMutexGuard aGuard;
-
-    ThrowIfDisposed();
 
     const SwFrame *pUpper = GetParent();
     OSL_ENSURE( pUpper != nullptr || m_isDisposing, "no upper found" );
@@ -652,6 +650,15 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent()
     }
 
     return xAcc;
+}
+
+uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent()
+{
+    SolarMutexGuard aGuard;
+
+    ThrowIfDisposed();
+
+    return getAccessibleParentImpl();
 }
 
 sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent()

@@ -110,7 +110,7 @@ SwAccessibleCell::SwAccessibleCell(std::shared_ptr<SwAccessibleMap> const& pInit
     m_bIsSelected = IsSelected();
 
     css::uno::Reference<css::accessibility::XAccessible> xTableReference(
-        getAccessibleParent());
+        getAccessibleParentImpl());
     css::uno::Reference<css::accessibility::XAccessibleContext> xContextTable(
         xTableReference, css::uno::UNO_QUERY);
     SAL_WARN_IF(
