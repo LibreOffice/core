@@ -33,7 +33,6 @@ class SmParser
 {
     OUString        m_aBufferString;
     SmToken         m_aCurToken;
-    SmNodeStack     m_aNodeStack;
     std::vector<std::unique_ptr<SmErrorDesc>> m_aErrDescList;
     int             m_nCurError;
     sal_Int32       m_nBufferIndex,
@@ -62,7 +61,7 @@ class SmParser
 
     // grammar
     SmTableNode *DoTable();
-    void    DoLine();
+    SmLineNode *DoLine();
     SmNode *DoExpression(bool bUseExtraSpaces = true);
     SmNode *DoRelation();
     SmNode *DoSum();
@@ -92,8 +91,6 @@ class SmParser
     SmGlyphSpecialNode *DoGlyphSpecial();
     SmExpressionNode *DoError(SmParseError Error);
     // end of grammar
-
-    void    Error(SmParseError Error);
 
 public:
                  SmParser();
