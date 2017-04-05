@@ -1266,7 +1266,7 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
             if (bNoSpace)
                 NextToken();
             if (m_aCurToken.eType != TLGROUP)
-                return DoTerm(false); // nospace is no loger concerned
+                return DoTerm(false); // nospace is no longer concerned
 
             NextToken();
 

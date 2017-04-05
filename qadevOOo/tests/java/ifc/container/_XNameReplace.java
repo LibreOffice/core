@@ -56,7 +56,7 @@ import com.sun.star.uno.UnoRuntime;
 * <p>
 * In one of the last steps the replaced object will be compared with the old
 * object. For that it is necessary that every thread replace it's own object.
-* INSTANCEn are n Objectrelations so that every thread can isert it's own
+* INSTANCEn are n Objectrelations so that every thread can insert its own
 * object. n depends on the variable THRCNT which and comes from API.INI
 * Some Object-Container can't replace the first that comes belong. So in
 * NAMEREPLACE you can determine a container object, which is replaceable. <p>

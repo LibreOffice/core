@@ -31,7 +31,7 @@
 #define RID_SVXSTR_GALLERY_ICONVIEW             (RID_SVX_GALLERY_START + 86)
 #define RID_SVXSTR_GALLERY_LISTVIEW             (RID_SVX_GALLERY_START + 87)
 
-// Controls fuer Gallery
+// Controls for Gallery
 #define RID_SVXMN_GALLERY1                      (RID_SVX_GALLERY_START + 36)
 #define RID_SVXMN_GALLERY2                      (RID_SVX_GALLERY_START + 37)
 
@@ -42,7 +42,7 @@
 #define RID_SVXBMP_GALLERY_VIEW_ICON            (RID_SVX_GALLERY_START + 56)
 #define RID_SVXBMP_GALLERY_VIEW_LIST            (RID_SVX_GALLERY_START + 57)
 
-// Gallery-Bitmaps fuer Sounds
+// Gallery-Bitmaps for Sounds
 #define RID_SVXBMP_GALLERY_SOUND_1              (RID_SVX_GALLERY_START + 62)
 #define RID_SVXBMP_GALLERY_SOUND_2              (RID_SVX_GALLERY_START + 63)
 #define RID_SVXBMP_GALLERY_SOUND_3              (RID_SVX_GALLERY_START + 64)
@@ -52,7 +52,7 @@
 #define RID_SVXBMP_GALLERY_SOUND_7              (RID_SVX_GALLERY_START + 68)
 #define RID_SVXBMP_GALLERY_MEDIA                (RID_SVX_GALLERY_START + 71)
 
-// lokale Defines
+// local Defines
 #define MN_ADD 6
 #define MN_PREVIEW 10
 #define MN_DELETE 12

@@ -103,7 +103,7 @@ void setincdirs()
  * Be careful using malloc() !!!
  * In savestring() as a matter of fact getmem() is used and probably these
  * two functions are getting in the way of each other.
- * When I used malloc() instead of savestring() an error occured in strcpy().
+ * When I used malloc() instead of savestring() an error occurred in strcpy().
  */
 
 #if !defined(_WIN32) && !defined(UNX)

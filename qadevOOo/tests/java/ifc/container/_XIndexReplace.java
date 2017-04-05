@@ -53,7 +53,7 @@ import com.sun.star.uno.UnoRuntime;
 * <p>
 * This ObjectRelations should be necessary to create an Object,
 * which is can be replaced by index
-* INSTANCEn are n Objectrelations so that every thread can isert it's own
+* INSTANCEn are n Objectrelations so that every thread can insert its own
 * object. n depends on the variable THRCNT which and comes from API.INI
 * <p>
 * Why that:

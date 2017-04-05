@@ -31,9 +31,9 @@ class PushButton;
 struct ImplWizPageData;
 struct ImplWizButtonData;
 
-/*************************************************************************
+/*
 
-Desciption
+Description
 ==========
 
 class WizardDialog
@@ -170,7 +170,7 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn, void )
         pBtn->Disable();
 }
 
-*************************************************************************/
+*/
 
 #define WIZARDDIALOG_BUTTON_STDOFFSET_X         6
 #define WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X    3

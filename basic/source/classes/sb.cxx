@@ -1329,7 +1329,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
                     continue;
                 }
                 // otherwise check if the element is available
-                // unset GBLSEARCH-Flag (due to Rekursion)
+                // unset GBLSEARCH-Flag (due to recursion)
                 SbxFlagBits nGblFlag = pModule->GetFlags() & SbxFlagBits::GlobalSearch;
                 pModule->ResetFlag( SbxFlagBits::GlobalSearch );
                 pRes = pModule->Find( rName, t );

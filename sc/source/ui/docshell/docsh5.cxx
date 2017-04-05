@@ -116,7 +116,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     SCTAB nStartTab = nTab;
     SCCOL nEndCol = rMarked.aEnd.Col();
     SCROW nEndRow = rMarked.aEnd.Row();
-    //  Not simply GetDBAtCursor: The continuos data range for "unnamed" (GetDataArea) may be
+    //  Not simply GetDBAtCursor: The continuous data range for "unnamed" (GetDataArea) may be
     //  located next to the cursor; so a named DB range needs to be searched for there as well.
     ScDBCollection* pColl = aDocument.GetDBCollection();
     ScDBData* pData = aDocument.GetDBAtArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
@@ -195,7 +195,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     else
     {
         if ( !bSelected )
-        {                                       // continuos range
+        {                                       // continuous range
             nStartCol = nCol;
             nStartRow = nRow;
             if (bOnlyDown)
@@ -382,7 +382,7 @@ void ScDocShell::CancelAutoDBRange()
     }
 }
 
-        //  adjust hights
+        //  adjust height
         //! merge with docfunc
 
 bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
