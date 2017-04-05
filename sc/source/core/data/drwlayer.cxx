@@ -578,7 +578,7 @@ void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpda
         if ( rSize != pPage->GetSize() )
         {
             pPage->SetSize( rSize );
-            Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() an den Views
+            Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() on the views
         }
 
         // Implement Detective lines (adjust to new heights / widths)

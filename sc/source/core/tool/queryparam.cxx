@@ -350,7 +350,7 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {
     bool bEqual = false;
 
-    // Anzahl der Queries gleich?
+    // Are the number of queries equal?
     SCSIZE nUsed      = 0;
     SCSIZE nOtherUsed = 0;
     SCSIZE nEntryCount = GetEntryCount();

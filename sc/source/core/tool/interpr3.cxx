@@ -1607,7 +1607,7 @@ void ScInterpreter::ScExpDist()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double kum    = GetDouble();                    // 0 oder 1
+        double kum    = GetDouble();                    // 0 or 1
         double lambda = GetDouble();                    // lambda
         double x      = GetDouble();                    // x
         if (lambda <= 0.0)
@@ -1755,7 +1755,7 @@ void ScInterpreter::ScWeibull()
 {
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        double kum   = GetDouble();                 // 0 oder 1
+        double kum   = GetDouble();                 // 0 or 1
         double beta  = GetDouble();                 // beta
         double alpha = GetDouble();                 // alpha
         double x     = GetDouble();                 // x

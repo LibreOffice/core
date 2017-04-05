@@ -1027,7 +1027,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         SfxLokHelper::forEachOtherView(pThisViewShell, lAddWindows);
     }
 
-    //  bei IdleFormat wird manchmal ein Cursor gemalt, wenn die View schon weg ist (23576)
+    // if view is gone then during IdleFormat sometimes a cursor is drawn
 
     EEControlBits nEC = pNewEngine->GetControlWord();
     pNewEngine->SetControlWord(nEC & ~EEControlBits::DOIDLEFORMAT);

@@ -143,7 +143,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
 {
     if (!pEditEngine)
     {
-        // Notizen haben keine Felder
+        // notes don't have fields
         if ( pDocShell )
         {
             pEditEngine = new ScNoteEditEngine( pDocShell->GetDocument().GetNoteEngine() );
@@ -189,7 +189,7 @@ void ScAnnotationEditSource::UpdateData()
 
         aModificator.SetDocumentModified();
 
-        // bDataValid wird bei SetDocumentModified zurueckgesetzt
+        // SetDocumentModified will reset bDataValid
     }
 }
 
@@ -197,20 +197,20 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        //! Ref-Update
+        //! reference update
     }
     else
     {
         const SfxHintId nId = rHint.GetId();
         if ( nId == SfxHintId::Dying )
         {
-            pDocShell = nullptr;                       // ungueltig geworden
+            pDocShell = nullptr;
 
             DELETEZ( pForwarder );
             DELETEZ( pEditEngine );     // EditEngine uses document's pool
         }
         else if ( nId == SfxHintId::DataChanged )
-            bDataValid = false;                     // Text muss neu geholt werden
+            bDataValid = false;                     // text must be retrieved again
     }
 }
 
