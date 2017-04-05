@@ -92,7 +92,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
     FileFilter fileFilter;
     FilenameFilter filenameFilter;
-    private List<IFile> filePaths;
+    private List<IFile> filePaths = new ArrayList<IFile>();
     private DocumentProviderFactory documentProviderFactory;
     private IDocumentProvider documentProvider;
     private IFile homeDirectory;
