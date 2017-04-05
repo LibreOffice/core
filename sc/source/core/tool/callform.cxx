@@ -359,7 +359,7 @@ void LegacyFuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 
             sal_Char pcName[256];
             sal_Char pcDesc[256];
             *pcName = *pcDesc = 0;
-            sal_uInt16 nFuncNo = nNumber;   // nicht per Reference versauen lassen..
+            sal_uInt16 nFuncNo = nNumber;   // don't let it mess up via reference...
             reinterpret_cast< ::GetParamDesc>(fProc)( nFuncNo, nParam, pcName, pcDesc );
             aName = OUString( pcName, 256, osl_getThreadTextEncoding() );
             aDesc = OUString( pcDesc, 256, osl_getThreadTextEncoding() );

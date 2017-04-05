@@ -26,7 +26,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-const sal_Unicode cDelim = 0x01;        // Delimiter zwischen From und To
+const sal_Unicode cDelim = 0x01;        // delimiter between From and To
 
 // ScUnitConverterData
 ScUnitConverterData::ScUnitConverterData(

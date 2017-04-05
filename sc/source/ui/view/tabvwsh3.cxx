@@ -557,7 +557,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     pThisFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::ASYNCHRON );
                 }
-                //  else Fehler (z.B. Ole)
+                //  else error (e.g. Ole)
             }
             break;
 

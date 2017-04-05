@@ -394,7 +394,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
     switch (nType)
     {
         case Type::SHEET:
-            //  noch nicht eingefuegt - DocShell=Null
+            //  not inserted yet - DocShell=Null
             xRet.set(static_cast<sheet::XSpreadsheet*>(new ScTableSheetObj(nullptr,0)));
             break;
         case Type::URLFIELD:
@@ -421,8 +421,8 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set(static_cast<container::XIndexAccess*>(new ScAutoFormatObj( SC_AFMTOBJ_INVALID )));
             break;
         case Type::CELLRANGES:
-            //  wird nicht eingefuegt, sondern gefuellt
-            //  -> DocShell muss gesetzt sein, aber leere Ranges
+            //  isn't inserted, rather filled
+            //  -> DocShell must be set, but empty ranges
             if (pDocShell)
                 xRet.set(static_cast<sheet::XSheetCellRanges*>(new ScCellRangesObj( pDocShell, ScRangeList() )));
             break;

@@ -3460,7 +3460,7 @@ void ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     }
 
     EndListeningTo( pDocument );
-    // IncTab _after_ EndListeningTo und _before_ Compiler UpdateDeleteTab!
+    // IncTab _after_ EndListeningTo and _before_ Compiler UpdateDeleteTab!
     ScAddress aOldPos = aPos;
     if (bPosChanged)
         aPos.IncTab(-1*rCxt.mnSheets);
@@ -3487,7 +3487,7 @@ void ScFormulaCell::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTab
 
     EndListeningTo(pDocument);
     ScAddress aOldPos = aPos;
-    // SetTab _after_ EndListeningTo und _before_ Compiler UpdateMoveTab !
+    // SetTab _after_ EndListeningTo and _before_ Compiler UpdateMoveTab !
     aPos.SetTab(nTabNo);
 
     // no StartListeningTo because pTab[nTab] not yet correct!

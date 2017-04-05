@@ -93,8 +93,8 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent()
 {
     SolarMutexGuard aGuard;
 
-    //  Parent der Notiz ist die zugehoerige Zelle
-    //! existierendes Objekt finden und zurueckgeben ???
+    //  parent of note is the related cell
+    //! find and reset existing object ???
 
     if (pDocShell)
         return static_cast<cppu::OWeakObject*>(new ScCellObj( pDocShell, aCellPos ));
@@ -113,7 +113,7 @@ void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>&
 uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursor()
 {
     SolarMutexGuard aGuard;
-    //  Notizen brauchen keine Extrawurst
+    //  notes does not need special treatment
     return GetUnoText().createTextCursor();
 }
 
@@ -121,7 +121,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursorByRa
                                     const uno::Reference<text::XTextRange>& aTextPosition )
 {
     SolarMutexGuard aGuard;
-    //  Notizen brauchen keine Extrawurst
+    //  notes does not need special treatment
     return GetUnoText().createTextCursorByRange(aTextPosition);
 }
 

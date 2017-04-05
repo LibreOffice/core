@@ -639,7 +639,7 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const css::uno::
         //  don't care about the type (only URLs can be found in the cells)
         SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
-        OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
+        OSL_ENSURE(pField,"setPropertyValue: Field not found");
         if (!pField)
             return;
 
@@ -712,7 +712,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
         //  don't care about the type (only URLs can be found in the cells)
         const SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
-        OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
+        OSL_ENSURE(pField,"getPropertyValue: Field not found");
         if (!pField)
             throw uno::RuntimeException();
 
@@ -1026,7 +1026,7 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
         //  don't care about the type (only URLs can be found in the cells)
         SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
-        OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
+        OSL_ENSURE(pField,"setPropertyValue: Field not found");
         if (!pField)
             return;
 
@@ -1158,7 +1158,7 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
     //  don't care about the type (only URLs can be found in the cells)
     const SvxFieldData* pField = aTempEngine.FindByPos(
         aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
-    OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
+    OSL_ENSURE(pField,"getPresentation: Field not found");
     if (!pField)
         return OUString();
 

@@ -145,8 +145,8 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
     // about a exception
     /*if (!bFound)
     {
-        OSL_FAIL("keine Matrix");
-        //! Exception, oder was?
+        OSL_FAIL("no matrix");
+        //! Exception, or what?
     }*/
 }
 
@@ -199,8 +199,8 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
     SolarMutexGuard aGuard;
     if ( nColumns <= 0 || nRows <= 0 )
     {
-        OSL_FAIL("leerer Range geht nicht");
-        //! und dann?
+        OSL_FAIL("Empty range not allowed");
+        //! and then?
     }
     else
     {
@@ -216,12 +216,12 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
         if ( nEndX > MAXCOL ) nEndX = MAXCOL;
         if ( nEndY < 0 )      nEndY = 0;
         if ( nEndY > MAXROW ) nEndY = MAXROW;
-        //! Fehler/Exception oder so, wenn zu gross/zu klein?
+        //! error/exception or so, if too big/small
 
         aNewRange.aEnd.SetCol((SCCOL)nEndX);
         aNewRange.aEnd.SetRow((SCROW)nEndY);
 
-        aNewRange.PutInOrder();    //! wirklich?
+        aNewRange.PutInOrder();    //! really?
 
         SetNewRange( aNewRange );
     }
@@ -349,7 +349,7 @@ void SAL_CALL ScCellCursorObj::gotoNext()
     ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.PutInOrder();
-    ScAddress aCursor(aOneRange.aStart);        //  bei Block immer den Start nehmen
+    ScAddress aCursor(aOneRange.aStart);        //  always use start of block
 
     ScMarkData aMark;   // not used with bMarked=FALSE
     SCCOL nNewX = aCursor.Col();
@@ -358,7 +358,7 @@ void SAL_CALL ScCellCursorObj::gotoNext()
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
         pDocSh->GetDocument().GetNextPos( nNewX,nNewY, nTab,  1,0, false,true, aMark );
-    //! sonst Exception oder so
+    //! otherwise exception or so
 
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
 }
@@ -371,7 +371,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious()
     ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.PutInOrder();
-    ScAddress aCursor(aOneRange.aStart);        //  bei Block immer den Start nehmen
+    ScAddress aCursor(aOneRange.aStart);        //  always use start of block
 
     ScMarkData aMark;   // not used with bMarked=FALSE
     SCCOL nNewX = aCursor.Col();
@@ -380,7 +380,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious()
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
         pDocSh->GetDocument().GetNextPos( nNewX,nNewY, nTab, -1,0, false,true, aMark );
-    //! sonst Exception oder so
+    //! otherwise exception or so
 
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
 }

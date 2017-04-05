@@ -1969,7 +1969,7 @@ ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& 
     pUndoDoc( pNewUndoDoc ),
     pWhich( nullptr )
 {
-    OSL_ENSURE( pW, "ScUndoClearItems: Which-Pointer ist 0" );
+    OSL_ENSURE( pW, "ScUndoClearItems: Which-Pointer is Null" );
 
     sal_uInt16 nCount = 0;
     while ( pW[nCount] )
