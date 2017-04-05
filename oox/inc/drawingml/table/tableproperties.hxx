@@ -38,18 +38,23 @@ public:
     TableProperties();
     ~TableProperties();
 
-    std::vector< sal_Int32 >& getTableGrid() { return mvTableGrid; };
-    std::vector< TableRow >& getTableRows() { return mvTableRows; };
+    std::vector< sal_Int32 >&           getTableGrid() { return mvTableGrid; };
+    std::vector< TableRow >&            getTableRows() { return mvTableRows; };
 
-    OUString&                          getStyleId(){ return maStyleId; };
-    std::shared_ptr< TableStyle >&    getTableStyle(){ return mpTableStyle; };
-    bool&                               isRtl(){ return mbRtl; };
-    bool&                               isFirstRow(){ return mbFirstRow; };
-    bool&                               isFirstCol(){ return mbFirstCol; };
-    bool&                               isLastRow(){ return mbLastRow; };
-    bool&                               isLastCol(){ return mbLastCol; };
-    bool&                               isBandRow(){ return mbBandRow; };
-    bool&                               isBandCol(){ return mbBandCol; };
+    OUString&                           getStyleId()    { return maStyleId; };
+    std::shared_ptr< TableStyle >&      getTableStyle() { return mpTableStyle; };
+    bool                                isFirstRow() const  { return mbFirstRow; };
+    void                                setFirstRow(bool b) { mbFirstRow = b; };
+    bool                                isFirstCol() const  { return mbFirstCol; };
+    void                                setFirstCol(bool b) { mbFirstCol = b; };
+    bool                                isLastRow() const   { return mbLastRow; };
+    void                                setLastRow(bool b)  { mbLastRow = b; };
+    bool                                isLastCol() const   { return mbLastCol; };
+    void                                setLastCol(bool b)  { mbLastCol = b; };
+    bool                                isBandRow() const   { return mbBandRow; };
+    void                                setBandRow(bool b)  { mbBandRow = b; };
+    bool                                isBandCol() const   { return mbBandCol; };
+    void                                setBandCol(bool b)  { mbBandCol = b; };
 
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
         const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
@@ -64,7 +69,6 @@ private:
     std::vector< sal_Int32 >            mvTableGrid;
     std::vector< TableRow >             mvTableRows;
 
-    bool                                mbRtl;
     bool                                mbFirstRow;
     bool                                mbFirstCol;
     bool                                mbLastRow;

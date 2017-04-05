@@ -80,7 +80,6 @@ public:
 private:
     SlideSorter& mrSlideSorter;
     bool mbIsVisible;
-    const sal_Int32 mnLayerIndex;
     SharedILayerInvalidator mpLayerInvalidator;
     // Center of the insertion indicator.
     Point maLocation;

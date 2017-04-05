@@ -5524,7 +5524,6 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
             rOrder.nTxBxComp = nTxBx;
             rOrder.pObj      = pObject;
             rOrder.pFly      = pFly;
-            rOrder.nHdFtSection = 0;
         }
     }
 }

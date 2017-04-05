@@ -66,7 +66,6 @@ class SVX_DLLPUBLIC SdrEngineDefaults
 {
 friend class SdrAttrObj;
     Color            aFontColor;
-    size_t           nFontHeight;
     Fraction         aMapFraction;
 
 private:
@@ -82,7 +81,7 @@ public:
     // see below for further details). The default setting 847/100mm corresponds to about
     // 24 Point. If e.g. one would use Twips (SetMapUnit(MapUnit::MapTwip)) (20 Twip = 1 Point)
     // instead, one would need to set the font height to 480, in order to get a 24 Point height.
-    static size_t      GetFontHeight()                      { return GetDefaults().nFontHeight; }
+    static size_t      GetFontHeight()                      { return 847; }
 
     // The MapMode is needed for the global Outliner.
     // Incidentally, every newly instantiated SdrModel is assigned this MapMode by default.
