@@ -246,10 +246,14 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 
 void ScGlobal::ClearAutoFormat()
 {
-    if (pAutoFormat!=nullptr)
+    if (pAutoFormat)
     {
+        //  When modified via StarOne then only the SaveLater flag is set and no saving is done.
+        //  If the flag is set then save now.
+        if (pAutoFormat->IsSaveLater())
+            pAutoFormat->Save();
         delete pAutoFormat;
-        pAutoFormat=nullptr;
+        pAutoFormat = nullptr;
     }
 }
 
@@ -571,7 +575,7 @@ void ScGlobal::Clear()
     }
     theAddInAsyncTbl.clear();
     ExitExternalFunc();
-    DELETEZ(pAutoFormat);
+    ClearAutoFormat();
     DELETEZ(pSearchItem);
     DELETEZ(pLegacyFuncCollection);
     DELETEZ(pAddInCollection);

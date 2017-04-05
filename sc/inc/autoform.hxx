@@ -314,13 +314,14 @@ class SC_DLLPUBLIC ScAutoFormat
     bool mbSaveLater;
     ScAfVersions m_aVersions;
 
+    ScAutoFormat(const ScAutoFormat&) = delete;
+    const ScAutoFormat operator=(const ScAutoFormat&) = delete;
+
 public:
     typedef MapType::const_iterator const_iterator;
     typedef MapType::iterator iterator;
 
     ScAutoFormat();
-    ScAutoFormat(const ScAutoFormat& r);
-    ~ScAutoFormat();
     void Load();
     bool Save();
 

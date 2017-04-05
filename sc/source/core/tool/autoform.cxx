@@ -917,24 +917,6 @@ bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right)
     return ScGlobal::GetCollator()->compareString( left, right) < 0;
 }
 
-ScAutoFormat::ScAutoFormat(const ScAutoFormat& r)
-    : mbSaveLater(false)
-{
-    for (auto const& it : r.m_Data)
-    {
-        m_Data.insert(std::make_pair(it.first, o3tl::make_unique<ScAutoFormatData>(*it.second)));
-    }
-}
-
-ScAutoFormat::~ScAutoFormat()
-{
-    //  When modified via StarOne then only the SaveLater flag is set and no saving is done.
-    //  If the flag is set then save now.
-
-    if (mbSaveLater)
-        Save();
-}
-
 void ScAutoFormat::SetSaveLater( bool bSet )
 {
     mbSaveLater = bSet;
