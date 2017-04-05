@@ -880,6 +880,8 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
     int nArrayDepth = 0;
     // Last seen array token that's outside any dictionaries.
     PDFArrayElement* pArray = nullptr;
+    // If we're inside an obj/endobj pair.
+    bool bInObject = false;
     while (true)
     {
         char ch;
@@ -1030,6 +1032,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                     if (it != m_aOffsetObjects.end())
                         m_pXRefStream = it->second;
                 }
+                else if (bInObject && !nDictionaryDepth && !nArrayDepth && pObject)
+                    // Number element inside an object, but outside a
+                    // dictionary / array: remember it.
+                    pObject->SetNumberElement(pNumberElement);
             }
             else if (rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
             {
@@ -1061,6 +1067,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                         rElements.push_back(std::unique_ptr<PDFElement>(pObject));
                         m_aOffsetObjects[pObjectNumber->GetLocation()] = pObject;
                         m_aIDObjects[pObjectNumber->GetValue()] = pObject;
+                        bInObject = true;
                     }
                     else
                     {
@@ -1150,6 +1157,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                         pObjectStream = nullptr;
                         pObjectKey = nullptr;
                     }
+                    bInObject = false;
                 }
                 else if (aKeyword == "true" || aKeyword == "false")
                     rElements.push_back(std::unique_ptr<PDFElement>(new PDFBooleanElement(aKeyword.toBoolean())));
@@ -2080,6 +2088,7 @@ PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, doubl
     : m_rDoc(rDoc),
       m_fObjectValue(fObjectValue),
       m_fGenerationValue(fGenerationValue),
+      m_pNumberElement(nullptr),
       m_nDictionaryOffset(0),
       m_nDictionaryLength(0),
       m_pDictionaryElement(nullptr),
@@ -2477,6 +2486,16 @@ void PDFObjectElement::SetDictionary(PDFDictionaryElement* pDictionaryElement)
     m_pDictionaryElement = pDictionaryElement;
 }
 
+void PDFObjectElement::SetNumberElement(PDFNumberElement* pNumberElement)
+{
+    m_pNumberElement = pNumberElement;
+}
+
+PDFNumberElement* PDFObjectElement::GetNumberElement() const
+{
+    return m_pNumberElement;
+}
+
 std::vector< std::pair<OString, PDFElement*> > PDFObjectElement::GetDictionaryItemsByOffset()
 {
     std::vector< std::pair<OString, PDFElement*> > aRet;
@@ -2496,8 +2515,11 @@ std::vector< std::pair<OString, PDFElement*> > PDFObjectElement::GetDictionaryIt
     return aRet;
 }
 
-const std::map<OString, PDFElement*>& PDFObjectElement::GetDictionaryItems() const
+const std::map<OString, PDFElement*>& PDFObjectElement::GetDictionaryItems()
 {
+    if (m_aDictionary.empty())
+        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
+
     return m_aDictionary;
 }
 

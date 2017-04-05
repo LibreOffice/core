@@ -50,6 +50,8 @@ class VCL_DLLPUBLIC PDFObjectElement : public PDFElement
     double m_fObjectValue;
     double m_fGenerationValue;
     std::map<OString, PDFElement*> m_aDictionary;
+    /// If set, the object contains this number element (outside any dictionary/array).
+    PDFNumberElement* m_pNumberElement;
     /// Position after the '<<' token.
     sal_uInt64 m_nDictionaryOffset;
     /// Length of the dictionary buffer till (before) the '>>' token.
@@ -82,8 +84,10 @@ public:
     sal_uInt64 GetDictionaryLength();
     PDFDictionaryElement* GetDictionary();
     void SetDictionary(PDFDictionaryElement* pDictionaryElement);
+    void SetNumberElement(PDFNumberElement* pNumberElement);
+    PDFNumberElement* GetNumberElement() const;
     /// Get access to the parsed key-value items from the object dictionary.
-    const std::map<OString, PDFElement*>& GetDictionaryItems() const;
+    const std::map<OString, PDFElement*>& GetDictionaryItems();
     /// Same as GetDictionaryItems(), but entries are sorted by file offset.
     std::vector< std::pair<OString, PDFElement*> > GetDictionaryItemsByOffset();
     void SetArray(PDFArrayElement* pArrayElement);
