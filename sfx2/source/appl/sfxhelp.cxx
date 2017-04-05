@@ -330,6 +330,7 @@ OUString SfxHelp::GetHelpModuleName_Impl()
                 || aFactoryShortName == "dbbrowser"
                 || aFactoryShortName == "dbrelation"
                 || aFactoryShortName == "dbtable"
+                || aFactoryShortName == "dbtdata"
                 || aFactoryShortName == "dbapp"
                 || aFactoryShortName == "dbreport"
                 || aFactoryShortName == "swreport"
