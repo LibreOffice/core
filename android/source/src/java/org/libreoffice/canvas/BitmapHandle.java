@@ -2,10 +2,10 @@ package org.libreoffice.canvas;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 /**
  * Bitmap handle canvas element is used to show a handle on the screen.
@@ -14,10 +14,10 @@ import android.graphics.drawable.Drawable;
  */
 public abstract class BitmapHandle extends CommonCanvasElement {
     public final RectF mDocumentPosition;
-    protected final Bitmap mBitmap;
-    protected final RectF mScreenPosition;
+    private final Bitmap mBitmap;
+    final RectF mScreenPosition;
 
-    public BitmapHandle(Bitmap bitmap) {
+    BitmapHandle(Bitmap bitmap) {
         mBitmap = bitmap;
         mScreenPosition = new RectF(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
         mDocumentPosition = new RectF();
@@ -26,8 +26,8 @@ public abstract class BitmapHandle extends CommonCanvasElement {
     /**
      * Return a bitmap for a drawable id.
      */
-    protected static Bitmap getBitmapForDrawable(Context context, int drawableId) {
-        Drawable drawable = context.getResources().getDrawable(drawableId);
+    static Bitmap getBitmapForDrawable(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
 
         return ImageUtils.getBitmapForDrawable(drawable);
     }
@@ -45,7 +45,7 @@ public abstract class BitmapHandle extends CommonCanvasElement {
      * Test if the bitmap has been hit.
      * @param x - x coordinate
      * @param y - y coordinate
-     * @return
+     * @return true if the bitmap has been hit
      */
     @Override
     public boolean onHitTest(float x, float y) {
