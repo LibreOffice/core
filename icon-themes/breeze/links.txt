@@ -110,6 +110,8 @@ cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
 cmd/sc_insertspreadsheet.png cmd/sc_togglesheetgrid.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
+cmd/sc_showtrackedchanges.png cmd/sc_addwatch.png
+cmd/lc_showtrackedchanges.png cmd/lc_addwatch.png
 
 # Zoom
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
