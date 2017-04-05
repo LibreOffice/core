@@ -39,7 +39,8 @@ public:
     virtual ~ScImportOptionsDlg();
     virtual void dispose() override;
 
-    void GetImportOptions( ScImportOptions& rOptions ) const;
+    virtual void GetImportOptions( ScImportOptions& rOptions ) const;
+    virtual void SaveImportOptions() const;
 
 private:
     VclPtr<VclFrame>           m_pFieldFrame;

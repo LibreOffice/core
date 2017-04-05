@@ -1023,6 +1023,60 @@
           <value>-1</value>
         </prop>
       </group>
+      <group oor:name="CSVExport">
+        <info>
+          <desc>Contains setting for Text CSV Export</desc>
+        </info>
+        <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
+          <info>
+            <desc>Char Set</desc>
+            <label>CharSet</label>
+          </info>
+          <value>-1</value>
+        </prop>
+        <prop oor:name="FieldSeparator" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Field delimiter</desc>
+            <label>FieldSeparator</label>
+          </info>
+          <value/>
+        </prop>
+        <prop oor:name="TextSeparator" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Text delimiter</desc>
+            <label>TextSeparator</label>
+          </info>
+          <value/>
+        </prop>
+        <prop oor:name="SaveTrueCellContent" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, formatted cell content is exported. If false, raw cell content is exported.</desc>
+            <label>SaveTrueCellContent</label>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="SaveCellFormulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, text formulas are exported instead of the calculated values.</desc>
+            <label>SaveCellFormulas</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="QuoteAllTextCells" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, text cells are always enclosed in quotes with no exception.</desc>
+            <label>QuoteAllTextCells</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>All fields are exported having the same width</desc>
+            <label>FixedWidth</label>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
       <group oor:name="CSVImport">
         <info>
           <desc>Contains setting for Text CSV Import</desc>

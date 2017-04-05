@@ -283,6 +283,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
+            pDlg->SaveImportOptions();
             pDlg->GetImportOptions( aOptions );
             save_CharSet( aOptions.eCharSet, bExport );
             if ( bAscii )
