@@ -107,6 +107,13 @@ void FastParser::setDocumentHandler( const Reference< XFastDocumentHandler >& rx
     mxParser->setFastDocumentHandler( rxDocHandler );
 }
 
+void FastParser::clearDocumentHandler()
+{
+    if (!mxParser.is())
+        return;
+    mxParser->setFastDocumentHandler(nullptr);
+}
+
 void FastParser::parseStream( const InputSource& rInputSource, bool bCloseStream )
 {
     // guard closing the input stream also when exceptions are thrown

@@ -78,6 +78,8 @@ public:
     void                setDocumentHandler(
                             const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rxDocHandler );
 
+    void                clearDocumentHandler();
+
     /** Parses the passed SAX input source.
         @param bCloseStream  True = closes the stream in the input source after parsing.
         @throws css::xml::sax::SAXException
