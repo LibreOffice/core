@@ -200,37 +200,27 @@ public class LayerView extends FrameLayout {
 
     @Override
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyPreIme(keyCode, event);
-        return false;
+        return mInputConnectionHandler != null && mInputConnectionHandler.onKeyPreIme(keyCode, event);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyDown(keyCode, event);
-        return false;
+        return mInputConnectionHandler != null && mInputConnectionHandler.onKeyDown(keyCode, event);
     }
 
     @Override
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyLongPress(keyCode, event);
-        return false;
+        return mInputConnectionHandler != null && mInputConnectionHandler.onKeyLongPress(keyCode, event);
     }
 
     @Override
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyMultiple(keyCode, repeatCount, event);
-        return false;
+        return mInputConnectionHandler != null && mInputConnectionHandler.onKeyMultiple(keyCode, repeatCount, event);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyUp(keyCode, event);
-        return false;
+        return mInputConnectionHandler != null && mInputConnectionHandler.onKeyUp(keyCode, event);
     }
 
     public boolean isIMEEnabled() {

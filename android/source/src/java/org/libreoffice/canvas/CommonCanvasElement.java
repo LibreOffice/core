@@ -41,9 +41,6 @@ public abstract class CommonCanvasElement implements CanvasElement, CanvasElemen
      */
     @Override
     public boolean contains(float x, float y) {
-        if (!isVisible()) {
-            return false;
-        }
-        return onHitTest(x, y);
+        return isVisible() && onHitTest(x, y);
     }
 }
