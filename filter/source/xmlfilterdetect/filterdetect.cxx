@@ -56,13 +56,13 @@ bool IsMediaTypeXML( const OUString& mediaType )
     {
         OUString sType, sSubType;
         INetContentTypes::parse(mediaType, sType, sSubType);
-        if (sType.equalsIgnoreAsciiCase("application"))
+        if (sType.equalsAscii("application"))
         {
             // RFC 3023: application/xml; don't detect text/xml
-            if (sSubType.equalsIgnoreAsciiCase("xml"))
+            if (sSubType.equalsAscii("xml"))
                 return true;
             // Registered media types: application/XXXX+xml
-            if (sSubType.endsWithIgnoreAsciiCase("+xml"))
+            if (sSubType.endsWith("+xml"))
                 return true;
         }
     }
