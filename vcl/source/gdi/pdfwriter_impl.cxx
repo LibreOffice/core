@@ -10990,6 +10990,14 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
         aLine.append("]\n");
     }
 
+    // If the object has a number element outside a dictionary or array, copy that.
+    if (filter::PDFNumberElement* pNumber = rObject.GetNumberElement())
+    {
+        aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + pNumber->GetLocation(), pNumber->GetLength());
+        aLine.append("\n");
+    }
+
+
     aLine.append("endobj\n\n");
 
     // We have the whole object, now write it to the output.
@@ -11008,18 +11016,30 @@ OString PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, co
     std::map<OString, sal_Int32> aRet;
 
     // Get the rKind subset of the resource dictionary.
-    auto pResources = dynamic_cast<filter::PDFDictionaryElement*>(rPage.Lookup("Resources"));
-    if (!pResources)
-        return OString();
-
-    auto pDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pResources->LookupElement(rKind));
-    if (!pDictionary)
+    std::map<OString, filter::PDFElement*> aItems;
+    if (auto pResources = dynamic_cast<filter::PDFDictionaryElement*>(rPage.Lookup("Resources")))
+    {
+        // Resources is a direct dictionary.
+        if (auto pDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pResources->LookupElement(rKind)))
+            aItems = pDictionary->GetItems();
+    }
+    else if (filter::PDFObjectElement* pPageResources = rPage.LookupObject("Resources"))
+    {
+        // Resources is an indirect object.
+        filter::PDFElement* pValue = pPageResources->Lookup(rKind);
+        if (auto pDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pValue))
+            // Kind is a direct dictionary.
+            aItems = pDictionary->GetItems();
+        else if (filter::PDFObjectElement* pObject = pPageResources->LookupObject(rKind))
+            // Kind is an indirect object.
+            aItems = pObject->GetDictionaryItems();
+    }
+    if (aItems.empty())
         return OString();
 
     SvMemoryStream& rDocBuffer = rPage.GetDocument().GetEditBuffer();
 
-    const std::map<OString, filter::PDFElement*>& rItems = pDictionary->GetItems();
-    for (const auto& rItem : rItems)
+    for (const auto& rItem : aItems)
     {
         // For each item copy it over to our output then insert it into aRet.
         auto pReference = dynamic_cast<filter::PDFReferenceElement*>(rItem.second);
