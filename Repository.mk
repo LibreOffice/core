@@ -268,7 +268,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,tde, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
 	animcore \
-	placeware \
 	PresenterScreen \
 	PresentationMinimizer \
 	wpftimpress \

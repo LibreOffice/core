@@ -589,7 +589,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xc
 	impress_StarOffice_XML_Impress \
 	impress_StarOffice_XML_Impress_Template \
 	pdf_Portable_Document_Format \
-	pwp_PlaceWare \
 	impress8 \
 	impress8_template \
 	draw8 \
@@ -615,7 +614,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filter
 	StarOffice_XML__Impress_ \
 	impress_StarOffice_XML_Impress_Template \
 	impress_pdf_Export \
-	placeware_Export \
 	impress8 \
 	impress8_template \
 	impress8_draw \
