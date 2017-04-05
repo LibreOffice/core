@@ -137,9 +137,9 @@ public:
 private:
 
     css::uno::Reference<css::chart2::data::XDataSource>
-        createValuesDataSource(OUString const & aRangeRepresentation);
+        createValuesDataSource();
     css::uno::Reference<css::chart2::data::XDataSource>
-        createCategoriesDataSource(OUString const & aRangeRepresentation, bool bOrientationIsColumn);
+        createCategoriesDataSource(bool bOrientationIsColumn);
 
     css::uno::Reference<css::chart2::data::XLabeledDataSequence> newLabeledDataSequence();
 

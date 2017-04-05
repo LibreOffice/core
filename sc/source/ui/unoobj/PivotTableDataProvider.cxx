@@ -188,9 +188,9 @@ uno::Reference<chart2::data::XDataSource> SAL_CALL
     uno::Reference<chart2::data::XDataSource> xResult;
 
     if (aRangeRepresentation == "Categories")
-        xResult = createCategoriesDataSource(aRangeRepresentation, bOrientCol);
+        xResult = createCategoriesDataSource(bOrientCol);
     else
-        xResult = createValuesDataSource(aRangeRepresentation);
+        xResult = createValuesDataSource();
 
     return xResult;
 }
@@ -230,8 +230,7 @@ void PivotTableDataProvider::setLabeledDataSequence(uno::Reference<chart2::data:
 }
 
 uno::Reference<chart2::data::XDataSource>
-PivotTableDataProvider::createCategoriesDataSource(OUString const & rRangeRepresentation,
-                                                   bool bOrientationIsColumn)
+PivotTableDataProvider::createCategoriesDataSource(bool bOrientationIsColumn)
 {
     if (m_bNeedsUpdate)
         collectPivotTableData();
@@ -258,7 +257,7 @@ PivotTableDataProvider::createCategoriesDataSource(OUString const & rRangeRepres
         }
     }
 
-    xDataSource.set(new PivotTableDataSource(rRangeRepresentation, aLabeledSequences));
+    xDataSource.set(new PivotTableDataSource(aLabeledSequences));
     return xDataSource;
 }
 
@@ -552,7 +551,7 @@ void PivotTableDataProvider::assignLabelsToDataSequence(uno::Reference<chart2::d
 }
 
 uno::Reference<chart2::data::XDataSource>
-    PivotTableDataProvider::createValuesDataSource(OUString const & rRangeRepresentation)
+    PivotTableDataProvider::createValuesDataSource()
 {
     if (m_bNeedsUpdate)
         collectPivotTableData();
@@ -605,7 +604,7 @@ uno::Reference<chart2::data::XDataSource>
         }
     }
 
-    xDataSource.set(new PivotTableDataSource(rRangeRepresentation, aLabeledSequences));
+    xDataSource.set(new PivotTableDataSource(aLabeledSequences));
     return xDataSource;
 }
 

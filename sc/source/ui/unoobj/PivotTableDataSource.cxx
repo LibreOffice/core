@@ -23,10 +23,8 @@ namespace sc
 
 SC_SIMPLE_SERVICE_INFO(PivotTableDataSource, "PivotTableDataSource", "com.sun.star.chart2.data.DataSource")
 
-PivotTableDataSource::PivotTableDataSource(OUString const & aRangeRepresentation,
-                                           std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence>>& xLabeledSequence)
+PivotTableDataSource::PivotTableDataSource(std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence>>& xLabeledSequence)
     : m_xLabeledSequence(xLabeledSequence)
-    , m_aRangeRepresentation(aRangeRepresentation)
 {
 }
 
