@@ -303,11 +303,9 @@ public class GeckoLayerClient implements PanZoomTarget {
         PointF origin = viewportMetrics.getOrigin();
         float zoom = viewportMetrics.zoomFactor;
 
-        PointF layerPoint = new PointF(
+        return new PointF(
                 ((viewPoint.x + origin.x) / zoom),
                 ((viewPoint.y + origin.y) / zoom));
-
-        return layerPoint;
     }
 
     /** Implementation of PanZoomTarget */

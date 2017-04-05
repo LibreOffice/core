@@ -592,7 +592,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                if(isFormattingToolbarOpen == true){
+                if(isFormattingToolbarOpen){
                     hideBottomToolbar();
                 }else{
                     showBottomToolbar();
@@ -621,7 +621,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                if(isSearchToolbarOpen==true){
+                if(isSearchToolbarOpen){
                     hideBottomToolbar();
                 }else{
                     showBottomToolbar();

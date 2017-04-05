@@ -574,13 +574,12 @@ final class DisplayPortCalculator {
             float scaleFactor = Math.min(reshapedSize.width / usableSize.width, reshapedSize.height / usableSize.height);
             float displayResolution = metrics.zoomFactor * Math.min(1.0f, scaleFactor);
 
-            DisplayPortMetrics dpMetrics = new DisplayPortMetrics(
+            return new DisplayPortMetrics(
                 metrics.viewportRectLeft - margins.left,
                 metrics.viewportRectTop - margins.top,
                 metrics.viewportRectRight + margins.right,
                 metrics.viewportRectBottom + margins.bottom,
                 displayResolution);
-            return dpMetrics;
         }
 
         /**

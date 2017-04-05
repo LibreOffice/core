@@ -62,13 +62,11 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     protected static RectF normalizeRect(RectF rect, float sourceFactor, float targetFactor) {
-        RectF normalizedRect = new RectF(
+        return new RectF(
                 (rect.left / sourceFactor) * targetFactor,
                 (rect.top / sourceFactor) * targetFactor,
                 (rect.right / sourceFactor) * targetFactor,
                 (rect.bottom / sourceFactor) * targetFactor);
-
-        return normalizedRect;
     }
 
     public void invalidate() {

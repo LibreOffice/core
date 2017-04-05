@@ -197,9 +197,6 @@ public class FolderIconView extends View{
             default:
                 break;
         }
-        //test
-
-        return;
     }
 
 }

@@ -170,18 +170,12 @@ public class LayerView extends FrameLayout {
 
     @Override
     public boolean onHoverEvent(MotionEvent event) {
-        if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
-            return true;
-        }
-        return false;
+        return mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event);
     }
 
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
-        if (mPanZoomController != null && mPanZoomController.onMotionEvent(event)) {
-            return true;
-        }
-        return false;
+        return mPanZoomController != null && mPanZoomController.onMotionEvent(event);
     }
 
     public GeckoLayerClient getLayerClient() { return mLayerClient; }
