@@ -116,6 +116,7 @@ namespace pcr
 #define PROP_FLAG_EXPERIMENTAL      0x00000100  // the property is experimental, i.e. should not appear in the
                                                 // UI, unless experimental properties are enabled by a configuration
                                                 // option
+#define PROP_FLAG_REPORT_INVISIBLE  0x00000200  // the property should not appear in the Report Designer UI
 
 
     //= property ids (for all browseable properties)

@@ -2165,6 +2165,13 @@ namespace pcr
         }
     }
 
+    bool FormComponentPropertyHandler::isReportModel() const
+    {
+        Reference<XModel> xModel(impl_getContextDocument_nothrow());
+        Reference<XReportDefinition> xReportDef(xModel, css::uno::UNO_QUERY);
+        return xReportDef.is();
+    }
+
     bool FormComponentPropertyHandler::impl_shouldExcludeProperty_nothrow( const Property& _rProperty ) const
     {
         OSL_ENSURE( _rProperty.Handle == m_pInfoService->getPropertyId( _rProperty.Name ),
@@ -2248,6 +2255,9 @@ namespace pcr
         if ( ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0 )
             if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
                 return true;
+
+        if ((nPropertyUIFlags & PROP_FLAG_REPORT_INVISIBLE) != 0 && isReportModel())
+            return true;
 
         return false;
     }
