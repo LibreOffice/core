@@ -137,6 +137,9 @@ DerivedData
 *.v12*
 *.opensdf
 *.vcxproj*
+/.vs
+LibreOffice.VC.db
+LibreOffice.VC.VC.opendb
 
 # QtCreator specific
 *.pro
