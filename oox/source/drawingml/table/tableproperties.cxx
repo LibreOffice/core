@@ -40,8 +40,7 @@ using namespace ::com::sun::star::table;
 namespace oox { namespace drawingml { namespace table {
 
 TableProperties::TableProperties()
-: mbRtl( false )
-, mbFirstRow( false )
+: mbFirstRow( false )
 , mbFirstCol( false )
 , mbLastRow( false )
 , mbLastCol( false )

@@ -349,7 +349,8 @@ private:
 public:
     BasicLibInfo();
 
-    bool&             IsReference()           { return bReference; }
+    bool              IsReference() const     { return bReference; }
+    void              SetReference(bool b)    { bReference = b; }
 
     bool              IsExtern() const        { return aStorageName != szImbedded; }
 
@@ -436,7 +437,7 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
         {
             bool bReferenz;
             rSStream.ReadCharAsBool( bReferenz );
-            pInfo->IsReference() = bReferenz;
+            pInfo->SetReference(bReferenz);
         }
 
         rSStream.Seek( nEndPos );
@@ -1081,7 +1082,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
         {
             pLibInfo->GetLib()->SetModified( false );   // Don't save in this case
             pLibInfo->SetRelStorageName( OUString() );
-            pLibInfo->IsReference() = true;
+            pLibInfo->SetReference(true);
         }
         else
         {

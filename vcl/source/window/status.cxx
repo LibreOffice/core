@@ -131,7 +131,6 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnDX            = 0;
     mnDY            = 0;
     mnCalcHeight    = 0;
-    mnItemY         = STATUSBAR_OFFSET_Y;
     mnTextY         = STATUSBAR_OFFSET_TEXTY;
 
     ImplInitSettings();
@@ -303,7 +302,7 @@ tools::Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
         {
             aRect.Left()   = pItem->mnX;
             aRect.Right()  = aRect.Left() + pItem->mnWidth + pItem->mnExtraWidth;
-            aRect.Top()    = mnItemY;
+            aRect.Top()    = STATUSBAR_OFFSET_Y;
             aRect.Bottom() = mnCalcHeight - STATUSBAR_OFFSET_Y;
         }
     }
@@ -590,7 +589,7 @@ void StatusBar::ImplCalcProgressRect()
 
     // calculate progress frame
     maPrgsFrameRect.Left()      = maPrgsTxtPos.X()+aPrgsTxtSize.Width()+STATUSBAR_OFFSET;
-    maPrgsFrameRect.Top()       = mnItemY;
+    maPrgsFrameRect.Top()       = STATUSBAR_OFFSET_Y;
     maPrgsFrameRect.Bottom()    = mnCalcHeight - STATUSBAR_OFFSET_Y;
 
     // calculate size of progress rects
@@ -735,7 +734,6 @@ void StatusBar::Resize()
     mnDY = aSize.Height();
     mnCalcHeight = mnDY;
 
-    mnItemY = STATUSBAR_OFFSET_Y;
     mnTextY = (mnCalcHeight-GetTextHeight())/2;
 
     // provoke re-formatting

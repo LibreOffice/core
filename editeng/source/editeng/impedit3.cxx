@@ -995,7 +995,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             aCurrentTab.nTabPortion = nTmpPortion;
                         }
 
-                        pPortion->GetKind() = PortionKind::TAB;
+                        pPortion->SetKind(PortionKind::TAB);
                         pPortion->SetExtraValue( aCurrentTab.aTabStop.GetFill() );
                         pPortion->GetSize().Width() = aCurrentTab.nTabPos - (nTmpWidth+nStartX);
 
@@ -1030,7 +1030,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         pPortion->GetSize().Width() = 0;
                         bEOL = true;
                         bLineBreak = true;
-                        pPortion->GetKind() = PortionKind::LINEBREAK;
+                        pPortion->SetKind( PortionKind::LINEBREAK );
                         bCompressedChars = false;
                         EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
                         size_t nPos = nTmpPos - pLine->GetStart();
@@ -1080,7 +1080,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
                         size_t nPos = nTmpPos - pLine->GetStart();
                         rArray.insert(rArray.begin()+nPos, pPortion->GetSize().Width());
-                        pPortion->GetKind() = cChar ? PortionKind::TEXT : PortionKind::FIELD;
+                        pPortion->SetKind( cChar ? PortionKind::TEXT : PortionKind::FIELD );
                         // If this is the first token on the line,
                         // and nTmpWidth > aPaperSize.Width, => infinite loop!
                         if ( ( nTmpWidth >= nXWidth ) && ( nTmpPortion == pLine->GetStartPortion() ) )
@@ -2018,7 +2018,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     {
         // A portion for inserting the separator ...
         TextPortion* pHyphPortion = new TextPortion( 0 );
-        pHyphPortion->GetKind() = PortionKind::HYPHENATOR;
+        pHyphPortion->SetKind( PortionKind::HYPHENATOR );
         OUString aHyphText(CH_HYPH);
         if ( (cAlternateReplChar || cAlternateExtraChar) && bAltFullRight ) // alternation after the break doesn't supported
         {

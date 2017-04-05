@@ -61,11 +61,11 @@ namespace sd { namespace slidesorter { namespace view {
 //=====  InsertionIndicatorOverlay  ===========================================
 
 const static sal_Int32 gnShadowBorder = 3;
+const static sal_Int32 gnLayerIndex = 2;
 
 InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mbIsVisible(false),
-      mnLayerIndex(2),
       mpLayerInvalidator(),
       maLocation(),
       maIcon(),
@@ -326,7 +326,7 @@ void InsertionIndicatorOverlay::Show()
             mrSlideSorter.GetView().GetLayeredDevice());
         if (pLayeredDevice)
         {
-            pLayeredDevice->RegisterPainter(shared_from_this(), mnLayerIndex);
+            pLayeredDevice->RegisterPainter(shared_from_this(), gnLayerIndex);
             if (mpLayerInvalidator)
                 mpLayerInvalidator->Invalidate(GetBoundingBox());
         }
@@ -345,7 +345,7 @@ void InsertionIndicatorOverlay::Hide()
         {
             if (mpLayerInvalidator)
                 mpLayerInvalidator->Invalidate(GetBoundingBox());
-            pLayeredDevice->RemovePainter(shared_from_this(), mnLayerIndex);
+            pLayeredDevice->RemovePainter(shared_from_this(), gnLayerIndex);
         }
     }
 }
