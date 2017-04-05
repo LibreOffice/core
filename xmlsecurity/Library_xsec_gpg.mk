@@ -13,9 +13,12 @@ $(eval $(call gb_Library_set_include,xsec_gpg,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/xmlsecurity/inc \
 	-I$(SRCDIR)/xmlsecurity/source/gpg \
+	-I$(call gb_UnpackedTarball_get_dir,xmlsec/include) \
 ))
 
 $(eval $(call gb_Library_add_defs,xsec_gpg,\
+	-DXMLSEC_NO_XSLT \
+	-DXMLSEC_CRYPTO_NSS \
 	-DXSECGPG_DLLIMPLEMENTATION \
 ))
 
