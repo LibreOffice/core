@@ -1537,7 +1537,7 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
         pOutlinerParaObject = GetOutlinerParaObject();
     }
 
-    if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != (bool)bVertical) )
+    if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != bVertical) )
     {
         // get item settings
         const SfxItemSet& rSet = GetObjectItemSet();

@@ -392,10 +392,10 @@ public:
     bool getHideChart() const { return mbHideChart; }
     bool getHideDraw() const { return mbHideDraw; }
     bool getHideFormControl() const { return mbHideFormControl; }
-    void setHideOle(bool bNew) { if(bNew != (bool)mbHideOle) mbHideOle = bNew; }
-    void setHideChart(bool bNew) { if(bNew != (bool)mbHideChart) mbHideChart = bNew; }
-    void setHideDraw(bool bNew) { if(bNew != (bool)mbHideDraw) mbHideDraw = bNew; }
-    void setHideFormControl(bool bNew) { if(bNew != (bool)mbHideFormControl) mbHideFormControl = bNew; }
+    void setHideOle(bool bNew) { if(bNew != mbHideOle) mbHideOle = bNew; }
+    void setHideChart(bool bNew) { if(bNew != mbHideChart) mbHideChart = bNew; }
+    void setHideDraw(bool bNew) { if(bNew != mbHideDraw) mbHideDraw = bNew; }
+    void setHideFormControl(bool bNew) { if(bNew != mbHideFormControl) mbHideFormControl = bNew; }
 
     void SetGridCoarse(const Size& rSiz) { maGridBig=rSiz; }
     void SetGridFine(const Size& rSiz) {

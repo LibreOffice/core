@@ -2937,7 +2937,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                     // not changed object.
                     if(pTextObj
                         && pTextObj->GetOutlinerParaObject()
-                        && pTextObj->GetOutlinerParaObject()->IsVertical() != (bool)bVertical)
+                        && pTextObj->GetOutlinerParaObject()->IsVertical() != bVertical)
                     {
                         ::tools::Rectangle aObjectRect = pTextObj->GetSnapRect();
                         pTextObj->GetOutlinerParaObject()->SetVertical(bVertical);

@@ -509,7 +509,7 @@ bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch( nMemberId )
     {
         case MID_ITALIC:
-            rVal <<= (bool)GetBoolValue();
+            rVal <<= GetBoolValue();
             break;
         case MID_POSTURE:
             rVal <<= vcl::unohelper::ConvertFontSlant(GetValue());
@@ -645,7 +645,7 @@ bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch( nMemberId )
     {
         case MID_BOLD   :
-            rVal <<= (bool)GetBoolValue();
+            rVal <<= GetBoolValue();
         break;
         case MID_WEIGHT:
         {
@@ -1274,7 +1274,7 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch(nMemberId)
     {
     case MID_TEXTLINED:
-        rVal <<= (bool)GetBoolValue();
+        rVal <<= GetBoolValue();
         break;
     case MID_TL_STYLE:
         rVal <<= (sal_Int16)(GetValue());
@@ -1283,7 +1283,7 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         rVal <<= (sal_Int32)( mColor.GetColor() );
         break;
     case MID_TL_HASCOLOR:
-        rVal <<= (bool) !mColor.GetTransparency();
+        rVal <<= !mColor.GetTransparency();
         break;
     }
     return true;
@@ -1475,7 +1475,7 @@ bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch(nMemberId)
     {
         case MID_CROSSED_OUT:
-            rVal <<= (bool) GetBoolValue();
+            rVal <<= GetBoolValue();
         break;
         case MID_CROSS_OUT:
             rVal <<= (sal_Int16)(GetValue());
@@ -2997,7 +2997,7 @@ bool SvxCharRotateItem::QueryValue( css::uno::Any& rVal,
         SvxTextRotateItem::QueryValue(rVal, nMemberId);
         break;
     case MID_FITTOLINE:
-        rVal <<= (bool) IsFitToLine();
+        rVal <<= IsFitToLine();
         break;
     default:
         bRet = false;

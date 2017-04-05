@@ -3427,7 +3427,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                 {
                     if (pMember && pMember->HasShowDetails())
                     {
-                        aRet <<= (bool)pMember->GetShowDetails();
+                        aRet <<= pMember->GetShowDetails();
                     }
                     else
                     {

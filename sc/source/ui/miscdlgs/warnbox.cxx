@@ -37,7 +37,7 @@ ScReplaceWarnBox::ScReplaceWarnBox( vcl::Window* pParent ) :
 sal_Int16 ScReplaceWarnBox::Execute()
 {
     sal_Int16 nRet = RET_YES;
-    if( (bool) SC_MOD()->GetInputOptions().GetReplaceCellsWarn() )
+    if( SC_MOD()->GetInputOptions().GetReplaceCellsWarn() )
     {
         nRet = WarningBox::Execute();
         if (!GetCheckBoxState())

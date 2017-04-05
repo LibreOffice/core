@@ -496,9 +496,9 @@ bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion 
 
 bool ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
-    return (bool)((nTab == nTable)
-                    && (nCol1 == nStartCol) && (nRow1 == nStartRow)
-                    && (nCol2 == nEndCol) && (nRow2 == nEndRow));
+    return (nTab == nTable)
+           && (nCol1 == nStartCol) && (nRow1 == nStartRow)
+           && (nCol2 == nEndCol) && (nRow2 == nEndRow);
 }
 
 bool ScDBData::HasImportParam() const

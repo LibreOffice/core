@@ -332,7 +332,7 @@ namespace frm
         if ( m_aSupportedFeatures.end() != aInfo )
             aInfo->second.aCachedAdditionalState >>= bState;
 
-        return (bool)bState;
+        return bState;
     }
 
 

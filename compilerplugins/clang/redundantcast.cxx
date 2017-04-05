@@ -299,14 +299,15 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
     }
     auto t1 = getSubExprAsWritten(expr)->getType();
     auto t2 = expr->getTypeAsWritten();
-    if (loplugin::TypeCheck(t1).Enum() && loplugin::TypeCheck(t2).Enum() && t1 == t2) {
+    if (loplugin::TypeCheck(t1).Enum() && t1 == t2) {
         report(
             DiagnosticsEngine::Warning,
             "redundant cstyle enum cast from %0 to %1", expr->getExprLoc())
             << t1 << t2 << expr->getSourceRange();
         return true;
     }
-    if (loplugin::TypeCheck(t1).Typedef() && loplugin::TypeCheck(t2).Typedef() && t1 == t2)
+    bool bBuiltinTypeBool = t1->isSpecificBuiltinType(BuiltinType::Bool);
+    if ((bBuiltinTypeBool || loplugin::TypeCheck(t1).Typedef()) && t1 == t2)
     {
         // Ignore FD_ISSET expanding to "...(SOCKET)(fd)..." in some Microsoft
         // winsock2.h (TODO: improve heuristic of determining that the whole
@@ -332,7 +333,7 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
         }
         report(
             DiagnosticsEngine::Warning,
-            "redundant cstyle typedef cast from %0 to %1", expr->getExprLoc())
+            "redundant cstyle cast from %0 to %1", expr->getExprLoc())
             << t1 << t2 << expr->getSourceRange();
         return true;
     }

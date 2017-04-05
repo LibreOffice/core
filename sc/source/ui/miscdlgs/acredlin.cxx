@@ -1627,8 +1627,8 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl, Timer *, void)
         ScRedlinData* pEntryData = static_cast<ScRedlinData*>(pEntry->GetUserData());
         if( pEntryData )
         {
-            bRejectFlag &= (bool) pEntryData->bIsRejectable;
-            bAcceptFlag &= (bool) pEntryData->bIsAcceptable;
+            bRejectFlag &= pEntryData->bIsRejectable;
+            bAcceptFlag &= pEntryData->bIsAcceptable;
 
             const ScChangeAction* pScChangeAction = static_cast<ScChangeAction*>(pEntryData->pData);
             if( pScChangeAction && (pScChangeAction->GetType() != SC_CAT_DELETE_TABS) &&

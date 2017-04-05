@@ -312,7 +312,7 @@ namespace pcr
                 if ( xBinding.is() )
                 {
                     bool bNeedIntegerBinding = ( nExchangeType == 1 );
-                    if ( (bool)bNeedIntegerBinding != CellBindingHelper::isCellIntegerBinding( xBinding ) )
+                    if ( bNeedIntegerBinding != CellBindingHelper::isCellIntegerBinding( xBinding ) )
                     {
                         CellAddress aAddress;
                         if ( m_pHelper->getAddressFromCellBinding( xBinding, aAddress ) )

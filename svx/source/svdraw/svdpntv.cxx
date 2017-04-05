@@ -1184,7 +1184,7 @@ vcl::Window* SdrPaintView::GetItemBrowser() const
 
 void SdrPaintView::SetAnimationPause( bool bSet )
 {
-    if((bool)mbAnimationPause != bSet)
+    if(mbAnimationPause != bSet)
     {
         mbAnimationPause = bSet;
 
@@ -1271,7 +1271,7 @@ bool SdrPaintView::IsBufferedOutputAllowed() const
 
 void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
 {
-    if(bNew != (bool)mbBufferedOutputAllowed)
+    if(bNew != mbBufferedOutputAllowed)
     {
         mbBufferedOutputAllowed = bNew;
     }
@@ -1284,7 +1284,7 @@ bool SdrPaintView::IsBufferedOverlayAllowed() const
 
 void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
 {
-    if(bNew != (bool)mbBufferedOverlayAllowed)
+    if(bNew != mbBufferedOverlayAllowed)
     {
         mbBufferedOverlayAllowed = bNew;
     }
@@ -1293,7 +1293,7 @@ void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
 
 void SdrPaintView::SetPagePaintingAllowed(bool bNew)
 {
-    if(bNew != (bool)mbPagePaintingAllowed)
+    if(bNew != mbPagePaintingAllowed)
     {
         mbPagePaintingAllowed = bNew;
     }

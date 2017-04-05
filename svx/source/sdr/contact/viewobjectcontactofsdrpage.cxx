@@ -438,7 +438,7 @@ bool ViewObjectContactOfPageGrid::isPrimitiveVisible(const DisplayInfo& rDisplay
         return false;
     }
 
-    if(static_cast< ViewContactOfGrid& >(GetViewContact()).getFront() != (bool)rView.IsGridFront())
+    if(static_cast< ViewContactOfGrid& >(GetViewContact()).getFront() != rView.IsGridFront())
     {
         return false;
     }
@@ -516,7 +516,7 @@ bool ViewObjectContactOfPageHelplines::isPrimitiveVisible(const DisplayInfo& rDi
         return false;
     }
 
-    if(static_cast< ViewContactOfHelplines& >(GetViewContact()).getFront() != (bool)rView.IsHlplFront())
+    if(static_cast< ViewContactOfHelplines& >(GetViewContact()).getFront() != rView.IsHlplFront())
     {
         return false;
     }

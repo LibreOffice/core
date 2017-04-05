@@ -383,7 +383,7 @@ void ScTabControl::UpdateStatus()
     {
         bModified = false;                                          // selection
         for (i=0; i<nMaxCnt && !bModified; i++)
-            if ( rMark.GetTableSelect(i) != (bool) IsPageSelected(static_cast<sal_uInt16>(i)+1) )
+            if ( rMark.GetTableSelect(i) != IsPageSelected(static_cast<sal_uInt16>(i)+1) )
                 bModified = true;
 
         if ( bModified )

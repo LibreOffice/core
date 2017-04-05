@@ -110,7 +110,7 @@ void lcl_linenumberingHeaderFooter( const uno::Reference<container::XNameContain
             if( !xStyle.is() )
                 return;
             uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY );
-            xPropertySet->setPropertyValue( getPropertyName( PROP_PARA_LINE_NUMBER_COUNT ), uno::makeAny( ( bool )( nListId >= 0 ) ) );
+            xPropertySet->setPropertyValue( getPropertyName( PROP_PARA_LINE_NUMBER_COUNT ), uno::makeAny( nListId >= 0 ) );
         }
     }
 }

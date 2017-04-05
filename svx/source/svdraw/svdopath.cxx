@@ -1796,7 +1796,7 @@ void SdrPathObj::ImpForceKind()
     {
         basegfx::B2DPolygon aCandidate(maPathPolygon.getB2DPolygon(a));
 
-        if((bool)IsClosed() != aCandidate.isClosed())
+        if(IsClosed() != aCandidate.isClosed())
         {
             // #i80213# really change polygon geometry; else e.g. the last point which
             // needs to be identical with the first one will be missing when opening

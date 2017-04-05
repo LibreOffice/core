@@ -875,7 +875,7 @@ public:
 
     void setClosed(bool bNew)
     {
-        if(bNew != (bool)mbIsClosed)
+        if(bNew != mbIsClosed)
         {
             mbIsClosed = bNew;
         }

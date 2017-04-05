@@ -636,7 +636,7 @@ void FormattedField::SetThousandsSep(bool _bUseSeparator)
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
-    if (bThousand == (bool)_bUseSeparator)
+    if (bThousand == _bUseSeparator)
         return;
 
     // we need the language for the following

@@ -884,7 +884,7 @@ void SdrDragView::SetMarkHandles(SfxViewShell* pOtherShell)
 
 void SdrDragView::SetSolidDragging(bool bOn)
 {
-    if((bool)mbSolidDragging != bOn)
+    if(mbSolidDragging != bOn)
     {
         mbSolidDragging = bOn;
     }

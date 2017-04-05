@@ -100,7 +100,7 @@ void MasterLayoutDialog::applyChanges()
 {
     mpDoc->BegUndo(GetText());
 
-    if( (mpCurrentPage->GetPageKind() != PageKind::Standard) && (mbOldHeader != (bool) mpCBHeader->IsChecked() ) )
+    if( (mpCurrentPage->GetPageKind() != PageKind::Standard) && (mbOldHeader != mpCBHeader->IsChecked() ) )
     {
         if( mbOldHeader )
             remove( PRESOBJ_HEADER );
@@ -108,7 +108,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_HEADER );
     }
 
-    if( mbOldFooter != (bool) mpCBFooter->IsChecked() )
+    if( mbOldFooter != mpCBFooter->IsChecked() )
     {
         if( mbOldFooter )
             remove( PRESOBJ_FOOTER );
@@ -116,7 +116,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_FOOTER );
     }
 
-    if( mbOldDate != (bool) mpCBDate->IsChecked() )
+    if( mbOldDate != mpCBDate->IsChecked() )
     {
         if( mbOldDate )
             remove( PRESOBJ_DATETIME );
@@ -124,7 +124,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_DATETIME );
     }
 
-    if( mbOldPageNumber != (bool) mpCBPageNumber->IsChecked() )
+    if( mbOldPageNumber != mpCBPageNumber->IsChecked() )
     {
         if( mbOldPageNumber )
             remove( PRESOBJ_SLIDENUMBER );

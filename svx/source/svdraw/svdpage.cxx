@@ -1637,7 +1637,7 @@ OUString SdrPage::GetLayoutName() const
 
 void SdrPage::SetInserted( bool bIns )
 {
-    if( (bool) mbInserted != bIns )
+    if( mbInserted != bIns )
     {
         mbInserted = bIns;
 

@@ -313,7 +313,7 @@ void ScaleTabPage::Reset(const SfxItemSet* rInAttrs)
 
     const SfxPoolItem *pPoolItem = nullptr;
     if (rInAttrs->GetItemState(SCHATTR_AXIS_ALLOW_DATEAXIS, true, &pPoolItem) == SfxItemState::SET)
-        m_bAllowDateAxis = (bool) static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        m_bAllowDateAxis = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
     m_nAxisType=chart2::AxisType::REALNUMBER;
     if (rInAttrs->GetItemState(SCHATTR_AXISTYPE, true, &pPoolItem) == SfxItemState::SET)
         m_nAxisType = (int) static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
@@ -323,7 +323,7 @@ void ScaleTabPage::Reset(const SfxItemSet* rInAttrs)
     {
         bool bAutoDateAxis = false;
         if (rInAttrs->GetItemState(SCHATTR_AXIS_AUTO_DATEAXIS, true, &pPoolItem) == SfxItemState::SET)
-            bAutoDateAxis = (bool) static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+            bAutoDateAxis = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
 
         sal_uInt16 nPos = 0;
         if( m_nAxisType==chart2::AxisType::DATE )
