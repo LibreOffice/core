@@ -179,6 +179,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
     maBroadcasters.erase(nStartRow, nEndRow);
     maBroadcasters.resize(MAXROWCOUNT);
 
+    CellNotesDeleting(nStartRow, nEndRow, false);
     maCellNotes.erase(nStartRow, nEndRow);
     maCellNotes.resize(MAXROWCOUNT);
 
