@@ -121,12 +121,15 @@ extern "C"
         }
         //prepare the new PATH. Add the Ure/bin directory at the front.
         //note also adding ';'
-        char * sNewPath = new char[strlen(sEnvPath) + strlen(pPath) * 2 + strlen(UNOPATH) + 4];
+        size_t size_sEnvPath = 0;
+        if(sEnvPath)
+            size_sEnvPath = strlen(sEnvPath);
+        char* sNewPath = new char[size_sEnvPath + 2*strlen(pPath) + strlen(UNOPATH) + 4];
         sNewPath[0] = L'\0';
         strcat(sNewPath, pPath);     // program to PATH
         strcat(sNewPath, ";");
         strcat(sNewPath, UNOPATH);   // UNO to PATH
-        if (strlen(sEnvPath))
+        if (size_sEnvPath > 0)
         {
             strcat(sNewPath, ";");
             strcat(sNewPath, sEnvPath);
