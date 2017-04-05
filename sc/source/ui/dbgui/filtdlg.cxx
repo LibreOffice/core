@@ -567,7 +567,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
     if (!m_EntryLists.count(nColumn))
     {
-        OSL_FAIL("Spalte noch nicht initialisiert");
+        OSL_FAIL("column not yet initialized");
         return;
     }
 

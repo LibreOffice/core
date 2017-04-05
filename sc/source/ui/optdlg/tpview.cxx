@@ -369,7 +369,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
             case FUNIT_PICA:
             case FUNIT_INCH:
             {
-                // nur diese Metriken benutzen
+                // only use these metrics
                 sal_Int32 nPos = m_pUnitLB->InsertEntry( sMetric );
                 m_pUnitLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
             }

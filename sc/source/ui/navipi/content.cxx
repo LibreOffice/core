@@ -63,11 +63,11 @@
 #include <o3tl/make_unique.hxx>
 using namespace com::sun::star;
 
-//  Reihenfolge der Kategorien im Navigator -------------------------------------
+//  order of the categories in navigator -------------------------------------
 
 static const ScContentId pTypeList[(int)ScContentId::LAST + 1] =
 {
-    ScContentId::ROOT,            // ROOT (0) muss vorne stehen
+    ScContentId::ROOT,            // ROOT (0) has to be at the front
     ScContentId::TABLE,
     ScContentId::RANGENAME,
     ScContentId::DBAREA,
@@ -95,8 +95,8 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
     }
     else
     {
-        //  Current nur, wenn keine manuell eingestellt ist
-        //  (damit erkannt wird, wenn das Dokument nicht mehr existiert)
+        //  only current when manual isn't set
+        //  (so it's detected when the documents don't exists any longer)
 
         SfxViewShell* pViewSh = SfxViewShell::Current();
         if ( pViewSh )
@@ -120,7 +120,7 @@ ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg
     , bisInNavigatoeDlg(false)
 {
     for (sal_uInt16 i = 0; i <= (int)ScContentId::LAST; ++i)
-        pPosList[pTypeList[i]] = i;         // invers zum suchen
+        pPosList[pTypeList[i]] = i;         // inverse for searching
 
     pRootNodes[ScContentId::ROOT] = nullptr;
     for (sal_uInt16 i = 1; i < (int)ScContentId::LAST; ++i)
@@ -219,7 +219,7 @@ void ScContentTree::InitRoot( ScContentId nType )
     if ( nType == ScContentId::ROOT )
         return;
 
-    if ( nRootType != ScContentId::ROOT && nRootType != nType )              // ausgeblendet ?
+    if ( nRootType != ScContentId::ROOT && nRootType != nType )              // hidden ?
     {
         pRootNodes[nType] = nullptr;
         return;
@@ -256,11 +256,11 @@ void ScContentTree::ClearType(ScContentId nType)
     else
     {
         SvTreeListEntry* pParent = pRootNodes[nType];
-        if ( !pParent || GetChildCount(pParent) )       // nicht, wenn ohne Children schon da
+        if ( !pParent || GetChildCount(pParent) )       // not if no children existing
         {
             if (pParent)
-                GetModel()->Remove( pParent );          // mit allen Children
-            InitRoot( nType );                          // ggf. neu eintragen
+                GetModel()->Remove( pParent );          // with all children
+            InitRoot( nType );                          // if needed insert anew
         }
     }
 }
@@ -272,7 +272,7 @@ void ScContentTree::InsertContent( ScContentId nType, const OUString& rValue )
         InsertEntry( rValue, pParent );
     else
     {
-        OSL_FAIL("InsertContent ohne Parent");
+        OSL_FAIL("InsertContent without parent");
     }
 }
 
@@ -353,7 +353,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
     if( pEntry && (nType != ScContentId::ROOT) && (nChild != SC_CONTENT_NOCHILD) )
     {
         if ( bHiddenDoc )
-            return false;               //! spaeter...
+            return false;               //! later...
 
         OUString aText( GetEntryText( pEntry ) );
 
@@ -372,9 +372,9 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
 
             case ScContentId::DBAREA:
             {
-                //  Wenn gleiche Bereichs- und DB-Namen existieren, wird
-                //  bei SID_CURRENTCELL der Bereichsname genommen.
-                //  DB-Bereiche darum direkt ueber die Adresse anspringen.
+                //  If the same names of area and DB exists, then
+                //  SID_CURRENTCELL takes the area name.
+                //  Therefore for DB areas access them directly via address.
 
                 OUString aRangeStr = lcl_GetDBAreaRange( GetSourceDocument(), aText );
                 if (!aRangeStr.isEmpty())
@@ -474,7 +474,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
             if( pEntry && (nType != ScContentId::ROOT) && (nChild != SC_CONTENT_NOCHILD) )
             {
                 if ( bHiddenDoc )
-                    return ;                //! spaeter...
+                    return ;                //! later...
                 OUString aText( GetEntryText( pEntry ) );
                 sKeyString = aText;
                 if (!aManualDoc.isEmpty())
@@ -564,10 +564,10 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
     switch ( rCEvt.GetCommand() )
     {
         case CommandEventId::StartDrag:
-            //  Aus dem ExecuteDrag heraus kann der Navigator geloescht werden
-            //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
-            //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
-            //  Deshalb Drag&Drop asynchron:
+            //  From within ExecuteDrag you can delete the navigator
+            //  (during switch over to another document type), but this would
+            //  kill the StarView MouseMove handler, who calls Command().
+            //  Therefore async Drag&Drop:
 
             Application::PostUserEvent( LINK( this, ScContentTree, ExecDragHdl ), nullptr, true );
 
@@ -584,13 +584,13 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 aPop->InsertItem( 1, pParentWindow->GetStrDragMode() );
                 aPop->SetPopupMenu( 1, aDropMenu.get() );
 
-                //  angezeigtes Dokument
+                //  displayed document
 
                 VclPtrInstance<ScPopupMenu> aDocMenu;
                 aDocMenu->SetMenuFlags( aDocMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
                 sal_uInt16 i=0;
                 sal_uInt16 nPos=0;
-                //  geladene Dokumente
+                //  loaded documents
                 ScDocShell* pCurrentSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current()  );
                 SfxObjectShell* pSh = SfxObjectShell::GetFirst();
                 while ( pSh )
@@ -609,11 +609,11 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                     }
                     pSh = SfxObjectShell::GetNext( *pSh );
                 }
-                //  "aktives Fenster"
+                //  "active window"
                 aDocMenu->InsertItem( ++i, pParentWindow->aStrActiveWin );
                 if (!bHiddenDoc && aManualDoc.isEmpty())
                     nPos = i;
-                //  verstecktes Dokument
+                //  hidden document
                 if ( !aHiddenTitle.isEmpty() )
                 {
                     OUString aEntry = aHiddenTitle;
@@ -626,7 +626,6 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 aPop->InsertItem( 2, pParentWindow->GetStrDisplay() );
                 aPop->SetPopupMenu( 2, aDocMenu.get() );
 
-                //  ausfuehren
 
                 aPop->Execute( this, rCEvt.GetMousePosPixel() );
 
@@ -636,7 +635,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                     if ( nId >= RID_DROPMODE_URL && nId <= RID_DROPMODE_COPY )
                         pParentWindow->SetDropMode( nId - RID_DROPMODE_URL );
                 }
-                else if ( aDocMenu->WasHit() )           //  angezeigtes Dokument
+                else if ( aDocMenu->WasHit() )           //  displayed document
                 {
                     sal_uInt16 nId = aDocMenu->GetSelected();
                     OUString aName = aDocMenu->GetItemText(nId);
@@ -671,7 +670,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
             }
             else if ( pParent == pRootNodes[ScContentId::NOTE] )
             {
-                aHelpText = GetEntryText(pEntry);           // Notizen als Help-Text
+                aHelpText = GetEntryText(pEntry);           // notes as help text
                 bRet = true;
             }
             else if ( pParent == pRootNodes[ScContentId::AREALINK] )
@@ -682,7 +681,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
                     const ScAreaLink* pLink = GetLink(nIndex);
                     if (pLink)
                     {
-                        aHelpText = pLink->GetFile();           // Source-Datei als Help-Text
+                        aHelpText = pLink->GetFile();           // source file as help text
                         bRet = true;
                     }
                 }
@@ -728,7 +727,7 @@ ScDocument* ScContentTree::GetSourceDocument()
 void ScContentTree::ObjectFresh( ScContentId nType, SvTreeListEntry* pEntry )
 {
     if ( bHiddenDoc && !pHiddenDocument )
-        return;     // anderes Dokument angezeigt
+        return;     // other document displayed
       if(nType ==ScContentId::GRAPHIC||nType ==ScContentId::OLEOBJECT||nType ==ScContentId::DRAWING)
         {
         SetUpdateMode(false);
@@ -766,9 +765,9 @@ void ScContentTree::ObjectFresh( ScContentId nType, SvTreeListEntry* pEntry )
 void ScContentTree::Refresh( ScContentId nType )
 {
     if ( bHiddenDoc && !pHiddenDocument )
-        return;                                 // anderes Dokument angezeigt
+        return;                                 // other document displayed
 
-    //  wenn sich nichts geaendert hat, gleich abbrechen (gegen Geflacker)
+    //  if nothing has changed the cancel right away (against flicker)
 
     if ( nType == ScContentId::NOTE )
         if (!NoteStringsChanged())
@@ -810,7 +809,7 @@ void ScContentTree::Refresh( ScContentId nType )
 
 void ScContentTree::GetTableNames()
 {
-    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::TABLE )       // ausgeblendet ?
+    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::TABLE )       // hidden ?
         return;
 
     ScDocument* pDoc = GetSourceDocument();
@@ -840,7 +839,7 @@ OUString createLocalRangeName(const OUString& rName, const OUString& rTableName)
 
 void ScContentTree::GetAreaNames()
 {
-    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::RANGENAME )       // ausgeblendet ?
+    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::RANGENAME )       // hidden ?
         return;
 
     ScDocument* pDoc = GetSourceDocument();
@@ -886,7 +885,7 @@ void ScContentTree::GetAreaNames()
 
 void ScContentTree::GetDbNames()
 {
-    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::DBAREA )      // ausgeblendet ?
+    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::DBAREA )      // hidden ?
         return;
 
     ScDocument* pDoc = GetSourceDocument();
@@ -925,7 +924,7 @@ bool ScContentTree::IsPartOfType( ScContentId nContentType, sal_uInt16 nObjIdent
 
 void ScContentTree::GetDrawNames( ScContentId nType )
 {
-    if ( nRootType != ScContentId::ROOT && nRootType != nType )              // ausgeblendet ?
+    if ( nRootType != ScContentId::ROOT && nRootType != nType )              // hidden ?
         return;
 
     ScDocument* pDoc = GetSourceDocument();
@@ -982,7 +981,7 @@ void ScContentTree::GetDrawNames( ScContentId nType )
                                       }
                                 }//end if parent
                                 else
-                                    SAL_WARN("sc", "InsertContent ohne Parent");
+                                    SAL_WARN("sc", "InsertContent without parent");
                             }
                         }
 
@@ -1012,7 +1011,7 @@ void ScContentTree::GetDrawingNames()
 
 void ScContentTree::GetLinkNames()
 {
-    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::AREALINK )                // ausgeblendet ?
+    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::AREALINK )                // hidden ?
         return;
 
     ScDocument* pDoc = GetSourceDocument();
@@ -1020,7 +1019,7 @@ void ScContentTree::GetLinkNames()
         return;
 
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    OSL_ENSURE(pLinkManager, "kein LinkManager am Dokument?");
+    OSL_ENSURE(pLinkManager, "no LinkManager on document?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.size();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -1029,7 +1028,7 @@ void ScContentTree::GetLinkNames()
         if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             InsertContent( ScContentId::AREALINK, static_cast<ScAreaLink*>(pBase)->GetSource() );
 
-            //  in der Liste die Namen der Quellbereiche
+            //  insert in list the names of source areas
     }
 }
 
@@ -1041,7 +1040,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
 
     sal_uLong nFound = 0;
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    OSL_ENSURE(pLinkManager, "kein LinkManager am Dokument?");
+    OSL_ENSURE(pLinkManager, "no LinkManager on document?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.size();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -1070,7 +1069,7 @@ static OUString lcl_NoteString( const ScPostIt& rNote )
 
 void ScContentTree::GetNoteStrings()
 {
-    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::NOTE )        // ausgeblendet ?
+    if ( nRootType != ScContentId::ROOT && nRootType != ScContentId::NOTE )        // hidden ?
         return;
 
     ScDocument* pDoc = GetSourceDocument();
@@ -1177,7 +1176,7 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
     }
 
     if ( pEntry )
-        bEqual = false;             // kommt noch was
+        bEqual = false;             // anything else
 
     return !bEqual;
 }
@@ -1308,7 +1307,7 @@ void ScContentTree::DoDrag()
     {
         OUString aText( GetEntryText( pEntry ) );
 
-        ScDocument* pLocalDoc = nullptr;                   // fuer URL-Drop
+        ScDocument* pLocalDoc = nullptr;                   // for URL drop
         OUString aDocName;
         if (bHiddenDoc)
             aDocName = aHiddenName;
@@ -1320,7 +1319,7 @@ void ScContentTree::DoDrag()
                 if (pDocSh->HasName())
                     aDocName = pDocSh->GetMedium()->GetName();
                 else
-                    pLocalDoc = &pDocSh->GetDocument();      // Drop nur in dieses Dokument
+                    pLocalDoc = &pDocSh->GetDocument();      // drop only in this document
             }
         }
 
@@ -1411,8 +1410,8 @@ void ScContentTree::DoDrag()
                         {
                             lcl_DoDragObject( pSrcShell, aText, nType, this );
 
-                            //  in ExecuteDrag kann der Navigator geloescht worden sein
-                            //  -> nicht mehr auf Member zugreifen !!!
+                            //  during ExecuteDrag the navigator can be deleted
+                            //  -> don't access member anymore !!!
                         }
                     }
                 }
@@ -1434,15 +1433,15 @@ void ScContentTree::DoDrag()
         }
     }
 
-    bIsInDrag = false;              // static Member
+    bIsInDrag = false;              // static member
 
-    delete pDocLoader;              // falls Dokument zum Draggen geladen wurde
+    delete pDocLoader;              // if document was load for dragging
 }
 
 IMPL_LINK_NOARG(ScContentTree, ExecDragHdl, void*, void)
 {
-    //  als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch der
-    //  Navigator geloescht werden darf
+    //  as link, so that async without ImpMouseMoveMsg on the stack also
+    //  the navigator can be deleted
 
     DoDrag();
 }
@@ -1452,7 +1451,7 @@ bool ScContentTree::LoadFile( const OUString& rUrl )
     OUString aDocName = rUrl;
     sal_Int32 nPos = aDocName.indexOf('#');
     if ( nPos != -1 )
-        aDocName = aDocName.copy(0, nPos);           // nur der Name, ohne #...
+        aDocName = aDocName.copy(0, nPos);           // only the name without #...
 
     bool bReturn = false;
     OUString aURL = aDocName;
@@ -1465,14 +1464,14 @@ bool ScContentTree::LoadFile( const OUString& rUrl )
         aHiddenTitle = aLoader.GetTitle();
         pHiddenDocument = aLoader.GetDocument();
 
-        Refresh();                      // Inhalte aus geladenem Dokument holen
+        Refresh();                      // get content from loaded document
 
         pHiddenDocument = nullptr;
 
-        pParentWindow->GetDocNames( &aHiddenTitle );            // Liste fuellen
+        pParentWindow->GetDocNames( &aHiddenTitle );            // fill list
     }
 
-    //  Dokument wird im dtor von ScDocumentLoader wieder geschlossen
+    //  document is closed again by ScDocumentLoader in dtor
 
     return bReturn;
 }
@@ -1528,9 +1527,9 @@ void ScContentTree::ResetManualDoc()
 void ScContentTree::ActiveDocChanged()
 {
     if ( !bHiddenDoc && aManualDoc.isEmpty() )
-        Refresh();                                  // Inhalte nur wenn automatisch
+        Refresh();                                  // content only if automatic
 
-        //  Listbox muss immer geupdated werden, wegen aktiv-Flag
+        //  if flag active Listbox must be updated
 
     OUString aCurrent;
     if ( bHiddenDoc )
@@ -1542,16 +1541,16 @@ void ScContentTree::ActiveDocChanged()
             aCurrent = pSh->GetTitle();
         else
         {
-            //  eingestelltes Dokument existiert nicht mehr
+            //  document is no longer available
 
-            aManualDoc.clear();             // wieder automatisch
+            aManualDoc.clear();             // again automatically
             Refresh();
-            pSh = GetManualOrCurrent();     // sollte jetzt aktives sein
+            pSh = GetManualOrCurrent();     // should be active now
             if (pSh)
                 aCurrent = pSh->GetTitle();
         }
     }
-    pParentWindow->GetDocNames( &aCurrent );        // selektieren
+    pParentWindow->GetDocNames( &aCurrent );        // select
 }
 
 void ScContentTree::SetManualDoc(const OUString& rName)
@@ -1560,11 +1559,11 @@ void ScContentTree::SetManualDoc(const OUString& rName)
     if (!bHiddenDoc)
     {
         Refresh();
-        pParentWindow->GetDocNames( &aManualDoc );      // selektieren
+        pParentWindow->GetDocNames( &aManualDoc );      // select
     }
 }
 
-void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/Listbox angezeigt
+void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in Menu/Listbox
 {
     if ( rName == pParentWindow->aStrActiveWin )
     {
@@ -1572,7 +1571,7 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/
         return;
     }
 
-    //  "aktiv" oder "inaktiv" weglassen
+    //  omit "active" or "inactive"
 
     OUString aRealName = rName;
     sal_Int32 nLen = rName.getLength();
@@ -1585,7 +1584,7 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/
 
     bool bLoaded = false;
 
-        // ist es ein normal geladenes Doc ?
+    // Is it a normally loaded document?
 
     SfxObjectShell* pSh = SfxObjectShell::GetFirst();
     while ( pSh && !bLoaded )
@@ -1601,14 +1600,14 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/
         bHiddenDoc = false;
         SetManualDoc(aRealName);
     }
-    else if (!aHiddenTitle.isEmpty())                // verstecktes ausgewaehlt
+    else if (!aHiddenTitle.isEmpty())                // hidden selected
     {
         if (!bHiddenDoc)
             LoadFile(aHiddenName);
     }
     else
     {
-        OSL_FAIL("SelectDoc: nicht gefunden");
+        OSL_FAIL("SelectDoc: not found");
     }
 }
 

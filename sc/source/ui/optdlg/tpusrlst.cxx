@@ -206,8 +206,8 @@ void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
 
 bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
 {
-    // Modifikationen noch nicht uebernommen?
-    // -> Click auf Add-Button simulieren
+    // Changes aren't saved?
+    // -> simulate click of Add-Button
 
     if ( bModifyMode || bCancelMode )
         BtnClickHdl( mpBtnAdd );
@@ -313,7 +313,7 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
 
     rListStr.clear();
 
-    // Alle Doppelten cDelimiter entfernen:
+    // delete all duplicates of cDelimiter
     sal_Int32 c = 0;
     while ( c < nLen )
     {
