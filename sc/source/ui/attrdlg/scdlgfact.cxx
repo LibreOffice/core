@@ -593,6 +593,11 @@ void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOption
     pDlg->GetImportOptions(rOptions);
 }
 
+void AbstractScImportOptionsDlg_Impl::SaveImportOptions() const
+{
+    pDlg->SaveImportOptions();
+}
+
 LanguageType AbstractScTextImportOptionsDlg_Impl::GetLanguageType() const
 {
     return pDlg->getLanguageType();

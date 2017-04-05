@@ -384,6 +384,7 @@ class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg
 {
     DECL_ABSTDLG_BASE( AbstractScImportOptionsDlg_Impl, ScImportOptionsDlg)
     virtual void GetImportOptions( ScImportOptions& rOptions ) const override;
+    virtual void SaveImportOptions() const override;
 };
 
 class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDlg
