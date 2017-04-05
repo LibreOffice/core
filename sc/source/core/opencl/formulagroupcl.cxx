@@ -215,6 +215,12 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
 /// Currently, only the hash is passed.
 /// TBD(IJSUNG): pass also length and the actual string if there is a
 /// hash function collision
+
+/// FIXME: This idea of passing of hashes of uppercased strings into OpenCL code is fairly potent
+/// crack. It is hopefully not used at all any more, but noticing that there are string arguments
+/// automatically disables use of OpenCL for a formula group. If at some point there are resources
+/// to drain the OpenCL swamp, this should go away.
+
 class ConstStringArgument : public DynamicKernelArgument
 {
 public:
