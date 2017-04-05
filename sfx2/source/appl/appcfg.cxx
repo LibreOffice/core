@@ -247,11 +247,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                                aHelpOptions.IsHelpTips() ) ) )
                         bRet = true;
                     break;
-                case SID_ATTR_WELCOMESCREEN :
-                    if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_WELCOMESCREEN ),
-                               aHelpOptions.IsWelcomeScreen() ) ) )
-                        bRet = true;
-                    break;
                 case SID_HELP_STYLESHEET :
                     if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_HELP_STYLESHEET ),
                                aHelpOptions.GetHelpStyleSheet() ) ) )
@@ -591,13 +586,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         aHelpOptions.SetHelpTips( static_cast<const SfxBoolItem *>(pItem)->GetValue());
-    }
-
-    // WelcomeScreen
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WELCOMESCREEN ), true, &pItem))
-    {
-        DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aHelpOptions.SetWelcomeScreen( static_cast<const SfxBoolItem *>(pItem)->GetValue() );
     }
 
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), true, &pItem))
