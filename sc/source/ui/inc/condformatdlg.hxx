@@ -77,6 +77,8 @@ public:
 
     DECL_LINK( AddBtnHdl, Button*, void );
     DECL_LINK( RemoveBtnHdl, Button*, void );
+    DECL_LINK( UpBtnHdl, Button*, void );
+    DECL_LINK( DownBtnHdl, Button*, void );
     DECL_LINK( ScrollHdl, ScrollBar*, void );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry&, void );
 
@@ -91,6 +93,8 @@ private:
     VclPtr<PushButton> mpBtnOk;
     VclPtr<PushButton> mpBtnAdd;
     VclPtr<PushButton> mpBtnRemove;
+    VclPtr<PushButton> mpBtnUp;
+    VclPtr<PushButton> mpBtnDown;
     VclPtr<PushButton> mpBtnCancel;
     VclPtr<FixedText> mpFtRange;
     VclPtr<formula::RefEdit> mpEdRange;
@@ -131,6 +135,7 @@ public:
     virtual bool Close() override;
 
     void InvalidateRefData();
+    void OnSelectionChange(size_t nIndex, size_t nSize, bool bSelected = true);
 
     DECL_LINK( BtnPressedHdl, Button*, void );
     DECL_LINK( RangeGetFocusHdl, Control&, void );

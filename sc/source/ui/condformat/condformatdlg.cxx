@@ -144,7 +144,10 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
     Thaw();
     RecalcAll();
     if (!maEntries.empty())
+    {
         (*maEntries.begin())->SetActive();
+        mpDialogParent->OnSelectionChange(0, maEntries.size());
+    }
 
     RecalcAll();
 }
@@ -392,6 +395,7 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl, Button*, void )
     }
     mpDialogParent->InvalidateRefData();
     pNewEntry->SetActive();
+    mpDialogParent->OnSelectionChange(maEntries.size() - 1, maEntries.size());
     Thaw();
     RecalcAll();
 }
@@ -410,6 +414,51 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, Button*, void )
         }
     }
     mpDialogParent->InvalidateRefData();
+    mpDialogParent->OnSelectionChange(0, maEntries.size(), false);
+    Thaw();
+    RecalcAll();
+}
+
+IMPL_LINK_NOARG(ScCondFormatList, UpBtnHdl, Button*, void)
+{
+    Freeze();
+    size_t index = 0;
+    for (size_t i = 0; i < maEntries.size(); i++)
+    {
+        auto widget = maEntries[i];
+        if (widget->IsSelected() && i > 0)
+        {
+            std::swap(maEntries[i], maEntries[i - 1]);
+            index = i - 1;
+            break;
+        }
+    }
+    mpDialogParent->InvalidateRefData();
+    mpDialogParent->OnSelectionChange(index, maEntries.size());
+    Thaw();
+    RecalcAll();
+}
+
+IMPL_LINK_NOARG(ScCondFormatList, DownBtnHdl, Button*, void)
+{
+    Freeze();
+    size_t index = 0;
+    for (size_t i = 0; i < maEntries.size(); i++)
+    {
+        auto widget = maEntries[i];
+        if (widget->IsSelected())
+        {
+            index = i;
+            if (i < maEntries.size()-1)
+            {
+                std::swap(maEntries[i], maEntries[i + 1]);
+                index = i + 1;
+                break;
+            }
+        }
+    }
+    mpDialogParent->InvalidateRefData();
+    mpDialogParent->OnSelectionChange(index, maEntries.size());
     Thaw();
     RecalcAll();
 }
@@ -423,11 +472,17 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry&, rEntry, void )
     //A child has focus, but we will hide that, so regrab to whatever new thing gets
     //shown instead of leaving it stuck in the inaccessible hidden element
     bool bReGrabFocus = HasChildPathFocus();
-    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    size_t index = 0;
+    for(size_t i = 0; i < maEntries.size(); i++)
     {
-        (*itr)->SetInactive();
+        if (maEntries[i] == &rEntry)
+        {
+            index = i;
+        }
+        maEntries[i]->SetInactive();
     }
     mpDialogParent->InvalidateRefData();
+    mpDialogParent->OnSelectionChange(index, maEntries.size());
     rEntry.SetActive();
     Thaw();
     RecalcAll();
@@ -451,6 +506,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
 {
     get(mpBtnOk, "ok");
     get(mpBtnAdd, "add");
+    get(mpBtnUp, "up");
+    get(mpBtnDown, "down");
     get(mpBtnRemove, "delete");
     get(mpBtnCancel, "cancel");
 
@@ -498,6 +555,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mpBtnOk->SetClickHdl(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mpBtnAdd->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, AddBtnHdl ) );
     mpBtnRemove->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, RemoveBtnHdl ) );
+    mpBtnUp->SetClickHdl(LINK(mpCondFormList, ScCondFormatList, UpBtnHdl));
+    mpBtnDown->SetClickHdl(LINK(mpCondFormList, ScCondFormatList, DownBtnHdl));
     mpBtnCancel->SetClickHdl( LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mpEdRange->SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
     mpEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
@@ -528,6 +587,8 @@ void ScCondFormatDlg::dispose()
     mpBtnOk.clear();
     mpBtnAdd.clear();
     mpBtnRemove.clear();
+    mpBtnUp.clear();
+    mpBtnDown.clear();
     mpBtnCancel.clear();
     mpFtRange.clear();
     mpEdRange.clear();
@@ -688,6 +749,20 @@ void ScCondFormatDlg::CancelPressed()
                                             SfxCallMode::ASYNCHRON );
     }
     Close();
+}
+
+void ScCondFormatDlg::OnSelectionChange(size_t nIndex, size_t nSize, bool bSelected)
+{
+    if (nSize <= 1 || !bSelected)
+    {
+        mpBtnUp->Enable(false);
+        mpBtnDown->Enable(false);
+    }
+    else
+    {
+        mpBtnUp->Enable(nIndex != 0);
+        mpBtnDown->Enable(nIndex < nSize - 1);
+    }
 }
 
 IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
