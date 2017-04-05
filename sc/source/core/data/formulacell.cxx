@@ -1791,8 +1791,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             }
         };
         pDocument->IncInterpretLevel();
-        ScInterpreter* p = new ScInterpreter( this, pDocument, aPos, *pCode );
-        StackCleaner aStackCleaner( pDocument, p);
+        ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, aPos, *pCode );
+        StackCleaner aStackCleaner( pDocument, pInterpreter);
         FormulaError nOldErrCode = aResult.GetResultError();
         if ( nSeenInIteration == 0 )
         {   // Only the first time
@@ -1812,7 +1812,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         bool bOldRunning = bRunning;
         bRunning = true;
-        p->Interpret();
+        pInterpreter->Interpret();
         if (pDocument->GetRecursionHelper().IsInReturn() && eTailParam != SCITP_CLOSE_ITERATION_CIRCLE)
         {
             if (nSeenInIteration > 0)
@@ -1826,14 +1826,14 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         bool bContentChanged = false;
 
         // Do not create a HyperLink() cell if the formula results in an error.
-        if( p->GetError() != FormulaError::NONE && pCode->IsHyperLink())
+        if( pInterpreter->GetError() != FormulaError::NONE && pCode->IsHyperLink())
             pCode->SetHyperLink(false);
 
-        if( p->GetError() != FormulaError::NONE && p->GetError() != FormulaError::CircularReference)
+        if( pInterpreter->GetError() != FormulaError::NONE && pInterpreter->GetError() != FormulaError::CircularReference)
         {
             bChanged = true;
 
-            if (p->GetError() == FormulaError::RetryCircular)
+            if (pInterpreter->GetError() == FormulaError::RetryCircular)
             {
                 // Array formula matrix calculation corner case. Keep dirty
                 // state, do not remove from formula tree or anything else, but
@@ -1850,11 +1850,11 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         {
             bool bIsValue = aResult.IsValue();  // the previous type
             // Did it converge?
-            if ((bIsValue && p->GetResultType() == svDouble && fabs(
-                            p->GetNumResult() - aResult.GetDouble()) <=
+            if ((bIsValue && pInterpreter->GetResultType() == svDouble && fabs(
+                            pInterpreter->GetNumResult() - aResult.GetDouble()) <=
                         pDocument->GetDocOptions().GetIterEps()) ||
-                    (!bIsValue && p->GetResultType() == svString &&
-                     p->GetStringResult() == aResult.GetString()))
+                    (!bIsValue && pInterpreter->GetResultType() == svString &&
+                     pInterpreter->GetStringResult() == aResult.GetString()))
             {
                 // A convergence in the first iteration doesn't necessarily
                 // mean that it's done, it may be as not all related cells
@@ -1872,7 +1872,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
 
         // New error code?
-        if( p->GetError() != nOldErrCode )
+        if( pInterpreter->GetError() != nOldErrCode )
         {
             bChanged = true;
             // bContentChanged only has to be set if the file content would be changed
@@ -1880,7 +1880,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 bContentChanged = true;
         }
 
-        ScFormulaResult aNewResult( p->GetResultToken().get());
+        ScFormulaResult aNewResult( pInterpreter->GetResultToken().get());
 
         // For IF() and other jumps or changed formatted source data the result
         // format may change for different runs, e.g. =IF(B1,B1) with first
@@ -1894,7 +1894,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // out to be a real problem then obtain the current format type after
         // the initial check when needed.
         bool bForceNumberFormat = (mbAllowNumberFormatChange && !mbNeedsNumberFormat &&
-                !SvNumberFormatter::IsCompatible( nFormatType, p->GetRetFormatType()));
+                !SvNumberFormatter::IsCompatible( nFormatType, pInterpreter->GetRetFormatType()));
 
         // We have some requirements additionally to IsCompatible().
         // * Do not apply a NumberFormat::LOGICAL if the result value is not
@@ -1909,7 +1909,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         if (bForceNumberFormat)
         {
             sal_uInt32 nOldFormatIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
-            const short nRetType = p->GetRetFormatType();
+            const short nRetType = pInterpreter->GetRetFormatType();
             if (nRetType == css::util::NumberFormat::LOGICAL)
             {
                 double fVal;
@@ -1955,8 +1955,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         {
             bool bSetFormat = true;
             const short nOldFormatType = nFormatType;
-            nFormatType = p->GetRetFormatType();
-            sal_uInt32 nFormatIndex = p->GetRetFormatIndex();
+            nFormatType = pInterpreter->GetRetFormatType();
+            sal_uInt32 nFormatIndex = pInterpreter->GetRetFormatIndex();
 
             if (nFormatType == css::util::NumberFormat::TEXT)
             {
@@ -2041,7 +2041,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 }
             }
 
-            aResult.SetToken( p->GetResultToken().get() );
+            aResult.SetToken( pInterpreter->GetResultToken().get() );
         }
         else
         {
@@ -2071,7 +2071,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
 
         // Precision as shown?
-        if ( aResult.IsValue() && p->GetError() == FormulaError::NONE
+        if ( aResult.IsValue() && pInterpreter->GetError() == FormulaError::NONE
           && pDocument->GetDocOptions().IsCalcAsShown()
           && nFormatType != css::util::NumberFormat::DATE
           && nFormatType != css::util::NumberFormat::TIME
@@ -2132,7 +2132,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
         }
 
-        switch (p->GetVolatileType())
+        switch (pInterpreter->GetVolatileType())
         {
             case ScInterpreter::VOLATILE:
                 // Volatile via built-in volatile functions.  No actions needed.
