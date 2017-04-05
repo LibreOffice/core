@@ -1031,7 +1031,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    open(position);
+                    open(holder.getAdapterPosition());
                 }
             });
             holder.itemView.setOnLongClickListener(new OnLongClickListener() {
@@ -1039,7 +1039,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 @Override
                 public boolean onLongClick(View view) {
                     //to be picked out by floating context menu (workaround-ish)
-                    currentlySelectedFile = position;
+                    currentlySelectedFile = holder.getAdapterPosition();
                     //must return false so the click is not consumed
                     return false;
                 }
