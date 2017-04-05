@@ -282,7 +282,6 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         OUString aString;
         if (HasRowHeaders())
         {
-            ScAddress aAddr( nStrCol, aRows[nRow], nTab1 );
             aString = pDocument->GetString(nStrCol, aRows[nRow], nTab1);
         }
         if (aString.isEmpty())
