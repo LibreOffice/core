@@ -699,6 +699,7 @@ private:
      * Call this only from those methods where maCells is modified directly.
      */
     void CellStorageModified();
+    void CellNotesDeleting(SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership );
 
     void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
 
