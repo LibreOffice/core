@@ -132,15 +132,6 @@ SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab )
     return nTab < 0 ? 0 : (nTab > MAXTAB ? MAXTAB : nTab);
 }
 
-//  ScAddress
-// The old cell address is combined in one UINT32:
-// +---+---+-------+
-// |Tab|Col|  Row  |
-// +---+---+-------+
-// For speed reasons access isn't done by shifting bits but by using platform
-// dependent casts, which unfortunately also leads to aliasing problems when
-// not using gcc -fno-strict-aliasing
-
 // The result of ConvertRef() is a bit group of the following:
 enum class ScRefFlags : sal_uInt16
 {
