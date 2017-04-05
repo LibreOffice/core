@@ -24,6 +24,7 @@
 #include "scresid.hxx"
 #include "scres.hrc"
 #include <comphelper/string.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 
@@ -202,18 +203,34 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
     if( bAscii )
     {
+        sal_Int32 nCharSet = officecfg::Office::Calc::Dialogs::CSVExport::CharSet::get();
+        OUString strFieldSeparator = officecfg::Office::Calc::Dialogs::CSVExport::FieldSeparator::get();
+        OUString strTextSeparator = officecfg::Office::Calc::Dialogs::CSVExport::TextSeparator::get();
+        bool bSaveTrueCellContent = officecfg::Office::Calc::Dialogs::CSVExport::SaveTrueCellContent::get();
+        bool bSaveCellFormulas = officecfg::Office::Calc::Dialogs::CSVExport::SaveCellFormulas::get();
+        bool bQuoteAllTextCells = officecfg::Office::Calc::Dialogs::CSVExport::QuoteAllTextCells::get();
+        bool bFixedWidth = officecfg::Office::Calc::Dialogs::CSVExport::FixedWidth::get();
+
         m_pCbFixed->Show();
         m_pCbFixed->SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
-        m_pCbFixed->Check( false );
+        m_pCbFixed->Check( bFixedWidth );
+        FixedWidthHdl(m_pCbFixed);
         m_pCbShown->Show();
-        m_pCbShown->Check();
+        m_pCbShown->Check( bSaveTrueCellContent );
         m_pCbQuoteAll->Show();
-        m_pCbQuoteAll->Check( false );
+        m_pCbQuoteAll->Check( bQuoteAllTextCells );
         m_pCbFormulas->Show();
-        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
-        bool bFormulas = pViewSh &&
-                pViewSh->GetViewData().GetOptions().GetOption( VOPT_FORMULAS);
-        m_pCbFormulas->Check( bFormulas );
+        // default option for "save formulas" no longer taken from view shell but from persisted dialog settings
+        m_pCbFormulas->Check( bSaveCellFormulas );
+        // if no charset, text separator or field separator exist, keep the values from dialog initialization
+        if (strFieldSeparator.getLength() > 0)
+            m_pEdFieldSep->SetText( strFieldSeparator );
+        if (strTextSeparator.getLength() > 0)
+            m_pEdTextSep->SetText( strTextSeparator );
+        if (nCharSet < 0 || nCharSet == RTL_TEXTENCODING_DONTKNOW )
+            m_pLbCharset->SelectTextEncoding(pOptions ? pOptions->eCharSet : osl_getThreadTextEncoding());
+        else
+            m_pLbCharset->SelectTextEncoding(nCharSet);
     }
     else
     {
@@ -229,10 +246,11 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         m_pCbFormulas->Hide();
         m_pLbCharset->GrabFocus();
         m_pLbCharset->SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
+
+        m_pLbCharset->SelectTextEncoding(pOptions ? pOptions->eCharSet :
+            osl_getThreadTextEncoding());
     }
 
-    m_pLbCharset->SelectTextEncoding( pOptions ? pOptions->eCharSet :
-        osl_getThreadTextEncoding() );
 
     // optional title:
     if ( pStrTitle )
@@ -330,6 +348,19 @@ IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox&, rLb, void )
     {
         m_pBtnOk->Click();
     }
+}
+
+void ScImportOptionsDlg::SaveImportOptions() const
+{
+    std::shared_ptr < comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Calc::Dialogs::CSVExport::CharSet::set(this->m_pLbCharset->GetSelectTextEncoding(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::FieldSeparator::set(m_pEdFieldSep->GetText(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::TextSeparator::set(m_pEdTextSep->GetText(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::FixedWidth::set(m_pCbFixed->IsChecked(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::SaveCellFormulas::set(m_pCbFormulas->IsChecked(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::SaveTrueCellContent::set(m_pCbShown->IsChecked(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::QuoteAllTextCells::set(m_pCbQuoteAll->IsChecked(), batch);
+    batch->commit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

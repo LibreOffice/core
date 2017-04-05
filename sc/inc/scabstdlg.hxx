@@ -23,7 +23,7 @@
 #include <tools/solar.h>
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/field.hxx>
+#include <vcl/f.hxx>
 #include "scres.hrc"
 #include "global.hxx"
 #include "pivot.hxx"
@@ -380,6 +380,7 @@ protected:
     virtual             ~AbstractScImportOptionsDlg() override = default;
 public:
     virtual void GetImportOptions( ScImportOptions& rOptions ) const = 0;
+    virtual void SaveImportOptions() const = 0;
 };
 
 class AbstractScTextImportOptionsDlg : public VclAbstractDialog
