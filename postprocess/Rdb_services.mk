@@ -32,7 +32,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	filter/source/msfilter/msfilter \
 	filter/source/odfflatxml/odfflatxml \
 	filter/source/pdf/pdffilter \
-	filter/source/placeware/placeware \
 	filter/source/storagefilterdetect/storagefd \
 	filter/source/svg/svgfilter \
 	filter/source/t602/t602filter \
