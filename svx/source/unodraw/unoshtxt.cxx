@@ -635,7 +635,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                 mpOutliner->SetStyleSheet( 0, pStyleSheet );
 
             if( bVertical )
-                mpOutliner->SetVertical( true );
+                mpOutliner->SetVertical( true, pOutlinerParaObject->IsTopToBottom());
         }
 
         // maybe we have to set the border attributes

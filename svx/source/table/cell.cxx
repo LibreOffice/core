@@ -51,6 +51,7 @@
 #include "svx/unoshape.hxx"
 #include "editeng/editobj.hxx"
 #include "editeng/boxitem.hxx"
+#include <editeng/charrotateitem.hxx>
 #include "svx/xflbstit.hxx"
 #include "svx/xflbmtit.hxx"
 #include <svx/svdpool.hxx>
@@ -284,6 +285,7 @@ namespace sdr
 
                         OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         pOutliner->Clear();
+                        pTemp->SetVertical(pParaObj->IsVertical(), pParaObj->IsTopToBottom());
 
                         mxCell->SetOutlinerParaObject(pTemp);
                     }
@@ -307,8 +309,7 @@ namespace sdr
                 bool bVertical(css::text::WritingMode_TB_RL == static_cast<const SvxWritingModeItem*>(pNewItem)->GetValue());
 
                 sdr::table::SdrTableObj& rObj = static_cast<sdr::table::SdrTableObj&>(GetSdrObject());
-                if( rObj.IsVerticalWriting() != bVertical )
-                    rObj.SetVerticalWriting(bVertical);
+                rObj.SetVerticalWriting(bVertical);
 
                 // Set a cell vertical property
                 OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
@@ -325,6 +326,50 @@ namespace sdr
                     if( bOwnParaObj )
                         delete pParaObj;
                 }
+            }
+
+            if (pNewItem && (SDRATTR_TABLE_TEXT_ROTATION == nWhich))
+            {
+                const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
+
+                // Set a cell vertical property
+                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+
+                const bool bOwnParaObj = pParaObj != nullptr;
+
+                if (pParaObj == nullptr)
+                    pParaObj = mxCell->GetOutlinerParaObject();
+
+                if (pParaObj)
+                {
+                    pParaObj->SetVertical(pRotateItem->IsVertical(), pRotateItem->IsTopToBottom());
+
+                    if (bOwnParaObj)
+                        delete pParaObj;
+                }
+
+               // Change autogrow direction
+                SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
+
+                // rescue object size
+                tools::Rectangle aObjectRect = rObj.GetSnapRect();
+
+                const SfxItemSet& rSet = rObj.GetObjectItemSet();
+                bool bAutoGrowWidth = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
+                bool bAutoGrowHeight = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+
+                // prepare ItemSet to set exchanged width and height items
+                SfxItemSet aNewSet(*rSet.GetPool(),
+                    SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+                    0, 0);
+
+                aNewSet.Put(rSet);
+                aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
+                aNewSet.Put(makeSdrTextAutoGrowHeightItem(bAutoGrowWidth));
+                rObj.SetObjectItemSet(aNewSet);
+
+                // restore object size
+                rObj.SetSnapRect(aObjectRect);
             }
 
             // call parent

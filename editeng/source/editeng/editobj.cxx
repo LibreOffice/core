@@ -356,9 +356,14 @@ bool EditTextObject::IsVertical() const
     return mpImpl->IsVertical();
 }
 
-void EditTextObject::SetVertical( bool bVertical )
+bool EditTextObject::IsTopToBottom() const
 {
-    return mpImpl->SetVertical(bVertical);
+    return mpImpl->IsTopToBottom();
+}
+
+void EditTextObject::SetVertical( bool bVertical, bool bTopToBottom )
+{
+    return mpImpl->SetVertical(bVertical, bTopToBottom);
 }
 
 SvtScriptType EditTextObject::GetScriptType() const
@@ -560,6 +565,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
     }
 
     bVertical = false;
+    bIsTopToBottomVert = false;
     bStoreUnicodeStrings = false;
     nScriptType = SvtScriptType::NONE;
 }
@@ -572,6 +578,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
     nUserType = r.nUserType;
     nObjSettings = r.nObjSettings;
     bVertical = r.bVertical;
+    bIsTopToBottomVert = r.bIsTopToBottomVert;
     nScriptType = r.nScriptType;
     pPortionInfo = nullptr;    // Do not copy PortionInfo
     bStoreUnicodeStrings = false;
@@ -653,12 +660,22 @@ std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
     return aSSs;
 }
 
-
-void EditTextObjectImpl::SetVertical( bool b )
+bool EditTextObjectImpl::IsVertical() const
 {
-    if ( b != bVertical )
+    return bVertical;
+}
+
+bool EditTextObjectImpl::IsTopToBottom() const
+{
+    return bIsTopToBottomVert;
+}
+
+void EditTextObjectImpl::SetVertical( bool bVert, bool bTopToBottom)
+{
+    if (bVert != bVertical || bTopToBottom != (bVert && bIsTopToBottomVert))
     {
-        bVertical = b;
+        bVertical = bVert;
+        bIsTopToBottomVert = bVert && bTopToBottom;
         ClearPortionInfo();
     }
 }
@@ -1088,7 +1105,7 @@ public:
 
 void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 {
-    sal_uInt16 nVer = 602;
+    sal_uInt16 nVer = 603;
     rOStream.WriteUInt16( nVer );
 
     rOStream.WriteBool( bOwnerOfPool );
@@ -1235,6 +1252,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     rOStream.WriteUInt32( nObjSettings );
 
     rOStream.WriteBool( bVertical );
+    rOStream.WriteBool( bIsTopToBottomVert );
     rOStream.WriteUInt16( static_cast<sal_uInt16>(nScriptType) );
 
     rOStream.WriteBool( bStoreUnicodeStrings );
@@ -1487,6 +1505,13 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         bVertical = bTmp;
     }
 
+    if (nVersion >= 603)
+    {
+        bool bTmp(false);
+        rIStream.ReadCharAsBool(bTmp);
+        bIsTopToBottomVert = bTmp;
+    }
+
     if ( nVersion >= 602 )
     {
         sal_uInt16 aTmp16;
@@ -1577,7 +1602,8 @@ bool EditTextObjectImpl::operator==( const EditTextObjectImpl& rCompare ) const
             ( nMetric != rCompare.nMetric ) ||
             ( nUserType!= rCompare.nUserType ) ||
             ( nScriptType != rCompare.nScriptType ) ||
-            ( bVertical != rCompare.bVertical ) )
+            ( bVertical != rCompare.bVertical ) ||
+            ( bIsTopToBottomVert != rCompare.bIsTopToBottomVert ) )
         return false;
 
     for (size_t i = 0, n = aContents.size(); i < n; ++i)

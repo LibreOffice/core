@@ -513,6 +513,11 @@ bool ImpEditView::IsVertical() const
     return pEditEngine->pImpEditEngine->IsVertical();
 }
 
+bool ImpEditView::IsTopToBottom() const
+{
+    return pEditEngine->pImpEditEngine->IsTopToBottom();
+}
+
 tools::Rectangle ImpEditView::GetVisDocArea() const
 {
     return tools::Rectangle( GetVisDocLeft(), GetVisDocTop(), GetVisDocRight(), GetVisDocBottom() );
@@ -530,8 +535,16 @@ Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
     }
     else
     {
-        aPoint.X() = rWindowPos.Y() - aOutArea.Top() + GetVisDocLeft();
-        aPoint.Y() = aOutArea.Right() - rWindowPos.X() + GetVisDocTop();
+        if (pEditEngine->pImpEditEngine->IsTopToBottom())
+        {
+            aPoint.X() = rWindowPos.Y() - aOutArea.Top() + GetVisDocLeft();
+            aPoint.Y() = aOutArea.Right() - rWindowPos.X() + GetVisDocTop();
+        }
+        else
+        {
+            aPoint.X() = aOutArea.Bottom() - rWindowPos.Y() + GetVisDocLeft();
+            aPoint.Y() = rWindowPos.X() - aOutArea.Left() + GetVisDocTop();
+        }
     }
 
     return aPoint;
@@ -549,8 +562,16 @@ Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
     }
     else
     {
-        aPoint.X() = aOutArea.Right() - rDocPos.Y() + GetVisDocTop();
-        aPoint.Y() = rDocPos.X() + aOutArea.Top() - GetVisDocLeft();
+        if (pEditEngine->pImpEditEngine->IsTopToBottom())
+        {
+            aPoint.X() = aOutArea.Right() - rDocPos.Y() + GetVisDocTop();
+            aPoint.Y() = rDocPos.X() + aOutArea.Top() - GetVisDocLeft();
+        }
+        else
+        {
+            aPoint.X() = aOutArea.Left() + rDocPos.Y() - GetVisDocTop();
+            aPoint.Y() = aOutArea.Bottom() - rDocPos.X() + GetVisDocLeft();
+        }
     }
 
     return aPoint;
@@ -916,8 +937,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
         if ( nDocDiffX | nDocDiffY )
         {
-            long nDiffX = !IsVertical() ? nDocDiffX : -nDocDiffY;
-            long nDiffY = !IsVertical() ? nDocDiffY : nDocDiffX;
+            long nDiffX = !IsVertical() ? nDocDiffX : (IsTopToBottom() ? -nDocDiffY : nDocDiffY);
+            long nDiffY = !IsVertical() ? nDocDiffY : (IsTopToBottom() ? nDocDiffX : -nDocDiffX);
 
             // Negative: Back to the top or left edge
             if ( ( std::abs( nDiffY ) > pEditEngine->GetOnePixelInRef() ) && DoBigScroll() )
@@ -993,7 +1014,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             aCursorSz.Width() = aOldSz.Height();
             aCursorSz.Height() = aOldSz.Width();
             GetCursor()->SetPos( aCursorRect.TopRight() );
-            GetCursor()->SetOrientation( 2700 );
+            GetCursor()->SetOrientation( IsTopToBottom() ? 2700 : 900 );
         }
         else
             // #i32593# Reset correct orientation in horizontal layout
@@ -1087,8 +1108,16 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     }
     else
     {
-        aNewVisArea.Top() += ndX;
-        aNewVisArea.Bottom() += ndX;
+        if( IsTopToBottom() )
+        {
+            aNewVisArea.Top() += ndX;
+            aNewVisArea.Bottom() += ndX;
+        }
+        else
+        {
+            aNewVisArea.Top() -= ndX;
+            aNewVisArea.Bottom() -= ndX;
+        }
     }
     if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Bottom() > (long)pEditEngine->pImpEditEngine->GetTextHeight() ) )
     {
@@ -1107,8 +1136,16 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     }
     else
     {
-        aNewVisArea.Left() -= ndY;
-        aNewVisArea.Right() -= ndY;
+        if (IsTopToBottom())
+        {
+            aNewVisArea.Left() -= ndY;
+            aNewVisArea.Right() -= ndY;
+        }
+        else
+        {
+            aNewVisArea.Left() += ndY;
+            aNewVisArea.Right() += ndY;
+        }
     }
     if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth( false ) ) )
     {
@@ -1119,8 +1156,8 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         aNewVisArea.Move( -aNewVisArea.Left(), 0 );
 
     // The difference must be alignt on pixel (due to scroll!)
-    long nDiffX = !IsVertical() ? ( GetVisDocLeft() - aNewVisArea.Left() ) : -( GetVisDocTop() - aNewVisArea.Top() );
-    long nDiffY = !IsVertical() ? ( GetVisDocTop() - aNewVisArea.Top() ) : ( GetVisDocLeft() - aNewVisArea.Left() );
+    long nDiffX = !IsVertical() ? ( GetVisDocLeft() - aNewVisArea.Left() ) : (IsTopToBottom() ? -( GetVisDocTop() - aNewVisArea.Top() ) : (GetVisDocTop() - aNewVisArea.Top()));
+    long nDiffY = !IsVertical() ? ( GetVisDocTop() - aNewVisArea.Top() ) : (IsTopToBottom() ? (GetVisDocLeft() - aNewVisArea.Left()) : -(GetVisDocTop() - aNewVisArea.Top()));
 
     Size aDiffs( nDiffX, nDiffY );
     aDiffs = pOutWin->LogicToPixel( aDiffs );
@@ -1139,7 +1176,12 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         if ( !IsVertical() )
             aVisDocStartPos.Move( -nRealDiffX, -nRealDiffY );
         else
-            aVisDocStartPos.Move( -nRealDiffY, nRealDiffX );
+        {
+            if (IsTopToBottom())
+                aVisDocStartPos.Move(-nRealDiffY, nRealDiffX);
+            else
+                aVisDocStartPos.Move(nRealDiffY, -nRealDiffX);
+        }
         // Move by aligned value does not necessarily result in aligned
         // rectangle ...
         aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
@@ -2101,8 +2143,16 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     }
                     else
                     {
-                        aEditCursor.Left()--;
-                        aEditCursor.Right()++;
+                        if( IsTopToBottom() )
+                        {
+                            aEditCursor.Left()--;
+                            aEditCursor.Right()++;
+                        }
+                        else
+                        {
+                            aEditCursor.Left()++;
+                            aEditCursor.Right()--;
+                        }
                     }
                     aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
                 }

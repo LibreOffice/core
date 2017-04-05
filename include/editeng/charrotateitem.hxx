@@ -63,6 +63,7 @@ public:
     void SetBottomToTop() { SetValue(900); }
     bool IsTopToBottom() const { return 2700 == GetValue(); }
     bool IsBottomToTop() const { return  900 == GetValue(); }
+    bool IsVertical() const     { return IsTopToBottom() || IsBottomToTop(); }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
