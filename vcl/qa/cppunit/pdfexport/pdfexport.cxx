@@ -49,6 +49,7 @@ public:
     void testTdf106206();
     /// Tests export of PDF images without reference XObjects.
     void testTdf106693();
+    void testTdf106972();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testTdf105093);
     CPPUNIT_TEST(testTdf106206);
     CPPUNIT_TEST(testTdf106693);
+    CPPUNIT_TEST(testTdf106972);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -316,6 +318,52 @@ void PdfExportTest::testTdf106206()
     it = std::search(pStart, pEnd, aInvalidImage.getStr(), aInvalidImage.getStr() + aInvalidImage.getLength());
     // This failed, object #0 was referenced.
     CPPUNIT_ASSERT(bool(it == pEnd));
+}
+
+void PdfExportTest::testTdf106972()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106972.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // Get access to the only form object on the only page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+
+    // Get access to the only image inside the form object.
+    auto pFormResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"));
+    CPPUNIT_ASSERT(pFormResources);
+    auto pImages = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pFormResources->LookupElement("XObject"));
+    CPPUNIT_ASSERT(pImages);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pImages->GetItems().size());
+    vcl::filter::PDFObjectElement* pImage = pImages->LookupObject(pImages->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pImage);
+
+    // Assert resources of the image.
+    auto pImageResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pImage->Lookup("Resources"));
+    CPPUNIT_ASSERT(pImageResources);
+    // This failed: the PDF image had no Font resource.
+    CPPUNIT_ASSERT(pImageResources->LookupElement("Font"));
 }
 #endif
 
