@@ -4119,7 +4119,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
     if (!ScCalcConfig::isOpenCLEnabled() && !ScCalcConfig::isSwInterpreterEnabled())
     {
-        aScope.addMessage("opencl not enabled");
+        aScope.addMessage("opencl not enabled and sw interpreter not enabled");
         return false;
     }
 
