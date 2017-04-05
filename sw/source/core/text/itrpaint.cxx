@@ -76,14 +76,6 @@ void SwTextPainter::CtorInitTextPainter( SwTextFrame *pNewFrame, SwTextPaintInfo
     m_pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
-#if OSL_DEBUG_LEVEL > 1
-    if( ALIGN_BASELINE != pMyFnt->GetAlign() )
-    {
-        OSL_ENSURE( ALIGN_BASELINE == pMyFnt->GetAlign(),
-                "+SwTextPainter::CTOR: font alignment revolution" );
-        pMyFnt->SetAlign( ALIGN_BASELINE );
-    }
-#endif
     bPaintDrop = false;
 }
 
