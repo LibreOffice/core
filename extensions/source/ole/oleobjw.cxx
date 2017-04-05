@@ -801,8 +801,8 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
 
                         switch( pMethod->pParams[i].pTypeRef->eTypeClass)
                         {
-                        case TypeClass_INTERFACE:
-                        case TypeClass_STRUCT:
+                        case typelib_TypeClass_INTERFACE:
+                        case typelib_TypeClass_STRUCT:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt= VT_DISPATCH;
@@ -811,9 +811,9 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                             pVarParams[parameterCount - i -1].vt = VT_DISPATCH | VT_BYREF;
                             pVarParams[parameterCount - i -1].ppdispVal= &pVarParamsRef[outParamIndex].pdispVal;
                             break;
-                        case TypeClass_ENUM:
-                        case TypeClass_LONG:
-                        case TypeClass_UNSIGNED_LONG:
+                        case typelib_TypeClass_ENUM:
+                        case typelib_TypeClass_LONG:
+                        case typelib_TypeClass_UNSIGNED_LONG:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_I4;
@@ -822,7 +822,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                             pVarParams[parameterCount - i -1].vt = VT_I4 | VT_BYREF;
                             pVarParams[parameterCount - i -1].plVal= &pVarParamsRef[outParamIndex].lVal;
                             break;
-                        case TypeClass_SEQUENCE:
+                        case typelib_TypeClass_SEQUENCE:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_ARRAY| VT_VARIANT;
@@ -831,7 +831,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                             pVarParams[parameterCount - i -1].vt = VT_ARRAY| VT_BYREF | VT_VARIANT;
                             pVarParams[parameterCount - i -1].pparray= &pVarParamsRef[outParamIndex].parray;
                             break;
-                        case TypeClass_ANY:
+                        case typelib_TypeClass_ANY:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_EMPTY;
@@ -840,7 +840,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                             pVarParams[parameterCount - i -1].vt = VT_VARIANT | VT_BYREF;
                             pVarParams[parameterCount - i -1].pvarVal = &pVarParamsRef[outParamIndex];
                             break;
-                        case TypeClass_BOOLEAN:
+                        case typelib_TypeClass_BOOLEAN:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_BOOL;
@@ -851,7 +851,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                 & pVarParamsRef[outParamIndex].boolVal;
                             break;
 
-                        case TypeClass_STRING:
+                        case typelib_TypeClass_STRING:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_BSTR;
@@ -862,7 +862,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                 & pVarParamsRef[outParamIndex].bstrVal;
                             break;
 
-                        case TypeClass_FLOAT:
+                        case typelib_TypeClass_FLOAT:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_R4;
@@ -872,7 +872,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                             pVarParams[parameterCount - i -1].pfltVal =
                                 & pVarParamsRef[outParamIndex].fltVal;
                             break;
-                        case TypeClass_DOUBLE:
+                        case typelib_TypeClass_DOUBLE:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_R8;
@@ -882,7 +882,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                             pVarParams[parameterCount - i -1].pdblVal=
                                 & pVarParamsRef[outParamIndex].dblVal;
                             break;
-                        case TypeClass_BYTE:
+                        case typelib_TypeClass_BYTE:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_UI1;
@@ -892,9 +892,9 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                             pVarParams[parameterCount - i -1].pbVal=
                                 & pVarParamsRef[outParamIndex].bVal;
                             break;
-                        case TypeClass_CHAR:
-                        case TypeClass_SHORT:
-                        case TypeClass_UNSIGNED_SHORT:
+                        case typelib_TypeClass_CHAR:
+                        case typelib_TypeClass_SHORT:
+                        case typelib_TypeClass_UNSIGNED_SHORT:
                             if( ! pMethod->pParams[i].bIn)
                             {
                                 pVarParamsRef[ outParamIndex].vt = VT_I2;
