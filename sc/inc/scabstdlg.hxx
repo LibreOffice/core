@@ -380,6 +380,7 @@ protected:
     virtual             ~AbstractScImportOptionsDlg() override = default;
 public:
     virtual void GetImportOptions( ScImportOptions& rOptions ) const = 0;
+    virtual void SaveImportOptions() const = 0;
 };
 
 class AbstractScTextImportOptionsDlg : public VclAbstractDialog
