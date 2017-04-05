@@ -19,16 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_STBCTRLS_STBCTRLS_H
 #define INCLUDED_SVX_SOURCE_STBCTRLS_STBCTRLS_H
 
-#define ZOOM_200            1
-#define ZOOM_150            2
-#define ZOOM_100            3
-#define ZOOM_75             4
-#define ZOOM_50             5
-
-#define ZOOM_OPTIMAL        6
-#define ZOOM_PAGE_WIDTH     7
-#define ZOOM_WHOLE_PAGE     8
-
 // IDs as in SUBTOTAL_FUNC of Calc
 
 #define PSZ_FUNC_AVG                1
