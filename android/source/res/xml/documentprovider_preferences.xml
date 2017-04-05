@@ -13,15 +13,14 @@
             android:key="pref_server_url"
             android:title="@string/server_url"
             android:summary="@string/server_url_and_port"
-            android:defaultValue="http://" />
+            android:hint="https://server:port/" />
         <EditTextPreference
             android:key="pref_user_name"
-            android:title="@string/user_name"
-            android:defaultValue="" />
+            android:title="@string/user_name" />
         <EditTextPreference
             android:key="pref_password"
             android:title="@string/password"
-            android:defaultValue="" />
+            android:password="true" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/physical_storage_settings">
