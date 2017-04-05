@@ -1845,16 +1845,16 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                 SetZoom(nIntVal);
         }
 
-        //  Optionen werden an der View und am Dokument (fuer neue Views) gesetzt,
-        //  damit sie beim Speichern erhalten bleiben.
-        //! An der App (Module) braeuchte man noch eine Extra-Moeglichkeit,
-        //! das einzustellen (fuer neue Dokumente)
+        //  Options are set on the view and document (for new views),
+        //  so that they remain during saving.
+        //! In the app (module) we need a extra options to tune that
+        //! (for new documents)
 
         if ( aNewOpt != rOldOpt )
         {
             rViewData.SetOptions( aNewOpt );
             rViewData.GetDocument()->SetViewOptions( aNewOpt );
-            rViewData.GetDocShell()->SetDocumentModified();    //! wirklich?
+            rViewData.GetDocShell()->SetDocumentModified();    //! really?
 
             pViewSh->UpdateFixPos();
             pViewSh->PaintGrid();
@@ -1864,7 +1864,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             pViewSh->InvalidateBorder();
 
             SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
-            rBindings.Invalidate( FID_TOGGLEHEADERS ); // -> Checks im Menue
+            rBindings.Invalidate( FID_TOGGLEHEADERS ); // -> check in menu
             rBindings.Invalidate( FID_TOGGLESYNTAX );
         }
     }
@@ -1941,7 +1941,7 @@ void SAL_CALL ScTabViewObj::removePropertyChangeListener( const OUString& /* aPr
     for (XViewPropertyChangeListenerVector::iterator it = aPropertyChgListeners.begin();
          it != aPropertyChgListeners.end(); ++it )
     {
-        if ( *it == xListener ) //! wozu der Mumpitz mit queryInterface?
+        if ( *it == xListener ) //! Why the nonsense with queryInterface?
         {
             aPropertyChgListeners.erase(it);
             break;

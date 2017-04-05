@@ -366,7 +366,7 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
     return &aFooterStyleMap;
 }
 
-//  Index-Access auf die Style-Typen: 0 = Cell, 1 = Page
+//  access index on the style types: 0 = Cell, 1 = Page
 
 #define SC_STYLE_FAMILY_COUNT 2
 
@@ -412,11 +412,11 @@ ScStyleFamiliesObj::~ScStyleFamiliesObj()
 
 void ScStyleFamiliesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  reference update does not matter here
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;
     }
 }
 
@@ -610,7 +610,7 @@ ScStyleFamilyObj::~ScStyleFamilyObj()
 
 void ScStyleFamilyObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  reference update does not matter here
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
@@ -656,7 +656,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
-    //  Reflection muss nicht uno::XInterface sein, kann auch irgendein Interface sein...
+    //  reflection does not need to be uno::XInterface, can be any interface...
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
@@ -669,7 +669,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
             ScDocument& rDoc = pDocShell->GetDocument();
             ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
-            //! DocFunc-Funktion??
+            //! DocFunc function ???
             //! Undo ?????????????
 
             if ( !pStylePool->Find( aNameStr, eFamily ) )   // not available yet
@@ -682,7 +682,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
                 pStyleObj->InitDoc( pDocShell, aNameStr );  // object can be used
 
                 if (!rDoc.IsImportingXML())
-                    pDocShell->SetDocumentModified();   // verwendet wird der neue Style noch nicht
+                    pDocShell->SetDocumentModified();   // new style not used yet
                 bDone = true;
             }
             else
@@ -918,7 +918,7 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const OUString&, c
     OSL_FAIL( "###unexpected!" );
 }
 
-//  Default-ctor wird fuer die Reflection gebraucht
+//  default ctor is needed for reflection
 
 ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName)
     : pPropSet( (eFam == SfxStyleFamily::Para) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() )
@@ -927,7 +927,7 @@ ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& 
     , aStyleName(rName)
     , pStyle_cached(nullptr)
 {
-    //  pDocShell ist Null, wenn per ServiceProvider erzeugt
+    //  if create by ServiceProvider then pDocShell is NULL
 
     if (pDocShell)
         pDocShell->GetDocument().AddUnoObject(*this);
@@ -986,7 +986,7 @@ ScStyleObj* ScStyleObj::getImplementation(const uno::Reference<uno::XInterface>&
 
 void ScStyleObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  reference update does not matter here
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
@@ -1077,7 +1077,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
             }
             else
             {
-                //! ModifyStyleSheet am Dokument (alte Werte merken)
+                //! ModifyStyleSheet on document (save old values)
 
                 pDocShell->PageStyleModified( aStyleName, true );
             }
@@ -1260,8 +1260,8 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( const OUString& aPropertyName )
             //  Default is default from ItemPool, not from Standard-Style,
             //  so it is the same as in setPropertyToDefault
             SfxItemSet aEmptySet( *pStyleSet->GetPool(), pStyleSet->GetRanges() );
-            //  Default-Items mit falscher Slot-ID funktionieren im SfxItemPropertySet3 nicht
-            //! Slot-IDs aendern...
+            //  default items with wrong Slot-ID are not functional in SfxItemPropertySet3
+            //! change Slot-IDs...
             if ( aEmptySet.GetPool()->GetSlotId(nWhich) == nWhich &&
                  aEmptySet.GetItemState(nWhich, false) == SfxItemState::DEFAULT )
             {
@@ -1269,7 +1269,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( const OUString& aPropertyName )
             }
             const SfxItemSet* pItemSet = &aEmptySet;
 
-            switch ( nWhich )       // fuer Item-Spezial-Behandlungen
+            switch ( nWhich )       // special item handling
             {
                 case ATTR_VALUE_FORMAT:
                     //  default has no language set
@@ -1697,9 +1697,8 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                 }
                                 break;
                             default:
-                                //  Default-Items mit falscher Slot-ID
-                                //  funktionieren im SfxItemPropertySet3 nicht
-                                //! Slot-IDs aendern...
+                                // default items with wrong Slot-ID are not working in SfxItemPropertySet3
+                                //! change Slot-IDs...
                                 if ( rSet.GetPool()->GetSlotId(pEntry->nWID) == pEntry->nWID &&
                                      rSet.GetItemState(pEntry->nWID, false) == SfxItemState::DEFAULT )
                                 {
@@ -1787,7 +1786,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
         }
         else
         {
-            //! ModifyStyleSheet am Dokument (alte Werte merken)
+            //! ModifyStyleSheet on document (save old values)
 
             pDocShell->PageStyleModified( aStyleName, true );
         }

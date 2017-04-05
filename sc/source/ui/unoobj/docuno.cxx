@@ -3052,7 +3052,7 @@ uno::Reference<drawing::XDrawPage> ScDrawPagesObj::GetObjectByIndex_Impl(sal_Int
     if (pDocShell)
     {
         ScDrawLayer* pDrawLayer = pDocShell->MakeDrawLayer();
-        OSL_ENSURE(pDrawLayer,"kann Draw-Layer nicht anlegen");
+        OSL_ENSURE(pDrawLayer,"Cannot create Draw-Layer");
         if ( pDrawLayer && nIndex >= 0 && nIndex < pDocShell->GetDocument().GetTableCount() )
         {
             SdrPage* pPage = pDrawLayer->GetPage((sal_uInt16)nIndex);

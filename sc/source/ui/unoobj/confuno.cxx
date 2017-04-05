@@ -100,11 +100,11 @@ ScDocumentConfiguration::~ScDocumentConfiguration()
 
 void ScDocumentConfiguration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  reference update does not matter here
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;
     }
 }
 

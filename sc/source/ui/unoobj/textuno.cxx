@@ -424,7 +424,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             pForwarder->QuickInsertField( aItem, aSelection );
             pEditSource->UpdateData();
 
-            //  neue Selektion: ein Zeichen
+            //  new selection: a digit
             aSelection.Adjust();
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
@@ -473,7 +473,7 @@ void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
         ScEditFieldObj* pHeaderField = ScEditFieldObj::getImplementation(xContent);
         if ( pHeaderField && pHeaderField->IsInserted() )
         {
-            //! Testen, ob das Feld in dieser Zelle ist
+            //! check if the field is in this cell
             pHeaderField->DeleteField();
             return;
         }
@@ -518,7 +518,7 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScHeaderFooterTextObj::ge
 
 uno::Reference<container::XNameAccess> SAL_CALL ScHeaderFooterTextObj::getTextFieldMasters()
 {
-    //  sowas gibts nicht im Calc (?)
+    //  this does not exists in Calc (?)
     return nullptr;
 }
 

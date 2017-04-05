@@ -38,7 +38,7 @@
 using namespace ::com::sun::star;
 using namespace ::formula;
 
-//  Map nur fuer PropertySetInfo
+//  map only for PropertySetInfo
 
 static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
@@ -192,9 +192,9 @@ FormulaGrammar::Grammar lclResolveGrammar( FormulaGrammar::Grammar eExtGrammar, 
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         ScDocument* pDoc, FormulaGrammar::Grammar eGrammar) const
 {
-    //  ScConditionalFormat = Core-Struktur, muss leer sein
+    //  ScConditionalFormat = Core-Struktur, has to be empty
 
-    OSL_ENSURE( rFormat.IsEmpty(), "FillFormat: Format nicht leer" );
+    OSL_ENSURE( rFormat.IsEmpty(), "FillFormat: format not empty" );
 
     for (const auto & i : maEntries)
     {

@@ -73,11 +73,11 @@ ScChartsObj::~ScChartsObj()
 
 void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update
+    //! update reference
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;
     }
 }
 
@@ -91,7 +91,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
         if (pDrawLayer)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            OSL_ENSURE(pPage, "Page nicht gefunden");
+            OSL_ENSURE(pPage, "Page not found");
             if (pPage)
             {
                 long nPos = 0;
@@ -106,7 +106,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
                             uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
                             if ( xObj.is() )
                                 aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
-                            break;  // nicht weitersuchen
+                            break;  // stop searching
                         }
                         ++nPos;
                     }
@@ -142,7 +142,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     ScDocument& rDoc = pDocShell->GetDocument();
     ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    OSL_ENSURE(pPage,"addChart: keine Page");
+    OSL_ENSURE(pPage,"addChart: no Page");
     if (!pPage)
         return;
 
@@ -176,8 +176,8 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
     if ( xObj.is() )
     {
-            //  Rechteck anpassen
-            //! Fehler/Exception, wenn leer/ungueltig ???
+            //  adjust rectangle
+            //! error/exception, if empty/invalid ???
             Point aRectPos( aRect.X, aRect.Y );
             bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
             if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) )
@@ -269,8 +269,8 @@ void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         rDoc.GetChartListenerCollection()->removeByName(aName);
-        ScDrawLayer* pModel = rDoc.GetDrawLayer();     // ist nicht 0
-        SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
+        ScDrawLayer* pModel = rDoc.GetDrawLayer();     // is not zero
+        SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // is not zero
 
         pModel->AddUndo( new SdrUndoDelObj( *pObj ) );
         pPage->RemoveObject( pObj->GetOrdNum() );
@@ -300,7 +300,7 @@ sal_Int32 SAL_CALL ScChartsObj::getCount()
         if (pDrawLayer)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            OSL_ENSURE(pPage, "Page nicht gefunden");
+            OSL_ENSURE(pPage, "Page not found");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -365,7 +365,7 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()
         if (pDrawLayer)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            OSL_ENSURE(pPage, "Page nicht gefunden");
+            OSL_ENSURE(pPage, "Page not found");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -426,11 +426,11 @@ ScChartObj::~ScChartObj()
 
 void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update
+    //! update reference
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;
     }
 }
 
@@ -677,7 +677,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges()
         return aSeq;
     }
 
-    OSL_FAIL("ScChartObj::getRanges: keine Ranges");
+    OSL_FAIL("ScChartObj::getRanges: no Ranges");
     return uno::Sequence<table::CellRangeAddress>();
 }
 

@@ -64,7 +64,7 @@
 
 using namespace com::sun::star;
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+//  everything without Which-ID, map only for PropertySetInfo
 
 static const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
 {
@@ -154,7 +154,7 @@ sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc e
         case SUBTOTAL_FUNC_VAR:  eGeneral = sheet::GeneralFunction_VAR;       break;
         case SUBTOTAL_FUNC_VARP: eGeneral = sheet::GeneralFunction_VARP;      break;
         default:
-            OSL_FAIL("SubTotalToGeneral: falscher enum");
+            OSL_FAIL("SubTotalToGeneral: wrong enum");
             eGeneral = sheet::GeneralFunction_NONE;
             break;
     }
@@ -163,7 +163,7 @@ sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc e
 
 void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScImportParam& rParam )
 {
-    OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "falscher Count" );
+    OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "wrong Count" );
 
     beans::PropertyValue* pArray = rSeq.getArray();
 
@@ -175,7 +175,7 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
         else if ( rParam.nType == ScDbQuery )
             eMode = sheet::DataImportMode_QUERY;
         else
-            eMode = sheet::DataImportMode_TABLE;        // Type ist immer ScDbQuery oder ScDbTable
+            eMode = sheet::DataImportMode_TABLE;        // type always ScDbQuery or ScDbTable
     }
 
     svx::ODataAccessDescriptor aDescriptor;
@@ -450,7 +450,7 @@ ScSubTotalFieldObj::ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uIn
     rParent( *pDesc ),
     nPos( nP )
 {
-    OSL_ENSURE(pDesc, "ScSubTotalFieldObj: Parent ist 0");
+    OSL_ENSURE(pDesc, "ScSubTotalFieldObj: Parent is 0");
 }
 
 ScSubTotalFieldObj::~ScSubTotalFieldObj()
@@ -527,7 +527,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
             aParam.pFunctions[nPos] = nullptr;
         }
     }
-    //! sonst Exception oder so? (zuviele Spalten)
+    //! otherwise exception or so? (too many columns)
 
     rParent.PutData(aParam);
 }
@@ -559,7 +559,7 @@ void SAL_CALL ScSubTotalDescriptorBase::clear()
     for (bool & rn : aParam.bGroupActive)
         rn = false;
 
-    //! Notify oder so fuer die Field-Objekte???
+    //! notify the field objects???
 
     PutData(aParam);
 }
@@ -883,7 +883,7 @@ void SAL_CALL ScConsolidationDescriptor::setSources(
                     static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow,
                     static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow );
 
-        aParam.SetAreas( pNew.get(), nCount );    // kopiert alles
+        aParam.SetAreas( pNew.get(), nCount );    // copy everything
 
         for (i=0; i<nCount; i++)
             delete pNew[i];
@@ -1139,9 +1139,9 @@ void fillQueryParam(
         }
     }
 
-    size_t nParamCount = rParam.GetEntryCount();    // Param wird nicht unter 8 resized
+    size_t nParamCount = rParam.GetEntryCount();    // if below eight Param isn't resized
     for (size_t i = nCount; i < nParamCount; ++i)
-        rParam.GetEntry(i).bDoQuery = false;        // ueberzaehlige Felder zuruecksetzen
+        rParam.GetEntry(i).bDoQuery = false;        // reset surplus fields
 }
 
 void fillQueryParam(
@@ -1182,9 +1182,9 @@ void fillQueryParam(
         }
     }
 
-    size_t nParamCount = rParam.GetEntryCount();    // Param wird nicht unter 8 resized
+    size_t nParamCount = rParam.GetEntryCount();    // if below eight Param isn't resized
     for (size_t i = nCount; i < nParamCount; ++i)
-        rParam.GetEntry(i).bDoQuery = false;        // ueberzaehlige Felder zuruecksetzen
+        rParam.GetEntry(i).bDoQuery = false;        // reset surplus fields
 }
 
 }
@@ -1195,8 +1195,8 @@ uno::Sequence<sheet::TableFilterField2> SAL_CALL ScFilterDescriptorBase::getFilt
     ScQueryParam aParam;
     GetData(aParam);
 
-    SCSIZE nEntries = aParam.GetEntryCount();   // allozierte Eintraege im Param
-    SCSIZE nCount = 0;                          // aktive
+    SCSIZE nEntries = aParam.GetEntryCount();   // allocated entries in Param
+    SCSIZE nCount = 0;                          // active
     while ( nCount < nEntries &&
         aParam.GetEntry(nCount).bDoQuery )
         ++nCount;
@@ -1351,14 +1351,14 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
                 rEntry.SetQueryByNonEmpty();
                 break;
             default:
-                OSL_FAIL("Falscher Query-enum");
+                OSL_FAIL("Wrong query enum");
                 rEntry.eOp = SC_EQUAL;
         }
     }
 
-    SCSIZE nParamCount = aParam.GetEntryCount();    // Param wird nicht unter 8 resized
+    SCSIZE nParamCount = aParam.GetEntryCount();    // if below eight Param isn't resized
     for (i=nCount; i<nParamCount; i++)
-        aParam.GetEntry(i).bDoQuery = false;        // ueberzaehlige Felder zuruecksetzen
+        aParam.GetEntry(i).bDoQuery = false;        // reset surplus fields
 
     PutData(aParam);
 }
@@ -1598,7 +1598,7 @@ void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
 
     if ( rHint.GetId() == SfxHintId::Dying )
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;
     else if ( dynamic_cast<const ScDBRangeRefreshedHint*>(&rHint) )
     {
         ScDBData* pDBData = GetDBData_Impl();
@@ -1849,7 +1849,7 @@ void SAL_CALL ScDatabaseRangeObj::refresh()
     {
         ScDBDocFunc aFunc(*pDocShell);
 
-        // Import zu wiederholen?
+        // repeat import?
         bool bContinue = true;
         ScImportParam aImportParam;
         pData->GetImportParam( aImportParam );
@@ -1862,7 +1862,7 @@ void SAL_CALL ScDatabaseRangeObj::refresh()
             bContinue = aFunc.DoImport( nTab, aImportParam, nullptr );   //! Api-Flag as parameter
         }
 
-        // interne Operationen (sort, query, subtotal) nur, wenn kein Fehler
+        // if no error then internal operations (sort, query, subtotal)
         if (bContinue)
             aFunc.RepeatDB( pData->GetName(), true, bIsUnnamed, aTab );
     }
@@ -2144,11 +2144,11 @@ ScDatabaseRangesObj::~ScDatabaseRangesObj()
 
 void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  reference update does not matter here
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;
     }
 }
 
@@ -2328,11 +2328,11 @@ ScUnnamedDatabaseRangesObj::~ScUnnamedDatabaseRangesObj()
 
 void ScUnnamedDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  reference update does not matter here
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;
     }
 }
 

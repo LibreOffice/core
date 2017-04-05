@@ -35,12 +35,12 @@ using utl::MediaDescriptor;
 
 namespace {
 
-// Tabelle mit Suchmustern
-// Bedeutung der Sequenzen
-// 0x00??: genau Byte 0x?? muss an dieser Stelle stehen
-// 0x0100: ein Byte ueberlesen (don't care)
-// 0x02nn: ein Byte aus 0xnn Alternativen folgt
-// 0x8000: Erkennung abgeschlossen
+// table with search pattern
+// meaning of the sequences
+// 0x00??: the exact byte 0x?? must be at that place
+// 0x0100: read over a byte (don't care)
+// 0x02nn: a byte of 0xnn variations follows
+// 0x8000: recognition finished
 
 #define M_DC        0x0100
 #define M_ALT(ANZ)  (0x0200+(ANZ))
@@ -71,7 +71,7 @@ const sal_uInt16 pQPro[] =
          0x0010,
          M_ENDE };
 
-const sal_uInt16 pDIF1[] =       // DIF mit CR-LF
+const sal_uInt16 pDIF1[] =       // DIF with CR-LF
     {
     'T', 'A', 'B', 'L', 'E',
     M_DC, M_DC,
@@ -80,7 +80,7 @@ const sal_uInt16 pDIF1[] =       // DIF mit CR-LF
     '\"',
     M_ENDE };
 
-const sal_uInt16 pDIF2[] =       // DIF mit CR oder LF
+const sal_uInt16 pDIF2[] =       // DIF with CR or LF
     {
     'T', 'A', 'B', 'L', 'E',
     M_DC,
@@ -98,7 +98,7 @@ const sal_uInt16 pSylk[] =       // Sylk
 bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
 {
     sal_uInt8 nByte;
-    rStr.Seek( 0 ); // am Anfang war alles Uebel...
+    rStr.Seek( 0 ); // in the beginning everything was bad...
     rStr.ReadUChar( nByte );
     bool bSync = true;
     while( !rStr.IsEof() && bSync )
@@ -106,27 +106,27 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
         sal_uInt16 nMuster = *pSearch;
 
         if( nMuster < 0x0100 )
-        { //                                direkter Byte-Vergleich
+        { // compare bytes
             if( ( sal_uInt8 ) nMuster != nByte )
                 bSync = false;
         }
         else if( nMuster & M_DC )
-        { //                                             don't care
+        { // don't care
         }
         else if( nMuster & M_ALT(0) )
-        { //                                      alternative Bytes
+        { // alternative Bytes
             sal_uInt8 nAnzAlt = ( sal_uInt8 ) nMuster;
-            bSync = false;          // zunaechst unsynchron
+            bSync = false;          // first unsynchron
             while( nAnzAlt > 0 )
             {
                 pSearch++;
                 if( ( sal_uInt8 ) *pSearch == nByte )
-                    bSync = true;   // jetzt erst Synchronisierung
+                    bSync = true;   // only now synchronization
                 nAnzAlt--;
             }
         }
         else if( nMuster & M_ENDE )
-        { //                                        Format detected
+        { // Format detected
             return true;
         }
 

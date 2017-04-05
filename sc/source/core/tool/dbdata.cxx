@@ -535,7 +535,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
         GetArea( aRange );
         SCTAB nTab = aRange.aStart.Tab();               // a database range is only on one sheet
 
-        //  anpassen wie die aktuelle Tabelle bei ScTablesHint (tabvwsh5.cxx)
+        //  customize as the current table as ScTablesHint (tabvwsh5.cxx)
 
         if ( nTab == nOldPos )                          // moved sheet
             nTab = nNewPos;

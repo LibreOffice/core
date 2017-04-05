@@ -60,10 +60,10 @@
 
 using namespace ::com::sun::star;
 
-//  ein AutoFormat hat immer 16 Eintraege
+//  a AutoFormat has always 16 entries
 #define SC_AF_FIELD_COUNT 16
 
-//  AutoFormat-Map nur fuer PropertySetInfo, ohne Which-IDs
+//  AutoFormat map only for PropertySetInfo without Which-IDs
 
 static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
 {
@@ -80,7 +80,7 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
     return aAutoFormatMap_Impl;
 }
 
-//! Zahlformat (String/Language) ??? (in XNumberFormat nur ReadOnly)
+//! number format (String/Language) ??? (in XNumberFormat only ReadOnly)
 //! table::TableBorder ??!?
 
 static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
@@ -159,13 +159,13 @@ static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const OUStrin
             return true;
         }
     }
-    return false;       // is nich
+    return false;
 }
 
 ScAutoFormatsObj::ScAutoFormatsObj()
 {
-    //! Dieses Objekt darf es nur einmal geben, und es muss an den Auto-Format-Daten
-    //! bekannt sein, damit Aenderungen gebroadcasted werden koennen
+    //! This object should only exist once and it must be known to Auto-Format-Data,
+    //! so that changes can be broadcasted
 }
 
 ScAutoFormatsObj::~ScAutoFormatsObj()
@@ -205,12 +205,12 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
-    //  Reflection muss nicht uno::XInterface sein, kann auch irgendein Interface sein...
+    //  Reflection need not be uno::XInterface, can be any interface...
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
         ScAutoFormatObj* pFormatObj = ScAutoFormatObj::getImplementation( xInterface );
-        if ( pFormatObj && !pFormatObj->IsInserted() )  // noch nicht eingefuegt?
+        if ( pFormatObj && !pFormatObj->IsInserted() )
         {
             ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
@@ -222,19 +222,19 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
 
                 if (pFormats->insert(pNew))
                 {
-                    //! Notify fuer andere Objekte
-                    pFormats->Save();   // sofort speichern
+                    //! notify to other objects
+                    pFormats->Save();
 
                     sal_uInt16 nNewIndex;
                     if (lcl_FindAutoFormatIndex( *pFormats, aName, nNewIndex ))
                     {
-                        pFormatObj->InitFormat( nNewIndex );    // kann jetzt benutzt werden
+                        pFormatObj->InitFormat( nNewIndex );    // can be used now
                         bDone = true;
                     }
                 }
                 else
                 {
-                    OSL_FAIL("AutoFormat konnte nicht eingefuegt werden");
+                    OSL_FAIL("AutoFormat could not be inserted");
                     throw uno::RuntimeException();
                 }
             }
@@ -357,8 +357,8 @@ ScAutoFormatObj::ScAutoFormatObj(sal_uInt16 nIndex) :
 
 ScAutoFormatObj::~ScAutoFormatObj()
 {
-    //  Wenn ein AutoFormat-Objekt losgelassen wird, werden eventuelle Aenderungen
-    //  gespeichert, damit sie z.B. im Writer sichtbar sind
+    //  If a AutoFormat object is released, then eventually changes are saved
+    //  so that they become visible in e.g Writer
 
     if (IsInserted())
     {
@@ -366,13 +366,13 @@ ScAutoFormatObj::~ScAutoFormatObj()
         if ( pFormats && pFormats->IsSaveLater() )
             pFormats->Save();
 
-        // Save() setzt SaveLater Flag zurueck
+        // Save() resets flag SaveLater
     }
 }
 
 void ScAutoFormatObj::InitFormat( sal_uInt16 nNewIndex )
 {
-    OSL_ENSURE( nFormatIndex == SC_AFMTOBJ_INVALID, "ScAutoFormatObj::InitFormat mehrfach" );
+    OSL_ENSURE( nFormatIndex == SC_AFMTOBJ_INVALID, "ScAutoFormatObj::InitFormat is multiple" );
     nFormatIndex = nNewIndex;
 }
 
@@ -486,7 +486,7 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
         ScAutoFormat::iterator it = pFormats->begin();
         std::advance(it, nFormatIndex);
         ScAutoFormatData *const pData = it->second.get();
-        OSL_ENSURE(pData,"AutoFormat Daten nicht da");
+        OSL_ENSURE(pData,"AutoFormat data not available");
 
         ScAutoFormatData* pNew = new ScAutoFormatData(*pData);
         pNew->SetName( aNewName );
@@ -498,13 +498,13 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
             ScAutoFormat::iterator itBeg = pFormats->begin();
             nFormatIndex = std::distance(itBeg, it);
 
-            //! Notify fuer andere Objekte
+            //! notify to other objects
             pFormats->SetSaveLater(true);
         }
         else
         {
-            OSL_FAIL("AutoFormat konnte nicht eingefuegt werden");
-            nFormatIndex = 0;       //! alter Index ist ungueltig
+            OSL_FAIL("AutoFormat could not be inserted");
+            nFormatIndex = 0;       //! old index invalid
         }
     }
     else
@@ -531,7 +531,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
     if (IsInserted() && nFormatIndex < pFormats->size())
     {
         ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
-        OSL_ENSURE(pData,"AutoFormat Daten nicht da");
+        OSL_ENSURE(pData,"AutoFormat data not available");
 
         bool bBool;
         if (aPropertyName == SC_UNONAME_INCBACK && (aValue >>= bBool))
@@ -547,9 +547,9 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
         else if (aPropertyName == SC_UNONAME_INCWIDTH && (aValue >>= bBool))
             pData->SetIncludeWidthHeight( bBool );
 
-        // else Fehler
+        // else error
 
-        //! Notify fuer andere Objekte
+        //! notify to other objects
         pFormats->SetSaveLater(true);
     }
 }
@@ -563,7 +563,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
     if (IsInserted() && nFormatIndex < pFormats->size())
     {
         ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
-        OSL_ENSURE(pData,"AutoFormat Daten nicht da");
+        OSL_ENSURE(pData,"AutoFormat data not available");
 
         bool bValue;
         bool bError = false;
@@ -581,7 +581,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
         else if (aPropertyName == SC_UNONAME_INCWIDTH)
             bValue = pData->GetIncludeWidthHeight();
         else
-            bError = true;      // unbekannte Property
+            bError = true;      // unknown property
 
         if (!bError)
             aAny <<= bValue;
