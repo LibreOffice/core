@@ -44,9 +44,6 @@ public:
     const OUString& GetHelpStyleSheet()const;
     void            SetHelpStyleSheet(const OUString& rStyleSheet);
 
-    void            SetWelcomeScreen( bool b );
-    bool            IsWelcomeScreen() const;
-
     OUString        GetSystem() const;
 };
 

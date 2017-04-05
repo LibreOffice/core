@@ -54,7 +54,6 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 {
     bool            bExtendedHelp;
     bool            bHelpTips;
-    bool            bWelcomeScreen;
     OUString        aLocale;
     OUString        aSystem;
     OUString        sHelpStyleSheet;
@@ -75,8 +74,6 @@ public:
     void            SetHelpTips( bool b )               { bHelpTips = b; SetModified(); }
     bool            IsHelpTips() const                      { return bHelpTips; }
 
-    void            SetWelcomeScreen( bool b )          { bWelcomeScreen = b; SetModified(); }
-    bool            IsWelcomeScreen() const                 { return bWelcomeScreen; }
     const OUString& GetSystem() const                       { return aSystem; }
 
     const OUString& GetHelpStyleSheet()const{return sHelpStyleSheet;}
@@ -125,7 +122,6 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( "Office.Common/Help" )
     , bExtendedHelp( false )
     , bHelpTips( true )
-    , bWelcomeScreen( false )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Load( aNames );
@@ -296,16 +292,6 @@ void SvtHelpOptions::SetHelpTips( bool b )
 bool SvtHelpOptions::IsHelpTips() const
 {
     return pImpl->IsHelpTips();
-}
-
-void SvtHelpOptions::SetWelcomeScreen( bool b )
-{
-    pImpl->SetWelcomeScreen( b );
-}
-
-bool SvtHelpOptions::IsWelcomeScreen() const
-{
-    return pImpl->IsWelcomeScreen();
 }
 
 OUString SvtHelpOptions::GetSystem() const
