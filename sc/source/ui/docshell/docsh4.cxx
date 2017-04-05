@@ -733,7 +733,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     return ;
                 }
 
-                if ( pMed )     // now execure in earnest...
+                if ( pMed )     // now execute in earnest...
                 {
                     SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
 

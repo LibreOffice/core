@@ -97,7 +97,7 @@ void ScDrawTextObjectBar::InitInterface_Impl()
 }
 
 
-// diable not wanted accelerators
+// disable not wanted accelerators
 
 void ScDrawTextObjectBar::StateDisableItems( SfxItemSet &rSet )
 {
