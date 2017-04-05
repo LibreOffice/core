@@ -50,6 +50,9 @@ class JavaPanZoomController
     // The maximum amount we allow you to zoom into a page
     private static final float MAX_ZOOM = 4.0f;
 
+    // The threshold zoom factor of whether a double tap triggers zoom-in or zoom-out
+    private static final float DOUBLE_TAP_THRESHOLD = 1.0f;
+
     // The maximum amount we would like to scroll with the mouse
     private final float MAX_SCROLL;
 
@@ -971,6 +974,14 @@ class JavaPanZoomController
 
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
+        PointF viewPoint = getMotionInDocumentCoordinates(motionEvent);
+        ZoomConstraints constraints = mTarget.getZoomConstraints();
+        float zoomFactor = getMetrics().getZoomFactor();
+        if (zoomFactor >= DOUBLE_TAP_THRESHOLD) {
+            animatedMove(viewPoint, constraints.getMinZoom());
+        } else {
+            animatedMove(viewPoint, DOUBLE_TAP_THRESHOLD);
+        }
         LOKitShell.sendTouchEvent("DoubleTap", getMotionInDocumentCoordinates(motionEvent));
         return true;
     }
