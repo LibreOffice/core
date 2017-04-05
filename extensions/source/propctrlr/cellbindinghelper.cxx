@@ -306,7 +306,7 @@ namespace pcr
             OSL_ENSURE( xBindingProps.is() || !_rxBinding.is(), "CellBindingHelper::getAddressFromCellBinding: no property set for the binding!" );
             if ( xBindingProps.is() )
             {
-                bReturn = (bool)( xBindingProps->getPropertyValue( PROPERTY_BOUND_CELL ) >>= _rAddress );
+                bReturn = ( xBindingProps->getPropertyValue( PROPERTY_BOUND_CELL ) >>= _rAddress );
             }
         }
         catch( const Exception& )

@@ -675,7 +675,7 @@ XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
 
 bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bValue = ( (bool) (rStrImpValue == sTransparent) == bTransPropValue);
+    bool bValue = ( (rStrImpValue == sTransparent) == bTransPropValue);
     rValue <<= bValue;
 
     return true;

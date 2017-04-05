@@ -520,8 +520,8 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 sal_Int32 nStart = 0;
                 sal_Int32 nEnd   = aCellStr.getLength();
 
-                bool bMatch = (bool) rEntry.GetSearchTextPtr( rParam.eSearchType, rParam.bCaseSens, bMatchWholeCell )
-                              ->SearchForward( aCellStr, &nStart, &nEnd );
+                bool bMatch = rEntry.GetSearchTextPtr( rParam.eSearchType, rParam.bCaseSens, bMatchWholeCell )
+                                ->SearchForward( aCellStr, &nStart, &nEnd );
                 // from 614 on, nEnd is behind the found text
                 if (bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.getLength()))

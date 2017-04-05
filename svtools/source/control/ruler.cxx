@@ -2743,7 +2743,7 @@ void Ruler::DrawTab(vcl::RenderContext& rRenderContext, const Color &rFillColor,
 
 void Ruler::SetTextRTL(bool bRTL)
 {
-    if(mpData->bTextRTL != (bool) bRTL)
+    if(mpData->bTextRTL != bRTL)
     {
         mpData->bTextRTL = bRTL;
         if ( IsReallyVisible() && IsUpdateMode() )

@@ -1448,7 +1448,7 @@ StyleSettings::SetUseFlatBorders( bool bUseFlatBorders )
 bool
 StyleSettings::GetUseFlatBorders() const
 {
-    return (bool) mxData->mnUseFlatBorders;
+    return mxData->mnUseFlatBorders;
 }
 
 void
@@ -1461,7 +1461,7 @@ StyleSettings::SetUseFlatMenus( bool bUseFlatMenus )
 bool
 StyleSettings::GetUseFlatMenus() const
 {
-    return (bool) mxData->mnUseFlatMenus;
+    return mxData->mnUseFlatMenus;
 }
 
 void

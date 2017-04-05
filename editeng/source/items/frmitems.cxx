@@ -467,7 +467,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
 
         case MID_FIRST_AUTO:
-            rVal <<= (bool) IsAutoFirst();
+            rVal <<= IsAutoFirst();
             break;
 
         default:
@@ -1196,7 +1196,7 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             return false;
     }
 
-    rVal <<= (bool) bValue;
+    rVal <<= bValue;
     return true;
 }
 

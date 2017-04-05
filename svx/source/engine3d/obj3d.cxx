@@ -197,7 +197,7 @@ E3dObject::~E3dObject()
 
 void E3dObject::SetSelected(bool bNew)
 {
-    if((bool)mbIsSelected != bNew)
+    if(mbIsSelected != bNew)
     {
         mbIsSelected = bNew;
     }

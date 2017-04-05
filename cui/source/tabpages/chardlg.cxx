@@ -2257,7 +2257,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     if ( pOld )
     {
         const SvxWordLineModeItem& rItem = *static_cast<const SvxWordLineModeItem*>(pOld);
-        if ( rItem.GetValue() == (bool) m_pIndividualWordsBtn->IsChecked() )
+        if ( rItem.GetValue() == m_pIndividualWordsBtn->IsChecked() )
             bChanged = false;
     }
 

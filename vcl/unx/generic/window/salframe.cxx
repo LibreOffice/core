@@ -2104,7 +2104,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 {
     if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
     {
-        if( mbFullScreen == (bool)bFullScreen )
+        if( mbFullScreen == bFullScreen )
             return;
         if( bFullScreen )
         {
@@ -2169,7 +2169,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             if( bVisible )
                 Show( true );
         }
-        if( mbFullScreen == (bool)bFullScreen )
+        if( mbFullScreen == bFullScreen )
             return;
 
         pDisplay_->getWMAdaptor()->showFullScreen( this, bFullScreen );

@@ -62,7 +62,7 @@ public:
         rtl::Reference<unoidl::PlainStructTypeEntity> const & theBaseEntity):
         SourceProviderEntityPad(published), baseName(theBaseName),
         baseEntity(theBaseEntity)
-    { assert(theBaseName.isEmpty() != (bool) theBaseEntity.is()); }
+    { assert(theBaseName.isEmpty() != theBaseEntity.is()); }
 
     OUString const baseName;
     rtl::Reference<unoidl::PlainStructTypeEntity> const baseEntity;
@@ -94,7 +94,7 @@ public:
         rtl::Reference<unoidl::ExceptionTypeEntity> const & theBaseEntity):
         SourceProviderEntityPad(published), baseName(theBaseName),
         baseEntity(theBaseEntity)
-    { assert(theBaseName.isEmpty() != (bool) theBaseEntity.is()); }
+    { assert(theBaseName.isEmpty() != theBaseEntity.is()); }
 
     OUString const baseName;
     rtl::Reference<unoidl::ExceptionTypeEntity> const baseEntity;

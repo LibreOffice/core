@@ -252,7 +252,7 @@ void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue,
                                   bool *pOk, bool *pChanged )
 {
     OUString aURL;
-    if( !(bool)( *pValue >>= aURL ) )
+    if( !( *pValue >>= aURL ) )
         return;
 
     if( LoadList( t, aURL, ""/*TODO?*/, uno::Reference< embed::XStorage >() ) )

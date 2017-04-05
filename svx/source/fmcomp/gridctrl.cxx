@@ -2602,7 +2602,7 @@ void DbGridControl::AppendNew()
 
 void DbGridControl::SetDesignMode(bool bMode)
 {
-    if ((bool) IsDesignMode() != bMode)
+    if (IsDesignMode() != bMode)
     {
         // adjust Enable/Disable for design mode so that the headerbar remains configurable
         if (bMode)

@@ -164,7 +164,7 @@ void Splitter::dispose()
 
 void Splitter::SetHorizontal(bool bNew)
 {
-    if(bNew != (bool)mbHorzSplit)
+    if(bNew != mbHorzSplit)
     {
         ImplInitHorVer(bNew);
     }
