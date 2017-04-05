@@ -517,8 +517,8 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             CPPUNIT_ASSERT(pDrawDoc);
             SfxItemSet aSet(pDrawDoc->GetItemPool(), ATTR_ANIMATION_START, ATTR_ACTION_END);
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, false));
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, presentation::AnimationEffect_NONE));
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
+            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
+            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
             aSet.InvalidateItem(ATTR_ANIMATION_SPEED);
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, false));
             aSet.Put(SvxColorItem(RGB_Color(COL_LIGHTGRAY), ATTR_ANIMATION_COLOR));
@@ -526,9 +526,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, false));
             aSet.InvalidateItem(ATTR_ANIMATION_SOUNDFILE);
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, false));
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION, presentation::ClickAction_NONE));
+            aSet.Put(SfxAllEnumItem(ATTR_ACTION, sal_uInt16(presentation::ClickAction_NONE)));
             aSet.InvalidateItem(ATTR_ACTION_FILENAME);
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, presentation::AnimationEffect_NONE));
+            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
             aSet.InvalidateItem(ATTR_ACTION_EFFECTSPEED);
             aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, false));
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
