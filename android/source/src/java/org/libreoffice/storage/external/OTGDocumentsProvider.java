@@ -63,7 +63,7 @@ public class OTGDocumentsProvider implements IExternalDocumentProvider,
         File f = IOUtils.getFileFromURIString(rootPathURI);
         if(IOUtils.isInvalidFile(f)) {
             //missing device
-            throw new RuntimeException(context.getString(R.string.otg_missing_error, context));
+            throw new RuntimeException(context.getString(R.string.otg_missing_error));
         }
 
         return new LocalFile(f);
