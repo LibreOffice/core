@@ -201,6 +201,10 @@ protected:
 
     virtual ~SwAccessibleContext() override;
 
+    // Return a reference to the parent.
+    css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+        getAccessibleParentImpl();
+
 public:
     SwAccessibleContext( std::shared_ptr<SwAccessibleMap> const& pMap,
                          sal_Int16 nRole, const SwFrame *pFrame );
