@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_9a7c1674",
+        "filename": "xmlsecurity/source/gpg/XMLSignature.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-05T07:30:45Z",
+      "side": 1,
+      "message": "Is there any advantage of XUnoTunnel here, compared to just doing:\n\nauto pElement \u003d dynamic_cast\u003cXMLElementWrapper_XmlSecImpl*\u003e(xElement.get());\n\n?",
+      "revId": "f6f26b026c2a0ab8c8628a5131f948c992c20519",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
