@@ -1173,9 +1173,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     pDoc->ExtendMergeSel( nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark );
 
-        //  check cell-protection
-
-    ScEditableTester aTester( pDoc, nStartTab, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow );
+    // check cell-protection, we pass the mark because several cells can be selected
+    ScEditableTester aTester(pDoc, nStartCol, nStartRow, nUndoEndCol, nUndoEndRow, rMark);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());

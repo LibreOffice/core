@@ -293,7 +293,9 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         else
         {
             ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
-            ScImportExport aObj( GetViewData().GetDocument(), aCellPos );
+            ScMarkData markCopy(GetViewData().GetMarkData());
+            markCopy.SetMarkArea(ScRange(aCellPos));
+            ScImportExport aObj( GetViewData().GetDocument(), markCopy );
             aObj.SetOverwriting( true );
 
             OUString aStr;
