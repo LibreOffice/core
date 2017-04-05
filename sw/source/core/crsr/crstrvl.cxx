@@ -1982,6 +1982,8 @@ const SwRangeRedline* SwCursorShell::SelNextRedline()
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
+        // ensure point is at the end so alternating SelNext/SelPrev works
+        NormalizePam(false);
         pFnd = GetDoc()->getIDocumentRedlineAccess().SelNextRedline( *m_pCurrentCursor );
         if( pFnd && !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
             UpdateCursor( SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
@@ -2000,6 +2002,8 @@ const SwRangeRedline* SwCursorShell::SelPrevRedline()
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
+        // ensure point is at the start so alternating SelNext/SelPrev works
+        NormalizePam(true);
         pFnd = GetDoc()->getIDocumentRedlineAccess().SelPrevRedline( *m_pCurrentCursor );
         if( pFnd && !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr() )
             UpdateCursor( SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
