@@ -2658,19 +2658,17 @@
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="ulspacing">
+                              <object class="sfxlo-NotebookbarToolBox" id="abovespacing">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Indent</property>
                                 <child>
-                                  <object class="GtkToolButton" id="ULSpacing">
+                                  <object class="GtkToolButton" id="AboveSpacing">
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="is_important">True</property>
-                                    <property name="action_name">.uno:ULSpacing</property>
+                                    <property name="action_name">.uno:AboveSpacing</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
@@ -2681,7 +2679,32 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">0</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="belowspacing">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="BelowSpacing">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="is_important">True</property>
+                                    <property name="action_name">.uno:BelowSpacing</property>
+                                    <property name="use_underline">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
