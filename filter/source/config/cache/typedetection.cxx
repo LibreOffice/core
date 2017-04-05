@@ -269,7 +269,6 @@ int getFlatTypeRank(const OUString& rType)
 
         // Export only
         "writer_layout_dump_xml",
-        "pwp_PlaceWare",
         "graphic_SWF",
         "graphic_HTML",
 
