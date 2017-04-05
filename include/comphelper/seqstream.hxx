@@ -71,6 +71,8 @@ class SAL_DLLPUBLIC_TEMPLATE OSequenceOutputStream_Base
 
 class COMPHELPER_DLLPUBLIC OSequenceOutputStream : public OSequenceOutputStream_Base
 {
+private:
+    void finalizeOutput();
 protected:
     css::uno::Sequence< sal_Int8 >&                 m_rSequence;
     double                                          m_nResizeFactor;
@@ -85,7 +87,7 @@ protected:
     ::osl::Mutex                                    m_aMutex;
 
 protected:
-    virtual ~OSequenceOutputStream() override { if (m_bConnected) closeOutput(); }
+    virtual ~OSequenceOutputStream() override { if (m_bConnected) finalizeOutput(); }
 
 public:
     /** constructs the object. Everything written into the stream through the XOutputStream methods will be forwarded

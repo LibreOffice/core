@@ -199,17 +199,23 @@ void SAL_CALL OSequenceOutputStream::flush(  )
     m_rSequence.realloc(m_nSize);
 }
 
-
-void SAL_CALL OSequenceOutputStream::closeOutput(  )
+void OSequenceOutputStream::finalizeOutput()
 {
     MutexGuard aGuard(m_aMutex);
-    if (!m_bConnected)
-        throw NotConnectedException();
 
     // cut the sequence to the real size
     m_rSequence.realloc(m_nSize);
     // and don't allow any further accesses
     m_bConnected = false;
+}
+
+void SAL_CALL OSequenceOutputStream::closeOutput()
+{
+    MutexGuard aGuard(m_aMutex);
+    if (!m_bConnected)
+        throw NotConnectedException();
+
+    finalizeOutput();
 }
 
 } // namespace comphelper
