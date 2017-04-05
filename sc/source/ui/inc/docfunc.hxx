@@ -178,7 +178,7 @@ public:
                                         double fStart, double fStep, double fMax,
                                         bool bApi );
 
-    // FillAuto: rRange wird von Source-Range auf Dest-Range angepasst
+    // FillAuto: rRange is change from Source-Range to Dest-Range
     SC_DLLPUBLIC bool
                     FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd  eDateCmd, sal_uLong nCount, double fStep, double fMax, bool bRecord, bool bApi );
 

@@ -167,7 +167,7 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
 
 bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
 {
-    // alle weiteren Optionen werden in den Handlern aktualisiert
+    // every other options are updated in handlers
     pLocalOptions->SetIterCount( (sal_uInt16)m_pEdSteps->GetValue() );
     pLocalOptions->SetIgnoreCase( !m_pBtnCase->IsChecked() );
     pLocalOptions->SetCalcAsShown( m_pBtnCalc->IsChecked() );

@@ -90,8 +90,8 @@ bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 
     SC_MOD()->SetAppOptions(aAppOptions);
 
-    //  Repaint (wenn alles ueber Items laufen wuerde, wie es sich gehoert,
-    //  waere das nicht noetig...)
+    //  repaint (if everything would be done by Items (how it sould be),
+    //  this wouldn't be neccessary)
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
     if (pDocSh)
         pDocSh->PostPaintGridAll();
