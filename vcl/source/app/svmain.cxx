@@ -34,6 +34,7 @@
 
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclmain.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/scheduler.hxx>
