@@ -16,14 +16,6 @@ ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any cons
 SdrUndoObjList::SetOrdNum(unsigned int)
 SecurityEnvironment_NssImpl::getCertificate(rtl::OUString const&, rtl::OUString const&)
 StylePool::getCount() const
-StyleSettings::SetAlternatingRowColor(Color const&)
-StyleSettings::SetCursorSize(long)
-StyleSettings::SetFloatTitleHeight(long)
-StyleSettings::SetHideDisabledMenuItems(bool)
-StyleSettings::SetSpinSize(long)
-StyleSettings::SetTitleHeight(long)
-StyleSettings::SetUseFlatBorders(bool)
-StyleSettings::SetUseFlatMenus(bool)
 SvpSalInstance::PostedEventsInQueue()
 SvtAccessibilityOptions::IsModified() const
 SvtListener::IsListening(SvtBroadcaster&) const
