@@ -942,24 +942,19 @@ void SmParser::NextToken()
 
 SmTableNode *SmParser::DoTable()
 {
-    DoLine();
+    SmNodeArray aLineArray;
+    aLineArray.push_back(DoLine());
     while (m_aCurToken.eType == TNEWLINE)
     {
         NextToken();
-        DoLine();
+        aLineArray.push_back(DoLine());
     }
 
     if (m_aCurToken.eType != TEND)
-        Error(SmParseError::UnexpectedChar);
-
-    SmNodeArray  LineArray(m_aNodeStack.size());
-    for (auto rIt = LineArray.rbegin(), rEnd = LineArray.rend(); rIt != rEnd; ++rIt)
-    {
-        *rIt = popOrZero(m_aNodeStack);
-    }
+        aLineArray.push_back(DoError(SmParseError::UnexpectedChar));
 
     std::unique_ptr<SmTableNode> pSNode(new SmTableNode(m_aCurToken));
-    pSNode->SetSubNodes(LineArray);
+    pSNode->SetSubNodes(aLineArray);
     return pSNode.release();
 }
 
@@ -989,7 +984,7 @@ SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
     return pNode.release();
 }
 
-void SmParser::DoLine()
+SmLineNode *SmParser::DoLine()
 {
     SmNodeArray  ExpressionArray;
 
@@ -1012,9 +1007,9 @@ void SmParser::DoLine()
         ExpressionArray.push_back(new SmExpressionNode(aTok));
     }
 
-    std::unique_ptr<SmStructureNode> pSNode(new SmLineNode(m_aCurToken));
+    auto pSNode = o3tl::make_unique<SmLineNode>(m_aCurToken);
     pSNode->SetSubNodes(ExpressionArray);
-    m_aNodeStack.push_front(std::move(pSNode));
+    return pSNode.release();
 }
 
 SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
@@ -2170,15 +2165,6 @@ SmExpressionNode *SmParser::DoError(SmParseError eError)
     return pSNode.release();
 }
 
-void SmParser::Error(SmParseError eError)
-{
-    //! put a structure node on the stack (instead of the error node itself)
-    //! because sometimes such a node is expected in order to attach some
-    //! subnodes
-    m_aNodeStack.emplace_front(DoError(eError));
-}
-
-
 // end grammar
 
 
@@ -2208,8 +2194,6 @@ SmTableNode *SmParser::Parse(const OUString &rBuffer)
 
     m_aErrDescList.clear();
 
-    m_aNodeStack.clear();
-
     NextToken();
     return DoTable();
 }
@@ -2224,8 +2208,6 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
     m_nCurError     = -1;
 
     m_aErrDescList.clear();
-
-    m_aNodeStack.clear();
 
     NextToken();
     return DoExpression();
