@@ -1902,11 +1902,16 @@ namespace {
     };
 } // anonymous namespace
 
-void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership )
+void ScColumn::CellNotesDeleting(SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership)
 {
     ScAddress aAddr(nCol, 0, nTab);
     CellNoteHandler aFunc(pDocument, aAddr, bForgetCaptionOwnership);
     sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
+}
+
+void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership )
+{
+    CellNotesDeleting(nRow1, nRow2, bForgetCaptionOwnership);
 
     rBlockPos.miCellNotePos =
         maCellNotes.set_empty(rBlockPos.miCellNotePos, nRow1, nRow2);
