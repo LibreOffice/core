@@ -2227,25 +2227,28 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 
         for (int nChild = 0; nChild < GetChildCount(); ++nChild)
         {
-            TabPage* pPage = static_cast<TabPage*>(GetChild(nChild));
-            sal_uInt16 nPageId = TabControl::GetPageId(*pPage);
+            sal_uInt16 nPageId = TabControl::GetPageId(nChild);
+            TabPage* pPage = GetTabPage(nChild);
 
-            if (pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any))
-                EnablePage(nPageId);
-            else
-                EnablePage(nPageId, false);
-
-            if (!bHandled && bLastContextWasSupported
-                && pPage->HasContext(vcl::EnumContext::Context::Default))
+            if (pPage)
             {
-                SetCurPageId(nPageId);
-            }
+                if (pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any))
+                    EnablePage(nPageId);
+                else
+                    EnablePage(nPageId, false);
 
-            if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
-            {
-                SetCurPageId(nPageId);
-                bHandled = true;
-                bLastContextWasSupported = true;
+                if (!bHandled && bLastContextWasSupported
+                    && pPage->HasContext(vcl::EnumContext::Context::Default))
+                {
+                    SetCurPageId(nPageId);
+                }
+
+                if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
+                {
+                    SetCurPageId(nPageId);
+                    bHandled = true;
+                    bLastContextWasSupported = true;
+                }
             }
         }
 
