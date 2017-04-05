@@ -1135,25 +1135,6 @@ namespace
     }
 } // anonymous
 
-css::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
-{
-    css::util::URL aURL;
-    aURL.Complete = "vnd.sun.star.help://" +
-        _sModuleName + "/" + OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
-
-    OUString sAnchor;
-    OUString sTempURL = aURL.Complete;
-    AppendConfigToken( sTempURL, true );
-    bool bHasAnchor = GetHelpAnchor_Impl( sTempURL, sAnchor );
-    AppendConfigToken(aURL.Complete,true);
-    if ( bHasAnchor )
-    {
-        aURL.Complete += "#";
-        aURL.Complete += sAnchor;
-    }
-    return aURL;
-}
-
 void setEvalDateFormatForFormatter(Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
     OSL_ENSURE( _rxFormatter.is(),"setEvalDateFormatForFormatter: Formatter is NULL!");

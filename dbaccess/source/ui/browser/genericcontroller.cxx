@@ -1210,50 +1210,6 @@ namespace
     }
 }
 
-void OGenericUnoController::openHelpAgent(OUString const& _suHelpStringURL )
-{
-    OUString suURL(_suHelpStringURL);
-    OUString sLanguage( "Language=" );
-    if (suURL.indexOf(sLanguage) == -1)
-    {
-        AppendConfigToken(suURL, false /* sal_False := add '&' */ );
-    }
-    URL aURL;
-    aURL.Complete = suURL;
-
-    openHelpAgent( aURL );
-}
-
-void OGenericUnoController::openHelpAgent(const OString& _sHelpId)
-{
-    openHelpAgent( createHelpAgentURL( lcl_getModuleHelpModuleName( getFrame() ), _sHelpId ) );
-}
-
-void OGenericUnoController::openHelpAgent( const URL& _rURL )
-{
-    try
-    {
-        URL aURL( _rURL );
-
-        if ( m_xUrlTransformer.is() )
-            m_xUrlTransformer->parseStrict(aURL);
-
-        Reference< XDispatchProvider > xDispProv( m_aCurrentFrame.getFrame(), UNO_QUERY );
-        Reference< XDispatch > xHelpDispatch;
-        if ( xDispProv.is() )
-            xHelpDispatch = xDispProv->queryDispatch(aURL, "_helpagent", FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
-        OSL_ENSURE(xHelpDispatch.is(), "SbaTableQueryBrowser::openHelpAgent: could not get a dispatcher!");
-        if (xHelpDispatch.is())
-        {
-            xHelpDispatch->dispatch(aURL, Sequence< PropertyValue >());
-        }
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-}
-
 Reference< awt::XWindow> OGenericUnoController::getTopMostContainerWindow() const
 {
     Reference< css::awt::XWindow> xWindow;

@@ -278,14 +278,6 @@ namespace dbaui
                                 ,bool& _rAutoIncrementValueEnabled
                                 ,OUString& _rsAutoIncrementValue);
 
-    /** creates the URL or the help agent
-        @param  _sModuleName
-        @param  _nHelpId
-        @return
-            The URL for the help agent to dispatch.
-    */
-    css::util::URL createHelpAgentURL(const OUString& _sModuleName,const OString& _rHelpId);
-
     /** set the evaluation flag at the number formatter
         @param  _rxFormatter
     */
