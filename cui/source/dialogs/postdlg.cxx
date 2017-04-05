@@ -64,11 +64,8 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
     bool bNew = true;
     sal_uInt16 nWhich = 0;
 
-    if ( !bPrevNext )
-    {
-        m_pPrevBtn->Hide();
-        m_pNextBtn->Hide();
-    }
+    m_pPrevBtn->Show(bPrevNext);
+    m_pNextBtn->Show(bPrevNext);
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR );
     OUString aAuthorStr, aDateStr;
