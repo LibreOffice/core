@@ -507,11 +507,33 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
 
-            case SID_INSERT_GRAPHIC:
             case SID_INSERT_AVMEDIA:
             case SID_FONTWORK_GALLERY_FLOATER:
                 if ( bTabProt || bShared )
                     rSet.DisableItem( nWhich );
+                break;
+
+            case SID_INSERT_GRAPHIC:
+                if (bTabProt || bShared)
+                {
+                    // do not disable 'insert graphic' item if the currently marked area is editable (not protected)
+                    // if there is no marked area, check the current cell
+                    bool bDisableInsertImage = true;
+                    ScMarkData& rMark = GetViewData().GetMarkData();
+                    if (!rMark.GetMarkedRanges().empty() && GetViewData().GetDocument()->IsSelectionEditable(rMark))
+                        bDisableInsertImage = false;
+                    else
+                    {
+                        if (GetViewData().GetDocument()->IsBlockEditable
+                            (GetViewData().GetTabNo(), GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetCurX(), GetViewData().GetCurY()))
+                        {
+                            bDisableInsertImage = false;
+                        }
+                    }
+
+                    if (bDisableInsertImage)
+                        rSet.DisableItem(nWhich);
+                }
                 break;
 
             case SID_LINKS:
