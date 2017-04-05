@@ -311,7 +311,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
 
 void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
-    if( nLen < 0 )
+    if (nLen < 1)
         m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FRAMEDIR);
     else
     {
