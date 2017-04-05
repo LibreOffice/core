@@ -3428,9 +3428,17 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
 
     if (m_bSymbol || m_bIgnoreText)
     {
-        if( m_bSymbol ) // Insert special chars
+        WW8_CP nRequested = nEnd - rPos;
+        if (m_bSymbol) // Insert special chars
         {
-            for(sal_uInt16 nCh = 0; nCh < nEnd - rPos; ++nCh)
+            sal_uInt64 nMaxPossible = m_pStrm->remainingSize();
+            if (static_cast<sal_uInt64>(nRequested) > nMaxPossible)
+            {
+                SAL_WARN("sw.ww8", "document claims to have more characters, " << nRequested << " than remaining, " << nMaxPossible);
+                nRequested = nMaxPossible;
+            }
+
+            for (WW8_CP nCh = 0; nCh < nRequested; ++nCh)
             {
                 m_rDoc.getIDocumentContentOperations().InsertString( *m_pPaM, OUString(m_cSymbol) );
             }
@@ -3438,7 +3446,7 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
             m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CJK_FONT );
             m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CTL_FONT );
         }
-        m_pStrm->SeekRel( nEnd- rPos );
+        m_pStrm->SeekRel(nRequested);
         rPos = nEnd; // Ignore until attribute end
         return false;
     }
