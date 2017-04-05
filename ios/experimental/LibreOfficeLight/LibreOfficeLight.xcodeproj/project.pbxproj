@@ -561,7 +561,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					i386,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -579,7 +582,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
-				"VALID_ARCHS[sdk=*]" = arm64;
+				VALID_ARCHS = "i386 $(ARCHS_STANDARD)";
 			};
 			name = Debug;
 		};
@@ -587,7 +590,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					i386,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
@@ -605,7 +611,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
-				"VALID_ARCHS[sdk=*]" = arm64;
+				VALID_ARCHS = "i386 $(ARCHS_STANDARD)";
 			};
 			name = Release;
 		};
