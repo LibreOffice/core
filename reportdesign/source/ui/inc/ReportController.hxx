@@ -309,7 +309,6 @@ namespace rptui
         void OnInvalidateClipboard();
         DECL_LINK( OnClipboardChanged, TransferableDataHelper*, void );
         DECL_LINK( OnExecuteReport, void*, void );
-        DECL_LINK( OnOpenHelpAgent, void*, void );
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() override;
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
