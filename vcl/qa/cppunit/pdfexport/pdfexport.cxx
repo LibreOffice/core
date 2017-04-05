@@ -50,6 +50,7 @@ public:
     /// Tests export of PDF images without reference XObjects.
     void testTdf106693();
     void testTdf106972();
+    void testTdf106972Pdf17();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -60,6 +61,7 @@ public:
     CPPUNIT_TEST(testTdf106206);
     CPPUNIT_TEST(testTdf106693);
     CPPUNIT_TEST(testTdf106972);
+    CPPUNIT_TEST(testTdf106972Pdf17);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -364,6 +366,42 @@ void PdfExportTest::testTdf106972()
     CPPUNIT_ASSERT(pImageResources);
     // This failed: the PDF image had no Font resource.
     CPPUNIT_ASSERT(pImageResources->LookupElement("Font"));
+}
+
+void PdfExportTest::testTdf106972Pdf17()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106972-pdf17.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // Get access to the only image on the only page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+
+    // This failed, the "image" had resources; that typically means we tried to
+    // preserve the original PDF markup here; which is not OK till our default
+    // output is PDF 1.4, and this bugdoc has PDF 1.7 data.
+    CPPUNIT_ASSERT(!pXObject->Lookup("Resources"));
 }
 #endif
 
