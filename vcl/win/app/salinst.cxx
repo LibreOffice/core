@@ -182,7 +182,7 @@ sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
 /// note: while VCL is fully up and running (other threads started and
 /// before shutdown), the main thread must acquire SolarMutex only via
 /// this function to avoid deadlock
-void ImplSalYieldMutexAcquireWithWait()
+void ImplSalYieldMutexAcquireWithWait( sal_uLong nCount )
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( !pInst )
@@ -197,21 +197,26 @@ void ImplSalYieldMutexAcquireWithWait()
         // needed because if we don't reschedule, then we create deadlocks if a
         // Window's create/destroy is called via SendMessage() from another thread.
         // Have a look at the osl_waitCondition implementation for more info.
-        pInst->mpSalYieldMutex->m_condition.reset();
-        while (!pInst->mpSalYieldMutex->tryToAcquire())
+        SalYieldMutex * const pYieldMutex = pInst->mpSalYieldMutex;
+        osl::Condition &rCondition = pYieldMutex->m_condition;
+        while ( nCount )
         {
-            // wait for SalYieldMutex::release() to set the condition
-            osl::Condition::Result res = pInst->mpSalYieldMutex->m_condition.wait();
-            assert(osl::Condition::Result::result_ok == res);
-            // reset condition *before* acquiring!
-            pInst->mpSalYieldMutex->m_condition.reset();
+            do {
+                // reset condition *before* acquiring!
+                rCondition.reset();
+                if (pYieldMutex->tryToAcquire())
+                    break;
+                // wait for SalYieldMutex::release() to set the condition
+                osl::Condition::Result res = rCondition.wait();
+                assert(osl::Condition::Result::result_ok == res);
+            }
+            while ( 1 );
+            --nCount;
         }
     }
     else
-    {
         // If this is not the main thread, call acquire directly.
-        pInst->mpSalYieldMutex->acquire();
-    }
+        ImplSalAcquireYieldMutex( nCount );
 }
 
 bool ImplSalYieldMutexTryToAcquire()
@@ -597,17 +602,8 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
     bool bDidWork = false;
     // NOTE: if nReleased != 0 this will be called without SolarMutex
     //       so don't do anything dangerous before releasing it here
-    SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
-    DWORD           nCurThreadId = GetCurrentThreadId();
     sal_uLong const nCount = (nReleased != 0)
-                                ? nReleased
-                                : pYieldMutex->GetAcquireCount(nCurThreadId);
-    sal_uLong       n = (nReleased != 0) ? 0 : nCount;
-    while ( n )
-    {
-        pYieldMutex->release();
-        n--;
-    }
+                             ? nReleased : ImplSalReleaseYieldMutex();
     if ( !IsMainThread() )
     {
         // #97739# A SendMessage call blocks until the called thread (here: the main thread)
@@ -621,31 +617,20 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
 
         // #i18883# only sleep if potential deadlock scenario, ie, when a dialog is open
         if( ImplGetSVData()->maAppData.mnModalMode )
-            Sleep(1);
+            SwitchToThread();
         else
-            SendMessageW( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
+            bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
 
-        n = nCount;
-        while ( n )
-        {
-            pYieldMutex->acquire();
-            n--;
-        }
+        ImplSalAcquireYieldMutex( nCount );
     }
     else
     {
         if (nReleased == 0) // tdf#99383 ReAcquireSolarMutex shouldn't Yield
-        {
             bDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
-        }
 
-        n = nCount;
-        while ( n )
-        {
-            ImplSalYieldMutexAcquireWithWait();
-            n--;
-        }
+        ImplSalYieldMutexAcquireWithWait( nCount );
     }
+
     return bDidWork;
 }
 
@@ -656,7 +641,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
     switch ( nMsg )
     {
         case SAL_MSG_THREADYIELD:
-            ImplSalYield( (bool)wParam, (bool)lParam );
+            nRet = static_cast<LRESULT>(ImplSalYield( (bool)wParam, (bool)lParam ));
             rDef = FALSE;
             break;
         case SAL_MSG_STARTTIMER:
