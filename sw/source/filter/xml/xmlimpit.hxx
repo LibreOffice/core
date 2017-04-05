@@ -35,7 +35,6 @@ class SvXMLImportItemMapper
 {
 protected:
     SvXMLItemMapEntriesRef mrMapEntries;
-    sal_uInt16 nUnknownWhich;
 
 public:
     explicit SvXMLImportItemMapper( SvXMLItemMapEntriesRef const & rMapEntries );

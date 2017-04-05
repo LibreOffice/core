@@ -50,13 +50,12 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
     {
     case A_TOKEN( tblPr ):              // CT_TableProperties
         {
-            mrTableProperties.isRtl() = rAttribs.getBool( XML_rtl, false );
-            mrTableProperties.isFirstRow() = rAttribs.getBool( XML_firstRow, false );
-            mrTableProperties.isFirstCol() = rAttribs.getBool( XML_firstCol, false );
-            mrTableProperties.isLastRow() = rAttribs.getBool( XML_lastRow, false );
-            mrTableProperties.isLastCol() = rAttribs.getBool( XML_lastCol, false );
-            mrTableProperties.isBandRow() = rAttribs.getBool( XML_bandRow, false );
-            mrTableProperties.isBandCol() = rAttribs.getBool( XML_bandCol, false );
+            mrTableProperties.setFirstRow( rAttribs.getBool( XML_firstRow, false ) );
+            mrTableProperties.setFirstCol( rAttribs.getBool( XML_firstCol, false ) );
+            mrTableProperties.setLastRow( rAttribs.getBool( XML_lastRow, false ) );
+            mrTableProperties.setLastCol( rAttribs.getBool( XML_lastCol, false ) );
+            mrTableProperties.setBandRow( rAttribs.getBool( XML_bandRow, false ) );
+            mrTableProperties.setBandCol( rAttribs.getBool( XML_bandCol, false ) );
         }
         break;
     case A_TOKEN( tableStyle ):         // CT_TableStyle

@@ -465,21 +465,16 @@ std::string SingleValFields::getExprValue(const Expr* arg)
     if (!arg)
         return "?";
     arg = arg->IgnoreParenCasts();
-    // workaround bug in clang
-    if (isa<ParenListExpr>(arg))
-        return "?";
     // ignore this, it seems to trigger an infinite recursion
-    if (isa<UnaryExprOrTypeTraitExpr>(arg)) {
+    if (isa<UnaryExprOrTypeTraitExpr>(arg))
         return "?";
-    }
+    if (arg->isValueDependent())
+        return "?";
     APSInt x1;
     if (arg->EvaluateAsInt(x1, compiler.getASTContext()))
-    {
         return x1.toString(10);
-    }
-    if (isa<CXXNullPtrLiteralExpr>(arg)) {
+    if (isa<CXXNullPtrLiteralExpr>(arg))
         return "0";
-    }
     return "?";
 }
 

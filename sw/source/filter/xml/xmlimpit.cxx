@@ -56,10 +56,11 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using uno::Any;
 
+static const sal_uInt16 nUnknownWhich = RES_UNKNOWNATR_CONTAINER;
+
 SvXMLImportItemMapper::SvXMLImportItemMapper(
                                 SvXMLItemMapEntriesRef const & rMapEntries ) :
-    mrMapEntries( rMapEntries ),
-    nUnknownWhich( RES_UNKNOWNATR_CONTAINER )
+    mrMapEntries( rMapEntries )
 {
 }
 

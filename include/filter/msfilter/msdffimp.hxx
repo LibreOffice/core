@@ -764,15 +764,13 @@ struct SvxMSDffShapeOrder
     SwFlyFrameFormat* pFly;   ///< format of frame that was inserted as a replacement
                          ///< for a Sdr-Text object in Writer - needed for
                          ///< chaining!
-    short nHdFtSection;  ///< used by Writer to find out if linked frames are in
-                         ///< the same header or footer of the same section
     SdrObject*  pObj;    ///< pointer to the draw object (or NULL if not used)
 
     // Approach: In the Ctor of SvxMSDffManager only the shape ids are stored in
     //           the shape order array. The Text-Box number and the object
     //           pointer are only stored if the shape is really imported.
     explicit SvxMSDffShapeOrder( sal_uLong nId ):
-        nShapeId( nId ), nTxBxComp( 0 ), pFly( nullptr ), nHdFtSection( 0 ), pObj( nullptr ){}
+        nShapeId( nId ), nTxBxComp( 0 ), pFly( nullptr ), pObj( nullptr ){}
 
     bool operator<( const SvxMSDffShapeOrder& rEntry ) const
     { return (nTxBxComp < rEntry.nTxBxComp); }

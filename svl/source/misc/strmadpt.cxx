@@ -55,6 +55,10 @@ private:
         sal_Int8 m_aBuffer[1];
     };
 
+    static const sal_uInt32 g_nPageSize = std::min< sal_uInt32 >(
+                                          1000,
+                                          sal_uInt32(std::numeric_limits< sal_uInt32 >::max()
+                                                     - sizeof (Page) + 1));
     std::multiset< sal_uInt32 > m_aMarks;
     Page * m_pFirstPage;
     Page * m_pReadPage;
@@ -62,7 +66,6 @@ private:
     sal_Int8 * m_pReadBuffer;
     sal_uInt32 m_nReadBufferSize;
     sal_uInt32 m_nReadBufferFilled;
-    sal_uInt32 m_nPageSize;
     sal_uInt32 m_nPages;
     bool m_bEOF;
 
@@ -95,10 +98,6 @@ SvDataPipe_Impl::SvDataPipe_Impl()
     , m_pReadBuffer( nullptr )
     , m_nReadBufferSize( 0 )
     , m_nReadBufferFilled( 0 )
-    , m_nPageSize(std::min< sal_uInt32 >(
-                          1000,
-                          sal_uInt32(std::numeric_limits< sal_uInt32 >::max()
-                                     - sizeof (Page) + 1)))
     , m_nPages( 0 )
     , m_bEOF( false )
 {}
@@ -451,7 +450,7 @@ void SvDataPipe_Impl::remove(Page * pPage)
         m_pReadPage == m_pFirstPage ||
         (
          !m_aMarks.empty() &&
-         *m_aMarks.begin() < m_pFirstPage->m_nOffset + m_nPageSize
+         *m_aMarks.begin() < m_pFirstPage->m_nOffset + g_nPageSize
         )
        )
     {
@@ -529,7 +528,7 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
     {
         m_pFirstPage
             = static_cast< Page * >(rtl_allocateMemory(sizeof (Page)
-                                                           + m_nPageSize
+                                                           + g_nPageSize
                                                            - 1));
         m_pFirstPage->m_pPrev = m_pFirstPage;
         m_pFirstPage->m_pNext = m_pFirstPage;
@@ -567,9 +566,9 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
             nRemain -= nBlock;
 
             nPosition += nBlock;
-            m_pWritePage->m_nOffset = (nPosition / m_nPageSize) * m_nPageSize;
+            m_pWritePage->m_nOffset = (nPosition / g_nPageSize) * g_nPageSize;
             m_pWritePage->m_pStart = m_pWritePage->m_aBuffer
-                                         + nPosition % m_nPageSize;
+                                         + nPosition % g_nPageSize;
             m_pWritePage->m_pRead = m_pWritePage->m_pStart;
             m_pWritePage->m_pEnd = m_pWritePage->m_pStart;
         }
@@ -579,7 +578,7 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
         for (;;)
         {
             sal_uInt32 nBlock
-                = std::min(sal_uInt32(m_pWritePage->m_aBuffer + m_nPageSize
+                = std::min(sal_uInt32(m_pWritePage->m_aBuffer + g_nPageSize
                                           - m_pWritePage->m_pEnd),
                            nRemain);
             memcpy(m_pWritePage->m_pEnd, pBuffer, nBlock);
@@ -597,7 +596,7 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
 
                 Page * pNew
                     = static_cast< Page * >(rtl_allocateMemory(
-                                                sizeof (Page) + m_nPageSize
+                                                sizeof (Page) + g_nPageSize
                                                     - 1));
                 pNew->m_pPrev = m_pWritePage;
                 pNew->m_pNext = m_pWritePage->m_pNext;
@@ -608,7 +607,7 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
             }
 
             m_pWritePage->m_pNext->m_nOffset = m_pWritePage->m_nOffset
-                                                   + m_nPageSize;
+                                                   + g_nPageSize;
             m_pWritePage = m_pWritePage->m_pNext;
             m_pWritePage->m_pStart = m_pWritePage->m_aBuffer;
             m_pWritePage->m_pRead = m_pWritePage->m_aBuffer;
@@ -645,7 +644,7 @@ SvDataPipe_Impl::SeekResult SvDataPipe_Impl::setReadPosition(sal_uInt32
             return SEEK_PAST_END;
 
         while (m_pReadPage != m_pWritePage
-               && nPosition >= m_pReadPage->m_nOffset + m_nPageSize)
+               && nPosition >= m_pReadPage->m_nOffset + g_nPageSize)
         {
             Page * pRemove = m_pReadPage;
             m_pReadPage = pRemove->m_pNext;

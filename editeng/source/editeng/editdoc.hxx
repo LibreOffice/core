@@ -420,7 +420,7 @@ public:
     Size&          GetSize()                   { return aOutSz; }
     const Size&    GetSize() const             { return aOutSz; }
 
-    PortionKind&   GetKind()                   { return nKind; }
+    void           SetKind(PortionKind n)      { nKind = n; }
     PortionKind    GetKind() const             { return nKind; }
 
     void           SetRightToLeftLevel( sal_uInt8 n ) { nRightToLeftLevel = n; }

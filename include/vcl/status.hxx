@@ -70,7 +70,6 @@ private:
     long                mnDY;
     long                mnCalcHeight;
     long                mnTextY;
-    long                mnItemY;
     sal_uInt16          mnCurItemId;
     sal_uInt16          mnPercent;
     sal_uInt16          mnPercentCount;
