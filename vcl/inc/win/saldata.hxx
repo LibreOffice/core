@@ -171,7 +171,7 @@ bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon );
 void ImplInitSalGDI();
 void ImplFreeSalGDI();
 
-void ImplSalYieldMutexAcquireWithWait();
+void ImplSalYieldMutexAcquireWithWait( sal_uLong nCount = 1 );
 bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexRelease();
 sal_uLong ImplSalReleaseYieldMutex();
