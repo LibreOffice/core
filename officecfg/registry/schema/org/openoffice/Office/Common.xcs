@@ -3519,43 +3519,6 @@
         </info>
         <value>Default</value>
       </prop>
-      <group oor:name="HelpAgent">
-        <info>
-          <desc>Specifies the properties of the HelpAgent.</desc>
-        </info>
-        <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies whether the HelpAgent is enabled.</desc>
-            <label>enable HelpAgent</label>
-          </info>
-          <value>true</value>
-        </prop>
-        <prop oor:name="Timeout" oor:type="xs:int" oor:nillable="false">
-          <info>
-            <desc>Specifies the time-out value in seconds after which the
-            HelpAgent is closed automatically if ignored by the user.</desc>
-            <label>HelpAgent timeout</label>
-          </info>
-          <value>30</value>
-        </prop>
-        <prop oor:name="RetryLimit" oor:type="xs:int" oor:nillable="false">
-          <info>
-            <desc>Specifies how often the user must ignore a given HelpAgent
-            topic until it is disregarded in the future (any requests for this
-            topic will be dropped silently).</desc>
-            <label>HelpAgent retry limit</label>
-          </info>
-          <value>3</value>
-        </prop>
-        <set oor:name="IgnoreList" oor:node-type="NameCounter">
-          <info>
-            <desc>Contains the help URLs which have been ignored at least once
-            by the user, together with a counter of how often they have been
-            ignored.</desc>
-            <label>HelpAgent ignore list</label>
-          </info>
-        </set>
-      </group>
       <group oor:name="StartCenter">
         <info>
           <desc>Contains settings for the start center.</desc>
