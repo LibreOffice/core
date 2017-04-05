@@ -3074,7 +3074,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         nCTLLang = static_cast<const SvxLanguageItem *>(pItem)->GetLanguage();
 
     sal_Int32 nL2;
-    for( nL2 = 0; nL2 < nStrLen; ++nL2, ++pWork )
+    for (nL2 = 0; nL2 < nStrLen; ++nL2)
     {
         if (m_bIsUnicode)
             m_pStrm->ReadUInt16( nUCode ); // unicode  --> read 2 bytes
@@ -3101,7 +3101,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         if (m_bIsUnicode)
         {
             if (!m_bVer67)
-                *pWork = nUCode;
+                *pWork++ = nUCode;
             else
             {
                 if (nUCode >= 0x3000) //0x8000 ?
@@ -3111,12 +3111,12 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
                     aTest[1] = static_cast< sal_Char >(nUCode & 0x00FF);
                     OUString aTemp(aTest, 2, eSrcCJKCharSet);
                     OSL_ENSURE(aTemp.getLength() == 1, "so much for that theory");
-                    *pWork = aTemp[0];
+                    *pWork++ = aTemp[0];
                 }
                 else
                 {
                     sal_Char cTest = static_cast< sal_Char >(nUCode & 0x00FF);
-                    Custom8BitToUnicode(hConverter, &cTest, 1, pWork, 1);
+                    pWork += Custom8BitToUnicode(hConverter, &cTest, 1, pWork, 1);
                 }
             }
         }
@@ -3128,7 +3128,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     {
         const sal_Int32 nEndUsed = !m_bIsUnicode
             ? Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nStrLen)
-            : nL2;
+            : pWork - pBuffer;
 
         if (m_bRegardHindiDigits && m_bBidi && LangUsesHindiNumbers(nCTLLang))
         {
