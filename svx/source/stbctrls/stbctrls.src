@@ -188,62 +188,7 @@ String RID_SIDEBAR_EMPTY_PANEL_TEXT
     Text [ en-US ] = "Properties for the task that you are performing are not available for the current selection" ;
 };
 
- // PopupMenu -------------------------------------------------------------
-Menu RID_SVXMNU_ZOOM
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ZOOM_WHOLE_PAGE ;
-            HelpId = HID_MNU_ZOOM_WHOLE_PAGE ;
-            Text [ en-US ] = "Entire Page" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_PAGE_WIDTH ;
-            HelpId = HID_MNU_ZOOM_PAGE_WIDTH ;
-            Text [ en-US ] = "Page Width" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_OPTIMAL ;
-            HelpId = HID_MNU_ZOOM_OPTIMAL ;
-            Text [ en-US ] = "Optimal View" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_50 ;
-            HelpId = HID_MNU_ZOOM_50 ;
-            Text [ en-US ] = "50%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_75 ;
-            HelpId = HID_MNU_ZOOM_75 ;
-            Text [ en-US ] = "75%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_100 ;
-            HelpId = HID_MNU_ZOOM_100 ;
-            Text [ en-US ] = "100%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_150 ;
-            HelpId = HID_MNU_ZOOM_150 ;
-            Text [ en-US ] = "150%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_200 ;
-            HelpId = HID_MNU_ZOOM_200 ;
-            Text [ en-US ] = "200%" ;
-        };
-    };
-};
- // Choice of functions on the SvxPosSizeStatusBarControl for Calc
+// Choice of functions on the SvxPosSizeStatusBarControl for Calc
 Menu RID_SVXMNU_PSZ_FUNC
 {
     ItemList =

@@ -81,6 +81,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/textunderlinecontrol \
 	svx/uiconfig/ui/xmlsecstatmenu \
 	svx/uiconfig/ui/xformspage \
+	svx/uiconfig/ui/zoommenu \
 ))
 
 # vim: set noet sw=4 ts=4:
