@@ -78,25 +78,24 @@ void SAL_CALL TablePivotChart::setName(OUString const & /* aName */)
 OUString SAL_CALL TablePivotChart::getPivotTableName()
 {
     SolarMutexGuard aGuard;
-    OUString aPivotTableName;
 
     SdrOle2Obj* pObject = sc::tools::findChartsByName(m_pDocShell, m_nTab, m_aChartName, sc::tools::ChartSourceType::PIVOT_TABLE);
+    if (!pObject)
+        return OUString();
 
     uno::Reference<embed::XEmbeddedObject> xObject = pObject->GetObjRef();
-    if (xObject.is())
-    {
-        uno::Reference<chart2::XChartDocument> xChartDoc(xObject->getComponent(), uno::UNO_QUERY);
-        if (xChartDoc.is())
-        {
-            uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
-            if (xPivotTableDataProvider.is())
-            {
-                aPivotTableName = xPivotTableDataProvider->getPivotTableName();
-            }
-        }
-    }
+    if (!xObject.is())
+        return OUString();
 
-    return aPivotTableName;
+    uno::Reference<chart2::XChartDocument> xChartDoc(xObject->getComponent(), uno::UNO_QUERY);
+    if (!xChartDoc.is())
+        return OUString();
+
+    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
+    if (!xPivotTableDataProvider.is())
+        return OUString();
+
+    return xPivotTableDataProvider->getPivotTableName();
 }
 
 } // end sc namespace
