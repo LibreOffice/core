@@ -811,6 +811,8 @@ ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScNoteData& r
 {
     if( bAlwaysCreateCaption || maNoteData.mbShown )
         CreateCaptionFromInitData( rPos );
+    else
+        maNoteData.mpCaption = nullptr;
 }
 
 ScPostIt::~ScPostIt()
