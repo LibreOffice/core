@@ -2,4 +2,4 @@
 
 <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
     android:src="@drawable/ic_keyboard_black_24dp"
-    android:tint="@color/toolbar_forgeround"/>
+    android:tint="@color/toolbar_foreground"/>
