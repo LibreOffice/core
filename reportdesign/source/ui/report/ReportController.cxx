@@ -1718,10 +1718,6 @@ void OReportController::impl_initialize( )
         }
 
         setModified(false);     // and we are not modified yet
-
-        // open the global help agent
-        // we need a Frame but at this time there is no frame, therefore we send a UserEvent
-        getView()->PostUserEvent(LINK(this, OReportController, OnOpenHelpAgent));
     }
     catch(const SQLException&)
     {
@@ -1737,22 +1733,6 @@ IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow& ,_rAddFieldDlg, void
     if ( aArgs.getLength() )
     {
         executeChecked(SID_ADD_CONTROL_PAIR,aArgs);
-    }
-}
-
-
-IMPL_LINK_NOARG( OReportController, OnOpenHelpAgent, void*, void )
-{
-    // open the help agent of report designer at start time
-    if (getFrame().is())
-    {
-        OUString suURL("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter");
-        openHelpAgent(suURL);
-    }
-    else
-    {
-        // as long as we don't get a Frame, we send the user event again.
-        getView()->PostUserEvent(LINK(this, OReportController, OnOpenHelpAgent));
     }
 }
 

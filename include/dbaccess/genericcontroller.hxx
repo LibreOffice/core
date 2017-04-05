@@ -291,26 +291,6 @@ namespace dbaui
         const ::comphelper::NamedValueCollection&
                                     getInitParams() const   { return m_aInitParameters; }
 
-
-        /** open the help agent for the given help id.
-            @param  _nHelpId
-                The help id to dispatch.
-        */
-        void openHelpAgent( const OString& _sHelpId );
-
-        /** open the help agent for the given help url.
-            @param  _pHelpStringURL
-                The help url to dispatch.
-        */
-        void openHelpAgent( const OUString& _suHelpStringURL );
-
-        /** opens the given Help URL in the help agent
-
-            The URL does not need to be parsed already, it is passed through
-            XURLTransformer::parseStrict before it is used.
-        */
-        void openHelpAgent( const css::util::URL& _rURL );
-
         // closes the task when possible
         void closeTask();
 
