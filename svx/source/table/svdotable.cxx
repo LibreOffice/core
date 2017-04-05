@@ -1943,9 +1943,9 @@ bool SdrTableObj::IsVerticalWriting() const
 }
 
 
-void SdrTableObj::SetVerticalWriting(bool bVertical )
+void SdrTableObj::SetVerticalWriting(bool bVertical)
 {
-    if( bVertical != IsVerticalWriting() )
+    if(bVertical != IsVerticalWriting() )
     {
         SvxWritingModeItem aModeItem( css::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION );
         SetObjectItem( aModeItem );

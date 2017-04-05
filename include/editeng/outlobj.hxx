@@ -81,7 +81,8 @@ public:
 
     // vertical access
     bool IsVertical() const;
-    void SetVertical(bool bNew);
+    bool IsTopToBottom() const;
+    void SetVertical(bool bNew, bool bTopToBottom = true);
 
     // data read access
     sal_Int32 Count() const;

@@ -526,9 +526,9 @@ const EditEngine& Outliner::GetEditEngine() const
     return *pEditEngine;
 }
 
-void Outliner::SetVertical( bool b )
+void Outliner::SetVertical( bool bVertical, bool bTopToBottom)
 {
-    pEditEngine->SetVertical( b );
+    pEditEngine->SetVertical(bVertical, bTopToBottom);
 }
 
 bool Outliner::IsVertical() const

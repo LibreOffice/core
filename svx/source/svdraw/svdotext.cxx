@@ -1384,7 +1384,7 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
 
     if (pText && pText->GetOutlinerParaObject())
     {
-        SvxWritingModeItem aWritingMode(pText->GetOutlinerParaObject()->IsVertical()
+        SvxWritingModeItem aWritingMode(pText->GetOutlinerParaObject()->IsVertical() && pText->GetOutlinerParaObject()->IsTopToBottom()
             ? css::text::WritingMode_TB_RL
             : css::text::WritingMode_LR_TB,
             SDRATTR_TEXTDIRECTION);
@@ -1529,6 +1529,7 @@ bool SdrTextObj::IsVerticalWriting() const
 void SdrTextObj::SetVerticalWriting(bool bVertical)
 {
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+
     if( !pOutlinerParaObject && bVertical )
     {
         // we only need to force a outliner para object if the default of
@@ -1537,7 +1538,8 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
         pOutlinerParaObject = GetOutlinerParaObject();
     }
 
-    if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != bVertical) )
+    if (pOutlinerParaObject &&
+        (pOutlinerParaObject->IsVertical() != bVertical))
     {
         // get item settings
         const SfxItemSet& rSet = GetObjectItemSet();
@@ -1564,14 +1566,14 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
         aNewSet.Put(makeSdrTextAutoGrowHeightItem(bAutoGrowWidth));
 
         // Exchange horz and vert adjusts
-        switch(eVert)
+        switch (eVert)
         {
             case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
             case SDRTEXTVERTADJUST_CENTER: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER)); break;
             case SDRTEXTVERTADJUST_BOTTOM: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT)); break;
             case SDRTEXTVERTADJUST_BLOCK: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK)); break;
         }
-        switch(eHorz)
+        switch (eHorz)
         {
             case SDRTEXTHORZADJUST_LEFT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM)); break;
             case SDRTEXTHORZADJUST_CENTER: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER)); break;
@@ -1582,7 +1584,7 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
         SetObjectItemSet(aNewSet);
 
         pOutlinerParaObject = GetOutlinerParaObject();
-        if( pOutlinerParaObject )
+        if (pOutlinerParaObject)
         {
             // set ParaObject orientation accordingly
             pOutlinerParaObject->SetVertical(bVertical);
@@ -1592,7 +1594,6 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
         SetSnapRect(aObjectRect);
     }
 }
-
 
 // transformation interface for StarOfficeAPI. This implements support for
 // homogeneous 3x3 matrices containing the transformation of the SdrObject. At the

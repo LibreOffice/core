@@ -428,14 +428,19 @@ const Size& EditEngine::GetPaperSize() const
     return pImpEditEngine->GetPaperSize();
 }
 
-void EditEngine::SetVertical( bool bVertical )
+void EditEngine::SetVertical( bool bVertical, bool bTopToBottom )
 {
-    pImpEditEngine->SetVertical( bVertical );
+    pImpEditEngine->SetVertical( bVertical, bTopToBottom);
 }
 
 bool EditEngine::IsVertical() const
 {
     return pImpEditEngine->IsVertical();
+}
+
+bool EditEngine::IsTopToBottom() const
+{
+    return pImpEditEngine->IsTopToBottom();
 }
 
 void EditEngine::SetFixedCellHeight( bool bUseFixedCellHeight )
@@ -1777,8 +1782,16 @@ void EditEngine::StripPortions()
     tools::Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
     if ( IsVertical() )
     {
-        aBigRect.Right() = 0;
-        aBigRect.Left() = -0x7FFFFFFF;
+        if( IsTopToBottom() )
+        {
+            aBigRect.Right() = 0;
+            aBigRect.Left() = -0x7FFFFFFF;
+        }
+        else
+        {
+            aBigRect.Top() = -0x7FFFFFFF;
+            aBigRect.Bottom() = 0;
+        }
     }
     pImpEditEngine->Paint( aTmpDev.get(), aBigRect, Point(), true );
 }
