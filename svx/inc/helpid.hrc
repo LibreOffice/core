@@ -69,7 +69,6 @@
 #define HID_POPUP_LINEEND_CTRL                                "SVX_HID_POPUP_LINEEND_CTRL"
 #define HID_STYLE_LISTBOX                                     "SVX_HID_STYLE_LISTBOX"
 #define HID_VALUESET_EXTRUSION_LIGHTING                       "SVX_HID_VALUESET_EXTRUSION_LIGHTING"
-#define HID_XMLSEC_CALL                                       "SVX_HID_XMLSEC_CALL"
 
 #endif
 

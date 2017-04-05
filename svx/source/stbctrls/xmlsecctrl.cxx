@@ -19,6 +19,7 @@
 
 
 #include <vcl/status.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -101,8 +102,9 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     if( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        ScopedVclPtrInstance<PopupMenu> aPopupMenu( ResId( RID_SVXMNU_XMLSECSTATBAR, DIALOG_MGR() ) );
-        if( aPopupMenu->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
+        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/xmlsecstatmenu.ui", "");
+        VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("menu"));
+        if (aPopupMenu->Execute(&GetStatusBar(), rCEvt.GetMousePosPixel()))
         {
             css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), 0 );

@@ -145,7 +145,6 @@
 
 // ResId for funktion popup menue
 #define RID_SVXMNU_PSZ_FUNC                 (RID_SVX_START +  83)
-#define RID_SVXMNU_XMLSECSTATBAR            (RID_SVX_START +  84)
 
 #define RID_SVXBMP_SLIDERBUTTON             (RID_SVX_START +  66)
 #define RID_SVXBMP_SLIDERDECREASE           (RID_SVX_START +  67)

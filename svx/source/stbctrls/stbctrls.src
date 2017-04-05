@@ -298,18 +298,6 @@ Menu RID_SVXMNU_PSZ_FUNC
         };
     };
 };
-Menu RID_SVXMNU_XMLSECSTATBAR
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = XMLSEC_CALL ;
-            HelpId = HID_XMLSEC_CALL ;
-            Text [ en-US ] = "Digital Signatures..." ;
-        };
-    };
-};
 
 Bitmap RID_SVXBMP_POSITION
 {

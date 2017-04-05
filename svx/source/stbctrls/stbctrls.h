@@ -40,8 +40,6 @@
 #define PSZ_FUNC_SELECTION_COUNT    13
 #define PSZ_FUNC_NONE               16
 
-#define XMLSEC_CALL         1
-
 #define SELECTION_STANDARD  1
 #define SELECTION_EXTENDED  2
 #define SELECTION_ADDED     3
