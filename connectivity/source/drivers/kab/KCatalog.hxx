@@ -35,7 +35,7 @@ namespace connectivity
         public:
             explicit KabCatalog(KabConnection* _pCon);
 
-            inline KabConnection* getConnection() const { return m_pConnection; }
+            KabConnection* getConnection() const { return m_pConnection; }
 
             // implementation of the pure virtual methods
             virtual void refreshTables() override;
