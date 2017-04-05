@@ -702,17 +702,7 @@ void SwView::Execute(SfxRequest &rReq)
 
         case FN_REDLINE_NEXT_CHANGE:
         {
-            const SwRangeRedline *pCurrent = m_pWrtShell->GetCurrRedline();
             const SwRangeRedline *pNext = m_pWrtShell->SelNextRedline();
-
-            // FN_REDLINE_PREV_CHANGE leaves the selection point at the start of the redline.
-            // In such cases, SelNextRedline (which starts searching from the selection point)
-            // immediately finds the current redline and advances the selection point to its end.
-
-            // This behavior means that PREV_CHANGE followed by NEXT_CHANGE would not change
-            // the current redline, so we detect it and select the next redline again.
-            if (pCurrent && pCurrent == pNext)
-                pNext = m_pWrtShell->SelNextRedline();
 
             if (pNext)
                 m_pWrtShell->SetInSelect();
@@ -721,22 +711,7 @@ void SwView::Execute(SfxRequest &rReq)
 
         case FN_REDLINE_PREV_CHANGE:
         {
-            const SwPaM *pCursor = m_pWrtShell->GetCursor();
-            const SwPosition initialCursorStart = *pCursor->Start();
             const SwRangeRedline *pPrev = m_pWrtShell->SelPrevRedline();
-
-            if (pPrev)
-            {
-                // FN_REDLINE_NEXT_CHANGE leaves the selection point at the end of the redline.
-                // In such cases, SelPrevRedline (which starts searching from the selection point)
-                // immediately finds the current redline and advances the selection point to its
-                // start.
-
-                // This behavior means that NEXT_CHANGE followed by PREV_CHANGE would not change
-                // the current redline, so we detect it and move to the previous redline again.
-                if (initialCursorStart == *pPrev->Start())
-                    pPrev = m_pWrtShell->SelPrevRedline();
-            }
 
             if (pPrev)
                 m_pWrtShell->SetInSelect();
