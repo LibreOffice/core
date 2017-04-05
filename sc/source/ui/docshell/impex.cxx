@@ -99,12 +99,13 @@ ScImportExport::ScImportExport( ScDocument* p )
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
+    ScRange rRange;
+    aRanges.Append(rRange);
 }
 
 // Insert am current cell without range(es)
 ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
     : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      aRange( rPt ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
@@ -112,6 +113,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
       mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ),
       mExportTextOptions()
 {
+    aRanges.Append(ScRange(rPt));
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
 }
@@ -120,7 +122,6 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
 //! ctor with a string (and bSingle=true) is also used for DdeSetData
 ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
     : pDocSh( dynamic_cast<ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      aRange( r ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
@@ -130,8 +131,23 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 {
     pUndoDoc = nullptr;
     pExtOptions = nullptr;
-    // Only one sheet (table) supported
-    aRange.aEnd.SetTab( aRange.aStart.Tab() );
+    ScRange rRange(r);
+    rRange.aEnd.SetTab(rRange.aStart.Tab());
+    aRanges.Append(rRange);
+}
+
+ScImportExport::ScImportExport( ScDocument* p, const ScRangeList& m )
+    : pDocSh( dynamic_cast<ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
+      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      bFormulas( false ), bIncludeFiltered( true ),
+      bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
+      bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ),
+      mExportTextOptions()
+{
+    pUndoDoc = nullptr;
+    pExtOptions = nullptr;
+    aRanges = m;
 }
 
 // Evaluate input string - either range, cell or the whole document (when error)
@@ -149,7 +165,8 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     pExtOptions = nullptr;
 
     SCTAB nTab = ScDocShell::GetCurTab();
-    aRange.aStart.SetTab( nTab );
+    ScRange rRange;
+    rRange.aStart.SetTab( nTab );
     OUString aPos( rPos );
     // Named range?
     ScRangeName* pRange = pDoc->GetRangeName();
@@ -168,13 +185,15 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     }
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     // Range?
-    if (aRange.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
+    if (rRange.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
         bSingle = false;
     // Cell?
-    else if (aRange.aStart.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
-        aRange.aEnd = aRange.aStart;
+    else if (rRange.aStart.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
+        rRange.aEnd = rRange.aStart;
     else
         bAll = true;
+
+    aRanges.Append(rRange);
 }
 
 ScImportExport::~ScImportExport()
@@ -216,20 +235,24 @@ bool ScImportExport::StartPaste()
 {
     if ( !bAll )
     {
-        ScEditableTester aTester( pDoc, aRange );
-        if ( !aTester.IsEditable() )
-        {
-            ScopedVclPtrInstance<InfoBox> aInfoBox( Application::GetDefDialogParent(),
-                                ScGlobal::GetRscString( aTester.GetMessageId() ) );
-            aInfoBox->Execute();
-            return false;
+        // We must check all selected tab so we use aMark
+        size_t rRangeCount = aRanges.size();
+        for (size_t i = 0; i < rRangeCount; i++) {
+            ScEditableTester aTester( pDoc, *aRanges[i] );
+            if ( !aTester.IsEditable() )
+            {
+                ScopedVclPtrInstance<InfoBox> aInfoBox( Application::GetDefDialogParent(),
+                                    ScGlobal::GetRscString( aTester.GetMessageId() ) );
+                aInfoBox->Execute();
+                return false;
+            }
         }
     }
     if( bUndo && pDocSh && pDoc->IsUndoEnabled())
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-        pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
+        pUndoDoc->InitUndo( pDoc, aRanges.front()->aStart.Tab(), aRanges.front()->aEnd.Tab() );
+        pDoc->CopyToDocument(*(aRanges.front()), InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
     return true;
 }
@@ -238,23 +261,23 @@ bool ScImportExport::StartPaste()
 void ScImportExport::EndPaste(bool bAutoRowHeight)
 {
     bool bHeight = bAutoRowHeight && pDocSh && pDocSh->AdjustRowHeight(
-                    aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab() );
+                    aRanges.front()->aStart.Row(), aRanges.front()->aEnd.Row(), aRanges.front()->aStart.Tab() );
 
     if( pUndoDoc && pDoc->IsUndoEnabled() && pDocSh )
     {
         ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-        pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc);
+        pRedoDoc->InitUndo( pDoc, aRanges.front()->aStart.Tab(), aRanges.front()->aEnd.Tab() );
+        pDoc->CopyToDocument(*(aRanges.front()), InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc);
         ScMarkData aDestMark;
-        aDestMark.SetMarkArea(aRange);
+        aDestMark.SetMarkArea(*(aRanges.front()));
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, nullptr));
+            new ScUndoPaste(pDocSh, *(aRanges.front()), aDestMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, nullptr));
     }
     pUndoDoc = nullptr;
     if( pDocSh )
     {
         if (!bHeight)
-            pDocSh->PostPaint( aRange, PaintPartFlags::Grid );
+            pDocSh->PostPaint( *(aRanges.front()), PaintPartFlags::Grid );
         pDocSh->SetDocumentModified();
     }
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
@@ -444,12 +467,12 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
             OUString aRefName;
             ScRefFlags nFlags = ScRefFlags::VALID | ScRefFlags::TAB_3D;
             if( bSingle )
-                aRefName = aRange.aStart.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
+                aRefName = aRanges.front()->aStart.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
             else
             {
-                if( aRange.aStart.Tab() != aRange.aEnd.Tab() )
+                if( aRanges.front()->aStart.Tab() != aRanges.front()->aEnd.Tab() )
                     nFlags |= ScRefFlags::TAB2_3D;
-                aRefName = aRange.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
+                aRefName = aRanges.front()->Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
             }
             OUString aAppName = Application::GetAppName();
 
@@ -846,10 +869,10 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     pSeps[0] = cSep;
     pSeps[1] = 0;
 
-    SCCOL nStartCol = aRange.aStart.Col();
-    SCROW nStartRow = aRange.aStart.Row();
-    SCCOL nEndCol = aRange.aEnd.Col();
-    SCROW nEndRow = aRange.aEnd.Row();
+    SCCOL nStartCol = aRanges.front()->aStart.Col();
+    SCROW nStartRow = aRanges.front()->aStart.Row();
+    SCCOL nEndCol = aRanges.front()->aEnd.Col();
+    SCROW nEndRow = aRanges.front()->aEnd.Row();
     sal_uLong  nOldPos = rStrm.Tell();
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
     bool   bData = !bSingle;
@@ -895,7 +918,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                         if (nRow>nEndRow) nEndRow = nRow;
                     }
                     if( bData && nCol <= nEndCol && nRow <= nEndRow )
-                        pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                        pDoc->SetString( nCol, nRow, aRanges.front()->aStart.Tab(), aCell );
                 }
                 else                            // too many columns/rows
                 {
@@ -911,8 +934,8 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
 
         if( !bData )
         {
-            aRange.aEnd.SetCol( nEndCol );
-            aRange.aEnd.SetRow( nEndRow );
+            aRanges.front()->aEnd.SetCol( nEndCol );
+            aRanges.front()->aEnd.SetRow( nEndRow );
             bOk = StartPaste();
             bData = true;
         }
@@ -923,7 +946,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     EndPaste();
     if (bOk && mbImportBroadcast)
     {
-        pDoc->BroadcastCells(aRange, SfxHintId::ScDataChanged);
+        pDoc->BroadcastCells(*(aRanges.front()), SfxHintId::ScDataChanged);
         pDocSh->PostDataChanged();
     }
 
@@ -1278,10 +1301,10 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             ScGlobal::GetRscString( STR_LOAD_DOC ), nRemaining, true ));
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
 
-    SCCOL nStartCol = aRange.aStart.Col();
-    SCCOL nEndCol = aRange.aEnd.Col();
-    SCROW nStartRow = aRange.aStart.Row();
-    SCTAB nTab = aRange.aStart.Tab();
+    SCCOL nStartCol = aRanges.front()->aStart.Col();
+    SCCOL nEndCol = aRanges.front()->aEnd.Col();
+    SCROW nStartRow = aRanges.front()->aStart.Row();
+    SCTAB nTab = aRanges.front()->aStart.Tab();
 
     bool    bFixed              = pExtOptions->IsFixedLen();
     const OUString& rSeps       = pExtOptions->GetFieldSeps();
@@ -1455,8 +1478,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
         if (bDetermineRange)
         {
-            aRange.aEnd.SetCol( nEndCol );
-            aRange.aEnd.SetRow( nRow );
+            aRanges.front()->aEnd.SetCol( nEndCol );
+            aRanges.front()->aEnd.SetRow( nRow );
 
             if ( !mbApi && nStartCol != nEndCol &&
                  !pDoc->IsBlockEmpty( nTab, nStartCol + 1, nStartRow, nEndCol, nRow ) )
@@ -1488,10 +1511,15 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     if (mbImportBroadcast && !mbOverwriting)
     {
-        pDoc->BroadcastCells(aRange, SfxHintId::ScDataChanged);
+        pDoc->BroadcastCells(*(aRanges.front()), SfxHintId::ScDataChanged);
         pDocSh->PostDataChanged();
     }
     return true;
+}
+
+ScRange ScImportExport::GetRange()
+{
+    return *(aRanges.front());
 }
 
 void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
@@ -1600,12 +1628,12 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
 {
     SCCOL nCol;
     SCROW nRow;
-    SCCOL nStartCol = aRange.aStart.Col();
-    SCROW nStartRow = aRange.aStart.Row();
-    SCTAB nStartTab = aRange.aStart.Tab();
-    SCCOL nEndCol = aRange.aEnd.Col();
-    SCROW nEndRow = aRange.aEnd.Row();
-    SCTAB nEndTab = aRange.aEnd.Tab();
+    SCCOL nStartCol = aRanges.front()->aStart.Col();
+    SCROW nStartRow = aRanges.front()->aStart.Row();
+    SCTAB nStartTab = aRanges.front()->aStart.Tab();
+    SCCOL nEndCol = aRanges.front()->aEnd.Col();
+    SCROW nEndRow = aRanges.front()->aEnd.Row();
+    SCTAB nEndTab = aRanges.front()->aEnd.Tab();
 
     if (!pDoc->GetClipParam().isMultiRange() && nStartTab == nEndTab)
         if (!pDoc->ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow ))
@@ -1718,10 +1746,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     sal_Unicode cDecSep = '.';
     sal_Unicode cGrpSep = ',';
 
-    SCCOL nStartCol = aRange.aStart.Col();
-    SCROW nStartRow = aRange.aStart.Row();
-    SCCOL nEndCol = aRange.aEnd.Col();
-    SCROW nEndRow = aRange.aEnd.Row();
+    SCCOL nStartCol = aRanges.front()->aStart.Col();
+    SCROW nStartRow = aRanges.front()->aStart.Row();
+    SCCOL nEndCol = aRanges.front()->aEnd.Col();
+    SCROW nEndRow = aRanges.front()->aEnd.Row();
     sal_uLong nOldPos = rStrm.Tell();
     bool bData = !bSingle;
     ::std::vector< sal_uInt32 > aFormats;
@@ -1801,16 +1829,16 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {   // don't ignore value
                                 if( bText )
                                 {
-                                    pDoc->EnsureTable(aRange.aStart.Tab());
+                                    pDoc->EnsureTable(aRanges.front()->aStart.Tab());
                                     pDoc->SetTextCell(
-                                        ScAddress(nCol, nRow, aRange.aStart.Tab()), aText);
+                                        ScAddress(nCol, nRow, aRanges.front()->aStart.Tab()), aText);
                                 }
                                 else
                                 {
                                     double fVal = rtl_math_uStringToDouble( p,
                                             aLine.getStr() + aLine.getLength(),
                                             cDecSep, cGrpSep, nullptr, nullptr );
-                                    pDoc->SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
+                                    pDoc->SetValue( nCol, nRow, aRanges.front()->aStart.Tab(), fVal );
                                 }
                             }
                         }
@@ -1836,7 +1864,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 break;
                             aText = "=";
                             p = lcl_ScanSylkFormula( p, aText, eVersion);
-                            ScAddress aPos( nCol, nRow, aRange.aStart.Tab() );
+                            ScAddress aPos( nCol, nRow, aRanges.front()->aStart.Tab() );
                             /* FIXME: do we want GRAM_ODFF_A1 instead? At the
                              * end it probably should be GRAM_ODFF_R1C1, since
                              * R1C1 is what Excel writes in SYLK, or even
@@ -1914,7 +1942,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                 if ( 0 <= nFormat && nFormat < (sal_Int32)aFormats.size() )
                 {
                     sal_uInt32 nKey = aFormats[nFormat];
-                    pDoc->ApplyAttr( nCol, nRow, aRange.aStart.Tab(),
+                    pDoc->ApplyAttr( nCol, nRow, aRanges.front()->aStart.Tab(),
                             SfxUInt32Item( ATTR_VALUE_FORMAT, nKey ) );
                 }
             }
@@ -1951,8 +1979,8 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
         }
         if( !bData )
         {
-            aRange.aEnd.SetCol( nEndCol );
-            aRange.aEnd.SetRow( nEndRow );
+            aRanges.front()->aEnd.SetCol( nEndCol );
+            aRanges.front()->aEnd.SetRow( nEndRow );
             bOk = StartPaste();
             bData = true;
         }
@@ -1968,10 +1996,10 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
 {
     SCCOL nCol;
     SCROW nRow;
-    SCCOL nStartCol = aRange.aStart.Col();
-    SCROW nStartRow = aRange.aStart.Row();
-    SCCOL nEndCol = aRange.aEnd.Col();
-    SCROW nEndRow = aRange.aEnd.Row();
+    SCCOL nStartCol = aRanges.front()->aStart.Col();
+    SCROW nStartRow = aRanges.front()->aStart.Row();
+    SCCOL nEndCol = aRanges.front()->aEnd.Col();
+    SCROW nEndRow = aRanges.front()->aEnd.Row();
     OUString aCellStr;
     OUString aValStr;
     lcl_WriteSimpleString( rStrm, "ID;PCALCOOO32" );
@@ -1986,20 +2014,20 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             bool bForm = false;
             SCROW r = nRow - nStartRow + 1;
             SCCOL c = nCol - nStartCol + 1;
-            ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, aRange.aStart.Tab()));
+            ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, aRanges.front()->aStart.Tab()));
             CellType eType = aCell.meType;
             switch( eType )
             {
                 case CELLTYPE_FORMULA:
                     bForm = bFormulas;
-                    if( pDoc->HasValueData( nCol, nRow, aRange.aStart.Tab()) )
+                    if( pDoc->HasValueData( nCol, nRow, aRanges.front()->aStart.Tab()) )
                         goto hasvalue;
                     else
                         goto hasstring;
 
                 case CELLTYPE_VALUE:
                 hasvalue:
-                    pDoc->GetValue( nCol, nRow, aRange.aStart.Tab(), nVal );
+                    pDoc->GetValue( nCol, nRow, aRanges.front()->aStart.Tab(), nVal );
 
                     aValStr = ::rtl::math::doubleToUString( nVal,
                             rtl_math_StringFormat_Automatic,
@@ -2017,7 +2045,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:
                 hasstring:
-                    aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
+                    aCellStr = pDoc->GetString(nCol, nRow, aRanges.front()->aStart.Tab());
                     aCellStr = aCellStr.replaceAll("\n", SYLK_LF);
 
                     aBufStr = "C;X";
@@ -2108,7 +2136,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
 bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 {
     // rtl_TextEncoding is ignored in ScExportHTML, read from Load/Save HTML options
-    ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
+    ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, *(aRanges.front()), RTL_TEXTENCODING_DONTKNOW, bAll,
         aStreamPath, aNonConvertibleChars, maFilterOptions );
     return rStrm.GetError() == SVSTREAM_OK;
 }
@@ -2116,42 +2144,42 @@ bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 bool ScImportExport::Doc2RTF( SvStream& rStrm )
 {
     //  rtl_TextEncoding is ignored in ScExportRTF
-    ScFormatFilter::Get().ScExportRTF( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW );
+    ScFormatFilter::Get().ScExportRTF( rStrm, pDoc, *(aRanges.front()), RTL_TEXTENCODING_DONTKNOW );
     return rStrm.GetError() == SVSTREAM_OK;
 }
 
 bool ScImportExport::Doc2Dif( SvStream& rStrm )
 {
     // for DIF in the clipboard, IBM_850 is always used
-    ScFormatFilter::Get().ScExportDif( rStrm, pDoc, aRange, RTL_TEXTENCODING_IBM_850 );
+    ScFormatFilter::Get().ScExportDif( rStrm, pDoc, *(aRanges.front()), RTL_TEXTENCODING_IBM_850 );
     return true;
 }
 
 bool ScImportExport::Dif2Doc( SvStream& rStrm )
 {
-    SCTAB nTab = aRange.aStart.Tab();
+    SCTAB nTab = aRanges.front()->aStart.Tab();
     std::unique_ptr<ScDocument> pImportDoc( new ScDocument( SCDOCMODE_UNDO ) );
     pImportDoc->InitUndo( pDoc, nTab, nTab );
 
     // for DIF in the clipboard, IBM_850 is always used
-    ScFormatFilter::Get().ScImportDif( rStrm, pImportDoc.get(), aRange.aStart, RTL_TEXTENCODING_IBM_850 );
+    ScFormatFilter::Get().ScImportDif( rStrm, pImportDoc.get(), aRanges.front()->aStart, RTL_TEXTENCODING_IBM_850 );
 
     SCCOL nEndCol;
     SCROW nEndRow;
     pImportDoc->GetCellArea( nTab, nEndCol, nEndRow );
     // if there are no cells in the imported content, nEndCol/nEndRow may be before the start
-    if ( nEndCol < aRange.aStart.Col() )
-        nEndCol = aRange.aStart.Col();
-    if ( nEndRow < aRange.aStart.Row() )
-        nEndRow = aRange.aStart.Row();
-    aRange.aEnd = ScAddress( nEndCol, nEndRow, nTab );
+    if ( nEndCol < aRanges.front()->aStart.Col() )
+        nEndCol = aRanges.front()->aStart.Col();
+    if ( nEndRow < aRanges.front()->aStart.Row() )
+        nEndRow = aRanges.front()->aStart.Row();
+    aRanges.front()->aEnd = ScAddress( nEndCol, nEndRow, nTab );
 
     bool bOk = StartPaste();
     if (bOk)
     {
         InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
-        pDoc->DeleteAreaTab( aRange, nFlags );
-        pImportDoc->CopyToDocument(aRange, nFlags, false, *pDoc);
+        pDoc->DeleteAreaTab( *(aRanges.front()), nFlags );
+        pImportDoc->CopyToDocument(*(aRanges.front()), nFlags, false, *pDoc);
         EndPaste();
     }
 
@@ -2160,17 +2188,17 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
 
 bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateRTFImport( pDoc, aRange );
+    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateRTFImport( pDoc, *(aRanges.front()) );
     if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
-    aRange = pImp->GetRange();
+    *(aRanges.front()) = pImp->GetRange();
 
     bool bOk = StartPaste();
     if (bOk)
     {
         InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
-        pDoc->DeleteAreaTab( aRange, nFlags );
+        pDoc->DeleteAreaTab( *(aRanges.front()), nFlags );
         pImp->WriteToDocument();
         EndPaste();
     }
@@ -2180,11 +2208,11 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 
 bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange);
+    ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, *(aRanges.front()));
     if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
-    aRange = pImp->GetRange();
+    *(aRanges.front()) = pImp->GetRange();
 
     bool bOk = StartPaste();
     if (bOk)
@@ -2195,7 +2223,7 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
             pDocSh->MakeDrawLayer();
 
         InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
-        pDoc->DeleteAreaTab( aRange, nFlags );
+        pDoc->DeleteAreaTab( *(aRanges.front()), nFlags );
 
         if (pExtOptions)
         {

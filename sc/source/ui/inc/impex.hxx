@@ -23,6 +23,7 @@
 #include <sot/exchange.hxx>
 #include "global.hxx"
 #include "address.hxx"
+#include "rangelst.hxx"
 
 class ScDocShell;
 class ScDocument;
@@ -49,7 +50,7 @@ class ScImportExport
     ScDocShell* pDocSh;
     ScDocument* pDoc;
     ScDocument* pUndoDoc;
-    ScRange     aRange;
+    ScRangeList  aRanges;
     OUString    aStreamPath;
     OUString    aNonConvertibleChars;
     OUString    maFilterOptions;
@@ -89,6 +90,7 @@ class ScImportExport
 
 public:
     ScImportExport( ScDocument* );                  // the whole document
+    ScImportExport( ScDocument*, const ScRangeList& );
     ScImportExport( ScDocument*, const OUString& );   // Range/cell input
     ScImportExport( ScDocument*, const ScAddress& );
     ScImportExport( ScDocument*, const ScRange& );
@@ -98,7 +100,8 @@ public:
     void SetFilterOptions( const OUString& rFilterOptions );
     bool IsRef() const       { return !bAll; }
 
-    const ScRange& GetRange() const { return aRange; }
+    const ScRangeList& GetRanges() const { return aRanges; }
+    ScRange GetRange();
 
     SC_DLLPUBLIC static void EmbeddedNullTreatment( OUString & rStr );
 

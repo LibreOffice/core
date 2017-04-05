@@ -293,7 +293,21 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         else
         {
             ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
-            ScImportExport aObj( GetViewData().GetDocument(), aCellPos );
+            ScRangeList aRanges;
+
+            ScMarkData::MarkedTabsType::const_iterator it;
+            ScMarkData::MarkedTabsType selectedTabs = GetViewData().GetMarkData().GetSelectedTabs();
+            SCTAB nTab;
+            for (it=selectedTabs.begin(); it!=selectedTabs.end(); ++it)
+            {
+                nTab = *it;
+                ScRange rRange = ScRange(aCellPos);
+                rRange.aStart.SetTab(nTab);
+                rRange.aEnd.SetTab(nTab);
+                aRanges.Append(rRange);
+            }
+
+            ScImportExport aObj( GetViewData().GetDocument(), aRanges );
             aObj.SetOverwriting( true );
 
             OUString aStr;
