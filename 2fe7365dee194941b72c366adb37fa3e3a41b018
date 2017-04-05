@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_3a4c0ac7",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-04-05T15:52:58Z",
+      "side": 1,
+      "message": "Simplified: if (widget-\u003eIsSelected() \u0026\u0026 i \u003e 0)",
+      "revId": "2fe7365dee194941b72c366adb37fa3e3a41b018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3a75eaf8",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-04-05T15:52:58Z",
+      "side": 1,
+      "message": "You can do this: std::swap(maEntries[i], maEntries[i-1])\n\nand that\u0027s it, no intermediates needed",
+      "revId": "2fe7365dee194941b72c366adb37fa3e3a41b018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_5ac70e12",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-04-05T15:52:58Z",
+      "side": 1,
+      "message": "if (widget-\u003eIsSelected() \u0026\u0026 (i\u003c maEntries.size()-1))",
+      "revId": "2fe7365dee194941b72c366adb37fa3e3a41b018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_1a4f46be",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-04-05T15:52:58Z",
+      "side": 1,
+      "message": "Here too, std::swap is possible",
+      "revId": "2fe7365dee194941b72c366adb37fa3e3a41b018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_9ad176d0",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-04-05T15:52:58Z",
+      "side": 1,
+      "message": "This works too: maEntries[i]-\u003eSetInactive();",
+      "revId": "2fe7365dee194941b72c366adb37fa3e3a41b018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_7a1772a3",
+        "filename": "sc/source/ui/inc/condformatdlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-04-05T15:52:58Z",
+      "side": 1,
+      "message": "Convention: nIndex, nSize (integer variables), bSelected (boolean variable)",
+      "revId": "2fe7365dee194941b72c366adb37fa3e3a41b018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
