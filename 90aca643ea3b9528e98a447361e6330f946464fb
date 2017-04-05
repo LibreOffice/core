@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_5fee208c",
+        "filename": "sfx2/uiconfig/ui/emojicontrol.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-04-05T00:07:50Z",
+      "side": 1,
+      "message": "This line should be `translatable\u003d\"no\"`",
+      "revId": "90aca643ea3b9528e98a447361e6330f946464fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
