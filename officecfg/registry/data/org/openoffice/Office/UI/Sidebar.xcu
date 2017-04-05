@@ -349,11 +349,13 @@
             Calc,             Cell,               visible,  .uno:CellTextDlg ;
             Calc,             default,            visible,  .uno:CellTextDlg ;
             Calc,             DrawText,           visible                    ;
+            Calc,             DrawLine,           hidden                     ;
             Calc,             EditCell,           visible                    ;
             Calc,             Pivot,              visible,  .uno:CellTextDlg ;
             DrawImpress,      3DObject,           visible                    ;
             DrawImpress,      Draw,               hidden                     ;
             DrawImpress,      DrawText,           visible                    ;
+            DrawImpress,      DrawLine,           hidden                     ;
             DrawImpress,      Graphic,            hidden                     ;
             DrawImpress,      OutlineText,        visible                    ;
             DrawImpress,      Table,              visible                    ;
@@ -1072,6 +1074,8 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Calc,           DrawText,   visible ;
+            Calc,           DrawLine,   hidden  ;
+            DrawImpress,    DrawLine,   hidden  ;
             DrawImpress,    3DObject,   hidden  ;
             DrawImpress,    Draw,       hidden  ;
             DrawImpress,    DrawText,   visible ;
