@@ -1336,7 +1336,8 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
     // into an object hierarchy with a little effort.
     SdrObject *pRet=nullptr;
     WW8_DPHEAD aHd;                         // Lese Draw-Primitive-Header
-    bool bCouldRead = checkRead(*m_pStrm, &aHd, sizeof(WW8_DPHEAD));
+    bool bCouldRead = checkRead(*m_pStrm, &aHd, sizeof(WW8_DPHEAD)) &&
+                      SVBT16ToShort(aHd.cb) >= sizeof(WW8_DPHEAD);
     OSL_ENSURE(bCouldRead, "Graphic Primitive header short read" );
     if (!bCouldRead)
     {
