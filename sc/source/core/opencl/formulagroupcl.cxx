@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -30,7 +30,11 @@
 #include "op_spreadsheet.hxx"
 #include "op_addin.hxx"
 
-/// CONFIGURATIONS
+// FIXME: The idea that somebody would bother to (now and then? once a year? once a month?) manually
+// edit a source file and change the value of some #defined constant and run some ill-defined
+// "correctness test" is of course ludicrous. Either things are checked in normal unit tests, in
+// every 'make check', or not at all. The below comments are ridiculous.
+
 #define REDUCE_THRESHOLD 201  // set to 4 for correctness testing. priority 1
 #define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
 
