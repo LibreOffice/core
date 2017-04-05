@@ -125,7 +125,7 @@ Dim iPropIndex As Integer, vProp As Variant, vValue As Variant, vMatrix As Varia
 End Function	&apos;	_GetPropertyValue V1.3.0
 
 REM =======================================================================================================================
-Public Sub _SetPropertyValue(ByRef pvPropertyValuesArray As Variant, ByVal psPropName As String, ByVal pvValue)
+Public Sub _SetPropertyValue(ByRef pvPropertyValuesArray As Variant, ByVal psPropName As String, ByVal pvValue As Variant)
 &apos; Set the value of a particular named property from an array of PropertyValue&apos;s.
 
 Dim iPropIndex As Integer, vProp As Variant, iNumProperties As Integer
@@ -201,10 +201,10 @@ Public Function _PropValuesToStr(ByRef pvPropertyValuesArray As Variant) As Stri
 &apos;	Semicolons and backslashes are escaped with a backslash (see _CStr and _CVar functions)
 
 Dim iNumProperties As Integer, sResult As String, i As Integer, j As Integer, vProp As Variant
-Dim sName As String, vValue As Variant, iType As Integer, vVector As Variant
+Dim sName As String, vValue As Variant, iType As Integer
 Dim cstLF As String
 
-	cstLF = Chr(10)
+	cstLF = vbLf()
 	iNumProperties = _NumPropertyValues(pvPropertyValuesArray)
 
 	sResult = cstHEADER &amp; cstLF
@@ -220,8 +220,6 @@ Dim cstLF As String
 				&apos;	1-dimension but vector of vectors must also be considered
 				If VarType(vValue(0)) &gt;= vbArray Then
 					sResult = sResult &amp; sName &amp; &quot; = (&quot; &amp; UBound(vValue) + 1 &amp; &quot;,&quot; &amp; UBound(vValue(0)) + 1 &amp; &quot;)&quot; &amp; cstLF
-					vVector = Array()
-					ReDim vVector(0 To UBound(vValue(0)))
 					For j = 0 To UBound(vValue)
 						sResult = sResult &amp; Utils._CStr(vValue(j), False) &amp; cstLF
 					Next j			

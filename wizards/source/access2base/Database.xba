@@ -1210,7 +1210,7 @@ Const cstSQLITE = &quot;SQLite&quot;
 					iInfo = iInfo + 1
 					_ColumnTypeNames(iInfo) = sName
 					_ColumnTypes(iInfo) = lType
-					_ColumnPrecisions(iInfo) = .getLong(3)
+					_ColumnPrecisions(iInfo) = CLng(.getLong(3))
 				End If
 				.next()
 			Loop

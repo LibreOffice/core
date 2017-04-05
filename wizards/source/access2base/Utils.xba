@@ -191,6 +191,7 @@ Const cstByteLength = 25
 				sArg = Format(pvArg)
 				If InStr(UCase(sArg), &quot;E&quot;) = 0 Then sArg = Format(pvArg, &quot;##0.0##&quot;)
 				sArg = Replace(sArg, &quot;,&quot;, &quot;.&quot;)
+			Case vbBigint			:		sArg = CStr(CLng(pvArg))
 			Case vbDate				:		sArg = Year(pvArg) &amp; &quot;-&quot; &amp; Right(&quot;0&quot; &amp; Month(pvArg), 2) &amp; &quot;-&quot; &amp; Right(&quot;0&quot; &amp; Day(pvArg), 2) _
 													&amp; &quot; &quot; &amp; Right(&quot;0&quot; &amp; Hour(pvArg), 2) &amp; &quot;:&quot; &amp; Right(&quot;0&quot; &amp; Minute(pvArg), 2)
 			Case Else				:		sArg = CStr(pvArg)
