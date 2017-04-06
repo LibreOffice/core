@@ -207,11 +207,8 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
                     *pDirectory = static_cast<oslDirectory>(pDirImpl);
                     return osl_File_E_None;
                 }
-                else
-                {
-                    errno = ENOMEM;
-                    closedir( pdir );
-                }
+                errno = ENOMEM;
+                closedir( pdir );
             }
             else
             {
@@ -274,8 +271,7 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, bool bFilterLocalAndParentDir
         if (bFilterLocalAndParentDir &&
             ((strcmp(pdirent->d_name, ".") == 0) || (strcmp(pdirent->d_name, "..") == 0)))
             continue;
-        else
-            break;
+        break;
     }
 
     return pdirent;
@@ -493,8 +489,7 @@ static int path_make_parent(sal_Unicode* path)
         *(path + i) = 0;
         return i;
     }
-    else
-        return 0;
+    return 0;
 }
 
 static int create_dir_with_callback(
@@ -775,10 +770,8 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     {
         return osl_File_E_ISDIR;
     }
-    else
-    {
-        /* mfe: file does not exists or is no dir */
-    }
+
+    /* mfe: file does not exists or is no dir */
 
     tErr = oslDoCopy(pszPath,pszDestPath,nMode,nSourceSize,DestFileExists);
 
@@ -924,8 +917,8 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
         nRet=errno;
         return nRet;
     }
-    else
-        pszLinkContent[ nRet ] = 0;
+
+    pszLinkContent[ nRet ] = 0;
 
     nRet = symlink(pszLinkContent,pszDestFileName);
 

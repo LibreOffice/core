@@ -300,22 +300,20 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
         return pPipe;
     }
-    else
-    {   /* osl_pipe_OPEN */
-        if ( access(name, F_OK) != -1 )
+
+    /* osl_pipe_OPEN */
+    if ( access(name, F_OK) != -1 )
+    {
+        if ( connect( pPipe->m_Socket, reinterpret_cast<sockaddr *>(&addr), len) >= 0 )
         {
-            if ( connect( pPipe->m_Socket, reinterpret_cast<sockaddr *>(&addr), len) >= 0 )
-            {
-                return pPipe;
-            }
-
-            SAL_WARN("sal.osl.pipe", "connect() failed: " << strerror(errno));
+            return pPipe;
         }
-
-        close (pPipe->m_Socket);
-        destroyPipeImpl(pPipe);
-        return nullptr;
+        SAL_WARN("sal.osl.pipe", "connect() failed: " << strerror(errno));
     }
+
+    close (pPipe->m_Socket);
+    destroyPipeImpl(pPipe);
+    return nullptr;
 }
 
 void SAL_CALL osl_acquirePipe( oslPipe pPipe )
@@ -444,31 +442,29 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         return nullptr;
     }
 #endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
-    else
+
+    /* alloc memory */
+    pAcceptedPipe = createPipeImpl();
+
+    OSL_ASSERT(pAcceptedPipe);
+    if(pAcceptedPipe==nullptr)
     {
-        /* alloc memory */
-        pAcceptedPipe = createPipeImpl();
-
-        OSL_ASSERT(pAcceptedPipe);
-        if(pAcceptedPipe==nullptr)
-        {
-            close(s);
-            return nullptr;
-        }
-
-        /* set close-on-exec flag */
-        int flags;
-        if (!((flags = fcntl(s, F_GETFD, 0)) < 0))
-        {
-            flags |= FD_CLOEXEC;
-            if (fcntl(s, F_SETFD, flags) < 0)
-            {
-                SAL_WARN("sal.osl.pipe", "fcntl() failed: " <<  strerror(errno));
-            }
-        }
-
-        pAcceptedPipe->m_Socket = s;
+        close(s);
+        return nullptr;
     }
+
+    /* set close-on-exec flag */
+    int flags;
+    if (!((flags = fcntl(s, F_GETFD, 0)) < 0))
+    {
+        flags |= FD_CLOEXEC;
+        if (fcntl(s, F_SETFD, flags) < 0)
+        {
+            SAL_WARN("sal.osl.pipe", "fcntl() failed: " <<  strerror(errno));
+        }
+    }
+
+    pAcceptedPipe->m_Socket = s;
 
     return pAcceptedPipe;
 }

@@ -431,64 +431,62 @@ oslFileError FileHandle_Impl::readFileAt (
         *pBytesRead = nBytes;
         return osl_File_E_None;
     }
-    else if (m_kind == KIND_MEM || nullptr == m_buffer)
+    if (m_kind == KIND_MEM || nullptr == m_buffer)
     {
         // not buffered
         return readAt (nOffset, pBuffer, nBytesRequested, pBytesRead);
     }
-    else
+
+    sal_uInt8 * buffer = static_cast<sal_uInt8*>(pBuffer);
+    for (*pBytesRead = 0; nBytesRequested > 0; )
     {
-        sal_uInt8 * buffer = static_cast<sal_uInt8*>(pBuffer);
-        for (*pBytesRead = 0; nBytesRequested > 0; )
+        off_t  const bufptr = (nOffset / m_bufsiz) * m_bufsiz;
+        size_t const bufpos = (nOffset % m_bufsiz);
+
+        if (bufptr != m_bufptr)
         {
-            off_t  const bufptr = (nOffset / m_bufsiz) * m_bufsiz;
-            size_t const bufpos = (nOffset % m_bufsiz);
+            // flush current buffer
+            oslFileError result = syncFile();
+            if (result != osl_File_E_None)
+                return result;
+            m_bufptr = -1;
+            m_buflen = 0;
 
-            if (bufptr != m_bufptr)
+            if (nBytesRequested >= m_bufsiz)
             {
-                // flush current buffer
-                oslFileError result = syncFile();
-                if (result != osl_File_E_None)
-                    return result;
-                m_bufptr = -1;
-                m_buflen = 0;
-
-                if (nBytesRequested >= m_bufsiz)
-                {
-                    // buffer too small, read through from file
-                    sal_uInt64 uDone = 0;
-                    result = readAt (nOffset, &(buffer[*pBytesRead]), nBytesRequested, &uDone);
-                    if (result != osl_File_E_None)
-                        return result;
-
-                    *pBytesRead += uDone;
-                    return osl_File_E_None;
-                }
-
-                // update buffer (pointer)
+                // buffer too small, read through from file
                 sal_uInt64 uDone = 0;
-                result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
+                result = readAt (nOffset, &(buffer[*pBytesRead]), nBytesRequested, &uDone);
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = bufptr;
-                m_buflen = uDone;
-            }
-            if (bufpos >= m_buflen)
-            {
-                // end of file
+
+                *pBytesRead += uDone;
                 return osl_File_E_None;
             }
 
-            size_t const bytes = std::min (m_buflen - bufpos, nBytesRequested);
-            SAL_INFO("sal.file", "FileHandle_Impl::readFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
-
-            memcpy (&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
-            nBytesRequested -= bytes;
-            *pBytesRead += bytes;
-            nOffset += bytes;
+            // update buffer (pointer)
+            sal_uInt64 uDone = 0;
+            result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
+            if (result != osl_File_E_None)
+                return result;
+            m_bufptr = bufptr;
+            m_buflen = uDone;
         }
-        return osl_File_E_None;
+        if (bufpos >= m_buflen)
+        {
+            // end of file
+            return osl_File_E_None;
+        }
+
+        size_t const bytes = std::min (m_buflen - bufpos, nBytesRequested);
+        SAL_INFO("sal.file", "FileHandle_Impl::readFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
+
+        memcpy (&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
+        nBytesRequested -= bytes;
+        *pBytesRead += bytes;
+        nOffset += bytes;
     }
+    return osl_File_E_None;
 }
 
 oslFileError FileHandle_Impl::writeFileAt (
@@ -506,63 +504,61 @@ oslFileError FileHandle_Impl::writeFileAt (
         *pBytesWritten = nBytes;
         return osl_File_E_None;
     }
-    else if (nullptr == m_buffer)
+    if (nullptr == m_buffer)
     {
         // not buffered
         return writeAt (nOffset, pBuffer, nBytesToWrite, pBytesWritten);
     }
-    else
+
+    sal_uInt8 const * buffer = static_cast<sal_uInt8 const *>(pBuffer);
+    for (*pBytesWritten = 0; nBytesToWrite > 0; )
     {
-        sal_uInt8 const * buffer = static_cast<sal_uInt8 const *>(pBuffer);
-        for (*pBytesWritten = 0; nBytesToWrite > 0; )
+        off_t  const bufptr = (nOffset / m_bufsiz) * m_bufsiz;
+        size_t const bufpos = (nOffset % m_bufsiz);
+        if (bufptr != m_bufptr)
         {
-            off_t  const bufptr = (nOffset / m_bufsiz) * m_bufsiz;
-            size_t const bufpos = (nOffset % m_bufsiz);
-            if (bufptr != m_bufptr)
+            // flush current buffer
+            oslFileError result = syncFile();
+            if (result != osl_File_E_None)
+                return result;
+            m_bufptr = -1;
+            m_buflen = 0;
+
+            if (nBytesToWrite >= m_bufsiz)
             {
-                // flush current buffer
-                oslFileError result = syncFile();
-                if (result != osl_File_E_None)
-                    return result;
-                m_bufptr = -1;
-                m_buflen = 0;
-
-                if (nBytesToWrite >= m_bufsiz)
-                {
-                    // buffer to small, write through to file
-                    sal_uInt64 uDone = 0;
-                    result = writeAt (nOffset, &(buffer[*pBytesWritten]), nBytesToWrite, &uDone);
-                    if (result != osl_File_E_None)
-                        return result;
-                    if (uDone != nBytesToWrite)
-                        return osl_File_E_IO;
-
-                    *pBytesWritten += uDone;
-                    return osl_File_E_None;
-                }
-
-                // update buffer (pointer)
+                // buffer to small, write through to file
                 sal_uInt64 uDone = 0;
-                result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
+                result = writeAt (nOffset, &(buffer[*pBytesWritten]), nBytesToWrite, &uDone);
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = bufptr;
-                m_buflen = uDone;
+                if (uDone != nBytesToWrite)
+                    return osl_File_E_IO;
+
+                *pBytesWritten += uDone;
+                return osl_File_E_None;
             }
 
-            size_t const bytes = std::min (m_bufsiz - bufpos, nBytesToWrite);
-            SAL_INFO("sal.file", "FileHandle_Impl::writeFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
-
-            memcpy (&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
-            nBytesToWrite -= bytes;
-            *pBytesWritten += bytes;
-            nOffset += bytes;
-
-            m_buflen = std::max(m_buflen, bufpos + bytes);
-            m_state |= STATE_MODIFIED;
+            // update buffer (pointer)
+            sal_uInt64 uDone = 0;
+            result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
+            if (result != osl_File_E_None)
+                return result;
+            m_bufptr = bufptr;
+            m_buflen = uDone;
         }
-        return osl_File_E_None;
+
+        size_t const bytes = std::min (m_bufsiz - bufpos, nBytesToWrite);
+        SAL_INFO("sal.file", "FileHandle_Impl::writeFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
+
+        memcpy (&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
+        nBytesToWrite -= bytes;
+        *pBytesWritten += bytes;
+        nOffset += bytes;
+
+        m_buflen = std::max(m_buflen, bufpos + bytes);
+        m_state |= STATE_MODIFIED;
     }
+    return osl_File_E_None;
 }
 
 oslFileError FileHandle_Impl::readLineAt (

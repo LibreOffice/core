@@ -306,7 +306,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                             *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                             break;
                         }
-                        else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
+                        if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
                         {
                             if ( pDestBuf >= pEndDestBuf )
                             {
@@ -347,7 +347,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                             *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                             break;
                         }
-                        else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
+                        if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
                         {
                             if ( pDestBuf >= pEndDestBuf )
                             {

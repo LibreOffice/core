@@ -1842,20 +1842,18 @@ static bool releaseProfile(osl_TProfileImpl* pProfile)
     {
         return osl_closeProfile(static_cast<oslProfile>(pProfile));
     }
-    else
-    {
-        if (! (pProfile->m_Flags & (osl_Profile_READLOCK | osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE )))
-        {
-            if (pProfile->m_Flags & FLG_MODIFIED)
-            {
-                bool bRet = storeProfile(pProfile, false);
-                SAL_WARN_IF(!bRet, "sal.osl", "storeProfile(pProfile, false) ==> false");
-                (void)bRet;
-            }
 
-            closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
-            pProfile->m_pFile = nullptr;
+    if (! (pProfile->m_Flags & (osl_Profile_READLOCK | osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE )))
+    {
+        if (pProfile->m_Flags & FLG_MODIFIED)
+        {
+            bool bRet = storeProfile(pProfile, false);
+            SAL_WARN_IF(!bRet, "sal.osl", "storeProfile(pProfile, false) ==> false");
+            (void)bRet;
         }
+
+        closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
+        pProfile->m_pFile = nullptr;
     }
 
     return true;

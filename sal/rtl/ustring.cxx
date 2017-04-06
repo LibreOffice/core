@@ -1017,7 +1017,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
             rtl_ustring_intern_internal( newStr, pScratch, CANNOT_RETURN );
             return;
         }
-        else if ( (ulen = rtl_canGuessUOutputLength(len, eTextEncoding)) != 0 )
+        if ( (ulen = rtl_canGuessUOutputLength(len, eTextEncoding)) != 0 )
         {
             rtl_uString *pScratch;
             rtl_TextToUnicodeConverter hConverter;
