@@ -654,7 +654,7 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
             nIndex -= 1;
     }
     if (pItem == nullptr)
-        pItem = mpParent->ImplGetItem (static_cast<sal_uInt16>(nIndex));
+        pItem = mpParent->ImplGetItem (nIndex);
 
     return pItem;
 }

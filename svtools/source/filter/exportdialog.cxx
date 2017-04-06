@@ -1012,7 +1012,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
         Fraction aFract( 1, 100 );
         sal_Int32 nWidth = mpMfSizeX->GetValue();
         sal_Int32 nHeight= static_cast< sal_Int32 >( nWidth * fRatio );
-        const Size aSource( static_cast< sal_Int32 >( nWidth ), static_cast< sal_Int32 >( nHeight ) );
+        const Size aSource( nWidth, nHeight );
         MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ),Point(), aFract, aFract );
         Size aDest( LogicToLogic( aSource, aSourceMapMode, MapUnit::Map100thMM ) );
 
@@ -1044,7 +1044,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
         Fraction aFract( 1, 100 );
         sal_Int32 nHeight= mpMfSizeY->GetValue();
         sal_Int32 nWidth = static_cast< sal_Int32 >( nHeight * fRatio );
-        const Size aSource( static_cast< sal_Int32 >( nWidth ), static_cast< sal_Int32 >( nHeight ) );
+        const Size aSource( nWidth, nHeight );
         MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ),Point(), aFract, aFract );
         Size aDest( LogicToLogic( aSource, aSourceMapMode, MapUnit::Map100thMM ) );
 
