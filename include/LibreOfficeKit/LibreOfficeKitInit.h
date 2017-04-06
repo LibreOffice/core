@@ -72,7 +72,7 @@ extern "C"
     }
 
 #else
-
+    #pragma warning(disable:4996)
     #include  <windows.h>
     #define TARGET_LIB        "sofficeapp" ".dll"
     #define TARGET_MERGED_LIB "mergedlo" ".dll"
@@ -124,15 +124,16 @@ extern "C"
         size_t size_sEnvPath = 0;
         if(sEnvPath)
             size_sEnvPath = strlen(sEnvPath);
-        char* sNewPath = new char[size_sEnvPath + 2*strlen(pPath) + strlen(UNOPATH) + 4];
+        size_t buffer_size = size_sEnvPath + 2*strlen(pPath) + strlen(UNOPATH) + 4;
+        char* sNewPath = new char[buffer_size];
         sNewPath[0] = L'\0';
-        strcat(sNewPath, pPath);     // program to PATH
-        strcat(sNewPath, ";");
-        strcat(sNewPath, UNOPATH);   // UNO to PATH
+        strcat_s(sNewPath, buffer_size, pPath);     // program to PATH
+        strcat_s(sNewPath, buffer_size, ";");
+        strcat_s(sNewPath, buffer_size, UNOPATH);   // UNO to PATH
         if (size_sEnvPath > 0)
         {
-            strcat(sNewPath, ";");
-            strcat(sNewPath, sEnvPath);
+            strcat_s(sNewPath, buffer_size, ";");
+            strcat_s(sNewPath, buffer_size, sEnvPath);
         }
 
         SetEnvironmentVariableA("PATH", sNewPath);

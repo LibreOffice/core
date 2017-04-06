@@ -13,9 +13,11 @@
 #include <stddef.h>
 
 #if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+# ifndef _WIN32
 // the unstable API needs C99's bool
-#include <stdbool.h>
-#include <stdint.h>
+#  include <stdbool.h>
+# endif
+# include <stdint.h>
 #endif
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
