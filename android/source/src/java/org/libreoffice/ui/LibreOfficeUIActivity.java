@@ -10,9 +10,11 @@
 package org.libreoffice.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -23,7 +25,6 @@ import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -39,6 +40,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -53,6 +55,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,12 +70,10 @@ import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.DocumentProviderSettingsActivity;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
-import org.libreoffice.storage.local.LocalFile;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -107,6 +108,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public static final String SORT_MODE_KEY = "SORT_MODE";
     private static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENTS";
 
+    public static final String NEW_FILE_PATH_KEY = "NEW_FILE_PATH_KEY";
     public static final String NEW_DOC_TYPE_KEY = "NEW_DOC_TYPE_KEY";
     public static final String NEW_WRITER_STRING_KEY = "private:factory/swriter";
     public static final String NEW_IMPRESS_STRING_KEY = "private:factory/simpress";
@@ -547,10 +549,37 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         }.execute(document);
     }
 
-    // For opening a new Document
-    private void open(String newDocumentType) {
-        Intent intent = new Intent(this, LibreOfficeMainActivity.class);
+    // Opens an Input dialog to get the name of new file
+    private void createNewFileInputDialog(final String defaultFileName, final String newDocumentType) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.create_new_document_title);
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(defaultFileName);
+        builder.setView(input);
+
+        builder.setPositiveButton(R.string.action_create, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String newFilePath = currentDirectory.getUri().getPath() + input.getText().toString();
+                loadNewDocument(newDocumentType, newFilePath);
+            }
+        });
+
+        builder.setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void loadNewDocument(String newDocumentType, String newFilePath) {
+        Intent intent = new Intent(LibreOfficeUIActivity.this, LibreOfficeMainActivity.class);
         intent.putExtra(NEW_DOC_TYPE_KEY, newDocumentType);
+        intent.putExtra(NEW_FILE_PATH_KEY, newFilePath);
         startActivity(intent);
     }
 
@@ -990,16 +1019,16 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 }
                 break;
             case R.id.newWriterFAB:
-                open(NEW_WRITER_STRING_KEY);
+                createNewFileInputDialog(getString(R.string.default_document_name) + FileUtilities.DEFAULT_WRITER_EXTENSION, NEW_WRITER_STRING_KEY);
                 break;
             case R.id.newImpressFAB:
-                open(NEW_IMPRESS_STRING_KEY);
+                createNewFileInputDialog(getString(R.string.default_document_name) + FileUtilities.DEFAULT_IMPRESS_EXTENSION, NEW_IMPRESS_STRING_KEY);
                 break;
             case R.id.newCalcFAB:
-                open(NEW_CALC_STRING_KEY);
+                createNewFileInputDialog(getString(R.string.default_document_name) + FileUtilities.DEFAULT_SPREADSHEET_EXTENSION, NEW_CALC_STRING_KEY);
                 break;
             case R.id.newDrawFAB:
-                open(NEW_DRAW_STRING_KEY);
+                createNewFileInputDialog(getString(R.string.default_document_name) + FileUtilities.DEFAULT_DRAWING_EXTENSION, NEW_DRAW_STRING_KEY);
                 break;
         }
     }
