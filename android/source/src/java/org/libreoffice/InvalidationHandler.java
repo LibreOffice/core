@@ -26,6 +26,8 @@ public class InvalidationHandler implements Document.MessageCallback {
     private boolean mKeyEvent = false;
     private LibreOfficeMainActivity mContext;
 
+    private int currentTotalPageNumber = 0;
+
     public InvalidationHandler(LibreOfficeMainActivity context) {
         mContext = context;
         mDocumentOverlay = mContext.getDocumentOverlay();
@@ -117,6 +119,14 @@ public class InvalidationHandler implements Document.MessageCallback {
             mContext.getFormattingController().onToggleStateChanged(Document.BULLET_LIST, pressed);
         } else if (parts[0].equals(".uno:DefaultNumbering")) {
             mContext.getFormattingController().onToggleStateChanged(Document.NUMBERED_LIST, pressed);
+        } else if (parts[0].equals(".uno:StatePageNumber")) {
+            String[] splitStrings = parts[1].split(" ");
+            int totalPageNumber = Integer.valueOf(splitStrings[splitStrings.length - 1]);
+            if (totalPageNumber != currentTotalPageNumber) {
+                currentTotalPageNumber = totalPageNumber;
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UPDATE_PART_PAGE_RECT));
+                LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_REEVALUATION_REQUEST));
+            }
         } else {
             Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
         }
@@ -128,7 +138,7 @@ public class InvalidationHandler implements Document.MessageCallback {
      * @param payload - invalidation message payload text
      * @return rectangle in pixel coordinates
      */
-    private RectF convertPayloadToRectangle(String payload) {
+    public RectF convertPayloadToRectangle(String payload) {
         String payloadWithoutWhitespace = payload.replaceAll("\\s", ""); // remove all whitespace from the string
 
         if (payloadWithoutWhitespace.isEmpty() || payloadWithoutWhitespace.equals("EMPTY")) {
@@ -162,7 +172,7 @@ public class InvalidationHandler implements Document.MessageCallback {
      * @param payload - invalidation message payload text
      * @return list of rectangles
      */
-    private List<RectF> convertPayloadToRectangles(String payload) {
+    public List<RectF> convertPayloadToRectangles(String payload) {
         List<RectF> rectangles = new ArrayList<RectF>();
         String[] rectangleArray = payload.split(";");
 
