@@ -176,7 +176,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     return nDstSize == 1
                         ? aDst[0] : rtl::combineSurrogates(aDst[0], aDst[1]);
                 }
-                else if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
+                if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
                          && pEnd - p >= 3 && p[0] == cEscapePrefix
                          && (nWeight1 = getHexWeight(p[1])) >= 0
                          && (nWeight2 = getHexWeight(p[2])) >= 0)
@@ -202,13 +202,11 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
         }
         return nChar;
     }
-    else
-    {
-        *pType = EscapeNo;
-        return rtl::isHighSurrogate(nChar) && *pBegin < pEnd
-               && rtl::isLowSurrogate(**pBegin) ?
-                   rtl::combineSurrogates(nChar, *(*pBegin)++) : nChar;
-    }
+
+    *pType = EscapeNo;
+    return rtl::isHighSurrogate(nChar) && *pBegin < pEnd
+           && rtl::isLowSurrogate(**pBegin) ?
+               rtl::combineSurrogates(nChar, *(*pBegin)++) : nChar;
 }
 
 void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
@@ -305,9 +303,8 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         } else {
             if (bStrict) {
                 return false;
-            } else {
-                writeUcs4(pBuffer, pCapacity, nUtf32);
             }
+            writeUcs4(pBuffer, pCapacity, nUtf32);
         }
     }
     return true;
@@ -359,7 +356,7 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
                 pPos = p;
                 break;
             }
-            else if (!rtl::isAsciiAlphanumeric(*p) && *p != '+' && *p != '-'
+            if (!rtl::isAsciiAlphanumeric(*p) && *p != '+' && *p != '-'
                      && *p != '.')
             {
                 break;

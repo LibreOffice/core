@@ -150,8 +150,7 @@ sal::detail::textenc::handleBadInputUnicodeToTextConversion(
             *pPrefixWritten = true;
         return BAD_INPUT_CONTINUE;
     }
-    else
-        return BAD_INPUT_NO_OUTPUT;
+    return BAD_INPUT_NO_OUTPUT;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

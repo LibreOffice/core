@@ -497,11 +497,8 @@ int ImplConvertUnicodeCharToChar(
                     dest[0] = static_cast< char >(pCharExData->mnChar);
                     if ( pCharExData->mnChar2 == 0 )
                         return 1;
-                    else
-                    {
-                        dest[1] = static_cast< char >(pCharExData->mnChar2);
-                        return 2;
-                    }
+                    dest[1] = static_cast< char >(pCharExData->mnChar2);
+                    return 2;
                 }
             }
         }
@@ -546,13 +543,12 @@ sal_Size sal::detail::textenc::convertCharToUnicode(
                     *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
                     break;
                 }
-                else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE )
+                if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE )
                 {
                     pSrcBuf++;
                     continue;
                 }
-                else
-                    cConv = ImplGetUndefinedUnicodeChar(c, nFlags);
+                cConv = ImplGetUndefinedUnicodeChar(c, nFlags);
             }
         }
 
@@ -642,8 +638,7 @@ sal_Size sal::detail::textenc::convertUnicodeToChar(
                                 &pSrcBuf, pEndSrcBuf, &pDestBuf, pEndDestBuf,
                                 nFlags, pInfo))
                             continue;
-                        else
-                            break;
+                        break;
                     }
                 }
             }

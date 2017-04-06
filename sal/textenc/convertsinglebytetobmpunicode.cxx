@@ -126,7 +126,8 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
         for (std::size_t i = 0; i < entries; ++i) {
             if (c < ranges[i].unicode) {
                 break;
-            } else if (c <= sal::static_int_cast< sal_uInt32 >(
+            }
+            if (c <= sal::static_int_cast< sal_uInt32 >(
                            ranges[i].unicode + ranges[i].range))
             {
                 if (destBufEnd - destBufPtr < 1) {

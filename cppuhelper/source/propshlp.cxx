@@ -220,8 +220,7 @@ Any OPropertySetHelper2::queryInterface( const css::uno::Type & rType )
     Any cnd(cppu::queryInterface(rType, static_cast< XPropertySetOption * >(this)));
     if ( cnd.hasValue() )
         return cnd;
-    else
-        return OPropertySetHelper::queryInterface(rType);
+    return OPropertySetHelper::queryInterface(rType);
 }
 
 /**
@@ -1054,19 +1053,16 @@ sal_Bool OPropertyArrayHelper::fillPropertyMembersByHandle
             *pAttributes = pProperties[ nHandle ].Attributes;
         return true;
     }
-    else
+    // normally the array is sorted
+    for( sal_Int32 i = 0; i < nElements; i++ )
     {
-        // normally the array is sorted
-        for( sal_Int32 i = 0; i < nElements; i++ )
+        if( pProperties[i].Handle == nHandle )
         {
-            if( pProperties[i].Handle == nHandle )
-            {
-                if( pPropName )
-                    *pPropName = pProperties[ i ].Name;
-                if( pAttributes )
-                    *pAttributes = pProperties[ i ].Attributes;
-                return true;
-            }
+            if( pPropName )
+                *pPropName = pProperties[ i ].Name;
+            if( pAttributes )
+                *pAttributes = pProperties[ i ].Attributes;
+            return true;
         }
     }
     return false;

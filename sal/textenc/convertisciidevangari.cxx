@@ -194,7 +194,7 @@ sal_Size IsciiDevanagariToUnicode::convert(
                 continue;
             if (eAction == BAD_INPUT_STOP)
                 break;
-            else if (eAction == BAD_INPUT_NO_OUTPUT)
+            if (eAction == BAD_INPUT_NO_OUTPUT)
             {
                 nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 break;
@@ -358,7 +358,7 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
             {
                 break;
             }
-            else if (c <= sal::static_int_cast< sal_uInt32 >(
+            if (c <= sal::static_int_cast< sal_uInt32 >(
                            ranges[i].unicode + ranges[i].range))
             {
                 if (pDestBufEnd - pDestBufPtr < 1)
