@@ -125,6 +125,8 @@ std::ostream& operator<<(std::ostream& rStrm, PropertyState n)
 
 } } } }
 
+#if !defined _WIN32
+
 namespace com { namespace sun { namespace star { namespace awt {
 
 std::ostream& operator<<(std::ostream& rStrm, FontSlant n)
@@ -165,13 +167,17 @@ std::ostream& operator<<(std::ostream& rStrm, ShadowLocation n)
 
 } } } }
 
+#endif
+
 namespace com { namespace sun { namespace star { namespace text {
 
+#if !defined _WIN32
 std::ostream& operator<<(std::ostream& rStrm, WrapTextMode n)
 {
     rStrm << (int) n;
     return rStrm;
 }
+#endif
 std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
 {
     rStrm << (int) n;
@@ -179,6 +185,8 @@ std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
 }
 
 } } } }
+
+#if !defined(_WIN32)
 
 namespace com { namespace sun { namespace star { namespace style {
 
@@ -189,8 +197,6 @@ std::ostream& operator<<(std::ostream& rStrm, BreakType n)
 }
 
 } } } }
-
-#if !defined(_WIN32)
 
 DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
 {

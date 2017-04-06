@@ -63,6 +63,8 @@
 
 #include <bordertest.hxx>
 
+#if !defined _WIN32
+
 namespace com
 {
 namespace sun
@@ -82,6 +84,9 @@ std::ostream& operator<<(std::ostream& rStrm, PropertyState n)
 }
 }
 }
+
+#endif
+
 namespace com
 {
 namespace sun
@@ -96,11 +101,13 @@ std::ostream& operator<<(std::ostream& rStrm, BreakType n)
     rStrm << (int) n;
     return rStrm;
 }
+#if !defined _WIN32
 std::ostream& operator<<(std::ostream& rStrm, TabAlign n)
 {
     rStrm << (int) n;
     return rStrm;
 }
+#endif
 std::ostream& operator<<(std::ostream& rStrm, ParagraphAdjust n)
 {
     rStrm << (int) n;
@@ -111,6 +118,9 @@ std::ostream& operator<<(std::ostream& rStrm, ParagraphAdjust n)
 }
 }
 }
+
+#if !defined _WIN32
+
 namespace com
 {
 namespace sun
@@ -130,6 +140,9 @@ std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
 }
 }
 }
+
+#endif
+
 namespace com
 {
 namespace sun
