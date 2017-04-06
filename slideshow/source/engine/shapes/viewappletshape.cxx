@@ -184,8 +184,8 @@ namespace slideshow
 
                     uno::Reference< awt::XWindow > xSurroundingWindow( mxFrame->getContainerWindow() );
                     if( xSurroundingWindow.is() )
-                        xSurroundingWindow->setPosSize( static_cast<sal_Int32>(rPixelBounds.getMinX()),
-                                                        static_cast<sal_Int32>(rPixelBounds.getMinY()),
+                        xSurroundingWindow->setPosSize( rPixelBounds.getMinX(),
+                                                        rPixelBounds.getMinY(),
                                                         static_cast<sal_Int32>(rPixelBounds.getWidth()),
                                                         static_cast<sal_Int32>(rPixelBounds.getHeight()),
                                                         awt::PosSize::POSSIZE );
@@ -250,8 +250,8 @@ namespace slideshow
 
             uno::Reference< awt::XWindow > xFrameWindow( mxFrame->getContainerWindow() );
             if( xFrameWindow.is() )
-                xFrameWindow->setPosSize( static_cast<sal_Int32>(rPixelBounds.getMinX()),
-                                          static_cast<sal_Int32>(rPixelBounds.getMinY()),
+                xFrameWindow->setPosSize( rPixelBounds.getMinX(),
+                                          rPixelBounds.getMinY(),
                                           static_cast<sal_Int32>(rPixelBounds.getWidth()),
                                           static_cast<sal_Int32>(rPixelBounds.getHeight()),
                                           awt::PosSize::POSSIZE );
