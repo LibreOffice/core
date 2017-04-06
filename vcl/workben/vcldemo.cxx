@@ -1660,7 +1660,7 @@ double DemoRenderer::getAndResetBenchmark(const RenderStyle style)
         maRenderers[i]->sumTime = 0;
         maRenderers[i]->countTime = 0;
     }
-    geomean = pow(geomean, static_cast<double>(1.0)/maRenderers.size());
+    geomean = pow(geomean, 1.0/maRenderers.size());
     fprintf(stderr, "GEOMEAN_%s: %f\n", style == RENDER_THUMB ? "THUMB": "EXPANDED", geomean);
     return geomean;
 }
@@ -1810,7 +1810,7 @@ public:
 
         double thumbGEOMEAN = mrRenderer.getAndResetBenchmark(RENDER_THUMB);
 
-        fprintf(stderr, "GEOMEAN_TOTAL: %f\n", pow(thumbGEOMEAN * expandedGEOMEAN, static_cast<double>(0.5)));
+        fprintf(stderr, "GEOMEAN_TOTAL: %f\n", pow(thumbGEOMEAN * expandedGEOMEAN, 0.5));
         Application::Quit();
     }
 };
