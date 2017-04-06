@@ -163,8 +163,8 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
         BaseGFXHelper::HomogenMatrixToB3DHomMatrix(
             m_aMatrixSceneToScreen ) ) );
 
-    double fCoosysWidth = static_cast< double >( fabs(aScale.getX()*FIXED_SIZE_FOR_3D_CHART_VOLUME));
-    double fCoosysHeight = static_cast< double >( fabs(aScale.getY()*FIXED_SIZE_FOR_3D_CHART_VOLUME));
+    double fCoosysWidth = fabs(aScale.getX()*FIXED_SIZE_FOR_3D_CHART_VOLUME);
+    double fCoosysHeight = fabs(aScale.getY()*FIXED_SIZE_FOR_3D_CHART_VOLUME);
 
     double fPageWidth = rPageSize.Width;
     double fPageHeight = rPageSize.Height;

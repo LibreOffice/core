@@ -897,7 +897,7 @@ void VLegend::createShapes(
             double fViewFontSize = lcl_CalcViewFontSize( xLegendProp, rPageSize );//todo
             // #i109336# Improve auto positioning in chart
             sal_Int32 nSymbolHeight = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
-            sal_Int32 nSymbolWidth = static_cast< sal_Int32 >( nSymbolHeight );
+            sal_Int32 nSymbolWidth = nSymbolHeight;
 
             for (LegendEntryProvider* pLegendEntryProvider : m_aLegendEntryProviderList)
             {

@@ -638,7 +638,7 @@ OUString DataBrowser::GetColString( sal_Int32 nColumnId ) const
 {
     OSL_ASSERT( m_apDataBrowserModel.get());
     if( nColumnId > 0 )
-        return OUString( m_apDataBrowserModel->getRoleOfColumn( static_cast< sal_Int32 >( nColumnId ) - 1 ));
+        return OUString( m_apDataBrowserModel->getRoleOfColumn( nColumnId - 1 ));
     return OUString();
 }
 

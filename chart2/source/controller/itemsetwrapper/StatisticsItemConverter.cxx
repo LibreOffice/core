@@ -208,7 +208,7 @@ void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const 
     OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
     {
-        double aValue = static_cast<double>(static_cast<const SvxDoubleItem&>(rItemSet.Get( nWhichId )).GetValue());
+        double aValue = static_cast<const SvxDoubleItem&>(rItemSet.Get( nWhichId )).GetValue();
         if(xProperties->getPropertyValue( aPropertyID ) >>= aValue)
         {
             rItemSet.Put(SvxDoubleItem( aValue, nWhichId ));
