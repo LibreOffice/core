@@ -1641,19 +1641,18 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
             pField = pField->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() ) : nullptr;
         }
 
-        OUString aOUText( aText );
-        sal_Int32 nTextLen = aOUText.getLength();
+        sal_Int32 nTextLen = aText.getLength();
 
         sal_Int32 nPos = 0;
-        short nScriptType = _xBI->getScriptType( aOUText, nPos );
+        short nScriptType = _xBI->getScriptType( aText, nPos );
         rTypes.push_back( ScriptTypePosInfo( nScriptType, nPos, nTextLen ) );
-        nPos = _xBI->endOfScript( aOUText, nPos, nScriptType );
+        nPos = _xBI->endOfScript( aText, nPos, nScriptType );
         while ( ( nPos != (-1) ) && ( nPos < nTextLen ) )
         {
             rTypes.back().nEndPos = nPos;
 
-            nScriptType = _xBI->getScriptType( aOUText, nPos );
-            long nEndPos = _xBI->endOfScript( aOUText, nPos, nScriptType );
+            nScriptType = _xBI->getScriptType( aText, nPos );
+            long nEndPos = _xBI->endOfScript( aText, nPos, nScriptType );
 
             if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes.back().nScriptType ) )
             {
@@ -1662,9 +1661,9 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
             }
             else
             {
-                if ( _xBI->getScriptType( aOUText, nPos - 1 ) == i18n::ScriptType::WEAK )
+                if ( _xBI->getScriptType( aText, nPos - 1 ) == i18n::ScriptType::WEAK )
                 {
-                    switch ( u_charType(aOUText.iterateCodePoints(&nPos, 0) ) ) {
+                    switch ( u_charType(aText.iterateCodePoints(&nPos, 0) ) ) {
                     case U_NON_SPACING_MARK:
                     case U_ENCLOSING_MARK:
                     case U_COMBINING_SPACING_MARK:
