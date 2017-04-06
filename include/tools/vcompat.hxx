@@ -21,11 +21,14 @@
 
 #include <tools/toolsdllapi.h>
 
-#define COMPAT_FORMAT( char1, char2, char3, char4 ) \
-    ((sal_uInt32)((((sal_uInt32)(char)(char1)))|                \
-    (((sal_uInt32)(char)(char2))<<8UL)|                 \
-    (((sal_uInt32)(char)(char3))<<16UL)|                    \
-    ((sal_uInt32)(char)(char4))<<24UL))
+inline sal_uInt32 COMPAT_FORMAT( char char1, char char2, char char3, char char4 )
+{
+    return
+        ((sal_uInt32)char1) |
+        (((sal_uInt32)char2) <<  8) |
+        (((sal_uInt32)char3) << 16) |
+        (((sal_uInt32)char4) << 24);
+};
 
 class SvStream;
 enum class StreamMode;
