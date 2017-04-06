@@ -848,7 +848,7 @@ static const FunctionData saFuncTable2013[] =
     { "BITRSHIFT",              "BITRSHIFT",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "BITXOR",                 "BITXOR",               NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.CEILING.MATH", "CEILING.MATH",     NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "CEILING",                "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "CEILING",                "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_EXPORTONLY | FUNCFLAG_MACROCALL_NEW },
     { "COMBINA",                "COMBINA",              NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COT",                    "COT",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COTH",                   "COTH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
@@ -859,7 +859,7 @@ static const FunctionData saFuncTable2013[] =
     { "COM.MICROSOFT.ENCODEURL","ENCODEURL",            NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.FILTERXML","FILTERXML",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.FLOOR.MATH", "FLOOR.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "FLOOR",                  "FLOOR.MATH",           NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "FLOOR",                  "FLOOR.MATH",           NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_EXPORTONLY | FUNCFLAG_MACROCALL_NEW },
     // NOTE: this FDIST is not our LEGACY.FDIST
     { nullptr/*"FDIST"*/,             "FDIST",                NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     // NOTE: this FINV is not our LEGACY.FINV

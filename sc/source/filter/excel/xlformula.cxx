@@ -408,6 +408,9 @@ static const XclFunctionInfo saFuncTable_Oox[] =
 #define EXC_FUNCENTRY_V_VR_IMPORT( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
 
+#define EXC_FUNCENTRY_V_RO_EXPORT( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
 #define EXC_FUNCENTRY_A_VR( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     A, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
     { opcode,  255, (minparam)+1, (maxparam)+1, A, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
@@ -524,6 +527,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocBitRshift,     2,  2,  0,  "BITRSHIFT" ),
     EXC_FUNCENTRY_V_VR(         ocBitXor,        2,  2,  0,  "BITXOR" ),
     EXC_FUNCENTRY_V_VR(         ocCeil_Math,     1,  3,  0,  "CEILING.MATH" ),
+    EXC_FUNCENTRY_V_RO_EXPORT(  ocCeil,          1,  3,  0,  "CEILING.MATH" ),
     EXC_FUNCENTRY_V_VR(         ocCombinA,       2,  2,  0,  "COMBINA" ),
     EXC_FUNCENTRY_V_VR_IMPORT(  ocCot,           1,  1,  0,  "COT" ),
     EXC_FUNCENTRY_V_VR_IMPORT(  ocCotHyp,        1,  1,  0,  "COTH" ),
@@ -538,6 +542,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocNoName,        3,  3,  0,  "FINV" ),
     EXC_FUNCENTRY_V_VR(         ocFilterXML,     2,  2,  0,  "FILTERXML" ),
     EXC_FUNCENTRY_V_VR(         ocFloor_Math,    1,  3,  0,  "FLOOR.MATH" ),
+    EXC_FUNCENTRY_V_RO_EXPORT(  ocFloor,         1,  3,  0,  "FLOOR.MATH" ),
     EXC_FUNCENTRY_V_RO(         ocFormula,       1,  1,  0,  "FORMULATEXT" ),
     EXC_FUNCENTRY_V_VR(         ocGamma,         1,  1,  0,  "GAMMA" ),
     EXC_FUNCENTRY_V_VR(         ocGauss,         1,  1,  0,  "GAUSS" ),
