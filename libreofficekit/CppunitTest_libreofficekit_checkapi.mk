@@ -16,6 +16,9 @@ $(eval $(call gb_CppunitTest_add_cxxflags,libreofficekit_checkapi, \
 $(eval $(call gb_CppunitTest_add_exception_objects,libreofficekit_checkapi, \
     libreofficekit/qa/unit/checkapi \
 ))
+$(eval $(call gb_CppunitTest_add_cobjects,libreofficekit_checkapi,\
+	libreofficekit/qa/unit/compile_test \
+))
 
 $(eval $(call gb_CppunitTest_set_external_code,libreofficekit_checkapi))
 
