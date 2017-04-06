@@ -153,7 +153,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
                 for (sal_uInt16 i = 0; i < rTabs.Count(); ++i)
                 {
                     const SvxTabStop& rTab = rTabs[i];
-                    aDebStr.append(static_cast<sal_Int32>(rTab.GetTabPos()));
+                    aDebStr.append(rTab.GetTabPos());
                     aDebStr.append(' ');
                 }
                 aDebStr.append(')');
@@ -354,7 +354,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
             const std::unique_ptr<EditCharAttrib>& rAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs()[z];
             OStringBuffer aCharAttribs;
             aCharAttribs.append("\nA");
-            aCharAttribs.append(static_cast<sal_Int32>(nPortion));
+            aCharAttribs.append(nPortion);
             aCharAttribs.append(":  ");
             aCharAttribs.append(static_cast<sal_Int32>(rAttr->GetItem()->Which()));
             aCharAttribs.append('\t');
@@ -375,18 +375,18 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         OStringBuffer aPortionStr("\nText portions: #");
         aPortionStr.append(static_cast<sal_Int32>(nTextPortions));
         aPortionStr.append(" \nA");
-        aPortionStr.append(static_cast<sal_Int32>(nPortion));
+        aPortionStr.append(nPortion);
         aPortionStr.append(": Paragraph Length = ");
-        aPortionStr.append(static_cast<sal_Int32>(pPPortion->GetNode()->Len()));
+        aPortionStr.append(pPPortion->GetNode()->Len());
         aPortionStr.append("\nA");
-        aPortionStr.append(static_cast<sal_Int32>(nPortion));
+        aPortionStr.append(nPortion);
         aPortionStr.append(": ");
         sal_Int32 n = 0;
         for ( sal_Int32 z = 0; z < nTextPortions; ++z )
         {
             TextPortion& rPortion = pPPortion->GetTextPortions()[z];
             aPortionStr.append(' ');
-            aPortionStr.append(static_cast<sal_Int32>(rPortion.GetLen()));
+            aPortionStr.append(rPortion.GetLen());
             aPortionStr.append('(');
             aPortionStr.append(static_cast<sal_Int32>(rPortion.GetSize().Width()));
             aPortionStr.append(')');
@@ -397,9 +397,9 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
             n += rPortion.GetLen();
         }
         aPortionStr.append("\nA");
-        aPortionStr.append(static_cast<sal_Int32>(nPortion));
+        aPortionStr.append(nPortion);
         aPortionStr.append(": Total length: ");
-        aPortionStr.append(static_cast<sal_Int32>(n));
+        aPortionStr.append(n);
         if ( pPPortion->GetNode()->Len() != n )
             aPortionStr.append(" => Error !!!");
         fprintf(fp, "%s", aPortionStr.getStr());
