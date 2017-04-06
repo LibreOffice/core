@@ -214,45 +214,39 @@ void lclIgnoreString32( SvMemoryStream& rStrm, bool b16Bit )
 
 OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nChars, bool b16Bit)
 {
-    rtl_uString *pStr = rtl_uString_alloc(nChars);
-
-    sal_Unicode* pcUniChar = pStr->buffer;
-    sal_Unicode* pcEndChar = pStr->buffer + nChars;
-
+    OUStringBuffer aBuf(nChars);
     if( b16Bit )
     {
         sal_uInt16 nReadChar;
-        for( ;  (pcUniChar < pcEndChar); ++pcUniChar )
+        for( sal_uInt16 i = 0; i < nChars; ++i)
         {
             rStrm.ReadUInt16( nReadChar );
-            (*pcUniChar) = static_cast< sal_Unicode >( nReadChar );
+            aBuf.append(static_cast< sal_Unicode >( nReadChar ));
         }
     }
     else
     {
         sal_uInt8 nReadChar;
-        for( ; (pcUniChar < pcEndChar); ++pcUniChar )
+        for( sal_uInt16 i = 0; i < nChars; ++i)
         {
             rStrm.ReadUChar( nReadChar ) ;
-            (*pcUniChar) = static_cast< sal_Unicode >( nReadChar );
+            aBuf.append(static_cast< sal_Unicode >( nReadChar ));
         }
     }
-
-    return OUString(pStr, SAL_NO_ACQUIRE);
+    return aBuf.makeStringAndClear();
 }
 
-void lclAppendString32(OUString& rString, SvMemoryStream& rStrm, sal_uInt32 nChars, bool b16Bit)
+OUString lclGetString32(SvMemoryStream& rStrm, sal_uInt32 nChars, bool b16Bit)
 {
     sal_uInt16 nReadChars = ulimit_cast< sal_uInt16 >( nChars );
-    OUString urlStr = SwWW8ImplReader::ReadRawUniString( rStrm, nReadChars, b16Bit );
-    rString += urlStr;
+    return SwWW8ImplReader::ReadRawUniString( rStrm, nReadChars, b16Bit );
 }
 
-void lclAppendString32(OUString& rString, SvMemoryStream& rStrm, bool b16Bit)
+OUString lclGetString32(SvMemoryStream& rStrm, bool b16Bit)
 {
     sal_uInt32 nValue(0);
     rStrm.ReadUInt32( nValue );
-    lclAppendString32(rString, rStrm, nValue, b16Bit);
+    return lclGetString32(rStrm, nValue, b16Bit);
 }
 
 void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr)
@@ -294,16 +288,13 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     // target frame
     if( ::get_flag( nFlags, WW8_HLINK_FRAME ) )
     {
-        OUString sFrameName;
-        lclAppendString32(sFrameName, rStrm, true);
-        hlStr.tarFrame = sFrameName;
+        hlStr.tarFrame = lclGetString32(rStrm, true);
     }
 
         // UNC path
     if( ::get_flag( nFlags, WW8_HLINK_UNC ) )
     {
-        xLongName.reset( new OUString );
-        lclAppendString32( *xLongName, rStrm, true );
+        xLongName.reset( new OUString(lclGetString32(rStrm, true)) );
         lclGetAbsPath( *xLongName, 0 , pDocShell);
     }
     // file link or URL
@@ -314,8 +305,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
         if( (memcmp(aGuid, aGuidFileMoniker, 16) == 0) )
         {
             rStrm.ReadUInt16( nLevel );
-            xShortName.reset( new OUString );
-            lclAppendString32( *xShortName,rStrm, false );
+            xShortName.reset( new OUString(lclGetString32(rStrm, false )) );
             rStrm.SeekRel( 24 );
 
             sal_uInt32 nStrLen(0);
@@ -326,8 +316,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
                 rStrm.ReadUInt32( nStrLen );
                 nStrLen /= 2;
                 rStrm.SeekRel( 2 );
-                xLongName.reset( new OUString );
-                lclAppendString32( *xLongName, rStrm,nStrLen, true );
+                xLongName.reset( new OUString(lclGetString32( rStrm, nStrLen, true )) );
                 lclGetAbsPath( *xLongName, nLevel, pDocShell);
             }
             else
@@ -338,8 +327,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
             sal_uInt32 nStrLen(0);
             rStrm.ReadUInt32( nStrLen );
             nStrLen /= 2;
-            xLongName.reset( new OUString );
-            lclAppendString32( *xLongName,rStrm, nStrLen, true );
+            xLongName.reset( new OUString(lclGetString32( rStrm, nStrLen, true )) );
             if( !::get_flag( nFlags, WW8_HLINK_ABS ) )
                 lclGetAbsPath( *xLongName, 0 ,pDocShell);
         }
@@ -352,8 +340,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     // text mark
     if( ::get_flag( nFlags, WW8_HLINK_MARK ) )
     {
-        xTextMark.reset( new OUString );
-        lclAppendString32( *xTextMark, rStrm, true );
+        xTextMark.reset( new OUString(lclGetString32( rStrm, true )) );
     }
 
     if( !xLongName.get() && xShortName.get() )
