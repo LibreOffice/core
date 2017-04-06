@@ -268,55 +268,55 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
  */
 void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const ::rtl::OUString &ouValue, Any &rAny)
 {
-    if(ouName.equals(u"CharBackColor") ||
-            ouName.equals(u"CharColor") ||
-            ouName.equals(u"ParaAdjust") ||
-            ouName.equals(u"ParaFirstLineIndent") ||
-            ouName.equals(u"ParaLeftMargin") ||
-            ouName.equals(u"ParaRightMargin") ||
-            ouName.equals(u"ParaTopMargin") ||
-            ouName.equals(u"ParaBottomMargin") ||
-            ouName.equals(u"CharFontPitch") )
+    if(ouName == "CharBackColor" ||
+            ouName == "CharColor" ||
+            ouName == "ParaAdjust" ||
+            ouName == "ParaFirstLineIndent" ||
+            ouName == "ParaLeftMargin" ||
+            ouName == "ParaRightMargin" ||
+            ouName == "ParaTopMargin" ||
+            ouName == "ParaBottomMargin" ||
+            ouName == "CharFontPitch" )
     {
         // Convert to int.
         // NOTE: CharFontPitch is not implemented in java file.
         sal_Int32 nValue = ouValue.toInt32();
         rAny.setValue(&nValue, cppu::UnoType<sal_Int32>::get());
     }
-    else if(ouName.equals(u"CharShadowed") ||
-            ouName.equals(u"CharContoured") )
+    else if(ouName == "CharShadowed" ||
+            ouName == "CharContoured" )
     {
         // Convert to boolean.
         rAny <<= ouValue.toBoolean();
     }
-    else if(ouName.equals(u"CharEscapement") ||
-            ouName.equals(u"CharStrikeout")  ||
-            ouName.equals(u"CharUnderline") ||
-            ouName.equals(u"CharFontPitch") )
+    else if(ouName == "CharEscapement" ||
+            ouName == "CharStrikeout"  ||
+            ouName == "CharUnderline" ||
+            ouName == "CharFontPitch" )
     {
         // Convert to short.
         short nValue = (short)ouValue.toInt32();
         rAny.setValue(&nValue, cppu::UnoType<short>::get());
     }
-    else if(ouName.equals(u"CharHeight") ||
-            ouName.equals(u"CharWeight") )
+    else if(ouName == "CharHeight" ||
+            ouName == "CharWeight" )
     {
         // Convert to float.
         float fValue = ouValue.toFloat();
         rAny.setValue(&fValue, cppu::UnoType<float>::get());
     }
-    else if(ouName.equals(u"CharFontName") )
+    else if(ouName == "CharFontName" )
     {
         // Convert to string.
         rAny.setValue(&ouValue, cppu::UnoType<rtl::OUString>::get());
     }
-    else if(ouName.equals(u"CharPosture") )
+    else if(ouName == "CharPosture" )
     {
         // Convert to FontSlant.
         css::awt::FontSlant fontSlant = (css::awt::FontSlant)ouValue.toInt32();
         rAny.setValue(&fontSlant, cppu::UnoType<css::awt::FontSlant>::get());
     }
-    else if(ouName.equals(u"ParaTabStops") )
+    else if(ouName == "ParaTabStops" )
     {
 
         // Convert to the Sequence with TabStop element.
@@ -328,7 +328,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         do
         {
             // Position.
-            pos = ouValue.indexOf(u"Position=", pos);
+            pos = ouValue.indexOf("Position=", pos);
             if(pos != -1)
             {
                 posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "Position=".
@@ -339,7 +339,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                     pos = posComma + 1;
 
                     // TabAlign.
-                    pos = ouValue.indexOf(u"TabAlign=", pos);
+                    pos = ouValue.indexOf("TabAlign=", pos);
                     if(pos != -1)
                     {
                         posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "TabAlign=".
@@ -350,7 +350,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                             pos = posComma + 1;
 
                             // DecimalChar.
-                            pos = ouValue.indexOf(u"DecimalChar=", pos);
+                            pos = ouValue.indexOf("DecimalChar=", pos);
                             if(pos != -1)
                             {
                                 posComma = ouValue.indexOf(',', pos + 11); // 11 = length of "TabAlign=".
@@ -361,7 +361,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                                     pos = posComma + 1;
 
                                     // FillChar.
-                                    pos = ouValue.indexOf(u"FillChar=", pos);
+                                    pos = ouValue.indexOf("FillChar=", pos);
                                     if(pos != -1)
                                     {
                                         posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "TabAlign=".
@@ -425,14 +425,14 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         // Assign to Any object.
         rAny.setValue(&seqTabStop, cppu::UnoType<Sequence< css::style::TabStop >>::get());
     }
-    else if(ouName.equals(u"ParaLineSpacing") )
+    else if(ouName == "ParaLineSpacing" )
     {
         // Parse value string.
         css::style::LineSpacing lineSpacing;
         ::rtl::OUString ouSubValue;
         sal_Int32 pos = 0, posComma = 0;
 
-        pos = ouValue.indexOf(u"Mode=", pos);
+        pos = ouValue.indexOf("Mode=", pos);
         if(pos != -1)
         {
             posComma = ouValue.indexOf(',', pos + 5); // 5 = length of "Mode=".
@@ -442,7 +442,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                 lineSpacing.Mode = (sal_Int16)ouSubValue.toInt32();
                 pos = posComma + 1;
 
-                pos = ouValue.indexOf(u"Height=", pos);
+                pos = ouValue.indexOf("Height=", pos);
                 if(pos != -1)
                 {
                     ouSubValue = ouValue.copy(pos + 7, ouValue.getLength() - pos - 7);
