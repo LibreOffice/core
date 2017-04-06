@@ -113,6 +113,30 @@ bool isRedundantConstCast(CXXConstCastExpr const * expr) {
             .getTypePtr());
 }
 
+bool isArithmeticOp(Expr const * expr) {
+    expr = expr->IgnoreParenImpCasts();
+    if (auto const e = dyn_cast<BinaryOperator>(expr)) {
+        switch (e->getOpcode()) {
+        case BO_Mul:
+        case BO_Div:
+        case BO_Rem:
+        case BO_Add:
+        case BO_Sub:
+        case BO_Shl:
+        case BO_Shr:
+        case BO_And:
+        case BO_Xor:
+        case BO_Or:
+            return true;
+        case BO_Comma:
+            return isArithmeticOp(e->getRHS());
+        default:
+            return false;
+        }
+    }
+    return isa<UnaryOperator>(expr) || isa<AbstractConditionalOperator>(expr);
+}
+
 class RedundantCast:
     public RecursiveASTVisitor<RedundantCast>, public loplugin::RewritePlugin
 {
@@ -348,8 +372,22 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
     }
     auto t1 = getSubExprAsWritten(expr)->getType();
     auto t2 = expr->getTypeAsWritten();
-    if (t1.getCanonicalType() != t2.getCanonicalType()
-        || t1->isArithmeticType())
+    if (t1.getCanonicalType() != t2.getCanonicalType()) {
+        return true;
+    }
+    // Don't warn if the types are arithmetic (in the C++ meaning), and: either
+    // at least one is a typedef (and if both are typedefs,they're different),
+    // or the sub-expression involves some operation that is likely to change
+    // types through promotion, or the sub-expression is an integer literal (so
+    // its type generally depends on its value and suffix if any---even with a
+    // suffix like L it could still be either long or long long):
+    if ((t1->isIntegralType(compiler.getASTContext())
+         || t1->isRealFloatingType())
+        && ((t1 != t2
+             && (loplugin::TypeCheck(t1).Typedef()
+                 || loplugin::TypeCheck(t2).Typedef()))
+            || isArithmeticOp(expr->getSubExpr())
+            || isa<IntegerLiteral>(expr->getSubExpr()->IgnoreParenImpCasts())))
     {
         return true;
     }
