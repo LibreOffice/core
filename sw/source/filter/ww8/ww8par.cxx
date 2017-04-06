@@ -214,16 +214,10 @@ void lclIgnoreString32( SvMemoryStream& rStrm, bool b16Bit )
 
 OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nChars, bool b16Bit)
 {
-    // Fixed-size characters
-    const sal_uInt8 WW8_NUL_C                   = '\x00';       /// NUL chararcter.
-    const sal_uInt16 WW8_NUL                    = WW8_NUL_C;    /// NUL chararcter (unicode).
-    sal_Unicode         mcNulSubst = '\0';
+    rtl_uString *pStr = rtl_uString_alloc(nChars);
 
-    sal_uInt16 nCharsLeft = nChars;
-    std::unique_ptr<sal_Unicode[]> pcBuffer( new sal_Unicode[ nCharsLeft + 1 ] );
-
-    sal_Unicode* pcUniChar = pcBuffer.get();
-    sal_Unicode* pcEndChar = pcBuffer.get() + nCharsLeft;
+    sal_Unicode* pcUniChar = pStr->buffer;
+    sal_Unicode* pcEndChar = pStr->buffer + nChars;
 
     if( b16Bit )
     {
@@ -231,7 +225,7 @@ OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nCh
         for( ;  (pcUniChar < pcEndChar); ++pcUniChar )
         {
             rStrm.ReadUInt16( nReadChar );
-            (*pcUniChar) = (nReadChar == WW8_NUL) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
+            (*pcUniChar) = static_cast< sal_Unicode >( nReadChar );
         }
     }
     else
@@ -240,13 +234,11 @@ OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nCh
         for( ; (pcUniChar < pcEndChar); ++pcUniChar )
         {
             rStrm.ReadUChar( nReadChar ) ;
-            (*pcUniChar) = (nReadChar == WW8_NUL_C) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
+            (*pcUniChar) = static_cast< sal_Unicode >( nReadChar );
         }
     }
 
-    *pcEndChar = '\0';
-    OUString aRet(pcBuffer.get());
-    return aRet;
+    return OUString(pStr, SAL_NO_ACQUIRE);
 }
 
 void lclAppendString32(OUString& rString, SvMemoryStream& rStrm, sal_uInt32 nChars, bool b16Bit)
