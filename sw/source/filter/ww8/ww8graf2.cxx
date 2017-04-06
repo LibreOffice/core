@@ -497,7 +497,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
     // Sanity check is needed because for example check boxes in field results
     // contain a WMF-like struct
-    if (!m_pDataStream->GetError() && (aPic.lcb >= 58))
+    if (m_pDataStream->good() && (aPic.lcb >= 58))
     {
         if( m_pFlyFormatOfJustInsertedGraphic )
         {
