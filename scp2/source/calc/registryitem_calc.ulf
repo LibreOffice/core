@@ -37,6 +37,9 @@ en-US = "Microsoft Excel 97-2003 Worksheet"
 [STR_REG_VAL_MS_EXCEL_WORKSHEET]
 en-US = "Microsoft Excel Worksheet"
 
+[STR_REG_VAL_MS_EXCEL_WEBQUERY]
+en-US = "Microsoft Excel Web Query File"
+
 [STR_REG_VAL_MS_EXCEL_TEMPLATE_OLD]
 en-US = "Microsoft Excel 97-2003 Template"
 

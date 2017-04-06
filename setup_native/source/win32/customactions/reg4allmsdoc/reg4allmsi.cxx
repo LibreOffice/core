@@ -48,6 +48,7 @@ static const CHAR* g_Extensions[] =
     ".xltx",    // Office Excel 2007 XML template
     ".xltm",    // Office Excel 2007 XML macro-enabled template
     ".xlsb",    // Office Excel 2007 binary workbook (BIFF12)
+    ".iqy",     // Microsoft Excel Web Query File
     ".ppt",     // Microsoft Powerpoint
     ".pps",     // Microsoft Powerpoint
     ".pot",     // Microsoft Powerpoint Template
@@ -63,9 +64,9 @@ static const CHAR* g_Extensions[] =
 
 static const int WORD_START = 0;
 static const int EXCEL_START = 7;
-static const int POWERPOINT_START = 15;
-static const int VISIO_START = 23;
-static const int VISIO_END = 25;
+static const int POWERPOINT_START = 16;
+static const int VISIO_START = 24;
+static const int VISIO_END = 26;
 
 //    ".xlam",    // Office Excel 2007 XML macro-enabled add-in
 //    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in
