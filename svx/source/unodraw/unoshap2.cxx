@@ -1105,25 +1105,9 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
         if(mpObj.is())
             mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-        switch (getShapeKind()) {
-        case OBJ_PATHLINE:
-        case OBJ_PATHFILL:
-            {
-                drawing::PolyPolygonBezierCoords aRetval;
-                basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier(
-                    aNewPolyPolygon, aRetval);
-                rValue <<= aRetval;
-                break;
-            }
-        default:
-            {
-                drawing::PointSequenceSequence aRetval(aNewPolyPolygon.count());
-                B2DPolyPolygonToSvxPointSequenceSequence(
-                    aNewPolyPolygon, aRetval);
-                rValue <<= aRetval;
-                break;
-            }
-        }
+        drawing::PointSequenceSequence aRetval(aNewPolyPolygon.count());
+        B2DPolyPolygonToSvxPointSequenceSequence(aNewPolyPolygon, aRetval);
+        rValue <<= aRetval;
         break;
     }
     case OWN_ATTR_VALUE_POLYGON:
