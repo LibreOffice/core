@@ -37,6 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/wrkwin.hxx>
+#include <o3tl/make_unique.hxx>
 #include <stdlib.h>
 
 #include "viewfunc.hxx"
@@ -2663,9 +2664,9 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
     ScRangeName* pList = rDoc.GetRangeName();
 
     ScRangeData::Type nType = ScRangeData::Type::Name;
-    std::unique_ptr<ScRangeData> pNewEntry(new ScRangeData(
+    auto pNewEntry = o3tl::make_unique<ScRangeData>(
         &rDoc, rName, rSymbol, ScAddress( GetViewData().GetCurX(),
-        GetViewData().GetCurY(), nTab), nType ));
+        GetViewData().GetCurY(), nTab), nType );
     OUString aUpType = rType.toAsciiUpperCase();
     if ( aUpType.indexOf( 'P' ) != -1 )
         nType |= ScRangeData::Type::PrintArea;
