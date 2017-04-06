@@ -129,25 +129,25 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
     static const char aExpectedXPrefix[] = "X = (long) ";
     assert(aToken.startsWith(aExpectedXPrefix));
     sal_Int32 nIndex = strlen(aExpectedXPrefix);
-    aRectangle.X = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
+    aRectangle.X = aToken.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedYPrefix[] = " Y = (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedYPrefix));
     nIndex = strlen(aExpectedYPrefix);
-    aRectangle.Y = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
+    aRectangle.Y = aToken.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedWidthPrefix[] = " Width = (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedWidthPrefix));
     nIndex = strlen(aExpectedWidthPrefix);
-    aRectangle.Width = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
+    aRectangle.Width = aToken.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedHeightPrefix));
     nIndex = strlen(aExpectedHeightPrefix);
-    aRectangle.Height = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
+    aRectangle.Height = aToken.copy(nIndex).toInt32();
 
     return aRectangle;
 }
@@ -160,13 +160,13 @@ awt::Size lcl_parseSize(const OString& rValue)
     static const char aExpectedWidthPrefix[] = "Width = (long) ";
     assert(aToken.startsWith(aExpectedWidthPrefix));
     sal_Int32 nIndex = strlen(aExpectedWidthPrefix);
-    aSize.Width = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
+    aSize.Width = aToken.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedHeightPrefix));
     nIndex = strlen(aExpectedHeightPrefix);
-    aSize.Height = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
+    aSize.Height = aToken.copy(nIndex).toInt32();
 
     return aSize;
 }
