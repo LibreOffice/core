@@ -45,8 +45,8 @@ const sal_uInt8 EXC_STRF_UNKNOWN            = 0xF2;
 // Fixed-size characters
 const sal_uInt8 EXC_LF_C                    = '\x0A';       /// LF character (used for line break).
 const sal_uInt16 EXC_LF                     = EXC_LF_C;     /// LF character (unicode).
-const sal_uInt8 EXC_NUL_C                   = '\x00';       /// NUL chararcter.
-const sal_uInt16 EXC_NUL                    = EXC_NUL_C;    /// NUL chararcter (unicode).
+const sal_uInt8 EXC_NUL_C                   = '\x00';       /// NUL character.
+const sal_uInt16 EXC_NUL                    = EXC_NUL_C;    /// NUL character (unicode).
 
 // Rich-string formatting runs ================================================
 

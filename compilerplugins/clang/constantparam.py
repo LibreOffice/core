@@ -72,7 +72,7 @@ with open("loplugin.constantparam.report", "wt") as f:
 # take bitmask parameters where one or more of the bits in the
 # bitmask is always one or always zero
 
-# integer to hext str
+# integer to hex str
 def hex(i):
     return "0x%x" % i
 # I can't use python's ~ operator, because that produces negative numbers

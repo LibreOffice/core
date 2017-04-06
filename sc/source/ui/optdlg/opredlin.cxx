@@ -90,7 +90,7 @@ bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 
     SC_MOD()->SetAppOptions(aAppOptions);
 
-    //  repaint (if everything would be done by Items (how it sould be),
+    //  repaint (if everything would be done by Items (how it should be),
     //  this wouldn't be neccessary)
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current() );
     if (pDocSh)
