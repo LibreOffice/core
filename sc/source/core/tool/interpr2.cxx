@@ -2180,7 +2180,7 @@ void ScInterpreter::ScRate()
 double ScInterpreter::ScGetCompoundInterest(double fInterest, double fZr, double fZzr, double fBw,
                                  double fZw, bool bPayInAdvance, double& fRmz)
 {
-    fRmz = ScGetRmz(fInterest, fZzr, fBw, fZw, bPayInAdvance);     // fuer kapz auch bei fZr == 1
+    fRmz = ScGetRmz(fInterest, fZzr, fBw, fZw, bPayInAdvance);     // for PPMT also if fZr == 1
     double fCompoundInterest;
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     if (fZr == 1.0)
