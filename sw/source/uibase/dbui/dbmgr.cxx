@@ -869,7 +869,7 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     // aTempFile is not deleted, but that seems to be intentional
     utl::TempFile aTempFile( basename, true, &sExt, &sTempDirURL );
     INetURLObject aTempFileURL( aTempFile.GetURL() );
-    SfxMedium* pDstMed = new SfxMedium(
+    auto pDstMed = o3tl::make_unique<SfxMedium>(
         aTempFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
         StreamMode::STD_READWRITE );
     bool bAnyError = !xTargetDocShell->DoSaveAs( *pDstMed );
@@ -879,7 +879,6 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
         SAL_WARN( "sw.mailmerge", "Error saving: " << aTempFile.GetURL() );
     else
         SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile.GetURL() );
-    delete pDstMed;
 }
 
 static bool lcl_SaveDoc(
