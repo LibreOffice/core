@@ -286,6 +286,42 @@ OUString getCurrentModuleIdentifier_Impl()
     return sIdentifier;
 }
 
+namespace
+{
+    OUString MapModuleIdentifier(const OUString &rFactoryShortName)
+    {
+        OUString aFactoryShortName(rFactoryShortName);
+
+        // Map some module identifiers to their "real" help module string.
+        if ( aFactoryShortName == "chart2" )
+            aFactoryShortName = "schart" ;
+        else if ( aFactoryShortName == "BasicIDE" )
+            aFactoryShortName = "sbasic";
+        else if ( aFactoryShortName == "sweb"
+                || aFactoryShortName == "sglobal"
+                || aFactoryShortName == "swxform" )
+            aFactoryShortName = "swriter" ;
+        else if ( aFactoryShortName == "dbquery"
+                || aFactoryShortName == "dbbrowser"
+                || aFactoryShortName == "dbrelation"
+                || aFactoryShortName == "dbtable"
+                || aFactoryShortName == "dbapp"
+                || aFactoryShortName == "dbreport"
+                || aFactoryShortName == "dbtdata"
+                || aFactoryShortName == "swreport"
+                || aFactoryShortName == "swform" )
+            aFactoryShortName = "sdatabase";
+        else if ( aFactoryShortName == "sbibliography"
+                || aFactoryShortName == "sabpilot"
+                || aFactoryShortName == "scanner"
+                || aFactoryShortName == "spropctrlr"
+                || aFactoryShortName == "StartModule" )
+            aFactoryShortName.clear();
+
+        return aFactoryShortName;
+    }
+}
+
 OUString SfxHelp::GetHelpModuleName_Impl()
 {
     OUString aFactoryShortName;
@@ -314,33 +350,10 @@ OUString SfxHelp::GetHelpModuleName_Impl()
         }
     }
 
-    OUString sDefaultModule = getDefaultModule_Impl();
-    if ( !aFactoryShortName.isEmpty() )
-    {
-        // Map some module identifiers to their "real" help module string.
-        if ( aFactoryShortName == "chart2" )
-            aFactoryShortName = "schart" ;
-        else if ( aFactoryShortName == "BasicIDE" )
-            aFactoryShortName = "sbasic";
-        else if ( aFactoryShortName == "sweb"
-                || aFactoryShortName == "sglobal"
-                || aFactoryShortName == "swxform" )
-            aFactoryShortName = "swriter" ;
-        else if ( aFactoryShortName == "dbquery"
-                || aFactoryShortName == "dbbrowser"
-                || aFactoryShortName == "dbrelation"
-                || aFactoryShortName == "dbtable"
-                || aFactoryShortName == "dbapp"
-                || aFactoryShortName == "dbreport"
-                || aFactoryShortName == "swreport"
-                || aFactoryShortName == "swform" )
-            aFactoryShortName = "sdatabase";
-        else if ( aFactoryShortName == "sbibliography"
-                || aFactoryShortName == "StartModule" )
-            aFactoryShortName = sDefaultModule;
-    }
-    else
-        aFactoryShortName = sDefaultModule;
+    if (!aFactoryShortName.isEmpty())
+        aFactoryShortName = MapModuleIdentifier(aFactoryShortName);
+    if (aFactoryShortName.isEmpty())
+        aFactoryShortName = getDefaultModule_Impl();
 
     return aFactoryShortName;
 }
