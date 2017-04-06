@@ -244,7 +244,7 @@ void HWPFile::ParaListRead()
 
 bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
 {
-    HWPPara *spNode = new HWPPara;
+    std::unique_ptr<HWPPara> spNode( new HWPPara );
      unsigned char tmp_etcflag;
      unsigned char prev_etcflag = 0;
     while (spNode->Read(*this, flag))
@@ -269,11 +269,10 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
                 AddParaShape( &spNode->pshape );
 
         if (!aplist.empty())
-            aplist.back()->SetNext(spNode);
-        aplist.push_back(spNode);
-        spNode = new HWPPara;
+            aplist.back()->SetNext(spNode.get());
+        aplist.push_back(spNode.release());
+        spNode.reset( new HWPPara );
     }
-    delete spNode;
 
     return true;
 }

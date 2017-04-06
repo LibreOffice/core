@@ -1674,7 +1674,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         //sort property values
         // build sorted index array
         sal_Int32 nLength = aValues.size();
-        sal_Int32* pIndices = new sal_Int32[nLength];
+        std::unique_ptr<sal_Int32[]> pIndices( new sal_Int32[nLength] );
         for( i = 0; i < nLength; i++ )
             pIndices[i] = i;
         sort( &pIndices[0], &pIndices[nLength], IndexCompare(aValues.data()) );
@@ -1685,7 +1685,6 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         {
             pNewValues[i] = aValues[pIndices[i]];
         }
-        delete[] pIndices;
         return aNewValues;
     }
 

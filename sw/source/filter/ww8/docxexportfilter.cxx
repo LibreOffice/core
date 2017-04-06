@@ -62,21 +62,20 @@ bool DocxExportFilter::exportDocument()
     aPam.SetMark();
     aPam.Move( fnMoveBackward, GoInDoc );
 
-    SwPaM *pCurPam = new SwPaM( *aPam.End(), *aPam.Start() );
+    std::unique_ptr<SwPaM> pCurPam( new SwPaM( *aPam.End(), *aPam.Start() ) );
 
     // export the document
     // (in a separate block so that it's destructed before the commit)
     {
-        DocxExport aExport( this, pDoc, pCurPam, &aPam );
+        DocxExport aExport( this, pDoc, pCurPam.get(), &aPam );
         aExport.ExportDocument( true ); // FIXME support exporting selection only
     }
 
     commitStorage();
 
     // delete the pCurPam
-    while ( pCurPam->GetNext() != pCurPam )
+    while ( pCurPam->GetNext() != pCurPam.get() )
         delete pCurPam->GetNext();
-    delete pCurPam;
 
     return true;
 }

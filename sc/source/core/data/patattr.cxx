@@ -1076,7 +1076,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 {
     const SfxItemSet* pSrcSet = &GetItemSet();
 
-    ScPatternAttr* pDestPattern = new ScPatternAttr(pDestDoc->GetPool());
+    std::unique_ptr<ScPatternAttr> pDestPattern( new ScPatternAttr(pDestDoc->GetPool()) );
     SfxItemSet* pDestSet = &pDestPattern->GetItemSet();
 
     // Copy cell pattern style to other document:
@@ -1144,7 +1144,6 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
     ScPatternAttr* pPatternAttr =
         const_cast<ScPatternAttr*>( static_cast<const ScPatternAttr*>( &pDestDoc->GetPool()->Put(*pDestPattern) ) );
-    delete pDestPattern;
     return pPatternAttr;
 }
 

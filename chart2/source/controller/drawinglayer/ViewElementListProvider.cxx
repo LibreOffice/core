@@ -156,12 +156,12 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
 
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
-    SdrModel* pModel = new SdrModel();
+    std::unique_ptr<SdrModel> pModel( new SdrModel );
     pModel->GetItemPool().FreezeIdRanges();
     SdrPage* pPage = new SdrPage( *pModel, false );
     pPage->SetSize(Size(1000,1000));
     pModel->InsertPage( pPage, 0 );
-    SdrView* pView = new SdrView( pModel, pVDev );
+    std::unique_ptr<SdrView> pView( new SdrView( pModel.get(), pVDev ) );
     pView->hideMarkHandles();
     SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
@@ -181,8 +181,6 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     pView->UnmarkAll();
     pObj=pPage->RemoveObject(0);
     SdrObject::Free( pObj );
-    delete pView;
-    delete pModel;
 
     return aGraph;
 }

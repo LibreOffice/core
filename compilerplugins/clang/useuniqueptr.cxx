@@ -141,18 +141,23 @@ bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
         return true;
     }
 
-    const CXXDeleteExpr* deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_back());
+    auto lastStmt = compoundStmt->body_back();
+    if (compoundStmt->size() > 1) {
+        if (isa<ReturnStmt>(lastStmt))
+            lastStmt = *(++compoundStmt->body_rbegin());
+    }
+    auto deleteExpr = dyn_cast<CXXDeleteExpr>(lastStmt);
     if (deleteExpr == nullptr) {
         return true;
     }
 
-    const ImplicitCastExpr* pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
+    auto pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
     if (!pCastExpr)
         return true;
-    const DeclRefExpr* declRefExpr = dyn_cast<DeclRefExpr>(pCastExpr->getSubExpr());
+    auto declRefExpr = dyn_cast<DeclRefExpr>(pCastExpr->getSubExpr());
     if (!declRefExpr)
         return true;
-    const VarDecl* varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
+    auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
     if (!varDecl)
         return true;
     if (!varDecl->hasInit() || !dyn_cast<CXXNewExpr>(varDecl->getInit()))
