@@ -71,10 +71,10 @@ void NodeTest::testTdf47813()
 #undef MATRIX
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     SmFormat aFmt;
-    (void)pNodeA->Arrange(*pOutputDevice, aFmt);
-    (void)pNodeC->Arrange(*pOutputDevice, aFmt);
-    (void)pNodeL->Arrange(*pOutputDevice, aFmt);
-    (void)pNodeR->Arrange(*pOutputDevice, aFmt);
+    pNodeA->Arrange(*pOutputDevice, aFmt);
+    pNodeC->Arrange(*pOutputDevice, aFmt);
+    pNodeL->Arrange(*pOutputDevice, aFmt);
+    pNodeR->Arrange(*pOutputDevice, aFmt);
     long nWidthA = pNodeA->GetRect().GetWidth();
     long nWidthC = pNodeC->GetRect().GetWidth();
     long nWidthL = pNodeL->GetRect().GetWidth();

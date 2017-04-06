@@ -64,7 +64,7 @@ AstScope* AstStack::nextToTop()
         return nullptr;
 
     tmp = top();        // Save top
-    (void) pop();       // Pop it
+    pop();              // Pop it
     retval = top();     // Get next one down
     (void) push(tmp);   // Push top back
     return retval;      // Return next one down
