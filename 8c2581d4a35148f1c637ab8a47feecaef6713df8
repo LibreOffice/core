@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_10f2c7d2",
+        "filename": "sc/source/filter/excel/xeformula.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1640,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-06T17:11:59Z",
+      "side": 1,
+      "message": "While this cures the bug\u0027s symptom, it is a wrong approach in that it suppresses definedName elements for any and all macro calls, even if they\u0027re legit \"real\" macro functions. Instead, tweaking the XclFunctionInfo maps is necessary. As that needs some knowledge about how things work I\u0027ll come up with a fix myself.",
+      "revId": "8c2581d4a35148f1c637ab8a47feecaef6713df8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
