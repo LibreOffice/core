@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sc_xlinecolor.svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     id="namedview7"
+     showgrid="true"
+     inkscape:snap-bbox="true"
+     inkscape:object-nodes="true"
+     inkscape:zoom="59"
+     inkscape:cx="7.8363451"
+     inkscape:cy="6.5714272"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4137" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     d="M 0 13 L 0 16 L 16 16 L 16 13 L 0 13 z "
+     id="rect5623-8" />
+  <path
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     d="M 7.7949219 0.001953125 C 6.1887919 0.025653125 4.0300462 0.64273 4.0664062 2.625 C 4.1044063 4.69333 5.6252544 3.7776469 5.8027344 4.6230469 C 5.8295344 4.5869469 5.8686844 4.5576375 5.8964844 4.5234375 C 6.0467944 4.3526775 6.1973063 4.2135581 6.3476562 4.0488281 C 6.5067425 3.8602492 6.6740548 3.6783636 6.8398438 3.4960938 C 6.6892981 3.5732362 6.5244074 3.625 6.3457031 3.625 C 5.7161931 3.625 5.2070312 3.0882414 5.2070312 2.4257812 C 5.2070312 1.7633213 5.7161931 1.2265625 6.3457031 1.2265625 C 6.9751931 1.2265625 7.4863281 1.7633213 7.4863281 2.4257812 C 7.4863281 2.5851254 7.453997 2.7358988 7.4003906 2.875 C 7.9635042 2.2540241 8.2660111 1.9837227 9.9746094 0.625 C 9.1870192 0.12836 8.9179131 0.029283125 8.1269531 0.001953125 C 8.0255631 -0.001046875 7.9020019 0.00097312759 7.7949219 0.001953125 z M 7.4003906 2.875 C 7.3006767 2.98496 7.2107293 3.0809022 7.0839844 3.2226562 C 7.0005898 3.3159281 6.9219572 3.4058175 6.8398438 3.4960938 C 7.0920435 3.3668616 7.2944011 3.1500283 7.4003906 2.875 z M 12.472656 0.001953125 C 11.102666 1.0407231 9.2712494 2.6426681 7.8183594 4.2675781 C 7.6864894 4.4150781 7.5581837 4.5573681 7.4335938 4.7050781 C 7.3547937 4.7912781 7.2720994 4.8617319 7.1933594 4.9511719 C 7.1436594 5.0125719 7.0989512 5.0813781 7.0507812 5.1425781 C 6.0594811 6.2936687 5.0879358 7.6478658 4.2753906 8.8945312 C 4.0369608 8.7663325 3.7401159 8.7478642 3.421875 8.96875 C 2.8481987 9.3669297 2.968639 10.797348 1.7871094 10.796875 C 1.8989765 11.278231 3.1086768 11.271279 3.9257812 11.056641 C 4.6970248 10.854049 4.9319178 10.14255 4.7851562 9.5488281 C 4.7647751 9.466376 4.7149178 9.3833454 4.6679688 9.3007812 C 6.1785087 7.9862732 7.2543846 6.888241 7.9863281 6.0722656 C 8.1693381 5.8756256 8.3878825 5.6193144 8.6328125 5.3339844 C 9.5490627 4.2666244 10.860296 2.5848231 12.472656 0.001953125 z M 12.101562 2.4628906 C 11.021903 4.2491206 10.298517 5.3058394 9.5351562 6.1308594 C 9.0485261 6.6567794 8.6501614 7.1812306 8.3007812 7.5566406 C 7.6620913 8.2686506 6.8255737 9.1075768 5.9023438 10.029297 C 5.9505437 11.204057 6.2981206 11.519094 8.1503906 11.896484 C 11.117811 12.501084 14.261733 10.436617 13.945312 6.2480469 C 13.809493 4.4501469 13.097243 3.5324306 12.101562 2.4628906 z M 12.140625 4.7988281 C 12.558395 4.7988281 12.900391 5.1579694 12.900391 5.5996094 C 12.900391 6.0412394 12.558395 6.3984375 12.140625 6.3984375 C 11.722855 6.3984375 11.380859 6.0412394 11.380859 5.5996094 C 11.380859 5.1579694 11.722855 4.7988281 12.140625 4.7988281 z M 11.666016 7.1992188 C 12.083786 7.1992188 12.425781 7.5564169 12.425781 7.9980469 C 12.425781 8.4396869 12.083786 8.796875 11.666016 8.796875 C 11.248246 8.796875 10.90625 8.4396869 10.90625 7.9980469 C 10.90625 7.5564169 11.248246 7.1992188 11.666016 7.1992188 z M 7.8652344 8.796875 C 8.2830044 8.796875 8.6269531 9.1560163 8.6269531 9.5976562 C 8.6269531 10.039286 8.2830044 10.396484 7.8652344 10.396484 C 7.4474644 10.396484 7.1054688 10.039286 7.1054688 9.5976562 C 7.1054688 9.1560163 7.4474644 8.796875 7.8652344 8.796875 z M 10.146484 8.796875 C 10.564264 8.796875 10.90625 9.1560163 10.90625 9.5976562 C 10.90625 10.039286 10.564264 10.396484 10.146484 10.396484 C 9.7287044 10.396484 9.3867187 10.039286 9.3867188 9.5976562 C 9.3867188 9.1560163 9.7287044 8.796875 10.146484 8.796875 z "
+     id="path9234-4" />
+</svg>

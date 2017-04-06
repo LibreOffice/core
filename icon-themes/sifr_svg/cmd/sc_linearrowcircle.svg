@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+ <path 
+     style="fill:#555753;fill-opacity:1;stroke:none" 
+     d="M 5 4 C 4.69055 4 4.44768 4.0903 4.25 4.28125 L 0 8 C 1.41667 9.073 2.83333 10.64574 4.25 11.71875 C 4.44768 11.9097 4.69055 12 5 12 L 5.5859375 12 L 6 12 L 6 11 C 6 10.74311 5.87017 10.47155 5.6875 10.28125 L 4.1777344 9 L 10.173828 9 A 2.9999971 3.0000048 0 0 0 13 11 A 2.9999971 3.0000048 0 0 0 16 8 A 2.9999971 3.0000048 0 0 0 13 5 A 2.9999971 3.0000048 0 0 0 10.175781 7 L 4.1777344 7 L 5.6875 5.71875 C 5.87017 5.52846 6 5.25689 6 5 L 6 4 L 5.5859375 4 L 5 4 z "
+     />
+</svg>

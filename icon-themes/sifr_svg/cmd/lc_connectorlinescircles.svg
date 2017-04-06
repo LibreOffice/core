@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+ <path 
+     style="fill:#555753;fill-opacity:1;stroke:none" 
+     d="M 5 1 C 2.802704 1 1 2.802704 1 5 C 1 7.197296 2.802704 9 5 9 C 6.850303 9 8.4055917 7.715787 8.8554688 6 L 9.2460938 6 L 13.039062 19.275391 C 13.161938 19.704198 13.553935 19.99979 14 20 L 15.144531 20 C 15.594408 21.715787 17.149697 23 19 23 C 21.197295 23 23 21.197296 23 19 C 23 16.802704 21.197295 15 19 15 C 17.149697 15 15.594408 16.284213 15.144531 18 L 14.753906 18 L 10.960938 4.7246094 C 10.838062 4.2958024 10.446065 4.000209 10 4 L 8.8554688 4 C 8.4055917 2.284213 6.850303 1 5 1 z "
+     />
+</svg>

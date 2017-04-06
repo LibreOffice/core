@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 24 24"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="lc_freeline_unfilled.svg">
+  <defs
+     id="defs9">
+    <linearGradient
+       id="linearGradient3827-6">
+      <stop
+         id="stop3829-6"
+         offset="0"
+         style="stop-color:#cc0001;stop-opacity:1" />
+      <stop
+         id="stop3831-4"
+         offset="1"
+         style="stop-color:#ef292a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     id="namedview7"
+     showgrid="true"
+     inkscape:zoom="32"
+     inkscape:cx="21.000138"
+     inkscape:cy="7.559008"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:object-nodes="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4393" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g7149-0"
+     style="display:inline;fill:#555753;fill-opacity:1"
+     transform="matrix(1.4579613,0,0,1.4579613,58.404906,-676.06127)"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_freeline_unfilled.png">
+    <path
+       sodipodi:nodetypes="cccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path7151-4"
+       transform="matrix(1.0002552,0,0,1.0002552,-90.014911,137.27682)"
+       d="m 58.171434,327.71449 -2.057145,2.05715 c 0.03329,1.07509 3.031112,4.11428 4.114286,4.11428 l 4.800002,-4.8 0,-1.37143 z m -3.428573,3.42857 -0.685714,3.42858 -2.742854,2.72931 2.742855,0.007 1.371427,-1.36467 3.428571,-0.68571 c -1.104288,0 -4.114284,-3.01001 -4.114285,-4.11429 z"
+       style="fill:#555753;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+  </g>
+  <path
+     style="display:inline;fill:none;fill-rule:evenodd;stroke:#555753;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 2.9999964,19 6.038991,-0.0442 C 12.137827,18.9331 15.734831,13.87862 17.867413,14.93932 19.999996,16 15.999996,20 20.999996,21"
+     id="path5910"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cszc"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_freeline_unfilled.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+</svg>

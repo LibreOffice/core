@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+ <path 
+     style="fill:#555753;fill-opacity:1;stroke:none" 
+     d="m 13.482768,3.9933435 c -0.275372,0.00431 -0.495421,0.2304724 -0.492188,0.5058594 l 0,1.5078125 -1.994141,0 0,-1.5 C 11.000829,4.225527 10.772083,3.9958983 10.49058,3.9992029 10.213668,4.0024418 9.9921214,4.2301179 9.9964393,4.5070154 l 0,1.5 -1.5,0 c -0.6761613,-0.00956 -0.6761613,1.0095626 0,1 l 1.5,0 0,2 -1.5,0 c -0.6761802,-0.00958 -0.6761802,1.0095816 0,0.9999996 l 1.5,0 0,1.472656 c -0.00958,0.676175 1.0095767,0.676175 0.9999997,0 l 0,-1.472656 1.994141,0 0,1.486328 c -0.0096,0.676161 1.009563,0.676161 1,0 l 0,-1.486328 1.505859,0 c 0.67618,0.0096 0.67618,-1.0095816 0,-0.9999996 l -1.505859,0 0,-2 1.511719,0 c 0.676161,0.00956 0.676161,-1.0095626 0,-1 l -1.511719,0 0,-1.5078125 C 13.993885,4.2176997 13.764256,3.9889542 13.482768,3.9933435 Z M 0.58432988,4.0070154 c -0.32662275,-0.00429 -0.59370927,0.2592866 -0.59375,0.5859375 l 0,6.8281241 c 3.4125e-4,0.474883 0.53574691,0.752208 0.92382812,0.478516 L 5.742533,8.485531 c 0.3302624,-0.2335326 0.3302624,-0.7234986 0,-0.9570312 L 0.914408,4.1144373 C 0.81775375,4.0461203 0.70267903,4.0086699 0.58432988,4.0070154 Z m 10.41210912,3 1.994141,0 0,2 -1.994141,0 z"
+     />
+</svg>
