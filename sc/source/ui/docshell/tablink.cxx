@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
@@ -450,7 +453,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
     //  Filter detection
 
     std::shared_ptr<const SfxFilter> pSfxFilter;
-    SfxMedium* pMedium = new SfxMedium( rFileName, StreamMode::STD_READ );
+    auto pMedium = o3tl::make_unique<SfxMedium>( rFileName, StreamMode::STD_READ );
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
         if ( bWithInteraction )
@@ -473,7 +476,6 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
         bOK = !rFilter.isEmpty();
     }
 
-    delete pMedium;
     return bOK;
 }
 
