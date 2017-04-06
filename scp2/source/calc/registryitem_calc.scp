@@ -1249,6 +1249,7 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_MSO_Reg, xls,  XLS
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_MSO_Reg, xlsx, XLSX, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_MSO_Reg, xlsm, XLSM, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_MSO_Reg, xlsb, XLSB, MS_EXCEL_WORKSHEET, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_OPEN_EXTENSION( Iqy, gid_Module_Prg_Calc_MSO_Reg, iqy, IQY, MS_EXCEL_WEBQUERY, 0, scalc.exe, open, Calc )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 4, scalc.exe, new, Calc )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
