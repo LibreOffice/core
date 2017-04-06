@@ -56,8 +56,7 @@ using ::com::sun::star::uno::RuntimeException;
 DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContext > const & context) :
     TDatabaseDataProvider(m_aMutex),
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >(
-        context, static_cast< Implements >(
-            IMPLEMENTS_PROPERTY_SET), uno::Sequence< OUString >()),
+        context, IMPLEMENTS_PROPERTY_SET, uno::Sequence< OUString >()),
     m_aParameterManager( m_aMutex, context ),
     m_aFilterManager(),
     m_xContext(context),
