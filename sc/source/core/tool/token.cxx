@@ -3111,6 +3111,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                                 aAbs = aErrorPos;
                             aRes.mbReferenceModified = true;
                         }
+                        else if (rCxt.maRange.In(aAbs))
+                        {
+                            // Referenced cell has been overwritten.
+                            aRes.mbValueChanged = true;
+                        }
 
                         rRef.SetAddress(aAbs, rNewPos);
                         rRef.SetFlag3D(aAbs.Tab() != rNewPos.Tab() || !rRef.IsTabRel());
@@ -3126,6 +3131,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                             if (!aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
                                 aAbs = aErrorRange;
                             aRes.mbReferenceModified = true;
+                        }
+                        else if (rCxt.maRange.In(aAbs))
+                        {
+                            // Referenced range has been entirely overwritten.
+                            aRes.mbValueChanged = true;
                         }
 
                         rRef.SetRange(aAbs, rNewPos);
