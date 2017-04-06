@@ -23,7 +23,6 @@ import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -67,12 +66,10 @@ import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.DocumentProviderSettingsActivity;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
-import org.libreoffice.storage.local.LocalFile;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -99,7 +96,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private IFile currentDirectory;
     private int currentlySelectedFile;
 
-    private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
+    public static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
     private static final String DOC_PROVIDER_KEY = "CURRENT_DOCUMENT_PROVIDER";
     private static final String FILTER_MODE_KEY = "FILTER_MODE";
     public static final String EXPLORER_VIEW_TYPE_KEY = "EXPLORER_VIEW_TYPE";
@@ -551,6 +548,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private void open(String newDocumentType) {
         Intent intent = new Intent(this, LibreOfficeMainActivity.class);
         intent.putExtra(NEW_DOC_TYPE_KEY, newDocumentType);
+        intent.putExtra(CURRENT_DIRECTORY_KEY, currentDirectory.getUri().getPath());
         startActivity(intent);
     }
 
