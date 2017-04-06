@@ -363,7 +363,7 @@ sal_Size ImplConvertUnicodeToGb18030(void const * pData,
                         goto no_output;
                     break;
                 }
-                else if (nChar <= pRange->m_nLastUnicode)
+                if (nChar <= pRange->m_nLastUnicode)
                 {
                     if (pDestBufEnd - pDestBufPtr >= 4)
                     {

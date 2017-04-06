@@ -115,7 +115,7 @@ XInterface * OInterfaceIteratorHelper::next()
         if( bIsList )
             // typecase to const,so the getArray method is faster
             return aData.pAsSequence->getConstArray()[nRemain].get();
-        else if( aData.pAsInterface )
+        if( aData.pAsInterface )
             return aData.pAsInterface;
     }
     // exception
@@ -159,7 +159,7 @@ sal_Int32 OInterfaceContainerHelper::getLength() const
     MutexGuard aGuard( rMutex );
     if( bIsList )
         return aData.pAsSequence->getLength();
-    else if( aData.pAsInterface )
+    if( aData.pAsInterface )
         return 1;
     return 0;
 }
@@ -169,7 +169,7 @@ Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const
     MutexGuard aGuard( rMutex );
     if( bIsList )
         return *aData.pAsSequence;
-    else if( aData.pAsInterface )
+    if( aData.pAsInterface )
     {
         Reference<XInterface> x( aData.pAsInterface );
         return Sequence< Reference< XInterface > >( &x, 1 );
@@ -207,7 +207,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
         aData.pAsSequence->getArray()[ nLen ] = rListener;
         return nLen +1;
     }
-    else if( aData.pAsInterface )
+    if( aData.pAsInterface )
     {
         Sequence< Reference< XInterface > > * pSeq = new Sequence< Reference< XInterface > >( 2 );
         Reference<XInterface> * pArray = pSeq->getArray();
@@ -218,13 +218,10 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
         bIsList = true;
         return 2;
     }
-    else
-    {
-        aData.pAsInterface = rListener.get();
-        if( rListener.is() )
-            rListener->acquire();
-        return 1;
-    }
+    aData.pAsInterface = rListener.get();
+    if( rListener.is() )
+        rListener->acquire();
+    return 1;
 }
 
 sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener )
@@ -271,10 +268,9 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
             bIsList = false;
             return 1;
         }
-        else
-            return aData.pAsSequence->getLength();
+        return aData.pAsSequence->getLength();
     }
-    else if( aData.pAsInterface && Reference<XInterface>( aData.pAsInterface ) == rListener )
+    if( aData.pAsInterface && Reference<XInterface>( aData.pAsInterface ) == rListener )
     {
         aData.pAsInterface->release();
         aData.pAsInterface = nullptr;
@@ -423,8 +419,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelper::addInterface(
         pMap->push_back(std::pair<Type, void*>(rKey, pLC));
         return pLC->addInterface( rListener );
     }
-    else
-        return static_cast<OInterfaceContainerHelper*>((*iter).second)->addInterface( rListener );
+    return static_cast<OInterfaceContainerHelper*>((*iter).second)->addInterface( rListener );
 }
 
 sal_Int32 OMultiTypeInterfaceContainerHelper::removeInterface(
@@ -595,8 +590,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperInt32::addInterface(
         pMap->push_back(std::pair< sal_Int32, void* >(rKey, pLC));
         return pLC->addInterface( rListener );
     }
-    else
-        return static_cast<OInterfaceContainerHelper*>((*iter).second)->addInterface( rListener );
+    return static_cast<OInterfaceContainerHelper*>((*iter).second)->addInterface( rListener );
 }
 
 sal_Int32 OMultiTypeInterfaceContainerHelperInt32::removeInterface(

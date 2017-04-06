@@ -65,12 +65,11 @@ static bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
            FreeBSD versions support sysconf(_SC_GETPW_R_SIZE_MAX) in a broken
            way and always set EINVAL, so be resilient here: */
         return false;
-    } else {
-        SAL_WARN_IF( m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max(), "sal.osl",
-                "m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max()");
-        *value = (std::size_t) m;
-        return true;
     }
+    SAL_WARN_IF( m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max(), "sal.osl",
+                "m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max()");
+    *value = (std::size_t) m;
+    return true;
 #else
     /* some platforms like Mac OS X 1.3 do not define _SC_GETPW_R_SIZE_MAX: */
     return false;

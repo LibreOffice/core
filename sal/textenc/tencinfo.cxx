@@ -783,8 +783,7 @@ sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding e
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
         return pData->mnBestWindowsCharset;
-    else
-        return 1;
+    return 1;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -794,10 +793,9 @@ const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eT
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
         return pData->mpBestUnixCharset;
-    else if( eTextEncoding == RTL_TEXTENCODING_UNICODE )
+    if( eTextEncoding == RTL_TEXTENCODING_UNICODE )
         return "iso10646-1";
-    else
-        return nullptr;
+    return nullptr;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -815,8 +813,7 @@ const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eT
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
         return pData->mpBestMimeCharset;
-    else
-        return nullptr;
+    return nullptr;
 }
 
 /* The following two functions are based on <http://www.sharmahd.com/tm/

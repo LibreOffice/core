@@ -139,7 +139,7 @@ Reference<XInterface > OSingleFactoryHelper::createInstanceEveryTime(
     {
         return (*m_fptr)( xContext );
     }
-    else if( pCreateFunction )
+    if( pCreateFunction )
     {
         if (xContext.is())
         {
@@ -150,10 +150,7 @@ Reference<XInterface > OSingleFactoryHelper::createInstanceEveryTime(
         }
         return (*pCreateFunction)( xSMgr );
     }
-    else
-    {
-        return Reference< XInterface >();
-    }
+    return Reference< XInterface >();
 }
 
 // XSingleServiceFactory
@@ -510,8 +507,7 @@ Any SAL_CALL ORegistryFactoryHelper::queryInterface(
     Any ret( OFactoryComponentHelper::queryInterface( type ) );
     if (ret.hasValue())
         return ret;
-    else
-        return OPropertySetHelper::queryInterface( type );
+    return OPropertySetHelper::queryInterface( type );
 }
 
 
@@ -624,7 +620,7 @@ Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime(
     {
         return xModuleFactory->createInstanceWithContext( xContext );
     }
-    else if( xModuleFactoryDepr.is() )
+    if( xModuleFactoryDepr.is() )
     {
         return xModuleFactoryDepr->createInstance();
     }
@@ -652,7 +648,7 @@ Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArgume
     {
         return xModuleFactoryDepr->createInstanceWithArguments( Arguments );
     }
-    else if( xModuleFactory.is() )
+    if( xModuleFactory.is() )
     {
         SAL_INFO("cppuhelper", "no context ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!");
         return xModuleFactory->createInstanceWithArgumentsAndContext( Arguments, Reference< XComponentContext >() );
@@ -682,7 +678,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
     {
         return xModuleFactory->createInstanceWithArgumentsAndContext( rArguments, xContext );
     }
-    else if( xModuleFactoryDepr.is() )
+    if( xModuleFactoryDepr.is() )
     {
         SAL_INFO_IF(xContext.is(), "cppuhelper", "ignoring context calling ORegistryFactoryHelper::createInstaceWithArgumentsAndContext()!");
         return xModuleFactoryDepr->createInstanceWithArguments( rArguments );

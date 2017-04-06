@@ -209,7 +209,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
 
                         return Result;
                     }
-                    else if ( ret != EINTR )
+                    if ( ret != EINTR )
                     {
                         Result = osl_cond_result_error;
                         nRet = pthread_mutex_unlock(&pCond->m_Lock);

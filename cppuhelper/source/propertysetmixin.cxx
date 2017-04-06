@@ -750,7 +750,8 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
                 object);
         }
         return strct;
-    } else if (wrapDefaulted
+    }
+    if (wrapDefaulted
                && type->getName().startsWith("com.sun.star.beans.Defaulted<"))
     {
         css::uno::Any strct;
@@ -778,7 +779,8 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
                 object);
         }
         return strct;
-    } else if (wrapOptional
+    }
+    if (wrapOptional
                && type->getName().startsWith("com.sun.star.beans.Optional<"))
     {
         css::uno::Any strct;
@@ -809,13 +811,12 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
                 object);
         }
         return strct;
-    } else {
-        if (wrapAmbiguous || wrapDefaulted || wrapOptional) {
-            throw css::uno::RuntimeException(
-                "unexpected type of attribute", object);
-        }
-        return value;
     }
+    if (wrapAmbiguous || wrapDefaulted || wrapOptional) {
+        throw css::uno::RuntimeException(
+            "unexpected type of attribute", object);
+    }
+    return value;
 }
 
 PropertySetMixinImpl::PropertySetMixinImpl(
@@ -954,21 +955,22 @@ css::uno::Any PropertySetMixinImpl::queryInterface(css::uno::Type const & type)
         css::uno::Reference< css::uno::XInterface > ifc(
             static_cast< css::beans::XPropertySet * >(this));
         return css::uno::Any(&ifc, type);
-    } else if ((m_impl->implements & IMPLEMENTS_FAST_PROPERTY_SET) != 0
+    }
+    if ((m_impl->implements & IMPLEMENTS_FAST_PROPERTY_SET) != 0
                && type == css::beans::XFastPropertySet::static_type())
     {
         css::uno::Reference< css::uno::XInterface > ifc(
             static_cast< css::beans::XFastPropertySet * >(this));
         return css::uno::Any(&ifc, type);
-    } else if ((m_impl->implements & IMPLEMENTS_PROPERTY_ACCESS) != 0
+    }
+    if ((m_impl->implements & IMPLEMENTS_PROPERTY_ACCESS) != 0
                && type == css::beans::XPropertyAccess::static_type())
     {
         css::uno::Reference< css::uno::XInterface > ifc(
             static_cast< css::beans::XPropertyAccess * >(this));
         return css::uno::Any(&ifc, type);
-    } else {
-        return css::uno::Any();
     }
+    return css::uno::Any();
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo >

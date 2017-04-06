@@ -76,10 +76,9 @@ bool resolvePathnameUrl(rtl::OUString * url) {
          osl::FileBase::E_None))
     {
         return true;
-    } else {
-        *url = rtl::OUString();
-        return false;
     }
+    *url = rtl::OUString();
+    return false;
 }
 
 enum LookupMode {
@@ -537,9 +536,8 @@ bool Bootstrap_Impl::getDirectValue(
     if (find(_nameValueList, key, &v)) {
         expandValue(value, v, mode, this, key, requestStack);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 bool Bootstrap_Impl::getAmbienceValue(
@@ -557,9 +555,8 @@ bool Bootstrap_Impl::getAmbienceValue(
     {
         expandValue(value, v, mode, nullptr, key, requestStack);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void Bootstrap_Impl::expandValue(
@@ -838,7 +835,8 @@ sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped) {
             *escaped = true;
             return static_cast< sal_Unicode >(
                 (n1 << 12) | (n2 << 8) | (n3 << 4) | n4);
-        } else if (*pos < text.getLength()) {
+        }
+        if (*pos < text.getLength()) {
             *escaped = true;
             return text[(*pos)++];
         }

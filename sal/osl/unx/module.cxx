@@ -172,28 +172,27 @@ oslModule osl_loadModuleRelativeAscii(
     assert(relativePath && "illegal argument");
     if (relativePath[0] == '/') {
         return osl_loadModuleAscii(relativePath, mode);
-    } else {
-        rtl_String * path = nullptr;
-        rtl_String * suffix = nullptr;
-        oslModule module;
-        if (!getModulePathFromAddress(
-                reinterpret_cast< void * >(baseModule), &path))
-        {
-            return nullptr;
-        }
-        rtl_string_newFromStr_WithLength(
-            &path, path->buffer,
-            (rtl_str_lastIndexOfChar_WithLength(path->buffer, path->length, '/')
-             + 1));
-            /* cut off everything after the last slash; should the original path
-               contain no slash, the resulting path is the empty string */
-        rtl_string_newFromStr(&suffix, relativePath);
-        rtl_string_newConcat(&path, path, suffix);
-        rtl_string_release(suffix);
-        module = osl_loadModuleAscii(path->buffer, mode);
-        rtl_string_release(path);
-        return module;
     }
+    rtl_String * path = nullptr;
+    rtl_String * suffix = nullptr;
+    oslModule module;
+    if (!getModulePathFromAddress(
+            reinterpret_cast< void * >(baseModule), &path))
+    {
+        return nullptr;
+    }
+    rtl_string_newFromStr_WithLength(
+        &path, path->buffer,
+        (rtl_str_lastIndexOfChar_WithLength(path->buffer, path->length, '/')
+         + 1));
+        /* cut off everything after the last slash; should the original path
+           contain no slash, the resulting path is the empty string */
+    rtl_string_newFromStr(&suffix, relativePath);
+    rtl_string_newConcat(&path, path, suffix);
+    rtl_string_release(suffix);
+    module = osl_loadModuleAscii(path->buffer, mode);
+    rtl_string_release(path);
+    return module;
 }
 
 #endif // !DISABLE_DYNLOADING

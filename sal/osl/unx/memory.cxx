@@ -20,16 +20,14 @@ void* osl_aligned_alloc( sal_Size align, sal_Size size )
     {
         return nullptr;
     }
-    else
-    {
+
 #if defined __ANDROID__
-        return memalign(align, size);
+    return memalign(align, size);
 #else
-        void* ptr;
-        int err = posix_memalign(&ptr, align, size);
-        return err ? nullptr : ptr;
+    void* ptr;
+    int err = posix_memalign(&ptr, align, size);
+    return err ? nullptr : ptr;
 #endif
-    }
 }
 
 void osl_aligned_free( void* p )

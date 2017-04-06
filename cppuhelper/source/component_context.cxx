@@ -359,8 +359,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
             pEntry->lateInit = false;
             return pEntry->value;
         }
-        else
-            ret = pEntry->value;
+        ret = pEntry->value;
     }
     guard.clear();
     if (ret != xInstance) {
@@ -377,8 +376,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
     {
         if (m_xDelegate.is())
             return m_xDelegate->getValueByName( rName );
-        else
-            return Any( Reference<XComponentContext>(this) );
+        return Any( Reference<XComponentContext>(this) );
     }
 
     Any ret( lookupMap( rName ) );

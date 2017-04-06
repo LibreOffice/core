@@ -54,18 +54,16 @@ static double getN10Exp( int nExp )
         // because -nExp = nExp
         if ( -nExp <= n10Count && -nExp > 0 )
             return n10s[1][-nExp-1];
-        else
-            return pow( 10.0, static_cast<double>( nExp ) );
+        return pow( 10.0, static_cast<double>( nExp ) );
     }
-    else if ( nExp > 0 )
+    if ( nExp > 0 )
     {
         if ( nExp <= n10Count )
             return n10s[0][nExp-1];
-        else
-            return pow( 10.0, static_cast<double>( nExp ) );
+        return pow( 10.0, static_cast<double>( nExp ) );
     }
-    else // ( nExp == 0 )
-        return 1.0;
+    // ( nExp == 0 )
+    return 1.0;
 }
 
 namespace {
@@ -1144,21 +1142,19 @@ double SAL_CALL rtl_math_asinh( double fX ) SAL_THROW_EXTERN_C()
 {
     if ( fX == 0.0 )
         return 0.0;
-    else
+
+    double fSign = 1.0;
+    if ( fX < 0.0 )
     {
-        double fSign = 1.0;
-        if ( fX < 0.0 )
-        {
-            fX = - fX;
-            fSign = -1.0;
-        }
-        if ( fX < 0.125 )
-            return fSign * rtl_math_log1p( fX + fX*fX / (1.0 + sqrt( 1.0 + fX*fX)));
-        else if ( fX < 1.25e7 )
-            return fSign * log( fX + sqrt( 1.0 + fX*fX));
-        else
-            return fSign * log( 2.0*fX);
+        fX = - fX;
+        fSign = -1.0;
     }
+    if ( fX < 0.125 )
+        return fSign * rtl_math_log1p( fX + fX*fX / (1.0 + sqrt( 1.0 + fX*fX)));
+    if ( fX < 1.25e7 )
+        return fSign * log( fX + sqrt( 1.0 + fX*fX));
+
+    return fSign * log( 2.0*fX);
 }
 
 /** improved accuracy of acosh for x large and for x near 1
@@ -1173,14 +1169,13 @@ double SAL_CALL rtl_math_acosh( double fX ) SAL_THROW_EXTERN_C()
         ::rtl::math::setNan( &fResult );
         return fResult;
     }
-    else if ( fX == 1.0 )
+    if ( fX == 1.0 )
         return 0.0;
-    else if ( fX < 1.1 )
+    if ( fX < 1.1 )
         return rtl_math_log1p( fZ + sqrt( fZ*fZ + 2.0*fZ));
-    else if ( fX < 1.25e7 )
+    if ( fX < 1.25e7 )
         return log( fX + sqrt( fX*fX - 1.0));
-    else
-        return log( 2.0*fX);
+    return log( 2.0*fX);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

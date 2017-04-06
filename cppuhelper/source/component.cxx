@@ -58,7 +58,7 @@ Any OComponentHelper::queryAggregation( Type const & rType )
         void * p = static_cast< lang::XComponent * >( this );
         return Any( &p, rType );
     }
-    else if (rType == cppu::UnoType<lang::XTypeProvider>::get())
+    if (rType == cppu::UnoType<lang::XTypeProvider>::get())
     {
         void * p = static_cast< lang::XTypeProvider * >( this );
         return Any( &p, rType );

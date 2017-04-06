@@ -126,7 +126,7 @@ oslFileError getSystemPathFromFileUrl(
                 }
                 i = j + 1;
                 break;
-            } else if (!rtl::isAsciiAlphanumeric(c) && c != '+' && c != '-'
+            } if (!rtl::isAsciiAlphanumeric(c) && c != '+' && c != '-'
                        && c != '.')
             {
                 break;
@@ -202,10 +202,9 @@ oslFileError getSystemPathFromFileUrl(
                 return osl_File_E_INVAL;
             }
             return getSystemPathFromFileUrl(home, path, false);
-        } else {
-            // FIXME: replace ~user with user's home directory
-            return osl_File_E_INVAL;
         }
+        // FIXME: replace ~user with user's home directory
+        return osl_File_E_INVAL;
     }
     return osl_File_E_None;
 }
@@ -500,12 +499,12 @@ namespace
                     punresolved++;
                     continue;
                 }
-                else if (*(punresolved + 1) == '/')
+                if (*(punresolved + 1) == '/')
                 {
                     punresolved += 2;
                     continue;
                 }
-                else if ((*(punresolved + 1) == '.') && (*(punresolved + 2) == '\0' || (*(punresolved + 2) == '/')))
+                if ((*(punresolved + 1) == '.') && (*(punresolved + 2) == '\0' || (*(punresolved + 2) == '/')))
                 {
                     _rmlastpathtoken(path_resolved_so_far);
 
@@ -518,22 +517,21 @@ namespace
 
                     continue;
                 }
-                else // a file or directory name may start with '.'
+                // a file or directory name may start with '.'
+
+                if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
+                    return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+
+                ustrchrcat(*punresolved++, path_resolved_so_far);
+
+                if (*punresolved == '\0' && !realpath_failed)
                 {
-                    if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
-                        return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+                    ferr = _osl_resolvepath(
+                        path_resolved_so_far,
+                        &realpath_failed);
 
-                    ustrchrcat(*punresolved++, path_resolved_so_far);
-
-                    if (*punresolved == '\0' && !realpath_failed)
-                    {
-                        ferr = _osl_resolvepath(
-                            path_resolved_so_far,
-                            &realpath_failed);
-
-                        if (ferr != osl_File_E_None)
-                            return ferr;
-                    }
+                    if (ferr != osl_File_E_None)
+                        return ferr;
                 }
             }
             else if (*punresolved == '/')

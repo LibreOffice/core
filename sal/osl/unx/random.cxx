@@ -40,10 +40,7 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
         close(fd);
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

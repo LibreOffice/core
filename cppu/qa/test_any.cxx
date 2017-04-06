@@ -92,12 +92,12 @@ public:
             css::uno::Reference< css::uno::XInterface > ref(
                 static_cast< css::uno::XInterface * >(this));
             return css::uno::Any(&ref, type);
-        } else if (type == cppu::UnoType<Interface1>::get()) {
+        }
+        if (type == cppu::UnoType<Interface1>::get()) {
             css::uno::Reference< Interface1 > ref(this);
             return css::uno::Any(&ref, type);
-        } else {
-            return css::uno::Any();
         }
+        return css::uno::Any();
     }
 
     virtual void SAL_CALL acquire() throw () override {
@@ -118,18 +118,20 @@ public:
                 static_cast< css::uno::XInterface * >(
                     static_cast< Interface2a * >(this)));
             return css::uno::Any(&ref, type);
-        } else if (type == cppu::UnoType<Interface2>::get()) {
+        }
+        if (type == cppu::UnoType<Interface2>::get()) {
             css::uno::Reference< Interface2 > ref(this);
             return css::uno::Any(&ref, type);
-        } else if (type == cppu::UnoType<Interface2a>::get()) {
+        }
+        if (type == cppu::UnoType<Interface2a>::get()) {
             css::uno::Reference< Interface2a > ref(this);
             return css::uno::Any(&ref, type);
-        } else if (type == cppu::UnoType<Interface3>::get()) {
+        }
+        if (type == cppu::UnoType<Interface3>::get()) {
             css::uno::Reference< Interface3 > ref(this);
             return css::uno::Any(&ref, type);
-        } else {
-            return css::uno::Any();
         }
+        return css::uno::Any();
     }
 
     virtual void SAL_CALL acquire() throw () override {
@@ -150,18 +152,20 @@ public:
                 static_cast< css::uno::XInterface * >(
                     static_cast< Interface2a * >(this)));
             return css::uno::Any(&ref, type);
-        } else if (type == cppu::UnoType<Interface2>::get()) {
+        }
+        if (type == cppu::UnoType<Interface2>::get()) {
             css::uno::Reference< Interface2 > ref(this);
             return css::uno::Any(&ref, type);
-        } else if (type == cppu::UnoType<Interface2a>::get()) {
+        }
+        if (type == cppu::UnoType<Interface2a>::get()) {
             css::uno::Reference< Interface2a > ref(this);
             return css::uno::Any(&ref, type);
-        } else if (type == cppu::UnoType<Interface2b>::get()) {
+        }
+        if (type == cppu::UnoType<Interface2b>::get()) {
             css::uno::Reference< Interface2b > ref(this);
             return css::uno::Any(&ref, type);
-        } else {
-            return css::uno::Any();
         }
+        return css::uno::Any();
     }
 
     virtual void SAL_CALL acquire() throw () override {

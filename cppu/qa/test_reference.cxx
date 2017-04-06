@@ -56,7 +56,7 @@ public:
             return css::uno::makeAny<css::uno::Reference<css::uno::XInterface>>(
                 this);
         }
-        else if (_type == cppu::UnoType<Interface1>::get())
+        if (_type == cppu::UnoType<Interface1>::get())
         {
             return css::uno::makeAny<css::uno::Reference<Interface1>>(this);
         }
