@@ -591,7 +591,7 @@ void ElementDescriptor::readDateAttr( OUString const & rPropName, OUString const
             if (a >>= aUDate)
             {
                 ::Date aTDate(aUDate);
-                addAttribute( rAttrName, OUString::number( static_cast<sal_Int32>(aTDate.GetDate()) ) );
+                addAttribute( rAttrName, OUString::number( aTDate.GetDate() ) );
             }
             else
                 OSL_FAIL( "### internal error" );
