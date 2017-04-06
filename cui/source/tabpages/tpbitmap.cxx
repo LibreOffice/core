@@ -348,7 +348,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         else if(nWidth < 0)
         {
             eRelative = TRISTATE_TRUE;
-            nWidth = static_cast<long>(std::abs(nWidth));
+            nWidth = std::abs(nWidth);
         }
     }
 
@@ -360,15 +360,15 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         else if(nHeight < 0)
         {
             eRelative = TRISTATE_TRUE;
-            nHeight = static_cast<long>(std::abs(nHeight));
+            nHeight = std::abs(nHeight);
         }
     }
     m_pTsbScale->SetState(eRelative);
 
     if(eRelative != TRISTATE_TRUE)
     {
-        nWidth = (OutputDevice::LogicToLogic(static_cast<long>(nWidth), mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
-        nHeight = (OutputDevice::LogicToLogic(static_cast<long>(nHeight), mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
+        nWidth = (OutputDevice::LogicToLogic(nWidth, mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
+        nHeight = (OutputDevice::LogicToLogic(nHeight, mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
     }
 
     if(m_pBitmapStyleLB->GetSelectEntryPos() == 0)
