@@ -26,6 +26,7 @@
 #include <xmloff/xmltoken.hxx>
 
 #include <node.hxx>
+#include <deque>
 #include <memory>
 
 class SfxMedium;
@@ -36,6 +37,8 @@ namespace com { namespace sun { namespace star {
         class XPropertySet; }
 } } }
 
+
+typedef std::deque<std::unique_ptr<SmNode>> SmNodeStack;
 
 class SmXMLImportWrapper
 {

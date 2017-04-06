@@ -84,6 +84,18 @@ using namespace ::xmloff::token;
 
 #define IMPORT_SVC_NAME "com.sun.star.xml.XMLImportFilter"
 
+namespace {
+
+SmNode* popOrZero(SmNodeStack& rStack)
+{
+    if (rStack.empty())
+        return nullptr;
+    auto pTmp = std::move(rStack.front());
+    rStack.pop_front();
+    return pTmp.release();
+}
+
+}
 
 sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 {

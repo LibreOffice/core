@@ -31,7 +31,6 @@
 #include <cassert>
 #include <memory>
 #include <vector>
-#include <deque>
 
 enum class FontAttribute {
     None   = 0x0000,
@@ -76,18 +75,7 @@ class SmDocShell;
 class SmNode;
 class SmStructureNode;
 
-typedef std::deque<std::unique_ptr<SmNode>> SmNodeStack;
 typedef std::vector< SmNode * > SmNodeArray;
-
-template < typename T >
-T* popOrZero(std::deque<std::unique_ptr<T>> & rStack)
-{
-    if (rStack.empty())
-        return nullptr;
-    std::unique_ptr<T> pTmp(std::move(rStack.front()));
-    rStack.pop_front();
-    return pTmp.release();
-}
 
 enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
 
