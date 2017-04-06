@@ -536,7 +536,7 @@ namespace accessibility
                                                          ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
                                                          AccessibleEventId::CARET_CHANGED,
                                                          uno::makeAny(static_cast<sal_Int32>(-1)),
-                                                         uno::makeAny(static_cast<sal_Int32>(maLastSelection.nEndPos)) );
+                                                         uno::makeAny(maLastSelection.nEndPos) );
                             }
 
                             ChangeChildFocus( aSelection.nEndPara );
@@ -560,7 +560,7 @@ namespace accessibility
                         if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND &&
                             maLastSelection.nEndPara == aSelection.nEndPara )
                         {
-                            aOldCursor <<= static_cast<sal_Int32>(maLastSelection.nEndPos);
+                            aOldCursor <<= maLastSelection.nEndPos;
                         }
                         else
                         {
@@ -570,7 +570,7 @@ namespace accessibility
                         maParaManager.FireEvent( aSelection.nEndPara,
                                                  aSelection.nEndPara+1,
                                                  AccessibleEventId::CARET_CHANGED,
-                                                 uno::makeAny(static_cast<sal_Int32>(aSelection.nEndPos)),
+                                                 uno::makeAny(aSelection.nEndPos),
                                                  aOldCursor );
                     }
 

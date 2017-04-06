@@ -96,7 +96,7 @@ bool CommonStylePreviewRenderer::recalculate()
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_OVERLINE)) != nullptr)
     {
-        pFont->SetOverline(static_cast<FontLineStyle>(static_cast<const SvxOverlineItem*>(pItem)->GetValue()));
+        pFont->SetOverline(static_cast<const SvxOverlineItem*>(pItem)->GetValue());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_STRIKEOUT)) != nullptr)
     {

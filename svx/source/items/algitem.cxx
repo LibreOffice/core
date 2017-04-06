@@ -144,13 +144,13 @@ sal_uInt16 SvxOrientationItem::GetValueCount() const
 
 bool SvxOrientationItem::IsStacked() const
 {
-    return static_cast< SvxCellOrientation >( GetValue() ) == SVX_ORIENTATION_STACKED;
+    return GetValue() == SVX_ORIENTATION_STACKED;
 }
 
 sal_Int32 SvxOrientationItem::GetRotation( sal_Int32 nStdAngle ) const
 {
     sal_Int32 nAngle = nStdAngle;
-    switch( static_cast< SvxCellOrientation >( GetValue() ) )
+    switch( GetValue() )
     {
         case SVX_ORIENTATION_BOTTOMTOP: nAngle = 9000;break;
         case SVX_ORIENTATION_TOPBOTTOM: nAngle = 27000;break;

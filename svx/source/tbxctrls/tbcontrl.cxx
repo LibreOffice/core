@@ -719,7 +719,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
 
                 pItem = pItemSet->GetItem( SID_ATTR_CHAR_OVERLINE );
                 if ( pItem )
-                    aFont.SetOverline( static_cast< FontLineStyle >( static_cast< const SvxOverlineItem* >( pItem )->GetValue() ) );
+                    aFont.SetOverline( static_cast< const SvxOverlineItem* >( pItem )->GetValue() );
 
                 pItem = pItemSet->GetItem( SID_ATTR_CHAR_STRIKEOUT );
                 if ( pItem )
