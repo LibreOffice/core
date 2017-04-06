@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sc_freeline.svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     id="namedview7"
+     showgrid="true"
+     inkscape:snap-bbox="true"
+     inkscape:object-nodes="true"
+     inkscape:zoom="41.7193"
+     inkscape:cx="6.8488625"
+     inkscape:cy="4.3860238"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4137" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.3;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#555753;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     d="m 8.2685611,11.253987 c -0.53611,0.45665 -0.89219,0.77161 -2.2226601,0.76367 l -3.07031,-0.0176 c -1.35051,-0.0253 -1.36241,2.00949 -0.0117,2 l 12.00584,0 c 1.35232,0.0191 1.35232,-2.01913 0,-2 0.0833,0 0.006,0.009 -0.18945,-0.12891 -0.19519,-0.13777 -0.47266,-0.38202 -0.81055,-0.65234 -0.67579,-0.54063 -1.96973,-2.2188086 -2.96973,-2.2188086 -1.39647,0 -2.09725,1.3391186 -2.7314399,2.2539886 z"
+     id="path5910-8-9-9"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccccc"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_freeline.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <g
+     id="g4519-8"
+     style="display:inline;fill:#555753;fill-opacity:1"
+     transform="matrix(0.99974483,0,0,0.99974483,41.991941,-464.24196)"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_freeline.png">
+    <path
+       style="fill:#555753;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       d="M 9 0 L 6 3 C 6.03329 4.07509 8.916826 7 10 7 L 16 1 L 16 0 L 9 0 z M 5 4 L 4 8 L 2 10 L 4 10 L 5 9 L 9 8 C 7.895712 8 5.000001 5.10428 5 4 z M 11 9 C 10.246933 9 9.5856167 9.3379758 9.1503906 9.7324219 C 8.7151645 10.126868 8.4342839 10.549771 8.1601562 10.898438 C 7.6119011 11.595769 7.2990763 12.024879 6.0761719 12.017578 L 3.0058594 12 A 1.0001 1.0001 0 1 0 2.9941406 14 L 6.0644531 14.017578 C 7.9404187 14.028778 9.0905196 12.951208 9.7324219 12.134766 C 10.053373 11.726542 10.301737 11.389219 10.494141 11.214844 C 10.686544 11.040468 10.753067 11 11 11 C 11.499993 11 12.024399 11.441 12.607422 12.140625 C 12.898933 12.490438 13.179462 12.871085 13.507812 13.21875 C 13.836165 13.566415 14.25 14 15 14 A 1.0001 1.0001 0 1 0 15 12 C 15.25 12 15.163835 12.05859 14.960938 11.84375 C 14.758038 11.628915 14.476068 11.259562 14.142578 10.859375 C 13.475596 10.059001 12.499997 9 11 9 z "
+       transform="matrix(1.0002552,0,0,1.0002552,-42.002659,464.36045)"
+       id="path4521-4" />
+  </g>
+</svg>

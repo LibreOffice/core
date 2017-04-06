@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+ <path 
+     style="fill:#555753;fill-opacity:1;stroke:none" 
+     d="M 12.5 2.0097656 L 6.5 2.0117188 C 5.39543 2.0119288 4.507911 2.9056656 4.5 4.0097656 L 4.5 7.984375 C 4.0304588 7.9954013 3.8749866 7.996492 2.9804688 8.0078125 C 1.8758997 8.0078125 0.98046875 8.9017401 0.98046875 10.005859 L 0.98046875 21.001953 C 0.98046875 22.106073 1.8758998 23.001953 2.9804688 23.001953 L 18.980469 23.001953 L 19.980469 23.001953 C 21.088469 23.001953 21.711739 22.076433 21.980469 21.001953 L 22.980469 17.003906 C 23.2492 15.929426 22.088469 15.003906 20.980469 15.003906 L 13.980469 15.003906 L 5.9804688 15.003906 L 4.6367188 20.376953 C 4.5422088 20.739923 4.2169318 21.001953 3.8242188 21.001953 C 3.3578147 21.001993 2.9804687 20.624413 2.9804688 20.158203 L 2.9804688 20.001953 C 2.9740686 18.301033 2.9783687 15.561936 2.9804688 14.003906 C 2.9804688 13.06636 3.6289189 12.286378 4.5 12.070312 L 4.5 13.005859 L 6.5 13.005859 L 6.5 6.0097656 L 6.5 4.0097656 L 12.5 3.9785156 L 12.5 8.9765625 L 17.5 9.0078125 L 17.5 13.005859 L 19.5 13.005859 L 19.5 9.0078125 L 19.5 8.6953125 C 19.509 8.3082325 19.18178 7.9110025 18.90625 7.6328125 L 13.5625 2.4160156 C 13.27786 2.1467256 12.89605 2.0008056 12.5 2.0097656 z "
+     />
+</svg>
