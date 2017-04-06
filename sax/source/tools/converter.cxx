@@ -1242,7 +1242,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
         rDuration.Hours         = static_cast<sal_Int16>(nHours);
         rDuration.Minutes       = static_cast<sal_Int16>(nMinutes);
         rDuration.Seconds       = static_cast<sal_Int16>(nSeconds);
-        rDuration.NanoSeconds   = static_cast<sal_Int32>(nNanoSeconds);
+        rDuration.NanoSeconds   = nNanoSeconds;
     }
 
     return bSuccess;
