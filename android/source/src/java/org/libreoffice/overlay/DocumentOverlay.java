@@ -74,6 +74,10 @@ public class DocumentOverlay {
         mDocumentOverlayView.initialize(layerView);
     }
 
+    public void setPartPageRectangles(List<RectF> rectangles) {
+        mDocumentOverlayView.setPartPageRectangles(rectangles);
+    }
+
     /**
      * Show the cursor at the defined cursor position on the overlay.
      */
@@ -92,6 +96,22 @@ public class DocumentOverlay {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
                 mDocumentOverlayView.hideCursor();
+            }
+        });
+    }
+
+    public void showPageNumberRect() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mDocumentOverlayView.showPageNumberRect();
+            }
+        });
+    }
+
+    public void hidePageNumberRect() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mDocumentOverlayView.hidePageNumberRect();
             }
         });
     }

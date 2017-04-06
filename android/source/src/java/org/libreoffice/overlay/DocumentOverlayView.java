@@ -21,6 +21,7 @@ import android.view.View;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.canvas.Cursor;
 import org.libreoffice.canvas.GraphicSelection;
+import org.libreoffice.canvas.PageNumberRect;
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.canvas.SelectionHandleEnd;
 import org.libreoffice.canvas.SelectionHandleMiddle;
@@ -61,6 +62,11 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     private Cursor mCursor;
 
     private SelectionHandle mDragHandle = null;
+
+    private List<RectF> mPartPageRectangles;
+    private PageNumberRect mPageNumberRect;
+    private boolean mPageNumberAvailable = false;
+    private int previousIndex = 0;
 
     public DocumentOverlayView(Context context) {
         super(context);
@@ -176,6 +182,12 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         return rect;
     }
 
+    public void setPartPageRectangles (List<RectF> rectangles) {
+        mPartPageRectangles = rectangles;
+        mPageNumberRect = new PageNumberRect();
+        mPageNumberAvailable = true;
+    }
+
     /**
      * Drawing on canvas.
      */
@@ -184,6 +196,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         super.onDraw(canvas);
 
         mCursor.draw(canvas);
+
+        if (mPageNumberAvailable) {
+            mPageNumberRect.draw(canvas);
+        }
 
         mHandleMiddle.draw(canvas);
         mHandleStart.draw(canvas);
@@ -232,6 +248,33 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         }
     }
 
+    public void showPageNumberRect() {
+        PointF midPoint = mLayerView.getLayerClient().convertViewPointToLayerPoint(new PointF(getWidth()/2f, getHeight()/2f));
+        int index = previousIndex;
+        for (RectF page : mPartPageRectangles) {
+            if (page.top < midPoint.y && midPoint.y < page.bottom) {
+                index = mPartPageRectangles.indexOf(page) + 1;
+                break;
+            }
+        }
+        if (index == 0) {
+            return;
+        }
+        if (!mPageNumberRect.isVisible() || index != previousIndex) {
+            previousIndex = index;
+            String pageNumberString = "Page " + index + " of " + mPartPageRectangles.size();
+            mPageNumberRect.setPageNumberString(pageNumberString);
+            mPageNumberRect.setVisible(true);
+            invalidate();
+        }
+    }
+
+    public void hidePageNumberRect() {
+        if (mPageNumberRect.isVisible()) {
+            mPageNumberRect.setVisible(false);
+            invalidate();
+        }
+    }
     /**
      * Show text selection rectangles.
      */
