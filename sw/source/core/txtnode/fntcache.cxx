@@ -928,13 +928,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
             // kerning array - gives the absolute position of end of each character
-            long* pKernArray = new long[rInf.GetLen()];
+            std::unique_ptr<long[]> pKernArray(new long[rInf.GetLen()]);
 
             if ( m_pPrinter )
-                m_pPrinter->GetTextArray( rInf.GetText(), pKernArray,
+                m_pPrinter->GetTextArray( rInf.GetText(), pKernArray.get(),
                                         rInf.GetIdx(), rInf.GetLen() );
             else
-                rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
                                             rInf.GetIdx(), rInf.GetLen() );
 
             // Change the average width per character to an appropriate grid width
@@ -1017,9 +1017,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                pKernArray, rInf.GetIdx(), rInf.GetLen() );
+                pKernArray.get(), rInf.GetIdx(), rInf.GetLen() );
 
-            delete[] pKernArray;
             return;
         }
     }
@@ -1037,13 +1036,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         {
             const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
-            long* pKernArray = new long[rInf.GetLen()];
+            std::unique_ptr<long[]> pKernArray( new long[rInf.GetLen()] );
 
             if ( m_pPrinter )
-                m_pPrinter->GetTextArray( rInf.GetText(), pKernArray,
+                m_pPrinter->GetTextArray( rInf.GetText(), pKernArray.get(),
                 rInf.GetIdx(), rInf.GetLen() );
             else
-                rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
                 rInf.GetIdx(), rInf.GetLen() );
             if ( bSwitchH2V )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
@@ -1060,7 +1059,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         pSI && pSI->CountCompChg() &&
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
                     {
-                        pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
+                        pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
                             rInf.GetKanaComp(), (sal_uInt16)m_aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
                         bSpecialJust = true;
                     }
@@ -1105,19 +1104,19 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             {
                                 pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
                                 rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                    pKernArray, rInf.GetIdx(), 1 );
+                                    pKernArray.get(), rInf.GetIdx(), 1 );
                             }
                             else
                             {
                                 pKernArray[ rInf.GetLen() - 2] += nSpaceAdd;
                                 rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                    pKernArray, rInf.GetIdx(), rInf.GetLen() );
+                                    pKernArray.get(), rInf.GetIdx(), rInf.GetLen() );
                             }
                         }
                         else
                         {
                             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                pKernArray, rInf.GetIdx(), rInf.GetLen() );
+                                pKernArray.get(), rInf.GetIdx(), rInf.GetLen() );
                         }
                     }
                     else
@@ -1155,9 +1154,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pKernArray[i] += nGridAddSum;
                 }
                 rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                    pKernArray, rInf.GetIdx(), rInf.GetLen() );
+                    pKernArray.get(), rInf.GetIdx(), rInf.GetLen() );
             }
-            delete[] pKernArray;
             return;
         }
     }
@@ -2004,18 +2002,18 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
     if( 0 != nSperren )
         nKern -= nSperren;
 
-    long* pKernArray = new long[ rInf.GetLen() ];
+    std::unique_ptr<long[]> pKernArray( new long[ rInf.GetLen() ] );
 
     // be sure to have the correct layout mode at the printer
     if ( m_pPrinter )
     {
         m_pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
         m_pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
-        m_pPrinter->GetTextArray( rInf.GetText(), pKernArray,
+        m_pPrinter->GetTextArray( rInf.GetText(), pKernArray.get(),
                                 rInf.GetIdx(), rInf.GetLen() );
     }
     else
-        rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+        rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
                                     rInf.GetIdx(), rInf.GetLen() );
 
     const SwScriptInfo* pSI = rInf.GetScriptInfo();
@@ -2028,7 +2026,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
              pSI && pSI->CountCompChg() &&
              lcl_IsMonoSpaceFont( rInf.GetOut() ) )
         {
-            pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
+            pSI->Compress( pKernArray.get(), rInf.GetIdx(), rInf.GetLen(),
                            rInf.GetKanaComp(),
                            (sal_uInt16) m_aFont.GetFontSize().Height(),
                            lcl_IsFullstopCentered( rInf.GetOut() ) );
@@ -2041,7 +2039,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
 
             if (!MsLangId::isKorean(aLang))
             {
-                SwScriptInfo::CJKJustify( rInf.GetText(), pKernArray, nullptr,
+                SwScriptInfo::CJKJustify( rInf.GetText(), pKernArray.get(), nullptr,
                         rInf.GetIdx(), rInf.GetLen(), aLang, nSpaceAdd );
 
                 nSpaceAdd = 0;
@@ -2055,7 +2053,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
             if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
             {
                 if ( pSI && pSI->CountKashida() &&
-                    pSI->KashidaJustify( pKernArray, nullptr, rInf.GetIdx(), rInf.GetLen(),
+                    pSI->KashidaJustify( pKernArray.get(), nullptr, rInf.GetIdx(), rInf.GetLen(),
                                          nSpaceAdd ) != -1 )
                     nSpaceAdd = 0;
             }
@@ -2068,7 +2066,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
 
             if ( LANGUAGE_THAI == aLang )
             {
-                SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, nullptr,
+                SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray.get(), nullptr,
                                            rInf.GetIdx(), rInf.GetLen(),
                                            rInf.GetNumberOfBlanks(),
                                            rInf.GetSpace() );
@@ -2106,7 +2104,6 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
             if ( 2 * ( rInf.GetOfst() - nCnt * nAvgWidthPerChar ) > nAvgWidthPerChar )
                 ++nCnt;
 
-            delete[] pKernArray;
             return nCnt;
         }
     }
@@ -2130,7 +2127,6 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
                     break;
                 }
             }
-            delete[] pKernArray;
             return nCnt;
         }
     }
@@ -2188,7 +2184,6 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
     if ( pSI )
         rInf.SetCursorBidiLevel( pSI->DirType( nLastIdx ) );
 
-    delete[] pKernArray;
     return nCnt;
 }
 
@@ -2330,8 +2325,8 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
-            long* pKernArray = new long[rInf.GetLen()];
-            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+            std::unique_ptr<long[]> pKernArray( new long[rInf.GetLen()] );
+            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
                                         rInf.GetIdx(), rInf.GetLen() );
 
             long nAvgWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
@@ -2349,7 +2344,6 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
                 ++nTextBreak;
             }
 
-            delete[] pKernArray;
             return nTextBreak + rInf.GetIdx();
         }
     }
@@ -2363,8 +2357,8 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         {
             const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
-            long* pKernArray = new long[rInf.GetLen()];
-            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+            std::unique_ptr<long[]> pKernArray( new long[rInf.GetLen()] );
+            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
                                             rInf.GetIdx(), rInf.GetLen() );
             long nCurrPos = pKernArray[nTextBreak] + nGridWidthAdd;
             while( nTextBreak < rInf.GetLen() && nTextWidth >= nCurrPos)
@@ -2372,7 +2366,6 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
                 nTextBreak++;
                 nCurrPos = pKernArray[nTextBreak] + nGridWidthAdd * ( nTextBreak + 1 );
             }
-            delete[] pKernArray;
             return nTextBreak + rInf.GetIdx();
         }
     }

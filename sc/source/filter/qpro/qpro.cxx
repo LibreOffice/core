@@ -162,7 +162,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
     if( !recordsLeft() )
         return eERR_OPEN;
 
-    ScQProStyle *pStyleElement = new ScQProStyle;
+    std::unique_ptr<ScQProStyle> pStyleElement( new ScQProStyle );
 
     while( nextRecord() && eRet == eERR_OK)
     {
@@ -184,7 +184,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                         else
                             pDoc->InsertTab( nTab, aName );
                     }
-                    eRet = readSheet( nTab, pDoc, pStyleElement );
+                    eRet = readSheet( nTab, pDoc, pStyleElement.get() );
                     nTab++;
                 }
                 break;
@@ -220,7 +220,6 @@ FltError ScQProReader::import( ScDocument *pDoc )
         }
     }
     pDoc->CalcAfterLoad();
-    delete pStyleElement;
     return eRet;
 }
 

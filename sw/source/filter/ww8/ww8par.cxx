@@ -220,10 +220,10 @@ OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nCh
     sal_Unicode         mcNulSubst = '\0';
 
     sal_uInt16 nCharsLeft = nChars;
-    sal_Unicode* pcBuffer = new sal_Unicode[ nCharsLeft + 1 ];
+    std::unique_ptr<sal_Unicode[]> pcBuffer( new sal_Unicode[ nCharsLeft + 1 ] );
 
-    sal_Unicode* pcUniChar = pcBuffer;
-    sal_Unicode* pcEndChar = pcBuffer + nCharsLeft;
+    sal_Unicode* pcUniChar = pcBuffer.get();
+    sal_Unicode* pcEndChar = pcBuffer.get() + nCharsLeft;
 
     if( b16Bit )
     {
@@ -245,8 +245,7 @@ OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nCh
     }
 
     *pcEndChar = '\0';
-    OUString aRet(pcBuffer);
-    delete[] pcBuffer;
+    OUString aRet(pcBuffer.get());
     return aRet;
 }
 

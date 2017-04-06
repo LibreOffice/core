@@ -1043,7 +1043,7 @@ Document::retrieveCharacterAttributes(
     // sort the attributes
     sal_Int32 nLength = aRes.getLength();
     const css::beans::PropertyValue* pPairs = aRes.getConstArray();
-    sal_Int32* pIndices = new sal_Int32[nLength];
+    std::unique_ptr<sal_Int32[]> pIndices( new sal_Int32[nLength] );
     for( i = 0; i < nLength; i++ )
         pIndices[i] = i;
     std::sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
@@ -1054,7 +1054,6 @@ Document::retrieveCharacterAttributes(
     {
         pNewValues[i] = pPairs[pIndices[i]];
     }
-    delete[] pIndices;
 
     return aNewValues;
 }

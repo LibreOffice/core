@@ -469,13 +469,13 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
 
     const sal_Int32 nTextLen = aText.getLength();
 
-    sal_Int32* pConvertPos = new sal_Int32[nTextLen+2];
-    sal_Int32* pConvertPara = new sal_Int32[nTextLen+2];
+    std::unique_ptr<sal_Int32[]> pConvertPos( new sal_Int32[nTextLen+2] );
+    std::unique_ptr<sal_Int32[]> pConvertPara( new sal_Int32[nTextLen+2] );
 
     const sal_Unicode* pText = aText.getStr();
 
-    sal_Int32* pPos = pConvertPos;
-    sal_Int32* pPara = pConvertPara;
+    sal_Int32* pPos = pConvertPos.get();
+    sal_Int32* pPara = pConvertPara.get();
 
     sal_Int32 nLastPos = 0, nLastPara = 0;
 
@@ -613,9 +613,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
             OSL_FAIL("Array overflow while searching!");
         }
     }
-
-    delete[] pConvertPos;
-    delete[] pConvertPara;
 
     return xFound;
 }
