@@ -84,10 +84,6 @@ private:
     VclPtr<ListBox>        m_pNotebookbarIconSizeLB;
     VclPtr<ListBox>        m_pIconStyleLB;
 
-    VclPtr<CheckBox>       m_pFontAntiAliasing;
-    VclPtr<FixedText>      m_pAAPointLimitLabel;
-    VclPtr<MetricField>    m_pAAPointLimit;
-
     VclPtr<ListBox>        m_pMenuIconsLB;
     VclPtr<ListBox>        m_pContextMenuShortcutsLB;
 
@@ -116,9 +112,6 @@ private:
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 
-#if defined( UNX )
-    DECL_LINK( OnAntialiasingToggled, CheckBox&, void );
-#endif
     void UpdateOGLStatus();
 
 public:

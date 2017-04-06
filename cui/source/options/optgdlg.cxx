@@ -626,9 +626,6 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pNotebookbarIconSizeLB, "notebookbariconsize");
     get(m_pIconStyleLB, "iconstyle");
 
-    get(m_pFontAntiAliasing, "aafont");
-    get(m_pAAPointLimitLabel, "aafrom");
-    get(m_pAAPointLimit, "aanf");
     get(m_pMenuIconsLB, "menuicons");
     get(m_pContextMenuShortcutsLB, "contextmenushortcuts");
     get(m_pFontShowCB, "showfontpreview");
@@ -648,16 +645,6 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
         m_pOpenGLStatusEnabled->Hide();
         m_pOpenGLStatusDisabled->Hide();
     }
-
-#if defined( UNX )
-    m_pFontAntiAliasing->SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
-#else
-    // on this platform, we do not have the anti aliasing options
-    m_pFontAntiAliasing->Hide();
-    m_pAAPointLimitLabel->Hide();
-    m_pAAPointLimit->Hide();
-
-#endif
 
     // Set known icon themes
     OUString sAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
@@ -708,9 +695,6 @@ void OfaViewTabPage::dispose()
     m_pSidebarIconSizeLB.clear();
     m_pNotebookbarIconSizeLB.clear();
     m_pIconStyleLB.clear();
-    m_pFontAntiAliasing.clear();
-    m_pAAPointLimitLabel.clear();
-    m_pAAPointLimit.clear();
     m_pMenuIconsLB.clear();
     m_pContextMenuShortcutsLB.clear();
     m_pFontShowCB.clear();
@@ -724,16 +708,6 @@ void OfaViewTabPage::dispose()
     m_pMouseMiddleLB.clear();
     SfxTabPage::dispose();
 }
-
-#if defined( UNX )
-IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, CheckBox&, void )
-{
-    bool bAAEnabled = m_pFontAntiAliasing->IsChecked();
-
-    m_pAAPointLimitLabel->Enable( bAAEnabled );
-    m_pAAPointLimit->Enable( bAAEnabled );
-}
-#endif
 
 VclPtr<SfxTabPage> OfaViewTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
@@ -839,20 +813,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         pAppearanceCfg->SetMiddleMouseButton( static_cast<MouseMiddleButtonAction>(eNewMiddleMouse) );
         bAppearanceChanged = true;
     }
-
-#if defined( UNX )
-    if ( m_pFontAntiAliasing->IsValueChangedFromSaved() )
-    {
-        pAppearanceCfg->SetFontAntiAliasing( m_pFontAntiAliasing->IsChecked() );
-        bAppearanceChanged = true;
-    }
-
-    if ( m_pAAPointLimit->IsValueChangedFromSaved() )
-    {
-        pAppearanceCfg->SetFontAntialiasingMinPixelHeight( m_pAAPointLimit->GetValue() );
-        bAppearanceChanged = true;
-    }
-#endif
 
     if ( m_pFontShowCB->IsValueChangedFromSaved() )
     {
@@ -1003,11 +963,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_pMouseMiddleLB->SelectEntryPos(static_cast<short>(pAppearanceCfg->GetMiddleMouseButton()));
     m_pMouseMiddleLB->SaveValue();
 
-#if defined( UNX )
-    m_pFontAntiAliasing->Check( pAppearanceCfg->IsFontAntiAliasing() );
-    m_pAAPointLimit->SetValue( pAppearanceCfg->GetFontAntialiasingMinPixelHeight() );
-#endif
-
     // WorkingSet
     SvtFontOptions aFontOpt;
     m_pFontShowCB->Check( aFontOpt.IsFontWYSIWYGEnabled() );
@@ -1051,18 +1006,10 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_pUseOpenGL->Check(mpOpenGLConfig->useOpenGL());
     m_pForceOpenGL->Check(mpOpenGLConfig->forceOpenGL());
 
-#if defined( UNX )
-    m_pFontAntiAliasing->SaveValue();
-    m_pAAPointLimit->SaveValue();
-#endif
     m_pFontShowCB->SaveValue();
 
     m_pUseOpenGL->SaveValue();
     m_pForceOpenGL->SaveValue();
-
-#if defined( UNX )
-    LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( *m_pFontAntiAliasing );
-#endif
 }
 
 void OfaViewTabPage::UpdateOGLStatus()
