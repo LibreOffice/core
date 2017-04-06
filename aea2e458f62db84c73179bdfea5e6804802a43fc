@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_35c6dd67",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-04-06T07:17:28Z",
+      "side": 1,
+      "message": "\"All fields are exported having the same width\" or something along that line, slightly more verbose than just \"fixed width\"",
+      "revId": "aea2e458f62db84c73179bdfea5e6804802a43fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
