@@ -59,28 +59,16 @@ void lclModifyOrientation(uno::Reference<sheet::XDataPilotDescriptor> const & xD
     }
 }
 
-bool lclCheckSequence(std::vector<double> const & reference,
+void lclCheckSequence(std::vector<double> const & reference,
                       uno::Sequence<uno::Any> const & values,
                       double delta)
 {
-    if (reference.size() != size_t(values.getLength()))
-    {
-        printf ("Sequence size differs - reference is %ld but actual is %ld\n",
-                reference.size(), size_t(values.getLength()));
-        return false;
-    }
-
+    CPPUNIT_ASSERT_EQUAL(reference.size(), size_t(values.getLength()));
     for (size_t i = 0; i < reference.size(); ++i)
     {
-        double value = values[i].get<double>();
-
-        if (std::fabs(reference[i] - value) > delta)
-        {
-            printf ("Value %f is not the same as reference %f (delta %f)\n", value, reference[i], delta);
-            return false;
-        }
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(
+            reference[i], values[i].get<double>(), delta);
     }
-    return true;
 }
 
 OUString lclGetLabel(Reference<chart2::XChartDocument> const & xChartDoc, sal_Int32 nSeriesIndex)
@@ -125,12 +113,12 @@ void PivotChartTest::testRoundtrip()
     // Check the data series
     {
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference1, xSequence, 1E-4));
+        lclCheckSequence(aReference1, xSequence, 1E-4);
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel1, lclGetLabel(xChartDoc, 0));
     }
     {
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference2, xSequence, 1E-4));
+        lclCheckSequence(aReference2, xSequence, 1E-4);
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel2, lclGetLabel(xChartDoc, 1));
     }
 
@@ -147,7 +135,7 @@ void PivotChartTest::testRoundtrip()
     // Check again the data series
     {
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference2, xSequence, 1E-4));
+        lclCheckSequence(aReference2, xSequence, 1E-4);
         CPPUNIT_ASSERT_EQUAL(OUString(""), lclGetLabel(xChartDoc, 0));
     }
 
@@ -161,7 +149,7 @@ void PivotChartTest::testRoundtrip()
     // Check again the data series
     {
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference2, xSequence, 1E-4));
+        lclCheckSequence(aReference2, xSequence, 1E-4);
         CPPUNIT_ASSERT_EQUAL(OUString(""), lclGetLabel(xChartDoc, 0));
     }
 }
@@ -193,7 +181,7 @@ void PivotChartTest::testChangePivotTable()
         OUString aExpectedLabel("Exp.");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-4));
+        lclCheckSequence(aReference, xSequence, 1E-4);
 
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 0));
     }
@@ -204,7 +192,7 @@ void PivotChartTest::testChangePivotTable()
         OUString aExpectedLabel("Rev.");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-4));
+        lclCheckSequence(aReference, xSequence, 1E-4);
 
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 1));
     }
@@ -229,7 +217,7 @@ void PivotChartTest::testChangePivotTable()
         OUString aExpectedLabel("Big");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        lclCheckSequence(aReference, xSequence, 1E-3);
 
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 0));
     }
@@ -240,7 +228,7 @@ void PivotChartTest::testChangePivotTable()
         OUString aExpectedLabel("Medium");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        lclCheckSequence(aReference, xSequence, 1E-3);
 
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 1));
     }
@@ -251,7 +239,7 @@ void PivotChartTest::testChangePivotTable()
         OUString aExpectedLabel("Small");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 2)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        lclCheckSequence(aReference, xSequence, 1E-3);
 
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 2));
     }
@@ -272,21 +260,21 @@ void PivotChartTest::testChangePivotTable()
     {
         std::vector<double> aReference { 10162.033139 };
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        lclCheckSequence(aReference, xSequence, 1E-3);
         CPPUNIT_ASSERT_EQUAL(OUString("Big"), lclGetLabel(xChartDoc, 0));
     }
     // Check the second data series
     {
         std::vector<double> aReference { 16614.523063 };
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        lclCheckSequence(aReference, xSequence, 1E-3);
         CPPUNIT_ASSERT_EQUAL(OUString("Medium"), lclGetLabel(xChartDoc, 1));
     }
     // Check the third data series
     {
         std::vector<double> aReference { 27944.146101 };
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 2)->getData();
-        CPPUNIT_ASSERT(lclCheckSequence(aReference, xSequence, 1E-3));
+        lclCheckSequence(aReference, xSequence, 1E-3);
         CPPUNIT_ASSERT_EQUAL(OUString("Small"), lclGetLabel(xChartDoc, 2));
     }
 }
