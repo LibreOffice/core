@@ -415,8 +415,8 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rSet.Get(RES_LR_SPACE));
         m_nOldLeftMargin  = static_cast< sal_uInt16 >(rLR.GetLeft());
         m_nOldRightMargin = static_cast< sal_uInt16 >(rLR.GetRight());
-        m_nOldUpperMargin = static_cast< sal_uInt16 >(rUL.GetUpper());
-        m_nOldLowerMargin = static_cast< sal_uInt16 >(rUL.GetLower());
+        m_nOldUpperMargin = rUL.GetUpper();
+        m_nOldLowerMargin = rUL.GetLower();
 
         // position
         const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));

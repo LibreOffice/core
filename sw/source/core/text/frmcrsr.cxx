@@ -1238,7 +1238,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                     if( nFormat <= GetOfst() )
                     {
                         nFormat = std::min( sal_Int32( GetOfst() + MIN_OFFSET_STEP ),
-                                       static_cast<sal_Int32>(nTmpLen) );
+                                       nTmpLen );
                         if( nFormat <= GetOfst() )
                             break;
                     }

@@ -149,8 +149,8 @@ void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
         const SfxItemSet *pArgs = rReq.GetArgs();
         if( pArgs && pArgs->Count() >= 1 )
         {
-            bPersistentCopy = static_cast<bool>(static_cast<const SfxBoolItem &>(pArgs->Get(
-                                    SID_FORMATPAINTBRUSH)).GetValue());
+            bPersistentCopy = static_cast<const SfxBoolItem &>(pArgs->Get(
+                                    SID_FORMATPAINTBRUSH)).GetValue();
         }
 
         m_pFormatClipboard->Copy( GetWrtShell(), GetPool(), bPersistentCopy );

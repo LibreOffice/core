@@ -952,7 +952,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 {
                     const sal_uInt16 nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG)
                         ? FN_TABLE_INSERT_COL_AFTER : FN_TABLE_INSERT_ROW_AFTER;
-                    SfxUInt16Item aCountItem( nDispatchSlot, static_cast< sal_uInt16 >(pDlg->getInsertCount()) );
+                    SfxUInt16Item aCountItem( nDispatchSlot, pDlg->getInsertCount() );
                     SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
                     SfxViewFrame* pVFrame = GetView().GetViewFrame();
                     if( pVFrame )

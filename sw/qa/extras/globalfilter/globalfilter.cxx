@@ -612,7 +612,7 @@ void Test::testMSCharBackgroundEditing()
                 case 3: nBackColor = 0x00ff00; break; //green
                 case 4: nBackColor = 0xff00ff; break; //magenta
             }
-            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(nBackColor)));
+            xRun->setPropertyValue("CharBackColor", uno::makeAny(nBackColor));
             // Remove highlighting
             xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(COL_TRANSPARENT)));
             // Remove shading marker
@@ -661,11 +661,11 @@ void Test::testMSCharBackgroundEditing()
             if( strcmp(aFilterNames[nFilter], "writer8") == 0 )
             {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(nBackColor), getProperty<sal_Int32>(xRun,"CharBackColor"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nBackColor, getProperty<sal_Int32>(xRun,"CharBackColor"));
             }
             else
             {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(nBackColor), getProperty<sal_Int32>(xRun,"CharHighlight"));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nBackColor, getProperty<sal_Int32>(xRun,"CharHighlight"));
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
             }
         }

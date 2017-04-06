@@ -2094,7 +2094,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             aAny <<= getRuntimeUID();
         break;
         case WID_DOC_LOCK_UPDATES :
-            aAny <<= static_cast<bool>( pDocShell->GetDoc()->IsInReading() );
+            aAny <<= pDocShell->GetDoc()->IsInReading();
         break;
         case WID_DOC_BUILDID:
             aAny <<= maBuildId;

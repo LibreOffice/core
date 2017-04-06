@@ -1516,7 +1516,7 @@ SvxFrameDirection MSWordExportBase::GetDefaultFrameDirection( ) const
         }
         else if ( dynamic_cast< const SwTextFormatColl *>( m_pOutFormatNode ) !=  nullptr )
         {
-            if ( MsLangId::isRightToLeft( static_cast<LanguageType>(GetAppLanguage())) )
+            if ( MsLangId::isRightToLeft( GetAppLanguage()) )
                 nDir = SvxFrameDirection::Horizontal_RL_TB;
             else
                 nDir = SvxFrameDirection::Horizontal_LR_TB;    //what else can we do :-(
@@ -1526,7 +1526,7 @@ SvxFrameDirection MSWordExportBase::GetDefaultFrameDirection( ) const
     if ( nDir == SvxFrameDirection::Environment )
     {
         // fdo#44029 put direction right when the locale are RTL.
-        if( MsLangId::isRightToLeft( static_cast<LanguageType>(GetAppLanguage())) )
+        if( MsLangId::isRightToLeft( GetAppLanguage()) )
             nDir = SvxFrameDirection::Horizontal_RL_TB;
         else
             nDir = SvxFrameDirection::Horizontal_LR_TB;        //Set something
