@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_1059e75a",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-04-06T23:31:02Z",
+      "side": 1,
+      "message": "I suspect this just coincidentally fixes the problem -",
+      "revId": "daf051ddd51a92c2cdbffd10e8a609230c1d591b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3056eb29",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-04-06T23:31:02Z",
+      "side": 1,
+      "message": "Since this is the only side effect probably visible to the cppcanvas renderer - how would it make a difference, if maLatestFillStyle is no difference to maFillStyle (that gets passed on here)?",
+      "revId": "daf051ddd51a92c2cdbffd10e8a609230c1d591b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_5031af0a",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2251,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-04-06T23:31:02Z",
+      "side": 1,
+      "message": "That is true, but I suspect that can only validly be handled in the cppcanvas renderer - since nothing here knows about the updated fillstyle?",
+      "revId": "daf051ddd51a92c2cdbffd10e8a609230c1d591b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
