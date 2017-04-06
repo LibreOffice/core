@@ -234,7 +234,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             aSize.width = 2;
             for( size_t i = 0; i < rButtons.size(); ++i )
             {
-                NSRect aImgRect = { { static_cast<CGFloat>(aSize.width),
+                NSRect aImgRect = { { aSize.width,
                                       static_cast<CGFloat>(floor((aSize.height-rButtons[i].maButton.maImage.GetSizePixel().Height())/2)) },
                                     { static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Width()),
                                       static_cast<CGFloat>(rButtons[i].maButton.maImage.GetSizePixel().Height()) } };
