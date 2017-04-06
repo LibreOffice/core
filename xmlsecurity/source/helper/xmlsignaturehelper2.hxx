@@ -46,7 +46,6 @@ namespace embed {
 
 class ImplXMLSignatureListener : public cppu::WeakImplHelper
 <
-    css::xml::crypto::sax::XSignatureCreationResultListener,
     css::xml::crypto::sax::XSignatureVerifyResultListener,
     css::xml::sax::XDocumentHandler
 >
@@ -62,9 +61,6 @@ public:
     virtual ~ImplXMLSignatureListener() override;
 
     void setNextHandler(const css::uno::Reference< css::xml::sax::XDocumentHandler >& xNextHandler);
-
-    // css::xml::crypto::sax::XSignatureCreationResultListener
-    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus creationResult ) override;
 
     // css::xml::crypto::sax::XSignatureVerifyResultListener
     virtual void SAL_CALL signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus verifyResult ) override;
