@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_f5237503",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-04-06T10:42:47Z",
+      "side": 1,
+      "message": "Write in present tense the commit messages. Not \"This commit will do this-that\" but \"The commit does this-that\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "c68dcf4551ffe45e8226e44529e27bf9319ab0b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d5267115",
+        "filename": "android/source/src/java/org/libreoffice/LibreOfficeMainActivity.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-04-06T10:42:47Z",
+      "side": 1,
+      "message": "Why is the dialog still here instead of LibreOfficeUIActivity? \n\nNow you get from the UiActivity the directory and create a combine it to a full path here, why not create the full path in the UIActivity? Also all the activity ping-pong would not be needed when the user decides to cancel.",
+      "range": {
+        "startLine": 237,
+        "startChar": 17,
+        "endLine": 237,
+        "endChar": 39
+      },
+      "revId": "c68dcf4551ffe45e8226e44529e27bf9319ab0b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
