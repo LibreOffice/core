@@ -331,7 +331,7 @@ void ShutdownIcon::StartFileDialog()
 {
     ::SolarMutexGuard aGuard;
 
-    bool bDirty = ( m_bSystemDialogs != static_cast<bool>(SvtMiscOptions().UseSystemFileDialog()) );
+    bool bDirty = ( m_bSystemDialogs != SvtMiscOptions().UseSystemFileDialog() );
 
     if ( m_pFileDlg && bDirty )
     {

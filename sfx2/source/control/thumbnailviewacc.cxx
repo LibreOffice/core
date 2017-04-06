@@ -548,7 +548,7 @@ sal_uInt16 ThumbnailViewAcc::getItemCount() const
 
 ThumbnailViewItem* ThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
 {
-    return mpParent->ImplGetVisibleItem (static_cast<sal_uInt16>(nIndex));
+    return mpParent->ImplGetVisibleItem (nIndex);
 }
 
 void ThumbnailViewAcc::ThrowIfDisposed()
