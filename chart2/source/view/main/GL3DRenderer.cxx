@@ -1416,7 +1416,7 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
    //     yScale /= (float)(1 + BOTTOM_THRESHOLD);
-        zScale /= (float)(m_RoundBarMesh.bottomThreshold);
+        zScale /= m_RoundBarMesh.bottomThreshold;
         PosVecf3 scale = {xyScale, xyScale, zScale};
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
@@ -1505,7 +1505,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
         //yScale /= (float)(1 + BOTTOM_THRESHOLD);
-        zScale /= (float)(m_RoundBarMesh.bottomThreshold);
+        zScale /= m_RoundBarMesh.bottomThreshold;
         glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, 0.0, -1.0));
         glm::mat4 scale = glm::scale(glm::vec3(xyScale, xyScale, zScale));
         //MoveModelf(trans, angle, scale);
@@ -2306,7 +2306,7 @@ void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
         //yScale /= (float)(1 + BOTTOM_THRESHOLD);
-        zScale /= (float)(m_RoundBarMesh.bottomThreshold);
+        zScale /= m_RoundBarMesh.bottomThreshold;
         glm::mat4 scale = glm::scale(glm::vec3(xyScale, xyScale, zScale));
         //MoveModelf(trans, angle, scale);
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));

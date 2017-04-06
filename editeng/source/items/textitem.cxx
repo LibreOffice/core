@@ -649,7 +649,7 @@ bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_WEIGHT:
         {
-            rVal <<= (float)( vcl::unohelper::ConvertFontWeight( GetValue() ) );
+            rVal <<= vcl::unohelper::ConvertFontWeight( GetValue() );
         }
         break;
     }

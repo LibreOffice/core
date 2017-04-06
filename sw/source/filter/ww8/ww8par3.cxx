@@ -2353,7 +2353,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
             break;
 
         case RES_CHRATR_WEIGHT:
-            aTmp <<= (float)vcl::unohelper::ConvertFontWeight(
+            aTmp <<= vcl::unohelper::ConvertFontWeight(
                                         static_cast<const SvxWeightItem*>(pItem)->GetWeight() );
             aFont.SetWeight( static_cast<const SvxWeightItem*>(pItem)->GetWeight() );
             break;
