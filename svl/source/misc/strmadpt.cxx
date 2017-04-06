@@ -54,6 +54,7 @@ private:
         sal_uInt32 m_nOffset;
         sal_Int8 m_aBuffer[1];
     };
+    static const sal_uInt32 m_nPageSize = 1000;
 
     std::multiset< sal_uInt32 > m_aMarks;
     Page * m_pFirstPage;
@@ -62,7 +63,6 @@ private:
     sal_Int8 * m_pReadBuffer;
     sal_uInt32 m_nReadBufferSize;
     sal_uInt32 m_nReadBufferFilled;
-    sal_uInt32 m_nPageSize;
     sal_uInt32 m_nPages;
     bool m_bEOF;
 
@@ -95,10 +95,6 @@ SvDataPipe_Impl::SvDataPipe_Impl()
     , m_pReadBuffer( nullptr )
     , m_nReadBufferSize( 0 )
     , m_nReadBufferFilled( 0 )
-    , m_nPageSize(std::min< sal_uInt32 >(
-                          1000,
-                          sal_uInt32(std::numeric_limits< sal_uInt32 >::max()
-                                     - sizeof (Page) + 1)))
     , m_nPages( 0 )
     , m_bEOF( false )
 {}
