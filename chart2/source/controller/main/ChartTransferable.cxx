@@ -17,8 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "ChartTransferable.hxx"
 
+#include <o3tl/make_unique.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
 #include <unotools/streamwrap.hxx>
@@ -43,7 +48,7 @@ ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelected
     :m_pMarkedObjModel( nullptr )
     ,m_bDrawing( bDrawing )
 {
-    SdrExchangeView * pExchgView( new SdrView( pDrawModel ));
+    std::unique_ptr<SdrExchangeView> pExchgView(o3tl::make_unique<SdrView>( pDrawModel ));
     SdrPageView* pPv = pExchgView->ShowSdrPage( pDrawModel->GetPage( 0 ));
     if( pSelectedObj )
         pExchgView->MarkObj( pSelectedObj, pPv );
@@ -55,7 +60,6 @@ ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelected
     {
         m_pMarkedObjModel = pExchgView->GetMarkedObjModel();
     }
-    delete pExchgView;
 }
 
 ChartTransferable::~ChartTransferable()
