@@ -91,7 +91,7 @@ void lcl_LOKRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
 
 } // anonymous namespace
 
-const ScPositionHelper::index_type ScPositionHelper::null; // definition
+const ScPositionHelper::index_type ScPositionHelper::null = std::numeric_limits<ScPositionHelper::index_type>::min(); // definition
 
 bool ScPositionHelper::Comp::operator() (const value_type& rValue1, const value_type& rValue2) const
 {

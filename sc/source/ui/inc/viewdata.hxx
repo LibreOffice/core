@@ -123,7 +123,7 @@ public:
     static_assert(std::numeric_limits<index_type>::is_signed, "ScPositionCache: index type is not signed");
 
 private:
-    static const index_type null = std::numeric_limits<index_type>::min();
+    static const index_type null;
 
     class Comp
     {
@@ -268,7 +268,7 @@ private:
     bool                bGrowing;
 
     long                m_nLOKPageUpDownOffset;
-    
+
     DECL_DLLPRIVATE_LINK( EditEngineHdl, EditStatus&, void );
 
 
