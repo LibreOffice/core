@@ -423,7 +423,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     if ( pDrView && bHelpEnabled && !bDone )
     {
         SdrPageView* pPV = pDrView->GetSdrPageView();
-        OSL_ENSURE( pPV, "SdrPageView* ist NULL" );
+        OSL_ENSURE( pPV, "SdrPageView* is NULL" );
         if (pPV)
             bDone = FmFormPage::RequestHelp( this, pDrView, rHEvt );
     }

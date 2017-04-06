@@ -891,7 +891,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
         if ( nPagebreakMouse == SC_PD_BREAK_H )
         {
             if ( nPosX > aPagebreakSource.aStart.Col() &&
-                 nPosX <= aPagebreakSource.aEnd.Col() + 1 )     // ans Ende ist auch erlaubt
+                 nPosX <= aPagebreakSource.aEnd.Col() + 1 )     // to the end is also allowed
             {
                 bToEnd = ( nPosX == aPagebreakSource.aEnd.Col() + 1 );
                 aDrawRange.aStart.SetCol( nPosX );
@@ -903,7 +903,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
         else
         {
             if ( nPosY > aPagebreakSource.aStart.Row() &&
-                 nPosY <= aPagebreakSource.aEnd.Row() + 1 )     // ans Ende ist auch erlaubt
+                 nPosY <= aPagebreakSource.aEnd.Row() + 1 )     //  to the end is also allowe
             {
                 bToEnd = ( nPosY == aPagebreakSource.aEnd.Row() + 1 );
                 aDrawRange.aStart.SetRow( nPosY );

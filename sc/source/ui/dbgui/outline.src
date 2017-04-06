@@ -19,8 +19,8 @@
 
 #include "scres.hrc"
 
-// Imageliste hier, damit sie nicht in ui.src beim Zusammenbauen der
-// "echten" Imagelisten stoert
+// Image list here, so that there is no interruption during assembly
+// of the "real" image list in ui.src
 
 Bitmap RID_BMP_LEVEL1
 {

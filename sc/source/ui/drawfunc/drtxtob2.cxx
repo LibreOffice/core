@@ -54,7 +54,7 @@ bool ScDrawTextObjectBar::IsNoteEdit()
     return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetSdrView()->GetTextEditObject() );
 }
 
-//  wenn kein Text editiert wird, Funktionen wie in drawsh
+//  if no text edited, functions like in drawsh
 
 void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 {

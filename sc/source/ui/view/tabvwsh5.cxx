@@ -43,13 +43,13 @@
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint))                    // neu zeichnen
+    if (const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint))                    // draw new
     {
         PaintPartFlags nParts = pPaintHint->GetParts();
         SCTAB nTab = GetViewData().GetTabNo();
         if (pPaintHint->GetStartTab() <= nTab && pPaintHint->GetEndTab() >= nTab)
         {
-            if (nParts & PaintPartFlags::Extras)          // zuerst, falls Tabelle weg ist !!!
+            if (nParts & PaintPartFlags::Extras)          // first if table vanished !!!
                 if (PaintExtras())
                     nParts = PaintPartFlags::All;
 
@@ -77,9 +77,9 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             HideNoteMarker();
         }
     }
-    else if (dynamic_cast<const ScEditViewHint*>(&rHint))                 // Edit-View anlegen
+    else if (dynamic_cast<const ScEditViewHint*>(&rHint))                 // create Edit-View
     {
-        //  ScEditViewHint kommt nur an aktiver View an
+        //  ScEditViewHint is only received at active view
 
         const ScEditViewHint* pHint = static_cast<const ScEditViewHint*>(&rHint);
         SCTAB nTab = GetViewData().GetTabNo();
@@ -92,25 +92,25 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 MakeEditView( pHint->GetEngine(), nCol, nRow );
 
-                StopEditShell();                    // sollte nicht gesetzt sein
+                StopEditShell();                    // shouldn't be set
 
                 ScSplitPos eActive = GetViewData().GetActivePart();
                 if ( GetViewData().HasEditView(eActive) )
                 {
-                    //  MakeEditView geht schief, wenn der Cursor ausserhalb des
-                    //  Bildschirms steht. GetEditView gibt dann eine nicht aktive
-                    //  View zurueck, darum die Abfrage HasEditView.
+                    //  MakeEditView will fail, if the cursor is outside the screen.
+                    //  Then GetEditView will return a none-active view, therefore
+                    //  calling HasEditView.
 
-                    EditView* pView = GetViewData().GetEditView(eActive);  // ist nicht 0
+                    EditView* pView = GetViewData().GetEditView(eActive);  // isn't zero
 
                     SetEditShell(pView, true);
                 }
             }
         }
     }
-    else if (dynamic_cast<const ScTablesHint*>(&rHint))               // Tabelle eingefuegt / geloescht
+    else if (dynamic_cast<const ScTablesHint*>(&rHint))               // table insert / deleted
     {
-            //  aktuelle Tabelle zuerst holen (kann bei DeleteTab an ViewData geaendert werden)
+        // first fetch current table (can be changed during DeleteTab on ViewData)
         SCTAB nActiveTab = GetViewData().GetTabNo();
 
         const ScTablesHint& rTabHint = static_cast<const ScTablesHint&>(rHint);
@@ -143,43 +143,43 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 OSL_FAIL("unknown ScTablesHint");
         }
 
-        //  hier keine Abfrage auf IsActive() mehr, weil die Aktion von Basic ausgehen
-        //  kann und dann auch die aktive View umgeschaltet werden muss.
+        //  No calling of IsActive() here, because the actions can be coming from Basic
+        //  and then also the active view has to be switched.
 
         SCTAB nNewTab = nActiveTab;
         bool bStayOnActiveTab = true;
         switch (nId)
         {
             case SC_TAB_INSERTED:
-                if ( nTab1 <= nNewTab )             // vorher eingefuegt
+                if ( nTab1 <= nNewTab )             // insert before
                     ++nNewTab;
                 break;
             case SC_TAB_DELETED:
-                if ( nTab1 < nNewTab )              // vorher geloescht
+                if ( nTab1 < nNewTab )              // deleted before
                     --nNewTab;
-                else if ( nTab1 == nNewTab )        // aktuelle geloescht
+                else if ( nTab1 == nNewTab )        // deleted current
                     bStayOnActiveTab = false;
                 break;
             case SC_TAB_MOVED:
-                if ( nNewTab == nTab1 )             // verschobene Tabelle
+                if ( nNewTab == nTab1 )             // moved table
                     nNewTab = nTab2;
-                else if ( nTab1 < nTab2 )           // nach hinten verschoben
+                else if ( nTab1 < nTab2 )           // moved back
                 {
-                    if ( nNewTab > nTab1 && nNewTab <= nTab2 )      // nachrueckender Bereich
+                    if ( nNewTab > nTab1 && nNewTab <= nTab2 )      // succeeding area
                         --nNewTab;
                 }
-                else                                // nach vorne verschoben
+                else                                // move in front
                 {
-                    if ( nNewTab >= nTab2 && nNewTab < nTab1 )      // nachrueckender Bereich
+                    if ( nNewTab >= nTab2 && nNewTab < nTab1 )      // succeeding area
                         ++nNewTab;
                 }
                 break;
             case SC_TAB_COPIED:
-                if ( nNewTab >= nTab2 )             // vorher eingefuegt
+                if ( nNewTab >= nTab2 )             // insert before
                     ++nNewTab;
                 break;
             case SC_TAB_HIDDEN:
-                if ( nTab1 == nNewTab )             // aktuelle ausgeblendet
+                if ( nTab1 == nNewTab )             // current is hidden
                     bStayOnActiveTab = false;
                 break;
             case SC_TABS_INSERTED:
@@ -211,7 +211,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             default: break;
         }
     }
-    else                       // ohne Parameter
+    else                       // without parameter
     {
         const SfxHintId nSlot = rHint.GetId();
         switch ( nSlot )
@@ -262,25 +262,25 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             case SfxHintId::ScDocSaved:
                 {
-                    //  beim "Save as" kann ein vorher schreibgeschuetztes Dokument
-                    //  bearbeitbar werden, deshalb die Layer-Locks neu (#39884#)
-                    //  (Invalidate etc. passiert schon vom Sfx her)
-                    //  bei SID_EDITDOC kommt kein SfxHintId::TitleChanged, darum
-                    //  der eigene Hint aus DoSaveCompleted
-                    //! was ist mit SfxHintId::SAVECOMPLETED ?
+                    //  "Save as" can make a write-protected document writable,
+                    //  therefore the Layer-Locks anew (#39884#)
+                    //  (Invalidate etc. is happing already from Sfx)
+                    //  by SID_EDITDOC no SfxHintId::TitleChanged will occur, that
+                    //  is why the own hint from DoSaveCompleted
+                    //! what is with SfxHintId::SAVECOMPLETED ?
 
                     UpdateLayerLocks();
 
-                    //  Design-Modus bei jedem Speichern anzupassen, waere zuviel
-                    //  (beim Speichern unter gleichem Namen soll er unveraendert bleiben)
-                    //  Darum nur bei SfxHintId::ModeChanged (vom ViewFrame)
+                    //  Would be too much to change Design-Mode with every save
+                    //  (when saving under the name, it should remain unchanged)
+                    //  Therefore only by SfxHintId::ModeChanged (from ViewFrame)
                 }
                 break;
 
             case SfxHintId::ModeChanged:
-                //  Da man sich nicht mehr darauf verlassen kann, woher
-                //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
-                //  ReadOnly-Status sich wirklich geaendert hat:
+                //  Since you can no longer rely on it where this hint was coming
+                //  from, always switch the design mode when the ReadOnly state
+                //  really was changed:
 
                 if ( GetViewData().GetSfxDocShell()->IsReadOnly() != bReadOnly )
                 {

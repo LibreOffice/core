@@ -325,7 +325,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
         {
             OSL_ENSURE( pActDefault, "RTF_CELL: pActDefault==0" );
             if ( bNewDef || !pActDefault )
-                NewCellRow( pInfo );    // davor war kein \intbl, bad behavior
+                NewCellRow( pInfo );    // before was no \intbl, bad behavior
             // Broken RTF? Let's save what we can
             if ( !pActDefault )
                 pActDefault = pInsDefault;

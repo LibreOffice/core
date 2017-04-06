@@ -211,7 +211,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            pObjSh->CallXScript( pInfo->GetMacro(),
                                aInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
                            pViewShell->FakeButtonUp( pViewShell->GetViewData().GetActivePart() );
-                           return true;        // kein CaptureMouse etc.
+                           return true;        // no CaptureMouse etc.
                        }
                    }
                 }
@@ -245,7 +245,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     ScGlobal::OpenURL( sURL, sTarget );
                     pViewShell->FakeButtonUp( pViewShell->GetViewData().GetActivePart() );
-                    return true;        // kein CaptureMouse etc.
+                    return true;        // no CaptureMouse etc.
                 }
 
                 //  Is another object being edited in this view?

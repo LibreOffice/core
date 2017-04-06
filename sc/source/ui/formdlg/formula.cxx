@@ -129,7 +129,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pData->SetInputHandler(pScMod->GetInputHdl());
         pData->SetDocShell(pViewData->GetDocShell());
 
-        OSL_ENSURE(pData,"FormEditData ist nicht da");
+        OSL_ENSURE(pData,"FormEditData not available");
 
         formula::FormulaDlgMode eMode = FORMULA_FORMDLG_FORMULA;            // default...
 

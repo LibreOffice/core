@@ -773,8 +773,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     // In any case, Szenario / ChangeTracking must happen after DrawGrid, also for !bGridFirst
 
-    //! Test, ob ChangeTrack-Anzeige aktiv ist
-    //! Szenario-Rahmen per View-Optionen abschaltbar?
+    //! test if ChangeTrack display is active
+    //! Disable scenario frame via view option?
 
     SCTAB nTabCount = rDoc.GetTableCount();
     const std::vector<ScHighlightEntry> &rHigh = pViewData->GetView()->GetHighlightRanges();

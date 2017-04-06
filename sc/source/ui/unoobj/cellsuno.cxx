@@ -6502,7 +6502,7 @@ uno::Reference<sheet::XSheetAnnotation> SAL_CALL ScCellObj::getAnnotation()
     if ( pDocSh )
         return new ScAnnotationObj( pDocSh, aCellPos );
 
-    OSL_FAIL("getAnnotation ohne DocShell");
+    OSL_FAIL("getAnnotation without DocShell");
     return nullptr;
 }
 
@@ -8949,7 +8949,7 @@ ScCellsEnumeration::~ScCellsEnumeration()
 
 void ScCellsEnumeration::Advance_Impl()
 {
-    OSL_ENSURE(!bAtEnd,"zuviel Advance_Impl");
+    OSL_ENSURE(!bAtEnd,"too much Advance_Impl");
     if (!pMark)
     {
         pMark = new ScMarkData;
@@ -8964,7 +8964,7 @@ void ScCellsEnumeration::Advance_Impl()
     if (bFound)
         aPos.Set( nCol, nRow, nTab );
     else
-        bAtEnd = true;      // kommt nix mehr
+        bAtEnd = true;      // nothing will follow
 }
 
 void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -8977,10 +8977,10 @@ void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
             aRanges.UpdateReference( pRefHint->GetMode(), &pDocShell->GetDocument(), pRefHint->GetRange(),
                                      pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() );
 
-            delete pMark;       // aus verschobenen Bereichen neu erzeugen
+            delete pMark;       // recreate from moved area
             pMark = nullptr;
 
-            if (!bAtEnd)        // aPos anpassen
+            if (!bAtEnd)        // adjust aPos
             {
                 ScRangeList aNew;
                 aNew.Append(ScRange(aPos));

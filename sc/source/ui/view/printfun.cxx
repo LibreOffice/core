@@ -127,7 +127,7 @@ void ScPageRowEntry::SetPagesX(size_t nNew)
 {
     if (pHidden)
     {
-        OSL_FAIL("SetPagesX nicht nach SetHidden");
+        OSL_FAIL("SetPagesX not after SetHidden");
         pHidden.reset();
     }
     nPagesX = nNew;
@@ -203,7 +203,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
         pParamSet = &pStyleSheet->GetItemSet();
     else
     {
-        OSL_FAIL("Seitenvorlage nicht gefunden" );
+        OSL_FAIL("Template not found" );
         pParamSet = nullptr;
     }
 
@@ -743,7 +743,7 @@ long ScPrintFunc::TextHeight( const EditTextObject* pObject )
 
 void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
 {
-    OSL_ENSURE( aPageSize.Width(), "UpdateHFHeight ohne aPageSize");
+    OSL_ENSURE( aPageSize.Width(), "UpdateHFHeight without aPageSize");
 
     if (rParam.bEnable && rParam.bDynamic)
     {

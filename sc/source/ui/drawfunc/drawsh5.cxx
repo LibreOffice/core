@@ -71,7 +71,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 
     SvxHyperlinkItem aHLinkItem;
 
-    if ( rMarkList.GetMarkCount() == 1 )              // URL-Button markiert ?
+    if ( rMarkList.GetMarkCount() == 1 )              // URL-Button marked ?
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
@@ -84,7 +84,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
         if (pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor())
         {
             uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-            OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
+            OSL_ENSURE( xControlModel.is(), "UNO-Control without model" );
             if( !xControlModel.is() )
                 return;
 
