@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.kit.Document;
@@ -85,7 +86,7 @@ public class InvalidationHandler implements Document.MessageCallback {
     }
 
     private void stateChanged(String payload) {
-        String[] parts = payload.split("=");
+        final String[] parts = payload.split("=");
         if (parts.length < 2) {
             Log.e(LOGTAG, "LOK_CALLBACK_STATE_CHANGED unexpected payload: " + payload);
             return;
@@ -117,6 +118,14 @@ public class InvalidationHandler implements Document.MessageCallback {
             mContext.getFormattingController().onToggleStateChanged(Document.BULLET_LIST, pressed);
         } else if (parts[0].equals(".uno:DefaultNumbering")) {
             mContext.getFormattingController().onToggleStateChanged(Document.NUMBERED_LIST, pressed);
+        } else if (parts[0].equals(".uno:StatePageNumber")) {
+            Log.d(LOGTAG,"Caught page number!" + payload);
+            LOKitShell.getMainHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(mContext, parts[1], Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
             Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
         }
