@@ -103,29 +103,31 @@ extern "C"
 
     static void extendUnoPath(const char *pPath)
     {
+        char *sNewPath = NULL, *sEnvPath = NULL;
+        size_t size_sEnvPath = 0, buffer_size = 0;
+        DWORD cChars;
+
         if (!pPath)
             return;
 
-        char* sEnvPath = NULL;
-        DWORD  cChars = GetEnvironmentVariableA("PATH", sEnvPath, 0);
+        cChars = GetEnvironmentVariableA("PATH", sEnvPath, 0);
         if (cChars > 0)
         {
-            sEnvPath = new char[cChars];
+            sEnvPath = (char *) malloc(cChars);
             cChars = GetEnvironmentVariableA("PATH", sEnvPath, cChars);
             //If PATH is not set then it is no error
             if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
             {
-                delete[] sEnvPath;
+                free(sEnvPath);
                 return;
             }
         }
         //prepare the new PATH. Add the Ure/bin directory at the front.
         //note also adding ';'
-        size_t size_sEnvPath = 0;
         if(sEnvPath)
             size_sEnvPath = strlen(sEnvPath);
-        size_t buffer_size = size_sEnvPath + 2*strlen(pPath) + strlen(UNOPATH) + 4;
-        char* sNewPath = new char[buffer_size];
+        buffer_size = size_sEnvPath + 2*strlen(pPath) + strlen(UNOPATH) + 4;
+        sNewPath = (char *) malloc(buffer_size);
         sNewPath[0] = L'\0';
         strcat_s(sNewPath, buffer_size, pPath);     // program to PATH
         strcat_s(sNewPath, buffer_size, ";");
@@ -138,8 +140,8 @@ extern "C"
 
         SetEnvironmentVariableA("PATH", sNewPath);
 
-        delete[] sEnvPath;
-        delete[] sNewPath;
+        free(sNewPath);
+        free(sEnvPath);
     }
 #endif
 
@@ -148,15 +150,15 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     char *imp_lib;
     void *dlhandle;
 
-    *_imp_lib = NULL;
-
 #if !(defined(__APPLE__) && (defined(__arm__) || defined(__arm64__)))
-    size_t partial_length;
+    size_t partial_length, imp_lib_size;
+    struct stat dir_st;
+
+    *_imp_lib = NULL;
 
     if (!install_path)
         return NULL;
 
-    struct stat dir_st;
     if (stat(install_path, &dir_st) != 0)
     {
         fprintf(stderr, "installation path \"%s\" does not exist\n", install_path);
@@ -165,7 +167,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 
     // allocate large enough buffer
     partial_length = strlen(install_path);
-    size_t imp_lib_size = partial_length + sizeof(TARGET_LIB) + sizeof(TARGET_MERGED_LIB) + 2;
+    imp_lib_size = partial_length + sizeof(TARGET_LIB) + sizeof(TARGET_MERGED_LIB) + 2;
     imp_lib = (char *) malloc(imp_lib_size);
     if (!imp_lib)
     {
