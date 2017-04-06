@@ -762,7 +762,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             break;
 
             case HANDLE_GREEK_CHAR_STYLE                    :
-                *pValue <<= static_cast<sal_Int16>(aFormat.GetGreekCharStyle());
+                *pValue <<= aFormat.GetGreekCharStyle();
             break;
 
             case HANDLE_ALIGNMENT                          :

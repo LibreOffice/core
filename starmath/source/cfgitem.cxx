@@ -518,7 +518,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         // Char
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        pVal->Value <<= static_cast< sal_UCS4 >( rSymbol.GetCharacter() );
+        pVal->Value <<= rSymbol.GetCharacter();
         pVal++;
         // Set
         pVal->Name  = aNodeNameDelim;
@@ -903,7 +903,7 @@ void SmMathConfig::SaveFormat()
     // StandardFormat/Textmode
     *pValue++ <<= pFormat->IsTextmode();
     // StandardFormat/GreekCharStyle
-    *pValue++ <<= static_cast<sal_Int16>(pFormat->GetGreekCharStyle());
+    *pValue++ <<= pFormat->GetGreekCharStyle();
     // StandardFormat/ScaleNormalBracket
     *pValue++ <<= pFormat->IsScaleNormalBrackets();
     // StandardFormat/HorizontalAlignment
