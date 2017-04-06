@@ -701,7 +701,7 @@ rtl_arena_activate (
 
         if (arena->m_qcache_max > 0)
         {
-            char namebuf[RTL_ARENA_NAME_LENGTH + 1];
+            char namebuf[2 * RTL_ARENA_NAME_LENGTH];
             int  i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
 
             sal_Size size = n * sizeof(rtl_cache_type*);
@@ -715,6 +715,7 @@ rtl_arena_activate (
             {
                 size = i * arena->m_quantum;
                 (void) snprintf (namebuf, sizeof(namebuf), "%s_%" SAL_PRIuUINTPTR, arena->m_name, size);
+                assert(strlen(namebuf) <= RTL_ARENA_NAME_LENGTH);
                 arena->m_qcache_ptr[i - 1] = rtl_cache_create(namebuf, size, 0, nullptr, nullptr, nullptr, nullptr, arena, RTL_CACHE_FLAG_QUANTUMCACHE);
             }
         }
