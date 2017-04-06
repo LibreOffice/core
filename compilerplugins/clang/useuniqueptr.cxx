@@ -160,7 +160,9 @@ bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
     auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
     if (!varDecl)
         return true;
-    if (!varDecl->hasInit() || !dyn_cast<CXXNewExpr>(varDecl->getInit()))
+    if (!varDecl->hasInit()
+        || !isa<CXXNewExpr>(
+            varDecl->getInit()->IgnoreImplicit()->IgnoreParenImpCasts()))
         return true;
     // determine if the var is declared inside the same block as the delete.
     // @TODO there should surely be a better way to do this
