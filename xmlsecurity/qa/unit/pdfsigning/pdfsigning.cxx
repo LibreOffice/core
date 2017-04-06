@@ -195,7 +195,7 @@ void PDFSigningTest::testPDFAdd()
         // Make sure the timestamp is correct.
         DateTime aDateTime(DateTime::SYSTEM);
         // This was 0 (on Windows), as neither the /M key nor the PKCS#7 blob contained a timestamp.
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(aDateTime.GetYear()), aInfos[0].stDateTime.Year);
+        CPPUNIT_ASSERT_EQUAL(aDateTime.GetYear(), aInfos[0].stDateTime.Year);
         // Assert that the digest algorithm is not SHA-1 in the bAdES case.
         CPPUNIT_ASSERT_EQUAL(xml::crypto::DigestID::SHA256, aInfos[0].nDigestID);
     }
