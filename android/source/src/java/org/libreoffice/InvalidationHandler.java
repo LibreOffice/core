@@ -29,6 +29,8 @@ public class InvalidationHandler implements Document.MessageCallback {
     private boolean mKeyEvent = false;
     private LibreOfficeMainActivity mContext;
 
+    private int currentTotalPageNumber = 0; // total page number of the current document
+
     public InvalidationHandler(LibreOfficeMainActivity context) {
         mContext = context;
         mDocumentOverlay = mContext.getDocumentOverlay();
@@ -196,6 +198,15 @@ public class InvalidationHandler implements Document.MessageCallback {
             mContext.getFormattingController().onToggleStateChanged(Document.BULLET_LIST, pressed);
         } else if (parts[0].equals(".uno:DefaultNumbering")) {
             mContext.getFormattingController().onToggleStateChanged(Document.NUMBERED_LIST, pressed);
+        } else if (parts[0].equals(".uno:StatePageNumber")) {
+            // get the total page number and compare to the current value and update accordingly
+            String[] splitStrings = parts[1].split(" ");
+            int totalPageNumber = Integer.valueOf(splitStrings[splitStrings.length - 1]);
+            if (totalPageNumber != currentTotalPageNumber) {
+                currentTotalPageNumber = totalPageNumber;
+                // update part page rectangles stored in DocumentOverlayView object
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UPDATE_PART_PAGE_RECT));
+            }
         } else {
             Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
         }
@@ -207,7 +218,7 @@ public class InvalidationHandler implements Document.MessageCallback {
      * @param payload - invalidation message payload text
      * @return rectangle in pixel coordinates
      */
-    private RectF convertPayloadToRectangle(String payload) {
+    public RectF convertPayloadToRectangle(String payload) {
         String payloadWithoutWhitespace = payload.replaceAll("\\s", ""); // remove all whitespace from the string
 
         if (payloadWithoutWhitespace.isEmpty() || payloadWithoutWhitespace.equals("EMPTY")) {
@@ -241,7 +252,7 @@ public class InvalidationHandler implements Document.MessageCallback {
      * @param payload - invalidation message payload text
      * @return list of rectangles
      */
-    private List<RectF> convertPayloadToRectangles(String payload) {
+    public List<RectF> convertPayloadToRectangles(String payload) {
         List<RectF> rectangles = new ArrayList<RectF>();
         String[] rectangleArray = payload.split(";");
 

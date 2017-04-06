@@ -498,6 +498,7 @@ class JavaPanZoomController
         ImmutableViewportMetrics bounceStartMetrics = getMetrics();
         if (bounceStartMetrics.fuzzyEquals(metrics)) {
             setState(PanZoomState.NOTHING);
+            finishAnimation();
             return;
         }
 
@@ -689,6 +690,7 @@ class JavaPanZoomController
                  */
                 float threshold = (overscrolled && !mSubscroller.scrolling() ? STOPPED_THRESHOLD : FLING_STOPPED_THRESHOLD);
                 if (getVelocity() >= threshold) {
+                    mContext.getDocumentOverlay().showPageNumberRect();
                     // we're still flinging
                     return;
                 }
@@ -711,6 +713,8 @@ class JavaPanZoomController
         checkMainThread();
 
         stopAnimationTimer();
+
+        mContext.getDocumentOverlay().hidePageNumberRect();
 
         // Force a viewport synchronisation
         mTarget.forceRedraw();
@@ -947,6 +951,12 @@ class JavaPanZoomController
     @Override
     public void onLongPress(MotionEvent motionEvent) {
         LOKitShell.sendTouchEvent("LongPress", getMotionInDocumentCoordinates(motionEvent));
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        mContext.getDocumentOverlay().showPageNumberRect();
+        return super.onScroll(e1, e2, distanceX, distanceY);
     }
 
     @Override

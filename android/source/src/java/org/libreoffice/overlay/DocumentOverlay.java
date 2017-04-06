@@ -32,6 +32,8 @@ public class DocumentOverlay {
     private final DocumentOverlayView mDocumentOverlayView;
     private final DocumentOverlayLayer mDocumentOverlayLayer;
 
+    private final long hidePageNumberRectDelayInMilliseconds = 500;
+
     /**
      * DocumentOverlayLayer responsibility is to get the changes to the viewport
      * and report them to DocumentOverlayView.
@@ -74,6 +76,10 @@ public class DocumentOverlay {
         mDocumentOverlayView.initialize(layerView);
     }
 
+    public void setPartPageRectangles(List<RectF> rectangles) {
+        mDocumentOverlayView.setPartPageRectangles(rectangles);
+    }
+
     /**
      * Show the cursor at the defined cursor position on the overlay.
      */
@@ -94,6 +100,28 @@ public class DocumentOverlay {
                 mDocumentOverlayView.hideCursor();
             }
         });
+    }
+
+    /**
+     * Show the page number rectangle on the overlay.
+     */
+    public void showPageNumberRect() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mDocumentOverlayView.showPageNumberRect();
+            }
+        });
+    }
+
+    /**
+     * Hide the page number rectangle on the overlay.
+     */
+    public void hidePageNumberRect() {
+        LOKitShell.getMainHandler().postDelayed(new Runnable() {
+            public void run() {
+                mDocumentOverlayView.hidePageNumberRect();
+            }
+        }, hidePageNumberRectDelayInMilliseconds);
     }
 
     /**

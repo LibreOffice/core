@@ -155,6 +155,17 @@ class LOKitThread extends Thread {
     private void refresh() {
         mLayerClient.clearAndResetlayers();
         redraw();
+        updatePartPageRectangles();
+    }
+
+    /**
+     * Update part page rectangles which hold positions of each document page.
+     * Result is stored in DocumentOverlayView class.
+     */
+    private void updatePartPageRectangles() {
+        String partPageRectString = ((LOKitTileProvider) mTileProvider).getPartPageRectangles();
+        List<RectF> partPageRectangles = mInvalidationHandler.convertPayloadToRectangles(partPageRectString);
+        mContext.getDocumentOverlay().setPartPageRectangles(partPageRectangles);
     }
 
 
@@ -318,6 +329,9 @@ class LOKitThread extends Thread {
                 break;
             case LOEvent.UNO_COMMAND:
                 mTileProvider.postUnoCommand(event.mString, event.mValue);
+                break;
+            case LOEvent.UPDATE_PART_PAGE_RECT:
+                updatePartPageRectangles();
                 break;
         }
     }
