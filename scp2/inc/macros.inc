@@ -368,7 +368,7 @@ End
         Styles = (); \
     End
 
-#define CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
+#define CONDITIONAL_REGISTER_DOC_OPEN_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
     CONDITIONAL_MODULE_ENTRY(name,modid) \
     REGISTRY_ENTRY_OPEN_WITH(name,cond,doc_type,modid,key) \
     CONDITIONAL_REGISTRY_ENTRY_EXT(name,cond,key) \
@@ -376,11 +376,14 @@ End
     REGISTRY_ENTRY_APPUSERMODELID(name,modid,doc_type) \
     REGISTRY_ENTRY_ICON(name,modid,icon_id) \
     REGISTRY_ENTRY_SHELL(name,default,modid) \
-    REGISTRY_ENTRY_NEW_CMD(name,modid,app) \
     REGISTRY_ENTRY_OPEN_CMD(name,modid,app) \
+    REGISTRY_ENTRY_CAPABILITIES(name,modid,key,doc_type) \
+
+#define CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
+    CONDITIONAL_REGISTER_DOC_OPEN_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
+    REGISTRY_ENTRY_NEW_CMD(name,modid,app) \
     REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
     REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
-    REGISTRY_ENTRY_CAPABILITIES(name,modid,key,doc_type) \
 
 #define CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
     CONDITIONAL_MODULE_ENTRY(name,modid) \
