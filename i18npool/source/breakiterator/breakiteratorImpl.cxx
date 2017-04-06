@@ -509,7 +509,7 @@ bool getCompatibilityScriptClassByBlock(sal_uInt32 currentChar, sal_Int16 &rScri
 sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 {
     static sal_uInt32 lastChar = 0;
-    static sal_Int16 nRet = 0;
+    static sal_Int16 nRet = ScriptType::WEAK;
 
     if (currentChar != lastChar)
     {
