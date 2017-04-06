@@ -1102,7 +1102,7 @@ bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
                     const ScRange& rRange, ScAddress aNewDestPos, bool bNewCut,
                     ScDocument* pUndoDocument, ScRefUndoData* pRefData, bool bScenario ) :
-    ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFFIRST ),
+    ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
     mnPaintExtFlags( 0 ),
     aSrcRange( rRange ),
     bCut( bNewCut ),
