@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_301eebba",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2183,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-06T20:23:05Z",
+      "side": 1,
+      "message": "\"for PPMT also if fZr \u003d\u003d 1\"\n\nKAPZ is the German UI translated PPMT function.",
+      "revId": "2d21c1ad056afd005abdf2bfb81753c812069eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
