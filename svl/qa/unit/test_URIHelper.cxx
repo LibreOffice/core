@@ -404,9 +404,9 @@ void Test::testFindFirstURLInText() {
             buf.append(" != ");
             buf.append(OUStringToOString(result, RTL_TEXTENCODING_UTF8));
             buf.append(" (");
-            buf.append(static_cast< sal_Int32 >(begin));
+            buf.append(begin);
             buf.append(", ");
-            buf.append(static_cast< sal_Int32 >(end));
+            buf.append(end);
             buf.append(')');
             msg = buf.makeStringAndClear();
         }
