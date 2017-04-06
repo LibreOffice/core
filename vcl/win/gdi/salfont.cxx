@@ -55,8 +55,6 @@
 
 using namespace vcl;
 
-static const int MAXFONTHEIGHT = 2048;
-
 
 inline FIXED FixedFromDouble( double d )
 {
@@ -830,7 +828,6 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 
 HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern* i_pFont, HFONT& o_rOldFont)
 {
-    float fFontScale;
     HFONT hNewFont = nullptr;
 
     HDC hdcScreen = nullptr;
@@ -840,26 +837,6 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern* i_pFont, HFONT& o_rOldFon
 
     LOGFONTW aLogFont;
     ImplGetLogFontFromFontSelect( getHDC(), i_pFont, aLogFont, true );
-
-    // #i47675# limit font requests to MAXFONTHEIGHT
-    // TODO: share MAXFONTHEIGHT font instance
-    if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
-    &&  (+aLogFont.lfWidth <= MAXFONTHEIGHT) )
-    {
-        fFontScale = 1.0;
-    }
-    else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
-    {
-        fFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
-        aLogFont.lfHeight = -MAXFONTHEIGHT;
-        aLogFont.lfWidth = FRound( aLogFont.lfWidth / fFontScale );
-    }
-    else // #i95867# also limit font widths
-    {
-        fFontScale = +aLogFont.lfWidth / (float)MAXFONTHEIGHT;
-        aLogFont.lfWidth = +MAXFONTHEIGHT;
-        aLogFont.lfHeight = FRound( aLogFont.lfHeight / fFontScale );
-    }
 
     hNewFont = ::CreateFontIndirectW( &aLogFont );
     if( hdcScreen )
