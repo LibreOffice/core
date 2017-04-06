@@ -385,7 +385,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
         {
             i++;
             sal_Int32 nProgress = static_cast< sal_Int32 >( 40.0 * ( i / static_cast< double >( rGraphicList.size() ) ) ) + 50;
-            rOptimizer.SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( nProgress ) ) );
+            rOptimizer.SetStatusValue( TK_Progress, Any( nProgress ) );
             rOptimizer.DispatchStatus();
 
             if ( aGraphicIter->maUser.size() )
