@@ -1218,8 +1218,7 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
         try {
             entry.reset(
                 new TypeRegistryEntry(
-                    static_cast< sal_uInt8 const * >(buffer),
-                    static_cast< sal_uInt32 >(length), copy));
+                    static_cast< sal_uInt8 const * >(buffer), length, copy));
         } catch (std::bad_alloc &) {
             return false;
         }
