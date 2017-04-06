@@ -241,6 +241,7 @@ CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curE
         xInput->closeInput();
 
         arg = OUString::createFromAscii(aResult.getStr());
+        return CommandLineEvent::ForceNew;
     }
     catch (...)
     {
