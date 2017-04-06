@@ -90,6 +90,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         { OUString("BottomBorder"),                 SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
         { OUString("LeftBorder"),                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
         { OUString("RightBorder"),                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
+        { OUString("RotateAngle"),                  SDRATTR_TABLE_TEXT_ROTATION,    cppu::UnoType<sal_Int32>::get(), 0, 0 },
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -285,8 +286,6 @@ namespace sdr
 
                         OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         pOutliner->Clear();
-                        pTemp->SetVertical(pParaObj->IsVertical(), pParaObj->IsTopToBottom());
-
                         mxCell->SetOutlinerParaObject(pTemp);
                     }
 
@@ -1102,6 +1101,18 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
             return;
         }
+        case SDRATTR_TABLE_TEXT_ROTATION:
+        {
+            sal_Int32 nRotVal = 0;
+            if (!(rValue >>= nRotVal))
+                throw IllegalArgumentException();
+
+            if (nRotVal != 27000 && nRotVal != 9000 && nRotVal != 0)
+                throw IllegalArgumentException();
+
+            mpProperties->SetObjectItem(SvxTextRotateItem(nRotVal/10, SDRATTR_TABLE_TEXT_ROTATION));
+            return;
+        }
         default:
         {
             SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
@@ -1216,6 +1227,11 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
             {
                 return Any(  BitmapMode_NO_REPEAT );
             }
+        }
+        case SDRATTR_TABLE_TEXT_ROTATION:
+        {
+            const SvxTextRotateItem& rTextRotate = static_cast<const SvxTextRotateItem&>(mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION));
+            return Any(sal_Int32(rTextRotate.GetValue() * 10));
         }
         default:
         {
