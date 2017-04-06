@@ -305,11 +305,8 @@ static inline bool idefaultConstructElements(
         OSL_ASSERT( nAlloc >= 0 ); // must have been an allocation failure
         return false;
     }
-    else
-    {
-        *ppSeq = pSeq;
-        return true;
-    }
+    *ppSeq = pSeq;
+    return true;
 }
 
 
@@ -568,11 +565,8 @@ static inline bool icopyConstructFromElements(
     {
         return false; // allocation failure
     }
-    else
-    {
-        *ppSeq = pSeq;
-        return true;
-    }
+    *ppSeq = pSeq;
+    return true;
 }
 
 

@@ -475,10 +475,7 @@ static Mapping getDirectMapping(
             aGuard.clear();
             return loadExternalMapping( rFrom, rTo, rAddPurpose );
         }
-        else
-        {
-            return Mapping( (*iFind).second->pMapping );
-        }
+        return Mapping( (*iFind).second->pMapping );
     }
     return Mapping();
 }

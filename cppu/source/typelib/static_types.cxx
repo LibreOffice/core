@@ -104,10 +104,7 @@ static inline typelib_TypeDescriptionReference * igetTypeByName( rtl_uString * p
     {
         return pRef;
     }
-    else
-    {
-        return nullptr;
-    }
+    return nullptr;
 }
 
 extern "C"
