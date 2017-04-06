@@ -124,7 +124,7 @@
     <string name="no_save_document">NO</string>
     <string name="new_write">New Write</string>
 
-    <string name="save_as_success">Saved file -</string>
+    <string name="save_as_success">"Saved file - "</string>
     <string name="save_as_error">Unable to create new file, please check entered file name.</string>
 
 
