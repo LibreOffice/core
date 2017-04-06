@@ -322,31 +322,46 @@ namespace
     }
 }
 
-OUString SfxHelp::GetHelpModuleName_Impl()
+OUString SfxHelp::GetHelpModuleName_Impl(const OUString& rHelpID)
 {
     OUString aFactoryShortName;
-    OUString aModuleIdentifier = getCurrentModuleIdentifier_Impl();
 
-    if ( !aModuleIdentifier.isEmpty() )
+    //rhbz#1438876 detect preferred module for this help id, e.g. csv dialog
+    //for calc import before any toplevel is created and so context is
+    //otherwise unknown. Cosmetic, same help is shown in any case because its
+    //in the shared section, but title bar would state "Writer" when context is
+    //expected to be "Calc"
+    OUString sRemainder;
+    if (rHelpID.startsWith("modules/", &sRemainder))
     {
-        try
+        sal_Int32 nEndModule = sRemainder.indexOf('/');
+        aFactoryShortName = nEndModule != -1 ? sRemainder.copy(0, nEndModule) : sRemainder;
+    }
+
+    if (aFactoryShortName.isEmpty())
+    {
+        OUString aModuleIdentifier = getCurrentModuleIdentifier_Impl();
+        if (!aModuleIdentifier.isEmpty())
         {
-            Reference < XModuleManager2 > xModuleManager(
-                ModuleManager::create(::comphelper::getProcessComponentContext()) );
-            Sequence< PropertyValue > lProps;
-            xModuleManager->getByName( aModuleIdentifier ) >>= lProps;
-            for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
+            try
             {
-                if ( lProps[i].Name == "ooSetupFactoryShortName" )
+                Reference < XModuleManager2 > xModuleManager(
+                    ModuleManager::create(::comphelper::getProcessComponentContext()) );
+                Sequence< PropertyValue > lProps;
+                xModuleManager->getByName( aModuleIdentifier ) >>= lProps;
+                for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
                 {
-                    lProps[i].Value >>= aFactoryShortName;
-                    break;
+                    if ( lProps[i].Name == "ooSetupFactoryShortName" )
+                    {
+                        lProps[i].Value >>= aFactoryShortName;
+                        break;
+                    }
                 }
             }
-        }
-        catch (const Exception&)
-        {
-            SAL_WARN( "sfx.appl", "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
+            catch (const Exception&)
+            {
+                SAL_WARN( "sfx.appl", "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
+            }
         }
     }
 
@@ -451,7 +466,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
 OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* pWindow )
 {
-    OUString sModuleName = GetHelpModuleName_Impl();
+    OUString sModuleName = GetHelpModuleName_Impl(aCommandURL);
     OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, getCurrentModuleIdentifier_Impl() );
     OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
 
@@ -565,7 +580,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
             break;
         default:
         {
-            OUString aHelpModuleName( GetHelpModuleName_Impl() );
+            OUString aHelpModuleName(GetHelpModuleName_Impl(rURL));
             OUString aRealCommand;
 
             if ( nProtocol == INetProtocol::Uno )
