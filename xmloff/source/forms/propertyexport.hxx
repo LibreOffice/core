@@ -358,7 +358,6 @@ namespace xmloff
 #ifdef DBG_UTIL
                 void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const OUString& _rValue);
                 void AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue );
-                void AddAttributeASCII( sal_uInt16 nPrefix, const sal_Char *pName, const sal_Char *pValue );
                 void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue);
                 void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue );
 #else
@@ -367,8 +366,6 @@ namespace xmloff
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue); }
         inline void AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue )
             { m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue ); }
-        inline  void AddAttributeASCII( sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue )
-            { m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue); }
         inline void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue)
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _rValue); }
         inline void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue )

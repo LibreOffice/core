@@ -368,7 +368,7 @@ namespace xmloff
         else
         {
             if (!_bVoidDefault)
-                AddAttributeASCII(_nNamespaceKey, _pAttributeName, "");
+                AddAttribute(_nNamespaceKey, _pAttributeName, OUString());
         }
 
         // the property does not need to be handled anymore
@@ -632,14 +632,6 @@ namespace xmloff
             "OPropertyExport::AddAttribute: already have such an attribute");
 
         m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue );
-    }
-
-    void OPropertyExport::AddAttributeASCII(sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue)
-    {
-        OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(OUString::createFromAscii(_pName)).isEmpty(),
-            "OPropertyExport::AddAttributeASCII: already have such an attribute");
-
-        m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue);
     }
 
     void OPropertyExport::AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue)
