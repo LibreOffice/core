@@ -4196,7 +4196,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
     sal_uInt32          nBlibId = 0;
     std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(rId));
 
-    EscherBlibEntry* p_EscherBlibEntry = new EscherBlibEntry( rPicOutStrm.Tell(), *xGraphicObject, rId, pGraphicAttr );
+    std::unique_ptr<EscherBlibEntry> p_EscherBlibEntry( new EscherBlibEntry( rPicOutStrm.Tell(), *xGraphicObject, rId, pGraphicAttr ) );
     if ( !p_EscherBlibEntry->IsEmpty() )
     {
         for ( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
@@ -4204,7 +4204,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             if ( *( mpBlibEntrys[ i ] ) == *p_EscherBlibEntry )
             {
                 mpBlibEntrys[ i ]->mnRefCount++;
-                delete p_EscherBlibEntry;
                 return i + 1;
             }
         }
@@ -4433,11 +4432,9 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 rPicOutStrm.WriteUInt32( nPos - nAtomSize );
                 rPicOutStrm.Seek( nPos );
             }
-            nBlibId = ImplInsertBlib( p_EscherBlibEntry );
-            p_EscherBlibEntry = nullptr;
+            nBlibId = ImplInsertBlib( p_EscherBlibEntry.release() );
         }
     }
-    delete p_EscherBlibEntry;
     return nBlibId;
 }
 

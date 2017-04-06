@@ -2337,7 +2337,7 @@ int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
     OSL_ASSERT( nLen1 >= 0 );
     OSL_ASSERT( nLen2 >= 0 );
 
-    int **pLcs = new int*[ nLen1 + 1 ];
+    std::unique_ptr<int*[]> pLcs( new int*[ nLen1 + 1 ] );
     pLcs[ 0 ] = pData.get();
 
     for( int i = 1; i < nLen1 + 1; i++ )
@@ -2386,8 +2386,6 @@ int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
             }
         }
     }
-
-    delete[] pLcs;
 
     return nLcsLen;
 }

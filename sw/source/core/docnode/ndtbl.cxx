@@ -3920,8 +3920,8 @@ OUString SwDoc::GetUniqueTableName() const
 
     const size_t nFlagSize = ( mpTableFrameFormatTable->size() / 8 ) + 2;
 
-    sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
-    memset( pSetFlags, 0, nFlagSize );
+    std::unique_ptr<sal_uInt8[]> pSetFlags( new sal_uInt8[ nFlagSize ] );
+    memset( pSetFlags.get(), 0, nFlagSize );
 
     for( size_t n = 0; n < mpTableFrameFormatTable->size(); ++n )
     {
@@ -3955,7 +3955,6 @@ OUString SwDoc::GetUniqueTableName() const
         }
     }
 
-    delete [] pSetFlags;
     return aName + OUString::number( ++nNum );
 }
 

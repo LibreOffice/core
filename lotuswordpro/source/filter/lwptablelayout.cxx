@@ -844,13 +844,13 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
 {
     sal_uInt16 nContentRow;
     sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
-    XFTable* pTmpTable = new XFTable;
+    rtl::Reference<XFTable> pTmpTable( new XFTable );
     XFRow* pXFRow;
 
-    ConvertTable(pTmpTable,nStartHeadRow,nEndHeadRow,0,nCol);
+    ConvertTable(pTmpTable.get(),nStartHeadRow,nEndHeadRow,0,nCol);
 
     sal_uInt16 nRowNum = pTmpTable->GetRowCount();
-    sal_uInt8* CellMark = new sal_uInt8[nRowNum];
+    std::unique_ptr<sal_uInt8[]> CellMark( new sal_uInt8[nRowNum] );
 
     if (nRowNum == 1)
     {
@@ -862,11 +862,11 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     else
     {
         sal_uInt8 nFirstColSpann = 1;
-        const bool bFindFlag = FindSplitColMark(pTmpTable,CellMark,nFirstColSpann);
+        const bool bFindFlag = FindSplitColMark(pTmpTable.get(),CellMark.get(),nFirstColSpann);
 
         if (bFindFlag)//split to 2 cells
         {
-            SplitRowToCells(pTmpTable,pXFTable,nFirstColSpann,CellMark);
+            SplitRowToCells(pTmpTable.get(),pXFTable,nFirstColSpann,CellMark.get());
             nContentRow = nEndHeadRow;
         }
         else//can not split,the first row will be the heading row,the rest will be content row
@@ -877,8 +877,6 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
             nContentRow = m_RowsMap[0]->GetCurMaxSpannedRows(0,nCol);
         }
     }
-    delete pTmpTable;
-    delete [] CellMark;
     return nContentRow;
 }
 

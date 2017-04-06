@@ -1003,15 +1003,14 @@ SvStream& SvStream::ReadDouble(double& r)
 SvStream& SvStream::ReadStream( SvStream& rStream )
 {
     const sal_uInt32 cBufLen = 0x8000;
-    char* pBuf = new char[ cBufLen ];
+    std::unique_ptr<char[]> pBuf( new char[ cBufLen ] );
 
     sal_uInt32 nCount;
     do {
-        nCount = ReadBytes( pBuf, cBufLen );
-        rStream.WriteBytes( pBuf, nCount );
+        nCount = ReadBytes( pBuf.get(), cBufLen );
+        rStream.WriteBytes( pBuf.get(), nCount );
     } while( nCount == cBufLen );
 
-    delete[] pBuf;
     return *this;
 }
 
@@ -1166,14 +1165,13 @@ SvStream& SvStream::WriteCharPtr( const char* pBuf )
 SvStream& SvStream::WriteStream( SvStream& rStream )
 {
     const sal_uInt32 cBufLen = 0x8000;
-    char* pBuf = new char[ cBufLen ];
+    std::unique_ptr<char[]> pBuf( new char[ cBufLen ] );
     sal_uInt32 nCount;
     do {
-        nCount = rStream.ReadBytes( pBuf, cBufLen );
-        WriteBytes( pBuf, nCount );
+        nCount = rStream.ReadBytes( pBuf.get(), cBufLen );
+        WriteBytes( pBuf.get(), nCount );
     } while( nCount == cBufLen );
 
-    delete[] pBuf;
     return *this;
 }
 

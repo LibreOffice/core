@@ -2130,11 +2130,11 @@ bool ScImportExport::Doc2Dif( SvStream& rStrm )
 bool ScImportExport::Dif2Doc( SvStream& rStrm )
 {
     SCTAB nTab = aRange.aStart.Tab();
-    ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );
+    std::unique_ptr<ScDocument> pImportDoc( new ScDocument( SCDOCMODE_UNDO ) );
     pImportDoc->InitUndo( pDoc, nTab, nTab );
 
     // for DIF in the clipboard, IBM_850 is always used
-    ScFormatFilter::Get().ScImportDif( rStrm, pImportDoc, aRange.aStart, RTL_TEXTENCODING_IBM_850 );
+    ScFormatFilter::Get().ScImportDif( rStrm, pImportDoc.get(), aRange.aStart, RTL_TEXTENCODING_IBM_850 );
 
     SCCOL nEndCol;
     SCROW nEndRow;
@@ -2154,8 +2154,6 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
         pImportDoc->CopyToDocument(aRange, nFlags, false, *pDoc);
         EndPaste();
     }
-
-    delete pImportDoc;
 
     return bOk;
 }
