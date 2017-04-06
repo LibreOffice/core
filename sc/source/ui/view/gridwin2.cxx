@@ -903,7 +903,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
         else
         {
             if ( nPosY > aPagebreakSource.aStart.Row() &&
-                 nPosY <= aPagebreakSource.aEnd.Row() + 1 )     //  to the end is also allowe
+                 nPosY <= aPagebreakSource.aEnd.Row() + 1 )     //  to the end is also allowed
             {
                 bToEnd = ( nPosY == aPagebreakSource.aEnd.Row() + 1 );
                 aDrawRange.aStart.SetRow( nPosY );

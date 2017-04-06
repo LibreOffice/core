@@ -90,7 +90,7 @@ OLEStorageBase::~OLEStorageBase()
 {
     if( pEntry )
     {
-        DBG_ASSERT( pEntry->m_nRefCnt, "RefCount unter 0" );
+        DBG_ASSERT( pEntry->m_nRefCnt, "RefCount under 0" );
         if( !--pEntry->m_nRefCnt )
         {
             if( pEntry->m_bZombie )

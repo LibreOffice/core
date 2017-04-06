@@ -1129,7 +1129,7 @@ void SwDocShell::LoadingFinished()
     // interface <SfxObjectShell::EnableSetModified(..)> no longer works, because
     // <SfxObjectShell::FinishedLoading(..)> doesn't care about its status and
     // enables the document modification again.
-    // Thus, manuell modify the document, if its modified and its links are updated
+    // Thus, manual modify the document, if it's modified and its links are updated
     // before <FinishedLoading(..)> is called.
     const bool bHasDocToStayModified( m_pDoc->getIDocumentState().IsModified() && m_pDoc->getIDocumentLinksAdministration().LinksUpdated() );
 

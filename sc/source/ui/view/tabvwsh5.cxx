@@ -264,7 +264,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     //  "Save as" can make a write-protected document writable,
                     //  therefore the Layer-Locks anew (#39884#)
-                    //  (Invalidate etc. is happing already from Sfx)
+                    //  (Invalidate etc. is happening already from Sfx)
                     //  by SID_EDITDOC no SfxHintId::TitleChanged will occur, that
                     //  is why the own hint from DoSaveCompleted
                     //! what is with SfxHintId::SAVECOMPLETED ?
