@@ -767,7 +767,7 @@ void ScInterpreter::ScGetDiffDate360()
                 else
                     aDate2.SetDay(30);
             }
-            PushDouble( fSign * (double)
+            PushDouble( fSign *
                 (  (double) aDate2.GetDay() + (double) aDate2.GetMonth() * 30.0 +
                    (double) aDate2.GetYear() * 360.0
                  - (double) aDate1.GetDay() - (double) aDate1.GetMonth() * 30.0
@@ -1310,7 +1310,7 @@ void ScInterpreter::ScNPV()
                 {
                     case svDouble :
                     {
-                        nVal += (GetDouble() / pow(1.0 + nInterest, (double)nCount));
+                        nVal += (GetDouble() / pow(1.0 + nInterest, nCount));
                         nCount++;
                     }
                     break;
@@ -1322,7 +1322,7 @@ void ScInterpreter::ScNPV()
                         if (!aCell.hasEmptyValue() && aCell.hasNumeric())
                         {
                             double nCellVal = GetCellValue(aAdr, aCell);
-                            nVal += (nCellVal / pow(1.0 + nInterest, (double)nCount));
+                            nVal += (nCellVal / pow(1.0 + nInterest, nCount));
                             nCount++;
                         }
                     }
@@ -1336,7 +1336,7 @@ void ScInterpreter::ScNPV()
                         ScHorizontalValueIterator aValIter( pDok, aRange );
                         while ((nErr == FormulaError::NONE) && aValIter.GetNext(nCellVal, nErr))
                         {
-                            nVal += (nCellVal / pow(1.0 + nInterest, (double)nCount));
+                            nVal += (nCellVal / pow(1.0 + nInterest, nCount));
                             nCount++;
                         }
                         if ( nErr != FormulaError::NONE )
@@ -1428,13 +1428,13 @@ void ScInterpreter::ScIRR()
         if (aValIter.GetFirst(fValue, nErr))
         {
             double nCount = 0.0;
-            fNom +=           fValue / pow(1.0+x,(double)nCount);
+            fNom    +=           fValue / pow(1.0+x,nCount);
             fDenom  += -nCount * fValue / pow(1.0+x,nCount+1.0);
             nCount++;
             while ((nErr == FormulaError::NONE) && aValIter.GetNext(fValue, nErr))
             {
-                fNom +=           fValue / pow(1.0+x,(double)nCount);
-                fDenom  += -nCount * fValue / pow(1.0+x,nCount+1.0);
+                fNom   +=           fValue / pow(1.0+x,nCount);
+                fDenom += -nCount * fValue / pow(1.0+x,nCount+1.0);
                 nCount++;
             }
             SetError(nErr);

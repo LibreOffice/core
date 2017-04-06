@@ -627,7 +627,7 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
     {
         double dWait = rPar.Get(1)->GetDouble();
         double dNow = Now_Impl();
-         double dSecs = (double)( ( dWait - dNow ) * (double)( 24.0*3600.0) );
+        double dSecs = ( dWait - dNow ) * 24.0 * 3600.0;
         nWait = (long)( dSecs * 1000 ); // wait in thousands of sec
     }
     else

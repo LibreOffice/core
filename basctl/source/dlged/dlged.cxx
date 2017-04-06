@@ -1174,13 +1174,13 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
         Size aOutputSz;
         if( nBmpSzHeight * nScaleX <= nPaperSzHeight )
         {
-            aOutputSz.Width() = (long)(((double)nBmpSzWidth) * nScaleX);
-            aOutputSz.Height() = (long)(((double)nBmpSzHeight) * nScaleX);
+            aOutputSz.Width() = (long)(nBmpSzWidth * nScaleX);
+            aOutputSz.Height() = (long)(nBmpSzHeight * nScaleX);
         }
         else
         {
-            aOutputSz.Width() = (long)(((double)nBmpSzWidth) * nScaleY);
-            aOutputSz.Height() = (long)(((double)nBmpSzHeight) * nScaleY);
+            aOutputSz.Width() = (long)(nBmpSzWidth * nScaleY);
+            aOutputSz.Height() = (long)(nBmpSzHeight * nScaleY);
         }
 
         Point aPosOffs(

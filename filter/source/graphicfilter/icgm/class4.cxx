@@ -56,7 +56,7 @@ void CGM::ImplGetVector( double* pVector )
     {
         for ( sal_uInt32 i = 0; i < 4; i++ )
         {
-            pVector[ i ] = (double)ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
+            pVector[ i ] = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
         }
     }
     else
@@ -504,7 +504,7 @@ void CGM::ImplDoClass4()
 
                 if ( pElement->eVDCType == VDC_REAL )
                 {
-                    aRadius.X = (double)ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
+                    aRadius.X = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 }
                 else
                 {
@@ -557,7 +557,7 @@ void CGM::ImplDoClass4()
                 ImplGetVector( &vector[ 0 ] );
                 if ( pElement->eVDCType == VDC_REAL )
                 {
-                    aRadius.X = (double)ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
+                    aRadius.X = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 }
                 else
                 {

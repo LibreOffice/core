@@ -86,8 +86,7 @@
 
 using namespace ::com::sun::star;
 
-const double ImportExcel::fExcToTwips =
-    ( double ) TWIPS_PER_CHAR / 256.0;
+const double ImportExcel::fExcToTwips = TWIPS_PER_CHAR / 256.0;
 
 ImportTyp::ImportTyp( ScDocument* pDoc, rtl_TextEncoding eQ )
 {

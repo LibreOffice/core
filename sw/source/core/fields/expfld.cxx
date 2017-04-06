@@ -1084,7 +1084,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_DOUBLE:
-        rAny <<= (double)GetValue();
+        rAny <<= GetValue();
         break;
     case FIELD_PROP_SUBTYPE:
         {

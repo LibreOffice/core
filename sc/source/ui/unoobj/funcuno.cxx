@@ -609,7 +609,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             else if ( pFormula->IsValue() )
             {
                 // numeric value
-                aRet <<= (double) pFormula->GetValue();
+                aRet <<= pFormula->GetValue();
             }
             else
             {

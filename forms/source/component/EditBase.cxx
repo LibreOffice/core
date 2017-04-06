@@ -189,7 +189,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream)
         else if ((nAnyMask & DEFAULT_DOUBLE) == DEFAULT_DOUBLE)
         {
             double fValue = _rxInStream->readDouble();
-            m_aDefault <<= (double)fValue;
+            m_aDefault <<= fValue;
         }
         else if ((nAnyMask & DEFAULT_TIME) == DEFAULT_TIME)
         {

@@ -66,7 +66,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
         rScaleX = Fraction( ((double)aPixelLog.X()) *
                             ((double)rZoomX.GetNumerator()) /
                             ((double)nTwipsX) /
-                            ((double)HMM_PER_TWIPS) /
+                            HMM_PER_TWIPS /
                             ((double)rZoomX.GetDenominator()) );
     else
         rScaleX = Fraction( 1, 1 );
@@ -75,7 +75,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
         rScaleY = Fraction( ((double)aPixelLog.Y()) *
                             ((double)rZoomY.GetNumerator()) /
                             ((double)nTwipsY) /
-                            ((double)HMM_PER_TWIPS) /
+                            HMM_PER_TWIPS /
                             ((double)rZoomY.GetDenominator()) );
     else
         rScaleY = Fraction( 1, 1 );

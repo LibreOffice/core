@@ -199,10 +199,10 @@ namespace cppcanvas
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::tools::createPolygonFromRect(
                                 ::basegfx::B2DRectangle(
-                                    (double)(aLocalClipRect.Left() - rOffset.getX())/pScaling->getX(),
-                                    (double)(aLocalClipRect.Top() - rOffset.getY())/pScaling->getY(),
-                                    (double)(aLocalClipRect.Right() - rOffset.getX())/pScaling->getX(),
-                                    (double)(aLocalClipRect.Bottom() - rOffset.getY())/pScaling->getY() ) ) ) );
+                                    (aLocalClipRect.Left() - rOffset.getX())/pScaling->getX(),
+                                    (aLocalClipRect.Top() - rOffset.getY())/pScaling->getY(),
+                                    (aLocalClipRect.Right() - rOffset.getX())/pScaling->getX(),
+                                    (aLocalClipRect.Bottom() - rOffset.getY())/pScaling->getY() ) ) ) );
                 }
                 else
                 {

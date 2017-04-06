@@ -691,7 +691,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                 double fL = hypot( fvx, fvy );
                                 fvx = fvx / fL;
                                 fvy = fvy / fL;
-                                fL = (double)( aTextAreaIter->aBoundRect.GetHeight() / 2.0 + aTextAreaIter->aBoundRect.Top() ) - aParagraphIter->aBoundRect.Center().Y();
+                                fL = aTextAreaIter->aBoundRect.GetHeight() / 2.0 + aTextAreaIter->aBoundRect.Top() - aParagraphIter->aBoundRect.Center().Y();
                                 fvx *= fL;
                                 fvy *= fL;
                                 rPolyPoly.Rotate( Point( aBoundRect.Center().X(), aParagraphIter->aBoundRect.Center().Y() ), sin( fAngle ), cos( fAngle ) );

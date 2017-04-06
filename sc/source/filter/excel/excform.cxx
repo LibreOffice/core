@@ -1601,7 +1601,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
                 if( aPool.IsSingleOp( eParam[ nLauf ], ocMissing ) )
                 {
                     if( !nNullParam )
-                        nNullParam = (sal_uInt16) aPool.Store( ( double ) 0.0 );
+                        nNullParam = (sal_uInt16) aPool.Store( 0.0 );
                     eParam[ nLauf ] = nNullParam;
                 }
             }

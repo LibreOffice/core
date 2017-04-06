@@ -77,8 +77,8 @@ PrinterGfx::Init (const JobData& rData)
     mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice != -1 ) : ( rData.m_pParser == nullptr || rData.m_pParser->isColorDevice() );
     int nRes = rData.m_aContext.getRenderResolution();
     mnDpi           = nRes;
-    mfScaleX        = (double)72.0 / (double)mnDpi;
-    mfScaleY        = (double)72.0 / (double)mnDpi;
+    mfScaleX        = 72.0 / (double)mnDpi;
+    mfScaleY        = 72.0 / (double)mnDpi;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
     mbUploadPS42Fonts = rInfo.m_pParser && rInfo.m_pParser->isType42Capable();
 }

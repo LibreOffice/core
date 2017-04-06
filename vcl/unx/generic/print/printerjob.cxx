@@ -570,8 +570,8 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
     mnTMarginPt     = nUpper;
     mnBMarginPt     = nLower;
 
-    mfXScale        = (double)72.0 / (double)mnResolution;
-    mfYScale        = -1.0 * (double)72.0 / (double)mnResolution;
+    mfXScale        = 72.0 / (double)mnResolution;
+    mfYScale        = -1.0 * 72.0 / (double)mnResolution;
 }
 
 void

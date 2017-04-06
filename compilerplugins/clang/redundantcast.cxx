@@ -306,8 +306,8 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
             << t1 << t2 << expr->getSourceRange();
         return true;
     }
-    bool bBuiltinTypeBool = t1->isSpecificBuiltinType(BuiltinType::Bool);
-    if ((bBuiltinTypeBool || loplugin::TypeCheck(t1).Typedef()) && t1 == t2)
+    bool bBuiltinType = t1->isSpecificBuiltinType(BuiltinType::Bool) || t1->isSpecificBuiltinType(BuiltinType::Double);
+    if ((bBuiltinType || loplugin::TypeCheck(t1).Typedef()) && t1 == t2)
     {
         // Ignore FD_ISSET expanding to "...(SOCKET)(fd)..." in some Microsoft
         // winsock2.h (TODO: improve heuristic of determining that the whole

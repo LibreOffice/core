@@ -151,7 +151,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                     OStringBuffer("PropertyConversion::convertString: could not convert \"").
                 append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                 append("\" into a double!").getStr());
-            aReturn <<= (double)nValue;
+            aReturn <<= nValue;
         }
         break;
         case TypeClass_STRING:
