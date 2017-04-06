@@ -1540,9 +1540,9 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     else
     {
         /*
-         * "Selbstgemachte" RadioButton-Funktionalitaet
-         * Beim Toggle gibt es den Standard-State, d.h. kein
-         * Button ist gedrueckt
+         * "Self-made" functionality of radio buttons
+         * At the toggle the default state is used, this means
+         * no button was clicked.
          */
 
         const SfxItemSet&        rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();

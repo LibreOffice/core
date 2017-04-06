@@ -269,7 +269,7 @@ void ScDocShell::UnlockPaint_Impl(bool bDoc)
     }
     else
     {
-        OSL_FAIL("UnlockPaint ohne LockPaint");
+        OSL_FAIL("UnlockPaint without LockPaint");
     }
 }
 

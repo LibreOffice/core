@@ -3117,7 +3117,7 @@ void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
 {
     if ( eMode == SC_INPUT_NONE )
     {
-        OSL_FAIL("InsertFunction, nicht im Eingabemodus");
+        OSL_FAIL("InsertFunction, not during input mode");
         return;
     }
 
@@ -3164,7 +3164,7 @@ void ScInputHandler::ClearText()
 {
     if ( eMode == SC_INPUT_NONE )
     {
-        OSL_FAIL("ClearText, nicht im Eingabemodus");
+        OSL_FAIL("ClearText, not during input mode");
         return;
     }
 

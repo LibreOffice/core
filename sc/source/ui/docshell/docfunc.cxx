@@ -562,7 +562,7 @@ bool ScDocFunc::DeleteContents(
 
     if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        OSL_FAIL("ScDocFunc::DeleteContents ohne Markierung");
+        OSL_FAIL("ScDocFunc::DeleteContents without markings");
         return false;
     }
 

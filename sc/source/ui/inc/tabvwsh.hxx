@@ -192,11 +192,11 @@ protected:
 
     virtual void    ShowCursor(bool bOn) override;
 
-    virtual void    Move() override;     // Benachrichtigung
+    virtual void    Move() override;     // notification
 
-    virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize ) override;     // alt
+    virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize ) override;     // old
 
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override; // neu
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override; // new
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
     virtual void    SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY ) override;
 

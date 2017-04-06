@@ -117,24 +117,24 @@ void ScTabView::Init()
     /*  #i97900# scrollbars remain in correct RTL mode, needed mirroring etc.
         is now handled correctly at the respective places. */
 
-    //  Hier noch nichts anzeigen (Show), weil noch falsch angeordnet ist
-    //  Show kommt dann aus UpdateShow beim ersten Resize
+    //  Don't show anything here, because still in wrong order
+    //  Show is received from UpdateShow during first resize
     //      pTabControl, pGridWin, aHScrollLeft, aVScrollBottom,
     //      aCornerButton, aScrollBarBox, pHSplitter, pVSplitter
 
-    //      Splitter
+    //      fragment
 
     pHSplitter->SetSplitHdl( LINK( this, ScTabView, SplitHdl ) );
     pVSplitter->SetSplitHdl( LINK( this, ScTabView, SplitHdl ) );
 
-    //  UpdateShow kommt beim Resize, oder bei Kopie einer bestehenden View aus dem ctor
+    //  UpdateShow is done during resize or a copy of an existing view from ctor
 
     pDrawActual = nullptr;
     pDrawOld    = nullptr;
 
-            //  DrawView darf nicht im TabView - ctor angelegt werden,
-            //  wenn die ViewShell noch nicht konstruiert ist...
-            //  Das gilt auch fuer ViewOptionsHasChanged()
+    //  DrawView cannot be create in the TabView - ctor
+    //  when the ViewShell isn't constructed yet...
+    //  The also applies to ViewOptionsHasChanged()
 
     TestHintWindow();
 }
@@ -227,7 +227,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
     if (!pDrawView)
     {
         ScDrawLayer* pLayer = aViewData.GetDocument()->GetDrawLayer();
-        OSL_ENSURE(pLayer, "wo ist der Draw Layer ??");
+        OSL_ENSURE(pLayer, "Where is the Draw Layer ??");
 
         sal_uInt16 i;
         pDrawView = new ScDrawView( pGridWin[SC_SPLIT_BOTTOMLEFT], &aViewData );
@@ -243,8 +243,8 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
             {
                 pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
 
-                pGridWin[i]->Update();      // wegen Invalidate im DrawView ctor (ShowPage),
-                                            // damit gleich gezeichnet werden kann
+                pGridWin[i]->Update();      // because of Invalidate in DrawView ctor (ShowPage),
+                                            // so that immediately can be drawn
             }
         SfxRequest aSfxRequest(SID_OBJECT_SELECT, SfxCallMode::SLOT, aViewData.GetViewShell()->GetPool());
         SetDrawFuncPtr(new FuSelection( aViewData.GetViewShell(), GetActiveWin(), pDrawView,
@@ -255,7 +255,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
         if ( nForceDesignMode != TRISTATE_INDET )
             pDrawView->SetDesignMode( nForceDesignMode );
 
-        //  an der FormShell anmelden
+        //  register at FormShell
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
         if (pFormSh)
             pFormSh->SetView(pDrawView);
@@ -280,7 +280,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
 {
     if (pDrawView)
     {
-        DrawDeselectAll();      // beendet auch Text-Edit-Modus
+        DrawDeselectAll();      // end also text edit mode
 
         SCTAB nTab = aViewData.GetTabNo();
         pDrawView->HideSdrPage();
@@ -289,13 +289,13 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
         UpdateLayerLocks();
 
         pDrawView->RecalcScale();
-        pDrawView->UpdateWorkArea();    // PageSize ist pro Page unterschiedlich
+        pDrawView->UpdateWorkArea();    // PageSize is different per page
     }
 
     SfxBindings& rBindings = aViewData.GetBindings();
 
-    //  Es gibt keine einfache Moeglichkeit, alle Slots der FormShell zu invalidieren
-    //  (fuer disablete Slots auf geschuetzten Tabellen), darum hier einfach alles...
+    //  There is no easy way to invalidate all slots of the FormShell
+    //  (for disabled slots on protected tables), therefore simply everything...
     rBindings.InvalidateAll(false);
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
@@ -462,7 +462,7 @@ void ScTabView::ViewOptionsHasChanged( bool bHScrollChanged, bool bGraphicsChang
     }
 }
 
-// Helper-Funktion gegen das Include des Drawing Layers
+// helper function against including the drawing layer
 
 void ScTabView::DrawMarkListHasChanged()
 {

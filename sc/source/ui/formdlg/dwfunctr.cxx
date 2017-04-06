@@ -118,8 +118,7 @@ void ScFunctionWin::dispose()
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Aktualisiert die Liste der Funktionen ab-
-#*              haengig von der eingestellten Kategorie.
+#*  Function:   Updates the list of functions depending on the set category
 #*
 #*  Input:      ---
 #*
@@ -144,7 +143,7 @@ void ScFunctionWin::InitLRUList()
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Aktualisiert die Liste der zuletzt verwendeten Funktionen.
+#*  Function:   Updates the list of last used functions.
 #*
 #*  Input:      ---
 #*
@@ -205,8 +204,7 @@ void ScFunctionWin::SetDescription()
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Aktualisiert die Liste der Funktionen ab-
-#*              haengig von der eingestellten Kategorie.
+#*  Function:   Updates the list of functions depending on the set category
 #*
 #*  Input:      ---
 #*
@@ -266,9 +264,8 @@ void ScFunctionWin::UpdateFunctionList()
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Eingabe ins Dokument uebernehmen. Wird aufgerufen
-#*              nach betaetigen der Uebernehmen- Schaltflaeche
-#*              oder einem Doppelklick in die Funktionsliste.
+#*  Function:   Save input into document. Is called after clicking the
+#*              Apply button or a double-click on the function list.
 #*
 #*  Input:      ---
 #*
@@ -347,7 +344,7 @@ void ScFunctionWin::DoEnter()
                 aString += aFuncList->GetSelectEntry();
             }
             EditView *pEdView=pHdl->GetActiveView();
-            if(pEdView!=nullptr) // @ Wegen Absturz bei Namen festlegen
+            if(pEdView!=nullptr) // @ needed because of crash during setting a name
             {
                 if(nArgs>0)
                 {
@@ -384,8 +381,7 @@ void ScFunctionWin::DoEnter()
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Bei einer Aenderung der Kategorie wird die
-#*              die Liste der Funktionen aktualisiert.
+#*  Function:   A change of the category will update the list of functions.
 #*
 #*  Input:      ---
 #*
@@ -413,8 +409,7 @@ IMPL_LINK( ScFunctionWin, SelHdl, ListBox&, rLb, void )
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Bei einer Aenderung der Kategorie wird die
-#*              die Liste der Funktionen aktualisiert.
+#*  Function:   A change of the category will update the list of functions.
 #*
 #*  Input:      ---
 #*
@@ -424,11 +419,11 @@ IMPL_LINK( ScFunctionWin, SelHdl, ListBox&, rLb, void )
 
 IMPL_LINK_NOARG( ScFunctionWin, SetSelectionClickHdl, Button*, void )
 {
-    DoEnter();          // Uebernimmt die Eingabe
+    DoEnter();          // saves the input
 }
 IMPL_LINK_NOARG( ScFunctionWin, SetSelectionHdl, ListBox&, void )
 {
-    DoEnter();          // Uebernimmt die Eingabe
+    DoEnter();          // saves the input
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

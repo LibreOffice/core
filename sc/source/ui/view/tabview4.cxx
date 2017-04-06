@@ -55,7 +55,7 @@ void ScTabView::ShowRefTip()
         SCROW nStartY = aViewData.GetRefStartY();
         SCCOL nEndX   = aViewData.GetRefEndX();
         SCROW nEndY   = aViewData.GetRefEndY();
-        if ( nEndX != nStartX || nEndY != nStartY )     // nicht fuer einzelne Zelle
+        if ( nEndX != nStartX || nEndY != nStartY )     // not for a single cell
         {
             bool bLeft = ( nEndX < nStartX );
             bool bTop  = ( nEndY < nStartY );
@@ -80,12 +80,12 @@ void ScTabView::ShowRefTip()
                 QuickHelpFlags nFlags = ( bLeft ? QuickHelpFlags::Right : QuickHelpFlags::Left ) |
                                 ( bTop ? QuickHelpFlags::Bottom : QuickHelpFlags::Top );
 
-                // nicht ueber die editierte Formel
+                // not over the edited formula
                 if ( !bTop && aViewData.HasEditView( eWhich ) &&
                         nEndY+1 == aViewData.GetEditViewRow() )
                 {
-                    //  dann an der oberen Kante der editierten Zelle ausrichten
-                    aPos.Y() -= 2;      // die 3 von oben
+                    //  then align at the upper border of edited cell
+                    aPos.Y() -= 2;      // the three from above
                     nFlags = ( nFlags & ~QuickHelpFlags::Top ) | QuickHelpFlags::Bottom;
                 }
 
@@ -134,7 +134,7 @@ void ScTabView::StopRefMode()
         }
 
         pSelEngine->Reset();
-        pSelEngine->SetAddMode( false );        //! sollte das nicht bei Reset passieren?
+        pSelEngine->SetAddMode( false );        //! shouldn't that happen during reset?
 
         ScSplitPos eOld = pSelEngine->GetWhich();
         ScSplitPos eNew = aViewData.GetActivePart();
@@ -189,8 +189,8 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
 
     if (!aViewData.IsRefMode())
     {
-        //  Das kommt vor, wenn bei einem Referenz-Dialog als erstes mit Control in die
-        //  die Tabelle geklickt wird. Dann die neue Referenz an den alten Inhalt anhaengen:
+        //  This will happen, when first at a reference dialog with Control in
+        //  the table is clicked. Then append the new reference to the old content:
 
         ScModule* pScMod = SC_MOD();
         if (pScMod->IsFormulaMode())
@@ -250,7 +250,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             PaintArea( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY, ScUpdateMode::Marks );
     }
 
-    //  Tip-Hilfe fuer Auto-Fill
+    //  autocomplete for Auto-Fill
     if ( aViewData.GetRefType() == SC_REFTYPE_FILL && Help::IsQuickHelpEnabled() )
     {
         vcl::Window* pWin = GetActiveWin();
@@ -265,7 +265,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             if ( aViewData.GetFillMode() == ScFillMode::MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
             {
                 aHelpStr = ScGlobal::GetRscString( STR_TIP_RESIZEMATRIX );
-                SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // Reihenfolge ist richtig
+                SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // order is right
                 SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
                 aHelpStr = aHelpStr.replaceFirst("%1", OUString::number(nRows) );
                 aHelpStr = aHelpStr.replaceFirst("%2", OUString::number(nCols) );
@@ -277,7 +277,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
 
             if (aHelpStr.getLength())
             {
-                //  je nach Richtung die obere oder untere Ecke:
+                //  depending on direction the upper or lower corner
                 SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
                 SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
                 Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
@@ -318,10 +318,10 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
             SCROW nEndY = nCurY;
             pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
 
-            //! nur Markierung ueber Inhalte zeichnen!
+            //! draw only markings over content!
             PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
 
-            //  SetReference ohne Merge-Anpassung
+            //  SetReference without Merge-Adjustment
             ScRange aRef( nCurX,nCurY,nCurZ, nCurX,nCurY,nCurZ );
             SC_MOD()->SetReference( aRef, pDoc, &rMark );
         }
@@ -345,9 +345,9 @@ long ScTabView::GetScrollBarPos( ScrollBar& rScroll )
     return rScroll.GetThumbPos();
 }
 
-//  UpdateScrollBars - sichtbaren Bereich und Scrollweite der Scrollbars einstellen
+//  UpdateScrollBars - set visible area and scroll width of scroll bars
 
-static long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (komplette) Zellen
+static long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (complete) cells
 {
     long nOldPos;
     long nNewPos;
@@ -356,7 +356,7 @@ static long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size =
     rScroll.SetPageSize( static_cast<long>(nSize) );
     nNewPos = rScroll.GetThumbPos();
 #ifndef UNX
-    rScroll.SetPageSize( 1 );               // immer moeglich !
+    rScroll.SetPageSize( 1 );               // always possible !
 #endif
 
     return nNewPos - nOldPos;

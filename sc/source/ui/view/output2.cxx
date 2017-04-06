@@ -126,7 +126,7 @@ public:
                 ScDrawStringsVars(ScOutputData* pData, bool bPTL);
 
                 //  SetPattern = ex-SetVars
-                //  SetPatternSimple: ohne Font
+                //  SetPatternSimple: without Font
 
     void SetPattern(
         const ScPatternAttr* pNew, const SfxItemSet* pSet, const ScRefCellValue& rCell,
@@ -2778,8 +2778,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     if (nAttrRotate)
     {
-        //! Flag setzen, um die Zelle in DrawRotated wiederzufinden ?
-        //! (oder Flag schon bei DrawBackground, dann hier keine Abfrage)
+        //! set flag to find the cell in DrawRotated again ?
+        //! (or flag already set during DrawBackground, then no query here)
         bHidden = true;     // rotated is outputted separately
     }
 
@@ -4148,8 +4148,8 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     if (nAttrRotate)
     {
-        //! Flag setzen, um die Zelle in DrawRotated wiederzufinden ?
-        //! (oder Flag schon bei DrawBackground, dann hier keine Abfrage)
+        //! set flag to find the cell in DrawRotated again ?
+        //! (or flag already set during DrawBackground, then no query here)
         bHidden = true;     // rotated is outputted separately
     }
 
@@ -4395,7 +4395,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         else
             aLogicClip = aAreaParam.maClipRect;
 
-        if (bClip)  // bei bSimClip nur aClipRect initialisieren
+        if (bClip)  // if bSimClip only initialize aClipRect
         {
             if (bMetaFile)
             {
@@ -5016,7 +5016,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if (bPixelToLogic)
                                     aCellSize = mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) );
                                 else
-                                    aCellSize = Size( nOutWidth, nOutHeight );  // Scale ist 1
+                                    aCellSize = Size( nOutWidth, nOutHeight );  // scale is one
 
                                 long nGridWidth = nEngineWidth;
                                 bool bNegative = false;
@@ -5227,7 +5227,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 long nOriVal = 0;
                                 if ( nAttrRotate )
                                 {
-                                    // Attribut ist 1/100, Font 1/10 Grad
+                                    // attribute is 1/100, Font 1/10 Grad
                                     nOriVal = nAttrRotate / 10;
 
                                     double nAddX = 0.0;
