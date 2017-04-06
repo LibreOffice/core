@@ -3778,7 +3778,7 @@ void SwWW8ImplReader::Read_Language( sal_uInt16 nId, const sal_uInt8* pData, sho
             return;
     }
 
-    if( nLen < 0 )                  // end of attribute
+    if (nLen < 2)                  // end of attribute
         m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
     else
     {
