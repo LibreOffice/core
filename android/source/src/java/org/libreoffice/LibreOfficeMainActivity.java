@@ -10,20 +10,20 @@ import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.RectF;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -78,7 +78,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private int partIndex=-1;
     private File mInputFile;
     private String newFileName = "untitled";
-    private String newFilePath = "/storage/emulated/0/Documents/";
+    private String newFileDirectory;
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
     private String newDocumentType = null;
@@ -86,7 +86,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private ToolbarController mToolbarController;
     private FontController mFontController;
     private SearchController mSearchController;
-    private static final int PICKFOLDER_RESULT_CODE = 1;
 
     public GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -146,8 +145,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 newFileName = newFileName + ".ods";
             else
                 newFileName = newFileName + ".odg";
+
+            // This is a new file, we also have current directory path in the intent extras
+            newFileDirectory = getIntent().getStringExtra(LibreOfficeUIActivity.CURRENT_DIRECTORY_KEY);
+
             // We want to create a new Document, create an alert dialogue to name the new file.
-            openSelectPathIntent();
+            openNewFileInputDialog();
             isNewDocument = true;
         }
 
@@ -231,40 +234,35 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         host.addTab(spec);
     }
 
-    private void openSelectPathIntent() {
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
-                           .addCategory(Intent.CATEGORY_OPENABLE)
-                           .setType("*/*")
-                           .putExtra(Intent.EXTRA_TITLE, newFileName);
-        startActivityForResult(intent, PICKFOLDER_RESULT_CODE);
-    }
+    private void openNewFileInputDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter file name");
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(newFileName);
+        builder.setView(input);
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode){
-            case PICKFOLDER_RESULT_CODE:
-                if(resultCode==RESULT_OK){
-                    Uri fileURI = data.getData();
-                    newFilePath = fileURI.getPath();
-                    if (newFilePath.contains("primary")) {
-                        /* When file is being saved in primary storage folder other than Documents home.
-                         *  newFilePath content is similar to this - /document/primary:Downloads/untitled1.odt */
-                        newFilePath = Environment.getExternalStorageDirectory().getPath() + "/" + newFilePath.split(":")[1];
-                    } else if (newFilePath.contains("home")) {
-                        /* When file is being saved in documents folder itself i.e. Document home.
-                         *  newFilePath content is similar to this - /document/home:untitled1.odt */
-                        newFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + newFilePath.split(":")[1];
-                    } else {
-                        newFilePath = Environment.getExternalStorageDirectory().getPath() + "/";
-                    }
-                    Log.d("newFilePath", newFilePath);
-                }
-                // Now set the input file variable to new file created
+        builder.setPositiveButton("CREATE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                newFileName = input.getText().toString();
+                String newFilePath = newFileDirectory + newFileName;
+                // Set the input file variable to new file created
                 mInputFile = new File(newFilePath);
                 // and load the new document
                 LOKitShell.sendNewDocumentLoadEvent(newFilePath, newDocumentType);
-                break;
-        }
+            }
+        });
+
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                startActivity(new Intent(LibreOfficeMainActivity.this, LibreOfficeUIActivity.class));
+            }
+        });
+
+        builder.show();
     }
 
     public RectF getCurrentCursorPosition() {
@@ -774,7 +772,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     // This method is used in LOKitTileProvider.java to show status of new file creation.
     public void showSaveStatusToast(boolean error) {
         if (!error)
-            Toast.makeText(this, getString(R.string.save_as_success) + newFilePath, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.save_as_success) + newFileName, Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(this, R.string.save_as_error, Toast.LENGTH_SHORT).show();
     }
