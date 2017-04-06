@@ -51,7 +51,7 @@ uno::Sequence< OUString > lcl_getFormattedFieldOptionals()
 
 OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const & _xContext)
 :FormattedFieldBase(m_aMutex)
-,FormattedFieldPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFormattedFieldOptionals())
+,FormattedFieldPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getFormattedFieldOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
 {
@@ -62,7 +62,7 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
                                  ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                                  ,uno::Reference< drawing::XShape >& _xShape)
 :FormattedFieldBase(m_aMutex)
-,FormattedFieldPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFormattedFieldOptionals())
+,FormattedFieldPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getFormattedFieldOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
 {

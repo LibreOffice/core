@@ -54,7 +54,7 @@ uno::Sequence< OUString > lcl_getShapeOptionals()
 
 OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 :ShapeBase(m_aMutex)
-,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
+,ShapePropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
 ,m_bOpaque(false)
@@ -67,7 +67,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
                ,uno::Reference< drawing::XShape >& _xShape
                ,const OUString& _sServiceName)
 :ShapeBase(m_aMutex)
-,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
+,ShapePropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
 ,m_bOpaque(false)

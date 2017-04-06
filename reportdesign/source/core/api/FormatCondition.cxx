@@ -42,7 +42,7 @@ uno::Reference< uno::XInterface > OFormatCondition::create(uno::Reference< uno::
 
 OFormatCondition::OFormatCondition(uno::Reference< uno::XComponentContext > const & _xContext)
 :FormatConditionBase(m_aMutex)
-,FormatConditionPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
+,FormatConditionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
 ,m_bEnabled(true)
 {
 }

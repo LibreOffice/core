@@ -45,7 +45,7 @@ uno::Sequence< OUString > lcl_getFixedTextOptionals()
 
 OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContext)
 :FixedTextBase(m_aMutex)
-,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
+,FixedTextPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT);
@@ -56,7 +56,7 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
                        ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                        ,uno::Reference< drawing::XShape >& _xShape)
 :FixedTextBase(m_aMutex)
-,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
+,FixedTextPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT);

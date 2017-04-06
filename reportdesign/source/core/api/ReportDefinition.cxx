@@ -536,7 +536,7 @@ struct OReportDefinitionImpl
 
 OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > const & _xContext)
 : ReportDefinitionBase(m_aMutex)
-,ReportDefinitionPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
+,ReportDefinitionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
 ,m_aProps(new OReportComponentProperties(_xContext))
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {
@@ -555,7 +555,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
                                      ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                                      ,uno::Reference< drawing::XShape >& _xShape)
 : ReportDefinitionBase(m_aMutex)
-,ReportDefinitionPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
+,ReportDefinitionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
 ,m_aProps(new OReportComponentProperties(_xContext))
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {

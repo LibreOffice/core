@@ -115,7 +115,7 @@ uno::Sequence< OUString > lcl_getImageOptionals()
 
 OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _xContext)
 :ImageControlBase(m_aMutex)
-,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
+,ImageControlPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(true)
@@ -127,7 +127,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
                            ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                            ,uno::Reference< drawing::XShape >& _xShape)
 :ImageControlBase(m_aMutex)
-,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
+,ImageControlPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(true)

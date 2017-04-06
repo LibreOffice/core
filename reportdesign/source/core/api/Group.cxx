@@ -41,7 +41,7 @@ namespace reportdesign
 OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
                ,const uno::Reference< uno::XComponentContext >& _xContext)
 :GroupBase(m_aMutex)
-,GroupPropertySet(_xContext,static_cast< GroupPropertySet::Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
+,GroupPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
 ,m_xContext(_xContext)
 ,m_xParent(_xParent)
 {

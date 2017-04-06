@@ -129,7 +129,7 @@ uno::Sequence< OUString > lcl_getLineOptionals()
 
 OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContext)
 :FixedLineBase(m_aMutex)
-,FixedLinePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getLineOptionals())
+,FixedLinePropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getLineOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_LineStyle( drawing::LineStyle_NONE )
 ,m_nOrientation(1)
@@ -146,7 +146,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
                        ,uno::Reference< drawing::XShape >& _xShape
                        ,sal_Int32 _nOrientation)
 :FixedLineBase(m_aMutex)
-,FixedLinePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getLineOptionals())
+,FixedLinePropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getLineOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_LineStyle( drawing::LineStyle_NONE )
 ,m_nOrientation(_nOrientation)

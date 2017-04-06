@@ -197,7 +197,7 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
     {
         Date aCurrentDate( Date::SYSTEM );
         static css::util::Date STANDARD_DB_DATE(30,12,1899);
-        nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(static_cast<sal_Int32>(aCurrentDate.GetDate())),STANDARD_DB_DATE);
+        nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(aCurrentDate.GetDate()),STANDARD_DB_DATE);
     }
 
     uno::Reference< util::XNumberFormatPreviewer> xPreviewer(m_pController->getReportNumberFormatter(),uno::UNO_QUERY);

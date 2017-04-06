@@ -63,7 +63,7 @@ namespace reportdesign
 
 OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentContext >& context)
 :ReportEngineBase(m_aMutex)
-,ReportEnginePropertySet(context,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
+,ReportEnginePropertySet(context,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
 ,m_xContext(context)
 ,m_nMaxRows(0)
 {
