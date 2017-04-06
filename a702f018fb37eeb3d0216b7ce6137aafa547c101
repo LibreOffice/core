@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_357fbdab",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-04-06T12:47:38Z",
+      "side": 1,
+      "message": "This part looks wrong. I need to check why it appears to be necessary but the change in this place is surely wrong.",
+      "revId": "a702f018fb37eeb3d0216b7ce6137aafa547c101",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
