@@ -203,53 +203,19 @@ void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell* pDocShell)
     }
 }
 
-void lclIgnoreString32( SvMemoryStream& rStrm, bool b16Bit )
+namespace
 {
-    sal_uInt32 nChars(0);
-    rStrm.ReadUInt32( nChars );
-    if( b16Bit )
-        nChars *= 2;
-    rStrm.SeekRel( nChars );
-}
-
-OUString SwWW8ImplReader::ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nChars, bool b16Bit)
-{
-    OUStringBuffer aBuf(nChars);
-    if( b16Bit )
+    void lclIgnoreString32(SvStream& rStrm, bool b16Bit)
     {
-        sal_uInt16 nReadChar;
-        for( sal_uInt16 i = 0; i < nChars; ++i)
-        {
-            rStrm.ReadUInt16( nReadChar );
-            aBuf.append(static_cast< sal_Unicode >( nReadChar ));
-        }
+        sal_uInt32 nChars(0);
+        rStrm.ReadUInt32(nChars);
+        if (b16Bit)
+            nChars *= 2;
+        rStrm.SeekRel(nChars);
     }
-    else
-    {
-        sal_uInt8 nReadChar;
-        for( sal_uInt16 i = 0; i < nChars; ++i)
-        {
-            rStrm.ReadUChar( nReadChar ) ;
-            aBuf.append(static_cast< sal_Unicode >( nReadChar ));
-        }
-    }
-    return aBuf.makeStringAndClear();
 }
 
-OUString lclGetString32(SvMemoryStream& rStrm, sal_uInt32 nChars, bool b16Bit)
-{
-    sal_uInt16 nReadChars = ulimit_cast< sal_uInt16 >( nChars );
-    return SwWW8ImplReader::ReadRawUniString( rStrm, nReadChars, b16Bit );
-}
-
-OUString lclGetString32(SvMemoryStream& rStrm, bool b16Bit)
-{
-    sal_uInt32 nValue(0);
-    rStrm.ReadUInt32( nValue );
-    return lclGetString32(rStrm, nValue, b16Bit);
-}
-
-void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr)
+void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr)
 {
     // (0x01B8) HLINK
     // const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
@@ -288,13 +254,13 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     // target frame
     if( ::get_flag( nFlags, WW8_HLINK_FRAME ) )
     {
-        hlStr.tarFrame = lclGetString32(rStrm, true);
+        hlStr.tarFrame = read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm);
     }
 
         // UNC path
     if( ::get_flag( nFlags, WW8_HLINK_UNC ) )
     {
-        xLongName.reset( new OUString(lclGetString32(rStrm, true)) );
+        xLongName.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
         lclGetAbsPath( *xLongName, 0 , pDocShell);
     }
     // file link or URL
@@ -305,7 +271,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
         if( (memcmp(aGuid, aGuidFileMoniker, 16) == 0) )
         {
             rStrm.ReadUInt16( nLevel );
-            xShortName.reset( new OUString(lclGetString32(rStrm, false )) );
+            xShortName.reset(new OUString(read_uInt32_lenPrefixed_uInt8s_ToOUString(rStrm, GetCharSetFromLanguage())));
             rStrm.SeekRel( 24 );
 
             sal_uInt32 nStrLen(0);
@@ -316,7 +282,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
                 rStrm.ReadUInt32( nStrLen );
                 nStrLen /= 2;
                 rStrm.SeekRel( 2 );
-                xLongName.reset( new OUString(lclGetString32( rStrm, nStrLen, true )) );
+                xLongName.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
                 lclGetAbsPath( *xLongName, nLevel, pDocShell);
             }
             else
@@ -327,7 +293,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
             sal_uInt32 nStrLen(0);
             rStrm.ReadUInt32( nStrLen );
             nStrLen /= 2;
-            xLongName.reset( new OUString(lclGetString32( rStrm, nStrLen, true )) );
+            xLongName.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
             if( !::get_flag( nFlags, WW8_HLINK_ABS ) )
                 lclGetAbsPath( *xLongName, 0 ,pDocShell);
         }
@@ -340,7 +306,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     // text mark
     if( ::get_flag( nFlags, WW8_HLINK_MARK ) )
     {
-        xTextMark.reset( new OUString(lclGetString32( rStrm, true )) );
+        xTextMark.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
     }
 
     if( !xLongName.get() && xShortName.get() )
@@ -1139,9 +1105,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             if( bRet )
                 aMemStream.ReadUInt16( nRawRecId ).ReadUInt16( nRawRecSize );
             SwDocShell* pDocShell = rReader.m_pDocShell;
-            if(pDocShell)
+            if (pDocShell)
             {
-                SwWW8ImplReader::ReadEmbeddedData( aMemStream, pDocShell, hlStr);
+                rReader.ReadEmbeddedData(aMemStream, pDocShell, hlStr);
             }
         }
 

@@ -498,30 +498,42 @@ TOOLS_DLLPUBLIC OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, 
 /// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
 /// 8bit units to an OString, returned OString's length is number of units
 /// successfully read.
+inline OString read_uInt32_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
+{
+    sal_uInt32 nUnits = 0;
+    rStrm.ReadUInt32(nUnits);
+    return read_uInt8s_ToOString(rStrm, nUnits);
+}
 inline OString read_uInt16_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
 {
     sal_uInt16 nUnits = 0;
-    rStrm.ReadUInt16( nUnits );
+    rStrm.ReadUInt16(nUnits);
     return read_uInt8s_ToOString(rStrm, nUnits);
 }
 
 inline OString read_uInt8_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
 {
     sal_uInt8 nUnits = 0;
-    rStrm.ReadUChar( nUnits );
+    rStrm.ReadUChar(nUnits);
     return read_uInt8s_ToOString(rStrm, nUnits);
 }
 
 /// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
 /// 8bit units to an OUString
+inline OUString read_uInt32_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
+                                                          rtl_TextEncoding eEnc)
+{
+    return OStringToOUString(read_uInt32_lenPrefixed_uInt8s_ToOString(rStrm), eEnc);
+}
+
 inline OUString read_uInt16_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
-                                            rtl_TextEncoding eEnc)
+                                                          rtl_TextEncoding eEnc)
 {
     return OStringToOUString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStrm), eEnc);
 }
 
 inline OUString read_uInt8_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
-                                            rtl_TextEncoding eEnc)
+                                                         rtl_TextEncoding eEnc)
 {
     return OStringToOUString(read_uInt8_lenPrefixed_uInt8s_ToOString(rStrm), eEnc);
 }
