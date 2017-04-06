@@ -123,6 +123,8 @@
 #define STR_OUTLINE_LEVEL            (STR_CONTEXT_FIRST + 0)
 #define STR_DRAGMODE                 (STR_CONTEXT_FIRST + 1)
 #define STR_HYPERLINK                (STR_CONTEXT_FIRST + 2)
+#define STR_LINK_REGION              (STR_CONTEXT_FIRST + 3)
+#define STR_COPY_REGION              (STR_CONTEXT_FIRST + 4)
 #define STR_DISPLAY                  (STR_CONTEXT_FIRST + 5)
 #define STR_ACTIVE_VIEW              (STR_CONTEXT_FIRST + 6)
 #define STR_STATUS_FIRST             (RC_GLOBALS_BEGIN + 59)
