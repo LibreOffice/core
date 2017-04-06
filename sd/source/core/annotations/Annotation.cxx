@@ -178,7 +178,7 @@ sal_uInt32 Annotation::m_nLastId = 1;
 
 Annotation::Annotation( const Reference< XComponentContext >& context, SdPage* pPage )
 : ::cppu::WeakComponentImplHelper< XAnnotation >(m_aMutex)
-, ::cppu::PropertySetMixin< XAnnotation >(context, static_cast< Implements >(IMPLEMENTS_PROPERTY_SET), Sequence< OUString >())
+, ::cppu::PropertySetMixin< XAnnotation >(context, IMPLEMENTS_PROPERTY_SET, Sequence< OUString >())
 , m_nId( m_nLastId++ )
 , mpPage( pPage )
 {
