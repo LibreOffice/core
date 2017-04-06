@@ -16,6 +16,24 @@
       "revId": "a702f018fb37eeb3d0216b7ce6137aafa547c101",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3556dd29",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1001484
+      },
+      "writtenOn": "2017-04-06T12:53:33Z",
+      "side": 1,
+      "message": "No this change is good.\nIf data is null, then it means the cell format is protected (because it\u0027s the default value (see the comment...)).\nThis method is used to check if a cell is protected and it will return False if the cell is \u0027virgin\u0027 instead of True.",
+      "parentUuid": "9a57fde8_357fbdab",
+      "revId": "a702f018fb37eeb3d0216b7ce6137aafa547c101",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
