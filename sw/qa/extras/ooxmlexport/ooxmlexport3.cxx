@@ -661,6 +661,16 @@ DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2291 ), aGraphicCropStruct.Bottom );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106974_int32Crop, "tdf106974_int32Crop.docx")
+{
+    uno::Reference<drawing::XShape> image = getShape(1);
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    css::text::GraphicCrop aGraphicCropStruct;
+
+    imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+    CPPUNIT_ASSERT( sal_Int32( 46000 ) < aGraphicCropStruct.Right );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
 {
      // The Problem was that the w:line attribute value in w:spacing tag was incorrect
