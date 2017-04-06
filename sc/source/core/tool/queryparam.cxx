@@ -243,8 +243,11 @@ void ScQueryParamBase::FillInExcelSyntax(
          * empty cells with an empty string is triggered from the interpreter.
          * This could be handled independently if all queries should support
          * it, needs to be evaluated if that actually is desired. */
+
+        // (empty = empty) is a match, and (empty <> not-empty) also is a match
         if (rItem.meType == ScQueryEntry::ByString)
-            rItem.mbMatchEmpty = (rEntry.eOp == SC_EQUAL && rItem.maString.isEmpty());
+            rItem.mbMatchEmpty = (rEntry.eOp == SC_EQUAL && rItem.maString.isEmpty()
+                || rEntry.eOp == SC_NOT_EQUAL && !rItem.maString.isEmpty());
     }
 }
 
