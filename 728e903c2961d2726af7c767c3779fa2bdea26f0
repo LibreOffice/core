@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_30b7cb3a",
+        "filename": "sal/rtl/alloc_arena.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-06T14:17:30Z",
+      "side": 1,
+      "message": "rtl_cache_create wants a name no longer than RTL_ARENA_NAME_LENGTH anyway, so using snprintf here to create a prefix of \u003carena-\u003em_name\u003e_\u003csize\u003e is fine\n\nin a previous (unpushed) attempt at building with GCC 7 -Wformat-truncation\u003d2, I silenced this unhelpful warning here with a local\n\n  #pragma GCC diagnostic ignored \"-Wformat-truncation\"\n\n(and didn\u0027t run into this false warning with a \"plain\" build not explicitly enabling -Wformat-truncation\u003d2, but that was probably with a somwhat older build towards GCC 7 than you\u0027re using now)",
+      "revId": "728e903c2961d2726af7c767c3779fa2bdea26f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
