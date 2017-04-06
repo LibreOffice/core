@@ -2763,7 +2763,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
 {
     if( !m_bIgnoreText )
     {
-        if (nLen < m_bVer67 ? 3 : 4)
+        if (nLen < (m_bVer67 ? 3 : 4))
         {
             //otherwise disable after we print the char
             if (m_pPlcxMan && m_pPlcxMan->GetDoingDrawTextBox())
