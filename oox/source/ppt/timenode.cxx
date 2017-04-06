@@ -154,7 +154,7 @@ namespace oox { namespace ppt {
                                     {
                                         // first effect does not start on click, so correct
                                         // first click nodes begin to 0s
-                                        xClickNode->setBegin( makeAny( (double)0.0 ) );
+                                        xClickNode->setBegin( makeAny( 0.0 ) );
                                         break;
                                     }
                                 }

@@ -214,7 +214,7 @@ Any OXMLDataSourceSetting::convertString(const css::uno::Type& _rExpectedType, c
             SAL_WARN_IF(!bSuccess, "dbaccess",
                 "OXMLDataSourceSetting::convertString: could not convert \""
                 << _rReadCharacters << "\" into a double!");
-            aReturn <<= (double)nValue;
+            aReturn <<= nValue;
         }
         break;
         case TypeClass_STRING:

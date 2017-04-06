@@ -1306,7 +1306,7 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
     Reference< XAnimationNode > xOuterSeqTimeContainer(xMsf->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY_THROW);
 
     // set begin
-    xOuterSeqTimeContainer->setBegin(Any((double)0.0));
+    xOuterSeqTimeContainer->setBegin(Any(0.0));
 
     // set fill
     xOuterSeqTimeContainer->setFill(AnimationFill::HOLD);
@@ -1324,7 +1324,7 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
     Reference< XAnimationNode > xAnimateSetForLast(xMsf->createInstance("com.sun.star.animations.AnimateSet"), UNO_QUERY_THROW);
 
     // set begin
-    xAnimateSetForLast->setBegin(Any((double)0.0));
+    xAnimateSetForLast->setBegin(Any(0.0));
 
     // set duration
     xAnimateSetForLast->setDuration(Any(fDuration));
@@ -1384,7 +1384,7 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
             Reference< XAnimationNode > xOuterSeqTimeContainer(xMsf->createInstance("com.sun.star.animations.ParallelTimeContainer"), UNO_QUERY_THROW);
 
             // set begin
-            xOuterSeqTimeContainer->setBegin(Any((double)(0.0)));
+            xOuterSeqTimeContainer->setBegin(Any(0.0));
 
             // prepare parent container
             Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);

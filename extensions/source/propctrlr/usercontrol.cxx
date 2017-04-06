@@ -197,7 +197,7 @@ namespace pcr
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
-            aPropValue <<= (double)getTypedControlWindow()->GetValue();
+            aPropValue <<= getTypedControlWindow()->GetValue();
         return aPropValue;
     }
 

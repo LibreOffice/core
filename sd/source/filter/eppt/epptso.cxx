@@ -1870,10 +1870,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     css::awt::Size  aSize( mXShape->getSize() );
                     css::awt::Point aStart, aEnd, aCenter;
                     ::tools::Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
-                    aStart.X = (sal_Int32)( ( cos( (double)( nStartAngle * F_PI18000 ) ) * 100.0 ) );
-                    aStart.Y = - (sal_Int32)( ( sin( (double)( nStartAngle * F_PI18000 ) ) * 100.0 ) );
-                    aEnd.X = (sal_Int32)( ( cos( (double)( nEndAngle * F_PI18000 ) ) * 100.0 ) );
-                    aEnd.Y = - (sal_Int32)( ( sin( (double)( nEndAngle * F_PI18000 ) ) * 100.0 ) );
+                    aStart.X = (sal_Int32)( ( cos( nStartAngle * F_PI18000 ) * 100.0 ) );
+                    aStart.Y = - (sal_Int32)( ( sin( nStartAngle * F_PI18000 ) * 100.0 ) );
+                    aEnd.X = (sal_Int32)( ( cos( nEndAngle * F_PI18000 ) * 100.0 ) );
+                    aEnd.Y = - (sal_Int32)( ( sin( nEndAngle * F_PI18000 ) * 100.0 ) );
                     aCenter.X = aPoint.X + ( aSize.Width / 2 );
                     aCenter.Y = aPoint.Y + ( aSize.Height / 2 );
                     aStart.X += aCenter.X;

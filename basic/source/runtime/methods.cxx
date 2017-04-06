@@ -2370,7 +2370,7 @@ double Now_Impl()
     nSeconds *= 3600;
     nSeconds += aTime.GetMin() * 60;
     nSeconds += aTime.GetSec();
-    double nDays = ((double)nSeconds) / (double)(24.0*3600.0);
+    double nDays = ((double)nSeconds) / (24.0*3600.0);
     aSerial += nDays;
     return aSerial;
 }
@@ -3254,7 +3254,7 @@ RTLFUNC(FileDateTime)
         nSeconds *= 3600;
         nSeconds += aTime.GetMin() * 60;
         nSeconds += aTime.GetSec();
-        double nDays = ((double)nSeconds) / (double)(24.0*3600.0);
+        double nDays = ((double)nSeconds) / (24.0*3600.0);
         fSerial += nDays;
 
         Color* pCol;

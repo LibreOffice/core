@@ -1989,7 +1989,7 @@ bool DbNumericField::commitControl()
     if (!aText.isEmpty())   // not empty
     {
         double fValue = static_cast<DoubleNumericField*>(m_pWindow.get())->GetValue();
-        aVal <<= (double)fValue;
+        aVal <<= fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);
     return true;
@@ -2141,7 +2141,7 @@ bool DbCurrencyField::commitControl()
         {
             fValue /= ::rtl::math::pow10Exp(1.0, m_nScale);
         }
-        aVal <<= (double)fValue;
+        aVal <<= fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);
     return true;

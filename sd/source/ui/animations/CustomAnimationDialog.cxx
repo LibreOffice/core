@@ -481,7 +481,7 @@ void CharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any CharHeightPropertyBox::getValue()
 {
-    return makeAny( (double)((double)mpMetric->GetValue() / 100.0) );
+    return makeAny( (double)mpMetric->GetValue() / 100.0 );
 }
 
 Control* CharHeightPropertyBox::getControl()
@@ -581,7 +581,7 @@ void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any TransparencyPropertyBox::getValue()
 {
-    return makeAny( (double)((double)mpMetric->GetValue()) / 100.0 );
+    return makeAny( ((double)mpMetric->GetValue()) / 100.0 );
 }
 
 Control* TransparencyPropertyBox::getControl()
@@ -702,7 +702,7 @@ void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any RotationPropertyBox::getValue()
 {
-    return makeAny( (double)((double)mpMetric->GetValue()) );
+    return makeAny( (double)mpMetric->GetValue() );
 }
 
 Control* RotationPropertyBox::getControl()
@@ -849,7 +849,7 @@ void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any ScalePropertyBox::getValue()
 {
-    double fValue1 = (double)((double)mpMetric->GetValue() / 100.0);
+    double fValue1 = (double)mpMetric->GetValue() / 100.0;
     double fValue2 = fValue1;
 
     if( mnDirection == 1 )
@@ -2227,11 +2227,11 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     pSet->setPropertyDefaultValue( nHandleAfterEffectOnNextEffect, makeAny( false ) );
     pSet->setPropertyDefaultValue( nHandleDimColor, aEmpty );
     pSet->setPropertyDefaultValue( nHandleIterateType, makeAny( (sal_Int16)0 ) );
-    pSet->setPropertyDefaultValue( nHandleIterateInterval, makeAny( (double)0.0 ) );
+    pSet->setPropertyDefaultValue( nHandleIterateInterval, makeAny( 0.0 ) );
 
     pSet->setPropertyDefaultValue( nHandleStart, makeAny( (sal_Int16)EffectNodeType::ON_CLICK ) );
-    pSet->setPropertyDefaultValue( nHandleBegin, makeAny( (double)0.0 ) );
-    pSet->setPropertyDefaultValue( nHandleDuration, makeAny( (double)2.0 ) );
+    pSet->setPropertyDefaultValue( nHandleBegin, makeAny( 0.0 ) );
+    pSet->setPropertyDefaultValue( nHandleDuration, makeAny( 2.0 ) );
     pSet->setPropertyDefaultValue( nHandleRepeat, aEmpty );
     pSet->setPropertyDefaultValue( nHandleRewind, makeAny( AnimationFill::HOLD ) );
 
@@ -2251,13 +2251,13 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     pSet->setPropertyDefaultValue( nHandleHasVisibleShape, makeAny( false ) );
     pSet->setPropertyDefaultValue( nHandleTextGrouping, makeAny( (sal_Int32)-1 ) );
     pSet->setPropertyDefaultValue( nHandleAnimateForm, makeAny( true ) );
-    pSet->setPropertyDefaultValue( nHandleTextGroupingAuto, makeAny( (double)-1.0 ) );
+    pSet->setPropertyDefaultValue( nHandleTextGroupingAuto, makeAny( -1.0 ) );
     pSet->setPropertyDefaultValue( nHandleTextReverse, makeAny( false ) );
 
     pSet->setPropertyDefaultValue( nHandleCurrentPage, aEmpty );
 
     pSet->setPropertyDefaultValue( nHandleSoundURL, aEmpty );
-    pSet->setPropertyDefaultValue( nHandleSoundVolumne, makeAny( (double)1.0) );
+    pSet->setPropertyDefaultValue( nHandleSoundVolumne, makeAny( 1.0) );
     pSet->setPropertyDefaultValue( nHandleSoundEndAfterSlide, makeAny( (sal_Int32)0 ) );
 
     pSet->setPropertyDefaultValue( nHandleCommand, makeAny( (sal_Int16)0 ) );

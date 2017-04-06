@@ -147,7 +147,7 @@ bool ONumericModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 
 Any ONumericModel::translateDbColumnToControlValue()
 {
-    m_aSaveValue <<= (double)m_xColumn->getDouble();
+    m_aSaveValue <<= m_xColumn->getDouble();
     if ( m_xColumn->wasNull() )
         m_aSaveValue.clear();
 

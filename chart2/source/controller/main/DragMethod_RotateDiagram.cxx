@@ -137,8 +137,8 @@ void DragMethod_RotateDiagram::MoveSdrDrag(const Point& rPnt)
             double fCx = m_aReferenceRect.Center().X();
             double fCy = m_aReferenceRect.Center().Y();
 
-            m_fAdditionalZAngleRad = atan((double)(fCx - m_aStartPos.X())/(m_aStartPos.Y()-fCy))
-                + atan((double)(fCx - rPnt.X())/(fCy-rPnt.Y()));
+            m_fAdditionalZAngleRad = atan((fCx - m_aStartPos.X())/(m_aStartPos.Y()-fCy))
+                + atan((fCx - rPnt.X())/(fCy-rPnt.Y()));
         }
 
         m_nAdditionalHorizontalAngleDegree = static_cast<sal_Int32>(m_fAdditionalXAngleRad*180.0/F_PI);

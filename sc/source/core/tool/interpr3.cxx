@@ -2992,7 +2992,7 @@ void ScInterpreter::ScHarMean()
         }
     }
     if (nGlobalError == FormulaError::NONE)
-        PushDouble((double)nValCount/nVal);
+        PushDouble( nValCount / nVal );
     else
         PushError( nGlobalError);
 }

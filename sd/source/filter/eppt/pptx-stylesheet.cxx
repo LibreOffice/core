@@ -252,7 +252,7 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
             {
                 const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
                 if ( pDesc )
-                     nLineSpacing = (sal_Int16)( (double)100.0 * pDesc->Scaling + 0.5 );
+                     nLineSpacing = (sal_Int16)( 100.0 * pDesc->Scaling + 0.5 );
                 else
                     nLineSpacing = 100;
             }

@@ -413,7 +413,7 @@ start:
         break;
     case SbxBYREF | SbxDATE:
     case SbxBYREF | SbxDOUBLE:
-        *p->pDouble = (double) n;
+        *p->pDouble = n;
         break;
     case SbxBYREF | SbxCURRENCY:
         if( n > SbxMAXCURR )

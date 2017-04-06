@@ -958,14 +958,14 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     }
     else
     {
-        aBegin <<= (double)0.0;
+        aBegin <<= 0.0;
     }
 
     xAnimate->setBegin( aBegin );
     xAnimate->setTo( aTo );
     xAnimate->setAttributeName( aAttributeName );
 
-    xAnimate->setDuration( makeAny( (double)0.001 ) );
+    xAnimate->setDuration( makeAny( 0.001 ) );
     xAnimate->setFill( AnimationFill::HOLD );
     xAnimate->setTarget( maTarget );
 
@@ -1853,7 +1853,7 @@ void EffectSequenceHelper::implRebuild()
                     // must not have INDEFINITE begin but start at 0s
                     bFirst = false;
                     if( pEffect->getNodeType() != EffectNodeType::ON_CLICK )
-                        aBegin <<= (double)0.0;
+                        aBegin <<= 0.0;
                 }
 
                 xOnClickContainer->setBegin( aBegin );
@@ -1911,7 +1911,7 @@ void EffectSequenceHelper::implRebuild()
         {
             // empty sequence, set duration to 0.0 explicitly
             // (otherwise, this sequence will never end)
-            mxSequenceRoot->setDuration( makeAny((double)0.0) );
+            mxSequenceRoot->setDuration( makeAny(0.0) );
         }
     }
     catch( Exception& )
@@ -2002,7 +2002,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                             // this does not yet have a child container, create one
                             xNextContainer.set( ParallelTimeContainer::create(xContext), UNO_QUERY_THROW );
 
-                            xNextContainer->setBegin( makeAny( (double)0.0 ) );
+                            xNextContainer->setBegin( makeAny( 0.0 ) );
                             xNextClickContainer->appendChild( xNextContainer );
                         }
                         DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not find/create container!" );
@@ -2026,7 +2026,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                     DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not create container!" );
                     if( xNextContainer.is() )
                     {
-                        xNextContainer->setBegin( makeAny( (double)0.0 ) );
+                        xNextContainer->setBegin( makeAny( 0.0 ) );
                         xNewClickContainer->appendChild( xNextContainer );
                     }
                 }
@@ -3027,7 +3027,7 @@ void MainSequence::createMainSequence()
             // empty sequence until now, set duration to 0.0
             // explicitly (otherwise, this sequence will never
             // end)
-            mxSequenceRoot->setDuration( makeAny((double)0.0) );
+            mxSequenceRoot->setDuration( makeAny(0.0) );
 
             Reference< XAnimationNode > xMainSequenceNode( mxSequenceRoot, UNO_QUERY_THROW );
             mxTimingRootNode->appendChild( xMainSequenceNode );

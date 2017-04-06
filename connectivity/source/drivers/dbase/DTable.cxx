@@ -905,7 +905,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 memcpy(&nValue, pData, nLen);
 
                 if ( m_aScales[i-1] )
-                    d = (double)(nValue / pow(10.0,(int)m_aScales[i-1]));
+                    d = (nValue / pow(10.0,(int)m_aScales[i-1]));
                 else
                     d = (double)(nValue);
             }

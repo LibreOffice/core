@@ -370,14 +370,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 nEndAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
 
                 Point aStart, aEnd, aCenter;
-                aStart.X() = (sal_Int32)( ( cos( (double)( nStartAngle *
-                                                F_PI18000 ) ) * 100.0 ) );
-                aStart.Y() = - (sal_Int32)( ( sin( (double)( nStartAngle *
-                                                F_PI18000 ) ) * 100.0 ) );
-                aEnd.X() = (sal_Int32)( ( cos( (double)( nEndAngle *
-                                                F_PI18000 ) ) * 100.0 ) );
-                aEnd.Y() = - (sal_Int32)( ( sin( (double)( nEndAngle *
-                                                F_PI18000 ) ) * 100.0 ) );
+                aStart.X() = (sal_Int32)( cos( nStartAngle * F_PI18000 ) * 100.0 );
+                aStart.Y() = - (sal_Int32)( sin( nStartAngle * F_PI18000 ) * 100.0 );
+                aEnd.X() = (sal_Int32)( cos( nEndAngle * F_PI18000 ) * 100.0 );
+                aEnd.Y() = - (sal_Int32)( sin( nEndAngle * F_PI18000 ) * 100.0 );
                 const tools::Rectangle& rRect = aRect100thmm;
                 aCenter.X() = rRect.Left() + ( rRect.GetWidth() / 2 );
                 aCenter.Y() = rRect.Top() + ( rRect.GetHeight() / 2 );

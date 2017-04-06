@@ -797,7 +797,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         aRet <<= (float)( toDouble( rVal, -FLT_MAX, FLT_MAX ) );
         break;
     case TypeClass_DOUBLE:
-        aRet <<= (double)( toDouble( rVal, -DBL_MAX, DBL_MAX ) );
+        aRet <<= toDouble( rVal, -DBL_MAX, DBL_MAX );
         break;
 
     // --- to STRING ----------------------------------------------------------------------------

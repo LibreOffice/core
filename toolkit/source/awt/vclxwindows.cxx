@@ -5670,22 +5670,22 @@ css::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName )
         {
             case BASEPROPERTY_VALUE_DOUBLE:
             {
-                aProp <<= (double) getValue();
+                aProp <<= getValue();
             }
             break;
             case BASEPROPERTY_VALUEMIN_DOUBLE:
             {
-                aProp <<= (double) getMin();
+                aProp <<= getMin();
             }
             break;
             case BASEPROPERTY_VALUEMAX_DOUBLE:
             {
-                aProp <<= (double) getMax();
+                aProp <<= getMax();
             }
             break;
             case BASEPROPERTY_VALUESTEP_DOUBLE:
             {
-                aProp <<= (double) getSpinSize();
+                aProp <<= getSpinSize();
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
@@ -6272,22 +6272,22 @@ css::uno::Any VCLXCurrencyField::getProperty( const OUString& PropertyName )
         {
             case BASEPROPERTY_VALUE_DOUBLE:
             {
-                aProp <<= (double) getValue();
+                aProp <<= getValue();
             }
             break;
             case BASEPROPERTY_VALUEMIN_DOUBLE:
             {
-                aProp <<= (double) getMin();
+                aProp <<= getMin();
             }
             break;
             case BASEPROPERTY_VALUEMAX_DOUBLE:
             {
-                aProp <<= (double) getMax();
+                aProp <<= getMax();
             }
             break;
             case BASEPROPERTY_VALUESTEP_DOUBLE:
             {
-                aProp <<= (double) getSpinSize();
+                aProp <<= getSpinSize();
             }
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:

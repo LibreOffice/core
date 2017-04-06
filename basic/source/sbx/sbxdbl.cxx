@@ -198,7 +198,7 @@ start:
         case SbxLPSTR:
             if( !p->pOUString )
                 p->pOUString = new OUString;
-            ImpCvtNum( (double) n, 14, *p->pOUString, bCoreString );
+            ImpCvtNum( n, 14, *p->pOUString, bCoreString );
             break;
         case SbxOBJECT:
         {
@@ -295,7 +295,7 @@ start:
             *p->puInt64 = ImpDoubleToSalUInt64( n ); break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
-            *p->pDouble = (double) n; break;
+            *p->pDouble = n; break;
         case SbxBYREF | SbxCURRENCY:
             if( n > SbxMAXCURR )
             {

@@ -595,7 +595,7 @@ coerce_value(AstExprValue *ev, ExprType t)
                     ev->et = ET_double;
                     return true;
                 case ET_uhyper:
-                    if ((double)ev->u.dval > FLT_MAX || (double)ev->u.dval < -FLT_MAX)
+                    if (ev->u.dval > FLT_MAX || ev->u.dval < -FLT_MAX)
                         return false;
                     ev->u.dval = (double)ev->u.ulval;
                     ev->et = ET_double;

@@ -339,7 +339,7 @@ IMPL_LINK_NOARG(ScDocCfg, CalcCommitHdl, ScLinkConfigItem&, void)
                 pValues[nProp] <<= (sal_Int32) GetIterCount();
                 break;
             case SCCALCOPT_ITER_MINCHG:
-                pValues[nProp] <<= (double) GetIterEps();
+                pValues[nProp] <<= GetIterEps();
                 break;
             case SCCALCOPT_DATE_DAY:
                 pValues[nProp] <<= (sal_Int32) nDateDay;

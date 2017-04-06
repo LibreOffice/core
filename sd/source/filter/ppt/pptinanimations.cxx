@@ -905,7 +905,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         Any aDuration;
         if( rNode.mnDuration > 0 )
         {
-            aDuration <<= (double)(rNode.mnDuration / 1000.0);
+            aDuration <<= rNode.mnDuration / 1000.0;
         }
         else if( rNode.mnDuration < 0 )
         {
@@ -2632,7 +2632,7 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
                     }
 
                     if( (nBegin != 0) || (aEvent.Trigger == EventTrigger::NONE) )
-                        aEvent.Offset = (nBegin == -1) ? makeAny( Timing_INDEFINITE ) : makeAny( (double)(nBegin / 1000.0) );
+                        aEvent.Offset = (nBegin == -1) ? makeAny( Timing_INDEFINITE ) : makeAny( nBegin / 1000.0 );
                 }
                 break;
                 case DFF_msofbtAnimateTargetElement:

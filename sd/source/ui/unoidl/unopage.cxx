@@ -1084,7 +1084,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= (sal_Int32)( GetPage()->GetTime() + .5 );
         break;
     case WID_PAGE_HIGHRESDURATION:
-        aAny <<= (double)( GetPage()->GetTime() );
+        aAny <<= GetPage()->GetTime();
         break;
     case WID_PAGE_LDNAME:
     {

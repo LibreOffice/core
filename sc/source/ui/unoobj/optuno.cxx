@@ -152,7 +152,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
             aRet <<= (sal_Int32)( rOptions.GetIterCount() );
         break;
         case PROP_UNO_ITEREPSILON:
-            aRet <<= (double)( rOptions.GetIterEps() );
+            aRet <<= rOptions.GetIterEps();
         break;
         case PROP_UNO_LOOKUPLABELS:
             aRet <<= rOptions.IsLookUpColRowNames();
