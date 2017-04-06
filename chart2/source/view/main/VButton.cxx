@@ -49,7 +49,7 @@ void VButton::createShapes(const awt::Point& rPosition,
     PropertyMapper::getTextLabelMultiPropertyLists(xTextProp, *pPropNames, *pPropValues);
 
     tPropertyNameValueMap aTextValueMap;
-    aTextValueMap["CharHeight"] <<= (float)10.0f;
+    aTextValueMap["CharHeight"] <<= 10.0f;
     aTextValueMap["FillColor"] <<= (sal_Int32)0xe6e6e6;
     aTextValueMap["FillStyle"] <<= drawing::FillStyle_SOLID;
     aTextValueMap["LineColor"] <<= (sal_Int32)0xcccccc;

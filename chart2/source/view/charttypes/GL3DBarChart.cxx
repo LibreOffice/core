@@ -841,8 +841,8 @@ void GL3DBarChart::create3DShapes(const std::vector<std::unique_ptr<VDataSeries>
         //if scroll the bars, set the speed and distance first
         if (mbScrollFlg)
         {
-            mpRenderer->SetScrollSpeed((float)(BAR_SIZE_X + BAR_DISTANCE_X) / (float)miScrollRate);
-            mpRenderer->SetScrollDistance((float)(BAR_SIZE_X + BAR_DISTANCE_X));
+            mpRenderer->SetScrollSpeed((BAR_SIZE_X + BAR_DISTANCE_X) / (float)miScrollRate);
+            mpRenderer->SetScrollDistance(BAR_SIZE_X + BAR_DISTANCE_X);
         }
         spawnRenderThread(new RenderBenchMarkThread(this));
     }

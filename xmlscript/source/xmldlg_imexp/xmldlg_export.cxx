@@ -261,12 +261,12 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         // dialog:font-charwidth CDATA #IMPLIED
         if (def_descr.CharacterWidth != _descr.CharacterWidth)
         {
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-charwidth", OUString::number( (float)_descr.CharacterWidth ) );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-charwidth", OUString::number( _descr.CharacterWidth ) );
         }
         // dialog:font-weight CDATA #IMPLIED
         if (def_descr.Weight != _descr.Weight)
         {
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-weight", OUString::number( (float)_descr.Weight ) );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-weight", OUString::number( _descr.Weight ) );
         }
         // dialog:font-slant "(oblique|italic|reverse_oblique|reverse_italic)" #IMPLIED
         if (def_descr.Slant != _descr.Slant)
@@ -379,7 +379,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         // dialog:font-orientation CDATA #IMPLIED
         if (def_descr.Orientation != _descr.Orientation)
         {
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-orientation", OUString::number( (float)_descr.Orientation ) );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-orientation", OUString::number( _descr.Orientation ) );
         }
         // dialog:font-kerning %boolean; #IMPLIED
         if (bool(def_descr.Kerning) != bool(_descr.Kerning))
