@@ -307,7 +307,8 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
         return true;
     }
     bool bBuiltinType = t1->isSpecificBuiltinType(BuiltinType::Bool) || t1->isSpecificBuiltinType(BuiltinType::Double)
-                        || t1->isSpecificBuiltinType(BuiltinType::Float);
+                        || t1->isSpecificBuiltinType(BuiltinType::Float)
+                        || t1->isSpecificBuiltinType(BuiltinType::Void);
     if ((bBuiltinType || loplugin::TypeCheck(t1).Typedef()) && t1 == t2)
     {
         // Ignore FD_ISSET expanding to "...(SOCKET)(fd)..." in some Microsoft

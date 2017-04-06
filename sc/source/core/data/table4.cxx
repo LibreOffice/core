@@ -410,7 +410,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
             for (SCSIZE i=1; i<nCount && rListData; i++)
             {
-                (void)GetString(nCol, nRow, aStr);
+                GetString(nCol, nRow, aStr);
                 if (!rListData->GetSubIndex(aStr, rListIndex, bMatchCase))
                     rListData = nullptr;
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
