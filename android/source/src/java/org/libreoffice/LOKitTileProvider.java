@@ -199,6 +199,10 @@ class LOKitTileProvider implements TileProvider {
         return mDocument.getParts();
     }
 
+    public String getPartPageRectangles() {
+        return mDocument.getPartPageRectangles();
+    }
+
     /**
      * @see TileProvider#onSwipeLeft()
      */
