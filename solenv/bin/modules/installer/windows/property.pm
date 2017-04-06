@@ -386,6 +386,7 @@ sub set_ms_file_types_properties
     push(@{$propertyfile}, "REGISTER_XLT"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLTX" . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_XLTM" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_IQY"  . "\t" . "0" . "\n");
 
     push(@{$propertyfile}, "REGISTER_NO_MSO_TYPES"  . "\t" . "0" . "\n");
     push(@{$propertyfile}, "REGISTER_ALL_MSO_TYPES"  . "\t" . "0" . "\n");
