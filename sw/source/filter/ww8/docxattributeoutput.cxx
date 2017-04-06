@@ -4163,10 +4163,10 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFo
 
     css::text::GraphicCrop aGraphicCropStruct;
     xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
-    sal_Int16 nCropL = aGraphicCropStruct.Left;
-    sal_Int16 nCropR = aGraphicCropStruct.Right;
-    sal_Int16 nCropT = aGraphicCropStruct.Top;
-    sal_Int16 nCropB = aGraphicCropStruct.Bottom;
+    sal_Int32 nCropL = aGraphicCropStruct.Left;
+    sal_Int32 nCropR = aGraphicCropStruct.Right;
+    sal_Int32 nCropT = aGraphicCropStruct.Top;
+    sal_Int32 nCropB = aGraphicCropStruct.Bottom;
 
     // simulate border padding as a negative crop.
     const SfxPoolItem* pItem;
