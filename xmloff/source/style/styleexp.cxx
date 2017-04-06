@@ -185,7 +185,7 @@ bool XMLStyleExport::exportStyle(
             if( nOutlineLevel > 0 )
             {
                 OUStringBuffer sTmp;
-                sTmp.append( static_cast<sal_Int32>(nOutlineLevel));
+                sTmp.append(nOutlineLevel);
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DEFAULT_OUTLINE_LEVEL,
                                           sTmp.makeStringAndClear() );

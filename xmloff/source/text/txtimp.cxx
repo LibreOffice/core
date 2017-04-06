@@ -1850,9 +1850,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         {
             if ( nCurrentOutlineLevelInheritedFromParagraphStyle != 0 )
             {
-                sal_Int16 nZero = 0;
                 xPropSet->setPropertyValue(s_OutlineLevel,
-                    makeAny( static_cast<sal_Int16>(nZero) ));
+                    makeAny( sal_Int16(0) ));
             }
         }
     }

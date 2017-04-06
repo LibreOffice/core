@@ -1114,9 +1114,9 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                                                                     uno::UNO_QUERY );
 
                     xBarProp->setPropertyValue("ErrorBarStyle",uno::makeAny(css::chart::ErrorBarStyle::NONE));
-                    xBarProp->setPropertyValue("PositiveError",uno::makeAny(static_cast<double>(0.0)));
-                    xBarProp->setPropertyValue("NegativeError",uno::makeAny(static_cast<double>(0.0)));
-                    xBarProp->setPropertyValue("Weight",uno::makeAny(static_cast<double>(1.0)));
+                    xBarProp->setPropertyValue("PositiveError",uno::makeAny(0.0));
+                    xBarProp->setPropertyValue("NegativeError",uno::makeAny(0.0));
+                    xBarProp->setPropertyValue("Weight",uno::makeAny(1.0));
                     xBarProp->setPropertyValue("ShowPositiveError",uno::makeAny(true));
                     xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(true));
 

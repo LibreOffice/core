@@ -247,8 +247,7 @@ void XMLTextMarkImportContext::EndElement()
                     {
                         std::shared_ptr< ::xmloff::ParsedRDFaAttributes >
                             xRDFaAttributes;
-                        if (m_bHaveAbout && (TypeBookmarkStart
-                                == static_cast<lcl_MarkType>(nTmp)))
+                        if (m_bHaveAbout && TypeBookmarkStart == nTmp)
                         {
                             xRDFaAttributes =
                                 GetImport().GetRDFaImportHelper().ParseRDFa(

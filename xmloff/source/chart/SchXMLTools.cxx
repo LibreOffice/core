@@ -369,7 +369,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
             bool bVal = false;
             uno::Any any = xPropSet->getPropertyValue("UseInternalDataProvider");
             if (any >>= bVal)
-                bUseInternal = static_cast<bool>(bVal);
+                bUseInternal = bVal;
         }
         catch (const beans::UnknownPropertyException&)
         {
