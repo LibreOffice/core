@@ -163,9 +163,7 @@ UUIInteractionHelper::handleRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
     if(
-        // be aware,it is the same type
-        static_cast< oslThreadIdentifier >(
-            Application::GetMainThreadIdentifier())
+        Application::GetMainThreadIdentifier()
         != osl::Thread::getCurrentIdentifier()
         &&
         GetpApp()
@@ -217,9 +215,7 @@ UUIInteractionHelper::getStringFromRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
     if(
-        // be aware,it is the same type
-        static_cast< oslThreadIdentifier >(
-            Application::GetMainThreadIdentifier())
+        Application::GetMainThreadIdentifier()
         != osl::Thread::getCurrentIdentifier()
         &&
         GetpApp()
