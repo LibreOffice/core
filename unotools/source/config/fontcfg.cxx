@@ -133,8 +133,8 @@ DefaultFontConfiguration::DefaultFontConfiguration()
         m_xConfigProvider.clear();
         m_xConfigAccess.clear();
     }
-    SAL_INFO("unotools.config", "config provider: " << static_cast<bool>(m_xConfigProvider.is())
-            << ", config access: " << static_cast<bool>(m_xConfigAccess.is()));
+    SAL_INFO("unotools.config", "config provider: " << m_xConfigProvider.is()
+            << ", config access: " << m_xConfigAccess.is());
 }
 
 DefaultFontConfiguration::~DefaultFontConfiguration()
@@ -386,8 +386,8 @@ FontSubstConfiguration::FontSubstConfiguration() :
         m_xConfigProvider.clear();
         m_xConfigAccess.clear();
     }
-    SAL_INFO("unotools.config", "config provider: " << static_cast<bool>(m_xConfigProvider.is())
-            << ", config access: " << static_cast<bool>(m_xConfigAccess.is()));
+    SAL_INFO("unotools.config", "config provider: " << m_xConfigProvider.is()
+            << ", config access: " << m_xConfigAccess.is());
 }
 
 /*
