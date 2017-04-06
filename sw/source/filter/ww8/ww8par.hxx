@@ -1876,8 +1876,7 @@ public:     // really private, but can only be done public
     rtl_TextEncoding GetCJKCharSetFromLanguage();
 
     void PostProcessAttrs();
-    static void ReadEmbeddedData(SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr);
-    static OUString ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nChars, bool b16Bit);
+    void ReadEmbeddedData(SvStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr);
 };
 
 bool CanUseRemoteLink(const OUString &rGrfName);
