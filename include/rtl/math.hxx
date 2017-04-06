@@ -294,7 +294,7 @@ inline bool approxEqual(double a, double b, sal_Int16 nPrec)
         return true;
     double x = a - b;
     return (x < 0.0 ? -x : x)
-        < ((a < 0.0 ? -a : a) * (1.0 / (pow(static_cast<double>(2.0), nPrec))));
+        < ((a < 0.0 ? -a : a) * (1.0 / (pow(2.0, nPrec))));
 }
 
 /** Add two values.
