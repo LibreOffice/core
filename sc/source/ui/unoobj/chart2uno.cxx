@@ -2794,7 +2794,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             }
         }
 
-        OSL_ENSURE(m_pRangeIndices->size() == static_cast<size_t>(aRanges.size()),
+        OSL_ENSURE(m_pRangeIndices->size() == aRanges.size(),
                    "range list and range index list have different sizes.");
 
         unique_ptr<ScRangeList> pUndoRanges;

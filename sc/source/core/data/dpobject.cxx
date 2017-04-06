@@ -2220,7 +2220,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
                 uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
                 sal_Int32 nTmp = 0;
                 if (aOrigAny >>= nTmp)
-                    nDupSource = static_cast<sal_Int32>(nTmp);
+                    nDupSource = nTmp;
             }
             catch(uno::Exception&)
             {

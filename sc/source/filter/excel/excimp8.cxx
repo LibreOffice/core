@@ -241,7 +241,7 @@ void ImportExcel8::Boundsheet()
     OUString aName( aIn.ReadUniString( nLen ) );
     GetTabInfo().AppendXclTabName( aName, nBdshtTab );
 
-    SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
+    SCTAB nScTab = nBdshtTab;
     if( nScTab > 0 )
     {
         OSL_ENSURE( !pD->HasTable( nScTab ), "ImportExcel8::Boundsheet - sheet exists already" );

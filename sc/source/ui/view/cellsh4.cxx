@@ -375,7 +375,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
                      pReqArgs->HasItem( FN_PARAM_2, &pModifierItem ) )
                 {
                     SCCOL nCol = static_cast<SCCOL>(static_cast<const SfxInt32Item*>(pColItem)->GetValue());
-                    sal_Int16 nModifier = static_cast<sal_Int16>(static_cast<const SfxInt16Item*>(pModifierItem)->GetValue());
+                    sal_Int16 nModifier = static_cast<const SfxInt16Item*>(pModifierItem)->GetValue();
 
                     pTabViewShell->MarkColumns( nCol, nModifier );
                 }
@@ -392,7 +392,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
                      pReqArgs->HasItem( FN_PARAM_2, &pModifierItem ) )
                 {
                     SCROW nRow = static_cast<SCROW>(static_cast<const SfxInt32Item*>(pRowItem)->GetValue());
-                    sal_Int16 nModifier = static_cast<sal_Int16>(static_cast<const SfxInt16Item*>(pModifierItem)->GetValue());
+                    sal_Int16 nModifier = static_cast<const SfxInt16Item*>(pModifierItem)->GetValue();
 
                     pTabViewShell->MarkRows( nRow, nModifier );
                 }

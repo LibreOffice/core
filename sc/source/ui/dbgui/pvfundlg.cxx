@@ -737,7 +737,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
         lclFillListBox( *m_pLbHierarchy, maLabelData.maHiers );
         sal_Int32 nHier = maLabelData.mnUsedHier;
         if( (nHier < 0) || (nHier >= maLabelData.maHiers.getLength()) ) nHier = 0;
-        m_pLbHierarchy->SelectEntryPos( static_cast< sal_Int32 >( nHier ) );
+        m_pLbHierarchy->SelectEntryPos( nHier );
         m_pLbHierarchy->SetSelectHdl( LINK( this, ScDPSubtotalOptDlg, SelectHdl ) );
     }
     else

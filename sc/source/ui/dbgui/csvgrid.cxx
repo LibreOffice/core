@@ -554,7 +554,7 @@ void ScCsvGrid::FillColumnDataFix( ScAsciiOptions& rOptions ) const
     for( sal_uInt32 nColIx = 0; nColIx < nCount; ++nColIx )
     {
         ScCsvExpData& rData = aDataVec[ nColIx ];
-        rData.mnIndex = static_cast< sal_Int32 >( GetColumnPos( nColIx ) );
+        rData.mnIndex = GetColumnPos( nColIx );
         rData.mnType = lcl_GetExtColumnType( GetColumnType( nColIx ) );
     }
     aDataVec[ nCount ].mnIndex = SAL_MAX_INT32;

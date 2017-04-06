@@ -595,7 +595,7 @@ void ScImportAsciiDlg::SaveParameters()
                      pCkbQuotedAsText->IsChecked(), pCkbDetectNumber->IsChecked(),
                      pRbFixed->IsChecked(),
                      static_cast<sal_Int32>(pNfRow->GetValue()),
-                     static_cast<sal_Int32>(pLbCharSet->GetSelectEntryPos()),
+                     pLbCharSet->GetSelectEntryPos(),
                      static_cast<sal_Int32>(pLbCustomLang->GetSelectLanguage()), meCall );
 }
 

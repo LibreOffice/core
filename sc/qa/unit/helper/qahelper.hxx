@@ -245,9 +245,6 @@ public:
 #define ASSERT_DOUBLES_EQUAL_MESSAGE( message, expected, result )   \
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( (message), (expected), (result), 1e-14 )
 
-#define ASSERT_EQUAL_TYPE( type, expected, result ) \
-    CPPUNIT_ASSERT_EQUAL( static_cast<type>(expected), static_cast<type>(result) );
-
 SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos,
         const char* expected, const char* msg, CppUnit::SourceLine const & sourceLine);
 

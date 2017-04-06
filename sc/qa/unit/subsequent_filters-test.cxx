@@ -2811,7 +2811,7 @@ void ScFiltersTest::testCondFormatParentXLSX()
     const ScPatternAttr* pPattern = rDoc.GetPattern(2, 5, 0);
     const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet);
     const SvxVerJustifyItem& rVerJustify = static_cast<const SvxVerJustifyItem&>(rPoolItem);
-    CPPUNIT_ASSERT_EQUAL(SVX_VER_JUSTIFY_TOP, static_cast<SvxCellVerJustify>(rVerJustify.GetValue()));
+    CPPUNIT_ASSERT_EQUAL(SVX_VER_JUSTIFY_TOP, rVerJustify.GetValue());
 
     xDocSh->DoClose();
 }

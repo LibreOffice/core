@@ -224,7 +224,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
     aArgs[0].Name = OUString::fromUtf8("Row");
     aArgs[0].Value <<= static_cast<sal_Int32>(10 - 1);
     aArgs[1].Name = OUString::fromUtf8("Modifier");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_SHIFT);
+    aArgs[1].Value <<= KEY_SHIFT;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // Check if all the rows from 5th to 10th get selected
@@ -236,7 +236,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
     aArgs[0].Name = OUString::fromUtf8("Row");
     aArgs[0].Value <<= static_cast<sal_Int32>(13 - 1);
     aArgs[1].Name = OUString::fromUtf8("Modifier");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_MOD1);
+    aArgs[1].Value <<= KEY_MOD1;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // When we copy this, we don't get anything useful, but we must not crash
@@ -250,7 +250,7 @@ void ScTiledRenderingTest::testRowColumnSelections()
     aArgs[0].Name = OUString::fromUtf8("Col");
     aArgs[0].Value <<= static_cast<sal_Int32>(5 - 1);
     aArgs[1].Name = OUString::fromUtf8("Modifier");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_MOD1);
+    aArgs[1].Value <<= KEY_MOD1;
     comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
 
     // When we copy this, we don't get anything useful, but we must not crash
@@ -265,21 +265,21 @@ void ScTiledRenderingTest::testRowColumnSelections()
     aArgs[0].Name = OUString::fromUtf8("Row");
     aArgs[0].Value <<= static_cast<sal_Int32>(13 - 1);
     aArgs[1].Name = OUString::fromUtf8("Modifier");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_MOD1);
+    aArgs[1].Value <<= KEY_MOD1;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // Deselect row 10
     aArgs[0].Name = OUString::fromUtf8("Row");
     aArgs[0].Value <<= static_cast<sal_Int32>(10 - 1);
     aArgs[1].Name = OUString::fromUtf8("Modifier");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_MOD1);
+    aArgs[1].Value <<= KEY_MOD1;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // Click at row 6 holding shift
     aArgs[0].Name = OUString::fromUtf8("Row");
     aArgs[0].Value <<= static_cast<sal_Int32>(6 - 1);
     aArgs[1].Name = OUString::fromUtf8("Modifier");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_SHIFT);
+    aArgs[1].Value <<= KEY_SHIFT;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     //  only row 5 should remain selected
@@ -903,7 +903,7 @@ void ScTiledRenderingTest::testHideColRow()
         aArgs[0].Name = OUString::fromUtf8("Col");
         aArgs[0].Value <<= static_cast<sal_Int32>(2 - 1);
         aArgs[1].Name = OUString::fromUtf8("Modifier");
-        aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_SHIFT);
+        aArgs[1].Value <<= KEY_SHIFT;
 
         comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
 
@@ -934,7 +934,7 @@ void ScTiledRenderingTest::testHideColRow()
         aArgs[0].Name = OUString::fromUtf8("Row");
         aArgs[0].Value <<= static_cast<sal_Int32>(6 - 1);
         aArgs[1].Name = OUString::fromUtf8("Modifier");
-        aArgs[1].Value <<= static_cast<sal_uInt16>(KEY_SHIFT);
+        aArgs[1].Value <<= KEY_SHIFT;
 
         comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 

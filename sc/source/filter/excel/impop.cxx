@@ -726,7 +726,7 @@ void ImportExcel::Boundsheet()
 
     OUString aName( aIn.ReadByteString( false ) );
 
-    SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
+    SCTAB nScTab = nBdshtTab;
     if( nScTab > 0 )
     {
         OSL_ENSURE( !pD->HasTable( nScTab ), "ImportExcel::Boundsheet - sheet exists already" );

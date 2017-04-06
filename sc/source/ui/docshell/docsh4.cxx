@@ -932,7 +932,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if ( aDlg->Execute() == RET_OK )
                 {
                     bool bSetShared = aDlg->IsShareDocumentChecked();
-                    if ( bSetShared != static_cast< bool >( IsDocShared() ) )
+                    if ( bSetShared != IsDocShared() )
                     {
                         if ( bSetShared )
                         {

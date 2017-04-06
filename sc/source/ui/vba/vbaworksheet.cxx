@@ -273,7 +273,7 @@ ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> const & xSheet
             ScDocShell* pDestDocShell = excel::getDocShell( pDestSheet->getModel() );
             ScDocShell* pSrcDocShell = excel::getDocShell( getModel() );
             if ( pDestDocShell && pSrcDocShell )
-                pDestDocShell->TransferTab( *pSrcDocShell, static_cast<SCTAB>(nSrc), static_cast<SCTAB>(nDest), true, true );
+                pDestDocShell->TransferTab( *pSrcDocShell, nSrc, nDest, true, true );
         }
     }
     // return new sheet

@@ -165,7 +165,7 @@ void XclExpPCItem::WriteBody( XclExpStream& rStrm )
     else if( const DateTime* pDateTime = GetDateTime() )
     {
         sal_uInt16 nYear = static_cast< sal_uInt16 >( pDateTime->GetYear() );
-        sal_uInt16 nMonth = static_cast< sal_uInt16 >( pDateTime->GetMonth() );
+        sal_uInt16 nMonth = pDateTime->GetMonth();
         sal_uInt8 nDay = static_cast< sal_uInt8 >( pDateTime->GetDay() );
         sal_uInt8 nHour = static_cast< sal_uInt8 >( pDateTime->GetHour() );
         sal_uInt8 nMin = static_cast< sal_uInt8 >( pDateTime->GetMin() );

@@ -394,7 +394,7 @@ void ScFlatBoolRowSegments::insertSegment(SCROW nRow, SCROW nSize)
 
 SCROW ScFlatBoolRowSegments::findLastTrue() const
 {
-    return static_cast<SCROW>(mpImpl->findLastTrue(false));
+    return mpImpl->findLastTrue(false);
 }
 
 ScFlatBoolColSegments::ScFlatBoolColSegments() :
@@ -522,7 +522,7 @@ void ScFlatUInt16RowSegments::insertSegment(SCROW nRow, SCROW nSize)
 
 SCROW ScFlatUInt16RowSegments::findLastTrue(sal_uInt16 nValue) const
 {
-    return static_cast<SCROW>(mpImpl->findLastTrue(nValue));
+    return mpImpl->findLastTrue(nValue);
 }
 
 void ScFlatUInt16RowSegments::enableTreeSearch(bool bEnable)

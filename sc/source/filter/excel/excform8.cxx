@@ -1463,7 +1463,7 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
                 // relative column references wrap around
                 nRelCol = static_cast<sal_Int16>(256 + (int)nRelCol);
             }
-            rSRD.SetRelCol(static_cast<SCCOL>(nRelCol));
+            rSRD.SetRelCol(nRelCol);
         }
         else
             rSRD.SetAbsCol(static_cast<SCCOL>(nCol));

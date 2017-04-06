@@ -251,7 +251,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
             continue;
 
         sal_uInt32 nOldFormat;
-        rDoc.GetNumberFormat(static_cast<SCCOL>(i), 0, 0, nOldFormat);
+        rDoc.GetNumberFormat(i, 0, 0, nOldFormat);
         const SvNumberformat* pOldEntry = pFormatter->GetEntry(nOldFormat);
         if (!pOldEntry)
             continue;
@@ -280,7 +280,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
         ScPatternAttr aNewAttrs( rDoc.GetPool() );
         SfxItemSet& rSet = aNewAttrs.GetItemSet();
         rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat) );
-        rDoc.ApplyPatternAreaTab(static_cast<SCCOL>(i), 0, static_cast<SCCOL>(i), MAXROW, 0, aNewAttrs);
+        rDoc.ApplyPatternAreaTab(i, 0, i, MAXROW, 0, aNewAttrs);
     }
 }
 

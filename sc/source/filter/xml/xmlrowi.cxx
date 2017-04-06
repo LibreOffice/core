@@ -321,7 +321,7 @@ void SAL_CALL ScXMLTableRowsContext::endFastElement(sal_Int32 /*nElement*/)
                 ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nSheet, true));
                 ScOutlineArray& rRowArray(pOutlineTable->GetRowArray());
                 bool bResized;
-                rRowArray.Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay);
+                rRowArray.Insert(nGroupStartRow, nGroupEndRow, bResized, !bGroupDisplay);
             }
         }
     }

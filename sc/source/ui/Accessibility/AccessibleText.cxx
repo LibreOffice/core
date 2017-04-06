@@ -816,7 +816,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         long nOffsetY = 0;
         const SvxVerJustifyItem* pVerJustifyItem = static_cast< const SvxVerJustifyItem* >(
             rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_VER_JUSTIFY ) );
-        SvxCellVerJustify eVerJust = ( pVerJustifyItem ? static_cast< SvxCellVerJustify >( pVerJustifyItem->GetValue() ) : SVX_VER_JUSTIFY_STANDARD );
+        SvxCellVerJustify eVerJust = ( pVerJustifyItem ? pVerJustifyItem->GetValue() : SVX_VER_JUSTIFY_STANDARD );
         switch ( eVerJust )
         {
             case SVX_VER_JUSTIFY_STANDARD:

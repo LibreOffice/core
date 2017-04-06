@@ -2698,7 +2698,7 @@ void ScViewFunc::MoveTable(
             nDestTab1 = nDestTab;
             for(SCTAB nTab : TheTabs)
             {
-                nErrVal = pDestShell->TransferTab( *pDocShell, nTab, static_cast<SCTAB>(nDestTab1), false, false );
+                nErrVal = pDestShell->TransferTab( *pDocShell, nTab, nDestTab1, false, false );
                 nDestTab1++;
             }
         }

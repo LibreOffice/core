@@ -3221,7 +3221,7 @@ XclImpSimpleDffConverter::~XclImpSimpleDffConverter()
 
 bool XclImpSimpleDffConverter::GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const
 {
-    ColorData nColor = GetPalette().GetColorData( static_cast< sal_uInt16 >( nIndex ) );
+    ColorData nColor = GetPalette().GetColorData( nIndex );
 
     if( nColor == COL_AUTO )
         return false;

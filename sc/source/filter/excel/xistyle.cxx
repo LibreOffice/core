@@ -286,7 +286,7 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
     if( (mbHeightUsed = (nHeight <= 0x7FFF)) )
         maData.mnHeight = static_cast< sal_uInt16 >( nHeight );
     if( (mbWeightUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE ) && (nWeight < 0x7FFF)) )
-        maData.mnWeight = static_cast< sal_uInt16 >( nWeight );
+        maData.mnWeight = nWeight;
     if( (mbItalicUsed = !::get_flag( nFontFlags1, EXC_CF_FONT_STYLE )) )
         maData.mbItalic = ::get_flag( nStyle, EXC_CF_FONT_STYLE );
     if( (mbUnderlUsed = !::get_flag( nFontFlags3, EXC_CF_FONT_UNDERL ) && (nUnderl <= 0x7F)) )

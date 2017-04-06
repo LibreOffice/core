@@ -1269,7 +1269,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                     //  combine
                     if ( nThisCol == nThisEndCol || ValidCol(static_cast<SCCOL>(pOtherCols[nThisCol+1])) )
                     {
-                        SCCOL nFirstNew = static_cast<SCCOL>(nThisCol);
+                        SCCOL nFirstNew = nThisCol;
                         while ( nFirstNew > 0 && pOtherCols[nFirstNew-1] > MAXCOL )
                             --nFirstNew;
                         SCCOL nDiff = nThisCol - nFirstNew;

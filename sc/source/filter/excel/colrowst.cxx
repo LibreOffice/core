@@ -39,7 +39,7 @@ XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     maHiddenRows(0, MAXROWCOUNT, false),
     mnLastScRow( -1 ),
     mnDefWidth( STD_COL_WIDTH ),
-    mnDefHeight( static_cast< sal_uInt16 >( ScGlobal::nStdRowHeight ) ),
+    mnDefHeight( ScGlobal::nStdRowHeight ),
     mnDefRowFlags( EXC_DEFROW_DEFAULTFLAGS ),
     mbHasStdWidthRec( false ),
     mbHasDefHeight( false ),
@@ -106,7 +106,7 @@ void XclImpColRowSettings::SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlag
     mnDefRowFlags = nFlags;
     if( mnDefHeight == 0 )
     {
-        mnDefHeight = static_cast< sal_uInt16 >( ScGlobal::nStdRowHeight );
+        mnDefHeight = ScGlobal::nStdRowHeight;
         ::set_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN );
     }
     mbHasDefHeight = true;
