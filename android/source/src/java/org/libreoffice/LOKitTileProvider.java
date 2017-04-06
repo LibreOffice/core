@@ -200,6 +200,13 @@ class LOKitTileProvider implements TileProvider {
     }
 
     /**
+     * Wrapper for getPartPageRectangles() JNI function.
+     */
+    public String getPartPageRectangles() {
+        return mDocument.getPartPageRectangles();
+    }
+
+    /**
      * @see TileProvider#onSwipeLeft()
      */
     @Override

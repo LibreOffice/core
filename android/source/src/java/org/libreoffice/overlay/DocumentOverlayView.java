@@ -21,6 +21,7 @@ import android.view.View;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.canvas.Cursor;
 import org.libreoffice.canvas.GraphicSelection;
+import org.libreoffice.canvas.PageNumberRect;
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.canvas.SelectionHandleEnd;
 import org.libreoffice.canvas.SelectionHandleMiddle;
@@ -61,6 +62,11 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     private Cursor mCursor;
 
     private SelectionHandle mDragHandle = null;
+
+    private List<RectF> mPartPageRectangles;
+    private PageNumberRect mPageNumberRect;
+    private boolean mPageNumberAvailable = false;
+    private int previousIndex = 0; // previous page number, used to compare with the current
 
     public DocumentOverlayView(Context context) {
         super(context);
@@ -177,6 +183,16 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     }
 
     /**
+     * Set part page rectangles and initialize a page number rectangle object
+     * (canvas element).
+     */
+    public void setPartPageRectangles (List<RectF> rectangles) {
+        mPartPageRectangles = rectangles;
+        mPageNumberRect = new PageNumberRect();
+        mPageNumberAvailable = true;
+    }
+
+    /**
      * Drawing on canvas.
      */
     @Override
@@ -184,6 +200,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         super.onDraw(canvas);
 
         mCursor.draw(canvas);
+
+        if (mPageNumberAvailable) {
+            mPageNumberRect.draw(canvas);
+        }
 
         mHandleMiddle.draw(canvas);
         mHandleStart.draw(canvas);
@@ -228,6 +248,47 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     public void hideCursor() {
         if (mCursor.isVisible()) {
             mCursor.setVisible(false);
+            invalidate();
+        }
+    }
+
+    /**
+     * Calculate and show page number according to current viewport position.
+     * In particular, this function compares the middle point of the
+     * view port with page rectangles and finds out which page the user
+     * is currently on. It does not update the associated canvas element
+     * unless there is a change of page number.
+     */
+    public void showPageNumberRect() {
+        PointF midPoint = mLayerView.getLayerClient().convertViewPointToLayerPoint(new PointF(getWidth()/2f, getHeight()/2f));
+        int index = previousIndex;
+        // search which page the user in currently on. can enhance the search algorithm to binary search if necessary
+        for (RectF page : mPartPageRectangles) {
+            if (page.top < midPoint.y && midPoint.y < page.bottom) {
+                index = mPartPageRectangles.indexOf(page) + 1;
+                break;
+            }
+        }
+        // index == 0 applies to non-text document, i.e. don't show page info on non-text docs
+        if (index == 0) {
+            return;
+        }
+        // if page rectangle canvas element is not visible or the page number is changed, show
+        if (!mPageNumberRect.isVisible() || index != previousIndex) {
+            previousIndex = index;
+            String pageNumberString = "Page " + index + " of " + mPartPageRectangles.size();
+            mPageNumberRect.setPageNumberString(pageNumberString);
+            mPageNumberRect.setVisible(true);
+            invalidate();
+        }
+    }
+
+    /**
+     * Hide page number rectangle canvas element.
+     */
+    public void hidePageNumberRect() {
+        if (mPageNumberRect.isVisible()) {
+            mPageNumberRect.setVisible(false);
             invalidate();
         }
     }
