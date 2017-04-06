@@ -330,9 +330,18 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
             << t1 << t2 << expr->getSourceRange();
         return true;
     }
-    bool bBuiltinType = t1->isSpecificBuiltinType(BuiltinType::Bool) || t1->isSpecificBuiltinType(BuiltinType::Double)
+    bool bBuiltinType = t1->isSpecificBuiltinType(BuiltinType::Bool)
+                        || t1->isSpecificBuiltinType(BuiltinType::Void)
                         || t1->isSpecificBuiltinType(BuiltinType::Float)
-                        || t1->isSpecificBuiltinType(BuiltinType::Void);
+                        || t1->isSpecificBuiltinType(BuiltinType::Double)
+                        || t1->isSpecificBuiltinType(BuiltinType::UChar)
+                        || t1->isSpecificBuiltinType(BuiltinType::Char_U)
+                        || t1->isSpecificBuiltinType(BuiltinType::SChar)
+                        || t1->isSpecificBuiltinType(BuiltinType::Char_S)
+                        || t1->isSpecificBuiltinType(BuiltinType::Char16)
+                        || t1->isSpecificBuiltinType(BuiltinType::Char32)
+                        || t1->isSpecificBuiltinType(BuiltinType::WChar_U)
+                        || t1->isSpecificBuiltinType(BuiltinType::WChar_S);
     if ((bBuiltinType || loplugin::TypeCheck(t1).Typedef()) && t1 == t2)
     {
         // Ignore FD_ISSET expanding to "...(SOCKET)(fd)..." in some Microsoft
