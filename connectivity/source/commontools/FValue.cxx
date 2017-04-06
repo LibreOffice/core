@@ -1603,7 +1603,7 @@ sal_uInt64 ORowSetValue::getULong()   const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = static_cast<sal_uInt64>(OUString(m_aValue.m_pString).toUInt64());
+                nRet = OUString(m_aValue.m_pString).toUInt64();
                 break;
             case DataType::FLOAT:
                 nRet = sal_uInt64(m_aValue.m_nFloat);
