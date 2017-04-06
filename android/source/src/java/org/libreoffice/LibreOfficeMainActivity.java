@@ -10,12 +10,11 @@ import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.RectF;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -76,16 +75,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private int partIndex=-1;
     private File mInputFile;
-    private String newFileName = "untitled";
-    private String newFilePath = "/storage/emulated/0/Documents/";
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
-    private String newDocumentType = null;
     private FormattingController mFormattingController;
     private ToolbarController mToolbarController;
     private FontController mFontController;
     private SearchController mSearchController;
-    private static final int PICKFOLDER_RESULT_CODE = 1;
 
     public GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -134,58 +129,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         mFontController = new FontController(this);
         mSearchController = new SearchController(this);
 
-        // New document type string is not null, it means we want to open a new document
-        if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
-            newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
-            if (newDocumentType.matches(LibreOfficeUIActivity.NEW_WRITER_STRING_KEY))
-                newFileName = newFileName + ".odt";
-            else if (newDocumentType.matches(LibreOfficeUIActivity.NEW_IMPRESS_STRING_KEY))
-                newFileName = newFileName + ".odp";
-            else if (newDocumentType.matches(LibreOfficeUIActivity.NEW_CALC_STRING_KEY))
-                newFileName = newFileName + ".ods";
-            else
-                newFileName = newFileName + ".odg";
-            // We want to create a new Document, create an alert dialogue to name the new file.
-            openSelectPathIntent();
-            isNewDocument = true;
-        }
-
-        if (getIntent().getData() != null) {
-            if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-                if (copyFileToTemp() && mTempFile != null) {
-                    mInputFile = mTempFile;
-                    Log.e(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
-                    toolbarTop.setTitle(mInputFile.getName());
-                } else {
-                    // TODO: can't open the file
-                    Log.e(LOGTAG, "couldn't create temporary file from " + getIntent().getData());
-                }
-            } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
-                mInputFile = new File(getIntent().getData().getPath());
-                Log.e(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
-                toolbarTop.setTitle(mInputFile.getName());
-                // Gather data to rebuild IFile object later
-                providerId = getIntent().getIntExtra(
-                        "org.libreoffice.document_provider_id", 0);
-                documentUri = (URI) getIntent().getSerializableExtra(
-                        "org.libreoffice.document_uri");
-            }
-        } else if (isNewDocument){
-            toolbarTop.setTitle(newFileName);
-        } else {
-            mInputFile = new File(DEFAULT_DOC_PATH);
-        }
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        if (mDocumentPartViewListAdapter == null) {
-            mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-            mDocumentPartViewListAdapter = new DocumentPartViewListAdapter(this, R.layout.document_part_list_layout, mDocumentPartView);
-            mDrawerList.setAdapter(mDocumentPartViewListAdapter);
-            mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
-        }
-
         loKitThread = new LOKitThread(this);
         loKitThread.start();
 
@@ -208,6 +151,51 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         // create TextCursorLayer
         mDocumentOverlay = new DocumentOverlay(this, layerView);
 
+        // New document type string is not null, meaning we want to open a new document
+        if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
+            String newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
+            String newFilePath = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_FILE_PATH_KEY);
+
+            // Load the new document
+            loadNewDocument(newFilePath, newDocumentType);
+        }
+
+        if (getIntent().getData() != null) {
+            if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+                if (copyFileToTemp() && mTempFile != null) {
+                    mInputFile = mTempFile;
+                    Log.e(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
+                    toolbarTop.setTitle(mInputFile.getName());
+                } else {
+                    // TODO: can't open the file
+                    Log.e(LOGTAG, "couldn't create temporary file from " + getIntent().getData());
+                }
+            } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
+                mInputFile = new File(getIntent().getData().getPath());
+                Log.e(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
+                toolbarTop.setTitle(mInputFile.getName());
+                // Gather data to rebuild IFile object later
+                providerId = getIntent().getIntExtra(
+                        "org.libreoffice.document_provider_id", 0);
+                documentUri = (URI) getIntent().getSerializableExtra(
+                        "org.libreoffice.document_uri");
+            }
+        } else {
+            if (!isNewDocument) {
+                mInputFile = new File(DEFAULT_DOC_PATH);
+            }
+        }
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        if (mDocumentPartViewListAdapter == null) {
+            mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+            mDocumentPartViewListAdapter = new DocumentPartViewListAdapter(this, R.layout.document_part_list_layout, mDocumentPartView);
+            mDrawerList.setAdapter(mDocumentPartViewListAdapter);
+            mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
+        }
+
         mToolbarController.setupToolbars();
 
         TabHost host = (TabHost) findViewById(R.id.toolbarTabHost);
@@ -229,40 +217,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         host.addTab(spec);
     }
 
-    private void openSelectPathIntent() {
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
-                           .addCategory(Intent.CATEGORY_OPENABLE)
-                           .setType("*/*")
-                           .putExtra(Intent.EXTRA_TITLE, newFileName);
-        startActivityForResult(intent, PICKFOLDER_RESULT_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode){
-            case PICKFOLDER_RESULT_CODE:
-                if(resultCode==RESULT_OK){
-                    Uri fileURI = data.getData();
-                    newFilePath = fileURI.getPath();
-                    if (newFilePath.contains("primary")) {
-                        /* When file is being saved in primary storage folder other than Documents home.
-                         *  newFilePath content is similar to this - /document/primary:Downloads/untitled1.odt */
-                        newFilePath = Environment.getExternalStorageDirectory().getPath() + "/" + newFilePath.split(":")[1];
-                    } else if (newFilePath.contains("home")) {
-                        /* When file is being saved in documents folder itself i.e. Document home.
-                         *  newFilePath content is similar to this - /document/home:untitled1.odt */
-                        newFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + newFilePath.split(":")[1];
-                    } else {
-                        newFilePath = Environment.getExternalStorageDirectory().getPath() + "/";
-                    }
-                    Log.d("newFilePath", newFilePath);
-                }
-                // Now set the input file variable to new file created
-                mInputFile = new File(newFilePath);
-                // and load the new document
-                LOKitShell.sendNewDocumentLoadEvent(newFilePath, newDocumentType);
-                break;
-        }
+    // Loads a new Document
+    private void loadNewDocument(String newFilePath, String newDocumentType) {
+        mInputFile = new File(newFilePath);
+        LOKitShell.sendNewDocumentLoadEvent(newFilePath, newDocumentType);
+        isNewDocument = true;
+        toolbarTop.setTitle(mInputFile.getName());
     }
 
     public RectF getCurrentCursorPosition() {
@@ -475,7 +435,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.save_alert_dialog_title)
                 .setPositiveButton(R.string.save_document, dialogClickListener)
-                .setNegativeButton(R.string.cancel_save_document, dialogClickListener)
+                .setNegativeButton(R.string.action_cancel, dialogClickListener)
                 .setNeutralButton(R.string.no_save_document, dialogClickListener)
                 .show();
 
@@ -770,12 +730,11 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     }
 
     // This method is used in LOKitTileProvider.java to show status of new file creation.
-    public void showSaveStatusToast(boolean error) {
+    public void showSaveStatusMessage(boolean error) {
         if (!error)
-            Toast.makeText(this, getString(R.string.save_as_success) + newFilePath, Toast.LENGTH_SHORT).show();
+            Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_success) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();
         else
-            Toast.makeText(this, R.string.save_as_error, Toast.LENGTH_SHORT).show();
-    }
+            Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_error) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

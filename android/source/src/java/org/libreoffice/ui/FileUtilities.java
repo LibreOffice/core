@@ -46,6 +46,11 @@ public class FileUtilities {
     /** Smallest Files First */
     static final int SORT_SMALLEST = 5;
 
+    public static final String DEFAULT_WRITER_EXTENSION = ".odt";
+    public static final String DEFAULT_IMPRESS_EXTENSION = ".odp";
+    public static final String DEFAULT_SPREADSHEET_EXTENSION = ".ods";
+    public static final String DEFAULT_DRAWING_EXTENSION = ".odg";
+
     private static final Map<String, Integer> mExtnMap = new HashMap<String, Integer>();
     private static final Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
     static {

@@ -142,7 +142,7 @@ class LOKitTileProvider implements TileProvider {
                 @Override
                 public void run() {
                     // There was some error
-                    mContext.showSaveStatusToast(true);
+                    mContext.showSaveStatusMessage(true);
                 }
             });
         }
@@ -150,7 +150,7 @@ class LOKitTileProvider implements TileProvider {
             @Override
             public void run() {
                 // There was no error
-                mContext.showSaveStatusToast(false);
+                mContext.showSaveStatusMessage(false);
             }
         });
     }
