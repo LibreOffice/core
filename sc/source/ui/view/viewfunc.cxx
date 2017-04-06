@@ -2663,9 +2663,9 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
     ScRangeName* pList = rDoc.GetRangeName();
 
     ScRangeData::Type nType = ScRangeData::Type::Name;
-    ScRangeData* pNewEntry = new ScRangeData( &rDoc, rName, rSymbol,
-            ScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(),
-                nTab), nType );
+    std::unique_ptr<ScRangeData> pNewEntry(new ScRangeData(
+        &rDoc, rName, rSymbol, ScAddress( GetViewData().GetCurX(),
+        GetViewData().GetCurY(), nTab), nType ));
     OUString aUpType = rType.toAsciiUpperCase();
     if ( aUpType.indexOf( 'P' ) != -1 )
         nType |= ScRangeData::Type::PrintArea;
@@ -2691,9 +2691,9 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
             pList->erase(*pData);
         }
 
-        if ( pList->insert( pNewEntry ) )
+        // don't delete, insert took ownership, even on failure!
+        if ( pList->insert( pNewEntry.release() ) )
             bOk = true;
-        pNewEntry = nullptr;   // never delete, insert took ownership
 
         rDoc.CompileHybridFormula();
 
@@ -2701,7 +2701,6 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
         SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreasChanged ) );
     }
 
-    delete pNewEntry;       // if it wasn't inserted
     return bOk;
 }
 
