@@ -10899,17 +10899,15 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
     OStringBuffer aLine;
     aLine.append(nObject);
     aLine.append(" 0 obj\n");
-    if (filter::PDFDictionaryElement* pDictionary = rObject.GetDictionary())
+    if (rObject.GetDictionary())
     {
         aLine.append("<<");
 
         // Complex case: can't copy the dictionary byte array as is, as it may contain references.
         bool bDone = false;
-        std::vector< std::pair<OString, filter::PDFElement*> > aItems = rObject.GetDictionaryItemsByOffset();
         sal_uInt64 nCopyStart = 0;
-        for (const auto& rItem : aItems)
+        for (auto pReference : rObject.GetDictionaryReferences())
         {
-            auto pReference = dynamic_cast<filter::PDFReferenceElement*>(rItem.second);
             if (pReference)
             {
                 filter::PDFObjectElement* pReferenced = pReference->LookupObject();
@@ -10918,8 +10916,8 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                     // Copy the referenced object.
                     sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced, rCopiedResources);
 
-                    sal_uInt64 nReferenceStart = pDictionary->GetKeyOffset(rItem.first) + rItem.first.getLength();
-                    sal_uInt64 nReferenceEnd = pDictionary->GetKeyOffset(rItem.first) + pDictionary->GetKeyValueLength(rItem.first);
+                    sal_uInt64 nReferenceStart = pReference->GetObjectElement().GetLocation();
+                    sal_uInt64 nReferenceEnd = pReference->GetOffset();
                     sal_uInt64 nOffset = 0;
                     if (nCopyStart == 0)
                         // Dict start -> reference start.

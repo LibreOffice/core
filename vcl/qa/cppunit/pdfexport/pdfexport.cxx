@@ -53,6 +53,7 @@ public:
     void testTdf106972();
     void testTdf106972Pdf17();
     void testTdf107013();
+    void testTdf107018();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -65,6 +66,7 @@ public:
     CPPUNIT_TEST(testTdf106972);
     CPPUNIT_TEST(testTdf106972Pdf17);
     CPPUNIT_TEST(testTdf107013);
+    CPPUNIT_TEST(testTdf107018);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -401,6 +403,54 @@ void PdfExportTest::testTdf107013()
     vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
     // This failed, the reference to the image was created, but not the image.
     CPPUNIT_ASSERT(pXObject);
+}
+
+void PdfExportTest::testTdf107018()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf107018.odt", aDocument);
+
+    // Get access to the only image on the only page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+
+    // Get access to the form object inside the image.
+    auto pXObjectResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"));
+    CPPUNIT_ASSERT(pXObjectResources);
+    auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObjectResources->LookupElement("XObject"));
+    CPPUNIT_ASSERT(pXObjectForms);
+    vcl::filter::PDFObjectElement* pForm = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pForm);
+
+    // Get access to Resources -> Font -> F1 of the form.
+    auto pFormResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pForm->Lookup("Resources"));
+    CPPUNIT_ASSERT(pFormResources);
+    auto pFonts = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pFormResources->LookupElement("Font"));
+    CPPUNIT_ASSERT(pFonts);
+    auto pF1Ref = dynamic_cast<vcl::filter::PDFReferenceElement*>(pFonts->LookupElement("F1"));
+    CPPUNIT_ASSERT(pF1Ref);
+    vcl::filter::PDFObjectElement* pF1 = pF1Ref->LookupObject();
+    CPPUNIT_ASSERT(pF1);
+
+    // Check that Foo -> Bar of the font is of type Pages.
+    auto pFontFoo = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pF1->Lookup("Foo"));
+    CPPUNIT_ASSERT(pFontFoo);
+    auto pBar = dynamic_cast<vcl::filter::PDFReferenceElement*>(pFontFoo->LookupElement("Bar"));
+    CPPUNIT_ASSERT(pBar);
+    vcl::filter::PDFObjectElement* pObject = pBar->LookupObject();
+    CPPUNIT_ASSERT(pObject);
+    auto pName = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+    CPPUNIT_ASSERT(pName);
+    // This was "XObject", reference in a nested dictionary wasn't updated when
+    // copying the page stream of a PDF image.
+    CPPUNIT_ASSERT_EQUAL(OString("Pages"), pName->GetValue());
 }
 #endif
 
