@@ -69,7 +69,7 @@ class SvxPixelCtlAccessibleChild :
     SvxPixelCtl& mrParentWindow;
     css::uno::Reference< css::accessibility::XAccessible > mxParent;
     bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
-    tools::Rectangle*  mpBoundingBox;
+    tools::Rectangle  maBoundingBox;
     /// index of child in parent
     long                                mnIndexInParent;
 public:

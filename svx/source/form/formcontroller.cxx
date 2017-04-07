@@ -540,7 +540,6 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
                   ,m_aRowSetApproveListeners(m_aMutex)
                   ,m_aParameterListeners(m_aMutex)
                   ,m_aFilterListeners(m_aMutex)
-                  ,m_pControlBorderManager( new ::svxform::ControlBorderManager )
                   ,m_xFormOperations()
                   ,m_aMode( OUString( "DataMode"  ) )
                   ,m_aLoadEvent( LINK( this, FormController, OnLoad ) )
@@ -610,9 +609,6 @@ FormController::~FormController()
         m_xAggregate->setDelegator( nullptr );
         m_xAggregate.clear();
     }
-
-    DELETEZ( m_pControlBorderManager );
-
 }
 
 
@@ -1164,7 +1160,7 @@ void FormController::disposing()
     removeBoundFieldListener();
     stopFiltering();
 
-    m_pControlBorderManager->restoreAll();
+    m_aControlBorderManager.restoreAll();
 
     m_aFilterRows.clear();
 
@@ -1284,13 +1280,13 @@ void SAL_CALL FormController::propertyChange(const PropertyChangeEvent& evt)
             bool bEnable = lcl_shouldUseDynamicControlBorder( evt.Source, evt.NewValue );
             if ( bEnable )
             {
-                m_pControlBorderManager->enableDynamicBorderColor();
+                m_aControlBorderManager.enableDynamicBorderColor();
                 if ( m_xActiveControl.is() )
-                    m_pControlBorderManager->focusGained( m_xActiveControl.get() );
+                    m_aControlBorderManager.focusGained( m_xActiveControl.get() );
             }
             else
             {
-                m_pControlBorderManager->disableDynamicBorderColor();
+                m_aControlBorderManager.disableDynamicBorderColor();
             }
         }
     }
@@ -1621,7 +1617,7 @@ void FormController::focusGained(const FocusEvent& e)
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    m_pControlBorderManager->focusGained( e.Source );
+    m_aControlBorderManager.focusGained( e.Source );
 
     Reference< XControl >  xControl(e.Source, UNO_QUERY);
     if (m_bDBConnection)
@@ -1772,7 +1768,7 @@ void FormController::focusLost(const FocusEvent& e)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 
-    m_pControlBorderManager->focusLost( e.Source );
+    m_aControlBorderManager.focusLost( e.Source );
 
     Reference< XControl >  xControl(e.Source, UNO_QUERY);
     Reference< XWindowPeer >  xNext(e.NextFocus, UNO_QUERY);
@@ -1799,13 +1795,13 @@ void SAL_CALL FormController::mouseReleased( const awt::MouseEvent& /*_rEvent*/ 
 
 void SAL_CALL FormController::mouseEntered( const awt::MouseEvent& _rEvent )
 {
-    m_pControlBorderManager->mouseEntered( _rEvent.Source );
+    m_aControlBorderManager.mouseEntered( _rEvent.Source );
 }
 
 
 void SAL_CALL FormController::mouseExited( const awt::MouseEvent& _rEvent )
 {
-    m_pControlBorderManager->mouseExited( _rEvent.Source );
+    m_aControlBorderManager.mouseExited( _rEvent.Source );
 }
 
 
@@ -1817,7 +1813,7 @@ void SAL_CALL FormController::componentValidityChanged( const EventObject& _rSou
     OSL_ENSURE( xControl.is() && xValidatable.is(), "FormController::componentValidityChanged: huh?" );
 
     if ( xControl.is() && xValidatable.is() )
-        m_pControlBorderManager->validityChanged( xControl, xValidatable );
+        m_aControlBorderManager.validityChanged( xControl, xValidatable );
 }
 
 
@@ -1913,17 +1909,17 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model)
                 bool bEnableDynamicControlBorder = lcl_shouldUseDynamicControlBorder(
                     xModelProps.get(), xModelProps->getPropertyValue( FM_PROP_DYNAMIC_CONTROL_BORDER ) );
                 if ( bEnableDynamicControlBorder )
-                    m_pControlBorderManager->enableDynamicBorderColor();
+                    m_aControlBorderManager.enableDynamicBorderColor();
                 else
-                    m_pControlBorderManager->disableDynamicBorderColor();
+                    m_aControlBorderManager.disableDynamicBorderColor();
 
                 sal_Int32 nColor = 0;
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_FOCUS ) >>= nColor )
-                    m_pControlBorderManager->setStatusColor( ControlStatus::Focused, nColor );
+                    m_aControlBorderManager.setStatusColor( ControlStatus::Focused, nColor );
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_MOUSE ) >>= nColor )
-                    m_pControlBorderManager->setStatusColor( ControlStatus::MouseHover, nColor );
+                    m_aControlBorderManager.setStatusColor( ControlStatus::MouseHover, nColor );
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_INVALID ) >>= nColor )
-                    m_pControlBorderManager->setStatusColor( ControlStatus::Invalid, nColor );
+                    m_aControlBorderManager.setStatusColor( ControlStatus::Invalid, nColor );
             }
         }
     }
@@ -2436,7 +2432,7 @@ void FormController::implControlInserted( const Reference< XControl>& _rxControl
         if ( xValidatable.is() )
         {
             xValidatable->addFormComponentValidityListener( this );
-            m_pControlBorderManager->validityChanged( _rxControl, xValidatable );
+            m_aControlBorderManager.validityChanged( _rxControl, xValidatable );
         }
     }
 

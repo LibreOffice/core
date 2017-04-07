@@ -660,7 +660,7 @@ SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     msDescription( rDescription ),
     msName( rName ),
     mxParent(rxParent),
-    mpBoundingBox( new tools::Rectangle( rBoundingBox ) ),
+    maBoundingBox( rBoundingBox ),
     mrParentWindow( rParentWindow ),
     mnClientId( 0 ),
     mnIndexInParent( nIndexInParent ),
@@ -986,8 +986,6 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::disposing()
         }
 
         mxParent.clear();
-
-        delete mpBoundingBox;
     }
 }
 
@@ -1009,10 +1007,10 @@ tools::Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBoxOnScreen()
 
 tools::Rectangle const & SvxRectCtlChildAccessibleContext::GetBoundingBox()
 {
-    // no guard necessary, because no one changes mpBoundingBox after creating it
+    // no guard necessary, because no one changes maBoundingBox after creating it
     ThrowExceptionIfNotAlive();
 
-    return *mpBoundingBox;
+    return maBoundingBox;
 }
 
 void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked )

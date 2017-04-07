@@ -180,8 +180,8 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
     private:
         NumberingTypeMgr(const NumberingTypeMgr&) = delete;
     public:
-        NumberSettingsArr_Impl*     pNumberSettingsArr;
-        NumberSettingsArr_Impl*     pDefaultNumberSettingsArr;
+        NumberSettingsArr_Impl      maNumberSettingsArr;
+        NumberSettingsArr_Impl      maDefaultNumberSettingsArr;
     public:
         NumberingTypeMgr();
         virtual ~NumberingTypeMgr() override;

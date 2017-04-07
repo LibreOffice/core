@@ -530,7 +530,7 @@ SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild(
     mrParentWindow( rWindow ),
     mxParent(rxParent),
     m_bPixelColorOrBG(bPixelColorOrBG),
-    mpBoundingBox( new tools::Rectangle( rBoundingBox ) ),
+    maBoundingBox( rBoundingBox ),
     mnIndexInParent( nIndexInParent ),
     mnClientId( 0 )
 {
@@ -771,8 +771,6 @@ void SAL_CALL SvxPixelCtlAccessibleChild::disposing()
         }
 
         mxParent.clear();
-
-        delete mpBoundingBox;
     }
 }
 
@@ -794,10 +792,10 @@ tools::Rectangle SvxPixelCtlAccessibleChild::GetBoundingBoxOnScreen()
 
 tools::Rectangle const & SvxPixelCtlAccessibleChild::GetBoundingBox()
 {
-    // no guard necessary, because no one changes mpBoundingBox after creating it
+    // no guard necessary, because no one changes maBoundingBox after creating it
     ThrowExceptionIfNotAlive();
 
-    return *mpBoundingBox;
+    return maBoundingBox;
 }
 
 OUString SvxPixelCtlAccessibleChild::GetName()
