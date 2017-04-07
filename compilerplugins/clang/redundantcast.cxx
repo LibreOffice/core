@@ -187,6 +187,7 @@ public:
 
 private:
     bool visitBinOp(BinaryOperator const * expr);
+    bool isOkToRemoveArithmeticCast(QualType t1, QualType t2, const Expr* subExpr);
 };
 
 bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
@@ -323,54 +324,60 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
     }
     auto t1 = getSubExprAsWritten(expr)->getType();
     auto t2 = expr->getTypeAsWritten();
-    if (loplugin::TypeCheck(t1).Enum() && t1 == t2) {
-        report(
-            DiagnosticsEngine::Warning,
-            "redundant cstyle enum cast from %0 to %1", expr->getExprLoc())
-            << t1 << t2 << expr->getSourceRange();
+    if (t1 != t2) {
         return true;
     }
-    bool bBuiltinType = t1->isSpecificBuiltinType(BuiltinType::Bool)
-                        || t1->isSpecificBuiltinType(BuiltinType::Void)
-                        || t1->isSpecificBuiltinType(BuiltinType::Float)
-                        || t1->isSpecificBuiltinType(BuiltinType::Double)
-                        || t1->isSpecificBuiltinType(BuiltinType::UChar)
-                        || t1->isSpecificBuiltinType(BuiltinType::Char_U)
-                        || t1->isSpecificBuiltinType(BuiltinType::SChar)
-                        || t1->isSpecificBuiltinType(BuiltinType::Char_S)
-                        || t1->isSpecificBuiltinType(BuiltinType::Char16)
-                        || t1->isSpecificBuiltinType(BuiltinType::Char32)
-                        || t1->isSpecificBuiltinType(BuiltinType::WChar_U)
-                        || t1->isSpecificBuiltinType(BuiltinType::WChar_S);
-    if ((bBuiltinType || loplugin::TypeCheck(t1).Typedef()) && t1 == t2)
-    {
-        // Ignore FD_ISSET expanding to "...(SOCKET)(fd)..." in some Microsoft
-        // winsock2.h (TODO: improve heuristic of determining that the whole
-        // expr is part of a single macro body expansion):
-        auto l1 = expr->getLocStart();
-        while (compiler.getSourceManager().isMacroArgExpansion(l1)) {
-            l1 = compiler.getSourceManager().getImmediateMacroCallerLoc(l1);
-        }
-        auto l2 = expr->getExprLoc();
-        while (compiler.getSourceManager().isMacroArgExpansion(l2)) {
-            l2 = compiler.getSourceManager().getImmediateMacroCallerLoc(l2);
-        }
-        auto l3 = expr->getLocEnd();
-        while (compiler.getSourceManager().isMacroArgExpansion(l3)) {
-            l3 = compiler.getSourceManager().getImmediateMacroCallerLoc(l3);
-        }
-        if (compiler.getSourceManager().isMacroBodyExpansion(l1)
-            && compiler.getSourceManager().isMacroBodyExpansion(l2)
-            && compiler.getSourceManager().isMacroBodyExpansion(l3)
-            && ignoreLocation(compiler.getSourceManager().getSpellingLoc(l2)))
-        {
-            return true;
-        }
-        report(
-            DiagnosticsEngine::Warning,
-            "redundant cstyle cast from %0 to %1", expr->getExprLoc())
-            << t1 << t2 << expr->getSourceRange();
+    if (!t1->isBuiltinType() && !loplugin::TypeCheck(t1).Enum() && !loplugin::TypeCheck(t1).Typedef()) {
         return true;
+    }
+    if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr())) {
+        return true;
+    }
+    // Ignore FD_ISSET expanding to "...(SOCKET)(fd)..." in some Microsoft
+    // winsock2.h (TODO: improve heuristic of determining that the whole
+    // expr is part of a single macro body expansion):
+    auto l1 = expr->getLocStart();
+    while (compiler.getSourceManager().isMacroArgExpansion(l1)) {
+        l1 = compiler.getSourceManager().getImmediateMacroCallerLoc(l1);
+    }
+    auto l2 = expr->getExprLoc();
+    while (compiler.getSourceManager().isMacroArgExpansion(l2)) {
+        l2 = compiler.getSourceManager().getImmediateMacroCallerLoc(l2);
+    }
+    auto l3 = expr->getLocEnd();
+    while (compiler.getSourceManager().isMacroArgExpansion(l3)) {
+         l3 = compiler.getSourceManager().getImmediateMacroCallerLoc(l3);
+    }
+    if (compiler.getSourceManager().isMacroBodyExpansion(l1)
+        && compiler.getSourceManager().isMacroBodyExpansion(l2)
+        && compiler.getSourceManager().isMacroBodyExpansion(l3)
+        && ignoreLocation(compiler.getSourceManager().getSpellingLoc(l2)))
+    {
+        return true;
+    }
+    report(
+        DiagnosticsEngine::Warning,
+        "redundant cstyle cast from %0 to %1", expr->getExprLoc())
+        << t1 << t2 << expr->getSourceRange();
+    return true;
+}
+
+bool RedundantCast::isOkToRemoveArithmeticCast(QualType t1, QualType t2, const Expr* subExpr) {
+    // Don't warn if the types are arithmetic (in the C++ meaning), and: either
+    // at least one is a typedef (and if both are typedefs,they're different),
+    // or the sub-expression involves some operation that is likely to change
+    // types through promotion, or the sub-expression is an integer literal (so
+    // its type generally depends on its value and suffix if any---even with a
+    // suffix like L it could still be either long or long long):
+    if ((t1->isIntegralType(compiler.getASTContext())
+         || t1->isRealFloatingType())
+        && ((t1 != t2
+             && (loplugin::TypeCheck(t1).Typedef()
+                 || loplugin::TypeCheck(t2).Typedef()))
+            || isArithmeticOp(subExpr)
+            || isa<IntegerLiteral>(subExpr->IgnoreParenImpCasts())))
+    {
+        return false;
     }
     return true;
 }
@@ -384,20 +391,7 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
     if (t1.getCanonicalType() != t2.getCanonicalType()) {
         return true;
     }
-    // Don't warn if the types are arithmetic (in the C++ meaning), and: either
-    // at least one is a typedef (and if both are typedefs,they're different),
-    // or the sub-expression involves some operation that is likely to change
-    // types through promotion, or the sub-expression is an integer literal (so
-    // its type generally depends on its value and suffix if any---even with a
-    // suffix like L it could still be either long or long long):
-    if ((t1->isIntegralType(compiler.getASTContext())
-         || t1->isRealFloatingType())
-        && ((t1 != t2
-             && (loplugin::TypeCheck(t1).Typedef()
-                 || loplugin::TypeCheck(t2).Typedef()))
-            || isArithmeticOp(expr->getSubExpr())
-            || isa<IntegerLiteral>(expr->getSubExpr()->IgnoreParenImpCasts())))
-    {
+    if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr())) {
         return true;
     }
     // Don't warn if the types are 'void *' and at least one involves a typedef

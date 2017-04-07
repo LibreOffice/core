@@ -1713,13 +1713,13 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
 
                 // adjust position so that frame fits onto screen
                 if( aPosSize.Right()+(long)aGeom.nRightDecoration > aScreenSize.Width()-1 )
-                    aPosSize.Move( (long)aScreenSize.Width() - (long)aPosSize.Right() - (long)aGeom.nRightDecoration, 0 );
+                    aPosSize.Move( aScreenSize.Width() - aPosSize.Right() - (long)aGeom.nRightDecoration, 0 );
                 if( aPosSize.Bottom()+(long)aGeom.nBottomDecoration > aScreenSize.Height()-1 )
-                    aPosSize.Move( 0, (long)aScreenSize.Height() - (long)aPosSize.Bottom() - (long)aGeom.nBottomDecoration );
+                    aPosSize.Move( 0, aScreenSize.Height() - aPosSize.Bottom() - (long)aGeom.nBottomDecoration );
                 if( aPosSize.Left() < (long)aGeom.nLeftDecoration )
-                    aPosSize.Move( (long)aGeom.nLeftDecoration - (long)aPosSize.Left(), 0 );
+                    aPosSize.Move( (long)aGeom.nLeftDecoration - aPosSize.Left(), 0 );
                 if( aPosSize.Top() < (long)aGeom.nTopDecoration )
-                    aPosSize.Move( 0, (long)aGeom.nTopDecoration - (long)aPosSize.Top() );
+                    aPosSize.Move( 0, (long)aGeom.nTopDecoration - aPosSize.Top() );
             }
 
             SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );

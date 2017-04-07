@@ -2448,7 +2448,7 @@ void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
     if( nOffsLogic != nEntryHeightOffs )
     {
         nEntryHeight = nEntryHeight - nEntryHeightOffs;
-        nEntryHeightOffs = (short)nOffsLogic;
+        nEntryHeightOffs = nOffsLogic;
         nEntryHeight = nEntryHeight + nOffsLogic;
         AdjustEntryHeightAndRecalc();
         pImpl->SetEntryHeight( nEntryHeight );

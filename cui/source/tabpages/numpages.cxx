@@ -1023,8 +1023,8 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
                 GraphicConverter::Import( *pIn, aGraphic );
 
                 BitmapEx aBitmap = aGraphic.GetBitmapEx();
-                long nPixelX = (long)(aBitmap.GetSizePixel().Width());
-                long nPixelY = (long)(aBitmap.GetSizePixel().Height());
+                long nPixelX = aBitmap.GetSizePixel().Width();
+                long nPixelY = aBitmap.GetSizePixel().Height();
                 double ratio = nPixelY/(double)nPixelX;
                 if(nPixelX > 30)
                 {

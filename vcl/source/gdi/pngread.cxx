@@ -1093,8 +1093,8 @@ void PNGReaderImpl::ImplApplyFilter()
                 int nb = *(p3++);
                 int nc = *(p4++);
 
-                int npa = nb - (int)nc;
-                int npb = na - (int)nc;
+                int npa = nb - nc;
+                int npb = na - nc;
                 int npc = npa + npb;
 
                 if( npa < 0 )

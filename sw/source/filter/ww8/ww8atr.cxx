@@ -4300,7 +4300,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
             {
                 // gibt es aber nicht in WW - also wie kommt man an
                 // die MaxLineHeight heran?
-                nSpace = (short)rSpacing.GetInterLineSpace();
+                nSpace = rSpacing.GetInterLineSpace();
                 sal_uInt16 nScript =
                     i18n::ScriptType::LATIN;
                 const SwAttrSet *pSet = nullptr;

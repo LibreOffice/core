@@ -1070,7 +1070,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
         aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() - aSize.Height() ), 1);                // BOTTOM LEFT
         aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() ), 2);                 // TOP RIGHT
         aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() - aSize.Height() ), 3);// BOTTOM RIGHT
-        aDummyPoly.Rotate( aP0, (short)aAttr.nChrAng );
+        aDummyPoly.Rotate( aP0, aAttr.nChrAng );
         if ( bMove )
             aAttr.aCurPos = aDummyPoly.GetPoint( 0 );
         aCalcBndRect.Union( tools::Rectangle( aDummyPoly.GetPoint( 0 ), aDummyPoly.GetPoint( 3 ) ) );

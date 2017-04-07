@@ -780,14 +780,14 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         else
         {
             pSizeBox->SetRelative(false);
-            pSizeBox->SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
+            pSizeBox->SetValue( CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
         }
     }
     else if ( eState >= SfxItemState::DEFAULT )
     {
         MapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich ));
-        pSizeBox->SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
+        pSizeBox->SetValue( CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
     }
     else
     {

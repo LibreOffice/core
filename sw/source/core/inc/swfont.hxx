@@ -723,8 +723,8 @@ inline void SwSubFont::SetSize( const Size& rSize )
     else
     {
         Font::SetFontSize( Size(
-            (long) m_aSize.Width() * GetPropr() / 100L,
-            (long) m_aSize.Height() * GetPropr() / 100L ) );
+            m_aSize.Width() * GetPropr() / 100L,
+            m_aSize.Height() * GetPropr() / 100L ) );
     }
     m_pMagic = nullptr;
 }
@@ -752,8 +752,8 @@ inline void SwFont::SetActual( SwFontScript nNew )
 inline void SwSubFont::SetProportion( const sal_uInt8 nNewPropr )
 {
     m_pMagic = nullptr;
-    Font::SetFontSize( Size( (long) m_aSize.Width() * nNewPropr / 100L,
-                         (long) m_aSize.Height() * nNewPropr / 100L ) );
+    Font::SetFontSize( Size( m_aSize.Width() * nNewPropr / 100L,
+                             m_aSize.Height() * nNewPropr / 100L ) );
     SvxFont::SetPropr( nNewPropr );
 }
 

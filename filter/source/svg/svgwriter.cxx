@@ -2680,7 +2680,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
         if( rFont.GetStrikeout() != STRIKEOUT_NONE || rFont.GetUnderline() != LINESTYLE_NONE )
         {
             tools::Polygon aPoly( 4 );
-            const long  nLineHeight = std::max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
+            const long  nLineHeight = std::max<long>( FRound( aMetric.GetLineHeight() * 0.05 ), 1 );
 
             if( rFont.GetStrikeout() )
             {

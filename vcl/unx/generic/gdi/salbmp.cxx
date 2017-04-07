@@ -781,8 +781,8 @@ bool X11SalBitmap::Create(
                                     depth,
                                     0,
                                     0,
-                                    (long) rSize.Width(),
-                                    (long) rSize.Height()
+                                    rSize.Width(),
+                                    rSize.Height()
                                 );
                 bool bFreePixmap = false;
                 if( bSuccess && (args[0] >>= bFreePixmap) && bFreePixmap )
