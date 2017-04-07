@@ -1286,12 +1286,147 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
     }
 }
 
-// Test if field contains specific attribute
+bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMask, SCROW nRow1, SCROW nRow2, SCSIZE i) const
+{
+    bool bFound = false;
+    if ( nMask & HasAttrFlags::Merged )
+    {
+        const ScMergeAttr* pMerge =
+            static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
+        if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
+            bFound = true;
+    }
+    if ( nMask & ( HasAttrFlags::Overlapped | HasAttrFlags::NotOverlapped | HasAttrFlags::AutoFilter ) )
+    {
+        const ScMergeFlagAttr* pMergeFlag =
+            static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
+        if ( (nMask & HasAttrFlags::Overlapped) && pMergeFlag->IsOverlapped() )
+            bFound = true;
+        if ( (nMask & HasAttrFlags::NotOverlapped) && !pMergeFlag->IsOverlapped() )
+            bFound = true;
+        if ( (nMask & HasAttrFlags::AutoFilter) && pMergeFlag->HasAutoFilter() )
+            bFound = true;
+    }
+    if ( nMask & HasAttrFlags::Lines )
+    {
+        const SvxBoxItem* pBox =
+            static_cast<const SvxBoxItem*>( &pPattern->GetItem( ATTR_BORDER ) );
+        if ( pBox->GetLeft() || pBox->GetRight() || pBox->GetTop() || pBox->GetBottom() )
+            bFound = true;
+    }
+    if ( nMask & HasAttrFlags::Shadow )
+    {
+        const SvxShadowItem* pShadow =
+            static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ) );
+        if ( pShadow->GetLocation() != SvxShadowLocation::NONE )
+            bFound = true;
+    }
+    if ( nMask & HasAttrFlags::Conditional )
+    {
+        bool bContainsCondFormat =
+            !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
+        if ( bContainsCondFormat )
+            bFound = true;
+    }
+    if ( nMask & HasAttrFlags::Protected )
+    {
+        const ScProtectionAttr* pProtect =
+            static_cast<const ScProtectionAttr*>( &pPattern->GetItem( ATTR_PROTECTION ) );
+        bool bFoundTemp = false;
+        if ( pProtect->GetProtection() || pProtect->GetHideCell() )
+            bFoundTemp = true;
 
+        bool bContainsCondFormat = pData &&
+            !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
+        if ( bContainsCondFormat && nCol != -1 ) // pDocument->GetCondResult() is valid only for real columns.
+        {
+            SCROW nRowStartCond = std::max<SCROW>( nRow1, i ? pData[i-1].nRow + 1: 0 );
+            SCROW nRowEndCond = std::min<SCROW>( nRow2, pData[i].nRow );
+            bool bFoundCond = false;
+            for(SCROW nRowCond = nRowStartCond; nRowCond <= nRowEndCond && !bFoundCond; ++nRowCond)
+            {
+                const SfxItemSet* pSet = pDocument->GetCondResult( nCol, nRowCond, nTab );
+
+                const SfxPoolItem* pItem;
+                if( pSet && pSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SfxItemState::SET )
+                {
+                    const ScProtectionAttr* pCondProtect = static_cast<const ScProtectionAttr*>(pItem);
+                    if( pCondProtect->GetProtection() || pCondProtect->GetHideCell() )
+                        bFoundCond = true;
+                    else
+                        break;
+                }
+                else
+                {
+                    // well it is not true that we found one
+                    // but existing one + cell where conditional
+                    // formatting does not remove it
+                    // => we should use the existing protection setting
+                    bFoundCond = bFoundTemp;
+                }
+            }
+            bFoundTemp = bFoundCond;
+        }
+
+        if(bFoundTemp)
+            bFound = true;
+    }
+    if ( nMask & HasAttrFlags::Rotate )
+    {
+        const SfxInt32Item* pRotate =
+            static_cast<const SfxInt32Item*>( &pPattern->GetItem( ATTR_ROTATE_VALUE ) );
+        // 90 or 270 degrees is former SvxOrientationItem - only look for other values
+        // (see ScPatternAttr::GetCellOrientation)
+        sal_Int32 nAngle = pRotate->GetValue();
+        if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
+            bFound = true;
+    }
+    if ( nMask & HasAttrFlags::NeedHeight )
+    {
+        if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
+            bFound = true;
+        else if (static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
+            bFound = true;
+        else if ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
+                    GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block)
+            bFound = true;
+
+        else if (!static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty())
+            bFound = true;
+        else if (static_cast<const SfxInt32Item&>(pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
+            bFound = true;
+    }
+    if ( nMask & ( HasAttrFlags::ShadowRight | HasAttrFlags::ShadowDown ) )
+    {
+        const SvxShadowItem* pShadow =
+            static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ));
+        SvxShadowLocation eLoc = pShadow->GetLocation();
+        if ( nMask & HasAttrFlags::ShadowRight )
+            if ( eLoc == SvxShadowLocation::TopRight || eLoc == SvxShadowLocation::BottomRight )
+                bFound = true;
+        if ( nMask & HasAttrFlags::ShadowDown )
+            if ( eLoc == SvxShadowLocation::BottomLeft || eLoc == SvxShadowLocation::BottomRight )
+                bFound = true;
+    }
+    if ( nMask & HasAttrFlags::RightOrCenter )
+    {
+        //  called only if the sheet is LTR, so physical=logical alignment can be assumed
+        SvxCellHorJustify eHorJust = (SvxCellHorJustify)
+            static_cast<const SvxHorJustifyItem&>( pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
+        if ( eHorJust == SvxCellHorJustify::Right || eHorJust == SvxCellHorJustify::Center )
+            bFound = true;
+    }
+
+    return bFound;
+}
+
+// Test if field contains specific attribute
 bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const
 {
-    if ( !pData )
-        return false;
+    if (!pData)
+    {
+        return HasAttrib_Impl(pDocument->GetDefPattern(), nMask, 0, MAXROW, 0);
+    }
 
     SCSIZE nStartIndex;
     SCSIZE nEndIndex;
@@ -1305,133 +1440,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
     for (SCSIZE i=nStartIndex; i<=nEndIndex && !bFound; i++)
     {
         const ScPatternAttr* pPattern = pData[i].pPattern;
-        if ( nMask & HasAttrFlags::Merged )
-        {
-            const ScMergeAttr* pMerge =
-                    static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
-            if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
-                bFound = true;
-        }
-        if ( nMask & ( HasAttrFlags::Overlapped | HasAttrFlags::NotOverlapped | HasAttrFlags::AutoFilter ) )
-        {
-            const ScMergeFlagAttr* pMergeFlag =
-                    static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
-            if ( (nMask & HasAttrFlags::Overlapped) && pMergeFlag->IsOverlapped() )
-                bFound = true;
-            if ( (nMask & HasAttrFlags::NotOverlapped) && !pMergeFlag->IsOverlapped() )
-                bFound = true;
-            if ( (nMask & HasAttrFlags::AutoFilter) && pMergeFlag->HasAutoFilter() )
-                bFound = true;
-        }
-        if ( nMask & HasAttrFlags::Lines )
-        {
-            const SvxBoxItem* pBox =
-                    static_cast<const SvxBoxItem*>( &pPattern->GetItem( ATTR_BORDER ) );
-            if ( pBox->GetLeft() || pBox->GetRight() || pBox->GetTop() || pBox->GetBottom() )
-                bFound = true;
-        }
-        if ( nMask & HasAttrFlags::Shadow )
-        {
-            const SvxShadowItem* pShadow =
-                    static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ) );
-            if ( pShadow->GetLocation() != SvxShadowLocation::NONE )
-                bFound = true;
-        }
-        if ( nMask & HasAttrFlags::Conditional )
-        {
-            bool bContainsCondFormat =
-                    !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
-            if ( bContainsCondFormat )
-                bFound = true;
-        }
-        if ( nMask & HasAttrFlags::Protected )
-        {
-            const ScProtectionAttr* pProtect =
-                    static_cast<const ScProtectionAttr*>( &pPattern->GetItem( ATTR_PROTECTION ) );
-            bool bFoundTemp = false;
-            if ( pProtect->GetProtection() || pProtect->GetHideCell() )
-                bFoundTemp = true;
-
-            bool bContainsCondFormat =
-                    !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
-            if ( bContainsCondFormat && nCol != -1 ) // pDocument->GetCondResult() is valid only for real columns.
-            {
-                SCROW nRowStartCond = std::max<SCROW>( nRow1, i ? pData[i-1].nRow + 1: 0 );
-                SCROW nRowEndCond = std::min<SCROW>( nRow2, pData[i].nRow );
-                bool bFoundCond = false;
-                for(SCROW nRowCond = nRowStartCond; nRowCond <= nRowEndCond && !bFoundCond; ++nRowCond)
-                {
-                    const SfxItemSet* pSet = pDocument->GetCondResult( nCol, nRowCond, nTab );
-
-                    const SfxPoolItem* pItem;
-                    if( pSet && pSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SfxItemState::SET )
-                    {
-                        const ScProtectionAttr* pCondProtect = static_cast<const ScProtectionAttr*>(pItem);
-                        if( pCondProtect->GetProtection() || pCondProtect->GetHideCell() )
-                            bFoundCond = true;
-                        else
-                            break;
-                    }
-                    else
-                    {
-                        // well it is not true that we found one
-                        // but existing one + cell where conditional
-                        // formatting does not remove it
-                        // => we should use the existing protection setting
-                        bFoundCond = bFoundTemp;
-                    }
-                }
-                bFoundTemp = bFoundCond;
-            }
-
-            if(bFoundTemp)
-                bFound = true;
-        }
-        if ( nMask & HasAttrFlags::Rotate )
-        {
-            const SfxInt32Item* pRotate =
-                    static_cast<const SfxInt32Item*>( &pPattern->GetItem( ATTR_ROTATE_VALUE ) );
-            // 90 or 270 degrees is former SvxOrientationItem - only look for other values
-            // (see ScPatternAttr::GetCellOrientation)
-            sal_Int32 nAngle = pRotate->GetValue();
-            if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
-                bFound = true;
-        }
-        if ( nMask & HasAttrFlags::NeedHeight )
-        {
-            if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
-                bFound = true;
-            else if (static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
-                bFound = true;
-            else if ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
-                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block)
-                bFound = true;
-
-            else if (!static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty())
-                bFound = true;
-            else if (static_cast<const SfxInt32Item&>(pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
-                bFound = true;
-        }
-        if ( nMask & ( HasAttrFlags::ShadowRight | HasAttrFlags::ShadowDown ) )
-        {
-            const SvxShadowItem* pShadow =
-                    static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ));
-            SvxShadowLocation eLoc = pShadow->GetLocation();
-            if ( nMask & HasAttrFlags::ShadowRight )
-                if ( eLoc == SvxShadowLocation::TopRight || eLoc == SvxShadowLocation::BottomRight )
-                    bFound = true;
-            if ( nMask & HasAttrFlags::ShadowDown )
-                if ( eLoc == SvxShadowLocation::BottomLeft || eLoc == SvxShadowLocation::BottomRight )
-                    bFound = true;
-        }
-        if ( nMask & HasAttrFlags::RightOrCenter )
-        {
-            //  called only if the sheet is LTR, so physical=logical alignment can be assumed
-            SvxCellHorJustify eHorJust = (SvxCellHorJustify)
-                    static_cast<const SvxHorJustifyItem&>( pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
-            if ( eHorJust == SvxCellHorJustify::Right || eHorJust == SvxCellHorJustify::Center )
-                bFound = true;
-        }
+        bFound = HasAttrib_Impl(pPattern, nMask, nRow1, nRow2, i);
     }
 
     return bFound;
