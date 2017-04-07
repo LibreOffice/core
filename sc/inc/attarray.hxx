@@ -101,6 +101,7 @@ friend class ScHorizontalAttrIterator;
     void RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
                               const ScPatternAttr* pPattern, ScEditDataArray* pDataArray );
     void SetDefaultIfNotInit( SCSIZE nNeeded = 1 );
+    bool HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMask, SCROW nRow1, SCROW nRow2, SCSIZE i) const;
 
     ScAttrArray(const ScAttrArray&) = delete;
     ScAttrArray& operator=(const ScAttrArray&) = delete;
