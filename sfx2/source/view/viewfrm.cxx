@@ -1140,7 +1140,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
-                if ( m_xObjSh->IsOriginallyReadOnlyMedium() &&
+                if ( m_xObjSh->IsReadOnly() &&
+                    ! m_xObjSh->IsSecurityOptOpenReadOnly() &&
                     ( m_xObjSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ||
                         (( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode())))
                 {
