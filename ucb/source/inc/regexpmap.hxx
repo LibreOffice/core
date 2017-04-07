@@ -23,6 +23,7 @@
 #include "sal/config.h"
 
 #include <list>
+#include <memory>
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -73,11 +74,7 @@ template< typename Val >
 struct RegexpMapImpl
 {
     List< Val > m_aList[Regexp::KIND_DOMAIN + 1];
-    Entry< Val > * m_pDefault;
-
-    RegexpMapImpl(): m_pDefault(nullptr) {}
-
-    ~RegexpMapImpl() { delete m_pDefault; }
+    std::unique_ptr<Entry< Val >> m_pDefault;
 };
 
 
@@ -426,7 +423,7 @@ void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue)
         {
             return;
         }
-        m_pImpl->m_pDefault = new Entry< Val >(aRegexp, rValue);
+        m_pImpl->m_pDefault.reset( new Entry< Val >(aRegexp, rValue) );
     }
     else
     {
@@ -478,11 +475,7 @@ void RegexpMap< Val >::erase(iterator const & rPos)
     {
         if (rPos.m_pImpl->getList() == -1)
         {
-            if (m_pImpl->m_pDefault)
-            {
-                delete m_pImpl->m_pDefault;
-                m_pImpl->m_pDefault = 0;
-            }
+            m_pImpl->m_pDefault.reset();
         }
         else
             m_pImpl->m_aList[rPos.m_pImpl->getList()].
