@@ -624,13 +624,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             {
                                 TheTabs.push_back(i);
                                 bTabFlag = true;
-                                if (nNewTab == i)
+                                if (nNewTab == i && i+1 < nTabCount)
                                     nNewTab++;
                             }
                             if (!bTabFlag)
                                 nFirstTab = i;
                         }
-                        if (nNewTab >= nTabCount)
+                        if (nNewTab >= nTabCount - static_cast<SCTAB>(TheTabs.size()))
                             nNewTab = nFirstTab;
                     }
 
