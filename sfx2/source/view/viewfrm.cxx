@@ -1156,7 +1156,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                             VclPtrInstance<PushButton> xSignButton(&GetWindow());
                             xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
                             xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
-                            xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
+                            xSignButton->SetCommandHandler(".uno:Signature", false);
                             pInfoBar->addButton(xSignButton);
                         }
 
@@ -1257,11 +1257,6 @@ IMPL_LINK_NOARG(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
             return;
     }
     GetDispatcher()->Execute(SID_EDITDOC);
-}
-
-IMPL_LINK_NOARG(SfxViewFrame, SignDocumentHandler, Button*, void)
-{
-    GetDispatcher()->Execute(SID_SIGNATURE);
 }
 
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
