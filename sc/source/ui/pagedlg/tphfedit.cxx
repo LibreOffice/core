@@ -143,8 +143,8 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
 
 EditTextObject* ScEditWindow::CreateTextObject()
 {
-    //  Absatzattribute zuruecksetzen
-    //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
+    //  reset paragraph attributes
+    //  (GetAttribs at creation of format dialog always returns the set items)
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
     sal_Int32 nParCnt = pEdEngine->GetParagraphCount();

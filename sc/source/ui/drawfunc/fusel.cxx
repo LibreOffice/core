@@ -49,8 +49,8 @@
 #include "docuno.hxx"
 #include "docsh.hxx"
 
-//  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
-//! fusel,fuconstr,futext - zusammenfassen!
+//  maximal permitted mouse movement to start Drag&Drop
+//! fusel,fuconstr,futext - combine them!
 #define SC_MAXDRAGMOVE  3
 // Min necessary mouse motion for normal dragging
 #define SC_MINDRAGMOVE 2
@@ -59,7 +59,7 @@ using namespace com::sun::star;
 
 /*************************************************************************
 |*
-|* Konstruktor
+|* ctor
 |*
 \************************************************************************/
 
@@ -71,7 +71,7 @@ FuSelection::FuSelection(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
 
 /*************************************************************************
 |*
-|* Destruktor
+|* dtor
 |*
 \************************************************************************/
 
@@ -97,7 +97,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         return true;
     }
 
-    bIsInDragMode = false;      //  irgendwo muss es ja zurueckgesetzt werden (#50033#)
+    bIsInDragMode = false;      //  somewhere it has to be reset (#50033#)
 
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
@@ -269,7 +269,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( pView->MarkObj( aMDPos, -2, false, rMEvt.IsMod1() ) )
                 {
 
-                    //Objekt verschieben
+                    // move object
 
                     if (pView->IsMarkedHit(aMDPos))
                     {
@@ -284,18 +284,16 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         pView->BegDragObj(aMDPos, nullptr, pHdl);
                         bReturn = true;
                     }
-                    else                                    // Objekt am Rand getroffen
+                    else                                    // object at the edge
                         if (pViewShell->IsDrawSelMode())
                             bReturn = true;
                 }
                 else
                 {
-                    //      nichts getroffen
-
                     if (pViewShell->IsDrawSelMode())
                     {
 
-                        //Objekt selektieren
+                        // select object
 
                         pView->BegMarkObj(aMDPos);
                         bReturn = true;
@@ -308,7 +306,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (!bIsInDragMode)
     {
-        // VC rufen selber CaptureMouse
+        // VC calls CaptureMouse itself
         pWindow->CaptureMouse();
         ForcePointer(&rMEvt);
     }
@@ -386,7 +384,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         if ( pView->IsDragObj() )
         {
             /******************************************************************
-            * Objekt wurde verschoben
+            * object was moved
             ******************************************************************/
             if ( rMEvt.IsMod1() )
             {
@@ -465,7 +463,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     }
 
     /**************************************************************************
-    * Ggf. OLE-Objekt beruecksichtigen
+    * maybe consider OLE object
     **************************************************************************/
     SfxInPlaceClient* pIPClient = pViewShell ? pViewShell->GetIPClient() : nullptr;
 
@@ -545,8 +543,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if (pWindow->IsMouseCaptured())
         pWindow->ReleaseMouse();
 
-    //  Command-Handler fuer Kontext-Menue kommt erst nach MouseButtonUp,
-    //  darum hier die harte IsLeft-Abfrage
+    //  command handler for context menu follows after MouseButtonUp,
+    //  therefore here the hard IsLeft call
     if ( !bReturn && rMEvt.IsLeft() )
         if (pViewShell->IsDrawSelMode())
             pViewShell->GetViewData().GetDispatcher().

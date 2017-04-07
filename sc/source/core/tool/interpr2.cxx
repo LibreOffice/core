@@ -1593,7 +1593,7 @@ void ScInterpreter::ScISPMT()
     }
 }
 
-// Finanzfunktionen
+// financial functions
 double ScInterpreter::ScGetBw(double fInterest, double fZzr, double fRmz,
                               double fZw, bool bPayInAdvance)
 {

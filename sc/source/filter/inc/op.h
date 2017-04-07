@@ -22,7 +22,7 @@
 
 #include <patattr.hxx>
 
-// OP-Code-Funktionen
+// OP code functions
 class SvStream;
 struct LotusContext;
 void NI(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
