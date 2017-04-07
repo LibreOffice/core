@@ -33,6 +33,8 @@ class ViewContactOfSdrOle2Obj : public ViewContactOfSdrRectObj
 private:
     // #i123539# allow local buffering of chart data (if chart)
     drawinglayer::primitive2d::Primitive2DReference mxChartContent;
+    // used to check if we need to re-calc the transformation
+    Point maGridOffset;
 
 protected:
     // Create a Object-Specific ViewObjectContact, set ViewContact and
