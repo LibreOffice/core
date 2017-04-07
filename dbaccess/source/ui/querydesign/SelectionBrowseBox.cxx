@@ -1940,17 +1940,13 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
 
                 if (!static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
                 {
-                    ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
-                    switch (aContextMenu->Execute(this, aMenuPos))
-                    {
-                        case SID_DELETE:
-                            RemoveField(nColId);
-                            break;
-
-                        case ID_BROWSER_COLWIDTH:
-                            adjustBrowseBoxColumnWidth( this, nColId );
-                            break;
-                    }
+                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
+                    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                    sal_uInt16 nItemId = aContextMenu->Execute(this, aMenuPos);
+                    if (nItemId == aContextMenu->GetItemId("delete"))
+                       RemoveField(nColId);
+                    else if (nItemId == aContextMenu->GetItemId("width"))
+                        adjustBrowseBoxColumnWidth( this, nColId );
                 }
             }
             else if(nRow >= 0 && nColId <= HANDLE_ID)

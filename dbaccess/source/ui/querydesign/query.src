@@ -53,29 +53,6 @@ Menu RID_MENU_JOINVIEW_TABLE
      };
 };
 
-Menu RID_QUERYCOLPOPUPMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_BROWSER_COLWIDTH ;
-            HelpID = HID_BROWSER_COLUMNWIDTH ;
-            Text [ en-US ] = "Column ~Width..." ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = SID_DELETE ;
-            Command = ".uno:Delete" ;
-            Text [ en-US ] = "~Delete" ;
-        };
-    };
-};
-
 Bitmap BMP_PRIMARY_KEY
 {
     File = "jo01.png";

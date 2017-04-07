@@ -1361,15 +1361,12 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                             if ( !IsColumnSelected( nColId ) )
                                 SelectColumnId( nColId );
 
-                            ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
-                            aContextMenu->EnableItem( SID_DELETE, false );
+                            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
+                            VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                            aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), false);
                             aContextMenu->RemoveDisabledEntries(true, true);
-                            switch ( aContextMenu->Execute( this, aMenuPos ) )
-                            {
-                                case ID_BROWSER_COLWIDTH:
-                                    adjustBrowseBoxColumnWidth( this, nColId );
-                                    break;
-                            }
+                            if (aContextMenu->Execute(this, aMenuPos) == aContextMenu->GetItemId("width"))
+                                adjustBrowseBoxColumnWidth( this, nColId );
                         }
                     }
                 }

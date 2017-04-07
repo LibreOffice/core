@@ -51,6 +51,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/parametersdialog \
     dbaccess/uiconfig/ui/password \
     dbaccess/uiconfig/ui/preparepage \
+    dbaccess/uiconfig/ui/querycolmenu \
     dbaccess/uiconfig/ui/queryfilterdialog \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
     dbaccess/uiconfig/ui/relationdialog \
