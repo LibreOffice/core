@@ -166,8 +166,8 @@ namespace svxform
         Idle                        m_aTabActivationIdle;
         Timer                       m_aFeatureInvalidationTimer;
 
-        ::svxform::ControlBorderManager*
-                                    m_pControlBorderManager;
+        ::svxform::ControlBorderManager
+                                    m_aControlBorderManager;
 
         css::uno::Reference< css::form::runtime::XFormOperations >
                                     m_xFormOperations;

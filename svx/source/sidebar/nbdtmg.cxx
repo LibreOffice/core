@@ -426,20 +426,14 @@ bool BulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 // Numbering Type lib
 NumberingTypeMgr::NumberingTypeMgr()
     : NBOTypeMgrBase()
-    , pNumberSettingsArr (new NumberSettingsArr_Impl)
 {
     Init();
-    pDefaultNumberSettingsArr = pNumberSettingsArr;
-    pNumberSettingsArr = new NumberSettingsArr_Impl;
-    //Initial the first time to store the default value. Then do it again for customized value
-    Init();
+    maDefaultNumberSettingsArr = maNumberSettingsArr;
     ImplLoad("standard.syb");
 }
 
 NumberingTypeMgr::~NumberingTypeMgr()
 {
-    delete pNumberSettingsArr;
-    delete pDefaultNumberSettingsArr;
 }
 
 class theNumberingTypeMgr : public rtl::Static<NumberingTypeMgr, theNumberingTypeMgr> {};
@@ -472,7 +466,7 @@ void NumberingTypeMgr::Init()
             pNumEntry->pNumSetting = pNew;
             if ( i < 8 )
                 pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );
-            pNumberSettingsArr->push_back(std::shared_ptr<NumberSettings_Impl>(pNumEntry));
+            maNumberSettingsArr.push_back(std::shared_ptr<NumberSettings_Impl>(pNumEntry));
         }
     }
     catch(Exception&)
@@ -497,10 +491,10 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     OUString sLclSuffix = aFmt.GetSuffix();
     sal_Int16 eNumType = aFmt.GetNumberingType();
 
-    sal_uInt16 nCount = pNumberSettingsArr->size();
+    sal_uInt16 nCount = maNumberSettingsArr.size();
     for(sal_uInt16 i = nFromIndex; i < nCount; ++i)
     {
-        NumberSettings_Impl* _pSet = (*pNumberSettingsArr)[i].get();
+        NumberSettings_Impl* _pSet = maNumberSettingsArr[i].get();
         sal_Int16 eNType = _pSet->pNumSetting->nNumberType;
         OUString sLocalPrefix = _pSet->pNumSetting->sPrefix;
         OUString sLocalSuffix = _pSet->pNumSetting->sSuffix;
@@ -526,11 +520,11 @@ void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     SvxNumType eNumType = aFmt.GetNumberingType();
 
-    sal_uInt16 nCount = pNumberSettingsArr->size();
+    sal_uInt16 nCount = maNumberSettingsArr.size();
     if ( nIndex >= nCount )
         return;
 
-    NumberSettings_Impl* _pSet = (*pNumberSettingsArr)[nIndex].get();
+    NumberSettings_Impl* _pSet = maNumberSettingsArr[nIndex].get();
 
     _pSet->pNumSetting->sPrefix = aFmt.GetPrefix();
     _pSet->pNumSetting->sSuffix = aFmt.GetSuffix();
@@ -555,10 +549,10 @@ void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
 
 void NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault, bool isResetSize)
 {
-    if(pNumberSettingsArr->size() <= nIndex)
+    if(maNumberSettingsArr.size() <= nIndex)
         return;
-    NumberSettingsArr_Impl*     pCurrentNumberSettingsArr=pNumberSettingsArr;
-    if (isDefault) pCurrentNumberSettingsArr=pDefaultNumberSettingsArr;
+    NumberSettingsArr_Impl*     pCurrentNumberSettingsArr = &maNumberSettingsArr;
+    if (isDefault) pCurrentNumberSettingsArr = &maDefaultNumberSettingsArr;
     NumberSettings_Impl* _pSet = (*pCurrentNumberSettingsArr)[nIndex].get();
     SvxNumType eNewType = _pSet->pNumSetting->nNumberType;
 
@@ -586,13 +580,13 @@ OUString NumberingTypeMgr::GetDescription(sal_uInt16 nIndex, bool isDefault)
 {
     OUString sRet;
     sal_uInt16 nLength = 0;
-    nLength = pNumberSettingsArr->size();
+    nLength = maNumberSettingsArr.size();
 
     if ( nIndex >= nLength )
         return sRet;
     else
-        sRet = (*pNumberSettingsArr)[nIndex]->sDescription;
-    if (isDefault) sRet = (*pDefaultNumberSettingsArr)[nIndex]->sDescription;
+        sRet = maNumberSettingsArr[nIndex]->sDescription;
+    if (isDefault) sRet = maDefaultNumberSettingsArr[nIndex]->sDescription;
 
     return sRet;
 }
@@ -601,12 +595,12 @@ bool NumberingTypeMgr::IsCustomized(sal_uInt16 nIndex)
 {
     bool bRet = false;
     sal_uInt16 nLength = 0;
-    nLength = pNumberSettingsArr->size();
+    nLength = maNumberSettingsArr.size();
 
     if ( nIndex >= nLength )
         bRet = false;
     else
-        bRet = (*pNumberSettingsArr)[nIndex]->bIsCustomized;
+        bRet = maNumberSettingsArr[nIndex]->bIsCustomized;
 
     return bRet;
 }
