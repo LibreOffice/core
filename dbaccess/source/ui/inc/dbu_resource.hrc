@@ -62,10 +62,10 @@
 #define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 414 - 433
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 65    // 434 - 493
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 75    // 434 - 503
 
 #define RID_STR_APP_START               RID_STR_GEN_END
-#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   494 - 533
+#define RID_STR_APP_END                 RID_STR_APP_START       + 50    // 504 - 543
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
 #error Resource-Id Ueberlauf in #file, #line
@@ -124,7 +124,6 @@
 // menus
 
 #define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2
-#define RID_SBA_GRID_ROWCTXMENU         RID_MENU_START +  3
 #define RID_QUERYCOLPOPUPMENU           RID_MENU_START +  5
 #define RID_QUERYFUNCTION_POPUPMENU     RID_MENU_START +  6
 #define RID_TABLEDESIGNROWPOPUPMENU     RID_MENU_START +  7
@@ -195,6 +194,9 @@
 #define STR_QUERY_CONNECTION_LOST           RID_STR_GEN_START + 62
 #define STR_QUERY_USERADMIN_DELETE_USER     RID_STR_GEN_START + 63
 #define STR_QUERY_SAVE_TABLE_EDIT_INDEXES   RID_STR_GEN_START + 64
+#define RID_STR_TABLE_FORMAT                RID_STR_GEN_START + 65
+#define RID_STR_ROW_HEIGHT                  RID_STR_GEN_START + 66
+#define RID_STR_COPY                        RID_STR_GEN_START + 67
 
 // untyped resources
 

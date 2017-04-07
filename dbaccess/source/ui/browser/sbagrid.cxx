@@ -18,6 +18,7 @@
  */
 
 #include "sbagrid.hrc"
+#include "dbaccess_helpid.hrc"
 #include "uiservices.hxx"
 
 #include <sot/exchange.hxx>
@@ -748,24 +749,21 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 {
     FmGridControl::PreExecuteRowContextMenu(nRow, rMenu);
 
-    ScopedVclPtrInstance<PopupMenu> aNewItems(ModuleRes(RID_SBA_GRID_ROWCTXMENU));
     sal_uInt16 nPos = 0;
 
     if (!IsReadOnlyDB())
     {
-        rMenu.InsertItem(ID_BROWSER_TABLEATTR, aNewItems->GetItemText(ID_BROWSER_TABLEATTR), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_TABLEATTR, aNewItems->GetHelpId(ID_BROWSER_TABLEATTR));
+        rMenu.InsertItem(ID_BROWSER_TABLEATTR, ModuleRes(RID_STR_TABLE_FORMAT).toString(), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.SetHelpId(ID_BROWSER_TABLEATTR, HID_BROWSER_TABLEFORMAT);
 
-        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems->GetItemText(ID_BROWSER_ROWHEIGHT), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems->GetHelpId(ID_BROWSER_ROWHEIGHT));
+        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, ModuleRes(RID_STR_ROW_HEIGHT).toString(), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, HID_BROWSER_ROWHEIGHT);
         rMenu.InsertSeparator(OString(), nPos++);
     }
 
     if ( GetSelectRowCount() > 0 )
     {
-        rMenu.InsertItem(ID_BROWSER_COPY, aNewItems->GetItemText(SID_COPY), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_COPY, aNewItems->GetHelpId(SID_COPY));
-
+        rMenu.InsertItem(ID_BROWSER_COPY, ModuleRes(RID_STR_COPY).toString(), MenuItemBits::NONE, OString(), nPos++);
         rMenu.InsertSeparator(OString(), nPos++);
     }
 }

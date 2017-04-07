@@ -46,29 +46,19 @@ Menu RID_SBA_GRID_COLCTXMENU
     };
 };
 
-Menu RID_SBA_GRID_ROWCTXMENU
+String RID_STR_TABLE_FORMAT
 {
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_BROWSER_TABLEATTR ;
-            HelpID = HID_BROWSER_TABLEFORMAT ;
-            Text [ en-US ] = "Table Format..." ;
-        };
-        MenuItem
-        {
-            Identifier = ID_BROWSER_ROWHEIGHT ;
-            HelpID = HID_BROWSER_ROWHEIGHT ;
-            Text [ en-US ] = "Row Height..." ;
-        };
-        MenuItem
-        {
-            Identifier = SID_COPY ;
-            Command = ".uno:Copy" ;
-            Text [ en-US ] = "~Copy" ;
-        };
-    };
+    Text [ en-US ] = "Table Format...";
+};
+
+String RID_STR_ROW_HEIGHT
+{
+    Text [ en-US ] = "Row Height...";
+};
+
+String RID_STR_COPY
+{
+    Text [ en-US ] = "~Copy";
 };
 
 String RID_STR_UNDO_MODIFY_RECORD
