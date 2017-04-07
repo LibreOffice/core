@@ -121,7 +121,10 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
 
         case RECT_FLY_PRT_EMBEDDED: bFrame = false;
                                     SAL_FALLTHROUGH;
-        case RECT_FLY_EMBEDDED:     pFrame = xObj.is() ? FindFlyFrame( xObj )
+        case RECT_FLY_EMBEDDED:
+        {
+                                    const SwFrame *pFlyFrame = xObj.is() ? FindFlyFrame(xObj) : nullptr;
+                                    pFrame = pFlyFrame ? pFlyFrame
                                                 : pFrame->IsFlyFrame()
                                                     ? pFrame
                                                     : pFrame->FindFlyFrame();
