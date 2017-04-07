@@ -157,6 +157,7 @@ public:
     void testTdf104445();
     void testTdf105150();
     void testTdf105150PPT();
+    void testTdf100926();
 
     bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -222,6 +223,7 @@ public:
     CPPUNIT_TEST(testTdf104445);
     CPPUNIT_TEST(testTdf105150);
     CPPUNIT_TEST(testTdf105150PPT);
+    CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPatternImport);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2153,6 +2155,32 @@ void SdImportTest::testPatternImport()
     // TODO: other patterns in the test document
 
     xDocRef->DoClose();
+}
+
+void SdImportTest::testTdf100926()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf100926.pptx"), PPTX);
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    CPPUNIT_ASSERT(pPage != nullptr);
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj != nullptr);
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+
+    sal_Int32 nRotation = 0;
+    uno::Reference< beans::XPropertySet > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(27000), nRotation);
+
+    xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9000), nRotation);
+
+    xCell.set(xTable->getCellByPosition(2, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRotation);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
