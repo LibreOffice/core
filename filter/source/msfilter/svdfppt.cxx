@@ -2282,10 +2282,10 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     }
                 }
                 sal_Int32  nParaIndex = pTextObj->GetCurrentIndex();
-                SfxStyleSheet* pS = ( ppStyleSheetAry ) ? ppStyleSheetAry[ pPara->pParaSet->mnDepth ] : pSheet;
+                SfxStyleSheet* pS = ( ppStyleSheetAry ) ? ppStyleSheetAry[ pPara->mxParaSet->mnDepth ] : pSheet;
 
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
-                rOutliner.Insert( OUString(), nParaIndex, pPara->pParaSet->mnDepth );
+                rOutliner.Insert( OUString(), nParaIndex, pPara->mxParaSet->mnDepth );
                 rOutliner.QuickInsertText( OUString(pParaText.get(), nCurrentIndex), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
                 if ( pS )
@@ -3411,15 +3411,15 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
                           : rManager.pPPTStyleSheet->pExtParaProv.get();
     if ( pPara )
     {
-        nBuFlags = pPara->pParaSet->mnExtParagraphMask;
+        nBuFlags = pPara->mxParaSet->mnExtParagraphMask;
         if ( nBuFlags )
         {
             if ( nBuFlags & 0x00800000 )
-                nBuBlip = pPara->pParaSet->mnBuBlip;
+                nBuBlip = pPara->mxParaSet->mnBuBlip;
             if ( nBuFlags & 0x01000000 )
-                nAnmScheme = pPara->pParaSet->mnAnmScheme;
+                nAnmScheme = pPara->mxParaSet->mnAnmScheme;
             if ( nBuFlags & 0x02000000 )
-                nHasAnm = pPara->pParaSet->mnHasAnm;
+                nHasAnm = pPara->mxParaSet->mnHasAnm;
             bHardAttribute = true;
         }
     }
@@ -3706,13 +3706,13 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     if ( pPtr )
         pPtr->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
     if ( nIsBullet )
-        nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth,
+        nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->mxParaSet->mnDepth,
                                                     pParaObj->mnInstance, nDestinationInstance, rStartNumbering, nFontHeight, pParaObj ) ? 1 : 0;
 
     if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
         pParaObj->UpdateBulletRelSize( nBulletHeight );
     if ( nHardCount )
-        ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth );
+        ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->mxParaSet->mnDepth );
 
     if ( nHardCount )
     {
@@ -4415,34 +4415,26 @@ PPTStyleSheet::~PPTStyleSheet()
 
 PPTParaPropSet::PPTParaPropSet()
     : mnOriginalTextPos(0)
-    , pParaSet( new ImplPPTParaPropSet )
+    , mxParaSet( new ImplPPTParaPropSet )
 {
-    pParaSet->mnHasAnm = 1;
+    mxParaSet->mnHasAnm = 1;
 }
 
 PPTParaPropSet::PPTParaPropSet( PPTParaPropSet& rParaPropSet )
 {
-    pParaSet = rParaPropSet.pParaSet;
-    pParaSet->mnRefCount++;
-
+    mxParaSet = rParaPropSet.mxParaSet;
     mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
 }
 
 PPTParaPropSet::~PPTParaPropSet()
 {
-    if ( ! ( --pParaSet->mnRefCount ) )
-        delete pParaSet;
 }
 
 PPTParaPropSet& PPTParaPropSet::operator=( const PPTParaPropSet& rParaPropSet )
 {
     if ( this != &rParaPropSet )
     {
-        if ( ! ( --pParaSet->mnRefCount ) )
-            delete pParaSet;
-        pParaSet = rParaPropSet.pParaSet;
-        pParaSet->mnRefCount++;
-
+        mxParaSet = rParaPropSet.mxParaSet;
         mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
     }
     return *this;
@@ -4878,15 +4870,15 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
     while ( nCharAnzRead <= nStringLen )
     {
         PPTParaPropSet aParaPropSet;
-        ImplPPTParaPropSet& aSet = *aParaPropSet.pParaSet;
+        ImplPPTParaPropSet& aSet = *aParaPropSet.mxParaSet;
         if ( bTextPropAtom )
         {
             rIn.ReadUInt32( nCharCount )
-               .ReadUInt16( aParaPropSet.pParaSet->mnDepth );  // indent depth
+               .ReadUInt16( aParaPropSet.mxParaSet->mnDepth );  // indent depth
 
-            aParaPropSet.pParaSet->mnDepth =        // taking care of about using not more than 9 outliner levels
+            aParaPropSet.mxParaSet->mnDepth =        // taking care of about using not more than 9 outliner levels
                 std::min(sal_uInt16(8),
-                    aParaPropSet.pParaSet->mnDepth);
+                    aParaPropSet.mxParaSet->mnDepth);
 
             nCharCount--;
 
@@ -5077,11 +5069,11 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
             nCharCount = nStringLen;
 
         //if the textofs attr has been read at above, need not to reset.
-        if ( ( !( aSet.mnAttrSet & 1 << PPT_ParaAttr_TextOfs ) ) && rRuler.GetTextOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_TextOfs ] ) )
+        if ( ( !( aSet.mnAttrSet & 1 << PPT_ParaAttr_TextOfs ) ) && rRuler.GetTextOfs( aParaPropSet.mxParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_TextOfs ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
-        if ( ( !( aSet.mnAttrSet & 1 << PPT_ParaAttr_BulletOfs ) ) && rRuler.GetBulletOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_BulletOfs ] ) )
+        if ( ( !( aSet.mnAttrSet & 1 << PPT_ParaAttr_BulletOfs ) ) && rRuler.GetBulletOfs( aParaPropSet.mxParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_BulletOfs ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_BulletOfs;
-        if ( rRuler.GetDefaultTab( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_DefaultTab ] ) )
+        if ( rRuler.GetDefaultTab( aParaPropSet.mxParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_DefaultTab ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_DefaultTab;
 
         if ( ( nCharCount > nStringLen ) || ( nStringLen < nCharAnzRead + nCharCount ) )
@@ -5354,13 +5346,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                 if ( nExtParaPos && ( nLatestParaUpdate != nCurrentPara ) && ( nCurrentPara < aParaPropList.size() ) )
                 {
                     PPTParaPropSet* pPropSet = aParaPropList[ nCurrentPara ];
-                    pPropSet->pParaSet->mnExtParagraphMask = nExtParaFlags;
+                    pPropSet->mxParaSet->mnExtParagraphMask = nExtParaFlags;
                     if ( nExtParaFlags & 0x800000 )
-                        pPropSet->pParaSet->mnBuBlip = nBuBlip;
+                        pPropSet->mxParaSet->mnBuBlip = nBuBlip;
                     if ( nExtParaFlags & 0x01000000 )
-                        pPropSet->pParaSet->mnAnmScheme = nAnmScheme;
+                        pPropSet->mxParaSet->mnAnmScheme = nAnmScheme;
                     if ( nExtParaFlags & 0x02000000 )
-                        pPropSet->pParaSet->mnHasAnm = nHasAnm;
+                        pPropSet->mxParaSet->mnHasAnm = nHasAnm;
                     nLatestParaUpdate = nCurrentPara;
                 }
                 aCharPropSet.mnOriginalTextPos = nCharAnzRead;
@@ -5848,7 +5840,7 @@ PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, TSS_Type nIn
     mbTab                   ( true ),      // style sheets always have to get the right tabulator setting
     mnCurrentObject         ( 0 )
 {
-    pParaSet->mnDepth = sanitizeForMaxPPTLevels(nDepth);
+    mxParaSet->mnDepth = sanitizeForMaxPPTLevels(nDepth);
 }
 
 PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
@@ -5874,7 +5866,7 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
             PPTCharPropSet *const pCharPropSet =
                 rPropReader.aCharPropList[rnCurCharPos];
             std::unique_ptr<PPTPortionObj> pPPTPortion(new PPTPortionObj(
-                    *pCharPropSet, rStyleSheet, nInstance, pParaSet->mnDepth));
+                    *pCharPropSet, rStyleSheet, nInstance, mxParaSet->mnDepth));
             if (!mbTab)
             {
                 mbTab = pPPTPortion->HasTabulator();
@@ -5914,7 +5906,7 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
         // if we do not have a hard attributed fontheight, the fontheight is taken from the style
         if ( !nFontHeight )
         {
-            nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[sanitizeForMaxPPTLevels(pParaSet->mnDepth)].mnFontHeight;
+            nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[sanitizeForMaxPPTLevels(mxParaSet->mnDepth)].mnFontHeight;
         }
         nBulletRelSize = nFontHeight ? ((-((sal_Int16)nBulletRelSize)) * 100 ) / nFontHeight : 100;
     }
@@ -5931,22 +5923,22 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
         return false;
     }
 
-    bool bIsHardAttribute = ( ( pParaSet->mnAttrSet & nMask ) != 0 );
+    bool bIsHardAttribute = ( ( mxParaSet->mnAttrSet & nMask ) != 0 );
 
-    sal_uInt16 nDepth = sanitizeForMaxPPTLevels(pParaSet->mnDepth);
+    sal_uInt16 nDepth = sanitizeForMaxPPTLevels(mxParaSet->mnDepth);
 
     if ( bIsHardAttribute )
     {
         if ( nAttr == PPT_ParaAttr_BulletColor )
         {
             bool bHardBulletColor;
-            if ( pParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardColor ) )
-                bHardBulletColor = pParaSet->mpArry[ PPT_ParaAttr_BuHardColor ] != 0;
+            if ( mxParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardColor ) )
+                bHardBulletColor = mxParaSet->mpArry[ PPT_ParaAttr_BuHardColor ] != 0;
             else
                 bHardBulletColor = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[nDepth].mnBuFlags
                                         & ( 1 << PPT_ParaAttr_BuHardColor ) ) != 0;
             if ( bHardBulletColor )
-                rRetValue = pParaSet->mnBulletColor;
+                rRetValue = mxParaSet->mnBulletColor;
             else
             {
                 rRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
@@ -5967,13 +5959,13 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
         else if ( nAttr == PPT_ParaAttr_BulletFont )
         {
             bool bHardBuFont;
-            if ( pParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardFont ) )
-                bHardBuFont = pParaSet->mpArry[ PPT_ParaAttr_BuHardFont ] != 0;
+            if ( mxParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardFont ) )
+                bHardBuFont = mxParaSet->mpArry[ PPT_ParaAttr_BuHardFont ] != 0;
             else
                 bHardBuFont = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[nDepth].mnBuFlags
                                         & ( 1 << PPT_ParaAttr_BuHardFont ) ) != 0;
             if ( bHardBuFont )
-                rRetValue = pParaSet->mpArry[ PPT_ParaAttr_BulletFont ];
+                rRetValue = mxParaSet->mpArry[ PPT_ParaAttr_BulletFont ];
             else
             {
                 // it is the font used which assigned to the first character of the following text
@@ -5993,7 +5985,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
             }
         }
         else
-            rRetValue = pParaSet->mpArry[ nAttr ];
+            rRetValue = mxParaSet->mpArry[ nAttr ];
     }
     else
     {
@@ -6032,8 +6024,8 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
             case PPT_ParaAttr_BulletFont :
             {
                 bool bHardBuFont;
-                if ( pParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardFont ) )
-                    bHardBuFont = pParaSet->mpArry[ PPT_ParaAttr_BuHardFont ] != 0;
+                if ( mxParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardFont ) )
+                    bHardBuFont = mxParaSet->mpArry[ PPT_ParaAttr_BuHardFont ] != 0;
                 else
                     bHardBuFont = ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardFont ) ) != 0;
                 if ( bHardBuFont )
@@ -6068,8 +6060,8 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
             case PPT_ParaAttr_BulletColor :
             {
                 bool bHardBulletColor;
-                if ( pParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardColor ) )
-                    bHardBulletColor = pParaSet->mpArry[ PPT_ParaAttr_BuHardColor ] != 0;
+                if ( mxParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardColor ) )
+                    bHardBulletColor = mxParaSet->mpArry[ PPT_ParaAttr_BuHardColor ] != 0;
                 else
                     bHardBulletColor = ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) ) != 0;
                 if ( bHardBulletColor )
@@ -6192,7 +6184,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     sal_uInt32  nVal, nUpperDist, nLowerDist;
     TSS_Type    nInstance = nDestinationInstance != TSS_Type::Unknown ? nDestinationInstance : mnInstance;
 
-    if ( ( nDestinationInstance != TSS_Type::Unknown ) || ( pParaSet->mnDepth <= 1 ) )
+    if ( ( nDestinationInstance != TSS_Type::Unknown ) || ( mxParaSet->mnDepth <= 1 ) )
     {
         SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ];
         if ( pNumBulletItem )
@@ -6212,10 +6204,10 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
                 SvxNumRule* pRule = aNewNumBulletItem.GetNumRule();
                 if ( pRule )
                 {
-                    pRule->SetLevel( pParaSet->mnDepth, aNumberFormat );
+                    pRule->SetLevel( mxParaSet->mnDepth, aNumberFormat );
                     for (sal_uInt16 i = 0; i < pRule->GetLevelCount(); ++i)
                     {
-                        if ( i != pParaSet->mnDepth )
+                        if ( i != mxParaSet->mnDepth )
                         {
                             sal_uInt16 n = sanitizeForMaxPPTLevels(i);
 
