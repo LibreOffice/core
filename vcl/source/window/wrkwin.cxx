@@ -255,7 +255,7 @@ bool WorkWindow::Close()
 {
     bool bCanClose = SystemWindow::Close();
 
-    // Ist es das Applikationsfenster, dann beende die Applikation
+    // if it's the application window then close the application
     if ( bCanClose && ( ImplGetSVData()->maWinData.mpAppWin == this ) )
         Application::Quit();
 

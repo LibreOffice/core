@@ -1866,7 +1866,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
     rConverter.PutandConvertEntry( aFormatString, nCheckPos, nType,
                                    nKey, eConvertFrom, eConvertTo );
     const SvNumberformat* pFormat = rConverter.GetEntry( nKey );
-    DBG_ASSERT( pFormat, "SvNumberformat::ConvertLanguage: Conversion ohne Format" );
+    DBG_ASSERT( pFormat, "SvNumberformat::ConvertLanguage: Conversion without format" );
     if ( pFormat )
     {
         ImpCopyNumberformat( *pFormat );

@@ -281,11 +281,11 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Bei Button-Repeat muessen wir den Timeout umsetzen
+    // if Button-Repeat we have to change the timeout
     if ( pSVData->maWinData.mnTrackFlags & StartTrackingFlags::ButtonRepeat )
         pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
 
-    // Tracking-Event erzeugen
+    // create Tracking-Event
     Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
     if( ImplIsAntiparallel() )
     {

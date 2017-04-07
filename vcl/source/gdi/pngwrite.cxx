@@ -78,7 +78,7 @@ private:
     sal_uLong mnWidth;
     sal_uLong mnHeight;
     sal_uInt8 mnBitsPerPixel;
-    sal_uInt8 mnFilterType;  // 0 oder 4;
+    sal_uInt8 mnFilterType;  // 0 or 4;
     sal_uLong mnBBP;         // bytes per pixel ( needed for filtering )
     bool mbTrueAlpha;
     sal_uLong mnCRC;

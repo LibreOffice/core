@@ -270,7 +270,7 @@ sal_uInt16 ZyklTriDiagGS(sal_uInt16 n, double* lower, double* diag,
 /*       (   0               .             .        . upper[n-2] )    */
 /*       ( lowrow[0]  0 .  .    0        lower[n-1]   diag[n-1]  )    */
 /*                                                                    */
-/*  Memory for lowrow[1],..,lowrow[n-3] und ricol[1],...,ricol[n-3]   */
+/*  Memory for lowrow[1],..,lowrow[n-3] and ricol[1],...,ricol[n-3]   */
 /*  should be provided separately, as this should be available to     */
 /*  store the decomposition matrix, which is overwriting              */
 /*  the 5 vectors mentioned.                                          */

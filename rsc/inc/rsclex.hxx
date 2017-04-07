@@ -92,11 +92,11 @@ class ObjectStack
 
 /****************** F o r w a r d s **************************************/
 #if defined(__sun)
-extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
+extern "C" int yyparse();   // forward declaration for created function
 extern "C" void yyerror( const char * );
 extern "C" int  yylex();
 #else
-int yyparse();              // forward Deklaration fuer erzeugte Funktion
+int yyparse();              // forward declaration for created function
 void yyerror( char * );
 int  yylex();
 #endif

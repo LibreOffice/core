@@ -928,7 +928,7 @@ void FormulaDlg_Impl::FillControls(bool &rbNext, bool &rbPrev)
         m_pFtEditName->SetText("");
         pMEdit->SetHelpId( m_aEditHelpId );
     }
-        //  Test, ob vorne/hinten noch mehr Funktionen sind
+        //  test if before/after are anymore functions
 
     sal_Int32 nTempStart = m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
     rbNext = m_aFormulaHelper.GetNextFunc( aFormula, false, nTempStart );

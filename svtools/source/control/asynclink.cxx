@@ -41,7 +41,7 @@ void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
         _pArg = pObj;
         DBG_ASSERT( bAllowDoubles ||
                     ( !_nEventId && ( !_pIdle || !_pIdle->IsActive() ) ),
-                    "Schon ein Call unterwegs" );
+                    "Already made a call" );
         ClearPendingCall();
         if( _pMutex ) _pMutex->acquire();
         _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent) );

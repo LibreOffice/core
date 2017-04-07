@@ -5208,7 +5208,7 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
         if ( pFrame && pFrame->mbHandleIME &&
              pFrame->mbAtCursorIME )
         {
-            // we want to hide der cursor
+            // we want to hide the cursor
             pFrame->mbCandidateMode = TRUE;
             ImplHandleIMEComposition( hWnd, GCS_CURSORPOS );
 

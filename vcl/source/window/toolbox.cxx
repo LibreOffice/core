@@ -4373,13 +4373,13 @@ void ToolBox::Resizing( Size& rSize )
     ImplToolItems::size_type nCalcLines;
     ImplToolItems::size_type nTemp;
 
-    // Alle Floatinggroessen berechnen
+    // calculate all floating sizes
     ImplCalcFloatSizes();
 
     if ( !mnLastResizeDY )
         mnLastResizeDY = mnDY;
 
-    // Ist vertikales Resizing angesagt
+    // is vertical resizing needed
     if ( (mnLastResizeDY != rSize.Height()) && (mnDY != rSize.Height()) )
     {
         nCalcLines = ImplCalcLines( rSize.Height() );

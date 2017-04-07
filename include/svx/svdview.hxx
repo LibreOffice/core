@@ -274,7 +274,7 @@ public:
 //     bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin);
 //     bool Command(const CommandEvent& rCEvt, vcl::Window* pWin);
 //
-//   Exchange (Clipboard derzeit noch ohne SdrPrivateData):
+//   Exchange (Clipboard currently without SdrPrivateData):
 //   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //     sal_Bool Cut(sal_uIntPtr nFormat=SDR_ANYFORMAT);
 //     sal_Bool Yank(sal_uIntPtr nFormat=SDR_ANYFORMAT);

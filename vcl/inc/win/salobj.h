@@ -28,11 +28,11 @@ class WinSalObject : public SalObject
 public:
     HWND                    mhWnd;                  // Window handle
     HWND                    mhWndChild;             // Child Window handle
-    HWND                    mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
+    HWND                    mhLastFocusWnd;         // Child-Window, which had the last focus
     SystemEnvData           maSysData;              // SystemEnvData
     RGNDATA*                mpClipRgnData;          // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
-    RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
+    RECT*                   mpNextClipRect;         // next ClipRegion-Rect
     bool                    mbFirstClipRect;        // Flag for first cliprect to insert
     WinSalObject*           mpNextObject;           // pointer to next object
 

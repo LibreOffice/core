@@ -274,7 +274,7 @@ void ImpVclMEdit::ImpSetScrollBarRanges()
     if ( mpHScrollBar )
     {
 //      sal_uLong nTextWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
-        // Es gibt kein Notify bei Breiten-Aenderung...
+        // there is no Notify by width change
 //      sal_uLong nW = Max( (sal_uLong)mpTextWindow->GetOutputSizePixel().Width()*5, (sal_uLong)nTextWidth );
 //      mpHScrollBar->SetRange( Range( 0, (long)nW ) );
         mpHScrollBar->SetRange( Range( 0, mnTextWidth-1 ) );
