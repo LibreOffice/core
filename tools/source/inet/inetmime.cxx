@@ -483,9 +483,7 @@ bool parseParameters(ParameterList const & rInput,
                 eEncoding
                     = getCharsetEncoding(p->m_aCharset.getStr(),
                                                    p->m_aCharset.getStr()
-                                                       + rInput.m_pList->
-                                                             m_aCharset.
-                                                                 getLength());
+                                                       + p->m_aCharset.getLength());
             OUString aValue;
             bool bBadEncoding = false;
             Parameter * pNext = p;
