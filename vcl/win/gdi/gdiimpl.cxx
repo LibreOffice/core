@@ -910,7 +910,7 @@ void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, Sa
         HBRUSH  hOldBrush = SelectBrush( mrParent.getHDC(), GetStockBrush( NULL_BRUSH ) );
         int     nOldROP = SetROP2( mrParent.getHDC(), R2_NOT );
 
-        WIN_Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+        Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 
         SetROP2( mrParent.getHDC(), nOldROP );
         SelectPen( mrParent.getHDC(), hOldPen );
@@ -1661,7 +1661,7 @@ void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
         }
     }
     else
-        WIN_Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+        Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 }
 
 void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )

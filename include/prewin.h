@@ -21,7 +21,6 @@
 
 #if defined(_WIN32)
 
-#define Rectangle    BLA_Rectangle
 #define Folder       WIN_Folder
 #define GradientStyle_RECT  WIN_GradientStyle_RECT
 

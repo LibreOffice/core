@@ -12,14 +12,8 @@
 #include <config_features.h>
 
 #if HAVE_FEATURE_PDFIUM
-#ifdef WNT
-#include <prewin.h>
-#endif
 #include <fpdfview.h>
 #include <fpdf_edit.h>
-#ifdef WNT
-#include <postwin.h>
-#endif
 #endif
 
 #include <vcl/bitmapaccess.hxx>
