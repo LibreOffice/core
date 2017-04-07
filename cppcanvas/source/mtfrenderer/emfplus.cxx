@@ -70,7 +70,6 @@ namespace
 #define EmfPlusRecordTypeFillRects 0x400A
 #define EmfPlusRecordTypeDrawRects 0x400B
 #define EmfPlusRecordTypeFillPolygon 0x400C
-//TODO EmfPlusRecordTypeDrawLines 0x400D
 #define EmfPlusRecordTypeDrawLines 0x400D
 #define EmfPlusRecordTypeFillEllipse 0x400E
 #define EmfPlusRecordTypeDrawEllipse 0x400F
@@ -102,6 +101,7 @@ namespace
 #define EmfPlusRecordTypeSetWorldTransform 0x402A
 #define EmfPlusRecordTypeResetWorldTransform 0x402B
 #define EmfPlusRecordTypeMultiplyWorldTransform 0x402C
+//TODO EmfPlusRecordTypeTranslateWorldTransform 0x402D
 //TODO EmfPlusRecordTypeScaleWorldTransform 0x402E
 //TODO EmfPlusRecordTypeRotateWorldTransform 0x402F
 #define EmfPlusRecordTypeSetPageTransform 0x4030
@@ -115,6 +115,7 @@ namespace
 //TODO EmfPlusRecordTypeSerializableObject 0x4038
 //TODO EmfPlusRecordTypeSetTSGraphics 0x4039
 //TODO EmfPlusRecordTypeSetTSClip 0x403A
+
 #define EmfPlusObjectTypeBrush 0x100
 #define EmfPlusObjectTypePen 0x200
 #define EmfPlusObjectTypePath 0x300
@@ -146,6 +147,7 @@ const char* emfTypeToName(sal_uInt16 type)
         case EmfPlusRecordTypeGetDC: return "EmfPlusRecordTypeGetDC";
         case EmfPlusRecordTypeObject: return "EmfPlusRecordTypeObject";
         case EmfPlusRecordTypeFillRects: return "EmfPlusRecordTypeFillRects";
+        case EmfPlusRecordTypeDrawRects: return "EmfPlusRecordTypeDrawRects";
         case EmfPlusRecordTypeFillPolygon: return "EmfPlusRecordTypeFillPolygon";
         case EmfPlusRecordTypeDrawLines: return "EmfPlusRecordTypeDrawLines";
         case EmfPlusRecordTypeFillEllipse: return "EmfPlusRecordTypeFillEllipse";
@@ -831,15 +833,15 @@ namespace cppcanvas
                 next = rMF.Tell() + ( size - 12 );
 
                 if (size < 12) {
-                    SAL_INFO("cppcanvas.emf", "Size field is less than 12 bytes");
+                    SAL_WARN("cppcanvas.emf", "Size field is less than 12 bytes");
                 } else if (size > length) {
-                    SAL_INFO("cppcanvas.emf", "Size field is greater than bytes left");
+                    SAL_WARN("cppcanvas.emf", "Size field is greater than bytes left");
                 }
                 if (dataSize > (size-12)) {
                     SAL_INFO("cppcanvas.emf", "DataSize field is greater than Size-12");
                 }
 
-                SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
+                SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: 0x" << std::hex << emfTypeToName(type) << " flags: 0x" << flags << std::dec <<" data size: " << dataSize);
 
                 if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000))) {
                     if (!mbMultipart) {
@@ -971,51 +973,50 @@ namespace cppcanvas
                         }
                         break;
                     case EmfPlusRecordTypeFillRects:
+                    case EmfPlusRecordTypeDrawRects:
                         {
-                            SAL_INFO("cppcanvas.emf", "EMF+ FillRects");
-
-                            sal_uInt32 brushIndexOrColor;
+                            // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
+                            sal_uInt32 brushIndexOrColor = 999;
                             sal_Int32 rectangles;
                             bool isColor = (flags & 0x8000);
                             ::basegfx::B2DPolygon polygon;
 
-                            rMF.ReadUInt32( brushIndexOrColor ).ReadInt32( rectangles );
+                            if ( type == EmfPlusRecordTypeFillRects )
+                            {
+                                SAL_INFO("cppcanvas.emf", "EMF+ FillRects");
+                                rMF.ReadUInt32( brushIndexOrColor );
+                                SAL_INFO("cppcanvas.emf", "EMF+\t" << (isColor ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
+                            }
+                            else
+                            {
+                                SAL_INFO("cppcanvas.emf", "EMF+ DrawRects");
+                            }
 
-                            SAL_INFO("cppcanvas.emf", "EMF+\t" << ((flags & 0x8000) ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
+                            rMF.ReadInt32( rectangles );
 
                             for (int i=0; i < rectangles; i++) {
-                                if (flags & 0x4000) {
-                                    /* 16bit integers */
-                                    sal_Int16 x, y, width, height;
+                                float x, y, width, height;
+                                ReadRectangle (rMF, x, y, width, height, bool(flags & 0x4000));
 
-                                    rMF.ReadInt16( x ).ReadInt16( y ).ReadInt16( width ).ReadInt16( height );
+                                polygon.append (Map (x, y));
+                                polygon.append (Map (x + width, y));
+                                polygon.append (Map (x + width, y + height));
+                                polygon.append (Map (x, y + height));
+                                polygon.append (Map (x, y));
 
-                                    polygon.append (Map (x, y));
-                                    polygon.append (Map (x + width, y));
-                                    polygon.append (Map (x + width, y + height));
-                                    polygon.append (Map (x, y + height));
-
-                                    SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << ", " << width << "x" << height);
-                                } else {
-                                    /* Single's */
-                                    float x, y, width, height;
-
-                                    rMF.ReadFloat( x ).ReadFloat( y ).ReadFloat( width ).ReadFloat( height );
-
-                                    polygon.append (Map (x, y));
-                                    polygon.append (Map (x + width, y));
-                                    polygon.append (Map (x + width, y + height));
-                                    polygon.append (Map (x, y + height));
-
-                                    SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << ", " << width << "x" << height);
-                                }
+                                SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << ", " << width << "x" << height);
 
                                 ::basegfx::B2DPolyPolygon polyPolygon (polygon);
-
-                                EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, isColor, brushIndexOrColor);
+                                if( type == EmfPlusRecordTypeFillRects )
+                                    EMFPPlusFillPolygon( polyPolygon,
+                                                         rFactoryParms, rState, rCanvas, isColor, brushIndexOrColor );
+                                else
+                                    EMFPPlusDrawPolygon( polyPolygon,
+                                                         rFactoryParms, rState, rCanvas, flags & 0xff );
                             }
                             break;
                         }
+
                     case EmfPlusRecordTypeFillPolygon:
                         {
                             sal_uInt8 index = flags & 0xff;
@@ -1473,8 +1474,8 @@ namespace cppcanvas
                         break;
                     }
                     default:
-                        SAL_INFO("cppcanvas.emf", "EMF+ unhandled record type: " << type);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                        SAL_WARN("cppcanvas.emf", "EMF+ unhandled record type: 0x" << std::hex << type<< std::dec);
+                        SAL_WARN("cppcanvas.emf", "EMF+\tTODO");
                     }
                 }
 
