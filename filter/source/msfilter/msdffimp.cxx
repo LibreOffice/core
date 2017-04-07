@@ -223,13 +223,20 @@ DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
     InitializePropSet( DFF_msofbtOPT );
 }
 
+bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
+{
+    const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
+    return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
+}
+
 void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDgg ) const
 {
     delete pDefaultPropSet;
     sal_uInt32 nMerk = rStCtrl.Tell();
-    rStCtrl.Seek( nOffsDgg );
+    bool bOk = checkSeek(rStCtrl, nOffsDgg);
     DffRecordHeader aRecHd;
-    bool bOk = ReadDffRecordHeader( rStCtrl, aRecHd );
+    if (bOk)
+        bOk = ReadDffRecordHeader( rStCtrl, aRecHd );
     if (bOk && aRecHd.nRecType == DFF_msofbtDggContainer)
     {
         if ( SvxMSDffManager::SeekToRec( rStCtrl, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
@@ -5804,13 +5811,10 @@ void SvxMSDffManager::CheckTxBxStoryChain()
     and remembering the File-Offsets for each Blip
                        ============
 ******************************************************************************/
-void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
+void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
 {
-    // absolutely remember Start Offset, in case we have to position again
-    sal_uInt32 nOffsDggL = nOffsDgg_;
-
     // position control stream
-    if (nOffsDggL != rStCtrl.Seek(nOffsDggL))
+    if (!checkSeek(rStCtrl, nOffsDggL))
         return;
 
     sal_uInt8   nVer;
