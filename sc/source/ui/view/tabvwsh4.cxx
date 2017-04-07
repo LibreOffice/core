@@ -1619,7 +1619,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     // ScDispatchProviderInterceptor registers itself in ctor
     xDisProvInterceptor = new ScDispatchProviderInterceptor( this );
 
-    bFirstActivate = true; // NavigatorUpdate aufschieben bis Activate()
+    bFirstActivate = true; // delay NavigatorUpdate until Activate()
 
     // #105575#; update only in the first creation of the ViewShell
     pDocSh->SetUpdateEnabled(false);

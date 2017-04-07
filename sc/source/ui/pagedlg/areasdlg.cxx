@@ -616,13 +616,13 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, Edit&, rEd, void )
         pLb->SelectEntryPos( !aStrEd.isEmpty() ? nUserDefPos : 0 );
 }
 
-// globale Funktionen:
+// global functions:
 
 // TODO: It might make sense to move these functions to address.?xx. -kohei
 
 static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
-    // Zulaessige Syntax fuer rStr:
+    // Allowed syntax for rStr:
     // Row: [$]1-MAXTAB
     // Col: [$]A-IV
 
