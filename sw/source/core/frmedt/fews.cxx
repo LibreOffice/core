@@ -494,12 +494,11 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
 
                 aAnc.SetAnchor(&aPos);
 
-                SfxItemSet aSet(makeItemSetFromFormatAnchor(GetDoc()->GetAttrPool(), aAnc));
-
                 SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
                 OSL_ENSURE(pFly, "SetFlyFrameAttr, no Fly selected.");
                 if (pFly)
                 {
+                    SfxItemSet aSet(makeItemSetFromFormatAnchor(GetDoc()->GetAttrPool(), aAnc));
                     SwFlyFrameFormat* pInnerFlyFormat = pFly->GetFormat();
                     GetDoc()->SetFlyFrameAttr(*pInnerFlyFormat, aSet);
                 }
@@ -513,7 +512,9 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 //the next line, pushing the caption text out of
                 //the frame making the caption apparently disappear
                 SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
-                pTextNode->InsertItem(aHidden, nIndex, nIndex + 1);
+                SfxItemSet aSet(GetDoc()->GetAttrPool(), aHidden.Which(), aHidden.Which());
+                aSet.Put(aHidden);
+                pTextNode->SetAttr(aSet, nIndex, nIndex + 1);
             }
         }
 
