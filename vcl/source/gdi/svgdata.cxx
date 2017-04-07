@@ -79,9 +79,13 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
                 }
             }
         }
-        catch(const uno::Exception& e)
+        catch (const uno::Exception& e)
         {
-            SAL_WARN( "vcl", "Got no graphic::XPrimitive2DRenderer! : " << e.Message);
+            SAL_WARN("vcl", "Got no graphic::XPrimitive2DRenderer! : " << e.Message);
+        }
+        catch (const std::exception& e)
+        {
+            SAL_WARN("vcl", "Got no graphic::XPrimitive2DRenderer! : " << e.what());
         }
     }
 
