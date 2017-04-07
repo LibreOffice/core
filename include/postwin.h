@@ -45,7 +45,6 @@
 #undef OUT
 #undef PASSTHROUGH
 #undef RELATIVE
-#undef Rectangle
 #undef STRICT
 #undef SetPort
 #undef SetPrinter
@@ -67,10 +66,6 @@
 
 #if !defined INCLUDED_POSTWIN_H && defined __cplusplus
 #define INCLUDED_POSTWIN_H
-extern "C"
-{
-BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 );
-}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

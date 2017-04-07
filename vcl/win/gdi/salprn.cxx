@@ -1609,7 +1609,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobDat
     // TODO: move into ImplCreateSalPrnGraphics()?
     HPEN    hTempPen = SelectPen( hDC, GetStockPen( NULL_PEN ) );
     HBRUSH  hTempBrush = SelectBrush( hDC, GetStockBrush( NULL_BRUSH ) );
-    WIN_Rectangle( hDC, -8000, -8000, -7999, -7999 );
+    Rectangle( hDC, -8000, -8000, -7999, -7999 );
     SelectPen( hDC, hTempPen );
     SelectBrush( hDC, hTempBrush );
 
