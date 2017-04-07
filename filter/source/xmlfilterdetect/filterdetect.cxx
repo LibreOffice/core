@@ -55,8 +55,8 @@ bool IsMediaTypeXML( const OUString& mediaType )
     if (!mediaType.isEmpty())
     {
         OUString sType, sSubType;
-        INetContentTypes::parse(mediaType, sType, sSubType);
-        if (sType == "application")
+        if (INetContentTypes::parse(mediaType, sType, sSubType)
+            && sType == "application")
         {
             // RFC 3023: application/xml; don't detect text/xml
             if (sSubType == "xml")
