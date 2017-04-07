@@ -60,7 +60,7 @@ public:
                                 return aObjectServerList.size();
                             }
 
-    const SvObjectServer    operator[]( size_t n ) const
+    const SvObjectServer&   operator[]( size_t n ) const
                             {
                                 return aObjectServerList[ n ];
                             }
