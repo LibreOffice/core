@@ -109,13 +109,15 @@ void Button::dispose()
     Control::dispose();
 }
 
-void Button::SetCommandHandler(const OUString& aCommand)
+void Button::SetCommandHandler(const OUString& aCommand, bool bAddStatusListener)
 {
     maCommand = aCommand;
     SetClickHdl( LINK( this, Button, dispatchCommandHandler) );
 
-    mpButtonData->mpStatusListener = new VclStatusListener<Button>(this, aCommand);
-    mpButtonData->mpStatusListener->startListening();
+    if (bAddStatusListener) {
+        mpButtonData->mpStatusListener = new VclStatusListener<Button>(this, aCommand);
+        mpButtonData->mpStatusListener->startListening();
+    }
 }
 
 void Button::Click()
