@@ -299,6 +299,14 @@ namespace DOM
         throw saxex;
     }
 
+    namespace {
+
+    struct XmlFreeParserCtxt {
+        void operator ()(xmlParserCtxt * p) const { xmlFreeParserCtxt(p); }
+    };
+
+    }
+
     Reference< XDocument > SAL_CALL CDocumentBuilder::parse(const Reference< XInputStream >& is)
     {
         if (!is.is()) {
@@ -307,8 +315,17 @@ namespace DOM
 
         ::osl::MutexGuard const g(m_Mutex);
 
-        std::shared_ptr<xmlParserCtxt> const pContext(
-                xmlNewParserCtxt(), xmlFreeParserCtxt);
+        // IO context struct.  Must outlive pContext, as destroying that via
+        // xmlFreeParserCtxt may still access this context_t
+        context_t c;
+        c.pBuilder = this;
+        c.rInputStream = is;
+        // we did not open the stream, thus we do not close it.
+        c.close = false;
+        c.freeOnClose = false;
+
+        std::unique_ptr<xmlParserCtxt, XmlFreeParserCtxt> const pContext(
+                xmlNewParserCtxt());
 
         // register error functions to prevent errors being printed
         // on the console
@@ -317,13 +334,6 @@ namespace DOM
         pContext->sax->warning = warning_func;
         pContext->sax->resolveEntity = resolve_func;
 
-        // IO context struct
-        context_t c;
-        c.pBuilder = this;
-        c.rInputStream = is;
-        // we did not open the stream, thus we do not close it.
-        c.close = false;
-        c.freeOnClose = false;
         xmlDocPtr const pDoc = xmlCtxtReadIO(pContext.get(),
                 xmlIO_read_func, xmlIO_close_func, &c, nullptr, nullptr, 0);
 
@@ -339,8 +349,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        std::shared_ptr<xmlParserCtxt> const pContext(
-                xmlNewParserCtxt(), xmlFreeParserCtxt);
+        std::unique_ptr<xmlParserCtxt, XmlFreeParserCtxt> const pContext(
+                xmlNewParserCtxt());
         pContext->_private = this;
         pContext->sax->error = error_func;
         pContext->sax->warning = warning_func;
