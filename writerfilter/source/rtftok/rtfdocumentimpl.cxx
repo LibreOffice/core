@@ -1123,8 +1123,10 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
         if (!bSkipped)
         {
             // note: apparently \'0d\'0a is interpreted as 2 breaks, not 1
-            if (m_aStates.top().eDestination != Destination::DOCCOMM
-                    && (ch == '\r' || ch == '\n'))
+            if ((ch == '\r' || ch == '\n')
+                    && m_aStates.top().eDestination != Destination::DOCCOMM
+                    && m_aStates.top().eDestination != Destination::LEVELNUMBERS
+                    && m_aStates.top().eDestination != Destination::LEVELTEXT)
             {
                 checkUnicode(/*bUnicode =*/ false, /*bHex =*/ true);
                 dispatchSymbol(RTF_PAR);
