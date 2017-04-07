@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_6b308657",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3379,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-07T11:09:20Z",
+      "side": 1,
+      "message": "so for any positive length other than 6 this will not call m_pCtrlStck-\u003eSetAttr - i have no idea if it should",
+      "revId": "134a7e0c5f88787ba54cab1bed2ba42b7bcd9bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4b2bc2eb",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3922,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-07T11:09:20Z",
+      "side": 1,
+      "message": "pData is passed to ExtractColour which reads 10 bytes",
+      "revId": "134a7e0c5f88787ba54cab1bed2ba42b7bcd9bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_cb3fb223",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4882,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-07T11:09:20Z",
+      "side": 1,
+      "message": "SetWW8_BRC reads a variable size of 2, 4, or 8 bytes depending",
+      "revId": "134a7e0c5f88787ba54cab1bed2ba42b7bcd9bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
