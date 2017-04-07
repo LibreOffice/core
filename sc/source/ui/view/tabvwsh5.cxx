@@ -229,7 +229,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         GetSelEngine()->Reset();
                         GetFunctionSet().SetAnchorFlag(true);
-                        //  AnchorFlag, damit gleich mit Control angehaengt werden kann
+                        //  AnchorFlag, so immediately Control can appended
                     }
                 }
                 break;
@@ -313,7 +313,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewData* pViewData )
 {
 
-    // NumberInfo-Item konstruieren:
+    // construct NumberInfo item
 
     SvxNumberValueType  eValType        = SvxNumberValueType::Undefined;
     double              nCellValue      = 0;

@@ -4813,8 +4813,8 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangeObj::getImplementationId()
 
 // XCellRange
 
-//  ColumnCount / RowCount sind weggefallen
-//! werden im Writer fuer Tabellen noch gebraucht ???
+//  ColumnCount / RowCount vanished
+//! are used in Writer for tables ???
 
 uno::Reference<table::XCell> ScCellRangeObj::GetCellByPosition_Impl(
                                         sal_Int32 nColumn, sal_Int32 nRow )
@@ -5699,7 +5699,7 @@ uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScCellRangeObj::createSubTot
         {
             ScSubTotalParam aParam;
             pData->GetSubTotalParam(aParam);
-            //  im SubTotalDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+            //  SubTotalDescriptor contains the counted fields inside the area
             ScRange aDBRange;
             pData->GetArea(aDBRange);
             SCCOL nFieldStart = aDBRange.aStart.Col();
@@ -6990,7 +6990,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks()
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        //! docfunc Funktion, auch fuer ScViewFunc::RemoveManualBreaks
+        //! DocFunc function, also for ScViewFunc::RemoveManualBreaks
 
         ScDocument& rDoc = pDocSh->GetDocument();
         bool bUndo (rDoc.IsUndoEnabled());
@@ -8746,12 +8746,12 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
             bool bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
             rFunc.SetWidthOrHeight(false, aRowArr, nTab, eMode, 0, true, true);
-            //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
+            //  SC_SIZE_DIRECT with size zero will hide
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLFILT )
         {
             bool bFil = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-            //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
+            //  SC_SIZE_DIRECT with size zero will hide
             rDoc.SetRowFiltered(nRow, nRow, nTab, bFil);
         }
         else if ( pEntry->nWID == SC_WID_UNO_OHEIGHT )

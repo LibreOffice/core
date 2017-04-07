@@ -229,7 +229,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
     if( ! rReq.IsAPI() )
         rReq.Done();
 
-    //! hier DLL's initalisieren, damit die Factories existieren?
+    //! initialize DLLs here, so that the factories exist?
 
     uno::Reference < embed::XEmbeddedObject > xObj;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
@@ -325,7 +325,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                 aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                 if (aSize.Height() == 0 || aSize.Width() == 0)
                 {
-                    // Rechteck mit ausgewogenem Kantenverhaeltnis
+                    // rectangle with balanced edge ratio
                     aSize.Width() = 5000;
                     aSize.Height() = 5000;
                     Size aTmp = OutputDevice::LogicToLogic( aSize, MapUnit::Map100thMM, aMapUnit );
@@ -342,7 +342,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                                     MapMode( aMapUnit ), aMap100 );
             }
 
-            //  Chart initialisieren ?
+            //  initialize chart ?
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
                 lcl_ChartInit(xObj, &pViewSh->GetViewData(), OUString(), false);
 

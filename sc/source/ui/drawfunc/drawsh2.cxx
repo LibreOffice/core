@@ -126,7 +126,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
     }
 }
 
-void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disablen
+void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
 {
     ScDrawView* pView = pViewData->GetScDrawView();
 

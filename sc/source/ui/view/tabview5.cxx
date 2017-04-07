@@ -437,7 +437,7 @@ void ScTabView::ResetDrawDragMode()
 
 void ScTabView::ViewOptionsHasChanged( bool bHScrollChanged, bool bGraphicsChanged )
 {
-    //  DrawView erzeugen, wenn Gitter angezeigt werden soll
+    //  create DrawView when grid should be displayed
     if ( !pDrawView && aViewData.GetOptions().GetGridOptions().GetGridVisible() )
         MakeDrawLayer();
 
@@ -495,7 +495,7 @@ void ScTabView::DrawEnableAnim(bool bSet)
             {
                 pDrawView->SetAnimationEnabled();
 
-                //  Animierte GIFs muessen wieder gestartet werden:
+                //  animated GIFs must be restarted:
                 ScDocument* pDoc = aViewData.GetDocument();
                 for (i=0; i<4; i++)
                     if ( pGridWin[i] && pGridWin[i]->IsVisible() )
@@ -544,25 +544,25 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
 
     tools::Rectangle aRect = pWin->LogicToPixel( rHMMRect );
 
-    long nScrollX=0, nScrollY=0;        // Pixel
+    long nScrollX=0, nScrollY=0;        // pixel
 
-    if ( aRect.Right() >= aWinSize.Width() )                // rechts raus
+    if ( aRect.Right() >= aWinSize.Width() )                // right out
     {
-        nScrollX = aRect.Right() - aWinSize.Width() + 1;    // rechter Rand sichtbar
+        nScrollX = aRect.Right() - aWinSize.Width() + 1;    // right border visible
         if ( aRect.Left() < nScrollX )
-            nScrollX = aRect.Left();                        // links sichtbar (falls zu gross)
+            nScrollX = aRect.Left();                        // left visible (if too big)
     }
-    if ( aRect.Bottom() >= aWinSize.Height() )              // unten raus
+    if ( aRect.Bottom() >= aWinSize.Height() )              // bottom out
     {
-        nScrollY = aRect.Bottom() - aWinSize.Height() + 1;  // unterer Rand sichtbar
+        nScrollY = aRect.Bottom() - aWinSize.Height() + 1;  // bottom border visible
         if ( aRect.Top() < nScrollY )
-            nScrollY = aRect.Top();                         // oben sichtbar (falls zu gross)
+            nScrollY = aRect.Top();                         // top visible (if too big)
     }
 
-    if ( aRect.Left() < 0 )             // links raus
-        nScrollX = aRect.Left();        // linker Rand sichtbar
-    if ( aRect.Top() < 0 )              // oben raus
-        nScrollY = aRect.Top();         // oberer Rand sichtbar
+    if ( aRect.Left() < 0 )             // left out
+        nScrollX = aRect.Left();        // left border visible
+    if ( aRect.Top() < 0 )              // top out
+        nScrollY = aRect.Top();         // top border visible
 
     if (nScrollX || nScrollY)
     {
@@ -576,7 +576,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
         SCCOL nPosX = aViewData.GetPosX(WhichH(eWhich));
         SCROW nPosY = aViewData.GetPosY(WhichV(eWhich));
 
-        long nLinesX=0, nLinesY=0;      // Spalten/Zeilen - um mindestens nScrollX/Y scrollen
+        long nLinesX=0, nLinesY=0;      // columns/rows - scroll at least nScrollX/Y
 
         if (nScrollX > 0)
             while (nScrollX > 0 && nPosX < MAXCOL)
@@ -608,7 +608,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
                 --nLinesY;
             }
 
-        ScrollLines( nLinesX, nLinesY );                    // ausfuehren
+        ScrollLines( nLinesX, nLinesY );                    // execute
     }
 }
 
