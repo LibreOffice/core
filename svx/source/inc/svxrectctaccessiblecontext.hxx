@@ -45,6 +45,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <tools/gen.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt {
     struct Point;
@@ -437,7 +438,7 @@ private:
                                         mxParent;
 
     /// Bounding box
-    tools::Rectangle*                          mpBoundingBox;
+    tools::Rectangle                         maBoundingBox;
 
     /// window of parent
     const vcl::Window&                       mrParentWindow;
