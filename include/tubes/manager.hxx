@@ -16,6 +16,7 @@
 
 #include <utility>
 #include <vector>
+#include <memory>
 
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
