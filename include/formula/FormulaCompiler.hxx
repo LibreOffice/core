@@ -80,8 +80,8 @@ public:
     {
         OpCodeHashMap         * mpHashMap;                 /// Hash map of symbols, OUString -> OpCode
         OUString              * mpTable;                   /// Array of symbols, OpCode -> OUString, offset==OpCode
-        ExternalHashMap       * mpExternalHashMap;         /// Hash map of ocExternal, Filter String -> AddIn String
-        ExternalHashMap       * mpReverseExternalHashMap;  /// Hash map of ocExternal, AddIn String -> Filter String
+        ExternalHashMap         maExternalHashMap;         /// Hash map of ocExternal, Filter String -> AddIn String
+        ExternalHashMap         maReverseExternalHashMap;  /// Hash map of ocExternal, AddIn String -> Filter String
         FormulaGrammar::Grammar meGrammar;                  /// Grammar, language and reference convention
         sal_uInt16              mnSymbols;                  /// Count of OpCode symbols
         bool                    mbCore      : 1;            /// If mapping was setup by core, not filters
@@ -95,8 +95,6 @@ public:
         OpCodeMap(sal_uInt16 nSymbols, bool bCore, FormulaGrammar::Grammar eGrammar ) :
             mpHashMap( new OpCodeHashMap( nSymbols)),
             mpTable( new OUString[ nSymbols ]),
-            mpExternalHashMap( new ExternalHashMap),
-            mpReverseExternalHashMap( new ExternalHashMap),
             meGrammar( eGrammar),
             mnSymbols( nSymbols),
             mbCore( bCore)
@@ -117,10 +115,10 @@ public:
         const OpCodeHashMap* getHashMap() const { return mpHashMap; }
 
         /// Get the symbol String -> AddIn String hash map for finds.
-        const ExternalHashMap* getExternalHashMap() const { return mpExternalHashMap; }
+        const ExternalHashMap* getExternalHashMap() const { return &maExternalHashMap; }
 
         /// Get the AddIn String -> symbol String hash map for finds.
-        const ExternalHashMap* getReverseExternalHashMap() const { return mpReverseExternalHashMap; }
+        const ExternalHashMap* getReverseExternalHashMap() const { return &maReverseExternalHashMap; }
 
         /// Get the symbol string matching an OpCode.
         const OUString& getSymbol( const OpCode eOp ) const
@@ -157,7 +155,7 @@ public:
         bool isOOXML() const { return FormulaGrammar::isOOXML( meGrammar); }
 
         /// Does it have external symbol/name mappings?
-        bool hasExternals() const { return !mpExternalHashMap->empty(); }
+        bool hasExternals() const { return !maExternalHashMap.empty(); }
 
         /// Put entry of symbol String and OpCode pair.
         void putOpCode( const OUString & rStr, const OpCode eOp, const CharClass* pCharClass );
