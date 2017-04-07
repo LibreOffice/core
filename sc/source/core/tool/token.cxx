@@ -3134,8 +3134,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
         // The cell hasn't moved at all.
         return aRes;
 
-    // When moving, the range is the destination range. We need to use the old
-    // range prior to the move for hit analysis.
+    // When moving, the range in the context is the destination range. We need
+    // to use the old range prior to the move for hit analysis.
     ScRange aOldRange = rCxt.maRange;
     ScRange aErrorMoveRange( ScAddress::UNINITIALIZED );
     if (!aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta, aErrorMoveRange))
