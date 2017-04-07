@@ -249,14 +249,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
 
 int SwView::getPart() const
 {
-    if (m_bInDtor || !m_pWrtShell)
-        return 0;
-
-    sal_uInt16 nPage, nLogPage;
-    OUString sDisplay;
-    m_pWrtShell->GetPageNumber(-1, m_pWrtShell->IsCursorVisible(), nPage, nLogPage, sDisplay);
-
-    return nPage - 1;
+    return 0;
 }
 
 void SwView::dumpAsXml(xmlTextWriterPtr pWriter) const
