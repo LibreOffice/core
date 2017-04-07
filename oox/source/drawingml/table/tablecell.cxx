@@ -467,6 +467,11 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     }
 
     getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
+
+    if (getVertToken() == XML_vert)
+        xPropSet->setPropertyValue("RotateAngle", Any(short(27000)));
+    else if (getVertToken() == XML_vert270)
+        xPropSet->setPropertyValue("RotateAngle", Any(short(9000)));
 }
 
 } } }
