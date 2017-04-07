@@ -6387,6 +6387,7 @@ include/o3tl/runtimetooustring.hxx
 include/o3tl/safeint.hxx
 include/o3tl/sorted_vector.hxx
 include/o3tl/span.hxx
+include/o3tl/string_view.hxx
 include/o3tl/strong_int.hxx
 include/o3tl/typed_flags_set.hxx
 include/o3tl/vector_pool.hxx
@@ -8615,6 +8616,7 @@ o3tl/qa/test-lru_map.cxx
 o3tl/qa/test-safeint.cxx
 o3tl/qa/test-sorted_vector.cxx
 o3tl/qa/test-span.cxx
+o3tl/qa/test-string_view.cxx
 o3tl/qa/test-typed_flags.cxx
 o3tl/qa/test-vector_pool.cxx
 odk/examples/DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp/addon.cxx
