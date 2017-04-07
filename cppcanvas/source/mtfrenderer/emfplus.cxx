@@ -75,7 +75,7 @@ namespace
 #define EmfPlusRecordTypeFillEllipse 0x400E
 #define EmfPlusRecordTypeDrawEllipse 0x400F
 #define EmfPlusRecordTypeFillPie 0x4010
-//TODO EmfPlusRecordTypeDrawPie 0x4011
+#define EmfPlusRecordTypeDrawPie 0x4011
 //TODO EmfPlusRecordTypeDrawArc 0x4012
 //TODO EmfPlusRecordTypeFillRegion 0x4013
 #define EmfPlusRecordTypeFillPath 0x4014
@@ -154,6 +154,7 @@ const char* emfTypeToName(sal_uInt16 type)
         case EmfPlusRecordTypeFillEllipse: return "EmfPlusRecordTypeFillEllipse";
         case EmfPlusRecordTypeDrawEllipse: return "EmfPlusRecordTypeDrawEllipse";
         case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
+        case EmfPlusRecordTypeDrawPie: return "EmfPlusRecordTypeDrawPie";
         case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
         case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
         case EmfPlusRecordTypeDrawBeziers: return "EmfPlusRecordTypeDrawBeziers";
@@ -888,13 +889,23 @@ namespace cppcanvas
                         processObjectRecord (rMF, flags, dataSize);
                         break;
                     case EmfPlusRecordTypeFillPie:
+                    case EmfPlusRecordTypeDrawPie:
                         {
-                            sal_uInt32 brushIndexOrColor;
                             float startAngle, sweepAngle;
 
-                            rMF.ReadUInt32( brushIndexOrColor ).ReadFloat( startAngle ).ReadFloat( sweepAngle );
+                            // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
+                            sal_uInt32 brushIndexOrColor = 999;
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor << " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
+                            if ( type == EmfPlusRecordTypeFillPie )
+                            {
+                                SAL_INFO("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor << " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
+                                rMF.ReadUInt32( brushIndexOrColor );
+                            }
+                            else
+                            {
+                                SAL_INFO("cppcanvas.emf", "EMF+ DrawPie startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
+                            }
+                            rMF.ReadFloat( startAngle ).ReadFloat( sweepAngle );
 
                             float dx, dy, dw, dh;
 
@@ -927,7 +938,12 @@ namespace cppcanvas
                             polygon.setClosed (true);
 
                             B2DPolyPolygon polyPolygon (polygon);
-                            EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                            if ( type == EmfPlusRecordTypeFillPie )
+                                EMFPPlusFillPolygon( polyPolygon,
+                                                     rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor );
+                            else
+                                EMFPPlusDrawPolygon( polyPolygon,
+                                                     rFactoryParms, rState, rCanvas, flags & 0xff );
                         }
                         break;
                     case EmfPlusRecordTypeFillPath:
