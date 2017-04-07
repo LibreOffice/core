@@ -61,18 +61,18 @@ public:
     bool                    mbFloatWin;             // is a FloatingWindow
     bool                    mbFullScreen;           // TRUE: in full screen mode
     bool                    mbPresentation;         // TRUE: Presentation Mode running
-    bool                    mbInShow;               // innerhalb eines Show-Aufrufs
+    bool                    mbInShow;               // inside a show call
     bool                    mbRestoreMaximize;      // Restore-Maximize
-    bool                    mbInMoveMsg;            // Move-Message wird verarbeitet
-    bool                    mbInSizeMsg;            // Size-Message wird verarbeitet
+    bool                    mbInMoveMsg;            // Move-Message is being processed
+    bool                    mbInSizeMsg;            // Size-Message is being processed
     bool                    mbFullScreenToolWin;    // WS_EX_TOOLWINDOW reset in FullScreenMode
     bool                    mbDefPos;               // default-position
-    bool                    mbOverwriteState;       // TRUE: WindowState darf umgesetzt werden
+    bool                    mbOverwriteState;       // TRUE: possible to change WindowState
     bool                    mbIME;                  // TRUE: We are in IME Mode
-    bool                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
-    bool                    mbSpezIME;              // TRUE: Spez IME
-    bool                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
-    bool                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
+    bool                    mbHandleIME;            // TRUE: We are handling the IME-Messages
+    bool                    mbSpezIME;              // TRUE: special IME
+    bool                    mbAtCursorIME;          // TRUE: We are only handling some IME-Messages
+    bool                    mbCandidateMode;        // TRUE: We are in Candidate-Mode
     static bool             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
 
     RGNDATA*                mpClipRgnData;

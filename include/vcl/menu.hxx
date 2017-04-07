@@ -352,7 +352,7 @@ public:
 
     Menu& operator =( const Menu& rMenu );
 
-    // Fuer Menu-'Funktionen'
+    // for menu functions
     MenuItemList* GetItemList() const
     {
         return pItemList.get();

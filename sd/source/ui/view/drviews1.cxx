@@ -509,7 +509,7 @@ VclPtr<SvxRuler> DrawViewShell::CreateHRuler (::sd::Window* pWin)
     aWBits  = WB_HSCROLL | WB_3DLOOK | WB_BORDER | WB_EXTRAFIELD;
     nFlags |= SvxRulerSupportFlags::SET_NULLOFFSET |
               SvxRulerSupportFlags::TABS |
-              SvxRulerSupportFlags::PARAGRAPH_MARGINS; // Neu
+              SvxRulerSupportFlags::PARAGRAPH_MARGINS; // new
 
     pRuler = VclPtr<Ruler>::Create(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);

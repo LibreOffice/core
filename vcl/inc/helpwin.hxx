@@ -62,7 +62,7 @@ public:
     sal_uInt16          GetWinStyle() const { return mnHelpWinStyle; }
     QuickHelpFlags      GetStyle() const { return mnStyle; }
 
-    // Nur merken:
+    // only remember:
     void                SetStatusText( const OUString& rStatusText ) { maStatusText = rStatusText; }
     void                SetHelpArea( const tools::Rectangle& rRect ) { maHelpArea = rRect; }
 

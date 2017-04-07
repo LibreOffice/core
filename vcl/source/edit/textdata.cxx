@@ -143,7 +143,7 @@ std::size_t TETextPortionList::FindPortion( sal_Int32 nCharPos, sal_Int32& nPort
             }
         }
     }
-    OSL_FAIL( "FindPortion: Nicht gefunden!" );
+    OSL_FAIL( "FindPortion: Not found!" );
     return ( maPortions.size() - 1 );
 }
 

@@ -74,7 +74,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 // - Redo
-// - Bei Tracking-Cancel DefaultSelection wieder herstellen
+// - if Tracking-Cancel recreate DefaultSelection
 
 static FncGetSpecialChars pImplFncGetSpecialChars = nullptr;
 
@@ -1124,18 +1124,18 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
         else
         {
             mnXOffset = (aOutSize.Width()-ImplGetExtraXOffset()) - nTextPos;
-            // Etwas mehr?
+            // Somthing more?
             if ( (aOutSize.Width()-ImplGetExtraXOffset()) < nTextPos )
             {
                 long nMaxNegX = (aOutSize.Width()-ImplGetExtraXOffset()) - GetTextWidth( aText );
                 mnXOffset -= aOutSize.Width() / 5;
-                if ( mnXOffset < nMaxNegX )  // beides negativ...
+                if ( mnXOffset < nMaxNegX )  // both negativ...
                     mnXOffset = nMaxNegX;
             }
         }
 
         nCursorPosX = nTextPos + mnXOffset + ImplGetExtraXOffset();
-        if ( nCursorPosX == aOutSize.Width() )  // dann nicht sichtbar...
+        if ( nCursorPosX == aOutSize.Width() )  // then invisible...
             nCursorPosX--;
 
         if ( mnXOffset != nOldXOffset )
@@ -2678,7 +2678,7 @@ void Edit::SetSubEdit(Edit* pEdit)
 
     if (mpSubEdit)
     {
-        SetPointer(PointerStyle::Arrow);    // Nur das SubEdit hat den BEAM...
+        SetPointer(PointerStyle::Arrow);    // Only SubEdit has the BEAM...
         mpSubEdit->mbIsSubEdit = true;
 
         mpSubEdit->SetReadOnly(mbReadOnly);
@@ -2815,12 +2815,12 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
     SolarMutexGuard aVclGuard;
 
     if ( !IsTracking() && maSelection.Len() &&
-         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || !mpDDInfo->bStarterOfDD) ) // Kein Mehrfach D&D
+         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || !mpDDInfo->bStarterOfDD) ) // no repeated D&D
     {
         Selection aSel( maSelection );
         aSel.Justify();
 
-        // Nur wenn Maus in der Selektion...
+        // only if mouse in the selection...
         Point aMousePos( rDGE.DragOriginX, rDGE.DragOriginY );
         sal_Int32 nCharPos = ImplGetCharPos( aMousePos );
         if ( (nCharPos >= aSel.Min()) && (nCharPos < aSel.Max()) )
@@ -2832,7 +2832,7 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
             mpDDInfo->aDndStartSel = aSel;
 
             if ( IsTracking() )
-                EndTracking();  // Vor D&D Tracking ausschalten
+                EndTracking();  // before D&D disable tracking
 
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( GetSelected() );
             sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;

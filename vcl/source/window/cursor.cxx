@@ -37,8 +37,8 @@ struct ImplCursorData
     short           mnOrientation;      // Pixel-Orientation
     CursorDirection mnDirection;        // indicates writing direction
     sal_uInt16      mnStyle;            // Cursor-Style
-    bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
-    VclPtr<vcl::Window> mpWindow;           // Zugeordnetes Windows
+    bool            mbCurVisible;       // Is cursor currently visible
+    VclPtr<vcl::Window> mpWindow;           // assigned window
 };
 
 static void ImplCursorInvert( ImplCursorData* pData )

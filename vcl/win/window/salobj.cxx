@@ -201,7 +201,7 @@ bool ImplSalPreDispatchMsg( MSG* pMsg )
         pSalData->mnSalObjWantKeyEvt = 0;
 
         sal_uInt16 nKeyCode = LOWORD( pMsg->wParam );
-        // Nur 0-9 und A-Z
+        // only 0-9 and A-Z
         if ( ((nKeyCode >= 48) && (nKeyCode <= 57)) ||
              ((nKeyCode >= 65) && (nKeyCode <= 90)) ||
              ((nKeyCode >= 97) && (nKeyCode <= 122)) )

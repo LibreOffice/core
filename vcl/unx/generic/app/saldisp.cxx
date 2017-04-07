@@ -2850,7 +2850,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
         const_cast<SalColormap*>(this)->GetLookupTable();
     }
 
-    // Colormatching ueber Palette
+    // color matching via palette
     sal_uInt16 r = SALCOLOR_RED  ( nSalColor );
     sal_uInt16 g = SALCOLOR_GREEN( nSalColor );
     sal_uInt16 b = SALCOLOR_BLUE ( nSalColor );
