@@ -401,7 +401,7 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     SvxMSDffBLIPInfos*      m_pBLIPInfos;
     std::unique_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_xShapeInfosByTxBxComp;
     std::unique_ptr<SvxMSDffShapeInfos_ById> m_xShapeInfosById;
-    SvxMSDffShapeOrders*    m_pShapeOrders;
+    SvxMSDffShapeOrders     m_aShapeOrders;
     sal_uInt32              nOffsDgg;
     sal_uInt16              nBLIPCount;
     sal_uInt32              nGroupShapeFlags;
@@ -684,8 +684,8 @@ public:
     const SvxMSDffShapeInfos_ById* GetShapeInfos() const
         { return m_xShapeInfosById.get(); }
 
-    SvxMSDffShapeOrders* GetShapeOrders() const
-        { return m_pShapeOrders; }
+    const SvxMSDffShapeOrders* GetShapeOrders() const
+        { return &m_aShapeOrders; }
 
     void StoreShapeOrder(sal_uLong      nId,
                          sal_uLong      nTxBx,
