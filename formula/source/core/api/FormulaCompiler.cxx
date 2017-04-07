@@ -362,11 +362,11 @@ void FormulaCompiler::OpCodeMap::putExternal( const OUString & rSymbol, const OU
     // map to different symbols, the first pair wins. Same symbol of course may
     // not map to different AddIns, again the first pair wins and also the
     // AddIn->symbol mapping is not inserted in other cases.
-    bool bOk = mpExternalHashMap->insert( ExternalHashMap::value_type( rSymbol, rAddIn)).second;
+    bool bOk = maExternalHashMap.insert( ExternalHashMap::value_type( rSymbol, rAddIn)).second;
     SAL_WARN_IF( !bOk, "formula.core", "OpCodeMap::putExternal: symbol not inserted, " << rSymbol << " -> " << rAddIn);
     if (bOk)
     {
-        bOk = mpReverseExternalHashMap->insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
+        bOk = maReverseExternalHashMap.insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
         // Failed insertion of the AddIn is ok for different symbols mapping to
         // the same AddIn. Make this INFO only.
         SAL_INFO_IF( !bOk, "formula.core", "OpCodeMap::putExternal: AddIn not inserted, " << rAddIn << " -> " << rSymbol);
@@ -375,9 +375,9 @@ void FormulaCompiler::OpCodeMap::putExternal( const OUString & rSymbol, const OU
 
 void FormulaCompiler::OpCodeMap::putExternalSoftly( const OUString & rSymbol, const OUString & rAddIn )
 {
-    bool bOk = mpReverseExternalHashMap->insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
+    bool bOk = maReverseExternalHashMap.insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
     if (bOk)
-        mpExternalHashMap->insert( ExternalHashMap::value_type( rSymbol, rAddIn));
+        maExternalHashMap.insert( ExternalHashMap::value_type( rSymbol, rAddIn));
 }
 
 uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(
@@ -398,8 +398,8 @@ uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceO
             OUString aIntName;
             if (hasExternals())
             {
-                ExternalHashMap::const_iterator iExt( mpExternalHashMap->find( *pName));
-                if (iExt != mpExternalHashMap->end())
+                ExternalHashMap::const_iterator iExt( maExternalHashMap.find( *pName));
+                if (iExt != maExternalHashMap.end())
                     aIntName = (*iExt).second;
                 // Check for existence not needed here, only name-mapping is of
                 // interest.
@@ -578,7 +578,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             // If AddIn functions are present in this mapping, use them, and only those.
             if (hasExternals())
             {
-                for (ExternalHashMap::const_iterator it( mpExternalHashMap->begin());it != mpExternalHashMap->end(); ++it)
+                for (ExternalHashMap::const_iterator it( maExternalHashMap.begin());it != maExternalHashMap.end(); ++it)
                 {
                     FormulaOpCodeMapEntry aEntry;
                     aEntry.Name = (*it).first;
@@ -1059,8 +1059,6 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
 
 FormulaCompiler::OpCodeMap::~OpCodeMap()
 {
-    delete mpReverseExternalHashMap;
-    delete mpExternalHashMap;
     delete [] mpTable;
     delete mpHashMap;
 }
