@@ -20,30 +20,14 @@
 #include "dbaccess_helpid.hrc"
 #include "browserids.hxx"
 
-Menu RID_SBA_GRID_COLCTXMENU
+String RID_STR_COLUMN_FORMAT
 {
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_BROWSER_COLATTRSET ;
-            HelpID = HID_BROWSER_COLUMNFORMAT ;
-            Text [ en-US ] = "Column ~Format..." ;
-        };
-        MenuItem
-        {
-            Identifier = ID_BROWSER_COLWIDTH ;
-            HelpID = HID_BROWSER_COLUMNWIDTH ;
-            Text [ en-US ] = "Column ~Width..." ;
-            HelpID = HID_BROWSER_COLUMNWIDTH;
-        };
-        MenuItem
-        {
-            Identifier = ID_BROWSER_COLUMNINFO ;
-            HelpID = HID_BROWSER_COLUMNINFO ;
-            Text [ en-US ] = "Copy Column D~escription";
-        };
-    };
+    Text [ en-US ] = "Column ~Format...";
+};
+
+String RID_STR_COLUMN_WIDTH
+{
+    Text [ en-US ] = "Column ~Width...";
 };
 
 String RID_STR_TABLE_FORMAT

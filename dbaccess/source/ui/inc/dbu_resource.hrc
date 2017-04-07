@@ -123,7 +123,6 @@
 
 // menus
 
-#define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2
 #define RID_QUERYCOLPOPUPMENU           RID_MENU_START +  5
 #define RID_QUERYFUNCTION_POPUPMENU     RID_MENU_START +  6
 #define RID_TABLEDESIGNROWPOPUPMENU     RID_MENU_START +  7
@@ -197,6 +196,8 @@
 #define RID_STR_TABLE_FORMAT                RID_STR_GEN_START + 65
 #define RID_STR_ROW_HEIGHT                  RID_STR_GEN_START + 66
 #define RID_STR_COPY                        RID_STR_GEN_START + 67
+#define RID_STR_COLUMN_FORMAT               RID_STR_GEN_START + 68
+#define RID_STR_COLUMN_WIDTH                RID_STR_GEN_START + 69
 
 // untyped resources
 
