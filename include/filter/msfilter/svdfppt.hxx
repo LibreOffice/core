@@ -1181,26 +1181,25 @@ public:
 #define PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK     8
 #define PPT_TEXTOBJ_FLAGS_VERTICAL                      16
 
-struct ImplPPTTextObj
+struct ImplPPTTextObj : public salhelper::SimpleReferenceObject
 {
-    sal_uInt32                  mnRefCount;
     sal_uInt32                  mnShapeId;
     sal_uInt32                  mnShapeMaster;
-    PptOEPlaceholderAtom*       mpPlaceHolderAtom;
+    std::unique_ptr<PptOEPlaceholderAtom> mpPlaceHolderAtom;
     TSS_Type                    mnInstance;
     TSS_Type                    mnDestinationInstance;
     MSO_SPT                     meShapeType;
 
     sal_uInt32                  mnCurrentObject;
     sal_uInt32                  mnParagraphCount;
-    PPTParagraphObj**           mpParagraphList;
+    std::vector<std::unique_ptr<PPTParagraphObj>>
+                                maParagraphList;
     PptSlidePersistEntry&       mrPersistEntry;
 
     sal_uInt32                  mnTextFlags;
 
     explicit ImplPPTTextObj( PptSlidePersistEntry& rPersistEntry )
-        : mnRefCount(0)
-        , mnShapeId(0)
+        : mnShapeId(0)
         , mnShapeMaster(0)
         , mpPlaceHolderAtom(nullptr)
         , mnInstance(TSS_Type::PageTitle)
@@ -1208,15 +1207,13 @@ struct ImplPPTTextObj
         , meShapeType(mso_sptMin)
         , mnCurrentObject(0)
         , mnParagraphCount(0)
-        , mpParagraphList(nullptr)
         , mrPersistEntry ( rPersistEntry )
         , mnTextFlags(0) {};
 };
 
 class MSFILTER_DLLPUBLIC PPTTextObj
 {
-    ImplPPTTextObj*         mpImplTextObj;
-    void                    ImplClear();
+    rtl::Reference<ImplPPTTextObj> mxImplTextObj;
 
 public:
                             PPTTextObj(
@@ -1228,32 +1225,32 @@ public:
                             PPTTextObj( PPTTextObj& rTextObj );
                             ~PPTTextObj();
 
-    sal_uInt32              GetCurrentIndex() const { return mpImplTextObj->mnCurrentObject; };
-    sal_uInt32              Count() const { return mpImplTextObj->mnParagraphCount; };
+    sal_uInt32              GetCurrentIndex() const { return mxImplTextObj->mnCurrentObject; };
+    sal_uInt32              Count() const { return mxImplTextObj->mnParagraphCount; };
     PPTParagraphObj*        First();
     PPTParagraphObj*        Next();
-    MSO_SPT                 GetShapeType() const { return mpImplTextObj->meShapeType; };
-    TSS_Type                GetInstance() const { return mpImplTextObj->mnInstance; };
+    MSO_SPT                 GetShapeType() const { return mxImplTextObj->meShapeType; };
+    TSS_Type                GetInstance() const { return mxImplTextObj->mnInstance; };
     void                    SetInstance( TSS_Type nInstance )
-                            { mpImplTextObj->mnInstance = nInstance; }
+                            { mxImplTextObj->mnInstance = nInstance; }
 
     TSS_Type                GetDestinationInstance() const
-                            { return mpImplTextObj->mnDestinationInstance; }
+                            { return mxImplTextObj->mnDestinationInstance; }
 
     void                    SetDestinationInstance( TSS_Type nInstance )
-                            { mpImplTextObj->mnDestinationInstance = nInstance; }
+                            { mxImplTextObj->mnDestinationInstance = nInstance; }
 
-    PptOEPlaceholderAtom*   GetOEPlaceHolderAtom() const { return mpImplTextObj->mpPlaceHolderAtom; }
-    sal_uInt32              GetTextFlags() const { return mpImplTextObj->mnTextFlags; }
+    PptOEPlaceholderAtom*   GetOEPlaceHolderAtom() const { return mxImplTextObj->mpPlaceHolderAtom.get(); }
+    sal_uInt32              GetTextFlags() const { return mxImplTextObj->mnTextFlags; }
     void                    SetVertical( bool bVertical )
                             {
                                 if ( bVertical )
-                                    mpImplTextObj->mnTextFlags |= PPT_TEXTOBJ_FLAGS_VERTICAL;
+                                    mxImplTextObj->mnTextFlags |= PPT_TEXTOBJ_FLAGS_VERTICAL;
                                 else
-                                    mpImplTextObj->mnTextFlags &= ~PPT_TEXTOBJ_FLAGS_VERTICAL;
+                                    mxImplTextObj->mnTextFlags &= ~PPT_TEXTOBJ_FLAGS_VERTICAL;
                             }
     bool                    GetVertical() const
-                            { return ( mpImplTextObj->mnTextFlags & PPT_TEXTOBJ_FLAGS_VERTICAL ) != 0; }
+                            { return ( mxImplTextObj->mnTextFlags & PPT_TEXTOBJ_FLAGS_VERTICAL ) != 0; }
 
     const SfxItemSet*       GetBackground() const;
 
