@@ -6480,18 +6480,15 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
 }
 
 PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport, PptSlidePersistEntry& rPersistEntry, DffObjData* pObjData ) :
-    mpImplTextObj   ( new ImplPPTTextObj( rPersistEntry ) )
+    mxImplTextObj   ( new ImplPPTTextObj( rPersistEntry ) )
 {
-    mpImplTextObj->mnRefCount = 1;
-    mpImplTextObj->mnShapeId = 0;
-    mpImplTextObj->mnShapeMaster = 0;
-    mpImplTextObj->mpPlaceHolderAtom = nullptr;
-    mpImplTextObj->mnDestinationInstance = mpImplTextObj->mnInstance = TSS_Type::TextInShape;
-    mpImplTextObj->mnCurrentObject = 0;
-    mpImplTextObj->mnParagraphCount = 0;
-    mpImplTextObj->mpParagraphList = nullptr;
-    mpImplTextObj->mnTextFlags = 0;
-    mpImplTextObj->meShapeType = ( pObjData && pObjData->bShapeType ) ? pObjData->eShapeType : mso_sptMin;
+    mxImplTextObj->mnShapeId = 0;
+    mxImplTextObj->mnShapeMaster = 0;
+    mxImplTextObj->mnDestinationInstance = mxImplTextObj->mnInstance = TSS_Type::TextInShape;
+    mxImplTextObj->mnCurrentObject = 0;
+    mxImplTextObj->mnParagraphCount = 0;
+    mxImplTextObj->mnTextFlags = 0;
+    mxImplTextObj->meShapeType = ( pObjData && pObjData->bShapeType ) ? pObjData->eShapeType : mso_sptMin;
 
     DffRecordHeader aExtParaHd;
     aExtParaHd.nRecType = 0;    // set empty
@@ -6505,9 +6502,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
         PPTExtParaProv* pExtParaProv = rSdrPowerPointImport.pPPTStyleSheet->pExtParaProv.get();
         if ( pObjData )
         {
-            mpImplTextObj->mnShapeId = pObjData->nShapeId;
+            mxImplTextObj->mnShapeId = pObjData->nShapeId;
             if ( pObjData->nSpFlags & SP_FHAVEMASTER )
-                mpImplTextObj->mnShapeMaster = rSdrPowerPointImport.GetPropertyValue( DFF_Prop_hspMaster, 0 );
+                mxImplTextObj->mnShapeMaster = rSdrPowerPointImport.GetPropertyValue( DFF_Prop_hspMaster, 0 );
         }
         // ClientData
         if ( rSdrPowerPointImport.maShapeRecords.SeekToContent( rIn, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
@@ -6517,8 +6514,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
             DffRecordHeader aPlaceHolderAtomHd;
             if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_OEPlaceholderAtom, aClientDataContainerHd.GetRecEndFilePos(), &aPlaceHolderAtomHd ) )
             {
-                mpImplTextObj->mpPlaceHolderAtom = new PptOEPlaceholderAtom;
-                ReadPptOEPlaceholderAtom( rIn, *( mpImplTextObj->mpPlaceHolderAtom ) );
+                mxImplTextObj->mpPlaceHolderAtom.reset( new PptOEPlaceholderAtom );
+                ReadPptOEPlaceholderAtom( rIn, *( mxImplTextObj->mpPlaceHolderAtom ) );
             }
             rIn.Seek( nOldPos );
             DffRecordHeader aProgTagHd;
@@ -6678,7 +6675,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                         nTmp = 4;
                     TSS_Type nInstance = (TSS_Type)nTmp;
                     aTextHd.SeekToEndOfRecord( rIn );
-                    mpImplTextObj->mnInstance = nInstance;
+                    mxImplTextObj->mnInstance = nInstance;
 
                     sal_uInt32 nFilePos = rIn.Tell();
                     if ( rSdrPowerPointImport.SeekToRec2( PPT_PST_TextBytesAtom,
@@ -6692,7 +6689,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                         PPTStyleTextPropReader aStyleTextPropReader( rIn, aClientTextBoxHd,
                                                                         aTextRulerInterpreter, aExtParaHd, nInstance );
-                        sal_uInt32 nParagraphs = mpImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.size();
+                        sal_uInt32 nParagraphs = mxImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.size();
                         if ( nParagraphs )
                         {
                             // the language settings will be merged into the list of PPTCharPropSet
@@ -7094,19 +7091,19 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     delete j;
                                 }
                             }
-                            mpImplTextObj->mpParagraphList = new PPTParagraphObj*[ nParagraphs ];
+                            mxImplTextObj->maParagraphList.resize( nParagraphs );
                             for (size_t nCurCharPos = 0, nCurPos = 0;
                                 nCurPos < aStyleTextPropReader.aParaPropList.size();
                                 ++nCurPos)
                             {
-                                PPTParagraphObj* pPara = new PPTParagraphObj(
-                                    aStyleTextPropReader, nCurPos, nCurCharPos,
-                                    *rSdrPowerPointImport.pPPTStyleSheet,
-                                    nInstance, aTextRulerInterpreter );
-                                mpImplTextObj->mpParagraphList[ nCurPos ] = pPara;
+                                mxImplTextObj->maParagraphList[ nCurPos ].reset(
+                                    new PPTParagraphObj(
+                                        aStyleTextPropReader, nCurPos, nCurCharPos,
+                                        *rSdrPowerPointImport.pPPTStyleSheet,
+                                        nInstance, aTextRulerInterpreter ) );
 
                                 sal_uInt32 nParaAdjust, nFlags = 0;
-                                pPara->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, GetInstance() );
+                                mxImplTextObj->maParagraphList[ nCurPos ]->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, GetInstance() );
 
                                 switch ( nParaAdjust )
                                 {
@@ -7115,7 +7112,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     case 2 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;  break;
                                     case 3 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;  break;
                                 }
-                                mpImplTextObj->mnTextFlags |= nFlags;
+                                mxImplTextObj->mnTextFlags |= nFlags;
                             }
                         }
                     }
@@ -7127,59 +7124,43 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
 PPTTextObj::PPTTextObj( PPTTextObj& rTextObj )
 {
-    mpImplTextObj = rTextObj.mpImplTextObj;
-    mpImplTextObj->mnRefCount++;
+    mxImplTextObj = rTextObj.mxImplTextObj;
 }
 
 PPTTextObj::~PPTTextObj()
 {
-    ImplClear();
 }
 
 PPTParagraphObj* PPTTextObj::First()
 {
-    mpImplTextObj->mnCurrentObject = 0;
-    if ( !mpImplTextObj->mnParagraphCount )
+    mxImplTextObj->mnCurrentObject = 0;
+    if ( !mxImplTextObj->mnParagraphCount )
         return nullptr;
-    return mpImplTextObj->mpParagraphList[ 0 ];
+    return mxImplTextObj->maParagraphList[ 0 ].get();
 }
 
 PPTParagraphObj* PPTTextObj::Next()
 {
-    sal_uInt32 i = mpImplTextObj->mnCurrentObject + 1;
-    if ( i >= mpImplTextObj->mnParagraphCount )
+    sal_uInt32 i = mxImplTextObj->mnCurrentObject + 1;
+    if ( i >= mxImplTextObj->mnParagraphCount )
         return nullptr;
-    mpImplTextObj->mnCurrentObject++;
-    return mpImplTextObj->mpParagraphList[ i ];
+    mxImplTextObj->mnCurrentObject++;
+    return mxImplTextObj->maParagraphList[ i ].get();
 }
 
 const SfxItemSet* PPTTextObj::GetBackground() const
 {
-    if ( mpImplTextObj->mrPersistEntry.pBObj )
-        return &mpImplTextObj->mrPersistEntry.pBObj->GetMergedItemSet();
+    if ( mxImplTextObj->mrPersistEntry.pBObj )
+        return &mxImplTextObj->mrPersistEntry.pBObj->GetMergedItemSet();
     else
         return nullptr;
-}
-
-void PPTTextObj::ImplClear()
-{
-    if ( ! ( --mpImplTextObj->mnRefCount ) )
-    {
-        for ( PPTParagraphObj* pPtr = First(); pPtr; pPtr = Next() )
-            delete pPtr;
-        delete[] mpImplTextObj->mpParagraphList;
-        delete mpImplTextObj->mpPlaceHolderAtom;
-        delete mpImplTextObj;
-    }
 }
 
 PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
 {
     if ( this != &rTextObj )
     {
-        ImplClear();
-        mpImplTextObj = rTextObj.mpImplTextObj;
-        mpImplTextObj->mnRefCount++;
+        mxImplTextObj = rTextObj.mxImplTextObj;
     }
     return *this;
 }
