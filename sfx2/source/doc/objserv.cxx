@@ -90,6 +90,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/checkin.hxx>
+#include "view/signaturehelper.hxx"
 
 #include "app.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
@@ -1036,6 +1037,11 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             }
             case SID_SIGNATURE:
             {
+                SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
+                if ( pFrame )
+                {
+                    SignatureHelper(pFrame).updateInfoBarState(GetDocumentSignatureState());
+                }
                 rSet.Put( SfxUInt16Item( SID_SIGNATURE, static_cast<sal_uInt16>(GetDocumentSignatureState()) ) );
                 break;
             }
