@@ -20,10 +20,10 @@
 #define INCLUDED_TOOLS_INETSTRM_HXX
 
 #include <tools/toolsdllapi.h>
+#include <tools/stream.hxx>
 #include <sal/types.h>
 
 class INetMIMEMessage;
-class SvMemoryStream;
 class SvStream;
 
 class TOOLS_DLLPUBLIC INetMIMEMessageStream
@@ -36,7 +36,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     sal_Char       *pWrite;
 
     SvStream       *pMsgStrm;
-    SvMemoryStream *pMsgBuffer;
+    SvMemoryStream  maMsgBuffer;
     sal_Char       *pMsgRead;
     sal_Char       *pMsgWrite;
 

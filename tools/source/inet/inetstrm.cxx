@@ -34,7 +34,7 @@ int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uIntPtr nSize)
 
     sal_uIntPtr i, n;
 
-    if (pMsgBuffer->Tell() == 0)
+    if (maMsgBuffer.Tell() == 0)
     {
         // Insert formatted header into buffer.
         n = pSourceMsg->GetHeaderCount();
@@ -44,15 +44,15 @@ int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uIntPtr nSize)
             if (aHeader.GetValue().getLength())
             {
                 // NYI: Folding long lines.
-                pMsgBuffer->WriteCharPtr( aHeader.GetName().getStr() );
-                pMsgBuffer->WriteCharPtr( ": " );
-                pMsgBuffer->WriteCharPtr( aHeader.GetValue().getStr() );
-                pMsgBuffer->WriteCharPtr( "\r\n" );
+                maMsgBuffer.WriteCharPtr( aHeader.GetName().getStr() );
+                maMsgBuffer.WriteCharPtr( ": " );
+                maMsgBuffer.WriteCharPtr( aHeader.GetValue().getStr() );
+                maMsgBuffer.WriteCharPtr( "\r\n" );
             }
         }
 
-        pMsgWrite = const_cast<char *>(static_cast<sal_Char const *>(pMsgBuffer->GetData()));
-        pMsgRead  = pMsgWrite + pMsgBuffer->Tell();
+        pMsgWrite = const_cast<char *>(static_cast<sal_Char const *>(maMsgBuffer.GetData()));
+        pMsgRead  = pMsgWrite + maMsgBuffer.Tell();
     }
 
     n = pMsgRead - pMsgWrite;
@@ -65,7 +65,7 @@ int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uIntPtr nSize)
     else
     {
         // Reset buffer.
-        pMsgBuffer->Seek(STREAM_SEEK_TO_BEGIN);
+        maMsgBuffer.Seek(STREAM_SEEK_TO_BEGIN);
     }
 
     return (pWBuf - pData);
@@ -234,7 +234,6 @@ INetMIMEMessageStream::INetMIMEMessageStream(
     pSourceMsg(pMsg),
     bHeaderGenerated(headerGenerated),
     pMsgStrm(nullptr),
-    pMsgBuffer(new SvMemoryStream),
     pMsgRead(nullptr),
     pMsgWrite(nullptr),
     done(false),
@@ -242,7 +241,7 @@ INetMIMEMessageStream::INetMIMEMessageStream(
     pChildStrm(nullptr)
 {
     assert(pMsg != nullptr);
-    pMsgBuffer->SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
+    maMsgBuffer.SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
     pBuffer = new sal_Char[BUFFER_SIZE];
     pRead = pWrite = pBuffer;
 }
@@ -251,7 +250,6 @@ INetMIMEMessageStream::~INetMIMEMessageStream()
 {
     delete pChildStrm;
     delete [] pBuffer;
-    delete pMsgBuffer;
     delete pMsgStrm;
 }
 
