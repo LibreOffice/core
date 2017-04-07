@@ -43,122 +43,81 @@ namespace dbaccess
     using ::com::sun::star::lang::XComponent;
 
     // SubComponentLoader
-    struct SubComponentLoader_Data
-    {
-        const Reference< XCommandProcessor >    xDocDefCommands;
-        const Reference< XComponent >           xNonDocComponent;
-        Reference< XWindow >                    xAppComponentWindow;
-
-        explicit SubComponentLoader_Data( const Reference< XCommandProcessor >& i_rDocumentDefinition )
-            :xDocDefCommands( i_rDocumentDefinition )
-            ,xNonDocComponent()
-        {
-        }
-
-        explicit SubComponentLoader_Data( const Reference< XComponent >& i_rNonDocumentComponent )
-            :xDocDefCommands()
-            ,xNonDocComponent( i_rNonDocumentComponent )
-        {
-        }
-    };
-
-    // helper
-    namespace
-    {
-        void lcl_onWindowShown_nothrow( const SubComponentLoader_Data& i_rData )
-        {
-            try
-            {
-                if ( i_rData.xDocDefCommands.is() )
-                {
-                    Command aCommandOpen;
-                    aCommandOpen.Name = "show";
-
-                    const sal_Int32 nCommandIdentifier = i_rData.xDocDefCommands->createCommandIdentifier();
-                    i_rData.xDocDefCommands->execute( aCommandOpen, nCommandIdentifier, nullptr );
-                }
-                else
-                {
-                    const Reference< XController > xController( i_rData.xNonDocComponent, UNO_QUERY_THROW );
-                    const Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
-                    const Reference< XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
-                    xWindow->setVisible( true );
-                }
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        }
-    }
-
-    // SubComponentLoader
     SubComponentLoader::SubComponentLoader( const Reference< XController >& i_rApplicationController,
             const Reference< XCommandProcessor >& i_rSubDocumentDefinition )
-        :m_pData( new SubComponentLoader_Data( i_rSubDocumentDefinition ) )
+        :mxDocDefCommands( i_rSubDocumentDefinition )
     {
         // add as window listener to the controller's container window, so we get notified when it is shown
         Reference< XController2 > xController( i_rApplicationController, UNO_QUERY_THROW );
-        m_pData->xAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
+        mxAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
 
         osl_atomic_increment( &m_refCount );
         {
-            m_pData->xAppComponentWindow->addWindowListener( this );
+            mxAppComponentWindow->addWindowListener( this );
         }
         osl_atomic_decrement( &m_refCount );
     }
 
     SubComponentLoader::SubComponentLoader( const Reference< XController >& i_rApplicationController,
             const Reference< XComponent >& i_rNonDocumentComponent )
-        :m_pData( new SubComponentLoader_Data( i_rNonDocumentComponent ) )
+        :mxNonDocComponent( i_rNonDocumentComponent )
     {
         // add as window listener to the controller's container window, so we get notified when it is shown
         Reference< XController2 > xController( i_rApplicationController, UNO_QUERY_THROW );
-        m_pData->xAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
+        mxAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
 
         osl_atomic_increment( &m_refCount );
         {
-            m_pData->xAppComponentWindow->addWindowListener( this );
+            mxAppComponentWindow->addWindowListener( this );
         }
         osl_atomic_decrement( &m_refCount );
     }
 
     SubComponentLoader::~SubComponentLoader()
     {
-        delete m_pData;
-        m_pData = nullptr;
     }
 
-    void SAL_CALL SubComponentLoader::windowResized( const WindowEvent& i_rEvent )
+    void SAL_CALL SubComponentLoader::windowResized( const WindowEvent&  )
     {
-        // not interested in
-        (void)i_rEvent;
     }
 
-    void SAL_CALL SubComponentLoader::windowMoved( const WindowEvent& i_rEvent )
+    void SAL_CALL SubComponentLoader::windowMoved( const WindowEvent& )
     {
-        // not interested in
-        (void)i_rEvent;
     }
 
-    void SAL_CALL SubComponentLoader::windowShown( const EventObject& i_rEvent )
+    void SAL_CALL SubComponentLoader::windowShown( const EventObject& )
     {
-        (void)i_rEvent;
+        try
+        {
+            if ( mxDocDefCommands.is() )
+            {
+                Command aCommandOpen;
+                aCommandOpen.Name = "show";
 
-        lcl_onWindowShown_nothrow( *m_pData );
-        m_pData->xAppComponentWindow->removeWindowListener( this );
+                const sal_Int32 nCommandIdentifier = mxDocDefCommands->createCommandIdentifier();
+                mxDocDefCommands->execute( aCommandOpen, nCommandIdentifier, nullptr );
+            }
+            else
+            {
+                const Reference< XController > xController( mxNonDocComponent, UNO_QUERY_THROW );
+                const Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
+                const Reference< XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
+                xWindow->setVisible( true );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        mxAppComponentWindow->removeWindowListener( this );
     }
 
-    void SAL_CALL SubComponentLoader::windowHidden( const EventObject& i_rEvent )
+    void SAL_CALL SubComponentLoader::windowHidden( const EventObject& )
     {
-        // not interested in
-        (void)i_rEvent;
     }
 
-    void SAL_CALL SubComponentLoader::disposing( const EventObject& i_rEvent )
+    void SAL_CALL SubComponentLoader::disposing( const EventObject& )
     {
-        // not interested in
-        (void)i_rEvent;
     }
 
 } // namespace dbaccess
