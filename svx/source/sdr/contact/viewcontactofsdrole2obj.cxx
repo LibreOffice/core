@@ -100,12 +100,17 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
         // #i123539# allow buffering and reuse of local chart data to not need to rebuild it
         // on every ViewObjectContact::getPrimitive2DSequence call. TTTT: Not needed for
         // aw080, there this mechanism alraedy works differently
-        if(mxChartContent.is())
+        if(mxChartContent.is()
+                // check if we need to update the transformation primitive wrapping the chart
+                && maGridOffset == GetOle2Obj().GetGridOffset())
         {
             xContent = mxChartContent;
         }
         else
         {
+            // update grid offset
+            const_cast< ViewContactOfSdrOle2Obj* >(this)->maGridOffset = GetOle2Obj().GetGridOffset();
+
             // try to get chart primitives and chart range directly from xChartModel
             basegfx::B2DRange aChartContentRange;
             const drawinglayer::primitive2d::Primitive2DContainer aChartSequence(
