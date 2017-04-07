@@ -77,7 +77,7 @@ Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties
     return xGraphic;
 }
 
-Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProperties &aBlipProps, Reference< XGraphic > & xGraphic,
+Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProperties &aBlipProps, Reference< XGraphic >  const & xGraphic,
                                                             const GraphicHelper& rGraphicHelper, const sal_Int32 nPhClr )
 {
     if( aBlipProps.maColorChangeFrom.isUsed() && aBlipProps.maColorChangeTo.isUsed() )
@@ -709,8 +709,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
     if( maBlipProps.mxGraphic.is() )
     {
         // created transformed graphic
-        Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, API_RGB_TRANSPARENT );
-        xGraphic = lclCheckAndApplyChangeColorTransform( maBlipProps, xGraphic, rGraphicHelper, API_RGB_TRANSPARENT );
+        Reference< XGraphic > xGraphic = lclCheckAndApplyChangeColorTransform(maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, API_RGB_TRANSPARENT);
 
         if (eColorMode == ColorMode_STANDARD && nBrightness == 70 && nContrast == -70)
             // map MSO 'washout' to our Watermark colormode
