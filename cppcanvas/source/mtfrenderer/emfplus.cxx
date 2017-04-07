@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/tools/tools.hxx>
@@ -82,7 +83,7 @@ namespace
 //TODO EmfPlusRecordTypeFillClosedCurve 0x4016
 //TODO EmfPlusRecordTypeDrawClosedCurve 0x4017
 //TODO EmfPlusRecordTypeDrawCurve 0x4018
-//TODO EmfPlusRecordTypeDrawBeziers 0x4019
+#define EmfPlusRecordTypeDrawBeziers 0x4019
 #define EmfPlusRecordTypeDrawImage 0x401A
 #define EmfPlusRecordTypeDrawImagePoints 0x401B
 #define EmfPlusRecordTypeDrawString 0x401C
@@ -155,6 +156,7 @@ const char* emfTypeToName(sal_uInt16 type)
         case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
         case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
         case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
+        case EmfPlusRecordTypeDrawBeziers: return "EmfPlusRecordTypeDrawBeziers";
         case EmfPlusRecordTypeDrawImage: return "EmfPlusRecordTypeDrawImage";
         case EmfPlusRecordTypeDrawImagePoints: return "EmfPlusRecordTypeDrawImagePoints";
         case EmfPlusRecordTypeDrawString: return "EmfPlusRecordTypeDrawString";
@@ -1064,6 +1066,42 @@ namespace cppcanvas
 
                             EMFPPlusDrawPolygon (path->GetPolygon (*this), rFactoryParms, rState, rCanvas, penIndex);
 
+                            break;
+                        }
+                    case EmfPlusRecordTypeDrawBeziers:
+                        {
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawBeziers slot: " << (flags & 0xff));
+
+                            sal_uInt32 aCount;
+                            rMF.ReadUInt32( aCount );
+
+                            ::basegfx::B2DPoint aStartPoint, aControlPointA, aControlPointB, aEndPoint;
+                            if( aCount == 4) {
+                                float x1, y1, x2, y2, x3, y3, x4, y4;
+
+                                ReadPoint (rMF, x1, y1, flags);
+                                ReadPoint (rMF, x2, y2, flags);
+                                ReadPoint (rMF, x3, y3, flags);
+                                ReadPoint (rMF, x4, y4, flags);
+
+                                SAL_INFO("cppcanvas.emf", "EMF+\t bezier points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3 << " " << x4 << "," << y4);
+
+                                aStartPoint = Map (x1, y1);
+                                aControlPointA = Map (x2, y2);
+                                aControlPointB = Map (x3, y3);
+                                aEndPoint = Map (x4, y4);
+
+                                ::basegfx::B2DPolygon aPolygon;
+                                ::basegfx::B2DCubicBezier cubicBezier( aStartPoint, aControlPointA, aControlPointB, aEndPoint );
+                                aPolygon.append( cubicBezier.getStartPoint() ); // We need to add starting point
+                                cubicBezier.adaptiveSubdivideByDistance( aPolygon, 10.0 );
+                                EMFPPlusDrawPolygon( ::basegfx::B2DPolyPolygon( aPolygon ), rFactoryParms,
+                                                     rState, rCanvas, flags & 0xff );
+                            }
+                            else
+                            {
+                                SAL_WARN("cppcanvas.emf", "EMF+\tTODO Bezier Draw not support more than 4 points. Number of points: " << aCount);
+                            }
                             break;
                         }
                     case EmfPlusRecordTypeDrawImage:
