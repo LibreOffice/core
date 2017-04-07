@@ -2859,12 +2859,12 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     if (bRecord)
     {
+        ScRange aUndoRange(nStartCol, nStartRow, nStartTab, nOldEndCol, nOldEndRow, nEndTab);
+        ScAddress aDestPos(nDestCol, nDestRow, nDestTab);
+
         rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoDragDrop( &rDocShell, ScRange(
-                                    nStartCol, nStartRow, nStartTab,
-                                    nOldEndCol, nOldEndRow, nEndTab ),
-                                ScAddress( nDestCol, nDestRow, nDestTab ),
-                                bCut, pUndoDoc, bScenariosAdded ) );
+            new ScUndoDragDrop(
+                &rDocShell, aUndoRange, aDestPos, bCut, pUndoDoc, bScenariosAdded));
     }
 
     SCCOL nDestPaintEndCol = nDestEndCol;
