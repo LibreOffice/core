@@ -125,12 +125,14 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     bFrame = false;
                                     SAL_FALLTHROUGH;
         case CurRectType::FlyEmbedded:
-                                    pFrame = xObj.is() ? FindFlyFrame( xObj )
+        {
+                                    const SwFrame *pFlyFrame = xObj.is() ? FindFlyFrame(xObj) : nullptr;
+                                    pFrame = pFlyFrame ? pFlyFrame
                                                 : pFrame->IsFlyFrame()
                                                     ? pFrame
                                                     : pFrame->FindFlyFrame();
                                     break;
-
+        }
         case CurRectType::SectionOutsideTable :
                                     if( pFrame->IsInTab() )
                                         pFrame = pFrame->FindTabFrame();
