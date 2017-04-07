@@ -275,7 +275,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::Map100thMM, MapUnit::MapTwip );
 
         long nVal = OutputDevice::LogicToLogic( maTxtLeft, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nVal = (long)mpLeftIndent->Normalize( (long)nVal );
+        nVal = (long)mpLeftIndent->Normalize( nVal );
 
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
@@ -285,7 +285,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         }
 
         long nrVal = OutputDevice::LogicToLogic( aTxtRight, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nrVal = (long)mpRightIndent->Normalize( (long)nrVal );
+        nrVal = (long)mpRightIndent->Normalize( nrVal );
 
         switch (maContext.GetCombinedContext_DI())
         {
@@ -316,7 +316,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         mpRightIndent->SetValue( nrVal, FUNIT_100TH_MM );
 
         long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::MapTwip, MapUnit::Map100thMM );
-        nfVal = (long)mpFLineIndent->Normalize( (long)nfVal );
+        nfVal = (long)mpFLineIndent->Normalize( nfVal );
         mpFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
     }
     else if( eState == SfxItemState::DISABLED )

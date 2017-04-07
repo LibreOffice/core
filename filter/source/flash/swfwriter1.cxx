@@ -660,7 +660,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         if( ( aOldFont.GetStrikeout() != STRIKEOUT_NONE ) || ( aOldFont.GetUnderline() != LINESTYLE_NONE ) )
         {
             tools::Polygon aPoly( 4 );
-            const long  nLineHeight = std::max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
+            const long  nLineHeight = std::max<long>( FRound( aMetric.GetLineHeight() * 0.05 ), 1 );
 
             if( aOldFont.GetStrikeout() != STRIKEOUT_NONE )
             {

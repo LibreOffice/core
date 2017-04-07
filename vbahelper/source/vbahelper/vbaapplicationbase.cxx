@@ -82,7 +82,7 @@ public:
         Date aDateNow( Date::SYSTEM );
         tools::Time aTimeNow( tools::Time::SYSTEM );
          Date aRefDate( 1,1,1900 );
-        long nDiffDays = (long)(aDateNow - aRefDate);
+        long nDiffDays = aDateNow - aRefDate;
         nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2
 
         long nDiffSeconds = aTimeNow.GetHour() * 3600 + aTimeNow.GetMin() * 60 + aTimeNow.GetSec();

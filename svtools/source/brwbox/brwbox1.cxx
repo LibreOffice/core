@@ -992,7 +992,7 @@ long BrowseBox::ScrollRows( long nRows )
     // compute new top row
     long nTmpMin = std::min( (long)(nTopRow + nRows), (long)(nRowCount - 1) );
 
-    long nNewTopRow = std::max( (long)nTmpMin, (long)0 );
+    long nNewTopRow = std::max<long>( nTmpMin, 0 );
 
     if ( nNewTopRow == nTopRow )
         return 0;
@@ -1005,7 +1005,7 @@ long BrowseBox::ScrollRows( long nRows )
     // compute new top row again (nTopRow might have changed!)
     nTmpMin = std::min( (long)(nTopRow + nRows), (long)(nRowCount - 1) );
 
-    nNewTopRow = std::max( (long)nTmpMin, (long)0 );
+    nNewTopRow = std::max<long>( nTmpMin, 0 );
 
     StartScroll();
 

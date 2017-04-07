@@ -2915,7 +2915,7 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
     // match that of the current template
 
     // A left margin can exist because of a list nearby
-    long nLeftMargin = (long)rLRItem.GetTextLeft() - rHTMLWrt.m_nLeftMargin;
+    long nLeftMargin = rLRItem.GetTextLeft() - rHTMLWrt.m_nLeftMargin;
     if( rHTMLWrt.m_nDfltLeftMargin != nLeftMargin )
     {
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_left, nLeftMargin );
@@ -2928,8 +2928,7 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.m_nDfltRightMargin != rLRItem.GetRight() )
     {
-        rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_right,
-                                 (long)rLRItem.GetRight() );
+        rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_right, rLRItem.GetRight() );
     }
 
     // The LineIndent of the first line might contain the room for numbering
@@ -2980,7 +2979,7 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
         pULItem->GetUpper() != rHTMLWrt.m_nDfltTopMargin &&
         pULItem->GetLower() != rHTMLWrt.m_nDfltBottomMargin )
     {
-        rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin, (long)pLRItem->GetLeft() );
+        rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin, pLRItem->GetLeft() );
     }
     else
     {

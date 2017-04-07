@@ -1055,8 +1055,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
         aButtonUpPt = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
 
-        long  nWidth = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Width();
-        long  nHeight = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Height();
+        long  nWidth = lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Width();
+        long  nHeight = lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Height();
 
         if( rMEvt.IsLeft() && GetPointer() == PointerStyle::HSizeBar )
         {
@@ -1309,8 +1309,8 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     long    nTopMargin = 0;
     long    nBottomMargin = 0;
 
-    long    nWidth = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Width();
-    long    nHeight = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Height();
+    long    nWidth = lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Width();
+    long    nHeight = lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Height();
 
     if ( nPageNo < nTotalPages )
     {
@@ -1563,8 +1563,8 @@ void ScPreview::DragMove( long nDragMovePos, PointerStyle nFlags )
 
 void ScPreview::DrawInvert( long nDragPos, PointerStyle nFlags )
 {
-    long  nHeight = (long) lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Height();
-    long  nWidth = (long) lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Width();
+    long  nHeight = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Height();
+    long  nWidth = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Width();
     if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )
     {
         tools::Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,(long)( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));

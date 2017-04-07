@@ -1205,13 +1205,13 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         // type check
                         if (nIndex == 0)
                         {
-                            eType = (short) NumFor[nIndex].Info().eScannedType;
+                            eType = NumFor[nIndex].Info().eScannedType;
                         }
                         else if (nIndex == 3)
                         {   // #77026# Everything recognized IS text
                             NumFor[nIndex].Info().eScannedType = css::util::NumberFormat::TEXT;
                         }
-                        else if ( (short) NumFor[nIndex].Info().eScannedType != eType)
+                        else if ( NumFor[nIndex].Info().eScannedType != eType)
                         {
                             eType = css::util::NumberFormat::DEFINED;
                         }

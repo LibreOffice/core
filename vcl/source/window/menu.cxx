@@ -1576,7 +1576,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             pData->aSz.Height() += EXTRAITEMHEIGHT; // little bit more distance
 
             if (!IsMenuBar())
-                aSz.Height() += (long)pData->aSz.Height();
+                aSz.Height() += pData->aSz.Height();
 
             if ( nWidth > nMaxWidth )
                 nMaxWidth = nWidth;

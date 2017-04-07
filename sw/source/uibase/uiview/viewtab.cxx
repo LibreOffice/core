@@ -1274,8 +1274,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
         case SID_ATTR_LONG_LRSPACE:
         {
-            SvxLongLRSpaceItem aLongLR( (long)aPageLRSpace.GetLeft(),
-                                        (long)aPageLRSpace.GetRight(),
+            SvxLongLRSpaceItem aLongLR( aPageLRSpace.GetLeft(),
+                                        aPageLRSpace.GetRight(),
                                         SID_ATTR_LONG_LRSPACE);
             if(bBrowse)
             {
@@ -1293,9 +1293,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SwRect aRect( rSh.GetAnyCurRect( CurRectType::HeaderFooter, pPt));
                     aRect.Pos() -= rSh.GetAnyCurRect( CurRectType::Page, pPt ).Pos();
                     const SvxLRSpaceItem& aLR = pFormat->GetLRSpace();
-                    aLongLR.SetLeft ( (long)aLR.GetLeft() + (long)aRect.Left() );
-                    aLongLR.SetRight( (nPageWidth -
-                                        (long)aRect.Right() + (long)aLR.GetRight()));
+                    aLongLR.SetLeft ( aLR.GetLeft() + aRect.Left() );
+                    aLongLR.SetRight( nPageWidth - aRect.Right() + aLR.GetRight() );
                 }
             }
             else
@@ -1338,8 +1337,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             const SvxLRSpaceItem aTmpPageLRSpace( rDesc.GetMaster().GetLRSpace() );
             const SvxLongLRSpaceItem aLongLR(
-                (long)aTmpPageLRSpace.GetLeft(),
-                (long)aTmpPageLRSpace.GetRight(),
+                aTmpPageLRSpace.GetLeft(),
+                aTmpPageLRSpace.GetRight(),
                 SID_ATTR_PAGE_LRSPACE );
             rSet.Put( aLongLR );
         }

@@ -420,10 +420,10 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(*pItem);
         SetMetricValue( *m_pLeftMarginEdit, rLRSpace.GetLeft(), eUnit );
         m_pBspWin->SetLeft(
-            (sal_uInt16)ConvertLong_Impl( (long)rLRSpace.GetLeft(), eUnit ) );
+            (sal_uInt16)ConvertLong_Impl( rLRSpace.GetLeft(), eUnit ) );
         SetMetricValue( *m_pRightMarginEdit, rLRSpace.GetRight(), eUnit );
         m_pBspWin->SetRight(
-            (sal_uInt16)ConvertLong_Impl( (long)rLRSpace.GetRight(), eUnit ) );
+            (sal_uInt16)ConvertLong_Impl( rLRSpace.GetRight(), eUnit ) );
     }
 
     // adjust margins (top/bottom)

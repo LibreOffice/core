@@ -714,8 +714,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
 
         // Calculations and values as in detfunc.cxx
 
-        Size aSize( (long)( TwipsToHmm( pDoc->GetColWidth( nCol1, nTab1) ) ),
-                    (long)( TwipsToHmm( pDoc->GetRowHeight( nRow1, nTab1) ) ) );
+        Size aSize( TwipsToHmm( pDoc->GetColWidth( nCol1, nTab1) ),
+                    TwipsToHmm( pDoc->GetRowHeight( nRow1, nTab1) ) );
         tools::Rectangle aRect( aPos, aSize );
         aRect.Left()    -= 250;
         aRect.Right()   += 250;

@@ -44,7 +44,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
         case MapUnit::MapMM:
         case MapUnit::MapCM:
         {
-            nRet = (long)OutputDevice::LogicToLogic( nVal, eSrcUnit, MapUnit::Map100thMM );
+            nRet = OutputDevice::LogicToLogic( nVal, eSrcUnit, MapUnit::Map100thMM );
 
             switch ( eDestUnit )
             {
@@ -76,7 +76,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
         case MapUnit::MapPoint:
         case MapUnit::MapTwip:
         case MapUnit::MapPixel:
-            return OUString::number( (long)OutputDevice::LogicToLogic(
+            return OUString::number( OutputDevice::LogicToLogic(
                         nVal, eSrcUnit, eDestUnit ));
 
         default:

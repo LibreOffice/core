@@ -512,7 +512,7 @@ void EditRTFParser::CalcValue()
     const MapUnit eDestUnit = aEditMapMode.GetMapUnit();
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
-        nTokenValue = OutputDevice::LogicToLogic( (long)nTokenValue, eSrcUnit, eDestUnit );
+        nTokenValue = OutputDevice::LogicToLogic( nTokenValue, eSrcUnit, eDestUnit );
 }
 
 void EditRTFParser::ReadField()

@@ -1286,8 +1286,8 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
         if ( ! pOld->GetEscapement() && 50 == pOld->GetPropr() )
         {
             Size aSize = pFnt->GetSize( pFnt->GetActual() );
-            pFnt->SetSize( Size( (long)aSize.Width() / 2,
-                                 (long)aSize.Height() / 2 ),
+            pFnt->SetSize( Size( aSize.Width() / 2,
+                                 aSize.Height() / 2 ),
                            pFnt->GetActual() );
         }
 

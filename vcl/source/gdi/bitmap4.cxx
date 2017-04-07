@@ -1074,8 +1074,8 @@ void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContribu
 
     for ( int i = 0; i < aSize; i++ )
     {
-        aLeft = (int)  i - aNumberOfContributions / 2;
-        aRight = (int) i + aNumberOfContributions / 2;
+        aLeft  = i - aNumberOfContributions / 2;
+        aRight = i + aNumberOfContributions / 2;
         aCurrentCount = 0;
         for ( int j = aLeft; j <= aRight; j++ )
         {

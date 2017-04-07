@@ -4834,12 +4834,12 @@ static long GetDayDiff( const Date& rDate )
     long nDiffDays;
     if ( aRefDate > rDate )
     {
-        nDiffDays = (long)(aRefDate - rDate);
+        nDiffDays = aRefDate - rDate;
         nDiffDays *= -1;
     }
     else
     {
-        nDiffDays = (long)(rDate - aRefDate);
+        nDiffDays = rDate - aRefDate;
     }
     nDiffDays += 2; // adjustment VisualBasic: 1.Jan.1900 == 2
     return nDiffDays;

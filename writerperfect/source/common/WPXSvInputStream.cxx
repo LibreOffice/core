@@ -731,7 +731,7 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
 {
     if (mpReadBuffer)
     {
-        seek((long) tell() + (long)mnReadBufferPos - (long)mnReadBufferLength);
+        seek(tell() + (long)mnReadBufferPos - (long)mnReadBufferLength);
         mpReadBuffer = nullptr;
         mnReadBufferPos = 0;
         mnReadBufferLength = 0;
@@ -910,7 +910,7 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
 
     if (tmpOffset < mpImpl->tell() && (unsigned long)tmpOffset >= (unsigned long)mpImpl->tell() - mpImpl->mnReadBufferLength)
     {
-        mpImpl->mnReadBufferPos = (unsigned long)(tmpOffset + (long) mpImpl->mnReadBufferLength - (long) mpImpl->tell());
+        mpImpl->mnReadBufferPos = (unsigned long)(tmpOffset + (long) mpImpl->mnReadBufferLength - mpImpl->tell());
         return retVal;
     }
 

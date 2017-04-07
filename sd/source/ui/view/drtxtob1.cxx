@@ -162,7 +162,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         else
                         {
                             nUpper -= 100;
-                            nUpper = std::max( (long) nUpper, 0L );
+                            nUpper = std::max<long>( nUpper, 0 );
                         }
                         pNewItem->SetUpper( (sal_uInt16) nUpper );
 
@@ -172,7 +172,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         else
                         {
                             nLower -= 100;
-                            nLower = std::max( (long) nLower, 0L );
+                            nLower = std::max<long>( nLower, 0 );
                         }
                         pNewItem->SetLower( (sal_uInt16) nLower );
 
@@ -203,7 +203,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     else
                     {
                         nUpper -= 100;
-                        nUpper = std::max( (long) nUpper, 0L );
+                        nUpper = std::max<long>( nUpper, 0 );
                     }
                     pNewItem->SetUpper( (sal_uInt16) nUpper );
 
@@ -213,7 +213,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     else
                     {
                         nLower -= 100;
-                        nLower = std::max( (long) nLower, 0L );
+                        nLower = std::max<long>( nLower, 0 );
                     }
                     pNewItem->SetLower( (sal_uInt16) nLower );
 
