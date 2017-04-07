@@ -850,10 +850,8 @@ struct PPTStyleSheet : public PPTNumberFormatCreator
                         ~PPTStyleSheet();
 };
 
-struct ImplPPTParaPropSet
+struct ImplPPTParaPropSet : public salhelper::SimpleReferenceObject
 {
-    sal_uInt32  mnRefCount;
-
     sal_uInt16  mnDepth;
     sal_uInt32  mnAttrSet;
     sal_uInt32  mnBulletColor;
@@ -869,8 +867,7 @@ struct ImplPPTParaPropSet
     sal_uInt16  nDontKnow2bit06;
 
     ImplPPTParaPropSet()
-        : mnRefCount( 1 )
-        , mnDepth( 0 )
+        : mnDepth( 0 )
         , mnAttrSet( 0 )
         , mnBulletColor( 0 )
         , mnExtParagraphMask( 0 )
@@ -886,7 +883,7 @@ struct ImplPPTParaPropSet
 struct PPTParaPropSet
 {
     sal_uInt32          mnOriginalTextPos;
-    ImplPPTParaPropSet* pParaSet;
+    rtl::Reference<ImplPPTParaPropSet> mxParaSet;
 
                         PPTParaPropSet();
                         PPTParaPropSet( PPTParaPropSet& rParaPropSet );
