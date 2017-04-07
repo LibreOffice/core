@@ -1612,6 +1612,7 @@ struct ColumnStorageDumper : std::unary_function<sc::CellStoreType::value_type, 
             if (!pCell->IsShared())
             {
                 cout << "    * row " << pCell->aPos.Row() << " not shared" << endl;
+                printFormula(pCell);
                 printResult(pCell);
                 continue;
             }
