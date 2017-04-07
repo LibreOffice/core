@@ -35,7 +35,6 @@ namespace dbaccess
     // SubComponentLoader
     typedef ::cppu::WeakImplHelper<   css::awt::XWindowListener
                                   >   SubComponentLoader_Base;
-    struct SubComponentLoader_Data;
     /** is a helper class which loads/opens a given sub component as soon as the main application
         window becomes visible.
     */
@@ -65,7 +64,9 @@ namespace dbaccess
         virtual ~SubComponentLoader() override;
 
     private:
-        SubComponentLoader_Data*    m_pData;
+        const css::uno::Reference< css::ucb::XCommandProcessor >  mxDocDefCommands;
+        const css::uno::Reference< css::lang::XComponent >        mxNonDocComponent;
+        css::uno::Reference< css::awt::XWindow >                  mxAppComponentWindow;
     };
 
 } // namespace dbaccess
