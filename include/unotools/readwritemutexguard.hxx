@@ -31,21 +31,14 @@ class ReadWriteMutex
 
             sal_uInt32          nReadCount;
             sal_uInt32          nBlockCriticalCount;
-            ::osl::Mutex*       pMutex;
-            ::osl::Mutex*       pWriteMutex;
+            ::osl::Mutex        maMutex;
+            ::osl::Mutex        maWriteMutex;
 
 public:
                                 ReadWriteMutex()
                                     : nReadCount(0)
                                     , nBlockCriticalCount(0)
-                                    , pMutex( new ::osl::Mutex )
-                                    , pWriteMutex( new ::osl::Mutex )
                                     {}
-                                ~ReadWriteMutex()
-                                    {
-                                        delete pMutex;
-                                        delete pWriteMutex;
-                                    }
 };
 
 namespace ReadWriteGuardMode {
