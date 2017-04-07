@@ -1749,6 +1749,36 @@ const std::vector< std::unique_ptr<PDFElement> >& PDFDocument::GetElements()
     return m_aElements;
 }
 
+/// Visits the page tree recursively, looking for page objects.
+static void visitPages(PDFObjectElement* pPages, std::vector<PDFObjectElement*>& rRet)
+{
+    auto pKids = dynamic_cast<PDFArrayElement*>(pPages->Lookup("Kids"));
+    if (!pKids)
+    {
+        SAL_WARN("vcl.filter", "visitPages: pages has no kids");
+        return;
+    }
+
+    for (const auto& pKid : pKids->GetElements())
+    {
+        auto pReference = dynamic_cast<PDFReferenceElement*>(pKid);
+        if (!pReference)
+            continue;
+
+        PDFObjectElement* pKidObject = pReference->LookupObject();
+        if (!pKidObject)
+            continue;
+
+        auto pName = dynamic_cast<PDFNameElement*>(pKidObject->Lookup("Type"));
+        if (pName && pName->GetValue() == "Pages")
+            // Pages inside pages: recurse.
+            visitPages(pKidObject, rRet);
+        else
+            // Found an actual page.
+            rRet.push_back(pKidObject);
+    }
+}
+
 std::vector<PDFObjectElement*> PDFDocument::GetPages()
 {
     std::vector<PDFObjectElement*> aRet;
@@ -1779,21 +1809,7 @@ std::vector<PDFObjectElement*> PDFDocument::GetPages()
         return aRet;
     }
 
-    auto pKids = dynamic_cast<PDFArrayElement*>(pPages->Lookup("Kids"));
-    if (!pKids)
-    {
-        SAL_WARN("vcl.filter", "PDFDocument::GetPages: pages has no kids");
-        return aRet;
-    }
-
-    for (const auto& pKid : pKids->GetElements())
-    {
-        auto pReference = dynamic_cast<PDFReferenceElement*>(pKid);
-        if (!pReference)
-            continue;
-
-        aRet.push_back(pReference->LookupObject());
-    }
+    visitPages(pPages, aRet);
 
     return aRet;
 }

@@ -39,6 +39,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 #if HAVE_FEATURE_PDFIUM
+    void load(const OUString& rFile, vcl::filter::PDFDocument& rDocument);
     /// Tests that a pdf image is roundtripped back to PDF as a vector format.
     void testTdf106059();
     /// Tests that text highlight from Impress is not lost.
@@ -51,6 +52,7 @@ public:
     void testTdf106693();
     void testTdf106972();
     void testTdf106972Pdf17();
+    void testTdf107013();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -62,6 +64,7 @@ public:
     CPPUNIT_TEST(testTdf106693);
     CPPUNIT_TEST(testTdf106972);
     CPPUNIT_TEST(testTdf106972Pdf17);
+    CPPUNIT_TEST(testTdf107013);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -83,6 +86,26 @@ void PdfExportTest::tearDown()
 }
 
 #if HAVE_FEATURE_PDFIUM
+
+void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocument)
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(rDocument.Read(aStream));
+}
+
 void PdfExportTest::testTdf106059()
 {
     // Import the bugdoc and export as PDF.
@@ -127,22 +150,8 @@ void PdfExportTest::testTdf106059()
 
 void PdfExportTest::testTdf106693()
 {
-    // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106693.odt";
-    mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load("tdf106693.odt", aDocument);
 
     // Assert that the XObject in the page resources dictionary is a form XObject.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -180,22 +189,8 @@ void PdfExportTest::testTdf106693()
 
 void PdfExportTest::testTdf105461()
 {
-    // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105461.odp";
-    mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load("tdf105461.odp", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -226,22 +221,8 @@ void PdfExportTest::testTdf105461()
 
 void PdfExportTest::testTdf105093()
 {
-    // Import the bugdoc and export as PDF.
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105093.odp";
-    mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
-    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Parse the export result.
     vcl::filter::PDFDocument aDocument;
-    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    load("tdf105093.odp", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -402,6 +383,24 @@ void PdfExportTest::testTdf106972Pdf17()
     // preserve the original PDF markup here; which is not OK till our default
     // output is PDF 1.4, and this bugdoc has PDF 1.7 data.
     CPPUNIT_ASSERT(!pXObject->Lookup("Resources"));
+}
+
+void PdfExportTest::testTdf107013()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf107013.odt", aDocument);
+
+    // Get access to the only image on the only page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    // This failed, the reference to the image was created, but not the image.
+    CPPUNIT_ASSERT(pXObject);
 }
 #endif
 
