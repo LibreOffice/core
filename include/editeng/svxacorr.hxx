@@ -232,9 +232,9 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
     SvxSwAutoFormatFlags aSwFlags;     // StarWriter AutoFormat Flags
 
     // all languages in a table
-    std::map<LanguageTag, std::unique_ptr<SvxAutoCorrectLanguageLists>>* m_pLangTable;
+    std::map<LanguageTag, std::unique_ptr<SvxAutoCorrectLanguageLists>> m_aLangTable;
     std::map<LanguageTag, long> aLastFileTable;
-    CharClass* pCharClass;
+    std::unique_ptr<CharClass> pCharClass;
 
     bool bRunNext;
 
