@@ -8,8 +8,11 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
+import unittest
+
 class tdf105466(UITestCase):
 
+    @unittest.skip("issue with floating windows")
     def test_changing_conditional_format(self):
 
         self.ui_test.create_doc_in_start_center("calc")
