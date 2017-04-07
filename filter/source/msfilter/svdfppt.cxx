@@ -4529,8 +4529,7 @@ void PPTCharPropSet::SetColor( sal_uInt32 nColor )
 }
 
 PPTRuler::PPTRuler()
-    : nRefCount(1)
-    , nFlags(0)
+    : nFlags(0)
     , nDefaultTab(0x240)
     , pTab(nullptr)
     , nTabCount(0)
@@ -4545,18 +4544,17 @@ PPTRuler::~PPTRuler()
 
 
 PPTTextRulerInterpreter::PPTTextRulerInterpreter() :
-    mpImplRuler ( new PPTRuler() )
+    mxImplRuler ( new PPTRuler() )
 {
 }
 
 PPTTextRulerInterpreter::PPTTextRulerInterpreter( PPTTextRulerInterpreter& rRuler )
 {
-    mpImplRuler = rRuler.mpImplRuler;
-    mpImplRuler->nRefCount++;
+    mxImplRuler = rRuler.mxImplRuler;
 }
 
 PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecordHeader& rHeader, SvStream& rIn ) :
-    mpImplRuler ( new PPTRuler() )
+    mxImplRuler ( new PPTRuler() )
 {
     if ( nFileOfs != 0xffffffff )
     {
@@ -4579,14 +4577,14 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecord
 
             sal_Int16   nTCount(0);
             sal_Int32   i;
-            rIn.ReadInt32( mpImplRuler->nFlags );
+            rIn.ReadInt32( mxImplRuler->nFlags );
 
             // number of indent levels, unused now
-            if ( mpImplRuler->nFlags & 2 )
+            if ( mxImplRuler->nFlags & 2 )
                 rIn.ReadInt16( nTCount );
-            if ( mpImplRuler->nFlags & 1 )
-                rIn.ReadUInt16( mpImplRuler->nDefaultTab );
-            if ( mpImplRuler->nFlags & 4 )
+            if ( mxImplRuler->nFlags & 1 )
+                rIn.ReadUInt16( mxImplRuler->nDefaultTab );
+            if ( mxImplRuler->nFlags & 4 )
             {
                 rIn.ReadInt16(nTCount);
 
@@ -4597,12 +4595,12 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecord
 
                 if (nTCount && bRecordOk)
                 {
-                    mpImplRuler->nTabCount = nTabCount;
-                    mpImplRuler->pTab.reset( new PPTTabEntry[ mpImplRuler->nTabCount ] );
+                    mxImplRuler->nTabCount = nTabCount;
+                    mxImplRuler->pTab.reset( new PPTTabEntry[ mxImplRuler->nTabCount ] );
                     for ( i = 0; i < nTCount; i++ )
                     {
-                        rIn.ReadUInt16( mpImplRuler->pTab[ i ].nOffset )
-                           .ReadUInt16( mpImplRuler->pTab[ i ].nStyle );
+                        rIn.ReadUInt16( mxImplRuler->pTab[ i ].nOffset )
+                           .ReadUInt16( mxImplRuler->pTab[ i ].nStyle );
                     }
                 }
             }
@@ -4611,11 +4609,11 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecord
             {
                 for ( i = 0; i < 5; i++ )
                 {
-                    if ( mpImplRuler->nFlags & ( 8 << i ) )
-                        rIn.ReadUInt16( mpImplRuler->nTextOfs[ i ] );
-                    if ( mpImplRuler->nFlags & ( 256 << i ) )
-                        rIn.ReadUInt16( mpImplRuler->nBulletOfs[ i ] );
-                    if( mpImplRuler->nBulletOfs[ i ] > 0x7fff)
+                    if ( mxImplRuler->nFlags & ( 8 << i ) )
+                        rIn.ReadUInt16( mxImplRuler->nTextOfs[ i ] );
+                    if ( mxImplRuler->nFlags & ( 256 << i ) )
+                        rIn.ReadUInt16( mxImplRuler->nBulletOfs[ i ] );
+                    if( mxImplRuler->nBulletOfs[ i ] > 0x7fff)
                     {
                         // workaround
                         // when bullet offset is > 0x7fff, the paragraph should look like
@@ -4624,8 +4622,8 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecord
 
                         // we add to bullet para indent 0xffff - bullet offset. it looks like
                         // best we can do for now
-                        mpImplRuler->nTextOfs[ i ] += 0xffff - mpImplRuler->nBulletOfs[ i ];
-                        mpImplRuler->nBulletOfs[ i ] = 0;
+                        mxImplRuler->nTextOfs[ i ] += 0xffff - mxImplRuler->nBulletOfs[ i ];
+                        mxImplRuler->nBulletOfs[ i ] = 0;
                     }
                 }
             }
@@ -4636,25 +4634,25 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecord
 
 bool PPTTextRulerInterpreter::GetDefaultTab( sal_uInt32 /*nLevel*/, sal_uInt16& nValue ) const
 {
-    if ( ! ( mpImplRuler->nFlags & 1 ) )
+    if ( ! ( mxImplRuler->nFlags & 1 ) )
         return false;
-    nValue = mpImplRuler->nDefaultTab;
+    nValue = mxImplRuler->nDefaultTab;
     return true;
 }
 
 bool PPTTextRulerInterpreter::GetTextOfs( sal_uInt32 nLevel, sal_uInt16& nValue ) const
 {
-    if ( ! ( ( nLevel < 5 ) && ( mpImplRuler->nFlags & ( 8 << nLevel ) ) ) )
+    if ( ! ( ( nLevel < 5 ) && ( mxImplRuler->nFlags & ( 8 << nLevel ) ) ) )
         return false;
-    nValue = mpImplRuler->nTextOfs[ nLevel ];
+    nValue = mxImplRuler->nTextOfs[ nLevel ];
     return true;
 }
 
 bool PPTTextRulerInterpreter::GetBulletOfs( sal_uInt32 nLevel, sal_uInt16& nValue ) const
 {
-    if ( ! ( ( nLevel < 5 ) && ( mpImplRuler->nFlags & ( 256 << nLevel ) ) ) )
+    if ( ! ( ( nLevel < 5 ) && ( mxImplRuler->nFlags & ( 256 << nLevel ) ) ) )
         return false;
-    nValue = mpImplRuler->nBulletOfs[ nLevel ];
+    nValue = mxImplRuler->nBulletOfs[ nLevel ];
     return true;
 }
 
@@ -4662,18 +4660,13 @@ PPTTextRulerInterpreter& PPTTextRulerInterpreter::operator=( PPTTextRulerInterpr
 {
     if ( this != &rRuler )
     {
-        if ( ! ( --mpImplRuler->nRefCount ) )
-            delete mpImplRuler;
-        mpImplRuler = rRuler.mpImplRuler;
-        mpImplRuler->nRefCount++;
+        mxImplRuler = rRuler.mxImplRuler;
     }
     return *this;
 }
 
 PPTTextRulerInterpreter::~PPTTextRulerInterpreter()
 {
-    if ( ! ( --mpImplRuler->nRefCount ) )
-        delete mpImplRuler;
 }
 
 PPTTextParagraphStyleAtomInterpreter::PPTTextParagraphStyleAtomInterpreter() :

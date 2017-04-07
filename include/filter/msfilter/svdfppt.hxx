@@ -46,6 +46,7 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <vcl/graph.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace boost {
     template <class T> class optional;
@@ -962,10 +963,8 @@ struct PPTTabEntry
     sal_uInt16  nStyle;
 };
 
-struct PPTRuler
+struct PPTRuler : public salhelper::SimpleReferenceObject
 {
-        sal_uInt32          nRefCount;
-
         sal_Int32           nFlags;
         sal_uInt16          nDefaultTab;
         sal_uInt16          nTextOfs[nMaxPPTLevels];
@@ -975,12 +974,12 @@ struct PPTRuler
         sal_uInt16          nTabCount;
 
         PPTRuler();
-        ~PPTRuler();
+        virtual ~PPTRuler() override;
 };
 
 struct PPTTextRulerInterpreter
 {
-        PPTRuler    *mpImplRuler;
+        rtl::Reference<PPTRuler>    mxImplRuler;
 
                     PPTTextRulerInterpreter();
                     PPTTextRulerInterpreter( PPTTextRulerInterpreter& rRuler );
@@ -992,12 +991,12 @@ struct PPTTextRulerInterpreter
                     ~PPTTextRulerInterpreter();
 
         sal_uInt16  GetTabOffsetByIndex( sal_uInt16 nIndex ) const
-                    { return mpImplRuler->pTab[ nIndex ].nOffset; };
+                    { return mxImplRuler->pTab[ nIndex ].nOffset; };
 
         sal_uInt16  GetTabStyleByIndex( sal_uInt16 nIndex ) const
-                    { return mpImplRuler->pTab[ nIndex ].nStyle; };
+                    { return mxImplRuler->pTab[ nIndex ].nStyle; };
 
-        sal_uInt16  GetTabCount() const { return mpImplRuler->nTabCount; };
+        sal_uInt16  GetTabCount() const { return mxImplRuler->nTabCount; };
         bool        GetDefaultTab( sal_uInt32 nLevel, sal_uInt16& nValue ) const;
         bool        GetTextOfs( sal_uInt32 nLevel, sal_uInt16& nValue ) const;
         bool        GetBulletOfs( sal_uInt32 nLevel, sal_uInt16& nValue ) const;
