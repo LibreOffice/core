@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_eba0f692",
+        "filename": "sc/qa/unit/data/functions/statistical/fods/chisq.test.fods",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-07T10:04:55Z",
+      "side": 1,
+      "message": "Looks odd.. might it be you worked on an old version of the document? That would explain a bunch of changes..",
+      "range": {
+        "startLine": 4,
+        "startChar": 34,
+        "endLine": 4,
+        "endChar": 44
+      },
+      "revId": "f99eb1e6ae37d74b47d437442890f47205729cb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ab9eee53",
+        "filename": "sc/qa/unit/data/functions/statistical/fods/chisq.test.fods",
+        "patchSetId": 1
+      },
+      "lineNbr": 3823,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-07T10:04:55Z",
+      "side": 1,
+      "message": "Replacing ROUNDSIG with ROUND(...,12) for a value of 1.16440189336067E-29 doesn\u0027t make sense.. also all other ROUNDSIG replacements below.",
+      "revId": "f99eb1e6ae37d74b47d437442890f47205729cb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2babde75",
+        "filename": "sc/qa/unit/data/functions/statistical/fods/chitest.fods",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-07T10:04:55Z",
+      "side": 1,
+      "message": "Same here, edited an old version of the document?",
+      "range": {
+        "startLine": 4,
+        "startChar": 34,
+        "endLine": 4,
+        "endChar": 44
+      },
+      "revId": "f99eb1e6ae37d74b47d437442890f47205729cb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
