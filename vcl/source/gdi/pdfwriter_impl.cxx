@@ -11696,7 +11696,8 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
-        rEmit.m_nObject     = createObject();
+        if (!hasPdfData(rGraphic, m_aContext.UseReferenceXObject) || m_aContext.UseReferenceXObject)
+            rEmit.m_nObject = createObject();
         rEmit.m_aID         = aID;
         rEmit.m_pStream.reset( pStream );
         rEmit.m_bTrueColor  = bIsTrueColor;
