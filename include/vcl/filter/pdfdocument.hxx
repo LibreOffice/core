@@ -71,6 +71,9 @@ class VCL_DLLPUBLIC PDFObjectElement : public PDFElement
     std::vector< std::unique_ptr<PDFElement> > m_aElements;
     /// Uncompressed buffer of an object in an object stream.
     std::unique_ptr<SvMemoryStream> m_pStreamBuffer;
+    /// List of all reference elements inside this object's dictionary and
+    /// nested dictionaries.
+    std::vector<PDFReferenceElement*> m_aDictionaryReferences;
 
 public:
     PDFObjectElement(PDFDocument& rDoc, double fObjectValue, double fGenerationValue);
@@ -88,8 +91,8 @@ public:
     PDFNumberElement* GetNumberElement() const;
     /// Get access to the parsed key-value items from the object dictionary.
     const std::map<OString, PDFElement*>& GetDictionaryItems();
-    /// Same as GetDictionaryItems(), but entries are sorted by file offset.
-    std::vector< std::pair<OString, PDFElement*> > GetDictionaryItemsByOffset();
+    const std::vector<PDFReferenceElement*>& GetDictionaryReferences() const;
+    void AddDictionaryReference(PDFReferenceElement* pReference);
     void SetArray(PDFArrayElement* pArrayElement);
     void SetStream(PDFStreamElement* pStreamElement);
     /// Access to the stream of the object, if it has any.
