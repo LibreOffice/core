@@ -21,6 +21,8 @@
 #define INCLUDED_CONFIGMGR_SOURCE_WRITEMODFILE_HXX
 
 #include <sal/config.h>
+
+#include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 
 namespace configmgr {
@@ -41,16 +43,15 @@ struct TempFile {
 #ifdef _WIN32
     oslFileError closeWithoutUnlink();
 #endif
-    void writeString(char const *begin, sal_Int32 length);
+    void writeString(o3tl::string_view text);
 
 private:
     TempFile(const TempFile&) = delete;
     TempFile& operator=(const TempFile&) = delete;
 };
 
-void writeData(TempFile &handle, OString const & text);
-void writeAttributeValue(TempFile &handle, OUString const & value);
-void writeValueContent(TempFile &handle, OUString const & value);
+void writeAttributeValue(TempFile &handle, o3tl::u16string_view value);
+void writeValueContent(TempFile &handle, o3tl::u16string_view value);
 
 void writeModFile(
     Components & components, OUString const & url, Data const & data);

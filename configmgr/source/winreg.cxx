@@ -149,7 +149,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             bool bHasNode = false;
             sal_Int32 nCloseNode = 0;
 
-            writeData(aFileHandle, "<item oor:path=\"");
+            aFileHandle.writeString("<item oor:path=\"");
             for(sal_Int32 nIndex = 0;; ++nIndex)
             {
                 OUString aNextPathPart = aPathAndNodes.getToken(nIndex, '\\');
@@ -160,13 +160,13 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                     {
                         bHasNode = true;
                         nCloseNode++;
-                        writeData(aFileHandle, "\"><node oor:name=\"");
+                        aFileHandle.writeString("\"><node oor:name=\"");
                         sal_Int32 nCommandSeparator = aNextPathPart.lastIndexOf('#');
                         if(nCommandSeparator != -1)
                         {
                             OUString aNodeOp = aNextPathPart.copy(nCommandSeparator + 1);
                             writeAttributeValue(aFileHandle, aNextPathPart.copy(0, nCommandSeparator - 1));
-                            writeData(aFileHandle, "\" oor:op=\"");
+                            aFileHandle.writeString("\" oor:op=\"");
                             writeAttributeValue(aFileHandle, aNodeOp);
                         }
                         else
@@ -176,33 +176,34 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                     }
                     else
                     {
-                        writeAttributeValue(aFileHandle, "/" + aNextPathPart);
+                        writeAttributeValue(
+                            aFileHandle, OUString("/" + aNextPathPart));
                     }
                 }
                 else
                 {
-                    writeData(aFileHandle, "\">");
+                    aFileHandle.writeString("\">");
                     break;
                 }
             }
 
-            writeData(aFileHandle, "<prop oor:name=\"");
+            aFileHandle.writeString("<prop oor:name=\"");
             writeAttributeValue(aFileHandle, aProp);
-            writeData(aFileHandle, "\"");
+            aFileHandle.writeString("\"");
             if(!aType.isEmpty())
             {
-                writeData(aFileHandle, " oor:type=\"");
+                aFileHandle.writeString(" oor:type=\"");
                 writeAttributeValue(aFileHandle, aType);
-                writeData(aFileHandle, "\"");
+                aFileHandle.writeString("\"");
             }
             if(bFinal)
-                writeData(aFileHandle, " oor:finalized=\"true\"");
-            writeData(aFileHandle, "><value>");
+                aFileHandle.writeString(" oor:finalized=\"true\"");
+            aFileHandle.writeString("><value>");
             writeValueContent(aFileHandle, aValue);
-            writeData(aFileHandle, "</value></prop>");
+            aFileHandle.writeString("</value></prop>");
             for(; nCloseNode > 0; nCloseNode--)
-                writeData(aFileHandle, "</node>");
-            writeData(aFileHandle, "</item>\n");
+                aFileHandle.writeString("</node>");
+            aFileHandle.writeString("</item>\n");
         }
         RegCloseKey(hCurKey);
     }
@@ -235,14 +236,13 @@ bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType)
             "cannot create temporary file");
     }
     aFileHandle.url = *pFileURL;
-    writeData(
-        aFileHandle,
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<oor:items"
-            " xmlns:oor=\"http://openoffice.org/2001/registry\""
-            " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
-            " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
+    aFileHandle.writeString(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<oor:items"
+        " xmlns:oor=\"http://openoffice.org/2001/registry\""
+        " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
+        " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
     dumpWindowsRegistryKey(hKey, "", aFileHandle);
-    writeData(aFileHandle, "</oor:items>");
+    aFileHandle.writeString("</oor:items>");
     oslFileError e = aFileHandle.closeWithoutUnlink();
     if (e != osl_File_E_None)
         SAL_WARN("configmgr", "osl_closeFile failed with " << +e);
