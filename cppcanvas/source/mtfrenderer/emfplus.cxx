@@ -65,7 +65,7 @@ namespace
 #define EmfPlusRecordTypeFillEllipse 0x400E
 #define EmfPlusRecordTypeDrawEllipse 0x400F
 #define EmfPlusRecordTypeFillPie 0x4010
-//TODO EmfPlusRecordTypeDrawPie 0x4011
+#define EmfPlusRecordTypeDrawPie 0x4011
 //TODO EmfPlusRecordTypeDrawArc 0x4012
 //TODO EmfPlusRecordTypeFillRegion 0x4013
 #define EmfPlusRecordTypeFillPath 0x4014
@@ -220,6 +220,7 @@ const char* emfTypeToName(sal_uInt16 type)
         case EmfPlusRecordTypeFillEllipse: return "EmfPlusRecordTypeFillEllipse";
         case EmfPlusRecordTypeDrawEllipse: return "EmfPlusRecordTypeDrawEllipse";
         case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
+        case EmfPlusRecordTypeDrawPie: return "EmfPlusRecordTypeDrawPie";
         case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
         case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
         case EmfPlusRecordTypeDrawImage: return "EmfPlusRecordTypeDrawImage";
@@ -1904,19 +1905,29 @@ namespace cppcanvas
                         processObjectRecord (rMF, flags, dataSize);
                         break;
                     case EmfPlusRecordTypeFillPie:
+                    case EmfPlusRecordTypeDrawPie:
                         {
-                            sal_uInt32 brushIndexOrColor;
                             float startAngle, sweepAngle;
 
-                            rMF.ReadUInt32( brushIndexOrColor ).ReadFloat( startAngle ).ReadFloat( sweepAngle );
+                            // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
+                            sal_uInt32 brushIndexOrColor = 999;
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor << " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
+                            if ( type == EmfPlusRecordTypeFillPie )
+                            {
+                                rMF.ReadUInt32( brushIndexOrColor );
+                                SAL_INFO("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor);
+                            }
+                            else
+                            {
+                                SAL_INFO("cppcanvas.emf", "EMF+ DrawPie");
+                            }
+                            rMF.ReadFloat( startAngle ).ReadFloat( sweepAngle );
 
                             float dx, dy, dw, dh;
 
                             ReadRectangle (rMF, dx, dy, dw, dh, bool(flags & 0x4000));
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+                            SAL_INFO("cppcanvas.emf", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
                             startAngle = 2*M_PI*startAngle/360;
                             sweepAngle = 2*M_PI*sweepAngle/360;
@@ -1935,15 +1946,21 @@ namespace cppcanvas
                             if (sweepAngle < 0)
                                 std::swap (endAngle, startAngle);
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ adjusted angles: start " <<
-                                     (360.0*startAngle/M_PI) << ", end: " << (360.0*endAngle/M_PI));
+                            SAL_INFO("cppcanvas.emf", "EMF+\t adjusted angles: start " <<
+                                     (360.0*startAngle/M_PI) << ", end: " << (360.0*endAngle/M_PI) <<
+                                     " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
 
                             B2DPolygon polygon = basegfx::tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
                             polygon.append (mappedCenter);
                             polygon.setClosed (true);
 
                             B2DPolyPolygon polyPolygon (polygon);
-                            EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                            if ( type == EmfPlusRecordTypeFillPie )
+                                EMFPPlusFillPolygon( polyPolygon,
+                                                     rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor );
+                            else
+                                EMFPPlusDrawPolygon( polyPolygon,
+                                                     rFactoryParms, rState, rCanvas, flags & 0xff );
                         }
                         break;
                     case EmfPlusRecordTypeFillPath:
