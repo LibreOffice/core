@@ -1071,10 +1071,14 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                     }
                     else
                     {
-                        rElements.push_back(std::unique_ptr<PDFElement>(new PDFReferenceElement(*this, *pObjectNumber, *pGenerationNumber)));
+                        auto pReference = new PDFReferenceElement(*this, *pObjectNumber, *pGenerationNumber);
+                        rElements.push_back(std::unique_ptr<PDFElement>(pReference));
                         if (pArray)
                             // Reference is part of a direct (non-dictionary) array, inform the array.
                             pArray->PushBack(rElements.back().get());
+                        if (bInObject && nDictionaryDepth > 0 && pObject)
+                            // Inform the object about a new in-dictionary reference.
+                            pObject->AddDictionaryReference(pReference);
                     }
                     if (!rElements.back()->Read(rStream))
                     {
@@ -2512,23 +2516,14 @@ PDFNumberElement* PDFObjectElement::GetNumberElement() const
     return m_pNumberElement;
 }
 
-std::vector< std::pair<OString, PDFElement*> > PDFObjectElement::GetDictionaryItemsByOffset()
+const std::vector<PDFReferenceElement*>& PDFObjectElement::GetDictionaryReferences() const
 {
-    std::vector< std::pair<OString, PDFElement*> > aRet;
+    return m_aDictionaryReferences;
+}
 
-    for (const auto& rItem : m_aDictionary)
-        aRet.push_back(rItem);
-
-    PDFDictionaryElement* pDictionary = GetDictionary();
-    if (!pDictionary)
-        return aRet;
-
-    std::sort(aRet.begin(), aRet.end(), [pDictionary](const std::pair<OString, PDFElement*>& a, const std::pair<OString, PDFElement*>& b) -> bool
-    {
-        return pDictionary->GetKeyOffset(a.first) < pDictionary->GetKeyOffset(b.first);
-    });
-
-    return aRet;
+void PDFObjectElement::AddDictionaryReference(PDFReferenceElement* pReference)
+{
+    m_aDictionaryReferences.push_back(pReference);
 }
 
 const std::map<OString, PDFElement*>& PDFObjectElement::GetDictionaryItems()
