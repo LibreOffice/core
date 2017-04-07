@@ -166,7 +166,7 @@ void ScFunctionWin::UpdateLRUList()
 #*
 #*  Class:      ScFunctionWin
 #*
-#*  Function:   Erklaerungstext fuer die Funktion einstellen.
+#*  Function:
 #*
 #*  Input:      ---
 #*

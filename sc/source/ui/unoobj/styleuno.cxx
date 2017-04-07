@@ -167,7 +167,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
     return &aCellStyleSet_Impl;
 }
 
-//  Map mit allen Seitenattributen, incl. Kopf-/Fusszeilenattribute
+//  map with all site attributes including header and footer attributes
 
 static const SfxItemPropertySet * lcl_GetPageStyleSet()
 {
@@ -288,7 +288,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
     return &aPageStyleSet_Impl;
 }
 
-//  Map mit Inhalten des Header-Item-Sets
+//  map with content of the Header-Item-Sets
 
 static const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
 {
@@ -327,7 +327,7 @@ static const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
     return &aHeaderStyleMap;
 }
 
-//  Map mit Inhalten des Footer-Item-Sets
+//  map with content of the Footer-Item-Sets
 
 static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 {
@@ -477,7 +477,7 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
 {
     SolarMutexGuard aGuard;
-    return cppu::UnoType<container::XNameContainer>::get();    // muss zu getByIndex passen
+    return cppu::UnoType<container::XNameContainer>::get();    // has to fit to getByIndex
 }
 
 sal_Bool SAL_CALL ScStyleFamiliesObj::hasElements()
@@ -700,7 +700,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
 void SAL_CALL ScStyleFamilyObj::replaceByName( const OUString& aName, const uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
-    //! zusammenfassen?
+    //! combine?
     removeByName( aName );
     insertByName( aName, aElement );
 }
@@ -716,7 +716,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
         ScDocument& rDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
-        //! DocFunc-Funktion??
+        //! DocFunc function??
         //! Undo ?????????????
 
         SfxStyleSheetBase* pStyle = pStylePool->Find( aString, eFamily );
@@ -725,7 +725,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
             bFound = true;
             if ( eFamily == SfxStyleFamily::Para )
             {
-                // wie ScViewFunc::RemoveStyleSheetInUse
+                // like ScViewFunc::RemoveStyleSheetInUse
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
                 Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
                 double nPPTX = aLogic.X() / 1000.0;
@@ -788,7 +788,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
 {
     SolarMutexGuard aGuard;
-    return cppu::UnoType<style::XStyle>::get();    // muss zu getByIndex passen
+    return cppu::UnoType<style::XStyle>::get();    // has to fit to getByIndex
 }
 
 sal_Bool SAL_CALL ScStyleFamilyObj::hasElements()
@@ -1048,7 +1048,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
         if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             return;         //! exception?
 
-        //! DocFunc-Funktion??
+        //! DocFunc function??
         //! Undo ?????????????
 
         OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, eFamily ));
@@ -1106,7 +1106,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
         if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             return;         //! exception?
 
-        //! DocFunc-Funktion??
+        //! DocFunc function??
         //! Undo ?????????????
 
         bool bOk = pStyle->SetName( aNewName );
@@ -1118,7 +1118,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
             if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
                 rDoc.GetPool()->CellStyleCreated( aNewName, &rDoc );
 
-            //  Zellvorlagen = 2, Seitenvorlagen = 4
+            //  cell styles = 2, page styles = 4
             sal_uInt16 nId = ( eFamily == SfxStyleFamily::Para ) ?
                             SID_STYLE_FAMILY2 : SID_STYLE_FAMILY4;
             SfxBindings* pBindings = pDocShell->GetViewBindings();
@@ -1537,7 +1537,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                 {
                     if (pValue)
                     {
-                        switch ( pEntry->nWID )     // fuer Item-Spezial-Behandlungen
+                        switch ( pEntry->nWID )     // special item handling
                         {
                             case ATTR_VALUE_FORMAT:
                                 {
@@ -1770,7 +1770,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
         ScDocument& rDoc = pDocShell->GetDocument();
         if ( eFamily == SfxStyleFamily::Para )
         {
-            // update lineheight
+            // update line height
             ScopedVclPtrInstance< VirtualDevice > pVDev;
             Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
             double nPPTX = aLogic.X() / 1000.0;
@@ -1815,7 +1815,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
 
             if ( IsScItemWid( nWhich ) )
             {
-                switch ( nWhich )       // fuer Item-Spezial-Behandlungen
+                switch ( nWhich )       // for special item handling
                 {
                     case ATTR_VALUE_FORMAT:
                         if ( pDocShell )
@@ -1848,7 +1848,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                     case ATTR_PAGE_CHARTS:
                     case ATTR_PAGE_OBJECTS:
                     case ATTR_PAGE_DRAWINGS:
-                        //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
+                        //! define sal_Bool-MID for ScViewObjectModeItem?
                         aAny <<= static_cast<const ScViewObjectModeItem&>(pItemSet->Get(nWhich)).GetValue() == VOBJ_MODE_SHOW;
                         break;
                     case ATTR_PAGE_PAPERBIN:

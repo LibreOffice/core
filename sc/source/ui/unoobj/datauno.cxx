@@ -1699,7 +1699,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getSortDescript
     {
         pData->GetSortParam(aParam);
 
-        //  im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+        //  SortDescriptor contains the counted fields inside the area
         ScRange aDBRange;
         pData->GetArea(aDBRange);
         SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
@@ -1720,7 +1720,7 @@ void ScDatabaseRangeObj::GetQueryParam(ScQueryParam& rQueryParam) const
     {
         pData->GetQueryParam(rQueryParam);
 
-        //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+        //  FilterDescriptor contains the counted fields inside the area
         ScRange aDBRange;
         pData->GetArea(aDBRange);
         SCCOLROW nFieldStart = rQueryParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
@@ -1739,7 +1739,7 @@ void ScDatabaseRangeObj::SetQueryParam(const ScQueryParam& rQueryParam)
     const ScDBData* pData = GetDBData_Impl();
     if (pData)
     {
-        //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+        //  FilterDescriptor contains the counted fields inside the area
         ScQueryParam aParam(rQueryParam);
         ScRange aDBRange;
         pData->GetArea(aDBRange);
@@ -1774,7 +1774,7 @@ void ScDatabaseRangeObj::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
     {
         pData->GetSubTotalParam(rSubTotalParam);
 
-        //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+        //  FilterDescriptor contains the counted fields inside the area
         ScRange aDBRange;
         pData->GetArea(aDBRange);
         SCCOL nFieldStart = aDBRange.aStart.Col();
@@ -1798,7 +1798,7 @@ void ScDatabaseRangeObj::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
     const ScDBData* pData = GetDBData_Impl();
     if (pData)
     {
-        //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+        //  FilterDescriptor contains the counted fields inside the area
         ScSubTotalParam aParam(rSubTotalParam);
         ScRange aDBRange;
         pData->GetArea(aDBRange);
@@ -1914,7 +1914,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScDatabaseRangeObj::getReferredCells(
     ScDBData* pData = GetDBData_Impl();
     if ( pData )
     {
-        //! static Funktion um ScCellObj/ScCellRangeObj zu erzeugen am ScCellRangeObj ???
+        //! static function to create ScCellObj/ScCellRange on ScCellRangeObj ???
 
         pData->GetArea(aRange);
         if ( aRange.aStart == aRange.aEnd )

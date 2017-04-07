@@ -32,13 +32,13 @@
 #include "document.hxx"
 #include "gridwin.hxx"
 
-//  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
-//! fusel,fuconstr,futext - zusammenfassen!
+//  maximal permitted mouse movement to start Drag&Drop
+//! fusel,fuconstr,futext - combine them!
 #define SC_MAXDRAGMOVE  3
 
 /*************************************************************************
 |*
-|* Konstruktor
+|* ctor
 |*
 \************************************************************************/
 
@@ -50,7 +50,7 @@ FuConstruct::FuConstruct(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
 
 /*************************************************************************
 |*
-|* Destruktor
+|* dtor
 |*
 \************************************************************************/
 

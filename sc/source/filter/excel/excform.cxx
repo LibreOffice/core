@@ -1564,7 +1564,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
     if( nAnz > 0 && eId == ocExternal )
     {
         TokenId             n = eParam[ nAnz - 1 ];
-//##### ADJUST GRUETZE (?) FOR BASIC-FUNCS!
+//##### ADJUST STUPIDITY FOR BASIC-FUNCS!
         if( const OUString* pExt = aPool.GetExternal( n ) )
         {
             if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclMacroName( *pExt ) )
