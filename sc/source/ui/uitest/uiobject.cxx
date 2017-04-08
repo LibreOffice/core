@@ -56,6 +56,12 @@ StringMap ScGridWinUIObject::get_state()
     aMap["CurrentColumn"] = OUString::number(mxGridWindow->getViewData()->GetCurX());
     aMap["CurrentRow"] = OUString::number(mxGridWindow->getViewData()->GetCurY());
 
+    ScSplitPos eAlign = mxGridWindow->getViewData()->GetActivePart();
+    ScHSplitPos eAlignX = WhichH(eAlign);
+    ScVSplitPos eAlignY = WhichV(eAlign);
+    aMap["TopVisibleRow"] = OUString::number(mxGridWindow->getViewData()->GetPosY(eAlignY));
+    aMap["TopVisibleColumn"] = OUString::number(mxGridWindow->getViewData()->GetPosX(eAlignX));
+
     ScRangeList aMarkedArea = mxGridWindow->getViewData()->GetMarkData().GetMarkedRanges();
     OUString aMarkedAreaString;
     ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, mxGridWindow->getViewData()->GetDocument(), formula::FormulaGrammar::CONV_OOO);
