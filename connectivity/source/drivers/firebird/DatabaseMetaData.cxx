@@ -1126,7 +1126,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         // for domains, whether a specific field is nullable is set in relfields,
         // this is also the one we manually fiddle when changin NULL/NOT NULL
         // (see Table.cxx)
-        "relfields.RDB$NULL_FLAG "      // 11
+        "relfields.RDB$NULL_FLAG, "      // 11
+        "fields.RDB$CHARACTER_LENGTH "   // 12
         "FROM RDB$RELATION_FIELDS relfields "
         "JOIN RDB$FIELDS fields "
         "on (fields.RDB$FIELD_NAME = relfields.RDB$FIELD_SOURCE) "
@@ -1192,7 +1193,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
             {
                 case SQL_TEXT:
                 case SQL_VARYING:
-                    aColumnSize = xRow->getShort(8);
+                    aColumnSize = xRow->getShort(12);
                     break;
                 case SQL_SHORT:
                 case SQL_LONG:
