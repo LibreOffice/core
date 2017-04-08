@@ -1404,6 +1404,7 @@
                           <object class="GtkBox" id="box16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkButton" id="Forward">
@@ -1578,6 +1579,7 @@
                       <object class="GtkBox" id="box18">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="PhotoAlbumDialog">
@@ -2380,6 +2382,7 @@
                       <object class="GtkBox" id="box28">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="NotesMode">
@@ -2422,6 +2425,7 @@
                       <object class="GtkBox" id="box29">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="SlideMasterPage">
@@ -2499,6 +2503,7 @@
                   <object class="GtkBox" id="box30">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">center</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkButton" id="ShowRuler">

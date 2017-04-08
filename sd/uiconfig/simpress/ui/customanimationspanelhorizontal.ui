@@ -54,6 +54,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="valign">center</property>
             <child>
               <object class="sdlo-CustomAnimationList" id="custom_animation_list">
                 <property name="visible">True</property>
@@ -85,6 +86,7 @@
             <property name="row_spacing">2</property>
             <property name="column_spacing">6</property>
             <property name="row_homogeneous">True</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkButton" id="add_effect">
                 <property name="visible">True</property>
@@ -155,6 +157,7 @@
             <property name="can_focus">False</property>
             <property name="row_spacing">3</property>
             <property name="column_spacing">6</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkLabel" id="start_effect">
                 <property name="visible">True</property>
@@ -235,6 +238,7 @@
             <property name="can_focus">False</property>
             <property name="row_spacing">3</property>
             <property name="column_spacing">6</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkLabel" id="categorylabel">
                 <property name="visible">True</property>
@@ -327,6 +331,7 @@
             <property name="width_request">300</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="valign">center</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="effectlabel">
@@ -368,6 +373,7 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">6</property>
             <property name="row_homogeneous">True</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkCheckButton" id="auto_preview">
                 <property name="label" translatable="yes">Automatic Preview</property>
