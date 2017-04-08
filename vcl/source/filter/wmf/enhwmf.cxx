@@ -603,12 +603,12 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
         return;
 
     // Get number of points in each polygon
-    std::unique_ptr<sal_uInt16[]> pnPoints(new sal_uInt16[ nPoly ]);
+    std::vector<sal_uInt16> aPoints(nPoly);
     for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
     {
         sal_uInt32 nPoints(0);
         pWMF->ReadUInt32( nPoints );
-        pnPoints[ i ] = (sal_uInt16)nPoints;
+        aPoints[i] = (sal_uInt16)nPoints;
     }
     if ( pWMF->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - pWMF->Tell() ) )
     {
@@ -616,20 +616,20 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
         tools::PolyPolygon aPolyPoly(nPoly, nPoly);
         for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
         {
-            const sal_uInt16 nPointCount(pnPoints[i]);
-            std::unique_ptr<Point[]> pPtAry(new Point[nPointCount]);
+            const sal_uInt16 nPointCount(aPoints[i]);
+            std::vector<Point> aPtAry(nPointCount);
             for (sal_uInt16 j = 0; j < nPointCount && pWMF->good(); ++j)
             {
                 T nX(0), nY(0);
                 *pWMF >> nX >> nY;
-                pPtAry[ j ] = Point( nX, nY );
+                aPtAry[j] = Point( nX, nY );
                 ++nReadPoints;
             }
 
-            aPolyPoly.Insert( tools::Polygon(nPointCount, pPtAry.get()) );
+            aPolyPoly.Insert(tools::Polygon(aPtAry.size(), aPtAry.data()));
         }
 
-        pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
+        pOut->DrawPolyPolygon(aPolyPoly, bRecordPath);
     }
 
     OSL_ENSURE(nReadPoints == nGesPoints, "The number Points processed from EMR_POLYPOLYGON is unequal imported number (!)");
