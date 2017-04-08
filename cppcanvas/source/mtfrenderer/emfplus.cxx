@@ -102,7 +102,7 @@ namespace
 #define EmfPlusRecordTypeSetWorldTransform 0x402A
 #define EmfPlusRecordTypeResetWorldTransform 0x402B
 #define EmfPlusRecordTypeMultiplyWorldTransform 0x402C
-//TODO EmfPlusRecordTypeTranslateWorldTransform 0x402D
+#define EmfPlusRecordTypeTranslateWorldTransform 0x402D
 //TODO EmfPlusRecordTypeScaleWorldTransform 0x402E
 //TODO EmfPlusRecordTypeRotateWorldTransform 0x402F
 #define EmfPlusRecordTypeSetPageTransform 0x4030
@@ -174,6 +174,7 @@ const char* emfTypeToName(sal_uInt16 type)
         case EmfPlusRecordTypeSetWorldTransform: return "EmfPlusRecordTypeSetWorldTransform";
         case EmfPlusRecordTypeResetWorldTransform: return "EmfPlusRecordTypeResetWorldTransform";
         case EmfPlusRecordTypeMultiplyWorldTransform: return "EmfPlusRecordTypeMultiplyWorldTransform";
+        case EmfPlusRecordTypeTranslateWorldTransform: return "EmfPlusRecordTypeTranslateWorldTransform";
         case EmfPlusRecordTypeSetPageTransform: return "EmfPlusRecordTypeSetPageTransform";
         case EmfPlusRecordTypeSetClipRect: return "EmfPlusRecordTypeSetClipRect";
         case EmfPlusRecordTypeSetClipPath: return "EmfPlusRecordTypeSetClipPath";
@@ -1382,6 +1383,36 @@ namespace cppcanvas
                                 "EMF+\tdx: "  << aWorldTransform.eDx  << "dy: "  << aWorldTransform.eDy);
                         break;
                     }
+                    case EmfPlusRecordTypeTranslateWorldTransform:
+                        {
+                            SAL_INFO("cppcanvas.emf", "EMF+ TranslateWorldTransform");
+                            float dx, dy;
+                            rMF.ReadFloat( dx ).ReadFloat( dy );
+
+                            XForm transform;
+                            transform.eM11 = 1.0;
+                            transform.eM12 = 0.0;
+                            transform.eM21 = 0.0;
+                            transform.eM22 = 1.0;
+                            transform.eDx = dx;
+                            transform.eDy = dy;
+                            SAL_INFO("cppcanvas.emf",
+                                     "EMF+\tmatrix m11: " << transform.eM11 << "m12: " << transform.eM12 <<
+                                     "EMF+\tm21: "        << transform.eM21 << "m22: " << transform.eM22 <<
+                                     "EMF+\tdx: "         << transform.eDx  << "dy: "  << transform.eDy);
+
+                            if (flags & 0x2000)  // post multiply
+                                aWorldTransform.Multiply (transform);
+                            else {               // pre multiply
+                                transform.Multiply (aWorldTransform);
+                                aWorldTransform.Set (transform);
+                            }
+                            SAL_INFO("cppcanvas.emf",
+                                    "EMF+\tm11: " << aWorldTransform.eM11 << "m12: " << aWorldTransform.eM12 <<
+                                    "EMF+\tm21: " << aWorldTransform.eM21 << "m22: " << aWorldTransform.eM22 <<
+                                    "EMF+\tdx: "  << aWorldTransform.eDx  << "dy: "  << aWorldTransform.eDy);
+                            break;
+                        }
                     case EmfPlusRecordTypeSetClipRect:
                         {
                             int combineMode = (flags >> 8) & 0xf;
