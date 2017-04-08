@@ -2245,6 +2245,43 @@ ScConditionalFormatList::const_iterator ScConditionalFormatList::end() const
     return m_ConditionalFormats.end();
 }
 
+ScRangeList ScConditionalFormatList::GetCombinedRange() const
+{
+    ScRangeList aRange;
+    for (auto& itr: m_ConditionalFormats)
+    {
+        const ScRangeList& rRange = itr->GetRange();
+        for (size_t i = 0, n = rRange.size(); i < n; ++i)
+        {
+            if (rRange[i])
+                aRange.Join(*rRange[i]);
+        }
+    }
+    return aRange;
+}
+
+void ScConditionalFormatList::RemoveFromDocument(ScDocument* pDoc) const
+{
+    ScRangeList aRange = GetCombinedRange();
+    ScMarkData aMark;
+    aMark.MarkFromRangeList(aRange, true);
+    sal_uInt16 pItems[2] = { ATTR_CONDITIONAL,0};
+    pDoc->ClearSelectionItems(pItems, aMark);
+}
+
+void ScConditionalFormatList::AddToDocument(ScDocument* pDoc) const
+{
+    for (auto& itr: m_ConditionalFormats)
+    {
+        const ScRangeList& rRange = itr->GetRange();
+        if (rRange.empty())
+            continue;
+
+        SCTAB nTab = rRange.front()->aStart.Tab();
+        pDoc->AddCondFormatData(rRange, nTab, itr->GetKey());
+    }
+}
+
 size_t ScConditionalFormatList::size() const
 {
     return m_ConditionalFormats.size();

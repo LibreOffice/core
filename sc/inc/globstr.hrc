@@ -662,7 +662,9 @@
 
 #define STR_QUERY_PIVOTTABLE_DELTAB     535
 
-#define SC_GLOBSTR_STR_COUNT            536     /**< the count of permanently resident strings */
+#define STR_UNDO_CONDFORMAT_LIST        536
+
+#define SC_GLOBSTR_STR_COUNT            537     /**< the count of permanently resident strings */
 
 #endif
 

@@ -511,6 +511,11 @@ public:
     typedef ConditionalFormatContainer::iterator iterator;
     typedef ConditionalFormatContainer::const_iterator const_iterator;
 
+    ScRangeList GetCombinedRange() const;
+
+    void RemoveFromDocument(ScDocument* pDoc) const;
+    void AddToDocument(ScDocument* pDoc) const;
+
     iterator begin();
     const_iterator begin() const;
     iterator end();

@@ -1873,6 +1873,11 @@ String STR_UNDO_CONDFORMAT+RID_GLOBSTR_OFFSET
     Text [ en-US ] = "Conditional Format";
 };
 
+String STR_UNDO_CONDFORMAT_LIST+RID_GLOBSTR_OFFSET
+{
+    Text [ en-US ] = "Conditional Formats";
+};
+
 String STR_UNDO_FORMULA_TO_VALUE+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Convert Formula To Value";
