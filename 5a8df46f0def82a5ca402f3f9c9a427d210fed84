@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_87fd9e3c",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-04-08T20:35:40Z",
+      "side": 1,
+      "message": "This makes now no sense anymore. Before your patch the two transformations were applied after each other. Now only the second transformation is actually applied as the xGraphic returned by the first transformation is overwritten by the second one.",
+      "revId": "5a8df46f0def82a5ca402f3f9c9a427d210fed84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
