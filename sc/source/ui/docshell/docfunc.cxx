@@ -5470,21 +5470,41 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     if(rDoc.IsTabProtected(nTab))
         return;
 
-    // first remove all old entries
-    ScConditionalFormatList* pOldList = rDoc.GetCondFormList(nTab);
-    for(ScConditionalFormatList::const_iterator itr = pOldList->begin(), itrEnd = pOldList->end(); itr != itrEnd; ++itr)
+    bool bUndo = rDoc.IsUndoEnabled();
+    ScDocument* pUndoDoc = nullptr;
+    if (bUndo)
     {
-        rDoc.RemoveCondFormatData((*itr)->GetRange(), nTab, (*itr)->GetKey());
+        pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+        pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+
+        ScConditionalFormatList* pOld = rDoc.GetCondFormList(nTab);
+
+        if (pOld)
+            pUndoDoc->SetCondFormList(new ScConditionalFormatList(pUndoDoc, *pOld), nTab);
+        else
+            pUndoDoc->SetCondFormList(nullptr, nTab);
+
     }
 
+    // first remove all old entries
+    ScConditionalFormatList* pOldList = rDoc.GetCondFormList(nTab);
+    pOldList->RemoveFromDocument(&rDoc);
+
     // then set new entries
-    for(ScConditionalFormatList::iterator itr = pList->begin(); itr != pList->end(); ++itr)
-    {
-        rDoc.AddCondFormatData((*itr)->GetRange(), nTab, (*itr)->GetKey());
-    }
+    pList->AddToDocument(&rDoc);
 
     rDoc.SetCondFormList(pList, nTab);
     rDocShell.PostPaintGridAll();
+
+    if(bUndo)
+    {
+        ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
+        pRedoDoc->InitUndo( &rDoc, nTab, nTab );
+        pRedoDoc->SetCondFormList(new ScConditionalFormatList(pRedoDoc, *pList), nTab);
+
+        rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoConditionalFormatList(&rDocShell, pUndoDoc, pRedoDoc, nTab));
+    }
 
     rDoc.SetStreamValid(nTab, false);
     aModificator.SetDocumentModified();

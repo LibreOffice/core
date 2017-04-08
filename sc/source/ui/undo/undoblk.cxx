@@ -1535,6 +1535,66 @@ bool ScUndoConditionalFormat::CanRepeat(SfxRepeatTarget& ) const
     return false;
 }
 
+ScUndoConditionalFormatList::ScUndoConditionalFormatList(ScDocShell* pNewDocShell,
+        ScDocument* pUndoDoc, ScDocument* pRedoDoc, SCTAB nTab):
+    ScSimpleUndo( pNewDocShell ),
+    mpUndoDoc(pUndoDoc),
+    mpRedoDoc(pRedoDoc),
+    mnTab(nTab)
+{
+}
+
+ScUndoConditionalFormatList::~ScUndoConditionalFormatList()
+{
+}
+
+OUString ScUndoConditionalFormatList::GetComment() const
+{
+    return ScGlobal::GetRscString( STR_UNDO_CONDFORMAT_LIST );
+}
+
+void ScUndoConditionalFormatList::Undo()
+{
+    DoChange(mpUndoDoc.get());
+}
+
+void ScUndoConditionalFormatList::Redo()
+{
+    DoChange(mpRedoDoc.get());
+}
+
+void ScUndoConditionalFormatList::DoChange(ScDocument* pSrcDoc)
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+
+    if (pSrcDoc == mpUndoDoc.get())
+    {
+        mpRedoDoc->GetCondFormList(mnTab)->RemoveFromDocument(&rDoc);
+        mpUndoDoc->GetCondFormList(mnTab)->AddToDocument(&rDoc);
+    }
+    else
+    {
+        mpUndoDoc->GetCondFormList(mnTab)->RemoveFromDocument(&rDoc);
+        mpRedoDoc->GetCondFormList(mnTab)->AddToDocument(&rDoc);
+    }
+    rDoc.SetCondFormList(new ScConditionalFormatList(&rDoc, *pSrcDoc->GetCondFormList(mnTab)), mnTab);
+
+    pDocShell->PostPaintGridAll();
+    pDocShell->PostDataChanged();
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+        pViewShell->CellContentChanged();
+}
+
+void ScUndoConditionalFormatList::Repeat(SfxRepeatTarget& )
+{
+}
+
+bool ScUndoConditionalFormatList::CanRepeat(SfxRepeatTarget& ) const
+{
+    return false;
+}
+
 ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
                         const ScMarkData& rMark,
 /*C*/                   const ScArea& rDestArea,

@@ -631,6 +631,27 @@ private:
     ScRange maRange;
 };
 
+class ScUndoConditionalFormatList : public ScSimpleUndo
+{
+public:
+    ScUndoConditionalFormatList( ScDocShell* pNewDocShell,
+            ScDocument* pUndoDoc, ScDocument* pRedoDoc, SCTAB nTab);
+    virtual         ~ScUndoConditionalFormatList() override;
+
+    virtual void    Undo() override;
+    virtual void    Redo() override;
+    virtual void    Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const override;
+
+    virtual OUString GetComment() const override;
+
+private:
+    void DoChange(ScDocument* pDoc);
+    std::unique_ptr<ScDocument> mpUndoDoc;
+    std::unique_ptr<ScDocument> mpRedoDoc;
+    SCTAB mnTab;
+};
+
 class ScUndoUseScenario: public ScSimpleUndo
 {
 public:
