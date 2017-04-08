@@ -85,7 +85,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     pEdFilterArea->GrabFocus();
 
     // hack: control of RefInput
-    pIdle = new Idle;
+    pIdle = new Idle("Special Filter Dialog");
     // FIXME: this is an abomination
     pIdle->SetPriority( TaskPriority::LOWEST );
     pIdle->SetInvokeHandler( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
