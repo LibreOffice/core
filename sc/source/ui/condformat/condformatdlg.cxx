@@ -657,7 +657,10 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 
         OUString aRefStr(rRef.Format(nFlags, mpViewData->GetDocument(),
             ScAddress::Details(mpViewData->GetDocument()->GetAddressConvention(), 0, 0)));
-        pEdit->SetRefString( aRefStr );
+        if (pEdit != mpEdRange)
+            pEdit->ReplaceSelected(aRefStr);
+        else
+            pEdit->SetRefString( aRefStr );
         updateTitle();
     }
 }
