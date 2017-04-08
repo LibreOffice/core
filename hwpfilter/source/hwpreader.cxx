@@ -2736,7 +2736,7 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
         d->bInHeader = false;
     }
     padd("text:style-name", sXML_CDATA,
-        ascii(getTStyleName(para->cshape.index, buf)));
+        ascii(getTStyleName(para->cshape->index, buf)));
     rstartEl("text:span", mxList.get());
     mxList->clear();
 
@@ -2780,8 +2780,8 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
     hchar_string str;
     int n;
     int res;
-     hchar dest[3];
-    int curr = para->cshape.index;
+    hchar dest[3];
+    int curr = para->cshape->index;
     unsigned char firstspace = 0;
 
     if( !bParaStart )
