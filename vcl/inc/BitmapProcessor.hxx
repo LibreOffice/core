@@ -12,7 +12,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-class BitmapProcessor
+class VCL_DLLPUBLIC BitmapProcessor
 {
 public:
     static BitmapEx createLightImage(const BitmapEx& rBitmapEx);
