@@ -305,7 +305,7 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
                             break;
                         }
 
-                        OSL_ENSURE( pCell->IsCellFrame(), "Frame ohne Celle" );
+                        OSL_ENSURE( pCell->IsCellFrame(), "Frame without Cell" );
                         if( ::IsFrameInTableSel( pUnion->GetUnion(), pCell ) )
                         {
                             SwTableBox* pBox = const_cast<SwTableBox*>(
@@ -510,7 +510,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                             break;
                         }
 
-                        OSL_ENSURE( pCell->IsCellFrame(), "Frame ohne Celle" );
+                        OSL_ENSURE( pCell->IsCellFrame(), "Frame without Cell" );
                         const SwRect& rUnion = pUnion->GetUnion(),
                                     & rFrameRect = pCell->Frame();
 
@@ -2117,13 +2117,13 @@ void FndBox_::SetTableLines( const SwTable &rTable )
 
     SwTableLine* pTmpLine = GetLines().front()->GetLine();
     sal_uInt16 nPos = rTable.GetTabLines().GetPos( pTmpLine );
-    OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
+    OSL_ENSURE( USHRT_MAX != nPos, "Line is not in table" );
     if( nPos )
         m_pLineBefore = rTable.GetTabLines()[ nPos - 1 ];
 
     pTmpLine = GetLines().back()->GetLine();
     nPos = rTable.GetTabLines().GetPos( pTmpLine );
-    OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
+    OSL_ENSURE( USHRT_MAX != nPos, "Line is not in the table" );
     if( ++nPos < rTable.GetTabLines().size() )
         m_pLineBehind = rTable.GetTabLines()[nPos];
 }

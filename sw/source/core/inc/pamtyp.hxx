@@ -28,7 +28,7 @@ struct SwPosition;
 class SwPaM;
 class SwTextAttr;
 
-// Funktions-Deklarationen fuer die Move/Find-Methoden vom SwPaM
+// function prototypes for the move/find methods of SwPaM
 
 void GoStartDoc( SwPosition*);
 void GoEndDoc( SwPosition*);
@@ -42,7 +42,7 @@ bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
 SW_DLLPUBLIC SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 
-// Typedefiniton fuer Funktionen
+// type definitions of functions
 typedef bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
 typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );
 typedef void (*GoDoc)( SwPosition* );
@@ -65,7 +65,7 @@ struct SwMoveFnCollection
     MvSection fnSection;
 };
 
-// Funktionsdefinitionen fuers Suchen
+// function prototype for searching
 SwContentNode* GetNode( SwPaM&, bool&, SwMoveFnCollection const &, bool bInReadOnly = false );
 
 #endif

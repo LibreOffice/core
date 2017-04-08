@@ -2227,20 +2227,20 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
 #if OSL_DEBUG_LEVEL > 0
             if( nCol == nRightCol-1UL )
             {
-                OSL_ENSURE( bSplit, "Split-Flag falsch" );
+                OSL_ENSURE( bSplit, "Split-Flag wrong" );
                 if ( m_bHasSubTables )
                 {
                     OSL_ENSURE( !bHoriSplitMayContinue,
-                            "HoriSplitMayContinue-Flag falsch" );
+                            "HoriSplitMayContinue-Flag wrong" );
                     SwXMLTableCell_Impl *pTmpCell = GetCell( nTopRow, nStartCol );
                     OSL_ENSURE( pTmpCell->GetRowSpan() != (nBottomRow-nTopRow) ||
-                            !bHoriSplitPossible, "HoriSplitPossible-Flag falsch" );
+                            !bHoriSplitPossible, "HoriSplitPossible-Flag wrong" );
                 }
             }
 #endif
 
             OSL_ENSURE( !m_bHasSubTables || !bHoriSplitMayContinue || bHoriSplitPossible,
-                    "bHoriSplitMayContinue, aber nicht bHoriSplitPossible" );
+                    "bHoriSplitMayContinue, but not bHoriSplitPossible" );
 
             if( bSplit )
             {

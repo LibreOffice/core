@@ -417,7 +417,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
             SwRowFrame* pTmpSourceRow = static_cast<SwRowFrame*>(pCurrSourceCell->Lower());
             while ( pTmpSourceRow )
             {
-                // #125926# Achtung! It is possible,
+                // #125926# Attention! It is possible,
                 // that pTmpSourceRow->IsFollowFlowRow() but pTmpDestRow
                 // cannot be found. In this case, we have to move the complete
                 // row.
@@ -2700,7 +2700,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
 /// The fixed size is not adjusted here.
 void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
-    OSL_ENSURE( pAttrs, "TabFrame::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "TabFrame::Format, pAttrs is 0." );
 
     SwRectFnSet aRectFnSet(this);
     if ( !mbValidSize )
@@ -2876,7 +2876,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 break;
             case text::HoriOrientation::LEFT_AND_WIDTH:
                 {
-                    //Linker Rand und die Breite zaehlen (Word-Spezialitaet)
+                    // count left border and width (Word specialty)
                     // OD 10.03.2003 #i9040# - no width alignment in online mode.
                     //bCheckBrowseWidth = true;
                     nLeftSpacing = pAttrs->CalcLeft( this );
@@ -3386,7 +3386,7 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat
 
 void SwTabFrame::Cut()
 {
-    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut without Upper()." );
 
     SwPageFrame *pPage = FindPageFrame();
     InvalidatePage( pPage );
@@ -4753,7 +4753,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
 
 void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
-    OSL_ENSURE( pAttrs, "CellFrame::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "CellFrame::Format, pAttrs is 0." );
     const SwTabFrame* pTab = FindTabFrame();
     SwRectFnSet aRectFnSet(pTab);
 

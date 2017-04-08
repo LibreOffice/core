@@ -197,7 +197,7 @@ class SwHTMLTableLayout
 
     sal_uInt16 m_nRelTabWidth;            ///< Relative width of table.
 
-    sal_uInt16 m_nWidthOption;            ///< Width of table (in Twips oder %).
+    sal_uInt16 m_nWidthOption;            ///< Width of table (in Twips or %).
     sal_uInt16 m_nCellPadding;            ///< Space to contents (in Twips).
     sal_uInt16 m_nCellSpacing;            ///< Cell spacing (in Twips).
     sal_uInt16 m_nBorder;                 /** Line strength of outer border, or rather the

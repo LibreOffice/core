@@ -27,7 +27,7 @@
 class ImageMap;
 class IntlWrapper;
 
-// URL, ServerMap und ClientMap
+// URL, ServerMap and ClientMap
 
 class SW_DLLPUBLIC SwFormatURL: public SfxPoolItem
 {

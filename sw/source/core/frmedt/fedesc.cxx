@@ -69,7 +69,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
             const SwFormatPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if( rPgDesc.GetPageDesc() )
             {
-                // wir haben ihn den Schlingel
+                // we found the culprit
                 oPageNumOffset = rPgDesc.GetNumOffset();
                 break;
             }
@@ -84,7 +84,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         {
             pPage   = static_cast<SwPageFrame*>(pPage->GetNext());
             pFlow = pPage->FindFirstBodyContent();
-            OSL_ENSURE( pFlow, "Dokuemnt ohne Inhalt?!?" );
+            OSL_ENSURE( pFlow, "Document without content?!?" );
         }
     }
 

@@ -930,7 +930,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             util::DateTime uDT( xDocProps->getCreationDate() );
             DateTime aDate(uDT);
             if( nSub == DI_CREATE )
-                ;       // das wars schon!!
+                ;       // that's it !!
             else if( nSub == DI_CHANGE )
             {
                 aName = xDocProps->getModifiedBy();

@@ -84,7 +84,7 @@ using namespace ::com::sun::star;
 // Copy for the internal clipboard. Copies all selections to the clipboard.
 bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
 {
-    OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"  );
+    OSL_ENSURE( pClpDoc, "No Clipboard document"  );
 
     pClpDoc->GetIDocumentUndoRedo().DoUndo(false); // always false!
 
@@ -124,7 +124,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
     if( pNewClpText )
     {
         pTextNd->InsertText( *pNewClpText, SwIndex( pTextNd ) );
-        return true;                // das wars.
+        return true;                // that's it
     }
 
     pClpDoc->getIDocumentFieldsAccess().LockExpFields();
@@ -697,8 +697,8 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
     SwFieldType* pTableFieldTyp = GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Table );
 
     SwTableNode *const pSrcNd = aCpyPam.GetNode().GetTableNode();
-    if( !pSrcNd )                               // TabellenNode ?
-    {                                           // nicht ueberspringen!!
+    if( !pSrcNd )                               // table node ?
+    {                                           // don't skip !!
         SwContentNode* pCNd = aCpyPam.GetNode().GetContentNode();
         if( pCNd )
             aCpyPam.GetPoint()->nContent.Assign( pCNd, 0 );
@@ -859,7 +859,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                     // make relative table copy
                     SwTableBox* pBox = pDestNd->GetTable().GetTableBox(
                                         pSttNd->GetIndex() );
-                    OSL_ENSURE( pBox, "Box steht nicht in dieser Tabelle" );
+                    OSL_ENSURE( pBox, "Box is not in this table" );
                     aBoxes.insert( pBox );
                 }
 

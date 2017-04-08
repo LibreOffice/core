@@ -156,7 +156,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     {
         // if there is content than save it
         const SwFormatContent& rContent = pFrameFormat->GetContent();
-        OSL_ENSURE( rContent.GetContentIdx(), "Fly ohne Inhalt" );
+        OSL_ENSURE( rContent.GetContentIdx(), "Fly without content" );
 
         SaveSection( *rContent.GetContentIdx() );
         const_cast<SwFormatContent&>(rContent).SetNewContentIdx( nullptr );
@@ -174,7 +174,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
         SwTextNode *const pTextNd = pPos->nNode.GetNode().GetTextNode();
-        OSL_ENSURE( pTextNd, "Kein Textnode gefunden" );
+        OSL_ENSURE( pTextNd, "No Textnode found" );
         SwTextFlyCnt* const pAttr = static_cast<SwTextFlyCnt*>(
             pTextNd->GetTextAttrForCharAt( nCntPos, RES_TXTATR_FLYCNT ) );
         // attribute is still in TextNode, delete

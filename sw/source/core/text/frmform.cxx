@@ -1634,7 +1634,7 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
         if( pBlink && pPara->IsBlinking() )
             pBlink->Delete( pPara );
 
-        // delete pSpaceAdd und pKanaComp
+        // delete pSpaceAdd and pKanaComp
         pPara->FinishSpaceAdd();
         pPara->FinishKanaComp();
         pPara->ResetFlags();

@@ -113,7 +113,7 @@ public:
     void SetVoidValue(bool bSet) {bVoid = bSet;}
 };
 
-// Calculate HashTables for VarTable und Operations
+// Calculate HashTables for VarTable and Operations
 struct SwHash
 {
     SwHash( const OUString& rStr );

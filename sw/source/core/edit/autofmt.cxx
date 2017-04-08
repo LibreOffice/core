@@ -1838,14 +1838,14 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
         while (nPos < pText->getLength() && IsSpace(cChar = (*pText)[nPos]))
             ++nPos;
         if (nPos == pText->getLength())
-            break;      // das wars
+            break;      // that's it
 
         if( ( ( bReplaceQuote && '\"' == cChar ) ||
               ( bReplaceSglQuote && '\'' == cChar ) ) &&
             (!nPos || ' ' == (*pText)[nPos-1]))
         {
 
-            // beachte: Sonderfall Symbolfonts !!!
+            // note: special case symbol fonts !!!
             if( !aFInfo.GetFrame() )
                 aFInfo.SetFrame( GetFrame( *m_pCurTextNd ) );
             if( !aFInfo.IsBullet( nPos ))

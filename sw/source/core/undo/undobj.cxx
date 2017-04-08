@@ -941,7 +941,7 @@ SwRedlineSaveData::SwRedlineSaveData(
         }
         break;
 
-    case POS_EQUAL:                 // Pos1 ist exactly as big as Pos2
+    case POS_EQUAL:                 // Pos1 is exactly as big as Pos2
         break;
 
     default:

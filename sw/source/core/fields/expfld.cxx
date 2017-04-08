@@ -854,7 +854,7 @@ void SwSetExpField::SetSubType(sal_uInt16 nSub)
     static_cast<SwSetExpFieldType*>(GetTyp())->SetType(nSub & 0xff);
     nSubType = nSub & 0xff00;
 
-    OSL_ENSURE( (nSub & 0xff) != 3, "SubType ist illegal!" );
+    OSL_ENSURE( (nSub & 0xff) != 3, "SubType is illegal!" );
 }
 
 sal_uInt16 SwSetExpField::GetSubType() const

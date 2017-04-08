@@ -319,7 +319,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
                         return;
                 }
                 SwTextFootnote *pAttr = static_cast<SwTextFootnote*>(pHt);
-                OSL_ENSURE( pAttr->GetStartNode(), "FootnoteAtr ohne StartNode." );
+                OSL_ENSURE( pAttr->GetStartNode(), "FootnoteAtr without StartNode." );
                 SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
                 SwContentNode *pNd = aIdx.GetNode().GetContentNode();
                 if ( !pNd )
@@ -718,7 +718,7 @@ SwContentNode *SwTextNode::JoinNext()
         InvalidateNumRule();
     }
     else {
-        OSL_FAIL( "kein TextNode." );
+        OSL_FAIL( "No TextNode." );
     }
 
     return this;
@@ -812,14 +812,14 @@ void SwTextNode::JoinPrev()
         InvalidateNumRule();
     }
     else {
-        OSL_FAIL( "kein TextNode." );
+        OSL_FAIL( "No TextNode." );
     }
 }
 
 // create an AttrSet with ranges for Frame-/Para/Char-attributes
 void SwTextNode::NewAttrSet( SwAttrPool& rPool )
 {
-    OSL_ENSURE( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
+    OSL_ENSURE( !mpAttrSet.get(), "AttrSet is set after all" );
     SwAttrSet aNewAttrSet( rPool, aTextNodeSetRange );
 
     // put names of parent style and conditional style:
@@ -1236,7 +1236,7 @@ void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
                                         const SwTextFormatColl *pNewColl)
 {
     SwDoc* pDoc = GetDoc();
-    OSL_ENSURE( pDoc, "Kein Doc?" );
+    OSL_ENSURE( pDoc, "No Doc?" );
     // query the OutlineLevel and if it changed, notify the Nodes-Array!
     const int nOldLevel = pOldColl && pOldColl->IsAssignedToListLevelOfOutlineStyle() ?
                      pOldColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;

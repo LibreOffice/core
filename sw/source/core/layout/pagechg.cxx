@@ -737,7 +737,7 @@ SwPageDesc *SwPageFrame::FindPageDesc()
             pRet = const_cast<SwPageDesc*>(pFlow->GetAttrSet()->GetPageDesc().GetPageDesc());
     }
 
-    //3. und 3.1
+    //3. and 3.1
     if ( !pRet && IsEmptyPage() )
             // FME 2008-03-03 #i81544# lijian/fme: an empty page should have
             // the same page description as its prev, just like after construction

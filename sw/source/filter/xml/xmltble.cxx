@@ -658,7 +658,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             else
                 nCPos = pLines->GetWidth();
 
-            // Und ihren Index
+            // and their index
             const size_t nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
             SwXMLTableColumns_Impl::const_iterator it = pLines->GetColumns().find( &aCol );
@@ -930,7 +930,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             else
                 nCPos = rLines.GetWidth();
 
-            // Und ihren Index
+            // and their index
             const size_t nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
             SwXMLTableColumns_Impl::const_iterator it = rLines.GetColumns().find( &aCol );

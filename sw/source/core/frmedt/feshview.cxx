@@ -307,7 +307,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     if( bRet || !bHadSelection )
         CallChgLnk();
 
-    // update der Statuszeile
+    // update status line
     ::FrameNotify( this, bRet ? FLY_DRAG_START : FLY_DRAG_END );
 
     EndAction();

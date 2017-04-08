@@ -631,7 +631,7 @@ void SwEditShell::SpellStart(
     // do not spell if interactive spelling is active elsewhere
     if (!pConvArgs && !g_pSpellIter)
     {
-        OSL_ENSURE( !g_pSpellIter, "wer ist da schon am spellen?" );
+        OSL_ENSURE( !g_pSpellIter, "spell already active?" );
         g_pSpellIter = new SwSpellIter;
         pLinguIter = g_pSpellIter;
     }

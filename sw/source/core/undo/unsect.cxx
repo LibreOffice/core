@@ -120,7 +120,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nSectionNodePos ]->GetSectionNode();
-    OSL_ENSURE( pNd, "wo ist mein SectionNode?" );
+    OSL_ENSURE( pNd, "where is my SectionNode?" );
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         rDoc.getIDocumentRedlineAccess().DeleteRedline( *pNd, true, USHRT_MAX );
