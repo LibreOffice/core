@@ -1936,6 +1936,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                             ( nTab == nOldTab ) &&
                             ( nCol != nOldCol || nRow != nOldRow ) )
                     {
+                        AlignToCursor(nCol, nRow, SC_FOLLOW_JUMP);
                         SetCursor( nCol, nRow, true );
                     }
                 }
