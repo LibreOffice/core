@@ -590,6 +590,8 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
     pWMF->SeekRel( 0x10 );
     // Number of polygons
     pWMF->ReadUInt32( nPoly ).ReadUInt32( nGesPoints );
+    if (pWMF->Tell() >= nEndPos)
+        return;
     if ( pWMF->good() &&
         ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && //check against numeric overflowing
         ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) &&
