@@ -31,6 +31,7 @@
 #include <vcl/graph.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svl/cjkoptions.hxx>
 
 #include "DrawDocShell.hxx"
@@ -63,6 +64,8 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         pOutSet             ( nullptr ),
         pOrgSet             ( &rStyleBase.GetItemSet() )
 {
+    const SfxPoolItem *pItem = nullptr;
+
     if( IS_OUTLINE(ePO))
     {
         // Unfortunately, the Itemsets of our style sheets are not discreet..
@@ -93,7 +96,6 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         pOutSet = new SfxItemSet( rStyleBase.GetItemSet() );
         pOutSet->ClearItem();
 
-        const SfxPoolItem *pItem = nullptr;
 
         // If there is no bullet item in this stylesheet, we get it
         // from 'Outline 1' style sheet.
@@ -110,10 +112,44 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         // preselect selected layer in dialog
         aInputSet.Put( SfxUInt16Item( SID_PARAM_CUR_NUM_LEVEL, 1<<GetOutlineLevel()));
 
-        SetInputSet( &aInputSet );
+        /*
+         * Adjusting item set since background tabpage can only work
+         * with SvxBrushItems, EE_CHAR_BKGCOLOR is SvxBackgroundColorItem.
+         */
+        aInputSet.MergeRange(SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR);
+        pOutSet->MergeRange(SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR);
+        if ( aInputSet.GetItemState( EE_CHAR_BKGCOLOR, true, &pItem ) == SfxItemState::SET )
+        {
+            /* extract Color outta SvxBackColorItem */
+            Color aBackColor = static_cast<const SvxBackgroundColorItem*>(pItem)->GetValue();
+            /* make new SvxBrushItem with this Color */
+            SvxBrushItem aBrushItem( aBackColor, SID_ATTR_BRUSH_CHAR );
+
+            aInputSet.ClearItem( EE_CHAR_BKGCOLOR );
+            /* and stick it into the set */
+            aInputSet.Put( aBrushItem );
+        }
     }
-    else
-        SetInputSet( pOrgSet );
+    else {
+        /*
+         * same here
+         */
+        aInputSet.SetRanges(pOrgSet->GetRanges());
+        aInputSet.MergeRange(SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR);
+        aInputSet.Put(*pOrgSet, false);
+        if ( pOrgSet->GetItemState( EE_CHAR_BKGCOLOR, true, &pItem ) == SfxItemState::SET )
+        {
+            /* extract Color outta SvxBackColorItem */
+            Color aBackColor = static_cast<const SvxBackgroundColorItem*>(pItem)->GetValue();
+            /* make new SvxBrushItem with this Color */
+            SvxBrushItem aBrushItem( aBackColor, SID_ATTR_BRUSH_CHAR );
+
+            aInputSet.ClearItem( EE_CHAR_BKGCOLOR );
+            /* and stick it into the set */
+            aInputSet.Put( aBrushItem );
+        }
+    }
+    SetInputSet( &aInputSet );
 
     SvxColorListItem aColorListItem(*static_cast<const SvxColorListItem*>( mpDocShell->GetItem( SID_COLOR_TABLE ) ) );
     SvxGradientListItem aGradientListItem(*static_cast<const SvxGradientListItem*>( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) );
