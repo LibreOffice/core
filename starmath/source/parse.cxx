@@ -949,10 +949,7 @@ SmTableNode *SmParser::DoTable()
         NextToken();
         aLineArray.push_back(DoLine());
     }
-
-    if (m_aCurToken.eType != TEND)
-        aLineArray.push_back(DoError(SmParseError::UnexpectedChar));
-
+    assert(m_aCurToken.eType == TEND);
     std::unique_ptr<SmTableNode> pSNode(new SmTableNode(m_aCurToken));
     pSNode->SetSubNodes(aLineArray);
     return pSNode.release();
@@ -984,6 +981,7 @@ SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
     return pNode.release();
 }
 
+// Postcondition: m_aCurToken.eType == TEND || m_aCurToken.eType == TNEWLINE
 SmLineNode *SmParser::DoLine()
 {
     SmNodeArray  ExpressionArray;
