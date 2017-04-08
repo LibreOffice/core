@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_07b1aee1",
+        "filename": "android/source/src/java/org/libreoffice/LOKitThread.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1001521
+      },
+      "writtenOn": "2017-04-08T09:08:47Z",
+      "side": 1,
+      "message": "You must have noticed that we\u0027re setting Zoom Constraints in LibreOfficeMainActivity\u0027s onCreate() as well. Is it possible to move it there, or remove the setting of zoom constraints from MainActivity? \nI think it would be better if we set zoom constraints only once and that too where it is easiest to be looked into in future. :)",
+      "range": {
+        "startLine": 204,
+        "startChar": 0,
+        "endLine": 204,
+        "endChar": 59
+      },
+      "revId": "3689e6bfcb41b11a524f38fa7d46f2fed5a6ae00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c7b6c6db",
+        "filename": "android/source/src/java/org/mozilla/gecko/ZoomConstraints.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001521
+      },
+      "writtenOn": "2017-04-08T09:08:47Z",
+      "side": 1,
+      "message": "Can\u0027t we modify the existing constructor here? :)",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 5
+      },
+      "revId": "3689e6bfcb41b11a524f38fa7d46f2fed5a6ae00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
