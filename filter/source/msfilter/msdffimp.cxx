@@ -223,10 +223,13 @@ DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
     InitializePropSet( DFF_msofbtOPT );
 }
 
-bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
+namespace
 {
-    const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
-    return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
+    bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
+    {
+        const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
+        return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
+    }
 }
 
 void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDgg ) const
