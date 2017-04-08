@@ -105,10 +105,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     SfxStyleSheetBase* pStyleSheet = nullptr;
 
     const SfxPoolItem* pItem;
-    static const sal_uInt16 aRanges[] = {
-        EE_ITEMS_START, EE_ITEMS_END,
-        SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR
-    };
     SfxStyleFamily nFamily = (SfxStyleFamily)USHRT_MAX;
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY,
         false, &pItem ))
@@ -305,15 +301,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 ScopedVclPtr<SfxAbstractTabDialog> pPresDlg;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 bool bOldDocInOtherLanguage = false;
-                SfxItemSet aNewAttr(mpViewShell->GetPool(), aRanges);
-
-                if( aNewAttr.GetItemState( XATTR_FILLBACKGROUND, true, &pItem ) == SfxItemState::SET)
-                {
-                    Color aBackColor = static_cast<const SvxBackgroundColorItem*>(pItem)->GetValue();
-                    SvxBrushItem aBrushItem(aBackColor, XATTR_FILLBACKGROUND);
-                    aNewAttr.ClearItem(XATTR_FILLBACKGROUND);
-                    aNewAttr.Put(aBrushItem);
-                }
 
                 SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
@@ -412,15 +399,17 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                         {
                             SfxItemSet aTempSet(*pOutSet);
+                            /* Extract SvxBrushItem out of set and insert SvxBackgroundColorItem */
+                            const SvxBrushItem* pBrushItem = aTempSet.GetItem<SvxBrushItem>( SID_ATTR_BRUSH_CHAR );
+
+                            if ( pBrushItem )
+                            {
+                                SvxBackgroundColorItem aBackColorItem(pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
+                                aTempSet.ClearItem( EE_CHAR_BKGCOLOR );
+                                aTempSet.Put( aBackColorItem );
+                            }
                             static_cast<SdStyleSheet*>(pStyleSheet)->AdjustToFontHeight(aTempSet);
 
-                            const SvxBrushItem* pBrushItem = aTempSet.GetItem<SvxBrushItem>(XATTR_FILLBACKGROUND);
-                            if( pBrushItem )
-                            {
-                               SvxBackgroundColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
-                               aTempSet.ClearItem(XATTR_FILLBACKGROUND);
-                               aTempSet.Put(aBackColorItem);
-                            }
                             /* Special treatment: reset the INVALIDS to
                                NULL-Pointer (otherwise INVALIDs or pointer point
                                to DefaultItems in the template; both would
