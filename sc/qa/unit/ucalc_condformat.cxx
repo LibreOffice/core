@@ -980,4 +980,45 @@ void Test::testCondFormatUpdateReferenceInsRow()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondFormatUndoList()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScConditionEntry* pEntry = new ScConditionEntry(SC_COND_EQUAL, "B6", "", m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(0, m_pDoc);
+    pFormat->AddEntry(pEntry);
+    pFormat->SetRange(ScRange(0, 0, 0, 0, 5, 0));
+    m_pDoc->AddCondFormat(pFormat, 0);
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, pFormat->GetKey());
+
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+        CPPUNIT_ASSERT(m_pDoc->GetCondFormat(0, nRow, 0));
+
+    ScConditionalFormatList* pNewList = new ScConditionalFormatList();
+
+    rFunc.SetConditionalFormatList(pNewList, 0);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), m_pDoc->GetCondFormList(0)->size());
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+        CPPUNIT_ASSERT(!m_pDoc->GetCondFormat(0, nRow, 0));
+
+    m_pDoc->GetUndoManager()->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+        CPPUNIT_ASSERT(m_pDoc->GetCondFormat(0, nRow, 0));
+
+    m_pDoc->GetUndoManager()->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), m_pDoc->GetCondFormList(0)->size());
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+        CPPUNIT_ASSERT(!m_pDoc->GetCondFormat(0, nRow, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
