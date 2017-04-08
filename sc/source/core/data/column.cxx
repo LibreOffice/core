@@ -469,11 +469,23 @@ void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& r
     SCROW nTop;
     SCROW nBottom;
 
-    if ( pAttrArray && rMark.IsMultiMarked() )
+    if (pAttrArray)
     {
-        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
-        while (aMultiIter.Next( nTop, nBottom ))
-            pAttrArray->ClearItems(nTop, nBottom, pWhich);
+        if (rMark.IsMultiMarked() )
+        {
+            ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+            while (aMultiIter.Next( nTop, nBottom ))
+                pAttrArray->ClearItems(nTop, nBottom, pWhich);
+        }
+        else if (rMark.IsMarked())
+        {
+            ScRange aRange;
+            rMark.GetMarkArea(aRange);
+            if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
+            {
+                pAttrArray->ClearItems(aRange.aStart.Row(), aRange.aEnd.Row(), pWhich);
+            }
+        }
     }
 }
 
