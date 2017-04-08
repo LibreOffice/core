@@ -126,7 +126,6 @@ void PivotChartTest::testRoundtrip()
     {
         uno::Reference<sheet::XDataPilotTable> xDataPilotTable = lclGetPivotTableByName(1, "DataPilot1", mxComponent);
         uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, UNO_QUERY_THROW);
-
         lclModifyOrientation(xDataPilotDescriptor, "Exp.", sheet::DataPilotFieldOrientation_HIDDEN);
     }
 
@@ -161,19 +160,26 @@ void PivotChartTest::testChangePivotTable()
 
     load("/chart2/qa/extras/data/ods/", "PivotTableExample.ods");
 
+    // Check we have the Pivot Table
+    OUString sPivotTableName("DataPilot1");
+    uno::Reference<sheet::XDataPilotTable> xDataPilotTable = lclGetPivotTableByName(1, sPivotTableName, mxComponent);
+    CPPUNIT_ASSERT(xDataPilotTable.is());
+
     // Check that we don't have any pivot chart in the document
     uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(1, mxComponent);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTablePivotCharts, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
     // Create a new pivot chart
-    xTablePivotCharts->addNewByName("Chart", awt::Rectangle{0, 0, 9000, 9000}, "DataPilot1");
+    xTablePivotCharts->addNewByName("Chart", awt::Rectangle{0, 0, 9000, 9000}, sPivotTableName);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     // Get the pivot chart document so we ca access its data
     xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
 
     CPPUNIT_ASSERT(xChartDoc.is());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getNumberOfDataSeries(xChartDoc));
 
     // Check first data series
     {
@@ -197,9 +203,9 @@ void PivotChartTest::testChangePivotTable()
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 1));
     }
 
-    // Modify the pivot table
+    // Modify the pivot table, move "Group Segment" to Column fields,
+    // add "Servie Month" to Row fields, remove "Rev." Data field
     {
-        uno::Reference<sheet::XDataPilotTable> xDataPilotTable = lclGetPivotTableByName(1, "DataPilot1", mxComponent);
         uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, UNO_QUERY_THROW);
 
         lclModifyOrientation(xDataPilotDescriptor, "Service Month", sheet::DataPilotFieldOrientation_ROW);
@@ -209,7 +215,7 @@ void PivotChartTest::testChangePivotTable()
 
     // Check the pivot chart again as we expect it has been updated when we updated the pivot table
 
-    CPPUNIT_ASSERT(xChartDoc.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getNumberOfDataSeries(xChartDoc));
 
     // Check the first data series
     {
@@ -244,17 +250,46 @@ void PivotChartTest::testChangePivotTable()
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 2));
     }
 
-    // Modify the pivot table
+    // Remove "Service Month" so row fields are empty - check we handle empty rows
     {
-        uno::Reference<sheet::XDataPilotTable> xDataPilotTable = lclGetPivotTableByName(1, "DataPilot1", mxComponent);
-        uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, UNO_QUERY_THROW);
-
+        uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, uno::UNO_QUERY_THROW);
         lclModifyOrientation(xDataPilotDescriptor, "Service Month", sheet::DataPilotFieldOrientation_HIDDEN);
     }
 
     // Check the pivot chart again as we expect it has been updated when we updated the pivot table
 
-    CPPUNIT_ASSERT(xChartDoc.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getNumberOfDataSeries(xChartDoc));
+
+    // Check the first data series
+    {
+        std::vector<double> aReference { 10162.033139 };
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
+        lclCheckSequence(aReference, xSequence, 1E-3);
+        CPPUNIT_ASSERT_EQUAL(OUString("Big"), lclGetLabel(xChartDoc, 0));
+    }
+    // Check the second data series
+    {
+        std::vector<double> aReference { 16614.523063 };
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
+        lclCheckSequence(aReference, xSequence, 1E-3);
+        CPPUNIT_ASSERT_EQUAL(OUString("Medium"), lclGetLabel(xChartDoc, 1));
+    }
+    // Check the third data series
+    {
+        std::vector<double> aReference { 27944.146101 };
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 2)->getData();
+        lclCheckSequence(aReference, xSequence, 1E-3);
+        CPPUNIT_ASSERT_EQUAL(OUString("Small"), lclGetLabel(xChartDoc, 2));
+    }
+
+    // Enable column totals and check the data is still unchanged
+    {
+        uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProperties(xDataPilotTable, uno::UNO_QUERY_THROW);
+        xProperties->setPropertyValue("ColumnGrand", uno::makeAny(true));
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getNumberOfDataSeries(xChartDoc));
 
     // Check the first data series
     {

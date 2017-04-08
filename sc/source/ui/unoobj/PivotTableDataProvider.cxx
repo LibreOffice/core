@@ -265,9 +265,8 @@ void PivotTableDataProvider::collectPivotTableData()
 {
     ScDPCollection* pDPCollection = m_pDocument->GetDPCollection();
     ScDPObject* pDPObject = pDPCollection->GetByName(m_sPivotTableName);
-
-    uno::Reference<sheet::XDataPilotResults> xDPResults(pDPObject->GetSource(), uno::UNO_QUERY);
-    uno::Sequence<uno::Sequence<sheet::DataResult>> xDataResultsSequence = xDPResults->getResults();
+    if (!pDPObject)
+        return;
 
     m_aCategoriesColumnOrientation.clear();
     m_aCategoriesRowOrientation.clear();
@@ -278,6 +277,9 @@ void PivotTableDataProvider::collectPivotTableData()
     m_aPageFields.clear();
     m_aDataFields.clear();
 
+    uno::Reference<sheet::XDataPilotResults> xDPResults(pDPObject->GetSource(), uno::UNO_QUERY);
+    uno::Sequence<uno::Sequence<sheet::DataResult>> xDataResultsSequence = xDPResults->getResults();
+
     double fNan;
     rtl::math::setNan(&fNan);
 
@@ -286,6 +288,8 @@ void PivotTableDataProvider::collectPivotTableData()
         size_t nIndex = 0;
         for (sheet::DataResult const & rDataResult : xDataResults)
         {
+            if (rDataResult.Flags & css::sheet::DataResultFlags::SUBTOTAL)
+                continue;
             if (rDataResult.Flags == 0 || rDataResult.Flags & css::sheet::DataResultFlags::HASDATA)
             {
                 if (nIndex >= m_aDataRowVector.size())
