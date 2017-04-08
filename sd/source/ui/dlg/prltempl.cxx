@@ -23,6 +23,7 @@
 #include <svx/svxdlg.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/svddef.hxx>
 #include <svl/style.hxx>
 #include <svx/tabline.hxx>
 #include <editeng/bulletitem.hxx>
@@ -31,6 +32,7 @@
 #include <vcl/graph.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svl/cjkoptions.hxx>
 
 #include "DrawDocShell.hxx"
@@ -63,7 +65,33 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         pOutSet             ( nullptr ),
         pOrgSet             ( &rStyleBase.GetItemSet() )
 {
-    if( IS_OUTLINE(ePO))
+    const SfxPoolItem *pItem = nullptr;
+    static const sal_uInt16 aRanges[] = {
+        SDRATTR_START, SDRATTR_END,
+        EE_ITEMS_START, EE_ITEMS_END,
+        SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR, 0
+    };
+
+    /*
+     * Adjusting item set since background tabpage can only work
+     * with SvxBrushItems, EE_CHAR_BKGCOLOR is SvxBackgroundColorItem.
+     */
+    if ( pOrgSet->GetItemState( EE_CHAR_BKGCOLOR, true, &pItem ) == SfxItemState::SET )
+    {
+        aInputSet.SetRanges(aRanges);
+        aInputSet.Put(rStyleBase.GetItemSet(), false);
+        /* extract Color outta SvxBackColorItem */
+        Color aBackColor = static_cast<const SvxBackgroundColorItem*>(pItem)->GetValue();
+        /* make new SvxBrushItem with this Color */
+        SvxBrushItem aBrushItem( aBackColor, SID_ATTR_BRUSH_CHAR );
+
+        aInputSet.ClearItem( EE_CHAR_BKGCOLOR);
+        /* and stick it into the set */
+        aInputSet.Put( aBrushItem );
+
+        SetInputSet(&aInputSet);
+    }
+    else if( IS_OUTLINE(ePO))
     {
         // Unfortunately, the Itemsets of our style sheets are not discreet..
         const sal_uInt16* pPtr = pOrgSet->GetRanges();
@@ -93,7 +121,6 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         pOutSet = new SfxItemSet( rStyleBase.GetItemSet() );
         pOutSet->ClearItem();
 
-        const SfxPoolItem *pItem = nullptr;
 
         // If there is no bullet item in this stylesheet, we get it
         // from 'Outline 1' style sheet.
