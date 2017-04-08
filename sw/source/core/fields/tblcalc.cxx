@@ -117,7 +117,7 @@ OUString SwTableField::Expand() const
 
     if(nSubType & nsSwGetSetExpType::GSE_STRING)
     {
-        // es ist ein String
+        // it is a string
         return sExpand.copy(1, sExpand.getLength()-2);
     }
 

@@ -113,8 +113,7 @@ public:
     /// For querying the attribute array.
     const SwAttrSet& GetAttrSet() const { return m_aSet; }
 
-    /** Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
-       im Zugriff. */
+    /** The document is set in SwAttrPool now, therefore you always can access it. */
     const SwDoc *GetDoc() const         { return m_aSet.GetDoc(); }
           SwDoc *GetDoc()               { return m_aSet.GetDoc(); }
 

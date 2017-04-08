@@ -2150,7 +2150,7 @@ static bool lcl_GoTableRow( SwCursorShell* pShell, bool bUp )
     return bUp ? pShell->Up() : pShell->Down();
 }
 
-    // aender eine  Zellenbreite/-Hoehe/Spaltenbreite/Zeilenhoehe
+// change a cell width/cell height/column width/row height
 bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
 {
     SwFrame *pFrame = GetCurrFrame();

@@ -565,7 +565,7 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
     return aRetval;
 }
 
-//  SwVirtFlyDrawObj::Move() und Resize()
+//  SwVirtFlyDrawObj::Move() and Resize()
 
 void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {

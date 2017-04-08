@@ -133,7 +133,7 @@ public:
     SwShellCursor( SwShellCursor& );
     virtual ~SwShellCursor() override;
 
-    virtual void FillRects() override;   // For Table- und normal cursors.
+    virtual void FillRects() override;   // For Table- and normal cursors.
     /// @see SwSelPaintRects::FillStartEnd(), override for text selections.
     virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const override;
 

@@ -60,7 +60,7 @@ namespace svx
     class ISdrObjectFilter;
 }
 
-// return values for GetFrameType() und GetSelFrameType().
+// return values for GetFrameType() and GetSelFrameType().
 //! values can be combined via logical or
 enum class FrameTypeFlags {
     NONE            =     0,

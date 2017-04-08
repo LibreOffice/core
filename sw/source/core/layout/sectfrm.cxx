@@ -216,7 +216,7 @@ void SwSectionFrame::Cut()
 
 void SwSectionFrame::Cut_( bool bRemove )
 {
-    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut without Upper()." );
 
     PROTOCOL( this, PROT::Cut, DbgAction::NONE, GetUpper() )
 
@@ -756,7 +756,7 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
 bool SwSectionFrame::ShouldBwdMoved( SwLayoutFrame *, bool , bool & )
 {
-    OSL_FAIL( "Hups, wo ist meine Tarnkappe?" );
+    OSL_FAIL( "Oops, where is my tinfoil hat?" );
     return false;
 }
 
@@ -2554,7 +2554,7 @@ void SwRootFrame::InsertEmptySct( SwSectionFrame* pDel )
 
 void SwRootFrame::DeleteEmptySct_()
 {
-    assert(mpDestroy && "Keine Liste, keine Kekse");
+    assert(mpDestroy);
     while( !mpDestroy->empty() )
     {
         SwSectionFrame* pSect = *mpDestroy->begin();

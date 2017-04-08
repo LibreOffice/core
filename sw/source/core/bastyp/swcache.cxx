@@ -210,7 +210,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
     }
     else
     {
-        OSL_ENSURE( m_pFirst, "ToTop, First ist not RealFirst an Empty." );
+        OSL_ENSURE( m_pFirst, "ToTop, First is not RealFirst an Empty." );
 
         if ( m_pFirst->GetPrev() )
         {

@@ -2039,7 +2039,7 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
     }
 }
 
-// erfrage die Attribute vom TextNode ueber den Bereich
+// request the attributes of the TextNode at the range
 bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                          const bool bOnlyTextAttr, const bool bGetFromChrFormat,
                          const bool bMergeIndentValuesOfNumRule ) const

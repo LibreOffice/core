@@ -1853,7 +1853,7 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
 {
     //Find Union-Rects and tables (Follows) of the selection.
     OSL_ENSURE( rTableCursor.GetContentNode() && rTableCursor.GetContentNode( false ),
-            "Tabselection nicht auf Cnt." );
+            "Tabselection not on Cnt." );
 
     bool bRet = false;
 
@@ -2027,7 +2027,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     SwContentFrame const* pEndFrame   = pEndPos->nNode.GetNode().
         GetContentNode()->getLayoutFrame( this, &rCursor.GetEndPos(), pEndPos );
 
-    OSL_ENSURE( (pStartFrame && pEndFrame), "Keine ContentFrames gefunden." );
+    OSL_ENSURE( (pStartFrame && pEndFrame), "No ContentFrames found." );
 
     //Do not subtract the FlyFrames in which selected Frames lie.
     SwSortedObjs aSortObjs;

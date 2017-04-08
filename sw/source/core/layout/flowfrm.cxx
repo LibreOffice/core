@@ -662,7 +662,7 @@ SwTextFrame* SwContentFrame::FindMaster() const
         return const_cast<SwTextFrame*>(static_cast< const SwTextFrame* >(pPrec));
     }
 
-    OSL_FAIL( "Follow ist lost in Space." );
+    OSL_FAIL( "Follow is lost in Space." );
     return nullptr;
 }
 
@@ -682,7 +682,7 @@ SwSectionFrame* SwSectionFrame::FindMaster() const
         pSect = aIter.Next();
     }
 
-    OSL_FAIL( "Follow ist lost in Space." );
+    OSL_FAIL( "Follow is lost in Space." );
     return nullptr;
 }
 
@@ -720,7 +720,7 @@ SwTabFrame* SwTabFrame::FindMaster( bool bFirstMaster ) const
         pTab = aIter.Next();
     }
 
-    OSL_FAIL( "Follow ist lost in Space." );
+    OSL_FAIL( "Follow is lost in Space." );
     return nullptr;
 }
 

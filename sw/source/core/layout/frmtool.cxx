@@ -1407,9 +1407,9 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         }
         else if ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )
         {
-            OSL_ENSURE( pActualSection, "Sectionende ohne Anfang?" );
+            OSL_ENSURE( pActualSection, "Section end without section?" );
             OSL_ENSURE( pActualSection->GetSectionNode() == pNd->StartOfSectionNode(),
-                            "Sectionende mit falschen Start Node?" );
+                            "Section end with wrong Start Node?" );
 
             //Close the section, where appropriate activate the surrounding
             //section again.
