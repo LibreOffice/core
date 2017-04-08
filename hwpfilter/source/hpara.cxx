@@ -75,17 +75,14 @@ HWPPara::HWPPara()
     , etcflag(0)
     , ctrlflag(0)
     , pstyno(0)
-    , linfo(nullptr)
-    , cshapep(nullptr)
+    , cshape(new CharShape)
 {
-    memset(&cshape, 0, sizeof(cshape));
+    memset(cshape.get(), 0, sizeof(cshape));
     memset(&pshape, 0, sizeof(pshape));
 }
 
 HWPPara::~HWPPara()
 {
-    delete[] linfo;
-    delete[] cshapep;
 }
 
 bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
@@ -102,36 +99,33 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read4b(&ctrlflag, 1);
     hwpf.Read1b(&pstyno, 1);
 
-
 /* Paragraph representative character */
-    cshape.Read(hwpf);
+    cshape->Read(hwpf);
     if (nch > 0)
-        hwpf.AddCharShape(&cshape);
+        hwpf.AddCharShape(cshape);
 
 /* Paragraph paragraphs shape  */
     if (nch && !reuse_shape)
     {
         pshape.Read(hwpf);
-        pshape.cshape = &cshape;
-          pshape.pagebreak = etcflag;
+        pshape.cshape = cshape.get();
+        pshape.pagebreak = etcflag;
     }
 
-    linfo = ::comphelper::newArray_null<LineInfo>(nline);
-    if (!linfo) { return false; }
+    linfo.reset(::comphelper::newArray_null<LineInfo>(nline));
     for (ii = 0; ii < nline; ii++)
     {
         linfo[ii].Read(hwpf, this);
     }
-     if( etcflag & 0x04 ){
+    if( etcflag & 0x04 ){
          hwpf.AddColumnInfo();
-     }
+    }
 
     if (nch && !reuse_shape){
          if( pshape.coldef.ncols > 1 ){
              hwpf.SetColumnDef( &pshape.coldef );
          }
-     }
-
+    }
 
     if( nline > 0 )
     {
@@ -144,23 +138,19 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 
     if (contain_cshape)
     {
-        cshapep = ::comphelper::newArray_null<CharShape>(nch);
-        if (!cshapep)
-        {
-            perror("Memory Allocation: cshape\n");
-            return false;
-        }
-        memset(cshapep, 0, nch * sizeof(CharShape));
+        cshapep.resize(nch);
 
         for (ii = 0; ii < nch; ii++)
         {
+            cshapep[ii].reset(new CharShape);
+            memset(cshapep[ii].get(), 0, sizeof(CharShape));
 
             hwpf.Read1b(&same_cshape, 1);
             if (!same_cshape)
             {
-                cshapep[ii].Read(hwpf);
+                cshapep[ii]->Read(hwpf);
                 if (nch > 1)
-                    hwpf.AddCharShape(&cshapep[ii]);
+                    hwpf.AddCharShape(cshapep[ii]);
             }
             else if (ii == 0)
                 cshapep[ii] = cshape;
@@ -185,14 +175,12 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     return nch && !hwpf.State();
 }
 
-
 CharShape *HWPPara::GetCharShape(int pos)
 {
     if (contain_cshape == 0)
-        return &cshape;
-    return cshapep + pos;
+        return cshape.get();
+    return cshapep[pos].get();
 }
-
 
 std::unique_ptr<HBox> HWPPara::readHBox(HWPFile & hwpf)
 {
