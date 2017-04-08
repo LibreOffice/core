@@ -499,6 +499,8 @@ public:
     void testCondFormatEndsWithStr();
     void testCondFormatEndsWithVal();
 
+    void testCondFormatUndoList();
+
     void testImportStream();
     void testDeleteContents();
     void testTransliterateText();
@@ -762,6 +764,7 @@ public:
     CPPUNIT_TEST(testCondFormatEndsWithVal);
     CPPUNIT_TEST(testCondFormatUpdateReferenceDelRow);
     CPPUNIT_TEST(testCondFormatUpdateReferenceInsRow);
+    CPPUNIT_TEST(testCondFormatUndoList);
     CPPUNIT_TEST(testIconSet);
     CPPUNIT_TEST(testDataBarLengthAutomaticAxis);
     CPPUNIT_TEST(testDataBarLengthMiddleAxis);
