@@ -8,7 +8,9 @@
  *
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
+  <menu:menuitem menu:id=".uno:AddDirect"/>
   <menu:menuitem menu:id=".uno:OpenFromCalc"/>
+  <menu:menuitem menu:id=".uno:RecentFileList"/>
   <menu:menuitem menu:id=".uno:Save"/>
   <menu:menuitem menu:id=".uno:Undo"/>
   <menu:menuitem menu:id=".uno:Redo"/>
