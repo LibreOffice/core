@@ -247,8 +247,8 @@ void HWPFile::ParaListRead()
 bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
 {
     std::unique_ptr<HWPPara> spNode( new HWPPara );
-     unsigned char tmp_etcflag;
-     unsigned char prev_etcflag = 0;
+    unsigned char tmp_etcflag;
+    unsigned char prev_etcflag = 0;
     while (spNode->Read(*this, flag))
     {
          if( !(spNode->etcflag & 0x04) ){
@@ -472,7 +472,7 @@ CharShape *HWPFile::getCharShape(int index)
 {
     if (index < 0 || static_cast<unsigned int>(index) >= cslist.size())
         return nullptr;
-    return cslist[index];
+    return cslist[index].get();
 }
 
 FBoxStyle *HWPFile::getFBoxStyle(int index)
@@ -542,11 +542,10 @@ void HWPFile::AddParaShape(ParaShape * pshape)
         pshape->index = value;
 }
 
-
-void HWPFile::AddCharShape(CharShape * cshape)
+void HWPFile::AddCharShape(std::shared_ptr<CharShape>& cshape)
 {
-    int value = compareCharShape(cshape);
-    if( value == 0 )
+    int value = compareCharShape(cshape.get());
+    if (value == 0)
     {
         cshape->index = ++ccount;
         cslist.push_back(cshape);
