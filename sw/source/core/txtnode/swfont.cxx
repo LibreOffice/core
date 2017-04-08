@@ -463,7 +463,7 @@ void SwFont::SetVertical( sal_uInt16 nDir, const bool bVertFormat )
         Bx = A1 + Esc;
 */
 
-// nEsc ist the percentage
+// nEsc is the percentage
 sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
 {
     if( DFLT_ESC_AUTO_SUPER != GetEscapement() &&

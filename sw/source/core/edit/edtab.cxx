@@ -232,7 +232,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
     SwTableNode* pTableNode = const_cast<SwTableNode*>(pTable->GetTabSortBoxes()[ 0 ]->
                                                 GetSttNd()->FindTableNode());
     SwDDETable* pDDETable = new SwDDETable( *pTable, pDDEType );
-    pTableNode->SetNewTable( pDDETable );       // setze die DDE-Tabelle
+    pTableNode->SetNewTable( pDDETable );       // set the DDE table
 
     if( bEndUndo )
         EndUndo( SwUndoId::END );
@@ -245,7 +245,6 @@ void SwEditShell::UpdateTable()
 {
     const SwTableNode* pTableNd = IsCursorInTable();
 
-    // Keine Arme keine Kekse
     if( pTableNd )
     {
         StartAllAction();

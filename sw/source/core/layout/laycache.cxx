@@ -837,7 +837,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                                 SwRowFrame* pHeadline = nullptr;
                                 while( nRowIdx < nRepeat )
                                 {
-                                    OSL_ENSURE( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table ohne Zeilen?" );
+                                    OSL_ENSURE( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table without rows?" );
                                     pHeadline =
                                         new SwRowFrame( *pTab->GetTable()->GetTabLines()[ nRowIdx ], pTab );
                                     pHeadline->SetRepeatedHeadline( true );

@@ -111,7 +111,7 @@ ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 void SwHTMLParser::ConnectImageMaps()
 {
     SwNodes& rNds = m_xDoc->GetNodes();
-    // auf den Start-Node der 1. Section
+    // on the first node of section #1
     sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
     sal_uLong nEndIdx = rNds.GetEndOfAutotext().GetIndex();
 
@@ -126,20 +126,19 @@ void SwHTMLParser::ConnectImageMaps()
             const ImageMap *pIMap = aURL.GetMap();
             if( pIMap && pIMap->GetIMapObjectCount()==0 )
             {
-                // Die (leere) Image-Map des Nodes wird entweder
-                // durch die jetzt gefundene Image-Map ersetzt
-                // oder geloescht.
+                // The (empty) image map of the node will be either
+                // replaced with found image map or deleted.
                 ImageMap *pNewIMap =
                     FindImageMap( pIMap->GetName() );
                 aURL.SetMap( pNewIMap );
                 pFormat->SetFormatAttr( aURL );
                 if( !pGrfNd->IsScaleImageMap() )
                 {
-                    // die Grafikgroesse ist mitlerweile da oder dir
-                    // Grafik muss nicht skaliert werden
+                    // meanwhile the graphic size is known or the
+                    // graphic don't need scaling
                     pGrfNd->ScaleImageMap();
                 }
-                m_nMissingImgMaps--;  // eine Map weniger suchen
+                m_nMissingImgMaps--;  // search a map less
             }
         }
         nIdx = rNds[nIdx]->EndOfSectionIndex() + 1;
@@ -161,20 +160,17 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
     if( pCntnrItemSet )
     {
-        // Wenn wir und in einem Container befinden wird die Verankerung
-        // des Containers uebernommen.
+        // If we are in a container then the anchoring of the container is used.
         rFrameItemSet.Put( *pCntnrItemSet );
     }
     else if( SwCSS1Parser::MayBePositioned( rCSS1PropInfo, true ) )
     {
-        // Wenn die Ausrichtung anhand der CSS1-Optionen gesetzt werden kann
-        // werden die benutzt.
+        // If the alignment can be set via CSS1 options we use them.
         SetAnchorAndAdjustment( rCSS1ItemSet, rCSS1PropInfo, rFrameItemSet );
     }
     else
     {
-        // Sonst wird die Ausrichtung entsprechend der normalen HTML-Optionen
-        // gesetzt.
+        // Otherwise the alignment is set correspondingly the normal HTML options.
         SetAnchorAndAdjustment( eVertOri, eHoriOri, rFrameItemSet );
     }
 }
@@ -190,12 +186,12 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
     if( text::HoriOrientation::NONE != eHoriOri )
     {
-        // den Absatz-Einzug bestimmen
+        // determine paragraph indent
         sal_uInt16 nLeftSpace = 0, nRightSpace = 0;
         short nIndent = 0;
         GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
 
-        // Horizonale Ausrichtung und Umlauf bestimmen.
+        // determine horizontal alignment and wrapping
         sal_Int16 eHoriRel;
         css::text::WrapTextMode eSurround;
         switch( eHoriOri )
@@ -208,7 +204,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             eHoriRel = nRightSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
             eSurround = css::text::WrapTextMode_LEFT;
             break;
-        case text::HoriOrientation::CENTER:   // fuer Tabellen
+        case text::HoriOrientation::CENTER:   // for tables
             eHoriRel = text::RelOrientation::FRAME;
             eSurround = css::text::WrapTextMode_NONE;
             break;
@@ -240,7 +236,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             }
         }
 
-        // Vertikale Ausrichtung und Verankerung bestimmen.
+        // determine vertical alignment and anchoring
         const sal_Int32 nContent = m_pPam->GetPoint()->nContent.GetIndex();
         if( nContent )
         {
@@ -275,8 +271,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
 void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
 {
-    // automatisch verankerte Rahmen muessen noch um eine Position
-    // nach vorne verschoben werden.
+    // automatically anchored frames must be moved forward by one position
     if( RES_DRAWFRMFMT != pFlyFormat->Which() &&
         (RndStdIds::FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()) &&
         css::text::WrapTextMode_THROUGHT == pFlyFormat->GetSurround().GetSurround() )
@@ -302,7 +297,7 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
 
 void SwHTMLParser::InsertImage()
 {
-    // und jetzt auswerten
+    // and now analyze
     OUString sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
     OUString sGrfNm;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
@@ -351,7 +346,7 @@ void SwHTMLParser::InsertImage()
                     rOption.GetEnum( aHTMLImgHAlignTable );
                 break;
             case HTML_O_WIDTH:
-                // erstmal nur als Pixelwerte merken!
+                // for now only store as pixel value!
                 nWidth = rOption.GetNumber();
                 bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcWidth && nWidth>100 )
@@ -359,7 +354,7 @@ void SwHTMLParser::InsertImage()
                 bWidthProvided = true;
                 break;
             case HTML_O_HEIGHT:
-                // erstmal nur als Pixelwerte merken!
+                // for now only store as pixel value!
                 nHeight = rOption.GetNumber();
                 bPrcHeight = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcHeight && nHeight>100 )

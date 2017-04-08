@@ -149,7 +149,7 @@ void SwHTMLParser::NewDivision( int nToken )
             pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat());
             if( !pHdFtFormat )
             {
-                // noch keine Header, dann erzeuge einen.
+                // still no header, then create one
                 rPageFormat.SetFormatAttr( SwFormatHeader( true ));
                 pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat());
                 bNew = true;
@@ -161,7 +161,7 @@ void SwHTMLParser::NewDivision( int nToken )
             pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetFooter().GetFooterFormat());
             if( !pHdFtFormat )
             {
-                // noch keine Footer, dann erzeuge einen.
+                // still no footer, then create one
                 rPageFormat.SetFormatAttr( SwFormatFooter( true ));
                 pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetFooter().GetFooterFormat());
                 bNew = true;
@@ -180,12 +180,12 @@ void SwHTMLParser::NewDivision( int nToken )
         }
         else
         {
-            // Einen neuen Node zu Beginn der Section anlegen
+            // Create a new node at the beginning of the section
             SwNodeIndex aSttIdx( rContentStIdx, 1 );
             pCNd = m_xDoc->GetNodes().MakeTextNode( aSttIdx,
                             m_pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_TEXT));
 
-            // Den bisherigen Inhalt der Section loeschen
+            // delete the current content of the section
             SwPaM aDelPam( aSttIdx );
             aDelPam.SetMark();
 
@@ -195,7 +195,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
             m_xDoc->getIDocumentContentOperations().DelFullPara( aDelPam );
 
-            // Die Seitenvorlage aktualisieren
+            // update page style
             for( size_t i=0; i < m_xDoc->GetPageDescCnt(); i++ )
             {
                 if( RES_POOLPAGE_HTML == m_xDoc->GetPageDesc(i).GetPoolFormatId() )
@@ -234,16 +234,15 @@ void SwHTMLParser::NewDivision( int nToken )
         }
     }
 
-    // Bereiche fuegen wir in Rahmen nur dann ein, wenn der Bereich gelinkt ist.
+    // We only insert sections into frames if the section is linked.
     if( (!aId.isEmpty() && !bPositioned) || !aHRef.isEmpty()  )
     {
-        // Bereich einfuegen (muss vor dem Setzten von Attributen erfolgen,
-        // weil die Section vor der PaM-Position eingefuegt.
+        // Insert section (has to be done before setting of attribures,
+        // because the section is inserted before the PaM position.
 
-        // wenn wir im ersten Node einer Section stehen, wir die neue
-        // Section nicht in der aktuellen, sondern vor der aktuellen
-        // Section eingefuegt. Deshalb muessen wir dann einen Node
-        // einfuegen. UND IN LOESCHEN!!!
+        // If we are in the first node of a section, we insert the section
+        // before the current section and not in the current section.
+        // Therefore we have to add a node and delete it again!
         if( !bAppended )
         {
             SwNodeIndex aPrvNdIdx( m_pPam->GetPoint()->nNode, -1 );
@@ -256,7 +255,7 @@ void SwHTMLParser::NewDivision( int nToken )
         HTMLAttrs *pPostIts = bAppended ? nullptr : new HTMLAttrs;
         SetAttr( true, true, pPostIts );
 
-        // Namen der Section eindeutig machen
+        // make name of section unique
         const OUString aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
 
         if( !aHRef.isEmpty() )
@@ -328,7 +327,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
         m_xDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrameItemSet, false );
 
-        // ggfs. einen Bereich anspringen
+        // maybe jump to section
         if( JUMPTO_REGION == m_eJumpTo && aName == m_sJmpMark )
         {
             m_bChkJumpMark = true;
@@ -340,16 +339,15 @@ void SwHTMLParser::NewDivision( int nToken )
 
         m_pPam->Move( fnMoveBackward );
 
-        // PageDesc- und SwFormatBreak Attribute vom aktuellen Node in den
-        // (ersten) Node des Bereich verschieben.
+        // move PageDesc and SwFormatBreak attribute from current node into
+        // (first) node of the section
         if( pOldTextNd )
             MovePageDescAttrs( pOldTextNd, m_pPam->GetPoint()->nNode.GetIndex(),
                                true  );
 
         if( pPostIts )
         {
-            // noch vorhandene PostIts in den ersten Absatz
-            // der Tabelle setzen
+            // move still existing PostIts in the first paragraph of the table
             InsertAttrs( *pPostIts );
             delete pPostIts;
             pPostIts = nullptr;
@@ -357,7 +355,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
         pCntxt->SetSpansSection( true );
 
-        // keine text::Bookmarks mit dem gleichen Namen wie Bereiche einfuegen
+        // don't insert Bookmarks with same name as sections
         if( !aPropInfo.m_aId.isEmpty() && aPropInfo.m_aId==aName )
             aPropInfo.m_aId.clear();
     }
@@ -371,7 +369,7 @@ void SwHTMLParser::NewDivision( int nToken )
         InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), pCntxt );
     }
 
-    // Style parsen
+    // parse style
     if( bStyleParsed )
         InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
 
@@ -380,8 +378,8 @@ void SwHTMLParser::NewDivision( int nToken )
 
 void SwHTMLParser::EndDivision( int /*nToken*/ )
 {
-    // Stack-Eintrag zu dem Token suchen (weil wir noch den Div-Stack
-    // haben unterscheiden wir erst einmal nicht zwischen DIV und CENTER
+    // search for the stack entry of the token (because we still have the div stack
+    // we don't make a difference between DIV and CENTER)
     HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     while( !pCntxt && nPos>m_nContextStMin )
@@ -398,9 +396,9 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
 
     if( pCntxt )
     {
-        // Attribute beenden
+        // close attribute
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  // set paragraph attributes really fast because of JavaScript
 
         delete pCntxt;
     }
@@ -415,7 +413,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     SwFrameFormat *pHdFtFormat =
         bHeader ? const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat())
                 : const_cast<SwFrameFormat*>(rPageFormat.GetFooter().GetFooterFormat());
-    OSL_ENSURE( pHdFtFormat, "Doch keine Kopf- oder Fusszeile" );
+    OSL_ENSURE( pHdFtFormat, "No header or footer" );
 
     const SwFormatContent& rFlyContent = pHdFtFormat->GetContent();
     const SwNodeIndex& rContentStIdx = *rFlyContent.GetContentIdx();
@@ -438,12 +436,11 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
             static_cast<const SvxULSpaceItem&>(pTextNode
                 ->SwContentNode::GetAttr( RES_UL_SPACE ));
 
-        // Der untere Absatz-Abstand wird zum Abstand zur
-        // Kopf- oder Fusszeile
+        // The bottom paragraph padding becomes the padding
+        // to header or footer
         nSpace = rULSpace.GetLower();
 
-        // und anschliessend auf einen vernuenftigen Wert
-        // gesetzt
+        // and afterwards set to a valid value
         const SvxULSpaceItem& rCollULSpace =
             pTextNode->GetAnyFormatColl().GetULSpace();
         if( rCollULSpace.GetUpper() == rULSpace.GetUpper() )
@@ -471,13 +468,13 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
             static_cast<const SvxULSpaceItem&>(pTextNode
                 ->SwContentNode::GetAttr( RES_UL_SPACE ));
 
-        // Der obere Absatz-Abstand wird zum Abstand zur
-        // Kopf- oder Fusszeile, wenn er groesser ist als
-        // der untere vom Absatz davor
+        // The top paragraph padding becomes the padding
+        // to headline or footer if it is greater then the
+        // bottom padding of the paragraph beforehand
         if( rULSpace.GetUpper() > nSpace )
             nSpace = rULSpace.GetUpper();
 
-        // und anschliessend auf einen vernuenftigen Wert gesetzt
+        // and afterwards set to a valid value
         const SvxULSpaceItem& rCollULSpace =
             pTextNode->GetAnyFormatColl().GetULSpace();
         if( rCollULSpace.GetLower() == rULSpace.GetLower() )
@@ -503,7 +500,7 @@ bool SwHTMLParser::EndSection( bool bLFStripped )
                             ->GetEndNode();
     if( pEndNd && pEndNd->StartOfSectionNode()->IsSectionNode() )
     {
-        // den Bereich beenden
+        // close the section
         if( !bLFStripped )
             StripTrailingPara();
         m_pPam->Move( fnMoveForward );
@@ -763,10 +760,9 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
     RndStdIds eAnchorId =
         static_cast<const SwFormatAnchor&>(rItemSet.Get( RES_ANCHOR )).GetAnchorId();
 
-    // Den Rahmen anlegen
+    // create frame
     SwFlyFrameFormat* pFlyFormat = m_xDoc->MakeFlySection( eAnchorId, m_pPam->GetPoint(),
                                                     &rItemSet );
-    // Ggf. den Namen setzen
     if( !rName.isEmpty() )
         pFlyFormat->SetName( rName );
 
@@ -789,7 +785,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
     SwContentNode* pDestContentNd =
         m_xDoc->GetNodes()[nDestIdx]->GetContentNode();
 
-    OSL_ENSURE( pDestContentNd, "Wieso ist das Ziel kein Content-Node?" );
+    OSL_ENSURE( pDestContentNd, "Why is the target not a Content-Node?" );
 
     if( pSrcNd->IsContentNode() )
     {

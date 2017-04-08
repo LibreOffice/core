@@ -1042,7 +1042,7 @@ void SwViewShell::SizeChgNotify()
 
 void SwViewShell::VisPortChgd( const SwRect &rRect)
 {
-    OSL_ENSURE( GetWin(), "VisPortChgd ohne Window." );
+    OSL_ENSURE( GetWin(), "VisPortChgd without Window." );
 
     if ( rRect == VisArea() )
         return;

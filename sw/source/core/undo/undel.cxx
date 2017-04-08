@@ -145,7 +145,7 @@ SwUndoDelete::SwUndoDelete(
     // Step 1. deletion/record of content indices
     if( m_bDelFullPara )
     {
-        OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
+        OSL_ENSURE( rPam.HasMark(), "PaM without Mark" );
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
                         DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 

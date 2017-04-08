@@ -328,7 +328,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         /*
          * !!! The Status of the Stream has to be reset directly. !!!
-         *     When Seeking, the current Status-, EOF- und bad-Bit is set;
+         *     When Seeking, the current Status-, EOF- and bad-Bit is set;
          *     nobody knows why
          */
         if( pStrm )
@@ -379,7 +379,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     mxDoc->SetOle2Link( aOLELink );
 
-    if( pCursor )                 // das Doc ist jetzt modifiziert
+    if( pCursor )                 // the document is now modified
         mxDoc->getIDocumentState().SetModified();
     // #i38810# - If links have been updated, the document
     // have to be modified. During update of links the OLE link at the document

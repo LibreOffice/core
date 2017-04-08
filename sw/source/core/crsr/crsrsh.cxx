@@ -1485,7 +1485,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         SwContentFrame *pTableFrame = pPos->nNode.GetNode().GetContentNode()->
                               getLayoutFrame( GetLayout(), &aTmpPt, pPos, false );
 
-        OSL_ENSURE( pTableFrame, "Tabelle Cursor nicht im Content ??" );
+        OSL_ENSURE( pTableFrame, "Table Cursor not in Content ??" );
 
         // --> Make code robust. The table cursor may point
         // to a table in a currently inactive header.
@@ -1501,12 +1501,12 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             {
                 SwContentFrame* pMarkTableFrame = pITmpCursor->GetContentNode( false )->
                     getLayoutFrame( GetLayout(), &aTmpMk, pITmpCursor->GetMark(), false );
-                OSL_ENSURE( pMarkTableFrame, "Tabelle Cursor nicht im Content ??" );
+                OSL_ENSURE( pMarkTableFrame, "Table Cursor not in Content ??" );
 
                 if ( pMarkTableFrame )
                 {
                     SwTabFrame* pMarkTab = pMarkTableFrame->FindTabFrame();
-                    OSL_ENSURE( pMarkTab, "Tabelle Cursor nicht im Content ??" );
+                    OSL_ENSURE( pMarkTab, "Table Cursor not in Content ??" );
 
                     // Make code robust:
                     if ( pMarkTab )

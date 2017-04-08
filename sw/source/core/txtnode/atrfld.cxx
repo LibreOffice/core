@@ -247,7 +247,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         return;
 
     SwTextNode* pTextNd = &mpTextField->GetTextNode();
-    OSL_ENSURE( pTextNd, "wo ist denn mein Node?" );
+    OSL_ENSURE( pTextNd, "Where is my Node?" );
     if( pNew )
     {
         switch( pNew->Which() )
