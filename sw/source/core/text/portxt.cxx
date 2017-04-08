@@ -28,6 +28,7 @@
 #include <porglue.hxx>
 #include <portab.hxx>
 #include <porfld.hxx>
+#include <pagefrm.hxx>
 #include <wrong.hxx>
 #include <viewsh.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -204,6 +205,16 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     }
 
     return nCnt;
+}
+
+static bool lcl_IsSnapToChars( const SwTextSizeInfo &rInf )
+{
+    if ( rInf.SnapToGrid() )
+    {
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetTextFrame()->FindPageFrame()));
+        return pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars();
+    }
+    return false;
 }
 
 SwTextPortion * SwTextPortion::CopyLinePortion(const SwLinePortion &rPortion)
@@ -563,6 +574,10 @@ sal_Int32 SwTextPortion::GetSpaceCnt( const SwTextSizeInfo &rInf,
 {
     sal_Int32 nCnt = 0;
     sal_Int32 nPos = 0;
+
+    if ( lcl_IsSnapToChars( rInf ) )
+        return 0;
+
     if ( InExpGrp() )
     {
         if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
@@ -592,6 +607,9 @@ sal_Int32 SwTextPortion::GetSpaceCnt( const SwTextSizeInfo &rInf,
 long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const
 {
     sal_Int32 nCnt = 0;
+
+    if ( lcl_IsSnapToChars( rInf ) )
+        return 0;
 
     if ( InExpGrp() )
     {
