@@ -368,7 +368,7 @@ void FmFormView::ActivateControls(SdrPageView* pPageView)
     if (!pPageView)
         return;
 
-    for (sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); ++i)
+    for (sal_uInt32 i = 0; i < pPageView->PageWindowCount(); ++i)
     {
         const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
         pImpl->addWindow(rPageWindow);
@@ -381,7 +381,7 @@ void FmFormView::DeactivateControls(SdrPageView* pPageView)
     if( !pPageView )
         return;
 
-    for (sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); ++i)
+    for (sal_uInt32 i = 0; i < pPageView->PageWindowCount(); ++i)
     {
         const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
         pImpl->removeWindow(rPageWindow.GetControlContainer() );
@@ -428,7 +428,7 @@ void FmFormView::InsertControlContainer(const Reference< css::awt::XControlConta
         SdrPageView* pPageView = GetSdrPageView();
         if( pPageView )
         {
-            for( sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); i++ )
+            for( sal_uInt32 i = 0; i < pPageView->PageWindowCount(); i++ )
             {
                 const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
 
