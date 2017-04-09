@@ -363,7 +363,7 @@ long ViewShell::GetZoom() const
 {
     if (mpContentWindow)
     {
-        mpContentWindow->GetZoom();
+        return mpContentWindow->GetZoom();
     }
 
     return 0;
