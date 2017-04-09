@@ -67,20 +67,62 @@ void ScGridWindow::dumpColumnInformationHmm()
 void ScGridWindow::dumpCellProperties()
 {
     ScDocument* pDoc = pViewData->GetDocument();
-
+    const ScMarkData& rMark = pViewData->GetMarkData();
     SCTAB nTab = pViewData->GetTabNo();
-    SCCOL nCol = pViewData->GetCurX();
-    SCROW nRow = pViewData->GetCurY();
-    const ScPatternAttr* pPatternAttr = pDoc->GetPattern(nCol,nRow,nTab);
+
+    ScRangeList aList;
+    if (rMark.IsMultiMarked())
+    {
+        aList = rMark.GetMarkedRangesForTab(nTab);
+    }
+    else if (rMark.IsMarked())
+    {
+        ScRange aRange;
+        rMark.GetMarkArea(aRange);
+        aList.Join(aRange);
+    }
+    else
+    {
+        SCCOL nCol = pViewData->GetCurX();
+        SCROW nRow = pViewData->GetCurY();
+
+        ScRange aRange(nCol, nRow, nTab);
+        aList.Join(aRange, false);
+    }
 
     OString aOutputFile("dump.xml");
     xmlTextWriterPtr writer = xmlNewTextWriterFilename( aOutputFile.getStr(), 0 );
     xmlTextWriterSetIndent(writer,1);
-    xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
+    xmlTextWriterSetIndentString(writer, BAD_CAST("    "));
 
     xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
 
-    pPatternAttr->GetItemSet().dumpAsXml(writer);
+    xmlTextWriterStartElement(writer, BAD_CAST("selection"));
+
+    for (size_t i = 0, n = aList.size(); i < n; ++i)
+    {
+        ScRange* pRange = aList[i];
+        if (!pRange)
+            continue;
+
+        for (SCCOL nCol = pRange->aStart.Col(); nCol <= pRange->aEnd.Col(); ++nCol)
+        {
+            for (SCROW nRow = pRange->aStart.Row(); nRow <= pRange->aEnd.Row(); ++nRow)
+            {
+                const ScPatternAttr* pPatternAttr = pDoc->GetPattern(nCol, nRow, nTab);
+                xmlTextWriterStartElement(writer, BAD_CAST("cell"));
+                xmlTextWriterWriteAttribute(writer, BAD_CAST("column"), BAD_CAST(OString::number(nCol).getStr()));
+                xmlTextWriterWriteAttribute(writer, BAD_CAST("row"), BAD_CAST(OString::number(nRow).getStr()));
+                xmlTextWriterWriteAttribute(writer, BAD_CAST("tab"), BAD_CAST(OString::number(nTab).getStr()));
+
+                pPatternAttr->GetItemSet().dumpAsXml(writer);
+
+                xmlTextWriterEndElement(writer);
+            }
+        }
+    }
+
+    xmlTextWriterEndElement(writer);
 
     xmlTextWriterEndDocument( writer );
     xmlFreeTextWriter (writer);
