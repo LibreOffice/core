@@ -2906,9 +2906,19 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
                 int nPriority = 0;
                 std::vector<vcl::EnumContext::Context> aContext = handleStyle(reader, nPriority);
                 if (nPriority != 0)
-                    dynamic_cast<vcl::IPrioritable*>(pCurrentChild.get())->SetPriority(nPriority);
+                {
+                    vcl::IPrioritable* pPrioritable = dynamic_cast<vcl::IPrioritable*>(pCurrentChild.get());
+                    SAL_WARN_IF(!pPrioritable, "vcl", "priority set for not supported item");
+                    if (pPrioritable)
+                        pPrioritable->SetPriority(nPriority);
+                }
                 if (aContext.size() != 0)
-                    dynamic_cast<vcl::IContext*>(pCurrentChild.get())->SetContext(aContext);
+                {
+                    vcl::IContext* pContextControl = dynamic_cast<vcl::IContext*>(pCurrentChild.get());
+                    SAL_WARN_IF(!pContextControl, "vcl", "context set for not supported item");
+                    if (pContextControl)
+                        pContextControl->SetContext(aContext);
+                }
             }
             else
             {
