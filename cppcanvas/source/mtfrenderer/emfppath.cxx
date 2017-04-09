@@ -105,7 +105,7 @@ namespace cppcanvas
 #endif
         }
 
-        ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (ImplRenderer& rR, bool bMapIt)
+        ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (ImplRenderer& rR, bool bMapIt, bool bAddLineToCloseShape)
         {
             ::basegfx::B2DPolygon polygon;
 
@@ -157,7 +157,13 @@ namespace cppcanvas
                     polygon.clear ();
                 }
             }
-
+            // Draw an extra line between the last point and the first point, to close the shape.
+            if (bAddLineToCloseShape) {
+                if (bMapIt)
+                    polygon.append (rR.Map (pPoints [0], pPoints [1]) );
+                else
+                    polygon.append (::basegfx::B2DPoint (pPoints [0], pPoints [1]) );
+            }
             if (polygon.count ()) {
                 aPolygon.append (polygon);
 
