@@ -103,7 +103,7 @@ namespace
 #define EmfPlusRecordTypeResetWorldTransform 0x402B
 #define EmfPlusRecordTypeMultiplyWorldTransform 0x402C
 #define EmfPlusRecordTypeTranslateWorldTransform 0x402D
-//TODO EmfPlusRecordTypeScaleWorldTransform 0x402E
+#define EmfPlusRecordTypeScaleWorldTransform 0x402E
 //TODO EmfPlusRecordTypeRotateWorldTransform 0x402F
 #define EmfPlusRecordTypeSetPageTransform 0x4030
 //TODO EmfPlusRecordTypeResetClip 0x4031
@@ -175,6 +175,7 @@ const char* emfTypeToName(sal_uInt16 type)
         case EmfPlusRecordTypeResetWorldTransform: return "EmfPlusRecordTypeResetWorldTransform";
         case EmfPlusRecordTypeMultiplyWorldTransform: return "EmfPlusRecordTypeMultiplyWorldTransform";
         case EmfPlusRecordTypeTranslateWorldTransform: return "EmfPlusRecordTypeTranslateWorldTransform";
+        case EmfPlusRecordTypeScaleWorldTransform: return "EmfPlusRecordTypeScaleWorldTransform";
         case EmfPlusRecordTypeSetPageTransform: return "EmfPlusRecordTypeSetPageTransform";
         case EmfPlusRecordTypeSetClipRect: return "EmfPlusRecordTypeSetClipRect";
         case EmfPlusRecordTypeSetClipPath: return "EmfPlusRecordTypeSetClipPath";
@@ -1407,6 +1408,29 @@ namespace cppcanvas
                                      "EMF+\t m11: " << transform.eM11 << ", m12: " << transform.eM12 <<
                                      "EMF+\t m21: " << transform.eM21 << ", m22: " << transform.eM22 <<
                                      "EMF+\t dx: "  << transform.eDx  << ", dy: "  << transform.eDy);
+
+                            if (flags & 0x2000)  // post multiply
+                                aWorldTransform.Multiply (transform);
+                            else {               // pre multiply
+                                transform.Multiply (aWorldTransform);
+                                aWorldTransform.Set (transform);
+                            }
+                            SAL_INFO("cppcanvas.emf",
+                                     "EMF+\t m11: " << aWorldTransform.eM11 << ", m12: " << aWorldTransform.eM12 <<
+                                     "EMF+\t m21: " << aWorldTransform.eM21 << ", m22: " << aWorldTransform.eM22 <<
+                                     "EMF+\t dx: "  << aWorldTransform.eDx  << ", dy: "  << aWorldTransform.eDy);
+                            break;
+                        }
+                    case EmfPlusRecordTypeScaleWorldTransform:
+                        {
+                            XForm transform = XForm();
+                            rMF.ReadFloat( transform.eM11 ).ReadFloat( transform.eM22 );
+                            SAL_INFO("cppcanvas.emf", "EMF+ ScaleWorldTransform Sx: " << transform.eM11 << " Sy: " << transform.eM22);
+
+                            SAL_INFO("cppcanvas.emf",
+                                     "EMF+\t m11: " << aWorldTransform.eM11 << ", m12: " << aWorldTransform.eM12 <<
+                                     "EMF+\t m21: " << aWorldTransform.eM21 << ", m22: " << aWorldTransform.eM22 <<
+                                     "EMF+\t dx: "  << aWorldTransform.eDx  << ", dy: "  << aWorldTransform.eDy);
 
                             if (flags & 0x2000)  // post multiply
                                 aWorldTransform.Multiply (transform);
