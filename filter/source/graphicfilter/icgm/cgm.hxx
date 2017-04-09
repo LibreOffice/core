@@ -64,7 +64,8 @@ class CGM
         bool                mbPictureBody;
         bool                mbFigure;
         bool                mbFirstOutPut;
-        sal_uInt32              mnAct4PostReset;
+        bool                mbInDefaultReplacement;
+        sal_uInt32          mnAct4PostReset;
         CGMBitmap*          mpBitmapInUse;
         CGMChart*           mpChart;                // if sal_True->"SHWSLIDEREC"
                                                     //  otherwise "BEGINPIC" commands

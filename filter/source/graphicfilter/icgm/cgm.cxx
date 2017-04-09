@@ -51,6 +51,7 @@ CGM::CGM(uno::Reference< frame::XModel > const & rModel)
     , mbPictureBody(false)
     , mbFigure(false)
     , mbFirstOutPut(false)
+    , mbInDefaultReplacement(false)
     , mnAct4PostReset(0)
     , mpBitmapInUse(nullptr)
     , mpChart(nullptr)
@@ -620,8 +621,16 @@ void CGM::ImplDoClass()
 
 void CGM::ImplDefaultReplacement()
 {
-    if ( !maDefRepList.empty() )
+    if (!maDefRepList.empty())
     {
+        if (mbInDefaultReplacement)
+        {
+            SAL_WARN("filter", "recursion in ImplDefaultReplacement");
+            return;
+        }
+
+        mbInDefaultReplacement = true;
+
         sal_uInt32  nOldEscape = mnEscape;
         sal_uInt32  nOldElementClass = mnElementClass;
         sal_uInt32  nOldElementID = mnElementID;
@@ -663,6 +672,8 @@ void CGM::ImplDefaultReplacement()
         mnParaSize = mnElementSize = nOldElementSize;
         mpSource = pOldBuf;
         mpEndValidSource = pOldEndValidSource;
+
+        mbInDefaultReplacement = false;
     }
 }
 
