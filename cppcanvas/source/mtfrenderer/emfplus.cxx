@@ -104,7 +104,7 @@ namespace
 #define EmfPlusRecordTypeMultiplyWorldTransform 0x402C
 #define EmfPlusRecordTypeTranslateWorldTransform 0x402D
 //TODO EmfPlusRecordTypeScaleWorldTransform 0x402E
-//TODO EmfPlusRecordTypeRotateWorldTransform 0x402F
+#define EmfPlusRecordTypeRotateWorldTransform 0x402F
 #define EmfPlusRecordTypeSetPageTransform 0x4030
 //TODO EmfPlusRecordTypeResetClip 0x4031
 #define EmfPlusRecordTypeSetClipRect 0x4032
@@ -175,6 +175,7 @@ const char* emfTypeToName(sal_uInt16 type)
         case EmfPlusRecordTypeResetWorldTransform: return "EmfPlusRecordTypeResetWorldTransform";
         case EmfPlusRecordTypeMultiplyWorldTransform: return "EmfPlusRecordTypeMultiplyWorldTransform";
         case EmfPlusRecordTypeTranslateWorldTransform: return "EmfPlusRecordTypeTranslateWorldTransform";
+        case EmfPlusRecordTypeRotateWorldTransform: return "EmfPlusRecordTypeRotateWorldTransform";
         case EmfPlusRecordTypeSetPageTransform: return "EmfPlusRecordTypeSetPageTransform";
         case EmfPlusRecordTypeSetClipRect: return "EmfPlusRecordTypeSetClipRect";
         case EmfPlusRecordTypeSetClipPath: return "EmfPlusRecordTypeSetClipPath";
@@ -1405,6 +1406,36 @@ namespace cppcanvas
                                 aWorldTransform.Set (transform);
                             }
                             SAL_INFO("cppcanvas.emf",
+                                     "EMF+\t m11: " << aWorldTransform.eM11 << ", m12: " << aWorldTransform.eM12 <<
+                                     "EMF+\t m21: " << aWorldTransform.eM21 << ", m22: " << aWorldTransform.eM22 <<
+                                     "EMF+\t dx: "  << aWorldTransform.eDx  << ", dy: "  << aWorldTransform.eDy);
+                            break;
+                        }
+
+                    case EmfPlusRecordTypeRotateWorldTransform:
+                        {
+
+                            XForm transform = XForm();
+                            float aAngle;
+                            rMF.ReadFloat( aAngle );
+
+                            SAL_WARN("cppcanvas.emf", "EMF+ RotateWorldTransform Angle: " << aAngle);
+                            transform.eM11 =  sin( M_PI * aAngle / 180.0 );
+                            transform.eM12 =  cos( M_PI * aAngle / 180.0 );
+                            transform.eM21 =  cos( M_PI * aAngle / 180.0 );
+                            transform.eM22 = -sin( M_PI * aAngle / 180.0 );
+                            SAL_WARN("cppcanvas.emf",
+                                     "EMF+\t m11: " << aWorldTransform.eM11 << ", m12: " << aWorldTransform.eM12 <<
+                                     "EMF+\t m21: " << aWorldTransform.eM21 << ", m22: " << aWorldTransform.eM22 <<
+                                     "EMF+\t dx: "  << aWorldTransform.eDx  << ", dy: "  << aWorldTransform.eDy);
+
+                            if (flags & 0x2000)  // post multiply
+                                aWorldTransform.Multiply (transform);
+                            else {               // pre multiply
+                                transform.Multiply (aWorldTransform);
+                                aWorldTransform.Set (transform);
+                            }
+                            SAL_WARN("cppcanvas.emf",
                                      "EMF+\t m11: " << aWorldTransform.eM11 << ", m12: " << aWorldTransform.eM12 <<
                                      "EMF+\t m21: " << aWorldTransform.eM21 << ", m22: " << aWorldTransform.eM22 <<
                                      "EMF+\t dx: "  << aWorldTransform.eDx  << ", dy: "  << aWorldTransform.eDy);

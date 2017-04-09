@@ -121,12 +121,16 @@ namespace cppcanvas
             // FIXME We shouldn't modify source matrix during computation
             void Multiply (const XForm& f)
             {
-                eM11 = eM11*f.eM11 + eM12*f.eM21;
-                eM12 = eM11*f.eM12 + eM12*f.eM22;
-                eM21 = eM21*f.eM11 + eM22*f.eM21;
-                eM22 = eM21*f.eM12 + eM22*f.eM22;
-                eDx  = eDx*f.eM11  + eDy*f.eM21 + f.eDx;
-                eDy  = eDx*f.eM12  + eDy*f.eM22 + f.eDy;
+                XForm aResult;
+                aResult.eM11 = eM11*f.eM11 + eM12*f.eM21;
+                aResult.eM12 = eM11*f.eM12 + eM12*f.eM22;
+                aResult.eM21 = eM21*f.eM11 + eM22*f.eM21;
+                aResult.eM22 = eM21*f.eM12 + eM22*f.eM22;
+                //aResult.eDx  = eM11*f.eDx  + eM12*f.eDy + eDx;
+                //aResult.eDy  = eM21*f.eDx  + eM22*f.eDy + eDy;
+                aResult.eDx  = eDx*f.eM11  + eDy*f.eM21 + f.eDx;
+                aResult.eDy  = eDx*f.eM12  + eDy*f.eM22 + f.eDy;
+                Set( aResult );
             }
 
 #ifdef OSL_BIGENDIAN
