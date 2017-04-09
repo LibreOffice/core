@@ -2352,7 +2352,7 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Links</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="box200">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
