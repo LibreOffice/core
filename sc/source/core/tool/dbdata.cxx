@@ -625,9 +625,10 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
 void ScDBData::ExtendDataArea(ScDocument* pDoc)
 {
     // Extend the DB area to include data rows immediately below.
-    // or shrink it if all cells are empty
     SCCOL nOldCol1 = nStartCol, nOldCol2 = nEndCol;
+    SCROW nOldEndRow = nEndRow;
     pDoc->GetDataArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow, false, true);
+    nEndRow = std::max(nEndRow, nOldEndRow);
     if (nStartCol != nOldCol1 || nEndCol != nOldCol2)
     {
         SAL_WARN_IF( !maTableColumnNames.empty(), "sc.core", "ScDBData::ExtendDataArea - invalidating column names/offsets");
