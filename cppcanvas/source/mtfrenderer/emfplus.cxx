@@ -1066,7 +1066,9 @@ namespace cppcanvas
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
 
-                            EMFPPlusDrawPolygon (path.GetPolygon (*this), rFactoryParms, rState, rCanvas, flags);
+                            // 0x2000 bit indicates whether to draw an extra line between the last point
+                            // and the first point, to close the shape.
+                            EMFPPlusDrawPolygon (path.GetPolygon (*this, true, (flags & 0x2000)), rFactoryParms, rState, rCanvas, flags);
 
                             break;
                         }

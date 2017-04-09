@@ -38,7 +38,7 @@ namespace cppcanvas
             // TODO: remove rR argument when debug code is not longer needed
             void Read(SvStream& s, sal_uInt32 pathFlags, ImplRenderer& rR);
 
-            ::basegfx::B2DPolyPolygon& GetPolygon(ImplRenderer& rR, bool bMapIt = true);
+            ::basegfx::B2DPolyPolygon& GetPolygon(ImplRenderer& rR, bool bMapIt = true, bool bAddLineToCloseShape = false);
         };
     }
 }
