@@ -76,6 +76,8 @@ public:
                 nRowMerge = rMerge.nRowMerge;
                 return *this;
             }
+
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 class SC_DLLPUBLIC ScMergeFlagAttr: public SfxInt16Item
@@ -99,6 +101,8 @@ public:
 
     bool    HasPivotButton() const;
     bool    HasPivotPopupButton() const;
+
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
