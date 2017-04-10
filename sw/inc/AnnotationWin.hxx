@@ -34,7 +34,6 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         SwAnnotationWin( SwEditWin& rEditWin,
                          WinBits nBits,
                          SwPostItMgr& aMgr,
-                         SwPostItBits aBits,
                          SwSidebarItem& rSidebarItem,
                          SwFormatField* aField );
         virtual ~SwAnnotationWin() override;
