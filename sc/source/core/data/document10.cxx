@@ -125,6 +125,25 @@ bool ScDocument::CopyOneCellFromClip(
         maTabs[i]->CopyOneCellFromClip(rCxt, nCol1, nRow1, nCol2, nRow2,  aClipRange.aStart.Row(), pSrcTab);
     }
 
+    sc::RefUpdateContext aRefCxt(*this);
+    aRefCxt.maRange = ScRange(nCol1, nRow1, rCxt.getTabStart(), nCol2, nRow2, nTabEnd);
+    aRefCxt.mnColDelta = nCol1 - aSrcPos.Col();
+    aRefCxt.mnRowDelta = nRow1 - aSrcPos.Row();
+    aRefCxt.mnTabDelta = rCxt.getTabStart() - aSrcPos.Tab();
+    if (rCxt.getClipDoc()->GetClipParam().mbCutMode)
+    {
+        if (rCxt.getClipDoc()->GetPool() == GetPool())
+        {
+            aRefCxt.meMode = URM_MOVE;
+            UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
+        }
+    }
+    else
+    {
+        aRefCxt.meMode = URM_COPY;
+        UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
+    }
+
     return true;
 }
 
