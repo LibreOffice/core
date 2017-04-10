@@ -1105,13 +1105,13 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
 
     for(int i = 1; i <= MAXLEVEL; ++i)
     {
-        pSubPop1->InsertItem( i + 100, OUString::number(i));
+        pSubPop1->InsertItem(i + 100, OUString::number(i), MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
     }
     pSubPop1->CheckItem(100 + m_nOutlineLevel);
     for(int i=0; i < 3; ++i)
     {
-        pSubPop2->InsertItem( i + 201, m_aContextStrings[
-                STR_HYPERLINK - STR_CONTEXT_FIRST + i]);
+        pSubPop2->InsertItem(i + 201, m_aContextStrings[
+                STR_HYPERLINK - STR_CONTEXT_FIRST + i], MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
     }
     pSubPop2->CheckItem(201 + static_cast<int>(GetParentWindow()->GetRegionDropMode()));
     // Insert the list of the open files
@@ -1127,20 +1127,20 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
             sInsert += m_aContextStrings[ STR_ACTIVE - STR_CONTEXT_FIRST];
             sInsert += ")";
         }
-        pSubPop3->InsertItem(nId, sInsert);
+        pSubPop3->InsertItem(nId, sInsert, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
         if (State::CONSTANT == m_eState && m_pActiveShell == &pView->GetWrtShell())
             pSubPop3->CheckItem(nId);
         pView = SwModule::GetNextView(pView);
         nId++;
     }
-    pSubPop3->InsertItem(nId++, m_aContextStrings[STR_ACTIVE_VIEW - STR_CONTEXT_FIRST]);
+    pSubPop3->InsertItem(nId++, m_aContextStrings[STR_ACTIVE_VIEW - STR_CONTEXT_FIRST], MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
     if(m_pHiddenShell)
     {
         OUString sHiddenEntry = m_pHiddenShell->GetView().GetDocShell()->GetTitle();
         sHiddenEntry += " ( ";
         sHiddenEntry += m_aContextStrings[ STR_HIDDEN - STR_CONTEXT_FIRST];
         sHiddenEntry += " )";
-        pSubPop3->InsertItem(nId, sHiddenEntry);
+        pSubPop3->InsertItem(nId, sHiddenEntry, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
     }
 
     if (State::ACTIVE == m_eState)
