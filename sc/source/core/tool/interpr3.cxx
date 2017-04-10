@@ -2241,9 +2241,9 @@ void ScInterpreter::ScBetaInv()
         PushDouble(fA + fVal*(fB-fA));                  // scale to (A,B)
 }
 
-                                                            // Note: T, F, and Chi are
-                                                            // monotonically decreasing,
-                                                            // therefore 1-Dist as function
+// Note: T, F, and Chi are
+// monotonically decreasing,
+// therefore 1-Dist as function
 
 class ScTDistFunction : public ScDistFunc
 {
