@@ -441,12 +441,6 @@
 #define RID_SCDLG_HFEDIT_HEADER         (SC_DIALOGS_START + 68)
 #define RID_SCDLG_HFEDIT_FOOTER         (SC_DIALOGS_START + 69)
 
-// popup for drop-mode in navigator
-#define RID_POPUP_DROPMODE              (SC_DIALOGS_START + 92)
-#define RID_DROPMODE_URL                (SC_DIALOGS_START + 93)
-#define RID_DROPMODE_LINK               (SC_DIALOGS_START + 94)
-#define RID_DROPMODE_COPY               (SC_DIALOGS_START + 95)
-
 #define RID_POPUP_NAVIPI_SCENARIO       (SC_DIALOGS_START + 120)
 #define RID_NAVIPI_SCENARIO_DELETE      (SC_DIALOGS_START + 121)
 #define RID_NAVIPI_SCENARIO_EDIT        (SC_DIALOGS_START + 122)

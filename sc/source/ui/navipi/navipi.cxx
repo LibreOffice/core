@@ -361,15 +361,33 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, ToolBox *, pToolBox, void)
     // click (button down) and not in the select (button up)
     if (pToolBox->GetCurItemId() == nDragModeId)
     {
-        ScopedVclPtrInstance<ScPopupMenu> aPop(ScResId(RID_POPUP_DROPMODE));
-        aPop->CheckItem(RID_DROPMODE_URL + GetDropMode());
-        aPop->Execute(pToolBox, pToolBox->GetItemRect(nDragModeId), PopupMenuFlags::ExecuteDown);
-        sal_uInt16 nId = aPop->GetSelected();
+        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/scalc/ui/dropmenu.ui", "");
+        VclPtr<PopupMenu> aPop(aBuilder.get_menu("menu"));
+
+        switch (GetDropMode())
+        {
+            case 0:
+                aPop->CheckItem(aPop->GetItemId("hyperlink"));
+                break;
+            case 1:
+                aPop->CheckItem(aPop->GetItemId("link"));
+                break;
+            case 2:
+                aPop->CheckItem(aPop->GetItemId("copy"));
+                break;
+        }
+
+        sal_uInt16 nId = aPop->Execute(pToolBox, pToolBox->GetItemRect(nDragModeId), PopupMenuFlags::ExecuteDown);
+        OString sIdent = aPop->GetItemIdent(nId);
+
+        if (sIdent == "hyperlink")
+            SetDropMode(0);
+        else if (sIdent == "link")
+            SetDropMode(1);
+        else if (sIdent == "copy")
+            SetDropMode(2);
 
         pToolBox->EndSelection();     // before SetDropMode (SetDropMode calls SetItemImage)
-
-        if (nId >= RID_DROPMODE_URL && nId <= RID_DROPMODE_COPY)
-            SetDropMode(nId - RID_DROPMODE_URL);
     }
 }
 

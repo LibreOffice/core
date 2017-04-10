@@ -579,14 +579,28 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 //  Drag-Drop Modus
 
                 ScopedVclPtrInstance<PopupMenu> aPop;
-                VclPtrInstance<ScPopupMenu> aDropMenu( ScResId( RID_POPUP_DROPMODE ) );
-                aDropMenu->CheckItem( RID_DROPMODE_URL + pParentWindow->GetDropMode() );
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/scalc/ui/dropmenu.ui", "");
+                VclPtr<PopupMenu> aDropMenu(aBuilder.get_menu("menu"));
+
+                switch (pParentWindow->GetDropMode())
+                {
+                    case 0:
+                        aDropMenu->CheckItem(aDropMenu->GetItemId("hyperlink"));
+                        break;
+                    case 1:
+                        aDropMenu->CheckItem(aDropMenu->GetItemId("link"));
+                        break;
+                    case 2:
+                        aDropMenu->CheckItem(aDropMenu->GetItemId("copy"));
+                        break;
+                }
+
                 aPop->InsertItem( 1, pParentWindow->GetStrDragMode() );
                 aPop->SetPopupMenu( 1, aDropMenu.get() );
 
                 //  displayed document
 
-                VclPtrInstance<ScPopupMenu> aDocMenu;
+                VclPtrInstance<PopupMenu> aDocMenu;
                 aDocMenu->SetMenuFlags( aDocMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
                 sal_uInt16 i=0;
                 sal_uInt16 nPos=0;
@@ -603,14 +617,16 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                             aEntry += pParentWindow->aStrActive;
                         else
                             aEntry += pParentWindow->aStrNotActive;
-                        aDocMenu->InsertItem( ++i, aEntry );
+                        ++i;
+                        aDocMenu->InsertItem(i, aEntry, MenuItemBits::TEXT, OString("document") + OString::number(i));
                         if ( !bHiddenDoc && aName == aManualDoc )
                             nPos = i;
                     }
                     pSh = SfxObjectShell::GetNext( *pSh );
                 }
                 //  "active window"
-                aDocMenu->InsertItem( ++i, pParentWindow->aStrActiveWin );
+                ++i;
+                aDocMenu->InsertItem(i, pParentWindow->aStrActiveWin, MenuItemBits::TEXT, OString("document") + OString::number(i));
                 if (!bHiddenDoc && aManualDoc.isEmpty())
                     nPos = i;
                 //  hidden document
@@ -618,7 +634,8 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 {
                     OUString aEntry = aHiddenTitle;
                     aEntry += pParentWindow->aStrHidden;
-                    aDocMenu->InsertItem( ++i, aEntry );
+                    ++i;
+                    aDocMenu->InsertItem(i, aEntry, MenuItemBits::TEXT, OString("document") + OString::number(i));
                     if (bHiddenDoc)
                         nPos = i;
                 }
@@ -626,21 +643,20 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 aPop->InsertItem( 2, pParentWindow->GetStrDisplay() );
                 aPop->SetPopupMenu( 2, aDocMenu.get() );
 
+                sal_uInt16 nSelected = aPop->Execute(this, rCEvt.GetMousePosPixel());
+                OString sIdent = aPop->GetItemIdent(nSelected);
 
-                aPop->Execute( this, rCEvt.GetMousePosPixel() );
-
-                if ( aDropMenu->WasHit() )               //  Drag-Drop Modus
+                if (sIdent.startsWith("document"))
                 {
-                    sal_uInt16 nId = aDropMenu->GetSelected();
-                    if ( nId >= RID_DROPMODE_URL && nId <= RID_DROPMODE_COPY )
-                        pParentWindow->SetDropMode( nId - RID_DROPMODE_URL );
+                    OUString aName = aDocMenu->GetItemText(aDocMenu->GetItemId(sIdent));
+                    SelectDoc(aName);
                 }
-                else if ( aDocMenu->WasHit() )           //  displayed document
-                {
-                    sal_uInt16 nId = aDocMenu->GetSelected();
-                    OUString aName = aDocMenu->GetItemText(nId);
-                    SelectDoc( aName );
-                }
+                else if (sIdent == "hyperlink")
+                    pParentWindow->SetDropMode(0);
+                else if (sIdent == "link")
+                    pParentWindow->SetDropMode(1);
+                else if (sIdent == "copy")
+                    pParentWindow->SetDropMode(2);
             }
             break;
             default: break;

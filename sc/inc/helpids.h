@@ -46,11 +46,6 @@
 #define HID_SC_ADD_AUTOFMT                                      "SC_HID_SC_ADD_AUTOFMT"
 #define HID_SC_AUTOFMT_NAME                                     "SC_HID_SC_AUTOFMT_NAME"
 
-#define HID_SC_DROPMODE_URL                                     "SC_HID_SC_DROPMODE_URL"
-#define HID_SC_DROPMODE_LINK                                    "SC_HID_SC_DROPMODE_LINK"
-#define HID_SC_DROPMODE_COPY                                    "SC_HID_SC_DROPMODE_COPY"
-
-
 #define HID_SC_SCENARIO_DELETE                                  "SC_HID_SC_SCENARIO_DELETE"
 #define HID_SC_SCENARIO_EDIT                                    "SC_HID_SC_SCENARIO_EDIT"
 

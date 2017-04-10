@@ -176,35 +176,6 @@ String SCSTR_QHLP_SCEN_COMMENT
     Text [ en-US ] = "Comment";
 };
 
- // PopupMenu -------------------------------------------------------------
-Menu RID_POPUP_DROPMODE
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = RID_DROPMODE_URL ;
-            HelpId = HID_SC_DROPMODE_URL ;
-            Text [ en-US ] = "Insert as Hyperlink" ;
-            RadioCheck = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = RID_DROPMODE_LINK ;
-            HelpId = HID_SC_DROPMODE_LINK ;
-            Text [ en-US ] = "Insert as Link" ;
-            RadioCheck = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = RID_DROPMODE_COPY ;
-            HelpId = HID_SC_DROPMODE_COPY ;
-            Text [ en-US ] = "Insert as Copy" ;
-            RadioCheck = TRUE ;
-        };
-    };
-};
-
 Menu RID_POPUP_NAVIPI_SCENARIO
 {
     ItemList =
