@@ -283,6 +283,26 @@ DECLARE_OOXMLIMPORT_TEST(testN751017, "n751017.docx")
     CPPUNIT_ASSERT(bFoundGet);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testN757890, "n757890.docx")
+{
+    // The w:pStyle token affected the text outside the textbox.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    OUString aValue;
+    xPara->getPropertyValue("ParaStyleName") >>= aValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aValue);
+
+    // This wan't centered
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nValue;
+    xFrame->getPropertyValue("HoriOrient") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN751077, "n751077.docx")
 {
 /*
