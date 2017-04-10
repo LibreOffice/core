@@ -4164,9 +4164,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             }
             // change ui if mouse is over SwPostItField
             // TODO: do the same thing for redlines IsAttrAtPos::Redline
-            SwRect aFieldRect;
             SwContentAtPos aContentAtPos( IsAttrAtPos::Field);
-            if( rSh.GetContentAtPos( aDocPt, aContentAtPos, false, &aFieldRect ) )
+            if (rSh.GetContentAtPos(aDocPt, aContentAtPos, false))
             {
                 const SwField* pField = aContentAtPos.aFnd.pField;
                 if (pField->Which()== SwFieldIds::Postit)
