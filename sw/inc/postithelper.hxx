@@ -32,8 +32,8 @@ class SwTextField;
 class SwRootFrame;
 class SwPostItMgr;
 class SwEditWin;
-namespace sw { namespace sidebarwindows {
-    class SwSidebarWin;
+namespace sw { namespace annotation {
+    class SwAnnotationWin;
 } }
 
 struct SwPosition;
@@ -88,7 +88,7 @@ namespace SwPostItHelper
 class SwSidebarItem
 {
 public:
-    VclPtr<sw::sidebarwindows::SwSidebarWin> pPostIt;
+    VclPtr<sw::annotation::SwAnnotationWin> pPostIt;
     bool bShow;
     bool bFocus;
     bool bPendingLayout;
@@ -114,7 +114,7 @@ public:
     virtual bool UseElement() = 0;
     virtual const SwFormatField& GetFormatField() const = 0;
     virtual const SfxBroadcaster* GetBroadCaster() const = 0;
-    virtual VclPtr<sw::sidebarwindows::SwSidebarWin> GetSidebarWindow( SwEditWin& rEditWin,
+    virtual VclPtr<sw::annotation::SwAnnotationWin> GetSidebarWindow( SwEditWin& rEditWin,
                                                                 SwPostItMgr& aMgr) = 0;
 };
 
@@ -139,7 +139,7 @@ public:
     {
         return dynamic_cast<const SfxBroadcaster *> (&mrFormatField);
     }
-    virtual VclPtr<sw::sidebarwindows::SwSidebarWin> GetSidebarWindow(
+    virtual VclPtr<sw::annotation::SwAnnotationWin> GetSidebarWindow(
         SwEditWin& rEditWin,
         SwPostItMgr& aMgr ) override;
 

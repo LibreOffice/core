@@ -25,15 +25,16 @@
 class SwViewShell;
 class SwSidebarItem;
 class SwFrame;
+namespace sw { namespace annotation {
+    class SwAnnotationWin;
+} }
 
 namespace sw { namespace sidebarwindows {
-
-class SwSidebarWin;
 
 class SidebarWinAccessible : public VCLXWindow
 {
     public:
-        explicit SidebarWinAccessible( SwSidebarWin& rSidebarWin,
+        explicit SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSidebarWin,
                                        SwViewShell& rViewShell,
                                        const SwSidebarItem& rSidebarItem );
         virtual ~SidebarWinAccessible() override;
@@ -44,7 +45,7 @@ class SidebarWinAccessible : public VCLXWindow
         void ChangeSidebarItem( const SwSidebarItem& rSidebarItem );
 
     private:
-        SwSidebarWin& mrSidebarWin;
+        sw::annotation::SwAnnotationWin& mrSidebarWin;
         SwViewShell& mrViewShell;
         const SwFrame* mpAnchorFrame;
         bool bAccContextCreated;

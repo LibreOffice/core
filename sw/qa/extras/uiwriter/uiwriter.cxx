@@ -43,7 +43,7 @@
 #include <pagedesc.hxx>
 #include <postithelper.hxx>
 #include <PostItMgr.hxx>
-#include <SidebarWin.hxx>
+#include <AnnotationWin.hxx>
 #include "com/sun/star/text/XDefaultNumberingProvider.hpp"
 #include "com/sun/star/awt/FontUnderline.hpp"
 

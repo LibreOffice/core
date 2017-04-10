@@ -147,8 +147,8 @@
 #include <xmloff/odffields.hxx>
 
 #include <PostItMgr.hxx>
-#include <SidebarWin.hxx>
 #include <FrameControlsManager.hxx>
+#include <AnnotationWin.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -6408,7 +6408,7 @@ void SwEditWin::SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool 
 
     if (m_rView.GetPostItMgr())
     {
-        if (sw::sidebarwindows::SwSidebarWin* pWin = m_rView.GetPostItMgr()->GetActiveSidebarWin())
+        if (sw::annotation::SwAnnotationWin* pWin = m_rView.GetPostItMgr()->GetActiveSidebarWin())
         {
             // Editing postit text.
             pWin->SetCursorLogicPosition(rPosition, bPoint, bClearMark);

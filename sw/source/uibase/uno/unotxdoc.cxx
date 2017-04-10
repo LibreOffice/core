@@ -148,7 +148,6 @@
 #include <srcview.hxx>
 #include <edtwin.hxx>
 #include <swdtflvr.hxx>
-#include <SidebarWin.hxx>
 #include <PostItMgr.hxx>
 
 #include <svtools/langtab.hxx>
@@ -3238,7 +3237,7 @@ OUString SwXTextDocument::getPostIts()
     for (std::list<SwSidebarItem*>::const_iterator i = pDocShell->GetView()->GetPostItMgr()->begin();
          i != pDocShell->GetView()->GetPostItMgr()->end(); ++i )
     {
-        sw::annotation::SwAnnotationWin* pWin = static_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt.get());
+        sw::annotation::SwAnnotationWin* pWin = (*i)->pPostIt.get();
 
         const SwPostItField* pField = pWin->GetPostItField();
         const SwRect& aRect = pWin->GetAnchorRect();
@@ -3457,7 +3456,7 @@ OString SwXTextDocument::getTextSelection(const char* pMimeType, OString& rUsedM
 
     if (SwPostItMgr* pPostItMgr = pDocShell->GetView()->GetPostItMgr())
     {
-        if (sw::sidebarwindows::SwSidebarWin* pWin = pPostItMgr->GetActiveSidebarWin())
+        if (sw::annotation::SwAnnotationWin* pWin = pPostItMgr->GetActiveSidebarWin())
         {
             // Editing postit text.
             EditView& rEditView = pWin->GetOutlinerView()->GetEditView();

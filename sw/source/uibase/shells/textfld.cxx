@@ -21,7 +21,6 @@
 #include <comphelper/lok.hxx>
 #include <chrdlgmodes.hxx>
 #include <hintids.hxx>
-#include <SidebarWin.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/kernitem.hxx>

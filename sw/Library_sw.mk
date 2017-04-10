@@ -598,6 +598,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/docvw/AnchorOverlayObject \
     sw/source/uibase/docvw/AnnotationMenuButton \
     sw/source/uibase/docvw/AnnotationWin \
+    sw/source/uibase/docvw/AnnotationWin2 \
     sw/source/uibase/docvw/DashedLine \
     sw/source/uibase/docvw/FrameControlsManager \
     sw/source/uibase/docvw/PageBreakWin \
@@ -607,7 +608,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/docvw/SidebarScrollBar \
     sw/source/uibase/docvw/SidebarTxtControl \
     sw/source/uibase/docvw/SidebarTxtControlAcc \
-    sw/source/uibase/docvw/SidebarWin \
     sw/source/uibase/docvw/SidebarWinAcc \
     sw/source/uibase/docvw/HeaderFooterWin \
     sw/source/uibase/docvw/edtdd \

@@ -26,15 +26,16 @@ class OutlinerView;
 class SwView;
 class SwPostItMgr;
 struct SpellCallbackInfo;
+namespace sw { namespace annotation {
+    class SwAnnotationWin;
+} }
 
 namespace sw { namespace sidebarwindows {
-
-class SwSidebarWin;
 
 class SidebarTextControl : public Control
 {
     private:
-        SwSidebarWin& mrSidebarWin;
+        sw::annotation::SwAnnotationWin& mrSidebarWin;
         SwView& mrDocView;
         SwPostItMgr& mrPostItMgr;
 
@@ -49,7 +50,7 @@ class SidebarTextControl : public Control
         virtual Selection GetSurroundingTextSelection() const override;
 
     public:
-        SidebarTextControl( SwSidebarWin& rSidebarWin,
+        SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,
                            WinBits nBits,
                            SwView& rDocView,
                            SwPostItMgr& rPostItMgr );

@@ -51,6 +51,11 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <SwUndoField.hxx>
+#include <edtwin.hxx>
+#include <ShadowOverlayObject.hxx>
+#include <AnchorOverlayObject.hxx>
+#include <OverlayRanges.hxx>
+#include <SidebarTxtControl.hxx>
 
 #include <memory>
 
@@ -61,11 +66,49 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwPostItMgr& aMgr,
                                   SwSidebarItem& rSidebarItem,
                                   SwFormatField* aField )
-    : SwSidebarWin( rEditWin, nBits, aMgr, rSidebarItem )
+    : Window(&rEditWin, nBits)
+    , mrMgr(aMgr)
+    , mrView(rEditWin.GetView())
+    , mnEventId(nullptr)
+    , mpOutlinerView(nullptr)
+    , mpOutliner(nullptr)
+    , mpSidebarTextControl(nullptr)
+    , mpVScrollbar(nullptr)
+    , mpMetadataAuthor(nullptr)
+    , mpMetadataDate(nullptr)
+    , mpMenuButton(nullptr)
+    , mpAnchor(nullptr)
+    , mpShadow(nullptr)
+    , mpTextRangeOverlay(nullptr)
+    , mColorAnchor()
+    , mColorDark()
+    , mColorLight()
+    , mChangeColor()
+    , meSidebarPosition(sw::sidebarwindows::SidebarPosition::NONE)
+    , mPosSize()
+    , mAnchorRect()
+    , mPageBorder(0)
+    , mbAnchorRectChanged(false)
+    , mbMouseOver(false)
+    , mLayoutStatus(SwPostItHelper::INVISIBLE)
+    , mbReadonly(false)
+    , mbIsFollow(false)
+    , mrSidebarItem(rSidebarItem)
+    , mpAnchorFrame(rSidebarItem.maLayoutInfo.mpAnchorFrame)
     , mpFormatField(aField)
     , mpField( static_cast<SwPostItField*>(aField->GetField()))
     , mpButtonPopup(nullptr)
 {
+    mpShadow = sidebarwindows::ShadowOverlayObject::CreateShadowOverlayObject( mrView );
+    if ( mpShadow )
+    {
+        mpShadow->setVisible(false);
+    }
+
+    mrMgr.ConnectSidebarWinToFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
+                                  mrSidebarItem.GetFormatField(),
+                                  *this );
+
     if (SupportsDoubleBuffering())
         // When double-buffering, allow parents to paint on our area. That's
         // necessary when parents paint the complete buffer.
@@ -80,7 +123,71 @@ SwAnnotationWin::~SwAnnotationWin()
 void SwAnnotationWin::dispose()
 {
     mpButtonPopup.disposeAndClear();
-    sw::sidebarwindows::SwSidebarWin::dispose();
+
+    if (IsDisposed())
+        return;
+
+    mrMgr.DisconnectSidebarWinFromFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
+                                       *this );
+
+    Disable();
+
+    if ( mpSidebarTextControl )
+    {
+        if ( mpOutlinerView )
+        {
+            mpOutlinerView->SetWindow( nullptr );
+        }
+    }
+    mpSidebarTextControl.disposeAndClear();
+
+    if ( mpOutlinerView )
+    {
+        delete mpOutlinerView;
+        mpOutlinerView = nullptr;
+    }
+
+    if (mpOutliner)
+    {
+        delete mpOutliner;
+        mpOutliner = nullptr;
+    }
+
+    if (mpMetadataAuthor)
+    {
+        mpMetadataAuthor->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    }
+    mpMetadataAuthor.disposeAndClear();
+
+    if (mpMetadataDate)
+    {
+        mpMetadataDate->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    }
+    mpMetadataDate.disposeAndClear();
+
+    if (mpVScrollbar)
+    {
+        mpVScrollbar->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    }
+    mpVScrollbar.disposeAndClear();
+
+    RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+
+    sidebarwindows::AnchorOverlayObject::DestroyAnchorOverlayObject( mpAnchor );
+    mpAnchor = nullptr;
+
+    sidebarwindows::ShadowOverlayObject::DestroyShadowOverlayObject( mpShadow );
+    mpShadow = nullptr;
+
+    delete mpTextRangeOverlay;
+    mpTextRangeOverlay = nullptr;
+
+    mpMenuButton.disposeAndClear();
+
+    if (mnEventId)
+        Application::RemoveUserEvent( mnEventId );
+
+    vcl::Window::dispose();
 }
 
 void SwAnnotationWin::SetPostItText()
@@ -155,7 +262,16 @@ void SwAnnotationWin::Delete()
 {
     if (DocView().GetWrtShellPtr()->GotoField(*mpFormatField))
     {
-        SwSidebarWin::Delete();
+        if ( mrMgr.GetActiveSidebarWin() == this)
+        {
+            mrMgr.SetActiveSidebarWin(nullptr);
+            // if the note is empty, the previous line will send a delete event, but we are already there
+            if (mnEventId)
+            {
+                Application::RemoveUserEvent( mnEventId );
+                mnEventId = nullptr;
+            }
+        }
         // we delete the field directly, the Mgr cleans up the PostIt by listening
         GrabFocusToDocument();
         DocView().GetWrtShellPtr()->ClearMark();
@@ -245,7 +361,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
         return;
 
     //collect our old meta data
-    SwSidebarWin* pWin = Mgr().GetNextPostIt(KEY_PAGEUP, this);
+    SwAnnotationWin* pWin = Mgr().GetNextPostIt(KEY_PAGEUP, this);
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
     SwRewriter aRewriter;
@@ -323,7 +439,7 @@ SvxLanguageItem SwAnnotationWin::GetLanguage()
 
 bool SwAnnotationWin::IsProtected()
 {
-    return SwSidebarWin::IsProtected() ||
+    return mbReadonly ||
            GetLayoutStatus() == SwPostItHelper::DELETED ||
            ( mpFormatField && mpFormatField->IsProtect() );
 }
