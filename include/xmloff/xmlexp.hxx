@@ -42,6 +42,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SchXMLExportHelper.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
+#include <xmloff/xmluconv.hxx>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -137,7 +138,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     OUString     msEmbeddedObjectProtocol;
     OUString     msFilterName;
     SvXMLNamespaceMap           *mpNamespaceMap;    // the namepspace map
-    SvXMLUnitConverter          *mpUnitConv;        // the unit converter
+    SvXMLUnitConverter          maUnitConv;        // the unit converter
     SvXMLNumFmtExport           *mpNumExport;
     ProgressBarHelper           *mpProgressBarHelper;
 
@@ -389,9 +390,9 @@ public:
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
 
     // Get unit converter
-    const SvXMLUnitConverter& GetMM100UnitConverter() const { return *mpUnitConv; }
+    const SvXMLUnitConverter& GetMM100UnitConverter() const { return maUnitConv; }
 
-    SvXMLUnitConverter& GetMM100UnitConverter() { return *mpUnitConv; }
+    SvXMLUnitConverter& GetMM100UnitConverter() { return maUnitConv; }
 
     void addChaffWhenEncryptedStorage();
 
