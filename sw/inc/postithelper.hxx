@@ -38,8 +38,6 @@ namespace sw { namespace sidebarwindows {
 
 struct SwPosition;
 
-typedef sal_Int64 SwPostItBits;
-
 struct SwLayoutInfo
 {
     const SwFrame* mpAnchorFrame;

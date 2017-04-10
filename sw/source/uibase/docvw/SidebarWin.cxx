@@ -159,12 +159,10 @@ namespace sw { namespace sidebarwindows {
 SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
                            WinBits nBits,
                            SwPostItMgr& aMgr,
-                           SwPostItBits aBits,
                            SwSidebarItem& rSidebarItem)
     : Window(&rEditWin, nBits)
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())
-    , nFlags(aBits)
     , mnEventId(nullptr)
     , mpOutlinerView(nullptr)
     , mpOutliner(nullptr)
@@ -794,36 +792,33 @@ void SwSidebarWin::SetPosAndSize()
             EditWin().EnableMapMode(false);
         }
 
-        if (!IsPreview())
+        if (mpAnchor)
         {
-            if (mpAnchor)
+            mpAnchor->SetAllPosition( basegfx::B2DPoint( mAnchorRect.Left() , mAnchorRect.Bottom() - 5* 15),
+                                      basegfx::B2DPoint( mAnchorRect.Left()-5*15 , mAnchorRect.Bottom()+5*15),
+                                      basegfx::B2DPoint( mAnchorRect.Left()+5*15 , mAnchorRect.Bottom()+5*15),
+                                      basegfx::B2DPoint( mAnchorRect.Left(), mAnchorRect.Bottom()+2*15),
+                                      basegfx::B2DPoint( mPageBorder ,mAnchorRect.Bottom()+2*15),
+                                      basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
+                                      basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()));
+            mpAnchor->SetHeight(mAnchorRect.Height());
+        }
+        else
+        {
+            mpAnchor = AnchorOverlayObject::CreateAnchorOverlayObject( mrView,
+                                                                       mAnchorRect,
+                                                                       mPageBorder,
+                                                                       aLineStart,
+                                                                       aLineEnd,
+                                                                       mColorAnchor );
+            if ( mpAnchor )
             {
-                mpAnchor->SetAllPosition( basegfx::B2DPoint( mAnchorRect.Left() , mAnchorRect.Bottom() - 5* 15),
-                                          basegfx::B2DPoint( mAnchorRect.Left()-5*15 , mAnchorRect.Bottom()+5*15),
-                                          basegfx::B2DPoint( mAnchorRect.Left()+5*15 , mAnchorRect.Bottom()+5*15),
-                                          basegfx::B2DPoint( mAnchorRect.Left(), mAnchorRect.Bottom()+2*15),
-                                          basegfx::B2DPoint( mPageBorder ,mAnchorRect.Bottom()+2*15),
-                                          basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
-                                          basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()));
                 mpAnchor->SetHeight(mAnchorRect.Height());
-            }
-            else
-            {
-                mpAnchor = AnchorOverlayObject::CreateAnchorOverlayObject( mrView,
-                                                                           mAnchorRect,
-                                                                           mPageBorder,
-                                                                           aLineStart,
-                                                                           aLineEnd,
-                                                                           mColorAnchor );
-                if ( mpAnchor )
+                mpAnchor->setVisible(true);
+                mpAnchor->SetAnchorState(AnchorState::Tri);
+                if (HasChildPathFocus())
                 {
-                    mpAnchor->SetHeight(mAnchorRect.Height());
-                    mpAnchor->setVisible(true);
-                    mpAnchor->SetAnchorState(AnchorState::Tri);
-                    if (HasChildPathFocus())
-                    {
-                        mpAnchor->setLineSolid(true);
-                    }
+                    mpAnchor->setLineSolid(true);
                 }
             }
         }
@@ -978,7 +973,7 @@ void SwSidebarWin::DoResize()
     mpMetadataDate->Show();
     mpSidebarTextControl->SetQuickHelpText(OUString());
 
-    if ((aTextHeight > aHeight) && !IsPreview())
+    if (aTextHeight > aHeight)
     {   // we need vertical scrollbars and have to reduce the width
         aWidth -= GetScrollbarWidth();
         mpVScrollbar->Show();
@@ -1015,8 +1010,7 @@ void SwSidebarWin::DoResize()
     }
     else
     {
-        mpSidebarTextControl->setPosSizePixel( ( (aTextHeight > aHeight) && !IsPreview()
-                                      ? GetScrollbarWidth() : 0 ) , 0,
+        mpSidebarTextControl->setPosSizePixel( ( aTextHeight > aHeight ? GetScrollbarWidth() : 0 ), 0,
                                       aWidth, aHeight);
         mpVScrollbar->setPosSizePixel( 0, 0, GetScrollbarWidth(), aHeight);
     }
@@ -1032,31 +1026,10 @@ void SwSidebarWin::DoResize()
     const Fraction& fy( GetMapMode().GetScaleY() );
 
     const Point aPos( mpMetadataAuthor->GetPosPixel());
-    tools::Rectangle aRectMetaButton;
-    if (IsPreview())
-    {
-        aRectMetaButton = PixelToLogic(
-            tools::Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH*4+10)*fx.GetNumerator()/fx.GetDenominator(),
-                              aPos.Y()+5*fy.GetNumerator()/fy.GetDenominator() ),
-                       Size( METABUTTON_WIDTH*4*fx.GetNumerator()/fx.GetDenominator(),
-                             METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() ) ) );
-    }
-    else
-    {
-        aRectMetaButton = PixelToLogic(
-            tools::Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx.GetNumerator()/fx.GetDenominator(),
-                              aPos.Y()+5*fy.GetNumerator()/fy.GetDenominator() ),
-                       Size( METABUTTON_WIDTH*fx.GetNumerator()/fx.GetDenominator(),
-                             METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() ) ) );
-    }
-
-    {
-        const tools::Rectangle aRectMetaButtonPixel( LogicToPixel( aRectMetaButton ) );
-        mpMenuButton->setPosSizePixel( aRectMetaButtonPixel.Left(),
-                                       aRectMetaButtonPixel.Top(),
-                                       aRectMetaButtonPixel.GetWidth(),
-                                       aRectMetaButtonPixel.GetHeight() );
-    }
+    mpMenuButton->setPosSizePixel( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx.GetNumerator()/fx.GetDenominator(),
+                                   aPos.Y()+5*fy.GetNumerator()/fy.GetDenominator(),
+                                   METABUTTON_WIDTH*fx.GetNumerator()/fx.GetDenominator(),
+                                   METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() );
 }
 
 void SwSidebarWin::SetSizePixel( const Size& rNewSize )
@@ -1389,14 +1362,11 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
         }
         else if ( pMouseEvt->IsLeaveWindow())
         {
-            if (!IsPreview())
+            mbMouseOver = false;
+            if ( !HasFocus() )
             {
-                mbMouseOver = false;
-                if ( !HasFocus() )
-                {
-                    SetViewState(ViewState::NORMAL);
-                    Invalidate();
-                }
+                SetViewState(ViewState::NORMAL);
+                Invalidate();
             }
         }
     }
@@ -1405,12 +1375,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
     {
         const bool bLockView = mrView.GetWrtShell().IsViewLocked();
         mrView.GetWrtShell().LockView( true );
-
-        if ( !IsPreview() )
-        {
-            mrMgr.SetActiveSidebarWin( this );
-        }
-
+        mrMgr.SetActiveSidebarWin( this );
         mrView.GetWrtShell().LockView( bLockView );
         mrMgr.MakeVisible( this );
     }
@@ -1462,10 +1427,7 @@ sal_Int32 SwSidebarWin::GetScrollbarWidth()
 sal_Int32 SwSidebarWin::GetMetaButtonAreaWidth()
 {
     const Fraction& f( GetMapMode().GetScaleX() );
-    if (IsPreview())
-        return 3 * METABUTTON_AREA_WIDTH * f.GetNumerator() / f.GetDenominator();
-    else
-        return METABUTTON_AREA_WIDTH * f.GetNumerator() / f.GetDenominator();
+    return METABUTTON_AREA_WIDTH * f.GetNumerator() / f.GetDenominator();
 }
 
 sal_Int32 SwSidebarWin::GetMetaHeight()

@@ -54,17 +54,12 @@ class SidebarTextControl;
 class AnchorOverlayObject;
 class ShadowOverlayObject;
 
-typedef sal_Int64 SwPostItBits;
-
-#define PB_Preview ((SwPostItBits)0x00000001)
-
 class SwSidebarWin : public vcl::Window
 {
     public:
         SwSidebarWin( SwEditWin& rEditWin,
                       WinBits nBits,
                       SwPostItMgr& aMgr,
-                      SwPostItBits aBits,
                       SwSidebarItem& rSidebarItem );
         virtual ~SwSidebarWin() override;
         virtual void dispose() override;
@@ -134,10 +129,6 @@ class SwSidebarWin : public vcl::Window
         bool            IsReadOnly()
         {
             return mbReadonly;
-        }
-        bool            IsPreview()
-        {
-            return nFlags & PB_Preview;
         }
 
         void         SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor);
@@ -218,7 +209,6 @@ class SwSidebarWin : public vcl::Window
 
         SwPostItMgr&    mrMgr;
         SwView&         mrView;
-        const SwPostItBits nFlags;
 
         ImplSVEvent *   mnEventId;
 
