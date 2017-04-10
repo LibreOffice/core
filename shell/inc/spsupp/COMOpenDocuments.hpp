@@ -213,7 +213,6 @@ private:
 
     static long m_nObjCount;
     static ITypeInfo* m_pTypeInfo;
-    static wchar_t m_szLOPath[MAX_PATH];
     COMObjectSafety m_aObjectSafety;
 };
 
