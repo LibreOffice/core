@@ -36,7 +36,6 @@
 #include "scres.hrc"
 #include "simpref.hxx"
 #include "scmod.hxx"
-#include "popmenu.hxx"
 #include "tabvwsh.hxx"
 
 // defines -------------------------------------------------------------------

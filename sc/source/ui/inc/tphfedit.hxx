@@ -28,7 +28,6 @@
 #include <vcl/virdev.hxx>
 #include "scdllapi.h"
 #include "scitems.hxx"
-#include "popmenu.hxx"
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakref.hxx>
 

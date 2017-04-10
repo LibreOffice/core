@@ -26,7 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "navipi.hxx"
-#include "popmenu.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
 #include "globstr.hrc"

@@ -384,7 +384,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/cctrl/cbuttonw \
     sc/source/ui/cctrl/checklistmenu \
     sc/source/ui/cctrl/dpcontrol \
-    sc/source/ui/cctrl/popmenu \
     sc/source/ui/cctrl/tbzoomsliderctrl \
     sc/source/ui/condformat/condformatdlg \
     sc/source/ui/condformat/condformatdlgentry \
