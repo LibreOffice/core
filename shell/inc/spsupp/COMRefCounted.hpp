@@ -11,6 +11,7 @@
 #define INCLUDED_SHELL_INC_SPSUPP_COMREFCOUNTED_HPP
 
 #include "objbase.h"
+#include "assert.h"
 
 template <class Interface>
 class COMRefCounted : public Interface
@@ -28,9 +29,13 @@ public:
 
     ULONG STDMETHODCALLTYPE Release() override
     {
+        assert(m_nRef > 0);
         if (::InterlockedDecrement(&m_nRef) == 0)
+        {
             delete this;
-        return (m_nRef > 0) ? static_cast<ULONG>(m_nRef) : 0;
+            return 0;
+        }
+        return static_cast<ULONG>(m_nRef);
     }
 
 private:

@@ -8,11 +8,18 @@
  */
 
 #include "registrar.hpp"
-#include "stdio.h"
+#include "wchar.h"
 
 namespace {
 
-    HRESULT RegWrite(HKEY hRootKey, const wchar_t* subKey, const wchar_t* keyName, const wchar_t* keyValue, HKEY *hKeyResult = nullptr)
+    HRESULT RegRead(HKEY hRootKey, const wchar_t* subKey, const wchar_t* valName, wchar_t* valData, size_t cchData)
+    {
+        DWORD cbData = cchData * sizeof(valData[0]);
+        long iRetVal = RegGetValue(hRootKey, subKey, valName, RRF_RT_REG_SZ, nullptr, valData, &cbData);
+        return HRESULT_FROM_WIN32(iRetVal);
+    }
+
+    HRESULT RegWrite(HKEY hRootKey, const wchar_t* subKey, const wchar_t* valName, const wchar_t* valData, HKEY *hKeyResult = nullptr)
     {
         HKEY hKey;
         long iRetVal = RegCreateKeyExW(
@@ -28,10 +35,10 @@ namespace {
         if (iRetVal != ERROR_SUCCESS)
             return HRESULT_FROM_WIN32(iRetVal);
 
-        if (keyValue)
+        if (valData)
         {
-            DWORD cbData = static_cast<DWORD>(wcslen(keyValue)*sizeof(keyValue[0]));
-            iRetVal = RegSetValueExW(hKey, keyName, 0, REG_SZ, reinterpret_cast<const BYTE *>(keyValue), cbData);
+            DWORD cbData = static_cast<DWORD>(wcslen(valData)*sizeof(valData[0]));
+            iRetVal = RegSetValueExW(hKey, valName, 0, REG_SZ, reinterpret_cast<const BYTE *>(valData), cbData);
         }
 
         if (hKeyResult && (iRetVal == ERROR_SUCCESS))
@@ -48,126 +55,186 @@ namespace {
         return HRESULT_FROM_WIN32(iRetVal);
     }
 
-    const int nGUIDlen = 40;
-
 }
 
-namespace Registrar {
+// see http://stackoverflow.com/questions/284619
+// see https://msdn.microsoft.com/en-us/library/ms691424
+// see https://msdn.microsoft.com/en-us/library/ms694514
 
-    // see http://stackoverflow.com/questions/284619
-    // see https://msdn.microsoft.com/en-us/library/ms691424
-    // see https://msdn.microsoft.com/en-us/library/ms694514
+Registrar::Registrar(REFIID riidCLSID)
+{
+    m_ConstructionResult = (StringFromGUID2(riidCLSID, m_sCLSID, nGUIDlen) == 0) ?
+        E_UNEXPECTED: S_OK;
+}
 
-    HRESULT RegisterObject(REFIID riidCLSID,
-                           REFIID riidTypeLib,
-                           const wchar_t* sProgram,
-                           const wchar_t* sComponent,
-                           const wchar_t* Path)
+HRESULT Registrar::RegisterObject(REFIID riidTypeLib,
+                       const wchar_t* sProgram,
+                       const wchar_t* sComponent,
+                       int nVersion,
+                       const wchar_t* Path,
+                       bool bSetDefault)
+{
+    if (!wcslen(sComponent) || !wcslen(sProgram))
+        return E_INVALIDARG;
+
+    if (FAILED(m_ConstructionResult))
+        return m_ConstructionResult;
+
+    // HKEY_CLASSES_ROOT
+    //    \CLSID
+    //       \{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
+    //          (default) = "MyLibrary MyControl Class"
+    //          \InprocServer32
+    //             (default) = "c:\foo\control.dll"
+    //             ThreadingModel = "Apartment"
+    //          \ProgID
+    //             (default) = "MyLibrary.MyControl"
+    //          \Programmable
+    //          \TypeLib
+    //             (default) = "{YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY}"
+
+    wchar_t sBufKey[MAX_PATH];
+    wchar_t sBufVal[MAX_PATH];
+
+    // CLSID
+    swprintf(sBufKey, MAX_PATH, L"CLSID\\%s", m_sCLSID);
+    swprintf(sBufVal, MAX_PATH, L"%s %s Class", sProgram, sComponent);
+    HKEY hKeyCLSID;
+    HRESULT hr = RegWrite(HKEY_CLASSES_ROOT, sBufKey, L"", sBufVal, &hKeyCLSID);
+    if (FAILED(hr))
+        return hr;
     {
-        if (!wcslen(sComponent) || !wcslen(sProgram))
-            return E_INVALIDARG;
+        class HKeyGuard {
+        public:
+            HKeyGuard(HKEY aKey) : m_hKey(aKey) {}
+            ~HKeyGuard() { RegCloseKey(m_hKey); }
+        private:
+            HKEY m_hKey;
+        };
 
-        wchar_t sCLSID[nGUIDlen];
-        if (::StringFromGUID2(riidCLSID, sCLSID, nGUIDlen) == 0)
-            return E_UNEXPECTED;
+        HKeyGuard hKeyCLSIDGuard(hKeyCLSID);
 
-        // HKEY_CLASSES_ROOT
-        //    \CLSID
-        //       \{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
-        //          (default) = "MyLibrary MyControl Class"
-        //          \InprocServer32
-        //             (default) = "c:\foo\control.dll"
-        //             ThreadingModel = "Apartment"
-        //          \ProgID
-        //             (default) = "MyLibrary.MyControl"
-        //          \Programmable
-        //          \TypeLib
-        //             (default) = "{YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY}"
-        //    \MyLibrary.MyControl
-        //       \CLSID
-        //          (default) = "{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}"
-
-        wchar_t sBufKey[MAX_PATH];
-        wchar_t sBufVal[MAX_PATH];
-
-        // CLSID
-        swprintf(sBufKey, MAX_PATH, L"CLSID\\%s", sCLSID);
-        swprintf(sBufVal, MAX_PATH, L"%s %s Class", sProgram, sComponent);
-        HKEY hKeyCLSID;
-        HRESULT hr = RegWrite(HKEY_CLASSES_ROOT, sBufKey, L"", sBufVal, &hKeyCLSID);
+        // InprocServer32
+        HKEY hKeyInprocServer32;
+        hr = RegWrite(hKeyCLSID, L"InprocServer32", L"", Path, &hKeyInprocServer32);
         if (FAILED(hr))
             return hr;
         {
-            class HKeyGuard {
-            public:
-                HKeyGuard(HKEY aKey) : m_hKey(aKey) {}
-                ~HKeyGuard() { RegCloseKey(m_hKey); }
-            private:
-                HKEY m_hKey;
-            };
-
-            HKeyGuard hKeyCLSIDGuard(hKeyCLSID);
-
-            // InprocServer32
-            HKEY hKeyInprocServer32;
-            hr = RegWrite(hKeyCLSID, L"InprocServer32", L"", Path, &hKeyInprocServer32);
-            if (FAILED(hr))
-                return hr;
-            {
-                HKeyGuard hKeyInProcServer32Guard(hKeyInprocServer32);
-                hr = RegWrite(hKeyInprocServer32, L"", L"ThreadingModel", L"Apartment");
-                if (FAILED(hr))
-                    return hr;
-            }
-
-            // ProgID
-            swprintf(sBufVal, MAX_PATH, L"%s.%s", sProgram, sComponent);
-            hr = RegWrite(hKeyCLSID, L"ProgID", L"", sBufVal);
-            if (FAILED(hr))
-                return hr;
-
-            // Programmable
-            hr = RegWrite(hKeyCLSID, L"Programmable", nullptr, nullptr);
-            if (FAILED(hr))
-                return hr;
-
-            // TypeLib
-            if (::StringFromGUID2(riidTypeLib, sBufVal, nGUIDlen) == 0)
-                return E_UNEXPECTED;
-            hr = RegWrite(hKeyCLSID, L"TypeLib", L"", sBufVal);
+            HKeyGuard hKeyInProcServer32Guard(hKeyInprocServer32);
+            hr = RegWrite(hKeyInprocServer32, L"", L"ThreadingModel", L"Apartment");
             if (FAILED(hr))
                 return hr;
         }
 
         // ProgID
-        swprintf(sBufKey, MAX_PATH, L"%s.%s\\CLSID", sProgram, sComponent);
-        return RegWrite(HKEY_CLASSES_ROOT, sBufKey, L"", sCLSID);
-    }
+        swprintf(sBufVal, MAX_PATH, L"%s.%s", sProgram, sComponent);
+        hr = RegWrite(hKeyCLSID, L"ProgID", L"", sBufVal);
+        if (FAILED(hr))
+            return hr;
 
-    HRESULT UnRegisterObject(REFIID riidCLSID, const wchar_t* LibId, const wchar_t* ClassId)
-    {
-        wchar_t sCLSID[nGUIDlen];
-        wchar_t sBuf[MAX_PATH];
-        if (::StringFromGUID2(riidCLSID, sCLSID, nGUIDlen) == 0)
+        // Programmable
+        hr = RegWrite(hKeyCLSID, L"Programmable", nullptr, nullptr);
+        if (FAILED(hr))
+            return hr;
+
+        // TypeLib
+        if (::StringFromGUID2(riidTypeLib, sBufVal, nGUIDlen) == 0)
             return E_UNEXPECTED;
-        // ProgID
-        swprintf(sBuf, MAX_PATH, L"%s.%s\\CLSID", LibId, ClassId);
-        RegDel(HKEY_CLASSES_ROOT, sBuf);
-        swprintf(sBuf, MAX_PATH, L"%s.%s", LibId, ClassId);
-        RegDel(HKEY_CLASSES_ROOT, sBuf);
-        // CLSID
-        swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\InProcServer32", sCLSID);
-        RegDel(HKEY_CLASSES_ROOT, sBuf);
-        swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\ProgId", sCLSID);
-        RegDel(HKEY_CLASSES_ROOT, sBuf);
-        swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\Programmable", sCLSID);
-        RegDel(HKEY_CLASSES_ROOT, sBuf);
-        swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\TypeLib", sCLSID);
-        RegDel(HKEY_CLASSES_ROOT, sBuf);
-        swprintf(sBuf, MAX_PATH, L"CLSID\\%s", sCLSID);
-        return RegDel(HKEY_CLASSES_ROOT, sBuf);
+        hr = RegWrite(hKeyCLSID, L"TypeLib", L"", sBufVal);
+        if (FAILED(hr))
+            return hr;
     }
 
+    // ProgID
+    return RegisterProgID(sProgram, sComponent, nVersion, bSetDefault);
+}
+
+HRESULT Registrar::UnRegisterObject(const wchar_t* sProgram, const wchar_t* sComponent, int nVersion)
+{
+    if (FAILED(m_ConstructionResult))
+        return m_ConstructionResult;
+    // ProgID
+    UnRegisterProgID(sProgram, sComponent, nVersion);
+    // CLSID
+    wchar_t sBuf[MAX_PATH];
+    swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\InProcServer32", m_sCLSID);
+    RegDel(HKEY_CLASSES_ROOT, sBuf);
+    swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\ProgId", m_sCLSID);
+    RegDel(HKEY_CLASSES_ROOT, sBuf);
+    swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\Programmable", m_sCLSID);
+    RegDel(HKEY_CLASSES_ROOT, sBuf);
+    swprintf(sBuf, MAX_PATH, L"CLSID\\%s\\TypeLib", m_sCLSID);
+    RegDel(HKEY_CLASSES_ROOT, sBuf);
+    swprintf(sBuf, MAX_PATH, L"CLSID\\%s", m_sCLSID);
+    return RegDel(HKEY_CLASSES_ROOT, sBuf);
+}
+
+HRESULT Registrar::RegisterProgID(const wchar_t* sProgram, const wchar_t* sComponent, int nVersion, bool bSetDefault)
+{
+    // HKEY_CLASSES_ROOT
+    //    \MyLibrary.MyControl
+    //       (default) = "MyLibrary MyControl Class"
+    //       \CurVer
+    //          (default) = "MyLibrary.MyControl.1"
+    //    \MyLibrary.MyControl.1
+    //       (default) = "MyLibrary MyControl Class"
+    //       \CLSID
+    //          (default) = "{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}"
+    if (FAILED(m_ConstructionResult))
+        return m_ConstructionResult;
+    wchar_t sBufKey[MAX_PATH];
+    swprintf(sBufKey, MAX_PATH, L"%s.%s.%d", sProgram, sComponent, nVersion);
+    wchar_t sBufVal[MAX_PATH];
+    swprintf(sBufVal, MAX_PATH, L"%s %s Class", sProgram, sComponent);
+    RegWrite(HKEY_CLASSES_ROOT, sBufKey, L"", sBufVal);
+    swprintf(sBufKey, MAX_PATH, L"%s.%s.%d\\CLSID", sProgram, sComponent, nVersion);
+    HRESULT hr = RegWrite(HKEY_CLASSES_ROOT, sBufKey, L"", m_sCLSID);
+    if (SUCCEEDED(hr) && bSetDefault)
+    {
+        swprintf(sBufKey, MAX_PATH, L"%s.%s", sProgram, sComponent);
+        swprintf(sBufVal, MAX_PATH, L"%s %s Class", sProgram, sComponent);
+        hr = RegWrite(HKEY_CLASSES_ROOT, sBufKey, L"", sBufVal);
+        swprintf(sBufKey, MAX_PATH, L"%s.%s\\CurVer", sProgram, sComponent);
+        swprintf(sBufVal, MAX_PATH, L"%s.%s.%d", sProgram, sComponent, nVersion);
+        hr = RegWrite(HKEY_CLASSES_ROOT, sBufKey, L"", sBufVal);
+    }
+    return hr;
+}
+
+HRESULT Registrar::UnRegisterProgID(const wchar_t* sProgram, const wchar_t* sComponent, int nVersion)
+{
+    if (FAILED(m_ConstructionResult))
+        return m_ConstructionResult;
+    wchar_t sBuf[MAX_PATH];
+    swprintf(sBuf, MAX_PATH, L"%s.%s.%d\\CLSID", sProgram, sComponent, nVersion);
+    wchar_t sCurCLSID[nGUIDlen];
+    HRESULT hr = RegRead(HKEY_CLASSES_ROOT, sBuf, L"", sCurCLSID, nGUIDlen);
+    if (FAILED(hr))
+        return hr;
+    if (wcsncmp(sCurCLSID, m_sCLSID, nGUIDlen) != 0)
+    {
+        // The ProgID points to a different CLSID; most probably it's intercepted
+        // by a different application, so don't remove it
+        return S_FALSE;
+    }
+    RegDel(HKEY_CLASSES_ROOT, sBuf);
+    swprintf(sBuf, MAX_PATH, L"%s.%s.%d", sProgram, sComponent, nVersion);
+    hr = RegDel(HKEY_CLASSES_ROOT, sBuf);
+
+    wchar_t sBufKey[MAX_PATH];
+    swprintf(sBufKey, MAX_PATH, L"%s.%s\\CurVer", sProgram, sComponent);
+    wchar_t sBufVal[MAX_PATH];
+    if (SUCCEEDED(RegRead(HKEY_CLASSES_ROOT, sBufKey, L"", sBufVal, MAX_PATH)) && (wcsncmp(sBufVal, sBuf, MAX_PATH) == 0))
+    {
+        // Only unreg default if this version is current default
+        RegDel(HKEY_CLASSES_ROOT, sBufKey);
+        swprintf(sBuf, MAX_PATH, L"%s.%s", sProgram, sComponent);
+        HRESULT hr1 = RegDel(HKEY_CLASSES_ROOT, sBuf);
+        // Always return a failure result if we failed somewhere
+        if (FAILED(hr1))
+            hr = hr1;
+    }
+    return hr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
