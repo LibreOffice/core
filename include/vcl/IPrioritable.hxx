@@ -23,6 +23,10 @@ protected:
     }
 
 public:
+    virtual ~IPrioritable()
+    {
+    }
+
     int GetPriority() const
     {
         return m_nPriority;
@@ -32,6 +36,9 @@ public:
     {
         m_nPriority = nPriority;
     }
+
+    virtual void HideContent() = 0;
+    virtual void ShowContent() = 0;
 
 private:
     int m_nPriority;

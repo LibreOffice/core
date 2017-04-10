@@ -41,7 +41,7 @@ class SFX2_DLLPUBLIC PriorityHBox : public VclHBox
 private:
     bool m_bInitialized;
 
-    std::vector<IPrioritable*> m_aSortedChilds;
+    std::vector<vcl::IPrioritable*> m_aSortedChilds;
 
 public:
     explicit PriorityHBox(vcl::Window *pParent)
@@ -69,8 +69,7 @@ public:
 
             bool bAllwaysExpanded = true;
 
-            IPrioritable* pPrioritable = pChild->GetType() == WindowType::CONTAINER ?
-                dynamic_cast<IPrioritable*>(pChild) : nullptr;
+            vcl::IPrioritable* pPrioritable = dynamic_cast<vcl::IPrioritable*>(pChild);
             if (pPrioritable && pPrioritable->GetPriority() != VCL_PRIORITY_DEFAULT)
                 bAllwaysExpanded = false;
 
@@ -98,11 +97,12 @@ public:
         auto pChild = m_aSortedChilds.begin();
         while (nCurrentWidth > nWidth && pChild != m_aSortedChilds.end())
         {
-            DropdownBox* pBox = static_cast<DropdownBox*>(*pChild);
+            // ATM DropdownBox is the only one derived class from IPrioritable
+            DropdownBox* pDropdownBox = static_cast<DropdownBox*>(*pChild);
 
-            nCurrentWidth -= pBox->GetOutputWidthPixel() + get_spacing();
-            pBox->HideContent();
-            nCurrentWidth += pBox->GetOutputWidthPixel() + get_spacing();
+            nCurrentWidth -= pDropdownBox->GetOutputWidthPixel() + get_spacing();
+            pDropdownBox->HideContent();
+            nCurrentWidth += pDropdownBox->GetOutputWidthPixel() + get_spacing();
 
             pChild++;
         }
@@ -154,8 +154,7 @@ public:
             vcl::Window* pChild = GetChild(i);
 
             // Add only containers which have explicitly assigned priority.
-            IPrioritable* pPrioritable = pChild->GetType() == WindowType::CONTAINER ?
-                dynamic_cast<IPrioritable*>(pChild) : nullptr;
+            vcl::IPrioritable* pPrioritable = dynamic_cast<vcl::IPrioritable*>(pChild);
             if (pPrioritable && pPrioritable->GetPriority() != VCL_PRIORITY_DEFAULT)
                 m_aSortedChilds.push_back(pPrioritable);
         }
