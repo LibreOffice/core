@@ -1100,10 +1100,11 @@ void ScPostIt::RemoveCaption()
     }
     // Either the caption object is gone or, because of Undo or clipboard is
     // held in at least two instances, or only one instance in Undo because the
-    // original sheet was deleted, or the Undo document is just destroyed
-    // which leaves us with one reference.
+    // original sheet in this document is just deleted, or the Undo document is
+    // just destroyed which leaves us with one reference.
     // Let's detect other use cases..
-    assert(!maNoteData.mxCaption || maNoteData.mxCaption.getRefs() >= 2 || !mrDoc.IsUndo() || mrDoc.IsInDtorClear());
+    assert(!maNoteData.mxCaption || maNoteData.mxCaption.getRefs() >= 2 ||
+            (!mrDoc.IsUndo() && !mrDoc.IsClipboard()) || (mrDoc.IsUndo() && mrDoc.IsInDtorClear()));
     maNoteData.mxCaption.reset(nullptr);
 }
 
