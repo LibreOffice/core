@@ -97,6 +97,22 @@ private:
 
 class WW8Fib;
 
+struct SprmResult
+{
+    const sal_uInt8* pSprm;
+    sal_Int32 nRemainingData;
+    SprmResult()
+        : pSprm(nullptr)
+        , nRemainingData(0)
+    {
+    }
+    SprmResult(const sal_uInt8* pInSprm, sal_Int32 nInRemainingData)
+        : pSprm(pInSprm)
+        , nRemainingData(nInRemainingData)
+    {
+    }
+};
+
 /**
     wwSprmParser knows how to take a sequence of bytes and split it up into
     sprms and their arguments
@@ -138,8 +154,7 @@ public:
 
     /// Returns the offset to data of the first sprm of id nId, 0
     //  if not found. nLen must be the <= length of pSprms
-    sal_uInt8* findSprmData(sal_uInt16 nId, sal_uInt8* pSprms, sal_uInt16 nLen)
-        const;
+    SprmResult findSprmData(sal_uInt16 nId, sal_uInt8* pSprms, sal_uInt16 nLen) const;
 };
 
 //Read a Pascal-style, i.e. single byte string length followed
@@ -267,7 +282,7 @@ public:
     explicit WW8SprmIter(const sal_uInt8* pSprms_, sal_Int32 nLen_,
         const wwSprmParser &rSprmParser);
     void  SetSprms(const sal_uInt8* pSprms_, sal_Int32 nLen_);
-    const sal_uInt8* FindSprm(sal_uInt16 nId);
+    SprmResult FindSprm(sal_uInt16 nId);
     void  advance();
     const sal_uInt8* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
@@ -555,8 +570,8 @@ public:
         /*
             calls GetLenAndIStdAndSprms()...
         */
-        const sal_uInt8* HasSprm( sal_uInt16 nId );
-        void HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult);
+        SprmResult HasSprm(sal_uInt16 nId);
+        void HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult);
 
         const wwSprmParser &GetSprmParser() const { return maSprmParser; }
     };
@@ -604,8 +619,8 @@ public:
     virtual void advance() override;
     virtual sal_uInt16 GetIstd() const override;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
-    const sal_uInt8* HasSprm( sal_uInt16 nId );
-    bool HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult);
+    SprmResult HasSprm(sal_uInt16 nId);
+    bool HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult);
     bool HasFkp() const { return (nullptr != pFkp); }
 };
 
@@ -663,12 +678,12 @@ public:
     virtual WW8_FC Where() override;
     virtual void GetSprms( WW8PLCFxDesc* p ) override;
     virtual void advance() override;
-    const sal_uInt8* HasSprm( sal_uInt16 nId ) const;
-    const sal_uInt8* HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const;
-    const sal_uInt8* HasSprm( sal_uInt16 nId, const sal_uInt8* pOtherSprms,
+    SprmResult HasSprm( sal_uInt16 nId ) const;
+    SprmResult HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const;
+    SprmResult HasSprm( sal_uInt16 nId, const sal_uInt8* pOtherSprms,
         long nOtherSprmSiz ) const;
     bool Find4Sprms(sal_uInt16 nId1, sal_uInt16 nId2, sal_uInt16 nId3, sal_uInt16 nId4,
-                    sal_uInt8*& p1,   sal_uInt8*& p2,   sal_uInt8*& p3,   sal_uInt8*& p4 ) const;
+                    SprmResult& r1, SprmResult& r2, SprmResult& r3, SprmResult& r4) const;
 };
 
 /// iterator for footnotes/endnotes and comments
@@ -968,11 +983,11 @@ public:
     long GetCpOfs() const { return m_pChp->nCpOfs; }  // for Header/Footer...
 
     /* asks, if *current paragraph* has an Sprm of this type */
-    const sal_uInt8* HasParaSprm( sal_uInt16 nId ) const;
+    SprmResult HasParaSprm(sal_uInt16 nId) const;
 
     /* asks, if *current textrun* has an Sprm of this type */
-    const sal_uInt8* HasCharSprm( sal_uInt16 nId ) const;
-    void HasCharSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult) const;
+    SprmResult HasCharSprm(sal_uInt16 nId) const;
+    void HasCharSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult) const;
 
     WW8PLCFx_Cp_FKP* GetChpPLCF() const
         { return static_cast<WW8PLCFx_Cp_FKP*>(m_pChp->pPLCFx); }

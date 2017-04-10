@@ -437,8 +437,8 @@ short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
     bool bRTL = false;
     if (m_pPlcxMan && !m_bVer67)
     {
-        const sal_uInt8 *pResult = m_pPlcxMan->HasCharSprm(0x85A);
-        if (pResult && *pResult)
+        SprmResult aResult = m_pPlcxMan->HasCharSprm(0x85A);
+        if (aResult.pSprm && aResult.nRemainingData >= 1 && *aResult.pSprm)
             bRTL = true;
     }
     RES_CHRATR eLang = bRTL ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;

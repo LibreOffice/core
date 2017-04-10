@@ -139,22 +139,25 @@ inline sal_uInt32 MSRoundTweak(sal_uInt32 x)
 // (except OLST which stays a normal attribute)
 static short ReadSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, short nDefaultVal )
 {
-    const sal_uInt8* pS = pSep->HasSprm( nId );          // sprm here?
-    short nVal = ( pS ) ? SVBT16ToShort( pS ) : nDefaultVal;
+    SprmResult aRes = pSep->HasSprm(nId);          // sprm here?
+    const sal_uInt8* pS = aRes.pSprm;
+    short nVal = (pS && aRes.nRemainingData >= 2) ? SVBT16ToShort(pS) : nDefaultVal;
     return nVal;
 }
 
 static sal_uInt16 ReadUSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, short nDefaultVal )
 {
-    const sal_uInt8* pS = pSep->HasSprm( nId );          // sprm here?
-    sal_uInt16 nVal = ( pS ) ? SVBT16ToShort( pS ) : nDefaultVal;
+    SprmResult aRes = pSep->HasSprm(nId);          // sprm here?
+    const sal_uInt8* pS = aRes.pSprm;
+    sal_uInt16 nVal = (pS && aRes.nRemainingData >= 2) ? SVBT16ToShort(pS) : nDefaultVal;
     return nVal;
 }
 
 static sal_uInt8 ReadBSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, sal_uInt8 nDefaultVal )
 {
-    const sal_uInt8* pS = pSep->HasSprm( nId );          // sprm here?
-    sal_uInt8 nVal = pS ? *pS : nDefaultVal;
+    SprmResult aRes = pSep->HasSprm(nId);          // sprm here?
+    const sal_uInt8* pS = aRes.pSprm;
+    sal_uInt8 nVal = (pS && aRes.nRemainingData >= 1) ? *pS : nDefaultVal;
     return nVal;
 }
 
@@ -886,7 +889,9 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         // 2 New page
         // 3 Even page
         // 4 Odd page
-        if (const sal_uInt8* pSprmBkc = pSep->HasSprm(pIds[0]))
+        SprmResult aRes = pSep->HasSprm(pIds[0]);
+        const sal_uInt8* pSprmBkc = aRes.pSprm;
+        if (pSprmBkc && aRes.nRemainingData >= 1)
             aNewSection.maSep.bkc = *pSprmBkc;
     }
 
@@ -936,20 +941,22 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
             for ( sal_uInt8 nColumn = 0; nColumn < nColumnCount; ++nColumn )
             {
                 //sprmSDxaColWidth
-                const sal_uInt8* pSW = pSep->HasSprm( nColumnWidthSprmId, nColumn );
+                SprmResult aSWRes = pSep->HasSprm(nColumnWidthSprmId, nColumn);
+                const sal_uInt8* pSW = aSWRes.pSprm;
 
                 OSL_ENSURE( pSW, "+Sprm 136 (resp. 0xF203) (ColWidth) missing" );
-                sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
+                sal_uInt16 nWidth = (pSW && aSWRes.nRemainingData >= 3) ? SVBT16ToShort(pSW + 1) : 1440;
 
                 aNewSection.maSep.rgdxaColumnWidthSpacing[++nColumnDataIdx] = nWidth;
 
                 if ( nColumn < nColumnCount - 1 )
                 {
                     //sprmSDxaColSpacing
-                    const sal_uInt8* pSD = pSep->HasSprm( nColumnSpacingSprmId, nColumn );
+                    SprmResult aSDRes = pSep->HasSprm(nColumnSpacingSprmId, nColumn);
+                    const sal_uInt8* pSD = aSDRes.pSprm;
 
                     OSL_ENSURE( pSD, "+Sprm 137 (resp. 0xF204) (Colspacing) missing" );
-                    if( pSD )
+                    if (pSD && aSDRes.nRemainingData >= 3)
                     {
                         nWidth = SVBT16ToShort(pSD + 1);
                         aNewSection.maSep.rgdxaColumnWidthSpacing[++nColumnDataIdx] = nWidth;
@@ -997,7 +1004,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         /*sprmSDzaGutter*/      0xB025,
         /*sprmSFPgnRestart*/    0x3011,
         /*sprmSPgnStart97*/     0x501C,
-           /*sprmSDmBinFirst*/     0x5007,
+        /*sprmSDmBinFirst*/     0x5007,
         /*sprmSDmBinOther*/     0x5008
     };
 
@@ -1036,19 +1043,27 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
 
     aNewSection.maSep.pgnStart = ReadUSprm( pSep, pIds[7], 0 );
 
+    SprmResult aRes;
+
     if (eVer >= ww::eWW6)
     {
-        if (const sal_uInt8* p = pSep->HasSprm( (eVer <= ww::eWW7 ? 132 : 0x3001) ))
-            aNewSection.maSep.iHeadingPgn = *p;
+        aRes = pSep->HasSprm((eVer <= ww::eWW7 ? 132 : 0x3001));
+        if (aRes.pSprm && aRes.nRemainingData >= 1)
+            aNewSection.maSep.iHeadingPgn = *aRes.pSprm;
 
-        if (const sal_uInt8* p = pSep->HasSprm( (eVer <= ww::eWW7 ? 131 : 0x3000) ))
-            aNewSection.maSep.cnsPgn = *p;
+        aRes = pSep->HasSprm((eVer <= ww::eWW7 ? 131 : 0x3000));
+        if (aRes.pSprm && aRes.nRemainingData >= 1)
+            aNewSection.maSep.cnsPgn = *aRes.pSprm;
     }
 
-    if(const sal_uInt8* pSprmSDmBinFirst = pSep->HasSprm( pIds[8] ))
+    aRes = pSep->HasSprm(pIds[8]);
+    const sal_uInt8* pSprmSDmBinFirst = aRes.pSprm;
+    if (pSprmSDmBinFirst && aRes.nRemainingData >= 1)
         aNewSection.maSep.dmBinFirst = *pSprmSDmBinFirst;
 
-    if (const sal_uInt8* pSprmSDmBinOther = pSep->HasSprm( pIds[9] ))
+    aRes = pSep->HasSprm(pIds[9]);
+    const sal_uInt8* pSprmSDmBinOther = aRes.pSprm;
+    if (pSprmSDmBinOther && aRes.nRemainingData >= 1)
         aNewSection.maSep.dmBinOther = *pSprmSDmBinOther;
 
     static const sal_uInt16 nTop[] = { MM_250, 1440 };
@@ -1101,8 +1116,9 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         aNewSection.maSep.wTextFlow = ReadUSprm(pSep, 0x5033, 0);
         aNewSection.maSep.clm = ReadUSprm( pSep, 0x5032, 0 );
         aNewSection.maSep.dyaLinePitch = ReadUSprm(pSep, 0x9031, 360);
-        if (const sal_uInt8* pS = pSep->HasSprm(0x7030))
-            aNewSection.maSep.dxtCharSpace = SVBT32ToUInt32(pS);
+        aRes = pSep->HasSprm(0x7030);
+        if (aRes.pSprm && aRes.nRemainingData >= 4)
+            aNewSection.maSep.dxtCharSpace = SVBT32ToUInt32(aRes.pSprm);
 
         //sprmSPgbProp
         sal_uInt16 pgbProp = ReadSprm( pSep, 0x522F, 0 );
@@ -1115,17 +1131,21 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
     }
 
     // check if Line Numbering must be activated or reset
-    if (const sal_uInt8* pSprmSNLnnMod = pSep->HasSprm( pIds[4] ))
-        aNewSection.maSep.nLnnMod = *pSprmSNLnnMod;
+    SprmResult aSprmSNLnnMod = pSep->HasSprm(pIds[4]);
+    if (aSprmSNLnnMod.pSprm && aSprmSNLnnMod.nRemainingData >= 1)
+        aNewSection.maSep.nLnnMod = *aSprmSNLnnMod.pSprm;
 
-    if (const sal_uInt8* pSprmSLnc = pSep->HasSprm( pIds[5] ))
-        aNewSection.maSep.lnc = *pSprmSLnc;
+    SprmResult aSprmSLnc = pSep->HasSprm(pIds[5]);
+    if (aSprmSLnc.pSprm && aSprmSLnc.nRemainingData >= 1)
+        aNewSection.maSep.lnc = *aSprmSLnc.pSprm;
 
-    if (const sal_uInt8* pSprmSDxaLnn = pSep->HasSprm( pIds[6] ))
-        aNewSection.maSep.dxaLnn = SVBT16ToShort( pSprmSDxaLnn );
+    SprmResult aSprmSDxaLnn = pSep->HasSprm(pIds[6]);
+    if (aSprmSDxaLnn.pSprm && aSprmSDxaLnn.nRemainingData >= 2)
+        aNewSection.maSep.dxaLnn = SVBT16ToShort(aSprmSDxaLnn.pSprm);
 
-    if (const sal_uInt8* pSprmSLnnMin = pSep->HasSprm( pIds[7] ))
-        aNewSection.maSep.lnnMin = *pSprmSLnnMin;
+    SprmResult aSprmSLnnMin = pSep->HasSprm(pIds[7]);
+    if (aSprmSLnnMin.pSprm && aSprmSLnnMin.nRemainingData >= 1)
+        aNewSection.maSep.lnnMin = *aSprmSLnnMin.pSprm;
 
     if (eVer <= ww::eWW7)
         aNewSection.maSep.grpfIhdt = ReadBSprm(pSep, eVer <= ww::eWW2 ? 128 : 153, 0);
@@ -1223,16 +1243,16 @@ void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
 // Read BoRder Control structure
 // nBrcVer should be set to the version of the BRC record being read (6, 8 or 9)
 // This will be converted to the latest format (9).
-static bool SetWW8_BRC(int nBrcVer, WW8_BRCVer9& rVar, const sal_uInt8* pS)
+static bool SetWW8_BRC(int nBrcVer, WW8_BRCVer9& rVar, const sal_uInt8* pS, size_t nLen)
 {
 
     if( pS )
     {
-        if ( nBrcVer == 9 )
+        if (nBrcVer == 9 && nLen >= sizeof(WW8_BRCVer9))
             rVar = *reinterpret_cast<const WW8_BRCVer9*>(pS);
-        else if( nBrcVer == 8 )
+        else if (nBrcVer == 8 && nLen >= sizeof(WW8_BRC))
             rVar = WW8_BRCVer9(*reinterpret_cast<const WW8_BRC*>(pS));
-        else // nBrcVer == 6
+        else if (nLen >= sizeof(WW8_BRCVer6)) // nBrcVer == 6
             rVar = WW8_BRCVer9(WW8_BRC(*reinterpret_cast<const WW8_BRCVer6*>(pS)));
     }
 
@@ -1251,24 +1271,24 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
     {
         if( !bVer67 )
         {
-            sal_uInt8* pSprm[4];
+            SprmResult aSprm[4];
 
-            if( pSep->Find4Sprms(
+            if (pSep->Find4Sprms(
                     NS_sprm::sprmSBrcTop80, NS_sprm::sprmSBrcLeft80,
                     NS_sprm::sprmSBrcBottom80, NS_sprm::sprmSBrcRight80,
-                    pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
+                    aSprm[0], aSprm[1], aSprm[2], aSprm[3]))
             {
                 for( int i = 0; i < 4; ++i )
-                    nBorder |= int(SetWW8_BRC( 8, brc[ i ], pSprm[ i ] ))<<i;
+                    nBorder |= int(SetWW8_BRC(8, brc[i], aSprm[i].pSprm, aSprm[i].nRemainingData))<<i;
             }
             // Version 9 BRCs if present will override version 8
-            if( pSep->Find4Sprms(
+            if (pSep->Find4Sprms(
                     NS_sprm::sprmSBrcTop, NS_sprm::sprmSBrcLeft,
                     NS_sprm::sprmSBrcBottom, NS_sprm::sprmSBrcRight,
-                    pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
+                    aSprm[0], aSprm[1], aSprm[2], aSprm[3]))
             {
                 for( int i = 0; i < 4; ++i )
-                    nBorder |= int(SetWW8_BRC( 9, brc[ i ], pSprm[ i ] ))<<i;
+                    nBorder |= int(SetWW8_BRC(9, brc[i], aSprm[i].pSprm, aSprm[i].nRemainingData))<<i;
             }
         }
     }
@@ -1288,15 +1308,24 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             if (bVer67)
             {
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(SetWW8_BRC( 6 , brc[ i ], pPap->HasSprm( aVer67Ids[ i ] )))<<i;
+                {
+                    SprmResult aRes(pPap->HasSprm(aVer67Ids[i]));
+                    nBorder |= int(SetWW8_BRC(6 , brc[i], aRes.pSprm, aRes.nRemainingData))<<i;
+                }
             }
             else
             {
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(SetWW8_BRC( 8 , brc[ i ], pPap->HasSprm( aVer8Ids[ i ] )))<<i;
+                {
+                    SprmResult aRes(pPap->HasSprm(aVer8Ids[i]));
+                    nBorder |= int(SetWW8_BRC(8 , brc[i], aRes.pSprm, aRes.nRemainingData))<<i;
+                }
                 // Version 9 BRCs if present will override version 8
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(SetWW8_BRC( 9 , brc[ i ], pPap->HasSprm( aVer9Ids[ i ] )))<<i;
+                {
+                    SprmResult aRes(pPap->HasSprm(aVer9Ids[i]));
+                    nBorder |= int(SetWW8_BRC(9 , brc[i], aRes.pSprm, aRes.nRemainingData))<<i;
+                }
             }
         }
         else if( pSty )
@@ -1304,15 +1333,24 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             if (bVer67)
             {
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(SetWW8_BRC( 6 , brc[ i ], pSty->HasParaSprm( aVer67Ids[ i ] )))<<i;
+                {
+                    SprmResult aRes(pSty->HasParaSprm(aVer67Ids[i]));
+                    nBorder |= int(SetWW8_BRC(6 , brc[i], aRes.pSprm, aRes.nRemainingData))<<i;
+                }
             }
             else
             {
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(SetWW8_BRC( 8 , brc[ i ], pSty->HasParaSprm( aVer8Ids[ i ] )))<<i;
+                {
+                    SprmResult aRes(pSty->HasParaSprm(aVer8Ids[i]));
+                    nBorder |= int(SetWW8_BRC(8 , brc[i], aRes.pSprm, aRes.nRemainingData))<<i;
+                }
                 // Version 9 BRCs if present will override version 8
                 for( int i = 0; i < 5; ++i )
-                    nBorder |= int(SetWW8_BRC( 9 , brc[ i ], pSty->HasParaSprm( aVer9Ids[ i ] )))<<i;
+                {
+                    SprmResult aRes(pSty->HasParaSprm(aVer9Ids[i]));
+                    nBorder |= int(SetWW8_BRC(9 , brc[i], aRes.pSprm, aRes.nRemainingData))<<i;
+                }
             }
         }
         else {
@@ -1490,18 +1528,18 @@ static void FlySecur1(short& rSize, const bool bBorder)
 
 inline bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
 {
-    const sal_uInt8* pS = pPap->HasSprm( nId );
-    if( pS )
-        *pVar = (sal_Int16)SVBT16ToShort( pS );
-    return ( pS != nullptr );
+    SprmResult aS = pPap->HasSprm(nId);
+    if (aS.pSprm && aS.nRemainingData >= 2)
+        *pVar = (sal_Int16)SVBT16ToShort(aS.pSprm);
+    return aS.pSprm != nullptr;
 }
 
 inline bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId )
 {
-    const sal_uInt8* pS = pStyle->HasParaSprm( nId );
-    if( pS )
-        *pVar = (sal_Int16)SVBT16ToShort( pS );
-    return ( pS != nullptr );
+    SprmResult aS = pStyle->HasParaSprm(nId);
+    if (aS.pSprm && aS.nRemainingData >= 2)
+        *pVar = (sal_Int16)SVBT16ToShort(aS.pSprm);
+    return aS.pSprm != nullptr;
 }
 
 /*
@@ -1560,7 +1598,6 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 // Read for normal text
 void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
 {
-    const sal_uInt8* pS = nullptr;
     if( bVer67 )
     {
         SetValSprm( &nSp26, pPap, 26 ); // X-position   //sprmPDxaAbs
@@ -1573,9 +1610,9 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
         SetValSprm( &nUpMgn, pPap, 48 ); // U-border    //sprmPDyaFromText
         SetValSprm( &nLoMgn, pPap, 48 ); // D-border    //sprmPDyaFromText
 
-        pS = pPap->HasSprm( 37 );                       //sprmPWr
-        if( pS )
-            nSp37 = *pS;
+        SprmResult aS = pPap->HasSprm(37);                       //sprmPWr
+        if (aS.pSprm && aS.nRemainingData >= 1)
+            nSp37 = *aS.pSprm;
     }
     else
     {
@@ -1589,9 +1626,9 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
         SetValSprm( &nUpMgn, pPap, NS_sprm::sprmPDyaFromText );    // U-border
         SetValSprm( &nLoMgn, pPap, NS_sprm::sprmPDyaFromText );    // D-border
 
-        pS = pPap->HasSprm( NS_sprm::sprmPWr );                               // wrapping
-        if( pS )
-            nSp37 = *pS;
+        SprmResult aS = pPap->HasSprm(NS_sprm::sprmPWr);                               // wrapping
+        if (aS.pSprm && aS.nRemainingData >= 1)
+            nSp37 = *aS.pSprm;
     }
 
     if( ::lcl_ReadBorders( bVer67, brc, pPap ))     // borders
@@ -1642,10 +1679,10 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 
             // in APO ?
             //sprmPPc
-            const sal_uInt8* pS = pPap->HasSprm( bVer67 ? 29 : 0x261B );
+            SprmResult aS = pPap->HasSprm( bVer67 ? 29 : 0x261B );
 
             // no -> graphics Apo
-            if (!pS)
+            if (!aS.pSprm || aS.nRemainingData < 1)
             {
                 bGrafApo = true;
                 break;                              // end of APO
@@ -1663,7 +1700,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 
             WW8FlyPara aF(bVer67, pNowStyleApo);
                                                 // new FlaPara for comparison
-            aF.Read( *pS, pPap );               // WWPara for new Para
+            aF.Read(*aS.pSprm, pPap);               // WWPara for new Para
             if( !( aF == *this ) )              // same APO? (or a new one?)
                 bGrafApo = true;                // no -> 1-line APO
                                                 //    -> graphics APO
@@ -1678,7 +1715,6 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 // read for Apo definitions in Styledefs
 void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
 {
-    const sal_uInt8* pS = nullptr;
     if (bVer67)
     {
         SetValSprm( &nSp26, pStyle, 26 );   // X-position
@@ -1691,9 +1727,9 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
         SetValSprm( &nUpMgn,    pStyle, 48 );   // U-border
         SetValSprm( &nLoMgn,    pStyle, 48 );   // D-border
 
-        pS = pStyle->HasParaSprm( 37 );             // wrapping
-        if( pS )
-            nSp37 = *pS;
+        SprmResult aS = pStyle->HasParaSprm( 37 );             // wrapping
+        if (aS.pSprm && aS.nRemainingData >= 1)
+            nSp37 = *aS.pSprm;
     }
     else
     {
@@ -1707,9 +1743,9 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
         SetValSprm( &nUpMgn, pStyle, 0x842E );  // U-border
         SetValSprm( &nLoMgn, pStyle, 0x842E );  // D-border
 
-        pS = pStyle->HasParaSprm( 0x2423 );             // wrapping
-        if( pS )
-            nSp37 = *pS;
+        SprmResult aS = pStyle->HasParaSprm( 0x2423 );             // wrapping
+        if (aS.pSprm && aS.nRemainingData >= 1)
+            nSp37 = *aS.pSprm;
     }
 
     if (::lcl_ReadBorders(bVer67, brc, nullptr, pStyle))      // border
@@ -1761,8 +1797,8 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
 
     eSurround = ( rWW.nSp37 > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapTextMode_NONE;
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
-    const bool bIsTable = rIo.m_pPlcxMan->HasParaSprm(0x2416);
-    if (  bIsTable && rWW.nSp37 == 2 )
+    const bool bIsTable = rIo.m_pPlcxMan->HasParaSprm(0x2416).pSprm;
+    if (bIsTable && rWW.nSp37 == 2)
         eSurround = css::text::WrapTextMode_PARALLEL;
 
     /*
@@ -2286,12 +2322,12 @@ bool SwWW8ImplReader::IsDropCap()
     WW8PLCFx_Cp_FKP *pPap = m_pPlcxMan ? m_pPlcxMan->GetPapPLCF() : nullptr;
     if (pPap)
     {
-        const sal_uInt8 *pDCS;
+        SprmResult aDCS;
         if (m_bVer67)
-            pDCS = pPap->HasSprm(46);
+            aDCS = pPap->HasSprm(46);
         else
-            pDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
-        if(pDCS)
+            aDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
+        if (aDCS.pSprm && aDCS.nRemainingData >= 2)
         {
             /*
               fdct   short :3   0007     drop cap type
@@ -2299,7 +2335,7 @@ bool SwWW8ImplReader::IsDropCap()
                                          1 normal drop cap
                                          2 drop cap in margin
             */
-            short nDCS = SVBT16ToShort( pDCS );
+            short nDCS = SVBT16ToShort(aDCS.pSprm);
             if (nDCS & 7)
                 return true;
         }
@@ -2871,10 +2907,10 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
     SwWW8StyInf* pSI = GetStyle(m_nAktColl);
     if (m_pPlcxMan && eVersion > ww::eWW2)
     {
-        const sal_uInt8 *pCharIstd =
+        SprmResult aCharIstd =
             m_pPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? 80 : 0x4A30);
-        if (pCharIstd)
-            pSI = GetStyle(SVBT16ToShort(pCharIstd));
+        if (aCharIstd.pSprm && aCharIstd.nRemainingData >= 2)
+            pSI = GetStyle(SVBT16ToShort(aCharIstd.pSprm));
     }
 
     if( m_pAktColl )                          // StyleDef -> remember flags
@@ -3038,10 +3074,10 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
     SwWW8StyInf* pSI = GetStyle(m_nAktColl);
     if (m_pPlcxMan)
     {
-        const sal_uInt8 *pCharIstd =
+        SprmResult aCharIstd =
             m_pPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? 80 : 0x4A30);
-        if (pCharIstd)
-            pSI = GetStyle(SVBT16ToShort(pCharIstd));
+        if (aCharIstd.pSprm && aCharIstd.nRemainingData >= 2)
+            pSI = GetStyle(SVBT16ToShort(aCharIstd.pSprm));
     }
 
     if (m_pAktColl && eVersion > ww::eWW2)        // StyleDef -> remember flags
@@ -3412,7 +3448,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     //Has newer colour variant, ignore this old variant
-    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCCv))
+    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCCv).pSprm)
         return;
 
     if (nLen < 1)
@@ -3894,7 +3930,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* , short nLen )
 void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     //Has newer colour variant, ignore this old variant
-    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetChpPLCF()->HasSprm(0xCA71))
+    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetChpPLCF()->HasSprm(0xCA71).pSprm)
         return;
 
     if (nLen < 2)
@@ -3981,9 +4017,9 @@ bool lcl_HasExplicitLeft(const WW8PLCFMan *pPlcxMan, bool bVer67)
     if (pPap)
     {
         if (bVer67)
-            return pPap->HasSprm(17);
+            return pPap->HasSprm(17).pSprm;
         else
-            return (pPap->HasSprm(0x840F) || pPap->HasSprm(0x845E));
+            return (pPap->HasSprm(0x840F).pSprm || pPap->HasSprm(0x845E).pSprm);
     }
     return false;
 }
@@ -4086,8 +4122,8 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             */
             if (m_pPlcxMan && m_nAktColl < m_vColl.size() && m_vColl[m_nAktColl].m_bHasBrokenWW6List)
             {
-                const sal_uInt8 *pIsZeroed = m_pPlcxMan->GetPapPLCF()->HasSprm(0x460B);
-                if (pIsZeroed && *pIsZeroed == 0)
+                SprmResult aIsZeroed = m_pPlcxMan->GetPapPLCF()->HasSprm(0x460B);
+                if (aIsZeroed.pSprm && aIsZeroed.nRemainingData >= 1 && *aIsZeroed.pSprm == 0)
                 {
                     const SvxLRSpaceItem &rLR =
                         ItemGet<SvxLRSpaceItem>(*(m_vColl[m_nAktColl].m_pFormat),
@@ -4378,10 +4414,11 @@ void SwWW8ImplReader::Read_Justify( sal_uInt16, const sal_uInt8* pData, short nL
 bool SwWW8ImplReader::IsRightToLeft()
 {
     bool bRTL = false;
-    const sal_uInt8 *pDir =
-        m_pPlcxMan ? m_pPlcxMan->GetPapPLCF()->HasSprm(0x2441) : nullptr;
-    if (pDir)
-        bRTL = *pDir != 0;
+    SprmResult aDir;
+    if (m_pPlcxMan)
+        aDir = m_pPlcxMan->GetPapPLCF()->HasSprm(0x2441);
+    if (aDir.pSprm && aDir.nRemainingData >= 1)
+        bRTL = *aDir.pSprm != 0;
     else
     {
         const SvxFrameDirectionItem* pItem=
@@ -4475,11 +4512,12 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
         //there is use it, if there is not fall back to the currently set one.
         //Only the cjk language setting seems to matter to word, the western
         //one is ignored
-        const sal_uInt8 *pLang =
-            m_pPlcxMan ? m_pPlcxMan->GetChpPLCF()->HasSprm(0x486E) : nullptr;
+        SprmResult aLang;
+        if (m_pPlcxMan)
+            aLang = m_pPlcxMan->GetChpPLCF()->HasSprm(0x486E);
 
-        if (pLang)
-            nLang = SVBT16ToShort( pLang );
+        if (aLang.pSprm && aLang.nRemainingData >= 2)
+            nLang = SVBT16ToShort(aLang.pSprm);
         else
         {
             nLang = static_cast<const SvxLanguageItem *>(
@@ -4723,7 +4761,7 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
 
 void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetPapPLCF()->HasSprm(0xC64D))
+    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetPapPLCF()->HasSprm(0xC64D).pSprm)
         return;
 
     if (nLen < 2)
@@ -4894,7 +4932,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             WW8_BRCVer9 aBrc;
             int nBrcVer = (nId == NS_sprm::sprmCBrc) ? 9 : (m_bVer67 ? 6 : 8);
 
-            SetWW8_BRC(nBrcVer, aBrc, pData);
+            SetWW8_BRC(nBrcVer, aBrc, pData, nLen);
 
             // Border style is none -> no border, no shadow
             if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != SvxBorderLineStyle::NONE )
@@ -5048,30 +5086,37 @@ void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
 bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 {
     bool bRet = false;
-    const sal_uInt8 *pRes=nullptr;
     memset(pTabPos, 0, sizeof(WW8_TablePos));
-    if (nullptr != (pRes = pPap->HasSprm(0x360D)))
+    SprmResult aRes = pPap->HasSprm(0x360D);
+    if (aRes.pSprm && aRes.nRemainingData >= 1)
     {
-        pTabPos->nSp29 = *pRes;
+        pTabPos->nSp29 = *aRes.pSprm;
         pTabPos->nSp37 = 2;     //Possible fail area, always parallel wrap
-        if (nullptr != (pRes = pPap->HasSprm(0x940E)))
-            pTabPos->nSp26 = SVBT16ToShort(pRes);
-        if (nullptr != (pRes = pPap->HasSprm(0x940F)))
-            pTabPos->nSp27 = SVBT16ToShort(pRes);
-        if (nullptr != (pRes = pPap->HasSprm(0x9410)))
-            pTabPos->nLeMgn = SVBT16ToShort(pRes);
-        if (nullptr != (pRes = pPap->HasSprm(0x941E)))
-            pTabPos->nRiMgn = SVBT16ToShort(pRes);
-        if (nullptr != (pRes = pPap->HasSprm(0x9411)))
-            pTabPos->nUpMgn = SVBT16ToShort(pRes);
-        if (nullptr != (pRes = pPap->HasSprm(0x941F)))
-            pTabPos->nLoMgn = SVBT16ToShort(pRes);
+        aRes = pPap->HasSprm(0x940E);
+        if (aRes.pSprm && aRes.nRemainingData >= 2)
+            pTabPos->nSp26 = SVBT16ToShort(aRes.pSprm);
+        aRes = pPap->HasSprm(0x940F);
+        if (aRes.pSprm && aRes.nRemainingData >= 2)
+            pTabPos->nSp27 = SVBT16ToShort(aRes.pSprm);
+        aRes = pPap->HasSprm(0x9410);
+        if (aRes.pSprm && aRes.nRemainingData >= 2)
+            pTabPos->nLeMgn = SVBT16ToShort(aRes.pSprm);
+        aRes = pPap->HasSprm(0x941E);
+        if (aRes.pSprm && aRes.nRemainingData >= 2)
+            pTabPos->nRiMgn = SVBT16ToShort(aRes.pSprm);
+        aRes = pPap->HasSprm(0x9411);
+        if (aRes.pSprm && aRes.nRemainingData >= 2)
+            pTabPos->nUpMgn = SVBT16ToShort(aRes.pSprm);
+        aRes = pPap->HasSprm(0x941F);
+        if (aRes.pSprm && aRes.nRemainingData >= 2)
+            pTabPos->nLoMgn = SVBT16ToShort(aRes.pSprm);
         bRet = true;
     }
-    if (nullptr != (pRes = pPap->HasSprm(NS_sprm::sprmTDefTable)))
+    aRes = pPap->HasSprm(NS_sprm::sprmTDefTable);
+    if (nullptr != aRes.pSprm)
     {
         WW8TabBandDesc aDesc;
-        aDesc.ReadDef(false, pRes);
+        aDesc.ReadDef(false, aRes.pSprm);
         int nTableWidth = aDesc.nCenter[aDesc.nWwCols] - aDesc.nCenter[0];
         int nTextAreaWidth = m_aSectionManager.GetTextAreaWidth();
         // If the table is wider than the text area, then don't create a fly
