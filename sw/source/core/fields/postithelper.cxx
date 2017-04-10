@@ -143,7 +143,7 @@ bool SwAnnotationItem::UseElement()
     return mrFormatField.IsFieldInDoc();
 }
 
-VclPtr<sw::sidebarwindows::SwSidebarWin> SwAnnotationItem::GetSidebarWindow(
+VclPtr<sw::annotation::SwAnnotationWin> SwAnnotationItem::GetSidebarWindow(
                                                             SwEditWin& rEditWin,
                                                             SwPostItMgr& aMgr)
 {

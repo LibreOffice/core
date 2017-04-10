@@ -57,7 +57,6 @@ namespace sw { namespace annotation {
     class SwAnnotationWin;
 }}
 namespace sw { namespace sidebarwindows {
-    class SwSidebarWin;
     class SwFrameSidebarWinContainer;
 }}
 class SwSidebarItem;
@@ -151,7 +150,7 @@ class SwPostItMgr: public SfxListener
         std::vector<SwPostItPageItem*>  mPages;
         ImplSVEvent *                   mnEventId;
         bool                            mbWaitingForCalcRects;
-        VclPtr<sw::sidebarwindows::SwSidebarWin> mpActivePostIt;
+        VclPtr<sw::annotation::SwAnnotationWin> mpActivePostIt;
         bool                            mbLayout;
         long                            mbLayoutHeight;
         bool                            mbLayouting;
@@ -162,18 +161,18 @@ class SwPostItMgr: public SfxListener
         OUString                        maAnswerText;
         bool                            mbIsShowAnchor;
 
-        // data structure to collect the <SwSidebarWin> instances for certain <SwFrame> instances.
+        // data structure to collect the <SwAnnotationWin> instances for certain <SwFrame> instances.
         sw::sidebarwindows::SwFrameSidebarWinContainer* mpFrameSidebarWinContainer;
 
-        typedef std::list<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
+        typedef std::list<sw::annotation::SwAnnotationWin*>::iterator  SwAnnotationWin_iterator;
 
         void            AddPostIts(bool bCheckExistance = true,bool bFocus = true);
         void            RemoveSidebarWin();
         void            PreparePageContainer();
         void            Scroll(const long lScroll,const unsigned long aPage );
-        void            AutoScroll(const sw::sidebarwindows::SwSidebarWin* pPostIt,const unsigned long aPage );
+        void            AutoScroll(const sw::annotation::SwAnnotationWin* pPostIt,const unsigned long aPage );
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
-        bool            LayoutByPage( std::list<sw::sidebarwindows::SwSidebarWin*> &aVisiblePostItList,
+        bool            LayoutByPage( std::list<sw::annotation::SwAnnotationWin*> &aVisiblePostItList,
                                       const tools::Rectangle& rBorder,
                                       long lNeededHeight);
         void            CheckForRemovedPostIts();
@@ -188,7 +187,7 @@ class SwPostItMgr: public SfxListener
         void            SetReadOnlyState();
         DECL_LINK( CalcHdl, void*, void);
 
-        sw::sidebarwindows::SwSidebarWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
+        sw::annotation::SwAnnotationWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
 
         SwSidebarItem*  InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
         void            RemoveItem( SfxBroadcaster* pBroadcast );
@@ -206,7 +205,7 @@ class SwPostItMgr: public SfxListener
         void LayoutPostIts();
         bool CalcRects();
 
-        void MakeVisible( const sw::sidebarwindows::SwSidebarWin* pPostIt);
+        void MakeVisible( const sw::annotation::SwAnnotationWin* pPostIt);
 
         bool ShowScrollbar(const unsigned long aPage) const;
         bool HasNotes() const ;
@@ -244,12 +243,12 @@ class SwPostItMgr: public SfxListener
         sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pField) const;
         sw::annotation::SwAnnotationWin* GetAnnotationWin(const sal_uInt32 nPostItId) const;
 
-        sw::sidebarwindows::SwSidebarWin* GetNextPostIt( sal_uInt16 aDirection,
-                                                         sw::sidebarwindows::SwSidebarWin* aPostIt);
+        sw::annotation::SwAnnotationWin* GetNextPostIt( sal_uInt16 aDirection,
+                                                        sw::annotation::SwAnnotationWin* aPostIt);
         long GetNextBorder();
 
-        sw::sidebarwindows::SwSidebarWin* GetActiveSidebarWin() { return mpActivePostIt; }
-        void SetActiveSidebarWin( sw::sidebarwindows::SwSidebarWin* p);
+        sw::annotation::SwAnnotationWin* GetActiveSidebarWin() { return mpActivePostIt; }
+        void SetActiveSidebarWin( sw::annotation::SwAnnotationWin* p);
         bool HasActiveSidebarWin() const;
         bool HasActiveAnnotationWin() const;
         void GrabFocusOnActiveSidebarWin();
@@ -283,9 +282,9 @@ class SwPostItMgr: public SfxListener
 
         void ConnectSidebarWinToFrame( const SwFrame& rFrame,
                                      const SwFormatField& rFormatField,
-                                     sw::sidebarwindows::SwSidebarWin& rSidebarWin );
+                                     sw::annotation::SwAnnotationWin& rSidebarWin );
         void DisconnectSidebarWinFromFrame( const SwFrame& rFrame,
-                                          sw::sidebarwindows::SwSidebarWin& rSidebarWin );
+                                          sw::annotation::SwAnnotationWin& rSidebarWin );
         bool HasFrameConnectedSidebarWins( const SwFrame& rFrame );
         vcl::Window* GetSidebarWinForFrameByIndex( const SwFrame& rFrame,
                                             const sal_Int32 nIndex );

@@ -23,7 +23,6 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 
-#include <SidebarWin.hxx>
 #include <PostItMgr.hxx>
 #include <edtwin.hxx>
 
@@ -56,11 +55,12 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <shellres.hxx>
+#include <AnnotationWin.hxx>
 #include <memory>
 
 namespace sw { namespace sidebarwindows {
 
-SidebarTextControl::SidebarTextControl( SwSidebarWin& rSidebarWin,
+SidebarTextControl::SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,
                                       WinBits nBits,
                                       SwView& rDocView,
                                       SwPostItMgr& rPostItMgr )
@@ -69,7 +69,7 @@ SidebarTextControl::SidebarTextControl( SwSidebarWin& rSidebarWin,
     , mrDocView( rDocView )
     , mrPostItMgr( rPostItMgr )
 {
-    AddEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
+    AddEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
 }
 
 SidebarTextControl::~SidebarTextControl()
@@ -79,7 +79,7 @@ SidebarTextControl::~SidebarTextControl()
 
 void SidebarTextControl::dispose()
 {
-    RemoveEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
+    RemoveEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
     Control::dispose();
 }
 
