@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_f3a908e1",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-10T22:25:55Z",
+      "side": 0,
+      "message": "When removing, the message detail \"got imported incorrectly.\" gets lost and instead the previous message\u0027s \"did not get imported at all.\" is used.",
+      "revId": "bdf41d8aeb53a298780f3633a76d71598a695bab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
