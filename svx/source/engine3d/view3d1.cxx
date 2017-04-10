@@ -28,7 +28,6 @@
 #include <svx/dialmgr.hxx>
 #include "svx/globl3d.hxx"
 #include <svx/obj3d.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/e3ditem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/lathe3d.hxx>
@@ -50,16 +49,19 @@ void E3dView::ConvertMarkedToPolyObj()
     {
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 
-        if (pObj && dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr)
+        if (pObj)
         {
-            bool bBezier = false;
-            pNewObj = static_cast<E3dPolyScene*>(pObj)->ConvertToPolyObj(bBezier, false/*bLineToArea*/);
-
-            if (pNewObj)
+            auto pScene = dynamic_cast< const E3dScene* >(pObj);
+            if (pScene)
             {
-                BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXTRUDE));
-                ReplaceObjectAtView(pObj, *GetSdrPageView(), pNewObj);
-                EndUndo();
+                bool bBezier = false;
+                pNewObj = pScene->ConvertToPolyObj(bBezier, false/*bLineToArea*/);
+                if (pNewObj)
+                {
+                    BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXTRUDE));
+                    ReplaceObjectAtView(pObj, *GetSdrPageView(), pNewObj);
+                    EndUndo();
+                }
             }
         }
     }

@@ -35,7 +35,6 @@
 #include <svx/camera3d.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
-#include <svx/polysc3d.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/style.hxx>
 #include <svx/dlgutil.hxx>

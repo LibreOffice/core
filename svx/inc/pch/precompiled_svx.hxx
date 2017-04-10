@@ -432,7 +432,6 @@
 #include <svx/msdffdef.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/sdrpaintwindow.hxx>

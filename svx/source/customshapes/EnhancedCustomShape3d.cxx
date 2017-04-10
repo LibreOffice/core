@@ -34,7 +34,6 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/extrud3d.hxx>
@@ -42,6 +41,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/sdasitm.hxx>
+#include <svx/scene3d.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
@@ -326,7 +326,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
         a3DDefaultAttr.SetDefaultExtrudeCharacterMode( true );
 
-        E3dScene* pScene = new E3dPolyScene( a3DDefaultAttr );
+        E3dScene* pScene = new E3dScene( a3DDefaultAttr );
 
         bool bSceneHasObjects ( false );
         bool bUseTwoFillStyles( false );

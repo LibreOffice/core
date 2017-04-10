@@ -31,8 +31,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/obj3d.hxx>
+#include <svx/scene3d.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -127,14 +127,14 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             /* If it is not a group object or 3D object, we disable "enter
                group". */
-            if( !( ( dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr && nInv == SdrInventor::Default ) ||
-                (dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr|| dynamic_cast< const E3dScene* >(pObj) !=  nullptr /*|| pObj->ISA (E3dCompoundObject) */) ) )
+            if( !( ( dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr && nInv == SdrInventor::Default ) ||
+                   ( dynamic_cast< const E3dScene* >(pObj) != nullptr ) ) )
             {
                 rSet.DisableItem( SID_ENTER_GROUP );
             }
 
             // If it is not a group object, we disable "ungroup"
-            if(!(dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr && nInv == SdrInventor::Default))
+            if(!(dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr && nInv == SdrInventor::Default))
             {
                 rSet.DisableItem(SID_UNGROUP);
             }

@@ -22,8 +22,7 @@
 
 #include <sal/types.h>
 
-const sal_uInt16 E3D_SCENE_ID       = 1;
-const sal_uInt16 E3D_POLYSCENE_ID   = 2;
+const sal_uInt16 E3D_SCENE_ID   = 2;
 const sal_uInt16 E3D_OBJECT_ID      = 3; // should not be used, it's only a helper class for E3DScene and E3DCompoundObject
 const sal_uInt16 E3D_CUBEOBJ_ID     = 4;
 const sal_uInt16 E3D_SPHEREOBJ_ID   = 5;

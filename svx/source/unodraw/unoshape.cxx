@@ -384,10 +384,6 @@ void SvxShape::impl_initFromSdrObject()
         case OBJ_SECT:          // sector
             mpImpl->mnObjId = OBJ_CIRC;
             break;
-
-        case E3D_SCENE_ID | E3D_INVENTOR_FLAG:
-            mpImpl->mnObjId = E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG;
-            break;
         }
     }
 }
@@ -874,7 +870,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
             return aTypeSequence;
         }
     // 3d scene shape
-    case E3D_POLYSCENE_ID|E3D_INVENTOR_FLAG:
+    case E3D_SCENE_ID|E3D_INVENTOR_FLAG:
         {
             static css::uno::Sequence< css::uno::Type > aTypeSequence;
 
