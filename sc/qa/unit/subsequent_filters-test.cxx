@@ -1269,11 +1269,7 @@ void checkValiditationEntries( const ValDataTestParams& rVDTParams )
     CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), pValDataTest);
 
     //check if expected and actual data validation entries are equal
-    if (!aValData.EqualEntries(*pValDataTest))
-    {
-        aMsg = aMsgPrefix + "got imported incorrectly.";
-        CPPUNIT_FAIL(aMsg.getStr());
-    }
+    CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), !aValData.EqualEntries(*pValDataTest));
 }
 
 void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, const ScDocument& rDoc )
