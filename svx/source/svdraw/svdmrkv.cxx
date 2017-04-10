@@ -151,8 +151,7 @@ SdrMarkView::SdrMarkView(SdrModel* pModel1, OutputDevice* pOut)
     mpMarkObjOverlay(nullptr),
     mpMarkPointsOverlay(nullptr),
     mpMarkGluePointsOverlay(nullptr),
-    maHdlList(this),
-    mpSdrViewSelection(new sdr::ViewSelection())
+    maHdlList(this)
 {
     ImpClearVars();
     StartListening(*pModel1);
@@ -164,7 +163,6 @@ SdrMarkView::~SdrMarkView()
     BrkMarkObj();
     BrkMarkPoints();
     BrkMarkGluePoints();
-    delete mpSdrViewSelection;
 }
 
 void SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
@@ -2084,7 +2082,7 @@ void SdrMarkView::EnterMarkedGroup()
 void SdrMarkView::MarkListHasChanged()
 {
     GetMarkedObjectListWriteAccess().SetNameDirty();
-    mpSdrViewSelection->SetEdgesOfMarkedNodesDirty();
+    maSdrViewSelection.SetEdgesOfMarkedNodesDirty();
 
     mbMarkedObjRectDirty=true;
     mbMarkedPointsRectsDirty=true;

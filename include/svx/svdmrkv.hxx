@@ -107,12 +107,12 @@ protected:
     Point                       maRef2;            // Persistent
     Point                       maLastCrookCenter; // Persistent
     SdrHdlList                  maHdlList;
-    sdr::ViewSelection*         mpSdrViewSelection;
+    sdr::ViewSelection          maSdrViewSelection;
 
-    tools::Rectangle                   maMarkedObjRect;
-    tools::Rectangle                   maMarkedObjRectNoOffset;
-    tools::Rectangle                   maMarkedPointsRect;
-    tools::Rectangle                   maMarkedGluePointsRect;
+    tools::Rectangle            maMarkedObjRect;
+    tools::Rectangle            maMarkedObjRectNoOffset;
+    tools::Rectangle            maMarkedPointsRect;
+    tools::Rectangle            maMarkedGluePointsRect;
 
     sal_uInt16                  mnFrameHandlesLimit;
     sal_uIntPtr                 mnInsPointNum;      // Number of the InsPoint
@@ -121,7 +121,6 @@ protected:
     SdrViewEditMode             meEditMode;      // Persistent
     SdrViewEditMode             meEditMode0;     // Persistent
 
-    //HMHbool                       bHdlShown : 1;
     bool                        mbDesignMode : 1;          // DesignMode for SdrUnoObj
     bool                        mbForceFrameHandles : 1;   // Persistent - FrameDrag also for single objects
     bool                        mbPlusHdlAlways : 1;       // Persistent
@@ -228,11 +227,11 @@ public:
 
 protected:
     // all available changing methods
-    SdrMarkList& GetMarkedObjectListWriteAccess() { return mpSdrViewSelection->GetMarkedObjectListWriteAccess(); }
+    SdrMarkList& GetMarkedObjectListWriteAccess() { return maSdrViewSelection.GetMarkedObjectListWriteAccess(); }
 
 public:
     // all available const methods for read access to selection
-    const SdrMarkList& GetMarkedObjectList() const { return mpSdrViewSelection->GetMarkedObjectList(); }
+    const SdrMarkList& GetMarkedObjectList() const { return maSdrViewSelection.GetMarkedObjectList(); }
     // returns SAL_MAX_SIZE if not found
     size_t TryToFindMarkedObject(const SdrObject* pObj) const { return GetMarkedObjectList().FindObject(pObj); }
     SdrPageView* GetSdrPageViewOfMarkedByIndex(size_t nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetPageView(); }
@@ -247,9 +246,9 @@ public:
 
     // Get a list of all those links which are connected to marked nodes,
     // but which are not marked themselves.
-    const SdrMarkList& GetEdgesOfMarkedNodes() const { return mpSdrViewSelection->GetEdgesOfMarkedNodes(); }
-    const SdrMarkList& GetMarkedEdgesOfMarkedNodes() const { return mpSdrViewSelection->GetMarkedEdgesOfMarkedNodes(); }
-    const std::vector<SdrObject*>& GetTransitiveHullOfMarkedObjects() const { return mpSdrViewSelection->GetAllMarkedObjects(); }
+    const SdrMarkList& GetEdgesOfMarkedNodes() const { return maSdrViewSelection.GetEdgesOfMarkedNodes(); }
+    const SdrMarkList& GetMarkedEdgesOfMarkedNodes() const { return maSdrViewSelection.GetMarkedEdgesOfMarkedNodes(); }
+    const std::vector<SdrObject*>& GetTransitiveHullOfMarkedObjects() const { return maSdrViewSelection.GetAllMarkedObjects(); }
 
 
     // mechanism to complete disable handles at the view. Handles will be hidden and deleted
