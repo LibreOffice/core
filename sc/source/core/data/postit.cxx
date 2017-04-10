@@ -717,7 +717,7 @@ void ScCaptionPtr::removeFromDrawPage( SdrPage& rDrawPage )
     assert(pObj == mpCaption); (void)pObj;
 }
 
-void ScCaptionPtr::removeFromDrawPageAndFree()
+void ScCaptionPtr::removeFromDrawPageAndFree( bool bIgnoreUndo )
 {
     assert(mpHead && mpCaption);
     SdrPage* pDrawPage = mpCaption->GetPage();
@@ -725,12 +725,16 @@ void ScCaptionPtr::removeFromDrawPageAndFree()
     if (pDrawPage)
     {
         pDrawPage->RecalcObjOrdNums();
-        ScDrawLayer* pDrawLayer = dynamic_cast<ScDrawLayer*>(mpCaption->GetModel());
-        SAL_WARN_IF( !pDrawLayer, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing layer");
-        // create drawing undo action (before removing the object to have valid draw page in undo action)
-        const bool bRecording = (pDrawLayer && pDrawLayer->IsRecording());
-        if (bRecording)
-            pDrawLayer->AddCalcUndo( new SdrUndoDelObj( *mpCaption ));
+        bool bRecording = false;
+        if (!bIgnoreUndo)
+        {
+            ScDrawLayer* pDrawLayer = dynamic_cast<ScDrawLayer*>(mpCaption->GetModel());
+            SAL_WARN_IF( !pDrawLayer, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing layer");
+            // create drawing undo action (before removing the object to have valid draw page in undo action)
+            bRecording = (pDrawLayer && pDrawLayer->IsRecording());
+            if (bRecording)
+                pDrawLayer->AddCalcUndo( new SdrUndoDelObj( *mpCaption ));
+        }
         // remove the object from the drawing page, delete if undo is disabled
         removeFromDrawPage( *pDrawPage );
         if (!bRecording)
