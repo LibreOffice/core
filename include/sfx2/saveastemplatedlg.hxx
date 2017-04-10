@@ -12,14 +12,13 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-
+#include <sfx2/doctempl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 
 class Edit;
 class ListBox;
 class CheckBox;
-class SfxDocumentTemplates;
 
 //  class SfxSaveAsTemplateDialog -------------------------------------------------------------------
 
@@ -32,13 +31,13 @@ private:
     VclPtr<Edit>            mpTemplateNameEdit;
     VclPtr<PushButton>      mpOKButton;
 
-    OUString     msSelectedCategory;
-    OUString     msTemplateName;
-    sal_uInt16   mnRegionPos;
+    OUString                msSelectedCategory;
+    OUString                msTemplateName;
+    sal_uInt16              mnRegionPos;
 
-    std::vector<OUString> msCategories;
+    std::vector<OUString>   msCategories;
 
-    SfxDocumentTemplates *mpDocTemplates;
+    SfxDocumentTemplates    maDocTemplates;
 
     css::uno::Reference< css::frame::XModel > m_xModel;
 
