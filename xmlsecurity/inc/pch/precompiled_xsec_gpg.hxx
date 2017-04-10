@@ -25,8 +25,6 @@
 #include <key.h>
 #include <keylistresult.h>
 #include <list>
-#include <com/sun/star/xml/crypto/gpg/GpgSecurityEnvironment.hpp>
-#include <com/sun/star/xml/crypto/gpg/GpgXMLSecurityContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/factory.hxx>
