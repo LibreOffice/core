@@ -3325,6 +3325,9 @@ find_ucrt()
             PathFormat "$(win_get_env_from_vsvars32bat UniversalCRTSdkDir)"
             UCRTSDKDIR=$formatted_path
             UCRTVERSION=$(win_get_env_from_vsvars32bat UCRTVersion)
+            if test "$UCRTVERSION" = 10.0.15063.0; then
+                UCRTVERSION=10.0.14393.0
+            fi
         else
           AC_MSG_ERROR([No UCRT found])
         fi
@@ -5191,6 +5194,8 @@ find_winsdk_version()
             winsdklibsubdir=$regvalue
             if test "$regvalue" = "10.0.14393"; then
                 winsdklibsubdir="10.0.14393.0"
+            elif test "$regvalue" = "10.0.15063"; then
+                winsdklibsubdir="10.0.14393.0"
             fi
             return
         fi
@@ -5201,7 +5206,7 @@ find_winsdk_version()
 find_winsdk()
 {
     # Args: $1 (optional) : list of acceptable SDK versions
-    # Return value: $winsdktest
+    # Return value: From find_winsdk_version
 
     unset winsdktest
 
