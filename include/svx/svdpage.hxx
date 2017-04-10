@@ -27,6 +27,7 @@
 #include <tools/weakbase.hxx>
 #include <tools/contnr.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -312,7 +313,7 @@ private:
     // data
     SdrPage*                mpSdrPage;
     SfxStyleSheet*          mpStyleSheet;
-    SfxItemSet*             mpProperties;
+    SfxItemSet              maProperties;
 
     // internal helpers
     void ImpRemoveStyleSheet();
@@ -331,7 +332,7 @@ public:
     virtual bool isUsedByModel() const override;
 
     // data read/write
-    const SfxItemSet& GetItemSet() const { return *mpProperties;}
+    const SfxItemSet& GetItemSet() const { return maProperties;}
     void PutItemSet(const SfxItemSet& rSet);
     void PutItem(const SfxPoolItem& rItem);
     void ClearItem(const sal_uInt16 nWhich = 0);
