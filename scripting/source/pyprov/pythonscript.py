@@ -405,7 +405,12 @@ class ProviderContext:
                 allFuncs.append(node.name)
             elif isinstance(node, ast.Assign):
                 for target in node.targets:
-                    if target.id == "g_exportedScripts":
+                    try:
+                        identifier = target.id
+                    except AttributeError:
+                        identifier = ""
+                        pass
+                    if identifier == "g_exportedScripts":
                         for value in node.value.elts:
                             g_exportedScripts.append(value.id)
                         return g_exportedScripts
