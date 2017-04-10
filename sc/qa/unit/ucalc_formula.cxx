@@ -30,6 +30,7 @@
 #include <scitems.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
+#include "docoptio.hxx"
 
 #include <formula/vectortoken.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -7707,6 +7708,31 @@ void Test::testRefR1C1WholeRow()
     OUString aFormula = pTokens->CreateString(aCxt, aPos);
 
     CPPUNIT_ASSERT_EQUAL(OUString("5:5"), aFormula);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSingleCellCopyColumnLabel()
+{
+    ScDocOptions aOptions = m_pDoc->GetDocOptions();
+    aOptions.SetLookUpColRowNames(true);
+    m_pDoc->SetDocOptions(aOptions);
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(0, 0, 0, "a");
+    m_pDoc->SetValue(0, 1, 0, 1.0);
+    m_pDoc->SetValue(0, 2, 0, 2.0);
+    m_pDoc->SetValue(0, 3, 0, 3.0);
+    m_pDoc->SetString(1, 1, 0, "='a'");
+
+    double nVal = m_pDoc->GetValue(1, 1, 0);
+    ASSERT_DOUBLES_EQUAL(1.0, nVal);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(1, 1, 0), &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, ScRange(1, 2, 0), &aClipDoc);
+    nVal = m_pDoc->GetValue(1, 2, 0);
+    ASSERT_DOUBLES_EQUAL(2.0, nVal);
 
     m_pDoc->DeleteTab(0);
 }
