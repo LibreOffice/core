@@ -540,7 +540,7 @@ void SwAnnotationWin::InitControls()
     SetLanguage(GetLanguage());
     GetOutlinerView()->StartSpeller();
     SetPostItText();
-    Engine()->CompleteOnlineSpelling();
+    mpOutliner->CompleteOnlineSpelling();
 
     mpSidebarTextControl->Show();
     mpMetadataAuthor->Show();
@@ -776,7 +776,7 @@ void SwAnnotationWin::SetPosAndSize()
             const bool bTableCursorNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
             if ( bTableCursorNeeded )
             {
-                SwShellTableCursor* pTableCursor = new SwShellTableCursor( DocView().GetWrtShell(), aStartPos );
+                SwShellTableCursor* pTableCursor = new SwShellTableCursor( mrView.GetWrtShell(), aStartPos );
                 pTableCursor->SetMark();
                 pTableCursor->GetMark()->nNode = *pTextNode;
                 pTableCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
@@ -785,7 +785,7 @@ void SwAnnotationWin::SetPosAndSize()
             }
             else
             {
-                SwShellCursor* pCursor = new SwShellCursor( DocView().GetWrtShell(), aStartPos );
+                SwShellCursor* pCursor = new SwShellCursor( mrView.GetWrtShell(), aStartPos );
                 pCursor->SetMark();
                 pCursor->GetMark()->nNode = *pTextNode;
                 pCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
@@ -834,7 +834,7 @@ void SwAnnotationWin::SetPosAndSize()
             // This window is not a reply, then draw its range overlay.
             mpTextRangeOverlay =
                 sw::overlay::OverlayRanges::CreateOverlayRange(
-                    DocView(),
+                    mrView,
                     mColorAnchor,
                     maAnnotationTextRanges,
                     mpAnchor && mpAnchor->getLineSolid() );
@@ -1022,33 +1022,33 @@ void SwAnnotationWin::SetReadonly(bool bSet)
 
 void SwAnnotationWin::SetLanguage(const SvxLanguageItem& rNewItem)
 {
-    Link<LinkParamNone*,void> aLink = Engine()->GetModifyHdl();
-    Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
+    Link<LinkParamNone*,void> aLink = mpOutliner->GetModifyHdl();
+    mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
     ESelection aOld = GetOutlinerView()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, Engine()->GetParagraphCount()-1, EE_TEXTPOS_ALL );
+    ESelection aNewSelection( 0, 0, mpOutliner->GetParagraphCount()-1, EE_TEXTPOS_ALL );
     GetOutlinerView()->SetSelection( aNewSelection );
     SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
     aEditAttr.Put(rNewItem);
     GetOutlinerView()->SetAttribs( aEditAttr );
 
     GetOutlinerView()->SetSelection(aOld);
-    Engine()->SetModifyHdl( aLink );
+    mpOutliner->SetModifyHdl( aLink );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    EEControlBits nCntrl = Engine()->GetControlWord();
+    EEControlBits nCntrl = mpOutliner->GetControlWord();
     // turn off
     nCntrl &= ~EEControlBits::ONLINESPELLING;
-    Engine()->SetControlWord(nCntrl);
+    mpOutliner->SetControlWord(nCntrl);
 
     //turn back on
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EEControlBits::ONLINESPELLING;
     else
         nCntrl &= ~EEControlBits::ONLINESPELLING;
-    Engine()->SetControlWord(nCntrl);
+    mpOutliner->SetControlWord(nCntrl);
 
-    Engine()->CompleteOnlineSpelling();
+    mpOutliner->CompleteOnlineSpelling();
     Invalidate();
 }
 
@@ -1143,7 +1143,7 @@ void SwAnnotationWin::DeactivatePostIt()
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         GetOutlinerView()->SetBackgroundColor(COL_TRANSPARENT);
 
-    if ( !IsProtected() && Engine()->GetEditEngine().GetText().isEmpty() )
+    if ( !IsProtected() && mpOutliner->GetEditEngine().GetText().isEmpty() )
     {
         mnEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
     }
@@ -1175,7 +1175,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
         {
             // if this note is empty, it will be deleted once losing the focus, so no reply, but only a new note
             // will be created
-            if (!Engine()->GetEditEngine().GetText().isEmpty())
+            if (!mpOutliner->GetEditEngine().GetText().isEmpty())
             {
                 OutlinerParaObject* pPara = new OutlinerParaObject(*GetOutlinerView()->GetEditView().CreateTextObject());
                 mrMgr.RegisterAnswer(pPara);
