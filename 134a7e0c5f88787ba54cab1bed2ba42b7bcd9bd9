@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_905fda74",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3379,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-04-10T14:54:00Z",
+      "side": 1,
+      "message": "that\u0027s fine, we don\u0027t really care",
+      "parentUuid": "9a57fde8_6b308657",
+      "revId": "134a7e0c5f88787ba54cab1bed2ba42b7bcd9bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_4b2bc2eb",
         "filename": "sw/source/filter/ww8/ww8par6.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_50773202",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3922,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-04-10T14:54:00Z",
+      "side": 1,
+      "message": "only if nLen is 10, so this one is already safe",
+      "parentUuid": "9a57fde8_4b2bc2eb",
+      "revId": "134a7e0c5f88787ba54cab1bed2ba42b7bcd9bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_cb3fb223",
         "filename": "sw/source/filter/ww8/ww8par6.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2017-04-07T11:09:20Z",
       "side": 1,
       "message": "SetWW8_BRC reads a variable size of 2, 4, or 8 bytes depending",
+      "revId": "134a7e0c5f88787ba54cab1bed2ba42b7bcd9bd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b064d649",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4882,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-04-10T14:54:00Z",
+      "side": 1,
+      "message": "yeah, this is an outstanding problem, a bit challenging to fix it up, need to bubble missing sizes around. I can have a stab at that in a follow up patch",
+      "parentUuid": "9a57fde8_cb3fb223",
       "revId": "134a7e0c5f88787ba54cab1bed2ba42b7bcd9bd9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
