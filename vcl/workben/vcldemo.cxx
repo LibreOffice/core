@@ -58,7 +58,6 @@
 #include "opengl/framebuffer.hxx"
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
-#include <rtl/math.hxx>
 
 #define FIXME_SELF_INTERSECTING_WORKING 0
 #define FIXME_BOUNCE_BUTTON 0

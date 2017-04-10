@@ -26,7 +26,6 @@
 #include <sal/log.hxx>
 #include <unicode/numfmt.h>
 #include "unicode_data.h"
-#include <com/sun/star/i18n/UnicodeType.hpp>
 #include <rtl/character.hxx>
 #include <memory>
 

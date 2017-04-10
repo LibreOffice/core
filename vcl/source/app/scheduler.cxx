@@ -21,7 +21,6 @@
 #include <tools/time.hxx>
 #include <vcl/scheduler.hxx>
 #include <saltimer.hxx>
-#include <svdata.hxx>
 #include <salinst.hxx>
 
 namespace {

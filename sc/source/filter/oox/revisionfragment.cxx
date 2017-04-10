@@ -30,8 +30,6 @@
 #include <chgviset.hxx>
 #include <richstringcontext.hxx>
 
-#include <memory>
-
 #include <com/sun/star/util/DateTime.hpp>
 
 using namespace com::sun::star;

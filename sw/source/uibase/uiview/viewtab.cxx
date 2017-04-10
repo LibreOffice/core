@@ -32,8 +32,6 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/ruler.hxx>
-#include <svx/xfillit.hxx>
-#include <svx/xfillit0.hxx>
 #include <editeng/protitem.hxx>
 #include <svl/rectitem.hxx>
 #include <sfx2/bindings.hxx>

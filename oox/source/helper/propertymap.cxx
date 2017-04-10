@@ -67,10 +67,6 @@ using ::com::sun::star::beans::XVetoableChangeListener;
 using ::com::sun::star::container::XIndexReplace;
 
 #if OSL_DEBUG_LEVEL > 0
-#include <cstdio>
-#include <com/sun/star/style/LineSpacing.hpp>
-#include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

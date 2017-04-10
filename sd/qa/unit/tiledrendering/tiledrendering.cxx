@@ -22,7 +22,6 @@
 #include <editeng/editids.hrc>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/editobj.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>

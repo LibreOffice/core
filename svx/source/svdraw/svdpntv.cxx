@@ -25,9 +25,6 @@
 #include <svtools/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
 
-#ifdef DBG_UTIL
-#include <svdibrow.hxx>
-#endif
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/hint.hxx>
@@ -39,7 +36,7 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
-#include "svdibrow.hxx"
+#include <svdibrow.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>

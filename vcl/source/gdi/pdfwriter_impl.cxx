@@ -110,7 +110,6 @@
 #endif
 
 #include <config_eot.h>
-#include <config_features.h>
 
 #if ENABLE_EOT
 #include <libeot/libeot.h>

@@ -29,7 +29,6 @@
 #include <orcus/orcus_import_ods.hpp>
 #include <orcus/global.hpp>
 #include <orcus/stream.hpp>
-#include <orcus/orcus_import_ods.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 #ifdef _WIN32

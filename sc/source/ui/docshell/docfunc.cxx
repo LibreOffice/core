@@ -93,7 +93,6 @@
 #include <memory>
 #include <utility>
 #include <basic/basmgr.hxx>
-#include <memory>
 #include <set>
 #include <vector>
 

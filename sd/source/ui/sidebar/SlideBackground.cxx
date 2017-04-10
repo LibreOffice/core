@@ -30,13 +30,11 @@
 #include "drawdoc.hxx"
 #include "filedlg.hxx"
 #include "strings.hrc"
-#include "drawdoc.hxx"
 #include "DocumentHelper.hxx"
 #include "MasterPagesSelector.hxx"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "sdresid.hxx"
 #include <svtools/controldims.hrc>
 #include <svx/colorbox.hxx>
 #include <svx/gallery.hxx>
