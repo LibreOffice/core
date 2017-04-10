@@ -102,7 +102,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     OStringBuffer m_ShapeStyle;
 
     /// Remember which shape types we had already written.
-    bool *m_pShapeTypeWritten;
+    std::vector<bool> m_aShapeTypeWritten;
 
 public:
                         VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport = nullptr );

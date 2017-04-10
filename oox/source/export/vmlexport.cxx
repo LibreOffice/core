@@ -65,10 +65,9 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLText
     , m_nShapeType( ESCHER_ShpInst_Nil )
     , m_nShapeFlags(0)
     , m_ShapeStyle( 200 )
-    , m_pShapeTypeWritten( new bool[ ESCHER_ShpInst_COUNT ] )
+    , m_aShapeTypeWritten( ESCHER_ShpInst_COUNT )
 {
     mnGroupLevel = 1;
-    memset( m_pShapeTypeWritten, 0, ESCHER_ShpInst_COUNT * sizeof( bool ) );
 }
 
 void VMLExport::SetFS( const ::sax_fastparser::FSHelperPtr& pSerializer )
@@ -80,8 +79,6 @@ VMLExport::~VMLExport()
 {
     delete mpOutStrm;
     mpOutStrm = nullptr;
-    delete[] m_pShapeTypeWritten;
-    m_pShapeTypeWritten = nullptr;
 }
 
 void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
@@ -1039,10 +1036,10 @@ sal_Int32 VMLExport::StartShape()
                 if ( aShapeType != "NULL" )
                 {
                     bReferToShapeType = true;
-                    if ( !m_pShapeTypeWritten[ m_nShapeType ] )
+                    if ( !m_aShapeTypeWritten[ m_nShapeType ] )
                     {
                         m_pSerializer->write( aShapeType.getStr() );
-                        m_pShapeTypeWritten[ m_nShapeType ] = true;
+                        m_aShapeTypeWritten[ m_nShapeType ] = true;
                     }
                 }
                 else
