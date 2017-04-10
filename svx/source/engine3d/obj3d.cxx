@@ -29,7 +29,6 @@
 #include "svx/globl3d.hxx"
 #include <svx/camera3d.hxx>
 #include <svx/scene3d.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/sphere3d.hxx>

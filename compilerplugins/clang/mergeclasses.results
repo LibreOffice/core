@@ -26,7 +26,6 @@ merge DbGridControl with FmGridControl
 merge DdeItem with DdeGetPutItem
 merge DdeLink with DdeHotLink
 merge DomVisitor with DomExport
-merge E3dScene with E3dPolyScene
 merge E3dUndoAction with E3dRotateUndoAction
 merge EscherPersistTable with EscherEx
 merge ExcBoolRecord with Exc1904

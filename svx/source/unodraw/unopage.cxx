@@ -41,13 +41,13 @@
 #include "shapeimpl.hxx"
 #include "svdglob.hxx"
 #include "svx/globl3d.hxx"
-#include <svx/polysc3d.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/svdopath.hxx>
 #include "svx/unoapi.hxx"
 #include <svx/svdomeas.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/lathe3d.hxx>
+#include <svx/scene3d.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/globname.hxx>
@@ -484,10 +484,9 @@ SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     if (!pNewObj)
         return nullptr;
 
-    if( dynamic_cast<const E3dPolyScene* >(pNewObj) !=  nullptr)
+    if( auto pScene = dynamic_cast<E3dScene* >(pNewObj) )
     {
         // initialise scene
-        E3dScene* pScene = static_cast<E3dScene*>(pNewObj);
 
         double fW = (double)aSize.Width;
         double fH = (double)aSize.Height;
@@ -585,7 +584,6 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
             switch( nType )
             {
                 case E3D_SCENE_ID :
-                case E3D_POLYSCENE_ID :
                     pRet = new Svx3DSceneObject( pObj, mpPage );
                     break;
                 case E3D_CUBEOBJ_ID :
@@ -779,10 +777,6 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
         case OBJ_CARC:          // arc of circle
         case OBJ_SECT:          // sector
             nObjId = OBJ_CIRC;
-            break;
-
-        case E3D_SCENE_ID | E3D_INVENTOR_FLAG:
-            nObjId = E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG;
             break;
 
         case OBJ_TITLETEXT:

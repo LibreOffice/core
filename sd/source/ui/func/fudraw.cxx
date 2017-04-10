@@ -35,7 +35,7 @@
 #include <svtools/imapobj.hxx>
 #include <svx/svxids.hrc>
 #include <svx/obj3d.hxx>
-#include <svx/polysc3d.hxx>
+#include <svx/scene3d.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include "anminfo.hxx"
@@ -568,7 +568,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 // test for animation or ImageMap
                 bDefPointer = !SetPointer(pObj, aPnt);
 
-                if (bDefPointer && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr))
+                if (bDefPointer && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dScene* >(pObj) !=  nullptr))
                 {
                     // take a glance into the group
                     pObj = mpView->PickObj(aPnt, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP);
@@ -754,7 +754,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
             bReturn = SetHelpText(pObj, aPosPixel, aVEvt);
 
-            if (!bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr))
+            if (!bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dScene* >(pObj) != nullptr))
             {
                 // take a glance into the group
                 SdrPageView* pPV = nullptr;

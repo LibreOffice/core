@@ -45,7 +45,6 @@
 #include "ToolBarManager.hxx"
 #include <svx/svx3ditems.hxx>
 
-#include <svx/polysc3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace com::sun::star;
@@ -374,7 +373,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
     ::tools::Rectangle a3DRect(0, 0, (long)fW, (long)fH);
-    E3dScene* pScene = new E3dPolyScene(mpView->Get3DDefaultAttributes());
+    E3dScene* pScene = new E3dScene(mpView->Get3DDefaultAttributes());
 
     // copied code from E3dView::InitScene
     double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));

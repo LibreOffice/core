@@ -22,7 +22,7 @@
 #include <svx/svddrgmt.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/polysc3d.hxx>
+#include <svx/scene3d.hxx>
 #include "drawview.hxx"
 #include <svtools/imapobj.hxx>
 #include <svl/urihelper.hxx>
@@ -308,7 +308,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     if ( ! bSelectionOnly)
                         bReturn = AnimateObj(pObj, aMDPos);
 
-                    if( !bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dPolyScene* >(pObj) !=  nullptr))
+                    if( !bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || dynamic_cast< const E3dScene* >(pObj) != nullptr))
                     {
                         if(rMEvt.GetClicks() == 1)
                         {

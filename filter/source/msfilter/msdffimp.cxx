@@ -103,7 +103,6 @@
 #include <editeng/colritem.hxx>
 #include <svx/sxekitm.hxx>
 #include <editeng/bulletitem.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include "svx/svditer.hxx"
 #include <svx/xpoly.hxx>

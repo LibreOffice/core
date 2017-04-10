@@ -33,7 +33,6 @@
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
 #include <editeng/unoprnms.hxx>
-#include <svx/polysc3d.hxx>
 #include "svx/globl3d.hxx"
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
@@ -42,6 +41,7 @@
 #include <svx/polygn3d.hxx>
 #include "svx/unoshprp.hxx"
 #include "svx/svdmodel.hxx"
+#include <svx/scene3d.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
@@ -187,7 +187,7 @@ sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
 
     sal_Int32 nRetval = 0;
 
-    if(mpObj.is() && dynamic_cast<const E3dPolyScene* >(mpObj.get()) != nullptr && mpObj->GetSubList())
+    if(mpObj.is() && dynamic_cast<const E3dScene* >(mpObj.get()) != nullptr && mpObj->GetSubList())
         nRetval = mpObj->GetSubList()->GetObjCount();
     return nRetval;
 }
