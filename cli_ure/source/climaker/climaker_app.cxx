@@ -471,7 +471,8 @@ SAL_IMPLEMENT_MAIN()
         // setup assembly info: xxx todo set more? e.g. avoid strong versioning
         AssemblyName ^ assembly_name = gcnew AssemblyName();
         assembly_name->CodeBase = output_dir;
-        assembly_name->Name = gcnew ::System::String(SAL_W(name.getStr()));
+        assembly_name->Name = gcnew ::System::String(
+            reinterpret_cast<wchar_t const *>(name.getStr()));
         if (kp != nullptr)
             assembly_name->KeyPair= kp;
 

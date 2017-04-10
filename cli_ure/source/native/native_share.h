@@ -35,14 +35,15 @@ namespace util
 
 inline ::System::String ^ ustring_to_String( OUString const & ustr )
 {
-    return gcnew ::System::String( SAL_W(ustr.getStr()), 0, ustr.getLength() );
+    return gcnew ::System::String(
+        reinterpret_cast<wchar_t const *>(ustr.getStr()), 0, ustr.getLength());
 }
 
 inline OUString String_to_ustring( ::System::String ^ str )
 {
     OSL_ASSERT( sizeof (wchar_t) == sizeof (sal_Unicode) );
     pin_ptr<wchar_t const> chars = PtrToStringChars( str );
-    return OUString( SAL_U(chars), str->Length );
+    return OUString(reinterpret_cast<sal_Unicode const *>(chars), str->Length);
 }
 
 template< typename T >
