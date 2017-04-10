@@ -25,12 +25,24 @@ bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
 }
 
 // Returns S_OK if successful
-HRESULT LOStart(wchar_t* sCommandLine)
+HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecurityWarning)
 {
-    STARTUPINFOW si = { sizeof(si) };
+    const wchar_t* sProgram = GetLOPath();
+    if (bDoSecurityWarning && !SecurityWarning(sProgram, sFilePath))
+    {
+        // Return success to avoid downloading in browser
+        return S_OK;
+    }
+
+    STARTUPINFOW si;
+    std::memset(&si, 0, sizeof si);
+    si.cb = sizeof si;
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOW;
     PROCESS_INFORMATION pi = {};
+    const size_t cchCommandLine = 32768;
+    wchar_t sCommandLine[cchCommandLine];
+    swprintf(sCommandLine, cchCommandLine, L"\"%s\" %s \"%s\"", sProgram, sModeArg, sFilePath);
     if (CreateProcessW(nullptr, sCommandLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi) == FALSE)
     {
         DWORD dwError = GetLastError();
@@ -127,7 +139,6 @@ HRESULT STDMETHODCALLTYPE COMOpenDocuments::COMObjectSafety::SetInterfaceSafetyO
 
 long COMOpenDocuments::m_nObjCount = 0;
 ITypeInfo* COMOpenDocuments::m_pTypeInfo = nullptr;
-wchar_t COMOpenDocuments::m_szLOPath[MAX_PATH] = {0};
 
 COMOpenDocuments::COMOpenDocuments()
     : m_aObjectSafety(this)
@@ -293,20 +304,8 @@ STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
     VARIANT_BOOL* pbResult)           // true if the document creation succeeds; otherwise false
 {
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    const wchar_t* sProgram = GetLOPath();
-    if (m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData())
-    {
-        if (!SecurityWarning(sProgram, bstrTemplateLocation))
-        {
-            // Set result to true and return success to avoid downloading in browser
-            *pbResult = TRUE;
-            return S_OK;
-        }
-    }
-    wchar_t sCommandLine[32768];
-    swprintf(sCommandLine, sizeof(sCommandLine) / sizeof(*sCommandLine), L"\"%s\" -n \"%s\"", sProgram, bstrTemplateLocation);
-    HRESULT hr = LOStart(sCommandLine);
-    *pbResult = SUCCEEDED(hr);
+    HRESULT hr = LOStart(L"-n", bstrTemplateLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
     return hr;
 }
 
@@ -343,20 +342,8 @@ STDMETHODIMP COMOpenDocuments::ViewDocument3(
     VARIANT_BOOL *pbResult)    // true if the document was successfully opened; otherwise false
 {
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    const wchar_t* sProgram = GetLOPath();
-    if (m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData())
-    {
-        if (!SecurityWarning(sProgram, bstrDocumentLocation))
-        {
-            // Set result to true and return success to avoid downloading in browser
-            *pbResult = TRUE;
-            return S_OK;
-        }
-    }
-    wchar_t sCommandLine[32768];
-    swprintf(sCommandLine, sizeof(sCommandLine) / sizeof(*sCommandLine), L"\"%s\" --view \"%s\"", sProgram, bstrDocumentLocation);
-    HRESULT hr = LOStart(sCommandLine);
-    *pbResult = SUCCEEDED(hr);
+    HRESULT hr = LOStart(L"--view", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
     return hr;
 }
 
@@ -417,20 +404,8 @@ STDMETHODIMP COMOpenDocuments::EditDocument3(
     VARIANT_BOOL *pbResult)     // true if the document was successfully opened; otherwise false
 {
     // TODO: resolve the program from varProgID (nullptr -> default?)
-    const wchar_t* sProgram = GetLOPath();
-    if (m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData())
-    {
-        if (!SecurityWarning(sProgram, bstrDocumentLocation))
-        {
-            // Set result to true and return success to avoid downloading in browser
-            *pbResult = TRUE;
-            return S_OK;
-        }
-    }
-    wchar_t sCommandLine[32768];
-    swprintf(sCommandLine, sizeof(sCommandLine) / sizeof(*sCommandLine), L"\"%s\" -o \"%s\"", sProgram, bstrDocumentLocation);
-    HRESULT hr = LOStart(sCommandLine);
-    *pbResult = SUCCEEDED(hr);
+    HRESULT hr = LOStart(L"-o", bstrDocumentLocation, m_aObjectSafety.GetSafe_forUntrustedCaller() || m_aObjectSafety.GetSafe_forUntrustedData());
+    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
     return hr;
 }
 
