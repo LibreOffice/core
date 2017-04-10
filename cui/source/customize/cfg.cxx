@@ -3033,14 +3033,22 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pContentsListBox->set_vexpand(true);
     m_pContentsListBox->Show();
 
+    m_pTopLevelListBox->SetHelpId ( HID_SVX_TOPLEVELLISTBOX );
+    m_pIconsOnlyRB->SetHelpId ( HID_SVX_ICONSONLY );
+    m_pTextOnlyRB->SetHelpId ( HID_SVX_TEXTONLY );
+    m_pIconsAndTextRB->SetHelpId ( HID_SVX_ICONSANDTEXT );
     m_pContentsListBox->SetHelpId( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
     m_pNewTopLevelButton->SetHelpId( HID_SVX_NEW_TOOLBAR );
     m_pModifyTopLevelButton->SetHelpId( HID_SVX_MODIFY_TOOLBAR );
     m_pAddCommandsButton->SetHelpId( HID_SVX_NEW_TOOLBAR_ITEM );
+    m_pAddSeparatorButton->SetHelpId ( HID_SVX_ADD_SEPARATOR );
     m_pModifyCommandButton->SetHelpId( HID_SVX_MODIFY_TOOLBAR_ITEM );
+    m_pDeleteCommandButton->SetHelpId ( HID_SVX_REMOVEBUTTON );
+    m_pResetTopLevelButton->SetHelpId ( HID_SVX_RESETBUTTON );
     m_pSaveInListBox->SetHelpId( HID_SVX_SAVE_IN );
     m_pMoveUpButton->SetHelpId( HID_SVX_UP_TOOLBAR_ITEM );
     m_pMoveDownButton->SetHelpId( HID_SVX_DOWN_TOOLBAR_ITEM );
+    m_pDescriptionField->SetHelpId ( HID_SVX_DESCFIELD );
 
     m_pTopLevel->set_label(CUI_RES(RID_SVXSTR_PRODUCTNAME_TOOLBARS));
 
