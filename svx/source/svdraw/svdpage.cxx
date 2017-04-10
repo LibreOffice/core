@@ -1049,7 +1049,7 @@ void SdrPageProperties::ImpRemoveStyleSheet()
     if(mpStyleSheet)
     {
         EndListening(*mpStyleSheet);
-        mpProperties->SetParent(nullptr);
+        maProperties.SetParent(nullptr);
         mpStyleSheet = nullptr;
     }
 }
@@ -1061,7 +1061,7 @@ void SdrPageProperties::ImpAddStyleSheet(SfxStyleSheet& rNewStyleSheet)
         ImpRemoveStyleSheet();
         mpStyleSheet = &rNewStyleSheet;
         StartListening(rNewStyleSheet);
-        mpProperties->SetParent(&rNewStyleSheet.GetItemSet());
+        maProperties.SetParent(&rNewStyleSheet.GetItemSet());
     }
 }
 
@@ -1081,18 +1081,17 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
 :   SfxListener(),
     mpSdrPage(&rSdrPage),
     mpStyleSheet(nullptr),
-    mpProperties(new SfxItemSet(mpSdrPage->GetModel()->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST))
+    maProperties(mpSdrPage->GetModel()->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST)
 {
     if(!rSdrPage.IsMasterPage())
     {
-        mpProperties->Put(XFillStyleItem(drawing::FillStyle_NONE));
+        maProperties.Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
 }
 
 SdrPageProperties::~SdrPageProperties()
 {
     ImpRemoveStyleSheet();
-    delete mpProperties;
 }
 
 void SdrPageProperties::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
@@ -1125,20 +1124,20 @@ bool SdrPageProperties::isUsedByModel() const
 void SdrPageProperties::PutItemSet(const SfxItemSet& rSet)
 {
     OSL_ENSURE(!mpSdrPage->IsMasterPage(), "Item set at MasterPage Attributes (!)");
-    mpProperties->Put(rSet);
+    maProperties.Put(rSet);
     ImpPageChange(*mpSdrPage);
 }
 
 void SdrPageProperties::PutItem(const SfxPoolItem& rItem)
 {
     OSL_ENSURE(!mpSdrPage->IsMasterPage(), "Item set at MasterPage Attributes (!)");
-    mpProperties->Put(rItem);
+    maProperties.Put(rItem);
     ImpPageChange(*mpSdrPage);
 }
 
 void SdrPageProperties::ClearItem(const sal_uInt16 nWhich)
 {
-    mpProperties->ClearItem(nWhich);
+    maProperties.ClearItem(nWhich);
     ImpPageChange(*mpSdrPage);
 }
 
