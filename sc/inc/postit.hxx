@@ -85,6 +85,9 @@ public:
      */
     bool forget();
 
+    /** Flag that this instance is in Undo, so drawing layer owns it. */
+    void setInUndo();
+
     oslInterlockedCount getRefs() const;
 
 private:
@@ -101,6 +104,14 @@ private:
     Head*                 mpHead;       ///< points to the "master" entry
     mutable ScCaptionPtr* mpNext;       ///< next in list
     SdrCaptionObj*        mpCaption;    ///< the caption object, managed by head master
+    bool                  mbInUndo;     ///< whether this caption object is held in Undo
+                                            /* TODO: can that be moved to Head?
+                                             * It's unclear when to reset, so
+                                             * each instance has its own flag.
+                                             * The last reference count
+                                             * decrement automatically has the
+                                             * then current state available.
+                                             * */
 
     void newHead();             //< Allocate a new Head and init.
     void incRef() const;
