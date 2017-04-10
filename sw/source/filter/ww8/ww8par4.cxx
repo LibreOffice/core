@@ -485,23 +485,23 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
          * of the change, (possibly a word bug) so we must use the "get a full
          * list" variant of HasCharSprm and take the last one as the true one.
          */
-        std::vector<const sal_uInt8 *> aResult;
+        std::vector<SprmResult> aResult;
         bool bIns = (nsRedlineType_t::REDLINE_INSERT == eType);
         if( m_bVer67 )
         {
             m_pPlcxMan->HasCharSprm(69, aResult);
-            pSprmCIbstRMark = aResult.empty() ? nullptr : aResult.back();
+            pSprmCIbstRMark = (aResult.empty() || aResult.back().nRemainingData < 2) ? nullptr : aResult.back().pSprm;
             aResult.clear();
             m_pPlcxMan->HasCharSprm(70, aResult);
-            pSprmCDttmRMark = aResult.empty() ? nullptr : aResult.back();
+            pSprmCDttmRMark = (aResult.empty() || aResult.back().nRemainingData < 4) ? nullptr : aResult.back().pSprm;
         }
         else
         {
             m_pPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863, aResult);
-            pSprmCIbstRMark = aResult.empty() ? nullptr : aResult.back();
+            pSprmCIbstRMark = (aResult.empty() || aResult.back().nRemainingData < 2) ? nullptr : aResult.back().pSprm;
             aResult.clear();
             m_pPlcxMan->HasCharSprm( bIns ? 0x6805 : NS_sprm::sprmCDttmRMarkDel, aResult);
-            pSprmCDttmRMark = aResult.empty() ? nullptr : aResult.back();
+            pSprmCDttmRMark = (aResult.empty() || aResult.back().nRemainingData < 4) ? nullptr : aResult.back().pSprm;
         }
     }
 

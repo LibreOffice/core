@@ -917,16 +917,20 @@ void WW8SprmIter::UpdateMyMembers()
     }
 }
 
-const sal_uInt8* WW8SprmIter::FindSprm(sal_uInt16 nId)
+SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId)
 {
     while (GetSprms())
     {
         if (GetAktId() == nId)
-            return GetAktParams();              // SPRM found!
+        {
+            sal_uInt16 nFixedLen =  mrSprmParser.DistanceToData(nId);
+            sal_uInt16 nL = mrSprmParser.GetSprmSize(nId, GetSprms(), GetRemLen());
+            return SprmResult(GetAktParams(), nL - nFixedLen); // SPRM found!
+        }
         advance();
     }
 
-    return nullptr;                                   // SPRM _not_ found
+    return SprmResult();                                   // SPRM _not_ found
 }
 
 // temporary test
@@ -2723,10 +2727,10 @@ sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(sal_Int32& rLen) const
     return maEntries[mnIdx].mpData;
 }
 
-const sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( sal_uInt16 nId )
+SprmResult WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( sal_uInt16 nId )
 {
     if (mnIdx >= mnIMax)
-        return nullptr;
+        return SprmResult();
 
     sal_Int32 nLen;
     sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
@@ -2736,7 +2740,7 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( sal_uInt16 nId )
 }
 
 void WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
-    std::vector<const sal_uInt8 *> &rResult)
+    std::vector<SprmResult> &rResult)
 {
     if (mnIdx >= mnIMax)
        return;
@@ -2749,7 +2753,11 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
     while(aIter.GetSprms())
     {
         if (aIter.GetAktId() == nId)
-            rResult.push_back(aIter.GetAktParams());
+        {
+            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId);
+            sal_uInt16 nL = maSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
+            rResult.push_back(SprmResult(aIter.GetAktParams(), nL - nFixedLen));
+        }
         aIter.advance();
     };
 }
@@ -3022,7 +3030,7 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
     }
 }
 
-const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
+SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId)
 {
     // const would be nicer, but for that, NewFkp() would need to be replaced or eliminated
     if( !pFkp )
@@ -3030,15 +3038,15 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
         OSL_FAIL( "+Motz: HasSprm: NewFkp needed ( no const possible )" );
         // happens in BugDoc 31722
         if( !NewFkp() )
-            return nullptr;
+            return SprmResult();
     }
 
     if (!pFkp)
-        return nullptr;
+        return SprmResult();
 
-    const sal_uInt8* pRes = pFkp->HasSprm( nId );
+    SprmResult aRes = pFkp->HasSprm(nId);
 
-    if( !pRes )
+    if (!aRes.pSprm)
     {
         WW8PLCFxDesc aDesc;
         GetPCDSprms( aDesc );
@@ -3047,14 +3055,14 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
         {
             WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen,
                 pFkp->GetSprmParser());
-            pRes = aIter.FindSprm(nId);
+            aRes = aIter.FindSprm(nId);
         }
     }
 
-    return pRes;
+    return aRes;
 }
 
-bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult)
+bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
 {
     // const would be nicer, but for that, NewFkp() would need to be replaced or eliminated
     if (!pFkp)
@@ -3075,12 +3083,16 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rR
 
     if (aDesc.pMemPos)
     {
-        WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen,
-            pFkp->GetSprmParser());
+        const wwSprmParser &rSprmParser = pFkp->GetSprmParser();
+        WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen, rSprmParser);
         while(aIter.GetSprms())
         {
             if (aIter.GetAktId() == nId)
-                rResult.push_back(aIter.GetAktParams());
+            {
+                sal_uInt16 nFixedLen = rSprmParser.DistanceToData(nId);
+                sal_uInt16 nL = rSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
+                rResult.push_back(SprmResult(aIter.GetAktParams(), nL - nFixedLen));
+            }
             aIter.advance();
         };
     }
@@ -3464,34 +3476,30 @@ void WW8PLCFx_SEPX::advance()
         pPLCF->advance();
 }
 
-const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId ) const
+SprmResult WW8PLCFx_SEPX::HasSprm(sal_uInt16 nId) const
 {
-    return HasSprm( nId, pSprms, nSprmSiz);
+    return HasSprm(nId, pSprms, nSprmSiz);
 }
 
-const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, const sal_uInt8*  pOtherSprms,
+SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, const sal_uInt8*  pOtherSprms,
     long nOtherSprmSiz ) const
 {
-    const sal_uInt8 *pRet = nullptr;
+    SprmResult aRet;
     if (pPLCF)
     {
         WW8SprmIter aIter(pOtherSprms, nOtherSprmSiz, maSprmParser);
-        pRet = aIter.FindSprm(nId);
+        aRet = aIter.FindSprm(nId);
     }
-    return pRet;
+    return aRet;
 }
 
 bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,sal_uInt16 nId4,
-    sal_uInt8*& p1, sal_uInt8*& p2, sal_uInt8*& p3, sal_uInt8*& p4) const
+    SprmResult& r1, SprmResult& r2, SprmResult& r3, SprmResult& r4) const
 {
     if( !pPLCF )
         return false;
 
     bool bFound = false;
-    p1 = nullptr;
-    p2 = nullptr;
-    p3 = nullptr;
-    p4 = nullptr;
 
     sal_uInt8* pSp = pSprms;
     sal_uInt16 i=0;
@@ -3499,30 +3507,42 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
     {
         // Sprm found?
         const sal_uInt16 nAktId = maSprmParser.GetSprmId(pSp);
+        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
         bool bOk = true;
         if( nAktId  == nId1 )
-            p1 = pSp + maSprmParser.DistanceToData(nId1);
+        {
+            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId1);
+            r1 = SprmResult(pSp + nFixedLen, x - nFixedLen);
+        }
         else if( nAktId  == nId2 )
-            p2 = pSp + maSprmParser.DistanceToData(nId2);
+        {
+            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId2);
+            r2 = SprmResult(pSp + nFixedLen, x - nFixedLen);
+        }
         else if( nAktId  == nId3 )
-            p3 = pSp + maSprmParser.DistanceToData(nId3);
+        {
+            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId3);
+            r3 = SprmResult(pSp + nFixedLen, x - nFixedLen);
+        }
         else if( nAktId  == nId4 )
-            p4 = pSp + maSprmParser.DistanceToData(nId4);
+        {
+            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId4);
+            r4 = SprmResult(pSp + nFixedLen, x - nFixedLen);
+        }
         else
             bOk = false;
         bFound |= bOk;
         // increment pointer so that it points to next SPRM
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
         i += x;
         pSp += x;
     }
     return bFound;
 }
 
-const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
+SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
 {
-    if( !pPLCF )
-        return nullptr;
+    if (!pPLCF)
+        return SprmResult();
 
     sal_uInt8* pSp = pSprms;
 
@@ -3531,19 +3551,23 @@ const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
     {
         // Sprm found?
         const sal_uInt16 nAktId = maSprmParser.GetSprmId(pSp);
+        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
         if (nAktId == nId)
         {
-            sal_uInt8 *pRet = pSp + maSprmParser.DistanceToData(nId);
-            if (*pRet == n2nd)
-                return pRet;
+            sal_uInt16 nFixedLen =  maSprmParser.DistanceToData(nId);
+            const sal_uInt8 *pRet = pSp + nFixedLen;
+            SprmResult aRet(pRet, x - nFixedLen);
+            if (aRet.nRemainingData >= 1 && *aRet.pSprm == n2nd)
+            {
+                return aRet;
+            }
         }
         // increment pointer so that it points to next SPRM
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
         i += x;
         pSp += x;
     }
 
-    return nullptr;   // Sprm not found
+    return SprmResult();   // Sprm not found
 }
 
 WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, const WW8Fib& rFib,
@@ -5219,18 +5243,18 @@ WW8PLCFx_FLD* WW8PLCFMan::GetField() const
     return static_cast<WW8PLCFx_FLD*>(m_pField->pPLCFx);
 }
 
-const sal_uInt8* WW8PLCFMan::HasParaSprm( sal_uInt16 nId ) const
+SprmResult WW8PLCFMan::HasParaSprm( sal_uInt16 nId ) const
 {
     return static_cast<WW8PLCFx_Cp_FKP*>(m_pPap->pPLCFx)->HasSprm( nId );
 }
 
-const sal_uInt8* WW8PLCFMan::HasCharSprm( sal_uInt16 nId ) const
+SprmResult WW8PLCFMan::HasCharSprm( sal_uInt16 nId ) const
 {
     return static_cast<WW8PLCFx_Cp_FKP*>(m_pChp->pPLCFx)->HasSprm( nId );
 }
 
 void WW8PLCFMan::HasCharSprm(sal_uInt16 nId,
-    std::vector<const sal_uInt8 *> &rResult) const
+    std::vector<SprmResult> &rResult) const
 {
     static_cast<WW8PLCFx_Cp_FKP*>(m_pChp->pPLCFx)->HasSprm(nId, rResult);
 }
@@ -7971,7 +7995,7 @@ sal_uInt16 wwSprmParser::DistanceToData(sal_uInt16 nId) const
     return 1 + mnDelta + SprmDataOfs(nId);
 }
 
-sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
+SprmResult wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
     sal_uInt16 nLen) const
 {
     while (nLen >= MinSprmLen())
@@ -7987,7 +8011,10 @@ sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
             nSize << " vs " << nLen << "doc or parser is wrong");
 
         if (nAktId == nId && bValid) // Sprm found
-            return pSprms + DistanceToData(nId);
+        {
+            sal_uInt16 nFixedLen = DistanceToData(nId);
+            return SprmResult(pSprms + nFixedLen, nSize - nFixedLen);
+        }
 
         //Clip to available size if wrong
         nSize = std::min(nSize, nLen);
@@ -7995,7 +8022,7 @@ sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
         nLen -= nSize;
     }
     // Sprm not found
-    return nullptr;
+    return SprmResult();
 }
 
 SEPr::SEPr() :

@@ -130,7 +130,7 @@ public:
     WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI );
     void Import();
     void PostProcessStyles();
-    const sal_uInt8* HasParaSprm( sal_uInt16 nId ) const;
+    SprmResult HasParaSprm(sal_uInt16 nId) const;
 };
 
 class WW8FlySet: public SfxItemSet

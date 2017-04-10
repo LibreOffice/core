@@ -466,11 +466,13 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     {
         if (pPap->Where() != WW8_CP_MAX)
         {
-            const sal_uInt8* pB = pPap->HasSprm(TabRowSprm(nLevel));
-            if (pB && *pB == 1)
+            SprmResult aSprmRes = pPap->HasSprm(TabRowSprm(nLevel));
+            const sal_uInt8* pB = aSprmRes.pSprm;
+            if (pB && aSprmRes.nRemainingData >= 1 && *pB == 1)
             {
-                const sal_uInt8 *pLevel = nullptr;
-                if (nullptr != (pLevel = pPap->HasSprm(0x6649)))
+                aSprmRes = pPap->HasSprm(0x6649);
+                const sal_uInt8 *pLevel = aSprmRes.pSprm;
+                if (pLevel && aSprmRes.nRemainingData >= 1)
                 {
                     if (nLevel + 1 == *pLevel)
                         return true;
@@ -537,10 +539,11 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     to see if we are still in that frame.
     */
 
-    aRet.m_bHasSprm37 = m_pPlcxMan->HasParaSprm( m_bVer67 ? 37 : 0x2423 );
-    const sal_uInt8 *pSrpm29 = m_pPlcxMan->HasParaSprm( m_bVer67 ? 29 : 0x261B );
+    aRet.m_bHasSprm37 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 37 : 0x2423).pSprm != nullptr;
+    SprmResult aSrpm29 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 29 : 0x261B);
+    const sal_uInt8 *pSrpm29 = aSrpm29.pSprm;
     aRet.m_bHasSprm29 = pSrpm29 != nullptr;
-    aRet.m_nSprm29 = pSrpm29 ? *pSrpm29 : 0;
+    aRet.m_nSprm29 = (pSrpm29 && aSrpm29.nRemainingData >= 1) ? *pSrpm29 : 0;
 
     // Is there some frame data here
     bool bNowApo = aRet.HasFrame() || pTopLevelTable;
@@ -1005,7 +1008,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_nWwNumType);
 
     // check for COL numbering:
-    const sal_uInt8* pS12 = nullptr;// sprmAnld
+    SprmResult aS12; // sprmAnld
     OUString sNumRule;
 
     if (m_pTableDesc)
@@ -1019,8 +1022,8 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
             else
             {
                 // this is ROW numbering ?
-                pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
-                if (pS12 && 0 != reinterpret_cast<WW8_ANLD const *>(pS12)->fNumberAcross)
+                aS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
+                if (aS12.pSprm && aS12.nRemainingData >= sal_Int32(sizeof(WW8_ANLD)) && 0 != reinterpret_cast<WW8_ANLD const *>(aS12.pSprm)->fNumberAcross)
                     sNumRule.clear();
             }
         }
@@ -1046,9 +1049,9 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         }
         if (m_pTableDesc)
         {
-            if (!pS12)
-                pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
-            if (!pS12 || !reinterpret_cast<WW8_ANLD const *>(pS12)->fNumberAcross)
+            if (!aS12.pSprm)
+                aS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
+            if (!aS12.pSprm || aS12.nRemainingData < sal_Int32(sizeof(WW8_ANLD)) || !reinterpret_cast<WW8_ANLD const *>(aS12.pSprm)->fNumberAcross)
                 m_pTableDesc->SetNumRuleName(pNumRule->GetName());
         }
     }
@@ -1083,8 +1086,9 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
         {
             // not defined yet
             // sprmAnld o. 0
-            const sal_uInt8* pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
-            SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(pS12), m_nSwNumLevel, false);
+            SprmResult aS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
+            if (aS12.nRemainingData >= sal_Int32(sizeof(WW8_ANLD)))
+                SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(aS12.pSprm), m_nSwNumLevel, false);
         }
     }
     else if( *pSprm13 > 0 && *pSprm13 <= MAXLEVEL )          // range WW:1..9 -> SW:0..8
@@ -1107,8 +1111,9 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
             else                                // no Olst -> use Anld
             {
                 // sprmAnld
-                const sal_uInt8* pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
-                SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(pS12), m_nSwNumLevel, false);
+                SprmResult aS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
+                if (aS12.nRemainingData >= sal_Int32(sizeof(WW8_ANLD)))
+                    SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(aS12.pSprm), m_nSwNumLevel, false);
             }
         }
     }
@@ -1656,17 +1661,17 @@ void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
     memset( pCells, 0, nCols * sizeof( WW8_TCell ) );
 }
 
-const sal_uInt8 *HasTabCellSprm(WW8PLCFx_Cp_FKP* pPap, bool bVer67)
+namespace
 {
-    const sal_uInt8 *pParams;
-    if (bVer67)
-        pParams = pPap->HasSprm(24);
-    else
+    SprmResult HasTabCellSprm(WW8PLCFx_Cp_FKP* pPap, bool bVer67)
     {
-        if (nullptr == (pParams = pPap->HasSprm(0x244B)))
-            pParams = pPap->HasSprm(0x2416);
+        if (bVer67)
+            return pPap->HasSprm(24);
+        SprmResult aRes = pPap->HasSprm(0x244B);
+        if (aRes.pSprm == nullptr)
+            aRes = pPap->HasSprm(0x2416);
+        return aRes;
     }
-    return pParams;
 }
 
 enum wwTableSprm
@@ -2054,11 +2059,13 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         }
 
         //Are we still in a table cell
-        const sal_uInt8* pParams = HasTabCellSprm(pPap, bOldVer);
-        const sal_uInt8 *pLevel = pPap->HasSprm(0x6649);
+        SprmResult aParamsRes = HasTabCellSprm(pPap, bOldVer);
+        const sal_uInt8* pParams = aParamsRes.pSprm;
+        SprmResult aLevelRes = pPap->HasSprm(0x6649);
+        const sal_uInt8 *pLevel = aLevelRes.pSprm;
         // InTable
-        if (!pParams || (1 != *pParams) ||
-            (pLevel && (*pLevel <= m_pIo->m_nInTable)))
+        if (!pParams || aParamsRes.nRemainingData < 1 || (1 != *pParams) ||
+            (pLevel && aLevelRes.nRemainingData >= 1 && (*pLevel <= m_pIo->m_nInTable)))
         {
             break;
         }
@@ -3663,10 +3670,10 @@ const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
 
 //          class WW8RStyle
 
-const sal_uInt8* WW8RStyle::HasParaSprm( sal_uInt16 nId ) const
+SprmResult WW8RStyle::HasParaSprm(sal_uInt16 nId) const
 {
     if( !pParaSprms || !nSprmsLen )
-        return nullptr;
+        return SprmResult();
 
     return maSprmParser.findSprmData(nId, pParaSprms, nSprmsLen);
 }

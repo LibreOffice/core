@@ -439,7 +439,7 @@ WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)
 // Helper methods
 
 // find Sprm-Parameter-Data, if Sprm is included in Grpprl
-sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
+SprmResult WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     sal_uInt8 nLen)
 {
     return maSprmParser.findSprmData(nId, &rSprms, nLen);
@@ -563,34 +563,39 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
         if (aLVL.nLenGrpprlPapx != rSt.ReadBytes(&aGrpprlPapx, aLVL.nLenGrpprlPapx))
             return false;
         // "sprmPDxaLeft"  pap.dxaLeft;dxa;word;
-        sal_uInt8* pSprm;
-        if (
-            (nullptr != (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx))) ||
-            (nullptr != (pSprm = GrpprlHasSprm(0x845E,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
-            )
+        SprmResult aSprm;
+
+        aSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx);
+        if (!aSprm.pSprm)
+            aSprm = GrpprlHasSprm(0x845E,aGrpprlPapx[0],aLVL.nLenGrpprlPapx);
+
+        if (aSprm.pSprm && aSprm.nRemainingData >= 2)
         {
-            sal_uInt8 *pBegin = pSprm-2;
+            const sal_uInt8 *pBegin = aSprm.pSprm - 2;
             for(int i=0;i<4;++i)
                 rParaSprms.push_back(*pBegin++);
-            short nDxaLeft = SVBT16ToShort( pSprm );
+            short nDxaLeft = SVBT16ToShort(aSprm.pSprm);
             aLVL.nDxaLeft = (0 < nDxaLeft) ? (sal_uInt16)nDxaLeft
                             : (sal_uInt16)(-nDxaLeft);
         }
 
         // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
-        if (
-            (nullptr != (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) ) ||
-            (nullptr != (pSprm = GrpprlHasSprm(0x8460,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
-            )
+        aSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx);
+        if (!aSprm.pSprm)
+            aSprm = GrpprlHasSprm(0x8460,aGrpprlPapx[0],aLVL.nLenGrpprlPapx);
+
+        if (aSprm.pSprm && aSprm.nRemainingData >= 2)
         {
-            sal_uInt8 *pBegin = pSprm-2;
+            const sal_uInt8 *pBegin = aSprm.pSprm - 2;
             for(int i=0;i<4;++i)
                 rParaSprms.push_back(*pBegin++);
-            aLVL.nDxaLeft1 = SVBT16ToShort(  pSprm );
+            aLVL.nDxaLeft1 = SVBT16ToShort(aSprm.pSprm);
         }
 
         // #i86652# - read tab setting
-        if(nullptr != (pSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+        aSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx);
+        const sal_uInt8* pSprm = aSprm.pSprm;
+        if (pSprm && aSprm.nRemainingData >= 5)
         {
             bool bDone = false;
             if (*(pSprm-1) == 5)
@@ -664,15 +669,15 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
             return false;
 
         //For i120928,parse the graphic info of bullets
-        sal_uInt8 *pSprmWhichPis = GrpprlHasSprm(NS_sprm::sprmCPbiIBullet, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
-        sal_uInt8 *pSprmIsPicBullet = GrpprlHasSprm(NS_sprm::sprmCPbiGrf, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
-        if (pSprmWhichPis)
+        SprmResult aSprmWhichPis = GrpprlHasSprm(NS_sprm::sprmCPbiIBullet, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        SprmResult aSprmIsPicBullet = GrpprlHasSprm(NS_sprm::sprmCPbiGrf, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        if (aSprmWhichPis.pSprm && aSprmWhichPis.nRemainingData >= 1)
         {
-            nWitchPicIsBullet = *pSprmWhichPis;
+            nWitchPicIsBullet = *aSprmWhichPis.pSprm;
         }
-        if (pSprmIsPicBullet)
+        if (aSprmIsPicBullet.pSprm && aSprmIsPicBullet.nRemainingData >= 1)
         {
-            bIsPicBullet = (*pSprmIsPicBullet) & 0x0001;
+            bIsPicBullet = (*aSprmIsPicBullet.pSprm) & 0x0001;
         }
 
         // create new Itemset for character attributes
@@ -2053,7 +2058,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                         m_nListLevel = WW8ListManager::nMaxLevel;
                     }
                 }
-                else if (m_pPlcxMan && m_pPlcxMan->HasParaSprm(NS_sprm::LN_PAnld))
+                else if (m_pPlcxMan && m_pPlcxMan->HasParaSprm(NS_sprm::LN_PAnld).pSprm)
                 {
                     /*
                      #i8114# Horrific backwards compatible ww7- lists in ww8+
