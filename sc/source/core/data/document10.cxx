@@ -125,6 +125,15 @@ bool ScDocument::CopyOneCellFromClip(
         maTabs[i]->CopyOneCellFromClip(rCxt, nCol1, nRow1, nCol2, nRow2,  aClipRange.aStart.Row(), pSrcTab);
     }
 
+    sc::RefUpdateContext aRefCxt(*this);
+    aRefCxt.maRange = ScRange(nCol1, nRow1, rCxt.getTabStart(), nCol2, nRow2, nTabEnd);
+    aRefCxt.mnColDelta = nCol1 - aSrcPos.Col();
+    aRefCxt.mnRowDelta = nRow1 - aSrcPos.Row();
+    aRefCxt.mnTabDelta = rCxt.getTabStart() - aSrcPos.Tab();
+    // Only Copy&Paste, for Cut&Paste we already bailed out early.
+    aRefCxt.meMode = URM_COPY;
+    UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
+
     return true;
 }
 
