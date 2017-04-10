@@ -717,6 +717,30 @@ void ScCaptionPtr::removeFromDrawPage( SdrPage& rDrawPage )
     assert(pObj == mpCaption); (void)pObj;
 }
 
+void ScCaptionPtr::removeFromDrawPageAndFree()
+{
+    assert(mpHead && mpCaption);
+    SdrPage* pDrawPage = mpCaption->GetPage();
+    SAL_WARN_IF( !pDrawPage, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing page");
+    if (pDrawPage)
+    {
+        pDrawPage->RecalcObjOrdNums();
+        ScDrawLayer* pDrawLayer = dynamic_cast<ScDrawLayer*>(mpCaption->GetModel());
+        SAL_WARN_IF( !pDrawLayer, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing layer");
+        // create drawing undo action (before removing the object to have valid draw page in undo action)
+        const bool bRecording = (pDrawLayer && pDrawLayer->IsRecording());
+        if (bRecording)
+            pDrawLayer->AddCalcUndo( new SdrUndoDelObj( *mpCaption ));
+        // remove the object from the drawing page, delete if undo is disabled
+        removeFromDrawPage( *pDrawPage );
+        if (!bRecording)
+        {
+            SdrObject* pObj = release();
+            SdrObject::Free( pObj );
+        }
+    }
+}
+
 SdrCaptionObj* ScCaptionPtr::release()
 {
     SdrCaptionObj* pTmp = mpCaption;
@@ -1077,27 +1101,8 @@ void ScPostIt::RemoveCaption()
         undo documents refer to captions in original document, do not remove
         them from drawing layer here). */
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
-    if( maNoteData.mxCaption && (pDrawLayer == maNoteData.mxCaption->GetModel()) )
-    {
-        OSL_ENSURE( pDrawLayer, "ScPostIt::RemoveCaption - object without drawing layer" );
-        SdrPage* pDrawPage = maNoteData.mxCaption->GetPage();
-        OSL_ENSURE( pDrawPage, "ScPostIt::RemoveCaption - object without drawing page" );
-        if( pDrawPage )
-        {
-            pDrawPage->RecalcObjOrdNums();
-            // create drawing undo action (before removing the object to have valid draw page in undo action)
-            const bool bRecording = (pDrawLayer && pDrawLayer->IsRecording());
-            if( bRecording )
-                pDrawLayer->AddCalcUndo( new SdrUndoDelObj( *maNoteData.mxCaption.get() ) );
-            // remove the object from the drawing page, delete if undo is disabled
-            maNoteData.mxCaption.removeFromDrawPage( *pDrawPage );
-            if( !bRecording )
-            {
-                SdrObject* pObj = maNoteData.mxCaption.release();
-                SdrObject::Free( pObj );
-            }
-        }
-    }
+    if (maNoteData.mxCaption && (pDrawLayer == maNoteData.mxCaption->GetModel()))
+        maNoteData.mxCaption.removeFromDrawPageAndFree();
     // Either the caption object is gone or, because of Undo or clipboard is
     // held in at least two instances, or only one instance in Undo because the
     // original sheet in this document is just deleted, or the Undo document is
