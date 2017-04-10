@@ -311,21 +311,21 @@ public:
 // redlining options
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
-    VclPtr<ListBox>             pInsertLB;
-    VclPtr<SvxColorListBox>     pInsertColorLB;
-    VclPtr<SvxFontPrevWindow>   pInsertedPreviewWN;
+    VclPtr<ListBox>             m_pInsertLB;
+    VclPtr<SvxColorListBox>     m_pInsertColorLB;
+    VclPtr<SvxFontPrevWindow>   m_pInsertedPreviewWN;
 
-    VclPtr<ListBox>             pDeletedLB;
-    VclPtr<SvxColorListBox>     pDeletedColorLB;
-    VclPtr<SvxFontPrevWindow>   pDeletedPreviewWN;
+    VclPtr<ListBox>             m_pDeletedLB;
+    VclPtr<SvxColorListBox>     m_pDeletedColorLB;
+    VclPtr<SvxFontPrevWindow>   m_pDeletedPreviewWN;
 
-    VclPtr<ListBox>             pChangedLB;
-    VclPtr<SvxColorListBox>     pChangedColorLB;
-    VclPtr<SvxFontPrevWindow>   pChangedPreviewWN;
+    VclPtr<ListBox>             m_pChangedLB;
+    VclPtr<SvxColorListBox>     m_pChangedColorLB;
+    VclPtr<SvxFontPrevWindow>   m_pChangedPreviewWN;
 
-    VclPtr<ListBox>             pMarkPosLB;
-    VclPtr<SvxColorListBox>     pMarkColorLB;
-    VclPtr<SwMarkPreview>       pMarkPreviewWN;
+    VclPtr<ListBox>             m_pMarkPosLB;
+    VclPtr<SvxColorListBox>     m_pMarkColorLB;
+    VclPtr<SwMarkPreview>       m_pMarkPreviewWN;
 
     DECL_LINK(AttribHdl, ListBox&, void);
     void ChangedMaskPrev();
