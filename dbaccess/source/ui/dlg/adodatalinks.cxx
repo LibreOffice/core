@@ -37,24 +37,10 @@
 
 #include "adodatalinks.hxx"
 
-OLECHAR const * PromptEdit(long hWnd,OLECHAR const * connstr);
-BSTR PromptNew(long hWnd);
+namespace {
 
-OUString getAdoDatalink(long hWnd,OUString& oldLink)
+OUString PromptNew(long hWnd)
 {
-    OUString dataLink;
-    if (!oldLink.isEmpty())
-    {
-        dataLink=SAL_U(PromptEdit(hWnd,SAL_W(oldLink.getStr())));
-    }
-    else
-        dataLink=reinterpret_cast<sal_Unicode *>(PromptNew(hWnd));
-    return dataLink;
-}
-
-BSTR PromptNew(long hWnd)
-{
-    BSTR connstr=nullptr;
     HRESULT hr;
     IDataSourceLocator* dlPrompt = nullptr;
     ADOConnection* piTmpConnection = nullptr;
@@ -73,14 +59,14 @@ BSTR PromptNew(long hWnd)
                     );
     if( FAILED( hr ) )
     {
-        return connstr;
+        return OUString();
     }
 
     dlPrompt->put_hWnd(hWnd);
     if( FAILED( hr ) )
     {
         dlPrompt->Release( );
-        return connstr;
+        return OUString();
     }
 
     // Prompt for connection information.
@@ -89,7 +75,7 @@ BSTR PromptNew(long hWnd)
     if( FAILED( hr ) || !piTmpConnection )
     {
         dlPrompt->Release( );
-        return connstr;
+        return OUString();
     }
 
     hr = piTmpConnection->get_ConnectionString(&_result);
@@ -97,16 +83,16 @@ BSTR PromptNew(long hWnd)
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );
-        return connstr;
+        return OUString();
     }
 
     piTmpConnection->Release( );
     dlPrompt->Release( );
     CoUninitialize();
-    return _result;
+    return OUString(reinterpret_cast<sal_Unicode const *>(_result));
 }
 
-OLECHAR const * PromptEdit(long hWnd,OLECHAR const * connstr)
+OUString PromptEdit(long hWnd, OUString const & connstr)
 {
     HRESULT hr;
     IDataSourceLocator* dlPrompt = nullptr;
@@ -128,7 +114,8 @@ OLECHAR const * PromptEdit(long hWnd,OLECHAR const * connstr)
     }
 
 
-    hr = piTmpConnection->put_ConnectionString(const_cast<BSTR>(connstr));
+    hr = piTmpConnection->put_ConnectionString(
+        const_cast<BSTR>(reinterpret_cast<wchar_t const *>(connstr.getStr())));
     if( FAILED( hr ) )
     {
         piTmpConnection->Release( );
@@ -193,7 +180,21 @@ OLECHAR const * PromptEdit(long hWnd,OLECHAR const * connstr)
     piTmpConnection->Release( );
     dlPrompt->Release( );
     CoUninitialize();
-    return _result;
+    return OUString(reinterpret_cast<sal_Unicode const *>(_result));
+}
+
+}
+
+OUString getAdoDatalink(long hWnd,OUString& oldLink)
+{
+    OUString dataLink;
+    if (!oldLink.isEmpty())
+    {
+        dataLink=PromptEdit(hWnd,oldLink);
+    }
+    else
+        dataLink=PromptNew(hWnd);
+    return dataLink;
 }
 
 #endif
