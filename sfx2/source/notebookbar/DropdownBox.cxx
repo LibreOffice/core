@@ -113,6 +113,7 @@ public:
 
 DropdownBox::DropdownBox(vcl::Window *pParent)
     : VclHBox(pParent)
+    , IPrioritable()
     , m_bInFullView(true)
 {
     m_pButton = VclPtr<PushButton>::Create(this, WB_FLATBUTTON);

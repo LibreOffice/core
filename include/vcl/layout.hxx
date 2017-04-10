@@ -14,7 +14,6 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/IPrioritable.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/split.hxx>
 #include <vcl/vclmedit.hxx>
@@ -24,7 +23,6 @@
 #include <set>
 
 class VCL_DLLPUBLIC VclContainer : public vcl::Window,
-                                   public vcl::IPrioritable,
                                    public vcl::IContext
 {
 public:
