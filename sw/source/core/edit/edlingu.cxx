@@ -631,14 +631,12 @@ void SwEditShell::SpellStart(
     // do not spell if interactive spelling is active elsewhere
     if (!pConvArgs && !g_pSpellIter)
     {
-        OSL_ENSURE( !g_pSpellIter, "spell already active?" );
         g_pSpellIter = new SwSpellIter;
         pLinguIter = g_pSpellIter;
     }
     // do not do text conversion if it is active elsewhere
     if (pConvArgs && !g_pConvIter)
     {
-        OSL_ENSURE( !g_pConvIter, "text conversion already active!" );
         g_pConvIter = new SwConvIter( *pConvArgs );
         pLinguIter = g_pConvIter;
     }
@@ -665,14 +663,12 @@ void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs, bool bRestoreSelection 
 {
     if (!pConvArgs && g_pSpellIter && g_pSpellIter->GetSh() == this)
     {
-        OSL_ENSURE( g_pSpellIter, "where is my Iterator?" );
         g_pSpellIter->End_(bRestoreSelection);
         delete g_pSpellIter;
         g_pSpellIter = nullptr;
     }
     if (pConvArgs && g_pConvIter && g_pConvIter->GetSh() == this)
     {
-        OSL_ENSURE( g_pConvIter, "where is my Iterator?" );
         g_pConvIter->End_();
         delete g_pConvIter;
         g_pConvIter = nullptr;
@@ -755,7 +751,6 @@ void SwEditShell::HyphStart( SwDocPositions eStart, SwDocPositions eEnd )
     // do not hyphenate if interactive hyphenation is active elsewhere
     if (!g_pHyphIter)
     {
-        OSL_ENSURE( !g_pHyphIter, "who is already hyphenating?" );
         g_pHyphIter = new SwHyphIter;
         g_pHyphIter->Start( this, eStart, eEnd );
     }
@@ -764,9 +759,9 @@ void SwEditShell::HyphStart( SwDocPositions eStart, SwDocPositions eEnd )
 /// restore selections
 void SwEditShell::HyphEnd()
 {
+    assert(g_pHyphIter);
     if (g_pHyphIter->GetSh() == this)
     {
-        OSL_ENSURE( g_pHyphIter, "No Iterator" );
         g_pHyphIter->End();
         delete g_pHyphIter;
         g_pHyphIter = nullptr;
@@ -777,6 +772,7 @@ void SwEditShell::HyphEnd()
 uno::Reference< uno::XInterface >
     SwEditShell::HyphContinue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
+    assert(g_pHyphIter);
     if (g_pHyphIter->GetSh() != this)
         return nullptr;
 
@@ -793,7 +789,6 @@ uno::Reference< uno::XInterface >
             *pPageSt = 1;
     }
 
-    OSL_ENSURE( g_pHyphIter, "No Iterator" );
     //JP 18.07.95: prevent displaying selection on error messages. NO StartAction so that all
     //             Paints are also disabled.
     ++mnStartAction;
@@ -813,14 +808,14 @@ uno::Reference< uno::XInterface >
  */
 void SwEditShell::InsertSoftHyph( const sal_Int32 nHyphPos )
 {
-    OSL_ENSURE( g_pHyphIter, "where is my Iterator?" );
+    assert(g_pHyphIter);
     g_pHyphIter->InsertSoftHyph( nHyphPos );
 }
 
 /// ignore hyphenation
 void SwEditShell::HyphIgnore()
 {
-    OSL_ENSURE( g_pHyphIter, "No Iterator" );
+    assert(g_pHyphIter);
     //JP 18.07.95: prevent displaying selection on error messages. NO StartAction so that all
     //             Paints are also disabled.
     ++mnStartAction;
