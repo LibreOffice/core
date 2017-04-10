@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_b0cbf61d",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2565,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2017-04-10T15:19:00Z",
+      "side": 1,
+      "message": "Searching for upper is done in PaintArea(), but I kept them merely for minimizing changed code. Maybe I should change the name to an appropriate one.",
+      "parentUuid": "5a3905b3_50b9f22d",
+      "revId": "5901f6cfa1968fc42857dd619d7df37a7c6a2c4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_70b6ee3e",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_30d8e6ef",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2567,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2017-04-10T15:19:00Z",
+      "side": 1,
+      "message": "My comment is wrong. It clip the table inside the page frame and still extrude from the body to the footer (if any).",
+      "parentUuid": "5a3905b3_70b6ee3e",
+      "revId": "5901f6cfa1968fc42857dd619d7df37a7c6a2c4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_90819a50",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2017-04-10T10:24:19Z",
       "side": 1,
       "message": "I must confess I don\u0027t really get what\u0027s the difference between Prt() and Frame() here -- did you figure that out? Are these the same when there are no borders? (Apart from one being an absolute and the other being a relative position, as sw/source/core/inc/frame.hxx:230 documents it.)",
+      "revId": "5901f6cfa1968fc42857dd619d7df37a7c6a2c4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1095aa3f",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2569,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2017-04-10T15:19:00Z",
+      "side": 1,
+      "message": "I guess it\u0027s Print area and frame area, where the difference is the margin.",
+      "parentUuid": "5a3905b3_90819a50",
       "revId": "5901f6cfa1968fc42857dd619d7df37a7c6a2c4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
