@@ -26,74 +26,74 @@
 
 #include <guid.hxx>
 
-OUString getStorageTypeFromGUID_Impl( GUID* guid )
+wchar_t const * getStorageTypeFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return OUString( "soffice.StarWriterDocument.6" );
+        return L"soffice.StarWriterDocument.6";
 
     if ( *guid == OID_WriterOASISTextServer )
-        return OUString( "LibreOffice.WriterDocument.1" );
+        return L"LibreOffice.WriterDocument.1";
 
     if ( *guid == OID_CalcServer )
-        return OUString( "soffice.StarCalcDocument.6" );
+        return L"soffice.StarCalcDocument.6";
 
     if ( *guid == OID_CalcOASISServer )
-        return OUString( "LibreOffice.CalcDocument.1" );
+        return L"LibreOffice.CalcDocument.1";
 
     if ( *guid == OID_DrawingServer )
-        return OUString( "soffice.StarDrawDocument.6" );
+        return L"soffice.StarDrawDocument.6";
 
     if ( *guid == OID_DrawingOASISServer )
-        return OUString( "LibreOffice.DrawDocument.1" );
+        return L"LibreOffice.DrawDocument.1";
 
     if ( *guid == OID_PresentationServer )
-        return OUString( "soffice.StarImpressDocument.6" );
+        return L"soffice.StarImpressDocument.6";
 
     if ( *guid == OID_PresentationOASISServer )
-        return OUString( "LibreOffice.ImpressDocument.1" );
+        return L"LibreOffice.ImpressDocument.1";
 
     if ( *guid == OID_MathServer )
-        return OUString( "soffice.StarMathDocument.6" );
+        return L"soffice.StarMathDocument.6";
 
     if ( *guid == OID_MathOASISServer )
-        return OUString( "LibreOffice.MathDocument.1" );
+        return L"LibreOffice.MathDocument.1";
 
-    return OUString();
+    return L"";
 }
 
-OUString getServiceNameFromGUID_Impl( GUID* guid )
+o3tl::u16string_view getServiceNameFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return OUString( "com.sun.star.comp.Writer.TextDocument" );
+        return u"com.sun.star.comp.Writer.TextDocument";
 
     if ( *guid == OID_WriterOASISTextServer )
-        return OUString( "com.sun.star.comp.Writer.TextDocument" );
+        return u"com.sun.star.comp.Writer.TextDocument";
 
     if ( *guid == OID_CalcServer )
-        return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
+        return u"com.sun.star.comp.Calc.SpreadsheetDocument";
 
     if ( *guid == OID_CalcOASISServer )
-        return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
+        return u"com.sun.star.comp.Calc.SpreadsheetDocument";
 
     if ( *guid == OID_DrawingServer )
-        return OUString( "com.sun.star.comp.Draw.DrawingDocument" );
+        return u"com.sun.star.comp.Draw.DrawingDocument";
 
     if ( *guid == OID_DrawingOASISServer )
-        return OUString( "com.sun.star.comp.Draw.DrawingDocument" );
+        return u"com.sun.star.comp.Draw.DrawingDocument";
 
     if ( *guid == OID_PresentationServer )
-        return OUString( "com.sun.star.comp.Draw.PresentationDocument" );
+        return u"com.sun.star.comp.Draw.PresentationDocument";
 
     if ( *guid == OID_PresentationOASISServer )
-        return OUString( "com.sun.star.comp.Draw.PresentationDocument" );
+        return u"com.sun.star.comp.Draw.PresentationDocument";
 
     if ( *guid == OID_MathServer )
-        return OUString( "com.sun.star.comp.Math.FormulaDocument" );
+        return u"com.sun.star.comp.Math.FormulaDocument";
 
     if ( *guid == OID_MathOASISServer )
-        return OUString( "com.sun.star.comp.Math.FormulaDocument" );
+        return u"com.sun.star.comp.Math.FormulaDocument";
 
-    return OUString();
+    return u"";
 }
 
 OUString getFilterNameFromGUID_Impl( GUID* guid )

@@ -37,6 +37,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <sal/types.h>
@@ -399,7 +400,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
         if ( m_xFactory.is() && pStg )
         {
             uno::Reference< frame::XModel > aDocument(
-                            m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
+                            m_xFactory->createInstance( o3tl::toOUString(getServiceNameFromGUID_Impl( &m_guid )) ),
                             uno::UNO_QUERY );
             if ( aDocument.is() )
             {
@@ -421,11 +422,11 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                 if ( hr == S_OK )
                 {
-                    OUString aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
+                    wchar_t const * aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
                     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
                     hr = WriteFmtUserTypeStg( pStg,
                                             cf,                         // ???
-                                            SAL_W(const_cast<sal_Unicode *>(aCurType.getStr())) );
+                                            const_cast<wchar_t *>(aCurType) );
 
                     if ( hr == S_OK )
                     {
@@ -534,7 +535,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
         if ( xTempIn.is() )
         {
             uno::Reference< frame::XModel > aDocument(
-                                                m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
+                                                m_xFactory->createInstance( o3tl::toOUString(getServiceNameFromGUID_Impl( &m_guid )) ),
                                                 uno::UNO_QUERY );
             if ( aDocument.is() )
             {
@@ -749,11 +750,11 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
     if ( FAILED( hr ) || !m_pMasterStorage ) return E_FAIL;
 
-    OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+    o3tl::u16string_view aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
                             cf,                         // ???
-                            SAL_W(const_cast<sal_Unicode *>(aCurType.getStr())) );
+                            const_cast<wchar_t *>(reinterpret_cast<wchar_t const *>(aCurType.data())) );
     if ( FAILED( hr ) ) return E_FAIL;
 
     hr = m_pMasterStorage->SetClass( m_guid );
@@ -775,7 +776,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
 
     uno::Reference< frame::XModel > aDocument(
-                    m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
+                    m_xFactory->createInstance( o3tl::toOUString(getServiceNameFromGUID_Impl( &m_guid )) ),
                     uno::UNO_QUERY );
     if ( aDocument.is() )
     {
@@ -804,7 +805,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
             cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
                                     cf,                         // ???
-                                    SAL_W(const_cast<sal_Unicode *>(aCurType.getStr())) );
+                                    const_cast<wchar_t *>(reinterpret_cast<wchar_t const *>(aCurType.data())) );
 
             if ( SUCCEEDED( hr ) )
             {

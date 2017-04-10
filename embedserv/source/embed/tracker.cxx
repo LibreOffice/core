@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+
 #include <sal/types.h>
 
 #ifdef _MSC_VER
@@ -540,7 +542,7 @@ void Tracker::DrawTrackerRect(
         // otherwise, size depends on the style
         if (m_nStyle & hatchedBorder)
         {
-            size.cx = size.cy = max(1,GetHandleSize(&rect)-1);
+            size.cx = size.cy = std::max(1,GetHandleSize(&rect)-1);
             InflateRect(&rect,size.cx,size.cy);
         }
         else
@@ -698,7 +700,7 @@ int Tracker::GetHandleSize(LPRECT lpRect) const
     if (!(m_nStyle & resizeOutside))
     {
         // make sure size is small enough for the size of the rect
-        int sizeMax = min(abs(rect->right - rect->left),
+        int sizeMax = std::min(abs(rect->right - rect->left),
                           abs(rect->bottom - rect->top));
         if (size * 2 > sizeMax)
             size = sizeMax / 2;

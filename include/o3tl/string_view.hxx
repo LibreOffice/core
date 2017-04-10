@@ -862,6 +862,17 @@ template<> struct hash<o3tl::wstring_view> {
 
 }
 
+namespace o3tl {
+
+// LO-specific convenience functions:
+
+// For std::u16string_view, this will be provided by a (LIBO_INTERNAL_ONLY)
+// rtl::OUString constructor:
+inline OUString toOUString(u16string_view s)
+{ return OUString(s.data(), s.size()); }
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -22,15 +22,16 @@
 
 #include <sal/config.h>
 
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 
 #include <common.h>
 
 OUString getFilterNameFromGUID_Impl( GUID* );
 
-OUString getServiceNameFromGUID_Impl( GUID* );
+o3tl::u16string_view getServiceNameFromGUID_Impl( GUID* );
 
-OUString getStorageTypeFromGUID_Impl( GUID* guid );
+wchar_t const * getStorageTypeFromGUID_Impl( GUID* guid );
 
 #endif
 
