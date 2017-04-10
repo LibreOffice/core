@@ -18,7 +18,6 @@
  */
 
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

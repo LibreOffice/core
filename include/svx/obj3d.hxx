@@ -43,7 +43,6 @@
 class SfxPoolItem;
 class Viewport3D;
 class E3dScene;
-class E3dPolyScene;
 
 namespace basegfx { class B3DPolyPolygon; }
 namespace sdr { namespace properties {

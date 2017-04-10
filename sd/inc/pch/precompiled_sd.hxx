@@ -417,7 +417,6 @@
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/obj3d.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/ruler.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>

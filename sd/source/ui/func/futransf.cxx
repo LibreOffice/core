@@ -20,7 +20,6 @@
 #include "futransf.hxx"
 
 #include <svx/dialogs.hrc>
-#include <svx/polysc3d.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 

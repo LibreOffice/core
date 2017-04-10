@@ -138,7 +138,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/engine3d/obj3d \
     svx/source/engine3d/objfac3d \
     svx/source/engine3d/polygn3d \
-    svx/source/engine3d/polysc3d \
     svx/source/engine3d/scene3d \
     svx/source/engine3d/sphere3d \
     svx/source/engine3d/svx3ditems \

@@ -30,8 +30,8 @@
 class FmFormModel;
 class FmFormPage;
 class E3dView;
-class E3dPolyScene;
 class E3dObject;
+class E3dScene;
 
 enum class SvxPreviewObjectType { SPHERE, CUBE };
 
@@ -41,7 +41,7 @@ protected:
     FmFormModel*            mpModel;
     FmFormPage*             mpFmPage;
     E3dView*                mp3DView;
-    E3dPolyScene*           mpScene;
+    E3dScene*               mpScene;
     E3dObject*              mp3DObj;
     SvxPreviewObjectType    mnObjectType;
 

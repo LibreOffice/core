@@ -60,7 +60,6 @@
 #include "svx/xlinjoit.hxx"
 
 #include <svx/fmmodel.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <sdr/contact/viewcontactofgraphic.hxx>
