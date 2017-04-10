@@ -226,11 +226,15 @@ bool SbxDecimal::setString( OUString* pOUString )
                 pBuffer[i] = ',';
             i++;
         }
-        hResult = VarDecFromStr( SAL_W(pBuffer.get()), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr(
+            reinterpret_cast<wchar_t const *>(pBuffer.get()), nLANGID, 0,
+            &maDec );
     }
     else
     {
-        hResult = VarDecFromStr( SAL_W(pOUString->getStr()), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr(
+            reinterpret_cast<wchar_t const *>(pOUString->getStr()), nLANGID, 0,
+            &maDec );
     }
     bRet = ( hResult == S_OK );
     return bRet;

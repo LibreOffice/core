@@ -139,14 +139,14 @@ void VBATest::testMiscOLEStuff()
         return; // can't do anything, skip test
 
     const int nBufSize = 1024 * 4;
-    sal_Unicode sBuf[nBufSize];
-    SQLGetInstalledDriversW( SAL_W(sBuf), nBufSize, nullptr );
+    wchar_t sBuf[nBufSize];
+    SQLGetInstalledDriversW( sBuf, nBufSize, nullptr );
 
-    const sal_Unicode *pODBCDriverName = sBuf;
+    const wchar_t *pODBCDriverName = sBuf;
     bool bFound = false;
-    for (; wcslen( SAL_W(pODBCDriverName) ) != 0; pODBCDriverName += wcslen( SAL_W(pODBCDriverName) ) + 1 ) {
-        if( wcscmp( SAL_W(pODBCDriverName), L"Microsoft Excel Driver (*.xls)" ) == 0 ||
-            wcscmp( SAL_W(pODBCDriverName), L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)" ) == 0 ) {
+    for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 ) {
+        if( wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls)" ) == 0 ||
+            wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)" ) == 0 ) {
             bFound = true;
             break;
         }
@@ -171,7 +171,8 @@ void VBATest::testMiscOLEStuff()
     sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] <<= sPath;
-    aArgs[ 1 ] <<= OUString(pODBCDriverName);
+    aArgs[ 1 ] <<= OUString(
+        reinterpret_cast<sal_Unicode const *>(pODBCDriverName));
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {
