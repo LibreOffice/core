@@ -37,7 +37,6 @@ OpenFileDropTargetListener::OpenFileDropTargetListener( const css::uno::Referenc
                                         const css::uno::Reference< css::frame::XFrame >&          xFrame  )
         : m_xContext      ( xContext                      )
         , m_xTargetFrame  ( xFrame                        )
-        , m_pFormats      ( new DataFlavorExVector        )
 {
 }
 
@@ -46,8 +45,6 @@ OpenFileDropTargetListener::~OpenFileDropTargetListener()
 {
     m_xTargetFrame.clear();
     m_xContext.clear();
-    delete m_pFormats;
-    m_pFormats = nullptr;
 }
 
 
@@ -145,8 +142,8 @@ void OpenFileDropTargetListener::implts_BeginDrag( const css::uno::Sequence< css
     /* SAFE { */
     SolarMutexGuard aGuard;
 
-    m_pFormats->clear();
-    TransferableDataHelper::FillDataFlavorExVector(rSupportedDataFlavors,*m_pFormats);
+    m_aFormats.clear();
+    TransferableDataHelper::FillDataFlavorExVector(rSupportedDataFlavors, m_aFormats);
     /* } SAFE */
 }
 
@@ -155,7 +152,7 @@ void OpenFileDropTargetListener::implts_EndDrag()
     /* SAFE { */
     SolarMutexGuard aGuard;
 
-    m_pFormats->clear();
+    m_aFormats.clear();
     /* } SAFE */
 }
 
@@ -164,7 +161,7 @@ bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotClipboardForma
     /* SAFE { */
     SolarMutexGuard aGuard;
 
-    DataFlavorExVector::iterator aIter( m_pFormats->begin() ), aEnd( m_pFormats->end() );
+    DataFlavorExVector::iterator aIter( m_aFormats.begin() ), aEnd( m_aFormats.end() );
     bool bRet = false;
 
     while ( aIter != aEnd )
