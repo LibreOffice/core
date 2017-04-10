@@ -703,7 +703,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             }
                             else if( nInv == SdrInventor::E3d )
                             {
-                                if( nId == E3D_POLYSCENE_ID || nId == E3D_SCENE_ID )
+                                if( nId == E3D_SCENE_ID )
                                 {
                                     if( !mpDrawView->IsGroupEntered() )
                                         aPopupId = "3dscene";

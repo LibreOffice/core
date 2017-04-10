@@ -24,9 +24,9 @@
 #include <svx/fmmodel.hxx>
 #include <svl/itempool.hxx>
 #include <svx/fmpage.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/cube3d.hxx>
+#include <svx/scene3d.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svx/helperhittest3d.hxx>
@@ -97,7 +97,7 @@ void Svx3DPreviewControl::Construct()
     mp3DView->SetBufferedOverlayAllowed(true);
 
     // 3D Scene
-    mpScene = new E3dPolyScene(mp3DView->Get3DDefaultAttributes());
+    mpScene = new E3dScene(mp3DView->Get3DDefaultAttributes());
 
     // initially create object
     SetObjectType(SvxPreviewObjectType::SPHERE);

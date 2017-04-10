@@ -44,7 +44,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/polysc3d.hxx>
 
 #include <svx/fmdpage.hxx>
 

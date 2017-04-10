@@ -25,7 +25,6 @@
 #include <svx/svddrgmt.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/obj3d.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/e3dundo.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
