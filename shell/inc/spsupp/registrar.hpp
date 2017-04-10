@@ -12,14 +12,23 @@
 
 #include "windows.h"
 
-namespace Registrar {
-    HRESULT RegisterObject(REFIID riidCLSID,
-                           REFIID riidTypeLib,
+class Registrar {
+public:
+    explicit Registrar(REFIID riidCLSID);
+    HRESULT RegisterObject(REFIID riidTypeLib,
                            const wchar_t* sProgram,
                            const wchar_t* sComponent,
-                           const wchar_t* Path);
-    HRESULT UnRegisterObject(REFIID riidCLSID, const wchar_t* LibId, const wchar_t* ClassId);
-}
+                           int nVersion,
+                           const wchar_t* Path,
+                           bool bSetDefault);
+    HRESULT UnRegisterObject(const wchar_t* sProgram, const wchar_t* sComponent, int nVersion);
+    HRESULT RegisterProgID(const wchar_t* sProgram, const wchar_t* sComponent, int nVersion, bool bSetDefault);
+    HRESULT UnRegisterProgID(const wchar_t* sProgram, const wchar_t* sComponent, int nVersion);
+private:
+    static const size_t nGUIDlen = 40;
+    wchar_t m_sCLSID[nGUIDlen];
+    HRESULT m_ConstructionResult;
+};
 
 #endif
 

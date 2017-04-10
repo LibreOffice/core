@@ -20,6 +20,7 @@
 
 #include <memory>
 #include "olectl.h"
+#include "wchar.h"
 #include "spsuppServ.hpp"
 #include "spsuppClassFactory.hpp"
 #include "COMOpenDocuments.hpp"
@@ -126,7 +127,7 @@ STDAPI DllRegisterServer(void)
     if (FAILED(hr))
         return hr;
 
-    return Registrar::RegisterObject(CLSID_spsupp, LIBID_spsupp, L"LOSPSupport", L"OpenDocuments", szFile);
+    return Registrar(CLSID_spsupp).RegisterObject(LIBID_spsupp, L"LOSPSupport", L"OpenDocuments", 1, szFile, true);
 }
 
 STDAPI DllUnregisterServer(void)
@@ -146,7 +147,37 @@ STDAPI DllUnregisterServer(void)
     if (FAILED(hr))
         return hr;
 
-    return Registrar::UnRegisterObject(CLSID_spsupp, L"LOSPSupport", L"OpenDocuments");
+    return Registrar(CLSID_spsupp).UnRegisterObject(L"LOSPSupport", L"OpenDocuments", 1);
+}
+
+// This is called when regsvr32.exe is called with "/i" flag
+// pszCmdLine is the string passed to "/i:<string>"
+// See https://msdn.microsoft.com/library/windows/desktop/bb759846
+STDAPI DllInstall(BOOL bInstall, _In_opt_ PCWSTR pszCmdLine)
+{
+    if (wcscmp(pszCmdLine, L"Substitute_OWSSUPP") == 0)
+    {
+        HRESULT hr;
+        Registrar registrar(CLSID_spsupp);
+        if (bInstall)
+        {
+            hr = registrar.RegisterProgID(L"SharePoint", L"OpenDocuments", 3, true);
+            if (SUCCEEDED(hr))
+                hr = registrar.RegisterProgID(L"SharePoint", L"OpenDocuments", 2, false);
+            if (SUCCEEDED(hr))
+                hr = registrar.RegisterProgID(L"SharePoint", L"OpenDocuments", 1, false);
+        }
+        else
+        {
+            // Try all ProgIDs regardless of error, but make sure to return failure result if at least one failed
+            hr = registrar.UnRegisterProgID(L"SharePoint", L"OpenDocuments", 1);
+            HRESULT hrLast;
+            hr = SUCCEEDED(hrLast = registrar.UnRegisterProgID(L"SharePoint", L"OpenDocuments", 2)) ? hr : hrLast;
+            hr = SUCCEEDED(hrLast = registrar.UnRegisterProgID(L"SharePoint", L"OpenDocuments", 3)) ? hr : hrLast;
+        }
+        return hr;
+    }
+    return E_INVALIDARG;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
