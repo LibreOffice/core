@@ -1720,61 +1720,61 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
 {
     Size aPreviewSize(getPreviewOptionsSize(this));
 
-    get(pInsertLB,"insert");
-    get(pInsertColorLB,"insertcolor");
-    pInsertColorLB->SetSlotId(SID_AUTHOR_COLOR, true);
-    get(pInsertedPreviewWN,"insertedpreview");
+    get(m_pInsertLB,"insert");
+    get(m_pInsertColorLB,"insertcolor");
+    m_pInsertColorLB->SetSlotId(SID_AUTHOR_COLOR, true);
+    get(m_pInsertedPreviewWN,"insertedpreview");
 
-    get(pDeletedLB,"deleted");
-    get(pDeletedColorLB,"deletedcolor");
-    pDeletedColorLB->SetSlotId(SID_AUTHOR_COLOR, true);
-    get(pDeletedPreviewWN,"deletedpreview");
+    get(m_pDeletedLB,"deleted");
+    get(m_pDeletedColorLB,"deletedcolor");
+    m_pDeletedColorLB->SetSlotId(SID_AUTHOR_COLOR, true);
+    get(m_pDeletedPreviewWN,"deletedpreview");
 
-    get(pChangedLB,"changed");
-    get(pChangedColorLB,"changedcolor");
-    pChangedColorLB->SetSlotId(SID_AUTHOR_COLOR, true);
-    get(pChangedPreviewWN,"changedpreview");
+    get(m_pChangedLB,"changed");
+    get(m_pChangedColorLB,"changedcolor");
+    m_pChangedColorLB->SetSlotId(SID_AUTHOR_COLOR, true);
+    get(m_pChangedPreviewWN,"changedpreview");
 
-    get(pMarkPosLB,"markpos");
-    get(pMarkColorLB,"markcolor");
-    get(pMarkPreviewWN,"markpreview");
+    get(m_pMarkPosLB,"markpos");
+    get(m_pMarkColorLB,"markcolor");
+    get(m_pMarkPreviewWN,"markpreview");
 
-    pInsertedPreviewWN->set_height_request(aPreviewSize.Height());
-    pDeletedPreviewWN->set_height_request(aPreviewSize.Height());
-    pChangedPreviewWN->set_height_request(aPreviewSize.Height());
-    pMarkPreviewWN->set_height_request(aPreviewSize.Height());
+    m_pInsertedPreviewWN->set_height_request(aPreviewSize.Height());
+    m_pDeletedPreviewWN->set_height_request(aPreviewSize.Height());
+    m_pChangedPreviewWN->set_height_request(aPreviewSize.Height());
+    m_pMarkPreviewWN->set_height_request(aPreviewSize.Height());
 
-    pInsertedPreviewWN->set_width_request(aPreviewSize.Width());
-    pDeletedPreviewWN->set_width_request(aPreviewSize.Width());
-    pChangedPreviewWN->set_width_request(aPreviewSize.Width());
-    pMarkPreviewWN->set_width_request(aPreviewSize.Width());
+    m_pInsertedPreviewWN->set_width_request(aPreviewSize.Width());
+    m_pDeletedPreviewWN->set_width_request(aPreviewSize.Width());
+    m_pChangedPreviewWN->set_width_request(aPreviewSize.Width());
+    m_pMarkPreviewWN->set_width_request(aPreviewSize.Width());
 
-    for (sal_Int32 i = 0; i < pInsertLB->GetEntryCount(); ++i)
+    for (sal_Int32 i = 0; i < m_pInsertLB->GetEntryCount(); ++i)
     {
-        const OUString sEntry(pInsertLB->GetEntry(i));
-        pDeletedLB->InsertEntry(sEntry);
-        pChangedLB->InsertEntry(sEntry);
+        const OUString sEntry(m_pInsertLB->GetEntry(i));
+        m_pDeletedLB->InsertEntry(sEntry);
+        m_pChangedLB->InsertEntry(sEntry);
     };
 
     // remove strikethrough from insert and change and underline + double
     // underline from delete
-    pInsertLB->RemoveEntry(5);
-    pChangedLB->RemoveEntry(5);
-    pDeletedLB->RemoveEntry(4);
-    pDeletedLB->RemoveEntry(3);
+    m_pInsertLB->RemoveEntry(5);
+    m_pChangedLB->RemoveEntry(5);
+    m_pDeletedLB->RemoveEntry(4);
+    m_pDeletedLB->RemoveEntry(3);
 
     Link<ListBox&,void> aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
-    pInsertLB->SetSelectHdl( aLk );
-    pDeletedLB->SetSelectHdl( aLk );
-    pChangedLB->SetSelectHdl( aLk );
+    m_pInsertLB->SetSelectHdl( aLk );
+    m_pDeletedLB->SetSelectHdl( aLk );
+    m_pChangedLB->SetSelectHdl( aLk );
 
     Link<SvxColorListBox&,void> aLk2 = LINK(this, SwRedlineOptionsTabPage, ColorHdl);
-    pInsertColorLB->SetSelectHdl( aLk2 );
-    pDeletedColorLB->SetSelectHdl( aLk2 );
-    pChangedColorLB->SetSelectHdl( aLk2 );
+    m_pInsertColorLB->SetSelectHdl( aLk2 );
+    m_pDeletedColorLB->SetSelectHdl( aLk2 );
+    m_pChangedColorLB->SetSelectHdl( aLk2 );
 
-    pMarkPosLB->SetSelectHdl(LINK(this, SwRedlineOptionsTabPage, ChangedMaskPrevHdl));
-    pMarkColorLB->SetSelectHdl(LINK(this, SwRedlineOptionsTabPage, ChangedMaskColorPrevHdl));
+    m_pMarkPosLB->SetSelectHdl(LINK(this, SwRedlineOptionsTabPage, ChangedMaskPrevHdl));
+    m_pMarkColorLB->SetSelectHdl(LINK(this, SwRedlineOptionsTabPage, ChangedMaskColorPrevHdl));
 }
 
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
@@ -1784,18 +1784,18 @@ SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 
 void SwRedlineOptionsTabPage::dispose()
 {
-    pInsertLB.clear();
-    pInsertColorLB.clear();
-    pInsertedPreviewWN.clear();
-    pDeletedLB.clear();
-    pDeletedColorLB.clear();
-    pDeletedPreviewWN.clear();
-    pChangedLB.clear();
-    pChangedColorLB.clear();
-    pChangedPreviewWN.clear();
-    pMarkPosLB.clear();
-    pMarkColorLB.clear();
-    pMarkPreviewWN.clear();
+    m_pInsertLB.clear();
+    m_pInsertColorLB.clear();
+    m_pInsertedPreviewWN.clear();
+    m_pDeletedLB.clear();
+    m_pDeletedColorLB.clear();
+    m_pDeletedPreviewWN.clear();
+    m_pChangedLB.clear();
+    m_pChangedColorLB.clear();
+    m_pChangedPreviewWN.clear();
+    m_pMarkPosLB.clear();
+    m_pMarkColorLB.clear();
+    m_pMarkPreviewWN.clear();
     SfxTabPage::dispose();
 }
 
@@ -1820,38 +1820,38 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     ColorData nOldMarkColor = pOpt->GetMarkAlignColor().GetColor();
     sal_uInt16 nOldMarkMode = pOpt->GetMarkAlignMode();
 
-    sal_Int32 nPos = pInsertLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pInsertLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        pAttr = static_cast<CharAttr *>(pInsertLB->GetEntryData(nPos));
+        pAttr = static_cast<CharAttr *>(m_pInsertLB->GetEntryData(nPos));
         aInsertedAttr.nItemId = pAttr->nItemId;
         aInsertedAttr.nAttr = pAttr->nAttr;
-        aInsertedAttr.nColor = pInsertColorLB->GetSelectEntryColor().GetColor();
+        aInsertedAttr.nColor = m_pInsertColorLB->GetSelectEntryColor().GetColor();
         pOpt->SetInsertAuthorAttr(aInsertedAttr);
     }
 
-    nPos = pDeletedLB->GetSelectEntryPos();
+    nPos = m_pDeletedLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        pAttr = static_cast<CharAttr *>(pDeletedLB->GetEntryData(nPos));
+        pAttr = static_cast<CharAttr *>(m_pDeletedLB->GetEntryData(nPos));
         aDeletedAttr.nItemId = pAttr->nItemId;
         aDeletedAttr.nAttr = pAttr->nAttr;
-        aDeletedAttr.nColor = pDeletedColorLB->GetSelectEntryColor().GetColor();
+        aDeletedAttr.nColor = m_pDeletedColorLB->GetSelectEntryColor().GetColor();
         pOpt->SetDeletedAuthorAttr(aDeletedAttr);
     }
 
-    nPos = pChangedLB->GetSelectEntryPos();
+    nPos = m_pChangedLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        pAttr = static_cast<CharAttr *>(pChangedLB->GetEntryData(nPos));
+        pAttr = static_cast<CharAttr *>(m_pChangedLB->GetEntryData(nPos));
         aChangedAttr.nItemId = pAttr->nItemId;
         aChangedAttr.nAttr = pAttr->nAttr;
-        aChangedAttr.nColor = pChangedColorLB->GetSelectEntryColor().GetColor();
+        aChangedAttr.nColor = m_pChangedColorLB->GetSelectEntryColor().GetColor();
         pOpt->SetFormatAuthorAttr(aChangedAttr);
     }
 
     nPos = 0;
-    switch (pMarkPosLB->GetSelectEntryPos())
+    switch (m_pMarkPosLB->GetSelectEntryPos())
     {
         case 0: nPos = text::HoriOrientation::NONE;       break;
         case 1: nPos = text::HoriOrientation::LEFT;       break;
@@ -1861,7 +1861,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     }
     pOpt->SetMarkAlignMode(nPos);
 
-    pOpt->SetMarkAlignColor(pMarkColorLB->GetSelectEntryColor());
+    pOpt->SetMarkAlignColor(m_pMarkColorLB->GetSelectEntryColor());
 
     if (!(aInsertedAttr == aOldInsertAttr) ||
         !(aDeletedAttr == aOldDeletedAttr) ||
@@ -1891,28 +1891,28 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     const AuthorCharAttr &rChangedAttr = pOpt->GetFormatAuthorAttr();
 
     // initialise preview
-    InitFontStyle(*pInsertedPreviewWN);
-    InitFontStyle(*pDeletedPreviewWN);
-    InitFontStyle(*pChangedPreviewWN);
+    InitFontStyle(*m_pInsertedPreviewWN);
+    InitFontStyle(*m_pDeletedPreviewWN);
+    InitFontStyle(*m_pChangedPreviewWN);
 
     ColorData nColor = rInsertAttr.nColor;
-    pInsertColorLB->SelectEntry(Color(nColor));
+    m_pInsertColorLB->SelectEntry(Color(nColor));
 
     nColor = rDeletedAttr.nColor;
-    pDeletedColorLB->SelectEntry(Color(nColor));
+    m_pDeletedColorLB->SelectEntry(Color(nColor));
 
     nColor = rChangedAttr.nColor;
-    pChangedColorLB->SelectEntry(Color(nColor));
+    m_pChangedColorLB->SelectEntry(Color(nColor));
 
-    pMarkColorLB->SelectEntry(pOpt->GetMarkAlignColor());
+    m_pMarkColorLB->SelectEntry(pOpt->GetMarkAlignColor());
 
-    pInsertLB->SelectEntryPos(0);
-    pDeletedLB->SelectEntryPos(0);
-    pChangedLB->SelectEntryPos(0);
+    m_pInsertLB->SelectEntryPos(0);
+    m_pDeletedLB->SelectEntryPos(0);
+    m_pChangedLB->SelectEntryPos(0);
 
-    lcl_FillRedlineAttrListBox(*pInsertLB, rInsertAttr, aInsertAttrMap, SAL_N_ELEMENTS(aInsertAttrMap));
-    lcl_FillRedlineAttrListBox(*pDeletedLB, rDeletedAttr, aDeletedAttrMap, SAL_N_ELEMENTS(aDeletedAttrMap));
-    lcl_FillRedlineAttrListBox(*pChangedLB, rChangedAttr, aChangedAttrMap, SAL_N_ELEMENTS(aChangedAttrMap));
+    lcl_FillRedlineAttrListBox(*m_pInsertLB, rInsertAttr, aInsertAttrMap, SAL_N_ELEMENTS(aInsertAttrMap));
+    lcl_FillRedlineAttrListBox(*m_pDeletedLB, rDeletedAttr, aDeletedAttrMap, SAL_N_ELEMENTS(aDeletedAttrMap));
+    lcl_FillRedlineAttrListBox(*m_pChangedLB, rChangedAttr, aChangedAttrMap, SAL_N_ELEMENTS(aChangedAttrMap));
 
     sal_Int32 nPos = 0;
     switch (pOpt->GetMarkAlignMode())
@@ -1923,15 +1923,15 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
         case text::HoriOrientation::OUTSIDE:  nPos = 3;   break;
         case text::HoriOrientation::INSIDE:   nPos = 4;   break;
     }
-    pMarkPosLB->SelectEntryPos(nPos);
+    m_pMarkPosLB->SelectEntryPos(nPos);
 
     // show settings in preview
-    AttribHdl(*pInsertLB);
-    ColorHdl(*pInsertColorLB);
-    AttribHdl(*pDeletedLB);
-    ColorHdl(*pInsertColorLB);
-    AttribHdl(*pChangedLB);
-    ColorHdl(*pChangedColorLB);
+    AttribHdl(*m_pInsertLB);
+    ColorHdl(*m_pInsertColorLB);
+    AttribHdl(*m_pDeletedLB);
+    ColorHdl(*m_pInsertColorLB);
+    AttribHdl(*m_pChangedLB);
+    ColorHdl(*m_pChangedColorLB);
 
     ChangedMaskPrev();
 }
@@ -1941,20 +1941,20 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
     SvxFontPrevWindow *pPrev = nullptr;
     SvxColorListBox *pColorLB;
 
-    if (&rLB == pInsertLB)
+    if (&rLB == m_pInsertLB)
     {
-        pColorLB = pInsertColorLB;
-        pPrev = pInsertedPreviewWN;
+        pColorLB = m_pInsertColorLB;
+        pPrev = m_pInsertedPreviewWN;
     }
-    else if (&rLB == pDeletedLB)
+    else if (&rLB == m_pDeletedLB)
     {
-        pColorLB = pDeletedColorLB;
-        pPrev = pDeletedPreviewWN;
+        pColorLB = m_pDeletedColorLB;
+        pPrev = m_pDeletedPreviewWN;
     }
     else
     {
-        pColorLB = pChangedColorLB;
-        pPrev = pChangedPreviewWN;
+        pColorLB = m_pChangedColorLB;
+        pPrev = m_pChangedPreviewWN;
     }
 
     SvxFont&    rFont = pPrev->GetFont();
@@ -2045,20 +2045,20 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, SvxColorListBox&, rListBox, void )
     SvxFontPrevWindow *pPrev = nullptr;
     ListBox* pLB;
 
-    if (pColorLB == pInsertColorLB)
+    if (pColorLB == m_pInsertColorLB)
     {
-        pLB = pInsertLB;
-        pPrev = pInsertedPreviewWN;
+        pLB = m_pInsertLB;
+        pPrev = m_pInsertedPreviewWN;
     }
-    else if (pColorLB == pDeletedColorLB)
+    else if (pColorLB == m_pDeletedColorLB)
     {
-        pLB = pDeletedLB;
-        pPrev = pDeletedPreviewWN;
+        pLB = m_pDeletedLB;
+        pPrev = m_pDeletedPreviewWN;
     }
     else
     {
-        pLB = pChangedLB;
-        pPrev = pChangedPreviewWN;
+        pLB = m_pChangedLB;
+        pPrev = m_pChangedPreviewWN;
     }
 
     SvxFont&    rFont = pPrev->GetFont();
@@ -2106,10 +2106,10 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, SvxColorListBox&, rListBox, void )
 
 void SwRedlineOptionsTabPage::ChangedMaskPrev()
 {
-    pMarkPreviewWN->SetMarkPos(pMarkPosLB->GetSelectEntryPos());
-    pMarkPreviewWN->SetColor(pMarkColorLB->GetSelectEntryColor().GetColor());
+    m_pMarkPreviewWN->SetMarkPos(m_pMarkPosLB->GetSelectEntryPos());
+    m_pMarkPreviewWN->SetColor(m_pMarkColorLB->GetSelectEntryColor().GetColor());
 
-    pMarkPreviewWN->Invalidate();
+    m_pMarkPreviewWN->Invalidate();
 }
 
 IMPL_LINK_NOARG(SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox&, void)
