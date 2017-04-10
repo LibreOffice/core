@@ -433,8 +433,7 @@ SvXMLExport::SvXMLExport(
     m_xContext(xContext), m_implementationName(implementationName),
     mxAttrList( new SvXMLAttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter( xContext,
-                util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
+    maUnitConv( xContext, util::MeasureUnit::MM_100TH, eDefaultMeasureUnit ),
     mpNumExport(nullptr),
     mpProgressBarHelper( nullptr ),
     mpEventExport( nullptr ),
@@ -463,8 +462,7 @@ SvXMLExport::SvXMLExport(
     mxAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter( xContext,
-                util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
+    maUnitConv( xContext, util::MeasureUnit::MM_100TH, eDefaultMeasureUnit ),
     mpNumExport(nullptr),
     mpProgressBarHelper( nullptr ),
     mpEventExport( nullptr ),
@@ -500,9 +498,9 @@ SvXMLExport::SvXMLExport(
     mxAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter( xContext,
-                    util::MeasureUnit::MM_100TH,
-                    SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit)) ),
+    maUnitConv( xContext,
+                util::MeasureUnit::MM_100TH,
+                SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit) ),
     mpNumExport(nullptr),
     mpProgressBarHelper( nullptr ),
     mpEventExport( nullptr ),
@@ -528,7 +526,6 @@ SvXMLExport::~SvXMLExport()
     delete mpImageMapExport;
     delete mpEventExport;
     delete mpNamespaceMap;
-    delete mpUnitConv;
     if (mpProgressBarHelper || mpNumExport)
     {
         if (mxExportInfo.is())
