@@ -1019,6 +1019,8 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     long nPosY = nScrY;
+
+    // iterate through the rows to show
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
@@ -1056,14 +1058,14 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 const Color* pOldColor = nullptr;
                 const ScDataBarInfo* pOldDataBarInfo = nullptr;
                 const ScIconSetInfo* pOldIconSetInfo = nullptr;
-                SCCOL nMergedCells = 1;
+                SCCOL nMergedCols = 1;
                 SCCOL nOldMerged = 0;
 
-                for (SCCOL nX=nX1; nX + nMergedCells <= nX2 + 1; nX += nOldMerged)
+                for (SCCOL nX=nX1; nX + nMergedCols <= nX2 + 1; nX += nOldMerged)
                 {
-                    CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+nMergedCells];
+                    CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+nMergedCols];
 
-                    nOldMerged = nMergedCells;
+                    nOldMerged = nMergedCols;
 
                     if (bCellContrast)
                     {
@@ -1110,15 +1112,15 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
                     // extend for all merged cells
-                    nMergedCells = 1;
+                    nMergedCols = 1;
                     if (pInfo->bMerged && pInfo->pPatternAttr)
                     {
                             const ScMergeAttr* pMerge =
                                     static_cast<const ScMergeAttr*>(&pInfo->pPatternAttr->GetItem(ATTR_MERGE));
-                            nMergedCells = std::max<SCCOL>(1, pMerge->GetColMerge());
+                            nMergedCols = std::max<SCCOL>(1, pMerge->GetColMerge());
                     }
 
-                    for (SCCOL nMerged = 0; nMerged < nMergedCells; ++nMerged)
+                    for (SCCOL nMerged = 0; nMerged < nMergedCols; ++nMerged)
                     {
                         SCCOL nCol = nX+nOldMerged+nMerged;
                         if (nCol > nX2+2)
