@@ -709,7 +709,16 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     mpDrawUndo( pDrawUndo )
 {
     OSL_ENSURE( rNoteData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
-    (bInsert ? maNewData : maOldData) = rNoteData;
+    if (bInsert)
+    {
+        maNewData = rNoteData;
+        maNewData.mxCaption.setInUndo();
+    }
+    else
+    {
+        maOldData = rNoteData;
+        maOldData.mxCaption.setInUndo();
+    }
 }
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
@@ -722,6 +731,8 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
 {
     OSL_ENSURE( maOldData.mxCaption || maNewData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
     OSL_ENSURE( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected unitialized note" );
+    maOldData.mxCaption.setInUndo();
+    maNewData.mxCaption.setInUndo();
 }
 
 ScUndoReplaceNote::~ScUndoReplaceNote()
