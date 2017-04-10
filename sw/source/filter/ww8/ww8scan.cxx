@@ -5976,7 +5976,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
         if( m_fWord97Saved )          nBits8 |= 0x0010;
         if( m_fWord2000Saved )        nBits8 |= 0x0020;
     }
-    // unter Ver67 these are only reserved
+    // under Ver67 these are only reserved
     Set_UInt8( pData, nBits8  );
 
     Set_UInt16( pData, m_chse );
