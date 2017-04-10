@@ -11107,7 +11107,7 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
     double fScaleX = 1.0 / aSize.Width();
     double fScaleY = 1.0 / aSize.Height();
 
-    std::vector<sal_Int32> aWrappedFormObjects;
+    sal_Int32 nWrappedFormObject = 0;
     if (!m_aContext.UseReferenceXObject)
     {
         // Parse the PDF data, we need that to write the PDF dictionary of our
@@ -11154,45 +11154,55 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             }
         }
 
+        if (aContentStreams.empty())
+        {
+            SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: no content stream");
+            return;
+        }
+
         // Maps from source object id (PDF image) to target object id (export result).
         std::map<sal_Int32, sal_Int32> aCopiedResources;
+
+        nWrappedFormObject = createObject();
+        // Write the form XObject wrapped below. This is a separate object from
+        // the wrapper, this way there is no need to alter the stream contents.
+
+        OStringBuffer aLine;
+        aLine.append(nWrappedFormObject);
+        aLine.append(" 0 obj\n");
+        aLine.append("<< /Type /XObject");
+        aLine.append(" /Subtype /Form");
+        aLine.append(" /Resources <<");
+        static const std::initializer_list<OString> aKeys =
+        {
+            "ColorSpace",
+            "ExtGState",
+            "Font",
+            "XObject"
+        };
+        for (const auto& rKey : aKeys)
+            aLine.append(copyExternalResources(*pPage, rKey, aCopiedResources));
+        aLine.append(">>");
+        aLine.append(" /BBox [ 0 0 ");
+        aLine.append(aSize.Width());
+        aLine.append(" ");
+        aLine.append(aSize.Height());
+        aLine.append(" ]");
+
+        // For now assume that all the content streams have the same filter.
+        auto pFilter = dynamic_cast<filter::PDFNameElement*>(aContentStreams[0]->Lookup("Filter"));
+        if (pFilter)
+        {
+            aLine.append(" /Filter /");
+            aLine.append(pFilter->GetValue());
+        }
+
+        aLine.append(" /Length ");
+
+        sal_Int32 nLength = 0;
+        OStringBuffer aStream;
         for (auto pContent : aContentStreams)
         {
-            aWrappedFormObjects.push_back(createObject());
-            // Write the form XObject wrapped below. This is a separate object from
-            // the wrapper, this way there is no need to alter the stream contents.
-
-            OStringBuffer aLine;
-            aLine.append(aWrappedFormObjects.back());
-            aLine.append(" 0 obj\n");
-            aLine.append("<< /Type /XObject");
-            aLine.append(" /Subtype /Form");
-            aLine.append(" /Resources <<");
-            static const std::initializer_list<OString> aKeys =
-            {
-                "ColorSpace",
-                "ExtGState",
-                "Font",
-                "XObject"
-            };
-            for (const auto& rKey : aKeys)
-                aLine.append(copyExternalResources(*pPage, rKey, aCopiedResources));
-            aLine.append(">>");
-            aLine.append(" /BBox [ 0 0 ");
-            aLine.append(aSize.Width());
-            aLine.append(" ");
-            aLine.append(aSize.Height());
-            aLine.append(" ]");
-
-            auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"));
-            if (pFilter)
-            {
-                aLine.append(" /Filter /");
-                aLine.append(pFilter->GetValue());
-            }
-
-            aLine.append(" /Length ");
-
             filter::PDFStreamElement* pPageStream = pContent->GetStream();
             if (!pPageStream)
             {
@@ -11202,17 +11212,20 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
 
             SvMemoryStream& rPageStream = pPageStream->GetMemory();
 
-            aLine.append(static_cast<sal_Int32>(rPageStream.GetSize()));
-
-            aLine.append(">>\nstream\n");
-            // Copy the original page stream to the form XObject stream.
-            aLine.append(static_cast<const sal_Char*>(rPageStream.GetData()), rPageStream.GetSize());
-            aLine.append("\nendstream\nendobj\n\n");
-            if (!updateObject(aWrappedFormObjects.back()))
-                continue;
-            if (!writeBuffer(aLine.getStr(), aLine.getLength()))
-                continue;
+            nLength += rPageStream.GetSize();
+            aStream.append(static_cast<const sal_Char*>(rPageStream.GetData()), rPageStream.GetSize());
         }
+
+        aLine.append(nLength);
+
+        aLine.append(">>\nstream\n");
+        // Copy the original page streams to the form XObject stream.
+        aLine.append(aStream.makeStringAndClear());
+        aLine.append("\nendstream\nendobj\n\n");
+        if (!updateObject(nWrappedFormObject))
+            return;
+        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+            return;
     }
 
     OStringBuffer aLine;
@@ -11225,18 +11238,14 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
     aLine.append("<< /Type /XObject");
     aLine.append(" /Subtype /Form");
     aLine.append(" /Resources << /XObject<<");
-    for (const auto nWrappedFormObject : aWrappedFormObjects)
-    {
-        sal_Int32 nObject = m_aContext.UseReferenceXObject ? rEmit.m_nBitmapObject : nWrappedFormObject;
-        aLine.append(" /Im");
-        aLine.append(nObject);
-        aLine.append(" ");
-        aLine.append(nObject);
-        aLine.append(" 0 R");
 
-        if (m_aContext.UseReferenceXObject)
-            break;
-    }
+    sal_Int32 nObject = m_aContext.UseReferenceXObject ? rEmit.m_nBitmapObject : nWrappedFormObject;
+    aLine.append(" /Im");
+    aLine.append(nObject);
+    aLine.append(" ");
+    aLine.append(nObject);
+    aLine.append(" 0 R");
+
     aLine.append(">> >>");
     aLine.append(" /Matrix [ ");
     appendDouble(fScaleX, aLine);
@@ -11277,14 +11286,12 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
     {
         // Reset line width to the default.
         aStream.append(" 1 w\n");
-        for (const auto nWrappedFormObject : aWrappedFormObjects)
-        {
-            // No reference XObject, draw the form XObject containing the original
-            // page stream.
-            aStream.append("/Im");
-            aStream.append(nWrappedFormObject);
-            aStream.append(" Do\n");
-        }
+
+        // No reference XObject, draw the form XObject containing the original
+        // page streams.
+        aStream.append("/Im");
+        aStream.append(nWrappedFormObject);
+        aStream.append(" Do\n");
     }
     aStream.append("Q");
     aLine.append(aStream.getLength());
