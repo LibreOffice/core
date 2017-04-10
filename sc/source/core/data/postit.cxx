@@ -445,12 +445,12 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 
 ScCaptionPtr::ScCaptionPtr() :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr)
+    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr), mbInUndo(false)
 {
 }
 
 ScCaptionPtr::ScCaptionPtr( SdrCaptionObj* p ) :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(p)
+    mpHead(nullptr), mpNext(nullptr), mpCaption(p), mbInUndo(false)
 {
     if (p)
     {
@@ -459,7 +459,7 @@ ScCaptionPtr::ScCaptionPtr( SdrCaptionObj* p ) :
 }
 
 ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
-    mpHead(r.mpHead), mpCaption(r.mpCaption)
+    mpHead(r.mpHead), mpCaption(r.mpCaption), mbInUndo(false)
 {
     if (r.mpCaption)
     {
@@ -477,7 +477,7 @@ ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
 }
 
 ScCaptionPtr::ScCaptionPtr( ScCaptionPtr&& r ) :
-    mpHead(r.mpHead), mpNext(r.mpNext), mpCaption(r.mpCaption)
+    mpHead(r.mpHead), mpNext(r.mpNext), mpCaption(r.mpCaption), mbInUndo(false)
 {
     r.replaceInList( this );
     r.mpCaption = nullptr;
@@ -532,6 +532,11 @@ ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
     r.mpNext = this;
 
     return *this;
+}
+
+void ScCaptionPtr::setInUndo()
+{
+    mbInUndo = true;
 }
 
 ScCaptionPtr::Head::Head( ScCaptionPtr* p ) :
