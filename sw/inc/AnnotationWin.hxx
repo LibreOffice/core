@@ -204,10 +204,6 @@ class SwAnnotationWin : public vcl::Window
         DECL_LINK(ScrollHdl, ScrollBar*, void);
         DECL_LINK(DeleteHdl, void*, void);
 
-        SwView& DocView() { return mrView;}
-        SwPostItMgr& Mgr() { return mrMgr; }
-        Outliner* Engine() { return mpOutliner;}
-
         sal_uInt32 CountFollowing();
         SwAnnotationWin*   GetTopReplyNote();
         SvxLanguageItem GetLanguage();
