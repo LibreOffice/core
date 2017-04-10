@@ -46,6 +46,7 @@
 #include <oleembobj.hxx>
 #include <mtnotification.hxx>
 #include <memory>
+#include <string>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -922,12 +923,12 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
             hr = pOleLink->GetSourceDisplayName( &pOleStr );
             if ( SUCCEEDED( hr ) && pOleStr )
             {
-                OUString aFilePath( SAL_U(pOleStr) );
+                std::wstring aFilePath( pOleStr );
                 if ( pMalloc )
                     pMalloc->Free( pOleStr );
 
                 hr = OleCreateFromFile( CLSID_NULL,
-                                        reinterpret_cast<LPCWSTR>(aFilePath.getStr()),
+                                        aFilePath.c_str(),
                                         IID_IUnknown,
                                         OLERENDER_DRAW, // OLERENDER_FORMAT
                                         nullptr,
