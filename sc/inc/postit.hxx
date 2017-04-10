@@ -70,7 +70,7 @@ public:
 
     /** Remove from draw page and free caption object if no Undo recording.
      */
-    void removeFromDrawPageAndFree();
+    void removeFromDrawPageAndFree( bool bIgnoreUndo = false );
 
     /** Release all management of the SdrCaptionObj* in all instances of this
         list and dissolve. The SdrCaptionObj pointer returned is ready to be
