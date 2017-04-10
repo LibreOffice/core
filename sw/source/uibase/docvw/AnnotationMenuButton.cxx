@@ -156,34 +156,19 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const tools
     }
     rRenderContext.DrawRect(aRect);
 
-    if (mrSidebarWin.IsPreview())
-    {
-        vcl::Font aOldFont(mrSidebarWin.GetFont());
-        vcl::Font aFont(aOldFont);
-        Color aCol(COL_BLACK);
-        aFont.SetColor(aCol);
-        aFont.SetFontHeight(200);
-        aFont.SetWeight(WEIGHT_MEDIUM);
-        rRenderContext.SetFont(aFont);
-        rRenderContext.DrawText(aRect, OUString("Edit Note"), DrawTextFlags::Center);
-        rRenderContext.SetFont(aOldFont);
-    }
-    else
-    {
-        tools::Rectangle aSymbolRect(aRect);
-        // 25% distance to the left and right button border
-        const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth() * 250) + 500) / 1000;
-        aSymbolRect.Left() += nBorderDistanceLeftAndRight;
-        aSymbolRect.Right() -= nBorderDistanceLeftAndRight;
-        // 40% distance to the top button border
-        const long nBorderDistanceTop = ((aSymbolRect.GetHeight() * 400) + 500) / 1000;
-        aSymbolRect.Top()+=nBorderDistanceTop;
-        // 15% distance to the bottom button border
-        const long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
-        aSymbolRect.Bottom() -= nBorderDistanceBottom;
-        DecorationView aDecoView(&rRenderContext);
-        aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, (bHighContrast ? Color(COL_WHITE) : Color(COL_BLACK)));
-    }
+    tools::Rectangle aSymbolRect(aRect);
+    // 25% distance to the left and right button border
+    const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth() * 250) + 500) / 1000;
+    aSymbolRect.Left() += nBorderDistanceLeftAndRight;
+    aSymbolRect.Right() -= nBorderDistanceLeftAndRight;
+    // 40% distance to the top button border
+    const long nBorderDistanceTop = ((aSymbolRect.GetHeight() * 400) + 500) / 1000;
+    aSymbolRect.Top()+=nBorderDistanceTop;
+    // 15% distance to the bottom button border
+    const long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
+    aSymbolRect.Bottom() -= nBorderDistanceBottom;
+    DecorationView aDecoView(&rRenderContext);
+    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, (bHighContrast ? Color(COL_WHITE) : Color(COL_BLACK)));
 }
 
 void AnnotationMenuButton::KeyInput(const KeyEvent& rKeyEvt)
