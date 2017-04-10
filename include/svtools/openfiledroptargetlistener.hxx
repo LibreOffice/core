@@ -45,7 +45,7 @@ class SVT_DLLPUBLIC OpenFileDropTargetListener : public cppu::WeakImplHelper< cs
         css::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;
 
         /// drag/drop info
-        DataFlavorExVector* m_pFormats;
+        DataFlavorExVector m_aFormats;
 
     public:
         OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
