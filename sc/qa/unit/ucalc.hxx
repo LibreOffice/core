@@ -166,6 +166,7 @@ public:
     void testFormulaRefUpdateNameDelete();
     void testFormulaRefUpdateValidity();
     void testTokenArrayRefUpdateMove();
+    void testSingleCellCopyColumnLabel();
     void testMultipleOperations();
     void testFuncCOLUMN();
     void testFuncCOUNT();
