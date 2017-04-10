@@ -492,7 +492,7 @@ public:
 
 
     // This method exports the given OUString
-    void exportText(
+    void exportCharacterData(
         const OUString& rText,
         bool& rPrevCharWasSpace);
 

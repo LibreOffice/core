@@ -1423,7 +1423,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                             sToken = sToken.copy(1,sToken.getLength()-2);
 
                         bool bPrevCharIsSpace = false;
-                        GetTextParagraphExport()->exportText(sToken,bPrevCharIsSpace);
+                        GetTextParagraphExport()->exportCharacterData(sToken, bPrevCharIsSpace);
                     }
                 }
             }
@@ -1435,7 +1435,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
     {
         OUString sExpr = xFT->getLabel();
         bool bPrevCharIsSpace = false;
-        GetTextParagraphExport()->exportText(sExpr,bPrevCharIsSpace);
+        GetTextParagraphExport()->exportCharacterData(sExpr, bPrevCharIsSpace);
     }
 }
 

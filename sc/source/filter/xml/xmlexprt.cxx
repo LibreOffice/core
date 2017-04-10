@@ -3293,7 +3293,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 ScCellFormat::GetOutputString(*pDoc, aCell.maCellAddress, aCell.maBaseCell);
 
             bool bPrevCharWasSpace = true;
-            GetTextParagraphExport()->exportText(aParaStr, bPrevCharWasSpace);
+            GetTextParagraphExport()->exportCharacterData(aParaStr, bPrevCharWasSpace);
         }
     }
     WriteShapes(aCell);

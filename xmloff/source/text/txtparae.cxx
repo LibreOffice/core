@@ -3329,7 +3329,7 @@ void XMLTextParagraphExport::exportTextRangeSpan(
         SvXMLElementExport aElem2( GetExport(), TEXT == openFieldMark,
             XML_NAMESPACE_TEXT, XML_TEXT_INPUT,
             false, false );
-        exportText( aText, rPrevCharIsSpace );
+        exportCharacterData(aText, rPrevCharIsSpace);
         openFieldMark = NONE;
     }
 }
@@ -3384,7 +3384,7 @@ void XMLTextParagraphExport::exportTextRange(
     }
 }
 
-void XMLTextParagraphExport::exportText( const OUString& rText,
+void XMLTextParagraphExport::exportCharacterData(const OUString& rText,
                                            bool& rPrevCharIsSpace )
 {
     sal_Int32 nExpStartPos = 0;

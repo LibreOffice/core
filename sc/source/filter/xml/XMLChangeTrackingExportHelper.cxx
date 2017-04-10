@@ -122,7 +122,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
     {
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
         bool bPrevCharWasSpace(true);
-        rExport.GetTextParagraphExport()->exportText(sComment, bPrevCharWasSpace);
+        rExport.GetTextParagraphExport()->exportCharacterData(sComment, bPrevCharWasSpace);
     }
 }
 
@@ -278,7 +278,7 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
     {
         SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
         bool bPrevCharWasSpace(true);
-        rExport.GetTextParagraphExport()->exportText(rCell.mpString->getString(), bPrevCharWasSpace);
+        rExport.GetTextParagraphExport()->exportCharacterData(rCell.mpString->getString(), bPrevCharWasSpace);
     }
 }
 
@@ -356,7 +356,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, co
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
             bool bPrevCharWasSpace(true);
-            rExport.GetTextParagraphExport()->exportText(sCellValue, bPrevCharWasSpace);
+            rExport.GetTextParagraphExport()->exportCharacterData(sCellValue, bPrevCharWasSpace);
         }
     }
 }

@@ -318,7 +318,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
             if( sText[i] == '\n')
             {
                 SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
-                rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+                rExport.GetTextParagraphExport()->exportCharacterData(sTemp.makeStringAndClear(), bPrevCharWasSpace);
             }
             else
                 sTemp.append(sText[i]);
@@ -327,7 +327,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         if (!sTemp.isEmpty())
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
-            rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+            rExport.GetTextParagraphExport()->exportCharacterData(sTemp.makeStringAndClear(), bPrevCharWasSpace);
         }
     }
     delete pMessage;
