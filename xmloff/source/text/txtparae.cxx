@@ -1484,7 +1484,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             Any aAny = xTextFieldsEnum->nextElement();
             Reference< XTextField > xTextField = *o3tl::doAccess<Reference<XTextField>>(aAny);
             exportTextField( xTextField, bAutoStyles, bIsProgress,
-                !xAutoStylesSupp.is() );
+                !xAutoStylesSupp.is(), nullptr );
             try
             {
                 Reference < XPropertySet > xSet( xTextField, UNO_QUERY );
@@ -1727,7 +1727,7 @@ void XMLTextParagraphExport::exportText(
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
 
-bool XMLTextParagraphExport::exportTextContentEnumeration(
+void XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XEnumeration > & rContEnum,
         bool bAutoStyles,
         const Reference < XTextSection > & rBaseSection,
@@ -1739,7 +1739,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
     SAL_WARN_IF( !rContEnum.is(), "xmloff", "No enumeration to export!" );
     bool bHasMoreElements = rContEnum->hasMoreElements();
     if( !bHasMoreElements )
-        return false;
+        return;
 
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
@@ -1889,8 +1889,6 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
                                     aPrevNumInfo, aNextNumInfo,
                                     bAutoStyles );
     }
-
-    return true;
 }
 
 void XMLTextParagraphExport::exportParagraph(
@@ -2128,6 +2126,8 @@ void XMLTextParagraphExport::exportParagraph(
         }
     }
 
+    bool bPrevCharIsSpace(true); // true because whitespace at start is ignored
+
     if( bAutoStyles )
     {
         if( bHasContentEnum )
@@ -2135,32 +2135,32 @@ void XMLTextParagraphExport::exportParagraph(
                                     xContentEnum, bAutoStyles, xSection,
                                     bIsProgress );
         if ( bHasPortions )
-            exportTextRangeEnumeration( xTextEnum, bAutoStyles, bIsProgress );
+        {
+            exportTextRangeEnumeration(xTextEnum, bAutoStyles, bIsProgress, bPrevCharIsSpace);
+        }
     }
     else
     {
-        bool bPrevCharIsSpace = true;
         enum XMLTokenEnum eElem =
             0 < nOutlineLevel ? XML_H : XML_P;
         SvXMLElementExport aElem( GetExport(), eExtensionNS == TextPNS::EXTENSION ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_TEXT, eElem,
                                   true, false );
         if( bHasContentEnum )
-            bPrevCharIsSpace = !exportTextContentEnumeration(
+        {
+            exportTextContentEnumeration(
                                     xContentEnum, bAutoStyles, xSection,
                                     bIsProgress );
-        exportTextRangeEnumeration( xTextEnum, bAutoStyles, bIsProgress,
-                                     bPrevCharIsSpace );
+        }
+        exportTextRangeEnumeration(xTextEnum, bAutoStyles, bIsProgress, bPrevCharIsSpace);
     }
 }
 
 void XMLTextParagraphExport::exportTextRangeEnumeration(
         const Reference < XEnumeration > & rTextEnum,
         bool bAutoStyles, bool bIsProgress,
-        bool bPrvChrIsSpc )
+        bool & rPrevCharIsSpace)
 {
     static const char sFieldMarkName[] = "__FieldMark_";
-
-    bool bPrevCharIsSpace = bPrvChrIsSpc;
 
     /* This is  used for exporting to strict OpenDocument 1.2, in which case traditional
      * bookmarks are used instead of fieldmarks. */
@@ -2180,17 +2180,15 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             if( sType.equals(sText))
             {
                 exportTextRange( xTxtRange, bAutoStyles,
-                                 bPrevCharIsSpace, openFieldMark);
+                                 rPrevCharIsSpace, openFieldMark);
             }
             else if( sType.equals(sTextField))
             {
-                exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                bPrevCharIsSpace = false;
+                exportTextField(xTxtRange, bAutoStyles, bIsProgress, &rPrevCharIsSpace);
             }
             else if ( sType == "Annotation" )
             {
-                exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                bPrevCharIsSpace = false;
+                exportTextField(xTxtRange, bAutoStyles, bIsProgress, &rPrevCharIsSpace);
             }
             else if ( sType == "AnnotationEnd" )
             {
@@ -2221,14 +2219,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                                     xSection, bIsProgress, true,
                                                      &xPropSet  );
 
-                bPrevCharIsSpace = false;
             }
             else if (sType.equals(sFootnote))
             {
                 exportTextFootnote(xPropSet,
                                    xTxtRange->getString(),
                                    bAutoStyles, bIsProgress );
-                bPrevCharIsSpace = false;
             }
             else if (sType.equals(sBookmark))
             {
@@ -2259,7 +2255,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType == "InContentMetadata")
             {
-                exportMeta(xPropSet, bAutoStyles, bIsProgress);
+                exportMeta(xPropSet, bAutoStyles, bIsProgress, rPrevCharIsSpace);
             }
             else if (sType.equals(sTextFieldStart))
             {
@@ -2415,13 +2411,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             Reference<XServiceInfo> xServiceInfo( xTxtRange, UNO_QUERY );
             if( xServiceInfo->supportsService( sTextFieldService ) )
             {
-                exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                bPrevCharIsSpace = false;
+                exportTextField(xTxtRange, bAutoStyles, bIsProgress, &rPrevCharIsSpace);
             }
             else
             {
                 // no TextPortionType property -> non-Writer app -> text
-                exportTextRange( xTxtRange, bAutoStyles, bPrevCharIsSpace, openFieldMark );
+                exportTextRange(xTxtRange, bAutoStyles, rPrevCharIsSpace, openFieldMark);
             }
         }
     }
@@ -2438,7 +2433,7 @@ void XMLTextParagraphExport::exportTable(
 
 void XMLTextParagraphExport::exportTextField(
         const Reference < XTextRange > & rTextRange,
-        bool bAutoStyles, bool bIsProgress )
+        bool bAutoStyles, bool bIsProgress, bool *const pPrevCharIsSpace)
 {
     Reference < XPropertySet > xPropSet( rTextRange, UNO_QUERY );
     // non-Writer apps need not support Property TextField, so test first
@@ -2448,7 +2443,7 @@ void XMLTextParagraphExport::exportTextField(
         SAL_WARN_IF( !xTxtFld.is(), "xmloff", "text field missing" );
         if( xTxtFld.is() )
         {
-            exportTextField(xTxtFld, bAutoStyles, bIsProgress, true);
+            exportTextField(xTxtFld, bAutoStyles, bIsProgress, true, pPrevCharIsSpace);
         }
         else
         {
@@ -2461,7 +2456,7 @@ void XMLTextParagraphExport::exportTextField(
 void XMLTextParagraphExport::exportTextField(
         const Reference < XTextField > & xTextField,
         const bool bAutoStyles, const bool bIsProgress,
-        const bool bRecursive )
+        const bool bRecursive, bool *const pPrevCharIsSpace)
 {
     if ( bAutoStyles )
     {
@@ -2470,7 +2465,8 @@ void XMLTextParagraphExport::exportTextField(
     }
     else
     {
-        pFieldExport->ExportField( xTextField, bIsProgress );
+        assert(pPrevCharIsSpace);
+        pFieldExport->ExportField(xTextField, bIsProgress, *pPrevCharIsSpace);
     }
 }
 
@@ -3701,7 +3697,7 @@ void XMLTextParagraphExport::exportRuby(
 
 void XMLTextParagraphExport::exportMeta(
     const Reference<XPropertySet> & i_xPortion,
-    bool i_bAutoStyles, bool i_isProgress)
+    bool i_bAutoStyles, bool i_isProgress, bool & rPrevCharIsSpace)
 {
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2
@@ -3732,7 +3728,7 @@ void XMLTextParagraphExport::exportMeta(
         XML_NAMESPACE_TEXT, XML_META, false, false );
 
     // recurse to export content
-    exportTextRangeEnumeration( xTextEnum, i_bAutoStyles, i_isProgress );
+    exportTextRangeEnumeration(xTextEnum, i_bAutoStyles, i_isProgress, rPrevCharIsSpace);
 }
 
 void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(

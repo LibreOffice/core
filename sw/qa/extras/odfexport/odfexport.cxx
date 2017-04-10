@@ -862,6 +862,329 @@ DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
         assertXPath(pXmlDoc, "//draw:custom-shape/loext:table", "name", "Table1");
 }
 
+// test that import whitespace collapsing is compatible with old docs
+DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
+{
+    uno::Reference<container::XEnumerationAccess> xPara;
+    uno::Reference<container::XEnumeration> xPortions;
+    uno::Reference<text::XTextRange> xPortion;
+    xPara.set(getParagraphOrTable(1), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(2), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/"), getProperty<OUString>(xPortion, "HyperLinkURL"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(3), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Ruby"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xPortion->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), getProperty<OUString>(xPortion, "RubyText"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Ruby"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(4), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("InContentMetadata"), getProperty<OUString>(xPortion, "TextPortionType"));
+    {
+        // what a stupid idea to require recursively enumerating this
+        uno::Reference<container::XEnumerationAccess> xMeta(
+            getProperty<uno::Reference<text::XTextContent>>(xPortion, "InContentMetadata"), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xMetaPortions(
+            xMeta->createEnumeration(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xMP(xMetaPortions->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xMP, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(OUString(" "), xMP->getString());
+        CPPUNIT_ASSERT(!xMetaPortions->hasMoreElements());
+    }
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(5), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xPortion, "TextPortionType"));
+    {
+        // what a stupid idea to require recursively enumerating this
+        uno::Reference<container::XEnumerationAccess> xMeta(
+            getProperty<uno::Reference<text::XTextContent>>(xPortion, "TextField"), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xMetaPortions(
+            xMeta->createEnumeration(), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xMP(xMetaPortions->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xMP, "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL(OUString(" "), xMP->getString());
+        CPPUNIT_ASSERT(!xMetaPortions->hasMoreElements());
+    }
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(7), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getProperty<OUString>(xPortion, "TextPortionType"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(8), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getProperty<OUString>(xPortion, "TextPortionType"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(9), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getProperty<OUString>(xPortion, "TextPortionType"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(10), uno::UNO_QUERY);
+    uno::Reference<container::XContentEnumerationAccess> xCEA(xPara, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xFrames(
+            xCEA->createContentEnumeration("com.sun.star.text.TextContent"));
+    xFrames->nextElement(); // one at-paragraph frame
+    CPPUNIT_ASSERT(!xFrames->hasMoreElements());
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(11), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Footnote"), getProperty<OUString>(xPortion, "TextPortionType"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(12), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xPortion, "TextPortionType"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(13), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPortion, "TextPortionType"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPortion, "TextPortionType"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(15), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(16), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(17), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(18), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(19), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("ReferenceMark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(20), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("ReferenceMark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("ReferenceMark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(21), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("DocumentIndexMark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+
+    xPara.set(getParagraphOrTable(22), uno::UNO_QUERY);
+    xPortions.set(xPara->createEnumeration());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("DocumentIndexMark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("DocumentIndexMark"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
+    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
+    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
 {
     // Export of this document failed with beans::UnknownPropertyException.

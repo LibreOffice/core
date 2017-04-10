@@ -166,7 +166,7 @@ public:
     /// Export this field and the surrounding span element with the formatting.
     /// To be called for every field in the document body.
     void ExportField(const css::uno::Reference < css::text::XTextField > & rTextField,
-                     bool bProgress );
+                     bool bProgress, bool & rPrevCharIsSpace);
 
     /// collect styles (character styles, data styles, ...) for this field
     /// (if appropriate).
@@ -217,7 +217,8 @@ private:
         const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
         const css::uno::Reference< css::beans::XPropertySet> & rRangePropSet,
         enum FieldIdEnum nToken,
-        bool bProgress );
+        bool bProgress,
+        bool & rPrevCharIsSpace);
 
     /// export an empty element
     void ExportElement(enum ::xmloff::token::XMLTokenEnum eElement, /// element token
@@ -234,7 +235,8 @@ private:
 
     /// export text:meta-field (RDF metadata)
     void ExportMetaField( const css::uno::Reference< css::beans::XPropertySet> & i_xMeta,
-                          bool i_bAutoStyles, bool i_bProgress );
+                          bool i_bAutoStyles, bool i_bProgress,
+                          bool & rPrevCharIsSpace);
 
     /// export a boolean attribute
     void ProcessBoolean(

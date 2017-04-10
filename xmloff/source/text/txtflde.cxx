@@ -833,7 +833,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         // recurse into content (does not export element, so can be done first)
         if (bRecursive)
         {
-            ExportMetaField(xPropSet, true, bProgress);
+            bool dummy_for_autostyles(true);
+            ExportMetaField(xPropSet, true, bProgress, dummy_for_autostyles);
         }
         SAL_FALLTHROUGH;
     case FIELD_ID_DOCINFO_PRINT_TIME:
@@ -955,7 +956,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
 /// export the given field to XML. Called on second pass through document
 void XMLTextFieldExport::ExportField(
-    const Reference<XTextField> & rTextField, bool bProgress )
+    const Reference<XTextField> & rTextField, bool bProgress,
+    bool & rPrevCharIsSpace)
 {
     // get property set
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
@@ -1033,7 +1035,7 @@ void XMLTextFieldExport::ExportField(
 
         // finally, export the field itself
         ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken,
-            bProgress );
+            bProgress, rPrevCharIsSpace);
     }
 }
 
@@ -1043,7 +1045,8 @@ void XMLTextFieldExport::ExportFieldHelper(
     const Reference<XPropertySet> & rPropSet,
     const Reference<XPropertySet> &,
     enum FieldIdEnum nToken,
-    bool bProgress )
+    bool bProgress,
+    bool & rPrevCharIsSpace)
 {
     // get property set info (because some attributes are not support
     // in all implementations)
@@ -1783,7 +1786,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_META:
     {
-        ExportMetaField(rPropSet, false, bProgress);
+        ExportMetaField(rPropSet, false, bProgress, rPrevCharIsSpace);
         break;
     }
 
@@ -2305,7 +2308,8 @@ void XMLTextFieldExport::ExportMacro(
 
 void XMLTextFieldExport::ExportMetaField(
     const Reference<XPropertySet> & i_xMeta,
-    bool i_bAutoStyles, bool i_bProgress )
+    bool i_bAutoStyles, bool i_bProgress,
+    bool & rPrevCharIsSpace)
 {
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2
@@ -2340,7 +2344,7 @@ void XMLTextFieldExport::ExportMetaField(
 
     // recurse to export content
     GetExport().GetTextParagraphExport()->
-        exportTextRangeEnumeration( xTextEnum, i_bAutoStyles, i_bProgress );
+        exportTextRangeEnumeration(xTextEnum, i_bAutoStyles, i_bProgress, rPrevCharIsSpace);
 }
 
 /// export all data-style related attributes

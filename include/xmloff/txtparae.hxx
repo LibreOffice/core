@@ -246,8 +246,7 @@ public:
 
     void exportTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
-        bool bAutoStyles, bool bProgress,
-        bool bPrvChrIsSpc = true );
+        bool bAutoStyles, bool bProgress, bool & rPrevCharIsSpace);
 
 protected:
 
@@ -276,7 +275,7 @@ protected:
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
         bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
 
-    bool exportTextContentEnumeration(
+    void exportTextContentEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rContentEnum,
         bool bAutoStyles,
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
@@ -298,12 +297,12 @@ protected:
 
     void exportTextField(
         const css::uno::Reference< css::text::XTextRange > & rTextRange,
-        bool bAutoStyles, bool bProgress );
+        bool bAutoStyles, bool bProgress, bool * pPrevCharIsSpace);
 
     void exportTextField(
         const css::uno::Reference< css::text::XTextField> & xTextField,
         const bool bAutoStyles, const bool bProgress,
-        const bool bRecursive );
+        const bool bRecursive, bool * pPrevCharIsSpace);
 
     void exportAnyTextFrame(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
@@ -418,7 +417,7 @@ protected:
     /// export a text:meta
     void exportMeta(
         const css::uno::Reference< css::beans::XPropertySet> & i_xPortion,
-        bool i_bAutoStyles, bool i_isProgress );
+        bool i_bAutoStyles, bool i_isProgress, bool & rPrevCharIsSpace);
 
 public:
 

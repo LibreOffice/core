@@ -319,6 +319,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
             {
                 SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
                 rExport.GetTextParagraphExport()->exportCharacterData(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+                bPrevCharWasSpace = true; // reset for start of next paragraph
             }
             else
                 sTemp.append(sText[i]);
