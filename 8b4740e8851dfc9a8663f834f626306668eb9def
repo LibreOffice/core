@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_506c929c",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-10T11:30:21Z",
+      "side": 1,
+      "message": "without",
+      "revId": "8b4740e8851dfc9a8663f834f626306668eb9def",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

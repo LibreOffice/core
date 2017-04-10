@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_70698e8b",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-10T11:30:21Z",
+      "side": 0,
+      "message": "Bereich means a text range here",
+      "revId": "7e03a22b690ff2fa9e2a1cf3a7b0f86ab48b10a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_90043ac7",
+        "filename": "sw/source/filter/html/htmlsect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-10T11:30:21Z",
+      "side": 0,
+      "message": "Bereich means a section here",
+      "revId": "7e03a22b690ff2fa9e2a1cf3a7b0f86ab48b10a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b00936e0",
+        "filename": "sw/source/filter/html/htmlsect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-10T11:30:21Z",
+      "side": 0,
+      "message": "i think this is a typo and means \"UND IHN LOESCHEN!!!\"\n\nalso in english one ! is usually sufficient :)",
+      "revId": "7e03a22b690ff2fa9e2a1cf3a7b0f86ab48b10a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d00ec2e4",
+        "filename": "sw/source/filter/html/htmlsect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-10T11:30:21Z",
+      "side": 0,
+      "message": "section again, for added inconsistency the jump-field calls it \"region\"",
+      "revId": "7e03a22b690ff2fa9e2a1cf3a7b0f86ab48b10a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
