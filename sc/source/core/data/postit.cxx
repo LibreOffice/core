@@ -691,18 +691,20 @@ void ScCaptionPtr::decRefAndDestroy()
         assert(mpHead->mpFirst == this);    // this must be one and only one
         assert(!mpNext);                    // this must be one and only one
         assert(mpCaption);
-#if 0
-        if (what?)
+
+        // Destroying Draw Undo deletes its SdrObject, don't attempt that twice.
+        if (!mbInUndo)
         {
-            /* FIXME: this should eventually remove the caption from drawing layer
-             * foo and call SdrObject::Free(), likely with mpCaption, see
-             * ScPostIt::RemoveCaption(). Further work needed to be able to do so.
-             * */
+            removeFromDrawPageAndFree( true );  // ignoring Undo
+            if (mpCaption)
+            {
+                // There's no draw page associated so removeFromDrawPageAndFree()
+                // didn't do anything, but still we want to delete the caption
+                // object. release()/dissolve() also resets mpCaption.
+                SdrObject* pObj = release();
+                SdrObject::Free( pObj );
+            }
         }
-        /* FIXME: once we got ownership right */
-        //SdrObject::Free( mpCaption );
-#endif
-        mpCaption = nullptr;
         delete mpHead;
         mpHead = nullptr;
     }
