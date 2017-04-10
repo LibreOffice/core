@@ -3407,6 +3407,14 @@ gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context
     aEvent.LocationX = x;
     aEvent.LocationY = y;
     aEvent.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
+    // ACTION_DEFAULT is documented as...
+    // 'This means the user did not press any key during the Drag and Drop operation
+    // and the action that was combined with ACTION_DEFAULT is the system default action'
+    // in tdf#107031 writer won't insert a link when a heading is dragged from the
+    // navigator unless this is set. Its unclear really what ACTION_DEFAULT means,
+    // there is a deprecated 'GDK_ACTION_DEFAULT Means nothing, and should not be used'
+    // possible equivalent in gtk.
+    aEvent.DropAction |= css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
     aEvent.SourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
     // For LibreOffice internal D&D we provide the Transferable without Gtk
