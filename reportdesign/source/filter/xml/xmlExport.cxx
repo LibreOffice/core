@@ -1434,7 +1434,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
     if ( xFT.is() )
     {
         OUString sExpr = xFT->getLabel();
-        bool bPrevCharIsSpace = false;
+        bool bPrevCharIsSpace = false; // FIXME this looks quite broken - does the corresponding import filter do whitespace collapsing at all?
         GetTextParagraphExport()->exportCharacterData(sExpr, bPrevCharIsSpace);
     }
 }
