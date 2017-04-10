@@ -535,7 +535,7 @@ ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
 }
 
 ScCaptionPtr::Head::Head( ScCaptionPtr* p ) :
-    mpFirst(p), mnRefs(1), mbInDrawPage(false)
+    mpFirst(p), mnRefs(1)
 {
 }
 
@@ -686,7 +686,8 @@ void ScCaptionPtr::decRefAndDestroy()
         assert(mpHead->mpFirst == this);    // this must be one and only one
         assert(!mpNext);                    // this must be one and only one
         assert(mpCaption);
-        if (mpHead->mbInDrawPage)
+#if 0
+        if (what?)
         {
             /* FIXME: this should eventually remove the caption from drawing layer
              * foo and call SdrObject::Free(), likely with mpCaption, see
@@ -695,6 +696,7 @@ void ScCaptionPtr::decRefAndDestroy()
         }
         /* FIXME: once we got ownership right */
         //SdrObject::Free( mpCaption );
+#endif
         mpCaption = nullptr;
         delete mpHead;
         mpHead = nullptr;
@@ -704,24 +706,15 @@ void ScCaptionPtr::decRefAndDestroy()
 void ScCaptionPtr::insertToDrawPage( SdrPage& rDrawPage )
 {
     assert(mpHead && mpCaption);
-    assert(!mpHead->mbInDrawPage);  // multiple assignments not possible
 
     rDrawPage.InsertObject( mpCaption );
-    mpHead->mbInDrawPage = true;
 }
 
 void ScCaptionPtr::removeFromDrawPage( SdrPage& rDrawPage )
 {
     assert(mpHead && mpCaption);
-    SAL_WARN_IF(!mpHead->mbInDrawPage,"sc.core","ScCaptionPtr::removeFromDrawPage - not in draw page");
-    /* FIXME: that should assert, but currently fails in
-     * Test::testCopyToDocument() probably due to CopyStaticToDocument()
-     * lacking something. */
-    //assert(mpHead->mbInDrawPage);   // did we lose track anywhere?
-
     SdrObject* pObj = rDrawPage.RemoveObject( mpCaption->GetOrdNum() );
     assert(pObj == mpCaption); (void)pObj;
-    mpHead->mbInDrawPage = false;
 }
 
 SdrCaptionObj* ScCaptionPtr::release()

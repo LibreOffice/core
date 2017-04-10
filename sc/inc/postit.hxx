@@ -89,7 +89,6 @@ private:
     {
         ScCaptionPtr*       mpFirst;        ///< first in list
         oslInterlockedCount mnRefs;         ///< use count
-        bool                mbInDrawPage;   ///< caption object is owned by draw page
 
         Head() = delete;
         explicit Head( ScCaptionPtr* );
