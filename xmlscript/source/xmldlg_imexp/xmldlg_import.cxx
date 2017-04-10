@@ -1092,7 +1092,7 @@ bool ImportContext::importButtonTypeProperty(
             throw xml::sax::SAXException( "invalid button-type value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nButtonType ) );
+        _xControlModel->setPropertyValue( rPropName, makeAny( (sal_Int16)nButtonType ) );
         return true;
     }
     return false;
