@@ -13,17 +13,17 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
-#include <SidebarWin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
+#include <AnnotationWin.hxx>
 
 namespace sw
 {
 namespace sidebarwindows
 {
 
-SidebarScrollBar::SidebarScrollBar(SwSidebarWin& rSidebarWin, WinBits nStyle, SwView& rView)
+SidebarScrollBar::SidebarScrollBar(sw::annotation::SwAnnotationWin& rSidebarWin, WinBits nStyle, SwView& rView)
     : ScrollBar(&rSidebarWin, nStyle),
       m_rSidebarWin(rSidebarWin),
       m_rView(rView)

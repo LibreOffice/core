@@ -94,7 +94,7 @@
 #include "annotsh.hxx"
 #include "view.hxx"
 #include <PostItMgr.hxx>
-#include <SidebarWin.hxx>
+#include <AnnotationWin.hxx>
 
 #include "swtypes.hxx"
 

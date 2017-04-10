@@ -417,7 +417,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         case NID_POSTIT:
             {
                 rSh.EnterStdMode();
-                sw::sidebarwindows::SwSidebarWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
+                sw::annotation::SwAnnotationWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
                 if (pPostIt)
                     GetPostItMgr()->SetActiveSidebarWin(nullptr);
                 SwFieldType* pFieldType = rSh.GetFieldType(0, SwFieldIds::Postit);

@@ -22,9 +22,9 @@
 #include <cstddef>
 #include <cstdlib>
 
-#include <SidebarWin.hxx>
 #include <SidebarWinAcc.hxx>
 #include <PostItMgr.hxx>
+#include <AnnotationWin.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <comphelper/string.hxx>
 #include <SidebarTxtControl.hxx>
@@ -87,6 +87,8 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 
+using namespace sw::sidebarwindows;
+
 namespace
 {
 
@@ -122,7 +124,7 @@ void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* p
 }
 
 /// Decide which one from the children of rParent should get rMouseEvent.
-vcl::Window* lcl_getHitWindow(sw::sidebarwindows::SwSidebarWin& rParent, const MouseEvent& rMouseEvent)
+vcl::Window* lcl_getHitWindow(sw::annotation::SwAnnotationWin& rParent, const MouseEvent& rMouseEvent)
 {
     vcl::Window* pRet = nullptr;
 
@@ -148,7 +150,7 @@ vcl::Window* lcl_getHitWindow(sw::sidebarwindows::SwSidebarWin& rParent, const M
 
 }
 
-namespace sw { namespace sidebarwindows {
+namespace sw { namespace annotation {
 
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
@@ -156,125 +158,8 @@ namespace sw { namespace sidebarwindows {
 #define POSTIT_META_HEIGHT  (sal_Int32)     30
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
-SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
-                           WinBits nBits,
-                           SwPostItMgr& aMgr,
-                           SwSidebarItem& rSidebarItem)
-    : Window(&rEditWin, nBits)
-    , mrMgr(aMgr)
-    , mrView(rEditWin.GetView())
-    , mnEventId(nullptr)
-    , mpOutlinerView(nullptr)
-    , mpOutliner(nullptr)
-    , mpSidebarTextControl(nullptr)
-    , mpVScrollbar(nullptr)
-    , mpMetadataAuthor(nullptr)
-    , mpMetadataDate(nullptr)
-    , mpMenuButton(nullptr)
-    , mpAnchor(nullptr)
-    , mpShadow(nullptr)
-    , mpTextRangeOverlay(nullptr)
-    , mColorAnchor()
-    , mColorDark()
-    , mColorLight()
-    , mChangeColor()
-    , meSidebarPosition(sw::sidebarwindows::SidebarPosition::NONE)
-    , mPosSize()
-    , mAnchorRect()
-    , mPageBorder(0)
-    , mbAnchorRectChanged(false)
-    , mbMouseOver(false)
-    , mLayoutStatus(SwPostItHelper::INVISIBLE)
-    , mbReadonly(false)
-    , mbIsFollow(false)
-    , mrSidebarItem(rSidebarItem)
-    , mpAnchorFrame(rSidebarItem.maLayoutInfo.mpAnchorFrame)
-{
-    mpShadow = ShadowOverlayObject::CreateShadowOverlayObject( mrView );
-    if ( mpShadow )
-    {
-        mpShadow->setVisible(false);
-    }
 
-    mrMgr.ConnectSidebarWinToFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
-                                  mrSidebarItem.GetFormatField(),
-                                  *this );
-}
-
-SwSidebarWin::~SwSidebarWin()
-{
-    disposeOnce();
-}
-
-void SwSidebarWin::dispose()
-{
-    if (IsDisposed())
-        return;
-
-    mrMgr.DisconnectSidebarWinFromFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
-                                       *this );
-
-    Disable();
-
-    if ( mpSidebarTextControl )
-    {
-        if ( mpOutlinerView )
-        {
-            mpOutlinerView->SetWindow( nullptr );
-        }
-    }
-    mpSidebarTextControl.disposeAndClear();
-
-    if ( mpOutlinerView )
-    {
-        delete mpOutlinerView;
-        mpOutlinerView = nullptr;
-    }
-
-    if (mpOutliner)
-    {
-        delete mpOutliner;
-        mpOutliner = nullptr;
-    }
-
-    if (mpMetadataAuthor)
-    {
-        mpMetadataAuthor->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-    }
-    mpMetadataAuthor.disposeAndClear();
-
-    if (mpMetadataDate)
-    {
-        mpMetadataDate->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-    }
-    mpMetadataDate.disposeAndClear();
-
-    if (mpVScrollbar)
-    {
-        mpVScrollbar->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-    }
-    mpVScrollbar.disposeAndClear();
-
-    RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-
-    AnchorOverlayObject::DestroyAnchorOverlayObject( mpAnchor );
-    mpAnchor = nullptr;
-
-    ShadowOverlayObject::DestroyShadowOverlayObject( mpShadow );
-    mpShadow = nullptr;
-
-    delete mpTextRangeOverlay;
-    mpTextRangeOverlay = nullptr;
-
-    mpMenuButton.disposeAndClear();
-
-    if (mnEventId)
-        Application::RemoveUserEvent( mnEventId );
-
-    vcl::Window::dispose();
-}
-
-void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 
@@ -304,7 +189,7 @@ void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     }
 }
 
-void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Paint(rRenderContext, rRect);
 
@@ -363,13 +248,13 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Re
     rRenderContext.Push(PushFlags::NONE);
 }
 
-bool SwSidebarWin::IsHitWindow(const Point& rPointLogic)
+bool SwAnnotationWin::IsHitWindow(const Point& rPointLogic)
 {
     tools::Rectangle aRectangleLogic(EditWin().PixelToLogic(GetPosPixel()), EditWin().PixelToLogic(GetSizePixel()));
     return aRectangleLogic.IsInside(rPointLogic);
 }
 
-void SwSidebarWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
+void SwAnnotationWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
     mpSidebarTextControl->Push(PushFlags::MAPMODE);
     MouseEvent aMouseEvent(rPosition);
@@ -382,7 +267,7 @@ void SwSidebarWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, b
     mpSidebarTextControl->Pop();
 }
 
-void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
+void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
 {
     if (mpMetadataAuthor->IsVisible() )
     {
@@ -450,7 +335,7 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, D
     }
 }
 
-void SwSidebarWin::KeyInput(const KeyEvent& rKeyEvent)
+void SwAnnotationWin::KeyInput(const KeyEvent& rKeyEvent)
 {
     if (mpSidebarTextControl)
     {
@@ -463,7 +348,7 @@ void SwSidebarWin::KeyInput(const KeyEvent& rKeyEvent)
     }
 }
 
-void SwSidebarWin::MouseMove(const MouseEvent& rMouseEvent)
+void SwAnnotationWin::MouseMove(const MouseEvent& rMouseEvent)
 {
     if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
     {
@@ -477,7 +362,7 @@ void SwSidebarWin::MouseMove(const MouseEvent& rMouseEvent)
     }
 }
 
-void SwSidebarWin::MouseButtonDown(const MouseEvent& rMouseEvent)
+void SwAnnotationWin::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
     if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
     {
@@ -491,7 +376,7 @@ void SwSidebarWin::MouseButtonDown(const MouseEvent& rMouseEvent)
     }
 }
 
-void SwSidebarWin::MouseButtonUp(const MouseEvent& rMouseEvent)
+void SwAnnotationWin::MouseButtonUp(const MouseEvent& rMouseEvent)
 {
     if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
     {
@@ -505,7 +390,7 @@ void SwSidebarWin::MouseButtonUp(const MouseEvent& rMouseEvent)
     }
 }
 
-void SwSidebarWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeight,
+void SwAnnotationWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeight,
                                        const SwRect& aAnchorRect, const long aPageBorder)
 {
     mPosSize = tools::Rectangle(Point(nX,nY),Size(nWidth,nHeight));
@@ -515,22 +400,22 @@ void SwSidebarWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeig
     mPageBorder = aPageBorder;
 }
 
-void SwSidebarWin::SetSize( const Size& rNewSize )
+void SwAnnotationWin::SetSize( const Size& rNewSize )
 {
     mPosSize.SetSize(rNewSize);
 }
 
-void SwSidebarWin::SetVirtualPosSize( const Point& aPoint, const Size& aSize)
+void SwAnnotationWin::SetVirtualPosSize( const Point& aPoint, const Size& aSize)
 {
     mPosSize = tools::Rectangle(aPoint,aSize);
 }
 
-void SwSidebarWin::TranslateTopPosition(const long aAmount)
+void SwAnnotationWin::TranslateTopPosition(const long aAmount)
 {
     mPosSize.Move(0,aAmount);
 }
 
-void SwSidebarWin::ShowAnchorOnly(const Point &aPoint)
+void SwAnnotationWin::ShowAnchorOnly(const Point &aPoint)
 {
     HideNote();
     SetPosAndSize();
@@ -545,16 +430,16 @@ void SwSidebarWin::ShowAnchorOnly(const Point &aPoint)
         mpShadow->setVisible(false);
 }
 
-SfxItemSet SwSidebarWin::DefaultItem()
+SfxItemSet SwAnnotationWin::DefaultItem()
 {
     SfxItemSet aItem( mrView.GetDocShell()->GetPool() );
     aItem.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
     return aItem;
 }
 
-void SwSidebarWin::InitControls()
+void SwAnnotationWin::InitControls()
 {
-    AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
+    AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
 
     // actual window which holds the user text
     mpSidebarTextControl = VclPtr<SidebarTextControl>::Create( *this,
@@ -569,7 +454,7 @@ void SwSidebarWin::InitControls()
     mpMetadataAuthor->SetReadOnly();
     mpMetadataAuthor->AlwaysDisableInput(true);
     mpMetadataAuthor->SetCallHandlersOnInputDisabled(true);
-    mpMetadataAuthor->AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
+    mpMetadataAuthor->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
     {
@@ -588,7 +473,7 @@ void SwSidebarWin::InitControls()
     mpMetadataDate->SetReadOnly();
     mpMetadataDate->AlwaysDisableInput(true);
     mpMetadataDate->SetCallHandlersOnInputDisabled(true);
-    mpMetadataDate->AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
+    mpMetadataDate->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
     {
@@ -625,9 +510,9 @@ void SwSidebarWin::InitControls()
     mpVScrollbar = VclPtr<SidebarScrollBar>::Create(*this, WB_3DLOOK |WB_VSCROLL|WB_DRAG, mrView);
     mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
-    mpVScrollbar->SetScrollHdl(LINK(this, SwSidebarWin, ScrollHdl));
+    mpVScrollbar->SetScrollHdl(LINK(this, SwAnnotationWin, ScrollHdl));
     mpVScrollbar->EnableDrag();
-    mpVScrollbar->AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
+    mpVScrollbar->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     EEControlBits nCntrl = mpOutliner->GetControlWord();
@@ -663,7 +548,7 @@ void SwSidebarWin::InitControls()
     mpVScrollbar->Show();
 }
 
-void SwSidebarWin::CheckMetaText()
+void SwAnnotationWin::CheckMetaText()
 {
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
@@ -700,7 +585,7 @@ void SwSidebarWin::CheckMetaText()
     }
 }
 
-void SwSidebarWin::Rescale()
+void SwAnnotationWin::Rescale()
 {
     MapMode aMode = GetParent()->GetMapMode();
     aMode.SetOrigin( Point() );
@@ -726,7 +611,7 @@ void SwSidebarWin::Rescale()
     }
 }
 
-void SwSidebarWin::SetPosAndSize()
+void SwAnnotationWin::SetPosAndSize()
 {
     bool bChange = false;
 
@@ -776,7 +661,7 @@ void SwSidebarWin::SetPosAndSize()
             }
             break;
             default:
-                OSL_FAIL( "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
+                OSL_FAIL( "<SwAnnotationWin::SetPosAndSize()> - unexpected position of sidebar" );
             break;
         }
 
@@ -860,7 +745,7 @@ void SwSidebarWin::SetPosAndSize()
             {
                 mpAnchor->SetAnchorState(AnchorState::All);
             }
-            SwSidebarWin* pWin = GetTopReplyNote();
+            SwAnnotationWin* pWin = GetTopReplyNote();
             // #i111964#
             if ( pWin && pWin->Anchor() )
             {
@@ -962,7 +847,7 @@ void SwSidebarWin::SetPosAndSize()
     }
 }
 
-void SwSidebarWin::DoResize()
+void SwAnnotationWin::DoResize()
 {
     long aTextHeight    =  LogicToPixel( mpOutliner->CalcTextSize()).Height();
     long aHeight        =  GetSizePixel().Height();
@@ -1032,7 +917,7 @@ void SwSidebarWin::DoResize()
                                    METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() );
 }
 
-void SwSidebarWin::SetSizePixel( const Size& rNewSize )
+void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
 {
     Window::SetSizePixel(rNewSize);
 
@@ -1044,12 +929,12 @@ void SwSidebarWin::SetSizePixel( const Size& rNewSize )
     }
 }
 
-void SwSidebarWin::SetScrollbar()
+void SwAnnotationWin::SetScrollbar()
 {
     mpVScrollbar->SetThumbPos(mpOutlinerView->GetVisArea().Top());
 }
 
-void SwSidebarWin::ResizeIfNecessary(long aOldHeight, long aNewHeight)
+void SwAnnotationWin::ResizeIfNecessary(long aOldHeight, long aNewHeight)
 {
     if (aOldHeight != aNewHeight)
     {
@@ -1087,7 +972,7 @@ void SwSidebarWin::ResizeIfNecessary(long aOldHeight, long aNewHeight)
     }
 }
 
-void SwSidebarWin::SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor)
+void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor)
 {
     mColorDark =  aColorDark;
     mColorLight = aColorLight;
@@ -1124,18 +1009,18 @@ void SwSidebarWin::SetColor(Color aColorDark,Color aColorLight, Color aColorAnch
     }
 }
 
-void SwSidebarWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition)
+void SwAnnotationWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition)
 {
     meSidebarPosition = eSidebarPosition;
 }
 
-void SwSidebarWin::SetReadonly(bool bSet)
+void SwAnnotationWin::SetReadonly(bool bSet)
 {
     mbReadonly = bSet;
     GetOutlinerView()->SetReadOnly(bSet);
 }
 
-void SwSidebarWin::SetLanguage(const SvxLanguageItem& rNewItem)
+void SwAnnotationWin::SetLanguage(const SvxLanguageItem& rNewItem)
 {
     Link<LinkParamNone*,void> aLink = Engine()->GetModifyHdl();
     Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
@@ -1167,17 +1052,17 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem& rNewItem)
     Invalidate();
 }
 
-void SwSidebarWin::GetFocus()
+void SwAnnotationWin::GetFocus()
 {
     if (mpSidebarTextControl)
         mpSidebarTextControl->GrabFocus();
 }
 
-void SwSidebarWin::LoseFocus()
+void SwAnnotationWin::LoseFocus()
 {
 }
 
-void SwSidebarWin::ShowNote()
+void SwAnnotationWin::ShowNote()
 {
     SetPosAndSize();
     if (!IsVisible())
@@ -1191,7 +1076,7 @@ void SwSidebarWin::ShowNote()
     InvalidateControl();
 }
 
-void SwSidebarWin::HideNote()
+void SwAnnotationWin::HideNote()
 {
     if (IsVisible())
         Window::Hide();
@@ -1206,7 +1091,7 @@ void SwSidebarWin::HideNote()
         mpShadow->setVisible(false);
 }
 
-void SwSidebarWin::InvalidateControl()
+void SwAnnotationWin::InvalidateControl()
 {
     // Invalidate.
     mpSidebarTextControl->Push(PushFlags::MAPMODE);
@@ -1215,7 +1100,7 @@ void SwSidebarWin::InvalidateControl()
     mpSidebarTextControl->Pop();
 }
 
-void SwSidebarWin::ActivatePostIt()
+void SwAnnotationWin::ActivatePostIt()
 {
     mrMgr.AssureStdModeAtShell();
 
@@ -1232,7 +1117,7 @@ void SwSidebarWin::ActivatePostIt()
         GetOutlinerView()->SetBackgroundColor(mColorDark);
 }
 
-void SwSidebarWin::DeactivatePostIt()
+void SwAnnotationWin::DeactivatePostIt()
 {
     // remove selection, #i87073#
     if (GetOutlinerView()->GetEditView().HasSelection())
@@ -1260,11 +1145,11 @@ void SwSidebarWin::DeactivatePostIt()
 
     if ( !IsProtected() && Engine()->GetEditEngine().GetText().isEmpty() )
     {
-        mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), nullptr, true );
+        mnEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
     }
 }
 
-void SwSidebarWin::ToggleInsMode()
+void SwAnnotationWin::ToggleInsMode()
 {
     if (!mrView.GetWrtShell().IsRedlineOn())
     {
@@ -1279,7 +1164,7 @@ void SwSidebarWin::ToggleInsMode()
     }
 }
 
-void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
+void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
 {
     mrMgr.AssureStdModeAtShell();
 
@@ -1304,7 +1189,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         case FN_DELETE_COMMENT:
 
             //Delete(); // do not kill the parent of our open popup menu
-            mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), nullptr, true );
+            mnEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
             break;
         case FN_FORMAT_ALL_NOTES:
         case FN_DELETE_ALL_NOTES:
@@ -1329,24 +1214,24 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
     }
 }
 
-SwEditWin&  SwSidebarWin::EditWin()
+SwEditWin&  SwAnnotationWin::EditWin()
 {
     return mrView.GetEditWin();
 }
 
-long SwSidebarWin::GetPostItTextHeight()
+long SwAnnotationWin::GetPostItTextHeight()
 {
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
 
-void SwSidebarWin::SwitchToPostIt(sal_uInt16 aDirection)
+void SwAnnotationWin::SwitchToPostIt(sal_uInt16 aDirection)
 {
-    SwSidebarWin* pPostIt = mrMgr.GetNextPostIt(aDirection, this);
+    SwAnnotationWin* pPostIt = mrMgr.GetNextPostIt(aDirection, this);
     if (pPostIt)
         pPostIt->GrabFocus();
 }
 
-IMPL_LINK( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( SwAnnotationWin, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     if ( rEvent.GetId() == VclEventId::WindowMouseMove )
     {
@@ -1381,73 +1266,59 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
     }
 }
 
-void SwSidebarWin::Delete()
-{
-    if ( mrMgr.GetActiveSidebarWin() == this)
-    {
-        mrMgr.SetActiveSidebarWin(nullptr);
-        // if the note is empty, the previous line will send a delete event, but we are already there
-        if (mnEventId)
-        {
-            Application::RemoveUserEvent( mnEventId );
-            mnEventId = nullptr;
-        }
-    }
-}
-
-IMPL_LINK(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll, void)
+IMPL_LINK(SwAnnotationWin, ScrollHdl, ScrollBar*, pScroll, void)
 {
     long nDiff = GetOutlinerView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     GetOutlinerView()->Scroll( 0, nDiff );
 }
 
-IMPL_LINK_NOARG(SwSidebarWin, ModifyHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SwAnnotationWin, ModifyHdl, LinkParamNone*, void)
 {
     mrView.GetDocShell()->SetModified();
 }
 
-IMPL_LINK_NOARG(SwSidebarWin, DeleteHdl, void*, void)
+IMPL_LINK_NOARG(SwAnnotationWin, DeleteHdl, void*, void)
 {
     mnEventId = nullptr;
     Delete();
 }
 
-void SwSidebarWin::ResetAttributes()
+void SwAnnotationWin::ResetAttributes()
 {
     mpOutlinerView->RemoveAttribsKeepLanguages(true);
     mpOutliner->RemoveFields();
     mpOutlinerView->SetAttribs(DefaultItem());
 }
 
-sal_Int32 SwSidebarWin::GetScrollbarWidth()
+sal_Int32 SwAnnotationWin::GetScrollbarWidth()
 {
     return mrView.GetWrtShell().GetViewOptions()->GetZoom() / 10;
 }
 
-sal_Int32 SwSidebarWin::GetMetaButtonAreaWidth()
+sal_Int32 SwAnnotationWin::GetMetaButtonAreaWidth()
 {
     const Fraction& f( GetMapMode().GetScaleX() );
     return METABUTTON_AREA_WIDTH * f.GetNumerator() / f.GetDenominator();
 }
 
-sal_Int32 SwSidebarWin::GetMetaHeight()
+sal_Int32 SwAnnotationWin::GetMetaHeight()
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     return POSTIT_META_HEIGHT * f.GetNumerator() / f.GetDenominator();
 }
 
-sal_Int32 SwSidebarWin::GetMinimumSizeWithMeta()
+sal_Int32 SwAnnotationWin::GetMinimumSizeWithMeta()
 {
     return mrMgr.GetMinimumSizeWithMeta();
 }
 
-sal_Int32 SwSidebarWin::GetMinimumSizeWithoutMeta()
+sal_Int32 SwAnnotationWin::GetMinimumSizeWithoutMeta()
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     return POSTIT_MINIMUMSIZE_WITHOUT_META * f.GetNumerator() / f.GetDenominator();
 }
 
-void SwSidebarWin::SetSpellChecking()
+void SwAnnotationWin::SetSpellChecking()
 {
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     EEControlBits nCntrl = mpOutliner->GetControlWord();
@@ -1461,7 +1332,7 @@ void SwSidebarWin::SetSpellChecking()
     Invalidate();
 }
 
-void SwSidebarWin::SetViewState(ViewState bViewState)
+void SwAnnotationWin::SetViewState(ViewState bViewState)
 {
     switch (bViewState)
     {
@@ -1470,7 +1341,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
             if (mpAnchor)
             {
                 mpAnchor->SetAnchorState(AnchorState::All);
-                SwSidebarWin* pWin = GetTopReplyNote();
+                SwAnnotationWin* pWin = GetTopReplyNote();
                 // #i111964#
                 if ( pWin && pWin->Anchor() )
                 {
@@ -1509,8 +1380,8 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     // if there is no visible parent note, we want to see the complete anchor ??
                     //if (IsAnyStackParentVisible())
                     mpAnchor->SetAnchorState(AnchorState::End);
-                    SwSidebarWin* pTopWinSelf = GetTopReplyNote();
-                    SwSidebarWin* pTopWinActive = mrMgr.HasActiveSidebarWin()
+                    SwAnnotationWin* pTopWinSelf = GetTopReplyNote();
+                    SwAnnotationWin* pTopWinActive = mrMgr.HasActiveSidebarWin()
                                                   ? mrMgr.GetActiveSidebarWin()->GetTopReplyNote()
                                                   : nullptr;
                     // #i111964#
@@ -1543,10 +1414,10 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
     }
 }
 
-SwSidebarWin* SwSidebarWin::GetTopReplyNote()
+SwAnnotationWin* SwAnnotationWin::GetTopReplyNote()
 {
-    SwSidebarWin* pTopNote = nullptr;
-    SwSidebarWin* pSidebarWin = IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, this) : nullptr;
+    SwAnnotationWin* pTopNote = nullptr;
+    SwAnnotationWin* pSidebarWin = IsFollow() ? mrMgr.GetNextPostIt(KEY_PAGEUP, this) : nullptr;
     while (pSidebarWin)
     {
         pTopNote = pSidebarWin;
@@ -1555,7 +1426,7 @@ SwSidebarWin* SwSidebarWin::GetTopReplyNote()
     return pTopNote;
 }
 
-void SwSidebarWin::SwitchToFieldPos()
+void SwAnnotationWin::SwitchToFieldPos()
 {
     if ( mrMgr.GetActiveSidebarWin() == this )
             mrMgr.SetActiveSidebarWin(nullptr);
@@ -1566,12 +1437,7 @@ void SwSidebarWin::SwitchToFieldPos()
     GrabFocusToDocument();
 }
 
-SvxLanguageItem SwSidebarWin::GetLanguage()
-{
-    return SvxLanguageItem(SwLangHelper::GetLanguage(mrView.GetWrtShell(),RES_CHRATR_LANGUAGE),RES_CHRATR_LANGUAGE);
-}
-
-void SwSidebarWin::SetChangeTracking( const SwPostItHelper::SwLayoutStatus aLayoutStatus,
+void SwAnnotationWin::SetChangeTracking( const SwPostItHelper::SwLayoutStatus aLayoutStatus,
                                       const Color& aChangeColor )
 {
     if ( (mLayoutStatus != aLayoutStatus) ||
@@ -1583,17 +1449,17 @@ void SwSidebarWin::SetChangeTracking( const SwPostItHelper::SwLayoutStatus aLayo
     }
 }
 
-bool SwSidebarWin::HasScrollbar() const
+bool SwAnnotationWin::HasScrollbar() const
 {
     return mpVScrollbar != nullptr;
 }
 
-bool SwSidebarWin::IsScrollbarVisible() const
+bool SwAnnotationWin::IsScrollbarVisible() const
 {
     return HasScrollbar() && mpVScrollbar->IsVisible();
 }
 
-void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
+void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
 {
     const bool bAnchorChanged = mpAnchorFrame != rSidebarItem.maLayoutInfo.mpAnchorFrame;
     if ( bAnchorChanged )
@@ -1609,7 +1475,7 @@ void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
         SidebarWinAccessible* pAcc =
                         static_cast<SidebarWinAccessible*>( GetWindowPeer() );
         OSL_ENSURE( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
-                "<SwSidebarWin::ChangeSidebarItem(..)> - unexpected type of window peer -> crash possible!" );
+                "<SwAnnotationWin::ChangeSidebarItem(..)> - unexpected type of window peer -> crash possible!" );
         pAcc->ChangeSidebarItem( mrSidebarItem );
     }
 
@@ -1621,7 +1487,7 @@ void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
     }
 }
 
-css::uno::Reference< css::accessibility::XAccessible > SwSidebarWin::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAccessible()
 {
     SidebarWinAccessible* pAcc( new SidebarWinAccessible( *this,
                                                           mrView.GetWrtShell(),
