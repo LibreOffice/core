@@ -91,7 +91,7 @@
 #include <unomid.h>
 
 #include "navmgr.hxx"
-#include "SidebarWin.hxx"
+#include "AnnotationWin.hxx"
 #include <memory>
 
 #define CTYPE_CNT   0

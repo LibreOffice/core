@@ -32,7 +32,7 @@
 #include <vcl/settings.hxx>
 
 #include <cmdid.h>
-#include <SidebarWin.hxx>
+#include <AnnotationWin.hxx>
 
 namespace sw { namespace annotation {
 
@@ -43,11 +43,11 @@ Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFront, co
                  sal_uInt8(aFront.GetBlue()  * aTransparency / 255.0 + aBack.GetBlue()  * (1 - aTransparency / 255.0)));
 }
 
-AnnotationMenuButton::AnnotationMenuButton(sw::sidebarwindows::SwSidebarWin& rSidebarWin)
+AnnotationMenuButton::AnnotationMenuButton(sw::annotation::SwAnnotationWin& rSidebarWin)
     : MenuButton(&rSidebarWin)
     , mrSidebarWin(rSidebarWin)
 {
-    AddEventListener(LINK(&mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener));
+    AddEventListener(LINK(&mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener));
 
     SetAccessibleName(SW_RES(STR_ACCESS_ANNOTATION_BUTTON_NAME));
     SetAccessibleDescription(SW_RES(STR_ACCESS_ANNOTATION_BUTTON_DESC));
@@ -61,7 +61,7 @@ AnnotationMenuButton::~AnnotationMenuButton()
 
 void AnnotationMenuButton::dispose()
 {
-    RemoveEventListener(LINK(&mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener));
+    RemoveEventListener(LINK(&mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener));
     MenuButton::dispose();
 }
 

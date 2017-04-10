@@ -146,7 +146,6 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IMark.hxx>
 #include <PostItMgr.hxx>
-#include <SidebarWin.hxx>
 #include <SwNodeNum.hxx>
 #include <SwRewriter.hxx>
 #include <SwSmartTagMgr.hxx>

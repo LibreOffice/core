@@ -22,8 +22,8 @@
 
 #include <vcl/menubtn.hxx>
 
-namespace sw { namespace sidebarwindows {
-    class SwSidebarWin;
+namespace sw { namespace annotation {
+    class SwAnnotationWin;
 } }
 
 namespace sw { namespace annotation {
@@ -31,7 +31,7 @@ namespace sw { namespace annotation {
 class AnnotationMenuButton : public MenuButton
 {
     public:
-        AnnotationMenuButton( sw::sidebarwindows::SwSidebarWin& rSidebarWin );
+        AnnotationMenuButton( sw::annotation::SwAnnotationWin& rSidebarWin );
         virtual ~AnnotationMenuButton() override;
         virtual void dispose() override;
 
@@ -44,7 +44,7 @@ class AnnotationMenuButton : public MenuButton
         virtual void KeyInput( const KeyEvent& rKeyEvt ) override;
 
     private:
-        sw::sidebarwindows::SwSidebarWin& mrSidebarWin;
+        sw::annotation::SwAnnotationWin& mrSidebarWin;
 };
 
 } } // end of namespace sw::annotation
