@@ -625,7 +625,7 @@ void CGM::ImplDefaultReplacement()
     {
         if (mbInDefaultReplacement)
         {
-            SAL_WARN("filter", "recursion in ImplDefaultReplacement");
+            SAL_WARN("filter.icgm", "recursion in ImplDefaultReplacement");
             return;
         }
 
