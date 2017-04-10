@@ -2534,7 +2534,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     OSL_ENSURE(m_nInTable >= 0,"nInTable < 0!");
 
     // TabRowEnd
-    bool bTableRowEnd = (m_pPlcxMan->HasParaSprm(m_bVer67 ? 25 : 0x2417) != nullptr );
+    bool bTableRowEnd = (m_pPlcxMan->HasParaSprm(m_bVer67 ? 25 : 0x2417).pSprm != nullptr);
 
 // Unfortunately, for every paragraph we need to check first whether
 // they contain a sprm 29 (0x261B), which starts an APO.
@@ -2565,12 +2565,12 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     sal_uInt8 nCellLevel = 0;
 
     if (m_bVer67)
-        nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(24));
+        nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(24).pSprm);
     else
     {
-        nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(0x2416));
+        nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(0x2416).pSprm);
         if (!nCellLevel)
-            nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(0x244B));
+            nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(0x244B).pSprm);
     }
     do
     {
@@ -2584,8 +2584,9 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
             WW8PLCFx_Cp_FKP* pPap = m_pPlcxMan->GetPapPLCF();
             WW8_CP nMyStartCp=nStartCp;
 
-            if (const sal_uInt8 *pLevel = m_pPlcxMan->HasParaSprm(0x6649))
-                nCellLevel = *pLevel;
+            SprmResult aLevel = m_pPlcxMan->HasParaSprm(0x6649);
+            if (aLevel.pSprm && aLevel.nRemainingData >= 1)
+                nCellLevel = *aLevel.pSprm;
 
             bool bHasRowEnd = SearchRowEnd(pPap, nMyStartCp, (m_nInTable<nCellLevel?m_nInTable:nCellLevel-1));
 
@@ -2617,8 +2618,9 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         //  Test for Anl (Numbering) and process all events in the right order
         if( m_bAnl && !bTableRowEnd )
         {
-            const sal_uInt8* pSprm13 = m_pPlcxMan->HasParaSprm( 13 );
-            if( pSprm13 )
+            SprmResult aSprm13 = m_pPlcxMan->HasParaSprm(13);
+            const sal_uInt8* pSprm13 = aSprm13.pSprm;
+            if (pSprm13 && aSprm13.nRemainingData >= 1)
             {   // Still Anl left?
                 sal_uInt8 nT = static_cast< sal_uInt8 >(GetNumType( *pSprm13 ));
                 if( ( nT != WW8_Pause && nT != m_nWwNumType ) // Anl change
@@ -4018,20 +4020,20 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             // If we have found a dropcap store the textnode
             pPreviousNode = m_pPaM->GetNode().GetTextNode();
 
-            const sal_uInt8 *pDCS;
-
+            SprmResult aDCS;
             if (m_bVer67)
-                pDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(46);
+                aDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(46);
             else
-                pDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
+                aDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
 
-            if (pDCS)
-                nDropLines = (*pDCS) >> 3;
+            if (aDCS.pSprm && aDCS.nRemainingData >= 1)
+                nDropLines = (*aDCS.pSprm) >> 3;
             else    // There is no Drop Cap Specifier hence no dropcap
                 pPreviousNode = nullptr;
 
-            if (const sal_uInt8 *pDistance = m_pPlcxMan->GetPapPLCF()->HasSprm(0x842F))
-                nDistance = SVBT16ToShort( pDistance );
+            SprmResult aDistance = m_pPlcxMan->GetPapPLCF()->HasSprm(0x842F);
+            if (aDistance.pSprm && aDistance.nRemainingData >= 2)
+                nDistance = SVBT16ToShort(aDistance.pSprm);
             else
                 nDistance = 0;
 
