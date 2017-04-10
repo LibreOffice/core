@@ -1439,12 +1439,18 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                             if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
                             {
+                                //get bounding box of range
                                 SwRect aStart;
                                 SwPosition aStartPos(*pTextNd, nSt);
                                 pFrame->GetCharRect(aStart, aStartPos, &aTmpState);
                                 SwRect aEnd;
                                 SwPosition aEndPos(*pTextNd, nEnd);
                                 pFrame->GetCharRect(aEnd, aEndPos, &aTmpState);
+                                if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
+                                {
+                                    aStart.Left(pFrame->Frame().Left());
+                                    aEnd.Right(pFrame->Frame().Right());
+                                }
                                 *pFieldRect = aStart.Union(aEnd);
                             }
                         }
@@ -1462,7 +1468,19 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         bRet = true;
 
                         if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
-                            pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                        {
+                            //get bounding box of range
+                            SwRect aStart;
+                            pFrame->GetCharRect(aStart, *pRedl->Start(), &aTmpState);
+                            SwRect aEnd;
+                            pFrame->GetCharRect(aEnd, *pRedl->End(), &aTmpState);
+                            if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
+                            {
+                                aStart.Left(pFrame->Frame().Left());
+                                aEnd.Right(pFrame->Frame().Right());
+                            }
+                            *pFieldRect = aStart.Union(aEnd);
+                        }
                     }
                 }
             }
