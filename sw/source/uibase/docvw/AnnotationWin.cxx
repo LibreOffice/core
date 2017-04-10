@@ -201,25 +201,25 @@ void SwAnnotationWin::SetPostItText()
     //point .e.g. fdo#33599
     mpField = static_cast<SwPostItField*>(mpFormatField->GetField());
     OUString sNewText = mpField->GetPar2();
-    bool bTextUnchanged = sNewText.equals(Engine()->GetEditEngine().GetText());
+    bool bTextUnchanged = sNewText.equals(mpOutliner->GetEditEngine().GetText());
     ESelection aOrigSelection(GetOutlinerView()->GetEditView().GetSelection());
 
     // get text from SwPostItField and insert into our textview
-    Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
-    Engine()->EnableUndo( false );
+    mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
+    mpOutliner->EnableUndo( false );
     if( mpField->GetTextObject() )
-        Engine()->SetText( *mpField->GetTextObject() );
+        mpOutliner->SetText( *mpField->GetTextObject() );
     else
     {
-        Engine()->Clear();
+        mpOutliner->Clear();
         GetOutlinerView()->SetAttribs(DefaultItem());
         GetOutlinerView()->InsertText(sNewText);
     }
 
-    Engine()->ClearModifyFlag();
-    Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( true );
-    Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
+    mpOutliner->ClearModifyFlag();
+    mpOutliner->GetUndoManager().Clear();
+    mpOutliner->EnableUndo( true );
+    mpOutliner->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     if (bTextUnchanged)
         GetOutlinerView()->GetEditView().SetSelection(aOrigSelection);
     if (bCursorVisible)
@@ -229,17 +229,17 @@ void SwAnnotationWin::SetPostItText()
 
 void SwAnnotationWin::UpdateData()
 {
-    if ( Engine()->IsModified() )
+    if ( mpOutliner->IsModified() )
     {
         IDocumentUndoRedo & rUndoRedo(
-            DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
+            mrView.GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
         std::unique_ptr<SwField> pOldField;
         if (rUndoRedo.DoesUndo())
         {
             pOldField.reset(mpField->Copy());
         }
-        mpField->SetPar2(Engine()->GetEditEngine().GetText());
-        mpField->SetTextObject(Engine()->CreateParaObject());
+        mpField->SetPar2(mpOutliner->GetEditEngine().GetText());
+        mpField->SetTextObject(mpOutliner->CreateParaObject());
         if (rUndoRedo.DoesUndo())
         {
             SwTextField *const pTextField = mpFormatField->GetTextField();
@@ -249,18 +249,18 @@ void SwAnnotationWin::UpdateData()
                 new SwUndoFieldFromDoc(aPosition, *pOldField, *mpField, nullptr, true));
         }
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
-        Mgr().SetLayout();
+        mrMgr.SetLayout();
         // #i98686# if we have several views, all notes should update their text
         mpFormatField->Broadcast(SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::CHANGED));
-        DocView().GetDocShell()->SetModified();
+        mrView.GetDocShell()->SetModified();
     }
-    Engine()->ClearModifyFlag();
-    Engine()->GetUndoManager().Clear();
+    mpOutliner->ClearModifyFlag();
+    mpOutliner->GetUndoManager().Clear();
 }
 
 void SwAnnotationWin::Delete()
 {
-    if (DocView().GetWrtShellPtr()->GotoField(*mpFormatField))
+    if (mrView.GetWrtShellPtr()->GotoField(*mpFormatField))
     {
         if ( mrMgr.GetActiveSidebarWin() == this)
         {
@@ -274,21 +274,21 @@ void SwAnnotationWin::Delete()
         }
         // we delete the field directly, the Mgr cleans up the PostIt by listening
         GrabFocusToDocument();
-        DocView().GetWrtShellPtr()->ClearMark();
-        DocView().GetWrtShellPtr()->DelRight();
+        mrView.GetWrtShellPtr()->ClearMark();
+        mrView.GetWrtShellPtr()->DelRight();
     }
 }
 
 void SwAnnotationWin::GotoPos()
 {
-    DocView().GetDocShell()->GetWrtShell()->GotoField(*mpFormatField);
+    mrView.GetDocShell()->GetWrtShell()->GotoField(*mpFormatField);
 }
 
 sal_uInt32 SwAnnotationWin::MoveCaret()
 {
     // if this is an answer, do not skip over all following ones, but insert directly behind the current one
     // but when just leaving a note, skip all following ones as well to continue typing
-    return Mgr().IsAnswer()
+    return mrMgr.IsAnswer()
            ? 1
            : 1 + CountFollowing();
 }
@@ -361,7 +361,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
         return;
 
     //collect our old meta data
-    SwAnnotationWin* pWin = Mgr().GetNextPostIt(KEY_PAGEUP, this);
+    SwAnnotationWin* pWin = mrMgr.GetNextPostIt(KEY_PAGEUP, this);
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
     SwRewriter aRewriter;
@@ -381,7 +381,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     GetOutlinerView()->InsertText("\"\n");
 
     GetOutlinerView()->SetSelection(ESelection(0,0,EE_PARA_ALL,EE_TEXTPOS_ALL));
-    SfxItemSet aAnswerSet( DocView().GetDocShell()->GetPool() );
+    SfxItemSet aAnswerSet( mrView.GetDocShell()->GetPool() );
     aAnswerSet.Put(SvxFontHeightItem(200,80,EE_CHAR_FONTHEIGHT));
     aAnswerSet.Put(SvxPostureItem(ITALIC_NORMAL,EE_CHAR_ITALIC));
     GetOutlinerView()->SetAttribs(aAnswerSet);
@@ -392,16 +392,16 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     GetOutlinerView()->SetAttribs(DefaultItem());
     // lets insert an undo step so the initial text can be easily deleted
     // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
-    Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
+    mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
     IDocumentUndoRedo & rUndoRedo(
-        DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
+        mrView.GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
     std::unique_ptr<SwField> pOldField;
     if (rUndoRedo.DoesUndo())
     {
         pOldField.reset(mpField->Copy());
     }
-    mpField->SetPar2(Engine()->GetEditEngine().GetText());
-    mpField->SetTextObject(Engine()->CreateParaObject());
+    mpField->SetPar2(mpOutliner->GetEditEngine().GetText());
+    mpField->SetTextObject(mpOutliner->CreateParaObject());
     if (rUndoRedo.DoesUndo())
     {
         SwTextField *const pTextField = mpFormatField->GetTextField();
@@ -410,14 +410,14 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
         rUndoRedo.AppendUndo(
             new SwUndoFieldFromDoc(aPosition, *pOldField, *mpField, nullptr, true));
     }
-    Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
-    Engine()->ClearModifyFlag();
-    Engine()->GetUndoManager().Clear();
+    mpOutliner->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
+    mpOutliner->ClearModifyFlag();
+    mpOutliner->GetUndoManager().Clear();
 }
 
 void SwAnnotationWin::UpdateText(const OUString& aText)
 {
-    Engine()->Clear();
+    mpOutliner->Clear();
     GetOutlinerView()->InsertText(aText);
     UpdateData();
 }
