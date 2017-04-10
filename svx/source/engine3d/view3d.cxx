@@ -39,7 +39,6 @@
 #include <svx/sphere3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/cube3d.hxx>
-#include <svx/polysc3d.hxx>
 #include "dragmt3d.hxx"
 #include <svx/view3d.hxx>
 #include <svx/svdundo.hxx>
@@ -839,7 +838,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
             BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_LATHE));
 
         // Create a new scene for the created 3D object
-        E3dScene* pScene = new E3dPolyScene(Get3DDefaultAttributes());
+        E3dScene* pScene = new E3dScene(Get3DDefaultAttributes());
 
         // Determine rectangle and possibly correct it
         tools::Rectangle aRect = GetAllMarkedRect();
@@ -1303,7 +1302,7 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 
     tools::Rectangle aRect(0,0, (long) fW, (long) fH);
 
-    pScene = new E3dPolyScene(Get3DDefaultAttributes());
+    pScene = new E3dScene(Get3DDefaultAttributes());
 
     InitScene(pScene, fW, fH, aVolume.getMaxZ() + ((fW + fH) / 4.0));
 

@@ -57,7 +57,6 @@
 #include <editeng/bulletitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/svdoashp.hxx>
 #include <editeng/tstpitem.hxx>
