@@ -135,20 +135,14 @@ bool ScScenarioListBox::EventNotify( NotifyEvent& rNEvt )
             {
                 if( !pEntry->mbProtected )
                 {
-                    ScopedVclPtrInstance<ScPopupMenu> aPopup( ScResId( RID_POPUP_NAVIPI_SCENARIO ) );
-                    aPopup->Execute( this, pCEvt->GetMousePosPixel() );
-                    if (aPopup->WasHit())
-                    {
-                        switch( aPopup->GetSelected() )
-                        {
-                            case RID_NAVIPI_SCENARIO_DELETE:
-                                DeleteScenario();
-                            break;
-                            case RID_NAVIPI_SCENARIO_EDIT:
-                                EditScenario();
-                            break;
-                        }
-                    }
+                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/scalc/ui/scenariomenu.ui", "");
+                    VclPtr<PopupMenu> aPopup(aBuilder.get_menu("menu"));
+                    sal_uInt16 nId = aPopup->Execute(this, pCEvt->GetMousePosPixel());
+                    OString sIdent(aPopup->GetItemIdent(nId));
+                    if (sIdent == "delete")
+                        DeleteScenario();
+                    else if (sIdent == "edit")
+                        EditScenario();
                 }
             }
             bHandled = true;

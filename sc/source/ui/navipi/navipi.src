@@ -176,23 +176,4 @@ String SCSTR_QHLP_SCEN_COMMENT
     Text [ en-US ] = "Comment";
 };
 
-Menu RID_POPUP_NAVIPI_SCENARIO
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = RID_NAVIPI_SCENARIO_DELETE ;
-            HelpId = HID_SC_SCENARIO_DELETE ;
-            Text [ en-US ] = "Delete" ;
-        };
-        MenuItem
-        {
-            Identifier = RID_NAVIPI_SCENARIO_EDIT ;
-            HelpId = HID_SC_SCENARIO_EDIT ;
-            Text [ en-US ] = "Properties..." ;
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

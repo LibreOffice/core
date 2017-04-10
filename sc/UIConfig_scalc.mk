@@ -188,6 +188,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/samplingdialog \
 	sc/uiconfig/scalc/ui/standardfilterdialog \
 	sc/uiconfig/scalc/ui/scenariodialog \
+	sc/uiconfig/scalc/ui/scenariomenu \
 	sc/uiconfig/scalc/ui/scgeneralpage \
 	sc/uiconfig/scalc/ui/searchresults \
 	sc/uiconfig/scalc/ui/selectdatasource \
