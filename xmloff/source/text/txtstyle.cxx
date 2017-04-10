@@ -105,7 +105,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
 void XMLTextParagraphExport::exportNumStyles( bool bUsed )
 {
     SvxXMLNumRuleExport aNumRuleExport( GetExport() );
-    aNumRuleExport.exportStyles( bUsed, pListAutoPool, !IsBlockMode() );
+    aNumRuleExport.exportStyles( bUsed, &maListAutoPool, !IsBlockMode() );
 }
 
 void XMLTextParagraphExport::exportTextStyles( bool bUsed, bool bProg )

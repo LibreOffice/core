@@ -29,6 +29,7 @@
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
+#include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <memory>
 #include <vector>
 
@@ -86,7 +87,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     const ::std::unique_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     XMLTextFieldExport          *pFieldExport;
     std::vector<OUString>  *pListElements;
-    XMLTextListAutoStylePool    *pListAutoPool;
+    XMLTextListAutoStylePool    maListAutoPool;
     XMLSectionExport            *pSectionExport;
     XMLIndexMarkExport          *pIndexMarkExport;
 
@@ -587,7 +588,7 @@ private:
 inline const XMLTextListAutoStylePool&
     XMLTextParagraphExport::GetListAutoStylePool() const
 {
-    return *pListAutoPool;
+    return maListAutoPool;
 }
 
 inline void XMLTextParagraphExport::exportTextFrame(
