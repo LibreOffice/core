@@ -531,7 +531,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                         }
                     }
                     if( bAdd )
-                        pListAutoPool->Add( xNumRule );
+                        maListAutoPool.Add( xNumRule );
                 }
             }
             break;
@@ -637,7 +637,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 }
             }
             if( bAdd )
-                pListAutoPool->Add( xNumRule );
+                maListAutoPool.Add( xNumRule );
         }
     }
 
@@ -1161,7 +1161,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pBoundFrameSets(new BoundFrameSets(GetExport().GetModel())),
     pFieldExport( nullptr ),
     pListElements( nullptr ),
-    pListAutoPool( new XMLTextListAutoStylePool( this->GetExport() ) ),
+    maListAutoPool( this->GetExport() ),
     pSectionExport( nullptr ),
     pIndexMarkExport( nullptr ),
     pRedlineExport( nullptr ),
@@ -1320,7 +1320,6 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     delete pSectionExport;
     delete pFieldExport;
     delete pListElements;
-    delete pListAutoPool;
 #ifdef DBG_UTIL
     txtparae_bContainsIllegalCharacters = false;
 #endif
@@ -1624,7 +1623,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                     }
                 }
                 if( bAdd )
-                    pListAutoPool->Add( xNumRule );
+                    maListAutoPool.Add( xNumRule );
             }
         }
     }
@@ -3617,7 +3616,7 @@ void XMLTextParagraphExport::exportTextAutoStyles()
                                   GetExport().GetMM100UnitConverter(),
                                   GetExport().GetNamespaceMap() );
 
-    pListAutoPool->exportXML();
+    maListAutoPool.exportXML();
 }
 
 void XMLTextParagraphExport::exportRuby(
