@@ -383,10 +383,9 @@ void PdfExportTest::testTdf106972Pdf17()
     vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
     CPPUNIT_ASSERT(pXObject);
 
-    // This failed, the "image" had resources; that typically means we tried to
-    // preserve the original PDF markup here; which is not OK till our default
-    // output is PDF 1.4, and this bugdoc has PDF 1.7 data.
-    CPPUNIT_ASSERT(!pXObject->Lookup("Resources"));
+    // Assert that we now attempt to preserve the original PDF data, even if
+    // the original input was PDF >= 1.4.
+    CPPUNIT_ASSERT(pXObject->Lookup("Resources"));
 }
 
 void PdfExportTest::testTdf107013()

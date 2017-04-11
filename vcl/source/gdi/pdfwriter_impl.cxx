@@ -665,32 +665,6 @@ static void appendDestinationName( const OUString& rString, OStringBuffer& rBuff
 }
 //<--- i56629
 
-/// Decide if rGraphic has PDF data that is possible to embed in our output.
-static bool hasPdfData(const Graphic& rGraphic, bool bUseReferenceXObject)
-{
-    const css::uno::Sequence<sal_Int8>& rData = rGraphic.getPdfData();
-
-    if (rData.getLength() < 8)
-        return false;
-
-    if (rData[0] != '%' || rData[1] != 'P' || rData[2] != 'D' || rData[3] != 'F' || rData[4] != '-')
-        // Unexpected header.
-        return false;
-
-    if (bUseReferenceXObject)
-        // This is possible for all versions.
-        return true;
-
-    sal_Int32 nMajor = OString(rData[5]).toInt32();
-    sal_Int32 nMinor = OString(rData[7]).toInt32();
-
-    if (nMajor > 1 || (nMajor == 1 && nMinor > 4))
-        // This is PDF-1.5 or newer, can't embed into PDF-1.4.
-        return false;
-
-    return true;
-}
-
 void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer)
 {
     rBuffer.append( "FEFF" );
@@ -12487,7 +12461,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     // no pdf data.
     rEmit.m_nBitmapObject = nBitmapObject;
 
-    if (!hasPdfData(rGraphic, m_aContext.UseReferenceXObject))
+    if (!rGraphic.getPdfData().hasElements())
         return;
 
     if (m_aContext.UseReferenceXObject)
@@ -12556,7 +12530,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
-        if (!hasPdfData(rGraphic, m_aContext.UseReferenceXObject) || m_aContext.UseReferenceXObject)
+        if (!rGraphic.getPdfData().hasElements() || m_aContext.UseReferenceXObject)
             rEmit.m_nObject = createObject();
         rEmit.m_aID         = aID;
         rEmit.m_pStream.reset( pStream );
@@ -12668,7 +12642,7 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
-        if (!hasPdfData(rGraphic, m_aContext.UseReferenceXObject) || m_aContext.UseReferenceXObject)
+        if (!rGraphic.getPdfData().hasElements() || m_aContext.UseReferenceXObject)
             m_aBitmaps.front().m_nObject = createObject();
         createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
         it = m_aBitmaps.begin();
