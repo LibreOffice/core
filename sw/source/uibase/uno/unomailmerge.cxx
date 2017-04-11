@@ -392,19 +392,6 @@ SwXMailMerge::SwXMailMerge() :
 
 SwXMailMerge::~SwXMailMerge()
 {
-    if (!m_aTmpFileName.isEmpty())
-        DeleteTmpFile_Impl( m_xModel, m_xDocSh, m_aTmpFileName );
-    else    // there was no temporary file in use
-    {
-        //! we still need to close the model and doc shell manually
-        //! because there is no automatism that will do that later.
-        //! #120086#
-        if ( eVetoed == CloseModelAndDocSh( m_xModel, m_xDocSh ) )
-            OSL_FAIL("ownership transferred to vetoing object!" );
-
-        m_xModel = nullptr;
-        m_xDocSh = nullptr; // destroy doc shell
-    }
 }
 
 // Guarantee object consistence in case of an exception
@@ -1136,6 +1123,20 @@ void SAL_CALL SwXMailMerge::dispose()
         m_aEvtListeners.disposeAndClear( aEvtObj );
         m_aMergeListeners.disposeAndClear( aEvtObj );
         m_aPropListeners.disposeAndClear( aEvtObj );
+
+        if (!m_aTmpFileName.isEmpty())
+            DeleteTmpFile_Impl( m_xModel, m_xDocSh, m_aTmpFileName );
+        else    // there was no temporary file in use
+        {
+            //! we still need to close the model and doc shell manually
+            //! because there is no automatism that will do that later.
+            //! #120086#
+            if ( eVetoed == CloseModelAndDocSh( m_xModel, m_xDocSh ) )
+                OSL_FAIL("ownership transferred to vetoing object!" );
+
+            m_xModel = nullptr;
+            m_xDocSh = nullptr; // destroy doc shell
+        }
     }
 }
 
