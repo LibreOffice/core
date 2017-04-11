@@ -586,9 +586,9 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
             if ( jfw_areEqualJavaInfo( pCmpInfo, pInfo ) )
             {
                 bFound = true;
-                nPos = i;
                 break;
             }
+            ++nPos;
         }
 
         if ( !bFound )
@@ -602,6 +602,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
                     bFound = true;
                     break;
                 }
+                ++nPos;
             }
         }
 
