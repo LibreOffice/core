@@ -5205,7 +5205,6 @@ find_winsdk_version()
 
 find_winsdk()
 {
-    # Args: $1 (optional) : list of acceptable SDK versions
     # Return value: From find_winsdk_version
 
     unset winsdktest
