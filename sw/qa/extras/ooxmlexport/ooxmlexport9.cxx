@@ -70,6 +70,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106690, "tdf106690.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(2), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
+{
+    // The second paragraph (first numbered one) had 0 bottom margin:
+    // autospacing was even collapsed between different numbering styles.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(4), "ParaBottomMargin"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.docx")
 {
     // the paragraph style should set table's text-flow break-before-page

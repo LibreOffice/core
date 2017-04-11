@@ -1180,10 +1180,22 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     });
                     if (itNumberingRules != aProperties.end())
                     {
-                        // This textnode has numbering.
-                        if (m_xPreviousParagraph.is() && m_xPreviousParagraph->getPropertyValue("NumberingRules").hasValue())
+                        // This textnode has numbering. Look up the numbering style name of the current and previous paragraph.
+                        OUString aCurrentNumberingRuleName;
+                        uno::Reference<container::XNamed> xCurrentNumberingRules(itNumberingRules->Value, uno::UNO_QUERY);
+                        if (xCurrentNumberingRules.is())
+                            aCurrentNumberingRuleName = xCurrentNumberingRules->getName();
+                        OUString aPreviousNumberingRuleName;
+                        if (m_xPreviousParagraph.is())
                         {
-                            // There was a previous textnode and it had numbering.
+                            uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+                            if (xPreviousNumberingRules.is())
+                                aPreviousNumberingRuleName = xPreviousNumberingRules->getName();
+                        }
+
+                        if (!aPreviousNumberingRuleName.isEmpty() && aCurrentNumberingRuleName == aPreviousNumberingRuleName)
+                        {
+                            // There was a previous textnode and it had the same numbering.
                             if (m_bParaAutoBefore)
                             {
                                 // This before spacing is set to auto, set before space to 0.
