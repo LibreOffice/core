@@ -126,13 +126,13 @@ protected:
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
-    /// @trhows css::uno::RuntimeException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL SetPropertyValues_Impl(
         const css::uno::Sequence< OUString >& aPropertyNames,
         const css::uno::Sequence< css::uno::Any >& aValues );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
-    /// @trhows css::uno::RuntimeException
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::uno::Any > SAL_CALL GetPropertyValues_Impl(
         const css::uno::Sequence< OUString >& aPropertyNames );
 
