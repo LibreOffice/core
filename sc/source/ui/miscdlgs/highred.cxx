@@ -78,8 +78,6 @@ void ScHighlightChgDlg::dispose()
 
 void ScHighlightChgDlg::Init()
 {
-    ScRange aRange;
-
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();

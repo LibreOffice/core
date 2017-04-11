@@ -123,7 +123,6 @@ void ScDocument::UpdateAllCharts()
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             OSL_ENSURE(pPage,"Page ?");
 
-            ScRange aRange;
             SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
             SdrObject* pObject = aIter.Next();
             while (pObject)

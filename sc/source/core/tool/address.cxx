@@ -1146,7 +1146,6 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
     OUString aTab;
     bool    bExtDoc = false;
     bool    bExtDocInherited = false;
-    const ScAddress aCurPos(rAddr);
 
     // Lets see if this is a reference to something in an external file.  A
     // document name is always quoted and has a trailing #.

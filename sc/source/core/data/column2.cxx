@@ -2222,15 +2222,13 @@ class FillMatrixHandler
     size_t mnMatCol;
     size_t mnTopRow;
 
-    SCCOL mnCol;
-    SCTAB mnTab;
     ScDocument* mpDoc;
     svl::SharedStringPool& mrPool;
     svl::SharedStringPool* mpPool; // if matrix is not in the same document
 
 public:
-    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab, ScDocument* pDoc, svl::SharedStringPool* pPool) :
-        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab),
+    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, ScDocument* pDoc, svl::SharedStringPool* pPool) :
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow),
         mpDoc(pDoc), mrPool(pDoc->GetSharedStringPool()), mpPool(pPool) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
@@ -2320,8 +2318,6 @@ public:
                     double fVal;
                     if (rCell.GetErrorOrValue(nErr, fVal))
                     {
-                        ScAddress aAdr(mnCol, nThisRow, mnTab);
-
                         if (nErr != FormulaError::NONE)
                             fVal = CreateDoubleError(nErr);
 
@@ -2370,7 +2366,7 @@ public:
 
 void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
-    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, nCol, nTab, pDocument, pPool);
+    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, pDocument, pPool);
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
 
