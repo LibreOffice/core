@@ -722,7 +722,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(rtl_uString * sLocation);
    @return
     JFW_E_NONE the function ran successfully.</br>
     JFW_E_ERROR an error occurred during execution.</br>
-    JFW_E_INVALID_ARG pInfo contains invalid data</br>
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist);
 

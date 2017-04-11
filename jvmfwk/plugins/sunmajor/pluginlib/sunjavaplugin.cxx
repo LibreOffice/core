@@ -30,6 +30,7 @@
 
 #include <string.h>
 
+#include <cassert>
 #include <memory>
 #include "config_options.h"
 #include "osl/diagnose.h"
@@ -884,9 +885,10 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
 javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist)
 {
+    assert(pInfo != nullptr);
+    assert(exist != nullptr);
+
     javaPluginError ret = javaPluginError::NONE;
-    if (!pInfo || !exist)
-        return javaPluginError::InvalidArg;
     OUString sLocation(pInfo->sLocation);
 
     if (sLocation.isEmpty())

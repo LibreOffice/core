@@ -987,9 +987,6 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist)
     case javaPluginError::NONE:
         ret = JFW_E_NONE;
         break;
-    case javaPluginError::InvalidArg:
-        ret = JFW_E_INVALID_ARG;
-        break;
     case javaPluginError::Error:
         ret = JFW_E_ERROR;
         break;
