@@ -947,8 +947,6 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist)
 {
     //get the function jfw_plugin_existJRE
     jfw::VendorSettings aVendorSettings;
-    jfw::CJavaInfo aInfo;
-    aInfo = pInfo; //makes a copy of pInfo
     javaPluginError plerr = jfw_plugin_existJRE(pInfo, exist);
 
     javaFrameworkError ret = JFW_E_NONE;
