@@ -45,7 +45,7 @@ struct ScJumpMatrixEntry
                     nNext = nNextP;
                     nStop = nStopP;
                 }
-    void    GetJump( double& rBool, short& rStart, short& rNext, short& rStop )
+    void    GetJump( double& rBool, short& rStart, short& rNext, short& rStop ) const
                 {
                     rBool = fBool;
                     rStart = nStart;
@@ -56,7 +56,7 @@ struct ScJumpMatrixEntry
 
 class ScJumpMatrix
 {
-    ScJumpMatrixEntry*  pJump;      // the jumps
+    std::vector<ScJumpMatrixEntry> mvJump;      // the jumps
     ScMatrixRef         pMat;       // the results
     ScTokenVec*         pParams;    // parameter stack
     SCSIZE              nCols;

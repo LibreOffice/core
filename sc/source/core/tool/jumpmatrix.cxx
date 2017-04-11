@@ -28,7 +28,7 @@ const SCSIZE kBufferThreshold = 128;
 }
 
 ScJumpMatrix::ScJumpMatrix(SCSIZE nColsP, SCSIZE nRowsP)
-    : pJump(new ScJumpMatrixEntry[nColsP * nRowsP])
+    : mvJump(nColsP * nRowsP)
     , pMat(new ScFullMatrix(nColsP, nRowsP))
     , pParams(nullptr)
     , nCols(nColsP)
@@ -62,7 +62,6 @@ ScJumpMatrix::~ScJumpMatrix()
         }
         delete pParams;
     }
-    delete[] pJump;
 }
 
 void ScJumpMatrix::GetDimensions(SCSIZE& rCols, SCSIZE& rRows) const
@@ -74,7 +73,7 @@ void ScJumpMatrix::GetDimensions(SCSIZE& rCols, SCSIZE& rRows) const
 void ScJumpMatrix::SetJump(SCSIZE nCol, SCSIZE nRow, double fBool,
                            short nStart, short nNext)
 {
-    pJump[(sal_uLong)nCol * nRows + nRow].SetJump(fBool, nStart, nNext, SHRT_MAX);
+    mvJump[(sal_uLong)nCol * nRows + nRow].SetJump(fBool, nStart, nNext, SHRT_MAX);
 }
 
 void ScJumpMatrix::GetJump(
@@ -93,7 +92,7 @@ void ScJumpMatrix::GetJump(
         nCol = 0;
         nRow = 0;
     }
-    pJump[(sal_uLong)nCol * nRows + nRow].
+    mvJump[(sal_uLong)nCol * nRows + nRow].
         GetJump(rBool, rStart, rNext, rStop);
 }
 
@@ -102,7 +101,7 @@ void ScJumpMatrix::SetAllJumps(double fBool, short nStart, short nNext, short nS
     sal_uLong n = (sal_uLong)nCols * nRows;
     for (sal_uLong j = 0; j < n; ++j)
     {
-        pJump[j].SetJump(fBool, nStart,
+        mvJump[j].SetJump(fBool, nStart,
                          nNext, nStop);
     }
 }
