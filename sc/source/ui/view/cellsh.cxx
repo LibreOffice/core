@@ -1050,19 +1050,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     SCTAB nFirstSelected = rMark.GetFirstSelected();
                     SCTAB nLastSelected = rMark.GetLastSelected();
 
-                    for( SCTAB aTab = nFirstSelected; aTab<=nLastSelected; aTab++ )
+                    for ( SCTAB nSelTab = nFirstSelected; nSelTab <= nLastSelected && !bHasNotes; nSelTab++ )
                     {
-                        if (rMark.GetTableSelect(aTab) )
+                        if (rMark.GetTableSelect( nSelTab ))
                         {
-                            if (pDoc->HasTabNotes( aTab ))
-                            {
+                            if (pDoc->HasTabNotes( nSelTab ))
                                 bHasNotes = true;
-                                break;
-                            }
                         }
-
-                        if( bHasNotes ) //for break nested loop
-                            break;
                     }
 
                     if ( !bHasNotes )
