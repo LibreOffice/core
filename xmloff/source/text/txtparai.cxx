@@ -1490,6 +1490,13 @@ XMLImpSpanContext_Impl::~XMLImpSpanContext_Impl()
                             ->GetCursorAsRange()->getStart() );
 }
 
+bool IsODF13(SvXMLImport const& rImport)
+{
+    OUString const& rVersion(rImport.GetODFVersion());
+    return (!rVersion.isEmpty() // office:version was optional before ODF 1.2
+        && rVersion != "1.0" && rVersion != "1.1" && rVersion != "1.2");
+}
+
 SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1556,8 +1563,11 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         else
         {
             pContext = new XMLUrlFieldImportContext( rImport, *rImport.GetTextImport().get(), nPrefix, rLocalName );
-            //whitespace handling like other fields
-            rIgnoreLeadingSpace = false;
+            //whitespace handling like other fields - why?
+            if (!IsODF13(rImport))
+            {
+                rIgnoreLeadingSpace = false;
+            }
 
         }
         break;
@@ -1583,7 +1593,10 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                                      *rImport.GetTextImport().get(),
                                                      nPrefix, rLocalName );
         }
-        rIgnoreLeadingSpace = false;
+        if (!IsODF13(rImport))
+        {
+            rIgnoreLeadingSpace = false;
+        }
         break;
 
     case XML_TOK_TEXT_REFERENCE:
@@ -1634,7 +1647,10 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                     pTextFrameContext, xAnchorPos));
             }
             pContext = pTextFrameContext;
-            rIgnoreLeadingSpace = false;
+            if (!IsODF13(rImport))
+            {
+                rIgnoreLeadingSpace = false;
+            }
         }
         break;
     case XML_TOK_DRAW_A:
@@ -1730,8 +1746,11 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             pContext =
                 new SvXMLImportContext( rImport, nPrefix, rLocalName );
         }
+        if (!IsODF13(rImport))
+        {
         // Behind fields, shapes and any unknown content blanks aren't ignored
-        rIgnoreLeadingSpace = false;
+            rIgnoreLeadingSpace = false;
+        }
     }
 
     return pContext;
