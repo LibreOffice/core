@@ -1205,7 +1205,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
         for ( size_t nDirIdx = 0; nDirIdx < aDirectionChanges.size(); ++nDirIdx )
         {
             const sal_uInt8 nCurrDirType = GetDirType( nDirIdx );
-                // nStart ist start of RTL run:
+                // nStart is start of RTL run:
                 const sal_Int32 nStart = nDirIdx > 0 ? GetDirChg( nDirIdx - 1 ) : 0;
                 // nEnd is end of RTL run:
                 const sal_Int32 nEnd = GetDirChg( nDirIdx );

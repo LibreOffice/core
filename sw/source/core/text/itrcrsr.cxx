@@ -877,7 +877,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
                         {
                             SeekAndChg( aInf );
                             const bool bOldOnWin = aInf.OnWin();
-                            aInf.SetOnWin( false ); // keine BULLETs!
+                            aInf.SetOnWin( false ); // no BULLETs!
                             SwTwips nTmp = nX;
                             aInf.SetKanaComp( pKanaComp );
                             aInf.SetKanaIdx( nKanaIdx );
@@ -889,7 +889,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
                             {
                                 pPor->SetLen( pPor->GetLen() + 1 );
                                 aInf.SetLen( pPor->GetLen() );
-                                aInf.SetOnWin( false ); // keine BULLETs!
+                                aInf.SetOnWin( false ); // no BULLETs!
                                 nTmp += pPor->GetTextSize( aInf ).Width();
                                 aInf.SetOnWin( bOldOnWin );
                                 if ( pPor->InSpaceGrp() && nSpaceAdd )
@@ -1068,7 +1068,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
                         pPor->SetLen( 1 );
                         aInf.SetLen( pPor->GetLen() );
                         SeekAndChg( aInf );
-                        aInf.SetOnWin( false ); // keine BULLETs!
+                        aInf.SetOnWin( false ); // no BULLETs!
                         aInf.SetKanaComp( pKanaComp );
                         aInf.SetKanaIdx( nKanaIdx );
                         nTmp = pPor->GetTextSize( aInf ).Width();

@@ -206,7 +206,7 @@ void SwTextFrameInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 }
 
 // Is there a bullet/symbol etc. at the text position?
-// Fonts: CharSet, SYMBOL und DONTKNOW
+// Fonts: CharSet, SYMBOL and DONTKNOW
 bool SwTextFrameInfo::IsBullet( sal_Int32 nTextStart ) const
 {
     SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );

@@ -163,7 +163,7 @@ const SwLineLayout *SwTextIter::GetPrevLine()
         }
     }
 
-    // Wenn sich nichts getan hat, dann gibt es nur noch Dummys
+    // If nothing has changed, then there are only dummy's
     return pLay;
 }
 
