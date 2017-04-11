@@ -65,6 +65,11 @@ public:
             css::uno::Reference<css::lang::XComponent>(
                 mxCurResultSet, css::uno::UNO_QUERY_THROW)->dispose();
         }
+        if (mxJob.is())
+        {
+            css::uno::Reference<css::lang::XComponent>(
+                mxJob, css::uno::UNO_QUERY_THROW)->dispose();
+        }
         SwModelTestBase::tearDown();
     }
 
