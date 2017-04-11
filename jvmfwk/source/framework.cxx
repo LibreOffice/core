@@ -660,7 +660,7 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
 
         const jfw::MergedSettings settings;
         ppInfo->reset(settings.createJavaInfo());
-        if (! ppInfo)
+        if (!*ppInfo)
         {
             return JFW_E_NONE;
         }
