@@ -1370,7 +1370,13 @@ rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
         {
             return xLay;
         }
-        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        if (xNext == xLay)
+        {
+            SAL_WARN("lwp", "loop in layout");
+            break;
+        }
+        xLay = xNext;
     }
     return rtl::Reference<LwpVirtualLayout>();
 }
