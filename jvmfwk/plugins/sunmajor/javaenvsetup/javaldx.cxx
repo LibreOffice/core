@@ -54,7 +54,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             fprintf(stdout, HELP_TEXT);// default
             return 0;
         }
-        sal_Bool bEnabled = false;
+        bool bEnabled = false;
         javaFrameworkError errcode = jfw_getEnabled( & bEnabled);
         if (errcode == JFW_E_NONE && !bEnabled)
         {

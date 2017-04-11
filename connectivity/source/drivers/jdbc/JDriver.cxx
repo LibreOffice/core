@@ -108,7 +108,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url )
 {
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's
-    sal_Bool bEnabled = false;
+    bool bEnabled = false;
     javaFrameworkError e = jfw_getEnabled(&bEnabled);
     switch (e) {
     case JFW_E_NONE:

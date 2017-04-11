@@ -823,7 +823,7 @@ javaFrameworkError jfw_setEnabled(bool bEnabled)
     return errcode;
 }
 
-javaFrameworkError jfw_getEnabled(sal_Bool *pbEnabled)
+javaFrameworkError jfw_getEnabled(bool *pbEnabled)
 {
     javaFrameworkError errcode = JFW_E_NONE;
     try

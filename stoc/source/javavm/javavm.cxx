@@ -938,7 +938,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
 //    initVMConfiguration(&aJvm, m_xContext->getServiceManager(), m_xContext);
 //    return aJvm.isEnabled();
     //ToDo
-    sal_Bool bEnabled = false;
+    bool bEnabled = false;
     if (jfw_getEnabled( & bEnabled) != JFW_E_NONE)
         throw css::uno::RuntimeException();
     return bEnabled;

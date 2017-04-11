@@ -384,7 +384,7 @@ namespace connectivity
 
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url )
     {
-        sal_Bool bEnabled = false;
+        bool bEnabled = false;
         javaFrameworkError e = jfw_getEnabled(&bEnabled);
         switch (e) {
         case JFW_E_NONE:

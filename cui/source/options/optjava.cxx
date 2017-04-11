@@ -690,7 +690,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         }
     }
 
-    sal_Bool bEnabled = false;
+    bool bEnabled = false;
     eErr = jfw_getEnabled( &bEnabled );
     DBG_ASSERT( JFW_E_NONE == eErr,
                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" );
@@ -715,7 +715,7 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     SvtMiscOptions aMiscOpt;
 
 #if HAVE_FEATURE_JAVA
-    sal_Bool bEnabled = false;
+    bool bEnabled = false;
     javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
     if ( eErr != JFW_E_NONE )
         bEnabled = false;

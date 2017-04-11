@@ -582,7 +582,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setEnabled(bool bEnabled);
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(sal_Bool *pbEnabled);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(bool *pbEnabled);
 
 /** determines parameters which are passed to VM during its creation.
 
