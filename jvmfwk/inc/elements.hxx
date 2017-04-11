@@ -210,7 +210,7 @@ public:
     /** adds a location to the already existing locations.
         Note: call load() before, then add the location and then call write().
     */
-    void addJRELocation(rtl_uString * sLocation);
+    void addJRELocation(OUString const & sLocation);
 
     /** writes the data to user settings.
      */

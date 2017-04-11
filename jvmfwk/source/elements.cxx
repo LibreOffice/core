@@ -645,18 +645,16 @@ void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
     }
 }
 
-void NodeJava::addJRELocation(rtl_uString * sLocation)
+void NodeJava::addJRELocation(OUString const & sLocation)
 {
-    assert( sLocation);
     if (!m_JRELocations)
         m_JRELocations = boost::optional<std::vector<OUString> >(
             std::vector<OUString> ());
      //only add the path if not already present
     std::vector<OUString>::const_iterator it =
-        std::find(m_JRELocations->begin(), m_JRELocations->end(),
-                  OUString(sLocation));
+        std::find(m_JRELocations->begin(), m_JRELocations->end(), sLocation);
     if (it == m_JRELocations->end())
-        m_JRELocations->push_back(OUString(sLocation));
+        m_JRELocations->push_back(sLocation);
 }
 
 jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL)

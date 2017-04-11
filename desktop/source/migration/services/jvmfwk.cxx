@@ -239,7 +239,7 @@ void JavaMigration::migrateJavarc()
     {
         //get the directory
         std::unique_ptr<JavaInfo> aInfo;
-        javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo);
+        javaFrameworkError err = jfw_getJavaInfoByPath(sValue, &aInfo);
 
         if (err == JFW_E_NONE)
         {
@@ -339,7 +339,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
                            "[Service implementation " IMPL_NAME
                            "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property", nullptr, Any());
 
-             if (jfw_setUserClassPath(cp.pData) != JFW_E_NONE)
+             if (jfw_setUserClassPath(cp) != JFW_E_NONE)
                  throw WrappedTargetException(
                        "[Service implementation " IMPL_NAME
                        "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed.", nullptr, Any());

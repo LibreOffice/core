@@ -140,7 +140,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     , m_pPathDlg(nullptr)
 #if HAVE_FEATURE_JAVA
     , m_parParameters(nullptr)
-    , m_pClassPath(nullptr)
     , m_nParamSize(0)
 #endif
     , m_aResetIdle("cui options SvxJavaOptionsPage Reset")
@@ -347,7 +346,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
     {
           m_pPathDlg = VclPtr<SvxJavaClassPathDlg>::Create( this );
         javaFrameworkError eErr = jfw_getUserClassPath( &m_pClassPath );
-        if ( JFW_E_NONE == eErr && m_pClassPath )
+        if ( JFW_E_NONE == eErr )
         {
             sClassPath = m_pClassPath;
             m_pPathDlg->SetClassPath( sClassPath );
@@ -538,7 +537,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 #if HAVE_FEATURE_JAVA
     bool bStartAgain = true;
     std::unique_ptr<JavaInfo> pInfo;
-    javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder.pData, &pInfo );
+    javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder, &pInfo );
     if ( JFW_E_NONE == eErr && pInfo )
     {
         sal_Int32 nPos = 0;
@@ -568,7 +567,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
         if ( !bFound )
         {
-            jfw_addJRELocation( pInfo->sLocation.pData );
+            jfw_addJRELocation( pInfo->sLocation );
             AddJRE( pInfo.get() );
             m_aAddedInfos.push_back( std::move(pInfo) );
             nPos = m_pJavaList->GetEntryCount() - 1;
@@ -650,7 +649,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         OUString sPath( m_pPathDlg->GetClassPath() );
         if ( m_pPathDlg->GetOldPath() != sPath )
         {
-            eErr = jfw_setUserClassPath( sPath.pData );
+            eErr = jfw_setUserClassPath( sPath );
             SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath");
             bModified = true;
         }

@@ -641,9 +641,8 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
 
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
         {
-            OUString sJRE = jfw::BootParams::getJREHome();
-
-            if ((errcode = jfw_getJavaInfoByPath(sJRE.pData, ppInfo))
+            if ((errcode = jfw_getJavaInfoByPath(
+                     jfw::BootParams::getJREHome(), ppInfo))
                 != JFW_E_NONE)
                 throw jfw::FrameworkException(
                     JFW_E_CONFIGURATION,
@@ -688,16 +687,13 @@ bool jfw_isVMRunning()
     return g_pJavaVM != nullptr;
 }
 
-javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, std::unique_ptr<JavaInfo> *ppInfo)
+javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr<JavaInfo> *ppInfo)
 {
-    assert(pPath != nullptr);
     assert(ppInfo != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-
-        OUString ouPath(pPath);
 
         jfw::VendorSettings aVendorSettings;
         std::vector<OUString> vecVendors =
@@ -717,7 +713,7 @@ javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, std::unique_ptr<Jav
             //Only if it does return a JavaInfo
             JavaInfo* pInfo = nullptr;
             javaPluginError plerr = jfw_plugin_getJavaInfoByPath(
-                ouPath,
+                pPath,
                 vendor,
                 versionInfo.sMinVersion,
                 versionInfo.sMaxVersion,
@@ -888,9 +884,8 @@ javaFrameworkError jfw_getVMParameters(
     return errcode;
 }
 
-javaFrameworkError jfw_setUserClassPath(rtl_uString * pCp)
+javaFrameworkError jfw_setUserClassPath(OUString const & pCp)
 {
-    assert(pCp != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
@@ -910,7 +905,7 @@ javaFrameworkError jfw_setUserClassPath(rtl_uString * pCp)
     return errcode;
 }
 
-javaFrameworkError jfw_getUserClassPath(rtl_uString ** ppCP)
+javaFrameworkError jfw_getUserClassPath(OUString * ppCP)
 {
     assert(ppCP != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
@@ -920,8 +915,7 @@ javaFrameworkError jfw_getUserClassPath(rtl_uString ** ppCP)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         const jfw::MergedSettings settings;
-        *ppCP = settings.getUserClassPath().pData;
-        rtl_uString_acquire(*ppCP);
+        *ppCP = settings.getUserClassPath();
     }
     catch (const jfw::FrameworkException& e)
     {
@@ -932,7 +926,7 @@ javaFrameworkError jfw_getUserClassPath(rtl_uString ** ppCP)
     return errcode;
 }
 
-javaFrameworkError jfw_addJRELocation(rtl_uString * sLocation)
+javaFrameworkError jfw_addJRELocation(OUString const & sLocation)
 {
     javaFrameworkError errcode = JFW_E_NONE;
     try

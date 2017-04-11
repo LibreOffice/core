@@ -67,7 +67,7 @@ private:
 #if HAVE_FEATURE_JAVA
     std::vector<std::unique_ptr<JavaInfo>> m_parJavaInfo;
     rtl_uString**           m_parParameters;
-    rtl_uString*            m_pClassPath;
+    OUString                m_pClassPath;
     sal_Int32               m_nParamSize;
 #endif
     OUString                m_sInstallText;

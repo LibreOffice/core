@@ -419,7 +419,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAllJREs(
    requirements as determined by the javavendors.xml
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(
-    rtl_uString *pPath, std::unique_ptr<JavaInfo> *ppInfo);
+    OUString const & pPath, std::unique_ptr<JavaInfo> *ppInfo);
 
 
 /** starts a Java Virtual Machine (JVM).
@@ -643,16 +643,14 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getVMParameters(
     were not met.<br/>
    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_setUserClassPath(rtl_uString * pCP);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_setUserClassPath(OUString const  & pCP);
 /** provides the value of the current user class path.
 
    <p>The function returns an empty string if no user class path is set.
    </p>
 
    @param ppCP
-   [out] contains the user class path on return. If <code>*ppCP</code> was
-   not NULL then the value is overwritten. No attempt at freeing that string
-   is made.
+   [out] contains the user class path on return.
 
    @return
    JFW_E_NONE function ran successfully.<br/>
@@ -661,7 +659,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setUserClassPath(rtl_uString * pCP);
     were not met.<br/>
    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getUserClassPath(rtl_uString ** ppCP);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_getUserClassPath(OUString * ppCP);
 
 /** saves the location of a JRE.
 
@@ -688,7 +686,8 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getUserClassPath(rtl_uString ** ppCP);
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(rtl_uString * sLocation);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(
+    OUString const & sLocation);
 
 /** checks if the installation of the jre still exists.
 
