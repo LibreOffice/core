@@ -30,8 +30,6 @@
 #include <cairo.h>
 #endif
 
-using namespace basegfx;
-
 SvpSalFrame* SvpSalFrame::s_pFocusFrame = nullptr;
 
 #ifdef IOS
@@ -150,7 +148,7 @@ SalGraphics* SvpSalFrame::AcquireGraphics()
 {
     SvpSalGraphics* pGraphics = new SvpSalGraphics();
 #ifndef IOS
-    pGraphics->setSurface(m_pSurface, B2IVector(maGeometry.nWidth, maGeometry.nHeight));
+    pGraphics->setSurface(m_pSurface, basegfx::B2IVector(maGeometry.nWidth, maGeometry.nHeight));
 #endif
     m_aGraphics.push_back( pGraphics );
     return pGraphics;
@@ -257,7 +255,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             maGeometry.nHeight = m_nMinHeight;
     }
 #ifndef IOS
-    B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
+    basegfx::B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
     if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != aFrameSize.getX() ||
                        cairo_image_surface_get_height(m_pSurface) != aFrameSize.getY() )
     {
@@ -271,7 +269,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 
         // Creating backing surfaces for invisible windows costs a big chunk of RAM.
         if (Application::IsHeadlessModeEnabled())
-             aFrameSize = B2IVector( 1, 1 );
+             aFrameSize = basegfx::B2IVector( 1, 1 );
 
         m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                                 aFrameSize.getX(),
