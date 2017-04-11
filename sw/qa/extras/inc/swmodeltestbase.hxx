@@ -425,7 +425,9 @@ protected:
         T data;
         if (!css::uno::fromAny(properties->getPropertyValue(name), &data))
         {
-            CPPUNIT_FAIL("the property is of unexpected type or void");
+            OString const msg("the property is of unexpected type or void: "
+                    + OUStringToOString(name, RTL_TEXTENCODING_UTF8));
+            CPPUNIT_FAIL(msg.getStr());
         }
         return data;
     }
@@ -437,7 +439,9 @@ protected:
         T data = T();
         if (!(properties->getPropertyValue(name) >>= data))
         {
-            CPPUNIT_FAIL("the property is of unexpected type or void");
+            OString const msg("the property is of unexpected type or void: "
+                    + OUStringToOString(name, RTL_TEXTENCODING_UTF8));
+            CPPUNIT_FAIL(msg.getStr());
         }
         return data;
     }
