@@ -1375,7 +1375,6 @@ ScTokenArray* ScConditionEntry::CreateFlatCopiedTokenArray( sal_uInt16 nIndex ) 
 {
     assert(nIndex <= 1);
     ScTokenArray* pRet = nullptr;
-    ScAddress aAddr;
 
     if ( nIndex==0 )
     {

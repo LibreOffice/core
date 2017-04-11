@@ -200,8 +200,6 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
 
 void ScAcceptChgDlg::Init()
 {
-    ScRange aRange;
-
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();

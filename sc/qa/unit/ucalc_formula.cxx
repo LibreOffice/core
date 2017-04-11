@@ -5108,10 +5108,6 @@ void Test::testFuncINDIRECT2()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (2, "baz"));
 
-    ScAddress aStart;
-    ScAddress aEnd;
-    ScAddress aRef;
-
     m_pDoc->SetValue(0,0,0, 10.0);
     m_pDoc->SetValue(0,1,0, 10.0);
     m_pDoc->SetValue(0,2,0, 10.0);

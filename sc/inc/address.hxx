@@ -180,7 +180,7 @@ inline void applyStartToEndFlags(ScRefFlags &target)
 }
 
 //  ScAddress
-class ScAddress
+class SAL_WARN_UNUSED ScAddress
 {
 private:
     SCROW   nRow;
@@ -459,7 +459,7 @@ inline bool ValidAddress( const ScAddress& rAddress )
 }
 
 //  ScRange
-class ScRange
+class SAL_WARN_UNUSED ScRange
 {
 public:
     ScAddress aStart;
@@ -720,7 +720,7 @@ inline bool ValidRange( const ScRange& rRange )
 }
 
 //  ScRangePair
-class ScRangePair
+class SAL_WARN_UNUSED ScRangePair
 {
 private:
     ScRange aRange[2];
@@ -756,7 +756,7 @@ inline ScRangePair& ScRangePair::operator= ( const ScRangePair& rRange )
 }
 
 //  ScRefAddress
-class ScRefAddress
+class SAL_WARN_UNUSED ScRefAddress
 {
 private:
     ScAddress           aAdr;

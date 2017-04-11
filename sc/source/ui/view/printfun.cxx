@@ -476,7 +476,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     long nDevSizeY = aRect.Bottom()-aRect.Top()+1;
 
     tools::Rectangle aLines;
-    ScRange aRange( nX1,nY1,nTab, nX2,nY2,nTab );
 
     long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)

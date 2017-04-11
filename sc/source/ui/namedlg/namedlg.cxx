@@ -122,8 +122,6 @@ void ScNameDlg::dispose()
 
 void ScNameDlg::Init()
 {
-    ScRange aRange;
-
     OSL_ENSURE( mpViewData && mpDoc, "ViewData or Document not found!" );
 
     //init UI
