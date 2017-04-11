@@ -695,9 +695,16 @@ void ScCaptionPtr::decRefAndDestroy()
 #if 1
         // FIXME: there are still cases where the caption pointer is dangling
         mpCaption = nullptr;
+        mbNotOwner = false;
 #else
-        // Destroying Draw Undo deletes its SdrObject, don't attempt that twice.
-        if (!mbNotOwner)
+        // Destroying Draw Undo and some other delete the SdrObject, don't
+        // attempt that twice.
+        if (mbNotOwner)
+        {
+            mpCaption = nullptr;
+            mbNotOwner = false;
+        }
+        else
         {
             removeFromDrawPageAndFree( true );  // ignoring Undo
             if (mpCaption)
