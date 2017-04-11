@@ -42,7 +42,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
-#include <com/sun/star/logging/XSimpleLogRing.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -142,7 +141,6 @@ struct OStorage_Impl
     SotElementList_Impl                         m_aDeletedList;
 
     css::uno::Reference< css::container::XNameContainer > m_xPackageFolder;
-    css::uno::Reference< css::logging::XSimpleLogRing >  m_xLogRing;
 
     css::uno::Reference< css::lang::XSingleServiceFactory > m_xPackage;
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
@@ -197,8 +195,6 @@ struct OStorage_Impl
                     sal_Int32 nStorageType );
 
     ~OStorage_Impl();
-
-    void AddLog( const OUString& aMessage );
 
     void SetReadOnlyWrap( OStorage& aStorage );
     void RemoveReadOnlyWrap( OStorage& aStorage );

@@ -37,7 +37,6 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/logging/DocumentIOLogRing.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/FinishEngineEvent.hpp>
 #include <com/sun/star/script/InterruptReason.hpp>
@@ -210,24 +209,18 @@ void SfxObjectShell::FlushDocInfo()
                  (delay > 0) || !url.isEmpty() );
 }
 
-
-void SfxObjectShell::SetError( sal_uInt32 lErr, const OUString& aLogMessage )
+void SfxObjectShell::SetError(sal_uInt32 lErr)
 {
-    if(pImpl->lErr==ERRCODE_NONE)
+    if (pImpl->lErr==ERRCODE_NONE)
     {
         pImpl->lErr=lErr;
-
-        if( lErr != ERRCODE_NONE && !aLogMessage.isEmpty() )
-            AddLog( aLogMessage );
     }
 }
-
 
 sal_uInt32 SfxObjectShell::GetError() const
 {
     return ERRCODE_TOERROR(GetErrorCode());
 }
-
 
 sal_uInt32 SfxObjectShell::GetErrorCode() const
 {
@@ -237,18 +230,13 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
     return lError;
 }
 
-
 void SfxObjectShell::ResetError()
 {
-    if( pImpl->lErr != ERRCODE_NONE )
-        AddLog( OSL_LOG_PREFIX "Resetting Error." );
-
     pImpl->lErr=0;
     SfxMedium * pMed = GetMedium();
     if( pMed )
         pMed->ResetError();
 }
-
 
 void SfxObjectShell::EnableSetModified( bool bEnable )
 {
@@ -1242,7 +1230,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
             }
             else
             {
-                SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
+                SetError(ERRCODE_IO_GENERAL);
             }
         }
         else
@@ -1846,89 +1834,6 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
     {}
 
     return bResult;
-}
-
-void SfxObjectShell::AddLog( const OUString& aMessage )
-{
-    if ( !pImpl->m_xLogRing.is() )
-    {
-        try
-        {
-            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-            pImpl->m_xLogRing.set( logging::DocumentIOLogRing::get(xContext) );
-        }
-        catch( uno::Exception& )
-        {}
-    }
-
-    if ( pImpl->m_xLogRing.is() )
-        pImpl->m_xLogRing->logString( aMessage );
-}
-
-namespace {
-
-void WriteStringInStream( const uno::Reference< io::XOutputStream >& xOutStream, const OUString& aString )
-{
-    if ( xOutStream.is() )
-    {
-        OString aStrLog = OUStringToOString( aString, RTL_TEXTENCODING_UTF8 );
-        uno::Sequence< sal_Int8 > aLogData( reinterpret_cast<const sal_Int8*>(aStrLog.getStr()), aStrLog.getLength() );
-        xOutStream->writeBytes( aLogData );
-
-        aLogData.realloc( 1 );
-        aLogData[0] = '\n';
-        xOutStream->writeBytes( aLogData );
-    }
-}
-
-}
-
-void SfxObjectShell::StoreLog()
-{
-    if ( !pImpl->m_xLogRing.is() )
-    {
-        try
-        {
-            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-            pImpl->m_xLogRing.set( logging::DocumentIOLogRing::get(xContext) );
-        }
-        catch( uno::Exception& )
-        {}
-    }
-
-    if ( pImpl->m_xLogRing.is() )
-    {
-        OUString aFileURL = ( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"  );
-
-        ::rtl::Bootstrap::expandMacros( aFileURL );
-
-        OUString aBuildID = ( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("setup") ":buildid}"  );
-
-        ::rtl::Bootstrap::expandMacros( aBuildID );
-
-        if ( !aFileURL.isEmpty() )
-        {
-            aFileURL += "/user/temp/document_io_logring.txt";
-            try
-            {
-                uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                uno::Reference< ucb::XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(xContext));
-                uno::Reference< io::XStream > xStream( xSimpleFileAccess->openFileReadWrite( aFileURL ), uno::UNO_SET_THROW );
-                uno::Reference< io::XOutputStream > xOutStream( xStream->getOutputStream(), uno::UNO_SET_THROW );
-                uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY_THROW );
-                xTruncate->truncate();
-
-                if ( !aBuildID.isEmpty() )
-                    WriteStringInStream( xOutStream, aBuildID );
-
-                uno::Sequence< OUString > aLogSeq = pImpl->m_xLogRing->getCollectedLog();
-                for ( sal_Int32 nInd = 0; nInd < aLogSeq.getLength(); nInd++ )
-                    WriteStringInStream( xOutStream, aLogSeq[nInd] );
-            }
-            catch( uno::Exception& )
-            {}
-        }
-    }
 }
 
 bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMessage)

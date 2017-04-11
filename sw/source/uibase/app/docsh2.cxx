@@ -572,7 +572,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bMerge = bool(nFlags & SfxTemplateFlags::MERGE_STYLES);
                     aOpt.SetMerge( !bMerge );
 
-                    SetError( LoadStylesFromFile( aFileName, aOpt, false ), OSL_LOG_PREFIX);
+                    SetError(LoadStylesFromFile(aFileName, aOpt, false));
                     if ( !GetError() )
                         rReq.Done();
                 }

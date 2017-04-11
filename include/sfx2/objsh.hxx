@@ -303,10 +303,7 @@ public:
     void                        ResetError();
     sal_uInt32                  GetError() const;
     sal_uInt32                  GetErrorCode() const;
-    void                        SetError( sal_uInt32 rErr, const OUString& aLogMessage );
-
-    void                        AddLog( const OUString& aMessage );
-    void                        StoreLog();
+    void                        SetError(sal_uInt32 rErr);
 
     /**
      * Initialize bare minimum just enough for unit test runs.
