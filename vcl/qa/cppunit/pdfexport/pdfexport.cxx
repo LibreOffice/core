@@ -54,6 +54,7 @@ public:
     void testTdf106972Pdf17();
     void testTdf107013();
     void testTdf107018();
+    void testTdf107089();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -67,6 +68,7 @@ public:
     CPPUNIT_TEST(testTdf106972Pdf17);
     CPPUNIT_TEST(testTdf107013);
     CPPUNIT_TEST(testTdf107018);
+    CPPUNIT_TEST(testTdf107089);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -451,6 +453,42 @@ void PdfExportTest::testTdf107018()
     // This was "XObject", reference in a nested dictionary wasn't updated when
     // copying the page stream of a PDF image.
     CPPUNIT_ASSERT_EQUAL(OString("Pages"), pName->GetValue());
+}
+
+void PdfExportTest::testTdf107089()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf107089.odt", aDocument);
+
+    // Get access to the only image on the only page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+
+    // Get access to the form object inside the image.
+    auto pXObjectResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"));
+    CPPUNIT_ASSERT(pXObjectResources);
+    auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObjectResources->LookupElement("XObject"));
+    CPPUNIT_ASSERT(pXObjectForms);
+    vcl::filter::PDFObjectElement* pForm = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pForm);
+
+    // Make sure 'Hello' is part of the form object's stream.
+    vcl::filter::PDFStreamElement* pStream = pForm->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    OString aHello("Hello");
+    auto pStart = static_cast<const char*>(rObjectStream.GetData());
+    const char* pEnd = pStart + rObjectStream.GetSize();
+    auto it = std::search(pStart, pEnd, aHello.getStr(), aHello.getStr() + aHello.getLength());
+    // This failed, 'Hello' was part only a mixed compressed/uncompressed stream, i.e. garbage.
+    CPPUNIT_ASSERT(it != pEnd);
 }
 #endif
 

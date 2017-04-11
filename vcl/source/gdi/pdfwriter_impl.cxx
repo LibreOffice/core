@@ -12017,7 +12017,8 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             "ColorSpace",
             "ExtGState",
             "Font",
-            "XObject"
+            "XObject",
+            "Shading"
         };
         for (const auto& rKey : aKeys)
             aLine.append(copyExternalResources(*pPage, rKey, aCopiedResources));
@@ -12027,14 +12028,6 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aLine.append(" ");
         aLine.append(aSize.Height());
         aLine.append(" ]");
-
-        // For now assume that all the content streams have the same filter.
-        auto pFilter = dynamic_cast<filter::PDFNameElement*>(aContentStreams[0]->Lookup("Filter"));
-        if (pFilter)
-        {
-            aLine.append(" /Filter /");
-            aLine.append(pFilter->GetValue());
-        }
 
         aLine.append(" /Length ");
 
@@ -12051,8 +12044,31 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
 
             SvMemoryStream& rPageStream = pPageStream->GetMemory();
 
-            nLength += rPageStream.GetSize();
-            aStream.append(static_cast<const sal_Char*>(rPageStream.GetData()), rPageStream.GetSize());
+            auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"));
+            if (pFilter)
+            {
+                if (pFilter->GetValue() != "FlateDecode")
+                    continue;
+
+                SvMemoryStream aMemoryStream;
+                ZCodec aZCodec;
+                rPageStream.Seek(0);
+                aZCodec.BeginCompression();
+                aZCodec.Decompress(rPageStream, aMemoryStream);
+                if (!aZCodec.EndCompression())
+                {
+                    SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: decompression failed");
+                    continue;
+                }
+
+                nLength += aMemoryStream.GetSize();
+                aStream.append(static_cast<const sal_Char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
+            }
+            else
+            {
+                nLength += rPageStream.GetSize();
+                aStream.append(static_cast<const sal_Char*>(rPageStream.GetData()), rPageStream.GetSize());
+            }
         }
 
         aLine.append(nLength);
