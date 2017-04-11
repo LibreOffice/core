@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <tools/datetime.hxx>
 
 #include <unotools/securityoptions.hxx>
@@ -127,8 +126,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     bool                m_bIsInit;
 
     OUString            m_aSharedFileURL;
-
-    css::uno::Reference< css::logging::XSimpleLogRing > m_xLogRing;
 
     bool                m_bIncomplEncrWarnShown;
 

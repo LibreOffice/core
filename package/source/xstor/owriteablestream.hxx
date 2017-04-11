@@ -38,7 +38,6 @@
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/logging/XSimpleLogRing.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -91,7 +90,6 @@ struct OWriteStream_Impl : public MutexHolder
     bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package
 
     css::uno::Reference< css::packages::XDataSinkEncrSupport > m_xPackageStream;
-    css::uno::Reference< css::logging::XSimpleLogRing >  m_xLogRing;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
@@ -155,8 +153,6 @@ public:
     ~OWriteStream_Impl();
 
     void CleanCacheStream();
-
-    void AddLog( const OUString& aMessage );
 
     bool UsesCommonEncryption_Impl() { return m_bUseCommonEncryption; }
     bool HasTempFile_Impl() const { return ( m_aTempURL.getLength() != 0 ); }

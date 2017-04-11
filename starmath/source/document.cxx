@@ -748,7 +748,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
             SmXMLImportWrapper aEquation(xModel);
             sal_uLong nError = aEquation.Import(rMedium);
             bRet = 0 == nError;
-            SetError( nError, OSL_LOG_PREFIX );
+            SetError(nError);
         }
     }
 

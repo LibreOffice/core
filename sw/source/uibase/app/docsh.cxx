@@ -276,7 +276,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     SW_MOD()->SetEmbeddedLoadSave( false );
 
-    SetError( nErr, OSL_LOG_PREFIX );
+    SetError(nErr);
     bool bOk = !IsError( nErr );
 
     if (bOk && !m_pDoc->IsInLoadAsynchron())
@@ -366,7 +366,7 @@ bool SwDocShell::Save()
         }
         SW_MOD()->SetEmbeddedLoadSave( false );
     }
-    SetError( nErr ? nErr : nVBWarning, OSL_LOG_PREFIX );
+    SetError(nErr ? nErr : nVBWarning);
 
     SfxViewFrame *const pFrame =
         (m_pWrtShell) ? m_pWrtShell->GetView().GetViewFrame() : nullptr;
@@ -512,7 +512,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         m_pDoc->cleanupUnoCursorTable();
     }
-    SetError( nErr ? nErr : nVBWarning, OSL_LOG_PREFIX );
+    SetError(nErr ? nErr : nVBWarning);
 
     return !IsError( nErr );
 }
@@ -595,7 +595,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                     Sequence<OUString> aModNames = xLib->getElementNames();
                     if(aModNames.getLength())
                     {
-                        SetError(WARN_SWG_HTML_NO_MACROS, OSL_LOG_PREFIX );
+                        SetError(WARN_SWG_HTML_NO_MACROS);
                         break;
                     }
                 }
@@ -751,7 +751,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     SW_MOD()->SetEmbeddedLoadSave( false );
-    SetError( nErrno ? nErrno : nVBWarning, OSL_LOG_PREFIX );
+    SetError(nErrno ? nErrno : nVBWarning);
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
 

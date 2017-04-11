@@ -145,9 +145,7 @@ public:
                         { return ERRCODE_TOERROR(GetErrorCode()); }
     sal_uInt32          GetLastStorageCreationState();
 
-    void                SetError( sal_uInt32 nError, const OUString& aLogMessage );
-
-    void                AddLog( const OUString& aMessage );
+    void                SetError(sal_uInt32 nError);
 
     void                CloseInStream();
     bool                CloseOutStream();

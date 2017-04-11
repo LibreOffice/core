@@ -61,8 +61,6 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <com/sun/star/logging/DocumentIOLogRing.hpp>
-#include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -221,7 +219,6 @@ public:
     uno::Reference<io::XStream> xStream;
     uno::Reference<io::XStream> m_xLockingStream;
     uno::Reference<task::XInteractionHandler> xInteraction;
-    uno::Reference<logging::XSimpleLogRing> m_xLogRing;
 
     sal_uInt32                  nLastStorageError;
 
@@ -300,38 +297,15 @@ void SfxMedium::ResetError()
         pImpl->m_pOutStream->ResetError();
 }
 
-
 sal_uInt32 SfxMedium::GetLastStorageCreationState()
 {
     return pImpl->nLastStorageError;
 }
 
-
-void SfxMedium::AddLog( const OUString& aMessage )
-{
-    if ( !pImpl->m_xLogRing.is() )
-    {
-        try
-        {
-            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-            pImpl->m_xLogRing.set( logging::DocumentIOLogRing::get(xContext) );
-        }
-        catch( const uno::Exception& )
-        {}
-    }
-
-    if ( pImpl->m_xLogRing.is() )
-        pImpl->m_xLogRing->logString( aMessage );
-}
-
-
-void SfxMedium::SetError( sal_uInt32 nError, const OUString& aLogMessage )
+void SfxMedium::SetError(sal_uInt32 nError)
 {
     pImpl->m_eError = nError;
-    if ( pImpl->m_eError != ERRCODE_NONE && !aLogMessage.isEmpty() )
-        AddLog( aLogMessage );
 }
-
 
 sal_uInt32 SfxMedium::GetErrorCode() const
 {
@@ -342,7 +316,6 @@ sal_uInt32 SfxMedium::GetErrorCode() const
         lError = pImpl->m_pOutStream->GetErrorCode();
     return lError;
 }
-
 
 void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 {
@@ -372,7 +345,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
                 ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
                 if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
                 {
-                    SetError( ERRCODE_ABORT, OSL_LOG_PREFIX );
+                    SetError(ERRCODE_ABORT);
                 }
             }
             catch ( const uno::Exception& )
@@ -760,7 +733,7 @@ void SfxMedium::StorageBackup_Impl()
     {
         DoInternalBackup_Impl( aOriginalContent );
         if( pImpl->m_aBackupURL.isEmpty() )
-            SetError( ERRCODE_SFX_CANTCREATEBACKUP, OSL_LOG_PREFIX );
+            SetError(ERRCODE_SFX_CANTCREATEBACKUP);
     }
 }
 
@@ -819,7 +792,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
             {
                 SAL_WARN( "sfx.doc", "It must be possible to set a common password for the storage" );
                 // TODO/LATER: set the error code in case of problem
-                // SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
+                // SetError(ERRCODE_IO_GENERAL);
             }
         }
     }
@@ -896,7 +869,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
         if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
         {
-            SetError( ERRCODE_ABORT, OSL_LOG_PREFIX );
+            SetError(ERRCODE_ABORT);
         }
         else if ( uno::Reference< task::XInteractionDisapprove >( xSelected.get(), uno::UNO_QUERY ).is() )
         {
@@ -935,7 +908,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
             GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         }
         else
-            SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
+            SetError(ERRCODE_IO_ACCESSDENIED);
 
     }
 
@@ -1068,7 +1041,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                 const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet, SID_DOC_READONLY, false);
 
                 if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
-                    SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
+                    SetError(ERRCODE_IO_ACCESSDENIED);
                 else
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             }
@@ -1286,7 +1259,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
             const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet, SID_DOC_READONLY, false);
 
             if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
-                SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
+                SetError(ERRCODE_IO_ACCESSDENIED);
             else
                 GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         }
@@ -1638,12 +1611,12 @@ bool SfxMedium::StorageCommit_Impl()
                     }
 
                     if (!GetError())
-                        SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
+                        SetError(ERRCODE_IO_GENERAL);
                 }
                 catch ( const uno::Exception& )
                 {
                     //TODO/LATER: improve error handling
-                    SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
+                    SetError(ERRCODE_IO_GENERAL);
                 }
             }
         }
@@ -1914,7 +1887,7 @@ void SfxMedium::Transfer_Impl()
             else
             {
                 SAL_WARN( "sfx.doc", "Illegal Output stream parameter!" );
-                SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
+                SetError(ERRCODE_IO_GENERAL);
             }
 
             // free the reference
@@ -2448,7 +2421,7 @@ void SfxMedium::GetMedium_Impl()
 
         //TODO/MBA: ErrorHandling - how to transport error from MediaDescriptor
         if ( !GetError() && !pImpl->xStream.is() && !pImpl->xInputStream.is() )
-            SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
+            SetError(ERRCODE_IO_ACCESSDENIED);
 
         if ( !GetError() )
         {
@@ -3365,7 +3338,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
     OUString aTmpURL = pImpl->pTempFile->GetURL();
     if ( pImpl->m_aName.isEmpty() || aTmpURL.isEmpty() )
     {
-        SetError( ERRCODE_IO_CANTWRITE, OSL_LOG_PREFIX );
+        SetError(ERRCODE_IO_CANTWRITE);
         return;
     }
 
@@ -3443,7 +3416,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
 
         if ( !bTransferSuccess )
         {
-            SetError( ERRCODE_IO_CANTWRITE, OSL_LOG_PREFIX );
+            SetError(ERRCODE_IO_CANTWRITE);
             return;
         }
     }
@@ -3463,7 +3436,7 @@ void SfxMedium::CreateTempFileNoCopy()
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     if ( pImpl->m_aName.isEmpty() )
     {
-        SetError( ERRCODE_IO_CANTWRITE, OSL_LOG_PREFIX );
+        SetError(ERRCODE_IO_CANTWRITE);
         return;
     }
 

@@ -94,7 +94,7 @@ bool SdPPTFilter::Import()
             pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
             if ( pStorage->IsStream( "EncryptedSummary" ) )
-                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, OSL_LOG_PREFIX );
+                mrMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
             else
             {
 #ifndef DISABLE_DYNLOADING
@@ -106,14 +106,14 @@ bool SdPPTFilter::Import()
                         bRet = PPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
 
                     if ( !bRet )
-                        mrMedium.SetError( SVSTREAM_WRONGVERSION, OSL_LOG_PREFIX );
+                        mrMedium.SetError(SVSTREAM_WRONGVERSION);
                     pLibrary->release(); //TODO: let it get unloaded?
                     delete pLibrary;
                 }
 #else
                 bRet = ImportPPT( &mrDocument, *pDocStream, *pStorage, mrMedium );
                 if ( !bRet )
-                    mrMedium.SetError( SVSTREAM_WRONGVERSION, OSL_LOG_PREFIX );
+                    mrMedium.SetError(SVSTREAM_WRONGVERSION);
 #endif
             }
 
