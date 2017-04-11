@@ -481,6 +481,7 @@ ScCaptionPtr::ScCaptionPtr( ScCaptionPtr&& r ) :
 {
     r.replaceInList( this );
     r.mpCaption = nullptr;
+    r.mbNotOwner = false;
 }
 
 ScCaptionPtr& ScCaptionPtr::operator=( ScCaptionPtr&& r )
@@ -490,9 +491,11 @@ ScCaptionPtr& ScCaptionPtr::operator=( ScCaptionPtr&& r )
     mpHead = r.mpHead;
     mpNext = r.mpNext;
     mpCaption = r.mpCaption;
+    mbNotOwner = r.mbNotOwner;
 
     r.replaceInList( this );
     r.mpCaption = nullptr;
+    r.mbNotOwner = false;
 
     return *this;
 }
@@ -525,6 +528,7 @@ ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
     removeFromList();
 
     mpCaption = r.mpCaption;
+    mbNotOwner = r.mbNotOwner;
     // That head is this' master.
     mpHead = r.mpHead;
     // Insert into list.
@@ -656,6 +660,7 @@ void ScCaptionPtr::reset( SdrCaptionObj* p )
     decRefAndDestroy();
     removeFromList();
     mpCaption = p;
+    mbNotOwner = false;
     if (p)
     {
         newHead();
@@ -776,6 +781,7 @@ bool ScCaptionPtr::forget()
     bool bRet = decRef();
     removeFromList();
     mpCaption = nullptr;
+    mbNotOwner = false;
     return bRet;
 }
 
@@ -800,6 +806,7 @@ void ScCaptionPtr::clear()
     mpHead = nullptr;
     mpNext = nullptr;
     mpCaption = nullptr;
+    mbNotOwner = false;
 }
 
 
