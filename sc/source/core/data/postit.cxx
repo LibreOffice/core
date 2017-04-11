@@ -692,6 +692,10 @@ void ScCaptionPtr::decRefAndDestroy()
         assert(!mpNext);                    // this must be one and only one
         assert(mpCaption);
 
+#if 1
+        // FIXME: there are still cases where the caption pointer is dangling
+        mpCaption = nullptr;
+#else
         // Destroying Draw Undo deletes its SdrObject, don't attempt that twice.
         if (!mbInUndo)
         {
@@ -705,6 +709,7 @@ void ScCaptionPtr::decRefAndDestroy()
                 SdrObject::Free( pObj );
             }
         }
+#endif
         delete mpHead;
         mpHead = nullptr;
     }
