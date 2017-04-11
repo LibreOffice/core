@@ -97,6 +97,8 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
 
     if (!functionDecl->getNameInfo().getLoc().isValid())
         return;
+    if (functionDecl->isVariadic())
+        return;
     if (ignoreLocation(functionDecl))
         return;
     // ignore stuff that forms part of the stable URE interface
