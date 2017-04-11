@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_138934cb",
+        "filename": "sc/inc/sc.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-11T12:40:17Z",
+      "side": 1,
+      "message": "This conflicts with the change for show/hide all notes, I\u0027ll resolve an upload a new patch set.",
+      "revId": "4db9127c9d64c824f58ebdf37bd970f5ddb8c1fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
