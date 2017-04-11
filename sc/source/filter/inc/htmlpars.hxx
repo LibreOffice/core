@@ -158,7 +158,7 @@ private:
     OUString            aString;
     ScRangeListRef      xLockedList;        // je Table
     OuterMap*           pTables;
-    ScHTMLColOffset*    pColOffset;
+    ScHTMLColOffset     maColOffset;
     ScHTMLColOffset*    pLocalColOffset;    // je Table
     sal_uLong           nFirstTableCell;    // je Table
     short               nTableLevel;

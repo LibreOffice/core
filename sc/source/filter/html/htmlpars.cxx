@@ -203,7 +203,6 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
         aBaseURL( rBaseURL ),
         xLockedList( new ScRangeList ),
         pTables( nullptr ),
-        pColOffset( new ScHTMLColOffset ),
         pLocalColOffset( new ScHTMLColOffset ),
         nFirstTableCell(0),
         nTableLevel(0),
@@ -221,7 +220,7 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
         bInTitle( false )
 {
     MakeColNoRef( pLocalColOffset, 0, 0, 0, 0 );
-    MakeColNoRef( pColOffset, 0, 0, 0, 0 );
+    MakeColNoRef( &maColOffset, 0, 0, 0, 0 );
 }
 
 ScHTMLLayoutParser::~ScHTMLLayoutParser()
@@ -247,7 +246,6 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
         delete pS;
     }
     delete pLocalColOffset;
-    delete pColOffset;
     if ( pTables )
     {
         for( OuterMap::const_iterator it = pTables->begin(); it != pTables->end(); ++it)
@@ -290,15 +288,15 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
     // Create column width
     Adjust();
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    sal_uInt16 nCount = pColOffset->size();
-    sal_uLong nOff = (*pColOffset)[0];
+    sal_uInt16 nCount = maColOffset.size();
+    sal_uLong nOff = maColOffset[0];
     Size aSize;
     for ( sal_uInt16 j = 1; j < nCount; j++ )
     {
-        aSize.Width() = (*pColOffset)[j] - nOff;
+        aSize.Width() = maColOffset[j] - nOff;
         aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
         maColWidths[ j-1 ] = aSize.Width();
-        nOff = (*pColOffset)[j];
+        nOff = maColOffset[j];
     }
     return nErr;
 }
@@ -590,24 +588,24 @@ void ScHTMLLayoutParser::Adjust()
             }
         }
         // Real column
-        (void)SeekOffset( pColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
+        (void)SeekOffset( &maColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
         SCCOL nColBeforeSkip = pE->nCol;
         SkipLocked( pE, false );
         if ( pE->nCol != nColBeforeSkip )
         {
-            SCCOL nCount = (SCCOL)pColOffset->size();
+            SCCOL nCount = (SCCOL)maColOffset.size();
             if ( nCount <= pE->nCol )
             {
-                pE->nOffset = (sal_uInt16) (*pColOffset)[nCount-1];
-                MakeCol( pColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
+                pE->nOffset = (sal_uInt16) maColOffset[nCount-1];
+                MakeCol( &maColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
             }
             else
             {
-                pE->nOffset = (sal_uInt16) (*pColOffset)[pE->nCol];
+                pE->nOffset = (sal_uInt16) maColOffset[pE->nCol];
             }
         }
         SCCOL nPos;
-        if ( pE->nWidth && SeekOffset( pColOffset, pE->nOffset + pE->nWidth, &nPos, nOffsetTolerance ) )
+        if ( pE->nWidth && SeekOffset( &maColOffset, pE->nOffset + pE->nWidth, &nPos, nOffsetTolerance ) )
             pE->nColOverlap = (nPos > pE->nCol ? nPos - pE->nCol : 1);
         else
         {
@@ -790,7 +788,7 @@ void ScHTMLLayoutParser::SetWidths()
                 pE->nWidth = GetWidth( pE );
                 OSL_ENSURE( pE->nWidth, "SetWidths: pE->nWidth == 0" );
             }
-            MakeCol( pColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
+            MakeCol( &maColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
         }
     }
 }
