@@ -1067,7 +1067,6 @@ void SwDocTest::randomTest()
 
         for( int i = 0; i < 2000; i++ )
         {
-            SwPaM aPam(m_pDoc->GetNodes());
             SwCursor aCrs(getRandomPosition(m_pDoc, i/20), nullptr);
             aCrs.SetMark();
 

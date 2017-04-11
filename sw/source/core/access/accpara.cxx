@@ -1416,8 +1416,6 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
     OUString strTypeName;
     SwFieldMgr aMgr;
     SwTextField* pTextField = nullptr;
-    SwTextNode* pTextNd = const_cast<SwTextNode*>( GetTextNode() );
-    SwIndex fldIndex( pTextNd, nIndex );
     sal_Int32 nFieldIndex = GetPortionData().GetFieldIndex(nIndex);
     if (nFieldIndex >= 0)
     {
