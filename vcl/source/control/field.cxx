@@ -1023,7 +1023,7 @@ static const OUString ImplMetricToString( FieldUnit rUnit )
     return OUString();
 }
 
-static FieldUnit ImplStringToMetric(const OUString &rMetricString)
+FieldUnit MetricFormatter::StringToMetric(const OUString &rMetricString)
 {
     FieldUnitStringList* pList = ImplGetCleanedFieldUnits();
     if( pList )
@@ -1042,8 +1042,8 @@ static FieldUnit ImplStringToMetric(const OUString &rMetricString)
 
 static FieldUnit ImplMetricGetUnit(const OUString& rStr)
 {
-    OUString aStr = ImplMetricGetUnitText( rStr );
-    return ImplStringToMetric( aStr );
+    OUString aStr = ImplMetricGetUnitText(rStr);
+    return MetricFormatter::StringToMetric(aStr);
 }
 
 #define K *1000L

@@ -232,6 +232,7 @@ public:
 
     void                    SetCustomConvertHdl( const Link<MetricFormatter&,void>& rLink ) { maCustomConvertLink = rLink; }
 
+    static FieldUnit        StringToMetric(const OUString &rMetricString);
 protected:
     sal_Int64               mnBaseValue;
     FieldUnit               meUnit;

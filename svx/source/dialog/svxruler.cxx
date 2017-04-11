@@ -20,6 +20,7 @@
 #include <cstring>
 #include <climits>
 
+#include <vcl/builder.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -3342,11 +3343,10 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
-
 IMPL_LINK( SvxRuler, MenuSelect, Menu *, pMenu, bool )
 {
     /* Handler of the context menus for switching the unit of measurement */
-    SetUnit(FieldUnit(pMenu->GetCurItemId()));
+    SetUnit(MetricFormatter::StringToMetric(OUString::fromUtf8(pMenu->GetCurItemIdent())));
     return false;
 }
 
@@ -3404,7 +3404,8 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
         }
         else
         {
-            ScopedVclPtrInstance<PopupMenu> aMenu(ResId(RID_SVXMN_RULER, DIALOG_MGR()));
+            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/rulermenu.ui", "");
+            VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
             aMenu->SetSelectHdl(LINK(this, SvxRuler, MenuSelect));
             FieldUnit eUnit = GetUnit();
             const sal_uInt16 nCount = aMenu->GetItemCount();
@@ -3412,22 +3413,24 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             bool bReduceMetric = bool(nFlags & SvxRulerSupportFlags::REDUCED_METRIC);
             for ( sal_uInt16 i = nCount; i; --i )
             {
-                const sal_uInt16 nId = aMenu->GetItemId(i - 1);
-                aMenu->CheckItem(nId, nId == (sal_uInt16)eUnit);
+                sal_uInt16 nId = aMenu->GetItemId(i - 1);
+                OString sIdent = aMenu->GetItemIdent(nId);
+                FieldUnit eMenuUnit = MetricFormatter::StringToMetric(OUString::fromUtf8(sIdent));
+                aMenu->CheckItem(nId, eMenuUnit == eUnit);
                 if( bReduceMetric )
                 {
-                    if ( nId == FUNIT_M    ||
-                         nId == FUNIT_KM   ||
-                         nId == FUNIT_FOOT ||
-                         nId == FUNIT_MILE )
+                    if (eMenuUnit == FUNIT_M    ||
+                        eMenuUnit == FUNIT_KM   ||
+                        eMenuUnit == FUNIT_FOOT ||
+                        eMenuUnit == FUNIT_MILE)
                     {
                         aMenu->RemoveItem(i - 1);
                     }
-                    else if (( nId == FUNIT_CHAR ) && !bHorz )
+                    else if (( eMenuUnit == FUNIT_CHAR ) && !bHorz )
                     {
                         aMenu->RemoveItem(i - 1);
                     }
-                    else if (( nId == FUNIT_LINE ) && bHorz )
+                    else if (( eMenuUnit == FUNIT_LINE ) && bHorz )
                     {
                         aMenu->RemoveItem(i - 1);
                     }

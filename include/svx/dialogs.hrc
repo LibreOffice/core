@@ -171,9 +171,6 @@
 #define RID_SVXBMP_EDIT                     (RID_SVX_START +  90)
 #define RID_SVXBMP_REMOVE                   (RID_SVX_START +  91)
 
-// Menu for the ruler
-#define RID_SVXMN_RULER                     (RID_SVX_START +  92)
-
 #define RID_SVXSTR_FRMSEL_TEXTS             (RID_SVX_START +  93)
 #define RID_SVXSTR_FRMSEL_DESCRIPTIONS      (RID_SVX_START +  94)
 #define RID_SVXBMP_FRMSEL_ARROW1            (RID_SVX_START +  95)
