@@ -1126,12 +1126,14 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
 
 void ScPostIt::RemoveCaption()
 {
+    if (!maNoteData.mxCaption)
+        return;
 
     /*  Remove caption object only, if this note is its owner (e.g. notes in
         undo documents refer to captions in original document, do not remove
         them from drawing layer here). */
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
-    if (maNoteData.mxCaption && (pDrawLayer == maNoteData.mxCaption->GetModel()))
+    if (pDrawLayer == maNoteData.mxCaption->GetModel())
         maNoteData.mxCaption.removeFromDrawPageAndFree();
 
     // Either the caption object is gone or, because of Undo or clipboard is
