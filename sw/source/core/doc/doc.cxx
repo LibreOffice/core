@@ -1487,12 +1487,9 @@ bool SwDoc::HasInvisibleContent() const
     for( sal_uLong n = GetNodes().Count()-1; n; --n)
     {
         SwTextNode* pTextNd = GetNodes()[ n ]->GetTextNode();
-        if ( pTextNd )
-        {
-            SwPaM aPam(*pTextNd, 0, *pTextNd, pTextNd->GetText().getLength());
-            if( pTextNd->HasHiddenCharAttribute( true ) ||  ( pTextNd->HasHiddenCharAttribute( false ) ) )
-                return true;
-        }
+        if ( pTextNd &&
+             ( pTextNd->HasHiddenCharAttribute( true ) || pTextNd->HasHiddenCharAttribute( false ) ) )
+            return true;
     }
 
     for(auto pSectFormat : GetSections())
