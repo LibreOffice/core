@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_731d18bd",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2567,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-11T10:05:42Z",
+      "side": 1,
+      "message": "Ah, that explains it. Please correct the comment, then. :-)",
+      "parentUuid": "5a3905b3_30d8e6ef",
+      "revId": "5901f6cfa1968fc42857dd619d7df37a7c6a2c4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_90819a50",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 3
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "I guess it\u0027s Print area and frame area, where the difference is the margin.",
       "parentUuid": "5a3905b3_90819a50",
+      "revId": "5901f6cfa1968fc42857dd619d7df37a7c6a2c4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b37dc0e9",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2569,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-11T10:05:42Z",
+      "side": 1,
+      "message": "Aha, that sounds quite possible.",
+      "parentUuid": "5a3905b3_1095aa3f",
       "revId": "5901f6cfa1968fc42857dd619d7df37a7c6a2c4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
