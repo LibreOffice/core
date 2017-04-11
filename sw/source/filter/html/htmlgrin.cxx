@@ -214,14 +214,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             break;
         }
 
-        // Einen neuen Absatz aufmachen, wenn der aktuelle
-        // absatzgebundene Rahmen ohne Umlauf enthaelt.
+        // Create a new paragraph, if the current one has frames
+        // anchored at paragraph/at char without wrapping.
         if( !bDontAppend && HasCurrentParaFlys( true ) )
         {
-            // Wenn der Absatz nur Grafiken enthaelt, braucht er
-            // auch keinen unteren Absatz-Abstand. Da hier auch bei
-            // Verwendung von Styles kein Abstand enstehen soll, wird
-            // hier auch geweohnlich attributiert !!!
+            // When the paragraph only contains graphics then there
+            // is no need for bottom margin. Since here also with use of
+            // styles no margin should be created, set attributes to
+            // override!
             sal_uInt16 nUpper=0, nLower=0;
             GetULSpaceFromContext( nUpper, nLower );
             InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), true );
@@ -423,9 +423,8 @@ IMAGE_SETEVENT:
     if( sGrfNm.isEmpty() )
         return;
 
-    // Wenn wir in einer Numerierung stehen und der Absatz noch leer und
-    // nicht numeriert ist, handelt es sich vielleicht um die Grafik
-    // einer Bullet-Liste
+    // When we are in a ordered list and the paragraph is still empty and not
+    // numbered, it may be a graphic for a bullet list.
     if( !m_pPam->GetPoint()->nContent.GetIndex() &&
         GetNumInfo().GetDepth() > 0 && GetNumInfo().GetDepth() <= MAXLEVEL &&
         !m_aBulletGrfs[GetNumInfo().GetDepth()-1].isEmpty() &&
@@ -440,13 +439,12 @@ IMAGE_SETEVENT:
 
             pTextNode->SetCountedInList( true );
 
-            // Rule invalisieren ist noetig, weil zwischem dem einlesen
-            // des LI und der Grafik ein EndAction gerufen worden sein kann.
+            // It's necessary to invalide the rule, because between the reading
+            // of LI and the graphic an EndAction could be called.
             if( GetNumInfo().GetNumRule() )
                 GetNumInfo().GetNumRule()->SetInvalidRule( true );
 
-            // Die Vorlage novh mal setzen. Ist noetig, damit der
-            // Erstzeilen-Einzug stimmt.
+            // Set the style again, so that indent of the first line is correct.
             SetTextCollAttrs();
 
             return;
@@ -535,13 +533,11 @@ IMAGE_SETEVENT:
         aFrameSet.Put( aBoxItem );
     }
 
-    // Ausrichtung setzen
     SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrameSet );
 
-    // Abstaende setzen
     SetSpace( Size( nHSpace, nVSpace), aItemSet, aPropInfo, aFrameSet );
 
-    // Sonstige CSS1-Attribute Setzen
+    // set other CSS1 attributes
     SetFrameFormatAttrs( aItemSet, aPropInfo, HtmlFrameFormatFlags::Box, aFrameSet );
 
     Size aTwipSz( bPrcWidth ? 0 : nWidth, bPrcHeight ? 0 : nHeight );
@@ -551,7 +547,7 @@ IMAGE_SETEVENT:
                     ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
     }
 
-    // CSS1-Groesse auf "normale" Groesse umrechnen
+    // convert CSS1 size to "normal" size
     switch( aPropInfo.m_eWidthType )
     {
         case SVX_CSS1_LTYPE_TWIP:
@@ -584,25 +580,23 @@ IMAGE_SETEVENT:
     }
 
     Size aGrfSz( 0, 0 );
-    bool bSetTwipSize = true;       // Twip-Size am Node setzen?
-    bool bChangeFrameSize = false;    // Frame-Format nachtraeglich anpassen?
+    bool bSetTwipSize = true;       // Set Twip-Size on Node?
+    bool bChangeFrameSize = false;    // Change frame format later?
     bool bRequestGrfNow = false;
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
     if( !nWidth || !nHeight )
     {
-        // Es fehlt die Breite oder die Hoehe
-        // Wenn die Grfik in einer Tabelle steht, wird sie gleich
-        // angefordert, damit sie eventuell schon da ist, bevor die
-        // Tabelle layoutet wird.
+        // When the graphic is in a table, it will be requested immediately,
+        // so that it is available before the table is layouted.
         if( m_pTable!=nullptr && !nWidth )
         {
             bRequestGrfNow = true;
             IncGrfsThatResizeTable();
         }
 
-        // Die Groesse des Rahmens wird nachtraeglich gesetzt
+        // The frame size is set later
         bChangeFrameSize = true;
         aGrfSz = aTwipSz;
         if( !nWidth && !nHeight )
@@ -612,7 +606,7 @@ IMAGE_SETEVENT:
         }
         else if( nWidth )
         {
-            // eine %-Angabe
+            // a percentage value
             if( bPrcWidth )
             {
                 nPrcWidth = (sal_uInt8)nWidth;
@@ -638,8 +632,7 @@ IMAGE_SETEVENT:
     }
     else
     {
-        // Breite und Hoehe wurden angegeben und brauchen nicht gesetzt
-        // zu werden
+        // Width and height were given and don't need to be set
         bSetTwipSize = false;
 
         if( bPrcWidth )
@@ -649,12 +642,12 @@ IMAGE_SETEVENT:
             nPrcHeight = (sal_uInt8)nHeight;
     }
 
-    // Image-Map setzen
+    // set image map
     aMap = comphelper::string::stripEnd(aMap, ' ');
     if( !aMap.isEmpty() )
     {
-        // Da wir nur lokale Image-Maps kennen nehmen wireinfach alles
-        // hinter dem # als Namen
+        // Since we only know local image maps we just use everything
+        // after # as name
         sal_Int32 nPos = aMap.indexOf( '#' );
         OUString aName;
         if ( -1 == nPos )
@@ -665,7 +658,7 @@ IMAGE_SETEVENT:
         ImageMap *pImgMap = FindImageMap( aName );
         if( pImgMap )
         {
-            SwFormatURL aURL; aURL.SetMap( pImgMap );//wird kopieiert
+            SwFormatURL aURL; aURL.SetMap( pImgMap );// is copied
 
             bSetScaleImageMap = !nPrcWidth || !nPrcHeight;
             aFrameSet.Put( aURL );
@@ -673,22 +666,21 @@ IMAGE_SETEVENT:
         else
         {
             ImageMap aEmptyImgMap( aName );
-            SwFormatURL aURL; aURL.SetMap( &aEmptyImgMap );//wird kopieiert
+            SwFormatURL aURL; aURL.SetMap( &aEmptyImgMap );// is copied
             aFrameSet.Put( aURL );
-            m_nMissingImgMaps++;          // es fehlen noch Image-Maps
+            m_nMissingImgMaps++;          // image maps are missing
 
-            // die Grafik muss beim SetTwipSize skaliert werden, wenn
-            // wir keine Groesse am Node gesetzt haben oder die Groesse
-            // nicht der Grafikgroesse entsprach.
+            // the graphic has to scaled during SetTwipSize, if we didn't
+            // set a size on the node or the size doesn't match the graphic size.
             bSetScaleImageMap = true;
         }
     }
 
-    // min. Werte einhalten !!
+    // observe minimum values !!
     if( nPrcWidth )
     {
         OSL_ENSURE( !aTwipSz.Width(),
-                "Wieso ist da trotz %-Angabe eine Breite gesetzt?" );
+                "Why is a width set if we already have percentage value?" );
         aTwipSz.Width() = aGrfSz.Width() ? aGrfSz.Width()
                                          : HTML_DFLT_IMG_WIDTH;
     }
@@ -701,7 +693,7 @@ IMAGE_SETEVENT:
     if( nPrcHeight )
     {
         OSL_ENSURE( !aTwipSz.Height(),
-                "Wieso ist da trotz %-Angabe eine Hoehe gesetzt?" );
+                "Why is a height set if we already have percentage value?" );
         aTwipSz.Height() = aGrfSz.Height() ? aGrfSz.Height()
                                            : HTML_DFLT_IMG_HEIGHT;
     }
@@ -727,7 +719,7 @@ IMAGE_SETEVENT:
     {
         pFlyFormat->SetName( sHTMLGrfName );
 
-        // ggfs. eine Grafik anspringen
+        // maybe jump to graphic
         if( JUMPTO_GRAPHIC == m_eJumpTo && sHTMLGrfName == m_sJmpMark )
         {
             m_bChkJumpMark = true;
@@ -782,13 +774,13 @@ IMAGE_SETEVENT:
             m_aAttrTab.pINetFormat->GetSttCnt() ==
                         m_pPam->GetPoint()->nContent.GetIndex() - 1 )
         {
-            // das Attribut wurde unmitellbar vor einer zeichengeb.
-            // Grafik eingefuegt, also verschieben wir es
+            // the attribute was insert right before as-character anchored
+            // graphic, therefore we move it
             m_aAttrTab.pINetFormat->SetStart( *m_pPam->GetPoint() );
 
-            // Wenn das Attribut auch ein Sprungziel ist, fuegen
-            // wir noch eine Bookmark vor der Grafik ein, weil das
-            // SwFormatURL kein Sprungziel ist.
+            // When the attribute is also an anchor, we'll insert
+            // a bookmark before the graphic, because SwFormatURL
+            // isn't an anchor.
             if( !rINetFormat.GetName().isEmpty() )
             {
                 m_pPam->Move( fnMoveBackward );
@@ -811,7 +803,7 @@ IMAGE_SETEVENT:
         SAL_WARN_IF(!aUpdatedSize.Width() || !aUpdatedSize.Height(), "sw.html", "html image with no width or height");
     }
 
-    // Ggf. Frames anlegen und Auto-gebundenen Rahmen registrieren
+    // maybe create frames and register auto bound frames
     RegisterFlyFrame( pFlyFormat );
 
     if( !aId.isEmpty() )
@@ -925,20 +917,20 @@ void SwHTMLParser::InsertBodyOptions()
 
     if( bTextColor && !m_pCSS1Parser->IsBodyTextSet() )
     {
-        // Die Textfarbe wird an der Standard-Vorlage gesetzt
+        // The font colour is set in the default style
         m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
             ->SetFormatAttr( SvxColorItem(aTextColor, RES_CHRATR_COLOR) );
         m_pCSS1Parser->SetBodyTextSet();
     }
 
-    // Die Item fuer die Seitenvorlage vorbereiten (Hintergrund, Umrandung)
-    // Beim BrushItem muessen schon gesetzte werte erhalten bleiben!
+    // Prepare the items for the page style (background, frame)
+    // If BrushItem already set values must remain!
     SvxBrushItem aBrushItem( m_pCSS1Parser->makePageDescBackground() );
     bool bSetBrush = false;
 
     if( bBGColor && !m_pCSS1Parser->IsBodyBGColorSet() )
     {
-        // Hintergrundfarbe aus "BGCOLOR"
+        // background colour from "BGCOLOR"
         OUString aLink;
         if( !aBrushItem.GetGraphicLink().isEmpty() )
             aLink = aBrushItem.GetGraphicLink();
@@ -957,7 +949,7 @@ void SwHTMLParser::InsertBodyOptions()
 
     if( !aBackGround.isEmpty() && !m_pCSS1Parser->IsBodyBackgroundSet() )
     {
-        // Hintergrundgrafik aus "BACKGROUND"
+        // background graphic from "BACKGROUND"
         aBrushItem.SetGraphicLink( INetURLObject::GetAbsURL( m_sBaseURL, aBackGround ) );
         aBrushItem.SetGraphicPos( GPOS_TILED );
         bSetBrush = true;
@@ -971,8 +963,8 @@ void SwHTMLParser::InsertBodyOptions()
         OUString aDummy;
         ParseStyleOptions( aStyle, aDummy, aDummy, aItemSet, aPropInfo, nullptr, &aDir );
 
-        // Ein par Attribute muessen an der Seitenvorlage gesetzt werden,
-        // und zwar die, die nicht vererbit werden
+        // Some attributes have to set on the page style, in fact the ones
+        // which aren't inherited
         m_pCSS1Parser->SetPageDescAttrs( bSetBrush ? &aBrushItem : nullptr,
                                        &aItemSet );
 
@@ -994,8 +986,7 @@ void SwHTMLParser::InsertBodyOptions()
             }
         }
 
-        // alle noch uebrigen Optionen koennen an der Standard-Vorlage
-        // gesetzt werden und gelten dann automatisch als defaults
+        // all remaining options can be set on the default style
         m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
             ->SetFormatAttr( aItemSet );
     }
@@ -1054,11 +1045,11 @@ void SwHTMLParser::InsertBodyOptions()
 
 void SwHTMLParser::NewAnchor()
 {
-    // den voherigen Link beenden, falls es einen gab
+    // end previous link if there was one
     HTMLAttrContext *pOldCntxt = PopContext( HTML_ANCHOR_ON );
     if( pOldCntxt )
     {
-        // und ggf. die Attribute beenden
+        // and maybe end attributes
         EndContext( pOldCntxt );
         delete pOldCntxt;
     }
@@ -1222,7 +1213,7 @@ ANCHOR_SETEVENT:
         }
         else
         {
-            // Bei leerer URL das Directory nehmen
+            // use directory if empty URL
             INetURLObject aURLObj( m_aPathToFile );
             sHRef = aURLObj.GetPartBeforeLastName();
         }
@@ -1234,7 +1225,7 @@ ANCHOR_SETEVENT:
         if( !aMacroTable.empty() )
             aINetFormat.SetMacroTable( &aMacroTable );
 
-        // das Default-Attribut setzen
+        // set the default attribute
         InsertAttr( &m_aAttrTab.pINetFormat, aINetFormat, pCntxt );
     }
     else if( !aName.isEmpty() )
@@ -1252,7 +1243,7 @@ ANCHOR_SETEVENT:
         m_bInFootEndNoteSymbol = m_bCallNextToken = true;
     }
 
-    // den Kontext merken
+    // save context
     PushContext( pCntxt );
 }
 
@@ -1351,18 +1342,17 @@ void SwHTMLParser::StripTrailingPara()
                      (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == nNodeIdx )
 
-                    return;     // den Knoten duerfen wir nicht loeschen
+                    return;     // we can't delete the node
             }
 
-            SetAttr( false );   // die noch offenen Attribute muessen
-                                // beendet werden, bevor der Node
-                                // geloescht wird, weil sonst der
-                                // End-Index in die Botanik zeigt
+            SetAttr( false );   // the still open attributes must be
+                                // closed before the node is deleted,
+                                // otherwise the last index is dangling
 
             if( pCNd->Len() && pCNd->IsTextNode() )
             {
-                // es wurden Felder in den Node eingefuegt, die muessen
-                // wir jetzt verschieben
+                // fields were inserted into the node, now they have
+                // to be moved
                 SwTextNode *pPrvNd = m_xDoc->GetNodes()[nNodeIdx-1]->GetTextNode();
                 if( pPrvNd )
                 {
@@ -1371,7 +1361,7 @@ void SwHTMLParser::StripTrailingPara()
                 }
             }
 
-            // jetz muessen wir noch eventuell vorhandene Bookmarks verschieben
+            // now we have to move maybe existing bookmarks
             IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
@@ -1410,9 +1400,8 @@ void SwHTMLParser::StripTrailingPara()
         }
         else if( pCNd && pCNd->IsTextNode() && m_pTable )
         {
-            // In leeren Zellen stellen wir einen kleinen Font ein, damit die
-            // Zelle nicht hoeher wird als die Grafik bzw. so niedrig wie
-            // moeglich bleibt.
+            // In empty cells we set a small font, so that the cell doesn't
+            // get higher than the graphic resp. as low as possible.
             bSetSmallFont = true;
         }
     }
@@ -1420,8 +1409,8 @@ void SwHTMLParser::StripTrailingPara()
              pCNd->StartOfSectionIndex()+2 ==
              pCNd->EndOfSectionIndex() )
     {
-        // Wenn die Zelle nur zeichengebundene Grafiken/Rahmen enthaelt
-        // stellen wir ebenfalls einen kleinen Font ein.
+        // When the cell contains only as-character anchored graphics/frames,
+        // then we also set a small font.
         bSetSmallFont = true;
         SwTextNode* pTextNd = pCNd->GetTextNode();
 
@@ -1437,7 +1426,7 @@ void SwHTMLParser::StripTrailingPara()
 
     if( bSetSmallFont )
     {
-        //Added default to CJK and CTL
+        // Added default to CJK and CTL
         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
         SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );

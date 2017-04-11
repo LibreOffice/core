@@ -472,7 +472,7 @@ void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
     SetDropDescent( nHeight - nAscent );
     SetDropHeight( nDropHght );
     SetDropLines( nDropLns );
-    // Alte Stelle wiederfinden!
+    // Find old position!
     while( pOldCurr != GetCurr() )
     {
         if( !Next() )
@@ -611,7 +611,7 @@ void SwTextPainter::PaintDropPortion()
     while( !m_pCurr->GetLen() && Next() )
         ;
 
-    // MarginPortion und Adjustment!
+    // MarginPortion and Adjustment!
     const SwLinePortion *pPor = m_pCurr->GetFirstPortion();
     long nX = 0;
     while( pPor && !pPor->IsDropPortion() )

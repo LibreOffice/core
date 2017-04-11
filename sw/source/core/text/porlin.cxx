@@ -39,7 +39,7 @@ bool ChkChain( SwLinePortion *pStart )
                 "ChkChain(): lost in chains" );
         if( nCount >= 200 || pPor == pStart )
         {
-            // der Lebensretter
+            // the lifesaver
             pPor = pStart->GetPortion();
             pStart->SetPortion(nullptr);
             pPor->Truncate();
@@ -151,7 +151,7 @@ void SwLinePortion::CalcTextSize( const SwTextSizeInfo &rInf )
     }
 }
 
-// Es werden alle nachfolgenden Portions geloescht.
+// all following portions will be deleted
 void SwLinePortion::Truncate_()
 {
     SwLinePortion *pPos = pPortion;
@@ -167,7 +167,7 @@ void SwLinePortion::Truncate_()
     pPortion = nullptr;
 }
 
-// Es wird immer hinter uns eingefuegt.
+// It always will be inserted after us.
 SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 {
     pIns->FindLastPortion()->SetPortion( pPortion );
@@ -181,7 +181,7 @@ SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 SwLinePortion *SwLinePortion::FindLastPortion()
 {
     SwLinePortion *pPos = this;
-    // An das Ende wandern und pLinPortion an den letzten haengen ...
+    // Find the end and link pLinPortion to the last one...
     while( pPos->GetPortion() )
     {
         pPos = pPos->GetPortion();
@@ -250,8 +250,8 @@ bool SwLinePortion::Format( SwTextFormatInfo &rInf )
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
     const sal_uInt16 nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
-    // Nur Portions mit echter Breite koennen ein true zurueckliefern
-    // Notizen beispielsweise setzen niemals bFull==true
+    // Only portions with true width can return true
+    // Notes for example never set bFull==true
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )
     {
         Truncate();
