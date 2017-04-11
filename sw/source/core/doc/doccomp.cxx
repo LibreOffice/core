@@ -1991,22 +1991,22 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
                 SwComparePosition eCmpPos = ComparePosition( *pDStt, *pDEnd, *pRStt, *pREnd );
                 switch( eCmpPos )
                 {
-                case POS_COLLIDE_START:
-                case POS_BEHIND:
+                case SwComparePosition::CollideStart:
+                case SwComparePosition::Behind:
                     break;
 
-                case POS_INSIDE:
-                case POS_EQUAL:
+                case SwComparePosition::Inside:
+                case SwComparePosition::Equal:
                     delete pDestRedl;
                     pDestRedl = nullptr;
                     SAL_FALLTHROUGH;
 
-                case POS_COLLIDE_END:
-                case POS_BEFORE:
+                case SwComparePosition::CollideEnd:
+                case SwComparePosition::Before:
                     n = rRedlineTable.size();
                     break;
 
-                case POS_OUTSIDE:
+                case SwComparePosition::Outside:
                     assert(pDestRedl && "is this actually impossible");
                     if (pDestRedl)
                     {
@@ -2034,11 +2034,11 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
                     }
                     break;
 
-                case POS_OVERLAP_BEFORE:
+                case SwComparePosition::OverlapBefore:
                     *pDEnd = *pRStt;
                     break;
 
-                case POS_OVERLAP_BEHIND:
+                case SwComparePosition::OverlapBehind:
                     *pDStt = *pREnd;
                     break;
                 }

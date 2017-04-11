@@ -75,16 +75,16 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);
 
 // Result of comparing positions.
-enum SwComparePosition {
-    POS_BEFORE,             ///< Pos1 before Pos2.
-    POS_BEHIND,             ///< Pos1 behind Pos2.
-    POS_INSIDE,             ///< Pos1 completely contained in Pos2.
-    POS_OUTSIDE,            ///< Pos2 completely contained in Pos1.
-    POS_EQUAL,              ///< Pos1 is as large as Pos2.
-    POS_OVERLAP_BEFORE,     ///< Pos1 overlaps Pos2 at the beginning.
-    POS_OVERLAP_BEHIND,     ///< Pos1 overlaps Pos2 at the end.
-    POS_COLLIDE_START,      ///< Pos1 start touches at Pos2 end.
-    POS_COLLIDE_END         ///< Pos1 end touches at Pos2 start.
+enum class SwComparePosition {
+    Before,             ///< Pos1 before Pos2.
+    Behind,             ///< Pos1 behind Pos2.
+    Inside,             ///< Pos1 completely contained in Pos2.
+    Outside,            ///< Pos2 completely contained in Pos1.
+    Equal,              ///< Pos1 is as large as Pos2.
+    OverlapBefore,      ///< Pos1 overlaps Pos2 at the beginning.
+    OverlapBehind,      ///< Pos1 overlaps Pos2 at the end.
+    CollideStart,       ///< Pos1 start touches at Pos2 end.
+    CollideEnd          ///< Pos1 end touches at Pos2 start.
 };
 
 template<typename T>
@@ -98,37 +98,37 @@ SwComparePosition ComparePosition(
         if( rEnd1 > rStt2 )
         {
             if( rEnd1 >= rEnd2 )
-                nRet = POS_OUTSIDE;
+                nRet = SwComparePosition::Outside;
             else
-                nRet = POS_OVERLAP_BEFORE;
+                nRet = SwComparePosition::OverlapBefore;
 
         }
         else if( rEnd1 == rStt2 )
-            nRet = POS_COLLIDE_END;
+            nRet = SwComparePosition::CollideEnd;
         else
-            nRet = POS_BEFORE;
+            nRet = SwComparePosition::Before;
     }
     else if( rEnd2 > rStt1 )
     {
         if( rEnd2 >= rEnd1 )
         {
             if( rEnd2 == rEnd1 && rStt2 == rStt1 )
-                nRet = POS_EQUAL;
+                nRet = SwComparePosition::Equal;
             else
-                nRet = POS_INSIDE;
+                nRet = SwComparePosition::Inside;
         }
         else
         {
             if (rStt1 == rStt2)
-                nRet = POS_OUTSIDE;
+                nRet = SwComparePosition::Outside;
             else
-                nRet = POS_OVERLAP_BEHIND;
+                nRet = SwComparePosition::OverlapBehind;
         }
     }
     else if( rEnd2 == rStt1 )
-        nRet = POS_COLLIDE_START;
+        nRet = SwComparePosition::CollideStart;
     else
-        nRet = POS_BEHIND;
+        nRet = SwComparePosition::Behind;
     return nRet;
 }
 

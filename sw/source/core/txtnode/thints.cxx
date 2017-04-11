@@ -455,19 +455,19 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
             switch (ComparePosition(nSplitNewStart, nSplitNewEnd,
                                     nOtherStart,    nOtherEnd))
             {
-                case POS_INSIDE:
+                case SwComparePosition::Inside:
                     {
                         assert(!bRemoveOverlap &&
                             "this one should be in OverwrittenExisting?");
                     }
                     break;
-                case POS_OUTSIDE:
-                case POS_EQUAL:
+                case SwComparePosition::Outside:
+                case SwComparePosition::Equal:
                     {
                         assert(!"existing hint inside new hint: why?");
                     }
                     break;
-                case POS_OVERLAP_BEFORE:
+                case SwComparePosition::OverlapBefore:
                     {
                         Delete( *itOther ); // this also does NoteInHistory!
                         (*itOther)->GetStart() = nSplitNewEnd;
@@ -486,7 +486,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                         }
                     }
                     break;
-                case POS_OVERLAP_BEHIND:
+                case SwComparePosition::OverlapBehind:
                     {
                         Delete( *itOther ); // this also does NoteInHistory!
                         *(*itOther)->GetEnd() = nSplitNewStart;
@@ -3090,15 +3090,15 @@ bool SwpHints::TryInsertHint(
                     bool bDelOld = true, bChgStart = false, bChgEnd = false;
                     switch( eCmp )
                     {
-                    case POS_BEFORE:
-                    case POS_BEHIND:    bDelOld = false; break;
+                    case SwComparePosition::Before:
+                    case SwComparePosition::Behind:    bDelOld = false; break;
 
-                    case POS_OUTSIDE:   bChgStart = bChgEnd = true; break;
+                    case SwComparePosition::Outside:   bChgStart = bChgEnd = true; break;
 
-                    case POS_COLLIDE_END:
-                    case POS_OVERLAP_BEFORE:    bChgStart = true; break;
-                    case POS_COLLIDE_START:
-                    case POS_OVERLAP_BEHIND:    bChgEnd = true; break;
+                    case SwComparePosition::CollideEnd:
+                    case SwComparePosition::OverlapBefore:    bChgStart = true; break;
+                    case SwComparePosition::CollideStart:
+                    case SwComparePosition::OverlapBehind:    bChgEnd = true; break;
                     default: break;
                     }
 
