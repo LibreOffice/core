@@ -724,7 +724,6 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
         p = skipLinearWhiteSpaceComment(p + 1, pEnd);
 
         OString aCharset;
-        OString aLanguage;
         OString aValue;
         if (bExtended)
         {
@@ -753,16 +752,12 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                     break;
                 ++p;
 
-                sal_Unicode const * pLanguageBegin = p;
-                bool bDowncaseLanguage = false;
                 int nLetters = 0;
                 for (; p != pEnd; ++p)
                     if (rtl::isAsciiAlpha(*p))
                     {
                         if (++nLetters > 8)
                             break;
-                        bDowncaseLanguage = bDowncaseLanguage
-                                            || rtl::isAsciiUpperCase(*p);
                     }
                     else if (*p == '-')
                     {
@@ -774,16 +769,6 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                         break;
                 if (nLetters == 0 || nLetters > 8)
                     break;
-                if (pParameters)
-                {
-                    aLanguage = OString(
-                        pLanguageBegin,
-                        p - pLanguageBegin,
-                        RTL_TEXTENCODING_ASCII_US);
-                    if (bDowncaseLanguage)
-                        aLanguage = aLanguage.toAsciiLowerCase();
-                }
-
                 if (p == pEnd || *p != '\'')
                     break;
                 ++p;
