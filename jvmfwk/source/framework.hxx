@@ -67,8 +67,6 @@ namespace jfw
 
 class CJavaInfo
 {
-    static JavaInfo * copyJavaInfo(const JavaInfo * pInfo);
-
     enum _transfer_ownership {TRANSFER};
     /*Attaching the pointer to this class. The argument pInfo must not
     be freed afterwards.
@@ -96,10 +94,11 @@ public:
     ::JavaInfo * detach();
     const ::JavaInfo* operator ->() const { return pInfo;}
     operator ::JavaInfo* () { return pInfo;}
-    ::JavaInfo* cloneJavaInfo() const;
 
     OUString getLocation() const;
     sal_uInt64 getFeatures() const;
+
+    static JavaInfo * copyJavaInfo(const JavaInfo * pInfo);
 };
 
 class FrameworkException : public std::exception

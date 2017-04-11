@@ -603,7 +603,7 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
             if (pInfo !=nullptr)
             {
                 //copy to out param
-                *pInfo = aCurrentInfo.cloneJavaInfo();
+                *pInfo = jfw::CJavaInfo::copyJavaInfo(aCurrentInfo.pInfo);
             }
         }
         else
@@ -1061,14 +1061,6 @@ CJavaInfo::~CJavaInfo()
 JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 {
     return pInfo == nullptr ? nullptr : new JavaInfo(*pInfo);
-}
-
-
-JavaInfo* CJavaInfo::cloneJavaInfo() const
-{
-    if (pInfo == nullptr)
-        return nullptr;
-    return copyJavaInfo(pInfo);
 }
 
 CJavaInfo & CJavaInfo::operator = (const CJavaInfo& info)
