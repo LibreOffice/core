@@ -47,13 +47,14 @@ bool areEqualJavaInfo(
 
 }
 
-javaFrameworkError jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
+javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparInfo)
 {
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (pparInfo == nullptr || pSize == nullptr)
+        if (pparInfo == nullptr)
             return JFW_E_INVALID_ARG;
+        pparInfo->clear();
 
         jfw::VendorSettings aVendorSettings;
         std::vector<OUString> vecVendors =
@@ -167,23 +168,15 @@ javaFrameworkError jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
             if (it_duplicate != vecInfoManual2.end())
                 vecInfoManual2.erase(it_duplicate);
         }
-        //create an fill the array of JavaInfo*
-        sal_Int32 nSize = vecInfo.size() + vecInfoManual2.size();
-        *pparInfo = static_cast<JavaInfo**>(rtl_allocateMemory(
-            nSize * sizeof(JavaInfo*)));
-        if (*pparInfo == nullptr)
-            return JFW_E_ERROR;
 
         typedef std::vector<jfw::CJavaInfo>::iterator it;
-        int index = 0;
         //Add the automatically detected JREs
         for (it k = vecInfo.begin(); k != vecInfo.end(); ++k)
-            (*pparInfo)[index++] = k->detach();
+            pparInfo->push_back(std::unique_ptr<JavaInfo>(k->detach()));
         //Add the manually detected JREs
         for (it l = vecInfoManual2.begin(); l != vecInfoManual2.end(); ++l)
-            (*pparInfo)[index++] = l->detach();
+            pparInfo->push_back(std::unique_ptr<JavaInfo>(l->detach()));
 
-        *pSize = nSize;
         return JFW_E_NONE;
     }
     catch (const jfw::FrameworkException& e)
@@ -216,7 +209,7 @@ javaFrameworkError jfw_startVM(
 
         std::vector<OString> vmParams;
         OString sUserClassPath;
-        jfw::CJavaInfo aInfo;
+        std::unique_ptr<JavaInfo> aInfo;
         if (pInfo == nullptr)
         {
             jfw::JFW_MODE mode = jfw::getMode();
@@ -225,9 +218,9 @@ javaFrameworkError jfw_startVM(
                 const jfw::MergedSettings settings;
                 if (!settings.getEnabled())
                     return JFW_E_JAVA_DISABLED;
-                aInfo.attach(settings.createJavaInfo());
+                aInfo.reset(settings.createJavaInfo());
                 //check if a Java has ever been selected
-                if (aInfo == nullptr)
+                if (!aInfo)
                     return JFW_E_NO_SELECT;
 
 #ifdef _WIN32
@@ -241,7 +234,7 @@ javaFrameworkError jfw_startVM(
                 {
                     // If no JRE has been selected then we do not select one. This function shall then
                     //return JFW_E_NO_SELECT
-                    if (aInfo != nullptr &&
+                    if (aInfo &&
                         (aInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
                     {
                         //has the user manually selected a JRE?
@@ -281,7 +274,7 @@ javaFrameworkError jfw_startVM(
             } // end mode FWK_MODE_OFFICE
             else if (mode == jfw::JFW_MODE_DIRECT)
             {
-                errcode = jfw_getSelectedJRE(&aInfo.pInfo);
+                errcode = jfw_getSelectedJRE(&aInfo);
                 if (errcode != JFW_E_NONE)
                     return errcode;
                 //In direct mode the options are specified by bootstrap variables
@@ -292,7 +285,7 @@ javaFrameworkError jfw_startVM(
             }
             else
                 OSL_ASSERT(false);
-            pInfo = aInfo.pInfo;
+            pInfo = aInfo.get();
         }
         assert(pInfo != nullptr);
 
@@ -369,7 +362,7 @@ javaFrameworkError jfw_startVM(
     PATH environment variables. If no suitable JavaInfo is found there, it
     inspects all JavaInfos found by the jfw_plugin_get* functions.
  */
-javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
+javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 {
     javaFrameworkError errcode = JFW_E_NONE;
     try
@@ -603,7 +596,7 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
             if (pInfo !=nullptr)
             {
                 //copy to out param
-                *pInfo = jfw::CJavaInfo::copyJavaInfo(aCurrentInfo.pInfo);
+                pInfo->reset(jfw::CJavaInfo::copyJavaInfo(aCurrentInfo.pInfo));
             }
         }
         else
@@ -639,7 +632,7 @@ bool jfw_areEqualJavaInfo(JavaInfo const * pInfoA,JavaInfo const * pInfoB)
     return false;
 }
 
-javaFrameworkError jfw_getSelectedJRE(JavaInfo **ppInfo)
+javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
 {
     javaFrameworkError errcode = JFW_E_NONE;
     try
@@ -652,8 +645,7 @@ javaFrameworkError jfw_getSelectedJRE(JavaInfo **ppInfo)
         {
             OUString sJRE = jfw::BootParams::getJREHome();
 
-            jfw::CJavaInfo aInfo;
-            if ((errcode = jfw_getJavaInfoByPath(sJRE.pData, & aInfo.pInfo))
+            if ((errcode = jfw_getJavaInfoByPath(sJRE.pData, ppInfo))
                 != JFW_E_NONE)
                 throw jfw::FrameworkException(
                     JFW_E_CONFIGURATION,
@@ -663,16 +655,13 @@ javaFrameworkError jfw_getSelectedJRE(JavaInfo **ppInfo)
                         " could not be recognized. Check the values and make sure that you "
                         "use a plug-in library that can recognize that JRE."));
 
-            *ppInfo = aInfo.detach();
             return JFW_E_NONE;
         }
 
         const jfw::MergedSettings settings;
-        jfw::CJavaInfo aInfo;
-        aInfo.attach(settings.createJavaInfo());
-        if (! aInfo)
+        ppInfo->reset(settings.createJavaInfo());
+        if (! ppInfo)
         {
-            *ppInfo = nullptr;
             return JFW_E_NONE;
         }
         //If the javavendors.xml has changed, then the current selected
@@ -681,8 +670,10 @@ javaFrameworkError jfw_getSelectedJRE(JavaInfo **ppInfo)
         OString sUpdated = jfw::getElementUpdated();
 
         if (!sUpdated.equals(settings.getJavaInfoAttrVendorUpdate()))
+        {
+            ppInfo->reset();
             return JFW_E_INVALID_SETTINGS;
-        *ppInfo = aInfo.detach();
+        }
     }
     catch (const jfw::FrameworkException& e)
     {
@@ -705,7 +696,7 @@ javaFrameworkError jfw_isVMRunning(sal_Bool *bRunning)
     return JFW_E_NONE;
 }
 
-javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, JavaInfo **ppInfo)
+javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, std::unique_ptr<JavaInfo> *ppInfo)
 {
     javaFrameworkError errcode = JFW_E_NONE;
     try
@@ -744,12 +735,12 @@ javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, JavaInfo **ppInfo)
 
             if (plerr == javaPluginError::NONE)
             {
-                *ppInfo = pInfo;
+                ppInfo->reset(pInfo);
                 break;
             }
             else if(plerr == javaPluginError::FailedVersion)
             {//found JRE but it has the wrong version
-                *ppInfo = nullptr;
+                ppInfo->reset();
                 errcode = JFW_E_FAILED_VERSION;
                 break;
             }
@@ -759,7 +750,7 @@ javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, JavaInfo **ppInfo)
             }
             OSL_ASSERT(false);
         }
-        if (*ppInfo == nullptr && errcode != JFW_E_FAILED_VERSION)
+        if (!*ppInfo && errcode != JFW_E_FAILED_VERSION)
             errcode = JFW_E_NOT_RECOGNIZED;
     }
     catch (const jfw::FrameworkException& e)
@@ -782,12 +773,12 @@ javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         //check if pInfo is the selected JRE
-        JavaInfo *currentInfo = nullptr;
+        std::unique_ptr<JavaInfo> currentInfo;
         errcode = jfw_getSelectedJRE( & currentInfo);
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
             return errcode;
 
-        if (!jfw_areEqualJavaInfo(currentInfo, pInfo))
+        if (!jfw_areEqualJavaInfo(currentInfo.get(), pInfo))
         {
             jfw::NodeJava node(jfw::NodeJava::USER);
             node.setJavaInfo(pInfo, false);
@@ -795,8 +786,6 @@ javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo)
             //remember that the JRE was selected in this process
             jfw::setJavaSelected();
         }
-
-        delete currentInfo;
     }
     catch (const jfw::FrameworkException& e)
     {

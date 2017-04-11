@@ -139,10 +139,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     , m_pParamDlg(nullptr)
     , m_pPathDlg(nullptr)
 #if HAVE_FEATURE_JAVA
-    , m_parJavaInfo(nullptr)
     , m_parParameters(nullptr)
     , m_pClassPath(nullptr)
-    , m_nInfoSize(0)
     , m_nParamSize(0)
 #endif
     , m_aResetIdle("cui options SvxJavaOptionsPage Reset")
@@ -221,12 +219,6 @@ void SvxJavaOptionsPage::dispose()
     m_pPathDlg.disposeAndClear();
     ClearJavaInfo();
 #if HAVE_FEATURE_JAVA
-    std::vector< JavaInfo* >::iterator pIter;
-    for ( pIter = m_aAddedInfos.begin(); pIter != m_aAddedInfos.end(); ++pIter )
-    {
-        JavaInfo* pInfo = *pIter;
-        delete pInfo;
-    }
     m_aAddedInfos.clear();
 
     jfw_unlock();
@@ -447,19 +439,7 @@ IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
 void SvxJavaOptionsPage::ClearJavaInfo()
 {
 #if HAVE_FEATURE_JAVA
-    if ( m_parJavaInfo )
-    {
-        JavaInfo** parInfo = m_parJavaInfo;
-        for ( sal_Int32 i = 0; i < m_nInfoSize; ++i )
-        {
-            JavaInfo* pInfo = *parInfo++;
-            delete pInfo;
-        }
-
-        rtl_freeMemory( m_parJavaInfo );
-        m_parJavaInfo = nullptr;
-        m_nInfoSize = 0;
-    }
+    m_parJavaInfo.clear();
 #else
     (void) this;
 #endif
@@ -483,50 +463,44 @@ void SvxJavaOptionsPage::LoadJREs()
 {
 #if HAVE_FEATURE_JAVA
     WaitObject aWaitObj(m_pJavaList);
-    javaFrameworkError eErr = jfw_findAllJREs( &m_parJavaInfo, &m_nInfoSize );
-    if ( JFW_E_NONE == eErr && m_parJavaInfo )
+    javaFrameworkError eErr = jfw_findAllJREs( &m_parJavaInfo );
+    if ( JFW_E_NONE == eErr )
     {
-        JavaInfo** parInfo = m_parJavaInfo;
-        for ( sal_Int32 i = 0; i < m_nInfoSize; ++i )
+        for (auto const & pInfo: m_parJavaInfo)
         {
-            JavaInfo* pInfo = *parInfo++;
-            AddJRE( pInfo );
+            AddJRE( pInfo.get() );
         }
     }
 
-    std::vector< JavaInfo* >::iterator pIter;
-    for ( pIter = m_aAddedInfos.begin(); pIter != m_aAddedInfos.end(); ++pIter )
+    for (auto const & pInfo: m_aAddedInfos)
     {
-        JavaInfo* pInfo = *pIter;
-        AddJRE( pInfo );
+        AddJRE( pInfo.get() );
     }
 
-    JavaInfo* pSelectedJava = nullptr;
+    std::unique_ptr<JavaInfo> pSelectedJava;
     eErr = jfw_getSelectedJRE( &pSelectedJava );
     if ( JFW_E_NONE == eErr && pSelectedJava )
     {
-        JavaInfo** parInfo = m_parJavaInfo;
-        for ( sal_Int32 i = 0; i < m_nInfoSize; ++i )
+        sal_Int32 i = 0;
+        for (auto const & pCmpInfo: m_parJavaInfo)
         {
-            JavaInfo* pCmpInfo = *parInfo++;
-            if ( jfw_areEqualJavaInfo( pCmpInfo, pSelectedJava ) )
+            if ( jfw_areEqualJavaInfo( pCmpInfo.get(), pSelectedJava.get() ) )
             {
                 SvTreeListEntry* pEntry = m_pJavaList->GetEntry(i);
                 if ( pEntry )
                     m_pJavaList->HandleEntryChecked( pEntry );
                 break;
             }
+            ++i;
         }
     }
-
-    delete pSelectedJava;
 #else
     (void) this;
 #endif
 }
 
 
-void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
+void SvxJavaOptionsPage::AddJRE( JavaInfo const * _pInfo )
 {
 #if HAVE_FEATURE_JAVA
     OUStringBuffer sEntry;
@@ -573,17 +547,15 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 {
 #if HAVE_FEATURE_JAVA
     bool bStartAgain = true;
-    JavaInfo* pInfo = nullptr;
+    std::unique_ptr<JavaInfo> pInfo;
     javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder.pData, &pInfo );
     if ( JFW_E_NONE == eErr && pInfo )
     {
         sal_Int32 nPos = 0;
         bool bFound = false;
-        JavaInfo** parInfo = m_parJavaInfo;
-        for ( sal_Int32 i = 0; i < m_nInfoSize; ++i )
+        for (auto const & pCmpInfo: m_parJavaInfo)
         {
-            JavaInfo* pCmpInfo = *parInfo++;
-            if ( jfw_areEqualJavaInfo( pCmpInfo, pInfo ) )
+            if ( jfw_areEqualJavaInfo( pCmpInfo.get(), pInfo.get() ) )
             {
                 bFound = true;
                 break;
@@ -593,11 +565,9 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
         if ( !bFound )
         {
-            std::vector< JavaInfo* >::iterator pIter;
-            for ( pIter = m_aAddedInfos.begin(); pIter != m_aAddedInfos.end(); ++pIter )
+            for (auto const & pCmpInfo: m_aAddedInfos)
             {
-                JavaInfo* pCmpInfo = *pIter;
-                if ( jfw_areEqualJavaInfo( pCmpInfo, pInfo ) )
+                if ( jfw_areEqualJavaInfo( pCmpInfo.get(), pInfo.get() ) )
                 {
                     bFound = true;
                     break;
@@ -609,12 +579,10 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
         if ( !bFound )
         {
             jfw_addJRELocation( pInfo->sLocation.pData );
-            AddJRE( pInfo );
-            m_aAddedInfos.push_back( pInfo );
+            AddJRE( pInfo.get() );
+            m_aAddedInfos.push_back( std::move(pInfo) );
             nPos = m_pJavaList->GetEntryCount() - 1;
         }
-        else
-            delete pInfo;
 
         SvTreeListEntry* pEntry = m_pJavaList->GetEntry( nPos );
         m_pJavaList->Select( pEntry );
@@ -703,17 +671,17 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     {
         if ( m_pJavaList->GetCheckButtonState( m_pJavaList->GetEntry(i) ) == SvButtonState::Checked )
         {
-            JavaInfo* pInfo = nullptr;
-            if ( i < static_cast< sal_uLong >( m_nInfoSize ) )
-                pInfo = m_parJavaInfo[i];
+            JavaInfo const * pInfo;
+            if ( i < m_parJavaInfo.size() )
+                pInfo = m_parJavaInfo[i].get();
             else
-                pInfo = m_aAddedInfos[ i - m_nInfoSize ];
+                pInfo = m_aAddedInfos[ i - m_parJavaInfo.size() ].get();
 
-            JavaInfo* pSelectedJava = nullptr;
+            std::unique_ptr<JavaInfo> pSelectedJava;
             eErr = jfw_getSelectedJRE( &pSelectedJava );
             if ( JFW_E_NONE == eErr || JFW_E_INVALID_SETTINGS == eErr )
             {
-                if (pSelectedJava == nullptr || !jfw_areEqualJavaInfo( pInfo, pSelectedJava ) )
+                if (!pSelectedJava || !jfw_areEqualJavaInfo( pInfo, pSelectedJava.get() ) )
                 {
                     sal_Bool bRunning = false;
                     eErr = jfw_isVMRunning( &bRunning );
@@ -732,7 +700,6 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
                     bModified = true;
                 }
             }
-            delete pSelectedJava;
             break;
         }
     }

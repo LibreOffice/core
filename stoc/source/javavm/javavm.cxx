@@ -700,7 +700,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     if (aId != aProcessId)
         return css::uno::Any();
 
-    jfw::JavaInfoGuard info;
+    std::unique_ptr<JavaInfo> info;
     while (!m_xVirtualMachine.is()) // retry until successful
     {
         stoc_javavm::JVM aJvm;
@@ -741,7 +741,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         if (getenv("STOC_FORCE_NO_JRE"))
             errcode = JFW_E_NO_SELECT;
         else
-            errcode = jfw_startVM(info.info, arOptions, index, & m_pJavaVm,
+            errcode = jfw_startVM(info.get(), arOptions, index, & m_pJavaVm,
                                   & pMainThreadEnv);
 
         bool bStarted = false;
@@ -751,8 +751,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         case JFW_E_NO_SELECT:
         {
             // No Java configured. We silently run the Java configuration
-            info.clear();
-            javaFrameworkError errFind = jfw_findAndSelectJRE(&info.info);
+            info.reset();
+            javaFrameworkError errFind = jfw_findAndSelectJRE(&info);
             if (getenv("STOC_FORCE_NO_JRE"))
                 errFind = JFW_E_NO_JAVA_FOUND;
             if (errFind == JFW_E_NONE)
@@ -812,18 +812,18 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //we search another one. As long as there is a javaldx, we should
             //never come into this situation. javaldx checks always if the JRE
             //still exist.
-            jfw::JavaInfoGuard aJavaInfo;
-            if (JFW_E_NONE == jfw_getSelectedJRE(&aJavaInfo.info))
+            std::unique_ptr<JavaInfo> aJavaInfo;
+            if (JFW_E_NONE == jfw_getSelectedJRE(&aJavaInfo))
             {
                 sal_Bool bExist = false;
-                if (JFW_E_NONE == jfw_existJRE(aJavaInfo.info, &bExist))
+                if (JFW_E_NONE == jfw_existJRE(aJavaInfo.get(), &bExist))
                 {
                     if (!bExist
-                        && ! (aJavaInfo.info->nRequirements & JFW_REQUIRE_NEEDRESTART))
+                        && ! (aJavaInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
                     {
-                        info.clear();
+                        info.reset();
                         javaFrameworkError errFind = jfw_findAndSelectJRE(
-                            &info.info);
+                            &info);
                         if (errFind == JFW_E_NONE)
                         {
                             continue;

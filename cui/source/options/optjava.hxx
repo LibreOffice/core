@@ -21,6 +21,7 @@
 
 #include <config_features.h>
 
+#include <memory>
 #include <vector>
 #include <ucbhelper/content.hxx>
 #include <vcl/button.hxx>
@@ -64,10 +65,9 @@ private:
     VclPtr<SvxJavaClassPathDlg>        m_pPathDlg;
 
 #if HAVE_FEATURE_JAVA
-    JavaInfo**              m_parJavaInfo;
+    std::vector<std::unique_ptr<JavaInfo>> m_parJavaInfo;
     rtl_uString**           m_parParameters;
     rtl_uString*            m_pClassPath;
-    sal_Int32               m_nInfoSize;
     sal_Int32               m_nParamSize;
 #endif
     OUString                m_sInstallText;
@@ -78,7 +78,7 @@ private:
     VclPtr<CheckBox>               m_pExperimentalCB;
     VclPtr<CheckBox>               m_pMacroCB;
 
-    std::vector< JavaInfo* >
+    std::vector<std::unique_ptr<JavaInfo>>
                             m_aAddedInfos;
 
     rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;
@@ -100,7 +100,7 @@ private:
     void                    ClearJavaInfo();
     void                    ClearJavaList();
     void                    LoadJREs();
-    void                    AddJRE( JavaInfo* _pInfo );
+    void                    AddJRE( JavaInfo const * _pInfo );
     void                    HandleCheckEntry( SvTreeListEntry* _pEntry );
     void                    AddFolder( const OUString& _rFolder );
 

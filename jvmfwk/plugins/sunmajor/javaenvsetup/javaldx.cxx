@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +34,7 @@
 
 static bool hasOption(char const * szOption, int argc, char** argv);
 static OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
-static bool findAndSelect(JavaInfo**);
+static bool findAndSelect(std::unique_ptr<JavaInfo>*);
 
 #define HELP_TEXT    \
 "\njavaldx is necessary to make Java work on some UNIX platforms." \
@@ -64,8 +67,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
-        jfw::JavaInfoGuard aInfo;
-        errcode = jfw_getSelectedJRE(&aInfo.info);
+        std::unique_ptr<JavaInfo> aInfo;
+        errcode = jfw_getSelectedJRE(&aInfo);
 
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
         {
@@ -73,19 +76,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
-        if (aInfo.info == nullptr)
+        if (!aInfo)
         {
-            if (!findAndSelect(&aInfo.info))
+            if (!findAndSelect(&aInfo))
                 return -1;
         }
         else
         {
             //check if the JRE was not uninstalled
             sal_Bool bExist = false;
-            errcode = jfw_existJRE(aInfo.info, &bExist);
+            errcode = jfw_existJRE(aInfo.get(), &bExist);
             if (errcode == JFW_E_NONE)
             {
-                if (!bExist && !findAndSelect(&aInfo.info))
+                if (!bExist && !findAndSelect(&aInfo))
                     return -1;
             }
             else
@@ -95,7 +98,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
         }
 
-        OString sPaths = getLD_LIBRARY_PATH(aInfo.info->arVendorData);
+        OString sPaths = getLD_LIBRARY_PATH(aInfo->arVendorData);
         fprintf(stdout, "%s\n", sPaths.getStr());
     }
     catch (const std::exception&)
@@ -135,7 +138,7 @@ static bool hasOption(char const * szOption, int argc, char** argv)
     return retVal;
 }
 
-static bool findAndSelect(JavaInfo ** ppInfo)
+static bool findAndSelect(std::unique_ptr<JavaInfo> * ppInfo)
 {
     javaFrameworkError errcode = jfw_findAndSelectJRE(ppInfo);
     if (errcode == JFW_E_NO_JAVA_FOUND)

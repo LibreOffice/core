@@ -37,6 +37,7 @@
 #include <com/sun/star/configuration/backend/TemplateIdentifier.hpp>
 #include <jvmfwk/framework.hxx>
 #include "jvmfwk.hxx"
+#include <memory>
 #include <stack>
 #include <stdio.h>
 
@@ -237,12 +238,12 @@ void JavaMigration::migrateJavarc()
     if (bSuccess && !sValue.isEmpty())
     {
         //get the directory
-        jfw::JavaInfoGuard aInfo;
-        javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo.info);
+        std::unique_ptr<JavaInfo> aInfo;
+        javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo);
 
         if (err == JFW_E_NONE)
         {
-            if (jfw_setSelectedJRE(aInfo.info) != JFW_E_NONE)
+            if (jfw_setSelectedJRE(aInfo.get()) != JFW_E_NONE)
             {
                 OSL_FAIL("[Service implementation " IMPL_NAME
                            "] XJob::execute: jfw_setSelectedJRE failed.");

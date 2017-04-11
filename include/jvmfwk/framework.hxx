@@ -22,6 +22,11 @@
 #ifndef INCLUDED_JVMFWK_FRAMEWORK_HXX
 #define INCLUDED_JVMFWK_FRAMEWORK_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+#include <vector>
+
 #include <jvmfwk/jvmfwkdllapi.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.h>
@@ -255,26 +260,6 @@ struct JavaInfo
     rtl::ByteSequence arVendorData;
 };
 
-namespace jfw {
-
-struct JavaInfoGuard {
-    JavaInfoGuard(JavaInfoGuard &) = delete;
-    void operator =(JavaInfoGuard) = delete;
-
-    JavaInfoGuard(): info(nullptr) {}
-
-    ~JavaInfoGuard() { delete info; }
-
-    void clear() {
-        delete info;
-        info = nullptr;
-    }
-
-    JavaInfo * info;
-};
-
-}
-
 /** compares two <code>JavaInfo</code> objects for equality.
 
    <p>Two <code>JavaInfo</code> objects are said to be equal if the contained
@@ -371,13 +356,11 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_isVMRunning(sal_Bool *bRunning);
     the first <code>JavaInfo</code> object that is detected by the algorithm
     as described above is used.</p>
 
-    @param ppInfo
+    @param pInfo
     [out] a <code>JavaInfo</code> pointer, representing the selected JRE.
-    The caller has to delete it. The
-    <code>JavaInfo</code> is for informational purposes only. It is not
+    The <code>JavaInfo</code> is for informational purposes only. It is not
     necessary to call <code>jfw_setSelectedJRE</code> afterwards.<br/>
-    <code>ppInfo</code>can be NULL. If <code>*ppInfo</code> is not null, then it is
-    overwritten, without attempting to free <code>*ppInfo</code>.
+    <code>pInfo</code>can be NULL.
 
     @return
     JFW_E_NONE function ran successfully.<br/>
@@ -387,7 +370,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_isVMRunning(sal_Bool *bRunning);
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo);
 
 /** provides information about all available JRE installations.
 
@@ -401,22 +384,18 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo);
     already an equal object.</p>
 
     @param parInfo
-    [out] on returns it contains a pointer to an array of <code>JavaInfo</code>
-    pointers.
-    The caller must free the array with <code>rtl_freeMemory</code> and each
-    element of the array must be deleted.
-    @param pSize
-    [out] on return contains the size of array returned in <code>parInfo</code>.
+    [out] on returns it contains a vector of <code>JavaInfo</code> pointers.
+    Any previously contained elements are removed first.
 
     @return
     JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALID_ARG at least on of the parameters was NULL<br/>
+    JFW_E_INVALID_ARG parInfo was NULL<br/>
     JFW_E_ERROR an error occurred. <br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.
 */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAllJREs(
-    JavaInfo ***parInfo, sal_Int32 *pSize);
+    std::vector<std::unique_ptr<JavaInfo>> *parInfo);
 
 /** determines if a path points to a Java installation.
 
@@ -433,7 +412,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAllJREs(
 
    @param pPath
    [in] a file URL to a directory.
-   @param pInfo
+   @param ppInfo
    [out] the <code>JavaInfo</code> object which represents a JRE found at the
    location specified by <code>pPath</code>
 
@@ -448,7 +427,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAllJREs(
    requirements as determined by the javavendors.xml
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(
-    rtl_uString *pPath, JavaInfo **ppInfo);
+    rtl_uString *pPath, std::unique_ptr<JavaInfo> *ppInfo);
 
 
 /** starts a Java Virtual Machine (JVM).
@@ -564,8 +543,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo);
     @param ppInfo
     [out] on return it contains a pointer to a <code>JavaInfo</code> object
     that represents the currently selected JRE. When <code>*ppInfo</code> is not
-    NULL then the function overwrites the pointer. It is not attempted to free
-    the pointer.
+    NULL then the function sets the pointer.
 
     @return
     JFW_E_NONE function ran successfully.<br/>
@@ -575,7 +553,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo);
     JFW_E_INVALID_SETTINGS the javavendors.xml has been changed and no
     JRE has been selected afterwards. <br/>
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_getSelectedJRE(JavaInfo **ppInfo);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo);
 
 
 /** determines if Java can be used.
