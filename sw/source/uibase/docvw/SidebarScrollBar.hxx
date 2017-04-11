@@ -14,9 +14,13 @@
 
 class SwView;
 
-namespace sw { namespace annotation {
-    class SwAnnotationWin;
-} }
+namespace sw
+{
+namespace annotation
+{
+class SwAnnotationWin;
+}
+}
 
 namespace sw
 {
