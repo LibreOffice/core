@@ -445,12 +445,12 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 
 ScCaptionPtr::ScCaptionPtr() :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr), mbInUndo(false)
+    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr), mbNotOwner(false)
 {
 }
 
 ScCaptionPtr::ScCaptionPtr( SdrCaptionObj* p ) :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(p), mbInUndo(false)
+    mpHead(nullptr), mpNext(nullptr), mpCaption(p), mbNotOwner(false)
 {
     if (p)
     {
@@ -459,7 +459,7 @@ ScCaptionPtr::ScCaptionPtr( SdrCaptionObj* p ) :
 }
 
 ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
-    mpHead(r.mpHead), mpCaption(r.mpCaption), mbInUndo(false)
+    mpHead(r.mpHead), mpCaption(r.mpCaption), mbNotOwner(false)
 {
     if (r.mpCaption)
     {
@@ -477,7 +477,7 @@ ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
 }
 
 ScCaptionPtr::ScCaptionPtr( ScCaptionPtr&& r ) :
-    mpHead(r.mpHead), mpNext(r.mpNext), mpCaption(r.mpCaption), mbInUndo(false)
+    mpHead(r.mpHead), mpNext(r.mpNext), mpCaption(r.mpCaption), mbNotOwner(false)
 {
     r.replaceInList( this );
     r.mpCaption = nullptr;
@@ -534,9 +534,9 @@ ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
     return *this;
 }
 
-void ScCaptionPtr::setInUndo()
+void ScCaptionPtr::setNotOwner()
 {
-    mbInUndo = true;
+    mbNotOwner = true;
 }
 
 ScCaptionPtr::Head::Head( ScCaptionPtr* p ) :
@@ -697,7 +697,7 @@ void ScCaptionPtr::decRefAndDestroy()
         mpCaption = nullptr;
 #else
         // Destroying Draw Undo deletes its SdrObject, don't attempt that twice.
-        if (!mbInUndo)
+        if (!mbNotOwner)
         {
             removeFromDrawPageAndFree( true );  // ignoring Undo
             if (mpCaption)
