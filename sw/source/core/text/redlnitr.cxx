@@ -231,7 +231,7 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
 
             if( nNew < nEnd )
             {
-                if( nNew >= nStart ) // der einzig moegliche Kandidat
+                if( nNew >= nStart ) // only possible candidate
                 {
                     bOn = true;
                     const SwRangeRedline *pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];

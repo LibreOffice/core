@@ -49,7 +49,7 @@ inline bool IsNastyFollow( const SwTextFrame *pFrame )
 {
     OSL_ENSURE( !pFrame->IsFollow() || !pFrame->GetPrev() ||
             static_cast<const SwTextFrame*>(pFrame->GetPrev())->GetFollow() == pFrame,
-            "IsNastyFollow: Was ist denn hier los?" );
+            "IsNastyFollow: What is going on here?" );
     return  pFrame->IsFollow() && pFrame->GetPrev();
 }
 
