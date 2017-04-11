@@ -57,27 +57,6 @@ using namespace com::sun::star::configuration::backend;
 namespace migration
 {
 
-class CJavaInfo
-{
-public:
-    JavaInfo* pData;
-    CJavaInfo();
-    ~CJavaInfo();
-    CJavaInfo(const CJavaInfo&) = delete;
-    const CJavaInfo& operator=(const CJavaInfo&) = delete;
-    operator JavaInfo* () const { return pData;}
-};
-
-CJavaInfo::CJavaInfo(): pData(nullptr)
-{
-}
-
-CJavaInfo::~CJavaInfo()
-{
-    delete pData;
-}
-
-
 class JavaMigration : public ::cppu::WeakImplHelper<
     css::lang::XServiceInfo,
     css::lang::XInitialization,
@@ -258,12 +237,12 @@ void JavaMigration::migrateJavarc()
     if (bSuccess && !sValue.isEmpty())
     {
         //get the directory
-        CJavaInfo aInfo;
-        javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo.pData);
+        jfw::JavaInfoGuard aInfo;
+        javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo.info);
 
         if (err == JFW_E_NONE)
         {
-            if (jfw_setSelectedJRE(aInfo) != JFW_E_NONE)
+            if (jfw_setSelectedJRE(aInfo.info) != JFW_E_NONE)
             {
                 OSL_FAIL("[Service implementation " IMPL_NAME
                            "] XJob::execute: jfw_setSelectedJRE failed.");
