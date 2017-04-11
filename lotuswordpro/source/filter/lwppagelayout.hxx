@@ -92,11 +92,11 @@ protected:
     double GetWidth() override;
     double GetHeight() override;
 protected:
-    LwpAtomHolder*  m_pPrinterBinName;
+    LwpAtomHolder   m_PrinterBinName;
     sal_uInt16      m_nPrinterBin;
     sal_Int32       m_nBdroffset;
-    LwpAtomHolder*  m_pPaperName;
-    XFPageMaster* m_pXFPageMaster;
+    LwpAtomHolder   m_PaperName;
+    XFPageMaster*   m_pXFPageMaster;
 public:
     bool HasColumns();
     bool HasFillerPageText(LwpFoundry* pFoundry);

@@ -540,46 +540,32 @@ void LwpLayoutStyle::Read(LwpObjectStream* pStrm)
 }
 
 LwpLayoutMisc::LwpLayoutMisc() :
-m_nGridDistance(0), m_nGridType(0),
-m_pContentStyle(new LwpAtomHolder)
+m_nGridDistance(0), m_nGridType(0)
 {
 }
 
 LwpLayoutMisc::~LwpLayoutMisc()
 {
-    if (m_pContentStyle)
-    {
-        delete m_pContentStyle;
-    }
 }
 
 void LwpLayoutMisc::Read(LwpObjectStream* pStrm)
 {
     m_nGridType = pStrm->QuickReaduInt16();
     m_nGridDistance = pStrm->QuickReadInt32();
-    m_pContentStyle->Read(pStrm);
+    m_aContentStyle.Read(pStrm);
     pStrm->SkipExtra();
 }
 
 LwpMiddleLayout::LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
     : LwpVirtualLayout(objHdr, pStrm)
-    , m_pStyleStuff(new LwpLayoutStyle)
-    , m_pMiscStuff(new LwpLayoutMisc)
     , m_bGettingGeometry(false)
 {
 }
 
 LwpMiddleLayout::~LwpMiddleLayout()
 {
-    if (m_pStyleStuff)
-    {
-        delete m_pStyleStuff;
-    }
-    if (m_pMiscStuff)
-    {
-        delete m_pMiscStuff;
-    }
 }
+
 void LwpMiddleLayout::Read()
 {
     LwpObjectStream* pStrm = m_pObjStrm.get();
@@ -605,11 +591,11 @@ void LwpMiddleLayout::Read()
 
     if (nWhatsItGot & DISK_GOT_STYLE_STUFF)
     {
-        m_pStyleStuff->Read(pStrm);
+        m_aStyleStuff.Read(pStrm);
     }
     if (nWhatsItGot & DISK_GOT_MISC_STUFF)
     {
-        m_pMiscStuff->Read(pStrm);
+        m_aMiscStuff.Read(pStrm);
     }
 
     m_LayGeometry.ReadIndexed(pStrm);
@@ -1473,15 +1459,11 @@ bool LwpMiddleLayout::HasContent()
 }
 
 LwpLayout::LwpLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm ) :
-    LwpMiddleLayout(objHdr, pStrm), m_pUseWhen(new LwpUseWhen)
+    LwpMiddleLayout(objHdr, pStrm)
 {}
 
 LwpLayout::~LwpLayout()
 {
-    if (m_pUseWhen)
-    {
-        delete m_pUseWhen;
-    }
 }
 
 void LwpLayout::Read()
@@ -1499,7 +1481,7 @@ void LwpLayout::Read()
 
         if (!nSimple)
         {
-            m_pUseWhen->Read(pStrm);
+            m_aUseWhen.Read(pStrm);
 
             sal_uInt8 nFlag = pStrm->QuickReaduInt8();
             if (nFlag)
@@ -1749,7 +1731,7 @@ LwpUseWhen* LwpLayout::VirtualGetUseWhen()
 {
     if(m_nOverrideFlag & OVER_PLACEMENT)
     {
-        return m_pUseWhen;
+        return &m_aUseWhen;
     }
     else
     {

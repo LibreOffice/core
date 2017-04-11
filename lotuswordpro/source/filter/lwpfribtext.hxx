@@ -166,7 +166,7 @@ public:
 
 private:
     sal_uInt16 m_nType;
-    LwpAtomHolder* m_pName;
+    LwpAtomHolder m_aName;
     OUString m_TimeStyle;
     void RegisterDefaultTimeStyle();
     void RegisterTotalTimeStyle();

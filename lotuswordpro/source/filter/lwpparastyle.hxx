@@ -97,7 +97,7 @@ public:
     LwpParaBorderOverride* GetParaBorder() const;
     LwpBreaksOverride* GetBreaks() const;
     LwpTabOverride* GetTabOverride() const;
-    LwpBulletOverride* GetBulletOverride() const { return m_pBulletOverride;}
+    const LwpBulletOverride* GetBulletOverride() const { return &m_BulletOverride;}
     LwpNumberingOverride* GetNumberingOverride() const;
 public:
     static void ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders);
@@ -113,8 +113,8 @@ private:
     LwpObjectID m_TabStyle;
     LwpObjectID m_BackgroundStyle;
 
-    LwpKinsokuOptsOverride* m_pKinsokuOptsOverride;
-    LwpBulletOverride*      m_pBulletOverride;
+    LwpKinsokuOptsOverride  m_KinsokuOptsOverride;
+    LwpBulletOverride       m_BulletOverride;
 };
 
 #endif
