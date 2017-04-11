@@ -14,6 +14,7 @@
 #if HAVE_FEATURE_PDFIUM
 #include <fpdfview.h>
 #include <fpdf_edit.h>
+#include <fpdf_save.h>
 #endif
 
 #include <vcl/bitmapaccess.hxx>
@@ -24,6 +25,29 @@ namespace
 {
 
 #if HAVE_FEATURE_PDFIUM
+
+/// Callback class to be used with FPDF_SaveWithVersion().
+struct CompatibleWriter : public FPDF_FILEWRITE
+{
+public:
+    CompatibleWriter();
+    static int WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void* pData, unsigned long nSize);
+
+    SvMemoryStream m_aStream;
+};
+
+CompatibleWriter::CompatibleWriter()
+{
+    FPDF_FILEWRITE::version = 1;
+    FPDF_FILEWRITE::WriteBlock = CompatibleWriter::WriteBlockCallback;
+}
+
+int CompatibleWriter::WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void* pData, unsigned long nSize)
+{
+    auto pImpl = static_cast<CompatibleWriter*>(pFileWrite);
+    pImpl->m_aStream.WriteBytes(pData, nSize);
+    return 1;
+}
 
 /// Convert to inch, then assume 96 DPI.
 double pointToPixel(double fPoint)
@@ -88,6 +112,70 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
 
     return true;
 }
+
+/// Decide if PDF data is old enough to be compatible.
+bool isCompatible(SvStream& rInStream)
+{
+    // %PDF-x.y
+    sal_uInt8 aFirstBytes[8];
+    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
+    sal_uLong nRead = rInStream.ReadBytes(aFirstBytes, 8);
+    if (nRead < 8)
+        return false;
+
+    if ((aFirstBytes[0] != '%' || aFirstBytes[1] != 'P' || aFirstBytes[2] != 'D' || aFirstBytes[3] != 'F' || aFirstBytes[4] != '-'))
+        return false;
+
+    sal_Int32 nMajor = OString(aFirstBytes[5]).toInt32();
+    sal_Int32 nMinor = OString(aFirstBytes[7]).toInt32();
+    if (nMajor > 1 || (nMajor == 1 && nMinor > 4))
+        return false;
+
+    return true;
+}
+
+/// Takes care of transparently downgrading the version of the PDF stream in
+/// case it's too new for our PDF export.
+bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
+{
+    bool bCompatible = isCompatible(rInStream);
+    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
+    if (bCompatible)
+        // Not converting.
+        rOutStream.WriteStream(rInStream);
+    else
+    {
+        // Downconvert to PDF-1.4.
+        FPDF_LIBRARY_CONFIG aConfig;
+        aConfig.version = 2;
+        aConfig.m_pUserFontPaths = nullptr;
+        aConfig.m_pIsolate = nullptr;
+        aConfig.m_v8EmbedderSlot = 0;
+        FPDF_InitLibraryWithConfig(&aConfig);
+
+        // Read input into a buffer.
+        SvMemoryStream aInBuffer;
+        aInBuffer.WriteStream(rInStream);
+
+        // Load the buffer using pdfium.
+        FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
+        if (!pPdfDocument)
+            return false;
+
+        CompatibleWriter aWriter;
+        // 14 means PDF-1.4.
+        if (!FPDF_SaveWithVersion(pPdfDocument, &aWriter, 0, 14))
+            return false;
+
+        FPDF_CloseDocument(pPdfDocument);
+        FPDF_DestroyLibrary();
+
+        aWriter.m_aStream.Seek(STREAM_SEEK_TO_BEGIN);
+        rOutStream.WriteStream(aWriter.m_aStream);
+    }
+
+    return rOutStream.good();
+}
 #else
 bool generatePreview(SvStream& rStream, Graphic& rGraphic)
 {
@@ -95,6 +183,13 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
     (void)rGraphic;
 
     return true;
+}
+
+bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
+{
+    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
+    rOutStream.WriteStream(rInStream);
+    return rOutStream.good();
 }
 #endif // HAVE_FEATURE_PDFIUM
 
@@ -110,10 +205,14 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
         return false;
 
     // Save the original PDF stream for later use.
-    rStream.Seek(STREAM_SEEK_TO_END);
-    uno::Sequence<sal_Int8> aPdfData(rStream.Tell());
-    rStream.Seek(STREAM_SEEK_TO_BEGIN);
-    rStream.ReadBytes(aPdfData.getArray(), aPdfData.getLength());
+    SvMemoryStream aMemoryStream;
+    if (!getCompatibleStream(rStream, aMemoryStream))
+        return false;
+
+    aMemoryStream.Seek(STREAM_SEEK_TO_END);
+    uno::Sequence<sal_Int8> aPdfData(aMemoryStream.Tell());
+    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+    aMemoryStream.ReadBytes(aPdfData.getArray(), aPdfData.getLength());
     rGraphic.setPdfData(aPdfData);
 
     return true;
