@@ -323,12 +323,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
         if ( !areListsEqual( aParameterList, m_pParamDlg->GetParameters() ) )
         {
             aParameterList = m_pParamDlg->GetParameters();
-            bool bRunning = false;
-            javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
-            DBG_ASSERT( JFW_E_NONE == eErr,
-                        "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
-            (void)eErr;
-            if ( bRunning )
+            if ( jfw_isVMRunning() )
             {
                 SolarMutexGuard aGuard;
                 svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS);
@@ -368,12 +363,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
         if ( m_pPathDlg->GetClassPath() != sClassPath )
         {
             sClassPath = m_pPathDlg->GetClassPath();
-            bool bRunning = false;
-            javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
-            DBG_ASSERT( JFW_E_NONE == eErr,
-                        "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
-            (void)eErr;
-            if ( bRunning )
+            if ( jfw_isVMRunning() )
             {
                 SolarMutexGuard aGuard;
                 svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ASSIGNING_FOLDERS);
@@ -683,11 +673,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
             {
                 if (!pSelectedJava || !jfw_areEqualJavaInfo( pInfo, pSelectedJava.get() ) )
                 {
-                    bool bRunning = false;
-                    eErr = jfw_isVMRunning( &bRunning );
-                    DBG_ASSERT( JFW_E_NONE == eErr,
-                                "SvxJavaOptionsPage::FillItemSet(): error in jfw_isVMRunning" );
-                    if ( bRunning ||
+                    if ( jfw_isVMRunning() ||
                         ( ( pInfo->nRequirements & JFW_REQUIRE_NEEDRESTART ) == JFW_REQUIRE_NEEDRESTART ) )
                     {
                         svtools::executeRestartDialog(

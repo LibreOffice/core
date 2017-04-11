@@ -684,16 +684,10 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
     return errcode;
 }
 
-javaFrameworkError jfw_isVMRunning(bool *bRunning)
+bool jfw_isVMRunning()
 {
     osl::MutexGuard guard(jfw::FwkMutex::get());
-    if (bRunning == nullptr)
-        return JFW_E_INVALID_ARG;
-    if (g_pJavaVM == nullptr)
-        *bRunning = false;
-    else
-        *bRunning = true;
-    return JFW_E_NONE;
+    return g_pJavaVM != nullptr;
 }
 
 javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, std::unique_ptr<JavaInfo> *ppInfo)

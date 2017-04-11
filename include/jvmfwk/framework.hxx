@@ -295,15 +295,10 @@ JVMFWK_DLLPUBLIC bool jfw_areEqualJavaInfo(
     By determining if a VM is running, the user can be presented a message,
     that the changed setting may not be effective immediately.</p>
 
-    @param bRunning
-    [out] true - a VM is running. <br/>
-    false - no VM is running.
-
     @return
-    JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALID_ARG the parameter <code>bRunning</code> was NULL.
+    true iff a VM is running.
 */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_isVMRunning(bool *bRunning);
+JVMFWK_DLLPUBLIC bool jfw_isVMRunning();
 
 /** detects a suitable JRE and configures the framework to use it.
 
