@@ -14,8 +14,28 @@ namespace {
 
     HRESULT RegRead(HKEY hRootKey, const wchar_t* subKey, const wchar_t* valName, wchar_t* valData, size_t cchData)
     {
+        HKEY hKey;
+        long iRetVal = RegCreateKeyExW(
+            hRootKey,
+            subKey,
+            0,
+            nullptr,
+            REG_OPTION_NON_VOLATILE,
+            KEY_READ,
+            nullptr,
+            &hKey,
+            nullptr);
+        if (iRetVal != ERROR_SUCCESS)
+            return HRESULT_FROM_WIN32(iRetVal);
+
         DWORD cbData = cchData * sizeof(valData[0]);
-        long iRetVal = RegGetValue(hRootKey, subKey, valName, RRF_RT_REG_SZ, nullptr, valData, &cbData);
+        DWORD dwType;
+        iRetVal = RegQueryValueExW(hKey, valName, nullptr, &dwType, reinterpret_cast<LPBYTE>(valData), &cbData);
+        RegCloseKey(hKey);
+        if ((iRetVal == ERROR_SUCCESS) && (dwType != REG_SZ))
+        {
+            return E_FAIL;
+        }
         return HRESULT_FROM_WIN32(iRetVal);
     }
 
