@@ -24,44 +24,6 @@
 #include "jvmfwk/framework.hxx"
 #include "vendorplugin.hxx"
 
-/** typedefs for functions from vendorplugin.hxx
- */
-typedef javaPluginError (*jfw_plugin_getAllJavaInfos_ptr)(
-    rtl_uString * sVendor,
-    rtl_uString * sMinVersion,
-    rtl_uString * sMaxVersion,
-    rtl_uString * * arExcludeList,
-    sal_Int32  nLenList,
-    JavaInfo*** parJavaInfo,
-    sal_Int32 *nLenInfoList);
-
-typedef javaPluginError (*jfw_plugin_getJavaInfoByPath_ptr)(
-    rtl_uString * sPath,
-    rtl_uString * sVendor,
-    rtl_uString * sMinVersion,
-    rtl_uString * sMaxVersion,
-    rtl_uString * * arExcludeList,
-    sal_Int32  nLenList,
-    JavaInfo** ppInfo);
-
-/** starts a Java Virtual Machine.
-    <p>
-    The function shall ensure, that the VM does not abort the process
-    during instantiation.
-    </p>
- */
-typedef javaPluginError (*jfw_plugin_startJavaVirtualMachine_ptr)(
-    const JavaInfo *info,
-    const JavaVMOption* options,
-    sal_Int32 cOptions,
-    JavaVM ** ppVM,
-    JNIEnv ** ppEnv);
-
-typedef javaPluginError (*jfw_plugin_existJRE_ptr)(
-    const JavaInfo *info,
-    sal_Bool *exist);
-
-
 namespace jfw
 {
 
