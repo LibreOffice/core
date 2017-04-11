@@ -335,8 +335,8 @@ bool SwpHints::Check(bool bPortionsMerged) const
                     SwComparePosition cmp = ComparePosition(
                         pHtThis->GetStart(), *pHtThis->End(),
                         pOther->GetStart(), *pOther->End());
-                    CHECK_ERR( (POS_OVERLAP_BEFORE != cmp) &&
-                               (POS_OVERLAP_BEHIND != cmp),
+                    CHECK_ERR( (SwComparePosition::OverlapBefore != cmp) &&
+                               (SwComparePosition::OverlapBehind != cmp),
                         "HintsCheck: overlapping nesting hints!!!" );
                 }
             }

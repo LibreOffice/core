@@ -2136,7 +2136,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline( SwRedlineTable::size_type nArr
                         switch( ::ComparePosition( *pCStt, *pCEnd,
                                                    *pNStt, *pNEnd ))
                         {
-                        case POS_INSIDE:         // Pos1 is completely in Pos2
+                        case SwComparePosition::Inside:         // Pos1 is completely in Pos2
                             if( !pCur->HasMark() )
                             {
                                 pCur->SetMark();
@@ -2147,16 +2147,16 @@ const SwRangeRedline* SwCursorShell::GotoRedline( SwRedlineTable::size_type nArr
                             *pCEnd = *pNEnd;
                             break;
 
-                        case POS_OUTSIDE:        // Pos2 is completely in Pos1
-                        case POS_EQUAL:          // Pos1 has same size as Pos2
+                        case SwComparePosition::Outside:        // Pos2 is completely in Pos1
+                        case SwComparePosition::Equal:          // Pos1 has same size as Pos2
                             break;
 
-                        case POS_OVERLAP_BEFORE: // Pos1 overlaps Pos2 at beginning
+                        case SwComparePosition::OverlapBefore: // Pos1 overlaps Pos2 at beginning
                             if( !pCur->HasMark() )
                                 pCur->SetMark();
                             *pCEnd = *pNEnd;
                             break;
-                        case POS_OVERLAP_BEHIND: // Pos1 overlaps Pos2 at end
+                        case SwComparePosition::OverlapBehind: // Pos1 overlaps Pos2 at end
                             if( !pCur->HasMark() )
                             {
                                 pCur->SetMark();

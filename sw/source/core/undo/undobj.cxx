@@ -910,29 +910,29 @@ SwRedlineSaveData::SwRedlineSaveData(
     : SwUndRng( rRedl )
     , SwRedlineData( rRedl.GetRedlineData(), bCopyNext )
 {
-    assert( POS_OUTSIDE == eCmpPos ||
+    assert( SwComparePosition::Outside == eCmpPos ||
             !rRedl.GetContentIdx() ); // "Redline with Content"
 
     switch (eCmpPos)
     {
-    case POS_OVERLAP_BEFORE:        // Pos1 overlaps Pos2 at the beginning
+    case SwComparePosition::OverlapBefore:        // Pos1 overlaps Pos2 at the beginning
         nEndNode = rEndPos.nNode.GetIndex();
         nEndContent = rEndPos.nContent.GetIndex();
         break;
 
-    case POS_OVERLAP_BEHIND:        // Pos1 overlaps Pos2 at the end
+    case SwComparePosition::OverlapBehind:        // Pos1 overlaps Pos2 at the end
         nSttNode = rSttPos.nNode.GetIndex();
         nSttContent = rSttPos.nContent.GetIndex();
         break;
 
-    case POS_INSIDE:                // Pos1 lays completely in Pos2
+    case SwComparePosition::Inside:                // Pos1 lays completely in Pos2
         nSttNode = rSttPos.nNode.GetIndex();
         nSttContent = rSttPos.nContent.GetIndex();
         nEndNode = rEndPos.nNode.GetIndex();
         nEndContent = rEndPos.nContent.GetIndex();
         break;
 
-    case POS_OUTSIDE:               // Pos2 lays completely in Pos1
+    case SwComparePosition::Outside:               // Pos2 lays completely in Pos1
         if ( rRedl.GetContentIdx() )
         {
             // than move section into UndoArray and memorize it
@@ -941,7 +941,7 @@ SwRedlineSaveData::SwRedlineSaveData(
         }
         break;
 
-    case POS_EQUAL:                 // Pos1 is exactly as big as Pos2
+    case SwComparePosition::Equal:                 // Pos1 is exactly as big as Pos2
         break;
 
     default:
@@ -1007,10 +1007,10 @@ bool SwUndo::FillSaveData(
 
         const SwComparePosition eCmpPos =
             ComparePosition( *pStt, *pEnd, *pRedl->Start(), *pRedl->End() );
-        if ( eCmpPos != POS_BEFORE
-             && eCmpPos != POS_BEHIND
-             && eCmpPos != POS_COLLIDE_END
-             && eCmpPos != POS_COLLIDE_START )
+        if ( eCmpPos != SwComparePosition::Before
+             && eCmpPos != SwComparePosition::Behind
+             && eCmpPos != SwComparePosition::CollideEnd
+             && eCmpPos != SwComparePosition::CollideStart )
         {
 
             rSData.push_back(o3tl::make_unique<SwRedlineSaveData>(eCmpPos, *pStt, *pEnd, *pRedl, bCopyNext));
@@ -1039,10 +1039,10 @@ bool SwUndo::FillSaveDataForFormat(
         if ( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
         {
             const SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRedl->Start(), *pRedl->End() );
-            if ( eCmpPos != POS_BEFORE
-                 && eCmpPos != POS_BEHIND
-                 && eCmpPos != POS_COLLIDE_END
-                 && eCmpPos != POS_COLLIDE_START )
+            if ( eCmpPos != SwComparePosition::Before
+                 && eCmpPos != SwComparePosition::Behind
+                 && eCmpPos != SwComparePosition::CollideEnd
+                 && eCmpPos != SwComparePosition::CollideStart )
             {
                 rSData.push_back(o3tl::make_unique<SwRedlineSaveData>(eCmpPos, *pStt, *pEnd, *pRedl, true));
             }

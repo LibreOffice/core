@@ -129,7 +129,7 @@ namespace
         bool bRet = true;
         SwRangeRedline* pRedl = rArr[ rPos ];
         SwPosition *pRStt = nullptr, *pREnd = nullptr;
-        SwComparePosition eCmp = POS_OUTSIDE;
+        SwComparePosition eCmp = SwComparePosition::Outside;
         if( pSttRng && pEndRng )
         {
             pRStt = pRedl->Start();
@@ -147,7 +147,7 @@ namespace
                 bool bCheck = false, bReplace = false;
                 switch( eCmp )
                 {
-                case POS_INSIDE:
+                case SwComparePosition::Inside:
                     if( *pSttRng == *pRStt )
                         pRedl->SetStart( *pEndRng, pRStt );
                     else
@@ -164,18 +164,18 @@ namespace
                     }
                     break;
 
-                case POS_OVERLAP_BEFORE:
+                case SwComparePosition::OverlapBefore:
                     pRedl->SetStart( *pEndRng, pRStt );
                     bReplace = true;
                     break;
 
-                case POS_OVERLAP_BEHIND:
+                case SwComparePosition::OverlapBehind:
                     pRedl->SetEnd( *pSttRng, pREnd );
                     bCheck = true;
                     break;
 
-                case POS_OUTSIDE:
-                case POS_EQUAL:
+                case SwComparePosition::Outside:
+                case SwComparePosition::Equal:
                     rArr.DeleteAndDestroy( rPos-- );
                     break;
 
@@ -198,7 +198,7 @@ namespace
                 bool bDelRedl = false;
                 switch( eCmp )
                 {
-                case POS_INSIDE:
+                case SwComparePosition::Inside:
                     if( bCallDelete )
                     {
                         pDelStt = pSttRng;
@@ -206,14 +206,14 @@ namespace
                     }
                     break;
 
-                case POS_OVERLAP_BEFORE:
+                case SwComparePosition::OverlapBefore:
                     if( bCallDelete )
                     {
                         pDelStt = pRStt;
                         pDelEnd = pEndRng;
                     }
                     break;
-                case POS_OVERLAP_BEHIND:
+                case SwComparePosition::OverlapBehind:
                     if( bCallDelete )
                     {
                         pDelStt = pREnd;
@@ -221,8 +221,8 @@ namespace
                     }
                     break;
 
-                case POS_OUTSIDE:
-                case POS_EQUAL:
+                case SwComparePosition::Outside:
+                case SwComparePosition::Equal:
                     {
                         rArr.Remove( rPos-- );
                         bDelRedl = true;
@@ -292,7 +292,7 @@ namespace
         bool bRet = true;
         SwRangeRedline* pRedl = rArr[ rPos ];
         SwPosition *pRStt = nullptr, *pREnd = nullptr;
-        SwComparePosition eCmp = POS_OUTSIDE;
+        SwComparePosition eCmp = SwComparePosition::Outside;
         if( pSttRng && pEndRng )
         {
             pRStt = pRedl->Start();
@@ -311,7 +311,7 @@ namespace
                 bool bDelRedl = false;
                 switch( eCmp )
                 {
-                case POS_INSIDE:
+                case SwComparePosition::Inside:
                     if( bCallDelete )
                     {
                         pDelStt = pSttRng;
@@ -319,22 +319,22 @@ namespace
                     }
                     break;
 
-                case POS_OVERLAP_BEFORE:
+                case SwComparePosition::OverlapBefore:
                     if( bCallDelete )
                     {
                         pDelStt = pRStt;
                         pDelEnd = pEndRng;
                     }
                     break;
-                case POS_OVERLAP_BEHIND:
+                case SwComparePosition::OverlapBehind:
                     if( bCallDelete )
                     {
                         pDelStt = pREnd;
                         pDelEnd = pSttRng;
                     }
                     break;
-                case POS_OUTSIDE:
-                case POS_EQUAL:
+                case SwComparePosition::Outside:
+                case SwComparePosition::Equal:
                     {
                         // delete the range again
                         rArr.Remove( rPos-- );
@@ -390,7 +390,7 @@ namespace
 
                 switch( eCmp )
                 {
-                case POS_INSIDE:
+                case SwComparePosition::Inside:
                     {
                         if( 1 < pRedl->GetStackCount() )
                         {
@@ -424,7 +424,7 @@ namespace
                     }
                     break;
 
-                case POS_OVERLAP_BEFORE:
+                case SwComparePosition::OverlapBefore:
                     if( 1 < pRedl->GetStackCount() )
                     {
                         pNew = new SwRangeRedline( *pRedl );
@@ -436,7 +436,7 @@ namespace
                         pNew->SetEnd( *pEndRng );
                     break;
 
-                case POS_OVERLAP_BEHIND:
+                case SwComparePosition::OverlapBehind:
                     if( 1 < pRedl->GetStackCount() )
                     {
                         pNew = new SwRangeRedline( *pRedl );
@@ -448,8 +448,8 @@ namespace
                         pNew->SetStart( *pSttRng );
                     break;
 
-                case POS_OUTSIDE:
-                case POS_EQUAL:
+                case SwComparePosition::Outside:
+                case SwComparePosition::Equal:
                     if( !pRedl->PopData() )
                         // deleting the RedlineObject is enough
                         rArr.DeleteAndDestroy( rPos-- );
@@ -830,10 +830,10 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         bool bDelete = false;
 
                         // Merge if applicable?
-                        if( (( POS_BEHIND == eCmpPos &&
+                        if( (( SwComparePosition::Behind == eCmpPos &&
                                IsPrevPos( *pREnd, *pStt ) ) ||
-                             ( POS_COLLIDE_START == eCmpPos ) ||
-                             ( POS_OVERLAP_BEHIND == eCmpPos ) ) &&
+                             ( SwComparePosition::CollideStart == eCmpPos ) ||
+                             ( SwComparePosition::OverlapBehind == eCmpPos ) ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
                             ( n+1 >= mpRedlineTable->size() ||
                              ( *(*mpRedlineTable)[ n+1 ]->Start() >= *pEnd &&
@@ -850,10 +850,10 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             bMerged = true;
                             bDelete = true;
                         }
-                        else if( (( POS_BEFORE == eCmpPos &&
+                        else if( (( SwComparePosition::Before == eCmpPos &&
                                     IsPrevPos( *pEnd, *pRStt ) ) ||
-                                   ( POS_COLLIDE_END == eCmpPos ) ||
-                                  ( POS_OVERLAP_BEFORE == eCmpPos ) ) &&
+                                   ( SwComparePosition::CollideEnd == eCmpPos ) ||
+                                  ( SwComparePosition::OverlapBefore == eCmpPos ) ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
                             ( !n ||
                              *(*mpRedlineTable)[ n-1 ]->End() != *pRStt ))
@@ -866,28 +866,28 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             bMerged = true;
                             bDelete = true;
                         }
-                        else if ( POS_OUTSIDE == eCmpPos )
+                        else if ( SwComparePosition::Outside == eCmpPos )
                         {
                             // own insert-over-insert redlines:
                             // just scrap the inside ones
                             mpRedlineTable->DeleteAndDestroy( n );
                             bDec = true;
                         }
-                        else if( POS_OVERLAP_BEHIND == eCmpPos )
+                        else if( SwComparePosition::OverlapBehind == eCmpPos )
                         {
                             *pStt = *pREnd;
                             if( ( *pStt == *pEnd ) &&
                                 ( pNewRedl->GetContentIdx() == nullptr ) )
                                 bDelete = true;
                         }
-                        else if( POS_OVERLAP_BEFORE == eCmpPos )
+                        else if( SwComparePosition::OverlapBefore == eCmpPos )
                         {
                             *pEnd = *pRStt;
                             if( ( *pStt == *pEnd ) &&
                                 ( pNewRedl->GetContentIdx() == nullptr ) )
                                 bDelete = true;
                         }
-                        else if( POS_INSIDE == eCmpPos || POS_EQUAL == eCmpPos)
+                        else if( SwComparePosition::Inside == eCmpPos || SwComparePosition::Equal == eCmpPos)
                             bDelete = true;
 
                         if( bDelete )
@@ -897,7 +897,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             bCompress = true;
                         }
                     }
-                    else if( POS_INSIDE == eCmpPos )
+                    else if( SwComparePosition::Inside == eCmpPos )
                     {
                         // split up
                         if( *pEnd != *pREnd )
@@ -920,7 +920,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             mpRedlineTable->Insert( pRedl );
                         }
                     }
-                    else if ( POS_OUTSIDE == eCmpPos )
+                    else if ( SwComparePosition::Outside == eCmpPos )
                     {
                         // handle overlapping redlines in broken documents
 
@@ -938,12 +938,12 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             bCompress = true;
                         }
                     }
-                    else if ( POS_OVERLAP_BEHIND == eCmpPos )
+                    else if ( SwComparePosition::OverlapBehind == eCmpPos )
                     {
                         // handle overlapping redlines in broken documents
                         pNewRedl->SetStart( *pREnd );
                     }
-                    else if ( POS_OVERLAP_BEFORE == eCmpPos )
+                    else if ( SwComparePosition::OverlapBefore == eCmpPos )
                     {
                         // handle overlapping redlines in broken documents
                         *pEnd = *pRStt;
@@ -957,7 +957,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                     }
                     break;
                 case nsRedlineType_t::REDLINE_DELETE:
-                    if( POS_INSIDE == eCmpPos )
+                    if( SwComparePosition::Inside == eCmpPos )
                     {
                         // split up
                         if( *pEnd != *pREnd )
@@ -980,7 +980,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             mpRedlineTable->Insert( pRedl, n );
                         }
                     }
-                    else if ( POS_OUTSIDE == eCmpPos )
+                    else if ( SwComparePosition::Outside == eCmpPos )
                     {
                         // handle overlapping redlines in broken documents
 
@@ -998,14 +998,14 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             bCompress = true;
                         }
                     }
-                    else if ( POS_EQUAL == eCmpPos )
+                    else if ( SwComparePosition::Equal == eCmpPos )
                     {
                         // handle identical redlines in broken documents
                         // delete old (delete) redline
                         mpRedlineTable->DeleteAndDestroy( n );
                         bDec = true;
                     }
-                    else if ( POS_OVERLAP_BEHIND == eCmpPos )
+                    else if ( SwComparePosition::OverlapBehind == eCmpPos )
                     {   // Another workaround for broken redlines
                         pNewRedl->SetStart( *pREnd );
                     }
@@ -1013,7 +1013,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                 case nsRedlineType_t::REDLINE_FORMAT:
                     switch( eCmpPos )
                     {
-                    case POS_OVERLAP_BEFORE:
+                    case SwComparePosition::OverlapBefore:
                         pRedl->SetStart( *pEnd, pRStt );
                         // re-insert
                         mpRedlineTable->Remove( n );
@@ -1021,7 +1021,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         bDec = true;
                         break;
 
-                    case POS_OVERLAP_BEHIND:
+                    case SwComparePosition::OverlapBehind:
                         pRedl->SetEnd( *pStt, pREnd );
                         if( *pStt == *pRStt && pRedl->GetContentIdx() == nullptr )
                         {
@@ -1030,15 +1030,15 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         }
                         break;
 
-                    case POS_EQUAL:
-                    case POS_OUTSIDE:
+                    case SwComparePosition::Equal:
+                    case SwComparePosition::Outside:
                         // Overlaps the current one completely or has the
                         // same dimension, delete the old one
                         mpRedlineTable->DeleteAndDestroy( n );
                         bDec = true;
                         break;
 
-                    case POS_INSIDE:
+                    case SwComparePosition::Inside:
                         // Overlaps the current one completely,
                         // split or shorten the new one
                         if( *pEnd != *pREnd )
@@ -1073,7 +1073,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                 case nsRedlineType_t::REDLINE_DELETE:
                     switch( eCmpPos )
                     {
-                    case POS_OUTSIDE:
+                    case SwComparePosition::Outside:
                         {
                             // Overlaps the current one completely,
                             // split the new one
@@ -1091,35 +1091,35 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         }
                         break;
 
-                    case POS_INSIDE:
-                    case POS_EQUAL:
+                    case SwComparePosition::Inside:
+                    case SwComparePosition::Equal:
                         delete pNewRedl;
                         pNewRedl = nullptr;
                         bCompress = true;
                         break;
 
-                    case POS_OVERLAP_BEFORE:
-                    case POS_OVERLAP_BEHIND:
+                    case SwComparePosition::OverlapBefore:
+                    case SwComparePosition::OverlapBehind:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ))
                         {
                             // If that's the case we can merge it, meaning
                             // the new one covers this well
-                            if( POS_OVERLAP_BEHIND == eCmpPos )
+                            if( SwComparePosition::OverlapBehind == eCmpPos )
                                 pNewRedl->SetStart( *pRStt, pStt );
                             else
                                 pNewRedl->SetEnd( *pREnd, pEnd );
                             mpRedlineTable->DeleteAndDestroy( n );
                             bDec = true;
                         }
-                        else if( POS_OVERLAP_BEHIND == eCmpPos )
+                        else if( SwComparePosition::OverlapBehind == eCmpPos )
                             pNewRedl->SetStart( *pREnd, pStt );
                         else
                             pNewRedl->SetEnd( *pRStt, pEnd );
                         break;
 
-                    case POS_COLLIDE_START:
-                    case POS_COLLIDE_END:
+                    case SwComparePosition::CollideStart:
+                    case SwComparePosition::CollideEnd:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ) )
                         {
@@ -1137,7 +1137,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                             // If that's the case we can merge it, meaning
                             // the new one covers this well
-                            if( POS_COLLIDE_START == eCmpPos )
+                            if( SwComparePosition::CollideStart == eCmpPos )
                                 pNewRedl->SetStart( *pRStt, pStt );
                             else
                                 pNewRedl->SetEnd( *pREnd, pEnd );
@@ -1182,13 +1182,13 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         meRedlineFlags = eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore);
                         switch( eCmpPos )
                         {
-                        case POS_EQUAL:
+                        case SwComparePosition::Equal:
                             bCompress = true;
                             mpRedlineTable->DeleteAndDestroy( n );
                             bDec = true;
                             SAL_FALLTHROUGH;
 
-                        case POS_INSIDE:
+                        case SwComparePosition::Inside:
                             if( bCallDelete )
                             {
                                 meRedlineFlags |= RedlineFlags::IgnoreDeleteRedlines;
@@ -1214,11 +1214,11 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             delete pNewRedl;
                             pNewRedl = nullptr;
-                            if (eCmpPos == POS_INSIDE)
+                            if (eCmpPos == SwComparePosition::Inside)
                                 pRedl->MaybeNotifyModification();
                             break;
 
-                        case POS_OUTSIDE:
+                        case SwComparePosition::Outside:
                             {
                                 mpRedlineTable->Remove( n );
                                 bDec = true;
@@ -1235,7 +1235,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             break;
 
-                        case POS_OVERLAP_BEFORE:
+                        case SwComparePosition::OverlapBefore:
                             {
                                 SwPaM aPam( *pRStt, *pEnd );
 
@@ -1263,7 +1263,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             break;
 
-                        case POS_OVERLAP_BEHIND:
+                        case SwComparePosition::OverlapBehind:
                             {
                                 SwPaM aPam( *pStt, *pREnd );
 
@@ -1304,7 +1304,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                         switch( eCmpPos )
                         {
-                        case POS_EQUAL:
+                        case SwComparePosition::Equal:
                             {
                                 pRedl->PushData( *pNewRedl );
                                 delete pNewRedl;
@@ -1317,7 +1317,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             break;
 
-                        case POS_INSIDE:
+                        case SwComparePosition::Inside:
                             {
                                 if( *pRStt == *pStt )
                                 {
@@ -1352,7 +1352,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             break;
 
-                        case POS_OUTSIDE:
+                        case SwComparePosition::Outside:
                             {
                                 pRedl->PushData( *pNewRedl );
                                 if( *pEnd == *pREnd )
@@ -1367,7 +1367,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             break;
 
-                        case POS_OVERLAP_BEFORE:
+                        case SwComparePosition::OverlapBefore:
                             {
                                 if( *pEnd == *pREnd )
                                 {
@@ -1395,7 +1395,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             }
                             break;
 
-                        case POS_OVERLAP_BEHIND:
+                        case SwComparePosition::OverlapBehind:
                             {
                                 if( *pStt == *pRStt )
                                 {
@@ -1449,7 +1449,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                 case nsRedlineType_t::REDLINE_FORMAT:
                     switch( eCmpPos )
                     {
-                    case POS_OVERLAP_BEFORE:
+                    case SwComparePosition::OverlapBefore:
                         pRedl->SetStart( *pEnd, pRStt );
                         // re-insert
                         mpRedlineTable->Remove( n );
@@ -1457,19 +1457,19 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         bDec = true;
                         break;
 
-                    case POS_OVERLAP_BEHIND:
+                    case SwComparePosition::OverlapBehind:
                         pRedl->SetEnd( *pStt, pREnd );
                         break;
 
-                    case POS_EQUAL:
-                    case POS_OUTSIDE:
+                    case SwComparePosition::Equal:
+                    case SwComparePosition::Outside:
                         // Overlaps the current one completely or has the
                         // same dimension, delete the old one
                         mpRedlineTable->DeleteAndDestroy( n );
                         bDec = true;
                         break;
 
-                    case POS_INSIDE:
+                    case SwComparePosition::Inside:
                         // Overlaps the current one completely,
                         // split or shorten the new one
                         if( *pEnd != *pREnd )
@@ -1506,21 +1506,21 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                 case nsRedlineType_t::REDLINE_DELETE:
                     switch( eCmpPos )
                     {
-                    case POS_OVERLAP_BEFORE:
+                    case SwComparePosition::OverlapBefore:
                         pNewRedl->SetEnd( *pRStt, pEnd );
                         break;
 
-                    case POS_OVERLAP_BEHIND:
+                    case SwComparePosition::OverlapBehind:
                         pNewRedl->SetStart( *pREnd, pStt );
                         break;
 
-                    case POS_EQUAL:
-                    case POS_INSIDE:
+                    case SwComparePosition::Equal:
+                    case SwComparePosition::Inside:
                         delete pNewRedl;
                         pNewRedl = nullptr;
                         break;
 
-                    case POS_OUTSIDE:
+                    case SwComparePosition::Outside:
                         // Overlaps the current one completely,
                         // split or shorten the new one
                         if( *pEnd != *pREnd )
@@ -1545,8 +1545,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                 case nsRedlineType_t::REDLINE_FORMAT:
                     switch( eCmpPos )
                     {
-                    case POS_OUTSIDE:
-                    case POS_EQUAL:
+                    case SwComparePosition::Outside:
+                    case SwComparePosition::Equal:
                         {
                             // Overlaps the current one completely or has the
                             // same dimension, delete the old one
@@ -1555,7 +1555,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         }
                         break;
 
-                    case POS_INSIDE:
+                    case SwComparePosition::Inside:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ))
                         {
@@ -1588,27 +1588,27 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         }
                         break;
 
-                    case POS_OVERLAP_BEFORE:
-                    case POS_OVERLAP_BEHIND:
+                    case SwComparePosition::OverlapBefore:
+                    case SwComparePosition::OverlapBehind:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ))
                         {
                             // If that's the case we can merge it, meaning
                             // the new one covers this well
-                            if( POS_OVERLAP_BEHIND == eCmpPos )
+                            if( SwComparePosition::OverlapBehind == eCmpPos )
                                 pNewRedl->SetStart( *pRStt, pStt );
                             else
                                 pNewRedl->SetEnd( *pREnd, pEnd );
                             mpRedlineTable->DeleteAndDestroy( n );
                             bDec = false;
                         }
-                        else if( POS_OVERLAP_BEHIND == eCmpPos )
+                        else if( SwComparePosition::OverlapBehind == eCmpPos )
                             pNewRedl->SetStart( *pREnd, pStt );
                         else
                             pNewRedl->SetEnd( *pRStt, pEnd );
                         break;
 
-                    case POS_COLLIDE_END:
+                    case SwComparePosition::CollideEnd:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ) && n &&
                             *(*mpRedlineTable)[ n-1 ]->End() < *pStt )
@@ -1620,7 +1620,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             bDec = true;
                         }
                         break;
-                    case POS_COLLIDE_START:
+                    case SwComparePosition::CollideStart:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
                             n+1 < mpRedlineTable->size() &&
@@ -1917,14 +1917,14 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                                                        : pRedl->GetPoint();
         switch( ComparePosition( *pStt, *pEnd, *pRStt, *pREnd ) )
         {
-        case POS_EQUAL:
-        case POS_OUTSIDE:
+        case SwComparePosition::Equal:
+        case SwComparePosition::Outside:
             pRedl->InvalidateRange();
             mpRedlineTable->DeleteAndDestroy( n-- );
             bChg = true;
             break;
 
-        case POS_OVERLAP_BEFORE:
+        case SwComparePosition::OverlapBefore:
                 pRedl->InvalidateRange();
                 pRedl->SetStart( *pEnd, pRStt );
                 // re-insert
@@ -1933,7 +1933,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                 --n;
             break;
 
-        case POS_OVERLAP_BEHIND:
+        case SwComparePosition::OverlapBehind:
                 pRedl->InvalidateRange();
                 pRedl->SetEnd( *pStt, pREnd );
                 if( !pRedl->HasValidRange() )
@@ -1945,7 +1945,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                 }
             break;
 
-        case POS_INSIDE:
+        case SwComparePosition::Inside:
             {
                 // this one needs to be splitted
                 pRedl->InvalidateRange();
@@ -1981,8 +1981,8 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             }
             break;
 
-        case POS_COLLIDE_END:
-        case POS_BEFORE:
+        case SwComparePosition::CollideEnd:
+        case SwComparePosition::Before:
             n = mpRedlineTable->size();
             break;
         default:

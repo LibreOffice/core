@@ -1814,23 +1814,23 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                     const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
                     {
-                    case POS_COLLIDE_START:
-                    case POS_BEHIND:            // Pos1 comes after Pos2
+                    case SwComparePosition::CollideStart:
+                    case SwComparePosition::Behind:            // Pos1 comes after Pos2
                         nRedlPos = getIDocumentRedlineAccess().GetRedlineTable().size();
                         break;
 
-                    case POS_COLLIDE_END:
-                    case POS_BEFORE:            // Pos1 comes before Pos2
+                    case SwComparePosition::CollideEnd:
+                    case SwComparePosition::Before:            // Pos1 comes before Pos2
                         break;
-                    case POS_INSIDE:            // Pos1 is completely inside Pos2
+                    case SwComparePosition::Inside:            // Pos1 is completely inside Pos2
                         // that's valid, but check all following for overlapping
                         bCheckDel = false;
                         break;
 
-                    case POS_OUTSIDE:           // Pos2 is completely inside Pos1
-                    case POS_EQUAL:             // Pos1 is equal to Pos2
-                    case POS_OVERLAP_BEFORE:    // Pos1 overlaps Pos2 in the beginning
-                    case POS_OVERLAP_BEHIND:    // Pos1 overlaps Pos2 at the end
+                    case SwComparePosition::Outside:           // Pos2 is completely inside Pos1
+                    case SwComparePosition::Equal:             // Pos1 is equal to Pos2
+                    case SwComparePosition::OverlapBefore:    // Pos1 overlaps Pos2 in the beginning
+                    case SwComparePosition::OverlapBehind:    // Pos1 overlaps Pos2 at the end
                         return false;
                     }
                 }

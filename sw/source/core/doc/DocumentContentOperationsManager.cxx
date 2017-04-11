@@ -347,13 +347,13 @@ namespace
                     SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
                     switch( eCmpPos )
                     {
-                    case POS_COLLIDE_END:
-                    case POS_BEFORE:
+                    case SwComparePosition::CollideEnd:
+                    case SwComparePosition::Before:
                         // Pos1 is before Pos2
                         break;
 
-                    case POS_COLLIDE_START:
-                    case POS_BEHIND:
+                    case SwComparePosition::CollideStart:
+                    case SwComparePosition::Behind:
                         // Pos1 is after Pos2
                         n = rTable.size();
                         break;
@@ -684,17 +684,17 @@ namespace
 
             // we must save this redline if it overlaps aPam
             // (we may have to split it, too)
-            if( eCompare == POS_OVERLAP_BEHIND  ||
-                eCompare == POS_OVERLAP_BEFORE  ||
-                eCompare == POS_OUTSIDE ||
-                eCompare == POS_INSIDE ||
-                eCompare == POS_EQUAL )
+            if( eCompare == SwComparePosition::OverlapBehind  ||
+                eCompare == SwComparePosition::OverlapBefore  ||
+                eCompare == SwComparePosition::Outside ||
+                eCompare == SwComparePosition::Inside ||
+                eCompare == SwComparePosition::Equal )
             {
                 rRedlineTable.Remove( nCurrentRedline-- );
 
                 // split beginning, if necessary
-                if( eCompare == POS_OVERLAP_BEFORE  ||
-                    eCompare == POS_OUTSIDE )
+                if( eCompare == SwComparePosition::OverlapBefore  ||
+                    eCompare == SwComparePosition::Outside )
                 {
                     SwRangeRedline* pNewRedline = new SwRangeRedline( *pCurrent );
                     *pNewRedline->End() = *pStart;
@@ -703,8 +703,8 @@ namespace
                 }
 
                 // split end, if necessary
-                if( eCompare == POS_OVERLAP_BEHIND  ||
-                    eCompare == POS_OUTSIDE )
+                if( eCompare == SwComparePosition::OverlapBehind  ||
+                    eCompare == SwComparePosition::Outside )
                 {
                     SwRangeRedline* pNewRedline = new SwRangeRedline( *pCurrent );
                     *pNewRedline->Start() = *pEnd;

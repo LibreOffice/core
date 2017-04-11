@@ -2830,13 +2830,13 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 }
 
 // The position comparison's result
-//  POS_BEFORE,             // Box comes before
-//  POS_BEHIND,             // Box comes after
-//  POS_INSIDE,             // Box is completely within start/end
-//  POS_OUTSIDE,            // Box overlaps start/end completely
-//  POS_EQUAL,              // Box and start/end are the same
-//  POS_OVERLAP_BEFORE,     // Box overlapps the start
-//  POS_OVERLAP_BEHIND      // Box overlapps the end
+//  SwComparePosition::Before,             // Box comes before
+//  SwComparePosition::Behind,             // Box comes after
+//  SwComparePosition::Inside,             // Box is completely within start/end
+//  SwComparePosition::Outside,            // Box overlaps start/end completely
+//  SwComparePosition::Equal,              // Box and start/end are the same
+//  SwComparePosition::OverlapBefore,      // Box overlapps the start
+//  SwComparePosition::OverlapBehind       // Box overlapps the end
 SwComparePosition CheckBoxInRange( sal_uInt16 nStt, sal_uInt16 nEnd,
                                     sal_uInt16 nBoxStt, sal_uInt16 nBoxEnd )
 {
@@ -2847,12 +2847,12 @@ SwComparePosition CheckBoxInRange( sal_uInt16 nStt, sal_uInt16 nEnd,
         if( nBoxEnd > nStt + COLFUZZY )
         {
             if( nBoxEnd >= nEnd + COLFUZZY )
-                nRet = POS_OUTSIDE;
+                nRet = SwComparePosition::Outside;
             else
-                nRet = POS_OVERLAP_BEFORE;
+                nRet = SwComparePosition::OverlapBefore;
         }
         else
-            nRet = POS_BEFORE;
+            nRet = SwComparePosition::Before;
     }
     else if( nEnd > nBoxStt + COLFUZZY )
     {
@@ -2860,15 +2860,15 @@ SwComparePosition CheckBoxInRange( sal_uInt16 nStt, sal_uInt16 nEnd,
         {
             if( COLFUZZY > std::abs( long(nEnd) - long(nBoxEnd) ) &&
                 COLFUZZY > std::abs( long(nStt) - long(nBoxStt) ) )
-                nRet = POS_EQUAL;
+                nRet = SwComparePosition::Equal;
             else
-                nRet = POS_INSIDE;
+                nRet = SwComparePosition::Inside;
         }
         else
-            nRet = POS_OVERLAP_BEHIND;
+            nRet = SwComparePosition::OverlapBehind;
     }
     else
-        nRet = POS_BEHIND;
+        nRet = SwComparePosition::Behind;
 
     return nRet;
 }
@@ -3051,7 +3051,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
 
         switch( ePosType )
         {
-        case POS_BEFORE:
+        case SwComparePosition::Before:
             if( bCheck )
             {
                 if( rParam.bLeft )
@@ -3065,7 +3065,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
             }
             break;
 
-        case POS_BEHIND:
+        case SwComparePosition::Behind:
             if( bCheck )
             {
                 if( !rParam.bLeft )
@@ -3079,13 +3079,13 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
             }
             break;
 
-        case POS_OUTSIDE:           // Box fully overlaps start/end
-        case POS_INSIDE:            // Box is completely within start/end
-        case POS_EQUAL:             // Box and start/end are the same
+        case SwComparePosition::Outside:           // Box fully overlaps start/end
+        case SwComparePosition::Inside:            // Box is completely within start/end
+        case SwComparePosition::Equal:             // Box and start/end are the same
             bDelBox = true;
             break;
 
-        case POS_OVERLAP_BEFORE:     // Box overlaps the start
+        case SwComparePosition::OverlapBefore:     // Box overlaps the start
             if( nBoxChkStt <= ( nDist + (rParam.bLeft ? - nWidth / 2
                                                       : nWidth / 2 )))
             {
@@ -3107,7 +3107,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
             }
             break;
 
-        case POS_OVERLAP_BEHIND:     // Box overlaps the end
+        case SwComparePosition::OverlapBehind:     // Box overlaps the end
             // JP 10.02.99:
             // Delete generally or (like in OVERLAP_BEFORE) only delete the one who reaches up to the half into the delete Box?
             if( !pBox->GetSttNd() )
@@ -3215,7 +3215,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                     {
                         switch( ePosType )
                         {
-                        case POS_OVERLAP_BEFORE:    // Box overlaps the start
+                        case SwComparePosition::OverlapBefore:    // Box overlaps the start
                             if( TBLFIX_CHGPROP == rParam.nMode )
                                 bCorrRel = rParam.bLeft;
                             else if( rParam.bLeft ) // TBLFIX_CHGABS
@@ -3226,7 +3226,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                             }
                             break;
 
-                        case POS_OVERLAP_BEHIND:    // Box overlaps the end
+                        case SwComparePosition::OverlapBehind:    // Box overlaps the end
                             if( TBLFIX_CHGPROP == rParam.nMode )
                                 bCorrRel = !rParam.bLeft;
                             else if( !rParam.bLeft )    // TBLFIX_CHGABS
