@@ -323,7 +323,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
         if ( !areListsEqual( aParameterList, m_pParamDlg->GetParameters() ) )
         {
             aParameterList = m_pParamDlg->GetParameters();
-            sal_Bool bRunning = false;
+            bool bRunning = false;
             javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
             DBG_ASSERT( JFW_E_NONE == eErr,
                         "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
         if ( m_pPathDlg->GetClassPath() != sClassPath )
         {
             sClassPath = m_pPathDlg->GetClassPath();
-            sal_Bool bRunning = false;
+            bool bRunning = false;
             javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
             DBG_ASSERT( JFW_E_NONE == eErr,
                         "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
@@ -683,7 +683,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
             {
                 if (!pSelectedJava || !jfw_areEqualJavaInfo( pInfo, pSelectedJava.get() ) )
                 {
-                    sal_Bool bRunning = false;
+                    bool bRunning = false;
                     eErr = jfw_isVMRunning( &bRunning );
                     DBG_ASSERT( JFW_E_NONE == eErr,
                                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_isVMRunning" );

@@ -684,7 +684,7 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
     return errcode;
 }
 
-javaFrameworkError jfw_isVMRunning(sal_Bool *bRunning)
+javaFrameworkError jfw_isVMRunning(bool *bRunning)
 {
     osl::MutexGuard guard(jfw::FwkMutex::get());
     if (bRunning == nullptr)

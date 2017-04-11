@@ -296,14 +296,14 @@ JVMFWK_DLLPUBLIC bool jfw_areEqualJavaInfo(
     that the changed setting may not be effective immediately.</p>
 
     @param bRunning
-    [out] sal_True - a VM is running. <br/>
-    sal_False - no VM is running.
+    [out] true - a VM is running. <br/>
+    false - no VM is running.
 
     @return
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALID_ARG the parameter <code>bRunning</code> was NULL.
 */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_isVMRunning(sal_Bool *bRunning);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_isVMRunning(bool *bRunning);
 
 /** detects a suitable JRE and configures the framework to use it.
 
