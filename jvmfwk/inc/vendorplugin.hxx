@@ -88,9 +88,7 @@ enum class javaPluginError
         [in] represents the maximum version of a JRE. The string can be empty.
     @param arExcludeList
         [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
-        versions must not be returned by this function. It can be NULL.
-    @param nSizeExcludeList
-        [in] the number of version strings contained in <code>arExcludeList</code>.
+        versions must not be returned by this function.
     @param parJavaInfo
         [out] if the function runs successfully then <code>parJavaInfo</code> contains
         on return an array of pointers to <code>JavaInfo</code> objects.
@@ -111,8 +109,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     OUString const& sVendor,
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
-    rtl_uString * * arExcludeList,
-    sal_Int32  nSizeExcludeList,
+    std::vector<OUString> const & arExcludeList,
     JavaInfo*** parJavaInfo,
     sal_Int32 *nSizeJavaInfo,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
@@ -136,9 +133,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
        [in] represents the maximum version of a JRE.
    @param arExcludeList
        [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
-        versions must not be returned by this function. It can be NULL.
-   @param nSizeExcludeList
-       [in] the number of version strings contained in <code>arExcludeList</code>.
+        versions must not be returned by this function.
    @param ppInfo
        [out] if the function runs successfully then <code>ppInfo</code> contains
         on return a pointer to a <code>JavaInfo</code> object.
@@ -162,8 +157,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     OUString const& sVendor,
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
-    rtl_uString * *arExcludeList,
-    sal_Int32  nSizeExcludeList,
+    std::vector<OUString> const &arExcludeList,
     JavaInfo ** ppInfo);
 
 

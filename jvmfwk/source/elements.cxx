@@ -171,43 +171,6 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     xmlAddChild(root, nodeCrLf);
 }
 
-
-VersionInfo::VersionInfo(): arVersions(nullptr)
-{
-}
-
-VersionInfo::~VersionInfo()
-{
-}
-
-void VersionInfo::addExcludeVersion(const OUString& sVersion)
-{
-    vecExcludeVersions.push_back(sVersion);
-}
-
-rtl_uString** VersionInfo::getExcludeVersions()
-{
-    osl::MutexGuard guard(FwkMutex::get());
-    if (arVersions != nullptr)
-        return arVersions;
-
-    arVersions = new rtl_uString*[vecExcludeVersions.size()];
-    int j=0;
-    typedef std::vector<OUString>::const_iterator it;
-    for (it i = vecExcludeVersions.begin(); i != vecExcludeVersions.end();
-         ++i, ++j)
-    {
-        arVersions[j] = vecExcludeVersions[j].pData;
-    }
-    return arVersions;
-}
-
-sal_Int32 VersionInfo::getExcludeVersionSize()
-{
-    return vecExcludeVersions.size();
-}
-
-
 NodeJava::NodeJava(Layer layer):
     m_layer(layer)
 {

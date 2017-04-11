@@ -93,8 +93,7 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                 vendor,
                 versionInfo.sMinVersion,
                 versionInfo.sMaxVersion,
-                versionInfo.getExcludeVersions(),
-                versionInfo.getExcludeVersionSize(),
+                versionInfo.vecExcludeVersions,
                 & arInfos,
                 & cInfos,
                 infos);
@@ -121,8 +120,7 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                     vendor,
                     versionInfo.sMinVersion,
                     versionInfo.sMaxVersion,
-                    versionInfo.getExcludeVersions(),
-                    versionInfo.getExcludeVersionSize(),
+                    versionInfo.vecExcludeVersions,
                     & aInfo.pInfo);
                 if (plerr == javaPluginError::NoJre)
                     continue;
@@ -480,8 +478,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                     vendor,
                     versionInfo.sMinVersion,
                     versionInfo.sMaxVersion,
-                    versionInfo.getExcludeVersions(),
-                    versionInfo.getExcludeVersionSize(),
+                    versionInfo.vecExcludeVersions,
                     & arInfos,
                     & cInfos,
                     infos);
@@ -551,8 +548,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                             vendor,
                             versionInfo.sMinVersion,
                             versionInfo.sMaxVersion,
-                            versionInfo.getExcludeVersions(),
-                            versionInfo.getExcludeVersionSize(),
+                            versionInfo.vecExcludeVersions,
                             & aInfo.pInfo);
                         if (err == javaPluginError::NoJre)
                             continue;
@@ -717,8 +713,7 @@ javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr
                 vendor,
                 versionInfo.sMinVersion,
                 versionInfo.sMaxVersion,
-                versionInfo.getExcludeVersions(),
-                versionInfo.getExcludeVersionSize(),
+                versionInfo.vecExcludeVersions,
                 & pInfo);
 
             if (plerr == javaPluginError::NONE)

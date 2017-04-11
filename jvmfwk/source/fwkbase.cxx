@@ -191,7 +191,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
                     OString osVersion(sVersion);
                     OUString usVersion = OStringToOUString(
                         osVersion, RTL_TEXTENCODING_UTF8);
-                    aVersionInfo.addExcludeVersion(usVersion);
+                    aVersionInfo.vecExcludeVersions.push_back(usVersion);
                 }
             }
             cur = cur->next;

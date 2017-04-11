@@ -32,6 +32,8 @@
 
 #include <cassert>
 #include <memory>
+#include <vector>
+
 #include "config_options.h"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
@@ -208,9 +210,7 @@ extern "C" void JNICALL abort_handler()
         [in] represents the maximum version of a JRE. The string can be empty.
     @param arExcludeList
         [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
-        versions must not be returned by this function. It can be NULL.
-    @param nLenList
-        [in] the number of version strings contained in <code>arExcludeList</code>.
+        versions must not be returned by this function.
 
    @return
     javaPluginError::NONE the function ran successfully and the version requirements are met
@@ -225,8 +225,7 @@ javaPluginError checkJavaVersionRequirements(
     rtl::Reference<VendorBase> const & aVendorInfo,
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
-    rtl_uString * * arExcludeList,
-    sal_Int32  nLenList)
+    std::vector<OUString> const & arExcludeList)
 {
     if (!aVendorInfo->isValidArch())
     {
@@ -270,9 +269,7 @@ javaPluginError checkJavaVersionRequirements(
         }
     }
 
-    for (int i = 0; i < nLenList; i++)
-    {
-        OUString sExVer(arExcludeList[i]);
+    for (auto const & sExVer: arExcludeList) {
         try
         {
             if (aVendorInfo->compareVersions(sExVer) == 0)
@@ -300,18 +297,13 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     OUString const& sVendor,
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
-    rtl_uString  * *arExcludeList,
-    sal_Int32  nLenList,
+    std::vector<OUString> const &arExcludeList,
     JavaInfo*** parJavaInfo,
     sal_Int32 *nLenInfoList,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos)
 {
     assert(parJavaInfo);
     assert(nLenInfoList);
-
-    //nLenlist contains the number of elements in arExcludeList.
-    //If no exclude list is provided then nLenList must be 0
-    assert( ! (arExcludeList == nullptr && nLenList > 0));
 
     OSL_ASSERT(!sVendor.isEmpty());
     if (sVendor.isEmpty())
@@ -333,7 +325,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             continue;
 
         javaPluginError err = checkJavaVersionRequirements(
-            cur, sMinVersion, sMaxVersion, arExcludeList, nLenList);
+            cur, sMinVersion, sMaxVersion, arExcludeList);
 
         if (err == javaPluginError::FailedVersion || err == javaPluginError::WrongArch)
             continue;
@@ -363,18 +355,13 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     OUString const& sVendor,
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
-    rtl_uString  *  *arExcludeList,
-    sal_Int32  nLenList,
+    std::vector<OUString> const &arExcludeList,
     JavaInfo ** ppInfo)
 {
     assert(ppInfo != nullptr);
     OSL_ASSERT(!sPath.isEmpty());
     if (sPath.isEmpty())
         return javaPluginError::InvalidArg;
-
-    //nLenlist contains the number of elements in arExcludeList.
-    //If no exclude list is provided then nLenList must be 0
-    assert( ! (arExcludeList == nullptr && nLenList > 0));
 
     OSL_ASSERT(!sVendor.isEmpty());
     if (sVendor.isEmpty())
@@ -388,7 +375,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     if (!sVendor.equals(aVendorInfo->getVendor()))
         return javaPluginError::NoJre;
     javaPluginError errorcode = checkJavaVersionRequirements(
-            aVendorInfo, sMinVersion, sMaxVersion, arExcludeList, nLenList);
+            aVendorInfo, sMinVersion, sMaxVersion, arExcludeList);
 
     if (errorcode == javaPluginError::NONE)
         *ppInfo = createJavaInfo(aVendorInfo);
@@ -422,8 +409,7 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
                 infoJavaHome[0],
                 versionInfo.sMinVersion,
                 versionInfo.sMaxVersion,
-                versionInfo.getExcludeVersions(),
-                versionInfo.getExcludeVersionSize());
+                versionInfo.vecExcludeVersions);
 
             if (errorcode == javaPluginError::NONE)
             {
@@ -457,7 +443,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
         for (ci_pl vendorInfo = vecVendorInfos.begin(); vendorInfo != vecVendorInfos.end(); ++vendorInfo)
         {
             const OUString& vendor = vendorInfo->first;
-            jfw::VersionInfo versionInfo = vendorInfo->second;
+            jfw::VersionInfo const & versionInfo = vendorInfo->second;
 
             if (vendor.equals(currentInfo->getVendor()))
             {
@@ -465,8 +451,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
                     currentInfo,
                     versionInfo.sMinVersion,
                     versionInfo.sMaxVersion,
-                    versionInfo.getExcludeVersions(),
-                    versionInfo.getExcludeVersionSize());
+                    versionInfo.vecExcludeVersions);
 
                 if (errorcode == javaPluginError::NONE)
                 {

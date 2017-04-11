@@ -318,27 +318,11 @@ public:
 };
 
 
-class VersionInfo
+struct VersionInfo
 {
     ::std::vector< OUString> vecExcludeVersions;
-    rtl_uString ** arVersions;
-
-public:
-    VersionInfo();
-    ~VersionInfo();
-
-    void addExcludeVersion(const OUString& sVersion);
-
     OUString sMinVersion;
     OUString sMaxVersion;
-
-    /** The caller DOES NOT get ownership of the strings. That is he
-        does not need to release the strings.
-        The array exists as long as this object exists.
-    */
-
-    rtl_uString** getExcludeVersions();
-    sal_Int32 getExcludeVersionSize();
 };
 
 } //end namespace
