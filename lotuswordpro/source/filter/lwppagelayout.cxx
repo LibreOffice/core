@@ -75,24 +75,14 @@
 
 LwpPageLayout::LwpPageLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpLayout(objHdr, pStrm)
-    , m_pPrinterBinName(new LwpAtomHolder)
     , m_nPrinterBin(0)
     , m_nBdroffset(0)
-    , m_pPaperName(new LwpAtomHolder)
     , m_pXFPageMaster(nullptr)
 {
 }
 
 LwpPageLayout::~LwpPageLayout()
 {
-    if (m_pPrinterBinName)
-    {
-        delete m_pPrinterBinName;
-    }
-    if (m_pPaperName)
-    {
-        delete m_pPaperName;
-    }
 }
 void LwpPageLayout::Read()
 {
@@ -104,14 +94,14 @@ void LwpPageLayout::Read()
     }
 
     m_nPrinterBin = m_pObjStrm->QuickReaduInt16();
-    m_pPrinterBinName->Read(m_pObjStrm.get());
+    m_PrinterBinName.Read(m_pObjStrm.get());
 
     if (LwpFileHeader::m_nFileRevision >= 0x000B)
         m_nBdroffset = m_pObjStrm->QuickReadInt32();
 
     if (m_pObjStrm->CheckExtra())
     {
-        m_pPaperName->Read(m_pObjStrm.get());
+        m_PaperName.Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
     }
 

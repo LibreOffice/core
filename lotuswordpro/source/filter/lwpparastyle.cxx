@@ -82,22 +82,12 @@
 #include "lwpsilverbullet.hxx"
 
 LwpParaStyle::LwpParaStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm) :
-LwpTextStyle(objHdr, pStrm), m_pKinsokuOptsOverride(new LwpKinsokuOptsOverride),
-m_pBulletOverride(new LwpBulletOverride)
+LwpTextStyle(objHdr, pStrm)
 {
 }
 
 LwpParaStyle::~LwpParaStyle()
 {
-    if (m_pKinsokuOptsOverride)
-    {
-        delete m_pKinsokuOptsOverride;
-    }
-
-    if (m_pBulletOverride)
-    {
-        delete m_pBulletOverride;
-    }
 }
 
 void LwpParaStyle::Read()
@@ -139,8 +129,8 @@ void LwpParaStyle::Read()
         m_NumberingStyle.ReadIndexed(m_pObjStrm.get());
         m_TabStyle.ReadIndexed(m_pObjStrm.get());
 
-        m_pKinsokuOptsOverride->Read(m_pObjStrm.get());
-        m_pBulletOverride->Read(m_pObjStrm.get());
+        m_KinsokuOptsOverride.Read(m_pObjStrm.get());
+        m_BulletOverride.Read(m_pObjStrm.get());
 
         if (m_pObjStrm->CheckExtra())
         {
@@ -172,7 +162,7 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         LwpIndentOverride   *pIndent = dynamic_cast<LwpIndentOverride*>(pPiece->GetOverride());
         if( pIndent )
         {
-            if (!m_pBulletOverride->IsInValid())// for remove bullet indent in named bullet style
+            if (!m_BulletOverride.IsInValid())// for remove bullet indent in named bullet style
             {
                 std::unique_ptr<LwpIndentOverride> pNewIndent(pIndent->clone());
                 pNewIndent->SetMFirst(0);
