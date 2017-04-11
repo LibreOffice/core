@@ -101,7 +101,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 
     pAkt->nHash0 = nRefHash;
 
-    mpLotusRoot->pFontBuff->Fill( rAttr.nFont, rItemSet );
+    mpLotusRoot->maFontBuff.Fill( rAttr.nFont, rItemSet );
 
     sal_uInt8 nLine = rAttr.nLineStyle;
     if( nLine )

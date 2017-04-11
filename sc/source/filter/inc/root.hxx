@@ -25,6 +25,10 @@
 #include "flttypes.hxx"
 #include "filter.hxx"
 #include "excdefs.hxx"
+#include "lotattr.hxx"
+#include "lotfntbf.hxx"
+#include "lotrange.hxx"
+#include <memory>
 
 class ScRangeName;
 
@@ -81,22 +85,18 @@ protected:
 
 // Lotus Imp~/Exp~ -
 
-class LotusRangeList;
-class LotusFontBuffer;
-class LotAttrTable;
-
 struct LOTUS_ROOT
 {
     ScDocument*         pDoc;
-    LotusRangeList*     pRangeNames;
+    LotusRangeList      maRangeNames;
     ScRangeName*        pScRangeName;
     rtl_TextEncoding    eCharsetQ;
     Lotus123Typ         eFirstType;
     Lotus123Typ         eActType;
     ScRange             aActRange;
-    RangeNameBufferWK3* pRngNmBffWK3;
-    LotusFontBuffer*    pFontBuff;
-    LotAttrTable*       pAttrTable;
+    std::unique_ptr<RangeNameBufferWK3> pRngNmBffWK3;
+    LotusFontBuffer     maFontBuff;
+    LotAttrTable        maAttrTable;
 
                         LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ );
                         ~LOTUS_ROOT();

@@ -223,7 +223,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
-        rContext.pLotusRoot->pRangeNames->Append( pRange, aTmp );
+        rContext.pLotusRoot->maRangeNames.Append( pRange, aTmp );
     }
 }
 
@@ -261,7 +261,7 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
         OUString  aTmp( cBuf, strlen(cBuf), rContext.pLotusRoot->eCharsetQ );
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
-        rContext.pLotusRoot->pRangeNames->Append( pRange, aTmp );
+        rContext.pLotusRoot->maRangeNames.Append( pRange, aTmp );
     }
 }
 

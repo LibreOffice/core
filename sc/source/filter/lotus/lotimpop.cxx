@@ -42,23 +42,18 @@
 LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
     :
         pDoc( pDocP),
-        pRangeNames( new LotusRangeList(this)),
+        maRangeNames( this ),
         pScRangeName( pDocP->GetRangeName()),
         eCharsetQ( eQ),
         eFirstType( Lotus123Typ::X),
         eActType( Lotus123Typ::X),
         pRngNmBffWK3( new RangeNameBufferWK3(this)),
-        pFontBuff( new LotusFontBuffer),
-        pAttrTable( new LotAttrTable(this))
+        maAttrTable( this )
 {
 }
 
 LOTUS_ROOT::~LOTUS_ROOT()
 {
-    delete pRangeNames;
-    delete pRngNmBffWK3;
-    delete pFontBuff;
-    delete pAttrTable;
 }
 
 static osl::Mutex aLotImpSemaphore;
@@ -354,7 +349,7 @@ void ImportLotus::Font_Face()
     Read( aName );
 
     LotusContext &rContext = aConv.getContext();
-    rContext.pLotusRoot->pFontBuff->SetName( nNum, aName );
+    rContext.pLotusRoot->maFontBuff.SetName( nNum, aName );
 }
 
 void ImportLotus::Font_Type()
@@ -364,7 +359,7 @@ void ImportLotus::Font_Type()
     {
         sal_uInt16 nType;
         Read( nType );
-        rContext.pLotusRoot->pFontBuff->SetType( nCnt, nType );
+        rContext.pLotusRoot->maFontBuff.SetType( nCnt, nType );
     }
 }
 
@@ -375,7 +370,7 @@ void ImportLotus::Font_Ysize()
     {
         sal_uInt16 nSize;
         Read( nSize );
-        rContext.pLotusRoot->pFontBuff->SetHeight( nCnt, nSize );
+        rContext.pLotusRoot->maFontBuff.SetHeight( nCnt, nSize );
     }
 }
 
@@ -412,7 +407,7 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
         Read( nRepeats );
 
         if( aAttr.HasStyles() )
-            rContext.pLotusRoot->pAttrTable->SetAttr(
+            rContext.pLotusRoot->maAttrTable.SetAttr(
                 nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), nRow, aAttr );
 
         // Do this here and NOT in class LotAttrTable, as we only add attributes if the other
