@@ -286,9 +286,6 @@ javaFrameworkError jfw_startVM(
         }
         assert(pInfo != nullptr);
 
-        //get the function jfw_plugin_startJavaVirtualMachine
-        jfw::VendorSettings aVendorSettings;
-
         // create JavaVMOptions array that is passed to the plugin
         // it contains the classpath and all options set in the
         //options dialog
@@ -945,8 +942,6 @@ javaFrameworkError jfw_addJRELocation(OUString const & sLocation)
 
 javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist)
 {
-    //get the function jfw_plugin_existJRE
-    jfw::VendorSettings aVendorSettings;
     javaPluginError plerr = jfw_plugin_existJRE(pInfo, exist);
 
     javaFrameworkError ret = JFW_E_NONE;
