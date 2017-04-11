@@ -1431,7 +1431,6 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
                     }
                 }
 
-                SwPosition aEnd( *pEnd );
                 *GetPoint() = *pEnd;
                 *GetMark() = *pEnd;
                 DeleteMark();

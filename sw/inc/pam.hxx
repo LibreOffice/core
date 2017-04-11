@@ -46,7 +46,7 @@ namespace utl {
 }
 
 /// Marks a position in the document model.
-struct SW_DLLPUBLIC SwPosition
+struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 {
     SwNodeIndex nNode;
     SwIndex nContent;
@@ -147,7 +147,7 @@ SW_DLLPUBLIC bool GoInContentSkipHidden( SwPaM&, SwMoveFnCollection const &);
 SW_DLLPUBLIC bool GoInContentCellsSkipHidden( SwPaM&, SwMoveFnCollection const &);
 
 /// PaM is Point and Mark: a selection of the document model.
-class SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
+class SAL_WARN_UNUSED SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
 {
     SwPosition   m_Bound1;
     SwPosition   m_Bound2;

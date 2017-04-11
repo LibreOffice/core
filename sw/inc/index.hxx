@@ -34,7 +34,7 @@ class IMark;
 }
 
 /// Marks a character position inside a document model node.
-class SW_DLLPUBLIC SwIndex
+class SAL_WARN_UNUSED SW_DLLPUBLIC SwIndex
 {
 private:
     friend class SwIndexReg;
@@ -107,7 +107,7 @@ public:
 
 SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwIndex& index);
 
-class SwIndexReg
+class SAL_WARN_UNUSED SwIndexReg
 {
     friend class SwIndex;
     friend bool sw_PosOk(const SwPosition & aPos);

@@ -36,7 +36,7 @@ namespace sw
      * @example sw/qa/core/uwriter.cxx
      */
     template <typename value_type>
-    class Ring
+    class SAL_WARN_UNUSED Ring
     {
         public:
             typedef typename std::add_const<value_type>::type const_value_type;
@@ -148,7 +148,7 @@ namespace sw
      * helper class that provides Svalue_typeL-style container iteration to the ring
      */
     template <typename value_type>
-    class RingContainer final
+    class SAL_WARN_UNUSED RingContainer final
     {
         private:
             /** the item in the ring where iteration starts */

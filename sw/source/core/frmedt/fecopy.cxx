@@ -1045,9 +1045,6 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                 // **
                 // ** Update SwDoc::Append, if you change the following code **
                 // **
-
-                SwPosition aInsertPosition( rInsPos );
-
                 {
                     SwNodeIndex aIndexBefore(rInsPos.nNode);
 

@@ -360,7 +360,6 @@ SwXFootnote::getAnchor()
 
     SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
     SwPaM aPam( pTextFootnote->GetTextNode(), pTextFootnote->GetStart() );
-    SwPosition aMark( *aPam.Start() );
     aPam.SetMark();
     ++aPam.GetMark()->nContent;
     const uno::Reference< text::XTextRange > xRet =
