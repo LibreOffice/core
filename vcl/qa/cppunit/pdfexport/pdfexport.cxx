@@ -481,10 +481,16 @@ void PdfExportTest::testTdf107089()
     // Make sure 'Hello' is part of the form object's stream.
     vcl::filter::PDFStreamElement* pStream = pForm->GetStream();
     CPPUNIT_ASSERT(pStream);
-    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    SvMemoryStream aObjectStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    pStream->GetMemory().Seek(0);
+    aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    aObjectStream.Seek(0);
     OString aHello("Hello");
-    auto pStart = static_cast<const char*>(rObjectStream.GetData());
-    const char* pEnd = pStart + rObjectStream.GetSize();
+    auto pStart = static_cast<const char*>(aObjectStream.GetData());
+    const char* pEnd = pStart + aObjectStream.GetSize();
     auto it = std::search(pStart, pEnd, aHello.getStr(), aHello.getStr() + aHello.getLength());
     // This failed, 'Hello' was part only a mixed compressed/uncompressed stream, i.e. garbage.
     CPPUNIT_ASSERT(it != pEnd);
