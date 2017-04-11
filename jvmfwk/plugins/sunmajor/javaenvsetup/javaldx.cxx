@@ -84,7 +84,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
         {
             //check if the JRE was not uninstalled
-            sal_Bool bExist = false;
+            bool bExist = false;
             errcode = jfw_existJRE(aInfo.get(), &bExist);
             if (errcode == JFW_E_NONE)
             {

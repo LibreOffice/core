@@ -973,7 +973,7 @@ javaFrameworkError jfw_addJRELocation(rtl_uString * sLocation)
 
 }
 
-javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
+javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist)
 {
     //get the function jfw_plugin_existJRE
     jfw::VendorSettings aVendorSettings;

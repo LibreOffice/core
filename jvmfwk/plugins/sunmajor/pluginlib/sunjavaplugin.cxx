@@ -882,7 +882,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
    return errorcode;
 }
 
-javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
+javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist)
 {
     javaPluginError ret = javaPluginError::NONE;
     if (!pInfo || !exist)

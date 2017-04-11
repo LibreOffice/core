@@ -815,7 +815,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             std::unique_ptr<JavaInfo> aJavaInfo;
             if (JFW_E_NONE == jfw_getSelectedJRE(&aJavaInfo))
             {
-                sal_Bool bExist = false;
+                bool bExist = false;
                 if (JFW_E_NONE == jfw_existJRE(aJavaInfo.get(), &bExist))
                 {
                     if (!bExist

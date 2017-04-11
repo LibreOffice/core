@@ -314,7 +314,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     javaPluginError::Error an error occurred during execution.</br>
     javaPluginError::InvalidArg pInfo contains invalid data</br>
  */
-javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
+javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist);
 
 #endif
 

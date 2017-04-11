@@ -716,7 +716,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(rtl_uString * sLocation);
     @param pInfo
         [in]  the JavaInfo object with information about the JRE.
     @param pp_exist
-        [out] the parameter is set to either sal_True or sal_False. The value is
+        [out] the parameter is set to either true or false. The value is
         only valid if the function returns JFW_E_NONE.
 
    @return
@@ -724,7 +724,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_addJRELocation(rtl_uString * sLocation);
     JFW_E_ERROR an error occurred during execution.</br>
     JFW_E_INVALID_ARG pInfo contains invalid data</br>
  */
-JVMFWK_DLLPUBLIC javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
+JVMFWK_DLLPUBLIC javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, bool *exist);
 
 
 /** locks this API so that it cannot be used by other threads.
