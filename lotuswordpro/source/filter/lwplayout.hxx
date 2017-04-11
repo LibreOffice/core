@@ -321,9 +321,9 @@ public:
     ~LwpLayoutMisc();
     void Read(LwpObjectStream* pStrm);
 private:
-    sal_Int32   m_nGridDistance;
-    sal_uInt16 m_nGridType;
-    LwpAtomHolder* m_pContentStyle;
+    sal_Int32     m_nGridDistance;
+    sal_uInt16    m_nGridType;
+    LwpAtomHolder m_aContentStyle;
 };
 
 class LwpMiddleLayout : public LwpVirtualLayout
@@ -400,8 +400,8 @@ protected:
     LwpObjectID m_Content;
     rtl::Reference<LwpObject> GetBasedOnStyle();
     LwpObjectID     m_TabPiece;
-    LwpLayoutStyle* m_pStyleStuff;
-    LwpLayoutMisc*  m_pMiscStuff;
+    LwpLayoutStyle  m_aStyleStuff;
+    LwpLayoutMisc   m_aMiscStuff;
     LwpObjectID     m_LayGeometry;
     LwpObjectID     m_LayScale;
     LwpObjectID     m_LayMargins;
@@ -426,7 +426,7 @@ public:
 protected:
     void Read() override;
 protected:
-    LwpUseWhen* m_pUseWhen;
+    LwpUseWhen  m_aUseWhen;
     LwpObjectID m_Position;
     LwpObjectID m_LayColumns;
     LwpObjectID m_LayGutterStuff;

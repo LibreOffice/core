@@ -462,7 +462,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
         {
             m_bHasBullet = true;
 
-            LwpOverride* pBullet= pParaStyle->GetBulletOverride();
+            const LwpOverride* pBullet= pParaStyle->GetBulletOverride();
             std::unique_ptr<LwpBulletOverride> pFinalBullet(
                 pBullet
                     ? polymorphic_downcast<LwpBulletOverride*>(pBullet->clone())
@@ -488,7 +488,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
     else
     {
 //      m_pBullOver = pParaStyle->GetBulletOverride();
-        LwpBulletOverride* pBullOver = pParaStyle->GetBulletOverride();
+        const LwpBulletOverride* pBullOver = pParaStyle->GetBulletOverride();
         if (pBullOver)
         {
             m_aSilverBulletID = pBullOver->GetSilverBullet();
