@@ -389,7 +389,7 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
     LR_ID               nId;
     TokenId             nNewId;
 
-    LotusRangeList&     rRangeList = *m_rContext.pLotusRoot->pRangeNames;
+    LotusRangeList&     rRangeList = m_rContext.pLotusRoot->maRangeNames;
 
     FuncType1*          pIndexToType;
     FuncType2*          pIndexToToken;
