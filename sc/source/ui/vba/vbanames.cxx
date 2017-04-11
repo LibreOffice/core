@@ -198,8 +198,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         uno::Reference< sheet::XCellRangeAddressable > thisRangeAdd( aAny, ::uno::UNO_QUERY_THROW);
 
         table::CellRangeAddress aAddr = thisRangeAdd->getRangeAddress();
-        ScAddress aPos( static_cast< SCCOL >( aAddr.StartColumn ) , static_cast< SCROW >( aAddr.StartRow ) , static_cast< SCTAB >(aAddr.Sheet ) );
-        uno::Any aAny2 ;
+        uno::Any aAny2;
         if ( mxNames.is() )
         {
             sal_Int32 nUnoType = 0;
