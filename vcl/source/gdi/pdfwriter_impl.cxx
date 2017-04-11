@@ -11164,10 +11164,11 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aLine.append(aSize.Height());
         aLine.append(" ]");
 
+        if (!g_bDebugDisableCompression)
+            aLine.append(" /Filter/FlateDecode");
         aLine.append(" /Length ");
 
-        sal_Int32 nLength = 0;
-        OStringBuffer aStream;
+        SvMemoryStream aStream;
         for (auto pContent : aContentStreams)
         {
             filter::PDFStreamElement* pPageStream = pContent->GetStream();
@@ -11196,21 +11197,19 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
                     continue;
                 }
 
-                nLength += aMemoryStream.GetSize();
-                aStream.append(static_cast<const sal_Char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
+                aStream.WriteBytes(aMemoryStream.GetData(), aMemoryStream.GetSize());
             }
             else
-            {
-                nLength += rPageStream.GetSize();
-                aStream.append(static_cast<const sal_Char*>(rPageStream.GetData()), rPageStream.GetSize());
-            }
+                aStream.WriteBytes(rPageStream.GetData(), rPageStream.GetSize());
         }
 
+        compressStream(&aStream);
+        sal_Int32 nLength = aStream.Tell();
         aLine.append(nLength);
 
         aLine.append(">>\nstream\n");
         // Copy the original page streams to the form XObject stream.
-        aLine.append(aStream.makeStringAndClear());
+        aLine.append(static_cast<const sal_Char*>(aStream.GetData()), aStream.GetSize());
         aLine.append("\nendstream\nendobj\n\n");
         if (!updateObject(nWrappedFormObject))
             return;
