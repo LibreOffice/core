@@ -591,21 +591,9 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
     }
 }
 
-void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
+void NodeJava::setVmParameters(std::vector<OUString> const & arOptions)
 {
-    assert( !(arOptions == nullptr && size != 0));
-    if ( ! m_vmParameters)
-        m_vmParameters = boost::optional<std::vector<OUString> >(
-            std::vector<OUString>());
-    m_vmParameters->clear();
-    if (arOptions != nullptr)
-    {
-        for (int i  = 0; i < size; i++)
-        {
-            const OUString sOption(arOptions[i]);
-            m_vmParameters->push_back(sOption);
-        }
-    }
+    m_vmParameters = boost::optional<std::vector<OUString> >(arOptions);
 }
 
 void NodeJava::addJRELocation(OUString const & sLocation)
@@ -1024,26 +1012,13 @@ bool MergedSettings::getJavaInfoAttrAutoSelect() const
     return m_javaInfo.bAutoSelect;
 }
 #endif
-void MergedSettings::getVmParametersArray(
-    rtl_uString *** parParams, sal_Int32 * size) const
+void MergedSettings::getVmParametersArray(std::vector<OUString> * parParams)
+    const
 {
-    assert(parParams != nullptr && size != nullptr);
+    assert(parParams != nullptr);
     osl::MutexGuard guard(FwkMutex::get());
 
-    *parParams = static_cast<rtl_uString **>(
-        rtl_allocateMemory(sizeof(rtl_uString*) * m_vmParams.size()));
-    if (*parParams == nullptr)
-        return;
-
-    int j=0;
-    typedef std::vector<OUString>::const_iterator it;
-    for (it i = m_vmParams.begin(); i != m_vmParams.end();
-         ++i, ++j)
-    {
-        (*parParams)[j] = i->pData;
-        rtl_uString_acquire(i->pData);
-    }
-    *size = m_vmParams.size();
+    *parParams = m_vmParams;
 }
 
 }

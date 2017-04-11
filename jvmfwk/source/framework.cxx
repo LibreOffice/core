@@ -834,8 +834,7 @@ javaFrameworkError jfw_getEnabled(bool *pbEnabled)
 }
 
 
-javaFrameworkError jfw_setVMParameters(
-    rtl_uString * * arOptions, sal_Int32 nLen)
+javaFrameworkError jfw_setVMParameters(std::vector<OUString> const & arOptions)
 {
     javaFrameworkError errcode = JFW_E_NONE;
     try
@@ -844,7 +843,7 @@ javaFrameworkError jfw_setVMParameters(
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
-        node.setVmParameters(arOptions, nLen);
+        node.setVmParameters(arOptions);
         node.write();
     }
     catch (const jfw::FrameworkException& e)
@@ -857,8 +856,7 @@ javaFrameworkError jfw_setVMParameters(
     return errcode;
 }
 
-javaFrameworkError jfw_getVMParameters(
-    rtl_uString *** parOptions, sal_Int32 * pLen)
+javaFrameworkError jfw_getVMParameters(std::vector<OUString> * parOptions)
 {
     javaFrameworkError errcode = JFW_E_NONE;
     try
@@ -868,7 +866,7 @@ javaFrameworkError jfw_getVMParameters(
             return JFW_E_DIRECT_MODE;
 
         const jfw::MergedSettings settings;
-        settings.getVmParametersArray(parOptions, pLen);
+        settings.getVmParametersArray(parOptions);
     }
     catch (const jfw::FrameworkException& e)
     {

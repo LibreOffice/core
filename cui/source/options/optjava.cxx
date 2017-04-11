@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <config_features.h>
 
 #include "optaboutconfig.hxx"
@@ -62,35 +66,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
-
-#if HAVE_FEATURE_JAVA
-
-static bool areListsEqual( const Sequence< OUString >& rListA, const Sequence< OUString >& rListB )
-{
-    bool bRet = true;
-    const sal_Int32 nLen = rListA.getLength();
-
-    if (  rListB.getLength() != nLen )
-        bRet = false;
-    else
-    {
-        const OUString* pStringA = rListA.getConstArray();
-        const OUString* pStringB = rListB.getConstArray();
-
-        for ( sal_Int32 i = 0; i < nLen; ++i )
-        {
-            if ( *pStringA++ != *pStringB++ )
-            {
-                bRet = false;
-                break;
-            }
-        }
-    }
-
-    return bRet;
-}
-
-#endif
 
 class SvxJavaListBox : public svx::SvxRadioButtonListBox
 {
@@ -138,10 +113,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", &rSet)
     , m_pParamDlg(nullptr)
     , m_pPathDlg(nullptr)
-#if HAVE_FEATURE_JAVA
-    , m_parParameters(nullptr)
-    , m_nParamSize(0)
-#endif
     , m_aResetIdle("cui options SvxJavaOptionsPage Reset")
     , xDialogListener(new ::svt::DialogClosedListener())
 {
@@ -293,21 +264,14 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
-    Sequence< OUString > aParameterList;
+    std::vector< OUString > aParameterList;
     if ( !m_pParamDlg )
     {
         m_pParamDlg = VclPtr<SvxJavaParameterDlg>::Create( this );
-        javaFrameworkError eErr = jfw_getVMParameters( &m_parParameters, &m_nParamSize );
-        if ( JFW_E_NONE == eErr && m_parParameters && m_nParamSize > 0 )
+        javaFrameworkError eErr = jfw_getVMParameters( &m_parParameters );
+        if ( JFW_E_NONE == eErr && !m_parParameters.empty() )
         {
-            rtl_uString** pParamArr = m_parParameters;
-            aParameterList.realloc( m_nParamSize );
-            OUString* pParams = aParameterList.getArray();
-            for ( sal_Int32 i = 0; i < m_nParamSize; ++i )
-            {
-                rtl_uString* pParam = *pParamArr++;
-                pParams[i] = OUString( pParam );
-            }
+            aParameterList = m_parParameters;
             m_pParamDlg->SetParameters( aParameterList );
         }
     }
@@ -319,7 +283,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 
     if ( m_pParamDlg->Execute() == RET_OK )
     {
-        if ( !areListsEqual( aParameterList, m_pParamDlg->GetParameters() ) )
+        if ( aParameterList != m_pParamDlg->GetParameters() )
         {
             aParameterList = m_pParamDlg->GetParameters();
             if ( jfw_isVMRunning() )
@@ -632,15 +596,8 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     javaFrameworkError eErr = JFW_E_NONE;
     if ( m_pParamDlg )
     {
-        Sequence< OUString > aParamList = m_pParamDlg->GetParameters();
-        sal_Int32 i, nSize = aParamList.getLength();
-        rtl_uString** pParamArr = static_cast<rtl_uString**>(rtl_allocateMemory( sizeof(rtl_uString*) * nSize ));
-        const OUString* pList = aParamList.getConstArray();
-        for ( i = 0; i < nSize; ++i )
-            pParamArr[i] = pList[i].pData;
-        eErr = jfw_setVMParameters( pParamArr, nSize );
+        eErr = jfw_setVMParameters( m_pParamDlg->GetParameters() );
         SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters");
-        rtl_freeMemory( pParamArr );
         bModified = true;
     }
 
@@ -879,13 +836,12 @@ short SvxJavaParameterDlg::Execute()
 }
 
 
-Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
+std::vector< OUString > SvxJavaParameterDlg::GetParameters() const
 {
     sal_Int32 nCount = m_pAssignedList->GetEntryCount();
-    Sequence< OUString > aParamList( nCount );
-    OUString* pArray = aParamList.getArray();
+    std::vector< OUString > aParamList;
      for ( sal_Int32 i = 0; i < nCount; ++i )
-         pArray[i] = OUString( m_pAssignedList->GetEntry(i) );
+         aParamList.push_back( m_pAssignedList->GetEntry(i) );
     return aParamList;
 }
 
@@ -897,14 +853,11 @@ void SvxJavaParameterDlg::DisableButtons()
     DisableRemoveButton();
 }
 
-void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
+void SvxJavaParameterDlg::SetParameters( std::vector< OUString > const & rParams )
 {
     m_pAssignedList->Clear();
-    sal_uLong i, nCount = rParams.getLength();
-    const OUString* pArray = rParams.getConstArray();
-    for ( i = 0; i < nCount; ++i )
+    for (auto const & sParam: rParams)
     {
-        OUString sParam = OUString( *pArray++ );
         m_pAssignedList->InsertEntry( sParam );
     }
     DisableEditButton();

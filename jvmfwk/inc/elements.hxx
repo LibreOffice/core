@@ -205,7 +205,7 @@ public:
         /java/vmParameters@xsi:nil will be set to true when write() is
         called.
      */
-    void setVmParameters(rtl_uString  * * arParameters, sal_Int32 size);
+    void setVmParameters(std::vector<OUString> const & arParameters);
 
     /** adds a location to the already existing locations.
         Note: call load() before, then add the location and then call write().
@@ -309,10 +309,7 @@ public:
     bool getJavaInfoAttrAutoSelect() const;
 #endif
 
-    /** returns an array.
-        Caller must free the strings and the array.
-     */
-    void getVmParametersArray(rtl_uString *** parParameters, sal_Int32 * size) const;
+    void getVmParametersArray(std::vector<OUString> * parParameters) const;
 
     const ::std::vector< OUString> & getJRELocations() const { return m_JRELocations;}
 };

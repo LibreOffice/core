@@ -66,9 +66,8 @@ private:
 
 #if HAVE_FEATURE_JAVA
     std::vector<std::unique_ptr<JavaInfo>> m_parJavaInfo;
-    rtl_uString**           m_parParameters;
+    std::vector<OUString>   m_parParameters;
     OUString                m_pClassPath;
-    sal_Int32               m_nParamSize;
 #endif
     OUString                m_sInstallText;
     OUString                m_sAccessibilityText;
@@ -165,8 +164,8 @@ public:
 
     virtual short           Execute() override;
 
-    css::uno::Sequence< OUString > GetParameters() const;
-    void SetParameters( css::uno::Sequence< OUString >& rParams );
+    std::vector< OUString > GetParameters() const;
+    void SetParameters( std::vector< OUString > const & rParams );
     void DisableButtons();
     void EditParameter();
 };

@@ -29,7 +29,6 @@
 
 #include <jvmfwk/jvmfwkdllapi.hxx>
 #include <rtl/byteseq.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.h>
 #include "jni.h"
@@ -587,9 +586,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(bool *pbEnabled);
     </p>
 
     @param arParameters
-    [in] contains the arguments. It can be NULL if nSize is 0.
-    @param nSize
-    [i] the size of <code>arArgs</code>
+    [in] contains the arguments.
 
     @return
     JFW_E_NONE function ran successfully.<br/>
@@ -599,21 +596,12 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(bool *pbEnabled);
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_setVMParameters(
-    rtl_uString **  arArgs, sal_Int32 nSize);
+    std::vector<OUString> const & arArgs);
 
 /** obtains the currently used start parameters.
 
-    <p>The caller needs to free the returned array with
-    <code>rtl_freeMemory</code>. The contained strings must be released with
-    <code>rtl_uString_release</code>.
-    </p>
-
     @param parParameters
     [out] on returns contains a pointer to the array of the start arguments.
-    If *parParameters is not NULL then the value is overwritten.
-    @param pSize
-    [out] on return contains the size of array returned in
-    <code>parParameters</code>
 
     @return
     JFW_E_NONE function ran successfully.<br/>
@@ -623,8 +611,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setVMParameters(
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_getVMParameters(
-    rtl_uString *** parParameters,
-    sal_Int32 * pSize);
+    std::vector<OUString> * parParameters);
 
 /** sets the user class path.
 
