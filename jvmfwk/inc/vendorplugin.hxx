@@ -101,9 +101,7 @@ enum class javaPluginError
     @return
     javaPluginError::NONE the function ran successfully.</br>
     javaPluginError::Error an error occurred during execution.</br>
-    javaPluginError::InvalidArg an argument was not valid. For example
-    <code>nSizeExcludeList</code> is greater null but <code>arExcludeList</code>
-    is NULL or NULL pointer were passed for at least on of the strings.</br>
+    javaPluginError::InvalidArg an argument was not valid.</br>
     javaPluginError::WrongVersionFormat the version strings in
     <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
     version strings.
@@ -148,9 +146,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
    @return
    javaPluginError::NONE the function ran successfully.</br>
    javaPluginError::Error an error occurred during execution.</br>
-   javaPluginError::InvalidArg an argument was not valid. For example
-    <code>nSizeExcludeList</code> is greater null but <code>arExcludeList</code>
-    is NULL, NULL pointer were passed for at least on of the strings, sLocation
+   javaPluginError::InvalidArg an argument was not valid. For example, sLocation
     is an empty string.</br>
    javaPluginError::WrongVersionFormat the version strings in
     <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
@@ -191,8 +187,6 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 
    @return
    javaPluginError::NONE the function ran successfully.</br>
-   javaPluginError::InvalidArg an argument was not valid, for example
-    <code>ppInfo</code> is an invalid pointer.
    javaPluginError::NoJre no suitable JRE could be detected at the given location. However, that
    does not mean necessarily that there is no JRE. There could be a JRE but it has
    a vendor which is not supported by this API implementation or it does not
@@ -283,9 +277,6 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     javaPluginError::Error an error occurred during execution.</br>
     javaPluginError::WrongVendor the <code>JavaInfo</code> object was not created
     in by this library and the VM cannot be started.</br>
-    javaPluginError::InvalidArg an argument was not valid. For example
-    <code>pInfo</code> or , <code>ppVM</code> or <code>ppEnv</code> are NULL.
-    </br>
     JFW_PLUGIN_E_VM_CREATION_FAILED a VM could not be created. The error was caused
     by the JRE.
  */

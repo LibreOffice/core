@@ -306,16 +306,12 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     sal_Int32 *nLenInfoList,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos)
 {
-    OSL_ASSERT(parJavaInfo);
-    OSL_ASSERT(nLenInfoList);
-    if (!parJavaInfo || !nLenInfoList)
-        return javaPluginError::InvalidArg;
+    assert(parJavaInfo);
+    assert(nLenInfoList);
 
     //nLenlist contains the number of elements in arExcludeList.
     //If no exclude list is provided then nLenList must be 0
-    OSL_ASSERT( ! (arExcludeList == nullptr && nLenList > 0));
-    if (arExcludeList == nullptr && nLenList > 0)
-        return javaPluginError::InvalidArg;
+    assert( ! (arExcludeList == nullptr && nLenList > 0));
 
     OSL_ASSERT(!sVendor.isEmpty());
     if (sVendor.isEmpty())
@@ -371,17 +367,14 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     sal_Int32  nLenList,
     JavaInfo ** ppInfo)
 {
-    if (!ppInfo)
-        return javaPluginError::InvalidArg;
+    assert(ppInfo != nullptr);
     OSL_ASSERT(!sPath.isEmpty());
     if (sPath.isEmpty())
         return javaPluginError::InvalidArg;
 
     //nLenlist contains the number of elements in arExcludeList.
     //If no exclude list is provided then nLenList must be 0
-    OSL_ASSERT( ! (arExcludeList == nullptr && nLenList > 0));
-    if (arExcludeList == nullptr && nLenList > 0)
-        return javaPluginError::InvalidArg;
+    assert( ! (arExcludeList == nullptr && nLenList > 0));
 
     OSL_ASSERT(!sVendor.isEmpty());
     if (sVendor.isEmpty())
@@ -407,8 +400,7 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
     std::vector<pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
     JavaInfo ** ppInfo, std::vector<rtl::Reference<VendorBase>> & infos)
 {
-    if (!ppInfo)
-        return javaPluginError::InvalidArg;
+    assert(ppInfo);
 
     std::vector<rtl::Reference<VendorBase>> infoJavaHome;
     addJavaInfoFromJavaHome(infos, infoJavaHome);
