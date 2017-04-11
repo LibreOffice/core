@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -140,75 +139,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103931, "tdf103931.docx")
     // This was 2, the last (empty) section of the document was lost on import.
     // (import test only: Columns/Sections do not round-trip well)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xTextSections->getCount());
-}
-
-DECLARE_OOXMLIMPORT_TEST(testTdf103975_notPageBreakB, "tdf103975_notPageBreakB.docx")
-{
-    // turn on View Formatting Marks to see these documents.
-    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
-
-    xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(2), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
-
-    xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(3), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
-
-    xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(4), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
-
-    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
-    CPPUNIT_ASSERT_EQUAL( 4, getParagraphs() );
-    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
-}
-
-DECLARE_OOXMLIMPORT_TEST(testTdf103975_notPageBreakC, "tdf103975_notPageBreakC.docx")
-{
-    // turn on View Formatting Marks to see these documents.
-    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
-
-    xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(2), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
-
-    xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(3), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
-
-    xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(4), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
-
-    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
-    CPPUNIT_ASSERT_EQUAL( 4, getParagraphs() );
-    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
-}
-
-DECLARE_OOXMLIMPORT_TEST(testTdf103975_notPageBreakD, "tdf103975_notPageBreakD.docx")
-{
-    // The problem was that the column break was moving outside of the columns, making a page break.
-    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
-    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
-}
-
-DECLARE_OOXMLIMPORT_TEST(testTdf103975_notPageBreakE, "tdf103975_notPageBreakE.docx")
-{
-    // The problem was that the column break was getting lost.
-    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN751017, "n751017.docx")

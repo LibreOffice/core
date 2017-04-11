@@ -3306,10 +3306,16 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
             const bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
-            if (pContext && (m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark() || bSingleParagraph))
+            if (pContext && !pContext->GetFootnote().is())
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
-                    pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
+                {
+                    if (m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())
+                    {
+                        pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
+                        m_pImpl->clearDeferredBreaks();
+                    }
+                }
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
                 {
                     if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
@@ -3320,8 +3326,8 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                     }
 
                     pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
+                    m_pImpl->clearDeferredBreaks();
                 }
-                m_pImpl->clearDeferredBreaks();
             }
 
             // If the paragraph contains only the section properties and it has
