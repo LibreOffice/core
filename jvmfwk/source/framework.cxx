@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 #include <memory>
 #include "rtl/ustring.hxx"
 #include "rtl/bootstrap.hxx"
@@ -49,11 +52,10 @@ bool areEqualJavaInfo(
 
 javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparInfo)
 {
+    assert(pparInfo != nullptr);
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (pparInfo == nullptr)
-            return JFW_E_INVALID_ARG;
         pparInfo->clear();
 
         jfw::VendorSettings aVendorSettings;
@@ -191,9 +193,9 @@ javaFrameworkError jfw_startVM(
     JavaInfo const * pInfo, JavaVMOption * arOptions, sal_Int32 cOptions,
     JavaVM ** ppVM, JNIEnv ** ppEnv)
 {
+    assert(cOptions == 0 || arOptions != nullptr);
+    assert(ppVM != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
-    if (cOptions > 0 && arOptions == nullptr)
-        return JFW_E_INVALID_ARG;
 
     try
     {
@@ -203,9 +205,6 @@ javaFrameworkError jfw_startVM(
         //been created.
         if (g_pJavaVM != nullptr)
             return JFW_E_RUNNING_JVM;
-
-        if (ppVM == nullptr)
-            return JFW_E_INVALID_ARG;
 
         std::vector<OString> vmParams;
         OString sUserClassPath;
@@ -634,12 +633,11 @@ bool jfw_areEqualJavaInfo(JavaInfo const * pInfoA,JavaInfo const * pInfoB)
 
 javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
 {
+    assert(ppInfo != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (ppInfo == nullptr)
-            return JFW_E_INVALID_ARG;
 
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
         {
@@ -692,12 +690,12 @@ bool jfw_isVMRunning()
 
 javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, std::unique_ptr<JavaInfo> *ppInfo)
 {
+    assert(pPath != nullptr);
+    assert(ppInfo != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (pPath == nullptr || ppInfo == nullptr)
-            return JFW_E_INVALID_ARG;
 
         OUString ouPath(pPath);
 
@@ -825,14 +823,13 @@ javaFrameworkError jfw_setEnabled(bool bEnabled)
 
 javaFrameworkError jfw_getEnabled(bool *pbEnabled)
 {
+    assert(pbEnabled != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (pbEnabled == nullptr)
-            return JFW_E_INVALID_ARG;
         jfw::MergedSettings settings;
         *pbEnabled = settings.getEnabled();
     }
@@ -856,8 +853,6 @@ javaFrameworkError jfw_setVMParameters(
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
-        if (arOptions == nullptr && nLen != 0)
-            return JFW_E_INVALID_ARG;
         node.setVmParameters(arOptions, nLen);
         node.write();
     }
@@ -881,8 +876,6 @@ javaFrameworkError jfw_getVMParameters(
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
 
-        if (parOptions == nullptr || pLen == nullptr)
-            return JFW_E_INVALID_ARG;
         const jfw::MergedSettings settings;
         settings.getVmParametersArray(parOptions, pLen);
     }
@@ -897,6 +890,7 @@ javaFrameworkError jfw_getVMParameters(
 
 javaFrameworkError jfw_setUserClassPath(rtl_uString * pCp)
 {
+    assert(pCp != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
@@ -904,8 +898,6 @@ javaFrameworkError jfw_setUserClassPath(rtl_uString * pCp)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
-        if (pCp == nullptr)
-            return JFW_E_INVALID_ARG;
         node.setUserClassPath(pCp);
         node.write();
     }
@@ -920,14 +912,13 @@ javaFrameworkError jfw_setUserClassPath(rtl_uString * pCp)
 
 javaFrameworkError jfw_getUserClassPath(rtl_uString ** ppCP)
 {
+    assert(ppCP != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        if (ppCP == nullptr)
-            return JFW_E_INVALID_ARG;
         const jfw::MergedSettings settings;
         *ppCP = settings.getUserClassPath().pData;
         rtl_uString_acquire(*ppCP);
@@ -950,8 +941,6 @@ javaFrameworkError jfw_addJRELocation(rtl_uString * sLocation)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         jfw::NodeJava node(jfw::NodeJava::USER);
-        if (sLocation == nullptr)
-            return JFW_E_INVALID_ARG;
         node.load();
         node.addJRELocation(sLocation);
         node.write();

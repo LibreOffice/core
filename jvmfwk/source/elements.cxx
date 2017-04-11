@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "elements.hxx"
 #include "osl/mutex.hxx"
 #include "osl/file.hxx"
@@ -626,7 +630,7 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
 
 void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
 {
-    OSL_ASSERT( !(arOptions == nullptr && size != 0));
+    assert( !(arOptions == nullptr && size != 0));
     if ( ! m_vmParameters)
         m_vmParameters = boost::optional<std::vector<OUString> >(
             std::vector<OUString>());
@@ -643,7 +647,7 @@ void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
 
 void NodeJava::addJRELocation(rtl_uString * sLocation)
 {
-    OSL_ASSERT( sLocation);
+    assert( sLocation);
     if (!m_JRELocations)
         m_JRELocations = boost::optional<std::vector<OUString> >(
             std::vector<OUString> ());
@@ -1062,8 +1066,8 @@ bool MergedSettings::getJavaInfoAttrAutoSelect() const
 void MergedSettings::getVmParametersArray(
     rtl_uString *** parParams, sal_Int32 * size) const
 {
+    assert(parParams != nullptr && size != nullptr);
     osl::MutexGuard guard(FwkMutex::get());
-    OSL_ASSERT(parParams != nullptr && size != nullptr);
 
     *parParams = static_cast<rtl_uString **>(
         rtl_allocateMemory(sizeof(rtl_uString*) * m_vmParams.size()));

@@ -194,7 +194,6 @@ enum javaFrameworkError
 {
     JFW_E_NONE,
     JFW_E_ERROR,
-    JFW_E_INVALID_ARG,
     JFW_E_NO_SELECT,
     JFW_E_INVALID_SETTINGS,
     JFW_E_NEED_RESTART,
@@ -384,7 +383,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInf
 
     @return
     JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALID_ARG parInfo was NULL<br/>
     JFW_E_ERROR an error occurred. <br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.
@@ -413,7 +411,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAllJREs(
 
    @return
    JFW_E_NONE function ran successfully.<br/>
-   JFW_E_INVALID_ARG at least on of the parameters was NULL<br/>
    JFW_E_ERROR an error occurred. <br/>
    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
    were not met.</br>
@@ -468,8 +465,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(
 
     @return
     JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALID_ARG <code>ppVM</code>, <code>ppEnv</code> are NULL or
-    <code>arOptions</code> was NULL but <code>nSize</code> was greater 0.<br/>
     JFW_E_ERROR an error occurred. <br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.</br>
@@ -542,7 +537,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo);
 
     @return
     JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALIDARG <code>ppInfo</code> is a NULL.<br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>
     JFW_E_INVALID_SETTINGS the javavendors.xml has been changed and no
@@ -576,7 +570,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setEnabled(bool bEnabled);
 
    @return
    JFW_E_NONE function ran successfully.<br/>
-   JFW_E_INVALIDARG pbEnabled is NULL<br/>
    JFW_E_ERROR An error occurred.<br/>
    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>
@@ -600,7 +593,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getEnabled(bool *pbEnabled);
 
     @return
     JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALIDARG arArgs is NULL and nSize is not 0
     JFW_E_ERROR An error occurred.<br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>
@@ -625,7 +617,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setVMParameters(
 
     @return
     JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALIDARG parParameters or pSize are  NULL<br/>
     JFW_E_ERROR An error occurred.<br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>
@@ -647,7 +638,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getVMParameters(
 
    @return
    JFW_E_NONE function ran successfully.<br/>
-   JFW_E_INVALIDARG pCP is NULL.<br/>
    JFW_E_ERROR An error occurred.<br/>
    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>
@@ -666,7 +656,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_setUserClassPath(rtl_uString * pCP);
 
    @return
    JFW_E_NONE function ran successfully.<br/>
-   JFW_E_INVALIDARG ppCP is NULL.<br/>
    JFW_E_ERROR An error occurred.<br/>
    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>
@@ -694,7 +683,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getUserClassPath(rtl_uString ** ppCP);
 
     @return
     JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALIDARG sLocation is NULL.<br/>
     JFW_E_ERROR An error occurred.<br/>
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>

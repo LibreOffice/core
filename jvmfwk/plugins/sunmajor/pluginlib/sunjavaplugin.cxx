@@ -645,14 +645,15 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JavaVM ** ppVm,
     JNIEnv ** ppEnv)
 {
+    assert(pInfo != nullptr);
+    assert(ppVm != nullptr);
+    assert(ppEnv != nullptr);
     // unless guard is volatile the following warning occurs on gcc:
     // warning: variable 't' might be clobbered by `longjmp' or `vfork'
     volatile osl::MutexGuard guard(PluginMutex::get());
     // unless errorcode is volatile the following warning occurs on gcc:
     // warning: variable 'errorcode' might be clobbered by `longjmp' or `vfork'
     volatile javaPluginError errorcode = javaPluginError::NONE;
-    if ( pInfo == nullptr || ppVm == nullptr || ppEnv == nullptr)
-        return javaPluginError::InvalidArg;
     //Check if the Vendor (pInfo->sVendor) is supported by this plugin
     if ( ! isVendorSupported(pInfo->sVendor))
         return javaPluginError::WrongVendor;
