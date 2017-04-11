@@ -86,7 +86,7 @@ public:
     bool forget();
 
     /** Flag that this instance is in Undo, so drawing layer owns it. */
-    void setInUndo();
+    void setNotOwner();
 
     oslInterlockedCount getRefs() const;
 
@@ -104,7 +104,7 @@ private:
     Head*                 mpHead;       ///< points to the "master" entry
     mutable ScCaptionPtr* mpNext;       ///< next in list
     SdrCaptionObj*        mpCaption;    ///< the caption object, managed by head master
-    bool                  mbInUndo;     ///< whether this caption object is held in Undo
+    bool                  mbNotOwner;   ///< whether this caption object is owned by something else, e.g. held in Undo
                                             /* TODO: can that be moved to Head?
                                              * It's unclear when to reset, so
                                              * each instance has its own flag.
