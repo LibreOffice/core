@@ -1085,7 +1085,10 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
     xStore->storeToURL( sTargetTempURL, aValues   );
 
     //create the send dialog
-    VclPtr<SwSendMailDialog> pDlg = VclPtr<SwSendMailDialog>::Create(pButton, *xConfigItem);
+    vcl::Window* pParent = getNonLayoutParent(pButton);
+    vcl::Window* pParentParent = getNonLayoutParent(pParent);
+
+    VclPtr<SwSendMailDialog> pDlg = VclPtr<SwSendMailDialog>::Create(pParentParent, *xConfigItem);
     pDlg->SetDocumentCount( nEnd );
     pDlg->ShowDialog();
     //help to force painting the dialog
@@ -1093,6 +1096,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
     //predetermined breaking point
     for ( sal_Int16 i = 0; i < 25; i++)
         Application::Reschedule();
+    endDialog(pButton);
     for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)
     {
         SwDocMergeInfo& rInfo = xConfigItem->GetDocumentMergeInfo(nDoc);
@@ -1246,7 +1250,6 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
     pDlg->EnableDesctruction();
     ::osl::File::remove( sTargetTempURL );
 
-    endDialog(pButton);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -336,7 +336,6 @@ void SwSendMailDialog::dispose()
     m_pStatusHB.clear();
     m_pStop.clear();
     m_pClose.clear();
-    ModelessDialog::dispose();
 }
 
 void SwSendMailDialog::AddDocument( SwMailDescriptor& rDesc )
