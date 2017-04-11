@@ -273,6 +273,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
 
     pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RETURN);
     pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RETURN);
+    processEventsToIdle();
     pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::UP);
     pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::UP);
     processEventsToIdle();
@@ -300,6 +301,7 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
 
     pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RETURN);
     pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RETURN);
+    processEventsToIdle();
     pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::UP);
     pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::UP);
     processEventsToIdle();
