@@ -160,14 +160,14 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_EDIT_FORMULA:
                 {
                     SwWrtShell* pSh = nullptr;
-                    int nSelection = 0;
+                    SelectionType nSelection = SelectionType::NONE;
                     if( pActView )
                         pSh = &pActView->GetWrtShell();
                     if( pSh )
                         nSelection = pSh->GetSelectionType();
 
                     if( (pSh && pSh->HasSelection()) ||
-                        !(nSelection & (nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL)))
+                        !(nSelection & (SelectionType::Text | SelectionType::Table)))
                         rSet.DisableItem(nWhich);
                 }
             break;

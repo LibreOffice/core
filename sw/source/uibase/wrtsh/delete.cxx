@@ -118,8 +118,8 @@ void SwWrtShell::DelToEndOfLine()
 long SwWrtShell::DelLeft()
 {
     // If it's a Fly, throw it away
-    int nSelType = GetSelectionType();
-    const int nCmp = nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW;
+    SelectionType nSelType = GetSelectionType();
+    const SelectionType nCmp = SelectionType::Frame | SelectionType::Graphic | SelectionType::Ole | SelectionType::DrawObject;
     if( nCmp & nSelType )
     {
         // #108205# Remember object's position.
@@ -233,22 +233,22 @@ long SwWrtShell::DelLeft()
 long SwWrtShell::DelRight()
 {
         // Will be or'ed, if a tableselection exists;
-        // will here be implemented on nsSelectionType::SEL_TBL
+        // will here be implemented on SelectionType::Table
     long nRet = 0;
-    int nSelection = GetSelectionType();
-    if(nSelection & nsSelectionType::SEL_TBL_CELLS)
-        nSelection = nsSelectionType::SEL_TBL;
-    if(nSelection & nsSelectionType::SEL_TXT)
-        nSelection = nsSelectionType::SEL_TXT;
+    SelectionType nSelection = GetSelectionType();
+    if(nSelection & SelectionType::TableCell)
+        nSelection = SelectionType::Table;
+    if(nSelection & SelectionType::Text)
+        nSelection = SelectionType::Text;
 
     const SwTableNode * pWasInTableNd = nullptr;
 
-    switch( nSelection & ~(nsSelectionType::SEL_BEZ) )
+    switch( nSelection & ~(SelectionType::Ornament) )
     {
-    case nsSelectionType::SEL_POSTIT:
-    case nsSelectionType::SEL_TXT:
-    case nsSelectionType::SEL_TBL:
-    case nsSelectionType::SEL_NUM:
+    case SelectionType::PostIt:
+    case SelectionType::Text:
+    case SelectionType::Table:
+    case SelectionType::NumberList:
             //  If a selection exists, erase it.
         if( IsSelection() )
         {
@@ -279,7 +279,7 @@ long SwWrtShell::DelRight()
 
         pWasInTableNd = IsCursorInTable();
 
-        if( nsSelectionType::SEL_TXT & nSelection && SwCursorShell::IsSttPara() &&
+        if( SelectionType::Text & nSelection && SwCursorShell::IsSttPara() &&
             SwCursorShell::IsEndPara() )
         {
             // save cursor
@@ -357,12 +357,12 @@ long SwWrtShell::DelRight()
         CloseMark( 0 != nRet );
         break;
 
-    case nsSelectionType::SEL_FRM:
-    case nsSelectionType::SEL_GRF:
-    case nsSelectionType::SEL_OLE:
-    case nsSelectionType::SEL_DRW:
-    case nsSelectionType::SEL_DRW_TXT:
-    case nsSelectionType::SEL_DRW_FORM:
+    case SelectionType::Frame:
+    case SelectionType::Graphic:
+    case SelectionType::Ole:
+    case SelectionType::DrawObject:
+    case SelectionType::DrawObjectEditMode:
+    case SelectionType::DbForm:
         {
             // #108205# Remember object's position.
             Point aTmpPt = GetObjRect().TopLeft();
@@ -393,10 +393,10 @@ long SwWrtShell::DelRight()
         // <IsFrameSelected()> can't be true - see above.
         {
             nSelection = GetSelectionType();
-            if ( nsSelectionType::SEL_FRM & nSelection ||
-                 nsSelectionType::SEL_GRF & nSelection ||
-                 nsSelectionType::SEL_OLE & nSelection ||
-                 nsSelectionType::SEL_DRW & nSelection )
+            if ( SelectionType::Frame & nSelection ||
+                 SelectionType::Graphic & nSelection ||
+                 SelectionType::Ole & nSelection ||
+                 SelectionType::DrawObject & nSelection )
             {
                 EnterSelFrameMode();
                 GotoNextFly();
@@ -404,6 +404,7 @@ long SwWrtShell::DelRight()
         }
         nRet = 1;
         break;
+    default: break;
     }
     return nRet;
 }

@@ -37,8 +37,8 @@ public:
      * Test if the object contains text or paragraph attribute
      */
     bool HasContent() const;
-    bool HasContentForThisType( int nSelectionType ) const;
-    static bool CanCopyThisType( int nSelectionType );
+    bool HasContentForThisType( SelectionType nSelectionType ) const;
+    static bool CanCopyThisType( SelectionType nSelectionType );
 
     /**
      * Store/Backup the text and paragraph attribute of the current selection.
@@ -66,7 +66,7 @@ public:
     void Erase();
 
 private:
-    int         m_nSelectionType;
+    SelectionType m_nSelectionType;
 
     /** automatic/named character attribute set */
     SfxItemSet* m_pItemSet_TextAttr;

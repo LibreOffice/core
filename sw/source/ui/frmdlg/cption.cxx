@@ -123,9 +123,9 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
      uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
 
     eType = rSh.GetSelectionType();
-    if ( eType & nsSelectionType::SEL_OLE )
+    if ( eType & SelectionType::Ole )
     {
-        eType = nsSelectionType::SEL_GRF;
+        eType = SelectionType::Graphic;
          uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
         xNameAccess = xObjs->getEmbeddedObjects();
     }
@@ -153,7 +153,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
 
     OUString sString;
     sal_uInt16 nPoolId = 0;
-    if (eType & nsSelectionType::SEL_GRF)
+    if (eType & SelectionType::Graphic)
     {
         nPoolId = RES_POOLCOLL_LABEL_ABB;
         sString = ::GetOldGrfCat();
@@ -167,7 +167,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         }
 
     }
-    else if( eType & nsSelectionType::SEL_TBL )
+    else if( eType & SelectionType::Table )
     {
         nPoolId = RES_POOLCOLL_LABEL_TABLE;
         sString = ::GetOldTabCat();
@@ -175,7 +175,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         xNameAccess = xTables->getTextTables();
         sObjectName = rSh.GetTableFormat()->GetName();
     }
-    else if( eType & nsSelectionType::SEL_FRM )
+    else if( eType & SelectionType::Frame )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
         sString = ::GetOldFrameCat();
@@ -183,12 +183,12 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         xNameAccess = xFrames->getTextFrames();
         sObjectName = rSh.GetFlyName();
     }
-    else if( eType == nsSelectionType::SEL_TXT )
+    else if( eType == SelectionType::Text )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
         sString = ::GetOldFrameCat();
     }
-    else if( eType & nsSelectionType::SEL_DRW )
+    else if( eType & SelectionType::DrawObject )
     {
         nPoolId = RES_POOLCOLL_LABEL_DRAWING;
         sString = ::GetOldDrwCat();
@@ -226,23 +226,22 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     }
 
     // aPosBox
-    switch (eType)
+    if (eType == SelectionType::Graphic
+        || eType == SelectionType::Table
+        || eType == (SelectionType::Table | SelectionType::NumberList)
+        || eType == (SelectionType::Table | SelectionType::Text)
+        || eType == (SelectionType::Table | SelectionType::NumberList | SelectionType::Text)
+        || eType == SelectionType::DrawObject
+        || eType == (SelectionType::DrawObject | SelectionType::Ornament))
     {
-        case nsSelectionType::SEL_GRF:
-        case nsSelectionType::SEL_TBL:
-        case nsSelectionType::SEL_TBL | nsSelectionType::SEL_NUM:
-        case nsSelectionType::SEL_TBL | nsSelectionType::SEL_TXT:
-        case nsSelectionType::SEL_TBL | nsSelectionType::SEL_NUM | nsSelectionType::SEL_TXT:
-        case nsSelectionType::SEL_DRW:
-        case nsSelectionType::SEL_DRW | nsSelectionType::SEL_BEZ:
-            m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_ABOVE));
-            m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_BELOW));
-            break;
-        case nsSelectionType::SEL_FRM:
-        case nsSelectionType::SEL_TXT:
-            m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_BEGINNING));
-            m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_END     ));
-            break;
+        m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_ABOVE));
+        m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_BELOW));
+    }
+    else if(eType == SelectionType::Frame
+            || eType == SelectionType::Text)
+    {
+        m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_BEGINNING));
+        m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_END     ));
     }
     m_pPosBox->SelectEntryPos(1);
 

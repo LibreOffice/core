@@ -210,7 +210,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         // pagebreak only when the cursor is in the body-area and not in a table
         const FrameTypeFlags eType = rSh.GetFrameType(nullptr,true);
         if( !(FrameTypeFlags::BODY & eType) ||
-            rSh.GetSelectionType() & nsSelectionType::SEL_TBL )
+            rSh.GetSelectionType() & SelectionType::Table )
         {
             aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,true));
             rPage.PageCreated(aSet);
@@ -228,7 +228,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
             // pagebreak only when the cursor is in the body-area and not in a table
             const FrameTypeFlags eType = rSh.GetFrameType(nullptr,true);
             if(!(FrameTypeFlags::BODY & eType) ||
-                rSh.GetSelectionType() & nsSelectionType::SEL_TBL)
+                rSh.GetSelectionType() & SelectionType::Table)
             {
                 aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,true));
                 rPage.PageCreated(aSet);

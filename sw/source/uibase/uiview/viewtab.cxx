@@ -1408,9 +1408,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             if ( dynamic_cast< const SwWebView *>( this ) !=  nullptr ||
                  IsTabColFromDoc() ||
                  IsTabRowFromDoc() ||
-                 ( nSelType & nsSelectionType::SEL_GRF ) ||
-                 ( nSelType & nsSelectionType::SEL_FRM ) ||
-                 ( nSelType & nsSelectionType::SEL_OLE ) ||
+                 ( nSelType & SelectionType::Graphic ) ||
+                 ( nSelType & SelectionType::Frame ) ||
+                 ( nSelType & SelectionType::Ole ) ||
                  ( SfxItemState::DEFAULT > aCoreSet.GetItemState(RES_LR_SPACE) ) ||
                  (!bVerticalWriting && (SID_ATTR_TABSTOP_VERTICAL == nWhich) ) ||
                  ( bVerticalWriting && (RES_PARATR_TABSTOP == nWhich))
@@ -1449,9 +1449,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_ATTR_PARA_RIGHTSPACE:
         case SID_ATTR_PARA_FIRSTLINESPACE:
         {
-            if ( nSelType & nsSelectionType::SEL_GRF ||
-                 nSelType & nsSelectionType::SEL_FRM ||
-                 nSelType & nsSelectionType::SEL_OLE ||
+            if ( nSelType & SelectionType::Graphic ||
+                 nSelType & SelectionType::Frame ||
+                 nSelType & SelectionType::Ole ||
                  nFrameType == FrameTypeFlags::DRAWOBJ ||
                  (!bVerticalWriting && (SID_ATTR_PARA_LRSPACE_VERTICAL == nWhich)) ||
                  ( bVerticalWriting && (SID_ATTR_PARA_LRSPACE == nWhich))
@@ -1524,9 +1524,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             m_nLeftBorderDistance = 0;
             m_nRightBorderDistance = 0;
-            if ( nSelType & nsSelectionType::SEL_GRF ||
-                    nSelType & nsSelectionType::SEL_FRM ||
-                    nSelType & nsSelectionType::SEL_OLE ||
+            if ( nSelType & SelectionType::Graphic ||
+                    nSelType & SelectionType::Frame ||
+                    nSelType & SelectionType::Ole ||
                     nFrameType == FrameTypeFlags::DRAWOBJ )
                 rSet.DisableItem(SID_RULER_BORDER_DISTANCE);
             else
@@ -1632,9 +1632,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
         case SID_RULER_TEXT_RIGHT_TO_LEFT:
         {
-            if ( nSelType & nsSelectionType::SEL_GRF ||
-                    nSelType & nsSelectionType::SEL_FRM ||
-                    nSelType & nsSelectionType::SEL_OLE ||
+            if ( nSelType & SelectionType::Graphic ||
+                    nSelType & SelectionType::Frame ||
+                    nSelType & SelectionType::Ole ||
                     nFrameType == FrameTypeFlags::DRAWOBJ)
                 rSet.DisableItem(nWhich);
             else

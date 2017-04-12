@@ -178,9 +178,9 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
         bool bShowCB = m_bFormat;
         if( !m_bFormat )
         {
-            int nSelType = m_pWrtSh->GetSelectionType();
-            if( ( nSelType & nsSelectionType::SEL_GRF ) ||
-                ( nSelType & nsSelectionType::SEL_OLE && GraphicType::NONE !=
+            SelectionType nSelType = m_pWrtSh->GetSelectionType();
+            if( ( nSelType & SelectionType::Graphic ) ||
+                ( nSelType & SelectionType::Ole && GraphicType::NONE !=
                             m_pWrtSh->GetIMapGraphic().GetType() ))
                 bShowCB = true;
         }

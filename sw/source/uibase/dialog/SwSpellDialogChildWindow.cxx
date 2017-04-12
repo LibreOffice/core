@@ -208,7 +208,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                 else
                 {
                     // the selection type has to be checked again - both text types are possible
-                    if(0 != (pWrtShell->GetSelectionType()& nsSelectionType::SEL_DRW_TXT))
+                    if(pWrtShell->GetSelectionType() & SelectionType::DrawObjectEditMode)
                         bDrawText = true;
                     bNormalText = !bDrawText;
                 }

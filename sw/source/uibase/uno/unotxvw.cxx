@@ -860,9 +860,9 @@ bool SwXTextViewCursor::IsTextSelection( bool bAllowTables ) const
         //! m_pView->GetShellMode() will only work after the shell
         //! has already changed and thus can not be used here!
         SelectionType eSelType = m_pView->GetWrtShell().GetSelectionType();
-        bRes =  ( (nsSelectionType::SEL_TXT & eSelType) ||
-                  (nsSelectionType::SEL_NUM & eSelType) )  &&
-                (!(nsSelectionType::SEL_TBL_CELLS & eSelType) || bAllowTables);
+        bRes =  ( (SelectionType::Text & eSelType) ||
+                  (SelectionType::NumberList & eSelType) )  &&
+                (!(SelectionType::TableCell & eSelType) || bAllowTables);
     }
     return bRes;
 }

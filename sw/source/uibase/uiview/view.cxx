@@ -142,15 +142,15 @@ SfxDispatcher &SwView::GetDispatcher()
     return *GetViewFrame()->GetDispatcher();
 }
 
-void SwView::ImpSetVerb( int nSelType )
+void SwView::ImpSetVerb( SelectionType nSelType )
 {
     bool bResetVerbs = m_bVerbsActive;
     if ( !GetViewFrame()->GetFrame().IsInPlace() &&
-         (nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) & nSelType )
+         (SelectionType::Ole|SelectionType::Graphic) & nSelType )
     {
         if ( m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE )
         {
-            if ( nSelType & nsSelectionType::SEL_OLE )
+            if ( nSelType & SelectionType::Ole )
             {
                 SetVerbs( GetWrtShell().GetOLEObject()->getSupportedVerbs() );
                 m_bVerbsActive = true;
@@ -236,17 +236,17 @@ void SwView::SelectShell()
     m_pLastTableFormat = pCurTableFormat;
 
     //SEL_TBL and SEL_TBL_CELLS can be ORed!
-    int nNewSelectionType = (m_pWrtShell->GetSelectionType()
-                                & ~nsSelectionType::SEL_TBL_CELLS);
+    SelectionType nNewSelectionType = (m_pWrtShell->GetSelectionType()
+                                & ~SelectionType::TableCell);
 
     if ( m_pFormShell && m_pFormShell->IsActiveControl() )
-        nNewSelectionType |= nsSelectionType::SEL_FOC_FRM_CTRL;
+        nNewSelectionType |= SelectionType::FormControl;
 
     if ( nNewSelectionType == m_nSelectionType )
     {
         GetViewFrame()->GetBindings().InvalidateAll( false );
-        if ( m_nSelectionType & nsSelectionType::SEL_OLE ||
-             m_nSelectionType & nsSelectionType::SEL_GRF )
+        if ( m_nSelectionType & SelectionType::Ole ||
+             m_nSelectionType & SelectionType::Graphic )
             // For graphs and OLE the verb can be modified of course!
             ImpSetVerb( nNewSelectionType );
     }
@@ -298,72 +298,72 @@ void SwView::SelectShell()
         m_nSelectionType = nNewSelectionType;
         ShellMode eShellMode;
 
-        if ( !( m_nSelectionType & nsSelectionType::SEL_FOC_FRM_CTRL ) )
+        if ( !( m_nSelectionType & SelectionType::FormControl ) )
             rDispatcher.Push( *m_pFormShell );
 
         m_pShell = new SwNavigationShell( *this );
         rDispatcher.Push( *m_pShell );
 
-        if ( m_nSelectionType & nsSelectionType::SEL_OLE )
+        if ( m_nSelectionType & SelectionType::Ole )
         {
             eShellMode = ShellMode::Object;
             m_pShell = new SwOleShell( *this );
             rDispatcher.Push( *m_pShell );
         }
-        else if ( m_nSelectionType & nsSelectionType::SEL_FRM
-            || m_nSelectionType & nsSelectionType::SEL_GRF)
+        else if ( m_nSelectionType & SelectionType::Frame
+            || m_nSelectionType & SelectionType::Graphic)
         {
             eShellMode = ShellMode::Frame;
             m_pShell = new SwFrameShell( *this );
             rDispatcher.Push( *m_pShell );
-            if(m_nSelectionType & nsSelectionType::SEL_GRF )
+            if(m_nSelectionType & SelectionType::Graphic )
             {
                 eShellMode = ShellMode::Graphic;
                 m_pShell = new SwGrfShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
         }
-        else if ( m_nSelectionType & nsSelectionType::SEL_DRW )
+        else if ( m_nSelectionType & SelectionType::DrawObject )
         {
             eShellMode = ShellMode::Draw;
             m_pShell = new SwDrawShell( *this );
             rDispatcher.Push( *m_pShell );
 
-            if ( m_nSelectionType & nsSelectionType::SEL_BEZ )
+            if ( m_nSelectionType & SelectionType::Ornament )
             {
                 eShellMode = ShellMode::Bezier;
                 m_pShell = new SwBezierShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
 #if HAVE_FEATURE_AVMEDIA
-            else if( m_nSelectionType & nsSelectionType::SEL_MEDIA )
+            else if( m_nSelectionType & SelectionType::Media )
             {
                 eShellMode = ShellMode::Media;
                 m_pShell = new SwMediaShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
 #endif
-            if (m_nSelectionType & nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE)
+            if (m_nSelectionType & SelectionType::ExtrudedCustomShape)
             {
                 eShellMode = ShellMode::ExtrudedCustomShape;
                 m_pShell = new svx::ExtrusionBar(this);
                 rDispatcher.Push( *m_pShell );
             }
-            if (m_nSelectionType & nsSelectionType::SEL_FONTWORK)
+            if (m_nSelectionType & SelectionType::FontWork)
             {
                 eShellMode = ShellMode::FontWork;
                 m_pShell = new svx::FontworkBar(this);
                 rDispatcher.Push( *m_pShell );
             }
         }
-        else if ( m_nSelectionType & nsSelectionType::SEL_DRW_FORM )
+        else if ( m_nSelectionType & SelectionType::DbForm )
         {
             eShellMode = ShellMode::DrawForm;
             m_pShell = new SwDrawFormShell( *this );
 
             rDispatcher.Push( *m_pShell );
         }
-        else if ( m_nSelectionType & nsSelectionType::SEL_DRW_TXT )
+        else if ( m_nSelectionType & SelectionType::DrawObjectEditMode )
         {
             bSetExtInpCntxt = true;
             eShellMode = ShellMode::DrawText;
@@ -371,7 +371,7 @@ void SwView::SelectShell()
             m_pShell = new SwDrawTextShell( *this );
             rDispatcher.Push( *m_pShell );
         }
-        else if ( m_nSelectionType & nsSelectionType::SEL_POSTIT )
+        else if ( m_nSelectionType & SelectionType::PostIt )
         {
             eShellMode = ShellMode::PostIt;
             m_pShell = new SwAnnotationShell( *this );
@@ -381,7 +381,7 @@ void SwView::SelectShell()
         {
             bSetExtInpCntxt = true;
             eShellMode = ShellMode::Text;
-            if ( m_nSelectionType & nsSelectionType::SEL_NUM )
+            if ( m_nSelectionType & SelectionType::NumberList )
             {
                 eShellMode = ShellMode::ListText;
                 m_pShell = new SwListShell( *this );
@@ -389,7 +389,7 @@ void SwView::SelectShell()
             }
             m_pShell = new SwTextShell(*this);
             rDispatcher.Push( *m_pShell );
-            if ( m_nSelectionType & nsSelectionType::SEL_TBL )
+            if ( m_nSelectionType & SelectionType::Table )
             {
                 eShellMode = eShellMode == ShellMode::ListText ? ShellMode::TableListText
                                                         : ShellMode::TableText;
@@ -398,7 +398,7 @@ void SwView::SelectShell()
             }
         }
 
-        if ( m_nSelectionType & nsSelectionType::SEL_FOC_FRM_CTRL )
+        if ( m_nSelectionType & SelectionType::FormControl )
             rDispatcher.Push( *m_pFormShell );
 
         m_pViewImpl->SetShellMode(eShellMode);
@@ -697,7 +697,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pLastTableFormat(nullptr),
     m_pFormatClipboard(new SwFormatClipboard()),
     m_pPostItMgr(nullptr),
-    m_nSelectionType( INT_MAX ),
+    m_nSelectionType( SelectionType::All ),
     m_nPageCnt(0),
     m_nDrawSfxId( USHRT_MAX ),
     m_nFormSfxId( USHRT_MAX ),
@@ -1523,8 +1523,8 @@ ErrCode SwView::DoVerb( long nVerb )
     if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {
         SwWrtShell &rSh = GetWrtShell();
-        const int nSel = rSh.GetSelectionType();
-        if ( nSel & nsSelectionType::SEL_OLE )
+        const SelectionType nSel = rSh.GetSelectionType();
+        if ( nSel & SelectionType::Ole )
             rSh.LaunchOLEObj( nVerb );
     }
     return ERRCODE_NONE;

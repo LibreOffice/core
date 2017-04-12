@@ -844,12 +844,12 @@ void SwWrtShell::SelectTableCell()
 //              surrounding spaces are cut out.
 // Return:      Delivers the type of the word selection.
 
-int SwWrtShell::IntelligentCut(int nSelection, bool bCut)
+int SwWrtShell::IntelligentCut(SelectionType nSelection, bool bCut)
 {
         // On multiple selection no intelligent drag and drop
         // there are multiple cursors, since a second was placed
         // already at the target position.
-    if( IsAddMode() || !(nSelection & nsSelectionType::SEL_TXT) )
+    if( IsAddMode() || !(nSelection & SelectionType::Text) )
         return NO_WORD;
 
     OUString sText;

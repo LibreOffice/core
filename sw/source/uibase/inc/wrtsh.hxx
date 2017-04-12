@@ -26,6 +26,7 @@
 #include <IMark.hxx>
 #include "navmgr.hxx"
 #include <boost/optional.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace vcl { class Window; }
 class SbxArray;
@@ -50,25 +51,29 @@ namespace i18nutil {
     struct SearchOptions2;
 }
 
-typedef sal_Int32 SelectionType;
-namespace nsSelectionType
+enum class SelectionType : sal_Int32
 {
-    const SelectionType SEL_TXT             = CNT_TXT;  // text, never frames too   0x0001
-    const SelectionType SEL_GRF             = CNT_GRF;  // graphic          0x0002
-    const SelectionType SEL_OLE             = CNT_OLE;  // OLE              0x0010
-    const SelectionType SEL_FRM             = 0x000020; // frame, no content type
-    const SelectionType SEL_NUM             = 0x000040; // NumList
-    const SelectionType SEL_TBL             = 0x000080; // cursor is in table
-    const SelectionType SEL_TBL_CELLS       = 0x000100; // table cells are selected
-    const SelectionType SEL_DRW             = 0x000200; // drawing objects (rectangle, circle...)
-    const SelectionType SEL_DRW_TXT         = 0x000400; // draw-textobjects in edit mode
-    const SelectionType SEL_BEZ             = 0x000800; // edit ornament objects
-    const SelectionType SEL_DRW_FORM        = 0x001000; // drawing objects: DB-Forms
-    const SelectionType SEL_FOC_FRM_CTRL    = 0x002000; // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by its clients.
-    const SelectionType SEL_MEDIA           = 0x004000; // Media object
-    const SelectionType SEL_EXTRUDED_CUSTOMSHAPE = 0x008000;    // extruded custom shape
-    const SelectionType SEL_FONTWORK        = 0x010000; // fontwork
-    const SelectionType SEL_POSTIT          = 0x020000; //annotation
+    NONE                 = 0x000000,
+    Text                 =  CNT_TXT, // text, never frames too   0x0001
+    Graphic              =  CNT_GRF, // graphic          0x0002
+    Ole                  =  CNT_OLE, // OLE              0x0010
+    Frame                = 0x000020, // frame, no content type
+    NumberList           = 0x000040, // NumList
+    Table                = 0x000080, // cursor is in table
+    TableCell            = 0x000100, // table cells are selected
+    DrawObject           = 0x000200, // drawing objects (rectangle, circle...)
+    DrawObjectEditMode   = 0x000400, // draw-textobjects in edit mode
+    Ornament             = 0x000800, // edit ornament objects
+    DbForm               = 0x001000, // drawing objects: DB-Forms
+    FormControl          = 0x002000, // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by its clients.
+    Media                = 0x004000, // Media object
+    ExtrudedCustomShape  = 0x008000, // extruded custom shape
+    FontWork             = 0x010000, // fontwork
+    PostIt               = 0x020000, // annotation
+    All                  = 0x03fff3,
+};
+namespace o3tl {
+    template<> struct typed_flags<SelectionType> : is_typed_flags<SelectionType, 0x03fff3> {};
 }
 
 /** Used by the UI to modify the document model.
@@ -282,7 +287,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
             WORD_SPACE_AFTER = 2,
             WORD_NO_SPACE = 3
         };
-    int     IntelligentCut(int nSelectionType, bool bCut = true);
+    int     IntelligentCut(SelectionType nSelectionType, bool bCut = true);
 
     // edit
     void    Insert(SwField &);

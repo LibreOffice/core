@@ -1358,63 +1358,63 @@ SelectionType SwWrtShell::GetSelectionType() const
     // The value does not matter, it may be updated in endaction anyway.
 
     if ( BasicActionPend() )
-        return IsSelFrameMode() ? nsSelectionType::SEL_FRM : nsSelectionType::SEL_TXT;
+        return IsSelFrameMode() ? SelectionType::Frame : SelectionType::Text;
 
     SwView &_rView = const_cast<SwView&>(GetView());
     if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
-        return nsSelectionType::SEL_POSTIT;
+        return SelectionType::PostIt;
 
     // Inserting a frame is not a DrawMode
-    int nCnt;
+    SelectionType nCnt;
     if ( !_rView.GetEditWin().IsFrameAction() &&
         (IsObjSelected() || (_rView.IsDrawMode() && !IsFrameSelected()) ))
     {
         if (GetDrawView()->IsTextEdit())
-            nCnt = nsSelectionType::SEL_DRW_TXT;
+            nCnt = SelectionType::DrawObjectEditMode;
         else
         {
             if (GetView().IsFormMode()) // Only Form selected
-                nCnt = nsSelectionType::SEL_DRW_FORM;
+                nCnt = SelectionType::DbForm;
             else
-                nCnt = nsSelectionType::SEL_DRW;            // Any draw object
+                nCnt = SelectionType::DrawObject;            // Any draw object
 
             if (_rView.IsBezierEditMode())
-                nCnt |= nsSelectionType::SEL_BEZ;
+                nCnt |= SelectionType::Ornament;
             else if( GetDrawView()->GetContext() == SdrViewContext::Media )
-                nCnt |= nsSelectionType::SEL_MEDIA;
+                nCnt |= SelectionType::Media;
 
             if (svx::checkForSelectedCustomShapes(
                 const_cast<SdrView *>(GetDrawView()),
                 true /* bOnlyExtruded */ ))
             {
-                nCnt |= nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE;
+                nCnt |= SelectionType::ExtrudedCustomShape;
             }
             sal_uInt32 nCheckStatus = 0;
             if (svx::checkForSelectedFontWork(
                 const_cast<SdrView *>(GetDrawView()), nCheckStatus ))
             {
-                nCnt |= nsSelectionType::SEL_FONTWORK;
+                nCnt |= SelectionType::FontWork;
             }
         }
 
         return nCnt;
     }
 
-    nCnt = GetCntType();
+    nCnt = static_cast<SelectionType>(GetCntType());
 
     if ( IsFrameSelected() )
     {
         if (_rView.IsDrawMode())
             _rView.LeaveDrawCreate();   // clean up (Bug #45639)
-        if ( !(nCnt & (CNT_GRF | CNT_OLE)) )
-            return nsSelectionType::SEL_FRM;
+        if ( !(nCnt & (SelectionType::Graphic | SelectionType::Ole)) )
+            return SelectionType::Frame;
     }
 
     if ( IsCursorInTable() )
-        nCnt |= nsSelectionType::SEL_TBL;
+        nCnt |= SelectionType::Table;
 
     if ( IsTableMode() )
-        nCnt |= (nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS);
+        nCnt |= (SelectionType::Table | SelectionType::TableCell);
 
     // Do not pop up numbering toolbar, if the text node has a numbering of type SVX_NUM_NUMBER_NONE.
     const SwNumRule* pNumRule = GetNumRuleAtCurrCursorPos();
@@ -1435,7 +1435,7 @@ SelectionType SwWrtShell::GetSelectionType() const
 
             const SwNumFormat& rFormat = pNumRule->Get(nLevel);
             if ( SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType() )
-                nCnt |= nsSelectionType::SEL_NUM;
+                nCnt |= SelectionType::NumberList;
         }
     }
 
@@ -1717,14 +1717,14 @@ OUString SwWrtShell::GetSelDescr() const
 {
     OUString aResult;
 
-    int nSelType = GetSelectionType();
+    SelectionType nSelType = GetSelectionType();
     switch (nSelType)
     {
-    case nsSelectionType::SEL_GRF:
+    case SelectionType::Graphic:
         aResult = SW_RESSTR(STR_GRAPHIC);
 
         break;
-    case nsSelectionType::SEL_FRM:
+    case SelectionType::Frame:
         {
             const SwFrameFormat * pFrameFormat = GetSelectedFrameFormat();
 
@@ -1732,7 +1732,7 @@ OUString SwWrtShell::GetSelDescr() const
                 aResult = pFrameFormat->GetDescription();
         }
         break;
-    case nsSelectionType::SEL_DRW:
+    case SelectionType::DrawObject:
         {
             aResult = SW_RESSTR(STR_DRAWING_OBJECTS);
         }

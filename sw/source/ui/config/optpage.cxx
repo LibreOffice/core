@@ -1173,7 +1173,7 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
         pModOpt->SetTableMode(eMode);
         // the table-keyboard-mode has changed, now the current
         // table should know about that too.
-        if(m_pWrtShell && nsSelectionType::SEL_TBL & m_pWrtShell->GetSelectionType())
+        if(m_pWrtShell && SelectionType::Table & m_pWrtShell->GetSelectionType())
         {
             m_pWrtShell->SetTableChgMode(eMode);
             static sal_uInt16 aInva[] =

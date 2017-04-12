@@ -895,7 +895,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
 
     SwWrtShell& rSh = GetShell();
 
-    if( rSh.GetSelectionType() & nsSelectionType::SEL_TXT )
+    if( rSh.GetSelectionType() & SelectionType::Text )
     {
         rSh.StartAction();
         SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
