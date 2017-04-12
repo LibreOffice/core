@@ -867,6 +867,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #else
     (void) arOptions;
     (void) cOptions;
+    (void) ppEnv;
     // On Android we always have a Java VM as we only expect this code
     // to be run in an Android app anyway.
     *ppVm = lo_get_javavm();
