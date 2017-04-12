@@ -58,28 +58,30 @@ class SwSelBoxes : public o3tl::sorted_vector<SwTableBox*, CompareSwSelBoxes> {}
 // Selection gets extended in given direction according to enum-parameter.
 // Boxes are collected via the Layout; works correctly if tables are split.
 // (Cf. MakeSelUnions().)
-typedef sal_uInt16 SwTableSearchType;
-namespace nsSwTableSearchType
+enum class SwTableSearchType : sal_uInt16
 {
-    const SwTableSearchType TBLSEARCH_NONE = 0x1;       // No extension.
-    const SwTableSearchType TBLSEARCH_ROW  = 0x2;       // Extend to rows.
-    const SwTableSearchType TBLSEARCH_COL  = 0x3;       // Extend to columns.
+    NONE           = 0x01, // No extension.
+    Row            = 0x02, // Extend to rows.
+    Col            = 0x03, // Extend to columns.
 
-    // As flag to the other values!
-    const SwTableSearchType TBLSEARCH_PROTECT = 0x8;      // Collect protected boxes too.
-    const SwTableSearchType TBLSEARCH_NO_UNION_CORRECT = 0x10; // Do not correct collected Union.
+    // As flags to the other values!
+    Protect        = 0x08, // Collect protected boxes too.
+    NoUnionCorrect = 0x10, // Do not correct collected Union.
+};
+namespace o3tl {
+    template<> struct typed_flags<SwTableSearchType> : is_typed_flags<SwTableSearchType, 0x1f> {};
 }
 
 SW_DLLPUBLIC void GetTableSel( const SwCursorShell& rShell, SwSelBoxes& rBoxes,
-                const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
+                const SwTableSearchType = SwTableSearchType::NONE );
 
 void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
-                const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
+                const SwTableSearchType = SwTableSearchType::NONE );
 
 // As before, but don't start from selection but from Start- EndFrames.
 void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
                 SwSelBoxes& rBoxes, SwCellFrames* pCells,
-                const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
+                const SwTableSearchType = SwTableSearchType::NONE );
 
 // As before but directly via PaMs.
 void GetTableSelCrs( const SwCursorShell& rShell, SwSelBoxes& rBoxes );
@@ -114,9 +116,9 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 
 // Check if Split or InsertCol lead to a box becoming smaller than MINLAY.
 bool CheckSplitCells( const SwCursorShell& rShell, sal_uInt16 nDiv,
-                        const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
+                        const SwTableSearchType = SwTableSearchType::NONE );
 bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
-                        const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
+                        const SwTableSearchType = SwTableSearchType::NONE );
 
 // For working on tab selection also for split tables.
 class SwSelUnion
@@ -140,11 +142,11 @@ typedef std::vector<SwSelUnion> SwSelUnions;
 
 // Gets the tables involved in a table selection and the union-rectangles of the selections
 // - also for split tables.
-// If a parameter is passed that != nsSwTableSearchType::TBLSEARCH_NONE
+// If a parameter is passed that != SwTableSearchType::NONE
 // the selection is extended in the given direction.
 void MakeSelUnions( SwSelUnions&, const SwLayoutFrame *pStart,
                     const SwLayoutFrame *pEnd,
-                    const SwTableSearchType = nsSwTableSearchType::TBLSEARCH_NONE );
+                    const SwTableSearchType = SwTableSearchType::NONE );
 
 // These classes copy the current table selections (rBoxes) into a
 // separate structure while keeping the table structure.

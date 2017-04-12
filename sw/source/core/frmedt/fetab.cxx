@@ -208,7 +208,7 @@ bool SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
         pPaM->End()->nNode = pNode->GetIndex() - 2;
         pPaM->End()->nContent.Assign(pPaM->End()->nNode.GetNode().GetContentNode(), 0);
     }
-    GetTableSel( *this, aBoxes, nsSwTableSearchType::TBLSEARCH_ROW );
+    GetTableSel( *this, aBoxes, SwTableSearchType::Row );
 
     TableWait aWait( nCnt, pFrame, *GetDoc()->GetDocShell(), aBoxes.size() );
 
@@ -236,7 +236,7 @@ bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
 
     SET_CURR_SHELL( this );
 
-    if( !CheckSplitCells( *this, nCnt + 1, nsSwTableSearchType::TBLSEARCH_COL ) )
+    if( !CheckSplitCells( *this, nCnt + 1, SwTableSearchType::Col ) )
     {
         ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR,
                         ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
@@ -246,7 +246,7 @@ bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
     StartAllAction();
     // search boxes via the layout
     SwSelBoxes aBoxes;
-    GetTableSel( *this, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
+    GetTableSel( *this, aBoxes, SwTableSearchType::Col );
 
     TableWait aWait( nCnt, pFrame, *GetDoc()->GetDocShell(), aBoxes.size() );
 
@@ -295,7 +295,7 @@ bool SwFEShell::DeleteCol()
     // search boxes via the layout
     bool bRet;
     SwSelBoxes aBoxes;
-    GetTableSel( *this, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
+    GetTableSel( *this, aBoxes, SwTableSearchType::Col );
     if ( !aBoxes.empty() )
     {
         TableWait aWait( aBoxes.size(), pFrame, *GetDoc()->GetDocShell() );
@@ -346,7 +346,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
     // search for boxes via the layout
     bool bRet;
     SwSelBoxes aBoxes;
-    GetTableSel( *this, aBoxes, nsSwTableSearchType::TBLSEARCH_ROW );
+    GetTableSel( *this, aBoxes, SwTableSearchType::Row );
 
     if( !aBoxes.empty() )
     {

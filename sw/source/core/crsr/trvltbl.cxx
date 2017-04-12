@@ -146,11 +146,11 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
 
     // search box based on layout
     SwSelBoxes aBoxes;
-    SwTableSearchType eType = bRow ? nsSwTableSearchType::TBLSEARCH_ROW : nsSwTableSearchType::TBLSEARCH_COL;
+    SwTableSearchType eType = bRow ? SwTableSearchType::Row : SwTableSearchType::Col;
     const bool bCheckProtected = !IsReadOnlyAvailable();
 
     if( bCheckProtected )
-        eType = (SwTableSearchType)(eType | nsSwTableSearchType::TBLSEARCH_PROTECT);
+        eType = (SwTableSearchType)(eType | SwTableSearchType::Protect);
 
     if ( !bRowSimple )
     {

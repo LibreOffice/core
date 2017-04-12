@@ -1345,7 +1345,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_DELETE_ROW:
                 {
                     SwSelBoxes aBoxes;
-                    ::GetTableSel( rSh, aBoxes, nsSwTableSearchType::TBLSEARCH_ROW );
+                    ::GetTableSel( rSh, aBoxes, SwTableSearchType::Row );
                     if( ::HasProtectedCells( aBoxes ))
                         rSet.DisableItem( nSlot );
                 }
@@ -1353,7 +1353,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_DELETE_COL:
                 {
                     SwSelBoxes aBoxes;
-                    ::GetTableSel( rSh, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
+                    ::GetTableSel( rSh, aBoxes, SwTableSearchType::Col );
                     if( ::HasProtectedCells( aBoxes ))
                         rSet.DisableItem( nSlot );
                 }

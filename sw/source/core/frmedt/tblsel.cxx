@@ -166,17 +166,17 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
     if( pTableNd && pTableNd->GetTable().IsNewModel() )
     {
         SwTable::SearchType eSearch;
-        switch( nsSwTableSearchType::TBLSEARCH_COL & eSearchType )
+        switch( SwTableSearchType::Col & eSearchType )
         {
-            case nsSwTableSearchType::TBLSEARCH_ROW: eSearch = SwTable::SEARCH_ROW; break;
-            case nsSwTableSearchType::TBLSEARCH_COL: eSearch = SwTable::SEARCH_COL; break;
+            case SwTableSearchType::Row: eSearch = SwTable::SEARCH_ROW; break;
+            case SwTableSearchType::Col: eSearch = SwTable::SEARCH_COL; break;
             default: eSearch = SwTable::SEARCH_NONE; break;
         }
-        const bool bChkP = 0 != ( nsSwTableSearchType::TBLSEARCH_PROTECT & eSearchType );
+        const bool bChkP( SwTableSearchType::Protect & eSearchType );
         pTableNd->GetTable().CreateSelection( rCursor, rBoxes, eSearch, bChkP );
         return;
     }
-    if( nsSwTableSearchType::TBLSEARCH_ROW == ((~nsSwTableSearchType::TBLSEARCH_PROTECT ) & eSearchType ) &&
+    if( SwTableSearchType::Row == ((~SwTableSearchType::Protect ) & eSearchType ) &&
         pTableNd && !pTableNd->GetTable().IsTableComplex() )
     {
         const SwTable& rTable = pTableNd->GetTable();
@@ -202,7 +202,7 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
                 sal_uInt16 nTmp = nSttPos; nSttPos = nEndPos; nEndPos = nTmp;
             }
 
-            int bChkProtected = nsSwTableSearchType::TBLSEARCH_PROTECT & eSearchType;
+            bool bChkProtected( SwTableSearchType::Protect & eSearchType );
             for( ; nSttPos <= nEndPos; ++nSttPos )
             {
                 pLine = rLines[ nSttPos ];
@@ -248,7 +248,7 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
         return;
     }
 
-    int bChkProtected = nsSwTableSearchType::TBLSEARCH_PROTECT & eSearchType;
+    bool bChkProtected( SwTableSearchType::Protect & eSearchType );
 
     // #i55421# Reduced value 10
     int nLoopMax = 10;
@@ -462,7 +462,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 
         // First, compute tables and rectangles
         SwSelUnions aUnions;
-        ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTableSearchType::TBLSEARCH_NO_UNION_CORRECT );
+        ::MakeSelUnions( aUnions, pStart, pEnd, SwTableSearchType::NoUnionCorrect );
 
         // find boxes for each entry and emit
         for( auto & rSelUnion : aUnions )
@@ -687,7 +687,7 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
     SwSelUnions aUnions;
 
     // by default, first test above and then to the left
-    ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTableSearchType::TBLSEARCH_COL );
+    ::MakeSelUnions( aUnions, pStart, pEnd, SwTableSearchType::Col );
 
     bool bTstRow = true, bFound = false;
 
@@ -759,7 +759,7 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
 
         rBoxes.clear();
         aUnions.clear();
-        ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTableSearchType::TBLSEARCH_ROW );
+        ::MakeSelUnions( aUnions, pStart, pEnd, SwTableSearchType::Row );
 
         for( SwSelUnions::size_type i = 0; i < aUnions.size(); ++i )
         {
@@ -1512,7 +1512,7 @@ static SwTwips lcl_CalcWish( const SwLayoutFrame *pCell, long nWish,
 
 static void lcl_FindStartEndRow( const SwLayoutFrame *&rpStart,
                              const SwLayoutFrame *&rpEnd,
-                             const int bChkProtected )
+                             const bool bChkProtected )
 {
     // Put Start at beginning of a row.
     // Put End at the end of its row.
@@ -1581,7 +1581,7 @@ static void lcl_FindStartEndRow( const SwLayoutFrame *&rpStart,
 
 static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
                              const SwLayoutFrame *&rpEnd,
-                             const int bChkProtected )
+                             const bool bChkProtected )
 {
     // Beginning and end vertical till the border of the table;
     // Consider the whole table, including master and follows.
@@ -1788,10 +1788,10 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
 
     // Beginning and end now nicely sorted, if required we
     // should move them
-    if( nsSwTableSearchType::TBLSEARCH_ROW == ((~nsSwTableSearchType::TBLSEARCH_PROTECT ) & eSearchType ) )
-        ::lcl_FindStartEndRow( pStart, pEnd, nsSwTableSearchType::TBLSEARCH_PROTECT & eSearchType );
-    else if( nsSwTableSearchType::TBLSEARCH_COL == ((~nsSwTableSearchType::TBLSEARCH_PROTECT ) & eSearchType ) )
-        ::lcl_FindStartEndCol( pStart, pEnd, nsSwTableSearchType::TBLSEARCH_PROTECT & eSearchType );
+    if( SwTableSearchType::Row == ((~SwTableSearchType::Protect ) & eSearchType ) )
+        ::lcl_FindStartEndRow( pStart, pEnd, bool(SwTableSearchType::Protect & eSearchType) );
+    else if( SwTableSearchType::Col == ((~SwTableSearchType::Protect ) & eSearchType ) )
+        ::lcl_FindStartEndCol( pStart, pEnd, bool(SwTableSearchType::Protect & eSearchType) );
 
     if ( !pEnd || !pStart ) return; // Made code robust.
 
@@ -1853,7 +1853,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
         SwRect aUnion( aSt, Size( aDiff.X(), aDiff.Y() ) );
         aUnion.Justify();
 
-        if( !(nsSwTableSearchType::TBLSEARCH_NO_UNION_CORRECT & eSearchType ))
+        if( !(SwTableSearchType::NoUnionCorrect & eSearchType ))
         {
             // Unfortunately the union contains rounding errors now, therefore
             // erroneous results could occur during split/merge.

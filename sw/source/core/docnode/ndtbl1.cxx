@@ -1376,7 +1376,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
 {
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd,
-                    bWishValues ? nsSwTableSearchType::TBLSEARCH_NONE : nsSwTableSearchType::TBLSEARCH_COL );
+                    bWishValues ? SwTableSearchType::NONE : SwTableSearchType::Col );
 
     for ( auto &rU : aUnions )
     {
