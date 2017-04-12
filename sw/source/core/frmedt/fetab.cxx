@@ -2179,7 +2179,7 @@ bool SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
     const SwFormatFrameSize& rTableFrameSz = pTab->GetFormat()->GetFrameSize();
     SwRectFnSet aRectFnSet(pTab);
     long nPrtWidth = aRectFnSet.GetWidth(pTab->Prt());
-    if( TBLVAR_CHGABS == pTab->GetTable()->GetTableChgMode() &&
+    if( TableChgMode::VarWidthChangeAbs == pTab->GetTable()->GetTableChgMode() &&
         ( eType & TableChgWidthHeightType::ColLeft || eType & TableChgWidthHeightType::ColRight ) &&
         text::HoriOrientation::NONE == pTab->GetFormat()->GetHoriOrient().GetHoriOrient() &&
         nPrtWidth != rTableFrameSz.GetWidth() )

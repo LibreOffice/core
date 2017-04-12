@@ -1163,11 +1163,11 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 
     TableChgMode eMode;
     if(m_pFixRB->IsChecked())
-        eMode = TBLFIX_CHGABS;
+        eMode = TableChgMode::FixedWidthChangeAbs;
     else if(m_pFixPropRB->IsChecked())
-        eMode = TBLFIX_CHGPROP;
+        eMode = TableChgMode::FixedWidthChangeProp;
     else
-        eMode = TBLVAR_CHGABS;
+        eMode = TableChgMode::VarWidthChangeAbs;
     if(eMode != pModOpt->GetTableMode())
     {
         pModOpt->SetTableMode(eMode);
@@ -1251,9 +1251,9 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
 
     switch(pModOpt->GetTableMode())
     {
-        case TBLFIX_CHGABS:     m_pFixRB->Check();     break;
-        case TBLFIX_CHGPROP:    m_pFixPropRB->Check(); break;
-        case TBLVAR_CHGABS:     m_pVarRB->Check(); break;
+        case TableChgMode::FixedWidthChangeAbs:     m_pFixRB->Check();     break;
+        case TableChgMode::FixedWidthChangeProp:    m_pFixPropRB->Check(); break;
+        case TableChgMode::VarWidthChangeAbs:     m_pVarRB->Check(); break;
     }
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
