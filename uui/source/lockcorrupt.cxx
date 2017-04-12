@@ -17,21 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define __RSC
-
 #include "ids.hrc"
+#include "lockcorrupt.hxx"
 
-String STR_LOCKFAILED_TITLE
+#include <vcl/button.hxx>
+
+LockCorruptQueryBox::LockCorruptQueryBox( vcl::Window* pParent, ResMgr* pResMgr ) :
+    MessBox(pParent, 0,
+            ResId(STR_LOCKCORRUPT_TITLE, *pResMgr).toString(),
+            OUString() )
 {
-    Text [ en-US ] = "Document Could Not Be Locked";
-};
-String STR_LOCKFAILED_MSG
+    SetImage( ErrorBox::GetStandardImage() );
+
+    AddButton(ResId(STR_LOCKCORRUPT_OPENREADONLY_BTN, *pResMgr).toString(), RET_OK,
+        ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+
+    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
+
+    SetMessText(ResId(STR_LOCKCORRUPT_MSG, *pResMgr ).toString());
+}
+
+LockCorruptQueryBox::~LockCorruptQueryBox()
 {
-    Text [ en-US ] = "The lock file could not be created for exclusive access by %PRODUCTNAME, due to missing permission to create a lock file on that file location or lack of free disk space.";
-};
-String STR_LOCKFAILED_OPENREADONLY_BTN
-{
-    Text [ en-US ] = "Open ~Read-Only";
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

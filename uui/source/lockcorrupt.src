@@ -21,15 +21,15 @@
 
 #include "ids.hrc"
 
-String STR_LOCKFAILED_TITLE
+String STR_LOCKCORRUPT_TITLE
 {
-    Text [ en-US ] = "Document Could Not Be Locked";
+    Text [ en-US ] = "Lock file is corrupted";
 };
-String STR_LOCKFAILED_MSG
+String STR_LOCKCORRUPT_MSG
 {
-    Text [ en-US ] = "The lock file could not be created for exclusive access by %PRODUCTNAME, due to missing permission to create a lock file on that file location or lack of free disk space.";
+    Text [ en-US ] = "The lock file is corrupted and probably empty. Opening the document read-only and closing it again removes the corrupted lock file.";
 };
-String STR_LOCKFAILED_OPENREADONLY_BTN
+String STR_LOCKCORRUPT_OPENREADONLY_BTN
 {
     Text [ en-US ] = "Open ~Read-Only";
 };

@@ -163,8 +163,10 @@ public:
     bool                Commit();
     bool                IsStorage();
 
-    sal_Int8            ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock );
+    sal_Int8            ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock, bool bHandleSysLocked);
     void                LockOrigFileOnDemand( bool bLoading, bool bNoUI );
+    enum class MessageDlg    { LockFileIgnore, LockFileCorrupt };
+    bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
     void                DisableUnlockWebDAV( bool bDisableUnlockWebDAV = true );
     void                UnlockFile( bool bReleaseLockStream );
 
