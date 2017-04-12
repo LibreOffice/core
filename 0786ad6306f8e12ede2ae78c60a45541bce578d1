@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a1d2c632",
+        "filename": "hwpfilter/source/hpara.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-12T13:53:25Z",
+      "side": 1,
+      "message": "this seems a bit risky, wouldnt it make sense to change that member to shared_ptr too?",
+      "revId": "0786ad6306f8e12ede2ae78c60a45541bce578d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
