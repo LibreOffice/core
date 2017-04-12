@@ -51,11 +51,6 @@
       constructor="com_sun_star_comp_embed_InstanceLocker">
     <service name="com.sun.star.embed.InstanceLocker"/>
   </implementation>
-  <implementation name="com.sun.star.comp.logging.SimpleLogRing"
-      constructor="com_sun_star_comp_logging_SimpleLogRing">
-    <service name="com.sun.star.logging.SimpleLogRing"/>
-    <singleton name="com.sun.star.logging.DocumentIOLogRing"/>
-  </implementation>
   <implementation name="com.sun.star.comp.task.OfficeRestartManager"
       constructor="com_sun_star_comp_task_OfficeRestartManager">
     <service name="com.sun.star.comp.task.OfficeRestartManager"/>
