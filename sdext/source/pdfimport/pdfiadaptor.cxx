@@ -294,7 +294,7 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     sal_Int32 nAttribs = rSourceData.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
     {
-        SAL_INFO("sdext.pdfimport","importer Attrib: " << OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("sdext.pdfimport", "importer Attrib: " << pAttribs->Name );
         if ( pAttribs->Name == "InputStream" )
             pAttribs->Value >>= xInput;
         else if ( pAttribs->Name == "URL" )

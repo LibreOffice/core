@@ -13350,7 +13350,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
             int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
             const OUString& rVal = m_aWidgets[nKidIndex].m_aOnValue;
             #if OSL_DEBUG_LEVEL > 1
-            SAL_INFO("vcl.pdfwriter", "OnValue: " << OUStringToOString( rVal, RTL_TEXTENCODING_UTF8 ).getStr());
+            SAL_INFO("vcl.pdfwriter", "OnValue: " << rVal);
             #endif
             if( aOnValues.find( rVal ) == aOnValues.end() )
             {

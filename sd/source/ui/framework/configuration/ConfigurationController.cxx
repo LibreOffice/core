@@ -240,14 +240,12 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     if (rBHelper.bInDispose)
     {
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceActivation(): ignoring " <<
-            OUStringToOString(
-                FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
+                FrameworkHelper::ResourceIdToString(rxResourceId));
         return;
     }
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceActivation() " <<
-        OUStringToOString(
-            FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
+            FrameworkHelper::ResourceIdToString(rxResourceId));
 
     if (rxResourceId.is())
     {
@@ -290,8 +288,7 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
     ThrowIfDisposed();
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceDeactivation() " <<
-            OUStringToOString(
-                FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
+                FrameworkHelper::ResourceIdToString(rxResourceId));
 
     if (rxResourceId.is())
     {

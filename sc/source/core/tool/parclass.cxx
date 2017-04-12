@@ -501,7 +501,7 @@ void ScParameterClassification::GenerateDocumentation()
         if ( !xMap->getSymbol(eOp).isEmpty() )
         {
             SAL_INFO("sc.core", "GenerateDocumentation, env var name: " << aEnvVarName);
-            OStringBuffer aStr(OUStringToOString(xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8));
+            OUStringBuffer aStr(xMap->getSymbol(eOp));
             aStr.append('(');
             formula::FormulaByteToken aToken( eOp);
             sal_uInt8 nParams = GetMinimumParameters( eOp);
@@ -608,7 +608,7 @@ void ScParameterClassification::GenerateDocumentation()
                 break;
                 default:;
             }
-            SAL_INFO( "sc.core", "" << aStr.getStr() << "\n");
+            SAL_INFO( "sc.core", "" << aStr << "\n");
         }
     }
     fflush( stdout);

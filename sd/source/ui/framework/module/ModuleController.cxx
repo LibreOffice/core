@@ -128,16 +128,14 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
         "URL",
         aURLs);
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::adding factory " <<
-        OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::adding factory " << sServiceName);
 
     // Add the resource URLs to the map.
     ::std::vector<OUString>::const_iterator iResource;
     for (iResource=aURLs.begin(); iResource!=aURLs.end(); ++iResource)
     {
         (*mpResourceToFactoryMap)[*iResource] = sServiceName;
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " <<
-            OUStringToOString(*iResource, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " << *iResource);
     }
 }
 
@@ -189,8 +187,7 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
         // at the configuration controller.
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sServiceName, aArguments, xContext);
 
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::created startup service " <<
-            OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::created startup service " << sServiceName);
     }
     catch (Exception&)
     {

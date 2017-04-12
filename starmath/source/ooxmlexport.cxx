@@ -74,7 +74,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
     }
     m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
     const SmTextNode* pTemp = static_cast<const SmTextNode* >(pNode);
-    SAL_INFO( "starmath.ooxml", "Text:" << OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO( "starmath.ooxml", "Text:" << pTemp->GetText());
     OUStringBuffer buf(pTemp->GetText());
     for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
     {

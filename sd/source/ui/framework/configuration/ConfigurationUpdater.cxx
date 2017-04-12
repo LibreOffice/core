@@ -320,9 +320,8 @@ void ConfigurationUpdater::CheckPureAnchors (
         if (bDeactiveCurrentResource)
         {
             SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": deactivating pure anchor " <<
-                OUStringToOString(
-                    FrameworkHelper::ResourceIdToString(xResourceId),
-                    RTL_TEXTENCODING_UTF8).getStr() << "because it has no children");
+                    FrameworkHelper::ResourceIdToString(xResourceId) <<
+                    "because it has no children");
             // Erase element from current configuration.
             for (sal_Int32 nI=nIndex; nI<nCount-2; ++nI)
                 aResources[nI] = aResources[nI+1];

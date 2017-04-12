@@ -1290,7 +1290,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                     OUString aTmp;
                     for( int i = 0; i < m_pData->m_aDocID.getLength(); i++ )
                         aTmp += OUString::number((unsigned int)sal_uInt8(m_pData->m_aDocID[i]), 16);
-                    SAL_INFO("sdext.pdfimport.pdfparse", "DocId is <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">");
+                    SAL_INFO("sdext.pdfimport.pdfparse", "DocId is <" << aTmp << ">");
 #endif
                 }
             }
@@ -1355,7 +1355,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                     for( int i = 0; i < aEnt.getLength(); i++ )
                                         aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt[i]), 16);
                                     SAL_WARN("sdext.pdfimport.pdfparse",
-                                             "O entry has length " << (int)aEnt.getLength() << ", should be 32 <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">" );
+                                             "O entry has length " << (int)aEnt.getLength() << ", should be 32 <" << aTmp << ">" );
                                 }
 #endif
                             }
@@ -1375,7 +1375,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                     for( int i = 0; i < aEnt.getLength(); i++ )
                                         aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt[i]), 16);
                                     SAL_WARN("sdext.pdfimport.pdfparse",
-                                             "U entry has length " << (int)aEnt.getLength() << ", should be 32 <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">" );
+                                             "U entry has length " << (int)aEnt.getLength() << ", should be 32 <" << aTmp << ">" );
                                 }
 #endif
                             }
@@ -1394,7 +1394,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                             SAL_INFO("sdext.pdfimport.pdfparse", "p entry is " << m_pData->m_nPEntry );
                         }
 
-                        SAL_INFO("sdext.pdfimport.pdfparse", "Encryption dict: sec handler: " << (pFilter ? OUStringToOString( pFilter->getFilteredName(), RTL_TEXTENCODING_UTF8 ).getStr() : "<unknown>") << ", version = " << (int)m_pData->m_nAlgoVersion << ", revision = " << (int)m_pData->m_nStandardRevision << ", key length = " << m_pData->m_nKeyLength );
+                        SAL_INFO("sdext.pdfimport.pdfparse", "Encryption dict: sec handler: " << (pFilter ? pFilter->getFilteredName() : OUString("<unknown>")) << ", version = " << (int)m_pData->m_nAlgoVersion << ", revision = " << (int)m_pData->m_nStandardRevision << ", key length = " << m_pData->m_nKeyLength );
                         break;
                     }
                 }

@@ -41,8 +41,7 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 {
     Reference<container::XNamed> xNamed (rxRequest, UNO_QUERY);
     if (xNamed.is())
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " <<
-            OUStringToOString(xNamed->getName(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " << xNamed->getName());
 }
 
 #endif
