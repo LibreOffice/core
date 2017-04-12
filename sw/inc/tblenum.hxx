@@ -48,11 +48,11 @@ constexpr TableChgWidthHeightType extractPosition(TableChgWidthHeightType e) {
     return static_cast<TableChgWidthHeightType>(static_cast<int>(e) & 0xf);
 }
 
-enum TableChgMode
+enum class TableChgMode
 {
-    TBLFIX_CHGABS,          // Table fixed width, change neighbour.
-    TBLFIX_CHGPROP,         // Table fixed width, change all neighbours.
-    TBLVAR_CHGABS           // Table variable, change all neighbours.
+    FixedWidthChangeAbs,          // Table fixed width, change neighbour.
+    FixedWidthChangeProp,         // Table fixed width, change all neighbours.
+    VarWidthChangeAbs           // Table variable, change all neighbours.
 };
 
 enum class SplitTable_HeadlineOption

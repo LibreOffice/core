@@ -109,7 +109,7 @@ bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
 TableChgMode GetTableChgDefaultMode()
 {
     SwModuleOptions* pOpt = SW_MOD()->GetModuleConfig();
-    return pOpt ? pOpt->GetTableMode() : TBLVAR_CHGABS;
+    return pOpt ? pOpt->GetTableMode() : TableChgMode::VarWidthChangeAbs;
 }
 
 void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect )

@@ -2381,15 +2381,15 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     return false;
 
             // Collect all "ContentBoxes"
-            bGreaterBox = (TBLFIX_CHGABS != rParam.nMode)
+            bGreaterBox = (TableChgMode::FixedWidthChangeAbs != rParam.nMode)
                        && ((nDist + (rParam.bLeft ? 0 : nWidth)) >= rParam.nSide);
             if (bGreaterBox
                 || (!rParam.bBigger
-                    && (std::abs(nDist + ((rParam.nMode && rParam.bLeft) ? 0 : nWidth) - rParam.nSide) < COLFUZZY)))
+                    && (std::abs(nDist + ((rParam.nMode != TableChgMode::FixedWidthChangeAbs && rParam.bLeft) ? 0 : nWidth) - rParam.nSide) < COLFUZZY)))
             {
                 rParam.bAnyBoxFnd = true;
                 SwTwips nLowerDiff;
-                if( bGreaterBox && TBLFIX_CHGPROP == rParam.nMode )
+                if( bGreaterBox && TableChgMode::FixedWidthChangeProp == rParam.nMode )
                 {
                     // The "other Boxes" have been adapted, so change by this value
                     nLowerDiff = (nDist + ( rParam.bLeft ? 0 : nWidth ) ) - rParam.nSide;
@@ -2418,9 +2418,9 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             rParam.nLowerDiff = nOldLower;
 
             if( nLowerDiff ||
-                 (bGreaterBox = !nOldLower && TBLFIX_CHGABS != rParam.nMode &&
+                 (bGreaterBox = !nOldLower && TableChgMode::FixedWidthChangeAbs != rParam.nMode &&
                     ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide) ||
-                ( std::abs( nDist + ( (rParam.nMode && rParam.bLeft) ? 0 : nWidth )
+                ( std::abs( nDist + ( (rParam.nMode != TableChgMode::FixedWidthChangeAbs && rParam.bLeft) ? 0 : nWidth )
                             - rParam.nSide ) < COLFUZZY ))
             {
                 // This column contains the Cursor - so decrease/increase
@@ -2428,7 +2428,7 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
                 if( !nLowerDiff )
                 {
-                    if( bGreaterBox && TBLFIX_CHGPROP == rParam.nMode )
+                    if( bGreaterBox && TableChgMode::FixedWidthChangeProp == rParam.nMode )
                     {
                         // The "other Boxes" have been adapted, so change by this value
                         nLowerDiff = (nDist + ( rParam.bLeft ? 0 : nWidth ) ) - rParam.nSide;
@@ -2451,13 +2451,13 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             }
         }
 
-        if( rParam.bLeft && rParam.nMode && nDist >= rParam.nSide )
+        if( rParam.bLeft && rParam.nMode != TableChgMode::FixedWidthChangeAbs && nDist >= rParam.nSide )
             break;
 
         nDist += nWidth;
 
         // If it gets bigger, then that's it
-        if( ( TBLFIX_CHGABS == rParam.nMode || !rParam.bLeft ) &&
+        if( ( TableChgMode::FixedWidthChangeAbs == rParam.nMode || !rParam.bLeft ) &&
                 nDist >= rParam.nSide )
             break;
     }
@@ -2480,14 +2480,14 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                 if( !::lcl_SetOtherBoxWidth( pLn, rParam, nDist, true ))
                     return false;
 
-            if( rParam.bBigger && ( TBLFIX_CHGABS == rParam.nMode
+            if( rParam.bBigger && ( TableChgMode::FixedWidthChangeAbs == rParam.nMode
                     ? std::abs( nDist - rParam.nSide ) < COLFUZZY
                     : ( rParam.bLeft ? nDist < rParam.nSide - COLFUZZY
                                      : nDist >= rParam.nSide - COLFUZZY )) )
             {
                 rParam.bAnyBoxFnd = true;
                 SwTwips nDiff;
-                if( TBLFIX_CHGPROP == rParam.nMode )        // Table fixed, proportional
+                if( TableChgMode::FixedWidthChangeProp == rParam.nMode )        // Table fixed, proportional
                 {
                     // calculate relative
                     nDiff = nWidth;
@@ -2515,7 +2515,7 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             rParam.nLowerDiff = nOldLower;
 
             if( nLowerDiff ||
-                ( TBLFIX_CHGABS == rParam.nMode
+                ( TableChgMode::FixedWidthChangeAbs == rParam.nMode
                         ? std::abs( nDist - rParam.nSide ) < COLFUZZY
                         : ( rParam.bLeft ? nDist < rParam.nSide - COLFUZZY
                                          : nDist >= rParam.nSide - COLFUZZY)
@@ -2525,7 +2525,7 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
                 if( !nLowerDiff )
                 {
-                    if( TBLFIX_CHGPROP == rParam.nMode )        // Table fixed, proportional
+                    if( TableChgMode::FixedWidthChangeProp == rParam.nMode )        // Table fixed, proportional
                     {
                         // calculate relative
                         nLowerDiff = nWidth;
@@ -2548,7 +2548,7 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
         }
 
         nDist += nWidth;
-        if( ( TBLFIX_CHGABS == rParam.nMode || rParam.bLeft ) &&
+        if( ( TableChgMode::FixedWidthChangeAbs == rParam.nMode || rParam.bLeft ) &&
             nDist > rParam.nSide )
             break;
     }
@@ -2679,7 +2679,7 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             }
         }
 
-        if( rParam.bLeft && rParam.nMode && nDist >= rParam.nSide )
+        if( rParam.bLeft && rParam.nMode != TableChgMode::FixedWidthChangeAbs && nDist >= rParam.nSide )
             break;
 
         nDist += nWidth;
@@ -2697,7 +2697,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
 
     // Table fixed, proportional
-    if( !rParam.nRemainWidth && TBLFIX_CHGPROP == rParam.nMode )
+    if( !rParam.nRemainWidth && TableChgMode::FixedWidthChangeProp == rParam.nMode )
     {
         // Find the right width to which the relative width adjustment
         // corresponds to
@@ -2731,7 +2731,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
             if(
                 rParam.bLeft ? ((nDist + nWidth / 2 ) <= rParam.nSide &&
-                                (TBLFIX_CHGABS != rParam.nMode ||
+                                (TableChgMode::FixedWidthChangeAbs != rParam.nMode ||
                                 (n < rBoxes.size() &&
                                   (nDist + nWidth + rBoxes[ n+1 ]->
                                    GetFrameFormat()->GetFrameSize().GetWidth() / 2)
@@ -2741,7 +2741,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             {
                 rParam.bAnyBoxFnd = true;
                 SwTwips nDiff;
-                if( TBLFIX_CHGPROP == rParam.nMode )        // Table fixed, proportional
+                if( TableChgMode::FixedWidthChangeProp == rParam.nMode )        // Table fixed, proportional
                 {
                     // calculate relatively
                     nDiff = nWidth;
@@ -2791,7 +2791,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
             if( nLowerDiff ||
                 (rParam.bLeft ? ((nDist + nWidth / 2 ) <= rParam.nSide &&
-                                (TBLFIX_CHGABS != rParam.nMode ||
+                                (TableChgMode::FixedWidthChangeAbs != rParam.nMode ||
                                 (n < rBoxes.size() &&
                                   (nDist + nWidth + rBoxes[ n+1 ]->
                                    GetFrameFormat()->GetFrameSize().GetWidth() / 2)
@@ -2800,7 +2800,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             {
                 if( !nLowerDiff )
                 {
-                    if( TBLFIX_CHGPROP == rParam.nMode )        // Table fixed, proportional
+                    if( TableChgMode::FixedWidthChangeProp == rParam.nMode )        // Table fixed, proportional
                     {
                         // Calculate relatively
                         nLowerDiff = nWidth;
@@ -2820,7 +2820,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     aNew.SetWidth( nWidth + nLowerDiff );
                 rParam.aShareFormats.SetSize( *pBox, aNew );
 
-                if( TBLFIX_CHGABS == rParam.nMode )
+                if( TableChgMode::FixedWidthChangeAbs == rParam.nMode )
                     break;
             }
         }
@@ -2918,12 +2918,12 @@ static void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
 
     switch( rParam.nMode )
     {
-    case TBLFIX_CHGABS:     // Fixed width table, change neighbor
+    case TableChgMode::FixedWidthChangeAbs:     // Fixed width table, change neighbor
         nDiff = rDelWidth + rParam.nLowerDiff;
         bSetSize = true;
         break;
 
-    case TBLFIX_CHGPROP:    // Fixed width table, change all neighbors
+    case TableChgMode::FixedWidthChangeProp:    // Fixed width table, change all neighbors
         if( !rParam.nRemainWidth )
         {
             // Calculate
@@ -2941,7 +2941,7 @@ static void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
         bSetSize = true;
         break;
 
-    case TBLVAR_CHGABS:     // Variable table, change all neighbors
+    case TableChgMode::VarWidthChangeAbs:     // Variable table, change all neighbors
         if( COLFUZZY < std::abs( rParam.nBoxWidth -
                             ( rDelWidth + rParam.nLowerDiff )))
         {
@@ -3061,7 +3061,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
             else if( rParam.bLeft )
             {
                 ::lcl_ChgBoxSize( *pBox, rParam, rSz, nDelWidth, nDist );
-                if( TBLFIX_CHGABS == rParam.nMode )
+                if( TableChgMode::FixedWidthChangeAbs == rParam.nMode )
                     n = nCntEnd;
             }
             break;
@@ -3075,7 +3075,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
             else if( !rParam.bLeft )
             {
                 ::lcl_ChgBoxSize( *pBox, rParam, rSz, nDelWidth, nDist );
-                if( TBLFIX_CHGABS == rParam.nMode )
+                if( TableChgMode::FixedWidthChangeAbs == rParam.nMode )
                     n = nCntEnd;
             }
             break;
@@ -3102,7 +3102,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                 else
                 {
                     ::lcl_ChgBoxSize( *pBox, rParam, rSz, nDelWidth, nDist );
-                    if( TBLFIX_CHGABS == rParam.nMode )
+                    if( TableChgMode::FixedWidthChangeAbs == rParam.nMode )
                         n = nCntEnd;
                 }
             }
@@ -3126,7 +3126,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
             {
                 // The last/first Box can only be deleted for the variable Table,
                 // if it's as large as the change in the Table.
-                if( (( TBLVAR_CHGABS != rParam.nMode ||
+                if( (( TableChgMode::VarWidthChangeAbs != rParam.nMode ||
                         nDelWidth != rParam.nBoxWidth ) &&
                      COLFUZZY > std::abs( rParam.bLeft
                                     ? nWidth - nDist
@@ -3212,14 +3212,14 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                     SwFormatFrameSize aNew( rSz );
                     bool bCorrRel = false;
 
-                    if( TBLVAR_CHGABS != rParam.nMode )
+                    if( TableChgMode::VarWidthChangeAbs != rParam.nMode )
                     {
                         switch( ePosType )
                         {
                         case SwComparePosition::OverlapBefore:    // Box overlaps the start
-                            if( TBLFIX_CHGPROP == rParam.nMode )
+                            if( TableChgMode::FixedWidthChangeProp == rParam.nMode )
                                 bCorrRel = rParam.bLeft;
-                            else if( rParam.bLeft ) // TBLFIX_CHGABS
+                            else if( rParam.bLeft ) // TableChgMode::FixedWidthChangeAbs
                             {
                                 nLowerDiff = nLowerDiff - nDelWidth;
                                 bCorrLowers = true;
@@ -3228,9 +3228,9 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                             break;
 
                         case SwComparePosition::OverlapBehind:    // Box overlaps the end
-                            if( TBLFIX_CHGPROP == rParam.nMode )
+                            if( TableChgMode::FixedWidthChangeProp == rParam.nMode )
                                 bCorrRel = !rParam.bLeft;
-                            else if( !rParam.bLeft )    // TBLFIX_CHGABS
+                            else if( !rParam.bLeft )    // TableChgMode::FixedWidthChangeAbs
                             {
                                 nLowerDiff = nLowerDiff - nDelWidth;
                                 bCorrLowers = true;
@@ -3435,7 +3435,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
     {
     case TableChgWidthHeightType::ColRight:
     case TableChgWidthHeightType::ColLeft:
-        if( TBLVAR_CHGABS == m_eTableChgMode )
+        if( TableChgMode::VarWidthChangeAbs == m_eTableChgMode )
         {
             if( bInsDel )
                 bBigger = !bBigger;
@@ -3467,7 +3467,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 {
                     // Then call itself recursively; only with another mode (proportional)
                     TableChgMode eOld = m_eTableChgMode;
-                    m_eTableChgMode = TBLFIX_CHGPROP;
+                    m_eTableChgMode = TableChgMode::FixedWidthChangeProp;
 
                     bRet = SetColWidth( rAktBox, eType, nAbsDiff, nRelDiff,
                                         ppUndo );
@@ -3607,7 +3607,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 ( bLeft ? nDist != 0 : std::abs( rSz.GetWidth() - nDist ) > COLFUZZY ) )
         {
             bRet = true;
-            if( bLeft && TBLFIX_CHGABS == m_eTableChgMode && !bInsDel )
+            if( bLeft && TableChgMode::FixedWidthChangeAbs == m_eTableChgMode && !bInsDel )
                 aParam.bBigger = !bBigger;
 
             // First test if we have room at all
@@ -3706,8 +3706,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                     *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                 if( bInsDel
-                    ? ( TBLFIX_CHGABS == m_eTableChgMode ? (bBigger && bLeft) : bLeft )
-                    : ( TBLFIX_CHGABS != m_eTableChgMode && bLeft ) )
+                    ? ( TableChgMode::FixedWidthChangeAbs == m_eTableChgMode ? (bBigger && bLeft) : bLeft )
+                    : ( TableChgMode::FixedWidthChangeAbs != m_eTableChgMode && bLeft ) )
                 {
                     for( sal_uInt16 n = m_aLines.size(); n; )
                     {
@@ -3735,11 +3735,11 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
 
     case TableChgWidthHeightType::CellRight:
     case TableChgWidthHeightType::CellLeft:
-        if( TBLVAR_CHGABS == m_eTableChgMode )
+        if( TableChgMode::VarWidthChangeAbs == m_eTableChgMode )
         {
             // Then call itself recursively; only with another mode (proportional)
             TableChgMode eOld = m_eTableChgMode;
-            m_eTableChgMode = TBLFIX_CHGABS;
+            m_eTableChgMode = TableChgMode::FixedWidthChangeAbs;
 
             bRet = SetColWidth( rAktBox, eType, nAbsDiff, nRelDiff,
                                 ppUndo );
@@ -3749,7 +3749,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
         else if( bInsDel || ( bLeft ? nDist != 0
                                     : (rSz.GetWidth() - nDist) > COLFUZZY ))
         {
-            if( bLeft && TBLFIX_CHGABS == m_eTableChgMode && !bInsDel )
+            if( bLeft && TableChgMode::FixedWidthChangeAbs == m_eTableChgMode && !bInsDel )
                 aParam.bBigger = !bBigger;
 
             // First, see if there is enough room at all
@@ -3820,8 +3820,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                     *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                 if( bInsDel
-                    ? ( TBLFIX_CHGABS == m_eTableChgMode ? (bBigger && bLeft) : bLeft )
-                    : ( TBLFIX_CHGABS != m_eTableChgMode && bLeft ) )
+                    ? ( TableChgMode::FixedWidthChangeAbs == m_eTableChgMode ? (bBigger && bLeft) : bLeft )
+                    : ( TableChgMode::FixedWidthChangeAbs != m_eTableChgMode && bLeft ) )
                 {
                     (*fnSelBox)( pLine, aParam, nDistStt, false );
                     (*fnOtherBox)( pLine, aParam1, nDistStt, false );
@@ -3976,7 +3976,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam
             SwLayoutFrame* pLineFrame = GetRowFrame( *pLine );
             OSL_ENSURE( pLineFrame, "Where is the Frame from the SwTableLine?" );
 
-            if( TBLFIX_CHGPROP == rParam.nMode )
+            if( TableChgMode::FixedWidthChangeProp == rParam.nMode )
             {
                 nDist *= pLineFrame->Frame().Height();
                 nDist /= rParam.nMaxHeight;
@@ -3988,7 +3988,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam
     {
         // Set line height
         // pLine is the following/preceding, thus adjust it
-        if( TBLFIX_CHGPROP == rParam.nMode )
+        if( TableChgMode::FixedWidthChangeProp == rParam.nMode )
         {
             SwLayoutFrame* pLineFrame = GetRowFrame( *pLine );
             OSL_ENSURE( pLineFrame, "Where is the Frame from the SwTableLine??" );
@@ -4167,7 +4167,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 nAbsDiff = GetRowFrame( *pBaseLine )->Frame().Height();
             }
 
-            if( TBLVAR_CHGABS == m_eTableChgMode )
+            if( TableChgMode::VarWidthChangeAbs == m_eTableChgMode )
             {
                 // First test if we have room at all
                 if( bBigger )
@@ -4225,7 +4225,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 }
 
                 // Get the current Lines' height
-                if( TBLFIX_CHGPROP == m_eTableChgMode )
+                if( TableChgMode::FixedWidthChangeProp == m_eTableChgMode )
                 {
                     for( auto n = nStt; n < nEnd; ++n )
                     {
@@ -4289,7 +4289,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                         *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                     CR_SetLineHeight aParam1( aParam );
-                    if( TBLFIX_CHGPROP == m_eTableChgMode && !bBigger &&
+                    if( TableChgMode::FixedWidthChangeProp == m_eTableChgMode && !bBigger &&
                         !aParam.nMaxSpace )
                     {
                         // We need to distribute the space evenly among all the Lines.
@@ -4318,7 +4318,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 {
                     // Then call itself recursively; only with another mode (proportional)
                     TableChgMode eOld = m_eTableChgMode;
-                    m_eTableChgMode = TBLVAR_CHGABS;
+                    m_eTableChgMode = TableChgMode::VarWidthChangeAbs;
 
                     bRet = SetRowHeight( rAktBox, eType, nAbsDiff,
                                         nRelDiff, ppUndo );
