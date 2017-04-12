@@ -688,8 +688,7 @@ void ToolBarManager::Implementation::PreUpdate()
         for (iToolBar=aToolBars.begin(); iToolBar!=aToolBars.end(); ++iToolBar)
         {
             OUString sFullName (GetToolBarResourceName(*iToolBar));
-            SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning off tool bar " <<
-                OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning off tool bar " << sFullName);
             mxLayouter->destroyElement(sFullName);
             maToolBarList.MarkToolBarAsNotActive(*iToolBar);
         }
@@ -719,8 +718,7 @@ void ToolBarManager::Implementation::PostUpdate()
         for (iToolBar=aToolBars.begin(); iToolBar!=aToolBars.end(); ++iToolBar)
         {
             OUString sFullName (GetToolBarResourceName(*iToolBar));
-            SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning on tool bar " <<
-                OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning on tool bar " << sFullName);
             mxLayouter->requestElement(sFullName);
             maToolBarList.MarkToolBarAsActive(*iToolBar);
         }

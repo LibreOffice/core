@@ -3045,10 +3045,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                SAL_WARN("cppcanvas.emf", "" << OUStringToOString(
-                                comphelper::anyToString( cppu::getCaughtException() ),
-                                RTL_TEXTENCODING_UTF8 ).getStr() );
-
+                SAL_WARN("cppcanvas.emf", "" << comphelper::anyToString( cppu::getCaughtException() ) );
                 // convert error to return value
                 return false;
             }
@@ -3106,10 +3103,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                SAL_WARN( "cppcanvas.emf", "" << OUStringToOString(
-                                comphelper::anyToString( cppu::getCaughtException() ),
-                                RTL_TEXTENCODING_UTF8 ).getStr() );
-
+                SAL_WARN( "cppcanvas.emf", "" << comphelper::anyToString( cppu::getCaughtException() ) );
                 return false;
             }
         }

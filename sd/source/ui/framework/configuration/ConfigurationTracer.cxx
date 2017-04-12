@@ -62,7 +62,7 @@ void ConfigurationTracer::TraceBoundResources (
         OUString sLine (aResourceList[nIndex]->getResourceURL());
         for (int i=0; i<nIndentation; ++i)
             sLine = sIndentation + sLine;
-        SAL_INFO("sd.ui","" << OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("sd.ui", "" << sLine);
         TraceBoundResources(rxConfiguration, aResourceList[nIndex], nIndentation+1);
     }
 }

@@ -92,9 +92,7 @@ void ResourceFactoryManager::AddFactory (
         maFactoryMap[rsURL] = rxFactory;
 
 #if defined VERBOSE && VERBOSE>=1
-        SAL_INFO("sd",("ResourceFactoryManager::AddFactory fixed %s %x\n",
-            OUStringToOString(rsURL, RTL_TEXTENCODING_UTF8).getStr(),
-            rxFactory.get());
+        SAL_INFO("sd", "ResourceFactoryManager::AddFactory fixed " << rsURL << " 0x" << std::hex << rxFactory.get());
 #endif
     }
 }

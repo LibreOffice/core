@@ -463,7 +463,7 @@ SbModule::SbModule( const OUString& rName, bool bVBACompat )
 
 SbModule::~SbModule()
 {
-    SAL_INFO("basic","Module named " << OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr() << " is destructing");
+    SAL_INFO("basic","Module named " << GetName() << " is destructing");
     delete pImage;
     delete pBreaks;
     delete pClassData;
@@ -476,7 +476,7 @@ SbModule::GetUnoModule()
     if ( !mxWrapper.is() )
         mxWrapper = new DocObjectWrapper( this );
 
-    SAL_INFO("basic","Module named " << OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr() << " returning wrapper mxWrapper (0x" << mxWrapper.get() <<")" );
+    SAL_INFO("basic","Module named " << GetName() << " returning wrapper mxWrapper (0x" << mxWrapper.get() <<")" );
     return mxWrapper;
 }
 
@@ -1031,7 +1031,7 @@ void SbModule::SetVBACompat( bool bCompat )
 // Run a Basic-subprogram
 void SbModule::Run( SbMethod* pMeth )
 {
-    SAL_INFO("basic","About to run " << OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() << ", vba compatmode is " << mbVBACompat );
+    SAL_INFO("basic","About to run " << pMeth->GetName() << ", vba compatmode is " << mbVBACompat );
 
     static sal_uInt16 nMaxCallLevel = 0;
 
@@ -2445,7 +2445,7 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun )
 
 void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< Any >& aArguments )
 {
-    SAL_INFO("basic", "*** trigger " << OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() << " ***");
+    SAL_INFO("basic", "*** trigger " << aMethodToRun << " ***");
     // Search method
     SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxClassType::Method );
     if( pMeth )

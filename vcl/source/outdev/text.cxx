@@ -818,9 +818,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     }
 
 #if OSL_DEBUG_LEVEL > 2
-    SAL_INFO("vcl.gdi", "OutputDevice::DrawText(\""
-             << OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr()
-             << "\")");
+    SAL_INFO("vcl.gdi", "OutputDevice::DrawText(\"" << rStr << "\")");
 #endif
 
     if ( mpMetaFile )
