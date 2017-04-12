@@ -670,6 +670,8 @@ uno::Reference<sheet::XRangeSelection> SAL_CALL PivotTableDataProvider::getRange
     return xResult;
 }
 
+// XPivotTableDataProvider ========================================================
+
 uno::Sequence<chart2::data::PivotTableFieldEntry> PivotTableDataProvider::getColumnFields()
 {
     return comphelper::containerToSequence(m_aColumnFields);
@@ -776,7 +778,7 @@ void SAL_CALL PivotTableDataProvider::removeModifyListener(const uno::Reference<
     }
 }
 
-// DataProvider XPropertySet -------------------------------------------------
+// DataProvider XPropertySet ========================================================
 
 uno::Reference< beans::XPropertySetInfo> SAL_CALL
     PivotTableDataProvider::getPropertySetInfo()
