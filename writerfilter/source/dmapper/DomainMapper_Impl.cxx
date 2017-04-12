@@ -89,6 +89,10 @@
 #include <comphelper/propertysequence.hxx>
 #include <unotools/mediadescriptor.hxx>
 
+
+
+
+
 using namespace ::com::sun::star;
 using namespace oox;
 namespace writerfilter {
@@ -5226,6 +5230,9 @@ void DomainMapper_Impl::ApplySettingsTable()
             }
 
             uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+
+            if (m_pSettingsTable->GetDoNotExpandShiftReturn())
+                xSettings->setPropertyValue( "DoNotJustifyLinesWithManualBreak", uno::makeAny(true) );
             if (m_pSettingsTable->GetUsePrinterMetrics())
                 xSettings->setPropertyValue("PrinterIndependentLayout", uno::makeAny(document::PrinterIndependentLayout::DISABLED));
             if( m_pSettingsTable->GetEmbedTrueTypeFonts())
