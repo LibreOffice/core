@@ -73,7 +73,6 @@
 #include <helpid.h>
 #include <globals.hrc>
 #include <shells.hrc>
-#include <popup.hrc>
 #include <web.hrc>
 #include <view.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>

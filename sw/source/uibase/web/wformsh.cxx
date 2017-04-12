@@ -30,7 +30,6 @@
 #include "wformsh.hxx"
 #include "globals.hrc"
 #include "web.hrc"
-#include "popup.hrc"
 #include "shells.hrc"
 
 #include <sfx2/request.hxx>

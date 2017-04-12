@@ -30,7 +30,6 @@
 #include <olesh.hxx>
 
 #include <cmdid.h>
-#include <popup.hrc>
 #include <shells.hrc>
 
 #define SwOleShell

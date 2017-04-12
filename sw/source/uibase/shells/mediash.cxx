@@ -55,7 +55,6 @@
 #include <edtwin.hxx>
 #include <swwait.hxx>
 #include <shells.hrc>
-#include <popup.hrc>
 
 #include <sfx2/objface.hxx>
 #include <vcl/EnumContext.hxx>

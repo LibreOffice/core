@@ -61,7 +61,6 @@
 #define SwDrawTextShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#include <popup.hrc>
 #include <uitool.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>

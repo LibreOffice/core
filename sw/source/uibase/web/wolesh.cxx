@@ -27,7 +27,6 @@
 #include "helpid.h"
 #include "globals.hrc"
 #include "web.hrc"
-#include "popup.hrc"
 #include "shells.hrc"
 #include "wolesh.hxx"
 #include "cmdid.h"

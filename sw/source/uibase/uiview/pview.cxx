@@ -67,7 +67,6 @@
 #include <helpid.h>
 #include <cmdid.h>
 #include <globals.hrc>
-#include <popup.hrc>
 #include <view.hrc>
 
 #define SwPagePreview

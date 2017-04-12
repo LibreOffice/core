@@ -78,7 +78,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/uibase/dbui/mailmergechildwindow.src \
     sw/source/ui/app/app.src \
     sw/source/ui/app/error.src \
-    sw/source/ui/app/mn.src \
     sw/source/ui/chrdlg/chrdlg.src \
     sw/source/ui/config/optdlg.src \
     sw/source/ui/config/optload.src \

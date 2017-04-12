@@ -64,7 +64,6 @@
 #include <edtwin.hxx>
 #include <swwait.hxx>
 #include <shells.hrc>
-#include <popup.hrc>
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
 #include <doc.hxx>

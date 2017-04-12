@@ -40,7 +40,6 @@
 #include "cmdid.h"
 #include "globals.hrc"
 #include "helpid.h"
-#include "popup.hrc"
 #include "shells.hrc"
 #include "drwbassh.hxx"
 #include "drformsh.hxx"

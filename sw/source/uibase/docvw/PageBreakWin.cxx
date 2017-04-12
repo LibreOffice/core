@@ -8,7 +8,6 @@
  */
 
 #include <globals.hrc>
-#include <popup.hrc>
 #include <utlui.hrc>
 
 #include <cmdid.h>

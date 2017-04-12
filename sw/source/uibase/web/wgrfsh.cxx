@@ -30,7 +30,6 @@
 #include "uitool.hxx"
 #include "docsh.hxx"
 #include "shells.hrc"
-#include "popup.hrc"
 #include "globals.hrc"
 #include "web.hrc"
 #include "wgrfsh.hxx"

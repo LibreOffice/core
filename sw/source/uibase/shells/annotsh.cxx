@@ -75,7 +75,6 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
-#include <popup.hrc>
 #include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
 #include <swdtflvr.hxx>

@@ -24,6 +24,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <editeng/editstat.hxx>
 #include <tools/date.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/window.hxx>
 
@@ -208,6 +209,7 @@ class SwAnnotationWin : public vcl::Window
         SwAnnotationWin*   GetTopReplyNote();
         SvxLanguageItem GetLanguage();
 
+        VclBuilder      maBuilder;
         SwPostItMgr&    mrMgr;
         SwView&         mrView;
 

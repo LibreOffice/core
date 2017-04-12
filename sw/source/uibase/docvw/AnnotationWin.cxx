@@ -23,7 +23,6 @@
 #include <PostItMgr.hxx>
 
 #include <annotation.hrc>
-#include <popup.hrc>
 #include <cmdid.h>
 
 #include <vcl/menu.hxx>
@@ -67,6 +66,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwSidebarItem& rSidebarItem,
                                   SwFormatField* aField )
     : Window(&rEditWin, nBits)
+    , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/annotationmenu.ui", "")
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())
     , mnEventId(nullptr)
@@ -122,7 +122,8 @@ SwAnnotationWin::~SwAnnotationWin()
 
 void SwAnnotationWin::dispose()
 {
-    mpButtonPopup.disposeAndClear();
+    mpButtonPopup.clear();
+    maBuilder.disposeBuilder();
 
     if (IsDisposed())
         return;
@@ -342,12 +343,13 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
 
 VclPtr<MenuButton> SwAnnotationWin::CreateMenuButton()
 {
-    mpButtonPopup = VclPtr<PopupMenu>::Create(SW_RES(MN_ANNOTATION_BUTTON));
-    OUString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
+    mpButtonPopup = maBuilder.get_menu("menu");
+    sal_uInt16 nByAuthorId = mpButtonPopup->GetItemId("deleteby");
+    OUString aText = mpButtonPopup->GetItemText(nByAuthorId);
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1,GetAuthor());
     aText = aRewriter.Apply(aText);
-    mpButtonPopup->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
+    mpButtonPopup->SetItemText(nByAuthorId, aText);
     VclPtrInstance<AnnotationMenuButton> pMenuButton( *this );
     pMenuButton->SetPopupMenu( mpButtonPopup );
     pMenuButton->Show();

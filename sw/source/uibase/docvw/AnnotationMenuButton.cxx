@@ -67,7 +67,17 @@ void AnnotationMenuButton::dispose()
 
 void AnnotationMenuButton::Select()
 {
-    mrSidebarWin.ExecuteCommand( GetCurItemId() );
+    OString sIdent = GetCurItemIdent();
+    if (sIdent == "reply")
+        mrSidebarWin.ExecuteCommand(FN_REPLY);
+    else if (sIdent == "delete")
+        mrSidebarWin.ExecuteCommand(FN_DELETE_COMMENT);
+    else if (sIdent == "deleteby")
+        mrSidebarWin.ExecuteCommand(FN_DELETE_NOTE_AUTHOR);
+    else if (sIdent == "deleteall")
+        mrSidebarWin.ExecuteCommand(FN_DELETE_ALL_NOTES);
+    else if (sIdent == "formatall")
+        mrSidebarWin.ExecuteCommand(FN_FORMAT_ALL_NOTES);
 }
 
 void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
@@ -75,18 +85,18 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     PopupMenu* pButtonPopup(GetPopupMenu());
     if (mrSidebarWin.IsReadOnly())
     {
-        pButtonPopup->EnableItem(FN_REPLY, false );
-        pButtonPopup->EnableItem(FN_DELETE_COMMENT, false );
-        pButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR, false );
-        pButtonPopup->EnableItem(FN_DELETE_ALL_NOTES, false );
-        pButtonPopup->EnableItem(FN_FORMAT_ALL_NOTES, false );
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"), false);
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("delete"), false );
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteby"), false );
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteall"), false );
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("formatall"), false );
     }
     else
     {
-        pButtonPopup->EnableItem(FN_DELETE_COMMENT, !mrSidebarWin.IsProtected() );
-        pButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR);
-        pButtonPopup->EnableItem(FN_DELETE_ALL_NOTES);
-        pButtonPopup->EnableItem(FN_FORMAT_ALL_NOTES);
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("delete"), !mrSidebarWin.IsProtected());
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteby"));
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteall"));
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("formatall"));
     }
 
     if (mrSidebarWin.IsProtected())

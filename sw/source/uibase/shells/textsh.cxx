@@ -88,7 +88,6 @@
 #include <column.hxx>
 #include <edtwin.hxx>
 #include <shells.hrc>
-#include <popup.hrc>
 #include <swerror.h>
 #include <unochart.hxx>
 

@@ -22,7 +22,6 @@
 #include "helpid.h"
 #include "globals.hrc"
 #include "navsh.hxx"
-#include "popup.hrc"
 #include "shells.hrc"
 #define SwNavigationShell
 #include "swslots.hxx"

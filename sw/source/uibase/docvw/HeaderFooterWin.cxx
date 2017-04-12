@@ -10,7 +10,6 @@
 #include <app.hrc>
 #include <docvw.hrc>
 #include <globals.hrc>
-#include <popup.hrc>
 #include <svtools/svtools.hrc>
 
 #include <cmdid.h>

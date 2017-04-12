@@ -34,7 +34,6 @@
 #include <OverlayRanges.hxx>
 
 #include <annotation.hrc>
-#include <popup.hrc>
 #include <docvw.hrc>
 #include <app.hrc>
 #include <access.hrc>

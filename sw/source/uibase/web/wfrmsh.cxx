@@ -26,7 +26,6 @@
 #include "view.hxx"
 #include "wfrmsh.hxx"
 #include "globals.hrc"
-#include "popup.hrc"
 #include "shells.hrc"
 #include "web.hrc"
 

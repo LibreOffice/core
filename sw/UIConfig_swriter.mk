@@ -88,6 +88,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/addentrydialog \
 	sw/uiconfig/swriter/ui/addressblockdialog \
 	sw/uiconfig/swriter/ui/alreadyexistsdialog \
+	sw/uiconfig/swriter/ui/annotationmenu \
 	sw/uiconfig/swriter/ui/asciifilterdialog \
 	sw/uiconfig/swriter/ui/asksearchdialog \
 	sw/uiconfig/swriter/ui/assignfieldsdialog \

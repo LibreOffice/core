@@ -20,18 +20,6 @@
 #define INCLUDED_SW_INC_SWCOMMANDS_H
 
 #define CMD_FN_READONLY_SELECTION_MODE              ".uno:SelectTextMode"
-#define CMD_FN_REPLY                                ".uno:ReplyNote"
-#define CMD_FN_DELETE_COMMENT                       ".uno:DeleteComment"
-#define CMD_FN_DELETE_NOTE_AUTHOR                   ".uno:DeleteAuthor"
-#define CMD_FN_DELETE_ALL_NOTES                     ".uno:DeleteAllNotes"
-#define CMD_FN_FORMAT_ALL_NOTES                     ".uno:FormatAllNotes"
-#define CMD_FN_HIDE_NOTE                            ".uno:HideNote"
-#define CMD_FN_HIDE_NOTE_AUTHOR                     ".uno:HideAuthor"
-#define CMD_FN_HIDE_ALL_NOTES                       ".uno:HideAllNotes"
-#define CMD_FN_REDLINE_ACCEPT_DIRECT                ".uno:AcceptTrackedChange"
-#define CMD_FN_REDLINE_REJECT_DIRECT                ".uno:RejectTrackedChange"
-#define CMD_FN_REDLINE_NEXT_CHANGE                  ".uno:NextTrackedChange"
-#define CMD_FN_REDLINE_PREV_CHANGE                  ".uno:PreviousTrackedChange"
 
 #endif
 
