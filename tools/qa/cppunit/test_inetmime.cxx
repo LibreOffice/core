@@ -35,8 +35,11 @@ namespace
     public:
         void test_decodeHeaderFieldBody();
 
+        void test_scanContentType();
+
         CPPUNIT_TEST_SUITE(Test);
         CPPUNIT_TEST(test_decodeHeaderFieldBody);
+        CPPUNIT_TEST(test_scanContentType);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -51,6 +54,29 @@ namespace
         CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QQ==?=", "A"));
         CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QUI=?=", "AB"));
         CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QUJD?=", "ABC"));
+    }
+
+    void Test::test_scanContentType()
+    {
+        {
+            OUString input
+                = "TEST/subTST; parm1*0*=US-ASCII'En'5%25%20; Parm1*1*=of%2010";
+            OUString type;
+            OUString subType;
+            INetContentTypeParameterList parameters;
+            auto end = INetMIME::scanContentType(
+                input.getStr(), input.getStr() + input.getLength(), &type,
+                &subType, &parameters);
+            CPPUNIT_ASSERT(end != nullptr);
+            CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
+            CPPUNIT_ASSERT_EQUAL(OUString("test"), type);
+            CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
+            CPPUNIT_ASSERT_EQUAL(
+                INetContentTypeParameterList::size_type(1), parameters.size());
+            auto i = parameters.find("parm1");
+            CPPUNIT_ASSERT(i != parameters.end());
+            CPPUNIT_ASSERT_EQUAL(OUString("5% of 10"), i->second.m_sValue);
+        }
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);

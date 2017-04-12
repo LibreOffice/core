@@ -434,16 +434,17 @@ void appendISO88591(OUString & rText, sal_Char const * pBegin,
 Parameter ** ParameterList::find(const OString& rAttribute,
                                  sal_uInt32 nSection, bool & rPresent)
 {
+    rPresent = false;
     Parameter ** p = &m_pList;
     for (; *p; p = &(*p)->m_pNext)
     {
         sal_Int32 nCompare = rAttribute.compareTo((*p)->m_aAttribute);
         if (nCompare > 0)
-            break;
+            return &(*p)->m_pNext;
         else if (nCompare == 0)
         {
             if (nSection > (*p)->m_nSection)
-                break;
+                return &(*p)->m_pNext;
             else if (nSection == (*p)->m_nSection)
             {
                 rPresent = true;
@@ -451,7 +452,6 @@ Parameter ** ParameterList::find(const OString& rAttribute,
             }
         }
     }
-    rPresent = false;
     return p;
 }
 
@@ -793,9 +793,11 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                 INetMIMEOutputSink aSink;
                 while (p != pEnd)
                 {
-                    sal_uInt32 nChar = INetMIME::getUTF32Character(p, pEnd);
+                    auto q = p;
+                    sal_uInt32 nChar = INetMIME::getUTF32Character(q, pEnd);
                     if (rtl::isAscii(nChar) && !isTokenChar(nChar))
                         break;
+                    p = q;
                     if (nChar == '%' && p + 1 < pEnd)
                     {
                         int nWeight1 = INetMIME::getHexWeight(p[0]);
