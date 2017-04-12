@@ -115,7 +115,7 @@ LocaleDataWrapper::~LocaleDataWrapper()
 
 void LocaleDataWrapper::setLanguageTag( const LanguageTag& rLanguageTag )
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nCriticalChange );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::CriticalChange );
     maLanguageTag = rLanguageTag;
     invalidateData();
 }
@@ -1383,7 +1383,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
 
 OUString LocaleDataWrapper::getDate( const Date& rDate ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
 //!TODO: leading zeros et al
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
@@ -1429,7 +1429,7 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
 
 OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
 //!TODO: leading zeros et al
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
@@ -1458,7 +1458,7 @@ OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b
 OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
         bool bTwoDigitYear ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     using namespace css::i18n;
     sal_Unicode     aBuf[20];
     sal_Unicode*    pBuf;
@@ -1500,7 +1500,7 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
 
 OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
 
@@ -1544,7 +1544,7 @@ inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal
 OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
         bool bUseThousandSep, bool bTrailingZeros ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     sal_Unicode aBuf[128];      // big enough for 64-bit long and crazy grouping
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
@@ -1563,7 +1563,7 @@ OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
 OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         const OUString& rCurrencySymbol, bool bUseThousandSep ) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     sal_Unicode aBuf[192];
     sal_Unicode aNumBuf[128];    // big enough for 64-bit long and crazy grouping
     sal_Unicode cZeroChar = getCurrZeroChar();
@@ -1771,7 +1771,7 @@ LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
 
 OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
     OUStringBuffer aDebugMsg(rDebugMsg);
     aDebugMsg.append('\n');
     aDebugMsg.append(maLanguageTag.getBcp47());
@@ -1872,7 +1872,7 @@ css::uno::Sequence< OUString > LocaleDataWrapper::getDateAcceptancePatterns() co
 void LocaleDataWrapper::setDateAcceptancePatterns(
         const css::uno::Sequence< OUString > & rPatterns )
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nWrite );
+    ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::Write );
 
     if (!aDateAcceptancePatterns.getLength() || !rPatterns.getLength())
     {
