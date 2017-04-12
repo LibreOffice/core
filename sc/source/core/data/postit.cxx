@@ -697,8 +697,9 @@ void ScCaptionPtr::decRefAndDestroy()
         assert(!mpNext);                    // this must be one and only one
         assert(mpCaption);
 
-#if 1
-        // FIXME: there are still cases where the caption pointer is dangling
+#if 0
+        // Quick workaround for when there are still cases where the caption
+        // pointer is dangling
         mpCaption = nullptr;
         mbNotOwner = false;
 #else
