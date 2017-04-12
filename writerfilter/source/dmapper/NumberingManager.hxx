@@ -45,9 +45,7 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nNFC;            //LN_CT_Lvl_numFmt
     sal_Int32                                     m_nJC;             //LN_JC
     sal_Int32                                     m_nFLegal;         //LN_FLEGAL
-    sal_Int32                                     m_nFPrev;          //LN_FPREV
     sal_Int32                                     m_nFPrevSpace;     //LN_FPREVSPACE
-    sal_Int32                                     m_nFWord6;         //LN_FWORD6
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
     OUString                               m_sGraphicURL;
@@ -66,9 +64,7 @@ public:
         ,m_nNFC(-1)
         ,m_nJC(-1)
         ,m_nFLegal(-1)
-        ,m_nFPrev(-1)
         ,m_nFPrevSpace(-1)
-        ,m_nFWord6(-1)
         ,m_nXChFollow(SvxNumberFormat::LISTTAB)
         ,m_nTabstop( 0 )
         ,m_outline(false)
