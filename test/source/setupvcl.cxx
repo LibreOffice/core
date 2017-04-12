@@ -74,7 +74,7 @@ void test::setUpVcl() {
     LanguageTag::setConfiguredSystemLanguage(tag.getLanguageType(false));
     InitVCL();
     if (isHeadless()) {
-        Application::EnableHeadlessMode(true);
+        Application::EnableHeadlessMode(false);
     }
     Application::setDeInitHook(LINK(nullptr, Hook, deinitHook));
 }
