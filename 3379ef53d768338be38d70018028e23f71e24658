@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_415be254",
+        "filename": "android/source/src/java/org/libreoffice/textselection/TextSelectionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001574
+      },
+      "writtenOn": "2017-04-12T20:07:35Z",
+      "side": 1,
+      "message": "I agree with you. The buttons all have their separate show/hide functions now. It will good to have a centralized method to handle collective actions. Maybe an interface ToolbarElementBehavior?",
+      "parentUuid": "5a3905b3_c1c0b2e3",
+      "range": {
+        "startLine": 47,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 44
+      },
+      "revId": "3379ef53d768338be38d70018028e23f71e24658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_61fc5e3f",
         "filename": "android/source/src/java/org/libreoffice/textselection/TextSelectionController.java",
         "patchSetId": 2
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I see, I may have missed something but how are they unsafe? :)",
       "parentUuid": "5a3905b3_61fc5e3f",
+      "range": {
+        "startLine": 52,
+        "startChar": 16,
+        "endLine": 53,
+        "endChar": 50
+      },
+      "revId": "3379ef53d768338be38d70018028e23f71e24658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6158de57",
+        "filename": "android/source/src/java/org/libreoffice/textselection/TextSelectionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001574
+      },
+      "writtenOn": "2017-04-12T20:07:35Z",
+      "side": 1,
+      "message": "Well, I mean these two variables are shared so accessing them should be atomic/critical section. Now, however, I think it\u0027s probably fine since they are on a UI thread.",
+      "parentUuid": "5a3905b3_61aa9e1b",
       "range": {
         "startLine": 52,
         "startChar": 16,
