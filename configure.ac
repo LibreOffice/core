@@ -5465,6 +5465,10 @@ if test "$build_os" = "cygwin"; then
          -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/msidb.exe" \
          -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/uuidgen.exe" \
          -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/msitran.exe"; then :
+    elif test -f "$WINDOWS_SDK_HOME/bin/x86/msiinfo.exe" \
+         -a -f "$WINDOWS_SDK_HOME/bin/x86/msidb.exe" \
+         -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/uuidgen.exe" \
+         -a -f "$WINDOWS_SDK_HOME/bin/x86/msitran.exe"; then :
     else
         AC_MSG_ERROR([Some (all?) Windows Installer tools in the Windows SDK are missing, please install.])
     fi
