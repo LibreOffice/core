@@ -491,6 +491,10 @@ String STR_PIVOT_NOTEMPTY+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "The destination range is not empty. Overwrite existing contents?" ;
 };
+String STR_PIVOT_REMOVE_PIVOTCHART+RID_GLOBSTR_OFFSET
+{
+    Text [ en-US ] = "There is at least one pivot chart associated with this pivot table. Should remove all or abort?" ;
+};
 String STR_DATAPILOT_SUBTOTAL+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "The source range contains subtotals which may distort the results. Use it anyway?";

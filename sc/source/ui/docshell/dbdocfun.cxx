@@ -21,7 +21,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-
+#include <svx/svdpage.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include "dbdocfun.hxx"
@@ -49,6 +49,9 @@
 #include "progress.hxx"
 #include <undosort.hxx>
 #include <inputopt.hxx>
+
+#include "chartlis.hxx"
+#include "ChartTools.hxx"
 
 #include <set>
 #include <memory>
@@ -1318,13 +1321,43 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
         return false;
 
+    ScDocument& rDoc = rDocShell.GetDocument();
+
+    if (!bApi)
+    {
+        // If we come from GUI - ask to delete the associated pivot charts too..
+        std::vector<SdrOle2Obj*> aListOfObjects =
+                    sc::tools::getAllPivotChartsConntectedTo(rDPObj.GetName(), &rDocShell);
+
+        ScDrawLayer* pModel = rDoc.GetDrawLayer();
+
+        if (pModel && !aListOfObjects.empty())
+        {
+            ScopedVclPtrInstance<QueryBox> aBox(
+                    ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                    ScGlobal::GetRscString(STR_PIVOT_REMOVE_PIVOTCHART));
+            if (aBox->Execute() == RET_NO)
+            {
+                return false;
+            }
+            else
+            {
+                for (SdrOle2Obj* pChartObject : aListOfObjects)
+                {
+                    rDoc.GetChartListenerCollection()->removeByName(pChartObject->GetName());
+                    pModel->AddUndo(new SdrUndoDelObj(*pChartObject));
+                    pChartObject->GetPage()->RemoveObject(pChartObject->GetOrdNum());
+                }
+            }
+        }
+    }
+
     std::unique_ptr<ScDocument> pOldUndoDoc;
     std::unique_ptr<ScDPObject> pUndoDPObj;
 
     if (bRecord)
         pUndoDPObj.reset(new ScDPObject(rDPObj));    // copy old settings for undo
 
-    ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
