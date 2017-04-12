@@ -32,6 +32,7 @@
 #include <window.h>
 #include <brdwin.hxx>
 
+#include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
@@ -489,23 +490,8 @@ void VclBuilderContainer::disposeBuilder()
 
 OUString VclBuilderContainer::getUIRootDir()
 {
-    /*to-do, check if user config has an override before using shared one, etc*/
-    css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::thePathSettings::get(
-        ::comphelper::getProcessComponentContext() );
-
-    OUString sShareLayer = xPathSettings->getBasePathShareLayer();
-
-    // "UIConfig" is a "multi path" ... use first part only here!
-    sal_Int32 nPos = sShareLayer.indexOf(';');
-    if (nPos > 0)
-        sShareLayer = sShareLayer.copy(0, nPos);
-
-    // Note: May be an user uses URLs without a final slash! Check it ...
-    if (!sShareLayer.endsWith("/"))
-        sShareLayer += "/";
-
-    sShareLayer += "soffice.cfg/";
-    /*to-do, can we merge all this foo with existing soffice.cfg finding code, etc*/
+    OUString sShareLayer("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/");
+    rtl::Bootstrap::expandMacros(sShareLayer);
     return sShareLayer;
 }
 
