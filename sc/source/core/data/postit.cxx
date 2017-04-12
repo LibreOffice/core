@@ -1138,20 +1138,16 @@ void ScPostIt::RemoveCaption()
     if (pDrawLayer == maNoteData.mxCaption->GetModel())
         maNoteData.mxCaption.removeFromDrawPageAndFree();
 
-#if 0
-    // Either the caption object is gone or, because of Undo or clipboard is
-    // held in at least two instances, or only one instance in Undo because the
-    // original sheet in this document is just deleted, or the Undo document is
-    // just destroyed which leaves us with one reference.
-    // Let's detect other use cases..
-    assert(!maNoteData.mxCaption || maNoteData.mxCaption.getRefs() >= 2 ||
-            (!mrDoc.IsUndo() && !mrDoc.IsClipboard()) || (mrDoc.IsUndo() && mrDoc.IsInDtorClear()));
-#endif
+    SAL_INFO("sc.core","ScPostIt::RemoveCaption - refs: " << maNoteData.mxCaption.getRefs() <<
+            "  IsUndo: " << mrDoc.IsUndo() << "  IsClip: " << mrDoc.IsClipboard() <<
+            "  Dtor: " << mrDoc.IsInDtorClear());
 
-    // Forget the caption object if removeFromDrawPageAndFree() above did not
-    // free it.
+    // Forget the caption object if removeFromDrawPageAndFree() did not free it.
     if (maNoteData.mxCaption)
+    {
+        SAL_INFO("sc.core","ScPostIt::RemoveCaption - forgetting one ref");
         maNoteData.mxCaption.forget();
+    }
 }
 
 ScCaptionPtr ScNoteUtil::CreateTempCaption(
