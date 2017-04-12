@@ -23,6 +23,7 @@
 #include "com/sun/star/document/LockedDocumentRequest.hpp"
 #include "com/sun/star/document/LockedOnSavingRequest.hpp"
 #include "com/sun/star/document/LockFileIgnoreRequest.hpp"
+#include "com/sun/star/document/LockFileCorruptRequest.hpp"
 #include "com/sun/star/document/OwnLockOnDocumentRequest.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/task/XInteractionDisapprove.hpp"
@@ -40,6 +41,7 @@
 #include "alreadyopen.hxx"
 #include "filechanged.hxx"
 #include "lockfailed.hxx"
+#include "lockcorrupt.hxx"
 
 #include "iahndl.hxx"
 
@@ -182,11 +184,16 @@ handleChangedByOthersRequest_(
     }
 }
 
+const sal_uInt16  UUI_DOC_CreateErrDlg  = 0;
+const sal_uInt16  UUI_DOC_CorruptErrDlg = 1;
+
+
+
 void
-handleLockFileIgnoreRequest_(
+handleLockFileProblemRequest_(
     Window * pParent,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
-        rContinuations )
+        rContinuations, sal_uInt16 nWhichDlg )
     SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionApprove > xApprove;
@@ -203,9 +210,20 @@ handleLockFileIgnoreRequest_(
         if (!xManager.get())
             return;
 
-        boost::scoped_ptr< LockFailedQueryBox > xDialog(
+        sal_Int32 nResult;
+
+        if (nWhichDlg == UUI_DOC_CreateErrDlg)
+        {
+            boost::scoped_ptr< LockFailedQueryBox > xDialog(
             new LockFailedQueryBox( pParent, xManager.get() ) );
-        sal_Int32 nResult = xDialog->Execute();
+            nResult = xDialog->Execute();
+        }
+        else
+        {
+            boost::scoped_ptr< LockCorruptQueryBox > xDialog(
+            new LockCorruptQueryBox( pParent, xManager.get() ) );
+            nResult = xDialog->Execute();
+        }
 
         if ( nResult == RET_OK )
             xApprove->select();
@@ -282,8 +300,9 @@ UUIInteractionHelper::handleChangedByOthersRequest(
     return false;
 }
 
+
 bool
-UUIInteractionHelper::handleLockFileIgnoreRequest(
+UUIInteractionHelper::handleLockFileProblemRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
     SAL_THROW((uno::RuntimeException))
 {
@@ -292,10 +311,19 @@ UUIInteractionHelper::handleLockFileIgnoreRequest(
     document::LockFileIgnoreRequest aLockFileIgnoreRequest;
     if (aAnyRequest >>= aLockFileIgnoreRequest )
     {
-        handleLockFileIgnoreRequest_( getParentProperty(),
-                                      rRequest->getContinuations() );
+        handleLockFileProblemRequest_( getParentProperty(),
+                                      rRequest->getContinuations(), UUI_DOC_CreateErrDlg );
         return true;
     }
+
+    document::LockFileCorruptRequest aLockFileCorruptRequest;
+    if (aAnyRequest >>= aLockFileCorruptRequest )
+    {
+        handleLockFileProblemRequest_( getParentProperty(),
+                                      rRequest->getContinuations(), UUI_DOC_CorruptErrDlg );
+        return true;
+    }
+
     return false;
 }
 

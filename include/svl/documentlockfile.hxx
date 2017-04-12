@@ -48,7 +48,10 @@ public:
     bool CreateOwnLockFile();
     ::com::sun::star::uno::Sequence< OUString > GetLockData();
     bool OverwriteOwnLockFile();
+    /// Delete the Lockfile, if current user is the owner
     void RemoveFile();
+    /// Only delete lockfile, disregarding ownership
+    void RemoveFileDirectly();
 
     // the methods allow to control whether UI interaction regarding the locked document file is allowed
     // this is a workaround for automated tests

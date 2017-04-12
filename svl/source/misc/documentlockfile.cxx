@@ -211,11 +211,18 @@ void DocumentLockFile::RemoveFile()
       || !aFileData[LOCKFILE_USERURL_ID].equals( aNewEntry[LOCKFILE_USERURL_ID] ) )
         throw io::IOException(); // not the owner, access denied
 
+    RemoveFileDirectly();
+}
+
+void DocumentLockFile::RemoveFileDirectly()
+{
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aCnt(m_aURL, xEnv, comphelper::getProcessComponentContext());
     aCnt.executeCommand(OUString("delete"),
         uno::makeAny(sal_Bool(sal_True)));
 }
+
+
 
 } // namespace svt
 

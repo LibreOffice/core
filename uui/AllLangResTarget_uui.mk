@@ -27,6 +27,7 @@ $(eval $(call gb_SrsTarget_add_files,uui/res,\
 	uui/source/ids.src \
 	uui/source/lockfailed.src \
 	uui/source/logindlg.src \
+	uui/source/lockcorrupt.src \
 	uui/source/nameclashdlg.src \
 	uui/source/newerverwarn.src \
 	uui/source/openlocked.src \

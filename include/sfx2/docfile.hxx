@@ -165,9 +165,12 @@ public:
     sal_Bool            Commit();
     sal_Bool            IsStorage();
 
-    sal_Int8            ShowLockedDocumentDialog( const css::uno::Sequence< OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
+    sal_Int8            ShowLockedDocumentDialog( const css::uno::Sequence< OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock, bool bHandleSysLocked );
     bool                LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
     void                UnlockFile( sal_Bool bReleaseLockStream );
+    enum  MessageDlg    { LockFileIgnore, LockFileCorrupt };
+    bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
+    void                DisableUnlockWebDAV( bool bDisableUnlockWebDAV = true );
 
     css::uno::Reference< css::embed::XStorage > GetStorage( sal_Bool bCreateTempIfNo = sal_True );
     css::uno::Reference< css::embed::XStorage > GetOutputStorage();

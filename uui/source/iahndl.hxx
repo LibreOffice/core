@@ -325,7 +325,7 @@ private:
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((::com::sun::star::uno::RuntimeException));
 
-    bool handleLockFileIgnoreRequest(
+    bool handleLockFileProblemRequest(
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((::com::sun::star::uno::RuntimeException));

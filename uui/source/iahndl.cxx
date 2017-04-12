@@ -874,7 +874,7 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleChangedByOthersRequest( rRequest ) )
                 return true;
 
-            if ( handleLockFileIgnoreRequest( rRequest ) )
+            if ( handleLockFileProblemRequest( rRequest ) )
                 return true;
 
             task::DocumentMacroConfirmationRequest aMacroConfirmRequest;
