@@ -874,7 +874,13 @@ void DocxExport::WriteSettings()
     {
         pFS->singleElementNS( XML_w, XML_documentProtection, FSNS(XML_w, XML_edit), "forms", FSNS(XML_w, XML_enforcement), "1",  FSEND );
     }
-
+    // Do not justify lines with manual break
+    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ))
+    {
+        pFS->startElementNS( XML_w, XML_compat, FSEND );
+        pFS->singleElementNS( XML_w, XML_doNotExpandShiftReturn, FSEND );
+        pFS->endElementNS( XML_w, XML_compat );
+    }
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Use the setting from the default style.
     SwTextFormatColl* pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
@@ -958,7 +964,6 @@ void DocxExport::WriteSettings()
                         FSNS( XML_w, XML_val ),  OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr(),
                         FSEND);
                 }
-
                 pFS->endElementNS( XML_w, XML_compat );
             }
         }
@@ -972,7 +977,6 @@ void DocxExport::WriteSettings()
                               FSNS( XML_w, XML_edit ), "forms",
                               FSEND );
     }
-
     pFS->endElementNS( XML_w, XML_settings );
 }
 

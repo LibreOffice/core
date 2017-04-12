@@ -71,6 +71,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     bool GetSplitPgBreakAndParaMark() const;
     bool GetMirrorMarginSettings() const;
     bool GetDisplayBackgroundShape() const;
+    bool GetDoNotExpandShiftReturn() const;
     bool GetNoColumnBalance() const;
     bool GetProtectForm() const;
 
