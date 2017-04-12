@@ -26,14 +26,41 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <transliteration_body.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-namespace com { namespace sun { namespace star { namespace i18n {
 
-typedef sal_uInt32 UPT_FLAG_TYPE;
+/// Flag values of table.
+enum class ParserFlags : sal_uInt32  {
+    ILLEGAL         = 0x00000000,
+    CHAR            = 0x00000001,
+    CHAR_BOOL       = 0x00000002,
+    CHAR_WORD       = 0x00000004,
+    CHAR_VALUE      = 0x00000008,
+    CHAR_STRING     = 0x00000010,
+    CHAR_DONTCARE   = 0x00000020,
+    BOOL            = 0x00000040,
+    WORD            = 0x00000080,
+    WORD_SEP        = 0x00000100,
+    VALUE           = 0x00000200,
+    VALUE_SEP       = 0x00000400,
+    VALUE_EXP       = 0x00000800,
+    VALUE_SIGN      = 0x00001000,
+    VALUE_EXP_VALUE = 0x00002000,
+    VALUE_DIGIT     = 0x00004000,
+    NAME_SEP        = 0x20000000,
+    STRING_SEP      = 0x40000000,
+    EXCLUDED        = 0x80000000,
+};
+namespace o3tl {
+    template<> struct typed_flags<ParserFlags> : is_typed_flags<ParserFlags, 0xe0007fff> {};
+}
+
+
+namespace com { namespace sun { namespace star { namespace i18n {
 
 class cclass_Unicode : public cppu::WeakImplHelper < XCharacterClassification, css::lang::XServiceInfo >
 {
@@ -88,29 +115,8 @@ private:
     };
 
     static const sal_uInt8      nDefCnt;
-    static const UPT_FLAG_TYPE  pDefaultParserTable[];
+    static const ParserFlags    pDefaultParserTable[];
     static const sal_Int32      pParseTokensType[];
-
-    /// Flag values of table.
-    static const UPT_FLAG_TYPE  TOKEN_ILLEGAL;
-    static const UPT_FLAG_TYPE  TOKEN_CHAR;
-    static const UPT_FLAG_TYPE  TOKEN_CHAR_BOOL;
-    static const UPT_FLAG_TYPE  TOKEN_CHAR_WORD;
-    static const UPT_FLAG_TYPE  TOKEN_CHAR_VALUE;
-    static const UPT_FLAG_TYPE  TOKEN_CHAR_STRING;
-    static const UPT_FLAG_TYPE  TOKEN_CHAR_DONTCARE;
-    static const UPT_FLAG_TYPE  TOKEN_BOOL;
-    static const UPT_FLAG_TYPE  TOKEN_WORD;
-    static const UPT_FLAG_TYPE  TOKEN_WORD_SEP;
-    static const UPT_FLAG_TYPE  TOKEN_VALUE;
-    static const UPT_FLAG_TYPE  TOKEN_VALUE_SEP;
-    static const UPT_FLAG_TYPE  TOKEN_VALUE_EXP;
-    static const UPT_FLAG_TYPE  TOKEN_VALUE_SIGN;
-    static const UPT_FLAG_TYPE  TOKEN_VALUE_EXP_VALUE;
-    static const UPT_FLAG_TYPE  TOKEN_VALUE_DIGIT;
-    static const UPT_FLAG_TYPE  TOKEN_NAME_SEP;
-    static const UPT_FLAG_TYPE  TOKEN_STRING_SEP;
-    static const UPT_FLAG_TYPE  TOKEN_EXCLUDED;
 
     /// If and where c occurs in pStr
     static  const sal_Unicode*  StrChr( const sal_Unicode* pStr, sal_Unicode c );
@@ -124,29 +130,29 @@ private:
     css::uno::Reference < css::i18n::XNativeNumberSupplier > xNatNumSup;
     OUString             aStartChars;
     OUString             aContChars;
-    UPT_FLAG_TYPE*              pTable;
-    UPT_FLAG_TYPE*              pStart;
-    UPT_FLAG_TYPE*              pCont;
-    sal_Int32                   nStartTypes;
-    sal_Int32                   nContTypes;
-    ScanState                   eState;
-    sal_Unicode                 cGroupSep;
-    sal_Unicode                 cDecimalSep;
+    ParserFlags*         pTable;
+    ParserFlags*         pStart;
+    ParserFlags*         pCont;
+    sal_Int32            nStartTypes;
+    sal_Int32            nContTypes;
+    ScanState            eState;
+    sal_Unicode          cGroupSep;
+    sal_Unicode          cDecimalSep;
 
     /// Get corresponding KParseTokens flag for a character
     static sal_Int32 getParseTokensType(sal_uInt32 c, bool isFirst);
 
     /// Access parser table flags.
-    UPT_FLAG_TYPE getFlags(sal_uInt32 c);
+    ParserFlags getFlags(sal_uInt32 c);
 
     /// Access parser flags via International and special definitions.
-    UPT_FLAG_TYPE getFlagsExtended(sal_uInt32 c);
+    ParserFlags getFlagsExtended(sal_uInt32 c);
 
     /// Access parser table flags for user defined start characters.
-    UPT_FLAG_TYPE getStartCharsFlags( sal_Unicode c );
+    ParserFlags getStartCharsFlags( sal_Unicode c );
 
     /// Access parser table flags for user defined continuation characters.
-    UPT_FLAG_TYPE getContCharsFlags( sal_Unicode c );
+    ParserFlags getContCharsFlags( sal_Unicode c );
 
     /// Setup parser table. Calls initParserTable() only if needed.
     void setupParserTable( const css::lang::Locale& rLocale, sal_Int32 startCharTokenType,
