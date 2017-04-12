@@ -13,6 +13,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
 
@@ -35,7 +36,7 @@ private:
     VclPtr<Button> mpBtnClose;
     VclPtr<FixedText> mpEditPreUpload;
     VclPtr<VclMultiLineEdit> mpEditPostUpload;
-    VclPtr<VclMultiLineEdit> mpFtBugReport;
+    VclPtr<FixedHyperlink> mpBugReportMailto;
     VclPtr<CheckBox> mpCBSafeMode;
 
     OUString maSuccessMsg;
