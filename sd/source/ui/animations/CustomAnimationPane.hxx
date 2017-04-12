@@ -32,7 +32,6 @@
 #include "CategoryListBox.hxx"
 #include "motionpathtag.hxx"
 #include "misc/scopelock.hxx"
-#include "CustomAnimationPreset.hxx"
 
 #include <vector>
 

@@ -36,7 +36,6 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/configmgr.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/security.hxx>
 #include <unotools/pathoptions.hxx>

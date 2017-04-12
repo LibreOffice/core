@@ -41,7 +41,6 @@
 #include <scrwnd.hxx>
 #include <helpwin.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/virdev.hxx>
 #include "salinst.hxx"
 #include "salframe.hxx"
 #include "salgdi.hxx"
@@ -50,8 +49,6 @@
 #include "salimestatus.hxx"
 #include "salsys.hxx"
 #include "svids.hrc"
-#include "helpwin.hxx"
-#include "scrwnd.hxx"
 
 #include "com/sun/star/accessibility/MSAAService.hpp"
 

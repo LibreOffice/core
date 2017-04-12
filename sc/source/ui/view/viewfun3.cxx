@@ -68,7 +68,6 @@
 #include "cliputil.hxx"
 #include "clipoptions.hxx"
 #include <gridwin.hxx>
-#include <memory>
 #include <com/sun/star/util/XCloneable.hpp>
 
 using namespace com::sun::star;

@@ -66,7 +66,6 @@
 #include <formula/FormulaCompiler.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sfx2/lokhelper.hxx>
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 

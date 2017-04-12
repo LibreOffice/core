@@ -42,8 +42,6 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <rtl/math.hxx>
-
 #include <chrono>
 #include <iostream>
 

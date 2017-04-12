@@ -85,8 +85,6 @@ const sal_Char pBuffer_Blank[]  = "";
 #if defined(_WIN32)                      // Windows
 #       include <tchar.h>
 #       include <io.h>
-#       include <stdio.h>
-#       include <stdlib.h>
 #   define PATH_MAX             MAX_PATH
 #   define TEST_PLATFORM        "c:/"
 #   define TEST_PLATFORM_ROOT   "c:/"

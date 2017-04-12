@@ -55,8 +55,6 @@
 #include <osl/getglobalmutex.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include <memory>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

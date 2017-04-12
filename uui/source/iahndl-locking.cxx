@@ -43,8 +43,6 @@
 
 #include "iahndl.hxx"
 
-#include <memory>
-
 #define UUI_DOC_LOAD_LOCK       0
 #define UUI_DOC_OWN_LOAD_LOCK   1
 #define UUI_DOC_SAVE_LOCK       2
