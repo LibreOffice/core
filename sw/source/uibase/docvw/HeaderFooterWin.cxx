@@ -126,8 +126,9 @@ namespace
 
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader ) :
     SwFrameMenuButtonBase( pEditWin, pFrame ),
+    m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/headerfootermenu.ui", ""),
     m_bIsHeader( bHeader ),
-    m_pPopupMenu( nullptr ),
+    m_pPopupMenu(m_aBuilder.get_menu("menu")),
     m_pLine( nullptr ),
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
@@ -143,19 +144,17 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame
     m_pLine = VclPtr<SwDashedLine>::Create(GetEditWin(), &SwViewOption::GetHeaderFooterMarkColor);
     m_pLine->SetZOrder(this, ZOrderFlags::Before);
 
-    // Create and set the PopupMenu
-    m_pPopupMenu = VclPtr<PopupMenu>::Create(SW_RES(MN_HEADERFOOTER_BUTTON));
-
+    // set the PopupMenu
     // Rewrite the menu entries' text
     if (m_bIsHeader)
     {
-        m_pPopupMenu->SetItemText(FN_HEADERFOOTER_EDIT, SW_RESSTR(STR_FORMAT_HEADER));
-        m_pPopupMenu->SetItemText(FN_HEADERFOOTER_DELETE, SW_RESSTR(STR_DELETE_HEADER));
+        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("edit"), SW_RESSTR(STR_FORMAT_HEADER));
+        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SW_RESSTR(STR_DELETE_HEADER));
     }
     else
     {
-        m_pPopupMenu->SetItemText(FN_HEADERFOOTER_EDIT, SW_RESSTR(STR_FORMAT_FOOTER));
-        m_pPopupMenu->SetItemText(FN_HEADERFOOTER_DELETE, SW_RESSTR(STR_DELETE_FOOTER));
+        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("edit"), SW_RESSTR(STR_FORMAT_FOOTER));
+        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SW_RESSTR(STR_DELETE_FOOTER));
     }
 
     SetPopupMenu(m_pPopupMenu);
@@ -171,7 +170,8 @@ SwHeaderFooterWin::~SwHeaderFooterWin( )
 
 void SwHeaderFooterWin::dispose()
 {
-    m_pPopupMenu.disposeAndClear();
+    m_pPopupMenu.clear();
+    m_aBuilder.disposeBuilder();
     m_pLine.disposeAndClear();
     SwFrameMenuButtonBase::dispose();
 }
@@ -402,78 +402,70 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
     return bResult;
 }
 
-void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
+void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
 {
     SwView& rView = GetEditWin()->GetView();
     SwWrtShell& rSh = rView.GetWrtShell();
 
     const OUString& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
-    switch ( nSlot )
+    if (rIdent == "edit")
     {
-        case FN_HEADERFOOTER_EDIT:
+        OString sPageId = m_bIsHeader ? OString("header") : OString("footer");
+        rView.GetDocShell()->FormatPage(rStyleName, sPageId, rSh);
+    }
+    else if (rIdent == "borderback")
+    {
+        const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
+        const SwFrameFormat& rMaster = pDesc->GetMaster();
+        SwFrameFormat* pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetFooter().GetFooterFormat() );
+        if ( m_bIsHeader )
+            pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetHeader().GetHeaderFormat() );
+
+        SfxItemPool* pPool = pHFFormat->GetAttrSet().GetPool();
+        SfxItemSet aSet( *pPool,
+               RES_BACKGROUND, RES_BACKGROUND,
+               RES_BOX, RES_BOX,
+               SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+               RES_SHADOW, RES_SHADOW, 0 );
+
+        aSet.Put( pHFFormat->GetAttrSet() );
+
+        // Create a box info item... needed by the dialog
+        SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
+        const SfxPoolItem *pBoxInfo;
+        if ( SfxItemState::SET == pHFFormat->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
+                                                true, &pBoxInfo) )
+            aBoxInfo = *static_cast<const SvxBoxInfoItem*>(pBoxInfo);
+
+        aBoxInfo.SetTable( false );
+        aBoxInfo.SetDist( true);
+        aBoxInfo.SetMinDist( false );
+        aBoxInfo.SetDefDist( MIN_BORDER_DIST );
+        aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
+        aSet.Put( aBoxInfo );
+
+        if ( svx::ShowBorderBackgroundDlg( this, &aSet, true ) )
         {
-            OString sPageId = m_bIsHeader ? OString("header") : OString("footer");
-            rView.GetDocShell()->FormatPage(rStyleName, sPageId, rSh);
-        }
-        break;
-        case FN_HEADERFOOTER_BORDERBACK:
-            {
-                const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
-                const SwFrameFormat& rMaster = pDesc->GetMaster();
-                SwFrameFormat* pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetFooter().GetFooterFormat() );
-                if ( m_bIsHeader )
-                    pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetHeader().GetHeaderFormat() );
+            const SfxPoolItem* pItem;
+            if ( SfxItemState::SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {
+                pHFFormat->SetFormatAttr( *pItem );
+                rView.GetDocShell()->SetModified();
+            }
 
-                SfxItemPool* pPool = pHFFormat->GetAttrSet().GetPool();
-                SfxItemSet aSet( *pPool,
-                       RES_BACKGROUND, RES_BACKGROUND,
-                       RES_BOX, RES_BOX,
-                       SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                       RES_SHADOW, RES_SHADOW, 0 );
+            if ( SfxItemState::SET == aSet.GetItemState( RES_BOX, false, &pItem ) ) {
+                pHFFormat->SetFormatAttr( *pItem );
+                rView.GetDocShell()->SetModified();
+            }
 
-            aSet.Put( pHFFormat->GetAttrSet() );
-
-            // Create a box info item... needed by the dialog
-            SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-            const SfxPoolItem *pBoxInfo;
-            if ( SfxItemState::SET == pHFFormat->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
-                                                    true, &pBoxInfo) )
-                aBoxInfo = *static_cast<const SvxBoxInfoItem*>(pBoxInfo);
-
-            aBoxInfo.SetTable( false );
-            aBoxInfo.SetDist( true);
-            aBoxInfo.SetMinDist( false );
-            aBoxInfo.SetDefDist( MIN_BORDER_DIST );
-            aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
-            aSet.Put( aBoxInfo );
-
-            if ( svx::ShowBorderBackgroundDlg( this, &aSet, true ) )
-            {
-                const SfxPoolItem* pItem;
-                if ( SfxItemState::SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {
-                    pHFFormat->SetFormatAttr( *pItem );
-                    rView.GetDocShell()->SetModified();
-                }
-
-                if ( SfxItemState::SET == aSet.GetItemState( RES_BOX, false, &pItem ) ) {
-                    pHFFormat->SetFormatAttr( *pItem );
-                    rView.GetDocShell()->SetModified();
-                }
-
-                if ( SfxItemState::SET == aSet.GetItemState( RES_SHADOW, false, &pItem ) ) {
-                    pHFFormat->SetFormatAttr( *pItem );
-                    rView.GetDocShell()->SetModified();
-                }
+            if ( SfxItemState::SET == aSet.GetItemState( RES_SHADOW, false, &pItem ) ) {
+                pHFFormat->SetFormatAttr( *pItem );
+                rView.GetDocShell()->SetModified();
             }
         }
-        break;
-        case FN_HEADERFOOTER_DELETE:
-        {
-            rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, false, true );
-        }
-        break;
-        default:
-            break;
+    }
+    else if (rIdent == "delete")
+    {
+        rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, false, true );
     }
 }
 
@@ -498,7 +490,7 @@ void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SwHeaderFooterWin::Select()
 {
-    ExecuteCommand(GetCurItemId());
+    ExecuteCommand(GetCurItemIdent());
 }
 
 IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler, Timer *, void)

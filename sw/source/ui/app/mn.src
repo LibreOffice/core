@@ -89,27 +89,4 @@ Menu MN_ANNOTATION_BUTTON
     };
 };
 
-Menu MN_HEADERFOOTER_BUTTON
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = FN_HEADERFOOTER_EDIT ;
-            HelpID = CMD_FN_HEADERFOOTER_EDIT ;
-        };
-        MenuItem
-        {
-            Identifier = FN_HEADERFOOTER_BORDERBACK ;
-            HelpID = CMD_FN_HEADERFOOTER_BORDERBACK ;
-            Text [ en-US ] = "Border and Background..." ;
-        };
-        MenuItem
-        {
-            Identifier = FN_HEADERFOOTER_DELETE ;
-            HelpID = CMD_FN_HEADERFOOTER_DELETE ;
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

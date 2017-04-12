@@ -32,9 +32,6 @@
 #define CMD_FN_REDLINE_REJECT_DIRECT                ".uno:RejectTrackedChange"
 #define CMD_FN_REDLINE_NEXT_CHANGE                  ".uno:NextTrackedChange"
 #define CMD_FN_REDLINE_PREV_CHANGE                  ".uno:PreviousTrackedChange"
-#define CMD_FN_HEADERFOOTER_EDIT                    ".uno:HeaderFooterEdit"
-#define CMD_FN_HEADERFOOTER_DELETE                  ".uno:HeaderFooterDelete"
-#define CMD_FN_HEADERFOOTER_BORDERBACK              ".uno:HeaderFooterBorderBackground"
 
 #endif
 

@@ -10,7 +10,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_HEADERFOOTERWIN_HXX
 
 #include <FrameControl.hxx>
-
+#include <vcl/builder.hxx>
 #include <vcl/menubtn.hxx>
 
 /** Class for the header and footer separator control window.
@@ -20,6 +20,7 @@
   */
 class SwHeaderFooterWin : public SwFrameMenuButtonBase
 {
+    VclBuilder            m_aBuilder;
     OUString              m_sLabel;
     bool                  m_bIsHeader;
     VclPtr<PopupMenu>     m_pPopupMenu;
@@ -45,7 +46,7 @@ public:
     bool IsHeader() { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( );
 
-    void ExecuteCommand(sal_uInt16 nSlot);
+    void ExecuteCommand(const OString &rIdent);
 
     void SetReadonly( bool bReadonly ) override;
 

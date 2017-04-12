@@ -23,9 +23,8 @@
 #include "rcid.hrc"
 
 #define MN_ANNOTATION_BUTTON        (RC_POPUPS_BEGIN + 0)
-#define MN_HEADERFOOTER_BUTTON      (RC_POPUPS_BEGIN + 1)
 
-#if MN_HEADERFOOTER_BUTTON > RC_POPUPS_END
+#if MN_ANNOTATION_BUTTON > RC_POPUPS_END
 
 #error Resource-Id Ueberlauf in #file, #line
 #endif

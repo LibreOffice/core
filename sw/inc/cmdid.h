@@ -711,10 +711,6 @@
 #define FN_REPLY                    (FN_NOTES+7)
 #define FN_FORMAT_ALL_NOTES         (FN_NOTES+8)
 
-#define FN_HEADERFOOTER_EDIT        (FN_HEADERFOOTER+1)
-#define FN_HEADERFOOTER_DELETE      (FN_HEADERFOOTER+2)
-#define FN_HEADERFOOTER_BORDERBACK  (FN_HEADERFOOTER+3)
-
 // Region: Parameter
 #define FN_PARAM_MOVE_COUNT         (FN_PARAM+2)
 #define FN_PARAM_MOVE_SELECTION     (FN_PARAM+3)
