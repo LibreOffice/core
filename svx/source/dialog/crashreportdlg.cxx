@@ -33,7 +33,7 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     , mxBtnClose(m_xBuilder->weld_button("btn_close"))
     , mxEditPreUpload(m_xBuilder->weld_label("ed_pre"))
     , mxEditPostUpload(m_xBuilder->weld_text_view("ed_post"))
-    , mxFtBugReport(m_xBuilder->weld_text_view("ed_bugreport"))
+    , mxBugReportMailto(m_xBuilder->weld_link_button("bugreport_mailto"))
     , mxCBSafeMode(m_xBuilder->weld_check_button("check_safemode"))
     , mxPrivacyPolicyButton(m_xBuilder->weld_link_button("btnPrivacyPolicy"))
 {
@@ -95,7 +95,8 @@ IMPL_LINK(CrashReportDialog, BtnHdl, weld::Button&, rBtn, void)
         }
 
         mxBtnClose->show();
-        mxFtBugReport->show();
+        mxBugReportMailto->set_uri(mxBugReportMailto->get_uri().replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=","")));
+        mxBugReportMailto->show();
         mxEditPostUpload->show();
         mxBtnSend->set_sensitive(false);
         mxBtnCancel->set_sensitive(false);
