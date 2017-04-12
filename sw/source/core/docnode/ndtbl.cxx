@@ -1706,12 +1706,12 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
  */
 bool SwDoc::InsertCol( const SwCursor& rCursor, sal_uInt16 nCnt, bool bBehind )
 {
-    if( !::CheckSplitCells( rCursor, nCnt + 1, nsSwTableSearchType::TBLSEARCH_COL ) )
+    if( !::CheckSplitCells( rCursor, nCnt + 1, SwTableSearchType::Col ) )
         return false;
 
     // Find the Boxes via the Layout
     SwSelBoxes aBoxes;
-    ::GetTableSel( rCursor, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
+    ::GetTableSel( rCursor, aBoxes, SwTableSearchType::Col );
 
     bool bRet = false;
     if( !aBoxes.empty() )
@@ -1773,7 +1773,7 @@ bool SwDoc::InsertRow( const SwCursor& rCursor, sal_uInt16 nCnt, bool bBehind )
 {
     // Find the Boxes via the Layout
     SwSelBoxes aBoxes;
-    GetTableSel( rCursor, aBoxes, nsSwTableSearchType::TBLSEARCH_ROW );
+    GetTableSel( rCursor, aBoxes, SwTableSearchType::Row );
 
     bool bRet = false;
     if( !aBoxes.empty() )
@@ -1839,7 +1839,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
 {
     // Find the Boxes via the Layout
     SwSelBoxes aBoxes;
-    GetTableSel( rCursor, aBoxes, nsSwTableSearchType::TBLSEARCH_ROW );
+    GetTableSel( rCursor, aBoxes, SwTableSearchType::Row );
     if( ::HasProtectedCells( aBoxes ))
         return false;
 
@@ -1941,7 +1941,7 @@ bool SwDoc::DeleteCol( const SwCursor& rCursor )
 {
     // Find the Boxes via the Layout
     SwSelBoxes aBoxes;
-    GetTableSel( rCursor, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
+    GetTableSel( rCursor, aBoxes, SwTableSearchType::Col );
     if( ::HasProtectedCells( aBoxes ))
         return false;
 
@@ -2605,7 +2605,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     {
         const SwPosition aPos( *static_cast<const SwTextFrame*>(pContent)->GetTextNode() );
         const SwCursor aTmpCursor( aPos, nullptr );
-        ::GetTableSel( aTmpCursor, aBoxes, nsSwTableSearchType::TBLSEARCH_COL );
+        ::GetTableSel( aTmpCursor, aBoxes, SwTableSearchType::Col );
     }
 
     // Make code robust:
