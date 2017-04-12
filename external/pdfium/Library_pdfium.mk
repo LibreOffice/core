@@ -250,7 +250,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 # fpdfdoc
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfdoc/cline \
-    UnpackedTarball/pdfium/core/fpdfdoc/clines \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_aaction \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_action \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_actionfields \
@@ -417,7 +416,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/pdfwindow/PWL_SpecialButton \
     UnpackedTarball/pdfium/fpdfsdk/pdfwindow/PWL_Utils \
     UnpackedTarball/pdfium/fpdfsdk/pdfwindow/PWL_Wnd \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_pathdata \
+    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_color \
 ))
 
 # third_party/bigint
@@ -489,26 +488,10 @@ $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
     UnpackedTarball/pdfium/third_party/libopenjpeg20/tgt \
 ))
 
-# third_party/fx_zlib
-$(eval $(call gb_Library_add_generated_cobjects,pdfium,\
-    UnpackedTarball/pdfium/third_party/zlib_v128/adler32 \
-    UnpackedTarball/pdfium/third_party/zlib_v128/compress \
-    UnpackedTarball/pdfium/third_party/zlib_v128/crc32 \
-    UnpackedTarball/pdfium/third_party/zlib_v128/deflate \
-    UnpackedTarball/pdfium/third_party/zlib_v128/gzclose \
-    UnpackedTarball/pdfium/third_party/zlib_v128/gzlib \
-    UnpackedTarball/pdfium/third_party/zlib_v128/gzread \
-    UnpackedTarball/pdfium/third_party/zlib_v128/gzwrite \
-    UnpackedTarball/pdfium/third_party/zlib_v128/infback \
-    UnpackedTarball/pdfium/third_party/zlib_v128/inffast \
-    UnpackedTarball/pdfium/third_party/zlib_v128/inflate \
-    UnpackedTarball/pdfium/third_party/zlib_v128/inftrees \
-    UnpackedTarball/pdfium/third_party/zlib_v128/trees \
-    UnpackedTarball/pdfium/third_party/zlib_v128/uncompr \
-    UnpackedTarball/pdfium/third_party/zlib_v128/zutil \
+$(eval $(call gb_Library_use_externals,pdfium,\
+    jpeg \
+    zlib \
 ))
-
-$(eval $(call gb_Library_use_external,pdfium,jpeg))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,pdfium,\

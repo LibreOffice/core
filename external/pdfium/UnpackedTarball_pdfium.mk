@@ -12,6 +12,7 @@ pdfium_patches += visibility.patch.1
 # To support macOS 10.9 baseline.
 pdfium_patches += macos.patch.1
 pdfium_patches += ubsan.patch
+pdfium_patches += system-zlib.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
