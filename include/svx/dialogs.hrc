@@ -251,7 +251,6 @@
 #define RID_SVXSTR_OVERWRITE_TEXT           (RID_SVX_START + 212)
 
 // Strings for the selection mode
-#define RID_SVXMENU_SELECTION               (RID_SVX_START + 213)
 #define RID_SVXBMP_SELECTION                (RID_SVX_START + 215)
 
 #define RID_SVXSTR_XMLSEC_SIG_OK            (RID_SVX_START + 222)
