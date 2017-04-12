@@ -3676,7 +3676,6 @@ void HwpReader::makeFormula(TxtBox * hbox)
 {
     char mybuf[3000];
     HWPPara* pPar;
-    CharShape *cshape = nullptr;
 
     int n, c, res;
      hchar dest[3];
@@ -3688,8 +3687,6 @@ void HwpReader::makeFormula(TxtBox * hbox)
         for( n = 0; n < pPar->nch && pPar->hhstr[n]->hh;
             n += pPar->hhstr[n]->WSize() )
         {
-            if (!cshape)
-                cshape = pPar->GetCharShape(n);
             if (l >= sizeof(mybuf)-7)
                 break;
             res = hcharconv(pPar->hhstr[n]->hh, dest, UNICODE);
