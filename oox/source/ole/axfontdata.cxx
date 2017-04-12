@@ -26,7 +26,7 @@ namespace oox {
 namespace ole {
 
 AxFontData::AxFontData() :
-    mnFontEffects( 0 ),
+    mnFontEffects( AxFontFlags::NONE ),
     mnFontHeight( 160 ),
     mnFontCharSet( WINDOWS_CHARSET_DEFAULT ),
     mnHorAlign( AxHorizontalAlign::Left ),
@@ -51,7 +51,9 @@ bool AxFontData::importBinaryModel( BinaryInputStream& rInStrm )
 {
     AxBinaryPropertyReader aReader( rInStrm );
     aReader.readStringProperty( maFontName );
-    aReader.readIntProperty< sal_uInt32 >( mnFontEffects );
+    sal_uInt32 nTmp32 = 0;
+    aReader.readIntProperty< sal_uInt32 >( nTmp32 );
+    mnFontEffects = static_cast<AxFontFlags>(nTmp32);
     aReader.readIntProperty< sal_Int32 >( mnFontHeight );
     aReader.skipIntProperty< sal_Int32 >(); // font offset
     aReader.readIntProperty< sal_uInt8 >( mnFontCharSet );
@@ -68,7 +70,7 @@ void AxFontData::exportBinaryModel( BinaryOutputStream& rOutStrm )
 {
     AxBinaryPropertyWriter aWriter( rOutStrm );
     aWriter.writeStringProperty( maFontName );
-    aWriter.writeIntProperty< sal_uInt32 >( mnFontEffects );
+    aWriter.writeIntProperty< sal_uInt32 >( static_cast<sal_uInt32>(mnFontEffects) );
     aWriter.writeIntProperty< sal_Int32 >( mnFontHeight );
     aWriter.skipProperty(); // font offset
     // TODO make AxFontDataModel::convertFromProperties convert the textencoding
@@ -86,11 +88,11 @@ bool AxFontData::importStdFont( BinaryInputStream& rInStrm )
     if( OleHelper::importStdFont( aFontInfo, rInStrm, false ) )
     {
         maFontName = aFontInfo.maName;
-        mnFontEffects = 0;
-        setFlag( mnFontEffects, AX_FONTDATA_BOLD,      aFontInfo.mnWeight >= OLE_STDFONT_BOLD );
-        setFlag( mnFontEffects, AX_FONTDATA_ITALIC,    getFlag( aFontInfo.mnFlags, OLE_STDFONT_ITALIC ) );
-        setFlag( mnFontEffects, AX_FONTDATA_UNDERLINE, getFlag( aFontInfo.mnFlags, OLE_STDFONT_UNDERLINE ) );
-        setFlag( mnFontEffects, AX_FONTDATA_STRIKEOUT, getFlag( aFontInfo.mnFlags,OLE_STDFONT_STRIKE ) );
+        mnFontEffects = AxFontFlags::NONE;
+        setFlag( mnFontEffects, AxFontFlags::Bold,      aFontInfo.mnWeight >= OLE_STDFONT_BOLD );
+        setFlag( mnFontEffects, AxFontFlags::Italic,    getFlag( aFontInfo.mnFlags, OLE_STDFONT_ITALIC ) );
+        setFlag( mnFontEffects, AxFontFlags::Underline, getFlag( aFontInfo.mnFlags, OLE_STDFONT_UNDERLINE ) );
+        setFlag( mnFontEffects, AxFontFlags::Strikeout, getFlag( aFontInfo.mnFlags,OLE_STDFONT_STRIKE ) );
         mbDblUnderline = false;
         // StdFont stores font height in 1/10,000 of points
         setHeightPoints( getLimitedValue< sal_Int16, sal_Int32 >( aFontInfo.mnHeight / 10000, 0, SAL_MAX_INT16 ) );
