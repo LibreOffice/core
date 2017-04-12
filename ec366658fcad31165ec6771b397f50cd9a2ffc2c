@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_01ed5a8b",
+        "filename": "sw/source/filter/html/swhtml.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-04-12T18:13:46Z",
+      "side": 1,
+      "message": "Looks like the error is in the German comment - but that\u0027s for height apparently",
+      "range": {
+        "startLine": 469,
+        "startChar": 45,
+        "endLine": 469,
+        "endChar": 50
+      },
+      "revId": "ec366658fcad31165ec6771b397f50cd9a2ffc2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
