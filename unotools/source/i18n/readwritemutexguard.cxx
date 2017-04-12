@@ -23,14 +23,14 @@
 namespace utl {
 
 ReadWriteGuard::ReadWriteGuard( ReadWriteMutex& rMutexP,
-            sal_Int32 nRequestMode )
+            ReadWriteGuardMode nRequestMode )
         : rMutex( rMutexP )
 {
     // don't do anything until a pending write completed (or another
     // ReadWriteGuard leaves the ctor phase)
     ::osl::MutexGuard aGuard( rMutex.maWriteMutex );
     nMode = nRequestMode;
-    if ( nMode & ReadWriteGuardMode::nWrite )
+    if ( nMode & ReadWriteGuardMode::Write )
     {
         rMutex.maWriteMutex.acquire();
         // wait for any read to complete
@@ -40,12 +40,12 @@ ReadWriteGuard::ReadWriteGuard( ReadWriteMutex& rMutexP,
         {
             rMutex.maMutex.acquire();
             bWait = (rMutex.nReadCount != 0);
-            if ( nMode & ReadWriteGuardMode::nCriticalChange )
+            if ( nMode & ReadWriteGuardMode::CriticalChange )
                 bWait |= (rMutex.nBlockCriticalCount != 0);
             rMutex.maMutex.release();
         } while ( bWait );
     }
-    else if ( nMode & ReadWriteGuardMode::nBlockCritical )
+    else if ( nMode & ReadWriteGuardMode::BlockCritical )
     {
         rMutex.maMutex.acquire();
         ++rMutex.nBlockCriticalCount;
@@ -61,9 +61,9 @@ ReadWriteGuard::ReadWriteGuard( ReadWriteMutex& rMutexP,
 
 ReadWriteGuard::~ReadWriteGuard()
 {
-    if ( nMode & ReadWriteGuardMode::nWrite )
+    if ( nMode & ReadWriteGuardMode::Write )
         rMutex.maWriteMutex.release();
-    else if ( nMode & ReadWriteGuardMode::nBlockCritical )
+    else if ( nMode & ReadWriteGuardMode::BlockCritical )
     {
         rMutex.maMutex.acquire();
         --rMutex.nBlockCriticalCount;
@@ -79,7 +79,7 @@ ReadWriteGuard::~ReadWriteGuard()
 
 void ReadWriteGuard::changeReadToWrite()
 {
-    bool bOk = !(nMode & (ReadWriteGuardMode::nWrite | ReadWriteGuardMode::nBlockCritical));
+    bool bOk = !(nMode & (ReadWriteGuardMode::Write | ReadWriteGuardMode::BlockCritical));
     DBG_ASSERT( bOk, "ReadWriteGuard::changeReadToWrite: can't" );
     if ( bOk )
     {
@@ -91,7 +91,7 @@ void ReadWriteGuard::changeReadToWrite()
         rMutex.maMutex.release();
 
         rMutex.maWriteMutex.acquire();
-        nMode |= ReadWriteGuardMode::nWrite;
+        nMode |= ReadWriteGuardMode::Write;
         // wait for any other read to complete
 // TODO: set up a waiting thread instead of a loop
         bool bWait = true;
