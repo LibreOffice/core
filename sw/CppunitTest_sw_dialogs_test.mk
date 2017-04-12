@@ -66,8 +66,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,sw_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_rdb,sw_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,sw_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,sw_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,sw_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_dialogs_test,\
 	modules/swriter \

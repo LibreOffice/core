@@ -60,8 +60,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,vcl_dialogs_test)
 
 $(eval $(call gb_CppunitTest_use_rdb,vcl_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,vcl_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,vcl_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,vcl_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,vcl_dialogs_test,\
 	vcl \
