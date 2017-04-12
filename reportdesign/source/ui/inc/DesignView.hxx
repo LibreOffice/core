@@ -136,7 +136,7 @@ namespace rptui
 
         /** align all marked objects in all sections
         */
-        void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection);
+        void alignMarkedObjects(ControlModification _nControlModification, bool _bAlignAtSection);
 
         /** All objects will be marked.
         */
@@ -147,7 +147,7 @@ namespace rptui
 
         void            UpdatePropertyBrowserDelayed(OSectionView& _rView);
 
-        sal_uInt16          getSectionCount() const;
+        sal_uInt16      getSectionCount() const;
 
         /** removes the section at the given position.
         *

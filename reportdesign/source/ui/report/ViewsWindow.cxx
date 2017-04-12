@@ -55,7 +55,7 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _nYMov,SdrObject* _pObj,SdrView* _pView,sal_Int32 _nControlModification, bool _bBoundRects)
+bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _nYMov,SdrObject* _pObj,SdrView* _pView, ControlModification _nControlModification, bool _bBoundRects)
 {
     bool bMoveAllowed = _nXMov != 0 || _nYMov != 0;
     if ( bMoveAllowed )
@@ -674,7 +674,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
     }
 }
 
-void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection, tools::Rectangle& _rBound, tools::Rectangle& _rResize)
+void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles, ControlModification _nControlModification,bool _bAlignAtSection, tools::Rectangle& _rBound, tools::Rectangle& _rResize)
 {
     bool bOnlyOnce = false;
     TRectangleMap::const_iterator aRectIter = _rSortRectangles.begin();
@@ -702,6 +702,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
                 if ( _rResize.getHeight() < aObjRect.getHeight() )
                     _rResize = aObjRect;
                 break;
+            default: break;
         }
 
         SdrObjTransformInfoRec aInfo;
@@ -737,7 +738,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
     }
 }
 
-void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection)
+void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification, bool _bAlignAtSection)
 {
     if ( _nControlModification == ControlModification::NONE )
         return;

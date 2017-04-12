@@ -351,9 +351,8 @@ void OReportWindow::collapseSections(const uno::Sequence< css::beans::PropertyVa
     m_aViewsWindow->collapseSections(_aCollpasedSections);
 }
 
-void OReportWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection)
+void OReportWindow::alignMarkedObjects(ControlModification _nControlModification, bool _bAlignAtSection)
 {
-
     m_aViewsWindow->alignMarkedObjects(_nControlModification, _bAlignAtSection);
 }
 

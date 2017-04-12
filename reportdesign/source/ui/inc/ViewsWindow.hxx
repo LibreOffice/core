@@ -37,12 +37,13 @@
 #include "SectionWindow.hxx"
 
 class SdrHdl;
+
 namespace rptui
 {
     class OReportWindow;
     class OReportSection;
     class OSectionView;
-
+    enum class ControlModification;
 
     struct RectangleLess : public ::std::binary_function< tools::Rectangle, tools::Rectangle, bool>
     {
@@ -91,7 +92,7 @@ namespace rptui
         */
         TSectionsMap::iterator getIteratorAtPos(sal_uInt16 _nPos);
         void collectRectangles(TRectangleMap& _rMap);
-        static void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,tools::Rectangle& _rBound,tools::Rectangle& _rResize);
+        static void collectBoundResizeRect(const TRectangleMap& _rSortRectangles, ControlModification _nControlModification,bool _bAlignAtSection,tools::Rectangle& _rBound,tools::Rectangle& _rResize);
         void impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet);
 
         OViewsWindow(OViewsWindow&) = delete;
@@ -213,7 +214,7 @@ namespace rptui
 
         /** align all marked objects in all sections
         */
-        void alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection);
+        void alignMarkedObjects(ControlModification _nControlModification, bool _bAlignAtSection);
 
         /** creates a default object
         *

@@ -189,7 +189,7 @@ namespace rptui
 
         /** align all marked objects in all sections
         */
-        void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection);
+        void alignMarkedObjects(ControlModification _nControlModification, bool _bAlignAtSection);
 
         sal_uInt32 getMarkedObjectCount() const;
 
