@@ -711,12 +711,12 @@ void VmlDrawing::convertControlFontData( AxFontData& rAxFontData, sal_uInt32& rn
     rAxFontData.setHeightPoints( static_cast< sal_Int16 >( (rFontModel.monSize.get( 200 ) + 10) / 20 ) );
 
     // font effects
-    rAxFontData.mnFontEffects = 0;
-    setFlag( rAxFontData.mnFontEffects, AX_FONTDATA_BOLD, rFontModel.mobBold.get( false ) );
-    setFlag( rAxFontData.mnFontEffects, AX_FONTDATA_ITALIC, rFontModel.mobItalic.get( false ) );
-    setFlag( rAxFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, rFontModel.mobStrikeout.get( false ) );
+    rAxFontData.mnFontEffects = AxFontFlags::NONE;
+    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Bold, rFontModel.mobBold.get( false ) );
+    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Italic, rFontModel.mobItalic.get( false ) );
+    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Strikeout, rFontModel.mobStrikeout.get( false ) );
     sal_Int32 nUnderline = rFontModel.monUnderline.get( XML_none );
-    setFlag( rAxFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, nUnderline != XML_none );
+    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Underline, nUnderline != XML_none );
     rAxFontData.mbDblUnderline = nUnderline == XML_double;
 
     // font color
