@@ -121,6 +121,8 @@
 #include <sfx2/sfxresid.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <com/sun/star/io/WrongFormatException.hpp>
+
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -1226,13 +1228,24 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                             if ( !bResult )
                             {
                                 LockFileEntry aData;
+                                bool          aLockMsg = true;
                                 try
                                 {
-                                    // impossibility to get data is no real problem
                                     aData = aLockFile.GetLockData();
+                                }
+                                catch (const io::WrongFormatException&)
+                                {
+                                    // we get empty or corrupt data
+                                    // maybe info to the user
+                                    // but not show the Lock Document Dialog
+                                    aLockMsg = false;
+                                    // open the docu normally, delete that file when close
+                                    bResult = true;
                                 }
                                 catch( const uno::Exception& )
                                 {
+                                    // not show the Lock Document Dialog
+                                    aLockMsg = false;
                                 }
 
                                 bool bOwnLock = false;
@@ -1251,7 +1264,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                     }
                                 }
 
-                                if ( !bResult && !bNoUI )
+                                if ( !bResult && !bNoUI && aLockMsg)
                                 {
                                     bUIStatus = ShowLockedDocumentDialog( aData, bLoading, bOwnLock );
                                     if ( bUIStatus == ShowLockResult::Succeeded )
@@ -2763,12 +2776,18 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
 
     if ( pImpl->m_bLocked )
     {
+        ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
+
         try
         {
             pImpl->m_bLocked = false;
-            ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
             // TODO/LATER: A warning could be shown in case the file is not the own one
             aLockFile.RemoveFile();
+        }
+        catch( const io::WrongFormatException& )
+        {
+            // erase the empty or corrupt file
+            aLockFile.EraseFile();
         }
         catch( const uno::Exception& )
         {}
