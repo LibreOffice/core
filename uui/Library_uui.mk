@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_exception_objects,uui,\
 	uui/source/iahndl-ssl \
 	uui/source/interactionhandler \
 	uui/source/lockfailed \
+	uui/source/lockcorrupt \
 	uui/source/logindlg \
 	uui/source/masterpasscrtdlg \
 	uui/source/masterpassworddlg \
