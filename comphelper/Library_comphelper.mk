@@ -88,7 +88,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/docpasswordhelper \
     comphelper/source/misc/docpasswordrequest \
     comphelper/source/misc/documentinfo \
-    comphelper/source/misc/documentiologring \
     comphelper/source/misc/evtlistenerhlp \
     comphelper/source/misc/evtmethodhelper \
     comphelper/source/misc/fileurl \
