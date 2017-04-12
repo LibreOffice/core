@@ -4079,17 +4079,17 @@ void WW8RStyle::ScanStyles()        // investigate style dependencies
 
         rSI.m_nFilePos = pStStrm->Tell();        // remember FilePos
         sal_uInt16 nSkip;
-        WW8_STD* pStd = Read1Style(nSkip, nullptr);  // read STD
-        rSI.m_bValid = (nullptr != pStd);
+        std::unique_ptr<WW8_STD> xStd(Read1Style(nSkip, nullptr));  // read STD
+        rSI.m_bValid = xStd.get() != nullptr;
         if (rSI.m_bValid)
         {
-            rSI.m_nBase = pStd->istdBase;        // remember Basis
-            rSI.m_bColl = ( pStd->sgc == 1 );    // Para-Style
+            rSI.m_nBase = xStd->istdBase; // remember Basis
+            rSI.m_bColl = xStd->sgc == 1; // Para-Style
         }
         else
             rSI = SwWW8StyInf();
 
-        delete pStd;
+        xStd.reset();
         pStStrm->SeekRel( nSkip );              // skip Names and Sprms
     }
 }
