@@ -167,11 +167,9 @@ namespace
         if(!xShape.is())
             return false;
         Reference<XServiceInfo> xServiceInfo(xTxtContent, UNO_QUERY);
-        if(xServiceInfo->supportsService("com.sun.star.text.TextFrame") ||
-            xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject") ||
-            xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject") )
-            return false;
-        return true;
+        return !xServiceInfo->supportsService("com.sun.star.text.TextFrame") &&
+               !xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject") &&
+               !xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject");
     };
 
     class BoundFrames

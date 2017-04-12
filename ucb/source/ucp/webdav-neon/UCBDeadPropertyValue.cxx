@@ -307,28 +307,15 @@ static OUString decodeValue( const OUString & rValue )
 // static
 bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 {
-    if ( ( rType != cppu::UnoType<OUString>::get() )
-         &&
-         ( rType != cppu::UnoType<sal_Int32>::get() )
-         &&
-         ( rType != cppu::UnoType<sal_Int16>::get() )
-         &&
-         ( rType != cppu::UnoType<bool>::get() )
-         &&
-         ( rType != cppu::UnoType<cppu::UnoCharType>::get() )
-         &&
-         ( rType != cppu::UnoType<sal_Int8>::get() )
-         &&
-         ( rType != cppu::UnoType<sal_Int64>::get() )
-         &&
-         ( rType != cppu::UnoType<float>::get() )
-         &&
-         ( rType != cppu::UnoType<double>::get() ) )
-    {
-        return false;
-    }
-
-    return true;
+    return rType == cppu::UnoType<OUString>::get()
+         || rType == cppu::UnoType<sal_Int32>::get()
+         || rType == cppu::UnoType<sal_Int16>::get()
+         || rType == cppu::UnoType<bool>::get()
+         || rType == cppu::UnoType<cppu::UnoCharType>::get()
+         || rType == cppu::UnoType<sal_Int8>::get()
+         || rType == cppu::UnoType<sal_Int64>::get()
+         || rType == cppu::UnoType<float>::get()
+         || rType == cppu::UnoType<double>::get();
 }
 
 

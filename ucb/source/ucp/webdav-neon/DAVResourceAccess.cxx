@@ -1193,10 +1193,7 @@ bool DAVResourceAccess::handleException( const DAVException & e, int errorCount 
             case SC_SERVICE_UNAVAILABLE: // retry, the service may become available
             case SC_INSUFFICIENT_STORAGE: // space may be freed, retry
             {
-                if ( errorCount < 3 )
-                    return true;
-                else
-                    return false;
+                return errorCount < 3;
             }
             break;
             // all the other HTTP server response status codes are NOT retry

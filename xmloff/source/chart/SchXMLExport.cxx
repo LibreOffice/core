@@ -678,9 +678,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
             return true;
         }
     }
-    if( xDataSequence->getData().getLength() )
-        return true;
-    return false;
+    return xDataSequence->getData().getLength();
 }
 
 typedef vector< OUString > tStringVector;

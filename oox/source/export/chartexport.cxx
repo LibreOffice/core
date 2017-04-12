@@ -120,9 +120,7 @@ namespace {
 bool isPrimaryAxes(sal_Int32 nIndex)
 {
     assert(nIndex == 0 || nIndex == 1);
-    if (nIndex == 1)
-        return false;
-    return true;
+    return nIndex != 1;
 }
 
 }

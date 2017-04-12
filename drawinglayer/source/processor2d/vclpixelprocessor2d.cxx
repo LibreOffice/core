@@ -204,12 +204,7 @@ namespace drawinglayer
             aLocalPolygon.transform(maCurrentTransformation);
 
             // try drawing; if it did not work, use standard fallback
-            if(mpOutputDevice->DrawPolyLineDirect( aLocalPolygon, 0.0, fTransparency))
-            {
-                return true;
-            }
-
-            return false;
+            return mpOutputDevice->DrawPolyLineDirect( aLocalPolygon, 0.0, fTransparency);
         }
 
         bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency)
