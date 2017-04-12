@@ -58,20 +58,20 @@ namespace rptui
 #define OBJ_DLG_SUBREPORT       ((sal_uInt16) OBJ_MAXI + 6)
 
 // allows the alignment and resizing of controls
-namespace ControlModification
+enum class ControlModification
 {
-    static const ::sal_Int32 NONE               = (sal_Int32)0;
-    static const ::sal_Int32 LEFT               = (sal_Int32)1;
-    static const ::sal_Int32 RIGHT              = (sal_Int32)2;
-    static const ::sal_Int32 TOP                = (sal_Int32)3;
-    static const ::sal_Int32 BOTTOM             = (sal_Int32)4;
-    static const ::sal_Int32 CENTER_HORIZONTAL  = (sal_Int32)5;
-    static const ::sal_Int32 CENTER_VERTICAL    = (sal_Int32)6;
-    static const ::sal_Int32 WIDTH_SMALLEST     = (sal_Int32)7;
-    static const ::sal_Int32 HEIGHT_SMALLEST    = (sal_Int32)8;
-    static const ::sal_Int32 WIDTH_GREATEST     = (sal_Int32)9;
-    static const ::sal_Int32 HEIGHT_GREATEST    = (sal_Int32)10;
-}
+    NONE               =     0,
+    LEFT               =     1,
+    RIGHT              =     2,
+    TOP                =     3,
+    BOTTOM             =     4,
+    CENTER_HORIZONTAL  =     5,
+    CENTER_VERTICAL    =     6,
+    WIDTH_SMALLEST     =     7,
+    HEIGHT_SMALLEST    =     8,
+    WIDTH_GREATEST     =     9,
+    HEIGHT_GREATEST    =     10,
+};
 
 class AnyConverter : public ::std::binary_function< OUString,css::uno::Any,css::uno::Any >
 {

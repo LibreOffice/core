@@ -2585,7 +2585,7 @@ void OReportController::executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std
     InvalidateFeature( SID_UNDO );
 }
 
-void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection)
+void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection)
 {
     const OUString sUndoAction = ModuleRes(_nUndoStrId);
     UndoContext aUndoContext( getUndoManager(), sUndoAction );

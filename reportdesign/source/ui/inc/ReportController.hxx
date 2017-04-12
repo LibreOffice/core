@@ -204,7 +204,7 @@ namespace rptui
                          ,bool _bShow);
 
         void executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
-        void alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection = false);
+        void alignControlsWithUndo(sal_uInt16 _nUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection = false);
 
         css::uno::Reference< css::frame::XFrame > getXFrame();
 
