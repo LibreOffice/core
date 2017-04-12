@@ -2190,6 +2190,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	FilterOptionsRequest \
 	LinkUpdateModes \
 	LockFileIgnoreRequest \
+	LockFileCorruptRequest \
 	LockedDocumentRequest \
 	LockedOnSavingRequest \
 	MacroExecMode \

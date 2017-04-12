@@ -490,7 +490,7 @@ ${MYCMD} --base sw/source/uibase/utlui --files attrdesc.src initui.src navipi.sr
 
 ${MYCMD} --files sw/source/uibase/wrtsh/wrtsh.src
 
-${MYCMD} --base uui/source --files alreadyopen.src filechanged.src ids.src lockfailed.src nameclashdlg.src openlocked.src passworddlg.src passworderrs.src trylater.src
+${MYCMD} --base uui/source --files alreadyopen.src filechanged.src ids.src lockfailed.src lockcorrupt.src nameclashdlg.src openlocked.src passworddlg.src passworderrs.src trylater.src
 
 ${MYCMD} --files vcl/source/edit/textundo.src
 
