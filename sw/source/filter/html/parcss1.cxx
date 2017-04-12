@@ -93,8 +93,8 @@ sal_Unicode CSS1Parser::GetNextChar()
 
 // This function implements the scanner described in
 
-//       http://www.w3.orh/pub/WWW/TR/WD-css1.html
-// resp. http://www.w3.orh/pub/WWW/TR/WD-css1-960220.html
+//       http://www.w3.org/pub/WWW/TR/WD-css1.html
+// resp. http://www.w3.org/pub/WWW/TR/WD-css1-960220.html
 
 // for CSS1. It's a direct implementation of the
 // described Lex grammar.
@@ -651,8 +651,8 @@ CSS1Token CSS1Parser::GetNextToken()
 
 // These functions implement the parser described in
 
-//       http://www.w3.orh/pub/WWW/TR/WD-css1.html
-// resp. http://www.w3.orh/pub/WWW/TR/WD-css1-960220.html
+//       http://www.w3.org/pub/WWW/TR/WD-css1.html
+// resp. http://www.w3.org/pub/WWW/TR/WD-css1-960220.html
 
 // for CSS1. It's a direct implementation of the
 // described Lex grammar.
