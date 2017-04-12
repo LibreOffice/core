@@ -143,9 +143,9 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 
     InitCntHyph();
 
-    // 5298: IsParaLine() (ex.IsFirstLine) fragt auf GetParaPortion() ab.
-    // wir muessen gleiche Bedingungen schaffen: in der ersten
-    // Zeile formatieren wir SwParaPortions...
+    // 5298: IsParaLine() (ex.IsFirstLine) calls GetParaPortion().
+    // We have to create the same conditions: in the first line
+    // we format SwParaPortions...
     if( pOldCurr->IsParaPortion() )
     {
         SwParaPortion *pPara = new SwParaPortion();
