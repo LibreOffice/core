@@ -65,8 +65,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,sd_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_rdb,sd_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,sd_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,sd_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,sd_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sd_dialogs_test,\
 	modules/sdraw \

@@ -61,8 +61,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,desktop_dialogs_t
 
 $(eval $(call gb_CppunitTest_use_rdb,desktop_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,desktop_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,desktop_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,desktop_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,desktop_dialogs_test,\
 	desktop \

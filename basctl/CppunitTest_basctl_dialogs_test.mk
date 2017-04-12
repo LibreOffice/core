@@ -61,8 +61,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,basctl_dialogs_te
 
 $(eval $(call gb_CppunitTest_use_rdb,basctl_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,basctl_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,basctl_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,basctl_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,basctl_dialogs_test,\
 	modules/BasicIDE \
