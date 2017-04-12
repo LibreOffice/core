@@ -484,8 +484,7 @@ bool MediaDescriptor::addInputStream()
 /*-----------------------------------------------*/
 bool MediaDescriptor::addInputStreamOwnLock()
 {
-    const bool bLock = !utl::ConfigManager::IsAvoidConfig()
-        && officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::get();
+    const bool bLock = !utl::ConfigManager::IsAvoidConfig();
     return impl_addInputStream(bLock);
 }
 
