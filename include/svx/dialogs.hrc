@@ -198,11 +198,6 @@
 #define RID_SVXBMP_SIGNET_BROKEN            (RID_SVX_START + 114)
 #define RID_SVXBMP_SIGNET_NOTVALIDATED      (RID_SVX_START + 115)
 
-// for Toolbox-Control style
-#define RID_SVX_STYLE_MENU                  (RID_SVX_START + 121)
-#define RID_SVX_UPDATE_STYLE                (RID_SVX_START + 122)
-#define RID_SVX_MODIFY_STYLE                (RID_SVX_START + 123)
-
 #define RID_SVXCTRL_RECTBTNS                (RID_SVX_START + 226)
 
 // ResId's for Starone impl. bitmaps

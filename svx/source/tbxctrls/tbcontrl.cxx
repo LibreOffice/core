@@ -169,7 +169,8 @@ private:
     OUString                        sDefaultStyle;
     bool                            bInSpecialMode;
     VclPtr<MenuButton>              m_pButtons[MAX_STYLES_ENTRIES];
-    ScopedVclPtr<PopupMenu>         m_pMenu;
+    VclBuilder                      m_aBuilder;
+    VclPtr<PopupMenu>               m_pMenu;
 
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
@@ -360,7 +361,8 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     , aClearFormatKey( rClearFormatKey )
     , aMoreKey( rMoreKey )
     , bInSpecialMode( bInSpec )
-    , m_pMenu( VclPtr<PopupMenu>::Create(SVX_RES( RID_SVX_STYLE_MENU )) )
+    , m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/stylemenu.ui", "")
+    , m_pMenu(m_aBuilder.get_menu("menu"))
 {
     SetHelpId(HID_STYLE_LISTBOX);
     m_pMenu->SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
@@ -387,6 +389,9 @@ void SvxStyleBox_Impl::dispose()
         rButton.disposeAndClear();
     }
 
+    m_pMenu.clear();
+    m_aBuilder.disposeBuilder();
+
     ComboBox::dispose();
 }
 
@@ -404,7 +409,7 @@ void SvxStyleBox_Impl::ReleaseFocus()
 IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
 {
     OUString sEntry = GetSelectEntry();
-    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+    OString sMenuIdent = pMenu->GetCurItemIdent();
     ReleaseFocus(); // It must be after getting entry pos!
     if (IsInDropDown())
         ToggleDropDown();
@@ -414,20 +419,17 @@ IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
     aArgs[1].Name   = "Family";
     aArgs[1].Value  <<= sal_Int16( eStyleFamily );
 
-    switch(nMenuId) {
-        case RID_SVX_UPDATE_STYLE:
-        {
-            SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                ".uno:StyleUpdateByExample", aArgs );
-            break;
-        }
-        case RID_SVX_MODIFY_STYLE:
-        {
-            SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                ".uno:EditStyle", aArgs );
-            break;
-        }
+    if (sMenuIdent == "update")
+    {
+        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
+            ".uno:StyleUpdateByExample", aArgs );
     }
+    else if (sMenuIdent == "edit")
+    {
+        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
+            ".uno:EditStyle", aArgs );
+    }
+
     return false;
 }
 

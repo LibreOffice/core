@@ -114,23 +114,6 @@ String RID_SVXSTR_MOREBULLETS
     Text [ en-US ] = "More Bullets..." ;
 };
 
-Menu RID_SVX_STYLE_MENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = RID_SVX_UPDATE_STYLE ;
-            Text [ en-US ] = "Update to Match Selection" ;
-        };
-        MenuItem
-        {
-            Identifier = RID_SVX_MODIFY_STYLE ;
-            Text [ en-US ] = "Edit Style..." ;
-        };
-    };
-};
-
 String RID_SVXSTR_BY_AUTHOR
 {
     Text [ en-US ] = "By author";
