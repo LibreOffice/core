@@ -83,6 +83,8 @@ void VBATest::testMiscVBAFunctions()
         "formatnumber.vb",
         "iif.vb",
         "instr.vb",
+        "instrrev.vb",
+        "int.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
