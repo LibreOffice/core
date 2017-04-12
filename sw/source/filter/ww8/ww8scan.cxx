@@ -6563,7 +6563,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
 // so it has no empty slot, we should allocate memory and a pointer should
 // reference to STD (perhaps filled with 0). If the slot is empty,
 // it will return a null pointer.
-WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
+WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip, sal_uInt16* pcbStd)
 {
     WW8_STD* pStd = nullptr;
 
@@ -6635,18 +6635,19 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
     return pStd;
 }
 
-WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
+WW8_STD* WW8Style::Read1Style(sal_uInt16& rSkip, OUString* pString, sal_uInt16* pcbStd)
 {
     // Attention: MacWord-Documents have their Stylenames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
 
-    WW8_STD* pStd = Read1STDFixed( rSkip, pcbStd );         // read STD
+    WW8_STD* pStd = Read1STDFixed(rSkip, pcbStd);         // read STD
 
     // string desired?
     if( pString )
     {   // real style?
         if ( pStd )
         {
+            sal_Int32 nLenStringBytes = 0;
             switch( rFib.m_nVersion )
             {
                 case 6:
@@ -6654,7 +6655,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
                     // read pascal string
                     *pString = read_uInt8_BeltAndBracesString(rSt, RTL_TEXTENCODING_MS_1252);
                     // leading len and trailing zero --> 2
-                    rSkip -= pString->getLength() + 2;
+                    nLenStringBytes = pString->getLength() + 2;
                     break;
                 case 8:
                     // handle Unicode-String with leading length short and
@@ -6662,7 +6663,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
                     if (TestBeltAndBraces(rSt))
                     {
                         *pString = read_uInt16_BeltAndBracesString(rSt);
-                        rSkip -= (pString->getLength() + 2) * 2;
+                        nLenStringBytes = (pString->getLength() + 2) * 2;
                     }
                     else
                     {
@@ -6678,13 +6679,19 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
                         */
                         *pString = read_uInt8_BeltAndBracesString(rSt,RTL_TEXTENCODING_MS_1252);
                         // leading len and trailing zero --> 2
-                        rSkip -= pString->getLength() + 2;
+                        nLenStringBytes = pString->getLength() + 2;
                     }
                     break;
                 default:
                     OSL_ENSURE(false, "Es wurde vergessen, nVersion zu kodieren!");
                     break;
             }
+            if (nLenStringBytes > rSkip)
+            {
+                SAL_WARN("sw.ww8", "WW8Style structure corrupt");
+                nLenStringBytes = rSkip;
+            }
+            rSkip -= nLenStringBytes;
         }
         else
             pString->clear();   // can not return a name

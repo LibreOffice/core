@@ -3983,7 +3983,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
 
     pStStrm->Seek( rSI.m_nFilePos );
 
-    short nSkip, cbStd;
+    sal_uInt16 nSkip, cbStd;
     OUString sName;
 
     std::unique_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName, &cbStd));// read Style
@@ -4075,10 +4075,10 @@ void WW8RStyle::ScanStyles()        // investigate style dependencies
 {                                   // and detect Filepos for each Style
     for (sal_uInt16 i = 0; i < cstd; ++i)
     {
-        short nSkip;
         SwWW8StyInf &rSI = pIo->m_vColl[i];
 
         rSI.m_nFilePos = pStStrm->Tell();        // remember FilePos
+        sal_uInt16 nSkip;
         WW8_STD* pStd = Read1Style( nSkip, nullptr, nullptr );  // read STD
         rSI.m_bValid = (nullptr != pStd);
         if (rSI.m_bValid)

@@ -1563,8 +1563,8 @@ protected:
 
 public:
     WW8Style( SvStream& rSt, WW8Fib& rFibPara );
-    WW8_STD* Read1STDFixed( short& rSkip, short* pcbStd );
-    WW8_STD* Read1Style( short& rSkip, OUString* pString, short* pcbStd );
+    WW8_STD* Read1STDFixed(sal_uInt16& rSkip, sal_uInt16* pcbStd);
+    WW8_STD* Read1Style(sal_uInt16& rSkip, OUString* pString, sal_uInt16* pcbStd);
     sal_uInt16 GetCount() const { return cstd; }
 };
 
