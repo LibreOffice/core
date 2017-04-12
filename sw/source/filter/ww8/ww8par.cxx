@@ -6002,7 +6002,7 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
         rStrm.Seek( m_pWwFib->m_fcGrpStAtnOwners );
 
         long nRead = 0, nCount = m_pWwFib->m_lcbGrpStAtnOwners;
-        while (nRead < nCount)
+        while (nRead < nCount && rStrm.good())
         {
             if( m_bVer67 )
             {
