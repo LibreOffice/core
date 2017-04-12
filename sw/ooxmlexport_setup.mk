@@ -114,7 +114,11 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport$(1),\
 	filter/source/storagefilterdetect/storagefd \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlexport$(1)))
+$(eval $(call gb_CppunitTest_use_instdir_configuration,sw_ooxmlexport$(1)))
+
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_ooxmlexport$(1),\
+    modules/swriter \
+))
 
 $(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
 	oox_customshapes \
