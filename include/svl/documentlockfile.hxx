@@ -48,7 +48,10 @@ public:
     bool CreateOwnLockFile();
     LockFileEntry GetLockData();
     bool OverwriteOwnLockFile();
+    /// Delete the Lockfile, if current user is the owner
     void RemoveFile();
+    /// Only delete lockfile, disregarding ownership
+    void RemoveFileDirectly();
 
     static bool IsInteractionAllowed() { return m_bAllowInteraction; }
 };

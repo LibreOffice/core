@@ -31,6 +31,7 @@
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
 #include <com/sun/star/document/OwnLockOnDocumentRequest.hpp>
 #include <com/sun/star/document/LockFileIgnoreRequest.hpp>
+#include <com/sun/star/document/LockFileCorruptRequest.hpp>
 #include <com/sun/star/document/ChangedByOthersRequest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -122,6 +123,8 @@
 #include "sfxacldetect.hxx"
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
+
+#include <com/sun/star/io/WrongFormatException.hpp>
 
 #include <memory>
 
@@ -846,12 +849,12 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 // not for some URL scheme belongs in UCB, not here.
 
 
-SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock )
+SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock, bool bHandleSysLocked )
 {
     ShowLockResult nResult = ShowLockResult::NoLock;
 
-    // tdf#92817: Simple check for empty lock file that needs to be deleted
-    if( aData[LockFileComponent::OOOUSERNAME].isEmpty() && aData[LockFileComponent::SYSUSERNAME].isEmpty() )
+    // tdf#92817: Simple check for empty lock file that needs to be deleted, when system locking is enabled
+    if( aData[LockFileComponent::OOOUSERNAME].isEmpty() && aData[LockFileComponent::SYSUSERNAME].isEmpty() && !bHandleSysLocked )
         bOwnLock=true;
 
     // show the interaction regarding the document opening
@@ -943,6 +946,51 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
     }
 
     return nResult;
+}
+
+
+bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
+{
+    // system file locking is not active, ask user whether he wants to open the document without any locking
+    uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+    if (xHandler.is())
+    {
+        ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl;
+
+        switch (nWhichDlg)
+        {
+            case MessageDlg::LockFileIgnore:
+                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny( document::LockFileIgnoreRequest() ));
+                break;
+            case MessageDlg::LockFileCorrupt:
+                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny( document::LockFileCorruptRequest() ));
+                break;
+        }
+
+        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations(2);
+        aContinuations[0] = new ::ucbhelper::InteractionAbort(xIgnoreRequestImpl.get());
+        aContinuations[1] = new ::ucbhelper::InteractionApprove(xIgnoreRequestImpl.get());
+        xIgnoreRequestImpl->setContinuations(aContinuations);
+
+        xHandler->handle(xIgnoreRequestImpl.get());
+
+        ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
+        bool bReadOnly = uno::Reference< task::XInteractionApprove >(xSelected.get(), uno::UNO_QUERY).is();
+
+        if (bReadOnly)
+        {
+            GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
+        }
+        else
+        {
+            SetError(ERRCODE_ABORT);
+        }
+
+        return bReadOnly;
+    }
+
+    return false;
 }
 
 namespace
@@ -1040,7 +1088,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
                             if ( !bResult && !bNoUI )
                             {
-                                bUIStatus = ShowLockedDocumentDialog( aLockData, bLoading, false );
+                                bUIStatus = ShowLockedDocumentDialog( aLockData, bLoading, false , false );
                             }
                         }
                         catch( ucb::InteractiveNetworkWriteException& )
@@ -1181,59 +1229,34 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                         try
                         {
                             ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
-                            if ( !bHandleSysLocked )
+                            bool  bIoErr = false;
+
+                            if (!bHandleSysLocked)
                             {
                                 try
                                 {
                                     bResult = aLockFile.CreateOwnLockFile();
                                 }
-                                catch ( const ucb::InteractiveIOException& e )
+                                catch (const ucb::InteractiveIOException&)
                                 {
-                                    // exception means that the lock file can not be successfully accessed
-                                    // in this case it should be ignored if system file locking is anyway active
-                                    if ( bUseSystemLock || !IsOOoLockFileUsed() )
+                                    if (bLoading && !bNoUI)
                                     {
-                                        bResult = true;
-                                        // take the ownership over the lock file
-                                        aLockFile.OverwriteOwnLockFile();
-                                    }
-                                    else if ( e.Code == IOErrorCode_INVALID_PARAMETER )
-                                    {
-                                        // system file locking is not active, ask user whether he wants to open the document without any locking
-                                        uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
-
-                                        if ( xHandler.is() )
-                                        {
-                                            ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl
-                                                = new ::ucbhelper::InteractionRequest( uno::makeAny( document::LockFileIgnoreRequest() ) );
-
-                                            uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
-                                            aContinuations[0] = new ::ucbhelper::InteractionAbort( xIgnoreRequestImpl.get() );
-                                            aContinuations[1] = new ::ucbhelper::InteractionApprove( xIgnoreRequestImpl.get() );
-                                            xIgnoreRequestImpl->setContinuations( aContinuations );
-
-                                            xHandler->handle( xIgnoreRequestImpl.get() );
-
-                                            ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
-                                            bResult = uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is();
-                                        }
+                                        bIoErr = true;
+                                        bResult = ShowLockFileProblemDialog(MessageDlg::LockFileIgnore);
                                     }
                                 }
-                                catch ( const uno::Exception& )
+                                catch (const uno::Exception&)
                                 {
-                                    // exception means that the lock file can not be successfully accessed
-                                    // in this case it should be ignored if system file locking is anyway active
-                                    if ( bUseSystemLock || !IsOOoLockFileUsed() )
+                                    if (bLoading && !bNoUI)
                                     {
-                                        bResult = true;
-                                        // take the ownership over the lock file
-                                        aLockFile.OverwriteOwnLockFile();
+                                        bIoErr = true;
+                                        bResult = ShowLockFileProblemDialog(MessageDlg::LockFileIgnore);
                                     }
                                 }
 
                                 // in case OOo locking is turned off the lock file is still written if possible
                                 // but it is ignored while deciding whether the document should be opened for editing or not
-                                if ( !bResult && !IsOOoLockFileUsed() )
+                                if (!bResult && !IsOOoLockFileUsed() && !bIoErr)
                                 {
                                     bResult = true;
                                     // take the ownership over the lock file
@@ -1241,46 +1264,54 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                 }
                             }
 
-
                             if ( !bResult )
                             {
                                 LockFileEntry aData;
                                 try
                                 {
-                                    // impossibility to get data is no real problem
                                     aData = aLockFile.GetLockData();
+                                }
+                                catch (const io::WrongFormatException&)
+                                {
+                                    // we get empty or corrupt data
+                                    // info to the user
+                                    if (!bIoErr && bLoading && !bNoUI )
+                                        bResult = ShowLockFileProblemDialog(MessageDlg::LockFileCorrupt);
+
+                                    // not show the Lock Document Dialog
+                                    bIoErr = true;
                                 }
                                 catch( const uno::Exception& )
                                 {
+                                    // show the Lock Document Dialog, when locked from other app
+                                    bIoErr = !bHandleSysLocked;
                                 }
 
                                 bool bOwnLock = false;
 
-                                if ( !bHandleSysLocked )
+                                if (!bHandleSysLocked)
                                 {
                                     LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
-                                    bOwnLock = aOwnData[LockFileComponent::SYSUSERNAME].equals( aData[LockFileComponent::SYSUSERNAME] );
+                                    bOwnLock = aOwnData[LockFileComponent::SYSUSERNAME].equals(aData[LockFileComponent::SYSUSERNAME]);
 
-                                    if ( bOwnLock
-                                      && aOwnData[LockFileComponent::LOCALHOST].equals( aData[LockFileComponent::LOCALHOST] )
-                                      && aOwnData[LockFileComponent::USERURL].equals( aData[LockFileComponent::USERURL] ) )
+                                    if (bOwnLock
+                                        && aOwnData[LockFileComponent::LOCALHOST].equals(aData[LockFileComponent::LOCALHOST])
+                                        && aOwnData[LockFileComponent::USERURL].equals(aData[LockFileComponent::USERURL]))
                                     {
                                         // this is own lock from the same installation, it could remain because of crash
                                         bResult = true;
                                     }
                                 }
 
-                                if ( !bResult && !bNoUI )
+                                if ( !bResult && !bNoUI && !bIoErr)
                                 {
-                                    bUIStatus = ShowLockedDocumentDialog( aData, bLoading, bOwnLock );
+                                    bUIStatus = ShowLockedDocumentDialog( aData, bLoading, bOwnLock, bHandleSysLocked );
                                     if ( bUIStatus == ShowLockResult::Succeeded )
                                     {
                                         // take the ownership over the lock file
                                         bResult = aLockFile.OverwriteOwnLockFile();
                                     }
                                 }
-
-                                bHandleSysLocked = false;
                             }
                         }
                         catch( const uno::Exception& )
@@ -2798,12 +2829,23 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
 
     if ( pImpl->m_bLocked )
     {
+        ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
+
         try
         {
             pImpl->m_bLocked = false;
-            ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
             // TODO/LATER: A warning could be shown in case the file is not the own one
             aLockFile.RemoveFile();
+        }
+        catch( const io::WrongFormatException& )
+        {
+            try
+            {
+                // erase the empty or corrupt file
+                aLockFile.RemoveFileDirectly();
+            }
+            catch( const uno::Exception& )
+            {}
         }
         catch( const uno::Exception& )
         {}
