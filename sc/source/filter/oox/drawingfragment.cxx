@@ -735,10 +735,10 @@ void VmlDrawing::convertControlText( AxFontData& rAxFontData, sal_uInt32& rnOleT
 
     switch( nTextHAlign )
     {
-        case XML_Left:      rAxFontData.mnHorAlign = AX_FONTDATA_LEFT;      break;
-        case XML_Center:    rAxFontData.mnHorAlign = AX_FONTDATA_CENTER;    break;
-        case XML_Right:     rAxFontData.mnHorAlign = AX_FONTDATA_RIGHT;     break;
-        default:            rAxFontData.mnHorAlign = AX_FONTDATA_LEFT;
+        case XML_Left:      rAxFontData.mnHorAlign = AxHorizontalAlign::Left;      break;
+        case XML_Center:    rAxFontData.mnHorAlign = AxHorizontalAlign::Center;    break;
+        case XML_Right:     rAxFontData.mnHorAlign = AxHorizontalAlign::Right;     break;
+        default:            rAxFontData.mnHorAlign = AxHorizontalAlign::Left;
     }
 }
 

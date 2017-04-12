@@ -39,9 +39,9 @@ const sal_uInt32 AX_FONTDATA_STRIKEOUT      = 0x00000008;
 const sal_uInt32 AX_FONTDATA_DISABLED       = 0x00002000;
 const sal_uInt32 AX_FONTDATA_AUTOCOLOR      = 0x40000000;
 
-const sal_Int32 AX_FONTDATA_LEFT            = 1;
-const sal_Int32 AX_FONTDATA_RIGHT           = 2;
-const sal_Int32 AX_FONTDATA_CENTER          = 3;
+enum class AxHorizontalAlign {
+    Left = 1, Right = 2, Center = 3
+};
 
 /** All entries of a font property. */
 struct OOX_DLLPUBLIC AxFontData
@@ -50,7 +50,7 @@ struct OOX_DLLPUBLIC AxFontData
     sal_uInt32          mnFontEffects;      ///< Font effect flags.
     sal_Int32           mnFontHeight;       ///< Height of the font (not really twips, see code).
     sal_Int32           mnFontCharSet;      ///< Windows character set of the font.
-    sal_Int32           mnHorAlign;         ///< Horizontal text alignment.
+    AxHorizontalAlign   mnHorAlign;         ///< Horizontal text alignment.
     bool                mbDblUnderline;     ///< True = double underline style (legacy VML drawing controls only).
 
     explicit            AxFontData();

@@ -29,7 +29,7 @@ AxFontData::AxFontData() :
     mnFontEffects( 0 ),
     mnFontHeight( 160 ),
     mnFontCharSet( WINDOWS_CHARSET_DEFAULT ),
-    mnHorAlign( AX_FONTDATA_LEFT ),
+    mnHorAlign( AxHorizontalAlign::Left ),
     mbDblUnderline( false )
 {
 }
@@ -56,7 +56,9 @@ bool AxFontData::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.skipIntProperty< sal_Int32 >(); // font offset
     aReader.readIntProperty< sal_uInt8 >( mnFontCharSet );
     aReader.skipIntProperty< sal_uInt8 >(); // font pitch/family
-    aReader.readIntProperty< sal_uInt8 >( mnHorAlign );
+    sal_uInt8 nTmp = 0;
+    aReader.readIntProperty< sal_uInt8 >( nTmp );
+    mnHorAlign = static_cast<AxHorizontalAlign>(nTmp);
     aReader.skipIntProperty< sal_uInt16 >(); // font weight
     mbDblUnderline = false;
     return aReader.finalizeImport();
@@ -73,7 +75,7 @@ void AxFontData::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.writeIntProperty< sal_uInt8 >( mnFontCharSet );
     aWriter.skipProperty(); // font pitch/family
 
-    aWriter.writeIntProperty< sal_uInt8 >( mnHorAlign );
+    aWriter.writeIntProperty< sal_uInt8 >( static_cast<sal_uInt8>(mnHorAlign) );
     aWriter.skipProperty(); // font weight
     aWriter.finalizeExport();
 }
@@ -93,7 +95,7 @@ bool AxFontData::importStdFont( BinaryInputStream& rInStrm )
         // StdFont stores font height in 1/10,000 of points
         setHeightPoints( getLimitedValue< sal_Int16, sal_Int32 >( aFontInfo.mnHeight / 10000, 0, SAL_MAX_INT16 ) );
         mnFontCharSet = aFontInfo.mnCharSet;
-        mnHorAlign = AX_FONTDATA_LEFT;
+        mnHorAlign = AxHorizontalAlign::Left;
         return true;
     }
     return false;
