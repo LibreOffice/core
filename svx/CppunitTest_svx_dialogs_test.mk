@@ -63,8 +63,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,svx_dialogs_test)
 
 $(eval $(call gb_CppunitTest_use_rdb,svx_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,svx_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,svx_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,svx_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,svx_dialogs_test,\
 	svx \

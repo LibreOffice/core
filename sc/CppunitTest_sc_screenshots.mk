@@ -56,7 +56,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,sc_screenshots))
 
 $(eval $(call gb_CppunitTest_use_rdb,sc_screenshots,services))
 
-$(eval $(call gb_CppunitTest_use_instdir_configuration,sc_screenshots))
+$(eval $(call gb_CppunitTest_use_configuration,sc_screenshots))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sc_screenshots,\
 	cui \

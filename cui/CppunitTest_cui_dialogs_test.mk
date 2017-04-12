@@ -62,8 +62,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,cui_dialogs_test)
 
 $(eval $(call gb_CppunitTest_use_rdb,cui_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,cui_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,cui_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,cui_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,cui_dialogs_test,\
 	cui \

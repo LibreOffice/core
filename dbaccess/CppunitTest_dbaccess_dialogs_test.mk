@@ -61,8 +61,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,dbaccess_dialogs_
 
 $(eval $(call gb_CppunitTest_use_rdb,dbaccess_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,dbaccess_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,dbaccess_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,dbaccess_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,dbaccess_dialogs_test,\
 	dbaccess \

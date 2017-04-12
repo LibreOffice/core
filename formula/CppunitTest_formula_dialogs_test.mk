@@ -55,8 +55,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,formula_dialogs_t
 
 $(eval $(call gb_CppunitTest_use_rdb,formula_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,formula_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,formula_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,formula_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,formula_dialogs_test,\
 	formula \

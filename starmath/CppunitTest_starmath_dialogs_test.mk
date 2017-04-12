@@ -60,8 +60,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,starmath_dialogs_
 
 $(eval $(call gb_CppunitTest_use_rdb,starmath_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,starmath_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,starmath_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,starmath_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,starmath_dialogs_test,\
 	modules/smath \
