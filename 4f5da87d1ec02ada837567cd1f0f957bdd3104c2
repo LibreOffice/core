@@ -16,6 +16,24 @@
       "revId": "4f5da87d1ec02ada837567cd1f0f957bdd3104c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c1d43249",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-12T13:11:48Z",
+      "side": 1,
+      "message": "Hmm, indeed, m_xPreviousParagraph should probably be cleared when crossing table cell boundaries. I didn\u0027t consider this, as SwWW8ImplReader::AppendTextNode() doesn\u0027t have any table-related code, either. I\u0027ll look at this.",
+      "parentUuid": "5a3905b3_61629eda",
+      "revId": "4f5da87d1ec02ada837567cd1f0f957bdd3104c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
