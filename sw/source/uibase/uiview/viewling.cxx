@@ -435,7 +435,7 @@ void SwView::HyphenateDocument()
         return;
     }
 
-    if (m_pWrtShell->GetSelectionType() & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_DRW))
+    if (m_pWrtShell->GetSelectionType() & (SelectionType::DrawObjectEditMode|SelectionType::DrawObject))
     {
         // Hyphenation in a Draw object
         HyphenateDrawText();
@@ -633,7 +633,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
     if( pVOpt->IsOnlineSpell() &&
         !m_pWrtShell->IsSelection())
     {
-        if (m_pWrtShell->GetSelectionType() & nsSelectionType::SEL_DRW_TXT)
+        if (m_pWrtShell->GetSelectionType() & SelectionType::DrawObjectEditMode)
             bRet = ExecDrwTextSpellPopup(rPt);
         else if (!m_pWrtShell->IsSelFrameMode())
         {

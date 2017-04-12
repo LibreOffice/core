@@ -197,7 +197,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     // Set minimum size in tables and paragraphs.
     aBoxInfo.SetMinDist( !bTableSel || rSh.IsTableMode() ||
                             rSh.GetSelectionType() &
-                            (nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL));
+                            (SelectionType::Text | SelectionType::Table));
     // Always set the default spacing.
     aBoxInfo.SetDefDist        (MIN_BORDER_DIST);
     // Individual lines can have DontCare status only in tables.

@@ -150,7 +150,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
 
     m_pDelimEdt->SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &
-            (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
+            (SelectionType::Table|SelectionType::TableCell) )
     {
         m_pColumnRB->Check(bCol);
         m_pColLbl->SetText(bCol ? aRowText : aColText);

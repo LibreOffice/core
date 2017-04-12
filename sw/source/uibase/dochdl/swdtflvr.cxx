@@ -412,13 +412,13 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     {
         SelectionType nSelectionType = m_pWrtShell->GetSelectionType();
 
-        // when pending we will not get the correct type, but nsSelectionType::SEL_TXT
+        // when pending we will not get the correct type, but SelectionType::Text
         // as fallback. This *happens* during D&D, so we need to check if we are in
         // the fallback and just try to get a graphic
         const bool bPending(m_pWrtShell->BasicActionPend());
 
         // SEL_GRF is from ContentType of editsh
-        if(bPending || ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_DRW_FORM) & nSelectionType))
+        if(bPending || ((SelectionType::Graphic | SelectionType::DbForm) & nSelectionType))
         {
             m_pClpGraphic = new Graphic;
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
@@ -449,7 +449,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             SwTransferable::InitOle( m_aDocShellRef, *pTmpDoc );
         pTmpDoc->SetTmpDocShell( nullptr );
 
-        if( nSelectionType & nsSelectionType::SEL_TXT && !m_pWrtShell->HasMark() )
+        if( nSelectionType & SelectionType::Text && !m_pWrtShell->HasMark() )
         {
             SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
 
@@ -777,9 +777,9 @@ void SwTransferable::DeleteSelection()
     if(!m_pWrtShell)
         return;
     // ask for type of selection before action-bracketing
-    const int nSelection = m_pWrtShell->GetSelectionType();
+    const SelectionType nSelection = m_pWrtShell->GetSelectionType();
     m_pWrtShell->StartUndo( SwUndoId::START );
-    if( ( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL ) & nSelection )
+    if( ( SelectionType::Text | SelectionType::Table ) & nSelection )
         m_pWrtShell->IntelligentCut( nSelection );
     m_pWrtShell->DelRight();
     m_pWrtShell->EndUndo( SwUndoId::END );
@@ -792,8 +792,8 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         return 0;
 
     OUString sGrfNm;
-    const int nSelection = m_pWrtShell->GetSelectionType();
-    if( nSelection == nsSelectionType::SEL_GRF )
+    const SelectionType nSelection = m_pWrtShell->GetSelectionType();
+    if( nSelection == SelectionType::Graphic )
     {
         m_pClpGraphic = new Graphic;
         if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
@@ -822,7 +822,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         m_eBufferType = TransferBufferType::Graphic;
         m_pWrtShell->GetGrfNms( &sGrfNm, nullptr );
     }
-    else if ( nSelection == nsSelectionType::SEL_OLE )
+    else if ( nSelection == SelectionType::Ole )
     {
         m_pClpDocFac = new SwDocFac;
         SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
@@ -915,7 +915,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         }
 
         bool bDDELink = m_pWrtShell->IsSelection();
-        if( nSelection & nsSelectionType::SEL_TBL_CELLS )
+        if( nSelection & SelectionType::TableCell )
         {
             m_eBufferType = TransferBufferType::Table | m_eBufferType;
             bDDELink = m_pWrtShell->HasWholeTabSelection();
@@ -934,10 +934,10 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         if( m_pWrtShell->IsSelection() )
             AddFormat( SotClipboardFormatId::STRING );
 
-        if( nSelection & ( nsSelectionType::SEL_DRW | nsSelectionType::SEL_DRW_FORM ))
+        if( nSelection & ( SelectionType::DrawObject | SelectionType::DbForm ))
         {
             AddFormat( SotClipboardFormatId::DRAWING );
-            if ( nSelection & nsSelectionType::SEL_DRW )
+            if ( nSelection & SelectionType::DrawObject )
             {
                 AddFormat( SotClipboardFormatId::GDIMETAFILE );
                 AddFormat( SotClipboardFormatId::PNG );
@@ -3017,8 +3017,8 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     if(!m_pWrtShell)
         return;
     OUString sGrfNm;
-    const int nSelection = m_pWrtShell->GetSelectionType();
-    if( nsSelectionType::SEL_GRF == nSelection)
+    const SelectionType nSelection = m_pWrtShell->GetSelectionType();
+    if( SelectionType::Graphic == nSelection)
     {
         AddFormat( SotClipboardFormatId::SVXB );
         const Graphic* pGrf = m_pWrtShell->GetGraphic();
@@ -3031,7 +3031,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         m_eBufferType = TransferBufferType::Graphic;
         m_pWrtShell->GetGrfNms( &sGrfNm, nullptr );
     }
-    else if( nsSelectionType::SEL_OLE == nSelection )
+    else if( SelectionType::Ole == nSelection )
     {
         AddFormat( SotClipboardFormatId::EMBED_SOURCE );
         PrepareOLE( m_aObjDesc );
@@ -3053,7 +3053,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
                 m_eBufferType = TransferBufferType::DocumentWord | m_eBufferType;
         }
 
-        if( nSelection & nsSelectionType::SEL_TBL_CELLS )
+        if( nSelection & SelectionType::TableCell )
             m_eBufferType = TransferBufferType::Table | m_eBufferType;
 
         AddFormat( SotClipboardFormatId::EMBED_SOURCE );
@@ -3068,10 +3068,10 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         if( m_pWrtShell->IsSelection() )
             AddFormat( SotClipboardFormatId::STRING );
 
-        if( nSelection & ( nsSelectionType::SEL_DRW | nsSelectionType::SEL_DRW_FORM ))
+        if( nSelection & ( SelectionType::DrawObject | SelectionType::DbForm ))
         {
             AddFormat( SotClipboardFormatId::DRAWING );
-            if ( nSelection & nsSelectionType::SEL_DRW )
+            if ( nSelection & SelectionType::DrawObject )
             {
                 AddFormat( SotClipboardFormatId::GDIMETAFILE );
                 AddFormat( SotClipboardFormatId::PNG );
@@ -3110,7 +3110,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         PrepareOLE( m_aObjDesc );
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
     }
-    else if( nSelection & nsSelectionType::SEL_TXT && !m_pWrtShell->HasMark() )
+    else if( nSelection & SelectionType::Text && !m_pWrtShell->HasMark() )
     {
         // is only one field - selected?
         SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
@@ -3198,9 +3198,9 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
         }
         else
         {
-            const int nSelection = m_pWrtShell->GetSelectionType();
-            if( ( nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF |
-                 nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW ) & nSelection )
+            const SelectionType nSelection = m_pWrtShell->GetSelectionType();
+            if( ( SelectionType::Frame | SelectionType::Graphic |
+                 SelectionType::Ole | SelectionType::DrawObject ) & nSelection )
             {
                 m_pWrtShell->EnterSelFrameMode();
             }
@@ -3243,23 +3243,23 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
     if ( !m_pClpDocFac )
         return false; // the return value of the SwFEShell::Paste also is bool!
 
-    const int nSelection = rShell.GetSelectionType();
+    const SelectionType nSelection = rShell.GetSelectionType();
 
     SwTrnsfrActionAndUndo aAction( &rShell );
 
     bool bKillPaMs = false;
 
     //Delete selected content, not at table-selection and table in Clipboard, and don't delete hovering graphics.
-    if( rShell.HasSelection() && !( nSelection & nsSelectionType::SEL_TBL_CELLS) && !( nSelection & nsSelectionType::SEL_DRW))
+    if( rShell.HasSelection() && !( nSelection & SelectionType::TableCell) && !( nSelection & SelectionType::DrawObject))
     {
         bKillPaMs = true;
         rShell.SetRetainSelection( true );
         rShell.DelRight();
         // when a Fly was selected, a valid cursor position has to be found now
         // (parked Cursor!)
-        if( ( nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF |
-            nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW |
-            nsSelectionType::SEL_DRW_FORM ) & nSelection )
+        if( ( SelectionType::Frame | SelectionType::Graphic |
+            SelectionType::Ole | SelectionType::DrawObject |
+            SelectionType::DbForm ) & nSelection )
         {
             // position the cursor again
             Point aPt( rShell.GetCharRect().Pos() );
@@ -3267,7 +3267,7 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
         }
         rShell.SetRetainSelection( false );
     }
-    if ( nSelection & nsSelectionType::SEL_DRW) //unselect hovering graphics
+    if ( nSelection & SelectionType::DrawObject) //unselect hovering graphics
     {
         rShell.ResetSelect(nullptr,false);
     }
@@ -3336,10 +3336,10 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 g_bFrameDrag = true;
             }
 
-            const int nSelection = rSh.GetSelectionType();
+            const SelectionType nSelection = rSh.GetSelectionType();
 
             // not yet consider Draw objects
-            if( nsSelectionType::SEL_GRF & nSelection )
+            if( SelectionType::Graphic & nSelection )
             {
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                 rSh.GetFlyFrameAttr( aSet );
@@ -3350,7 +3350,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 return true;
             }
 
-            if( nsSelectionType::SEL_DRW & nSelection )
+            if( SelectionType::DrawObject & nSelection )
             {
                 rSh.LeaveSelFrameMode();
                 rSh.UnSelectFrame();
@@ -3360,7 +3360,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         }
     }
 
-    if( &rSh != &rSrcSh && (nsSelectionType::SEL_GRF & rSh.GetSelectionType()) &&
+    if( &rSh != &rSrcSh && (SelectionType::Graphic & rSh.GetSelectionType()) &&
         TransferBufferType::Graphic == m_eBufferType )
     {
         // ReRead the graphic
@@ -3387,7 +3387,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         bFrameSel = true;
     }
 
-    const int nSel = rSrcSh.GetSelectionType();
+    const SelectionType nSel = rSrcSh.GetSelectionType();
 
     SwUndoId eUndoId = bMove ? SwUndoId::UI_DRAG_AND_MOVE : SwUndoId::UI_DRAG_AND_COPY;
 
@@ -3640,7 +3640,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     , bInDisconnect(false)
 {
     // we only end up here with table- or text selection
-    if( nsSelectionType::SEL_TBL_CELLS & rSh.GetSelectionType() )
+    if( SelectionType::TableCell & rSh.GetSelectionType() )
     {
         SwFrameFormat* pFormat = rSh.GetTableFormat();
         if( pFormat )

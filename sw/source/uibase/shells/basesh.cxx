@@ -179,7 +179,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
             aGrf, rURL.GetMap(), pList.get(), pEditObj );
 }
 
-static bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
+static bool lcl_UpdateContourDlg( SwWrtShell &rSh, SelectionType nSel )
 {
     Graphic aGraf( rSh.GetIMapGraphic() );
     GraphicType nGrfType = aGraf.GetType();
@@ -187,7 +187,7 @@ static bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
     if( bRet )
     {
         OUString aGrfName;
-        if ( nSel & nsSelectionType::SEL_GRF )
+        if ( nSel & SelectionType::Graphic )
             rSh.GetGrfNms( &aGrfName, nullptr );
 
         SvxContourDlg *pDlg = GetContourDlg(rSh.GetView());
@@ -759,10 +759,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if ( !pGalleryItem )
                 break;
 
-            const int nSelType = rSh.GetSelectionType();
+            const SelectionType nSelType = rSh.GetSelectionType();
             sal_Int8 nGalleryItemType( pGalleryItem->GetType() );
 
-            if ( (!rSh.IsSelFrameMode() || nSelType & nsSelectionType::SEL_GRF) &&
+            if ( (!rSh.IsSelFrameMode() || nSelType & SelectionType::Graphic) &&
                 nGalleryItemType == css::gallery::GalleryItemType::GRAPHIC )
             {
                 SwWait aWait( *rView.GetDocShell(), true );
@@ -770,7 +770,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 OUString aGrfName, aFltName;
                 const Graphic aGrf( pGalleryItem->GetGraphic() );
 
-                if ( nSelType & nsSelectionType::SEL_GRF )
+                if ( nSelType & SelectionType::Graphic )
                     rSh.ReRead( aGrfName, aFltName, &aGrf );
                 else
                     rSh.Insert( aGrfName, aFltName, aGrf );
@@ -998,9 +998,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             pVFrame->ToggleChildWindow( nId );
             pVFrame->GetBindings().Invalidate( SID_CONTOUR_DLG );
 
-            int nSel = rSh.GetSelectionType();
+            SelectionType nSel = rSh.GetSelectionType();
             if ( pVFrame->HasChildWindow( nId ) &&
-                 (nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE)) )
+                 (nSel & (SelectionType::Graphic|SelectionType::Ole)) )
             {
                 lcl_UpdateContourDlg( rSh, nSel );
             }
@@ -1010,8 +1010,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         {
             SvxContourDlg *pDlg = GetContourDlg(GetView());
             // Check, if the allocation is useful or allowed at all.
-            int nSel = rSh.GetSelectionType();
-            if ( nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE) )
+            SelectionType nSel = rSh.GetSelectionType();
+            if ( nSel & (SelectionType::Graphic|SelectionType::Ole) )
             {
                 if (pDlg && pDlg->GetEditingObject() == rSh.GetIMapInventor())
                 {
@@ -1321,7 +1321,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
                         static_cast<SvxIMapDlg*>(pChildWindow->GetWindow()) : nullptr;
                     if( pDlg && pDlg->GetEditingObject() !=
                                 rSh.GetIMapInventor() )
-                        lcl_UpdateContourDlg( rSh, nsSelectionType::SEL_GRF );
+                        lcl_UpdateContourDlg( rSh, SelectionType::Graphic );
 
                     bSetState = true;
                     bState = nullptr != pDlg;
@@ -1382,7 +1382,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case SID_GALLERY_FORMATS:
                 if ( rSh.IsObjSelected() ||
                      (rSh.IsSelFrameMode() &&
-                      !(rSh.GetSelectionType() & nsSelectionType::SEL_GRF)) )
+                      !(rSh.GetSelectionType() & SelectionType::Graphic)) )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_GALLERY_ENABLE_ADDCOPY:
@@ -1471,7 +1471,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     const bool bHas = pVFrame->HasChildWindow( nId );
                     const bool bFrameSel = rSh.IsFrameSelected();
                     const bool bIsGraphicSelection =
-                                rSh.GetSelectionType() == nsSelectionType::SEL_GRF;
+                                rSh.GetSelectionType() == SelectionType::Graphic;
 
                     // #i59688#
                     // Avoid unnecessary loading of selected graphic.
@@ -1512,7 +1512,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
                 if(!bDisable && pVFrame->HasChildWindow( nId ))
                 {
-                    if(rSh.GetSelectionType() == nsSelectionType::SEL_GRF
+                    if(rSh.GetSelectionType() == SelectionType::Graphic
                                     && rSh.IsLinkedGrfSwapOut())
                     {
                         if( AddGrfUpdateSlot( nWhich ))
@@ -1549,8 +1549,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 {
                     sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
                     bool bHas = GetView().GetViewFrame()->HasChildWindow( nId );
-                    int nSel = rSh.GetSelectionType();
-                    bool bOk = 0 != (nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE));
+                    SelectionType nSel = rSh.GetSelectionType();
+                    bool bOk(nSel & (SelectionType::Graphic|SelectionType::Ole));
 
                     bool bDisable = false;
                     if( !bHas && !bOk )
@@ -1561,7 +1561,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     // If the swapping of the graphic is finished, the status
                     // must be determined asynchronously, until this the slot
                     // will be disabled.
-                    else if ( bHas && (nSel & nsSelectionType::SEL_GRF) &&
+                    else if ( bHas && (nSel & SelectionType::Graphic) &&
                               rSh.IsLinkedGrfSwapOut() )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
@@ -1575,7 +1575,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     {
                         // #i75481#
                         // apply fix #i59688# only for selected graphics
-                        if ( nSel & nsSelectionType::SEL_GRF )
+                        if ( nSel & SelectionType::Graphic )
                             bDisable = GraphicType::NONE == rSh.GetGraphicType();
                         else
                             bDisable = GraphicType::NONE == rSh.GetIMapGraphic().GetType();
@@ -1591,8 +1591,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case SID_CONTOUR_EXEC:
             {
                 bool bDisable = false;
-                int nSel = rSh.GetSelectionType();
-                if( !(nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE)) )
+                SelectionType nSel = rSh.GetSelectionType();
+                if( !(nSel & (SelectionType::Graphic|SelectionType::Ole)) )
                     bDisable = true;
                 sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
                 if( !bDisable && GetView().GetViewFrame()->HasChildWindow( nId ))
@@ -1751,8 +1751,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             bDisable |= (nSurround == css::text::WrapTextMode_NONE || nSurround == css::text::WrapTextMode_THROUGHT);
                             if( !bDisable )
                             {
-                                int nSel = rSh.GetSelectionType();
-                                if( (nSel & nsSelectionType::SEL_GRF) &&
+                                SelectionType nSel = rSh.GetSelectionType();
+                                if( (nSel & SelectionType::Graphic) &&
                                             rSh.IsLinkedGrfSwapOut())
                                 {
                                     if( AddGrfUpdateSlot( nWhich ))
@@ -1762,7 +1762,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                 {
                                     // #i102253# applied patch from OD (see task)
                                     bDisable =
-                                        nSel & nsSelectionType::SEL_FRM ||
+                                        nSel & SelectionType::Frame ||
                                         GraphicType::NONE == rSh.GetIMapGraphic().GetType();
                                 }
                             }
@@ -2205,10 +2205,10 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich(aIter.FirstWhich());
-    int nSelType(rSh.GetSelectionType());
+    SelectionType nSelType(rSh.GetSelectionType());
     SvxBrushItem aBrushItem(RES_BACKGROUND);
 
-    if( nsSelectionType::SEL_TBL_CELLS & nSelType )
+    if( SelectionType::TableCell & nSelType )
     {
         rSh.GetBoxBackground( aBrushItem );
     }
@@ -2219,7 +2219,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
-        if(nSelType & nsSelectionType::SEL_GRF || nsSelectionType::SEL_FRM & nSelType)
+        if(nSelType & SelectionType::Graphic || SelectionType::Frame & nSelType)
         {
             rSh.GetFlyFrameAttr(aCoreSet);
         }
@@ -2257,7 +2257,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
 void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
-    int nSelType(rSh.GetSelectionType());
+    SelectionType nSelType(rSh.GetSelectionType());
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSlot(rReq.GetSlot());
 
@@ -2268,7 +2268,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
     SvxBrushItem aBrushItem(RES_BACKGROUND);
 
-    if( nsSelectionType::SEL_TBL_CELLS & nSelType )
+    if( SelectionType::TableCell & nSelType )
     {
         rSh.GetBoxBackground( aBrushItem );
     }
@@ -2279,7 +2279,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
-        if((nsSelectionType::SEL_FRM & nSelType) || (nsSelectionType::SEL_GRF & nSelType))
+        if((SelectionType::Frame & nSelType) || (SelectionType::Graphic & nSelType))
         {
             rSh.GetFlyFrameAttr(aCoreSet);
         }
@@ -2327,7 +2327,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         }
     }
 
-    if( nsSelectionType::SEL_TBL_CELLS & nSelType )
+    if( SelectionType::TableCell & nSelType )
     {
         rSh.SetBoxBackground( aBrushItem );
     }
@@ -2339,7 +2339,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
         setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, aCoreSet);
 
-        if((nsSelectionType::SEL_FRM & nSelType) || (nsSelectionType::SEL_GRF & nSelType))
+        if((SelectionType::Frame & nSelType) || (SelectionType::Graphic & nSelType))
         {
             // Template autoupdate
             SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
@@ -2747,7 +2747,7 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
     {
         case SID_GALLERY_BG_BRUSH:
         {
-            int nSel = rSh.GetSelectionType();
+            SelectionType nSel = rSh.GetSelectionType();
             SfxStringListItem aLst( nWhich );
             std::vector<OUString> &rLst = aLst.GetList();
             nParagraphPos = nGraphicPos = nOlePos = nFramePos = nTablePos =
@@ -2760,13 +2760,13 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
             bool bHtmlMode = 0 != (nHtmlMode & HTMLMODE_ON);
 
             if ( (!bHtmlMode || (nHtmlMode & HTMLMODE_FULL_STYLES)) &&
-                 (nSel & nsSelectionType::SEL_TXT) )
+                 (nSel & SelectionType::Text) )
             {
                 rLst.push_back( SW_RESSTR( STR_SWBG_PARAGRAPH ) );
                 nParagraphPos = nPos++;
             }
             if ( (!bHtmlMode || (nHtmlMode & HTMLMODE_SOME_STYLES)) &&
-                    nSel & (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
+                    nSel & (SelectionType::Table|SelectionType::TableCell) )
             {
                 rLst.push_back( SW_RESSTR( STR_SWBG_TABLE ) );
                 nTablePos = nPos++;
@@ -2782,17 +2782,17 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
             }
             if(!bHtmlMode)
             {
-                if ( nSel & nsSelectionType::SEL_FRM )
+                if ( nSel & SelectionType::Frame )
                 {
                     rLst.push_back( SW_RESSTR( STR_SWBG_FRAME ) );
                     nFramePos = nPos++;
                 }
-                if ( nSel & nsSelectionType::SEL_GRF )
+                if ( nSel & SelectionType::Graphic )
                 {
                     rLst.push_back( SW_RESSTR( STR_SWBG_GRAPHIC ) );
                     nGraphicPos = nPos++;
                 }
-                if ( nSel & nsSelectionType::SEL_OLE )
+                if ( nSel & SelectionType::Ole )
                 {
                     rLst.push_back( SW_RESSTR( STR_SWBG_OLE ) );
                     nOlePos = nPos++;
@@ -2831,8 +2831,8 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
             if ( !pArgs )
                 break;
 
-            int nSel = rSh.GetSelectionType();
-            if ( nSel & nsSelectionType::SEL_DRW_TXT )
+            SelectionType nSel = rSh.GetSelectionType();
+            if ( nSel & SelectionType::DrawObjectEditMode )
                 break;
 
             const SfxUInt16Item* pPos = rReq.GetArg<SfxUInt16Item>(SID_GALLERY_BG_POS);

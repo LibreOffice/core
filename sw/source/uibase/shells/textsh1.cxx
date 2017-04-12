@@ -1457,10 +1457,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_CHARMAP:
         case SID_EMOJI_CONTROL:
             {
-                const int nType = rSh.GetSelectionType();
-                if (!(nType & nsSelectionType::SEL_TXT) &&
-                    !(nType & nsSelectionType::SEL_TBL) &&
-                    !(nType & nsSelectionType::SEL_NUM))
+                const SelectionType nType = rSh.GetSelectionType();
+                if (!(nType & SelectionType::Text) &&
+                    !(nType & SelectionType::Table) &&
+                    !(nType & SelectionType::NumberList))
                 {
                     rSet.DisableItem(nWhich);
                 }

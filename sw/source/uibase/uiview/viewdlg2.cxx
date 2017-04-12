@@ -115,13 +115,13 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     }
 
     SelectionType eType = rSh.GetSelectionType();
-    if (eType & nsSelectionType::SEL_OLE)
-        eType = nsSelectionType::SEL_GRF;
+    if (eType & SelectionType::Ole)
+        eType = SelectionType::Graphic;
 
-    const SwLabelType eT = (eType & nsSelectionType::SEL_TBL) ? LTYPE_TABLE :
-                      (eType & nsSelectionType::SEL_FRM) ? LTYPE_FLY :
-                      (eType == nsSelectionType::SEL_TXT) ? LTYPE_FLY :
-                      (eType & nsSelectionType::SEL_DRW) ? LTYPE_DRAW :
+    const SwLabelType eT = (eType & SelectionType::Table) ? LTYPE_TABLE :
+                      (eType & SelectionType::Frame) ? LTYPE_FLY :
+                      (eType == SelectionType::Text) ? LTYPE_FLY :
+                      (eType & SelectionType::DrawObject) ? LTYPE_DRAW :
                                                     LTYPE_OBJECT;
 
     SwFieldMgr aMgr(&rSh);
@@ -186,15 +186,15 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     }
 
     // remember category
-    if (eType & nsSelectionType::SEL_GRF)
+    if (eType & SelectionType::Graphic)
         SetOldGrfCat(rName);
-    else if( eType & nsSelectionType::SEL_TBL)
+    else if( eType & SelectionType::Table)
         SetOldTabCat(rName);
-    else if( eType & nsSelectionType::SEL_FRM)
+    else if( eType & SelectionType::Frame)
         SetOldFrameCat(rName);
-    else if( eType == nsSelectionType::SEL_TXT)
+    else if( eType == SelectionType::Text)
         SetOldFrameCat(rName);
-    else if( eType & nsSelectionType::SEL_DRW)
+    else if( eType & SelectionType::DrawObject)
         SetOldDrwCat(rName);
 }
 

@@ -80,6 +80,7 @@ class SwPostItMgr;
 enum class SotExchangeDest;
 class SwCursorShell;
 enum class SvxSearchCmd;
+enum class SelectionType : sal_Int32;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -208,7 +209,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SwPostItMgr         *m_pPostItMgr;
 
-    int                 m_nSelectionType;
+    SelectionType       m_nSelectionType;
     VclPtr<FloatingWindow> m_pFieldPopup;
     sal_uInt16          m_nPageCnt;
 
@@ -337,10 +338,10 @@ protected:
 
     SwView_Impl*    GetViewImpl() {return m_pViewImpl;}
 
-    void ImpSetVerb( int nSelType );
+    void ImpSetVerb( SelectionType nSelType );
 
-    int             GetSelectionType() const { return m_nSelectionType; }
-    void            SetSelectionType(int nSet) { m_nSelectionType = nSet;}
+    SelectionType   GetSelectionType() const { return m_nSelectionType; }
+    void            SetSelectionType(SelectionType nSet) { m_nSelectionType = nSet;}
 
     // for SwWebView
     void            SetShell( SfxShell* pS )            { m_pShell = pS; }

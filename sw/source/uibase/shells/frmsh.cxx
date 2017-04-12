@@ -378,8 +378,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_FRAME_DLG:
         case FN_DRAW_WRAP_DLG:
         {
-            const int nSel = rSh.GetSelectionType();
-            if (nSel & nsSelectionType::SEL_GRF)
+            const SelectionType nSel = rSh.GetSelectionType();
+            if (nSel & SelectionType::Graphic)
             {
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_GRAFIC_DLG);
                 bUpdateMgr = false;
@@ -420,11 +420,11 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 pDrawModel->PutAreaListItems(aSet);
 
                 const SwViewOption* pVOpt = rSh.GetViewOptions();
-                if(nSel & nsSelectionType::SEL_OLE)
+                if(nSel & SelectionType::Ole)
                     aSet.Put( SfxBoolItem(FN_KEEP_ASPECT_RATIO, pVOpt->IsKeepRatio()) );
                 aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
-                if( nSel & nsSelectionType::SEL_OLE )
+                if( nSel & SelectionType::Ole )
                 {
                     // #i73249#
                     aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
@@ -466,8 +466,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact);
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(
-                                                        nSel & nsSelectionType::SEL_GRF ? OUString("PictureDialog") :
-                                                        nSel & nsSelectionType::SEL_OLE ? OUString("ObjectDialog"):
+                                                        nSel & SelectionType::Graphic ? OUString("PictureDialog") :
+                                                        nSel & SelectionType::Ole ? OUString("ObjectDialog"):
                                                                                         OUString("FrameDialog"),
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
@@ -487,7 +487,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     if(pOutSet)
                     {
                         rReq.Done(*pOutSet);
-                        if(nSel & nsSelectionType::SEL_OLE &&
+                        if(nSel & SelectionType::Ole &&
                         SfxItemState::SET == pOutSet->GetItemState(FN_KEEP_ASPECT_RATIO, true, &pItem))
                         {
                             SwViewOption aUsrPref( *pVOpt );
@@ -852,8 +852,8 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                 case FN_FRAME_CHAIN:
                 {
-                    const int nSel = rSh.GetSelectionType();
-                    if (nSel & nsSelectionType::SEL_GRF || nSel & nsSelectionType::SEL_OLE)
+                    const SelectionType nSel = rSh.GetSelectionType();
+                    if (nSel & SelectionType::Graphic || nSel & SelectionType::Ole)
                         rSet.DisableItem( FN_FRAME_CHAIN );
                     else
                     {
@@ -873,8 +873,8 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 break;
                 case FN_FRAME_UNCHAIN:
                 {
-                    const int nSel = rSh.GetSelectionType();
-                    if (nSel & nsSelectionType::SEL_GRF || nSel & nsSelectionType::SEL_OLE)
+                    const SelectionType nSel = rSh.GetSelectionType();
+                    if (nSel & SelectionType::Graphic || nSel & SelectionType::Ole)
                         rSet.DisableItem( FN_FRAME_UNCHAIN );
                     else
                     {
@@ -930,8 +930,8 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                 case FN_FORMAT_FRAME_DLG:
                 {
-                    const int nSel = rSh.GetSelectionType();
-                    if ( bParentCntProt || nSel & nsSelectionType::SEL_GRF)
+                    const SelectionType nSel = rSh.GetSelectionType();
+                    if ( bParentCntProt || nSel & SelectionType::Graphic)
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -1191,9 +1191,9 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 
 void  SwFrameShell::StateInsert(SfxItemSet &rSet)
 {
-    const int nSel = GetShell().GetSelectionType();
-    if ( (nSel & nsSelectionType::SEL_GRF)
-        || (nSel & nsSelectionType::SEL_OLE) )
+    const SelectionType nSel = GetShell().GetSelectionType();
+    if ( (nSel & SelectionType::Graphic)
+        || (nSel & SelectionType::Ole) )
     {
         rSet.DisableItem(FN_INSERT_FRAME);
     }

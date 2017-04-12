@@ -112,7 +112,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
         // Always show the distance field
     aBoxInfo.SetDist           (true);
         // Set minimal size in tables and paragraphs
-    aBoxInfo.SetMinDist        (rSh.IsTableMode() || rSh.GetSelectionType() & (nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL));
+    aBoxInfo.SetMinDist        (rSh.IsTableMode() || rSh.GetSelectionType() & (SelectionType::Text | SelectionType::Table));
         // Set always the default distance
     aBoxInfo.SetDefDist        (MIN_BORDER_DIST);
         // Single lines can have only in tables DontCare-Status

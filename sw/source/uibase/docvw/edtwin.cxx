@@ -360,7 +360,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 
             bool bFrameIsValidTarget = false;
             if( m_pApplyTempl->m_pFormatClipboard )
-                bFrameIsValidTarget = m_pApplyTempl->m_pFormatClipboard->HasContentForThisType( nsSelectionType::SEL_FRM );
+                bFrameIsValidTarget = m_pApplyTempl->m_pFormatClipboard->HasContentForThisType( SelectionType::Frame );
             else if( !m_pApplyTempl->nColor )
                 bFrameIsValidTarget = ( m_pApplyTempl->eType == SfxStyleFamily::Frame );
 
@@ -1524,13 +1524,13 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 return ;
         }
     }
-    int nLclSelectionType;
+    SelectionType nLclSelectionType;
     //A is converted to 1
     if( rKeyCode.GetFullCode() == (KEY_A | KEY_MOD1 |KEY_SHIFT)
         && rSh.HasDrawView() &&
-        (0 != (nLclSelectionType = rSh.GetSelectionType()) &&
-        ((nLclSelectionType & (nsSelectionType::SEL_FRM|nsSelectionType::SEL_GRF)) ||
-        ((nLclSelectionType & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM)) &&
+        (bool(nLclSelectionType = rSh.GetSelectionType()) &&
+        ((nLclSelectionType & (SelectionType::Frame|SelectionType::Graphic)) ||
+        ((nLclSelectionType & (SelectionType::DrawObject|SelectionType::DbForm)) &&
                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1))))
     {
         SdrHdlList& rHdlList = (SdrHdlList&)rSh.GetDrawView()->GetHdlList();
@@ -1728,7 +1728,7 @@ KEYINPUT_CHECKTABLE:
                         if(SwKeyState::KeyToView != eFlyState)
                         {
                             if(!pFlyFormat && SwKeyState::KeyToView != eFlyState &&
-                                (rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM))  &&
+                                (rSh.GetSelectionType() & (SelectionType::DrawObject|SelectionType::DbForm))  &&
                                     rSh.GetDrawView()->AreObjectsMarked())
                                 eKeyState = SwKeyState::Draw_Change;
                         }
@@ -1746,10 +1746,10 @@ KEYINPUT_CHECKTABLE:
                 case KEY_UP | KEY_SHIFT:
                 case KEY_DOWN | KEY_SHIFT:
                 {
-                    const int nSelectionType = rSh.GetSelectionType();
+                    const SelectionType nSelectionType = rSh.GetSelectionType();
                     if ( ( pFlyFormat
-                           && ( nSelectionType & (nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) ) )
-                         || ( ( nSelectionType & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM) )
+                           && ( nSelectionType & (SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic) ) )
+                         || ( ( nSelectionType & (SelectionType::DrawObject|SelectionType::DbForm) )
                               && rSh.GetDrawView()->AreObjectsMarked() ) )
                     {
                         eKeyState = pFlyFormat ? SwKeyState::Fly_Change : SwKeyState::Draw_Change;
@@ -1825,15 +1825,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         false /* table protected */
                             )
                     {
-                        const int nSelectionType = rSh.GetSelectionType();
+                        const SelectionType nSelectionType = rSh.GetSelectionType();
 
                         eKeyState = SwKeyState::KeyToView;
                         if(SwKeyState::KeyToView != eFlyState)
                         {
-                            if((nSelectionType & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM))  &&
+                            if((nSelectionType & (SelectionType::DrawObject|SelectionType::DbForm))  &&
                                     rSh.GetDrawView()->AreObjectsMarked())
                                 eKeyState = SwKeyState::Draw_Change;
-                            else if(nSelectionType & (nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF))
+                            else if(nSelectionType & (SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic))
                                 eKeyState = SwKeyState::Fly_Change;
                         }
                     }
@@ -1885,13 +1885,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if ( !rSh.HasReadonlySel()
                          && !rSh.CursorInsideInputField() )
                     {
-                        const int nSelectionType = rSh.GetSelectionType();
-                        if(nSelectionType & nsSelectionType::SEL_OLE)
+                        const SelectionType nSelectionType = rSh.GetSelectionType();
+                        if(nSelectionType & SelectionType::Ole)
                             eKeyState = SwKeyState::LaunchOLEObject;
-                        else if(nSelectionType & nsSelectionType::SEL_FRM)
+                        else if(nSelectionType & SelectionType::Frame)
                             eKeyState = SwKeyState::GoIntoFly;
-                        else if((nSelectionType & nsSelectionType::SEL_DRW) &&
-                                0 == (nSelectionType & nsSelectionType::SEL_DRW_TXT) &&
+                        else if((nSelectionType & SelectionType::DrawObject) &&
+                                !(nSelectionType & SelectionType::DrawObjectEditMode) &&
                                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1)
                         {
                             eKeyState = SwKeyState::GoIntoDrawing;
@@ -1914,10 +1914,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                         //RETURN for new paragraph with AutoFormatting
                         else if( pACfg && pACfg->IsAutoFormatByInput() &&
-                                !(nSelectionType & (nsSelectionType::SEL_GRF |
-                                    nsSelectionType::SEL_OLE | nsSelectionType::SEL_FRM |
-                                    nsSelectionType::SEL_TBL_CELLS | nsSelectionType::SEL_DRW |
-                                    nsSelectionType::SEL_DRW_TXT)) )
+                                !(nSelectionType & (SelectionType::Graphic |
+                                    SelectionType::Ole | SelectionType::Frame |
+                                    SelectionType::TableCell | SelectionType::DrawObject |
+                                    SelectionType::DrawObjectEditMode)) )
                         {
                             eKeyState = SwKeyState::CheckAutoCorrect;
                             eNextKeyState = SwKeyState::AutoFormatByInput;
@@ -2077,11 +2077,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                     }
                     else if ( rSh.GetSelectionType() &
-                                (nsSelectionType::SEL_GRF |
-                                    nsSelectionType::SEL_FRM |
-                                    nsSelectionType::SEL_OLE |
-                                    nsSelectionType::SEL_DRW |
-                                    nsSelectionType::SEL_DRW_FORM))
+                                (SelectionType::Graphic |
+                                    SelectionType::Frame |
+                                    SelectionType::Ole |
+                                    SelectionType::DrawObject |
+                                    SelectionType::DbForm))
 
                             eKeyState = SwKeyState::NextObject;
                     else
@@ -2132,11 +2132,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                     }
                     else if ( rSh.GetSelectionType() &
-                                (nsSelectionType::SEL_GRF |
-                                    nsSelectionType::SEL_FRM |
-                                    nsSelectionType::SEL_OLE |
-                                    nsSelectionType::SEL_DRW |
-                                    nsSelectionType::SEL_DRW_FORM))
+                                (SelectionType::Graphic |
+                                    SelectionType::Frame |
+                                    SelectionType::Ole |
+                                    SelectionType::DrawObject |
+                                    SelectionType::DbForm))
 
                             eKeyState = SwKeyState::PrevObject;
                     else
@@ -2167,8 +2167,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else if( rSh.GetTableFormat() )
                             eKeyState = SwKeyState::InsTab;
                         else if((rSh.GetSelectionType() &
-                                    (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM|
-                                        nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF))  &&
+                                    (SelectionType::DrawObject|SelectionType::DbForm|
+                                        SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic))  &&
                                 rSh.GetDrawView()->AreObjectsMarked())
                             eKeyState = SwKeyState::EnterDrawHandleMode;
                         else
@@ -2188,8 +2188,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                               pACorr->GetSwFlags().bAutoCmpltEndless );
                             eKeyState = SwKeyState::NextPrevGlossary;
                         }
-                        else if((rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM|
-                                        nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF)) &&
+                        else if((rSh.GetSelectionType() & (SelectionType::DrawObject|SelectionType::DbForm|
+                                        SelectionType::Frame|SelectionType::Ole|SelectionType::Graphic)) &&
                                 rSh.GetDrawView()->AreObjectsMarked())
                         {
                             eKeyState = SwKeyState::EnterDrawHandleMode;
@@ -2199,10 +2199,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     case KEY_F2 :
                     if( !rSh.HasReadonlySel() )
                     {
-                        const int nSelectionType = rSh.GetSelectionType();
-                        if(nSelectionType & nsSelectionType::SEL_FRM)
+                        const SelectionType nSelectionType = rSh.GetSelectionType();
+                        if(nSelectionType & SelectionType::Frame)
                             eKeyState = SwKeyState::GoIntoFly;
-                        else if((nSelectionType & nsSelectionType::SEL_DRW))
+                        else if((nSelectionType & SelectionType::DrawObject))
                         {
                             eKeyState = SwKeyState::GoIntoDrawing;
                             if (lcl_goIntoTextBox(*this, rSh))
@@ -2223,11 +2223,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         bNormalChar = false;
                         eKeyState = SwKeyState::End;
                         if ( rSh.GetSelectionType() &
-                                (nsSelectionType::SEL_GRF |
-                                    nsSelectionType::SEL_FRM |
-                                    nsSelectionType::SEL_OLE |
-                                    nsSelectionType::SEL_DRW |
-                                    nsSelectionType::SEL_DRW_FORM))
+                                (SelectionType::Graphic |
+                                    SelectionType::Frame |
+                                    SelectionType::Ole |
+                                    SelectionType::DrawObject |
+                                    SelectionType::DbForm))
 
                         {
                             eKeyState = (rKeyCode.GetModifier() & KEY_SHIFT) ?
@@ -2245,8 +2245,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
                     case KEY_RETURN:
                     {
-                        const int nSelectionType = rSh.GetSelectionType();
-                        if(nSelectionType & nsSelectionType::SEL_FRM)
+                        const SelectionType nSelectionType = rSh.GetSelectionType();
+                        if(nSelectionType & SelectionType::Frame)
                             eKeyState = SwKeyState::GoIntoFly;
                         else
                         {
@@ -2317,9 +2317,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                     if( !bIsDocReadOnly && bNormalChar )
                     {
-                        const int nSelectionType = rSh.GetSelectionType();
-                        const bool bDrawObject = (nSelectionType & nsSelectionType::SEL_DRW) &&
-                            0 == (nSelectionType & nsSelectionType::SEL_DRW_TXT) &&
+                        const SelectionType nSelectionType = rSh.GetSelectionType();
+                        const bool bDrawObject = (nSelectionType & SelectionType::DrawObject) &&
+                            !(nSelectionType & SelectionType::DrawObjectEditMode) &&
                             rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1;
 
                         bool bTextBox = false;
@@ -2340,7 +2340,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 rSh.GetDrawView()->KeyInput( rKEvt, this );
                             }
                         }
-                        else if (nSelectionType & nsSelectionType::SEL_FRM || bTextBox)
+                        else if (nSelectionType & SelectionType::Frame || bTextBox)
                         {
                             rSh.UnSelectFrame();
                             rSh.LeaveSelFrameMode();
@@ -3301,9 +3301,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                          * (take a look into the GetSelectionType method) and on the other hand the
                          * return value is used in a switch without proper masking (very nice), this must lead to trouble
                          */
-                            switch ( rSh.GetSelectionType() &~ ( nsSelectionType::SEL_FONTWORK | nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE ) )
+                            switch ( rSh.GetSelectionType() & ~SelectionType( SelectionType::FontWork | SelectionType::ExtrudedCustomShape ) )
                             {
-                            case nsSelectionType::SEL_GRF:
+                            case SelectionType::Graphic:
                                 RstMBDownFlags();
                                 if (!comphelper::LibreOfficeKit::isActive())
                                 {
@@ -3314,7 +3314,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 return;
 
                             // double click on OLE object --> OLE-InPlace
-                            case nsSelectionType::SEL_OLE:
+                            case SelectionType::Ole:
                                 if (rSh.IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE)
                                 {
                                     RstMBDownFlags();
@@ -3322,7 +3322,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 }
                                 return;
 
-                            case nsSelectionType::SEL_FRM:
+                            case SelectionType::Frame:
                                 RstMBDownFlags();
                                 if (!comphelper::LibreOfficeKit::isActive())
                                 {
@@ -3332,12 +3332,14 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 }
                                 return;
 
-                            case nsSelectionType::SEL_DRW:
+                            case SelectionType::DrawObject:
                                 RstMBDownFlags();
                                 EnterDrawTextMode(aDocPos);
                                 if ( dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
                                     static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
                                 return;
+
+                            default: break;
                             }
                         }
 
@@ -3685,11 +3687,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 }
                 if (!bOverURLGrf && !bExecDrawTextLink && !bOnlyText)
                 {
-                    const int nSelType = rSh.GetSelectionType();
+                    const SelectionType nSelType = rSh.GetSelectionType();
                     // Check in general, if an object is selectable at given position.
                     // Thus, also text fly frames in background become selectable via Ctrl-Click.
-                    if ( ( nSelType & nsSelectionType::SEL_OLE ||
-                         nSelType & nsSelectionType::SEL_GRF ||
+                    if ( ( nSelType & SelectionType::Ole ||
+                         nSelType & SelectionType::Graphic ||
                          rSh.IsObjSelectable( aDocPos ) ) && !lcl_urlOverBackground( rSh, aDocPos ) )
                     {
                         SwMvContext aMvContext( &rSh );
@@ -4073,9 +4075,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     if( bIsDocReadOnly )
                         break;
 
-                    bool bResizeKeepRatio = rSh.GetSelectionType() & nsSelectionType::SEL_GRF ||
-                                            rSh.GetSelectionType() & nsSelectionType::SEL_MEDIA ||
-                                            rSh.GetSelectionType() & nsSelectionType::SEL_OLE;
+                    bool bResizeKeepRatio = rSh.GetSelectionType() & SelectionType::Graphic ||
+                                            rSh.GetSelectionType() & SelectionType::Media ||
+                                            rSh.GetSelectionType() & SelectionType::Ole;
                     bool bisResize = g_eSdrMoveHdl != SdrHdlKind::Move;
 
                     if (pSdrView)
@@ -4762,7 +4764,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     if( m_pApplyTempl )
     {
-        int eSelection = rSh.GetSelectionType();
+        SelectionType eSelection = rSh.GetSelectionType();
         SwFormatClipboard* pFormatClipboard = m_pApplyTempl->m_pFormatClipboard;
         if( pFormatClipboard )//apply format paintbrush
         {
@@ -4802,7 +4804,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     nId = RES_CHRATR_BACKGROUND;
                     break;
             }
-            if( nId && (nsSelectionType::SEL_TXT|nsSelectionType::SEL_TBL) & eSelection)
+            if( nId && (SelectionType::Text|SelectionType::Table) & eSelection)
             {
                 if( rSh.IsSelection() && !rSh.HasReadonlySel() )
                 {
@@ -4831,7 +4833,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             switch ( m_pApplyTempl->eType )
             {
                 case SfxStyleFamily::Para:
-                    if( (( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL )
+                    if( (( SelectionType::Text | SelectionType::Table )
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
                         rSh.SetTextFormatColl( m_pApplyTempl->aColl.pTextColl );
@@ -4843,7 +4845,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     break;
                 case SfxStyleFamily::Char:
-                    if( (( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL )
+                    if( (( SelectionType::Text | SelectionType::Table )
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
                         rSh.SetAttrItem( SwFormatCharFormat(m_pApplyTempl->aColl.pCharFormat) );
@@ -5651,7 +5653,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
         // if draw text is active and there's a text selection
         // at the mouse position then do nothing
-        if(rSh.GetSelectionType() & nsSelectionType::SEL_DRW_TXT)
+        if(rSh.GetSelectionType() & SelectionType::DrawObjectEditMode)
         {
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             ESelection aSelection = pOLV->GetSelection();
@@ -5825,9 +5827,9 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     }
     if( !bOverURLGrf )
     {
-        const int nSelType = rSh.GetSelectionType();
-        if( nSelType == nsSelectionType::SEL_OLE ||
-            nSelType == nsSelectionType::SEL_GRF )
+        const SelectionType nSelType = rSh.GetSelectionType();
+        if( nSelType == SelectionType::Ole ||
+            nSelType == SelectionType::Graphic )
         {
             SwMvContext aMvContext( &rSh );
             if( !rSh.IsFrameSelected() )

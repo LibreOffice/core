@@ -106,9 +106,9 @@ void SwView::GetState(SfxItemSet &rSet)
                         eFrameType = m_pWrtShell->GetFrameType(nullptr, true);
                         bGetFrameType = true;
                     }
-                    if (! ( ((eFrameType & FrameTypeFlags::FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
-                        m_nSelectionType & nsSelectionType::SEL_TBL ||
-                        m_nSelectionType & nsSelectionType::SEL_DRW) )
+                    if (! ( ((eFrameType & FrameTypeFlags::FLY_ANY) && m_nSelectionType != SelectionType::DrawObjectEditMode)||
+                        m_nSelectionType & SelectionType::Table ||
+                        m_nSelectionType & SelectionType::DrawObject) )
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -428,7 +428,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 if( !m_pShell )
                     SelectShell();
                 sal_uInt16 nAlias = 0;
-                if( m_nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
+                if( m_nSelectionType & (SelectionType::DrawObjectEditMode|SelectionType::Text) )
                 {
                     switch( nWhich )
                     {
@@ -459,7 +459,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     GetViewFrame()->GetDispatcher()->QueryState( nAlias, pState );
                 if(pState)
                 {
-                    if (!(m_nSelectionType & nsSelectionType::SEL_DRW))
+                    if (!(m_nSelectionType & SelectionType::DrawObject))
                     {
                         std::unique_ptr<SfxPoolItem> pNewItem(pState->CloneSetWhich(nWhich));
                         rSet.Put(*pNewItem);

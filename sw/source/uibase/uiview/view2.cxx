@@ -246,7 +246,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
         SwWrtShell& rShell = GetWrtShell();
 
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
-        const bool bReplaceMode(rShell.HasSelection() && nsSelectionType::SEL_FRM == rShell.GetSelectionType());
+        const bool bReplaceMode(rShell.HasSelection() && SelectionType::Frame == rShell.GetSelectionType());
 
         if(bReplaceMode)
         {
@@ -445,7 +445,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_GRAPHIC_DEFNAME));
 
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
-        const bool bReplaceMode(rSh.HasSelection() && nsSelectionType::SEL_FRM == rSh.GetSelectionType());
+        const bool bReplaceMode(rSh.HasSelection() && SelectionType::Frame == rSh.GetSelectionType());
 
         rSh.StartUndo(SwUndoId::INSERT, &aRewriter);
 
@@ -1180,7 +1180,7 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_ALIGN_ANY_VDEFAULT :
         {
             sal_uInt16 nAlias = 0;
-            if( m_nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
+            if( m_nSelectionType & (SelectionType::DrawObjectEditMode|SelectionType::Text) )
             {
                 switch( nSlot )
                 {

@@ -694,8 +694,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case FN_INSERT_FRAME:
                 if (rSh.IsSelFrameMode() )
                 {
-                    const int nSel = rSh.GetSelectionType();
-                    if( ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE ) & nSel ) || bCursorInHidden )
+                    const SelectionType nSel = rSh.GetSelectionType();
+                    if( ((SelectionType::Graphic | SelectionType::Ole ) & nSel ) || bCursorInHidden )
                         rSet.DisableItem(nWhich);
                 }
                 else if ( rSh.CursorInsideInputField() )
