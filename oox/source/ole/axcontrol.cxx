@@ -851,10 +851,14 @@ void AxFontDataModel::importProperty( sal_Int32 nPropId, const OUString& rValue 
     switch( nPropId )
     {
         case XML_FontName:          maFontData.maFontName = rValue;                                             break;
-        case XML_FontEffects:       maFontData.mnFontEffects = AttributeConversion::decodeUnsigned( rValue );   break;
+        case XML_FontEffects:
+            maFontData.mnFontEffects = static_cast<AxFontFlags>(AttributeConversion::decodeUnsigned( rValue ));
+            break;
         case XML_FontHeight:        maFontData.mnFontHeight = AttributeConversion::decodeInteger( rValue );     break;
         case XML_FontCharSet:       maFontData.mnFontCharSet = AttributeConversion::decodeInteger( rValue );    break;
-        case XML_ParagraphAlign:    maFontData.mnHorAlign = static_cast<AxHorizontalAlign>(AttributeConversion::decodeInteger( rValue )); break;
+        case XML_ParagraphAlign:
+            maFontData.mnHorAlign = static_cast<AxHorizontalAlign>(AttributeConversion::decodeInteger( rValue ));
+            break;
         default:                    AxControlModelBase::importProperty( nPropId, rValue );
     }
 }
@@ -875,10 +879,13 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
         rPropMap.setProperty( PROP_FontName, maFontData.maFontName );
 
     // font effects
-    rPropMap.setProperty( PROP_FontWeight, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_BOLD, awt::FontWeight::BOLD, awt::FontWeight::NORMAL ) );
-    rPropMap.setProperty( PROP_FontSlant, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, FontSlant_ITALIC, FontSlant_NONE ) );
-    rPropMap.setProperty( PROP_FontUnderline, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, maFontData.mbDblUnderline ? awt::FontUnderline::DOUBLE : awt::FontUnderline::SINGLE, awt::FontUnderline::NONE ) );
-    rPropMap.setProperty( PROP_FontStrikeout, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, awt::FontStrikeout::SINGLE, awt::FontStrikeout::NONE ) );
+    rPropMap.setProperty( PROP_FontWeight, maFontData.mnFontEffects & AxFontFlags::Bold ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL );
+    rPropMap.setProperty( PROP_FontSlant, maFontData.mnFontEffects & AxFontFlags::Italic ? FontSlant_ITALIC : FontSlant_NONE );
+    if (maFontData.mnFontEffects & AxFontFlags::Underline)
+        rPropMap.setProperty( PROP_FontUnderline, maFontData.mbDblUnderline ? awt::FontUnderline::DOUBLE : awt::FontUnderline::SINGLE );
+    else
+        rPropMap.setProperty( PROP_FontUnderline, awt::FontUnderline::NONE );
+    rPropMap.setProperty( PROP_FontStrikeout, maFontData.mnFontEffects & AxFontFlags::Strikeout ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE );
     rPropMap.setProperty( PROP_FontHeight, maFontData.getHeightPoints() );
 
     // font character set
@@ -912,17 +919,17 @@ void AxFontDataModel::convertFromProperties( PropertySet& rPropSet, const Contro
     rPropSet.getProperty( maFontData.maFontName, PROP_FontName );
     float fontWeight = (float)0;
     if ( rPropSet.getProperty(fontWeight, PROP_FontWeight ) )
-        setFlag( maFontData.mnFontEffects, AX_FONTDATA_BOLD, ( fontWeight == awt::FontWeight::BOLD ) );
+        setFlag( maFontData.mnFontEffects, AxFontFlags::Bold, ( fontWeight == awt::FontWeight::BOLD ) );
     FontSlant nSlant = FontSlant_NONE;
     if ( rPropSet.getProperty( nSlant, PROP_FontSlant ) )
-        setFlag( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, ( nSlant == FontSlant_ITALIC ) );
+        setFlag( maFontData.mnFontEffects, AxFontFlags::Italic, ( nSlant == FontSlant_ITALIC ) );
 
     sal_Int16 nUnderLine = awt::FontUnderline::NONE;
     if ( rPropSet.getProperty( nUnderLine, PROP_FontUnderline ) )
-        setFlag( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, nUnderLine != awt::FontUnderline::NONE );
+        setFlag( maFontData.mnFontEffects, AxFontFlags::Underline, nUnderLine != awt::FontUnderline::NONE );
     sal_Int16 nStrikeout = awt::FontStrikeout::NONE ;
     if ( rPropSet.getProperty( nStrikeout, PROP_FontStrikeout ) )
-        setFlag( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, nStrikeout != awt::FontStrikeout::NONE );
+        setFlag( maFontData.mnFontEffects, AxFontFlags::Strikeout, nStrikeout != awt::FontStrikeout::NONE );
 
     float fontHeight = 0.0;
     if ( rPropSet.getProperty( fontHeight, PROP_FontHeight ) )
