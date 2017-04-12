@@ -31,7 +31,7 @@ CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     get(mpBtnClose, "btn_close");
     get(mpEditPreUpload, "ed_pre");
     get(mpEditPostUpload, "ed_post");
-    get(mpFtBugReport, "ed_bugreport");
+    get(mpBugReportMailto, "bugreport_mailto");
     get(mpCBSafeMode, "check_safemode");
 
     maSuccessMsg = mpEditPostUpload->GetText();
@@ -54,7 +54,7 @@ void CrashReportDialog::dispose()
     mpBtnClose.clear();
     mpEditPreUpload.clear();
     mpEditPostUpload.clear();
-    mpFtBugReport.clear();
+    mpBugReportMailto.clear();
     mpCBSafeMode.clear();
 
     Dialog::dispose();
@@ -97,7 +97,8 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
         }
 
         mpBtnClose->Show();
-        mpFtBugReport->Show();
+        mpBugReportMailto->SetURL(mpBugReportMailto->GetURL().replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=","")));
+        mpBugReportMailto->Show();
         mpEditPreUpload->Hide();
         mpEditPostUpload->Show();
         mpBtnSend->Hide();
