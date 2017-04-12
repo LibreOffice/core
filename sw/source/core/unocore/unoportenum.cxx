@@ -85,18 +85,18 @@ static void lcl_CreatePortions(
 
 namespace
 {
-    static const sal_uInt8 BKM_TYPE_START = 0;
-    static const sal_uInt8 BKM_TYPE_END = 1;
-    static const sal_uInt8 BKM_TYPE_START_END = 2;
+    enum class BkmType {
+        Start, End, StartEnd
+    };
 
     struct SwXBookmarkPortion_Impl
     {
         Reference<XTextContent>     xBookmark;
-        sal_uInt8                       nBkmType;
+        BkmType                     nBkmType;
         const SwPosition            aPosition;
 
         SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent> const& xMark,
-                const sal_uInt8 nType, SwPosition const& rPosition)
+                const BkmType nType, SwPosition const& rPosition)
         : xBookmark ( xMark )
         , nBkmType  ( nType )
         , aPosition ( rPosition )
@@ -141,8 +141,8 @@ namespace
         {
             // #i109272#: cross reference marks: need special handling!
             ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
-            sal_uInt8 const nType = (hasOther || pCrossRefMark)
-                ? BKM_TYPE_START : BKM_TYPE_START_END;
+            BkmType const nType = (hasOther || pCrossRefMark)
+                ? BkmType::Start : BkmType::StartEnd;
             rBkmArr.insert(std::make_shared<SwXBookmarkPortion_Impl>(
                         SwXBookmark::CreateXBookmark(rDoc, pBkmk),
                         nType, rStartPos));
@@ -169,7 +169,7 @@ namespace
             {
                 rBkmArr.insert(std::make_shared<SwXBookmarkPortion_Impl>(
                             SwXBookmark::CreateXBookmark(rDoc, pBkmk),
-                            BKM_TYPE_END, *pEndPos));
+                            BkmType::End, *pEndPos));
             }
         }
     }
@@ -615,17 +615,17 @@ static void lcl_ExportBookmark(
             break;
 
         SwXTextPortion* pPortion = nullptr;
-        if ((BKM_TYPE_START     == pPtr->nBkmType) ||
-            (BKM_TYPE_START_END == pPtr->nBkmType))
+        if ((BkmType::Start     == pPtr->nBkmType) ||
+            (BkmType::StartEnd == pPtr->nBkmType))
         {
             pPortion =
                 new SwXTextPortion(pUnoCursor, xParent, PORTION_BOOKMARK_START);
             rPortions.push_back(pPortion);
             pPortion->SetBookmark(pPtr->xBookmark);
-            pPortion->SetCollapsed( BKM_TYPE_START_END == pPtr->nBkmType );
+            pPortion->SetCollapsed( BkmType::StartEnd == pPtr->nBkmType );
 
         }
-        if (BKM_TYPE_END == pPtr->nBkmType)
+        if (BkmType::End == pPtr->nBkmType)
         {
             pPortion =
                 new SwXTextPortion(pUnoCursor, xParent, PORTION_BOOKMARK_END);
