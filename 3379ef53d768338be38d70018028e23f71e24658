@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_c1c0b2e3",
+        "filename": "android/source/src/java/org/libreoffice/textselection/TextSelectionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001521
+      },
+      "writtenOn": "2017-04-12T19:09:10Z",
+      "side": 1,
+      "message": "TextSelectionControls are part of bottom toolbar layout. So first make bottom toolbar visible, then hide the other components. \n\nAnyway, I\u0027m working on a better way to handle these hiding/showing of these views.\n \nThey\u0027re quite confusing right now.",
+      "parentUuid": "5a3905b3_41ff6234",
+      "range": {
+        "startLine": 47,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 44
+      },
+      "revId": "3379ef53d768338be38d70018028e23f71e24658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_61fc5e3f",
         "filename": "android/source/src/java/org/libreoffice/textselection/TextSelectionController.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-04-12T18:24:58Z",
       "side": 1,
       "message": "Maybe these two lines should be synchronized safety-wise.?",
+      "range": {
+        "startLine": 52,
+        "startChar": 16,
+        "endLine": 53,
+        "endChar": 50
+      },
+      "revId": "3379ef53d768338be38d70018028e23f71e24658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_61aa9e1b",
+        "filename": "android/source/src/java/org/libreoffice/textselection/TextSelectionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001521
+      },
+      "writtenOn": "2017-04-12T19:09:10Z",
+      "side": 1,
+      "message": "I see, I may have missed something but how are they unsafe? :)",
+      "parentUuid": "5a3905b3_61fc5e3f",
       "range": {
         "startLine": 52,
         "startChar": 16,
