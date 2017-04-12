@@ -6563,7 +6563,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
 // so it has no empty slot, we should allocate memory and a pointer should
 // reference to STD (perhaps filled with 0). If the slot is empty,
 // it will return a null pointer.
-WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip, sal_uInt16* pcbStd)
+WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip)
 {
     WW8_STD* pStd = nullptr;
 
@@ -6630,17 +6630,15 @@ WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip, sal_uInt16* pcbStd)
             rSt.SeekRel( cbStd );           // skip leftovers
         rSkip = 0;
     }
-    if( pcbStd )
-        *pcbStd = cbStd;
     return pStd;
 }
 
-WW8_STD* WW8Style::Read1Style(sal_uInt16& rSkip, OUString* pString, sal_uInt16* pcbStd)
+WW8_STD* WW8Style::Read1Style(sal_uInt16& rSkip, OUString* pString)
 {
     // Attention: MacWord-Documents have their Stylenames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
 
-    WW8_STD* pStd = Read1STDFixed(rSkip, pcbStd);         // read STD
+    WW8_STD* pStd = Read1STDFixed(rSkip);         // read STD
 
     // string desired?
     if( pString )
