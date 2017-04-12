@@ -23,21 +23,28 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace oox {
     class BinaryInputStream;
     class BinaryOutputStream;
 }
 
+enum class AxFontFlags {
+    NONE           = 0x00000000,
+    Bold           = 0x00000001,
+    Italic         = 0x00000002,
+    Underline      = 0x00000004,
+    Strikeout      = 0x00000008,
+    Disabled       = 0x00002000,
+    AutoColor      = 0x40000000,
+};
+namespace o3tl {
+    template<> struct typed_flags<AxFontFlags> : is_typed_flags<AxFontFlags, 0x4000200f> {};
+}
+
 namespace oox {
 namespace ole {
-
-const sal_uInt32 AX_FONTDATA_BOLD           = 0x00000001;
-const sal_uInt32 AX_FONTDATA_ITALIC         = 0x00000002;
-const sal_uInt32 AX_FONTDATA_UNDERLINE      = 0x00000004;
-const sal_uInt32 AX_FONTDATA_STRIKEOUT      = 0x00000008;
-const sal_uInt32 AX_FONTDATA_DISABLED       = 0x00002000;
-const sal_uInt32 AX_FONTDATA_AUTOCOLOR      = 0x40000000;
 
 enum class AxHorizontalAlign {
     Left = 1, Right = 2, Center = 3
@@ -46,8 +53,8 @@ enum class AxHorizontalAlign {
 /** All entries of a font property. */
 struct OOX_DLLPUBLIC AxFontData
 {
-    OUString     maFontName;         ///< Name of the used font.
-    sal_uInt32          mnFontEffects;      ///< Font effect flags.
+    OUString            maFontName;         ///< Name of the used font.
+    AxFontFlags         mnFontEffects;      ///< Font effect flags.
     sal_Int32           mnFontHeight;       ///< Height of the font (not really twips, see code).
     sal_Int32           mnFontCharSet;      ///< Windows character set of the font.
     AxHorizontalAlign   mnHorAlign;         ///< Horizontal text alignment.
