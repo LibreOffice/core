@@ -187,10 +187,9 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
 }
 
 javaFrameworkError jfw_startVM(
-    JavaInfo const * pInfo, JavaVMOption * arOptions, sal_Int32 cOptions,
+    JavaInfo const * pInfo, std::vector<OUString> const & arOptions,
     JavaVM ** ppVM, JNIEnv ** ppEnv)
 {
-    assert(cOptions == 0 || arOptions != nullptr);
     assert(ppVM != nullptr);
     javaFrameworkError errcode = JFW_E_NONE;
 
@@ -289,7 +288,7 @@ javaFrameworkError jfw_startVM(
         // it contains the classpath and all options set in the
         //options dialog
         std::unique_ptr<JavaVMOption[]> sarJOptions(
-            new JavaVMOption[cOptions + 2 + vmParams.size()]);
+            new JavaVMOption[arOptions.size() + 2 + vmParams.size()]);
         JavaVMOption * arOpt = sarJOptions.get();
         if (! arOpt)
             return JFW_E_ERROR;
@@ -313,10 +312,13 @@ javaFrameworkError jfw_startVM(
             index ++;
         }
         //add all options of the arOptions argument
-        for (int ii = 0; ii < cOptions; ii++)
+        std::vector<OString> convertedOptions;
+        for (auto const & ii: arOptions)
         {
-            arOpt[index].optionString = arOptions[ii].optionString;
-            arOpt[index].extraInfo = arOptions[ii].extraInfo;
+            OString conv = OUStringToOString(ii, osl_getThreadTextEncoding());
+            convertedOptions.push_back(conv);
+            arOpt[index].optionString = const_cast<char *>(conv.getStr());
+            arOpt[index].extraInfo = nullptr;
             index++;
         }
 
