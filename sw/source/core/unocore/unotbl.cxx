@@ -1620,7 +1620,7 @@ sal_Bool SwXTextTableCursor::mergeRange()
     bool bResult;
     {
         UnoActionContext aContext(rUnoCursor.GetDoc());
-        bResult = TBLMERGE_OK == rTableCursor.GetDoc()->MergeTable(rTableCursor);
+        bResult = TableMergeErr::Ok == rTableCursor.GetDoc()->MergeTable(rTableCursor);
     }
     if(bResult)
     {

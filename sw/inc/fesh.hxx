@@ -638,8 +638,7 @@ public:
 
     bool DeleteTableSel();        ///< Current selection, may be whole table.
 
-    sal_uInt16 MergeTab();          /**< Merge selected parts of table.
-                                      @return error via enum. */
+    TableMergeErr MergeTab();          /**< Merge selected parts of table */
 
     /// Split cell vertically or horizontally.
     bool SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight = false );

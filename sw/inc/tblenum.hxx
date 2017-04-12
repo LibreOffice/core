@@ -64,11 +64,11 @@ enum class SplitTable_HeadlineOption
     BoxAttrAllCopy     // Copy box attributes and paragraph styles of 1st line.
 };
 
-enum TableMergeErr
+enum class TableMergeErr
 {
-    TBLMERGE_OK,
-    TBLMERGE_NOSELECTION,
-    TBLMERGE_TOOCOMPLEX
+    Ok,
+    NoSelection,
+    TooComplex
 };
 
 #endif

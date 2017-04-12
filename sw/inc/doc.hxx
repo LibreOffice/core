@@ -1206,8 +1206,7 @@ public:
     bool SplitTable( const SwSelBoxes& rBoxes, bool bVert,
                        sal_uInt16 nCnt, bool bSameHeight = false );
 
-    // @return enum TableMergeErr.
-    sal_uInt16 MergeTable( SwPaM& rPam );
+    TableMergeErr MergeTable( SwPaM& rPam );
     OUString GetUniqueTableName() const;
     bool IsInsTableFormatNum() const;
     bool IsInsTableChangeNumFormat() const;
