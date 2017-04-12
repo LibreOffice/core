@@ -41,9 +41,6 @@
 
 using namespace com::sun::star;
 
-#define NUMBERING_MAX_LEVELS    10
-
-
 namespace writerfilter {
 namespace dmapper {
 
@@ -294,14 +291,6 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     //2.2
     //2.3
     //3.4
-
-
-    if( m_nFWord6 > 0) //Word 6 compatibility
-    {
-        if( m_nFPrev == 1)
-            aNumberingProperties.push_back(lcl_makePropVal<sal_Int16>(PROP_PARENT_NUMBERING, NUMBERING_MAX_LEVELS));
-        //TODO: prefixing space     nFPrevSpace;     - has not been used in WW8 filter
-    }
 
 //    TODO: sRGBXchNums;     array of inherited numbers
 
