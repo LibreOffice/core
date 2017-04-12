@@ -160,11 +160,7 @@ ScConflictsFinder::~ScConflictsFinder()
 
 bool ScConflictsFinder::DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 )
 {
-    if ( pAction1 && pAction2 && pAction1->GetBigRange().Intersects( pAction2->GetBigRange() ) )
-    {
-        return true;
-    }
-    return false;
+    return pAction1 && pAction2 && pAction1->GetBigRange().Intersects( pAction2->GetBigRange() );
 }
 
 ScConflictsListEntry* ScConflictsFinder::GetIntersectingEntry( const ScChangeAction* pAction ) const

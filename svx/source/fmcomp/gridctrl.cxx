@@ -2067,10 +2067,7 @@ bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
         return false;
     }
 
-    if ( !EditBrowseBox::CursorMoving( nNewRow, nNewCol ) )
-        return false;
-
-    return true;
+    return EditBrowseBox::CursorMoving( nNewRow, nNewCol );
 }
 
 bool DbGridControl::SetCurrent(long nNewRow)

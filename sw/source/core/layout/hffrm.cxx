@@ -633,10 +633,7 @@ bool SwHeadFootFrame::GetEatSpacing() const
     const SwFrameFormat * pFormat = GetFormat();
     OSL_ENSURE(pFormat, "SwHeadFootFrame: no format?");
 
-    if (pFormat->GetHeaderAndFooterEatSpacing().GetValue())
-        return true;
-
-    return false;
+    return pFormat->GetHeaderAndFooterEatSpacing().GetValue();
 }
 
 void DelFlys( SwLayoutFrame *pFrame, SwPageFrame *pPage )

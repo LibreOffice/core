@@ -40,12 +40,10 @@ ImplHatch::ImplHatch( const ImplHatch& rImplHatch ) :
 
 bool ImplHatch::operator==( const ImplHatch& rImplHatch ) const
 {
-    if( maColor == rImplHatch.maColor &&
+    return maColor == rImplHatch.maColor &&
         meStyle == rImplHatch.meStyle &&
         mnDistance == rImplHatch.mnDistance &&
-        mnAngle == rImplHatch.mnAngle)
-        return true;
-    return false;
+        mnAngle == rImplHatch.mnAngle;
 }
 
 Hatch::Hatch() : mpImplHatch()

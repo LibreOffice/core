@@ -372,14 +372,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 {
                     ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                     // Allow editing annotation by Id (without selecting the cell) for LOK
-                    if( isLOKNoTiledAnnotations || rDoc.GetNote(aPos) )
-                    {
-                        bDisable = false;
-                    }
-                    else
-                    {
-                        bDisable = true;
-                    }
+                    bDisable = !(isLOKNoTiledAnnotations || rDoc.GetNote(aPos));
                 }
                 break;
         }

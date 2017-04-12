@@ -142,13 +142,8 @@ ResultSetBase::dispose()
 sal_Bool SAL_CALL
 ResultSetBase::next()
 {
-    bool test;
     m_nRow++;
-    if( sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
-        test = true;
-    else
-        test = false;
-    return test;
+    return sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size();
 }
 
 

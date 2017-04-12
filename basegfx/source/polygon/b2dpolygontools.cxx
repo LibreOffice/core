@@ -1418,14 +1418,7 @@ namespace basegfx
                     const B2DVector aDelta(rTestPosition - aCutPoint);
                     const double fDistanceSquare(aDelta.scalar(aDelta));
 
-                    if(fDistanceSquare <= fDistance * fDistance)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return fDistanceSquare <= fDistance * fDistance;
                 }
             }
 

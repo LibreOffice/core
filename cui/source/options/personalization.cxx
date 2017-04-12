@@ -585,9 +585,7 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
         return false;
 
     *pName = searchValue( rBuffer, persona, "&#34;name&#34;:&#34;" );
-    if ( pName->isEmpty() )
-        return false;
-    return true;
+    return !pName->isEmpty();
 }
 
 SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,

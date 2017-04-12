@@ -369,10 +369,7 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
         nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
         pItems );
 
-    if ( !pItem )
-        return false;
-
-    return true;
+    return pItem != nullptr;
 
 }
 

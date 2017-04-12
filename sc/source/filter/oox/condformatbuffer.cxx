@@ -106,10 +106,7 @@ bool isValue(const OUString& rStr, double& rVal)
     sal_Int32 nEnd = -1;
     rVal = rtl::math::stringToDouble(rStr.trim(), '.', ',', nullptr, &nEnd);
 
-    if (nEnd < rStr.getLength())
-        return false;
-
-    return true;
+    return nEnd >= rStr.getLength();
 }
 
 void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )

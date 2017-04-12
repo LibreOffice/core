@@ -1114,9 +1114,7 @@ static bool isNullGrid(const array_type &A)
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
 
-    if (!nMaxX || !nMaxY)
-        return true;
-    return false;
+    return !nMaxX || !nMaxY;
 }
 
 static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, std::vector<VclGrid::Value> &rHeights)

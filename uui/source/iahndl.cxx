@@ -267,10 +267,7 @@ UUIInteractionHelper::isInformationalErrorMessageRequest(
 
     uno::Reference< task::XInteractionAbort > xAbort(
         rContinuations[0], uno::UNO_QUERY);
-    if (xAbort.is())
-        return true;
-
-    return false;
+    return xAbort.is();
 }
 
 bool

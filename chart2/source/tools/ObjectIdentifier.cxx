@@ -279,12 +279,8 @@ ObjectIdentifier::ObjectIdentifier( const ObjectIdentifier& rOID )
 
 bool ObjectIdentifier::operator==( const ObjectIdentifier& rOID ) const
 {
-    if ( areIdenticalObjects( m_aObjectCID, rOID.m_aObjectCID ) &&
-         ( m_xAdditionalShape == rOID.m_xAdditionalShape ) )
-    {
-        return true;
-    }
-    return false;
+    return areIdenticalObjects( m_aObjectCID, rOID.m_aObjectCID ) &&
+         ( m_xAdditionalShape == rOID.m_xAdditionalShape );
 }
 
 bool ObjectIdentifier::operator!=( const ObjectIdentifier& rOID ) const
@@ -766,10 +762,7 @@ bool ObjectIdentifier::parsePieSegmentDragParameterString(
 
     aValueString = rDragParameterString.getToken( 0, ',', nCharacterIndex );
     rMaximumPosition.Y = aValueString.toInt32();
-    if( nCharacterIndex < 0 )
-        return false;
-
-    return true;
+    return nCharacterIndex >= 0;
 }
 
 OUString ObjectIdentifier::getDragMethodServiceName( const OUString& rCID )

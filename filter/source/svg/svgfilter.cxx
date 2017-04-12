@@ -333,10 +333,7 @@ bool SVGFilter::isStreamSvg(const uno::Reference<io::XInputStream>& xInput)
     sal_Int8 aMagic2[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
     sal_Int32 aMagic2Size = sizeof(aMagic2) / sizeof(*aMagic2);
 
-    if (std::search(pBuffer, pBuffer + nBytes, aMagic2, aMagic2 + aMagic2Size) != pBuffer + nBytes)
-        return true;
-
-    return false;
+    return std::search(pBuffer, pBuffer + nBytes, aMagic2, aMagic2 + aMagic2Size) != pBuffer + nBytes;
 }
 
 OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)

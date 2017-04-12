@@ -79,9 +79,7 @@ bool CheckMailAddress( const OUString& rMailAddress )
     if (nPosAt<0 || rMailAddress.lastIndexOf('@')!=nPosAt)
         return false;
     const sal_Int32 nPosDot = rMailAddress.indexOf('.', nPosAt);
-    if (nPosDot<0 || nPosDot-nPosAt<3 || rMailAddress.getLength()-nPosDot<3)
-        return false;
-    return true;
+    return !(nPosDot<0 || nPosDot-nPosAt<3 || rMailAddress.getLength()-nPosDot<3);
 }
 
 uno::Reference< mail::XSmtpService > ConnectToSmtpServer(

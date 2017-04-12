@@ -68,10 +68,7 @@ namespace framework
                         bool bEqual = ( m_aDockedData.m_aPos.X == aUIElement.m_aDockedData.m_aPos.X );
                         if ( bEqual )
                         {
-                            if ( m_bUserActive && !aUIElement.m_bUserActive )
-                                return true;
-                            else
-                                return false;
+                            return m_bUserActive && !aUIElement.m_bUserActive;
                         }
                         else
                             return ( m_aDockedData.m_aPos.X <= aUIElement.m_aDockedData.m_aPos.X );
@@ -86,10 +83,7 @@ namespace framework
                         bool bEqual = ( m_aDockedData.m_aPos.Y == aUIElement.m_aDockedData.m_aPos.Y );
                         if ( bEqual )
                         {
-                            if ( m_bUserActive && !aUIElement.m_bUserActive )
-                                return true;
-                            else
-                                return false;
+                            return m_bUserActive && !aUIElement.m_bUserActive;
                         }
                         else
                             return ( m_aDockedData.m_aPos.Y <= aUIElement.m_aDockedData.m_aPos.Y );

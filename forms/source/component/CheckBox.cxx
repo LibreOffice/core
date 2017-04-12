@@ -181,9 +181,7 @@ void SAL_CALL OCheckBoxModel::read(const Reference<css::io::XObjectInputStream>&
 
 bool OCheckBoxModel::DbUseBool()
 {
-    if ( ! (getReferenceValue().isEmpty() && getNoCheckReferenceValue().isEmpty()) )
-        return false;
-    return true;
+    return getReferenceValue().isEmpty() && getNoCheckReferenceValue().isEmpty();
 }
 
 

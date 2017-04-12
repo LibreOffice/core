@@ -1630,13 +1630,9 @@ void ScAccessibleSpreadsheet::RemoveFormulaSelection(bool bRemoveAll )
 
 bool ScAccessibleSpreadsheet::IsScAddrFormulaSel(const ScAddress &addr) const
 {
-    if( addr.Col() >= m_nMinX && addr.Col() <= m_nMaxX &&
+    return addr.Col() >= m_nMinX && addr.Col() <= m_nMaxX &&
         addr.Row() >= m_nMinY && addr.Row() <= m_nMaxY &&
-        addr.Tab() == mpViewShell->GetViewData().GetTabNo() )
-    {
-        return true;
-    }
-    return false;
+        addr.Tab() == mpViewShell->GetViewData().GetTabNo();
 }
 
 bool ScAccessibleSpreadsheet::CheckChildIndex(sal_Int32 nIndex) const

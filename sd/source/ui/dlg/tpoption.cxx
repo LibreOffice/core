@@ -601,10 +601,7 @@ bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32
         return false;
 
     rY = (long) aTmp.toInt32();
-    if( rY == 0 )
-        return false;
-
-    return true;
+    return rY != 0;
 }
 
 void SdTpOptionsMisc::UpdateCompatibilityControls()

@@ -274,11 +274,7 @@ static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& n
     {
         --nRow;
     }
-    if ( eSkip == ScAutoSumSum && nRow < nTmp )
-    {
-        return true;
-    }
-    return false;
+    return eSkip == ScAutoSumSum && nRow < nTmp;
 }
 
 static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
@@ -291,11 +287,7 @@ static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow
     {
         --nCol;
     }
-    if ( eSkip == ScAutoSumSum && nCol < nTmp )
-    {
-        return true;
-    }
-    return false;
+    return eSkip == ScAutoSumSum && nCol < nTmp;
 }
 
 static bool lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )

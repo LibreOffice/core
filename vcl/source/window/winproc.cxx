@@ -1069,10 +1069,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
             }
             else
             {
-                if ( ImplCallHotKey( aKeyCode ) )
-                    bRet = true;
-                else
-                    bRet = false;
+                bRet = ImplCallHotKey( aKeyCode );
             }
         }
     }
@@ -1357,9 +1354,7 @@ bool HandleGestureEventBase::Setup()
         m_pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
     if (m_pSVData->maHelpData.mpHelpWin)
         ImplDestroyHelpWindow( true );
-    if (m_pWindow->IsDisposed())
-        return false;
-    return true;
+    return !m_pWindow->IsDisposed();
 }
 
 vcl::Window* HandleGestureEventBase::FindTarget()

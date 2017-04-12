@@ -53,7 +53,7 @@ Impl_Gradient::Impl_Gradient( const Impl_Gradient& rImplGradient ) :
 
 bool Impl_Gradient::operator==( const Impl_Gradient& rImpl_Gradient ) const
 {
-    if ( (meStyle           == rImpl_Gradient.meStyle)           &&
+    return (meStyle           == rImpl_Gradient.meStyle)           &&
          (mnAngle           == rImpl_Gradient.mnAngle)           &&
          (mnBorder          == rImpl_Gradient.mnBorder)          &&
          (mnOfsX            == rImpl_Gradient.mnOfsX)            &&
@@ -62,9 +62,7 @@ bool Impl_Gradient::operator==( const Impl_Gradient& rImpl_Gradient ) const
          (mnIntensityStart  == rImpl_Gradient.mnIntensityStart)  &&
          (mnIntensityEnd    == rImpl_Gradient.mnIntensityEnd)    &&
          (maStartColor      == rImpl_Gradient.maStartColor)      &&
-         (maEndColor        == rImpl_Gradient.maEndColor) )
-         return true;
-    return false;
+         (maEndColor        == rImpl_Gradient.maEndColor);
 }
 
 Gradient::Gradient() :

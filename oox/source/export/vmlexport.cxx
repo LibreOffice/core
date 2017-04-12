@@ -199,10 +199,7 @@ bool VMLExport::IsWaterMarkShape(const OUString& rStr)
 {
      if (rStr.isEmpty() )  return false;
 
-     if (rStr.match("PowerPlusWaterMarkObject") || rStr.match("WordPictureWatermark"))
-        return true;
-     else
-        return false;
+     return rStr.match("PowerPlusWaterMarkObject") || rStr.match("WordPictureWatermark");
 }
 
 static void impl_AddArrowHead( sax_fastparser::FastAttributeList *pAttrList, sal_Int32 nElement, sal_uInt32 nValue )

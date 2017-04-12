@@ -44,15 +44,10 @@ bool GraphicNativeTransform::canBeRotated()
         return false;
     }
 
-    if (   aLink.GetType() == GfxLinkType::NativeJpg
+    return aLink.GetType() == GfxLinkType::NativeJpg
         || aLink.GetType() == GfxLinkType::NativePng
         || aLink.GetType() == GfxLinkType::NativeGif
-        || aLink.GetType() == GfxLinkType::NONE)
-    {
-        return true;
-    }
-
-    return false;
+        || aLink.GetType() == GfxLinkType::NONE;
 }
 
 bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)

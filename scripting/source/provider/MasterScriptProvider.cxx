@@ -59,12 +59,8 @@ bool endsWith( const OUString& target,
     const OUString& item )
 {
     sal_Int32 index = 0;
-    if (  ( index = target.indexOf( item ) ) != -1  &&
-       ( index == ( target.getLength() - item.getLength() ) ) )
-    {
-        return true;
-    }
-    return false;
+    return ( index = target.indexOf( item ) ) != -1  &&
+       ( index == ( target.getLength() - item.getLength() ) );
 }
 
 /* should be available in some central location. */
@@ -607,30 +603,18 @@ MasterScriptProvider::removeByName( const OUString& Name )
 
 
 void SAL_CALL
-MasterScriptProvider::replaceByName( const OUString& aName, const Any& aElement )
+MasterScriptProvider::replaceByName( const OUString& /*aName*/, const Any& /*aElement*/ )
 {
-    (void)aName;
-    (void)aElement;
-
     // TODO needs implementing
-    if ( true )
-    {
-        throw RuntimeException( "replaceByName not implemented!!!!" );
-    }
+     throw RuntimeException( "replaceByName not implemented!!!!" );
 }
 
 Any SAL_CALL
-MasterScriptProvider::getByName( const OUString& aName )
+MasterScriptProvider::getByName( const OUString& /*aName*/ )
 {
-    (void)aName;
-
     // TODO needs to be implemented
-    Any result;
-    if ( true )
-    {
-        throw RuntimeException( "getByName not implemented!!!!" );
-    }
-    return result;
+    throw RuntimeException( "getByName not implemented!!!!" );
+    return Any();
 }
 
 sal_Bool SAL_CALL
@@ -702,7 +686,6 @@ MasterScriptProvider::getElementNames(  )
 {
     // TODO needs implementing
     Sequence< OUString >  names;
-    if ( true )
     {
         throw RuntimeException( "getElementNames not implemented!!!!" );
     }
@@ -720,10 +703,7 @@ MasterScriptProvider::getElementType(  )
 sal_Bool SAL_CALL MasterScriptProvider::hasElements(  )
 {
     // TODO needs implementing
-    if ( true )
-    {
-        throw RuntimeException( "hasElements not implemented!!!!" );
-    }
+    throw RuntimeException( "hasElements not implemented!!!!" );
     return false;
 }
 

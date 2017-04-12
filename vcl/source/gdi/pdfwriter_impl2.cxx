@@ -2051,10 +2051,7 @@ static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
     }
 
     // TODO: handle step count
-    if (rGradient.GetSteps() > 0)
-        return false;
-
-    return true;
+    return rGradient.GetSteps() <= 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

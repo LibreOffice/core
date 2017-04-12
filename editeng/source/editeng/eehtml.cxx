@@ -740,9 +740,7 @@ bool EditHTMLParser::ThrowAwayBlank()
     // A blank must be thrown away if the new text begins with a Blank and
     // if the current paragraph is empty or ends with a Blank...
     ContentNode* pNode = aCurSel.Max().GetNode();
-    if ( pNode->Len() && ( pNode->GetChar( pNode->Len()-1 ) != ' ' ) )
-        return false;
-    return true;
+    return !(pNode->Len() && ( pNode->GetChar( pNode->Len()-1 ) != ' ' ));
 }
 
 bool EditHTMLParser::HasTextInCurrentPara()

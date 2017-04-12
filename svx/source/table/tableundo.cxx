@@ -96,14 +96,7 @@ void CellUndo::Redo()
 bool CellUndo::Merge( SfxUndoAction *pNextAction )
 {
     CellUndo* pNext = dynamic_cast< CellUndo* >( pNextAction );
-    if( pNext && pNext->mxCell.get() == mxCell.get() )
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return pNext && pNext->mxCell.get() == mxCell.get();
 }
 
 void CellUndo::setDataToCell( const Data& rData )

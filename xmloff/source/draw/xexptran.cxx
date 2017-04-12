@@ -73,12 +73,9 @@ bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
 {
     sal_Unicode aChar(rStr[nPos]);
 
-    if(('a' <= aChar && 'z' >= aChar)
+    return ('a' <= aChar && 'z' >= aChar)
         || ('A' <= aChar && 'Z' >= aChar)
-        || '%' == aChar
-    )
-        return true;
-    return false;
+        || '%' == aChar;
 }
 
 double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen,

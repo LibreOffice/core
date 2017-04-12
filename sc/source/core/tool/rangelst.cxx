@@ -535,10 +535,7 @@ template<typename X, typename Y>
 bool checkForOneRange(
    X nDeleteX1, X nDeleteX2, Y nDeleteY1, Y nDeleteY2, X nX1, X nX2, Y nY1, Y nY2)
 {
-    if (nDeleteX1 <= nX1 && nX2 <= nDeleteX2 && (nDeleteY1 <= nY1 || nY2 <= nDeleteY2))
-        return true;
-
-    return false;
+    return nDeleteX1 <= nX1 && nX2 <= nDeleteX2 && (nDeleteY1 <= nY1 || nY2 <= nDeleteY2);
 }
 
 bool handleOneRange( const ScRange& rDeleteRange, ScRange* p )

@@ -110,9 +110,7 @@ bool LinguIsUnspecified( const OUString & rBcp47 )
 {
     if (rBcp47.getLength() != 3)
         return false;
-    if (rBcp47 == "zxx" || rBcp47 == "und" || rBcp47 == "mul")
-        return true;
-    return false;
+    return rBcp47 == "zxx" || rBcp47 == "und" || rBcp47 == "mul";
 }
 
 static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )

@@ -78,9 +78,7 @@ struct CompIdentifiers
     bool operator() (std::vector<Reference<css::deployment::XPackage> > const & a,
                      std::vector<Reference<css::deployment::XPackage> > const & b)
         {
-            if (getName(a).compareTo(getName(b)) < 0)
-                return true;
-            return false;
+            return getName(a).compareTo(getName(b)) < 0;
         }
 
     static OUString getName(std::vector<Reference<css::deployment::XPackage> > const & a);

@@ -1003,13 +1003,11 @@ static bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldF
 {
     sal_Unicode cChar = rKEvt.GetCharCode();
     sal_uInt16 nGroup = rKEvt.GetKeyCode().GetGroup();
-    if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
-         (nGroup == KEYGROUP_MISC)||
-         ((cChar >= '0') && (cChar <= '9')) ||
-         (cChar == ImplGetDateSep( rLocaleDataWrapper, eFormat )[0]) )
-        return false;
-    else
-        return true;
+    return !((nGroup == KEYGROUP_FKEYS) ||
+             (nGroup == KEYGROUP_CURSOR) ||
+             (nGroup == KEYGROUP_MISC)||
+             ((cChar >= '0') && (cChar <= '9')) ||
+             (cChar == ImplGetDateSep( rLocaleDataWrapper, eFormat )[0]));
 }
 
 static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,

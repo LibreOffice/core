@@ -1688,9 +1688,7 @@ bool SbModule::ExceedsLegacyModuleSize()
 {
     if ( !IsCompiled() )
         Compile();
-    if ( pImage && pImage->ExceedsLegacyLimits() )
-        return true;
-    return false;
+    return pImage && pImage->ExceedsLegacyLimits();
 }
 
 class ErrorHdlResetter

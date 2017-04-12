@@ -367,12 +367,7 @@ namespace svgio
 
             const double fBasegfxPathLength(basegfx::tools::getLength(aPolygon));
 
-            if(basegfx::fTools::equalZero(fBasegfxPathLength))
-            {
-                return false;
-            }
-
-            return true;
+            return !basegfx::fTools::equalZero(fBasegfxPathLength);
         }
 
         void SvgTextPathNode::decomposePathNode(

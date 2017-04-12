@@ -199,9 +199,7 @@ void wwSection::SetDirection()
 
 bool wwSection::IsVertical() const
 {
-    if (meDir == SvxFrameDirection::Vertical_RL_TB || meDir == SvxFrameDirection::Vertical_LR_TB)
-        return true;
-    return false;
+    return meDir == SvxFrameDirection::Vertical_RL_TB || meDir == SvxFrameDirection::Vertical_LR_TB;
 }
 
 /*
@@ -1775,9 +1773,7 @@ bool WW8FlyPara::IsEmpty() const
     OSL_ENSURE(aEmpty.nSp37 == 2, "this is not what we expect for nSp37");
     if (this->nSp37 == 0)
         aEmpty.nSp37 = 0;
-    if (aEmpty == *this)
-        return true;
-    return false;
+    return aEmpty == *this;
 }
 
 // #i18732# - changes made on behalf of CMC
@@ -4616,10 +4612,7 @@ void SwWW8ImplReader::Read_TextAnim(sal_uInt16 /*nId*/, const sal_uInt8* pData, 
             // 2 background blink   3 sparkle text
             // 4 marching ants      5 marching red ants
             // 6 shimmer
-            if (*pData > 0 && *pData < 7 )
-                bBlink = true;
-            else
-                bBlink = false;
+            bBlink = *pData > 0 && *pData < 7;
 
             NewAttr(SvxBlinkItem(bBlink, RES_CHRATR_BLINK));
         }

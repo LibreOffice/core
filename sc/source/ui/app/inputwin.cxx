@@ -639,10 +639,7 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool ScInputWindow::IsPointerAtResizePos()
 {
-    if ( GetOutputSizePixel().Height() - GetPointerPosPixel().Y() <= 4  )
-        return true;
-    else
-        return false;
+    return GetOutputSizePixel().Height() - GetPointerPosPixel().Y() <= 4;
 }
 
 void ScInputWindow::MouseMove( const MouseEvent& rMEvt )

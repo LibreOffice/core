@@ -67,10 +67,7 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
             return true;
     }
 
-    if (tryLoadPng( aBaseDir, aBaseName + aPng, rBitmap))
-        return true;
-
-    return false;
+    return tryLoadPng( aBaseDir, aBaseName + aPng, rBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

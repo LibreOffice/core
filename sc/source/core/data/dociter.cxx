@@ -598,10 +598,7 @@ bool isQueryByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem
             ;
     }
 
-    if (rItem.meType == ScQueryEntry::ByString && rMat.IsString(nCol, nRow))
-        return true;
-
-    return false;
+    return rItem.meType == ScQueryEntry::ByString && rMat.IsString(nCol, nRow);
 }
 
 }

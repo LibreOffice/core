@@ -216,10 +216,7 @@ bool SdDrawDocument::IsPageNameUnique( const OUString& rPgName ) const
         nPage++;
     }
 
-    if (nCount == 1)
-        return true;
-    else
-        return false;
+    return nCount == 1;
 }
 
 SdPage* SdDrawDocument::GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const

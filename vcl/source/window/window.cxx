@@ -3650,10 +3650,7 @@ Selection Window::GetSurroundingTextSelection() const
 
 bool Window::UsePolyPolygonForComplexGradient()
 {
-    if ( meRasterOp != RasterOp::OverPaint )
-        return true;
-
-    return false;
+    return meRasterOp != RasterOp::OverPaint;
 }
 
 void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)

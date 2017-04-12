@@ -2950,10 +2950,7 @@ void ScDPResultDimension::LateInitFrom(
                 bool bAllChildren = false;
                 if( bShowEmpty )
                 {
-                    if (  pResultMember->IsNamedItem( rThisData ) )
-                        bAllChildren = false;
-                    else
-                        bAllChildren = true;
+                    bAllChildren = !pResultMember->IsNamedItem( rThisData );
                 }
                 rParams.SetInitAllChildren( bAllChildren );
                 rInitState.AddMember( nDimSource,  pResultMember->GetDataId() );

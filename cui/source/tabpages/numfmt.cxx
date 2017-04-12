@@ -959,10 +959,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_SCIENTIFIC: // bThousand is for Engineering notation
             {
                 sal_uInt16 nIntDigits = pNumFmtShell->GetFormatIntegerDigits(theFormat);
-                if ( (nIntDigits > 0) && (nIntDigits % 3 == 0) )
-                    bThousand = true;
-                else
-                    bThousand = false;
+                bThousand = (nIntDigits > 0) && (nIntDigits % 3 == 0);
                 m_pBtnEngineering->Enable();
                 m_pBtnEngineering->Check( bThousand );
             }

@@ -1129,13 +1129,8 @@ bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
         return false;
 
     const ScPatternAttr* pPattern = mpDoc->GetPattern( nX, nY, nTab );
-    if ( static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE)).IsMerged() ||
-         static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG)).IsOverlapped() )
-    {
-        return false;
-    }
-
-    return true;
+    return !(static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE)).IsMerged() ||
+         static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG)).IsOverlapped());
 }
 
 // nX, nArrY:       loop variables from DrawStrings / DrawEdit

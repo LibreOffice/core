@@ -121,10 +121,7 @@ bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
     rSize.Height() = rStr.getToken(0, '/', nIdx).toInt32();
 
     // negative sizes are invalid
-    if ( rSize.Width() < 0 || rSize.Height() < 0 )
-        return false;
-
-    return true;
+    return !(rSize.Width() < 0 || rSize.Height() < 0);
 }
 
 bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
@@ -142,10 +139,7 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
         rSize.Height() = aStr.getToken(1, ';' ).toInt32();
 
         // negative sizes are invalid
-        if ( rSize.Width() < 0 || rSize.Height() < 0 )
-            return false;
-
-        return true;
+        return !(rSize.Width() < 0 || rSize.Height() < 0);
     }
 
     return false;
@@ -603,11 +597,7 @@ bool SfxChildWinInfo::GetExtraData_Impl
     aStr = aStr.copy(nPos+1);
     Point aChildPos;
     Size aChildSize;
-    if ( GetPosSizeFromString( aStr, aChildPos, aChildSize ) )
-    {
-        return true;
-    }
-    return false;
+    return GetPosSizeFromString( aStr, aChildPos, aChildSize );
 }
 
 bool SfxChildWindow::IsVisible() const

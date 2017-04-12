@@ -63,10 +63,8 @@ struct ExtensionName
     explicit ExtensionName( OUString const & str ) : m_str( str ) {}
     bool operator () ( Reference<deployment::XPackage> const & e ) const
     {
-        if (m_str.equals(dp_misc::getIdentifier(e))
-             ||  m_str.equals(e->getName()))
-            return true;
-        return false;
+        return m_str.equals(dp_misc::getIdentifier(e))
+             ||  m_str.equals(e->getName());
     }
 };
 

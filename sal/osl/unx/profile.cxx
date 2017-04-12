@@ -890,15 +890,7 @@ static bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
         sal_Char* pEnvValue;
         pEnvValue = getenv( "STAR_PROFILE_LOCKING_DISABLED" );
 
-        if ( pEnvValue == nullptr )
-        {
-            bLockingDisabled = false;
-
-        }
-        else
-        {
-            bLockingDisabled = true;
-        }
+        bLockingDisabled = pEnvValue != nullptr;
 
         bIsInitialized = true;
     }

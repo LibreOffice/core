@@ -178,10 +178,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
             aBorderRect.Right() -= nRight;
 
             PointerState aBorderState = pBorder->GetPointerState();
-            if( aBorderRect.IsInside( aBorderState.maPos ) )
-                bRealMove = true;
-            else
-                bRealMove = false;
+            bRealMove = aBorderRect.IsInside( aBorderState.maPos );
         }
     }
 
@@ -323,10 +320,7 @@ bool DockingManager::IsFloating( const vcl::Window *pWindow )
 bool DockingManager::IsLocked( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
-    if( pWrapper && pWrapper->IsLocked() )
-        return true;
-    else
-        return false;
+    return pWrapper && pWrapper->IsLocked();
 }
 
 void DockingManager::Lock( const vcl::Window *pWindow )
@@ -367,10 +361,7 @@ void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window 
 bool DockingManager::IsInPopupMode( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
-    if( pWrapper && pWrapper->IsInPopupMode() )
-        return true;
-    else
-        return false;
+    return pWrapper && pWrapper->IsInPopupMode();
 }
 
 void DockingManager::EndPopupMode( const vcl::Window *pWin )

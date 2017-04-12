@@ -287,7 +287,7 @@ void LayerTabBar::EndRenaming()
 
 void LayerTabBar::ActivatePage()
 {
-    if ( /*IsInSwitching*/ true && pDrViewSh!=nullptr)
+    if (pDrViewSh!=nullptr)
     {
 
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();

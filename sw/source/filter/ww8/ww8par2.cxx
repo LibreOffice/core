@@ -2924,10 +2924,7 @@ bool WW8TabDesc::InFirstParaInCell() const
     if (!IsValidCell(GetAktCol()))
         return false;
 
-    if (m_pIo->m_pPaM->GetPoint()->nNode == m_pTabBox->GetSttIdx() + 1)
-        return true;
-
-    return false;
+    return m_pIo->m_pPaM->GetPoint()->nNode == m_pTabBox->GetSttIdx() + 1;
 }
 
 void WW8TabDesc::StartMiserableHackForUnsupportedDirection(short nWwCol)

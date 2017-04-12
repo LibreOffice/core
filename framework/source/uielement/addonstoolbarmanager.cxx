@@ -161,11 +161,8 @@ void SAL_CALL AddonsToolBarManager::dispose()
 
 bool AddonsToolBarManager::MenuItemAllowed( sal_uInt16 nId ) const
 {
-    if (( nId == MENUITEM_TOOLBAR_VISIBLEBUTTON ) ||
-        ( nId == MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR ))
-        return false;
-    else
-        return true;
+    return ( nId != MENUITEM_TOOLBAR_VISIBLEBUTTON ) &&
+           ( nId != MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR );
 }
 
 void AddonsToolBarManager::RefreshImages()

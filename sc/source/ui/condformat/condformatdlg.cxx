@@ -627,10 +627,7 @@ void ScCondFormatDlg::RefInputDone( bool bForced )
 
 bool ScCondFormatDlg::IsTableLocked() const
 {
-    if (mpLastEdit && mpLastEdit != mpEdRange)
-        return false;
-
-    return true;
+    return !mpLastEdit || mpLastEdit == mpEdRange;
 }
 
 bool ScCondFormatDlg::IsRefInputMode() const

@@ -197,9 +197,7 @@ bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
 
 bool LwpTools::isFileUrl(const OString &fileName)
 {
-    if (fileName.startsWith("file://") )
-        return true;
-    return false;
+    return fileName.startsWith("file://");
 }
 
 OUString LwpTools::convertToFileUrl(const OString &fileName)

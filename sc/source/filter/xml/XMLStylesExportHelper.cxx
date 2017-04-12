@@ -65,7 +65,7 @@ ScMyValidation::~ScMyValidation()
 
 bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
 {
-    if (aVal.bIgnoreBlanks == bIgnoreBlanks &&
+    return aVal.bIgnoreBlanks == bIgnoreBlanks &&
         aVal.bShowImputMessage == bShowImputMessage &&
         aVal.bShowErrorMessage == bShowErrorMessage &&
         aVal.aBaseCell == aBaseCell &&
@@ -77,10 +77,7 @@ bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
         aVal.sErrorMessage == sErrorMessage &&
         aVal.sImputMessage == sImputMessage &&
         aVal.sFormula1 == sFormula1 &&
-        aVal.sFormula2 == sFormula2)
-        return true;
-    else
-        return false;
+        aVal.sFormula2 == sFormula2;
 }
 
 ScMyValidationsContainer::ScMyValidationsContainer()

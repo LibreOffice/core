@@ -143,10 +143,7 @@ void TaskPaneList::RemoveWindow( vcl::Window *pWindow )
 bool TaskPaneList::IsInList( vcl::Window *pWindow )
 {
     auto p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), VclPtr<vcl::Window>(pWindow) );
-    if( p != mTaskPanes.end() )
-        return true;
-    else
-        return false;
+    return p != mTaskPanes.end();
 }
 
 bool TaskPaneList::IsCycleKey(const vcl::KeyCode& rKeyCode)

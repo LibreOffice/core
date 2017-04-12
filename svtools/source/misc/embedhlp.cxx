@@ -786,16 +786,10 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
 bool EmbeddedObjectRef::IsChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj)
 {
     SvGlobalName aObjClsId(xObj->getClassID());
-    if(
-        SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId
+    return SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId
         || SvGlobalName(SO3_SCH_CLASSID_40) == aObjClsId
         || SvGlobalName(SO3_SCH_CLASSID_50) == aObjClsId
-        || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId)
-    {
-        return true;
-    }
-
-    return false;
+        || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId;
 }
 
 bool EmbeddedObjectRef::IsGLChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj)

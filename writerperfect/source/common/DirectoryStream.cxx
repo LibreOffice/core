@@ -168,10 +168,7 @@ const css::uno::Reference<css::ucb::XContent> DirectoryStream::getContent() cons
 
 bool DirectoryStream::isStructured()
 {
-    if (!m_pImpl)
-        return false;
-
-    return true;
+    return m_pImpl != nullptr;
 }
 
 unsigned DirectoryStream::subStreamCount()

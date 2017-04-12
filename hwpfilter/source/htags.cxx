@@ -70,9 +70,7 @@ bool EmPicture::Read(HWPFile & hwpf)
     name[0] = 'H';
     name[1] = 'W';
     name[2] = 'P';
-    if (hwpf.ReadBlock(data, size) == 0)
-        return false;
-    return true;
+    return hwpf.ReadBlock(data, size) != 0;
 }
 
 

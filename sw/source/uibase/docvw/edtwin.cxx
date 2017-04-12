@@ -1177,14 +1177,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         bool bSetPos = (RndStdIds::FLY_AS_CHAR != eAnchorId);
         if(bSetPos && bWeb)
         {
-            if (RndStdIds::FLY_AT_PAGE != eAnchorId)
-            {
-                bSetPos = false;
-            }
-            else
-            {
-                bSetPos = true;
-            }
+            bSetPos = RndStdIds::FLY_AT_PAGE == eAnchorId;
         }
         if( bSetPos )
             rSh.SetFlyPos( aTmp.Pos() );
@@ -1820,10 +1813,7 @@ KEYINPUT_CHECKTABLE:
                     goto KEYINPUT_CHECKTABLE_INSDEL;
 
 KEYINPUT_CHECKTABLE_INSDEL:
-                    if( rSh.IsTableMode() || !rSh.GetTableFormat() ||
-                        !m_bTableInsDelMode ||
-                        false /* table protected */
-                            )
+                    if( rSh.IsTableMode() || !rSh.GetTableFormat() || !m_bTableInsDelMode )
                     {
                         const SelectionType nSelectionType = rSh.GetSelectionType();
 

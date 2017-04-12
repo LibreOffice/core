@@ -87,18 +87,12 @@ static const sal_Int32 DELIMLEN = strlen(DELIM);
 
 bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 {
-    if ( !( params.getLength() > 0 ) ||
-        !( params[ 0 ] >>= evt ) )
-        return false;
-    return true;
+    return ( params.getLength() > 0 ) && ( params[ 0 ] >>= evt );
 }
 
 bool isMouseEventOk( awt::MouseEvent& evt, const Sequence< Any >& params )
 {
-    if ( !( params.getLength() > 0 ) ||
-        !( params[ 0 ] >>= evt ) )
-        return false;
-    return true;
+    return ( params.getLength() > 0 ) && ( params[ 0 ] >>= evt );
 }
 
 Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
@@ -793,14 +787,7 @@ bool DenyMouseDrag(const ScriptEvent& evt, void const * )
 {
     awt::MouseEvent aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
-    if (aEvent.Buttons == 0 )
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return aEvent.Buttons == 0;
 }
 
 
