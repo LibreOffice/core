@@ -203,11 +203,6 @@
 #define RID_SVX_UPDATE_STYLE                (RID_SVX_START + 122)
 #define RID_SVX_MODIFY_STYLE                (RID_SVX_START + 123)
 
-// for fill style preset listbox
-#define RID_SVX_PRESET_MENU                 (RID_SVX_START + 124)
-#define RID_SVX_PRESET_RENAME               (RID_SVX_START + 125)
-#define RID_SVX_PRESET_DELETE               (RID_SVX_START + 126)
-
 #define RID_SVXCTRL_RECTBTNS                (RID_SVX_START + 226)
 
 // ResId's for Starone impl. bitmaps

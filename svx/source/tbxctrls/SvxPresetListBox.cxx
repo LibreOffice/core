@@ -59,7 +59,8 @@ void SvxPresetListBox::Command( const CommandEvent& rEvent )
             if(nIndex > 0)
             {
                 Point aPos(rEvent.GetMousePosPixel());
-                ScopedVclPtrInstance<PopupMenu> pMenu(SVX_RES(RID_SVX_PRESET_MENU));
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/presetmenu.ui", "");
+                VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if(pMenuWindow != nullptr)
                 {
@@ -123,16 +124,11 @@ IMPL_LINK(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
         return false;
     }
     pMenu->Deactivate();
-    switch(pMenu->GetCurItemId())
-    {
-        default:
-        case RID_SVX_PRESET_RENAME:
-            maRenameHdl.Call(this);
-            break;
-        case RID_SVX_PRESET_DELETE:
-            maDeleteHdl.Call(this);
-            break;
-    }
+    OString sIdent = pMenu->GetCurItemIdent();
+    if (sIdent == "rename")
+        maRenameHdl.Call(this);
+    else if (sIdent == "delete")
+        maDeleteHdl.Call(this);
     return false;
 }
 
