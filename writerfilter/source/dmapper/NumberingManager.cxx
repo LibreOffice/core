@@ -295,14 +295,6 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     //2.3
     //3.4
 
-
-    if( m_nFWord6 > 0) //Word 6 compatibility
-    {
-        if( m_nFPrev == 1)
-            aNumberingProperties.push_back(lcl_makePropVal<sal_Int16>(PROP_PARENT_NUMBERING, NUMBERING_MAX_LEVELS));
-        //TODO: prefixing space     nFPrevSpace;     - has not been used in WW8 filter
-    }
-
 //    TODO: sRGBXchNums;     array of inherited numbers
 
 //  nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
