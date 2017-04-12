@@ -112,23 +112,4 @@ Menu MN_HEADERFOOTER_BUTTON
     };
 };
 
-Menu MN_PAGEBREAK_BUTTON
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = FN_PAGEBREAK_EDIT ;
-            HelpID = CMD_FN_PAGEBREAK_EDIT ;
-            Text [ en-US ] = "Edit Page Break..." ;
-        };
-        MenuItem
-        {
-            Identifier = FN_PAGEBREAK_DELETE ;
-            HelpID = CMD_FN_PAGEBREAK_DELETE ;
-            Text [ en-US ] = "Delete Page Break" ;
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

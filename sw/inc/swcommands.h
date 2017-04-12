@@ -35,8 +35,6 @@
 #define CMD_FN_HEADERFOOTER_EDIT                    ".uno:HeaderFooterEdit"
 #define CMD_FN_HEADERFOOTER_DELETE                  ".uno:HeaderFooterDelete"
 #define CMD_FN_HEADERFOOTER_BORDERBACK              ".uno:HeaderFooterBorderBackground"
-#define CMD_FN_PAGEBREAK_EDIT                       ".uno:PageBreakEdit"
-#define CMD_FN_PAGEBREAK_DELETE                     ".uno:PageBreakDelete"
 
 #endif
 

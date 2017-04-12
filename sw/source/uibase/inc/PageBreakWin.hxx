@@ -10,7 +10,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_PAGEBREAKWIN_HXX
 
 #include <FrameControl.hxx>
-
+#include <vcl/builder.hxx>
 #include <vcl/menubtn.hxx>
 
 class SwPageFrame;
@@ -22,6 +22,7 @@ class SwPageFrame;
   */
 class SwPageBreakWin : public SwFrameMenuButtonBase
 {
+    VclBuilder            m_aBuilder;
     VclPtr<PopupMenu>     m_pPopupMenu;
     VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;
