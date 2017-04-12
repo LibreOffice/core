@@ -96,7 +96,7 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
         }
 
         mpBtnClose->Show();
-        mpBugReportMailto->SetURL(mpFtBugReport->GetURL().replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=","")));
+        mpBugReportMailto->SetURL(mpBugReportMailto->GetURL().replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=","")));
         mpBugReportMailto->Show();
         mpEditPreUpload->Hide();
         mpEditPostUpload->Show();
