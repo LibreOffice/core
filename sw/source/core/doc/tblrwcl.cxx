@@ -107,16 +107,16 @@ struct CR_SetBoxWidth
     sal_uInt16 nTableWidth, nRemainWidth, nBoxWidth;
     bool bBigger, bLeft, bSplittBox, bAnyBoxFnd;
 
-    CR_SetBoxWidth( sal_uInt16 eType, SwTwips nDif, SwTwips nSid, SwTwips nTableW,
+    CR_SetBoxWidth( TableChgWidthHeightType eType, SwTwips nDif, SwTwips nSid, SwTwips nTableW,
                     SwTwips nMax, SwTableNode* pTNd )
         : pTableNd( pTNd ), pUndo( nullptr ),
         nDiff( nDif ), nSide( nSid ), nMaxSize( nMax ), nLowerDiff( 0 ),
         nTableWidth( (sal_uInt16)nTableW ), nRemainWidth( 0 ), nBoxWidth( 0 ),
         bSplittBox( false ), bAnyBoxFnd( false )
     {
-        bLeft = nsTableChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
-                nsTableChgWidthHeightType::WH_CELL_LEFT == ( eType & 0xff );
-        bBigger = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_BIGGER );
+        bLeft = TableChgWidthHeightType::ColLeft == extractPosition( eType ) ||
+                TableChgWidthHeightType::CellLeft == extractPosition( eType );
+        bBigger = bool(eType & TableChgWidthHeightType::BiggerMode );
         nMode = pTableNd->GetTable().GetTableChgMode();
     }
     CR_SetBoxWidth( const CR_SetBoxWidth& rCpy )
@@ -201,13 +201,14 @@ struct CR_SetLineHeight
     sal_uInt16 nLines;
     bool bBigger, bTop;
 
-    CR_SetLineHeight( sal_uInt16 eType, SwTableNode* pTNd )
+    CR_SetLineHeight( TableChgWidthHeightType eType, SwTableNode* pTNd )
         : pTableNd( pTNd ), pUndo( nullptr ),
         nMaxSpace( 0 ), nMaxHeight( 0 ), nLines( 0 )
     {
-        bTop = nsTableChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) || nsTableChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff );
-        bBigger = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_BIGGER );
-        if( eType & nsTableChgWidthHeightType::WH_FLAG_INSDEL )
+        bTop = TableChgWidthHeightType::RowTop == extractPosition( eType ) ||
+               TableChgWidthHeightType::CellTop == extractPosition( eType );
+        bBigger = bool(eType & TableChgWidthHeightType::BiggerMode );
+        if( eType & TableChgWidthHeightType::InsertDeleteMode )
             bBigger = !bBigger;
         nMode = pTableNd->GetTable().GetTableChgMode();
     }
@@ -3381,7 +3382,7 @@ static FndBox_* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
     return pFndBox;
 }
 
-bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
+bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo )
 {
     SetHTMLTableLayout( nullptr );    // Delete HTML Layout
@@ -3393,9 +3394,9 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
-        bLeft = nsTableChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
-                nsTableChgWidthHeightType::WH_CELL_LEFT == ( eType & 0xff ),
-        bInsDel = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_INSDEL );
+        bLeft = TableChgWidthHeightType::ColLeft == extractPosition( eType ) ||
+                TableChgWidthHeightType::CellLeft == extractPosition( eType ),
+        bInsDel = bool(eType & TableChgWidthHeightType::InsertDeleteMode );
     sal_uLong nBoxIdx = rAktBox.GetSttIdx();
 
     // Get the current Box's edge
@@ -3430,10 +3431,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
         fnOtherBox = lcl_SetOtherBoxWidth;
     }
 
-    switch( eType & 0xff )
+    switch( extractPosition(eType) )
     {
-    case nsTableChgWidthHeightType::WH_COL_RIGHT:
-    case nsTableChgWidthHeightType::WH_COL_LEFT:
+    case TableChgWidthHeightType::ColRight:
+    case TableChgWidthHeightType::ColLeft:
         if( TBLVAR_CHGABS == m_eTableChgMode )
         {
             if( bInsDel )
@@ -3520,7 +3521,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     if( aSz.GetWidth() + nRelDiff > USHRT_MAX )
                     {
                         // Break down to USHRT_MAX / 2
-                        CR_SetBoxWidth aTmpPara( 0, aSz.GetWidth() / 2,
+                        CR_SetBoxWidth aTmpPara( TableChgWidthHeightType::ColLeft, aSz.GetWidth() / 2,
                                         0, aSz.GetWidth(), aSz.GetWidth(), aParam.pTableNd );
                         for( size_t nLn = 0; nLn < m_aLines.size(); ++nLn )
                             ::lcl_AjustLines( m_aLines[ nLn ], aTmpPara );
@@ -3732,8 +3733,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
         }
         break;
 
-    case nsTableChgWidthHeightType::WH_CELL_RIGHT:
-    case nsTableChgWidthHeightType::WH_CELL_LEFT:
+    case TableChgWidthHeightType::CellRight:
+    case TableChgWidthHeightType::CellLeft:
         if( TBLVAR_CHGABS == m_eTableChgMode )
         {
             // Then call itself recursively; only with another mode (proportional)
@@ -3833,7 +3834,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             }
         }
         break;
-
+        default: break;
     }
 
     if( xFndBox )
@@ -4113,7 +4114,7 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
     return bRet;
 }
 
-bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
+bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff,SwUndo** ppUndo )
 {
     SwTableLine* pLine = rAktBox.GetUpper();
@@ -4126,9 +4127,9 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
-        bTop = nsTableChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) ||
-                nsTableChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff ),
-        bInsDel = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_INSDEL );
+        bTop = TableChgWidthHeightType::RowTop == extractPosition( eType ) ||
+               TableChgWidthHeightType::CellTop == extractPosition( eType ),
+        bInsDel = bool(eType & TableChgWidthHeightType::InsertDeleteMode );
     sal_uInt16 nBaseLinePos = GetTabLines().GetPos( pBaseLine );
     sal_uLong nBoxIdx = rAktBox.GetSttIdx();
 
@@ -4145,10 +4146,10 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     SwTableLines* pLines = &m_aLines;
 
     // How do we get to the height?
-    switch( eType & 0xff )
+    switch( extractPosition(eType) )
     {
-    case nsTableChgWidthHeightType::WH_CELL_TOP:
-    case nsTableChgWidthHeightType::WH_CELL_BOTTOM:
+    case TableChgWidthHeightType::CellTop:
+    case TableChgWidthHeightType::CellBottom:
         if( pLine == pBaseLine )
             break;  // it doesn't work then!
 
@@ -4158,8 +4159,8 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
         pBaseLine = pLine;
         SAL_FALLTHROUGH;
 
-    case nsTableChgWidthHeightType::WH_ROW_TOP:
-    case nsTableChgWidthHeightType::WH_ROW_BOTTOM:
+    case TableChgWidthHeightType::RowTop:
+    case TableChgWidthHeightType::RowBottom:
         {
             if( bInsDel && !bBigger )       // By how much does it get higher?
             {
@@ -4328,6 +4329,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
             }
         }
         break;
+        default: break;
     }
 
     if( xFndBox )

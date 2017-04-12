@@ -729,7 +729,7 @@ public:
 
     bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 
-    bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff );
+    bool SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 nDiff );
 
     bool GetAutoSum( OUString& rFormula ) const;
 

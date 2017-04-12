@@ -1555,7 +1555,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    TableChgWidthHeightType eTableChgMode = nsTableChgWidthHeightType::WH_COL_LEFT;    // initialization just for warning-free code
+    TableChgWidthHeightType eTableChgMode = TableChgWidthHeightType::ColLeft;    // initialization just for warning-free code
     sal_uInt16 nTableChgSize = 0;
     bool bStopKeyInputTimer = true;
     OUString sFormulaEntry;
@@ -1773,16 +1773,16 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_LEFT_BIG;
                     }
-                    eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL |
+                    eTableChgMode = TableChgWidthHeightType::InsertDeleteMode |
                             ( bMod1
-                                ? nsTableChgWidthHeightType::WH_CELL_LEFT
-                                : nsTableChgWidthHeightType::WH_COL_LEFT );
+                                ? TableChgWidthHeightType::CellLeft
+                                : TableChgWidthHeightType::ColLeft );
                     nTableChgSize = pModOpt->GetTableVInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_RIGHT | KEY_MOD1:
                 {
-                    eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL | nsTableChgWidthHeightType::WH_CELL_RIGHT;
+                    eTableChgMode = TableChgWidthHeightType::InsertDeleteMode | TableChgWidthHeightType::CellRight;
                     nTableChgSize = pModOpt->GetTableVInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
@@ -1795,10 +1795,10 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_UP_BIG;
                     }
-                    eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL |
+                    eTableChgMode = TableChgWidthHeightType::InsertDeleteMode |
                             ( bMod1
-                                ? nsTableChgWidthHeightType::WH_CELL_TOP
-                                : nsTableChgWidthHeightType::WH_ROW_TOP );
+                                ? TableChgWidthHeightType::CellTop
+                                : TableChgWidthHeightType::RowTop );
                     nTableChgSize = pModOpt->GetTableHInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
@@ -1811,10 +1811,10 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_DOWN_BIG;
                     }
-                    eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL |
+                    eTableChgMode = TableChgWidthHeightType::InsertDeleteMode |
                             ( bMod1
-                                ? nsTableChgWidthHeightType::WH_CELL_BOTTOM
-                                : nsTableChgWidthHeightType::WH_ROW_BOTTOM );
+                                ? TableChgWidthHeightType::CellBottom
+                                : TableChgWidthHeightType::RowBottom );
                     nTableChgSize = pModOpt->GetTableHInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
@@ -1840,7 +1840,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     else
                     {
                         if( !m_bTableIsInsMode )
-                            eTableChgMode = eTableChgMode | nsTableChgWidthHeightType::WH_FLAG_BIGGER;
+                            eTableChgMode = eTableChgMode | TableChgWidthHeightType::BiggerMode;
                         eKeyState = SwKeyState::TableColCellInsDel;
                     }
                     break;
@@ -2039,7 +2039,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         eFlyState = SwKeyState::Fly_Change;
                         nDir = MOVE_RIGHT_BIG;
-                        eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL | nsTableChgWidthHeightType::WH_COL_RIGHT;
+                        eTableChgMode = TableChgWidthHeightType::InsertDeleteMode | TableChgWidthHeightType::ColRight;
                         nTableChgSize = pModOpt->GetTableVInsert();
                         goto KEYINPUT_CHECKTABLE_INSDEL;
                     }
@@ -2638,20 +2638,20 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             break;
 
-            case SwKeyState::ColLeftBig:         rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_COL_LEFT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHMove() );   break;
-            case SwKeyState::ColRightBig:        rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_COL_RIGHT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHMove() );  break;
-            case SwKeyState::ColLeftSmall:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_COL_LEFT, pModOpt->GetTableHMove() );   break;
-            case SwKeyState::ColRightSmall:      rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_COL_RIGHT, pModOpt->GetTableHMove() );  break;
-            case SwKeyState::ColBottomBig:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_ROW_BOTTOM|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVMove() ); break;
-            case SwKeyState::ColBottomSmall:     rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_ROW_BOTTOM, pModOpt->GetTableVMove() ); break;
-            case SwKeyState::CellLeftBig:        rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_LEFT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHMove() );  break;
-            case SwKeyState::CellRightBig:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_RIGHT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHMove() ); break;
-            case SwKeyState::CellLeftSmall:      rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_LEFT, pModOpt->GetTableHMove() );  break;
-            case SwKeyState::CellRightSmall:     rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_RIGHT, pModOpt->GetTableHMove() ); break;
-            case SwKeyState::CellTopBig:         rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_TOP|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVMove() );   break;
-            case SwKeyState::CellBottomBig:      rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_BOTTOM|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVMove() );    break;
-            case SwKeyState::CellTopSmall:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_TOP, pModOpt->GetTableVMove() );   break;
-            case SwKeyState::CellBottomSmall:    rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_BOTTOM, pModOpt->GetTableVMove() );    break;
+            case SwKeyState::ColLeftBig:         rSh.SetColRowWidthHeight( TableChgWidthHeightType::ColLeft|TableChgWidthHeightType::BiggerMode, pModOpt->GetTableHMove() );   break;
+            case SwKeyState::ColRightBig:        rSh.SetColRowWidthHeight( TableChgWidthHeightType::ColRight|TableChgWidthHeightType::BiggerMode, pModOpt->GetTableHMove() );  break;
+            case SwKeyState::ColLeftSmall:       rSh.SetColRowWidthHeight( TableChgWidthHeightType::ColLeft, pModOpt->GetTableHMove() );   break;
+            case SwKeyState::ColRightSmall:      rSh.SetColRowWidthHeight( TableChgWidthHeightType::ColRight, pModOpt->GetTableHMove() );  break;
+            case SwKeyState::ColBottomBig:       rSh.SetColRowWidthHeight( TableChgWidthHeightType::RowBottom|TableChgWidthHeightType::BiggerMode, pModOpt->GetTableVMove() ); break;
+            case SwKeyState::ColBottomSmall:     rSh.SetColRowWidthHeight( TableChgWidthHeightType::RowBottom, pModOpt->GetTableVMove() ); break;
+            case SwKeyState::CellLeftBig:        rSh.SetColRowWidthHeight( TableChgWidthHeightType::CellLeft|TableChgWidthHeightType::BiggerMode, pModOpt->GetTableHMove() );  break;
+            case SwKeyState::CellRightBig:       rSh.SetColRowWidthHeight( TableChgWidthHeightType::CellRight|TableChgWidthHeightType::BiggerMode, pModOpt->GetTableHMove() ); break;
+            case SwKeyState::CellLeftSmall:      rSh.SetColRowWidthHeight( TableChgWidthHeightType::CellLeft, pModOpt->GetTableHMove() );  break;
+            case SwKeyState::CellRightSmall:     rSh.SetColRowWidthHeight( TableChgWidthHeightType::CellRight, pModOpt->GetTableHMove() ); break;
+            case SwKeyState::CellTopBig:         rSh.SetColRowWidthHeight( TableChgWidthHeightType::CellTop|TableChgWidthHeightType::BiggerMode, pModOpt->GetTableVMove() );   break;
+            case SwKeyState::CellBottomBig:      rSh.SetColRowWidthHeight( TableChgWidthHeightType::CellBottom|TableChgWidthHeightType::BiggerMode, pModOpt->GetTableVMove() );    break;
+            case SwKeyState::CellTopSmall:       rSh.SetColRowWidthHeight( TableChgWidthHeightType::CellTop, pModOpt->GetTableVMove() );   break;
+            case SwKeyState::CellBottomSmall:    rSh.SetColRowWidthHeight( TableChgWidthHeightType::CellBottom, pModOpt->GetTableVMove() );    break;
 
             case SwKeyState::TableColCellInsDel:
                 rSh.SetColRowWidthHeight( eTableChgMode, nTableChgSize );

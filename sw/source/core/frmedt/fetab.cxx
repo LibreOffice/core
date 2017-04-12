@@ -2151,13 +2151,13 @@ static bool lcl_GoTableRow( SwCursorShell* pShell, bool bUp )
 }
 
 // change a cell width/cell height/column width/row height
-bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
+bool SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 nDiff )
 {
     SwFrame *pFrame = GetCurrFrame();
     if( !pFrame || !pFrame->IsInTab() )
         return false;
 
-    if( nsTableChgWidthHeightType::WH_FLAG_INSDEL & eType &&
+    if( (TableChgWidthHeightType::InsertDeleteMode & eType) &&
         dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
@@ -2180,7 +2180,7 @@ bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
     SwRectFnSet aRectFnSet(pTab);
     long nPrtWidth = aRectFnSet.GetWidth(pTab->Prt());
     if( TBLVAR_CHGABS == pTab->GetTable()->GetTableChgMode() &&
-        ( eType & nsTableChgWidthHeightType::WH_COL_LEFT || eType & nsTableChgWidthHeightType::WH_COL_RIGHT ) &&
+        ( eType & TableChgWidthHeightType::ColLeft || eType & TableChgWidthHeightType::ColRight ) &&
         text::HoriOrientation::NONE == pTab->GetFormat()->GetHoriOrient().GetHoriOrient() &&
         nPrtWidth != rTableFrameSz.GetWidth() )
     {
@@ -2189,27 +2189,24 @@ bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
         pTab->GetFormat()->SetFormatAttr( aSz );
     }
 
-    if( (eType & (nsTableChgWidthHeightType::WH_FLAG_BIGGER | nsTableChgWidthHeightType::WH_FLAG_INSDEL)) ==
-        (nsTableChgWidthHeightType::WH_FLAG_BIGGER | nsTableChgWidthHeightType::WH_FLAG_INSDEL) )
+    if( eType & (TableChgWidthHeightType::BiggerMode | TableChgWidthHeightType::InsertDeleteMode) )
     {
         nDiff = sal_uInt16(aRectFnSet.GetWidth(pFrame->Frame()));
 
         // we must move the cursor outside the current cell before
         // deleting the cells.
-        TableChgWidthHeightType eTmp =
-            static_cast<TableChgWidthHeightType>( eType & 0xfff );
-        switch( eTmp )
+        switch( extractPosition(eType) )
         {
-        case nsTableChgWidthHeightType::WH_ROW_TOP:
+        case TableChgWidthHeightType::RowTop:
             lcl_GoTableRow( this, true );
             break;
-        case nsTableChgWidthHeightType::WH_ROW_BOTTOM:
+        case TableChgWidthHeightType::RowBottom:
             lcl_GoTableRow( this, false );
             break;
-        case nsTableChgWidthHeightType::WH_COL_LEFT:
+        case TableChgWidthHeightType::ColLeft:
             GoPrevCell();
             break;
-        case nsTableChgWidthHeightType::WH_COL_RIGHT:
+        case TableChgWidthHeightType::ColRight:
             GoNextCell();
             break;
         default:
@@ -2230,29 +2227,30 @@ bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
     pLastCols = nullptr;
     EndAllActionAndCall();
 
-    if( bRet && (eType & (nsTableChgWidthHeightType::WH_FLAG_BIGGER | nsTableChgWidthHeightType::WH_FLAG_INSDEL)) == nsTableChgWidthHeightType::WH_FLAG_INSDEL )
+    if( bRet && (eType & (TableChgWidthHeightType::BiggerMode | TableChgWidthHeightType::InsertDeleteMode)) == TableChgWidthHeightType::InsertDeleteMode )
     {
-        switch(eType & ~(nsTableChgWidthHeightType::WH_FLAG_BIGGER | nsTableChgWidthHeightType::WH_FLAG_INSDEL))
+        switch(extractPosition(eType))
         {
-        case nsTableChgWidthHeightType::WH_CELL_LEFT:
-        case nsTableChgWidthHeightType::WH_COL_LEFT:
+        case TableChgWidthHeightType::CellLeft:
+        case TableChgWidthHeightType::ColLeft:
                 GoPrevCell();
                 break;
 
-        case nsTableChgWidthHeightType::WH_CELL_RIGHT:
-        case nsTableChgWidthHeightType::WH_COL_RIGHT:
+        case TableChgWidthHeightType::CellRight:
+        case TableChgWidthHeightType::ColRight:
                 GoNextCell();
                 break;
 
-        case nsTableChgWidthHeightType::WH_CELL_TOP:
-        case nsTableChgWidthHeightType::WH_ROW_TOP:
+        case TableChgWidthHeightType::CellTop:
+        case TableChgWidthHeightType::RowTop:
                 lcl_GoTableRow( this, true );
                 break;
 
-        case nsTableChgWidthHeightType::WH_CELL_BOTTOM:
-        case nsTableChgWidthHeightType::WH_ROW_BOTTOM:
+        case TableChgWidthHeightType::CellBottom:
+        case TableChgWidthHeightType::RowBottom:
                 lcl_GoTableRow( this, false );
                 break;
+        default: break;
         }
     }
 

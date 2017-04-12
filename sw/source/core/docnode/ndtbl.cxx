@@ -3980,13 +3980,13 @@ SwTableFormat* SwDoc::FindTableFormatByName( const OUString& rName, bool bAll ) 
     return const_cast<SwTableFormat*>(static_cast<const SwTableFormat*>(pRet));
 }
 
-bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
+bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                                     SwTwips nAbsDiff, SwTwips nRelDiff )
 {
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rAktBox.GetSttNd()->FindTableNode());
     SwUndo* pUndo = nullptr;
 
-    if( nsTableChgWidthHeightType::WH_FLAG_INSDEL & eType && dynamic_cast<const SwDDETable*>( &pTableNd->GetTable()) !=  nullptr)
+    if( (TableChgWidthHeightType::InsertDeleteMode & eType) && dynamic_cast<const SwDDETable*>( &pTableNd->GetTable()) !=  nullptr)
         return false;
 
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
@@ -3995,26 +3995,27 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     bool bRet = false;
-    switch( eType & 0xff )
+    switch( extractPosition(eType) )
     {
-    case nsTableChgWidthHeightType::WH_COL_LEFT:
-    case nsTableChgWidthHeightType::WH_COL_RIGHT:
-    case nsTableChgWidthHeightType::WH_CELL_LEFT:
-    case nsTableChgWidthHeightType::WH_CELL_RIGHT:
+    case TableChgWidthHeightType::ColLeft:
+    case TableChgWidthHeightType::ColRight:
+    case TableChgWidthHeightType::CellLeft:
+    case TableChgWidthHeightType::CellRight:
         {
              bRet = pTableNd->GetTable().SetColWidth( rAktBox,
                                 eType, nAbsDiff, nRelDiff,
                                 (bUndo) ? &pUndo : nullptr );
         }
         break;
-    case nsTableChgWidthHeightType::WH_ROW_TOP:
-    case nsTableChgWidthHeightType::WH_ROW_BOTTOM:
-    case nsTableChgWidthHeightType::WH_CELL_TOP:
-    case nsTableChgWidthHeightType::WH_CELL_BOTTOM:
+    case TableChgWidthHeightType::RowTop:
+    case TableChgWidthHeightType::RowBottom:
+    case TableChgWidthHeightType::CellTop:
+    case TableChgWidthHeightType::CellBottom:
         bRet = pTableNd->GetTable().SetRowHeight( rAktBox,
                             eType, nAbsDiff, nRelDiff,
                             (bUndo) ? &pUndo : nullptr );
         break;
+    default: break;
     }
 
     GetIDocumentUndoRedo().DoUndo(bUndo); // SetColWidth can turn it off
@@ -4026,7 +4027,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     if( bRet )
     {
         getIDocumentState().SetModified();
-        if( nsTableChgWidthHeightType::WH_FLAG_INSDEL & eType )
+        if( TableChgWidthHeightType::InsertDeleteMode & eType )
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
     }
     return bRet;

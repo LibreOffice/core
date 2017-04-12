@@ -1482,7 +1482,7 @@ SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
     nMin( nMn ), nMax( nMx ),
     nSttNode( rTableNd.GetIndex() ), nCurrBox( 0 ),
     nCount( nCnt ), nRelDiff( 0 ), nAbsDiff( 0 ),
-    nSetColType( USHRT_MAX ),
+    nSetColType( TableChgWidthHeightType::InvalidPos ),
     bFlag( bFlg ),
     bSameHeight( bSmHght )
 {
@@ -1500,7 +1500,7 @@ SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
     nMin( 0 ), nMax( 0 ),
     nSttNode( rTableNd.GetIndex() ), nCurrBox( 0 ),
     nCount( 0 ), nRelDiff( 0 ), nAbsDiff( 0 ),
-    nSetColType( USHRT_MAX ),
+    nSetColType( TableChgWidthHeightType::InvalidPos ),
     bFlag( false ),
     bSameHeight( false )
 {
@@ -1832,7 +1832,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     switch( GetId() )
     {
     case SwUndoId::TABLE_INSCOL:
-        if( USHRT_MAX == nSetColType )
+        if( TableChgWidthHeightType::InvalidPos == extractPosition(nSetColType) )
             rDoc.InsertCol( aSelBoxes, nCount, bFlag );
         else
         {
@@ -1843,7 +1843,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
         break;
 
     case SwUndoId::TABLE_INSROW:
-        if( USHRT_MAX == nSetColType )
+        if( TableChgWidthHeightType::InvalidPos == extractPosition(nSetColType) )
             rDoc.InsertRow( aSelBoxes, nCount, bFlag );
         else
         {
@@ -1862,7 +1862,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     case SwUndoId::TABLE_DELBOX:
     case SwUndoId::ROW_DELETE:
     case SwUndoId::COL_DELETE:
-        if( USHRT_MAX == nSetColType )
+        if( TableChgWidthHeightType::InvalidPos == extractPosition(nSetColType) )
         {
             SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
             aMsgHint.m_eFlags = TBL_BOXPTR;
@@ -1888,22 +1888,23 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             rDoc.GetIDocumentUndoRedo().DoUndo( true );
             SwUndo* pUndo = nullptr;
 
-            switch( nSetColType & 0xff )
+            switch( extractPosition(nSetColType) )
             {
-            case nsTableChgWidthHeightType::WH_COL_LEFT:
-            case nsTableChgWidthHeightType::WH_COL_RIGHT:
-            case nsTableChgWidthHeightType::WH_CELL_LEFT:
-            case nsTableChgWidthHeightType::WH_CELL_RIGHT:
+            case TableChgWidthHeightType::ColLeft:
+            case TableChgWidthHeightType::ColRight:
+            case TableChgWidthHeightType::CellLeft:
+            case TableChgWidthHeightType::CellRight:
                  rTable.SetColWidth( *pBox, nSetColType, nAbsDiff,
                                     nRelDiff, &pUndo );
                 break;
-            case nsTableChgWidthHeightType::WH_ROW_TOP:
-            case nsTableChgWidthHeightType::WH_ROW_BOTTOM:
-            case nsTableChgWidthHeightType::WH_CELL_TOP:
-            case nsTableChgWidthHeightType::WH_CELL_BOTTOM:
+            case TableChgWidthHeightType::RowTop:
+            case TableChgWidthHeightType::RowBottom:
+            case TableChgWidthHeightType::CellTop:
+            case TableChgWidthHeightType::CellBottom:
                 rTable.SetRowHeight( *pBox, nSetColType, nAbsDiff,
                                     nRelDiff, &pUndo );
                 break;
+            default: break;
             }
 
             if( pUndo )
