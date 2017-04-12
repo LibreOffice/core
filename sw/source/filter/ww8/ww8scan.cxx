@@ -6622,7 +6622,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
         if( (0 != rSt.GetError()) || !nRead )
             DELETEZ( pStd );        // report error with NULL
 
-      rSkip = cbStd - cbSTDBaseInFile;
+        rSkip = cbStd - cbSTDBaseInFile;
     }
     else
     {           // Fixed part too short
