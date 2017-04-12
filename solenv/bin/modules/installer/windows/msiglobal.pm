@@ -249,10 +249,6 @@ sub generate_cab_file_list
             # Writing the makecab system call
 
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-            if ( $installer::globals::isunix )
-            {
-                $oneline = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-            }
 
             push(@cabfilelist, $oneline);
 
@@ -329,10 +325,6 @@ sub generate_cab_file_list
             # Writing the makecab system call
 
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-            if ( $installer::globals::isunix )
-            {
-                $oneline = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-            }
 
             push(@cabfilelist, $oneline);
 
@@ -458,10 +450,6 @@ sub create_msi_database
     # -i : include the following tables ("*" includes all available tables)
 
     my $msidb = "msidb.exe";    # Has to be in the path
-    if ( $installer::globals::isunix )
-    {
-        $msidb = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/msidb.exe";
-    }
     my $extraslash = "";        # Has to be set for non-ActiveState perl
 
     installer::logger::include_header_into_logfile("Creating msi database");
@@ -613,10 +601,6 @@ sub write_summary_into_msi_database
     installer::logger::include_header_into_logfile("Writing summary information stream");
 
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
-    if ( $installer::globals::isunix )
-    {
-        $msiinfo = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/msiinfo.exe";
-    }
 
     my $msiversion = get_msiversion_for_sis();
     my $codepage = 0; # PID_CODEPAGE summary property in a signed short, therefore it is impossible to set 65001 here.
@@ -669,11 +653,6 @@ sub create_transforms
     my $cscript = "cscript.exe";    # Has to be in the path
     my $msitran = "msitran.exe";    # Has to be in the path
     my $msidb = "msidb.exe";    # Has to be in the path
-    if ( $installer::globals::isunix )
-    {
-        $infoline = "ERROR: We cannot create transformations yet (we cannot use cscript.exe when cross-compiling)\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
     my $wilangid = $ENV{WINDOWS_SDK_WILANGID};
 
     my $from = cwd();
@@ -909,11 +888,6 @@ sub get_guid_list
     # "-c" for uppercase output
 
     my $systemcall = "$uuidgen -n$number |";
-    if ( $installer::globals::isunix )
-    {
-        # -n is not present in the non-windows uuidgen
-        $systemcall = "for I in `seq 1 $number` ; do uuidgen ; done |";
-    }
     open (UUIDGEN, "$systemcall" ) or die("uuidgen is missing.");
     my @uuidlist = <UUIDGEN>;
     close (UUIDGEN);
@@ -1149,10 +1123,6 @@ sub include_cabs_into_msi
     push( @installer::globals::logfileinfo, $infoline);
 
     my $msidb = "msidb.exe";    # Has to be in the path
-    if ( $installer::globals::isunix )
-    {
-        $msidb = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/msidb.exe";
-    }
     my $extraslash = "";        # Has to be set for non-ActiveState perl
 
     my $msifilename = $installer::globals::msidatabasename;
