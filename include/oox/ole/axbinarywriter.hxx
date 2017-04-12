@@ -85,7 +85,7 @@ public:
     /** Write an integer property value to the stream, the
         respective flag in the property mask is set. */
     template< typename StreamType, typename DataType >
-    void                writeIntProperty( DataType& ornValue )
+    void                writeIntProperty( DataType ornValue )
                             { if( startNextProperty() ) maOutStrm.writeAligned< StreamType >( ornValue ); }
     /** Write a boolean property value to the stream, the
         respective flag in the property mask is set. */

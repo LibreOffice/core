@@ -854,7 +854,7 @@ void AxFontDataModel::importProperty( sal_Int32 nPropId, const OUString& rValue 
         case XML_FontEffects:       maFontData.mnFontEffects = AttributeConversion::decodeUnsigned( rValue );   break;
         case XML_FontHeight:        maFontData.mnFontHeight = AttributeConversion::decodeInteger( rValue );     break;
         case XML_FontCharSet:       maFontData.mnFontCharSet = AttributeConversion::decodeInteger( rValue );    break;
-        case XML_ParagraphAlign:    maFontData.mnHorAlign = AttributeConversion::decodeInteger( rValue );       break;
+        case XML_ParagraphAlign:    maFontData.mnHorAlign = static_cast<AxHorizontalAlign>(AttributeConversion::decodeInteger( rValue )); break;
         default:                    AxControlModelBase::importProperty( nPropId, rValue );
     }
 }
@@ -894,9 +894,9 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
         sal_Int32 nAlign = awt::TextAlign::LEFT;
         switch( maFontData.mnHorAlign )
         {
-            case AX_FONTDATA_LEFT:      nAlign = awt::TextAlign::LEFT;   break;
-            case AX_FONTDATA_RIGHT:     nAlign = awt::TextAlign::RIGHT;  break;
-            case AX_FONTDATA_CENTER:    nAlign = awt::TextAlign::CENTER; break;
+            case AxHorizontalAlign::Left:      nAlign = awt::TextAlign::LEFT;   break;
+            case AxHorizontalAlign::Right:     nAlign = awt::TextAlign::RIGHT;  break;
+            case AxHorizontalAlign::Center:    nAlign = awt::TextAlign::CENTER; break;
             default:    OSL_FAIL( "AxFontDataModel::convertProperties - unknown text alignment" );
         }
         // form controls expect short value
@@ -934,9 +934,9 @@ void AxFontDataModel::convertFromProperties( PropertySet& rPropSet, const Contro
     {
         switch ( nAlign )
         {
-            case awt::TextAlign::LEFT: maFontData.mnHorAlign = AX_FONTDATA_LEFT;   break;
-            case awt::TextAlign::RIGHT: maFontData.mnHorAlign = AX_FONTDATA_RIGHT;  break;
-            case awt::TextAlign::CENTER: maFontData.mnHorAlign = AX_FONTDATA_CENTER; break;
+            case awt::TextAlign::LEFT: maFontData.mnHorAlign = AxHorizontalAlign::Left;   break;
+            case awt::TextAlign::RIGHT: maFontData.mnHorAlign = AxHorizontalAlign::Right;  break;
+            case awt::TextAlign::CENTER: maFontData.mnHorAlign = AxHorizontalAlign::Center; break;
             default:    OSL_FAIL( "AxFontDataModel::convertFromProperties - unknown text alignment" );
         }
     }
