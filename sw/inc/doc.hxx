@@ -1251,7 +1251,7 @@ public:
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 
-    bool SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
+    bool SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                                 SwTwips nAbsDiff, SwTwips nRelDiff );
     SwTableBoxFormat* MakeTableBoxFormat();
     SwTableLineFormat* MakeTableLineFormat();
