@@ -664,7 +664,8 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
     else
         h -= 100;
 
-    return Size(w, h);
+    return Size(std::max<long>(w, 640 - 15),
+                std::max<long>(h, 480 - 50));
 }
 
 void Dialog::StateChanged( StateChangedType nType )
