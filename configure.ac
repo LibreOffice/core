@@ -3325,7 +3325,11 @@ find_ucrt()
             PathFormat "$(win_get_env_from_vsvars32bat UniversalCRTSdkDir)"
             UCRTSDKDIR=$formatted_path
             UCRTVERSION=$(win_get_env_from_vsvars32bat UCRTVersion)
-            if test "$UCRTVERSION" = 10.0.15063.0; then
+            dnl Hack needed at least by tml:
+            if test "$UCRTVERSION" = 10.0.15063.0 \
+                -a ! -f "${UCRTSDKDIR}Include/10.0.15063.0/um/sqlext.h" \
+                -a -f "${UCRTSDKDIR}Include/10.0.14393.0/um/sqlext.h"
+            then
                 UCRTVERSION=10.0.14393.0
             fi
         else
@@ -5157,9 +5161,9 @@ find_dotnetsdk46()
 find_winsdk_version()
 {
     # Args: $1 : SDK version as in "6.0A", "7.0" etc
-    # Return values: $winsdktest, $winsdklibsubdir
+    # Return values: $winsdktest, $winsdkbinsubdir, $winsdklibsubdir
 
-    unset winsdktest winsdklibsubdir
+    unset winsdktest winsdkbinsubdir winsdklibsubdir
 
     case "$1" in
     7.*)
@@ -5191,11 +5195,20 @@ find_winsdk_version()
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/ProductVersion"
+            if test -n "$regvalue"; then
+                winsdkbinsubdir="$regvalue".0
+            fi
             winsdklibsubdir=$regvalue
             if test "$regvalue" = "10.0.14393"; then
                 winsdklibsubdir="10.0.14393.0"
             elif test "$regvalue" = "10.0.15063"; then
-                winsdklibsubdir="10.0.14393.0"
+                winsdklibsubdir="10.0.15063.0"
+                dnl Hack needed at least by tml:
+                if test ! -f "${winsdktest}/Include/10.0.15063.0/um/sqlext.h" \
+                    -a -f "${winsdktest}/Include/10.0.14393.0/um/sqlext.h"
+                then
+                    winsdklibsubdir="10.0.14393.0"
+                fi
             fi
             return
         fi
@@ -5304,14 +5317,23 @@ find_msvc_x64_dlls()
 }
 
 if test "$build_os" = "cygwin"; then
-    dnl Check midl.exe
+    dnl Check midl.exe; this being the first check for a tool in the SDK bin
+    dnl dir, it also determines that dir's path w/o an arch segment if any,
+    dnl WINDOWS_SDK_BINDIR_NO_ARCH:
     AC_MSG_CHECKING([for midl.exe])
 
     find_winsdk
-    if test -f "$winsdktest/Bin/midl.exe"; then
-        MIDL_PATH="$winsdktest/Bin"
+    if test -n "$winsdkbinsubdir" \
+        -a -f "$winsdktest/Bin/$winsdkbinsubdir/$WINDOWS_SDK_ARCH/midl.exe"
+    then
+        WINDOWS_SDK_BINDIR_NO_ARCH=$winsdktest/Bin/$winsdkbinsubdir
+        MIDL_PATH=$WINDOWS_SDK_BINDIR_NO_ARCH/$WINDOWS_SDK_ARCH
     elif test -f "$winsdktest/Bin/$WINDOWS_SDK_ARCH/midl.exe"; then
-        MIDL_PATH="$winsdktest/Bin/$WINDOWS_SDK_ARCH"
+        WINDOWS_SDK_BINDIR_NO_ARCH=$winsdktest/Bin
+        MIDL_PATH=$WINDOWS_SDK_BINDIR_NO_ARCH/$WINDOWS_SDK_ARCH
+    elif test -f "$winsdktest/Bin/midl.exe"; then
+        WINDOWS_SDK_BINDIR_NO_ARCH=$winsdktest/Bin
+        MIDL_PATH=$WINDOWS_SDK_BINDIR_NO_ARCH
     fi
     if test ! -f "$MIDL_PATH/midl.exe"; then
         AC_MSG_ERROR([midl.exe not found in $winsdktest/Bin/$WINDOWS_SDK_ARCH, Windows SDK installation broken?])
@@ -5339,10 +5361,14 @@ if test "$build_os" = "cygwin"; then
     dnl Check al.exe
     AC_MSG_CHECKING([for al.exe])
     find_winsdk
-    if test -f "$winsdktest/Bin/al.exe"; then
-        AL_PATH="$winsdktest/Bin"
+    if test -n "$winsdkbinsubdir" \
+        -a -f "$winsdktest/Bin/$winsdkbinsubdir/$WINDOWS_SDK_ARCH/al.exe"
+    then
+        AL_PATH="$winsdktest/Bin/$winsdkbinsubdir/$WINDOWS_SDK_ARCH"
     elif test -f "$winsdktest/Bin/$WINDOWS_SDK_ARCH/al.exe"; then
         AL_PATH="$winsdktest/Bin/$WINDOWS_SDK_ARCH"
+    elif test -f "$winsdktest/Bin/al.exe"; then
+        AL_PATH="$winsdktest/Bin"
     fi
 
     if test -z "$AL_PATH"; then
@@ -9589,14 +9615,14 @@ if test "$_os" = "WINNT"; then
 the  Windows SDK are installed.])
         fi
 
-        if test ! -f "$WINDOWS_SDK_HOME/bin/msiinfo.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/msidb.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/msitran.exe"; then :
-        elif test ! -f "$WINDOWS_SDK_HOME/bin/x86/msiinfo.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/msidb.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/uuidgen.exe" \
-             -o ! -f "$WINDOWS_SDK_HOME/bin/x86/msitran.exe"; then :
+        if test -f "$WINDOWS_SDK_BINDIR_NO_ARCH/msiinfo.exe" \
+             -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/msidb.exe" \
+             -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/uuidgen.exe" \
+             -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/msitran.exe"; then :
+        elif test -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/msiinfo.exe" \
+             -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/msidb.exe" \
+             -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/uuidgen.exe" \
+             -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/x86/msitran.exe"; then :
         else
             AC_MSG_ERROR([Some (all?) Windows Installer tools in the Windows SDK are missing, please install.])
         fi
@@ -12602,7 +12628,7 @@ else
         fi
         if test "$BITNESS_OVERRIDE" = 64; then
             # needed for msi packaging
-            pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
+            pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/x86" "before"
         fi
         # .NET 4.6 and higher don't have bin directory
         if test -f "$DOTNET_FRAMEWORK_HOME/bin"; then
@@ -12619,10 +12645,10 @@ else
         fi
         if test "$BITNESS_OVERRIDE" = 64; then
             pathmunge "$COMPATH/bin/amd64" "before"
-            pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
+            pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/x64" "before"
         else
             pathmunge "$COMPATH/bin" "before"
-            pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
+            pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/x86" "before"
         fi
         if test "$ENABLE_JAVA" != ""; then
             if test -d "$JAVA_HOME/jre/bin/client"; then
