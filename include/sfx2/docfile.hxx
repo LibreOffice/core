@@ -165,6 +165,8 @@ public:
     enum class ShowLockResult { NoLock, Succeeded,Try };
     ShowLockResult      ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock );
     void                LockOrigFileOnDemand( bool bLoading, bool bNoUI );
+    enum class MessageDlg    { LockFileIgnore, LockFileCorrupt };
+    bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
     void                DisableUnlockWebDAV( bool bDisableUnlockWebDAV = true );
     void                UnlockFile( bool bReleaseLockStream );
 
