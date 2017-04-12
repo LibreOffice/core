@@ -2247,22 +2247,22 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
     return bRet;
 }
 
-sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
+TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
 {
     // Check if the current cursor's Point/Mark are inside a Table
     SwTableNode* pTableNd = rPam.GetNode().FindTableNode();
     if( !pTableNd )
-        return TBLMERGE_NOSELECTION;
+        return TableMergeErr::NoSelection;
     SwTable& rTable = pTableNd->GetTable();
     if( dynamic_cast<const SwDDETable*>( &rTable) !=  nullptr )
-        return TBLMERGE_NOSELECTION;
-    sal_uInt16 nRet = TBLMERGE_NOSELECTION;
+        return TableMergeErr::NoSelection;
+    TableMergeErr nRet = TableMergeErr::NoSelection;
     if( !rTable.IsNewModel() )
     {
         nRet =::CheckMergeSel( rPam );
-        if( TBLMERGE_OK != nRet )
+        if( TableMergeErr::Ok != nRet )
             return nRet;
-        nRet = TBLMERGE_NOSELECTION;
+        nRet = TableMergeErr::NoSelection;
     }
 
     // #i33394#
@@ -2331,7 +2331,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
 
         if( pTableNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo ))
         {
-            nRet = TBLMERGE_OK;
+            nRet = TableMergeErr::Ok;
 
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );

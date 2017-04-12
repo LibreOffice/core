@@ -109,8 +109,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                   SwTableBox** ppMergeBox, SwUndoTableMerge* pUndo );
 
 // Check if selected boxes allow for a valid merge.
-sal_uInt16 CheckMergeSel( const SwPaM& rPam );
-sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes );
+TableMergeErr CheckMergeSel( const SwPaM& rPam );
+TableMergeErr CheckMergeSel( const SwSelBoxes& rBoxes );
 
 bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 

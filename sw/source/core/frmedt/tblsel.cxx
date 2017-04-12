@@ -1417,7 +1417,7 @@ static bool lcl_CheckCol( FndBox_ const& rFndBox, bool* pPara )
     return *pPara;
 }
 
-sal_uInt16 CheckMergeSel( const SwPaM& rPam )
+TableMergeErr CheckMergeSel( const SwPaM& rPam )
 {
     SwSelBoxes aBoxes;
 //JP 24.09.96:  Merge with repeating TableHeadLines does not work properly.
@@ -1435,12 +1435,12 @@ sal_uInt16 CheckMergeSel( const SwPaM& rPam )
     return CheckMergeSel( aBoxes );
 }
 
-sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
+TableMergeErr CheckMergeSel( const SwSelBoxes& rBoxes )
 {
-    sal_uInt16 eRet = TBLMERGE_NOSELECTION;
+    TableMergeErr eRet = TableMergeErr::NoSelection;
     if( !rBoxes.empty() )
     {
-        eRet = TBLMERGE_OK;
+        eRet = TableMergeErr::Ok;
 
         FndBox_ aFndBox( nullptr, nullptr );
         FndPara aPara( rBoxes, &aFndBox );
@@ -1474,10 +1474,10 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
                 }
             }
             if( !bMergeSelOk )
-                eRet = TBLMERGE_TOOCOMPLEX;
+                eRet = TableMergeErr::TooComplex;
         }
         else
-            eRet = TBLMERGE_NOSELECTION;
+            eRet = TableMergeErr::NoSelection;
     }
     return eRet;
 }

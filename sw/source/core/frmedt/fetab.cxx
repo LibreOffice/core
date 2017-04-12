@@ -444,10 +444,10 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
     return bRet;
 }
 
-sal_uInt16 SwFEShell::MergeTab()
+TableMergeErr SwFEShell::MergeTab()
 {
     // check if Point/Mark of current cursor are in a table
-    sal_uInt16 nRet = TBLMERGE_NOSELECTION;
+    TableMergeErr nRet = TableMergeErr::NoSelection;
     if( IsTableMode() )
     {
         SwShellTableCursor* pTableCursor = GetTableCursor();

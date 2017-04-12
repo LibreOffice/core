@@ -753,12 +753,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( rSh.IsTableMode() )
                 switch ( rSh.MergeTab() )
                 {
-                    case TBLMERGE_OK:
+                    case TableMergeErr::Ok:
                          bCallDone = true;
                          SAL_FALLTHROUGH;
-                    case TBLMERGE_NOSELECTION:
+                    case TableMergeErr::NoSelection:
                         break;
-                    case TBLMERGE_TOOCOMPLEX:
+                    case TableMergeErr::TooComplex:
                     {
                         ScopedVclPtrInstance<MessageDialog> aInfoBox( GetView().GetWindow(),
                                     SW_RES( STR_ERR_TABLE_MERGE ), VclMessageType::Info );
