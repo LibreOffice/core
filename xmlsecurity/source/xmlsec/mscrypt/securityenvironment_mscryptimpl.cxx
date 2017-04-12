@@ -30,7 +30,6 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-#include <sal/config.h>
 #include <sal/macros.h>
 #include <osl/thread.h>
 #include "securityenvironment_mscryptimpl.hxx"

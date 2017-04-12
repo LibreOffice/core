@@ -43,7 +43,6 @@
 #include <unodispatch.hxx>
 #include <wrtsh.hxx>
 #include <dbui.hrc>
-#include <vector>
 #include <unomid.h>
 
 using namespace utl;

@@ -51,7 +51,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <vcl/commandinfoprovider.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <svtools/miscopt.hxx>

@@ -40,7 +40,6 @@
 #include <svl/intitem.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/rulritem.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xfillit0.hxx>

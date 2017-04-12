@@ -32,7 +32,6 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <framework/fwedllapi.h>

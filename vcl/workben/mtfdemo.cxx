@@ -27,8 +27,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 
-#include <tools/stream.hxx>
-
 #include <cstdlib>
 
 using namespace com::sun::star;

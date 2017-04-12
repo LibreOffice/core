@@ -41,7 +41,6 @@
 #include <svl/intitem.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/rulritem.hxx>
 #include <svx/relfld.hxx>
 
 #include <vector>
