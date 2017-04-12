@@ -337,6 +337,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73541,"fdo73541.docx")
     assertXPath(pXmlDoc, "/w:settings/w:mirrorMargins");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo106029,"fdo106029.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/settings.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotExpandShiftReturn");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO74106, "FDO74106.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
