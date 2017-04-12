@@ -87,7 +87,7 @@ You can help us to fix this issue by sending an anonymous crash report to the %P
             <property name="xalign">0</property>
             <property name="label" translatable="yes" context="crashreportdlg|ed_post">The crash report was successfully uploaded.
 You can soon find the report at:
-crashreport.collaboraoffice.com/stats/crash_details/%CRASHID</property>
+http://crashreport.collaboraoffice.com/stats/crash_details/%CRASHID</property>
             <property name="wrap">True</property>
             <property name="selectable">True</property>
           </object>
@@ -98,12 +98,16 @@ crashreport.collaboraoffice.com/stats/crash_details/%CRASHID</property>
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="ed_bugreport">
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="crashreportdlg|ed_bugreport">Please check the report and if no bug report is connected to the crash report yet, open a new bug report at bugs.documentfoundation.org.
-Add detailed instructions on how to reproduce the crash and the shown crash ID into the crash report field.
+          <object class="GtkLinkButton" id="bugreport_mailto">
+            <property name="label" translatable="yes" context="crashreportdlg|ed_post">Click here to send an email to support@collaboraoffice.com.
+In the message body please add detailed instructions on how to reproduce the crash.
 Thank you for your help in improving %PRODUCTNAME.</property>
-            <property name="wrap">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="relief">none</property>
+            <property name="xalign">0</property>
+            <property name="uri">mailto:support@collaboraoffice.com?subject=Crash report: %CRASHID</property>
           </object>
           <packing>
             <property name="expand">False</property>
