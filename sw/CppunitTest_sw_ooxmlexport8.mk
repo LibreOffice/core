@@ -100,6 +100,10 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport8,\
     xmloff/util/xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlexport8))
+$(eval $(call gb_CppunitTest_use_instdir_configuration,sw_ooxmlexport8))
+
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_ooxmlexport8,\
+    modules/swriter \
+))
 
 # vim: set noet sw=4 ts=4:
