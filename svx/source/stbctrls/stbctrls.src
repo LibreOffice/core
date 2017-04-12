@@ -36,38 +36,6 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text [ en-US ] = "Overwrite" ;
 };
 
-// Selection type menu
-Menu RID_SVXMENU_SELECTION
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SELECTION_STANDARD ;
-            RadioCheck = TRUE ;
-            Text [ en-US ] = "Standard selection" ;
-        };
-        MenuItem
-        {
-            Identifier = SELECTION_EXTENDED ;
-            RadioCheck = TRUE ;
-            Text [ en-US ] = "Extending selection" ;
-        };
-        MenuItem
-        {
-            Identifier = SELECTION_ADDED ;
-            RadioCheck = TRUE ;
-            Text [ en-US ] = "Adding selection" ;
-        };
-        MenuItem
-        {
-            Identifier = SELECTION_BLOCK ;
-            RadioCheck = TRUE ;
-            Text [ en-US ] = "Block selection" ;
-        };
-    };
-};
-
 Bitmap RID_SVXBMP_SELECTION
 {
     File = "selection_10x22.png" ;
