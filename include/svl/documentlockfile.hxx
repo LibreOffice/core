@@ -49,6 +49,7 @@ public:
     LockFileEntry GetLockData();
     bool OverwriteOwnLockFile();
     void RemoveFile();
+    void EraseFile();
 
     static bool IsInteractionAllowed() { return m_bAllowInteraction; }
 };

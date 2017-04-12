@@ -16,20 +16,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_UUI_SOURCE_LOCKCORRUPT_HXX
+#define INCLUDED_UUI_SOURCE_LOCKCORRUPT_HXX
 
-#include "ids.hrc"
+#include <vcl/msgbox.hxx>
 
-String STR_LOCKFAILED_TITLE
+class LockCorruptQueryBox : public MessBox
 {
-    Text [ en-US ] = "Document Could Not Be Locked";
+public:
+    LockCorruptQueryBox( vcl::Window* pParent, ResMgr* pResMgr );
+    virtual ~LockCorruptQueryBox() override;
 };
-String STR_LOCKFAILED_MSG
-{
-    Text [ en-US ] = "The lock file could not be created for exclusive access by %PRODUCTNAME, due to missing permission to create a lock file on that file location, lack of free disk space.";
-};
-String STR_LOCKFAILED_OPENREADONLY_BTN
-{
-    Text [ en-US ] = "Open ~Read-Only";
-};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

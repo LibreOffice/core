@@ -232,7 +232,7 @@ private:
         css::uno::Reference<
             css::task::XInteractionRequest > const & rRequest);
 
-    bool handleLockFileIgnoreRequest(
+    bool handleLockFileProblemRequest(
         css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     bool handleCustomRequest(
