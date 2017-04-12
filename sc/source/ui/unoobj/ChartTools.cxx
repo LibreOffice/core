@@ -29,6 +29,38 @@ using namespace css;
 namespace sc {
 namespace tools {
 
+namespace {
+
+uno::Reference<chart2::data::XPivotTableDataProvider>
+getPivotTableDataProvider(SdrOle2Obj* pOleObject)
+{
+    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
+
+    uno::Reference<embed::XEmbeddedObject> xObject = pOleObject->GetObjRef();
+    if (xObject.is())
+    {
+        uno::Reference<chart2::XChartDocument> xChartDoc(xObject->getComponent(), uno::UNO_QUERY);
+        if (xChartDoc.is())
+        {
+            xPivotTableDataProvider.set(uno::Reference<chart2::data::XPivotTableDataProvider>(
+                                            xChartDoc->getDataProvider(), uno::UNO_QUERY));
+        }
+    }
+    return xPivotTableDataProvider;
+}
+
+OUString getAssociatedPivotTableName(SdrOle2Obj* pOleObject)
+{
+    OUString aPivotTableName;
+    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
+    xPivotTableDataProvider.set(getPivotTableDataProvider(pOleObject));
+    if (xPivotTableDataProvider.is())
+        aPivotTableName = xPivotTableDataProvider->getPivotTableName();
+    return aPivotTableName;
+}
+
+} // end anonymous namespace
+
 ChartIterator::ChartIterator(ScDocShell* pDocShell, SCTAB nTab, ChartSourceType eChartSourceType)
     : m_eChartSourceType(eChartSourceType)
 {
@@ -55,23 +87,14 @@ SdrOle2Obj* ChartIterator::next()
         if (pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject))
         {
             SdrOle2Obj* pOleObject = static_cast<SdrOle2Obj*>(pObject);
-            uno::Reference<embed::XEmbeddedObject> xObject = pOleObject->GetObjRef();
-            if (xObject.is())
-            {
-                uno::Reference<chart2::XChartDocument> xChartDoc(xObject->getComponent(), uno::UNO_QUERY);
-                if (xChartDoc.is())
-                {
-                    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
-                    if (xPivotTableDataProvider.is() && m_eChartSourceType == ChartSourceType::PIVOT_TABLE)
-                    {
-                        return pOleObject;
-                    }
-                    else if (!xPivotTableDataProvider.is() && m_eChartSourceType == ChartSourceType::CELL_RANGE)
-                    {
-                        return pOleObject;
-                    }
-                }
-            }
+
+            uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
+            xPivotTableDataProvider.set(getPivotTableDataProvider(pOleObject));
+
+            if (xPivotTableDataProvider.is() && m_eChartSourceType == ChartSourceType::PIVOT_TABLE)
+                return pOleObject;
+            else if (!xPivotTableDataProvider.is() && m_eChartSourceType == ChartSourceType::CELL_RANGE)
+                return pOleObject;
         }
         pObject = m_pIterator->Next();
     }
@@ -120,6 +143,36 @@ SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab, long nIndex, Char
         pObject = aIterator.next();
     }
     return nullptr;
+}
+
+std::vector<SdrOle2Obj*> getAllPivotChartsConntectedTo(OUString const & sPivotTableName, ScDocShell* pDocShell)
+{
+    std::vector<SdrOle2Obj*> aObjects;
+
+    ScDocument& rDocument = pDocShell->GetDocument();
+    ScDrawLayer* pModel = rDocument.GetDrawLayer();
+    if (!pModel)
+        return aObjects;
+
+    sal_uInt16 nPageCount = pModel->GetPageCount();
+    for (sal_uInt16 nPageNo = 0; nPageNo < nPageCount; nPageNo++)
+    {
+        SdrPage* pPage = pModel->GetPage(nPageNo);
+        if (!pPage)
+            continue;
+
+        sc::tools::ChartIterator aIterator(pDocShell, nPageNo, ChartSourceType::PIVOT_TABLE);
+        SdrOle2Obj* pObject = aIterator.next();
+        while (pObject)
+        {
+            if (sPivotTableName == getAssociatedPivotTableName(pObject))
+            {
+                aObjects.push_back(pObject);
+            }
+            pObject = aIterator.next();
+        }
+    }
+    return aObjects;
 }
 
 }} // end sc::tools

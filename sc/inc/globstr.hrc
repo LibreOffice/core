@@ -404,6 +404,7 @@
 #define STR_QUICKHELP_REF           321
 
 #define STR_PIVOT_NOTEMPTY          323
+#define STR_PIVOT_REMOVE_PIVOTCHART 324
 
 #define STR_PROGRESS_COMPARING      326
 

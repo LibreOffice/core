@@ -43,6 +43,8 @@ SdrOle2Obj* findChartsByName(ScDocShell* pDocShell, SCTAB nTab,
 SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab,
                             long nIndex, ChartSourceType eChartSourceType);
 
+std::vector<SdrOle2Obj*> getAllPivotChartsConntectedTo(OUString const & sPivotTableName, ScDocShell* pDocShell);
+
 }} // end sc::tools
 
 #endif
