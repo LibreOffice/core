@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_61629eda",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-12T12:36:42Z",
+      "side": 1,
+      "message": "this seems a bit dubious: what happens if you have a table, does one table cell consider the paragraph in the previous cell here? it probably shouldn\u0027t?",
+      "revId": "4f5da87d1ec02ada837567cd1f0f957bdd3104c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
