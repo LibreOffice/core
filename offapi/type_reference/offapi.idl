@@ -4662,6 +4662,8 @@ module com {
     };
     published exception LockFileIgnoreRequest: ::com::sun::star::io::IOException {
     };
+    published exception LockFileCorruptRequest: ::com::sun::star::io::IOException {
+    };
     published exception LockedDocumentRequest: ::com::sun::star::uno::Exception {
      string DocumentURL;
      string UserInfo;

@@ -29,11 +29,12 @@ LockFailedQueryBox::LockFailedQueryBox( vcl::Window* pParent, ResMgr* pResMgr ) 
 {
     SetImage( ErrorBox::GetStandardImage() );
 
-    AddButton( StandardButtonType::OK, RET_OK, ButtonDialogFlags::OK );
+    AddButton(ResId(STR_LOCKFAILED_OPENREADONLY_BTN, *pResMgr).toString(), RET_OK,
+        ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
     SetMessText(ResId(STR_LOCKFAILED_MSG, *pResMgr ).toString());
-    SetCheckBoxText(ResId(STR_LOCKFAILED_DONTSHOWAGAIN, *pResMgr).toString());
 }
 
 LockFailedQueryBox::~LockFailedQueryBox()
