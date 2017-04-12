@@ -171,10 +171,7 @@ ContentProperties::ContentProperties( const ContentProperties & rOther )
 
 bool ContentProperties::contains( const OUString & rName ) const
 {
-    if ( get( rName ) )
-        return true;
-    else
-        return false;
+    return get( rName ) != nullptr;
 }
 
 

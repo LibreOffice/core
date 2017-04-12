@@ -583,10 +583,7 @@ bool OfficeDocumentsManager::isHelpDocument(
         return false;
 
     OUString sURL( xModel->getURL() );
-    if ( sURL.match( "vnd.sun.star.help://" ) )
-        return true;
-
-    return false;
+    return sURL.match( "vnd.sun.star.help://" );
 }
 
 

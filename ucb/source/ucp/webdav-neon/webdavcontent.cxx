@@ -3774,16 +3774,13 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
 // static
 bool Content::shouldAccessNetworkAfterException( const DAVException & e )
 {
-    if ( ( e.getStatus() == SC_NOT_FOUND ) ||
-         ( e.getStatus() == SC_GONE ) ||
-         ( e.getError() == DAVException::DAV_HTTP_TIMEOUT ) ||
-         ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) ||
-         ( e.getError() == DAVException::DAV_HTTP_CONNECT ) ||
-         ( e.getError() == DAVException::DAV_HTTP_AUTH ) ||
-         ( e.getError() == DAVException::DAV_HTTP_AUTHPROXY ) )
-        return false;
-
-    return true;
+    return !(( e.getStatus() == SC_NOT_FOUND ) ||
+             ( e.getStatus() == SC_GONE ) ||
+             ( e.getError() == DAVException::DAV_HTTP_TIMEOUT ) ||
+             ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) ||
+             ( e.getError() == DAVException::DAV_HTTP_CONNECT ) ||
+             ( e.getError() == DAVException::DAV_HTTP_AUTH ) ||
+             ( e.getError() == DAVException::DAV_HTTP_AUTHPROXY ));
 }
 
 
@@ -4275,7 +4272,7 @@ void Content::getResourceOptions(
                  )
             )
         {
-            *networkAccessAllowed = *networkAccessAllowed && false;
+            *networkAccessAllowed = false;
         }
     }
     rDAVOptions = aDAVOptions;
