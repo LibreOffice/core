@@ -61,8 +61,7 @@ $(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,reportdesign_dial
 
 $(eval $(call gb_CppunitTest_use_rdb,reportdesign_dialogs_test,services))
 
-# $(eval $(call gb_CppunitTest_use_configuration,reportdesign_dialogs_test))
-$(eval $(call gb_CppunitTest_use_instdir_configuration,reportdesign_dialogs_test))
+$(eval $(call gb_CppunitTest_use_configuration,reportdesign_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,reportdesign_dialogs_test,\
 	modules/dbreport \
