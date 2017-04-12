@@ -815,7 +815,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
         {
             long nMinStartCp = rStartCp;
             long nMaxEndCp   = rEndCp;
-            // rasch den TextBox-Break-Deskriptor-PLCF greifen
+            // quickly grab the TextBox-Break-Deskriptor-PLCF
             pT = m_pPlcxMan->GetTxbxBkd();
             if (!pT) // It can occur on occasion, Caolan
                 return false;
@@ -977,8 +977,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
     return pRet;
 }
 
-// InsertTxbxText() fuegt fuer TextBoxen und CaptionBoxen den Text
-// und die Attribute ein
+// InsertTxbxText() adds the Text and the Attributs for TextBoxes and CaptionBoxes
 void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     Size* pObjSiz, sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp,
     SwFrameFormat* pOldFlyFormat, bool bMakeSdrGrafObj, bool& rbEraseTextObj,
@@ -1075,8 +1074,8 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                             if( bMakeSdrGrafObj && pTextObj &&
                                 pTextObj->GetUpGroup() )
                             {
-                                // SdrOleObj/SdrGrafObj anstatt des
-                                // SdrTextObj in dessen Gruppe einsetzen
+                                // use SdrOleObj/SdrGrafObj instead of
+                                // SdrTextObj in this Group
 
                                 Graphic aGraph;
                                 SdrObject* pNew = ImportOleBase(aGraph);
@@ -1256,7 +1255,7 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 
     std::unique_ptr<SVBT16[]> xP(new SVBT16[nCount * 2]);
 
-    bool bCouldRead = checkRead(*m_pStrm, xP.get(), nCount * 4);      // Punkte einlesen
+    bool bCouldRead = checkRead(*m_pStrm, xP.get(), nCount * 4);      // read points
     if (!bCouldRead)
     {
         SAL_WARN("sw.ww8", "Short CaptionBox header");
@@ -1291,9 +1290,9 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 
     InsertTxbxText(pObj, &aSize, 0, 0, 0, nullptr, false, bEraseThisObject );
 
-    if( SVBT16ToShort( aCallB.dptxbx.aLnt.lnps ) != 5 ) // Umrandung sichtbar ?
+    if( SVBT16ToShort( aCallB.dptxbx.aLnt.lnps ) != 5 ) // Is border visible ?
         SetStdAttr( rSet, aCallB.dptxbx.aLnt, aCallB.dptxbx.aShd );
-    else                                                // nein -> Nimm Linie
+    else                                                // no -> take lines
         SetStdAttr( rSet, aCallB.dpPolyLine.aLnt, aCallB.dptxbx.aShd );
     SetFill( rSet, aCallB.dptxbx.aFill );
     rSet.Put( SdrCaptionTypeItem( aCaptA[nTyp] ) );
@@ -1353,7 +1352,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
         return pRet;
     }
 
-    if( rLeft >= SVBT16ToShort(aHd.cb) )    // Vorsichtsmassmahme
+    if( rLeft >= SVBT16ToShort(aHd.cb) )    // precautions
     {
         rSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGH));
         switch (SVBT16ToShort(aHd.dpk) & 0xff )
@@ -1402,25 +1401,25 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     void* pF0;
     if( !pPF->Get( nStartFc, pF0 ) )
     {
-        OSL_ENSURE( false, "+Wo ist die Grafik (2) ?" );
+        OSL_ENSURE( false, "+Where is the graphic (2) ?" );
         return;
     }
     WW8_FDOA* pF = static_cast<WW8_FDOA*>(pF0);
     if( !SVBT32ToUInt32( pF->fc ) )
     {
-        OSL_ENSURE( false, "+Wo ist die Grafik (3) ?" );
+        OSL_ENSURE( false, "+Where is the graphic (3) ?" );
         return;
     }
 
     bool bCouldSeek = checkSeek(*m_pStrm, SVBT32ToUInt32(pF->fc));
-    OSL_ENSURE(bCouldSeek, "Invalid Graphic offset");
+    OSL_ENSURE(bCouldSeek, "Invalid graphic offset");
     if (!bCouldSeek)
         return;
 
-    // Lese Draw-Header
+    // read Draw-Header
     WW8_DO aDo;
     bool bCouldRead = checkRead(*m_pStrm, &aDo, sizeof(WW8_DO));
-    OSL_ENSURE(bCouldRead, "Short Graphic header");
+    OSL_ENSURE(bCouldRead, "Short graphic header");
     if (!bCouldRead)
         return;
 
@@ -1559,11 +1558,11 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     */
     switch( +eLineStyle )
     {
-    // zuerst die Einzel-Linien
+    // first the single lines
     case mso_lineSimple:
         nIdx = SvxBorderLineStyle::SOLID;
     break;
-    // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
+    // second the double lines
     case mso_lineDouble:
         nIdx = SvxBorderLineStyle::DOUBLE;
     break;
@@ -1798,7 +1797,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         bBrushItemOk = true;
     }
 
-    // Hintergrund: SvxBrushItem
+    // Background: SvxBrushItem
     eState = rOldSet.GetItemState(XATTR_FILLSTYLE, true, &pItem);
     if (eState == SfxItemState::SET)
     {
@@ -2473,7 +2472,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     WW8_FC nStartFc;
     void* pF0;
     if( !pPF->Get( nStartFc, pF0 ) ){
-        OSL_ENSURE( false, "+Wo ist die Grafik (2) ?" );
+        OSL_ENSURE( false, "+Where is the graphic (2) ?" );
         return nullptr;
     }
 
@@ -2484,7 +2483,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     WW8FSPAShadowToReal( pFS, pF );
     if( !pF->nSpId )
     {
-        OSL_ENSURE( false, "+Wo ist die Grafik (3) ?" );
+        OSL_ENSURE( false, "+Where is the graphic (3) ?" );
         return nullptr;
     }
 
@@ -2582,7 +2581,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     SwFormatSurround aSur( eSurround );
     aSur.SetContour( bContour );
-    aSur.SetOutside(true); // Winword kann nur Aussen-Konturen
+    aSur.SetOutside(true); // Winword can only do outside contours
     aFlySet.Put( aSur );
 
     // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
@@ -2812,7 +2811,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
             (pSdrTextObj != pTrueObject) || (nullptr != pGroupObject),
             bEraseThisObject, nullptr, nullptr, nullptr, nullptr, pRecord);
 
-        // wurde dieses Objekt ersetzt ??
+        // was this object replaced ??
         if (bEraseThisObject)
         {
             if( pGroupObject || (pSdrTextObj != pTrueObject) )
@@ -2834,9 +2833,9 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
             }
             else
             {
-                // Objekt aus der Z-Order-Liste loeschen
+                // remove the object from Z-Order list
                 m_pMSDffManager->RemoveFromShapeOrder( pSdrTextObj );
-                // Objekt aus der Drawing-Page rausnehmen
+                // take the object from the drawing page
                 if( pSdrTextObj->GetPage() )
                     m_pDrawPg->RemoveObject( pSdrTextObj->GetOrdNum() );
                 // und FrameFormat entfernen, da durch Grafik ersetzt (dies
@@ -2849,7 +2848,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         }
         else
         {
-            // ww8-default Randabstand einsetzen
+            // use ww8-default border distance
             SfxItemSet aItemSet(m_pDrawModel->GetItemPool(),
                 SDRATTR_TEXT_LEFTDIST, SDRATTR_TEXT_LOWERDIST);
             aItemSet.Put( makeSdrTextLeftDistItem( pRecord->nDxTextLeft ) );
@@ -3066,10 +3065,10 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     if( rpObject->GetPage() )
         m_pDrawPg->RemoveObject( rpObject->GetOrdNum() );
 
-    // und das Objekt loeschen
+    // and delete the object
     SdrObject::Free( rpObject );
     /*
-        Achtung: ab jetzt nur noch pOrgShapeObject abfragen!
+        Warning: from now on query only pOrgShapeObject!
     */
 
     // Kontakt-Objekt in die Z-Order-Liste und die Page aufnehmen
@@ -3090,7 +3089,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     return pRetFrameFormat;
 }
 
-void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
+void SwWW8ImplReader::GrafikCtor()  // For SVDraw and VCControls and Escher
 {
     if (!m_pDrawModel)
     {
