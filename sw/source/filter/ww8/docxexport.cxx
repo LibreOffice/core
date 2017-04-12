@@ -958,8 +958,11 @@ void DocxExport::WriteSettings()
                         FSNS( XML_w, XML_val ),  OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr(),
                         FSEND);
                 }
-
                 pFS->endElementNS( XML_w, XML_compat );
+            }
+            if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ))
+            {
+                pFS->singleElementNS( XML_w, XML_doNotExpandShiftReturn, FSEND );
             }
         }
     }
