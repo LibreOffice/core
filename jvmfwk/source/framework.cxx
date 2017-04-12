@@ -27,7 +27,6 @@
 #include "osl/file.hxx"
 #include "jvmfwk/framework.hxx"
 #include "vendorplugin.hxx"
-#include <cassert>
 #include <vector>
 #include <functional>
 #include <algorithm>

@@ -39,7 +39,7 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include "svtools/restartdialog.hxx"
+#include <svtools/restartdialog.hxx>
 #include "svtools/treelistentry.hxx"
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/inputdlg.hxx>
@@ -59,7 +59,6 @@
 
 #define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
 
-#include <svtools/restartdialog.hxx>
 #include <comphelper/solarmutex.hxx>
 
 using namespace ::com::sun::star::lang;

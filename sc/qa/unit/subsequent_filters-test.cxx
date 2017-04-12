@@ -55,7 +55,7 @@
 #include "docsh.hxx"
 #include "editutil.hxx"
 #include "cellvalue.hxx"
-#include "attrib.hxx"
+#include <attrib.hxx>
 #include "dpshttab.hxx"
 #include "tabvwsh.hxx"
 #include "fillinfo.hxx"
@@ -65,7 +65,6 @@
 #include <formula/errorcodes.hxx>
 #include "externalrefmgr.hxx"
 #include <stlpool.hxx>
-#include <attrib.hxx>
 
 #include <orcusfiltersimpl.hxx>
 #include "orcusfilters.hxx"

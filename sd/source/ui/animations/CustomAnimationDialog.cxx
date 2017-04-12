@@ -45,7 +45,6 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/field.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/combobox.hxx>

@@ -41,7 +41,6 @@
 #include <fldbas.hxx>
 #include <tox.hxx>
 #include <numrule.hxx>
-#include <frmfmt.hxx>
 
 class SwRangeRedline;
 class SwExtraRedline;

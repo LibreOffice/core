@@ -73,7 +73,6 @@
 #include "editattributemap.hxx"
 #include "documentimport.hxx"
 #include "pivotsource.hxx"
-#include "importcontext.hxx"
 #include <unonames.hxx>
 #include <numformat.hxx>
 

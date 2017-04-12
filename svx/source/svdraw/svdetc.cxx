@@ -49,7 +49,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <unotools/syslocale.hxx>
-#include <unotools/configmgr.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>

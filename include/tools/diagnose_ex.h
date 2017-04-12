@@ -34,7 +34,6 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
 #if OSL_DEBUG_LEVEL > 0
     #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
     #include <cppuhelper/exc_hlp.hxx>
-    #include <osl/diagnose.h>
     #include <osl/thread.h>
 
     /** reports a caught UNO exception via OSL diagnostics

@@ -32,7 +32,6 @@
 
 #include <osl/process.h>
 #include <osl/thread.h>
-#include <osl/file.hxx>
 
 #include "sdabstdlg.hxx"
 #include <vcl/pngwrite.hxx>

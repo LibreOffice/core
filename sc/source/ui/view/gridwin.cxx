@@ -140,9 +140,7 @@
 #include <sfx2/lokhelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/lok.hxx>
 
-#include <memory>
 #include <vector>
 
 using namespace css;

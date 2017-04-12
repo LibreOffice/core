@@ -32,7 +32,6 @@
 #include <unx/genprn.h>
 #include <unx/sm.hxx>
 #include <unx/i18n_im.hxx>
-#include <unx/saldisp.hxx>
 #include <unx/helper.hxx>
 
 #include <vcl/inputtypes.hxx>

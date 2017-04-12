@@ -34,7 +34,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/Deferrability.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace connectivity::firebird;
 using namespace com::sun::star;

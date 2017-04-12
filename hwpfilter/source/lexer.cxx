@@ -931,7 +931,6 @@ static char *yy_last_accepting_cpos;
 #define YY_RESTORE_YY_MORE_OFFSET
 static char *yytext;
 #define INITIAL 0
-#include <stdlib.h>
 #include <string.h>
 #include "nodes.h"
 
