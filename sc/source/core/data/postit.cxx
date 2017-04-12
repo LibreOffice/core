@@ -761,7 +761,9 @@ void ScCaptionPtr::removeFromDrawPageAndFree( bool bIgnoreUndo )
         }
         // remove the object from the drawing page, delete if undo is disabled
         removeFromDrawPage( *pDrawPage );
-        if (!bRecording)
+        // If called from outside mnRefs must be 1 to delete. If called from
+        // decRefAndDestroy() mnRefs is already 0.
+        if (!bRecording && getRefs() <= 1)
         {
             SdrObject* pObj = release();
             SdrObject::Free( pObj );
@@ -1136,6 +1138,7 @@ void ScPostIt::RemoveCaption()
     if (pDrawLayer == maNoteData.mxCaption->GetModel())
         maNoteData.mxCaption.removeFromDrawPageAndFree();
 
+#if 0
     // Either the caption object is gone or, because of Undo or clipboard is
     // held in at least two instances, or only one instance in Undo because the
     // original sheet in this document is just deleted, or the Undo document is
@@ -1143,6 +1146,7 @@ void ScPostIt::RemoveCaption()
     // Let's detect other use cases..
     assert(!maNoteData.mxCaption || maNoteData.mxCaption.getRefs() >= 2 ||
             (!mrDoc.IsUndo() && !mrDoc.IsClipboard()) || (mrDoc.IsUndo() && mrDoc.IsInDtorClear()));
+#endif
 
     // Forget the caption object if removeFromDrawPageAndFree() above did not
     // free it.
