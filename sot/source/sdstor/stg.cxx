@@ -116,13 +116,11 @@ OLEStorageBase::~OLEStorageBase()
 
 bool OLEStorageBase::Validate_Impl( bool bWrite ) const
 {
-    if( pIo
+    return pIo
         && pIo->m_pTOC
         && pEntry
         && !pEntry->m_bInvalid
-        &&  ( !bWrite || !pEntry->m_bDirect || ( nStreamMode & StreamMode::WRITE ) ) )
-            return true;
-    return false;
+        &&  ( !bWrite || !pEntry->m_bDirect || ( nStreamMode & StreamMode::WRITE ) );
 }
 
 bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p )

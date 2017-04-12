@@ -145,9 +145,7 @@ bool SAL_CALL WordPerfectImportFilter::importImpl(const Sequence< css::beans::Pr
     collector.addDocumentHandler(&aHandler, ODF_FLAT_XML);
     collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
     collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
-    if (libwpd::WPD_OK == libwpd::WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? nullptr : aUtf8Passwd.getStr()))
-        return true;
-    return false;
+    return libwpd::WPD_OK == libwpd::WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? nullptr : aUtf8Passwd.getStr());
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::filter(const Sequence< css::beans::PropertyValue > &aDescriptor)

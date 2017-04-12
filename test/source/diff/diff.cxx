@@ -65,10 +65,7 @@ struct tolerance
             cmp = xmlStrcmp(attribName, rTol.attribName);
         }
 
-        if(cmp>=0)
-            return false;
-        else
-            return true;
+        return cmp < 0;
     }
 };
 

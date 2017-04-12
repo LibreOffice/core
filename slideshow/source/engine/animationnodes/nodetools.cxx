@@ -81,13 +81,7 @@ namespace slideshow
 
             animations::Timing eTiming;
 
-            if( !(rAny >>= eTiming) ||
-                eTiming != animations::Timing_INDEFINITE )
-            {
-                return false;
-            }
-
-            return true;
+            return (rAny >>= eTiming) && eTiming == animations::Timing_INDEFINITE;
         }
 
     }

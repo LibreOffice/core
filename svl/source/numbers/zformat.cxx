@@ -4557,15 +4557,8 @@ void SvNumberformat::GetFormatSpecialInfo(bool& bThousand,
     // "negative in red" is only useful for the whole format
 
     const Color* pColor = NumFor[1].GetColor();
-    if (fLimit1 == 0.0 && fLimit2 == 0.0 && pColor
-        && (*pColor == rScan.GetRedColor()))
-    {
-        IsRed = true;
-    }
-    else
-    {
-        IsRed = false;
-    }
+    IsRed = fLimit1 == 0.0 && fLimit2 == 0.0 && pColor
+        && (*pColor == rScan.GetRedColor());
 }
 
 void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,

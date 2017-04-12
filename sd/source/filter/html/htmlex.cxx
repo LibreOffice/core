@@ -2945,10 +2945,7 @@ bool HtmlExport::CreateASPScripts()
             return false;
     }
 
-    if (!CopyScript(maExportPath, "edit.asp", maIndex))
-        return false;
-
-    return true;
+    return CopyScript(maExportPath, "edit.asp", maIndex);
 }
 
 static const char *PERL_Scripts[] = { "webcast.pl", "common.pl", "editpic.pl", "poll.pl", "savepic.pl", "show.pl" };

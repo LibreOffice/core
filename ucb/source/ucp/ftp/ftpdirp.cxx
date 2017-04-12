@@ -835,10 +835,7 @@ bool FTPDirectoryParser::parseVMS (
         rEntry.m_aDate.SetNanoSec(0);
 
         // Skip <rest> part:
-        if (*p && (*p != '\t' && *p != ' '))
-            return false;
-
-        return true;
+        return !*p || *p == '\t' || *p == ' ';
     }
 }
 

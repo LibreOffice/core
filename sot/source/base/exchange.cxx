@@ -498,16 +498,14 @@ OUString SotExchange::GetFormatName( SotClipboardFormatId nFormat )
 
 bool SotExchange::IsInternal( const SvGlobalName& rName )
 {
-    if ( rName == SvGlobalName(SO3_SW_CLASSID_60) ||
+    return rName == SvGlobalName(SO3_SW_CLASSID_60) ||
          rName == SvGlobalName(SO3_SC_CLASSID_60) ||
          rName == SvGlobalName(SO3_SIMPRESS_CLASSID_60) ||
          rName == SvGlobalName(SO3_SDRAW_CLASSID_60) ||
          rName == SvGlobalName(SO3_SCH_CLASSID_60) ||
          rName == SvGlobalName(SO3_SM_CLASSID_60) ||
          rName == SvGlobalName(SO3_SWWEB_CLASSID_60) ||
-         rName == SvGlobalName(SO3_SWGLOB_CLASSID_60) )
-        return true;
-    return false;
+         rName == SvGlobalName(SO3_SWGLOB_CLASSID_60);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
