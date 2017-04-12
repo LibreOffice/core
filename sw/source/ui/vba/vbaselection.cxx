@@ -956,9 +956,7 @@ uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable()
 bool SwVbaSelection::IsInTable()
 {
     uno::Reference< text::XTextTable > xTextTable = GetXTextTable();
-    if( xTextTable.is() )
-        return true;
-    return false;
+    return xTextTable.is();
 }
 
 bool SwVbaSelection::HasSelection()
@@ -966,9 +964,7 @@ bool SwVbaSelection::HasSelection()
     uno::Reference< text::XTextRange > xStart = mxTextViewCursor->getStart();
     uno::Reference< text::XTextRange > xEnd = mxTextViewCursor->getEnd();
     uno::Reference< text::XTextRangeCompare > xTRC( mxTextViewCursor->getText(), uno::UNO_QUERY_THROW );
-    if( xTRC->compareRegionStarts( xStart, xEnd ) == 0 && xTRC->compareRegionEnds( xStart, xEnd ) == 0 )
-        return false;
-    return true;
+    return xTRC->compareRegionStarts( xStart, xEnd ) != 0 || xTRC->compareRegionEnds( xStart, xEnd ) != 0;
 }
 
 void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName )

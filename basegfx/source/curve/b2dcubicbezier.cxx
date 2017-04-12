@@ -395,12 +395,7 @@ namespace basegfx
     // test if vectors are used
     bool B2DCubicBezier::isBezier() const
     {
-        if(maControlPointA != maStartPoint || maControlPointB != maEndPoint)
-        {
-            return true;
-        }
-
-        return false;
+        return maControlPointA != maStartPoint || maControlPointB != maEndPoint;
     }
 
     void B2DCubicBezier::testAndSolveTrivialBezier()

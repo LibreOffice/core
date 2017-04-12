@@ -175,10 +175,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
             break;
         }
     }
-    if (!bLdPath)
-        return false;
-
-    return true;
+    return bLdPath;
 }
 
 const OUString & VendorBase::getVendor() const
@@ -228,9 +225,7 @@ bool VendorBase::supportsAccessibility() const
 
 bool VendorBase::needsRestart() const
 {
-    if (!getLibraryPath().isEmpty())
-        return true;
-    return false;
+    return !getLibraryPath().isEmpty();
 }
 
 }

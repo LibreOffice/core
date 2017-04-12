@@ -143,8 +143,7 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            maOpenCLDevice == r.maOpenCLDevice &&
            mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize &&
            *mpOpenCLSubsetOpCodes == *r.mpOpenCLSubsetOpCodes &&
-           *mpSwInterpreterSubsetOpCodes == *r.mpSwInterpreterSubsetOpCodes &&
-           true;
+           *mpSwInterpreterSubsetOpCodes == *r.mpSwInterpreterSubsetOpCodes;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const

@@ -901,9 +901,7 @@ OUString LwpFrameLayout::GetNextLinkName()
 bool LwpFrameLayout::HasPreviousLinkLayout()
 {
     LwpObjectID& rObjectID = m_Link.GetPreviousLayout();
-    if(rObjectID.IsNull())
-        return false;
-    return true;
+    return !rObjectID.IsNull();
 }
 /**
  * @descr whether current frame is for water mark. Problem maybe exists by this method, must be tracking

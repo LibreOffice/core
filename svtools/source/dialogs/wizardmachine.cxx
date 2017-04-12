@@ -280,9 +280,7 @@ namespace svt
     bool OWizardMachine::DeactivatePage()
     {
         WizardState nCurrentState = getCurrentState();
-        if (!leaveState(nCurrentState) || !WizardDialog::DeactivatePage())
-            return false;
-        return true;
+        return leaveState(nCurrentState) && WizardDialog::DeactivatePage();
     }
 
 

@@ -46,11 +46,7 @@ void FeatureCommandDispatchBase::initialize()
 bool FeatureCommandDispatchBase::isFeatureSupported( const OUString& rCommandURL )
 {
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( rCommandURL );
-    if ( aIter != m_aSupportedFeatures.end() )
-    {
-        return true;
-    }
-    return false;
+    return aIter != m_aSupportedFeatures.end();
 }
 
 void FeatureCommandDispatchBase::fireStatusEvent( const OUString& rURL,

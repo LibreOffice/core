@@ -707,11 +707,9 @@ bool SwCursor::IsAtValidPos( bool bPoint ) const
         return false;
 
     const SwSectionNode* pSectNd = pNd->FindSectionNode();
-    if( pSectNd && (pSectNd->GetSection().IsHiddenFlag() ||
-                    ( !bCursorInReadOnly && pSectNd->GetSection().IsProtectFlag() )))
-        return false;
-
-    return true;
+    return !pSectNd
+           || !(pSectNd->GetSection().IsHiddenFlag() ||
+                ( !bCursorInReadOnly && pSectNd->GetSection().IsProtectFlag() ));
 }
 
 void SwCursor::SaveTableBoxContent( const SwPosition* ) {}

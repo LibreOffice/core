@@ -860,14 +860,8 @@ bool SwLayAction::TurboAction()
 
 static bool lcl_IsInvaLay( const SwFrame *pFrame, long nBottom )
 {
-    if (
-         !pFrame->IsValid() ||
-         (pFrame->IsCompletePaint() && ( pFrame->Frame().Top() < nBottom ) )
-       )
-    {
-        return true;
-    }
-    return false;
+    return !pFrame->IsValid() ||
+         (pFrame->IsCompletePaint() && ( pFrame->Frame().Top() < nBottom ) );
 }
 
 static const SwFrame *lcl_FindFirstInvaLay( const SwFrame *pFrame, long nBottom )

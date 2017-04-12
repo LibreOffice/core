@@ -4172,10 +4172,7 @@ bool SwTextNode::IsHidden() const
         return true;
 
     const SwSectionNode* pSectNd = FindSectionNode();
-    if ( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
-        return true;
-
-    return false;
+    return pSectNd && pSectNd->GetSection().IsHiddenFlag();
 }
 
 namespace {

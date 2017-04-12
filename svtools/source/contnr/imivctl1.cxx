@@ -2263,10 +2263,7 @@ sal_Int32 SvxIconChoiceCtrl_Impl::GetSelectionCount() const
 void SvxIconChoiceCtrl_Impl::ToggleSelection( SvxIconChoiceCtrlEntry* pEntry )
 {
     bool bSel;
-    if( pEntry->IsSelected() )
-        bSel = false;
-    else
-        bSel = true;
+    bSel = !pEntry->IsSelected();
     SelectEntry( pEntry, bSel, true );
 }
 
@@ -2676,9 +2673,7 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Timer *, void)
 bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos )
 {
     tools::Rectangle aRect( CalcTextRect( pEntry ));
-    if( aRect.IsInside( rDocPos ) )
-        return true;
-    return false;
+    return aRect.IsInside( rDocPos );
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Timer *, void)

@@ -631,9 +631,7 @@ bool OpenGLSalGraphicsImpl::UseSolid()
 
 bool OpenGLSalGraphicsImpl::UseInvert50()
 {
-    if( !UseProgram( "dumbVertexShader", "invert50FragmentShader" ) )
-        return false;
-    return true;
+    return UseProgram( "dumbVertexShader", "invert50FragmentShader" );
 }
 
 bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor )

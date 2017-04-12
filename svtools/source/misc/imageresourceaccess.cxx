@@ -127,14 +127,11 @@ namespace svt
 
     bool GraphicAccess::isSupportedURL( const OUString& _rURL )
     {
-        if  (  _rURL.startsWith( "private:resource/" )
+        return _rURL.startsWith( "private:resource/" )
             || _rURL.startsWith( "private:graphicrepository/" )
             || _rURL.startsWith( "private:standardimage/" )
             || _rURL.startsWith( "vnd.sun.star.GraphicObject:" )
-            || _rURL.startsWith( "vnd.sun.star.extension://" )
-            )
-            return true;
-        return false;
+            || _rURL.startsWith( "vnd.sun.star.extension://" );
     }
 
 

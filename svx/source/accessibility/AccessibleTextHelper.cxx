@@ -492,10 +492,7 @@ namespace accessibility
                         return xCell->IsActiveCell();
                 }
             }
-            if( pViewForwarder->IsValid() )
-                return true;
-            else
-                return false;
+            return pViewForwarder->IsValid();
         }
         catch( const uno::RuntimeException& )
         {

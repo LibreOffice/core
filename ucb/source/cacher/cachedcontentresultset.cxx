@@ -179,12 +179,9 @@ bool SAL_CALL CachedContentResultSet::CCRS_Cache
     if( !m_pResult )
         return false;
 
-    if( ( m_pResult->FetchError & FetchError::ENDOFDATA )
+    return ( m_pResult->FetchError & FetchError::ENDOFDATA )
         && m_pResult->Orientation
-        && m_pResult->Rows.getLength() )
-        return true;
-
-    return false;
+        && m_pResult->Rows.getLength();
 }
 
 bool SAL_CALL CachedContentResultSet::CCRS_Cache

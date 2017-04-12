@@ -1201,10 +1201,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
                 pObj->bRefresh = false;
         }
     }
-    if ( nRet & DeactivateRC::LeavePage )
-        return true;
-    else
-        return false;
+    return static_cast<bool>(nRet & DeactivateRC::LeavePage);
 }
 
 

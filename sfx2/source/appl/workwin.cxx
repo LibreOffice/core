@@ -2176,12 +2176,9 @@ tools::Rectangle SfxWorkWindow::GetTopRect_Impl()
 
 bool SfxWorkWindow::RequestTopToolSpacePixel_Impl( SvBorder aBorder )
 {
-    if ( !IsDockingAllowed() ||
+    return !(!IsDockingAllowed() ||
             aClientArea.GetWidth() < aBorder.Left() + aBorder.Right() ||
-            aClientArea.GetHeight() < aBorder.Top() + aBorder.Bottom() )
-        return false;
-    else
-        return true;
+            aClientArea.GetHeight() < aBorder.Top() + aBorder.Bottom());
 }
 
 void SfxWorkWindow::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInfo &rInfo)

@@ -291,10 +291,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
         else if ( isInRange( m_nxtSym, OUStringLiteral(TOKEN) + TSPECIALS + SPACE ) )
         {
             pvalue += m_nxtSym;
-            if ( m_nxtSym == "\"" )
-                bAfterQuoteSign = true;
-            else
-                bAfterQuoteSign = false;
+            bAfterQuoteSign = m_nxtSym == "\"";
         }
         else
             throw IllegalArgumentException( );

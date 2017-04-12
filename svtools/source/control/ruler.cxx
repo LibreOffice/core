@@ -2566,10 +2566,7 @@ void Ruler::SetLines( sal_uInt32 aLineArraySize, const RulerLine* pLineArray )
 
     // New values and new share issue
     bool bMustUpdate;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        bMustUpdate = true;
-    else
-        bMustUpdate = false;
+    bMustUpdate = IsReallyVisible() && IsUpdateMode();
 
     // Delete old lines
     if ( bMustUpdate )

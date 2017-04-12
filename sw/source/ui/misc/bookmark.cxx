@@ -265,9 +265,7 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
         }
     }
     // less bookmarks then expected
-    if (aListIter != aTableBookmarks.end())
-        return true;
-    return false;
+    return aListIter != aTableBookmarks.end();
 }
 
 void SwInsertBookmarkDlg::PopulateTable()

@@ -139,9 +139,7 @@ bool DocumentSignatureHelper::isODFPre_1_2(const OUString & sVersion)
     //The property version exists only if the document is at least version 1.2
     //That is, if the document has version 1.1 and sVersion is empty.
     //The constant is defined in comphelper/documentconstants.hxx
-    if (compareVersions(sVersion, ODFVER_012_TEXT) == -1)
-        return true;
-    return false;
+    return compareVersions(sVersion, ODFVER_012_TEXT) == -1;
 }
 
 bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & sigInfo)

@@ -256,20 +256,13 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
  */
 bool LwpGraphicObject::IsGrafFormatValid()
 {
-    if ((m_sServerContextFormat[1]=='b'&& m_sServerContextFormat[2]=='m' && m_sServerContextFormat[3]=='p')
+    return (m_sServerContextFormat[1]=='b'&& m_sServerContextFormat[2]=='m' && m_sServerContextFormat[3]=='p')
     || (m_sServerContextFormat[1]=='j' && m_sServerContextFormat[2]=='p' && m_sServerContextFormat[3]=='g')
     || (m_sServerContextFormat[1]=='w' && m_sServerContextFormat[2]=='m' && m_sServerContextFormat[3]=='f')
     || (m_sServerContextFormat[1]=='g' && m_sServerContextFormat[2]=='i' && m_sServerContextFormat[3]=='f')
     || (m_sServerContextFormat[1]=='t' && m_sServerContextFormat[2]=='g' && m_sServerContextFormat[3]=='f')
     || (m_sServerContextFormat[1]=='p' && m_sServerContextFormat[2]=='n' && m_sServerContextFormat[3]=='g')
-    || (m_sServerContextFormat[1]=='e' && m_sServerContextFormat[2]=='p' && m_sServerContextFormat[3]=='s'))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    || (m_sServerContextFormat[1]=='e' && m_sServerContextFormat[2]=='p' && m_sServerContextFormat[3]=='s');
 }
 
 /**

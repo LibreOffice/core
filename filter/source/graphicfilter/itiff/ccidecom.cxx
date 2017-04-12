@@ -819,8 +819,7 @@ bool CCIDecompressor::Read2DTag()
         nInputBitsBufSize=8;
     }
     nInputBitsBufSize--;
-    if ( ((nInputBitsBuf>>nInputBitsBufSize)&0x0001) ) return false;
-    else return true;
+    return ((nInputBitsBuf>>nInputBitsBufSize)&0x0001) == 0;
 }
 
 
@@ -978,7 +977,7 @@ bool CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nBitsTo
         }
 
         // is that a 'Terminating-Code'?
-        if (nDataBits<64) bTerminatingCode=true; else bTerminatingCode=false;
+        bTerminatingCode = nDataBits<64;
 
         // remove the read bits from the input buffer:
         nInputBitsBufSize = nInputBitsBufSize - nCodeBits;

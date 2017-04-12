@@ -149,22 +149,16 @@ void OAppBorderWindow::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( true )
-    {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetFieldFont();
-        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont(*this, aFont);
-    }
 
-    if( true )
-    {
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
-        SetTextFillColor();
-    }
+    vcl::Font aFont;
+    aFont = rStyleSettings.GetFieldFont();
+    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+    SetPointFont(*this, aFont);
 
-    if( true )
-        SetBackground( rStyleSettings.GetDialogColor() );
+    SetTextColor( rStyleSettings.GetFieldTextColor() );
+    SetTextFillColor();
+
+    SetBackground( rStyleSettings.GetDialogColor() );
 }
 
 
@@ -547,22 +541,16 @@ void OApplicationView::ImplInitSettings()
 {
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( true )
-    {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetFieldFont();
-        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont(*this, aFont);
-    }
 
-    if( true )
-    {
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
-        SetTextFillColor();
-    }
+    vcl::Font aFont;
+    aFont = rStyleSettings.GetFieldFont();
+    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+    SetPointFont(*this, aFont);
 
-    if( true )
-        SetBackground( rStyleSettings.GetFieldColor() );
+    SetTextColor( rStyleSettings.GetFieldTextColor() );
+    SetTextFillColor();
+
+    SetBackground( rStyleSettings.GetFieldColor() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

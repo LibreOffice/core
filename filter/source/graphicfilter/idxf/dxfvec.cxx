@@ -240,7 +240,7 @@ double DXFTransform::CalcRotAngle() const
 
 bool DXFTransform::Mirror() const
 {
-    if (aMZ.SProd(aMX*aMY)<0) return true; else return false;
+    return aMZ.SProd(aMX*aMY)<0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

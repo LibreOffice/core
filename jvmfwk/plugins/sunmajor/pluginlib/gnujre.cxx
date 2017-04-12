@@ -283,10 +283,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
             break;
         }
     }
-    if (!bLdPath)
-        return false;
-
-    return true;
+    return bLdPath;
 }
 
 int GnuInfo::compareVersions(const OUString&) const

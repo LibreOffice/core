@@ -90,12 +90,9 @@ ScDPSaveMember::~ScDPSaveMember()
 
 bool ScDPSaveMember::operator== ( const ScDPSaveMember& r ) const
 {
-    if ( aName            != r.aName           ||
-         nVisibleMode     != r.nVisibleMode    ||
-         nShowDetailsMode != r.nShowDetailsMode )
-        return false;
-
-    return true;
+    return aName            == r.aName           &&
+           nVisibleMode     == r.nVisibleMode    &&
+           nShowDetailsMode == r.nShowDetailsMode;
 }
 
 bool ScDPSaveMember::HasIsVisible() const

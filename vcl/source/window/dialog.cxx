@@ -103,16 +103,13 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
         if ( !pNextWindow )
             return false;
         pNextWindow = pNextWindow->GetWindow( GetWindowType::Client );
-        if ( !(pNextWindow->GetStyle() & WB_TABSTOP) ||
-             (pNextWindow->GetType() == WindowType::FIXEDTEXT) ||
-             (pNextWindow->GetType() == WindowType::GROUPBOX) ||
-             (pNextWindow->GetType() == WindowType::RADIOBUTTON) ||
-             (pNextWindow->GetType() == WindowType::CHECKBOX) ||
-             (pNextWindow->GetType() == WindowType::TRISTATEBOX) ||
-             (pNextWindow->GetType() == WindowType::PUSHBUTTON) )
-            return false;
-
-        return true;
+        return !(!(pNextWindow->GetStyle() & WB_TABSTOP) ||
+                 (pNextWindow->GetType() == WindowType::FIXEDTEXT) ||
+                 (pNextWindow->GetType() == WindowType::GROUPBOX) ||
+                 (pNextWindow->GetType() == WindowType::RADIOBUTTON) ||
+                 (pNextWindow->GetType() == WindowType::CHECKBOX) ||
+                 (pNextWindow->GetType() == WindowType::TRISTATEBOX) ||
+                 (pNextWindow->GetType() == WindowType::PUSHBUTTON));
     }
 
     return false;

@@ -1045,9 +1045,7 @@ bool SvTreeListBox::HandleKeyInput( const KeyEvent& _rKEvt )
 
 bool SvTreeListBox::EditingCanceled() const
 {
-    if( pEdCtrl && pEdCtrl->EditingCanceled() )
-        return true;
-    return false;
+    return pEdCtrl && pEdCtrl->EditingCanceled();
 }
 
 

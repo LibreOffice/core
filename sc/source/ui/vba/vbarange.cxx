@@ -522,19 +522,13 @@ public:
     bool isBooleanType()
     {
 
-        if ( getNumberFormat() & util::NumberFormat::LOGICAL )
-            return true;
-        return false;
+        return (getNumberFormat() & util::NumberFormat::LOGICAL) != 0;
     }
 
     bool isDateType()
     {
         sal_Int16 nType = getNumberFormat();
-        if(( nType & util::NumberFormat::DATETIME ))
-        {
-            return true;
-        }
-        return false;
+        return ( nType & util::NumberFormat::DATETIME ) != 0;
     }
 
     OUString getNumberFormatString()
@@ -2275,10 +2269,8 @@ ScVbaRange::Select()
 
 bool cellInRange( const table::CellRangeAddress& rAddr, sal_Int32 nCol, sal_Int32 nRow )
 {
-    if ( nCol >= rAddr.StartColumn && nCol <= rAddr.EndColumn &&
-        nRow >= rAddr.StartRow && nRow <= rAddr.EndRow )
-        return true;
-    return false;
+    return nCol >= rAddr.StartColumn && nCol <= rAddr.EndColumn &&
+        nRow >= rAddr.StartRow && nRow <= rAddr.EndRow;
 }
 
 void setCursor( SCCOL nCol, SCROW nRow, const uno::Reference< frame::XModel >& xModel,  bool bInSel = true )

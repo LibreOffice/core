@@ -143,10 +143,7 @@ bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pShape, sal_uInt16 nType)
         return false;
 
     const SwFormatContent& rContent = pShape->GetContent();
-    if (!pFormat->GetAttrSet().HasItem(RES_CNTNT) || pFormat->GetContent() != rContent)
-        return false;
-
-    return true;
+    return pFormat->GetAttrSet().HasItem(RES_CNTNT) && pFormat->GetContent() == rContent;
 }
 
 bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)

@@ -623,9 +623,9 @@ bool SwWrongList::LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
     std::vector<SwWrongArea>::iterator aIter = maList.begin();
     while( aIter != maList.end() && (*aIter).mnPos < nBegin )
         ++aIter;
-    if( aIter != maList.end() && nBegin == (*aIter).mnPos && nEnd == (*aIter).mnPos +(*aIter).mnLen )
-        return true;
-    return false;
+    return aIter != maList.end()
+           && nBegin == (*aIter).mnPos
+           && nEnd == (*aIter).mnPos + (*aIter).mnLen;
 }
 
 void SwWrongList::Insert( const OUString& rType,

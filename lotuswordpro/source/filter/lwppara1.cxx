@@ -617,9 +617,7 @@ bool LwpPara::IsInCell()
     if (!pStory)
         return false;
     rtl::Reference<LwpVirtualLayout> xLayout(pStory->GetLayout(nullptr));
-    if (xLayout.is() && xLayout->IsCell())
-        return true;
-    return false;
+    return xLayout.is() && xLayout->IsCell();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

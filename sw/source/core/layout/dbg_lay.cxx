@@ -716,9 +716,7 @@ bool SwImplProtocol::DeleteFrame( sal_uInt16 nId )
 {
     if( !pFrameIds )
         return false;
-    if ( pFrameIds->erase(nId) )
-        return true;
-    return false;
+    return pFrameIds->erase(nId) != 0;
 }
 
 /* SwEnterLeave::Ctor(..) is called from the (inline-)CTor if the function should

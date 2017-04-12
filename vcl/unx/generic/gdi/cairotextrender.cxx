@@ -464,10 +464,7 @@ bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
     if( !pSF )
         return false;
 
-    if( pSF->GetGlyphOutline(rGlyph, rPolyPoly))
-        return true;
-
-    return false;
+    return pSF->GetGlyphOutline(rGlyph, rPolyPoly);
 }
 
 SalLayout* CairoTextRender::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)

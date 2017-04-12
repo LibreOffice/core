@@ -1463,12 +1463,7 @@ bool SvxNumberFormatShell::IsTmpCurrencyFormat( const OUString& rFmtString )
 {
     sal_uInt32 nFound;
     FindEntry(rFmtString, &nFound);
-
-    if(nFound==NUMBERFORMAT_ENTRY_NEW_CURRENCY)
-    {
-        return true;
-    }
-    return false;
+    return nFound == NUMBERFORMAT_ENTRY_NEW_CURRENCY;
 }
 
 sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const OUString& rFmtString )

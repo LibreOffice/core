@@ -46,10 +46,7 @@ namespace dbaui
     bool OPropertySetItem::operator==(const SfxPoolItem& _rItem) const
     {
         const OPropertySetItem* pCompare = dynamic_cast<const OPropertySetItem*>( &_rItem );
-        if ((!pCompare) || (pCompare->m_xSet.get() != m_xSet.get()))
-            return false;
-
-        return true;
+        return pCompare && (pCompare->m_xSet.get() == m_xSet.get());
     }
 
     SfxPoolItem* OPropertySetItem::Clone(SfxItemPool* /* _pPool */) const

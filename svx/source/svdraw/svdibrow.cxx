@@ -824,8 +824,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             if (ImpGetItem(*pSet,SDRATTR_EDGEKIND,pItem)) {
                 SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem*>(pItem)->GetValue();
                 if (eKind==SdrEdgeKind::ThreeLines) {
-                    if (nWhich>SDRATTR_EDGELINE2DELTA) return true;
-                    else return false;
+                    return nWhich>SDRATTR_EDGELINE2DELTA;
                 }
                 if (eKind!=SdrEdgeKind::OrthoLines && eKind!=SdrEdgeKind::Bezier) return true;
             }

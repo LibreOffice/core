@@ -1050,10 +1050,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr && ( eTextKind == OBJ_RECT ) )
                 {
                     bAutoGrowHeight = bFitShapeToText;
-                    if ( bWordWrap )
-                        bAutoGrowWidth = false;
-                    else
-                        bAutoGrowWidth = true;
+                    bAutoGrowWidth = !bWordWrap;
                     pTObj = pRet;
                     pRet = nullptr;
                 }

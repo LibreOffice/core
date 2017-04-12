@@ -864,10 +864,8 @@ bool ScChangeActionDel::IsMultiDelete() const
     if ( !p || p->GetType() != GetType() )
         return false;
     const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(p);
-    if ( (pDel->GetDx() > GetDx() || pDel->GetDy() > GetDy()) &&
-            pDel->GetBigRange() == aBigRange )
-        return true;
-    return false;
+    return (pDel->GetDx() > GetDx() || pDel->GetDy() > GetDy()) &&
+            pDel->GetBigRange() == aBigRange;
 }
 
 bool ScChangeActionDel::IsTabDeleteCol() const

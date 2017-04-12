@@ -464,9 +464,7 @@ namespace dbaui
     {
         DataSourceMetaData aMeta( _sURL );
         const FeatureSet& rFeatures( aMeta.getFeatureSet() );
-        if ( rFeatures.supportsGeneratedValues() || rFeatures.supportsAnySpecialSetting() )
-            return true;
-        return false;
+        return rFeatures.supportsGeneratedValues() || rFeatures.supportsAnySpecialSetting();
     }
 
     short AdvancedSettingsDialog::Execute()

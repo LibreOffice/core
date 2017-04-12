@@ -2991,11 +2991,7 @@ bool SvNumberFormatter::IsUserDefined(const OUString& sStr,
         return true;
     }
     SvNumberformat* pEntry = GetFormatEntry( nKey );
-    if ( pEntry && ((pEntry->GetType() & css::util::NumberFormat::DEFINED) != 0) )
-    {
-        return true;
-    }
-    return false;
+    return pEntry && ((pEntry->GetType() & css::util::NumberFormat::DEFINED) != 0);
 }
 
 sal_uInt32 SvNumberFormatter::GetEntryKey(const OUString& sStr,

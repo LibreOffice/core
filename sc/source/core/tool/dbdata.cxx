@@ -244,10 +244,7 @@ bool ScDBData::operator== (const ScDBData& rData) const
     ScImportParam aImport1, aImport2;
     GetImportParam(aImport1);
     rData.GetImportParam(aImport2);
-    if (!(aImport1 == aImport2))
-        return false;
-
-    return true;
+    return aImport1 == aImport2;
 }
 
 ScDBData::~ScDBData()

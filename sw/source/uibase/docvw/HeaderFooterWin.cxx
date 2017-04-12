@@ -248,10 +248,7 @@ bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
         return true;
 
     ::tools::Rectangle aLineRect(m_pLine->GetPosPixel(), m_pLine->GetSizePixel());
-    if (aLineRect.IsInside(rDocPt))
-        return true;
-
-    return false;
+    return aLineRect.IsInside(rDocPt);
 }
 
 void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)

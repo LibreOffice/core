@@ -1400,17 +1400,10 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                         // Check the return value from the script
                         bool bTmp = false;
-                        if ( eErr == ERRCODE_NONE &&
+                        bAnimated = eErr == ERRCODE_NONE &&
                              aRet.getValueType() == cppu::UnoType<bool>::get() &&
                              ( aRet >>= bTmp ) &&
-                             bTmp )
-                        {
-                            bAnimated = true;
-                        }
-                        else
-                        {
-                            bAnimated = false;
-                        }
+                             bTmp;
                     }
                     else
                     {

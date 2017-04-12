@@ -304,16 +304,12 @@ bool DigitalSignaturesDialog::canAddRemove()
 
 bool DigitalSignaturesDialog::canAdd()
 {
-    if (canAddRemove())
-        return true;
-    return false;
+    return canAddRemove();
 }
 
 bool DigitalSignaturesDialog::canRemove()
 {
-    if (canAddRemove())
-        return true;
-    return false;
+    return canAddRemove();
 }
 
 short DigitalSignaturesDialog::Execute()

@@ -241,10 +241,7 @@ bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     // For non-ISO language it does not make sense to write *:script if
     // *:language is not written either, does it? It's all in
     // *:rfc-language-tag
-    if (aLanguage.isEmpty() || rStrExpValue.isEmpty())
-        return false;
-
-    return true;
+    return !aLanguage.isEmpty() && !rStrExpValue.isEmpty();
 }
 
 XMLCharCountryHdl::~XMLCharCountryHdl()

@@ -1239,7 +1239,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                 SAL_WARN("sfx.doc", "Invalid boolean: " << text);
                 continue;
             }
-        } else if ( type == "string" || true) { // default
+        } else { // default
             any <<= text;
         }
         try {

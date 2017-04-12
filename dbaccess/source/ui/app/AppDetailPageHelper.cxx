@@ -518,15 +518,11 @@ bool OAppDetailPageHelper::isLeaf(SvTreeListEntry* _pEntry)
     if ( !_pEntry )
         return false;
     sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
-    if  (   ( nEntryType == DatabaseObjectContainer::TABLES )
-        ||  ( nEntryType == DatabaseObjectContainer::CATALOG )
-        ||  ( nEntryType == DatabaseObjectContainer::SCHEMA )
-        ||  ( nEntryType == DatabaseObjectContainer::FORMS_FOLDER )
-        ||  ( nEntryType == DatabaseObjectContainer::REPORTS_FOLDER )
-        )
-        return false;
-
-    return true;
+    return !(   ( nEntryType == DatabaseObjectContainer::TABLES )
+             || ( nEntryType == DatabaseObjectContainer::CATALOG )
+             || ( nEntryType == DatabaseObjectContainer::SCHEMA )
+             || ( nEntryType == DatabaseObjectContainer::FORMS_FOLDER )
+             || ( nEntryType == DatabaseObjectContainer::REPORTS_FOLDER ));
 }
 
 bool OAppDetailPageHelper::isALeafSelected() const

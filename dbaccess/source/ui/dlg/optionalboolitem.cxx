@@ -41,10 +41,7 @@ namespace dbaui
         if ( !pCompare )
             return false;
 
-        if ( m_aValue == pCompare->m_aValue )
-            return true;
-
-        return false;
+        return m_aValue == pCompare->m_aValue;
     }
 
     SfxPoolItem* OptionalBoolItem::Clone( SfxItemPool* /*_pPool*/ ) const

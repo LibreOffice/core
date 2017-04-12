@@ -108,10 +108,7 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
 
     // The string following '<' has to be a known HTML token.
     OString aToken = sHeader.copy( nStartOfTagIndex, i - nStartOfTagIndex );
-    if ( GetHTMLToken( OStringToOUString( aToken.toAsciiLowerCase(), RTL_TEXTENCODING_ASCII_US ) ) != 0 )
-        return true;
-
-    return false;
+    return GetHTMLToken( OStringToOUString( aToken.toAsciiLowerCase(), RTL_TEXTENCODING_ASCII_US ) ) != 0;
 }
 
 }

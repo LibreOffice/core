@@ -2638,9 +2638,7 @@ static bool lcl_isSystem( LanguageType nLangID )
     // There are some special values that simplify to SYSTEM,
     // getRealLanguage() catches and resolves them.
     LanguageType nNewLangID = MsLangId::getRealLanguage( nLangID);
-    if (nNewLangID != nLangID)
-        return true;
-    return false;
+    return nNewLangID != nLangID;
 }
 
 

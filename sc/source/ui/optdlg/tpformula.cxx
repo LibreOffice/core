@@ -190,10 +190,7 @@ bool ScTpFormulaOptions::IsValidSeparatorSet() const
     // Make sure the column and row separators are different.
     OUString aColStr = mpEdSepArrayCol->GetText();
     OUString aRowStr = mpEdSepArrayRow->GetText();
-    if (aColStr == aRowStr)
-        return false;
-
-    return true;
+    return aColStr != aRowStr;
 }
 
 IMPL_LINK( ScTpFormulaOptions, ButtonHdl, Button*, pBtn, void )

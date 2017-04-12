@@ -649,11 +649,8 @@ bool Application::IsUICaptured()
     // If mouse was captured, or if in tracking- or in select-mode of a floatingwindow (e.g. menus
     // or pulldown toolboxes) another window should be created
     // D&D active !!!
-    if ( pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
-         pSVData->maWinData.mpFirstFloat || nImplSysDialog )
-        return true;
-    else
-        return false;
+    return pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
+         pSVData->maWinData.mpFirstFloat || nImplSysDialog;
 }
 
 void Application::OverrideSystemSettings( AllSettings& /*rSettings*/ )

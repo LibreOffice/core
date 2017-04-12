@@ -183,11 +183,7 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
 
     // 3. new (uno) add in functions
     OUString aIntName = ScGlobal::GetAddInCollection()->FindFunction(aUpper, false);
-    if (!aIntName.isEmpty())
-    {
-        return true;
-    }
-    return false;       // no valid function name
+    return !aIntName.isEmpty();       // no valid function name
 }
 
 void ScCompiler::InitCharClassEnglish()

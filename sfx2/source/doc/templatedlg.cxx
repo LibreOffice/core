@@ -127,9 +127,7 @@ public:
     {
         if(maKeyword.isEmpty())
             return false;
-        if(sItemName.toAsciiLowerCase().indexOf(maKeyword) >= 0)
-            return true;
-        return false;
+        return sItemName.toAsciiLowerCase().indexOf(maKeyword) >= 0;
     }
 
 private:

@@ -140,10 +140,7 @@ bool SwEditShell::HasOtherCnt() const
         return true;
 
     pNd = &rNds.GetEndOfAutotext();
-    if ( 1 != (pNd->GetIndex() - pNd->StartOfSectionIndex()) )
-        return true;
-
-    return false;
+    return 1 != (pNd->GetIndex() - pNd->StartOfSectionIndex());
 }
 
 SwActContext::SwActContext(SwEditShell *pShell)

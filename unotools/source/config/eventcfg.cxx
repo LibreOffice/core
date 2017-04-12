@@ -297,10 +297,7 @@ bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName )
     // never accessed before - is it supported in general?
     SupportedEventsVector::iterator pos = ::std::find(
         m_supportedEvents.begin(), m_supportedEvents.end(), aName );
-    if ( pos != m_supportedEvents.end() )
-        return true;
-
-    return false;
+    return pos != m_supportedEvents.end();
 }
 
 Type SAL_CALL GlobalEventConfig_Impl::getElementType(  )

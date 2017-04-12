@@ -723,12 +723,7 @@ void Svx3DLightControl::SetObjectType(SvxPreviewObjectType nType)
 
 bool Svx3DLightControl::IsSelectionValid()
 {
-    if((NO_LIGHT_SELECTED != maSelectedLight) && (GetLightOnOff(maSelectedLight)))
-    {
-        return true;
-    }
-
-    return false;
+    return (NO_LIGHT_SELECTED != maSelectedLight) && GetLightOnOff(maSelectedLight);
 }
 
 void Svx3DLightControl::GetPosition(double& rHor, double& rVer)

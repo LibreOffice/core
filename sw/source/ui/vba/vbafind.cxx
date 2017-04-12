@@ -45,17 +45,13 @@ SwVbaFind::~SwVbaFind()
 bool SwVbaFind::InRange( const uno::Reference< text::XTextRange >& xCurrentRange )
 {
     uno::Reference< text::XTextRangeCompare > xTRC( mxTextRange->getText(), uno::UNO_QUERY_THROW );
-    if( xTRC->compareRegionStarts( mxTextRange, xCurrentRange ) >= 0 && xTRC->compareRegionEnds( mxTextRange, xCurrentRange ) <= 0 )
-        return true;
-    return false;
+    return xTRC->compareRegionStarts( mxTextRange, xCurrentRange ) >= 0 && xTRC->compareRegionEnds( mxTextRange, xCurrentRange ) <= 0;
 }
 
 bool SwVbaFind::InEqualRange( const uno::Reference< text::XTextRange >& xCurrentRange )
 {
     uno::Reference< text::XTextRangeCompare > xTRC( mxTextRange->getText(), uno::UNO_QUERY_THROW );
-    if( xTRC->compareRegionStarts( mxTextRange, xCurrentRange ) == 0 && xTRC->compareRegionEnds( mxTextRange, xCurrentRange ) == 0 )
-        return true;
-    return false;
+    return xTRC->compareRegionStarts( mxTextRange, xCurrentRange ) == 0 && xTRC->compareRegionEnds( mxTextRange, xCurrentRange ) == 0;
 }
 
 void SwVbaFind::SetReplaceWith( const OUString& rText )
