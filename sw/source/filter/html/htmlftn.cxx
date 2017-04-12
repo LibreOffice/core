@@ -208,7 +208,7 @@ void SwHTMLParser::FinishFootEndNote()
     SwTextFootnote * const pTextFootnote = static_cast<SwTextFootnote *>(
         m_pPam->GetNode().GetTextNode()->GetTextAttrForCharAt(
             m_pPam->GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_FTN ) );
-    // In Kopf- und Fusszeilen duerfen keine Fussnoten eingefuegt werden.
+    // In header and footer no footnotes can be inserted.
     if( pTextFootnote )
     {
         m_pFootEndNoteImpl->aTextFootnotes.push_back( pTextFootnote );
@@ -359,12 +359,12 @@ void SwHTMLWriter::OutFootEndNotes()
         Strm().WriteCharPtr( "\">" );
 
         m_bLFPossible = true;
-        IncIndentLevel();   // Inhalt von <DIV> einruecken
+        IncIndentLevel();   // indent content of <DIV>
 
-        OSL_ENSURE( pTextFootnote, "SwHTMLWriter::OutFootEndNotes: SwTextFootnote fehlt" );
+        OSL_ENSURE( pTextFootnote, "SwHTMLWriter::OutFootEndNotes: SwTextFootnote is missing" );
         SwNodeIndex *pSttNdIdx = pTextFootnote->GetStartNode();
         OSL_ENSURE( pSttNdIdx,
-                "SwHTMLWriter::OutFootEndNotes: StartNode-Index fehlt" );
+                "SwHTMLWriter::OutFootEndNotes: StartNode-Index is missing" );
         if( pSttNdIdx )
         {
             HTMLSaveData aSaveData( *this, pSttNdIdx->GetIndex()+1,
@@ -372,14 +372,14 @@ void SwHTMLWriter::OutFootEndNotes()
             Out_SwDoc( pCurPam );
         }
 
-        DecIndentLevel();   // Inhalt von <DIV> einruecken
+        DecIndentLevel();   // indent content of <DIV>
         if( m_bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
         m_bLFPossible = true;
 
         OSL_ENSURE( !m_pFormatFootnote,
-                "SwHTMLWriter::OutFootEndNotes: Footnote wurde nicht ausgegeben" );
+                "SwHTMLWriter::OutFootEndNotes: Footnote was not output" );
         if( m_pFormatFootnote )
         {
             if( m_pFormatFootnote->IsEndNote() )
@@ -393,9 +393,9 @@ void SwHTMLWriter::OutFootEndNotes()
 
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( nFootnote == m_nFootNote,
-            "SwHTMLWriter::OutFootEndNotes: Anzahl Fussnoten stimmt nicht" );
+            "SwHTMLWriter::OutFootEndNotes: Number of footnotes does not match" );
     OSL_ENSURE( nEn == m_nEndNote,
-            "SwHTMLWriter::OutFootEndNotes: Anzahl Endnoten stimmt nicht" );
+            "SwHTMLWriter::OutFootEndNotes: Number of endnotes does not match" );
 #endif
 
     delete m_pFootEndNotes;

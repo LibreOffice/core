@@ -60,12 +60,12 @@ struct ImplSVEvent;
 #define HTML_DFLT_IMG_WIDTH (MM50*4)
 #define HTML_DFLT_IMG_HEIGHT (MM50*2)
 
-// ein par Sachen, die man oefter mal braucht
+// some things you often need
 extern HTMLOptionEnum<SvxAdjust> aHTMLPAlignTable[];
 extern HTMLOptionEnum<sal_Int16> aHTMLImgHAlignTable[];
 extern HTMLOptionEnum<sal_Int16> aHTMLImgVAlignTable[];
 
-// der Attribut Stack:
+// attribute stack:
 
 class HTMLAttr;
 typedef std::deque<HTMLAttr *> HTMLAttrs;
@@ -78,13 +78,13 @@ class HTMLAttr
     SwNodeIndex nSttPara, nEndPara;
     sal_Int32 nSttContent, nEndContent;
     bool bInsAtStart : 1;
-    bool bLikePara : 1; // Attribut ueber dem gesamten Absatz setzen
-    bool bValid : 1;    // ist das Attribut gueltig?
+    bool bLikePara : 1; // set attribute above the whole paragraph
+    bool bValid : 1;    // is the attribute valid?
 
     std::unique_ptr<SfxPoolItem> pItem;
-    HTMLAttr *pNext;   // noch zu schliessene Attrs mit unterschiedl. Werten
-    HTMLAttr *pPrev;   // bereits geschlossene aber noch nicht gesetze Attrs
-    HTMLAttr **ppHead; // der Listenkopf
+    HTMLAttr *pNext;   // still to close attributes with different values
+    HTMLAttr *pPrev;   // already closed but not set attributes
+    HTMLAttr **ppHead; // list head
 
     HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
                HTMLAttr **pHd=nullptr );
@@ -125,26 +125,25 @@ public:
 
     void SetHead( HTMLAttr **ppHd ) { ppHead = ppHd; }
 
-    // Beim Setzen von Attributen aus Vorlagen kann es passieren,
-    // dass Attribute doch nicht mehr gesetzt werden sollen. Die zu loeschen
-    // waere sehr aufwendig, da man nicht so genau weiss, wo sie eingekettet
-    // sind. Sie werden deshalb einfach invalidiert und erst beim naechsten
-    // SetAttr_() geloescht.
+    // During setting attributes from styles it can happen that these
+    // shouldn't be set anymore. To delete them would be very expensive, because
+    // you don't know all the places where they are linked in. Therefore they're
+    // made invalid and deleted at the next call of SetAttr_().
     void Invalidate() { bValid = false; }
 };
 
-// Tabelle der Attribute: Hier ist die Reihenfolge wichtig: Die Attribute
-// vorne in der Tabelle werden in EndAllAttrs auch zuerst gesetzt.
+// Table of attributes: The order here is important: The attributes in the
+// beginning of the table will set first in EndAllAttrs.
 struct HTMLAttrTable
 {
     HTMLAttr
-                *pKeep,         // Frame-Attribute
+                *pKeep,         // frame attributes
                 *pBox,
                 *pBrush,
                 *pBreak,
                 *pPageDesc,
 
-                *pLRSpace,      // Absatz-Attribute
+                *pLRSpace,      // paragraph attributes
                 *pULSpace,
                 *pLineSpacing,
                 *pAdjust,
@@ -154,10 +153,10 @@ struct HTMLAttrTable
                 *pOrphans,
                 *pDirection,
 
-                *pCharFormats,     // Text-Attribute
+                *pCharFormats,     // text attributes
                 *pINetFormat,
 
-                *pBold,         // Zeichen-Attribute
+                *pBold,         // character attributes
                 *pBoldCJK,
                 *pBoldCTL,
                 *pItalic,
@@ -175,8 +174,8 @@ struct HTMLAttrTable
                 *pFontColor,
                 *pEscapement,
                 *pCaseMap,
-                *pKerning,      // (nur fuer SPACER)
-                *pCharBrush,    // Zeichen-Hintergrund
+                *pKerning,      // (only for SPACER)
+                *pCharBrush,    // character background
                 *pLanguage,
                 *pLanguageCJK,
                 *pLanguageCTL,
@@ -187,40 +186,40 @@ struct HTMLAttrTable
 class HTMLAttrContext_SaveDoc;
 
 enum SwHTMLAppendMode {
-     AM_NORMAL,         // keine Absatz-Abstand-Behandlung
-     AM_NOSPACE,        // Abstand hart auf 0cm setzen
-     AM_SPACE,          // Abstand hart auf 0.5cm setzen
-     AM_SOFTNOSPACE,    // Abstand nicht setzen aber 0cm merken
-     AM_NONE            // gar kein Append
+     AM_NORMAL,         // no paragraph spacing handling
+     AM_NOSPACE,        // set spacing hard to 0cm
+     AM_SPACE,          // set spacing hard to 0.5cm
+     AM_SOFTNOSPACE,    // don't set spacing, but save 0cm
+     AM_NONE            // no append
 };
 
 class HTMLAttrContext
 {
-    HTMLAttrs aAttrs;      // die in dem Kontext gestarteten Attribute
+    HTMLAttrs aAttrs;      // the attributes created in the context
 
-    OUString    aClass;          // die Klasse des Kontexts
+    OUString    aClass;          // context class
 
     HTMLAttrContext_SaveDoc *pSaveDocContext;
     SfxItemSet *pFrameItemSet;
 
-    sal_uInt16  nToken;         // das Token, zu dem der Kontext gehoehrt
+    sal_uInt16  nToken;         // the token of the context
 
-    sal_uInt16  nTextFormatColl;    // eine in dem Kontext begonnene Vorlage oder 0
+    sal_uInt16  nTextFormatColl;    // a style created in the context or zero
 
-    sal_uInt16  nLeftMargin;        // ein veraenderter linker Rand
-    sal_uInt16  nRightMargin;       // ein veraenderter rechter Rand
-    sal_uInt16  nFirstLineIndent;   // ein veraenderter Erstzeilen-Einzug
+    sal_uInt16  nLeftMargin;        // a changed left border
+    sal_uInt16  nRightMargin;       // a changed right border
+    sal_uInt16  nFirstLineIndent;   // a changed first line indent
 
     sal_uInt16  nUpperSpace;
     sal_uInt16  nLowerSpace;
 
     SwHTMLAppendMode eAppend;
 
-    bool    bLRSpaceChanged : 1;// linker/rechtr Rand, Einzug veraendert?
-    bool    bULSpaceChanged : 1;// oberer/unterer Rand veraendert?
-    bool    bDfltTextFormatColl : 1;// nTextFormatColl ist nur ein default
-    bool    bSpansSection : 1;  // Der Kontext spannt eine SwSection auf
-    bool    bPopStack : 1;      // Oberhalb liegende Stack-Elemente entf.
+    bool    bLRSpaceChanged : 1;    // left/right border, changed indent?
+    bool    bULSpaceChanged : 1;    // top/bottom border changed?
+    bool    bDfltTextFormatColl : 1;// nTextFormatColl is only default
+    bool    bSpansSection : 1;      // the context opens a SwSection
+    bool    bPopStack : 1;          // delete above stack elements
     bool    bFinishPREListingXMP : 1;
     bool    bRestartPRE : 1;
     bool    bRestartXMP : 1;
@@ -369,66 +368,65 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     OUString      m_sBaseURL;
     OUString      m_aBasicLib;
     OUString      m_aBasicModule;
-    OUString      m_aScriptSource;  // Inhalt des aktuellen Script-Blocks
-    OUString      m_aScriptType;    // Type des gelesenen Scripts (StarBasic/VB/JAVA)
-    OUString      m_aScriptURL;     // URL eines Scripts
-    OUString      m_aStyleSource;   // Inhalt des aktuellen Style-Sheets
-    OUString      m_aContents;      // Text des akteullen Marquee, Feldes etc.
+    OUString      m_aScriptSource;  // content of the current script block
+    OUString      m_aScriptType;    // type of read script (StarBasic/VB/JAVA)
+    OUString      m_aScriptURL;     // script URL
+    OUString      m_aStyleSource;   // content of current style sheet
+    OUString      m_aContents;      // text of current marquee, field and so
     OUString      m_sTitle;
-    OUString      m_aUnknownToken;  // ein gestartetes unbekanntes Token
+    OUString      m_aUnknownToken;  // a started unknown token
     OUString      m_aBulletGrfs[MAXLEVEL];
     OUString      m_sJmpMark;
 
-    std::vector<sal_uInt16>   m_aBaseFontStack; // Stack fuer <BASEFONT>
-                                // Bit 0-2: Fontgroesse (1-7)
-    std::vector<sal_uInt16>   m_aFontStack;     // Stack fuer <FONT>, <BIG>, <SMALL>
-                                // Bit 0-2: Fontgroesse (1-7)
-                                // Bit 15: Fontfarbe wurde gesetzt
+    std::vector<sal_uInt16>   m_aBaseFontStack; // stack for <BASEFONT>
+                                // Bit 0-2: font size (1-7)
+    std::vector<sal_uInt16>   m_aFontStack;     // stack for <FONT>, <BIG>, <SMALL>
+                                // Bit 0-2: font size (1-7)
+                                // Bit 15:  font colour was set
 
-    HTMLAttrs      m_aSetAttrTab;// "geschlossene", noch nicht gesetzte Attr.
-    HTMLAttrs      m_aParaAttrs; // vorlauefige Absatz-Attribute
-    HTMLAttrTable  m_aAttrTab;   // "offene" Attribute
-    HTMLAttrContexts m_aContexts;// der aktuelle Attribut/Token-Kontext
+    HTMLAttrs      m_aSetAttrTab;// "closed", not set attributes
+    HTMLAttrs      m_aParaAttrs; // temporary paragraph attributes
+    HTMLAttrTable  m_aAttrTab;   // "open" attributes
+    HTMLAttrContexts m_aContexts;// the current context of attribute/token
     std::vector<SwFrameFormat *> m_aMoveFlyFrames;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> m_aMoveFlyCnts;// and the Content-Positions
 
-    SwApplet_Impl *m_pAppletImpl; // das aktuelle Applet
+    SwApplet_Impl *m_pAppletImpl; // current applet
 
-    SwCSS1Parser    *m_pCSS1Parser;   // der Style-Sheet-Parser
+    SwCSS1Parser    *m_pCSS1Parser;   // Style-Sheet-Parser
     SwHTMLNumRuleInfo *m_pNumRuleInfo;
     SwPendingStack  *m_pPendStack;
 
     rtl::Reference<SwDoc> m_xDoc;
-    SwPaM           *m_pPam;      // SwPosition duerfte doch reichen, oder ??
-    SwViewShell       *m_pActionViewShell;  // SwViewShell, an der das StartAction
-                                        // gerufen wurde.
+    SwPaM           *m_pPam;      // SwPosition should be enough, or ??
+    SwViewShell       *m_pActionViewShell;  // SwViewShell, where StartAction was called
     SwNodeIndex     *m_pSttNdIdx;
 
-    HTMLTable       *m_pTable;    // die aktuelle "auesserste" Tabelle
-    SwHTMLForm_Impl *m_pFormImpl;// die aktuelle Form
-    SdrObject       *m_pMarquee;  // aktuelles Marquee
-    SwField         *m_pField;    // aktuelles Feld
-    ImageMap        *m_pImageMap; // aktuelle Image-Map
-    ImageMaps       *m_pImageMaps; ///< all Image-Maps that have been read
+    HTMLTable       *m_pTable;      // current "outermost" table
+    SwHTMLForm_Impl *m_pFormImpl;   // current form
+    SdrObject       *m_pMarquee;    // current marquee
+    SwField         *m_pField;      // current field
+    ImageMap        *m_pImageMap;   // current image map
+    ImageMaps       *m_pImageMaps;  ///< all Image-Maps that have been read
     SwHTMLFootEndNote_Impl *m_pFootEndNoteImpl;
 
-    Size    m_aHTMLPageSize;      // die Seitengroesse der HTML-Vorlage
+    Size    m_aHTMLPageSize;      // page size of HTML template
 
-    sal_uInt32  m_aFontHeights[7];    // die Font-Hoehen 1-7
-    sal_uInt32  m_nScriptStartLineNr; // Zeilennummer eines Script-Blocks
+    sal_uInt32  m_aFontHeights[7];    // font heights 1-7
+    sal_uInt32  m_nScriptStartLineNr; // line number of script block
     ImplSVEvent * m_nEventId;
 
     sal_uInt16  m_nBaseFontStMin;
     sal_uInt16  m_nFontStMin;
     sal_uInt16  m_nDefListDeep;
-    sal_uInt16  m_nFontStHeadStart;   // Elemente im Font-Stack bei <Hn>
-    sal_uInt16  m_nSBModuleCnt;       // Zaehler fuer Basic-Module
-    sal_uInt16  m_nMissingImgMaps;    // Wie viele Image-Maps fehlen noch?
+    sal_uInt16  m_nFontStHeadStart;   // elements in font stack at <Hn>
+    sal_uInt16  m_nSBModuleCnt;       // counter for basic modules
+    sal_uInt16  m_nMissingImgMaps;    // How many image maps are still missing?
     size_t m_nParaCnt;
-    size_t m_nContextStMin;           // Untergrenze fuer PopContext
-    size_t m_nContextStAttrMin;       // Untergrenze fuer Attributierung
+    size_t m_nContextStMin;           // lower limit of PopContext
+    size_t m_nContextStAttrMin;       // lower limit of attributes
     sal_uInt16  m_nSelectEntryCnt;    // Number of entries in the actual listbox
-    sal_uInt16  m_nOpenParaToken;     // ein geoeffnetes Absatz-Element
+    sal_uInt16  m_nOpenParaToken;     // opened paragraph element
 
     enum JumpToMarks { JUMPTO_NONE, JUMPTO_MARK, JUMPTO_TABLE, JUMPTO_FRAME,
                         JUMPTO_REGION, JUMPTO_GRAPHIC } m_eJumpTo;
@@ -437,39 +435,38 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_uInt16  m_nContinue;        // depth of Continue calls
 #endif
 
-    SvxAdjust   m_eParaAdjust;    // Ausrichtung des aktuellen Absatz
-    HTMLScriptLanguage m_eScriptLang; // die aktuelle Script-Language
+    SvxAdjust   m_eParaAdjust;    // adjustment of current paragraph
+    HTMLScriptLanguage m_eScriptLang; // current script language
 
-    bool m_bOldIsHTMLMode : 1;    // War's mal ein HTML-Dokument?
+    bool m_bOldIsHTMLMode : 1;    // Was it a HTML document?
 
-    bool m_bDocInitalized : 1;    // Dokument bzw. Shell wurden initialisiert
-                                // Flag um doppeltes init durch Rekursion
-                                // zu verhindern.
-    bool m_bViewCreated : 1;      // die View wurde schon erzeugt (asynchron)
+    bool m_bDocInitalized : 1;    // document resp. shell was initialize
+                                  // flag to prevent double init via recursion
+    bool m_bViewCreated : 1;      // the view was already created (asynchronous)
     bool m_bSetModEnabled : 1;
 
-    bool m_bInFloatingFrame : 1;  // Wir sind in einen Floating Frame
+    bool m_bInFloatingFrame : 1;  // We are in a floating frame
     bool m_bInField : 1;
-    bool m_bKeepUnknown : 1;      // unbekannte/nicht unterstuetze Tokens beh.
+    bool m_bKeepUnknown : 1;      // handle unknown/not supported tokens
     // 8
-    bool m_bCallNextToken : 1;    // In Tabellen: NextToken in jedem Fall rufen
-    bool m_bIgnoreRawData : 1;    // Inhalt eines Scripts/Styles ignorieren.
-    bool m_bLBEntrySelected : 1;  // Ist der aktuelle Listbox-Eintrag selekt.
-    bool m_bTAIgnoreNewPara : 1;  // naechstes LF in TextArea ignorieren?
-    bool m_bFixMarqueeWidth : 1;  // Groesse einer Laufschrift anpassen?
+    bool m_bCallNextToken : 1;    // In tables: call NextToken in any case
+    bool m_bIgnoreRawData : 1;    // ignore content of script/style
+    bool m_bLBEntrySelected : 1;  // Is the current option selected?
+    bool m_bTAIgnoreNewPara : 1;  // ignore next LF in text area?
+    bool m_bFixMarqueeWidth : 1;  // Change size of marquee?
 
-    bool m_bUpperSpace : 1;       // obererer Absatz-Abstand wird benoetigt
+    bool m_bUpperSpace : 1;       // top paragraph spacing is needed
     bool m_bNoParSpace : 1;
     // 16
 
-    bool m_bInNoEmbed : 1;        // Wir sind in einem NOEMBED-Bereich
+    bool m_bInNoEmbed : 1;        // we are in a NOEMBED area
 
-    bool m_bInTitle : 1;          // Wir sind im Titel
+    bool m_bInTitle : 1;          // we are in title
 
-    bool m_bChkJumpMark : 1;      // springe ggfs. zu einem vorgegebenem Mark
+    bool m_bChkJumpMark : 1;      // maybe jump to predetermined mark
     bool m_bUpdateDocStat : 1;
-    bool m_bFixSelectWidth : 1;   // Breite eines Selects neu setzen?
-    bool m_bFixSelectHeight : 1;  // Breite eines Selects neu setzen?
+    bool m_bFixSelectWidth : 1;   // Set new width of select?
+    bool m_bFixSelectHeight : 1;  // Set new width of select?
     bool m_bTextArea : 1;
     // 24
     bool m_bSelect : 1;
@@ -494,7 +491,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     DECL_LINK( AsyncCallback, void*, void );
 
-    // Attribute am Dok setzen
+    // set attribute on document
     void SetAttr_( bool bChkEnd, bool bBeforeTable, HTMLAttrs *pPostIts );
     void SetAttr( bool bChkEnd = true, bool bBeforeTable = false,
                          HTMLAttrs *pPostIts = nullptr )
@@ -505,13 +502,13 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     HTMLAttr **GetAttrTabEntry( sal_uInt16 nWhich );
 
-    // Einen neuen Textknoten an PaM-Position anlegen
+    // create a new text node on PaM position
     bool AppendTextNode( SwHTMLAppendMode eMode=AM_NORMAL, bool bUpdateNum=true );
     void AddParSpace();
 
-    // Ein Attribut beginnen/beenden
-    // ppDepAttr gibt einen Attribut-Tabellen-Eintrag an, dessen Attribute
-    // gesetzt sein muessen, bevor das Attribut beendet werden darf
+    // start/end an attribute
+    // ppDepAttr indicated an attribute table entry, which attribute has to be
+    // set, before the attribute is closed
     void NewAttr( HTMLAttr **ppAttr, const SfxPoolItem& rItem );
     bool EndAttr( HTMLAttr *pAttr, bool bChkEmpty=true );
     void DeleteAttr( HTMLAttr* pAttr );
@@ -550,21 +547,20 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // add parameter <bCountedInList>
     void SetNodeNum( sal_uInt8 nLevel );
 
-    // Verwalten von Absatz-Vorlagen
+    // Manage paragraph styles
 
-    // die Vorlagen auf dem Stack bzw. deren Attribute setzen
+    // set the style resp. its attributes on the stack
     void SetTextCollAttrs( HTMLAttrContext *pContext = nullptr );
 
     void InsertParaAttrs( const SfxItemSet& rItemSet );
 
-    // Verwalten des Attribut-Kontexts
+    // Manage attribute context
 
-    // aktuellen Kontext merken
+    // save current context
     inline void PushContext( HTMLAttrContext *pCntxt );
 
-    // den obersten/spezifizierten Kontext holen, aber nicht ausserhalb
-    // des Kontexts mit Token nLimit suchen. Wenn bRemove gesetzt ist,
-    // wird er entfernt
+    // Fetch top/specified context but not outside the context with token
+    // nLimit. If bRemove set then remove it.
     HTMLAttrContext *PopContext( sal_uInt16 nToken=0 );
 
     bool GetMarginsFromContext( sal_uInt16 &nLeft, sal_uInt16 &nRight, short& nIndent,
@@ -575,23 +571,23 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     void MovePageDescAttrs( SwNode *pSrcNd, sal_uLong nDestIdx, bool bFormatBreak );
 
-    // Behandlung von Tags auf Absatz-Ebene
+    // Handling of tags at paragraph level
 
-    // <P> und <H1> bis <H6>
+    // <P> and <H1> to <H6>
     void NewPara();
     void EndPara( bool bReal = false );
     void NewHeading( int nToken );
     void EndHeading();
 
-    // <ADDRESS>, <BLOCKQUOTE> und <PRE>
+    // <ADDRESS>, <BLOCKQUOTE> and <PRE>
     void NewTextFormatColl( int nToken, sal_uInt16 nPoolId );
     void EndTextFormatColl( int nToken );
 
-    // <DIV> und <CENTER>
+    // <DIV> and <CENTER>
     void NewDivision( int nToken );
     void EndDivision( int nToken );
 
-    // Fly-Frames einfuegen/verlassen
+    // insert/close Fly-Frames
     void InsertFlyFrame( const SfxItemSet& rItemSet, HTMLAttrContext *pCntxt,
                          const OUString& rId );
 
@@ -599,7 +595,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
                        const SwPosition *pNewPos );
     void RestoreDocContext( HTMLAttrContext *pCntxt );
 
-    // alle durch <DIV> aufgespannten Bereiche verlassen
+    // end all opened <DIV> areas
     bool EndSections( bool bLFStripped );
 
     // <MULTICOL>
@@ -610,25 +606,25 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void EndMarquee();
     void InsertMarqueeText();
 
-    // Behandluung von Listen
+    // Handling of lists
 
-    // Numerierungs <OL> und Aufzaehlungs-Listen <UL> mit <LI>
+    // order list <OL> and unordered list <UL> with <LI>
     void NewNumBulList( int nToken );
     void EndNumBulList( int nToken=0 );
     void NewNumBulListItem( int nToken );
     void EndNumBulListItem( int nToken, bool bSetColl,
                             bool bLastPara=false );
 
-    // Definitions-Listen <DL> mit <DD>, <DT>
+    // definitions lists <DL> with <DD>, <DT>
     void NewDefList();
     void EndDefList();
     void NewDefListItem( int nToken );
     void EndDefListItem( int nToken=0, bool bLastPara=false );
 
-    // Behandlung von Tags auf Zeichen-Ebene
+    // Handling of tags on character level
 
-    // Tags wie <B>, <I> etc behandeln, die ein bestimmtes Attribut
-    // an und ausschalten, oder die wie SPAN nur Attribute aus Styles holen
+    // handle tags like <B>, <I> and so, which enable/disable a certain
+    // attribute or like <SPAN> get attributes from styles
     void NewStdAttr( int nToken );
     void NewStdAttr( int nToken,
                      HTMLAttr **ppAttr, const SfxPoolItem & rItem,
@@ -636,13 +632,13 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
                      HTMLAttr **ppAttr3=nullptr, const SfxPoolItem *pItem3=nullptr );
     void EndTag( int nToken );
 
-    // Font-Attribute behandeln
-    void NewBasefontAttr();             // fuer <BASEFONT>
+    // handle font attributes
+    void NewBasefontAttr();             // for <BASEFONT>
     void EndBasefontAttr();
-    void NewFontAttr( int nToken ); // fuer <FONT>, <BIG> und <SMALL>
+    void NewFontAttr( int nToken ); // for <FONT>, <BIG> and <SMALL>
     void EndFontAttr( int nToken );
 
-    // Tags, die durch Zeichenvorlagen realisiert werden
+    // tags realized via character styles
     void NewCharFormat( int nToken );
 
     // <SDFIELD>
@@ -656,14 +652,14 @@ private:
     // <SPACER>
     void InsertSpacer();
 
-    // Einfuegen von Grafiken, Plugins und Applets
+    // Inserting graphics, plug-ins and applets
 
-    // Image-Maps suchen und mit Grafik-Nodes verbinden
+    // search image maps and link with graphic nodes
     ImageMap *FindImageMap( const OUString& rURL ) const;
     void ConnectImageMaps();
 
-    // Verankerung eines Fly-Frames bestimmen und entsprechende Attribute
-    // in den Attrset setzen (htmlgrin.cxx)
+    // find anchor of Fly-Frames and set corresponding attributes
+    // in Attrset (htmlgrin.cxx)
     void SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                  sal_Int16 eHoriOri,
                                  const SfxItemSet &rItemSet,
@@ -680,11 +676,11 @@ private:
     static void SetFrameFormatAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
                          HtmlFrameFormatFlags nFlags, SfxItemSet &rFrameItemSet );
 
-    // Frames anlegen und Auto-gebundene Rahmen registrieren
+    // create frames and register auto bound frames
     void RegisterFlyFrame( SwFrameFormat *pFlyFrame );
 
-    // Die Groesse des Fly-Frames an die Vorgaben und Gegebenheiten anpassen
-    // (nicht fuer Grafiken, deshalb htmlplug.cxx)
+    // Adjust the size of the Fly-Frames to requirements and conditions
+    // (not for graphics, therefore htmlplug.cxx)
     static void SetFixSize( const Size& rPixSize, const Size& rTwipDfltSize,
                      bool bPrcWidth, bool bPrcHeight,
                      SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
@@ -700,50 +696,49 @@ private:
     void GetDefaultScriptType( ScriptType& rType,
                                OUString& rTypeStr ) const;
 
-    // die eigentlichen Einfuege-Methoden fuer <IMG>, <EMBED> und <APPLET>
-    // und <PARAM>
+    // the actual insert methods for <IMG>, <EMBED>, <APPLET> and <PARAM>
     void InsertImage();     // htmlgrin.cxx
     void InsertEmbed();     // htmlplug.cxx
 
 #if HAVE_FEATURE_JAVA
     void NewObject();   // htmlplug.cxx
 #endif
-    void EndObject();       // CommandLine mit Applet verkn. (htmlplug.cxx)
+    void EndObject();       // link CommandLine with applet (htmlplug.cxx)
 #if HAVE_FEATURE_JAVA
     void InsertApplet();    // htmlplug.cxx
 #endif
-    void EndApplet();       // CommandLine mit Applet verkn. (htmlplug.cxx)
+    void EndApplet();       // link CommandLine with applet (htmlplug.cxx)
     void InsertParam();     // htmlplug.cxx
 
     void InsertFloatingFrame();
 
-    // <BODY>-Tag auswerten: Hintergrund-Grafiken und -Farben setzen (htmlgrin.cxx)
+    // parse <BODY>-tag: set background graphic and background colour (htmlgrin.cxx)
     void InsertBodyOptions();
 
-    // Einfuegen von Links und Bookmarks (htmlgrin.cxx)
+    // Inserting links and bookmarks (htmlgrin.cxx)
 
-    // <A>-Tag auswerten: einen Link bzw. eine Bookmark einfuegen
+    // parse <A>-tag: insert a link resp. bookmark
     void NewAnchor();
     void EndAnchor();
 
-    // eine Bookmark einfuegen
+    // insert bookmark
     void InsertBookmark( const OUString& rName );
 
     void InsertCommentText( const sal_Char *pTag );
     void InsertComment( const OUString& rName, const sal_Char *pTag = nullptr );
 
-    // sind im aktuellen Absatz Bookmarks vorhanden?
+    // Has the current paragraph bookmarks?
     bool HasCurrentParaBookmarks( bool bIgnoreStack=false ) const;
 
-    // Einfuegen von Script/Basic-Elementen
+    // Inserting script/basic elements
 
-    // das zueletzt gelsene Basic-Modul parsen (htmlbas.cxx)
+    // parse the last read basic module (htmlbas.cxx)
     void NewScript();
     void EndScript();
 
     void AddScriptSource();
 
-    // ein Event in die SFX-Konfiguation eintragen (htmlbas.cxx)
+    // insert event in SFX configuration (htmlbas.cxx)
     void InsertBasicDocEvent( const OUString& aEventName, const OUString& rName,
                               ScriptType eScrType, const OUString& rScrType );
 
@@ -794,7 +789,7 @@ private:
     void NewForm( bool bAppend=true );
     void EndForm( bool bAppend=true );
 
-    // Insert methods for <INPUT>, <TEXTAREA> und <SELECT>
+    // Insert methods for <INPUT>, <TEXTAREA> and <SELECT>
     void InsertInput();
 
     void NewTextArea();
