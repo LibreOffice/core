@@ -65,6 +65,7 @@ struct SettingsTable_Impl
     bool                m_bWidowControl;
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
+    bool                m_bDoNotExpandShiftReturn;
     bool                m_bProtectForm;
     bool                m_bDisplayBackgroundShape;
 
@@ -92,6 +93,7 @@ struct SettingsTable_Impl
     , m_bWidowControl(false)
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
+    , m_bDoNotExpandShiftReturn(false)
     , m_bProtectForm(false)
     , m_bDisplayBackgroundShape(false)
     , m_pThemeFontLangProps(3)
@@ -279,6 +281,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_widowControl:
         m_pImpl->m_bWidowControl = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Compat_doNotExpandShiftReturn:
+        m_pImpl->m_bDoNotExpandShiftReturn = true;
+        break;
     case NS_ooxml::LN_CT_Settings_displayBackgroundShape:
         m_pImpl->m_bDisplayBackgroundShape = nIntValue;
         break;
@@ -360,6 +365,11 @@ bool SettingsTable::GetMirrorMarginSettings() const
 bool SettingsTable::GetDisplayBackgroundShape() const
 {
     return m_pImpl->m_bDisplayBackgroundShape;
+}
+
+bool SettingsTable::GetDoNotExpandShiftReturn() const
+{
+    return m_pImpl->m_bDoNotExpandShiftReturn;
 }
 
 bool SettingsTable::GetProtectForm() const
