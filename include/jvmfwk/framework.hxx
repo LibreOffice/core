@@ -454,9 +454,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(
     @param pInfo
     [in] optional pointer to a specific JRE; must be caller-freed if not NULL
     @param arOptions
-    [in] the array containing additional start arguments or NULL.
-    @param nSize
-    [in] the size of the array <code>arOptions</code>.
+    [in] the vector containing additional start arguments.
     @param ppVM
     [out] the <code>JavaVM</code> pointer.
     @param ppEnv
@@ -484,7 +482,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(
     <code>JAVA_HOME</code>does not meet the version requirements.
  */
 JVMFWK_DLLPUBLIC javaFrameworkError jfw_startVM(
-    JavaInfo const * pInfo, JavaVMOption * arOptions, sal_Int32 nSize,
+    JavaInfo const * pInfo, std::vector<OUString> const & arOptions,
     JavaVM ** ppVM, JNIEnv ** ppEnv);
 
 /** determines the JRE that is to be used.

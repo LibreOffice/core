@@ -706,33 +706,11 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         stoc_javavm::JVM aJvm;
         initVMConfiguration(&aJvm, m_xContext->getServiceManager(),
                             m_xContext);
-        //Create the JavaVMOption array
         const std::vector<OUString> & props = aJvm.getProperties();
-        std::unique_ptr<JavaVMOption[]> sarOptions(
-            new JavaVMOption[props.size()]);
-        JavaVMOption * arOptions = sarOptions.get();
-        //Create an array that contains the strings which are passed
-        //into the options
-        std::unique_ptr<OString[]> sarPropStrings(
-             new OString[props.size()]);
-        OString * arPropStrings = sarPropStrings.get();
-
-        OString sJavaOption("-");
-        typedef std::vector<OUString>::const_iterator cit;
-        int index = 0;
-        for (cit i = props.begin(); i != props.end(); ++i)
+        std::vector<OUString> options;
+        for (auto const & i: props)
         {
-            OString sOption = OUStringToOString(
-                *i, osl_getThreadTextEncoding());
-
-            if (!sOption.matchIgnoreAsciiCase(sJavaOption))
-                arPropStrings[index]= OString("-D") + sOption;
-            else
-                arPropStrings[index] = sOption;
-
-            arOptions[index].optionString = const_cast<sal_Char*>(arPropStrings[index].getStr());
-            arOptions[index].extraInfo = nullptr;
-            index ++;
+            options.push_back(i.startsWith("-") ? i : "-D" + i);
         }
 
         JNIEnv * pMainThreadEnv = nullptr;
@@ -741,7 +719,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         if (getenv("STOC_FORCE_NO_JRE"))
             errcode = JFW_E_NO_SELECT;
         else
-            errcode = jfw_startVM(info.get(), arOptions, index, & m_pJavaVm,
+            errcode = jfw_startVM(info.get(), options, & m_pJavaVm,
                                   & pMainThreadEnv);
 
         bool bStarted = false;
