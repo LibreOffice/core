@@ -36,9 +36,9 @@ namespace sdr
     {
         ItemChangeBroadcaster::ItemChangeBroadcaster(const SdrObject& rObj)
         {
-            if(dynamic_cast<const SdrObjGroup*>( &rObj ) !=  nullptr)
+            if (const SdrObjGroup* pGroupObj = dynamic_cast<const SdrObjGroup*>(&rObj))
             {
-                SdrObjListIter aIter(static_cast<const SdrObjGroup&>(rObj), SdrIterMode::DeepNoGroups);
+                SdrObjListIter aIter(*pGroupObj, SdrIterMode::DeepNoGroups);
                 mpData = new RectangleVector;
                 DBG_ASSERT(mpData, "ItemChangeBroadcaster: No memory (!)");
                 static_cast<RectangleVector*>(mpData)->reserve(aIter.Count());
