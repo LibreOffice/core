@@ -235,6 +235,9 @@ public:
 
 #endif // ENABLE_GRAPHITE
 
+class TextOutRenderer;
+void DeleteTextOutRenderer(TextOutRenderer *);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
