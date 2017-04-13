@@ -308,6 +308,10 @@ class VCL_DLLPUBLIC PDFDocument
     std::map<size_t, PDFObjectElement*> m_aIDObjects;
     /// List of xref offsets we know.
     std::vector<size_t> m_aStartXRefs;
+    /// Offsets of trailers, from latest to oldest.
+    std::vector<size_t> m_aTrailerOffsets;
+    /// Trailer offset <-> Trailer pointer map.
+    std::map<size_t, PDFTrailerElement*> m_aOffsetTrailers;
     /// List of EOF offsets we know.
     std::vector<size_t> m_aEOFs;
     PDFTrailerElement* m_pTrailer;
