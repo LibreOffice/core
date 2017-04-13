@@ -1524,7 +1524,7 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
     IsPostitFieldWithPostitId aFilter(nPostItId);
     FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
     const SwFormatField* pField = aStack.pop();
-    if (mpWrtShell->GotoField(*pField))
+    if (pField && mpWrtShell->GotoField(*pField))
         mpWrtShell->DelRight();
     mpWrtShell->EndUndo();
     PrepareView();
