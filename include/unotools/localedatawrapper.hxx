@@ -39,10 +39,11 @@ class Date;
 namespace tools { class Time; }
 class CalendarWrapper;
 
-enum DateFormat {
-    MDY,
+enum class DateFormat {
+    Invalid = -1,
+    MDY = 0,
     DMY,
-    YMD
+    YMD,
 };
 
 enum MeasurementSystem {
@@ -68,8 +69,8 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     OUString                aReservedWord[css::i18n::reservedWords::COUNT];
     OUString                aCurrSymbol;
     OUString                aCurrBankSymbol;
-    int                     nDateFormat;
-    int                     nLongDateFormat;
+    DateFormat              nDateFormat;
+    DateFormat              nLongDateFormat;
     sal_uInt16              nCurrPositiveFormat;
     sal_uInt16              nCurrNegativeFormat;
     sal_uInt16              nCurrDigits;

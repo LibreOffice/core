@@ -42,7 +42,6 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
-static const int nDateFormatInvalid = -1;
 static const sal_uInt16 nCurrFormatInvalid = 0xffff;
 static const sal_uInt16 nCurrFormatDefault = 0;
 
@@ -136,7 +135,7 @@ void LocaleDataWrapper::invalidateData()
 {
     aCurrSymbol.clear();
     aCurrBankSymbol.clear();
-    nDateFormat = nLongDateFormat = nDateFormatInvalid;
+    nDateFormat = nLongDateFormat = DateFormat::Invalid;
     nCurrPositiveFormat = nCurrNegativeFormat = nCurrDigits = nCurrFormatInvalid;
     if ( bLocaleDataItemValid )
     {
@@ -893,7 +892,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
 DateFormat LocaleDataWrapper::getDateFormat() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
-    if ( nDateFormat == nDateFormatInvalid )
+    if ( nDateFormat == DateFormat::Invalid )
     {
         aGuard.changeReadToWrite();
         const_cast<LocaleDataWrapper*>(this)->getDateFormatsImpl();
@@ -904,7 +903,7 @@ DateFormat LocaleDataWrapper::getDateFormat() const
 DateFormat LocaleDataWrapper::getLongDateFormat() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
-    if ( nLongDateFormat == nDateFormatInvalid )
+    if ( nLongDateFormat == DateFormat::Invalid )
     {
         aGuard.changeReadToWrite();
         const_cast<LocaleDataWrapper*>(this)->getDateFormatsImpl();
@@ -977,11 +976,11 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const OUString& rCode )
     }
     // compare with <= because each position may equal rCode.getLength()
     if ( nDay <= nMonth && nMonth <= nYear )
-        return DMY;     // also if every position equals rCode.getLength()
+        return DateFormat::DMY;     // also if every position equals rCode.getLength()
     else if ( nMonth <= nDay && nDay <= nYear )
-        return MDY;
+        return DateFormat::MDY;
     else if ( nYear <= nMonth && nMonth <= nDay )
-        return YMD;
+        return DateFormat::YMD;
     else
     {
         if (areChecksEnabled())
@@ -989,7 +988,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const OUString& rCode )
             OUString aMsg( "LocaleDataWrapper::scanDateFormat: no magic applicable" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
-        return DMY;
+        return DateFormat::DMY;
     }
 }
 
@@ -1005,7 +1004,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
             OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no date formats" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
-        nDateFormat = nLongDateFormat = DMY;
+        nDateFormat = nLongDateFormat = DateFormat::DMY;
         return;
     }
     // find the edit (21), a default (medium preferred),
@@ -1402,14 +1401,14 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
 
     switch ( getDateFormat() )
     {
-        case DMY :
+        case DateFormat::DMY :
             pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAddNum( pBuf, nYear, nYearLen );
         break;
-        case MDY :
+        case DateFormat::MDY :
             pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
@@ -1486,10 +1485,10 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
     // concatenate
     switch ( getLongDateFormat() )
     {
-        case DMY :
+        case DateFormat::DMY :
             aStr += aDay + getLongDateDaySep() + aMonth + getLongDateMonthSep() + aYear;
         break;
-        case MDY :
+        case DateFormat::MDY :
             aStr += aMonth + getLongDateMonthSep() + aDay + getLongDateDaySep() + aYear;
         break;
         default:    // YMD

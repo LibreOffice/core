@@ -121,9 +121,9 @@ double ImpGetDate( const SbxValues* p )
             switch( eDate )
             {
                 default:
-                case MDY: aDateStr = "MM/DD/YYYY"; break;
-                case DMY: aDateStr = "DD/MM/YYYY"; break;
-                case YMD: aDateStr = "YYYY/MM/DD"; break;
+                case DateFormat::MDY: aDateStr = "MM/DD/YYYY"; break;
+                case DateFormat::DMY: aDateStr = "DD/MM/YYYY"; break;
+                case DateFormat::YMD: aDateStr = "YYYY/MM/DD"; break;
             }
 
             OUString aStr = aDateStr + " HH:MM:SS";
@@ -285,20 +285,20 @@ start:
                 {
                     switch( eDate )
                     {
-                    case MDY: aStr = "MM.TT.JJJJ"; break;
-                    case DMY: aStr = "TT.MM.JJJJ"; break;
-                    case YMD: aStr = "JJJJ.MM.TT"; break;
-                    default:  aStr = "MM.TT.JJJJ";
+                    case DateFormat::MDY: aStr = "MM.TT.JJJJ"; break;
+                    case DateFormat::DMY: aStr = "TT.MM.JJJJ"; break;
+                    case DateFormat::YMD: aStr = "JJJJ.MM.TT"; break;
+                    default:               aStr = "MM.TT.JJJJ";
                     }
                 }
                 else
                 {
                     switch( eDate )
                     {
-                    case MDY: aStr = "MM.TT.JJJJ HH:MM:SS"; break;
-                    case DMY: aStr = "TT.MM.JJJJ HH:MM:SS"; break;
-                    case YMD: aStr = "JJJJ.MM.TT HH:MM:SS"; break;
-                    default:  aStr = "MM.TT.JJJJ HH:MM:SS";
+                    case DateFormat::MDY: aStr = "MM.TT.JJJJ HH:MM:SS"; break;
+                    case DateFormat::DMY: aStr = "TT.MM.JJJJ HH:MM:SS"; break;
+                    case DateFormat::YMD: aStr = "JJJJ.MM.TT HH:MM:SS"; break;
+                    default:              aStr = "MM.TT.JJJJ HH:MM:SS";
                     }
                 }
             }
