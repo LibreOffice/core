@@ -36,7 +36,10 @@ namespace sdr
         class ItemChangeBroadcaster
         {
             bool                                            mbSingleRect;
-            void*                                           mpData;
+            union {
+                RectangleVector*                            mpRectangleVector;
+                tools::Rectangle*                           mpRectangle;
+            };
 
         public:
             explicit ItemChangeBroadcaster(const SdrObject& rObj);
@@ -44,7 +47,7 @@ namespace sdr
 
             sal_uInt32 GetRectangleCount() const
             {
-                return mbSingleRect ? 1 : static_cast<RectangleVector*>(mpData)->size();
+                return mbSingleRect ? 1 : mpRectangleVector->size();
             }
             const tools::Rectangle& GetRectangle(sal_uInt32 nIndex) const;
         };
