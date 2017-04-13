@@ -357,7 +357,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
     std::vector<OUString> const &arExcludeList,
-    JavaInfo ** ppInfo)
+    std::unique_ptr<JavaInfo> * ppInfo)
 {
     assert(ppInfo != nullptr);
     OSL_ASSERT(!sPath.isEmpty());
@@ -379,7 +379,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
             aVendorInfo, sMinVersion, sMaxVersion, arExcludeList);
 
     if (errorcode == javaPluginError::NONE)
-        *ppInfo = createJavaInfo(aVendorInfo);
+        ppInfo->reset(createJavaInfo(aVendorInfo));
 
     return errorcode;
 }

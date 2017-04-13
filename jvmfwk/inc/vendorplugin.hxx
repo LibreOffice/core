@@ -160,7 +160,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
     std::vector<OUString> const &arExcludeList,
-    JavaInfo ** ppInfo);
+    std::unique_ptr<JavaInfo> * ppInfo);
 
 
 /** obtains information for a JRE referenced by the JAVA_HOME environment variable.

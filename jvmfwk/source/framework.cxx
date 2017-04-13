@@ -101,15 +101,14 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
             //Check every manually added location
             for (auto const & ii: vecJRELocations)
             {
-                JavaInfo * info;
+                std::unique_ptr<JavaInfo> aInfo;
                 plerr = jfw_plugin_getJavaInfoByPath(
                     ii,
                     vendor,
                     versionInfo.sMinVersion,
                     versionInfo.sMaxVersion,
                     versionInfo.vecExcludeVersions,
-                    &info);
-                std::unique_ptr<JavaInfo> aInfo(info);
+                    &aInfo);
                 if (plerr == javaPluginError::NoJre)
                     continue;
                 if (plerr == javaPluginError::FailedVersion)
@@ -499,15 +498,14 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                     for (citLoc it = vecJRELocations.begin();
                         it != vecJRELocations.end(); ++it)
                     {
-                        JavaInfo * info;
+                        std::unique_ptr<JavaInfo> aInfo;
                         javaPluginError err = jfw_plugin_getJavaInfoByPath(
                             *it,
                             vendor,
                             versionInfo.sMinVersion,
                             versionInfo.sMaxVersion,
                             versionInfo.vecExcludeVersions,
-                            &info);
-                        std::unique_ptr<JavaInfo> aInfo(info);
+                            &aInfo);
                         if (err == javaPluginError::NoJre)
                             continue;
                         if (err == javaPluginError::FailedVersion)
@@ -667,18 +665,16 @@ javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr
             //ask the plugin if this is a JRE.
             //If so check if it meets the version requirements.
             //Only if it does return a JavaInfo
-            JavaInfo* pInfo = nullptr;
             javaPluginError plerr = jfw_plugin_getJavaInfoByPath(
                 pPath,
                 vendor,
                 versionInfo.sMinVersion,
                 versionInfo.sMaxVersion,
                 versionInfo.vecExcludeVersions,
-                & pInfo);
+                ppInfo);
 
             if (plerr == javaPluginError::NONE)
             {
-                ppInfo->reset(pInfo);
                 break;
             }
             else if(plerr == javaPluginError::FailedVersion)
