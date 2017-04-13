@@ -315,6 +315,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Default Paragraph</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -323,14 +324,34 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Title</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles</property>
         <property name="use_underline">True</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="subtitle">
+      <object class="GtkMenuItem" id="heading1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Subtitle</property>
+        <property name="label" translatable="yes">Heading 1</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="heading2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Heading 2</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="heading3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Heading 3</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -345,6 +366,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Default Character</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Default%20Style&amp;FamilyName:string=CharacterStyles</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -353,6 +375,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Emphasis</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -361,6 +384,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Strong Emphasis</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Strong%20Emphasis&amp;FamilyName:string=CharacterStyles</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -907,7 +931,7 @@
                 <property name="can_focus">False</property>
                 <property name="spacing">3</property>
                 <child>
-                  <object class="GtkButton" id="paragraphstyleb:stylemenu">
+                  <object class="svtlo-ManagedMenuButton" id="paragraphstyleb:stylemenu">
                     <property name="label" translatable="yes">Style</property>
                     <property name="width_request">70</property>
                     <property name="visible">True</property>
@@ -1545,7 +1569,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkButton" id="linksb:linksmenu">
+                          <object class="svtlo-ManagedMenuButton" id="linksb:linksmenu">
                             <property name="label" translatable="yes">Links</property>
                             <property name="height_request">26</property>
                             <property name="visible">True</property>
