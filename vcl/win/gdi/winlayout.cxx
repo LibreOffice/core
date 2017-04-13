@@ -258,6 +258,11 @@ public:
         Point* pPos, int* pGetNextGlypInfo) = 0;
 };
 
+void DeleteTextOutRenderer(TextOutRenderer *const pThis)
+{
+    delete pThis;
+}
+
 class ExTextOutRenderer : public TextOutRenderer
 {
     ExTextOutRenderer(const ExTextOutRenderer &) = delete;
@@ -3659,15 +3664,33 @@ void D2DWriteTextOutRenderer::CleanupModules()
 
 TextOutRenderer & TextOutRenderer::get()
 {
-#if ENABLE_GRAPHITE_DWRITE
-    static std::unique_ptr<TextOutRenderer> _impl(D2DWriteTextOutRenderer::InitModules()
-        ? static_cast<TextOutRenderer*>(new D2DWriteTextOutRenderer())
-        : static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
-#else // ENABLE_GRAPHITE_DWRITE
-    static std::unique_ptr<TextOutRenderer> _impl(static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
-#endif // ENABLE_GRAPHITE_DWRITE
+    SalData *const pSalData = GetSalData();
 
-    return *_impl;
+    if (!pSalData)
+    {   // don't call this after DeInitVCL()
+        fprintf(stderr, "TextOutRenderer fatal error: no SalData");
+        abort();
+    }
+
+#if ENABLE_GRAPHITE_DWRITE
+    {
+        static bool const bSuccess(D2DWriteTextOutRenderer::InitModules());
+        if (bSuccess && !pSalData->m_pD2DWriteTextOutRenderer)
+        {
+            pSalData->m_pD2DWriteTextOutRenderer = new D2DWriteTextOutRenderer();
+        }
+        if (pSalData->m_pD2DWriteTextOutRenderer)
+        {
+            return *pSalData->m_pD2DWriteTextOutRenderer;
+        }
+        // else: fall back to GDI
+    }
+#endif // ENABLE_GRAPHITE_DWRITE
+    if (!pSalData->m_pExTextOutRenderer)
+    {
+        pSalData->m_pExTextOutRenderer = new ExTextOutRenderer;
+    }
+    return *pSalData->m_pExTextOutRenderer;
 }
 
 
