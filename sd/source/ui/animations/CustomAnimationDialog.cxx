@@ -723,6 +723,7 @@ public:
     void updateMenu();
 
 private:
+    VclBuilder maBuilder;
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
@@ -730,16 +731,17 @@ private:
     int                       mnDirection;
 };
 
-ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
-: PropertySubControl( nControlType )
-, maModifyHdl( rModifyHdl )
+ScalePropertyBox::ScalePropertyBox(sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
+    : PropertySubControl( nControlType )
+    , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/scalemenu.ui", "")
+    , maModifyHdl( rModifyHdl )
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
 
-    mpMenu = VclPtr<PopupMenu>::Create(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
+    mpMenu = maBuilder.get_menu("menu");
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
@@ -753,6 +755,7 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 
 ScalePropertyBox::~ScalePropertyBox()
 {
+    maBuilder.disposeBuilder();
     mpControl.disposeAndClear();
 }
 
@@ -760,14 +763,14 @@ void ScalePropertyBox::updateMenu()
 {
     sal_Int64 nValue = mpMetric->GetValue();
 
-    mpMenu->CheckItem( 25, nValue == 25 );
-    mpMenu->CheckItem( 50, nValue == 50 );
-    mpMenu->CheckItem( 150, nValue == 150 );
-    mpMenu->CheckItem( 400, nValue == 400 );
+    mpMenu->CheckItem(mpMenu->GetItemId("25"), nValue == 25);
+    mpMenu->CheckItem(mpMenu->GetItemId("50"), nValue == 50);
+    mpMenu->CheckItem(mpMenu->GetItemId("150"), nValue == 150);
+    mpMenu->CheckItem(mpMenu->GetItemId("400"), nValue == 400);
 
-    mpMenu->CheckItem( CM_HORIZONTAL, mnDirection == 1 );
-    mpMenu->CheckItem( CM_VERTICAL, mnDirection == 2 );
-    mpMenu->CheckItem( CM_BOTH, mnDirection == 3 );
+    mpMenu->CheckItem(mpMenu->GetItemId("hori"), mnDirection == 1);
+    mpMenu->CheckItem(mpMenu->GetItemId("vert"), mnDirection == 2);
+    mpMenu->CheckItem(mpMenu->GetItemId("both"), mnDirection == 3);
 }
 
 IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl, Edit&, void)
@@ -782,15 +785,15 @@ IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 
     int nDirection = mnDirection;
 
-    switch( pPb->GetCurItemId() )
-    {
-    case CM_HORIZONTAL: nDirection = 1; break;
-    case CM_VERTICAL: nDirection = 2; break;
-    case CM_BOTH: nDirection = 3; break;
-
-    default:
-        nValue = pPb->GetCurItemId();
-    }
+    OString sIdent(pPb->GetCurItemIdent());
+    if (sIdent == "hori")
+        nDirection = 1;
+    else if (sIdent == "veri")
+        nDirection = 2;
+    else if (sIdent == "both")
+        nDirection = 3;
+    else
+        nValue = sIdent.toInt32();
 
     bool bModified = false;
 

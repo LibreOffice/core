@@ -19,55 +19,6 @@
 
 #include "CustomAnimation.hrc"
 
-Menu RID_CUSTOMANIMATION_SCALE_POPUP
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = CM_SIZE_25 ;
-            Text [ en-US ] = "Tiny" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_SIZE_50 ;
-            Text [ en-US ] = "Smaller" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_SIZE_150 ;
-            Text [ en-US ] = "Larger" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_SIZE_400 ;
-            Text [ en-US ] = "Extra large" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = CM_HORIZONTAL  ;
-            Text [ en-US ] = "Horizontal" ;
-
-        };
-        MenuItem
-        {
-            Identifier = CM_VERTICAL ;
-            Text [ en-US ] = "Vertical" ;
-
-        };
-        MenuItem
-        {
-            Identifier = CM_BOTH ;
-            Text [ en-US ] = "Both" ;
-
-        };
-    };
-};
-
 Menu RID_CUSTOMANIMATION_ROTATION_POPUP
 {
     ItemList =

@@ -27,7 +27,6 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 #define RID_CUSTOMANIMATION_ROTATION_POPUP              RID_CUSTOMANIMATION_START+9
-#define RID_CUSTOMANIMATION_SCALE_POPUP                 RID_CUSTOMANIMATION_START+11
 #define RID_CUSTOMANIMATION_FONTSTYLE_POPUP             RID_CUSTOMANIMATION_START+12
 
 #define BMP_CUSTOMANIMATION_ON_CLICK                    RID_CUSTOMANIMATION_START+0
@@ -79,14 +78,6 @@
 #define CM_TWO_SPINS                4
 #define CM_CLOCKWISE                5
 #define CM_COUNTERCLOCKWISE         6
-
-#define CM_SIZE_25                  25
-#define CM_SIZE_50                  50
-#define CM_SIZE_150                 150
-#define CM_SIZE_400                 400
-#define CM_HORIZONTAL               1
-#define CM_VERTICAL                 2
-#define CM_BOTH                     3
 
 #define CM_BOLD                     1
 #define CM_ITALIC                   2
