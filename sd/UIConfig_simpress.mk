@@ -106,6 +106,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
+	sd/uiconfig/simpress/ui/currentmastermenu \
 	sd/uiconfig/simpress/ui/customanimationspanel \
 	sd/uiconfig/simpress/ui/customanimationspanelhorizontal \
 	sd/uiconfig/simpress/ui/customanimationproperties \
@@ -123,6 +124,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/interactionpage \
 	sd/uiconfig/simpress/ui/layoutmenu \
 	sd/uiconfig/simpress/ui/masterlayoutdlg \
+	sd/uiconfig/simpress/ui/mastermenu \
 	sd/uiconfig/simpress/ui/navigatorpanel \
 	sd/uiconfig/simpress/ui/notebookbar \
 	sd/uiconfig/simpress/ui/notebookbar_groups \

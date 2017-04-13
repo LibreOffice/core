@@ -152,9 +152,9 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
     }
 }
 
-ResId CurrentMasterPagesSelector::GetContextMenuResId() const
+OUString CurrentMasterPagesSelector::GetContextMenuUIFile() const
 {
-    return SdResId(RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP);
+    return "modules/simpress/ui/currentmastermenu.ui";
 }
 
 void CurrentMasterPagesSelector::UpdateSelection()
@@ -202,9 +202,9 @@ void CurrentMasterPagesSelector::UpdateSelection()
     }
 }
 
-void CurrentMasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
+void CurrentMasterPagesSelector::ExecuteCommand(const OString &rIdent)
 {
-    if (nCommandId == SID_DELETE_MASTER_PAGE)
+    if (rIdent == "delete")
     {
         // Check once again that the master page can safely be deleted,
         // i.e. is not used.
@@ -219,16 +219,17 @@ void CurrentMasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
         }
     }
     else
-        MasterPagesSelector::ExecuteCommand(nCommandId);
+        MasterPagesSelector::ExecuteCommand(rIdent);
 }
 
 void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
-    // Disable the SID_DELTE_MASTER slot when there is only one master page.
+    // Disable the delete entry when there is only one master page.
     if (mrDocument.GetMasterPageUserCount(GetSelectedMasterPage()) > 0)
     {
-        if (rMenu.GetItemPos(SID_DELETE_MASTER_PAGE) != MENU_ITEM_NOTFOUND)
-            rMenu.EnableItem(SID_DELETE_MASTER_PAGE, false);
+        sal_uInt16 nItemid = rMenu.GetItemId("delete");
+        if (rMenu.GetItemPos(nItemid) != MENU_ITEM_NOTFOUND)
+            rMenu.EnableItem(nItemid, false);
     }
 
     std::shared_ptr<DrawViewShell> pDrawViewShell (
@@ -236,8 +237,9 @@ void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
     if (pDrawViewShell
         && pDrawViewShell->GetEditMode() == EditMode::MasterPage)
     {
-        if (rMenu.GetItemPos(SID_TP_EDIT_MASTER) != MENU_ITEM_NOTFOUND)
-            rMenu.EnableItem(SID_TP_EDIT_MASTER, false);
+        sal_uInt16 nItemid = rMenu.GetItemId("edit");
+        if (rMenu.GetItemPos(nItemid) != MENU_ITEM_NOTFOUND)
+            rMenu.EnableItem(nItemid, false);
     }
 
     MasterPagesSelector::ProcessPopupMenu(rMenu);

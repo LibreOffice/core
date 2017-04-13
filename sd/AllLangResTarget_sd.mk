@@ -29,7 +29,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/accessibility/accessibility.src \
     sd/source/ui/animations/CustomAnimation.src \
     sd/source/ui/annotations/annotations.src \
-    sd/source/ui/app/popup.src \
     sd/source/ui/app/res_bmp.src \
     sd/source/ui/app/sdstring.src \
     sd/source/ui/app/strings.src \

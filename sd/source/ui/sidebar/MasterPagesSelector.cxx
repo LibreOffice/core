@@ -75,7 +75,7 @@ MasterPagesSelector::MasterPagesSelector (
       mpContainer(rpContainer),
       mrDocument(rDocument),
       mrBase(rBase),
-      mnDefaultClickAction(SID_TP_APPLY_TO_SELECTED_SLIDES),
+      msDefaultClickAction("applyselect"),
       maCurrentItemList(),
       maTokenToValueSetIndex(),
       maLockedMasterPages(),
@@ -164,9 +164,9 @@ void MasterPagesSelector::Fill()
     UpdateItemList(std::move(pItemList));
 }
 
-ResId MasterPagesSelector::GetContextMenuResId() const
+OUString MasterPagesSelector::GetContextMenuUIFile() const
 {
-    return SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP);
+    return "modules/simpress/ui/mastermenu.ui";
 }
 
 IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)
@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)
     // We use the framework to assign the clicked-on master page because we
     // so use the same mechanism as the context menu does (where we do not
     // have the option to call the assignment method directly.)
-    ExecuteCommand(mnDefaultClickAction);
+    ExecuteCommand(msDefaultClickAction);
 }
 
 IMPL_LINK(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEvent, void)
@@ -221,7 +221,8 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 }
 
                 // Setup the menu.
-                ScopedVclPtrInstance<PopupMenu> pMenu(GetContextMenuResId());
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), GetContextMenuUIFile(), "");
+                VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != nullptr)
                     pMenuWindow->SetPopupModeFlags(
@@ -243,9 +244,9 @@ void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
     // Disable some entries.
     if (mpContainer->GetPreviewSize() == MasterPageContainer::SMALL)
-        rMenu.EnableItem(SID_TP_SHOW_SMALL_PREVIEW, false);
+        rMenu.EnableItem(rMenu.GetItemId("small"), false);
     else
-        rMenu.EnableItem(SID_TP_SHOW_LARGE_PREVIEW, false);
+        rMenu.EnableItem(rMenu.GetItemId("large"), false);
 }
 
 IMPL_LINK(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu, bool)
@@ -257,74 +258,60 @@ IMPL_LINK(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu, bool)
     }
 
     pMenu->Deactivate();
-    ExecuteCommand(pMenu->GetCurItemId());
+    ExecuteCommand(pMenu->GetCurItemIdent());
     return false;
 }
 
-void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
+void MasterPagesSelector::ExecuteCommand(const OString &rIdent)
 {
-    switch (nCommandId)
+    if (rIdent == "applyall")
     {
-        case SID_TP_APPLY_TO_ALL_SLIDES:
-            mrBase.SetBusyState (true);
-            AssignMasterPageToAllSlides (GetSelectedMasterPage());
-            mrBase.SetBusyState (false);
-            break;
-
-        case SID_TP_APPLY_TO_SELECTED_SLIDES:
-            mrBase.SetBusyState (true);
-            AssignMasterPageToSelectedSlides (GetSelectedMasterPage());
-            mrBase.SetBusyState (false);
-            break;
-
-        case SID_TP_USE_FOR_NEW_PRESENTATIONS:
-            SAL_WARN ( "sd",
-                "Using slides as default for new presentations"
-                " is not yet implemented");
-            break;
-
-        case SID_TP_SHOW_SMALL_PREVIEW:
-        case SID_TP_SHOW_LARGE_PREVIEW:
+        mrBase.SetBusyState (true);
+        AssignMasterPageToAllSlides (GetSelectedMasterPage());
+        mrBase.SetBusyState (false);
+    }
+    else if (rIdent == "applyselect")
+    {
+        mrBase.SetBusyState (true);
+        AssignMasterPageToSelectedSlides (GetSelectedMasterPage());
+        mrBase.SetBusyState (false);
+    }
+    else if (rIdent == "large")
+    {
+        mrBase.SetBusyState (true);
+        mpContainer->SetPreviewSize(MasterPageContainer::LARGE);
+        mrBase.SetBusyState (false);
+        if (mxSidebar.is())
+            mxSidebar->requestLayout();
+    }
+    else if (rIdent == "small")
+    {
+        mrBase.SetBusyState (true);
+        mpContainer->SetPreviewSize(MasterPageContainer::SMALL);
+        mrBase.SetBusyState (false);
+        if (mxSidebar.is())
+            mxSidebar->requestLayout();
+    }
+    else if (rIdent == "edit")
+    {
+        using namespace ::com::sun::star;
+        uno::Reference<drawing::XDrawPage> xSelectedMaster;
+        SdPage* pMasterPage = GetSelectedMasterPage();
+        assert(pMasterPage); //rhbz#902884
+        if (pMasterPage)
+            xSelectedMaster.set(pMasterPage->getUnoPage(), uno::UNO_QUERY);
+        SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
+        if (pViewFrame != nullptr && xSelectedMaster.is())
         {
-            mrBase.SetBusyState (true);
-            mpContainer->SetPreviewSize(
-                nCommandId==SID_TP_SHOW_SMALL_PREVIEW
-                ? MasterPageContainer::SMALL
-                : MasterPageContainer::LARGE);
-            mrBase.SetBusyState (false);
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
-            break;
-        }
-
-        case SID_TP_EDIT_MASTER:
-        {
-            using namespace ::com::sun::star;
-            uno::Reference<drawing::XDrawPage> xSelectedMaster;
-            SdPage* pMasterPage = GetSelectedMasterPage();
-            assert(pMasterPage); //rhbz#902884
-            if (pMasterPage)
-                xSelectedMaster.set(pMasterPage->getUnoPage(), uno::UNO_QUERY);
-            SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
-            if (pViewFrame != nullptr && xSelectedMaster.is())
+            SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+            if (pDispatcher != nullptr)
             {
-                SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-                if (pDispatcher != nullptr)
-                {
-                    sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
-                    pDispatcher->Execute(SID_MASTERPAGE, SfxCallMode::SYNCHRON);
-                    PreviewValueSet::SelectItem (nIndex);
-                    mrBase.GetDrawController().setCurrentPage(xSelectedMaster);
-                }
+                sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
+                pDispatcher->Execute(SID_MASTERPAGE, SfxCallMode::SYNCHRON);
+                PreviewValueSet::SelectItem (nIndex);
+                mrBase.GetDrawController().setCurrentPage(xSelectedMaster);
             }
-            break;
         }
-
-        case SID_CUT:
-        case SID_COPY:
-        case SID_PASTE:
-            // Cut, copy, and paste are not supported and thus are ignored.
-            break;
     }
 }
 

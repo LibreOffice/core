@@ -54,10 +54,10 @@ public:
     using MasterPagesSelector::Fill;
 
 protected:
-    virtual ResId GetContextMenuResId() const override;
+    virtual OUString GetContextMenuUIFile() const override;
 
     virtual void ProcessPopupMenu (Menu& rMenu) override;
-    virtual void ExecuteCommand (const sal_Int32 nCommandId) override;
+    virtual void ExecuteCommand(const OString &rIdent) override;
 
 private:
     CurrentMasterPagesSelector (

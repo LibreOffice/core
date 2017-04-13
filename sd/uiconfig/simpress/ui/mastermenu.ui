@@ -6,7 +6,15 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="apply">
+      <object class="GtkMenuItem" id="applyall">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Apply to All Slides</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="applyselect">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Apply to _Selected Slides</property>
@@ -20,10 +28,18 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="insert">
+      <object class="GtkMenuItem" id="large">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Insert Slide</property>
+        <property name="label" translatable="yes">Show _Large Preview</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="small">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Show S_mall Preview</property>
         <property name="use_underline">True</property>
       </object>
     </child>

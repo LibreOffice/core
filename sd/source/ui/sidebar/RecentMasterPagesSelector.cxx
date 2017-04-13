@@ -145,8 +145,9 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
 
 void RecentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
-    if (rMenu.GetItemPos(SID_TP_EDIT_MASTER) != MENU_ITEM_NOTFOUND)
-        rMenu.EnableItem(SID_TP_EDIT_MASTER, false);
+    sal_uInt16 nItemid = rMenu.GetItemId("edit");
+    if (rMenu.GetItemPos(nItemid) != MENU_ITEM_NOTFOUND)
+        rMenu.EnableItem(nItemid, false);
 }
 
 } } // end of namespace sd::sidebar

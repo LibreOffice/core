@@ -21,13 +21,6 @@
 
 #define CMD_SID_HANDOUT_MASTER_MODE                 ".uno:HandoutMode"
 #define CMD_SID_NOTES_MODE                          ".uno:NotesMode"
-#define CMD_SID_DELETE_MASTER_PAGE                  ".uno:DeleteMasterPage"
-#define CMD_SID_TP_APPLY_TO_ALL_SLIDES              ".uno:TaskPaneApplyToAllSlides"
-#define CMD_SID_TP_APPLY_TO_SELECTED_SLIDES         ".uno:TaskPaneApplyToSelectedSlides"
-#define CMD_SID_TP_SHOW_SMALL_PREVIEW               ".uno:TaskPaneShowSmallPreview"
-#define CMD_SID_TP_SHOW_LARGE_PREVIEW               ".uno:TaskPaneShowLargePreview"
-#define CMD_SID_TP_EDIT_MASTER                      ".uno:TaskPaneEditMaster"
-#define CMD_SID_INSERTPAGE_LAYOUT_MENU              ".uno:TaskPaneInsertPage"
 
 #endif
 

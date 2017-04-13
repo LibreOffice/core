@@ -112,10 +112,10 @@ protected:
 
     SdDrawDocument& mrDocument;
     ViewShellBase& mrBase;
-    /** Slot that is executed as default action when the left mouse button is
+    /** menu entry that is executed as default action when the left mouse button is
         clicked over a master page.
     */
-    sal_uInt16 mnDefaultClickAction;
+    OString msDefaultClickAction;
 
     SdPage* GetSelectedMasterPage();
 
@@ -170,12 +170,12 @@ protected:
         menu.  If they do then they probably have to provide their own
         Execute() and GetState() methods as well.
     */
-    virtual ResId GetContextMenuResId() const;
+    virtual OUString GetContextMenuUIFile() const;
 
     virtual void Command (const CommandEvent& rEvent) override;
 
     virtual void ProcessPopupMenu (Menu& rMenu);
-    virtual void ExecuteCommand (const sal_Int32 nCommandId);
+    virtual void ExecuteCommand(const OString& rIdent);
 
 private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
