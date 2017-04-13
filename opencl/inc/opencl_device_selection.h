@@ -14,6 +14,8 @@
 //#define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#include <memory>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
