@@ -7787,7 +7787,7 @@ Alternatively, you can install the 'new' nasm where ever you want and make sure 
 _EOS
             else
 cat << _EOS
-consult http://svn.code.sf.net/p/libjpeg-turbo/code/trunk/BUILDING.txt
+consult https://github.com/libjpeg-turbo/libjpeg-turbo/blob/master/BUILDING.md
 
 _EOS
             fi
