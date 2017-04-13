@@ -57,8 +57,6 @@ public:
     const ::JavaInfo* operator ->() const { return pInfo;}
     operator ::JavaInfo* () { return pInfo;}
 
-    OUString getLocation() const;
-
     static JavaInfo * copyJavaInfo(const JavaInfo * pInfo);
 };
 

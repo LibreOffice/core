@@ -366,7 +366,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
         sal_uInt64 nFeatureFlags = 0;
-        jfw::CJavaInfo aCurrentInfo;
+        std::unique_ptr<JavaInfo> aCurrentInfo;
         //Determine if accessibility support is needed
         bool bSupportAccessibility = jfw::isAccessibilitySupportDesired();
         nFeatureFlags = bSupportAccessibility ?
@@ -403,7 +403,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
         if (jfw_plugin_getJavaInfoFromJavaHome(versionInfos, &pHomeInfo, infos)
             == javaPluginError::NONE)
         {
-            aCurrentInfo = pHomeInfo;
+            aCurrentInfo.reset(pHomeInfo);
 
             // compare features
             // if the user does not require any features (nFeatureFlags = 0)
@@ -433,19 +433,19 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                         // if the current Java installation implements all required features: use it
                         if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
                         {
-                            aCurrentInfo = pJInfo;
+                            aCurrentInfo.reset(pJInfo);
                             bInfoFound = true;
                         }
-                        else if (static_cast<JavaInfo*>(aCurrentInfo) == nullptr)
+                        else if (!aCurrentInfo)
                         {
                             // current Java installation does not provide all features
                             // but no Java installation has been detected before
                             // -> remember the current one until one is found
                             // that provides all features
-                            aCurrentInfo = pJInfo;
+                            aCurrentInfo.reset(pJInfo);
                         }
-
-                        delete pJInfo;
+                        else
+                            delete pJInfo;
                     }
                     ++it;
                 }
@@ -494,10 +494,6 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                 {
                     JavaInfo* pJInfo = arInfos[ii];
 
-                    //We remember the first installation in aCurrentInfo
-                    // if no JavaInfo has been found before
-                    if (aCurrentInfo.getLocation().isEmpty())
-                            aCurrentInfo = pJInfo;
                     // compare features
                     // If the user does not require any features (nFeatureFlags = 0)
                     // then the first installation is used
@@ -505,9 +501,17 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                     {
                         //the just found Java implements all required features
                         //currently there is only accessibility!!!
-                        aCurrentInfo = pJInfo;
+                        aCurrentInfo.reset(
+                            jfw::CJavaInfo::copyJavaInfo(pJInfo));
                         bInfoFound = true;
                         break;
+                    }
+                    else if (!aCurrentInfo)
+                    {
+                        // We remember the first installation in aCurrentInfo if
+                        // no JavaInfo has been found before:
+                        aCurrentInfo.reset(
+                            jfw::CJavaInfo::copyJavaInfo(pJInfo));
                     }
                 }
                 //The array returned by jfw_plugin_getAllJavaInfos must be freed as well as
@@ -521,7 +525,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                 //All Java installations found by the current plug-in lib
                 //do not provide the required features. Try the next plug-in
             }
-            if (static_cast<JavaInfo*>(aCurrentInfo) == nullptr)
+            if (!aCurrentInfo)
             {//The plug-ins did not find a suitable Java. Now try the paths which have been
             //added manually.
                 //get the list of paths to jre locations which have been added manually
@@ -565,15 +569,15 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                             {
                                 //the just found Java implements all required features
                                 //currently there is only accessibility!!!
-                                aCurrentInfo = aInfo.release();
+                                aCurrentInfo = std::move(aInfo);
                                 bInfoFound = true;
                                 break;
                             }
-                            else if (aCurrentInfo.getLocation().isEmpty())
+                            else if (!aCurrentInfo)
                             {
                                 // We remember the very first installation in
                                 // aCurrentInfo:
-                                aCurrentInfo = aInfo.release();
+                                aCurrentInfo = std::move(aInfo);
                             }
                         }
                     }//end iterate over paths
@@ -582,18 +586,17 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                 }// end iterate plug-ins
             }
         }
-        if (static_cast<JavaInfo*>(aCurrentInfo))
+        if (aCurrentInfo)
         {
             jfw::NodeJava javaNode(jfw::NodeJava::USER);
-            javaNode.setJavaInfo(aCurrentInfo,true);
+            javaNode.setJavaInfo(aCurrentInfo.get(),true);
             javaNode.write();
             //remember that this JRE was selected in this process
             jfw::setJavaSelected();
 
             if (pInfo !=nullptr)
             {
-                //copy to out param
-                pInfo->reset(jfw::CJavaInfo::copyJavaInfo(aCurrentInfo.pInfo));
+                *pInfo = std::move(aCurrentInfo);
             }
         }
         else
@@ -1034,14 +1037,6 @@ CJavaInfo & CJavaInfo::operator = (const ::JavaInfo* info)
     delete pInfo;
     pInfo = copyJavaInfo(info);
     return *this;
-}
-
-OUString CJavaInfo::getLocation() const
-{
-    if (pInfo)
-        return OUString(pInfo->sLocation);
-    else
-        return OUString();
 }
 
 }
