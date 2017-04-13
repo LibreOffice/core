@@ -395,6 +395,7 @@ void PDFSigningTest::testTokenize()
         "noeol.pdf",
         // File that's intentionally smaller than 1024 bytes.
         "small.pdf",
+        "tdf107149.pdf",
     };
 
     for (const auto& rName : aNames)
@@ -403,6 +404,10 @@ void PDFSigningTest::testTokenize()
         vcl::filter::PDFDocument aDocument;
         // Just make sure the tokenizer finishes without an error, don't look at the signature.
         CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+        if (rName == "tdf107149.pdf")
+            // This failed, page list was empty.
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aDocument.GetPages().size());
     }
 }
 
