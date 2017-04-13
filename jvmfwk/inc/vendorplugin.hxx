@@ -25,6 +25,8 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.h>
 #include "jni.h"
+
+#include <memory>
 #include <vector>
 #include <utility>
 #include "elements.hxx"
@@ -204,10 +206,6 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
     The JavaInfo structures returned in <code>vecJavaInfosFromPath</code> should be ordered
     according to their occurrence in the PATH. The one that is the first one on the PATH
     is also the first element in the vector.</p>
-    <p>
-    The function allocates memory for all the JavaInfo objects returned
-    in <code>vecJavaInfosFromPath</code>. The caller must delete each JavaInfo object.
-    </p>
     @param vecVendorInfos
        [in] vector specifying the vendor and version requirements that the JRE must fulfill.
        The vector contains pairs of vendors and the respective version requirements
@@ -230,7 +228,7 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
 
 javaPluginError jfw_plugin_getJavaInfosFromPath(
     std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
-    std::vector<JavaInfo*> & vecJavaInfosFromPath,
+    std::vector<std::unique_ptr<JavaInfo>> & vecJavaInfosFromPath,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
 /** starts a Java Virtual Machine.

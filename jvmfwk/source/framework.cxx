@@ -384,35 +384,28 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
         // query PATH for Java installations
         if (!bInfoFound)
         {
-            std::vector<JavaInfo*> vecJavaInfosFromPath;
+            std::vector<std::unique_ptr<JavaInfo>> vecJavaInfosFromPath;
             if (jfw_plugin_getJavaInfosFromPath(
                     versionInfos, vecJavaInfosFromPath, infos)
                 == javaPluginError::NONE)
             {
-                std::vector<JavaInfo*>::const_iterator it = vecJavaInfosFromPath.begin();
-                while(it != vecJavaInfosFromPath.end() && !bInfoFound)
+                for (auto & pJInfo: vecJavaInfosFromPath)
                 {
-                    JavaInfo* pJInfo = *it;
-                    if (pJInfo != nullptr)
+                    // if the current Java installation implements all required features: use it
+                    if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
                     {
-                        // if the current Java installation implements all required features: use it
-                        if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
-                        {
-                            aCurrentInfo.reset(pJInfo);
-                            bInfoFound = true;
-                        }
-                        else if (!aCurrentInfo)
-                        {
-                            // current Java installation does not provide all features
-                            // but no Java installation has been detected before
-                            // -> remember the current one until one is found
-                            // that provides all features
-                            aCurrentInfo.reset(pJInfo);
-                        }
-                        else
-                            delete pJInfo;
+                        aCurrentInfo = std::move(pJInfo);
+                        bInfoFound = true;
+                        break;
                     }
-                    ++it;
+                    else if (!aCurrentInfo)
+                    {
+                        // current Java installation does not provide all features
+                        // but no Java installation has been detected before
+                        // -> remember the current one until one is found
+                        // that provides all features
+                        aCurrentInfo = std::move(pJInfo);
+                    }
                 }
             }
         }

@@ -32,6 +32,7 @@
 
 #include <cassert>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include "config_options.h"
@@ -424,14 +425,14 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
 
 javaPluginError jfw_plugin_getJavaInfosFromPath(
     std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
-    std::vector<JavaInfo*> & javaInfosFromPath,
+    std::vector<std::unique_ptr<JavaInfo>> & javaInfosFromPath,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos)
 {
     // find JREs from PATH
     vector<rtl::Reference<VendorBase>> vecInfosFromPath;
     addJavaInfosFromPath(infos, vecInfosFromPath);
 
-    vector<JavaInfo*> vecVerifiedInfos;
+    vector<std::unique_ptr<JavaInfo>> vecVerifiedInfos;
 
     // copy infos of JREs that meet version requirements to vecVerifiedInfos
     typedef vector<rtl::Reference<VendorBase> >::iterator it;
@@ -455,7 +456,8 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
 
                 if (errorcode == javaPluginError::NONE)
                 {
-                    vecVerifiedInfos.push_back(createJavaInfo(currentInfo));
+                    vecVerifiedInfos.push_back(
+                        std::unique_ptr<JavaInfo>(createJavaInfo(currentInfo)));
                 }
             }
         }
@@ -464,7 +466,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     if (vecVerifiedInfos.empty())
         return javaPluginError::NoJre;
 
-    javaInfosFromPath = vecVerifiedInfos;
+    javaInfosFromPath = std::move(vecVerifiedInfos);
 
     return javaPluginError::NONE;
 }
