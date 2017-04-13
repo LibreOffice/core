@@ -19,47 +19,6 @@
 
 #include "CustomAnimation.hrc"
 
-Menu RID_CUSTOMANIMATION_ROTATION_POPUP
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = CM_QUARTER_SPIN ;
-            Text [ en-US ] = "Quarter spin" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_HALF_SPIN ;
-            Text [ en-US ] = "Half spin" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_FULL_SPIN;
-            Text [ en-US ] = "Full spin" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_TWO_SPINS;
-            Text [ en-US ] = "Two spins" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = CM_CLOCKWISE;
-            Text [ en-US ] = "Clockwise" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_COUNTERCLOCKWISE;
-            Text [ en-US ] = "Counter-clockwise" ;
-        };
-    };
-};
-
 Menu RID_CUSTOMANIMATION_FONTSTYLE_POPUP
 {
     ItemList =

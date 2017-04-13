@@ -26,7 +26,6 @@
 // attention, we have 200 ids free after RID_CUSTOMANIMATION_START
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#define RID_CUSTOMANIMATION_ROTATION_POPUP              RID_CUSTOMANIMATION_START+9
 #define RID_CUSTOMANIMATION_FONTSTYLE_POPUP             RID_CUSTOMANIMATION_START+12
 
 #define BMP_CUSTOMANIMATION_ON_CLICK                    RID_CUSTOMANIMATION_START+0
@@ -71,13 +70,6 @@
 #define STR_CUSTOMANIMATION_EMPHASIS                    RID_CUSTOMANIMATION_START+40
 #define STR_CUSTOMANIMATION_EXIT                        RID_CUSTOMANIMATION_START+41
 #define STR_CUSTOMANIMATION_MOTION_PATHS                RID_CUSTOMANIMATION_START+42
-
-#define CM_QUARTER_SPIN             1
-#define CM_HALF_SPIN                2
-#define CM_FULL_SPIN                3
-#define CM_TWO_SPINS                4
-#define CM_CLOCKWISE                5
-#define CM_COUNTERCLOCKWISE         6
 
 #define CM_BOLD                     1
 #define CM_ITALIC                   2

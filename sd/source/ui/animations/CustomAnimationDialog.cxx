@@ -602,6 +602,7 @@ public:
     void updateMenu();
 
 private:
+    VclBuilder                maBuilder;
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
@@ -609,8 +610,9 @@ private:
 };
 
 RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
-: PropertySubControl( nControlType )
-, maModifyHdl( rModifyHdl )
+    : PropertySubControl(nControlType)
+    , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/rotatemenu.ui", "")
+    , maModifyHdl(rModifyHdl)
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_CUSTOM );
@@ -618,7 +620,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
     mpMetric->SetMin( -10000 );
     mpMetric->SetMax( 10000 );
 
-    mpMenu = VclPtr<PopupMenu>::Create(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
+    mpMenu = maBuilder.get_menu("menu");
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
@@ -632,6 +634,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
 
 RotationPropertyBox::~RotationPropertyBox()
 {
+    maBuilder.disposeBuilder();
     mpControl.disposeAndClear();
 }
 
@@ -641,13 +644,13 @@ void RotationPropertyBox::updateMenu()
     bool bDirection = nValue >= 0;
     nValue = (nValue < 0 ? -nValue : nValue);
 
-    mpMenu->CheckItem( CM_QUARTER_SPIN, nValue == 90 );
-    mpMenu->CheckItem( CM_HALF_SPIN, nValue == 180 );
-    mpMenu->CheckItem( CM_FULL_SPIN, nValue == 360 );
-    mpMenu->CheckItem( CM_TWO_SPINS, nValue == 720 );
+    mpMenu->CheckItem(mpMenu->GetItemId("90"), nValue == 90);
+    mpMenu->CheckItem(mpMenu->GetItemId("180"), nValue == 180);
+    mpMenu->CheckItem(mpMenu->GetItemId("360"), nValue == 360);
+    mpMenu->CheckItem(mpMenu->GetItemId("720"), nValue == 720);
 
-    mpMenu->CheckItem( CM_CLOCKWISE, bDirection );
-    mpMenu->CheckItem( CM_COUNTERCLOCKWISE, !bDirection );
+    mpMenu->CheckItem(mpMenu->GetItemId("closewise"), bDirection);
+    mpMenu->CheckItem(mpMenu->GetItemId("counterclock"), !bDirection);
 }
 
 IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl, Edit&, void)
@@ -662,17 +665,13 @@ IMPL_LINK( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
     bool bDirection = nValue >= 0;
     nValue = (nValue < 0 ? -nValue : nValue);
 
-    switch( pPb->GetCurItemId() )
-    {
-    case CM_QUARTER_SPIN: nValue = 90; break;
-    case CM_HALF_SPIN: nValue = 180; break;
-    case CM_FULL_SPIN: nValue = 360; break;
-    case CM_TWO_SPINS: nValue = 720; break;
-
-    case CM_CLOCKWISE: bDirection = true; break;
-    case CM_COUNTERCLOCKWISE: bDirection = false; break;
-
-    }
+    OString sIdent = pPb->GetCurItemIdent();
+    if (sIdent == "clockwise")
+        bDirection = true;
+    else if (sIdent == "counterclock")
+        bDirection = false;
+    else
+        nValue = sIdent.toInt32();
 
     if( !bDirection )
         nValue = -nValue;
