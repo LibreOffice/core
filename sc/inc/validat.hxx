@@ -24,6 +24,7 @@
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include "scdllapi.h"
 
+namespace vcl { class Window; }
 
 namespace sc {
 
