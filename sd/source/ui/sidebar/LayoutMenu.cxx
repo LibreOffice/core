@@ -600,7 +600,8 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 }
 
                 // Setup the menu.
-                ScopedVclPtrInstance<PopupMenu> pMenu(SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/layoutmenu.ui", "");
+                VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != nullptr)
                     pMenuWindow->SetPopupModeFlags(
@@ -640,13 +641,13 @@ IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu, bool)
     }
 
     pMenu->Deactivate();
-    const sal_Int32 nIndex (pMenu->GetCurItemId());
+    OString sIdent = pMenu->GetCurItemIdent();
 
-    if (nIndex == SID_TP_APPLY_TO_SELECTED_SLIDES)
+    if (sIdent == "apply")
     {
         AssignLayoutToSelectedSlides(GetSelectedAutoLayout());
     }
-    else if (nIndex == SID_INSERTPAGE_LAYOUT_MENU)
+    else if (sIdent == "insert")
     {
         // Add arguments to this slot and forward it to the main view
         // shell.

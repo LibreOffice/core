@@ -108,26 +108,4 @@ Menu RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP
     };
 };
 
-Menu RID_TASKPANE_LAYOUTMENU_POPUP
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_TP_APPLY_TO_SELECTED_SLIDES;
-            HelpId = CMD_SID_TP_APPLY_TO_SELECTED_SLIDES;
-            Text [ en-US ] = "Apply to ~Selected Slides";
-        };
-
-        SEPARATOR
-
-        MenuItem
-        {
-            Identifier = SID_INSERTPAGE_LAYOUT_MENU;
-            HelpId = CMD_SID_INSERTPAGE_LAYOUT_MENU;
-            Text [ en-US ] = "~Insert Slide";
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
