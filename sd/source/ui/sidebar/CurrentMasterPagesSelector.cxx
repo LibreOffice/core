@@ -154,7 +154,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 
 OUString CurrentMasterPagesSelector::GetContextMenuUIFile() const
 {
-    return "modules/simpress/ui/currentmastermenu.ui";
+    return OUString("modules/simpress/ui/currentmastermenu.ui");
 }
 
 void CurrentMasterPagesSelector::UpdateSelection()
