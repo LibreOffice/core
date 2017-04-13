@@ -33,7 +33,7 @@ bool ScOptionsUtil::IsMetricSystem()
 
     MeasurementSystem eSys = ScGlobal::pLocaleData->getMeasurementSystemEnum();
 
-    return ( eSys == MEASURE_METRIC );
+    return ( eSys == MeasurementSystem::Metric );
 }
 
 ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree ) :

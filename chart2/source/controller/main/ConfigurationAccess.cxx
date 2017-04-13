@@ -36,7 +36,7 @@ bool lcl_IsMetric()
     const LocaleDataWrapper* pLocWrapper = aSysLocale.GetLocaleDataPtr();
     MeasurementSystem eSys = pLocWrapper->getMeasurementSystemEnum();
 
-    return ( eSys == MEASURE_METRIC );
+    return ( eSys == MeasurementSystem::Metric );
 }
 }//end anonymous namespace
 

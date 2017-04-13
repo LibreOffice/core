@@ -471,9 +471,9 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const OUString&
 {
 //! TODO: could be cached too
     if ( rMS.equalsIgnoreAsciiCase( "metric" ) )
-        return MEASURE_METRIC;
+        return MeasurementSystem::Metric;
 //! TODO: other measurement systems? => extend enum MeasurementSystem
-    return MEASURE_US;
+    return MeasurementSystem::US;
 }
 
 void LocaleDataWrapper::getSecondaryCalendarImpl()

@@ -140,7 +140,7 @@ void GraphicExportDialog::setSourceDocument( const Reference<XComponent>& xDocum
             OUString aPropertyName;
             SvtSysLocale aSysLocale;
 
-            if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MEASURE_METRIC )
+            if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MeasurementSystem::Metric )
             {
                 aPropertyName = "Metric";
             }

@@ -194,7 +194,7 @@ SwViewOption::SwViewOption() :
         ViewOptFlags2::GrfKeepZoom |
         ViewOptFlags2::AnyRuler;
 
-    if (!utl::ConfigManager::IsAvoidConfig() && MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
+    if (!utl::ConfigManager::IsAvoidConfig() && MeasurementSystem::Metric != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
         m_aSnapSize.Width() = m_aSnapSize.Height() = 720;   // 1/2"
     else
         m_aSnapSize.Width() = m_aSnapSize.Height() = 567;   // 1 cm
