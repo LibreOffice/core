@@ -29,6 +29,7 @@
 #include "xmlfilter.hxx"
 #include "xmlGroup.hxx"
 #include "xmlReport.hxx"
+#include <tools/errinf.hxx>
 #include "xmlHelper.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
