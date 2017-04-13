@@ -668,7 +668,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106974_int32Crop, "tdf106974_int32Crop.docx")
     css::text::GraphicCrop aGraphicCropStruct;
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
-    CPPUNIT_ASSERT( sal_Int32( 46000 ) < aGraphicCropStruct.Right );
+
+    CPPUNIT_ASSERT( sal_Int32( 41000 ) < aGraphicCropStruct.Right );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
