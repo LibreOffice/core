@@ -4801,20 +4801,20 @@ DateFormat SvNumberformat::GetDateOrder() const
             {
             case NF_KEY_D :
             case NF_KEY_DD :
-                return DMY;
+                return DateFormat::DMY;
             case NF_KEY_M :
             case NF_KEY_MM :
             case NF_KEY_MMM :
             case NF_KEY_MMMM :
             case NF_KEY_MMMMM :
-                return MDY;
+                return DateFormat::MDY;
             case NF_KEY_YY :
             case NF_KEY_YYYY :
             case NF_KEY_EC :
             case NF_KEY_EEC :
             case NF_KEY_R :
             case NF_KEY_RR :
-                return YMD;
+                return DateFormat::YMD;
             }
         }
     }

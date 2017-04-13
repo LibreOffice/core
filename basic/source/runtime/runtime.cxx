@@ -307,7 +307,7 @@ SbiInstance::SbiInstance( StarBASIC* p )
     , pDdeCtrl(new SbiDdeControl)
     , pBasic(p)
     , meFormatterLangType(LANGUAGE_DONTKNOW)
-    , meFormatterDateFormat(YMD)
+    , meFormatterDateFormat(DateFormat::YMD)
     , nStdDateIdx(0)
     , nStdTimeIdx(0)
     , nStdDateTimeIdx(0)
@@ -425,9 +425,9 @@ SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx
     switch( eDate )
     {
         default:
-        case MDY: aDateStr = "MM/DD/YYYY"; break;
-        case DMY: aDateStr = "DD/MM/YYYY"; break;
-        case YMD: aDateStr = "YYYY/MM/DD"; break;
+        case DateFormat::MDY: aDateStr = "MM/DD/YYYY"; break;
+        case DateFormat::DMY: aDateStr = "DD/MM/YYYY"; break;
+        case DateFormat::YMD: aDateStr = "YYYY/MM/DD"; break;
     }
     OUString aStr( aDateStr );      // PutandConvertEntry() modifies string!
     pNumberFormater->PutandConvertEntry( aStr, nCheckPos, nType,

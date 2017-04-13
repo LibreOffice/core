@@ -943,9 +943,9 @@ static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
 {
     switch( eOld )
     {
-        case DMY:   return ExtDateFieldFormat::ShortDDMMYY;
-        case MDY:   return ExtDateFieldFormat::ShortMMDDYY;
-        default:    return ExtDateFieldFormat::ShortYYMMDD;
+        case DateFormat::DMY:   return ExtDateFieldFormat::ShortDDMMYY;
+        case DateFormat::MDY:   return ExtDateFieldFormat::ShortMMDDYY;
+        default:                return ExtDateFieldFormat::ShortYYMMDD;
     }
 }
 
@@ -1027,17 +1027,17 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
         DateFormat eFormat = rLocaleDataWrapper.getLongDateFormat();
         switch( eFormat )
         {
-            case MDY:
+            case DateFormat::MDY:
                 nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
                 nDay = ImplCutNumberFromString( aStr );
                 nYear  = ImplCutNumberFromString( aStr );
                 break;
-            case DMY:
+            case DateFormat::DMY:
                 nDay = ImplCutNumberFromString( aStr );
                 nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
                 nYear  = ImplCutNumberFromString( aStr );
                 break;
-            case YMD:
+            case DateFormat::YMD:
             default:
                 nYear = ImplCutNumberFromString( aStr );
                 nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
@@ -1469,12 +1469,14 @@ ExtDateFieldFormat DateFormatter::GetExtDateFormat( bool bResolveSystemFormat ) 
         bool bShowCentury = (eDateFormat == ExtDateFieldFormat::SystemShortYYYY);
         switch ( ImplGetLocaleDataWrapper().getDateFormat() )
         {
-            case DMY:   eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortDDMMYYYY : ExtDateFieldFormat::ShortDDMMYY;
-                        break;
-            case MDY:   eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortMMDDYYYY : ExtDateFieldFormat::ShortMMDDYY;
-                        break;
-            default:    eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortYYYYMMDD : ExtDateFieldFormat::ShortYYMMDD;
-
+            case DateFormat::DMY:
+                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortDDMMYYYY : ExtDateFieldFormat::ShortDDMMYY;
+                break;
+            case DateFormat::MDY:
+                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortMMDDYYYY : ExtDateFieldFormat::ShortMMDDYY;
+                break;
+            default:
+                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortYYYYMMDD : ExtDateFieldFormat::ShortYYMMDD;
         }
     }
 
