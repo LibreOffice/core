@@ -26,8 +26,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
-#include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 
 namespace com {
 namespace sun {
@@ -46,7 +44,6 @@ namespace embed {
 
 class ImplXMLSignatureListener : public cppu::WeakImplHelper
 <
-    css::xml::crypto::sax::XSignatureVerifyResultListener,
     css::xml::sax::XDocumentHandler
 >
 {
@@ -61,9 +58,6 @@ public:
     virtual ~ImplXMLSignatureListener() override;
 
     void setNextHandler(const css::uno::Reference< css::xml::sax::XDocumentHandler >& xNextHandler);
-
-    // css::xml::crypto::sax::XSignatureVerifyResultListener
-    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus verifyResult ) override;
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;

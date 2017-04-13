@@ -47,12 +47,6 @@ void ImplXMLSignatureListener::setNextHandler(
     m_xNextHandler = xNextHandler;
 }
 
-void SAL_CALL ImplXMLSignatureListener::signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
-{
-    XMLSignatureVerifyResult aResult( securityId, nResult );
-    m_rXMLSignatureHelper.SignatureVerifyResultListener(aResult);
-}
-
 // XDocumentHandler
 void SAL_CALL ImplXMLSignatureListener::startDocument(  )
 {
