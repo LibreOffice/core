@@ -148,14 +148,9 @@ OString getPluginJarPath(
 #endif // UNX
 
 
-JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
+std::unique_ptr<JavaInfo> createJavaInfo(
+    const rtl::Reference<VendorBase> & info)
 {
-    JavaInfo* pInfo = new JavaInfo;
-    pInfo->sVendor = info->getVendor();
-    pInfo->sLocation = info->getHome();
-    pInfo->sVersion = info->getVersion();
-    pInfo->nFeatures = info->supportsAccessibility() ? 1 : 0;
-    pInfo->nRequirements = info->needsRestart() ? JFW_REQUIRE_NEEDRESTART : 0;
     OUStringBuffer buf(1024);
     buf.append(info->getRuntimeLibrary());
     if (!info->getLibraryPath().isEmpty())
@@ -164,13 +159,15 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
         buf.append(info->getLibraryPath());
         buf.append("\n");
     }
-
     OUString sVendorData = buf.makeStringAndClear();
-    pInfo->arVendorData = rtl::ByteSequence(
-        reinterpret_cast<sal_Int8*>(sVendorData.pData->buffer),
-        sVendorData.getLength() * sizeof(sal_Unicode));
-
-    return pInfo;
+    return std::unique_ptr<JavaInfo>(
+        new JavaInfo{
+            info->getVendor(), info->getHome(), info->getVersion(),
+            sal_uInt64(info->supportsAccessibility() ? 1 : 0),
+            sal_uInt64(info->needsRestart() ? JFW_REQUIRE_NEEDRESTART : 0),
+            rtl::ByteSequence(
+                reinterpret_cast<sal_Int8*>(sVendorData.pData->buffer),
+                sVendorData.getLength() * sizeof(sal_Unicode))});
 }
 
 OUString getRuntimeLib(const rtl::ByteSequence & data)
@@ -337,7 +334,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
     for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ++ii)
     {
-        parJavaInfo->push_back(std::unique_ptr<JavaInfo>(createJavaInfo(*ii)));
+        parJavaInfo->push_back(createJavaInfo(*ii));
     }
 
     return javaPluginError::NONE;
@@ -371,7 +368,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
             aVendorInfo, sMinVersion, sMaxVersion, arExcludeList);
 
     if (errorcode == javaPluginError::NONE)
-        ppInfo->reset(createJavaInfo(aVendorInfo));
+        *ppInfo = createJavaInfo(aVendorInfo);
 
     return errorcode;
 }
@@ -407,7 +404,7 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
 
             if (errorcode == javaPluginError::NONE)
             {
-                ppInfo->reset(createJavaInfo(infoJavaHome[0]));
+                *ppInfo = createJavaInfo(infoJavaHome[0]);
                 return javaPluginError::NONE;
             }
         }
@@ -449,8 +446,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
 
                 if (errorcode == javaPluginError::NONE)
                 {
-                    vecVerifiedInfos.push_back(
-                        std::unique_ptr<JavaInfo>(createJavaInfo(currentInfo)));
+                    vecVerifiedInfos.push_back(createJavaInfo(currentInfo));
                 }
             }
         }
