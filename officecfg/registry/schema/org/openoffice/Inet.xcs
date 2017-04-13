@@ -155,13 +155,13 @@
         <info>
           <desc>Specifies the timeout when first open a connection to a Web/WebDAV server. Time in seconds. Minimum allowed 5 sec maximum 180 sec.</desc>
         </info>
-	<value>20</value>
+        <value>20</value>
       </prop>
       <prop oor:name="ReadTimeout" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Specifies the timeout when waiting for data from a Web/WebDAV server. Time in seconds. Minimum allowed 20 sec maximum 180 sec.</desc>
         </info>
-	<value>60</value>
+        <value>60</value>
       </prop>
       <!-- WebDAV OPTIONS cache lifetime time values -->
       <prop oor:name="OptsCacheLifeImplWeb" oor:type="xs:int" oor:nillable="false">
@@ -195,6 +195,216 @@
 	<value>15</value>
       </prop>
       <!-- End of WebDAV OPTIONS cache lifetime time values -->
+    </group>
+    <group oor:name="System">
+      <info>
+        <desc>Contains System level Internet-related configurations (servers, proxies, etc.).</desc>
+      </info>
+      <prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/NoProxy -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Enumerates the names of servers that do not require any proxies.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetFTPProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/FTPProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the FTP proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/FTPProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the FTP proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/HTTPProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the HTTP proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/HTTPProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the HTTP proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/HTTPSProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the HTTPS proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetHTTPSProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/HTTPSProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the HTTPS proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+    </group>
+    <group oor:name="User">
+      <info>
+        <desc>Contains User level Internet-related configurations (servers, proxies, etc.).</desc>
+      </info>
+      <prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/NoProxy -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Enumerates the names of servers that do not require any proxies.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetFTPProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/FTPProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the FTP proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/FTPProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the FTP proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/HTTPProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the HTTP proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/HTTPProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the HTTP proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
+      <prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string" oor:nillable="false">
+        <!-- OldPath: Inet/HTTPSProxyName -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the name of the HTTPS proxy server.</desc>
+        </info>
+        <value/>
+        <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+      </prop>
+      <prop oor:name="ooInetHTTPSProxyPort" oor:type="xs:int">
+        <!-- OldPath: Inet/HTTPSProxyPort -->
+        <!-- OldLocation: soffice.ini -->
+        <!-- UIHints: Tools  Options  Internet  Proxy -->
+        <info>
+          <desc>Specifies the port of the HTTPS proxy server.</desc>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum allowed port number.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc>Specifies the maximum allowed port number.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
