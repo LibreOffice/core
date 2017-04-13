@@ -30,7 +30,7 @@ namespace {
   typedef void (* DisplayFnPtr)();
 }
 
-struct EDcrData
+struct ErrorRegistry
 {
 public:
     std::vector<ErrorHandler*>  errorHandlers;
@@ -40,10 +40,10 @@ public:
 
     DynamicErrorInfo            *ppDcr[ERRCODE_DYNAMIC_COUNT];
     sal_uInt16                  nNextDcr;
-                                EDcrData();
+                                ErrorRegistry();
 };
 
-struct TheEDcrData: public rtl::Static<EDcrData, TheEDcrData> {};
+struct TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};
 
 class DynamicErrorInfo_Impl
 {
@@ -58,7 +58,7 @@ friend class DynamicErrorInfo;
 friend class ErrorInfo;
 };
 
-EDcrData::EDcrData()
+ErrorRegistry::ErrorRegistry()
     : pDsp(nullptr)
     , bIsWindowDsp(false)
     , nNextDcr(0)
@@ -70,7 +70,7 @@ EDcrData::EDcrData()
 void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 {
     // Register dynamic identifier
-    EDcrData& rData = TheEDcrData::get();
+    ErrorRegistry& rData = TheErrorRegistry::get();
     lErrId = (((sal_uIntPtr)rData.nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
              pDcr->GetErrorCode();
 
@@ -85,7 +85,7 @@ void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 
 void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo const *pDcr)
 {
-    DynamicErrorInfo **ppDcr = TheEDcrData::get().ppDcr;
+    DynamicErrorInfo **ppDcr = TheErrorRegistry::get().ppDcr;
     sal_uIntPtr lIdx = (((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
     DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error not found");
     if(ppDcr[lIdx]==pDcr)
@@ -126,7 +126,7 @@ DynamicErrorInfo::~DynamicErrorInfo()
 ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
 {
     sal_uIntPtr lIdx = ((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
-    DynamicErrorInfo* pDcr = TheEDcrData::get().ppDcr[lIdx];
+    DynamicErrorInfo* pDcr = TheErrorRegistry::get().ppDcr[lIdx];
     if(pDcr && (sal_uIntPtr)(*pDcr)==lId)
         return pDcr;
     else
@@ -169,24 +169,24 @@ ErrorContext::ErrorContext(vcl::Window *pWinP)
     : pImpl( new ErrorContextImpl )
 {
     pImpl->pWin = pWinP;
-    TheEDcrData::get().contexts.insert(TheEDcrData::get().contexts.begin(), this);
+    TheErrorRegistry::get().contexts.insert(TheErrorRegistry::get().contexts.begin(), this);
 }
 
 ErrorContext::~ErrorContext()
 {
-    auto &rContexts = TheEDcrData::get().contexts;
+    auto &rContexts = TheErrorRegistry::get().contexts;
     rContexts.erase( ::std::remove(rContexts.begin(), rContexts.end(), this), rContexts.end());
 }
 
 ErrorContext *ErrorContext::GetContext()
 {
-    return TheEDcrData::get().contexts.empty() ? nullptr : TheEDcrData::get().contexts.front();
+    return TheErrorRegistry::get().contexts.empty() ? nullptr : TheErrorRegistry::get().contexts.front();
 }
 
 
 ErrorHandler::ErrorHandler()
 {
-    EDcrData &rData = TheEDcrData::get();
+    ErrorRegistry &rData = TheErrorRegistry::get();
     rData.errorHandlers.insert(rData.errorHandlers.begin(), this);
     if(!rData.pDsp)
         RegisterDisplay(&aDspFunc);
@@ -194,7 +194,7 @@ ErrorHandler::ErrorHandler()
 
 ErrorHandler::~ErrorHandler()
 {
-    auto &rErrorHandlers = TheEDcrData::get().errorHandlers;
+    auto &rErrorHandlers = TheErrorRegistry::get().errorHandlers;
     rErrorHandlers.erase( ::std::remove(rErrorHandlers.begin(), rErrorHandlers.end(), this), rErrorHandlers.end());
 }
 
@@ -205,14 +205,14 @@ vcl::Window* ErrorContext::GetParent()
 
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
-    EDcrData &rData    = TheEDcrData::get();
+    ErrorRegistry &rData    = TheErrorRegistry::get();
     rData.bIsWindowDsp = true;
     rData.pDsp         = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
-    EDcrData &rData    = TheEDcrData::get();
+    ErrorRegistry &rData    = TheErrorRegistry::get();
     rData.bIsWindowDsp = false;
     rData.pDsp         = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
@@ -242,7 +242,7 @@ ErrorHandlerFlags ErrorHandler::HandleError_Impl(
     OUString aAction;
     if(!nErrCodeId || nErrCodeId == ERRCODE_ABORT)
         return ErrorHandlerFlags::NONE;
-    EDcrData &rData      = TheEDcrData::get();
+    ErrorRegistry &rData      = TheErrorRegistry::get();
     vcl::Window *pParent = nullptr;
     ErrorInfo *pInfo     = ErrorInfo::GetErrorInfo(nErrCodeId);
     if (!rData.contexts.empty())
@@ -339,7 +339,7 @@ ErrorHandlerFlags ErrorHandler::HandleError(sal_uIntPtr lId, ErrorHandlerFlags n
 
 bool ErrorHandler_Impl::CreateString(const ErrorInfo* pInfo, OUString& rStr)
 {
-    for(const ErrorHandler *pHdl : TheEDcrData::get().errorHandlers)
+    for(const ErrorHandler *pHdl : TheErrorRegistry::get().errorHandlers)
     {
         if(pHdl->CreateString(pInfo, rStr))
             return true;
