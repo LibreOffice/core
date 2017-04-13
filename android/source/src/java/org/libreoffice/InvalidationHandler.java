@@ -455,9 +455,11 @@ public class InvalidationHandler implements Document.MessageCallback {
      * Handle a general transition - executed for all transitions.
      */
     private void handleGeneralChangeState(OverlayState previous, OverlayState next) {
-        if (previous == OverlayState.NONE) {
+        if (previous == OverlayState.NONE &&
+                !mContext.getToolbarController().getEditModeStatus()) {
             mContext.getToolbarController().switchToEditMode();
-        } else if (next == OverlayState.NONE) {
+        } else if (next == OverlayState.NONE &&
+                mContext.getToolbarController().getEditModeStatus()) {
             mContext.getToolbarController().switchToViewMode();
         }
     }

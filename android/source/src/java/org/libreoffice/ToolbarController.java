@@ -24,6 +24,8 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     private final LibreOfficeMainActivity mContext;
     private final Menu mMainMenu;
 
+    private boolean isEditModeOn = false;
+
     public ToolbarController(LibreOfficeMainActivity context, Toolbar toolbarTop) {
         mToolbarTop = toolbarTop;
         mContext = context;
@@ -48,6 +50,14 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         });
     }
 
+    public void setEditModeOn(boolean enabled) {
+        isEditModeOn = enabled;
+    }
+
+    public boolean getEditModeStatus() {
+        return isEditModeOn;
+    }
+
     /**
      * Change the toolbar to edit mode.
      */
@@ -62,7 +72,7 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 mMainMenu.setGroupVisible(R.id.group_edit_actions, true);
                 mToolbarTop.setNavigationIcon(R.drawable.ic_check);
                 mToolbarTop.setLogo(null);
-
+                setEditModeOn(true);
             }
         });
     }
@@ -81,6 +91,9 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 mMainMenu.setGroupVisible(R.id.group_edit_actions, false);
                 mToolbarTop.setNavigationIcon(R.drawable.lo_icon);
                 mToolbarTop.setLogo(null);
+                setEditModeOn(false);
+                mContext.hideBottomToolbar();
+                mContext.hideSoftKeyboard();
             }
         });
     }
