@@ -19,33 +19,6 @@
 
 #include "CustomAnimation.hrc"
 
-Menu RID_CUSTOMANIMATION_FONTSIZE_POPUP
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = CM_SIZE_25 ;
-            Text [ en-US ] = "Tiny" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_SIZE_50 ;
-            Text [ en-US ] = "Smaller" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_SIZE_150 ;
-            Text [ en-US ] = "Larger" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_SIZE_400 ;
-            Text [ en-US ] = "Extra large" ;
-        };
-    };
-};
-
 Menu RID_CUSTOMANIMATION_SCALE_POPUP
 {
     ItemList =

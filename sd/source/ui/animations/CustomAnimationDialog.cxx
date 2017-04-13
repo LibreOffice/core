@@ -420,21 +420,24 @@ public:
 
 private:
     DECL_LINK( EditModifyHdl, Edit&, void );
+    VclBuilder maBuilder;
     VclPtr<DropdownMenuBox> mpControl;
     VclPtr<PopupMenu> mpMenu;
     VclPtr<MetricField> mpMetric;
     Link<LinkParamNone*,void> maModifyHdl;
 };
 
-CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
-: PropertySubControl( nControlType ), maModifyHdl(rModifyHdl)
+CharHeightPropertyBox::CharHeightPropertyBox(sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
+    : PropertySubControl(nControlType)
+    , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/fontsizemenu.ui", "")
+    , maModifyHdl(rModifyHdl)
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 1000 );
 
-    mpMenu = VclPtr<PopupMenu>::Create(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
+    mpMenu = maBuilder.get_menu("menu");
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
     mpControl->SetModifyHdl( LINK( this, CharHeightPropertyBox, EditModifyHdl ) );
@@ -446,6 +449,7 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Windo
 
 CharHeightPropertyBox::~CharHeightPropertyBox()
 {
+    maBuilder.disposeBuilder();
     mpControl.disposeAndClear();
 }
 
@@ -456,15 +460,8 @@ IMPL_LINK_NOARG( CharHeightPropertyBox, EditModifyHdl, Edit&, void )
 
 IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
-    long nValue = 100;
-    switch( pPb->GetCurItemId() )
-    {
-    case CM_SIZE_25: nValue = 25; break;
-    case CM_SIZE_50: nValue = 50; break;
-    case CM_SIZE_150: nValue = 150; break;
-    case CM_SIZE_400: nValue = 400; break;
-    }
-    mpMetric->SetValue( nValue );
+    sal_Int32 nValue = pPb->GetCurItemIdent().toInt32();
+    mpMetric->SetValue(nValue);
     mpMetric->Modify();
 }
 
