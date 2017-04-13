@@ -361,12 +361,6 @@ private:
     SwDoc* createDoc(const char* pName = nullptr);
 };
 
-std::ostream& operator<<(std::ostream& s, SvxAdjust n)
-{
-    s << (int)n;
-    return s;
-}
-
 SwDoc* SwUiWriterTest::createDoc(const char* pName)
 {
     if (!pName)

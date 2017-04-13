@@ -73,12 +73,6 @@ private:
     sd::DrawDocShellRef Load(const OUString& rURL, sal_Int32 nFormat);
 };
 
-std::ostream& operator<<(std::ostream& s, SvxAdjust n)
-{
-    s << (int)n;
-    return s;
-}
-
 sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
