@@ -19,6 +19,9 @@
 #ifndef INCLUDED_JVMFWK_SOURCE_ELEMENTS_HXX
 #define INCLUDED_JVMFWK_SOURCE_ELEMENTS_HXX
 
+#include <sal/config.h>
+
+#include <memory>
 #include <vector>
 #include "jvmfwk/framework.hxx"
 #include "fwkutil.hxx"
@@ -98,7 +101,7 @@ public:
 
     /** returns NULL if javaInfo is nil.
      */
-    JavaInfo * makeJavaInfo() const;
+    std::unique_ptr<JavaInfo> makeJavaInfo() const;
 };
 
 /** this class represents the java settings  based on a particular
@@ -294,7 +297,7 @@ public:
         which needs to be freed by the caller.
         If both, user and share settings are nil, then NULL is returned.
     */
-    JavaInfo * createJavaInfo() const;
+    std::unique_ptr<JavaInfo> createJavaInfo() const;
 
     /** returns the value of the attribute /java/javaInfo[@vendorUpdate].
      */

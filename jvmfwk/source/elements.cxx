@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <memory>
 
 #include "elements.hxx"
 #include "osl/mutex.hxx"
@@ -925,19 +926,14 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 }
 
-JavaInfo * CNodeJavaInfo::makeJavaInfo() const
+std::unique_ptr<JavaInfo> CNodeJavaInfo::makeJavaInfo() const
 {
     if (bNil || m_bEmptyNode)
-        return nullptr;
-    JavaInfo * pInfo = new JavaInfo;
-    memset(pInfo, 0, sizeof(JavaInfo));
-    pInfo->sVendor = sVendor;
-    pInfo->sLocation = sLocation;
-    pInfo->sVersion = sVersion;
-    pInfo->nFeatures = nFeatures;
-    pInfo->nRequirements = nRequirements;
-    pInfo->arVendorData = arVendorData;
-    return pInfo;
+        return std::unique_ptr<JavaInfo>();
+    return std::unique_ptr<JavaInfo>(
+        new JavaInfo{
+            sVendor, sLocation, sVersion, nFeatures, nRequirements,
+            arVendorData});
 }
 
 
@@ -1002,7 +998,7 @@ void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
 }
 
 
-JavaInfo * MergedSettings::createJavaInfo() const
+std::unique_ptr<JavaInfo> MergedSettings::createJavaInfo() const
 {
     return m_javaInfo.makeJavaInfo();
 }

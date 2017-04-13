@@ -213,7 +213,7 @@ javaFrameworkError jfw_startVM(
                 const jfw::MergedSettings settings;
                 if (!settings.getEnabled())
                     return JFW_E_JAVA_DISABLED;
-                aInfo.reset(settings.createJavaInfo());
+                aInfo = settings.createJavaInfo();
                 //check if a Java has ever been selected
                 if (!aInfo)
                     return JFW_E_NO_SELECT;
@@ -650,7 +650,7 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
         }
 
         const jfw::MergedSettings settings;
-        ppInfo->reset(settings.createJavaInfo());
+        *ppInfo = settings.createJavaInfo();
         if (!*ppInfo)
         {
             return JFW_E_NONE;
