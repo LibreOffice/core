@@ -245,20 +245,26 @@ void D2DWriteTextOutRenderer::CleanupModules()
 
 TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
 {
-    if (bUseDWrite)
-    {
-        static std::unique_ptr<TextOutRenderer> _impl(D2DWriteTextOutRenderer::InitModules()
-            ? static_cast<TextOutRenderer*>(new D2DWriteTextOutRenderer())
-            : static_cast<TextOutRenderer*>(new ExTextOutRenderer));
+    SalData *const pSalData = GetSalData();
 
-        return *_impl;
+    if (!pSalData)
+    {   // don't call this after DeInitVCL()
+        fprintf(stderr, "TextOutRenderer fatal error: no SalData");
+        abort();
     }
-    else
-    {
-        static std::unique_ptr<TextOutRenderer> _impl(new ExTextOutRenderer);
 
-        return *_impl;
+    if (!pSalData->m_pTextOutRenderer)
+    {
+        if (bUseDWrite && D2DWriteTextOutRenderer::InitModules())
+        {
+            pSalData->m_pTextOutRenderer.reset(new D2DWriteTextOutRenderer());
+        }
+        else
+        {
+            pSalData->m_pTextOutRenderer.reset(new ExTextOutRenderer());
+        }
     }
+    return *pSalData->m_pTextOutRenderer;
 }
 
 
