@@ -58,7 +58,6 @@ public:
     operator ::JavaInfo* () { return pInfo;}
 
     OUString getLocation() const;
-    sal_uInt64 getFeatures() const;
 
     static JavaInfo * copyJavaInfo(const JavaInfo * pInfo);
 };

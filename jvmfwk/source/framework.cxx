@@ -540,14 +540,15 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                     for (citLoc it = vecJRELocations.begin();
                         it != vecJRELocations.end(); ++it)
                     {
-                        jfw::CJavaInfo aInfo;
+                        JavaInfo * info;
                         javaPluginError err = jfw_plugin_getJavaInfoByPath(
                             *it,
                             vendor,
                             versionInfo.sMinVersion,
                             versionInfo.sMaxVersion,
                             versionInfo.vecExcludeVersions,
-                            & aInfo.pInfo);
+                            &info);
+                        std::unique_ptr<JavaInfo> aInfo(info);
                         if (err == javaPluginError::NoJre)
                             continue;
                         if (err == javaPluginError::FailedVersion)
@@ -557,19 +558,22 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
                         if (aInfo)
                         {
-                            //We remember the very first installation in aCurrentInfo
-                            if (aCurrentInfo.getLocation().isEmpty())
-                                aCurrentInfo = aInfo;
                             // compare features
                             // If the user does not require any features (nFeatureFlags = 0)
                             // then the first installation is used
-                            if ((aInfo.getFeatures() & nFeatureFlags) == nFeatureFlags)
+                            if ((aInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
                             {
                                 //the just found Java implements all required features
                                 //currently there is only accessibility!!!
-                                aCurrentInfo = aInfo;
+                                aCurrentInfo = aInfo.release();
                                 bInfoFound = true;
                                 break;
+                            }
+                            else if (aCurrentInfo.getLocation().isEmpty())
+                            {
+                                // We remember the very first installation in
+                                // aCurrentInfo:
+                                aCurrentInfo = aInfo.release();
                             }
                         }
                     }//end iterate over paths
@@ -1038,14 +1042,6 @@ OUString CJavaInfo::getLocation() const
         return OUString(pInfo->sLocation);
     else
         return OUString();
-}
-
-sal_uInt64 CJavaInfo::getFeatures() const
-{
-    if (pInfo)
-        return pInfo->nFeatures;
-    else
-        return 0l;
 }
 
 }
