@@ -2448,7 +2448,7 @@
           <value xml:lang="en-US">Basic</value>
         </prop>
         <prop oor:name="Effects" oor:type="oor:string-list">
-          <value oor:separator=";">ooo-emphasis-fill-color;ooo-emphasis-font;ooo-emphasis-font-color;ooo-emphasis-font-size;ooo-emphasis-font-style;ooo-emphasis-line-color;ooo-emphasis-spin;ooo-emphasis-transparency</value>
+          <value oor:separator=";">ooo-emphasis-fill-color;ooo-emphasis-font;ooo-emphasis-font-color;ooo-emphasis-font-size;ooo-emphasis-font-style;ooo-emphasis-grow-and-shrink;ooo-emphasis-line-color;ooo-emphasis-spin;ooo-emphasis-transparency</value>
         </prop>
       </node>
       <node oor:name="special" oor:op="replace">
