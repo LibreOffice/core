@@ -60,10 +60,9 @@ public:
 
 MyInterceptor::MyInterceptor()
     : m_nExpected(0),
-      m_nUnexpected(0)
+      m_nUnexpected(0),
+      m_aDisabledCommands {".uno:Bold"}
 {
-    // Not part of the initializer list as MSVC 2013 would not handle that.
-    m_aDisabledCommands = {".uno:Bold"};
 }
 
 int MyInterceptor::getExpected()

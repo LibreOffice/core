@@ -35,13 +35,10 @@ namespace frm
 // Implements the UNO Container for Forms and contains all assigned Forms.
 // It can either represent the Context for Forms or be passed a Context.
 
-typedef ::cppu::OComponentHelper FormsCollectionComponentBase;
-typedef ::cppu::ImplHelper2<    css::form::XForms
-                                ,css::lang::XServiceInfo > OFormsCollection_BASE;
-
-// else MSVC kills itself on some statements
+typedef ::cppu::ImplHelper2< css::form::XForms
+                             ,css::lang::XServiceInfo > OFormsCollection_BASE;
 class OFormsCollection
-        :public FormsCollectionComponentBase
+        :public ::cppu::OComponentHelper
         ,public OInterfaceContainer
         ,public OFormsCollection_BASE
 {
@@ -54,7 +51,7 @@ public:
     virtual ~OFormsCollection() override;
 
 public:
-    DECLARE_UNO3_AGG_DEFAULTS(OFormsCollection, FormsCollectionComponentBase)
+    DECLARE_UNO3_AGG_DEFAULTS(OFormsCollection, ::cppu::OComponentHelper)
 
     virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
