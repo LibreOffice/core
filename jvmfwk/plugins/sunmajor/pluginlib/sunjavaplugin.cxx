@@ -386,7 +386,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 
 javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
     std::vector<pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
-    JavaInfo ** ppInfo, std::vector<rtl::Reference<VendorBase>> & infos)
+    std::unique_ptr<JavaInfo> * ppInfo,
+    std::vector<rtl::Reference<VendorBase>> & infos)
 {
     assert(ppInfo);
 
@@ -414,7 +415,7 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
 
             if (errorcode == javaPluginError::NONE)
             {
-                *ppInfo = createJavaInfo(infoJavaHome[0]);
+                ppInfo->reset(createJavaInfo(infoJavaHome[0]));
                 return javaPluginError::NONE;
             }
         }

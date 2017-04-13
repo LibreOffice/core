@@ -190,7 +190,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
  */
 javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
     std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
-    JavaInfo ** ppInfo,
+    std::unique_ptr<JavaInfo> * ppInfo,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
 

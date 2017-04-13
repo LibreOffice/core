@@ -364,20 +364,17 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
         // first inspect Java installation that the JAVA_HOME
         // environment variable points to (if it is set)
-        JavaInfo* pHomeInfo = nullptr;
-        if (jfw_plugin_getJavaInfoFromJavaHome(versionInfos, &pHomeInfo, infos)
+        if (jfw_plugin_getJavaInfoFromJavaHome(
+                versionInfos, &aCurrentInfo, infos)
             == javaPluginError::NONE)
         {
-            aCurrentInfo.reset(pHomeInfo);
-
             // compare features
             // if the user does not require any features (nFeatureFlags = 0)
             // or the Java installation provides all features, then this installation is used
-            if ((pHomeInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
+            if ((aCurrentInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
             {
                 bInfoFound = true;
             }
-            delete pHomeInfo;
         }
 
         // if no Java installation providing all features was detected by using JAVA_HOME,
