@@ -165,8 +165,7 @@ void SlideBackground::Initialize()
 
         if ( pFrameView->GetViewShEditMode() ==  EditMode::Page )
         {
-            DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
-            SdPage* mpPage = pDrawViewShell->getCurrentPage();
+            SdPage* mpPage = pMainViewShell->getCurrentPage();
             populateMasterSlideDropdown();
 
             OUString aLayoutName( mpPage->GetLayoutName() );
