@@ -327,7 +327,7 @@ sal_uInt16 Date::GetDayOfYear() const
     Normalize( nDay, nMonth, nYear);
 
     for( sal_uInt16 i = 1; i < nMonth; i++ )
-         nDay = nDay + ::ImplDaysInMonth( i, nYear );   // += yields a warning on MSVC, so don't use it
+         nDay += ::ImplDaysInMonth( i, nYear );
     return nDay;
 }
 

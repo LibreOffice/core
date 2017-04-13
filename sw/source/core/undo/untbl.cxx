@@ -1053,18 +1053,10 @@ void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
             }
         }
 
-#ifdef _MSC_VER
-// MSVC 2012 appears very confused and rambles about a declaration of "n" below
-#pragma warning (push, 1)
-#pragma warning (disable: 4258)
-#endif
         for( SwTableLines::const_iterator it = rTable.GetTabLines().begin() + n;
              it != rTable.GetTabLines().begin() + nOldLines; ++it )
             delete *it;
         rTable.GetTabLines().erase( rTable.GetTabLines().begin() + n, rTable.GetTabLines().begin() + nOldLines );
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
     }
 
     aParent.GetTabLines().erase( aParent.GetTabLines().begin(), aParent.GetTabLines().begin() + n );
