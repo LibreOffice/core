@@ -119,6 +119,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/dockinganimation \
 	sd/uiconfig/simpress/ui/effectmenu \
 	sd/uiconfig/simpress/ui/fontsizemenu \
+	sd/uiconfig/simpress/ui/fontstylemenu \
 	sd/uiconfig/simpress/ui/headerfooterdialog \
 	sd/uiconfig/simpress/ui/headerfootertab \
 	sd/uiconfig/simpress/ui/insertslides \

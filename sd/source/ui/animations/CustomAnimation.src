@@ -19,28 +19,6 @@
 
 #include "CustomAnimation.hrc"
 
-Menu RID_CUSTOMANIMATION_FONTSTYLE_POPUP
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = CM_BOLD ;
-            Text [ en-US ] = "Bold" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_ITALIC ;
-            Text [ en-US ] = "Italic" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_UNDERLINED ;
-            Text [ en-US ] = "Underlined" ;
-        };
-    };
-};
-
 String STR_CUSTOMANIMATION_REPEAT_NONE
 {
     Text [ en-US ] = "none";

@@ -883,6 +883,7 @@ public:
     void update();
 
 private:
+    VclBuilder                maBuilder;
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<Edit>              mpEdit;
@@ -894,13 +895,14 @@ private:
 };
 
 FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
-: PropertySubControl( nControlType )
-, maModifyHdl( rModifyHdl )
+    : PropertySubControl(nControlType)
+    , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/fontstylemenu.ui", "")
+    , maModifyHdl( rModifyHdl )
 {
     mpEdit.set( VclPtr<Edit>::Create( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY) );
     mpEdit->SetText( SD_RESSTR(STR_CUSTOMANIMATION_SAMPLE) );
 
-    mpMenu = VclPtr<PopupMenu>::Create(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );
+    mpMenu = maBuilder.get_menu("menu");
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpEdit, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, FontStylePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX );
@@ -911,15 +913,16 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
 
 FontStylePropertyBox::~FontStylePropertyBox()
 {
+    maBuilder.disposeBuilder();
     mpControl.disposeAndClear();
 }
 
 void FontStylePropertyBox::update()
 {
     // update menu
-    mpMenu->CheckItem( CM_BOLD, mfFontWeight == awt::FontWeight::BOLD );
-    mpMenu->CheckItem( CM_ITALIC, meFontSlant == awt::FontSlant_ITALIC);
-    mpMenu->CheckItem( CM_UNDERLINED, mnFontUnderline != awt::FontUnderline::NONE );
+    mpMenu->CheckItem(mpMenu->GetItemId("bold"), mfFontWeight == awt::FontWeight::BOLD);
+    mpMenu->CheckItem(mpMenu->GetItemId("italic"), meFontSlant == awt::FontSlant_ITALIC);
+    mpMenu->CheckItem(mpMenu->GetItemId("underline"), mnFontUnderline != awt::FontUnderline::NONE );
 
     // update sample edit
     vcl::Font aFont( mpEdit->GetFont() );
@@ -932,28 +935,27 @@ void FontStylePropertyBox::update()
 
 IMPL_LINK( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
-    switch( pPb->GetCurItemId() )
+    OString sIdent = pPb->GetCurItemIdent();
+    if (sIdent == "bold")
     {
-    case CM_BOLD:
         if( mfFontWeight == awt::FontWeight::BOLD )
             mfFontWeight = awt::FontWeight::NORMAL;
         else
             mfFontWeight = awt::FontWeight::BOLD;
-        break;
-    case CM_ITALIC:
+    }
+    else if (sIdent == "italic")
+    {
         if( meFontSlant == awt::FontSlant_ITALIC )
             meFontSlant = awt::FontSlant_NONE;
         else
             meFontSlant = awt::FontSlant_ITALIC;
-        break;
-    case CM_UNDERLINED:
+    }
+    else if (sIdent == "underline")
+    {
         if( mnFontUnderline == awt::FontUnderline::SINGLE )
             mnFontUnderline = awt::FontUnderline::NONE;
         else
             mnFontUnderline = awt::FontUnderline::SINGLE;
-        break;
-    default:
-        return;
     }
 
     update();
