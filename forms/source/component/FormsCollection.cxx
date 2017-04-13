@@ -43,18 +43,18 @@ Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  )
 
 Sequence<Type> SAL_CALL OFormsCollection::getTypes()
 {
-    return concatSequences(OInterfaceContainer::getTypes(), FormsCollectionComponentBase::getTypes(), OFormsCollection_BASE::getTypes());
+    return concatSequences(OInterfaceContainer::getTypes(), ::cppu::OComponentHelper::getTypes(), OFormsCollection_BASE::getTypes());
 }
 
 OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactory)
-    :FormsCollectionComponentBase( m_aMutex )
+    : ::cppu::OComponentHelper( m_aMutex )
     ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XForm>::get() )
     ,OFormsCollection_BASE()
 {
 }
 
 OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
-    :FormsCollectionComponentBase( m_aMutex )
+    : ::cppu::OComponentHelper( m_aMutex )
     ,OInterfaceContainer( m_aMutex, _cloneSource )
     ,OFormsCollection_BASE()
 {
@@ -62,7 +62,7 @@ OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
 
 OFormsCollection::~OFormsCollection()
 {
-    if (!FormsCollectionComponentBase::rBHelper.bDisposed)
+    if (!::cppu::OComponentHelper::rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -77,7 +77,7 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType)
         aReturn = OInterfaceContainer::queryInterface(_rType);
 
         if (!aReturn.hasValue())
-            aReturn = FormsCollectionComponentBase::queryAggregation(_rType);
+            aReturn = ::cppu::OComponentHelper::queryAggregation(_rType);
     }
 
     return aReturn;
@@ -121,7 +121,7 @@ void OFormsCollection::disposing()
         SAL_INFO( "forms.component", "forms::OFormsCollection::disposing" );
         OInterfaceContainer::disposing();
     }
-    FormsCollectionComponentBase::disposing();
+    ::cppu::OComponentHelper::disposing();
     m_xParent = nullptr;
 }
 

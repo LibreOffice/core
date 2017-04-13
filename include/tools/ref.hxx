@@ -122,22 +122,21 @@ class TOOLS_DLLPUBLIC SvRefBase
     // work around a clang 3.5 optimization bug: if the bNoDelete is *first*
     // it mis-compiles "if (--nRefCount == 0)" and never deletes any object
     unsigned int nRefCount : 31;
-    // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
-    unsigned int bNoDelete : 1;
+    bool bNoDelete : 1;
 
 protected:
     virtual         ~SvRefBase();
 
 public:
-                    SvRefBase() : nRefCount(0), bNoDelete(1) {}
+                    SvRefBase() : nRefCount(0), bNoDelete(true) {}
 
-                    SvRefBase(const SvRefBase &) : nRefCount(0), bNoDelete(1) {}
+                    SvRefBase(const SvRefBase &) : nRefCount(0), bNoDelete(true) {}
 
     SvRefBase &     operator = ( const SvRefBase & )
                     { return *this; }
 
     void            RestoreNoDelete()
-                    { bNoDelete = 1; }
+                    { bNoDelete = true; }
 
     void            AddNextRef()
                     {
@@ -149,7 +148,7 @@ public:
                     {
                         assert( nRefCount < (1 << 30) && "Do not add refs to dead objects" );
                         if( bNoDelete )
-                            bNoDelete = 0;
+                            bNoDelete = false;
                         ++nRefCount;
                     }
 

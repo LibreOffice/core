@@ -2601,12 +2601,11 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         Get the record for top level object, so we can get the word anchoring
         and wrapping information for it.
     */
-    for (MSDffImportRecords::const_iterator it = aData.begin();
-            it != aData.end(); ++it) // MSVC2008 wants const_iterator here???
+    for (auto const & it : aData)
     {
-        if ((*it)->pObj == pObject)
+        if (it->pObj == pObject)
         {
-            pRecord = it->get();
+            pRecord = it.get();
             break;
         }
     }
