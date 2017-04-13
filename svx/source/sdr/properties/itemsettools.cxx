@@ -38,9 +38,8 @@ namespace sdr
             if (const SdrObjGroup* pGroupObj = dynamic_cast<const SdrObjGroup*>(&rObj))
             {
                 SdrObjListIter aIter(*pGroupObj, SdrIterMode::DeepNoGroups);
-                mpData = new RectangleVector;
-                DBG_ASSERT(mpData, "ItemChangeBroadcaster: No memory (!)");
-                static_cast<RectangleVector*>(mpData)->reserve(aIter.Count());
+                mpRectangleVector = new RectangleVector;
+                mpRectangleVector->reserve(aIter.Count());
 
                 while(aIter.IsMore())
                 {
@@ -48,7 +47,7 @@ namespace sdr
 
                     if(pObj)
                     {
-                        static_cast<RectangleVector*>(mpData)->push_back(pObj->GetLastBoundRect());
+                        mpRectangleVector->push_back(pObj->GetLastBoundRect());
                     }
                 }
 
@@ -56,7 +55,7 @@ namespace sdr
             }
             else
             {
-                mpData = new tools::Rectangle(rObj.GetLastBoundRect());
+                mpRectangle = new tools::Rectangle(rObj.GetLastBoundRect());
                 mbSingleRect = true;
             }
         }
@@ -65,11 +64,11 @@ namespace sdr
         {
             if (!mbSingleRect)
             {
-                delete static_cast<RectangleVector*>(mpData);
+                delete mpRectangleVector;
             }
             else
             {
-                delete static_cast<tools::Rectangle*>(mpData);
+                delete mpRectangle;
             }
         }
 
@@ -77,11 +76,11 @@ namespace sdr
         {
             if (!mbSingleRect)
             {
-                return (*static_cast<RectangleVector*>(mpData))[nIndex];
+                return (*mpRectangleVector)[nIndex];
             }
             else
             {
-                return *static_cast<tools::Rectangle*>(mpData);
+                return *mpRectangle;
             }
         }
     } // end of namespace properties
