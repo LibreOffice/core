@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
 
 #include <sal/types.h>
+#include <vcl/region.hxx>
 
 class SdrObject;
 class SfxItemSet;
@@ -34,14 +35,17 @@ namespace sdr
     {
         class ItemChangeBroadcaster
         {
-            sal_uInt32                                      mnCount;
+            bool                                            mbSingleRect;
             void*                                           mpData;
 
         public:
             explicit ItemChangeBroadcaster(const SdrObject& rObj);
             ~ItemChangeBroadcaster();
 
-            sal_uInt32 GetRectangleCount() const {  return mnCount; }
+            sal_uInt32 GetRectangleCount() const
+            {
+                return mbSingleRect ? 1 : static_cast<RectangleVector*>(mpData)->size();
+            }
             const tools::Rectangle& GetRectangle(sal_uInt32 nIndex) const;
         };
     } // end of namespace properties

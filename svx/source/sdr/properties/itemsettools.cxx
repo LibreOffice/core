@@ -24,7 +24,6 @@
 #include <svl/whiter.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
-#include <vcl/region.hxx>
 #include <vcl/outdev.hxx>
 #include <memory>
 
@@ -53,18 +52,18 @@ namespace sdr
                     }
                 }
 
-                mnCount = static_cast<RectangleVector*>(mpData)->size();
+                mbSingleRect = false;
             }
             else
             {
                 mpData = new tools::Rectangle(rObj.GetLastBoundRect());
-                mnCount = 1L;
+                mbSingleRect = true;
             }
         }
 
         ItemChangeBroadcaster::~ItemChangeBroadcaster()
         {
-            if(mnCount > 1)
+            if (!mbSingleRect)
             {
                 delete static_cast<RectangleVector*>(mpData);
             }
@@ -74,10 +73,9 @@ namespace sdr
             }
         }
 
-
         const tools::Rectangle& ItemChangeBroadcaster::GetRectangle(sal_uInt32 nIndex) const
         {
-            if(mnCount > 1)
+            if (!mbSingleRect)
             {
                 return (*static_cast<RectangleVector*>(mpData))[nIndex];
             }
