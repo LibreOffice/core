@@ -59,19 +59,4 @@ void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
 #endif // WNT
 }
 
-#ifdef _MSC_VER
-
-/* This operator is supposed to be unimplemented, but that now leads
- * to compilation and/or linking errors with MSVC2008. Problem still
- * there with MSVC2013. As it can be left unimplemented just fine with
- * other compilers, presumably it is never called. So do implement it
- * then to avoid the compilation and/or linking errors, but make it
- * crash intentionally if called.
- */
-void SimpleReferenceObject::operator delete[](void * /* pPtr */)
-{
-    abort();
-}
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
