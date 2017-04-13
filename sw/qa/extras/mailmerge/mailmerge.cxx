@@ -42,16 +42,6 @@
 typedef std::map<OUString, OUString> DBuriMap;
 static DBuriMap aDBuriMap;
 
-namespace com { namespace sun { namespace star { namespace text {
-
-std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
 class MMTest : public SwModelTestBase
 {
 public:

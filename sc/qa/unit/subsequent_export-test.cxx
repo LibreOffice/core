@@ -295,12 +295,6 @@ private:
 
 };
 
-std::ostream& operator<<(std::ostream& os, SvxBorderLineStyle n)
-{
-    os << (int)n;
-    return os;
-}
-
 void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
     struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =

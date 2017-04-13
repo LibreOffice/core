@@ -53,12 +53,6 @@ operator <<(std::basic_ostream<charT, traits> & stream, Type const & type) {
     return stream << type.getTypeName();
 }
 
-std::ostream& operator<< (std::ostream& aStream, const css::uno::TypeClass& aTypeClass)
-{
-    aStream << (sal_Int32)aTypeClass;
-    return aStream;
-}
-
 } } } }
 
 

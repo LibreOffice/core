@@ -44,14 +44,6 @@
 using namespace com::sun::star;
 using namespace desktop;
 
-namespace com { namespace sun { namespace star { namespace text {
-std::ostream& operator<<(std::ostream& os, css::text::TextContentAnchorType const & n)
-{
-    os << (sal_Int32)n;
-    return os;
-}
-} } } };
-
 class DesktopLOKTest : public UnoApiTest
 {
 public:
