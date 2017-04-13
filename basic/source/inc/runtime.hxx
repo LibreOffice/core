@@ -142,7 +142,7 @@ class SbiInstance
     std::unique_ptr<SvNumberFormatter> pNumberFormatter;
     StarBASIC*      pBasic;
     LanguageType    meFormatterLangType;
-    DateFormat      meFormatterDateFormat;
+    DateOrder       meFormatterDateOrder;
     sal_uInt32      nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
 
     SbError         nErr;
@@ -200,7 +200,7 @@ public:
     // offer NumberFormatter also static
     static SvNumberFormatter* PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
         sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
-        LanguageType* peFormatterLangType=nullptr, DateFormat* peFormatterDateFormat=nullptr );
+        LanguageType* peFormatterLangType=nullptr, DateOrder* peFormatterDateOrder=nullptr );
 };
 
 // There's one instance of this class for every executed sub-program.

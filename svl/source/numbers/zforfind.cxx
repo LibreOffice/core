@@ -1039,7 +1039,7 @@ bool ImpSvNumberInputScan::MayBeIso8601()
 }
 
 
-bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
+bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
 {
     if (nCanForceToIso8601 == 0)
     {
@@ -1058,23 +1058,24 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
         }
 
         sal_Int32 n;
-        switch (eDateFormat)
+        switch (eDateOrder)
         {
-        case DMY:               // "day" value out of range => ISO 8601 year
+        case DateOrder::DMY:               // "day" value out of range => ISO 8601 year
             if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 31)
             {
                 nCanForceToIso8601 = 2;
             }
             break;
-        case MDY:               // "month" value out of range => ISO 8601 year
+        case DateOrder::MDY:               // "month" value out of range => ISO 8601 year
             if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 12)
             {
                 nCanForceToIso8601 = 2;
             }
             break;
-        case YMD:               // always possible
+        case DateOrder::YMD:               // always possible
             nCanForceToIso8601 = 2;
             break;
+        default: break;
         }
     }
     return nCanForceToIso8601 > 1;
@@ -1381,31 +1382,31 @@ sal_uInt32 ImpSvNumberInputScan::GetDatePatternOrder()
 }
 
 
-DateFormat ImpSvNumberInputScan::GetDateOrder()
+DateOrder ImpSvNumberInputScan::GetDateOrder()
 {
     sal_uInt32 nOrder = GetDatePatternOrder();
     if (!nOrder)
     {
-        return pFormatter->GetLocaleData()->getDateFormat();
+        return pFormatter->GetLocaleData()->getDateOrder();
     }
     switch ((nOrder & 0xff0000) >> 16)
     {
     case 'Y':
         if ((((nOrder & 0xff00) >> 8) == 'M') && ((nOrder & 0xff) == 'D'))
         {
-            return YMD;
+            return DateOrder::YMD;
         }
         break;
     case 'M':
         if ((((nOrder & 0xff00) >> 8) == 'D') && ((nOrder & 0xff) == 'Y'))
         {
-            return MDY;
+            return DateOrder::MDY;
         }
         break;
     case 'D':
         if ((((nOrder & 0xff00) >> 8) == 'M') && ((nOrder & 0xff) == 'Y'))
         {
-            return DMY;
+            return DateOrder::DMY;
         }
         break;
     default:
@@ -1416,25 +1417,25 @@ DateFormat ImpSvNumberInputScan::GetDateOrder()
             switch ((nOrder & 0xff))
             {
             case 'M':
-                return YMD;
+                return DateOrder::YMD;
             }
             break;
         case 'M':
             switch ((nOrder & 0xff))
             {
             case 'Y':
-                return DMY;
+                return DateOrder::DMY;
             case 'D':
-                return MDY;
+                return DateOrder::MDY;
             }
             break;
         case 'D':
             switch ((nOrder & 0xff))
             {
             case 'Y':
-                return MDY;
+                return DateOrder::MDY;
             case 'M':
-                return DMY;
+                return DateOrder::DMY;
             }
             break;
         default:
@@ -1442,17 +1443,17 @@ DateFormat ImpSvNumberInputScan::GetDateOrder()
             switch ((nOrder & 0xff))
             {
             case 'Y':
-                return YMD;
+                return DateOrder::YMD;
             case 'M':
-                return MDY;
+                return DateOrder::MDY;
             case 'D':
-                return DMY;
+                return DateOrder::DMY;
             }
             break;
         }
     }
     SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
-    return pFormatter->GetLocaleData()->getDateFormat();
+    return pFormatter->GetLocaleData()->getDateOrder();
 }
 
 bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
@@ -1492,7 +1493,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
     {
         pCal->setGregorianDateTime( Date( Date::SYSTEM ) ); // today
         OUString aOrgCalendar; // empty => not changed yet
-        DateFormat DateFmt;
+        DateOrder DateFmt;
         bool bFormatTurn;
         switch ( eEDF )
         {
@@ -1530,7 +1531,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
             break;
         default:
             SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
-            DateFmt = YMD;
+            DateFmt = DateOrder::YMD;
             bFormatTurn = false;
         }
         if ( bFormatTurn )
@@ -1625,8 +1626,8 @@ input for the following reasons:
                 pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                 switch (DateFmt)
                 {
-                case MDY:
-                case YMD:
+                case DateOrder::MDY:
+                case DateOrder::YMD:
                 {
                     sal_uInt16 nDay = ImplGetDay(0);
                     sal_uInt16 nYear = ImplGetYear(0);
@@ -1640,7 +1641,7 @@ input for the following reasons:
                     }
                     break;
                 }
-                case DMY:
+                case DateOrder::DMY:
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                     break;
                 default:
@@ -1652,10 +1653,10 @@ input for the following reasons:
                 pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                 switch (DateFmt)
                 {
-                case DMY:
+                case DateOrder::DMY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                     break;
-                case YMD:
+                case DateOrder::YMD:
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                     break;
                 default:
@@ -1739,7 +1740,7 @@ input for the following reasons:
                     }
                     switch (DateFmt)
                     {
-                    case MDY:
+                    case DateOrder::MDY:
                         // M D
                         pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                         pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
@@ -1750,7 +1751,7 @@ input for the following reasons:
                             pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                         }
                         break;
-                    case DMY:
+                    case DateOrder::DMY:
                         // D M
                         pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                         pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
@@ -1761,7 +1762,7 @@ input for the following reasons:
                             pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                         }
                         break;
-                    case YMD:
+                    case DateOrder::YMD:
                         // M D
                         pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                         pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
@@ -1801,14 +1802,14 @@ input for the following reasons:
             case 2:             // month in the middle (10 Jan 94)
             {
                 pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
-                DateFormat eDF = (MayBeMonthDate() ? (nMayBeMonthDate == 2 ? DMY : YMD) : DateFmt);
+                DateOrder eDF = (MayBeMonthDate() ? (nMayBeMonthDate == 2 ? DateOrder::DMY : DateOrder::YMD) : DateFmt);
                 switch (eDF)
                 {
-                case DMY:
+                case DateOrder::DMY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                     break;
-                case YMD:
+                case DateOrder::YMD:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                     break;
@@ -1842,22 +1843,22 @@ input for the following reasons:
                     }
                 }
                 // ISO 8601 yyyy-mm-dd forced recognition
-                DateFormat eDF = (CanForceToIso8601( DateFmt) ? YMD : DateFmt);
+                DateOrder eDF = (CanForceToIso8601( DateFmt) ? DateOrder::YMD : DateFmt);
                 switch (eDF)
                 {
-                case MDY:
+                case DateOrder::MDY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                     pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
                     if ( nCounter > 2 )
                         pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
                     break;
-                case DMY:
+                case DateOrder::DMY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                     pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
                     if ( nCounter > 2 )
                         pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
                     break;
-                case YMD:
+                case DateOrder::YMD:
                     if ( nCounter > 2 )
                         pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(2) );
                     pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
@@ -1873,7 +1874,7 @@ input for the following reasons:
                 nCounter = 2;
                 switch (DateFmt)
                 {
-                case MDY:
+                case DateOrder::MDY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                     pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
@@ -1888,11 +1889,11 @@ input for the following reasons:
                 pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                 switch (DateFmt)
                 {
-                case DMY:
+                case DateOrder::DMY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                     break;
-                case YMD:
+                case DateOrder::YMD:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                     break;
@@ -2446,7 +2447,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
         switch (eScannedType)
         {
         case css::util::NumberFormat::DATE:
-            if (nMonthPos == 1 && pLoc->getLongDateFormat() == MDY)
+            if (nMonthPos == 1 && pLoc->getLongDateOrder() == DateOrder::MDY)
             {
                 // #68232# recognize long date separators like ", " in "September 5, 1999"
                 if (SkipString( pLoc->getLongDateDaySep(), rString, nPos ))

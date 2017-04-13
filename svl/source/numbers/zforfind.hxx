@@ -62,13 +62,13 @@ public:
 
         Depends on locale's date separator and a specific date format order.
 
-        @param eDateFormat
+        @param eDateOrder
             Evaluated only on first call during one scan process, subsequent
             calls return state of nCanForceToIso8601!
 
         @see nCanForceToIso8601
      */
-    bool CanForceToIso8601( DateFormat eDateFormat );
+    bool CanForceToIso8601( DateOrder eDateOrder );
 
     void InvalidateDateAcceptancePatterns();
 
@@ -402,7 +402,7 @@ private:
     /** Obtain date format order, from accepted date pattern if available or
         otherwise the locale's default order.
      */
-    DateFormat GetDateOrder();
+    DateOrder GetDateOrder();
 
     /** Whether input may be an ISO 8601 date format, yyyy-mm-dd...
 

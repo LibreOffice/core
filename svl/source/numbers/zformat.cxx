@@ -4789,7 +4789,7 @@ bool SvNumberformat::HasPositiveBracketPlaceholder() const
     return tmpStr[nAnz-1] == "_)";
 }
 
-DateFormat SvNumberformat::GetDateOrder() const
+DateOrder SvNumberformat::GetDateOrder() const
 {
     if ( (eType & css::util::NumberFormat::DATE) == css::util::NumberFormat::DATE )
     {
@@ -4801,20 +4801,20 @@ DateFormat SvNumberformat::GetDateOrder() const
             {
             case NF_KEY_D :
             case NF_KEY_DD :
-                return DMY;
+                return DateOrder::DMY;
             case NF_KEY_M :
             case NF_KEY_MM :
             case NF_KEY_MMM :
             case NF_KEY_MMMM :
             case NF_KEY_MMMMM :
-                return MDY;
+                return DateOrder::MDY;
             case NF_KEY_YY :
             case NF_KEY_YYYY :
             case NF_KEY_EC :
             case NF_KEY_EEC :
             case NF_KEY_R :
             case NF_KEY_RR :
-                return YMD;
+                return DateOrder::YMD;
             }
         }
     }
@@ -4822,7 +4822,7 @@ DateFormat SvNumberformat::GetDateOrder() const
     {
        SAL_WARN( "svl.numbers", "SvNumberformat::GetDateOrder: no date" );
     }
-    return rLoc().getDateFormat();
+    return rLoc().getDateOrder();
 }
 
 sal_uInt32 SvNumberformat::GetExactDateOrder() const

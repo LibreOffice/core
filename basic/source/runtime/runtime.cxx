@@ -307,7 +307,7 @@ SbiInstance::SbiInstance( StarBASIC* p )
     , pDdeCtrl(new SbiDdeControl)
     , pBasic(p)
     , meFormatterLangType(LANGUAGE_DONTKNOW)
-    , meFormatterDateFormat(YMD)
+    , meFormatterDateOrder(DateOrder::YMD)
     , nStdDateIdx(0)
     , nStdTimeIdx(0)
     , nStdDateTimeIdx(0)
@@ -363,21 +363,21 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
 {
     LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
     SvtSysLocale aSysLocale;
-    DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
+    DateOrder eDate = aSysLocale.GetLocaleData().getDateOrder();
     if( pNumberFormatter )
     {
         if( eLangType != meFormatterLangType ||
-            eDate != meFormatterDateFormat )
+            eDate != meFormatterDateOrder )
         {
             pNumberFormatter.reset(nullptr);
         }
     }
     meFormatterLangType = eLangType;
-    meFormatterDateFormat = eDate;
+    meFormatterDateOrder = eDate;
     if( !pNumberFormatter )
     {
         pNumberFormatter.reset(PrepareNumberFormatter( nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx,
-        &meFormatterLangType, &meFormatterDateFormat ));
+        &meFormatterLangType, &meFormatterDateOrder ));
     }
     return pNumberFormatter.get();
 }
@@ -385,7 +385,7 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
 // #39629 offer NumberFormatter static too
 SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
     sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
-    LanguageType* peFormatterLangType, DateFormat* peFormatterDateFormat )
+    LanguageType* peFormatterLangType, DateOrder* peFormatterDateOrder )
 {
     SvNumberFormatter* pNumberFormater = nullptr;
     LanguageType eLangType;
@@ -397,15 +397,15 @@ SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx
     {
         eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
     }
-    DateFormat eDate;
-    if( peFormatterDateFormat )
+    DateOrder eDate;
+    if( peFormatterDateOrder )
     {
-        eDate = *peFormatterDateFormat;
+        eDate = *peFormatterDateOrder;
     }
     else
     {
         SvtSysLocale aSysLocale;
-        eDate = aSysLocale.GetLocaleData().getDateFormat();
+        eDate = aSysLocale.GetLocaleData().getDateOrder();
     }
 
     pNumberFormater = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
@@ -425,9 +425,9 @@ SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx
     switch( eDate )
     {
         default:
-        case MDY: aDateStr = "MM/DD/YYYY"; break;
-        case DMY: aDateStr = "DD/MM/YYYY"; break;
-        case YMD: aDateStr = "YYYY/MM/DD"; break;
+        case DateOrder::MDY: aDateStr = "MM/DD/YYYY"; break;
+        case DateOrder::DMY: aDateStr = "DD/MM/YYYY"; break;
+        case DateOrder::YMD: aDateStr = "YYYY/MM/DD"; break;
     }
     OUString aStr( aDateStr );      // PutandConvertEntry() modifies string!
     pNumberFormater->PutandConvertEntry( aStr, nCheckPos, nType,

@@ -387,7 +387,7 @@ public:
     static sal_Int32 InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_Unicode c );
 
     /// One of YMD,DMY,MDY if date format
-    DateFormat GetDateOrder() const;
+    DateOrder GetDateOrder() const;
 
     /** A coded value of the exact YMD combination used, if date format.
         For example: YYYY-MM-DD => ('Y' << 16) | ('M' << 8) | 'D'
