@@ -80,11 +80,14 @@ private:
     VclPtr<FixedText>      m_pNoProxyDescFT;
 
     css::uno::Reference< css::uno::XInterface > m_xConfigurationUpdateAccess;
+    css::uno::Reference< css::uno::XInterface > m_xConfigurationUserUpdateAccess;
+    css::uno::Reference< css::uno::XInterface > m_xConfigurationSystemAccess;
 
     void EnableControls_Impl(bool bEnable);
-    void ReadConfigData_Impl();
-    void ReadConfigDefaults_Impl();
-    void RestoreConfigDefaults_Impl();
+    void ReadConfigData_Impl(css::uno::Reference< css::uno::XInterface > configuration_access);
+    void StoreConfigData_Impl(css::uno::Reference< css::uno::XInterface > m_xConfigurationUpdateAccess);
+    void CopyConfigData_Impl(css::uno::Reference< css::uno::XInterface > m_xConfigurationccess,
+        css::uno::Reference< css::uno::XInterface > m_xConfigurationUpdateAccess);
 
     DECL_LINK( ProxyHdl_Impl, ListBox&, void );
     DECL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, void );
