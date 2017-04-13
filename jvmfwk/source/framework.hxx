@@ -27,11 +27,6 @@
 namespace jfw
 {
 
-namespace CJavaInfo
-{
-    JavaInfo * copyJavaInfo(const JavaInfo * pInfo);
-}
-
 class FrameworkException : public std::exception
 {
 public:

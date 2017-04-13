@@ -74,13 +74,6 @@ enum class javaPluginError
     The JavaInfo structures returned in <code>parJavaInfo</code> should be ordered
     according to their version. The one, representing a JRE with the highest
     version should be the first in the array. </p>
-    <p>
-    The function allocates memory for an array and all the JavaInfo objects returned
-    in <code>parJavaInfo</code>. The caller must delete each JavaInfo object.
-    The array is to be
-    freed by rtl_freeMemory.
-    In case an error occurred <code>parJavaInfo</code> need not be freed.
-    </p>
     @param sVendor
         [in] only JREs from this vendor are examined. This parameter always contains
         a vendor string. That is, the string it is not empty.
@@ -93,10 +86,7 @@ enum class javaPluginError
         versions must not be returned by this function.
     @param parJavaInfo
         [out] if the function runs successfully then <code>parJavaInfo</code> contains
-        on return an array of pointers to <code>JavaInfo</code> objects.
-    @param nSizeJavaInfo
-       [out] the number of <code>JavaInfo</code> pointers contained in
-       <code>parJavaInfo</code>.
+        on return a vector of pointers to <code>JavaInfo</code> objects.
 
     @return
     javaPluginError::NONE the function ran successfully.</br>
@@ -112,8 +102,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
     std::vector<OUString> const & arExcludeList,
-    JavaInfo*** parJavaInfo,
-    sal_Int32 *nSizeJavaInfo,
+    std::vector<std::unique_ptr<JavaInfo>> * parJavaInfo,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
 /** obtains information for a JRE at a given location.

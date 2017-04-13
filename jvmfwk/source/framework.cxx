@@ -75,8 +75,7 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
 
             //get all installations of one vendor according to minVersion,
             //maxVersion and excludeVersions
-            sal_Int32 cInfos = 0;
-            JavaInfo** arInfos = nullptr;
+            std::vector<std::unique_ptr<JavaInfo>> arInfos;
             std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
             javaPluginError plerr = jfw_plugin_getAllJavaInfos(
                 true,
@@ -85,16 +84,13 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                 versionInfo.sMaxVersion,
                 versionInfo.vecExcludeVersions,
                 & arInfos,
-                & cInfos,
                 infos);
 
             if (plerr != javaPluginError::NONE)
                 return JFW_E_ERROR;
 
-            for (int j = 0; j < cInfos; j++)
-                vecInfo.push_back(std::unique_ptr<JavaInfo>(arInfos[j]));
-
-            rtl_freeMemory(arInfos);
+            for (auto & j: arInfos)
+                vecInfo.push_back(std::move(j));
 
             //Check if the current plugin can detect JREs at the location
             // of the paths added by jfw_addJRELocation
@@ -423,8 +419,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
                 //get all installations of one vendor according to minVersion,
                 //maxVersion and excludeVersions
-                sal_Int32 cInfos = 0;
-                JavaInfo** arInfos = nullptr;
+                std::vector<std::unique_ptr<JavaInfo>> arInfos;
                 javaPluginError plerr = jfw_plugin_getAllJavaInfos(
                     false,
                     vendor,
@@ -432,22 +427,14 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                     versionInfo.sMaxVersion,
                     versionInfo.vecExcludeVersions,
                     & arInfos,
-                    & cInfos,
                     infos);
 
                 if (plerr != javaPluginError::NONE)
                     continue;
                 //iterate over all installations to find the best which has
                 //all features
-                if (cInfos == 0)
+                for (auto & pJInfo: arInfos)
                 {
-                    rtl_freeMemory(arInfos);
-                    continue;
-                }
-                for (int ii = 0; ii < cInfos; ii++)
-                {
-                    JavaInfo* pJInfo = arInfos[ii];
-
                     // compare features
                     // If the user does not require any features (nFeatureFlags = 0)
                     // then the first installation is used
@@ -455,8 +442,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                     {
                         //the just found Java implements all required features
                         //currently there is only accessibility!!!
-                        aCurrentInfo.reset(
-                            jfw::CJavaInfo::copyJavaInfo(pJInfo));
+                        aCurrentInfo = std::move(pJInfo);
                         bInfoFound = true;
                         break;
                     }
@@ -464,15 +450,9 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                     {
                         // We remember the first installation in aCurrentInfo if
                         // no JavaInfo has been found before:
-                        aCurrentInfo.reset(
-                            jfw::CJavaInfo::copyJavaInfo(pJInfo));
+                        aCurrentInfo = std::move(pJInfo);
                     }
                 }
-                //The array returned by jfw_plugin_getAllJavaInfos must be freed as well as
-                //its contents
-                for (int j = 0; j < cInfos; j++)
-                    delete arInfos[j];
-                rtl_freeMemory(arInfos);
 
                 if (bInfoFound)
                     break;
@@ -926,11 +906,6 @@ void jfw_lock()
 void jfw_unlock()
 {
     jfw::FwkMutex::get().release();
-}
-
-JavaInfo * jfw::CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
-{
-    return pInfo == nullptr ? nullptr : new JavaInfo(*pInfo);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

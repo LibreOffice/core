@@ -299,18 +299,14 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
     std::vector<OUString> const &arExcludeList,
-    JavaInfo*** parJavaInfo,
-    sal_Int32 *nLenInfoList,
+    std::vector<std::unique_ptr<JavaInfo>>* parJavaInfo,
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos)
 {
     assert(parJavaInfo);
-    assert(nLenInfoList);
 
     OSL_ASSERT(!sVendor.isEmpty());
     if (sVendor.isEmpty())
         return javaPluginError::InvalidArg;
-
-    JavaInfo** arInfo = nullptr;
 
     //Find all JREs
     vector<rtl::Reference<VendorBase> > vecInfos =
@@ -337,17 +333,13 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     }
     //Now vecVerifiedInfos contains all those JREs which meet the version requirements
     //Transfer them into the array that is passed out.
-    arInfo = static_cast<JavaInfo**>(rtl_allocateMemory(vecVerifiedInfos.size() * sizeof (JavaInfo*)));
-    int j = 0;
+    parJavaInfo->clear();
     typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
-    for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ++ii, ++j)
+    for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ++ii)
     {
-        arInfo[j] = createJavaInfo(*ii);
+        parJavaInfo->push_back(std::unique_ptr<JavaInfo>(createJavaInfo(*ii)));
     }
-    *nLenInfoList = vecVerifiedInfos.size();
 
-
-    *parJavaInfo = arInfo;
     return javaPluginError::NONE;
 }
 
