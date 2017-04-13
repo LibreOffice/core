@@ -114,7 +114,6 @@
 //      RID_ANNOTATIONS_END                     RID_GLOB_START+220
 #define STR_UNDO_ANIMATION                      RID_GLOB_START+221
 #define STR_UNDO_SLIDE_PARAMS                   RID_GLOB_START+222
-#define RID_SLIDESHOW_CONTEXTMENU               RID_GLOB_START+223
 
 #define STR_DEAUTHORISE_CLIENT                  RID_GLOB_START+229
 #define STR_MASTERSLIDE_NAME                    RID_GLOB_START+230

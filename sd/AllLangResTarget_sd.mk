@@ -33,7 +33,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/app/sdstring.src \
     sd/source/ui/app/strings.src \
     sd/source/ui/app/toolbox.src \
-    sd/source/ui/slideshow/slideshow.src \
     sd/source/ui/view/DocumentRenderer.src \
 ))
 

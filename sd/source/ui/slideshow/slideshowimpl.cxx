@@ -70,7 +70,6 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"
-#include "slideshow.hrc"
 #include "canvas/elapsedtime.hxx"
 #include "avmedia/mediawindow.hxx"
 #include "svtools/colrdlg.hxx"
@@ -78,6 +77,7 @@
 #include "customshowlist.hxx"
 #include "unopage.hxx"
 
+#define CM_SLIDES       21
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationListener;
@@ -1985,17 +1985,18 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
     if( !mbWasPaused )
         pause();
 
-    VclPtrInstance<PopupMenu> pMenu( SdResId( RID_SLIDESHOW_CONTEXTMENU ) );
+    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/slidecontextmenu.ui", "");
+    VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
 
     // Adding button to display if in Pen  mode
-    pMenu->CheckItem( CM_PEN_MODE, mbUsePen);
+    pMenu->CheckItem(pMenu->GetItemId("pen"), mbUsePen);
 
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
-    pMenu->EnableItem( CM_NEXT_SLIDE, ( mpSlideController->getNextSlideIndex() != -1 ) );
-    pMenu->EnableItem( CM_PREV_SLIDE, ( mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) );
-    pMenu->EnableItem( CM_EDIT_PRESENTATION, mpViewShell->GetDoc()->IsStartWithPresentation());
+    pMenu->EnableItem(pMenu->GetItemId("next"), mpSlideController->getNextSlideIndex() != -1);
+    pMenu->EnableItem(pMenu->GetItemId("prev"), (mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK));
+    pMenu->EnableItem(pMenu->GetItemId("edit"), mpViewShell->GetDoc()->IsStartWithPresentation());
 
-    PopupMenu* pPageMenu = pMenu->GetPopupMenu( CM_GOTO );
+    PopupMenu* pPageMenu = pMenu->GetPopupMenu(pMenu->GetItemId("goto"));
 
     SfxViewFrame* pViewFrame = getViewFrame();
     if( pViewFrame )
@@ -2003,13 +2004,13 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         Reference< css::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
-            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, "slot:10617" , false ) );
-            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, "slot:10618" , false ) );
+            pMenu->SetItemImage(pMenu->GetItemId("next"), GetImage(xFrame, "slot:10617" , false));
+            pMenu->SetItemImage(pMenu->GetItemId("prev"), GetImage(xFrame, "slot:10618" , false));
 
             if( pPageMenu )
             {
-                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, "slot:10616" , false ) );
-                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, "slot:10619" , false ) );
+                pPageMenu->SetItemImage(pPageMenu->GetItemId("first"), GetImage(xFrame, "slot:10616" , false));
+                pPageMenu->SetItemImage(pPageMenu->GetItemId("last"), GetImage(xFrame, "slot:10619" , false));
             }
         }
     }
@@ -2020,7 +2021,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         const sal_Int32 nPageNumberCount = mpSlideController->getSlideNumberCount();
         if( nPageNumberCount <= 1 )
         {
-            pMenu->EnableItem( CM_GOTO, false );
+            pMenu->EnableItem(pMenu->GetItemId("goto"), false);
         }
         else
         {
@@ -2028,8 +2029,8 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
             if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
                 nCurrentSlideNumber = -1;
 
-            pPageMenu->EnableItem( CM_FIRST_SLIDE, ( mpSlideController->getSlideNumber(0) != nCurrentSlideNumber ) );
-            pPageMenu->EnableItem( CM_LAST_SLIDE, ( mpSlideController->getSlideNumber( mpSlideController->getSlideIndexCount() - 1) != nCurrentSlideNumber ) );
+            pPageMenu->EnableItem(pPageMenu->GetItemId("first"), mpSlideController->getSlideNumber(0) != nCurrentSlideNumber);
+            pPageMenu->EnableItem(pPageMenu->GetItemId("last"), mpSlideController->getSlideNumber(mpSlideController->getSlideIndexCount() - 1) != nCurrentSlideNumber);
 
             sal_Int32 nPageNumber;
 
@@ -2051,14 +2052,14 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
 
     if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
     {
-        PopupMenu* pBlankMenu = pMenu->GetPopupMenu( CM_SCREEN );
+        PopupMenu* pBlankMenu = pMenu->GetPopupMenu(pMenu->GetItemId("screen"));
         if( pBlankMenu )
         {
-            pBlankMenu->CheckItem( ( mpShowWindow->GetBlankColor() == Color( COL_WHITE ) ) ? CM_SCREEN_WHITE : CM_SCREEN_BLACK  );
+            pBlankMenu->CheckItem((mpShowWindow->GetBlankColor() == Color(COL_WHITE)) ? pBlankMenu->GetItemId("white") : pBlankMenu->GetItemId("black"));
         }
     }
 
-    PopupMenu* pWidthMenu = pMenu->GetPopupMenu( CM_WIDTH_PEN);
+    PopupMenu* pWidthMenu = pMenu->GetPopupMenu(pMenu->GetItemId("width"));
 
     // populate color width list
     if( pWidthMenu )
@@ -2090,15 +2091,13 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
                     break;
             }
 
-            pWidthMenu->EnableItem( (sal_uInt16)(CM_WIDTH_PEN + nIterator));
-            if( nWidth ==  mdUserPaintStrokeWidth)
-                pWidthMenu->CheckItem( (sal_uInt16)(CM_WIDTH_PEN + nIterator) );
+            if (nWidth == mdUserPaintStrokeWidth)
+                pWidthMenu->CheckItem(pWidthMenu->GetItemId(OString::number(nWidth)));
         }
     }
 
     pMenu->SetSelectHdl( LINK( this, SlideshowImpl, ContextMenuSelectHdl ) );
     pMenu->Execute( mpShowWindow, maPopupMousePos );
-    pMenu.disposeAndClear();
 
     if( mxView.is() )
         mxView->ignoreNextMouseReleased();
@@ -2109,153 +2108,142 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
 
 IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
 {
-    if( pMenu )
+    if (!pMenu)
+        return false;
+
+    OString sMenuId = pMenu->GetCurItemIdent();
+
+    if (sMenuId == "prev")
     {
-        sal_uInt16 nMenuId = pMenu->GetCurItemId();
-
-        switch( nMenuId )
+        gotoPreviousSlide();
+        mbWasPaused = false;
+    }
+    else if(sMenuId == "next")
+    {
+        gotoNextSlide();
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "first")
+    {
+        gotoFirstSlide();
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "last")
+    {
+        gotoLastSlide();
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "black" || sMenuId == "white")
+    {
+        const Color aBlankColor(sMenuId == "white" ? COL_WHITE : COL_BLACK);
+        if( mbWasPaused )
         {
-        case CM_PREV_SLIDE:
-            gotoPreviousSlide();
-            mbWasPaused = false;
-            break;
-        case CM_NEXT_SLIDE:
-            gotoNextSlide();
-            mbWasPaused = false;
-            break;
-        case CM_FIRST_SLIDE:
-            gotoFirstSlide();
-            mbWasPaused = false;
-            break;
-        case CM_LAST_SLIDE:
-            gotoLastSlide();
-            mbWasPaused = false;
-            break;
-        case CM_SCREEN_BLACK:
-        case CM_SCREEN_WHITE:
-        {
-            const Color aBlankColor( (nMenuId == CM_SCREEN_WHITE) ? COL_WHITE : COL_BLACK );
-            if( mbWasPaused )
+            if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
             {
-                if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
+                if( mpShowWindow->GetBlankColor() == aBlankColor )
                 {
-                    if( mpShowWindow->GetBlankColor() == aBlankColor )
-                    {
-                        mbWasPaused = false;
-                        mpShowWindow->RestartShow();
-                        break;
-                    }
-                }
-                mpShowWindow->RestartShow();
-            }
-            if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), aBlankColor ) )
-            {
-                pause();
-                mbWasPaused = true;
-            }
-        }
-        break;
-        case CM_COLOR_PEN:
-            {
-                //Open a color picker based on SvColorDialog
-                ::Color aColor( mnUserPaintColor );
-                SvColorDialog aColorDlg( mpShowWindow);
-                aColorDlg.SetColor( aColor );
-
-                if (aColorDlg.Execute() )
-                {
-                    aColor = aColorDlg.GetColor();
-                    setPenColor(aColor.GetColor());
-                }
-                mbWasPaused = false;
-            }
-            break;
-
-        case CM_WIDTH_PEN_VERY_THIN:
-            {
-                setPenWidth(4.0);
-                mbWasPaused = false;
-            }
-            break;
-
-        case CM_WIDTH_PEN_THIN:
-            {
-                setPenWidth(100.0);
-                mbWasPaused = false;
-            }
-            break;
-
-        case CM_WIDTH_PEN_NORMAL:
-            {
-                setPenWidth(150.0);
-                mbWasPaused = false;
-            }
-            break;
-
-        case CM_WIDTH_PEN_THICK:
-            {
-                setPenWidth(200.0);
-                mbWasPaused = false;
-            }
-            break;
-
-        case CM_WIDTH_PEN_VERY_THICK:
-            {
-                setPenWidth(400.0);
-                mbWasPaused = false;
-            }
-            break;
-        case CM_ERASE_ALLINK:
-            {
-                setEraseAllInk(true);
                     mbWasPaused = false;
-            }
-            break;
-        case CM_PEN_MODE:
-            {
-                setUsePen(!mbUsePen);
-                mbWasPaused = false;
-            }
-            break;
-        case CM_EDIT_PRESENTATION:
-            // When in autoplay mode (pps/ppsx), offer editing of the presentation
-            // Turn autostart off, else Impress will close when exiting the Presentation
-            mpViewShell->GetDoc()->SetExitAfterPresenting(false);
-            if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
-            {
-                if( mpSlideController->getCurrentSlideNumber() != -1 )
-                {
-                    mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
+                    mpShowWindow->RestartShow();
+                    return false;
                 }
             }
-            endPresentation();
-            break;
-        case CM_ENDSHOW:
-            // in case the user cancels the presentation, switch to current slide
-            // in edit mode
-            if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
-            {
-                if( mpSlideController->getCurrentSlideNumber() != -1 )
-                {
-                    mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
-                }
-            }
-            endPresentation();
-            break;
-        default:
-            sal_Int32 nPageNumber = nMenuId - CM_SLIDES;
-            const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
-            if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
-            {
-                mpShowWindow->RestartShow( nPageNumber );
-            }
-            else if( nPageNumber != mpSlideController->getCurrentSlideNumber() )
-            {
-                displaySlideNumber( nPageNumber );
-            }
-            mbWasPaused = false;
-            break;
+            mpShowWindow->RestartShow();
         }
+        if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), aBlankColor ) )
+        {
+            pause();
+            mbWasPaused = true;
+        }
+    }
+    else if (sMenuId == "color")
+    {
+        //Open a color picker based on SvColorDialog
+        ::Color aColor( mnUserPaintColor );
+        SvColorDialog aColorDlg( mpShowWindow);
+        aColorDlg.SetColor( aColor );
+
+        if (aColorDlg.Execute() )
+        {
+            aColor = aColorDlg.GetColor();
+            setPenColor(aColor.GetColor());
+        }
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "4")
+    {
+        setPenWidth(4.0);
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "100")
+    {
+        setPenWidth(100.0);
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "150")
+    {
+        setPenWidth(150.0);
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "200")
+    {
+        setPenWidth(200.0);
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "400")
+    {
+        setPenWidth(400.0);
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "erase")
+    {
+        setEraseAllInk(true);
+            mbWasPaused = false;
+    }
+    else if (sMenuId == "pen")
+    {
+        setUsePen(!mbUsePen);
+        mbWasPaused = false;
+    }
+    else if (sMenuId == "edit")
+    {
+        // When in autoplay mode (pps/ppsx), offer editing of the presentation
+        // Turn autostart off, else Impress will close when exiting the Presentation
+        mpViewShell->GetDoc()->SetExitAfterPresenting(false);
+        if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+        {
+            if( mpSlideController->getCurrentSlideNumber() != -1 )
+            {
+                mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
+            }
+        }
+        endPresentation();
+    }
+    else if (sMenuId == "end")
+    {
+        // in case the user cancels the presentation, switch to current slide
+        // in edit mode
+        if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+        {
+            if( mpSlideController->getCurrentSlideNumber() != -1 )
+            {
+                mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
+            }
+        }
+        endPresentation();
+    }
+    else
+    {
+        sal_Int32 nPageNumber = pMenu->GetCurItemId() - CM_SLIDES;
+        const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
+        if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+        {
+            mpShowWindow->RestartShow( nPageNumber );
+        }
+        else if( nPageNumber != mpSlideController->getCurrentSlideNumber() )
+        {
+            displaySlideNumber( nPageNumber );
+        }
+        mbWasPaused = false;
     }
 
     return false;
