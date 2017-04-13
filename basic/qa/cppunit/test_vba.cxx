@@ -85,6 +85,17 @@ void VBATest::testMiscVBAFunctions()
         "instr.vb",
         "instrrev.vb",
         "int.vb",
+        "iserror.vb",
+        "ismissing.vb",
+        "isnull.vb",
+        "isobject.vb",
+        "join.vb",
+        "lbound.vb",
+        "isarray.vb",
+        "isdate.vb",
+        "isempty.vb",
+        "isnumeric.vb",
+        "lcase.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
