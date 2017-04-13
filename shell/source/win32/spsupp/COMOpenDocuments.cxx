@@ -7,6 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
+#include <cstring>
+
 #include "COMOpenDocuments.hpp"
 #include "spsuppServ.hpp"
 #include "stdio.h"
