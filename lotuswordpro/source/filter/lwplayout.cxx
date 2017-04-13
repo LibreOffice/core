@@ -58,6 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
+#include <memory>
 #include "lwplayout.hxx"
 #include "lwpusewhen.hxx"
 #include "lwptools.hxx"

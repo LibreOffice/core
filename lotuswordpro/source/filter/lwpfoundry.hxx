@@ -73,6 +73,7 @@
 class LwpDocument;
 class LwpBookMark;
 
+#include <memory>
 #include <vector>
 #define TAG_USER_VERSION    0x72655655UL        // "UVer"
 

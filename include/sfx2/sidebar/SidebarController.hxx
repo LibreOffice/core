@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARCONTROLLER_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARCONTROLLER_HXX
 
+#include <memory>
 #include <sal/config.h>
 
 #include <sfx2/sidebar/AsynchronousCall.hxx>

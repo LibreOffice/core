@@ -51,6 +51,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {

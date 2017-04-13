@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <toolkit/helper/formpdfexport.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>

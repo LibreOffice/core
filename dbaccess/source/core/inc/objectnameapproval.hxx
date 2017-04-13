@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_OBJECTNAMEAPPROVAL_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_OBJECTNAMEAPPROVAL_HXX
 
+#include <memory>
 #include "containerapprove.hxx"
 
 #include <com/sun/star/sdbc/XConnection.hpp>

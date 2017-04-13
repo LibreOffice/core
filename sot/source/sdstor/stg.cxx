@@ -33,6 +33,8 @@
 #include "stgio.hxx"
 #include "stgole.hxx"
 
+#include <memory>
+
 static long nTmpCount = 0;
 
 // The internal open mode is StreamMode::READ | StreamMode::TRUNC, which is silly

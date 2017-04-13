@@ -11,6 +11,7 @@
 #ifndef INCLUDED_SC_INC_CHARTTOOLS_HXX
 #define INCLUDED_SC_INC_CHARTTOOLS_HXX
 
+#include <memory>
 #include <svx/svdoole2.hxx>
 #include <svx/svditer.hxx>
 

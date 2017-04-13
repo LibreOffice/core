@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include "dp_misc.h"
 #include "dp_backend.h"
 #include "dp_services.hxx"

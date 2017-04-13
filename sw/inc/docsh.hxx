@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_DOCSH_HXX
 #define INCLUDED_SW_INC_DOCSH_HXX
 
+#include <memory>
 #include <rtl/ref.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/uno/Sequence.h>

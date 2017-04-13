@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

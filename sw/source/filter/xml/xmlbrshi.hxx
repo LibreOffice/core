@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHI_HXX
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLBRSHI_HXX
 
+#include <memory>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <xmloff/xmlictxt.hxx>

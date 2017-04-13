@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASEGFX_RASTER_BPIXELRASTER_HXX
 #define INCLUDED_BASEGFX_RASTER_BPIXELRASTER_HXX
 
+#include <memory>
 #include <algorithm>
 #include <string.h>
 #include <sal/types.h>

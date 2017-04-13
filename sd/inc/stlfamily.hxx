@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_INC_STLFAMILY_HXX
 #define INCLUDED_SD_INC_STLFAMILY_HXX
 
+#include <memory>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

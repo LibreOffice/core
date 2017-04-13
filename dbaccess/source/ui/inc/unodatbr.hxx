@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_UNODATBR_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_UNODATBR_HXX
 
+#include <memory>
 #include "brwctrlr.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>

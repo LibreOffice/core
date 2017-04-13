@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_SHEETDATACONTEXT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_SHEETDATACONTEXT_HXX
 
+#include <memory>
 #include "excelhandlers.hxx"
 #include "richstring.hxx"
 #include "sheetdatabuffer.hxx"

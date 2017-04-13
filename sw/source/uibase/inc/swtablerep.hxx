@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWTABLEREP_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWTABLEREP_HXX
 
+#include <memory>
 #include <sfx2/tabdlg.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"

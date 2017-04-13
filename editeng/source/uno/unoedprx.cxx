@@ -23,6 +23,7 @@
 
 #include <limits.h>
 #include <utility>
+#include <memory>
 #include <vector>
 #include <algorithm>
 #include <osl/mutex.hxx>

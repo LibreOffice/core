@@ -58,6 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
+#include <memory>
 #include "lwpfrib.hxx"
 #include "lwpcharsetmgr.hxx"
 #include "lwpsection.hxx"

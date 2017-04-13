@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <comphelper/anycompare.hxx>
 
 #include <com/sun/star/util/Date.hpp>

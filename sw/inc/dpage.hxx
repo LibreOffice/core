@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_DPAGE_HXX
 #define INCLUDED_SW_INC_DPAGE_HXX
 
+#include <memory>
 #include <svx/fmpage.hxx>
 #include <svx/svdobj.hxx>
 

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_WIZARDMACHINE_HXX
 #define INCLUDED_SVTOOLS_WIZARDMACHINE_HXX
 
+#include <memory>
 #include <svtools/svtdllapi.h>
 #include <svtools/wizdlg.hxx>
 #include <vcl/button.hxx>

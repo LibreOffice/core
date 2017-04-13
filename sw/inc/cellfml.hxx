@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_CELLFML_HXX
 #define INCLUDED_SW_INC_CELLFML_HXX
 
+#include <memory>
 #include <rtl/ustring.hxx>
 
 class SwTable;

@@ -10,6 +10,7 @@
 #ifndef SW_SOURCE_UIBASE_INC_UIOBJECT_HXX
 #define SW_SOURCE_UIBASE_INC_UIOBJECT_HXX
 
+#include <memory>
 #include <vcl/uitest/uiobject.hxx>
 
 class SwEditWin;

@@ -22,6 +22,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
+#include <climits>
 #include <limits>
 #include <memory>
 #include <unordered_map>

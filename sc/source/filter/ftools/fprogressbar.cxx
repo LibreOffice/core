@@ -23,6 +23,8 @@
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 
+#include <climits>
+
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( std::size_t nSize ) :
     mnSize( nSize ),
     mnPos( 0 )

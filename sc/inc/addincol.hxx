@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_ADDINCOL_HXX
 #define INCLUDED_SC_INC_ADDINCOL_HXX
 
+#include <memory>
 #include "global.hxx"
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 #include <com/sun/star/sheet/XAddIn.hpp>

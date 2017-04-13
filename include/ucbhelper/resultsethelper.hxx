@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UCBHELPER_RESULTSETHELPER_HXX
 #define INCLUDED_UCBHELPER_RESULTSETHELPER_HXX
 
+#include <memory>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

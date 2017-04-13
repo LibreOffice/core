@@ -60,6 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBREAKSOVERRIDE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBREAKSOVERRIDE_HXX
 
+#include <memory>
 #include "lwpoverride.hxx"
 
 class LwpObjectStream;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_RTFEXP_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_RTFEXP_HXX
 
+#include <memory>
 #include "expbase.hxx"
 
 class ScRTFExport : public ScExportBase

@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <memory>
 #include "DAVSessionFactory.hxx"
 #include "NeonSession.hxx"
 #include "NeonUri.hxx"

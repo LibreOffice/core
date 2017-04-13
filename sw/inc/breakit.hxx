@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_BREAKIT_HXX
 #define INCLUDED_SW_INC_BREAKIT_HXX
 
+#include <memory>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>

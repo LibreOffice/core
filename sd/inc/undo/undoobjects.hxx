@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_INC_UNDO_UNDOOBJECTS_HXX
 #define INCLUDED_SD_INC_UNDO_UNDOOBJECTS_HXX
 
+#include <memory>
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>

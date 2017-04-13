@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_AXES_TICKMARKS_EQUIDISTANT_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_TICKMARKS_EQUIDISTANT_HXX
 
+#include <memory>
 #include "Tickmarks.hxx"
 
 namespace chart

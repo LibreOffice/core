@@ -61,6 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUT_HXX
 
+#include <memory>
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>

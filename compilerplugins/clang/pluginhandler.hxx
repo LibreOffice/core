@@ -12,6 +12,7 @@
 #ifndef PLUGINHANDLER_H
 #define PLUGINHANDLER_H
 
+#include <memory>
 #include "plugin.hxx"
 
 #include <set>

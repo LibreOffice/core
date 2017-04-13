@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
 #include <svx/dialogs.hrc>

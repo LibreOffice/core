@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOREDLINE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOREDLINE_HXX
 
+#include <memory>
 #include <undobj.hxx>
 
 struct SwSortOptions;

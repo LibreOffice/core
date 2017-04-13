@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_OPENGLWIN_HXX
 #define INCLUDED_VCL_OPENGLWIN_HXX
 
+#include <memory>
 #include <vcl/event.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/dllapi.h>

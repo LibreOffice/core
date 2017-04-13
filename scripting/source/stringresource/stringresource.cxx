@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include "stringresource.hxx"
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>

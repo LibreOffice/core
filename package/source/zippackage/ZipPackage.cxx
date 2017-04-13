@@ -69,6 +69,7 @@
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 
 #include <cstring>
+#include <memory>
 #include <vector>
 
 #include <comphelper/processfactory.hxx>

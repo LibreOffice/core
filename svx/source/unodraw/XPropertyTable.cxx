@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include "svx/XPropertyTable.hxx"
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>

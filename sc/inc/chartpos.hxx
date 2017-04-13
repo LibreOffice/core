@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_CHARTPOS_HXX
 #define INCLUDED_SC_INC_CHARTPOS_HXX
 
+#include <memory>
 #include "rangelst.hxx"
 #include <map>
 

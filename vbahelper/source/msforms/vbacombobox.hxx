@@ -18,6 +18,7 @@
  */
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACOMBOBOX_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACOMBOBOX_HXX
+#include <memory>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

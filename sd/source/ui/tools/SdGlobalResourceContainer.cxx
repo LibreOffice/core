@@ -27,6 +27,7 @@
 #include <rtl/instance.hxx>
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 using namespace ::com::sun::star;

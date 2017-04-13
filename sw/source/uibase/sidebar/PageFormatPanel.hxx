@@ -43,6 +43,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/relfld.hxx>
 
+#include <memory>
 #include <vector>
 
 namespace sw { namespace sidebar {

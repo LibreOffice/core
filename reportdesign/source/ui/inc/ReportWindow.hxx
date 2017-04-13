@@ -26,6 +26,7 @@
 #include <svx/svdedtv.hxx>
 #include <sfx2/zoomitem.hxx>
 
+#include <memory>
 #include <vector>
 #include <comphelper/propmultiplex.hxx>
 

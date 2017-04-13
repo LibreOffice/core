@@ -19,6 +19,7 @@
 #ifndef INCLUDED_VCL_TEXTENG_HXX
 #define INCLUDED_VCL_TEXTENG_HXX
 
+#include <memory>
 #include <sal/config.h>
 
 #include <cstddef>

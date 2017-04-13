@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_UNOCTITM_HXX
 #define INCLUDED_SFX2_UNOCTITM_HXX
 
+#include <memory>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>

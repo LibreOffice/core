@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWIMPL_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWIMPL_HXX
 
+#include <memory>
 #include "sal/config.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include <cppuhelper/compbase.hxx>

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SD_SOURCE_SIDEBAR_MEDIAPLAYBACKPANEL_HXX
 #define INCLUDED_SD_SOURCE_SIDEBAR_MEDIAPLAYBACKPANEL_HXX
 
+#include <memory>
 #include <vcl/ctrl.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 

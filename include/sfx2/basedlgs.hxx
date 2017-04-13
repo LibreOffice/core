@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_BASEDLGS_HXX
 #define INCLUDED_SFX2_BASEDLGS_HXX
 
+#include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>

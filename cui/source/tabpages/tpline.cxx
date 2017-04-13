@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <editeng/sizeitem.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>

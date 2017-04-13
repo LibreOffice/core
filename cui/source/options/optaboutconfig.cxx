@@ -30,6 +30,7 @@
 #include <unotools/textsearch.hxx>
 #include <o3tl/make_unique.hxx>
 
+#include <memory>
 #include <vector>
 #include <iostream>
 

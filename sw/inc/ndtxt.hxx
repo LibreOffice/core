@@ -31,6 +31,7 @@
 
 #include <sfx2/Metadatable.hxx>
 
+#include <memory>
 #include <vector>
 #include <set>
 

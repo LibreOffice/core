@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX
 
+#include <memory>
 #include "anyrefdg.hxx"
 #include "global.hxx"
 #include <vcl/lstbox.hxx>

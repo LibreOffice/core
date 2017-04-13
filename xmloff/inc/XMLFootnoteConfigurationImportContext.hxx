@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLFOOTNOTECONFIGURATIONIMPORTCONTEXT_HXX
 #define INCLUDED_XMLOFF_INC_XMLFOOTNOTECONFIGURATIONIMPORTCONTEXT_HXX
 
+#include <memory>
 #include <xmloff/xmlstyle.hxx>
 
 namespace com { namespace sun { namespace star {

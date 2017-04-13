@@ -45,6 +45,7 @@
 #include "xilink.hxx"
 #include "xecontent.hxx"
 
+#include <memory>
 #include <vector>
 
 RootData::RootData()

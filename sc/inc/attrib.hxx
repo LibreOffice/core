@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_ATTRIB_HXX
 #define INCLUDED_SC_INC_ATTRIB_HXX
 
+#include <memory>
 #include <svl/poolitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>

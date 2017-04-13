@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <i18nutil/searchopt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/texteng.hxx>

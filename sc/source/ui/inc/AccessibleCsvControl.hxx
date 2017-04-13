@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECSVCONTROL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECSVCONTROL_HXX
 
+#include <memory>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

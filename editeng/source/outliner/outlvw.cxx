@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <svl/intitem.hxx>

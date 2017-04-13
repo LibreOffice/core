@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_MENU_HXX
 #define INCLUDED_VCL_MENU_HXX
 
+#include <memory>
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <tools/color.hxx>
 #include <tools/solar.h>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_PIECHART_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_PIECHART_HXX
 
+#include <memory>
 #include "VSeriesPlotter.hxx"
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2irectangle.hxx>

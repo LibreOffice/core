@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_PAGESETTINGS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_PAGESETTINGS_HXX
 
+#include <memory>
 #include "worksheethelper.hxx"
 
 namespace oox { class PropertySet; }

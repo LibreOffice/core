@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SC_QA_UNIT_HELPER_SHARED_TEST_IMPL_HXX
 #define INCLUDED_SC_QA_UNIT_HELPER_SHARED_TEST_IMPL_HXX
 
+#include <memory>
 #include "colorscale.hxx"
 #include "conditio.hxx"
 #include "document.hxx"

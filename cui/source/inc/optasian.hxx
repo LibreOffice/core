@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTASIAN_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTASIAN_HXX
 
+#include <memory>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>

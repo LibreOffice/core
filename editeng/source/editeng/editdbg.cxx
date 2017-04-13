@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>

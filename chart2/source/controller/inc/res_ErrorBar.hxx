@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_ERRORBAR_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_ERRORBAR_HXX
 
+#include <memory>
 #include <vcl/button.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>

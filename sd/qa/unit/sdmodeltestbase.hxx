@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SD_QA_UNIT_SDMODELTESTBASE_HXX
 #define INCLUDED_SD_QA_UNIT_SDMODELTESTBASE_HXX
 
+#include <memory>
 #include <test/bootstrapfixture.hxx>
 #include <test/xmldiff.hxx>
 #include <test/xmltesttools.hxx>

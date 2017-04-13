@@ -10,6 +10,7 @@
 #ifndef INCLUDED_COMPHELPER_UNIQUE_DISPOSING_PTR_HXX
 #define INCLUDED_COMPHELPER_UNIQUE_DISPOSING_PTR_HXX
 
+#include <memory>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>

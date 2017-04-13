@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCONDFORMAT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCONDFORMAT_HXX
 
+#include <memory>
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"

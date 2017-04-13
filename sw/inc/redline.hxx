@@ -28,6 +28,7 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 class SfxItemSet;

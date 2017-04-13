@@ -19,6 +19,7 @@
 
 #ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_EPPT_HXX
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPT_HXX
+#include <memory>
 #include <vector>
 #include "escherex.hxx"
 #include <sal/types.h>

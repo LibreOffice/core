@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_IVCTRL_HXX
 #define INCLUDED_SVTOOLS_IVCTRL_HXX
 
+#include <memory>
 #include <svtools/svtdllapi.h>
 #include <vcl/ctrl.hxx>
 #include <tools/link.hxx>

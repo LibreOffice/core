@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCHANGETRACKINGIMPORTHELPER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCHANGETRACKINGIMPORTHELPER_HXX
 
+#include <memory>
 #include "chgtrack.hxx"
 #include <list>
 #include <com/sun/star/util/DateTime.hpp>

@@ -18,6 +18,7 @@
  */
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
+#include <memory>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>

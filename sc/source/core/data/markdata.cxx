@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include "markdata.hxx"
 #include "markarr.hxx"
 #include "markmulti.hxx"

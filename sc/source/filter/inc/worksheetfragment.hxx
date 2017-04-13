@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_WORKSHEETFRAGMENT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_WORKSHEETFRAGMENT_HXX
 
+#include <memory>
 #include "excelhandlers.hxx"
 
 namespace oox {

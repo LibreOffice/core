@@ -24,6 +24,7 @@
 
 #include <fstream>
 #include <unordered_map>
+#include <memory>
 #include <vector>
 #include "po.hxx"
 

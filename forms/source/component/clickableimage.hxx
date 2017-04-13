@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_CLICKABLEIMAGE_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_CLICKABLEIMAGE_HXX
 
+#include <memory>
 #include "FormComponent.hxx"
 #include "EventThread.hxx"
 #include "imgprod.hxx"

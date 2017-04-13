@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASEGFX_RASTER_BZPIXELRASTER_HXX
 #define INCLUDED_BASEGFX_RASTER_BZPIXELRASTER_HXX
 
+#include <memory>
 #include <basegfx/raster/bpixelraster.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <osl/diagnose.h>

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include "xmlImportDocumentHandler.hxx"
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>

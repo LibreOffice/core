@@ -23,6 +23,7 @@
 #include "file/FTable.hxx"
 #include <connectivity/FValue.hxx>
 #include <rtl/ref.hxx>
+#include <memory>
 #include <vector>
 
 #define NODE_NOTFOUND 0xFFFF

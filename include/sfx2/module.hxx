@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_MODULE_HXX
 #define INCLUDED_SFX2_MODULE_HXX
 
+#include <memory>
 #include <sal/config.h>
 #include <sfx2/app.hxx>
 #include <sfx2/dllapi.h>

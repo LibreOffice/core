@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_WIN_GDIIMPL_HXX
 #define INCLUDED_VCL_INC_OPENGL_WIN_GDIIMPL_HXX
 
+#include <memory>
 #include <vcl/dllapi.h>
 
 #include "openglgdiimpl.hxx"
