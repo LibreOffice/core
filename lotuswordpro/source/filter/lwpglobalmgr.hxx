@@ -61,6 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPGLOBALMGR_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPGLOBALMGR_HXX
 
+#include <memory>
 #include <map>
 #include "lwpheader.hxx"
 #include "lwpsvstream.hxx"

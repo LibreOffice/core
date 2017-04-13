@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_NAMEBUFF_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_NAMEBUFF_HXX
 
+#include <memory>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include "compiler.hxx"

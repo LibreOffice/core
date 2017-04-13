@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_TCOLUMNSHELPER_HXX
 #define INCLUDED_CONNECTIVITY_TCOLUMNSHELPER_HXX
 
+#include <memory>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>

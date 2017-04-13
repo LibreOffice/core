@@ -21,6 +21,7 @@
 #include <list>
 #include <array>
 #include <utility>
+#include <memory>
 #include <vector>
 #include <algorithm>
 

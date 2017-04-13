@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWACORR_HXX
 #define INCLUDED_SW_INC_SWACORR_HXX
 
+#include <memory>
 #include <editeng/svxacorr.hxx>
 
 #include <com/sun/star/uno/Reference.h>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_FMPAGE_HXX
 #define INCLUDED_SVX_FMPAGE_HXX
 
+#include <memory>
 #include <svx/svdpage.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/svxdllapi.h>

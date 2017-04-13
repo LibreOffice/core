@@ -22,7 +22,9 @@
 
 #include <tools/stream.hxx>
 #include <rtl/ref.hxx>
+
 #include <vector>
+#include <memory>
 
 class StgIo;
 class StgStrm;

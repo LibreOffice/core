@@ -58,6 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
+#include <memory>
 #include "lwpglobalmgr.hxx"
 #include "lwpsilverbullet.hxx"
 #include "lwpdoc.hxx"

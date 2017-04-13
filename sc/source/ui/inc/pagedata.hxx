@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PAGEDATA_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PAGEDATA_HXX
 
+#include <memory>
 #include "global.hxx"
 #include "address.hxx"
 

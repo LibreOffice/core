@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASIDE2_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASIDE2_HXX
 
+#include <memory>
 #include "layout.hxx"
 #include "bastype3.hxx"
 #include "basidesh.hxx"

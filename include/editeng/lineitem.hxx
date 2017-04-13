@@ -19,6 +19,7 @@
 #ifndef INCLUDED_EDITENG_LINEITEM_HXX
 #define INCLUDED_EDITENG_LINEITEM_HXX
 
+#include <memory>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 

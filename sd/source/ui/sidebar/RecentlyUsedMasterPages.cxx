@@ -26,6 +26,7 @@
 #include "sdpage.hxx"
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include <comphelper/processfactory.hxx>

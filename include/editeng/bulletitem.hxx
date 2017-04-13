@@ -19,6 +19,7 @@
 #ifndef INCLUDED_EDITENG_BULLETITEM_HXX
 #define INCLUDED_EDITENG_BULLETITEM_HXX
 
+#include <memory>
 #include <editeng/editengdllapi.h>
 #include <svl/poolitem.hxx>
 #include <svtools/grfmgr.hxx>

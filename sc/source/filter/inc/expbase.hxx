@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXPBASE_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXPBASE_HXX
 
+#include <memory>
 #include "global.hxx"
 #include "address.hxx"
 

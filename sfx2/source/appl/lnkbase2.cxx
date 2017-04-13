@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <sfx2/lnkbase.hxx>
 #include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>

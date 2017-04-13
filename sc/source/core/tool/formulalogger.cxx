@@ -5,6 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <memory>
 #include <formulalogger.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>

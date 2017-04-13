@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDOMEDIA_HXX
 #define INCLUDED_SVX_SVDOMEDIA_HXX
 
+#include <memory>
 #include <svx/svdorect.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <svx/svxdllapi.h>

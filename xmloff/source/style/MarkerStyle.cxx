@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <xmloff/MarkerStyle.hxx>
 #include "xexptran.hxx"
 #include <xmloff/attrlist.hxx>

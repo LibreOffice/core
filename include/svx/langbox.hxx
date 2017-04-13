@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_LANGBOX_HXX
 #define INCLUDED_SVX_LANGBOX_HXX
 
+#include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/image.hxx>

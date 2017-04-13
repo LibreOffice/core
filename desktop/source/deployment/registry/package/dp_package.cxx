@@ -69,6 +69,7 @@
 #include <boost/optional.hpp>
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include "dp_extbackenddb.hxx"

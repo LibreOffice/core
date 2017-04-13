@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <memory>
 #include "editeng/fieldupdater.hxx"
 #include "editeng/flditem.hxx"
 #include <editeng/edtdlg.hxx>

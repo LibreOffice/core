@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SINGLEDOCCONTROLLER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_SINGLEDOCCONTROLLER_HXX
 
+#include <memory>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>

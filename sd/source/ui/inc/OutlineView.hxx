@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEW_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEW_HXX
 
+#include <memory>
 #include <vcl/image.hxx>
 #include <editeng/lrspitem.hxx>
 #include "View.hxx"

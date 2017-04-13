@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <fesh.hxx>
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>

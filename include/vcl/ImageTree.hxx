@@ -20,6 +20,7 @@
 #ifndef INCLUDED_INCLUDE_VCL_IMAGETREE_HXX
 #define INCLUDED_INCLUDE_VCL_IMAGETREE_HXX
 
+#include <memory>
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>

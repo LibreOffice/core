@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <com/sun/star/awt/WindowEvent.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>

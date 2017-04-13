@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_DOC_PRINTHELPER_HXX
 #define INCLUDED_SFX2_SOURCE_DOC_PRINTHELPER_HXX
 
+#include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/viewsh.hxx>

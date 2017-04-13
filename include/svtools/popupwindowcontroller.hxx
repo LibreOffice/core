@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_POPUPWINDOWCONTROLLER_HXX
 #define INCLUDED_SVTOOLS_POPUPWINDOWCONTROLLER_HXX
 
+#include <memory>
 #include <svtools/svtdllapi.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>

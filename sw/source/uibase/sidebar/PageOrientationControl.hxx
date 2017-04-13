@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEORIENTATIONCONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEORIENTATIONCONTROL_HXX
 
+#include <memory>
 #include <svx/tbxctl.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/rulritem.hxx>

@@ -61,6 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
 
+#include <memory>
 #include "lwplayout.hxx"
 #include "lwpstory.hxx"
 #include "lwpmarker.hxx"

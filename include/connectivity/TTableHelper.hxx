@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
 #define INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
 
+#include <memory>
 #include <sal/config.h>
 
 #include <map>

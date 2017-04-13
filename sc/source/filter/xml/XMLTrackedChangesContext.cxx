@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include "XMLTrackedChangesContext.hxx"
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"

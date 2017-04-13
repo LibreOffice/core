@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 
+#include <memory>
 #include <sal/config.h>
 
 #include <vcl/graph.hxx>

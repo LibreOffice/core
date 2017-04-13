@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTBASE_HXX
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTBASE_HXX
 
+#include <memory>
 #include <vector>
 
 #include <vcl/mapmod.hxx>

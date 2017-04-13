@@ -19,6 +19,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_MSFILTER_VISCACHE_HXX
 #define INCLUDED_FILTER_SOURCE_MSFILTER_VISCACHE_HXX
 
+#include <memory>
 #include <sfx2/objsh.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/bitmap.hxx>

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_FMTURL_HXX
 #define INCLUDED_SW_INC_FMTURL_HXX
 
+#include <memory>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <hintids.hxx>

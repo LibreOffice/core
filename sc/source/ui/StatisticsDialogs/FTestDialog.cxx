@@ -8,6 +8,7 @@
  *
  */
 
+#include <memory>
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/undo.hxx>

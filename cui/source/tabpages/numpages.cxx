@@ -65,6 +65,7 @@
 #include <tools/resary.hxx>
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 #include "sfx2/opengrf.hxx"
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <svx/XPropertyTable.hxx>
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"

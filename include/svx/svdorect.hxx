@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDORECT_HXX
 #define INCLUDED_SVX_SVDORECT_HXX
 
+#include <memory>
 #include <svx/svdotext.hxx>
 #include <svx/svxdllapi.h>
 

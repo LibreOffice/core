@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGESSELECTOR_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGESSELECTOR_HXX
 
+#include <memory>
 #include "MasterPageContainer.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "PreviewValueSet.hxx"

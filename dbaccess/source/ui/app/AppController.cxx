@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include "AppController.hxx"
 #include "dbustrings.hrc"
 #include "advancedsettingsdlg.hxx"

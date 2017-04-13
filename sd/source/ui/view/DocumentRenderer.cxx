@@ -53,6 +53,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <xmloff/autolayout.hxx>
 
+#include <memory>
 #include <vector>
 
 using namespace ::com::sun::star;

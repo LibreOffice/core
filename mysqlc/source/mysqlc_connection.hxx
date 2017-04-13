@@ -20,6 +20,7 @@
 #ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
 #define INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
 
+#include <memory>
 #include "mysqlc_subcomponent.hxx"
 #include "mysqlc_types.hxx"
 

@@ -23,6 +23,7 @@
 #include <SwPortionHandler.hxx>
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
+#include <memory>
 #include <vector>
 
 class SwTextNode;

@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SVX_COLORBOX_HXX
 #define INCLUDED_SVX_COLORBOX_HXX
 
+#include <memory>
 #include <vcl/menubtn.hxx>
 #include <svx/colorwindow.hxx>
 #include <sfx2/controlwrapper.hxx>

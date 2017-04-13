@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DRAWVIEWWRAPPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DRAWVIEWWRAPPER_HXX
 
+#include <memory>
 #include <svx/view3d.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>

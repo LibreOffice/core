@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOOVERWRITE_HXX
 
+#include <memory>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
 #include <undobj.hxx>

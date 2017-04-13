@@ -19,6 +19,7 @@
 #include "dputil.hxx"
 #include "dbdocfun.hxx"
 
+#include <memory>
 #include <vector>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>

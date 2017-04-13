@@ -30,6 +30,7 @@
 #include <SwNumberTreeTypes.hxx>
 #include <ndarr.hxx>
 #include <unordered_map>
+#include <memory>
 #include <vector>
 #include <charfmt.hxx>
 

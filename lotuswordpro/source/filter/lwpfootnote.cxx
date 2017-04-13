@@ -54,6 +54,7 @@
  *
  ************************************************************************/
 
+#include <memory>
 #include "lwpfootnote.hxx"
 #include "lwpstory.hxx"
 #include "xfilter/xffootnote.hxx"

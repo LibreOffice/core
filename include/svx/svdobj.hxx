@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDOBJ_HXX
 #define INCLUDED_SVX_SVDOBJ_HXX
 
+#include <memory>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>

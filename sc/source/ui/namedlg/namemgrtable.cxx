@@ -8,6 +8,7 @@
  */
 
 //ScRangeManagerTable
+#include <memory>
 #include "global.hxx"
 #include "reffact.hxx"
 #include "document.hxx"

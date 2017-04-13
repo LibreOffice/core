@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PRINTFUN_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PRINTFUN_HXX
 
+#include <memory>
 #include "pagepar.hxx"
 #include "editutil.hxx"
 

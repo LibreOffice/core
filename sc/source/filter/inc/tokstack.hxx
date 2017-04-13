@@ -25,6 +25,7 @@
 #include "tokenarray.hxx"
 #include <osl/diagnose.h>
 
+#include <memory>
 #include <vector>
 
 namespace svl {

@@ -26,6 +26,7 @@
 #include <swtypes.hxx>
 
 #include <map>
+#include <memory>
 #include <vector>
 #include <set>
 

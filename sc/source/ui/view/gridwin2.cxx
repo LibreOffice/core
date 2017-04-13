@@ -46,6 +46,7 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include <unordered_map>
+#include <memory>
 #include <vector>
 
 using namespace css;

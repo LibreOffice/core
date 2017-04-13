@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
 #define INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
 
+#include <memory>
 #include <svtools/svtdllapi.h>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

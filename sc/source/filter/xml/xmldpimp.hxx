@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLDPIMP_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLDPIMP_HXX
 
+#include <memory>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>

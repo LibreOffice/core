@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_EDITUTIL_HXX
 #define INCLUDED_SC_INC_EDITUTIL_HXX
 
+#include <memory>
 #include "scdllapi.h"
 #include "address.hxx"
 #include <editeng/editeng.hxx>

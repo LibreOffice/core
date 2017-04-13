@@ -58,6 +58,7 @@
  *  For LWP filter architecture prototype - table cell numerics format
  */
 
+#include <memory>
 #include "lwpnumericfmt.hxx"
 
 LwpCurrencyPool  LwpNumericFormat::m_aCurrencyInfo;

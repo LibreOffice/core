@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_DOCKWIN_HXX
 #define INCLUDED_SFX2_DOCKWIN_HXX
 
+#include <memory>
 #include <sal/config.h>
 #include <sal/types.h>
 #include <vcl/dockwin.hxx>

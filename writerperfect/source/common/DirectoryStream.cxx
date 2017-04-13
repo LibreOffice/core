@@ -19,6 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
+#include <memory>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

@@ -61,6 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSILVERBULLET_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSILVERBULLET_HXX
 
+#include <memory>
 #include "lwpheader.hxx"
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_SHELLRES_HXX
 #define INCLUDED_SW_INC_SHELLRES_HXX
 
+#include <memory>
 #include <swdllapi.h>
 #include <rtl/ustring.hxx>
 #include <vcl/bitmap.hxx>

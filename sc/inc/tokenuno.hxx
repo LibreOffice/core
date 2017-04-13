@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_TOKENUNO_HXX
 #define INCLUDED_SC_INC_TOKENUNO_HXX
 
+#include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

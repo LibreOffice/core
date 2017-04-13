@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 #define INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 
+#include <memory>
 #include <config_features.h>
 
 #include <com/sun/star/uno/Reference.h>

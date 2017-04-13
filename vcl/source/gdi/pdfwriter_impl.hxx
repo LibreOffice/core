@@ -22,6 +22,7 @@
 #include <map>
 #include <list>
 #include <unordered_map>
+#include <memory>
 #include <vector>
 
 #include <com/sun/star/lang/Locale.hpp>

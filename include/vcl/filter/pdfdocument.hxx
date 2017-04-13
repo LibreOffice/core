@@ -11,6 +11,7 @@
 #ifndef INCLUDED_VCL_FILTER_PDFDOCUMENT_HXX
 #define INCLUDED_VCL_FILTER_PDFDOCUMENT_HXX
 
+#include <memory>
 #include <map>
 #include <vector>
 

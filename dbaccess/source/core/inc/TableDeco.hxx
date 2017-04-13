@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLEDECO_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLEDECO_HXX
 
+#include <memory>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>

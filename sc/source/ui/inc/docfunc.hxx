@@ -27,6 +27,7 @@
 #include "token.hxx"
 #include "rangenam.hxx"
 
+#include <memory>
 #include <vector>
 #include <map>
 

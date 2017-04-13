@@ -82,6 +82,7 @@
 #include <sfx2/docfile.hxx>
 #include "doc.hrc"
 
+#include <memory>
 #include <vector>
 
 #define SERVICENAME_TYPEDETECTION "com.sun.star.document.TypeDetection"

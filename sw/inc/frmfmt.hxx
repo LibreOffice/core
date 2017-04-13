@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_FRMFMT_HXX
 #define INCLUDED_SW_INC_FRMFMT_HXX
 
+#include <memory>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <tools/gen.hxx>

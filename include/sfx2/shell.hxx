@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_SHELL_HXX
 #define INCLUDED_SFX2_SHELL_HXX
 
+#include <memory>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>

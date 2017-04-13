@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include <sfx2/tabdlg.hxx>
+#include <memory>
 #include <vector>
 #include <vcl/msgbox.hxx>
 

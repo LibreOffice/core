@@ -110,6 +110,7 @@
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <list>
 #include <unordered_map>
+#include <memory>
 #include <vector>
 #include <algorithm>
 #include <iterator>

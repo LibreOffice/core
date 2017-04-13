@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_UNDOSTYL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOSTYL_HXX
 
+#include <memory>
 #include <rsc/rscsfx.hxx>
 #include "undobase.hxx"
 

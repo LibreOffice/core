@@ -25,6 +25,7 @@
 #include <rtl/character.hxx>
 
 #include <vector>
+#include <climits>
 
 // structure to store the actuel data
 struct SvParser_Impl

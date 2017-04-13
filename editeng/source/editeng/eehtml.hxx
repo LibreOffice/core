@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EEHTML_HXX
 #define INCLUDED_EDITENG_SOURCE_EDITENG_EEHTML_HXX
 
+#include <memory>
 #include <editdoc.hxx>
 #include <svtools/parhtml.hxx>
 

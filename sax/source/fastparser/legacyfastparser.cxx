@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
 #include <sax/fastparser.hxx>
+#include <memory>
 #include <vector>
 #include <o3tl/make_unique.hxx>
 

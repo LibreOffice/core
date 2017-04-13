@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <algorithm>
 
 #include "rtl/string.h"
 #include "stgole.hxx"
 #include "sot/storinfo.hxx"
-#include <memory>
 #include <sot/exchange.hxx>
 
 #ifdef _MSC_VER

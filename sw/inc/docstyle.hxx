@@ -27,6 +27,7 @@
 #include "swdllapi.h"
 
 #include <unordered_map>
+#include <memory>
 #include <vector>
 
 class SwDoc;

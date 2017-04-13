@@ -22,6 +22,7 @@
 
 #include <utility>
 #include <string>
+#include <memory>
 #include <vector>
 #include "metainforeader.hxx"
 

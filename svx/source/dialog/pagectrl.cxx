@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <vcl/bitmap.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>

@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include "parser.hxx"
 #include <basic/sbx.hxx>
 #include "expr.hxx"

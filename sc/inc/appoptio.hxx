@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_APPOPTIO_HXX
 #define INCLUDED_SC_INC_APPOPTIO_HXX
 
+#include <memory>
 #include <vcl/field.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <unotools/configitem.hxx>

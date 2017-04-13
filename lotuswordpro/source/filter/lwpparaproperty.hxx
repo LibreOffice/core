@@ -61,6 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARAPROPERTY_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARAPROPERTY_HXX
 
+#include <memory>
 #include "lwpobj.hxx"
 #include "lwpobjstrm.hxx"
 #include "lwpdllist.hxx"

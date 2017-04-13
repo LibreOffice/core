@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include <map>
 #include <set>
+#include <memory>
 #include <vector>
 #include <iostream>
 

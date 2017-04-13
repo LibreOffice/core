@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
 
+#include <memory>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/field.hxx>
 #include <vcl/group.hxx>
