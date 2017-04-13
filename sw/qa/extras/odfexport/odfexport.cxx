@@ -97,46 +97,6 @@ public:
     }
 };
 
-namespace com { namespace sun { namespace star { namespace awt {
-
-std::ostream& operator<<(std::ostream& rStrm, FontSlant n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-std::ostream& operator<<(std::ostream& rStrm, GradientStyle n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
-namespace com { namespace sun { namespace star { namespace drawing {
-
-std::ostream& operator<<(std::ostream& rStrm, TextVerticalAdjust n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
-namespace com { namespace sun { namespace star { namespace table {
-
-std::ostream& operator<<(std::ostream& rStrm, ShadowLocation n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
 DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
 {
     uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);

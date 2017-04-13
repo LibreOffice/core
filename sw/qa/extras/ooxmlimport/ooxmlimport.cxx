@@ -81,35 +81,6 @@ public:
     }
 };
 
-namespace com { namespace sun { namespace star { namespace text {
-
-std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-#if !defined _WIN32
-std::ostream& operator<<(std::ostream& rStrm, WrapTextMode n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-#endif
-
-} } } }
-
-#if !defined _WIN32
-
-namespace com { namespace sun { namespace star { namespace style {
-
-std::ostream& operator<<(std::ostream& rStrm, BreakType n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
 class FailTest : public Test
 {
 public:
@@ -143,8 +114,6 @@ public:
         finish();
     }
 };
-
-#endif
 
 DECLARE_OOXMLIMPORT_TEST(testImageHyperlink, "image-hyperlink.docx")
 {

@@ -82,6 +82,18 @@
 
 using namespace ::com::sun::star;
 
+namespace com { namespace sun { namespace star { namespace uno {
+
+template<class T>
+std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
+{
+    rStrm << xRef.get();
+    return rStrm;
+}
+
+} } } }
+
+
 /// Impress import filters tests.
 class SdImportTest : public SdModelTestBase
 {
@@ -611,52 +623,6 @@ void SdImportTest::testFdo77027()
 
     xDocShRef->DoClose();
 }
-
-namespace com { namespace sun { namespace star { namespace uno {
-
-template<class T>
-std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
-{
-    rStrm << xRef.get();
-    return rStrm;
-}
-
-} } } }
-
-namespace com { namespace sun { namespace star { namespace drawing {
-
-std::ostream& operator<<(std::ostream& rStrm, LineStyle n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
-namespace com { namespace sun { namespace star { namespace presentation {
-
-std::ostream& operator<<(std::ostream& rStrm, ClickAction n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
-namespace com { namespace sun { namespace star { namespace style {
-
-std::ostream& operator<<(std::ostream& rStrm, ParagraphAdjust n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
 
 void SdImportTest::testTdf97808()
 {

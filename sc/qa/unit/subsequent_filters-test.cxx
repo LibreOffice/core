@@ -362,27 +362,6 @@ private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
-std::ostream& operator<<(std::ostream& rStrm, const SvxCellHorJustify& rCode)
-{
-    rStrm << static_cast<int>(rCode);
-    return rStrm;
-}
-std::ostream& operator<<(std::ostream& os, SvxBorderLineStyle n)
-{
-    os << (int)n;
-    return os;
-}
-
-namespace com { namespace sun { namespace star { namespace sheet {
-
-std::ostream& operator<<(std::ostream& rStrm, DataPilotFieldOrientation n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
