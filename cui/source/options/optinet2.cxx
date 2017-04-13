@@ -197,7 +197,9 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
             configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext() ) );
 
-    OUString aConfigRoot( "org.openoffice.Inet/Settings" );
+    const OUString aConfigRoot( "org.openoffice.Inet/Settings" );
+    const OUString aConfigRootSystem( "org.openoffice.Inet/System" );
+    const OUString aConfigRootUser( "org.openoffice.Inet/User" );
 
     beans::NamedValue aProperty;
     aProperty.Name  = "nodepath";
@@ -208,6 +210,20 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationUpdateAccess",
+        aArgumentList );
+
+    aProperty.Value <<= aConfigRootUser;
+    aArgumentList[0] <<= aProperty;
+
+    m_xConfigurationUserUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
+        "com.sun.star.configuration.ConfigurationUpdateAccess",
+        aArgumentList );
+
+    aProperty.Value <<= aConfigRootSystem;
+    aArgumentList[0] <<= aProperty;
+
+    m_xConfigurationSystemAccess = xConfigurationProvider->createInstanceWithArguments(
+        "com.sun.star.configuration.ConfigurationAccess",
         aArgumentList );
 }
 
@@ -242,16 +258,19 @@ VclPtr<SfxTabPage> SvxProxyTabPage::Create(vcl::Window* pParent, const SfxItemSe
     return VclPtr<SvxProxyTabPage>::Create(pParent, *rAttrSet);
 }
 
-void SvxProxyTabPage::ReadConfigData_Impl()
+void SvxProxyTabPage::ReadConfigData_Impl(css::uno::Reference< css::uno::XInterface > pConfigurationAccess)
 {
-    try {
-        Reference< container::XNameAccess > xNameAccess(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+    try
+    {
+        Reference< container::XNameAccess > xNameAccess(pConfigurationAccess, UNO_QUERY_THROW);
 
         sal_Int32 nIntValue = 0;
         OUString  aStringValue;
 
-        if( xNameAccess->getByName(g_aProxyModePN) >>= nIntValue )
+        const bool bHasProxyMode = xNameAccess->hasByName(g_aProxyModePN);
+        if (bHasProxyMode)
         {
+            xNameAccess->getByName(g_aProxyModePN) >>= nIntValue;
             m_pProxyModeLB->SelectEntryPos( nIntValue );
         }
 
@@ -290,108 +309,108 @@ void SvxProxyTabPage::ReadConfigData_Impl()
             m_pNoProxyForED->SetText( aStringValue );
         }
     }
-    catch (const container::NoSuchElementException&) {
+    catch (const container::NoSuchElementException&)
+    {
         SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
-    catch (const css::lang::WrappedTargetException &) {
+    catch (const css::lang::WrappedTargetException &)
+    {
         SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
     }
-    catch (const RuntimeException &) {
+    catch (const RuntimeException &)
+    {
         SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
     }
 }
 
-void SvxProxyTabPage::ReadConfigDefaults_Impl()
+void SvxProxyTabPage::StoreConfigData_Impl(css::uno::Reference< css::uno::XInterface > xConfigurationUpdateAccess)
 {
     try
     {
-        Reference< beans::XPropertyState > xPropertyState(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+        Reference< beans::XPropertySet > xPropertySet(xConfigurationUpdateAccess, UNO_QUERY_THROW);
 
-        sal_Int32 nIntValue = 0;
-        OUString  aStringValue;
-
-        if( xPropertyState->getPropertyDefault(g_aHttpProxyPN) >>= aStringValue )
-        {
-            m_pHttpProxyED->SetText( aStringValue );
-        }
-
-        if( xPropertyState->getPropertyDefault(g_aHttpPortPN) >>= nIntValue )
-        {
-            m_pHttpPortED->SetText( OUString::number( nIntValue ));
-        }
-
-        if( xPropertyState->getPropertyDefault(g_aHttpsProxyPN) >>= aStringValue )
-        {
-            m_pHttpsProxyED->SetText( aStringValue );
-        }
-
-        if( xPropertyState->getPropertyDefault(g_aHttpsPortPN) >>= nIntValue )
-        {
-            m_pHttpsPortED->SetText( OUString::number( nIntValue ));
-        }
-
-        if( xPropertyState->getPropertyDefault(g_aFtpProxyPN) >>= aStringValue )
-        {
-            m_pFtpProxyED->SetText( aStringValue );
-        }
-
-        if( xPropertyState->getPropertyDefault(g_aFtpPortPN) >>= nIntValue )
-        {
-            m_pFtpPortED->SetText( OUString::number( nIntValue ));
-        }
-
-        if( xPropertyState->getPropertyDefault(g_aNoProxyDescPN) >>= aStringValue )
-        {
-            m_pNoProxyForED->SetText( aStringValue );
-        }
+        xPropertySet->setPropertyValue(g_aHttpProxyPN, Any(m_pHttpProxyED->GetText()));
+        xPropertySet->setPropertyValue(g_aHttpPortPN, Any(m_pHttpPortED->GetText().toInt32()));
+        xPropertySet->setPropertyValue(g_aHttpsProxyPN, Any(m_pHttpsProxyED->GetText()));
+        xPropertySet->setPropertyValue(g_aHttpsPortPN, Any(m_pHttpsPortED->GetText().toInt32()));
+        xPropertySet->setPropertyValue(g_aFtpProxyPN, Any(m_pFtpProxyED->GetText()));
+        xPropertySet->setPropertyValue(g_aFtpPortPN, Any(m_pFtpPortED->GetText().toInt32()));
+        xPropertySet->setPropertyValue(g_aNoProxyDescPN, Any(m_pNoProxyForED->GetText()));
     }
+
+    catch (const css::lang::IllegalArgumentException &)
+    {
+        SAL_WARN("cui.options", "SvxProxyTabPage::StoreConfigData_Impl: IllegalArgumentException caught");
+    }
+
     catch (const beans::UnknownPropertyException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::StoreConfigData_Impl: UnknownPropertyException caught");
     }
-    catch (const css::lang::WrappedTargetException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
+
+    catch (const beans::PropertyVetoException &)
+    {
+        SAL_WARN("cui.options", "SvxProxyTabPage::StoreConfigData_Impl: PropertyVetoException caught");
     }
+
+    catch (const css::lang::WrappedTargetException &)
+    {
+        SAL_WARN("cui.options", "SvxProxyTabPage::StoreConfigData_Impl: WrappedTargetException caught");
+    }
+
     catch (const RuntimeException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::StoreConfigData_Impl: RuntimeException caught");
     }
 }
 
-void SvxProxyTabPage::RestoreConfigDefaults_Impl()
+void SvxProxyTabPage::CopyConfigData_Impl(
+    css::uno::Reference< css::uno::XInterface > xConfigurationccess,
+    css::uno::Reference< css::uno::XInterface > xConfigurationUpdateAccess)
 {
     try
     {
-        Reference< beans::XPropertyState > xPropertyState(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+        Reference< beans::XPropertySet > xPropertySet(xConfigurationUpdateAccess, UNO_QUERY_THROW);
+        Reference< container::XNameAccess > xNameAccess(xConfigurationccess, UNO_QUERY_THROW);
 
-        xPropertyState->setPropertyToDefault(g_aProxyModePN);
-        xPropertyState->setPropertyToDefault(g_aHttpProxyPN);
-        xPropertyState->setPropertyToDefault(g_aHttpPortPN);
-        xPropertyState->setPropertyToDefault(g_aHttpsProxyPN);
-        xPropertyState->setPropertyToDefault(g_aHttpsPortPN);
-        xPropertyState->setPropertyToDefault(g_aFtpProxyPN);
-        xPropertyState->setPropertyToDefault(g_aFtpPortPN);
-        xPropertyState->setPropertyToDefault(g_aNoProxyDescPN);
-
-        Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
-        xChangesBatch->commitChanges();
+        xPropertySet->setPropertyValue(g_aHttpProxyPN, xNameAccess->getByName(g_aHttpProxyPN));
+        xPropertySet->setPropertyValue(g_aHttpPortPN, xNameAccess->getByName(g_aHttpPortPN));
+        xPropertySet->setPropertyValue(g_aHttpsProxyPN, xNameAccess->getByName(g_aHttpsProxyPN));
+        xPropertySet->setPropertyValue(g_aHttpsPortPN, xNameAccess->getByName(g_aHttpsPortPN));
+        xPropertySet->setPropertyValue(g_aFtpProxyPN, xNameAccess->getByName(g_aFtpProxyPN));
+        xPropertySet->setPropertyValue(g_aFtpPortPN, xNameAccess->getByName(g_aFtpPortPN));
+        xPropertySet->setPropertyValue(g_aNoProxyDescPN, xNameAccess->getByName(g_aNoProxyDescPN));
     }
+
+    catch (const css::lang::IllegalArgumentException &)
+    {
+        SAL_WARN("cui.options", "SvxProxyTabPage::CopyConfigData_Impl: IllegalArgumentException caught");
+    }
+
     catch (const beans::UnknownPropertyException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::CopyConfigData_Impl: UnknownPropertyException caught");
     }
-    catch (const css::lang::WrappedTargetException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
+
+    catch (const beans::PropertyVetoException &)
+    {
+        SAL_WARN("cui.options", "SvxProxyTabPage::CopyConfigData_Impl: PropertyVetoException caught");
     }
+
+    catch (const css::lang::WrappedTargetException &)
+    {
+        SAL_WARN("cui.options", "SvxProxyTabPage::CopyConfigData_Impl: WrappedTargetException caught");
+    }
+
     catch (const RuntimeException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
+        SAL_WARN("cui.options", "SvxProxyTabPage::CopyConfigData_Impl: RuntimeException caught");
     }
 }
 
 void SvxProxyTabPage::Reset(const SfxItemSet*)
 {
-    ReadConfigData_Impl();
+    ReadConfigData_Impl(m_xConfigurationUpdateAccess);
 
     m_pProxyModeLB->SaveValue();
     m_pHttpProxyED->SaveValue();
@@ -409,80 +428,79 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
 {
     bool bModified = false;
 
-    try {
+    try
+    {
         Reference< beans::XPropertySet > xPropertySet(m_xConfigurationUpdateAccess, UNO_QUERY_THROW );
 
         sal_Int32 nSelPos = m_pProxyModeLB->GetSelectEntryPos();
         if(m_pProxyModeLB->IsValueChangedFromSaved())
         {
+            xPropertySet->setPropertyValue(g_aProxyModePN, Any(nSelPos));
+
             if( nSelPos == 1 )
             {
-                RestoreConfigDefaults_Impl();
-                return true;
+                ReadConfigData_Impl(m_xConfigurationSystemAccess);
+            }
+            else if (nSelPos == 2)
+            {
+                ReadConfigData_Impl(m_xConfigurationUserUpdateAccess);
             }
 
-            xPropertySet->setPropertyValue(g_aProxyModePN, Any(nSelPos));
             bModified = true;
         }
 
-        if(m_pHttpProxyED->IsValueChangedFromSaved())
+        if(m_pHttpProxyED->IsValueChangedFromSaved()
+            || m_pHttpPortED->IsValueChangedFromSaved()
+            || m_pHttpsProxyED->IsValueChangedFromSaved()
+            || m_pHttpsPortED->IsValueChangedFromSaved()
+            || m_pFtpProxyED->IsValueChangedFromSaved()
+            || m_pFtpPortED->IsValueChangedFromSaved()
+            || m_pNoProxyForED->IsValueChangedFromSaved() )
         {
-            xPropertySet->setPropertyValue( g_aHttpProxyPN, Any(m_pHttpProxyED->GetText()));
+            if (nSelPos == 2)
+            {
+                StoreConfigData_Impl(m_xConfigurationUserUpdateAccess);
+
+                Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUserUpdateAccess, UNO_QUERY_THROW);
+                xChangesBatch->commitChanges();
+            }
+
             bModified = true;
         }
 
-        if ( m_pHttpPortED->IsValueChangedFromSaved())
+        if (bModified && (nSelPos == 1 || nSelPos == 2))
         {
-            xPropertySet->setPropertyValue( g_aHttpPortPN, Any(m_pHttpPortED->GetText().toInt32()));
-            bModified = true;
-        }
-
-        if( m_pHttpsProxyED->IsValueChangedFromSaved() )
-        {
-            xPropertySet->setPropertyValue( g_aHttpsProxyPN, Any(m_pHttpsProxyED->GetText()) );
-            bModified = true;
-        }
-
-        if ( m_pHttpsPortED->IsValueChangedFromSaved() )
-        {
-            xPropertySet->setPropertyValue( g_aHttpsPortPN, Any(m_pHttpsPortED->GetText().toInt32()) );
-            bModified = true;
-        }
-
-        if( m_pFtpProxyED->IsValueChangedFromSaved())
-        {
-            xPropertySet->setPropertyValue( g_aFtpProxyPN, Any(m_pFtpProxyED->GetText()) );
-            bModified = true;
-        }
-
-        if ( m_pFtpPortED->IsValueChangedFromSaved() )
-        {
-            xPropertySet->setPropertyValue( g_aFtpPortPN, Any(m_pFtpPortED->GetText().toInt32()));
-            bModified = true;
-        }
-
-        if ( m_pNoProxyForED->IsValueChangedFromSaved() )
-        {
-            xPropertySet->setPropertyValue( g_aNoProxyDescPN, Any( m_pNoProxyForED->GetText()));
-            bModified = true;
+            if (nSelPos == 2)
+            {
+                CopyConfigData_Impl(m_xConfigurationUserUpdateAccess, m_xConfigurationUpdateAccess);
+            }
+            else if (nSelPos == 1)
+            {
+                CopyConfigData_Impl(m_xConfigurationSystemAccess, m_xConfigurationUpdateAccess);
+            }
         }
 
         Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
         xChangesBatch->commitChanges();
     }
-    catch (const css::lang::IllegalArgumentException &) {
+    catch (const css::lang::IllegalArgumentException &)
+    {
         SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
-    catch (const beans::UnknownPropertyException &) {
+    catch (const beans::UnknownPropertyException &)
+    {
         SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
     }
-    catch (const beans::PropertyVetoException &) {
+    catch (const beans::PropertyVetoException &)
+    {
         SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
     }
-    catch (const css::lang::WrappedTargetException &) {
+    catch (const css::lang::WrappedTargetException &)
+    {
         SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
     }
-    catch (const RuntimeException &) {
+    catch (const RuntimeException &)
+    {
         SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
     }
 
@@ -519,7 +537,11 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
     // Restore original system values
     if( nPos == 1 )
     {
-        ReadConfigDefaults_Impl();
+        ReadConfigData_Impl(m_xConfigurationSystemAccess);
+    }
+    else if (nPos == 2)
+    {
+        ReadConfigData_Impl(m_xConfigurationUserUpdateAccess);
     }
 
     EnableControls_Impl(nPos == 2);
