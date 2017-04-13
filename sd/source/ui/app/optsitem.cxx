@@ -160,7 +160,7 @@ bool SdOptionsGeneric::isMetricSystem()
     SvtSysLocale aSysLocale;
     MeasurementSystem eSys = aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum();
 
-    return ( eSys == MEASURE_METRIC );
+    return ( eSys == MeasurementSystem::Metric );
 }
 
 /*************************************************************************

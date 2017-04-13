@@ -76,7 +76,7 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
     m_aHRuler->SetMargin1();
     m_aHRuler->SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    m_aHRuler->SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
+    m_aHRuler->SetUnit(MeasurementSystem::Metric == eSystem ? FUNIT_CM : FUNIT_INCH);
 
     ImplInitSettings();
     m_pReportListener = addStyleListener(_pView->getController().getReportDefinition(),this);

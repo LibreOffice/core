@@ -396,7 +396,7 @@ namespace pcr
         if ( FUNIT_NONE == eUnit )
         {
             MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-            eUnit = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
+            eUnit = MeasurementSystem::Metric == eSystem ? FUNIT_CM : FUNIT_INCH;
         }
 
         return VCLUnoHelper::ConvertToMeasurementUnit( eUnit, 1 );

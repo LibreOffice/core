@@ -911,7 +911,7 @@ static Size lcl_GuessPaperSize()
 {
     Size aRes;
     const LocaleDataWrapper& rLocWrp( AllSettings().GetLocaleDataWrapper() );
-    if( MEASURE_METRIC == rLocWrp.getMeasurementSystemEnum() )
+    if( MeasurementSystem::Metric == rLocWrp.getMeasurementSystemEnum() )
     {
         // in 100th mm
         PaperInfo aInfo( PAPER_A4 );

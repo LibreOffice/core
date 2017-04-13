@@ -236,7 +236,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
     MapUnit eUnit = MapUnit::MapMM;
     int nDigits = 0;
-    if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
+    if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
     {
         eUnit = MapUnit::Map100thInch;
         nDigits = 2;
@@ -447,7 +447,7 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
     const LocaleDataWrapper& rLocWrap( mpPageMarginEdt->GetLocaleDataWrapper() );
     FieldUnit eUnit = FUNIT_MM;
     sal_uInt16 nDigits = 0;
-    if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
+    if( rLocWrap.getMeasurementSystemEnum() == MeasurementSystem::US )
     {
         eUnit = FUNIT_INCH;
         nDigits = 2;

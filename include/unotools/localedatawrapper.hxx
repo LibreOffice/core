@@ -46,9 +46,9 @@ enum class DateOrder {
     YMD,
 };
 
-enum MeasurementSystem {
-    MEASURE_METRIC,
-    MEASURE_US
+enum class MeasurementSystem {
+    Metric,
+    US
 };
 
 class UNOTOOLS_DLLPUBLIC LocaleDataWrapper

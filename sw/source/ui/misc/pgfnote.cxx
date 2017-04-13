@@ -122,7 +122,7 @@ SwFootNotePage::SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet)
     SetMetric(*m_pDistEdit, aMetric);
     SetMetric(*m_pLineDistEdit, aMetric);
     MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    long nHeightValue = MEASURE_METRIC != eSys ? 1440 : 1134;
+    long nHeightValue = MeasurementSystem::Metric != eSys ? 1440 : 1134;
     m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(nHeightValue),FUNIT_TWIP);
 }
 

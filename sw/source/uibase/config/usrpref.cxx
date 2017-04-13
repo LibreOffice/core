@@ -66,7 +66,7 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
         return;
     }
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    m_eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
+    m_eUserMetric = MeasurementSystem::Metric == eSystem ? FUNIT_CM : FUNIT_INCH;
     m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric;
 
     m_aContentConfig.Load();
