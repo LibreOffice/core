@@ -104,12 +104,6 @@ private:
 
     /// @cond INTERNAL
 
-#ifdef _MSC_VER
-/* We can't now have these private with MSVC2008 at least, it leads to
-   compilation errors in xmloff and other places.
-*/
-protected:
-#endif
     /** not implemented (see general class documentation)
      */
     static void * operator new[](std::size_t);

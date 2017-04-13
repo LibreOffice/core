@@ -99,19 +99,6 @@ protected:
                 sal_Int32 _nSecondHandle                /// second handle, which should supersede _nFirstHandle in the sequence
             );
 
-protected:
-#ifdef _MSC_VER
-    UnoControlModel() //do not use! needed by MSVC at compile time to satisfy WeakAggImplHelper7
-        : UnoControlModel_Base()
-        , MutexAndBroadcastHelper()
-        , OPropertySetHelper( BrdcstHelper )
-        , maDisposeListeners( *this )
-        , m_xContext( css::uno::Reference< css::uno::XComponentContext >() )
-    {
-        assert(false);
-    }
-#endif
-
 public:
                 UnoControlModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                 UnoControlModel( const UnoControlModel& rModel );
