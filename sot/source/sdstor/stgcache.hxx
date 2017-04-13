@@ -26,6 +26,8 @@
 #include <tools/stream.hxx>
 #include <stgelem.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+
+#include <memory>
 #include <unordered_map>
 #include <functional>
 
