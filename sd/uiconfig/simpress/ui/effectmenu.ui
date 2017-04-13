@@ -6,7 +6,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="onclick">
+      <object class="GtkRadioMenuItem" id="onclick">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Start On _Click</property>
@@ -14,7 +14,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="withprev">
+      <object class="GtkRadioMenuItem" id="withprev">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Start _With Previous</property>
@@ -22,7 +22,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="afterprev">
+      <object class="GtkRadioMenuItem" id="afterprev">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Start _After Previous</property>
