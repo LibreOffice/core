@@ -35,13 +35,10 @@ namespace frm
 // Implements the UNO Container for Forms and contains all assigned Forms.
 // It can either represent the Context for Forms or be passed a Context.
 
-typedef ::cppu::OComponentHelper FormsCollectionComponentBase;
-typedef ::cppu::ImplHelper2<    css::form::XForms
-                                ,css::lang::XServiceInfo > OFormsCollection_BASE;
-
-// else MSVC kills itself on some statements
+typedef ::cppu::ImplHelper2< css::form::XForms
+                             ,css::lang::XServiceInfo > OFormsCollection_BASE;
 class OFormsCollection
-        :public FormsCollectionComponentBase
+        :public ::cppu::OComponentHelper
         ,public OInterfaceContainer
         ,public OFormsCollection_BASE
 {
@@ -54,7 +51,7 @@ public:
     virtual ~OFormsCollection() override;
 
 public:
-    DECLARE_UNO3_AGG_DEFAULTS(OFormsCollection, FormsCollectionComponentBase)
+    DECLARE_UNO3_AGG_DEFAULTS(OFormsCollection, ::cppu::OComponentHelper)
 
     virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
@@ -135,11 +132,11 @@ public:
     virtual void SAL_CALL removeScriptListener(const css::uno::Reference<css::script::XScriptListener>& p1) override
         { OInterfaceContainer::removeScriptListener(p1); }
     virtual void SAL_CALL dispose() override
-        { FormsCollectionComponentBase::dispose(); }
+        { ::cppu::OComponentHelper::dispose(); }
     virtual void SAL_CALL addEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) override
-        { FormsCollectionComponentBase::addEventListener(p1); }
+        { ::cppu::OComponentHelper::addEventListener(p1); }
     virtual void SAL_CALL removeEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) override
-        { FormsCollectionComponentBase::removeEventListener(p1); }
+        { ::cppu::OComponentHelper::removeEventListener(p1); }
     virtual void SAL_CALL addContainerListener(const css::uno::Reference<css::container::XContainerListener>& p1) override
         { OInterfaceContainer::addContainerListener(p1); }
     virtual void SAL_CALL removeContainerListener(const css::uno::Reference<css::container::XContainerListener>& p1) override

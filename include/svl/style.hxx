@@ -272,13 +272,7 @@ public:
     virtual bool        SetParent( const OUString& ) override;
 
 protected:
-    SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper
-        : SfxStyleSheetBase("dummy", nullptr, SfxStyleFamily::All, 0)
-    {
-        assert(false);
-    }
     virtual             ~SfxStyleSheet() override;
-
 };
 
 class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
