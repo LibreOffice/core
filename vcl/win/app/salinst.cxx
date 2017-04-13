@@ -39,6 +39,7 @@
 #include "win/salobj.h"
 #include "win/saltimer.h"
 #include "win/salbmp.h"
+#include "../gdi/winlayout.hxx"
 
 #include "salimestatus.hxx"
 #include "salsys.hxx"
@@ -409,6 +410,8 @@ void DeInitSalData()
     {
         Gdiplus::GdiplusShutdown(pSalData->gdiplusToken);
     }
+
+    DestroyTextOutRenderer(pSalData->m_pTextOutRenderer);
 
     delete pSalData;
 }
