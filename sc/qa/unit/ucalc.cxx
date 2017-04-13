@@ -94,11 +94,6 @@
 #include <utility>
 #include <vector>
 
-static std::ostream& operator<<(std::ostream& os, ScMatrixMode mode)
-{
-    os << (int) mode; return os;
-}
-
 struct TestImpl
 {
     ScDocShellRef m_xDocShell;

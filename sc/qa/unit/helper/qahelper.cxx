@@ -71,12 +71,6 @@ std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode)
     return rStrm;
 }
 
-std::ostream& operator<<(std::ostream& rStrm, const SvxCellHorJustify& rCode)
-{
-    rStrm << static_cast<int>(rCode);
-    return rStrm;
-}
-
 const FileFormat ScBootstrapFixture::aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },

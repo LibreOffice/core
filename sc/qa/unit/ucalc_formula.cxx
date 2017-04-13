@@ -87,11 +87,6 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
 
 }
 
-static std::ostream& operator<<(std::ostream& os, ScMatrixMode mode)
-{
-    os << (int) mode; return os;
-}
-
 void Test::testFormulaCreateStringFromTokens()
 {
     // Insert sheets.
