@@ -39,10 +39,11 @@ class Date;
 namespace tools { class Time; }
 class CalendarWrapper;
 
-enum DateFormat {
-    MDY,
+enum class DateOrder {
+    Invalid = -1,
+    MDY = 0,
     DMY,
-    YMD
+    YMD,
 };
 
 enum MeasurementSystem {
@@ -68,8 +69,8 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     OUString                aReservedWord[css::i18n::reservedWords::COUNT];
     OUString                aCurrSymbol;
     OUString                aCurrBankSymbol;
-    int                     nDateFormat;
-    int                     nLongDateFormat;
+    DateOrder               nDateOrder;
+    DateOrder               nLongDateOrder;
     sal_uInt16              nCurrPositiveFormat;
     sal_uInt16              nCurrNegativeFormat;
     sal_uInt16              nCurrDigits;
@@ -87,10 +88,10 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     void                invalidateData();
 
     void                getOneLocaleItemImpl( sal_Int16 nItem );
-    const OUString& getOneLocaleItem( sal_Int16 nItem ) const;
+    const OUString&     getOneLocaleItem( sal_Int16 nItem ) const;
 
     void                getOneReservedWordImpl( sal_Int16 nWord );
-    const OUString& getOneReservedWord( sal_Int16 nWord ) const;
+    const OUString&     getOneReservedWord( sal_Int16 nWord ) const;
 
     void                getCurrSymbolsImpl();
     void                getCurrFormatsImpl();
@@ -100,8 +101,8 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
                             sal_Int32& nPar, sal_Int32& nNum,
                             sal_Int32& nBlank, sal_Int32& nSym );
 
-    void                getDateFormatsImpl();
-    DateFormat          scanDateFormatImpl( const OUString& rCode );
+    void                getDateOrdersImpl();
+    DateOrder           scanDateOrderImpl( const OUString& rCode );
 
     void                getDefaultCalendarImpl();
     void                getSecondaryCalendarImpl();
@@ -244,8 +245,8 @@ public:
     sal_uInt16              getCurrDigits() const;
 
     // simple date and time formatting
-    DateFormat          getDateFormat() const;
-    DateFormat          getLongDateFormat() const;
+    DateOrder          getDateOrder() const;
+    DateOrder          getLongDateOrder() const;
     /// only numerical values of Gregorian calendar
     OUString       getDate( const Date& rDate ) const;
     OUString       getTime( const tools::Time& rTime, bool bSec = true,

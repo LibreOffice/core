@@ -939,13 +939,13 @@ void PatternBox::ReformatAll()
     SetUpdateMode( true );
 }
 
-static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
+static ExtDateFieldFormat ImplGetExtFormat( DateOrder eOld )
 {
     switch( eOld )
     {
-        case DMY:   return ExtDateFieldFormat::ShortDDMMYY;
-        case MDY:   return ExtDateFieldFormat::ShortMMDDYY;
-        default:    return ExtDateFieldFormat::ShortYYMMDD;
+        case DateOrder::DMY:   return ExtDateFieldFormat::ShortDDMMYY;
+        case DateOrder::MDY:   return ExtDateFieldFormat::ShortMMDDYY;
+        default:               return ExtDateFieldFormat::ShortYYMMDD;
     }
 }
 
@@ -1012,7 +1012,7 @@ static bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldF
         return true;
 }
 
-static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,
+static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateOrder,
                               const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper,
                               const AllSettings& )
 {
@@ -1022,22 +1022,22 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
     bool bError = false;
     OUString aStr( rStr );
 
-    if ( eDateFormat == ExtDateFieldFormat::SystemLong )
+    if ( eDateOrder == ExtDateFieldFormat::SystemLong )
     {
-        DateFormat eFormat = rLocaleDataWrapper.getLongDateFormat();
+        DateOrder eFormat = rLocaleDataWrapper.getLongDateOrder();
         switch( eFormat )
         {
-            case MDY:
+            case DateOrder::MDY:
                 nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
                 nDay = ImplCutNumberFromString( aStr );
                 nYear  = ImplCutNumberFromString( aStr );
                 break;
-            case DMY:
+            case DateOrder::DMY:
                 nDay = ImplCutNumberFromString( aStr );
                 nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
                 nYear  = ImplCutNumberFromString( aStr );
                 break;
-            case YMD:
+            case DateOrder::YMD:
             default:
                 nYear = ImplCutNumberFromString( aStr );
                 nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
@@ -1050,7 +1050,7 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
         bool bYear = true;
 
         // Check if year is present:
-        OUString aDateSep = ImplGetDateSep( rLocaleDataWrapper, eDateFormat );
+        OUString aDateSep = ImplGetDateSep( rLocaleDataWrapper, eDateOrder );
         sal_Int32 nSepPos = aStr.indexOf( aDateSep );
         if ( nSepPos < 0 )
             return false;
@@ -1064,7 +1064,7 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
         const sal_Unicode* pBuf = aStr.getStr();
         ImplSkipDelimiters( pBuf );
 
-        switch ( eDateFormat )
+        switch ( eDateOrder )
         {
             case ExtDateFieldFormat::ShortDDMMYY:
             case ExtDateFieldFormat::ShortDDMMYYYY:
@@ -1104,7 +1104,7 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
 
             default:
             {
-                OSL_FAIL( "DateFormat???" );
+                OSL_FAIL( "DateOrder???" );
             }
         }
     }
@@ -1224,7 +1224,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
         break;
         default:
         {
-            OSL_FAIL( "DateFormat???" );
+            OSL_FAIL( "DateOrder???" );
         }
     }
 
@@ -1340,7 +1340,7 @@ void DateField::ImplDateSpinArea( bool bUp )
             ExtDateFieldFormat eFormat = GetExtDateFormat( true );
             if ( eFormat == ExtDateFieldFormat::SystemLong )
             {
-                eFormat = ImplGetExtFormat( ImplGetLocaleDataWrapper().getLongDateFormat() );
+                eFormat = ImplGetExtFormat( ImplGetLocaleDataWrapper().getLongDateOrder() );
                 nDateArea = 1;
             }
             else
@@ -1467,14 +1467,16 @@ ExtDateFieldFormat DateFormatter::GetExtDateFormat( bool bResolveSystemFormat ) 
     if ( bResolveSystemFormat && ( eDateFormat <= ExtDateFieldFormat::SystemShortYYYY ) )
     {
         bool bShowCentury = (eDateFormat == ExtDateFieldFormat::SystemShortYYYY);
-        switch ( ImplGetLocaleDataWrapper().getDateFormat() )
+        switch ( ImplGetLocaleDataWrapper().getDateOrder() )
         {
-            case DMY:   eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortDDMMYYYY : ExtDateFieldFormat::ShortDDMMYY;
-                        break;
-            case MDY:   eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortMMDDYYYY : ExtDateFieldFormat::ShortMMDDYY;
-                        break;
-            default:    eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortYYYYMMDD : ExtDateFieldFormat::ShortYYMMDD;
-
+            case DateOrder::DMY:
+                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortDDMMYYYY : ExtDateFieldFormat::ShortDDMMYY;
+                break;
+            case DateOrder::MDY:
+                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortMMDDYYYY : ExtDateFieldFormat::ShortMMDDYY;
+                break;
+            default:
+                eDateFormat = bShowCentury ? ExtDateFieldFormat::ShortYYYYMMDD : ExtDateFieldFormat::ShortYYMMDD;
         }
     }
 
