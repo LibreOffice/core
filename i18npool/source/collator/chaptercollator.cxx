@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// prevent internal compiler error with MSVC6SP3
-#include <utility>
-
 #include <cppuhelper/supportsservice.hxx>
 #include <chaptercollator.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>

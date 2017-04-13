@@ -22,6 +22,7 @@
 #include <xml/imagesdocumenthandler.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>

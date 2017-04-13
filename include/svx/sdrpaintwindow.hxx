@@ -34,10 +34,6 @@ namespace sdr
     }
 }
 
-#ifdef _MSC_VER // broken msvc template instantiation
-#include <svx/sdr/overlay/overlaymanager.hxx>
-#endif
-
 /// paint the transparent children of rWin that overlap rPixelRect
 /// (for example, transparent form controls like check boxes)
 void SVX_DLLPUBLIC

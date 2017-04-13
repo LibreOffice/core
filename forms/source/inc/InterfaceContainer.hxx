@@ -275,9 +275,7 @@ private:
 };
 
 typedef ::cppu::ImplHelper1< css::form::XFormComponent> OFormComponents_BASE;
-typedef ::cppu::OComponentHelper FormComponentsBase;
-    // else MSVC kills itself on some statements
-class OFormComponents   :public FormComponentsBase
+class OFormComponents   :public ::cppu::OComponentHelper
                         ,public OInterfaceContainer
                         ,public OFormComponents_BASE
 {
@@ -290,7 +288,7 @@ public:
     OFormComponents( const OFormComponents& _cloneSource );
     virtual ~OFormComponents() override;
 
-    DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, FormComponentsBase)
+    DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, ::cppu::OComponentHelper)
 
     virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;

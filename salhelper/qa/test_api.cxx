@@ -120,13 +120,6 @@ void Test::testCondition() {
     CPPUNIT_ASSERT(bool(typeid (salhelper::Condition *) == getConditionTypeInfo()));
 }
 
-#ifdef _MSC_VER
-// MSVC 2012 warns about the "p" being unused
-#pragma warning (push, 1)
-#pragma warning (disable: 4189)
-#endif
-
-
 void Test::testConditionModifier() {
     salhelper::ConditionModifier * p = nullptr;
     CPPUNIT_ASSERT(bool(typeid (*p) == typeid (salhelper::ConditionModifier)));
@@ -190,10 +183,6 @@ void Test::testORealDynamicLoader() {
         typeid (salhelper::ORealDynamicLoader *)
         == getORealDynamicLoaderTypeInfo()));
 }
-
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
 
 void Test::testSimpleReferenceObject() {
     salhelper::SimpleReferenceObject * p = new DerivedSimpleReferenceObject;
