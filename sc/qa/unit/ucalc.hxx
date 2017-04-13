@@ -151,6 +151,7 @@ public:
     void testFormulaRefUpdateInsertColumns();
     void testFormulaRefUpdateMove();
     void testFormulaRefUpdateMoveUndo();
+    void testFormulaRefUpdateMoveUndo2();
     void testFormulaRefUpdateMoveToSheet();
     void testFormulaRefUpdateDeleteContent();
     void testFormulaRefUpdateDeleteAndShiftLeft();
@@ -554,6 +555,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateInsertColumns);
     CPPUNIT_TEST(testFormulaRefUpdateMove);
     CPPUNIT_TEST(testFormulaRefUpdateMoveUndo);
+    CPPUNIT_TEST(testFormulaRefUpdateMoveUndo2);
     CPPUNIT_TEST(testFormulaRefUpdateMoveToSheet);
     CPPUNIT_TEST(testFormulaRefUpdateDeleteContent);
     CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftLeft);

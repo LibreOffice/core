@@ -140,6 +140,10 @@ SCQAHELPER_DLLPUBLIC ScTokenArray* compileFormula(
     ScDocument* pDoc, const OUString& rFormula, const ScAddress* pPos = nullptr,
     formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE );
 
+SCQAHELPER_DLLPUBLIC bool checkOutput(
+    ScDocument* pDoc, const ScRange& aOutRange,
+    const std::vector<std::vector<const char*>>& aCheck, const char* pCaption );
+
 template<size_t Size>
 bool checkOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][Size], const char* pCaption)
 {

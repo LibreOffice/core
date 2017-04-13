@@ -2263,6 +2263,69 @@ void Test::testFormulaRefUpdateMoveUndo()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateMoveUndo2()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    std::vector<std::vector<const char*>> aData = {
+        { "1", "2", "=A2*10",      "=SUM(A1:B1)" },
+        { "3", "4", "=SUM(A2:B2)", "=SUM(A2:B2)" },
+        { "=SUM(A1:B1)" },
+    };
+
+    ScRange aOutRange = insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
+
+    std::vector<std::vector<const char*>> aCheckInitial = {
+        { "1",     "2",    "30",     "3" },
+        { "3",     "4",     "7",     "7" },
+        { "3", nullptr, nullptr, nullptr },
+    };
+
+    bool bGood = checkOutput(m_pDoc, aOutRange, aCheckInitial, "initial data");
+    CPPUNIT_ASSERT(bGood);
+
+    // D1:D2 should be grouped.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(3,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), pFC->GetSharedLength());
+
+    // Drag A1:B1 into A2:B2 thereby overwriting the old A2:B2 content.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.MoveBlock(ScRange(0,0,0,1,0,0), ScAddress(0,1,0), true, true, false, true);
+
+    std::vector<std::vector<const char*>> aCheckAfter = {
+        { nullptr, nullptr,    "10",     "3" },
+        {     "1",     "2",     "3",     "3" },
+        {     "3", nullptr, nullptr, nullptr },
+    };
+
+    bGood = checkOutput(m_pDoc, aOutRange, aCheckAfter, "A1:B1 moved to A2:B2");
+    CPPUNIT_ASSERT(bGood);
+
+    // Undo the move.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    bGood = checkOutput(m_pDoc, aOutRange, aCheckInitial, "after undo");
+    CPPUNIT_ASSERT(bGood);
+
+    // D1:D2 should be grouped.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(3,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), pFC->GetSharedLength());
+
+    // Redo and check.
+    pUndoMgr->Redo();
+
+    bGood = checkOutput(m_pDoc, aOutRange, aCheckAfter, "after redo");
+    CPPUNIT_ASSERT(bGood);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateMoveToSheet()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.

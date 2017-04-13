@@ -490,6 +490,44 @@ ScTokenArray* compileFormula(
     return aComp.CompileString(rFormula);
 }
 
+bool checkOutput(
+    ScDocument* pDoc, const ScRange& aOutRange,
+    const std::vector<std::vector<const char*>>& aCheck, const char* pCaption )
+{
+    bool bResult = true;
+    const ScAddress& s = aOutRange.aStart;
+    const ScAddress& e = aOutRange.aEnd;
+    svl::GridPrinter printer(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1, CALC_DEBUG_OUTPUT != 0);
+    SCROW nOutRowSize = e.Row() - s.Row() + 1;
+    SCCOL nOutColSize = e.Col() - s.Col() + 1;
+    for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
+    {
+        for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
+        {
+            OUString aVal = pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab());
+            printer.set(nRow, nCol, aVal);
+            const char* p = aCheck[nRow][nCol];
+            if (p)
+            {
+                OUString aCheckVal = OUString::createFromAscii(p);
+                bool bEqual = aCheckVal.equals(aVal);
+                if (!bEqual)
+                {
+                    std::cout << "Expected: " << aCheckVal << "  Actual: " << aVal << std::endl;
+                    bResult = false;
+                }
+            }
+            else if (!aVal.isEmpty())
+            {
+                std::cout << "Empty cell expected" << std::endl;
+                bResult = false;
+            }
+        }
+    }
+    printer.print(pCaption);
+    return bResult;
+}
+
 void clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange )
 {
     const ScAddress& s = rRange.aStart;
