@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSLIDESORTER_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSLIDESORTER_HXX
 
+#include <memory>
 #include "PresenterController.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterViewFactory.hxx"

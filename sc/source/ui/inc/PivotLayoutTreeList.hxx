@@ -11,6 +11,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELIST_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELIST_HXX
 
+#include <memory>
 #include "PivotLayoutTreeListBase.hxx"
 
 class ScPivotLayoutTreeList : public ScPivotLayoutTreeListBase

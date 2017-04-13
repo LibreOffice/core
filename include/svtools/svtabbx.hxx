@@ -23,6 +23,7 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/accessibletableprovider.hxx>
 
+#include <memory>
 #include <vector>
 
 enum SvTabJustify

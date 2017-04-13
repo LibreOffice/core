@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_GRAPH_HXX
 #define INCLUDED_VCL_GRAPH_HXX
 
+#include <memory>
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 #include <tools/solar.h>

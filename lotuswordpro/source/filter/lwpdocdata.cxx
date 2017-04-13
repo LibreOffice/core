@@ -53,6 +53,7 @@
  *
  *
  ************************************************************************/
+#include <memory>
 #include "lwpdocdata.hxx"
 #include "xfilter/xfofficemeta.hxx"
 #include "localtime.hxx"

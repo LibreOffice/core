@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8GLSY_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WW8GLSY_HXX
 
+#include <memory>
 #include <sot/storage.hxx>
 #include "ww8scan.hxx"
 

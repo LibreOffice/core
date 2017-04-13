@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_UNDODRAW_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_UNDODRAW_HXX
 
+#include <memory>
 #include <svl/undo.hxx>
 
 class ScDocShell;

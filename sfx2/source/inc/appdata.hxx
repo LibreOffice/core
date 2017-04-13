@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include "bitset.hxx"
+#include <memory>
 #include <vector>
 
 class SfxApplication;

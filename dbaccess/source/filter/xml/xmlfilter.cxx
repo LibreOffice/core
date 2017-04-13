@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <tools/errinf.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 #define INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 
+#include <memory>
 #include <sal/config.h>
 
 #include <i18nlangtag/languagetag.hxx>

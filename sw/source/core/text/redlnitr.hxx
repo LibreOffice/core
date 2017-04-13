@@ -26,6 +26,7 @@
 #include "swfont.hxx"
 
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 class SwTextNode;

@@ -29,6 +29,7 @@
 #include <tools/contnr.hxx>
 
 #include <limits.h>
+#include <memory>
 #include <vector>
 
 enum class SvListAction

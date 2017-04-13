@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_PROVIDER_HXX
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_PROVIDER_HXX
 
+#include <memory>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <ucbhelper/providerhelper.hxx>

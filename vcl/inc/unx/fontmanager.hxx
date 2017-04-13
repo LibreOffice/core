@@ -31,6 +31,7 @@
 #include <list>
 #include <map>
 #include <set>
+#include <memory>
 #include <vector>
 #include <unordered_map>
 

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_CONTROLCOMMAND_HXX
 #define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_CONTROLCOMMAND_HXX
 
+#include <memory>
 #include <sal/types.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>

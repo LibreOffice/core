@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_NETCHART_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_NETCHART_HXX
 
+#include <memory>
 #include "VSeriesPlotter.hxx"
 
 namespace chart

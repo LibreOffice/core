@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_ZOOM_HXX
 #define INCLUDED_CUI_SOURCE_INC_ZOOM_HXX
 
+#include <memory>
 #include <sfx2/basedlgs.hxx>
 #include <svx/zoom_def.hxx>
 #include <vcl/button.hxx>

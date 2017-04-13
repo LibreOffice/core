@@ -9,6 +9,7 @@
  *
  */
 
+#include <memory>
 #include "compat.hxx"
 #include "pluginhandler.hxx"
 

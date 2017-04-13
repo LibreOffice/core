@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <memory>
 #include <uitest/sfx_uiobject.hxx>
 
 #include <sfx2/tabdlg.hxx>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_PRINTERINFOMANAGER_HXX
 #define INCLUDED_VCL_PRINTERINFOMANAGER_HXX
 
+#include <memory>
 #include <list>
 #include <unordered_map>
 

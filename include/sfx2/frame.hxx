@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/ref.hxx>
+#include <memory>
 #include <vector>
 
 

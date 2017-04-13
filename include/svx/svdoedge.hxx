@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDOEDGE_HXX
 #define INCLUDED_SVX_SVDOEDGE_HXX
 
+#include <memory>
 #include <svx/svdotext.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svxdllapi.h>

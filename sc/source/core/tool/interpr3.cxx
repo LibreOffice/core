@@ -32,6 +32,7 @@
 #include "globstr.hrc"
 
 #include <math.h>
+#include <memory>
 #include <vector>
 #include <algorithm>
 #include <comphelper/random.hxx>

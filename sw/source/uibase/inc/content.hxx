@@ -18,6 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONTENT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONTENT_HXX
+#include <memory>
 #include <limits.h>
 #include "swcont.hxx"
 

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTUNOWRAPPER_HXX
 #define INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTUNOWRAPPER_HXX
 
+#include <memory>
 #include <editeng/unotext.hxx>
 #include <editeng/unoedsrc.hxx>
 

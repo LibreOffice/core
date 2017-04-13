@@ -10,6 +10,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_UIOBJECT_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_UIOBJECT_HXX
 
+#include <memory>
 #include <vcl/uitest/uiobject.hxx>
 
 #include "ChartWindow.hxx"

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_L10NTOOLS_INC_XRMMERGE_HXX
 #define INCLUDED_L10NTOOLS_INC_XRMMERGE_HXX
 
+#include <memory>
 #include "sal/config.h"
 
 #include <fstream>

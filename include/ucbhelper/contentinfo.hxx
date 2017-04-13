@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UCBHELPER_CONTENTINFO_HXX
 #define INCLUDED_UCBHELPER_CONTENTINFO_HXX
 
+#include <memory>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

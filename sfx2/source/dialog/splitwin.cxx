@@ -38,6 +38,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <memory>
 #include <vector>
 #include <utility>
 

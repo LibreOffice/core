@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_USRPREF_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_USRPREF_HXX
 
+#include <memory>
 #include <unotools/configitem.hxx>
 #include <fldupde.hxx>
 #include "viewopt.hxx"

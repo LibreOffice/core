@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWFONT_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWFONT_HXX
 
+#include <memory>
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>

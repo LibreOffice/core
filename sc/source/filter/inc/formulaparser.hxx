@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_FORMULAPARSER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_FORMULAPARSER_HXX
 
+#include <memory>
 #include "formulabase.hxx"
 
 namespace oox {

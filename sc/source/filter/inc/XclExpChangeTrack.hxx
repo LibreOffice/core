@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XCLEXPCHANGETRACK_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XCLEXPCHANGETRACK_HXX
 
+#include <memory>
 #include <stack>
 #include <tools/datetime.hxx>
 #include <rtl/uuid.h>

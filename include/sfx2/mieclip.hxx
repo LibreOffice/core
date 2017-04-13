@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_MIECLIP_HXX
 #define INCLUDED_SFX2_MIECLIP_HXX
 
+#include <memory>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>

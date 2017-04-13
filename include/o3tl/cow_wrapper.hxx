@@ -20,6 +20,7 @@
 #ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
 #define INCLUDED_O3TL_COW_WRAPPER_HXX
 
+#include <memory>
 #include <osl/interlck.h>
 
 #include <utility>

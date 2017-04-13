@@ -49,6 +49,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <functional>
+#include <memory>
 #include <vector>
 
 class OutlinerEditEng;

@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_X11_SALVD_H
 #define INCLUDED_VCL_INC_OPENGL_X11_SALVD_H
 
+#include <memory>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 

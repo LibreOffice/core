@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONTEXT_HXX
 
+#include <memory>
 #include <drawingml/chart/chartcontextbase.hxx>
 #include <svl/zforlist.hxx>
 

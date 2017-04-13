@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <HelpCompiler.hxx>
 #include <BasCodeTagger.hxx>
 #include <limits.h>

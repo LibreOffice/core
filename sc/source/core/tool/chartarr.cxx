@@ -34,6 +34,7 @@
 #include <o3tl/make_unique.hxx>
 #include <formula/errorcodes.hxx>
 
+#include <memory>
 #include <vector>
 
 using ::std::vector;

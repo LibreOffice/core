@@ -14,6 +14,7 @@
 #include <rtl/crc.h>
 #include <algorithm>
 #include <deque>
+#include <memory>
 #include <vector>
 #include <zlib.h>
 

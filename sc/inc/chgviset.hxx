@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SC_INC_CHGVISET_HXX
 #define INCLUDED_SC_INC_CHGVISET_HXX
 
+#include <memory>
 #include <tools/datetime.hxx>
 #include <unotools/textsearch.hxx>
 #include <svx/ctredlin.hxx>

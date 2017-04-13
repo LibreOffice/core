@@ -19,6 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETBASE_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETBASE_HXX
 
+#include <memory>
 #include <cppuhelper/implbase10.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

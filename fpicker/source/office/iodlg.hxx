@@ -19,6 +19,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
 
+#include <memory>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

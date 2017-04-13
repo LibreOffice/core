@@ -92,6 +92,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
+#include <memory>
 #include <vector>
 #include <algorithm>
 #include <wrtsh.hxx>

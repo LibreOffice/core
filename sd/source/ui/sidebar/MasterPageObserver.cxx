@@ -25,6 +25,7 @@
 #include "sdpage.hxx"
 #include <set>
 #include <unordered_map>
+#include <memory>
 #include <vector>
 #include <svl/lstner.hxx>
 #include <osl/doublecheckedlocking.h>

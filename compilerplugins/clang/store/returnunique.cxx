@@ -12,6 +12,7 @@
 // unique_ptr is returned directly.  (But other occurrences might be fine the
 // way they are, hence place this plugin into store/).
 
+#include <memory>
 #include "plugin.hxx"
 
 namespace {

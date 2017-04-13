@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <config_features.h>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -31,6 +32,7 @@
 #endif
 #include <hintids.hxx>
 
+#include <tools/errinf.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>

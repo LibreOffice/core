@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <memory>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/processfactory.hxx>

@@ -25,6 +25,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/msg.hxx>
 #include <string>
+#include <memory>
 #include <vector>
 
 class SfxInterface;

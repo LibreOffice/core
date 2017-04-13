@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_INETTBC_HXX
 #define INCLUDED_SVTOOLS_INETTBC_HXX
 
+#include <memory>
 #include <rtl/ref.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/urlobj.hxx>

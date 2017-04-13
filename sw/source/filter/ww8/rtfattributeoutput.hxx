@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
 
+#include <memory>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include "attributeoutputbase.hxx"

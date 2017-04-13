@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_SFXBASECONTROLLER_HXX
 #define INCLUDED_SFX2_SFXBASECONTROLLER_HXX
 
+#include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>

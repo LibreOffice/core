@@ -19,11 +19,13 @@
 #ifndef INCLUDED_BASIC_BASMGR_HXX
 #define INCLUDED_BASIC_BASMGR_HXX
 
+#include <tools/errinf.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <basic/basicdllapi.h>
+#include <memory>
 #include <vector>
 
 // Basic XML Import/Export

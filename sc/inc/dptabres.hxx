@@ -32,6 +32,7 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
+#include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {

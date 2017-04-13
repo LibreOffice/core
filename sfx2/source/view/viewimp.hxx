@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
 #define INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
 
+#include <memory>
 #include <basic/sbxobj.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>

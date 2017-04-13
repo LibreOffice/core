@@ -26,6 +26,7 @@
 #include <sal/types.h>
 #include <tools/fract.hxx>
 #include <vcl/mapmod.hxx>
+#include <memory>
 #include <vector>
 #include <utility>
 

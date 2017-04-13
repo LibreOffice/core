@@ -23,6 +23,7 @@
 #include <fldbas.hxx>
 #include <cellfml.hxx>
 #include <set>
+#include <memory>
 #include <vector>
 
 class SfxPoolItem;

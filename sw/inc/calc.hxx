@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_CALC_HXX
 #define INCLUDED_SW_INC_CALC_HXX
 
+#include <memory>
 #include <vector>
 #include <basic/sbxvar.hxx>
 #include <unotools/syslocale.hxx>

@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
+#include <memory>
 #include <vector>
 
 namespace vcl

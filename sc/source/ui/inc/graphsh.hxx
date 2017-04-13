@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_GRAPHSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_GRAPHSH_HXX
 
+#include <memory>
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"
 #include <sfx2/module.hxx>

@@ -8,6 +8,7 @@
  *
  */
 
+#include <memory>
 #include <sal/config.h>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>

@@ -23,6 +23,7 @@
 #define INITIAL_NUM_ATTR 3
 #define NUM_ATTRIBUTE_STACKS 44
 
+#include <memory>
 #include <txatbase.hxx>
 #include <swfntcch.hxx>
 

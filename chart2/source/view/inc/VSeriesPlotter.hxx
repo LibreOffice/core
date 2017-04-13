@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_VSERIESPLOTTER_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_VSERIESPLOTTER_HXX
 
+#include <memory>
 #include "PlotterBase.hxx"
 #include "VDataSeries.hxx"
 #include "LabelAlignment.hxx"

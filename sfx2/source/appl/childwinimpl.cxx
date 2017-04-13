@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include "childwinimpl.hxx"
 
 size_t SfxChildWinContextArr_Impl::size() const

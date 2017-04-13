@@ -20,6 +20,7 @@
 
 /** this file implements an export of a selected EditEngine content into
     a xml stream. See editeng/source/inc/xmledit.hxx for interface */
+#include <memory>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

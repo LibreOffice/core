@@ -19,6 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONCONTROLLER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONCONTROLLER_HXX
 
+#include <memory>
 #include "JoinController.hxx"
 #include "RelationDesignView.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_SUBMISSIONHANDLER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_SUBMISSIONHANDLER_HXX
 
+#include <memory>
 #include "propertyhandler.hxx"
 #include "eformshelper.hxx"
 

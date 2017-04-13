@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVL_ONDEMAND_HXX
 #define INCLUDED_SVL_ONDEMAND_HXX
 
+#include <memory>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/lang.h>
 #include <unotools/localedatawrapper.hxx>

@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <vcl/timer.hxx>
+#include <memory>
 #include <vector>
 #include <algorithm>
 

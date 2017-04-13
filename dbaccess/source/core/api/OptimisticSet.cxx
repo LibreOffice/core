@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include "OptimisticSet.hxx"
 #include "core_resource.hxx"
 #include "core_resource.hrc"

@@ -24,6 +24,7 @@
 #include <sfx2/dllapi.h>
 #include <tools/errcode.hxx>
 #include <tools/link.hxx>
+#include <memory>
 #include <vector>
 
 namespace sfx2 { class FileDialogHelper; }

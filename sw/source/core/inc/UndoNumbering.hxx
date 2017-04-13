@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDONUMBERING_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDONUMBERING_HXX
 
+#include <memory>
 #include <vector>
 #include <undobj.hxx>
 #include <rtl/ustring.hxx>

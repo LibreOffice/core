@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_GLOSHDL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLOSHDL_HXX
 
+#include <memory>
 #include <rtl/ustring.hxx>
 #include "swdllapi.h"
 

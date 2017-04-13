@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSCLIPBOARD_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSCLIPBOARD_HXX
 
+#include <memory>
 #include "ViewClipboard.hxx"
 #include "controller/SlsSelectionObserver.hxx"
 #include "sdxfer.hxx"

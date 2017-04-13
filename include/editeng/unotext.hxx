@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_UNOTEXT_HXX
 #define INCLUDED_EDITENG_UNOTEXT_HXX
 
+#include <memory>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XText.hpp>

@@ -24,6 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <iostream>
+#include <memory>
 #include <vector>
 
 UIObject::~UIObject()

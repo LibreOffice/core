@@ -22,6 +22,7 @@
 #include "swtypes.hxx"
 #include "swrect.hxx"
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <memory>
 #include <vector>
 
 class OutputDevice;

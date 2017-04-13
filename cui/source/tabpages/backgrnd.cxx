@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <unotools/pathoptions.hxx>
 #include <vcl/builderfactory.hxx>

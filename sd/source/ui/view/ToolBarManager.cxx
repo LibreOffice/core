@@ -44,6 +44,7 @@
 
 #include <map>
 #include <utility>
+#include <memory>
 #include <vector>
 
 using namespace ::com::sun::star;

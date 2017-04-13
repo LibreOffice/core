@@ -58,6 +58,7 @@
  *  the class for VO_FrameLayout
  ************************************************************************/
 
+#include <memory>
 #include "lwpframelayout.hxx"
 #include "lwppara.hxx"
 #include "xfilter/xfstylemanager.hxx"

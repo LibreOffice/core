@@ -82,6 +82,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/strbuf.hxx>
+#include <memory>
 #include <vector>
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORMULTI_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORMULTI_HXX
 
+#include <memory>
 #include "porlay.hxx"
 #include "porexp.hxx"
 #include <com/sun/star/text/RubyAdjust.hpp>

@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cassert>
+#include <memory>
 #include <vector>
 
 #include <osl/diagnose.h>

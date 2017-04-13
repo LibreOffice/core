@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGPROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGPROVIDER_HXX
 
+#include <memory>
 #include <ucbhelper/providerhelper.hxx>
 #include "pkguri.hxx"
 

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_FUNCUNO_HXX
 #define INCLUDED_SC_INC_FUNCUNO_HXX
 
+#include <memory>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

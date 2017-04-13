@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MAILMRGE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MAILMRGE_HXX
 
+#include <memory>
 #include <svx/stddlg.hxx>
 
 #include <vcl/button.hxx>

@@ -32,6 +32,7 @@
 #include <svtools/svmedit.hxx>
 #include <svl/srchdefs.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 #include <vector>
 
 class SvxSearchItem;

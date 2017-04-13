@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_IMPBMP_HXX
 #define INCLUDED_VCL_INC_IMPBMP_HXX
 
+#include <memory>
 #include <vcl/salbtype.hxx>
 
 extern const sal_uLong nVCLRLut[ 6 ];

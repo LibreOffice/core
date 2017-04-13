@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 

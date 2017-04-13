@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_OLDPRINTADAPTOR_HXX
 #define INCLUDED_VCL_OLDPRINTADAPTOR_HXX
 
+#include <memory>
 #include <vcl/print.hxx>
 
 namespace vcl

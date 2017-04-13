@@ -11,6 +11,7 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_PACKEDTEXTUREATLAS_HXX
 #define INCLUDED_VCL_INC_OPENGL_PACKEDTEXTUREATLAS_HXX
 
+#include <memory>
 #include "opengl/texture.hxx"
 
 struct PackedTexture;

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_CHILDWIN_HXX
 #define INCLUDED_SFX2_CHILDWIN_HXX
 
+#include <memory>
 #include <sal/config.h>
 
 #include <sfx2/dllapi.h>

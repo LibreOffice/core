@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_COMMANDEVENT_HXX
 #define INCLUDED_VCL_COMMANDEVENT_HXX
 
+#include <memory>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>

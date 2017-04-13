@@ -17,6 +17,7 @@
 
 #include <stack>
 #include <cmath>
+#include <memory>
 #include <vector>
 
 using namespace formula;

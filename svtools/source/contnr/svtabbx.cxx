@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtresid.hxx>

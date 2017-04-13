@@ -26,6 +26,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
 
+#include <memory>
 #include <vector>
 
 namespace {
