@@ -73,16 +73,6 @@ protected:
     }
 };
 
-namespace com { namespace sun { namespace star { namespace drawing {
-
-std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
-{
-    rStrm << (int) n;
-    return rStrm;
-}
-
-} } } }
-
 DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);

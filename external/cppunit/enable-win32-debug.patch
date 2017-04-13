@@ -1,5 +1,5 @@
---- misc/cppunit-1.13.1/src/cppunit/cppunit_dll.vcxproj
-+++ misc/build/cppunit-1.13.1/src/cppunit/cppunit_dll.vcxproj
+--- misc/cppunit-1.14.0/src/cppunit/cppunit_dll.vcxproj
++++ misc/build/cppunit-1.14.0/src/cppunit/cppunit_dll.vcxproj
 @@ -107,7 +107,6 @@
        <SuppressStartupBanner>true</SuppressStartupBanner>
        <WarningLevel>Level3</WarningLevel>

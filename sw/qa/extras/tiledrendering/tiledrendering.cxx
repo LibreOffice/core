@@ -36,12 +36,6 @@
 
 static const char* const DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 
-static std::ostream& operator<<(std::ostream& os, ViewShellId id)
-{
-    os << (sal_Int32)id;
-    return os;
-}
-
 /// Testsuite for the SwXTextDocument methods implementing the vcl::ITiledRenderable interface.
 class SwTiledRenderingTest : public SwModelTestBase
 {
