@@ -137,13 +137,7 @@ void SmWordExportBase::HandleUnaryOperation(const SmUnHorNode* pNode, int nLevel
     // update HandleMath() when adding new items
     SAL_INFO("starmath.wordbase", "Unary: " << int(pNode->GetToken().eType));
 
-// Avoid MSVC warning C4065: switch statement contains 'default' but no 'case' labels
-//    switch( pNode->GetToken().eType )
-//    {
-//        default:
     HandleAllSubNodes(pNode, nLevel);
-//            break;
-//    }
 }
 
 void SmWordExportBase::HandleBinaryOperation(const SmBinHorNode* pNode, int nLevel)

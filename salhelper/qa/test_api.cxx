@@ -142,6 +142,10 @@ void Test::testConditionModifier() {
         == getConditionModifierTypeInfo()));
 }
 
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif
+
 void Test::testConditionWaiter() {
     salhelper::ConditionWaiter * p = nullptr;
     CPPUNIT_ASSERT(bool(typeid (*p) == typeid (salhelper::ConditionWaiter)));
@@ -190,10 +194,6 @@ void Test::testORealDynamicLoader() {
         typeid (salhelper::ORealDynamicLoader *)
         == getORealDynamicLoaderTypeInfo()));
 }
-
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
 
 void Test::testSimpleReferenceObject() {
     salhelper::SimpleReferenceObject * p = new DerivedSimpleReferenceObject;

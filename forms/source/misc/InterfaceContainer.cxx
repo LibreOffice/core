@@ -1252,7 +1252,7 @@ Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType)
         aReturn = OInterfaceContainer::queryInterface(_rType);
 
         if (!aReturn.hasValue())
-            aReturn = FormComponentsBase::queryAggregation(_rType);
+            aReturn =  ::cppu::OComponentHelper::queryAggregation(_rType);
     }
 
     return aReturn;
@@ -1261,12 +1261,12 @@ Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType)
 
 Sequence<Type> SAL_CALL OFormComponents::getTypes()
 {
-    return ::comphelper::concatSequences(OInterfaceContainer::getTypes(), FormComponentsBase::getTypes(), OFormComponents_BASE::getTypes());
+    return ::comphelper::concatSequences(OInterfaceContainer::getTypes(),  ::cppu::OComponentHelper::getTypes(), OFormComponents_BASE::getTypes());
 }
 
 
 OFormComponents::OFormComponents(const Reference<XComponentContext>& _rxFactory)
-    :FormComponentsBase( m_aMutex )
+    : ::cppu::OComponentHelper( m_aMutex )
     ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XFormComponent>::get() )
     ,OFormComponents_BASE()
 {
@@ -1274,7 +1274,7 @@ OFormComponents::OFormComponents(const Reference<XComponentContext>& _rxFactory)
 
 
 OFormComponents::OFormComponents( const OFormComponents& _cloneSource )
-    :FormComponentsBase( m_aMutex )
+    : ::cppu::OComponentHelper( m_aMutex )
     ,OInterfaceContainer( m_aMutex, _cloneSource )
     ,OFormComponents_BASE()
 {
@@ -1283,7 +1283,7 @@ OFormComponents::OFormComponents( const OFormComponents& _cloneSource )
 
 OFormComponents::~OFormComponents()
 {
-    if (!FormComponentsBase::rBHelper.bDisposed)
+    if (! ::cppu::OComponentHelper::rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -1295,7 +1295,7 @@ OFormComponents::~OFormComponents()
 void OFormComponents::disposing()
 {
     OInterfaceContainer::disposing();
-    FormComponentsBase::disposing();
+     ::cppu::OComponentHelper::disposing();
     m_xParent = nullptr;
 }
 
