@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UIITEMS_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UIITEMS_HXX
 
+#include <memory>
 #include <svl/intitem.hxx>
 #include "swdllapi.h"
 #include "cmdid.h"

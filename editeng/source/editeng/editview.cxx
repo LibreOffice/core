@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <sal/macros.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>

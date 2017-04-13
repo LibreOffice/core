@@ -9,6 +9,7 @@
  * This file incorporates work covered by the following license notice:
  */
 
+#include <memory>
 #include "PivotLayoutTreeListLabel.hxx"
 #include "PivotLayoutDialog.hxx"
 

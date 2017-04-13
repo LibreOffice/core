@@ -69,6 +69,7 @@
 
 //#define DEBUG_TIMING
 #ifdef DEBUG_TIMING
+#include <memory>
 #include <vector>
 #endif
 

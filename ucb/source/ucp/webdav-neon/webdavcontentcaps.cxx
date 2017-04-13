@@ -32,6 +32,7 @@
 
  *************************************************************************/
 
+#include <memory>
 #include <set>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

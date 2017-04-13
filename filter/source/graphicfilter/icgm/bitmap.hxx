@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BITMAP_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BITMAP_HXX
 
+#include <memory>
 #include "cgm.hxx"
 #include <vcl/bitmapaccess.hxx>
 

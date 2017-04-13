@@ -17,6 +17,7 @@
  *   the License at http: // www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/script/Converter.hpp>

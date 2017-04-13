@@ -54,6 +54,7 @@
  *
  ************************************************************************/
 
+#include <memory>
 #include "lwppagelayout.hxx"
 #include "lwplaypiece.hxx"
 #include "lwpfootnote.hxx"

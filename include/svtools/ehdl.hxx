@@ -22,6 +22,7 @@
 
 #ifndef __RSC
 
+#include <memory>
 #include <svtools/svtdllapi.h>
 
 #include <tools/errinf.hxx>

@@ -26,6 +26,8 @@
 #include "stgio.hxx"
 #include <rtl/instance.hxx>
 
+#include <memory>
+
 ///////////////////////////// class StgIo
 
 // This class holds the storage header and all internal streams.

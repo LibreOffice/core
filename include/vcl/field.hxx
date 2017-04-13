@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_FIELD_HXX
 #define INCLUDED_VCL_FIELD_HXX
 
+#include <memory>
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <tools/date.hxx>

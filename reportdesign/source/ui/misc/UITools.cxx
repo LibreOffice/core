@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "SectionView.hxx"

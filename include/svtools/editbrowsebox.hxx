@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX
 #define SVTOOLS_IN_EDITBROWSEBOX_HXX
 
+#include <memory>
 #include <svtools/svtdllapi.h>
 #include <tools/ref.hxx>
 #include <vcl/window.hxx>

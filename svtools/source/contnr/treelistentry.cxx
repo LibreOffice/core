@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <svtools/treelistentry.hxx>
 #include <svtools/treelist.hxx>
 #include <o3tl/make_unique.hxx>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_UNOSHAPE_HXX
 #define INCLUDED_SVX_UNOSHAPE_HXX
 
+#include <memory>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>

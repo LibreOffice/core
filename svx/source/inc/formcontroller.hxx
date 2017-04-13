@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <vector>
 
 #include "delayedevent.hxx"

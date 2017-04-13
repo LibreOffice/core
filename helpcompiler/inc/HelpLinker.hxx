@@ -20,6 +20,7 @@
 #ifndef INCLUDED_HELPCOMPILER_INC_HELPLINKER_HXX
 #define INCLUDED_HELPCOMPILER_INC_HELPLINKER_HXX
 
+#include <memory>
 #include <helpcompiler/dllapi.h>
 #include <libxslt/transform.h>
 

@@ -29,6 +29,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVPROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVPROVIDER_HXX
 
+#include <memory>
 #include <config_lgpl.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/beans/Property.hpp>

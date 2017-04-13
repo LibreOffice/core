@@ -29,6 +29,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 namespace accessibility

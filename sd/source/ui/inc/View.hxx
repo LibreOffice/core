@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_VIEW_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_VIEW_HXX
 
+#include <memory>
 #include "pres.hxx"
 #include <tools/gen.hxx>
 #include <svtools/transfer.hxx>

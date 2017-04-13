@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include "fmdocumentclassification.hxx"
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"

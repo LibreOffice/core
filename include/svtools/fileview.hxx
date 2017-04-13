@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_FILEVIEW_HXX
 #define INCLUDED_SVTOOLS_FILEVIEW_HXX
 
+#include <memory>
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/ucb/XContent.hpp>

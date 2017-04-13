@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XCL97REC_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XCL97REC_HXX
 
+#include <memory>
 #include "excrecds.hxx"
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"

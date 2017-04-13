@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include "filtercache.hxx"
 #include "macros.hxx"
 #include "constant.hxx"

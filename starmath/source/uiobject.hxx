@@ -10,6 +10,7 @@
 #ifndef INCLUDED_STARMATH_SOURCE_UIOBJECT_HXX
 #define INCLUDED_STARMATH_SOURCE_UIOBJECT_HXX
 
+#include <memory>
 #include <vcl/uitest/uiobject.hxx>
 
 class SmElementsControl;

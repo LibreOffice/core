@@ -28,6 +28,7 @@
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
 
+#include <memory>
 #include <vector>
 
 #define SFX_REC_PRETAG_EXT              sal_uInt8(0x00) // Pre-Tag for Extended-Records

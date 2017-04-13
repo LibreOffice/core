@@ -29,6 +29,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <unotools/datetime.hxx>
 
+#include <memory>
 #include <vector>
 #include <list>
 #include <limits.h>

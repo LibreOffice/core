@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUPAGE_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUPAGE_HXX
 
+#include <memory>
 #include "fupoor.hxx"
 
 class SfxItemSet;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDMODEL_HXX
 #define INCLUDED_SVX_SVDMODEL_HXX
 
+#include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <editeng/forbiddencharacterstable.hxx>

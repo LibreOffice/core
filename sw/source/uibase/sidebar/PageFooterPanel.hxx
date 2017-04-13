@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEFOOTERPANEL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEFOOTERPANEL_HXX
 
+#include <memory>
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <svx/sidebar/PanelLayout.hxx>

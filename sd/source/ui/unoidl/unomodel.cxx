@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/presentation/XPresentation2.hpp>

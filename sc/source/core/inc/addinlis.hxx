@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX
 
+#include <memory>
 #include "adiasync.hxx"
 #include <com/sun/star/sheet/XResultListener.hpp>
 #include <com/sun/star/sheet/XVolatileResult.hpp>

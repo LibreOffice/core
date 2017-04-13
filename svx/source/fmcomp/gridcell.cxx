@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <sal/macros.h>
 #include "fmprop.hrc"
 #include "svx/fmresids.hrc"

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_COMBOBOX_HXX
 #define INCLUDED_VCL_COMBOBOX_HXX
 
+#include <memory>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 

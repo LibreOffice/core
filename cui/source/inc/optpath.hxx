@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_OPTPATH_HXX
 #define INCLUDED_CUI_SOURCE_INC_OPTPATH_HXX
 
+#include <memory>
 #include <sfx2/tabdlg.hxx>
 #include <svtools/simptabl.hxx>
 #include <vcl/fixed.hxx>

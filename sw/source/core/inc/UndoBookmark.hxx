@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOBOOKMARK_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOBOOKMARK_HXX
 
+#include <memory>
 #include <undobj.hxx>
 
 class SwHistoryBookmark;

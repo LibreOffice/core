@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
 #define INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
 
+#include <memory>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H

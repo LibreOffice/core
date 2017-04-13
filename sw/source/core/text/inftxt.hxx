@@ -18,6 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_INFTXT_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_INFTXT_HXX
+#include <memory>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 

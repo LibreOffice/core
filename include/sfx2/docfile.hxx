@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_DOCFILE_HXX
 #define INCLUDED_SFX2_DOCFILE_HXX
 
+#include <memory>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>

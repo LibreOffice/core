@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_EDIT_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_EDIT_HXX
 
+#include <memory>
 #include "EditBase.hxx"
 
 #include <tools/link.hxx>

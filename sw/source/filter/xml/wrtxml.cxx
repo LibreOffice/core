@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XModule.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <tools/errinf.hxx>
 #include <o3tl/any.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>

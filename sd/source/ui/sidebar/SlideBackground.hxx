@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDEBACKGROUND_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDEBACKGROUND_HXX
 
+#include <memory>
 #include <vcl/ctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>

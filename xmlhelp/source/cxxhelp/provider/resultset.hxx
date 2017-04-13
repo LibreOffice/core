@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSET_HXX
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSET_HXX
 
+#include <memory>
 #include <ucbhelper/resultsethelper.hxx>
 #include <rtl/ref.hxx>
 

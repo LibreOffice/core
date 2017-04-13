@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_IOSYS_HXX
 #define INCLUDED_BASIC_SOURCE_INC_IOSYS_HXX
 
+#include <memory>
 #include <tools/stream.hxx>
 #include <basic/sberrors.hxx>
 #include <o3tl/typed_flags_set.hxx>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_GRIDCELL_HXX
 #define INCLUDED_SVX_SOURCE_INC_GRIDCELL_HXX
 
+#include <memory>
 #include <svx/gridctrl.hxx>
 
 #include "sqlparserclient.hxx"

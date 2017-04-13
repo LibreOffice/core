@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDOOLE2_HXX
 #define INCLUDED_SVX_SVDOOLE2_HXX
 
+#include <memory>
 #include <svx/svdorect.hxx>
 #include <svx/svxdllapi.h>
 #include <sfx2/linkmgr.hxx>

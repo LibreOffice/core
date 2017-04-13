@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDOGRP_HXX
 #define INCLUDED_SVX_SVDOGRP_HXX
 
+#include <memory>
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
 

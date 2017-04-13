@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
+#include <memory>
 #include <vector>
 
 /*

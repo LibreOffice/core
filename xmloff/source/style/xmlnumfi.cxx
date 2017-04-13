@@ -47,6 +47,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/languagetagodf.hxx>
 
+#include <memory>
 #include <vector>
 
 using namespace ::com::sun::star;

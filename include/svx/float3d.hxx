@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_FLOAT3D_HXX
 #define INCLUDED_SVX_FLOAT3D_HXX
 
+#include <memory>
 #include <sfx2/ctrlitem.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_AWT_VCLXFONT_HXX
 #define INCLUDED_TOOLKIT_AWT_VCLXFONT_HXX
 
+#include <memory>
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XFont2.hpp>
 #include <com/sun/star/awt/XDevice.hpp>

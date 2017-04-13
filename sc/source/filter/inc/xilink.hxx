@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XILINK_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XILINK_HXX
 
+#include <memory>
 #include <map>
 #include "xllink.hxx"
 #include "xiroot.hxx"

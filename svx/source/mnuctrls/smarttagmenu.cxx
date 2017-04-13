@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <svx/SmartTagItem.hxx>
 #include <vcl/commandinfoprovider.hxx>

@@ -23,6 +23,7 @@
 #include "sal/config.h"
 
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 #include <signal.h>

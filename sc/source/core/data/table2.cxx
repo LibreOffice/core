@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include "table.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"

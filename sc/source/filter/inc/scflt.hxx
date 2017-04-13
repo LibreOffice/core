@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_SCFLT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_SCFLT_HXX
 
+#include <memory>
 #include "viewopti.hxx"
 #include "collect.hxx"
 #include <tools/solar.h>

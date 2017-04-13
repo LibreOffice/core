@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_HTMLTBL_HXX
 #define INCLUDED_SW_INC_HTMLTBL_HXX
 
+#include <memory>
 #include <vcl/timer.hxx>
 #include <editeng/svxenum.hxx>
 

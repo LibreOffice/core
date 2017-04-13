@@ -20,6 +20,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLELIST_HXX
 #define INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLELIST_HXX
 
+#include <memory>
 #include <vector>
 #include <functional>
 #include <standard/vclxaccessibleedit.hxx>

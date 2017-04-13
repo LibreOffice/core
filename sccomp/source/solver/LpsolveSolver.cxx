@@ -60,6 +60,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/math.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <memory>
 #include <vector>
 
 using namespace com::sun::star;

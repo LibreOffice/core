@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
 #define INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
 
+#include <memory>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

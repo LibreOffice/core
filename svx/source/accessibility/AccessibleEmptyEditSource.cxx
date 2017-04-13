@@ -21,6 +21,7 @@
 // Global header
 
 
+#include <memory>
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>

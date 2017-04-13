@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_XMLSECCTRL_HXX
 #define INCLUDED_SVX_XMLSECCTRL_HXX
 
+#include <memory>
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
 

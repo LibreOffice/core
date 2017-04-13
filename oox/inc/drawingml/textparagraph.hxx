@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX
 
+#include <memory>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
 

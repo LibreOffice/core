@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
 
+#include <memory>
 #include <osl/diagnose.h>
 
 

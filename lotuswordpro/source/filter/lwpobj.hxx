@@ -61,6 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJ_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJ_HXX
 
+#include <memory>
 #include <sal/config.h>
 
 #include <stdexcept>

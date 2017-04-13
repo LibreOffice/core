@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_FRMDESCR_HXX
 #define INCLUDED_SFX2_FRMDESCR_HXX
 
+#include <memory>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>

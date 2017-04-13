@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCOMPONENTHANDLER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCOMPONENTHANDLER_HXX
 
+#include <memory>
 #include "propertyhandler.hxx"
 #include "sqlcommanddesign.hxx"
 #include "pcrcommon.hxx"

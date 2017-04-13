@@ -60,6 +60,7 @@
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIB_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIB_HXX
+#include <memory>
 #include "lwpobjid.hxx"
 #include "lwpobjstrm.hxx"
 #include "lwpbasetype.hxx"

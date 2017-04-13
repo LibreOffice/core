@@ -29,6 +29,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/vclptr.hxx>
+#include <memory>
 #include <vector>
 
 #include <com/sun/star/frame/FeatureStateEvent.hpp>

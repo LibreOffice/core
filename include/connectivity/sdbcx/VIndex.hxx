@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VINDEX_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VINDEX_HXX
 
+#include <memory>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>

@@ -23,6 +23,7 @@
  **************************************************************************
 
  *************************************************************************/
+#include <memory>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <ucbhelper/getcomponentcontext.hxx>

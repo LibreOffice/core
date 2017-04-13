@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cstring>
+#include <memory>
 #include <vector>
 
 #include <formula/formuladllapi.h>

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABVIEW_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABVIEW_HXX
 
+#include <memory>
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
 

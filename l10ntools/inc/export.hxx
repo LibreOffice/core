@@ -32,6 +32,7 @@
 #include <iterator>
 #include <set>
 #include <unordered_map>
+#include <memory>
 #include <vector>
 #include <queue>
 #include <string>

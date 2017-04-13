@@ -18,6 +18,7 @@
  */
 
 
+#include <memory>
 #include <vcl/graph.hxx>
 #include <vcl/bitmapaccess.hxx>
 

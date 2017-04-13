@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_FNTCTRL_HXX
 #define INCLUDED_SVX_FNTCTRL_HXX
 
+#include <memory>
 #include <vcl/window.hxx>
 #include <editeng/svxfont.hxx>
 #include <svx/svxdllapi.h>

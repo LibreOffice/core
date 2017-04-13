@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_UNOSRCH_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_UNOSRCH_HXX
 
+#include <memory>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/text/XTextRange.hpp>

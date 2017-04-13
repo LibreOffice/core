@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_OBJFACE_HXX
 #define INCLUDED_SFX2_OBJFACE_HXX
 
+#include <memory>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>

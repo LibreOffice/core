@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include "xistyle.hxx"
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>

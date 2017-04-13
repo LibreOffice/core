@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_NDNOTXT_HXX
 #define INCLUDED_SW_INC_NDNOTXT_HXX
 
+#include <memory>
 #include "node.hxx"
 
 namespace tools { class PolyPolygon; }

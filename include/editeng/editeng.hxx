@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_EDITENG_HXX
 
 #include <rtl/ref.hxx>
+#include <memory>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>

@@ -28,6 +28,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/lang.h>
+#include <memory>
 #include <vector>
 #include <unotools/localedatawrapper.hxx>
 

@@ -63,6 +63,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTORY_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTORY_HXX
 
+#include <memory>
 #include "lwpcontent.hxx"
 
 class LwpPageLayout;

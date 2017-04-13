@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_STYLESBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_STYLESBUFFER_HXX
 
+#include <memory>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>

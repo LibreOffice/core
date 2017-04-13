@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_METAACT_HXX
 #define INCLUDED_VCL_METAACT_HXX
 
+#include <memory>
 #include <vcl/dllapi.h>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>

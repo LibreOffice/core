@@ -33,6 +33,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/listenernotification.hxx>
 
+#include <memory>
 #include <vector>
 #include <set>
 
