@@ -878,33 +878,22 @@ void CustomAnimationPane::onDoubleClick()
     showOptions();
 }
 
-void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
+void CustomAnimationPane::onContextMenu(const OString &rIdent)
 {
-    switch( nSelectedPopupEntry )
-    {
-    case CM_WITH_CLICK:
+    if (rIdent == "onclick")
         onChangeStart( EffectNodeType::ON_CLICK );
-        break;
-    case CM_WITH_PREVIOUS:
+    else if (rIdent == "withprev")
         onChangeStart( EffectNodeType::WITH_PREVIOUS  );
-        break;
-    case CM_AFTER_PREVIOUS:
+    else if (rIdent == "afterprev")
         onChangeStart( EffectNodeType::AFTER_PREVIOUS );
-        break;
-    case CM_OPTIONS:
+    else if (rIdent == "options")
         showOptions();
-        break;
-    case CM_DURATION:
+    else if (rIdent == "timing")
         showOptions("timing");
-        break;
-    case CM_REMOVE:
+    else if (rIdent == "remove")
         onRemove();
-        break;
-    case CM_CREATE:
-        if( maViewSelection.hasValue() ) onAdd();
-        break;
-    }
-
+    else if (rIdent == "create" && maViewSelection.hasValue())
+        onAdd();
     updateControls();
 }
 

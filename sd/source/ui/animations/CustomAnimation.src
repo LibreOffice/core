@@ -19,47 +19,6 @@
 
 #include "CustomAnimation.hrc"
 
-Menu RID_EFFECT_CONTEXTMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = CM_WITH_CLICK ;
-            Text [ en-US ] = "Start On ~Click" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_WITH_PREVIOUS ;
-            Text [ en-US ] = "Start ~With Previous" ;
-        };
-        MenuItem
-        {
-            Identifier = CM_AFTER_PREVIOUS;
-            Text [ en-US ] = "Start ~After Previous" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = CM_OPTIONS;
-            Text [ en-US ] = "~Effect Options..." ;
-        };
-        MenuItem
-        {
-            Identifier = CM_DURATION;
-            Text [ en-US ] = "~Timing..." ;
-        };
-        MenuItem
-        {
-            Identifier = CM_REMOVE;
-            Text [ en-US ] = "~Remove" ;
-        };
-    };
-};
-
 Menu RID_CUSTOMANIMATION_FONTSIZE_POPUP
 {
     ItemList =

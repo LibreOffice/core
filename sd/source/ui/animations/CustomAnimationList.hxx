@@ -40,7 +40,7 @@ class ICustomAnimationListController
 public:
     virtual void onSelect() = 0;
     virtual void onDoubleClick() = 0;
-    virtual void onContextMenu( sal_uInt16 nSelectedPopupEntry ) = 0;
+    virtual void onContextMenu(const OString &rIdent) = 0;
     virtual ~ICustomAnimationListController() {}
 };
 
@@ -96,6 +96,9 @@ public:
     };
 
 private:
+    std::unique_ptr<VclBuilder> mxBuilder;
+    VclPtr<PopupMenu> mxMenu;
+
     bool    mbIgnorePaint;
 
     /** appends the given effect to the list*/

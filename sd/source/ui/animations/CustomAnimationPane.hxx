@@ -89,7 +89,7 @@ public:
     // ICustomAnimationListController
     virtual void onSelect() override;
     virtual void onDoubleClick() override;
-    virtual void onContextMenu( sal_uInt16 nSelectedPopupEntry ) override;
+    virtual void onContextMenu(const OString& rIdent) override;
 
     // Window
     virtual void DataChanged (const DataChangedEvent& rEvent) override;

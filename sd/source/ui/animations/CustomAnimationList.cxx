@@ -445,7 +445,6 @@ CustomAnimationList::CustomAnimationList( vcl::Window* pParent )
     , mnLastGroupId(0)
     , mpLastParentEntry(nullptr)
 {
-
     EnableContextMenuHandling();
     SetSelectionMode( SelectionMode::Multiple );
     SetOptimalImageIndent();
@@ -478,6 +477,10 @@ void CustomAnimationList::dispose()
         mpMainSequence->removeListener( this );
 
     clear();
+
+    mxMenu.disposeAndClear();
+    mxBuilder.reset();
+
     SvTreeListBox::dispose();
 }
 
@@ -486,8 +489,12 @@ void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )
     const int nKeyCode = rKEvt.GetKeyCode().GetCode();
     switch( nKeyCode )
     {
-        case KEY_DELETE:    mpController->onContextMenu( CM_REMOVE ); return;
-        case KEY_INSERT:    mpController->onContextMenu( CM_CREATE ); return;
+        case KEY_DELETE:
+            mpController->onContextMenu("remove");
+            return;
+        case KEY_INSERT:
+            mpController->onContextMenu("create");
+            return;
         case KEY_SPACE:
             {
                 const Point aPos;
@@ -892,7 +899,9 @@ bool CustomAnimationList::DoubleClickHdl()
 
 VclPtr<PopupMenu> CustomAnimationList::CreateContextMenu()
 {
-    VclPtrInstance<PopupMenu> pMenu(SdResId( RID_EFFECT_CONTEXTMENU ));
+    mxMenu.disposeAndClear();
+    mxBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/effectmenu.ui", ""));
+    mxMenu.set(mxBuilder->get_menu("menu"));
 
     sal_Int16 nNodeType = -1;
     sal_Int16 nEntries = 0;
@@ -921,18 +930,18 @@ VclPtr<PopupMenu> CustomAnimationList::CreateContextMenu()
         pEntry = static_cast< CustomAnimationListEntry* >(NextSelected( pEntry ));
     }
 
-    pMenu->CheckItem( CM_WITH_CLICK, nNodeType == EffectNodeType::ON_CLICK );
-    pMenu->CheckItem( CM_WITH_PREVIOUS, nNodeType == EffectNodeType::WITH_PREVIOUS );
-    pMenu->CheckItem( CM_AFTER_PREVIOUS, nNodeType == EffectNodeType::AFTER_PREVIOUS );
-    pMenu->EnableItem( CM_OPTIONS, nEntries == 1 );
-    pMenu->EnableItem( CM_DURATION, nEntries == 1 );
+    mxMenu->CheckItem(mxMenu->GetItemId("onclick"), nNodeType == EffectNodeType::ON_CLICK);
+    mxMenu->CheckItem(mxMenu->GetItemId("withprev"), nNodeType == EffectNodeType::WITH_PREVIOUS);
+    mxMenu->CheckItem(mxMenu->GetItemId("afterprev"), nNodeType == EffectNodeType::AFTER_PREVIOUS);
+    mxMenu->EnableItem(mxMenu->GetItemId("options"), nEntries == 1);
+    mxMenu->EnableItem(mxMenu->GetItemId("timing"), nEntries == 1);
 
-    return pMenu;
+    return mxMenu;
 }
 
 void CustomAnimationList::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
-    mpController->onContextMenu( nSelectedPopupEntry );
+    mpController->onContextMenu(mxMenu->GetItemIdent(nSelectedPopupEntry));
 }
 
 void CustomAnimationList::notify_change()
