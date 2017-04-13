@@ -68,7 +68,7 @@ namespace
 #define EmfPlusRecordTypeDrawEllipse 0x400F
 #define EmfPlusRecordTypeFillPie 0x4010
 #define EmfPlusRecordTypeDrawPie 0x4011
-//TODO EmfPlusRecordTypeDrawArc 0x4012
+#define EmfPlusRecordTypeDrawArc 0x4012
 //TODO EmfPlusRecordTypeFillRegion 0x4013
 #define EmfPlusRecordTypeFillPath 0x4014
 #define EmfPlusRecordTypeDrawPath 0x4015
@@ -225,6 +225,7 @@ const char* emfTypeToName(sal_uInt16 type)
         case EmfPlusRecordTypeDrawEllipse: return "EmfPlusRecordTypeDrawEllipse";
         case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
         case EmfPlusRecordTypeDrawPie: return "EmfPlusRecordTypeDrawPie";
+        case EmfPlusRecordTypeDrawArc: return "EmfPlusRecordTypeDrawArc";
         case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
         case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
         case EmfPlusRecordTypeDrawBeziers: return "EmfPlusRecordTypeDrawBeziers";
@@ -1911,6 +1912,7 @@ namespace cppcanvas
                         break;
                     case EmfPlusRecordTypeFillPie:
                     case EmfPlusRecordTypeDrawPie:
+                    case EmfPlusRecordTypeDrawArc:
                         {
                             float startAngle, sweepAngle;
 
@@ -1922,9 +1924,13 @@ namespace cppcanvas
                                 rMF.ReadUInt32( brushIndexOrColor );
                                 SAL_INFO("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor);
                             }
-                            else
+                            else if ( type == EmfPlusRecordTypeDrawPie )
                             {
                                 SAL_INFO("cppcanvas.emf", "EMF+ DrawPie");
+                            }
+                            else
+                            {
+                                SAL_INFO("cppcanvas.emf", "EMF+ DrawArc");
                             }
                             rMF.ReadFloat( startAngle ).ReadFloat( sweepAngle );
 
@@ -1956,8 +1962,11 @@ namespace cppcanvas
                                      " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
 
                             B2DPolygon polygon = basegfx::tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
-                            polygon.append (mappedCenter);
-                            polygon.setClosed (true);
+                            if ( type != EmfPlusRecordTypeDrawArc )
+                            {
+                                polygon.append (mappedCenter);
+                                polygon.setClosed (true);
+                            }
 
                             B2DPolyPolygon polyPolygon (polygon);
                             if ( type == EmfPlusRecordTypeFillPie )
