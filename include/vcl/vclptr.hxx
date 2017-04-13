@@ -61,7 +61,6 @@ private:
     static S f(T1 *, int);
 
     struct H {
-        H(); // avoid C2514 "class has no constructors" from MSVC 2008
         operator T1 * () const;
         operator T2 * ();
     };
