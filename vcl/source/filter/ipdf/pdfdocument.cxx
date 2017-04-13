@@ -112,11 +112,14 @@ class PDFTrailerElement : public PDFElement
 {
     PDFDocument& m_rDoc;
     std::map<OString, PDFElement*> m_aDictionary;
+    /// Location of the end of the trailer token.
+    sal_uInt64 m_nOffset = 0;
 
 public:
     explicit PDFTrailerElement(PDFDocument& rDoc);
     bool Read(SvStream& rStream) override;
     PDFElement* Lookup(const OString& rDictionaryKey);
+    sal_uInt64 GetLocation() const;
 };
 
 XRefEntry::XRefEntry()
@@ -1176,6 +1179,11 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 else if (aKeyword == "trailer")
                 {
                     auto pTrailer = new PDFTrailerElement(*this);
+
+                    // Make it possible to find this trailer later by offset.
+                    pTrailer->Read(rStream);
+                    m_aOffsetTrailers[pTrailer->GetLocation()] = pTrailer;
+
                     // When reading till the first EOF token only, remember
                     // just the first trailer token.
                     if (eMode != TokenizeMode::EOF_TOKEN || !m_pTrailer)
@@ -1261,7 +1269,13 @@ bool PDFDocument::Read(SvStream& rStream)
 
         PDFNumberElement* pPrev = nullptr;
         if (m_pTrailer)
+        {
             pPrev = dynamic_cast<PDFNumberElement*>(m_pTrailer->Lookup("Prev"));
+
+            // Remember the offset of this trailer in the correct order. It's
+            // possible that newer trailers don't have a larger offset.
+            m_aTrailerOffsets.push_back(m_pTrailer->GetLocation());
+        }
         else if (m_pXRefStream)
             pPrev = dynamic_cast<PDFNumberElement*>(m_pXRefStream->Lookup("Prev"));
         if (pPrev)
@@ -1788,8 +1802,20 @@ std::vector<PDFObjectElement*> PDFDocument::GetPages()
     std::vector<PDFObjectElement*> aRet;
 
     PDFReferenceElement* pRoot = nullptr;
-    if (m_pTrailer)
-        pRoot = dynamic_cast<PDFReferenceElement*>(m_pTrailer->Lookup("Root"));
+
+
+    PDFTrailerElement* pTrailer = nullptr;
+    if (!m_aTrailerOffsets.empty())
+    {
+        // Get access to the latest trailer, and work with the keys of that
+        // one.
+        auto it = m_aOffsetTrailers.find(m_aTrailerOffsets[0]);
+        if (it != m_aOffsetTrailers.end())
+            pTrailer = it->second;
+    }
+
+    if (pTrailer)
+        pRoot = dynamic_cast<PDFReferenceElement*>(pTrailer->Lookup("Root"));
     else if (m_pXRefStream)
         pRoot = dynamic_cast<PDFReferenceElement*>(m_pXRefStream->Lookup("Root"));
 
@@ -2085,8 +2111,9 @@ PDFTrailerElement::PDFTrailerElement(PDFDocument& rDoc)
 {
 }
 
-bool PDFTrailerElement::Read(SvStream& /*rStream*/)
+bool PDFTrailerElement::Read(SvStream& rStream)
 {
+    m_nOffset = rStream.Tell();
     return true;
 }
 
@@ -2098,6 +2125,10 @@ PDFElement* PDFTrailerElement::Lookup(const OString& rDictionaryKey)
     return PDFDictionaryElement::Lookup(m_aDictionary, rDictionaryKey);
 }
 
+sal_uInt64 PDFTrailerElement::GetLocation() const
+{
+    return m_nOffset;
+}
 
 double PDFNumberElement::GetValue() const
 {
