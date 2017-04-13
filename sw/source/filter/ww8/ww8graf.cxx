@@ -1253,12 +1253,20 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
         return nullptr;
 
     sal_uInt16 nCount = SVBT16ToShort( aCallB.dpPolyLine.aBits1 ) >> 1 & 0x7fff;
+    if (nCount < 1)
+    {
+        SAL_WARN("sw.ww8", "Short CaptionBox header");
+        return nullptr;
+    }
+
     std::unique_ptr<SVBT16[]> xP(new SVBT16[nCount * 2]);
 
     bool bCouldRead = checkRead(*m_pStrm, xP.get(), nCount * 4);      // Punkte einlesen
-    OSL_ENSURE(bCouldRead, "Short CaptionBox header");
     if (!bCouldRead)
+    {
+        SAL_WARN("sw.ww8", "Short CaptionBox header");
         return nullptr;
+    }
 
     sal_uInt8 nTyp = (sal_uInt8)nCount - 1;
     if( nTyp == 1 && SVBT16ToShort( xP[0] ) == SVBT16ToShort( xP[2] ) )
