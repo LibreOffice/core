@@ -24,7 +24,6 @@
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-#include <xml/saxnamespacefilter.hxx> // HACK: needed for MSVC 2013 ENABLE_LTO build: WeakImplHelper<XDocumentHandler>
 #include <xml/imagesconfiguration.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>

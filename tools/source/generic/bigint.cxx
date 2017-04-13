@@ -349,7 +349,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
                 nK = (sal_uInt16)(0x10000UL - nK);
         }
         unsigned short& rNum( aTmpA.nNum[j - nLenB + i] );
-        rNum = rNum - nK;   // MSVC yields a warning on -= here, so don't use it
+        rNum -= nK;
         if (aTmpA.nNum[j - nLenB + i] == 0)
             rErg.nNum[j - nLenB] = nQ;
         else

@@ -267,8 +267,6 @@ public:
             , m_bTrueColor(false)
         {
         }
-        JPGEmit(const JPGEmit&) = delete; // to keep MSVC2013 happy
-        JPGEmit(JPGEmit&&); // to keep MSVC2013 happy
     };
 
     struct GradientEmit
