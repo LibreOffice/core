@@ -37,7 +37,7 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         mMainMenu = mToolbarTop.getMenu();
     }
 
-    private void disableMenuItem(final int menuItemId, final boolean disabled) {
+    public void disableMenuItem(final int menuItemId, final boolean disabled) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
                 MenuItem menuItem = mMainMenu.findItem(menuItemId);

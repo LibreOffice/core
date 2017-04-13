@@ -117,6 +117,7 @@ class LOKitTileProvider implements TileProvider {
             }
         } else {
             mContext.disableNavigationDrawer();
+            mContext.getToolbarController().disableMenuItem(R.id.action_parts, true);
         }
 
         mDocument.setPart(0);
