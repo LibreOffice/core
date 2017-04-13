@@ -21,6 +21,8 @@
 
 #include <cassert>
 #include <memory>
+#include <utility>
+
 #include "rtl/ustring.hxx"
 #include "rtl/bootstrap.hxx"
 #include "osl/thread.hxx"
@@ -28,7 +30,6 @@
 #include "jvmfwk/framework.hxx"
 #include "vendorplugin.hxx"
 #include <vector>
-#include <functional>
 #include <algorithm>
 #include "framework.hxx"
 #include "fwkutil.hxx"
@@ -55,30 +56,20 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
     try
     {
         osl::MutexGuard guard(jfw::FwkMutex::get());
-        pparInfo->clear();
 
         jfw::VendorSettings aVendorSettings;
         std::vector<OUString> vecVendors =
             aVendorSettings.getSupportedVendors();
         //Add the JavaInfos found by jfw_plugin_getAllJavaInfos to the vector
-        //Make sure that the contents are destroyed if this
-        //function returns with an error
-        std::vector<jfw::CJavaInfo> vecInfo;
-        //Add the JavaInfos found by jfw_plugin_getJavaInfoByPath to this vector
-        //Make sure that the contents are destroyed if this
-        //function returns with an error
-        std::vector<jfw::CJavaInfo> vecInfoManual;
-        typedef std::vector<jfw::CJavaInfo>::iterator it_info;
+        std::vector<std::unique_ptr<JavaInfo>> vecInfo;
         //get the list of paths to jre locations which have been
         //added manually
         const jfw::MergedSettings settings;
         const std::vector<OUString>& vecJRELocations =
             settings.getJRELocations();
         //Use every plug-in library to get Java installations.
-        typedef std::vector<OUString>::const_iterator ci_pl;
-        for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
+        for (auto const & vendor: vecVendors)
         {
-            const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
                 aVendorSettings.getVersionInformation(vendor);
 
@@ -101,26 +92,24 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                 return JFW_E_ERROR;
 
             for (int j = 0; j < cInfos; j++)
-                vecInfo.push_back(jfw::CJavaInfo::createWrapper(arInfos[j]));
+                vecInfo.push_back(std::unique_ptr<JavaInfo>(arInfos[j]));
 
             rtl_freeMemory(arInfos);
 
             //Check if the current plugin can detect JREs at the location
             // of the paths added by jfw_addJRELocation
-            //get the function from the plugin
-            typedef std::vector<OUString>::const_iterator citLoc;
             //Check every manually added location
-            for (citLoc ii = vecJRELocations.begin();
-                ii != vecJRELocations.end(); ++ii)
+            for (auto const & ii: vecJRELocations)
             {
-                jfw::CJavaInfo aInfo;
+                JavaInfo * info;
                 plerr = jfw_plugin_getJavaInfoByPath(
-                    *ii,
+                    ii,
                     vendor,
                     versionInfo.sMinVersion,
                     versionInfo.sMaxVersion,
                     versionInfo.vecExcludeVersions,
-                    & aInfo.pInfo);
+                    &info);
+                std::unique_ptr<JavaInfo> aInfo(info);
                 if (plerr == javaPluginError::NoJre)
                     continue;
                 if (plerr == javaPluginError::FailedVersion)
@@ -128,53 +117,29 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
                 else if (plerr != javaPluginError::NONE)
                     return JFW_E_ERROR;
 
-                if (aInfo)
+                // Was this JRE already added?  Different plugins could detect
+                // the same JRE.  Also make sure vecInfo contains only JavaInfos
+                // for the vendors for which there is a javaSelection/plugins/
+                // library entry in the javavendors.xml; jfw_getJavaInfoByPath
+                // can return a JavaInfo of any vendor:
+                if ((std::find_if(
+                         vecInfo.begin(), vecInfo.end(),
+                         [&aInfo](std::unique_ptr<JavaInfo> const & info) {
+                             return areEqualJavaInfo(
+                                 info.get(), aInfo.get());
+                         })
+                     == vecInfo.end())
+                    && (std::find(
+                            vecVendors.begin(), vecVendors.end(),
+                            aInfo->sVendor)
+                        != vecVendors.end()))
                 {
-                    //Was this JRE already added?. Different plugins could detect
-                    //the same JRE
-                    it_info it_duplicate =
-                        std::find_if(vecInfoManual.begin(), vecInfoManual.end(),
-                                     std::bind(areEqualJavaInfo, std::placeholders::_1, aInfo));
-                    if (it_duplicate == vecInfoManual.end())
-                        vecInfoManual.push_back(aInfo);
+                    vecInfo.push_back(std::move(aInfo));
                 }
             }
-        }
-        //Make sure vecInfoManual contains only JavaInfos for the vendors for which
-        //there is a javaSelection/plugins/library entry in the javavendors.xml
-        //To obtain the JavaInfos for the manually added JRE locations the function
-        //jfw_getJavaInfoByPath is called which can return a JavaInfo of any vendor.
-        std::vector<jfw::CJavaInfo> vecInfoManual2;
-        for (it_info ivm = vecInfoManual.begin(); ivm != vecInfoManual.end(); ++ivm)
-        {
-            for (ci_pl ii = vecVendors.begin(); ii != vecVendors.end(); ++ii)
-            {
-                if ( ii->equals((*ivm)->sVendor))
-                {
-                    vecInfoManual2.push_back(*ivm);
-                    break;
-                }
-            }
-        }
-        //Check which JavaInfo from vector vecInfoManual2 is already
-        //contained in vecInfo. If it already exists then remove it from
-        //vecInfoManual2
-        for (it_info j = vecInfo.begin(); j != vecInfo.end(); ++j)
-        {
-            it_info it_duplicate =
-                std::find_if(vecInfoManual2.begin(), vecInfoManual2.end(),
-                             std::bind(areEqualJavaInfo, std::placeholders::_1, *j));
-            if (it_duplicate != vecInfoManual2.end())
-                vecInfoManual2.erase(it_duplicate);
         }
 
-        typedef std::vector<jfw::CJavaInfo>::iterator it;
-        //Add the automatically detected JREs
-        for (it k = vecInfo.begin(); k != vecInfo.end(); ++k)
-            pparInfo->push_back(std::unique_ptr<JavaInfo>(k->detach()));
-        //Add the manually detected JREs
-        for (it l = vecInfoManual2.begin(); l != vecInfoManual2.end(); ++l)
-            pparInfo->push_back(std::unique_ptr<JavaInfo>(l->detach()));
+        *pparInfo = std::move(vecInfo);
 
         return JFW_E_NONE;
     }
@@ -977,68 +942,9 @@ void jfw_unlock()
     jfw::FwkMutex::get().release();
 }
 
-
-namespace jfw
-{
-CJavaInfo::CJavaInfo(): pInfo(nullptr)
-{
-}
-
-CJavaInfo::CJavaInfo(const CJavaInfo & info)
-{
-    pInfo = copyJavaInfo(info.pInfo);
-}
-
-CJavaInfo::CJavaInfo(::JavaInfo * info, _transfer_ownership)
-{
-    pInfo = info;
-}
-CJavaInfo CJavaInfo::createWrapper(::JavaInfo* info)
-{
-    return CJavaInfo(info, TRANSFER);
-}
-void CJavaInfo::attach(::JavaInfo * info)
-{
-    delete pInfo;
-    pInfo = info;
-}
-::JavaInfo * CJavaInfo::detach()
-{
-    JavaInfo * tmp = pInfo;
-    pInfo = nullptr;
-    return tmp;
-}
-
-CJavaInfo::~CJavaInfo()
-{
-    delete pInfo;
-}
-
-
-JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
+JavaInfo * jfw::CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 {
     return pInfo == nullptr ? nullptr : new JavaInfo(*pInfo);
-}
-
-CJavaInfo & CJavaInfo::operator = (const CJavaInfo& info)
-{
-    if (&info == this)
-        return *this;
-
-    delete pInfo;
-    pInfo = copyJavaInfo(info.pInfo);
-    return *this;
-}
-CJavaInfo & CJavaInfo::operator = (const ::JavaInfo* info)
-{
-    if (info == pInfo)
-        return *this;
-
-    delete pInfo;
-    pInfo = copyJavaInfo(info);
-    return *this;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

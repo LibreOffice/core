@@ -27,38 +27,10 @@
 namespace jfw
 {
 
-class CJavaInfo
+namespace CJavaInfo
 {
-    enum _transfer_ownership {TRANSFER};
-    /*Attaching the pointer to this class. The argument pInfo must not
-    be freed afterwards.
-    */
-    CJavaInfo(::JavaInfo * info, _transfer_ownership);
-
-public:
-    ::JavaInfo * pInfo;
-
-
-    CJavaInfo();
-    CJavaInfo(const CJavaInfo &);
-    ~CJavaInfo();
-    CJavaInfo& operator =(const ::JavaInfo* info);
-    CJavaInfo & operator = (const CJavaInfo& info);
-
-    /* The returned class takes ownership of the argument info. info
-    must not been freed afterwards.
-    */
-    static CJavaInfo createWrapper(::JavaInfo* info);
-    /*Attaching the pointer to this class. The argument pInfo must not
-    be freed afterwards.
-    */
-    void attach(::JavaInfo* pInfo);
-    ::JavaInfo * detach();
-    const ::JavaInfo* operator ->() const { return pInfo;}
-    operator ::JavaInfo* () { return pInfo;}
-
-    static JavaInfo * copyJavaInfo(const JavaInfo * pInfo);
-};
+    JavaInfo * copyJavaInfo(const JavaInfo * pInfo);
+}
 
 class FrameworkException : public std::exception
 {

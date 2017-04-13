@@ -43,12 +43,6 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
     if (isInUnoIncludeFile(destructorDecl))
         return true;
 
-/*
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(destructorDecl->getLocStart()));
-    // weird stuff, passing pointers to internal members of struct
-    if (aFileName.startswith(SRCDIR "/include/jvmfwk/framework.hxx"))
-        return true;
-*/
     if (destructorDecl->getBody() == nullptr)
         return true;
     const CompoundStmt* compoundStmt = dyn_cast< CompoundStmt >( destructorDecl->getBody() );
@@ -87,9 +81,6 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
     // to ignore things like the CPPUNIT macros
     StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(pFieldDecl->getLocStart()));
     if (aFileName.startswith(WORKDIR))
-        return true;
-    // weird stuff, passing pointers to internal members of struct
-    if (aFileName == SRCDIR "/jvmfwk/source/framework.hxx")
         return true;
     // passes and stores pointers to member fields
     if (aFileName.startswith(SRCDIR "/sot/source/sdstor/stgdir.hxx"))

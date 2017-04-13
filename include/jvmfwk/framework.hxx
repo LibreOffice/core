@@ -378,7 +378,6 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInf
 
     @param parInfo
     [out] on returns it contains a vector of <code>JavaInfo</code> pointers.
-    Any previously contained elements are removed first.
 
     @return
     JFW_E_NONE function ran successfully.<br/>
