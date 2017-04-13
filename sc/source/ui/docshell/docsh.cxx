@@ -20,6 +20,7 @@
 #include "docsh.hxx"
 
 #include "scitems.hxx"
+#include <tools/errinf.hxx>
 #include <editeng/justifyitem.hxx>
 #include <comphelper/classids.hxx>
 #include <formula/errorcodes.hxx>

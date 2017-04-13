@@ -20,6 +20,7 @@
 // TODO: Read->RefreshBuffer-> React to changes from m_nBufActualLen
 
 #include <cstddef>
+#include <memory>
 
 #include <string.h>
 #include <stdio.h>
