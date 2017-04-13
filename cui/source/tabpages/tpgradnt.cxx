@@ -318,7 +318,6 @@ IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, CheckBox&, void )
         m_pMtrIncrement->Enable();
     }
     ModifiedHdl_Impl(m_pMtrIncrement);
-    m_pGradientLB->SetNoSelection();
 }
 
 void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
