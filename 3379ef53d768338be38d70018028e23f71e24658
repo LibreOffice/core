@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_e70e9ee4",
+        "filename": "android/source/src/java/org/libreoffice/textselection/TextSelectionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001574
+      },
+      "writtenOn": "2017-04-13T22:07:53Z",
+      "side": 1,
+      "message": "Well that idea wasn\u0027t quite complete. Forgive me about that:) My initial thought was an interface with at least two methods: show() and hide(). In the interface, the two methods only show/hide view through findViewById and toggle their corresponding boolean values, and any class that implements this interface can override show() and hide() to do there own stuff.\nI do look forward to the bottom sheet behavior. It\u0027s cool and modern.",
+      "parentUuid": "5a3905b3_5c582957",
+      "range": {
+        "startLine": 47,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 44
+      },
+      "revId": "3379ef53d768338be38d70018028e23f71e24658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_61fc5e3f",
         "filename": "android/source/src/java/org/libreoffice/textselection/TextSelectionController.java",
         "patchSetId": 2
