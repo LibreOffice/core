@@ -585,16 +585,24 @@ uno::Reference<chart2::data::XDataSource>
 
             OUString aLabel;
             bool bFirst = true;
-            for (ValueAndFormat const & rItem : m_aLabels[i])
+
+            if (m_aLabels.empty())
             {
-                if (bFirst)
+                aLabel = "Total";
+            }
+            else
+            {
+                for (ValueAndFormat const & rItem : m_aLabels[i])
                 {
-                    aLabel += rItem.m_aString;
-                    bFirst = false;
-                }
-                else
-                {
-                    aLabel += " - " + rItem.m_aString;
+                    if (bFirst)
+                    {
+                        aLabel += rItem.m_aString;
+                        bFirst = false;
+                    }
+                    else
+                    {
+                        aLabel += " - " + rItem.m_aString;
+                    }
                 }
             }
 
