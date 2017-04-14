@@ -46,6 +46,9 @@ struct OutlinerParaObjData
 
     OutlinerParaObjData( const OutlinerParaObjData& r );
 
+    // assignment operator
+    OutlinerParaObjData& operator=(const OutlinerParaObjData& rCandidate) = delete;
+
     // destructor
     ~OutlinerParaObjData();
 
