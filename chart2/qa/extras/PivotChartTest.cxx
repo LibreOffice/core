@@ -20,6 +20,7 @@
 #include <com/sun/star/table/XTablePivotChart.hpp>
 #include <com/sun/star/table/XTablePivotCharts.hpp>
 #include <com/sun/star/table/XTablePivotChartsSupplier.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <rtl/strbuf.hxx>
 
@@ -33,10 +34,14 @@ public:
 
     void testRoundtrip();
     void testChangePivotTable();
+    void testPivotChartWithOneColumnField();
+    void testPivotChartWithOneRowField();
 
     CPPUNIT_TEST_SUITE(PivotChartTest);
     CPPUNIT_TEST(testRoundtrip);
     CPPUNIT_TEST(testChangePivotTable);
+    CPPUNIT_TEST(testPivotChartWithOneColumnField);
+    CPPUNIT_TEST(testPivotChartWithOneRowField);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -56,6 +61,22 @@ void lclModifyOrientation(uno::Reference<sheet::XDataPilotDescriptor> const & xD
         uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
         if (aName == sFieldName)
             xPropSet->setPropertyValue("Orientation", uno::makeAny(eOrientation));
+    }
+}
+
+void lclModifyFunction(uno::Reference<sheet::XDataPilotDescriptor> const & xDescriptor,
+                          OUString const & sFieldName,
+                          sheet::GeneralFunction eFunction)
+{
+    uno::Reference<container::XIndexAccess> xPilotIndexAccess(xDescriptor->getDataPilotFields(), UNO_QUERY_THROW);
+    sal_Int32 nCount = xPilotIndexAccess->getCount();
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        uno::Reference<container::XNamed> xNamed(xPilotIndexAccess->getByIndex(i), UNO_QUERY_THROW);
+        OUString aName = xNamed->getName();
+        uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
+        if (aName == sFieldName)
+            xPropSet->setPropertyValue("Function", uno::makeAny(eFunction));
     }
 }
 
@@ -88,6 +109,100 @@ uno::Reference<sheet::XDataPilotTable> lclGetPivotTableByName(sal_Int32 nIndex, 
     uno::Reference<sheet::XDataPilotTablesSupplier> xDataPilotTablesSupplier(xSheet, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables = xDataPilotTablesSupplier->getDataPilotTables();
     return uno::Reference<sheet::XDataPilotTable>(xDataPilotTables->getByName(sPivotTableName), UNO_QUERY_THROW);
+}
+
+struct Value
+{
+    OUString maString;
+    double mfValue;
+    bool mbIsValue;
+
+    Value(OUString const & rString)
+        : maString(rString)
+        , mbIsValue(false)
+    {}
+
+    Value(double fValue)
+        : mfValue(fValue)
+        , mbIsValue(true)
+    {}
+};
+
+uno::Reference< sheet::XDataPilotTables>
+lclGetDataPilotTables(sal_Int32 nIndex, uno::Reference<sheet::XSpreadsheetDocument> const & xSheetDoc)
+{
+    uno::Reference<sheet::XSpreadsheets> xSpreadsheets = xSheetDoc->getSheets();
+    uno::Reference<container::XIndexAccess> oIndexAccess(xSpreadsheets, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet;
+    CPPUNIT_ASSERT(oIndexAccess->getByIndex(nIndex) >>= xSheet);
+
+    // create the test objects
+    uno::Reference< sheet::XDataPilotTablesSupplier> xDataPilotTablesSupplier(xSheet, uno::UNO_QUERY_THROW);
+    return xDataPilotTablesSupplier->getDataPilotTables();
+}
+
+table::CellRangeAddress lclCreateTestData(uno::Reference<sheet::XSpreadsheetDocument> const & xSheetDoc)
+{
+    CPPUNIT_ASSERT_MESSAGE("no calc document!", xSheetDoc.is());
+
+    std::vector<OUString> aHeaders {
+        "Country", "City", "Type", "Sales T1", "Sales T2", "Sales T3", "Sales T4"
+    };
+
+    std::vector<std::vector<Value>> aData {
+        { {"FR"}, {"Paris"},     {"A"}, {123.0}, {223.0}, {323.0}, {423.0} },
+        { {"EN"}, {"London"},    {"A"}, {456.0}, {556.0}, {656.0}, {756.0} },
+        { {"DE"}, {"Berlin"},    {"A"}, {468.0}, {568.0}, {668.0}, {768.0} },
+        { {"FR"}, {"Nantes"},    {"A"}, {694.0}, {794.0}, {894.0}, {994.0} },
+        { {"EN"}, {"Glasgow"},   {"A"}, {298.0}, {398.0}, {498.0}, {598.0} },
+        { {"DE"}, {"Munich"},    {"A"}, {369.0}, {469.0}, {569.0}, {669.0} },
+        { {"FR"}, {"Paris"},     {"B"}, {645.0}, {745.0}, {845.0}, {945.0} },
+        { {"EN"}, {"London"},    {"B"}, {687.0}, {787.0}, {887.0}, {987.0} },
+        { {"DE"}, {"Munich"},    {"B"}, {253.0}, {353.0}, {453.0}, {553.0} },
+        { {"FR"}, {"Nantes"},    {"B"}, {474.0}, {574.0}, {674.0}, {774.0} },
+        { {"EN"}, {"Liverpool"}, {"B"}, {562.0}, {662.0}, {762.0}, {862.0} },
+        { {"DE"}, {"Berlin"},    {"B"}, {648.0}, {748.0}, {848.0}, {948.0} }
+    };
+
+    // Getting spreadsheet
+    uno::Reference<sheet::XSpreadsheets> xSpreadsheets = xSheetDoc->getSheets();
+    uno::Reference<container::XIndexAccess> oIndexAccess(xSpreadsheets, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet;
+    CPPUNIT_ASSERT(oIndexAccess->getByIndex(0) >>= xSheet);
+
+    uno::Reference<sheet::XSpreadsheet> oPivotTableSheet;
+    xSpreadsheets->insertNewByName("Pivot Table", 1);
+    CPPUNIT_ASSERT(oIndexAccess->getByIndex(1) >>= oPivotTableSheet);
+
+    sal_Int32 currentRow = 0;
+    for (size_t column = 0; column < aHeaders.size(); ++column)
+    {
+        xSheet->getCellByPosition(column, currentRow)->setFormula(aHeaders[column]);
+    }
+    currentRow++;
+
+    for (std::vector<Value> const & rRowOfData : aData)
+    {
+        for (size_t column = 0; column < rRowOfData.size(); ++column)
+        {
+            Value const & rValue = rRowOfData[column];
+            uno::Reference<table::XCell> xCell(xSheet->getCellByPosition(column, currentRow));
+            if (rValue.mbIsValue)
+                xCell->setValue(rValue.mfValue);
+            else
+                xCell->setFormula(rValue.maString);
+        }
+        currentRow++;
+    }
+
+    table::CellRangeAddress sCellRangeAdress;
+    sCellRangeAdress.Sheet = 0;
+    sCellRangeAdress.StartColumn = 0;
+    sCellRangeAdress.StartRow = 0;
+    sCellRangeAdress.EndColumn = sal_Int32(aHeaders.size() - 1);
+    sCellRangeAdress.EndRow = sal_Int32(1/*HEADER*/ + aData.size() - 1);
+
+    return sCellRangeAdress;
 }
 
 } // end anonymous namespace
@@ -313,6 +428,162 @@ void PivotChartTest::testChangePivotTable()
         CPPUNIT_ASSERT_EQUAL(OUString("Small"), lclGetLabel(xChartDoc, 2));
     }
 }
+
+void PivotChartTest::testPivotChartWithOneColumnField()
+{
+    // We put one field as COLUMN field only and one DATA field. We expect we will get as many data series
+    // in the pivot table as many distinct column values we have (with this example data 3: DE, EN, FR).
+
+    // SETUP DATA and PIVOT TABLE
+
+    if (!mxComponent.is())
+        mxComponent = loadFromDesktop("private:factory/scalc");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+
+    sal_Int32 nSheetIndex = 0;
+    OUString sPivotTableName("DataPilotTable");
+
+    table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
+
+    uno::Reference<sheet::XDataPilotTables> xDataPilotTables;
+    xDataPilotTables = lclGetDataPilotTables(nSheetIndex, xSheetDoc);
+
+    uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor;
+    xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
+    xDataPilotDescriptor->setSourceRange(sCellRangeAdress);
+
+    lclModifyOrientation(xDataPilotDescriptor, "Country", sheet::DataPilotFieldOrientation_COLUMN);
+    lclModifyOrientation(xDataPilotDescriptor, "Sales T1", sheet::DataPilotFieldOrientation_DATA);
+    lclModifyFunction(xDataPilotDescriptor, "Sales T1", sheet::GeneralFunction_SUM);
+
+    xDataPilotTables->insertNewByName(sPivotTableName, table::CellAddress{1, 0, 0}, xDataPilotDescriptor);
+
+    // TEST
+
+    uno::Sequence<uno::Any> xSequence;
+    Reference<chart2::XChartDocument> xChartDoc;
+
+    // Check we have the Pivot Table
+
+    uno::Reference<sheet::XDataPilotTable> xDataPilotTable = lclGetPivotTableByName(1, sPivotTableName, mxComponent);
+    CPPUNIT_ASSERT(xDataPilotTable.is());
+
+    // Check that we don't have any pivot chart in the document
+    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(1, mxComponent);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTablePivotCharts, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    // Create a new pivot chart
+    xTablePivotCharts->addNewByName("PivotChart", awt::Rectangle{ 9000, 9000, 21000, 18000 }, sPivotTableName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    // Get the pivot chart document so we ca access its data
+    xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
+
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getNumberOfDataSeries(xChartDoc));
+    // Check data series 1
+    {
+        std::vector<double> aReference { 1738.0 };
+        OUString aExpectedLabel("DE");
+
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
+        lclCheckSequence(aReference, xSequence, 1E-4);
+
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 0));
+    }
+
+    // Check data series 2
+    {
+        std::vector<double> aReference { 2003.0 };
+        OUString aExpectedLabel("EN");
+
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
+        lclCheckSequence(aReference, xSequence, 1E-4);
+
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 1));
+    }
+    // Check data series 3
+    {
+        std::vector<double> aReference { 1936.0 };
+        OUString aExpectedLabel("FR");
+
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 2)->getData();
+        lclCheckSequence(aReference, xSequence, 1E-4);
+
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 2));
+    }
+}
+
+void PivotChartTest::testPivotChartWithOneRowField()
+{
+    // We put one field as ROW field only and one DATA field. We expect we will get one data series
+    // in the pivot table.
+
+    // SETUP DATA and PIVOT TABLE
+
+    if (!mxComponent.is())
+        mxComponent = loadFromDesktop("private:factory/scalc");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+
+    sal_Int32 nSheetIndex = 0;
+    OUString sPivotTableName("DataPilotTable");
+
+    table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
+
+    uno::Reference<sheet::XDataPilotTables> xDataPilotTables;
+    xDataPilotTables = lclGetDataPilotTables(nSheetIndex, xSheetDoc);
+
+    uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor;
+    xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
+    xDataPilotDescriptor->setSourceRange(sCellRangeAdress);
+
+    lclModifyOrientation(xDataPilotDescriptor, "Country", sheet::DataPilotFieldOrientation_ROW);
+    lclModifyOrientation(xDataPilotDescriptor, "Sales T1", sheet::DataPilotFieldOrientation_DATA);
+    lclModifyFunction(xDataPilotDescriptor, "Sales T1", sheet::GeneralFunction_SUM);
+
+    xDataPilotTables->insertNewByName(sPivotTableName, table::CellAddress{1, 0, 0}, xDataPilotDescriptor);
+
+    // TEST
+
+    uno::Sequence<uno::Any> xSequence;
+    Reference<chart2::XChartDocument> xChartDoc;
+
+    // Check we have the Pivot Table
+
+    uno::Reference<sheet::XDataPilotTable> xDataPilotTable = lclGetPivotTableByName(1, sPivotTableName, mxComponent);
+    CPPUNIT_ASSERT(xDataPilotTable.is());
+
+    // Check that we don't have any pivot chart in the document
+    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(1, mxComponent);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTablePivotCharts, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    // Create a new pivot chart
+    xTablePivotCharts->addNewByName("PivotChart", awt::Rectangle{ 9000, 9000, 21000, 18000 }, sPivotTableName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    // Get the pivot chart document so we ca access its data
+    xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
+
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfDataSeries(xChartDoc));
+    // Check data series 1
+    {
+        std::vector<double> aReference { 1738.0, 2003.0, 1936.0 };
+        OUString aExpectedLabel("Total");
+
+        xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
+        lclCheckSequence(aReference, xSequence, 1E-4);
+
+        CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 0));
+    }
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PivotChartTest);
 
