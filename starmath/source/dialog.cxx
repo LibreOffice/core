@@ -1590,7 +1590,7 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
                    } );
 
         m_pSymbolSetDisplay->SetSymbolSet( aSymbolSet );
-        if (aSymbolSet.size() > 0)
+        if (!aSymbolSet.empty())
             SelectSymbol(0);
 
         bRet = true;
