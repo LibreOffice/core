@@ -50,40 +50,6 @@ String STR_DELETE_STYLE
 {
     Text [ en-US ] = "Styles in use: " ;
 };
-Menu MN_CONTEXT_TEMPLDLG
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_NEW ;
-            Text [ en-US ] = "New..." ;
-            HelpId = HID_STYLIST_NEW ;
-        };
-        MenuItem
-        {
-            Identifier = ID_EDIT ;
-            Text [ en-US ] = "Modify..." ;
-            HelpId = HID_STYLIST_EDIT ;
-        };
-        MenuItem
-        {
-            Identifier = ID_HIDE ;
-            Text [ en-US ] = "Hide" ;
-        };
-        MenuItem
-        {
-            Identifier = ID_SHOW ;
-            Text [ en-US ] = "Show" ;
-        };
-        MenuItem
-        {
-            Identifier = ID_DELETE ;
-            Text [ en-US ] = "Delete..." ;
-            HelpId = HID_STYLIST_DELETE ;
-        };
-    };
-};
 
 String SID_NAVIGATOR
 {

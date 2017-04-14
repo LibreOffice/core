@@ -172,6 +172,9 @@ protected:
     SfxTemplateControllerItem* pBoundItems[COUNT_BOUND_FUNC];
 
     VclPtr<vcl::Window> pWindow;
+    std::unique_ptr<VclBuilder> mxBuilder;
+    VclPtr<PopupMenu> mxMenu;
+    OString sLastItemIdent;
     SfxModule* pModule;
     Idle* pIdle;
 

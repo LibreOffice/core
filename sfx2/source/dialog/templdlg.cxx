@@ -169,8 +169,6 @@ void StyleLBoxString::Paint(
 #define SFX_TEMPLDLG_MIDVSPACE      3
 #define SFX_TEMPLDLG_FILTERHEIGHT   100
 
-static sal_uInt16 nLastItemId = USHRT_MAX;
-
 // filter box has maximum 14 entries visible
 #define MAX_FILTER_ENTRIES          14
 
@@ -2088,7 +2086,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
 
 IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool )
 {
-    nLastItemId = pMenu->GetCurItemId();
+    sLastItemIdent = pMenu->GetCurItemIdent();
     Application::PostUserEvent(
         LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl ) );
     return true;
@@ -2096,13 +2094,16 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool )
 
 IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl, void*, void )
 {
-    switch(nLastItemId) {
-    case ID_NEW: NewHdl(); break;
-    case ID_EDIT: EditHdl(); break;
-    case ID_DELETE: DeleteHdl(); break;
-    case ID_HIDE: HideHdl(); break;
-    case ID_SHOW: ShowHdl(); break;
-    }
+    if (sLastItemIdent == "new")
+        NewHdl();
+    else if (sLastItemIdent == "edit")
+        EditHdl();
+    else if (sLastItemIdent == "delete")
+        DeleteHdl();
+    else if (sLastItemIdent == "hide")
+        HideHdl();
+    else if (sLastItemIdent == "show")
+        ShowHdl();
 }
 
 SfxStyleFamily SfxCommonTemplateDialog_Impl::GetActualFamily() const
@@ -2133,22 +2134,24 @@ VclPtr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
         pBindings->Update( SID_STYLE_NEW );
         bBindingUpdate = false;
     }
-    VclPtr<PopupMenu> pMenu = VclPtr<PopupMenu>::Create( SfxResId( MN_CONTEXT_TEMPLDLG ) );
-    pMenu->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ) );
-    pMenu->EnableItem( ID_EDIT, bCanEdit );
-    pMenu->EnableItem( ID_DELETE, bCanDel );
-    pMenu->EnableItem( ID_NEW, bCanNew );
-    pMenu->EnableItem( ID_HIDE, bCanHide );
-    pMenu->EnableItem( ID_SHOW, bCanShow );
+    mxMenu.disposeAndClear();
+    mxBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "sfx/ui/stylecontextmenu.ui", ""));
+    mxMenu.set(mxBuilder->get_menu("menu"));
+    mxMenu->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ) );
+    mxMenu->EnableItem(mxMenu->GetItemId("edit"), bCanEdit);
+    mxMenu->EnableItem(mxMenu->GetItemId("delete"), bCanDel);
+    mxMenu->EnableItem(mxMenu->GetItemId("new"), bCanNew);
+    mxMenu->EnableItem(mxMenu->GetItemId("hide"), bCanHide);
+    mxMenu->EnableItem(mxMenu->GetItemId("show"), bCanShow);
 
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
     if (pItem && pItem->GetFamily() == SfxStyleFamily::Table) //tdf#101648, no ui for this yet
     {
-        pMenu->EnableItem(ID_EDIT, false);
-        pMenu->EnableItem(ID_NEW, false);
+        mxMenu->EnableItem(mxMenu->GetItemId("edit"), false);
+        mxMenu->EnableItem(mxMenu->GetItemId("new"), false);
     }
 
-    return pMenu;
+    return mxMenu;
 }
 
 static OUString lcl_GetLabel(uno::Any& rAny)

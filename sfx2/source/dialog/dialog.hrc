@@ -24,12 +24,6 @@
 
 // defines ---------------------------------------------------------------
 
-#define ID_NEW                          1
-#define ID_EDIT                         2
-#define ID_DELETE                       3
-#define ID_HIDE                         4
-#define ID_SHOW                         5
-
 #define RC_DIALOG_BEGIN                 RID_SFX_DIALOG_START
 
 #define STR_RESET                       ( RC_DIALOG_BEGIN + 0)
@@ -41,8 +35,6 @@
 
 #define STR_DELETE_STYLE                ( RC_DIALOG_BEGIN + 19)
 #define STR_DELETE_STYLE_USED           ( RC_DIALOG_BEGIN + 20)
-
-#define MN_CONTEXT_TEMPLDLG             ( RC_DIALOG_BEGIN + 46)
 
 #define STR_VIEWVERSIONCOMMENT          ( RC_DIALOG_BEGIN + 71 )
 #define STR_NO_NAME_SET                 ( RC_DIALOG_BEGIN + 72 )
