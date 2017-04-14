@@ -562,13 +562,13 @@
 #define SID_FM_DBGRID                                   ( SID_SVX_START + 603 )
 #define SID_FM_IMAGEBUTTON                              ( SID_SVX_START + 604 )
 #define SID_FM_FILECONTROL                              ( SID_SVX_START + 605 )
-#define SID_FM_CHANGECOL                                ( SID_SVX_START + 606 )
+//FREE
 #define SID_FM_NAVIGATIONBAR                            ( SID_SVX_START + 607 )
 #define SID_FM_NEW_HIDDEN                               ( SID_SVX_START + 608 )
 #define SID_FM_RENAME_OBJECT                            ( SID_SVX_START + 609 )
 #define SID_FM_DELETEROWS                               ( SID_SVX_START + 610 )
-#define SID_FM_INSERTCOL                                ( SID_SVX_START + 611 )
-#define SID_FM_DELETECOL                                ( SID_SVX_START + 612 )
+//FREE
+//FREE
 #define SID_FM_CTL_PROPERTIES                           ( SID_SVX_START + 613 )
 #define SID_FM_PROPERTIES                               ( SID_SVX_START + 614 )
 #define SID_FM_TAB_DIALOG                               ( SID_SVX_START + 615 )
@@ -654,11 +654,11 @@
 #define SID_FM_CONVERTTO_IMAGECONTROL                   ( SID_SVX_START + 750 )
 #define SID_FM_CONVERTTO_FORMATTED                      ( SID_SVX_START + 751 )
 #define SID_FM_FILTER_NAVIGATOR_CONTROL                 ( SID_SVX_START + 752 )
-#define SID_FM_HIDECOL                                  ( SID_SVX_START + 753 )
-#define SID_FM_SHOWCOLS                                 ( SID_SVX_START + 754 )
-#define SID_FM_SHOWCOLS_MORE                            ( SID_SVX_START + 755 )
-#define SID_FM_SHOWALLCOLS                              ( SID_SVX_START + 756 )
-#define SID_FM_TWOFIELDS_DATE_N_TIME                    ( SID_SVX_START + 757 )
+//FREE
+//FREE
+//FREE
+//FREE
+//FREE
 #define SID_FM_FILTER_EDIT                              ( SID_SVX_START + 758 )
 #define SID_FM_FILTER_IS_NULL                           ( SID_SVX_START + 759 )
 #define SID_FM_FILTER_IS_NOT_NULL                       ( SID_SVX_START + 760 )
