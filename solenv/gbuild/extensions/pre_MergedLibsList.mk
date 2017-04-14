@@ -49,7 +49,6 @@ MERGE_LIBRARY_LIST := \
 	svxcore \
 	tk \
 	tl \
-	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
 	ucbhelper \
 	ucpexpand1 \

@@ -52,15 +52,6 @@ else
 $(eval $(call gb_Library_use_externals,sc,orcus-parser))
 endif
 
-ifeq ($(ENABLE_TELEPATHY),TRUE)
-$(eval $(call gb_Library_use_libraries,sc,tubes))
-
-$(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/ui/collab/sccollaboration \
-    sc/source/ui/collab/sendfunc \
-))
-endif
-
 $(eval $(call gb_Library_use_libraries,sc,\
     $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \

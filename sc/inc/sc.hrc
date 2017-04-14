@@ -127,7 +127,6 @@
 #define SID_NUMBER_DECDEC       (SC_VIEW_START + 58)
 
 // misc:
-#define SID_COLLABORATION       (SC_VIEW_START + 59)
 #define SID_LINKS               (SC_VIEW_START + 60)
 #define SID_INSERT_SMATH        (SC_VIEW_START + 63)
 #define SID_MIRROR_VERTICAL     (SC_VIEW_START + 65)

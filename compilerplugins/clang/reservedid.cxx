@@ -151,8 +151,6 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
                 // vcl/unx/gtk/xid_fullscreen_on_all_monitors.c
             && s != "_GstVideoOverlay"
                 // avmedia/source/gstreamer/gstplayer.hxx
-            && s != "_TpAccount" && s != "_TpContact"
-                // include/tubes/manager.hxx
             && s != "_XRegion" // vcl/unx/generic/gdi/x11cairotextrender.cxx
             && s != "_XTrap") // vcl/unx/generic/gdi/xrender_peer.hxx
         {

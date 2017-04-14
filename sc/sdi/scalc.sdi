@@ -1932,24 +1932,6 @@ SfxVoidItem FocusCellAddress FID_FOCUS_POSWND
 ]
 
 
-SfxVoidItem Collaborate SID_COLLABORATION
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-
 SfxVoidItem FormatCellDialog FID_CELL_FORMAT
 ()
 [

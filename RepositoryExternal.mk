@@ -2537,26 +2537,6 @@ endef
 endif # ENABLE_DBUS
 
 
-ifeq ($(ENABLE_TELEPATHY),TRUE)
-
-define gb_LinkTarget__use_telepathy
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(TELEPATHY_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(TELEPATHY_LIBS) \
-)
-
-endef
-
-else # !ENABLE_TELEPATHY
-
-gb_LinkTarget__use_telepathy :=
-
-endif # ENABLE_TELEPATHY
-
 ifneq ($(SYSTEM_LIBPNG),)
 
 define gb_LinkTarget__use_png

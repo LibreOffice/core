@@ -116,12 +116,6 @@
 
 #include "langselect.hxx"
 
-#include <config_telepathy.h>
-
-#if ENABLE_TELEPATHY
-#include <tubes/manager.hxx>
-#endif
-
 #if HAVE_FEATURE_BREAKPAD
 #include <fstream>
 #endif
@@ -534,9 +528,6 @@ Desktop::Desktop()
 
 Desktop::~Desktop()
 {
-#if ENABLE_TELEPATHY
-    TeleManager::finalize();
-#endif
 }
 
 void Desktop::Init()
@@ -1612,11 +1603,6 @@ int Desktop::Main()
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
     SetSplashScreenProgress(60);
-
-#if ENABLE_TELEPATHY
-    bool bListen = rCmdLineArgs.IsInvisible();
-    TeleManager::init( bListen );
-#endif
 
     if ( !pExecGlobals->bRestartRequested )
     {

@@ -135,7 +135,6 @@ certain functionality.
 @li @c sc.orcus.style
 @li @c sc.orcus.table
 @li @c sc.qa
-@li @c sc.tubes
 @li @c sc.ui - Calc UI
 @li @c sc.uitest - Calc UI Test part
 @li @c sc.viewdata
@@ -582,8 +581,6 @@ certain functionality.
 @li @c store
 @li @c svg
 @li @c test
-@li @c tubes
-@li @c tubes.method
 @li @c ucbhelper
 @li @c unodevtools
 @li @c unoidl

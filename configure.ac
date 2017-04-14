@@ -1263,11 +1263,6 @@ libo_FUZZ_ARG_ENABLE(gio,
         [Determines whether to use the GIO support.]),
 ,test "${enable_gio+set}" = set || enable_gio=yes)
 
-libo_FUZZ_ARG_ENABLE(telepathy,
-    AS_HELP_STRING([--enable-telepathy],
-        [Determines whether to enable Telepathy for collaboration.]),
-,test "${enable_telepathy+set}" = set || enable_telepathy=no)
-
 AC_ARG_ENABLE(tde,
     AS_HELP_STRING([--enable-tde],
         [Determines whether to use TQt/TDE vclplug on platforms where TQt and
@@ -10112,32 +10107,6 @@ AC_SUBST([GTK_PRINT_LIBS])
 
 
 dnl ===================================================================
-dnl Check whether the Telepathy libraries are available.
-dnl ===================================================================
-
-ENABLE_TELEPATHY=""
-TELEPATHY_CFLAGS=""
-TELEPATHY_LIBS=""
-
-AC_MSG_CHECKING([whether to enable Telepathy support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_telepathy" = "yes"; then
-    ENABLE_TELEPATHY="TRUE"
-    AC_DEFINE(ENABLE_TELEPATHY)
-    AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES( TELEPATHY, telepathy-glib >= 0.18.0 glib-2.0 gobject-2.0 gthread-2.0 gio-2.0 gtk+-2.0 >= 2.18.0 )
-    TELEPATHY_CFLAGS=$(printf '%s' "$TELEPATHY_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    FilterLibs "${TELEPATHY_LIBS}"
-    TELEPATHY_LIBS="${filteredlibs}"
-else
-    AC_MSG_RESULT([no])
-fi
-
-AC_SUBST(ENABLE_TELEPATHY)
-AC_SUBST(TELEPATHY_CFLAGS)
-AC_SUBST(TELEPATHY_LIBS)
-
-
-dnl ===================================================================
 
 SPLIT_APP_MODULES=""
 if test "$enable_split_app_modules" = "yes"; then
@@ -12712,7 +12681,6 @@ AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
 AC_CONFIG_HEADERS([config_host/config_test.h])
-AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
 AC_CONFIG_HEADERS([config_host/config_vcl.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])

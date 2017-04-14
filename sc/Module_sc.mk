@@ -24,14 +24,6 @@ $(eval $(call gb_Module_add_l10n_targets,sc,\
 	UIConfig_scalc \
 ))
 
-ifeq ($(ENABLE_TELEPATHY),TRUE)
-
-$(eval $(call gb_Module_add_targets,sc,\
-	CustomTarget_uiconfig \
-))
-
-endif
-
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
 $(eval $(call gb_Module_add_targets,sc,\

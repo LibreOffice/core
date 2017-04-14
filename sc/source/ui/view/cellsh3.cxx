@@ -45,12 +45,6 @@
 #include "scabstdlg.hxx"
 #include "columnspanset.hxx"
 
-#include <config_telepathy.h>
-
-#if ENABLE_TELEPATHY
-#include "sccollaboration.hxx"
-#endif
-
 #include <memory>
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
@@ -103,12 +97,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
-        case SID_COLLABORATION:
-#if ENABLE_TELEPATHY
-            GetViewData()->GetDocShell()->GetCollaboration()->DisplayContacts();
-#endif
-            break;
-
         case SID_STATUS_SELMODE:
             if ( pReqArgs )
             {
