@@ -30,7 +30,6 @@
 #include <svtools/svtools.hrc>
 #include <svtools/viewdataentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "fileview.hrc"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -162,6 +161,8 @@ class ViewTabListBox_Impl : public SvHeaderTabListBox
 {
 private:
     Reference< XCommandEnvironment >    mxCmdEnv;
+    std::unique_ptr<VclBuilder> mxBuilder;
+    VclPtr<PopupMenu> mxMenu;
 
     ::osl::Mutex            maMutex;
     VclPtr<HeaderBar>       mpHeaderBar;
@@ -533,7 +534,6 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     EnableContextMenuHandling();
 }
 
-
 ViewTabListBox_Impl::~ViewTabListBox_Impl()
 {
     disposeOnce();
@@ -543,10 +543,12 @@ void ViewTabListBox_Impl::dispose()
 {
     maResetQuickSearch.Stop();
 
+    mxMenu.disposeAndClear();
+    mxBuilder.reset();
+
     mpHeaderBar.disposeAndClear();
     SvHeaderTabListBox::dispose();
 }
-
 
 IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
 {
@@ -692,31 +694,25 @@ VclPtr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
 
     if ( bEnableDelete || bEnableRename )
     {
-        VclPtrInstance<PopupMenu> pRet(SvtResId( RID_FILEVIEW_CONTEXTMENU ));
-        pRet->EnableItem( MID_FILEVIEW_DELETE, bEnableDelete );
-        pRet->EnableItem( MID_FILEVIEW_RENAME, bEnableRename );
-        pRet->RemoveDisabledEntries( true, true );
-        return pRet;
+        mxMenu.disposeAndClear();
+        mxBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svt/ui/fileviewmenu.ui", ""));
+        mxMenu.set(mxBuilder->get_menu("menu"));
+        mxMenu->EnableItem(mxMenu->GetItemId("delete"), bEnableDelete);
+        mxMenu->EnableItem(mxMenu->GetItemId("rename"), bEnableRename);
+        mxMenu->RemoveDisabledEntries( true, true );
+        return mxMenu;
     }
 
     return nullptr;
 }
 
-
 void ViewTabListBox_Impl::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
-    switch ( nSelectedPopupEntry )
-    {
-        case MID_FILEVIEW_DELETE :
-            DeleteEntries();
-            break;
-
-        case MID_FILEVIEW_RENAME :
-            EditEntry( FirstSelected() );
-            break;
-    }
+    if (nSelectedPopupEntry == mxMenu->GetItemId("delete"))
+        DeleteEntries();
+    else if (nSelectedPopupEntry == mxMenu->GetItemId("rename"))
+        EditEntry( FirstSelected() );
 }
-
 
 void ViewTabListBox_Impl::ClearAll()
 {

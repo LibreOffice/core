@@ -24,11 +24,6 @@
 #define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
 #define HID_FILEDLG_STANDARD                                  "SVT_HID_FILEDLG_STANDARD"
 
-// Help ids for the filepicker dialogs
-// help ids for fileview contextmenu
-#define HID_FILEVIEW_MENU_DELETE                               "SVT_HID_FILEVIEW_MENU_DELETE"
-#define HID_FILEVIEW_MENU_RENAME                               "SVT_HID_FILEVIEW_MENU_RENAME"
-
 // help ids for the different modi of the file picker dialog
 #define HID_FILESAVE_LEVELUP                                   "SVT_HID_FILESAVE_LEVELUP"
 #define HID_FILESAVE_CREATEDIRECTORY                           "SVT_HID_FILESAVE_CREATEDIRECTORY"

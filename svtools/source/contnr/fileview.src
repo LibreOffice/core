@@ -18,7 +18,6 @@
  */
 
 #include <svtools/svtools.hrc>
-#include "fileview.hrc"
 #include <svtools/helpid.hrc>
 
 // strings --------------------------------------------------------------------
@@ -71,27 +70,6 @@ Bitmap RID_BMP_FOLDER
 Bitmap RID_BMP_FOLDER_OPEN
 {
     File = "folderop.png";
-};
-
-// Menus -----------------------------------------------------------------
-
-Menu RID_FILEVIEW_CONTEXTMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = MID_FILEVIEW_DELETE ;
-            HelpId = HID_FILEVIEW_MENU_DELETE ;
-            Text [ en-US ] = "~Delete";
-        };
-        MenuItem
-        {
-            Identifier = MID_FILEVIEW_RENAME ;
-            HelpId = HID_FILEVIEW_MENU_RENAME ;
-            Text [ en-US ] = "~Rename";
-        };
-    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
