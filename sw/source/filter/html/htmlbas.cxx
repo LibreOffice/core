@@ -236,7 +236,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
                                         ScriptType eScrType,
                                         const OUString& rScrType )
 {
-    OSL_ENSURE( !rName.isEmpty(), "InsertBasicDocEvent() ohne Macro gerufen" );
+    OSL_ENSURE( !rName.isEmpty(), "InsertBasicDocEvent() called without macro" );
     if( rName.isEmpty() )
         return;
 
@@ -261,7 +261,7 @@ void SwHTMLWriter::OutBasic()
         return;
 
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
-    OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
+    OSL_ENSURE( pBasicMan, "Where is the Basic-Manager?" );
     // Only write DocumentBasic
     if( !pBasicMan || pBasicMan == SfxApplication::GetBasicManager() )
     {
