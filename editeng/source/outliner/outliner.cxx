@@ -1137,7 +1137,6 @@ sal_uLong Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16
     return nRet;
 }
 
-
 void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
 {
 
