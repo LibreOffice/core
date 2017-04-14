@@ -39,7 +39,6 @@
 #define HID_XFORMS_TOOLBOX_ITEM_EDIT                          "SVX_HID_XFORMS_TOOLBOX_ITEM_EDIT"
 #define HID_XFORMS_TOOLBOX_ITEM_REMOVE                        "SVX_HID_XFORMS_TOOLBOX_ITEM_REMOVE"
 #define HID_XFORMS_MID_INSERT_CONTROL                         "SVX_HID_XFORMS_MID_INSERT_CONTROL"
-#define HID_FM_DELETEROWS                                     "SVX_HID_FM_DELETEROWS"
 #define HID_FM_INSERTCOL                                      "SVX_HID_FM_INSERTCOL"
 #define HID_FM_CHANGECOL                                      "SVX_HID_FM_CHANGECOL"
 #define HID_FM_DELETECOL                                      "SVX_HID_FM_DELETECOL"

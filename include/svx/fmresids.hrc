@@ -63,7 +63,6 @@
 
 // Menu-Id's -----------------------------------------------------------
 #define RID_FMEXPLORER_POPUPMENU                    (RID_FORMS_START + 0)
-#define RID_SVXMNU_ROWS                             (RID_FORMS_START + 1)
 #define RID_SVXMNU_COLS                             (RID_FORMS_START + 2)
 #define RID_SVXMNU_CELL                             (RID_FORMS_START + 3)
 #define RID_FMSHELL_CONVERSIONMENU                  (RID_FORMS_START + 4)

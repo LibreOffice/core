@@ -44,6 +44,7 @@
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 
@@ -2698,8 +2699,8 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMe
     // if only a blank row is selected than do not delete
     bDelete = bDelete && !((m_nOptions & DbGridControlOptions::Insert) && GetSelectRowCount() == 1 && IsRowSelected(GetRowCount() - 1));
 
-    rMenu.EnableItem(SID_FM_DELETEROWS, bDelete);
-    rMenu.EnableItem(SID_FM_RECORD_SAVE, IsModified());
+    rMenu.EnableItem(rMenu.GetItemId("delete"), bDelete);
+    rMenu.EnableItem(rMenu.GetItemId("save"), IsModified());
 
     // the undo is more difficult
     bool bCanUndo = IsModified();
@@ -2708,28 +2709,22 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMe
         nState = m_aMasterStateProvider.Call(DbGridControlNavigationBarState::Undo);
     bCanUndo &= ( 0 != nState );
 
-    rMenu.EnableItem(SID_FM_RECORD_UNDO, bCanUndo);
+    rMenu.EnableItem(rMenu.GetItemId("undo"), bCanUndo);
 }
 
-void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMenu& /*rMenu*/, sal_uInt16 nExecutionResult)
+void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {
-    switch (nExecutionResult)
+    if (nExecutionResult == rMenu.GetItemId("delete"))
     {
-        case SID_FM_DELETEROWS:
-            // delete asynchronously
-            if (m_nDeleteEvent)
-                Application::RemoveUserEvent(m_nDeleteEvent);
-            m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete), nullptr, true);
-            break;
-        case SID_FM_RECORD_UNDO:
-            Undo();
-            break;
-        case SID_FM_RECORD_SAVE:
-            SaveRow();
-            break;
-        default:
-            break;
+        // delete asynchronously
+        if (m_nDeleteEvent)
+            Application::RemoveUserEvent(m_nDeleteEvent);
+        m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete), nullptr, true);
     }
+    else if (nExecutionResult == rMenu.GetItemId("undo"))
+        Undo();
+    else if (nExecutionResult == rMenu.GetItemId("save"))
+        SaveRow();
 }
 
 void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt)
@@ -2822,14 +2817,12 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
 
 void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredPos )
 {
-    ScopedVclPtrInstance<PopupMenu> aContextMenu( SVX_RES( RID_SVXMNU_ROWS ) );
+    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/rowsmenu.ui", "");
+    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
     PreExecuteRowContextMenu( (sal_uInt16)_nRow, *aContextMenu.get() );
     aContextMenu->RemoveDisabledEntries( true, true );
     PostExecuteRowContextMenu( (sal_uInt16)_nRow, *aContextMenu.get(), aContextMenu->Execute( this, _rPreferredPos ) );
-
-    // TODO: why this weird cast to sal_uInt16? What if we really have more than 65535 lines?
-    // -> change this to sal_uInt32
 }
 
 void DbGridControl::Command(const CommandEvent& rEvt)

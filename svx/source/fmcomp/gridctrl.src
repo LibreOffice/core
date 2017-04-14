@@ -22,30 +22,6 @@
 #include "fmhelp.hrc"
 #include <svx/svxcommands.h>
 
-Menu RID_SVXMNU_ROWS
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_FM_DELETEROWS ;
-            HelpId = HID_FM_DELETEROWS ;
-            Text [ en-US ] = "Delete Rows" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_FM_RECORD_SAVE ;
-            HelpId = CMD_SID_FM_RECORD_SAVE ;
-            Text [ en-US ] = "Save Record" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_FM_RECORD_UNDO ;
-            HelpId = CMD_SID_FM_RECORD_UNDO ;
-            Text [ en-US ] = "Undo: Data entry" ;
-        };
-    };
-};
 Menu RID_SVXMNU_COLS
 {
     ItemList =
