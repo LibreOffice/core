@@ -28,6 +28,9 @@
 #include <action.hxx>
 #include <outdevstate.hxx>
 
+#include <com/sun/star/rendering/FontRequest.hpp>
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
+
 #include <osl/endian.h>
 
 #include <vector>
@@ -274,7 +277,7 @@ static float GetSwapFloat( SvStream& rSt )
 
             /* EMF+ */
             void processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms, OutDevState& rState, const CanvasSharedPtr& rCanvas );
-            double setFont( sal_uInt8 objectId, const ActionFactoryParameters& rParms, OutDevState& rState );
+            double setFont(css::rendering::FontRequest& aFontRequest, sal_uInt8 fontObjectId, const ActionFactoryParameters& rParms, OutDevState& rState );
 
             /// Render LineCap, like the start or end arrow of a polygon.
             /// @return how much we should shorten the original polygon.
