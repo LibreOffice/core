@@ -386,8 +386,7 @@ bool SwHTMLWriter::OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx, HtmlPos
                 {
                     delete m_pHTMLPosFlyFrames;
                     m_pHTMLPosFlyFrames = nullptr;
-                    bRestart = true;    // nicht wirklich, nur raus
-                                        // aus der Schleife
+                    bRestart = true;    // not really, only exit the loop
                 }
 
                 if( pContext )
@@ -601,7 +600,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
             append(pStr).append("\"");
     }
 
-    // HSPACE und VSPACE
+    // HSPACE and VSPACE
     Size aTwipSpc( 0, 0 );
     if( (nFrameOpts & (HtmlFrmOpts::Space|HtmlFrmOpts::MarginSize)) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, true, &pItem ))
