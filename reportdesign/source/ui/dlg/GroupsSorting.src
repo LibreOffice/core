@@ -112,8 +112,7 @@ Menu RID_GROUPSROWPOPUPMENU
         MenuItem
         {
             Identifier = SID_DELETE ;
-            Command = ".uno:Delete" ;
-            Text [ en-US ] = "~Delete" ;
+            Text [ en-US ] = "~Delete FOO" ;
         };
     };
 };

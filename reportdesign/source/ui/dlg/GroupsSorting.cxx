@@ -721,26 +721,12 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                         bEnable = true;
                     nIndex = NextSelectedRow();
                 }
-                aContextMenu->EnableItem( SID_DELETE, IsDeleteAllowed() && bEnable );
-                switch (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
+                aContextMenu->EnableItem(SID_DELETE, IsDeleteAllowed() && bEnable);
+                if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()) == SID_DELETE)
                 {
-                    case SID_CUT:
-                        cut();
-                        break;
-                    case SID_COPY:
-                        copy();
-                        break;
-                    case SID_PASTE:
-                        paste();
-                        break;
-
-                    case SID_DELETE:
-                        if( m_nDeleteEvent )
-                            Application::RemoveUserEvent( m_nDeleteEvent );
-                        m_nDeleteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedDelete), nullptr, true );
-                        break;
-                    default:
-                        break;
+                    if( m_nDeleteEvent )
+                        Application::RemoveUserEvent( m_nDeleteEvent );
+                    m_nDeleteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedDelete), nullptr, true );
                 }
             }
             SAL_FALLTHROUGH;
