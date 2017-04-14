@@ -188,7 +188,7 @@
 #include <svtools/svtdllapi.h>
 #include <svx/msdffdef.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>

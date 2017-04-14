@@ -35,7 +35,7 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <o3tl/any.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/stritem.hxx>
