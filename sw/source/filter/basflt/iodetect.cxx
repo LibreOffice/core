@@ -44,7 +44,8 @@ SwIoDetect aFilterDetect[] =
     SwIoDetect( sWW5 ),
     SwIoDetect( FILTER_XML ),
     SwIoDetect( FILTER_TEXT_DLG ),
-    SwIoDetect( FILTER_TEXT )
+    SwIoDetect( FILTER_TEXT ),
+    SwIoDetect( FILTER_DOCX )
 };
 
 const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )

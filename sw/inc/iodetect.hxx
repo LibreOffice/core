@@ -36,6 +36,7 @@
 #define FILTER_XML      "CXML"      ///< XML filter
 #define FILTER_XMLV     "CXMLV"     ///< XML filter
 #define FILTER_XMLVW    "CXMLVWEB"  ///< XML filter
+#define FILTER_DOCX     "OXML"
 #define sHTML           "HTML"
 #define sWW5            "WW6"
 #define sWW6            "CWW6"
@@ -69,6 +70,7 @@ enum ReaderWriterEnum {
     READER_WRITER_XML,
     READER_WRITER_TEXT_DLG,
     READER_WRITER_TEXT,
+    READER_WRITER_DOCX,
     MAXFILTER
 };
 
