@@ -161,17 +161,4 @@ Menu RID_SVXMNU_COLS
     };
 };
 
-Menu RID_SVXMNU_CELL
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_COPY ;
-            Command = ".uno:Copy" ;
-            Text [ en-US ] = "~Copy" ;
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

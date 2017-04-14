@@ -2860,14 +2860,10 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             }
             else if (canCopyCellText(nRow, nColId))
             {
-                ScopedVclPtrInstance<PopupMenu> aContextMenu(SVX_RES(RID_SVXMNU_CELL));
-                aContextMenu->RemoveDisabledEntries(true, true);
-                switch (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
-                {
-                    case SID_COPY:
-                        copyCellText(nRow, nColId);
-                        break;
-                }
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/cellmenu.ui", "");
+                VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
+                    copyCellText(nRow, nColId);
             }
             else
             {
