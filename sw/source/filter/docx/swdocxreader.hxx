@@ -21,6 +21,9 @@
 #define INCLUDED_SW_SOURCE_FILTER_DOCX_SWDOCXREADER_HXX
 
 #include <shellio.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <tools/ref.hxx>
 
 /// Wrapper for the UNO DOCX import filter (in writerfilter) for autotext purposes.
 class SwDOCXReader : public StgReader
@@ -33,6 +36,9 @@ public:
 
 private:
     virtual sal_uLong Read( SwDoc&, const OUString&, SwPaM&, const OUString& ) override;
+
+    uno::Reference<css::xml::dom::XDocument> OpenDocument() const;
+    static comphelper::SequenceAsHashMap GetGrabBag( const uno::Reference<lang::XComponent>& xDocument );
 };
 
 #endif
