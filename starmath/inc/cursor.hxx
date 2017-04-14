@@ -410,7 +410,7 @@ private:
     SmNodeList* pList;
     /** Get the current terminal */
     SmNode* Terminal(){
-        if(pList->size() > 0)
+        if (!pList->empty())
             return pList->front();
         return nullptr;
     }

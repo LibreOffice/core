@@ -153,7 +153,7 @@ SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
     for (decltype(aFontVec)::size_type nPos = 0; nPos < aFontVec.size(); nPos++)
         InsertEntry(lcl_GetStringItem(aFontVec[nPos]), nPos);
 
-    if (aFontVec.size() > 0)
+    if (!aFontVec.empty())
         SelectEntry(lcl_GetStringItem(aFontVec.front()));
 
     return *this;

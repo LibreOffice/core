@@ -517,7 +517,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
 
     //Find node that this should be applied to
     SmNode* pSubject;
-    bool bPatchLine = pSelectedNodesList->size() > 0; //If the line should be patched later
+    bool bPatchLine = !pSelectedNodesList->empty(); //If the line should be patched later
     if(it != pLineList->begin()) {
         --it;
         pSubject = *it;
@@ -569,7 +569,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
 
     //Find caret pos, that should be used after sub-/superscription.
     SmCaretPos PosAfterScript; //Leave invalid for first position
-    if(pScriptLineList->size() > 0)
+    if (!pScriptLineList->empty())
         PosAfterScript = SmCaretPos::GetPosAfter(pScriptLineList->back());
 
     //Parse pScriptLineList
@@ -629,7 +629,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup) {
     } else {
         pLine = pSubSup->GetSubSup(eSubSup);
         SmNodeList* pLineList = NodeToList(pLine);
-        if(pLineList->size() > 0)
+        if (!pLineList->empty())
             PosAfterLimit = SmCaretPos::GetPosAfter(pLineList->back());
         pLine = SmNodeListParser().Parse(pLineList);
         delete pLineList;
@@ -1147,7 +1147,7 @@ void SmCursor::Copy(){
     }
 
     //Set clipboard
-    if (aClipboard.size() > 0)
+    if (!aClipboard.empty())
         maClipboard = std::move(aClipboard);
 }
 
@@ -1155,7 +1155,7 @@ void SmCursor::Paste() {
     BeginEdit();
     Delete();
 
-    if(maClipboard.size() > 0)
+    if (!maClipboard.empty())
         InsertNodes(CloneList(maClipboard));
 
     EndEdit();
