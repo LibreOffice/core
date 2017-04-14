@@ -67,7 +67,7 @@
 #include <desktop/crashreport.hxx>
 #include <vcl/scheduler.hxx>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/extract.hxx>
 
