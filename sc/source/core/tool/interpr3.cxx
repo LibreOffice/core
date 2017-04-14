@@ -3286,7 +3286,7 @@ void ScInterpreter::ScSkewp()
 double ScInterpreter::GetMedian( vector<double> & rArray )
 {
     size_t nSize = rArray.size();
-    if (rArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE)
+    if (nSize == 0 || nGlobalError != FormulaError::NONE)
     {
         SetError( FormulaError::NoValue);
         return 0.0;
@@ -3386,7 +3386,7 @@ void ScInterpreter::ScPercentile( bool bInclusive )
     }
     vector<double> aArray;
     GetNumberSequenceArray( 1, aArray, false );
-    if ( aArray.empty() || aArray.size() == 0 || nGlobalError != FormulaError::NONE )
+    if ( aArray.empty() || nGlobalError != FormulaError::NONE )
     {
         SetError( FormulaError::NoValue );
         return;
@@ -3409,7 +3409,7 @@ void ScInterpreter::ScQuartile( bool bInclusive )
     }
     vector<double> aArray;
     GetNumberSequenceArray( 1, aArray, false );
-    if ( aArray.empty() || aArray.size() == 0 || nGlobalError != FormulaError::NONE )
+    if ( aArray.empty() || nGlobalError != FormulaError::NONE )
     {
         SetError( FormulaError::NoValue );
         return;
@@ -3428,7 +3428,7 @@ void ScInterpreter::ScModalValue()
     vector<double> aSortArray;
     GetSortArray( nParamCount, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE)
+    if (nSize == 0 || nGlobalError != FormulaError::NONE)
         PushNoValue();
     else
     {
@@ -3483,7 +3483,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
      * we may or will need a real sorted array again, see #i32345. */
     GetNumberSequenceArray(1, aSortArray, false );
     SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE || nSize < k)
+    if (nSize == 0 || nGlobalError != FormulaError::NONE || nSize < k)
         PushNoValue();
     else
     {
@@ -3519,7 +3519,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
     vector<double> aSortArray;
     GetSortArray( 1, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
-    if ( aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE )
+    if ( nSize == 0 || nGlobalError != FormulaError::NONE )
         PushNoValue();
     else
     {
@@ -3612,7 +3612,7 @@ void ScInterpreter::ScTrimMean()
     vector<double> aSortArray;
     GetSortArray( 1, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE)
+    if (nSize == 0 || nGlobalError != FormulaError::NONE)
         PushNoValue();
     else
     {
@@ -3857,7 +3857,7 @@ void ScInterpreter::ScRank( bool bAverage )
     GetSortArray( 1, aSortArray, nullptr, false, false );
     double fVal = GetDouble();
     SCSIZE nSize = aSortArray.size();
-    if ( aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE )
+    if ( nSize == 0 || nGlobalError != FormulaError::NONE )
         PushNoValue();
     else
     {
