@@ -28,7 +28,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include <unotools/localfilehelper.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

@@ -20,7 +20,7 @@
 #include <hintids.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>

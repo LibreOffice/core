@@ -27,7 +27,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/lnkbase.hxx>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <svx/svdview.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>

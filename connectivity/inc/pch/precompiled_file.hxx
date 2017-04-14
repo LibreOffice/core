@@ -166,7 +166,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/lineend.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>

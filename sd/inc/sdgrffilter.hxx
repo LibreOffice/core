@@ -22,7 +22,7 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include "sdfilter.hxx"
 
 // SdCGMFilter

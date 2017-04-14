@@ -184,7 +184,7 @@
 #include <tools/config.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>

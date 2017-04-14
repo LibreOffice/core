@@ -20,7 +20,7 @@
 #include <hintids.hxx>
 
 #include <o3tl/make_unique.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <svx/svxids.hrc>

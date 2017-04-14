@@ -18,7 +18,7 @@
  */
 
 #include <limits.h>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <vcl/window.hxx>
@@ -338,7 +338,7 @@ sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
 }
 
 bool ErrorHandler_Impl::CreateString( const ErrorInfo* pInfo, OUString& pStr,
-                                    sal_uInt16 &rFlags)
+                                     sal_uInt16& rFlags)
 {
     for(const ErrorHandler *pHdl : TheEDcrData::get().errorHandlers)
     {

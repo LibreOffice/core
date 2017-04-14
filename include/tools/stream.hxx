@@ -23,7 +23,7 @@
 #include <osl/process.h>
 #include <tools/toolsdllapi.h>
 #include <tools/lineend.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/ref.hxx>
 #include <rtl/string.hxx>
 #include <o3tl/typed_flags_set.hxx>

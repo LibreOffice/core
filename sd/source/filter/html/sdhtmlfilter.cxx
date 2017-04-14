@@ -18,7 +18,7 @@
  */
 
 #include <unotools/localfilehelper.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

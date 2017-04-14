@@ -23,7 +23,7 @@
 
 #include <unotools/transliterationwrapper.hxx>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <osl/diagnose.h>
 #include <svl/urihelper.hxx>
 #include <svl/fstathelper.hxx>

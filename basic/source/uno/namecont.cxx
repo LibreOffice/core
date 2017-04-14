@@ -29,7 +29,7 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/getexpandeduri.hxx>
