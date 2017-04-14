@@ -140,9 +140,6 @@
 #define RID_SVXFLOAT3D_FIX_G                (RID_SVX_START + 78)
 #define RID_SVXFLOAT3D_FIX_B                (RID_SVX_START + 84)
 
-// ResId for funktion popup menue
-#define RID_SVXMNU_PSZ_FUNC                 (RID_SVX_START +  83)
-
 #define RID_SVXBMP_SLIDERBUTTON             (RID_SVX_START +  66)
 #define RID_SVXBMP_SLIDERDECREASE           (RID_SVX_START +  67)
 #define RID_SVXBMP_SLIDERINCREASE           (RID_SVX_START +  68)
