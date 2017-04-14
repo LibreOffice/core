@@ -375,10 +375,10 @@ void SwHTMLParser::ClearContext( HTMLAttrContext *pContext )
     }
 
     OSL_ENSURE( !pContext->GetSpansSection(),
-            "Bereich kann nicht mehr verlassen werden" );
+            "Area can no longer be exited" );
 
     OSL_ENSURE( !pContext->HasSaveDocContext(),
-            "Rahmen kann nicht mehr verlassen werden" );
+            "Frame can no longer be exited" );
 
     // Restart PRE/LISTING/XMP environments
     if( pContext->IsFinishPREListingXMP() )
@@ -531,7 +531,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 {
                     OSL_ENSURE( rPropInfo.m_nLeftMargin < 0 ||
                             rPropInfo.m_nLeftMargin == pLRItem->GetTextLeft(),
-                            "linker Abstand stimmt nicht mit Item ueberein" );
+                            "left margin does not match with item" );
                     if( rPropInfo.m_nLeftMargin < 0 &&
                         -rPropInfo.m_nLeftMargin > nOldLeft )
                         nLeft = 0;
@@ -542,7 +542,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 {
                     OSL_ENSURE( rPropInfo.m_nRightMargin < 0 ||
                             rPropInfo.m_nRightMargin == pLRItem->GetRight(),
-                            "rechter Abstand stimmt nicht mit Item ueberein" );
+                            "right margin does not match with item" );
                     if( rPropInfo.m_nRightMargin < 0 &&
                         -rPropInfo.m_nRightMargin > nOldRight )
                         nRight = 0;
