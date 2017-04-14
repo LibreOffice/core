@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4723f205",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-04-14T11:19:32Z",
+      "side": 1,
+      "message": "I don\u0027t see any need for a heap object here.",
+      "revId": "91e52b938ccb91a7a77c18794c62a3e85878787d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_871ddabf",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-04-14T11:19:32Z",
+      "side": 1,
+      "message": "I think we should also accept TIME based on the VBA documentation. Maybe even DATETIME. BEst to check with MSO.",
+      "revId": "91e52b938ccb91a7a77c18794c62a3e85878787d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
