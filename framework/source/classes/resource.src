@@ -39,53 +39,34 @@ String STR_CLOSEDOC_ANDRETURN
     Text [ en-US ] = "~Close & Return to " ;
 };
 
-Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
+String STR_TOOLBAR_VISIBLE_BUTTONS
 {
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = MENUITEM_TOOLBAR_VISIBLEBUTTON;
-            SubMenu = Menu
-            {
-            };
-            Text[ en-US ] = "Visible ~Buttons";
-        };
-        MenuItem
-        {
-            Identifier = MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR;
-            Command = ".uno:ConfigureToolboxVisible" ;
-            Text[ en-US ] = "~Customize Toolbar...";
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = MENUITEM_TOOLBAR_DOCKTOOLBAR;
-            Text[ en-US ] = "~Dock Toolbar" ;
-        };
-        MenuItem
-        {
-            Identifier = MENUITEM_TOOLBAR_DOCKALLTOOLBAR;
-            Text[ en-US ] = "Dock ~All Toolbars" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION;
-            Text[ en-US ] = "~Lock Toolbar Position" ;
-        };
-        MenuItem
-        {
-            Identifier = MENUITEM_TOOLBAR_CLOSE;
-            Text[ en-US ] = "Close ~Toolbar" ;
-        };
-    };
+    Text[ en-US ] = "Visible ~Buttons";
+};
+
+String STR_TOOLBAR_CUSTOMIZE_TOOLBAR
+{
+    Text[ en-US ] = "~Customize Toolbar...";
+};
+
+String STR_TOOLBAR_DOCK_TOOLBAR
+{
+    Text[ en-US ] = "~Dock Toolbar" ;
+};
+
+String STR_TOOLBAR_DOCK_ALL_TOOLBARS
+{
+    Text[ en-US ] = "Dock ~All Toolbars" ;
+};
+
+String STR_TOOLBAR_LOCK_TOOLBAR
+{
+    Text[ en-US ] = "~Lock Toolbar Position" ;
+};
+
+String STR_TOOLBAR_CLOSE_TOOLBAR
+{
+    Text[ en-US ] = "Close ~Toolbar" ;
 };
 
 String STR_SAVECOPYDOC

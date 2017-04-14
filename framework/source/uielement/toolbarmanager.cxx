@@ -1399,8 +1399,6 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 
 void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
 {
-    ::PopupMenu *pMenu = pToolBar->GetMenu();
-
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
     Reference< XDispatch > xDisp;
     css::util::URL aURL;
@@ -1418,12 +1416,56 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
 
     // popup menu for quick customization
     bool bHideDisabledEntries = !SvtMenuOptions().IsEntryHidingEnabled();
-    ScopedVclPtrInstance<::PopupMenu> aQuickCustomizationMenu( FwkResId( POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION ));
 
-    if ( m_pToolBar->IsCustomize() )
+    ::PopupMenu *pMenu = pToolBar->GetMenu();
+
+    // copy all menu items 'Visible buttons, Customize toolbar, Dock toolbar,
+    // Dock all Toolbars) from the loaded resource into the toolbar menu
+    sal_uInt16 nGroupLen = pMenu->GetItemCount();
+    if (nGroupLen)
+        pMenu->InsertSeparator();
+
+    VclPtr<PopupMenu> xVisibleItemsPopupMenu;
+
+    if (MenuItemAllowed(MENUITEM_TOOLBAR_VISIBLEBUTTON))
     {
-        ::PopupMenu*  pVisibleItemsPopupMenu( aQuickCustomizationMenu->GetPopupMenu( 1 ));
+        pMenu->InsertItem(MENUITEM_TOOLBAR_VISIBLEBUTTON, FWK_RESSTR(STR_TOOLBAR_VISIBLE_BUTTONS));
+        xVisibleItemsPopupMenu = VclPtr<PopupMenu>::Create();
+        pMenu->SetPopupMenu(MENUITEM_TOOLBAR_VISIBLEBUTTON, xVisibleItemsPopupMenu);
+    }
 
+    if (MenuItemAllowed(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR) && m_pToolBar->IsCustomize())
+    {
+        pMenu->InsertItem(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, FWK_RESSTR(STR_TOOLBAR_CUSTOMIZE_TOOLBAR));
+        pMenu->SetItemCommand(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, ".uno:ConfigureToolboxVisible");
+    }
+
+    if (nGroupLen != pMenu->GetItemCount())
+    {
+        pMenu->InsertSeparator();
+        nGroupLen = pMenu->GetItemCount();
+    }
+
+    if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKTOOLBAR))
+        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, FWK_RESSTR(STR_TOOLBAR_DOCK_TOOLBAR));
+
+    if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKALLTOOLBAR))
+        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, FWK_RESSTR(STR_TOOLBAR_DOCK_ALL_TOOLBARS));
+
+    if (nGroupLen != pMenu->GetItemCount())
+    {
+        pMenu->InsertSeparator();
+        nGroupLen = pMenu->GetItemCount();
+    }
+
+    if (MenuItemAllowed(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION))
+        pMenu->InsertItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, FWK_RESSTR(STR_TOOLBAR_LOCK_TOOLBAR));
+
+    if (MenuItemAllowed(MENUITEM_TOOLBAR_CLOSE))
+        pMenu->InsertItem(MENUITEM_TOOLBAR_CLOSE, FWK_RESSTR(STR_TOOLBAR_CLOSE_TOOLBAR));
+
+    if (m_pToolBar->IsCustomize())
+    {
         bool    bIsFloating( false );
 
         DockingManager* pDockMgr = vcl::Window::GetDockingManager();
@@ -1432,52 +1474,51 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
 
         if ( !bIsFloating )
         {
-            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_DOCKTOOLBAR, false );
-            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_DOCKALLTOOLBAR, false );
+            pMenu->EnableItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, false);
+            pMenu->EnableItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, false);
             Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
             if( xDockable.is() )
-                aQuickCustomizationMenu->CheckItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, xDockable->isLocked() );
+                pMenu->CheckItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, xDockable->isLocked());
         }
         else
-            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false );
+            pMenu->EnableItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false);
 
-        if ( SvtMiscOptions().DisableUICustomization() )
+        if (SvtMiscOptions().DisableUICustomization())
         {
-            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, false );
-            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, false );
-            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false );
+            pMenu->EnableItem(MENUITEM_TOOLBAR_VISIBLEBUTTON, false);
+            pMenu->EnableItem(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, false);
+            pMenu->EnableItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false);
         }
 
         // Disable menu item CLOSE if the toolbar has no closer
         if( !(pToolBar->GetFloatStyle() & WB_CLOSEABLE) )
-            aQuickCustomizationMenu->EnableItem(MENUITEM_TOOLBAR_CLOSE, false);
+            pMenu->EnableItem(MENUITEM_TOOLBAR_CLOSE, false);
 
         // Temporary stores a Command --> Url map to update contextual menu with the
         // correct icons. The popup icons are by default the same as those in the
         // toolbar. They are not correct for contextual popup menu.
         std::map< OUString, Image > commandToImage;
 
-        // Go through all toolbar items and add them to the context menu
-        for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
+        if (xVisibleItemsPopupMenu)
         {
-            if ( m_pToolBar->GetItemType(nPos) == ToolBoxItemType::BUTTON )
+            // Go through all toolbar items and add them to the context menu
+            for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
             {
-                sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
-                OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-                pVisibleItemsPopupMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
-                    //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
-                pVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
-                    //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
-                pVisibleItemsPopupMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
-                    //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
-                Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame));
-                commandToImage[aCommandURL] = aImage;
-                pVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
-                    //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
-            }
-            else
-            {
-                pVisibleItemsPopupMenu->InsertSeparator();
+                if ( m_pToolBar->GetItemType(nPos) == ToolBoxItemType::BUTTON )
+                {
+                    sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
+                    OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
+                    xVisibleItemsPopupMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
+                    xVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
+                    xVisibleItemsPopupMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
+                    Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame));
+                    commandToImage[aCommandURL] = aImage;
+                    xVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
+                }
+                else
+                {
+                    xVisibleItemsPopupMenu->InsertSeparator();
+                }
             }
         }
 
@@ -1492,25 +1533,6 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
                 pMenu->SetItemImage( nId, it->second );
             }
         }
-    }
-    else
-    {
-        sal_uInt16 nPos = aQuickCustomizationMenu->GetItemPos( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR );
-        if ( nPos != MENU_ITEM_NOTFOUND )
-            aQuickCustomizationMenu->RemoveItem( nPos );
-    }
-
-    // copy all menu items 'Visible buttons, Customize toolbar, Dock toolbar,
-    // Dock all Toolbars) from the loaded resource into the toolbar menu
-    if( pMenu->GetItemCount() )
-        pMenu->InsertSeparator();
-
-    sal_uInt16 i;
-    for( i=0; i< aQuickCustomizationMenu->GetItemCount(); i++)
-    {
-        sal_uInt16 nId = aQuickCustomizationMenu->GetItemId( i );
-        if ( MenuItemAllowed( nId ))
-            pMenu->CopyItem( *aQuickCustomizationMenu.get(), i );
     }
 
     // Set the title of the menu
