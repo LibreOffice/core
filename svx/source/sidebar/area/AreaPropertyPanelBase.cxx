@@ -738,17 +738,18 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
     }
 }
 
-void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault, const SfxUInt16Item* pItem)
+void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
 {
     if (bDisabled)
     {
         mpTransparanceItem.reset();
         return;
     }
-    else if(bDefault)
+    else if (bDefaultOrSet)
     {
-        if(pItem)
+        if (pState)
         {
+            const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
             mpTransparanceItem.reset(static_cast<SfxUInt16Item*>(pItem->Clone()));
         }
         else
@@ -765,7 +766,7 @@ void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault
     ImpUpdateTransparencies();
 }
 
-void AreaPropertyPanelBase::updateFillFloatTransparence(bool bDisabled, bool bDefault, const XFillFloatTransparenceItem* pItem)
+void AreaPropertyPanelBase::updateFillFloatTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
 {
     if (bDisabled)
     {
@@ -773,10 +774,11 @@ void AreaPropertyPanelBase::updateFillFloatTransparence(bool bDisabled, bool bDe
         return;
     }
 
-    if(bDefault)
+    if (bDefaultOrSet)
     {
-        if(pItem)
+        if (pState)
         {
+            const XFillFloatTransparenceItem* pItem = static_cast<const XFillFloatTransparenceItem*>(pState);
             mpFloatTransparenceItem.reset(static_cast<XFillFloatTransparenceItem*>(pItem->Clone()));
         }
         else
@@ -793,7 +795,7 @@ void AreaPropertyPanelBase::updateFillFloatTransparence(bool bDisabled, bool bDe
     ImpUpdateTransparencies();
 }
 
-void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefault, const XFillStyleItem* pItem)
+void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
 {
     if(bDisabled)
     {
@@ -807,8 +809,9 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefault, const
         meLastXFS = static_cast<sal_uInt16>(-1);
         mpStyleItem.reset();
     }
-    else if(bDefault && pItem)
+    else if (bDefaultOrSet && pState)
     {
+        const XFillStyleItem* pItem = static_cast<const XFillStyleItem*>(pState);
         mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
         mpLbFillType->Enable();
         mpColorTextFT->Enable();
@@ -862,10 +865,11 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefault, const
     mpStyleItem.reset();
 }
 
-void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, const XFillGradientItem* pItem)
+void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
 {
-    if(bDefault)
+    if (bDefaultOrSet)
     {
+        const XFillGradientItem* pItem = static_cast<const XFillGradientItem*>(pState);
         mpFillGradientItem.reset(pItem ? static_cast<XFillGradientItem*>(pItem->Clone()) : nullptr);
     }
 
@@ -878,7 +882,7 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, co
         mpGradientStyle->Show();
         mpToolBoxColor->Hide();
 
-        if(bDefault)
+        if (bDefaultOrSet)
         {
             mpLbFillType->SelectEntryPos(GRADIENT);
             Update();
@@ -900,10 +904,11 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, co
     }
 }
 
-void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const XFillHatchItem* pItem)
+void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
 {
-    if(bDefault)
+    if (bDefaultOrSet)
     {
+        const XFillHatchItem* pItem = static_cast<const XFillHatchItem*>(pState);
         mpHatchItem.reset(pItem ? static_cast<XFillHatchItem*>(pItem->Clone()) : nullptr);
     }
 
@@ -912,7 +917,7 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const
         mpLbFillAttr->Show();
         mpToolBoxColor->Hide();
 
-        if(bDefault)
+        if (bDefaultOrSet)
         {
             mpLbFillAttr->Enable();
             mpLbFillType->SelectEntryPos(HATCH);
@@ -930,10 +935,11 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const
     }
 }
 
-void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem* pItem)
+void AreaPropertyPanelBase::updateFillColor(bool bDefaultOrSet, const SfxPoolItem* pState)
 {
-    if(bDefault)
+    if (bDefaultOrSet)
     {
+        const XFillColorItem* pItem = static_cast<const XFillColorItem*>(pState);
         mpColorItem.reset(pItem ? static_cast<XFillColorItem*>(pItem->Clone()) : nullptr);
     }
 
@@ -946,10 +952,11 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem*
     }
 }
 
-void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, const XFillBitmapItem* pItem)
+void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
 {
-    if(bDefault)
+    if (bDefaultOrSet)
     {
+        const XFillBitmapItem* pItem = static_cast<const XFillBitmapItem*>(pState);
         mpBitmapItem.reset(pItem ? static_cast<XFillBitmapItem*>(pItem->Clone()) : nullptr);
     }
 
@@ -958,7 +965,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, cons
         mpLbFillAttr->Show();
         mpToolBoxColor->Hide();
 
-        if(bDefault)
+        if (bDefaultOrSet)
         {
             if(mpBitmapItem->isPattern())
                 mpLbFillType->SelectEntryPos(PATTERN);
@@ -991,32 +998,25 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
     switch(nSID)
     {
         case SID_ATTR_FILL_TRANSPARENCE:
-            updateFillTransparence(bDisabled, bDefaultOrSet,
-                    static_cast<const SfxUInt16Item*>(pState));
+            updateFillTransparence(bDisabled, bDefaultOrSet, pState);
         break;
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
-            updateFillFloatTransparence(bDisabled, bDefaultOrSet,
-                    static_cast<const XFillFloatTransparenceItem*>(pState));
+            updateFillFloatTransparence(bDisabled, bDefaultOrSet, pState);
         break;
         case SID_ATTR_FILL_STYLE:
-            updateFillStyle(bDisabled, bDefaultOrSet,
-                    static_cast<const XFillStyleItem*>(pState));
+            updateFillStyle(bDisabled, bDefaultOrSet, pState);
         break;
         case SID_ATTR_FILL_COLOR:
-            updateFillColor(bDefaultOrSet,
-                    static_cast<const XFillColorItem*>(pState));
+            updateFillColor(bDefaultOrSet, pState);
         break;
         case SID_ATTR_FILL_GRADIENT:
-            updateFillGradient(bDisabled, bDefaultOrSet,
-                    static_cast<const XFillGradientItem*>(pState));
+            updateFillGradient(bDisabled, bDefaultOrSet, pState);
         break;
         case SID_ATTR_FILL_HATCH:
-            updateFillHatch(bDisabled, bDefaultOrSet,
-                    static_cast<const XFillHatchItem*>(pState));
+            updateFillHatch(bDisabled, bDefaultOrSet, pState);
         break;
         case SID_ATTR_FILL_BITMAP:
-            updateFillBitmap(bDisabled, bDefaultOrSet,
-                    static_cast<const XFillBitmapItem*>(pState));
+            updateFillBitmap(bDisabled, bDefaultOrSet, pState);
         break;
         case SID_GRADIENT_LIST:
         {

@@ -97,13 +97,13 @@ public:
     virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& aHatchItem) = 0;
     virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& aHatchItem) = 0;
 
-    void updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const SfxUInt16Item* pItem);
-    void updateFillFloatTransparence(bool bDisabled, bool bDefaultOrSet, const XFillFloatTransparenceItem* pItem);
-    void updateFillStyle(bool bDisabled, bool bDefaultOrSet, const XFillStyleItem* pItem);
-    void updateFillGradient(bool bDisabled, bool bDefaultOrSet, const XFillGradientItem* pItem);
-    void updateFillHatch(bool bDisabled, bool bDefaultOrSet, const XFillHatchItem* pItem);
-    void updateFillColor(bool bDefaultOrSet, const XFillColorItem* pItem);
-    void updateFillBitmap(bool BDisabled, bool bDefaultOrSet, const XFillBitmapItem* pItem);
+    void updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillFloatTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillStyle(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillGradient(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillHatch(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillColor(bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillBitmap(bool BDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
 
 protected:
     sal_uInt16                                          meLastXFS;
