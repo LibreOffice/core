@@ -500,6 +500,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/basflt/fltshell \
     sw/source/filter/basflt/iodetect \
     sw/source/filter/basflt/shellio \
+    sw/source/filter/docx/swdocxreader \
     sw/source/filter/html/SwAppletImpl \
     sw/source/filter/html/css1atr \
     sw/source/filter/html/css1kywd \
