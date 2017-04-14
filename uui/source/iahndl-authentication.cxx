@@ -36,7 +36,7 @@
 #include <rtl/digest.h>
 #include <osl/mutex.hxx>
 #include <tools/errcode.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>

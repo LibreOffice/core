@@ -30,7 +30,7 @@
 
 #include <vcl/svapp.hxx>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 
 namespace framework{
 

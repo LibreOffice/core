@@ -25,7 +25,7 @@
 #include <memory>
 #include <svtools/svtdllapi.h>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 
 namespace vcl { class Window; }
 class ResMgr;

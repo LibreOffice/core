@@ -18,7 +18,7 @@
  */
 
 #include <limits.h>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <vcl/window.hxx>
@@ -87,7 +87,7 @@ void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo const *pDynErrInfo)
 {
     DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
     sal_uIntPtr lIdx = (((sal_uIntPtr)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
-    DBG_ASSERT(ppDynErrInfo[lIdx]==pDynErrInfo,"ErrHdl: Error not found");
+    DBG_ASSERT(ppDynErrInfo[lIdx]==pDynErrInfo, "ErrHdl: Error not found");
     if(ppDynErrInfo[lIdx]==pDynErrInfo)
         ppDynErrInfo[lIdx]=nullptr;
 }

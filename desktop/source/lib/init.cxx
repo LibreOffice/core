@@ -20,7 +20,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <sal/log.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
