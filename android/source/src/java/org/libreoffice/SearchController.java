@@ -1,14 +1,74 @@
 package org.libreoffice;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class SearchController implements View.OnClickListener {
+class SearchController implements View.OnClickListener, View.OnLongClickListener{
+    private static String LOGTAG = SearchController.class.getSimpleName();
     private LibreOfficeMainActivity mActivity;
+
+    private int hits = 0;
+
+    /**
+     * Called when a view has been clicked and held.
+     *
+     * @param view The view that was clicked and held.
+     * @return true if the callback consumed the long click, false otherwise.
+     */
+    @Override
+    public boolean onLongClick(View view) {
+
+        final ImageButton button = (ImageButton) view;
+
+        switch(button.getId()) {
+            case R.id.button_search_down:
+                if (hits == 0) {
+                    hits = 1;
+                    Log.d(LOGTAG, "01");
+                } else if (hits == 1) {
+                    hits = 0;
+                    Log.d(LOGTAG, "10");
+                    LOKitShell.getMainHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mActivity, "Back to normal...", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                break;
+            case R.id.button_search_up:
+                if (hits == 1) {
+                    hits = 2;
+                    Log.d(LOGTAG, "12");
+                    LOKitShell.getMainHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mActivity,
+                                    "Now you have super power!\n" +
+                                    "Type 'SelectAll' and search.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else if (hits == 2) {
+                    hits = 1;
+                    Log.d(LOGTAG, "21");
+                }
+                break;
+            default:
+                break;
+        }
+
+        return true;
+    }
+
+    private void searchUNO(String searchText) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:" + searchText));
+    }
 
     private enum SearchDirection {
         UP, DOWN
@@ -19,6 +79,8 @@ class SearchController implements View.OnClickListener {
 
         activity.findViewById(R.id.button_search_up).setOnClickListener(this);
         activity.findViewById(R.id.button_search_down).setOnClickListener(this);
+        activity.findViewById(R.id.button_search_up).setOnLongClickListener(this);
+        activity.findViewById(R.id.button_search_down).setOnLongClickListener(this);
     }
 
     private void search(String searchString, SearchDirection direction, float x, float y) {
@@ -65,6 +127,10 @@ class SearchController implements View.OnClickListener {
 
         float x = mActivity.getCurrentCursorPosition().centerX();
         float y = mActivity.getCurrentCursorPosition().centerY();
-        search(searchText, direction, x, y);
+        if (hits == 2) {
+            searchUNO(searchText);
+        } else {
+            search(searchText, direction, x, y);
+        }
     }
 }
