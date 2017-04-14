@@ -54,7 +54,7 @@ void SfxLokHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        ViewShellType* pOtherViewShell = dynamic_cast<ViewShellType*>(pViewShell);
+        auto pOtherViewShell = dynamic_cast<ViewShellType*>(pViewShell);
         if (pOtherViewShell != nullptr && pOtherViewShell != pThisViewShell)
         {
             f(pOtherViewShell);
