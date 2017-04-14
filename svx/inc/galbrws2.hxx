@@ -162,7 +162,7 @@ public:
     static css::uno::Reference< css::frame::XFrame > GetFrame();
     const css::uno::Reference< css::util::XURLTransformer >& GetURLTransformer() const { return m_xTransformer; }
 
-    void Execute( sal_uInt16 nId );
+    void Execute(const OString &rIdent);
     void Dispatch( sal_uInt16 nId,
                    const css::uno::Reference< css::frame::XDispatch > &rxDispatch,
                    const css::util::URL &rURL );

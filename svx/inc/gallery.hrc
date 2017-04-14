@@ -33,7 +33,6 @@
 
 // Controls for Gallery
 #define RID_SVXMN_GALLERY1                      (RID_SVX_GALLERY_START + 36)
-#define RID_SVXMN_GALLERY2                      (RID_SVX_GALLERY_START + 37)
 
 // Images
 #define RID_SVXBMP_THEME_NORMAL                 (RID_SVX_GALLERY_START + 48)
@@ -56,10 +55,6 @@
 #define MN_ADD 6
 #define MN_PREVIEW 10
 #define MN_DELETE 12
-#define MN_BACKGROUND 14
-#define MN_TITLE 15
-#define MN_COPYCLIPBOARD 16
-#define MN_PASTECLIPBOARD 17
 
 #define MN_ACTUALIZE 21
 #define MN_RENAME 22
