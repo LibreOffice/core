@@ -1401,15 +1401,6 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Styles = ();
 End
 
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Hwp
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = ".hwp";
-    Value = "soffice.StarWriterDocument.6";
-    Styles = ();
-End
-
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Sxg
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
