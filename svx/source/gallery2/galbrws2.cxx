@@ -311,7 +311,7 @@ IMPL_LINK( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu, bool )
     {
         const CommandInfoMap::const_iterator it = m_aCommandInfo.find( SID_GALLERY_FORMATS );
         if (it != m_aCommandInfo.end())
-            mpBrowser->Dispatch(MN_ADD, it->second.Dispatch, it->second.URL);
+            mpBrowser->DispatchAdd(it->second.Dispatch, it->second.URL);
     }
     else
         mpBrowser->Execute(sIdent);
@@ -655,7 +655,7 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
                 // Inserting a gallery item in the document must be dispatched
                 if( bValidURL )
                 {
-                    Dispatch( MN_ADD, css::uno::Reference<css::frame::XDispatch>(), css::util::URL() );
+                    DispatchAdd(css::uno::Reference<css::frame::XDispatch>(), css::util::URL());
                     return true;
                 }
             }
@@ -989,10 +989,9 @@ GalleryBrowser2::GetFrame()
     return xFrame;
 }
 
-void GalleryBrowser2::Dispatch(
-     sal_uInt16 nId,
+void GalleryBrowser2::DispatchAdd(
     const css::uno::Reference< css::frame::XDispatch > &rxDispatch,
-    const css::util::URL &rURL )
+    const css::util::URL &rURL)
 {
     Point aSelPos;
     const sal_uIntPtr nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
@@ -1002,94 +1001,84 @@ void GalleryBrowser2::Dispatch(
 
     mnCurActionPos = nItemId - 1;
 
-    switch( nId )
+    css::uno::Reference< css::frame::XDispatch > xDispatch( rxDispatch );
+    css::util::URL aURL = rURL;
+
+    if ( !xDispatch.is() )
     {
-        case MN_ADD:
-        {
-            css::uno::Reference< css::frame::XDispatch > xDispatch( rxDispatch );
-            css::util::URL aURL = rURL;
+        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(
+            GetFrame(), css::uno::UNO_QUERY );
+        if ( !xDispatchProvider.is() || !m_xTransformer.is() )
+            return;
 
-            if ( !xDispatch.is() )
-            {
-                css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(
-                    GetFrame(), css::uno::UNO_QUERY );
-                if ( !xDispatchProvider.is() || !m_xTransformer.is() )
-                    return;
+        aURL.Complete = CMD_SID_GALLERY_FORMATS;
+        m_xTransformer->parseStrict( aURL );
+        xDispatch = xDispatchProvider->queryDispatch(
+            aURL,
+            "_self",
+            css::frame::FrameSearchFlag::SELF );
+    }
 
-                aURL.Complete = CMD_SID_GALLERY_FORMATS;
-                m_xTransformer->parseStrict( aURL );
-                xDispatch = xDispatchProvider->queryDispatch(
-                    aURL,
-                    "_self",
-                    css::frame::FrameSearchFlag::SELF );
-            }
+    if ( !xDispatch.is() )
+        return;
 
-            if ( !xDispatch.is() )
-                return;
+    sal_Int8 nType = 0;
+    OUString aFileURL, aFilterName;
+    css::uno::Reference< css::lang::XComponent > xDrawing;
+    css::uno::Reference< css::graphic::XGraphic > xGraphic;
 
-            sal_Int8 nType = 0;
-            OUString aFileURL, aFilterName;
-            css::uno::Reference< css::lang::XComponent > xDrawing;
-            css::uno::Reference< css::graphic::XGraphic > xGraphic;
+    aFilterName = GetFilterName();
 
-            aFilterName = GetFilterName();
+    switch( mpCurTheme->GetObjectKind( mnCurActionPos ) )
+    {
+        case SgaObjKind::Bitmap:
+        case SgaObjKind::Animation:
+        case SgaObjKind::Inet:
+        // TODO drawing objects are inserted as drawings only via drag&drop
+        case SgaObjKind::SvDraw:
+            nType = css::gallery::GalleryItemType::GRAPHIC;
+        break;
 
-            switch( mpCurTheme->GetObjectKind( mnCurActionPos ) )
-            {
-                case SgaObjKind::Bitmap:
-                case SgaObjKind::Animation:
-                case SgaObjKind::Inet:
-                // TODO drawing objects are inserted as drawings only via drag&drop
-                case SgaObjKind::SvDraw:
-                    nType = css::gallery::GalleryItemType::GRAPHIC;
-                break;
-
-                case SgaObjKind::Sound :
-                    nType = css::gallery::GalleryItemType::MEDIA;
-                break;
-
-                default:
-                    nType = css::gallery::GalleryItemType::EMPTY;
-                break;
-            }
-
-            Graphic aGraphic;
-            bool bGraphic = mpCurTheme->GetGraphic( mnCurActionPos, aGraphic );
-            if ( bGraphic && !!aGraphic )
-                xGraphic.set( aGraphic.GetXGraphic() );
-            OSL_ENSURE( xGraphic.is(), "gallery item is graphic, but the reference is invalid!" );
-
-            css::uno::Sequence< css::beans::PropertyValue > aSeq( SVXGALLERYITEM_PARAMS );
-
-            aSeq[0].Name = SVXGALLERYITEM_TYPE;
-            aSeq[0].Value <<= nType;
-            aSeq[1].Name = SVXGALLERYITEM_URL;
-            aSeq[1].Value <<= aFileURL;
-            aSeq[2].Name = SVXGALLERYITEM_FILTER;
-            aSeq[2].Value <<= aFilterName;
-            aSeq[3].Name = SVXGALLERYITEM_DRAWING;
-            aSeq[3].Value <<= xDrawing;
-            aSeq[4].Name = SVXGALLERYITEM_GRAPHIC;
-            aSeq[4].Value <<= xGraphic;
-
-            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name = SVXGALLERYITEM_ARGNAME;
-            aArgs[0].Value <<= aSeq;
-
-            DispatchInfo *pInfo = new DispatchInfo;
-            pInfo->TargetURL = aURL;
-            pInfo->Arguments = aArgs;
-            pInfo->Dispatch = xDispatch;
-
-            if ( !Application::PostUserEvent(
-                    LINK( nullptr, GalleryBrowser2, AsyncDispatch_Impl), pInfo ) )
-                delete pInfo;
-        }
+        case SgaObjKind::Sound :
+            nType = css::gallery::GalleryItemType::MEDIA;
         break;
 
         default:
+            nType = css::gallery::GalleryItemType::EMPTY;
         break;
     }
+
+    Graphic aGraphic;
+    bool bGraphic = mpCurTheme->GetGraphic( mnCurActionPos, aGraphic );
+    if ( bGraphic && !!aGraphic )
+        xGraphic.set( aGraphic.GetXGraphic() );
+    OSL_ENSURE( xGraphic.is(), "gallery item is graphic, but the reference is invalid!" );
+
+    css::uno::Sequence< css::beans::PropertyValue > aSeq( SVXGALLERYITEM_PARAMS );
+
+    aSeq[0].Name = SVXGALLERYITEM_TYPE;
+    aSeq[0].Value <<= nType;
+    aSeq[1].Name = SVXGALLERYITEM_URL;
+    aSeq[1].Value <<= aFileURL;
+    aSeq[2].Name = SVXGALLERYITEM_FILTER;
+    aSeq[2].Value <<= aFilterName;
+    aSeq[3].Name = SVXGALLERYITEM_DRAWING;
+    aSeq[3].Value <<= xDrawing;
+    aSeq[4].Name = SVXGALLERYITEM_GRAPHIC;
+    aSeq[4].Value <<= xGraphic;
+
+    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name = SVXGALLERYITEM_ARGNAME;
+    aArgs[0].Value <<= aSeq;
+
+    DispatchInfo *pInfo = new DispatchInfo;
+    pInfo->TargetURL = aURL;
+    pInfo->Arguments = aArgs;
+    pInfo->Dispatch = xDispatch;
+
+    if ( !Application::PostUserEvent(
+            LINK( nullptr, GalleryBrowser2, AsyncDispatch_Impl), pInfo ) )
+        delete pInfo;
 }
 
 void GalleryBrowser2::Execute(const OString &rIdent)

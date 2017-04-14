@@ -52,7 +52,6 @@
 #define RID_SVXBMP_GALLERY_MEDIA                (RID_SVX_GALLERY_START + 71)
 
 // local Defines
-#define MN_ADD 6
 #define MN_PREVIEW 10
 #define MN_DELETE 12
 

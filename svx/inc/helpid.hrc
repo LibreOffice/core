@@ -34,7 +34,6 @@
 #define HID_EDITENG_SPELLER_WORDLANGUAGE                      "SVX_HID_EDITENG_SPELLER_WORDLANGUAGE"
 #define HID_GALLERY_ICONVIEW                                  "SVX_HID_GALLERY_ICONVIEW"
 #define HID_GALLERY_LISTVIEW                                  "SVX_HID_GALLERY_LISTVIEW"
-#define HID_GALLERY_MN_ADD                                    "SVX_HID_GALLERY_MN_ADD"
 #define HID_GALLERY_MN_DELETE                                 "SVX_HID_GALLERY_MN_DELETE"
 #define HID_GALLERY_MN_PREVIEW                                "SVX_HID_GALLERY_MN_PREVIEW"
 #define HID_GALLERY_NEWTHEME                                  "SVX_HID_GALLERY_NEWTHEME"

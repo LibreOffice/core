@@ -163,9 +163,8 @@ public:
     const css::uno::Reference< css::util::XURLTransformer >& GetURLTransformer() const { return m_xTransformer; }
 
     void Execute(const OString &rIdent);
-    void Dispatch( sal_uInt16 nId,
-                   const css::uno::Reference< css::frame::XDispatch > &rxDispatch,
-                   const css::util::URL &rURL );
+    void DispatchAdd(const css::uno::Reference<css::frame::XDispatch> &rxDispatch,
+                     const css::util::URL &rURL);
 
     DECL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
 };
