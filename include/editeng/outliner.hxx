@@ -686,6 +686,7 @@ public:
 
     void            SetVertical( bool bVertical, bool bTopToBottom = true);
     bool            IsVertical() const;
+    bool            IsTopToBottom() const;
 
     void            SetFixedCellHeight( bool bUseFixedCellHeight );
 
