@@ -55,6 +55,7 @@
 #include <emfppath.hxx>
 #include <emfppen.hxx>
 #include <emfpregion.hxx>
+#include <emfpstringformat.hxx>
 
 namespace
 {
@@ -747,6 +748,10 @@ namespace cppcanvas
                 }
             case EmfPlusObjectTypeStringFormat:
                 {
+                    EMFPStringFormat *stringFormat;
+                    aObjects [index] = stringFormat = new EMFPStringFormat();
+                    stringFormat->Read (rObjectStream);
+
                     SAL_INFO("cppcanvas.emf", "EMF+\t Object type 'string format' not yet implemented");
                     break;
                 }
