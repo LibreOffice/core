@@ -1771,12 +1771,6 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
         case PointerStyle::ChainNotAllowed:
             MAKE_CURSOR( chainnot_ );
             break;
-        case PointerStyle::TimeEventMove:
-            MAKE_CURSOR( timemove_ );
-            break;
-        case PointerStyle::TimeEventSize:
-            MAKE_CURSOR( timesize_ );
-            break;
         case PointerStyle::AutoScrollN:
             MAKE_CURSOR(asn_ );
             break;
@@ -1810,9 +1804,6 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
         case PointerStyle::AutoScrollNSWE:
             MAKE_CURSOR( asnswe_ );
             break;
-        case PointerStyle::Airbrush:
-            MAKE_CURSOR( airbrush_ );
-            break;
         case PointerStyle::TextVertical:
             MAKE_CURSOR( vertcurs_ );
             break;
@@ -1832,11 +1823,6 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
             break;
         case PointerStyle::TabSelectSW:
             MAKE_CURSOR( tblselsw_ );
-            break;
-
-        // #i20119# Paintbrush tool
-        case PointerStyle::Paintbrush:
-            MAKE_CURSOR( paintbrush_ );
             break;
 
         case PointerStyle::HideWhitespace:

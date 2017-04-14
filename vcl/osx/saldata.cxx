@@ -185,8 +185,6 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { "pivotfld", { 8, 7 } }, //PointerStyle::PivotField
 { "chain", { 0, 2 } }, //PointerStyle::Chain
 { "chainnot", { 2, 2 } }, //PointerStyle::ChainNotAllowed
-{ "timemove", { 16, 16 } }, //PointerStyle::TimeEventMove
-{ "timesize", { 16, 17 } }, //PointerStyle::TimeEventSize
 { "asn", { 16, 12 } }, //PointerStyle::AutoScrollN
 { "ass", { 15, 19 } }, //PointerStyle::AutoScrollS
 { "asw", { 12, 15 } }, //PointerStyle::AutoScrollW
@@ -198,7 +196,6 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { "asns", { 15, 15 } }, //PointerStyle::AutoScrollNS
 { "aswe", { 15, 15 } }, //PointerStyle::AutoScrollWE
 { "asnswe", { 15, 15 } }, //PointerStyle::AutoScrollNSWE
-{ "airbrush", { 5, 22 } }, //PointerStyle::Airbrush
 { "vtext", { 15, 15 } }, //PointerStyle::TextVertical
 { "pivotdel", { 18, 15 } }, //PointerStyle::PivotDelete
 { "tblsels", { 15, 30 } }, //PointerStyle::TabSelectS
@@ -206,7 +203,6 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { "tblselse", { 30, 30 } }, //PointerStyle::TabSelectSE
 { "tblselw", { 1, 16 } }, //PointerStyle::TabSelectW
 { "tblselsw", { 1, 30 } }, //PointerStyle::TabSelectSW
-{ "pntbrsh", { 9, 16 } }, //PointerStyle::Paintbrush
 { "wshide", { 16, 16 } }, //PointerStyle::HideWhitespace
 { "wsshow", { 16, 16 } } //PointerStyle::ShowWhitespace
 };

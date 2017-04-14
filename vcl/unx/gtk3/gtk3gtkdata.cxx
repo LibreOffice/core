@@ -312,8 +312,6 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( PointerStyle::PivotDelete, pivotdel_ );
             MAKE_CURSOR( PointerStyle::Chain, chain_ );
             MAKE_CURSOR( PointerStyle::ChainNotAllowed, chainnot_ );
-            MAKE_CURSOR( PointerStyle::TimeEventMove, timemove_ );
-            MAKE_CURSOR( PointerStyle::TimeEventSize, timesize_ );
             MAKE_CURSOR( PointerStyle::AutoScrollN, asn_ );
             MAKE_CURSOR( PointerStyle::AutoScrollS, ass_ );
             MAKE_CURSOR( PointerStyle::AutoScrollW, asw_ );
@@ -325,7 +323,6 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( PointerStyle::AutoScrollNS, asns_ );
             MAKE_CURSOR( PointerStyle::AutoScrollWE, aswe_ );
             MAKE_CURSOR( PointerStyle::AutoScrollNSWE, asnswe_ );
-            MAKE_CURSOR( PointerStyle::Airbrush, airbrush_ );
             MAKE_CURSOR( PointerStyle::TextVertical, vertcurs_ );
 
             // #i32329#
@@ -334,9 +331,6 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( PointerStyle::TabSelectSE, tblselse_ );
             MAKE_CURSOR( PointerStyle::TabSelectW, tblselw_ );
             MAKE_CURSOR( PointerStyle::TabSelectSW, tblselsw_ );
-
-            // #i20119#
-            MAKE_CURSOR( PointerStyle::Paintbrush, paintbrush_ );
 
             MAKE_CURSOR( PointerStyle::HideWhitespace, hidewhitespace_ );
             MAKE_CURSOR( PointerStyle::ShowWhitespace, showwhitespace_ );

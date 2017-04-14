@@ -62,8 +62,6 @@ SAL_RESID_POINTER_PIVOT_FIELD           CURSOR          pivotfld.cur
 SAL_RESID_POINTER_PIVOT_DELETE          CURSOR          pivotdel.cur
 SAL_RESID_POINTER_CHAIN                 CURSOR          chain.cur
 SAL_RESID_POINTER_CHAIN_NOTALLOWED      CURSOR          chainnot.cur
-SAL_RESID_POINTER_TIMEEVENT_MOVE        CURSOR          timemove.cur
-SAL_RESID_POINTER_TIMEEVENT_SIZE        CURSOR          timesize.cur
 SAL_RESID_POINTER_AUTOSCROLL_N          CURSOR          asn.cur
 SAL_RESID_POINTER_AUTOSCROLL_S          CURSOR          ass.cur
 SAL_RESID_POINTER_AUTOSCROLL_W          CURSOR          asw.cur
@@ -75,14 +73,12 @@ SAL_RESID_POINTER_AUTOSCROLL_SE         CURSOR          asse.cur
 SAL_RESID_POINTER_AUTOSCROLL_NS         CURSOR          asns.cur
 SAL_RESID_POINTER_AUTOSCROLL_WE         CURSOR          aswe.cur
 SAL_RESID_POINTER_AUTOSCROLL_NSWE       CURSOR          asnswe.cur
-SAL_RESID_POINTER_AIRBRUSH              CURSOR          airbrush.cur
 SAL_RESID_POINTER_TEXT_VERTICAL         CURSOR          vtext.cur
 SAL_RESID_POINTER_TAB_SELECT_S          CURSOR          tblsels.cur
 SAL_RESID_POINTER_TAB_SELECT_E          CURSOR          tblsele.cur
 SAL_RESID_POINTER_TAB_SELECT_SE         CURSOR          tblselse.cur
 SAL_RESID_POINTER_TAB_SELECT_W          CURSOR          tblselw.cur
 SAL_RESID_POINTER_TAB_SELECT_SW         CURSOR          tblselsw.cur
-SAL_RESID_POINTER_PAINTBRUSH            CURSOR          pntbrsh.cur
 SAL_RESID_POINTER_HIDEWHITESPACE        CURSOR          wshide.cur
 SAL_RESID_POINTER_SHOWWHITESPACE        CURSOR          wsshow.cur
 

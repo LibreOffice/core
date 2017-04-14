@@ -243,9 +243,7 @@ static const std::map <PointerStyle, OString> aPointerMap {
     { PointerStyle::NotAllowed, "not-allowed" },
     // DrawLine through DrawCaption
     // Chart, Detective, PivotCol, PivotRow, PivotField, Chain, ChainNotAllowed
-    // TimeEventMove, TimeEventSize
     // AutoScrollN through AutoScrollNSWE
-    // Airbrush
     { PointerStyle::TextVertical, "vertical-text" }
     // Pivot Delete, TabSelectS through TabSelectSW
     // PaintBrush, HideWhiteSpace, ShowWhiteSpace

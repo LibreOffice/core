@@ -39,7 +39,6 @@ $(eval $(call gb_WinResTarget_add_dependencies,vcl/salsrc,\
     vcl/win/src/dpolygon.cur \
     vcl/win/src/movedlnk.cur \
     vcl/win/src/salsrc.rc \
-    vcl/win/src/airbrush.cur \
     vcl/win/src/copyf.cur \
     vcl/win/src/drect.cur \
     vcl/win/src/movef.cur \
@@ -66,10 +65,8 @@ $(eval $(call gb_WinResTarget_add_dependencies,vcl/salsrc,\
     vcl/win/src/asnw.cur \
     vcl/win/src/darc.cur \
     vcl/win/src/nullptr.cur \
-    vcl/win/src/timemove.cur \
     vcl/win/src/ass.cur \
     vcl/win/src/dbezier.cur \
-    vcl/win/src/timesize.cur \
     vcl/win/src/asse.cur \
     vcl/win/src/dcapt.cur \
     vcl/win/src/vshear.cur \
@@ -92,7 +89,6 @@ $(eval $(call gb_WinResTarget_add_dependencies,vcl/salsrc,\
     vcl/win/src/vtext.cur \
     vcl/win/src/chainnot.cur \
     vcl/win/src/dfree.cur \
-    vcl/win/src/pntbrsh.cur \
     vcl/win/src/chart.cur \
     vcl/win/src/dline.cur \
     vcl/win/src/movebw.cur \

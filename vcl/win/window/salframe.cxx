@@ -2117,8 +2117,6 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, nullptr, SAL_RESID_POINTER_PIVOT_FIELD },        // POINTER_PIVOT_FIELD
     { nullptr, nullptr, SAL_RESID_POINTER_CHAIN },              // POINTER_CHAIN
     { nullptr, nullptr, SAL_RESID_POINTER_CHAIN_NOTALLOWED },   // POINTER_CHAIN_NOTALLOWED
-    { nullptr, nullptr, SAL_RESID_POINTER_TIMEEVENT_MOVE },     // POINTER_TIMEEVENT_MOVE
-    { nullptr, nullptr, SAL_RESID_POINTER_TIMEEVENT_SIZE },     // POINTER_TIMEEVENT_SIZE
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_N },       // POINTER_AUTOSCROLL_N
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_S },       // POINTER_AUTOSCROLL_S
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_W },       // POINTER_AUTOSCROLL_W
@@ -2130,7 +2128,6 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_NS },      // POINTER_AUTOSCROLL_NS
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_WE },      // POINTER_AUTOSCROLL_WE
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_NSWE },    // POINTER_AUTOSCROLL_NSWE
-    { nullptr, nullptr, SAL_RESID_POINTER_AIRBRUSH },           // POINTER_AIRBRUSH
     { nullptr, nullptr, SAL_RESID_POINTER_TEXT_VERTICAL },      // POINTER_TEXT_VERTICAL
     { nullptr, nullptr, SAL_RESID_POINTER_PIVOT_DELETE },       // POINTER_PIVOT_DELETE
 
@@ -2140,9 +2137,6 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, nullptr, SAL_RESID_POINTER_TAB_SELECT_SE },      // POINTER_TAB_SELECT_SE
     { nullptr, nullptr, SAL_RESID_POINTER_TAB_SELECT_W },       // POINTER_TAB_SELECT_W
     { nullptr, nullptr, SAL_RESID_POINTER_TAB_SELECT_SW },      // POINTER_TAB_SELECT_SW
-
-     // #i20119#
-    { nullptr, nullptr, SAL_RESID_POINTER_PAINTBRUSH },         // POINTER_PAINTBRUSH
 
     { nullptr, nullptr, SAL_RESID_POINTER_HIDEWHITESPACE },     // POINTER_HIDEWHITESPACE
     { nullptr, nullptr, SAL_RESID_POINTER_SHOWWHITESPACE }      // POINTER_UNHIDEWHITESPACE

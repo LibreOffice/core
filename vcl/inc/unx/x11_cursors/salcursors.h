@@ -104,11 +104,6 @@
 #include "unx/x11_cursors/chainnot_curs.h"
 #include "unx/x11_cursors/chainnot_mask.h"
 
-#include "unx/x11_cursors/timemove_curs.h"
-#include "unx/x11_cursors/timemove_mask.h"
-#include "unx/x11_cursors/timesize_curs.h"
-#include "unx/x11_cursors/timesize_mask.h"
-
 #include "unx/x11_cursors/ase_curs.h"
 #include "unx/x11_cursors/ase_mask.h"
 #include "unx/x11_cursors/asn_curs.h"
@@ -134,8 +129,6 @@
 #include "unx/x11_cursors/null_curs.h"
 #include "unx/x11_cursors/null_mask.h"
 
-#include "unx/x11_cursors/airbrush_curs.h"
-#include "unx/x11_cursors/airbrush_mask.h"
 #include "unx/x11_cursors/fill_curs.h"
 #include "unx/x11_cursors/fill_mask.h"
 #include "unx/x11_cursors/vertcurs_curs.h"
@@ -150,8 +143,6 @@
 #include "unx/x11_cursors/tblselw_mask.h"
 #include "unx/x11_cursors/tblselsw_curs.h"
 #include "unx/x11_cursors/tblselsw_mask.h"
-#include "unx/x11_cursors/paintbrush_curs.h"
-#include "unx/x11_cursors/paintbrush_mask.h"
 #include "unx/x11_cursors/wshide_curs.h"
 #include "unx/x11_cursors/wshide_mask.h"
 #include "unx/x11_cursors/wsshow_curs.h"
