@@ -36,10 +36,6 @@
 #define STR_ANNOTATION_UNDO_EDIT            (RID_ANNOTATIONS_START+11)
 #define STR_ANNOTATION_REPLY                (RID_ANNOTATIONS_START+13)
 
-// menus
-#define RID_ANNOTATION_CONTEXTMENU          (RID_ANNOTATIONS_START+0)
-#define RID_ANNOTATION_TAG_CONTEXTMENU      (RID_ANNOTATIONS_START+1)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
