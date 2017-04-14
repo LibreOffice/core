@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6749ced0",
+        "filename": "sw/source/filter/docx/swdocxreader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-14T09:41:43Z",
+      "side": 1,
+      "message": "Please add a one-liner doxygen comment explaining what this class does. See \u003chttps://wiki.documentfoundation.org/Development/Doxygen\u003e.",
+      "revId": "ad0e7141a2871984040646d6b8daa52094d5fb04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
