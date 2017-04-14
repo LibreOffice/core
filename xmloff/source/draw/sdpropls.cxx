@@ -27,6 +27,7 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/WordWrapPropertyHdl.hxx>
@@ -58,6 +59,7 @@
 #include "XMLPercentOrMeasurePropertyHandler.hxx"
 #include "animations.hxx"
 #include <sax/tools/converter.hxx>
+#include "xmlsdtypes.hxx"
 
 #include "sdxmlexp_impl.hxx"
 
@@ -843,6 +845,52 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
     return bRet;
 }
 
+class XMLSdRotationAngleTypeHdl : public XMLPropertyHandler
+{
+public:
+    virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
+    virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
+};
+
+bool XMLSdRotationAngleTypeHdl::importXML(
+    const OUString& rStrImpValue,
+    css::uno::Any& rValue,
+    const SvXMLUnitConverter&) const
+{
+    sal_Int32 nValue;
+    bool const bRet = ::sax::Converter::convertNumber(nValue, rStrImpValue);
+    if (bRet)
+    {
+        nValue = (nValue % 360);
+        if (nValue < 0)
+            nValue = 360 + nValue;
+        sal_Int32 nAngle;
+        if (nValue < 45 || nValue > 315)
+            nAngle = 0;
+        else if (nValue < 180)
+            nAngle = 9000;
+        else /* if nValalue <= 315 ) */
+            nAngle = 27000;
+
+        rValue <<= nAngle;
+    }
+    return bRet;
+}
+
+bool XMLSdRotationAngleTypeHdl::exportXML(
+    OUString& rStrExpValue,
+    const Any& rValue,
+    const SvXMLUnitConverter&) const
+{
+    sal_Int32 nAngle;
+    bool bRet = (rValue >>= nAngle) && nAngle != 0;
+    if (bRet)
+    {
+        rStrExpValue = OUString::number(nAngle / 100);
+    }
+    return bRet;
+}
+
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > const & xModel, SvXMLImport& rImport )
 : mxModel( xModel ), mpExport(nullptr), mpImport( &rImport )
 {
@@ -1142,6 +1190,9 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE:
                 pHdl = new XMLSdHeaderFooterVisibilityTypeHdl;
                 break;
+            case XML_SD_TYPE_CELL_ROTATION_ANGLE:
+                pHdl = new XMLSdRotationAngleTypeHdl;
+                break;
         }
 
         if(pHdl)
@@ -1264,7 +1315,18 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                 pControlWritingMode = property;
                 break;
             case CTF_TEXTWRITINGMODE:
-                pTextWritingMode = property;
+                {
+                    pTextWritingMode = property;
+                    sal_Int32 eWritingMode;
+                    if (property->maValue >>= eWritingMode)
+                    {
+                        if (text::WritingMode2::LR_TB == eWritingMode)
+                        {
+                            property->mnIndex = -1;
+                            pTextWritingMode = nullptr;
+                        }
+                    }
+                }
                 break;
             case CTF_REPEAT_OFFSET_X:
                 pRepeatOffsetX = property;

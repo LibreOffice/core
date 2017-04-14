@@ -93,6 +93,7 @@ public:
     void testTransparentBackground();
     void testEmbeddedPdf();
     void testAuthorField();
+    void testTdf100926();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -108,6 +109,7 @@ public:
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testEmbeddedPdf);
     CPPUNIT_TEST(testAuthorField);
+    CPPUNIT_TEST(testTdf100926);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -567,6 +569,35 @@ void SdExportTest::testAuthorField()
     bool bFixed = false;
     xPropSet->getPropertyValue("IsFixed") >>= bFixed;
     CPPUNIT_ASSERT_MESSAGE("Author field is not fixed", bFixed);
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf100926()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf100926_ODP.pptx"), PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    CPPUNIT_ASSERT(pPage != nullptr);
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj != nullptr);
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+
+    sal_Int32 nRotation = 0;
+    uno::Reference< beans::XPropertySet > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(27000), nRotation);
+
+    xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9000), nRotation);
+
+    xCell.set(xTable->getCellByPosition(2, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRotation);
 
     xDocShRef->DoClose();
 }

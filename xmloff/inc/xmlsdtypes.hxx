@@ -117,6 +117,8 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
+#define XML_SD_TYPE_CELL_ROTATION_ANGLE             (XML_SD_TYPES_START + 79 )
+
 #define CTF_NUMBERINGRULES          1000
 #define CTF_CONTROLWRITINGMODE      1001
 #define CTF_WRITINGMODE             1002
