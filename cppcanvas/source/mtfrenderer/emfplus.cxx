@@ -36,9 +36,9 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
 #include <rtl/ustring.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
@@ -55,6 +55,7 @@
 #include <emfppath.hxx>
 #include <emfppen.hxx>
 #include <emfpregion.hxx>
+#include <emfpstringformat.hxx>
 
 namespace
 {
@@ -138,6 +139,15 @@ enum EmfPlusCombineMode
     EmfPlusCombineModeExclude = 0x00000004,
     EmfPlusCombineModeComplement = 0x00000005
 };
+
+enum EmfPlusFontStyle
+{
+    FontStyleBold = 0x00000001,
+    FontStyleItalic = 0x00000002,
+    FontStyleUnderline = 0x00000004,
+    FontStyleStrikeout = 0x00000008
+};
+
 
 const char* emfTypeToName(sal_uInt16 type)
 {
@@ -747,6 +757,10 @@ namespace cppcanvas
                 }
             case EmfPlusObjectTypeStringFormat:
                 {
+                    EMFPStringFormat *stringFormat;
+                    aObjects [index] = stringFormat = new EMFPStringFormat();
+                    stringFormat->Read (rObjectStream);
+
                     SAL_INFO("cppcanvas.emf", "EMF+\t Object type 'string format' not yet implemented");
                     break;
                 }
@@ -766,13 +780,16 @@ namespace cppcanvas
             }
         }
 
-        double ImplRenderer::setFont (sal_uInt8 objectId, const ActionFactoryParameters& rParms, OutDevState& rState)
+        double ImplRenderer::setFont (css::rendering::FontRequest& aFontRequest, sal_uInt8 fontObjectId, const ActionFactoryParameters& rParms, OutDevState& rState)
         {
-            EMFPFont *font = static_cast<EMFPFont*>( aObjects[ objectId ] );
+            EMFPFont *font = static_cast< EMFPFont* >( aObjects[ fontObjectId ] );
 
-            rendering::FontRequest aFontRequest;
             aFontRequest.FontDescription.FamilyName = font->family;
             double cellSize = font->emSize;
+            if( font->fontFlags & FontStyleBold )
+            {
+                aFontRequest.FontDescription.FontDescription.Weight = rendering::PanoseWeight::BOLD;
+            }
             aFontRequest.CellSize = (rState.mapModeTransform*MapSize( cellSize, 0 )).getX();
             rState.xFont = rParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
                                                uno::Sequence< beans::PropertyValue >(),
@@ -1252,7 +1269,13 @@ namespace cppcanvas
 
                                 OUString text = read_uInt16s_ToOUString(rMF, stringLength);
 
-                                double cellSize = setFont (flags & 0xff, rFactoryParms, rState);
+                                EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >( aObjects[ formatId ] );
+                                css::rendering::FontRequest aFontRequest;
+                                LanguageTag aLanguageTag( static_cast< LanguageType >( stringFormat->language ) );
+                                aFontRequest.Locale = aLanguageTag.getLocale( false );
+                                SAL_INFO("cppcanvas.emf", "EMF+\t\t Font locale, Country:" << aLanguageTag.getCountry() <<" Language:" << aLanguageTag.getLanguage() );
+
+                                double cellSize = setFont (aFontRequest, flags & 0xff, rFactoryParms, rState);
                                 rState.textColor = COLOR( brushId );
 
                                 ::basegfx::B2DPoint point( Map( lx + 0.15*cellSize, ly + cellSize ) );
@@ -1555,8 +1578,9 @@ namespace cppcanvas
                                 SAL_INFO("cppcanvas.emf", "EMF+\tmatrix: " << transform.eM11 << ", " << transform.eM12 << ", " << transform.eM21 << ", " << transform.eM22 << ", " << transform.eDx << ", " << transform.eDy);
                             }
 
+                            rendering::FontRequest aFontRequest;
                             // add the text action
-                            setFont (flags & 0xff, rFactoryParms, rState);
+                            setFont (aFontRequest, flags & 0xff, rFactoryParms, rState);
 
                             if( flags & 0x8000 )
                                 rState.textColor = COLOR( brushIndexOrColor );
