@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <cassert>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <ucbhelper/content.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

@@ -131,6 +131,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/window/errinf \
     vcl/source/window/settings \
     vcl/source/window/paint \
     vcl/source/window/abstdlg \

@@ -24,7 +24,7 @@
 #include "framework/FrameworkHelper.hxx"
 
 #include <svx/dialogs.hrc>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/editdata.hxx>
 #include <vcl/msgbox.hxx>
