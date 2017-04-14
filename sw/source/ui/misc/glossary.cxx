@@ -591,6 +591,12 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
                             pFilter->GetWildcard().getGlob() );
                 xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
             }
+            else if( pFilter->GetUserData() == FILTER_DOCX )
+            {
+                xFltMgr->appendFilter( pFilter->GetUIName(),
+                            pFilter->GetWildcard().getGlob() );
+                xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
+            }
 
             pFilter = aIter.Next();
         }

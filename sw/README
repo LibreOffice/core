@@ -17,6 +17,7 @@ comments show that Writer core dates back until at least November
  * filter: Writer internal filters
    * ascii: plan text filter
    * basflt
+   * docx: wrapper for the UNO DOCX import filter (in writerfilter) for autotext purposes
    * html: HTML filter
    * inc: include files for filters
    * rtf: thin copy&paste helper around the UNO RTF import filter (in writerfilter)

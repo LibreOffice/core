@@ -66,9 +66,10 @@ SwRead ReadAscii = nullptr, ReadHTML = nullptr, ReadXML = nullptr;
 
 Reader* GetRTFReader();
 Reader* GetWW8Reader();
+Reader* GetDOCXReader();
 
 // Note: if editing, please don't forget to modify also the enum
-// ReaderWriterEnum and aFilterDetect in shellio.hxx
+// ReaderWriterEnum and aFilterDetect in iodetect.hxx & iodetect.cxx
 SwReaderWriterEntry aReaderWriter[] =
 {
     SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  true  ),
@@ -80,7 +81,8 @@ SwReaderWriterEntry aReaderWriter[] =
     SwReaderWriterEntry( &::GetWW8Reader, nullptr,                true  ),
     SwReaderWriterEntry( nullptr,               &::GetXMLWriter,  true  ),
     SwReaderWriterEntry( nullptr,               &::GetASCWriter,  false ),
-    SwReaderWriterEntry( nullptr,               &::GetASCWriter,  true  )
+    SwReaderWriterEntry( nullptr,               &::GetASCWriter,  true  ),
+    SwReaderWriterEntry( &::GetDOCXReader,      nullptr,          true  )
 };
 
 Reader* SwReaderWriterEntry::GetReader()
@@ -643,6 +645,7 @@ extern "C" {
     void ExportRTF( const OUString&, const OUString& rBaseURL, WriterRef& );
     Reader *ImportDOC();
     void ExportDOC( const OUString&, const OUString& rBaseURL, WriterRef& );
+    Reader *ImportDOCX();
     sal_uLong SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
     sal_uLong GetSaveWarningOfMSVBAStorage_ww8( SfxObjectShell& );
 }
@@ -704,6 +707,20 @@ void GetWW8Writer( const OUString& rFltName, const OUString& rBaseURL, WriterRef
         xRet = WriterRef(nullptr);
 #else
     ExportDOC( rFltName, rBaseURL, xRet );
+#endif
+}
+
+Reader* GetDOCXReader()
+{
+#ifndef DISABLE_DYNLOADING
+    FnGetReader pFunction = reinterpret_cast<FnGetReader>( SwGlobals::getFilters().GetMswordLibSymbol( "ImportDOCX" ) );
+
+    if ( pFunction )
+        return (*pFunction)();
+
+    return nullptr;
+#else
+    return ImportDOCX();
 #endif
 }
 
