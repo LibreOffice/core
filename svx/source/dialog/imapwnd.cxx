@@ -471,23 +471,20 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
 
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        ScopedVclPtrInstance<PopupMenu> aMenu( SVX_RES( RID_SVXMN_IMAP ) );
+        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/imapmenu.ui", "");
+        VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
         const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
         const size_t nMarked = rMarkList.GetMarkCount();
 
-        aMenu->EnableItem( MN_URL, false );
-        aMenu->EnableItem( MN_ACTIVATE, false );
-        aMenu->EnableItem( MN_MACRO, false );
-        aMenu->EnableItem( MN_MARK_ALL, pModel->GetPage( 0 )->GetObjCount() != pView->GetMarkedObjectCount() );
+        aMenu->EnableItem(aMenu->GetItemId("url"), false);
+        aMenu->EnableItem(aMenu->GetItemId("active"), false);
+        aMenu->EnableItem(aMenu->GetItemId("macro"), false);
+        aMenu->EnableItem(aMenu->GetItemId("selectall"), pModel->GetPage(0)->GetObjCount() != pView->GetMarkedObjectCount());
 
         if ( !nMarked )
         {
-            aMenu->EnableItem( MN_POSITION, false );
-            aMenu->EnableItem( MN_FRAME_TO_TOP, false );
-            aMenu->EnableItem( MN_MOREFRONT, false );
-            aMenu->EnableItem( MN_MOREBACK, false );
-            aMenu->EnableItem( MN_FRAME_TO_BOTTOM, false );
-            aMenu->EnableItem( MN_DELETE1, false );
+            aMenu->EnableItem(aMenu->GetItemId("arrange"), false);
+            aMenu->EnableItem(aMenu->GetItemId("delete"), false);
         }
         else
         {
@@ -495,18 +492,14 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
             {
                 SdrObject*  pSdrObj = GetSelectedSdrObject();
 
-                aMenu->EnableItem( MN_URL );
-                aMenu->EnableItem( MN_ACTIVATE );
-                aMenu->EnableItem( MN_MACRO );
-                aMenu->CheckItem( MN_ACTIVATE, GetIMapObj( pSdrObj )->IsActive() );
+                aMenu->EnableItem(aMenu->GetItemId("url"));
+                aMenu->EnableItem(aMenu->GetItemId("active"));
+                aMenu->EnableItem(aMenu->GetItemId("macro"));
+                aMenu->CheckItem(aMenu->GetItemId("active"), GetIMapObj(pSdrObj)->IsActive());
             }
 
-            aMenu->EnableItem( MN_POSITION );
-            aMenu->EnableItem( MN_FRAME_TO_TOP );
-            aMenu->EnableItem( MN_MOREFRONT );
-            aMenu->EnableItem( MN_MOREBACK );
-            aMenu->EnableItem( MN_FRAME_TO_BOTTOM );
-            aMenu->EnableItem( MN_DELETE1 );
+            aMenu->EnableItem(aMenu->GetItemId("arrange"));
+            aMenu->EnableItem(aMenu->GetItemId("delete"));
         }
 
         aMenu->SetSelectHdl( LINK( this, IMapWindow, MenuSelectHdl ) );
@@ -709,55 +702,32 @@ IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu, bool )
     if (!pMenu)
         return false;
 
-    sal_uInt16  nId = pMenu->GetCurItemId();
+    OString sId = pMenu->GetCurItemIdent();
 
-    switch(nId)
+    if (sId == "url")
+        DoPropertyDialog();
+    else if (sId == "macro")
+        DoMacroAssign();
+    else if (sId == "active")
     {
-        case MN_URL:
-            DoPropertyDialog();
-        break;
-
-        case MN_MACRO:
-            DoMacroAssign();
-        break;
-
-        case MN_ACTIVATE:
-        {
-            const bool bNewState = !pMenu->IsItemChecked( MN_ACTIVATE );
-
-            pMenu->CheckItem( MN_ACTIVATE, bNewState );
-            SetCurrentObjState( bNewState );
-            UpdateInfo( false );
-        }
-        break;
-
-        case MN_FRAME_TO_TOP:
-            pView->PutMarkedToTop();
-        break;
-
-        case MN_MOREFRONT:
-            pView->MovMarkedToTop();
-        break;
-
-        case MN_MOREBACK:
-            pView->MovMarkedToBtm();
-        break;
-
-        case MN_FRAME_TO_BOTTOM:
-            pView->PutMarkedToBtm();
-        break;
-
-        case MN_MARK_ALL:
-            pView->MarkAll();
-        break;
-
-        case MN_DELETE1:
-            pView->DeleteMarked();
-        break;
-
-        default :
-        break;
+        const sal_uInt16 nActiveId = pMenu->GetItemId(sId);
+        const bool bNewState = !pMenu->IsItemChecked(nActiveId);
+        pMenu->CheckItem(nActiveId, bNewState);
+        SetCurrentObjState(bNewState);
+        UpdateInfo( false );
     }
+    else if (sId == "front")
+        pView->PutMarkedToTop();
+    else if (sId == "forward")
+        pView->MovMarkedToTop();
+    else if (sId == "backward")
+        pView->MovMarkedToBtm();
+    else if (sId == "back")
+        pView->PutMarkedToBtm();
+    else if (sId == "selectall")
+        pView->MarkAll();
+    else if (sId == "delete")
+        pView->DeleteMarked();
 
     return false;
 }

@@ -45,19 +45,4 @@
 #define TBI_UNDO                40
 #define TBI_REDO                41
 
-/******************************************************************************/
-
-#define RID_SVXMN_IMAP          (RID_SVX_IMAPDLG_START + 1)
-
-#define MN_URL                  1
-#define MN_POSITION             2
-#define MN_FRAME_TO_TOP         3
-#define MN_MOREFRONT            4
-#define MN_MOREBACK             5
-#define MN_FRAME_TO_BOTTOM      6
-#define MN_MARK_ALL             7
-#define MN_DELETE1              8
-#define MN_ACTIVATE             9
-#define MN_MACRO                10
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
