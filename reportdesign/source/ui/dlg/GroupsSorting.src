@@ -105,16 +105,4 @@ String STR_RPT_HELP_SORT
     Text [ en-US ] = "Select ascending or descending sort order. Ascending means from A to Z or 0 to 9" ;
 };
 
-Menu RID_GROUPSROWPOPUPMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_DELETE ;
-            Text [ en-US ] = "~Delete FOO" ;
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

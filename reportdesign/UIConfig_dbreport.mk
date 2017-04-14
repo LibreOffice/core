@@ -47,6 +47,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/dbreport,\
 	reportdesign/uiconfig/dbreport/ui/floatingfield \
 	reportdesign/uiconfig/dbreport/ui/floatingnavigator \
 	reportdesign/uiconfig/dbreport/ui/floatingsort \
+	reportdesign/uiconfig/dbreport/ui/groupsortmenu \
 	reportdesign/uiconfig/dbreport/ui/pagedialog \
 	reportdesign/uiconfig/dbreport/ui/pagenumberdialog \
 ))

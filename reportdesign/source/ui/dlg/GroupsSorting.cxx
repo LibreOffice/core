@@ -709,7 +709,6 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
 
             if ( nColId == HANDLE_ID )
             {
-                ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_GROUPSROWPOPUPMENU));
                 bool bEnable = false;
                 long nIndex = FirstSelectedRow();
                 while( nIndex >= 0 && !bEnable )
@@ -718,8 +717,10 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                         bEnable = true;
                     nIndex = NextSelectedRow();
                 }
-                aContextMenu->EnableItem(SID_DELETE, IsDeleteAllowed() && bEnable);
-                if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()) == SID_DELETE)
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/dbreport/ui/groupsortmenu.ui", "");
+                VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed() && bEnable);
+                if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
                 {
                     if( m_nDeleteEvent )
                         Application::RemoveUserEvent( m_nDeleteEvent );
