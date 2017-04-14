@@ -59,7 +59,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/ucsubset.src \
     svx/source/engine3d/float3d.src \
     svx/source/engine3d/string3d.src \
-    svx/source/fmcomp/gridctrl.src \
     svx/source/form/datanavi.src \
     svx/source/form/filtnav.src \
     svx/source/form/fmexpl.src \

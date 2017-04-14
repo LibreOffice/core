@@ -88,24 +88,6 @@ using namespace ::svxform;
 using namespace ::svx;
 using namespace ::dbtools;
 
-OUString FieldServiceFromId(sal_Int32 nID)
-{
-    switch (nID)
-    {
-        case SID_FM_EDIT            : return OUString(FM_COL_TEXTFIELD);
-        case SID_FM_COMBOBOX        : return OUString(FM_COL_COMBOBOX);
-        case SID_FM_LISTBOX         : return OUString(FM_COL_LISTBOX);
-        case SID_FM_CHECKBOX        : return OUString(FM_COL_CHECKBOX);
-        case SID_FM_DATEFIELD       : return OUString(FM_COL_DATEFIELD);
-        case SID_FM_TIMEFIELD       : return OUString(FM_COL_TIMEFIELD);
-        case SID_FM_NUMERICFIELD    : return OUString(FM_COL_NUMERICFIELD);
-        case SID_FM_CURRENCYFIELD   : return OUString(FM_COL_CURRENCYFIELD);
-        case SID_FM_PATTERNFIELD    : return OUString(FM_COL_PATTERNFIELD);
-        case SID_FM_FORMATTEDFIELD  : return OUString(FM_COL_FORMATTEDFIELD);
-    }
-    return OUString();
-}
-
 struct FmGridHeaderData
 {
     ODataAccessDescriptor   aDropData;
@@ -115,16 +97,12 @@ struct FmGridHeaderData
     Reference< XInterface > xDroppedResultSet;
 };
 
-const sal_Int16 nChangeTypeOffset = 1000;
-void SetMenuItem(sal_uInt16 nImgID, sal_uInt16 nID, Menu* pMenu, Menu& rNewMenu, bool bDesignMode, sal_Int16 nOffset = nChangeTypeOffset)
+void SetMenuItem(sal_uInt16 nImgID, const OString &rID, Menu& rMenu, bool bDesignMode)
 {
     Image aImage(BitmapEx(SVX_RES(nImgID)));
-    pMenu->SetItemImage(nID, aImage);
-    pMenu->EnableItem(nID, bDesignMode);
-    rNewMenu.InsertItem(nID + nOffset, pMenu->GetItemText(nID));
-    rNewMenu.SetItemImage(nID + nOffset, aImage);
-    rNewMenu.SetHelpId(nID + nOffset, pMenu->GetHelpId(nID));
-    rNewMenu.EnableItem(nID + nOffset, bDesignMode);
+    sal_uInt16 nID = rMenu.GetItemId(rID);
+    rMenu.SetItemImage(nID, aImage);
+    rMenu.EnableItem(nID, bDesignMode);
 }
 
 FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
@@ -434,61 +412,61 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         Reference< XPropertySet >  xCol, xSecondCol;
 
         // Create Column based on type, default textfield
-        std::vector<sal_uInt16> aPossibleTypes;
+        std::vector<OString> aPossibleTypes;
         std::vector<sal_uInt16> aImgResId;
         switch (nDataType)
         {
             case DataType::BIT:
             case DataType::BOOLEAN:
-                aPossibleTypes.push_back(SID_FM_CHECKBOX);
+                aPossibleTypes.push_back(FM_COL_CHECKBOX);
                 aImgResId.push_back(RID_SVXBMP_CHECKBOX);
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
             case DataType::INTEGER:
-                aPossibleTypes.push_back(SID_FM_NUMERICFIELD);
+                aPossibleTypes.push_back(FM_COL_NUMERICFIELD);
                 aImgResId.push_back(RID_SVXBMP_NUMERICFIELD);
-                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
                 aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::REAL:
             case DataType::DOUBLE:
             case DataType::NUMERIC:
             case DataType::DECIMAL:
-                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
                 aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
-                aPossibleTypes.push_back(SID_FM_NUMERICFIELD);
+                aPossibleTypes.push_back(FM_COL_NUMERICFIELD);
                 aImgResId.push_back(RID_SVXBMP_NUMERICFIELD);
                 break;
             case DataType::TIMESTAMP:
-                aPossibleTypes.push_back(SID_FM_TWOFIELDS_DATE_N_TIME);
+                aPossibleTypes.push_back("dateandtimefield");
                 aImgResId.push_back(RID_SVXBMP_DATE_N_TIME_FIELDS);
-                aPossibleTypes.push_back(SID_FM_DATEFIELD);
+                aPossibleTypes.push_back(FM_COL_DATEFIELD);
                 aImgResId.push_back(RID_SVXBMP_DATEFIELD);
-                aPossibleTypes.push_back(SID_FM_TIMEFIELD);
+                aPossibleTypes.push_back(FM_COL_TIMEFIELD);
                 aImgResId.push_back(RID_SVXBMP_TIMEFIELD);
-                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
                 aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::DATE:
-                aPossibleTypes.push_back(SID_FM_DATEFIELD);
+                aPossibleTypes.push_back(FM_COL_DATEFIELD);
                 aImgResId.push_back(RID_SVXBMP_DATEFIELD);
-                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
                 aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::TIME:
-                aPossibleTypes.push_back(SID_FM_TIMEFIELD);
+                aPossibleTypes.push_back(FM_COL_TIMEFIELD);
                 aImgResId.push_back(RID_SVXBMP_TIMEFIELD);
-                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
                 aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
             default:
-                aPossibleTypes.push_back(SID_FM_EDIT);
+                aPossibleTypes.push_back(FM_COL_TEXTFIELD);
                 aImgResId.push_back(RID_SVXBMP_EDITBOX);
-                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
                 aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
         }
@@ -498,7 +476,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
             if  (   ::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField)
                 &&  ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY)))
             {
-                aPossibleTypes.insert(aPossibleTypes.begin(), SID_FM_CURRENCYFIELD);
+                aPossibleTypes.insert(aPossibleTypes.begin(), FM_COL_CURRENCYFIELD);
                 aImgResId.insert(aImgResId.begin(), RID_SVXBMP_CURRENCYFIELD);
             }
         }
@@ -512,29 +490,33 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         bool bDateNTimeCol = false;
         if (!aPossibleTypes.empty())
         {
-            sal_Int32 nPreferredType = aPossibleTypes[0];
+            OString sPreferredType = aPossibleTypes[0];
             if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.size() > 1))
             {
-                ScopedVclPtrInstance<PopupMenu> aInsertMenu(SVX_RES(RID_SVXMNU_COLS));
-                ScopedVclPtrInstance<PopupMenu> aTypeMenu;
-                PopupMenu* pMenu = aInsertMenu->GetPopupMenu(SID_FM_INSERTCOL);
-                for (std::vector<sal_uInt16>::const_iterator iter = aPossibleTypes.begin(), imgiter = aImgResId.begin();
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/colsmenu.ui", "");
+                VclPtr<PopupMenu> aInsertMenu(aBuilder.get_menu("menu"));
+                PopupMenu* pTypeMenu = aInsertMenu->GetPopupMenu(aInsertMenu->GetItemId("insert"));
+                pTypeMenu->ShowItem(pTypeMenu->GetItemId("dateandtimefield"));
+                std::vector<OString>::const_iterator iter;
+                std::vector<sal_uInt16>::const_iterator imgiter;
+                for (iter = aPossibleTypes.begin(), imgiter = aImgResId.begin();
                      iter != aPossibleTypes.end(); ++iter, ++imgiter)
                 {
-                    SetMenuItem(*imgiter, *iter, pMenu, *aTypeMenu.get(), true, 0);
+                    SetMenuItem(*imgiter, *iter, *pTypeMenu, true);
                 }
-                nPreferredType = aTypeMenu->Execute(this, m_pImpl->aDropPosPixel);
+                if (pTypeMenu->Execute(this, m_pImpl->aDropPosPixel))
+                    sPreferredType = pTypeMenu->GetCurItemIdent();
             }
 
-            bDateNTimeCol = nPreferredType == SID_FM_TWOFIELDS_DATE_N_TIME;
+            bDateNTimeCol = sPreferredType == "dateandtimefield";
             sal_uInt16 nColCount = bDateNTimeCol ? 2 : 1;
             OUString sFieldService;
             while (nColCount--)
             {
                 if (bDateNTimeCol)
-                    nPreferredType = nColCount ? SID_FM_DATEFIELD : SID_FM_TIMEFIELD;
+                    sPreferredType = nColCount ? FM_COL_DATEFIELD : FM_COL_TIMEFIELD;
 
-                sFieldService = FieldServiceFromId(nPreferredType);
+                sFieldService = OUString::fromUtf8(sPreferredType);
                 Reference< XPropertySet >  xThisRoundCol;
                 if ( !sFieldService.isEmpty() )
                     xThisRoundCol = xFactory->createColumn(sFieldService);
@@ -678,21 +660,19 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     sal_uInt16 nPos = GetModelColumnPos(nColId);
     bool bMarked = nColId && static_cast<FmGridControl*>(GetParent())->isColumnMarked(nColId);
 
-    VclPtrInstance<PopupMenu> pControlMenu;
-
-    PopupMenu* pMenu = rMenu.GetPopupMenu(SID_FM_INSERTCOL);
+    PopupMenu* pMenu = rMenu.GetPopupMenu(rMenu.GetItemId("insert"));
     if (pMenu)
     {
-        SetMenuItem(RID_SVXBMP_EDITBOX, SID_FM_EDIT, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_CHECKBOX, SID_FM_CHECKBOX, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_COMBOBOX, SID_FM_COMBOBOX, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_LISTBOX, SID_FM_LISTBOX, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_DATEFIELD, SID_FM_DATEFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_TIMEFIELD, SID_FM_TIMEFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_NUMERICFIELD, SID_FM_NUMERICFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_CURRENCYFIELD, SID_FM_CURRENCYFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_PATTERNFIELD, SID_FM_PATTERNFIELD, pMenu, *pControlMenu, bDesignMode);
-        SetMenuItem(RID_SVXBMP_FORMATTEDFIELD, SID_FM_FORMATTEDFIELD, pMenu, *pControlMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_EDITBOX, FM_COL_TEXTFIELD, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_CHECKBOX, FM_COL_CHECKBOX, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_COMBOBOX, FM_COL_COMBOBOX, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_LISTBOX, FM_COL_LISTBOX, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_DATEFIELD, FM_COL_DATEFIELD, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_TIMEFIELD, FM_COL_TIMEFIELD, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_NUMERICFIELD, FM_COL_NUMERICFIELD, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_CURRENCYFIELD, FM_COL_CURRENCYFIELD, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_PATTERNFIELD, FM_COL_PATTERNFIELD, *pMenu, bDesignMode);
+        SetMenuItem(RID_SVXBMP_FORMATTEDFIELD, FM_COL_FORMATTEDFIELD, *pMenu, bDesignMode);
     }
 
     if (pMenu && xCols.is() && nColId)
@@ -716,27 +696,30 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
             }
         }
 
-        pControlMenu->EnableItem(SID_FM_EDIT + nChangeTypeOffset, bDesignMode && (nColType != TYPE_TEXTFIELD));
-        pControlMenu->EnableItem(SID_FM_COMBOBOX + nChangeTypeOffset, bDesignMode && (nColType != TYPE_COMBOBOX));
-        pControlMenu->EnableItem(SID_FM_LISTBOX + nChangeTypeOffset, bDesignMode && (nColType != TYPE_LISTBOX));
-        pControlMenu->EnableItem(SID_FM_CHECKBOX + nChangeTypeOffset, bDesignMode && (nColType != TYPE_CHECKBOX));
-        pControlMenu->EnableItem(SID_FM_DATEFIELD + nChangeTypeOffset, bDesignMode && (nColType != TYPE_DATEFIELD));
-        pControlMenu->EnableItem(SID_FM_NUMERICFIELD + nChangeTypeOffset, bDesignMode && (nColType != TYPE_NUMERICFIELD));
-        pControlMenu->EnableItem(SID_FM_TIMEFIELD + nChangeTypeOffset, bDesignMode && (nColType != TYPE_TIMEFIELD));
-        pControlMenu->EnableItem(SID_FM_CURRENCYFIELD + nChangeTypeOffset, bDesignMode && (nColType != TYPE_CURRENCYFIELD));
-        pControlMenu->EnableItem(SID_FM_PATTERNFIELD + nChangeTypeOffset, bDesignMode && (nColType != TYPE_PATTERNFIELD));
-        pControlMenu->EnableItem(SID_FM_FORMATTEDFIELD + nChangeTypeOffset, bDesignMode && (nColType != TYPE_FORMATTEDFIELD));
-        rMenu.SetPopupMenu(SID_FM_CHANGECOL, pControlMenu);
+        PopupMenu* pControlMenu = rMenu.GetPopupMenu(rMenu.GetItemId("change"));
+        if (pControlMenu)
+        {
+            SetMenuItem(RID_SVXBMP_EDITBOX, FM_COL_TEXTFIELD"1", *pControlMenu, bDesignMode && (nColType != TYPE_TEXTFIELD));
+            SetMenuItem(RID_SVXBMP_CHECKBOX, FM_COL_CHECKBOX"1", *pControlMenu, bDesignMode && (nColType != TYPE_CHECKBOX));
+            SetMenuItem(RID_SVXBMP_COMBOBOX, FM_COL_COMBOBOX"1", *pControlMenu, bDesignMode && (nColType != TYPE_COMBOBOX));
+            SetMenuItem(RID_SVXBMP_LISTBOX, FM_COL_LISTBOX"1", *pControlMenu, bDesignMode && (nColType != TYPE_LISTBOX));
+            SetMenuItem(RID_SVXBMP_DATEFIELD, FM_COL_DATEFIELD"1", *pControlMenu, bDesignMode && (nColType != TYPE_DATEFIELD));
+            SetMenuItem(RID_SVXBMP_TIMEFIELD, FM_COL_TIMEFIELD"1", *pControlMenu, bDesignMode && (nColType != TYPE_TIMEFIELD));
+            SetMenuItem(RID_SVXBMP_NUMERICFIELD, FM_COL_NUMERICFIELD"1", *pControlMenu, bDesignMode && (nColType != TYPE_NUMERICFIELD));
+            SetMenuItem(RID_SVXBMP_CURRENCYFIELD, FM_COL_CURRENCYFIELD"1", *pControlMenu, bDesignMode && (nColType != TYPE_CURRENCYFIELD));
+            SetMenuItem(RID_SVXBMP_PATTERNFIELD, FM_COL_PATTERNFIELD"1", *pControlMenu, bDesignMode && (nColType != TYPE_PATTERNFIELD));
+            SetMenuItem(RID_SVXBMP_FORMATTEDFIELD, FM_COL_FORMATTEDFIELD"1", *pControlMenu, bDesignMode && (nColType != TYPE_FORMATTEDFIELD));
+        }
+        rMenu.EnableItem(rMenu.GetItemId("change"), bDesignMode && bMarked && xCols.is());
     }
     else
-        pControlMenu.disposeAndClear();
+        rMenu.EnableItem(rMenu.GetItemId("change"), false);
 
-    rMenu.EnableItem(SID_FM_INSERTCOL, bDesignMode && xCols.is());
-    rMenu.EnableItem(SID_FM_DELETECOL, bDesignMode && bMarked && xCols.is());
-    rMenu.EnableItem(SID_FM_CHANGECOL, bDesignMode && bMarked && xCols.is());
-    rMenu.EnableItem(SID_FM_SHOW_PROPERTY_BROWSER, bDesignMode && bMarked && xCols.is());
+    rMenu.EnableItem(rMenu.GetItemId("insert"), bDesignMode && xCols.is());
+    rMenu.EnableItem(rMenu.GetItemId("delete"), bDesignMode && bMarked && xCols.is());
+    rMenu.EnableItem(rMenu.GetItemId("column"), bDesignMode && bMarked && xCols.is());
 
-    PopupMenu* pShowColsMenu = rMenu.GetPopupMenu(SID_FM_SHOWCOLS);
+    PopupMenu* pShowColsMenu = rMenu.GetPopupMenu(rMenu.GetItemId("show"));
     sal_uInt16 nHiddenCols = 0;
     if (pShowColsMenu)
     {
@@ -766,8 +749,8 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
                 }
             }
         }
-        pShowColsMenu->EnableItem(SID_FM_SHOWCOLS_MORE, xCols.is() && (nHiddenCols > 16));
-        pShowColsMenu->EnableItem(SID_FM_SHOWALLCOLS, xCols.is() && (nHiddenCols > 0));
+        pShowColsMenu->EnableItem(pShowColsMenu->GetItemId("more"), xCols.is() && (nHiddenCols > 16));
+        pShowColsMenu->EnableItem(pShowColsMenu->GetItemId("all"), xCols.is() && (nHiddenCols > 0));
     }
 
     // allow the 'hide column' item ?
@@ -775,7 +758,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     bAllowHide = bAllowHide || (!bDesignMode && (nPos != (sal_uInt16)-1));  // OR we are in alive mode and have hit a column
     bAllowHide = bAllowHide && xCols.is();                              // AND we have a column container
     bAllowHide = bAllowHide && (xCols->getCount()-nHiddenCols > 1);     // AND there are at least two visible columns
-    rMenu.EnableItem(SID_FM_HIDECOL,  bAllowHide);
+    rMenu.EnableItem(rMenu.GetItemId("hide"), bAllowHide);
 
     if (bMarked)
     {
@@ -791,7 +774,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
             if (eState >= SfxItemState::DEFAULT && pItem.get() != nullptr )
             {
                 bool bChecked = dynamic_cast<const SfxBoolItem*>( pItem.get()) != nullptr && static_cast<SfxBoolItem*>(pItem.get())->GetValue();
-                rMenu.CheckItem(SID_FM_SHOW_PROPERTY_BROWSER,bChecked);
+                rMenu.CheckItem(rMenu.GetItemId("column"), bChecked);
             }
         }
     }
@@ -808,129 +791,143 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
     bool    bReplace = false;
     InspectorAction eInspectorAction = eNone;
     Reference< XPropertySet > xColumnToInspect;
-    switch (nExecutionResult)
-    {
-        case SID_FM_DELETECOL:
-        {
-            Reference< XInterface > xCol(
-                xCols->getByIndex(nPos), css::uno::UNO_QUERY);
-            xCols->removeByIndex(nPos);
-            ::comphelper::disposeComponent(xCol);
-        }   break;
-        case SID_FM_SHOW_PROPERTY_BROWSER:
-            eInspectorAction = rMenu.IsItemChecked( SID_FM_SHOW_PROPERTY_BROWSER ) ? eOpenInspector : eCloseInspector;
-            xColumnToInspect.set( xCols->getByIndex( nPos ), UNO_QUERY );
-            break;
-        case SID_FM_EDIT + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_EDIT:
-            aFieldType = FM_COL_TEXTFIELD;
-            break;
-        case SID_FM_COMBOBOX + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_COMBOBOX:
-            aFieldType = FM_COL_COMBOBOX;
-            break;
-        case SID_FM_LISTBOX + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_LISTBOX:
-            aFieldType = FM_COL_LISTBOX;
-            break;
-        case SID_FM_CHECKBOX + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_CHECKBOX:
-            aFieldType = FM_COL_CHECKBOX;
-            break;
-        case SID_FM_DATEFIELD + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_DATEFIELD:
-            aFieldType = FM_COL_DATEFIELD;
-            break;
-        case SID_FM_TIMEFIELD + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_TIMEFIELD:
-            aFieldType = FM_COL_TIMEFIELD;
-            break;
-        case SID_FM_NUMERICFIELD + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_NUMERICFIELD:
-            aFieldType = FM_COL_NUMERICFIELD;
-            break;
-        case SID_FM_CURRENCYFIELD + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_CURRENCYFIELD:
-            aFieldType = FM_COL_CURRENCYFIELD;
-            break;
-        case SID_FM_PATTERNFIELD + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_PATTERNFIELD:
-            aFieldType = FM_COL_PATTERNFIELD;
-            break;
-        case SID_FM_FORMATTEDFIELD + nChangeTypeOffset:
-            bReplace = true;
-            SAL_FALLTHROUGH;
-        case SID_FM_FORMATTEDFIELD:
-            aFieldType = FM_COL_FORMATTEDFIELD;
-            break;
-        case SID_FM_HIDECOL:
-        {
-            Reference< css::beans::XPropertySet > xCurCol( xCols->getByIndex(nPos), css::uno::UNO_QUERY);
-            xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(true));
-        }
-        break;
-        case SID_FM_SHOWCOLS_MORE:
-        {
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            if(pFact)
-            {
-                ScopedVclPtr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog());
-                DBG_ASSERT(pDlg, "Dialog creation failed!");
-                pDlg->SetColumns(xCols);
-                pDlg->Execute();
-            }
 
-        }
-        break;
-        case SID_FM_SHOWALLCOLS:
+    OString sExecutionResult = rMenu.GetCurItemIdent();
+    if (sExecutionResult.isEmpty())
+    {
+        PopupMenu* pMenu = rMenu.GetPopupMenu(rMenu.GetItemId("insert"));
+        if (pMenu)
+            sExecutionResult = pMenu->GetCurItemIdent();
+    }
+    if (sExecutionResult.isEmpty())
+    {
+        PopupMenu* pMenu = rMenu.GetPopupMenu(rMenu.GetItemId("change"));
+        if (pMenu)
+            sExecutionResult = pMenu->GetCurItemIdent();
+    }
+    if (sExecutionResult.isEmpty())
+    {
+        PopupMenu* pMenu = rMenu.GetPopupMenu(rMenu.GetItemId("show"));
+        if (pMenu)
+            sExecutionResult = pMenu->GetCurItemIdent();
+    }
+
+    if (sExecutionResult == "delete")
+    {
+        Reference< XInterface > xCol(
+            xCols->getByIndex(nPos), css::uno::UNO_QUERY);
+        xCols->removeByIndex(nPos);
+        ::comphelper::disposeComponent(xCol);
+    }
+    else if (sExecutionResult == "hide")
+    {
+        Reference< css::beans::XPropertySet > xCurCol( xCols->getByIndex(nPos), css::uno::UNO_QUERY);
+        xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(true));
+    }
+    else if (sExecutionResult == "column")
+    {
+        eInspectorAction = rMenu.IsItemChecked(rMenu.GetItemId("column")) ? eOpenInspector : eCloseInspector;
+        xColumnToInspect.set( xCols->getByIndex( nPos ), UNO_QUERY );
+    }
+    else if (sExecutionResult.startsWith(FM_COL_TEXTFIELD))
+    {
+        if (sExecutionResult != FM_COL_TEXTFIELD)
+            bReplace = true;
+        aFieldType = FM_COL_TEXTFIELD;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_COMBOBOX))
+    {
+        if (sExecutionResult != FM_COL_COMBOBOX)
+            bReplace = true;
+        aFieldType = FM_COL_COMBOBOX;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_LISTBOX))
+    {
+        if (sExecutionResult != FM_COL_LISTBOX)
+            bReplace = true;
+        aFieldType = FM_COL_LISTBOX;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_CHECKBOX))
+    {
+        if (sExecutionResult != FM_COL_CHECKBOX)
+            bReplace = true;
+        aFieldType = FM_COL_CHECKBOX;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_DATEFIELD))
+    {
+        if (sExecutionResult != FM_COL_DATEFIELD)
+            bReplace = true;
+        aFieldType = FM_COL_DATEFIELD;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_TIMEFIELD))
+    {
+        if (sExecutionResult != FM_COL_TIMEFIELD)
+            bReplace = true;
+        aFieldType = FM_COL_TIMEFIELD;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_NUMERICFIELD))
+    {
+        if (sExecutionResult != FM_COL_NUMERICFIELD)
+            bReplace = true;
+        aFieldType = FM_COL_NUMERICFIELD;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_CURRENCYFIELD))
+    {
+        if (sExecutionResult != FM_COL_CURRENCYFIELD)
+            bReplace = true;
+        aFieldType = FM_COL_CURRENCYFIELD;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_PATTERNFIELD))
+    {
+        if (sExecutionResult != FM_COL_PATTERNFIELD)
+            bReplace = true;
+        aFieldType = FM_COL_PATTERNFIELD;
+    }
+    else if (sExecutionResult.startsWith(FM_COL_FORMATTEDFIELD))
+    {
+        if (sExecutionResult != FM_COL_FORMATTEDFIELD)
+            bReplace = true;
+        aFieldType = FM_COL_FORMATTEDFIELD;
+    }
+    else if (sExecutionResult == "more")
+    {
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        if(pFact)
         {
-            // just iterate through all the cols ...
-            Reference< css::beans::XPropertySet >  xCurCol;
-            for (sal_Int32 i=0; i<xCols->getCount(); ++i)
-            {
-                xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
-                xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(false));
-            }
-            // TODO : there must be a more clever way to do this ....
-            // with the above the view is updated after every single model update ...
+            ScopedVclPtr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog());
+            DBG_ASSERT(pDlg, "Dialog creation failed!");
+            pDlg->SetColumns(xCols);
+            pDlg->Execute();
         }
-        break;
-        default:
-            if (nExecutionResult>0 && nExecutionResult<=16)
-            {   // it was a "show column/<colname>" command (there are at most 16 such items)
-                // search the nExecutionResult'th hidden col
-                Reference< css::beans::XPropertySet >  xCurCol;
-                for (sal_Int32 i=0; i<xCols->getCount() && nExecutionResult; ++i)
+
+    }
+    else if (sExecutionResult == "all")
+    {
+        // just iterate through all the cols ...
+        Reference< css::beans::XPropertySet >  xCurCol;
+        for (sal_Int32 i=0; i<xCols->getCount(); ++i)
+        {
+            xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
+            xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(false));
+        }
+        // TODO : there must be a more clever way to do this ....
+        // with the above the view is updated after every single model update ...
+    }
+    else if (nExecutionResult>0 && nExecutionResult<=16)
+    {   // it was a "show column/<colname>" command (there are at most 16 such items)
+        // search the nExecutionResult'th hidden col
+        Reference< css::beans::XPropertySet >  xCurCol;
+        for (sal_Int32 i=0; i<xCols->getCount() && nExecutionResult; ++i)
+        {
+            xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
+            Any aHidden = xCurCol->getPropertyValue(FM_PROP_HIDDEN);
+            if (::comphelper::getBOOL(aHidden))
+                if (!--nExecutionResult)
                 {
-                    xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
-                    Any aHidden = xCurCol->getPropertyValue(FM_PROP_HIDDEN);
-                    if (::comphelper::getBOOL(aHidden))
-                        if (!--nExecutionResult)
-                        {
-                            xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(false));
-                            break;
-                        }
+                    xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(false));
+                    break;
                 }
-            }
-            break;
+        }
     }
 
     if ( !aFieldType.isEmpty() )
@@ -1002,7 +999,8 @@ void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
     sal_uInt16 nColId = GetItemId( _rPreferredPos );
 
     // the menu
-    ScopedVclPtrInstance<PopupMenu> aContextMenu( SVX_RES( RID_SVXMNU_COLS ) );
+    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/colsmenu.ui", "");
+    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
     // let derivees modify the menu
     PreExecuteColumnContextMenu( nColId, *aContextMenu );
