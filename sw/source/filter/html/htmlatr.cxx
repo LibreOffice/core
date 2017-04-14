@@ -468,7 +468,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
 
         if( bNumbered )
         {
-            nBulletGrfLvl = nLvl; // nur veruebergehend!!!
+            nBulletGrfLvl = nLvl; // only temporarily!!!
             // #i57919#
             // correction of re-factoring done by cws swnumtree:
             // - <nNumStart> has to contain the restart value, if the
