@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a703b675",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Notebookbar.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2017-04-14T08:13:56Z",
+      "side": 1,
+      "message": "Intentionally misspelled? Would be childish, IMHO.",
+      "range": {
+        "startLine": 29,
+        "startChar": 36,
+        "endLine": 29,
+        "endChar": 45
+      },
+      "revId": "ace9c25cb5f0d59d07311f899d11c883aa630547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
