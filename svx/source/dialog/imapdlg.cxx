@@ -18,7 +18,7 @@
  */
 
 #include <stdlib.h>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/msgbox.hxx>
