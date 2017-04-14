@@ -308,7 +308,7 @@
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/debug.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>

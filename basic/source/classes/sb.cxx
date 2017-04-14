@@ -21,7 +21,7 @@
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
 #include <tools/stream.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <basic/sbx.hxx>
 #include <vcl/svapp.hxx>
