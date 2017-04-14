@@ -42,7 +42,7 @@ public:
     CPPUNIT_TEST(testRoundtrip);
     CPPUNIT_TEST(testChangePivotTable);
     CPPUNIT_TEST(testPivotChartWithOneColumnField);
-    //CPPUNIT_TEST(testPivotChartWithOneRowField);
+    CPPUNIT_TEST(testPivotChartWithOneRowField);
     CPPUNIT_TEST_SUITE_END();
 };
 
