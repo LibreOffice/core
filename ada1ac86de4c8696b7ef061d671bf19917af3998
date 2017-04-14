@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_473cd22f",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-04-14T12:10:03Z",
+      "side": 0,
+      "message": "Interesting - this goes back to the original import in 2000 (git blame dc7ca91a0^ basic/source/comp/scanner.cxx). However, it was impossible for this to ever be the case - the only possibilities were \", [, or ].",
+      "range": {
+        "startLine": 524,
+        "startChar": 38,
+        "endLine": 524,
+        "endChar": 48
+      },
+      "revId": "ada1ac86de4c8696b7ef061d671bf19917af3998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
