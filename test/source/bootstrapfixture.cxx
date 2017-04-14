@@ -11,7 +11,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/setupvcl.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>

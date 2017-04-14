@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
 #include <comphelper/processfactory.hxx>
