@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a79496e8",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-04-14T14:53:11Z",
+      "side": 1,
+      "message": "Please describe that default behaviour is also like MS Word 2013+",
+      "range": {
+        "startLine": 578,
+        "startChar": 11,
+        "endLine": 578,
+        "endChar": 64
+      },
+      "revId": "67af3d1506067595ef07ee14205a274806f8e48b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_87f95a50",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-04-14T14:53:11Z",
+      "side": 1,
+      "message": "It\u0027s better to use single comparison like\n\nif ( nMode \u003e 0 \u0026\u0026 nMode \u003c\u003d 14 \u0026\u0026 rInfo.nNestLevel \u003d\u003d 0 )\n\nand have only one \"else\" block",
+      "range": {
+        "startLine": 581,
+        "startChar": 8,
+        "endLine": 583,
+        "endChar": 39
+      },
+      "revId": "67af3d1506067595ef07ee14205a274806f8e48b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
