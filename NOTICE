@@ -1,14 +1,14 @@
 
-Apache OpenOffice (http://www.openoffice.org)
+Apache OpenOffice (https://www.openoffice.org)
 Copyright 2011, 2017 The Apache Software Foundation
 
 This product includes software developed at
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 ____
 
 
-Portions of this software copyright (c) 2000-2011, Oracle and/or its affiliates  <http://www.oracle.com/>.
+Portions of this software copyright (c) 2000-2011, Oracle and/or its affiliates  <https://www.oracle.com/>.
 
 Portions of this software (C) Copyright IBM Corporation 2003, 2012.  All Rights Reserved.
 
@@ -29,7 +29,7 @@ Apache Lucene
 Copyright 2006 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 The snowball stemmers in
   contrib/snowball/src/java/net/sf/snowball
@@ -42,7 +42,7 @@ Apache Portable Runtime
 Copyright (c) 2011 The Apache Software Foundation.
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 Portions of this software were developed at the National Center
 for Supercomputing Applications (NCSA) at the University of
@@ -59,7 +59,7 @@ Apache Portable Runtime Utility Library
 Copyright (c) 2011 The Apache Software Foundation.
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 Portions of this software were developed at the National Center
 for Supercomputing Applications (NCSA) at the University of
@@ -75,7 +75,7 @@ Apache Commons Codec
 Copyright 2002-2012 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 src/test/org/apache/commons/codec/language/DoubleMetaphoneTest.java contains
 test data from http://aspell.sourceforge.net/test/batch0.tab.
@@ -88,13 +88,13 @@ Apache Jakarta HttpClient
 Copyright 1999-2007 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 Apache Commons Lang
 Copyright 2001-2012 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 This product includes software from the Spring Framework,
 under the Apache License 2.0 (see: StringUtils.containsWhitespace())
@@ -104,14 +104,14 @@ Apache Commons Logging
 Copyright 2003-2007 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 
 Apache Tomcat
 Copyright 1999-2012 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 Java Management Extensions (JMX) support is provided by
 the MX4J package, which is open source software.  The
@@ -127,7 +127,7 @@ http://nsis.sourceforge.net/.
 Java compilation software for JSP pages is provided by Eclipse, 
 which is open source software.  The original software and 
 related information is available at
-http://www.eclipse.org/.
+https://www.eclipse.org/.
 
 ____
 
@@ -141,7 +141,7 @@ The notices from these projects are following:
 
 serf
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 
 redland
@@ -156,6 +156,6 @@ StAX
 ____
 
 This product includes software developed by the OpenSSL Project
-for use in the OpenSSL Toolkit. (http://www.openssl.org/)
+for use in the OpenSSL Toolkit. (https://www.openssl.org/)
 
 $HeadURL$

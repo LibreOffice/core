@@ -69,7 +69,7 @@ ModalDialog RID_DEFAULTABOUT
     FixedText RID_CUI_ABOUT_FTXT_WELCOME_LINK
     {
         Left = TRUE ;
-        Text = "http://www.openoffice.org/welcome/credits.html";
+        Text = "https://www.openoffice.org/welcome/credits.html";
     };
     String RID_CUI_ABOUT_STR_COPYRIGHT_VENDOR
     {
