@@ -89,9 +89,6 @@ Module gid_Module_Root
              gid_File_Share_Config_Sofficecfg_uiconfig_swreport,
              gid_File_Share_Config_Sofficecfg_uiconfig_swriter,
              gid_File_Share_Config_Sofficecfg_uiconfig_swxform,
-#ifdef ENABLE_TELEPATHY
-             gid_File_Share_Config_Sofficecfg_uiconfig_tubes,
-#endif
              gid_File_Share_Config_Sofficecfg_uiconfig_uui,
              gid_File_Share_Config_Sofficecfg_uiconfig_vcl,
              gid_File_Share_Config_Sofficecfg_uiconfig_writerperfect,

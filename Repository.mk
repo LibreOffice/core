@@ -38,7 +38,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	helpex \
 	idxdict \
 	langsupport \
-	$(if $(ENABLE_TELEPATHY),liboapprover) \
 	$(if $(filter IOS,$(OS)),LibreOffice) \
 	libtest \
 	lngconvex \
@@ -426,7 +425,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	textfd \
 	tk \
 	tl \
-	$(if $(ENABLE_TELEPATHY),tubes) \
 	ucpexpand1 \
 	ucpext \
 	ucpimage \
@@ -1153,7 +1151,6 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	sfx \
 	svt \
 	svx \
-	$(if $(ENABLE_TELEPATHY),tubes) \
 	uui \
 	vcl \
 	writerperfect \

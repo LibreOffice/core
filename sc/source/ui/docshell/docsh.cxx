@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include "docsh.hxx"
 
 #include "scitems.hxx"
@@ -130,12 +128,6 @@
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
 #include <refupdatecontext.hxx>
-
-#include <config_telepathy.h>
-
-#if ENABLE_TELEPATHY
-#include "sccollaboration.hxx"
-#endif
 
 #include <memory>
 #include <vector>
@@ -2643,17 +2635,10 @@ bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
         || rFilter == pFilterRtf;
 }
 
-#if ! ENABLE_TELEPATHY
 ScDocFunc *ScDocShell::CreateDocFunc()
 {
     return new ScDocFuncDirect( *this );
 }
-#else
-ScCollaboration* ScDocShell::GetCollaboration()
-{
-    return mpCollaboration;
-}
-#endif
 
 ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     SvRefBase(),
@@ -2680,9 +2665,6 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     pSheetSaveData  ( nullptr ),
     mpFormatSaveData( nullptr ),
     pModificator    ( nullptr )
-#if ENABLE_TELEPATHY
-    , mpCollaboration( new ScCollaboration( this ) )
-#endif
 {
     SetPool( &SC_MOD()->GetPool() );
 
@@ -2725,9 +2707,6 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     pSheetSaveData  ( nullptr ),
     mpFormatSaveData( nullptr ),
     pModificator    ( nullptr )
-#if ENABLE_TELEPATHY
-    , mpCollaboration( new ScCollaboration( this ) )
-#endif
 {
     SetPool( &SC_MOD()->GetPool() );
 
@@ -2782,9 +2761,6 @@ ScDocShell::~ScDocShell()
         OSL_FAIL("The Modificator should not exist");
         delete pModificator;
     }
-#if ENABLE_TELEPATHY
-    delete mpCollaboration;
-#endif
 }
 
 ::svl::IUndoManager* ScDocShell::GetUndoManager()

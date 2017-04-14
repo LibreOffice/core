@@ -35,7 +35,6 @@
 #include "optutil.hxx"
 #include "docuno.hxx"
 
-#include <config_telepathy.h>
 #include <memory>
 #include <unordered_map>
 
@@ -64,9 +63,6 @@ class ScSheetSaveData;
 class ScFlatBoolRowSegments;
 class HelperModelObj;
 struct ScColWidthParam;
-#if ENABLE_TELEPATHY
-class ScCollaboration;
-#endif
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
@@ -112,9 +108,6 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     ScFormatSaveData*   mpFormatSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
-#if ENABLE_TELEPATHY
-    ScCollaboration*      mpCollaboration;
-#endif
 
     SAL_DLLPRIVATE void          InitItems();
     SAL_DLLPRIVATE void          DoEnterHandler();
@@ -174,10 +167,6 @@ public:
     explicit        ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT );
                     virtual ~ScDocShell() override;
 
-#if ENABLE_TELEPATHY
-    SAL_DLLPRIVATE ScCollaboration* GetCollaboration();
-#endif
-
     virtual ::svl::IUndoManager*
                     GetUndoManager() override;
 
@@ -226,9 +215,6 @@ public:
 
     ScDocument&     GetDocument()   { return aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
-#if ENABLE_TELEPATHY
-    void            SetDocFunc( ScDocFunc *pDF ) { pDocFunc = pDF; }
-#endif
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
     sal_uInt16      SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );

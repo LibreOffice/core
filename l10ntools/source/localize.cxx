@@ -283,7 +283,6 @@ bool includeProject(const OString& rProject) {
         "sw",
         "swext",
         "sysui",
-        "tubes",
         "uui",
         "vcl",
         "wizards",

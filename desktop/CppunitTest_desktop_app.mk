@@ -40,7 +40,6 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     svt \
     tk \
     tl \
-    $(if $(ENABLE_TELEPATHY),tubes) \
     ucbhelper \
     utl \
     vcl \

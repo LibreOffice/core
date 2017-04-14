@@ -37,7 +37,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Reload"/>
             <menu:menuitem menu:id=".uno:VersionDialog"/>
-            <!-- .uno:Collaborate menuitem, see CustomTarget_uiconfig.mk -->
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Save"/>
             <menu:menuitem menu:id=".uno:SaveAsRemote"/>

@@ -9,15 +9,9 @@
 
 $(eval $(call gb_UIConfig_UIConfig,modules/scalc))
 
-ifeq ($(ENABLE_TELEPATHY),TRUE)
-$(eval $(call gb_UIConfig_add_generated_menubarfiles,modules/scalc,\
-	CustomTarget/sc/uiconfig/scalc/menubar/menubar \
-))
-else
 $(eval $(call gb_UIConfig_add_menubarfiles,modules/scalc,\
 	sc/uiconfig/scalc/menubar/menubar \
 ))
-endif
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/anchor \

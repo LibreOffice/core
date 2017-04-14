@@ -134,7 +134,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	testtools \
 	toolkit \
 	tools \
-	tubes \
 	ucb \
 	ucbhelper \
 	udkapi \

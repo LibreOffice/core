@@ -171,9 +171,6 @@ UI_FILELIST(swform, "UIConfig/modules/swform.filelist")
 UI_FILELIST(swreport, "UIConfig/modules/swreport.filelist")
 UI_FILELIST(swriter, "UIConfig/modules/swriter.filelist")
 UI_FILELIST(swxform, "UIConfig/modules/swxform.filelist")
-#ifdef ENABLE_TELEPATHY
-UI_FILELIST(tubes, "UIConfig/tubes.filelist")
-#endif
 UI_FILELIST(uui, "UIConfig/uui.filelist")
 UI_FILELIST(vcl, "UIConfig/vcl.filelist")
 UI_FILELIST(writerperfect, "UIConfig/writerperfect.filelist")
@@ -202,9 +199,6 @@ UI_FILELIST_ALL_LANG(smath, modules/smath)
 UI_FILELIST_ALL_LANG(svt, svt)
 UI_FILELIST_ALL_LANG(svx, svx)
 UI_FILELIST_ALL_LANG(swriter, modules/swriter)
-#ifdef ENABLE_TELEPATHY
-UI_FILELIST_ALL_LANG(tubes, tubes)
-#endif
 UI_FILELIST_ALL_LANG(uui, uui)
 UI_FILELIST_ALL_LANG(vcl, vcl)
 UI_FILELIST_ALL_LANG(xmlsec, xmlsec)
