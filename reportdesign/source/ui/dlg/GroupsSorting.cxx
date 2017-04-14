@@ -126,9 +126,6 @@ public:
     void        lateInit();
     bool    IsDeleteAllowed( );
     void        DeleteRows();
-    void        cut();
-    void        copy();
-    void        paste();
 
     sal_Int32   getGroupPosition(sal_Int32 _nRow) const { return _nRow != BROWSER_ENDOFSELECTION ? m_aGroupPositions[_nRow] : sal_Int32(NO_GROUP); }
 
@@ -796,42 +793,6 @@ void OFieldExpressionControl::DeleteRows()
     m_pParent->DisplayData( m_nDataPos );
     m_bIgnoreEvent = false;
     Invalidate();
-}
-
-
-void OFieldExpressionControl::cut()
-{
-    copy();
-    DeleteRows();
-}
-
-
-void OFieldExpressionControl::copy()
-{
-
-    // set to the right row and save it
-    m_pParent->SaveData( m_nDataPos );
-
-    uno::Sequence<uno::Any> aClipboardList = fillSelectedGroups();
-
-    if( aClipboardList.getLength() )
-    {
-        OGroupExchange* pData = new OGroupExchange(aClipboardList);
-        uno::Reference< css::datatransfer::XTransferable> xRef = pData;
-        pData->CopyToClipboard(GetParent());
-    }
-}
-
-
-void OFieldExpressionControl::paste()
-{
-    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-    if(aTransferData.HasFormat(OGroupExchange::getReportGroupId()))
-    {
-        if( m_nPasteEvent )
-            Application::RemoveUserEvent( m_nPasteEvent );
-        m_nPasteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedPaste), nullptr, true );
-    }
 }
 
 IMPL_LINK_NOARG( OFieldExpressionControl, DelayedPaste, void*, void )
