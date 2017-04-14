@@ -32,7 +32,7 @@
 #endif
 #include <hintids.hxx>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>
