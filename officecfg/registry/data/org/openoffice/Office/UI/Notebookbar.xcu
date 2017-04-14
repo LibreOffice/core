@@ -24,6 +24,28 @@
             <value>false</value>
           </prop>
         </node>
+        <node oor:name="GrupedbarCompact" oor:op="replace">
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Grupedbar Compact</value>
+          </prop>
+          <prop oor:name="File">
+            <value>notebookbar_grupedbar_compact.ui</value>
+          </prop>
+          <prop oor:name="HasMenubar">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="GrupedbarFull" oor:op="replace">
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Grupedbar Full</value>
+          </prop>
+          <prop oor:name="File">
+            <value>notebookbar_grupedbar_full.ui</value>
+          </prop>
+          <prop oor:name="HasMenubar">
+            <value>true</value>
+          </prop>
+        </node>
         <node oor:name="Groups" oor:op="replace">
           <prop oor:name="Label">
             <value xml:lang="en-US">Contextual groups</value>
