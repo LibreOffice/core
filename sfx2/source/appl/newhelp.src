@@ -141,35 +141,6 @@ String STR_HELP_MENU_TEXT_COPY
     Text [ en-US ] = "~Copy" ;
 };
 
-Menu MENU_HELP_BOOKMARKS
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = MID_OPEN ;
-            HelpId = HID_HELP_BOOKMARKS_OPEN;
-            Text [ en-US ] = "Display";
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = MID_RENAME ;
-            HelpId = HID_HELP_BOOKMARKS_RENAME;
-            Text [ en-US ] = "Rename...";
-        };
-        MenuItem
-        {
-            Identifier = MID_DELETE ;
-            HelpId = HID_HELP_BOOKMARKS_DELETE;
-            Text [ en-US ] = "Delete";
-        };
-    };
-};
-
 String STR_INFO_NOSEARCHRESULTS
 {
     Text [ en-US ] = "No topics found.";

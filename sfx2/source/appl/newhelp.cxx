@@ -1247,10 +1247,19 @@ bool BookmarksBox_Impl::EventNotify( NotifyEvent& rNEvt )
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt->GetCommand() == CommandEventId::ContextMenu )
         {
-            ScopedVclPtrInstance<PopupMenu> aMenu( SfxResId( MENU_HELP_BOOKMARKS ) );
-            sal_uInt16 nId = aMenu->Execute( this, pCEvt->GetMousePosPixel() );
-            if ( nId != MENU_ITEM_NOTFOUND )
-                DoAction( nId );
+            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "sfx/ui/bookmarkmenu.ui", "");
+            VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
+            sal_uInt16 nId = aMenu->Execute(this, pCEvt->GetMousePosPixel());
+            if (nId != MENU_ITEM_NOTFOUND)
+            {
+                OString sIdent = aMenu->GetCurItemIdent();
+                if (sIdent == "display")
+                    DoAction(MID_OPEN);
+                else if (sIdent == "rename")
+                    DoAction(MID_RENAME);
+                else if (sIdent == "delete")
+                    DoAction(MID_DELETE);
+            }
             bRet = true;
         }
     }

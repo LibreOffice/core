@@ -35,7 +35,6 @@
 
 #define CONFIG_PATH_START               (RID_SFX_APP_START+98)
 
-#define MENU_HELP_BOOKMARKS                     (RID_SFX_APP_START+105)
 #define STR_INFO_NOSEARCHRESULTS                (RID_SFX_APP_START+106)
 #define STR_INFO_NOSEARCHTEXTFOUND              (RID_SFX_APP_START+107)
 
