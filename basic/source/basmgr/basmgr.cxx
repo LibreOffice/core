@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/stream.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>

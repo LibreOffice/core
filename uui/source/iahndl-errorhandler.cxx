@@ -26,7 +26,7 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <svtools/svtools.hrc>
 #include <svx/dialogs.hrc>
 
