@@ -23,7 +23,7 @@
 #include <vcl/layout.hxx>
 #include <svtools/langtab.hxx>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/frame/XStorable.hpp>

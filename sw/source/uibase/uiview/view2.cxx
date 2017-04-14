@@ -67,7 +67,7 @@
 #include <svl/whiter.hxx>
 #include <svl/ptitem.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/svdview.hxx>
 #include <swtypes.hxx>
