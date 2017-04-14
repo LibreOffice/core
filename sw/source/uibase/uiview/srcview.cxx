@@ -22,7 +22,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/print.hxx>
 #include <vcl/msgbox.hxx>

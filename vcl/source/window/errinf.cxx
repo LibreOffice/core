@@ -18,7 +18,7 @@
  */
 
 #include <limits.h>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <vcl/window.hxx>
@@ -85,11 +85,11 @@ void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDynErrInfo)
 
 void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo const *pDynErrInfo)
 {
-    DynamicErrorInfo **ppDcr = TheErrorRegistry::get().ppDcr;
-    sal_uIntPtr lIdx = (((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
-    DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error not found");
-    if(ppDcr[lIdx]==pDcr)
-        ppDcr[lIdx]=nullptr;
+    DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
+    sal_uIntPtr lIdx = (((sal_uIntPtr)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
+    DBG_ASSERT(ppDynErrInfo[lIdx]==pDynErrInfo, "ErrHdl: Error not found");
+    if(ppDynErrInfo[lIdx]==pDynErrInfo)
+        ppDynErrInfo[lIdx]=nullptr;
 }
 
 ErrorInfo::~ErrorInfo()
@@ -126,9 +126,9 @@ DynamicErrorInfo::~DynamicErrorInfo()
 ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
 {
     sal_uIntPtr lIdx = ((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
-    DynamicErrorInfo* pDcr = TheErrorRegistry::get().ppDcr[lIdx];
-    if(pDcr && (sal_uIntPtr)(*pDcr)==lId)
-        return pDcr;
+    DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[lIdx];
+    if(pDynErrInfo && (sal_uIntPtr)(*pDynErrInfo)==lId)
+        return pDynErrInfo;
     else
         return new ErrorInfo(lId & ~ERRCODE_DYNAMIC_MASK);
 }

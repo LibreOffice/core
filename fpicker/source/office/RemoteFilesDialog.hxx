@@ -19,7 +19,7 @@
 #include <svtools/breadcrumb.hxx>
 #include <svtools/fileview.hxx>
 
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <tools/resid.hxx>
 
 #include <unotools/viewoptions.hxx>
