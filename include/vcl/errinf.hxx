@@ -19,17 +19,16 @@
 
 #ifndef __RSC
 
-#ifndef INCLUDED_TOOLS_ERRINF_HXX
-#define INCLUDED_TOOLS_ERRINF_HXX
+#ifndef INCLUDED_VCL_ERRINF_HXX
+#define INCLUDED_VCL_ERRINF_HXX
 
 #include <limits.h>
 #include <rtl/ustring.hxx>
 #include <tools/errcode.hxx>
-#include <tools/toolsdllapi.h>
+#include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
-// FIXME: horrible legacy dependency on VCL from tools.
 namespace vcl { class Window; }
 
 class DynamicErrorInfo_Impl;
@@ -63,7 +62,7 @@ namespace o3tl
     template<> struct typed_flags<ErrorHandlerFlags> : is_typed_flags<ErrorHandlerFlags, 0xffff> {};
 }
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ErrorInfo
+class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorInfo
 {
 private:
     sal_uIntPtr             lUserId;
@@ -79,7 +78,7 @@ public:
     static ErrorInfo*       GetErrorInfo(sal_uIntPtr);
 };
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
+class SAL_WARN_UNUSED VCL_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
 {
     friend class DynamicErrorInfo_Impl;
 
@@ -95,7 +94,7 @@ public:
     ErrorHandlerFlags       GetDialogMask() const;
 };
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
+class SAL_WARN_UNUSED VCL_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
 {
 private:
     OUString                aString;
@@ -108,7 +107,7 @@ public:
     const OUString&         GetErrorString() const { return aString; }
 };
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
+class SAL_WARN_UNUSED VCL_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
 {
 private:
     OUString aArg1;
@@ -125,7 +124,7 @@ public:
 };
 
 struct ErrorContextImpl;
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ErrorContext
+class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorContext
 {
     friend class ErrorHandler;
 
@@ -148,7 +147,7 @@ typedef ErrorHandlerFlags WindowDisplayErrorFunc(
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ErrorHandler
+class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
 {
     friend class ErrorHandler_Impl;
 

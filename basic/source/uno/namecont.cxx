@@ -31,7 +31,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <tools/errinf.hxx>
+#include <vcl/errinf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/getexpandeduri.hxx>
