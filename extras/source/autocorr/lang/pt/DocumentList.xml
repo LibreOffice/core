@@ -255,6 +255,8 @@
 <block-list:block block-list:abbreviated-name="axam" block-list:name="acham"/>
 <block-list:block block-list:abbreviated-name="axar" block-list:name="achar"/>
 <block-list:block block-list:abbreviated-name="axim" block-list:name="assim"/>
+<block-list:block block-list:abbreviated-name="azuleijo" block-list:name="azulejo"/>
+<block-list:block block-list:abbreviated-name="azuleijos" block-list:name="azulejos"/>
 <block-list:block block-list:abbreviated-name="baichela" block-list:name="baixela"/>
 <block-list:block block-list:abbreviated-name="baicho" block-list:name="baixo"/>
 <block-list:block block-list:abbreviated-name="barrio" block-list:name="bairro"/>
@@ -274,12 +276,15 @@
 <block-list:block block-list:abbreviated-name="bechiga" block-list:name="bexiga"/>
 <block-list:block block-list:abbreviated-name="beige" block-list:name="bege"/>
 <block-list:block block-list:abbreviated-name="ben" block-list:name="bem"/>
+<block-list:block block-list:abbreviated-name="benção" block-list:name="bênção"/>
+<block-list:block block-list:abbreviated-name="bençãos" block-list:name="bênçãos"/>
 <block-list:block block-list:abbreviated-name="beneficiência" block-list:name="beneficência"/>
 <block-list:block block-list:abbreviated-name="beringela" block-list:name="beringela"/>
 <block-list:block block-list:abbreviated-name="bibkioteca" block-list:name="biblioteca"/>
 <block-list:block block-list:abbreviated-name="bibkiotecas" block-list:name="bibliotecas"/>
 <block-list:block block-list:abbreviated-name="biciclete" block-list:name="bicicleta"/>
 <block-list:block block-list:abbreviated-name="bicicletes" block-list:name="bicicletas"/>
+<block-list:block block-list:abbreviated-name="biotipo" block-list:name="biótipo"/>
 <block-list:block block-list:abbreviated-name="bixinho" block-list:name="bichinho"/>
 <block-list:block block-list:abbreviated-name="bixinhos" block-list:name="bichinhos"/>
 <block-list:block block-list:abbreviated-name="bixo" block-list:name="bicho"/>
@@ -288,6 +293,8 @@
 <block-list:block block-list:abbreviated-name="bjos" block-list:name="beijos"/>
 <block-list:block block-list:abbreviated-name="bjs" block-list:name="beijos"/>
 <block-list:block block-list:abbreviated-name="blz" block-list:name="beleza"/>
+<block-list:block block-list:abbreviated-name="boasinha" block-list:name="boazinha"/>
+<block-list:block block-list:abbreviated-name="boasinhas" block-list:name="boazinhas"/>
 <block-list:block block-list:abbreviated-name="bon" block-list:name="bom"/>
 <block-list:block block-list:abbreviated-name="boqueaberto" block-list:name="boquiaberto"/>
 <block-list:block block-list:abbreviated-name="borraxa" block-list:name="borracha"/>
@@ -331,6 +338,8 @@
 <block-list:block block-list:abbreviated-name="canço" block-list:name="canso"/>
 <block-list:block block-list:abbreviated-name="câncro" block-list:name="cancro"/>
 <block-list:block block-list:abbreviated-name="câncros" block-list:name="cancros"/>
+<block-list:block block-list:abbreviated-name="candieiro" block-list:name="candeeiro"/>
+<block-list:block block-list:abbreviated-name="candieiros" block-list:name="candeeiros"/>
 <block-list:block block-list:abbreviated-name="capelões" block-list:name="capelães"/>
 <block-list:block block-list:abbreviated-name="capitões" block-list:name="capitães"/>
 <block-list:block block-list:abbreviated-name="capueira" block-list:name="capoeira"/>
@@ -470,6 +479,7 @@
 <block-list:block block-list:abbreviated-name="contactos" block-list:name="contactos"/>
 <block-list:block block-list:abbreviated-name="contactou" block-list:name="contactou"/>
 <block-list:block block-list:abbreviated-name="contezto" block-list:name="contexto"/>
+<block-list:block block-list:abbreviated-name="convivio" block-list:name="convívio"/>
 <block-list:block block-list:abbreviated-name="conxa" block-list:name="concha"/>
 <block-list:block block-list:abbreviated-name="conzinha" block-list:name="cozinha"/>
 <block-list:block block-list:abbreviated-name="coqueluxe" block-list:name="coqueluche"/>
@@ -664,6 +674,7 @@
 <block-list:block block-list:abbreviated-name="enchada" block-list:name="enxada"/>
 <block-list:block block-list:abbreviated-name="enchame" block-list:name="enxame"/>
 <block-list:block block-list:abbreviated-name="enchaqueca" block-list:name="enxaqueca"/>
+<block-list:block block-list:abbreviated-name="encherga" block-list:name="enxerga"/>
 <block-list:block block-list:abbreviated-name="enchergar" block-list:name="enxergar"/>
 <block-list:block block-list:abbreviated-name="enchoval" block-list:name="enxoval"/>
 <block-list:block block-list:abbreviated-name="enchugamos" block-list:name="enxugamos"/>
@@ -682,6 +693,7 @@
 <block-list:block block-list:abbreviated-name="Eng°." block-list:name="Eng.º"/>
 <block-list:block block-list:abbreviated-name="Eng°" block-list:name="Eng.º"/>
 <block-list:block block-list:abbreviated-name="Engª" block-list:name="Eng.ª"/>
+<block-list:block block-list:abbreviated-name="engerir" block-list:name="ingerir"/>
 <block-list:block block-list:abbreviated-name="enginheira" block-list:name="engenheira"/>
 <block-list:block block-list:abbreviated-name="enginheiras" block-list:name="engenheiras"/>
 <block-list:block block-list:abbreviated-name="enginheiro" block-list:name="engenheiro"/>
@@ -700,6 +712,10 @@
 <block-list:block block-list:abbreviated-name="entertimento" block-list:name="entretimento"/>
 <block-list:block block-list:abbreviated-name="entervalo" block-list:name="intervalo"/>
 <block-list:block block-list:abbreviated-name="entervalos" block-list:name="intervalos"/>
+<block-list:block block-list:abbreviated-name="entitulado" block-list:name="intitulado"/>
+<block-list:block block-list:abbreviated-name="entitulados" block-list:name="intitulados"/>
+<block-list:block block-list:abbreviated-name="entropecido" block-list:name="entorpecido"/>
+<block-list:block block-list:abbreviated-name="entropecidos" block-list:name="entorpecidos"/>
 <block-list:block block-list:abbreviated-name="envez" block-list:name="em vez"/>
 <block-list:block block-list:abbreviated-name="enxarcar" block-list:name="encharcar"/>
 <block-list:block block-list:abbreviated-name="enxente" block-list:name="enchente"/>
@@ -740,6 +756,8 @@
 <block-list:block block-list:abbreviated-name="esercício" block-list:name="exercício"/>
 <block-list:block block-list:abbreviated-name="esercícios" block-list:name="exercícios"/>
 <block-list:block block-list:abbreviated-name="esgroviado" block-list:name="esgrouviado"/>
+<block-list:block block-list:abbreviated-name="esorcismo" block-list:name="exorcismo"/>
+<block-list:block block-list:abbreviated-name="esorcismos" block-list:name="exorcismos"/>
 <block-list:block block-list:abbreviated-name="espectativa" block-list:name="expectativa"/>
 <block-list:block block-list:abbreviated-name="espectativas" block-list:name="expectativas"/>
 <block-list:block block-list:abbreviated-name="esplícita" block-list:name="explícita"/>
@@ -806,6 +824,8 @@
 <block-list:block block-list:abbreviated-name="eszas" block-list:name="essas"/>
 <block-list:block block-list:abbreviated-name="étapa" block-list:name="etapa"/>
 <block-list:block block-list:abbreviated-name="étapas" block-list:name="etapas"/>
+<block-list:block block-list:abbreviated-name="etério" block-list:name="etéreo"/>
+<block-list:block block-list:abbreviated-name="etérios" block-list:name="etéreos"/>
 <block-list:block block-list:abbreviated-name="etidais" block-list:name="editais"/>
 <block-list:block block-list:abbreviated-name="etidal" block-list:name="edital"/>
 <block-list:block block-list:abbreviated-name="etsa" block-list:name="esta"/>
@@ -818,6 +838,7 @@
 <block-list:block block-list:abbreviated-name="exceços" block-list:name="excessos"/>
 <block-list:block block-list:abbreviated-name="Excesões" block-list:name="exceções"/>
 <block-list:block block-list:abbreviated-name="excessão" block-list:name="exceção"/>
+<block-list:block block-list:abbreviated-name="exclarecer" block-list:name="esclarecer"/>
 <block-list:block block-list:abbreviated-name="exclareser" block-list:name="esclarecer"/>
 <block-list:block block-list:abbreviated-name="exclaresser" block-list:name="esclarecer"/>
 <block-list:block block-list:abbreviated-name="exclusivé" block-list:name="exclusive"/>
@@ -836,6 +857,7 @@
 <block-list:block block-list:abbreviated-name="explêndidos" block-list:name="esplêndidos"/>
 <block-list:block block-list:abbreviated-name="explicaçoes" block-list:name="explicações"/>
 <block-list:block block-list:abbreviated-name="expontâneo" block-list:name="espontâneo"/>
+<block-list:block block-list:abbreviated-name="expôr" block-list:name="expor"/>
 <block-list:block block-list:abbreviated-name="exporádico" block-list:name="esporádico"/>
 <block-list:block block-list:abbreviated-name="exporádicos" block-list:name="esporádicos"/>
 <block-list:block block-list:abbreviated-name="expreça" block-list:name="expressa"/>
@@ -1457,6 +1479,7 @@
 <block-list:block block-list:abbreviated-name="palvaras" block-list:name="palavras"/>
 <block-list:block block-list:abbreviated-name="palvra" block-list:name="palavra"/>
 <block-list:block block-list:abbreviated-name="palvras" block-list:name="palavras"/>
+<block-list:block block-list:abbreviated-name="panico" block-list:name="pânico"/>
 <block-list:block block-list:abbreviated-name="papél" block-list:name="papel"/>
 <block-list:block block-list:abbreviated-name="parabens" block-list:name="parabéns"/>
 <block-list:block block-list:abbreviated-name="paraiso" block-list:name="paraíso"/>
@@ -1495,6 +1518,8 @@
 <block-list:block block-list:abbreviated-name="pasiência" block-list:name="paciência"/>
 <block-list:block block-list:abbreviated-name="pasiensia" block-list:name="paciência"/>
 <block-list:block block-list:abbreviated-name="pasiênsia" block-list:name="paciência"/>
+<block-list:block block-list:abbreviated-name="passaro" block-list:name="pássaro"/>
+<block-list:block block-list:abbreviated-name="passaros" block-list:name="pássaros"/>
 <block-list:block block-list:abbreviated-name="passiência" block-list:name="paciência"/>
 <block-list:block block-list:abbreviated-name="passiênsia" block-list:name="paciência"/>
 <block-list:block block-list:abbreviated-name="pataquada" block-list:name="patacoada"/>
