@@ -87,7 +87,13 @@ long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &
     const SvxFontHeightItem &aDefaultFontItem = static_cast<const SvxFontHeightItem&>(aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE));
 
     const SwDoc* pDoc = rInf.GetShell()->GetDoc();
-    const long nGridWidthAdd = GetGridWidth(*pGrid, *pDoc) - aDefaultFontItem.GetHeight();
+#if 0
+    const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
+    const sal_uInt32 nFontHeight = aDefaultFontItem.GetHeight();
+    const long nGridWidthAdd = nGridWidth > nFontHeight ? nGridWidth - nFontHeight : 0;
+#else
+const long nGridWidthAdd = GetGridWidth(*pGrid, *pDoc) - aDefaultFontItem.GetHeight();
+#endif
     if( SwFontScript::Latin == rInf.GetFont()->GetActual() )
         return nGridWidthAdd / 2;
 
