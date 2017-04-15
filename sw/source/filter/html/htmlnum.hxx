@@ -36,10 +36,10 @@ class SwNumRule;
 class SwHTMLNumRuleInfo
 {
     sal_uInt16      aNumStarts[MAXLEVEL];
-    SwNumRule   *   pNumRule;       // Aktuelle Numerierung
-    sal_uInt16      nDeep;          // aktuelle Num-Tiefe (1, 2, 3, ...)
-    bool        bRestart : 1;   // Export: Numerierung neu starten
-    bool        bNumbered : 1;  // Export: Absatz ist numeriert
+    SwNumRule   *   pNumRule;       // current numbering
+    sal_uInt16      nDeep;          // current numbering depth (1, 2, 3, ...)
+    bool        bRestart : 1;   // Export: restart numbering
+    bool        bNumbered : 1;  // Export: paragraph is numbered
 
 public:
 
