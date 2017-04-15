@@ -42,6 +42,7 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <sal/macros.h>
+#include <chrono>
 
 #ifdef _WIN32
 #ifdef _MSC_VER
@@ -448,10 +449,9 @@ UpdateCheckThread::run()
     osl_getSystemTime( &nExtCheckTime );
 
     osl::Condition::Result aResult = osl::Condition::result_timeout;
-    TimeValue tv = { 10, 0 };
 
     // Initial wait to avoid doing further time consuming tasks during start-up
-    aResult = m_aCondition.wait(&tv);
+    aResult = m_aCondition.wait(std::chrono::seconds(10));
 
     try {
         bool bExtensionsChecked = false;
