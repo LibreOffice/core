@@ -12,7 +12,7 @@ SUBMODULES_ALL="dictionaries helpcontent2 translations"
 pushd $(dirname $0) > /dev/null
 if [ -f config_host.mk ] ; then
     # we are in the BUILDDIR
-    SRC_ROOT=$(cat config_host.mk | grep -a SRC_ROOT | sed -e "s/.*=//")
+    SRC_ROOT=$(< config_host.mk grep -a SRC_ROOT | sed -e "s/.*=//")
 else
     SRC_ROOT=$(pwd)
 fi
@@ -37,35 +37,35 @@ local hook_name
 
     if [ -d ${repo?}/.git ] ; then
         # use core's hook by default
-	for hook_name in $(ls -1 "${COREDIR?}/.git-hooks") ; do
-            hook="${repo?}/.git/hooks/${hook_name?}"
-            if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
+	for hook_name in ${COREDIR?}/.git-hooks/* ; do
+            hook="${repo?}/.git/hooks/${hook_name##*/}"
+            if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
 		rm -f "${hook?}"
-		ln -sf "${COREDIR?}/.git-hooks/${hook_name?}" "${hook?}"
+		ln -sf "${hook_name}" "${hook?}"
             fi
 	done
         # override if need be by the submodules' own hooks
-	for hook_name in $(ls -1 "${COREDIR?}/${repo?}/.git-hooks" 2>/dev/null) ; do
-            hook="${repo?}/.git/hooks/${hook_name?}"
-            if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
+	for hook_name in ${COREDIR?}/${repo?}/.git-hooks/* ; do
+            hook="${repo?}/.git/hooks/${hook_name##*/}"
+            if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
 		rm -f "${hook?}"
-		ln -sf "${COREDIR?}/${repo?}/.git-hooks/${hook_name?}" "${hook?}"
+		ln -sf "${hook_name}" "${hook?}"
 	    fi
 	done
     elif [ -d .git/modules/${repo}/hooks ] ; then
-	for hook_name in $(ls -1 "${COREDIR?}/.git-hooks") ; do
-            hook=".git/modules/${repo?}/hooks/${hook_name?}"
-            if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
+	for hook_name in ${COREDIR?}/.git-hooks/* ; do
+            hook=".git/modules/${repo?}/hooks/${hook_name##*/}"
+            if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
 		rm -f "${hook?}"
-		ln -sf "${COREDIR?}/.git-hooks/${hook_name?}" "${hook?}"
+		ln -sf "${hook_name}" "${hook?}"
             fi
 	done
         # override if need be by the submodules' own hooks
-	for hook_name in $(ls -1 "${COREDIR?}/${repo?}/.git-hooks" 2>/dev/null) ; do
-            hook=".git/modules/${repo?}/hooks/${hook_name?}"
-            if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
+	for hook_name in ${COREDIR?}/${repo?}/.git-hooks/* ; do
+            hook=".git/modules/${repo?}/hooks/${hook_name##*/}"
+            if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
 		rm -f "${hook?}"
-		ln -sf "${COREDIR?}/${repo?}/.git-hooks/${hook_name?}" "${hook?}"
+		ln -sf "${hook_name}" "${hook?}"
 	    fi
 	done
     fi
@@ -79,11 +79,11 @@ local hook_name
 local hook
 
     pushd "${COREDIR?}" > /dev/null
-    for hook_name in $(ls -1 "${COREDIR?}/.git-hooks") ; do
-        hook=".git/hooks/${hook_name?}"
-        if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
+    for hook_name in ${COREDIR?}/.git-hooks/* ; do
+        hook=".git/hooks/${hook_name##*/}"
+        if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
             rm -f "${hook?}"
-            ln -sf "${COREDIR?}/.git-hooks/${hook_name?}" "${hook?}"
+            ln -sf "${hook_name}" "${hook?}"
         fi
     done
 
@@ -137,7 +137,7 @@ SUBMODULES_ACTIVE=""
 local repo
 
     for repo in ${SUBMODULES_ALL?} ; do
-	if [ -d ${repo?}/.git -o -f ${repo?}/.git ] ; then
+	if [ -d ${repo?}/.git ] || [ -f ${repo?}/.git ] ; then
 	    SUBMODULES_ACTIVE="${repo?} ${SUBMODULES_ACTIVE?}"
 	fi
     done
@@ -147,7 +147,7 @@ get_configured_submodules()
 {
     SUBMODULES_CONFIGURED=""
     if [ -f config_host.mk ] ; then
-	SUBMODULES_CONFIGURED=$(cat config_host.mk | grep -a GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
+	SUBMODULES_CONFIGURED=$(< config_host.mk grep -a GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
     else
 	# if we need the configured submoduel before the configuration is done. we assumed you want them all
 	SUBMODULES_CONFIGURED=${SUBMODULES_ALL?}
@@ -158,11 +158,11 @@ get_git_reference()
 {
     REFERENCED_GIT=""
     if [ -f config_host.mk ]; then
-	REFERENCED_GIT=$(cat config_host.mk | grep -a GIT_REFERENCE_SRC | sed -e "s/.*=//")
+	REFERENCED_GIT=$(< config_host.mk grep -a GIT_REFERENCE_SRC | sed -e "s/.*=//")
     fi
     LINKED_GIT=""
     if [ -f config_host.mk ]; then
-	LINKED_GIT=$(cat config_host.mk | grep -a GIT_LINK_SRC | sed -e "s/.*=//")
+	LINKED_GIT=$(< config_host.mk grep -a GIT_LINK_SRC | sed -e "s/.*=//")
     fi
 }
 
@@ -287,7 +287,7 @@ if [ "$#" -eq "0" ] ; then
     usage
 fi
 
-if [ ! "`type -p git`" ]; then
+if [ ! "$(type -p git)" ]; then
     echo "Cannot find the git binary! Is git installed and is in PATH?"
     exit 1
 fi
