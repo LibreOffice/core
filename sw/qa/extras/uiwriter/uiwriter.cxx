@@ -229,6 +229,7 @@ public:
     void testTdf35021_tabOverMarginDemo();
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
+    void testTdf107025();
     void testTdf105417();
     void testTdf105625();
     void testMsWordCompTrailingBlanks();
@@ -352,6 +353,7 @@ public:
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
+    CPPUNIT_TEST(testTdf107025);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
@@ -4436,6 +4438,23 @@ void SwUiWriterTest::testTdf104492()
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // The document should split table over 3 pages.
     assertXPath(pXmlDoc, "//page", 3);
+}
+
+void SwUiWriterTest::testTdf107025()
+{
+    // Tdf107025 - characters advance with wrong distance, so that
+    // they are cluttered because of negative value or
+    // break into multiple lines because of overflow.
+    createDoc("tdf107025.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // The portion should have nWidth attribute.
+    CPPUNIT_ASSERT(!parseDump("//Text[@nType='POR_TXT']", "nWidth").isEmpty());
+
+    // There should be only one portion, with nWidth attributes ~ 1800
+    sal_Int32 nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TXT']", "nWidth").toInt32();
+    CPPUNIT_ASSERT_EQUAL(1800, nWidth);
+    CPPUNIT_ASSERT(nWidth > 1600);
+    CPPUNIT_ASSERT(nWidth < 2000);
 }
 
 void SwUiWriterTest::testTdf105417()
