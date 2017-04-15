@@ -42,10 +42,6 @@
 #define HID_FM_FILTER_EDIT                                    "SVX_HID_FM_EDIT"
 #define HID_FM_FILTER_IS_NULL                                 "SVX_HID_FM_FILTER_IS_NULL"
 #define HID_FM_FILTER_IS_NOT_NULL                             "SVX_HID_FM_IS_NOT_NULL"
-#define HID_FM_NEW                                            "SVX_HID_FM_NEW"
-#define HID_FM_NEW_FORM                                       "SVX_HID_FM_NEW_FORM"
-#define HID_FM_NEW_HIDDEN                                     "SVX_HID_FM_NEW_HIDDEN"
-#define HID_FM_RENAME_OBJECT                                  "SVX_HID_FM_RENAME_OBJECT"
 
 #endif
 

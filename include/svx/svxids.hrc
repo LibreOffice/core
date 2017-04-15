@@ -564,8 +564,8 @@
 #define SID_FM_FILECONTROL                              ( SID_SVX_START + 605 )
 //FREE
 #define SID_FM_NAVIGATIONBAR                            ( SID_SVX_START + 607 )
-#define SID_FM_NEW_HIDDEN                               ( SID_SVX_START + 608 )
-#define SID_FM_RENAME_OBJECT                            ( SID_SVX_START + 609 )
+//FREE
+//FREE
 #define SID_FM_DELETEROWS                               ( SID_SVX_START + 610 )
 //FREE
 //FREE
@@ -594,9 +594,9 @@
 #define SID_FM_SHOW_PROPERTIES                          ( SID_SVX_START + 635 )
 #define SID_FM_PROPERTY_CONTROL                         ( SID_SVX_START + 636 )
 #define SID_FM_FMEXPLORER_CONTROL                       ( SID_SVX_START + 637 )
-#define SID_FM_NEW                                      ( SID_SVX_START + 638 )
+//FREE
 #define SID_FM_DELETE                                   ( SID_SVX_START + 639 )
-#define SID_FM_NEW_FORM                                 ( SID_SVX_START + 640 )
+//FREE
 #define SID_3D_WIN                                      ( SID_SVX_START + 644 )
 #define SID_3D_STATE                                    ( SID_SVX_START + 645 )
 #define SID_3D_INIT                                     ( SID_SVX_START + 646 )

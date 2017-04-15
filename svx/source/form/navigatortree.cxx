@@ -358,167 +358,152 @@ namespace svxform
                 FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : nullptr;
                 if( pFormShell && pFormModel )
                 {
-                    ScopedVclPtrInstance<PopupMenu> aContextMenu(SVX_RES(RID_FMEXPLORER_POPUPMENU));
-                    PopupMenu* pSubMenuNew = aContextMenu->GetPopupMenu( SID_FM_NEW );
+                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/formnavimenu.ui", "");
+                    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                    const sal_uInt16 nNewId = aContextMenu->GetItemId("new");
+                    PopupMenu* pSubMenuNew = aContextMenu->GetPopupMenu(nNewId);
 
                     // menu 'New' only exists, if only the root or only one form is selected
-                    aContextMenu->EnableItem( SID_FM_NEW, bSingleSelection && (m_nFormsSelected || m_bRootSelected) );
+                    aContextMenu->EnableItem(nNewId, bSingleSelection && (m_nFormsSelected || m_bRootSelected));
 
                     // 'New'\'Form' under the same terms
-                    pSubMenuNew->EnableItem( SID_FM_NEW_FORM, bSingleSelection && (m_nFormsSelected || m_bRootSelected) );
-                    pSubMenuNew->SetItemImage(SID_FM_NEW_FORM, Image(BitmapEx(SVX_RES(RID_SVXBMP_FORM))));
-                    pSubMenuNew->SetItemImage(SID_FM_NEW_HIDDEN, Image(BitmapEx(SVX_RES(RID_SVXBMP_HIDDEN))));
+                    const sal_uInt16 nFormId = pSubMenuNew->GetItemId("form");
+                    pSubMenuNew->EnableItem(nFormId, bSingleSelection && (m_nFormsSelected || m_bRootSelected));
+                    pSubMenuNew->SetItemImage(nFormId, Image(BitmapEx(SVX_RES(RID_SVXBMP_FORM))));
 
                     // 'New'\'hidden...', if exactly one form is selected
-                    pSubMenuNew->EnableItem( SID_FM_NEW_HIDDEN, bSingleSelection && m_nFormsSelected );
+                    const sal_uInt16 nHiddenId = pSubMenuNew->GetItemId("hidden");
+                    pSubMenuNew->EnableItem(nHiddenId, bSingleSelection && m_nFormsSelected);
+                    pSubMenuNew->SetItemImage(nHiddenId, Image(BitmapEx(SVX_RES(RID_SVXBMP_HIDDEN))));
 
                     // 'Delete': everything which is not root can be removed
-                    aContextMenu->EnableItem( SID_FM_DELETE, !m_bRootSelected );
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), !m_bRootSelected);
 
                     // 'Cut', 'Copy' and 'Paste'
-                    aContextMenu->EnableItem( SID_CUT, !m_bRootSelected && implAllowExchange( DND_ACTION_MOVE ) );
-                    aContextMenu->EnableItem( SID_COPY, !m_bRootSelected && implAllowExchange( DND_ACTION_COPY ) );
-                    aContextMenu->EnableItem( SID_PASTE, implAcceptPaste( ) );
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), !m_bRootSelected && implAllowExchange(DND_ACTION_MOVE));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), !m_bRootSelected && implAllowExchange(DND_ACTION_COPY));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), implAcceptPaste());
 
                     // TabDialog, if exactly one form
-                    aContextMenu->EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("taborder"), bSingleSelection && m_nFormsSelected);
 
+                    const sal_uInt16 nBrowserId = aContextMenu->GetItemId("props");
                     // in XML forms, we don't allow for the properties of a form
                     // #i36484#
                     if ( pFormShell->GetImpl()->isEnhancedForm() && !m_nControlsSelected )
-                        aContextMenu->RemoveItem( aContextMenu->GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
+                        aContextMenu->RemoveItem(aContextMenu->GetItemPos(nBrowserId));
 
                     // if the property browser is already open, we don't allow for the properties, too
                     if( pFormShell->GetImpl()->IsPropBrwOpen() )
-                        aContextMenu->RemoveItem( aContextMenu->GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
+                        aContextMenu->RemoveItem(aContextMenu->GetItemPos(nBrowserId));
                     // and finally, if there's a mixed selection of forms and controls, disable the entry, too
                     else
-                        aContextMenu->EnableItem( SID_FM_SHOW_PROPERTY_BROWSER,
+                        aContextMenu->EnableItem(nBrowserId,
                             (m_nControlsSelected && !m_nFormsSelected) || (!m_nControlsSelected && m_nFormsSelected) );
 
                     // rename, if one element and no root
-                    aContextMenu->EnableItem( SID_FM_RENAME_OBJECT, bSingleSelection && !m_bRootSelected );
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("rename"), bSingleSelection && !m_bRootSelected);
 
                     // Readonly-entry is only for root
-                    aContextMenu->EnableItem( SID_FM_OPEN_READONLY, m_bRootSelected );
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("designmode"), m_bRootSelected);
                     // the same for automatic control focus
-                    aContextMenu->EnableItem( SID_FM_AUTOCONTROLFOCUS, m_bRootSelected );
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("controlfocus"), m_bRootSelected);
 
                     // ConvertTo-Slots are enabled, if one control is selected
                     // the corresponding slot is disabled
+                    const sal_Int16 nChangeId = aContextMenu->GetItemId("change");
                     if (!m_bRootSelected && !m_nFormsSelected && (m_nControlsSelected == 1))
                     {
-                        aContextMenu->SetPopupMenu( SID_FM_CHANGECONTROLTYPE, FmXFormShell::GetConversionMenu() );
+                        aContextMenu->SetPopupMenu(nChangeId, FmXFormShell::GetConversionMenu() );
 #if OSL_DEBUG_LEVEL > 0
                         FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
                         OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected( pCurrent->GetFormComponent() ),
                             "NavigatorTree::Command: inconsistency between the navigator selection, and the selection as the shell knows it!" );
 #endif
 
-                        pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection( *aContextMenu->GetPopupMenu( SID_FM_CHANGECONTROLTYPE ) );
+                        pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection(*aContextMenu->GetPopupMenu(nChangeId));
                     }
                     else
-                        aContextMenu->EnableItem( SID_FM_CHANGECONTROLTYPE, false );
+                        aContextMenu->EnableItem(nChangeId, false );
 
                     // remove all disabled entries
                     aContextMenu->RemoveDisabledEntries(true, true);
 
                     // set OpenReadOnly
 
-                    aContextMenu->CheckItem( SID_FM_OPEN_READONLY, pFormModel->GetOpenInDesignMode() );
-                    aContextMenu->CheckItem( SID_FM_AUTOCONTROLFOCUS, pFormModel->GetAutoControlFocus() );
+                    aContextMenu->CheckItem(aContextMenu->GetItemId("designmode"), pFormModel->GetOpenInDesignMode());
+                    aContextMenu->CheckItem(aContextMenu->GetItemId("controlfocus"), pFormModel->GetAutoControlFocus());
 
-                    sal_uInt16 nSlotId = aContextMenu->Execute( this, ptWhere );
-                    switch( nSlotId )
+                    sal_uInt16 nSlotId = aContextMenu->Execute(this, ptWhere);
+                    OString sIdent = aContextMenu->GetCurItemIdent();
+                    if (sIdent.isEmpty())
+                        sIdent = pSubMenuNew->GetCurItemIdent();
+                    if (sIdent == "form")
                     {
-                        case SID_FM_NEW_FORM:
-                        {
-                            OUString aStr(SVX_RESSTR(RID_STR_FORM));
-                            OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
+                        OUString aStr(SVX_RESSTR(RID_STR_FORM));
+                        OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
 
-                            pFormModel->BegUndo(aUndoStr);
-                            // slot was only available, if there is only one selected entry,
-                            // which is a root or a form
-                            NewForm( *m_arrCurrentSelection.begin() );
-                            pFormModel->EndUndo();
+                        pFormModel->BegUndo(aUndoStr);
+                        // slot was only available, if there is only one selected entry,
+                        // which is a root or a form
+                        NewForm( *m_arrCurrentSelection.begin() );
+                        pFormModel->EndUndo();
+                    }
+                    else if (sIdent == "hidden")
+                    {
+                        OUString aStr(SVX_RESSTR(RID_STR_CONTROL));
+                        OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
 
-                        }   break;
-                        case SID_FM_NEW_HIDDEN:
-                        {
-                            OUString aStr(SVX_RESSTR(RID_STR_CONTROL));
-                            OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
+                        pFormModel->BegUndo(aUndoStr);
+                        // slot was valid for (exactly) one selected form
+                        OUString fControlName = FM_COMPONENT_HIDDEN;
+                        NewControl( fControlName, *m_arrCurrentSelection.begin(), true );
+                        pFormModel->EndUndo();
+                    }
+                    else if (sIdent == "cut")
+                        doCut();
+                    else if (sIdent == "copy")
+                        doCopy();
+                    else if (sIdent == "paste")
+                        doPaste();
+                    else if (sIdent == "delete")
+                        DeleteSelection();
+                    else if (sIdent == "taborder")
+                    {
+                        // this slot was effective for exactly one selected form
+                        SvTreeListEntry* pSelectedForm = *m_arrCurrentSelection.begin();
+                        DBG_ASSERT( IsFormEntry(pSelectedForm), "NavigatorTree::Command: This entry must be a FormEntry." );
 
-                            pFormModel->BegUndo(aUndoStr);
-                            // slot was valid for (exactly) one selected form
-                            OUString fControlName = FM_COMPONENT_HIDDEN;
-                            NewControl( fControlName, *m_arrCurrentSelection.begin(), true );
-                            pFormModel->EndUndo();
+                        FmFormData* pFormData = static_cast<FmFormData*>(pSelectedForm->GetUserData());
+                        Reference< XForm >  xForm(  pFormData->GetFormIface());
 
-                        }   break;
-
-                        case SID_CUT:
-                            doCut();
+                        Reference< XTabControllerModel >  xTabController(xForm, UNO_QUERY);
+                        if( !xTabController.is() )
                             break;
-
-                        case SID_COPY:
-                            doCopy();
-                            break;
-
-                        case SID_PASTE:
-                            doPaste();
-                            break;
-
-                        case SID_FM_DELETE:
-                        {
-                            DeleteSelection();
-                        }
-                        break;
-                        case SID_FM_TAB_DIALOG:
-                        {
-                            // this slot was effective for exactly one selected form
-                            SvTreeListEntry* pSelectedForm = *m_arrCurrentSelection.begin();
-                            DBG_ASSERT( IsFormEntry(pSelectedForm), "NavigatorTree::Command: This entry must be a FormEntry." );
-
-                            FmFormData* pFormData = static_cast<FmFormData*>(pSelectedForm->GetUserData());
-                            Reference< XForm >  xForm(  pFormData->GetFormIface());
-
-                            Reference< XTabControllerModel >  xTabController(xForm, UNO_QUERY);
-                            if( !xTabController.is() )
-                                break;
-                            GetNavModel()->GetFormShell()->GetImpl()->ExecuteTabOrderDialog( xTabController );
-                        }
-                        break;
-
-                        case SID_FM_SHOW_PROPERTY_BROWSER:
-                        {
-                            ShowSelectionProperties(true);
-                        }
-                        break;
-                        case SID_FM_RENAME_OBJECT:
-                        {
-                            // only allowed for one no-root-entry
-                            EditEntry( *m_arrCurrentSelection.begin() );
-                        }
-                        break;
-                        case SID_FM_OPEN_READONLY:
-                        {
-                            pFormModel->SetOpenInDesignMode( !pFormModel->GetOpenInDesignMode() );
-                            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
-                        }
-                        break;
-                        case SID_FM_AUTOCONTROLFOCUS:
-                        {
-                            pFormModel->SetAutoControlFocus( !pFormModel->GetAutoControlFocus() );
-                            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
-                        }
-                        break;
-                        default:
-                            if (FmXFormShell::isControlConversionSlot(nSlotId))
-                            {
-                                FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
-                                if ( pFormShell->GetImpl()->executeControlConversionSlot( pCurrent->GetFormComponent(), nSlotId ) )
-                                    ShowSelectionProperties();
-                            }
+                        GetNavModel()->GetFormShell()->GetImpl()->ExecuteTabOrderDialog( xTabController );
+                    }
+                    else if (sIdent == "props")
+                        ShowSelectionProperties(true);
+                    else if (sIdent == "rename")
+                    {
+                        // only allowed for one no-root-entry
+                        EditEntry( *m_arrCurrentSelection.begin() );
+                    }
+                    else if (sIdent == "designmode")
+                    {
+                        pFormModel->SetOpenInDesignMode( !pFormModel->GetOpenInDesignMode() );
+                        pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
+                    }
+                    else if (sIdent == "controlfocus")
+                    {
+                        pFormModel->SetAutoControlFocus( !pFormModel->GetAutoControlFocus() );
+                        pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
+                    }
+                    else if (FmXFormShell::isControlConversionSlot(nSlotId))
+                    {
+                        FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
+                        if ( pFormShell->GetImpl()->executeControlConversionSlot( pCurrent->GetFormComponent(), nSlotId ) )
+                            ShowSelectionProperties();
                     }
                 }
                 bHandled = true;

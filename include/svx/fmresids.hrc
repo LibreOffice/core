@@ -62,7 +62,6 @@
 #define RID_SVXTBX_FORMDESIGN                       (RID_FORMS_START +  6)
 
 // Menu-Id's -----------------------------------------------------------
-#define RID_FMEXPLORER_POPUPMENU                    (RID_FORMS_START + 0)
 #define RID_FMSHELL_CONVERSIONMENU                  (RID_FORMS_START + 4)
 #define RID_FM_FILTER_MENU                          (RID_FORMS_START + 5)
 #define RID_MENU_DATANAVIGATOR                      (RID_FORMS_START + 10)
