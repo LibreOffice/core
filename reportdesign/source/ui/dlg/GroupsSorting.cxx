@@ -167,8 +167,6 @@ private:
 
     DECL_LINK( CBChangeHdl, ComboBox&, void);
 
-    void InsertRows( long nRow );
-
 public:
     DECL_LINK( DelayedDelete, void*, void );
 
@@ -799,64 +797,6 @@ IMPL_LINK_NOARG( OFieldExpressionControl, DelayedDelete, void*, void )
 {
     m_nDeleteEvent = nullptr;
     DeleteRows();
-}
-
-void OFieldExpressionControl::InsertRows( long nRow )
-{
-
-    sal_Int32 nSize = 0;
-
-    // get rows from clipboard
-    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-    if(aTransferData.HasFormat(OGroupExchange::getReportGroupId()))
-    {
-        datatransfer::DataFlavor aFlavor;
-        SotExchange::GetFormatDataFlavor(OGroupExchange::getReportGroupId(), aFlavor);
-        uno::Sequence< uno::Any > aGroups;
-
-        if ((aTransferData.GetAny(aFlavor, OUString()) >>= aGroups) && aGroups.getLength())
-        {
-            m_bIgnoreEvent = false;
-            {
-                const OUString sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
-                const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
-
-                uno::Reference<report::XGroups> xGroups = m_pParent->getGroups();
-                sal_Int32 nGroupPos = 0;
-                ::std::vector<sal_Int32>::iterator aIter = m_aGroupPositions.begin();
-                ::std::vector<sal_Int32>::size_type nRowPos = static_cast< ::std::vector<sal_Int32>::size_type >(nRow);
-                if ( nRowPos < m_aGroupPositions.size() )
-                {
-                    ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.begin() + nRowPos;
-                    for(;aIter != aEnd;++aIter)
-                    {
-                        if ( *aIter != NO_GROUP )
-                            nGroupPos = *aIter;
-                    }
-                }
-                for(sal_Int32 i=0;i < aGroups.getLength();++i,++nSize)
-                {
-                    uno::Sequence< beans::PropertyValue > aArgs(2);
-                    aArgs[0].Name = PROPERTY_GROUP;
-                    aArgs[0].Value = aGroups[i];
-                    aArgs[1].Name = PROPERTY_POSITIONY;
-                    aArgs[1].Value <<= nGroupPos;
-                    m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
-
-                    ::std::vector<sal_Int32>::iterator aInsertPos = m_aGroupPositions.insert(aIter,nGroupPos);
-                    ++aInsertPos;
-                    aIter = aInsertPos;
-                    ::std::vector<sal_Int32>::const_iterator aEnd  = m_aGroupPositions.end();
-                    for(;aInsertPos != aEnd;++aInsertPos)
-                        if ( *aInsertPos != NO_GROUP )
-                            ++*aInsertPos;
-                }
-            }
-            m_bIgnoreEvent = true;
-        }
-    }
-
-    RowInserted( nRow, nSize );
 }
 
 Size OFieldExpressionControl::GetOptimalSize() const
