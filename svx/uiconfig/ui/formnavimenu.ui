@@ -100,7 +100,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="designmode">
+      <object class="GtkCheckMenuItem" id="designmode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Open in Design Mode</property>
@@ -108,7 +108,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="controlfocus">
+      <object class="GtkCheckMenuItem" id="controlfocus">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Automatic Control Focus</property>
