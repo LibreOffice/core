@@ -46,6 +46,7 @@
 #include "unx/x11_cursors/salcursors.h"
 
 #include <vcl/svapp.hxx>
+#include <chrono>
 
 using namespace vcl_sal;
 
@@ -502,8 +503,7 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
              */
             // we are the dispatch thread
             m_aDispatchCondition.reset();
-            TimeValue aValue = { 1, 0 };
-            m_aDispatchCondition.wait( &aValue );
+            m_aDispatchCondition.wait( std::chrono::seconds(1) );
         }
     }
 
