@@ -52,7 +52,7 @@ class DynamicErrorInfo_Impl
 
     void                        RegisterEDcr(DynamicErrorInfo *);
     static void                 UnRegisterEDcr(DynamicErrorInfo const *);
-    static ErrorInfo*           GetDynamicErrorInfo(sal_uIntPtr lId);
+    static ErrorInfo*           GetDynamicErrorInfo(sal_uInt32 lId);
 
 friend class DynamicErrorInfo;
 friend class ErrorInfo;
@@ -97,7 +97,7 @@ ErrorInfo::~ErrorInfo()
 }
 
 
-ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
+ErrorInfo *ErrorInfo::GetErrorInfo(sal_uInt32 lId)
 {
     if(lId & ERRCODE_DYNAMIC_MASK)
         return DynamicErrorInfo_Impl::GetDynamicErrorInfo(lId);
@@ -105,12 +105,12 @@ ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
         return new ErrorInfo(lId);
 }
 
-DynamicErrorInfo::operator sal_uIntPtr() const
+DynamicErrorInfo::operator sal_uInt32() const
 {
     return pImpl->lErrId;
 }
 
-DynamicErrorInfo::DynamicErrorInfo(sal_uIntPtr lArgUserId, ErrorHandlerFlags nMask)
+DynamicErrorInfo::DynamicErrorInfo(sal_uInt32 lArgUserId, ErrorHandlerFlags nMask)
 : ErrorInfo(lArgUserId),
   pImpl(new DynamicErrorInfo_Impl)
 {
@@ -123,7 +123,7 @@ DynamicErrorInfo::~DynamicErrorInfo()
     DynamicErrorInfo_Impl::UnRegisterEDcr(this);
 }
 
-ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
+ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uInt32 lId)
 {
     sal_uIntPtr lIdx = ((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[lIdx];
@@ -139,7 +139,7 @@ ErrorHandlerFlags DynamicErrorInfo::GetDialogMask() const
 }
 
 StringErrorInfo::StringErrorInfo(
-    sal_uIntPtr UserId, const OUString& aStringP, ErrorHandlerFlags nMask)
+    sal_uInt32 UserId, const OUString& aStringP, ErrorHandlerFlags nMask)
 : DynamicErrorInfo(UserId, nMask), aString(aStringP)
 {
 }
@@ -236,7 +236,7 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     @return ???
 */
 ErrorHandlerFlags ErrorHandler::HandleError_Impl(
-    sal_uIntPtr nErrCodeId, ErrorHandlerFlags nFlags, bool bJustCreateString, OUString & rError)
+    sal_uInt32 nErrCodeId, ErrorHandlerFlags nFlags, bool bJustCreateString, OUString & rError)
 {
     OUString aErr;
     OUString aAction;
@@ -322,7 +322,7 @@ ErrorHandlerFlags ErrorHandler::HandleError_Impl(
 }
 
 // static
-bool ErrorHandler::GetErrorString(sal_uIntPtr lId, OUString& rStr)
+bool ErrorHandler::GetErrorString(sal_uInt32 lId, OUString& rStr)
 {
     return HandleError_Impl( lId, ErrorHandlerFlags::MAX, true, rStr ) != ErrorHandlerFlags::NONE;
 }
@@ -331,7 +331,7 @@ bool ErrorHandler::GetErrorString(sal_uIntPtr lId, OUString& rStr)
 
     @see ErrorHandler::HandleError_Impl
 */
-ErrorHandlerFlags ErrorHandler::HandleError(sal_uIntPtr lId, ErrorHandlerFlags nFlags)
+ErrorHandlerFlags ErrorHandler::HandleError(sal_uInt32 lId, ErrorHandlerFlags nFlags)
 {
     OUString aDummy;
     return HandleError_Impl( lId, nFlags, false, aDummy );
