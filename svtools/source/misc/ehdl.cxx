@@ -272,7 +272,7 @@ SfxErrorContext::SfxErrorContext(
 }
 
 
-bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
+bool SfxErrorContext::GetString(sal_uInt32 nErrId, OUString &rStr)
 
 /*  [Description]
 
