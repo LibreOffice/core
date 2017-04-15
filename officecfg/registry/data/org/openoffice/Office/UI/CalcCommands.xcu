@@ -961,6 +961,14 @@
           <value xml:lang="en-US">Hide All Comments</value>
         </prop>
       </node>
+      <node oor:name=".uno:ViewCommentsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Comments</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertAnnotation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Comm~ent</value>
