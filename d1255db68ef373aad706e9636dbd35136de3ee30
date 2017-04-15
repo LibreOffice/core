@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_e234cc4b",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-04-15T23:23:39Z",
+      "side": 1,
+      "message": "What is this supposed to mean?",
+      "revId": "d1255db68ef373aad706e9636dbd35136de3ee30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_023ab836",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-04-15T23:23:39Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d1255db68ef373aad706e9636dbd35136de3ee30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
