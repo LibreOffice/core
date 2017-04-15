@@ -290,7 +290,7 @@ class Parser:
             "i18nutil" : 1,
             "idl" : 1,
             "idlc" : 1,
-            "include" : 0, #
+            "include" : 1,
             "io" : 1,
             "javaunohelper" : 1,
             "jvmaccess" : 1,
@@ -318,7 +318,7 @@ class Parser:
             "sal" : 1,
             "salhelper" : 1,
             "sax" : 1,
-            "sc" : 0, #
+            "sc" : 1,
             "scaddins" : 1,
             "sccomp" : 1,
             "scripting" : 1,
