@@ -44,8 +44,8 @@
     <Markers>
       <QuotationStart>'</QuotationStart>
       <QuotationEnd>'</QuotationEnd>
-      <DoubleQuotationStart>"</DoubleQuotationStart>
-      <DoubleQuotationEnd>"</DoubleQuotationEnd>
+      <DoubleQuotationStart>„</DoubleQuotationStart>
+      <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
     <TimeAM>AM</TimeAM>
     <TimePM>PM</TimePM>
@@ -198,16 +198,16 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>DD.MM.YYYY HH:MM:SS AM/PM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER" formatindex="60">
+    <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER" formatindex="50">
       <FormatCode>#.##0,00;[RED]-#.##0,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="61">
+    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="51">
       <FormatCode>#.###,00;[RED]-#.###,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="62">
+    <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="52">
       <FormatCode>DD. MM. YYYY.</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey25" default="false" type="short" usage="DATE" formatindex="63">
+    <FormatElement msgid="DateFormatskey25" default="false" type="short" usage="DATE" formatindex="53">
       <FormatCode>MM/YY</FormatCode>
     </FormatElement>
   </LC_FORMAT>
@@ -226,8 +226,8 @@
     <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-C Č Ć D {DŽ} Đ E-L {LJ} M N {NJ} O P R S Š T-V Z Ž</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
-    <FollowPageWord>str.</FollowPageWord>
-    <FollowPageWord>str.</FollowPageWord>
+    <FollowPageWord>p</FollowPageWord>
+    <FollowPageWord>pp</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
@@ -407,7 +407,7 @@
       <StartDayOfWeek>
         <DayID>mon</DayID>
       </StartDayOfWeek>
-      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+      <MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
