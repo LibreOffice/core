@@ -1878,90 +1878,109 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     sal_uInt16 nTSize;
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
-    SCCOL   nPosX = GetPosX(eWhichX);
-    SCCOL   nX;
 
-    long nScrPosX=0;
-    if (bIsTiledRendering)
+    SCCOL nPosX = GetPosX(eWhichX);
+    long nScrPosX = 0;
+
+    if (bAllowNeg || nWhereX >= nPosX)
     {
-        const auto& rNearest = pThisTab->aWidthHelper.getNearestByIndex(nWhereX - 1);
-        nPosX = rNearest.first + 1;
-        nScrPosX = rNearest.second;
-    }
-
-    if (nWhereX >= nPosX)
-        for (nX = nPosX; nX < nWhereX && (bAllowNeg || bIsTiledRendering || nScrPosX <= aScrSize.Width()); nX++)
+        SCROW nStartPosX = nPosX;
+        if (bIsTiledRendering)
         {
-            if ( nX > MAXCOL )
-                nScrPosX = 0x7FFFFFFF;
-            else
+            OSL_ENSURE(nPosX == 0, "Unsupported case.");
+            const auto& rNearest = pThisTab->aWidthHelper.getNearestByIndex(nWhereX - 1);
+            nStartPosX = rNearest.first + 1;
+            nScrPosX = rNearest.second;
+        }
+
+        if (nWhereX >= nStartPosX)
+        {
+            for (SCCOL nX = nStartPosX; nX < nWhereX && (bAllowNeg || bIsTiledRendering || nScrPosX <= aScrSize.Width()); nX++)
             {
+                if ( nX > MAXCOL )
+                    nScrPosX = 0x7FFFFFFF;
+                else
+                {
+                    nTSize = pDoc->GetColWidth( nX, nTabNo );
+                    if (nTSize)
+                    {
+                        long nSizeXPix = ToPixel( nTSize, nPPTX );
+                        nScrPosX += nSizeXPix;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (SCCOL nX = nStartPosX; nX > nWhereX;)
+            {
+                --nX;
                 nTSize = pDoc->GetColWidth( nX, nTabNo );
                 if (nTSize)
                 {
                     long nSizeXPix = ToPixel( nTSize, nPPTX );
-                    nScrPosX += nSizeXPix;
+                    nScrPosX -= nSizeXPix;
                 }
             }
         }
-    else if (bAllowNeg)
-        for (nX=nPosX; nX>nWhereX;)
-        {
-            --nX;
-            nTSize = pDoc->GetColWidth( nX, nTabNo );
-            if (nTSize)
-            {
-                long nSizeXPix = ToPixel( nTSize, nPPTX );
-                nScrPosX -= nSizeXPix;
-            }
-        }
 
-    SCROW   nPosY = GetPosY(eWhichY);
-    SCROW   nY;
-
-    long nScrPosY=0;
-    if (bIsTiledRendering)
-    {
-        const auto& rNearest = pThisTab->aHeightHelper.getNearestByIndex(nWhereY - 1);
-        nPosY = rNearest.first + 1;
-        nScrPosY = rNearest.second;
     }
 
-    if (nWhereY >= nPosY)
-        for (nY = nPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
+
+    SCROW nPosY = GetPosY(eWhichY);
+    long nScrPosY = 0;
+
+    if (bAllowNeg || nWhereY >= nPosY)
+    {
+        SCROW nStartPosY = nPosY;
+        if (bIsTiledRendering)
         {
-            if ( nY > MAXROW )
-                nScrPosY = 0x7FFFFFFF;
-            else
+            OSL_ENSURE(nPosY == 0, "Unsupported case.");
+            const auto& rNearest = pThisTab->aHeightHelper.getNearestByIndex(nWhereY - 1);
+            nStartPosY = rNearest.first + 1;
+            nScrPosY = rNearest.second;
+        }
+
+        if (nWhereY >= nStartPosY)
+        {
+            for (SCROW nY = nStartPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
             {
+                if ( nY > MAXROW )
+                    nScrPosY = 0x7FFFFFFF;
+                else
+                {
+                    nTSize = pDoc->GetRowHeight( nY, nTabNo );
+                    if (nTSize)
+                    {
+                        long nSizeYPix = ToPixel( nTSize, nPPTY );
+                        nScrPosY += nSizeYPix;
+                    }
+                    else if ( nY < MAXROW )
+                    {
+                        // skip multiple hidden rows (forward only for now)
+                        SCROW nNext = pDoc->FirstVisibleRow(nY + 1, MAXROW, nTabNo);
+                        if ( nNext > MAXROW )
+                            nY = MAXROW;
+                        else
+                            nY = nNext - 1;     // +=nDir advances to next visible row
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (SCROW nY = nStartPosY; nY > nWhereY;)
+            {
+                --nY;
                 nTSize = pDoc->GetRowHeight( nY, nTabNo );
                 if (nTSize)
                 {
                     long nSizeYPix = ToPixel( nTSize, nPPTY );
-                    nScrPosY += nSizeYPix;
-                }
-                else if ( nY < MAXROW )
-                {
-                    // skip multiple hidden rows (forward only for now)
-                    SCROW nNext = pDoc->FirstVisibleRow(nY + 1, MAXROW, nTabNo);
-                    if ( nNext > MAXROW )
-                        nY = MAXROW;
-                    else
-                        nY = nNext - 1;     // +=nDir advances to next visible row
+                    nScrPosY -= nSizeYPix;
                 }
             }
         }
-    else if (bAllowNeg)
-        for (nY=nPosY; nY>nWhereY;)
-        {
-            --nY;
-            nTSize = pDoc->GetRowHeight( nY, nTabNo );
-            if (nTSize)
-            {
-                long nSizeYPix = ToPixel( nTSize, nPPTY );
-                nScrPosY -= nSizeYPix;
-            }
-        }
+    }
 
     if ( pDoc->IsLayoutRTL( nTabNo ) )
     {
