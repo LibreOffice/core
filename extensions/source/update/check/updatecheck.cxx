@@ -42,6 +42,7 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <sal/macros.h>
+#include <chrono>
 
 #ifdef _WIN32
 #ifdef _MSC_VER
@@ -448,10 +449,9 @@ UpdateCheckThread::run()
     osl_getSystemTime( &nExtCheckTime );
 
     osl::Condition::Result aResult = osl::Condition::result_timeout;
-    TimeValue tv = { 10, 0 };
 
     // Initial wait to avoid doing further time consuming tasks during start-up
-    aResult = m_aCondition.wait(&tv);
+    aResult = m_aCondition.wait(std::chrono::seconds(10));
 
     try {
         bool bExtensionsChecked = false;
@@ -502,8 +502,8 @@ UpdateCheckThread::run()
                 if( last + offset > systime.Seconds )
                 {
                     // This can not be > 32 Bit for now ..
-                    tv.Seconds = static_cast< sal_Int32 > (next - systime.Seconds);
-                    aResult = m_aCondition.wait(&tv);
+                    std::chrono::seconds(10).Seconds = static_cast< sal_Int32 > (next - systime.Seconds);
+                    aResult = m_aCondition.wait(std::chrono::seconds(10));
                     continue;
                 }
             }
@@ -524,8 +524,8 @@ UpdateCheckThread::run()
                 if( n < SAL_N_ELEMENTS(nRetryInterval) )
                     ++n;
 
-                tv.Seconds = nRetryInterval[n-1];
-                aResult = m_aCondition.wait(&tv);
+                std::chrono::seconds(10).Seconds = nRetryInterval[n-1];
+                aResult = m_aCondition.wait(std::chrono::seconds(10));
             }
             else // reset retry counter
             {

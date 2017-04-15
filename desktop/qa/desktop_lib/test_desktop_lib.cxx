@@ -38,6 +38,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
 #include <ostream>
+#include <chrono>
 
 #include <lib/init.hxx>
 
@@ -740,14 +741,13 @@ void DesktopLOKTest::testCommandResult()
     // the postUnoCommand() is supposed to be async, let's test it safely
     // [no idea if it is async in reality - most probably we are operating
     // under some solar mutex or something anyway ;-) - but...]
-    TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
 
     // nothing is triggered when we have no callback yet, we just time out on
     // the condition var.
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
     Scheduler::ProcessEventsToIdle();
-    m_aCommandResultCondition.wait(aTimeValue);
+    m_aCommandResultCondition.wait(std::chrono::seconds(2));
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
 
@@ -757,7 +757,7 @@ void DesktopLOKTest::testCommandResult()
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
     Scheduler::ProcessEventsToIdle();
-    m_aCommandResultCondition.wait(aTimeValue);
+    m_aCommandResultCondition.wait(std::chrono::seconds(2));
 
     boost::property_tree::ptree aTree;
     std::stringstream aStream(m_aCommandResult.getStr());
@@ -776,11 +776,10 @@ void DesktopLOKTest::testWriterComments()
 
     // Insert a comment at the beginning of the document and wait till the main
     // loop grabs the focus, so characters end up in the annotation window.
-    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
     Scheduler::ProcessEventsToIdle();
-    m_aCommandResultCondition.wait(aTimeValue);
+    m_aCommandResultCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
     xToolkit->reschedule();
 
@@ -1058,8 +1057,7 @@ void DesktopLOKTest::testContextMenuCalc()
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
 
-    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
-    m_aContextMenuCondition.wait(aTimeValue);
+    m_aContextMenuCondition.wait(std::chrono::seconds(2));
 
     CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
     boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
@@ -1168,8 +1166,7 @@ void DesktopLOKTest::testContextMenuWriter()
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
 
-    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
-    m_aContextMenuCondition.wait(aTimeValue);
+    m_aContextMenuCondition.wait(std::chrono::seconds(2));
 
     CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
     boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
@@ -1224,8 +1221,7 @@ void DesktopLOKTest::testContextMenuImpress()
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
 
-    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
-    m_aContextMenuCondition.wait(aTimeValue);
+    m_aContextMenuCondition.wait(std::chrono::seconds(2));
 
     CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
     boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
