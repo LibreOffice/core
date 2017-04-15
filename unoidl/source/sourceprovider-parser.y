@@ -1318,7 +1318,7 @@ structMember:
           error(
               @3, yyscanner,
               ("struct/exception type " + data->currentName + " direct member "
-               + id + " has same unqualified identifer as the type itself"));
+               + id + " has same unqualified identifier as the type itself"));
           YYERROR;
       }
       unoidl::detail::SourceProviderEntity * ent = getCurrentEntity(data);

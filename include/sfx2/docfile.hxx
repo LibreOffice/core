@@ -178,7 +178,7 @@ public:
     SAL_WARN_UNUSED_RESULT bool  IsReadOnly() const;
 
     // Whether the medium had originally been opened r/o (either because it is
-    // "physically" r/o, or because it was requested to be opended r/o,
+    // "physically" r/o, or because it was requested to be opened r/o,
     // independent of later changes via SetOpenMode; used to keep track of the
     // "true" state of the medium across toggles via SID_EDITDOC (which do
     // change SetOpenMode):

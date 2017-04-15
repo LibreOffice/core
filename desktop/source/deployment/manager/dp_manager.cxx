@@ -1247,7 +1247,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                     dp_misc::getDescriptionInfoset(url);
                 OSL_ENSURE(infoset.hasDescription() && infoset.getIdentifier(),
                            "Extension Manager: bundled and shared extensions "
-                           "must have an identifer and a version");
+                           "must have an identifier and a version");
                 if (infoset.hasDescription() &&
                     infoset.getIdentifier() &&
                     (! i->first.equals(*(infoset.getIdentifier()))

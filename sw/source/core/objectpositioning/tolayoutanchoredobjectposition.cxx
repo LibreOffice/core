@@ -68,7 +68,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
     SwFormatVertOrient aVert( rFrameFormat.GetVertOrient() );
     {
         // to-frame anchored objects are *only* vertical positioned centered or
-        // bottom, if its wrap mode is 'throught' and its anchor frame has fixed
+        // bottom, if its wrap mode is 'through' and its anchor frame has fixed
         // size. Otherwise, it's positioned top.
         sal_Int16 eVertOrient = aVert.GetVertOrient();
         if ( ( bFlyAtFly &&

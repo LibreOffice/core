@@ -396,7 +396,7 @@ bool ExtensionManager::isUserDisabled(
     it is not disabled by the user, then it is always registered.  Otherwise an
     extension is only registered when there is no registered extension in one of
     the repositories with a higher priority. That is, if the extension is from
-    the shared repository and an active extension with the same identifer is in
+    the shared repository and an active extension with the same identifier is in
     the user repository, then the extension is not registered. Similarly a
     bundled extension is not registered if there is an active extension with the
     same identifier in the shared or user repository.

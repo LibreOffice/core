@@ -48,7 +48,7 @@ struct LotusContext
     SvxHorJustifyItem *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
     ScProtectionAttr* pAttrUnprot;
 
-    FormCache*       pValueFormCache; // -> in memory.cxx initialisiert
+    FormCache*       pValueFormCache; // -> initialized in memory.cxx
 
     LotusContext()
         : eTyp(eWK_UNKNOWN)

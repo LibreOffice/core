@@ -49,7 +49,7 @@
 // Escape sequences: [Esc]<Ident><Value>[Esc]  at least 4 characters
 // Max length of value should be: 8 chars (7+sign). Therefore max. length
 // of a escape sequence: 11 chars.
-// Identifer:
+// Identifier:
 
 #define  EscFont   'F' /* fontID, e.g. 92500 for CG Times                           */
 #define  EscGrad   'G' /* font angle 1..255 for <<Pt-127<<Pt                        */

@@ -210,7 +210,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
             m_nEndIndex++;
         }
     }
-    else // skip the not opended ends
+    else // skip the not opened ends
     {
         while ( (m_nEndIndex < m_pHints->Count()) &&
                 (*m_pHints->GetSortedByEnd(m_nEndIndex)->GetAnyEnd() <= nNewPos) )
@@ -220,7 +220,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
     }
 
     // As long as we've not yet reached the end of EndArray and the
-    // TextAttribute ends before or at the new position ...
+    // TextAttribute ends before or at the new position...
     while ( ( m_nStartIndex < m_pHints->Count() ) &&
             ((pTextAttr=m_pHints->Get(m_nStartIndex))->GetStart()<=nNewPos) )
     {

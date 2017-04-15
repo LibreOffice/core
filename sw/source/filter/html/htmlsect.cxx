@@ -237,7 +237,7 @@ void SwHTMLParser::NewDivision( int nToken )
     // We only insert sections into frames if the section is linked.
     if( (!aId.isEmpty() && !bPositioned) || !aHRef.isEmpty()  )
     {
-        // Insert section (has to be done before setting of attribures,
+        // Insert section (has to be done before setting of attributes,
         // because the section is inserted before the PaM position.
 
         // If we are in the first node of a section, we insert the section
