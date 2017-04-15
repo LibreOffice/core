@@ -89,7 +89,7 @@ sal_uInt32 GetNumber()
             if( rtl::isAsciiDigit( static_cast<unsigned char>(c) ) )
                 l = l * nLog + (c - '0');
             else
-                l = l * nLog + (toupper( c ) - 'A' + 10 );
+                l = l * nLog + (rtl::toAsciiUpperCase( static_cast<sal_uInt32>(c) ) - 'A' + 10 );
 
             c = pFI->GetFastChar();
         }
