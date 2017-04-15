@@ -2186,7 +2186,7 @@ const SwNumRule * SwDocStyleSheet::GetNumRule()
 
 void SwDocStyleSheet::SetNumRule(const SwNumRule& rRule)
 {
-    OSL_ENSURE(pNumRule, "Wo ist die NumRule");
+    OSL_ENSURE(pNumRule, "Where is the NumRule");
     rDoc.ChgNumRuleFormats( rRule );
 }
 
@@ -2429,14 +2429,14 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOrg*/)
 {
-    OSL_ENSURE(false , "Create im SW-Stylesheet-Pool geht nicht" );
+    OSL_ENSURE(false , "Create in SW-Stylesheet-Pool not possible" );
     return nullptr;
 }
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
                                                   SfxStyleFamily, sal_uInt16 )
 {
-    OSL_ENSURE( false, "Create im SW-Stylesheet-Pool geht nicht" );
+    OSL_ENSURE( false, "Create in SW-Stylesheet-Pool not possible" );
     return nullptr;
 }
 
