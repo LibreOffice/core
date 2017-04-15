@@ -229,6 +229,7 @@ public:
     void testTdf35021_tabOverMarginDemo();
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
+    void testTdf107025();
     void testTdf105417();
     void testTdf105625();
     void testTdf106736();
@@ -353,6 +354,7 @@ public:
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
+    CPPUNIT_TEST(testTdf107025);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
@@ -4432,6 +4434,28 @@ void SwUiWriterTest::testTdf104492()
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // The document should split table over 3 pages.
     assertXPath(pXmlDoc, "//page", 3);
+}
+
+void SwUiWriterTest::testTdf107025()
+{
+    // Tdf107025 - characters advance with wrong distance, so that
+    // they are cluttered because of negative value or
+    // break into multiple lines because of overflow.
+    createDoc("tdf107025.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Verify the number of characters in each line.
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]", "nLength").toInt32());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(9), getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nLength").toInt32());
+
+
+    CPPUNIT_ASSERT(!parseDump("(//Text[@nType='POR_TXT'])[1]", "nWidth").isEmpty());
+    CPPUNIT_ASSERT(!parseDump("(//Text[@nType='POR_TXT'])[2]", "nWidth").isEmpty());
+    // Width of the second line is expected to be 9 times of the first.
+    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]", "nWidth").toInt32();
+    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nWidth").toInt32();
+
+    CPPUNIT_ASSERT( nWidth1 != 0 );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(9), nWidth2 / nWidth1 );
 }
 
 void SwUiWriterTest::testTdf105417()
