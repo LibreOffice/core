@@ -165,7 +165,6 @@ protected:
 
 private:
 
-    DECL_LINK( DelayedPaste, void*, void );
     DECL_LINK( CBChangeHdl, ComboBox&, void);
 
     void InsertRows( long nRow );
@@ -794,17 +793,6 @@ void OFieldExpressionControl::DeleteRows()
     m_pParent->DisplayData( m_nDataPos );
     m_bIgnoreEvent = false;
     Invalidate();
-}
-
-IMPL_LINK_NOARG( OFieldExpressionControl, DelayedPaste, void*, void )
-{
-    m_nPasteEvent = nullptr;
-
-    sal_Int32 nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : GetCurRow();
-
-    InsertRows( nPastePosition );
-    SetNoSelection();
-    GoToRow( nPastePosition );
 }
 
 IMPL_LINK_NOARG( OFieldExpressionControl, DelayedDelete, void*, void )
