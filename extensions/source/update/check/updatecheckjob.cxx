@@ -24,6 +24,7 @@
 #include "updatehdl.hxx"
 #include "updateprotocol.hxx"
 
+#include <chrono>
 #include <memory>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -120,8 +121,7 @@ void SAL_CALL InitUpdateCheckJobThread::run()
     osl_setThreadName("InitUpdateCheckJobThread");
 
     if (!m_bShowDialog) {
-        TimeValue tv = { 25, 0 };
-        m_aCondition.wait( &tv );
+        m_aCondition.wait( std::chrono::seconds(25) );
         if ( m_bTerminating )
             return;
     }
