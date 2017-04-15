@@ -1659,7 +1659,7 @@ struct ColumnStorageDumper : std::unary_function<sc::CellStoreType::value_type, 
                 cout << aRes.mfValue << " (type: value)";
                 break;
             case sc::FormulaResultValue::String:
-                cout << aRes.maString.getString() << " (type: string)";
+                cout << "'" << aRes.maString.getString() << "' (type: string)";
                 break;
             case sc::FormulaResultValue::Error:
                 cout << "error (" << static_cast<int>(aRes.mnError) << ")";
