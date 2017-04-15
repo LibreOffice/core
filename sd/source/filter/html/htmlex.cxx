@@ -3229,7 +3229,7 @@ HtmlErrorContext::HtmlErrorContext()
     mnResId = 0;
 }
 
-bool HtmlErrorContext::GetString( sal_uLong, OUString& rCtxStr )
+bool HtmlErrorContext::GetString( sal_uInt32, OUString& rCtxStr )
 {
     DBG_ASSERT( mnResId != 0, "No error context set" );
     if( mnResId == 0 )

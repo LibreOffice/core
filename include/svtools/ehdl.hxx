@@ -39,7 +39,7 @@ public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, const OUString &aArg1, vcl::Window *pWin=nullptr,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=nullptr);
-    bool GetString(sal_uLong nErrId, OUString &rStr) override;
+    bool GetString(sal_uInt32 nErrId, OUString &rStr) override;
 
 private:
     sal_uInt16 nCtxId;
