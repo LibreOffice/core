@@ -968,7 +968,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
 {
     // AS: Go through the actual JPEG bits, separating out the
     //  header fields from the actual image fields.  Fields are
-    //  identifed by 0xFFXX where XX is the field type.  Both
+    //  identified by 0xFFXX where XX is the field type.  Both
     //  the header and the image need start and stop (D8 and D9),
     //  so that's why you see those written to both.  I don't
     //  really know what the rest of these are, I got it to work

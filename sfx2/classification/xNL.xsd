@@ -223,7 +223,7 @@ e.g. used for legal purposes</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="ID" type="ct:String">
 			<xs:annotation>
-				<xs:documentation>Globally unique identifer</xs:documentation>
+				<xs:documentation>Globally unique identifier</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="Usage" type="OrganisationNameUsageList">

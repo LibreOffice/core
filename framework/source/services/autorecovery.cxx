@@ -2845,12 +2845,12 @@ void AutoRecovery::implts_prepareSessionShutdown()
         that a document must be ignored for AutoSave and Recovery.
         But sometimes XModel->getArgs() does not contained this information
         if implts_registerDocument() was called.
-        So we have to check a second time, if this property is set ....
-        Best place doing so is to check it immeditaly before saving
+        So we have to check a second time, if this property is set...
+        Best place doing so is to check it immediately before saving
         and suppressing saving the document then.
         Of course removing the corresponding cache entry is not an option.
-        Because it would disturb iteration over the cache !
-        So we ignore such documents only ...
+        Because it would disturb iteration over the cache!
+        So we ignore such documents only...
         Hopefully next time they are not inserted in our cache.
 */
 bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo& rInfo)

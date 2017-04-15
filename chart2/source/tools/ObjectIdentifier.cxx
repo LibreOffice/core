@@ -390,7 +390,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     }
     else
     {
-        OSL_FAIL("give object could not be identifed in createClassifiedIdentifierForObject");
+        OSL_FAIL("give object could not be identified in createClassifiedIdentifierForObject");
     }
 
     return aRet;
@@ -472,7 +472,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     }
     else
     {
-        OSL_FAIL("give object could not be identifed in createClassifiedIdentifierForObject");
+        OSL_FAIL("give object could not be identified in createClassifiedIdentifierForObject");
     }
 
     return aRet;

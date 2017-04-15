@@ -547,7 +547,7 @@ bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
             case KEY_RETURN:
             {
                 if( bMod1 )
-                    sExecuteIdent = "proeprties";
+                    sExecuteIdent = "properties";
             }
             break;
         }
