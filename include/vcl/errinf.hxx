@@ -65,17 +65,17 @@ namespace o3tl
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorInfo
 {
 private:
-    sal_uIntPtr             lUserId;
+    sal_uInt32             lUserId;
 
 public:
 
-                            ErrorInfo( sal_uIntPtr lArgUserId ) :
+                            ErrorInfo( sal_uInt32 lArgUserId ) :
                                 lUserId( lArgUserId ){}
     virtual                 ~ErrorInfo();
 
-    sal_uIntPtr             GetErrorCode() const { return lUserId; }
+    sal_uInt32             GetErrorCode() const { return lUserId; }
 
-    static ErrorInfo*       GetErrorInfo(sal_uIntPtr);
+    static ErrorInfo*       GetErrorInfo(sal_uInt32);
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
@@ -87,10 +87,10 @@ private:
 
 public:
 
-                            DynamicErrorInfo(sal_uIntPtr lUserId, ErrorHandlerFlags nMask);
+                            DynamicErrorInfo(sal_uInt32 lUserId, ErrorHandlerFlags nMask);
     virtual                 ~DynamicErrorInfo() override;
 
-    operator                sal_uIntPtr() const;
+    operator                sal_uInt32() const;
     ErrorHandlerFlags       GetDialogMask() const;
 };
 
@@ -101,7 +101,7 @@ private:
 
 public:
 
-                            StringErrorInfo( sal_uIntPtr lUserId,
+                            StringErrorInfo( sal_uInt32 lUserId,
                                             const OUString& aStringP,
                                             ErrorHandlerFlags nMask = ErrorHandlerFlags::NONE);
     const OUString&         GetErrorString() const { return aString; }
@@ -115,7 +115,7 @@ private:
 
 public:
 
-    TwoStringErrorInfo(sal_uIntPtr nUserID, const OUString & rTheArg1,
+    TwoStringErrorInfo(sal_uInt32 nUserID, const OUString & rTheArg1,
                        const OUString & rTheArg2, ErrorHandlerFlags nMask):
         DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
 
@@ -135,7 +135,7 @@ public:
                             ErrorContext(vcl::Window *pWin);
     virtual                 ~ErrorContext();
 
-    virtual bool            GetString( sal_uIntPtr nErrId, OUString& rCtxStr ) = 0;
+    virtual bool            GetString( sal_uInt32 nErrId, OUString& rCtxStr ) = 0;
     vcl::Window*            GetParent();
 
     static ErrorContext*    GetContext();
@@ -152,7 +152,7 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
     friend class ErrorHandler_Impl;
 
 private:
-    static ErrorHandlerFlags HandleError_Impl( sal_uIntPtr lId,
+    static ErrorHandlerFlags HandleError_Impl( sal_uInt32 lId,
                               ErrorHandlerFlags nFlags,
                               bool bJustCreateString,
                               OUString & rError);
@@ -163,8 +163,8 @@ public:
                         ErrorHandler();
     virtual             ~ErrorHandler();
 
-    static ErrorHandlerFlags HandleError ( sal_uIntPtr lId, ErrorHandlerFlags nMask = ErrorHandlerFlags::MAX );
-    static bool         GetErrorString( sal_uIntPtr lId, OUString& rStr );
+    static ErrorHandlerFlags HandleError ( sal_uInt32 lId, ErrorHandlerFlags nMask = ErrorHandlerFlags::MAX );
+    static bool         GetErrorString( sal_uInt32 lId, OUString& rStr );
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );
     static void         RegisterDisplay( WindowDisplayErrorFunc* );
