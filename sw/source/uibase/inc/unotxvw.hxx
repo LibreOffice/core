@@ -170,7 +170,7 @@ public:
     virtual void SAL_CALL setVisible(sal_Bool bVisible) override;
     virtual css::awt::Point SAL_CALL getPosition() override;
 
-    //XTextCursor - neu
+    //XTextCursor - new
     virtual void SAL_CALL collapseToStart() override;
     virtual void SAL_CALL collapseToEnd() override;
     virtual sal_Bool SAL_CALL isCollapsed() override;
