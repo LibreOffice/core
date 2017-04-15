@@ -103,6 +103,8 @@ namespace svxform
     class DataTreeListBox : public SvTreeListBox
     {
     private:
+        std::unique_ptr<VclBuilder> m_xBuilder;
+        VclPtr<PopupMenu>       m_xMenu;
         VclPtr<XFormsPage>      m_pXFormsPage;
         DataGroupType           m_eGroup;
         sal_uInt16              m_nAddId;

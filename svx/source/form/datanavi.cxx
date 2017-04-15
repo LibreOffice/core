@@ -25,7 +25,6 @@
 #include "datanavi.hxx"
 #include "fmservs.hxx"
 
-#include "datanavi.hrc"
 #include "fmhelp.hrc"
 #include <svx/svxids.hrc>
 #include <tools/rcid.h>
@@ -152,6 +151,8 @@ namespace svxform
     void DataTreeListBox::dispose()
     {
         DeleteAndClear();
+        m_xMenu.clear();
+        m_xBuilder.reset();
         m_pXFormsPage.clear();
         SvTreeListBox::dispose();
     }
@@ -160,10 +161,12 @@ namespace svxform
     {
         return DND_ACTION_NONE;
     }
+
     sal_Int8 DataTreeListBox::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
     {
         return DND_ACTION_NONE;
     }
+
     void DataTreeListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
     {
         SvTreeListEntry* pSelected = FirstSelected();
@@ -222,34 +225,46 @@ namespace svxform
 
     VclPtr<PopupMenu> DataTreeListBox::CreateContextMenu()
     {
-        VclPtrInstance<PopupMenu> pMenu( SVX_RES( RID_MENU_DATANAVIGATOR ) );
+        m_xMenu.disposeAndClear();
+        m_xBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/formdatamenu.ui", ""));
+        m_xMenu.set(m_xBuilder->get_menu("menu"));
+
         if ( DGTInstance == m_eGroup )
-            pMenu->RemoveItem( pMenu->GetItemPos( m_nAddId ) );
+            m_xMenu->RemoveItem(m_xMenu->GetItemPos(m_xMenu->GetItemId("additem")));
         else
         {
-            pMenu->RemoveItem( pMenu->GetItemPos( m_nAddElementId ) );
-            pMenu->RemoveItem( pMenu->GetItemPos( m_nAddAttributeId ) );
+            m_xMenu->RemoveItem(m_xMenu->GetItemPos(m_xMenu->GetItemId("addelement")));
+            m_xMenu->RemoveItem(m_xMenu->GetItemPos(m_xMenu->GetItemId("addattribute")));
 
             if ( DGTSubmission == m_eGroup )
             {
-                pMenu->SetItemText( m_nAddId, SVX_RESSTR( RID_STR_DATANAV_ADD_SUBMISSION ) );
-                pMenu->SetItemText( m_nEditId, SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
-                pMenu->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
+                m_xMenu->SetItemText(m_xMenu->GetItemId("additem"), SVX_RESSTR(RID_STR_DATANAV_ADD_SUBMISSION));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("edit"), SVX_RESSTR(RID_STR_DATANAV_EDIT_SUBMISSION));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("delete"), SVX_RESSTR(RID_STR_DATANAV_REMOVE_SUBMISSION));
             }
             else
             {
-                pMenu->SetItemText( m_nAddId, SVX_RESSTR( RID_STR_DATANAV_ADD_BINDING ) );
-                pMenu->SetItemText( m_nEditId, SVX_RESSTR( RID_STR_DATANAV_EDIT_BINDING ) );
-                pMenu->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
+                m_xMenu->SetItemText(m_xMenu->GetItemId("additem"), SVX_RESSTR(RID_STR_DATANAV_ADD_BINDING));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("edit"), SVX_RESSTR(RID_STR_DATANAV_EDIT_BINDING));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("delete"), SVX_RESSTR(RID_STR_DATANAV_REMOVE_BINDING));
             }
         }
-        m_pXFormsPage->EnableMenuItems( pMenu.get() );
-        return pMenu;
+        m_pXFormsPage->EnableMenuItems(m_xMenu.get());
+        return m_xMenu;
     }
 
     void DataTreeListBox::ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
     {
-        m_pXFormsPage->DoMenuAction( _nSelectedPopupEntry );
+        if (m_xMenu->GetItemId("additem") == _nSelectedPopupEntry)
+            m_pXFormsPage->DoMenuAction(m_nAddId);
+        else if (m_xMenu->GetItemId("addelement") == _nSelectedPopupEntry)
+            m_pXFormsPage->DoMenuAction(m_nAddElementId);
+        else if (m_xMenu->GetItemId("addattribute") == _nSelectedPopupEntry)
+            m_pXFormsPage->DoMenuAction(m_nAddAttributeId);
+        else if (m_xMenu->GetItemId("edit") == _nSelectedPopupEntry)
+            m_pXFormsPage->DoMenuAction(m_nEditId);
+        else if (m_xMenu->GetItemId("delete") == _nSelectedPopupEntry)
+            m_pXFormsPage->DoMenuAction(m_nRemoveId);
     }
 
     void DataTreeListBox::RemoveEntry( SvTreeListEntry* _pEntry )
@@ -765,10 +780,6 @@ namespace svxform
                     return bHandled;
             }
             bIsDocModified = RemoveEntry();
-        }
-        else if(_nToolBoxID == MID_INSERT_CONTROL)
-        {
-            OSL_FAIL( "XFormsPage::DoToolboxAction: MID_INSERT_CONTROL not implemented, yet!" );
         }
         else
         {
@@ -1304,11 +1315,11 @@ namespace svxform
 
         if ( _pMenu )
         {
-            _pMenu->EnableItem( m_nAddId, bEnableAdd );
-            _pMenu->EnableItem( m_nAddElementId, bEnableAdd );
-            _pMenu->EnableItem( m_nAddAttributeId, bEnableAdd );
-            _pMenu->EnableItem( m_nEditId, bEnableEdit );
-            _pMenu->EnableItem( m_nRemoveId, bEnableRemove );
+            _pMenu->EnableItem(_pMenu->GetItemId("additem"), bEnableAdd);
+            _pMenu->EnableItem(_pMenu->GetItemId("addelement"), bEnableAdd);
+            _pMenu->EnableItem(_pMenu->GetItemId("addattribute"), bEnableAdd);
+            _pMenu->EnableItem(_pMenu->GetItemId("edit"), bEnableEdit);
+            _pMenu->EnableItem(_pMenu->GetItemId("delete"), bEnableRemove);
         }
         if ( DGTInstance == m_eGroup )
         {
@@ -1338,8 +1349,8 @@ namespace svxform
             m_pToolBox->SetItemText( m_nRemoveId, SVX_RESSTR( nResId2 ) );
             if ( _pMenu )
             {
-                _pMenu->SetItemText( m_nEditId, SVX_RESSTR( nResId1 ) );
-                _pMenu->SetItemText( m_nRemoveId, SVX_RESSTR( nResId2 ) );
+                _pMenu->SetItemText(_pMenu->GetItemId("edit"), SVX_RESSTR( nResId1 ) );
+                _pMenu->SetItemText(_pMenu->GetItemId("delete"), SVX_RESSTR( nResId2 ) );
             }
         }
     }

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "datanavi.hrc"
 #include "svx/dialogs.hrc"
 #include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
@@ -115,58 +114,6 @@ String RID_STR_DOUBLE_MODELNAME
 String RID_STR_EMPTY_SUBMISSIONNAME
 {
     Text [ en-US ] = "The submission must have a name." ;
-};
-
-Menu RID_MENU_DATANAVIGATOR
-{
-    ItemList =
-    {
-        // MID_INSERT_CONTROL not implemented, yet (#i99890#)
-        /*MenuItem
-        {
-            Identifier = MID_INSERT_CONTROL ;
-            HelpId = HID_XFORMS_MID_INSERT_CONTROL ;
-            Text [ en-US ] = "Insert Control" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };*/
-        MenuItem
-        {
-            Identifier = TBI_ITEM_ADD ;
-            HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD ;
-            Text [ en-US ] = "Add Item" ;
-        };
-        MenuItem
-        {
-            Identifier = TBI_ITEM_ADD_ELEMENT ;
-            HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT ;
-            Text [ en-US ] = "Add Element" ;
-        };
-        MenuItem
-        {
-            Identifier = TBI_ITEM_ADD_ATTRIBUTE ;
-            HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE ;
-            Text [ en-US ] = "Add Attribute" ;
-        };
-        MenuItem
-        {
-            Identifier = TBI_ITEM_EDIT ;
-            HelpId = HID_XFORMS_TOOLBOX_ITEM_EDIT ;
-            Text [ en-US ] = "Edit" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = TBI_ITEM_REMOVE ;
-            HelpId = HID_XFORMS_TOOLBOX_ITEM_REMOVE ;
-            Text [ en-US ] = "Delete" ;
-        };
-    };
 };
 
 String RID_STR_METHOD_POST
