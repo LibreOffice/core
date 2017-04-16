@@ -2288,7 +2288,8 @@ void Test::testFormulaRefUpdateMoveUndo2()
 
     // Drag A1:B1 into A2:B2 thereby overwriting the old A2:B2 content.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    rFunc.MoveBlock(ScRange(0,0,0,1,0,0), ScAddress(0,1,0), true, true, false, true);
+    bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,1,0,0), ScAddress(0,1,0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
 
     std::vector<std::vector<const char*>> aCheckAfter = {
         { nullptr, nullptr,    "10",     "3" },
