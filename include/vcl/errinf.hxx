@@ -34,7 +34,7 @@ namespace vcl { class Window; }
 class DynamicErrorInfo_Impl;
 class ErrorHandler_Impl;
 
-enum class ErrorHandlerFlags
+enum class DialogMask
 {
     NONE                    = 0x0000,
     ButtonsOk               = 0x0001,
@@ -59,7 +59,7 @@ enum class ErrorHandlerFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ErrorHandlerFlags> : is_typed_flags<ErrorHandlerFlags, 0xffff> {};
+    template<> struct typed_flags<DialogMask> : is_typed_flags<DialogMask, 0xffff> {};
 }
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorInfo
@@ -87,11 +87,11 @@ private:
 
 public:
 
-                            DynamicErrorInfo(sal_uInt32 lUserId, ErrorHandlerFlags nMask);
+                            DynamicErrorInfo(sal_uInt32 lUserId, DialogMask nMask);
     virtual                 ~DynamicErrorInfo() override;
 
     operator                sal_uInt32() const;
-    ErrorHandlerFlags       GetDialogMask() const;
+    DialogMask       GetDialogMask() const;
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
@@ -103,7 +103,7 @@ public:
 
                             StringErrorInfo( sal_uInt32 lUserId,
                                             const OUString& aStringP,
-                                            ErrorHandlerFlags nMask = ErrorHandlerFlags::NONE);
+                                            DialogMask nMask = DialogMask::NONE);
     const OUString&         GetErrorString() const { return aString; }
 };
 
@@ -116,7 +116,7 @@ private:
 public:
 
     TwoStringErrorInfo(sal_uInt32 nUserID, const OUString & rTheArg1,
-                       const OUString & rTheArg2, ErrorHandlerFlags nMask):
+                       const OUString & rTheArg2, DialogMask nMask):
         DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
 
     const OUString& GetArg1() const { return aArg1; }
@@ -141,8 +141,8 @@ public:
     static ErrorContext*    GetContext();
 };
 
-typedef ErrorHandlerFlags WindowDisplayErrorFunc(
-    vcl::Window *, ErrorHandlerFlags nMask, const OUString &rErr, const OUString &rAction);
+typedef DialogMask WindowDisplayErrorFunc(
+    vcl::Window *, DialogMask nMask, const OUString &rErr, const OUString &rAction);
 
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
@@ -152,8 +152,8 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
     friend class ErrorHandler_Impl;
 
 private:
-    static ErrorHandlerFlags HandleError_Impl( sal_uInt32 lId,
-                              ErrorHandlerFlags nFlags,
+    static DialogMask HandleError_Impl( sal_uInt32 lId,
+                              DialogMask nFlags,
                               bool bJustCreateString,
                               OUString & rError);
 protected:
@@ -163,7 +163,7 @@ public:
                         ErrorHandler();
     virtual             ~ErrorHandler();
 
-    static ErrorHandlerFlags HandleError ( sal_uInt32 lId, ErrorHandlerFlags nMask = ErrorHandlerFlags::MAX );
+    static DialogMask   HandleError ( sal_uInt32 lId, DialogMask nMask = DialogMask::MAX );
     static bool         GetErrorString( sal_uInt32 lId, OUString& rStr );
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );

@@ -211,13 +211,13 @@ sal_Int32 ReadThroughComponent(
                             (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
                                                     : WARN_FORMAT_FILE_ROWCOL),
                             rStreamName, sErr,
-                            ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError );
+                            DialogMask::ButtonsOk | DialogMask::MessageError );
         }
         else
         {
             OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
             return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
-                             ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError );
+                             DialogMask::ButtonsOk | DialogMask::MessageError );
         }
     }
     catch(const xml::sax::SAXException& r)
