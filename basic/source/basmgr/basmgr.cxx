@@ -638,7 +638,7 @@ void BasicManager::ImpMgrNotLoaded( const OUString& rStorageName )
 {
     // pErrInf is only destroyed if the error os processed by an
     // ErrorHandler
-    StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, rStorageName, ErrorHandlerFlags::ButtonsOk );
+    StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, rStorageName, DialogMask::ButtonsOk );
     aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::OPENMGRSTREAM));
 
     // Create a stdlib otherwise we crash!
@@ -778,7 +778,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     xManagerStream->Seek( nBasicStartOff );
     if (!ImplLoadBasic( *xManagerStream, mpImpl->aLibs.front()->GetLibRef() ))
     {
-        StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, aStorName, ErrorHandlerFlags::ButtonsOk );
+        StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, aStorName, DialogMask::ButtonsOk );
         aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::OPENMGRSTREAM));
         // and it proceeds ...
     }
@@ -826,7 +826,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             }
             else
             {
-                StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, aStorName, ErrorHandlerFlags::ButtonsOk );
+                StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, aStorName, DialogMask::ButtonsOk );
                 aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::STORAGENOTFOUND));
             }
         }
@@ -909,7 +909,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
 
     if ( !xBasicStorage.is() || xBasicStorage->GetError() )
     {
-        StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, xStorage->GetName(), ErrorHandlerFlags::ButtonsOk );
+        StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, xStorage->GetName(), DialogMask::ButtonsOk );
         aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::OPENLIBSTORAGE));
     }
     else
@@ -918,7 +918,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
         tools::SvRef<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( pLibInfo->GetLibName(), eStreamReadMode );
         if ( !xBasicStream.is() || xBasicStream->GetError() )
         {
-            StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD , pLibInfo->GetLibName(), ErrorHandlerFlags::ButtonsOk );
+            StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD , pLibInfo->GetLibName(), DialogMask::ButtonsOk );
             aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::OPENLIBSTREAM));
         }
         else
@@ -941,7 +941,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
             }
             if ( !bLoaded )
             {
-                StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, pLibInfo->GetLibName(), ErrorHandlerFlags::ButtonsOk );
+                StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, pLibInfo->GetLibName(), DialogMask::ButtonsOk );
                 aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::BASICLOADERROR));
             }
             else
@@ -1125,7 +1125,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 
     if( !nLib || nLib  < mpImpl->aLibs.size() )
     {
-        StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, OUString(), ErrorHandlerFlags::ButtonsOk );
+        StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, OUString(), DialogMask::ButtonsOk );
         aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::STDLIB));
         return false;
     }
@@ -1161,7 +1161,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 
             if ( !xBasicStorage.is() || xBasicStorage->GetError() )
             {
-                StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, OUString(), ErrorHandlerFlags::ButtonsOk );
+                StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, OUString(), DialogMask::ButtonsOk );
                 aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::OPENLIBSTORAGE));
             }
             else if (xBasicStorage->IsStream((*itLibInfo)->GetLibName()))
@@ -1296,7 +1296,7 @@ bool BasicManager::LoadLib( sal_uInt16 nLib )
     }
     else
     {
-        StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, OUString(), ErrorHandlerFlags::ButtonsOk );
+        StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, OUString(), DialogMask::ButtonsOk );
         aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::LIBNOTFOUND));
     }
     return bDone;
