@@ -97,7 +97,7 @@ css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
     aFD.Orientation = rFont.GetOrientation();
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
-    aFD.Type = 0;   // ??? => Nur an Metric...
+    aFD.Type = 0;   // ??? => only to metric...
     return aFD;
 }
 
@@ -1182,7 +1182,7 @@ void FmXGridPeer::removeModifyListener(const Reference< css::util::XModifyListen
 #define LAST_KNOWN_TYPE     FormComponentType::PATTERNFIELD
 Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType )
 {
-    // eine 'Konvertierungstabelle'
+    // a 'conversion table'
     static const bool bCanConvert[LAST_KNOWN_TYPE][4] =
     {
         { false, false, false, false }, //  FormComponentType::CONTROL
@@ -1283,7 +1283,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     if (!pGrid || !pGrid->IsOpen())
         return Sequence< Any>();
 
-    // das Control zur angegebenen Row fahren
+    // move the control to the specified row
     if (!pGrid->SeekRow(nRow))
     {
         throw IllegalArgumentException();
@@ -1297,7 +1297,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     // I need the columns of the control for GetFieldText
     DbGridColumns aColumns = pGrid->GetColumns();
 
-    // und durch alle Spalten durch
+    // and through all the columns
     sal_Int32 nColumnCount = pGrid->GetViewColCount();
 
     Sequence< Any> aReturnSequence(nColumnCount);
@@ -1720,7 +1720,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt)
     SolarMutexGuard aGuard;
 
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
-    // Handle Column beruecksichtigen
+    // take handle column into account
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
         return;
 
@@ -1735,7 +1735,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt)
 
     pGrid->AppendColumn(aName, (sal_uInt16)nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
 
-    // jetzt die Spalte setzen
+    // now set the column
     DbGridColumn* pCol = pGrid->GetColumns().at( ::comphelper::getINT32(evt.Accessor) );
     pCol->setModel(xNewColumn);
 
@@ -1753,7 +1753,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt)
 
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
 
-    // Handle Column beruecksichtigen
+    // take handle column into account
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove())
         return;
 
@@ -1808,7 +1808,7 @@ void FmXGridPeer::elementRemoved(const ContainerEvent& evt)
 
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
 
-    // Handle Column beruecksichtigen
+    // take handle column into account
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
         return;
 
@@ -1910,7 +1910,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
             if (Value >>= aFont)
             {
                 vcl::Font aNewVclFont;
-                if (aFont != ::comphelper::getDefaultFont())    // ist das der Default
+                if (aFont != ::comphelper::getDefaultFont())    // is this the default
                     aNewVclFont = ImplCreateFont( aFont );
 
                 // need to add relief and emphasis (they're stored in a VCL-Font, but not in a FontDescriptor
@@ -2278,8 +2278,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt)
             // The columns have to be 1-based for the VCL control.
             // If necessary, pass on the selection to the VCL control
             if ( i != pGrid->GetSelectedColumn() )
-            {   // (wenn das nicht greift, wurde das selectionChanged implizit von dem Control selber ausgeloest
-                // if this does not ?hold?catch?, the selectionChanged is cleared by the Control itself
+            {   // (if this does not take effect, the selectionChanged was implicitly triggered by the control itself)
                 if ( i < nColCount )
                 {
                     pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1);

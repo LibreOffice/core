@@ -384,12 +384,12 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
             return;
         }
 
-        // Vom Feld werden nun zwei Informationen benoetigt:
-        // a.) Name des Feldes fuer Label und ControlSource
-        // b.) FormatKey, um festzustellen, welches Feld erzeugt werden soll
+        // The field now needs two pieces of information:
+        // a.) Name of the field for label and ControlSource
+        // b.) FormatKey, to determine which field is to be created
         sal_Int32 nDataType = 0;
         xField->getPropertyValue(FM_PROP_FIELDTYPE) >>= nDataType;
-        // diese Datentypen koennen im Gridcontrol nicht verarbeitet werden
+        // these datatypes can not be processed in Gridcontrol
         switch (nDataType)
         {
             case DataType::BLOB:
@@ -402,12 +402,12 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                 return;
         }
 
-        // Erstellen der Column
+        // Creating the column
         Reference< XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
         Reference< XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
 
         sal_uInt16 nColId = GetItemId(m_pImpl->aDropPosPixel);
-        // EinfuegePosition, immer vor der aktuellen Spalte
+        // insert position, always before the current column
         sal_uInt16 nPos = GetModelColumnPos(nColId);
         Reference< XPropertySet >  xCol, xSecondCol;
 
@@ -546,7 +546,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         else
             xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName));
 
-        // jetzt einfuegen
+        // insert now
         Any aElement;
         aElement <<= xCol;
 
@@ -592,7 +592,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
             xCols->insertByIndex(nPos == (sal_uInt16)-1 ? nPos : ++nPos, aElement);
         }
 
-        // ist die component::Form an die Datenbankangebunden?
+        // is the component::Form tied to the database?
         Reference< XFormComponent >  xFormCp(xCols, UNO_QUERY);
         Reference< XPropertySet >  xForm(xFormCp->getParent(), UNO_QUERY);
         if (xForm.is())
@@ -643,7 +643,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     bool bDesignMode = static_cast<FmGridControl*>(GetParent())->IsDesignMode();
 
     Reference< css::container::XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
-    // Aufbau des Insert Menus
+    // Building of the Insert Menu
     // mark the column if nColId != HEADERBAR_ITEM_NOTFOUND
     if(nColId > 0)
     {
@@ -656,7 +656,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
             xSelSupplier->select(makeAny(xColumn));
     }
 
-    // EinfuegePosition, immer vor der aktuellen Spalte
+    // insert position, always before the current column
     sal_uInt16 nPos = GetModelColumnPos(nColId);
     bool bMarked = nColId && static_cast<FmGridControl*>(GetParent())->isColumnMarked(nColId);
 
@@ -939,7 +939,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
 
             if ( bReplace )
             {
-                // ein paar Properties hinueberretten
+                // rescue over a few properties
                 Reference< XPropertySet > xReplaced( xCols->getByIndex( nPos ), UNO_QUERY );
 
                 TransferFormComponentProperties(
@@ -1081,7 +1081,7 @@ void FmGridControl::propertyChange(const css::beans::PropertyChangeEvent& evt)
     }
 
     const DbGridRowRef& xRow = GetCurrentRow();
-    // waehrend Positionierung wird kein abgleich  der Properties vorgenommen
+    // no adjustment of the properties is carried out during positioning
     Reference<XPropertySet> xSet(evt.Source,UNO_QUERY);
     if (xRow.is() && (::cppu::any2bool(xSet->getPropertyValue(FM_PROP_ISNEW))|| CompareBookmark(getDataSource()->getBookmark(), xRow->GetBookmark())))
     {
@@ -1107,7 +1107,7 @@ void FmGridControl::SetDesignMode(bool bMode)
     {
         if (!bMode)
         {
-            // selection aufheben
+            // cancel selection
             markColumn(USHRT_MAX);
         }
         else
@@ -1198,7 +1198,7 @@ void FmGridControl::DeleteSelectedRows()
         {
             OSL_FAIL("Exception caught while deleting rows!");
         }
-        // An den DatenCursor anpassen
+        // adapt to the data cursor
         AdjustDataSource(true);
         EndCursorAction();
         SetUpdateMode(true);
@@ -1253,8 +1253,8 @@ void FmGridControl::DeleteSelectedRows()
             }
         }
 
-        // Sind alle Zeilen Selectiert
-        // Zweite bedingung falls keine einguegeZeile existiert
+        // Are all rows selected?
+        // Second condition if no insertion line exists
         bool bAllSelected = GetTotalCount() == nSelectedRows || GetRowCount() == nSelectedRows;
 
         BeginCursorAction();
@@ -1280,7 +1280,7 @@ void FmGridControl::DeleteSelectedRows()
                 ++nDeletedRows;
         }
 
-        // sind Zeilen geloescht worden?
+        // have rows been deleted?
         if (nDeletedRows)
         {
             SetUpdateMode(false);
@@ -1347,18 +1347,18 @@ void FmGridControl::DeleteSelectedRows()
                 }
             }
 
-            // An den DatenCursor anpassen
+            // adapt to the data cursor
             AdjustDataSource(true);
 
-            // es konnten nicht alle Zeilen geloescht werden
-            // da nie nicht geloeschten wieder selektieren
+            // not all rows could be deleted;
+            // never select again there the ones that could not be deleted
             if (nDeletedRows < nSelectedRows)
             {
-                // waren alle selektiert
+                // were all selected
                 if (bAllSelected)
                 {
                     SelectAll();
-                    if (IsInsertionRow(GetRowCount() - 1))  // einfuegeZeile nicht
+                    if (IsInsertionRow(GetRowCount() - 1))  // not the insertion row
                         SelectRow(GetRowCount() - 1, false);
                 }
                 else
@@ -1387,7 +1387,7 @@ void FmGridControl::DeleteSelectedRows()
             EndCursorAction();
             SetUpdateMode(true);
         }
-        else // Zeile konnte nicht geloescht werden
+        else // row could not be deleted
         {
             EndCursorAction();
             try
@@ -1417,8 +1417,8 @@ void FmGridControl::positioned(const css::lang::EventObject& /*rEvent*/)
 
 bool FmGridControl::commit()
 {
-    // Commit nur ausfuehren, wenn nicht bereits ein Update vom css::form::component::GridControl ausgefuehrt
-    // wird
+    // execute commit only if an update is not already executed by the
+    // css::form::component::GridControl
     if (!IsUpdating())
     {
         if (Controller().is() && Controller()->IsModified())
@@ -1436,7 +1436,7 @@ void FmGridControl::inserted(const css::lang::EventObject& /*rEvent*/)
     if (!xRow.is())
         return;
 
-    // Zeile ist eingefuegt worden, dann den status und mode zuruecksetzen
+    // line has been inserted, then reset the status and mode
     xRow->SetState(m_pDataCursor, false);
     xRow->SetNew(false);
 
@@ -1506,7 +1506,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
 {
     DbGridControl::ColumnResized(nId);
 
-    // Wert ans model uebergeben
+    // transfer value to the model
     DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
     Reference< css::beans::XPropertySet >  xColModel(pCol->getModel());
     if (xColModel.is())
@@ -1514,7 +1514,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
         Any aWidth;
         sal_Int32 nColumnWidth = GetColumnWidth(nId);
         nColumnWidth = CalcReverseZoom(nColumnWidth);
-        // Umrechnen in 10THMM
+        // convert to 10THMM
         aWidth <<= (sal_Int32)PixelToLogic(Point(nColumnWidth,0),MapUnit::Map10thMM).X();
         xColModel->setPropertyValue(FM_PROP_WIDTH, aWidth);
     }
@@ -1547,12 +1547,12 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
 
     if (xColumns.is())
     {
-        // suchen der Spalte und verschieben im Model
-        // ColumnPos holen
+        // locate the column and move in the model;
+        // get ColumnPos
         DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
         Reference< css::beans::XPropertySet >  xCol;
 
-        // Einfuegen muss sich an den Column Positionen orientieren
+        // inserting must be based on the column positions
         sal_Int32 i;
         Reference< XInterface > xCurrent;
         for (i = 0; !xCol.is() && i < xColumns->getCount(); i++)
@@ -1581,8 +1581,8 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
 
 void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexContainer >& xColumns)
 {
-    // Spalten wieder neu setzen
-    // wenn es nur eine HandleColumn gibt, dann nicht
+    // reset columns;
+    // if there is only one HandleColumn, then don't
     if (GetModelColCount())
     {
         RemoveColumns();
@@ -1594,7 +1594,7 @@ void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexC
 
     SetUpdateMode(false);
 
-    // Einfuegen muss sich an den Column Positionen orientieren
+    // inserting must be based on the column positions
     sal_Int32 i;
     Any aWidth;
     for (i = 0; i < xColumns->getCount(); ++i)
@@ -1615,10 +1615,10 @@ void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexC
         pCol->setModel(xCol);
     }
 
-    // und jetzt noch die hidden columns rausnehmen
-    // (wir haben das nicht gleich in der oberen Schleife gemacht, da wir dann Probleme mit den
-    // IDs der Spalten bekommen haetten : AppendColumn vergibt die automatisch, die Spalte _nach_
-    // einer versteckten braucht aber eine um eine erhoehte ID ....
+    // and now remove the hidden columns as well
+    // (we did not already make it in the upper loop, since we would then have gotten
+    // problems with the IDs of the columns: AppendColumn allocates them automatically,
+    // but the column _after_ a hidden one needs an ID increased by one ...)
     Any aHidden;
     for (i = 0; i < xColumns->getCount(); ++i)
     {
@@ -1708,11 +1708,11 @@ void FmGridControl::InitColumnsByFields(const Reference< css::container::XIndexA
     if ( !_rxFields.is() )
         return;
 
-    // Spalten initialisieren
+    // initialize columns
     Reference< XIndexContainer > xColumns( GetPeer()->getColumns() );
     Reference< XNameAccess > xFieldsAsNames( _rxFields, UNO_QUERY );
 
-    // Einfuegen muss sich an den Column Positionen orientieren
+    // inserting must be based on the column positions
     for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
     {
         DbGridColumn* pCol = GetColumns().at( i );
@@ -1852,13 +1852,13 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
             nIdx = ::comphelper::getINT32(pBookmarks[i]);
             if (IsInsertionRow(nIdx))
             {
-                // leerzeile nicht loeschen
+                // do not delete empty row
                 aBookmarks.realloc(--nSelectedRows);
-                SelectRow(nIdx, false);          // selection aufheben fuer leerzeile
+                SelectRow(nIdx, false);          // cancel selection for empty row
                 break;
             }
 
-            // Zunaechst den DatenCursor auf den selektierten Satz pos.
+            // first, position the data cursor on the selected block
             if (SeekCursor(nIdx))
             {
                 GetSeekRow()->SetState(m_pSeekCursor, true);
@@ -1976,7 +1976,7 @@ OUString FmGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseB
 void FmGridControl::Select()
 {
     DbGridControl::Select();
-    // ... betrifft das unsere Spalten ?
+    // ... does it affect our columns?
     const MultiSelection* pColumnSelection = GetColumnSelection();
 
     sal_uInt16 nSelectedColumn =
@@ -1984,7 +1984,7 @@ void FmGridControl::Select()
             ? sal::static_int_cast< sal_uInt16 >(
                 const_cast<MultiSelection*>(pColumnSelection)->FirstSelected())
             : SAL_MAX_UINT16;
-    // die HandleColumn wird nicht selektiert
+    // the HandleColumn is not selected
     switch (nSelectedColumn)
     {
         case SAL_MAX_UINT16: break; // no selection
@@ -1998,7 +1998,7 @@ void FmGridControl::Select()
 
     if (nSelectedColumn != m_nCurrentSelectedColumn)
     {
-        // VOR dem Aufruf des select am SelectionSupplier !
+        // BEFORE calling the select at the SelectionSupplier!
         m_nCurrentSelectedColumn = nSelectedColumn;
 
         if (!m_bSelecting)
