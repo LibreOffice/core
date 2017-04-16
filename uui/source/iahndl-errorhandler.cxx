@@ -40,7 +40,7 @@ using namespace com::sun::star;
 
 namespace {
 
-ErrorHandlerFlags
+DialogMask
 executeErrorDialog(
     vcl::Window * pParent,
     task::InteractionClassification eClassification,
@@ -105,23 +105,23 @@ executeErrorDialog(
 
     xBox.disposeAndClear();
 
-    ErrorHandlerFlags aResult = ErrorHandlerFlags::NONE;
+    DialogMask aResult = DialogMask::NONE;
     switch( aMessResult )
     {
     case RET_OK:
-        aResult = ErrorHandlerFlags::ButtonsOk;
+        aResult = DialogMask::ButtonsOk;
         break;
     case RET_CANCEL:
-        aResult = ErrorHandlerFlags::ButtonsCancel;
+        aResult = DialogMask::ButtonsCancel;
         break;
     case RET_YES:
-        aResult = ErrorHandlerFlags::ButtonsYes;
+        aResult = DialogMask::ButtonsYes;
         break;
     case RET_NO:
-        aResult = ErrorHandlerFlags::ButtonsNo;
+        aResult = DialogMask::ButtonsNo;
         break;
     case RET_RETRY:
-        aResult = ErrorHandlerFlags::ButtonsRetry;
+        aResult = DialogMask::ButtonsRetry;
         break;
     default: assert(false);
     }
@@ -259,12 +259,12 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             }
         }
 
-        ErrorHandlerFlags nResult = executeErrorDialog(
+        DialogMask nResult = executeErrorDialog(
             getParentProperty(), eClassification, aContext, aMessage, nButtonMask );
 
         switch (nResult)
         {
-        case ErrorHandlerFlags::ButtonsOk:
+        case DialogMask::ButtonsOk:
             OSL_ENSURE(xApprove.is() || xAbort.is(), "unexpected situation");
             if (xApprove.is())
                 xApprove->select();
@@ -272,25 +272,25 @@ UUIInteractionHelper::handleErrorHandlerRequest(
                 xAbort->select();
             break;
 
-        case ErrorHandlerFlags::ButtonsCancel:
+        case DialogMask::ButtonsCancel:
             OSL_ENSURE(xAbort.is(), "unexpected situation");
             if (xAbort.is())
                 xAbort->select();
             break;
 
-        case ErrorHandlerFlags::ButtonsRetry:
+        case DialogMask::ButtonsRetry:
             OSL_ENSURE(xRetry.is(), "unexpected situation");
             if (xRetry.is())
                 xRetry->select();
             break;
 
-        case ErrorHandlerFlags::ButtonsNo:
+        case DialogMask::ButtonsNo:
             OSL_ENSURE(xDisapprove.is(), "unexpected situation");
             if (xDisapprove.is())
                 xDisapprove->select();
             break;
 
-        case ErrorHandlerFlags::ButtonsYes:
+        case DialogMask::ButtonsYes:
             OSL_ENSURE(xApprove.is(), "unexpected situation");
             if (xApprove.is())
                 xApprove->select();
