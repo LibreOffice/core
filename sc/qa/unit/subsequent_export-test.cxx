@@ -11,6 +11,7 @@
 #include <sal/config.h>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <config_features.h>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -215,10 +216,14 @@ public:
     CPPUNIT_TEST(testFormatExportODS);
 
     CPPUNIT_TEST(testCommentExportXLSX);
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
+#endif
     CPPUNIT_TEST(testXfDefaultValuesXLSX);
     CPPUNIT_TEST(testColumnWidthResaveXLSX);
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX);
+#endif
     CPPUNIT_TEST(testOutlineExportXLSX);
     CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
     CPPUNIT_TEST(testAllRowsHiddenXLSX);
