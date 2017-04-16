@@ -415,14 +415,14 @@ sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >&
     {
         if( !sErrFile.isEmpty() )
             return *new StringErrorInfo( ERR_WRITE_ERROR_FILE, sErrFile,
-                                         ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError );
+                                         DialogMask::ButtonsOk | DialogMask::MessageError );
         return ERR_SWG_WRITE_ERROR;
     }
     else if( bWarn )
     {
         if( !sWarnFile.isEmpty() )
             return *new StringErrorInfo( WARN_WRITE_ERROR_FILE, sWarnFile,
-                                         ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError );
+                                         DialogMask::ButtonsOk | DialogMask::MessageError );
         return WARN_SWG_FEATURES_LOST;
     }
 
