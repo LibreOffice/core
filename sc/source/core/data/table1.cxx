@@ -903,11 +903,11 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     if ( !bIncludeOld && !bOnlyDown )
     {
         if ( !bLeft )
-            while ( aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) && rStartCol < (aCol.size()-1) && rStartCol < rEndCol)
+            while ( rStartCol < rEndCol && rStartCol < (aCol.size()-1) && aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) )
                 ++rStartCol;
 
         if ( !bRight )
-            while ( aCol[rEndCol].IsEmptyBlock(rStartRow,rEndRow) && rEndCol > 0 && rStartCol < rEndCol)
+            while ( rEndCol > 0 && rStartCol < rEndCol && aCol[rEndCol].IsEmptyBlock(rStartRow,rEndRow) )
                 --rEndCol;
 
         if ( !bTop && rStartRow < MAXROW && rStartRow < rEndRow )

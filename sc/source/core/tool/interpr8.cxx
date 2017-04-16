@@ -238,14 +238,14 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
             switch ( nAggregation )
             {
                 case 1 : // AVERAGE (default)
-                         while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
+                         while ( i < mnCount && maRange[ i ].X == maRange[ i - 1 ].X )
                          {
                              maRange.erase( maRange.begin() + i );
                              --mnCount;
                          }
                          break;
                 case 7 : // SUM
-                         while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
+                         while ( i < mnCount && maRange[ i ].X == maRange[ i - 1 ].X )
                          {
                              fTmp += maRange[ i ].Y;
                              maRange.erase( maRange.begin() + i );
@@ -256,7 +256,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
 
                 case 2 : // COUNT
                 case 3 : // COUNTA (same as COUNT as there are no non-numeric Y-values)
-                         while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
+                         while ( i < mnCount && maRange[ i ].X == maRange[ i - 1 ].X )
                          {
                              nCounter++;
                              maRange.erase( maRange.begin() + i );
@@ -266,7 +266,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
                          break;
 
                 case 4 : // MAX
-                         while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
+                         while ( i < mnCount && maRange[ i ].X == maRange[ i - 1 ].X )
                          {
                              if ( maRange[ i ].Y > fTmp )
                                  fTmp = maRange[ i ].Y;
@@ -280,7 +280,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
                          {
                              std::vector< double > aTmp;
                              aTmp.push_back( maRange[ i - 1 ].Y );
-                             while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
+                             while ( i < mnCount && maRange[ i ].X == maRange[ i - 1 ].X )
                              {
                                  aTmp.push_back( maRange[ i ].Y );
                                  nCounter++;
@@ -297,7 +297,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
                              break;
 
                 case 6 : // MIN
-                         while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
+                         while ( i < mnCount && maRange[ i ].X == maRange[ i - 1 ].X )
                          {
                              if ( maRange[ i ].Y < fTmp )
                                  fTmp = maRange[ i ].Y;

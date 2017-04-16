@@ -615,7 +615,7 @@ FormulaToken* FormulaTokenArray::PeekNextNoSpaces()
     if( pCode && nIndex < nLen )
     {
         sal_uInt16 j = nIndex;
-        while ( pCode[j]->GetOpCode() == ocSpaces && j < nLen )
+        while ( j < nLen && pCode[j]->GetOpCode() == ocSpaces )
             j++;
         if ( j < nLen )
             return pCode[ j ];

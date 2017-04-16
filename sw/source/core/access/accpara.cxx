@@ -785,7 +785,7 @@ bool SwAccessibleParagraph::GetSentenceBoundary(
     const sal_Unicode* pStr = rText.getStr();
     if (pStr)
     {
-        while( pStr[nPos] == sal_Unicode(' ') && nPos < rText.getLength())
+        while( nPos < rText.getLength() && pStr[nPos] == sal_Unicode(' ') )
             nPos++;
     }
 
