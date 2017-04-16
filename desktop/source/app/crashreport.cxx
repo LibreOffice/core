@@ -75,7 +75,7 @@ void CrashReporter::writeCommonInfo()
     minidump_file << "ProductName=LibreOffice\n";
     minidump_file << "Version=" LIBO_VERSION_DOTTED "\n";
     minidump_file << "BuildID=" << utl::Bootstrap::getBuildIdData("") << "\n";
-    minidump_file << "URL=http://crashreport.libreoffice.org/submit/\n";
+    minidump_file << "URL=https://crashreport.libreoffice.org/submit/\n";
     for (auto& keyValue : maKeyValues)
     {
         writeToStream(minidump_file, keyValue.first, keyValue.second);
