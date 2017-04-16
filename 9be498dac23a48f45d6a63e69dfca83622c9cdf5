@@ -34,6 +34,24 @@
       "revId": "9be498dac23a48f45d6a63e69dfca83622c9cdf5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_225ed445",
+        "filename": "sw/source/uibase/uiview/uivwimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2017-04-16T17:09:23Z",
+      "side": 0,
+      "message": "Done\nDeletion was restored in patch 5",
+      "parentUuid": "9a57fde8_491e72bb",
+      "revId": "9be498dac23a48f45d6a63e69dfca83622c9cdf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

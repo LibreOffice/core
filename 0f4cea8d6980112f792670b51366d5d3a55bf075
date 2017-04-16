@@ -34,6 +34,24 @@
       "revId": "0f4cea8d6980112f792670b51366d5d3a55bf075",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6258dc57",
+        "filename": "sfx2/source/dialog/filedlghelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2017-04-16T17:09:23Z",
+      "side": 1,
+      "message": "Done\nI changed the logic in patch 5: new InsertXYZ flags do not have the Insert bit set, while mbInsert is initialized to true for all Insert* values.",
+      "parentUuid": "9a57fde8_29212efc",
+      "revId": "0f4cea8d6980112f792670b51366d5d3a55bf075",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
