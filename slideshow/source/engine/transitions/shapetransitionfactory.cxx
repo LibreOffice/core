@@ -110,9 +110,9 @@ ClippingAnimation::~ClippingAnimation()
     {
         end_();
     }
-    catch (const uno::Exception&)
+    catch (const uno::Exception& e)
     {
-        SAL_WARN( "slideshow", "" << comphelper::anyToString(cppu::getCaughtException() ) );
+        SAL_WARN("slideshow", "" << e.Message);
     }
 }
 
