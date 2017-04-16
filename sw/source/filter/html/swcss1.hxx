@@ -31,9 +31,9 @@ class SvxBrushItem;
 class SwFormatDrop;
 class SwPageDesc;
 
-// Dieser Header seiht zwar harmlos aus, included aber eben doch
-// ganz unauffaellig das ein oder andere! Andererseits wird diese
-// Klasse recht selten benoetigt. Deshalb ein eigener Header.
+// This header looks harmless, but includes still quite
+// inconspicuous one or the other! On the other hand this class
+// is rarely needed. Therefore it's own header.
 
 class SwCSS1Parser : public SvxCSS1Parser
 {
@@ -77,17 +77,16 @@ public:
 
     virtual bool ParseStyleSheet( const OUString& rIn ) override;
 
-    // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
+    // determine font height for a certain font size (0-6)
     virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const override;
 
-    // Die aktuelle Font-Liste holen (auch 0 ist erlaubt)
+    // fetch current font list (also zero is allowed)
     virtual const FontList *GetFontList() const override;
 
-    // das Zeichen-Format zu einem Token und einer ggf leeren Klasse
-    // ermitteln
+    // determine the character format of a token and a maybe empty class
     SwCharFormat* GetChrFormat( sal_uInt16 nToken, const OUString& rClass ) const;
 
-    // eine TextFormatColl zu einer Pool-Id ermitteln
+    // determine a TextFormatColl of a Pool-Id
     SwTextFormatColl *GetTextFormatColl( sal_uInt16 nTextColl, const OUString& rClass );
 
     // This methods do the same as the one of SwDoc, but change the
@@ -95,30 +94,28 @@ public:
     SwTextFormatColl *GetTextCollFromPool( sal_uInt16 nPoolId ) const;
     SwCharFormat *GetCharFormatFromPool( sal_uInt16 nPoolId ) const;
 
-    // Die linke oder rechte Seiten-Vorlage holen. In Dokumenten mit nur
-    // einer Vorlage gibt es nur eine rechtee Seite.
-    // Ansonsten ist die rechte Seite die HTML-Poolvorlage und die linke
-    // eine Benutzter-Vorlage, die on-demand angelegt wird, wenn
-    // bCreate gesetzt ist.
+    // Fetch the left or right page style. In documents with only
+    // one style there is only a right page.
+    // Otherwise the right page is the HTML pool style and the left
+    // page a user style which is created on-demand if bCreate is set.
     SwPageDesc* GetMasterPageDesc();
     inline const SwPageDesc* GetFirstPageDesc( bool bCreate=false );
     inline const SwPageDesc* GetRightPageDesc( bool bCreate=false );
     inline const SwPageDesc* GetLeftPageDesc( bool bCreate=false );
 
-    // Attribute an der HTML-Seitenvorlage setzen (gesetzte Attribute
-    // werden aus dem Item-Set geloescht ). Wird fuer's BODY-Tag
-    // aufgerufen.
+    // Set attributes on the HTML page style (set attributes are
+    // deleted from the Item-Set). Is called for the BODY tag.
     void SetPageDescAttrs( const SvxBrushItem *pBrush,
                            SfxItemSet *pItemSet=nullptr );
 
     void ChgPageDesc( const SwPageDesc *pPageDesc,
                       const SwPageDesc& rNewPageDesc );
 
-    // Wird fuer @page aufgerufen.
+    // Is called for @page
     void SetPageDescAttrs( const SwPageDesc *pPageDesc, SfxItemSet& rItemSet,
                            const SvxCSS1PropertyInfo& rPropInfo );
 
-    // Fuellen eines DropCap-Attributs
+    // Fill a DropCap attribute
     void FillDropCap( SwFormatDrop& rDrop, SfxItemSet& rItemSet,
                       const OUString *pName=nullptr );
 
