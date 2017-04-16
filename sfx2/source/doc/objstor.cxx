@@ -2256,7 +2256,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             if (rWrapped.TargetException >>= e)
             {
                 SetError(*new StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
-                    e.Message, ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError ));
+                    e.Message, DialogMask::ButtonsOk | DialogMask::MessageError ));
             }
         }
         catch (const std::exception& e)
@@ -2264,7 +2264,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             const char *msg = e.what();
             OUString sError(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
             SetError(*new StringErrorInfo(ERRCODE_SFX_DOLOADFAILED,
-                sError, ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError));
+                sError, DialogMask::ButtonsOk | DialogMask::MessageError));
         }
         catch (...)
         {
