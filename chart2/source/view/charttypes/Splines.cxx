@@ -379,8 +379,8 @@ double lcl_SplineCalculation::GetInterpolatedValue( double x )
     }
     else
     {
-        while( ( m_aPoints[ m_nKHigh ].first < x ) &&
-               ( m_nKHigh <= n ) )
+        while( ( m_nKHigh <= n ) &&
+               ( m_aPoints[ m_nKHigh ].first < x ) )
         {
             ++m_nKHigh;
             ++m_nKLow;

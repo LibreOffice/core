@@ -2354,7 +2354,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
                 {
                     // If the document model doesn't have an adjustment name (e.g. shape was created from VML), then take it from the predefined list.
                     OString aAdjName;
-                    if (aAdjustmentSeq[i].Name.isEmpty() && static_cast<sal_uInt32>(i) < aAdjustments.size())
+                    if (static_cast<sal_uInt32>(i) < aAdjustments.size() && aAdjustmentSeq[i].Name.isEmpty())
                         aAdjName = aAdjustments[i];
 
                     mpFS->singleElementNS( XML_a, XML_gd,

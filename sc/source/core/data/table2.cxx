@@ -1646,7 +1646,7 @@ void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
 {
     rCol = 0;
     rRow = MAXROW+1;
-    while (aCol[rCol].IsEmptyData() && rCol < aCol.size() - 1 )
+    while (rCol < (aCol.size() - 1) && aCol[rCol].IsEmptyData() )
         ++rCol;
     SCCOL nCol = rCol;
     while (nCol < aCol.size() && rRow > 0)
