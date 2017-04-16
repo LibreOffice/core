@@ -7945,7 +7945,7 @@ dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
 if test "$cross_compiling" != "yes"; then
-    libo_CHECK_SYSTEM_MODULE([Cppunit],[CPPUNIT],[cppunit >= 1.14.0])
+    libo_CHECK_SYSTEM_MODULE([cppunit],[CPPUNIT],[cppunit >= 1.14.0])
 fi
 
 dnl ===================================================================
