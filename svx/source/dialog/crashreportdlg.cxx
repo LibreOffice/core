@@ -92,7 +92,9 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
             mpEditPostUpload->SetText(aProcessedMessage.replaceAll("~", "_"));
         }
         else
-            mpEditPostUpload->SetText("Error!");
+        {
+            mpEditPostUpload->SetText(aCrashID);
+        }
 
         mpBtnClose->Show();
         mpFtBugReport->Show();
