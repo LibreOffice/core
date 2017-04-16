@@ -2719,6 +2719,10 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     if ( !aSel.HasRange() )
         aSel = SelectWord( aSel );
 
+    // tdf#107176: if there's still no range, just return aSel
+    if ( !aSel.HasRange() )
+        return aSel;
+
     EditSelection aNewSel( aSel );
 
     const sal_Int32 nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
