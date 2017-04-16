@@ -11305,6 +11305,7 @@ if test "$with_fonts" != "no"; then
     AC_MSG_RESULT([yes])
     WITH_FONTS=TRUE
     BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
+    AC_DEFINE(HAVE_MORE_FONTS)
 else
     AC_MSG_RESULT([no])
     WITH_FONTS=
