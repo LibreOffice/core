@@ -101,8 +101,7 @@ SystemWindow::~SystemWindow()
 void SystemWindow::dispose()
 {
     maLayoutIdle.Stop();
-    delete mpImplData;
-    mpImplData = nullptr;
+    mpImplData.reset();
 
     // Hack to make sure code called from base ~Window does not interpret this
     // as a SystemWindow (which it no longer is by then):
