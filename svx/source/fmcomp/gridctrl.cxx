@@ -352,7 +352,7 @@ DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent)
     m_aAbsolute->SetHelpId(HID_GRID_TRAVEL_ABSOLUTE);
     m_aRecordCount->SetHelpId(HID_GRID_NUMBEROFRECORDS);
 
-    // Handler fuer Buttons einrichten
+    // set handlers for buttons
     m_aFirstBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
     m_aPrevBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
     m_aNextBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
@@ -1855,7 +1855,7 @@ void DbGridControl::VisibleRowsChanged( long nNewTopRow, sal_uInt16 nLinesOnScre
 
 void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor)
 {
-    // Wenn kein Cursor -> keine Rows im Browser.
+    // If no cursor -> no rows in the browser.
     if (!m_pSeekCursor)
     {
         DBG_ASSERT(GetRowCount() == 0,"DbGridControl: ohne Cursor darf es keine Rows geben");
@@ -3424,11 +3424,11 @@ sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
 
     DbGridColumn* pCol = m_aColumns[ nPos ];
 #if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
-    // in der Debug-Version rechnen wir die ModelPos in eine ViewPos um und vergleichen das mit dem Wert,
-    // den wir zurueckliefern werden (nId an der entsprechenden Col in m_aColumns)
+    // in the debug version, we convert the ModelPos into a ViewPos and compare this with the
+    // value we will return (nId at the corresponding Col in m_aColumns)
 
     if (!pCol->IsHidden())
-    {   // macht nur Sinn, wenn die Spalte sichtbar ist
+    {   // makes sense only if the column is visible
         sal_uInt16 nViewPos = nPos;
         for ( size_t i = 0; i < m_aColumns.size() && i < nPos; ++i)
             if ( m_aColumns[ i ]->IsHidden())

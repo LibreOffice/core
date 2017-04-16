@@ -46,7 +46,7 @@ const css::uno::Sequence<OUString>& getColumnTypes()
 }
 
 
-// Vergleichen von PropertyInfo
+// comparison of PropertyInfo
 extern "C" int SAL_CALL NameCompare(const void* pFirst, const void* pSecond)
 {
     return static_cast<OUString const *>(pFirst)->compareTo(*static_cast<OUString const *>(pSecond));
