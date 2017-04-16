@@ -73,11 +73,11 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                          const SdrObject *pObj,
                                          bool bSetDefaults )
 {
-    // die Edit script::Engine-Attribute aus dem Objekt holen
+    // get the edit script::Engine attributes from object
     SfxItemSet rObjItemSet = pObj->GetMergedItemSet();
 
-    // ueber die Edit script::Engine-Attribute iterieren und die Attribute
-    // in SW-Attrs wandeln bzw. default setzen
+    // iterate over Edit script::Engine attributes and convert them
+    // into SW-Attrs resp. set default
     SfxWhichIter aIter( rObjItemSet );
     sal_uInt16 nEEWhich = aIter.FirstWhich();
     while( nEEWhich )
@@ -112,12 +112,11 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
 
             if( nSwWhich )
             {
-                // wenn das Item nicht gesetzt ist nehmen wir ggf. das
-                // Default-Item
+                // if the item isn't set we maybe take the default item
                 if( !bSet )
                     pEEItem = &rObjItemSet.GetPool()->GetDefaultItem(nEEWhich);
 
-                // jetzt Clonen wir das Item mit der Which-Id des Writers
+                // now we clone the item with the which id of the writer
                 SfxPoolItem *pSwItem = pEEItem->Clone();
                 pSwItem->SetWhich( nSwWhich );
                 rItemSet.Put( *pSwItem );
@@ -139,7 +138,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
             "There is a Draw-Obj with no Draw-Model?" );
     const SdrTextObj *pTextObj = static_cast<const SdrTextObj *>(&rSdrObject);
 
-    // Gibt es ueberhaupt auszugebenden Text
+    // Is there text to output
     const OutlinerParaObject *pOutlinerParaObj =
         pTextObj->GetOutlinerParaObject();
     if( !pOutlinerParaObj )
@@ -148,7 +147,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_marquee);
 
-    // Die Attribute des Objektd holen
+    // get attributes of the object
     const SfxItemSet& rItemSet = pTextObj->GetMergedItemSet();
 
     // BEHAVIOUR
@@ -156,7 +155,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     OSL_ENSURE( SdrTextAniKind::Scroll==eAniKind ||
             SdrTextAniKind::Alternate==eAniKind ||
             SdrTextAniKind::Slide==eAniKind,
-            "Text-Draw-Objekt nicht fuer Marquee geeignet" );
+            "Text-Draw-Object not suitable for marquee" );
 
     const sal_Char *pStr = nullptr;
     switch( eAniKind )
@@ -230,11 +229,10 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     Size aTwipSz( pTextObj->GetLogicRect().GetSize() );
     if( pTextObj->IsAutoGrowWidth() )
         aTwipSz.Width() = 0;
-    // Die Hoehe ist bei MS eine Mindesthoehe, also geben wir auch die
-    // Mindestheoehe aus, wenn es sie gibt. Da eine Mindesthoehe MINFLY
-    // mit hoher Wahrscheinlichkeit vom Import kommt, wird sie nicht mit
-    // ausgegeben. Falsch machen kann man da nichst, denn jeder Font ist
-    // hoeher.
+    // The height is at MS a minimum height, therefore we output the minimum
+    // height, if they exists. Because a minimum height MINFLY is coming with
+    // high probability from import, we aren't outputting it. You can't
+    // do anything wrong, because every font is higher.
     if( pTextObj->IsAutoGrowHeight() )
     {
         aTwipSz.Height() = pTextObj->GetMinTextFrameHeight();
@@ -282,7 +280,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     if (!sOut.isEmpty())
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-    // und nun noch ALIGN, HSPACE und VSPACE
+    // and now ALIGN, HSPACE and VSPACE
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MARQUEE;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         nFrameFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
@@ -292,7 +290,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
 
     rWrt.Strm().WriteChar( '>' );
 
-    // Was jetzt kommt ist das Gegenstueck zu SdrTextObjectt::SetText()
+    // What follows now is the counterpart of SdrTextObject::SetText()
     Outliner aOutliner(nullptr, OutlinerMode::TextObject);
     aOutliner.SetUpdateMode( false );
     aOutliner.SetText( *pOutlinerParaObj );
