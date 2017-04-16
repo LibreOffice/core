@@ -145,7 +145,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< css::bea
     m_nTypeId = (sal_Int16)nTypeId;
     if (xField != m_xField)
     {
-        // Grundeinstellung
+        // initial setting
         m_xField = xField;
         xField->getPropertyValue(FM_PROP_FORMATKEY) >>= m_nFormatKey;
         m_nFieldPos   = (sal_Int16)_nFieldPos;
@@ -1249,7 +1249,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_LEFT );
             m_pPainter  = VclPtr<FormattedField>::Create( &rParent, WB_LEFT );
 
-            // Alles nur damit die Selektion bei Focuserhalt von rechts nach links geht
+            // Everything just so that the selection goes from right to left when getting focus
             AllSettings aSettings = m_pWindow->GetSettings();
             StyleSettings aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(
@@ -1262,17 +1262,16 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
 
     static_cast< FormattedField* >( m_pWindow.get() )->SetStrictFormat( false );
     static_cast< FormattedField* >( m_pPainter.get() )->SetStrictFormat( false );
-        // wenn man _irgendeine_ Formatierung zulaesst, kann man da sowieso keine Eingabe-Ueberpruefung
-        // machen (das FormattedField unterstuetzt das sowieso nicht, nur abgeleitete Klassen)
+        // if one allows any formatting, one cannot make an entry check anyway
+        // (the FormattedField does not support that anyway, only derived classes)
 
-    // von dem Uno-Model den Formatter besorgen
-    // (Ich koennte theoretisch auch ueber den css::util::NumberFormatter gehen, den mir der Cursor bestimmt
-    // liefern wuerde. Das Problem dabei ist, dass ich mich eigentlich nicht darauf verlassen
-    // kann, dass die beiden Formatter die selben sind, sauber ist das Ganze, wenn ich ueber das
-    // UNO-Model gehe.)
+    // get the formatter from the uno model
+    // (I could theoretically also go via the css::util::NumberFormatter, which the cursor would
+    // surely give me. The problem is that I can not really rely on the fact that the two
+    // formatters are the same. Clean is the whole thing if I go via the UNO model.)
     sal_Int32 nFormatKey = -1;
 
-    // mal sehen, ob das Model einen hat ...
+    // let's see if the model has one ...
     DBG_ASSERT(::comphelper::hasProperty(FM_PROP_FORMATSSUPPLIER, xUnoModel), "DbFormattedField::Init : invalid UNO model !");
     Any aSupplier( xUnoModel->getPropertyValue(FM_PROP_FORMATSSUPPLIER));
     if (aSupplier.hasValue())
@@ -1280,7 +1279,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         m_xSupplier.set(aSupplier, css::uno::UNO_QUERY);
         if (m_xSupplier.is())
         {
-            // wenn wir den Supplier vom Model nehmen, dann auch den Key
+            // if we take the supplier from the model, then also the key
             Any aFmtKey( xUnoModel->getPropertyValue(FM_PROP_FORMATKEY));
             if (aFmtKey.hasValue())
             {
@@ -1301,12 +1300,12 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         }
     }
 
-    // nein ? vielleicht die css::form::component::Form hinter dem Cursor ?
+    // No? Maybe the css::form::component::Form behind the cursor?
     if (!m_xSupplier.is())
     {
         Reference< XRowSet >  xCursorForm(xCursor, UNO_QUERY);
         if (xCursorForm.is())
-        {   // wenn wir vom Cursor den Formatter nehmen, dann auch den Key vom Feld, an das wir gebunden sind
+        {   // If we take the formatter from the cursor, then also the key from the field to which we are bound
             m_xSupplier = getNumberFormats(getConnection(xCursorForm));
 
             if (m_rColumn.GetField().is())
@@ -1321,18 +1320,18 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         if (pImplmentation)
             pFormatterUsed = pImplmentation->GetNumberFormatter();
         else
-            // alles hingfaellig : der Supplier ist vom falschen Typ, dann koennen wir uns auch nicht darauf verlassen, dass
-            // ein Standard-Formatter den (eventuell nicht-Standard-)Key kennt.
+            // Everything is invalid: the supplier is of the wrong type, then we can not
+            // rely on a standard formatter to know the (possibly non-standard) key.
             nFormatKey = -1;
     }
 
-    // einen Standard-Formatter ...
+    // a standard formatter ...
     if (pFormatterUsed == nullptr)
     {
         pFormatterUsed = static_cast<FormattedField*>(m_pWindow.get())->StandardFormatter();
         DBG_ASSERT(pFormatterUsed != nullptr, "DbFormattedField::Init : no standard formatter given by the numeric field !");
     }
-    // ... und einen Standard-Key
+    // ... and a standard key
     if (nFormatKey == -1)
         nFormatKey = 0;
 
@@ -1347,7 +1346,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     static_cast<FormattedField*>(m_pWindow.get())->TreatAsNumber(m_rColumn.IsNumeric());
     static_cast<FormattedField*>(m_pPainter.get())->TreatAsNumber(m_rColumn.IsNumeric());
 
-    // Min- und Max-Werte
+    // min and max values
     if (m_rColumn.IsNumeric())
     {
         bool bClearMin = true;
@@ -1388,10 +1387,10 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         }
     }
 
-    // den Default-Wert
+    // the default value
     Any aDefault( xUnoModel->getPropertyValue(FM_PROP_EFFECTIVE_DEFAULT));
     if (aDefault.hasValue())
-    {   // das Ding kann ein double oder ein String sein
+    {   // the thing can be a double or a string
         switch (aDefault.getValueType().getTypeClass())
         {
             case TypeClass_DOUBLE:
@@ -1466,11 +1465,11 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
 
 OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** ppColor)
 {
-    // defaultmaessig keine Farb-Angabe
+    // no color specification by default
     if (ppColor != nullptr)
         *ppColor = nullptr;
 
-    // NULL-Wert -> leerer Text
+    // NULL value -> empty text
     if (!_rxField.is())
         return OUString();
 
@@ -1479,11 +1478,11 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
     {
         if (m_rColumn.IsNumeric())
         {
-            // das IsNumeric an der Column sagt nichts aus ueber die Klasse des benutzen Formates, sondern
-            // ueber die des an die Column gebundenen Feldes. Wenn man also eine FormattedField-Spalte an
-            // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
-            // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
-            // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
+            // The IsNumeric at the column says nothing about the class of the used format, but
+            // about the class of the field bound to the column. So when you bind a FormattedField
+            // column to a double field and format it as text, m_rColumn.IsNumeric() returns
+            // sal_True. So that simply means that I can query the contents of the variant using
+            // getDouble, and then I can leave the rest (the formatting) to the FormattedField.
             double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 return aText;
@@ -1491,8 +1490,8 @@ OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _
         }
         else
         {
-            // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
-            // Also einfach den Text vom css::util::NumberFormatter in die richtige css::form::component::Form brinden lassen.
+            // Here I can not work with a double, since the field can not provide it to me.
+            // So simply bind the text from the css::util::NumberFormatter to the correct css::form::component::Form.
             aText = _rxField->getString();
             if (_rxField->wasNull())
                 return aText;
@@ -1518,16 +1517,16 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
     {
         FormattedField* pFormattedWindow = static_cast<FormattedField*>(m_pWindow.get());
         if (!_rxField.is())
-        {   // NULL-Wert -> leerer Text
+        {   // NULL value -> empty text
             m_pWindow->SetText(OUString());
         }
         else if (m_rColumn.IsNumeric())
         {
-            // das IsNumeric an der Column sagt nichts aus ueber die Klasse des benutzen Formates, sondern
-            // ueber die des an die Column gebundenen Feldes. Wenn man also eine FormattedField-Spalte an
-            // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
-            // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
-            // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
+            // The IsNumeric at the column says nothing about the class of the used format, but
+            // about the class of the field bound to the column. So when you bind a FormattedField
+            // column to a double field and format it as text, m_rColumn.IsNumeric() returns
+            // sal_True. So that simply means that I can query the contents of the variant using
+            // getDouble, and then I can leave the rest (the formatting) to the FormattedField.
             double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 m_pWindow->SetText(OUString());
@@ -1536,8 +1535,8 @@ void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rx
         }
         else
         {
-            // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
-            // Also einfach den Text vom css::util::NumberFormatter in die richtige css::form::component::Form brinden lassen.
+            // Here I can not work with a double, since the field can not provide it to me.
+            // So simply bind the text from the css::util::NumberFormatter to the correct css::form::component::Form.
             OUString sText( _rxField->getString());
 
             pFormattedWindow->SetTextFormatted( sText );
@@ -1582,7 +1581,7 @@ bool DbFormattedField::commitControl()
     {
         if (!rField.GetText().isEmpty())
             aNewVal <<= rField.GetValue();
-        // ein LeerString wird erst mal standardmaessig als void weitergereicht
+        // an empty string is passed on as void by default, to start with
     }
     else
         aNewVal <<= rField.GetTextValue();
@@ -1893,8 +1892,8 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         static_cast< DoubleNumericField* >( m_pPainter.get() )->SetStrictFormat(bStrict);
 
 
-        // dem Field und dem Painter einen Formatter spendieren
-        // zuerst testen, ob ich von dem Service hinter einer Connection bekommen kann
+        // give a formatter to the field and the painter;
+        // test first if I can get from the service behind a connection
         Reference< css::util::XNumberFormatsSupplier >  xSupplier;
         Reference< XRowSet > xForm;
         if ( m_rColumn.GetParent().getDataSource() )
@@ -1908,14 +1907,14 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
             pFormatterUsed = pImplmentation ? pImplmentation->GetNumberFormatter() : nullptr;
         }
         if ( nullptr == pFormatterUsed )
-        {   // der Cursor fuehrte nicht zum Erfolg -> Standard
+        {   // the cursor didn't lead to success -> standard
             pFormatterUsed = static_cast< DoubleNumericField* >( m_pWindow.get() )->StandardFormatter();
             DBG_ASSERT( pFormatterUsed != nullptr, "DbNumericField::implAdjustGenericFieldSetting: no standard formatter given by the numeric field !" );
         }
         static_cast< DoubleNumericField* >( m_pWindow.get() )->SetFormatter( pFormatterUsed );
         static_cast< DoubleNumericField* >( m_pPainter.get() )->SetFormatter( pFormatterUsed );
 
-        // und dann ein Format generieren, dass die gewuenschten Nachkommastellen usw. hat
+        // and then generate a format which has the desired length after the decimal point, etc.
         LanguageType aAppLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
         OUString sFormatString = pFormatterUsed->GenerateFormat(0, aAppLanguage, bThousand, false, nScale);
 
@@ -2445,7 +2444,7 @@ void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor
 
     m_pWindow = VclPtr<ComboBoxControl>::Create( &rParent );
 
-    // selection von rechts nach links
+    // selection from right to left
     AllSettings     aSettings = m_pWindow->GetSettings();
     StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
     aStyleSettings.SetSelectionOptions(
@@ -3016,7 +3015,7 @@ void DbFilterField::Update()
             if (!xTablesNames->hasByName(aTableName))
                 return;
 
-            // ein Statement aufbauen und abschicken als query
+            // build a statement and send as query;
             // Access to the connection
             Reference< XStatement >  xStatement;
             Reference< XResultSet >  xListCursor;
@@ -3653,8 +3652,8 @@ void SAL_CALL FmXEditCell::setText( const OUString& aText )
     {
         m_pEditImplementation->SetText( aText );
 
-        // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
-        // css::awt::Toolkit soll JAVA-komform sein...
+        // In Java, a textChanged is fired as well; not in VCL.
+        // css::awt::Toolkit must be Java-compliant...
         onTextChanged();
     }
 }
@@ -4095,7 +4094,7 @@ void SAL_CALL FmXListBoxCell::addItems(const css::uno::Sequence<OUString>& aItem
         for ( sal_Int32 n = 0; n < aItems.getLength(); n++ )
         {
             m_pBox->InsertEntry( aItems.getConstArray()[n], nP );
-            if ( nPos != -1 )    // Nicht wenn 0xFFFF, weil LIST_APPEND
+            if ( nPos != -1 )    // Not if 0xFFFF, because LIST_APPEND
                 nP++;
         }
     }
@@ -4302,7 +4301,7 @@ void FmXListBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Windo
         aEvent.Source = *this;
         aEvent.Highlighted = 0;
 
-        // Bei Mehrfachselektion 0xFFFF, sonst die ID
+        // with multiple selection 0xFFFF, otherwise the ID
         aEvent.Selected = (m_pBox->GetSelectEntryCount() == 1 )
             ? m_pBox->GetSelectEntryPos() : 0xFFFF;
 
@@ -4502,7 +4501,7 @@ void FmXComboBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Wind
         aEvent.Source = *this;
         aEvent.Highlighted = 0;
 
-        // Bei Mehrfachselektion 0xFFFF, sonst die ID
+        // with multiple selection 0xFFFF, otherwise the ID
         aEvent.Selected =   ( m_pComboBox->GetSelectEntryCount() == 1 )
                         ?   m_pComboBox->GetSelectEntryPos()
                         :   0xFFFF;
