@@ -62,7 +62,6 @@
 #define RID_SVXTBX_FORMDESIGN                       (RID_FORMS_START +  6)
 
 // Menu-Id's -----------------------------------------------------------
-#define RID_FMSHELL_CONVERSIONMENU                  (RID_FORMS_START + 4)
 #define RID_FM_FILTER_MENU                          (RID_FORMS_START + 5)
 
 // String-Id's -----------------------------------------------------------

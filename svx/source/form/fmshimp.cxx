@@ -179,28 +179,28 @@ static const sal_Int16 SelObjectSlotMap[] =  // vom SelObject abhaengige Slots
 
 // die folgenden Arrays muessen kosistent sein, also einander entsprechende Eintraege an der selben relativen Position
 // innerhalb ihres jeweiligen Arrays stehen
-static const sal_Int16 nConvertSlots[] =
+static const char* aConvertSlots[] =
 {
-    SID_FM_CONVERTTO_EDIT,
-    SID_FM_CONVERTTO_BUTTON,
-    SID_FM_CONVERTTO_FIXEDTEXT,
-    SID_FM_CONVERTTO_LISTBOX,
-    SID_FM_CONVERTTO_CHECKBOX,
-    SID_FM_CONVERTTO_RADIOBUTTON,
-    SID_FM_CONVERTTO_GROUPBOX,
-    SID_FM_CONVERTTO_COMBOBOX,
-    SID_FM_CONVERTTO_IMAGEBUTTON,
-    SID_FM_CONVERTTO_FILECONTROL,
-    SID_FM_CONVERTTO_DATE,
-    SID_FM_CONVERTTO_TIME,
-    SID_FM_CONVERTTO_NUMERIC,
-    SID_FM_CONVERTTO_CURRENCY,
-    SID_FM_CONVERTTO_PATTERN,
-    SID_FM_CONVERTTO_IMAGECONTROL,
-    SID_FM_CONVERTTO_FORMATTED,
-    SID_FM_CONVERTTO_SCROLLBAR,
-    SID_FM_CONVERTTO_SPINBUTTON,
-    SID_FM_CONVERTTO_NAVIGATIONBAR
+    "ConvertToEdit",
+    "ConvertToButton",
+    "ConvertToFixed",
+    "ConvertToList",
+    "ConvertToCheckBox",
+    "ConvertToRadio",
+    "ConvertToGroup",
+    "ConvertToCombo",
+    "ConvertToImageBtn",
+    "ConvertToFileControl",
+    "ConvertToDate",
+    "ConvertToTime",
+    "ConvertToNumeric",
+    "ConvertToCurrency",
+    "ConvertToPattern",
+    "ConvertToImageControl",
+    "ConvertToFormatted",
+    "ConvertToScrollBar",
+    "ConvertToSpinButton",
+    "ConvertToNavigationBar"
 };
 
 static const sal_Int16 nImgIds[] =
@@ -1028,38 +1028,50 @@ void FmXFormShell::ForceUpdateSelection()
     }
 }
 
-VclPtr<PopupMenu> FmXFormShell::GetConversionMenu()
+VclBuilder* FmXFormShell::GetConversionMenu()
 {
-
-    VclPtrInstance<PopupMenu> pNewMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
-    for ( size_t i = 0; i < SAL_N_ELEMENTS(nConvertSlots); ++i )
+    VclBuilder* pBuilder = new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/convertmenu.ui", "");
+    VclPtr<PopupMenu> pNewMenu(pBuilder->get_menu("menu"));
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
     {
         // das entsprechende Image dran
-        pNewMenu->SetItemImage(nConvertSlots[i], Image(BitmapEx(SVX_RES(nImgIds[i]))));
+        pNewMenu->SetItemImage(pNewMenu->GetItemId(aConvertSlots[i]), Image(BitmapEx(SVX_RES(nImgIds[i]))));
     }
-    return pNewMenu;
+    return pBuilder;
 }
 
-bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
+OString FmXFormShell::SlotToIdent(sal_uInt16 nSlot)
 {
-    for (sal_Int16 nConvertSlot : nConvertSlots)
-        if (nConvertSlot == nSlotId)
+    assert(SAL_N_ELEMENTS(SelObjectSlotMap) >= SAL_N_ELEMENTS(aConvertSlots));
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
+    {
+        if (nSlot == SelObjectSlotMap[i])
+            return aConvertSlots[i];
+    }
+
+    return OString();
+}
+
+bool FmXFormShell::isControlConversionSlot(const OString& rIdent)
+{
+    for (const auto& rConvertSlot : aConvertSlots)
+        if (rIdent == rConvertSlot)
             return true;
     return false;
 }
 
-void FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
+void FmXFormShell::executeControlConversionSlot(const OString &rIdent)
 {
-    OSL_PRECOND( canConvertCurrentSelectionToControl( _nSlotId ), "FmXFormShell::executeControlConversionSlot: illegal call!" );
+    OSL_PRECOND( canConvertCurrentSelectionToControl(rIdent), "FmXFormShell::executeControlConversionSlot: illegal call!" );
     InterfaceBag::const_iterator aSelectedElement = m_aCurrentSelection.begin();
     if ( aSelectedElement == m_aCurrentSelection.end() )
         return;
 
-    executeControlConversionSlot( Reference< XFormComponent >( *aSelectedElement, UNO_QUERY ), _nSlotId );
+    executeControlConversionSlot(Reference< XFormComponent >(*aSelectedElement, UNO_QUERY), rIdent);
 }
 
-
-bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent >& _rxObject, sal_uInt16 _nSlotId )
+bool FmXFormShell::executeControlConversionSlot(const Reference< XFormComponent >& _rxObject, const OString& rIdent)
 {
     if ( impl_checkDisposed() )
         return false;
@@ -1077,9 +1089,9 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
     OSL_ENSURE( isSolelySelected( _rxObject ),
         "FmXFormShell::executeControlConversionSlot: hmm ... shouldn't this parameter be redundant?" );
 
-    for ( size_t lookupSlot = 0; lookupSlot < SAL_N_ELEMENTS(nConvertSlots); ++lookupSlot )
+    for (size_t lookupSlot = 0; lookupSlot < SAL_N_ELEMENTS(aConvertSlots); ++lookupSlot)
     {
-        if (nConvertSlots[lookupSlot] == _nSlotId)
+        if (rIdent == aConvertSlots[lookupSlot])
         {
             Reference< XInterface > xNormalizedObject( _rxObject, UNO_QUERY );
 
@@ -1265,8 +1277,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
     return false;
 }
 
-
-bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot )
+bool FmXFormShell::canConvertCurrentSelectionToControl(const OString& rIdent)
 {
     if ( m_aCurrentSelection.empty() )
         return false;
@@ -1293,24 +1304,25 @@ bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlo
        )
         return false;   // those types cannot be converted
 
-    DBG_ASSERT(SAL_N_ELEMENTS(nConvertSlots) == SAL_N_ELEMENTS(nObjectTypes),
-        "FmXFormShell::canConvertCurrentSelectionToControl: nConvertSlots & nObjectTypes must have the same size !");
+    DBG_ASSERT(SAL_N_ELEMENTS(aConvertSlots) == SAL_N_ELEMENTS(nObjectTypes),
+        "FmXFormShell::canConvertCurrentSelectionToControl: aConvertSlots & nObjectTypes must have the same size !");
 
-    for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
-        if (nConvertSlots[i] == nConversionSlot)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
+        if (rIdent == aConvertSlots[i])
             return nObjectTypes[i] != nObjectType;
 
     return true;    // all other slots: assume "yes"
 }
 
-
-void FmXFormShell::checkControlConversionSlotsForCurrentSelection( Menu& rMenu )
+void FmXFormShell::checkControlConversionSlotsForCurrentSelection(Menu& rMenu)
 {
-    for (sal_Int16 i=0; i<rMenu.GetItemCount(); ++i)
+    for (sal_Int16 i = 0; i < rMenu.GetItemCount(); ++i)
+    {
         // der Context ist schon von einem Typ, der dem Eitnrag entspricht -> disable
-        rMenu.EnableItem( rMenu.GetItemId(i), canConvertCurrentSelectionToControl( rMenu.GetItemId( i ) ) );
+        const sal_uInt16 nId = rMenu.GetItemId(i);
+        rMenu.EnableItem(nId, canConvertCurrentSelectionToControl(rMenu.GetItemIdent(nId)));
+    }
 }
-
 
 void FmXFormShell::LoopGrids(LoopGridsSync nSync, LoopGridsFlags nFlags)
 {

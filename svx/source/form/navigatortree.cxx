@@ -409,12 +409,16 @@ namespace svxform
                     // the same for automatic control focus
                     aContextMenu->EnableItem(aContextMenu->GetItemId("controlfocus"), m_bRootSelected);
 
+                    std::unique_ptr<VclBuilder> xBuilder;
+                    VclPtr<PopupMenu> xConversionMenu;
                     // ConvertTo-Slots are enabled, if one control is selected
                     // the corresponding slot is disabled
                     const sal_Int16 nChangeId = aContextMenu->GetItemId("change");
                     if (!m_bRootSelected && !m_nFormsSelected && (m_nControlsSelected == 1))
                     {
-                        aContextMenu->SetPopupMenu(nChangeId, FmXFormShell::GetConversionMenu() );
+                        xBuilder.reset(FmXFormShell::GetConversionMenu());
+                        xConversionMenu = xBuilder->get_menu("menu");
+                        aContextMenu->SetPopupMenu(nChangeId, xConversionMenu);
 #if OSL_DEBUG_LEVEL > 0
                         FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
                         OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected( pCurrent->GetFormComponent() ),
@@ -434,10 +438,14 @@ namespace svxform
                     aContextMenu->CheckItem(aContextMenu->GetItemId("designmode"), pFormModel->GetOpenInDesignMode());
                     aContextMenu->CheckItem(aContextMenu->GetItemId("controlfocus"), pFormModel->GetAutoControlFocus());
 
-                    sal_uInt16 nSlotId = aContextMenu->Execute(this, ptWhere);
-                    OString sIdent = aContextMenu->GetCurItemIdent();
+                    aContextMenu->Execute(this, ptWhere);
+                    OString sIdent;
+                    if (xConversionMenu)
+                        sIdent = xConversionMenu->GetCurItemIdent();
                     if (sIdent.isEmpty())
                         sIdent = pSubMenuNew->GetCurItemIdent();
+                    if (sIdent.isEmpty())
+                        sIdent = aContextMenu->GetCurItemIdent();
                     if (sIdent == "form")
                     {
                         OUString aStr(SVX_RESSTR(RID_STR_FORM));
@@ -499,10 +507,10 @@ namespace svxform
                         pFormModel->SetAutoControlFocus( !pFormModel->GetAutoControlFocus() );
                         pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
                     }
-                    else if (FmXFormShell::isControlConversionSlot(nSlotId))
+                    else if (FmXFormShell::isControlConversionSlot(sIdent))
                     {
                         FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
-                        if ( pFormShell->GetImpl()->executeControlConversionSlot( pCurrent->GetFormComponent(), nSlotId ) )
+                        if (pFormShell->GetImpl()->executeControlConversionSlot(pCurrent->GetFormComponent(), sIdent))
                             ShowSelectionProperties();
                     }
                 }

@@ -576,7 +576,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CONVERTTO_SCROLLBAR     :
         case SID_FM_CONVERTTO_SPINBUTTON    :
         case SID_FM_CONVERTTO_NAVIGATIONBAR :
-            GetImpl()->executeControlConversionSlot( nSlot );
+            GetImpl()->executeControlConversionSlot(FmXFormShell::SlotToIdent(nSlot));
             // nach dem Konvertieren die Selektion neu bestimmern, da sich ja das selektierte Objekt
             // geaendert hat
             GetImpl()->SetSelection(GetFormView()->GetMarkedObjectList());
@@ -1021,7 +1021,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    if ( !GetImpl()->canConvertCurrentSelectionToControl( SID_FM_CONVERTTO_FIXEDTEXT ) )
+                    if (!GetImpl()->canConvertCurrentSelectionToControl("ConvertToFixed"))
                         // if it cannot be converted to a fixed text, it is no single control
                         rSet.DisableItem( nWhich );
                 }
@@ -1048,7 +1048,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CONVERTTO_FORMATTED     :
             case SID_FM_CONVERTTO_SPINBUTTON    :
             {
-                if ( !m_pFormView || !m_bDesignMode || !GetImpl()->canConvertCurrentSelectionToControl( nWhich ) )
+                if (!m_pFormView || !m_bDesignMode || !GetImpl()->canConvertCurrentSelectionToControl(FmXFormShell::SlotToIdent(nWhich)))
                     rSet.DisableItem( nWhich );
                 else
                 {

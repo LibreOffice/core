@@ -416,21 +416,21 @@ public:
     SAL_DLLPRIVATE void startFiltering();
     SAL_DLLPRIVATE void stopFiltering(bool bSave);
 
-    SAL_DLLPRIVATE static VclPtr<PopupMenu> GetConversionMenu();
+    SAL_DLLPRIVATE static VclBuilder* GetConversionMenu();
         // ein Menue, das alle ControlConversion-Eintraege enthaelt
 
     /// checks whether a given control conversion slot can be applied to the current selection
-    SAL_DLLPRIVATE        bool canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot );
+    SAL_DLLPRIVATE        bool canConvertCurrentSelectionToControl(const OString& rIdent);
     /// enables or disables all conversion slots in a menu, according to the current selection
     SAL_DLLPRIVATE        void checkControlConversionSlotsForCurrentSelection( Menu& rMenu );
     /// executes a control conversion slot for a given object
-    SAL_DLLPRIVATE        bool executeControlConversionSlot( const css::uno::Reference< css::form::XFormComponent >& _rxObject, sal_uInt16 _nSlotId );
+    SAL_DLLPRIVATE        bool executeControlConversionSlot(const css::uno::Reference< css::form::XFormComponent >& _rxObject, const OString& rIdent);
     /** executes a control conversion slot for the current selection
         @precond canConvertCurrentSelectionToControl( <arg>_nSlotId</arg> ) must return <TRUE/>
     */
-    SAL_DLLPRIVATE        void executeControlConversionSlot( sal_uInt16 _nSlotId );
+    SAL_DLLPRIVATE        void executeControlConversionSlot(const OString& rIdent);
     /// checks whether the given slot id denotes a control conversion slot
-    SAL_DLLPRIVATE static bool isControlConversionSlot( sal_uInt16 _nSlotId );
+    SAL_DLLPRIVATE static bool isControlConversionSlot(const OString& rIdent);
 
     SAL_DLLPRIVATE void    ExecuteTextAttribute( SfxRequest& _rReq );
     SAL_DLLPRIVATE void    GetTextAttributeState( SfxItemSet& _rSet );
@@ -525,6 +525,8 @@ public:
     /** determines whether the current form slot is currently enabled
     */
     SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState );
+
+    SAL_DLLPRIVATE static OString SlotToIdent(sal_uInt16 nSlot);
 
 protected:
     DECL_DLLPRIVATE_LINK( OnLoadForms, void*, void );
