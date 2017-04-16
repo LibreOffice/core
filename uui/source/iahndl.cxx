@@ -973,7 +973,7 @@ UUIInteractionHelper::getInteractionHandler()
 
 namespace {
 
-ErrorHandlerFlags
+DialogMask
 executeMessageBox(
     vcl::Window * pParent,
     OUString const & rTitle,
@@ -985,23 +985,23 @@ executeMessageBox(
     ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, rTitle, rMessage);
 
     sal_uInt16 aMessResult = xBox->Execute();
-    ErrorHandlerFlags aResult = ErrorHandlerFlags::NONE;
+    DialogMask aResult = DialogMask::NONE;
     switch( aMessResult )
     {
     case RET_OK:
-        aResult = ErrorHandlerFlags::ButtonsOk;
+        aResult = DialogMask::ButtonsOk;
         break;
     case RET_CANCEL:
-        aResult = ErrorHandlerFlags::ButtonsCancel;
+        aResult = DialogMask::ButtonsCancel;
         break;
     case RET_YES:
-        aResult = ErrorHandlerFlags::ButtonsYes;
+        aResult = DialogMask::ButtonsYes;
         break;
     case RET_NO:
-        aResult = ErrorHandlerFlags::ButtonsNo;
+        aResult = DialogMask::ButtonsNo;
         break;
     case RET_RETRY:
-        aResult = ErrorHandlerFlags::ButtonsRetry;
+        aResult = DialogMask::ButtonsRetry;
         break;
     default: assert(false);
     }
@@ -1258,19 +1258,19 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     switch (
         executeMessageBox( getParentProperty(), title, aMessage, nButtonMask ) )
     {
-    case ErrorHandlerFlags::ButtonsOk:
+    case DialogMask::ButtonsOk:
         OSL_ENSURE( xAbort.is(), "unexpected situation" );
         if (xAbort.is())
             xAbort->select();
         break;
 
-    case ErrorHandlerFlags::ButtonsNo:
+    case DialogMask::ButtonsNo:
         OSL_ENSURE(xDisapprove.is(), "unexpected situation");
         if (xDisapprove.is())
             xDisapprove->select();
         break;
 
-    case ErrorHandlerFlags::ButtonsYes:
+    case DialogMask::ButtonsYes:
         OSL_ENSURE(xApprove.is(), "unexpected situation");
         if (xApprove.is())
             xApprove->select();

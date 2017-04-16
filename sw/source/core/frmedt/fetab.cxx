@@ -190,7 +190,7 @@ bool SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
 
@@ -231,7 +231,7 @@ bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
 
@@ -240,7 +240,7 @@ bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
     if( !CheckSplitCells( *this, nCnt + 1, SwTableSearchType::Col ) )
     {
         ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
 
@@ -286,7 +286,7 @@ bool SwFEShell::DeleteCol()
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
 
@@ -337,7 +337,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
 
@@ -456,7 +456,7 @@ TableMergeErr SwFEShell::MergeTab()
         if( dynamic_cast< const SwDDETable* >(&pTableNd->GetTable()) != nullptr )
         {
             ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
-                            ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                            DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         }
         else
         {
@@ -487,7 +487,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr  )
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
 
@@ -496,7 +496,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
     if( bVert && !CheckSplitCells( *this, nCnt + 1 ) )
     {
         ErrorHandler::HandleError( ERR_TBLSPLIT_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
     StartAllAction();
@@ -1296,7 +1296,7 @@ bool SwFEShell::DeleteTableSel()
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
 
@@ -2162,7 +2162,7 @@ bool SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
         dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
-                        ErrorHandlerFlags::MessageInfo | ErrorHandlerFlags::ButtonDefaultsOk );
+                        DialogMask::MessageInfo | DialogMask::ButtonDefaultsOk );
         return false;
     }
 
