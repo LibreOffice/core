@@ -114,8 +114,8 @@ executeLoginDialog(
         if ( bCanUseSysCreds )
             xDialog->SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
 
-        rInfo.SetResult(xDialog->Execute() == RET_OK ? ErrorHandlerFlags::ButtonsOk :
-                                                       ErrorHandlerFlags::ButtonsCancel);
+        rInfo.SetResult(xDialog->Execute() == RET_OK ? DialogMask::ButtonsOk :
+                                                       DialogMask::ButtonsCancel);
         rInfo.SetUserName(xDialog->GetName());
         rInfo.SetPassword(xDialog->GetPassword());
         rInfo.SetAccount(xDialog->GetAccount());
@@ -277,7 +277,7 @@ handleAuthenticationRequest_(
                        rRequest.HasRealm ? rRequest.Realm : OUString());
     switch (aInfo.GetResult())
     {
-    case ErrorHandlerFlags::ButtonsOk:
+    case DialogMask::ButtonsOk:
         if (xSupplyAuthentication.is())
         {
             if (xSupplyAuthentication->canSetUserName())
@@ -391,7 +391,7 @@ handleAuthenticationRequest_(
           }
           break;
 
-    case ErrorHandlerFlags::ButtonsRetry:
+    case DialogMask::ButtonsRetry:
         if (xRetry.is())
             xRetry->select();
         break;
@@ -420,7 +420,7 @@ executeMasterPasswordDialog(
             ScopedVclPtrInstance< MasterPasswordCreateDialog > xDialog(
                 pParent, xManager.get());
             rInfo.SetResult(xDialog->Execute()
-                == RET_OK ? ErrorHandlerFlags::ButtonsOk : ErrorHandlerFlags::ButtonsCancel);
+                == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             aMaster = OUStringToOString(
                 xDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8);
         }
@@ -429,7 +429,7 @@ executeMasterPasswordDialog(
             ScopedVclPtrInstance< MasterPasswordDialog > xDialog(
                 pParent, nMode, xManager.get());
             rInfo.SetResult(xDialog->Execute()
-                == RET_OK ? ErrorHandlerFlags::ButtonsOk : ErrorHandlerFlags::ButtonsCancel);
+                == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             aMaster = OUStringToOString(
                 xDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8);
         }
@@ -477,7 +477,7 @@ handleMasterPasswordRequest_(
 
     switch (aInfo.GetResult())
     {
-    case ErrorHandlerFlags::ButtonsOk:
+    case DialogMask::ButtonsOk:
         if (xSupplyAuthentication.is())
         {
             if (xSupplyAuthentication->canSetPassword())
@@ -486,7 +486,7 @@ handleMasterPasswordRequest_(
         }
         break;
 
-    case ErrorHandlerFlags::ButtonsRetry:
+    case DialogMask::ButtonsRetry:
         if (xRetry.is())
             xRetry->select();
         break;
@@ -521,7 +521,7 @@ executePasswordDialog(
                     bIsPasswordToModify, bIsSimplePasswordRequest);
                 xDialog->SetMinLen(0);
 
-                rInfo.SetResult(xDialog->Execute() == RET_OK ? ErrorHandlerFlags::ButtonsOk : ErrorHandlerFlags::ButtonsCancel);
+                rInfo.SetResult(xDialog->Execute() == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
                 rInfo.SetPassword(xDialog->GetPassword());
             }
             else
@@ -532,7 +532,7 @@ executePasswordDialog(
                 ScopedVclPtr<AbstractPasswordToOpenModifyDialog> const pDialog(
                     pFact->CreatePasswordToOpenModifyDialog(pParent, nMaxPasswdLen, bIsPasswordToModify));
 
-                rInfo.SetResult( pDialog->Execute() == RET_OK ? ErrorHandlerFlags::ButtonsOk : ErrorHandlerFlags::ButtonsCancel );
+                rInfo.SetResult( pDialog->Execute() == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel );
                 rInfo.SetPassword( pDialog->GetPasswordToOpen() );
                 rInfo.SetPasswordToModify( pDialog->GetPasswordToModify() );
                 rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
@@ -544,7 +544,7 @@ executePasswordDialog(
                 bIsPasswordToModify, bIsSimplePasswordRequest);
             xDialog->SetMinLen(0);
 
-            rInfo.SetResult(xDialog->Execute() == RET_OK ? ErrorHandlerFlags::ButtonsOk : ErrorHandlerFlags::ButtonsCancel);
+            rInfo.SetResult(xDialog->Execute() == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             rInfo.SetPassword(bIsPasswordToModify ? OUString() : xDialog->GetPassword());
             rInfo.SetPasswordToModify(bIsPasswordToModify ? xDialog->GetPassword() : OUString());
         }
@@ -583,7 +583,7 @@ handlePasswordRequest_(
 
     switch (aInfo.GetResult())
     {
-    case ErrorHandlerFlags::ButtonsOk:
+    case DialogMask::ButtonsOk:
         OSL_ENSURE( !bIsPasswordToModify || xPassword2.is(), "PasswordToModify is requested, but there is no Interaction!" );
         if (xPassword.is())
         {
@@ -598,7 +598,7 @@ handlePasswordRequest_(
         }
         break;
 
-    case ErrorHandlerFlags::ButtonsRetry:
+    case DialogMask::ButtonsRetry:
         if (xRetry.is())
             xRetry->select();
         break;
