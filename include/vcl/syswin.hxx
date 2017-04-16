@@ -27,6 +27,7 @@
 #include <vcl/notebookbar.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class ModalDialog;
 class MenuBar;
@@ -163,7 +164,7 @@ private:
     bool            mbIsCalculatingInitialLayoutSize;
     MenuBarMode     mnMenuBarMode;
     sal_uInt16      mnIcon;
-    ImplData*       mpImplData;
+    std::unique_ptr<ImplData> mpImplData;
     Idle            maLayoutIdle;
     OUString        maNotebookBarUIFile;
 protected:
