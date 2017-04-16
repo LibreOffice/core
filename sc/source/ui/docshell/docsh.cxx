@@ -2463,7 +2463,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 SetError(*new StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
                     aImExport.GetNonConvertibleChars(),
-                    ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageInfo));
+                    DialogMask::ButtonsOk | DialogMask::MessageInfo));
             }
         }
     }
