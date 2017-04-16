@@ -78,7 +78,7 @@ HWPPara::HWPPara()
     , cshape(new CharShape)
     , linfo(nullptr)
 {
-    memset(cshape.get(), 0, sizeof(cshape));
+    memset(cshape.get(), 0, sizeof(CharShape));
     memset(&pshape, 0, sizeof(pshape));
 }
 
