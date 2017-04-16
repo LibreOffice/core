@@ -32,9 +32,9 @@
 #include <memory>
 
 
-static ErrorHandlerFlags aWndFunc(
+static DialogMask aWndFunc(
     vcl::Window *pWin,            // Parent of the dialog
-    ErrorHandlerFlags nFlags,
+    DialogMask nFlags,
     const OUString &rErr,      // error text
     const OUString &rAction)   // action text
 
@@ -53,32 +53,32 @@ static ErrorHandlerFlags aWndFunc(
 
     // determine necessary WinBits from the flags
     WinBits eBits=0;
-    if ( nFlags & (ErrorHandlerFlags::ButtonsCancel | ErrorHandlerFlags::ButtonsRetry) )
+    if ( nFlags & (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry) )
         eBits = WB_RETRY_CANCEL;
-    else if ( nFlags & ErrorHandlerFlags::ButtonsOkCancel )
+    else if ( nFlags & DialogMask::ButtonsOkCancel )
         eBits = WB_OK_CANCEL;
-    else if ( nFlags & ErrorHandlerFlags::ButtonsOk )
+    else if ( nFlags & DialogMask::ButtonsOk )
         eBits = WB_OK;
-    else if ( nFlags & ErrorHandlerFlags::ButtonsYesNoCancel )
+    else if ( nFlags & DialogMask::ButtonsYesNoCancel )
         eBits = WB_YES_NO_CANCEL;
-    else if ( nFlags & ErrorHandlerFlags::ButtonsYesNo )
+    else if ( nFlags & DialogMask::ButtonsYesNo )
         eBits = WB_YES_NO;
 
-    switch(nFlags & ErrorHandlerFlags(0x0f00))
+    switch(nFlags & DialogMask(0x0f00))
     {
-      case ErrorHandlerFlags::ButtonDefaultsOk:
+      case DialogMask::ButtonDefaultsOk:
             eBits |= WB_DEF_OK;
             break;
 
-      case ErrorHandlerFlags::ButtonDefaultsCancel:
+      case DialogMask::ButtonDefaultsCancel:
             eBits |= WB_DEF_CANCEL;
             break;
 
-      case ErrorHandlerFlags::ButtonDefaultsYes:
+      case DialogMask::ButtonDefaultsYes:
             eBits |= WB_DEF_YES;
             break;
 
-      case ErrorHandlerFlags::ButtonDefaultsNo:
+      case DialogMask::ButtonDefaultsNo:
             eBits |= WB_DEF_NO;
             break;
       default: break;
@@ -92,44 +92,44 @@ static ErrorHandlerFlags aWndFunc(
     aErr = aErr.replaceAll("$(ERROR)", rErr);
 
     VclPtr<MessBox> pBox;
-    switch ( nFlags & ErrorHandlerFlags(0xf000) )
+    switch ( nFlags & DialogMask(0xf000) )
     {
-        case ErrorHandlerFlags::MessageError:
+        case DialogMask::MessageError:
             pBox.reset(VclPtr<ErrorBox>::Create(pWin, eBits, aErr));
             break;
 
-        case ErrorHandlerFlags::MessageWarning:
+        case DialogMask::MessageWarning:
             pBox.reset(VclPtr<WarningBox>::Create(pWin, eBits, aErr));
             break;
 
-        case ErrorHandlerFlags::MessageInfo:
+        case DialogMask::MessageInfo:
             pBox.reset(VclPtr<InfoBox>::Create(pWin, aErr));
             break;
 
         default:
         {
             SAL_WARN( "svtools.misc", "no MessBox type");
-            return ErrorHandlerFlags::ButtonsOk;
+            return DialogMask::ButtonsOk;
         }
     }
 
-    ErrorHandlerFlags nRet = ErrorHandlerFlags::NONE;
+    DialogMask nRet = DialogMask::NONE;
     switch ( pBox->Execute() )
     {
         case RET_OK:
-            nRet = ErrorHandlerFlags::ButtonsOk;
+            nRet = DialogMask::ButtonsOk;
             break;
         case RET_CANCEL:
-            nRet = ErrorHandlerFlags::ButtonsCancel;
+            nRet = DialogMask::ButtonsCancel;
             break;
         case RET_RETRY:
-            nRet = ErrorHandlerFlags::ButtonsRetry;
+            nRet = DialogMask::ButtonsRetry;
             break;
         case RET_YES:
-            nRet = ErrorHandlerFlags::ButtonsYes;
+            nRet = DialogMask::ButtonsYes;
             break;
         case RET_NO:
-            nRet = ErrorHandlerFlags::ButtonsNo;
+            nRet = DialogMask::ButtonsNo;
             break;
         default:
             SAL_WARN( "svtools.misc", "Unknown MessBox return value" );
