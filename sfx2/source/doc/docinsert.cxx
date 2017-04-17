@@ -108,9 +108,8 @@ SfxMedium* DocumentInserter::CreateMedium(char const*const pFallbackHack)
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
         DBG_ASSERT( m_pURLList.size() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
-        OUString sURL(m_pURLList[0]);
         pMedium.reset(new SfxMedium(
-                sURL, SFX_STREAM_READONLY,
+                m_pURLList[0], SFX_STREAM_READONLY,
                 SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet ));
         pMedium->UseInteractionHandler( true );
         std::unique_ptr<SfxFilterMatcher> pMatcher;
@@ -223,8 +222,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
                     short nRet = aPasswordDlg->Execute();
                     if ( RET_OK == nRet )
                     {
-                        OUString aPasswd = aPasswordDlg->GetPassword();
-                        m_pItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswd ) );
+                        m_pItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswordDlg->GetPassword() ) );
                     }
                     else
                     {
