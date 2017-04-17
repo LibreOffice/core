@@ -30,6 +30,8 @@ struct PivotTableFieldEntry
     string Name;
 
     long DimensionIndex;
+
+    long DimensionPositionIndex;
 };
 
 }; // data
