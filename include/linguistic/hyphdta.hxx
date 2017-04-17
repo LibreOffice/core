@@ -24,6 +24,7 @@
 #include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <linguistic/lngdllapi.h>
+#include <i18nlangtag/lang.h>
 
 namespace linguistic
 {
@@ -35,14 +36,14 @@ class HyphenatedWord :
     OUString     aHyphenatedWord;
     sal_Int16    nHyphPos;
     sal_Int16    nHyphenationPos;
-    sal_uInt16   nLanguage;
+    LanguageType nLanguage;
     bool         bIsAltSpelling;
 
     HyphenatedWord(const HyphenatedWord &) = delete;
     HyphenatedWord & operator = (const HyphenatedWord &) = delete;
 
 public:
-    HyphenatedWord(const OUString &rWord, sal_uInt16 nLang, sal_Int16 nHyphenationPos,
+    HyphenatedWord(const OUString &rWord, LanguageType nLang, sal_Int16 nHyphenationPos,
                    const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
     virtual ~HyphenatedWord() override;
 
@@ -61,7 +62,7 @@ public:
         isAlternativeSpelling() override;
 
     static css::uno::Reference <css::linguistic2::XHyphenatedWord> LNG_DLLPUBLIC CreateHyphenatedWord(
-        const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
+        const OUString &rWord, LanguageType nLang, sal_Int16 nHyphenationPos,
         const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
 };
 
@@ -75,13 +76,13 @@ class PossibleHyphens :
     OUString             aWord;
     OUString             aWordWithHyphens;
     css::uno::Sequence< sal_Int16 > aOrigHyphenPos;
-    sal_uInt16           nLanguage;
+    LanguageType         nLanguage;
 
     PossibleHyphens(const PossibleHyphens &) = delete;
     PossibleHyphens & operator = (const PossibleHyphens &) = delete;
 
 public:
-    PossibleHyphens(const OUString &rWord, sal_uInt16 nLang,
+    PossibleHyphens(const OUString &rWord, LanguageType nLang,
             const OUString &rHyphWord,
             const css::uno::Sequence< sal_Int16 > &rPositions);
     virtual ~PossibleHyphens() override;
@@ -97,7 +98,7 @@ public:
         getHyphenationPositions() override;
 
     static css::uno::Reference < css::linguistic2::XPossibleHyphens > LNG_DLLPUBLIC CreatePossibleHyphens
-        (const OUString &rWord, sal_Int16 nLang,
+        (const OUString &rWord, LanguageType nLang,
          const OUString &rHyphWord,
          const css::uno::Sequence< sal_Int16 > &rPositions);
 };

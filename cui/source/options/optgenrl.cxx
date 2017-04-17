@@ -211,17 +211,14 @@ void SvxGeneralTabPage::InitControls ()
 {
     // which language bit do we use? (see Lang and vRowInfo[] above)
     unsigned LangBit;
-    switch (Application::GetSettings().GetUILanguageTag().getLanguageType())
+    LanguageType l = Application::GetSettings().GetUILanguageTag().getLanguageType();
+    if (l == LANGUAGE_ENGLISH_US)
+        LangBit = Lang::US;
+    else if (l == LANGUAGE_RUSSIAN)
+        LangBit = Lang::Russian;
+    else
     {
-        case LANGUAGE_ENGLISH_US:
-            LangBit = Lang::US;
-            break;
-        case LANGUAGE_RUSSIAN:
-            LangBit = Lang::Russian;
-            break;
-        default:
-            LangBit = Lang::Others;
-            break;
+        LangBit = Lang::Others;
     }
 
     // creating rows

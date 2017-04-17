@@ -91,7 +91,7 @@ public:
                                         virtual ~EditAbstractDialogFactory() override;   // needed for export of vtable
     static EditAbstractDialogFactory*   Create();
     virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog( vcl::Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
-                                                const OUString &rWord, sal_Int16 nLanguage ) = 0;
+                                                const OUString &rWord, LanguageType nLanguage ) = 0;
 
     virtual VclPtr<AbstractHyphenWordDialog> CreateHyphenWordDialog( vcl::Window*,
                                                 const OUString &rWord, LanguageType nLang,

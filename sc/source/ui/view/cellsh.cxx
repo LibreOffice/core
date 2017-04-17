@@ -328,7 +328,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                     if (!bDisable)
                     {
                         //  test for available languages
-                        sal_uInt16 nLang = ScViewUtil::GetEffLanguage( &rDoc, aCursor );
+                        LanguageType nLang = ScViewUtil::GetEffLanguage( &rDoc, aCursor );
                         bDisable = !ScModule::HasThesaurusLanguage( nLang );
                     }
                 }

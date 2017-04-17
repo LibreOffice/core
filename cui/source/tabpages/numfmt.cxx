@@ -1813,7 +1813,7 @@ void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, b
 {
     m_pLbLanguage->RemoveLanguage(LANGUAGE_SYSTEM);
     const sal_Int32 nPos = m_pLbLanguage->InsertEntry(sAutomaticEntry);
-    m_pLbLanguage->SetEntryData(nPos, reinterpret_cast<void*>((sal_uLong)eAutoLang));
+    m_pLbLanguage->SetEntryData(nPos, reinterpret_cast<void*>((sal_uInt16)eAutoLang));
     if(bSelect)
         m_pLbLanguage->SelectEntryPos(nPos);
 }

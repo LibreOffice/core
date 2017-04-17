@@ -4445,7 +4445,7 @@ PPTCharPropSet::PPTCharPropSet(sal_uInt32 nParagraph)
     mnHylinkOrigColor = 0;
     mbIsHyperlink = false;
     mbHardHylinkOrigColor = false;
-    mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = 0;
+    mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = LANGUAGE_SYSTEM;
 }
 
 PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet )
@@ -4475,7 +4475,7 @@ PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 n
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
     maString = rCharPropSet.maString;
     mpFieldItem.reset( rCharPropSet.mpFieldItem ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : nullptr );
-    mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = 0;
+    mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = LANGUAGE_SYSTEM;
 }
 
 PPTCharPropSet::~PPTCharPropSet()
@@ -4737,9 +4737,9 @@ PPTTextSpecInfo::PPTTextSpecInfo( sal_uInt32 _nCharIdx ) :
     nCharIdx        ( _nCharIdx ),
     nDontKnow       ( 1 )
 {
-    nLanguage[ 0 ] = 0x400;
-    nLanguage[ 1 ] = 0;
-    nLanguage[ 2 ] = 0;
+    nLanguage[ 0 ] = LANGUAGE_PROCESS_OR_USER_DEFAULT;
+    nLanguage[ 1 ] = LANGUAGE_SYSTEM;
+    nLanguage[ 2 ] = LANGUAGE_SYSTEM;
 }
 
 PPTTextSpecInfo::~PPTTextSpecInfo()
@@ -4796,14 +4796,14 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
             if ( nLang )
             {
                 // #i119985#, we could probably handle this better if we have a
-                // place to over-ride the final language for weak
+                // place to override the final language for weak
                 // characters/fields to fallback to, rather than the current
                 // application locale. Assuming that we can determine what the
                 // default fallback language for a given .ppt, etc is during
                 // load time.
                 if (i == 2)
                 {
-                    pEntry->nLanguage[ 0 ] = pEntry->nLanguage[ 1 ] = pEntry->nLanguage[ 2 ] = nLang;
+                    pEntry->nLanguage[ 0 ] = pEntry->nLanguage[ 1 ] = pEntry->nLanguage[ 2 ] = LanguageType(nLang);
                 }
             }
             nFlags &= ~i;

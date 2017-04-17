@@ -167,7 +167,7 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
         EnableFormat(false);    // Do not use a Numberformatter
 }
 
-OUString SwUserFieldType::Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, sal_uInt16 nLng)
+OUString SwUserFieldType::Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng)
 {
     if((nType & nsSwGetSetExpType::GSE_EXPR) && !(nSubType & nsSwExtendedSubType::SUB_CMD))
     {
@@ -309,7 +309,7 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             // The following line is in fact wrong, since the language is unknown (is part of the
             // field) and, thus, aContent should also belong to the field. Each field can have a
             // different language, but the same content with just different formatting.
-            aContent = DoubleToString(nValue, static_cast<sal_uInt32>(LANGUAGE_SYSTEM));
+            aContent = DoubleToString(nValue, static_cast<sal_uInt16>(LANGUAGE_SYSTEM));
         }
         break;
     case FIELD_PROP_PAR2:

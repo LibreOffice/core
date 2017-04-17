@@ -28,14 +28,14 @@
 class SwCalendarWrapper : public CalendarWrapper
 {
     OUString sUniqueId;
-    sal_uInt16 nLang;
+    LanguageType nLang;
 
 public:
     SwCalendarWrapper( const css::uno::Reference< css::uno::XComponentContext > & rxContext = ::comphelper::getProcessComponentContext() )
         : CalendarWrapper( rxContext ), nLang( LANGUAGE_SYSTEM )
     {}
 
-    void LoadDefaultCalendar( sal_uInt16 nLang );
+    void LoadDefaultCalendar( LanguageType nLang );
 };
 
 salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper();
