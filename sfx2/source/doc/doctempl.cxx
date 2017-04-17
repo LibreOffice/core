@@ -339,9 +339,7 @@ sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
     if ( !pImp->Construct() )
         return 0;
 
-    sal_uInt16 nCount = pImp->GetRegionCount();
-
-    return nCount;
+    return pImp->GetRegionCount();
 }
 
 
@@ -366,12 +364,11 @@ sal_uInt16 SfxDocumentTemplates::GetCount
         return 0;
 
     RegionData_Impl *pData = pImp->GetRegion( nRegion );
-    sal_uInt16            nCount = 0;
 
-    if ( pData )
-        nCount = pData->GetCount();
+    if ( !pData )
+        return 0;
 
-    return nCount;
+    return pData->GetCount();
 }
 
 
@@ -395,14 +392,14 @@ OUString SfxDocumentTemplates::GetName
 
     if ( pImp->Construct() )
     {
-        DocTempl_EntryData_Impl  *pEntry = nullptr;
         RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
         if ( pRegion )
-            pEntry = pRegion->GetEntry( nIdx );
-
-        if ( pEntry )
-            return pEntry->GetTitle();
+        {
+            DocTempl_EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
+            if ( pEntry )
+                return pEntry->GetTitle();
+        }
     }
 
     return OUString();
@@ -429,16 +426,16 @@ OUString SfxDocumentTemplates::GetPath
     if ( !pImp->Construct() )
         return OUString();
 
-    DocTempl_EntryData_Impl  *pEntry = nullptr;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
     if ( pRegion )
-        pEntry = pRegion->GetEntry( nIdx );
+    {
+        DocTempl_EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
+        if ( pEntry )
+            return pEntry->GetTargetURL();
+    }
 
-    if ( pEntry )
-        return pEntry->GetTargetURL();
-    else
-        return OUString();
+    return OUString();
 }
 
 
@@ -846,7 +843,7 @@ bool SfxDocumentTemplates::CopyFrom
                 if ( nIdx == USHRT_MAX )
                     nIdx = 0;
                 else
-                    nIdx += 1;
+                    ++nIdx;
 
                 // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
                 size_t temp_nIdx = nIdx;
@@ -1143,7 +1140,7 @@ bool SfxDocumentTemplates::GetLogicNames
     DocTempl_EntryData_Impl  *pEntry = nullptr;
     bool         bFound = false;
 
-    sal_uInt16 nCount = GetRegionCount();
+    const sal_uInt16 nCount = GetRegionCount();
 
     for ( sal_uInt16 i=0; !bFound && (i<nCount); i++ )
     {
@@ -1287,10 +1284,9 @@ RegionData_Impl::~RegionData_Impl()
 size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, bool& rFound ) const
 {
 #if 1   // Don't use binary search today
-    size_t i;
-    size_t nCount = maEntries.size();
+    const size_t nCount = maEntries.size();
 
-    for ( i=0; i<nCount; i++ )
+    for ( size_t i=0; i<nCount; ++i )
     {
         DocTempl_EntryData_Impl *pData = maEntries[ i ];
 
@@ -1302,7 +1298,7 @@ size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, bool& rFound ) cons
     }
 
     rFound = false;
-    return i;
+    return nCount;
 
 #else
     // use binary search to find the correct position
@@ -1409,8 +1405,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) cons
 
     if ( bFound )
         return maEntries[ nPos ];
-    else
-        return nullptr;
+    return nullptr;
 }
 
 
@@ -1436,9 +1431,7 @@ void RegionData_Impl::DeleteEntry( size_t nIndex )
 
 int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
 {
-    int nCompare = maTitle.compareTo( pCompare->maTitle );
-
-    return nCompare;
+    return maTitle.compareTo( pCompare->maTitle );
 }
 
 
