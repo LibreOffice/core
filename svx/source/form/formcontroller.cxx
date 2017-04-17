@@ -603,7 +603,7 @@ FormController::~FormController()
         m_xFormOperations->dispose();
     m_xFormOperations.clear();
 
-    // Freigeben der Aggregation
+    // release of aggregation
     if ( m_xAggregate.is() )
     {
         m_xAggregate->setDelegator( nullptr );
@@ -1098,7 +1098,7 @@ Any SAL_CALL FormController::getByIndex(sal_Int32 Index)
 
 void SAL_CALL FormController::disposing(const EventObject& e)
 {
-    // Ist der Container disposed worden
+    // has the container been disposed
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XControlContainer >  xContainer(e.Source, UNO_QUERY);
     if (xContainer.is())
@@ -1107,7 +1107,7 @@ void SAL_CALL FormController::disposing(const EventObject& e)
     }
     else
     {
-        // ist ein Control disposed worden
+        // has a control been disposed
         Reference< XControl >  xControl(e.Source, UNO_QUERY);
         if (xControl.is())
         {
@@ -1649,11 +1649,11 @@ void FormController::focusGained(const FocusEvent& e)
             Reference< XBoundControl >  xLockingTest(m_xCurrentControl, UNO_QUERY);
             bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
             assert(!bControlIsLocked && "FormController::Gained: I'm modified and the current control is locked ? How this ?");
-            // normalerweise sollte ein gelocktes Control nicht modified sein, also muss wohl mein bModified aus einem anderen Kontext
-            // gesetzt worden sein, was ich nicht verstehen wuerde ...
+            // normally, a locked control should not be modified, so probably my bModified must
+            // have been set from a different context, which I would not understand ...
 #endif
             DBG_ASSERT(m_xCurrentControl.is(), "kein CurrentControl gesetzt");
-            // zunaechst das Control fragen ob es das IFace unterstuetzt
+            // first the control ask if it supports the IFace
             Reference< XBoundComponent >  xBound(m_xCurrentControl, UNO_QUERY);
             if (!xBound.is() && m_xCurrentControl.is())
                 xBound.set(m_xCurrentControl->getModel(), UNO_QUERY);
@@ -1661,7 +1661,7 @@ void FormController::focusGained(const FocusEvent& e)
             // lock if we lose the focus during commit
             m_bCommitLock = true;
 
-            // Commit nicht erfolgreich, Focus zuruecksetzen
+            // commit unsuccessful, reset focus
             if (xBound.is() && !xBound->commit())
             {
                 // the commit failed and we don't commit again until the current control
@@ -1704,7 +1704,7 @@ void FormController::focusGained(const FocusEvent& e)
         }
     }
 
-    // Immer noch ein und dasselbe Control
+    // still one and the same control
     if  (   ( m_xActiveControl == xControl )
         &&  ( xControl == m_xCurrentControl )
         )
@@ -1737,7 +1737,7 @@ void FormController::focusGained(const FocusEvent& e)
     if ( !m_xCurrentControl.is() )
         return;
 
-    // Control erhaelt Focus, dann eventuell in den sichtbaren Bereich
+    // control gets focus, then possibly in the visible range
     Reference< XFormControllerContext > xContext( m_xFormControllerContext );
     Reference< XControl > xCurrentControl( m_xCurrentControl );
     aGuard.clear();
@@ -1949,11 +1949,11 @@ void FormController::addToEventAttacher(const Reference< XControl > & xControl)
     if ( !xControl.is() )
         return; /* throw IllegalArgumentException(); */
 
-    // anmelden beim Eventattacher
+    // register at the event attacher
     Reference< XFormComponent >  xComp(xControl->getModel(), UNO_QUERY);
     if (xComp.is() && m_xModelAsIndex.is())
     {
-        // Und die Position des ControlModel darin suchen
+        // and look for the position of the ControlModel in it
         sal_uInt32 nPos = m_xModelAsIndex->getCount();
         Reference< XFormComponent > xTemp;
         for( ; nPos; )
@@ -1976,11 +1976,11 @@ void FormController::removeFromEventAttacher(const Reference< XControl > & xCont
     if ( !xControl.is() )
         return; /* throw IllegalArgumentException(); */
 
-    // abmelden beim Eventattacher
+    // register at the event attacher
     Reference< XFormComponent >  xComp(xControl->getModel(), UNO_QUERY);
     if ( xComp.is() && m_xModelAsIndex.is() )
     {
-        // Und die Position des ControlModel darin suchen
+        // and look for the position of the ControlModel in it
         sal_uInt32 nPos = m_xModelAsIndex->getCount();
         Reference< XFormComponent > xTemp;
         for( ; nPos; )
@@ -2019,13 +2019,13 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
         ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), RemoveComponentTextListener( this ) );
         m_aFilterComponents.clear();
 
-        // einsammeln der Controls
+        // collecting the controls
         const Reference< XControl >* pControls = m_aControls.getConstArray();
         const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
         while ( pControls != pControlsEnd )
             implControlRemoved( *pControls++, true );
 
-        // Datenbank spezifische Dinge vornehmen
+        // make database-specific things
         if (m_bDBConnection && isListeningForChanges())
             stopListening();
 
@@ -2035,7 +2035,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
     if (m_xTabController.is())
         m_xTabController->setContainer(xContainer);
 
-    // Welche Controls gehoeren zum Container ?
+    // What controls belong to the container?
     if (xContainer.is() && xTabModel.is())
     {
         Sequence< Reference< XControlModel > > aModels = xTabModel->getControlModels();
@@ -2046,7 +2046,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
         m_aControls = Sequence< Reference< XControl > >( nCount );
         Reference< XControl > * pControls = m_aControls.getArray();
 
-        // einsammeln der Controls
+        // collecting the controls
         sal_Int32 i, j;
         for (i = 0, j = 0; i < nCount; ++i, ++pModels )
         {
@@ -2062,12 +2062,12 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
         if (j != i)
             m_aControls.realloc(j);
 
-        // am Container horchen
+        // listen at the container
         Reference< XContainer >  xNewContainer(xContainer, UNO_QUERY);
         if (xNewContainer.is())
             xNewContainer->addContainerListener(this);
 
-        // Datenbank spezifische Dinge vornehmen
+        // make database-specific things
         if (m_bDBConnection)
         {
             m_bLocked = determineLockState();
@@ -2076,7 +2076,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
                 startListening();
         }
     }
-    // befinden sich die Controls in der richtigen Reihenfolge
+    // the controls are in the right order
     m_bControlsSorted = true;
 }
 
@@ -2113,7 +2113,7 @@ Sequence< Reference< XControl > > FormController::getControls()
         Reference< XControl > * pControls = aNewControls.getArray();
         Reference< XControl >  xControl;
 
-        // Umsortieren der Controls entsprechend der TabReihenfolge
+        // rearrange the controls according to the tab order sequence
         sal_Int32 j = 0;
         for (sal_Int32 i = 0; i < nModels; ++i, ++pModels )
         {
@@ -2160,18 +2160,18 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     bool bLocked = isLocked();
 
-    // es wird gelockt
-    // a.) wenn der ganze Datensatz gesperrt ist
-    // b.) wenn das zugehoerige Feld gespeert ist
+    // It is locked
+    // a. if the entire record is locked
+    // b. if the associated field is locked
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
     if (xBound.is() && (( (bLocked && bLocked != bool(xBound->getLock())) ||
-                         !bLocked)))    // beim entlocken immer einzelne Felder ueberprüfen
+                         !bLocked)))    // always uncheck individual fields when unlocking
     {
-        // gibt es eine Datenquelle
+        // there is a data source
         Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
         if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
         {
-            // wie sieht mit den Properties ReadOnly und Enable aus
+            // what about the ReadOnly and Enable properties
             bool bTouch = true;
             if (::comphelper::hasProperty(FM_PROP_ENABLED, xSet))
                 bTouch = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ENABLED));
@@ -2212,7 +2212,7 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
 void FormController::setLocks()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    // alle Controls, die mit einer Datenquelle verbunden sind locken/unlocken
+    // lock/unlock all controls connected to a data source
     const Reference< XControl >* pControls = m_aControls.getConstArray();
     const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
     while ( pControls != pControlsEnd )
@@ -2266,7 +2266,7 @@ void FormController::startControlModifyListening(const Reference< XControl > & x
             break;
         }
 
-        // alle die Text um vorzeitig ein modified zu erkennen
+        // all the text to prematurely recognize a modified
         Reference< XTextComponent >  xText(xControl, UNO_QUERY);
         if (xText.is())
         {
@@ -2305,7 +2305,7 @@ void FormController::stopControlModifyListening(const Reference< XControl > & xC
 
     bool bModifyListening = lcl_shouldListenForModifications( xControl, nullptr );
 
-    // kuenstliches while
+    // artificial while
     while (bModifyListening)
     {
         Reference< XModifyBroadcaster >  xMod(xControl, UNO_QUERY);
@@ -2314,7 +2314,7 @@ void FormController::stopControlModifyListening(const Reference< XControl > & xC
             xMod->removeModifyListener(this);
             break;
         }
-        // alle die Text um vorzeitig ein modified zu erkennen
+        // all the text to prematurely recognize a modified
         Reference< XTextComponent >  xText(xControl, UNO_QUERY);
         if (xText.is())
         {
@@ -2352,7 +2352,7 @@ void FormController::startListening()
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     m_bModified  = false;
 
-    // jetzt anmelden bei gebundenen feldern
+    // now register at bound fields
     const Reference< XControl >* pControls = m_aControls.getConstArray();
     const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
     while ( pControls != pControlsEnd )
@@ -2365,7 +2365,7 @@ void FormController::stopListening()
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     m_bModified  = false;
 
-    // jetzt anmelden bei gebundenen feldern
+    // now register at bound fields
     const Reference< XControl >* pControls = m_aControls.getConstArray();
     const Reference< XControl >* pControlsEnd = pControls + m_aControls.getLength();
     while ( pControls != pControlsEnd )
@@ -3227,7 +3227,7 @@ void FormController::startFiltering()
     // we change attach flags
     m_bAttachEvents = false;
 
-    // Austauschen der Kontrols fuer das aktuelle Formular
+    // exchanging the controls for the current form
     Sequence< Reference< XControl > > aControlsCopy( m_aControls );
     const Reference< XControl >* pControls = aControlsCopy.getConstArray();
     sal_Int32 nControlCount = aControlsCopy.getLength();
@@ -3324,7 +3324,7 @@ void FormController::startFiltering()
             }
             else
             {
-                // abmelden vom EventManager
+                // unsubscribe from EventManager
             }
         }
     }
@@ -3359,7 +3359,7 @@ void FormController::stopFiltering()
 
     ::comphelper::disposeComponent(m_xComposer);
 
-    // Austauschen der Kontrols fuer das aktuelle Formular
+    // exchanging the controls for the current form
     Sequence< Reference< XControl > > aControlsCopy( m_aControls );
     const Reference< XControl > * pControls = aControlsCopy.getConstArray();
     sal_Int32 nControlCount = aControlsCopy.getLength();
