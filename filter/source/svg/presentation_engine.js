@@ -9747,6 +9747,9 @@ function createClipPolyPolygon( nType, nSubtype )
                     return new BarnDoorWipePath(true /* Doubled */);
                 case DOUBLEDIAMOND_TRANS_SUBTYPE:
                     return new DoubleDiamondWipePath();
+                default:
+                    log( 'createClipPolyPolygon: unhandled subtype: ' + nSubtype );
+                    return null;
             }
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
