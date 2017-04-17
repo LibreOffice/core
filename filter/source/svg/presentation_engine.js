@@ -401,19 +401,13 @@ function getDefaultMouseHandlerDictionary()
     // slide mode
     mouseHandlerDict[SLIDE_MODE][MOUSE_UP]
         = mouseClickHelper;
-        //= function( aEvt ) { return slideOnMouseDown( aEvt ); };
-//        = function( aEvt ) { return ( aSlideShow.aEventMultiplexer ) ?
-//                                        aSlideShow.aEventMultiplexer.notifyMouseClick( aEvt )
-//                                        : slideOnMouseUp( aEvt ); };
 
     mouseHandlerDict[SLIDE_MODE][MOUSE_WHEEL]
         = function( aEvt ) { return slideOnMouseWheel( aEvt ); };
 
     // index mode
     mouseHandlerDict[INDEX_MODE][MOUSE_UP]
-        = function( aEvt ) { return toggleSlideIndex(); };
-//    mouseHandlerDict[INDEX_MODE][MOUSE_MOVE]
-//        = function( aEvt ) { return theSlideIndexPage.updateSelection( aEvt ); };
+        = function( ) { return toggleSlideIndex(); };
 
     return mouseHandlerDict;
 }
@@ -1129,7 +1123,7 @@ function configureDetectionTools()
         };
 
         // When a path segment changes the list needs to be synchronized back to the path element.
-        SVGPathSegList.prototype.segmentChanged = function(pathSeg) {
+        SVGPathSegList.prototype.segmentChanged = function() {
             this._writeListToPath();
         };
 
@@ -1916,13 +1910,6 @@ function log( message )
     }
 }
 
-function warning( bCondition, sMessage )
-{
-    if( bCondition )
-        log( sMessage );
-    return bCondition;
-}
-
 function getNSAttribute( sNSPrefix, aElem, sAttrName )
 {
     if( !aElem ) return null;
@@ -1959,17 +1946,6 @@ function setNSAttribute( sNSPrefix, aElem, sAttrName, aValue )
         aElem.setAttribute(sNSPrefix + ':' + sAttrName, aValue );
         return true;
     }
-}
-
-function setOOOAttribute( aElem, sAttrName, aValue )
-{
-    return setNSAttribute( 'ooo', aElem, sAttrName, aValue );
-}
-
-function checkElemAndSetAttribute( aElem, sAttrName, aValue )
-{
-    if( aElem )
-        aElem.setAttribute( sAttrName, aValue );
 }
 
 function getElementsByClassName( aElem, sClassName )
@@ -2048,16 +2024,6 @@ function initVisibilityProperty( aElement )
     return nVisibility;
 }
 
-function setElementVisibility( aElement, nCurrentVisibility, nNewVisibility )
-{
-    if( nCurrentVisibility !=  nNewVisibility )
-    {
-        checkElemAndSetAttribute( aElement, 'visibility', aVisibilityAttributeValue[nNewVisibility] );
-        return nNewVisibility;
-    }
-    return nCurrentVisibility;
-}
-
 function getSafeIndex( nIndex, nMin, nMax )
 {
     if( nIndex < nMin )
@@ -2077,15 +2043,6 @@ function getSafeIndex( nIndex, nMin, nMax )
 function getRandomInt( nMax )
 {
     return Math.floor( Math.random() * nMax );
-}
-
-function isTextFieldElement( aElement )
-{
-    var sClassName = aElement.getAttribute( 'class' );
-    return ( sClassName === aSlideNumberClassName ) ||
-           ( sClassName === aFooterClassName ) ||
-           ( sClassName === aHeaderClassName ) ||
-           ( sClassName === aDateTimeClassName );
 }
 
 
@@ -3316,7 +3273,7 @@ CurrentDateTimeProvider.prototype.update = function( aDateTimeField )
 
 /*** private methods ***/
 
-CurrentDateTimeProvider.prototype.createDateTimeText = function( sDateTimeFormat )
+CurrentDateTimeProvider.prototype.createDateTimeText = function()
 {
     // TODO handle date/time format
     var aDate = new Date();
@@ -3374,7 +3331,7 @@ SlideNumberProvider.prototype.update = function( aSlideNumberField, nSlideNumber
 
 /*** private methods ***/
 
-SlideNumberProvider.prototype.createSlideNumberText = function( nSlideNumber, sNumberingType )
+SlideNumberProvider.prototype.createSlideNumberText = function( nSlideNumber )
 {
     // TODO handle page numbering type
     return String( nSlideNumber );
@@ -3717,7 +3674,7 @@ Thumbnail.prototype.update = function( nIndex )
     this.slideIndex = nIndex;
 };
 
-Thumbnail.prototype.clear = function( nIndex )
+Thumbnail.prototype.clear = function( )
 {
     setNSAttribute( 'xlink', this.slideElement, 'href', '' );
 };
@@ -4067,11 +4024,6 @@ function getCurrentSystemTime()
     //return ROOT_NODE.getCurrentTime();
 }
 
-function getSlideAnimationsRoot( sSlideId )
-{
-    return theMetaDoc.aSlideAnimationsMap[ sSlideId ];
-}
-
 /** This function return an array populated with all children nodes of the
  *  passed element that are elements
  *
@@ -4134,28 +4086,8 @@ function makeMatrixString( a, b, c, d, e, f )
     return s;
 }
 
-function matrixToString( aSVGMatrix )
-{
-    return makeMatrixString( aSVGMatrix.a, aSVGMatrix.b, aSVGMatrix.c,
-                             aSVGMatrix.d, aSVGMatrix.e, aSVGMatrix.f );
-}
-
-
-
 
 // Attribute Parsers
-
-function numberParser( sValue )
-{
-    if( sValue === '.' )
-        return undefined;
-    var reFloatNumber = /^[+-]?[0-9]*[.]?[0-9]*$/;
-
-    if( reFloatNumber.test( sValue ) )
-        return parseFloat( sValue );
-    else
-        return undefined;
-}
 
 function booleanParser( sValue )
 {
@@ -4170,22 +4102,6 @@ function booleanParser( sValue )
 
 function colorParser( sValue )
 {
-
-    function hsl( nHue, nSaturation, nLuminance )
-    {
-        return new HSLColor( nHue, nSaturation / 100, nLuminance / 100 );
-    }
-
-    function rgb( nRed, nGreen, nBlue )
-    {
-        return new RGBColor( nRed / 255, nGreen / 255, nBlue / 255 );
-    }
-
-    function prgb( nRed, nGreen, nBlue )
-    {
-        return new RGBColor( nRed / 100, nGreen / 100, nBlue / 100 );
-    }
-
     var sCommaPattern = ' *[,] *';
     var sIntegerPattern = '[+-]?[0-9]+';
     var sHexDigitPattern = '[0-9A-Fa-f]';
@@ -7377,7 +7293,7 @@ BaseNode.prototype.activate_st = function()
     this.scheduleDeactivationEvent();
 };
 
-BaseNode.prototype.deactivate_st = function( aNodeState )
+BaseNode.prototype.deactivate_st = function( )
 {
     // empty body
 };
@@ -8116,7 +8032,7 @@ BaseContainerNode.prototype.activate_st = function()
     log( 'BaseContainerNode.activate_st: abstract method called' );
 };
 
-BaseContainerNode.prototype.notifyDeactivating = function( aAnimationNode )
+BaseContainerNode.prototype.notifyDeactivating = function( )
 {
     log( 'BaseContainerNode.notifyDeactivating: abstract method called' );
 };
@@ -9112,7 +9028,7 @@ function createChildNode( aElement, aParentNode, aNodeContext )
 
 
 
-function createIteratedNodes( aElement, aContainerNode, aNodeContext )
+function createIteratedNodes( )
 {
     // not implemented
 }
@@ -9122,7 +9038,6 @@ function createIteratedNodes( aElement, aContainerNode, aNodeContext )
 /**********************************************************************************************
  *      Animation Factory
  **********************************************************************************************/
-
 
 
 function makeScaler( nScale )
@@ -9142,7 +9057,7 @@ function makeScaler( nScale )
 
 
 
-function createPropertyAnimation( sAttrName, aAnimatedElement, nWidth, nHeight )
+function createPropertyAnimation( sAttrName, aAnimatedElement )
 {
     if( !aAttributeMap[ sAttrName ] )
     {
@@ -9469,12 +9384,12 @@ SlideChangeBase.prototype.getUnderlyingValue = function()
     return 0.0;
 };
 
-SlideChangeBase.prototype.performIn = function( nValue )
+SlideChangeBase.prototype.performIn = function( )
 {
     log( 'SlideChangeBase.performIn: abstract method called' );
 };
 
-SlideChangeBase.prototype.performOut = function( nValue )
+SlideChangeBase.prototype.performOut = function( )
 {
     log( 'SlideChangeBase.performOut: abstract method called' );
 };
@@ -9756,7 +9671,7 @@ ClippedSlideChange.prototype.performIn = function( nT )
     this.aEnteringSlide.setClipPath( aPolyPolygonElement );
 };
 
-ClippedSlideChange.prototype.performOut = function( nT )
+ClippedSlideChange.prototype.performOut = function( )
 {
     // empty body
 };
@@ -11487,7 +11402,7 @@ AnimatedElement.prototype.notifyAnimationEnd = function()
     // empty body
 };
 
-AnimatedElement.prototype.notifyNextEffectStart = function( nEffectIndex )
+AnimatedElement.prototype.notifyNextEffectStart = function( )
 {
     // empty body
 };
@@ -11661,7 +11576,6 @@ AnimatedElement.prototype.getHeight = function()
 
 AnimatedElement.prototype.updateTransformAttribute = function()
 {
-    //this.aActiveElement.setAttribute( 'transform', matrixToString( this.aTMatrix ) );
     this.aTransformAttrList = this.aActiveElement.transform.baseVal;
     this.aTransformAttr = this.aTransformAttrList.getItem( 0 );
     this.aTransformAttr.setMatrix( this.aTMatrix );
@@ -12935,7 +12849,7 @@ SourceEventElement.prototype.charge = function()
     this.setPointerCursor();
 };
 
-SourceEventElement.prototype.handleClick = function( aMouseEvent )
+SourceEventElement.prototype.handleClick = function( )
 {
     if( !this.bIsPointerOver ) return false;
 
@@ -13040,7 +12954,7 @@ HyperlinkElement.prototype.onMouseLeave = function()
     this.setDefaultCursor();
 };
 
-HyperlinkElement.prototype.handleClick = function( aMouseEvent )
+HyperlinkElement.prototype.handleClick = function( )
 {
     if( !this.bIsPointerOver ) return false;
 
@@ -13616,7 +13530,7 @@ aOperatorSetMap[ ENUM_PROPERTY ].equal = function( a, b )
     return ( a === b );
 };
 
-aOperatorSetMap[ ENUM_PROPERTY ].add = function( a, b )
+aOperatorSetMap[ ENUM_PROPERTY ].add = function( a )
 {
     return a;
 };
@@ -14029,7 +13943,7 @@ DiscreteActivityBase.prototype.calcRepeatCount = function( nCurrCalls, nVectorSi
     }
 };
 
-DiscreteActivityBase.prototype.performDiscreteHook = function( nFrame, nRepeatCount )
+DiscreteActivityBase.prototype.performDiscreteHook = function( )
 {
     throw ( 'DiscreteActivityBase.performDiscreteHook: abstract method invoked' );
 };
@@ -14304,7 +14218,7 @@ SimpleContinuousActivityBase.prototype.perform = function()
     return this.isActive();
 };
 
-SimpleContinuousActivityBase.prototype.simplePerform = function( nSimpleTime, nRepeatCount )
+SimpleContinuousActivityBase.prototype.simplePerform = function( )
 {
     throw ( 'SimpleContinuousActivityBase.simplePerform: abstract method invoked' );
 };
@@ -14338,7 +14252,7 @@ ContinuousKeyTimeActivityBase.prototype.activate = function( aEndElement )
     this.aLerper.reset();
 };
 
-ContinuousKeyTimeActivityBase.prototype.performContinuousHook = function( nIndex, nFractionalIndex, nRepeatCount )
+ContinuousKeyTimeActivityBase.prototype.performContinuousHook = function( )
 {
     throw ( 'ContinuousKeyTimeActivityBase.performContinuousHook: abstract method invoked' );
 };
@@ -14363,7 +14277,7 @@ function ContinuousActivityBase( aCommonParamSet )
 extend( ContinuousActivityBase, SimpleContinuousActivityBase );
 
 
-ContinuousActivityBase.prototype.performContinuousHook = function( nModifiedTime, nRepeatCount )
+ContinuousActivityBase.prototype.performContinuousHook = function( )
 {
     throw ( 'ContinuousActivityBase.performContinuousHook: abstract method invoked' );
 };
@@ -14410,7 +14324,7 @@ SimpleActivity.prototype.endAnimation = function()
 
 };
 
-SimpleActivity.prototype.performContinuousHook = function( nModifiedTime, nRepeatCount )
+SimpleActivity.prototype.performContinuousHook = function( nModifiedTime )
 {
     // nRepeatCount is not used
 
@@ -14625,7 +14539,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
     };
 
     // perform hook override for DiscreteActivityBase
-    FromToByActivity.prototype.performDiscreteHook = function( nFrame, nRepeatCount )
+    FromToByActivity.prototype.performDiscreteHook = function( )
     {
         if (this.isDisposed() || !this.aAnimation) {
             log('FromToByActivity.performDiscreteHook: activity disposed or not valid animation');
@@ -14857,7 +14771,7 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
         var x = ( aBBox.x + aBBox.width / 2 ) / aActivityParamSet.nSlideWidth;
         var y = ( aBBox.y + aBBox.height / 2 ) / aActivityParamSet.nSlideHeight;
 
-        aActivityParamSet.aFormula = function( __PARAM0__ ) {
+        aActivityParamSet.aFormula = function( ) {
 
             return eval(sFormula);
         };
