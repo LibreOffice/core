@@ -14623,7 +14623,6 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
                                                 DiscreteFromToByActivity,
                                                 bAccumulate,
                                                 eValueType );
-                break;
 
             default:
                 log( 'createActivity: unexpected calculation mode: ' + eCalcMode );
