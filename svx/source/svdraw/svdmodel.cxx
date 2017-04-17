@@ -712,7 +712,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     SvxFontItem aSvxFontItem( EE_CHAR_FONTINFO) ;
     SvxFontItem aSvxFontItemCJK(EE_CHAR_FONTINFO_CJK);
     SvxFontItem aSvxFontItemCTL(EE_CHAR_FONTINFO_CTL);
-    sal_uInt16 nLanguage;
+    LanguageType nLanguage;
     if (!utl::ConfigManager::IsAvoidConfig())
         nLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     else

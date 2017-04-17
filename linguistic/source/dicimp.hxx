@@ -33,7 +33,7 @@
 
 #define DIC_MAX_ENTRIES     30000
 
-sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg );
+sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, LanguageType &nLng, bool &bNeg );
 
 class DictionaryNeo :
     public ::cppu::WeakImplHelper
@@ -49,7 +49,7 @@ class DictionaryNeo :
     OUString                                                    aDicName;
     OUString                                                    aMainURL;
     css::linguistic2::DictionaryType                            eDicType;
-    sal_Int16                                                   nLanguage;
+    LanguageType                                                nLanguage;
     sal_Int16                                                   nDicVersion;
     bool                                                        bNeedEntries;
     bool                                                        bIsModified;
@@ -75,7 +75,7 @@ class DictionaryNeo :
                                           bool bIsLoadEntries = false);
 
 public:
-    DictionaryNeo(const OUString &rName, sal_Int16 nLang,
+    DictionaryNeo(const OUString &rName, LanguageType nLang,
                     css::linguistic2::DictionaryType eType,
                     const OUString &rMainURL,
                     bool bWriteable );

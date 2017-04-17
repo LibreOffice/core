@@ -756,7 +756,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLanguage(
     sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return hasLocale( LanguageTag::convertToLocale( nLanguage) );
+    return hasLocale( LanguageTag::convertToLocale( LanguageType(nLanguage)) );
 }
 
 
@@ -766,7 +766,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::isValid(
     const uno::Sequence< beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return isValid( rWord, LanguageTag::convertToLocale( nLanguage ), rProperties);
+    return isValid( rWord, LanguageTag::convertToLocale( LanguageType(nLanguage) ), rProperties);
 }
 
 
@@ -776,7 +776,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL SpellCheckerDispatche
     const uno::Sequence< beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return spell( rWord, LanguageTag::convertToLocale( nLanguage), rProperties);
+    return spell( rWord, LanguageTag::convertToLocale( LanguageType(nLanguage) ), rProperties);
 }
 
 
@@ -788,7 +788,7 @@ void SpellCheckerDispatcher::SetServiceList( const Locale &rLocale,
     if (m_pCache)
         m_pCache->Flush();    // new services may spell differently...
 
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
 
     sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
@@ -822,7 +822,7 @@ Sequence< OUString >
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     const SpellSvcByLangMap_t::const_iterator aIt( m_aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Spell      *pEntry = aIt != m_aSvcMap.end() ? aIt->second.get() : nullptr;
     if (pEntry)

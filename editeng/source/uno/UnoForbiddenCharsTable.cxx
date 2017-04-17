@@ -115,8 +115,8 @@ Sequence< lang::Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
         for( SvxForbiddenCharactersTable::Map::iterator it = mxForbiddenChars->GetMap().begin();
              it != mxForbiddenChars->GetMap().end(); ++it )
         {
-            const sal_uLong nLanguage = it->first;
-            *pLocales++ = LanguageTag( static_cast < LanguageType > (nLanguage) ).getLocale();
+            const LanguageType nLanguage = it->first;
+            *pLocales++ = LanguageTag( nLanguage ).getLocale();
         }
     }
 

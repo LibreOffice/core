@@ -35,7 +35,6 @@
 
 #define MAX_FALLBACK 16
 
-typedef unsigned short LanguageType;
 
 class SalGraphics;
 class PhysicalFontFace;

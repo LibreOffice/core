@@ -955,7 +955,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
         aStrTD.append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_SDnum).
             append("=\"").
-            append(static_cast<sal_Int32>(
+            append((sal_Int32)static_cast<sal_uInt16>(
                 Application::GetSettings().GetLanguageTag().getLanguageType())).
             append(';'); // Language for Format 0
         if ( nFormat )
@@ -971,7 +971,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             }
             else
                 nLang = LANGUAGE_SYSTEM;
-            aStrTD.append(static_cast<sal_Int32>(nLang)).append(';').
+            aStrTD.append((sal_Int32)static_cast<sal_uInt16>(nLang)).append(';').
                 append(aNumStr);
         }
         aStrTD.append('\"');
