@@ -9922,14 +9922,14 @@ SweepWipePath.prototype.perform = function( nT ) {
     if(!this.bSingle && !this.bOppositeVertical)
         nT /= 2.0;
 
-    var aBasePath = PinWheelWipePath.calcCenteredClock( nT + 0.25, 1.0 );
+    var poly = PinWheelWipePath.calcCenteredClock( nT + 0.25, 1.0 );
     var aTransform;
 
     if(this.bCenter) {
         aTransform = SVGIdentityMatrix.translate(0.5, 0.0);
-        aBasePath.matrixTransform(aTransform);
+        poly.matrixTransform(aTransform);
     }
-    var res = aBasePath;
+    var res = poly;
 
     if(!this.bSingle) {
         if(this.bOppositeVertical) {
