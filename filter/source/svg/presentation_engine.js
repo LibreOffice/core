@@ -4388,7 +4388,7 @@ HSLColor.interpolate = function( aFrom, aTo, nT, bCCW )
  *      SVGMatrix extensions
  **********************************************************************************************/
 
-SVGIdentityMatrix = document.documentElement.createSVGMatrix();
+var SVGIdentityMatrix = document.documentElement.createSVGMatrix();
 
 SVGMatrix.prototype.setToIdentity = function()
 {
@@ -4770,7 +4770,7 @@ var ANIMATION_NODE_TRANSITIONFILTER     = 9;
 var ANIMATION_NODE_AUDIO                = 10;
 var ANIMATION_NODE_COMMAND              = 11;
 
-aAnimationNodeTypeInMap = {
+var aAnimationNodeTypeInMap = {
     'par'               : ANIMATION_NODE_PAR,
     'seq'               : ANIMATION_NODE_SEQ,
     'iterate'           : ANIMATION_NODE_ITERATE,
@@ -4832,15 +4832,15 @@ function getNodeStateName( eNodeState )
 
 
 // Impress Node Types
-IMPRESS_DEFAULT_NODE                    = 0;
-IMPRESS_ON_CLICK_NODE                   = 1;
-IMPRESS_WITH_PREVIOUS_NODE              = 2;
-IMPRESS_AFTER_PREVIOUS_NODE             = 3;
-IMPRESS_MAIN_SEQUENCE_NODE              = 4;
-IMPRESS_TIMING_ROOT_NODE                = 5;
-IMPRESS_INTERACTIVE_SEQUENCE_NODE       = 6;
+var IMPRESS_DEFAULT_NODE                    = 0;
+var IMPRESS_ON_CLICK_NODE                   = 1;
+var IMPRESS_WITH_PREVIOUS_NODE              = 2;
+var IMPRESS_AFTER_PREVIOUS_NODE             = 3;
+var IMPRESS_MAIN_SEQUENCE_NODE              = 4;
+var IMPRESS_TIMING_ROOT_NODE                = 5;
+var IMPRESS_INTERACTIVE_SEQUENCE_NODE       = 6;
 
-aImpressNodeTypeInMap = {
+var aImpressNodeTypeInMap = {
     'on-click'                  : IMPRESS_ON_CLICK_NODE,
     'with-previous'             : IMPRESS_WITH_PREVIOUS_NODE,
     'after-previous'            : IMPRESS_AFTER_PREVIOUS_NODE,
@@ -4849,16 +4849,16 @@ aImpressNodeTypeInMap = {
     'interactive-sequence'      : IMPRESS_INTERACTIVE_SEQUENCE_NODE
 };
 
-aImpressNodeTypeOutMap = [ 'default', 'on-click', 'with-previous', 'after-previous',
+var aImpressNodeTypeOutMap = [ 'default', 'on-click', 'with-previous', 'after-previous',
                             'main-sequence', 'timing-root', 'interactive-sequence' ];
 
 
 // Preset Classes
-aPresetClassInMap = {};
+var aPresetClassInMap = {};
 
 
 // Preset Ids
-aPresetIdInMap = {};
+var aPresetIdInMap = {};
 
 
 // Restart Modes
@@ -4867,14 +4867,14 @@ var RESTART_MODE_ALWAYS             = 1;
 var RESTART_MODE_WHEN_NOT_ACTIVE    = 2;
 var RESTART_MODE_NEVER              = 3;
 
-aRestartModeInMap = {
+var aRestartModeInMap = {
     'inherit'       : RESTART_MODE_DEFAULT,
     'always'        : RESTART_MODE_ALWAYS,
     'whenNotActive' : RESTART_MODE_WHEN_NOT_ACTIVE,
     'never'         : RESTART_MODE_NEVER
 };
 
-aRestartModeOutMap = [ 'inherit','always', 'whenNotActive', 'never' ];
+var aRestartModeOutMap = [ 'inherit','always', 'whenNotActive', 'never' ];
 
 
 // Fill Modes
@@ -4885,7 +4885,7 @@ var FILL_MODE_HOLD              = 3;
 var FILL_MODE_TRANSITION        = 4;
 var FILL_MODE_AUTO              = 5;
 
-aFillModeInMap = {
+var aFillModeInMap = {
     'inherit'       : FILL_MODE_DEFAULT,
     'remove'        : FILL_MODE_REMOVE,
     'freeze'        : FILL_MODE_FREEZE,
@@ -4894,7 +4894,7 @@ aFillModeInMap = {
     'auto'          : FILL_MODE_AUTO
 };
 
-aFillModeOutMap = [ 'inherit', 'remove', 'freeze', 'hold', 'transition', 'auto' ];
+var aFillModeOutMap = [ 'inherit', 'remove', 'freeze', 'hold', 'transition', 'auto' ];
 
 
 // Additive Modes
@@ -4904,7 +4904,7 @@ var ADDITIVE_MODE_REPLACE       = 3;
 var ADDITIVE_MODE_MULTIPLY      = 4;
 var ADDITIVE_MODE_NONE          = 5;
 
-aAddittiveModeInMap = {
+var aAddittiveModeInMap = {
     'base'          : ADDITIVE_MODE_BASE,
     'sum'           : ADDITIVE_MODE_SUM,
     'replace'       : ADDITIVE_MODE_REPLACE,
@@ -4912,14 +4912,14 @@ aAddittiveModeInMap = {
     'none'          : ADDITIVE_MODE_NONE
 };
 
-aAddittiveModeOutMap = [ 'unknown', 'base', 'sum', 'replace', 'multiply', 'none' ];
+var aAddittiveModeOutMap = [ 'unknown', 'base', 'sum', 'replace', 'multiply', 'none' ];
 
 
 // Accumulate Modes
 var ACCUMULATE_MODE_NONE        = 0;
 var ACCUMULATE_MODE_SUM         = 1;
 
-aAccumulateModeOutMap = [ 'none', 'sum' ];
+var aAccumulateModeOutMap = [ 'none', 'sum' ];
 
 // Calculation Modes
 var CALC_MODE_DISCRETE          = 1;
@@ -4927,43 +4927,43 @@ var CALC_MODE_LINEAR            = 2;
 var CALC_MODE_PACED             = 3;
 var CALC_MODE_SPLINE            = 4;
 
-aCalcModeInMap = {
+var aCalcModeInMap = {
     'discrete'      : CALC_MODE_DISCRETE,
     'linear'        : CALC_MODE_LINEAR,
     'paced'         : CALC_MODE_PACED,
     'spline'        : CALC_MODE_SPLINE
 };
 
-aCalcModeOutMap = [ 'unknown', 'discrete', 'linear', 'paced', 'spline' ];
+var aCalcModeOutMap = [ 'unknown', 'discrete', 'linear', 'paced', 'spline' ];
 
 
 // Color Spaces
 var COLOR_SPACE_RGB = 0;
 var COLOR_SPACE_HSL = 1;
 
-aColorSpaceInMap = { 'rgb': COLOR_SPACE_RGB, 'hsl': COLOR_SPACE_HSL };
+var aColorSpaceInMap = { 'rgb': COLOR_SPACE_RGB, 'hsl': COLOR_SPACE_HSL };
 
-aColorSpaceOutMap = [ 'rgb', 'hsl' ];
+var aColorSpaceOutMap = [ 'rgb', 'hsl' ];
 
 
 // Clock Directions
 var CLOCKWISE               = 0;
 var COUNTERCLOCKWISE        = 1;
 
-aClockDirectionInMap = { 'clockwise': CLOCKWISE, 'counter-clockwise': COUNTERCLOCKWISE };
+var aClockDirectionInMap = { 'clockwise': CLOCKWISE, 'counter-clockwise': COUNTERCLOCKWISE };
 
-aClockDirectionOutMap = [ 'clockwise', 'counter-clockwise' ];
+var aClockDirectionOutMap = [ 'clockwise', 'counter-clockwise' ];
 
 
 // Attribute Value Types
-UNKNOWN_PROPERTY        = 0; // TODO
-NUMBER_PROPERTY         = 1;
-ENUM_PROPERTY           = 2;
-COLOR_PROPERTY          = 3;
-STRING_PROPERTY         = 4;
-BOOL_PROPERTY           = 5;
+var UNKNOWN_PROPERTY        = 0; // TODO
+var NUMBER_PROPERTY         = 1;
+var ENUM_PROPERTY           = 2;
+var COLOR_PROPERTY          = 3;
+var STRING_PROPERTY         = 4;
+var BOOL_PROPERTY           = 5;
 
-aValueTypeOutMap = [ 'unknown', 'number', 'enum', 'color', 'string', 'boolean' ];
+var aValueTypeOutMap = [ 'unknown', 'number', 'enum', 'color', 'string', 'boolean' ];
 
 
 // Attribute Map
@@ -5029,9 +5029,9 @@ var aAttributeMap =
 
 
 // Transition Classes
-TRANSITION_INVALID              = 0;    // Invalid type
-TRANSITION_CLIP_POLYPOLYGON     = 1;    // Transition expressed by parametric clip polygon
-TRANSITION_SPECIAL              = 2;    // Transition expressed by hand-crafted function
+var TRANSITION_INVALID              = 0;    // Invalid type
+var TRANSITION_CLIP_POLYPOLYGON     = 1;    // Transition expressed by parametric clip polygon
+var TRANSITION_SPECIAL              = 2;    // Transition expressed by hand-crafted function
 
 /*
  * All Transition types should be in sync with aTransitionTypeInMap:
@@ -5040,32 +5040,32 @@ TRANSITION_SPECIAL              = 2;    // Transition expressed by hand-crafted 
  */
 
 // Transition Types
-BARWIPE_TRANSITION              = 1;
-BOXWIPE_TRANSITION              = 2;
-FOURBOXWIPE_TRANSITION          = 3;
-ELLIPSEWIPE_TRANSITION          = 4; // 17
-CLOCKWIPE_TRANSITION            = 5; // 22
-PINWHEELWIPE_TRANSITION         = 6; // 23
-PUSHWIPE_TRANSITION             = 7; // 35
-SLIDEWIPE_TRANSITION            = 8; // 36
-FADE_TRANSITION                 = 9; // 37
-RANDOMBARWIPE_TRANSITION        = 10; // 38
-CHECKERBOARDWIPE_TRANSITION     = 11; // 39
-DISSOLVE_TRANSITION             = 12; // 40
-SNAKEWIPE_TRANSITION            = 13; // 30
-PARALLELSNAKESWIPE_TRANSITION   = 14; // 32
-IRISWIPE_TRANSITION             = 15; // 12
-BARNDOORWIPE_TRANSITION         = 16; // 4
-VEEWIPE_TRANSITION              = 17; // 8
-ZIGZAGWIPE_TRANSITION           = 18; // 10
-BARNZIGZAGWIPE_TRANSITION       = 19; // 11
-FANWIPE_TRANSITION              = 20; // 25
-SINGLESWEEPWIPE_TRANSITION      = 21; // 24
-WATERFALLWIPE_TRANSITION        = 22; // 34
-SPIRALWIPE_TRANSITION           = 23; // 31
-MISCDIAGONALWIPE_TRANSITION     = 24; // 7
+var BARWIPE_TRANSITION              = 1;
+var BOXWIPE_TRANSITION              = 2;
+var FOURBOXWIPE_TRANSITION          = 3;
+var ELLIPSEWIPE_TRANSITION          = 4; // 17
+var CLOCKWIPE_TRANSITION            = 5; // 22
+var PINWHEELWIPE_TRANSITION         = 6; // 23
+var PUSHWIPE_TRANSITION             = 7; // 35
+var SLIDEWIPE_TRANSITION            = 8; // 36
+var FADE_TRANSITION                 = 9; // 37
+var RANDOMBARWIPE_TRANSITION        = 10; // 38
+var CHECKERBOARDWIPE_TRANSITION     = 11; // 39
+var DISSOLVE_TRANSITION             = 12; // 40
+var SNAKEWIPE_TRANSITION            = 13; // 30
+var PARALLELSNAKESWIPE_TRANSITION   = 14; // 32
+var IRISWIPE_TRANSITION             = 15; // 12
+var BARNDOORWIPE_TRANSITION         = 16; // 4
+var VEEWIPE_TRANSITION              = 17; // 8
+var ZIGZAGWIPE_TRANSITION           = 18; // 10
+var BARNZIGZAGWIPE_TRANSITION       = 19; // 11
+var FANWIPE_TRANSITION              = 20; // 25
+var SINGLESWEEPWIPE_TRANSITION      = 21; // 24
+var WATERFALLWIPE_TRANSITION        = 22; // 34
+var SPIRALWIPE_TRANSITION           = 23; // 31
+var MISCDIAGONALWIPE_TRANSITION     = 24; // 7
 
-aTransitionTypeInMap = {
+var aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
     'boxWipe'           : BOXWIPE_TRANSITION,
     'barnDoorWipe'      : BARNDOORWIPE_TRANSITION,
@@ -5098,95 +5098,95 @@ aTransitionTypeInMap = {
  * C++ implementations.
  */
 // Transition Subtypes
-DEFAULT_TRANS_SUBTYPE                       = 0;
-LEFTTORIGHT_TRANS_SUBTYPE                   = 1;
-TOPTOBOTTOM_TRANS_SUBTYPE                   = 2;
-CORNERSIN_TRANS_SUBTYPE                     = 3; // 11
-CORNERSOUT_TRANS_SUBTYPE                    = 4;
-VERTICAL_TRANS_SUBTYPE                      = 5;
-HORIZONTAL_TRANS_SUBTYPE                    = 6; // 14
-DOWN_TRANS_SUBTYPE                          = 7; // 19
-CIRCLE_TRANS_SUBTYPE                        = 8; // 27
-CLOCKWISETWELVE_TRANS_SUBTYPE               = 9; // 33
-CLOCKWISETHREE_TRANS_SUBTYPE                = 10;
-CLOCKWISESIX_TRANS_SUBTYPE                  = 11;
-CLOCKWISENINE_TRANS_SUBTYPE                 = 12;
-TWOBLADEVERTICAL_TRANS_SUBTYPE              = 13;
-TWOBLADEHORIZONTAL_TRANS_SUBTYPE            = 14;
-FOURBLADE_TRANS_SUBTYPE                     = 15; // 39
-FROMLEFT_TRANS_SUBTYPE                      = 16; // 97
-FROMTOP_TRANS_SUBTYPE                       = 17;
-FROMRIGHT_TRANS_SUBTYPE                     = 18;
-FROMBOTTOM_TRANS_SUBTYPE                    = 19;
-CROSSFADE_TRANS_SUBTYPE                     = 20;
-FADETOCOLOR_TRANS_SUBTYPE                   = 21;
-FADEFROMCOLOR_TRANS_SUBTYPE                 = 22;
-FADEOVERCOLOR_TRANS_SUBTYPE                 = 23;
-THREEBLADE_TRANS_SUBTYPE                    = 24;
-EIGHTBLADE_TRANS_SUBTYPE                    = 25;
-ONEBLADE_TRANS_SUBTYPE                      = 26; // 107
-ACROSS_TRANS_SUBTYPE                        = 27;
-TOPLEFTVERTICAL_TRANS_SUBTYPE               = 28; // 109
-TOPLEFTHORIZONTAL_TRANS_SUBTYPE             = 29; // 64
-TOPLEFTDIAGONAL_TRANS_SUBTYPE               = 30; // 65
-TOPRIGHTDIAGONAL_TRANS_SUBTYPE              = 31; // 66
-BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE           = 32; // 67
-BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE            = 33; // 68
-RECTANGLE_TRANS_SUBTYPE                     = 34; // 101
-DIAMOND_TRANS_SUBTYPE                       = 35; // 102
-TOPLEFT_TRANS_SUBTYPE                       = 36; // 3
-TOPRIGHT_TRANS_SUBTYPE                      = 37; // 4
-BOTTOMRIGHT_TRANS_SUBTYPE                   = 38; // 5
-BOTTOMLEFT_TRANS_SUBTYPE                    = 39; // 6
-TOPCENTER_TRANS_SUBTYPE                     = 40; // 7
-RIGHTCENTER_TRANS_SUBTYPE                   = 41; // 8
-BOTTOMCENTER_TRANS_SUBTYPE                  = 42; // 9
-LEFTCENTER_TRANS_SUBTYPE                    = 43; // 10
-LEFT_TRANS_SUBTYPE                          = 44; // 20
-UP_TRANS_SUBTYPE                            = 45; // 21
-RIGHT_TRANS_SUBTYPE                         = 46; // 22
-DIAGONALBOTTOMLEFT_TRANS_SUBTYPE            = 47; // 15
-DIAGONALTOPLEFT_TRANS_SUBTYPE               = 48; // 16
-CENTERTOP_TRANS_SUBTYPE                     = 49; // 48
-CENTERRIGHT_TRANS_SUBTYPE                   = 50; // 49
-TOP_TRANS_SUBTYPE                           = 51; // 50
-RIGHT_TRANS_SUBTYPE                         = 52; // 22
-BOTTOM_TRANS_SUBTYPE                        = 53; // 52
-LEFT_TRANS_SUBTYPE                          = 54; // 20
-CLOCKWISETOP_TRANS_SUBTYPE                  = 55; // 40
-CLOCKWISERIGHT_TRANS_SUBTYPE                = 56; // 41
-CLOCKWISEBOTTOM_TRANS_SUBTYPE               = 57; // 42
-CLOCKWISELEFT_TRANS_SUBTYPE                 = 58; // 43
-CLOCKWISETOPLEFT_TRANS_SUBTYPE              = 59; // 44
-COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE    = 60; // 45
-CLOCKWISEBOTTOMRIGHT_TRANS_SUBTYPE          = 61; // 46
-COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE      = 62; // 47
-VERTICALLEFT_TRANS_SUBTYPE                  = 63; // 93
-VERTICALRIGHT_TRANS_SUBTYPE                 = 64; // 94
-HORIZONTALLEFT_TRANS_SUBTYPE                = 65; // 95
-HORIZONTALRIGHT_TRANS_SUBTYPE               = 66; // 96
-TOPLEFTCLOCKWISE_TRANS_SUBTYPE              = 67; // 69
-TOPRIGHTCLOCKWISE_TRANS_SUBTYPE             = 68; // 70
-BOTTOMRIGHTCLOCKWISE_TRANS_SUBTYPE          = 69; // 71
-BOTTOMLEFTCLOCKWISE_TRANS_SUBTYPE           = 70; // 72
-TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE       = 71; // 73
-TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE      = 72; // 74
-BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE   = 73; // 75
-BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE    = 74; // 76
-DOUBLEBARNDOOR_TRANS_SUBTYPE                = 75; // 17
-DOUBLEDIAMOND_TRANS_SUBTYPE                 = 76; // 18
-VERTICALTOPSAME_TRANS_SUBTYPE               = 77; // 77
-VERTICALBOTTOMSAME_TRANS_SUBTYPE            = 78; // 78
-VERTICALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 79; // 79
-VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 80; // 80
-HORIZONTALLEFTSAME_TRANS_SUBTYPE            = 81; // 81
-HORIZONTALRIGHTSAME_TRANS_SUBTYPE           = 82; // 82
-HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE     = 83; // 83
-HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE    = 84; // 84
-DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 85; // 85
-DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 86; // 86
+var DEFAULT_TRANS_SUBTYPE                       = 0;
+var LEFTTORIGHT_TRANS_SUBTYPE                   = 1;
+var TOPTOBOTTOM_TRANS_SUBTYPE                   = 2;
+var CORNERSIN_TRANS_SUBTYPE                     = 3; // 11
+var CORNERSOUT_TRANS_SUBTYPE                    = 4;
+var VERTICAL_TRANS_SUBTYPE                      = 5;
+var HORIZONTAL_TRANS_SUBTYPE                    = 6; // 14
+var DOWN_TRANS_SUBTYPE                          = 7; // 19
+var CIRCLE_TRANS_SUBTYPE                        = 8; // 27
+var CLOCKWISETWELVE_TRANS_SUBTYPE               = 9; // 33
+var CLOCKWISETHREE_TRANS_SUBTYPE                = 10;
+var CLOCKWISESIX_TRANS_SUBTYPE                  = 11;
+var CLOCKWISENINE_TRANS_SUBTYPE                 = 12;
+var TWOBLADEVERTICAL_TRANS_SUBTYPE              = 13;
+var TWOBLADEHORIZONTAL_TRANS_SUBTYPE            = 14;
+var FOURBLADE_TRANS_SUBTYPE                     = 15; // 39
+var FROMLEFT_TRANS_SUBTYPE                      = 16; // 97
+var FROMTOP_TRANS_SUBTYPE                       = 17;
+var FROMRIGHT_TRANS_SUBTYPE                     = 18;
+var FROMBOTTOM_TRANS_SUBTYPE                    = 19;
+var CROSSFADE_TRANS_SUBTYPE                     = 20;
+var FADETOCOLOR_TRANS_SUBTYPE                   = 21;
+var FADEFROMCOLOR_TRANS_SUBTYPE                 = 22;
+var FADEOVERCOLOR_TRANS_SUBTYPE                 = 23;
+var THREEBLADE_TRANS_SUBTYPE                    = 24;
+var EIGHTBLADE_TRANS_SUBTYPE                    = 25;
+var ONEBLADE_TRANS_SUBTYPE                      = 26; // 107
+var ACROSS_TRANS_SUBTYPE                        = 27;
+var TOPLEFTVERTICAL_TRANS_SUBTYPE               = 28; // 109
+var TOPLEFTHORIZONTAL_TRANS_SUBTYPE             = 29; // 64
+var TOPLEFTDIAGONAL_TRANS_SUBTYPE               = 30; // 65
+var TOPRIGHTDIAGONAL_TRANS_SUBTYPE              = 31; // 66
+var BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE           = 32; // 67
+var BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE            = 33; // 68
+var RECTANGLE_TRANS_SUBTYPE                     = 34; // 101
+var DIAMOND_TRANS_SUBTYPE                       = 35; // 102
+var TOPLEFT_TRANS_SUBTYPE                       = 36; // 3
+var TOPRIGHT_TRANS_SUBTYPE                      = 37; // 4
+var BOTTOMRIGHT_TRANS_SUBTYPE                   = 38; // 5
+var BOTTOMLEFT_TRANS_SUBTYPE                    = 39; // 6
+var TOPCENTER_TRANS_SUBTYPE                     = 40; // 7
+var RIGHTCENTER_TRANS_SUBTYPE                   = 41; // 8
+var BOTTOMCENTER_TRANS_SUBTYPE                  = 42; // 9
+var LEFTCENTER_TRANS_SUBTYPE                    = 43; // 10
+var LEFT_TRANS_SUBTYPE                          = 44; // 20
+var UP_TRANS_SUBTYPE                            = 45; // 21
+var RIGHT_TRANS_SUBTYPE                         = 46; // 22
+var DIAGONALBOTTOMLEFT_TRANS_SUBTYPE            = 47; // 15
+var DIAGONALTOPLEFT_TRANS_SUBTYPE               = 48; // 16
+var CENTERTOP_TRANS_SUBTYPE                     = 49; // 48
+var CENTERRIGHT_TRANS_SUBTYPE                   = 50; // 49
+var TOP_TRANS_SUBTYPE                           = 51; // 50
+var RIGHT_TRANS_SUBTYPE                         = 52; // 22
+var BOTTOM_TRANS_SUBTYPE                        = 53; // 52
+var LEFT_TRANS_SUBTYPE                          = 54; // 20
+var CLOCKWISETOP_TRANS_SUBTYPE                  = 55; // 40
+var CLOCKWISERIGHT_TRANS_SUBTYPE                = 56; // 41
+var CLOCKWISEBOTTOM_TRANS_SUBTYPE               = 57; // 42
+var CLOCKWISELEFT_TRANS_SUBTYPE                 = 58; // 43
+var CLOCKWISETOPLEFT_TRANS_SUBTYPE              = 59; // 44
+var COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE    = 60; // 45
+var CLOCKWISEBOTTOMRIGHT_TRANS_SUBTYPE          = 61; // 46
+var COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE      = 62; // 47
+var VERTICALLEFT_TRANS_SUBTYPE                  = 63; // 93
+var VERTICALRIGHT_TRANS_SUBTYPE                 = 64; // 94
+var HORIZONTALLEFT_TRANS_SUBTYPE                = 65; // 95
+var HORIZONTALRIGHT_TRANS_SUBTYPE               = 66; // 96
+var TOPLEFTCLOCKWISE_TRANS_SUBTYPE              = 67; // 69
+var TOPRIGHTCLOCKWISE_TRANS_SUBTYPE             = 68; // 70
+var BOTTOMRIGHTCLOCKWISE_TRANS_SUBTYPE          = 69; // 71
+var BOTTOMLEFTCLOCKWISE_TRANS_SUBTYPE           = 70; // 72
+var TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE       = 71; // 73
+var TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE      = 72; // 74
+var BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE   = 73; // 75
+var BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE    = 74; // 76
+var DOUBLEBARNDOOR_TRANS_SUBTYPE                = 75; // 17
+var DOUBLEDIAMOND_TRANS_SUBTYPE                 = 76; // 18
+var VERTICALTOPSAME_TRANS_SUBTYPE               = 77; // 77
+var VERTICALBOTTOMSAME_TRANS_SUBTYPE            = 78; // 78
+var VERTICALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 79; // 79
+var VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 80; // 80
+var HORIZONTALLEFTSAME_TRANS_SUBTYPE            = 81; // 81
+var HORIZONTALRIGHTSAME_TRANS_SUBTYPE           = 82; // 82
+var HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE     = 83; // 83
+var HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE    = 84; // 84
+var DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 85; // 85
+var DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 86; // 86
 
-aTransitionSubtypeInMap = {
+var aTransitionSubtypeInMap = {
     'default'                       : DEFAULT_TRANS_SUBTYPE,
     'leftToRight'                   : LEFTTORIGHT_TRANS_SUBTYPE,
     'topToBottom'                   : TOPTOBOTTOM_TRANS_SUBTYPE,
@@ -5275,30 +5275,30 @@ aTransitionSubtypeInMap = {
 };
 
 // Transition Modes
-TRANSITION_MODE_IN  = 1;
-TRANSITION_MODE_OUT = 0;
+var TRANSITION_MODE_IN  = 1;
+var TRANSITION_MODE_OUT = 0;
 
-aTransitionModeOutMap = [ 'out', 'in' ];
+var aTransitionModeOutMap = [ 'out', 'in' ];
 
 
 // Transition Reverse Methods
 
 // Ignore direction attribute altogether.
 // (If it has no sensible meaning for this transition.)
-REVERSEMETHOD_IGNORE                    = 0;
+var REVERSEMETHOD_IGNORE                    = 0;
 // Revert by changing the direction of the parameter sweep.
 // (From 1->0 instead of 0->1)
-REVERSEMETHOD_INVERT_SWEEP              = 1;
+var REVERSEMETHOD_INVERT_SWEEP              = 1;
 // Revert by subtracting the generated polygon from the target bound rect.
-REVERSEMETHOD_SUBTRACT_POLYGON          = 2;
+var REVERSEMETHOD_SUBTRACT_POLYGON          = 2;
 // Combination of REVERSEMETHOD_INVERT_SWEEP and REVERSEMETHOD_SUBTRACT_POLYGON.
-REVERSEMETHOD_SUBTRACT_AND_INVERT       = 3;
+var REVERSEMETHOD_SUBTRACT_AND_INVERT       = 3;
 // Reverse by rotating polygon 180 degrees.
-REVERSEMETHOD_ROTATE_180                = 4;
+var REVERSEMETHOD_ROTATE_180                = 4;
 // Reverse by flipping polygon at the y axis.
-REVERSEMETHOD_FLIP_X                    = 5;
+var REVERSEMETHOD_FLIP_X                    = 5;
 // Reverse by flipping polygon at the x axis.
-REVERSEMETHOD_FLIP_Y                    = 6;
+var REVERSEMETHOD_FLIP_Y                    = 6;
 
 
 // Transition filter info table
@@ -6369,8 +6369,8 @@ var EVENT_TRIGGER_ON_NEXT_EFFECT        = 9;
 var EVENT_TRIGGER_ON_PREV_EFFECT        = 10;
 var EVENT_TRIGGER_REPEAT                = 11; // TODO
 
-aEventTriggerOutMap = [ 'unknown', 'slideBegin', 'slideEnd', 'begin', 'end', 'click',
-                        'doubleClick', 'mouseEnter', 'mouseLeave', 'next', 'previous', 'repeat' ];
+var aEventTriggerOutMap = [ 'unknown', 'slideBegin', 'slideEnd', 'begin', 'end', 'click',
+                            'doubleClick', 'mouseEnter', 'mouseLeave', 'next', 'previous', 'repeat' ];
 
 
 function getEventTriggerType( sEventTrigger )
@@ -6402,7 +6402,7 @@ var EVENT_TIMING            = 4;
 var SYNCBASE_TIMING         = 5;
 var MEDIA_TIMING            = 6; // TODO
 
-aTimingTypeOutMap = [ 'unknown', 'offset', 'wallclock', 'indefinite', 'event', 'syncbase', 'media' ];
+var aTimingTypeOutMap = [ 'unknown', 'offset', 'wallclock', 'indefinite', 'event', 'syncbase', 'media' ];
 
 
 // Char Codes
