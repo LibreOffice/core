@@ -2383,6 +2383,39 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         }
         break;
 
+        case FID_DELETE_ALL_NOTES:
+            {
+                ScViewData* pData  = GetViewData();
+                ScDocument* pDoc   = pData->GetDocument();
+                ScMarkData& rMark  = pData->GetMarkData();
+                ScMarkData  aMark;
+                ScRangeList aRanges;
+                std::vector<sc::NoteEntry> aNotes;
+
+                SCTAB nFirstSelected = rMark.GetFirstSelected();
+                SCTAB nLastSelected = rMark.GetLastSelected();
+
+                for( SCTAB aTab = nFirstSelected; aTab<=nLastSelected; aTab++ ) // get all notes from selected tables
+                {
+                    if (rMark.GetTableSelect(aTab))
+                        pDoc->GetAllNoteEntries(aTab, aNotes);
+                }
+
+                for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),  // select cells containing note
+                    itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+                {
+                    SCCOL rCol = itr->maPos.Col();
+                    SCROW rRow = itr->maPos.Row();
+                    SCTAB rTab = itr->maPos.Tab();
+
+                    aRanges.Append( ScRange(rCol, rRow, rTab) );
+                }
+
+                aMark.MarkFromRangeList(aRanges, true);
+                pData->GetDocShell()->GetDocFunc().DeleteContents(aMark, InsertDeleteFlags::NOTE, false, false );
+            }
+            break;
+
         case SID_CHARMAP:
             if( pReqArgs != nullptr )
             {
