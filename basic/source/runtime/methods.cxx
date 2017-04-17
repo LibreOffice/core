@@ -4251,7 +4251,7 @@ RTLFUNC(StrConv)
     OUString aOldStr = rPar.Get(1)->GetOUString();
     sal_Int32 nConversion = rPar.Get(2)->GetLong();
 
-    sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
+    LanguageType nLanguage = LANGUAGE_SYSTEM;
 
     sal_Int32 nOldLen = aOldStr.getLength();
     if( nOldLen == 0 )

@@ -96,7 +96,7 @@ OutputDevice::OutputDevice() :
     meTextAlign                     = maFont.GetAlignment();
     meRasterOp                      = RasterOp::OverPaint;
     mnAntialiasing                  = AntialiasingFlags::NONE;
-    meTextLanguage                  = 0;  // TODO: get default from configuration?
+    meTextLanguage                  = LANGUAGE_SYSTEM;  // TODO: get default from configuration?
     mbLineColor                     = true;
     mbFillColor                     = true;
     mbInitLineColor                 = true;

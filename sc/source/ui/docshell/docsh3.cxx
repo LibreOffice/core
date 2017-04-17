@@ -404,7 +404,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
 {
     //  Settings from the SpellCheckCfg get into Doc- and ViewOptions
 
-    sal_uInt16 nDefLang, nCjkLang, nCtlLang;
+    LanguageType nDefLang, nCjkLang, nCtlLang;
     bool bAutoSpell;
     ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
     ScModule* pScMod = SC_MOD();
@@ -437,7 +437,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
 
     //  print options are now set directly before the printing
 
-    aDocument.SetLanguage( (LanguageType) nDefLang, (LanguageType) nCjkLang, (LanguageType) nCtlLang );
+    aDocument.SetLanguage( nDefLang, nCjkLang, nCtlLang );
 }
 
 Printer* ScDocShell::GetDocumentPrinter()       // for OLE

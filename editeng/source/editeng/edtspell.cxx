@@ -137,7 +137,7 @@ bool EditSpellWrapper::SpellMore()
 }
 
 void EditSpellWrapper::ReplaceAll( const OUString &rNewText,
-            sal_Int16 )
+            LanguageType )
 {
     // Is called when the word is in ReplaceList of the spell checker
     pEditView->InsertText( rNewText );

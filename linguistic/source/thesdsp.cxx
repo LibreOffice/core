@@ -110,7 +110,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
     Sequence< Reference< XMeaning > >   aMeanings;
 
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     if (LinguIsUnspecified( nLanguage) || rTerm.isEmpty())
         return aMeanings;
 
@@ -202,7 +202,7 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
 
     sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
@@ -236,7 +236,7 @@ Sequence< OUString >
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     const ThesSvcByLangMap_t::const_iterator  aIt( aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Thes       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : nullptr;
     if (pEntry)

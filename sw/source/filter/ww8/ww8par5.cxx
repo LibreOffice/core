@@ -389,14 +389,14 @@ static SvxNumType GetNumberPara(const OUString& rStr, bool bAllowPageDesc = fals
     return aType;
 }
 
-bool SwWW8ImplReader::ForceFieldLanguage(SwField &rField, sal_uInt16 nLang)
+bool SwWW8ImplReader::ForceFieldLanguage(SwField &rField, LanguageType nLang)
 {
     bool bRet(false);
 
     const SvxLanguageItem *pLang =
         static_cast<const SvxLanguageItem*>(GetFormatAttr(RES_CHRATR_LANGUAGE));
     OSL_ENSURE(pLang, "impossible");
-    sal_uInt16 nDefault =  pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
+    LanguageType nDefault =  pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
     if (nLang != nDefault)
     {
@@ -408,7 +408,7 @@ bool SwWW8ImplReader::ForceFieldLanguage(SwField &rField, sal_uInt16 nLang)
     return bRet;
 }
 
-OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, sal_uInt16 nLang)
+OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, LanguageType nLang)
 {
     //Get the system date in the correct final language layout, convert to
     //a known language and modify the 2 digit year part to be 4 digit, and
@@ -432,7 +432,7 @@ OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, sal_uInt16 
 }
 
 short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
-    sal_uInt16 &rLang, int nWhichDefault, bool bHijri)
+    LanguageType &rLang, int nWhichDefault, bool bHijri)
 {
     bool bRTL = false;
     if (m_pPlcxMan && !m_bVer67)
@@ -1655,7 +1655,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
 
     sal_uInt32 nFormat = 0;
 
-    sal_uInt16 nLang(0);
+    LanguageType nLang(LANGUAGE_SYSTEM);
     if (bDateTime)
     {
         short nDT = GetTimeDatePara(rStr, nFormat, nLang, pF->nId);
@@ -1758,7 +1758,7 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, OUString& rStr )
 
     sal_uInt32 nFormat = 0;
 
-    sal_uInt16 nLang(0);
+    LanguageType nLang(LANGUAGE_SYSTEM);
     short nDT = GetTimeDatePara(rStr, nFormat, nLang, ww::eDATE, bHijri);
 
     if( css::util::NumberFormat::UNDEFINED == nDT )             // no D/T-Formatstring

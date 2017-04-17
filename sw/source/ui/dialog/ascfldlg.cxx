@@ -263,7 +263,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {
     sal_uLong nCCode = m_pCharSetLB->GetSelectTextEncoding();
     OUString sFont;
-    LanguageType nLng = 0;
+    LanguageType nLng = LANGUAGE_SYSTEM;
     if( m_pFontLB->IsVisible() )
     {
         sFont = m_pFontLB->GetSelectEntry();
@@ -272,7 +272,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 
     rOptions.SetFontName( sFont );
     rOptions.SetCharSet( rtl_TextEncoding( nCCode ) );
-    rOptions.SetLanguage( sal_uInt16( nLng ) );
+    rOptions.SetLanguage( nLng );
     rOptions.SetParaFlags( GetCRLF() );
 
     // save the user settings

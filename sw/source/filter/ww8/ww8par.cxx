@@ -2858,11 +2858,11 @@ std::size_t Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
     return nDestChars;
 }
 
-bool SwWW8ImplReader::LangUsesHindiNumbers(sal_uInt16 nLang)
+bool SwWW8ImplReader::LangUsesHindiNumbers(LanguageType nLang)
 {
     bool bResult = false;
 
-    switch (nLang)
+    switch ((sal_uInt16)nLang)
     {
         case 0x1401: // Arabic(Algeria)
         case 0x3c01: // Arabic(Bahrain)
@@ -3014,7 +3014,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     sal_uInt8   nBCode = 0;
     sal_uInt16 nUCode;
 
-    sal_uInt16 nCTLLang = 0;
+    LanguageType nCTLLang = LANGUAGE_SYSTEM;
     const SfxPoolItem * pItem = GetFormatAttr(RES_CHRATR_CTL_LANGUAGE);
     if (pItem != nullptr)
         nCTLLang = static_cast<const SvxLanguageItem *>(pItem)->GetLanguage();

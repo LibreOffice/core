@@ -956,7 +956,7 @@ ATTR_SETOVERLINE:
             case RTF_LANG:
                 if( aPlainMap.nLanguage )
                 {
-                    pSet->Put( SvxLanguageItem( (LanguageType)nTokenValue,
+                    pSet->Put( SvxLanguageItem( LanguageType(nTokenValue),
                                 aPlainMap.nLanguage ));
                 }
                 break;
@@ -964,13 +964,13 @@ ATTR_SETOVERLINE:
             case RTF_LANGFE:
                 if( aPlainMap.nCJKLanguage )
                 {
-                    pSet->Put( SvxLanguageItem( (LanguageType)nTokenValue,
+                    pSet->Put( SvxLanguageItem( LanguageType(nTokenValue),
                                                 aPlainMap.nCJKLanguage ));
                 }
                 break;
             case RTF_ALANG:
                 {
-                    SvxLanguageItem aTmpItem( (LanguageType)nTokenValue,
+                    SvxLanguageItem aTmpItem( LanguageType(nTokenValue),
                                     SID_ATTR_CHAR_LANGUAGE );
                     SetScriptAttr( eCharType, *pSet, aTmpItem );
                 }
