@@ -384,7 +384,7 @@ static bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 
 static void lcl_GetColumnCnt(SwDSParam *pParam,
                              const uno::Reference< beans::XPropertySet > &rColumnProps,
-                             long nLanguage, OUString &rResult, double* pNumber)
+                             LanguageType nLanguage, OUString &rResult, double* pNumber)
 {
     SwDBFormatData aFormatData;
     if(!pParam->xFormatter.is())
@@ -396,13 +396,13 @@ static void lcl_GetColumnCnt(SwDSParam *pParam,
     aFormatData.aNullDate = pParam->aNullDate;
     aFormatData.xFormatter = pParam->xFormatter;
 
-    aFormatData.aLocale = LanguageTag( (LanguageType)nLanguage ).getLocale();
+    aFormatData.aLocale = LanguageTag( nLanguage ).getLocale();
 
     rResult = SwDBManager::GetDBField( rColumnProps, aFormatData, pNumber);
 }
 
 static bool lcl_GetColumnCnt(SwDSParam* pParam, const OUString& rColumnName,
-                             long nLanguage, OUString& rResult, double* pNumber)
+                             LanguageType nLanguage, OUString& rResult, double* pNumber)
 {
     uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( pParam->xResultSet, uno::UNO_QUERY );
     uno::Reference<container::XNameAccess> xCols;
@@ -1689,7 +1689,7 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
                                 const OUString& rTableName,
                                 const OUString& rColNm,
                                 SvNumberFormatter* pNFormatr,
-                                long nLanguage )
+                                LanguageType nLanguage )
 {
     sal_uLong nRet = 0;
     if(pNFormatr)
@@ -1768,7 +1768,7 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const
                         uno::Reference< sdbc::XConnection> const & xConnection,
                         uno::Reference< beans::XPropertySet> const & xColumn,
                         SvNumberFormatter* pNFormatr,
-                        long nLanguage )
+                        LanguageType nLanguage )
 {
     auto xSource = xSource_in;
 
@@ -1788,7 +1788,7 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const
         uno::Reference< util::XNumberFormats > xDocNumberFormats = xDocNumFormatsSupplier->getNumberFormats();
         uno::Reference< util::XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, uno::UNO_QUERY);
 
-        css::lang::Locale aLocale( LanguageTag( (LanguageType)nLanguage ).getLocale());
+        css::lang::Locale aLocale( LanguageTag( nLanguage ).getLocale());
 
         //get the number formatter of the data source
         uno::Reference<beans::XPropertySet> xSourceProps(xSource, uno::UNO_QUERY);
@@ -2061,7 +2061,7 @@ bool    SwDBManager::IsDataSourceOpen(const OUString& rDataSource,
 // read column data at a specified position
 bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
                            const OUString& rColumnName, sal_uInt32 nAbsRecordId,
-                           long nLanguage,
+                           LanguageType nLanguage,
                            OUString& rResult, double* pNumber)
 {
     bool bRet = false;
@@ -2123,7 +2123,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
 }
 
 // reads the column data at the current position
-bool    SwDBManager::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
+bool    SwDBManager::GetMergeColumnCnt(const OUString& rColumnName, LanguageType nLanguage,
                                    OUString &rResult, double *pNumber)
 {
     if( !IsValidMergeRecord() )
@@ -2143,7 +2143,7 @@ bool SwDBManager::ToNextMergeRecord()
 }
 
 bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
-                                         sal_uInt16 nLanguage, SwCalc &rCalc )
+                                         LanguageType nLanguage, SwCalc &rCalc )
 {
     if( !IsValidMergeRecord() )
         return false;

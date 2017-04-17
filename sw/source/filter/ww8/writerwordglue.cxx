@@ -834,8 +834,8 @@ namespace sw
         }
 
         sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams,
-            SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri,
-            sal_uInt16 nDocLang)
+            SvNumberFormatter *pFormatter, LanguageType &rLang, bool bHijri,
+            LanguageType nDocLang)
         {
             // tell the Formatter about the new entry
             sal_Int32 nCheckPos = 0;
@@ -906,14 +906,10 @@ namespace sw
                     sal_Unicode nChar = rParams[nI];
 
                     // Change the localized word string to english
-                    switch ( nDocLang )
+                    if ( nDocLang == LANGUAGE_FRENCH )
                     {
-                        case LANGUAGE_FRENCH:
-                            if ( ( nChar == 'a' || nChar == 'A' ) && IsNotAM(rParams, nI) )
-                                rParams = rParams.replaceAt(nI, 1, "Y");
-                            break;
-                        default:
-                            ;
+                        if ( ( nChar == 'a' || nChar == 'A' ) && IsNotAM(rParams, nI) )
+                            rParams = rParams.replaceAt(nI, 1, "Y");
                     }
                     if (nChar == '/')
                     {
@@ -934,111 +930,103 @@ namespace sw
                     if ( !bForceJapanese && !bForceNatNum )
                     {
                         // Convert to the localized equivalent for OOo
-                        switch ( rLang )
+                        if ( rLang == LANGUAGE_FINNISH )
                         {
-                        case LANGUAGE_FINNISH:
-                            {
-                                if (nChar == 'y' || nChar == 'Y')
-                                    rParams = rParams.replaceAt(nI, 1, "V");
-                                else if (nChar == 'm' || nChar == 'M')
-                                    rParams = rParams.replaceAt(nI, 1, "K");
-                                else if (nChar == 'd' || nChar == 'D')
-                                    rParams = rParams.replaceAt(nI, 1, "P");
-                                else if (nChar == 'h' || nChar == 'H')
-                                    rParams = rParams.replaceAt(nI, 1, "T");
-                            }
-                            break;
-                        case LANGUAGE_DANISH:
-                        case LANGUAGE_NORWEGIAN:
-                        case LANGUAGE_NORWEGIAN_BOKMAL:
-                        case LANGUAGE_NORWEGIAN_NYNORSK:
-                        case LANGUAGE_SWEDISH:
-                        case LANGUAGE_SWEDISH_FINLAND:
-                            {
-                                if (nChar == 'h' || nChar == 'H')
-                                    rParams = rParams.replaceAt(nI, 1, "T");
-                            }
-                            break;
-                        case LANGUAGE_PORTUGUESE:
-                        case LANGUAGE_PORTUGUESE_BRAZILIAN:
-                        case LANGUAGE_SPANISH_MODERN:
-                        case LANGUAGE_SPANISH_DATED:
-                        case LANGUAGE_SPANISH_MEXICAN:
-                        case LANGUAGE_SPANISH_GUATEMALA:
-                        case LANGUAGE_SPANISH_COSTARICA:
-                        case LANGUAGE_SPANISH_PANAMA:
-                        case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
-                        case LANGUAGE_SPANISH_VENEZUELA:
-                        case LANGUAGE_SPANISH_COLOMBIA:
-                        case LANGUAGE_SPANISH_PERU:
-                        case LANGUAGE_SPANISH_ARGENTINA:
-                        case LANGUAGE_SPANISH_ECUADOR:
-                        case LANGUAGE_SPANISH_CHILE:
-                        case LANGUAGE_SPANISH_URUGUAY:
-                        case LANGUAGE_SPANISH_PARAGUAY:
-                        case LANGUAGE_SPANISH_BOLIVIA:
-                        case LANGUAGE_SPANISH_EL_SALVADOR:
-                        case LANGUAGE_SPANISH_HONDURAS:
-                        case LANGUAGE_SPANISH_NICARAGUA:
-                        case LANGUAGE_SPANISH_PUERTO_RICO:
-                            {
-                                if (nChar == 'a' || nChar == 'A')
-                                    rParams = rParams.replaceAt(nI, 1, "O");
-                                else if (nChar == 'y' || nChar == 'Y')
-                                    rParams = rParams.replaceAt(nI, 1, "A");
-                            }
-                            break;
-                        case LANGUAGE_DUTCH:
-                        case LANGUAGE_DUTCH_BELGIAN:
-                            {
-                                if (nChar == 'y' || nChar == 'Y')
-                                    rParams = rParams.replaceAt(nI, 1, "J");
-                                else if (nChar == 'u' || nChar == 'U')
-                                    rParams = rParams.replaceAt(nI, 1, "H");
-                            }
-                            break;
-                        case LANGUAGE_ITALIAN:
-                        case LANGUAGE_ITALIAN_SWISS:
-                            {
-                                if (nChar == 'a' || nChar == 'A')
-                                    rParams = rParams.replaceAt(nI, 1, "O");
-                                else if (nChar == 'g' || nChar == 'G')
-                                    rParams = rParams.replaceAt(nI, 1, "X");
-                                else if (nChar == 'y' || nChar == 'Y')
-                                    rParams = rParams.replaceAt(nI, 1, "A");
-                                else if (nChar == 'd' || nChar == 'D')
-                                    rParams = rParams.replaceAt(nI, 1, "G");
-                            }
-                            break;
-                        case LANGUAGE_GERMAN:
-                        case LANGUAGE_GERMAN_SWISS:
-                        case LANGUAGE_GERMAN_AUSTRIAN:
-                        case LANGUAGE_GERMAN_LUXEMBOURG:
-                        case LANGUAGE_GERMAN_LIECHTENSTEIN:
-                            {
-                                if (nChar == 'y' || nChar == 'Y')
-                                    rParams = rParams.replaceAt(nI, 1, "J");
-                                else if (nChar == 'd' || nChar == 'D')
-                                    rParams = rParams.replaceAt(nI, 1, "T");
-                            }
-                            break;
-                        case LANGUAGE_FRENCH:
-                        case LANGUAGE_FRENCH_BELGIAN:
-                        case LANGUAGE_FRENCH_CANADIAN:
-                        case LANGUAGE_FRENCH_SWISS:
-                        case LANGUAGE_FRENCH_LUXEMBOURG:
-                        case LANGUAGE_FRENCH_MONACO:
-                            {
-                                if (nChar == 'y' || nChar == 'Y' || nChar == 'a')
-                                    rParams = rParams.replaceAt(nI, 1, "A");
-                                else if (nChar == 'd' || nChar == 'D' || nChar == 'j')
-                                    rParams = rParams.replaceAt(nI, 1, "J");
-                            }
-                            break;
-                        default:
-                            {
-                                ; // Nothing
-                            }
+                            if (nChar == 'y' || nChar == 'Y')
+                                rParams = rParams.replaceAt(nI, 1, "V");
+                            else if (nChar == 'm' || nChar == 'M')
+                                rParams = rParams.replaceAt(nI, 1, "K");
+                            else if (nChar == 'd' || nChar == 'D')
+                                rParams = rParams.replaceAt(nI, 1, "P");
+                            else if (nChar == 'h' || nChar == 'H')
+                                rParams = rParams.replaceAt(nI, 1, "T");
+                        }
+                        else if ( rLang.anyOf(
+                            LANGUAGE_DANISH,
+                            LANGUAGE_NORWEGIAN,
+                            LANGUAGE_NORWEGIAN_BOKMAL,
+                            LANGUAGE_NORWEGIAN_NYNORSK,
+                            LANGUAGE_SWEDISH,
+                            LANGUAGE_SWEDISH_FINLAND))
+                        {
+                            if (nChar == 'h' || nChar == 'H')
+                                rParams = rParams.replaceAt(nI, 1, "T");
+                        }
+                        else if ( rLang.anyOf(
+                            LANGUAGE_PORTUGUESE,
+                            LANGUAGE_PORTUGUESE_BRAZILIAN,
+                            LANGUAGE_SPANISH_MODERN,
+                            LANGUAGE_SPANISH_DATED,
+                            LANGUAGE_SPANISH_MEXICAN,
+                            LANGUAGE_SPANISH_GUATEMALA,
+                            LANGUAGE_SPANISH_COSTARICA,
+                            LANGUAGE_SPANISH_PANAMA,
+                            LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,
+                            LANGUAGE_SPANISH_VENEZUELA,
+                            LANGUAGE_SPANISH_COLOMBIA,
+                            LANGUAGE_SPANISH_PERU,
+                            LANGUAGE_SPANISH_ARGENTINA,
+                            LANGUAGE_SPANISH_ECUADOR,
+                            LANGUAGE_SPANISH_CHILE,
+                            LANGUAGE_SPANISH_URUGUAY,
+                            LANGUAGE_SPANISH_PARAGUAY,
+                            LANGUAGE_SPANISH_BOLIVIA,
+                            LANGUAGE_SPANISH_EL_SALVADOR,
+                            LANGUAGE_SPANISH_HONDURAS,
+                            LANGUAGE_SPANISH_NICARAGUA,
+                            LANGUAGE_SPANISH_PUERTO_RICO))
+                        {
+                            if (nChar == 'a' || nChar == 'A')
+                                rParams = rParams.replaceAt(nI, 1, "O");
+                            else if (nChar == 'y' || nChar == 'Y')
+                                rParams = rParams.replaceAt(nI, 1, "A");
+                        }
+                        else if ( rLang.anyOf(
+                            LANGUAGE_DUTCH,
+                            LANGUAGE_DUTCH_BELGIAN))
+                        {
+                            if (nChar == 'y' || nChar == 'Y')
+                                rParams = rParams.replaceAt(nI, 1, "J");
+                            else if (nChar == 'u' || nChar == 'U')
+                                rParams = rParams.replaceAt(nI, 1, "H");
+                        }
+                        else if ( rLang.anyOf(
+                                LANGUAGE_ITALIAN,
+                                LANGUAGE_ITALIAN_SWISS))
+                        {
+                            if (nChar == 'a' || nChar == 'A')
+                                rParams = rParams.replaceAt(nI, 1, "O");
+                            else if (nChar == 'g' || nChar == 'G')
+                                rParams = rParams.replaceAt(nI, 1, "X");
+                            else if (nChar == 'y' || nChar == 'Y')
+                                rParams = rParams.replaceAt(nI, 1, "A");
+                            else if (nChar == 'd' || nChar == 'D')
+                                rParams = rParams.replaceAt(nI, 1, "G");
+                        }
+                        else if ( rLang.anyOf(
+                            LANGUAGE_GERMAN,
+                            LANGUAGE_GERMAN_SWISS,
+                            LANGUAGE_GERMAN_AUSTRIAN,
+                            LANGUAGE_GERMAN_LUXEMBOURG,
+                            LANGUAGE_GERMAN_LIECHTENSTEIN))
+                        {
+                            if (nChar == 'y' || nChar == 'Y')
+                                rParams = rParams.replaceAt(nI, 1, "J");
+                            else if (nChar == 'd' || nChar == 'D')
+                                rParams = rParams.replaceAt(nI, 1, "T");
+                        }
+                        else if ( rLang.anyOf(
+                            LANGUAGE_FRENCH,
+                            LANGUAGE_FRENCH_BELGIAN,
+                            LANGUAGE_FRENCH_CANADIAN,
+                            LANGUAGE_FRENCH_SWISS,
+                            LANGUAGE_FRENCH_LUXEMBOURG,
+                            LANGUAGE_FRENCH_MONACO))
+                        {
+                            if (nChar == 'y' || nChar == 'Y' || nChar == 'a')
+                                rParams = rParams.replaceAt(nI, 1, "A");
+                            else if (nChar == 'd' || nChar == 'D' || nChar == 'j')
+                                rParams = rParams.replaceAt(nI, 1, "J");
                         }
                     }
                 }

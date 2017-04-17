@@ -54,7 +54,7 @@ namespace o3tl
 }
 
 // load language strings from resource
-SVX_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg );
+SVX_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bNeg );
 
 class SVX_DLLPUBLIC SvxLanguageBoxBase
 {
@@ -69,7 +69,7 @@ public:
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
 
-    void            AddLanguages( const css::uno::Sequence< sal_Int16 >& rLanguageTypes, SvxLanguageListFlags nLangList );
+    void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
 
     sal_Int32       InsertLanguage( const LanguageType eLangType );
     void            InsertDefaultLanguage( sal_Int16 nType );

@@ -3344,10 +3344,10 @@ void SwTextNode::ClearSwpHintsArr( bool bDelFields )
     }
 }
 
-sal_uInt16 SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
+LanguageType SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                            sal_uInt16 nScript ) const
 {
-    sal_uInt16 nRet = LANGUAGE_DONTKNOW;
+    LanguageType nRet = LANGUAGE_DONTKNOW;
 
     if ( ! nScript )
     {
@@ -3390,7 +3390,7 @@ sal_uInt16 SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                         continue;
                 }
                 const SfxPoolItem* pItem = CharFormat::GetItem( *pHt, nWhichId );
-                const sal_uInt16 nLng = static_cast<const SvxLanguageItem*>(pItem)->GetLanguage();
+                const LanguageType nLng = static_cast<const SvxLanguageItem*>(pItem)->GetLanguage();
 
                 // does the attribute completely cover the range?
                 if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
@@ -3404,7 +3404,7 @@ sal_uInt16 SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
     {
         nRet = static_cast<const SvxLanguageItem&>(GetSwAttrSet().Get( nWhichId )).GetLanguage();
         if( LANGUAGE_DONTKNOW == nRet )
-            nRet = static_cast<sal_uInt16>(GetAppLanguage());
+            nRet = GetAppLanguage();
     }
     return nRet;
 }

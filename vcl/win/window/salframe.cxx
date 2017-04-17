@@ -3297,13 +3297,13 @@ LanguageType WinSalFrame::GetInputLanguage()
     if( !mnInputLang )
         return LANGUAGE_DONTKNOW;
     else
-        return (LanguageType) mnInputLang;
+        return LanguageType(mnInputLang);
 }
 
 bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode )
 {
     bool bRet = FALSE;
-    sal_IntPtr nLangType = aLangType;
+    sal_IntPtr nLangType = (sal_uInt16)aLangType;
     // just use the passed language identifier, do not try to load additional keyboard support
     HKL hkl = reinterpret_cast<HKL>(nLangType);
 

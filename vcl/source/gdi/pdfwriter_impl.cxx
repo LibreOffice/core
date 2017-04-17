@@ -13148,7 +13148,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
     {
         if( eAttr == PDFWriter::Language )
         {
-            m_aStructure[ m_nCurrentStructElement ].m_aLocale = LanguageTag( (LanguageType)nValue ).getLocale();
+            m_aStructure[ m_nCurrentStructElement ].m_aLocale = LanguageTag( LanguageType(nValue) ).getLocale();
             return true;
         }
 

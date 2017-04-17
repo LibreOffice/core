@@ -3443,13 +3443,15 @@ void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt16( meTextLanguage );
+    rOStm.WriteUInt16( (sal_uInt16)meTextLanguage );
 }
 
 void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    rIStm.ReadUInt16( meTextLanguage );
+    sal_uInt16 nTmp = 0;
+    rIStm.ReadUInt16( nTmp );
+    meTextLanguage = static_cast<LanguageType>(nTmp);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

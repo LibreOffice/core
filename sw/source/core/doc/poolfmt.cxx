@@ -118,11 +118,10 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
 /// exist yet, create it.
 /// If the String pointer is defined, then only query for
 /// the Attribute descriptions. It doesn't create a style!
-SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage)
+SvxFrameDirection GetDefaultFrameDirection(LanguageType nLanguage)
 {
-    SvxFrameDirection eResult = (MsLangId::isRightToLeft( static_cast<LanguageType>(nLanguage)) ?
-            SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB);
-    return eResult;
+    return MsLangId::isRightToLeft(nLanguage) ?
+            SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
 }
 
 // See if the Paragraph/Character/Frame/Page style is in use

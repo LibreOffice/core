@@ -590,7 +590,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, Button*, void)
     Reference<XDictionary> aXDictionary( LinguMgr::GetChangeAllList(), UNO_QUERY );
     DictionaryError nAdded = AddEntryToDic( aXDictionary,
             aOldWord, true,
-            aString, eLang );
+            aString );
 
     if(nAdded == DictionaryError::NONE)
     {
@@ -638,7 +638,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
         OUString sErrorText(m_pSentenceED->GetErrorText());
         DictionaryError nAdded = AddEntryToDic( aXDictionary,
             sErrorText, false,
-            OUString(), LANGUAGE_NONE );
+            OUString() );
         if(nAdded == DictionaryError::NONE)
         {
             SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
@@ -753,7 +753,7 @@ bool SpellDialog::Close()
 
 LanguageType SpellDialog::GetSelectedLang_Impl() const
 {
-    sal_Int16 nLang = m_pLanguageLB->GetSelectLanguage();
+    LanguageType nLang = m_pLanguageLB->GetSelectLanguage();
     return nLang;
 }
 
@@ -771,7 +771,7 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
     if(!sError.isEmpty())
     {
         LanguageType eLanguage = static_cast<SvxLanguageBox*>(&rBox)->GetSelectLanguage();
-        Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, eLanguage,
+        Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, (sal_uInt16)eLanguage,
                                             Sequence< PropertyValue >() );
         if( xAlt.is() )
             m_pSentenceED->SetAlternatives( xAlt );
@@ -898,7 +898,7 @@ void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
     DictionaryError nAddRes = DictionaryError::UNKNOWN;
     if (xDic.is())
     {
-        nAddRes = AddEntryToDic( xDic, aNewWord, false, OUString(), LANGUAGE_NONE );
+        nAddRes = AddEntryToDic( xDic, aNewWord, false, OUString() );
         // save modified user-dictionary if it is persistent
         uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
         if (xSavDic.is())
@@ -1605,7 +1605,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
             aCursor.GetIndex() += xEntry->getReplacementText().getLength();
         // maybe the error found here is already added to the dictionary and has to be ignored
-        } else if(pSpellErrorDescription && !bGrammarError && xSpell->isValid( GetErrorText(), LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ), Sequence< PropertyValue >() )) {
+        } else if(pSpellErrorDescription && !bGrammarError && xSpell->isValid( GetErrorText(), (sal_uInt16)LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ), Sequence< PropertyValue >() )) {
             ++aCursor.GetIndex();
         }
         else

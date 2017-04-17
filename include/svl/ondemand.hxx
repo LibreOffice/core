@@ -96,28 +96,27 @@ public:
             void                changeLocale( const LanguageTag& rLanguageTag )
                                     {
                                         LanguageType eLang = rLanguageTag.getLanguageType( false);
-                                        switch ( eLang )
-                                        {
-                                            case LANGUAGE_SYSTEM :
+                                        if ( eLang == LANGUAGE_SYSTEM )
                                                 pCurrent = pSystem;
-                                            break;
-                                            case LANGUAGE_ENGLISH_US :
+                                        else if ( eLang == LANGUAGE_ENGLISH_US )
+                                        {
                                                 if ( !pEnglish )
                                                     pEnglish = new LocaleDataWrapper( m_xContext, rLanguageTag );
                                                 pCurrent = pEnglish;
-                                            break;
-                                            default:
-                                                if ( !pAny )
-                                                {
-                                                    pAny = new LocaleDataWrapper( m_xContext, rLanguageTag );
-                                                    eLastAnyLanguage = eLang;
-                                                }
-                                                else if ( eLastAnyLanguage != eLang )
-                                                {
-                                                    pAny->setLanguageTag( rLanguageTag );
-                                                    eLastAnyLanguage = eLang;
-                                                }
-                                                pCurrent = pAny;
+                                        }
+                                        else
+                                        {
+                                            if ( !pAny )
+                                            {
+                                                pAny = new LocaleDataWrapper( m_xContext, rLanguageTag );
+                                                eLastAnyLanguage = eLang;
+                                            }
+                                            else if ( eLastAnyLanguage != eLang )
+                                            {
+                                                pAny->setLanguageTag( rLanguageTag );
+                                                eLastAnyLanguage = eLang;
+                                            }
+                                            pCurrent = pAny;
                                         }
                                         eCurrentLanguage = eLang;
                                     }

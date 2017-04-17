@@ -203,7 +203,7 @@ static const LanguageTag& GetAppLang()
 {
     return Application::GetSettings().GetLanguageTag();
 }
-static LocaleDataWrapper& GetLocaleDataWrapper( sal_uInt16 nLang )
+static LocaleDataWrapper& GetLocaleDataWrapper( LanguageType nLang )
 {
     static LocaleDataWrapper aLclDtWrp( GetAppLang() );
     LanguageTag aLcl( nLang );
@@ -276,21 +276,18 @@ long SvxAutoCorrect::GetDefaultFlags()
                     | SaveWordWrdSttLst
                     | CorrectCapsLock;
     LanguageType eLang = GetAppLang().getLanguageType();
-    switch( eLang )
-    {
-    case LANGUAGE_ENGLISH:
-    case LANGUAGE_ENGLISH_US:
-    case LANGUAGE_ENGLISH_UK:
-    case LANGUAGE_ENGLISH_AUS:
-    case LANGUAGE_ENGLISH_CAN:
-    case LANGUAGE_ENGLISH_NZ:
-    case LANGUAGE_ENGLISH_EIRE:
-    case LANGUAGE_ENGLISH_SAFRICA:
-    case LANGUAGE_ENGLISH_JAMAICA:
-    case LANGUAGE_ENGLISH_CARRIBEAN:
+    if( eLang.anyOf(
+        LANGUAGE_ENGLISH,
+        LANGUAGE_ENGLISH_US,
+        LANGUAGE_ENGLISH_UK,
+        LANGUAGE_ENGLISH_AUS,
+        LANGUAGE_ENGLISH_CAN,
+        LANGUAGE_ENGLISH_NZ,
+        LANGUAGE_ENGLISH_EIRE,
+        LANGUAGE_ENGLISH_SAFRICA,
+        LANGUAGE_ENGLISH_JAMAICA,
+        LANGUAGE_ENGLISH_CARRIBEAN))
         nRet &= ~(ChgQuotes|ChgSglQuotes);
-        break;
-    }
     return nRet;
 }
 
@@ -421,10 +418,10 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
                 // Check that word isn't correctly spelled before correcting:
                 css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller =
                     LinguMgr::GetSpellChecker();
-                if( xSpeller->hasLanguage(eLang) )
+                if( xSpeller->hasLanguage((sal_uInt16)eLang) )
                 {
                     Sequence< css::beans::PropertyValue > aEmptySeq;
-                    if (xSpeller->isValid(sWord, eLang, aEmptySeq))
+                    if (xSpeller->isValid(sWord, (sal_uInt16)eLang, aEmptySeq))
                     {
                         return false;
                     }
@@ -457,12 +454,10 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
 
     // In some languages ordinal suffixes should never be
     // changed to superscript. Let's break for those languages.
-    switch (eLang)
+    if (!eLang.anyOf(
+         LANGUAGE_SWEDISH,
+         LANGUAGE_SWEDISH_FINLAND))
     {
-    case LANGUAGE_SWEDISH:
-    case LANGUAGE_SWEDISH_FINLAND:
-        break;
-    default:
         CharClass& rCC = GetCharClass(eLang);
 
         for (; nSttPos < nEndPos; ++nSttPos)
@@ -1187,13 +1182,13 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
     {
         if( LANGUAGE_SYSTEM == eLang )
             eLang = GetAppLang().getLanguageType();
-        switch( eLang )
+        if( eLang.anyOf(
+            LANGUAGE_FRENCH,
+            LANGUAGE_FRENCH_BELGIAN,
+            LANGUAGE_FRENCH_CANADIAN,
+            LANGUAGE_FRENCH_SWISS,
+            LANGUAGE_FRENCH_LUXEMBOURG))
         {
-        case LANGUAGE_FRENCH:
-        case LANGUAGE_FRENCH_BELGIAN:
-        case LANGUAGE_FRENCH_CANADIAN:
-        case LANGUAGE_FRENCH_SWISS:
-        case LANGUAGE_FRENCH_LUXEMBOURG:
             {
                 OUString s( cNonBreakingSpace );
                     // UNICODE code for no break space
@@ -1203,7 +1198,6 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                         ++nInsPos;
                 }
             }
-            break;
         }
     }
 
@@ -1222,18 +1216,17 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
     {
         if( LANGUAGE_SYSTEM == eLang )
             eLang = GetAppLang().getLanguageType();
-        switch( eLang )
+        if( eLang.anyOf(
+             LANGUAGE_FRENCH,
+             LANGUAGE_FRENCH_BELGIAN,
+             LANGUAGE_FRENCH_CANADIAN,
+             LANGUAGE_FRENCH_SWISS,
+             LANGUAGE_FRENCH_LUXEMBOURG))
         {
-        case LANGUAGE_FRENCH:
-        case LANGUAGE_FRENCH_BELGIAN:
-        case LANGUAGE_FRENCH_CANADIAN:
-        case LANGUAGE_FRENCH_SWISS:
-        case LANGUAGE_FRENCH_LUXEMBOURG:
             if( bSttQuote )
                 sRet += " ";
             else
                 sRet = " " + sRet;
-            break;
         }
     }
     return sRet;

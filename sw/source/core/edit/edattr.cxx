@@ -747,12 +747,12 @@ SvtScriptType SwEditShell::GetScriptType() const
     return nRet;
 }
 
-sal_uInt16 SwEditShell::GetCurLang() const
+LanguageType SwEditShell::GetCurLang() const
 {
     const SwPaM* pCursor = GetCursor();
     const SwPosition& rPos = *pCursor->GetPoint();
     const SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
-    sal_uInt16 nLang;
+    LanguageType nLang;
     if( pTNd )
     {
         //JP 24.9.2001: if exist no selection, then get the language before

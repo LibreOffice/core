@@ -163,8 +163,8 @@ public:
     // IDocumentSettingAccess
     virtual bool get(/*[in]*/ DocumentSettingId id) const override;
     virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value) override;
-    virtual const css::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const override;
-    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ const css::i18n::ForbiddenCharacters& rForbiddenCharacters ) override;
+    virtual const css::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ LanguageType nLang, /*[in]*/ bool bLocaleData ) const override;
+    virtual void setForbiddenCharacters(/*[in]*/ LanguageType nLang, /*[in]*/ const css::i18n::ForbiddenCharacters& rForbiddenCharacters ) override;
     virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() override;
     virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const override;
     virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const override;

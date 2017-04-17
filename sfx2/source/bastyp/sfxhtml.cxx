@@ -322,13 +322,13 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
         LanguageType& eNumLang, const OUString& aValStr, const OUString& aNumStr,
         SvNumberFormatter& rFormatter )
 {
-    LanguageType eParseLang = (LanguageType )aNumStr.toInt32();
+    LanguageType eParseLang(aNumStr.toInt32());
     sal_uInt32 nParseForm = rFormatter.GetFormatForLanguageIfBuiltIn( 0, eParseLang );
     double fVal;
     (void)rFormatter.IsNumberFormat(aValStr, nParseForm, fVal);
     if ( comphelper::string::getTokenCount(aNumStr, ';') > 2 )
     {
-        eNumLang = (LanguageType)aNumStr.getToken( 1, ';' ).toInt32();
+        eNumLang = LanguageType(aNumStr.getToken( 1, ';' ).toInt32());
         sal_Int32 nPos = aNumStr.indexOf( ';' );
         nPos = aNumStr.indexOf( ';', nPos + 1 );
         OUString aFormat( aNumStr.copy( nPos + 1 ) );

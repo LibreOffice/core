@@ -3320,7 +3320,7 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
                 pStrm ->WriteUInt32( nPortionSize )
                        .WriteInt32( nFlags )
                        .WriteInt16( 1 )    // spellinfo -> needs rechecking
-                       .WriteInt16( LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType() )
+                       .WriteInt16( (sal_uInt16)LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType() )
                        .WriteInt16( 0 );   // alt language
             }
         }

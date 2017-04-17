@@ -846,7 +846,7 @@ SwFieldType* SwDocInfoFieldType::Copy() const
     return pTyp;
 }
 
-static void lcl_GetLocalDataWrapper( sal_uLong nLang,
+static void lcl_GetLocalDataWrapper( LanguageType nLang,
                               const LocaleDataWrapper **ppAppLocalData,
                               const LocaleDataWrapper **ppLocalData )
 {
@@ -854,12 +854,11 @@ static void lcl_GetLocalDataWrapper( sal_uLong nLang,
     *ppAppLocalData = &aLocale.GetLocaleData();
     *ppLocalData = *ppAppLocalData;
     if( nLang != (*ppLocalData)->getLanguageTag().getLanguageType() )
-        *ppLocalData = new LocaleDataWrapper(
-                        LanguageTag( static_cast<LanguageType>(nLang) ));
+        *ppLocalData = new LocaleDataWrapper(LanguageTag( nLang ));
 }
 
 OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
-                                    sal_uInt16 nLang, const OUString& rName ) const
+                                    LanguageType nLang, const OUString& rName ) const
 {
     const LocaleDataWrapper *pAppLocalData = nullptr, *pLocalData = nullptr;
     SwDocShell *pDocShell(GetDoc()->GetDocShell());
@@ -1153,7 +1152,7 @@ void SwDocInfoField::SetSubType(sal_uInt16 nSub)
     nSubType = nSub;
 }
 
-void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
+void SwDocInfoField::SetLanguage(LanguageType nLng)
 {
     if (!GetFormat())
         SwField::SetLanguage(nLng);
