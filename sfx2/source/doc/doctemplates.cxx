@@ -393,15 +393,13 @@ void SfxDocTplService_Impl::init_Impl()
         getDefaultLocale();
 
     // convert locale to string
-    OUString aLang = LanguageTag::convertToBcp47( maLocale);
-
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
 
-    maRootURL = ( TEMPLATE_ROOT_URL "/" ) + aLang;
+    maRootURL = ( TEMPLATE_ROOT_URL "/" ) + LanguageTag::convertToBcp47(maLocale);
 
-    OUString aTemplVersPropName( TEMPLATE_VERSION  );
-    OUString aTemplVers( TEMPLATE_VERSION_VALUE  );
+    const OUString aTemplVersPropName( TEMPLATE_VERSION  );
+    const OUString aTemplVers( TEMPLATE_VERSION_VALUE  );
     if ( Content::create( maRootURL, maCmdEnv, comphelper::getProcessComponentContext(), maRootContent ) )
     {
         uno::Any aValue;
@@ -527,7 +525,6 @@ OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
 
 void SfxDocTplService_Impl::getDirList()
 {
-    OUString aPropName( PROPERTY_DIRLIST  );
     Any      aValue;
 
     // Get the template dir list
@@ -564,8 +561,7 @@ void SfxDocTplService_Impl::getDirList()
         css::util::thePathSettings::get(mxContext);
 
     // load internal paths
-    OUString sProp( "Template_internal" );
-    Any aAny = xPathSettings->getPropertyValue( sProp );
+    Any aAny = xPathSettings->getPropertyValue( "Template_internal" );
     aAny >>= maInternalTemplateDirs;
 
     nCount = maInternalTemplateDirs.getLength();
@@ -578,18 +574,17 @@ void SfxDocTplService_Impl::getDirList()
     }
 
     // Store the template dir list
-    setProperty( maRootContent, aPropName, aValue );
+    setProperty( maRootContent, PROPERTY_DIRLIST, aValue );
 }
 
 
 bool SfxDocTplService_Impl::needsUpdate()
 {
-    OUString aPropName( PROPERTY_NEEDSUPDATE  );
     bool bNeedsUpdate = true;
     Any      aValue;
 
     // Get the template dir list
-    bool bHasProperty = getProperty( maRootContent, aPropName, aValue );
+    bool bHasProperty = getProperty( maRootContent, PROPERTY_NEEDSUPDATE, aValue );
 
     if ( bHasProperty )
         aValue >>= bNeedsUpdate;
@@ -654,7 +649,7 @@ bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
 
     if ( aType.isEmpty() && mxType.is() )
     {
-        OUString aDocType = mxType->queryTypeByURL( rURL );
+        const OUString aDocType {mxType->queryTypeByURL( rURL )};
         if ( !aDocType.isEmpty() )
             try
             {
@@ -693,7 +688,7 @@ bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aLinkURL {aLinkObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     Content aLink;
 
@@ -709,13 +704,10 @@ bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
         aValues[1] <<= false;
         aValues[2] <<= rTargetURL;
 
-        OUString aType( TYPE_LINK  );
-        OUString aAdditionalProp( PROPERTY_TYPE  );
-
         try
         {
-            rParentFolder.insertNewContent( aType, aNames, aValues, aLink );
-            setProperty( aLink, aAdditionalProp, makeAny( rType ) );
+            rParentFolder.insertNewContent( TYPE_LINK, aNames, aValues, aLink );
+            setProperty( aLink, PROPERTY_TYPE, makeAny( rType ) );
             bAddedEntry = true;
         }
         catch( Exception& )
@@ -733,8 +725,8 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
     Content         aParent;
     bool        bCreatedFolder = false;
     INetURLObject   aParentURL( rNewFolderURL );
-    OUString        aFolderName = aParentURL.getName( INetURLObject::LAST_SEGMENT, true,
-                                                      INetURLObject::DecodeMechanism::WithCharset );
+    const OUString aFolderName {aParentURL.getName( INetURLObject::LAST_SEGMENT, true,
+                                                    INetURLObject::DecodeMechanism::WithCharset )};
 
     // compute the parent folder url from the new folder url
     // and remove the final slash, because Content::create doesn't
@@ -823,9 +815,7 @@ bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPa
                 aValues[0] <<= aTryName;
                 aValues[1] <<= true;
 
-                OUString aType( TYPE_FSYS_FOLDER  );
-
-                bCreated = aParent.insertNewContent( aType, aNames, aValues, aNewFolder );
+                bCreated = aParent.insertNewContent( TYPE_FSYS_FOLDER, aNames, aValues, aNewFolder );
             }
             catch( ucb::NameClashException& )
             {
@@ -889,9 +879,7 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
                 aValues[0] <<= aTryName;
                 aValues[1] <<= true;
 
-                OUString aType( TYPE_FSYS_FILE  );
-
-                bCreated = aParent.insertNewContent( aType, aNames, aValues, aNewFile );
+                bCreated = aParent.insertNewContent( TYPE_FSYS_FILE, aNames, aValues, aNewFile );
             }
             catch( ucb::NameClashException& )
             {
@@ -926,10 +914,9 @@ bool SfxDocTplService_Impl::removeContent( Content& rContent )
     bool bRemoved = false;
     try
     {
-        OUString aCmd( COMMAND_DELETE  );
         Any aArg = makeAny( true );
 
-        rContent.executeCommand( aCmd, aArg );
+        rContent.executeCommand( COMMAND_DELETE, aArg );
         bRemoved = true;
     }
     catch ( RuntimeException& ) {}
@@ -1134,7 +1121,7 @@ void SfxDocTplService_Impl::doUpdate()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    OUString aPropName( PROPERTY_NEEDSUPDATE  );
+    const OUString aPropName( PROPERTY_NEEDSUPDATE );
     Any      aValue;
 
     aValue <<= true;
@@ -1389,10 +1376,9 @@ OUString SfxDocTplService_Impl::CreateNewGroupFsys( const OUString& rGroupName, 
         }
 
         // Now set the target url for this group and we are done
-        OUString aPropName( TARGET_DIR_URL  );
         Any aValue = makeAny( aResultURL );
 
-        if ( ! setProperty( aGroup, aPropName, aValue ) )
+        if ( ! setProperty( aGroup, TARGET_DIR_URL, aValue ) )
         {
             removeContent( aNewFolder );
             return OUString();
@@ -1472,10 +1458,9 @@ bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     }
 
     // Now set the target url for this group and we are done
-    OUString aPropName( TARGET_DIR_URL  );
     Any aValue = makeAny( aNewFolderURL );
 
-    if ( ! setProperty( aNewGroup, aPropName, aValue ) )
+    if ( ! setProperty( aNewGroup, TARGET_DIR_URL, aValue ) )
     {
         removeContent( aNewGroup );
         removeContent( aNewFolder );
@@ -1503,11 +1488,11 @@ bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 
     // Get the target url
     Content  aGroup;
-    OUString    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
     {
-        OUString    aPropName( TARGET_DIR_URL  );
+        const OUString aPropName( TARGET_DIR_URL  );
         Any      aValue;
 
         OUString    aGroupTargetURL;
@@ -1624,9 +1609,8 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     OUString aGroupTargetURL;
     // there is no need to check whether target dir url is in target path, since if the target path is changed
     // the target dir url should be already generated new
-    OUString    aPropName( TARGET_DIR_URL  );
     Any      aValue;
-    if ( getProperty( aGroup, aPropName, aValue ) )
+    if ( getProperty( aGroup, TARGET_DIR_URL, aValue ) )
         aValue >>= aGroupTargetURL;
 
     if ( aGroupTargetURL.isEmpty() )
@@ -1659,9 +1643,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
 
                while ( xResultSet->next() )
                {
-                   OUString aTemplTargetURL( xRow->getString( 1 ) );
-
-                if ( !::utl::UCBContentHelper::IsSubPath( aGroupTargetURL, aTemplTargetURL ) )
+                if ( !::utl::UCBContentHelper::IsSubPath( aGroupTargetURL, xRow->getString( 1 ) ) )
                     throw uno::Exception();
             }
 
@@ -1673,7 +1655,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     if ( bCanBeRenamed )
     {
         INetURLObject aGroupTargetObj( aGroupTargetURL );
-        OUString aFsysName = aGroupTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
+        const OUString aFsysName = aGroupTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
 
         if ( aGroupTargetObj.removeSegment()
           && ReplaceUINamesForTemplateDir_Impl( aGroupTargetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
@@ -1682,11 +1664,10 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
                                                 rNewName ) )
         {
             // rename the group in the hierarchy
-            OUString aTitleProp( TITLE  );
             Any aTitleValue;
             aTitleValue <<= rNewName;
 
-            return setProperty( aGroup, aTitleProp, aTitleValue );
+            return setProperty( aGroup, TITLE, aTitleValue );
         }
     }
 
@@ -1703,23 +1684,20 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate, aTargetGroup, aTemplateToRemove;
-    OUString        aGroupURL, aTemplateURL, aTemplateToRemoveTargetURL;
     INetURLObject   aGroupObj( maRootURL );
     bool        bRemoveOldTemplateContent = false;
-    OUString sDocServiceName;
 
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aGroupURL {aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
         return false;
 
     OUString aGroupTargetURL;
-    OUString aPropName( TARGET_DIR_URL  );
     Any      aValue;
-    if ( getProperty( aGroup, aPropName, aValue ) )
+    if ( getProperty( aGroup, TARGET_DIR_URL, aValue ) )
         aValue >>= aGroupTargetURL;
 
 
@@ -1730,14 +1708,14 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aTemplateURL {aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
+
+    OUString aTemplateToRemoveTargetURL;
 
     if ( Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplateToRemove ) )
     {
-        OUString    aTargetTemplPropName( TARGET_URL  );
-
         bRemoveOldTemplateContent = true;
-        if ( getProperty( aTemplateToRemove, aTargetTemplPropName, aValue ) )
+        if ( getProperty( aTemplateToRemove, TARGET_URL, aValue ) )
             aValue >>= aTemplateToRemoveTargetURL;
 
         if ( aGroupTargetURL.isEmpty() || !maTemplateDirs.getLength()
@@ -1751,13 +1729,11 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         // get document service name
         uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
-        sDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
+        const OUString sDocServiceName {xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) )};
         if ( sDocServiceName.isEmpty() )
             throw uno::RuntimeException();
 
         // get the actual filter name
-        OUString aFilterName;
-
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
                 configuration::theDefaultProvider::get( xContext );
 
@@ -1778,18 +1754,19 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         if ( !xApplConfig.is() )
             throw uno::RuntimeException();
 
+        OUString aFilterName;
         xApplConfig->getByName("ooSetupFactoryActualTemplateFilter") >>= aFilterName;
         if ( aFilterName.isEmpty() )
             throw uno::RuntimeException();
 
         // find the related type name
-        OUString aTypeName;
         uno::Reference< container::XNameAccess > xFilterFactory(
             mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", mxContext),
             uno::UNO_QUERY_THROW );
 
         uno::Sequence< beans::PropertyValue > aFilterData;
         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
+        OUString aTypeName;
         for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
             if ( aFilterData[nInd].Name == "Type" )
                 aFilterData[nInd].Value >>= aTypeName;
@@ -1813,8 +1790,8 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         if ( !aAllExt.getLength() )
             throw uno::RuntimeException();
 
-        OUString aMediaType = aTypeProps.getUnpackedValueOrDefault("MediaType", OUString() );
-        OUString aExt = aAllExt[0];
+        const OUString aMediaType {aTypeProps.getUnpackedValueOrDefault("MediaType", OUString() )};
+        const OUString aExt {aAllExt[0]};
 
         if ( aMediaType.isEmpty() || aExt.isEmpty() )
             throw uno::RuntimeException();
@@ -1859,7 +1836,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
              * if the old template was the standard template
              * it is necessary to change the standard template with the new file name
              */
-            OUString sStdTmplFile = SfxObjectFactory::GetStandardTemplate( sDocServiceName );
+            const OUString sStdTmplFile = SfxObjectFactory::GetStandardTemplate( sDocServiceName );
             if ( INetURLObject( sStdTmplFile ) == INetURLObject( aTemplateToRemoveTargetURL ) )
             {
                 SfxObjectFactory::SetStandardTemplate( sDocServiceName, aNewTemplateTargetURL );
@@ -1889,13 +1866,12 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate, aTargetGroup;
-    OUString        aGroupURL, aTemplateURL;
     INetURLObject   aGroupObj( maRootURL );
 
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
         return false;
@@ -1905,17 +1881,16 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aTemplateURL {aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     if ( Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return false;
 
     // get the target url of the group
     OUString    aTargetURL;
-    OUString    aPropName( TARGET_DIR_URL  );
     Any         aValue;
 
-    if ( getProperty( aGroup, aPropName, aValue ) )
+    if ( getProperty( aGroup, TARGET_DIR_URL, aValue ) )
         aValue >>= aTargetURL;
 
     if ( aTargetURL.isEmpty() )
@@ -1927,7 +1902,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     }
 
     // Get the content type
-    OUString aTitle, aType, aTargetURL2;
+    OUString aTitle, aType;
 
     bool bDocHasTitle = false;
     if( !getTitleFromURL( rSourceURL, aTitle, aType, bDocHasTitle ) )
@@ -1948,7 +1923,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
                       INetURLObject::EncodeMechanism::All );
         aTargetObj.setExtension( aSourceObj.getExtension() );
 
-        aTargetURL2 = aTargetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        const OUString aTargetURL2 = aTargetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         if ( aTargetURL2 == rSourceURL )
             return addEntry( aGroup, rTemplateName, aTargetURL2, aType );
@@ -1958,11 +1933,11 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 
     INetURLObject aTmpURL( aSourceObj );
     aTmpURL.CutExtension();
-    OUString aPattern = aTmpURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
+    const OUString aPattern {aTmpURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset )};
 
-    OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aTargetURL, aPattern, aSourceObj.getExtension() );
+    const OUString aNewTemplateTargetURL {CreateNewUniqueFileWithPrefix( aTargetURL, aPattern, aSourceObj.getExtension() )};
     INetURLObject aNewTemplateTargetObj( aNewTemplateTargetURL );
-    OUString aNewTemplateTargetName = aNewTemplateTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
+    const OUString aNewTemplateTargetName {aNewTemplateTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset )};
     if ( aNewTemplateTargetURL.isEmpty() || aNewTemplateTargetName.isEmpty() )
         return false;
 
@@ -1990,7 +1965,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         Content aResultContent;
         if ( Content::create( aNewTemplateTargetURL, xEnv, comphelper::getProcessComponentContext(), aResultContent ) )
         {
-            OUString aPropertyName( "IsReadOnly"  );
+            const OUString aPropertyName( "IsReadOnly" );
             uno::Any aProperty;
             bool bReadOnly = false;
             if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )
@@ -2062,13 +2037,12 @@ bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
     // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate;
-    OUString        aGroupURL, aTemplateURL;
     INetURLObject   aGroupObj( maRootURL );
 
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aGroupURL {aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
         return false;
@@ -2078,17 +2052,16 @@ bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rTemplateName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aTemplateURL {aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     if ( !Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return false;
 
     // get the target URL from the template
     OUString    aTargetURL;
-    OUString    aPropName( TARGET_URL  );
     Any         aValue;
 
-    if ( getProperty( aTemplate, aPropName, aValue ) )
+    if ( getProperty( aTemplate, TARGET_URL, aValue ) )
         aValue >>= aTargetURL;
 
     // delete the target template
@@ -2114,13 +2087,12 @@ bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     // Check, whether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate;
-    OUString        aGroupURL, aTemplateURL;
     INetURLObject   aGroupObj( maRootURL );
 
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aGroupURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aGroupURL {aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     if ( ! Content::create( aGroupURL, maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
         return false;
@@ -2130,7 +2102,7 @@ bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
     aGroupObj.insertName( rNewName, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    OUString aTemplateURL {aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     if ( Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return false;
@@ -2147,21 +2119,19 @@ bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
         return false;
 
     OUString    aTemplateTargetURL;
-    OUString    aTargetProp( TARGET_URL  );
     Any         aTargetValue;
 
-    if ( getProperty( aTemplate, aTargetProp, aTargetValue ) )
+    if ( getProperty( aTemplate, TARGET_URL, aTargetValue ) )
         aTargetValue >>= aTemplateTargetURL;
 
     if ( !setTitleForURL( aTemplateTargetURL, rNewName ) )
         return false;
 
     // rename the template entry in the cache
-    OUString    aTitleProp( TITLE  );
     Any         aTitleValue;
     aTitleValue <<= rNewName;
 
-    return setProperty( aTemplate, aTitleProp, aTitleValue );
+    return setProperty( aTemplate, TITLE, aTitleValue );
 }
 
 
@@ -2406,10 +2376,10 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                 bool             bUpdateType = false;
                 DocTemplates_EntryData_Impl  *pData;
 
-                OUString aTitle( xRow->getString( 1 ) );
-                OUString aTargetDir( xRow->getString( 2 ) );
+                const OUString aTitle( xRow->getString( 1 ) );
+                const OUString aTargetDir( xRow->getString( 2 ) );
                 OUString aType( xRow->getString( 3 ) );
-                OUString aHierURL = xContentAccess->queryContentIdentifierString();
+                const OUString aHierURL {xContentAccess->queryContentIdentifierString()};
 
                 if ( aType.isEmpty() )
                 {
@@ -2506,7 +2476,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
             while ( xResultSet->next() )
             {
                 OUString aChildTitle( xRow->getString( 1 ) );
-                OUString aTargetURL = xContentAccess->queryContentIdentifierString();
+                const OUString aTargetURL {xContentAccess->queryContentIdentifierString()};
                 OUString aType;
                 OUString aHierURL;
 
@@ -2530,12 +2500,12 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
                                                bool bHierarchy,
                                                bool bWriteableContent )
 {
-    OUString aTargetURL = rContent.get()->getIdentifier()->getContentIdentifier();
+    const OUString aTargetURL {rContent.get()->getIdentifier()->getContentIdentifier()};
 
     // when scanning the file system, we have to add the 'standard' group, too
     if ( ! bHierarchy )
     {
-        OUString aUIStdTitle = getLongName( STANDARD_FOLDER );
+        const OUString aUIStdTitle {getLongName( STANDARD_FOLDER )};
         addFsysGroup( rList, OUString(), aUIStdTitle, aTargetURL, bWriteableContent );
     }
 
@@ -2567,8 +2537,8 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
             while ( xResultSet->next() )
             {
                 // TODO/LATER: clarify the encoding of the Title
-                OUString aTitle( xRow->getString( 1 ) );
-                OUString aTargetSubfolderURL( xContentAccess->queryContentIdentifierString() );
+                const OUString aTitle( xRow->getString( 1 ) );
+                const OUString aTargetSubfolderURL( xContentAccess->queryContentIdentifierString() );
 
                 if ( bHierarchy )
                     addHierGroup( rList, aTitle, aTargetSubfolderURL );
@@ -2618,7 +2588,7 @@ void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
 
-    OUString aTemplateURL = aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aTemplateURL {aGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     if ( Content::create( aTemplateURL, maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return;
@@ -2636,25 +2606,20 @@ void SfxDocTplService_Impl::updateData( DocTemplates_EntryData_Impl *pData )
     if ( ! Content::create( pData->getHierarchyURL(), maCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
         return;
 
-    OUString aPropName;
-
     if ( pData->getUpdateType() )
     {
-        aPropName =  PROPERTY_TYPE;
-        setProperty( aTemplate, aPropName, makeAny( pData->getType() ) );
+        setProperty( aTemplate, PROPERTY_TYPE, makeAny( pData->getType() ) );
     }
 
     if ( pData->getUpdateLink() )
     {
-        aPropName = TARGET_URL;
-        setProperty( aTemplate, aPropName, makeAny( pData->getTargetURL() ) );
+        setProperty( aTemplate, TARGET_URL, makeAny( pData->getTargetURL() ) );
     }
 }
 
 
 void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
 {
-    OUString aAdditionalProp( TARGET_DIR_URL  );
     Content aGroup;
 
     INetURLObject aNewGroupObj( maRootURL );
@@ -2662,11 +2627,11 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
           INetURLObject::LAST_SEGMENT,
           INetURLObject::EncodeMechanism::All );
 
-    OUString aNewGroupURL = aNewGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aNewGroupURL {aNewGroupObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )};
 
     if ( createFolder( aNewGroupURL, false, false, aGroup ) )
     {
-        setProperty( aGroup, aAdditionalProp, makeAny( pGroup->getTargetURL() ) );
+        setProperty( aGroup, TARGET_DIR_URL, makeAny( pGroup->getTargetURL() ) );
         pGroup->setHierarchyURL( aNewGroupURL );
 
         sal_uIntPtr nCount = pGroup->count();
