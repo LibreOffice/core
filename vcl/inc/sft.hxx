@@ -48,6 +48,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
+#include <i18nlangtag/lang.h>
 
 #include <vector>
 #include <cstdint>
@@ -147,7 +148,7 @@ namespace vcl
     typedef struct {
         sal_uInt16 platformID;                  /**< Platform ID                                            */
         sal_uInt16 encodingID;                  /**< Platform-specific encoding ID                          */
-        sal_uInt16 languageID;                  /**< Language ID                                            */
+        LanguageType languageID;                /**< Language ID                                            */
         sal_uInt16 nameID;                      /**< Name ID                                                */
         sal_uInt16 slen;                        /**< String length in bytes                                 */
         sal_uInt8  *sptr;                        /**< Pointer to string data (not zero-terminated!)          */

@@ -1318,7 +1318,7 @@ bool SwFieldMgr::InsertField(
 
     //the auto language flag has to be set prior to the language!
     pField->SetAutomaticLanguage(rData.m_bIsAutomaticLanguage);
-    sal_uInt16 nLang = GetCurrLanguage();
+    LanguageType nLang = GetCurrLanguage();
     pField->SetLanguage(nLang);
 
     // insert
@@ -1544,7 +1544,7 @@ void SwFieldMgr::EvalExpFields(SwWrtShell* pSh)
         pSh->EndAllAction();
     }
 }
-sal_uInt16 SwFieldMgr::GetCurrLanguage() const
+LanguageType SwFieldMgr::GetCurrLanguage() const
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     if( pSh )

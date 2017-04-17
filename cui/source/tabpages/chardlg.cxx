@@ -825,7 +825,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         case SfxItemState::SET:
         {
             const SvxLanguageItem& rItem = static_cast<const SvxLanguageItem&>(rSet.Get( nWhich ));
-            LanguageType eLangType = (LanguageType)rItem.GetValue();
+            LanguageType eLangType = rItem.GetValue();
             DBG_ASSERT( eLangType != LANGUAGE_SYSTEM, "LANGUAGE_SYSTEM not allowed" );
             if ( eLangType != LANGUAGE_DONTKNOW )
                 pLangBox->SelectLanguage( eLangType );
@@ -1130,13 +1130,13 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     sal_Int32 nLangPos = pLangBox->GetSelectEntryPosLBB();
-    LanguageType eLangType = (LanguageType)reinterpret_cast<sal_uLong>(pLangBox->GetEntryDataLBB( nLangPos ));
+    LanguageType eLangType = LanguageType(reinterpret_cast<sal_uLong>(pLangBox->GetEntryDataLBB( nLangPos )));
 
     if ( pOld )
     {
         const SvxLanguageItem& rItem = *static_cast<const SvxLanguageItem*>(pOld);
 
-        if ( nLangPos == LISTBOX_ENTRY_NOTFOUND || eLangType == (LanguageType)rItem.GetValue() )
+        if ( nLangPos == LISTBOX_ENTRY_NOTFOUND || eLangType == rItem.GetValue() )
             bChanged = false;
     }
 

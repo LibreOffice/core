@@ -377,7 +377,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     rIStm.ReadUInt16( nTmp16 ); rImplFont.meUnderline = (FontLineStyle) nTmp16;
     rIStm.ReadUInt16( nTmp16 ); rImplFont.meStrikeout = (FontStrikeout) nTmp16;
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetItalic( (FontItalic) nTmp16 );
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.maLanguageTag.reset( (LanguageType) nTmp16);
+    rIStm.ReadUInt16( nTmp16 ); rImplFont.maLanguageTag.reset( LanguageType(nTmp16) );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.meWidthType = (FontWidth) nTmp16;
 
     rIStm.ReadInt16( rImplFont.mnOrientation );
@@ -390,7 +390,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     if( aCompat.GetVersion() >= 2 )
     {
         rIStm.ReadUChar( nTmp8 );     rImplFont.meRelief = (FontRelief)nTmp8;
-        rIStm.ReadUInt16( nTmp16 );   rImplFont.maCJKLanguageTag.reset( (LanguageType)nTmp16);
+        rIStm.ReadUInt16( nTmp16 );   rImplFont.maCJKLanguageTag.reset( LanguageType(nTmp16) );
         rIStm.ReadCharAsBool( bTmp ); rImplFont.mbVertical = bTmp;
         rIStm.ReadUInt16( nTmp16 );   rImplFont.meEmphasisMark = (FontEmphasisMark)nTmp16;
     }
@@ -420,7 +420,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     rOStm.WriteUInt16( rImplFont.meUnderline );
     rOStm.WriteUInt16( rImplFont.meStrikeout );
     rOStm.WriteUInt16( rImplFont.GetItalicNoAsk() );
-    rOStm.WriteUInt16( rImplFont.maLanguageTag.getLanguageType( false) );
+    rOStm.WriteUInt16( (sal_uInt16)rImplFont.maLanguageTag.getLanguageType( false) );
     rOStm.WriteUInt16( rImplFont.GetWidthTypeNoAsk() );
 
     rOStm.WriteInt16( rImplFont.mnOrientation );
@@ -432,7 +432,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
 
     // new in version 2
     rOStm.WriteUChar( (sal_uChar)rImplFont.meRelief );
-    rOStm.WriteUInt16( rImplFont.maCJKLanguageTag.getLanguageType( false) );
+    rOStm.WriteUInt16( (sal_uInt16)rImplFont.maCJKLanguageTag.getLanguageType( false) );
     rOStm.WriteBool( rImplFont.mbVertical );
     rOStm.WriteUInt16( (sal_uInt16)rImplFont.meEmphasisMark );
 

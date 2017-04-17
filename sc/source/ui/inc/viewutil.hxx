@@ -21,6 +21,7 @@
 
 #include "address.hxx"
 #include <sal/types.h>
+#include <i18nlangtag/lang.h>
 
 class SfxItemSet;
 class SfxBindings;
@@ -54,7 +55,7 @@ public:
     static void PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
                                 sal_uInt16 nWhichId, SvtScriptType nScript );
 
-    static sal_uInt16 GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
+    static LanguageType GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
 
     static TransliterationFlags GetTransliterationType( sal_uInt16 nSlotID );
 

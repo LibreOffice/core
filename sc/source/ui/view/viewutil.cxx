@@ -69,7 +69,7 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
         rShellSet.InvalidateItem( nWhichId );
 }
 
-sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
+LanguageType ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
 {
     //  used for thesaurus
 
@@ -81,7 +81,7 @@ sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     LanguageType eLnge;
     if (pLangIt)
     {
-        eLnge = (LanguageType) pLangIt->GetValue();
+        eLnge = pLangIt->GetValue();
         if (eLnge == LANGUAGE_DONTKNOW)                 //! can this happen?
         {
             LanguageType eLatin, eCjk, eCtl;

@@ -83,10 +83,10 @@ public:
 
     static sal_Int16    CheckSpellLang(
                             css::uno::Reference< css::linguistic2::XSpellChecker1 > const & xSpell,
-                            sal_Int16 nLang );
+                            LanguageType nLang );
     static sal_Int16    CheckHyphLang(
                             css::uno::Reference< css::linguistic2::XHyphenator >const & xHyph,
-                            sal_Int16 nLang );
+                            LanguageType nLang );
 
     static void         ShowLanguageErrors();
 

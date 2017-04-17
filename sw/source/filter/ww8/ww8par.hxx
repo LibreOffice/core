@@ -1391,7 +1391,7 @@ private:
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCpOfs);
     bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd, long nCpOfs);
-    static bool LangUsesHindiNumbers(sal_uInt16 nLang);
+    static bool LangUsesHindiNumbers(LanguageType nLang);
     static sal_Unicode TranslateToHindiNumbers(sal_Unicode);
 
     void SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &rSection);
@@ -1805,9 +1805,9 @@ public:     // really private, but can only be done public
     eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr );
     eF_ResT Read_F_Author( WW8FieldDesc*, OUString& );
     eF_ResT Read_F_TemplName( WW8FieldDesc*, OUString& );
-    short GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat, sal_uInt16 &rLang,
+    short GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat, LanguageType &rLang,
         int nWhichDefault, bool bHijri = false);
-    bool ForceFieldLanguage(SwField &rField, sal_uInt16 nLang);
+    bool ForceFieldLanguage(SwField &rField, LanguageType nLang);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, OUString& rStr );
     eF_ResT Read_F_FileName( WW8FieldDesc*, OUString& rStr);
     eF_ResT Read_F_Num( WW8FieldDesc* pF, OUString& );

@@ -215,7 +215,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        LanguageTag aTag((LanguageType)nParam);
+        LanguageTag aTag((LanguageType(nParam)));
         auto pValue = std::make_shared<RTFValue>(aTag.getBcp47());
         putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_lang, nSprm, pValue);
         // Language is a character property, but we should store it at a paragraph level as well for fields.
@@ -473,7 +473,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_DEFLANG:
     case RTF_ADEFLANG:
     {
-        LanguageTag aTag((LanguageType)nParam);
+        LanguageTag aTag((LanguageType(nParam)));
         auto pValue = std::make_shared<RTFValue>(aTag.getBcp47());
         putNestedAttribute(m_aStates.top().aCharacterSprms, (nKeyword == RTF_DEFLANG ? NS_ooxml::LN_EG_RPrBase_lang : NS_ooxml::LN_CT_Language_bidi), nSprm, pValue);
     }

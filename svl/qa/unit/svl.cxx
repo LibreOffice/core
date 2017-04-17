@@ -405,7 +405,7 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
         aMessage += "\", ";
         aMessage += rtl::OString::number( fPreviewNumber );
         aMessage += ", sStr, ppColor, ";
-        aMessage += rtl::OString::number( eLang );
+        aMessage += rtl::OString::number( (sal_uInt16)eLang );
         aMessage += " ) failed";
         CPPUNIT_FAIL( aMessage.getStr() );
     }

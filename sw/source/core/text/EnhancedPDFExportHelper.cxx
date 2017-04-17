@@ -87,7 +87,7 @@ NumListIdMap SwEnhancedPDFExportHelper::aNumListIdMap;
 NumListBodyIdMap SwEnhancedPDFExportHelper::aNumListBodyIdMap;
 FrameTagIdMap SwEnhancedPDFExportHelper::aFrameTagIdMap;
 
-LanguageType SwEnhancedPDFExportHelper::eLanguageDefault = 0;
+LanguageType SwEnhancedPDFExportHelper::eLanguageDefault = LANGUAGE_SYSTEM;
 
 #if OSL_DEBUG_LEVEL > 1
 
@@ -802,7 +802,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
 
             if ( nDefaultLang != nCurrentLanguage )
-                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Language, nCurrentLanguage );
+                mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Language, (sal_uInt16)nCurrentLanguage );
         }
 
         if ( bLinkAttribute )

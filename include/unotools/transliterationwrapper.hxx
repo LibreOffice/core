@@ -46,7 +46,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
     TransliterationWrapper& operator=( const TransliterationWrapper& ) = delete;
 
     void loadModuleImpl() const;
-    void setLanguageLocaleImpl( sal_uInt16 nLang );
+    void setLanguageLocaleImpl( LanguageType nLang );
 
 public:
     TransliterationWrapper( const css::uno::Reference< css::uno::XComponentContext > & rxContext,
@@ -60,7 +60,7 @@ public:
 
     /** set a new language and load the corresponding transliteration module if
         needed for the mode set with nType in the ctor */
-    void loadModuleIfNeeded( sal_uInt16 nLang );
+    void loadModuleIfNeeded( LanguageType nLang );
 
     /** Load the transliteration module specified by rModuleName, which has to
         be the UNO service implementation name that is expanded to the full UNO
@@ -74,7 +74,7 @@ public:
         those may load a different module and overwrite this setting. Only the
         transliterate() method that takes no LanguageType parameter may be used
         for a specific module loaded with this method.  */
-    void loadModuleByImplName( const OUString& rModuleName, sal_uInt16 nLang );
+    void loadModuleByImplName( const OUString& rModuleName, LanguageType nLang );
 
     /** This transliteration method corresponds with the loadModuleByImplName()
         method. It relies on a module being loaded and does not try load one.
@@ -84,7 +84,7 @@ public:
                         sal_Int32 nStart, sal_Int32 nLen ) const;
 
     // Wrapper implementations of class Transliteration
-    OUString transliterate( const OUString& rStr, sal_uInt16 nLanguage,
+    OUString transliterate( const OUString& rStr, LanguageType nLanguage,
                         sal_Int32 nStart, sal_Int32 nLen,
                         css::uno::Sequence <sal_Int32>* pOffset );
 
