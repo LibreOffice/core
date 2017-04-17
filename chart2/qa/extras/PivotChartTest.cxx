@@ -22,6 +22,8 @@
 #include <com/sun/star/table/XTablePivotChartsSupplier.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
+#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
@@ -36,12 +38,14 @@ public:
     void testChangePivotTable();
     void testPivotChartWithOneColumnField();
     void testPivotChartWithOneRowField();
+    void testPivotTableDataProvider_PivotTableFields();
 
     CPPUNIT_TEST_SUITE(PivotChartTest);
     CPPUNIT_TEST(testRoundtrip);
     CPPUNIT_TEST(testChangePivotTable);
     CPPUNIT_TEST(testPivotChartWithOneColumnField);
     CPPUNIT_TEST(testPivotChartWithOneRowField);
+    CPPUNIT_TEST(testPivotTableDataProvider_PivotTableFields);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -52,11 +56,11 @@ void lclModifyOrientation(uno::Reference<sheet::XDataPilotDescriptor> const & xD
                           OUString const & sFieldName,
                           sheet::DataPilotFieldOrientation eOrientation)
 {
-    uno::Reference<container::XIndexAccess> xPilotIndexAccess(xDescriptor->getDataPilotFields(), UNO_QUERY_THROW);
-    sal_Int32 nCount = xPilotIndexAccess->getCount();
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDescriptor->getDataPilotFields(), UNO_QUERY_THROW);
+    sal_Int32 nCount = xIndexAccess->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        uno::Reference<container::XNamed> xNamed(xPilotIndexAccess->getByIndex(i), UNO_QUERY_THROW);
+        uno::Reference<container::XNamed> xNamed(xIndexAccess->getByIndex(i), UNO_QUERY_THROW);
         OUString aName = xNamed->getName();
         uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
         if (aName == sFieldName)
@@ -78,6 +82,18 @@ void lclModifyFunction(uno::Reference<sheet::XDataPilotDescriptor> const & xDesc
         if (aName == sFieldName)
             xPropSet->setPropertyValue("Function", uno::makeAny(eFunction));
     }
+}
+
+void lclModifyColumnGrandTotal(uno::Reference<sheet::XDataPilotDescriptor> const & xDataPilotDescriptor, bool bTotal)
+{
+        uno::Reference<beans::XPropertySet> xProperties(xDataPilotDescriptor, uno::UNO_QUERY_THROW);
+        xProperties->setPropertyValue("ColumnGrand", uno::makeAny(bTotal));
+}
+
+void lclModifyRowGrandTotal(uno::Reference<sheet::XDataPilotDescriptor> const & xDataPilotDescriptor, bool bTotal)
+{
+        uno::Reference<beans::XPropertySet> xProperties(xDataPilotDescriptor, uno::UNO_QUERY_THROW);
+        xProperties->setPropertyValue("RowGrand", uno::makeAny(bTotal));
 }
 
 void lclCheckSequence(std::vector<double> const & reference,
@@ -399,7 +415,6 @@ void PivotChartTest::testChangePivotTable()
 
     // Enable column totals and check the data is still unchanged
     {
-        uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xProperties(xDataPilotTable, uno::UNO_QUERY_THROW);
         xProperties->setPropertyValue("ColumnGrand", uno::makeAny(true));
     }
@@ -582,6 +597,117 @@ void PivotChartTest::testPivotChartWithOneRowField()
 
         CPPUNIT_ASSERT_EQUAL(aExpectedLabel, lclGetLabel(xChartDoc, 0));
     }
+}
+
+void PivotChartTest::testPivotTableDataProvider_PivotTableFields()
+{
+    // SETUP DATA and PIVOT TABLE
+
+    if (!mxComponent.is())
+        mxComponent = loadFromDesktop("private:factory/scalc");
+
+    uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
+
+    sal_Int32 nSheetIndex = 0;
+    OUString sPivotTableName("DataPilotTable");
+
+    table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
+
+    uno::Reference<sheet::XDataPilotTables> xDataPilotTables;
+    xDataPilotTables = lclGetDataPilotTables(nSheetIndex, xSheetDoc);
+
+    uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor;
+    xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
+    xDataPilotDescriptor->setSourceRange(sCellRangeAdress);
+
+    lclModifyOrientation(xDataPilotDescriptor, "City", sheet::DataPilotFieldOrientation_ROW);
+    lclModifyOrientation(xDataPilotDescriptor, "Country", sheet::DataPilotFieldOrientation_COLUMN);
+    lclModifyOrientation(xDataPilotDescriptor, "Type", sheet::DataPilotFieldOrientation_COLUMN);
+    lclModifyOrientation(xDataPilotDescriptor, "Sales T1", sheet::DataPilotFieldOrientation_DATA);
+    lclModifyFunction(xDataPilotDescriptor, "Sales T1", sheet::GeneralFunction_SUM);
+    lclModifyOrientation(xDataPilotDescriptor, "Sales T2", sheet::DataPilotFieldOrientation_DATA);
+    lclModifyFunction(xDataPilotDescriptor, "Sales T2", sheet::GeneralFunction_SUM);
+
+    lclModifyColumnGrandTotal(xDataPilotDescriptor, true);
+    lclModifyRowGrandTotal(xDataPilotDescriptor, true);
+
+    xDataPilotTables->insertNewByName(sPivotTableName, table::CellAddress{1, 0, 0}, xDataPilotDescriptor);
+
+    // TEST
+    Reference<chart2::XChartDocument> xChartDoc;
+
+    // Check we have the Pivot Table
+    uno::Reference<sheet::XDataPilotTable> xDataPilotTable = lclGetPivotTableByName(1, sPivotTableName, mxComponent);
+    CPPUNIT_ASSERT(xDataPilotTable.is());
+
+    // refetch the XDataPilotDescriptor
+    xDataPilotDescriptor.set(xDataPilotTable, uno::UNO_QUERY_THROW);
+
+    // Check that we don't have any pivot chart in the document
+    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(1, mxComponent);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTablePivotCharts, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    // Create a new pivot chart
+    xTablePivotCharts->addNewByName("PivotChart", awt::Rectangle{ 9000, 9000, 21000, 18000 }, sPivotTableName);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    // Get the pivot chart document so we can access its data
+    xChartDoc.set(getPivotChartDocFromSheet(xTablePivotCharts, 0));
+
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xChartDoc->getDataProvider(), UNO_QUERY_THROW);
+    uno::Sequence<chart2::data::PivotTableFieldEntry> aFieldEntries;
+
+    aFieldEntries = xPivotTableDataProvider->getColumnFields();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("Country"), aFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(OUString("Type"), aFieldEntries[1].Name);
+
+    aFieldEntries = xPivotTableDataProvider->getRowFields();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("City"), aFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(OUString("Data"), aFieldEntries[1].Name);
+
+    aFieldEntries = xPivotTableDataProvider->getDataFields();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("Sum - Sales T1"), aFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sum - Sales T2"), aFieldEntries[1].Name);
+
+    // Data to column fields
+    lclModifyOrientation(xDataPilotDescriptor, "Data", sheet::DataPilotFieldOrientation_COLUMN);
+
+    // Change the order of column fields: expected data, type, country
+    lclModifyOrientation(xDataPilotDescriptor, "Country", sheet::DataPilotFieldOrientation_HIDDEN);
+    lclModifyOrientation(xDataPilotDescriptor, "Type", sheet::DataPilotFieldOrientation_HIDDEN);
+
+    lclModifyOrientation(xDataPilotDescriptor, "Type", sheet::DataPilotFieldOrientation_COLUMN);
+    lclModifyOrientation(xDataPilotDescriptor, "Country", sheet::DataPilotFieldOrientation_COLUMN);
+
+    // set the XPivotTableDataProvider again as the old one was exchanged
+    xPivotTableDataProvider.set(xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW);
+
+    aFieldEntries = xPivotTableDataProvider->getColumnFields();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aFieldEntries.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("Data"), aFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(OUString("Type"), aFieldEntries[1].Name);
+    CPPUNIT_ASSERT_EQUAL(OUString("Country"), aFieldEntries[2].Name);
+
+    aFieldEntries = xPivotTableDataProvider->getRowFields();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aFieldEntries.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("City"), aFieldEntries[0].Name);
+
+    aFieldEntries = xPivotTableDataProvider->getDataFields();
+
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
+    //CPPUNIT_ASSERT_EQUAL(OUString("Sum - Sales T1"), aFieldEntries[0].Name);
+    //CPPUNIT_ASSERT_EQUAL(OUString("Sum - Sales T2"), aFieldEntries[1].Name);
 }
 
 
