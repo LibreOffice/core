@@ -1629,8 +1629,8 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
 
     // check that the group can be renamed ( all the contents must be in target location )
     bool bCanBeRenamed = false;
-       try
-       {
+    try
+    {
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps { TARGET_URL };
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
@@ -1638,11 +1638,11 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
 
         if ( xResultSet.is() )
         {
-               uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
-               uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
+            uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
+            uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
 
-               while ( xResultSet->next() )
-               {
+            while ( xResultSet->next() )
+            {
                 if ( !::utl::UCBContentHelper::IsSubPath( aGroupTargetURL, xRow->getString( 1 ) ) )
                     throw uno::Exception();
             }
