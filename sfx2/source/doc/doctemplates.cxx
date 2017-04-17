@@ -1294,7 +1294,8 @@ void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aU
 
     aNewUINames.resize( nNewLen );
 
-    !bChanged || WriteUINamesForTemplateDir_Impl( aUserPath, aNewUINames );
+    if (bChanged)
+        WriteUINamesForTemplateDir_Impl( aUserPath, aNewUINames );
 }
 
 
