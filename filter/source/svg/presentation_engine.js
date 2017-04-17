@@ -4960,7 +4960,7 @@ aClockDirectionOutMap = [ 'clockwise', 'counter-clockwise' ];
 
 
 // Attribute Value Types
-UNKNOWN_PROPERTY        = 0;
+UNKNOWN_PROPERTY        = 0; // TODO
 NUMBER_PROPERTY         = 1;
 ENUM_PROPERTY           = 2;
 COLOR_PROPERTY          = 3;
@@ -5036,8 +5036,6 @@ var aAttributeMap =
 TRANSITION_INVALID              = 0;    // Invalid type
 TRANSITION_CLIP_POLYPOLYGON     = 1;    // Transition expressed by parametric clip polygon
 TRANSITION_SPECIAL              = 2;    // Transition expressed by hand-crafted function
-
-aTransitionClassOutMap = ['invalid', 'clip polypolygon', 'special'];
 
 /*
  * All Transition types should be in sync with aTransitionTypeInMap:
@@ -5284,7 +5282,6 @@ aTransitionSubtypeInMap = {
 TRANSITION_MODE_IN  = 1;
 TRANSITION_MODE_OUT = 0;
 
-aTransitionModeInMap = { 'out': TRANSITION_MODE_OUT, 'in': TRANSITION_MODE_IN };
 aTransitionModeOutMap = [ 'out', 'in' ];
 
 
@@ -5306,9 +5303,6 @@ REVERSEMETHOD_ROTATE_180                = 4;
 REVERSEMETHOD_FLIP_X                    = 5;
 // Reverse by flipping polygon at the x axis.
 REVERSEMETHOD_FLIP_Y                    = 6;
-
-aReverseMethodOutMap = ['ignore', 'invert sweep', 'subtract polygon',
-                        'subtract and invert', 'rotate 180', 'flip x', 'flip y'];
 
 
 // Transition filter info table
@@ -10518,7 +10512,7 @@ SnakeWipePath.prototype.calcSnake = function(t)
 }
 
 SnakeWipePath.prototype.calcHalfDiagonalSnake = function(nT, bIn) {
-    var res = createEmptyPath(), aTransform;
+    var res = createEmptyPath();
 
     if(bIn) {
         const sqrtArea2 = Math.sqrt(nT * this.sqrtElements * this.sqrtElements);
@@ -14756,7 +14750,7 @@ function extractAttributeValues( eValueType, aValueList, aValueSet, aBBox, nSlid
 }
 
 
-function evalValuesAttribute( aValueList, aValueSet, aBBox, nSlideWidth, nSlideHeight )
+function evalValuesAttribute( aValueList, aValueSet )
 {
     var reMath = /abs|sqrt|asin|acos|atan|sin|cos|tan|exp|log|min|max/g;
 
