@@ -151,7 +151,7 @@ sal_uInt32 LoadOlePropertySet(
         for( ::std::vector< sal_Int32 >::const_iterator aIt = aPropIds.begin(),
              aEnd = aPropIds.end(); aIt != aEnd; ++aIt )
         {
-            OUString aPropName = xCustomSect->GetPropertyName( *aIt );
+            const OUString aPropName = xCustomSect->GetPropertyName( *aIt );
             uno::Any aPropValue = xCustomSect->GetAnyValue( *aIt );
             if( !aPropName.isEmpty() && aPropValue.hasValue() )
             {
@@ -209,7 +209,7 @@ bool SaveOlePropertySet(
     SfxOleSection& rGlobSect = aGlobSet.AddSection( SECTION_GLOBAL );
     rGlobSect.SetStringValue( PROPID_TITLE,    i_xDocProps->getTitle() );
     rGlobSect.SetStringValue( PROPID_SUBJECT,  i_xDocProps->getSubject() );
-    OUString aStr = ::comphelper::string::convertCommaSeparated(
+    const OUString aStr = ::comphelper::string::convertCommaSeparated(
         i_xDocProps->getKeywords() );
     rGlobSect.SetStringValue( PROPID_KEYWORDS, aStr );
     rGlobSect.SetStringValue( PROPID_TEMPLATE, i_xDocProps->getTemplateName() );

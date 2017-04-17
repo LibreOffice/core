@@ -198,12 +198,10 @@ namespace sfx2
 
         try
         {
-            OUString sReferrer( m_xData->m_rDocumentAccess.getDocumentLocation() );
-
             // get document location from medium name and check whether it is a trusted one
             // the service is created ohne document version, since it is not of interest here
             Reference< XDocumentDigitalSignatures > xSignatures(DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
-            INetURLObject aURLReferer( sReferrer );
+            INetURLObject aURLReferer( m_xData->m_rDocumentAccess.getDocumentLocation() );
 
             OUString aLocation;
             if ( aURLReferer.removeSegment() )
@@ -308,15 +306,15 @@ namespace sfx2
                     bHasMacroLib = false;
                 else
                 {
-                    OUString aStdLibName( "Standard" );
-                    OUString aVBAProject( "VBAProject" );
+                    const OUString aStdLibName( "Standard" );
+                    const OUString aVBAProject( "VBAProject" );
                     Sequence< OUString > aElements = xContainer->getElementNames();
                     if ( aElements.getLength() )
                     {
                         sal_Int32 nElements = aElements.getLength();
                         for( sal_Int32 i = 0; i < nElements; ++i )
                         {
-                            OUString aElement = aElements[i];
+                            const OUString aElement = aElements[i];
                             if( aElement == aStdLibName || aElement == aVBAProject )
                             {
                                 Reference < XNameAccess > xLib;
