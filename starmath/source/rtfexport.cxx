@@ -179,7 +179,7 @@ namespace
 {
 OString mathSymbolToString(const SmNode* node, rtl_TextEncoding nEncoding)
 {
-    assert(node->GetType() == NMATH || node->GetType() == NMATHIDENT);
+    assert(node->GetType() == SmNodeType::Math || node->GetType() == SmNodeType::MathIdent);
     auto txtnode = static_cast<const SmTextNode*>(node);
     if (txtnode->GetText().isEmpty())
         return OString();
@@ -206,7 +206,7 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
     case TCOPROD:
     case TSUM:
     {
-        const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : nullptr;
+        const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == SmNodeType::SubSup ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : nullptr;
         const SmNode* operation = subsup ? subsup->GetBody() : pNode->GetSubNode(0);
         m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNARY " ");
         m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNARYPR " ");
@@ -248,7 +248,7 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
         HandleNode(pNode->GetSymbol(), nLevel + 1);
         m_pBuffer->append("}"); // me
         m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIM " ");
-        if (const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : nullptr)
+        if (const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == SmNodeType::SubSup ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : nullptr)
             if (subsup->GetSubSup(CSUB))
                 HandleNode(subsup->GetSubSup(CSUB), nLevel + 1);
         m_pBuffer->append("}"); // mlim
@@ -403,14 +403,14 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
     m_pBuffer->append(mathSymbolToString(pNode->OpeningBrace(), m_nEncoding));
     m_pBuffer->append("}"); // mbegChr
     std::vector< const SmNode* > subnodes;
-    if (pNode->Body()->GetType() == NBRACEBODY)
+    if (pNode->Body()->GetType() == SmNodeType::Bracebody)
     {
         auto body = static_cast<const SmBracebodyNode*>(pNode->Body());
         bool separatorWritten = false; // assume all separators are the same
         for (int i = 0; i < body->GetNumSubNodes(); ++i)
         {
             const SmNode* subnode = body->GetSubNode(i);
-            if (subnode->GetType() == NMATH || subnode->GetType() == NMATHIDENT)
+            if (subnode->GetType() == SmNodeType::Math || subnode->GetType() == SmNodeType::MathIdent)
             {
                 // do not write, but write what separator it is
                 auto math = static_cast<const SmMathSymbolNode*>(subnode);

@@ -22,34 +22,34 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
     SAL_INFO("starmath.wordbase", "Node: " << nLevel << " " << int(pNode->GetType()) << " " << pNode->GetNumSubNodes());
     switch (pNode->GetType())
     {
-    case NATTRIBUT:
+    case SmNodeType::Attribut:
         HandleAttribute(static_cast< const SmAttributNode* >(pNode), nLevel);
         break;
-    case NTEXT:
+    case SmNodeType::Text:
         HandleText(pNode,nLevel);
         break;
-    case NVERTICAL_BRACE:
+    case SmNodeType::VerticalBrace:
         HandleVerticalBrace(static_cast< const SmVerticalBraceNode* >(pNode), nLevel);
         break;
-    case NBRACE:
+    case SmNodeType::Brace:
         HandleBrace(static_cast< const SmBraceNode* >(pNode), nLevel);
         break;
-    case NOPER:
+    case SmNodeType::Oper:
         HandleOperator(static_cast< const SmOperNode* >(pNode), nLevel);
         break;
-    case NUNHOR:
+    case SmNodeType::UnHor:
         HandleUnaryOperation(static_cast< const SmUnHorNode* >(pNode), nLevel);
         break;
-    case NBINHOR:
+    case SmNodeType::BinHor:
         HandleBinaryOperation(static_cast< const SmBinHorNode* >(pNode), nLevel);
         break;
-    case NBINVER:
+    case SmNodeType::BinVer:
         HandleFractions(pNode,nLevel,nullptr);
         break;
-    case NROOT:
+    case SmNodeType::Root:
         HandleRoot(static_cast< const SmRootNode* >(pNode), nLevel);
         break;
-    case NSPECIAL:
+    case SmNodeType::Special:
     {
         auto pText= static_cast<const SmTextNode*>(pNode);
         //if the token str and the result text are the same then this
@@ -60,38 +60,38 @@ void SmWordExportBase::HandleNode(const SmNode* pNode, int nLevel)
             HandleMath(pText,nLevel);
         break;
     }
-    case NMATH:
-    case NMATHIDENT:
+    case SmNodeType::Math:
+    case SmNodeType::MathIdent:
         HandleMath(pNode,nLevel);
         break;
-    case NSUBSUP:
+    case SmNodeType::SubSup:
         HandleSubSupScript(static_cast< const SmSubSupNode* >(pNode), nLevel);
         break;
-    case NEXPRESSION:
+    case SmNodeType::Expression:
         HandleAllSubNodes(pNode, nLevel);
         break;
-    case NTABLE:
+    case SmNodeType::Table:
         //Root Node, PILE equivalent, i.e. vertical stack
         HandleTable(pNode,nLevel);
         break;
-    case NMATRIX:
+    case SmNodeType::Matrix:
         HandleMatrix(static_cast< const SmMatrixNode* >(pNode), nLevel);
         break;
-    case NLINE:
+    case SmNodeType::Line:
     {
 // TODO
         HandleAllSubNodes(pNode, nLevel);
     }
     break;
 #if 0
-    case NALIGN:
+    case SmNodeType::Align:
         HandleMAlign(pNode,nLevel);
         break;
 #endif
-    case NPLACE:
+    case SmNodeType::Place:
         // explicitly do nothing, MSOffice treats that as a placeholder if item is missing
         break;
-    case NBLANK:
+    case SmNodeType::Blank:
         HandleBlank();
         break;
     default:

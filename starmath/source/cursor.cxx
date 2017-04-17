@@ -184,7 +184,7 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
     assert(nLineOffset >= 0);
 
     //If we're in front of a node who's parent is a TABLE
-    if(pLineParent->GetType() == NTABLE && mpPosition->CaretPos.nIndex == 0 && nLineOffset > 0){
+    if(pLineParent->GetType() == SmNodeType::Table && mpPosition->CaretPos.nIndex == 0 && nLineOffset > 0){
         //Now we can merge with nLineOffset - 1
         BeginEdit();
         //Line to merge things into, so we can delete pLine
@@ -228,12 +228,12 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
         EndEdit();
 
     //TODO: If we're in an empty (sub/super/*) script
-    /*}else if(pLineParent->GetType() == NSUBSUP &&
+    /*}else if(pLineParent->GetType() == SmNodeType::SubSup &&
              nLineOffset != 0 &&
-             pLine->GetType() == NEXPRESSION &&
+             pLine->GetType() == SmNodeType::Expression &&
              pLine->GetNumSubNodes() == 0){
         //There's a (sub/super) script we can delete
-    //Consider selecting the entire script if GetNumSubNodes() != 0 or pLine->GetType() != NEXPRESSION
+    //Consider selecting the entire script if GetNumSubNodes() != 0 or pLine->GetType() != SmNodeType::Expression
     //TODO: Handle case where we delete a limit
     */
 
@@ -339,7 +339,7 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
     for(it = pLineList->begin(); it != pLineList->end(); ++it){
         if(*it == rCaretPos.pSelectedNode)
         {
-            if((*it)->GetType() == NTEXT)
+            if((*it)->GetType() == SmNodeType::Text)
             {
                 //Split textnode if needed
                 if(rCaretPos.nIndex > 0)
@@ -383,8 +383,8 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
     //Check if there's textnodes to merge
     if( prev &&
         next &&
-        prev->GetType() == NTEXT &&
-        next->GetType() == NTEXT &&
+        prev->GetType() == SmNodeType::Text &&
+        next->GetType() == SmNodeType::Text &&
         ( prev->GetToken().eType != TNUMBER ||
           next->GetToken().eType == TNUMBER) ){
         SmTextNode *pText = static_cast<SmTextNode*>(prev),
@@ -400,7 +400,7 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
     }
 
     //Check if there's a SmPlaceNode to remove:
-    if(prev && next && prev->GetType() == NPLACE && !SmNodeListParser::IsOperator(next->GetToken())){
+    if(prev && next && prev->GetType() == SmNodeType::Place && !SmNodeListParser::IsOperator(next->GetToken())){
         --aIter;
         aIter = pLineList->erase(aIter);
         delete prev;
@@ -411,7 +411,7 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
             return SmCaretPos();
         return SmCaretPos::GetPosAfter(*aIter);
     }
-    if(prev && next && next->GetType() == NPLACE && !SmNodeListParser::IsOperator(prev->GetToken())){
+    if(prev && next && next->GetType() == SmNodeType::Place && !SmNodeListParser::IsOperator(prev->GetToken())){
         aIter = pLineList->erase(aIter);
         delete next;
         return SmCaretPos::GetPosAfter(prev);
@@ -430,7 +430,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
     while(it != pLineList->end()){
         if((*it)->IsSelected()){
             //Split text nodes
-            if((*it)->GetType() == NTEXT) {
+            if((*it)->GetType() == SmNodeType::Text) {
                 SmTextNode* pText = static_cast<SmTextNode*>(*it);
                 OUString aText = pText->GetText();
                 //Start and lengths of the segments, 2 is the selected segment
@@ -533,7 +533,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
 
     //Wrap the subject in a SmSubSupNode
     SmSubSupNode* pSubSup;
-    if(pSubject->GetType() != NSUBSUP){
+    if(pSubject->GetType() != SmNodeType::SubSup){
         SmToken token;
         token.nGroup = TG::Power;
         pSubSup = new SmSubSupNode(token);
@@ -588,12 +588,12 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup) {
     //Find a subject to set limits on
     SmOperNode *pSubject = nullptr;
     //Check if pSelectedNode might be a subject
-    if(mpPosition->CaretPos.pSelectedNode->GetType() == NOPER)
+    if(mpPosition->CaretPos.pSelectedNode->GetType() == SmNodeType::Oper)
         pSubject = static_cast<SmOperNode*>(mpPosition->CaretPos.pSelectedNode);
     else {
         //If not, check if parent of the current line is a SmOperNode
         SmNode *pLineNode = FindTopMostNodeInLine(mpPosition->CaretPos.pSelectedNode);
-        if(pLineNode->GetParent() && pLineNode->GetParent()->GetType() == NOPER)
+        if(pLineNode->GetParent() && pLineNode->GetParent()->GetType() == SmNodeType::Oper)
             pSubject = static_cast<SmOperNode*>(pLineNode->GetParent());
     }
 
@@ -606,7 +606,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup) {
     //Find the sub sup node
     SmSubSupNode *pSubSup = nullptr;
     //Check if there's already one there...
-    if(pSubject->GetSubNode(0)->GetType() == NSUBSUP)
+    if(pSubject->GetSubNode(0)->GetType() == SmNodeType::SubSup)
         pSubSup = static_cast<SmSubSupNode*>(pSubject->GetSubNode(0));
     else { //if not create a new SmSubSupNode
         SmToken token;
@@ -765,18 +765,18 @@ bool SmCursor::InsertRow() {
     SmTableNode  *pTable  = nullptr;
     SmMatrixNode *pMatrix = nullptr;
     int nTableIndex = nParentIndex;
-    if(pLineParent->GetType() == NTABLE)
+    if(pLineParent->GetType() == SmNodeType::Table)
         pTable = static_cast<SmTableNode*>(pLineParent);
     //If it's wrapped in a SmLineNode, we can still insert a newline
-    else if(pLineParent->GetType() == NLINE &&
+    else if(pLineParent->GetType() == SmNodeType::Line &&
             pLineParent->GetParent() &&
-            pLineParent->GetParent()->GetType() == NTABLE) {
+            pLineParent->GetParent()->GetType() == SmNodeType::Table) {
         //NOTE: This hack might give problems if we stop ignoring SmAlignNode
         pTable = static_cast<SmTableNode*>(pLineParent->GetParent());
         nTableIndex = pTable->IndexOfSubNode(pLineParent);
         assert(nTableIndex >= 0);
     }
-    if(pLineParent->GetType() == NMATRIX)
+    if(pLineParent->GetType() == SmNodeType::Matrix)
         pMatrix = static_cast<SmMatrixNode*>(pLineParent);
 
     //If we're not in a context that supports InsertRow, return sal_False
@@ -815,7 +815,7 @@ bool SmCursor::InsertRow() {
         SmNode *pNewLine = SmNodeListParser().Parse(pNewLineList);
         delete pNewLineList;
         //Wrap pNewLine in SmLineNode if needed
-        if(pLineParent->GetType() == NLINE) {
+        if(pLineParent->GetType() == SmNodeType::Line) {
             SmLineNode *pNewLineNode = new SmLineNode(SmToken(TNEWLINE, '\0', "newline"));
             pNewLineNode->SetSubNodes(pNewLine, nullptr);
             pNewLine = pNewLineNode;
@@ -1132,7 +1132,7 @@ void SmCursor::Copy(){
         CloneLineToClipboard(static_cast<SmStructureNode*>(pLine), &aClipboard);
     else{
         //Special care to only clone selected text
-        if(pLine->GetType() == NTEXT) {
+        if(pLine->GetType() == SmNodeType::Text) {
             SmTextNode *pText = static_cast<SmTextNode*>(pLine);
             std::unique_ptr<SmTextNode> pClone(new SmTextNode( pText->GetToken(), pText->GetFontDesc() ));
             int start  = pText->GetSelectionStart(),
@@ -1214,15 +1214,15 @@ SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
         if (!pChild)
             continue;
         switch(pChild->GetType()){
-            case NLINE:
-            case NUNHOR:
-            case NEXPRESSION:
-            case NBINHOR:
-            case NALIGN:
-            case NFONT:
+            case SmNodeType::Line:
+            case SmNodeType::UnHor:
+            case SmNodeType::Expression:
+            case SmNodeType::BinHor:
+            case SmNodeType::Align:
+            case SmNodeType::Font:
                 LineToList(static_cast<SmStructureNode*>(pChild), list);
                 break;
-            case NERROR:
+            case SmNodeType::Error:
                 delete pChild;
                 break;
             default:
@@ -1243,9 +1243,9 @@ void SmCursor::CloneLineToClipboard(SmStructureNode* pLine, SmClipboard* pClipbo
             continue;
         if( IsLineCompositionNode( pChild ) )
             CloneLineToClipboard( static_cast<SmStructureNode*>(pChild), pClipboard );
-        else if( pChild->IsSelected() && pChild->GetType() != NERROR ) {
+        else if( pChild->IsSelected() && pChild->GetType() != SmNodeType::Error ) {
             //Only clone selected text from SmTextNode
-            if(pChild->GetType() == NTEXT) {
+            if(pChild->GetType() == SmNodeType::Text) {
                 SmTextNode *pText = static_cast<SmTextNode*>(pChild);
                 std::unique_ptr<SmTextNode> pClone(new SmTextNode( pChild->GetToken(), pText->GetFontDesc() ));
                 int start = pText->GetSelectionStart(),
@@ -1261,12 +1261,12 @@ void SmCursor::CloneLineToClipboard(SmStructureNode* pLine, SmClipboard* pClipbo
 
 bool SmCursor::IsLineCompositionNode(SmNode* pNode){
     switch(pNode->GetType()){
-        case NLINE:
-        case NUNHOR:
-        case NEXPRESSION:
-        case NBINHOR:
-        case NALIGN:
-        case NFONT:
+        case SmNodeType::Line:
+        case SmNodeType::UnHor:
+        case SmNodeType::Expression:
+        case SmNodeType::BinHor:
+        case SmNodeType::Align:
+        case SmNodeType::Font:
             return true;
         default:
             return false;
@@ -1310,7 +1310,7 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
     delete pLineList;
 
     //Check if we're making the body of a subsup node bigger than one
-    if(pParent->GetType() == NSUBSUP &&
+    if(pParent->GetType() == SmNodeType::SubSup &&
        nParentIndex == 0 &&
        entries > 1) {
         //Wrap pLine in scalable round brackets
@@ -1418,7 +1418,7 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
 
     SmNode* pNode = pos.pSelectedNode;
 
-    if (pNode->GetType() == NTEXT) {
+    if (pNode->GetType() == SmNodeType::Text) {
         SmTextNode* pTextNode = static_cast<SmTextNode*>(pNode);
         if (pos.nIndex < pTextNode->GetText().getLength()) {
             // The cursor is on a text node and at the middle of it.
@@ -1445,14 +1445,14 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
         }
 
         pNode = pParentNode;
-        if (pNode->GetType() == NBRACEBODY) {
+        if (pNode->GetType() == SmNodeType::Bracebody) {
             // Found the brace body node.
             break;
         }
     }
 
     SmStructureNode* pBraceNodeTmp = pNode->GetParent();
-    if (!pBraceNodeTmp || pBraceNodeTmp->GetType() != NBRACE) {
+    if (!pBraceNodeTmp || pBraceNodeTmp->GetType() != SmNodeType::Brace) {
         // Brace node is invalid.
         return false;
     }
@@ -1498,7 +1498,7 @@ SmNode* SmNodeListParser::Parse(SmNodeList* list){
     //Delete error nodes
     SmNodeList::iterator it = pList->begin();
     while(it != pList->end()) {
-        if((*it)->GetType() == NERROR){
+        if((*it)->GetType() == SmNodeType::Error){
             //Delete and erase
             delete *it;
             it = pList->erase(it);

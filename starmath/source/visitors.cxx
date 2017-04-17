@@ -524,9 +524,9 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
     , mbSelecting(false)
 {
     //Assume that pTree is a SmTableNode
-    SAL_WARN_IF(pTree->GetType() != NTABLE, "starmath", "pTree should be a SmTableNode!");
+    SAL_WARN_IF(pTree->GetType() != SmNodeType::Table, "starmath", "pTree should be a SmTableNode!");
     //Visit root node, this is special as this node cannot be selected, but its children can!
-    if(pTree->GetType() == NTABLE){
+    if(pTree->GetType() == SmNodeType::Table){
         //Change state if maStartPos is in front of this node
         if( maStartPos.pSelectedNode == pTree && maStartPos.nIndex == 0 )
             mbSelecting = !mbSelecting;
@@ -605,9 +605,9 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     {
         //Select this node and all of its children
         //(Make exception for SmBracebodyNode)
-        if( pNode->GetType() != NBRACEBODY ||
+        if( pNode->GetType() != SmNodeType::Bracebody ||
             !pNode->GetParent() ||
-            pNode->GetParent()->GetType() != NBRACE )
+            pNode->GetParent()->GetType() != SmNodeType::Brace )
             SetSelectedOnAll( pNode );
         else
             SetSelectedOnAll( pNode->GetParent() );
@@ -736,9 +736,9 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
     , mpGraph(new SmCaretPosGraph)
 {
     //pRootNode should always be a table
-    SAL_WARN_IF( pRootNode->GetType( ) != NTABLE, "starmath", "pRootNode must be a table node");
-    //Handle the special case where NTABLE is used a rootnode
-    if( pRootNode->GetType( ) == NTABLE ){
+    SAL_WARN_IF( pRootNode->GetType( ) != SmNodeType::Table, "starmath", "pRootNode must be a table node");
+    //Handle the special case where SmNodeType::Table is used a rootnode
+    if( pRootNode->GetType( ) == SmNodeType::Table ){
         //Children are SmLineNodes
         //Or so I thought... Apparently, the children can be instances of SmExpression
         //especially if there's a error in the formula... So he we go, a simple work around.
@@ -977,7 +977,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
     bodyRight->SetRight( right );
 
     //Get subsup pNode if any
-    SmSubSupNode* pSubSup = pOper->GetType( ) == NSUBSUP ? static_cast<SmSubSupNode*>(pOper) : nullptr;
+    SmSubSupNode* pSubSup = pOper->GetType( ) == SmNodeType::SubSup ? static_cast<SmSubSupNode*>(pOper) : nullptr;
 
     SmNode* pChild;
     SmCaretPosGraphEntry *childLeft;
@@ -1491,7 +1491,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBraceNode* pNode )
     SmCaretPosGraphEntry  *left = mpRightMost,
                         *right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    if( pBody->GetType() != NBRACEBODY ) {
+    if( pBody->GetType() != SmNodeType::Bracebody ) {
         mpRightMost = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
         left->SetRight( mpRightMost );
     }else
@@ -2004,12 +2004,12 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
     Separate( );
     if( pNode->GetToken( ).eType == TOPER ){
         //There's an SmGlyphSpecialNode if eType == TOPER
-        if( pNode->GetSubNode( 0 )->GetType( ) == NSUBSUP )
+        if( pNode->GetSubNode( 0 )->GetType( ) == SmNodeType::SubSup )
             Append( pNode->GetSubNode( 0 )->GetSubNode( 0 )->GetToken( ).aText );
         else
             Append( pNode->GetSubNode( 0 )->GetToken( ).aText );
     }
-    if( pNode->GetSubNode( 0 )->GetType( ) == NSUBSUP ) {
+    if( pNode->GetSubNode( 0 )->GetType( ) == SmNodeType::SubSup ) {
         SmSubSupNode *pSubSup = static_cast<SmSubSupNode*>( pNode->GetSubNode( 0 ) );
         SmNode* pChild = pSubSup->GetSubSup( LSUP );
         if( pChild ) {
@@ -2190,7 +2190,7 @@ void SmNodeToTextVisitor::Visit( SmUnHorNode* pNode )
 void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
 {
     const SmNode *pParent = pNode->GetParent();
-    bool bBraceNeeded = pParent && pParent->GetType() == NFONT;
+    bool bBraceNeeded = pParent && pParent->GetType() == SmNodeType::Font;
     SmNode *pLeft  = pNode->LeftOperand(),
            *pOper  = pNode->Symbol(),
            *pRight = pNode->RightOperand();
@@ -2361,15 +2361,15 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
-    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == NBINHOR;
+    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == SmNodeType::BinHor;
     if (!bracketsNeeded)
     {
         const SmNode *pParent = pNode->GetParent();
         // nested subsups
         bracketsNeeded =
-            pParent && pParent->GetType() == NSUBSUP &&
+            pParent && pParent->GetType() == SmNodeType::SubSup &&
             pNode->GetNumSubNodes() == 1 &&
-            pNode->GetSubNode(0)->GetType() == NSUBSUP;
+            pNode->GetSubNode(0)->GetType() == SmNodeType::SubSup;
     }
 
     if (bracketsNeeded) {

@@ -92,11 +92,11 @@ void NodeTest::testTdf52225()
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pTree->GetNumSubNodes());   \
         const SmNode *pLine = pTree->GetSubNode(0);                     \
         CPPUNIT_ASSERT(pLine);                                          \
-        CPPUNIT_ASSERT_EQUAL(NLINE, pLine->GetType());                  \
+        CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pLine->GetType());       \
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pLine->GetNumSubNodes());   \
         const SmNode *pNode = pLine->GetSubNode(0);                     \
         CPPUNIT_ASSERT(pNode);                                          \
-        CPPUNIT_ASSERT_EQUAL(NSPECIAL, pNode->GetType());               \
+        CPPUNIT_ASSERT_EQUAL(SmNodeType::Special, pNode->GetType());    \
         const SmSpecialNode *pSn = static_cast<const SmSpecialNode *>(pNode); \
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pSn->GetText().getLength()); \
         CPPUNIT_ASSERT_EQUAL(sal_Unicode(code), pSn->GetText()[0]);     \

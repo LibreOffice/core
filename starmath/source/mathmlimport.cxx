@@ -495,7 +495,7 @@ void SmXMLImport::endDocument()
 {
     //Set the resulted tree into the SmDocShell where it belongs
     SmNode *pTree = popOrZero(aNodeStack);
-    if (pTree && pTree->GetType() == NTABLE)
+    if (pTree && pTree->GetType() == SmNodeType::Table)
     {
         uno::Reference <frame::XModel> xModel = GetModel();
         uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
@@ -2411,9 +2411,9 @@ void SmXMLRowContext_Impl::EndElement()
         //ourselves, and creating the appropriate dummy StarMath none bracket
         //to balance the arrangement
         if (((aRelationArray[0]->GetScaleMode() == SCALE_HEIGHT)
-            && (aRelationArray[0]->GetType() == NMATH))
+            && (aRelationArray[0]->GetType() == SmNodeType::Math))
         || ((aRelationArray[nSize-1]->GetScaleMode() == SCALE_HEIGHT)
-            && (aRelationArray[nSize-1]->GetType() == NMATH)))
+            && (aRelationArray[nSize-1]->GetType() == SmNodeType::Math)))
         {
             SmToken aToken;
             aToken.cMathChar = '\0';
@@ -2421,7 +2421,7 @@ void SmXMLRowContext_Impl::EndElement()
 
             int nLeft=0,nRight=0;
             if ((aRelationArray[0]->GetScaleMode() == SCALE_HEIGHT)
-                && (aRelationArray[0]->GetType() == NMATH))
+                && (aRelationArray[0]->GetType() == SmNodeType::Math))
             {
                 aToken = aRelationArray[0]->GetToken();
                 nLeft=1;
@@ -2433,7 +2433,7 @@ void SmXMLRowContext_Impl::EndElement()
             SmNode *pLeft = new SmMathSymbolNode(aToken);
 
             if ((aRelationArray[nSize-1]->GetScaleMode() == SCALE_HEIGHT)
-                && (aRelationArray[nSize-1]->GetType() == NMATH))
+                && (aRelationArray[nSize-1]->GetType() == SmNodeType::Math))
             {
                 aToken = aRelationArray[nSize-1]->GetToken();
                 nRight=1;

@@ -469,7 +469,7 @@ void SmExpressionNode::CreateTextFromNode(OUString &rText)
         {
             pNode->CreateTextFromNode(rText);
             //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
-            if (pNode->GetType() == NMATH)
+            if (pNode->GetType() == SmNodeType::Math)
                 if ((nSize != 2) ||
                     ( !rText.endsWith("+") && !rText.endsWith("-") ))
                     rText += " ";
@@ -1080,7 +1080,7 @@ void SmBinDiagonalNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
            *pLine  = GetSubNode(2);
     assert(pLeft);
     assert(pRight);
-    assert(pLine && pLine->GetType() == NPOLYLINE);
+    assert(pLine && pLine->GetType() == SmNodeType::PolyLine);
 
     SmPolyLineNode *pOper = static_cast<SmPolyLineNode *>(pLine);
     assert(pOper);
@@ -1373,7 +1373,7 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     long  nBraceHeight;
     if (bScale)
     {
-        nBraceHeight = pBody->GetType() == NBRACEBODY ?
+        nBraceHeight = pBody->GetType() == SmNodeType::Bracebody ?
                               static_cast<SmBracebodyNode *>(pBody)->GetBodyHeight()
                             : pBody->GetHeight();
         nBraceHeight += 2 * (nBraceHeight * nPerc / 100L);
@@ -1566,7 +1566,7 @@ SmNode * SmOperNode::GetSymbol()
     SmNode *pNode = GetSubNode(0);
     assert(pNode);
 
-    if (pNode->GetType() == NSUBSUP)
+    if (pNode->GetType() == SmNodeType::SubSup)
         pNode = static_cast<SmSubSupNode *>(pNode)->GetBody();
 
     OSL_ENSURE(pNode, "Sm: NULL pointer!");
@@ -1697,7 +1697,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             break;
         default :
             eVerAlign = RectVerAlign::AttributeHi;
-            if (pBody->GetType() == NATTRIBUT)
+            if (pBody->GetType() == SmNodeType::Attribut)
                 nDist = GetFont().GetFontSize().Height()
                         * rFormat.GetDistance(DIS_ORNAMENTSPACE) / 100L;
     }
@@ -1917,7 +1917,7 @@ void SmFontNode::SetSizeParameter(const Fraction& rValue, FontSizeType eType)
 
 
 SmPolyLineNode::SmPolyLineNode(const SmToken &rNodeToken)
-    : SmGraphicNode(NPOLYLINE, rNodeToken)
+    : SmGraphicNode(SmNodeType::PolyLine, rNodeToken)
     , maPoly(2)
     , maToSize()
     , mnWidth(0)
@@ -2044,7 +2044,7 @@ SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, sal_uIn
 }
 
 SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP )
-    : SmVisibleNode(NTEXT, rNodeToken)
+    : SmVisibleNode(SmNodeType::Text, rNodeToken)
     , mnFontDesc(nFontDescP)
     , mnSelectionStart(0)
     , mnSelectionEnd(0)
@@ -2103,16 +2103,16 @@ void SmTextNode::CreateTextFromNode(OUString &rText)
     {
         SmParser aParseTest;
         std::unique_ptr<SmTableNode> pTable(aParseTest.Parse(GetToken().aText));
-        assert(pTable->GetType() == NTABLE);
+        assert(pTable->GetType() == SmNodeType::Table);
         bQuoted=true;
         if (pTable->GetNumSubNodes() == 1)
         {
             SmNode *pResult = pTable->GetSubNode(0);
-            if ( (pResult->GetType() == NLINE) &&
+            if ( (pResult->GetType() == SmNodeType::Line) &&
                 (pResult->GetNumSubNodes() == 1) )
             {
                 pResult = pResult->GetSubNode(0);
-                if (pResult->GetType() == NTEXT)
+                if (pResult->GetType() == SmNodeType::Text)
                     bQuoted=false;
             }
         }
@@ -2345,7 +2345,7 @@ const SmNode * SmMatrixNode::GetLeftMost() const
 
 
 SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
-:   SmSpecialNode(NMATH, rNodeToken, FNT_MATH)
+:   SmSpecialNode(SmNodeType::Math, rNodeToken, FNT_MATH)
 {
     sal_Unicode cChar = GetToken().cMathChar;
     if (sal_Unicode('\0') != cChar)
@@ -2590,7 +2590,7 @@ SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sa
 
 
 SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken)
-    : SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  // default Font isn't always correct!
+    : SmTextNode(SmNodeType::Special, rNodeToken, FNT_MATH)  // default Font isn't always correct!
     , mbIsFromGreekSymbolSet(lcl_IsFromGreekSymbolSet( rNodeToken.aText ))
 {
 }

@@ -79,14 +79,14 @@ typedef std::vector< SmNode * > SmNodeArray;
 
 enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
 
-enum SmNodeType
+enum class SmNodeType
 {
-/* 0*/ NTABLE,         NBRACE,         NBRACEBODY,     NOPER,          NALIGN,
-/* 5*/ NATTRIBUT,      NFONT,          NUNHOR,         NBINHOR,        NBINVER,
-/*10*/ NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
-/*15*/ NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
-/*20*/ NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
-/*25*/ NRECTANGLE,  NVERTICAL_BRACE, NMATHIDENT
+/* 0*/ Table,       Brace,         Bracebody,     Oper,        Align,
+/* 5*/ Attribut,    Font,          UnHor,         BinHor,      BinVer,
+/*10*/ BinDiagonal, SubSup,        Matrix,        Place,       Text,
+/*15*/ Special,     GlyphSpecial,  Math,          Blank,       Error,
+/*20*/ Line,        Expression,    PolyLine,      Root,        RootSymbol,
+/*25*/ Rectangle,   VerticalBrace, MathIdent
 };
 
 
@@ -320,7 +320,7 @@ class SmRectangleNode : public SmGraphicNode
 
 public:
     explicit SmRectangleNode(const SmToken &rNodeToken)
-    :   SmGraphicNode(NRECTANGLE, rNodeToken)
+        : SmGraphicNode(SmNodeType::Rectangle, rNodeToken)
     {}
 
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth) override;
@@ -458,7 +458,7 @@ class SmGlyphSpecialNode : public SmSpecialNode
 {
 public:
     explicit SmGlyphSpecialNode(const SmToken &rNodeToken)
-    :   SmSpecialNode(NGLYPH_SPECIAL, rNodeToken, FNT_MATH)
+        : SmSpecialNode(SmNodeType::GlyphSpecial, rNodeToken, FNT_MATH)
     {}
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -504,7 +504,7 @@ class SmMathIdentifierNode : public SmMathSymbolNode
 {
 public:
     explicit SmMathIdentifierNode(const SmToken &rNodeToken)
-    :   SmMathSymbolNode(NMATHIDENT, rNodeToken) {}
+        : SmMathSymbolNode(SmNodeType::MathIdent, rNodeToken) {}
 };
 
 
@@ -520,7 +520,7 @@ class SmRootSymbolNode : public SmMathSymbolNode
 
 public:
     explicit SmRootSymbolNode(const SmToken &rNodeToken)
-        : SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
+        : SmMathSymbolNode(SmNodeType::RootSymbol, rNodeToken)
         , mnBodyWidth(0)
     {
     }
@@ -543,10 +543,10 @@ class SmPlaceNode : public SmMathSymbolNode
 {
 public:
     explicit SmPlaceNode(const SmToken &rNodeToken)
-    :   SmMathSymbolNode(NPLACE, rNodeToken)
+        : SmMathSymbolNode(SmNodeType::Place, rNodeToken)
     {
     }
-    SmPlaceNode() : SmMathSymbolNode(NPLACE, SmToken(TPLACE, MS_PLACE, "<?>")) {};
+    SmPlaceNode() : SmMathSymbolNode(SmNodeType::Place, SmToken(TPLACE, MS_PLACE, "<?>")) {};
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -563,7 +563,7 @@ class SmErrorNode : public SmMathSymbolNode
 {
 public:
     explicit SmErrorNode(const SmToken &rNodeToken)
-    :   SmMathSymbolNode(NERROR, rNodeToken)
+        : SmMathSymbolNode(SmNodeType::Error, rNodeToken)
     {
         SetText(OUString(MS_ERROR));
     }
@@ -586,7 +586,7 @@ class SmTableNode : public SmStructureNode
     long mnFormulaBaseline;
 public:
     explicit SmTableNode(const SmToken &rNodeToken)
-        :   SmStructureNode(NTABLE, rNodeToken)
+        : SmStructureNode(SmNodeType::Table, rNodeToken)
         , mnFormulaBaseline(0)
     {
     }
@@ -618,7 +618,7 @@ protected:
 
 public:
     explicit SmLineNode(const SmToken &rNodeToken)
-        : SmStructureNode(NLINE, rNodeToken)
+        : SmStructureNode(SmNodeType::Line, rNodeToken)
         , mbUseExtraSpaces(true)
     {
     }
@@ -642,7 +642,7 @@ class SmExpressionNode : public SmLineNode
 {
 public:
     explicit SmExpressionNode(const SmToken &rNodeToken)
-    :   SmLineNode(NEXPRESSION, rNodeToken)
+        : SmLineNode(SmNodeType::Expression, rNodeToken)
     {}
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -659,7 +659,7 @@ class SmUnHorNode : public SmStructureNode
 {
 public:
     explicit SmUnHorNode(const SmToken &rNodeToken)
-        : SmStructureNode(NUNHOR, rNodeToken, 2)
+        : SmStructureNode(SmNodeType::UnHor, rNodeToken, 2)
     {
     }
 
@@ -683,7 +683,7 @@ class SmRootNode : public SmStructureNode
 {
 public:
     explicit SmRootNode(const SmToken &rNodeToken)
-        : SmStructureNode(NROOT, rNodeToken, 3)
+        : SmStructureNode(SmNodeType::Root, rNodeToken, 3)
     {
     }
 
@@ -715,7 +715,7 @@ class SmBinHorNode : public SmStructureNode
 {
 public:
     explicit SmBinHorNode(const SmToken &rNodeToken)
-        : SmStructureNode(NBINHOR, rNodeToken, 3)
+        : SmStructureNode(SmNodeType::BinHor, rNodeToken, 3)
     {
     }
 
@@ -747,7 +747,7 @@ class SmBinVerNode : public SmStructureNode
 {
 public:
     explicit SmBinVerNode(const SmToken &rNodeToken)
-        : SmStructureNode(NBINVER, rNodeToken, 3)
+        : SmStructureNode(SmNodeType::BinVer, rNodeToken, 3)
     {
     }
 
@@ -778,7 +778,7 @@ class SmBinDiagonalNode : public SmStructureNode
 
 public:
     explicit SmBinDiagonalNode(const SmToken &rNodeToken)
-        : SmStructureNode(NBINDIAGONAL, rNodeToken, 3)
+        : SmStructureNode(SmNodeType::BinDiagonal, rNodeToken, 3)
         , mbAscending(false)
     {
     }
@@ -837,7 +837,7 @@ class SmSubSupNode : public SmStructureNode
 
 public:
     explicit SmSubSupNode(const SmToken &rNodeToken)
-        : SmStructureNode(NSUBSUP, rNodeToken, 1 + SUBSUP_NUM_ENTRIES)
+        : SmStructureNode(SmNodeType::SubSup, rNodeToken, 1 + SUBSUP_NUM_ENTRIES)
         , mbUseLimits(false)
     {
     }
@@ -887,7 +887,7 @@ class SmBraceNode : public SmStructureNode
 {
 public:
     explicit SmBraceNode(const SmToken &rNodeToken)
-        : SmStructureNode(NBRACE, rNodeToken, 3)
+        : SmStructureNode(SmNodeType::Brace, rNodeToken, 3)
     {
     }
 
@@ -919,7 +919,7 @@ class SmBracebodyNode : public SmStructureNode
 
 public:
     explicit SmBracebodyNode(const SmToken &rNodeToken)
-        : SmStructureNode(NBRACEBODY, rNodeToken)
+        : SmStructureNode(SmNodeType::Bracebody, rNodeToken)
         , mnBodyHeight(0)
     {
     }
@@ -960,7 +960,7 @@ public:
 
 
 inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken)
-    : SmStructureNode(NVERTICAL_BRACE, rNodeToken, 3)
+    : SmStructureNode(SmNodeType::VerticalBrace, rNodeToken, 3)
 {
 }
 
@@ -979,7 +979,7 @@ class SmOperNode : public SmStructureNode
 {
 public:
     explicit SmOperNode(const SmToken &rNodeToken)
-        : SmStructureNode(NOPER, rNodeToken, 2)
+        : SmStructureNode(SmNodeType::Oper, rNodeToken, 2)
     {
     }
 
@@ -1004,7 +1004,7 @@ class SmAlignNode : public SmStructureNode
 {
 public:
     explicit SmAlignNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NALIGN, rNodeToken)
+        : SmStructureNode(SmNodeType::Align, rNodeToken)
     {}
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -1026,7 +1026,7 @@ class SmAttributNode : public SmStructureNode
 {
 public:
     explicit SmAttributNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NATTRIBUT, rNodeToken, 2)
+        : SmStructureNode(SmNodeType::Attribut, rNodeToken, 2)
     {}
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -1051,7 +1051,7 @@ class SmFontNode : public SmStructureNode
 
 public:
     explicit SmFontNode(const SmToken &rNodeToken)
-        : SmStructureNode(NFONT, rNodeToken)
+        : SmStructureNode(SmNodeType::Font, rNodeToken)
         , meSizeType(FontSizeType::MULTIPLY)
         , maFontSize(1)
     {
@@ -1080,7 +1080,7 @@ class SmMatrixNode : public SmStructureNode
 
 public:
     explicit SmMatrixNode(const SmToken &rNodeToken)
-        : SmStructureNode(NMATRIX, rNodeToken)
+        : SmStructureNode(SmNodeType::Matrix, rNodeToken)
         , mnNumRows(0)
         , mnNumCols(0)
     {
@@ -1108,7 +1108,7 @@ class SmBlankNode : public SmGraphicNode
 
 public:
     explicit SmBlankNode(const SmToken &rNodeToken)
-        : SmGraphicNode(NBLANK, rNodeToken)
+        : SmGraphicNode(SmNodeType::Blank, rNodeToken)
         , mnNum(0)
     {
     }
@@ -1137,7 +1137,7 @@ inline const SmNode* SmRootNode::Argument() const
 inline SmRootSymbolNode* SmRootNode::Symbol()
 {
     assert( GetNumSubNodes() == 3 );
-    assert( GetSubNode( 1 )->GetType() == NROOTSYMBOL );
+    assert( GetSubNode( 1 )->GetType() == SmNodeType::RootSymbol );
     return static_cast< SmRootSymbolNode* >( GetSubNode( 1 ));
 }
 inline const SmRootSymbolNode* SmRootNode::Symbol() const
@@ -1205,7 +1205,7 @@ inline const SmNode* SmAttributNode::Body() const
 inline SmMathSymbolNode* SmBraceNode::OpeningBrace()
 {
     assert( GetNumSubNodes() == 3 );
-    assert( GetSubNode( 0 )->GetType() == NMATH );
+    assert( GetSubNode( 0 )->GetType() == SmNodeType::Math );
     return static_cast< SmMathSymbolNode* >( GetSubNode( 0 ));
 }
 inline const SmMathSymbolNode* SmBraceNode::OpeningBrace() const
@@ -1224,7 +1224,7 @@ inline const SmNode* SmBraceNode::Body() const
 inline SmMathSymbolNode* SmBraceNode::ClosingBrace()
 {
     assert( GetNumSubNodes() == 3 );
-    assert( GetSubNode( 2 )->GetType() == NMATH );
+    assert( GetSubNode( 2 )->GetType() == SmNodeType::Math );
     return static_cast< SmMathSymbolNode* >( GetSubNode( 2 ));
 }
 inline const SmMathSymbolNode* SmBraceNode::ClosingBrace() const
@@ -1244,7 +1244,7 @@ inline const SmNode* SmVerticalBraceNode::Body() const
 inline SmMathSymbolNode* SmVerticalBraceNode::Brace()
 {
     assert( GetNumSubNodes() == 3 );
-    assert( GetSubNode( 1 )->GetType() == NMATH );
+    assert( GetSubNode( 1 )->GetType() == SmNodeType::Math );
     return static_cast< SmMathSymbolNode* >( GetSubNode( 1 ));
 }
 inline const SmMathSymbolNode* SmVerticalBraceNode::Brace() const

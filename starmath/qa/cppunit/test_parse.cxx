@@ -69,15 +69,15 @@ void ParseTest::testMinus()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetNumSubNodes());
     const SmNode *pNode0 = pNode->GetSubNode(0);
     CPPUNIT_ASSERT(pNode0);
-    CPPUNIT_ASSERT_EQUAL(NLINE, pNode0->GetType());
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pNode0->GetType());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode0->GetNumSubNodes());
     const SmNode *pNode00 = pNode0->GetSubNode(0);
     CPPUNIT_ASSERT(pNode00);
-    CPPUNIT_ASSERT_EQUAL(NUNHOR, pNode00->GetType());
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::UnHor, pNode00->GetType());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pNode00->GetNumSubNodes());
     const SmNode *pNode000 = pNode00->GetSubNode(0);
     CPPUNIT_ASSERT(pNode000);
-    CPPUNIT_ASSERT_EQUAL(NMATH, pNode000->GetType());
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Math, pNode000->GetType());
     // GetText() vs GetToken().aText
     CPPUNIT_ASSERT_EQUAL(OUString(MS_MINUS),
                          static_cast<const SmMathSymbolNode *>(pNode000)->GetText());
@@ -85,7 +85,7 @@ void ParseTest::testMinus()
                          static_cast<const SmMathSymbolNode *>(pNode000)->GetToken().aText);
     const SmNode *pNode001 = pNode00->GetSubNode(1);
     CPPUNIT_ASSERT(pNode001);
-    CPPUNIT_ASSERT_EQUAL(NTEXT, pNode001->GetType());
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Text, pNode001->GetType());
     // GetText() vs GetToken().aText
     CPPUNIT_ASSERT(static_cast<const SmTextNode *>(pNode001)->GetText().isEmpty());
     CPPUNIT_ASSERT_EQUAL(OUString("1.2"),
@@ -102,21 +102,21 @@ void ParseTest::testNospace()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetNumSubNodes());
     const SmNode *pNode0 = pNode->GetSubNode(0);
     CPPUNIT_ASSERT(pNode0);
-    CPPUNIT_ASSERT_EQUAL(NLINE, pNode0->GetType());
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pNode0->GetType());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode0->GetNumSubNodes());
     const SmNode *pNode00 = pNode0->GetSubNode(0);
     CPPUNIT_ASSERT(pNode00);
-    CPPUNIT_ASSERT_EQUAL(NEXPRESSION, pNode00->GetType());
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Expression, pNode00->GetType());
     CPPUNIT_ASSERT(!static_cast<const SmExpressionNode *>(pNode00)->IsUseExtraSpaces());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pNode00->GetNumSubNodes());
     const SmNode *pNode000 = pNode00->GetSubNode(0);
     CPPUNIT_ASSERT(pNode000);
-    CPPUNIT_ASSERT_EQUAL(NFONT, pNode000->GetType());
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Font, pNode000->GetType());
     CPPUNIT_ASSERT_EQUAL(OUString("nitalic"),
                          static_cast<const SmFontNode *>(pNode000)->GetToken().aText);
     const SmNode *pNode001 = pNode00->GetSubNode(1);
     CPPUNIT_ASSERT(pNode001);
-    CPPUNIT_ASSERT_EQUAL(NEXPRESSION, pNode001->GetType());
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Expression, pNode001->GetType());
     CPPUNIT_ASSERT(static_cast<const SmExpressionNode *>(pNode001)->IsUseExtraSpaces());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pNode00->GetNumSubNodes());
 }

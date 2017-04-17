@@ -54,7 +54,7 @@ struct SmCaretPos{
      * Unless pNode is an instance of SmTextNode, then the index is the text length.
      */
     static SmCaretPos GetPosAfter(SmNode* pNode) {
-        if(pNode && pNode->GetType() == NTEXT)
+        if(pNode && pNode->GetType() == SmNodeType::Text)
             return SmCaretPos(pNode, static_cast<SmTextNode*>(pNode)->GetText().getLength());
         return SmCaretPos(pNode, 1);
     }

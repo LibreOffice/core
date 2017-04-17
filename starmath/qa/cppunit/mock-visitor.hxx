@@ -20,8 +20,8 @@ public:
     virtual ~MockVisitor() {}
 
     void Visit( SmTableNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmTableNode should have type NTABLE",
-                                     NTABLE, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmTableNode should have type SmNodeType::Table",
+                                     SmNodeType::Table, pNode->GetType());
         auto eTT = pNode->GetToken().eType;
         CPPUNIT_ASSERT_MESSAGE("The type of SmTableNode's token should be either TEND, TBINOM, or TSTACK",
                                eTT == TEND || eTT == TBINOM || eTT == TSTACK);
@@ -29,150 +29,150 @@ public:
     }
 
     void Visit( SmBraceNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBraceNode should have type NBRACE",
-                                     NBRACE, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBraceNode should have type SmNodeType::Brace",
+                                     SmNodeType::Brace, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmBracebodyNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBracebodyNode should have type NBRACEBODY",
-                                     NBRACEBODY, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBracebodyNode should have type SmNodeType::Bracebody",
+                                     SmNodeType::Bracebody, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmOperNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmOperNode should have type NOPER",
-                                     NOPER, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmOperNode should have type SmNodeType::Oper",
+                                     SmNodeType::Oper, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmAlignNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmAlignNode should have type NALIGN",
-                                     NALIGN, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmAlignNode should have type SmNodeType::Align",
+                                     SmNodeType::Align, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmAttributNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmAttributNode should have type NATTRIBUT",
-                                     NATTRIBUT, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmAttributNode should have type SmNodeType::Attribut",
+                                     SmNodeType::Attribut, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmFontNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmFontNode should have type NFONT",
-                                     NFONT, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmFontNode should have type SmNodeType::Font",
+                                     SmNodeType::Font, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmUnHorNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmUnHorNode should have type NUNHOR",
-                                     NUNHOR, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmUnHorNode should have type SmNodeType::UnHor",
+                                     SmNodeType::UnHor, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmBinHorNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBinHorNode should have type NBINHOR",
-                                     NBINHOR, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBinHorNode should have type SmNodeType::BinHor",
+                                     SmNodeType::BinHor, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmBinVerNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBinVerNode should have type NBINVER",
-                                     NBINVER, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBinVerNode should have type SmNodeType::BinVer",
+                                     SmNodeType::BinVer, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmBinDiagonalNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBinDiagonalNode should have type NBINDIAGONAL",
-                                     NBINDIAGONAL, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBinDiagonalNode should have type SmNodeType::BinDiagonal",
+                                     SmNodeType::BinDiagonal, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmSubSupNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmSubSupNode should have type NSUBSUP",
-                                     NSUBSUP, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmSubSupNode should have type SmNodeType::SubSup",
+                                     SmNodeType::SubSup, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmMatrixNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmMatrixNode should have type NMATRIX",
-                                     NMATRIX, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmMatrixNode should have type SmNodeType::Matrix",
+                                     SmNodeType::Matrix, pNode->GetType());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("SmMatrixNode's token should be of type TMATRIX",
                                      TMATRIX, pNode->GetToken().eType);
         VisitChildren( pNode );
     }
 
     void Visit( SmPlaceNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmPlaceNode should have type NPLACE",
-                                     NPLACE, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmPlaceNode should have type SmNodeType::Place",
+                                     SmNodeType::Place, pNode->GetType());
     }
 
     void Visit( SmTextNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmTextNode should have type NTEXT",
-                                     NTEXT, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmTextNode should have type SmNodeType::Text",
+                                     SmNodeType::Text, pNode->GetType());
     }
 
     void Visit( SmSpecialNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmSpecialNode should have type NSPECIAL",
-                                     NSPECIAL, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmSpecialNode should have type SmNodeType::Special",
+                                     SmNodeType::Special, pNode->GetType());
     }
 
     void Visit( SmGlyphSpecialNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmGlyphSpecialNode should have type NGLYPH_SPECIAL",
-                                     NGLYPH_SPECIAL, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmGlyphSpecialNode should have type SmNodeType::GlyphSpecial",
+                                     SmNodeType::GlyphSpecial, pNode->GetType());
     }
 
     void Visit( SmMathSymbolNode* pNode ) override {
-        CPPUNIT_ASSERT_MESSAGE("SmMathSymbolNode should have type NMATH or NMATHIDENT",
-                               pNode->GetType() == NMATH || pNode->GetType() == NMATHIDENT);
+        CPPUNIT_ASSERT_MESSAGE("SmMathSymbolNode should have type SmNodeType::Math or SmNodeType::MathIdent",
+                               pNode->GetType() == SmNodeType::Math || pNode->GetType() == SmNodeType::MathIdent);
     }
 
     void Visit( SmBlankNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBlankNode should have type NBLANK",
-                                     NBLANK, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmBlankNode should have type SmNodeType::Blank",
+                                     SmNodeType::Blank, pNode->GetType());
     }
 
     void Visit( SmErrorNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmErrorNode should have type NERROR",
-                                     NERROR, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmErrorNode should have type SmNodeType::Error",
+                                     SmNodeType::Error, pNode->GetType());
     }
 
     void Visit( SmLineNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmLineNode should have type NLINE",
-                                     NLINE, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmLineNode should have type SmNodeType::Line",
+                                     SmNodeType::Line, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmExpressionNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmExpressionNode should have type NEXPRESSION",
-                                     NEXPRESSION, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmExpressionNode should have type SmNodeType::Expression",
+                                     SmNodeType::Expression, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmPolyLineNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmPolyLineNode should have type NPOLYLINE",
-                                     NPOLYLINE, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmPolyLineNode should have type SmNodeType::PolyLine",
+                                     SmNodeType::PolyLine, pNode->GetType());
     }
 
     void Visit( SmRootNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmRootNode should have type NROOT",
-                                     NROOT, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmRootNode should have type SmNodeType::Root",
+                                     SmNodeType::Root, pNode->GetType());
         VisitChildren( pNode );
     }
 
     void Visit( SmRootSymbolNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmRootSymbolNode should have type NROOTSYMBOL",
-                                     NROOTSYMBOL, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmRootSymbolNode should have type SmNodeType::RootSymbol",
+                                     SmNodeType::RootSymbol, pNode->GetType());
     }
 
     void Visit( SmRectangleNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmRectangleNode should have type NRECTANGLE",
-                                     NRECTANGLE, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmRectangleNode should have type SmNodeType::Rectangle",
+                                     SmNodeType::Rectangle, pNode->GetType());
     }
 
     void Visit( SmVerticalBraceNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmVerticalBraceNode should have type NVERTICAL_BRACE",
-                                     NVERTICAL_BRACE, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmVerticalBraceNode should have type SmNodeType::VerticalBrace",
+                                     SmNodeType::VerticalBrace, pNode->GetType());
         VisitChildren( pNode );
     }
 
