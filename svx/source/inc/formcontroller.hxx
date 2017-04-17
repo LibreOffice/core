@@ -189,12 +189,12 @@ namespace svxform
         bool                        m_bCurrentRecordModified    : 1;
         bool                        m_bCurrentRecordNew         : 1;
         bool                        m_bLocked                   : 1;
-        bool                        m_bDBConnection             : 1;    // Focuslistener nur fuer Datenbankformulare
+        bool                        m_bDBConnection             : 1;    // focus listener only for database forms
         bool                        m_bCycle                    : 1;
         bool                        m_bCanInsert                : 1;
         bool                        m_bCanUpdate                : 1;
         bool                        m_bCommitLock               : 1;    // lock the committing of controls see focusGained
-        bool                        m_bModified                 : 1;    // ist der Inhalt eines Controls modifiziert ?
+        bool                        m_bModified                 : 1;    // is the content of a control modified?
         bool                        m_bControlsSorted           : 1;
         bool                        m_bFiltering                : 1;
         bool                        m_bAttachEvents             : 1;
@@ -316,13 +316,13 @@ namespace svxform
     // css::beans::XPropertyChangeListener -> change of states
         virtual void SAL_CALL propertyChange(const  css::beans::PropertyChangeEvent& evt) override;
 
-    // XTextListener           -> modify setzen
+    // XTextListener           -> set modify
         virtual void SAL_CALL textChanged(const  css::awt::TextEvent& rEvent) override;
 
-    // XItemListener            -> modify setzen
+    // XItemListener            -> set modify
         virtual void SAL_CALL itemStateChanged(const  css::awt::ItemEvent& rEvent) override;
 
-    // XModifyListener   -> modify setzen
+    // XModifyListener   -> set modify
         virtual void SAL_CALL modified(const css::lang::EventObject& rEvent) override;
 
     // XFormController

@@ -169,17 +169,17 @@ namespace svxform
             ) { m_xFormsRoot = _rxFormsRoot; }
 
         void buildPathFormat(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
-            // baut aus m_aSelectedEntries m_aControlPaths auf
-            // (es wird davon ausgegangen, dass die Eintraege in m_aSelectedEntries sortiert sind in Bezug auf die Nachbar-Beziehung)
+            // assembles m_aControlPaths from m_aSelectedEntries
+            // (it is assumed that the entries are sorted in m_aSelectedEntries with respect to the neighbor relationship)
 
 
         void buildListFromPath(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
-            // der umgekehrte Weg : wirft alles aus m_aSelectedEntries weg und baut es mittels m_aControlPaths neu auf
+            // The reverse way: throws everything out of m_aSelectedEntries and rebuilds it using m_aControlPaths
 
         void addHiddenControlsFormat(const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces);
-            // fuegt ein SVX_FML_HIDDEN_CONTROLS-Format hinzu und merk sich dafuer die uebergebenen Interfaces
-            // (es erfolgt KEINE Ueberpruefung, ob dadurch auch tatsaechlich nur hidden Controls bezeichnet werden, dass muss der
-            // Aufrufer sicherstellen)
+            // adds an SVX_FML_HIDDEN_CONTROLS format and remembers the passed interfaces for it
+            // (it is NOT checked whether actually only hidden controls are denominated
+            // by this - the caller must ensure that)
 
         const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
         const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >&

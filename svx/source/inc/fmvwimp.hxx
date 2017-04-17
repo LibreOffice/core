@@ -169,7 +169,7 @@ class FmXFormView : public ::cppu::WeakImplHelper<
     MapControlContainerToSetOfForms
                     m_aNeedTabOrderUpdate;
 
-    // Liste der markierten Object, dient zur Restauration beim Umschalten von Alive in DesignMode
+    // list of selected objects, used for restoration when switching from Alive to DesignMode
     SdrMarkList             m_aMark;
     ObjectRemoveListener*   m_pWatchStoredList;
 
@@ -191,7 +191,7 @@ protected:
         // notifies this impl class that the anti-impl instance (m_pView) is going to die
 
 public:
-    // UNO Anbindung
+    // UNO connection
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;

@@ -78,7 +78,7 @@ public:
 
 class FmNavModelReplacedHint : public SfxHint
 {
-    FmEntryData* pEntryData;    // die Daten des Eintrages, der ein neues Model bekommen hat
+    FmEntryData* pEntryData;    // the data of the entry that has got a new model
 
 public:
     FmNavModelReplacedHint( FmEntryData* pAffectedEntryData );
@@ -208,7 +208,7 @@ public:
 };
 
 
-// FmNavRequestSelectHint - jemand teilt dem NavigatorTree mit, dass er bestimmte Eintraege selektieren soll
+// FmNavRequestSelectHint - someone tells the NavigatorTree to select certain entries
 
 typedef std::set<FmEntryData*> FmEntryDataArray;
 
@@ -336,10 +336,10 @@ namespace svxform
         void ReplaceFormComponent(const css::uno::Reference< css::form::XFormComponent >& xOld, const css::uno::Reference< css::form::XFormComponent >& xNew);
 
         void BroadcastMarkedObjects(const SdrMarkList& mlMarked);
-            // einen RequestSelectHint mit den aktuell markierten Objekten broadcasten
+            // send a RequestSelectHint with the currently selected objects
         bool InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject);
-            // ist ein Helper fuer vorherige, managet das Abteigen in SdrObjGroups
-            // Rueckgabe sal_True, wenn das Objekt eine FormComponent ist (oder rekursiv nur aus solchen besteht)
+            // is a helper for previous, manages the ... in SdrObjGroups;
+            // returns sal_True if the object is a FormComponent (or recursively consists only of such)
 
     public:
         NavigatorTreeModel();
@@ -378,10 +378,10 @@ namespace svxform
         enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
         enum SELDATA_ITEMS      { SDI_DIRTY, SDI_ALL, SDI_NORMALIZED, SDI_NORMALIZED_FORMARK };
 
-        // beim Droppen will ich scrollen und Folder aufklappen koennen, dafuer :
+        // when dropping I want to be able to scroll and to exand folders, for this:
         AutoTimer           m_aDropActionTimer;
         Timer               m_aSynchronizeTimer;
-        // die Meta-Daten ueber meine aktuelle Selektion
+        // the meta-data about my current selection
         SvLBoxEntrySortedArray  m_arrCurrentSelection;
         // the entries which, in the view, are currently marked as "cut" (painted semi-transparent)
         ListBoxEntrySet         m_aCutEntries;
@@ -395,21 +395,21 @@ namespace svxform
         ImplSVEvent *       nEditEvent;
 
         SELDATA_ITEMS       m_sdiState;
-        Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
+        Point               m_aTimerTriggered;      // the position at which the DropTimer was switched on
         DROP_ACTION         m_aDropActionType;
 
         sal_uInt16          m_nSelectLock;
         sal_uInt16          m_nFormsSelected;
         sal_uInt16          m_nControlsSelected;
-        sal_uInt16          m_nHiddenControls;      // (die Zahl geht in m_nControlsSelected mit ein)
+        sal_uInt16          m_nHiddenControls;      // (the number is included in m_nControlsSelected)
 
         unsigned short      m_aTimerCounter;
 
-        bool            m_bDragDataDirty        : 1;    // dito
+        bool            m_bDragDataDirty        : 1;    // ditto
         bool            m_bPrevSelectionMixed   : 1;
-        bool            m_bMarkingObjects       : 1;    // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
+        bool            m_bMarkingObjects       : 1;    // if this is sal_True, I do not need to react to the RequestSelectHints
         bool            m_bRootSelected         : 1;
-        bool            m_bInitialUpdate        : 1;   // bin ich das erste Mal im UpdateContent ?
+        bool            m_bInitialUpdate        : 1;    // am I the first time in the UpdateContent?
         bool            m_bKeyboardCut          : 1;
 
         FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, bool bEditName );
@@ -419,32 +419,32 @@ namespace svxform
 
 
         void CollectSelectionData(SELDATA_ITEMS sdiHow);
-            // sammelt in m_arrCurrentSelection die aktuell selektierten Eintraege, normalisiert die Liste wenn verlangt
-            // SDI_NORMALIZED bedeutet einfach, dass alle Eintraege, die schon einen selektierten Vorfahren haben, nicht mit gesammelt
-            // werden.
-            // SDI_NORMALIZED_FORMARK bedeutet, dass wie bei SDI_NORMALIZED verfahren wird, aber Eintraege, deren direktes Elter nicht
-            // selektiert ist, aufgenommen werden (unabhaengig vom Status weiterer Vorfahren), desgleichen Formulare, die selektiert sind,
-            // unabhaengig vom Status irgendwelcher Vorfahren
-            // Bei beiden Normalized-Modi enthalten die m_nFormsSelected, ... die richtige Anzahl, auch wenn nicht alle dieser Eintraege
-            // in m_arrCurrentSelection landen.
-            // SDI_DIRTY ist natuerlich nicht erlaubt als Parameter
+            // Collects the currently selected entries in m_arrCurrentSelection, normalizes the list if requested.
+            // - SDI_NORMALIZED simply means that all entries that already have a selected ancestor are not collected.
+            // - SDI_NORMALIZED_FORMARK means that the procedure is the same as for SDI_NORMALIZED,
+            //   but entries whose direct parent is not selected are collected (independent of the
+            //   status of further ancestors). The same applies for forms that are selected,
+            //   regardless of the status of any ancestors.
+            // For both normalized modes, the m_nFormsSelected, ... contain the correct number,
+            // even if not all of these entries end up in m_arrCurrentSelection.
+            // SDI_DIRTY is of course not allowed as a parameter.
 
-        // ein einziges Interface fuer alle selektierten Eintraege zusammensetzen
+        // a single interface for all selected entries
         void    ShowSelectionProperties(bool bForce = false);
-        // alle selektierten Elemnte loeschen
+        // delete all selected elements
         void    DeleteSelection();
 
         void SynchronizeSelection(FmEntryDataArray& arredToSelect);
-            // nach dem Aufruf dieser Methode sind genau die Eintraege selektiert, die in dem Array bezeichnet sind
+            // after calling this method, exactly the entries marked in the array are selected
         void SynchronizeSelection();
-            // macht das selbe, nimmt die MarkList der View
+            // makes the same, takes the MarkList of the View
         void SynchronizeMarkList();
-            // umgekehrte Richtung von SynchronizeMarkList : markiert in der View alle der aktuellen Selektion entsprechenden Controls
+            // reverse direction of SynchronizeMarkList: selects in the view all controls corresponding to the current selection
 
         void CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< css::uno::Reference< css::form::XFormComponent > >& _rObjects);
 
-        // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen View, mit folgenden Funktionen
-        // kann ich das Locking dieses Verhaltens steuern
+        // in the Select I usually update the Marklist of the corresponding view,
+        // with the following functions I can control the locking of this behavior
         void LockSelectionHandling() { ++m_nSelectLock; }
         void UnlockSelectionHandling() { --m_nSelectLock; }
         bool IsSelectionHandlingLocked() const { return m_nSelectLock>0; }

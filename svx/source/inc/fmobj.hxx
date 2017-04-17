@@ -36,8 +36,8 @@ class SVX_DLLPUBLIC FmFormObj: public SdrUnoObj
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
                 // m_pEnvironmentHistory was created
 
-    // Informationen fuer die Controlumgebung
-    // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet
+    // information for the control environment is only maintained if an object is not in an
+    // object list
     css::uno::Reference< css::container::XIndexContainer>     m_xParent;
     css::uno::Reference< css::form::XForms >                  m_xEnvironmentHistory;
     sal_Int32           m_nPos;

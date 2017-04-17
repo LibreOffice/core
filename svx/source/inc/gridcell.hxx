@@ -59,35 +59,35 @@ protected:
 };
 
 
-// DbGridColumn, Spaltenbeschreibung
+// DbGridColumn, column description
 
 class DbGridColumn
 {
     friend class DbGridControl;
 
     css::uno::Reference< css::beans::XPropertySet >       m_xModel;
-    css::uno::Reference< css::beans::XPropertySet >       m_xField;       // Verbindung zum Datenbankfeld
-    ::svt::CellControllerRef m_xController; // Struktur zum Verwalten der Controls fuer eine Spalte
-                                        // diese wird von der DbBrowseBox auf die jeweiligen Zellen
-                                        // einer Spalte positioniert
+    css::uno::Reference< css::beans::XPropertySet >       m_xField;       // connection to the database field
+    ::svt::CellControllerRef m_xController; // structure for managing the controls for a column
+                                        // this is positioned by the DbBrowseBox on the respective
+                                        // cells of a column
     rtl::Reference<FmXGridCell>                           m_pCell;
 
 protected:
     DbGridControl&      m_rParent;
 
 private:
-    sal_Int32               m_nLastVisibleWidth;    // nur gueltig, wenn m_bHidden == sal_True
+    sal_Int32               m_nLastVisibleWidth;    // only valid if m_bHidden == sal_True
     sal_Int32               m_nFormatKey;
     sal_Int16               m_nFieldType;
     sal_Int16               m_nTypeId;
     sal_uInt16              m_nId;
     sal_Int16               m_nFieldPos;
-    sal_Int16               m_nAlign;                       // wird mit TXT_ALIGN_LEFT .... angegeben
+    sal_Int16               m_nAlign;                       // specified with TXT_ALIGN_LEFT ....
     bool                m_bReadOnly : 1;
     bool                m_bAutoValue : 1;
     bool                m_bInSave : 1;
     bool                m_bNumeric : 1;
-    bool                m_bObject : 1;  // Verweist die Column auf ein Object Datentyp?
+    bool                m_bObject : 1;  // does the column reference an object datatype?
     bool                m_bHidden : 1;
     bool                m_bLocked : 1;
     bool                m_bDateTime : 1;
@@ -137,17 +137,16 @@ public:
 
     css::uno::Reference< css::sdb::XColumn >  GetCurrentFieldValue() const;
 
-    //      Zeichnen eines Feldes an einer Position, ist ein View gesetzt
-    //      uebernimmt dieser das Zeichnen, z.B. fuer CheckBoxen
+    //      Drawing a field at a position. If a view is set, it takes over the drawing,
+    //      e.g., for checkboxes.
     void    Paint(OutputDevice& rDev,
                   const tools::Rectangle& rRect,
                   const DbGridRow* pRow,
                   const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
 
 
-    //      Inititialierung im alive mode
-    //      Ist kein ColumnController gesetzt, wird eine DefaultInitialisierung
-    //      vorgenommen
+    //      Initializing in the alive mode.
+    //      If no ColumnController is set, a default initialization is performed.
     void    CreateControl(sal_Int32 _nFieldPos, const css::uno::Reference< css::beans::XPropertySet >& xField, sal_Int32 nTypeId);
     void    UpdateControl()
             {
@@ -155,11 +154,11 @@ public:
                 CreateControl(m_nFieldPos, xField, m_nTypeId);
             }
 
-    //      Editieren einer Zelle
+    //      Editing a Zelle
     void    UpdateFromField(const DbGridRow* pRow, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
     bool    Commit();
 
-    //      freigeben aller Daten, die fuer den AliveMode noetig sind
+    //      releasing all the data required for the AliveMode
     void    Clear();
 
     OUString  GetCellText(const DbGridRow* pRow, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
@@ -170,7 +169,7 @@ public:
 
     void    ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat );
 
-    // Properties, die auf den css::frame::Controller durchschlagen koennen
+    // properties that can bleed through onto the css::frame::Controller
     sal_Int16   SetAlignment(sal_Int16 _nAlign);
         // if _nAlign is -1, the alignment is calculated from the type of the field we are bound to
         // the value really set is returned
@@ -190,9 +189,8 @@ private:
 };
 
 
-// DbCellControl, liefert die Daten fuer einen CellController
-// wird in der Regel nur f\FCr komplexe Controls wie z.B ComboBoxen
-// benoetigt
+// DbCellControl, provides the data for a CellController.
+// Is usually only required for complex controls such as combo boxes.
 
 class DbCellControl
         :public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
@@ -277,11 +275,11 @@ public:
     void SetTextLineColor();
     void SetTextLineColor(const Color& _rColor);
 
-    // Initialisieren bevor ein Control angezeigt wird
+    // initializing before a control is displayed
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor );
     virtual ::svt::CellControllerRef CreateController() const = 0;
 
-    // Schreiben des Wertes in das Model
+    // writing the value into the model
     bool Commit();
 
     // Formatting the field data to output text
@@ -291,7 +289,7 @@ public:
     // Refresh the control by the field data
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) = 0;
 
-    // Painten eines Zellinhalts im vorgegeben Rechteck
+    // painting a cell content in the specified rectangle
     virtual void PaintFieldToCell( OutputDevice& rDev, const tools::Rectangle& rRect, const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
     virtual void PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect );
 
