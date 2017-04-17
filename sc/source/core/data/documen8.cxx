@@ -1188,7 +1188,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
 
     utl::TransliterationWrapper aTransliterationWrapper( comphelper::getProcessComponentContext(), nType );
     bool bConsiderLanguage = aTransliterationWrapper.needLanguageForTheMode();
-    sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
+    LanguageType nLanguage = LANGUAGE_SYSTEM;
 
     std::unique_ptr<ScEditEngineDefaulter> pEngine;        // not using pEditEngine member because of defaults
 

@@ -479,7 +479,7 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
     const SwNode* pSttNd = &rNdIdx.GetNode();
     OUString sCleanStr;
     std::vector<sal_Int32> aFltArr;
-    LanguageType eLastLang = 0;
+    LanguageType eLastLang = LANGUAGE_SYSTEM;
     // if the search string contains a soft hyphen,
     // we don't strip them from the text:
     bool bRemoveSoftHyphens = true;

@@ -1560,7 +1560,7 @@ void SdOutliner::HandleChangedSelection()
     }
 }
 
-void SdOutliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
+void SdOutliner::StartConversion( LanguageType nSourceLanguage,  LanguageType nTargetLanguage,
         const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());

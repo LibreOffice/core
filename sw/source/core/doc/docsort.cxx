@@ -74,13 +74,10 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
     pBox = pFltBx;
 
     LanguageType nLang = rOpt.nLanguage;
-    switch ( nLang )
-    {
-    case LANGUAGE_NONE:
-    case LANGUAGE_DONTKNOW:
+    if ( nLang.anyOf(
+        LANGUAGE_NONE,
+        LANGUAGE_DONTKNOW))
         nLang = GetAppLanguage();
-        break;
-    }
     pLocale = new lang::Locale( LanguageTag::convertToLocale( nLang ) );
 
     pSortCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );

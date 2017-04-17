@@ -98,14 +98,14 @@ public:
     bool    IsReadOnly(EOption eOption) const;
 
     // returns for a language the scripttype
-    static  SvtScriptType GetScriptTypeOfLanguage( sal_uInt16 nLang );
+    static  SvtScriptType GetScriptTypeOfLanguage( LanguageType nLang );
 
     // convert from css::i18n::ScriptType constants to SvtScriptType
     static SvtScriptType FromI18NToSvtScriptType( sal_Int16 nI18NType );
 
     static sal_Int16 FromSvtScriptTypeToI18N( SvtScriptType nI18NType );
 
-    static sal_Int16 GetI18NScriptTypeOfLanguage( sal_uInt16 nLang );
+    static sal_Int16 GetI18NScriptTypeOfLanguage( LanguageType nLang );
 
 };
 

@@ -228,13 +228,13 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     {
         sKeyword[NF_KEY_THAI_T] = "t";
     }
-    switch ( eLang )
+    if ( eLang.anyOf(
+            LANGUAGE_GERMAN,
+            LANGUAGE_GERMAN_SWISS,
+            LANGUAGE_GERMAN_AUSTRIAN,
+            LANGUAGE_GERMAN_LUXEMBOURG,
+            LANGUAGE_GERMAN_LIECHTENSTEIN))
     {
-    case LANGUAGE_GERMAN:
-    case LANGUAGE_GERMAN_SWISS:
-    case LANGUAGE_GERMAN_AUSTRIAN:
-    case LANGUAGE_GERMAN_LUXEMBOURG:
-    case LANGUAGE_GERMAN_LIECHTENSTEIN:
         //! all capital letters
         sKeyword[NF_KEY_M] =         "M";     // month 1
         sKeyword[NF_KEY_MM] =        "MM";    // month 01
@@ -261,13 +261,14 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         sKeyword[NF_KEY_GREY] =      "GRAU";
         sKeyword[NF_KEY_YELLOW] =    "GELB";
         sKeyword[NF_KEY_WHITE] =     "WEISS";
-        break;
-    default:
+    }
+    else
+    {
         // day
-        switch ( eLang )
+        if ( eLang.anyOf(
+                LANGUAGE_ITALIAN,
+                LANGUAGE_ITALIAN_SWISS))
         {
-        case LANGUAGE_ITALIAN:
-        case LANGUAGE_ITALIAN_SWISS:
             sKeyword[NF_KEY_D] = "G";
             sKeyword[NF_KEY_DD] = "GG";
             sKeyword[NF_KEY_DDD] = "GGG";
@@ -276,41 +277,45 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_G] = "X";
             sKeyword[NF_KEY_GG] = "XX";
             sKeyword[NF_KEY_GGG] = "XXX";
-            break;
-        case LANGUAGE_FRENCH:
-        case LANGUAGE_FRENCH_BELGIAN:
-        case LANGUAGE_FRENCH_CANADIAN:
-        case LANGUAGE_FRENCH_SWISS:
-        case LANGUAGE_FRENCH_LUXEMBOURG:
-        case LANGUAGE_FRENCH_MONACO:
+        }
+        else if ( eLang.anyOf(
+                 LANGUAGE_FRENCH,
+                 LANGUAGE_FRENCH_BELGIAN,
+                 LANGUAGE_FRENCH_CANADIAN,
+                 LANGUAGE_FRENCH_SWISS,
+                 LANGUAGE_FRENCH_LUXEMBOURG,
+                 LANGUAGE_FRENCH_MONACO))
+        {
             sKeyword[NF_KEY_D] = "J";
             sKeyword[NF_KEY_DD] = "JJ";
             sKeyword[NF_KEY_DDD] = "JJJ";
             sKeyword[NF_KEY_DDDD] = "JJJJ";
-            break;
-        case LANGUAGE_FINNISH:
+        }
+        else if ( eLang == LANGUAGE_FINNISH )
+        {
             sKeyword[NF_KEY_D] = "P";
             sKeyword[NF_KEY_DD] = "PP";
             sKeyword[NF_KEY_DDD] = "PPP";
             sKeyword[NF_KEY_DDDD] = "PPPP";
-            break;
-        default:
+        }
+        else
+        {
             sKeyword[NF_KEY_D] = "D";
             sKeyword[NF_KEY_DD] = "DD";
             sKeyword[NF_KEY_DDD] = "DDD";
             sKeyword[NF_KEY_DDDD] = "DDDD";
         }
         // month
-        switch ( eLang )
+        if ( eLang == LANGUAGE_FINNISH )
         {
-        case LANGUAGE_FINNISH:
             sKeyword[NF_KEY_M] = "K";
             sKeyword[NF_KEY_MM] = "KK";
             sKeyword[NF_KEY_MMM] = "KKK";
             sKeyword[NF_KEY_MMMM] = "KKKK";
             sKeyword[NF_KEY_MMMMM] = "KKKKK";
-            break;
-        default:
+        }
+        else
+        {
             sKeyword[NF_KEY_M] = "M";
             sKeyword[NF_KEY_MM] = "MM";
             sKeyword[NF_KEY_MMM] = "MMM";
@@ -318,76 +323,83 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_MMMMM] = "MMMMM";
         }
         // year
-        switch ( eLang )
+        if ( eLang.anyOf(
+            LANGUAGE_ITALIAN,
+            LANGUAGE_ITALIAN_SWISS,
+            LANGUAGE_FRENCH,
+            LANGUAGE_FRENCH_BELGIAN,
+            LANGUAGE_FRENCH_CANADIAN,
+            LANGUAGE_FRENCH_SWISS,
+            LANGUAGE_FRENCH_LUXEMBOURG,
+            LANGUAGE_FRENCH_MONACO,
+            LANGUAGE_PORTUGUESE,
+            LANGUAGE_PORTUGUESE_BRAZILIAN,
+            LANGUAGE_SPANISH_MODERN,
+            LANGUAGE_SPANISH_DATED,
+            LANGUAGE_SPANISH_MEXICAN,
+            LANGUAGE_SPANISH_GUATEMALA,
+            LANGUAGE_SPANISH_COSTARICA,
+            LANGUAGE_SPANISH_PANAMA,
+            LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,
+            LANGUAGE_SPANISH_VENEZUELA,
+            LANGUAGE_SPANISH_COLOMBIA,
+            LANGUAGE_SPANISH_PERU,
+            LANGUAGE_SPANISH_ARGENTINA,
+            LANGUAGE_SPANISH_ECUADOR,
+            LANGUAGE_SPANISH_CHILE,
+            LANGUAGE_SPANISH_URUGUAY,
+            LANGUAGE_SPANISH_PARAGUAY,
+            LANGUAGE_SPANISH_BOLIVIA,
+            LANGUAGE_SPANISH_EL_SALVADOR,
+            LANGUAGE_SPANISH_HONDURAS,
+            LANGUAGE_SPANISH_NICARAGUA,
+            LANGUAGE_SPANISH_PUERTO_RICO))
         {
-        case LANGUAGE_ITALIAN:
-        case LANGUAGE_ITALIAN_SWISS:
-        case LANGUAGE_FRENCH:
-        case LANGUAGE_FRENCH_BELGIAN:
-        case LANGUAGE_FRENCH_CANADIAN:
-        case LANGUAGE_FRENCH_SWISS:
-        case LANGUAGE_FRENCH_LUXEMBOURG:
-        case LANGUAGE_FRENCH_MONACO:
-        case LANGUAGE_PORTUGUESE:
-        case LANGUAGE_PORTUGUESE_BRAZILIAN:
-        case LANGUAGE_SPANISH_MODERN:
-        case LANGUAGE_SPANISH_DATED:
-        case LANGUAGE_SPANISH_MEXICAN:
-        case LANGUAGE_SPANISH_GUATEMALA:
-        case LANGUAGE_SPANISH_COSTARICA:
-        case LANGUAGE_SPANISH_PANAMA:
-        case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
-        case LANGUAGE_SPANISH_VENEZUELA:
-        case LANGUAGE_SPANISH_COLOMBIA:
-        case LANGUAGE_SPANISH_PERU:
-        case LANGUAGE_SPANISH_ARGENTINA:
-        case LANGUAGE_SPANISH_ECUADOR:
-        case LANGUAGE_SPANISH_CHILE:
-        case LANGUAGE_SPANISH_URUGUAY:
-        case LANGUAGE_SPANISH_PARAGUAY:
-        case LANGUAGE_SPANISH_BOLIVIA:
-        case LANGUAGE_SPANISH_EL_SALVADOR:
-        case LANGUAGE_SPANISH_HONDURAS:
-        case LANGUAGE_SPANISH_NICARAGUA:
-        case LANGUAGE_SPANISH_PUERTO_RICO:
             sKeyword[NF_KEY_YY] = "AA";
             sKeyword[NF_KEY_YYYY] = "AAAA";
             // must exchange the day of week name code, same as Xcl
             sKeyword[NF_KEY_AAA] =   "OOO";
             sKeyword[NF_KEY_AAAA] =  "OOOO";
-            break;
-        case LANGUAGE_DUTCH:
-        case LANGUAGE_DUTCH_BELGIAN:
+        }
+        else if ( eLang.anyOf(
+             LANGUAGE_DUTCH,
+             LANGUAGE_DUTCH_BELGIAN))
+        {
             sKeyword[NF_KEY_YY] = "JJ";
             sKeyword[NF_KEY_YYYY] = "JJJJ";
-            break;
-        case LANGUAGE_FINNISH:
+        }
+        else if ( eLang == LANGUAGE_FINNISH )
+        {
             sKeyword[NF_KEY_YY] = "VV";
             sKeyword[NF_KEY_YYYY] = "VVVV";
-            break;
-        default:
+        }
+        else
+        {
             sKeyword[NF_KEY_YY] = "YY";
             sKeyword[NF_KEY_YYYY] = "YYYY";
         }
         // hour
-        switch ( eLang )
+        if ( eLang.anyOf(
+             LANGUAGE_DUTCH,
+             LANGUAGE_DUTCH_BELGIAN))
         {
-        case LANGUAGE_DUTCH:
-        case LANGUAGE_DUTCH_BELGIAN:
             sKeyword[NF_KEY_H] = "U";
             sKeyword[NF_KEY_HH] = "UU";
-            break;
-        case LANGUAGE_FINNISH:
-        case LANGUAGE_SWEDISH:
-        case LANGUAGE_SWEDISH_FINLAND:
-        case LANGUAGE_DANISH:
-        case LANGUAGE_NORWEGIAN:
-        case LANGUAGE_NORWEGIAN_BOKMAL:
-        case LANGUAGE_NORWEGIAN_NYNORSK:
+        }
+        else if ( eLang.anyOf(
+            LANGUAGE_FINNISH,
+            LANGUAGE_SWEDISH,
+            LANGUAGE_SWEDISH_FINLAND,
+            LANGUAGE_DANISH,
+            LANGUAGE_NORWEGIAN,
+            LANGUAGE_NORWEGIAN_BOKMAL,
+            LANGUAGE_NORWEGIAN_NYNORSK))
+        {
             sKeyword[NF_KEY_H] = "T";
             sKeyword[NF_KEY_HH] = "TT";
-            break;
-        default:
+        }
+        else
+        {
             sKeyword[NF_KEY_H] = "H";
             sKeyword[NF_KEY_HH] = "HH";
         }
@@ -405,7 +417,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         sKeyword[NF_KEY_GREY] =      "GREY";
         sKeyword[NF_KEY_YELLOW] =    "YELLOW";
         sKeyword[NF_KEY_WHITE] =     "WHITE";
-        break;
     }
 
     // boolean keywords

@@ -118,7 +118,7 @@ size_t FontSelectPatternAttributes::hashCode() const
     nHash += 19 * GetWeight();
     nHash += 29 * GetItalic();
     nHash += 37 * mnOrientation;
-    nHash += 41 * meLanguage;
+    nHash += 41 * (sal_uInt16)meLanguage;
     if( mbVertical )
         nHash += 53;
     return nHash;

@@ -19,7 +19,7 @@
 
 #include <svtools/svtools.hrc>
 
-#define RSC_RESOURCE_USAGE 1
+#define __RSC
 #include <i18nlangtag/lang.h>
 
 #define PairedList ItemList

@@ -67,7 +67,7 @@ public:
 
     bool               Next();
     sal_Int32          GetChgPos() const        { return nChgPos; }
-    sal_uInt16         GetLanguage() const
+    LanguageType       GetLanguage() const
         { return static_cast<const SvxLanguageItem&>(*pCurItem).GetValue(); }
 };
 

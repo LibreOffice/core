@@ -51,14 +51,14 @@ namespace
         public rtl::Static< osl::Mutex, theSvtLinguConfigItemMutex > {};
 }
 
-static bool lcl_SetLocale( sal_Int16 &rLanguage, const uno::Any &rVal )
+static bool lcl_SetLocale( LanguageType &rLanguage, const uno::Any &rVal )
 {
     bool bSucc = false;
 
     lang::Locale aNew;
     if (rVal >>= aNew)  // conversion successful?
     {
-        sal_Int16 nNew = LanguageTag::convertToLanguageType( aNew, false);
+        LanguageType nNew = LanguageTag::convertToLanguageType( aNew, false);
         if (nNew != rLanguage)
         {
             rLanguage = nNew;
@@ -68,7 +68,7 @@ static bool lcl_SetLocale( sal_Int16 &rLanguage, const uno::Any &rVal )
     return bSucc;
 }
 
-static inline const OUString lcl_LanguageToCfgLocaleStr( sal_Int16 nLanguage )
+static inline const OUString lcl_LanguageToCfgLocaleStr( LanguageType nLanguage )
 {
     OUString aRes;
     if (LANGUAGE_SYSTEM != nLanguage)
@@ -76,7 +76,7 @@ static inline const OUString lcl_LanguageToCfgLocaleStr( sal_Int16 nLanguage )
     return aRes;
 }
 
-static sal_Int16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
+static LanguageType lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
@@ -326,6 +326,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
     uno::Any aRes;
 
     const sal_Int16 *pnVal = nullptr;
+    const LanguageType *plVal = nullptr;
     const bool  *pbVal = nullptr;
     const sal_Int32 *pnInt32Val = nullptr;
 
@@ -339,7 +340,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         case UPH_IS_SPELL_AUTO :            pbVal = &rOpt.bIsSpellAuto; break;
         case UPH_IS_SPELL_SPECIAL :         pbVal = &rOpt.bIsSpellSpecial;  break;
         case UPH_IS_WRAP_REVERSE :          pbVal = &rOpt.bIsSpellReverse;  break;
-        case UPH_DEFAULT_LANGUAGE :         pnVal = &rOpt.nDefaultLanguage; break;
+        case UPH_DEFAULT_LANGUAGE :         plVal = &rOpt.nDefaultLanguage; break;
         case UPH_IS_SPELL_CAPITALIZATION :  pbVal = &rOpt.bIsSpellCapitalization;       break;
         case UPH_IS_SPELL_WITH_DIGITS :     pbVal = &rOpt.bIsSpellWithDigits;   break;
         case UPH_IS_SPELL_UPPER_CASE :      pbVal = &rOpt.bIsSpellUpperCase;        break;
@@ -392,6 +393,8 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         aRes <<= *pbVal;
     else if (pnVal)
         aRes <<= *pnVal;
+    else if (plVal)
+        aRes <<= (sal_Int16)(sal_uInt16)*plVal;
     else if (pnInt32Val)
         aRes <<= *pnInt32Val;
 
@@ -420,6 +423,7 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
     bool bMod = false;
 
     sal_Int16 *pnVal = nullptr;
+    LanguageType *plVal = nullptr;
     bool  *pbVal = nullptr;
     sal_Int32 *pnInt32Val = nullptr;
 
@@ -433,7 +437,7 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
         case UPH_IS_SPELL_AUTO :            pbVal = &rOpt.bIsSpellAuto;    break;
         case UPH_IS_SPELL_SPECIAL :         pbVal = &rOpt.bIsSpellSpecial; break;
         case UPH_IS_WRAP_REVERSE :          pbVal = &rOpt.bIsSpellReverse; break;
-        case UPH_DEFAULT_LANGUAGE :         pnVal = &rOpt.nDefaultLanguage;    break;
+        case UPH_DEFAULT_LANGUAGE :         plVal = &rOpt.nDefaultLanguage;    break;
         case UPH_IS_SPELL_CAPITALIZATION :  pbVal = &rOpt.bIsSpellCapitalization;      break;
         case UPH_IS_SPELL_WITH_DIGITS :     pbVal = &rOpt.bIsSpellWithDigits;  break;
         case UPH_IS_SPELL_UPPER_CASE :      pbVal = &rOpt.bIsSpellUpperCase;       break;
@@ -508,6 +512,19 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
             if (nNew != *pnVal)
             {
                 *pnVal = nNew;
+                bMod = true;
+            }
+            bSucc = true;
+        }
+    }
+    else if (plVal)
+    {
+        sal_Int16 nNew = sal_Int16();
+        if (rValue >>= nNew)
+        {
+            if (nNew != (sal_uInt16)*plVal)
+            {
+                *plVal = LanguageType(nNew);
                 bMod = true;
             }
             bSucc = true;

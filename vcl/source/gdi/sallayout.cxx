@@ -148,82 +148,63 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
     // eLang & LANGUAGE_MASK_PRIMARY catches language independent of region.
     // CAVEAT! To some like Mongolian MS assigned the same primary language
     // although the script type is different!
-    switch( eLang & LANGUAGE_MASK_PRIMARY )
-    {
-        default:
-            nOffset = 0;
-            break;
-        case LANGUAGE_ARABIC_SAUDI_ARABIA  & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0660 - '0';  // arabic-indic digits
-            break;
-        case LANGUAGE_FARSI         & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_URDU_PAKISTAN & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_PUNJABI       & LANGUAGE_MASK_PRIMARY: //???
-        case LANGUAGE_SINDHI        & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x06F0 - '0';  // eastern arabic-indic digits
-            break;
-        case LANGUAGE_BENGALI       & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x09E6 - '0';  // bengali
-            break;
-        case LANGUAGE_HINDI         & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0966 - '0';  // devanagari
-            break;
-        case LANGUAGE_AMHARIC_ETHIOPIA & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_TIGRIGNA_ETHIOPIA & LANGUAGE_MASK_PRIMARY:
+    LanguageType pri = primary(eLang);
+    if( pri == primary(LANGUAGE_ARABIC_SAUDI_ARABIA) )
+        nOffset = 0x0660 - '0';  // arabic-indic digits
+    else if ( pri.anyOf(
+        primary(LANGUAGE_FARSI),
+        primary(LANGUAGE_URDU_PAKISTAN),
+        primary(LANGUAGE_PUNJABI), //???
+        primary(LANGUAGE_SINDHI)))
+        nOffset = 0x06F0 - '0';  // eastern arabic-indic digits
+    else if ( pri == primary(LANGUAGE_BENGALI) )
+        nOffset = 0x09E6 - '0';  // bengali
+    else if ( pri == primary(LANGUAGE_HINDI) )
+        nOffset = 0x0966 - '0';  // devanagari
+    else if ( pri.anyOf(
+        primary(LANGUAGE_AMHARIC_ETHIOPIA),
+        primary(LANGUAGE_TIGRIGNA_ETHIOPIA)))
         // TODO case:
-            nOffset = 0x1369 - '0';  // ethiopic
-            break;
-        case LANGUAGE_GUJARATI      & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0AE6 - '0';  // gujarati
-            break;
+        nOffset = 0x1369 - '0';  // ethiopic
+    else if ( pri == primary(LANGUAGE_GUJARATI) )
+        nOffset = 0x0AE6 - '0';  // gujarati
 #ifdef LANGUAGE_GURMUKHI // TODO case:
-        case LANGUAGE_GURMUKHI      & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0A66 - '0';  // gurmukhi
-            break;
+    else if ( pri == primary(LANGUAGE_GURMUKHI) )
+        nOffset = 0x0A66 - '0';  // gurmukhi
 #endif
-        case LANGUAGE_KANNADA       & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0CE6 - '0';  // kannada
-            break;
-        case LANGUAGE_KHMER         & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x17E0 - '0';  // khmer
-            break;
-        case LANGUAGE_LAO           & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0ED0 - '0';  // lao
-            break;
-        case LANGUAGE_MALAYALAM     & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0D66 - '0';  // malayalam
-            break;
-        case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO & LANGUAGE_MASK_PRIMARY:
-            switch (eLang)
-            {
-                case LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA:
-                case LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA:
-                case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO:
-                    nOffset = 0x1810 - '0';   // mongolian
-                    break;
-                default:
-                    nOffset = 0;              // mongolian cyrillic
-                    break;
-            }
-            break;
-        case LANGUAGE_BURMESE       & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x1040 - '0';  // myanmar
-            break;
-        case LANGUAGE_ODIA          & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0B66 - '0';  // odia
-            break;
-        case LANGUAGE_TAMIL         & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0BE7 - '0';  // tamil
-            break;
-        case LANGUAGE_TELUGU        & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0C66 - '0';  // telugu
-            break;
-        case LANGUAGE_THAI          & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0E50 - '0';  // thai
-            break;
-        case LANGUAGE_TIBETAN       & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0F20 - '0';  // tibetan
-            break;
+    else if ( pri == primary(LANGUAGE_KANNADA) )
+        nOffset = 0x0CE6 - '0';  // kannada
+    else if ( pri == primary(LANGUAGE_KHMER))
+        nOffset = 0x17E0 - '0';  // khmer
+    else if ( pri == primary(LANGUAGE_LAO) )
+        nOffset = 0x0ED0 - '0';  // lao
+    else if ( pri == primary(LANGUAGE_MALAYALAM) )
+        nOffset = 0x0D66 - '0';  // malayalam
+    else if ( pri == primary(LANGUAGE_MONGOLIAN_MONGOLIAN_LSO))
+    {
+        if (eLang.anyOf(
+             LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,
+             LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,
+             LANGUAGE_MONGOLIAN_MONGOLIAN_LSO))
+                nOffset = 0x1810 - '0';   // mongolian
+        else
+                nOffset = 0;              // mongolian cyrillic
+    }
+    else if ( pri == primary(LANGUAGE_BURMESE) )
+        nOffset = 0x1040 - '0';  // myanmar
+    else if ( pri == primary(LANGUAGE_ODIA) )
+        nOffset = 0x0B66 - '0';  // odia
+    else if ( pri == primary(LANGUAGE_TAMIL) )
+        nOffset = 0x0BE7 - '0';  // tamil
+    else if ( pri == primary(LANGUAGE_TELUGU) )
+        nOffset = 0x0C66 - '0';  // telugu
+    else if ( pri == primary(LANGUAGE_THAI) )
+        nOffset = 0x0E50 - '0';  // thai
+    else if ( pri == primary(LANGUAGE_TIBETAN) )
+        nOffset = 0x0F20 - '0';  // tibetan
+    else
+    {
+        nOffset = 0;
     }
 
     nChar += nOffset;

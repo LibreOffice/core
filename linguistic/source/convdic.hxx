@@ -39,7 +39,7 @@
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 
 
-bool    IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
+bool    IsConvDic( const OUString &rFileURL, LanguageType &nLang, sal_Int16 &nConvType );
 
 typedef std::unordered_multimap<OUString, OUString, const OUStringHash> ConvMap;
 
@@ -69,7 +69,7 @@ protected:
 
     OUString        aMainURL;   // URL to file
     OUString        aName;
-    sal_Int16       nLanguage;
+    LanguageType    nLanguage;
     sal_Int16       nConversionType;
     sal_Int16       nMaxLeftCharCount;
     sal_Int16       nMaxRightCharCount;
@@ -89,7 +89,7 @@ protected:
 
 public:
     ConvDic( const OUString &rName,
-             sal_Int16 nLanguage,
+             LanguageType nLanguage,
              sal_Int16 nConversionType,
              bool bBiDirectional,
              const OUString &rMainURL);

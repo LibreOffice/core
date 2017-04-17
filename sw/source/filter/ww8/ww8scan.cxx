@@ -5537,7 +5537,9 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     sal_Int16 cpnBtePap_Ver67=0;
 
     // read FIB
-    rSt.ReadInt16( m_lid );
+    sal_Int16 nTmpLid = 0;
+    rSt.ReadInt16( nTmpLid );
+    m_lid = (LanguageType)nTmpLid;
     rSt.ReadInt16( m_pnNext );
     rSt.ReadUChar( aBits1 );
     rSt.ReadUChar( aBits2 );
@@ -5583,7 +5585,9 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         && (bVer67 || WW8ReadINT16(  rSt, pnLvcFirst_W6                 ))  // 8
         && (bVer67 || WW8ReadINT16(  rSt, cpnBteLvc_W6                  ))  // 9
         */
-        rSt.ReadInt16( m_lidFE );
+        sal_Int16 nTmpFE = 0;
+        rSt.ReadInt16( nTmpFE );
+        m_lidFE = (LanguageType)nTmpFE;
         rSt.ReadUInt16( m_clw );
     }
 
@@ -5932,7 +5936,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
     m_cQuickSaves = m_nFib >= 0x00D9 ? 0xF : 0;
 
     // --> #i90932#
-    m_lid = 0x409; // LANGUAGE_ENGLISH_US
+    m_lid = (LanguageType)0x409; // LANGUAGE_ENGLISH_US
 
     LanguageType nLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     m_fFarEast = MsLangId::isCJK(nLang);
@@ -5963,7 +5967,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
     Set_UInt16( pData, m_wIdent );
     Set_UInt16( pData, m_nFib );
     Set_UInt16( pData, m_nProduct );
-    Set_UInt16( pData, m_lid );
+    Set_UInt16( pData, (sal_uInt16)m_lid );
     Set_UInt16( pData, m_pnNext );
 
     sal_uInt16 nBits16 = 0;
@@ -6019,7 +6023,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
         Set_UInt16( pData, m_wMagicCreatedPrivate );
         Set_UInt16( pData, m_wMagicRevisedPrivate );
         pData += 9 * sizeof( sal_Int16 );
-        Set_UInt16( pData, m_lidFE );
+        Set_UInt16( pData, (sal_uInt16)m_lidFE );
         Set_UInt16( pData, m_clw );
     }
 
@@ -6274,12 +6278,12 @@ void WW8Fib::Write(SvStream& rStrm)
     rStrm.WriteBytes(pDataPtr.get(), m_fcMin - nUnencryptedHdr);
 }
 
-rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale)
+rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, LanguageType nLidLocale)
 {
     OSL_ENSURE(chs <= 0x100, "overflowed winword charset set");
     if (chs == 0x0100)
         return RTL_TEXTENCODING_APPLE_ROMAN;
-    if (chs == 0 && nLidLocale >= 999)
+    if (chs == 0 && (sal_uInt16)nLidLocale >= 999)
     {
         /*
          nLidLocale:
@@ -7865,9 +7869,9 @@ void WW8DopTypography::WriteToMem(sal_uInt8 *&pData) const
         Set_UInt16(pData,rgxchLPunct[i]);
 }
 
-sal_uInt16 WW8DopTypography::GetConvertedLang() const
+LanguageType WW8DopTypography::GetConvertedLang() const
 {
-    sal_uInt16 nLang;
+    LanguageType nLang;
     //I have assumed peoples republic/taiwan == simplified/traditional
 
     //This isn't a documented issue, so we might have it all wrong,

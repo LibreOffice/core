@@ -93,7 +93,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
     nHash   += size_t(rFontSelData.mbVertical);
     nHash   += rFontSelData.GetItalic();
     nHash   += rFontSelData.GetWeight();
-    nHash   += rFontSelData.meLanguage;
+    nHash   += (sal_uInt16)rFontSelData.meLanguage;
 
     return nHash;
 }

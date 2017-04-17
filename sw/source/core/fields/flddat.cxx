@@ -40,7 +40,7 @@ SwFieldType* SwDateTimeFieldType::Copy() const
     return pTmp;
 }
 
-SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFormat, sal_uInt16 nLng)
+SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFormat, LanguageType nLng)
     : SwValueField(pInitType, nFormat, nLng, 0.0),
     nSubType(nSub),
     nOffset(0)

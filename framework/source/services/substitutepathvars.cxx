@@ -671,7 +671,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;
 
     // Set $(langid)
-    m_aPreDefVars.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::number( m_aPreDefVars.m_eLanguageType );
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::number( (sal_uInt16)m_aPreDefVars.m_eLanguageType );
 
     // Set the other pre defined path variables
     // Set $(work)

@@ -917,7 +917,7 @@ VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHa
 
 VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialog( vcl::Window* pParent,
                                 css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
-                                const OUString &rWord, sal_Int16 nLanguage )
+                                const OUString &rWord, LanguageType nLanguage )
 {
     VclPtrInstance<SvxThesaurusDialog> pDlg( pParent, xThesaurus, rWord, nLanguage );
     return VclPtr<AbstractThesaurusDialog_Impl>::Create( pDlg );

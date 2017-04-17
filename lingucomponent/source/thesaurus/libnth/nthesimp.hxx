@@ -79,7 +79,7 @@ class Thesaurus :
     // cache for the Thesaurus dialog
     Sequence < Reference < css::linguistic2::XMeaning > > prevMeanings;
     OUString  prevTerm;
-    sal_Int16 prevLocale;
+    LanguageType prevLocale;
 
     Thesaurus(const Thesaurus &) = delete;
     Thesaurus & operator = (const Thesaurus &) = delete;
