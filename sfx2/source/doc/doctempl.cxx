@@ -275,7 +275,6 @@ OUString SfxDocumentTemplates::GetFullRegionName
 
 {
     // First: find the RegionData for the index
-    OUString aName;
 
     DocTemplLocker_Impl aLocker( *pImp );
 
@@ -284,14 +283,14 @@ OUString SfxDocumentTemplates::GetFullRegionName
         RegionData_Impl *pData1 = pImp->GetRegion( nIdx );
 
         if ( pData1 )
-            aName = pData1->GetTitle();
+            return pData1->GetTitle();
 
         // --**-- here was some code which appended the path to the
         //      group if there was more than one with the same name.
         //      this should not happen anymore
     }
 
-    return aName;
+    return OUString();
 }
 
 
@@ -310,8 +309,6 @@ OUString SfxDocumentTemplates::GetRegionName
 
 */
 {
-    OUString aTmpString;
-
     DocTemplLocker_Impl aLocker( *pImp );
 
     if ( pImp->Construct() )
@@ -319,10 +316,10 @@ OUString SfxDocumentTemplates::GetRegionName
         RegionData_Impl *pData = pImp->GetRegion( nIdx );
 
         if ( pData )
-            aTmpString = pData->GetTitle();
+            return pData->GetTitle();
     }
 
-    return aTmpString;
+    return OUString();
 }
 
 
@@ -396,8 +393,6 @@ OUString SfxDocumentTemplates::GetName
 {
     DocTemplLocker_Impl aLocker( *pImp );
 
-    OUString aTmpString;
-
     if ( pImp->Construct() )
     {
         DocTempl_EntryData_Impl  *pEntry = nullptr;
@@ -407,10 +402,10 @@ OUString SfxDocumentTemplates::GetName
             pEntry = pRegion->GetEntry( nIdx );
 
         if ( pEntry )
-            aTmpString = pEntry->GetTitle();
+            return pEntry->GetTitle();
     }
 
-    return aTmpString;
+    return OUString();
 }
 
 
@@ -463,17 +458,16 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
                         INetURLObject::EncodeMechanism::All );
 
 
-    OUString aResult;
     Content aTemplate;
     uno::Reference< XCommandEnvironment > aCmdEnv;
     if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
     {
-        OUString aPropName( TARGET_URL  );
-        getTextProperty_Impl( aTemplate, aPropName, aResult );
-        aResult = SvtPathOptions().SubstituteVariable( aResult );
+        OUString aResult;
+        getTextProperty_Impl( aTemplate, TARGET_URL, aResult );
+        return SvtPathOptions().SubstituteVariable( aResult );
     }
 
-    return aResult;
+    return OUString();
 }
 
 
@@ -562,7 +556,7 @@ bool SfxDocumentTemplates::CopyOrMove
     if ( !pTargetRgn )
         return false;
 
-    OUString aTitle = pSource->GetTitle();
+    const OUString aTitle = pSource->GetTitle();
 
     uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
 
@@ -570,7 +564,7 @@ bool SfxDocumentTemplates::CopyOrMove
                                   aTitle,
                                   pSource->GetTargetURL() ) )
     {
-        OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
+        const OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
         if ( aNewTargetURL.isEmpty() )
             return false;
 
@@ -703,11 +697,11 @@ bool SfxDocumentTemplates::CopyTo
 
     INetURLObject aTargetURL( rName );
 
-    OUString aTitle( aTargetURL.getName( INetURLObject::LAST_SEGMENT, true,
+    const OUString aTitle( aTargetURL.getName( INetURLObject::LAST_SEGMENT, true,
                                          INetURLObject::DecodeMechanism::WithCharset ) );
     aTargetURL.removeSegment();
 
-    OUString aParentURL = aTargetURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aParentURL = aTargetURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     uno::Reference< XCommandEnvironment > aCmdEnv;
     Content aTarget;
@@ -723,9 +717,7 @@ bool SfxDocumentTemplates::CopyTo
         aTransferInfo.NameClash = NameClash::RENAME;
 
         Any aArg = makeAny( aTransferInfo );
-        OUString aCmd( COMMAND_TRANSFER  );
-
-        aTarget.executeCommand( aCmd, aArg );
+        aTarget.executeCommand( COMMAND_TRANSFER, aArg );
     }
     catch ( ContentCreationException& )
     { return false; }
@@ -841,7 +833,7 @@ bool SfxDocumentTemplates::CopyFrom
         aTemplObj.insertName( aTitle, false,
                               INetURLObject::LAST_SEGMENT,
                               INetURLObject::EncodeMechanism::All );
-        OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        const OUString aTemplURL = aTemplObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aTemplCont;
@@ -849,9 +841,7 @@ bool SfxDocumentTemplates::CopyFrom
         if( Content::create( aTemplURL, aCmdEnv, comphelper::getProcessComponentContext(), aTemplCont ) )
         {
             OUString aTemplName;
-            OUString aPropName( TARGET_URL  );
-
-            if( getTextProperty_Impl( aTemplCont, aPropName, aTemplName ) )
+            if( getTextProperty_Impl( aTemplCont, TARGET_URL, aTemplName ) )
             {
                 if ( nIdx == USHRT_MAX )
                     nIdx = 0;
@@ -1147,7 +1137,7 @@ bool SfxDocumentTemplates::GetLogicNames
 
     aFullPath.SetSmartProtocol( INetProtocol::File );
     aFullPath.SetURL( rPath );
-    OUString aPath( aFullPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    const OUString aPath( aFullPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     RegionData_Impl *pData = nullptr;
     DocTempl_EntryData_Impl  *pEntry = nullptr;
@@ -1266,9 +1256,7 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 
         if ( Content::create( GetHierarchyURL(), aCmdEnv, comphelper::getProcessComponentContext(), aRegion ) )
         {
-            OUString aPropName( TARGET_URL  );
-
-            getTextProperty_Impl( aRegion, aPropName, maTargetURL );
+            getTextProperty_Impl( aRegion, TARGET_URL, maTargetURL );
         }
         else
         {
@@ -1365,7 +1353,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
-    OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     bool        bFound = false;
     size_t          nPos = GetEntryPos( rTitle, bFound );
@@ -1555,10 +1543,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
         {
             while ( xResultSet->next() )
             {
-                OUString aTitle( xRow->getString( 1 ) );
-                OUString aTargetDir( xRow->getString( 2 ) );
-
-                pRegion->AddEntry( aTitle, aTargetDir, nullptr );
+                pRegion->AddEntry( xRow->getString( 1 ), xRow->getString( 2 ), nullptr );
             }
         }
         catch ( Exception& ) {}
@@ -1591,12 +1576,10 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
         {
             while ( xResultSet->next() )
             {
-                OUString aTitle( xRow->getString( 1 ) );
-
-                OUString aId = xContentAccess->queryContentIdentifierString();
+                const OUString aId = xContentAccess->queryContentIdentifierString();
                 Content  aContent( aId, aCmdEnv, comphelper::getProcessComponentContext() );
 
-                AddRegion( aTitle, aContent );
+                AddRegion( xRow->getString( 1 ), aContent );
             }
         }
         catch ( Exception& ) {}
@@ -1730,8 +1713,7 @@ bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
             uno::Reference< XPropertySet > aPropSet( mxInfo, UNO_QUERY );
             if ( aPropSet.is() )
             {
-                OUString aPropName( TITLE  );
-                Any aValue = aPropSet->getPropertyValue( aPropName );
+                Any aValue = aPropSet->getPropertyValue( TITLE );
                 aValue >>= aTitle;
             }
         }
