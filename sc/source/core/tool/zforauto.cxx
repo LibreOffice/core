@@ -50,8 +50,8 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, rtl_TextEncoding eByteStrSet )
     sal_uInt16 nSysLang, nLang;
     sFormatstring = rStream.ReadUniOrByteString( eByteStrSet );
     rStream.ReadUInt16( nSysLang ).ReadUInt16( nLang );
-    eLanguage = (LanguageType) nLang;
-    eSysLanguage = (LanguageType) nSysLang;
+    eLanguage = LanguageType(nLang);
+    eSysLanguage = LanguageType(nSysLang);
     if ( eSysLanguage == LANGUAGE_SYSTEM )          // old versions did write it
         eSysLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 }
@@ -59,7 +59,7 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, rtl_TextEncoding eByteStrSet )
 void ScNumFormatAbbrev::Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) const
 {
     rStream.WriteUniOrByteString( sFormatstring, eByteStrSet );
-    rStream.WriteUInt16( eSysLanguage ).WriteUInt16( eLanguage );
+    rStream.WriteUInt16( (sal_uInt16)eSysLanguage ).WriteUInt16( (sal_uInt16)eLanguage );
 }
 
 void ScNumFormatAbbrev::PutFormatIndex(sal_uInt32 nFormat,

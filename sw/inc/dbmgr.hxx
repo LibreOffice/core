@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <i18nlangtag/lang.h>
 #include <com/sun/star/util/Date.hpp>
 #include "swdllapi.h"
 #include <swdbdata.hxx>
@@ -329,13 +330,13 @@ public:
                             css::uno::Reference< css::sdbc::XConnection> const & xConnection,
                             css::uno::Reference< css::beans::XPropertySet> const & xColumn,
                             SvNumberFormatter* pNFormatr,
-                            long nLanguage );
+                            LanguageType nLanguage );
 
     sal_uLong GetColumnFormat( const OUString& rDBName,
                             const OUString& rTableName,
                             const OUString& rColNm,
                             SvNumberFormatter* pNFormatr,
-                            long nLanguage );
+                            LanguageType nLanguage );
     sal_Int32 GetColumnType( const OUString& rDBName,
                           const OUString& rTableName,
                           const OUString& rColNm );
@@ -356,7 +357,7 @@ public:
     bool            OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery);
     sal_uInt32      GetSelectedRecordId(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
     bool            GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
-                            const OUString& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
+                            const OUString& rColumnName, sal_uInt32 nAbsRecordId, LanguageType nLanguage,
                             OUString& rResult, double* pNumber);
     /** create and store or find an already stored connection to a data source for use
     in SwFieldMgr and SwDBTreeList */
@@ -370,10 +371,10 @@ public:
     /// close all data sources - after fields were updated
     void            CloseAll(bool bIncludingMerge = true);
 
-    bool            GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
+    bool            GetMergeColumnCnt(const OUString& rColumnName, LanguageType nLanguage,
                                       OUString &rResult, double *pNumber);
     bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
-                                          sal_uInt16 nLanguage, SwCalc &aCalc);
+                                          LanguageType nLanguage, SwCalc &aCalc);
     bool            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery);
 
     sal_uInt32      GetSelectedRecordId();

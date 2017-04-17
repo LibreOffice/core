@@ -134,7 +134,7 @@ bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
 }
 
 // returns for a language the scripttype
-SvtScriptType SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
+SvtScriptType SvtLanguageOptions::GetScriptTypeOfLanguage( LanguageType nLang )
 {
     if( LANGUAGE_DONTKNOW == nLang )
         nLang = LANGUAGE_ENGLISH_US;
@@ -184,7 +184,7 @@ sal_Int16 SvtLanguageOptions::FromSvtScriptTypeToI18N( SvtScriptType nItemType )
     return 0;
 }
 
-sal_Int16 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( sal_uInt16 nLang )
+sal_Int16 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( LanguageType nLang )
 {
     return FromSvtScriptTypeToI18N( GetScriptTypeOfLanguage( nLang ) );
 }
@@ -237,7 +237,7 @@ bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptTyp
             for(int i = 0; i < nLayouts; ++i)
             {
                 LCID lang = MAKELCID((WORD)(reinterpret_cast<DWORD_PTR>(lpList[i]) & 0xffff), SORT_DEFAULT);
-                if (MsLangId::getScriptType(lang) == scriptType)
+                if (MsLangId::getScriptType(LanguageType(lang)) == scriptType)
                 {
                     isInstalled = true;
                     break;

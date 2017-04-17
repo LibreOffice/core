@@ -487,8 +487,8 @@ bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sa
         rtl_TextEncoding eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         m_sNumFormatString = rStream.ReadUniOrByteString( eCharSet );
         rStream.ReadUInt16( eSys ).ReadUInt16( eLge );
-        m_eSysLanguage = (LanguageType) eSys;
-        m_eNumFormatLanguage = (LanguageType) eLge;
+        m_eSysLanguage = LanguageType(eSys);
+        m_eNumFormatLanguage = LanguageType(eLge);
         if ( m_eSysLanguage == LANGUAGE_SYSTEM )      // from old versions (Calc)
             m_eSysLanguage = ::GetAppLanguage();
     }
@@ -547,7 +547,7 @@ bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_sNumFormatString,
         RTL_TEXTENCODING_UTF8);
-    rStream.WriteUInt16( m_eSysLanguage ).WriteUInt16( m_eNumFormatLanguage );
+    rStream.WriteUInt16( (sal_uInt16)m_eSysLanguage ).WriteUInt16( (sal_uInt16)m_eNumFormatLanguage );
 
     return 0 == rStream.GetError();
 }

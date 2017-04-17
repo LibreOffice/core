@@ -618,121 +618,85 @@ OUString makeMinimalTextForScript(UScriptCode eScript)
 OUString makeRepresentativeTextForLanguage(LanguageType eLang)
 {
     OUString sRet;
-    switch( eLang & LANGUAGE_MASK_PRIMARY )
+    LanguageType pri = primary(eLang);
+    if( pri == primary(LANGUAGE_ARMENIAN) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_ARMENIAN);
+    else if( pri == primary(LANGUAGE_CHINESE) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_HAN);
+    else if( pri == primary(LANGUAGE_GREEK) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_GREEK);
+    else if( pri.anyOf(
+                primary(LANGUAGE_HEBREW),
+                primary(LANGUAGE_YIDDISH)) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_HEBREW);
+    else if( pri == primary(LANGUAGE_ARABIC_SAUDI_ARABIA) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_ARABIC);
+    else if( pri == primary(LANGUAGE_HINDI) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_DEVANAGARI);
+    else if( pri == primary(LANGUAGE_ASSAMESE) )
     {
-        case LANGUAGE_ARMENIAN & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_ARMENIAN);
-            break;
-        case LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_HAN);
-            break;
-        case LANGUAGE_GREEK & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_GREEK);
-            break;
-        case LANGUAGE_HEBREW & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_YIDDISH & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_HEBREW);
-            break;
-        case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_ARABIC);
-            break;
-        case LANGUAGE_HINDI & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_DEVANAGARI);
-            break;
-        case LANGUAGE_ASSAMESE & LANGUAGE_MASK_PRIMARY:
-        {
-            static const sal_Unicode aAs[] = {
-                0x0985, 0x09B8, 0x09AE, 0x09C0, 0x09AF, 0x09BC, 0x09BE,
-                0x0020, 0x0986, 0x0996, 0x09F0
-            };
-            sRet = OUString(aAs, SAL_N_ELEMENTS(aAs));
-            break;
-        }
-        case LANGUAGE_BENGALI & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_BENGALI);
-            break;
-        case LANGUAGE_PUNJABI & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_GURMUKHI);
-            break;
-        case LANGUAGE_GUJARATI & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_GUJARATI);
-            break;
-        case LANGUAGE_ODIA & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_ORIYA);
-            break;
-        case LANGUAGE_TAMIL & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_TAMIL);
-            break;
-        case LANGUAGE_TELUGU & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_TELUGU);
-            break;
-        case LANGUAGE_KANNADA & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_KANNADA);
-            break;
-        case LANGUAGE_MALAYALAM & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_MALAYALAM);
-            break;
-        case LANGUAGE_THAI & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_THAI);
-            break;
-        case LANGUAGE_LAO & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_LAO);
-            break;
-        case LANGUAGE_GEORGIAN & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_GEORGIAN);
-            break;
-        case LANGUAGE_KOREAN & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_KOREAN);
-            break;
-        case LANGUAGE_TIBETAN & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_TIBETAN);
-            break;
-        case LANGUAGE_SYRIAC & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_SYRIAC);
-            break;
-        case LANGUAGE_SINHALESE_SRI_LANKA & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_SINHALA);
-            break;
-        case LANGUAGE_BURMESE & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_MYANMAR);
-            break;
-        case LANGUAGE_AMHARIC_ETHIOPIA & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_ETHIOPIC);
-            break;
-        case LANGUAGE_CHEROKEE_UNITED_STATES & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_CHEROKEE);
-            break;
-        case LANGUAGE_KHMER & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_KHMER);
-            break;
-        case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO & LANGUAGE_MASK_PRIMARY:
-            switch (eLang)
-            {
-                case LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA:
-                case LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA:
-                case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO:
-                    sRet = makeRepresentativeTextForScript(USCRIPT_MONGOLIAN);
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_JAPANESE);
-            break;
-        case LANGUAGE_YI & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_YI);
-            break;
-        case LANGUAGE_GAELIC_IRELAND & LANGUAGE_MASK_PRIMARY:
-        {
-            static const sal_Unicode aGa[] = {
-                'T', 0x00E9, 'a', 'c', 's', ' ', 'S', 'a', 'm', 'p', 'l', 'a', 'c', 'h'
-            };
-            sRet = OUString(aGa, SAL_N_ELEMENTS(aGa));
-            break;
-        }
-        default:
-            break;
+        static const sal_Unicode aAs[] = {
+            0x0985, 0x09B8, 0x09AE, 0x09C0, 0x09AF, 0x09BC, 0x09BE,
+            0x0020, 0x0986, 0x0996, 0x09F0
+        };
+        sRet = OUString(aAs, SAL_N_ELEMENTS(aAs));
+    }
+    else if( pri == primary(LANGUAGE_BENGALI) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_BENGALI);
+    else if( pri == primary(LANGUAGE_PUNJABI) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_GURMUKHI);
+    else if( pri == primary(LANGUAGE_GUJARATI) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_GUJARATI);
+    else if( pri == primary(LANGUAGE_ODIA) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_ORIYA);
+    else if( pri == primary(LANGUAGE_TAMIL) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_TAMIL);
+    else if( pri == primary(LANGUAGE_TELUGU) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_TELUGU);
+    else if( pri == primary(LANGUAGE_KANNADA) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_KANNADA);
+    else if( pri == primary(LANGUAGE_MALAYALAM) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_MALAYALAM);
+    else if( pri == primary(LANGUAGE_THAI) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_THAI);
+    else if( pri == primary(LANGUAGE_LAO) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_LAO);
+    else if( pri == primary(LANGUAGE_GEORGIAN) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_GEORGIAN);
+    else if( pri == primary(LANGUAGE_KOREAN) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_KOREAN);
+    else if( pri == primary(LANGUAGE_TIBETAN) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_TIBETAN);
+    else if( pri == primary(LANGUAGE_SYRIAC) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_SYRIAC);
+    else if( pri == primary(LANGUAGE_SINHALESE_SRI_LANKA) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_SINHALA);
+    else if( pri == primary(LANGUAGE_BURMESE) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_MYANMAR);
+    else if( pri == primary(LANGUAGE_AMHARIC_ETHIOPIA) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_ETHIOPIC);
+    else if( pri == primary(LANGUAGE_CHEROKEE_UNITED_STATES) )
+         sRet = makeRepresentativeTextForScript(USCRIPT_CHEROKEE);
+    else if( pri == primary(LANGUAGE_KHMER) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_KHMER);
+    else if( pri == primary(LANGUAGE_MONGOLIAN_MONGOLIAN_LSO) )
+    {
+        if (eLang.anyOf(
+             LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,
+             LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,
+             LANGUAGE_MONGOLIAN_MONGOLIAN_LSO))
+                sRet = makeRepresentativeTextForScript(USCRIPT_MONGOLIAN);
+    }
+    else if( pri == primary(LANGUAGE_JAPANESE) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_JAPANESE);
+    else if( pri == primary(LANGUAGE_YI) )
+        sRet = makeRepresentativeTextForScript(USCRIPT_YI);
+    else if( pri == primary(LANGUAGE_GAELIC_IRELAND) )
+    {
+        static const sal_Unicode aGa[] = {
+            'T', 0x00E9, 'a', 'c', 's', ' ', 'S', 'a', 'm', 'p', 'l', 'a', 'c', 'h'
+        };
+        sRet = OUString(aGa, SAL_N_ELEMENTS(aGa));
     }
 
     return sRet;
