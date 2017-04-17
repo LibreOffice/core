@@ -1826,6 +1826,14 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     sal_uInt16 nModifier = rEvent.GetModifier();
     bool bLeftDown = rEvent.IsLeft();
 
+    // Check if object is for field button and set the normal arrow pointer in this case
+    SdrObject* pObject = m_pDrawViewWrapper->getHitObject(aMousePos);
+    if (pObject && pObject->GetName().startsWith("FieldButton"))
+    {
+        pChartWindow->SetPointer(Pointer(PointerStyle::Arrow));
+        return;
+    }
+
     if ( m_pDrawViewWrapper->IsTextEdit() )
     {
         if( m_pDrawViewWrapper->IsTextEditHit( aMousePos ) )
