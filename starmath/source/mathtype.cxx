@@ -1952,28 +1952,28 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
 {
     switch(pNode->GetType())
     {
-        case NATTRIBUT:
+        case SmNodeType::Attribut:
             HandleAttributes(pNode,nLevel);
             break;
-        case NTEXT:
+        case SmNodeType::Text:
             HandleText(pNode,nLevel);
             break;
-        case NVERTICAL_BRACE:
+        case SmNodeType::VerticalBrace:
             HandleVerticalBrace(pNode,nLevel);
             break;
-        case NBRACE:
+        case SmNodeType::Brace:
             HandleBrace(pNode,nLevel);
             break;
-        case NOPER:
+        case SmNodeType::Oper:
             HandleOperator(pNode,nLevel);
             break;
-        case NBINVER:
+        case SmNodeType::BinVer:
             HandleFractions(pNode,nLevel);
             break;
-        case NROOT:
+        case SmNodeType::Root:
             HandleRoot(pNode,nLevel);
             break;
-        case NSPECIAL:
+        case SmNodeType::Special:
             {
             SmTextNode *pText = static_cast<SmTextNode *>(pNode);
             //if the token str and the result text are the same then this
@@ -1984,14 +1984,14 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
                 HandleMath(pText,nLevel);
             }
             break;
-        case NMATH:
-        case NMATHIDENT:
+        case SmNodeType::Math:
+        case SmNodeType::MathIdent:
             HandleMath(pNode,nLevel);
             break;
-        case NSUBSUP:
+        case SmNodeType::SubSup:
             HandleSubSupScript(pNode,nLevel);
             break;
-        case NEXPRESSION:
+        case SmNodeType::Expression:
             {
             sal_uInt16  nSize = pNode->GetNumSubNodes();
             for (sal_uInt16 i = 0; i < nSize; i++)
@@ -1999,14 +1999,14 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
                     HandleNodes(pTemp,nLevel+1);
             }
             break;
-        case NTABLE:
+        case SmNodeType::Table:
             //Root Node, PILE equivalent, i.e. vertical stack
             HandleTable(pNode,nLevel);
             break;
-        case NMATRIX:
+        case SmNodeType::Matrix:
             HandleSmMatrix(static_cast<SmMatrixNode *>(pNode),nLevel);
             break;
-        case NLINE:
+        case SmNodeType::Line:
             {
             pS->WriteUChar( 0x0a );
             pS->WriteUChar( LINE );
@@ -2017,10 +2017,10 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
             pS->WriteUChar( END );
             }
             break;
-        case NALIGN:
+        case SmNodeType::Align:
             HandleMAlign(pNode,nLevel);
             break;
-        case NBLANK:
+        case SmNodeType::Blank:
             pS->WriteUChar( CHAR );
             pS->WriteUChar( 0x98 );
             if (pNode->GetToken().eType == TSBLANK)

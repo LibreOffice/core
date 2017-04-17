@@ -238,7 +238,7 @@ void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
 
 static OString mathSymbolToString( const SmNode* node )
 {
-    assert( node->GetType() == NMATH || node->GetType() == NMATHIDENT );
+    assert( node->GetType() == SmNodeType::Math || node->GetType() == SmNodeType::MathIdent );
     const SmTextNode* txtnode = static_cast< const SmTextNode* >( node );
     assert( txtnode->GetText().getLength() == 1 );
     sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode( txtnode->GetText()[0] );
@@ -261,7 +261,7 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
         case TCOPROD:
         case TSUM:
         {
-            const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
+            const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == SmNodeType::SubSup
                 ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : nullptr;
             const SmNode* operation = subsup != nullptr ? subsup->GetBody() : pNode->GetSubNode( 0 );
             m_pSerializer->startElementNS( XML_m, XML_nary, FSEND );
@@ -303,7 +303,7 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
             HandleNode( pNode->GetSymbol(), nLevel + 1 );
             m_pSerializer->endElementNS( XML_m, XML_e );
             m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
-            if( const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
+            if( const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == SmNodeType::SubSup
                 ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : nullptr )
             {
                 if( subsup->GetSubSup( CSUB ) != nullptr )
@@ -466,14 +466,14 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
             FSNS( XML_m, XML_val ), mathSymbolToString( pNode->OpeningBrace()).getStr(), FSEND );
 
     std::vector< const SmNode* > subnodes;
-    if( pNode->Body()->GetType() == NBRACEBODY )
+    if( pNode->Body()->GetType() == SmNodeType::Bracebody )
     {
         const SmBracebodyNode* body = static_cast< const SmBracebodyNode* >( pNode->Body());
         bool separatorWritten = false; // assume all separators are the same
         for( int i = 0; i < body->GetNumSubNodes(); ++i )
         {
             const SmNode* subnode = body->GetSubNode( i );
-            if (subnode->GetType() == NMATH || subnode->GetType() == NMATHIDENT)
+            if (subnode->GetType() == SmNodeType::Math || subnode->GetType() == SmNodeType::MathIdent)
             { // do not write, but write what separator it is
                 const SmMathSymbolNode* math = static_cast< const SmMathSymbolNode* >( subnode );
                 if( !separatorWritten )

@@ -628,7 +628,7 @@ void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
     {
         const SmNode *node = s.top();
         s.pop();
-        if (node->GetType() != NBINHOR || node->GetToken().nGroup != nGroup)
+        if (node->GetType() != SmNodeType::BinHor || node->GetToken().nGroup != nGroup)
         {
             ExportNodes(node, nLevel+1);
             continue;
@@ -653,7 +653,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
 
     // #i115443: nodes of type expression always need to be grouped with mrow statement
     if (!bNoMrowContainer &&
-        (nSize > 1 || pNode->GetType() == NEXPRESSION))
+        (nSize > 1 || pNode->GetType() == SmNodeType::Expression))
         pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, true, true);
 
     for (sal_uInt16 i = 0; i < nSize; i++)
@@ -668,14 +668,14 @@ void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
     assert(pNode->GetNumSubNodes() == 3);
     const SmNode *pNum = pNode->GetSubNode(0);
     const SmNode *pDenom = pNode->GetSubNode(2);
-    if (pNum->GetType() == NALIGN && pNum->GetToken().eType != TALIGNC)
+    if (pNum->GetType() == SmNodeType::Align && pNum->GetToken().eType != TALIGNC)
     {
         // A left or right alignment is specified on the numerator:
         // attach the corresponding numalign attribute.
         AddAttribute(XML_NAMESPACE_MATH, XML_NUMALIGN,
             pNum->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
     }
-    if (pDenom->GetType() == NALIGN && pDenom->GetToken().eType != TALIGNC)
+    if (pDenom->GetType() == SmNodeType::Align && pDenom->GetToken().eType != TALIGNC)
     {
         // A left or right alignment is specified on the denominator:
         // attach the corresponding denomalign attribute.
@@ -734,7 +734,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     if (nSize >= 1)
     {
         const SmNode *pLine = pNode->GetSubNode(nSize-1);
-        if (pLine->GetType() == NLINE && pLine->GetNumSubNodes() == 1 &&
+        if (pLine->GetType() == SmNodeType::Line && pLine->GetNumSubNodes() == 1 &&
             pLine->GetSubNode(0) != nullptr &&
             pLine->GetSubNode(0)->GetToken().eType == TNEWLINE)
             --nSize;
@@ -754,21 +754,21 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
             {
                 pRow  = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTR, true, true);
                 SmTokenType eAlign = TALIGNC;
-                if (pTemp->GetType() == NALIGN)
+                if (pTemp->GetType() == SmNodeType::Align)
                 {
-                    // For Binom() and Stack() constructions, the NALIGN nodes
+                    // For Binom() and Stack() constructions, the SmNodeType::Align nodes
                     // are direct children.
                     // binom{alignl ...}{alignr ...} and
                     // stack{alignl ... ## alignr ... ## ...}
                     eAlign = pTemp->GetToken().eType;
                 }
-                else if (pTemp->GetType() == NLINE &&
+                else if (pTemp->GetType() == SmNodeType::Line &&
                          pTemp->GetNumSubNodes() == 1 &&
                          pTemp->GetSubNode(0) &&
-                         pTemp->GetSubNode(0)->GetType() == NALIGN)
+                         pTemp->GetSubNode(0)->GetType() == SmNodeType::Align)
                 {
-                    // For the Table() construction, the NALIGN node is a child
-                    // of an NLINE node.
+                    // For the Table() construction, the SmNodeType::Align node is a child
+                    // of an SmNodeType::Line node.
                     // alignl ... newline alignr ... newline ...
                     eAlign = pTemp->GetSubNode(0)->GetToken().eType;
                 }
@@ -794,12 +794,12 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
     SvXMLElementExport *pMath = nullptr;
 
-    if (pNode->GetType() == NMATH || pNode->GetType() == NGLYPH_SPECIAL)
+    if (pNode->GetType() == SmNodeType::Math || pNode->GetType() == SmNodeType::GlyphSpecial)
     {
-        // Export NMATH and NGLYPH_SPECIAL symbols as <mo> elements
+        // Export SmNodeType::Math and SmNodeType::GlyphSpecial symbols as <mo> elements
         pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, true, false);
     }
-    else if (pNode->GetType() == NSPECIAL)
+    else if (pNode->GetType() == SmNodeType::Special)
     {
         bool bIsItalic = IsItalic(pNode->GetFont());
         if (!bIsItalic)
@@ -808,14 +808,14 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     }
     else
     {
-        // Export NMATHIDENT and NPLACE symbols as <mi> elements:
+        // Export SmNodeType::MathIdent and SmNodeType::Place symbols as <mi> elements:
         // - These math symbols should not be drawn slanted. Hence we should
         // attach a mathvariant="normal" attribute to single-char <mi> elements
         // that are not mathematical alphanumeric symbol. For simplicity and to
         // work around browser limitations, we always attach such an attribute.
         // - The MathML specification suggests to use empty <mi> elements as
         // placeholders but they won't be visible in most MathML rendering
-        // engines so let's use an empty square for NPLACE instead.
+        // engines so let's use an empty square for SmNodeType::Place instead.
         AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
         pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, true, false);
     }
@@ -1436,7 +1436,7 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
         for (sal_uInt16 x = 0; x < pMatrix->GetNumCols(); x++)
             if (const SmNode *pTemp = pNode->GetSubNode(i++))
             {
-                if (pTemp->GetType() == NALIGN &&
+                if (pTemp->GetType() == SmNodeType::Align &&
                     pTemp->GetToken().eType != TALIGNC)
                 {
                     // A left or right alignment is specified on this cell,
@@ -1457,22 +1457,22 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         return;
     switch(pNode->GetType())
     {
-        case NTABLE:
+        case SmNodeType::Table:
             ExportTable(pNode, nLevel);
             break;
-        case NALIGN:
-        case NBRACEBODY:
-        case NEXPRESSION:
+        case SmNodeType::Align:
+        case SmNodeType::Bracebody:
+        case SmNodeType::Expression:
             ExportExpression(pNode, nLevel);
             break;
-        case NLINE:
+        case SmNodeType::Line:
             ExportLine(pNode, nLevel);
             break;
-        case NTEXT:
+        case SmNodeType::Text:
             ExportText(pNode, nLevel);
             break;
-        case NGLYPH_SPECIAL:
-        case NMATH:
+        case SmNodeType::GlyphSpecial:
+        case SmNodeType::Math:
             {
                 sal_Unicode cTmp = 0;
                 const SmTextNode *pTemp = static_cast< const SmTextNode * >(pNode);
@@ -1520,48 +1520,48 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                 }
             }
             break;
-        case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in the XML engine.
-        case NMATHIDENT :
-        case NPLACE:
+        case SmNodeType::Special: //SmNodeType::Special requires some sort of Entity preservation in the XML engine.
+        case SmNodeType::MathIdent:
+        case SmNodeType::Place:
             ExportMath(pNode, nLevel);
             break;
-        case NBINHOR:
+        case SmNodeType::BinHor:
             ExportBinaryHorizontal(pNode, nLevel);
             break;
-        case NUNHOR:
+        case SmNodeType::UnHor:
             ExportUnaryHorizontal(pNode, nLevel);
             break;
-        case NBRACE:
+        case SmNodeType::Brace:
             ExportBrace(pNode, nLevel);
             break;
-        case NBINVER:
+        case SmNodeType::BinVer:
             ExportBinaryVertical(pNode, nLevel);
             break;
-        case NBINDIAGONAL:
+        case SmNodeType::BinDiagonal:
             ExportBinaryDiagonal(pNode, nLevel);
             break;
-        case NSUBSUP:
+        case SmNodeType::SubSup:
             ExportSubSupScript(pNode, nLevel);
             break;
-        case NROOT:
+        case SmNodeType::Root:
             ExportRoot(pNode, nLevel);
             break;
-        case NOPER:
+        case SmNodeType::Oper:
             ExportOperator(pNode, nLevel);
             break;
-        case NATTRIBUT:
+        case SmNodeType::Attribut:
             ExportAttributes(pNode, nLevel);
             break;
-        case NFONT:
+        case SmNodeType::Font:
             ExportFont(pNode, nLevel);
             break;
-        case NVERTICAL_BRACE:
+        case SmNodeType::VerticalBrace:
             ExportVerticalBrace(static_cast<const SmVerticalBraceNode *>(pNode), nLevel);
             break;
-        case NMATRIX:
+        case SmNodeType::Matrix:
             ExportMatrix(pNode, nLevel);
             break;
-        case NBLANK:
+        case SmNodeType::Blank:
             ExportBlank(pNode, nLevel);
             break;
        default:
