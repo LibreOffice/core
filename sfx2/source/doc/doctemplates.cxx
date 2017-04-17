@@ -932,8 +932,7 @@ bool SfxDocTplService_Impl::removeContent( const OUString& rContentURL )
 
     if ( Content::create( rContentURL, maCmdEnv, comphelper::getProcessComponentContext(), aContent ) )
         return removeContent( aContent );
-    else
-        return false;
+    return false;
 }
 
 
@@ -2212,8 +2211,7 @@ uno::Reference< ucb::XContent > SAL_CALL SfxDocTplService::getContent()
 {
     if ( pImp->init() )
         return pImp->getContent().get();
-    else
-        return nullptr;
+    return nullptr;
 }
 
 
@@ -2221,10 +2219,7 @@ sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
                                                    const uno::Reference< frame::XStorable >& Storable )
 {
-    if ( pImp->init() )
-        return pImp->storeTemplate( GroupName, TemplateName, Storable );
-    else
-        return false;
+    return pImp->init() && pImp->storeTemplate( GroupName, TemplateName, Storable );
 }
 
 
@@ -2232,20 +2227,14 @@ sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
                                                  const OUString& rTemplateName,
                                                  const OUString& rSourceURL )
 {
-    if ( pImp->init() )
-        return pImp->addTemplate( rGroupName, rTemplateName, rSourceURL );
-    else
-        return false;
+    return pImp->init() && pImp->addTemplate( rGroupName, rTemplateName, rSourceURL );
 }
 
 
 sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
                                                     const OUString& rTemplateName )
 {
-    if ( pImp->init() )
-        return pImp->removeTemplate( rGroupName, rTemplateName );
-    else
-        return false;
+    return pImp->init() && pImp->removeTemplate( rGroupName, rTemplateName );
 }
 
 
@@ -2256,28 +2245,19 @@ sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
     if ( rOldName == rNewName )
         return true;
 
-    if ( pImp->init() )
-        return pImp->renameTemplate( rGroupName, rOldName, rNewName );
-    else
-        return false;
+    return pImp->init() && pImp->renameTemplate( rGroupName, rOldName, rNewName );
 }
 
 
 sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
 {
-    if ( pImp->init() )
-        return pImp->addGroup( rGroupName );
-    else
-        return false;
+    return pImp->init() && pImp->addGroup( rGroupName );
 }
 
 
 sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
 {
-    if ( pImp->init() )
-        return pImp->removeGroup( rGroupName );
-    else
-        return false;
+    return pImp->init() && pImp->removeGroup( rGroupName );
 }
 
 
@@ -2287,10 +2267,7 @@ sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
     if ( rOldName == rNewName )
         return true;
 
-    if ( pImp->init() )
-        return pImp->renameGroup( rOldName, rNewName );
-    else
-        return false;
+    return pImp->init() && pImp->renameGroup( rOldName, rNewName );
 }
 
 
