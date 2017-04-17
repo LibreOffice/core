@@ -1755,8 +1755,8 @@ var INDEX_MODE = 2;
 
 // Mouse handler actions.
 var MOUSE_UP = 1;
-var MOUSE_DOWN = 2;
-var MOUSE_MOVE = 3;
+var MOUSE_DOWN = 2; // TODO
+var MOUSE_MOVE = 3; // TODO
 var MOUSE_WHEEL = 4;
 
 // Key-codes.
@@ -1776,7 +1776,6 @@ var ESCAPE_KEY = 27;
 var HIDDEN = 0;
 var VISIBLE = 1;
 var INHERIT = 2;
-var aVisibilityAttributeValue = [ 'hidden', 'visible', 'inherit' ];
 var aVisibilityValue = { 'hidden' : HIDDEN, 'visible' : VISIBLE, 'inherit' : INHERIT };
 
 // Parameters
@@ -4868,7 +4867,6 @@ aPresetIdInMap = {};
 
 // Restart Modes
 var RESTART_MODE_DEFAULT            = 0;
-var RESTART_MODE_INHERIT            = 0;
 var RESTART_MODE_ALWAYS             = 1;
 var RESTART_MODE_WHEN_NOT_ACTIVE    = 2;
 var RESTART_MODE_NEVER              = 3;
@@ -4885,7 +4883,6 @@ aRestartModeOutMap = [ 'inherit','always', 'whenNotActive', 'never' ];
 
 // Fill Modes
 var FILL_MODE_DEFAULT           = 0;
-var FILL_MODE_INHERIT           = 0;
 var FILL_MODE_REMOVE            = 1;
 var FILL_MODE_FREEZE            = 2;
 var FILL_MODE_HOLD              = 3;
@@ -4905,7 +4902,6 @@ aFillModeOutMap = [ 'inherit', 'remove', 'freeze', 'hold', 'transition', 'auto' 
 
 
 // Additive Modes
-var ADDITIVE_MODE_UNKNOWN       = 0;
 var ADDITIVE_MODE_BASE          = 1;
 var ADDITIVE_MODE_SUM           = 2;
 var ADDITIVE_MODE_REPLACE       = 3;
@@ -4930,7 +4926,6 @@ var ACCUMULATE_MODE_SUM         = 1;
 aAccumulateModeOutMap = [ 'none', 'sum' ];
 
 // Calculation Modes
-var CALC_MODE_UNKNOWN           = 0
 var CALC_MODE_DISCRETE          = 1;
 var CALC_MODE_LINEAR            = 2;
 var CALC_MODE_PACED             = 3;
@@ -6374,17 +6369,17 @@ function getTransitionTable( eRestartMode, eFillMode )
 
 // Event Triggers
 var EVENT_TRIGGER_UNKNOWN               = 0;
-var EVENT_TRIGGER_ON_SLIDE_BEGIN        = 1;
-var EVENT_TRIGGER_ON_SLIDE_END          = 2;
+var EVENT_TRIGGER_ON_SLIDE_BEGIN        = 1; // TODO
+var EVENT_TRIGGER_ON_SLIDE_END          = 2; // TODO
 var EVENT_TRIGGER_BEGIN_EVENT           = 3;
 var EVENT_TRIGGER_END_EVENT             = 4;
 var EVENT_TRIGGER_ON_CLICK              = 5;
-var EVENT_TRIGGER_ON_DBL_CLICK          = 6;
-var EVENT_TRIGGER_ON_MOUSE_ENTER        = 7;
-var EVENT_TRIGGER_ON_MOUSE_LEAVE        = 8;
+var EVENT_TRIGGER_ON_DBL_CLICK          = 6; // TODO
+var EVENT_TRIGGER_ON_MOUSE_ENTER        = 7; // TODO
+var EVENT_TRIGGER_ON_MOUSE_LEAVE        = 8; // TODO
 var EVENT_TRIGGER_ON_NEXT_EFFECT        = 9;
 var EVENT_TRIGGER_ON_PREV_EFFECT        = 10;
-var EVENT_TRIGGER_REPEAT                = 11;
+var EVENT_TRIGGER_REPEAT                = 11; // TODO
 
 aEventTriggerOutMap = [ 'unknown', 'slideBegin', 'slideEnd', 'begin', 'end', 'click',
                         'doubleClick', 'mouseEnter', 'mouseLeave', 'next', 'previous', 'repeat' ];
@@ -6413,11 +6408,11 @@ function getEventTriggerType( sEventTrigger )
 // Timing Types
 var UNKNOWN_TIMING          = 0;
 var OFFSET_TIMING           = 1;
-var WALLCLOCK_TIMING        = 2;
+var WALLCLOCK_TIMING        = 2; // TODO
 var INDEFINITE_TIMING       = 3;
 var EVENT_TIMING            = 4;
 var SYNCBASE_TIMING         = 5;
-var MEDIA_TIMING            = 6;
+var MEDIA_TIMING            = 6; // TODO
 
 aTimingTypeOutMap = [ 'unknown', 'offset', 'wallclock', 'indefinite', 'event', 'syncbase', 'media' ];
 
@@ -14556,13 +14551,6 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
         sFormula = sFormula.replace(/e(?!\w)/g, 'Math.E');
         sFormula = sFormula.replace(/\$/g, '__PARAM0__');
 
-        var aAnimatedElement = aAnimationNode.getAnimatedElement();
-        var aBBox = aAnimatedElement.getBaseBBox();
-        var width = aBBox.width / aActivityParamSet.nSlideWidth;
-        var height = aBBox.height / aActivityParamSet.nSlideHeight;
-        var x = ( aBBox.x + aBBox.width / 2 ) / aActivityParamSet.nSlideWidth;
-        var y = ( aBBox.y + aBBox.height / 2 ) / aActivityParamSet.nSlideHeight;
-
         aActivityParamSet.aFormula = function( ) {
 
             return eval(sFormula);
@@ -14770,11 +14758,6 @@ function extractAttributeValues( eValueType, aValueList, aValueSet, aBBox, nSlid
 
 function evalValuesAttribute( aValueList, aValueSet, aBBox, nSlideWidth, nSlideHeight )
 {
-    var width = aBBox.width / nSlideWidth;
-    var height = aBBox.height / nSlideHeight;
-    var x = ( aBBox.x + aBBox.width / 2 ) / nSlideWidth;
-    var y = ( aBBox.y + aBBox.height / 2 ) / nSlideHeight;
-
     var reMath = /abs|sqrt|asin|acos|atan|sin|cos|tan|exp|log|min|max/g;
 
     for( var i = 0; i < aValueSet.length; ++i )
