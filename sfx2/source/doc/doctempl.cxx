@@ -1136,37 +1136,29 @@ bool SfxDocumentTemplates::GetLogicNames
     aFullPath.SetURL( rPath );
     const OUString aPath( aFullPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
-    RegionData_Impl *pData = nullptr;
-    DocTempl_EntryData_Impl  *pEntry = nullptr;
-    bool         bFound = false;
-
     const sal_uInt16 nCount = GetRegionCount();
 
-    for ( sal_uInt16 i=0; !bFound && (i<nCount); i++ )
+    for ( sal_uInt16 i=0; i<nCount; ++i )
     {
-        pData = pImp->GetRegion( i );
+        RegionData_Impl *pData = pImp->GetRegion( i );
         if ( pData )
         {
-            sal_uInt16 nChildCount = pData->GetCount();
+            const sal_uInt16 nChildCount = pData->GetCount();
 
-            for ( sal_uInt16 j=0; !bFound && (j<nChildCount); j++ )
+            for ( sal_uInt16 j=0; j<nChildCount; ++j )
             {
-                pEntry = pData->GetEntry( j );
+                DocTempl_EntryData_Impl *pEntry = pData->GetEntry( j );
                 if ( pEntry && pEntry->GetTargetURL() == aPath )
                 {
-                    bFound = true;
+                    rRegion = pData->GetTitle();
+                    rName = pEntry->GetTitle();
+                    return true;
                 }
             }
         }
     }
 
-    if ( bFound )
-    {
-        rRegion = pData->GetTitle();
-        rName = pEntry->GetTitle();
-    }
-
-    return bFound;
+    return false;
 }
 
 
