@@ -40,7 +40,7 @@ namespace linguistic
 {
 
 
-HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_uInt16 nLang, sal_Int16 nHPos,
+HyphenatedWord::HyphenatedWord(const OUString &rWord, LanguageType nLang, sal_Int16 nHPos,
                                const OUString &rHyphWord, sal_Int16 nPos ) :
     aWord           (rWord),
     aHyphenatedWord (rHyphWord),
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 }
 
 
-PossibleHyphens::PossibleHyphens(const OUString &rWord, sal_uInt16 nLang,
+PossibleHyphens::PossibleHyphens(const OUString &rWord, LanguageType nLang,
             const OUString &rHyphWord,
             const Sequence< sal_Int16 > &rPositions) :
     aWord           (rWord),
@@ -157,14 +157,14 @@ Sequence< sal_Int16 > SAL_CALL PossibleHyphens::getHyphenationPositions()
 }
 
 css::uno::Reference <css::linguistic2::XHyphenatedWord> HyphenatedWord::CreateHyphenatedWord(
-        const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
+        const OUString &rWord, LanguageType nLang, sal_Int16 nHyphenationPos,
         const OUString &rHyphenatedWord, sal_Int16 nHyphenPos )
 {
     return new HyphenatedWord( rWord, nLang, nHyphenationPos, rHyphenatedWord, nHyphenPos );
 }
 
 css::uno::Reference < css::linguistic2::XPossibleHyphens > PossibleHyphens::CreatePossibleHyphens
-        (const OUString &rWord, sal_Int16 nLang,
+        (const OUString &rWord, LanguageType nLang,
          const OUString &rHyphWord,
          const css::uno::Sequence< sal_Int16 > &rPositions)
 {

@@ -32,12 +32,12 @@ public:
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
-    void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
+    void StartConversion( LanguageType nSourceLanguage,  LanguageType nTargetLanguage,
                           const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
 
     void StartChineseConversion();
 
-    void ConvertStyles( sal_Int16 nTargetLanguage, const vcl::Font *pTargetFont );
+    void ConvertStyles( LanguageType nTargetLanguage, const vcl::Font *pTargetFont );
 
 protected:
     virtual ~FuHangulHanjaConversion() override;

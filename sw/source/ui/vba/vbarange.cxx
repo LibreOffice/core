@@ -310,13 +310,13 @@ SwVbaRange::getListFormat()
 ::sal_Int32 SAL_CALL SwVbaRange::getLanguageID()
 {
     uno::Reference< beans::XPropertySet > xParaProps( mxTextCursor, uno::UNO_QUERY_THROW );
-    return SwVbaStyle::getLanguageID( xParaProps );
+    return (sal_uInt16)SwVbaStyle::getLanguageID( xParaProps );
 }
 
 void SAL_CALL SwVbaRange::setLanguageID( ::sal_Int32 _languageid )
 {
     uno::Reference< beans::XPropertySet > xParaProps( mxTextCursor, uno::UNO_QUERY_THROW );
-    SwVbaStyle::setLanguageID( xParaProps, _languageid );
+    SwVbaStyle::setLanguageID( xParaProps, LanguageType(_languageid) );
 }
 
 uno::Any SAL_CALL

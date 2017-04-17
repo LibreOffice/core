@@ -1610,7 +1610,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
 
     sNewNode += "/ColumnSet";
 
-    LanguageType ePrevLang = (LanguageType)-1;
+    LanguageType ePrevLang(0xffff);
 
     SvNumberFormatter& rNFormatr = *pView->GetWrtShell().GetNumberFormatter();
     for(size_t nCol = 0; nCol < aDBColumns.size(); nCol++)

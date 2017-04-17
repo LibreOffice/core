@@ -871,7 +871,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                     // Entry present?
                     sal_uInt16 nPos;
                     const OUString& rNm = pFieldType->GetName();
-                    OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, 0, 0));
+                    OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, 0, LANGUAGE_SYSTEM));
                     SwHash* pFnd = Find( rNm, pHashStrTable, nStrFormatCnt, &nPos );
                     if( pFnd )
                         // modify entry in the hash table
@@ -901,7 +901,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
 
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper* pLclData = aSysLocale.GetLocaleDataPtr();
-    const long nLang = pLclData->getLanguageTag().getLanguageType();
+    const LanguageType nLang = pLclData->getLanguageTag().getLanguageType();
     bool bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, aCalc );
 #endif
 

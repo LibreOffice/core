@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 #include <rtl/ref.hxx>
 #include <fldupde.hxx>
+#include <i18nlangtag/lang.h>
 
 class SvxForbiddenCharactersTable;
 namespace com { namespace sun { namespace star { namespace i18n { struct ForbiddenCharacters; } } } }
@@ -136,7 +137,7 @@ enum class DocumentSettingId
        a list of forbidden characters.
     */
     virtual const css::i18n::ForbiddenCharacters*
-        getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const = 0;
+        getForbiddenCharacters(/*[in]*/ LanguageType nLang, /*[in]*/ bool bLocaleData ) const = 0;
 
     /** Set the forbidden characters.
 
@@ -146,7 +147,7 @@ enum class DocumentSettingId
        @param rForbiddenCharacters
        [in] the new list of forbidden characters for language lang.
     */
-    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
+    virtual void setForbiddenCharacters(/*[in]*/ LanguageType nLang,
                                         /*[in]*/ const css::i18n::ForbiddenCharacters& rForbiddenCharacters ) = 0;
 
     /** Get the forbidden character table and creates one if necessary.
