@@ -847,7 +847,7 @@ CharClass& GetAppCharClass()
     return *pAppCharClass;
 }
 
-void SwCalendarWrapper::LoadDefaultCalendar( sal_uInt16 eLang )
+void SwCalendarWrapper::LoadDefaultCalendar( LanguageType eLang )
 {
     sUniqueId.clear();
     if( eLang != nLang )
@@ -906,7 +906,7 @@ namespace
                     TransliterationFlags::IGNORE_KANA |
                     TransliterationFlags::IGNORE_WIDTH ));
 
-            xTransWrp->loadModuleIfNeeded( static_cast<sal_uInt16>(GetAppLanguage()) );
+            xTransWrp->loadModuleIfNeeded( GetAppLanguage() );
         }
         const ::utl::TransliterationWrapper& getTransliterationWrapper() const
         {

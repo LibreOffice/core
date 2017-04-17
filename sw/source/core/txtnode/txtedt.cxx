@@ -1037,7 +1037,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                 if (pArgs->xSpeller.is())
                 {
                     SvxSpellWrapper::CheckSpellLang( pArgs->xSpeller, eActLang );
-                    pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, eActLang,
+                    pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, (sal_uInt16)eActLang,
                                             Sequence< PropertyValue >() );
                 }
                 if( (pArgs->xSpellAlt).is() )
@@ -1348,13 +1348,13 @@ SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
-            bool bSpell = xSpell.is() && xSpell->hasLanguage( eActLang );
+            bool bSpell = xSpell.is() && xSpell->hasLanguage( (sal_uInt16)eActLang );
             if( bSpell && !rWord.isEmpty() )
             {
                 // check for: bAlter => xHyphWord.is()
                 OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
 
-                if( !xSpell->isValid( rWord, eActLang, Sequence< PropertyValue >() ) )
+                if( !xSpell->isValid( rWord, (sal_uInt16)eActLang, Sequence< PropertyValue >() ) )
                 {
                     sal_Int32 nSmartTagStt = nBegin;
                     sal_Int32 nDummy = 1;
@@ -1615,8 +1615,8 @@ void SwTextFrame::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPo
 bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     // shortcut: paragraph doesn't have a language set:
-    if ( LANGUAGE_NONE == sal_uInt16( GetSwAttrSet().GetLanguage().GetLanguage() )
-         && USHRT_MAX == GetLang(0, m_Text.getLength()))
+    if ( LANGUAGE_NONE == GetSwAttrSet().GetLanguage().GetLanguage()
+         && LanguageType(USHRT_MAX) == GetLang(0, m_Text.getLength()))
     {
         if( !rHyphInf.IsCheck() )
             rHyphInf.SetNoLang( true );
@@ -1858,7 +1858,7 @@ void SwTextNode::TransliterateText(
                 pIter = nullptr;
 
             sal_Int32 nEndPos = 0;
-            sal_uInt16 nLang = LANGUAGE_NONE;
+            LanguageType nLang = LANGUAGE_NONE;
             do {
                 if( pIter )
                 {

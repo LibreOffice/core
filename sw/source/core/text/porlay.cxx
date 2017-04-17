@@ -1325,7 +1325,7 @@ sal_Int16 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
     }
 
     // the default is the application language script
-    return SvtLanguageOptions::GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+    return SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 }
 
 sal_Int32 SwScriptInfo::NextDirChg( const sal_Int32 nPos,

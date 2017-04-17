@@ -76,8 +76,8 @@ sal_uInt32 GetLangId(const OString &rLang)
 
 void RscLangEnum::Init( RscNameTable& rNames )
 {
-    SetConstant( rNames.Put( "SYSTEM", CONSTNAME, (long)LANGUAGE_SYSTEM ), LANGUAGE_SYSTEM );
-    SetConstant( rNames.Put( "DONTKNOW", CONSTNAME, LANGUAGE_DONTKNOW ), LANGUAGE_DONTKNOW );
+    SetConstant( rNames.Put( "SYSTEM", CONSTNAME, (sal_uInt16)LANGUAGE_SYSTEM ), (sal_uInt16)LANGUAGE_SYSTEM );
+    SetConstant( rNames.Put( "DONTKNOW", CONSTNAME, (sal_uInt16)LANGUAGE_DONTKNOW ), (sal_uInt16)LANGUAGE_DONTKNOW );
 
     sal_Int32 nIndex = 0;
     mnLangId = 0x400; // stay away from selfdefined...

@@ -130,7 +130,7 @@ private:
 
 
     void            ShowWords_Impl( sal_uInt16 nId );
-    void            SetLanguage_Impl( css::util::Language nLanguage );
+    void            SetLanguage_Impl( LanguageType nLanguage );
     bool            IsDicReadonly_Impl() const { return bDicIsReadonly; }
     void            SetDicReadonly_Impl( css::uno::Reference<
                             css::linguistic2::XDictionary >  &xDic );

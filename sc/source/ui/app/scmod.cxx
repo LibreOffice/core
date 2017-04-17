@@ -912,7 +912,7 @@ SvtUserOptions&  ScModule::GetUserOptions()
     return *pUserOptions;
 }
 
-sal_uInt16 ScModule::GetOptDigitLanguage()
+LanguageType ScModule::GetOptDigitLanguage()
 {
     SvtCTLOptions::TextNumerals eNumerals = GetCTLOptions().GetCTLTextNumerals();
     return ( eNumerals == SvtCTLOptions::NUMERALS_ARABIC ) ? LANGUAGE_ENGLISH_US :
@@ -927,7 +927,7 @@ sal_uInt16 ScModule::GetOptDigitLanguage()
  */
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
-    sal_uInt16 nOldSpellLang, nOldCjkLang, nOldCtlLang;
+    LanguageType nOldSpellLang, nOldCjkLang, nOldCtlLang;
     bool bOldAutoSpell;
     GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell );
 
@@ -2230,7 +2230,7 @@ using namespace com::sun::star;
 
 #define LINGUPROP_AUTOSPELL "IsSpellAuto"
 
-void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
+void ScModule::GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang,
         bool& rAutoSpell )
 {
     // use SvtLinguConfig instead of service LinguProperties to avoid
@@ -2255,7 +2255,7 @@ void ScModule::SetAutoSpellProperty( bool bSet )
     aConfig.SetProperty( OUString( LINGUPROP_AUTOSPELL ), uno::Any(bSet) );
 }
 
-bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
+bool ScModule::HasThesaurusLanguage( LanguageType nLang )
 {
     if ( nLang == LANGUAGE_NONE )
         return false;

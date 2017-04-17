@@ -106,8 +106,8 @@ public:
 class ConvDicXMLDictionaryContext_Impl :
     public ConvDicXMLImportContext
 {
-    sal_Int16       nLanguage;
-    sal_Int16   nConversionType;
+    LanguageType nLanguage;
+    sal_Int16    nConversionType;
 
 public:
     ConvDicXMLDictionaryContext_Impl( ConvDicXMLImport &rImport,

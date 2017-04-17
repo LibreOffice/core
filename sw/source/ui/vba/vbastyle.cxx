@@ -48,27 +48,27 @@ SwVbaStyle::getName()
     return mxStyle->getName();
 }
 
-sal_Int32 SwVbaStyle::getLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps )
+LanguageType SwVbaStyle::getLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps )
 {
     lang::Locale aLocale;
     xTCProps->getPropertyValue("CharLocale") >>= aLocale;
     return LanguageTag::convertToLanguageType( aLocale, false);
 }
 
-void SwVbaStyle::setLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps, sal_Int32 _languageid )
+void SwVbaStyle::setLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps, LanguageType _languageid )
 {
-    lang::Locale aLocale = LanguageTag( static_cast<LanguageType>(_languageid) ).getLocale();
+    lang::Locale aLocale = LanguageTag( _languageid ).getLocale();
     xTCProps->setPropertyValue("CharLocale", uno::makeAny( aLocale ) ) ;
 }
 
 ::sal_Int32 SAL_CALL SwVbaStyle::getLanguageID()
 {
-    return getLanguageID( mxStyleProps );
+    return (sal_uInt16)getLanguageID( mxStyleProps );
 }
 
 void SAL_CALL SwVbaStyle::setLanguageID( ::sal_Int32 _languageid )
 {
-    setLanguageID( mxStyleProps, _languageid );
+    setLanguageID( mxStyleProps, LanguageType(_languageid) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaStyle::getType()

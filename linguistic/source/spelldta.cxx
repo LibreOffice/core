@@ -60,7 +60,7 @@ bool SeqHasEntry(
 }
 
 
-void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
+void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
         Reference< XSearchableDictionaryList > &xDicList,
         std::vector< OUString > & rDicListProps )
 {
@@ -77,7 +77,7 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
     {
         Reference< XDictionary > xDic( pDic[i], UNO_QUERY );
 
-        sal_Int16           nLang = LinguLocaleToLanguage( xDic->getLocale() );
+        LanguageType nLang = LinguLocaleToLanguage( xDic->getLocale() );
 
         if ( xDic.is() && xDic->isActive()
             && (nLang == nLanguage  ||  LinguIsUnspecified( nLang)) )
@@ -108,7 +108,7 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
 
 void SeqRemoveNegEntries( std::vector< OUString > &rSeq,
         Reference< XSearchableDictionaryList > &rxDicList,
-        sal_Int16 nLanguage )
+        LanguageType nLanguage )
 {
     bool bSthRemoved = false;
     sal_Int32 nLen = rSeq.size();
@@ -179,7 +179,7 @@ SpellAlternatives::SpellAlternatives()
 
 
 SpellAlternatives::SpellAlternatives(
-        const OUString &rWord, sal_Int16 nLang,
+        const OUString &rWord, LanguageType nLang,
         const Sequence< OUString > &rAlternatives ) :
     aAlt        (rAlternatives),
     aWord       (rWord),
@@ -243,7 +243,7 @@ void SAL_CALL SpellAlternatives::setFailureType( sal_Int16 nFailureType )
 }
 
 
-void SpellAlternatives::SetWordLanguage(const OUString &rWord, sal_Int16 nLang)
+void SpellAlternatives::SetWordLanguage(const OUString &rWord, LanguageType nLang)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     aWord = rWord;
@@ -266,7 +266,7 @@ void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 
 
 css::uno::Reference < css::linguistic2::XSpellAlternatives > SpellAlternatives::CreateSpellAlternatives(
-        const OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const css::uno::Sequence< OUString > &rAlt )
+        const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const css::uno::Sequence< OUString > &rAlt )
 {
     SpellAlternatives* pAlt = new SpellAlternatives;
     pAlt->SetWordLanguage( rWord, nLang );

@@ -375,7 +375,7 @@ public:
     void WriteToMem(sal_uInt8 *&pData) const;
 
     //Maps what I think is the language this is to affect to the OOo language
-    sal_uInt16 GetConvertedLang() const;
+    LanguageType GetConvertedLang() const;
 
     sal_uInt16 fKerningPunct  : 1;  // true if we're kerning punctuation
     sal_uInt16 iJustification : 2;  // Kinsoku method of justification:
