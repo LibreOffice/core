@@ -41,6 +41,12 @@ $(eval $(call gb_CppunitTest_set_include,sw_rtfexport,\
     $$(INCLUDE) \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_add_cxxflags,sw_rtfexport,\
+	-bigobj \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_sdk_api,sw_rtfexport))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_rtfexport))
