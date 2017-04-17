@@ -127,13 +127,13 @@ struct Impl_IMEInfos
 };
 
 Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos)
-    : aOldTextAfterStartPos(rOldTextAfterStartPos)
+    : aOldTextAfterStartPos(rOldTextAfterStartPos),
+    pAttribs(nullptr),
+    nPos(nP),
+    nLen(0),
+    bCursor(true),
+    bWasCursorOverwrite(false)
 {
-    nPos = nP;
-    nLen = 0;
-    bCursor = true;
-    pAttribs = nullptr;
-    bWasCursorOverwrite = false;
 }
 
 void Impl_IMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL)
