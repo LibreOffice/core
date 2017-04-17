@@ -2488,8 +2488,8 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
     return true;
 }
 
-void lcl_createButtons(const uno::Reference< drawing::XShapes>& xPageShapes,
-                       const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory,
+void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
+                       const uno::Reference<lang::XMultiServiceFactory>& xShapeFactory,
                        ChartModel& rModel,
                        awt::Rectangle& rRemainingSpace)
 {
@@ -2513,23 +2513,6 @@ void lcl_createButtons(const uno::Reference< drawing::XShapes>& xPageShapes,
             awt::Point aNewPosition = awt::Point(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
             pButton->setLabel(rPageFieldEntry.Name);
             pButton->setCID("FieldButton.Page." + OUString::number(rPageFieldEntry.DimensionIndex));
-            pButton->createShapes(aNewPosition, aSize, xModelPage);
-            x += aSize.Width + 100;
-        }
-        rRemainingSpace.Y += (aSize.Height + 100 + 100);
-        rRemainingSpace.Height -= (aSize.Height + 100 + 100);
-    }
-
-    if (xPivotTableDataProvider->getDataFields().hasElements())
-    {
-        x = 200;
-        for (css::chart2::data::PivotTableFieldEntry const & rDataFieldEntry : xPivotTableDataProvider->getDataFields())
-        {
-            std::unique_ptr<VButton> pButton(new VButton);
-            pButton->init(xPageShapes, xShapeFactory);
-            awt::Point aNewPosition = awt::Point(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
-            pButton->setLabel(rDataFieldEntry.Name);
-            pButton->setCID("FieldButton.Data." + OUString::number(rDataFieldEntry.DimensionIndex));
             pButton->createShapes(aNewPosition, aSize, xModelPage);
             x += aSize.Width + 100;
         }
