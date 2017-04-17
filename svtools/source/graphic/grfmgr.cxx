@@ -943,43 +943,56 @@ bool GraphicObject::SwapOut()
 
 bool GraphicObject::SwapOut( SvStream* pOStm )
 {
-    bool bRet = !mbAutoSwapped;
-    // swap out as a link
-    if( pOStm == GRFMGR_AUTOSWAPSTREAM_LINK )
+    bool bRet = false;
+    try
     {
-        maGraphic.SwapOutAsLink();
+        bRet = !mbAutoSwapped;
+        // swap out as a link
+        if( pOStm == GRFMGR_AUTOSWAPSTREAM_LINK )
+        {
+            maGraphic.SwapOutAsLink();
+        }
+        else
+        {
+            bRet = bRet && maGraphic.SwapOut( pOStm );
+        }
+
+        if (bRet)
+            mpGlobalMgr->ImplGraphicObjectWasSwappedOut(*this);
     }
-    else
+    catch(...)
     {
-        bRet = bRet && maGraphic.SwapOut( pOStm );
+        SAL_WARN( "svtools", "GraphicObject::SwapIn exception");
     }
-
-    if (bRet)
-        mpGlobalMgr->ImplGraphicObjectWasSwappedOut(*this);
-
     return bRet;
 }
 
 bool GraphicObject::SwapIn()
 {
     bool bRet = false;
-
-    if( mbAutoSwapped )
+    try
     {
-        ImplAutoSwapIn();
-        bRet = true;
+        if( mbAutoSwapped )
+        {
+            ImplAutoSwapIn();
+            bRet = true;
+        }
+        else
+        {
+            bRet = maGraphic.SwapIn();
+
+            if (bRet)
+                mpGlobalMgr->ImplGraphicObjectWasSwappedIn(*this);
+        }
+
+        if( bRet )
+        {
+            ImplAssignGraphicData();
+        }
     }
-    else
+    catch (...)
     {
-        bRet = maGraphic.SwapIn();
-
-        if (bRet)
-            mpGlobalMgr->ImplGraphicObjectWasSwappedIn(*this);
-    }
-
-    if( bRet )
-    {
-        ImplAssignGraphicData();
+        SAL_WARN( "svtools", "GraphicObject::SwapIn exception");
     }
 
     return bRet;
