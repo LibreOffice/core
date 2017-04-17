@@ -1766,12 +1766,8 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     else
         aTransformLoadArgs.remove( "Hidden" );
 
-    OUString sURL( "private:object"  );
-    if ( sURL.isEmpty() )
-        sURL = i_rDoc.GetFactory().GetFactoryURL();
-
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
-    xLoader->loadComponentFromURL( sURL, "_self", 0,
+    xLoader->loadComponentFromURL( "private:object", "_self", 0,
         aTransformLoadArgs.getPropertyValues() );
 
     SfxViewShell* pViewShell = SfxViewShell::Get( i_rFrame->getController() );
