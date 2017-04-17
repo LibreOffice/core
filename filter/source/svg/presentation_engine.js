@@ -2345,10 +2345,6 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     this.aSlideAnimationsHandler.importAnimations( this.getSlideAnimationsRoot() );
     this.aSlideAnimationsHandler.parseElements();
 
-    // this statement is used only for debugging
-    if( false && this.aSlideAnimationsHandler.aRootNode )
-        log( this.aSlideAnimationsHandler.aRootNode.info( true ) );
-
     // We collect text shapes included in this slide .
     this.aTextShapeSet = this.collectTextShapes();
 
