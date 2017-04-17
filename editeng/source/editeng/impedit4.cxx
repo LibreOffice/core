@@ -1890,7 +1890,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() );
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
-            xSpellAlt = xSpeller->spell( aWord, eLang, aEmptySeq );
+            xSpellAlt = xSpeller->spell( aWord, (sal_uInt16)eLang, aEmptySeq );
         }
 
         if ( !xSpellAlt.is() )
@@ -1938,7 +1938,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
         }
 
         if ( !aWord.isEmpty() )
-            xSpellAlt = xSpeller->spell( aWord, GetLanguage( aCurSel.Max() ), aEmptySeq );
+            xSpellAlt = xSpeller->spell( aWord, (sal_uInt16)GetLanguage( aCurSel.Max() ), aEmptySeq );
 
         if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
@@ -2315,7 +2315,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 {
                     const sal_Int32 nWStart = aSel.Min().GetIndex();
                     const sal_Int32 nWEnd = aSel.Max().GetIndex();
-                    if ( !xSpeller->isValid( aWord, GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ), aEmptySeq ) )
+                    if ( !xSpeller->isValid( aWord, (sal_uInt16)GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ), aEmptySeq ) )
                     {
                         // Check if already marked correctly...
                         const sal_Int32 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
@@ -2463,7 +2463,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() );
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
-            xSpellAlt = xSpeller->spell( aWord, eLang, aEmptySeq );
+            xSpellAlt = xSpeller->spell( aWord, (sal_uInt16)eLang, aEmptySeq );
         }
         aCurSel = WordRight( aCurSel.Max(), css::i18n::WordType::DICTIONARY_WORD );
     }
@@ -2741,7 +2741,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
         sal_Int32 nCurrentStart = nStartPos;
         sal_Int32 nCurrentEnd = nEndPos;
-        sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
+        LanguageType nLanguage = LANGUAGE_SYSTEM;
 
         // since we don't use Hiragana/Katakana or half-width/full-width transliterations here
         // it is fine to use ANYWORD_IGNOREWHITESPACES. (ANY_WORD btw is broken and will

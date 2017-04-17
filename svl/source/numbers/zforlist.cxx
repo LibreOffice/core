@@ -748,7 +748,7 @@ void SvNumberFormatter::DeleteEntry(sal_uInt32 nKey)
     aFTable.erase(nKey);
 }
 
-void SvNumberFormatter::GetUsedLanguages( std::vector<sal_uInt16>& rList )
+void SvNumberFormatter::GetUsedLanguages( std::vector<LanguageType>& rList )
 {
     rList.clear();
 
@@ -3593,7 +3593,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
         }
         else
         {
-            eExtLang = (LanguageType) ((nExtLang < 0) ? -nExtLang : nExtLang);
+            eExtLang = LanguageType((nExtLang < 0) ? -nExtLang : nExtLang);
         }
     }
     else
@@ -4091,7 +4091,7 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
         }
         if ( !bWithoutExtension && eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_SYSTEM )
         {
-            sal_Int32 nLang = static_cast<sal_Int32>(eLanguage);
+            sal_Int32 nLang = static_cast<sal_uInt16>(eLanguage);
             aBuf.append('-').append( OUString::number(nLang, 16).toAsciiUpperCase());
         }
     }

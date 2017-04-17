@@ -56,7 +56,7 @@ static sal_uInt16 nType1 = 0;
 static sal_uInt16 nType2 = 0;
 static sal_uInt16 nType3 = 0;
 
-static sal_uInt16 nLang = LANGUAGE_NONE;
+static LanguageType nLang = LANGUAGE_NONE;
 
 static bool   bAsc1  = true;
 static bool   bAsc2  = true;
@@ -196,7 +196,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
 
     // first initialise the language, then select the
     if( LANGUAGE_NONE == nLang || LANGUAGE_DONTKNOW == nLang )
-        nLang = (sal_uInt16)GetAppLanguage();
+        nLang = GetAppLanguage();
 
     m_pLangLB->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, true );
     m_pLangLB->SelectLanguage( nLang );

@@ -481,12 +481,12 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int32)m_aSearchOpt.transliterateFlags; break;
         case MID_SEARCH_LOCALE:
         {
-            sal_Int16 nLocale;
+            LanguageType nLocale;
             if (!m_aSearchOpt.Locale.Language.isEmpty() || !m_aSearchOpt.Locale.Country.isEmpty() )
                 nLocale = LanguageTag::convertToLanguageType( m_aSearchOpt.Locale );
             else
                 nLocale = LANGUAGE_NONE;
-            rVal <<= nLocale;
+            rVal <<= (sal_Int16)(sal_uInt16)nLocale;
             break;
         }
 
@@ -655,13 +655,13 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             bRet = (rVal >>= nInt);
             if ( bRet )
             {
-                if ( nInt == LANGUAGE_NONE )
+                if ( LanguageType(nInt) == LANGUAGE_NONE )
                 {
                     m_aSearchOpt.Locale = css::lang::Locale();
                 }
                 else
                 {
-                    m_aSearchOpt.Locale = LanguageTag::convertToLocale( nInt);
+                    m_aSearchOpt.Locale = LanguageTag::convertToLocale( LanguageType(nInt) );
                 }
             }
             break;

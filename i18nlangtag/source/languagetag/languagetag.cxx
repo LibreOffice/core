@@ -98,7 +98,7 @@ struct theSystemLocale : public rtl::Static< LanguageTag::ImplPtr, theSystemLoca
 
 static LanguageType getNextOnTheFlyLanguage()
 {
-    static LanguageType nOnTheFlyLanguage = 0;
+    static LanguageType nOnTheFlyLanguage(0);
     osl::MutexGuard aGuard( theMutex::get());
     if (!nOnTheFlyLanguage)
         nOnTheFlyLanguage = MsLangId::makeLangID( LANGUAGE_ON_THE_FLY_SUB_START, LANGUAGE_ON_THE_FLY_START);
@@ -114,10 +114,10 @@ static LanguageType getNextOnTheFlyLanguage()
             else
             {
                 SAL_WARN( "i18nlangtag", "getNextOnTheFlyLanguage: none left! ("
-                        << ((LANGUAGE_ON_THE_FLY_END - LANGUAGE_ON_THE_FLY_START + 1)
-                            * (LANGUAGE_ON_THE_FLY_SUB_END - LANGUAGE_ON_THE_FLY_SUB_START + 1))
+                        << ((sal_uInt16(LANGUAGE_ON_THE_FLY_END) - sal_uInt16(LANGUAGE_ON_THE_FLY_START) + 1)
+                            * (sal_uInt16(LANGUAGE_ON_THE_FLY_SUB_END) - sal_uInt16(LANGUAGE_ON_THE_FLY_SUB_START) + 1))
                         << " consumed?!?)");
-                return 0;
+                return LanguageType(0);
             }
         }
     }
@@ -643,7 +643,7 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
 
     if (!bOtherImpl || !pImpl->mbInitializedLangID)
     {
-        if (nRegisterID == 0 || nRegisterID == LANGUAGE_DONTKNOW)
+        if (nRegisterID == LANGUAGE_SYSTEM || nRegisterID == LANGUAGE_DONTKNOW)
             nRegisterID = getNextOnTheFlyLanguage();
         else
         {

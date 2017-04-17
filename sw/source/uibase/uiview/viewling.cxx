@@ -159,9 +159,9 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             }
 
                             //execute translation
-                            sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
-                            sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                            sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                            LanguageType nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                            LanguageType nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                            sal_Int32 nOptions       = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
                             if( !bCommonTerms )
                                 nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 

@@ -95,7 +95,7 @@ rtl::Reference<FuPoor> FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd
 /**
  * Search and replace
  */
-void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_Int16 nTargetLanguage,
+void FuHangulHanjaConversion::StartConversion( LanguageType nSourceLanguage, LanguageType nTargetLanguage,
         const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
 
@@ -147,7 +147,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
         mpView->EndUndo();
 }
 
-void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const vcl::Font *pTargetFont )
+void FuHangulHanjaConversion::ConvertStyles( LanguageType nTargetLanguage, const vcl::Font *pTargetFont )
 {
     if( !mpDoc )
         return;
@@ -182,7 +182,7 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const vc
         pStyle = pStyleSheetPool->Next();
     }
 
-    mpDoc->SetLanguage( EE_CHAR_LANGUAGE_CJK, nTargetLanguage );
+    mpDoc->SetLanguage( nTargetLanguage, EE_CHAR_LANGUAGE_CJK );
 }
 
 void FuHangulHanjaConversion::StartChineseConversion()
@@ -234,9 +234,9 @@ void FuHangulHanjaConversion::StartChineseConversion()
                     }
 
                     //execute translation
-                    sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
-                    sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                    sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                    LanguageType nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                    LanguageType nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                    sal_Int32 nOptions       = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
                     if( !bCommonTerms )
                         nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 

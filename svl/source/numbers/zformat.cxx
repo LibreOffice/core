@@ -142,10 +142,10 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
 {
     sal_uInt8 nNatNum = 0;
     eLang = MsLangId::getRealLanguage( eLang );  // resolve SYSTEM etc.
-    eLang &= 0x03FF;    // 10 bit primary language
+    eLang = primary(eLang);    // 10 bit primary language
     if ( bDate )
     {
-        if ( nDBNum == 4 && eLang == (LANGUAGE_KOREAN & 0x03FF) )
+        if ( nDBNum == 4 && eLang == primary(LANGUAGE_KOREAN) )
         {
             nNatNum = 9;
         }
@@ -159,57 +159,34 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
         switch ( nDBNum )
         {
         case 1:
-            switch ( eLang )
-            {
-            case (LANGUAGE_CHINESE  & 0x03FF):
+            if ( eLang == primary(LANGUAGE_CHINESE) )
                 nNatNum = 4;
-                break;
-            case (LANGUAGE_JAPANESE & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_JAPANESE) )
                 nNatNum = 1;
-                break;
-            case (LANGUAGE_KOREAN   & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_KOREAN) )
                 nNatNum = 1;
-                break;
-            }
             break;
         case 2:
-            switch ( eLang )
-            {
-            case (LANGUAGE_CHINESE  & 0x03FF):
+            if ( eLang == primary(LANGUAGE_CHINESE))
                 nNatNum = 5;
-                break;
-            case (LANGUAGE_JAPANESE & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_JAPANESE) )
                 nNatNum = 4;
-                break;
-            case (LANGUAGE_KOREAN   & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_KOREAN) )
                 nNatNum = 2;
-                break;
-            }
             break;
         case 3:
-            switch ( eLang )
-            {
-            case (LANGUAGE_CHINESE  & 0x03FF):
+            if ( eLang == primary(LANGUAGE_CHINESE) )
                 nNatNum = 6;
-                break;
-            case (LANGUAGE_JAPANESE & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_JAPANESE) )
                 nNatNum = 5;
-                break;
-            case (LANGUAGE_KOREAN   & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_KOREAN) )
                 nNatNum = 3;
-                break;
-            }
             break;
         case 4:
-            switch ( eLang )
-            {
-            case (LANGUAGE_JAPANESE & 0x03FF):
+            if ( eLang == primary(LANGUAGE_JAPANESE) )
                 nNatNum = 7;
-                break;
-            case (LANGUAGE_KOREAN   & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_KOREAN) )
                 nNatNum = 9;
-                break;
-            }
             break;
         }
     }
@@ -221,10 +198,10 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
 {
     sal_uInt8 nDBNum = 0;
     eLang = MsLangId::getRealLanguage( eLang );  // resolve SYSTEM etc.
-    eLang &= 0x03FF;    // 10 bit primary language
+    eLang = primary(eLang);    // 10 bit primary language
     if ( bDate )
     {
-        if ( nNatNum == 9 && eLang == (LANGUAGE_KOREAN & 0x03FF) )
+        if ( nNatNum == 9 && eLang == primary(LANGUAGE_KOREAN) )
         {
             nDBNum = 4;
         }
@@ -238,79 +215,44 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
         switch ( nNatNum )
         {
         case 1:
-            switch ( eLang )
-            {
-            case (LANGUAGE_JAPANESE & 0x03FF):
+            if ( eLang == primary(LANGUAGE_JAPANESE) )
                 nDBNum = 1;
-                break;
-            case (LANGUAGE_KOREAN   & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_KOREAN) )
                 nDBNum = 1;
-                break;
-            }
             break;
         case 2:
-            switch ( eLang )
-            {
-            case (LANGUAGE_KOREAN   & 0x03FF):
+            if ( eLang == primary(LANGUAGE_KOREAN) )
                 nDBNum = 2;
-                break;
-            }
             break;
         case 3:
-            switch ( eLang )
-            {
-            case (LANGUAGE_KOREAN   & 0x03FF):
+            if ( eLang == primary(LANGUAGE_KOREAN) )
                 nDBNum = 3;
-                break;
-            }
             break;
         case 4:
-            switch ( eLang )
-            {
-            case (LANGUAGE_CHINESE  & 0x03FF):
+            if ( eLang == primary(LANGUAGE_CHINESE) )
                 nDBNum = 1;
-                break;
-            case (LANGUAGE_JAPANESE & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_JAPANESE) )
                 nDBNum = 2;
-                break;
-            }
             break;
         case 5:
-            switch ( eLang )
-            {
-            case (LANGUAGE_CHINESE  & 0x03FF):
+            if ( eLang == primary(LANGUAGE_CHINESE) )
                 nDBNum = 2;
-                break;
-            case (LANGUAGE_JAPANESE & 0x03FF):
+            else if ( eLang == primary(LANGUAGE_JAPANESE) )
                 nDBNum = 3;
-                break;
-            }
             break;
         case 6:
-            switch ( eLang )
-            {
-            case (LANGUAGE_CHINESE  & 0x03FF):
+            if ( eLang == primary(LANGUAGE_CHINESE) )
                 nDBNum = 3;
-                break;
-            }
             break;
         case 7:
-            switch ( eLang )
-            {
-            case (LANGUAGE_JAPANESE & 0x03FF):
+            if ( eLang == primary(LANGUAGE_JAPANESE) )
                 nDBNum = 4;
-                break;
-            }
             break;
         case 8:
             break;
         case 9:
-            switch ( eLang )
-            {
-            case (LANGUAGE_KOREAN   & 0x03FF):
+            if ( eLang == primary(LANGUAGE_KOREAN) )
                 nDBNum = 4;
-                break;
-            }
             break;
         case 10:
             break;
@@ -577,10 +519,10 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
         case 0x17 : // same?
             sCalendar = "[~hijri]";
             // Only Arabic or Farsi languages support Hijri calendar
-            if ( ( ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != LANGUAGE_ARABIC_PRIMARY_ONLY )
+            if ( ( primary( nLocaleLang ) != LANGUAGE_ARABIC_PRIMARY_ONLY )
                   && nLocaleLang != LANGUAGE_FARSI )
             {
-                if ( ( ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == LANGUAGE_ARABIC_PRIMARY_ONLY )
+                if ( ( primary( nTmpLocaleLang ) == LANGUAGE_ARABIC_PRIMARY_ONLY )
                       || nTmpLocaleLang == LANGUAGE_FARSI )
                 {
                     nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
@@ -686,9 +628,9 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
         case 0x10 : // Burmese (Myanmar) numerals
         case 0x11 : // Tigrigna (Ethiopia) numerals
         case 0x12 : // Khmer numerals
-            if ( ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != ( nReferenceLanguage & LANGUAGE_MASK_PRIMARY ) )
+            if ( primary( nLocaleLang ) != primary( nReferenceLanguage ) )
             {
-                if ( ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == ( nReferenceLanguage & LANGUAGE_MASK_PRIMARY ) )
+                if ( primary( nTmpLocaleLang ) == primary( nReferenceLanguage ) )
                 {
                     nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
                 }
@@ -702,10 +644,10 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
         case 0x04 : // Devanagari (Hindi) numerals
             // same numerals (Devanagari) for languages with different primary masks
             if ( nLocaleLang != LANGUAGE_HINDI    && nLocaleLang != LANGUAGE_MARATHI
-            && ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != ( LANGUAGE_NEPALI & LANGUAGE_MASK_PRIMARY ) )
+            && primary( nLocaleLang ) != primary( LANGUAGE_NEPALI ) )
             {
                 if ( nTmpLocaleLang == LANGUAGE_HINDI || nTmpLocaleLang == LANGUAGE_MARATHI
-                || ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == ( LANGUAGE_NEPALI & LANGUAGE_MASK_PRIMARY ) )
+                || primary( nTmpLocaleLang ) == primary( LANGUAGE_NEPALI ) )
                 {
                     nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
                 }
@@ -735,10 +677,10 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
             break;
         case 0x02 : // Eastern-Arabic numerals
             // all arabic primary mask + LANGUAGE_PUNJABI_ARABIC_LSO
-            if ( ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != LANGUAGE_ARABIC_PRIMARY_ONLY
+            if ( primary( nLocaleLang ) != LANGUAGE_ARABIC_PRIMARY_ONLY
                 && nLocaleLang != LANGUAGE_PUNJABI_ARABIC_LSO )
             {
-                if ( ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == LANGUAGE_ARABIC_PRIMARY_ONLY
+                if ( primary( nTmpLocaleLang ) == LANGUAGE_ARABIC_PRIMARY_ONLY
                     || nTmpLocaleLang != LANGUAGE_PUNJABI_ARABIC_LSO )
                 {
                     nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
@@ -758,9 +700,9 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
         case 0x26 : // Arabic fullwidth numerals, Korean
         case 0x27 : // Korean Hangul numerals
             // Japanese and Korean are regular
-            if ( ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != ( nReferenceLanguage & LANGUAGE_MASK_PRIMARY ) )
+            if ( primary( nLocaleLang ) != primary( nReferenceLanguage ) )
             {
-                if ( ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == ( nReferenceLanguage & LANGUAGE_MASK_PRIMARY ) )
+                if ( primary( nTmpLocaleLang ) == primary( nReferenceLanguage ) )
                 {
                     nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
                 }
@@ -1057,7 +999,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             // result in an unknown (empty) language
                             // listbox entry and the user would never see
                             // this format.
-                            if (nIndex == 0 && (aTmpLocale.meLanguage == 0 ||
+                            if (nIndex == 0 && (aTmpLocale.meLanguage == LANGUAGE_SYSTEM ||
                                                 SvNumberFormatter::IsLocaleInstalled( aTmpLocale.meLanguage)))
                             {
                                 maLocale = aTmpLocale;
@@ -1173,7 +1115,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             ((eLanguage = MsLangId::getRealLanguage( eLan)) == LANGUAGE_THAI) &&
                             NumFor[nIndex].GetNatNum().GetLang() == LANGUAGE_DONTKNOW)
                         {
-                            sStr = "[$-" + OUString::number( eLanguage, 16 ).toAsciiUpperCase() + "]" + sStr;
+                            sStr = "[$-" + OUString::number( sal_uInt16(eLanguage), 16 ).toAsciiUpperCase() + "]" + sStr;
                             NumFor[nIndex].SetNatNumLang( eLanguage);
                         }
                         sBuff.remove(nPosOld, nPos - nPosOld);
@@ -1551,7 +1493,7 @@ SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(const OUString& rStr
         }
         else
         {
-            return LANGUAGE_DONTKNOW;
+            return LocaleType(); // LANGUAGE_DONTKNOW;
         }
         ++nPos;
     }
@@ -5159,7 +5101,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             }
         }
         sal_uInt32 nAlphabetID = 0x0000000; // Excel ID of alphabet used for numerals see tdf#36038
-        sal_uInt32 nLanguageID = 0x0000000;
+        LanguageType nLanguageID = LANGUAGE_SYSTEM;
         if ( aNatNum.IsComplete() )
         {
             nLanguageID = MsLangId::getRealLanguage( aNatNum.GetLang());
@@ -5171,115 +5113,105 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             {   // if no DBNum code then use long LCID
                 // if DBNum value != NatNum value, use DBNum and not extended LCID
                 // if calendar, then DBNum will be removed
-                switch ( nLanguageID & LANGUAGE_MASK_PRIMARY )
-                {
-                    case LANGUAGE_ARABIC_PRIMARY_ONLY:
+                LanguageType pri = primary(nLanguageID);
+                if ( pri == LANGUAGE_ARABIC_PRIMARY_ONLY )
                         nAlphabetID = 0x02000000;  // Arabic-indic numerals
-                        break;
-                    case LANGUAGE_FARSI & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_FARSI) )
                         nAlphabetID = 0x03000000;  // Farsi numerals
-                        break;
-                    case LANGUAGE_HINDI & LANGUAGE_MASK_PRIMARY:
-                    case LANGUAGE_MARATHI & LANGUAGE_MASK_PRIMARY:
-                    case LANGUAGE_NEPALI & LANGUAGE_MASK_PRIMARY:
+                else if ( pri.anyOf(
+                    primary(LANGUAGE_HINDI),
+                    primary(LANGUAGE_MARATHI),
+                    primary(LANGUAGE_NEPALI) ))
                         nAlphabetID = 0x04000000;  // Devanagari numerals
-                        break;
-                    case LANGUAGE_BENGALI & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_BENGALI) )
                         nAlphabetID = 0x05000000;  // Bengali numerals
-                        break;
-                    case LANGUAGE_PUNJABI & LANGUAGE_MASK_PRIMARY:
-                        if ( nLanguageID == LANGUAGE_PUNJABI_ARABIC_LSO )
-                            nAlphabetID =  0x02000000;  // Arabic-indic numerals
-                        else
-                            nAlphabetID = 0x06000000;  // Punjabi numerals
-                        break;
-                    case LANGUAGE_GUJARATI & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_PUNJABI) )
+                {
+                    if ( nLanguageID == LANGUAGE_PUNJABI_ARABIC_LSO )
+                        nAlphabetID =  0x02000000;  // Arabic-indic numerals
+                    else
+                        nAlphabetID = 0x06000000;  // Punjabi numerals
+                }
+                else if ( pri == primary(LANGUAGE_GUJARATI) )
                         nAlphabetID = 0x07000000;  // Gujarati numerals
-                        break;
-                    case LANGUAGE_ODIA & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_ODIA))
                         nAlphabetID = 0x08000000;  // Odia (Oriya) numerals
-                        break;
-                    case LANGUAGE_TAMIL & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_TAMIL))
                         nAlphabetID = 0x09000000;  // Tamil numerals
-                        break;
-                    case LANGUAGE_TELUGU & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_TELUGU))
                         nAlphabetID = 0x0A000000;  // Telugu numerals
-                        break;
-                    case LANGUAGE_KANNADA & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_KANNADA))
                         nAlphabetID = 0x0B000000;  // Kannada numerals
-                        break;
-                    case LANGUAGE_MALAYALAM & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_MALAYALAM))
                         nAlphabetID = 0x0C000000;  // Malayalam numerals
-                        break;
-                    case LANGUAGE_THAI & LANGUAGE_MASK_PRIMARY:
-                        // The Thai T NatNum modifier during Xcl export.
-                        if ( rKeywords[NF_KEY_THAI_T] == "T" )
-                            nAlphabetID = 0x0D000000;  // Thai numerals
-                        break;
-                    case LANGUAGE_LAO & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_THAI))
+                {
+                    // The Thai T NatNum modifier during Xcl export.
+                    if ( rKeywords[NF_KEY_THAI_T] == "T" )
+                        nAlphabetID = 0x0D000000;  // Thai numerals
+                }
+                else if ( pri == primary(LANGUAGE_LAO))
                         nAlphabetID = 0x0E000000;  // Lao numerals
-                        break;
-                    case LANGUAGE_TIBETAN & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_TIBETAN))
                         nAlphabetID = 0x0F000000;  // Tibetan numerals
-                        break;
-                    case LANGUAGE_BURMESE & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_BURMESE))
                         nAlphabetID = 0x10000000;  // Burmese numerals
-                        break;
-                    case LANGUAGE_TIGRIGNA_ETHIOPIA & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_TIGRIGNA_ETHIOPIA))
                         nAlphabetID = 0x11000000;  // Tigrigna numerals
-                        break;
-                    case LANGUAGE_KHMER & LANGUAGE_MASK_PRIMARY:
+                else if ( pri == primary(LANGUAGE_KHMER))
                         nAlphabetID = 0x12000000;  // Khmer numerals
-                        break;
-                    case LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA & LANGUAGE_MASK_PRIMARY:
-                        if ( nLanguageID != LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA
-                          && nLanguageID != LANGUAGE_MONGOLIAN_CYRILLIC_LSO )
-                            nAlphabetID = 0x13000000;  // Mongolian numerals
-                        break;
+                else if ( pri == primary(LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA))
+                {
+                    if ( nLanguageID != LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA
+                      && nLanguageID != LANGUAGE_MONGOLIAN_CYRILLIC_LSO )
+                        nAlphabetID = 0x13000000;  // Mongolian numerals
+                }
                     // CJK numerals
-                    case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
-                        nAlphabetID = 0x1B;
+                else if ( pri == primary(LANGUAGE_JAPANESE))
+                {
+                    nAlphabetID = 0x1B;
+                    lcl_incrementAlphabetWithNatNum ( nAlphabetID, aNatNum.GetNatNum() );
+                }
+                else if ( pri == primary(LANGUAGE_CHINESE))
+                {
+                    if ( nLanguageID == LANGUAGE_CHINESE_TRADITIONAL
+                      || nLanguageID == LANGUAGE_CHINESE_HONGKONG
+                      || nLanguageID == LANGUAGE_CHINESE_MACAU )
+                    {
+                        nAlphabetID = 0x21;
                         lcl_incrementAlphabetWithNatNum ( nAlphabetID, aNatNum.GetNatNum() );
-                        break;
-                    case LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY:
-                        if ( nLanguageID == LANGUAGE_CHINESE_TRADITIONAL
-                          || nLanguageID == LANGUAGE_CHINESE_HONGKONG
-                          || nLanguageID == LANGUAGE_CHINESE_MACAU )
-                        {
-                            nAlphabetID = 0x21;
-                            lcl_incrementAlphabetWithNatNum ( nAlphabetID, aNatNum.GetNatNum() );
-                        }
-                        else // LANGUAGE_CHINESE_SIMPLIFIED
-                        {
-                            nAlphabetID = 0x1E;
-                            lcl_incrementAlphabetWithNatNum ( nAlphabetID, aNatNum.GetNatNum() );
-                        }
-                        break;
-                    case LANGUAGE_KOREAN & LANGUAGE_MASK_PRIMARY:
-                        if ( aNatNum.GetNatNum() == 9 ) // Hangul
-                        {
-                            nAlphabetID = 0x27000000;
-                        }
-                        else
-                        {
-                            nAlphabetID = 0x24;
-                            lcl_incrementAlphabetWithNatNum ( nAlphabetID, aNatNum.GetNatNum() );
-                        }
-                        break;
+                    }
+                    else // LANGUAGE_CHINESE_SIMPLIFIED
+                    {
+                        nAlphabetID = 0x1E;
+                        lcl_incrementAlphabetWithNatNum ( nAlphabetID, aNatNum.GetNatNum() );
+                    }
+                }
+                else if ( pri == primary(LANGUAGE_KOREAN))
+                {
+                    if ( aNatNum.GetNatNum() == 9 ) // Hangul
+                    {
+                        nAlphabetID = 0x27000000;
+                    }
+                    else
+                    {
+                        nAlphabetID = 0x24;
+                        lcl_incrementAlphabetWithNatNum ( nAlphabetID, aNatNum.GetNatNum() );
+                    }
                 }
             }
             // Add LCID to DBNum
-            if ( aNatNum.GetDBNum() > 0 && nLanguageID == 0 )
+            if ( aNatNum.GetDBNum() > 0 && nLanguageID == LANGUAGE_SYSTEM )
                 nLanguageID = MsLangId::getRealLanguage( aNatNum.GetLang());
         }
         if ( nCalendarID > 0 )
         {   // Add alphabet and language to calendar
             if ( nAlphabetID == 0 )
                 nAlphabetID = 0x01000000;
-            if ( nLanguageID == 0 && nOriginalLang != LANGUAGE_DONTKNOW )
+            if ( nLanguageID == LANGUAGE_SYSTEM && nOriginalLang != LANGUAGE_DONTKNOW )
                 nLanguageID = nOriginalLang;
         }
-        lcl_insertLCID( aStr, nAlphabetID + nCalendarID + nLanguageID, nPosInsertLCID );
+        lcl_insertLCID( aStr, nAlphabetID + nCalendarID + (sal_uInt16)nLanguageID, nPosInsertLCID );
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats

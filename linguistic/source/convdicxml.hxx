@@ -72,7 +72,7 @@ class ConvDicXMLImport : public SvXMLImport
                                 //   but the language and conversion type will
                                 //   still be determined!
 
-    sal_Int16       nLanguage;          // language of the dictionary
+    LanguageType    nLanguage;          // language of the dictionary
     sal_Int16       nConversionType;    // conversion type the dictionary is used for
 
 public:
@@ -92,12 +92,12 @@ public:
         sal_uInt16 nPrefix, const OUString &rLocalName,
         const css::uno::Reference < css::xml::sax::XAttributeList > &rxAttrList ) override;
 
-    ConvDic *   GetDic()                    { return pDic; }
-    sal_Int16   GetLanguage() const         { return nLanguage; }
-    sal_Int16   GetConversionType() const   { return nConversionType; }
+    ConvDic *    GetDic()                    { return pDic; }
+    LanguageType GetLanguage() const         { return nLanguage; }
+    sal_Int16    GetConversionType() const   { return nConversionType; }
 
-    void        SetLanguage( sal_Int16 nLang )              { nLanguage = nLang; }
-    void        SetConversionType( sal_Int16 nType )    { nConversionType = nType; }
+    void         SetLanguage( LanguageType nLang )              { nLanguage = nLang; }
+    void         SetConversionType( sal_Int16 nType )    { nConversionType = nType; }
 };
 
 

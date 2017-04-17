@@ -272,7 +272,7 @@ void SmDocShell::ArrangeFormula()
     // and numbers should not be converted
     ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
     pOutDev->SetLayoutMode( ComplexTextLayoutFlags::Default );
-    sal_Int16 nDigitLang = pOutDev->GetDigitLanguage();
+    LanguageType nDigitLang = pOutDev->GetDigitLanguage();
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
 
     mpTree->Arrange(*pOutDev, rFormat);
@@ -290,8 +290,8 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguO
 {
     // set fonts to be used
     struct FontDta {
-        sal_Int16       nFallbackLang;
-        sal_Int16       nLang;
+        LanguageType    nFallbackLang;
+        LanguageType    nLang;
         DefaultFontType nFontType;
         sal_uInt16      nFontInfoId;
         } aTable[3] =
@@ -419,7 +419,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     // and numbers should not be converted
     ComplexTextLayoutFlags nLayoutMode = rDev.GetLayoutMode();
     rDev.SetLayoutMode( ComplexTextLayoutFlags::Default );
-    sal_Int16 nDigitLang = rDev.GetDigitLanguage();
+    LanguageType nDigitLang = rDev.GetDigitLanguage();
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
 
     //Set selection if any

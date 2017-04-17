@@ -83,7 +83,7 @@ static bool getTag(const OString &rLine, const sal_Char *pTagName,
 }
 
 
-sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
+sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, LanguageType &nLng, bool &bNeg )
 {
     // Sniff the header
     sal_Int16 nDicVersion = DIC_VERSION_DONTKNOW;
@@ -170,9 +170,9 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
             DIC_VERSION_6 == nDicVersion)
         {
             // The language of the dictionary
-            rpStream->ReadUInt16( nLng );
+            rpStream->ReadUInt16( (sal_uInt16&)nLng );
 
-            if (VERS2_NOLANGUAGE == nLng)
+            if (VERS2_NOLANGUAGE == (sal_uInt16)nLng)
                 nLng = LANGUAGE_NONE;
 
             // Negative Flag
@@ -184,7 +184,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
 }
 
 DictionaryNeo::DictionaryNeo(const OUString &rName,
-                             sal_Int16 nLang, DictionaryType eType,
+                             LanguageType nLang, DictionaryType eType,
                              const OUString &rMainURL,
                              bool bWriteable) :
     aDicEvtListeners( GetLinguMutex() ),
@@ -262,7 +262,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     // read header
     bool bNegativ;
-    sal_uInt16 nLang;
+    LanguageType nLang;
     nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
     sal_uLong nErr = pStream->GetError();
     if (0 != nErr)
@@ -756,7 +756,7 @@ Locale SAL_CALL DictionaryNeo::getLocale(  )
 void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    sal_Int16 nLanguageP = LinguLocaleToLanguage( aLocale );
+    LanguageType nLanguageP = LinguLocaleToLanguage( aLocale );
     if (!bIsReadonly  &&  nLanguage != nLanguageP)
     {
         nLanguage = nLanguageP;

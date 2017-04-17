@@ -69,7 +69,7 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
         rShellSet.InvalidateItem( nWhichId );
 }
 
-sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
+LanguageType ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
 {
     //  used for thesaurus
 

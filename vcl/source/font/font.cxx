@@ -420,7 +420,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     rOStm.WriteUInt16( rImplFont.meUnderline );
     rOStm.WriteUInt16( rImplFont.meStrikeout );
     rOStm.WriteUInt16( rImplFont.GetItalicNoAsk() );
-    rOStm.WriteUInt16( rImplFont.maLanguageTag.getLanguageType( false) );
+    rOStm.WriteUInt16( (sal_uInt16)rImplFont.maLanguageTag.getLanguageType( false) );
     rOStm.WriteUInt16( rImplFont.GetWidthTypeNoAsk() );
 
     rOStm.WriteInt16( rImplFont.mnOrientation );
@@ -432,7 +432,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
 
     // new in version 2
     rOStm.WriteUChar( (sal_uChar)rImplFont.meRelief );
-    rOStm.WriteUInt16( rImplFont.maCJKLanguageTag.getLanguageType( false) );
+    rOStm.WriteUInt16( (sal_uInt16)rImplFont.maCJKLanguageTag.getLanguageType( false) );
     rOStm.WriteBool( rImplFont.mbVertical );
     rOStm.WriteUInt16( (sal_uInt16)rImplFont.meEmphasisMark );
 

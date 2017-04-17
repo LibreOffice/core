@@ -643,7 +643,7 @@ struct PPTTextParagraphStyleAtomInterpreter
 struct PPTTextSpecInfo
 {
     sal_uInt32      nCharIdx;
-    sal_uInt16      nLanguage[ 3 ];
+    LanguageType    nLanguage[ 3 ];
     sal_uInt16      nDontKnow;
 
     explicit PPTTextSpecInfo( sal_uInt32 nCharIdx );
@@ -933,7 +933,7 @@ struct PPTCharPropSet
     OUString            maString;
     std::unique_ptr<SvxFieldItem>
                         mpFieldItem;
-    sal_uInt16          mnLanguage[ 3 ];
+    LanguageType        mnLanguage[ 3 ];
 
     void                SetFont( sal_uInt16 nFont );
     void                SetColor( sal_uInt32 nColor );

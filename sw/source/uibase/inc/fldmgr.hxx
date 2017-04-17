@@ -108,7 +108,7 @@ private:
     sal_uLong           nCurFormat;
     bool            bEvalExp;
 
-    SAL_DLLPRIVATE sal_uInt16            GetCurrLanguage() const;
+    SAL_DLLPRIVATE LanguageType    GetCurrLanguage() const;
 
     css::uno::Reference<css::text::XNumberingTypeInfo> xNumberingInfo;
     SAL_DLLPRIVATE css::uno::Reference<css::text::XNumberingTypeInfo> const & GetNumberingInfo()const;

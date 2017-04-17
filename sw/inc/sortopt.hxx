@@ -47,7 +47,7 @@ struct SW_DLLPUBLIC SwSortOptions
     std::vector<SwSortKey*> aKeys;
     SwSortDirection         eDirection;
     sal_Unicode             cDeli;
-    sal_uInt16              nLanguage;
+    LanguageType            nLanguage;
     bool                    bTable;
     bool                    bIgnoreCase;
 };

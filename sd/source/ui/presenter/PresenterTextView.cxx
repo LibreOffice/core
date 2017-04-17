@@ -273,8 +273,8 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
         SvtLinguConfig().GetOptions( aOpt );
 
         struct FontDta {
-            sal_Int16       nFallbackLang;
-            sal_Int16       nLang;
+            LanguageType    nFallbackLang;
+            LanguageType    nLang;
             DefaultFontType nFontType;
             sal_uInt16      nFontInfoId;
             } aTable[3] =

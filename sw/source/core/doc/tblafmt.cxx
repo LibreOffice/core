@@ -547,7 +547,7 @@ bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_sNumFormatString,
         RTL_TEXTENCODING_UTF8);
-    rStream.WriteUInt16( m_eSysLanguage ).WriteUInt16( m_eNumFormatLanguage );
+    rStream.WriteUInt16( (sal_uInt16)m_eSysLanguage ).WriteUInt16( (sal_uInt16)m_eNumFormatLanguage );
 
     return 0 == rStream.GetError();
 }

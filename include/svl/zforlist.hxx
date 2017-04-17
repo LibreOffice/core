@@ -754,7 +754,7 @@ public:
     void GetCompatibilityCurrency( OUString& rSymbol, OUString& rAbbrev ) const;
 
     /// Fill rList with the language/country codes that have been allocated
-    void    GetUsedLanguages( std::vector<sal_uInt16>& rList );
+    void    GetUsedLanguages( std::vector<LanguageType>& rList );
 
     /// Fill a NfKeywordIndex table with keywords of a language/country
     void    FillKeywordTable( NfKeywordTable& rKeywords, LanguageType eLang );

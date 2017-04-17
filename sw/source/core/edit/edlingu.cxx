@@ -863,8 +863,8 @@ uno::Reference< XSpellAlternatives >
             uno::Reference< XSpellChecker1 >  xSpell( ::GetSpellChecker() );
             if( xSpell.is() )
             {
-                LanguageType eActLang = (LanguageType)pNode->GetLang( nBegin, nLen );
-                if( xSpell->hasLanguage( eActLang ))
+                LanguageType eActLang = pNode->GetLang( nBegin, nLen );
+                if( xSpell->hasLanguage( (sal_uInt16)eActLang ))
                 {
                     // restrict the maximal number of suggestions displayed
                     // in the context menu.
@@ -881,7 +881,7 @@ uno::Reference< XSpellAlternatives >
                     rVal.Name = UPN_MAX_NUMBER_OF_SUGGESTIONS;
                     rVal.Value <<= (sal_Int16) 7;
 
-                    xSpellAlt = xSpell->spell( aWord, eActLang, aPropVals );
+                    xSpellAlt = xSpell->spell( aWord, (sal_uInt16)eActLang, aPropVals );
                 }
             }
 

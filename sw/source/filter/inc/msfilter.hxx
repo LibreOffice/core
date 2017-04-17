@@ -109,7 +109,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri, sal_uInt16 nDocLang);
+        sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams, SvNumberFormatter *pFormatter, LanguageType &rLang, bool bHijri, LanguageType nDocLang);
 
         /*Used to identify if the previous token is AM time field*/
         bool IsPreviousAM(OUString& rParams, sal_Int32 nPos);

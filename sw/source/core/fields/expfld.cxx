@@ -398,7 +398,7 @@ void SwGetExpField::SetSubType(sal_uInt16 nType)
     nSubType = nType;
 }
 
-void SwGetExpField::SetLanguage(sal_uInt16 nLng)
+void SwGetExpField::SetLanguage(LanguageType nLng)
 {
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
         SwField::SetLanguage(nLng);

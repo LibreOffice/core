@@ -536,7 +536,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             OUString sResult;
             double nNumber = DBL_MAX;
 
-            long nLang = m_pLocaleDataWrapper->getLanguageTag().getLanguageType();
+            LanguageType nLang = m_pLocaleDataWrapper->getLanguageTag().getLanguageType();
             if(pMgr->GetColumnCnt( sSourceName, sTableName, sColumnName,
                                     nTmpRec, nLang, sResult, &nNumber ))
             {

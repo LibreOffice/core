@@ -172,7 +172,7 @@ public:
 
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
-    void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
+    void StartConversion( LanguageType nSourceLanguage,  LanguageType nTargetLanguage,
                 const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
 
     /** This is called internally when text conversion is started.
@@ -214,7 +214,7 @@ private:
     /** this is the language that is used for current text conversion.
         Only valid if meMode is TEXT_CONVERSION.
     */
-    sal_Int16 mnConversionLanguage;
+    LanguageType mnConversionLanguage;
 
     /** While the value of this flag is greater than 0 changes of the current page
         do not lead to selecting the corresponding text in the outliner.

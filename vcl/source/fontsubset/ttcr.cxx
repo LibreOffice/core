@@ -779,7 +779,7 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     for (i = 0; i < n; i++) {
         PutUInt16(nr[i].platformID, p1, 0, 1);
         PutUInt16(nr[i].encodingID, p1, 2, 1);
-        PutUInt16(nr[i].languageID, p1, 4, 1);
+        PutUInt16((sal_uInt16)nr[i].languageID, p1, 4, 1);
         PutUInt16(nr[i].nameID, p1, 6, 1);
         PutUInt16(nr[i].slen, p1, 8, 1);
         PutUInt16((sal_uInt16)(p2 - (name + 6 + 12 * n)), p1, 10, 1);

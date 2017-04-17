@@ -44,7 +44,7 @@ TransliterationWrapper::~TransliterationWrapper()
 {
 }
 
-OUString TransliterationWrapper::transliterate(const OUString& rStr, sal_uInt16 nLang,
+OUString TransliterationWrapper::transliterate(const OUString& rStr, LanguageType nLang,
                                                sal_Int32 nStart, sal_Int32 nLen,
                                                Sequence <sal_Int32>* pOffset )
 {
@@ -96,14 +96,14 @@ bool TransliterationWrapper::needLanguageForTheMode() const
            TransliterationFlags::TOGGLE_CASE   == nType;
 }
 
-void TransliterationWrapper::setLanguageLocaleImpl( sal_uInt16 nLang )
+void TransliterationWrapper::setLanguageLocaleImpl( LanguageType nLang )
 {
     if( LANGUAGE_NONE == nLang )
         nLang = LANGUAGE_SYSTEM;
     aLanguageTag.reset( nLang);
 }
 
-void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
+void TransliterationWrapper::loadModuleIfNeeded( LanguageType nLang )
 {
     bool bLoad = bFirstCall;
     bFirstCall = false;
@@ -155,7 +155,7 @@ void TransliterationWrapper::loadModuleImpl() const
 }
 
 void TransliterationWrapper::loadModuleByImplName(const OUString& rModuleName,
-                                                  sal_uInt16 nLang )
+                                                  LanguageType nLang )
 {
     try
     {

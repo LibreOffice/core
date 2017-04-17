@@ -31,11 +31,11 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-static inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_Int16 eCJK, sal_Int16 eCTL)
+static inline LanguageType lcl_LanguageOfType(sal_Int16 nType, LanguageType eWestern, LanguageType eCJK, LanguageType eCTL)
 {
-    return LanguageType(
-                nType < FONT_STANDARD_CJK ? eWestern :
-                    nType >= FONT_STANDARD_CTL ? eCTL : eCJK);
+    return nType < FONT_STANDARD_CJK
+           ? eWestern
+           : nType >= FONT_STANDARD_CTL ? eCTL : eCJK;
 }
 
 Sequence<OUString> SwStdFontConfig::GetPropertyNames()
@@ -95,9 +95,9 @@ SwStdFontConfig::SwStdFontConfig() :
     if (!utl::ConfigManager::IsAvoidConfig())
         SvtLinguConfig().GetOptions( aLinguOpt );
 
-    sal_Int16   eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
-                eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN),
-                eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
+    LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
+                 eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN),
+                 eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
 
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
     {
@@ -141,9 +141,9 @@ void SwStdFontConfig::ImplCommit()
 
     SvtLinguConfig().GetOptions( aLinguOpt );
 
-    sal_Int16   eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
-                eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN),
-                eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
+    LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
+                 eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN),
+                 eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
 
     for(sal_uInt16 nProp = 0;
         nProp < sal::static_int_cast< sal_uInt16, sal_Int32 >( aNames.getLength() );
@@ -175,9 +175,9 @@ bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
     if (!utl::ConfigManager::IsAvoidConfig())
         SvtLinguConfig().GetOptions(aLinguOpt);
 
-    sal_Int16   eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
-                eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN),
-                eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
+    LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
+                 eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN),
+                 eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
 
     OUString sDefFont(GetDefaultFor(FONT_STANDARD, eWestern));
     OUString sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eCJK));
@@ -289,9 +289,9 @@ void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
         if (!utl::ConfigManager::IsAvoidConfig())
             SvtLinguConfig().GetOptions( aLinguOpt );
 
-        sal_Int16 eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
-                  eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN),
-                  eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
+        LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
+                     eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN),
+                     eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
 
         // #i92090# default height value sets back to -1
         const sal_Int32 nDefaultHeight = GetDefaultHeightFor(nFontType, lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL));
