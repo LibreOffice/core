@@ -12412,7 +12412,7 @@ function WakeupEvent( aTimer, aActivityQueue )
 {
     WakeupEvent.superclass.constructor.call( this );
 
-    this.aTimer = new ElapsedTime( aTimer );;
+    this.aTimer = new ElapsedTime( aTimer );
     this.nNextTime = 0.0;
     this.aActivity = null;
     this.aActivityQueue = aActivityQueue;
