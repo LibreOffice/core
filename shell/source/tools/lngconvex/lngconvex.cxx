@@ -289,7 +289,7 @@ void add_group_entries(
 
     aConfig.SetGroup(GroupName);
     size_t key_count = aConfig.GetKeyCount();
-    std::map< unsigned short , std::string > map;
+    std::map< LanguageType, std::string > map;
 
     for (size_t i = 0; i < key_count; i++)
     {
@@ -297,7 +297,7 @@ void add_group_entries(
         OString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
         iso_lang_identifier myiso_lang( iso_lang );
         LanguageType ltype = LanguageTag( myiso_lang.make_OUString()).makeFallback().getLanguageType();
-        if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
+        if(  ( (sal_uInt16)ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
         {
             Substitutor.set_language(iso_lang_identifier(iso_lang));
 
@@ -308,13 +308,13 @@ void add_group_entries(
 
             Substitutor.add_substitution(
                 GroupName.getStr(), make_winrc_unicode_string(key_value_utf16));
-            map[ static_cast<unsigned short>(ltype) ] = std::string( iso_lang.getStr() );
+            map[ ltype ] = std::string( iso_lang.getStr() );
         }
         else
         {
             if( !map[ ltype ].empty() )
             {
-                printf("ERROR: Duplicated ms id %d found for the languages %s and %s !!!! This does not work in microsoft resources\nPlease remove one!\n", ltype , map[ ltype ].c_str() , iso_lang.getStr());
+                printf("ERROR: Duplicated ms id %d found for the languages %s and %s !!!! This does not work in microsoft resources\nPlease remove one!\n", (sal_uInt16)ltype , map[ ltype ].c_str() , iso_lang.getStr());
                 exit( -1 );
             }
         }

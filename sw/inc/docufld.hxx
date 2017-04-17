@@ -496,7 +496,7 @@ class SwDocInfoFieldType : public SwValueFieldType
 public:
     SwDocInfoFieldType(SwDoc* pDc);
 
-    OUString                Expand(sal_uInt16 nSubType, sal_uInt32 nFormat, sal_uInt16 nLang, const OUString& rName) const;
+    OUString                Expand(sal_uInt16 nSubType, sal_uInt32 nFormat, LanguageType nLang, const OUString& rName) const;
     virtual SwFieldType*    Copy() const override;
 };
 
@@ -515,7 +515,7 @@ public:
 
     virtual void            SetSubType(sal_uInt16) override;
     virtual sal_uInt16      GetSubType() const override;
-    virtual void            SetLanguage(sal_uInt16 nLng) override;
+    virtual void            SetLanguage(LanguageType nLng) override;
     virtual OUString        GetFieldName() const override;
     const OUString&         GetName() const { return aName; }
     void                    SetName( const OUString& rName ) { aName = rName; }

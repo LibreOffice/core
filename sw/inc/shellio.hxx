@@ -63,7 +63,7 @@ class SW_DLLPUBLIC SwAsciiOptions
 {
     OUString sFont;
     rtl_TextEncoding eCharSet;
-    sal_uInt16 nLanguage;
+    LanguageType nLanguage;
     LineEnd eCRLF_Flag;
 
 public:
@@ -74,8 +74,8 @@ public:
     rtl_TextEncoding GetCharSet() const { return eCharSet; }
     void SetCharSet( rtl_TextEncoding nVal ) { eCharSet = nVal; }
 
-    sal_uInt16 GetLanguage() const { return nLanguage; }
-    void SetLanguage( sal_uInt16 nVal ) { nLanguage = nVal; }
+    LanguageType GetLanguage() const { return nLanguage; }
+    void SetLanguage( LanguageType nVal ) { nLanguage = nVal; }
 
     LineEnd GetParaFlags() const { return eCRLF_Flag; }
     void SetParaFlags( LineEnd eVal ) { eCRLF_Flag = eVal; }
@@ -85,7 +85,7 @@ public:
         sFont.clear();
         eCRLF_Flag = GetSystemLineEnd();
         eCharSet = ::osl_getThreadTextEncoding();
-        nLanguage = 0;
+        nLanguage = LANGUAGE_SYSTEM;
     }
     // for the automatic conversion (mail/news/...)
     void ReadUserData( const OUString& );

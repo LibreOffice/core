@@ -293,7 +293,7 @@ void ConvDicNameContainer::AddConvDics(
         if(aExt != aSearchExt)
             continue;          // skip other files
 
-        sal_Int16 nLang;
+        LanguageType nLang;
         sal_Int16 nConvType;
         if (IsConvDic( aURL, nLang, nConvType ))
         {
@@ -413,7 +413,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
+    LanguageType nLang = LinguLocaleToLanguage( rLocale );
 
     if (GetNameContainer().hasByName( rName ))
         throw ElementExistException();

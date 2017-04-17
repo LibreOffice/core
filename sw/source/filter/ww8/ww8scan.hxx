@@ -1135,7 +1135,7 @@ public:
     */
     sal_uInt16 m_nFib;        // 0x2 FIB version written
     sal_uInt16 m_nProduct;    // 0x4 product version written by
-    sal_Int16 m_lid;          // 0x6 language stamp---localized version;
+    LanguageType m_lid;       // 0x6 language stamp---localized version;
     WW8_PN m_pnNext;          // 0x8
 
     bool m_fDot :1;     // 0xa 0001
@@ -1190,8 +1190,8 @@ public:
     sal_uInt16 m_wMagicCreatedPrivate; // private data
     sal_uInt16 m_wMagicRevisedPrivate; // private data
 
-    sal_Int16  m_lidFE; // Language id if document was written by Far East version
-                      // of Word (i.e. FIB.fFarEast is on)
+    LanguageType m_lidFE; // Language id if document was written by Far East version
+                          // of Word (i.e. FIB.fFarEast is on)
     sal_uInt16 m_clw; // Number of fields in the array of longs
 
     // end of WW8 section
@@ -1529,7 +1529,7 @@ public:
 
     void WriteHeader(SvStream& rStrm);
     void Write(SvStream& rStrm);
-    static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale);
+    static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs, LanguageType nLidLocale);
     ww::WordVersion GetFIBVersion() const;
     bool GetBaseCp(ManTypes nType, WW8_CP * cp) const;
     sal_Unicode getNumDecimalSep() const { return m_nNumDecimalSep;}

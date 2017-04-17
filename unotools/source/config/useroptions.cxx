@@ -183,33 +183,33 @@ void SvtUserOptions::Impl::SetToken (UserOptToken nToken, OUString const& sToken
 OUString SvtUserOptions::Impl::GetFullName () const
 {
     OUString sFullName;
-    switch (LanguageType const eLang = SvtSysLocale().GetUILanguageTag().getLanguageType())
+    LanguageType const eLang = SvtSysLocale().GetUILanguageTag().getLanguageType();
+    if (eLang == LANGUAGE_RUSSIAN)
     {
-        case LANGUAGE_RUSSIAN:
+        sFullName = GetToken(UserOptToken::FirstName).trim();
+        if (!sFullName.isEmpty())
+            sFullName += " ";
+        sFullName += GetToken(UserOptToken::FathersName).trim();
+        if (!sFullName.isEmpty())
+            sFullName += " ";
+        sFullName += GetToken(UserOptToken::LastName).trim();
+    }
+    else
+    {
+        if (MsLangId::isFamilyNameFirst(eLang))
+        {
+            sFullName = GetToken(UserOptToken::LastName).trim();
+            if (!sFullName.isEmpty())
+                sFullName += " ";
+            sFullName += GetToken(UserOptToken::FirstName).trim();
+        }
+        else
+        {
             sFullName = GetToken(UserOptToken::FirstName).trim();
             if (!sFullName.isEmpty())
                 sFullName += " ";
-            sFullName += GetToken(UserOptToken::FathersName).trim();
-            if (!sFullName.isEmpty())
-                sFullName += " ";
             sFullName += GetToken(UserOptToken::LastName).trim();
-            break;
-        default:
-            if (MsLangId::isFamilyNameFirst(eLang))
-            {
-                sFullName = GetToken(UserOptToken::LastName).trim();
-                if (!sFullName.isEmpty())
-                    sFullName += " ";
-                sFullName += GetToken(UserOptToken::FirstName).trim();
-            }
-            else
-            {
-                sFullName = GetToken(UserOptToken::FirstName).trim();
-                if (!sFullName.isEmpty())
-                    sFullName += " ";
-                sFullName += GetToken(UserOptToken::LastName).trim();
-            }
-            break;
+        }
     }
 
     return sFullName;

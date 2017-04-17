@@ -170,7 +170,7 @@ public:
         matching, excluding already known problems.
         (e.g. used in number formatter dialog init)
      */
-    static css::uno::Sequence< sal_uInt16 > getInstalledLanguageTypes();
+    static std::vector< LanguageType > getInstalledLanguageTypes();
 
     /// maps the LocaleData string to the International enum
     MeasurementSystem   mapMeasurementStringToEnum( const OUString& rMS ) const;

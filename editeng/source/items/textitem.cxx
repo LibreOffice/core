@@ -2366,7 +2366,7 @@ SfxPoolItem* SvxLanguageItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxLanguageItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUInt16( GetValue() );
+    rStrm.WriteUInt16( (sal_uInt16)GetValue() );
     return rStrm;
 }
 
@@ -2397,7 +2397,7 @@ bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch(nMemberId)
     {
         case MID_LANG_INT:  // for basic conversions!
-            rVal <<= (sal_Int16)(GetValue());
+            rVal <<= (sal_Int16)(sal_uInt16)GetValue();
         break;
         case MID_LANG_LOCALE:
             lang::Locale aRet( LanguageTag::convertToLocale( GetValue(), false));
@@ -2418,7 +2418,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nValue))
                 return false;
 
-            SetValue((sal_Int16)nValue);
+            SetValue((LanguageType)nValue);
         }
         break;
         case MID_LANG_LOCALE:
@@ -3434,7 +3434,7 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
     static struct
     {
         DefaultFontType nFontType;
-        sal_uInt16 nLanguage;
+        LanguageType    nLanguage;
     }
     aOutTypeArr[ nItemCnt ] =
     {

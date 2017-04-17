@@ -124,7 +124,7 @@ void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
     }
 }
 
-bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType )
+bool IsConvDic( const OUString &rFileURL, LanguageType &nLang, sal_Int16 &nConvType )
 {
     bool bRes = false;
 
@@ -164,7 +164,7 @@ bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType
 
 ConvDic::ConvDic(
         const OUString &rName,
-        sal_Int16 nLang,
+        LanguageType nLang,
         sal_Int16 nConvType,
         bool bBiDirectional,
         const OUString &rMainURL) :

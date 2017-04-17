@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustrbuf.hxx>
+#include <i18nlangtag/lang.h>
 #include <memory>
 
 #define XML_WRITTENNUMBERSTYLES "WrittenNumberStyles"
@@ -56,7 +57,7 @@ private:
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );
-    SAL_DLLPRIVATE void AddLanguageAttr_Impl( sal_Int32 nLang );
+    SAL_DLLPRIVATE void AddLanguageAttr_Impl( LanguageType nLang );
 
     SAL_DLLPRIVATE void AddToTextElement_Impl( const OUString& rString );
     SAL_DLLPRIVATE void FinishTextElement_Impl(bool bUseExtensionNS = false);

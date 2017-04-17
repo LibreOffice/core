@@ -43,7 +43,7 @@ public:
     explicit constexpr strong_int(UNDERLYING_TYPE value) : m_value(value) {}
     strong_int() : m_value(0) {}
 
-    explicit operator UNDERLYING_TYPE() const { return m_value; }
+    explicit constexpr operator UNDERLYING_TYPE() const { return m_value; }
     explicit operator bool() const { return m_value != 0; }
     UNDERLYING_TYPE get() const { return m_value; }
 
@@ -55,6 +55,15 @@ public:
     bool operator!=(strong_int const & other) const { return m_value != other.m_value; }
     strong_int& operator++() { ++m_value; return *this; }
     strong_int operator++(int) { UNDERLYING_TYPE nOldValue = m_value; ++m_value; return strong_int(nOldValue); }
+
+    bool anyOf(strong_int v) const {
+      return *this == v;
+    }
+
+    template<typename... Args>
+    bool anyOf(strong_int first, Args... args) const {
+      return *this == first || anyOf(args...);
+    }
 
 private:
     UNDERLYING_TYPE m_value;

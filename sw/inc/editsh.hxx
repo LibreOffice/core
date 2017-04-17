@@ -288,7 +288,7 @@ public:
     SvtScriptType GetScriptType() const;
 
     /// @return the language at current cursor position.
-    sal_uInt16 GetCurLang() const;
+    LanguageType GetCurLang() const;
 
     /// TABLE
     size_t GetTableFrameFormatCount( bool bUsed = false ) const;

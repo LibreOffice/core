@@ -22,6 +22,7 @@
 #include <limits.h>
 #include <tools/solar.h>
 #include <editeng/frmdir.hxx>
+#include <i18nlangtag/lang.h>
 
 /** POOLCOLL-IDs:
 // +----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
@@ -431,7 +432,7 @@ RES_POOLCOLL_HTML_END
             the parent in all other cases. */
 sal_uInt16 GetPoolParent( sal_uInt16 nId );
 
-SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage);
+SvxFrameDirection GetDefaultFrameDirection(LanguageType nLanguage);
 
 bool IsConditionalByPoolId(sal_uInt16 nId);
 

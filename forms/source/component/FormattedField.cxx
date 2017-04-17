@@ -672,7 +672,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         if (hasProperty(s_aFormatStringProp, xFormat))
             xFormat->getPropertyValue(s_aFormatStringProp) >>= sFormatDescription;
         _rxOutStream->writeUTF(sFormatDescription);
-        _rxOutStream->writeLong((sal_Int32)eFormatLanguage);
+        _rxOutStream->writeLong((sal_uInt16)eFormatLanguage);
     }
     // version 2 : write the properties common to all OEditBaseModels
     writeCommonEditProperties(_rxOutStream);

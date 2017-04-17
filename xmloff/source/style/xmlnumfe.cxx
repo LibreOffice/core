@@ -316,12 +316,12 @@ void SvXMLNumFmtExport::AddStyleAttr_Impl( bool bLong )
     }
 }
 
-void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
+void SvXMLNumFmtExport::AddLanguageAttr_Impl( LanguageType nLang )
 {
     if ( nLang != LANGUAGE_SYSTEM )
     {
         rExport.AddLanguageTagAttributes( XML_NAMESPACE_NUMBER, XML_NAMESPACE_NUMBER,
-                LanguageTag( (LanguageType)nLang), false);
+                LanguageTag( nLang), false);
     }
 }
 
@@ -372,7 +372,7 @@ void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
         sal_Int32 nLang = rExt.toInt32(16);
         if ( nLang < 0 )
             nLang = -nLang;
-        AddLanguageAttr_Impl( nLang );          // adds to pAttrList
+        AddLanguageAttr_Impl( LanguageType(nLang) );          // adds to pAttrList
     }
 
     SvXMLElementExport aElem( rExport,
@@ -1836,9 +1836,9 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
     }
     if (!bIsAutoStyle)
     {
-        std::vector<sal_uInt16> aLanguages;
+        std::vector<LanguageType> aLanguages;
         pFormatter->GetUsedLanguages( aLanguages );
-        for (std::vector<sal_uInt16>::const_iterator it(aLanguages.begin()); it != aLanguages.end(); ++it)
+        for (std::vector<LanguageType>::const_iterator it(aLanguages.begin()); it != aLanguages.end(); ++it)
         {
             LanguageType nLang = *it;
 

@@ -121,7 +121,7 @@ namespace
         };
         for(const auto & n : aArr)
         {
-            sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
+            LanguageType nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
                                 n.nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
@@ -150,7 +150,7 @@ namespace
 
         for(const auto & n : aArr)
         {
-            sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
+            LanguageType nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
                                 n.nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( n.nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
@@ -354,7 +354,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             /* koreans do not like SvxScriptItem(TRUE) */
             if (bRegardLanguage)
             {
-                sal_uLong nAppLanguage = GetAppLanguage();
+                LanguageType nAppLanguage = GetAppLanguage();
                 if (GetDefaultFrameDirection(nAppLanguage) ==
                     SvxFrameDirection::Horizontal_RL_TB)
                 {
@@ -440,7 +440,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                     RES_CHRATR_CJK_LANGUAGE,
                     RES_CHRATR_CTL_LANGUAGE
                 };
-                static const sal_uInt16 aLangs[] =
+                static const LanguageType aLangs[] =
                 {
                     LANGUAGE_ENGLISH_US,
                     LANGUAGE_ENGLISH_US,
@@ -455,7 +455,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
                 for( int i = 0; i < 3; ++i )
                 {
-                    sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(m_rDoc.GetDefault( aLangTypes[i] )).GetLanguage();
+                    LanguageType nLng = static_cast<const SvxLanguageItem&>(m_rDoc.GetDefault( aLangTypes[i] )).GetLanguage();
                     if( LANGUAGE_DONTKNOW == nLng )
                         nLng = aLangs[i];
 

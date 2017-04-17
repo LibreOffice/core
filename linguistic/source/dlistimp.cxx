@@ -52,7 +52,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-static bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, bool& bNeg );
+static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& bNeg );
 
 static void AddInternal( const uno::Reference< XDictionary > &rDic,
                          const OUString& rNew );
@@ -295,9 +295,9 @@ void DicList::SearchForDictionaries(
     OUString aDCP("dcp");
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
-        OUString  aURL( pDirCnt[i] );
-        sal_uInt16  nLang = LANGUAGE_NONE;
-        bool        bNeg  = false;
+        OUString     aURL( pDirCnt[i] );
+        LanguageType nLang = LANGUAGE_NONE;
+        bool         bNeg  = false;
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
@@ -315,7 +315,7 @@ void DicList::SearchForDictionaries(
 
         // Record in the list of Dictionaries
         // When it already exists don't record
-        sal_Int16 nSystemLanguage = MsLangId::getSystemLanguage();
+        LanguageType nSystemLanguage = MsLangId::getSystemLanguage();
         OUString aTmp1 = ToLower( aURL, nSystemLanguage );
         sal_Int32 nPos = aTmp1.lastIndexOf( '/' );
         if (-1 != nPos)
@@ -520,7 +520,7 @@ uno::Reference< XDictionary > SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
+    LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
     bool bIsWriteablePath = rURL.match( GetDictionaryWriteablePath() );
     return new DictionaryNeo( rName, nLanguage, eDicType, rURL, bIsWriteablePath );
 }
@@ -801,7 +801,7 @@ static void AddUserData( const uno::Reference< XDictionary > &rDic )
     }
 }
 
-static bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, bool& bNeg )
+static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& bNeg )
 {
     if (rFileURL.isEmpty())
         return false;

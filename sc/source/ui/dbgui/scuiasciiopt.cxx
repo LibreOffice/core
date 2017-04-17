@@ -596,7 +596,7 @@ void ScImportAsciiDlg::SaveParameters()
                      pRbFixed->IsChecked(),
                      static_cast<sal_Int32>(pNfRow->GetValue()),
                      pLbCharSet->GetSelectEntryPos(),
-                     static_cast<sal_Int32>(pLbCustomLang->GetSelectLanguage()), meCall );
+                     static_cast<sal_uInt16>(pLbCustomLang->GetSelectLanguage()), meCall );
 }
 
 void ScImportAsciiDlg::SetSeparators()

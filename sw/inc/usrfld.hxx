@@ -41,7 +41,7 @@ public:
     virtual OUString        GetName() const override;
     virtual SwFieldType*    Copy() const override;
 
-    OUString                Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, sal_uInt16 nLng);
+    OUString                Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng);
 
     OUString                GetContent( sal_uInt32 nFormat = 0 );
            void             SetContent( const OUString& rStr, sal_uInt32 nFormat = 0 );
