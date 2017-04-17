@@ -173,20 +173,19 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 {
     static const int nMaxPathSize = 16000;
 
-    OUString CONF_PATH = "Office/Factories/" + rServiceName;
+    const OUString sConfPath = "Office/Factories/" + rServiceName;
     static const char PROP_DEF_TEMPL_CHANGED[] = "ooSetupFactorySystemDefaultTemplateChanged";
 
     static const char DEF_TPL_STR[] = "/soffice.";
 
-    OUString sURL;
+    OUString sUserTemplateURL;
     OUString sPath;
     sal_Unicode aPathBuffer[nMaxPathSize];
     if ( SystemPath::GetUserTemplateLocation( aPathBuffer, nMaxPathSize ))
         sPath = OUString( aPathBuffer );
-    osl::FileBase::getFileURLFromSystemPath( sPath, sURL );
+    osl::FileBase::getFileURLFromSystemPath( sPath, sUserTemplateURL );
 
-    OUString aUserTemplateURL( sURL );
-    if ( !aUserTemplateURL.isEmpty())
+    if ( !sUserTemplateURL.isEmpty())
     {
         try
         {
@@ -195,9 +194,9 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
                 ::comphelper::getProcessComponentContext(), "/org.openoffice.Setup", ::comphelper::EConfigurationModes::Standard );
 
             OUString aActualFilter;
-            ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, "ooSetupFactoryActualFilter" ) >>= aActualFilter;
+            ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, "ooSetupFactoryActualFilter" ) >>= aActualFilter;
             bool bChanged(false);
-            ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED ) >>= bChanged;
+            ::comphelper::ConfigurationHelper::readRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED ) >>= bChanged;
 
             uno::Reference< container::XNameAccess > xFilterFactory(
                 xFactory->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY_THROW );
@@ -214,10 +213,9 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
             uno::Sequence< OUString > aAllExt =
                 aProps1.getUnpackedValueOrDefault("Extensions", uno::Sequence< OUString >() );
             //To-do: check if aAllExt is empty first
-            OUString aExt = aAllExt[0];
+            const OUString aExt = DEF_TPL_STR + aAllExt[0];
 
-            aUserTemplateURL += DEF_TPL_STR;
-            aUserTemplateURL += aExt;
+            sUserTemplateURL += aExt;
 
             uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
                 ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
@@ -229,13 +227,12 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
             if ( !xSimpleFileAccess->exists( aBackupURL ) )
                 xSimpleFileAccess->createFolder( aBackupURL );
 
-            aBackupURL += DEF_TPL_STR;
             aBackupURL += aExt;
 
             if ( !rTemplateName.isEmpty() )
             {
-                if ( xSimpleFileAccess->exists( aUserTemplateURL ) && !bChanged )
-                    xSimpleFileAccess->copy( aUserTemplateURL, aBackupURL );
+                if ( xSimpleFileAccess->exists( sUserTemplateURL ) && !bChanged )
+                    xSimpleFileAccess->copy( sUserTemplateURL, aBackupURL );
 
                 uno::Reference< document::XTypeDetection > xTypeDetector( xTypeDetection, uno::UNO_QUERY );
                 ::comphelper::SequenceAsHashMap aProps2( xTypeDetection->getByName( xTypeDetector->queryTypeByURL( rTemplateName ) ) );
@@ -248,7 +245,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
                 aArgs[1].Name = "AsTemplate";
                 aArgs[1].Value <<= true;
                 aArgs[2].Name = "URL";
-                aArgs[2].Value <<= OUString( rTemplateName );
+                aArgs[2].Value <<= rTemplateName;
 
                 uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( rServiceName ), uno::UNO_QUERY );
                 xLoadable->load( aArgs );
@@ -258,17 +255,17 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
                 aArgs[1].Value <<= true;
 
                 uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );
-                xStorable->storeToURL( aUserTemplateURL, aArgs );
-                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED, uno::makeAny( true ));
+                xStorable->storeToURL( sUserTemplateURL, aArgs );
+                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::makeAny( true ));
                 ::comphelper::ConfigurationHelper::flush( xConfig );
             }
             else
             {
                 DBG_ASSERT( bChanged, "invalid ooSetupFactorySystemDefaultTemplateChanged value!" );
 
-                xSimpleFileAccess->copy( aBackupURL, aUserTemplateURL );
+                xSimpleFileAccess->copy( aBackupURL, sUserTemplateURL );
                 xSimpleFileAccess->kill( aBackupURL );
-                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, CONF_PATH, PROP_DEF_TEMPL_CHANGED, uno::makeAny( false ));
+                ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::makeAny( false ));
                 ::comphelper::ConfigurationHelper::flush( xConfig );
             }
         }
@@ -296,11 +293,10 @@ OUString SfxObjectFactory::GetStandardTemplate( const OUString& rServiceName )
     if (eFac == SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
         eFac = SvtModuleOptions::ClassifyFactoryByShortName(rServiceName);
 
-    OUString sTemplate;
     if (eFac != SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
-        sTemplate = SvtModuleOptions().GetFactoryStandardTemplate(eFac);
+        return SvtModuleOptions().GetFactoryStandardTemplate(eFac);
 
-    return sTemplate;
+    return OUString();
 }
 
 std::shared_ptr<const SfxFilter> SfxObjectFactory::GetTemplateFilter() const
@@ -353,10 +349,8 @@ OUString SfxObjectFactory::GetModuleName() const
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
             css::frame::ModuleManager::create(xContext));
 
-        OUString sDocService(GetDocumentServiceName());
-        ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(sDocService) );
-        OUString sModuleName = aPropSet.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
-        return sModuleName;
+        ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(GetDocumentServiceName()) );
+        return aPropSet.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
     }
     catch(const css::uno::RuntimeException&)
     {
