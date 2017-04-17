@@ -274,7 +274,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxAllItemSet aSet( pApp->GetPool() );
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
-                aSet.Put( SfxStringItem( SID_TARGETNAME, OUString("_blank") ) );
+                aSet.Put( SfxStringItem( SID_TARGETNAME, "_blank" ) );
                 const SfxStringItem* pReferer = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_REFERER, false);
                 if ( pReferer )
                     aSet.Put( *pReferer );
@@ -322,7 +322,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                   && ( pSh->GetModifyPasswordHash() || pSh->GetModifyPasswordInfo().getLength() )
                   && !pSh->IsModifyPasswordEntered() )
                 {
-                    OUString aDocumentName = INetURLObject( pMed->GetOrigURL() ).GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
+                    const OUString aDocumentName = INetURLObject( pMed->GetOrigURL() ).GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
                     if( !AskPasswordToModify_Impl( pMed->GetInteractionHandler(), aDocumentName, pMed->GetOrigFilter(), pSh->GetModifyPasswordHash(), pSh->GetModifyPasswordInfo() ) )
                     {
                         // this is a read-only document, if it has "Password to modify"
@@ -364,9 +364,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             // doing
 
-            OUString aTemp;
-            osl::FileBase::getFileURLFromSystemPath( pMed->GetPhysicalName(), aTemp );
-            INetURLObject aPhysObj( aTemp );
+            OUString sTemp;
+            osl::FileBase::getFileURLFromSystemPath( pMed->GetPhysicalName(), sTemp );
+            INetURLObject aPhysObj( sTemp );
             const SfxInt16Item* pVersionItem = SfxItemSet::GetItem<SfxInt16Item>(pSh->GetMedium()->GetItemSet(), SID_VERSION, false);
 
             INetURLObject aMedObj( pMed->GetName() );
@@ -1881,7 +1881,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const SfxInterfaceId i_nNewViewId )
         for ( sal_Int32 i=0; i<nCount; ++i )
         {
             const ::comphelper::NamedValueCollection aCurViewData( xViewData->getByIndex(i) );
-            OUString sViewId( aCurViewData.getOrDefault( "ViewId", OUString() ) );
+            const OUString sViewId( aCurViewData.getOrDefault( "ViewId", OUString() ) );
             if ( sViewId.isEmpty() )
                 continue;
 
@@ -2376,8 +2376,8 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         if ( xUrl.is() )
         {
             // get name
-            OUString aName = xUrl->getName();
-            sal_Unicode cTok = '.';
+            const OUString aName = xUrl->getName();
+            const sal_Unicode cTok = '.';
             sal_Int32 nIndex = 0;
             aLibName = aName.getToken( 0, cTok, nIndex );
             if ( nIndex != -1 )
@@ -2457,7 +2457,6 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         // pack the macro as direct usable "sub" routine
-        OUString sCode;
         OUStringBuffer sRoutine(10000);
         bool bReplace = false;
 
@@ -2470,6 +2469,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
             }
             else
             {
+                OUString sCode;
                 aTemp = xLib->getByName(aModuleName);
                 aTemp >>= sCode;
                 sRoutine.append( sCode );
