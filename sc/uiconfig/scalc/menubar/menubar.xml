@@ -546,6 +546,7 @@
                     <menu:menuitem menu:id=".uno:HideAllNotes"/>
                     <menu:menuitem menu:id=".uno:ShowAllNotes"/>
                     <menu:menuitem menu:id=".uno:DeleteNote"/>
+                    <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:Delete"/>
