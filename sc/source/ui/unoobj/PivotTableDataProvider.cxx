@@ -307,7 +307,6 @@ void PivotTableDataProvider::collectPivotTableData()
     std::vector<OUString> aDataFieldNamesVectors;
 
     std::unordered_map<OUString, OUString, OUStringHash> aDataFieldCaptionNames;
-    std::vector<std::pair<OUString, sal_Int32>> aDataFieldPairs;
 
     sheet::DataPilotFieldOrientation eDataFieldOrientation = sheet::DataPilotFieldOrientation_HIDDEN;
 
@@ -349,7 +348,7 @@ void PivotTableDataProvider::collectPivotTableData()
             uno::Reference<sheet::XDataPilotMemberResults> xLevelResult(xLevel, uno::UNO_QUERY );
 
             bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_ISDATALAYOUT);
-            long nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
+            sal_Int32 nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
             sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
 
             if (xLevelName.is() && xLevelResult.is())
@@ -358,7 +357,7 @@ void PivotTableDataProvider::collectPivotTableData()
                 {
                     case sheet::DataPilotFieldOrientation_COLUMN:
                     {
-                        m_aColumnFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim});
+                        m_aColumnFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos});
 
                         uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
                         size_t i = 0;
@@ -396,7 +395,7 @@ void PivotTableDataProvider::collectPivotTableData()
 
                     case sheet::DataPilotFieldOrientation_ROW:
                     {
-                        m_aRowFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim});
+                        m_aRowFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos});
 
                         uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
                         m_aCategoriesRowOrientation.resize(aSequence.getLength());
@@ -449,14 +448,14 @@ void PivotTableDataProvider::collectPivotTableData()
 
                     case sheet::DataPilotFieldOrientation_PAGE:
                     {
-                        m_aPageFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim});
+                        m_aPageFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos});
                     }
                     break;
 
                     case sheet::DataPilotFieldOrientation_DATA:
                     {
                         aDataFieldNumberFormatMap[xLevelName->getName()] = nNumberFormat;
-                        aDataFieldPairs.push_back(std::pair<OUString, sal_Int32>(xLevelName->getName(), nDim));
+                        m_aDataFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos});
                     }
                     break;
 
@@ -467,12 +466,10 @@ void PivotTableDataProvider::collectPivotTableData()
         }
     }
 
-    // Fill data field entry info
-    for (std::pair<OUString, sal_Int32> & rPair : aDataFieldPairs)
+    // Transform the name of data fields
+    for (chart2::data::PivotTableFieldEntry& rDataFields : m_aDataFields)
     {
-        m_aDataFields.push_back(chart2::data::PivotTableFieldEntry{
-                                    aDataFieldCaptionNames[rPair.first],
-                                    rPair.second});
+        rDataFields.Name = aDataFieldCaptionNames[rDataFields.Name];
     }
 
     // Apply number format to the data
@@ -505,6 +502,20 @@ void PivotTableDataProvider::collectPivotTableData()
         }
     }
 
+    // Sort fields so it respects the order of how it is represented in the pivot table
+
+    auto funcDimensionPositionSortCompare = [] (chart2::data::PivotTableFieldEntry const & entry1,
+                                                chart2::data::PivotTableFieldEntry const & entry2)
+    {
+        return entry1.DimensionPositionIndex < entry2.DimensionPositionIndex;
+    };
+
+    std::sort(m_aColumnFields.begin(), m_aColumnFields.end(), funcDimensionPositionSortCompare);
+    std::sort(m_aRowFields.begin(),    m_aRowFields.end(),    funcDimensionPositionSortCompare);
+    std::sort(m_aPageFields.begin(),   m_aPageFields.end(),   funcDimensionPositionSortCompare);
+    std::sort(m_aDataFields.begin(),   m_aDataFields.end(),   funcDimensionPositionSortCompare);
+
+    // Mark that we updated the data
     m_bNeedsUpdate = false;
 }
 
