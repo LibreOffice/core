@@ -106,7 +106,9 @@ LNG_DLLPUBLIC bool LinguIsUnspecified( LanguageType nLanguage );
     tag string instead. */
 LNG_DLLPUBLIC bool LinguIsUnspecified( const OUString & rBcp47 );
 
-css::uno::Sequence< sal_Int16 >
+std::vector< LanguageType >
+    LocaleSeqToLangVec( css::uno::Sequence< css::lang::Locale > &rLocaleSeq );
+css::uno::Sequence<sal_Int16>
     LocaleSeqToLangSeq( css::uno::Sequence< css::lang::Locale > &rLocaleSeq );
 
 // checks if file pointed to by rURL is readonly
@@ -132,12 +134,12 @@ css::uno::Reference< css::linguistic2::XHyphenatedWord >
                 css::uno::Reference< css::linguistic2::XHyphenatedWord > &rxHyphWord );
 
 
-LNG_DLLPUBLIC bool        IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 nLanguage );
+LNG_DLLPUBLIC bool        IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage );
 
-inline bool        IsUpper( const OUString &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.getLength(), nLanguage ); }
+inline bool        IsUpper( const OUString &rText, LanguageType nLanguage )     { return IsUpper( rText, 0, rText.getLength(), nLanguage ); }
 LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass *);
 
-OUString      ToLower( const OUString &rText, sal_Int16 nLanguage );
+OUString      ToLower( const OUString &rText, LanguageType nLanguage );
 LNG_DLLPUBLIC bool      HasDigits( const OUString &rText );
 LNG_DLLPUBLIC bool      IsNumeric( const OUString &rText );
 
@@ -157,13 +159,13 @@ css::uno::Reference<
     css::linguistic2::XDictionaryEntry >
         SearchDicList(
             const css::uno::Reference< css::linguistic2::XSearchableDictionaryList >& rDicList,
-            const OUString& rWord, sal_Int16 nLanguage,
+            const OUString& rWord, LanguageType nLanguage,
             bool bSearchPosDics, bool bSearchSpellEntry );
 
 LNG_DLLPUBLIC DictionaryError AddEntryToDic(
     css::uno::Reference< css::linguistic2::XDictionary >  &rxDic,
     const OUString &rWord, bool bIsNeg,
-    const OUString &rRplcTxt, sal_Int16 nRplcLang,
+    const OUString &rRplcTxt,
     bool bStripDot = true );
 
 LNG_DLLPUBLIC bool SaveDictionaries( const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &xDicList );

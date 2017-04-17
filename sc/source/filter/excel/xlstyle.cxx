@@ -758,11 +758,11 @@ namespace {
 const NfIndexTableOffset PRV_NF_INDEX_REUSE = NF_INDEX_TABLE_ENTRIES;
 
 /** German primary language not defined, LANGUAGE_GERMAN belongs to Germany. */
-const LanguageType PRV_LANGUAGE_GERMAN_PRIM = LANGUAGE_GERMAN & LANGUAGE_MASK_PRIMARY;
+constexpr LanguageType PRV_LANGUAGE_GERMAN_PRIM = primary(LANGUAGE_GERMAN);
 /** French primary language not defined, LANGUAGE_FRENCH belongs to France. */
-const LanguageType PRV_LANGUAGE_FRENCH_PRIM = LANGUAGE_FRENCH & LANGUAGE_MASK_PRIMARY;
+constexpr LanguageType PRV_LANGUAGE_FRENCH_PRIM = primary(LANGUAGE_FRENCH);
 /** Parent language identifier for Asian languages. */
-const LanguageType PRV_LANGUAGE_ASIAN_PRIM = LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY;
+constexpr LanguageType PRV_LANGUAGE_ASIAN_PRIM = primary(LANGUAGE_CHINESE);
 
 /** Stores the number format used in Calc for an Excel built-in number format. */
 struct XclBuiltInFormat

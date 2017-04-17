@@ -52,7 +52,7 @@
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
-static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFormat,
+static LanguageType lcl_GetLanguageOfFormat( LanguageType nLng, sal_uLong nFormat,
                                 const SvNumberFormatter& rFormatter )
 {
     if( nLng == LANGUAGE_NONE ) // Bug #60010
@@ -174,7 +174,7 @@ void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwField::SwField(
         SwFieldType* pType,
         sal_uInt32 nFormat,
-        sal_uInt16 nLang,
+        LanguageType nLang,
         bool bUseFieldValueCache)
     : m_Cache()
     , m_bUseFieldValueCache( bUseFieldValueCache )
@@ -361,7 +361,7 @@ bool SwField::HasClickHdl() const
     return bRet;
 }
 
-void SwField::SetLanguage(sal_uInt16 const nLang)
+void SwField::SetLanguage(LanguageType const nLang)
 {
     m_nLang = nLang;
 }
@@ -462,7 +462,7 @@ SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
 
 /// return value formatted as string
 OUString SwValueFieldType::ExpandValue( const double& rVal,
-                                        sal_uInt32 nFormat, sal_uInt16 nLng) const
+                                        sal_uInt32 nFormat, LanguageType nLng) const
 {
     if (rVal >= DBL_MAX) // error string for calculator
         return SwViewShell::GetShellRes()->aCalc_Error;
@@ -472,7 +472,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
     Color* pCol = nullptr;
 
     // Bug #60010
-    sal_uInt16 nFormatLng = ::lcl_GetLanguageOfFormat( nLng, nFormat, *pFormatter );
+    LanguageType nFormatLng = ::lcl_GetLanguageOfFormat( nLng, nFormat, *pFormatter );
 
     if( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFormatLng )
     {
@@ -484,7 +484,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
         if (pEntry && nLng != pEntry->GetLanguage())
         {
             sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFormat,
-                                                    (LanguageType)nFormatLng);
+                                                    nFormatLng);
 
             if (nNewFormat == nFormat)
             {
@@ -525,7 +525,7 @@ OUString SwValueFieldType::DoubleToString(const double &rVal,
 }
 
 OUString SwValueFieldType::DoubleToString( const double &rVal,
-                                        sal_uInt16 nLng ) const
+                                        LanguageType nLng ) const
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetNumberFormatter();
 
@@ -539,7 +539,7 @@ OUString SwValueFieldType::DoubleToString( const double &rVal,
 }
 
 SwValueField::SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat,
-                            sal_uInt16 nLng, const double fVal )
+                            LanguageType nLng, const double fVal )
     : SwField(pFieldType, nFormat, nLng)
     , m_fValue(fVal)
 {
@@ -583,12 +583,12 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
 sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFormat)
 {
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
-    sal_uInt16 nLng = SvtSysLocale().GetLanguageTag().getLanguageType();
+    LanguageType nLng = SvtSysLocale().GetLanguageTag().getLanguageType();
 
     if (pEntry && nLng != pEntry->GetLanguage())
     {
         sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFormat,
-                                                        (LanguageType)nLng);
+                                                        nLng);
 
         if (nNewFormat == nFormat)
         {
@@ -611,7 +611,7 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
 }
 
 /// set language of the format
-void SwValueField::SetLanguage( sal_uInt16 nLng )
+void SwValueField::SetLanguage( LanguageType nLng )
 {
     if( IsAutomaticLanguage() &&
             static_cast<SwValueFieldType *>(GetTyp())->UseFormat() &&
@@ -619,7 +619,7 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
     {
         // Bug #60010
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-        sal_uInt16 nFormatLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
+        LanguageType nFormatLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
                                                     *pFormatter );
 
         if( (GetFormat() >= SV_COUNTRY_LANGUAGE_OFFSET ||
@@ -631,7 +631,7 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
             if( pEntry && nFormatLng != pEntry->GetLanguage() )
             {
                 sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(
-                                        GetFormat(), (LanguageType)nFormatLng );
+                                        GetFormat(), nFormatLng );
 
                 if( nNewFormat == GetFormat() )
                 {

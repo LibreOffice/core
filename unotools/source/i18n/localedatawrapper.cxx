@@ -58,7 +58,7 @@ namespace
 
     struct InstalledLanguageTypes
         : public rtl::Static<
-            uno::Sequence< sal_uInt16 >, InstalledLanguageTypes >
+            std::vector< LanguageType >, InstalledLanguageTypes >
     {};
 }
 
@@ -288,18 +288,18 @@ css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getInstalledLocaleNam
 }
 
 // static
-css::uno::Sequence< sal_uInt16 > LocaleDataWrapper::getInstalledLanguageTypes()
+std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
 {
-    uno::Sequence< sal_uInt16 > &rInstalledLanguageTypes =
+    std::vector< LanguageType > &rInstalledLanguageTypes =
         InstalledLanguageTypes::get();
 
-    if ( rInstalledLanguageTypes.getLength() )
+    if ( !rInstalledLanguageTypes.empty() )
         return rInstalledLanguageTypes;
 
     css::uno::Sequence< css::lang::Locale > xLoc =  getInstalledLocaleNames();
     sal_Int32 nCount = xLoc.getLength();
-    css::uno::Sequence< sal_uInt16 > xLang( nCount );
-    sal_Int32 nLanguages = 0;
+    std::vector< LanguageType > xLang;
+    xLang.reserve(nCount);
     for ( sal_Int32 i=0; i<nCount; i++ )
     {
         LanguageTag aLanguageTag( xLoc[i] );
@@ -317,12 +317,8 @@ css::uno::Sequence< sal_uInt16 > LocaleDataWrapper::getInstalledLanguageTypes()
             outputCheckMessage(aMsg.makeStringAndClear());
         }
 
-        switch ( eLang )
-        {
-            case LANGUAGE_NORWEGIAN :       // no_NO, not Bokmal (nb_NO), not Nynorsk (nn_NO)
-                eLang = LANGUAGE_DONTKNOW;  // don't offer "Unknown" language
-                break;
-        }
+        if ( eLang == LANGUAGE_NORWEGIAN)       // no_NO, not Bokmal (nb_NO), not Nynorsk (nn_NO)
+            eLang = LANGUAGE_DONTKNOW;  // don't offer "Unknown" language
         if ( eLang != LANGUAGE_DONTKNOW )
         {
             LanguageTag aBackLanguageTag( eLang);
@@ -340,7 +336,7 @@ css::uno::Sequence< sal_uInt16 > LocaleDataWrapper::getInstalledLanguageTypes()
                     OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
                     aMsg.append(aDebugLocale);
                     aMsg.append("  ->  0x");
-                    aMsg.append(static_cast<sal_Int32>(eLang), 16);
+                    aMsg.append((sal_Int32)(sal_uInt16)eLang, 16);
                     aMsg.append("  ->  ");
                     aMsg.append(aBackLanguageTag.getBcp47());
                     outputCheckMessage( aMsg.makeStringAndClear() );
@@ -349,10 +345,8 @@ css::uno::Sequence< sal_uInt16 > LocaleDataWrapper::getInstalledLanguageTypes()
             }
         }
         if ( eLang != LANGUAGE_DONTKNOW )
-            xLang[ nLanguages++ ] = eLang;
+            xLang.push_back(eLang);
     }
-    if ( nLanguages < nCount )
-        xLang.realloc( nLanguages );
     rInstalledLanguageTypes = xLang;
 
     return rInstalledLanguageTypes;
