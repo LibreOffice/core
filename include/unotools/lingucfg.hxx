@@ -53,9 +53,9 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
             bROHyphMinWordLength;
 
     // misc options (non-service specific)
-    sal_Int16   nDefaultLanguage;
-    sal_Int16   nDefaultLanguage_CJK;
-    sal_Int16   nDefaultLanguage_CTL;
+    LanguageType nDefaultLanguage;
+    LanguageType nDefaultLanguage_CJK;
+    LanguageType nDefaultLanguage_CTL;
 
     bool    bRODefaultLanguage;
     bool    bRODefaultLanguage_CJK;

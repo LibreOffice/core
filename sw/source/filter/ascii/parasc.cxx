@@ -108,8 +108,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
     // set defaults from the options
     if( rOpt.GetLanguage() )
     {
-        SvxLanguageItem aLang( (LanguageType)rOpt.GetLanguage(),
-                                 RES_CHRATR_LANGUAGE );
+        SvxLanguageItem aLang( rOpt.GetLanguage(), RES_CHRATR_LANGUAGE );
         pItemSet->Put( aLang );
         aLang.SetWhich(RES_CHRATR_CJK_LANGUAGE);
         pItemSet->Put( aLang );

@@ -158,7 +158,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     }
 
     // create and add
-    sal_uInt16 nLang = pLanguageLB->GetSelectLanguage();
+    LanguageType nLang = pLanguageLB->GetSelectLanguage();
     try
     {
         // create new dictionary
@@ -375,7 +375,7 @@ void SvxEditDictionaryDialog::SetDicReadonly_Impl(
 }
 
 
-void SvxEditDictionaryDialog::SetLanguage_Impl( util::Language nLanguage )
+void SvxEditDictionaryDialog::SetLanguage_Impl( LanguageType nLanguage )
 {
     // select language
     pLangLB->SelectLanguage( nLanguage );
@@ -447,9 +447,9 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, void)
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
 {
     sal_Int32 nDicPos = pAllDictsLB->GetSelectEntryPos();
-    sal_Int32 nLang = pLangLB->GetSelectLanguage();
+    LanguageType nLang = pLangLB->GetSelectLanguage();
     Reference< XDictionary >  xDic( aDics.getConstArray()[ nDicPos ], UNO_QUERY );
-    sal_Int16 nOldLang = LanguageTag( xDic->getLocale() ).getLanguageType();
+    LanguageType nOldLang = LanguageTag( xDic->getLocale() ).getLanguageType();
 
     if ( nLang != nOldLang )
     {
@@ -627,7 +627,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
 
                 nAddRes = linguistic::AddEntryToDic( xDic,
                             aNewWord, bIsNegEntry,
-                            aRplcText, LanguageTag( xDic->getLocale() ).getLanguageType(), false );
+                            aRplcText, false );
              }
         }
         if (DictionaryError::NONE != nAddRes)

@@ -26,6 +26,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <linguistic/lngdllapi.h>
+#include <i18nlangtag/lang.h>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
@@ -46,9 +47,9 @@ std::vector< OUString >
 void    SeqRemoveNegEntries(
                 std::vector< OUString > &rSeq,
                 css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &rxDicList,
-                sal_Int16 nLanguage );
+                LanguageType nLanguage );
 
-void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
+void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
         css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &xDicList,
         std::vector< OUString > & rDicListProps );
 
@@ -63,11 +64,11 @@ class SpellAlternatives
     css::uno::Sequence< OUString >  aAlt;   // list of alternatives, may be empty.
     OUString                        aWord;
     sal_Int16                       nType;          // type of failure
-    sal_Int16                       nLanguage;
+    LanguageType                    nLanguage;
 
 public:
     LNG_DLLPUBLIC SpellAlternatives();
-    SpellAlternatives(const OUString &rWord, sal_Int16 nLang,
+    SpellAlternatives(const OUString &rWord, LanguageType nLang,
                       const css::uno::Sequence< OUString > &rAlternatives );
     virtual ~SpellAlternatives() override;
     SpellAlternatives(const SpellAlternatives&) = delete;
@@ -85,11 +86,11 @@ public:
     virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) override;
 
     // non-interface specific functions
-    void    LNG_DLLPUBLIC SetWordLanguage(const OUString &rWord, sal_Int16 nLang);
+    void    LNG_DLLPUBLIC SetWordLanguage(const OUString &rWord, LanguageType nLang);
     void    LNG_DLLPUBLIC SetFailureType(sal_Int16 nTypeP);
     void    LNG_DLLPUBLIC SetAlternatives( const css::uno::Sequence< OUString > &rAlt );
     static css::uno::Reference < css::linguistic2::XSpellAlternatives > LNG_DLLPUBLIC CreateSpellAlternatives(
-        const OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const css::uno::Sequence< OUString > &rAlt );
+        const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const css::uno::Sequence< OUString > &rAlt );
 };
 
 }   // namespace linguistic

@@ -40,19 +40,19 @@ public:
     /// Create a LangID from a primary and a sublanguage.
     static LanguageType makeLangID( LanguageType nSubLangId, LanguageType nPriLangId)
     {
-        return (nSubLangId << 10) | nPriLangId;
+        return LanguageType((sal_uInt16(nSubLangId) << 10) | sal_uInt16(nPriLangId));
     }
 
     /// Get the primary language of a LangID.
     static LanguageType getPrimaryLanguage( LanguageType nLangID)
     {
-        return nLangID & LANGUAGE_MASK_PRIMARY;
+        return LanguageType(sal_uInt16(nLangID) & LANGUAGE_MASK_PRIMARY);
     }
 
     /// Get the sublanguage of a LangID.
     static LanguageType getSubLanguage( LanguageType nLangID)
     {
-        return (nLangID & ~LANGUAGE_MASK_PRIMARY) >> 10;
+        return LanguageType((sal_uInt16(nLangID) & ~LANGUAGE_MASK_PRIMARY) >> 10);
     }
 
     /** Language/locale of category LC_CTYPE (on Unix, else the system

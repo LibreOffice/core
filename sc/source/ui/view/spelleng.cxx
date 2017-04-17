@@ -192,7 +192,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 const SfxPoolItem* pItem = mrDoc.GetAttr( nNewCol, nNewRow, mnStartTab, ATTR_FONT_LANGUAGE );
                 if( const SvxLanguageItem* pLangItem = dynamic_cast<const SvxLanguageItem*>( pItem )  )
                 {
-                    LanguageType eLang = static_cast< LanguageType >( pLangItem->GetValue() );
+                    LanguageType eLang = pLangItem->GetValue();
                     if( eLang == LANGUAGE_SYSTEM )
                         eLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
                     if( eLang != meCurrLang )

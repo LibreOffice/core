@@ -346,7 +346,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         // those states.
         pOut->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
         pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
-        pOut->SetDigitLanguage( 0 );
+        pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
 
         SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
 
@@ -499,7 +499,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
         // recent add-ons. Newer metafiles must of course explicitly set
         // those states.
         pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
-        pOut->SetDigitLanguage( 0 );
+        pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
 
         Play( pOut );
 

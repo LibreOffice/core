@@ -275,7 +275,7 @@ class SW_DLLPUBLIC SwField
 private:
     mutable OUString    m_Cache;                ///< Cached expansion (for clipboard).
     bool                m_bUseFieldValueCache;  /// control the usage of the cached field value
-    sal_uInt16          m_nLang;                ///< Always change via SetLanguage!
+    LanguageType        m_nLang;                ///< Always change via SetLanguage!
     bool                m_bIsAutomaticLanguage;
     sal_uInt32          m_nFormat;              /// this can be either SvxNumType or SwChapterFormat depending on the subtype
     SwFieldType*        m_pType;
@@ -290,7 +290,7 @@ protected:
 
     SwField( SwFieldType* pTyp,
              sal_uInt32 nFormat = 0,
-             sal_uInt16 nLang = LANGUAGE_SYSTEM,
+             LanguageType nLang = LANGUAGE_SYSTEM,
              bool m_bUseFieldValueCache = true );
 
 public:
@@ -332,8 +332,8 @@ public:
     virtual void        SetSubType(sal_uInt16);
 
     /// Language at field position.
-    inline sal_uInt16       GetLanguage() const;
-    virtual void        SetLanguage(sal_uInt16 nLng);
+    inline LanguageType GetLanguage() const;
+    virtual void        SetLanguage(LanguageType nLng);
 
     /// Query parameters for dialog and for BASIC.
     inline sal_uInt32   GetFormat() const;
@@ -376,7 +376,7 @@ inline sal_uInt32 SwField::GetFormat() const
     return m_nFormat;
 }
 
-inline sal_uInt16 SwField::GetLanguage() const
+inline LanguageType SwField::GetLanguage() const
 {
     return m_nLang;
 }
@@ -407,7 +407,7 @@ public:
         m_bUseFormat = bFormat;
     }
 
-    OUString        ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const;
+    OUString        ExpandValue(const double& rVal, sal_uInt32 nFormat, LanguageType nLng) const;
     OUString        DoubleToString(const double &rVal, LanguageType eLng) const;
     OUString        DoubleToString(const double &rVal, sal_uInt32 nFormat) const;
 };
@@ -418,14 +418,14 @@ private:
     double m_fValue;
 
 protected:
-    SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat, sal_uInt16 nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
+    SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat, LanguageType nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
     SwValueField( const SwValueField& rField );
 
 public:
     virtual                 ~SwValueField() override;
 
     virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
-    virtual void            SetLanguage(sal_uInt16 nLng) override;
+    virtual void            SetLanguage(LanguageType nLng) override;
 
     SwDoc*           GetDoc() const          {
         return static_cast<const SwValueFieldType*>(GetTyp())->GetDoc();
@@ -434,7 +434,7 @@ public:
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
-    OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const {
+    OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, LanguageType nLng) const {
         return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFormat, nLng);
     }
 

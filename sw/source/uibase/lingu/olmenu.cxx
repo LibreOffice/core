@@ -743,7 +743,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         } else {
             OUString sWord(m_xSpellAlt->getWord());
             linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
-                    sWord, false, OUString(), LANGUAGE_NONE );
+                    sWord, false, OUString() );
             if (linguistic::DictionaryError::NONE != nAddRes && !xDictionary->getEntry(sWord).is())
             {
                 SvxDicError(&m_pSh->GetView().GetViewFrame()->GetWindow(), nAddRes);
@@ -770,7 +770,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
 
         if (xDic.is())
         {
-            linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic(xDic, sWord, false, OUString(), LANGUAGE_NONE);
+            linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic(xDic, sWord, false, OUString());
             // save modified user-dictionary if it is persistent
             uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
             if (xSavDic.is())

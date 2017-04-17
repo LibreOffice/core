@@ -70,40 +70,36 @@ void MsLangId::setConfiguredComplexFallback( LanguageType nLang )
 // static
 inline LanguageType MsLangId::simplifySystemLanguages( LanguageType nLang )
 {
-    switch (nLang)
-    {
-        case LANGUAGE_PROCESS_OR_USER_DEFAULT :
-        case LANGUAGE_SYSTEM_DEFAULT :
-        case LANGUAGE_SYSTEM :
-            nLang = LANGUAGE_SYSTEM;
-            break;
-        default:
-            ;   // nothing
-    }
+    if (nLang.anyOf( LANGUAGE_PROCESS_OR_USER_DEFAULT,
+        LANGUAGE_SYSTEM_DEFAULT,
+        LANGUAGE_SYSTEM))
+        nLang = LANGUAGE_SYSTEM;
     return nLang;
 }
 
 // static
 LanguageType MsLangId::getRealLanguage( LanguageType nLang )
 {
-    switch (simplifySystemLanguages( nLang))
+    LanguageType simplifyLang = simplifySystemLanguages( nLang);
+    if (simplifyLang == LANGUAGE_SYSTEM )
     {
-        case LANGUAGE_SYSTEM :
-            if (nConfiguredSystemLanguage == LANGUAGE_SYSTEM)
-                nLang = getSystemLanguage();
-            else
-                nLang = nConfiguredSystemLanguage;
-            break;
-        case LANGUAGE_HID_HUMAN_INTERFACE_DEVICE :
-            if (nConfiguredSystemUILanguage == LANGUAGE_SYSTEM)
-                nLang = getSystemUILanguage();
-            else
-                nLang = nConfiguredSystemUILanguage;
-            break;
-        default:
-            /* TODO: would this be useful here? */
-            //nLang = MsLangId::getReplacementForObsoleteLanguage( nLang);
-            ;   // nothing
+        if (nConfiguredSystemLanguage == LANGUAGE_SYSTEM)
+            nLang = getSystemLanguage();
+        else
+            nLang = nConfiguredSystemLanguage;
+    }
+    else if (simplifyLang == LANGUAGE_HID_HUMAN_INTERFACE_DEVICE)
+    {
+        if (nConfiguredSystemUILanguage == LANGUAGE_SYSTEM)
+            nLang = getSystemUILanguage();
+        else
+            nLang = nConfiguredSystemUILanguage;
+    }
+    else
+    {
+        /* TODO: would this be useful here? */
+        //nLang = MsLangId::getReplacementForObsoleteLanguage( nLang);
+        ;   // nothing
     }
     if (nLang == LANGUAGE_DONTKNOW)
         nLang = LANGUAGE_ENGLISH_US;
@@ -196,39 +192,38 @@ css::lang::Locale MsLangId::getFallbackLocale(
         return Conversion::lookupFallbackLocale( rLocale);
 }
 
+static constexpr bool equalsPrimary(LanguageType lhs, LanguageType rhs)
+{
+    return (sal_uInt16(lhs) & LANGUAGE_MASK_PRIMARY )
+        == (sal_uInt16(rhs) & LANGUAGE_MASK_PRIMARY );
+}
+
 // static
 bool MsLangId::isRightToLeft( LanguageType nLang )
 {
-    switch( nLang & LANGUAGE_MASK_PRIMARY )
+    if( equalsPrimary(nLang, LANGUAGE_ARABIC_SAUDI_ARABIA)
+        || equalsPrimary(nLang, LANGUAGE_HEBREW)
+        || equalsPrimary(nLang, LANGUAGE_YIDDISH)
+        || equalsPrimary(nLang, LANGUAGE_URDU_PAKISTAN)
+        || equalsPrimary(nLang, LANGUAGE_FARSI)
+        || equalsPrimary(nLang, LANGUAGE_KASHMIRI)
+        || equalsPrimary(nLang, LANGUAGE_SINDHI)
+        || equalsPrimary(nLang, LANGUAGE_UIGHUR_CHINA)
+        || equalsPrimary(nLang, LANGUAGE_USER_KYRGYZ_CHINA)
+        || equalsPrimary(nLang, LANGUAGE_USER_NKO) )
     {
-        case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_HEBREW              & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_YIDDISH             & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_URDU_PAKISTAN       & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_FARSI               & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_KASHMIRI            & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_SINDHI              & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_UIGHUR_CHINA        & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_USER_KYRGYZ_CHINA   & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_USER_NKO            & LANGUAGE_MASK_PRIMARY :
-            return true;
-
-        default:
-            break;
+        return true;
     }
-    switch (nLang)
+    if (nLang.anyOf(
+        LANGUAGE_USER_KURDISH_IRAN,
+        LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ,
+        LANGUAGE_KURDISH_ARABIC_IRAQ,
+        LANGUAGE_KURDISH_ARABIC_LSO,
+        LANGUAGE_USER_KURDISH_SOUTHERN_IRAN,
+        LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ,
+        LANGUAGE_USER_HUNGARIAN_ROVAS))
     {
-        case LANGUAGE_USER_KURDISH_IRAN:
-        case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
-        case LANGUAGE_KURDISH_ARABIC_IRAQ:
-        case LANGUAGE_KURDISH_ARABIC_LSO:
-        case LANGUAGE_USER_KURDISH_SOUTHERN_IRAN:
-        case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
-        case LANGUAGE_USER_HUNGARIAN_ROVAS:
             return true;
-
-        default:
-            break;
     }
     if (LanguageTag::isOnTheFlyID(nLang))
         return LanguageTag::getOnTheFlyScriptType(nLang) == LanguageTag::ScriptType::RTL;
@@ -259,18 +254,10 @@ bool MsLangId::isSimplifiedChinese( const css::lang::Locale & rLocale )
 // static
 bool MsLangId::isTraditionalChinese( LanguageType nLang )
 {
-    bool bRet = false;
-    switch (nLang)
-    {
-        case LANGUAGE_CHINESE_TRADITIONAL:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_MACAU:
-            bRet = true;
-            break;
-        default:
-            break;
-    }
-    return bRet;
+    return nLang.anyOf(
+         LANGUAGE_CHINESE_TRADITIONAL,
+         LANGUAGE_CHINESE_HONGKONG,
+         LANGUAGE_CHINESE_MACAU);
 }
 
 // static
@@ -295,15 +282,13 @@ bool MsLangId::isKorean( LanguageType nLang )
 // static
 bool MsLangId::isCJK( LanguageType nLang )
 {
-    switch (nLang & LANGUAGE_MASK_PRIMARY)
+    if (primary(nLang).anyOf(
+         primary(LANGUAGE_CHINESE),
+         primary(LANGUAGE_YUE_CHINESE_HONGKONG),
+         primary(LANGUAGE_JAPANESE),
+         primary(LANGUAGE_KOREAN)))
     {
-        case LANGUAGE_CHINESE              & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_YUE_CHINESE_HONGKONG & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_JAPANESE             & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_KOREAN               & LANGUAGE_MASK_PRIMARY:
-            return true;
-        default:
-            break;
+        return true;
     }
     if (LanguageTag::isOnTheFlyID(nLang))
         return LanguageTag::getOnTheFlyScriptType(nLang) == LanguageTag::ScriptType::CJK;
@@ -326,17 +311,11 @@ bool MsLangId::hasForbiddenCharacters( LanguageType nLang )
 // static
 bool MsLangId::needsSequenceChecking( LanguageType nLang )
 {
-    switch (nLang & LANGUAGE_MASK_PRIMARY)
-    {
-        case LANGUAGE_BURMESE & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_KHMER   & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_LAO     & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_THAI    & LANGUAGE_MASK_PRIMARY:
-            return true;
-        default:
-            break;
-    }
-    return false;
+    return primary(nLang).anyOf(
+        primary(LANGUAGE_BURMESE),
+        primary(LANGUAGE_KHMER),
+        primary(LANGUAGE_LAO),
+        primary(LANGUAGE_THAI));
 }
 
 
@@ -345,33 +324,33 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 {
     sal_Int16 nScript;
 
-    switch( nLang )
-    {
         // CTL
-        case LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA:
-        case LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA:
-        case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO:
-        case LANGUAGE_USER_KURDISH_IRAN:
-        case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
-        case LANGUAGE_KURDISH_ARABIC_IRAQ:
-        case LANGUAGE_KURDISH_ARABIC_LSO:
-        case LANGUAGE_USER_KURDISH_SOUTHERN_IRAN:
-        case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
-        case LANGUAGE_USER_KYRGYZ_CHINA:
-        case LANGUAGE_USER_HUNGARIAN_ROVAS:
-        case LANGUAGE_USER_MANCHU:
-        case LANGUAGE_USER_XIBE:
+    if( nLang.anyOf(
+         LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,
+         LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,
+         LANGUAGE_MONGOLIAN_MONGOLIAN_LSO,
+         LANGUAGE_USER_KURDISH_IRAN,
+         LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ,
+         LANGUAGE_KURDISH_ARABIC_IRAQ,
+         LANGUAGE_KURDISH_ARABIC_LSO,
+         LANGUAGE_USER_KURDISH_SOUTHERN_IRAN,
+         LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ,
+         LANGUAGE_USER_KYRGYZ_CHINA,
+         LANGUAGE_USER_HUNGARIAN_ROVAS,
+         LANGUAGE_USER_MANCHU,
+         LANGUAGE_USER_XIBE))
+    {
             nScript = css::i18n::ScriptType::COMPLEX;
-            break;
-
+    }
         // "Western"
-        case LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA:
-        case LANGUAGE_MONGOLIAN_CYRILLIC_LSO:
-        case LANGUAGE_USER_KURDISH_SYRIA:
-        case LANGUAGE_USER_KURDISH_TURKEY:
+    else if (nLang.anyOf(
+        LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA,
+        LANGUAGE_MONGOLIAN_CYRILLIC_LSO,
+        LANGUAGE_USER_KURDISH_SYRIA,
+        LANGUAGE_USER_KURDISH_TURKEY))
+    {
             nScript = css::i18n::ScriptType::LATIN;
-            break;
-
+    }
 // currently not knowing scripttype - defaulted to LATIN:
 /*
 #define LANGUAGE_ARMENIAN                   0x042B
@@ -381,83 +360,80 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 #define LANGUAGE_MACEDONIAN                 0x042F
 #define LANGUAGE_TATAR                      0x0444
 */
-
-        default:
-            switch ( nLang & LANGUAGE_MASK_PRIMARY )
-            {
-                // CJK catcher
-                case LANGUAGE_CHINESE              & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_YUE_CHINESE_HONGKONG & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_JAPANESE             & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_KOREAN               & LANGUAGE_MASK_PRIMARY:
-                    nScript = css::i18n::ScriptType::ASIAN;
-                    break;
-
-                    // CTL catcher
-                case LANGUAGE_AMHARIC_ETHIOPIA    & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_ASSAMESE            & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_BENGALI             & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_BURMESE             & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_DHIVEHI             & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_FARSI               & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_GUJARATI            & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_HEBREW              & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_HINDI               & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_KANNADA             & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_KASHMIRI            & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_KHMER               & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_LAO                 & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_MALAYALAM           & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_MANIPURI            & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_MARATHI             & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_NEPALI              & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_ODIA                & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_PUNJABI             & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_SANSKRIT            & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_SINDHI              & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_SINHALESE_SRI_LANKA & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_SYRIAC              & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_TAMIL               & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_TELUGU              & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_THAI                & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_TIBETAN             & LANGUAGE_MASK_PRIMARY:  // also LANGUAGE_DZONGKHA
-                case LANGUAGE_UIGHUR_CHINA        & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_URDU_INDIA          & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_USER_BODO_INDIA     & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_USER_DOGRI_INDIA    & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_USER_LIMBU          & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_USER_MAITHILI_INDIA & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_USER_NKO            & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_YIDDISH             & LANGUAGE_MASK_PRIMARY:
-                    nScript = css::i18n::ScriptType::COMPLEX;
-                    break;
-
-                // Western (actually not necessarily Latin but also Cyrillic,
-                // for example)
-                default:
-                    if (LanguageTag::isOnTheFlyID(nLang))
-                    {
-                        switch (LanguageTag::getOnTheFlyScriptType(nLang))
-                        {
-                            case LanguageTag::ScriptType::CJK :
-                                nScript = css::i18n::ScriptType::ASIAN;
-                                break;
-                            case LanguageTag::ScriptType::CTL :
-                            case LanguageTag::ScriptType::RTL :
-                                nScript = css::i18n::ScriptType::COMPLEX;
-                                break;
-                            case LanguageTag::ScriptType::WESTERN :
-                            case LanguageTag::ScriptType::UNKNOWN :
-                            default:
-                                nScript = css::i18n::ScriptType::LATIN;
-                                break;
-                        }
-                    }
-                    else
-                        nScript = css::i18n::ScriptType::LATIN;
-            }
-            break;
+            // CJK catcher
+    else if ( primary(nLang).anyOf(
+        primary(LANGUAGE_CHINESE              ),
+        primary(LANGUAGE_YUE_CHINESE_HONGKONG ),
+        primary(LANGUAGE_JAPANESE             ),
+        primary(LANGUAGE_KOREAN               )
+        ))
+    {
+            nScript = css::i18n::ScriptType::ASIAN;
+    }
+            // CTL catcher
+    else if (primary(nLang).anyOf(
+        primary(LANGUAGE_AMHARIC_ETHIOPIA    ),
+        primary(LANGUAGE_ARABIC_SAUDI_ARABIA ),
+        primary(LANGUAGE_ASSAMESE            ),
+        primary(LANGUAGE_BENGALI             ),
+        primary(LANGUAGE_BURMESE             ),
+        primary(LANGUAGE_DHIVEHI             ),
+        primary(LANGUAGE_FARSI               ),
+        primary(LANGUAGE_GUJARATI            ),
+        primary(LANGUAGE_HEBREW              ),
+        primary(LANGUAGE_HINDI               ),
+        primary(LANGUAGE_KANNADA             ),
+        primary(LANGUAGE_KASHMIRI            ),
+        primary(LANGUAGE_KHMER               ),
+        primary(LANGUAGE_LAO                 ),
+        primary(LANGUAGE_MALAYALAM           ),
+        primary(LANGUAGE_MANIPURI            ),
+        primary(LANGUAGE_MARATHI             ),
+        primary(LANGUAGE_NEPALI              ),
+        primary(LANGUAGE_ODIA                ),
+        primary(LANGUAGE_PUNJABI             ),
+        primary(LANGUAGE_SANSKRIT            ),
+        primary(LANGUAGE_SINDHI              ),
+        primary(LANGUAGE_SINHALESE_SRI_LANKA ),
+        primary(LANGUAGE_SYRIAC              ),
+        primary(LANGUAGE_TAMIL               ),
+        primary(LANGUAGE_TELUGU              ),
+        primary(LANGUAGE_THAI                ),
+        primary(LANGUAGE_TIBETAN             ),  // also LANGUAGE_DZONGKHA
+        primary(LANGUAGE_UIGHUR_CHINA        ),
+        primary(LANGUAGE_URDU_INDIA          ),
+        primary(LANGUAGE_USER_BODO_INDIA     ),
+        primary(LANGUAGE_USER_DOGRI_INDIA    ),
+        primary(LANGUAGE_USER_LIMBU          ),
+        primary(LANGUAGE_USER_MAITHILI_INDIA ),
+        primary(LANGUAGE_USER_NKO            ),
+        primary(LANGUAGE_YIDDISH             )))
+    {
+            nScript = css::i18n::ScriptType::COMPLEX;
+    }
+        // Western (actually not necessarily Latin but also Cyrillic,
+        // for example)
+    else if (LanguageTag::isOnTheFlyID(nLang))
+    {
+        switch (LanguageTag::getOnTheFlyScriptType(nLang))
+        {
+            case LanguageTag::ScriptType::CJK :
+                nScript = css::i18n::ScriptType::ASIAN;
+                break;
+            case LanguageTag::ScriptType::CTL :
+            case LanguageTag::ScriptType::RTL :
+                nScript = css::i18n::ScriptType::COMPLEX;
+                break;
+            case LanguageTag::ScriptType::WESTERN :
+            case LanguageTag::ScriptType::UNKNOWN :
+            default:
+                nScript = css::i18n::ScriptType::LATIN;
+                break;
+        }
+    }
+    else
+    {
+        nScript = css::i18n::ScriptType::LATIN;
     }
     return nScript;
 }
@@ -466,37 +442,34 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 // static
 bool MsLangId::isNonLatinWestern( LanguageType nLang )
 {
-    switch (nLang)
+    if (nLang.anyOf(
+        LANGUAGE_AZERI_CYRILLIC,
+        LANGUAGE_AZERI_CYRILLIC_LSO,
+        LANGUAGE_BELARUSIAN,
+        LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA,
+        LANGUAGE_BOSNIAN_CYRILLIC_LSO,
+        LANGUAGE_BULGARIAN,
+        LANGUAGE_GREEK,
+        LANGUAGE_MONGOLIAN_CYRILLIC_LSO,
+        LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA,
+        LANGUAGE_RUSSIAN,
+        LANGUAGE_RUSSIAN_MOLDOVA,
+        LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA,
+        LANGUAGE_SERBIAN_CYRILLIC_LSO,
+        LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,
+        LANGUAGE_SERBIAN_CYRILLIC_SAM,
+        LANGUAGE_SERBIAN_CYRILLIC_SERBIA,
+        LANGUAGE_UKRAINIAN,
+        LANGUAGE_UZBEK_CYRILLIC,
+        LANGUAGE_UZBEK_CYRILLIC_LSO))
     {
-        case LANGUAGE_AZERI_CYRILLIC:
-        case LANGUAGE_AZERI_CYRILLIC_LSO:
-        case LANGUAGE_BELARUSIAN:
-        case LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
-        case LANGUAGE_BOSNIAN_CYRILLIC_LSO:
-        case LANGUAGE_BULGARIAN:
-        case LANGUAGE_GREEK:
-        case LANGUAGE_MONGOLIAN_CYRILLIC_LSO:
-        case LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA:
-        case LANGUAGE_RUSSIAN:
-        case LANGUAGE_RUSSIAN_MOLDOVA:
-        case LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
-        case LANGUAGE_SERBIAN_CYRILLIC_LSO:
-        case LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO:
-        case LANGUAGE_SERBIAN_CYRILLIC_SAM:
-        case LANGUAGE_SERBIAN_CYRILLIC_SERBIA:
-        case LANGUAGE_UKRAINIAN:
-        case LANGUAGE_UZBEK_CYRILLIC:
-        case LANGUAGE_UZBEK_CYRILLIC_LSO:
             return true;
-        default:
-            {
-                if (getScriptType( nLang) != css::i18n::ScriptType::LATIN)
-                    return false;
-                LanguageTag aLanguageTag( nLang);
-                if (aLanguageTag.hasScript())
-                    return aLanguageTag.getScript() != "Latn";
-            }
     }
+    if (getScriptType( nLang) != css::i18n::ScriptType::LATIN)
+        return false;
+    LanguageTag aLanguageTag( nLang);
+    if (aLanguageTag.hasScript())
+        return aLanguageTag.getScript() != "Latn";
     return false;
 }
 
@@ -504,15 +477,13 @@ bool MsLangId::isNonLatinWestern( LanguageType nLang )
 // static
 bool MsLangId::isLegacy( LanguageType nLang )
 {
-    switch (nLang)
-    {
-        case LANGUAGE_SERBIAN_CYRILLIC_SAM:
-        case LANGUAGE_SERBIAN_LATIN_SAM:
+    if (nLang.anyOf(
+         LANGUAGE_SERBIAN_CYRILLIC_SAM,
+         LANGUAGE_SERBIAN_LATIN_SAM))
             /* TODO: activate once dictionary was renamed from pap-AN to
              * pap-CW, or the pap-CW one supports also pap-AN, see fdo#44112 */
         //case LANGUAGE_PAPIAMENTU:
             return true;
-    }
     return false;
 }
 
@@ -520,100 +491,71 @@ bool MsLangId::isLegacy( LanguageType nLang )
 // static
 LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
 {
-    switch (nLang)
-    {
-        default:
-            break;  // nothing
-        case LANGUAGE_OBSOLETE_USER_LATIN:
-            nLang = LANGUAGE_USER_LATIN_VATICAN;
-            break;
-        case LANGUAGE_OBSOLETE_USER_MAORI:
-            nLang = LANGUAGE_MAORI_NEW_ZEALAND;
-            break;
-        case LANGUAGE_OBSOLETE_USER_KINYARWANDA:
-            nLang = LANGUAGE_KINYARWANDA_RWANDA;
-            break;
-        case LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN:
-            nLang = LANGUAGE_UPPER_SORBIAN_GERMANY;
-            break;
-        case LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN:
-            nLang = LANGUAGE_LOWER_SORBIAN_GERMANY;
-            break;
-        case LANGUAGE_OBSOLETE_USER_OCCITAN:
-            nLang = LANGUAGE_OCCITAN_FRANCE;
-            break;
-        case LANGUAGE_OBSOLETE_USER_BRETON:
-            nLang = LANGUAGE_BRETON_FRANCE;
-            break;
-        case LANGUAGE_OBSOLETE_USER_KALAALLISUT:
-            nLang = LANGUAGE_KALAALLISUT_GREENLAND;
-            break;
-        case LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH:
-            nLang = LANGUAGE_LUXEMBOURGISH_LUXEMBOURG;
-            break;
-        case LANGUAGE_OBSOLETE_USER_KABYLE:
-            nLang = LANGUAGE_TAMAZIGHT_LATIN_ALGERIA;
-            break;
-        case LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN:
-            nLang = LANGUAGE_CATALAN_VALENCIAN;
-            break;
-        case LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU:
-            nLang = LANGUAGE_MALAGASY_PLATEAU;
-            break;
-        case LANGUAGE_GAELIC_SCOTLAND_LEGACY:
-            nLang = LANGUAGE_GAELIC_SCOTLAND;
-            break;
-        case LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA:
-            nLang = LANGUAGE_TSWANA_BOTSWANA;
-            break;
-        case LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA:
-            nLang = LANGUAGE_SERBIAN_LATIN_SERBIA;
-            break;
-        case LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO:
-            nLang = LANGUAGE_SERBIAN_LATIN_MONTENEGRO;
-            break;
-        case LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA:
-            nLang = LANGUAGE_SERBIAN_CYRILLIC_SERBIA;
-            break;
-        case LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO:
-            nLang = LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO;
-            break;
-        case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
-            nLang = LANGUAGE_KURDISH_ARABIC_IRAQ;
-            break;
-        case LANGUAGE_OBSOLETE_USER_SPANISH_CUBA:
-            nLang = LANGUAGE_SPANISH_CUBA;
-            break;
+    if (nLang == LANGUAGE_OBSOLETE_USER_LATIN)
+        nLang = LANGUAGE_USER_LATIN_VATICAN;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_MAORI)
+        nLang = LANGUAGE_MAORI_NEW_ZEALAND;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_KINYARWANDA)
+        nLang = LANGUAGE_KINYARWANDA_RWANDA;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN)
+        nLang = LANGUAGE_UPPER_SORBIAN_GERMANY;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN)
+        nLang = LANGUAGE_LOWER_SORBIAN_GERMANY;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_OCCITAN)
+        nLang = LANGUAGE_OCCITAN_FRANCE;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_BRETON)
+        nLang = LANGUAGE_BRETON_FRANCE;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_KALAALLISUT)
+        nLang = LANGUAGE_KALAALLISUT_GREENLAND;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH)
+        nLang = LANGUAGE_LUXEMBOURGISH_LUXEMBOURG;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_KABYLE)
+        nLang = LANGUAGE_TAMAZIGHT_LATIN_ALGERIA;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN)
+        nLang = LANGUAGE_CATALAN_VALENCIAN;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU)
+        nLang = LANGUAGE_MALAGASY_PLATEAU;
+    else if (nLang == LANGUAGE_GAELIC_SCOTLAND_LEGACY)
+        nLang = LANGUAGE_GAELIC_SCOTLAND;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA)
+        nLang = LANGUAGE_TSWANA_BOTSWANA;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA)
+        nLang = LANGUAGE_SERBIAN_LATIN_SERBIA;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO)
+        nLang = LANGUAGE_SERBIAN_LATIN_MONTENEGRO;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA)
+        nLang = LANGUAGE_SERBIAN_CYRILLIC_SERBIA;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO)
+        nLang = LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ)
+        nLang = LANGUAGE_KURDISH_ARABIC_IRAQ;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_SPANISH_CUBA)
+        nLang = LANGUAGE_SPANISH_CUBA;
 
-        // The following are not strictly obsolete but should be mapped to a
-        // replacement locale when encountered.
+    // The following are not strictly obsolete but should be mapped to a
+    // replacement locale when encountered.
 
-        // no_NO is an alias for nb_NO
-        case LANGUAGE_NORWEGIAN:
-            nLang = LANGUAGE_NORWEGIAN_BOKMAL;
-            break;
+    // no_NO is an alias for nb_NO
+    else if (nLang == LANGUAGE_NORWEGIAN)
+        nLang = LANGUAGE_NORWEGIAN_BOKMAL;
 
-        // #i94435# A Spanish variant that differs only in collation details we
-        // do not support.
-        case LANGUAGE_SPANISH_DATED:
-            nLang = LANGUAGE_SPANISH_MODERN;
-            break;
+    // #i94435# A Spanish variant that differs only in collation details we
+    // do not support.
+    else if (nLang == LANGUAGE_SPANISH_DATED)
+        nLang = LANGUAGE_SPANISH_MODERN;
 
-        // The erroneous Tibetan vs. Dzongkha case, #i53497#
-        // We (and MS) have stored LANGUAGE_TIBETAN_BHUTAN. This will need
-        // special attention if MS one day decides to actually use
-        // LANGUAGE_TIBETAN_BHUTAN for bo-BT instead of having it reserved;
-        // then remove the mapping and hope every dz-BT user used ODF to store
-        // documents ;-)
-        case LANGUAGE_TIBETAN_BHUTAN:
-            nLang = LANGUAGE_DZONGKHA_BHUTAN;
-            break;
+    // The erroneous Tibetan vs. Dzongkha case, #i53497#
+    // We (and MS) have stored LANGUAGE_TIBETAN_BHUTAN. This will need
+    // special attention if MS one day decides to actually use
+    // LANGUAGE_TIBETAN_BHUTAN for bo-BT instead of having it reserved;
+    // then remove the mapping and hope every dz-BT user used ODF to store
+    // documents ;-)
+    else if (nLang == LANGUAGE_TIBETAN_BHUTAN)
+        nLang = LANGUAGE_DZONGKHA_BHUTAN;
 
-        // en-GB-oed is deprecated, use en-GB-oxendict instead.
-        case LANGUAGE_USER_ENGLISH_UK_OED:
-            nLang = LANGUAGE_USER_ENGLISH_UK_OXENDICT;
-            break;
-    }
+    // en-GB-oed is deprecated, use en-GB-oxendict instead.
+    else if (nLang == LANGUAGE_USER_ENGLISH_UK_OED)
+        nLang = LANGUAGE_USER_ENGLISH_UK_OXENDICT;
     return nLang;
 }
 

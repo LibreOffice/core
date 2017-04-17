@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 
 static_assert((LISTBOX_APPEND == COMBOBOX_APPEND) && (LISTBOX_ENTRY_NOTFOUND == COMBOBOX_ENTRY_NOTFOUND), "If these ever dispersed we'd need a solution");
 
-OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg )
+OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bNeg )
 {
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INetProtocol::File );
@@ -59,7 +59,7 @@ OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg
     else
     {
         aTmp += "[";
-        aTmp += SvtLanguageTable::GetLanguageString( (LanguageType)nLang );
+        aTmp += SvtLanguageTable::GetLanguageString( nLang );
         aTmp += "]";
     }
 
@@ -70,16 +70,15 @@ OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg
 //  misc local helper functions
 
 
-static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > &rSeq )
+static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > &rSeq )
 {
     const css::lang::Locale *pLocale = rSeq.getConstArray();
     sal_Int32 nCount = rSeq.getLength();
 
-    Sequence< sal_Int16 >   aLangs( nCount );
-    sal_Int16 *pLang = aLangs.getArray();
+    std::vector< LanguageType >   aLangs;
     for (sal_Int32 i = 0;  i < nCount;  ++i)
     {
-        pLang[i] = LanguageTag::convertToLanguageType( pLocale[i] );
+        aLangs.push_back( LanguageTag::convertToLanguageType( pLocale[i] ) );
 
     }
 
@@ -87,6 +86,13 @@ static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale
 }
 
 
+static bool lcl_SeqHasLang( const std::vector< LanguageType > & rLangSeq, LanguageType nLang )
+{
+    for (auto const & i : rLangSeq)
+        if (i == nLang)
+            return true;
+    return false;
+}
 static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nLang )
 {
     sal_Int32 i = -1;
@@ -197,14 +203,11 @@ bool lcl_isScriptTypeRequested( LanguageType nLangType, SvxLanguageListFlags nLa
          (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) == SvtScriptType::ASIAN));
 }
 
-void SvxLanguageBoxBase::AddLanguages( const css::uno::Sequence< sal_Int16 >& rLanguageTypes,
+void SvxLanguageBoxBase::AddLanguages( const std::vector< LanguageType >& rLanguageTypes,
         SvxLanguageListFlags nLangList )
 {
-    sal_Int16 const * pLang = rLanguageTypes.getConstArray();
-    sal_Int16 const * const pStop = pLang + rLanguageTypes.getLength();
-    for ( ; pLang < pStop; ++pLang )
+    for ( auto const & nLangType : rLanguageTypes )
     {
-        LanguageType nLangType = static_cast<LanguageType>(*pLang);
         if (lcl_isPrerequisite( nLangType, nLangList))
         {
             LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType );
@@ -235,12 +238,12 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
                  (nLangList & SvxLanguageListFlags::WESTERN) ||
                  (nLangList & SvxLanguageListFlags::CTL) ||
                  (nLangList & SvxLanguageListFlags::CJK)));
-        Sequence< sal_Int16 > aSpellAvailLang;
-        Sequence< sal_Int16 > aHyphAvailLang;
-        Sequence< sal_Int16 > aThesAvailLang;
+        std::vector< LanguageType > aSpellAvailLang;
+        std::vector< LanguageType > aHyphAvailLang;
+        std::vector< LanguageType > aThesAvailLang;
         Sequence< sal_Int16 > aSpellUsedLang;
-        Sequence< sal_Int16 > aHyphUsedLang;
-        Sequence< sal_Int16 > aThesUsedLang;
+        std::vector< LanguageType > aHyphUsedLang;
+        std::vector< LanguageType > aThesUsedLang;
         Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
         if (xAvail.is())
         {
@@ -285,25 +288,22 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
             }
         }
 
-        css::uno::Sequence< sal_uInt16 > xKnown;
-        const sal_uInt16* pKnown;
+        std::vector<LanguageType> aKnown;
         sal_uInt32 nCount;
         if ( nLangList & SvxLanguageListFlags::ONLY_KNOWN )
         {
-            xKnown = LocaleDataWrapper::getInstalledLanguageTypes();
-            pKnown = xKnown.getConstArray();
-            nCount = xKnown.getLength();
+            aKnown = LocaleDataWrapper::getInstalledLanguageTypes();
+            nCount = aKnown.size();
         }
         else
         {
             nCount = SvtLanguageTable::GetLanguageEntryCount();
-            pKnown = nullptr;
         }
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             LanguageType nLangType;
             if ( nLangList & SvxLanguageListFlags::ONLY_KNOWN )
-                nLangType = pKnown[i];
+                nLangType = aKnown[i];
             else
                 nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
             if ( lcl_isPrerequisite( nLangType, nLangList) &&
@@ -317,7 +317,7 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
                   (bool(nLangList & SvxLanguageListFlags::THES_AVAIL) &&
                    lcl_SeqHasLang(aThesAvailLang, nLangType)) ||
                   (bool(nLangList & SvxLanguageListFlags::SPELL_USED) &&
-                   lcl_SeqHasLang(aSpellUsedLang, nLangType)) ||
+                   lcl_SeqHasLang(aSpellUsedLang, (sal_uInt16)nLangType)) ||
                   (bool(nLangList & SvxLanguageListFlags::HYPH_USED) &&
                    lcl_SeqHasLang(aHyphUsedLang, nLangType)) ||
                   (bool(nLangList & SvxLanguageListFlags::THES_USED) &&
@@ -389,14 +389,14 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
                 m_pSpellUsedLang.reset( new Sequence< sal_Int16 >( xSpell->getLanguages() ) );
         }
         bFound = m_pSpellUsedLang &&
-            lcl_SeqHasLang( *m_pSpellUsedLang, nRealLang );
+            lcl_SeqHasLang( *m_pSpellUsedLang, (sal_uInt16)nRealLang );
 
         nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }
     else
         nAt = ImplInsertEntry( aStrEntry, nPos );
 
-    ImplSetEntryData( nAt, reinterpret_cast<void*>(nLangType) );
+    ImplSetEntryData( nAt, reinterpret_cast<void*>((sal_uInt16)nLangType) );
     return nAt;
 }
 
@@ -432,7 +432,7 @@ void SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
         aStrEntry = m_aAllString;
 
     sal_Int32 nAt = ImplInsertImgEntry( aStrEntry, LISTBOX_APPEND, bCheckEntry );
-    ImplSetEntryData( nAt, reinterpret_cast<void*>(nLang) );
+    ImplSetEntryData( nAt, reinterpret_cast<void*>((sal_uInt16)nLang) );
 }
 
 
@@ -488,7 +488,7 @@ bool SvxLanguageBoxBase::IsLanguageSelected( const LanguageType eLangType ) cons
 
 sal_Int32 SvxLanguageBoxBase::ImplTypeToPos( LanguageType eType ) const
 {
-    return ImplGetEntryPos( reinterpret_cast<void*>(eType) );
+    return ImplGetEntryPos( reinterpret_cast<void*>((sal_uInt16)eType) );
 }
 
 
