@@ -319,7 +319,6 @@ function mouseHandlerDispatch( aEvt, anAction )
 
 //Set mouse event handler.
 document.onmouseup = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_UP ); };
-//document.onmousemove = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_MOVE ); };
 
 
 /** mouseClickHelper
@@ -1921,11 +1920,6 @@ function getNSAttribute( sNSPrefix, aElem, sAttrName )
     {
         return aElem.getAttribute( sNSPrefix + ':' + sAttrName );
     }
-//    if( aElem.hasAttributeNS( NSS[sNSPrefix], sAttrName ) )
-//    {
-//        return aElem.getAttributeNS( NSS[sNSPrefix], sAttrName );
-//    }
-//    return null;
 }
 
 function getOOOAttribute( aElem, sAttrName )
@@ -2345,8 +2339,6 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     if( this.bHasTransition )
     {
         this.aTransitionHandler = new SlideTransition( this.getSlideAnimationsRoot(), this.slideId );
-        //if( this.aTransitionHandler.isValid() )
-        //    log( this.aTransitionHandler.info() );
     }
 
     // We initialize the SlideAnimationsHandler object
@@ -2510,7 +2502,6 @@ collectTextShapes : function()
                 var sTextShapeIds = getOOOAttribute( aIndexEntryList[i], 'id-list' );
                 if( sTextShapeIds )
                 {
-                    //log( 'slide id: ' + this.slideId + ' text shape id list: ' + sTextShapeIds );
                     var aTextShapeIdSet =  sTextShapeIds.split( ' ' );
                     var j;
                     for( j = 0; j < aTextShapeIdSet.length; ++j )
@@ -2552,7 +2543,6 @@ initHyperlinks : function()
                     for( j = 0; j < aHyperlinkIdSet.length; ++j )
                     {
                         var sId = aHyperlinkIdSet[j];
-                        //log( 'initHyperlinks: j=' + j + ' id: <' + sId + '>' );
                         aHyperlinkSet[ sId ] = new HyperlinkElement( sId, this.aSlideAnimationsHandler.aEventMultiplexer );
                     }
                 }
@@ -3388,9 +3378,7 @@ function SlideIndexPage()
         this.aThumbnailSet[i].updateView();
     }
 
-//  this.curThumbnailIndex = this.selectedSlideIndex % this.totalThumbnails;
     this.curThumbnailIndex = 0;
-//    this.aThumbnailSet[ this.curThumbnailIndex ].select();
 }
 
 
@@ -3582,8 +3570,6 @@ function Thumbnail( aSlideIndexPage, nIndex )
     this.slideElement = getElementByClassName( this.thumbnailElement, 'Slide' );
     this.borderElement = getElementByClassName( this.thumbnailElement, 'Border' );
     this.mouseAreaElement = getElementByClassName( this.thumbnailElement, 'MouseArea' );
-    //this.mouseAreaElement.setAttribute( 'onmouseover', 'theSlideIndexPage.aThumbnailSet[' + this.index  + '].onMouseOver()' );
-    //this.mouseAreaElement.onmousedown = mouseHandlerDictionary[INDEX_MODE][MOUSE_DOWN];
     this.aTransformSet = new Array( 3 );
     this.visibility = VISIBLE;
     this.isSelected = false;
@@ -3752,30 +3738,6 @@ function init()
     aSlideShow.bIsEnabled = theMetaDoc.bIsAnimated;
     theSlideIndexPage = new SlideIndexPage();
     aSlideShow.displaySlide( theMetaDoc.nStartSlideNumber, false );
-
-    //=====================================//
-    //      ===== timing test =====        //
-    //=====================================//
-//        var aTimingAttributeList = [ '0.001s', '-12:16.123', 'next', 'id23.click', 'id3.end + 5s', 'id4.begin - 12:45' ];
-//
-//        for( var i = 0; i < aTimingAttributeList.length; ++i)
-//        {
-//            var aTiming = new Timing( aTimingAttributeList[i] );
-//            aTiming.parse();
-//            aTiming.info();
-//        }
-
-
-
-    //  == animations parsing test ==
-
-
-//        var aSlideShowContext = aSlideShow.getContext();
-//        var aSlideAnimations = new SlideAnimations( aSlideShowContext );
-//        aSlideAnimations.importAnimations( getSlideAnimationsRoot( 'id7' ) );
-//        aSlideAnimations.parseElements();
-//        log( aSlideAnimations.aRootNode.info( true ) );
-
 }
 
 function presentationEngineStop()
@@ -3882,8 +3844,6 @@ function displayIndex( offsetNumber )
  */
 function toggleSlideIndex()
 {
-    //var suspendHandle = ROOT_NODE.suspendRedraw(500);
-
     if( currentMode == SLIDE_MODE )
     {
 
@@ -3901,9 +3861,6 @@ function toggleSlideIndex()
         aSlideShow.displaySlide( nNewSlide, true );
         currentMode = SLIDE_MODE;
     }
-
-    //ROOT_NODE.unsuspendRedraw(suspendHandle);
-    //ROOT_NODE.forceRedraw();
 }
 
 /** Function that exit from the index mode without changing the shown slide
@@ -4021,7 +3978,6 @@ function bind2( aFunction )
 function getCurrentSystemTime()
 {
     return ( new Date() ).getTime();
-    //return ROOT_NODE.getCurrentTime();
 }
 
 /** This function return an array populated with all children nodes of the
@@ -4839,7 +4795,6 @@ aAnimationNodeTypeInMap = {
 function getAnimationElementType( aElement )
 {
     var sName = aElement.localName.toLowerCase();
-    //log( 'getAnimationElementType: ' + sName );
 
     if( sName && aAnimationNodeTypeInMap[ sName ] )
         return aAnimationNodeTypeInMap[ sName ];
@@ -7570,9 +7525,6 @@ AnimationBaseNode.prototype.activate_st = function()
     {
         AnimationBaseNode.superclass.scheduleDeactivationEvent.call( this );
     }
-
-    // TODO: only for testing! to be removed!
-    //AnimationBaseNode.superclass.scheduleDeactivationEvent.call( this );
 };
 
 AnimationBaseNode.prototype.deactivate_st = function( eDestState )
@@ -8407,7 +8359,6 @@ SequentialTimeContainer.prototype.rewindLastEffect = function( aChildNode )
         // lately we noticed that when interactive animation sequences are
         // involved into the shape effect invoking such a method causes
         // some issue.
-        //aChildNode.removeEffect();
 
         // As we rewind the previous effect we need to decrease the finished
         // children counter.
@@ -8516,79 +8467,6 @@ extend( PropertyAnimationNode, AnimationBaseNode3 );
 
 PropertyAnimationNode.prototype.createActivity = function()
 {
-
-    /*
-    var aActivityParamSet = this.fillActivityParams();
-    var aAnimation = createPropertyAnimation( 'opacity',
-                                              this.getAnimatedElement(),
-                                              this.aNodeContext.aSlideWidth,
-                                              this.aNodeContext.aSlideHeight );
-
-    return new SimpleActivity( aActivityParamSet, aAnimation, FORWARD );
-    */
-
-
-    /*
-        if( true && this.getAttributeName() === 'x' )
-        {
-            var sAttributeName = 'x';
-
-            this.aDuration = new Duration( '2s' );
-            this.sAttributeName = sAttributeName;
-            this.aKeyTimes = [ 0.0, 0.25, 0.50, 0.75, 1.0 ];
-            //this.aKeyTimes = [ 0.0, 1.0 ];
-            var aM = 5000 / this.aNodeContext.aSlideWidth;
-            this.aValues = [ 'x', 'x - ' + aM, 'x', 'x + ' + aM, 'x' ];
-            //this.aValues = [ '0', 'width' ];
-
-            //this.aFromValue = '';
-            //this.aToValue = '0 + ' + aTranslationValue;
-            //this.aByValue = aTranslationValue;
-            //this.nRepeatCount = 3;
-
-            var aActivityParamSet = this.fillActivityParams();
-
-            var aAnimation = createPropertyAnimation( this.getAttributeName(),
-                                                      this.getAnimatedElement(),
-                                                      this.aNodeContext.aSlideWidth,
-                                                      this.aNodeContext.aSlideHeight );
-
-            var aInterpolator = null;
-            return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
-        }
-
-        if( true && this.getAttributeName() === 'y' )
-        {
-            var sAttributeName = 'height';
-            this.aDuration = new Duration( '2s' );
-            this.sAttributeName = sAttributeName;
-            this.aKeyTimes = [ 0.0, 0.25, 0.50, 0.75, 1.0 ];
-            //this.aKeyTimes = [ 0.0, 1.0 ];
-            var aM = 5000 / this.aNodeContext.aSlideHeight;
-            this.aValues = new Array();
-            //this.aValues = [ 'y', 'y', 'y - ' + aM, 'y - ' + aM, 'y' ];
-            this.aValues = [ 'height', '0', 'height', '2*height', 'height' ];
-            //this.aValues = [ '0', 'height' ];
-
-            //this.aFromValue = '2 * height';
-            //this.aToValue = 'width';
-            //this.aByValue = 'width';//aTranslationValue;
-
-
-            var aActivityParamSet = this.fillActivityParams();
-
-            var aAnimation = createPropertyAnimation( this.getAttributeName(),
-                                                      this.getAnimatedElement(),
-                                                      this.aNodeContext.aSlideWidth,
-                                                      this.aNodeContext.aSlideHeight );
-
-            var aInterpolator = null;
-            return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
-        }
-        */
-
-
-
     var aActivityParamSet = this.fillActivityParams();
 
     var aAnimation = createPropertyAnimation( this.getAttributeName(),
@@ -8598,7 +8476,6 @@ PropertyAnimationNode.prototype.createActivity = function()
 
     var aInterpolator = null;  // createActivity will compute it;
     return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
-
 };
 
 
@@ -8663,67 +8540,6 @@ AnimationColorNode.prototype.parseElement = function()
 
 AnimationColorNode.prototype.createActivity = function()
 {
-    /*
-    var aActivityParamSet = this.fillActivityParams();
-
-    var aAnimation = createPropertyAnimation( 'opacity',
-    this.getAnimatedElement(),
-    this.aNodeContext.aSlideWidth,
-    this.aNodeContext.aSlideHeight );
-
-    return new SimpleActivity( aActivityParamSet, aAnimation, FORWARD );
-    */
-
-    /*
-    if( false && this.getAttributeName() === 'fill-color' )
-    {
-        var sAttributeName = 'stroke-color';
-
-        this.aDuration = new Duration( '2s' );
-        this.nAccelerate = 0.0;
-        this.nDecelerate = 0.0;
-        this.eColorInterpolation = COLOR_SPACE_RGB;
-        this.eColorInterpolationDirection = COUNTERCLOCKWISE;
-
-        this.sAttributeName = sAttributeName;
-
-        this.aFromValue = 'rgb( 0%, 0%, 0% )';
-        this.aToValue = 'rgb( 0%, 0%, 100% )';
-        //this.aByValue = 'hsl( 0, -12%, -25% )';
-
-
-
-        var aActivityParamSet = this.fillActivityParams();
-
-        var aAnimation = createPropertyAnimation( this.getAttributeName(),
-                                                  this.getAnimatedElement(),
-                                                  this.aNodeContext.aSlideWidth,
-                                                  this.aNodeContext.aSlideHeight );
-        var aColorAnimation;
-        var aInterpolator;
-        if( this.getColorInterpolation() === COLOR_SPACE_HSL )
-        {
-            ANIMDBG.print( 'AnimationColorNode.createActivity: color space hsl'  );
-            aColorAnimation = new HSLAnimationWrapper( aAnimation );
-            var aInterpolatorMaker = aInterpolatorHandler.getInterpolator( this.getCalcMode(),
-                                                                           COLOR_PROPERTY,
-                                                                           COLOR_SPACE_HSL );
-            aInterpolator = aInterpolatorMaker( this.getColorInterpolationDirection() );
-        }
-        else
-        {
-            ANIMDBG.print( 'AnimationColorNode.createActivity: color space rgb'  );
-            aColorAnimation = aAnimation;
-            aInterpolator = aInterpolatorHandler.getInterpolator( this.getCalcMode(),
-                                                                  COLOR_PROPERTY,
-                                                                  COLOR_SPACE_RGB );
-        }
-
-        return createActivity( aActivityParamSet, this, aColorAnimation, aInterpolator );
-    }
-     */
-
-
     var aActivityParamSet = this.fillActivityParams();
 
     var aAnimation = createPropertyAnimation( this.getAttributeName(),
@@ -8752,8 +8568,6 @@ AnimationColorNode.prototype.createActivity = function()
     }
 
     return createActivity( aActivityParamSet, this, aColorAnimation, aInterpolator );
-
-
 };
 
 AnimationColorNode.prototype.getColorInterpolation = function()
@@ -8957,16 +8771,12 @@ function createAnimationNode( aElement, aParentNode, aNodeContext )
             aCreatedNode = new AnimationSetNode( aElement, aParentNode, aNodeContext );
             break;
         case ANIMATION_NODE_ANIMATEMOTION:
-            //aCreatedNode = new AnimationPathMotionNode( aElement, aParentNode, aNodeContext );
-            //break;
             log( 'createAnimationNode: ANIMATEMOTION not implemented' );
             return null;
         case ANIMATION_NODE_ANIMATECOLOR:
             aCreatedNode = new AnimationColorNode( aElement, aParentNode, aNodeContext );
             break;
         case ANIMATION_NODE_ANIMATETRANSFORM:
-            //aCreatedNode = new AnimationTransformNode( aElement, aParentNode, aNodeContext );
-            //break;
             log( 'createAnimationNode: ANIMATETRANSFORM not implemented' );
             return null;
         case ANIMATION_NODE_TRANSITIONFILTER:
@@ -9819,7 +9629,6 @@ ClippingFunctor.prototype.perform = function( nT, nWidth, nHeight )
     if( this.bScaleIsotropically )
     {
         var nScaleFactor = Math.max( nWidth, nHeight );
-        // translate( scale( aStaticTransformation() ) )
         // note: operations must be defined in reverse order.
         aMatrix = SVGIdentityMatrix.translate( -( nScaleFactor - nWidth ) / 2.0,
                                                   -( nScaleFactor - nHeight ) / 2.0 );
@@ -11234,8 +11043,6 @@ AnimatedSlide.prototype.setClipPath = function( aClipPathContent )
     // anyway that does not work in IE9, so we replace the 'd' attribute, only.
     if( this.aClipPathContent )
     {
-//        this.aClipPathElement.replaceChild( aClipPathContent, this.aClipPathContent );
-//        this.aClipPathContent = aClipPathContent;
         var sPathData = aClipPathContent.getAttribute( 'd' );
         this.aClipPathContent.setAttribute( 'd', sPathData );
     }
@@ -12925,7 +12732,6 @@ function HyperlinkElement( sId, aEventMultiplexer )
 
 HyperlinkElement.prototype.onElementChanged = function( aElement )
 {
-    //var aElement = document.getElementById( this.sId );
     if( !aElement )
     {
         log( 'error: HyperlinkElement: passed element is not valid' );
@@ -12957,8 +12763,6 @@ HyperlinkElement.prototype.onMouseLeave = function()
 HyperlinkElement.prototype.handleClick = function( )
 {
     if( !this.bIsPointerOver ) return false;
-
-    //log( 'hyperlink: ' + this.sURL );
 
     if( this.nTargetSlideIndex !== undefined )
     {
@@ -14332,7 +14136,6 @@ SimpleActivity.prototype.performContinuousHook = function( nModifiedTime )
         return;
 
     var nT = 1.0 - this.nDirection + nModifiedTime * ( 2.0*this.nDirection - 1.0 );
-    //ANIMDBG.print( 'SimpleActivity.performContinuousHook: nT = ' + nT );
     this.aAnimation.perform( nT );
 };
 
@@ -14377,9 +14180,6 @@ function FromToByActivityTemplate( BaseType ) // template parameter
         this.nIteration = 0;
         this.bCumulative = bAccumulate;
         this.aFormula = aActivityParamSet.aFormula;
-
-        //this.initAnimatedElement();
-
     }
     extend( FromToByActivity, BaseType );
 
@@ -14428,7 +14228,6 @@ function FromToByActivityTemplate( BaseType ) // template parameter
                 // From-By animation
                 this.aStartValue = this.aFrom;
 
-                // this.aEndValue = this.aStartValue + this.aBy;
                 this.aEndValue = this.add( this.aStartValue, this.aBy );
             }
         }
@@ -14457,7 +14256,6 @@ function FromToByActivityTemplate( BaseType ) // template parameter
                 // By animation
                 this.aStartValue = aAnimationStartValue;
 
-                // this.aEndValue = this.aStartValue + this.aBy;
                 this.aEndValue = this.add( this.aStartValue, this.aBy );
             }
         }
@@ -14524,7 +14322,6 @@ function FromToByActivityTemplate( BaseType ) // template parameter
         // the target attribute, cumulative animation is not defined.
         if( this.bCumulative && !this.bDynamicStartValue )
         {
-            // aValue = this.aEndValue * nRepeatCount + aValue;
             aValue = this.add( this.scale( nRepeatCount, this.aEndValue ), aValue );
         }
 
@@ -14601,8 +14398,6 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
         this.bCumulative = bAccumulate;
         this.aLastValue = this.aValueList[ this.aValueList.length - 1 ];
         this.aFormula = aActivityParamSet.aFormula;
-
-        //this.initAnimatedElement();
     }
     extend( ValueListActivity, BaseType );
 
@@ -14613,8 +14408,6 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
         {
             ANIMDBG.print( 'createValueListActivity: value[' + i + '] = ' + this.aValueList[i] );
         }
-
-        //this.initAnimatedElement();
     };
 
     ValueListActivity.prototype.initAnimatedElement = function()
@@ -14667,7 +14460,6 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
         if( this.bCumulative )
         {
             aValue = this.add( aValue, this.scale( nRepeatCount, this.aLastValue ) );
-            //aValue = aValue + nRepeatCount * this.aLastValue;
         }
 
         aValue = this.aFormula ? this.aFormula( aValue ) : aValue;
@@ -15752,7 +15544,6 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
 SlideShow.prototype.update = function()
 {
     this.aTimer.holdTimer();
-    //var suspendHandle = ROOT_NODE.suspendRedraw( PREFERRED_FRAME_RATE * 1000 );
 
     // process queues
     this.aTimerEventQueue.process();
@@ -15762,8 +15553,6 @@ SlideShow.prototype.update = function()
 
     this.aActivityQueue.processDequeued();
 
-    //ROOT_NODE.unsuspendRedraw(suspendHandle);
-    //ROOT_NODE.forceRedraw();
     this.aTimer.releaseTimer();
 
     var bActivitiesLeft = ( ! this.aActivityQueue.isEmpty() );
@@ -16262,18 +16051,10 @@ ElapsedTime.prototype.getCurrentTime = function()
     if ( !this.aTimeBase )
     {
         nCurrentTime = this.getSystemTime();
-//            if( !isFinite(nCurrentTime) )
-//            {
-//                log( 'ElapsedTime.getCurrentTime: this.getSystemTime() == ' + nCurrentTime );
-//            }
     }
     else
     {
         nCurrentTime = this.aTimeBase.getElapsedTimeImpl();
-//            if( !isFinite(nCurrentTime) )
-//            {
-//                log( 'ElapsedTime.getCurrentTime: this.aTimeBase.getElapsedTimeImpl() == ' + nCurrentTime );
-//            }
     }
 
     assert( ( typeof( nCurrentTime ) === typeof( 0 ) ) && isFinite( nCurrentTime ),
@@ -16287,11 +16068,6 @@ ElapsedTime.prototype.getElapsedTimeImpl = function()
 {
     if( this.bInHoldMode || this.bInPauseMode )
     {
-//            if( !isFinite(this.nFrozenTime) )
-//            {
-//                log( 'ElapsedTime.getElapsedTimeImpl: nFrozenTime == ' + this.nFrozenTime );
-//            }
-
         return this.nFrozenTime;
     }
 
