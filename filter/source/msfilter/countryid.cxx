@@ -276,7 +276,7 @@ inline bool CountryEntryPred_Language::operator()( const CountryEntry& rCmp ) co
     //  rCmp.mbUseSubLang==true  -> compare full language type
     //  rCmp.mbUseSubLang==false -> compare primary language only
     return rCmp.mbUseSubLang ? (meLanguage == rCmp.meLanguage) :
-                ((meLanguage & 0x03FF) == (rCmp.meLanguage & 0x03FF));
+                (primary(meLanguage) == primary(rCmp.meLanguage));
 }
 
 } // namespace

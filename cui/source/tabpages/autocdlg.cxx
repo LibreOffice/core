@@ -121,14 +121,14 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
     m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
     sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
-    m_pLanguageLB->SetEntryData( nPos, reinterpret_cast<void*>(LANGUAGE_UNDETERMINED) );
+    m_pLanguageLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_uInt16)LANGUAGE_UNDETERMINED) );
 
     // Initializing doesn't work for static on linux - therefore here
     if( LANGUAGE_SYSTEM == eLastDialogLanguage )
         eLastDialogLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 
     LanguageType nSelectLang = LANGUAGE_UNDETERMINED;
-    nPos = m_pLanguageLB->GetEntryPos( reinterpret_cast<void*>(eLastDialogLanguage) );
+    nPos = m_pLanguageLB->GetEntryPos( reinterpret_cast<void*>((sal_uInt16)eLastDialogLanguage) );
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
         nSelectLang = eLastDialogLanguage;
     m_pLanguageLB->SelectLanguage( nSelectLang );
@@ -179,7 +179,7 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox&, rBox, void)
 {
     sal_Int32 nPos = rBox.GetSelectEntryPos();
     void* pVoid = rBox.GetEntryData(nPos);
-    LanguageType eNewLang = (LanguageType)reinterpret_cast<sal_IntPtr>(pVoid);
+    LanguageType eNewLang = LanguageType(reinterpret_cast<sal_IntPtr>(pVoid));
     // save old settings and fill anew
     if(eNewLang != eLastDialogLanguage)
     {

@@ -85,31 +85,26 @@ static const sal_Char cThes[]    = SN_THESAURUS;
 
 // static ----------------------------------------------------------------
 
-static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( const Sequence< Locale > &rSeq )
+static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( const Sequence< Locale > &rSeq )
 {
     sal_Int32 nLen = rSeq.getLength();
-    Sequence< sal_Int16 > aRes( nLen );
-    sal_Int16 *pRes = aRes.getArray();
+    std::vector<LanguageType> aRes;
+    aRes.reserve(nLen);
     const Locale *pSeq = rSeq.getConstArray();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
-        pRes[i] = LanguageTag::convertToLanguageType( pSeq[i] );
+        aRes.push_back( LanguageTag::convertToLanguageType( pSeq[i] ) );
     }
     return aRes;
 }
 
 
-static bool lcl_SeqHasLang( const Sequence< sal_Int16 > &rSeq, sal_Int16 nLang )
+static bool lcl_SeqHasLang( const std::vector< LanguageType > &rSeq, LanguageType nLang )
 {
-    sal_Int32 nLen = rSeq.getLength();
-    const sal_Int16 *pLang = rSeq.getConstArray();
-    sal_Int32 nPos = -1;
-    for (sal_Int32 i = 0;  i < nLen  &&  nPos < 0;  ++i)
-    {
-        if (nLang == pLang[i])
-            nPos = i;
-    }
-    return nPos >= 0;
+    for (auto const & i : rSeq)
+        if (i == nLang)
+            return true;
+    return false;
 }
 
 
@@ -458,8 +453,8 @@ struct ServiceInfo_Impl
     ServiceInfo_Impl() : bConfigured(false) {}
 };
 
-typedef std::vector< ServiceInfo_Impl >                             ServiceInfoArr;
-typedef std::map< sal_Int16 /*LanguageType*/, Sequence< OUString > >    LangImplNameTable;
+typedef std::vector< ServiceInfo_Impl >                   ServiceInfoArr;
+typedef std::map< LanguageType, Sequence< OUString > >    LangImplNameTable;
 
 
 // SvxLinguData_Impl ----------------------------------------------------
@@ -511,7 +506,7 @@ public:
     // I.e. the ones available but not configured in arbitrary order).
     // They available ones may contain names that do not(!) support that
     // language.
-    Sequence< OUString > GetSortedImplNames( sal_Int16 nLang, sal_uInt8 nType );
+    Sequence< OUString > GetSortedImplNames( LanguageType nLang, sal_uInt8 nType );
 
     ServiceInfo_Impl * GetInfoByImplName( const OUString &rSvcImplName );
 };
@@ -531,7 +526,7 @@ static sal_Int32 lcl_SeqGetIndex( const Sequence< OUString > &rSeq, const OUStri
 }
 
 
-Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( sal_Int16 nLang, sal_uInt8 nType )
+Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( LanguageType nLang, sal_uInt8 nType )
 {
     LangImplNameTable *pTable = nullptr;
     switch (nType)
@@ -792,7 +787,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     const Locale* pAllLocales = aAllServiceLocales.getConstArray();
     for(sal_Int32 nLocale = 0; nLocale < aAllServiceLocales.getLength(); nLocale++)
     {
-        sal_Int16 nLang = LanguageTag::convertToLanguageType( pAllLocales[nLocale] );
+        LanguageType nLang = LanguageTag::convertToLanguageType( pAllLocales[nLocale] );
 
         aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cSpell, pAllLocales[nLocale]);
         SetChecked( aCfgSvcs );
@@ -927,7 +922,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
             nLocales = aLocales.getLength();
             for (i = 0;  i < nLocales;  ++i)
             {
-                sal_Int16 nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+                LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
                 if (!aCfgSpellTable.count( nLang ) && bEnable)
                     aCfgSpellTable[ nLang ] = Sequence< OUString >();
                 if (aCfgSpellTable.count( nLang ))
@@ -943,7 +938,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
             nLocales = aLocales.getLength();
             for (i = 0;  i < nLocales;  ++i)
             {
-                sal_Int16 nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+                LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
                 if (!aCfgGrammarTable.count( nLang ) && bEnable)
                     aCfgGrammarTable[ nLang ] = Sequence< OUString >();
                 if (aCfgGrammarTable.count( nLang ))
@@ -959,7 +954,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
             nLocales = aLocales.getLength();
             for (i = 0;  i < nLocales;  ++i)
             {
-                sal_Int16 nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+                LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
                 if (!aCfgHyphTable.count( nLang ) && bEnable)
                     aCfgHyphTable[ nLang ] = Sequence< OUString >();
                 if (aCfgHyphTable.count( nLang ))
@@ -975,7 +970,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
             nLocales = aLocales.getLength();
             for (i = 0;  i < nLocales;  ++i)
             {
-                sal_Int16 nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+                LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
                 if (!aCfgThesTable.count( nLang ) && bEnable)
                     aCfgThesTable[ nLang ] = Sequence< OUString >();
                 if (aCfgThesTable.count( nLang ))
@@ -1120,7 +1115,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         const LangImplNameTable *pTable = &pLinguData->GetSpellTable();
         for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
         {
-            sal_Int16 nLang = aIt->first;
+            LanguageType nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( LanguageTag::convertToLocale(nLang) );
@@ -1132,7 +1127,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         pTable = &pLinguData->GetGrammarTable();
         for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
         {
-            sal_Int16 nLang = aIt->first;
+            LanguageType nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( LanguageTag::convertToLocale(nLang) );
@@ -1144,7 +1139,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         pTable = &pLinguData->GetHyphTable();
         for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
         {
-            sal_Int16 nLang = aIt->first;
+            LanguageType nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( LanguageTag::convertToLocale(nLang) );
@@ -1156,7 +1151,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         pTable = &pLinguData->GetThesTable();
         for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
         {
-            sal_Int16 nLang = aIt->first;
+            LanguageType nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( LanguageTag::convertToLocale(nLang) );
@@ -1529,7 +1524,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
         sal_Int32 nLocales = pLinguData->GetAllSupportedLocales().getLength();
         for (sal_Int32 k = 0;  k < nLocales;  ++k)
         {
-            sal_Int16 nLang = LanguageTag::convertToLanguageType( pAllLocales[k] );
+            LanguageType nLang = LanguageTag::convertToLanguageType( pAllLocales[k] );
             if (pLinguData->GetSpellTable().count( nLang ))
                 pLinguData->SetChecked( pLinguData->GetSpellTable()[ nLang ] );
             if (pLinguData->GetGrammarTable().count( nLang ))
@@ -1796,7 +1791,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
         m_pMoreDictsLink->Hide();
 
     //fill language box
-    Sequence< sal_Int16 > aAvailLang;
+    std::vector< LanguageType > aAvailLang;
     uno::Reference< XAvailableLocales > xAvail( rLinguData.GetManager(), UNO_QUERY );
     if (xAvail.is())
     {
@@ -1808,7 +1803,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
     m_pLanguageLB->Clear();
     for(long i = 0; i < rLoc.getLength(); i++)
     {
-        sal_Int16 nLang = LanguageTag::convertToLanguageType( pLocales[i] );
+        LanguageType nLang = LanguageTag::convertToLanguageType( pLocales[i] );
         m_pLanguageLB->InsertLanguage( nLang, lcl_SeqHasLang( aAvailLang, nLang ) );
     }
     LanguageType eSysLang = MsLangId::getSystemLanguage();
@@ -1942,7 +1937,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
         // save old probably changed settings
         // before switching to new language entries
 
-        sal_Int16 nLang = LanguageTag::convertToLanguageType( aLastLocale );
+        LanguageType nLang = LanguageTag::convertToLanguageType( aLastLocale );
 
         sal_Int32 nStart = 0, nLocalIndex = 0;
         Sequence< OUString > aChange;

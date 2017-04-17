@@ -146,31 +146,27 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
 struct SvcInfo
 {
     const OUString                  aSvcImplName;
-    const uno::Sequence< sal_Int16 >    aSuppLanguages;
+    const std::vector< LanguageType >    aSuppLanguages;
 
     SvcInfo( const OUString &rSvcImplName,
-             const uno::Sequence< sal_Int16 >  &rSuppLanguages ) :
+             const std::vector< LanguageType >  &rSuppLanguages ) :
         aSvcImplName    (rSvcImplName),
         aSuppLanguages  (rSuppLanguages)
     {
     }
 
-    bool    HasLanguage( sal_Int16 nLanguage ) const;
+    bool    HasLanguage( LanguageType nLanguage ) const;
 };
 
 
-bool SvcInfo::HasLanguage( sal_Int16 nLanguage ) const
+bool SvcInfo::HasLanguage( LanguageType nLanguage ) const
 {
-    sal_Int32 nCnt = aSuppLanguages.getLength();
-    const sal_Int16 *pLang = aSuppLanguages.getConstArray();
-    sal_Int32 i;
-
-    for ( i = 0;  i < nCnt;  ++i)
+    for ( auto const & i : aSuppLanguages)
     {
-        if (nLanguage == pLang[i])
-            break;
+        if (nLanguage == i)
+            return true;
     }
-    return i < nCnt;
+    return false;
 }
 
 class LngSvcMgrListenerHelper :
@@ -1035,7 +1031,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                 if (xSvc.is())
                 {
                     OUString            aImplName;
-                    uno::Sequence< sal_Int16 >    aLanguages;
+                    std::vector< LanguageType >   aLanguages;
                     uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
@@ -1044,7 +1040,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                     SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
                     if (xSuppLoc.is()) {
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                        aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
+                        aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     }
 
                     pAvailSpellSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
@@ -1097,7 +1093,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                 if (xSvc.is() && pAvailGrammarSvcs)
                 {
                     OUString            aImplName;
-                    uno::Sequence< sal_Int16 >   aLanguages;
+                    std::vector< LanguageType >    aLanguages;
                     uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
@@ -1107,7 +1103,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                     if (xSuppLoc.is())
                     {
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                        aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
+                        aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     }
 
                     pAvailGrammarSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
@@ -1158,7 +1154,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                 if (xSvc.is())
                 {
                     OUString            aImplName;
-                    uno::Sequence< sal_Int16 >    aLanguages;
+                    std::vector< LanguageType >    aLanguages;
                     uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
@@ -1168,7 +1164,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                     if (xSuppLoc.is())
                     {
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                        aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
+                        aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     }
                     pAvailHyphSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
@@ -1219,7 +1215,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                 if (xSvc.is())
                 {
                     OUString            aImplName;
-                    uno::Sequence< sal_Int16 >    aLanguages;
+                    std::vector< LanguageType >    aLanguages;
                     uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
@@ -1229,7 +1225,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                     if (xSuppLoc.is())
                     {
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                        aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
+                        aLanguages = LocaleSeqToLangVec( aLocaleSequence );
                     }
 
                     pAvailThesSvcs->push_back( o3tl::make_unique<SvcInfo>( aImplName, aLanguages ) );

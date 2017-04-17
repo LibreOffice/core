@@ -2325,15 +2325,15 @@ void RtfAttributeOutput::CharLanguage(const SvxLanguageItem& rLanguage)
     {
     case RES_CHRATR_LANGUAGE:
         m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LANG);
-        m_aStylesEnd.append((sal_Int32)rLanguage.GetLanguage());
+        m_aStylesEnd.append((sal_Int32)static_cast<sal_uInt16>(rLanguage.GetLanguage()));
         break;
     case RES_CHRATR_CJK_LANGUAGE:
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LANGFE);
-        m_aStyles.append((sal_Int32)rLanguage.GetLanguage());
+        m_aStyles.append((sal_Int32)static_cast<sal_uInt16>(rLanguage.GetLanguage()));
         break;
     case RES_CHRATR_CTL_LANGUAGE:
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ALANG);
-        m_aStyles.append((sal_Int32)rLanguage.GetLanguage());
+        m_aStyles.append((sal_Int32)static_cast<sal_uInt16>(rLanguage.GetLanguage()));
         break;
     }
 }

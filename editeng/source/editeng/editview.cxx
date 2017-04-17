@@ -136,11 +136,11 @@ LanguageType EditView::CheckLanguage(
         sal_Int32 nCount = SAL_N_ELEMENTS(aLangList);
         for (sal_Int32 i = 0;  i < nCount;  i++)
         {
-            sal_Int16 nTmpLang = aLangList[i];
+            LanguageType nTmpLang = aLangList[i];
             if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
-                if (xSpell->hasLanguage( nTmpLang ) &&
-                    xSpell->isValid( rText, nTmpLang, Sequence< PropertyValue >() ))
+                if (xSpell->hasLanguage( (sal_uInt16)nTmpLang ) &&
+                    xSpell->isValid( rText, (sal_uInt16)nTmpLang, Sequence< PropertyValue >() ))
                 {
                     nLang = nTmpLang;
                     break;
@@ -853,7 +853,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
         // Are there any replace suggestions?
         Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
-                xSpeller->spell( aSelected, pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ), aPropVals );
+                xSpeller->spell( aSelected, (sal_uInt16)pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ), aPropVals );
 
         Reference< linguistic2::XLanguageGuessing >  xLangGuesser( EditDLL::Get().GetGlobalData()->GetLanguageGuesser() );
 
@@ -936,7 +936,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
             aDics = xDicList->getDictionaries();
             pDic  = aDics.getConstArray();
-            sal_uInt16 nCheckedLanguage = pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 );
+            LanguageType nCheckedLanguage = pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 );
             sal_uInt16 nDicCount = (sal_uInt16)aDics.getLength();
             for (sal_uInt16 i = 0; i < nDicCount; i++)
             {

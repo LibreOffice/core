@@ -150,9 +150,9 @@ SvtLanguageTableImpl::SvtLanguageTableImpl() :
             LanguageType nLangType = aLang.getLanguageType();
             if (nType <= LanguageTag::ScriptType::RTL && nType > LanguageTag::ScriptType::UNKNOWN)
                 aLang.setScriptType(LanguageTag::ScriptType(nType));
-            sal_uInt32 nPos = FindIndex(nLangType);
+            sal_uInt32 nPos = FindIndex((sal_uInt16)nLangType);
             if (nPos == RESARRAY_INDEX_NOTFOUND)
-                AddItem((aName.isEmpty() ? rElementNames[i] : aName), nLangType);
+                AddItem((aName.isEmpty() ? rElementNames[i] : aName), (sal_uInt16)nLangType);
         }
     }
 }
@@ -165,7 +165,7 @@ SvtLanguageTableImpl::~SvtLanguageTableImpl()
 bool SvtLanguageTableImpl::HasType( const LanguageType eType ) const
 {
     LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType );
-    sal_uInt32 nPos = FindIndex( eLang );
+    sal_uInt32 nPos = FindIndex( (sal_uInt16)eLang );
 
     return RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count();
 }
@@ -190,7 +190,7 @@ OUString lcl_getDescription( const OUString& rBcp47 )
 const OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
 {
     LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType );
-    sal_uInt32 nPos = FindIndex( eLang );
+    sal_uInt32 nPos = FindIndex( (sal_uInt16)eLang );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
@@ -205,7 +205,7 @@ const OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
     // And add it to the table if it is an on-the-fly-id, which it usually is,
     // so it is available in all subsequent language boxes.
     if (LanguageTag::isOnTheFlyID( eType))
-        const_cast<SvtLanguageTableImpl*>(this)->AddItem( sLangTag, eType);
+        const_cast<SvtLanguageTableImpl*>(this)->AddItem( sLangTag, (sal_uInt16)eType);
 
     return sLangTag;
 }
@@ -265,7 +265,7 @@ LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
 sal_uInt32 SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag, const OUString& rString )
 {
     return theLanguageTable::get().AddItem( (rString.isEmpty() ? lcl_getDescription(rLanguageTag.getBcp47()) : rString),
-            rLanguageTag.getLanguageType());
+            (sal_uInt16)rLanguageTag.getLanguageType());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

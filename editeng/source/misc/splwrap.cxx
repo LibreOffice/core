@@ -175,7 +175,7 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
 
 
 sal_Int16 SvxSpellWrapper::CheckSpellLang(
-        Reference< XSpellChecker1 > const & xSpell, sal_Int16 nLang)
+        Reference< XSpellChecker1 > const & xSpell, LanguageType nLang)
 {
     LangCheckState_map_t &rLCS = GetLangCheckState();
 
@@ -188,7 +188,7 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
     if (SVX_LANG_NEED_CHECK == (nVal & 0x00FF))
     {
         sal_uInt16 nTmpVal = SVX_LANG_MISSING_DO_WARN;
-        if (xSpell.is()  &&  xSpell->hasLanguage( nLang ))
+        if (xSpell.is()  &&  xSpell->hasLanguage( (sal_uInt16)nLang ))
             nTmpVal = SVX_LANG_OK;
         nVal &= 0xFF00;
         nVal |= nTmpVal;
@@ -200,7 +200,7 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
 }
 
 sal_Int16 SvxSpellWrapper::CheckHyphLang(
-        Reference< XHyphenator > const & xHyph, sal_Int16 nLang)
+        Reference< XHyphenator > const & xHyph, LanguageType nLang)
 {
     LangCheckState_map_t &rLCS = GetLangCheckState();
 

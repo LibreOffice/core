@@ -658,7 +658,7 @@ public:
 
     void fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const;
 
-    sal_uInt16 GetLang( const sal_Int32 nBegin, const sal_Int32 nLen = 0,
+    LanguageType GetLang( const sal_Int32 nBegin, const sal_Int32 nLen = 0,
                     sal_uInt16 nScript = 0 ) const;
 
     /// in ndcopy.cxx

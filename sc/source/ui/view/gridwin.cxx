@@ -5396,7 +5396,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
             }
 
             const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
-            sal_uInt16 nCellLang =
+            LanguageType nCellLang =
                 static_cast<const SvxLanguageItem&>(pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
             if (nCellLang == LANGUAGE_SYSTEM)
                 nCellLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling

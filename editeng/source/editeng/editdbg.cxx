@@ -165,7 +165,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
             aDebStr.append("Language=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLanguageItem&>(rItem).GetLanguage()));
+            aDebStr.append((sal_Int32)static_cast<sal_uInt16>(static_cast<const SvxLanguageItem&>(rItem).GetLanguage()));
         break;
         case EE_CHAR_COLOR:
         {

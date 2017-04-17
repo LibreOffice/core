@@ -113,7 +113,7 @@ void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
     }
 }
 
-static LanguageType eLastUsedLanguageTypeForForbiddenCharacters = USHRT_MAX;
+static LanguageType eLastUsedLanguageTypeForForbiddenCharacters(USHRT_MAX);
 
 SvxAsianLayoutPage::SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "OptAsianPage", "cui/ui/optasianpage.ui", &rSet),
@@ -291,7 +291,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
 
     m_pLanguageLB->SelectEntryPos(0);
     //preselect the system language in the box - if available
-    if(USHRT_MAX == eLastUsedLanguageTypeForForbiddenCharacters)
+    if(LanguageType(USHRT_MAX) == eLastUsedLanguageTypeForForbiddenCharacters)
     {
         eLastUsedLanguageTypeForForbiddenCharacters =
             Application::GetSettings().GetLanguageTag().getLanguageType();

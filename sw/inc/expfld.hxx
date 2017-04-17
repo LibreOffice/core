@@ -99,7 +99,7 @@ public:
                    sal_uInt16 nSubType, sal_uLong nFormat = 0);
 
     virtual void                SetValue( const double& rVal ) override;
-    virtual void                SetLanguage(sal_uInt16 nLng) override;
+    virtual void                SetLanguage(LanguageType nLng) override;
 
     inline void                 ChgExpStr(const OUString& rExpand);
 

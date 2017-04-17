@@ -1290,19 +1290,19 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
     {
         // use sprmCRgLid0_80 rather than sprmCLid
         m_rWW8Export.InsUInt16( nId );
-        m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
+        m_rWW8Export.InsUInt16( (sal_uInt16)rLanguage.GetLanguage() );
 
         // Word 2000 and above apparently require both old and new versions of
         // these sprms to be set, without it spellchecking doesn't work
         if ( nId == NS_sprm::sprmCRgLid0_80 )
         {
             m_rWW8Export.InsUInt16( NS_sprm::sprmCRgLid0 );
-            m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
+            m_rWW8Export.InsUInt16( (sal_uInt16)rLanguage.GetLanguage() );
         }
         else if ( nId == NS_sprm::sprmCRgLid1_80 )
         {
             m_rWW8Export.InsUInt16( NS_sprm::sprmCRgLid1 );
-            m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
+            m_rWW8Export.InsUInt16( (sal_uInt16)rLanguage.GetLanguage() );
         }
     }
 }
@@ -2293,7 +2293,7 @@ bool MSWordExportBase::GetNumberFormat(const SwField& rField, OUString& rStr)
     const SvNumberformat* pNumFormat = pNFormatr->GetEntry( nFormatIdx );
     if( pNumFormat )
     {
-        sal_uInt16 nLng = rField.GetLanguage();
+        LanguageType nLng = rField.GetLanguage();
         LocaleDataWrapper aLocDat(pNFormatr->GetComponentContext(),
                                   LanguageTag(nLng));
 

@@ -18,8 +18,10 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBASTYLE_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBASTYLE_HXX
+
 #include <ooo/vba/word/XStyle.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+#include <i18nlangtag/lang.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -43,9 +45,9 @@ public:
     /// @throws css::uno::RuntimeException
     static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const css::uno::Any& xStyle );
     /// @throws css::uno::RuntimeException
-    static sal_Int32 getLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps );
+    static LanguageType getLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps );
     /// @throws css::uno::RuntimeException
-    static void setLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, sal_Int32 _languageid );
+    static void setLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, LanguageType _languageid );
 
     // Attributes
     virtual OUString SAL_CALL getName() override;

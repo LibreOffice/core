@@ -93,14 +93,10 @@ css::lang::Locale LinguLanguageToLocale( LanguageType nLanguage )
 
 bool LinguIsUnspecified( LanguageType nLanguage )
 {
-    switch (nLanguage)
-    {
-        case LANGUAGE_NONE:
-        case LANGUAGE_UNDETERMINED:
-        case LANGUAGE_MULTIPLE:
-            return true;
-    }
-    return false;
+    return nLanguage.anyOf(
+         LANGUAGE_NONE,
+         LANGUAGE_UNDETERMINED,
+         LANGUAGE_MULTIPLE);
 }
 
 // When adding anything keep both LinguIsUnspecified() methods in sync!
@@ -264,7 +260,7 @@ static bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
 
 uno::Reference< XDictionaryEntry > SearchDicList(
         const uno::Reference< XSearchableDictionaryList > &xDicList,
-        const OUString &rWord, sal_Int16 nLanguage,
+        const OUString &rWord, LanguageType nLanguage,
         bool bSearchPosDics, bool bSearchSpellEntry )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -286,7 +282,7 @@ uno::Reference< XDictionaryEntry > SearchDicList(
         uno::Reference< XDictionary > axDic( pDic[i], UNO_QUERY );
 
         DictionaryType  eType = axDic->getDictionaryType();
-        sal_Int16           nLang = LinguLocaleToLanguage( axDic->getLocale() );
+        LanguageType    nLang = LinguLocaleToLanguage( axDic->getLocale() );
 
         if ( axDic.is() && axDic->isActive()
             && (nLang == nLanguage  ||  LinguIsUnspecified( nLang)) )
@@ -343,7 +339,7 @@ bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicLi
 DictionaryError AddEntryToDic(
         uno::Reference< XDictionary >  &rxDic,
         const OUString &rWord, bool bIsNeg,
-        const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
+        const OUString &rRplcTxt,
         bool bStripDot )
 {
     if (!rxDic.is())
@@ -380,8 +376,23 @@ DictionaryError AddEntryToDic(
     return nRes;
 }
 
+std::vector< LanguageType >
+    LocaleSeqToLangVec( uno::Sequence< Locale > &rLocaleSeq )
+{
+    const Locale *pLocale = rLocaleSeq.getConstArray();
+    sal_Int32 nCount = rLocaleSeq.getLength();
+
+    std::vector< LanguageType >   aLangs;
+    for (sal_Int32 i = 0;  i < nCount;  ++i)
+    {
+        aLangs.push_back( LinguLocaleToLanguage( pLocale[i] ) );
+    }
+
+    return aLangs;
+}
+
 uno::Sequence< sal_Int16 >
-    LocaleSeqToLangSeq( uno::Sequence< Locale > &rLocaleSeq )
+     LocaleSeqToLangSeq( uno::Sequence< Locale > &rLocaleSeq )
 {
     const Locale *pLocale = rLocaleSeq.getConstArray();
     sal_Int32 nCount = rLocaleSeq.getLength();
@@ -390,12 +401,11 @@ uno::Sequence< sal_Int16 >
     sal_Int16 *pLang = aLangs.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)
     {
-        pLang[i] = LinguLocaleToLanguage( pLocale[i] );
+        pLang[i] = (sal_uInt16)LinguLocaleToLanguage( pLocale[i] );
     }
 
     return aLangs;
 }
-
 bool    IsReadOnly( const OUString &rURL, bool *pbExist )
 {
     bool bRes = false;
@@ -562,7 +572,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         }
         else
         {
-            sal_Int16 nLang = LinguLocaleToLanguage( rxHyphWord->getLocale() );
+            LanguageType nLang = LinguLocaleToLanguage( rxHyphWord->getLocale() );
             xRes = new HyphenatedWord(
                         rOrigWord, nLang, nOrigHyphenationPos,
                         aOrigHyphenatedWord, nOrigHyphenPos );
@@ -584,7 +594,7 @@ osl::Mutex & lcl_GetCharClassMutex()
     return aMutex;
 }
 
-bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 nLanguage )
+bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -620,7 +630,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
         return CapType::UNKNOWN;
 }
 
-OUString ToLower( const OUString &rText, sal_Int16 nLanguage )
+OUString ToLower( const OUString &rText, LanguageType nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 

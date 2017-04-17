@@ -522,7 +522,7 @@ void PrintFontManager::analyzeSfntFamilyName( void* pTTFont, ::std::list< OUStri
             }
             else if (pNameRecords[i].platformID == 1)
             {
-                AppleLanguageId aAppleId = static_cast<AppleLanguageId>(pNameRecords[i].languageID);
+                AppleLanguageId aAppleId = static_cast<AppleLanguageId>((sal_uInt16)pNameRecords[i].languageID);
                 LanguageTag aApple(makeLanguageTagFromAppleLanguageId(aAppleId));
                 if (aApple == aSystem)
                     nMatch = 8000;

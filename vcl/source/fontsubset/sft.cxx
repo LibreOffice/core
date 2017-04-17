@@ -2613,7 +2613,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
 
         rec[i].platformID = GetUInt16(table, 6 + 0 + 12 * i);
         rec[i].encodingID = GetUInt16(table, 6 + 2 + 12 * i);
-        rec[i].languageID = GetUInt16(table, 6 + 4 + 12 * i);
+        rec[i].languageID = LanguageType(GetUInt16(table, 6 + 4 + 12 * i));
         rec[i].nameID = GetUInt16(table, 6 + 6 + 12 * i);
         rec[i].slen = GetUInt16(table, 6 + 8 + 12 * i);
         int nStrOffset = GetUInt16(table, nLargestFixedOffsetPos);

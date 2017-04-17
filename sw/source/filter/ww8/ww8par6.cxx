@@ -842,7 +842,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         aLastSection = maSegments.back();
 
     //Here
-    sal_uInt16 nLIdx = ( ( mrReader.m_pWwFib->m_lid & 0xff ) == 0x9 ) ? 1 : 0;
+    sal_uInt16 nLIdx = ( ( (sal_uInt16)mrReader.m_pWwFib->m_lid & 0xff ) == 0x9 ) ? 1 : 0;
 
     //BEGIN read section values
     wwSection aNewSection(*mrReader.m_pPaM->GetPoint());
@@ -3867,7 +3867,7 @@ void SwWW8ImplReader::Read_Language( sal_uInt16 nId, const sal_uInt8* pData, sho
     else
     {
         sal_uInt16 nLang = SVBT16ToShort( pData );  // Language-Id
-        NewAttr(SvxLanguageItem((const LanguageType)nLang, nId));
+        NewAttr(SvxLanguageItem(LanguageType(nLang), nId));
     }
 }
 
@@ -4513,7 +4513,7 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
             aLang = m_pPlcxMan->GetChpPLCF()->HasSprm(0x486E);
 
         if (aLang.pSprm && aLang.nRemainingData >= 2)
-            nLang = SVBT16ToShort(aLang.pSprm);
+            nLang = LanguageType(SVBT16ToShort(aLang.pSprm));
         else
         {
             nLang = static_cast<const SvxLanguageItem *>(

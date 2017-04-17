@@ -177,12 +177,12 @@ public:
     void                SetPrintOptions ( const ScPrintOptions& rOpt );
     void                InsertEntryToLRUList(sal_uInt16 nFIndex);
 
-    static void         GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
+    static void         GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang,
                                           bool& rAutoSpell );
     static void         SetAutoSpellProperty( bool bSet );
-    static bool         HasThesaurusLanguage( sal_uInt16 nLang );
+    static bool         HasThesaurusLanguage( LanguageType nLang );
 
-    sal_uInt16           GetOptDigitLanguage();      // from CTL options
+    LanguageType        GetOptDigitLanguage();      // from CTL options
 
     ScNavipiCfg&        GetNavipiCfg();
     ScAddInCfg&         GetAddInCfg();

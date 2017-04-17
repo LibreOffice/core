@@ -672,7 +672,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         if (hasProperty(s_aFormatStringProp, xFormat))
             xFormat->getPropertyValue(s_aFormatStringProp) >>= sFormatDescription;
         _rxOutStream->writeUTF(sFormatDescription);
-        _rxOutStream->writeLong((sal_Int32)eFormatLanguage);
+        _rxOutStream->writeLong((sal_uInt16)eFormatLanguage);
     }
     // version 2 : write the properties common to all OEditBaseModels
     writeCommonEditProperties(_rxOutStream);
@@ -729,7 +729,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
             {
                 // read string and language...
                 OUString sFormatDescription = _rxInStream->readUTF();
-                LanguageType eDescriptionLanguage = (LanguageType)_rxInStream->readLong();
+                LanguageType eDescriptionLanguage(_rxInStream->readLong());
                 // and let a formatter roll dice based on that to create a key...
                 xSupplier = calcFormatsSupplier();
                 // calcFormatsSupplier first takes the one from the model, then one from the starform, then a new one...
