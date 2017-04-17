@@ -184,9 +184,9 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
 
     css::form::NavigationBarMode   m_eNavigate;                // Art der Navigation
 
-        // da ich beim Suchen fuer die Behandlung des "gefunden" ein SdrObject markieren will, besorge ich mir vor dem
-        // Hochreissen des Suchen-Dialoges alle relevanten Objekte
-        // (das Array ist damit auch nur waehrend des Suchvorganges gueltig)
+        // since I want to mark an SdrObject when searching for the treatment of the "found",
+        // I get all relevant objects before yanking up of the search dialog
+        // (the array is thus only valid during the search process)
     std::vector<long> m_arrRelativeGridColumn;
 
     ::osl::Mutex    m_aMutex;
@@ -201,14 +201,14 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
     svx::ControllerFeatures   m_aActiveControllerFeatures;
     svx::ControllerFeatures   m_aNavControllerFeatures;
 
-    // aktuelle Form, Controller
-    // nur im alive mode verfuegbar
+    // current form, controller
+    // only available in the alive mode
     css::uno::Reference< css::form::runtime::XFormController >    m_xActiveController;
     css::uno::Reference< css::form::runtime::XFormController >    m_xNavigationController;
     css::uno::Reference< css::form::XForm >                       m_xActiveForm;
 
-    // Aktueller container einer Page
-    // nur im designmode verfuegbar
+    // current container of a page
+    // only available in the design mode
     css::uno::Reference< css::container::XIndexAccess>            m_xForms;
 
     // the currently selected objects, as to be displayed in the property browser
@@ -219,9 +219,10 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
     InterfaceBag                                                  m_aLastKnownMarkedControls;
 
 
-        // und das ist ebenfalls fuer's 'gefunden' : Beim Finden in GridControls brauche ich die Spalte, bekomme aber
-        // nur die Nummer des Feldes, die entspricht der Nummer der Spalte + <offset>, wobei der Offset von der Position
-        // des GridControls im Formular abhaengt. Also hier eine Umrechnung.
+        // And this is also for the 'found': When I find in GridControls, I need the column,
+        // but only get the number of the field corresponding to the number of the
+        // column + <offset>, where the offset depends on the position of the GridControl
+        // in the form. So here is a conversion.
     css::uno::Reference< css::awt::XControlModel>                 m_xLastGridFound;
      // the frame we live in
     css::uno::Reference< css::frame::XFrame>                      m_xAttachedFrame;
@@ -236,14 +237,14 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
     bool        m_bHadPropertyBrowserInDesignMode : 1;
 
     bool        m_bTrackProperties  : 1;
-        // soll ich (bzw. der Owner diese Impl-Klasse) mich um die Aktualisierung des css::beans::Property-Browsers kuemmern ?
+        // should I (or the owner of this impl class) take car of the update of the css::beans::Property-Browser?
 
     bool        m_bUseWizards : 1;
 
-    bool        m_bDatabaseBar      : 1;    // Gibt es eine Datenbankleiste
-    bool        m_bInActivate       : 1;    // Wird ein Controller aktiviert
-    bool        m_bSetFocus         : 1;    // Darf der Focus umgesetzt werden
-    bool        m_bFilterMode       : 1;    // Wird gerade ein Filter auf die Controls angesetzt
+    bool        m_bDatabaseBar      : 1;    // is there a database bar
+    bool        m_bInActivate       : 1;    // is a controller activated
+    bool        m_bSetFocus         : 1;    // may the focus be changed over
+    bool        m_bFilterMode       : 1;    // is a filter currently set to the controls
     bool        m_bChangingDesignMode:1;    // sal_True within SetDesignMode
     bool        m_bPreparedClose    : 1;    // for the current modification state of the current form
                                                 //  PrepareClose had been called and the user denied to save changes
@@ -411,13 +412,13 @@ public:
     SAL_DLLPRIVATE bool    GetWizardUsing() const { return m_bUseWizards; }
     SAL_DLLPRIVATE void    SetWizardUsing(bool _bUseThem);
 
-        // Setzen des Filtermodus
+        // setting the filter mode
     SAL_DLLPRIVATE bool isInFilterMode() const {return m_bFilterMode;}
     SAL_DLLPRIVATE void startFiltering();
     SAL_DLLPRIVATE void stopFiltering(bool bSave);
 
+        // a menu that contains all ControlConversion entries
     SAL_DLLPRIVATE static VclBuilder* GetConversionMenu();
-        // ein Menue, das alle ControlConversion-Eintraege enthaelt
 
     /// checks whether a given control conversion slot can be applied to the current selection
     SAL_DLLPRIVATE        bool canConvertCurrentSelectionToControl(const OString& rIdent);
@@ -446,8 +447,8 @@ public:
     /// determines whether our host document is currently read-only
     SAL_DLLPRIVATE bool    IsReadonlyDoc() const;
 
-    // das Setzen des curObject/selObject/curForm erfolgt verzoegert (SetSelectionDelayed), mit den folgenden
-    // Funktionen laesst sich das abfragen/erzwingen
+    // Setting the curObject/selObject/curForm is delayed (SetSelectionDelayed). With the
+    // following functions this can be inquired/enforced.
     SAL_DLLPRIVATE inline bool IsSelectionUpdatePending();
     SAL_DLLPRIVATE void        ForceUpdateSelection();
 
@@ -470,11 +471,11 @@ private:
 
     SAL_DLLPRIVATE void LoopGrids(LoopGridsSync nSync, LoopGridsFlags nWhat = LoopGridsFlags::NONE);
 
-    // Invalidierung von Slots
+    // invalidation of slots
     SAL_DLLPRIVATE void    InvalidateSlot( sal_Int16 nId, bool bWithId );
     SAL_DLLPRIVATE void    UpdateSlot( sal_Int16 nId );
-    // Locking der Invalidierung - wenn der interne Locking-Counter auf 0 geht, werden alle aufgelaufenen Slots
-    // (asynchron) invalidiert
+    // locking the invalidation - if the internal locking counter goes to 0, all accumulated slots
+    // are invalidated (asynchronously)
     SAL_DLLPRIVATE void    LockSlotInvalidation(bool bLock);
 
     DECL_DLLPRIVATE_LINK(OnInvalidateSlots, void*, void);
@@ -539,21 +540,20 @@ inline bool FmXFormShell::IsSelectionUpdatePending()
 }
 
 
-// = ein Iterator, der ausgehend von einem Interface ein Objekt sucht, dessen
-// = css::beans::Property-Set eine ControlSource- sowie eine BoundField-Eigenschaft hat,
-// = wobei letztere einen Wert ungleich NULL haben muss.
-// = Wenn das Interface selber diese Bedingung nicht erfuellt, wird getestet,
-// = ob es ein Container ist (also ueber eine css::container::XIndexAccess verfuegt), dann
-// = wird dort abgestiegen und fuer jedes Element des Containers das selbe
-// = versucht (wiederum eventuell mit Abstieg).
-// = Wenn irgendein Objekt dabei die geforderte Eigenschaft hat, entfaellt
-// = der Teil mit dem Container-Test fuer dieses Objekt.
+// = An iterator that, emanating from an interface, looks for an object whose
+// = css::beans::Property-Set has a ControlSource and a BoundField property, the
+// = latter having a non-NULL value. If the interface itself does not meet this
+// = condition, it is tested whether it is a container (that is, has a
+// = css::container::XIndexAccess), then it is descended there and the same tried
+// = for each element of the container (again possibly with descent). If any
+// = object thereby has the required property, the part with the container test
+// = for that object is omitted.
 // =
 
 class SearchableControlIterator : public ::comphelper::IndexAccessIterator
 {
     OUString         m_sCurrentValue;
-        // der aktuelle Wert der ControlSource-css::beans::Property
+        // the current value of the ControlSource css::beans::Property
 
 public:
     const OUString& getCurrentValue() const { return m_sCurrentValue; }

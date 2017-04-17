@@ -42,8 +42,8 @@ class SdrObject;
 
 
 // FmFormPageImpl
-// lauscht an allen Containern, um festzustellen, wann Objecte
-// eingefuegt worden sind und wann diese entfernt wurden
+// Listens to all containers to determine when objects have been inserted
+// and when they have been removed
 
 
 class FmFormPageImpl
@@ -64,7 +64,7 @@ public:
 
     void initFrom( FmFormPageImpl& i_foreignImpl );
 
-    //  nur wichtig fuer den DesignMode
+    //  only important for the DesignMode
     void setCurForm(const css::uno::Reference< css::form::XForm>& xForm);
     css::uno::Reference< css::form::XForm> getDefaultForm();
 

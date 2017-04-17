@@ -141,7 +141,7 @@ public:
     FmXUndoEnvironment(FmFormModel& _rModel);
     virtual ~FmXUndoEnvironment() override;
 
-    // UNO Anbindung
+    // UNO connection
     //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
     //  virtual sal_Bool queryInterface(UsrUik, css::uno::Reference< css::uno::XInterface>&);
     //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass>>    getIdlClasses();
@@ -192,8 +192,8 @@ private:
     void    switchListening( const css::uno::Reference< css::uno::XInterface >& _rxObject, bool _bStartListening );
     css::uno::Reference< css::script::XScriptListener > m_vbaListener;
 public:
-    // Methoden zur Zuordnung von Controls zu Forms,
-    // werden von der Seite und der UndoUmgebung genutzt
+    // Methods for assigning controls to forms,
+    // used by the page and the undo environment
     void Inserted(SdrObject* pObj);
     void Removed(SdrObject* pObj);
 
