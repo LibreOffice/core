@@ -525,7 +525,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
             }
             else
             {
-                OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                const OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
                 GetMedium()->SwitchDocumentToFile( GetSharedFileURL() );
                 (pImpl->m_aSharedFileURL).clear();
 
@@ -769,7 +769,7 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
         return aNoName;
     }
 
-    const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : OUString( GetMedium()->GetName() ) );
+    const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : GetMedium()->GetName() );
     if ( nMaxLength > SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
     {
         sal_uInt16 nRemote;
@@ -783,9 +783,8 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
     // Local file?
     if ( aURL.GetProtocol() == INetProtocol::File )
     {
-        OUString aName( aURL.HasMark() ? INetURLObject( aURL.GetURLNoMark() ).PathToFileName() : aURL.PathToFileName() );
         if ( nMaxLength == SFX_TITLE_FULLNAME )
-            return aName;
+            return aURL.HasMark() ? INetURLObject( aURL.GetURLNoMark() ).PathToFileName() : aURL.PathToFileName();
         else if ( nMaxLength == SFX_TITLE_FILENAME )
             return aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
         else if ( pImpl->aTitle.isEmpty() )
@@ -796,23 +795,16 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
     {
         if ( nMaxLength >= SFX_TITLE_MAXLEN )
         {
-            OUString aComplete( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            const OUString aComplete( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if( aComplete.getLength() > nMaxLength )
-            {
-                OUString aRet( "..." );
-                aRet += aComplete.copy( aComplete.getLength() - nMaxLength + 3, nMaxLength - 3 );
-                return aRet;
-            }
+                return "..." + aComplete.copy( aComplete.getLength() - nMaxLength + 3, nMaxLength - 3 );
             else
                 return aComplete;
         }
         else if ( nMaxLength == SFX_TITLE_FILENAME )
         {
-            OUString aName( aURL.GetBase() );
-            aName = INetURLObject::decode( aName, INetURLObject::DecodeMechanism::WithCharset );
-            if( aName.isEmpty() )
-                aName = aURL.GetURLNoPass();
-            return aName;
+            const OUString aName = INetURLObject::decode( aURL.GetBase(), INetURLObject::DecodeMechanism::WithCharset );
+            return aName.isEmpty() ? aURL.GetURLNoPass() : aName;
         }
         else if ( nMaxLength == SFX_TITLE_FULLNAME )
             return aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
@@ -1051,13 +1043,12 @@ void SfxObjectShell::InitOwnModel_Impl()
         uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
         if ( xModel.is() )
         {
-            OUString aURL = GetMedium()->GetOrigURL();
             SfxItemSet *pSet = GetMedium()->GetItemSet();
             if ( !GetMedium()->IsReadOnly() )
                 pSet->ClearItem( SID_INPUTSTREAM );
             uno::Sequence< beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
-            xModel->attachResource( aURL, aArgs );
+            xModel->attachResource( GetMedium()->GetOrigURL(), aArgs );
             impl_addToModelCollection(xModel);
         }
 
@@ -1109,7 +1100,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         pImpl->nFlagsInProgress |= SfxLoadedFlags::IMAGES;
         uno::Reference<document::XDocumentProperties> xDocProps(
             getDocProperties());
-        OUString url(xDocProps->getAutoloadURL());
+        const OUString url(xDocProps->getAutoloadURL());
         sal_Int32 delay(xDocProps->getAutoloadSecs());
         SetAutoLoad( INetURLObject(url), delay * 1000,
                      (delay > 0) || !url.isEmpty() );
@@ -1169,7 +1160,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
     SfxMedium* pTmpMedium = pMedium;
     if ( pTmpMedium )
     {
-        OUString aName( pTmpMedium->GetName() );
+        const OUString aName( pTmpMedium->GetName() );
         const SfxStringItem* pTemplNamItem = SfxItemSet::GetItem<SfxStringItem>(pTmpMedium->GetItemSet(), SID_TEMPLATE_NAME, false);
         OUString aTemplateName;
         if ( pTemplNamItem )
@@ -1471,7 +1462,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
     if( rKV.GetKey().equalsIgnoreAsciiCase("refresh") && !rKV.GetValue().isEmpty() )
     {
         sal_uInt32 nTime = aValue.getToken(  0, ';' ).toInt32() ;
-        OUString aURL = comphelper::string::strip(aValue.getToken( 1, ';' ), ' ');
+        const OUString aURL = comphelper::string::strip(aValue.getToken( 1, ';' ), ' ');
         uno::Reference<document::XDocumentProperties> xDocProps(
             pDoc->getDocProperties());
         if( aURL.startsWithIgnoreAsciiCase( "url=" ) )
@@ -1544,8 +1535,7 @@ bool SfxObjectShell::IsPreview() const
     if ( pFlags )
     {
         // Distributed values among individual items
-        OUString aFileFlags = pFlags->GetValue();
-        aFileFlags = aFileFlags.toAsciiUpperCase();
+        const OUString aFileFlags = pFlags->GetValue().toAsciiUpperCase();
         if ( -1 != aFileFlags.indexOf( 'B' ) )
             bPreview = true;
     }
@@ -1573,7 +1563,7 @@ void SfxObjectShell::SetWaitCursor( bool bSet ) const
 
 OUString SfxObjectShell::GetAPIName() const
 {
-    INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : OUString( GetMedium()->GetName() ) );
+    INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : GetMedium()->GetName() );
     OUString aName( aURL.GetBase() );
     if( aName.isEmpty() )
         aName = aURL.GetURLNoPass();
