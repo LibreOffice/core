@@ -961,6 +961,11 @@
           <value xml:lang="en-US">Hide All Comments</value>
         </prop>
       </node>
+      <node oor:name=".uno:DeleteAllNotes" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Delete All Comments</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertAnnotation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Comm~ent</value>

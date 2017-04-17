@@ -2379,6 +2379,23 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         }
         break;
 
+        case FID_DELETE_ALL_NOTES:
+            {
+                ScViewData* pData  = GetViewData();
+                ScMarkData& rMark  = pData->GetMarkData();
+                ScMarkData  aNewMark;
+                ScRangeList aRangeList;
+
+                for (auto const& rTab : rMark.GetSelectedTabs())
+                {
+                    aRangeList.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+                }
+
+                aNewMark.MarkFromRangeList( aRangeList, true );
+                pData->GetDocShell()->GetDocFunc().DeleteContents(aNewMark, InsertDeleteFlags::NOTE, true, false );
+            }
+            break;
+
         case SID_CHARMAP:
             if( pReqArgs != nullptr )
             {

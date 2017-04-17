@@ -1045,6 +1045,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_SHOW_ALL_NOTES:
             case FID_HIDE_ALL_NOTES:
+            case FID_DELETE_ALL_NOTES:
                 {
                     bool bHasNotes = false;
                     for (auto const& rTab : rMark.GetSelectedTabs())

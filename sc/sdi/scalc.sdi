@@ -3634,6 +3634,24 @@ SfxVoidItem HideAllNotes FID_HIDE_ALL_NOTES
     GroupId = GID_VIEW;
 ]
 
+SfxVoidItem DeleteAllNotes FID_DELETE_ALL_NOTES
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
 SfxVoidItem DeleteNote SID_DELETE_NOTE
 (SvxPostItIdItem Id SID_ATTR_POSTIT_ID)
 [
