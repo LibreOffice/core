@@ -1584,33 +1584,49 @@ function configureDetectionTools()
                         this._skipOptionalSpaces();
                         return new SVGPathSegClosePath(owningPathSegList);
                     case SVGPathSeg.PATHSEG_CURVETO_CUBIC_REL:
-                        var points = {x1: this._parseNumber(), y1: this._parseNumber(), x2: this._parseNumber(), y2: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
+                    {
+                        const points = {x1: this._parseNumber(), y1: this._parseNumber(), x2: this._parseNumber(), y2: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
                         return new SVGPathSegCurvetoCubicRel(owningPathSegList, points.x, points.y, points.x1, points.y1, points.x2, points.y2);
+                    }
                     case SVGPathSeg.PATHSEG_CURVETO_CUBIC_ABS:
-                        var points = {x1: this._parseNumber(), y1: this._parseNumber(), x2: this._parseNumber(), y2: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
+                    {
+                        const points = {x1: this._parseNumber(), y1: this._parseNumber(), x2: this._parseNumber(), y2: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
                         return new SVGPathSegCurvetoCubicAbs(owningPathSegList, points.x, points.y, points.x1, points.y1, points.x2, points.y2);
+                    }
                     case SVGPathSeg.PATHSEG_CURVETO_CUBIC_SMOOTH_REL:
-                        var points = {x2: this._parseNumber(), y2: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
+                    {
+                        const points = {x2: this._parseNumber(), y2: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
                         return new SVGPathSegCurvetoCubicSmoothRel(owningPathSegList, points.x, points.y, points.x2, points.y2);
+                    }
                     case SVGPathSeg.PATHSEG_CURVETO_CUBIC_SMOOTH_ABS:
-                        var points = {x2: this._parseNumber(), y2: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
+                    {
+                        const points = {x2: this._parseNumber(), y2: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
                         return new SVGPathSegCurvetoCubicSmoothAbs(owningPathSegList, points.x, points.y, points.x2, points.y2);
+                    }
                     case SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_REL:
-                        var points = {x1: this._parseNumber(), y1: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
+                    {
+                        const points = {x1: this._parseNumber(), y1: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
                         return new SVGPathSegCurvetoQuadraticRel(owningPathSegList, points.x, points.y, points.x1, points.y1);
+                    }
                     case SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_ABS:
-                        var points = {x1: this._parseNumber(), y1: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
+                    {
+                        const points = {x1: this._parseNumber(), y1: this._parseNumber(), x: this._parseNumber(), y: this._parseNumber()};
                         return new SVGPathSegCurvetoQuadraticAbs(owningPathSegList, points.x, points.y, points.x1, points.y1);
+                    }
                     case SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL:
                         return new SVGPathSegCurvetoQuadraticSmoothRel(owningPathSegList, this._parseNumber(), this._parseNumber());
                     case SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS:
                         return new SVGPathSegCurvetoQuadraticSmoothAbs(owningPathSegList, this._parseNumber(), this._parseNumber());
                     case SVGPathSeg.PATHSEG_ARC_REL:
-                        var points = {x1: this._parseNumber(), y1: this._parseNumber(), arcAngle: this._parseNumber(), arcLarge: this._parseArcFlag(), arcSweep: this._parseArcFlag(), x: this._parseNumber(), y: this._parseNumber()};
+                    {
+                        const points = {x1: this._parseNumber(), y1: this._parseNumber(), arcAngle: this._parseNumber(), arcLarge: this._parseArcFlag(), arcSweep: this._parseArcFlag(), x: this._parseNumber(), y: this._parseNumber()};
                         return new SVGPathSegArcRel(owningPathSegList, points.x, points.y, points.x1, points.y1, points.arcAngle, points.arcLarge, points.arcSweep);
+                    }
                     case SVGPathSeg.PATHSEG_ARC_ABS:
-                        var points = {x1: this._parseNumber(), y1: this._parseNumber(), arcAngle: this._parseNumber(), arcLarge: this._parseArcFlag(), arcSweep: this._parseArcFlag(), x: this._parseNumber(), y: this._parseNumber()};
+                    {
+                        const points = {x1: this._parseNumber(), y1: this._parseNumber(), arcAngle: this._parseNumber(), arcLarge: this._parseArcFlag(), arcSweep: this._parseArcFlag(), x: this._parseNumber(), y: this._parseNumber()};
                         return new SVGPathSegArcAbs(owningPathSegList, points.x, points.y, points.x1, points.y1, points.arcAngle, points.arcLarge, points.arcSweep);
+                    }
                     default:
                         throw 'Unknown path seg type.'
                 }
@@ -5150,41 +5166,39 @@ var DIAGONALTOPLEFT_TRANS_SUBTYPE               = 48; // 16
 var CENTERTOP_TRANS_SUBTYPE                     = 49; // 48
 var CENTERRIGHT_TRANS_SUBTYPE                   = 50; // 49
 var TOP_TRANS_SUBTYPE                           = 51; // 50
-var RIGHT_TRANS_SUBTYPE                         = 52; // 22
-var BOTTOM_TRANS_SUBTYPE                        = 53; // 52
-var LEFT_TRANS_SUBTYPE                          = 54; // 20
-var CLOCKWISETOP_TRANS_SUBTYPE                  = 55; // 40
-var CLOCKWISERIGHT_TRANS_SUBTYPE                = 56; // 41
-var CLOCKWISEBOTTOM_TRANS_SUBTYPE               = 57; // 42
-var CLOCKWISELEFT_TRANS_SUBTYPE                 = 58; // 43
-var CLOCKWISETOPLEFT_TRANS_SUBTYPE              = 59; // 44
-var COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE    = 60; // 45
-var CLOCKWISEBOTTOMRIGHT_TRANS_SUBTYPE          = 61; // 46
-var COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE      = 62; // 47
-var VERTICALLEFT_TRANS_SUBTYPE                  = 63; // 93
-var VERTICALRIGHT_TRANS_SUBTYPE                 = 64; // 94
-var HORIZONTALLEFT_TRANS_SUBTYPE                = 65; // 95
-var HORIZONTALRIGHT_TRANS_SUBTYPE               = 66; // 96
-var TOPLEFTCLOCKWISE_TRANS_SUBTYPE              = 67; // 69
-var TOPRIGHTCLOCKWISE_TRANS_SUBTYPE             = 68; // 70
-var BOTTOMRIGHTCLOCKWISE_TRANS_SUBTYPE          = 69; // 71
-var BOTTOMLEFTCLOCKWISE_TRANS_SUBTYPE           = 70; // 72
-var TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE       = 71; // 73
-var TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE      = 72; // 74
-var BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE   = 73; // 75
-var BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE    = 74; // 76
-var DOUBLEBARNDOOR_TRANS_SUBTYPE                = 75; // 17
-var DOUBLEDIAMOND_TRANS_SUBTYPE                 = 76; // 18
-var VERTICALTOPSAME_TRANS_SUBTYPE               = 77; // 77
-var VERTICALBOTTOMSAME_TRANS_SUBTYPE            = 78; // 78
-var VERTICALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 79; // 79
-var VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 80; // 80
-var HORIZONTALLEFTSAME_TRANS_SUBTYPE            = 81; // 81
-var HORIZONTALRIGHTSAME_TRANS_SUBTYPE           = 82; // 82
-var HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE     = 83; // 83
-var HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE    = 84; // 84
-var DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 85; // 85
-var DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 86; // 86
+var BOTTOM_TRANS_SUBTYPE                        = 52; // 52
+var CLOCKWISETOP_TRANS_SUBTYPE                  = 53; // 40
+var CLOCKWISERIGHT_TRANS_SUBTYPE                = 54; // 41
+var CLOCKWISEBOTTOM_TRANS_SUBTYPE               = 55; // 42
+var CLOCKWISELEFT_TRANS_SUBTYPE                 = 56; // 43
+var CLOCKWISETOPLEFT_TRANS_SUBTYPE              = 57; // 44
+var COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE    = 58; // 45
+var CLOCKWISEBOTTOMRIGHT_TRANS_SUBTYPE          = 59; // 46
+var COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE      = 60; // 47
+var VERTICALLEFT_TRANS_SUBTYPE                  = 61; // 93
+var VERTICALRIGHT_TRANS_SUBTYPE                 = 62; // 94
+var HORIZONTALLEFT_TRANS_SUBTYPE                = 63; // 95
+var HORIZONTALRIGHT_TRANS_SUBTYPE               = 64; // 96
+var TOPLEFTCLOCKWISE_TRANS_SUBTYPE              = 65; // 69
+var TOPRIGHTCLOCKWISE_TRANS_SUBTYPE             = 66; // 70
+var BOTTOMRIGHTCLOCKWISE_TRANS_SUBTYPE          = 67; // 71
+var BOTTOMLEFTCLOCKWISE_TRANS_SUBTYPE           = 68; // 72
+var TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE       = 69; // 73
+var TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE      = 70; // 74
+var BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE   = 71; // 75
+var BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE    = 72; // 76
+var DOUBLEBARNDOOR_TRANS_SUBTYPE                = 73; // 17
+var DOUBLEDIAMOND_TRANS_SUBTYPE                 = 74; // 18
+var VERTICALTOPSAME_TRANS_SUBTYPE               = 75; // 77
+var VERTICALBOTTOMSAME_TRANS_SUBTYPE            = 76; // 78
+var VERTICALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 77; // 79
+var VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 78; // 80
+var HORIZONTALLEFTSAME_TRANS_SUBTYPE            = 79; // 81
+var HORIZONTALRIGHTSAME_TRANS_SUBTYPE           = 80; // 82
+var HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE     = 81; // 83
+var HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE    = 82; // 84
+var DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 83; // 85
+var DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 84; // 86
 
 var aTransitionSubtypeInMap = {
     'default'                       : DEFAULT_TRANS_SUBTYPE,
@@ -10524,7 +10538,7 @@ SnakeWipePath.prototype.calcHalfDiagonalSnake = function(nT, bIn) {
             aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
             aPoint.x = 0.0;
             aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-            var poly = document.createElementNS( NSS['svg'], 'path');
+            const poly = document.createElementNS( NSS['svg'], 'path');
             poly.setAttribute('d', aPath);
             res.appendPath(poly);
         }
@@ -10541,9 +10555,9 @@ SnakeWipePath.prototype.calcHalfDiagonalSnake = function(nT, bIn) {
         aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
         aPoint.x = 0.0;
         aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-        var poly = document.createElementNS( NSS['svg'], 'path');
+        const poly = document.createElementNS( NSS['svg'], 'path');
         poly.setAttribute('d', aPath);
-        var aTransform;
+        let aTransform;
 
         if((Math.floor(sqrtArea2) & 1) == 1) {
             // odd line
@@ -10563,7 +10577,7 @@ SnakeWipePath.prototype.calcHalfDiagonalSnake = function(nT, bIn) {
         const sqrtArea2 = Math.sqrt(nT * this.sqrtElements * this.sqrtElements);
         const edge = pruneScaleValue(Math.floor(sqrtArea2)/this.sqrtElements);
 
-        var aPath, aPoint = document.documentElement.createSVGPoint();
+        let aPath, aPoint = document.documentElement.createSVGPoint();
         if(edge != 0) {
             aPoint.y = 1.0;
             aPath = 'M ' + aPoint.x + ' ' + aPoint.y + ' ';
@@ -10576,7 +10590,7 @@ SnakeWipePath.prototype.calcHalfDiagonalSnake = function(nT, bIn) {
             aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
             aPoint.x = 0.0;
             aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-            var poly = document.createElementNS( NSS['svg'], 'path');
+            const poly = document.createElementNS( NSS['svg'], 'path');
             poly.setAttribute('d', aPath);
             res.appendPath(poly);
         }
@@ -10593,9 +10607,9 @@ SnakeWipePath.prototype.calcHalfDiagonalSnake = function(nT, bIn) {
         aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
         aPoint.x = 0.0;
         aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-        var poly = document.createElementNS( NSS['svg'], 'path');
+        const poly = document.createElementNS( NSS['svg'], 'path');
         poly.setAttribute('d', aPath);
-        var aTransform;
+        let aTransform;
 
         if((Math.floor(sqrtArea2) & 1) == 1) {
             // odd line
