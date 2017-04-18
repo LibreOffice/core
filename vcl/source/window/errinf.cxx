@@ -39,7 +39,7 @@ public:
     bool                        bIsWindowDsp;
 
     DynamicErrorInfo*           ppDynErrInfo[ERRCODE_DYNAMIC_COUNT];
-    sal_uInt16                  nNextDcr;
+    sal_uInt16                  nNextError;
                                 ErrorRegistry();
 };
 
@@ -50,8 +50,8 @@ class DynamicErrorInfo_Impl
     ErrCode                     lErrId;
     DialogMask           nMask;
 
-    void                        RegisterEDcr(DynamicErrorInfo *);
-    static void                 UnRegisterEDcr(DynamicErrorInfo const *);
+    void                        RegisterError(DynamicErrorInfo *);
+    static void                 UnRegisterError(DynamicErrorInfo const *);
     static ErrorInfo*           GetDynamicErrorInfo(sal_uInt32 lId);
 
 friend class DynamicErrorInfo;
@@ -61,33 +61,34 @@ friend class ErrorInfo;
 ErrorRegistry::ErrorRegistry()
     : pDsp(nullptr)
     , bIsWindowDsp(false)
-    , nNextDcr(0)
+    , nNextError(0)
 {
     for(DynamicErrorInfo*& rp : ppDynErrInfo)
         rp = nullptr;
 }
 
-void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDynErrInfo)
+void DynamicErrorInfo_Impl::RegisterError(DynamicErrorInfo *pDynErrInfo)
 {
     // Register dynamic identifier
     ErrorRegistry& rData = TheErrorRegistry::get();
-    lErrId = (((sal_uIntPtr)rData.nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
+    lErrId = (((sal_uInt32)rData.nNextError + 1) << ERRCODE_DYNAMIC_SHIFT) +
              pDynErrInfo->GetErrorCode();
 
-    if(rData.ppDynErrInfo[rData.nNextDcr])
+    if(rData.ppDynErrInfo[rData.nNextError])
     {
-        delete rData.ppDynErrInfo[rData.nNextDcr];
+        delete rData.ppDynErrInfo[rData.nNextError];
     }
-    rData.ppDynErrInfo[rData.nNextDcr] = pDynErrInfo;
-    if(++rData.nNextDcr>=ERRCODE_DYNAMIC_COUNT)
-        rData.nNextDcr=0;
+    rData.ppDynErrInfo[rData.nNextError] = pDynErrInfo;
+    if(++rData.nNextError>=ERRCODE_DYNAMIC_COUNT)
+        rData.nNextError=0;
 }
 
-void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo const *pDynErrInfo)
+void DynamicErrorInfo_Impl::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
 {
     DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
-    sal_uIntPtr lIdx = (((sal_uIntPtr)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
-    DBG_ASSERT(ppDynErrInfo[lIdx]==pDynErrInfo, "ErrHdl: Error not found");
+    sal_uInt32 lIdx = (((sal_uIntPtr)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
+    DBG_ASSERT(ppDynErrInfo[lIdx] == pDynErrInfo, "ErrHdl: Error not found");
+
     if(ppDynErrInfo[lIdx]==pDynErrInfo)
         ppDynErrInfo[lIdx]=nullptr;
 }
@@ -114,20 +115,20 @@ DynamicErrorInfo::DynamicErrorInfo(sal_uInt32 lArgUserId, DialogMask nMask)
 : ErrorInfo(lArgUserId),
   pImpl(new DynamicErrorInfo_Impl)
 {
-    pImpl->RegisterEDcr(this);
+    pImpl->RegisterError(this);
     pImpl->nMask=nMask;
 }
 
 DynamicErrorInfo::~DynamicErrorInfo()
 {
-    DynamicErrorInfo_Impl::UnRegisterEDcr(this);
+    DynamicErrorInfo_Impl::UnRegisterError(this);
 }
 
 ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uInt32 lId)
 {
-    sal_uIntPtr lIdx = ((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
+    sal_uInt32 lIdx = ((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[lIdx];
-    if(pDynErrInfo && (sal_uIntPtr)(*pDynErrInfo)==lId)
+    if(pDynErrInfo && (sal_uInt32)(*pDynErrInfo)==lId)
         return pDynErrInfo;
     else
         return new ErrorInfo(lId & ~ERRCODE_DYNAMIC_MASK);
@@ -250,11 +251,13 @@ DialogMask ErrorHandler::HandleError_Impl(
         rData.contexts.front()->GetString(pInfo->GetErrorCode(), aAction);
         // Remove parent from context
         for(ErrorContext *pCtx : rData.contexts)
+        {
             if(pCtx->GetParent())
             {
                 pParent=pCtx->GetParent();
                 break;
             }
+        }
     }
 
     bool bWarning = ((nErrCodeId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
