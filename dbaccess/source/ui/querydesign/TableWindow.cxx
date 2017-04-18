@@ -585,13 +585,10 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                         ptWhere = m_xTitle->GetPosPixel();
                 }
 
-                ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_MENU_JOINVIEW_TABLE));
-                switch (aContextMenu->Execute(this, ptWhere))
-                {
-                    case SID_DELETE:
-                        Remove();
-                        break;
-                }
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/jointablemenu.ui", "");
+                VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                if (aContextMenu->Execute(this, ptWhere))
+                    Remove();
             }
             break;
         }

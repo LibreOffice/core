@@ -21,19 +21,6 @@
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
 
-Menu RID_MENU_JOINVIEW_TABLE
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_DELETE ;
-            Command = ".uno:Delete" ;
-            Text [ en-US ] = "~Delete" ;
-        };
-     };
-};
-
 Bitmap BMP_PRIMARY_KEY
 {
     File = "jo01.png";
