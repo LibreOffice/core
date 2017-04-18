@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_99d8de1f",
+        "filename": "i18npool/source/localedata/data/hr_HR.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T16:57:14Z",
+      "side": 1,
+      "message": "Please no trailing blanks.",
+      "revId": "43e095a2e511ef5f3f2522ff19ff2e0fa8d03e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_79db321c",
+        "filename": "i18npool/source/localedata/data/hr_HR.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T16:57:14Z",
+      "side": 1,
+      "message": "Never use a sequence of -- within an HTML or XML comment. Mostly unknown, but technically a plain -- ends a comment, the optional trailing \u003e to form --\u003e is only for cosmetics and to enable editors to jump between matching brackets. Actually this is the reason why the saxparser fails the build (although it should gracefully exit instead of dumping core).",
+      "revId": "43e095a2e511ef5f3f2522ff19ff2e0fa8d03e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_19eceec6",
+        "filename": "i18npool/source/localedata/data/hr_HR.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T16:57:14Z",
+      "side": 1,
+      "message": "It would be most helpful to others if comments were in English instead of a local language. Also note that if some automation processes the file, comments may be lost. It may be better to add relevant information, like what has been changed why, as part of the commit message instead. Last but not least, we don\u0027t use tabs for indentation but spaces instead, which don\u0027t depend on individual tab width settings.",
+      "revId": "43e095a2e511ef5f3f2522ff19ff2e0fa8d03e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
