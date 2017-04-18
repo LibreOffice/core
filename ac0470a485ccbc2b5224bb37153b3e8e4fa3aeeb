@@ -1,0 +1,249 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_f9d002cc",
+        "filename": "cui/source/options/optlingu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "aRes.reserve(nLen) to avoid reallocation.",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_593cb62f",
+        "filename": "i18nlangtag/source/isolang/isolang.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "Ugh.. this all is ugly, but specifically the define that is longer than the word kSAME is.. I\u0027d prefer\n\n static const LanguageType k0(0)\n\ninstead, so any other value visually sticks out immediately.",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f99e4206",
+        "filename": "i18nlangtag/source/isolang/isolang.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "This should use anyOf(), shouldn\u0027t it?",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_79fc123f",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "I\u0027d rather use LanguageType(0) here to clarify it\u0027s not any LCID.",
+      "range": {
+        "startLine": 101,
+        "startChar": 44,
+        "endLine": 101,
+        "endChar": 59
+      },
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_39028a3f",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "See comment in include/i18nlangtag/lang.h why this is unnecessary if the defines are not LT() there.",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_99f9be50",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "LanguageType(0)",
+      "range": {
+        "startLine": 120,
+        "startChar": 23,
+        "endLine": 120,
+        "endChar": 38
+      },
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b994bae8",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "LanguageType(0)",
+      "range": {
+        "startLine": 646,
+        "startChar": 27,
+        "endLine": 646,
+        "endChar": 42
+      },
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b9111ab2",
+        "filename": "include/i18nlangtag/lang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s a good idea to have a global define of only two characters LT in a header file that is included about ~everywhere.",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d9f2666f",
+        "filename": "include/i18nlangtag/lang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "Actually these four defines are not LanguageType values, but primary and sublanguage values. Not defining them as LT() also eliminates the need to cast them back to sal_uInt16 in i18nlangtag/source/languagetag/languagetag.cxx",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_792092f8",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "I\u0027d rather see\n\n return LocaleType(LANGUAGE_DONTKNOW);\n\nhere, or maybe better\n\n return LocaleType();\n\nwhich effectively is the same.",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_99745efe",
+        "filename": "svtools/source/misc/langtab.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "Defines starting with two underscores are reserved, aren\u0027t they? Why not keep the original?",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_195f8e73",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "Should be\n\n if (!rInstalledLanguageTypes.empty())",
+      "range": {
+        "startLine": 296,
+        "startChar": 9,
+        "endLine": 296,
+        "endChar": 39
+      },
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_794ed2c2",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:14:36Z",
+      "side": 1,
+      "message": "Do reserve(nCount) elements so it doesn\u0027t have to be reallocated while pushing elements.",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
