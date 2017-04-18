@@ -21,7 +21,6 @@
 #include <rtl/crc.h>
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
-#include <tools/rc.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>

@@ -24,15 +24,6 @@
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 
-void Resource::GetRes( const ResId& rResId )
-{
-    if( rResId.GetResMgr() )
-        m_pResMgr = rResId.GetResMgr();
-    assert(m_pResMgr);
-    m_pResMgr->GetResource( rResId, this );
-    IncrementRes( sizeof( RSHEADER_TYPE ) );
-}
-
 OUString ResId::toString() const
 {
     SetRT( RSC_STRING );

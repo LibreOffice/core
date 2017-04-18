@@ -21,9 +21,10 @@
 #include <rtl/strbuf.hxx>
 
 #include <o3tl/any.hxx>
-#include <tools/stream.hxx>
 #include <tools/debug.hxx>
-#include <tools/rc.h>
+#include <tools/rcid.h>
+#include <tools/resmgr.hxx>
+#include <tools/stream.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>

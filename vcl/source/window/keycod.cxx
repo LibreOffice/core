@@ -24,8 +24,6 @@
 #include <vcl/window.hxx>
 #include <vcl/keycod.hxx>
 
-#include <tools/rc.h>
-
 static const sal_uInt16 aImplKeyFuncTab[(static_cast<int>(KeyFuncType::FRONT)+1)*4] =
 {
     0, 0, 0, 0,                                                    // KeyFuncType::DONTKNOW

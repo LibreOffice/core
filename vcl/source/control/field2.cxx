@@ -24,7 +24,6 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <tools/rc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>

@@ -20,7 +20,6 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <tools/rc.h>
 #include <tools/rc.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/settings.hxx>

@@ -27,38 +27,10 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Resource
 protected:
     ResMgr* m_pResMgr;
 
-    // Load a Resource
-    void                GetRes( const ResId& rResId );
-
     // check Resource state
 #ifdef DBG_UTIL
     void                TestRes();
 #endif
-
-    // Get a pointer to the Resource's data
-    void* GetClassRes()
-    { return m_pResMgr->GetClass(); }
-
-    // increase the memory pointer gotten by GetClassRes()
-    void IncrementRes( sal_uInt32 nBytes )
-    { m_pResMgr->Increment( nBytes ); }
-
-    // return the memory size of a Resource data block
-    static sal_uInt32   GetObjSizeRes( RSHEADER_TYPE * pHT )
-    { return ResMgr::GetObjSize( pHT ); }
-
-    // read a 32bit value from resource data and increment pointer
-    sal_Int32 ReadLongRes()
-    { return m_pResMgr->ReadLong(); }
-    // read a 16bit value from resource data and increment pointer
-    sal_Int16 ReadShortRes()
-    { return m_pResMgr->ReadShort(); }
-    // read a string from resource data and increment pointer
-    OUString ReadStringRes()
-    { return m_pResMgr->ReadString(); }
-    // read a byte string from resource data and increment pointer
-    OString ReadByteStringRes()
-    { return m_pResMgr->ReadByteString(); }
 
     // constructors
     Resource() : m_pResMgr( nullptr ) {}

@@ -282,7 +282,6 @@
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
-#include <tools/rc.h>
 #include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

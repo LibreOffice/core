@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 #include <rtl/strbuf.hxx>
-#include <tools/rc.h>
 
 #include <sal/types.h>
 #include <vcl/salgtype.hxx>

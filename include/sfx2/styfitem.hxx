@@ -24,7 +24,6 @@
 #include <sfx2/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
-#include <tools/rc.hxx>
 #include <tools/resary.hxx>
 #include <rsc/rscsfx.hxx>
 #include <vector>

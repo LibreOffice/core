@@ -26,7 +26,6 @@
 #include <rscclass.hxx>
 
 #include <tools/rcid.h>
-#include <tools/rc.h>
 
 RscClass::RscClass( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuperCl )
     : RscTop( nId, nTypeId, pSuperCl )

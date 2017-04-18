@@ -29,7 +29,6 @@
 #include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/rc.h>
 #include <tools/wintypes.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
 

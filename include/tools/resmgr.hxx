@@ -161,8 +161,6 @@ public:
 
     /// Return a string and its length out of the resource
     static sal_uInt32   GetString( OUString& rStr, const sal_uInt8* pStr );
-    /// Return a byte string and its length out of the resource
-    static sal_uInt32   GetByteString( OString& rStr, const sal_uInt8* pStr );
 
     /// Return the size of a string in the resource
     static sal_uInt32   GetStringSize( sal_uInt32 nLen )
@@ -179,16 +177,10 @@ public:
     /// Return a pointer to the resource
     void *              GetClass();
 
-    RSHEADER_TYPE *     CreateBlock( const ResId & rId );
-
-    sal_uInt32          GetRemainSize();
-
     const OUString& GetFileName() const;
 
-    sal_Int16           ReadShort();
     sal_Int32           ReadLong();
     OUString            ReadString();
-    OString             ReadByteString();
 
     static void         SetReadStringHook( ResHookProc pProc );
     static ResHookProc  GetReadStringHook();
