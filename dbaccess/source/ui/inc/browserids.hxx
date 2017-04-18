@@ -99,7 +99,6 @@
 #define ID_QUERY_TABLENAME                  (SID_SBA_START + 42) // show table name
 #define ID_QUERY_ALIASNAME                  (SID_SBA_START + 43) // show alias name
 #define ID_QUERY_DISTINCT                   (SID_SBA_START + 44) // show distinct
-#define ID_QUERY_EDIT_JOINCONNECTION        (SID_SBA_START + 45) // show-edit Join
 #define ID_BROWSER_INSERT_ROW               (SID_SBA_START + 46) // insert row
 #define ID_QUERY_ZOOM_IN                    SID_ZOOM_IN
 #define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT

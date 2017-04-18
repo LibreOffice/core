@@ -21,25 +21,6 @@
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
 
-Menu RID_MENU_JOINVIEW_CONNECTION
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_DELETE ;
-            Command = ".uno:Delete" ;
-            Text [ en-US ] = "~Delete" ;
-        };
-        MenuItem
-        {
-            Identifier = ID_QUERY_EDIT_JOINCONNECTION;
-            HelpId = HID_QUERY_EDIT_JOINCONNECTION ;
-            Text [ en-US ] = "Edit...";
-        };
-    };
-};
-
 Menu RID_MENU_JOINVIEW_TABLE
 {
     ItemList =

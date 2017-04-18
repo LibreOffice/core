@@ -1129,16 +1129,14 @@ bool OJoinTableView::IsAddAllowed()
 
 void OJoinTableView::executePopup(const Point& _aPos, VclPtr<OTableConnection>& rSelConnection)
 {
-    ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_MENU_JOINVIEW_CONNECTION ) );
-    switch (aContextMenu->Execute(this, _aPos))
-    {
-        case SID_DELETE:
-            RemoveConnection(rSelConnection, true);
-            break;
-        case ID_QUERY_EDIT_JOINCONNECTION:
-            ConnDoubleClicked(rSelConnection); // is the same as double clicked
-            break;
-    }
+    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/joinviewmenu.ui", "");
+    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+    aContextMenu->Execute(this, _aPos);
+    OString sIdent = aContextMenu->GetCurItemIdent();
+    if (sIdent == "delete")
+        RemoveConnection(rSelConnection, true);
+    else if (sIdent == "edit")
+        ConnDoubleClicked(rSelConnection); // is the same as double clicked
 }
 
 void OJoinTableView::Command(const CommandEvent& rEvt)
