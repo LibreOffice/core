@@ -34,7 +34,6 @@ struct MenuItemData
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
     VclPtr<Menu>    pSubMenu;               // Pointer to SubMenu
-    VclPtr<Menu>    pAutoSubMenu;           // Pointer to SubMenu from Resource
     OUString        aText;                  // Menu-Text
     OUString        aHelpText;              // Help-String
     OUString        aTipHelpText;           // TipHelp-String (eg, expanded filenames)
@@ -60,7 +59,6 @@ struct MenuItemData
         , eType(MenuItemType::DONTKNOW)
         , nBits(MenuItemBits::NONE)
         , pSubMenu(nullptr)
-        , pAutoSubMenu(nullptr)
         , nUserValue(0)
         , aUserValueReleaseFunc(nullptr)
         , bChecked(false)
@@ -75,7 +73,6 @@ struct MenuItemData
         , eType(MenuItemType::DONTKNOW)
         , nBits(MenuItemBits::NONE)
         , pSubMenu(nullptr)
-        , pAutoSubMenu(nullptr)
         , aText(rStr)
         , nUserValue(0)
         , aUserValueReleaseFunc(nullptr)

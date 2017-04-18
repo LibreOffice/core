@@ -21,8 +21,8 @@
 
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 
+#include <tools/rcid.h>
 #include <tools/resmgr.hxx>
-#include <tools/rc.h>
 #include <vcl/svapp.hxx>
 
 using namespace css;

@@ -56,11 +56,6 @@ RscArray::~RscArray()
 {
 }
 
-RSCCLASS_TYPE RscArray::GetClassType() const
-{
-    return RSCCLASS_ENUMARRAY;
-}
-
 RscTop * RscArray::GetTypeClass() const
 {
     return pTypeClass;
@@ -426,15 +421,6 @@ RscLangArray::RscLangArray( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuper,
                           RscEnum * pTypeCl )
     : RscArray( nId, nTypeId, pSuper, pTypeCl )
 {
-}
-
-RSCCLASS_TYPE RscLangArray::GetClassType() const
-{
-    if( GetSuperClass() )
-        return GetSuperClass()->GetClassType();
-    else
-        return RscArray::GetClassType();
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

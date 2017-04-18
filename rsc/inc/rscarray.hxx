@@ -62,7 +62,6 @@ public:
                     RscArray( Atom nId, RESOURCE_TYPE nTypId,
                               RscTop * pSuper, RscEnum * pTypeClass );
                     virtual ~RscArray() override;
-    virtual RSCCLASS_TYPE   GetClassType() const override;
 
     virtual RscTop *    GetTypeClass() const override;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
@@ -96,7 +95,6 @@ class RscLangArray : public RscArray
 public:
                     RscLangArray( Atom nId, RESOURCE_TYPE nTypId,
                                   RscTop * pSuper, RscEnum * pTypeClass );
-    virtual RSCCLASS_TYPE   GetClassType() const override;
 };
 
 #endif // INCLUDED_RSC_INC_RSCARRAY_HXX

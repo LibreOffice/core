@@ -62,13 +62,6 @@ namespace o3tl {
     template<> struct typed_flags<CommandFlags> : is_typed_flags<CommandFlags, 0x327f> {};
 }
 
-
-/******************* T y p e s *******************************************/
-enum RSCCLASS_TYPE  { RSCCLASS_BOOL, RSCCLASS_STRING, RSCCLASS_NUMBER,
-                      RSCCLASS_CONST, RSCCLASS_COMPLEX, RSCCLASS_ENUMARRAY };
-
-typedef void (* VarEnumCallbackProc)( void * pData, RSCCLASS_TYPE, Atom );
-
 /******************* S t r u c t s ***************************************/
 struct RSCINST
 {

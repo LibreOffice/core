@@ -49,11 +49,6 @@ RscBaseCont::~RscBaseCont()
 {
 }
 
-RSCCLASS_TYPE RscBaseCont::GetClassType() const
-{
-    return RSCCLASS_COMPLEX;
-}
-
 void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
 {
     if( pClassData->nEntries )

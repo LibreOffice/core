@@ -38,7 +38,6 @@ protected:
 public:
                     RscConst( Atom nId, RESOURCE_TYPE nTypId );
                     virtual ~RscConst() override;
-    virtual RSCCLASS_TYPE   GetClassType() const override;
                     // sets the allowed values
     void            SetConstant( Atom nVarName, sal_Int32 lValue );
     bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;

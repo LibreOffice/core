@@ -102,12 +102,6 @@ ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
         return ERR_UNKNOWN_METHOD;
 }
 
-void RscTop::EnumVariables( void * pData, VarEnumCallbackProc pProc )
-{
-    if( pSuperClass )
-        pSuperClass->EnumVariables( pData, pProc );
-}
-
 RSCINST RscTop::GetVariable( const RSCINST & rInst,
                              Atom nVarName,
                              const RSCINST & rInitInst,

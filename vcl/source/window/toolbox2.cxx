@@ -21,7 +21,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <tools/rc.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>

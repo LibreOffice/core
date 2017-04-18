@@ -18,7 +18,6 @@
  */
 
 #include <tools/time.hxx>
-#include <tools/rc.h>
 
 #include <brdwin.hxx>
 #include <svdata.hxx>

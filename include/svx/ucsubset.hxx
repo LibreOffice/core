@@ -24,7 +24,6 @@
 
 #include <svx/ucsubset.hrc>
 #include <vcl/metric.hxx>
-#include "tools/rc.hxx"
 
 #include <list>
 

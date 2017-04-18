@@ -19,6 +19,7 @@
 
 #include <dialmgr.hxx>
 #include <svl/solar.hrc>
+#include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

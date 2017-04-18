@@ -57,7 +57,6 @@ $(eval $(call gb_Executable_add_exception_objects,rsc,\
 	rsc/source/res/rscclobj \
 	rsc/source/res/rscconst \
 	rsc/source/res/rsccont \
-	rsc/source/res/rscflag \
 	rsc/source/res/rscmgr \
 	rsc/source/res/rscrange \
 	rsc/source/res/rscstr \

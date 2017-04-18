@@ -19,7 +19,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/rc.h>
 #include <tools/stream.hxx>
 
 #include <vcl/svapp.hxx>
@@ -436,88 +435,6 @@ void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr,
 {
     InsertItem(nItemId, rStr, nItemBits, rIdent, nPos);
     SetItemImage( nItemId, rImage );
-}
-
-void Menu::InsertItem( const ResId& rResId )
-{
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( ! pMgr )
-        return;
-
-    RscMenuItem              nObjMask;
-
-    GetRes( rResId.SetRT( RSC_MENUITEM ) );
-    nObjMask    = (RscMenuItem)ReadLongRes();
-
-    bool bSep = false;
-    if ( nObjMask & RscMenuItem::Separator )
-        bSep = ReadShortRes() != 0;
-
-    sal_uInt16 nItemId = 1;
-    if ( nObjMask & RscMenuItem::Id )
-        nItemId = sal::static_int_cast<sal_uInt16>(ReadLongRes());
-
-    MenuItemBits nStatus = MenuItemBits::NONE;
-    if ( nObjMask & RscMenuItem::Status )
-        nStatus = sal::static_int_cast<MenuItemBits>(ReadLongRes());
-
-    OUString aText;
-    if ( nObjMask & RscMenuItem::Text )
-        aText = ReadStringRes();
-
-    // create item
-    if (!bSep)
-        InsertItem(nItemId, aText, nStatus);
-    else
-        InsertSeparator();
-
-    OUString aHelpText;
-    if ( nObjMask & RscMenuItem::HelpText )
-    {
-        aHelpText = ReadStringRes();
-        if( !bSep )
-            SetHelpText( nItemId, aHelpText );
-    }
-
-    if ( nObjMask & RscMenuItem::HelpId )
-    {
-        OString aHelpId( ReadByteStringRes() );
-        if ( !bSep )
-            SetHelpId( nItemId, aHelpId );
-    }
-
-    if( !bSep )
-        SetHelpText( nItemId, aHelpText );
-
-    if ( nObjMask & RscMenuItem::Disable )
-    {
-        if ( !bSep )
-            EnableItem( nItemId, ReadShortRes() == 0 );
-    }
-    if ( nObjMask & RscMenuItem::Command )
-    {
-        OUString aCommandStr = ReadStringRes();
-        if ( !bSep )
-            SetItemCommand( nItemId, aCommandStr );
-    }
-    if ( nObjMask & RscMenuItem::Menu )
-    {
-        if ( !bSep )
-        {
-            MenuItemData* pData = GetItemList()->GetData( nItemId );
-            if ( pData )
-            {
-                VclPtr<PopupMenu> pSubMenu = VclPtr<PopupMenu>::Create( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
-                pData->pAutoSubMenu = pSubMenu;
-                // #111060# keep track of this pointer, may be it will be deleted from outside
-                pSubMenu->pRefAutoSubMenu = &pData->pAutoSubMenu;
-                SetPopupMenu( nItemId, pSubMenu );
-            }
-        }
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-    }
-    delete mpLayoutData;
-    mpLayoutData = nullptr;
 }
 
 void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame)
@@ -2728,45 +2645,12 @@ MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
 }
 
 PopupMenu::PopupMenu()
-    : pRefAutoSubMenu(nullptr)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
-}
-
-PopupMenu::PopupMenu( const ResId& rResId )
-    : pRefAutoSubMenu(nullptr)
-{
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
-
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( ! pMgr )
-        return;
-
-    rResId.SetRT( RSC_MENU );
-    GetRes( rResId );
-
-    RscMenu nObjMask = (RscMenu)ReadLongRes();
-
-    if( nObjMask & RscMenu::Items )
-    {
-        sal_uLong nObjFollows = ReadLongRes();
-        // insert menu items
-        for( sal_uLong i = 0; i < nObjFollows; i++ )
-        {
-            InsertItem( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
-            IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-        }
-    }
-
-    if( nObjMask & RscMenu::Text )
-    {
-        aTitleText = ReadStringRes();
-    }
 }
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )
-    : Menu(),
-      pRefAutoSubMenu(nullptr)
+    : Menu()
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
     *this = rMenu;
@@ -2775,13 +2659,6 @@ PopupMenu::PopupMenu( const PopupMenu& rMenu )
 PopupMenu::~PopupMenu()
 {
     disposeOnce();
-}
-
-void PopupMenu::dispose()
-{
-    if( pRefAutoSubMenu && *pRefAutoSubMenu == this )
-        *pRefAutoSubMenu = nullptr;    // #111060# avoid second delete in ~MenuItemData
-    Menu::dispose();
 }
 
 void PopupMenu::ClosePopup(Menu* pMenu)

@@ -26,7 +26,6 @@
 #include <rscclass.hxx>
 
 #include <tools/rcid.h>
-#include <tools/rc.h>
 
 RscClass::RscClass( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuperCl )
     : RscTop( nId, nTypeId, pSuperCl )
@@ -59,11 +58,6 @@ RscClass::~RscClass()
 {
     if( pVarTypeList )
         rtl_freeMemory( static_cast<void *>(pVarTypeList) );
-}
-
-RSCCLASS_TYPE RscClass::GetClassType() const
-{
-    return RSCCLASS_COMPLEX;
 }
 
 RSCINST RscClass::GetInstData
@@ -260,18 +254,6 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
         RscExit( 16 );
     }
     return ERR_OK;
-}
-
-void RscClass::EnumVariables( void * pData, VarEnumCallbackProc pProc )
-{
-    sal_uInt32 i;
-
-    RscTop::EnumVariables( pData, pProc );
-    for( i = 0; i < nEntries; i ++ )
-    {
-        if( !(pVarTypeList[ i ].nVarType & RSCVAR::NoEnum) )
-            (*pProc)( pData, pVarTypeList[ i ].pClass->GetClassType(), pVarTypeList[ i ].nVarName );
-    }
 }
 
 RSCINST RscClass::GetVariable( const RSCINST & rInst,

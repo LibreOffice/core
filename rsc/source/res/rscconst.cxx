@@ -38,11 +38,6 @@ RscConst::~RscConst()
         rtl_freeMemory( static_cast<void *>(pVarArray) );
 }
 
-RSCCLASS_TYPE RscConst::GetClassType() const
-{
-    return RSCCLASS_CONST;
-}
-
 void RscConst::SetConstant( Atom nVarName, sal_Int32 lValue )
 {
     if( pVarArray )

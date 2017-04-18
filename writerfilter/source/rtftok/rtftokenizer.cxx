@@ -8,8 +8,9 @@
  */
 
 #include <rtftokenizer.hxx>
-#include <svx/dialogs.hrc>
+#include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/dialogs.hrc>
 #include <rtl/strbuf.hxx>
 #include <rtfskipdestination.hxx>
 #include <rtl/character.hxx>

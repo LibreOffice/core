@@ -21,7 +21,6 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
-#include <tools/rc.hxx>
 #include <vcl/region.hxx>
 #include <vcl/alpha.hxx>
 

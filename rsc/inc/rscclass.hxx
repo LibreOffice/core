@@ -57,14 +57,11 @@ public:
                     RscClass( Atom nId, RESOURCE_TYPE nTypId, RscTop * pSuperCl );
                     virtual ~RscClass() override;
 
-    virtual RSCCLASS_TYPE   GetClassType() const override;
-
     void            Pre_dtor() override;
     ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt = nullptr,
                                  RSCVAR nVarType = RSCVAR::NONE, sal_uInt32 nMask = 0,
                                  Atom nDataBaseName = InvalidAtom ) override;
-    virtual void    EnumVariables( void * pData, VarEnumCallbackProc ) override;
     RSCINST         GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
                                  bool bInitDflt = false,

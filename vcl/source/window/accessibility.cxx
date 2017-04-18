@@ -23,7 +23,6 @@
 
 #include "tools/time.hxx"
 #include "tools/debug.hxx"
-#include "tools/rc.h"
 
 #include "unotools/fontcfg.hxx"
 #include "unotools/confignode.hxx"

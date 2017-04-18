@@ -19,7 +19,6 @@
 
 #include <vcl/morebtn.hxx>
 
-#include <tools/rc.h>
 #include <vector>
 
 struct ImplMoreButtonData

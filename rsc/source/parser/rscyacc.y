@@ -25,7 +25,6 @@
 #include <string.h>
 
 #include <rtl/strbuf.hxx>
-#include <tools/rc.h>
 #include <rscerror.h>
 #include <rsctools.hxx>
 #include <rscclass.hxx>

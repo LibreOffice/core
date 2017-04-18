@@ -21,6 +21,7 @@
 
 #include "editeng/forbiddencharacterstable.hxx"
 #include "officecfg/Office/Common.hxx"
+#include <tools/resmgr.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>

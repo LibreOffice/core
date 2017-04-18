@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/resmgr.hxx>
 #include <svx/dialmgr.hxx>
 #include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
