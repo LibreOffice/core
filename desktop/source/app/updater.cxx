@@ -517,10 +517,10 @@ void update_checker()
         "/" + aBuildID + "/" + aBuildTarget + "/" + "/" + aChannel;
     OString aURL = OUStringToOString(aDownloadCheckURL, RTL_TEXTENCODING_UTF8);
 
-    std::string response_body = download_content(aURL, false);
 
     try
     {
+        std::string response_body = download_content(aURL, false);
         if (!response_body.empty())
         {
             update_info aUpdateInfo = parse_response(response_body);
