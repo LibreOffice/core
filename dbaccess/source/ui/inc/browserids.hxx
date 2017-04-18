@@ -96,8 +96,6 @@
 #define ID_BROWSER_ESCAPEPROCESSING         SID_FM_NATIVESQL
 
 #define ID_BROWSER_INSERT_ROW               (SID_SBA_START + 46) // insert row
-#define ID_QUERY_ZOOM_IN                    SID_ZOOM_IN
-#define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT
 
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_BROWSERIDS_HXX

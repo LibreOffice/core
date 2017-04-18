@@ -717,14 +717,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             {
             }
             break;
-        case ID_QUERY_ZOOM_IN:
-            {
-            }
-            break;
-        case ID_QUERY_ZOOM_OUT:
-            {
-            }
-            break;
 #if OSL_DEBUG_LEVEL > 0
         case ID_EDIT_QUERY_DESIGN:
         case ID_EDIT_QUERY_SQL:
