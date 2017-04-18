@@ -2340,13 +2340,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
                  pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
-                 SCTAB nFirstSelected = rMark.GetFirstSelected();
-                 SCTAB nLastSelected = rMark.GetLastSelected();
-
-                 for( SCTAB aTab = nFirstSelected; aTab<=nLastSelected; aTab++ )
+                 for (auto const& rTab : rMark.GetSelectedTabs())
                  {
-                     if (rMark.GetTableSelect(aTab))
-                         pDoc->GetAllNoteEntries(aTab, aNotes);
+                     pDoc->GetAllNoteEntries(rTab, aNotes);
                  }
 
                  for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
