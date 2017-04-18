@@ -4415,7 +4415,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ReviewSectio">
+                      <object class="sfxlo-DropdownBox" id="ReviewSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>

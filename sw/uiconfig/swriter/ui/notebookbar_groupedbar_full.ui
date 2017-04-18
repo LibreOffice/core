@@ -139,7 +139,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="OpneGroup1">
+                                  <object class="sfxlo-NotebookbarToolBox" id="OpenGroup1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
@@ -167,7 +167,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="sfxlo-NotebookbarToolBox" id="SavGroup1">
+                                  <object class="sfxlo-NotebookbarToolBox" id="SaveGroup1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
