@@ -33,7 +33,6 @@ ApiPro3;Writer/AmiPro_3x.sam;writer_Text_encoded:writer_Text;writer_Text_encoded
 Applix;Writer/Applix.aw;writer_Text_encoded:writer_Text;writer_Text_encoded:writer_Text
 Text2;Writer/Counterstrike I.txt;writer_Text_encoded:writer_Text;writer_Text_encoded:writer_Text
 FrameMake_document;Writer/FrameMaker.mif;writer_Text_encoded:writer_Text;writer_Text_encoded:writer_Text
-WordPro_Hangul;Writer/HangulWordPro.hwp;writer_Text_encoded:writer_Text;writer_Text_encoded:writer_Text
 Ichitaro;Writer/Ichitaro.jtd;writer_JustSystem_Ichitaro_10;writer_JustSystem_Ichitaro_10
 MacWord5_document;Writer/MacWord_5.mcw;writer_Text_encoded:writer_Text;writer_Text_encoded:writer_Text
 rtf2;Writer/RTF.rtf;writer_Rich_Text_Format;writer_Rich_Text_Format
