@@ -323,12 +323,6 @@ update_info parse_response(const std::string& rResponse)
         throw invalid_update_info();
     }
 
-    if (aRootKeys.size() != 5)
-    {
-        SAL_WARN("desktop.Update", "invalid root entries: " << rResponse);
-        throw invalid_update_info();
-    }
-
     orcus::json::detail::node aFromNode = aDocumentRoot.child("from");
     if (aFromNode.type() != orcus::json_node_t::string)
     {
