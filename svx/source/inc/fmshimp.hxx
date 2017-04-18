@@ -182,7 +182,7 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
     ::osl::Mutex    m_aInvalidationSafety;
         // secure the access to all our slot invalidation related members
 
-    css::form::NavigationBarMode   m_eNavigate;                // Art der Navigation
+    css::form::NavigationBarMode   m_eNavigate;                // kind of navigation
 
         // since I want to mark an SdrObject when searching for the treatment of the "found",
         // I get all relevant objects before yanking up of the search dialog
@@ -348,7 +348,7 @@ protected:
     SAL_DLLPRIVATE bool    impl_checkDisposed() const;
 
 public:
-    // methode fuer nicht designmode (alive mode)
+    // method for non design mode (alive mode)
     SAL_DLLPRIVATE void setActiveController( const css::uno::Reference< css::form::runtime::XFormController>& _xController, bool _bNoSaveOldContent = false );
     SAL_DLLPRIVATE const css::uno::Reference< css::form::runtime::XFormController>& getActiveController() const {return m_xActiveController;}
     SAL_DLLPRIVATE const css::uno::Reference< css::form::runtime::XFormController>& getActiveInternalController() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
