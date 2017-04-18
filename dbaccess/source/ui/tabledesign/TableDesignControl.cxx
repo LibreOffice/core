@@ -138,6 +138,8 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                     GoToRow( nRow );
                     SeekRow( nRow );
                 }
+
+                return;
             }
 
             SAL_FALLTHROUGH;
