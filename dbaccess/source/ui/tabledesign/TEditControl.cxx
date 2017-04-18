@@ -1372,15 +1372,16 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 }
                 else
                 {
-                    ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_TABLEDESIGNROWPOPUPMENU));
+                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/tabledesignrowmenu.ui", "");
+                    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
-                    aContextMenu->EnableItem( SID_CUT, IsCutAllowed(nRow) );
-                    aContextMenu->EnableItem( SID_COPY, IsCopyAllowed(nRow) );
-                    aContextMenu->EnableItem( SID_PASTE, IsPasteAllowed(nRow) );
-                    aContextMenu->EnableItem( SID_DELETE, IsDeleteAllowed(nRow) );
-                    aContextMenu->EnableItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, IsPrimaryKeyAllowed(nRow) );
-                    aContextMenu->EnableItem( SID_TABLEDESIGN_INSERTROWS, IsInsertNewAllowed(nRow) );
-                    aContextMenu->CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, IsRowSelected(GetCurRow()) && IsPrimaryKey() );
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), IsCutAllowed(nRow));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), IsCopyAllowed(nRow));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), IsPasteAllowed(nRow));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed(nRow));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("primarykey"), IsPrimaryKeyAllowed(nRow));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("insert"), IsInsertNewAllowed(nRow));
+                    aContextMenu->CheckItem(aContextMenu->GetItemId("primarykey"), IsRowSelected(GetCurRow()) && IsPrimaryKey());
 
                     // remove all the disable entries
                     aContextMenu->RemoveDisabledEntries(true, true);
@@ -1391,32 +1392,29 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     // All actions which change the number of rows must be run asynchronously
                     // otherwise there may be problems between the Context menu and the Browser
                     m_nDataPos = GetCurRow();
-                    switch (aContextMenu->Execute(this, aMenuPos))
+                    aContextMenu->Execute(this, aMenuPos);
+                    OString sIdent = aContextMenu->GetCurItemIdent();
+                    if (sIdent == "cut")
+                        cut();
+                    else if (sIdent == "copy")
+                        copy();
+                    else if (sIdent == "paste")
+                        paste();
+                    else if (sIdent == "delete")
                     {
-                        case SID_CUT:
-                            cut();
-                            break;
-                        case SID_COPY:
-                            copy();
-                            break;
-                        case SID_PASTE:
-                            paste();
-                            break;
-                        case SID_DELETE:
-                            if( nDeleteEvent )
-                                Application::RemoveUserEvent( nDeleteEvent );
-                            nDeleteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedDelete), nullptr, true );
-                            break;
-                        case SID_TABLEDESIGN_INSERTROWS:
-                            if( nInsNewRowsEvent )
-                                Application::RemoveUserEvent( nInsNewRowsEvent );
-                            nInsNewRowsEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedInsNewRows), nullptr, true );
-                            break;
-                        case SID_TABLEDESIGN_TABED_PRIMARYKEY:
-                            SetPrimaryKey( !IsPrimaryKey() );
-                            break;
-                        default:
-                            break;
+                        if( nDeleteEvent )
+                            Application::RemoveUserEvent( nDeleteEvent );
+                        nDeleteEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedDelete), nullptr, true );
+                    }
+                    else if (sIdent == "insert")
+                    {
+                        if( nInsNewRowsEvent )
+                            Application::RemoveUserEvent( nInsNewRowsEvent );
+                        nInsNewRowsEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, DelayedInsNewRows), nullptr, true );
+                    }
+                    else if (sIdent == "primarykey")
+                    {
+                        SetPrimaryKey( !IsPrimaryKey() );
                     }
                 }
             }

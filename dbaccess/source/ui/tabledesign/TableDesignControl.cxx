@@ -24,6 +24,7 @@
 #include "browserids.hxx"
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <vcl/builder.hxx>
 #include "dbaccess_helpid.hrc"
 
 using namespace ::dbaui;
@@ -108,38 +109,34 @@ void OTableRowView::Command(const CommandEvent& rEvt)
 
             if ( nColId == HANDLE_ID )
             {
-                ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_TABLEDESIGNROWPOPUPMENU));
+                VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
+                VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                 long nSelectRowCount = GetSelectRowCount();
-                aContextMenu->EnableItem( SID_CUT, nSelectRowCount != 0);
-                aContextMenu->EnableItem( SID_COPY, nSelectRowCount  != 0);
-                aContextMenu->EnableItem( SID_PASTE, false );
-                aContextMenu->EnableItem( SID_DELETE, false );
-                switch (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
+                aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), nSelectRowCount != 0);
+                aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), nSelectRowCount  != 0);
+                aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), false);
+                aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), false);
+                aContextMenu->Execute(this, rEvt.GetMousePosPixel());
+                OString sIdent = aContextMenu->GetCurItemIdent();
+                if (sIdent == "cut")
+                    cut();
+                else if (sIdent == "copy")
+                    copy();
+                else if (sIdent == "paste")
                 {
-                    case SID_CUT:
-                        cut();
-                        break;
-                    case SID_COPY:
-                        copy();
-                        break;
-                    case SID_PASTE:
-                        Paste( nRow );
-                        SetNoSelection();
-                        GoToRow( nRow );
-                        SeekRow( nRow );
-                        break;
-
-                    case SID_DELETE:
-                        DeleteRows();
-                        break;
-                    case SID_TABLEDESIGN_INSERTROWS:
-                        InsertNewRows( nRow );
-                        SetNoSelection();
-                        GoToRow( nRow );
-                        SeekRow( nRow );
-                        break;
-                    default:
-                        break;
+                    Paste( nRow );
+                    SetNoSelection();
+                    GoToRow( nRow );
+                    SeekRow( nRow );
+                }
+                else if (sIdent == "delete")
+                    DeleteRows();
+                else if (sIdent == "insert")
+                {
+                    InsertNewRows( nRow );
+                    SetNoSelection();
+                    GoToRow( nRow );
+                    SeekRow( nRow );
                 }
             }
 

@@ -88,54 +88,6 @@ String STR_TAB_PROPERTIES
     Text [ en-US ] = "Field Properties" ;
 };
 
-Menu RID_TABLEDESIGNROWPOPUPMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_CUT ;
-            Command = ".uno:Cut" ;
-            Text [ en-US ] = "Cu~t" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_COPY ;
-            Command = ".uno:Copy" ;
-            Text [ en-US ] = "~Copy" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_PASTE ;
-            Command = ".uno:Paste" ;
-            Text [ en-US ] = "~Paste" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_DELETE ;
-            Command = ".uno:Delete" ;
-            Text [ en-US ] = "~Delete" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_TABLEDESIGN_INSERTROWS ;
-            HelpID = HID_TABLEDESIGN_INSERTROWS ;
-            Text [ en-US ] = "Insert Rows" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
-            HelpID = HID_TABLEDESIGN_TABED_PRIMARYKEY ;
-            Checkable = TRUE ;
-            Text [ en-US ] = "Primary Key" ;
-        };
-    };
-};
-
 String STR_TABED_UNDO_CELLMODIFIED
 {
     Text [ en-US ] = "Modify cell" ;
