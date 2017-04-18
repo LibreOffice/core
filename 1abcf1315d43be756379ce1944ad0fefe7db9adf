@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_39b0ca8b",
+        "filename": "sc/source/core/data/document10.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T19:41:30Z",
+      "side": 1,
+      "message": "Actually handling cut mode here is unnecessary as we already bail out at the top of this function in that case.",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 5
+      },
+      "revId": "1abcf1315d43be756379ce1944ad0fefe7db9adf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
