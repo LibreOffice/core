@@ -31,6 +31,8 @@
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
+
+#include <memory>
 #include <utility>
 #include <vector>
 #include <tools/time.hxx>
@@ -214,17 +216,16 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() {
 
         // Here the cbIssuer count the last 0x00 , take care.
         if( cbIssuer != 0 ) {
-            char* issuer = new char[ cbIssuer ] ;
+            auto issuer = std::unique_ptr<char[]>(new char[ cbIssuer ]);
 
             cbIssuer = CertNameToStr(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
                 &( m_pCertContext->pCertInfo->Issuer ),
                 CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
-                issuer, cbIssuer
+                issuer.get(), cbIssuer
             ) ;
 
             if( cbIssuer <= 0 ) {
-                delete [] issuer ;
                 throw RuntimeException() ;
             }
 
@@ -234,9 +235,8 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() {
             osl_getProcessLocale( &pLocale ) ;
             encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
-            if(issuer[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
-            OUString xIssuer(issuer , cbIssuer ,encoding ) ;
-            delete [] issuer ;
+            if(issuer.get()[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
+            OUString xIssuer(issuer.get() , cbIssuer ,encoding ) ;
 
             return replaceTagSWithTagST(xIssuer);
         } else {
@@ -262,22 +262,21 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName()
 
         if( cbSubject != 0 )
         {
-            wchar_t* subject = new wchar_t[ cbSubject ] ;
+            auto subject = std::unique_ptr<wchar_t[]>(new wchar_t[ cbSubject ]);
 
             cbSubject = CertNameToStrW(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
                 &( m_pCertContext->pCertInfo->Subject ),
                 CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
-                subject, cbSubject
+                subject.get(), cbSubject
             ) ;
 
             if( cbSubject <= 0 ) {
-                delete [] subject ;
                 throw RuntimeException() ;
             }
 
-            OUString xSubject(reinterpret_cast<const sal_Unicode*>(subject));
-            delete [] subject ;
+            OUString xSubject(
+                reinterpret_cast<const sal_Unicode*>(subject.get()));
 
             return replaceTagSWithTagST(xSubject);
         } else
