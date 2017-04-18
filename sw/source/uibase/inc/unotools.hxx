@@ -56,24 +56,24 @@ class SwView;
 
 class SW_DLLPUBLIC SwOneExampleFrame
 {
-    css::uno::Reference< css::awt::XControl >         _xControl;
-    css::uno::Reference< css::frame::XModel >         _xModel;
-    css::uno::Reference< css::frame::XController >    _xController;
-    css::uno::Reference< css::text::XTextCursor >     _xCursor;
+    css::uno::Reference< css::awt::XControl >         m_xControl;
+    css::uno::Reference< css::frame::XModel >         m_xModel;
+    css::uno::Reference< css::frame::XController >    m_xController;
+    css::uno::Reference< css::text::XTextCursor >     m_xCursor;
 
-    VclPtr<SwFrameCtrlWindow> aTopWindow;
-    Idle            aLoadedIdle;
-    Link<SwOneExampleFrame&,void> aInitializedLink;
+    VclPtr<SwFrameCtrlWindow> m_aTopWindow;
+    Idle            m_aLoadedIdle;
+    Link<SwOneExampleFrame&,void> m_aInitializedLink;
 
-    ResStringArray  aMenuRes;
-    OUString        sArgumentURL;
+    ResStringArray  m_aMenuRes;
+    OUString        m_sArgumentURL;
 
-    SwView*         pModuleView;
+    SwView*         m_pModuleView;
 
-    sal_uInt32          nStyleFlags;
+    sal_uInt32          m_nStyleFlags;
 
-    bool            bIsInitialized;
-    bool            bServiceAvailable;
+    bool            m_bIsInitialized;
+    bool            m_bServiceAvailable;
 
     static  bool    bShowServiceNotAvailableMessage;
 
@@ -90,14 +90,14 @@ public:
                     const OUString* pURL = nullptr);
     ~SwOneExampleFrame();
 
-    css::uno::Reference< css::frame::XModel > &       GetModel()      {return _xModel;}
-    css::uno::Reference< css::frame::XController > &  GetController() {return _xController;}
-    css::uno::Reference< css::text::XTextCursor > &   GetTextCursor() {return _xCursor;}
+    css::uno::Reference< css::frame::XModel > &       GetModel()      {return m_xModel;}
+    css::uno::Reference< css::frame::XController > &  GetController() {return m_xController;}
+    css::uno::Reference< css::text::XTextCursor > &   GetTextCursor() {return m_xCursor;}
 
     void ClearDocument();
 
-    bool IsInitialized() const {return bIsInitialized;}
-    bool IsServiceAvailable() const {return bServiceAvailable;}
+    bool IsInitialized() const {return m_bIsInitialized;}
+    bool IsServiceAvailable() const {return m_bServiceAvailable;}
 
     void CreatePopup(const Point& rPt);
 
