@@ -18,7 +18,6 @@
  */
 
 #include <tools/debug.hxx>
-#include <tools/rc.h>
 
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>

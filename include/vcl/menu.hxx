@@ -22,8 +22,6 @@
 
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <tools/color.hxx>
-#include <tools/rc.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
@@ -122,7 +120,7 @@ struct MenuLogo
 
 typedef void (*MenuUserDataReleaseFunction)(sal_uLong);
 
-class VCL_DLLPUBLIC Menu : public Resource, public VclReferenceBase
+class VCL_DLLPUBLIC Menu : public VclReferenceBase
 {
     friend class MenuBar;
     friend class MenuBarWindow;
@@ -248,7 +246,6 @@ public:
                     MenuItemBits nItemBits = MenuItemBits::NONE,
                     const OString &rIdent = OString(),
                     sal_uInt16 nPos = MENU_APPEND);
-    void InsertItem(const ResId& rResId);
     void InsertItem(const OUString& rCommand,
                     const css::uno::Reference<css::frame::XFrame>& rFrame);
     void InsertSeparator(const OString &rIdent = OString(), sal_uInt16 nPos = MENU_APPEND);
@@ -491,8 +488,6 @@ class VCL_DLLPUBLIC PopupMenu : public Menu
     friend struct MenuItemData;
 
 private:
-    VclPtr<Menu>* pRefAutoSubMenu; // keeps track if a pointer to this Menu is stored in the MenuItemData
-
     SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
 
 protected:
@@ -504,9 +499,7 @@ protected:
 public:
     PopupMenu();
     PopupMenu( const PopupMenu& rMenu );
-    explicit PopupMenu( const ResId& );
     virtual ~PopupMenu() override;
-    virtual void dispose() override;
 
     virtual bool IsMenuBar() const override { return false; }
 

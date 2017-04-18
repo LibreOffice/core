@@ -21,8 +21,6 @@
 #include <tools/debug.hxx>
 #include <tools/bigint.hxx>
 
-#include <tools/rc.h>
-
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/longcurr.hxx>

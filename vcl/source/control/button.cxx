@@ -20,7 +20,6 @@
 #include <tools/debug.hxx>
 #include <tools/lineend.hxx>
 #include <tools/poly.hxx>
-#include <tools/rc.h>
 
 #include <vcl/image.hxx>
 #include <vcl/bitmap.hxx>

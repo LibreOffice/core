@@ -89,15 +89,12 @@ class RscTypCont
     RscTop *    InitClassMgr();
     RscTop *    InitClassString( RscTop * pSuper );
     RscTop *    InitClassBitmap( RscTop * pSuper );
-    RscTop *    InitClassMenuItem( RscTop * pSuper );
-    RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
 
 public:
     RscBool             aBool;
     RscRange            aShort;
     RscRange            aUShort;
     RscLongEnumRange    aEnumLong;
-    RscIdRange          aIdNoZeroUShort;
     RscString           aString;
     RscString           aStringLiteral;
     RscLangEnum         aLangType;

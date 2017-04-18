@@ -19,7 +19,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <tools/rc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
