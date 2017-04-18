@@ -3466,7 +3466,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                 {
                     if ( bStatic )
                     {
-                        pElem = StepSTATIC_Impl( aName, t );
+                        pElem = StepSTATIC_Impl( aName, t, 0 );
                     }
                     if ( !pElem )
                     {
@@ -4602,7 +4602,8 @@ void SbiRuntime::StepFIND_G( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 }
 
 
-SbxVariable* SbiRuntime::StepSTATIC_Impl( OUString& aName, SbxDataType& t )
+SbxVariable* SbiRuntime::StepSTATIC_Impl(
+    OUString& aName, SbxDataType& t, sal_uInt32 nOp2 )
 {
     SbxVariable* p = nullptr;
     if ( pMeth )
@@ -4616,6 +4617,7 @@ SbxVariable* SbiRuntime::StepSTATIC_Impl( OUString& aName, SbxDataType& t )
                 p->SetFlag( SbxFlagBits::Fixed );
             }
             p->SetName( aName );
+            implHandleSbxFlags( p, t, nOp2 );
             pStatics->Put( p, pStatics->Count() );
         }
     }
@@ -4625,8 +4627,8 @@ SbxVariable* SbiRuntime::StepSTATIC_Impl( OUString& aName, SbxDataType& t )
 void SbiRuntime::StepSTATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType) nOp2;
-    StepSTATIC_Impl( aName, t );
+    SbxDataType t = (SbxDataType) (nOp2 & 0xffff);
+    StepSTATIC_Impl( aName, t, nOp2 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
