@@ -45,11 +45,6 @@
 #define HID_QRYDGN_ROW_ALIAS                              "DBACCESS_HID_QRYDGN_ROW_ALIAS"
 #define HID_QRYDGN_ROW_CRIT                               "DBACCESS_HID_QRYDGN_ROW_CRIT"
 
-#define HID_QUERY_FUNCTION                                "DBACCESS_HID_QUERY_FUNCTION"
-#define HID_QUERY_TABLENAME                               "DBACCESS_HID_QUERY_TABLENAME"
-#define HID_QUERY_ALIASNAME                               "DBACCESS_HID_QUERY_ALIASNAME"
-#define HID_QUERY_DISTINCT                                "DBACCESS_HID_QUERY_DISTINCT"
-
 #define HID_TAB_DESIGN_FIELDCONTROL                       "DBACCESS_HID_TAB_DESIGN_FIELDCONTROL"
 #define HID_TABLE_DESIGN_HELP_WINDOW                      "DBACCESS_HID_TABLE_DESIGN_HELP_WINDOW"
 #define HID_TAB_DESIGN_DESCWIN                            "DBACCESS_HID_TAB_DESIGN_DESCWIN"

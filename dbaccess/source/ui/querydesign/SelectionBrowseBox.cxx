@@ -1953,31 +1953,36 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
             {
                 if (!static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
                 {
-                    ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_QUERYFUNCTION_POPUPMENU));
-                    aContextMenu->CheckItem( ID_QUERY_FUNCTION, m_bVisibleRow[BROW_FUNCTION_ROW]);
-                    aContextMenu->CheckItem( ID_QUERY_TABLENAME, m_bVisibleRow[BROW_TABLE_ROW]);
-                    aContextMenu->CheckItem( ID_QUERY_ALIASNAME, m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
-                    aContextMenu->CheckItem( ID_QUERY_DISTINCT, static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
+                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/queryfuncmenu.ui", "");
+                    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                    aContextMenu->CheckItem(aContextMenu->GetItemId("functions"), m_bVisibleRow[BROW_FUNCTION_ROW]);
+                    aContextMenu->CheckItem(aContextMenu->GetItemId("tablename"), m_bVisibleRow[BROW_TABLE_ROW]);
+                    aContextMenu->CheckItem(aContextMenu->GetItemId("alias"), m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
+                    aContextMenu->CheckItem(aContextMenu->GetItemId("distinct"), static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
 
-                    switch (aContextMenu->Execute(this, aMenuPos))
+                    aContextMenu->Execute(this, aMenuPos);
+
+                    OString sIdent = aContextMenu->GetCurItemIdent();
+                    if (sIdent == "functions")
                     {
-                        case ID_QUERY_FUNCTION:
-                            SetRowVisible(BROW_FUNCTION_ROW, !IsRowVisible(BROW_FUNCTION_ROW));
-                            static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_VIEW_FUNCTIONS );
-                            break;
-                        case ID_QUERY_TABLENAME:
-                            SetRowVisible(BROW_TABLE_ROW, !IsRowVisible(BROW_TABLE_ROW));
-                            static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_VIEW_TABLES );
-                            break;
-                        case ID_QUERY_ALIASNAME:
-                            SetRowVisible(BROW_COLUMNALIAS_ROW, !IsRowVisible(BROW_COLUMNALIAS_ROW));
-                            static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_VIEW_ALIASES );
-                            break;
-                        case ID_QUERY_DISTINCT:
-                            static_cast<OQueryController&>(getDesignView()->getController()).setDistinct(!static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
-                            static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
-                            static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
-                            break;
+                        SetRowVisible(BROW_FUNCTION_ROW, !IsRowVisible(BROW_FUNCTION_ROW));
+                        static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_VIEW_FUNCTIONS );
+                    }
+                    else if (sIdent == "tablename")
+                    {
+                        SetRowVisible(BROW_TABLE_ROW, !IsRowVisible(BROW_TABLE_ROW));
+                        static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_VIEW_TABLES );
+                    }
+                    else if (sIdent == "alias")
+                    {
+                        SetRowVisible(BROW_COLUMNALIAS_ROW, !IsRowVisible(BROW_COLUMNALIAS_ROW));
+                        static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_VIEW_ALIASES );
+                    }
+                    else if (sIdent == "distinct")
+                    {
+                        static_cast<OQueryController&>(getDesignView()->getController()).setDistinct(!static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
+                        static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
+                        static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
                     }
 
                     static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );

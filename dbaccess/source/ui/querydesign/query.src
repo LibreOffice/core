@@ -104,45 +104,6 @@ String STR_QRY_ORDERBY_UNRELATED
     Text [ en-US ] = "The database only supports sorting for visible fields.";
 };
 
-Menu RID_QUERYFUNCTION_POPUPMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_QUERY_FUNCTION ;
-            HelpID = HID_QUERY_FUNCTION;
-            Text [ en-US ] = "Functions";
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = ID_QUERY_TABLENAME ;
-            HelpID = HID_QUERY_TABLENAME ;
-            Text [ en-US ] = "Table Name";
-        };
-        MenuItem
-        {
-            Identifier = ID_QUERY_ALIASNAME ;
-            HelpID = HID_QUERY_ALIASNAME ;
-            Text [ en-US ] = "Alias";
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = ID_QUERY_DISTINCT ;
-            HelpID = HID_QUERY_DISTINCT ;
-            Text [ en-US ] = "Distinct Values";
-        };
-    };
-};
-
 String STR_QUERY_HANDLETEXT
 {
     Text [ en-US ] = "Field;Alias;Table;Sort;Visible;Function;Criterion;Or;Or";

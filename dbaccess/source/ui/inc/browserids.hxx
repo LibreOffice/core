@@ -95,10 +95,6 @@
 #define ID_BROWSER_CLOSE                    SID_CLOSEWIN
 #define ID_BROWSER_ESCAPEPROCESSING         SID_FM_NATIVESQL
 
-#define ID_QUERY_FUNCTION                   (SID_SBA_START + 41) // show functions
-#define ID_QUERY_TABLENAME                  (SID_SBA_START + 42) // show table name
-#define ID_QUERY_ALIASNAME                  (SID_SBA_START + 43) // show alias name
-#define ID_QUERY_DISTINCT                   (SID_SBA_START + 44) // show distinct
 #define ID_BROWSER_INSERT_ROW               (SID_SBA_START + 46) // insert row
 #define ID_QUERY_ZOOM_IN                    SID_ZOOM_IN
 #define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT
