@@ -45,12 +45,6 @@
           <value xml:lang="en-US">.uno:Copy</value>
         </prop>
       </node>
-      <node oor:name="E_SHIFT_MOD1" oor:op="replace">
-        <prop oor:name="Command">
-          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="en-US">.uno:TrackChanges</value>
-        </prop>
-      </node>
       <node oor:name="M_SHIFT_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2089,6 +2083,12 @@
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:CenterPara</value>
             <value xml:lang="es">.uno:SelectAll</value>
+          </prop>
+        </node>
+        <node oor:name="E_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:TrackChanges</value>
           </prop>
         </node>
         <node oor:name="F10_MOD1" oor:op="replace">
@@ -5819,6 +5819,12 @@
             <value xml:lang="es">.uno:SelectAll</value>
           </prop>
         </node>
+        <node oor:name="E_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:TrackChanges</value>
+          </prop>
+        </node>
         <node oor:name="F10_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -7288,6 +7294,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Undo</value>
+          </prop>
+        </node>
+        <node oor:name="E_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:TraceChangeMode</value>
           </prop>
         </node>
         <node oor:name="F5_SHIFT_MOD1" oor:op="replace">
