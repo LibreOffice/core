@@ -46,6 +46,30 @@
       "revId": "16286668b6e1a1decda47be1a8deec40a380668e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_19f86ee5",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2415,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T11:06:09Z",
+      "side": 1,
+      "message": "Or even better, instead of begin()/end() use\n\n for (auto const\u0026 rTab : rMark.GetSelectedTabs())\n {\n     aRangeList.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));\n }",
+      "parentUuid": "5a3905b3_19814e4b",
+      "range": {
+        "startLine": 2404,
+        "startChar": 16,
+        "endLine": 2415,
+        "endChar": 113
+      },
+      "revId": "16286668b6e1a1decda47be1a8deec40a380668e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
