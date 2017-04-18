@@ -241,6 +241,15 @@ private: // Private section
         reused instead of shifting all one up and nPos is decremented! */
     bool InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const OUString& rStr );
 
+    /** Whether two key symbols are adjacent separated by date separator.
+        This can only be used at the end of FinalScan() after
+        NF_SYMBOLTYPE_DATESEP has already been set.
+     */
+    bool IsDateFragment( size_t nPos1, size_t nPos2 ) const;
+
+    /** Swap nTypeArray and sStrArray elements at positions. */
+    void SwapArrayElements( size_t nPos1, size_t nPos2 );
+
     static bool StringEqualsChar( const OUString& rStr, sal_Unicode ch )
         { return rStr.getLength() == 1 && rStr[0] == ch; }
 

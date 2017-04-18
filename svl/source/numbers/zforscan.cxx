@@ -1520,6 +1520,17 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
     return 0;
 }
 
+bool ImpSvNumberformatScan::IsDateFragment( size_t nPos1, size_t nPos2 ) const
+{
+    return nPos2 - nPos1 == 2 && nTypeArray[nPos1+1] == NF_SYMBOLTYPE_DATESEP;
+}
+
+void ImpSvNumberformatScan::SwapArrayElements( size_t nPos1, size_t nPos2 )
+{
+    std::swap( nTypeArray[nPos1], nTypeArray[nPos2]);
+    std::swap( sStrArray[nPos1], sStrArray[nPos2]);
+}
+
 sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
@@ -1535,6 +1546,9 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     sal_Unicode cOldKeyH    = sKeyword[NF_KEY_H][0];
     sal_Unicode cOldKeyMI   = sKeyword[NF_KEY_MI][0];
     sal_Unicode cOldKeyS    = sKeyword[NF_KEY_S][0];
+    DateOrder eOldDateOrder = pLoc->getDateOrder();
+    sal_uInt16 nDayPos, nMonthPos, nYearPos;
+    nDayPos = nMonthPos = nYearPos = SAL_MAX_UINT16;
 
     // If the group separator is a No-Break Space (French) continue with a
     // normal space instead so queries on space work correctly.
@@ -1546,6 +1560,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     {
         sOldThousandSep = " ";
     }
+    bool bNewDateOrder = false;
     // change locale data et al
     if (bConvertMode)
     {
@@ -1554,6 +1569,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         pLoc = pFormatter->GetLocaleData();
         //! init new keywords
         InitKeywords();
+        bNewDateOrder = (eOldDateOrder != pLoc->getDateOrder());
     }
     const CharClass* pChrCls = pFormatter->GetCharClass();
 
@@ -2318,6 +2334,37 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             case NF_KEY_RR :                        // RR
                 sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                 nPos = nPos + sStrArray[i].getLength();
+                if (bNewDateOrder)
+                {
+                    // For simple numeric date formats record date order and
+                    // later rearrange.
+                    switch (nTypeArray[i])
+                    {
+                        case NF_KEY_M:
+                        case NF_KEY_MM:
+                            if (nMonthPos == SAL_MAX_UINT16)
+                                nMonthPos = i;
+                            else
+                                bNewDateOrder = false;
+                        break;
+                        case NF_KEY_D:
+                        case NF_KEY_DD:
+                            if (nDayPos == SAL_MAX_UINT16)
+                                nDayPos = i;
+                            else
+                                bNewDateOrder = false;
+                        break;
+                        case NF_KEY_YY:
+                        case NF_KEY_YYYY:
+                            if (nYearPos == SAL_MAX_UINT16)
+                                nYearPos = i;
+                            else
+                                bNewDateOrder = false;
+                        break;
+                        default:
+                            ;   // nothing
+                    }
+                }
                 i++;
                 break;
             default: // Other keywords
@@ -2613,6 +2660,37 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 bTimePart = false;
                 sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                 nPos = nPos + sStrArray[i].getLength();
+                if (bNewDateOrder)
+                {
+                    // For simple numeric date formats record date order and
+                    // later rearrange.
+                    switch (nTypeArray[i])
+                    {
+                        case NF_KEY_M:
+                        case NF_KEY_MM:
+                            if (nMonthPos == SAL_MAX_UINT16)
+                                nMonthPos = i;
+                            else
+                                bNewDateOrder = false;
+                        break;
+                        case NF_KEY_D:
+                        case NF_KEY_DD:
+                            if (nDayPos == SAL_MAX_UINT16)
+                                nDayPos = i;
+                            else
+                                bNewDateOrder = false;
+                        break;
+                        case NF_KEY_YY:
+                        case NF_KEY_YYYY:
+                            if (nYearPos == SAL_MAX_UINT16)
+                                nYearPos = i;
+                            else
+                                bNewDateOrder = false;
+                        break;
+                        default:
+                            ;   // nothing
+                    }
+                }
                 i++;
                 break;
             case NF_KEY_THAI_T :
@@ -2652,6 +2730,110 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     }
     if ( bConvertMode )
     {
+        if (bNewDateOrder && sOldDateSep == "-")
+        {
+            // Keep ISO formats Y-M-D, Y-M and M-D
+            if (IsDateFragment( nYearPos, nMonthPos))
+            {
+                nTypeArray[nYearPos+1] = NF_SYMBOLTYPE_STRING;
+                sStrArray[nYearPos+1] = sOldDateSep;
+                bNewDateOrder = false;
+            }
+            if (IsDateFragment( nMonthPos, nDayPos))
+            {
+                nTypeArray[nMonthPos+1] = NF_SYMBOLTYPE_STRING;
+                sStrArray[nMonthPos+1] = sOldDateSep;
+                bNewDateOrder = false;
+            }
+        }
+        if (bNewDateOrder)
+        {
+            // Rearrange date order to the target locale if the original order
+            // includes date separators and is adjacent.
+            /* TODO: for incomplete dates trailing separators need to be
+             * handled according to the locale's usage, e.g. en-US M/D should
+             * be converted to de-DE D.M. and vice versa. As is, it's
+             * M/D -> D.M and D.M. -> M/D/ where specifically the latter looks
+             * odd. Check accepted date patterns and append/remove? */
+            switch (eOldDateOrder)
+            {
+                case DateOrder::DMY:
+                    switch (pLoc->getDateOrder())
+                    {
+                        case DateOrder::MDY:
+                            if (IsDateFragment( nDayPos, nMonthPos))
+                                SwapArrayElements( nDayPos, nMonthPos);
+                        break;
+                        case DateOrder::YMD:
+                            if (nYearPos != SAL_MAX_UINT16)
+                            {
+                                if (IsDateFragment( nDayPos, nMonthPos) && IsDateFragment( nMonthPos, nYearPos))
+                                    SwapArrayElements( nDayPos, nYearPos);
+                            }
+                            else
+                            {
+                                if (IsDateFragment( nDayPos, nMonthPos))
+                                    SwapArrayElements( nDayPos, nMonthPos);
+                            }
+                        break;
+                        default:
+                            ;   // nothing
+                    }
+                break;
+                case DateOrder::MDY:
+                    switch (pLoc->getDateOrder())
+                    {
+                        case DateOrder::DMY:
+                            if (IsDateFragment( nMonthPos, nDayPos))
+                                SwapArrayElements( nMonthPos, nDayPos);
+                        break;
+                        case DateOrder::YMD:
+                            if (nYearPos != SAL_MAX_UINT16)
+                            {
+                                if (IsDateFragment( nMonthPos, nDayPos) && IsDateFragment( nDayPos, nYearPos))
+                                {
+                                    SwapArrayElements( nYearPos, nMonthPos);    // YDM
+                                    SwapArrayElements( nYearPos, nDayPos);      // YMD
+                                }
+                            }
+                        break;
+                        default:
+                            ;   // nothing
+                    }
+                break;
+                case DateOrder::YMD:
+                    switch (pLoc->getDateOrder())
+                    {
+                        case DateOrder::DMY:
+                            if (nYearPos != SAL_MAX_UINT16)
+                            {
+                                if (IsDateFragment( nYearPos, nMonthPos) && IsDateFragment( nMonthPos, nDayPos))
+                                    SwapArrayElements( nYearPos, nDayPos);
+                            }
+                            else
+                            {
+                                if (IsDateFragment( nMonthPos, nDayPos))
+                                    SwapArrayElements( nMonthPos, nDayPos);
+                            }
+                        break;
+                        case DateOrder::MDY:
+                            if (nYearPos != SAL_MAX_UINT16)
+                            {
+                                if (IsDateFragment( nYearPos, nMonthPos) && IsDateFragment( nMonthPos, nDayPos))
+                                {
+                                    SwapArrayElements( nYearPos, nDayPos);      // DMY
+                                    SwapArrayElements( nYearPos, nMonthPos);    // MDY
+                                }
+                            }
+                        break;
+                        default:
+                            ;   // nothing
+                    }
+                break;
+                default:
+                    ;   // nothing
+            }
+        }
         // strings containing keywords of the target locale must be quoted, so
         // the user sees the difference and is able to edit the format string
         for ( i=0; i < nAnzStrings; i++ )
