@@ -18,7 +18,6 @@
  */
 #include "swcommands.h"
 #include <svx/svxcommands.h>
-#include <sfx2/sfxcommands.h>
 
 #define HID_CONFIG_SAVE                                         "SW_HID_CONFIG_SAVE"
 

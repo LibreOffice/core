@@ -43,7 +43,6 @@
 #include <svtools/optionsdrawinglayer.hxx>
 
 #include <sfx2/sfxuno.hxx>
-#include <sfx2/sfxcommands.h>
 #include "about.hxx"
 #include <config_buildid.h>
 #include <sfx2/app.hxx>

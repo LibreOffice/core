@@ -18,7 +18,6 @@
  */
 
 #include <svx/dialogs.hrc>
-#include <sfx2/sfxcommands.h>
 
  // Strings ---------------------------------------------------------------
 

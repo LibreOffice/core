@@ -23,7 +23,6 @@
 #include <sfx2/sfx.hrc>
 #include <svx/dialogs.hrc>
 
-#include "sfx2/sfxcommands.h"
 #include "svx/svxcommands.h"
 #include "helpids.h"
 

@@ -19,7 +19,6 @@
 
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
-#include <sfx2/sfxcommands.h>
 
 String STR_QUERY_OVERWRITE
 {

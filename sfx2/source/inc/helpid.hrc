@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_HELPID_HRC
 #define INCLUDED_SFX2_SOURCE_INC_HELPID_HRC
 
-#include <sfx2/sfxcommands.h>
-
 #define HID_TEMPLATE_FMT                                      "SFX2_HID_TEMPLATE_FMT"
 #define HID_TEMPLATE_FILTER                                   "SFX2_HID_TEMPLATE_FILTER"
 #define HID_TEMPLDLG_NEWBYEXAMPLE                             "SFX2_HID_TEMPLDLG_NEWBYEXAMPLE"

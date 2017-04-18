@@ -336,7 +336,6 @@
 #include <sfx2/itemwrapper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sfxcommands.h>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>

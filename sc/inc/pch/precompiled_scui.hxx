@@ -129,7 +129,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfxcommands.h>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>
