@@ -56,20 +56,6 @@ String STR_WIZ_PB_OK
     Text [ en-US ] = "C~reate";
 };
 
-Menu RID_SBA_RTF_PKEYPOPUP
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier      = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
-            HelpID          = HID_TABLEDESIGN_TABED_PRIMARYKEY ;
-            Checkable       = TRUE ;
-            Text [ en-US ] = "Primary Key" ;
-        };
-    };
-};
-
 Bitmap BMP_UP
 {
     File = "sortup.png" ;

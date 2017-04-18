@@ -434,7 +434,8 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             if (pComEvt->IsMouseEvent())
                 ptWhere = pComEvt->GetMousePosPixel();
 
-            ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_SBA_RTF_PKEYPOPUP));
+            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/keymenu.ui", "");
+            VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
             // Should primary key checkbox be checked?
             const sal_Int32 nCount = GetEntryCount();
             bool bCheckOk = false;
@@ -454,31 +455,27 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             }
 
             if (bCheckOk)
-                aContextMenu->CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY );
+                aContextMenu->CheckItem(aContextMenu->GetItemId("primarykey"));
 
-            switch( aContextMenu->Execute( this, ptWhere ) )
+            if (aContextMenu->Execute(this, ptWhere))
             {
-                case SID_TABLEDESIGN_TABED_PRIMARYKEY:
+                for (sal_Int32 j = 0 ; j < nCount ; ++j)
                 {
-                    for(sal_Int32 j = 0 ; j < nCount ; ++j)
+                    OFieldDescription* pFieldDescr = static_cast<OFieldDescription*>(GetEntryData(j));
+                    if( pFieldDescr )
                     {
-                        OFieldDescription* pFieldDescr = static_cast<OFieldDescription*>(GetEntryData(j));
-                        if( pFieldDescr )
+                        if(!bCheckOk && IsEntryPosSelected(j))
                         {
-                            if(!bCheckOk && IsEntryPosSelected(j))
-                            {
-                                setPrimaryKey(pFieldDescr,j,true);
-                                SelectEntryPos(j);
-                            }
-                            else
-                            {
-                                setPrimaryKey(pFieldDescr,j);
-                            }
+                            setPrimaryKey(pFieldDescr,j,true);
+                            SelectEntryPos(j);
+                        }
+                        else
+                        {
+                            setPrimaryKey(pFieldDescr,j);
                         }
                     }
-                    GetSelectHdl().Call(*this);
                 }
-                break;
+                GetSelectHdl().Call(*this);
             }
             bDone = true;
         }

@@ -99,10 +99,8 @@
 #define SID_APP_NEW_REPORT              ( SID_DBACCESS_START +  65 )
 
 #define SID_DB_APP_EDIT_SQL_VIEW        ( SID_DBACCESS_START +  66 )
-
-#define SID_TABLEDESIGN_TABED_PRIMARYKEY ( SID_DBACCESS_START + 67 )
 //FREE
-
+//FREE
 #define SID_QUERY_PROP_DLG              ( SID_DBACCESS_START +  69 )
 
 #endif
