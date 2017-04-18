@@ -60,7 +60,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/engine3d/float3d.src \
     svx/source/engine3d/string3d.src \
     svx/source/form/datanavi.src \
-    svx/source/form/filtnav.src \
     svx/source/form/fmexpl.src \
     svx/source/form/fmstring.src \
     svx/source/items/svxerr.src \

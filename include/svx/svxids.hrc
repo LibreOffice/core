@@ -595,7 +595,7 @@
 #define SID_FM_PROPERTY_CONTROL                         ( SID_SVX_START + 636 )
 #define SID_FM_FMEXPLORER_CONTROL                       ( SID_SVX_START + 637 )
 //FREE
-#define SID_FM_DELETE                                   ( SID_SVX_START + 639 )
+//FREE
 //FREE
 #define SID_3D_WIN                                      ( SID_SVX_START + 644 )
 #define SID_3D_STATE                                    ( SID_SVX_START + 645 )
@@ -659,9 +659,9 @@
 //FREE
 //FREE
 //FREE
-#define SID_FM_FILTER_EDIT                              ( SID_SVX_START + 758 )
-#define SID_FM_FILTER_IS_NULL                           ( SID_SVX_START + 759 )
-#define SID_FM_FILTER_IS_NOT_NULL                       ( SID_SVX_START + 760 )
+//FREE
+//FREE
+//FREE
 #define SID_FM_VIEW_AS_GRID                             ( SID_SVX_START + 761 )
 #define SID_FM_AUTOCONTROLFOCUS                         ( SID_SVX_START + 763 )
 #define SID_DSBROWSER_EXPLORER                          ( SID_SVX_START + 764 )

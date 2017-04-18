@@ -32,10 +32,6 @@
 #define HID_GRID_TRAVEL_NEW                                   "SVX_HID_GRID_TRAVEL_NEW"
 #define HID_GRID_TRAVEL_ABSOLUTE                              "SVX_HID_GRID_TRAVEL_ABSOLUTE"
 #define HID_GRID_NUMBEROFRECORDS                              "SVX_HID_GRID_NUMBEROFRECORDS"
-#define HID_FM_DELETE                                         "SVX_HID_FM_DELETE"
-#define HID_FM_FILTER_EDIT                                    "SVX_HID_FM_EDIT"
-#define HID_FM_FILTER_IS_NULL                                 "SVX_HID_FM_FILTER_IS_NULL"
-#define HID_FM_FILTER_IS_NOT_NULL                             "SVX_HID_FM_IS_NOT_NULL"
 
 #endif
 

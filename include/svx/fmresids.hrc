@@ -61,9 +61,6 @@
 #define RID_SVXTBX_MORECONTROLS                     (RID_FORMS_START +  5)
 #define RID_SVXTBX_FORMDESIGN                       (RID_FORMS_START +  6)
 
-// Menu-Id's -----------------------------------------------------------
-#define RID_FM_FILTER_MENU                          (RID_FORMS_START + 5)
-
 // String-Id's -----------------------------------------------------------
 #define RID_STR_INVALID_XMLNAME                     (RID_FORMS_START + 1)
 #define RID_STR_INVALID_XMLPREFIX                   (RID_FORMS_START + 2)

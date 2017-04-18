@@ -1611,45 +1611,45 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                     aSelectList.clear();
             }
 
-            ScopedVclPtrInstance<PopupMenu> aContextMenu(SVX_RES(RID_FM_FILTER_MENU));
+            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/filtermenu.ui", "");
+            VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
             // every condition could be deleted except the first one if it's the only one
-            aContextMenu->EnableItem( SID_FM_DELETE, !aSelectList.empty() );
+            aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), !aSelectList.empty());
 
 
             bool bEdit = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pClicked->GetUserData()) ) != nullptr &&
                 IsSelected(pClicked) && GetSelectionCount() == 1;
 
-            aContextMenu->EnableItem( SID_FM_FILTER_EDIT, bEdit );
-            aContextMenu->EnableItem( SID_FM_FILTER_IS_NULL, bEdit );
-            aContextMenu->EnableItem( SID_FM_FILTER_IS_NOT_NULL, bEdit );
+            aContextMenu->EnableItem(aContextMenu->GetItemId("edit"), bEdit);
+            aContextMenu->EnableItem(aContextMenu->GetItemId("isnull"), bEdit);
+            aContextMenu->EnableItem(aContextMenu->GetItemId("isnotnull"), bEdit);
 
             aContextMenu->RemoveDisabledEntries(true, true);
-            sal_uInt16 nSlotId = aContextMenu->Execute( this, aWhere );
-            switch( nSlotId )
+            aContextMenu->Execute(this, aWhere);
+            OString sIdent = aContextMenu->GetCurItemIdent();
+            if (sIdent == "edit")
+                EditEntry( pClicked );
+            else if (sIdent == "isnull")
             {
-                case SID_FM_FILTER_EDIT:
-                {
-                    EditEntry( pClicked );
-                }   break;
-                case SID_FM_FILTER_IS_NULL:
-                case SID_FM_FILTER_IS_NOT_NULL:
-                {
-                    OUString aErrorMsg;
-                    OUString aText;
-                    if (nSlotId == SID_FM_FILTER_IS_NULL)
-                        aText = "IS NULL";
-                    else
-                        aText = "IS NOT NULL";
+                OUString aErrorMsg;
+                OUString aText = "IS NULL";
+                m_pModel->ValidateText(static_cast<FmFilterItem*>(pClicked->GetUserData()),
+                                        aText, aErrorMsg);
+                m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pClicked->GetUserData()), aText);
+            }
+            else if (sIdent == "isnotnull")
+            {
+                OUString aErrorMsg;
+                OUString aText = "IS NOT NULL";
 
-                    m_pModel->ValidateText(static_cast<FmFilterItem*>(pClicked->GetUserData()),
-                                            aText, aErrorMsg);
-                    m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pClicked->GetUserData()), aText);
-                }   break;
-                case SID_FM_DELETE:
-                {
-                    DeleteSelection();
-                }   break;
+                m_pModel->ValidateText(static_cast<FmFilterItem*>(pClicked->GetUserData()),
+                                        aText, aErrorMsg);
+                m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pClicked->GetUserData()), aText);
+            }
+            else if (sIdent == "delete")
+            {
+                DeleteSelection();
             }
             bHandled = true;
         }
