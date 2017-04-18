@@ -130,19 +130,9 @@ bool ScDocument::CopyOneCellFromClip(
     aRefCxt.mnColDelta = nCol1 - aSrcPos.Col();
     aRefCxt.mnRowDelta = nRow1 - aSrcPos.Row();
     aRefCxt.mnTabDelta = rCxt.getTabStart() - aSrcPos.Tab();
-    if (rCxt.getClipDoc()->GetClipParam().mbCutMode)
-    {
-        if (rCxt.getClipDoc()->GetPool() == GetPool())
-        {
-            aRefCxt.meMode = URM_MOVE;
-            UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
-        }
-    }
-    else
-    {
-        aRefCxt.meMode = URM_COPY;
-        UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
-    }
+    // Only Copy&Paste, for Cut&Paste we already bailed out early.
+    aRefCxt.meMode = URM_COPY;
+    UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
 
     return true;
 }
