@@ -4603,7 +4603,7 @@ void SbiRuntime::StepFIND_G( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
 
 SbxVariable* SbiRuntime::StepSTATIC_Impl(
-    OUString& aName, SbxDataType& t, sal_uInt32 nOp2 )
+    OUString const & aName, SbxDataType t, sal_uInt32 nOp2 )
 {
     SbxVariable* p = nullptr;
     if ( pMeth )
