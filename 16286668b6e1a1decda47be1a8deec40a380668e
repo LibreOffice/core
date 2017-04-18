@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_16a4bd55",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2415,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-04-18T06:44:36Z",
+      "side": 1,
+      "message": "I will do undoable that action but only i want to know is it true way.",
+      "range": {
+        "startLine": 2404,
+        "startChar": 16,
+        "endLine": 2415,
+        "endChar": 113
+      },
+      "revId": "16286668b6e1a1decda47be1a8deec40a380668e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
