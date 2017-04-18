@@ -35,7 +35,6 @@ class RscString : public RscTop
     };
 public:
                     RscString( Atom nId, RESOURCE_TYPE nTypId );
-    virtual RSCCLASS_TYPE   GetClassType() const override;
 
     void            SetRefClass( RscTop * pClass ) { pRefClass = pClass; }
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;

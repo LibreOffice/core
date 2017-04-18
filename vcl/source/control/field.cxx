@@ -24,8 +24,6 @@
 
 #include "tools/debug.hxx"
 
-#include "tools/rc.h"
-
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
 #include <vcl/event.hxx>

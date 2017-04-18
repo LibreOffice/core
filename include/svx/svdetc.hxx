@@ -39,6 +39,7 @@
  * is set.
  */
 
+class ResMgr;
 class SdrOutliner;
 class SdrModel;
 class SvtSysLocale;

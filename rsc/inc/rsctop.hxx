@@ -66,7 +66,6 @@ public:
             void    SetCallPar( const OString& rPar1, const OString& rPar2,
                                 const OString& rParType );
             RscTop* GetRefClass() const { return pRefClass; }
-    virtual RSCCLASS_TYPE GetClassType() const = 0;
             RSCINST const & GetDefault();
 
                     // preparation fro the destructor call
@@ -91,9 +90,6 @@ public:
                                  RSCINST * pDflt = nullptr,
                                  RSCVAR nVarType = RSCVAR::NONE, sal_uInt32 nMask = 0,
                                  Atom nDataBaseName = InvalidAtom );
-
-                    // enumerate all variables
-    virtual void    EnumVariables( void * pData, VarEnumCallbackProc );
 
                     // returns variable instance
                     // returned pData, pClass may be NULL

@@ -34,11 +34,6 @@ MenuItemData::~MenuItemData()
 {
     if (aUserValueReleaseFunc)
         aUserValueReleaseFunc(nUserValue);
-    if( pAutoSubMenu )
-    {
-        static_cast<PopupMenu*>(pAutoSubMenu.get())->pRefAutoSubMenu = nullptr;
-        pAutoSubMenu.disposeAndClear();
-    }
     if( pSalMenuItem )
         ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );
     pSubMenu.disposeAndClear();
@@ -67,7 +62,6 @@ MenuItemData* MenuItemList::Insert(
     pData->eType            = eType;
     pData->nBits            = nBits;
     pData->pSubMenu         = nullptr;
-    pData->pAutoSubMenu     = nullptr;
     pData->nUserValue       = 0;
     pData->bChecked         = false;
     pData->bEnabled         = true;
@@ -101,7 +95,6 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     pData->eType            = MenuItemType::SEPARATOR;
     pData->nBits            = MenuItemBits::NONE;
     pData->pSubMenu         = nullptr;
-    pData->pAutoSubMenu     = nullptr;
     pData->nUserValue       = 0;
     pData->bChecked         = false;
     pData->bEnabled         = true;

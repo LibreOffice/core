@@ -56,7 +56,6 @@ public:
                     RscBaseCont( Atom nId, RESOURCE_TYPE nTypId,
                                  bool bNoId );
                     virtual ~RscBaseCont() override;
-    virtual RSCCLASS_TYPE   GetClassType() const override;
     void            SetTypeClass( RscTop * pClass )
                         {
                             pTypeClass = pClass;

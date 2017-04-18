@@ -34,11 +34,6 @@ RscString::RscString( Atom nId, RESOURCE_TYPE nTypeId )
 {
 }
 
-RSCCLASS_TYPE RscString::GetClassType() const
-{
-    return RSCCLASS_STRING;
-}
-
 ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr )
 {
     char    * pTmp;

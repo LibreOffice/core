@@ -25,6 +25,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/rcid.h>
+#include <tools/resmgr.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/virdev.hxx>

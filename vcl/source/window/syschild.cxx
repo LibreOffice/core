@@ -22,8 +22,6 @@
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
 
-#include <tools/rc.h>
-
 #include <vcl/window.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>

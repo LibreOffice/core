@@ -33,7 +33,6 @@
 #include <vcl/vclstatuslistener.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/rc.h>
 #include <tools/poly.hxx>
 #include <svl/imageitm.hxx>
 

@@ -21,14 +21,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <tools/rc.h>
+#include <tools/rcid.h>
 #include <tools/wintypes.hxx>
 
 #include <rsctree.hxx>
 #include <rsctop.hxx>
 #include <rscrange.hxx>
 #include <rscconst.hxx>
-#include <rscflag.hxx>
 #include <rscstr.hxx>
 #include <rsccont.hxx>
 #include <rscmgr.hxx>
@@ -67,13 +66,7 @@ void RscTypCont::Init()
     aNmTb.Put( "FALSE",              BOOLEAN,        (sal_IntPtr)false );
 }
 {
-    aShort.SetRange( -32768, 32767 );
-
-    aUShort.SetRange( 0, 0xFFFF );
-
     aEnumLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
-
-    aIdNoZeroUShort.SetRange( 1, 0xFFFF );
 }
 {
     aLangType.Init( aNmTb );
@@ -110,18 +103,6 @@ void RscTypCont::Init()
     pClassBitmap = InitClassBitmap( pClassMgr );
     pRoot->Insert( pClassBitmap );
 
-}
-{
-    RscTop* pClassMenuItem = InitClassMenuItem(pClassMgr);
-    pRoot->Insert( pClassMenuItem );
-
-    RscTop* pClassMenu = InitClassMenu( pClassMgr, pClassMenuItem );
-    pRoot->Insert( pClassMenu );
-
-    // pClassMenu is only completely defined here
-    nId = aNmTb.Put( "SubMenu", VARNAME );
-    pClassMenuItem->SetVariable( nId, pClassMenu, nullptr, RSCVAR::SvDynamic,
-                                 (sal_uInt32)RscMenuItem::Menu );
 }
 
     aNmTb.SetSort();

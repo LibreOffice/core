@@ -27,7 +27,6 @@
 
 #include <tools/debug.hxx>
 
-#include <tools/rc.h>
 #include <svdata.hxx>
 #include <window.h>
 #include <brdwin.hxx>

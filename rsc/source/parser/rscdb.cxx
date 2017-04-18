@@ -21,11 +21,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <tools/rc.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>
+#include <tools/rcid.h>
 
 #include <rsctree.hxx>
 #include <rsctop.hxx>
@@ -44,13 +44,8 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , nUniqueId(256)
     , nFilePos( 0 )
     , nPMId(RSC_VERSIONCONTROL + RESOURCE_TYPE(1)) // at least one more
-    , aBool( pHS->getID( "sal_Bool" ), RSC_NOTYPE )
-    , aShort( pHS->getID( "short" ), RSC_NOTYPE )
-    , aUShort( pHS->getID( "sal_uInt16" ), RSC_NOTYPE )
     , aEnumLong( pHS->getID( "enum_long" ), RSC_NOTYPE )
-    , aIdNoZeroUShort( pHS->getID( "IDUSHORT" ), RSC_NOTYPE )
     , aString( pHS->getID( "Chars" ), RSC_NOTYPE )
-    , aStringLiteral( pHS->getID( "Chars" ), RSC_NOTYPE )
     , aLangType()
     , aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType )
     , pEH(pErrHdl)
@@ -171,10 +166,6 @@ RscTypCont::~RscTypCont()
     for (RscTop* pItem : aBaseLst)
         pItem->Pre_dtor();
 
-    aBool.Pre_dtor();
-    aShort.Pre_dtor();
-    aUShort.Pre_dtor();
-    aIdNoZeroUShort.Pre_dtor();
     aString.Pre_dtor();
     aVersion.pClass->Pre_dtor();
     // sub-types

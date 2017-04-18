@@ -1083,40 +1083,6 @@ void ResMgr::PopContext( const Resource* pResObj )
     }
 }
 
-RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-
-    if( pFallbackResMgr )
-    {
-        ResId aId( rId );
-        aId.ClearResMgr();
-        return pFallbackResMgr->CreateBlock( aId );
-    }
-
-    RSHEADER_TYPE* pHeader = nullptr;
-    if ( GetResource( rId ) )
-    {
-        // Pointer is at the beginning of the resource, thus
-        // class pointer points to the header, and the remaining size
-        // equals to total size of allocated memory
-        pHeader = static_cast<RSHEADER_TYPE*>(rtl_allocateMemory( GetRemainSize() ));
-        memcpy( pHeader, GetClass(), GetRemainSize() );
-        Increment( pHeader->GetLocalOff() ); //ans Ende setzen
-        if ( pHeader->GetLocalOff() != pHeader->GetGlobOff() )
-            // Has sub-resources, thus release them as well
-            PopContext();
-    }
-
-    return pHeader;
-}
-
-sal_Int16 ResMgr::GetShort( void const * pShort )
-{
-    return ((*(static_cast<const sal_uInt8*>(pShort) + 0) << 8) |
-            (*(static_cast<const sal_uInt8*>(pShort) + 1) << 0)   );
-}
-
 sal_Int32 ResMgr::GetLong( void const * pLong )
 {
     return ((*(static_cast<const sal_uInt8*>(pLong) + 0) << 24) |
@@ -1160,31 +1126,10 @@ sal_uInt32 ResMgr::GetString( OUString& rStr, const sal_uInt8* pStr )
     return nRet;
 }
 
-sal_uInt32 ResMgr::GetByteString( OString& rStr, const sal_uInt8* pStr )
-{
-    sal_uInt32 nLen=0;
-    sal_uInt32 nRet = GetStringSize( pStr, nLen );
-    rStr = OString( reinterpret_cast<const char*>(pStr), nLen );
-    return nRet;
-}
-
 sal_uInt32 ResMgr::GetStringSize( const sal_uInt8* pStr, sal_uInt32& nLen )
 {
     nLen = static_cast< sal_uInt32 >( strlen( reinterpret_cast<const char*>(pStr) ) );
     return GetStringSize( nLen );
-}
-
-sal_uInt32 ResMgr::GetRemainSize()
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-
-    if( pFallbackResMgr )
-        return pFallbackResMgr->GetRemainSize();
-
-    const ImpRCStack& rTop = aStack[nCurStack];
-    return (sal_uInt32)(reinterpret_cast<sal_IntPtr>(rTop.pResource) +
-                        rTop.pResource->GetLocalOff() -
-                        reinterpret_cast<sal_IntPtr>(rTop.pClassRes));
 }
 
 void* ResMgr::Increment( sal_uInt32 nSize )
@@ -1306,18 +1251,6 @@ ResMgr* ResMgr::SearchCreateResMgr(
     return pImp ? new ResMgr( pImp ) : nullptr;
 }
 
-sal_Int16 ResMgr::ReadShort()
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-
-    if( pFallbackResMgr )
-        return pFallbackResMgr->ReadShort();
-
-    sal_Int16 n = GetShort( GetClass() );
-    Increment( sizeof( sal_Int16 ) );
-    return n;
-}
-
 sal_Int32 ResMgr::ReadLong()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
@@ -1357,28 +1290,6 @@ OUString ResMgr::ReadString()
     OUString aRet = ReadStringWithoutHook();
     if ( pImplResHookProc )
         aRet = pImplResHookProc( aRet );
-    return aRet;
-}
-
-OString ResMgr::ReadByteString()
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-
-    if( pFallbackResMgr )
-        return pFallbackResMgr->ReadByteString();
-
-    OString aRet;
-
-    const ImpRCStack& rTop = aStack[nCurStack];
-    if( (rTop.Flags & RCFlags::NOTFOUND) )
-    {
-        #if OSL_DEBUG_LEVEL > 0
-        aRet = OString( "<resource not found>" );
-        #endif
-    }
-    else
-        Increment( GetByteString( aRet, static_cast<const sal_uInt8*>(GetClass()) ) );
-
     return aRet;
 }
 

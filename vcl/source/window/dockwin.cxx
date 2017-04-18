@@ -18,7 +18,6 @@
  */
 
 #include <tools/time.hxx>
-#include <tools/rc.h>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/dockwin.hxx>

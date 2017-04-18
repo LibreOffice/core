@@ -22,7 +22,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
-#include <tools/rc.h>
 
 void TabDialog::ImplInitTabDialogData()
 {
