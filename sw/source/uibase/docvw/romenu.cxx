@@ -53,14 +53,9 @@ using namespace ::sfx2;
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {
-    disposeOnce();
-}
-
-void SwReadOnlyPopup::dispose()
-{
     delete pImageMap;
     delete pTargetURL;
-    PopupMenu::dispose();
+    xMenu.disposeAndClear();
 }
 
 void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis )
@@ -69,28 +64,28 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
     SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );
     if (eState >= SfxItemState::DEFAULT)
     {
-        EnableItem( nMID );
+        xMenu->EnableItem(nMID);
         if (_pItem)
         {
-            CheckItem ( nMID, dynamic_cast< const SfxVoidItem *>( _pItem.get() ) ==  nullptr &&
+            xMenu->CheckItem(nMID, dynamic_cast< const SfxVoidItem *>( _pItem.get() ) ==  nullptr &&
                             dynamic_cast< const SfxBoolItem *>( _pItem.get() ) !=  nullptr &&
                             static_cast<SfxBoolItem*>(_pItem.get())->GetValue());
             //remove full screen entry when not in full screen mode
-            if( SID_WIN_FULLSCREEN == nSID && !IsItemChecked(SID_WIN_FULLSCREEN) )
-                EnableItem(nMID, false);
+            if (SID_WIN_FULLSCREEN == nSID && !xMenu->IsItemChecked(SID_WIN_FULLSCREEN))
+                xMenu->EnableItem(nMID, false);
         }
     }
     else
-        EnableItem( nMID, false );
+        xMenu->EnableItem(nMID, false);
 }
 
-SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
-    PopupMenu( SW_RES(MN_READONLY_POPUP) ),
-    rView  ( rV ),
-    aBrushItem(RES_BACKGROUND),
-    rDocPos( rDPos ),
-    pImageMap( nullptr ),
-    pTargetURL( nullptr )
+SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
+    : xMenu(VclPtr<PopupMenu>::Create(SW_RES(MN_READONLY_POPUP)))
+    , rView(rV)
+    , aBrushItem(RES_BACKGROUND)
+    , rDocPos(rDPos)
+    , pImageMap(nullptr)
+    , pTargetURL(nullptr)
 {
     bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -111,8 +106,8 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     const Graphic *pGrf;
     if ( nullptr == (pGrf = rSh.GetGrfAtPos( rDocPos, sGrfName, bLink )) )
     {
-        EnableItem( MN_READONLY_SAVEGRAPHIC, false );
-        EnableItem( MN_READONLY_COPYGRAPHIC, false );
+        xMenu->EnableItem(MN_READONLY_SAVEGRAPHIC, false);
+        xMenu->EnableItem(MN_READONLY_COPYGRAPHIC, false);
     }
     else
     {
@@ -138,7 +133,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     {
         if (GalleryExplorer::FillThemeList( aThemeList ))
         {
-            PopupMenu *pMenu = GetPopupMenu(MN_READONLY_GRAPHICTOGALLERY);
+            PopupMenu *pMenu = xMenu->GetPopupMenu(MN_READONLY_GRAPHICTOGALLERY);
             pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
             pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
 
@@ -149,7 +144,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
             bEnableGraphicToGallery = false;
     }
 
-    EnableItem( MN_READONLY_GRAPHICTOGALLERY, bEnableGraphicToGallery );
+    xMenu->EnableItem(MN_READONLY_GRAPHICTOGALLERY, bEnableGraphicToGallery);
 
     SfxViewFrame * pVFrame = rV.GetViewFrame();
     SfxDispatcher &rDis = *pVFrame->GetDispatcher();
@@ -168,7 +163,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
 
             if ( !aThemeList.empty() )
             {
-                PopupMenu *pMenu = GetPopupMenu(MN_READONLY_BACKGROUNDTOGALLERY);
+                PopupMenu *pMenu = xMenu->GetPopupMenu(MN_READONLY_BACKGROUNDTOGALLERY);
                 pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
                 pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
                 bEnableBackGallery = true;
@@ -178,16 +173,16 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
             }
         }
     }
-    EnableItem( MN_READONLY_SAVEBACKGROUND, bEnableBack );
-    EnableItem( MN_READONLY_BACKGROUNDTOGALLERY, bEnableBackGallery );
+    xMenu->EnableItem(MN_READONLY_SAVEBACKGROUND, bEnableBack);
+    xMenu->EnableItem(MN_READONLY_BACKGROUNDTOGALLERY, bEnableBackGallery);
 
     if ( !rSh.GetViewOptions()->IsGraphic() )
-        CheckItem( MN_READONLY_GRAPHICOFF );
+        xMenu->CheckItem(MN_READONLY_GRAPHICOFF);
     else
-        EnableItem( MN_READONLY_LOADGRAPHIC, false );
+        xMenu->EnableItem(MN_READONLY_LOADGRAPHIC, false);
 
-    EnableItem( MN_READONLY_RELOAD_FRAME, false );
-    EnableItem( MN_READONLY_RELOAD);
+    xMenu->EnableItem(MN_READONLY_RELOAD_FRAME, false);
+    xMenu->EnableItem(MN_READONLY_RELOAD);
 
     Check( MN_READONLY_EDITDOC,         SID_EDITDOC,        rDis );
     Check( MN_READONLY_SELECTION_MODE,  FN_READONLY_SELECTION_MODE,    rDis );
@@ -201,8 +196,8 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
 
     SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
     Check( MN_READONLY_COPY,            SID_COPY,           rDis );
-    if(eState < SfxItemState::DEFAULT)
-        EnableItem( MN_READONLY_COPY, false );
+    if (eState < SfxItemState::DEFAULT)
+        xMenu->EnableItem(MN_READONLY_COPY, false);
 
     eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
     if (
@@ -210,25 +205,23 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         (rSh.IsGlobalDoc() && rView.GetDocShell()->IsReadOnlyUI())
        )
     {
-        EnableItem( MN_READONLY_EDITDOC, false );
+        xMenu->EnableItem(MN_READONLY_EDITDOC, false);
     }
 
     if ( sURL.isEmpty() )
     {
-        EnableItem( MN_READONLY_OPENURL, false );
-        EnableItem( MN_READONLY_OPENURLNEW, false );
-        EnableItem( MN_READONLY_COPYLINK, false );
+        xMenu->EnableItem(MN_READONLY_OPENURL, false);
+        xMenu->EnableItem(MN_READONLY_OPENURLNEW, false);
+        xMenu->EnableItem(MN_READONLY_COPYLINK, false);
     }
     Check( SID_WIN_FULLSCREEN,         SID_WIN_FULLSCREEN,        rDis );
 
-    RemoveDisabledEntries( true, true );
+    xMenu->RemoveDisabledEntries( true, true );
 }
 
 void SwReadOnlyPopup::Execute( vcl::Window* pWin, const Point &rPixPos )
 {
-    sal_uInt16 nId     = PopupMenu::Execute(
-    pWin,
-    rPixPos );
+    sal_uInt16 nId = xMenu->Execute(pWin, rPixPos);
     Execute(pWin, nId);
 }
 

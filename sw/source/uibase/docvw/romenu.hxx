@@ -29,8 +29,9 @@ class SfxDispatcher;
 class ImageMap;
 class INetImage;
 
-class SwReadOnlyPopup : public PopupMenu
+class SwReadOnlyPopup
 {
+    ScopedVclPtr<PopupMenu> xMenu;
     SwView &rView;
     SvxBrushItem aBrushItem;
     const Point &rDocPos;
@@ -47,12 +48,10 @@ class SwReadOnlyPopup : public PopupMenu
     void Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis );
     OUString SaveGraphic( sal_uInt16 nId );
 
-    using PopupMenu::Execute;
-
 public:
-    SwReadOnlyPopup( const Point &rDPos, SwView &rV );
-    virtual ~SwReadOnlyPopup() override;
-    virtual void dispose() override;
+    SwReadOnlyPopup(const Point &rDPos, SwView &rV);
+    PopupMenu& GetMenu() const { return *xMenu; }
+    ~SwReadOnlyPopup();
 
     void Execute( vcl::Window* pWin, const Point &rPPos );
     void Execute( vcl::Window* pWin, sal_uInt16 nId );
