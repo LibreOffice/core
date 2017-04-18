@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_19730eb3",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1886,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-04-18T10:09:44Z",
+      "side": 1,
+      "message": "In the desktop case nStartPosX is always equal to nPosX, so having replaced nPosX with nStartPosX in some places doesn\u0027t make any difference.\nExcept for this small change the code of both for loops is the same as it was earlier.\n\nWhen nWhereX \u003e\u003d nPosX is true, the first for loop is executed; when it is false and bAllowNeg is true the second for loop is executed. This is the same behaviour we have earlier.\n\nFinally if both nWhereX \u003e\u003d nPosX is false and bAllowNeg is false we do not execute any for lopp at all, and again that\u0027s the same that occurred earlier since the condition was:\nif (nWhereX \u003e\u003d nPosX) {\n    for () ....\n} else if (bAllowNeg) {\n    for () ....\n}",
+      "revId": "88b34472b9969039c79917f91dec9148141db624",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
