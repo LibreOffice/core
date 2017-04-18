@@ -369,12 +369,14 @@ struct Parameter
     Parameter * m_pNext;
     OString m_aAttribute;
     OString m_aCharset;
+    OString m_aLanguage;
     OString m_aValue;
     sal_uInt32 m_nSection;
     bool m_bExtended;
 
     inline Parameter(Parameter * pTheNext, const OString& rTheAttribute,
                      const OString& rTheCharset,
+                     const OString& rTheLanguage,
                      const OString& rTheValue, sal_uInt32 nTheSection,
                      bool bTheExtended);
 };
@@ -382,11 +384,13 @@ struct Parameter
 inline Parameter::Parameter(Parameter * pTheNext,
                             const OString& rTheAttribute,
                             const OString& rTheCharset,
+                            const OString& rTheLanguage,
                             const OString& rTheValue,
                             sal_uInt32 nTheSection, bool bTheExtended):
     m_pNext(pTheNext),
     m_aAttribute(rTheAttribute),
     m_aCharset(rTheCharset),
+    m_aLanguage(rTheLanguage),
     m_aValue(rTheValue),
     m_nSection(nTheSection),
     m_bExtended(bTheExtended)
@@ -439,16 +443,16 @@ Parameter ** ParameterList::find(const OString& rAttribute,
     for (; *p; p = &(*p)->m_pNext)
     {
         sal_Int32 nCompare = rAttribute.compareTo((*p)->m_aAttribute);
-        if (nCompare > 0)
-            return &(*p)->m_pNext;
+        if (nCompare < 0)
+            break;
         else if (nCompare == 0)
         {
-            if (nSection > (*p)->m_nSection)
-                return &(*p)->m_pNext;
+            if (nSection < (*p)->m_nSection)
+                break;
             else if (nSection == (*p)->m_nSection)
             {
                 rPresent = true;
-                return p;
+                break;
             }
         }
     }
@@ -537,8 +541,9 @@ bool parseParameters(ParameterList const & rInput,
                         break;
                 };
             }
-            INetContentTypeParameter x {aValue}; // workaround ICE in VisualStudio2013
-            auto const ret = pOutput->insert({p->m_aAttribute, x });
+            auto const ret = pOutput->insert(
+                {p->m_aAttribute,
+                 {p->m_aCharset, p->m_aLanguage, aValue, !bBadEncoding}});
             SAL_INFO_IF(!ret.second, "tools",
                 "INetMIME: dropping duplicate parameter: " << p->m_aAttribute);
             p = pNext;
@@ -877,7 +882,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                     RTL_TEXTENCODING_UTF8);
         }
 
-        *pPos = new Parameter(*pPos, aAttribute, aCharset, aValue,
+        *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
                               nSection, bExtended);
     }
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;

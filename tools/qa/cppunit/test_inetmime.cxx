@@ -35,11 +35,13 @@ namespace
     public:
         void test_decodeHeaderFieldBody();
 
-        void test_scanContentType();
+        void test_scanContentType_basic();
+        void test_scanContentType_rfc2231();
 
         CPPUNIT_TEST_SUITE(Test);
         CPPUNIT_TEST(test_decodeHeaderFieldBody);
-        CPPUNIT_TEST(test_scanContentType);
+        CPPUNIT_TEST(test_scanContentType_basic);
+        CPPUNIT_TEST(test_scanContentType_rfc2231);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -56,17 +58,61 @@ namespace
         CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QUJD?=", "ABC"));
     }
 
-    void Test::test_scanContentType()
+    void Test::test_scanContentType_basic()
     {
         {
             OUString input
-                = "TEST/subTST; parm1*0*=US-ASCII'En'5%25%20; Parm1*1*=of%2010";
+                = "TEST/subTST; parm1=Value1; Parm2=\"unpacked value; %20\"";
+            // Just scan input for valid string:
+            auto end = INetMIME::scanContentType(input.getStr(), input.getStr()+input.getLength());
+            CPPUNIT_ASSERT(end != nullptr);
+            CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
+            // Scan input and parse type, subType and parameters:
             OUString type;
             OUString subType;
             INetContentTypeParameterList parameters;
-            auto end = INetMIME::scanContentType(
-                input.getStr(), input.getStr() + input.getLength(), &type,
-                &subType, &parameters);
+            end = INetMIME::scanContentType(input.getStr(), input.getStr() + input.getLength(),
+                                            &type, &subType, &parameters);
+            CPPUNIT_ASSERT(end != nullptr);
+            CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
+            CPPUNIT_ASSERT_EQUAL(OUString("test"), type);
+            CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
+            CPPUNIT_ASSERT_EQUAL(
+                INetContentTypeParameterList::size_type(2), parameters.size());
+            auto i = parameters.find("parm1");
+            CPPUNIT_ASSERT(i != parameters.end());
+            CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sCharset);
+            CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sLanguage);
+            CPPUNIT_ASSERT_EQUAL(OUString("Value1"), i->second.m_sValue);
+            CPPUNIT_ASSERT(i->second.m_bConverted);
+            i = parameters.find("parm2");
+            CPPUNIT_ASSERT(i != parameters.end());
+            CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sCharset);
+            CPPUNIT_ASSERT_EQUAL(OString(), i->second.m_sLanguage);
+            CPPUNIT_ASSERT_EQUAL(OUString("unpacked value; %20"), i->second.m_sValue);
+            CPPUNIT_ASSERT(i->second.m_bConverted);
+        }
+    }
+
+    void Test::test_scanContentType_rfc2231()
+    {
+        {
+            // Test extended parameter with value split in 3 sections:
+            OUString input
+                = "TEST/subTST; "
+                  "parm1*0*=US-ASCII'En'5%25%20; "
+                  "Parm1*1*=of%2010;\t"
+                  "parm1*2*=%20%3d%200.5";
+            // Just scan input for valid string:
+            auto end = INetMIME::scanContentType(input.getStr(), input.getStr()+input.getLength());
+            CPPUNIT_ASSERT(end != nullptr);
+            CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
+            // Scan input and parse type, subType and parameters:
+            OUString type;
+            OUString subType;
+            INetContentTypeParameterList parameters;
+            end = INetMIME::scanContentType(input.getStr(), input.getStr() + input.getLength(),
+                                            &type, &subType, &parameters);
             CPPUNIT_ASSERT(end != nullptr);
             CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
             CPPUNIT_ASSERT_EQUAL(OUString("test"), type);
@@ -75,7 +121,48 @@ namespace
                 INetContentTypeParameterList::size_type(1), parameters.size());
             auto i = parameters.find("parm1");
             CPPUNIT_ASSERT(i != parameters.end());
-            CPPUNIT_ASSERT_EQUAL(OUString("5% of 10"), i->second.m_sValue);
+            CPPUNIT_ASSERT_EQUAL(OString("us-ascii"), i->second.m_sCharset);
+            CPPUNIT_ASSERT_EQUAL(OString("en"), i->second.m_sLanguage);
+            CPPUNIT_ASSERT_EQUAL(OUString("5% of 10 = 0.5"), i->second.m_sValue);
+            CPPUNIT_ASSERT(i->second.m_bConverted);
+
+            // Test extended parameters with different value charsets:
+            input = "TEST/subTST;"
+                    "parm1*0*=us-ascii'en'value;PARM1*1*=1;"
+                    "parm2*0*=WINDOWS-1250'en-GB'value2%20%80;"
+                    "parm3*0*=UNKNOWN'EN'value3";
+            // Just scan input for valid string:
+            end = INetMIME::scanContentType(input.getStr(), input.getStr()+input.getLength());
+            CPPUNIT_ASSERT(end != nullptr);
+            CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
+            // Scan input and parse type, subType and parameters:
+            end = INetMIME::scanContentType(input.getStr(), input.getStr() + input.getLength(),
+                                            &type, &subType, &parameters);
+            CPPUNIT_ASSERT(end != nullptr);
+            CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
+            CPPUNIT_ASSERT_EQUAL(OUString("test"), type);
+            CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
+            CPPUNIT_ASSERT_EQUAL(
+                INetContentTypeParameterList::size_type(3), parameters.size());
+            i = parameters.find("parm1");
+            CPPUNIT_ASSERT(i != parameters.end());
+            CPPUNIT_ASSERT_EQUAL(OString("us-ascii"), i->second.m_sCharset);
+            CPPUNIT_ASSERT_EQUAL(OString("en"), i->second.m_sLanguage);
+            CPPUNIT_ASSERT_EQUAL(OUString("value1"), i->second.m_sValue);
+            CPPUNIT_ASSERT(i->second.m_bConverted);
+            i = parameters.find("parm2");
+            CPPUNIT_ASSERT(i != parameters.end());
+            CPPUNIT_ASSERT_EQUAL(OString("windows-1250"), i->second.m_sCharset);
+            CPPUNIT_ASSERT_EQUAL(OString("en-gb"), i->second.m_sLanguage);
+            // Euro currency sign, windows-1250 x80 is converted to unicode u20AC:
+            CPPUNIT_ASSERT_EQUAL(OUString(u"value2 \u20AC"), i->second.m_sValue);
+            CPPUNIT_ASSERT(i->second.m_bConverted);
+            i = parameters.find("parm3");
+            CPPUNIT_ASSERT(i != parameters.end());
+            CPPUNIT_ASSERT_EQUAL(OString("unknown"), i->second.m_sCharset);
+            CPPUNIT_ASSERT_EQUAL(OString("en"), i->second.m_sLanguage);
+            // Convertion fails for unknown charsets:
+            CPPUNIT_ASSERT(!i->second.m_bConverted);
         }
     }
 
