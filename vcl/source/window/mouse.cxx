@@ -464,14 +464,9 @@ void Window::CaptureMouse()
 
 void Window::ReleaseMouse()
 {
-
-    ImplSVData* pSVData = ImplGetSVData();
-
-    SAL_WARN_IF(!IsMouseCaptured(), "vcl",
-                       "Window::ReleaseMouse(): window doesn't have the mouse capture" );
-
     if (IsMouseCaptured())
     {
+        ImplSVData* pSVData = ImplGetSVData();
         pSVData->maWinData.mpCaptureWin = nullptr;
         mpWindowImpl->mpFrame->CaptureMouse( false );
         ImplGenerateMouseMove();
@@ -480,13 +475,11 @@ void Window::ReleaseMouse()
 
 bool Window::IsMouseCaptured() const
 {
-
     return (this == ImplGetSVData()->maWinData.mpCaptureWin);
 }
 
 void Window::SetPointer( const Pointer& rPointer )
 {
-
     if ( mpWindowImpl->maPointer == rPointer )
         return;
 
