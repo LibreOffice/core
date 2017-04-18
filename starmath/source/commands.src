@@ -1318,6 +1318,28 @@ Menu RID_COMMANDMENU
     {
         MenuItem
         {
+            Identifier = SID_CUT ;
+            Command = ".uno:Cut" ;
+            Text [ en-US ] = "Cu~t" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_COPY ;
+            Command = ".uno:Copy" ;
+            Text [ en-US ] = "~Copy" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_PASTE ;
+            Command = ".uno:Paste" ;
+            Text [ en-US ] = "~Paste" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
             Identifier = RID_UNBINOPS_MENU ;
             HelpId = HID_SMA_UNBINOPS_TBX ;
             Text [ en-US ] = "~Unary/Binary Operators" ;
