@@ -22,6 +22,30 @@
       "revId": "16286668b6e1a1decda47be1a8deec40a380668e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_19814e4b",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2415,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-18T10:51:05Z",
+      "side": 1,
+      "message": "You don\u0027t need to obtain the notes.\n\nJust create an ScRangeList and for each marked sheet append an ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) and then create a new ScMarkData and init that with the range list, i.e. using MarkFromRangeList(rangelist,false)\n\nTo iterate over selected sheets when creating the range list use an iterator of ScMarkData::begin() to ScMarkData::end() on the original view data\u0027s mark data.",
+      "parentUuid": "5a3905b3_16a4bd55",
+      "range": {
+        "startLine": 2404,
+        "startChar": 16,
+        "endLine": 2415,
+        "endChar": 113
+      },
+      "revId": "16286668b6e1a1decda47be1a8deec40a380668e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
