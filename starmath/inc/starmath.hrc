@@ -86,7 +86,6 @@
 #define RID_MATH_TOOLBOX            (RID_APP_START + 50)
 
 #define RID_UNDOFORMATNAME          (RID_APP_START + 504)
-#define RID_COMMANDMENU             (RID_APP_START + 701)
 #define RID_FONTREGULAR             (RID_APP_START + 804)
 #define RID_FONTITALIC              (RID_APP_START + 805)
 #define RID_FONTBOLD                (RID_APP_START + 806)
@@ -461,18 +460,6 @@
 #define RID_EXISTS                  (RID_APP_START + 1608)
 #define RID_NOTEXISTS               (RID_APP_START + 1618)
 #define RID_FORALL                  (RID_APP_START + 1612)
-
-// new menue resource ID's
-#define RID_UNBINOPS_MENU           (RID_APP_START + 2164)
-#define RID_RELATIONS_MENU          (RID_APP_START + 2165)
-#define RID_SETOPERATIONS_MENU      (RID_APP_START + 2166)
-#define RID_FUNCTIONS_MENU          (RID_APP_START + 2167)
-#define RID_OPERATORS_MENU          (RID_APP_START + 2168)
-#define RID_ATTRIBUTES_MENU         (RID_APP_START + 2169)
-#define RID_BRACKETS_MENU           (RID_APP_START + 2170)
-#define RID_FORMAT_MENU             (RID_APP_START + 2171)
-#define RID_MISC_MENU               (RID_APP_START + 2172)
-#define RID_FUNCTIONSOTHER1_MENU    (RID_APP_START + 2173)
 
 #define RID_UI_SYMBOL_NAMES             (RID_APP_START + 3102)
 #define RID_EXPORT_SYMBOL_NAMES         (RID_APP_START + 3103)
