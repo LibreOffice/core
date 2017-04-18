@@ -261,6 +261,26 @@ void NavigatorTree::dispose()
     SvTreeListBox::dispose();
 }
 
+namespace
+{
+    sal_uInt16 mapIdent(const OString& rIdent)
+    {
+        if (rIdent == "sorting")
+            return SID_SORTINGANDGROUPING;
+        else if (rIdent == "page")
+            return SID_PAGEHEADERFOOTER;
+        else if (rIdent == "report")
+            return SID_REPORTHEADERFOOTER;
+        else if (rIdent == "function")
+            return SID_RPT_NEW_FUNCTION;
+        else if (rIdent == "properties")
+            return SID_SHOW_PROPERTYBROWSER;
+        else if (rIdent == "delete")
+            return SID_DELETE;
+        return 0;
+    }
+}
+
 void NavigatorTree::Command( const CommandEvent& rEvt )
 {
     bool bHandled = false;
@@ -297,29 +317,33 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
             uno::Reference< report::XGroup> xGroup(pData->getContent(),uno::UNO_QUERY);
             bool bDeleteAllowed = m_rController.isEditable() && (xGroup.is() ||
                                       uno::Reference< report::XFunction>(pData->getContent(),uno::UNO_QUERY).is());
-            ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_MENU_NAVIGATOR ) );
+
+            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/dbreport/ui/navigatormenu.ui", "");
+            VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
             sal_uInt16 nCount = aContextMenu->GetItemCount();
             for (sal_uInt16 i = 0; i < nCount; ++i)
             {
                 if ( MenuItemType::SEPARATOR != aContextMenu->GetItemType(i))
                 {
-                    sal_uInt16 nId = aContextMenu->GetItemId(i);
+                    sal_uInt16 nMId = aContextMenu->GetItemId(i);
+                    sal_uInt16 nSId = mapIdent(aContextMenu->GetItemIdent(nMId));
 
-                    aContextMenu->CheckItem(nId,m_rController.isCommandChecked(nId));
-                    bool bEnabled = m_rController.isCommandEnabled(nId);
-                    if ( nId == SID_RPT_NEW_FUNCTION )
-                        aContextMenu->EnableItem(nId,m_rController.isEditable() && (xSupplier.is() || xFunctions.is()) );
+                    aContextMenu->CheckItem(nMId, m_rController.isCommandChecked(nSId));
+                    bool bEnabled = m_rController.isCommandEnabled(nSId);
+                    if (nSId == SID_RPT_NEW_FUNCTION)
+                        aContextMenu->EnableItem(nMId, m_rController.isEditable() && (xSupplier.is() || xFunctions.is()));
                     // special condition, check for function and group
-                    else if ( nId == SID_DELETE )
-                        aContextMenu->EnableItem(SID_DELETE,bDeleteAllowed);
+                    else if (nSId == SID_DELETE)
+                        aContextMenu->EnableItem(nMId, bDeleteAllowed);
                     else
-                        aContextMenu->EnableItem(nId,bEnabled);
+                        aContextMenu->EnableItem(nMId, bEnabled);
                 }
             }
-            sal_uInt16 nId = aContextMenu->Execute(this, aWhere);
-            if ( nId )
+
+            if (aContextMenu->Execute(this, aWhere))
             {
+                sal_uInt16 nId = mapIdent(aContextMenu->GetCurItemIdent());
                 uno::Sequence< beans::PropertyValue> aArgs;
                 if ( nId == SID_RPT_NEW_FUNCTION )
                 {
