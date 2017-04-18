@@ -386,7 +386,10 @@
             <xsl:when test="$number-format = 'thai-letters' or $number-format = 'thai-numbers' or $number-format = 'thai-counting'">
                 <xsl:attribute name="style:num-format">ก, ข, ฃ, ...</xsl:attribute>
             </xsl:when>
-            <xsl:when test="$number-format = 'hebrew-1' or $number-format = 'hebrew-2'">
+            <xsl:when test="$number-format = 'hebrew-1'">
+                <xsl:attribute name="style:num-format">א, י, ק, ...</xsl:attribute>
+            </xsl:when>
+            <xsl:when test="$number-format = 'hebrew-2'">
                 <xsl:attribute name="style:num-format">א, ב, ג, ...</xsl:attribute>
             </xsl:when>
             < ordinal, cardinal-text, ordinal-text, hex, chicago, bullet, ideograph-zodiac-traditional,

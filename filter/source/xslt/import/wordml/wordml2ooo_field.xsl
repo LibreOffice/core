@@ -1294,7 +1294,10 @@
             <xsl:when test="contains($input_MS_num_format, 'ALPHABETIC' ) ">
                 <xsl:text>A</xsl:text>
             </xsl:when>
-            <xsl:when test="contains($input_MS_num_format, 'hebrew2' ) ">
+            <xsl:when test="contains($input_MS_num_format, 'hebrew1' ) ">
+                <xsl:text>א, י, ק, ...</xsl:text>
+            </xsl:when>
+	    <xsl:when test="contains($input_MS_num_format, 'hebrew2' ) ">
                 <xsl:text>א, ב, ג, ...</xsl:text>
             </xsl:when>
             <xsl:when test="contains($input_MS_num_format,  'ArabicAlpha' ) ">

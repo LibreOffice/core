@@ -264,7 +264,10 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
             <xsl:when test="$field_number_format_style ='A' ">
                 <xsl:text>  \* ALPHABETIC </xsl:text>
             </xsl:when>
-            <xsl:when test="$field_number_format_style = 'א, ב, ג, ...' ">
+            <xsl:when test="$field_number_format_style = 'א, י, ק, ...' ">
+                <xsl:text>  \* hebrew1  </xsl:text>
+            </xsl:when>
+	    <xsl:when test="$field_number_format_style = 'א, ב, ג, ...' ">
                 <xsl:text>  \* hebrew2  </xsl:text>
             </xsl:when>
             <xsl:when test="$field_number_format_style = 'أ, ب, ت, ...' ">

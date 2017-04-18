@@ -569,7 +569,7 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_hebrew1:
             //91726
-            nRet = style::NumberingType::CHARS_HEBREW;
+            nRet = style::NumberingType::NUMBER_HEBREW;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth:
         case NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth2:
