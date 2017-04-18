@@ -162,7 +162,6 @@ struct update_info
 {
     OUString aFromBuildID;
     OUString aSeeAlsoURL;
-    OUString aNewVersion;
 
     update_file aUpdateFile;
     std::vector<language_file> aLanguageFiles;
@@ -342,12 +341,6 @@ update_info parse_response(const std::string& rResponse)
         throw invalid_update_info();
     }
 
-    orcus::json::detail::node aVersionNode = aDocumentRoot.child("version");
-    if (aVersionNode.type() != orcus::json_node_t::string)
-    {
-        throw invalid_update_info();
-    }
-
     orcus::json::detail::node aUpdateNode = aDocumentRoot.child("update");
     if (aUpdateNode.type() != orcus::json_node_t::object)
     {
@@ -362,7 +355,6 @@ update_info parse_response(const std::string& rResponse)
 
     update_info aUpdateInfo;
     aUpdateInfo.aFromBuildID = toOUString(aFromNode.string_value().str());
-    aUpdateInfo.aNewVersion = toOUString(aVersionNode.string_value().str());
     aUpdateInfo.aSeeAlsoURL = toOUString(aSeeAlsoNode.string_value().str());
 
     aUpdateInfo.aUpdateFile = parse_update_file(aUpdateNode);
