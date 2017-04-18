@@ -152,6 +152,9 @@ void CertificateChooser::ImplInitialize()
 
     for (auto &secEnvironment : mxSecurityEnvironments)
     {
+        if (!secEnvironment.is())
+            continue;
+
         uno::Sequence< uno::Reference< security::XCertificate > > xCerts;
         try
         {
