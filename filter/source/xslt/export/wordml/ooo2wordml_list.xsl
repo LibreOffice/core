@@ -281,16 +281,20 @@
                 <w:nfc w:val="24"/>
             </xsl:when>
             <xsl:when test="$number-format ='أ, ب, ت, ...'">
-                <!-- 46.	hebrew-1-->
+                <!-- 46.	arabic-alpha-->
                 <w:nfc w:val="46"/>
             </xsl:when>
             <xsl:when test="$number-format = 'ก, ข, ฃ, ...'">
                 <!--53.	thai-letters not match well !-->
                 <w:nfc w:val="53"/>
+	    </xsl:when>
+	    <xsl:when test="$number-format='א, י, ק, ...'">
+                <!--45. hebrew-1-->
+                <w:nfc w:val="45"/>
             </xsl:when>
             <xsl:when test="$number-format='א, ב, ג, ...'">
-                <!--45.	arabic-alpha-->
-                <w:nfc w:val="45"/>
+                <!--47.	hebrew-2-->
+                <w:nfc w:val="47"/>
             </xsl:when>
             <xsl:when test="string-length($number-format)=0">
                 <w:nfc w:val="255"/>

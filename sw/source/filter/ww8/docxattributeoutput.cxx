@@ -5728,7 +5728,9 @@ static OString impl_NumberingType( sal_uInt16 nNumberingType )
 
         case SVX_NUM_BITMAP:
         case SVX_NUM_CHAR_SPECIAL:          aType = "bullet";      break;
-        case style::NumberingType::CHARS_HEBREW: aType = "hebrew1"; break;
+
+        case style::NumberingType::CHARS_HEBREW: aType = "hebrew2"; break;
+        case style::NumberingType::NUMBER_HEBREW: aType = "hebrew1"; break;
 
         default:                            aType = "none";        break;
     }
@@ -5753,6 +5755,7 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::BITMAP:
         case style::NumberingType::CHAR_SPECIAL:
         case style::NumberingType::CHARS_HEBREW:
+        case style::NumberingType::NUMBER_HEBREW:
         case style::NumberingType::NUMBER_NONE:
             return impl_NumberingType( nNumberingType );
         case style::NumberingType::FULLWIDTH_ARABIC: aType="decimalFullWidth"; break;

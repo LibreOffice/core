@@ -261,8 +261,11 @@
             <xsl:when test="$number-format = 'ก, ข, ฃ, ...'">
                 <w:numFmt w:val="thai-letters"/>
             </xsl:when>
-            <xsl:when test="$number-format = 'א, ב, ג, ...'">
+            <xsl:when test="$number-format = 'א, י, ק, ...'">
                 <w:numFmt w:val="hebrew-1"/>
+            </xsl:when>
+	    <xsl:when test="$number-format = 'א, ב, ג, ...'">
+                <w:numFmt w:val="hebrew-2"/>
             </xsl:when>
             <xsl:when test="$number-format = 'Native Numbering'">
                 <xsl:variable name="locale" select="/office:document/office:meta/dc:language"/>
