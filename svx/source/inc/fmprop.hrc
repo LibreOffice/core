@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMPROP_HRC
 #define INCLUDED_SVX_SOURCE_INC_FMPROP_HRC
 
-// PropertyId's, welche eine Zuordnung zu einen PropertyName haben, das koennten
-// auch in Zukunft WhichIds sein -> Itemset
+// PropertyIds, which have an assignment to a PropertyName, could continue
+// to be WhichIds in the future -> Itemset
 #define FM_ATTR_START           0
 
 #define FM_ATTR_FILTER          ( FM_ATTR_START + 1 )
