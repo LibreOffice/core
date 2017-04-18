@@ -229,6 +229,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/printmonitordialog \
 	sw/uiconfig/swriter/ui/printoptionspage \
 	sw/uiconfig/swriter/ui/privateuserpage \
+	sw/uiconfig/swriter/ui/readonlymenu \
 	sw/uiconfig/swriter/ui/renameautotextdialog \
 	sw/uiconfig/swriter/ui/renameentrydialog \
 	sw/uiconfig/swriter/ui/renameobjectdialog \

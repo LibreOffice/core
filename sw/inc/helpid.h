@@ -88,17 +88,6 @@
 #define HID_MN_SUB_SPELLING                                     "SW_HID_MN_SUB_SPELLING"
 #define HID_MN_SUB_MIRROR                                       "SW_HID_MN_SUB_MIRROR"
 
-#define HID_MN_READONLY_SAVEGRAPHIC                             "SW_HID_MN_READONLY_SAVEGRAPHIC"
-#define HID_MN_READONLY_GRAPHICTOGALLERY                        "SW_HID_MN_READONLY_GRAPHICTOGALLERY"
-#define HID_MN_READONLY_TOGALLERYLINK                           "SW_HID_MN_READONLY_TOGALLERYLINK"
-#define HID_MN_READONLY_TOGALLERYCOPY                           "SW_HID_MN_READONLY_TOGALLERYCOPY"
-#define HID_MN_READONLY_SAVEBACKGROUND                          "SW_HID_MN_READONLY_SAVEBACKGROUND"
-#define HID_MN_READONLY_BACKGROUNDTOGALLERY                     "SW_HID_MN_READONLY_BACKGROUNDTOGALLERY"
-#define HID_MN_READONLY_COPYLINK                                "SW_HID_MN_READONLY_COPYLINK"
-#define HID_MN_READONLY_COPYGRAPHIC                             "SW_HID_MN_READONLY_COPYGRAPHIC"
-#define HID_MN_READONLY_LOADGRAPHIC                             "SW_HID_MN_READONLY_LOADGRAPHIC"
-#define HID_MN_READONLY_GRAPHICOFF                              "SW_HID_MN_READONLY_GRAPHICOFF"
-
 #define HID_LINGU_AUTOCORR                                      "SW_HID_LINGU_AUTOCORR"
 #define HID_LINGU_REPLACE                                       "SW_HID_LINGU_REPLACE"
 #define HID_SMARTTAG_MAIN                                       "SW_HID_SMARTTAG_MAIN"    // SMARTTAGS

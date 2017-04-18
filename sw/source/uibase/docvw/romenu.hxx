@@ -31,7 +31,32 @@ class INetImage;
 
 class SwReadOnlyPopup
 {
+    VclBuilder aBuilder;
     ScopedVclPtr<PopupMenu> xMenu;
+    sal_uInt16 nReadonlyOpenurl;
+    sal_uInt16 nReadonlyOpendoc;
+    sal_uInt16 nReadonlyEditdoc;
+    sal_uInt16 nReadonlySelectionMode;
+    sal_uInt16 nReadonlyReload;
+    sal_uInt16 nReadonlyReloadFrame;
+    sal_uInt16 nReadonlySourceview;
+    sal_uInt16 nReadonlyBrowseBackward;
+    sal_uInt16 nReadonlyBrowseForward;
+    sal_uInt16 nReadonlySaveGraphic;
+    sal_uInt16 nReadonlyGraphictogallery;
+    sal_uInt16 nReadonlyTogallerylink;
+    sal_uInt16 nReadonlyTogallerycopy;
+    sal_uInt16 nReadonlySaveBackground;
+    sal_uInt16 nReadonlyBackgroundtogallery;
+    sal_uInt16 nReadonlyBackgroundTogallerylink;
+    sal_uInt16 nReadonlyBackgroundTogallerycopy;
+    sal_uInt16 nReadonlyCopylink;
+    sal_uInt16 nReadonlyCopyGraphic;
+    sal_uInt16 nReadonlyLoadGraphic;
+    sal_uInt16 nReadonlyGraphicoff;
+    sal_uInt16 nReadonlyFullscreen;
+    sal_uInt16 nReadonlyCopy;
+
     SwView &rView;
     SvxBrushItem aBrushItem;
     const Point &rDocPos;

@@ -22,32 +22,6 @@
 
 #include "rcid.hrc"
 
-#define MN_READONLY_POPUP               (RC_DOCVW_BEGIN + 1)
-#define MN_READONLY_OPENURL             (RC_DOCVW_BEGIN + 2)
-#define MN_READONLY_OPENURLNEW          (RC_DOCVW_BEGIN + 3)
-#define MN_READONLY_EDITDOC             (RC_DOCVW_BEGIN + 4)
-// free (5)
-#define MN_READONLY_BROWSE_BACKWARD     (RC_DOCVW_BEGIN + 6)
-#define MN_READONLY_BROWSE_FORWARD      (RC_DOCVW_BEGIN + 7)
-#define MN_READONLY_SELECTION_MODE      (RC_DOCVW_BEGIN + 8)
-#define MN_READONLY_SAVEGRAPHIC         (RC_DOCVW_BEGIN + 11)
-#define MN_READONLY_SAVEBACKGROUND      (RC_DOCVW_BEGIN + 12)
-#define MN_READONLY_COPYLINK            (RC_DOCVW_BEGIN + 13)
-#define MN_READONLY_COPYGRAPHIC         (RC_DOCVW_BEGIN + 14)
-#define MN_READONLY_LOADGRAPHIC         (RC_DOCVW_BEGIN + 15)
-#define MN_READONLY_GRAPHICOFF          (RC_DOCVW_BEGIN + 16)
-// free                                 (RC_DOCVW_BEGIN + 17)
-#define MN_READONLY_TOGALLERYLINK       (RC_DOCVW_BEGIN + 18)
-#define MN_READONLY_TOGALLERYCOPY       (RC_DOCVW_BEGIN + 19)
-#define MN_READONLY_SOURCEVIEW          (RC_DOCVW_BEGIN + 20)
-#define MN_READONLY_RELOAD_FRAME        (RC_DOCVW_BEGIN + 21)
-#define MN_READONLY_RELOAD              (RC_DOCVW_BEGIN + 22)
-#define MN_READONLY_COPY                (RC_DOCVW_BEGIN + 23)
-
-//For the following we need space for the gallery-themes
-#define MN_READONLY_GRAPHICTOGALLERY    (RC_DOCVW_BEGIN + 24)
-#define MN_READONLY_BACKGROUNDTOGALLERY (RC_DOCVW_BEGIN + 60)
-
 #define STR_REDLINE_INSERT              (RC_DOCVW_BEGIN + 9)
 #define STR_REDLINE_DELETE              (RC_DOCVW_BEGIN + 10)
 #define STR_REDLINE_FORMAT              (RC_DOCVW_BEGIN + 11)
