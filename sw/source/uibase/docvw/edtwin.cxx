@@ -5283,7 +5283,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
                     if ( m_rView.GetDocShell()->IsReadOnly() )
                     {
-                        ScopedVclPtrInstance<SwReadOnlyPopup> pROPopup( aDocPos, m_rView );
+                        SwReadOnlyPopup aROPopup(aDocPos, m_rView);
 
                         ui::ContextMenuExecuteEvent aEvent;
                         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
@@ -5291,16 +5291,16 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.ExecutePosition.Y = aPixPos.Y();
                         VclPtr<Menu> pMenu;
                         OUString sMenuName("private:resource/ReadonlyContextMenu");
-                        if( GetView().TryContextMenuInterception( *pROPopup, sMenuName, pMenu, aEvent ) )
+                        if (GetView().TryContextMenuInterception(aROPopup.GetMenu(), sMenuName, pMenu, aEvent))
                         {
                             if ( pMenu )
                             {
                                 sal_uInt16 nExecId = static_cast<PopupMenu*>(pMenu.get())->Execute(this, aPixPos);
                                 if( !::ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu.get()), *m_rView.GetViewFrame(), nExecId ))
-                                    pROPopup->Execute(this, nExecId);
+                                    aROPopup.Execute(this, nExecId);
                             }
                             else
-                                pROPopup->Execute(this, aPixPos);
+                                aROPopup.Execute(this, aPixPos);
                         }
                     }
                     else if ( !m_rView.ExecSpellPopup( aDocPos ) )
