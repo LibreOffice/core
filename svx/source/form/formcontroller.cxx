@@ -1456,7 +1456,7 @@ void SAL_CALL FormController::textChanged(const TextEvent& e)
     if ( m_aFilterRows.empty() )
         appendEmptyDisjunctiveTerm();
 
-    // Suchen der aktuellen Row
+    // find the current row
     if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
     {
         OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
@@ -2872,7 +2872,7 @@ void SAL_CALL FormController::elementRemoved(const ContainerEvent& evt)
     if (xModel.is() && m_xModelAsIndex == xModel->getParent())
     {
         removeControl(xControl);
-        // TabOrder nicht neu berechnen, da das intern schon funktionieren muss!
+        // Do not recalculate TabOrder, because it must already work internally!
     }
     // are we in filtermode and a XModeSelector has inserted an element
     else if (m_bFiltering && Reference< XModeSelector > (evt.Source, UNO_QUERY).is())
