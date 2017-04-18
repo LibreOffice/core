@@ -141,8 +141,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleTextComponent, VCLXAccessibleCom
 
 sal_Int32 VCLXAccessibleTextComponent::getCaretPosition()
 {
-    OExternalLockGuard aGuard( this );
-
     return -1;
 }
 
