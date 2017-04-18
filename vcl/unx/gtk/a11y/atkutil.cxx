@@ -90,7 +90,14 @@ atk_wrapper_focus_idle_handler (gpointer data)
                     wrapper_obj->mpText.set(wrapper_obj->mpContext, css::uno::UNO_QUERY);
                     if ( wrapper_obj->mpText.is() )
                     {
-                        gint caretPos = wrapper_obj->mpText->getCaretPosition();
+                        gint caretPos = -1;
+
+                        try {
+                            caretPos = wrapper_obj->mpText->getCaretPosition();
+                        }
+                        catch(const uno::Exception&) {
+                            g_warning( "Exception in getCaretPosition()" );
+                        }
 
                         if ( caretPos != -1 )
                         {
