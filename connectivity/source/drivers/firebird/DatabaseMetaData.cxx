@@ -1086,9 +1086,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         aCurrentRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(1)));
         // 4. COLUMN_NAME
         aCurrentRow[4] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(6)));
-        aCurrentRow[5] = new ORowSetValueDecorator(xRow->getString(2)); // 5. GRANTOR
-        aCurrentRow[6] = new ORowSetValueDecorator(xRow->getString(3)); // 6. GRANTEE
-        aCurrentRow[7] = new ORowSetValueDecorator(xRow->getString(4)); // 7. Privilege
+        aCurrentRow[5] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(2))); // 5. GRANTOR
+        aCurrentRow[6] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(3))); // 6. GRANTEE
+        aCurrentRow[7] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(4))); // 7. Privilege
         aCurrentRow[7] = new ORowSetValueDecorator( ( xRow->getShort(5) == 1 ) ?
                     OUString("YES") : OUString("NO")); // 8. Grantable
 
@@ -1531,25 +1531,25 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 
     while(rs->next())
     {
-        aCurrentRow[3] = new ORowSetValueDecorator(xRow->getString(7)); // PK table
-        aCurrentRow[4] = new ORowSetValueDecorator(xRow->getString(8)); // PK column
-        aCurrentRow[7] = new ORowSetValueDecorator(xRow->getString(10)); // FK table
-        aCurrentRow[8] = new ORowSetValueDecorator(xRow->getString(11)); // FK column
+        aCurrentRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(7))); // PK table
+        aCurrentRow[4] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(8))); // PK column
+        aCurrentRow[7] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(10))); // FK table
+        aCurrentRow[8] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(11))); // FK column
 
         aCurrentRow[9] = new ORowSetValueDecorator(xRow->getShort(9)); // PK sequence number
-        aCurrentRow[10] = new ORowSetValueDecorator(aRuleMap[xRow->getString(1)]); // update role
-        aCurrentRow[11] = new ORowSetValueDecorator(aRuleMap[xRow->getString(2)]); // delete role
+        aCurrentRow[10] = new ORowSetValueDecorator(aRuleMap[sanitizeIdentifier(xRow->getString(1))]); // update role
+        aCurrentRow[11] = new ORowSetValueDecorator(aRuleMap[sanitizeIdentifier(xRow->getString(2))]); // delete role
 
-        aCurrentRow[12] = new ORowSetValueDecorator(xRow->getString(4)); // FK name
-        aCurrentRow[13] = new ORowSetValueDecorator(xRow->getString(3)); // PK name
+        aCurrentRow[12] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(4))); // FK name
+        aCurrentRow[13] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(3))); // PK name
 
         aCurrentRow[14] = new ORowSetValueDecorator(Deferrability::NONE); // deferrability
 
         // deferrability is currently not supported, but may be supported in the future.
         /*
-        aCurrentRow[14] = (xRow->getString(5).compareTo(OUString("NO") == 0 ?
+        aCurrentRow[14] = (sanitizeIdentifier(xRow->getString(5)).compareTo(OUString("NO") == 0 ?
                           new ORowSetValueDecorator(Deferrability::NONE)
-                        : (xRow->getString(6).compareTo(OUString("NO") == 0 ?
+                        : (sanitizeIdentifier(xRow->getString(6)).compareTo(OUString("NO") == 0 ?
                             new ORowSetValueDecorator(Deferrability::INITIALLY_IMMEDIATE)
                           : new ORowSetValueDecorator(Deferrability::INITIALLY_DEFERRED));
         */
@@ -1782,9 +1782,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     {
         // 3. TABLE_NAME
         aRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(1)));
-        aRow[4] = new ORowSetValueDecorator(xRow->getString(2)); // 4. GRANTOR
-        aRow[5] = new ORowSetValueDecorator(xRow->getString(3)); // 5. GRANTEE
-        aRow[6] = new ORowSetValueDecorator(xRow->getString(4)); // 6. Privilege
+        aRow[4] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(2))); // 4. GRANTOR
+        aRow[5] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(3))); // 5. GRANTEE
+        aRow[6] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(4))); // 6. Privilege
         aRow[7] = new ORowSetValueDecorator(bool(xRow->getBoolean(5))); // 7. Is Grantable
 
         aResults.push_back(aRow);
