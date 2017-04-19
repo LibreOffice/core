@@ -25,6 +25,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include "svtools/treelistentry.hxx"
 #include <cuires.hrc>
+#include <bitmaps.hlst>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
 #include <svl/eitem.hxx>
@@ -392,7 +393,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
     SvTreeListEntry* pEntry = nullptr;
     if ( _bReadOnly )
     {
-        Image aLocked(BitmapEx(CUI_RES(RID_SVXBMP_LOCK)));
+        Image aLocked(BitmapEx(RID_SVXBMP_LOCK));
         pEntry = m_pPathBox->InsertEntry( aStr, aLocked, aLocked );
     }
     else

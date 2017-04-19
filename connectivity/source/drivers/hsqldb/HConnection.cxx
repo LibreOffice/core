@@ -20,7 +20,7 @@
 
 #include "hsqldb/HConnection.hxx"
 #include "hsqldb/HTools.hxx"
-#include "hsqlui.hrc"
+#include "bitmaps.hlst"
 
 #include <connectivity/dbtools.hxx>
 
@@ -323,7 +323,6 @@ namespace connectivity { namespace hsqldb
             // load the graphic from the global graphic repository
             aImageURL.append( "private:graphicrepository/" );
             // the relative path within the images.zip
-            aImageURL.append( "database/" );
             aImageURL.append( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
             // the name of the graphic to use
             OUString sImageURL( aImageURL.makeStringAndClear() );

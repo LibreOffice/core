@@ -20,7 +20,7 @@
 #ifndef CONNECTIVITY_HSQLUI_HRC
 #define CONNECTIVITY_HSQLUI_HRC
 
-#define LINKED_TEXT_TABLE_IMAGE_RESOURCE        "linked_text_table.png"
+#define LINKED_TEXT_TABLE_IMAGE_RESOURCE        "dbaccess/res/linked_text_table.png"
 
 #endif // CONNECTIVITY_HSQLUI_HRC
 

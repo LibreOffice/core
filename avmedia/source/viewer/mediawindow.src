@@ -39,16 +39,6 @@ String AVMEDIA_STR_ALL_FILES
     Text[en-US] = "All files";
 };
 
-Bitmap AVMEDIA_BMP_AUDIOLOGO
-{
-    file = "avaudiologo.png";
-};
-
-Bitmap AVMEDIA_BMP_EMPTYLOGO
-{
-    file = "avemptylogo.png";
-};
-
 String AVMEDIA_STR_ERR_URL
 {
     Text[en-US] = "The format of the selected file is not supported.";

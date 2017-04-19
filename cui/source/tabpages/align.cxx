@@ -22,6 +22,7 @@
 #include <editeng/svxenum.hxx>
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
+#include <bitmaps.hlst>
 #include <svx/rotmodit.hxx>
 
 #include <svx/algitem.hxx>
@@ -340,9 +341,9 @@ void AlignmentTabPage::InitVsRefEgde()
     // remember selection - is deleted in call to ValueSet::Clear()
     sal_uInt16 nSel = m_pVsRefEdge->GetSelectItemId();
 
-    BitmapEx aBottomLock(ResId(RID_SVXBMP_BOTTOMLOCK, CUI_MGR()));
-    BitmapEx aTopLock(ResId(RID_SVXBMP_TOPLOCK, CUI_MGR()));
-    BitmapEx aCellLock(ResId(RID_SVXBMP_CELLLOCK, CUI_MGR()));
+    BitmapEx aBottomLock(RID_SVXBMP_BOTTOMLOCK);
+    BitmapEx aTopLock(RID_SVXBMP_TOPLOCK);
+    BitmapEx aCellLock(RID_SVXBMP_CELLLOCK);
 
     if( GetDPIScaleFactor() > 1 )
     {

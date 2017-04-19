@@ -18,6 +18,7 @@
  */
 
 #include <svids.hrc>
+#include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <brdwin.hxx>
 #include <window.h>
@@ -38,14 +39,10 @@ static void ImplInitMsgBoxImageList()
     ImplSVData* pSVData = ImplGetSVData();
     if (pSVData->maWinData.maMsgBoxImgList.empty())
     {
-        ResMgr* pResMgr = ImplGetResMgr();
-        if (pResMgr)
-        {
-            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_ERRORBOX, *pResMgr))));
-            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_QUERYBOX, *pResMgr))));
-            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WARNINGBOX, *pResMgr))));
-            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_INFOBOX, *pResMgr))));
-        }
+        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_ERRORBOX)));
+        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_QUERYBOX)));
+        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_WARNINGBOX)));
+        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_INFOBOX)));
     }
 }
 

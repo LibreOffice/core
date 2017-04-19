@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 
 #include <svids.hrc>
+#include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <scrwnd.hxx>
 
@@ -59,11 +60,8 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     // create wheel window
     SetTitleType( FloatWinTitleType::NONE );
     ImplCreateImageList();
-    ResMgr* pResMgr = ImplGetResMgr();
-    Bitmap aBmp;
-    if( pResMgr )
-        aBmp = Bitmap( ResId( SV_RESID_BITMAP_SCROLLMSK, *pResMgr ) );
-    ImplSetRegion( aBmp );
+    BitmapEx aBmp(SV_RESID_BITMAP_SCROLLMSK);
+    ImplSetRegion(aBmp.GetBitmap());
 
     // set wheel mode
     if( bHorz && bVert )
@@ -121,16 +119,12 @@ void ImplWheelWindow::ImplSetRegion( const Bitmap& rRegionBmp )
 
 void ImplWheelWindow::ImplCreateImageList()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if (pResMgr)
-    {
-        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_SCROLLVH, *pResMgr))));
-        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_SCROLLV, *pResMgr))));
-        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_SCROLLH, *pResMgr))));
-        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WHEELVH, *pResMgr))));
-        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WHEELV, *pResMgr))));
-        maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WHEELH, *pResMgr))));
-    }
+    maImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_SCROLLVH)));
+    maImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_SCROLLV)));
+    maImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_SCROLLH)));
+    maImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_WHEELVH)));
+    maImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_WHEELV)));
+    maImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_WHEELH)));
 }
 
 void ImplWheelWindow::ImplSetWheelMode( WheelMode nWheelMode )

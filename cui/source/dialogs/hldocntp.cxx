@@ -38,6 +38,8 @@
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
+#include "bitmaps.hlst"
+
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -105,7 +107,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDia
     get(m_pCbbPath, "path");
     m_pCbbPath->SetSmartProtocol(INetProtocol::File);
     get(m_pBtCreate, "create");
-    BitmapEx aBitmap(CUI_RES(RID_SVXBMP_NEWDOC));
+    BitmapEx aBitmap(RID_SVXBMP_NEWDOC);
     aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
     m_pBtCreate->SetModeImage(Image(aBitmap));
     get(m_pLbDocTypes, "types");

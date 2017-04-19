@@ -39,6 +39,7 @@
 #include <vcl/uitest/uiobject.hxx>
 
 #include <svids.hrc>
+#include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <window.h>
 #include <controldata.hxx>
@@ -2738,7 +2739,7 @@ Size RadioButton::ImplGetRadioImageSize() const
 }
 
 static void LoadThemedImageList(const StyleSettings &rStyleSettings,
-                                std::vector<Image>& rList, const std::vector<ResId> &rResources)
+                                std::vector<Image>& rList, const std::vector<OUString> &rResources)
 {
     Color aColorAry1[6];
     Color aColorAry2[6];
@@ -2786,18 +2787,26 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
         pSVData->maCtrlData.mnLastRadioWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastRadioLColor = rStyleSettings.GetLightColor().GetColor();
 
-        ResMgr* pResMgr = ImplGetResMgr();
-        if (pResMgr)
+        std::vector<OUString> aResources;
+        if (nStyle)
         {
-            std::vector<ResId> aResources;
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO1 : SV_RESID_BITMAP_RADIO1, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO2 : SV_RESID_BITMAP_RADIO2, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO3 : SV_RESID_BITMAP_RADIO3, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO4 : SV_RESID_BITMAP_RADIO4, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO5 : SV_RESID_BITMAP_RADIO5, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO6 : SV_RESID_BITMAP_RADIO6, *pResMgr));
-            LoadThemedImageList( rStyleSettings, pSVData->maCtrlData.maRadioImgList, aResources);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO1);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO2);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO3);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO4);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO5);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO6);
         }
+        else
+        {
+            aResources.push_back(SV_RESID_BITMAP_RADIO1);
+            aResources.push_back(SV_RESID_BITMAP_RADIO2);
+            aResources.push_back(SV_RESID_BITMAP_RADIO3);
+            aResources.push_back(SV_RESID_BITMAP_RADIO4);
+            aResources.push_back(SV_RESID_BITMAP_RADIO5);
+            aResources.push_back(SV_RESID_BITMAP_RADIO6);
+        }
+        LoadThemedImageList( rStyleSettings, pSVData->maCtrlData.maRadioImgList, aResources);
         pSVData->maCtrlData.mnRadioStyle = nStyle;
     }
 
@@ -3622,21 +3631,32 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
         pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor().GetColor();
 
-        ResMgr* pResMgr = ImplGetResMgr();
-        if( pResMgr )
+        std::vector<OUString> aResources;
+        if (nStyle)
         {
-            std::vector<ResId> aResources;
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO1 : SV_RESID_BITMAP_CHECK1, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO2 : SV_RESID_BITMAP_CHECK2, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO3 : SV_RESID_BITMAP_CHECK3, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO4 : SV_RESID_BITMAP_CHECK4, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO5 : SV_RESID_BITMAP_CHECK5, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO6 : SV_RESID_BITMAP_CHECK6, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO7 : SV_RESID_BITMAP_CHECK7, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO8 : SV_RESID_BITMAP_CHECK8, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO9 : SV_RESID_BITMAP_CHECK9, *pResMgr));
-            LoadThemedImageList(rStyleSettings, pSVData->maCtrlData.maCheckImgList, aResources);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO1);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO2);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO3);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO4);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO5);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO6);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO7);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO8);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO9);
         }
+        else
+        {
+            aResources.push_back(SV_RESID_BITMAP_CHECK1);
+            aResources.push_back(SV_RESID_BITMAP_CHECK2);
+            aResources.push_back(SV_RESID_BITMAP_CHECK3);
+            aResources.push_back(SV_RESID_BITMAP_CHECK4);
+            aResources.push_back(SV_RESID_BITMAP_CHECK5);
+            aResources.push_back(SV_RESID_BITMAP_CHECK6);
+            aResources.push_back(SV_RESID_BITMAP_CHECK7);
+            aResources.push_back(SV_RESID_BITMAP_CHECK8);
+            aResources.push_back(SV_RESID_BITMAP_CHECK9);
+        }
+        LoadThemedImageList(rStyleSettings, pSVData->maCtrlData.maCheckImgList, aResources);
         pSVData->maCtrlData.mnCheckStyle = nStyle;
     }
 
@@ -3826,9 +3846,9 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
     {
         ImplSVCtrlData& rCtrlData(ImplGetSVData()->maCtrlData);
         if (!rCtrlData.mpDisclosurePlus)
-            rCtrlData.mpDisclosurePlus = new Image(BitmapEx(VclResId(SV_DISCLOSURE_PLUS)));
+            rCtrlData.mpDisclosurePlus = new Image(BitmapEx(SV_DISCLOSURE_PLUS));
         if (!rCtrlData.mpDisclosureMinus)
-            rCtrlData.mpDisclosureMinus = new Image(BitmapEx(VclResId(SV_DISCLOSURE_MINUS)));
+            rCtrlData.mpDisclosureMinus = new Image(BitmapEx(SV_DISCLOSURE_MINUS));
 
         Image* pImg = nullptr;
         pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;

@@ -10,6 +10,7 @@
 $(eval $(call gb_Library_Library,hsqldb))
 
 $(eval $(call gb_Library_set_include,hsqldb,\
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
 ))

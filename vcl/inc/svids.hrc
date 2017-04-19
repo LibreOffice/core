@@ -20,57 +20,6 @@
 #ifndef INCLUDED_VCL_INC_SVIDS_HRC
 #define INCLUDED_VCL_INC_SVIDS_HRC
 
-#define SV_RESID_BITMAP_CHECK1                       1000
-#define SV_RESID_BITMAP_CHECK2                       1001
-#define SV_RESID_BITMAP_CHECK3                       1002
-#define SV_RESID_BITMAP_CHECK4                       1003
-#define SV_RESID_BITMAP_CHECK5                       1004
-#define SV_RESID_BITMAP_CHECK6                       1005
-#define SV_RESID_BITMAP_CHECK7                       1006
-#define SV_RESID_BITMAP_CHECK8                       1007
-#define SV_RESID_BITMAP_CHECK9                       1008
-#define SV_RESID_BITMAP_CHECKMONO1                   1009
-#define SV_RESID_BITMAP_CHECKMONO2                   1010
-#define SV_RESID_BITMAP_CHECKMONO3                   1011
-#define SV_RESID_BITMAP_CHECKMONO4                   1012
-#define SV_RESID_BITMAP_CHECKMONO5                   1013
-#define SV_RESID_BITMAP_CHECKMONO6                   1014
-#define SV_RESID_BITMAP_CHECKMONO7                   1015
-#define SV_RESID_BITMAP_CHECKMONO8                   1016
-#define SV_RESID_BITMAP_CHECKMONO9                   1017
-#define SV_RESID_BITMAP_RADIO1                       1018
-#define SV_RESID_BITMAP_RADIO2                       1019
-#define SV_RESID_BITMAP_RADIO3                       1020
-#define SV_RESID_BITMAP_RADIO4                       1021
-#define SV_RESID_BITMAP_RADIO5                       1022
-#define SV_RESID_BITMAP_RADIO6                       1023
-#define SV_RESID_BITMAP_RADIOMONO1                   1024
-#define SV_RESID_BITMAP_RADIOMONO2                   1025
-#define SV_RESID_BITMAP_RADIOMONO3                   1026
-#define SV_RESID_BITMAP_RADIOMONO4                   1027
-#define SV_RESID_BITMAP_RADIOMONO5                   1028
-#define SV_RESID_BITMAP_RADIOMONO6                   1029
-
-#define SV_RESID_BITMAP_ERRORBOX                     1030
-#define SV_RESID_BITMAP_QUERYBOX                     1031
-#define SV_RESID_BITMAP_WARNINGBOX                   1032
-#define SV_RESID_BITMAP_INFOBOX                      1033
-
-#define SV_RESID_BITMAP_SCROLLMSK                    1050
-#define SV_RESID_BITMAP_WHEELVH                      1051
-#define SV_RESID_BITMAP_WHEELV                       1052
-#define SV_RESID_BITMAP_WHEELH                       1053
-#define SV_RESID_BITMAP_SCROLLVH                     1054
-#define SV_RESID_BITMAP_SCROLLV                      1055
-#define SV_RESID_BITMAP_SCROLLH                      1056
-#define SV_RESID_BITMAP_CLOSEDOC                     1057
-#define SV_RESID_BITMAP_INDEX                        1058
-#define SV_RESID_BITMAP_REFRESH                      1059
-#define SV_RESID_BITMAP_NOTEBOOKBAR                  1060
-
-#define SV_DISCLOSURE_PLUS                           1070
-#define SV_DISCLOSURE_MINUS                          1071
-
 #define RID_STR_PAPERNAMES                           1080
 
 #define SV_RESID_STRING_NOSELECTIONPOSSIBLE          2001
@@ -166,8 +115,6 @@
 #define SV_PRINT_TOFILE_TXT                         10610
 #define SV_PRINT_DEFPRT_TXT                         10611
 #define SV_PRINT_PRINTPREVIEW_TXT                   10612
-#define SV_PRINT_COLLATE_BMP                        10613
-#define SV_PRINT_NOCOLLATE_BMP                      10614
 #define SV_PRINT_QUERYFAXNUMBER_TXT                 10615
 #define SV_PRINT_INVALID_TXT                        10616
 #define SV_PRINT_CUSTOM_TXT                         10617
@@ -186,18 +133,6 @@
 #define SV_ICON_SIZE48_START                        20000
 #define SV_ICON_SIZE32_START                        21000
 #define SV_ICON_SIZE16_START                        23000
-
-#define SV_ICON_ID_OFFICE                               1
-#define SV_ICON_ID_TEXT                                 2
-#define SV_ICON_ID_TEXT_TEMPLATE                        3
-#define SV_ICON_ID_SPREADSHEET                          4
-#define SV_ICON_ID_SPREADSHEET_TEMPLATE                 5
-#define SV_ICON_ID_DRAWING                              6
-#define SV_ICON_ID_PRESENTATION                         8
-#define SV_ICON_ID_MASTER_DOCUMENT                     10
-#define SV_ICON_ID_TEMPLATE                            11
-#define SV_ICON_ID_DATABASE                            12
-#define SV_ICON_ID_FORMULA                             13
 
 #endif // INCLUDED_VCL_INC_SVIDS_HRC
 

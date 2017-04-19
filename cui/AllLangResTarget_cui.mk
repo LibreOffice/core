@@ -52,8 +52,4 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/tabpages/strings.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,cui/res,\
-    cui/source/tabpages/align.src \
-))
-
 # vim: set noet sw=4 ts=4:

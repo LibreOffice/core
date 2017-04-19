@@ -44,8 +44,4 @@ $(eval $(call gb_SrsTarget_add_files,vcl/source/src,\
     vcl/source/edit/textundo.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,vcl/source/src,\
-    vcl/source/src/images.src \
-))
-
 # vim: set noet sw=4 ts=4:

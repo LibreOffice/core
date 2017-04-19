@@ -73,12 +73,12 @@ public:
                     virtual ~SFTreeListBox() override;
     virtual void    dispose() override;
 
-    SvTreeListEntry *       insertEntry(OUString const & rText, sal_uInt16 nBitmap,
+    SvTreeListEntry *       insertEntry(OUString const & rText, OUString const & rBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::unique_ptr< SFEntry > && aUserData,
                               const OUString& factoryURL );
-    SvTreeListEntry *       insertEntry(OUString const & rText, sal_uInt16 nBitmap,
+    SvTreeListEntry *       insertEntry(OUString const & rText, OUString const & rBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::unique_ptr< SFEntry > && aUserData );

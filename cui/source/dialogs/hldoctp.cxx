@@ -24,6 +24,7 @@
 
 #include "hldoctp.hxx"
 #include "hlmarkwn_def.hxx"
+#include "bitmaps.hlst"
 
 sal_Char const sHash[]          = "#";
 sal_Char const sFileScheme[]    = INET_FILE_SCHEME;
@@ -41,13 +42,13 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
     get(m_pCbbPath, "path");
     m_pCbbPath->SetSmartProtocol(INetProtocol::File);
     get(m_pBtFileopen, "fileopen");
-    BitmapEx aBitmap(CUI_RES(RID_SVXBMP_FILEOPEN));
+    BitmapEx aBitmap(RID_SVXBMP_FILEOPEN);
     aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality);
     m_pBtFileopen->SetModeImage(Image(aBitmap));
     get(m_pEdTarget, "target");
     get(m_pFtFullURL, "url");
     get(m_pBtBrowse, "browse");
-    aBitmap = BitmapEx(CUI_RES(RID_SVXBMP_TARGET));
+    aBitmap = BitmapEx(RID_SVXBMP_TARGET);
     aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
     m_pBtBrowse->SetModeImage(Image(aBitmap));
 
