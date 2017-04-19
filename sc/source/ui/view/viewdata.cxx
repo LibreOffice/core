@@ -971,6 +971,38 @@ void ScViewData::ResetOldCursor()
     pThisTab->mbOldCursorValid = false;
 }
 
+SCCOL ScViewData::GetCurXForTab( SCTAB nTabIndex ) const
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+        return -1;
+
+    return maTabData[nTabIndex]->nCurX;
+}
+
+SCROW ScViewData::GetCurYForTab( SCTAB nTabIndex ) const
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+            return -1;
+
+    return maTabData[nTabIndex]->nCurY;
+}
+
+void ScViewData::SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex )
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+            return;
+
+    maTabData[nTabIndex]->nCurX = nNewCurX;
+}
+
+void ScViewData::SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex )
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+            return;
+
+    maTabData[nTabIndex]->nCurY = nNewCurY;
+}
+
 tools::Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
                                     vcl::Window* pWin, const ScPatternAttr* pPattern,
                                     bool bForceToTop )
@@ -984,10 +1016,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                 ScEditEngineDefaulter* pNewEngine,
                                 vcl::Window* pWin, SCCOL nNewX, SCROW nNewY )
 {
-    if (comphelper::LibreOfficeKit::isActive()
-        && GetViewShell() != SfxViewShell::Current())
-        return;
-
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
     ScHSplitPos eHWhich = WhichH(eWhich);
 
@@ -1023,7 +1051,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
 
     // add windows from other views
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!bWasThere && comphelper::LibreOfficeKit::isActive())
+    //if (comphelper::LibreOfficeKit::isActive())
     {
         ScTabViewShell* pThisViewShell = GetViewShell();
         SCTAB nThisTabNo = GetTabNo();

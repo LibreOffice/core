@@ -1746,6 +1746,14 @@ ScTabViewShell::~ScTabViewShell()
     SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
     SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY");
 
+    // all to NULL, in case the TabView-dtor tries to access them
+    //! (should not really! ??!?!)
+    if (mpInputHandler)
+        mpInputHandler->SetDocumentDisposing(true);
+    // We end edit mode, before destroying the input handler and the edit engine
+    // and before end listening (in order to call ScTabViewShell::KillEditView())
+    mpInputHandler->EnterHandler();
+
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     EndListening(*pDocSh);
     EndListening(*GetViewFrame());
@@ -1755,11 +1763,6 @@ ScTabViewShell::~ScTabViewShell()
 
     RemoveSubShell();           // all
     SetWindow(nullptr);
-
-    // all to NULL, in case the TabView-dtor tries to access them
-    //! (should not really! ??!?!)
-    if (mpInputHandler)
-        mpInputHandler->SetDocumentDisposing(true);
 
     DELETEZ(pFontworkBarShell);
     DELETEZ(pExtrusionBarShell);

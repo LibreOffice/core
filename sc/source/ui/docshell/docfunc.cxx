@@ -2132,6 +2132,24 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             rDocShell.ErrorMessage(STR_INSERT_FULL);        // column/row full
     }
 
+    // The cursor position needs to be modified earlier than updating
+    // any enabled edit view which is triggered by SetDocumentModified below.
+    if (bSuccess)
+    {
+        bool bInsertCols = ( eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
+        bool bInsertRows = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER );
+
+        if (bInsertCols)
+        {
+            pViewSh->OnLOKInsertDeleteColumn(rRange.aStart.Col(), 1);
+        }
+
+        if (bInsertRows)
+        {
+            pViewSh->OnLOKInsertDeleteRow(rRange.aStart.Row(), 1);
+        }
+    }
+
     aModificator.SetDocumentModified();
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
@@ -2655,6 +2673,21 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 lcl_PaintAbove( rDocShell, ScRange( nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr+nScenarioCount) );
             if (nPaintFlags & PaintPartFlags::Top)
                 rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr+nScenarioCount, PaintPartFlags::Top );
+        }
+    }
+
+    // The cursor position needs to be modified earlier than updating
+    // any enabled edit view which is triggered by SetDocumentModified below.
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if (pViewSh)
+    {
+        if (eCmd == DEL_DELCOLS)
+        {
+            pViewSh->OnLOKInsertDeleteColumn(rRange.aStart.Col(), -1);
+        }
+        if (eCmd == DEL_DELROWS)
+        {
+            pViewSh->OnLOKInsertDeleteRow(rRange.aStart.Row(), -1);
         }
     }
 

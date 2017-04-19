@@ -1465,6 +1465,103 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
         pHdl->ForgetLastPattern();
 }
 
+
+void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
+{
+    if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
+        return;
+
+    SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+        {
+            // if we remove a column the cursor position  and the current selection
+            // in other views could need to be moved on the left by one column.
+            if (pTabViewShell != this)
+            {
+                if (pTabViewShell->getPart() == nCurrentTabIndex)
+                {
+                    SCCOL nX = pTabViewShell->GetViewData().GetCurX();
+                    if (nX > nStartCol || (nX == nStartCol && nOffset > 0))
+                    {
+                        SCROW nY = pTabViewShell->GetViewData().GetCurY();
+                        pTabViewShell->SetCursor(nX + nOffset, nY);
+                    }
+
+                    ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
+                    aMultiMark.SetMarking( false );
+                    aMultiMark.MarkToMulti();
+                    if (aMultiMark.IsMultiMarked())
+                    {
+                        aMultiMark.ShiftCols(nStartCol, nOffset);
+                        pTabViewShell->SetMarkData(aMultiMark);
+                    }
+                }
+                else
+                {
+                    SCROW nX = pTabViewShell->GetViewData().GetCurXForTab(nCurrentTabIndex);
+                    if (nX > nStartCol || (nX == nStartCol && nOffset > 0))
+                    {
+                        pTabViewShell->GetViewData().SetCurXForTab(nX + nOffset, nCurrentTabIndex);
+                    }
+                }
+            }
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
+void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
+{
+    if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
+        return;
+
+    SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+        {
+            // if we remove a row the cursor position and the current selection
+            // in other views could need to be moved up by one row.
+            if (pTabViewShell != this)
+            {
+                if (pTabViewShell->getPart() == nCurrentTabIndex)
+                {
+                    SCROW nY = pTabViewShell->GetViewData().GetCurY();
+                    if (nY > nStartRow || (nY == nStartRow && nOffset > 0))
+                    {
+                        SCCOL nX = pTabViewShell->GetViewData().GetCurX();
+                        pTabViewShell->SetCursor(nX, nY + nOffset);
+                    }
+
+                    ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
+                    aMultiMark.SetMarking( false );
+                    aMultiMark.MarkToMulti();
+                    if (aMultiMark.IsMultiMarked())
+                    {
+                        aMultiMark.ShiftRows(nStartRow, nOffset);
+                        pTabViewShell->SetMarkData(aMultiMark);
+                    }
+                }
+                else
+                {
+                    SCROW nY = pTabViewShell->GetViewData().GetCurYForTab(nCurrentTabIndex);
+                    if (nY >= nStartRow || (nY == nStartRow && nOffset > 0))
+                    {
+                        pTabViewShell->GetViewData().SetCurYForTab(nY + nOffset, nCurrentTabIndex);
+                    }
+                }
+            }
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 //  insert cells - undo OK
 
 bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
