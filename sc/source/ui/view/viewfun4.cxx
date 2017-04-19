@@ -257,9 +257,9 @@ void ScViewFunc::DoRefConversion()
                 sal_Int32 nLen = aOld.getLength();
                 if (eMatrixMode == ScMatrixMode::Formula)
                 {
-                    assert(nLen >= 3 && aOld[0] == '{' && aOld[1] == '=' && aOld[aOld.getLength()-1] == '}');
-                    nLen -= 3;
-                    aOld = aOld.copy( 2, nLen);
+                    assert(nLen >= 2 && aOld[0] == '{' && aOld[nLen-1] == '}');
+                    nLen -= 2;
+                    aOld = aOld.copy( 1, nLen);
                 }
                 ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
                 aFinder.ToggleRel( 0, nLen );
