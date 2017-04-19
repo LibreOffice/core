@@ -1,0 +1,160 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the N_("License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_BASIC_INC_STRINGS_HRC
+#define INCLUDED_BASIC_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+std::pair<const char*, SbError> RID_BASIC_START[] =
+{
+    { N_("Syntax error. "), ERRCODE_BASIC_SYNTAX },
+    { N_("Return without Gosub. "), ERRCODE_BASIC_NO_GOSUB },
+    { N_("Incorrect entry; please retry. "), ERRCODE_BASIC_REDO_FROM_START },
+    { N_("Invalid procedure call. "), ERRCODE_BASIC_BAD_ARGUMENT },
+    { N_("Overflow. "), ERRCODE_BASIC_MATH_OVERFLOW },
+    { N_("Not enough memory. "), ERRCODE_BASIC_NO_MEMORY },
+    { N_("Array already dimensioned. "), ERRCODE_BASIC_ALREADY_DIM },
+    { N_("Index out of defined range. "), ERRCODE_BASIC_OUT_OF_RANGE },
+    { N_("Duplicate definition. "), ERRCODE_BASIC_DUPLICATE_DEF },
+    { N_("Division by zero. "), ERRCODE_BASIC_ZERODIV },
+    { N_("Variable not defined. "), ERRCODE_BASIC_VAR_UNDEFINED },
+    { N_("Data type mismatch. "), ERRCODE_BASIC_CONVERSION },
+    { N_("Invalid parameter. "), ERRCODE_BASIC_BAD_PARAMETER },
+    { N_("Process interrupted by user. "), ERRCODE_BASIC_USER_ABORT },
+    { N_("Resume without error. "), ERRCODE_BASIC_BAD_RESUME },
+    { N_("Not enough stack memory. "), ERRCODE_BASIC_STACK_OVERFLOW },
+    { N_("Sub-procedure or function procedure not defined. "), ERRCODE_BASIC_PROC_UNDEFINED },
+    { N_("Error loading DLL file. "), ERRCODE_BASIC_BAD_DLL_LOAD },
+    { N_("Wrong DLL call convention. "), ERRCODE_BASIC_BAD_DLL_CALL },
+    { N_("Internal error $(ARG1). "), ERRCODE_BASIC_INTERNAL_ERROR },
+    { N_("Invalid file name or file number. "), ERRCODE_BASIC_BAD_CHANNEL },
+    { N_("File not found. "), ERRCODE_BASIC_FILE_NOT_FOUND },
+    { N_("Incorrect file mode. "), ERRCODE_BASIC_BAD_FILE_MODE },
+    { N_("File already open. "), ERRCODE_BASIC_FILE_ALREADY_OPEN },
+    { N_("Device I/O error. "), ERRCODE_BASIC_IO_ERROR },
+    { N_("File already exists. "), ERRCODE_BASIC_FILE_EXISTS },
+    { N_("Incorrect record length. "), ERRCODE_BASIC_BAD_RECORD_LENGTH },
+    { N_("Disk or hard drive full. "), ERRCODE_BASIC_DISK_FULL },
+    { N_("Reading exceeds EOF. "), ERRCODE_BASIC_READ_PAST_EOF },
+    { N_("Incorrect record number. "), ERRCODE_BASIC_BAD_RECORD_NUMBER },
+    { N_("Too many files. "), ERRCODE_BASIC_TOO_MANY_FILES },
+    { N_("Device not available. "), ERRCODE_BASIC_NO_DEVICE },
+    { N_("Access denied. "), ERRCODE_BASIC_ACCESS_DENIED },
+    { N_("Disk not ready. "), ERRCODE_BASIC_NOT_READY },
+    { N_("Not implemented. "), ERRCODE_BASIC_NOT_IMPLEMENTED },
+    { N_("Renaming on different drives impossible. "), ERRCODE_BASIC_DIFFERENT_DRIVE },
+    { N_("Path/File access error. "), ERRCODE_BASIC_ACCESS_ERROR },
+    { N_("Path not found. "), ERRCODE_BASIC_PATH_NOT_FOUND },
+    { N_("Object variable not set. "), ERRCODE_BASIC_NO_OBJECT },
+    { N_("Invalid string pattern. "), ERRCODE_BASIC_BAD_PATTERN },
+    { N_("Use of zero not permitted. "), ERRCODE_BASIC_IS_NULL },
+    { N_("DDE Error. "), ERRCODE_BASIC_DDE_ERROR },
+    { N_("Awaiting response to DDE connection. "), ERRCODE_BASIC_DDE_WAITINGACK },
+    { N_("No DDE channels available. "), ERRCODE_BASIC_DDE_OUTOFCHANNELS },
+    { N_("No application responded to DDE connect initiation. "), ERRCODE_BASIC_DDE_NO_RESPONSE },
+    { N_("Too many applications responded to DDE connect initiation. "), ERRCODE_BASIC_DDE_MULT_RESPONSES },
+    { N_("DDE channel locked. "), ERRCODE_BASIC_DDE_CHANNEL_LOCKED },
+    { N_("External application cannot execute DDE operation. "), ERRCODE_BASIC_DDE_NOTPROCESSED },
+    { N_("Timeout while waiting for DDE response. "), ERRCODE_BASIC_DDE_TIMEOUT },
+    { N_("User pressed ESCAPE during DDE operation. "), ERRCODE_BASIC_DDE_USER_INTERRUPT },
+    { N_("External application busy. "), ERRCODE_BASIC_DDE_BUSY },
+    { N_("DDE operation without data. "), ERRCODE_BASIC_DDE_NO_DATA },
+    { N_("Data are in wrong format. "), ERRCODE_BASIC_DDE_WRONG_DATA_FORMAT },
+    { N_("External application has been terminated. "), ERRCODE_BASIC_DDE_PARTNER_QUIT },
+    { N_("DDE connection interrupted or modified. "), ERRCODE_BASIC_DDE_CONV_CLOSED },
+    { N_("DDE method invoked with no channel open. "), ERRCODE_BASIC_DDE_NO_CHANNEL },
+    { N_("Invalid DDE link format. "), ERRCODE_BASIC_DDE_INVALID_LINK },
+    { N_("DDE message has been lost. "), ERRCODE_BASIC_DDE_QUEUE_OVERFLOW },
+    { N_("Paste link already performed. "), ERRCODE_BASIC_DDE_LINK_ALREADY_EST },
+    { N_("Link mode cannot be set due to invalid link topic. "), ERRCODE_BASIC_DDE_LINK_INV_TOPIC },
+    { N_("DDE requires the DDEML.DLL file. "), ERRCODE_BASIC_DDE_DLL_NOT_FOUND },
+    { N_("Module cannot be loaded; invalid format. "), ERRCODE_BASIC_CANNOT_LOAD },
+    { N_("Invalid object index. "), ERRCODE_BASIC_BAD_INDEX },
+    { N_("Object is not available. "), ERRCODE_BASIC_NO_ACTIVE_OBJECT },
+    { N_("Incorrect property value. "), ERRCODE_BASIC_BAD_PROP_VALUE },
+    { N_("This property is read-only. "), ERRCODE_BASIC_PROP_READONLY },
+    { N_("This property is write only. "), ERRCODE_BASIC_PROP_WRITEONLY },
+    { N_("Invalid object reference. "), ERRCODE_BASIC_INVALID_OBJECT },
+    { N_("Property or method not found: $(ARG1). "), ERRCODE_BASIC_NO_METHOD },
+    { N_("Object required. "), ERRCODE_BASIC_NEEDS_OBJECT },
+    { N_("Invalid use of an object. "), ERRCODE_BASIC_INVALID_USAGE_OBJECT },
+    { N_("OLE Automation is not supported by this object. "), ERRCODE_BASIC_NO_OLE },
+    { N_("This property or method is not supported by the object. "), ERRCODE_BASIC_BAD_METHOD },
+    { N_("OLE Automation Error. "), ERRCODE_BASIC_OLE_ERROR },
+    { N_("This action is not supported by given object. "), ERRCODE_BASIC_BAD_ACTION },
+    { N_("Named arguments are not supported by given object. "), ERRCODE_BASIC_NO_NAMED_ARGS },
+    { N_("The current locale setting is not supported by the given object. "), ERRCODE_BASIC_BAD_LOCALE },
+    { N_("Named argument not found. "), ERRCODE_BASIC_NAMED_NOT_FOUND },
+    { N_("Argument is not optional. "), ERRCODE_BASIC_NOT_OPTIONAL },
+    { N_("Invalid number of arguments. "), ERRCODE_BASIC_WRONG_ARGS },
+    { N_("Object is not a list. "), ERRCODE_BASIC_NOT_A_COLL },
+    { N_("Invalid ordinal number. "), ERRCODE_BASIC_BAD_ORDINAL },
+    { N_("Specified DLL function not found. "), ERRCODE_BASIC_DLLPROC_NOT_FOUND },
+    { N_("Invalid clipboard format. "), ERRCODE_BASIC_BAD_CLIPBD_FORMAT },
+    { N_("Object does not have this property. "), ERRCODE_BASIC_PROPERTY_NOT_FOUND },
+    { N_("Object does not have this method. "), ERRCODE_BASIC_METHOD_NOT_FOUND },
+    { N_("Required argument lacking. "), ERRCODE_BASIC_ARG_MISSING },
+    { N_("Invalid number of arguments. "), ERRCODE_BASIC_BAD_NUMBER_OF_ARGS },
+    { N_("Error executing a method. "), ERRCODE_BASIC_METHOD_FAILED },
+    { N_("Unable to set property. "), ERRCODE_BASIC_SETPROP_FAILED },
+    { N_("Unable to determine property. "), ERRCODE_BASIC_GETPROP_FAILED },
+     // Compiler errors. These are not runtime errors.
+    { N_("Unexpected symbol: $(ARG1). "), ERRCODE_BASIC_UNEXPECTED },
+    { N_("Expected: $(ARG1). "), ERRCODE_BASIC_EXPECTED },
+    { N_("Symbol expected. "), ERRCODE_BASIC_SYMBOL_EXPECTED },
+    { N_("Variable expected. "), ERRCODE_BASIC_VAR_EXPECTED },
+    { N_("Label expected. "), ERRCODE_BASIC_LABEL_EXPECTED },
+    { N_("Value cannot be applied. "), ERRCODE_BASIC_LVALUE_EXPECTED },
+    { N_("Variable $(ARG1) already defined. "), ERRCODE_BASIC_VAR_DEFINED },
+    { N_("Sub procedure or function procedure $(ARG1) already defined. "), ERRCODE_BASIC_PROC_DEFINED },
+    { N_("Label $(ARG1) already defined. "), ERRCODE_BASIC_LABEL_DEFINED },
+    { N_("Variable $(ARG1) not found. "), ERRCODE_BASIC_UNDEF_VAR },
+    { N_("Array or procedure $(ARG1) not found. "), ERRCODE_BASIC_UNDEF_ARRAY },
+    { N_("Procedure $(ARG1) not found. "), ERRCODE_BASIC_UNDEF_PROC },
+    { N_("Label $(ARG1) undefined. "), ERRCODE_BASIC_UNDEF_LABEL },
+    { N_("Unknown data type $(ARG1). "), ERRCODE_BASIC_UNDEF_TYPE },
+    { N_("Exit $(ARG1) expected. "), ERRCODE_BASIC_BAD_EXIT },
+    { N_("Statement block still open: $(ARG1) missing. "), ERRCODE_BASIC_BAD_BLOCK },
+    { N_("Parentheses do not match. "), ERRCODE_BASIC_BAD_BRACKETS },
+    { N_("Symbol $(ARG1) already defined differently. "), ERRCODE_BASIC_BAD_DECLARATION },
+    { N_("Parameters do not correspond to procedure. "), ERRCODE_BASIC_BAD_PARAMETERS },
+    { N_("Invalid character in number. "), ERRCODE_BASIC_BAD_CHAR_IN_NUMBER },
+    { N_("Array must be dimensioned. "), ERRCODE_BASIC_MUST_HAVE_DIMS },
+    { N_("Else/Endif without If. "), ERRCODE_BASIC_NO_IF },
+    { N_("$(ARG1) not allowed within a procedure. "), ERRCODE_BASIC_NOT_IN_SUBR },
+    { N_("$(ARG1) not allowed outside a procedure. "), ERRCODE_BASIC_NOT_IN_MAIN },
+    { N_("Dimension specifications do not match. "), ERRCODE_BASIC_WRONG_DIMS },
+    { N_("Unknown option: $(ARG1). "), ERRCODE_BASIC_BAD_OPTION },
+    { N_("Constant $(ARG1) redefined. "), ERRCODE_BASIC_CONSTANT_REDECLARED },
+    { N_("Program too large. "), ERRCODE_BASIC_PROG_TOO_LARGE },
+    { N_("Strings or arrays not permitted. "), ERRCODE_BASIC_NO_STRINGS_ARRAYS },
+    { N_("An exception occurred $(ARG1). "), ERRCODE_BASIC_EXCEPTION },
+    { N_("This array is fixed or temporarily locked. "), ERRCODE_BASIC_ARRAY_FIX },
+    { N_("Out of string space. "), ERRCODE_BASIC_STRING_OVERFLOW },
+    { N_("Expression Too Complex. "), ERRCODE_BASIC_EXPR_TOO_COMPLEX },
+    { N_("Can't perform requested operation. "), ERRCODE_BASIC_OPER_NOT_PERFORM },
+    { N_("Too many DLL application clients. "), ERRCODE_BASIC_TOO_MANY_DLL },
+    { N_("For loop not initialized. "), ERRCODE_BASIC_LOOP_NOT_INIT },
+    { N_("$(ARG1) "), ERRCODE_BASIC_COMPAT }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

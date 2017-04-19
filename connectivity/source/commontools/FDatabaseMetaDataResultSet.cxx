@@ -38,7 +38,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "TConnection.hxx"
 
 using namespace connectivity;

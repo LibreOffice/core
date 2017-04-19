@@ -19,7 +19,8 @@
 
 #include <memory>
 #include "AppController.hxx"
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
 #include "advancedsettingsdlg.hxx"
 #include "subcomponentmanager.hxx"
 #include "uiservices.hxx"
@@ -110,7 +111,7 @@
 #include "AppView.hxx"
 #include "browserids.hxx"
 #include "dbu_reghelper.hxx"
-#include "dbu_app.hrc"
+#include "strings.hrc"
 #include "defaultobjectnamecheck.hxx"
 #include "databaseobjectview.hxx"
 #include "listviewitems.hxx"
@@ -865,7 +866,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     OUString sDSTypeName;
                     if ( dbaccess::ODsnTypeCollection::isEmbeddedDatabase( sURL ) )
                     {
-                        sDSTypeName = OUString( ModuleRes( RID_STR_EMBEDDED_DATABASE ) );
+                        sDSTypeName = DBA_RES(RID_STR_EMBEDDED_DATABASE);
                     }
                     else
                     {
@@ -2036,9 +2037,9 @@ void OApplicationController::renameEntry()
                         {
                             OUString sLabel;
                             if ( eType == E_FORM )
-                                sLabel = OUString(ModuleRes( STR_FRM_LABEL ));
+                                sLabel = DBA_RES(STR_FRM_LABEL);
                             else
-                                sLabel = OUString(ModuleRes( STR_RPT_LABEL ));
+                                sLabel = DBA_RES(STR_RPT_LABEL);
 
                             OUString sName = *aList.begin();
                             if ( xHNames->hasByHierarchicalName(sName) )
@@ -2136,7 +2137,7 @@ void OApplicationController::renameEntry()
                         catch(const ElementExistException& e)
                         {
                             OUString sStatus("S1000");
-                            OUString sMsg = OUString( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
+                            OUString sMsg = DBA_RES(STR_NAME_ALREADY_EXISTS);
                             showError(SQLExceptionInfo(SQLException(sMsg.replaceAll("#", e.Message), e.Context, sStatus, 0, Any())));
                         }
                         catch(const Exception& )
@@ -2530,9 +2531,9 @@ void OApplicationController::OnFirstControllerConnected()
             return;
 
         SQLWarning aWarning;
-        aWarning.Message = OUString( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS ) );
+        aWarning.Message = DBA_RES(STR_SUB_DOCS_WITH_SCRIPTS);
         SQLException aDetail;
-        aDetail.Message = OUString( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS_DETAIL ) );
+        aDetail.Message = DBA_RES(STR_SUB_DOCS_WITH_SCRIPTS_DETAIL);
         aWarning.NextException <<= aDetail;
 
         Reference< XExecutableDialog > xDialog = ErrorMessageDialog::create( getORB(), "", nullptr, makeAny( aWarning ) );
@@ -2771,7 +2772,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
             case DatabaseObjectContainer::REPORTS:
                 if ( eSelectedCategory != E_NONE )
                     throw IllegalArgumentException(
-                        ModuleRes(RID_STR_NO_DIFF_CAT),
+                        DBA_RES(RID_STR_NO_DIFF_CAT),
                         *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ) );
                 eSelectedCategory =
                         ( pObject->Type == DatabaseObjectContainer::TABLES )  ? E_TABLE
@@ -2785,7 +2786,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
             case DatabaseObjectContainer::DATA_SOURCE:
             {
                 OUString sMessage(
-                        OUString(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE)).
+                        DBA_RES(RID_STR_UNSUPPORTED_OBJECT_TYPE).
                     replaceFirst("$type$", OUString::number(pObject->Type)));
                 throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
             }

@@ -23,7 +23,9 @@ $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
 	sal \
 	salhelper \
 	test \
+	tl \
 	unotest \
+	vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,extensions_test_update, \

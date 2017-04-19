@@ -141,8 +141,8 @@ private:
     void                    enableControls( short nCtrlState );
     void                    setDownloadBtnLabel( bool bAppendDots );
     void                    loadStrings();
-    static OUString         loadString( const css::uno::Reference< css::resource::XResourceBundle >& xBundle,
-                                        sal_Int32 nResourceId );
+    static OUString         loadString(const std::locale& rLocale,
+                                       const char* pResourceId);
     OUString                substVariables( const OUString &rSource ) const;
     static void             insertControlModel( css::uno::Reference< css::awt::XControlModel > const & rxDialogModel,
                                                 OUString const & rServiceName,

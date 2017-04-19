@@ -193,7 +193,6 @@ private:
     CFilePickerState*                       m_FilePickerState;
     CExecuteFilePickerState*                m_ExecuteFilePickerState;
     CNonExecuteFilePickerState*             m_NonExecuteFilePickerState;
-    CResourceProvider                       m_ResProvider;
 };
 
 #endif

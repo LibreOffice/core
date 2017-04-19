@@ -17,7 +17,6 @@
 #
 class UIConsts():
 
-    RID_COMMON = 500
     RID_DB_COMMON = 1000
     RID_FORM = 2200
     RID_QUERY = 2300

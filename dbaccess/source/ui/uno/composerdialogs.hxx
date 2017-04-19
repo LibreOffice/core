@@ -27,7 +27,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 
 #include <svtools/genericunodialog.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "apitools.hxx"
 
 namespace dbaui
@@ -41,7 +41,7 @@ namespace dbaui
             :public svt::OGenericUnoDialog
             ,public ComposerDialog_PBASE
     {
-        OModuleClient m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
     protected:
         // <properties>
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer >
