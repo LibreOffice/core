@@ -1184,16 +1184,6 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     aDirectionChanges.clear();
 
     // Perform Unicode Bidi Algorithm for text direction information
-    bool bPerformUBA = UBIDI_LTR != nDefaultDir;
-    nCnt = 0;
-    while( !bPerformUBA && nCnt < CountScriptChg() )
-    {
-        if ( i18n::ScriptType::COMPLEX == GetScriptType( nCnt++ ) )
-            bPerformUBA = true;
-    }
-
-    // do not call the unicode bidi algorithm if not required
-    if ( bPerformUBA )
     {
         UpdateBidiInfo( rText );
 
