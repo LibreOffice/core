@@ -238,6 +238,13 @@ enum ScDocumentMode
     SCDOCMODE_UNDO
 };
 
+enum CommentCaptionState
+{
+    ALLSHOWN,                   // All comments captions are shown
+    ALLHIDDEN,                  // All comments captions are hidden
+    MIXED                       // There are comments in shown and hidden.
+};
+
 struct ScDocStat
 {
     OUString  aDocName;
@@ -1103,8 +1110,9 @@ public:
      * Ensure that all note objects have an associated sdr object.  The export
      * code uses sdr objects to export note data.
      */
-    void      CreateAllNoteCaptions();
-    void      ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveData );
+    void                 CreateAllNoteCaptions();
+    void                 ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveData );
+    CommentCaptionState  GetAllNoteCaptionsState( const ScRangeList& rRanges);
 
     ScAddress GetNotePosition( size_t nIndex ) const;
     ScAddress GetNotePosition( size_t nIndex, SCTAB nTab ) const;
