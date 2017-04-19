@@ -2103,6 +2103,15 @@ void OpenGLSalGraphicsImpl::doFlush()
 
     assert( mpWindowContext.is() );
 
+    if( !mpWindowContext.is() )
+    {
+        // failed to create a GL context for this window:
+        // eg. mis-matching pixel formats, underlying window
+        // resource lifecycle, etc.
+        VCL_GL_INFO( "Failed to create window context" );
+        return;
+    }
+
     // Interesting ! -> this destroys a context [ somehow ] ...
     mpWindowContext->makeCurrent();
     CHECK_GL_ERROR();
