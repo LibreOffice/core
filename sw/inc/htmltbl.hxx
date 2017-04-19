@@ -173,8 +173,8 @@ class SwHTMLTableLayout
 {
     Timer m_aResizeTimer;             ///< Timer for DelayedResize.
 
-    SwHTMLTableLayoutColumn **m_aColumns;
-    SwHTMLTableLayoutCell **m_aCells;
+    std::vector<std::unique_ptr<SwHTMLTableLayoutColumn>> m_aColumns;
+    std::vector<std::unique_ptr<SwHTMLTableLayoutCell>>   m_aCells;
 
     const SwTable *m_pSwTable;            ///< SwTable (Top-Table only).
     SwTableBox *m_pLeftFillerBox;         ///< Left filler-box (table in table only).
@@ -278,10 +278,10 @@ public:
                     sal_uInt16 nParentInhSpace=0 );
 
     inline SwHTMLTableLayoutColumn *GetColumn( sal_uInt16 nCol ) const;
-    inline void SetColumn( SwHTMLTableLayoutColumn *pCol, sal_uInt16 nCol );
+    inline void SetColumn( std::unique_ptr<SwHTMLTableLayoutColumn> pCol, sal_uInt16 nCol );
 
     inline SwHTMLTableLayoutCell *GetCell( sal_uInt16 nRow, sal_uInt16 nCol ) const;
-    inline void SetCell( SwHTMLTableLayoutCell *pCell, sal_uInt16 nRow, sal_uInt16 nCol );
+    inline void SetCell( std::unique_ptr<SwHTMLTableLayoutCell> pCell, sal_uInt16 nRow, sal_uInt16 nCol );
 
     void SetLeftFillerBox( SwTableBox *pBox ) { m_pLeftFillerBox = pBox; }
     void SetRightFillerBox( SwTableBox *pBox ) { m_pRightFillerBox = pBox; }
@@ -410,7 +410,7 @@ inline sal_uInt16 SwHTMLTableLayout::GetInhCellSpace( sal_uInt16 nCol,
 
 inline SwHTMLTableLayoutColumn *SwHTMLTableLayout::GetColumn( sal_uInt16 nCol ) const
 {
-    return m_aColumns[nCol];
+    return m_aColumns[nCol].get();
 }
 
 inline void SwHTMLTableLayoutColumn::SetWidthOption( sal_uInt16 nWidth )
@@ -419,20 +419,20 @@ inline void SwHTMLTableLayoutColumn::SetWidthOption( sal_uInt16 nWidth )
     bRelWidthOption = true;
 }
 
-inline void SwHTMLTableLayout::SetColumn( SwHTMLTableLayoutColumn *pCol, sal_uInt16 nCol )
+inline void SwHTMLTableLayout::SetColumn( std::unique_ptr<SwHTMLTableLayoutColumn> pCol, sal_uInt16 nCol )
 {
-    m_aColumns[nCol] = pCol;
+    m_aColumns[nCol] = std::move(pCol);
 }
 
 inline SwHTMLTableLayoutCell *SwHTMLTableLayout::GetCell( sal_uInt16 nRow, sal_uInt16 nCol ) const
 {
-    return m_aCells[nRow*m_nCols+nCol];
+    return m_aCells[nRow*m_nCols+nCol].get();
 }
 
-inline void SwHTMLTableLayout::SetCell( SwHTMLTableLayoutCell *pCell,
+inline void SwHTMLTableLayout::SetCell( std::unique_ptr<SwHTMLTableLayoutCell> pCell,
                                sal_uInt16 nRow, sal_uInt16 nCol )
 {
-    m_aCells[nRow*m_nCols+nCol] = pCell;
+    m_aCells[nRow*m_nCols+nCol] = std::move(pCell);
 }
 
 inline long SwHTMLTableLayout::GetBrowseWidthMin() const

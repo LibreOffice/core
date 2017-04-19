@@ -261,7 +261,7 @@ public:
     // Is the cell filled or protected ?
     bool IsUsed() const { return pContents!=nullptr || bProtected; }
 
-    SwHTMLTableLayoutCell *CreateLayoutInfo();
+    std::unique_ptr<SwHTMLTableLayoutCell> CreateLayoutInfo();
 
     bool IsCovered() const { return mbCovered; }
 };
@@ -355,7 +355,7 @@ public:
     inline SwFrameFormat *GetFrameFormat( bool bBorderLine,
                                 sal_Int16 eVertOri ) const;
 
-    SwHTMLTableLayoutColumn *CreateLayoutInfo();
+    std::unique_ptr<SwHTMLTableLayoutColumn> CreateLayoutInfo();
 };
 
 // HTML table
@@ -758,12 +758,12 @@ inline bool HTMLTableCell::GetValue( double& rValue ) const
     return bHasValue;
 }
 
-SwHTMLTableLayoutCell *HTMLTableCell::CreateLayoutInfo()
+std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
 {
     SwHTMLTableLayoutCnts *pCntInfo = pContents ? pContents->CreateLayoutInfo() : nullptr;
 
-    return new SwHTMLTableLayoutCell( pCntInfo, nRowSpan, nColSpan, nWidth,
-                                      bRelWidth, bNoWrap );
+    return std::unique_ptr<SwHTMLTableLayoutCell>(new SwHTMLTableLayoutCell( pCntInfo, nRowSpan, nColSpan, nWidth,
+                                      bRelWidth, bNoWrap ));
 }
 
 HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
@@ -885,9 +885,9 @@ inline void HTMLTableColumn::SetWidth( sal_uInt16 nWdth, bool bRelWdth )
     bRelWidth = bRelWdth;
 }
 
-inline SwHTMLTableLayoutColumn *HTMLTableColumn::CreateLayoutInfo()
+inline std::unique_ptr<SwHTMLTableLayoutColumn> HTMLTableColumn::CreateLayoutInfo()
 {
-    return new SwHTMLTableLayoutColumn( nWidth, bRelWidth, bLeftBorder );
+    return std::unique_ptr<SwHTMLTableLayoutColumn>(new SwHTMLTableLayoutColumn( nWidth, bRelWidth, bLeftBorder ));
 }
 
 inline sal_uInt16 HTMLTableColumn::GetFrameFormatIdx( bool bBorderLine,
@@ -1118,10 +1118,8 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
         HTMLTableRow *const pRow = (*m_pRows)[i].get();
         for( sal_uInt16 j=0; j<m_nCols; j++ )
         {
-            SwHTMLTableLayoutCell *pLayoutCell =
-                pRow->GetCell(j)->CreateLayoutInfo();
-
-            m_pLayoutInfo->SetCell( pLayoutCell, i, j );
+            m_pLayoutInfo->SetCell( pRow->GetCell(j)->CreateLayoutInfo(), i, j );
+            SwHTMLTableLayoutCell* pLayoutCell = m_pLayoutInfo->GetCell(i, j );
 
             if( bExportable )
             {
@@ -1137,7 +1135,7 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
     m_pLayoutInfo->SetExportable( bExportable );
 
     for( i=0; i<m_nCols; i++ )
-        m_pLayoutInfo->SetColumn( ((*m_pColumns)[i])->CreateLayoutInfo(), i );
+        m_pLayoutInfo->SetColumn( (*m_pColumns)[i]->CreateLayoutInfo(), i );
 
     return m_pLayoutInfo;
 }
