@@ -33,6 +33,7 @@
 #include <cuires.hrc>
 #include <tools/fract.hxx>
 #include <svx/dialogs.hrc>
+#include <strings.hrc>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 
@@ -708,7 +709,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
              sal_Int32 ay = sal_Int32(floor((float)aOrigPixelSize.Height() /
                         ((float)aOrigSize.Height()/TWIP_TO_INCH)+0.5));
              sTemp += " ";
-             sTemp += CUI_RESSTR( RID_SVXSTR_PPI );
+             sTemp += CUI_RES( RID_SVXSTR_PPI );
              OUString sPPI = OUString::number(ax);
              if (abs(ax - ay) > 1) {
                 sPPI += OUStringLiteral1(0x00D7) + OUString::number(ay);

@@ -22,16 +22,12 @@
 
 #include <unotools/componentresmodule.hxx>
 
-
 namespace pcr
 {
+    DEFINE_MODULE(PcrModule, PcrClient)
 
-
-    DEFINE_MODULE( PcrModule, PcrClient, PcrRes )
-
-
+    OUString PcrRes(const char* pId);
 } // namespace pcr
-
 
 #endif // _ INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX_
 

@@ -32,6 +32,7 @@
 #include <sal/macros.h>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include "helpid.hrc"
 #include "page.hxx"
 #include <svx/pageitem.hxx>
@@ -218,11 +219,11 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
     //  fill text flow listbox with valid entries
 
-    m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), SvxFrameDirection::Horizontal_LR_TB );
+    m_pTextFlowBox->InsertEntryValue( CUI_RES( RID_SVXSTR_PAGEDIR_LTR_HORI ), SvxFrameDirection::Horizontal_LR_TB );
 
 
     if( bCTL )
-        m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_HORI ), SvxFrameDirection::Horizontal_RL_TB );
+        m_pTextFlowBox->InsertEntryValue( CUI_RES( RID_SVXSTR_PAGEDIR_RTL_HORI ), SvxFrameDirection::Horizontal_RL_TB );
 
 
     // #109989# do not show vertical directions in Writer/Web
@@ -230,8 +231,8 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     {
         if( bCJK )
         {
-            m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), SvxFrameDirection::Vertical_RL_TB );
-            m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), SvxFrameDirection::Vertical_LR_TB );
+            m_pTextFlowBox->InsertEntryValue( CUI_RES( RID_SVXSTR_PAGEDIR_RTL_VERT ), SvxFrameDirection::Vertical_RL_TB );
+            m_pTextFlowBox->InsertEntryValue( CUI_RES( RID_SVXSTR_PAGEDIR_LTR_VERT ), SvxFrameDirection::Vertical_LR_TB );
         }
     }
 
@@ -484,7 +485,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     OUString aBinName;
 
     if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
-        aBinName = EditResId::GetString( RID_SVXSTR_PAPERBIN_SETTINGS );
+        aBinName = EditResId(RID_SVXSTR_PAPERBIN_SETTINGS);
     else
         aBinName = mpDefPrinter->GetPaperBinName( (sal_uInt16)nPaperBin );
 
@@ -900,7 +901,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
     m_pPaperTrayBox->SetUpdateMode( false );
     m_pPaperTrayBox->Clear();
     sal_Int32 nEntryPos = m_pPaperTrayBox->InsertEntry(
-        EditResId::GetString( RID_SVXSTR_PAPERBIN_SETTINGS ) );
+        EditResId( RID_SVXSTR_PAPERBIN_SETTINGS ) );
     m_pPaperTrayBox->SetEntryData( nEntryPos,
         reinterpret_cast<void*>((sal_uLong)PAPERBIN_PRINTER_SETTINGS) );
     OUString aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );

@@ -22,8 +22,8 @@
 #include "pcrstrings.hxx"
 #include "standardcontrol.hxx"
 #include "linedescriptor.hxx"
-#include "propresid.hrc"
-#include "formresid.hrc"
+#include "strings.hrc"
+#include "strings.hrc"
 #include "propertyeditor.hxx"
 #include "modulepcr.hxx"
 #include "formstrings.hxx"
@@ -1345,7 +1345,7 @@ namespace pcr
     {
         try
         {
-            OUString sPlcHolder = PcrRes(RID_EMBED_IMAGE_PLACEHOLDER).toString();
+            OUString sPlcHolder = PcrRes(RID_EMBED_IMAGE_PLACEHOLDER);
             bool bIsPlaceHolderValue = false;
 
             if ( rName == PROPERTY_IMAGE_URL )

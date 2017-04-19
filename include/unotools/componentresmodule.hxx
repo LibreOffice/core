@@ -28,6 +28,7 @@
 
 #include <memory>
 
+class LanguageTag;
 class ResMgr;
 
 namespace utl
@@ -49,11 +50,12 @@ namespace utl
         ::std::unique_ptr< OComponentResModuleImpl >  m_pImpl;
 
     public:
-        OComponentResourceModule( const OString& _rResFilePrefix );
+        OComponentResourceModule(const OString& _rResFilePrefix, const LanguageTag& rLanguage);
         virtual ~OComponentResourceModule() override;
 
         /// get the vcl res manager of the module
         ResMgr* getResManager();
+        const std::locale& getResLocale();
 
     protected:
         // OModule overridables
@@ -72,7 +74,7 @@ namespace utl
 
     //= defining a concrete module
 
-#define DEFINE_MODULE( ModuleClass, ClientClass, ResClass ) \
+#define DEFINE_MODULE( ModuleClass, ClientClass ) \
     /* -------------------------------------------------------------------- */ \
     class ModuleClass : public ::utl::OComponentResourceModule \
     { \
@@ -94,18 +96,6 @@ namespace utl
     \
     public: \
         ClientClass() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
-    }; \
-    \
-    /* -------------------------------------------------------------------- */ \
-    class ResClass : public ::utl::ModuleRes \
-    { \
-    private: \
-        typedef ::utl::ModuleRes    BaseClass; \
-    \
-    public: \
-        ResClass( sal_uInt16 _nId ) : BaseClass( _nId, ModuleClass::getInstance() ) \
         { \
         } \
     }; \
@@ -143,7 +133,7 @@ namespace utl
     }; \
     \
     ModuleClass::ModuleClass() \
-        :BaseClass( OString( resprefix ) ) \
+        :BaseClass( OString( resprefix ), Application::GetSettings().GetUILanguageTag() ) \
     { \
     } \
     \

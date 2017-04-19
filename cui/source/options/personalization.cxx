@@ -29,6 +29,8 @@
 #include <vcl/mnemonic.hxx>
 #include <dialmgr.hxx>
 #include "cuires.hrc"
+#include "strings.hrc"
+#include "personalization.hrc"
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -58,11 +60,10 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     get( m_vSearchSuggestions[4], "suggestion5" );
     get( m_vSearchSuggestions[5], "suggestion6" );
 
-    ResStringArray aCategoriesArr(CUI_RES(RID_SVXSTR_PERSONA_CATEGORIES));
-    assert(aCategoriesArr.Count() >= CATEGORYCOUNT);
+    assert(SAL_N_ELEMENTS(RID_SVXSTR_PERSONA_CATEGORIES) >= CATEGORYCOUNT);
     for(sal_uInt32 i = 0; i < CATEGORYCOUNT; ++i)
     {
-        m_vSearchSuggestions[i]->SetText( aCategoriesArr.GetString(i) );
+        m_vSearchSuggestions[i]->SetText(CUI_RES(RID_SVXSTR_PERSONA_CATEGORIES[i]));
         m_vSearchSuggestions[i]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
     }
 
@@ -127,7 +128,7 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     /*
      * English category names should be used for search.
      * These strings should be in sync with the strings of
-     * RID_SVXSTR_PERSONA_CATEGORIES in personalization.src
+     * RID_SVXSTR_PERSONA_CATEGORIES in personalization.hrc
      */
     static const OUStringLiteral vSuggestionCategories[] =
         {"LibreOffice", "Abstract", "Color", "Music", "Nature", "Solid"};
@@ -209,7 +210,7 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
                 // get the persona name from the setting variable to show in the progress.
                 sal_Int32 nNameIndex = m_aSelectedPersona.indexOf( ';' );
                 OUString aName = m_aSelectedPersona.copy( 0, nNameIndex );
-                OUString aProgress = CUI_RESSTR( RID_SVXSTR_SELECTEDPERSONA ) + aName;
+                OUString aProgress = CUI_RES( RID_SVXSTR_SELECTEDPERSONA ) + aName;
                 SetProgress( aProgress );
             }
             break;

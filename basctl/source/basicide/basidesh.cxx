@@ -21,7 +21,8 @@
 
 #include <tools/diagnose_ex.h>
 #include <basic/basmgr.hxx>
-#include <basidesh.hrc>
+#include <svx/svxids.hrc>
+#include "basidesh.hrc"
 #include "baside2.hxx"
 #include "baside3.hxx"
 #include <basdoc.hxx>
@@ -386,7 +387,7 @@ bool Shell::PrepareClose( bool bUI )
         if( bUI )
         {
             vcl::Window *pParent = &GetViewFrame()->GetWindow();
-            ScopedVclPtrInstance<InfoBox>(pParent, IDE_RESSTR(RID_STR_CANNOTCLOSE))->Execute();
+            ScopedVclPtrInstance<InfoBox>(pParent, IDEResId(RID_STR_CANNOTCLOSE))->Execute();
         }
         return false;
     }
