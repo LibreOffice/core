@@ -267,7 +267,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( pOpt->IsViewMetaChars() ); break;
             case FN_VIEW_TABLEGRID:
                 aBool.SetValue( SwViewOption::IsTableBoundaries() ); break;
-            case FN_VIEW_NOTES:
+            case SID_TOGGLE_NOTES:
             {
                 aBool.SetValue( pOpt->IsPostIts());
                 if (!GetPostItMgr()->HasNotes())
@@ -413,7 +413,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         pOpt->setBrowseMode( bFlag );
         break;
 
-    case FN_VIEW_NOTES:
+    case SID_TOGGLE_NOTES:
         if ( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsPostIts();
 
