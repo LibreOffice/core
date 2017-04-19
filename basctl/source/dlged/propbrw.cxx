@@ -23,8 +23,8 @@
 #include "dlgedobj.hxx"
 #include "iderid.hxx"
 #include "baside3.hxx"
+#include "basidesh.hrc"
 
-#include "dlgresid.hrc"
 #include "strings.hxx"
 #include <svx/svxids.hrc>
 
@@ -285,8 +285,8 @@ void PropBrw::implSetNewObjectSequence
     {
         xObjectInspector->inspect( _rObjectSeq );
 
-        OUString aText = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES)
-                       + IDE_RESSTR(RID_STR_BRWTITLE_MULTISELECT);
+        OUString aText = IDEResId(RID_STR_BRWTITLE_PROPERTIES)
+                       + IDEResId(RID_STR_BRWTITLE_MULTISELECT);
         SetText( aText );
     }
 }
@@ -412,7 +412,7 @@ OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
     }
     else if (!_rxObject.is())    // no properties
     {
-        aName = IDE_RESSTR(RID_STR_BRWTITLE_NO_PROPERTIES);
+        aName = IDEResId(RID_STR_BRWTITLE_NO_PROPERTIES);
     }
 
     return aName;

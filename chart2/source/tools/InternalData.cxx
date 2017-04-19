@@ -19,7 +19,7 @@
 
 #include "InternalData.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 
 #include <rtl/math.hxx>
 #ifdef DEBUG_CHART2_TOOLS
@@ -100,8 +100,8 @@ void InternalData::createDefaultData()
     m_nColumnCount = nColumnCount;
     const sal_Int32 nSize = nColumnCount * nRowCount;
     // @todo: localize this!
-    const OUString aRowName(SCH_RESSTR(STR_ROW_LABEL));
-    const OUString aColName(SCH_RESSTR(STR_COLUMN_LABEL));
+    const OUString aRowName(SchResId(STR_ROW_LABEL));
+    const OUString aColName(SchResId(STR_COLUMN_LABEL));
 
     m_aData.resize( nSize );
     for( sal_Int32 i=0; i<nSize; ++i )

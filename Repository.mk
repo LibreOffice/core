@@ -1049,12 +1049,8 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 # Resources
 $(eval $(call gb_Helper_register_resources,\
 	abp \
-	acc \
 	analysis \
-	avmedia \
-	$(call gb_Helper_optional,SCRIPTING,basctl) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,bib) \
-	chartcontroller \
 	cnr \
 	cui \
 	date \
@@ -1084,7 +1080,6 @@ $(eval $(call gb_Helper_register_resources,\
 	pricing \
 	rpt \
 	rptui \
-	$(call gb_Helper_optional,SCRIPTING,sb) \
 	sc \
 	scn \
 	sd \
@@ -1093,7 +1088,6 @@ $(eval $(call gb_Helper_register_resources,\
 	sfx \
 	sm \
 	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),solver) \
-	svl \
 	svt \
 	svx \
 	sw \
@@ -1101,7 +1095,6 @@ $(eval $(call gb_Helper_register_resources,\
 	tpl \
 	upd \
 	uui \
-	vcl \
 	writerperfect \
 	$(if $(ENABLE_NSS),xmlsec) \
 	xsltdlg \

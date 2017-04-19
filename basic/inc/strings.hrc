@@ -17,46 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svids.hrc>
+#ifndef INCLUDED_BASIC_INC_STRINGS_HRC
+#define INCLUDED_BASIC_INC_STRINGS_HRC
 
-String SV_STDTEXT_SERVICENOTAVAILABLE
-{
-    Text [ en-US ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option.";
-};
+#define N_(String) (u8##String)
 
-String SV_STDTEXT_DONTASKAGAIN
-{
-    Text [ en-US ] = "Do not show this question again.";
-};
+#define STR_BASICKEY_FORMAT_ON          N_("On")
+#define STR_BASICKEY_FORMAT_OFF         N_("Off")
+#define STR_BASICKEY_FORMAT_TRUE        N_("True")
+#define STR_BASICKEY_FORMAT_FALSE       N_("False")
+#define STR_BASICKEY_FORMAT_YES         N_("Yes")
+#define STR_BASICKEY_FORMAT_NO          N_("No")
+//format currency
+#define STR_BASICKEY_FORMAT_CURRENCY    N_("@0.00 $;@(0.00 $)")
 
-String SV_STDTEXT_DONTWARNAGAIN
-{
-    Text [ en-US ] = "Do not show warning again.";
-};
+#define IDS_SBERR_TERMINATED            N_("The macro running has been interrupted")
 
-String SV_ACCESSERROR_NO_FONTS
-{
-    Text [ en-US ] = "No fonts could be found on the system.";
-};
-
-String SV_STDTEXT_ABOUT
-{
-    Text [ en-US ] = "About %PRODUCTNAME";
-};
-
-String SV_STDTEXT_PREFERENCES
-{
-    Text [ en-US ] = "Preferences...";
-};
-
-String SV_EDIT_WARNING_STR
-{
-    Text [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
-};
-
-String SV_STDTEXT_ALLFILETYPES
-{
-    Text [en-US] = "Any type";
-};
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

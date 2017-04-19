@@ -21,7 +21,7 @@
 
 #include "ResId.hxx"
 #include "ResourceIds.hrc"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "AxisHelper.hxx"
 
