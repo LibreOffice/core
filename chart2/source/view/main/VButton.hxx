@@ -25,6 +25,12 @@ private:
     css::uno::Reference<css::drawing::XShape> m_xShape;
     OUString m_sLabel;
     OUString m_sCID;
+    css::awt::Point m_aPosition;
+    css::awt::Size m_aSize;
+    bool m_bShowArrow;
+
+    css::uno::Reference<css::drawing::XShape>
+        createTriangle(css::awt::Size aSize);
 
 public:
     VButton();
@@ -32,18 +38,33 @@ public:
     void init(const css::uno::Reference<css::drawing::XShapes>& xTargetPage,
               const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory);
 
-    void createShapes(const css::awt::Point& rPosition,
-                      const css::awt::Size& rReferenceSize,
-                      const css::uno::Reference<css::beans::XPropertySet>& xTextProp);
+    void createShapes(const css::uno::Reference<css::beans::XPropertySet>& xTextProp);
 
-    void setWidth(sal_Int32 nWidth);
-    void setLabel(OUString const & sLabel)
+    void showArrow(bool bShowArrow)
     {
-        m_sLabel = sLabel;
+        m_bShowArrow = bShowArrow;
     }
-    void setCID(OUString const & sCID)
+
+
+    void setLabel(OUString const & rLabel)
     {
-        m_sCID = sCID;
+        m_sLabel = rLabel;
+    }
+    void setCID(OUString const & rCID)
+    {
+        m_sCID = rCID;
+    }
+    void setPosition(css::awt::Point const & rPosition)
+    {
+        m_aPosition = rPosition;
+    }
+    css::awt::Size getSize()
+    {
+        return m_aSize;
+    }
+    void setSize(css::awt::Size const & rSize)
+    {
+        m_aSize = rSize;
     }
 };
 
