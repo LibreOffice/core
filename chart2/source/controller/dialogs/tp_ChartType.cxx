@@ -18,7 +18,7 @@
  */
 
 #include "tp_ChartType.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ResId.hxx"
 #include "ChartModelHelper.hxx"
 #include "DiagramHelper.hxx"
@@ -338,7 +338,7 @@ SplinePropertiesDialog::SplinePropertiesDialog( vcl::Window* pParent )
     get(m_pFT_SplineOrder, "PolynomialsLabel");
     get(m_pMF_SplineOrder, "PolynomialsSpinButton");
 
-    this->SetText( SCH_RESSTR( STR_DLG_SMOOTH_LINE_PROPERTIES ) );
+    this->SetText( SchResId( STR_DLG_SMOOTH_LINE_PROPERTIES ) );
 
     m_pLB_Spline_Type->SetSelectHdl( LINK (this, SplinePropertiesDialog, SplineTypeListBoxHdl ) );
 }
@@ -416,7 +416,7 @@ SteppedPropertiesDialog::SteppedPropertiesDialog( vcl::Window* pParent )
     get(m_pRB_CenterX, "step_center_x_rb");
     get(m_pRB_CenterY, "step_center_y_rb");
 
-    SetText(SCH_RESSTR(STR_DLG_STEPPED_LINE_PROPERTIES));
+    SetText(SchResId(STR_DLG_STEPPED_LINE_PROPERTIES));
 }
 
 void SteppedPropertiesDialog::dispose()
@@ -535,7 +535,7 @@ void SplineResourceGroup::fillControls( const ChartTypeParameter& rParameter )
             m_pLB_LineType->SelectEntryPos(POS_LINETYPE_SMOOTH);
             m_pPB_DetailsDialog->Enable();
             m_pPB_DetailsDialog->SetClickHdl( LINK( this, SplineResourceGroup, SplineDetailsDialogHdl ) );
-            m_pPB_DetailsDialog->SetQuickHelpText( SCH_RESSTR(STR_DLG_SMOOTH_LINE_PROPERTIES) );
+            m_pPB_DetailsDialog->SetQuickHelpText( SchResId(STR_DLG_SMOOTH_LINE_PROPERTIES) );
             getSplinePropertiesDialog().fillControls( rParameter );
             break;
         case CurveStyle_STEP_START:
@@ -545,7 +545,7 @@ void SplineResourceGroup::fillControls( const ChartTypeParameter& rParameter )
             m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STEPPED);
             m_pPB_DetailsDialog->Enable();
             m_pPB_DetailsDialog->SetClickHdl( LINK( this, SplineResourceGroup, SteppedDetailsDialogHdl ) );
-            m_pPB_DetailsDialog->SetQuickHelpText( SCH_RESSTR(STR_DLG_STEPPED_LINE_PROPERTIES) );
+            m_pPB_DetailsDialog->SetQuickHelpText( SchResId(STR_DLG_STEPPED_LINE_PROPERTIES) );
             getSteppedPropertiesDialog().fillControls( rParameter );
             break;
         default:
@@ -696,7 +696,7 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         m_pFT_ChooseType->SetStyle(m_pFT_ChooseType->GetStyle() | WB_NOLABEL);
     }
 
-    this->SetText( SCH_RESSTR(STR_PAGE_CHARTTYPE) );
+    this->SetText( SchResId(STR_PAGE_CHARTTYPE) );
 
     m_pMainTypeList->SetStyle(m_pMainTypeList->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_FLATVALUESET | WB_3DLOOK );
     m_pMainTypeList->SetSelectHdl( LINK( this, ChartTypeTabPage, SelectMainTypeHdl ) );

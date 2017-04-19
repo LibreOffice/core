@@ -19,15 +19,14 @@
 
 #include "ResId.hxx"
 #include "ResourceManager.hxx"
+#include <tools/simplerm.hxx>
 
 namespace chart
 {
-
-    SchResId::SchResId( sal_Int16 nId )
-        : ResId( nId, ResourceManager::getResourceManager() )
+    OUString SchResId(const char *pId)
     {
+        return Translate::get(pId, ResourceManager::getResourceLocale());
     }
-
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

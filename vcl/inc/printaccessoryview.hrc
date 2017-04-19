@@ -17,17 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_INC_SB_HRC
-#define INCLUDED_BASIC_INC_SB_HRC
+#ifndef INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
+#define INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 
-#include <svl/solar.hrc>
+#define N_(String) (u8##String)
 
-#ifndef IDS_SBERR_START
- #define IDS_SBERR_START RID_BASIC_START
-#endif
+const char* SV_PRINT_NATIVE_STRINGS[] =
+{
+    N_("Preview"),
+    N_("Page number"),
+    N_("Number of pages"),
+    N_("More"),
+    N_("Print selection only")
+};
 
-#define IDS_SBERR_TERMINATED        IDS_SBERR_START+2000
-
-#endif
+#endif // INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
