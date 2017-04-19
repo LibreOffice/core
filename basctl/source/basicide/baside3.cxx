@@ -46,6 +46,7 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
@@ -605,9 +606,9 @@ void DialogWindow::SaveDialog()
 
     xFP->setDefaultName( GetName() );
 
-    OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
+    OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
     xFP->appendFilter( aDialogStr, "*.xdl" );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), FilterMask_All );
+    xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -739,7 +740,7 @@ void DialogWindow::SaveDialog()
             }
         }
         else
-            ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_COULDNTWRITE))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_COULDNTWRITE))->Execute();
     }
 }
 
@@ -794,9 +795,9 @@ NameClashQueryBox::NameClashQueryBox( vcl::Window* pParent,
 
     maMessText = rMessage;
 
-    AddButton( IDE_RESSTR(RID_STR_DLGIMP_CLASH_RENAME), RET_YES,
+    AddButton( IDEResId(RID_STR_DLGIMP_CLASH_RENAME), RET_YES,
         ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus );
-    AddButton( IDE_RESSTR(RID_STR_DLGIMP_CLASH_REPLACE), RET_NO );
+    AddButton( IDEResId(RID_STR_DLGIMP_CLASH_REPLACE), RET_NO );
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
     SetImage( QueryBox::GetStandardImage() );
@@ -818,9 +819,9 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( vcl::Window* pParent,
         SetText( rTitle );
 
     maMessText = rMessage;
-    AddButton( IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_ADD), RET_YES,
+    AddButton( IDEResId(RID_STR_DLGIMP_MISMATCH_ADD), RET_YES,
         ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus );
-    AddButton( IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_OMIT), RET_NO );
+    AddButton( IDEResId(RID_STR_DLGIMP_MISMATCH_OMIT), RET_NO );
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
     AddButton( StandardButtonType::Help, RET_HELP, ButtonDialogFlags::Help, 4 );
 
@@ -845,9 +846,9 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
     if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
+    OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
     xFP->appendFilter( aDialogStr, "*.xdl" );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), FilterMask_All );
+    xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -907,8 +908,8 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             NameClashMode eNameClashMode = NO_CLASH;
             if( bDialogAlreadyExists )
             {
-                OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TITLE));
-                OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TEXT));
+                OUString aQueryBoxTitle(IDEResId(RID_STR_DLGIMP_CLASH_TITLE));
+                OUString aQueryBoxText(IDEResId(RID_STR_DLGIMP_CLASH_TEXT));
                 aQueryBoxText = aQueryBoxText.replaceAll("$(ARG1)", aXmlDlgName);
 
                 ScopedVclPtrInstance< NameClashQueryBox > aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
@@ -971,8 +972,8 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             bool bAddDialogLanguagesToLib = false;
             if( nOnlyInImportLanguageCount > 0 )
             {
-                OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TITLE));
-                OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TEXT));
+                OUString aQueryBoxTitle(IDEResId(RID_STR_DLGIMP_MISMATCH_TITLE));
+                OUString aQueryBoxText(IDEResId(RID_STR_DLGIMP_MISMATCH_TEXT));
                 ScopedVclPtrInstance< LanguageMismatchQueryBox > aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox->Execute();
                 if( RET_YES == nRet )

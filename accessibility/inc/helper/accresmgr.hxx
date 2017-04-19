@@ -34,7 +34,7 @@ namespace accessibility
 
 class TkResMgr
 {
-    static SimpleResMgr* m_pImpl;
+    static std::locale* m_pImpl;
 
 private:
     // no instantiation allowed
@@ -56,7 +56,7 @@ protected:
 
 public:
     // loads the string with the specified resource id
-    static OUString loadString( sal_uInt16 nResId );
+    static OUString loadString(const char *pResId);
 };
 
 }

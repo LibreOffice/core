@@ -21,7 +21,7 @@
 #include <vcl/abstdlg.hxx>
 
 #include "svdata.hxx"
-#include <svids.hrc>
+#include <strings.hrc>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WindowType::CONTAINER)
@@ -262,10 +262,10 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         aMenu->InsertItem(
                             nLocalID,
-                            VclResId(SV_BUTTONTEXT_SCREENSHOT).toString());
+                            VclResId(SV_BUTTONTEXT_SCREENSHOT));
                         aMenu->SetHelpText(
                             nLocalID,
-                            VclResId(SV_HELPTEXT_SCREENSHOT).toString());
+                            VclResId(SV_HELPTEXT_SCREENSHOT));
                         aMenu->SetHelpId(
                             nLocalID,
                             "InteractiveScreenshotMode");
@@ -486,7 +486,7 @@ void VclBox::setAllocation(const Size &rAllocation)
     }
 }
 
-bool VclBox::set_property(const OString &rKey, const OString &rValue)
+bool VclBox::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "spacing")
         set_spacing(rValue.toInt32());
@@ -706,7 +706,7 @@ Size VclButtonBox::calculateRequisition() const
     return addSpacing(addReqGroups(aReq), nVisibleChildren);
 }
 
-bool VclButtonBox::set_property(const OString &rKey, const OString &rValue)
+bool VclButtonBox::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "layout-style")
     {
@@ -1431,12 +1431,12 @@ void VclGrid::setAllocation(const Size& rAllocation)
     }
 }
 
-bool toBool(const OString &rValue)
+bool toBool(const OUString &rValue)
 {
     return (!rValue.isEmpty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
 }
 
-bool VclGrid::set_property(const OString &rKey, const OString &rValue)
+bool VclGrid::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "row-spacing")
         set_row_spacing(rValue.toInt32());
@@ -1648,7 +1648,7 @@ void VclAlignment::setAllocation(const Size &rAllocation)
     setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
-bool VclAlignment::set_property(const OString &rKey, const OString &rValue)
+bool VclAlignment::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "bottom-padding")
         m_nBottomPadding = rValue.toInt32();
@@ -1779,7 +1779,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
     }
 }
 
-bool VclExpander::set_property(const OString &rKey, const OString &rValue)
+bool VclExpander::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "expanded")
         set_expanded(toBool(rValue));
@@ -2007,7 +2007,7 @@ Size VclScrolledWindow::getVisibleChildSize() const
     return aRet;
 }
 
-bool VclScrolledWindow::set_property(const OString &rKey, const OString &rValue)
+bool VclScrolledWindow::set_property(const OString &rKey, const OUString &rValue)
 {
     bool bRet = VclBin::set_property(rKey, rValue);
     m_pVScroll->Show((GetStyle() & WB_VSCROLL) != 0);
@@ -2132,7 +2132,7 @@ void VclSizeGroup::set_mode(VclSizeGroupMode eMode)
 
 }
 
-bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
+bool VclSizeGroup::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "ignore-hidden")
         set_ignore_hidden(toBool(rValue));
@@ -2456,12 +2456,12 @@ OUString const & MessageDialog::get_secondary_text() const
     return m_sSecondaryString;
 }
 
-bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
+bool MessageDialog::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "text")
-        set_primary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        set_primary_text(rValue);
     else if (rKey == "secondary-text")
-        set_secondary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        set_secondary_text(rValue);
     else if (rKey == "message-type")
     {
         VclMessageType eMode = VclMessageType::Info;

@@ -132,7 +132,7 @@ public:
 
     void            EnableCursor( bool bEnable );
 
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 };
 
 #endif // INCLUDED_VCL_VCLMEDIT_HXX

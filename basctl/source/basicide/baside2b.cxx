@@ -23,6 +23,7 @@
 
 #include "helpid.hrc"
 #include <basidesh.hrc>
+#include "bitmaps.hrc"
 
 #include "baside2.hxx"
 #include "brkdlg.hxx"
@@ -38,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urihelper.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/xtextedt.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
@@ -74,9 +76,9 @@ SbxVariable* IsSbxVariable (SbxBase* pBase)
     return nullptr;
 }
 
-Image GetImage (unsigned nId)
+Image GetImage(const OUString& rId)
 {
-    return Image(BitmapEx(IDEResId(nId)));
+    return Image(BitmapEx(rId));
 }
 
 int const nScrollLine = 12;
@@ -477,7 +479,7 @@ bool EditorWindow::ImpCanModify()
     {
         // If in Trace-mode, abort the trace or refuse input
         // Remove markers in the modules in Notify at Basic::Stopped
-        if (ScopedVclPtrInstance<QueryBox>(nullptr, WB_OK_CANCEL, IDEResId(RID_STR_WILLSTOPPRG).toString())->Execute() == RET_OK)
+        if (ScopedVclPtrInstance<QueryBox>(nullptr, WB_OK_CANCEL, IDEResId(RID_STR_WILLSTOPPRG))->Execute() == RET_OK)
         {
             rModulWindow.GetBasicStatus().bIsRunning = false;
             StopBasic();
@@ -979,7 +981,7 @@ void EditorWindow::CreateEditEngine()
     // it could be cut down on one formatting but you would wait even longer
     // for the text then if the source code is long...
     pProgress.reset(new ProgressInfo(GetShell()->GetViewFrame()->GetObjectShell(),
-                                     IDEResId(RID_STR_GENERATESOURCE).toString(),
+                                     IDEResId(RID_STR_GENERATESOURCE),
                                      nLines * 4));
     setTextEngineText(*pEditEngine, aOUSource);
 
@@ -1378,7 +1380,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     Size const aOutSz = GetOutputSize();
     long const nLineHeight = GetTextHeight();
 
-    Image aMarker = GetImage(bErrorMarker ? RID_BMP_ERRORMARKER : RID_BMP_STEPMARKER);
+    Image aMarker = GetImage(bErrorMarker ? OUStringLiteral(RID_BMP_ERRORMARKER) : OUStringLiteral(RID_BMP_STEPMARKER));
 
     Size aMarkerSz(aMarker.GetSizePixel());
     aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);
@@ -1552,10 +1554,10 @@ WatchWindow::WatchWindow (Layout* pParent)
                                                           WB_HASLINESATROOT | WB_HASBUTTONSATROOT))
     , aHeaderBar(VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BORDER))
 {
-    aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
+    aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME));
     aXEdit->SetHelpId(HID_BASICIDE_WATCHWINDOW_EDIT);
     aXEdit->SetSizePixel(aXEdit->LogicToPixel(Size(80, 12), MapUnit::MapAppFont));
-    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
+    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME));
 
     long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
     aXEdit->SetPosPixel( Point( nTextLen, 3 ) );
@@ -1568,7 +1570,7 @@ WatchWindow::WatchWindow (Layout* pParent)
     aRemoveWatchButton->SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton->SetPosPixel( Point( nTextLen + aXEdit->GetSizePixel().Width() + 4, 2 ) );
     aRemoveWatchButton->SetHelpId(HID_BASICIDE_REMOVEWATCH);
-    aRemoveWatchButton->SetModeImage(Image(BitmapEx(IDEResId(RID_BMP_REMOVEWATCH))));
+    aRemoveWatchButton->SetModeImage(Image(BitmapEx(RID_BMP_REMOVEWATCH)));
     aRemoveWatchButton->SetQuickHelpText(IDEResId(RID_STR_REMOVEWATCHTIP));
     Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
     aSz.Width() += 6;
@@ -1597,9 +1599,9 @@ WatchWindow::WatchWindow (Layout* pParent)
     long nVarTabWidth = 220;
     long nValueTabWidth = 100;
     long nTypeTabWidth = 1250;
-    aHeaderBar->InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE).toString(), nVarTabWidth );
-    aHeaderBar->InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE).toString(), nValueTabWidth );
-    aHeaderBar->InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE).toString(), nTypeTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE), nVarTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE), nValueTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE), nTypeTabWidth );
 
     long tabs[ 4 ];
     tabs[ 0 ] = 3; // two tabs
@@ -1615,7 +1617,7 @@ WatchWindow::WatchWindow (Layout* pParent)
 
     aTreeListBox->Show();
 
-    SetText(IDEResId(RID_STR_WATCHNAME).toString());
+    SetText(IDEResId(RID_STR_WATCHNAME));
 
     SetHelpId( HID_BASICIDE_WATCHWINDOW );
 
@@ -1832,14 +1834,14 @@ StackWindow::StackWindow (Layout* pParent) :
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
     aTreeListBox->SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
-    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_STACKNAME).toString());
+    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_STACKNAME));
     aTreeListBox->SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox->SetHighlightRange();
     aTreeListBox->SetSelectionMode( SelectionMode::NONE );
     aTreeListBox->InsertEntry( OUString() );
     aTreeListBox->Show();
 
-    SetText(IDEResId(RID_STR_STACKNAME).toString());
+    SetText(IDEResId(RID_STR_STACKNAME));
 
     SetHelpId( HID_BASICIDE_STACKWINDOW );
 

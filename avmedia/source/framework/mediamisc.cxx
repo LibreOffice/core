@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
-#include <svl/solar.hrc>
+#include <tools/simplerm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -26,16 +25,10 @@
 
 namespace avmedia {
 
-ResMgr* GetResMgr()
+const std::locale& GetResLocale()
 {
-    static ResMgr* pResMgr = nullptr;
-
-    if( !pResMgr )
-    {
-        pResMgr = ResMgr::CreateResMgr("avmedia", Application::GetSettings().GetUILanguageTag());
-    }
-
-    return pResMgr;
+    static std::locale loc = Translate::Create("avmedia", Application::GetSettings().GetUILanguageTag());
+    return loc;
 }
 
 } // namespace avmedia

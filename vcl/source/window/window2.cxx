@@ -1395,7 +1395,7 @@ void Window::queue_resize(StateChangedType eReason)
 
 namespace
 {
-    VclAlign toAlign(const OString &rValue)
+    VclAlign toAlign(const OUString &rValue)
     {
         VclAlign eRet = VclAlign::Fill;
 
@@ -1411,7 +1411,7 @@ namespace
     }
 }
 
-bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
+bool Window::set_font_attribute(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "weight")
     {
@@ -1470,11 +1470,11 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
     return true;
 }
 
-bool Window::set_property(const OString &rKey, const OString &rValue)
+bool Window::set_property(const OString &rKey, const OUString &rValue)
 {
     if ((rKey == "label") || (rKey == "title") || (rKey == "text") )
     {
-        SetText(OStringToOUString(VclBuilder::convertMnemonicMarkup(rValue), RTL_TEXTENCODING_UTF8));
+        SetText(VclBuilder::convertMnemonicMarkup(rValue));
     }
     else if (rKey == "visible")
         Show(toBool(rValue));
@@ -1553,9 +1553,9 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
     else if (rKey == "valign")
         set_valign(toAlign(rValue));
     else if (rKey == "tooltip-markup")
-        SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetQuickHelpText(rValue);
     else if (rKey == "tooltip-text")
-        SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetQuickHelpText(rValue);
     else if (rKey == "border-width")
         set_border_width(rValue.toInt32());
     else if (rKey == "margin-left")
@@ -1588,11 +1588,11 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
     }
     else if (rKey == "accessible-name")
     {
-        SetAccessibleName(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetAccessibleName(rValue);
     }
     else if (rKey == "accessible-description")
     {
-        SetAccessibleDescription(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetAccessibleDescription(rValue);
     }
     else if (rKey == "use-markup")
     {

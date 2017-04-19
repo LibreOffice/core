@@ -288,7 +288,7 @@ ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
 VCL_BUILDER_DECL_FACTORY(ContentListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
     rRet = VclPtr<ContentListBox_Impl>::Create(pParent, nWinStyle);
@@ -475,7 +475,7 @@ IndexBox_Impl::IndexBox_Impl(vcl::Window* pParent, WinBits nStyle)
 VCL_BUILDER_DECL_FACTORY(IndexBox)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
     VclPtrInstance<IndexBox_Impl> pListBox(pParent, nWinBits);
@@ -883,7 +883,7 @@ void SearchBox_Impl::Select()
 VCL_BUILDER_DECL_FACTORY(SearchResultsBox)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
     VclPtrInstance<SearchResultsBox_Impl> pListBox(pParent, nWinBits);
@@ -1144,7 +1144,7 @@ BookmarksBox_Impl::BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle)
 VCL_BUILDER_DECL_FACTORY(BookmarksBox)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
     VclPtrInstance<BookmarksBox_Impl> pListBox(pParent, nWinBits);

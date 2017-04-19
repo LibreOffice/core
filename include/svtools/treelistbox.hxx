@@ -526,7 +526,7 @@ public:
 
     void set_min_width_in_chars(sal_Int32 nChars);
 
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
 protected:
     using SvListView::SelectAll;

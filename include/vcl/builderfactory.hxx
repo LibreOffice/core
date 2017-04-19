@@ -34,7 +34,7 @@
 #define VCL_BUILDER_FACTORY_CONSTRUCTOR(typeName,arg2) \
     VCL_BUILDER_DECL_FACTORY(typeName) \
     { \
-        OString sBorder = VclBuilder::extractCustomProperty(rMap); \
+        OUString sBorder = VclBuilder::extractCustomProperty(rMap); \
         WinBits wb = arg2; \
         if (!sBorder.isEmpty()) \
             wb |= WB_BORDER; \
