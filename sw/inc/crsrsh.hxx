@@ -177,7 +177,7 @@ private:
     Link<SwCursorShell&,void> m_aGrfArrivedLnk;      ///< Link calls to UI if a graphic is arrived
 
     SwShellCursor* m_pCurrentCursor;      ///< current cursor
-    SwShellCursor* m_pCursorStack;      ///< stack for the cursor
+    SwShellCursor* m_pStackCursor;      ///< stack for the cursor
     SwVisibleCursor *m_pVisibleCursor;        ///< the visible cursor
 
     SwBlockCursor *m_pBlockCursor;   ///< interface of cursor for block (=rectangular) selection
@@ -856,7 +856,7 @@ inline SwCursor* SwCursorShell::GetSwCursor() const
     return static_cast<SwCursor*>(GetCursor());
 }
 
-inline SwPaM* SwCursorShell::GetStackCursor() const { return m_pCursorStack; }
+inline SwPaM* SwCursorShell::GetStackCursor() const { return m_pStackCursor; }
 
 inline void SwCursorShell::SetMark() { m_pCurrentCursor->SetMark(); }
 

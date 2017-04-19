@@ -1031,7 +1031,7 @@ int SwCursorShell::CompareCursorStackMkCurrPt() const
 {
     int nRet = 0;
     const SwPosition *pFirst = nullptr, *pSecond = nullptr;
-    const SwPaM *pCur = GetCursor(), *pStack = m_pCursorStack;
+    const SwPaM *pCur = GetCursor(), *pStack = m_pStackCursor;
     // cursor on stack is needed if we compare against stack
     if( pStack  )
     {
@@ -2012,13 +2012,13 @@ void SwCursorShell::Push()
     // This seems to work because UpdateCursor() will fix this up on Pop(),
     // then MakeBoxSels() will re-create the current m_pCurrentCursor cell ring.
     SwShellCursor *const pCurrent((m_pTableCursor) ? m_pTableCursor : m_pCurrentCursor);
-    m_pCursorStack = new SwShellCursor( *this, *pCurrent->GetPoint(),
-                                    pCurrent->GetPtPos(), m_pCursorStack );
+    m_pStackCursor = new SwShellCursor( *this, *pCurrent->GetPoint(),
+                                    pCurrent->GetPtPos(), m_pStackCursor );
 
     if (pCurrent->HasMark())
     {
-        m_pCursorStack->SetMark();
-        *m_pCursorStack->GetMark() = *pCurrent->GetMark();
+        m_pStackCursor->SetMark();
+        *m_pStackCursor->GetMark() = *pCurrent->GetMark();
     }
 }
 
@@ -2033,21 +2033,21 @@ bool SwCursorShell::Pop( bool bOldCursor )
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
 
     // are there any left?
-    if( nullptr == m_pCursorStack )
+    if (nullptr == m_pStackCursor)
         return false;
 
-    SwShellCursor *pTmp = nullptr, *pOldStack = m_pCursorStack;
+    SwShellCursor *pTmp = nullptr, *pOldStack = m_pStackCursor;
 
     // the successor becomes the current one
-    if( m_pCursorStack->GetNext() != m_pCursorStack )
+    if (m_pStackCursor->GetNext() != m_pStackCursor)
     {
-        pTmp = dynamic_cast<SwShellCursor*>(m_pCursorStack->GetNext());
+        pTmp = dynamic_cast<SwShellCursor*>(m_pStackCursor->GetNext());
     }
 
     if( bOldCursor ) // delete from stack
-        delete m_pCursorStack;
+        delete m_pStackCursor;
 
-    m_pCursorStack = pTmp; // assign new one
+    m_pStackCursor = pTmp; // assign new one
 
     if( !bOldCursor )
     {
@@ -2096,29 +2096,29 @@ bool SwCursorShell::Pop( bool bOldCursor )
 void SwCursorShell::Combine()
 {
     // any others left?
-    if( nullptr == m_pCursorStack )
+    if (nullptr == m_pStackCursor)
         return;
 
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     // rhbz#689053: IsSelOvr must restore the saved stack position, not the
     // current one, because current point + stack mark may be invalid PaM
-    SwCursorSaveState aSaveState(*m_pCursorStack);
+    SwCursorSaveState aSaveState(*m_pStackCursor);
     // stack cursor & current cursor in same Section?
-    assert(!m_pCursorStack->HasMark() ||
-            CheckNodesRange(m_pCursorStack->GetMark()->nNode,
+    assert(!m_pStackCursor->HasMark() ||
+            CheckNodesRange(m_pStackCursor->GetMark()->nNode,
                             m_pCurrentCursor->GetPoint()->nNode, true));
-    *m_pCursorStack->GetPoint() = *m_pCurrentCursor->GetPoint();
-    m_pCursorStack->GetPtPos() = m_pCurrentCursor->GetPtPos();
+    *m_pStackCursor->GetPoint() = *m_pCurrentCursor->GetPoint();
+    m_pStackCursor->GetPtPos() = m_pCurrentCursor->GetPtPos();
 
     SwShellCursor * pTmp = nullptr;
-    if( m_pCursorStack->GetNext() != m_pCursorStack )
+    if (m_pStackCursor->GetNext() != m_pStackCursor)
     {
-        pTmp = dynamic_cast<SwShellCursor*>(m_pCursorStack->GetNext());
+        pTmp = dynamic_cast<SwShellCursor*>(m_pStackCursor->GetNext());
     }
     delete m_pCurrentCursor;
-    m_pCurrentCursor = m_pCursorStack;
-    m_pCursorStack->MoveTo(nullptr); // remove from ring
-    m_pCursorStack = pTmp;
+    m_pCurrentCursor = m_pStackCursor;
+    m_pStackCursor->MoveTo(nullptr); // remove from ring
+    m_pStackCursor = pTmp;
     if( !m_pCurrentCursor->IsInProtectTable( true ) &&
         !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
                              SwCursorSelOverFlags::ChangePos ) )
@@ -2622,8 +2622,8 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
         if( dynamic_cast<const SwCursorShell *>(&rTmp) != nullptr)
         {
             SwCursorShell* pSh = static_cast<SwCursorShell*>(&rTmp);
-            if( pSh->m_pCursorStack )
-                pSh->ParkPams( pNew.get(), &pSh->m_pCursorStack );
+            if (pSh->m_pStackCursor)
+                pSh->ParkPams(pNew.get(), &pSh->m_pStackCursor);
 
             pSh->ParkPams( pNew.get(), &pSh->m_pCurrentCursor );
             if( pSh->m_pTableCursor )
@@ -2650,7 +2650,7 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
 SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     : SwViewShell( rShell, pInitWin )
     , SwModify( nullptr )
-    , m_pCursorStack( nullptr )
+    , m_pStackCursor( nullptr )
     , m_pBlockCursor( nullptr )
     , m_pTableCursor( nullptr )
     , m_pBoxIdx( nullptr )
@@ -2688,7 +2688,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
                             const SwViewOption *pInitOpt )
     : SwViewShell( rDoc, pInitWin, pInitOpt )
     , SwModify( nullptr )
-    , m_pCursorStack( nullptr )
+    , m_pStackCursor( nullptr )
     , m_pBlockCursor( nullptr )
     , m_pTableCursor( nullptr )
     , m_pBoxIdx( nullptr )
@@ -2748,11 +2748,11 @@ SwCursorShell::~SwCursorShell()
     delete m_pCurrentCursor;
 
     // free stack
-    if( m_pCursorStack )
+    if (m_pStackCursor)
     {
-        while( m_pCursorStack->GetNext() != m_pCursorStack )
-            delete m_pCursorStack->GetNext();
-        delete m_pCursorStack;
+        while (m_pStackCursor->GetNext() != m_pStackCursor)
+            delete m_pStackCursor->GetNext();
+        delete m_pStackCursor;
     }
 
     // #i54025# - do not give a HTML parser that might potentially hang as
