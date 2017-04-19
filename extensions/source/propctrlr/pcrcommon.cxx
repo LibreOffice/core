@@ -19,7 +19,7 @@
 
 #include "pcrcommon.hxx"
 #include "modulepcr.hxx"
-#include "propresid.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <rtl/ustrbuf.hxx>

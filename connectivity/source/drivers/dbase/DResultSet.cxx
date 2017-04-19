@@ -26,7 +26,7 @@
 #include "dbase/DIndexIter.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#include "resource/dbase_res.hrc"
+#include "strings.hrc"
 
 using namespace ::comphelper;
 

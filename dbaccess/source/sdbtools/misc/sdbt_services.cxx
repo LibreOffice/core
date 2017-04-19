@@ -17,34 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "module_sdbt.hxx"
-#include "sdbt_services.hxx"
+#include "connectiontools.hxx"
+#include <comphelper/componentmodule.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
 
-extern "C" void SAL_CALL sdbt_initializeModule()
-{
-    static bool s_bInit = false;
-    if (!s_bInit)
-    {
-        createRegistryInfo_ConnectionTools();
-        s_bInit = true;
-    }
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdbt_component_getFactory(
-                    const sal_Char* pImplementationName,
-                    void* pServiceManager,
-                    void* /*pRegistryKey*/)
+                    const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*, SAL_UNUSED_PARAMETER void*)
 {
-    sdbt_initializeModule();
-
     Reference< XInterface > xRet;
-    if (pServiceManager && pImplementationName)
+
+    if (sdbtools::ConnectionTools::getImplementationName_static() == OUString::createFromAscii(pImplementationName))
     {
-        xRet = ::sdbtools::SdbtModule::getInstance().getComponentFactory(
-            OUString::createFromAscii(pImplementationName));
+        xRet = ::cppu::createSingleComponentFactory(sdbtools::ConnectionTools::Create,
+                    sdbtools::ConnectionTools::getImplementationName_static(),
+                    sdbtools::ConnectionTools::getSupportedServiceNames_static(), nullptr);
     }
 
     if (xRet.is())

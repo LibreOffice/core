@@ -17,15 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "dbwiz.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "adminpages.hxx"
 #include "generalpage.hxx"
 #include "stringlistitem.hxx"
@@ -92,7 +95,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
     m_pCollection = rCollectionItem.getCollection();
 
     ActivatePage();
-    setTitleBase(ModuleRes(STR_DATABASE_TYPE_CHANGE));
+    setTitleBase(DBA_RES(STR_DATABASE_TYPE_CHANGE));
 }
 
 ODbTypeWizDialog::~ODbTypeWizDialog()
@@ -229,7 +232,7 @@ void ODbTypeWizDialog::clearPassword()
 
 VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
 {
-    sal_uInt16 nStringId = STR_PAGETITLE_ADVANCED;
+    const char* pStringId = STR_PAGETITLE_ADVANCED;
     VclPtr<TabPage> pPage;
     switch(_nState)
     {
@@ -238,12 +241,12 @@ VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
             pPage = VclPtr<OGeneralPageDialog>::Create(this,*m_pOutSet);
             OGeneralPage* pGeneralPage = static_cast< OGeneralPage* >( pPage.get() );
             pGeneralPage->SetTypeSelectHandler( LINK( this, ODbTypeWizDialog, OnTypeSelected));
-            nStringId = STR_PAGETITLE_GENERAL;
+            pStringId = STR_PAGETITLE_GENERAL;
         }
         break;
         case CONNECTION_PAGE:
             pPage = OConnectionTabPage::Create(this,m_pOutSet);
-            nStringId = STR_PAGETITLE_CONNECTION;
+            pStringId = STR_PAGETITLE_CONNECTION;
             break;
 
         case ADDITIONAL_PAGE_DBASE:
@@ -286,7 +289,7 @@ VclPtr<TabPage> ODbTypeWizDialog::createPage(WizardState _nState)
     {
         static_cast<OGenericAdministrationPage*>(pPage.get())->SetServiceFactory( m_pImpl->getORB() );
         static_cast<OGenericAdministrationPage*>(pPage.get())->SetAdminDialog(this,this);
-        pPage->SetText(ModuleRes(nStringId));
+        pPage->SetText(DBA_RES(pStringId));
         defaultButton( _nState == START_PAGE ? WizardButtonFlags::NEXT : WizardButtonFlags::FINISH );
         enableButtons( WizardButtonFlags::FINISH, _nState != START_PAGE);
         pPage->Show();
