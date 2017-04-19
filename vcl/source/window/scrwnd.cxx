@@ -59,11 +59,13 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     // create wheel window
     SetTitleType( FloatWinTitleType::NONE );
     ImplCreateImageList();
+#if 0
     ResMgr* pResMgr = ImplGetResMgr();
     Bitmap aBmp;
     if( pResMgr )
         aBmp = Bitmap( ResId( SV_RESID_BITMAP_SCROLLMSK, *pResMgr ) );
     ImplSetRegion( aBmp );
+#endif
 
     // set wheel mode
     if( bHorz && bVert )
@@ -121,6 +123,7 @@ void ImplWheelWindow::ImplSetRegion( const Bitmap& rRegionBmp )
 
 void ImplWheelWindow::ImplCreateImageList()
 {
+#if 0
     ResMgr* pResMgr = ImplGetResMgr();
     if (pResMgr)
     {
@@ -131,6 +134,7 @@ void ImplWheelWindow::ImplCreateImageList()
         maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WHEELV, *pResMgr))));
         maImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WHEELH, *pResMgr))));
     }
+#endif
 }
 
 void ImplWheelWindow::ImplSetWheelMode( WheelMode nWheelMode )

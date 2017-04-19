@@ -635,15 +635,14 @@ gboolean ensure_dbus_setup( gpointer data )
             gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu" );
 
         //app menu, to-do translations, block normal menus when active, honor use appmenu settings
-        ResMgr* pMgr = ImplGetResMgr();
-        if( pMgr && !bDesktopIsUnity )
+        if (!bDesktopIsUnity )
         {
             GMenu *menu = g_menu_new ();
             GMenuItem* item;
 
             GMenu *firstsubmenu = g_menu_new ();
 
-            OString sNew(OUStringToOString(ResId(SV_BUTTONTEXT_NEW, *pMgr).toString(),
+            OString sNew(OUStringToOString(VclResStr(SV_BUTTONTEXT_NEW),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sNew.getStr(), "app.New");
@@ -655,7 +654,7 @@ gboolean ensure_dbus_setup( gpointer data )
 
             GMenu *secondsubmenu = g_menu_new ();
 
-            OString sPreferences(OUStringToOString(ResId(SV_STDTEXT_PREFERENCES, *pMgr).toString(),
+            OString sPreferences(OUStringToOString(VclResStr(SV_STDTEXT_PREFERENCES),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sPreferences.getStr(), "app.OptionsTreeDialog");
@@ -667,21 +666,21 @@ gboolean ensure_dbus_setup( gpointer data )
 
             GMenu *thirdsubmenu = g_menu_new ();
 
-            OString sHelp(OUStringToOString(ResId(SV_BUTTONTEXT_HELP, *pMgr).toString(),
+            OString sHelp(OUStringToOString(VclResStr(SV_BUTTONTEXT_HELP),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sHelp.getStr(), "app.HelpIndex");
             g_menu_append_item( thirdsubmenu, item );
             g_object_unref(item);
 
-            OString sAbout(OUStringToOString(ResId(SV_STDTEXT_ABOUT, *pMgr).toString(),
+            OString sAbout(OUStringToOString(VclResStr(SV_STDTEXT_ABOUT),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sAbout.getStr(), "app.About");
             g_menu_append_item( thirdsubmenu, item );
             g_object_unref(item);
 
-            OString sQuit(OUStringToOString(ResId(SV_MENU_MAC_QUITAPP, *pMgr).toString(),
+            OString sQuit(OUStringToOString(VclResStr(SV_MENU_MAC_QUITAPP),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sQuit.getStr(), "app.Quit");

@@ -58,12 +58,14 @@ void DecoToolBox::calcMinSize()
     ScopedVclPtrInstance<ToolBox> aTbx( GetParent() );
     if( GetItemCount() == 0 )
     {
+#if 0
         ResMgr* pResMgr = ImplGetResMgr();
 
         Bitmap aBitmap;
         if( pResMgr )
             aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
         aTbx->InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
+#endif
     }
     else
     {
@@ -128,6 +130,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     SetMBWHideAccel(true);
     SetMBWMenuKey(false);
 
+#if 0
     ResMgr* pResMgr = ImplGetResMgr();
 
     if(pResMgr)
@@ -151,6 +154,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
         aHideBtn->SetSymbol( SymbolType::HIDE );
         aHideBtn->SetQuickHelpText( ResId(SV_HELPTEXT_MINIMIZE, *pResMgr).toString() );
     }
+#endif
 
     ImplInitStyleSettings();
 

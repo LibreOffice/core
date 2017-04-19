@@ -2835,21 +2835,17 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     sal_uInt16 nVisibleEntries = ImplGetVisibleItemCount();
     if ( !nVisibleEntries )
     {
-        ResMgr* pResMgr = ImplGetResMgr();
-        if( pResMgr )
-        {
-            OUString aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
+        OUString aTmpEntryText(VclResStr(SV_RESID_STRING_NOSELECTIONPOSSIBLE));
 
-            MenuItemData* pData = NbcInsertItem(0xFFFF, MenuItemBits::NONE, aTmpEntryText, nullptr, 0xFFFF, OString());
-            size_t nPos = 0;
-            pData = pItemList->GetData( pData->nId, nPos );
-            assert(pData);
-            if (pData)
-            {
-                pData->bIsTemporary = true;
-            }
-            ImplCallEventListeners(VclEventId::MenuSubmenuChanged, nPos);
+        MenuItemData* pData = NbcInsertItem(0xFFFF, MenuItemBits::NONE, aTmpEntryText, nullptr, 0xFFFF, OString());
+        size_t nPos = 0;
+        pData = pItemList->GetData( pData->nId, nPos );
+        assert(pData);
+        if (pData)
+        {
+            pData->bIsTemporary = true;
         }
+        ImplCallEventListeners(VclEventId::MenuSubmenuChanged, nPos);
     }
     else if (!(nMenuFlags & MenuFlags::NoAutoMnemonics))
     {

@@ -122,46 +122,34 @@ void Button::Click()
     ImplCallEventListenersAndHandler( VclEventId::ButtonClick, [this] () { maClickHdl.Call(this); } );
 }
 
-OUString Button::GetStandardText( StandardButtonType eButton )
+OUString Button::GetStandardText(StandardButtonType eButton)
 {
-    static struct
+    static const char* aResIdAry[static_cast<int>(StandardButtonType::Count)] =
     {
-        sal_uInt32 nResId;
-        const char* pDefText;
-    } aResIdAry[static_cast<int>(StandardButtonType::Count)] =
-    {
-        { SV_BUTTONTEXT_OK, "~OK" },
-        { SV_BUTTONTEXT_CANCEL, "~Cancel" },
-        { SV_BUTTONTEXT_YES, "~Yes" },
-        { SV_BUTTONTEXT_NO, "~No" },
-        { SV_BUTTONTEXT_RETRY, "~Retry" },
-        { SV_BUTTONTEXT_HELP, "~Help" },
-        { SV_BUTTONTEXT_CLOSE, "~Close" },
-        { SV_BUTTONTEXT_MORE, "~More" },
-        { SV_BUTTONTEXT_IGNORE, "~Ignore" },
-        { SV_BUTTONTEXT_ABORT, "~Abort" },
-        { SV_BUTTONTEXT_LESS, "~Less" }
+        SV_BUTTONTEXT_OK,
+        SV_BUTTONTEXT_CANCEL,
+        SV_BUTTONTEXT_YES,
+        SV_BUTTONTEXT_NO,
+        SV_BUTTONTEXT_RETRY,
+        SV_BUTTONTEXT_HELP,
+        SV_BUTTONTEXT_CLOSE,
+        SV_BUTTONTEXT_MORE,
+        SV_BUTTONTEXT_IGNORE,
+        SV_BUTTONTEXT_ABORT,
+        SV_BUTTONTEXT_LESS,
     };
 
-    ResMgr* pResMgr = ImplGetResMgr();
-
-    if (!pResMgr)
-    {
-        OString aT( aResIdAry[(sal_uInt16)eButton].pDefText );
-        return OStringToOUString(aT, RTL_TEXTENCODING_ASCII_US);
-    }
-
-    sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
+    const char* pResId = aResIdAry[(sal_uInt16)eButton];
 #ifdef _WIN32
     // http://lists.freedesktop.org/archives/libreoffice/2013-January/044513.html
     // Under windows we don't want accelerators on ok/cancel but do on other
     // buttons
-    if (nResId == SV_BUTTONTEXT_OK)
-        nResId = SV_BUTTONTEXT_OK_NOMNEMONIC;
-    else if (nResId == SV_BUTTONTEXT_CANCEL)
-        nResId = SV_BUTTONTEXT_CANCEL_NOMNEMONIC;
+    if (pResId == SV_BUTTONTEXT_OK)
+        pResId = SV_BUTTONTEXT_OK_NOMNEMONIC;
+    else if (pResId == SV_BUTTONTEXT_CANCEL)
+        pResId = SV_BUTTONTEXT_CANCEL_NOMNEMONIC;
 #endif
-    return ResId(nResId, *pResMgr).toString();
+    return VclResStr(pResId);
 }
 
 bool Button::SetModeImage( const Image& rImage )
@@ -2739,6 +2727,7 @@ Size RadioButton::ImplGetRadioImageSize() const
     return aSize;
 }
 
+#if 0
 static void LoadThemedImageList(const StyleSettings &rStyleSettings,
                                 std::vector<Image>& rList, const std::vector<ResId> &rResources)
 {
@@ -2766,6 +2755,7 @@ static void LoadThemedImageList(const StyleSettings &rStyleSettings,
         rList.push_back(Image(aBmpEx));
     }
 }
+#endif
 
 Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags )
 {
@@ -2788,6 +2778,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
         pSVData->maCtrlData.mnLastRadioWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastRadioLColor = rStyleSettings.GetLightColor().GetColor();
 
+#if 0
         ResMgr* pResMgr = ImplGetResMgr();
         if (pResMgr)
         {
@@ -2800,6 +2791,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
             aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO6 : SV_RESID_BITMAP_RADIO6, *pResMgr));
             LoadThemedImageList( rStyleSettings, pSVData->maCtrlData.maRadioImgList, aResources);
         }
+#endif
         pSVData->maCtrlData.mnRadioStyle = nStyle;
     }
 
@@ -3624,7 +3616,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
         pSVData->maCtrlData.mnLastCheckFColor = rStyleSettings.GetFaceColor().GetColor();
         pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor().GetColor();
-
+#if 0
         ResMgr* pResMgr = ImplGetResMgr();
         if( pResMgr )
         {
@@ -3640,6 +3632,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
             aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO9 : SV_RESID_BITMAP_CHECK9, *pResMgr));
             LoadThemedImageList(rStyleSettings, pSVData->maCtrlData.maCheckImgList, aResources);
         }
+#endif
         pSVData->maCtrlData.mnCheckStyle = nStyle;
     }
 

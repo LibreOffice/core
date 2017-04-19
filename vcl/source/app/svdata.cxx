@@ -21,7 +21,9 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
 #include <tools/debug.hxx>
 #include <tools/resary.hxx>
@@ -54,10 +56,17 @@
 
 #include "officecfg/Office/Common.hxx"
 
+#include <config_folders.h>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
 #endif
+
+//include other includes that use std::auto_ptr
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+#include <boost/locale.hpp>
+SAL_WNODEPRECATED_DECLARATIONS_POP
+#include <boost/locale/gnu_gettext.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -161,36 +170,34 @@ vcl::Window *ImplGetDefaultContextWindow()
     return pSVData->mpDefaultWin;
 }
 
-ResMgr* ImplGetResMgr()
+const std::locale& ImplGetResLocale()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->mpResMgr )
+    if (!pSVData->mbResLocaleSet)
     {
-        LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
-        pSVData->mpResMgr = ResMgr::SearchCreateResMgr( "vcl", aLocale );
-
-        static bool bMessageOnce = false;
-        if( !pSVData->mpResMgr && ! bMessageOnce )
-        {
-            bMessageOnce = true;
-            const char pMsg[] =
-                "Missing vcl resource. This indicates that files vital to localization are missing. "
-                "You might have a corrupt installation.";
-            SAL_WARN("vcl", "" << pMsg << "\n");
-            ScopedVclPtrInstance< MessageDialog > aBox( nullptr, pMsg );
-            aBox->Execute();
-        }
+        boost::locale::generator gen;
+        OUString uri("$BRAND_BASE_DIR/" LIBO_SHARE_RESOURCE_FOLDER "/");
+        rtl::Bootstrap::expandMacros(uri);
+        OUString path;
+        osl::File::getSystemPathFromFileURL(uri, path);
+        gen.add_messages_path(OUStringToOString(path, osl_getThreadTextEncoding()).getStr());
+        gen.add_messages_domain("vcl");
+        pSVData->maResLocale = gen(Application::GetSettings().GetUILanguageTag().getBcp47().toUtf8().getStr());
+        pSVData->mbResLocaleSet = true;
     }
-    return pSVData->mpResMgr;
+    return pSVData->maResLocale;
 }
 
-ResId VclResId( sal_Int32 nId )
+ResId VclResId( sal_Int32 )
 {
-    ResMgr* pMgr = ImplGetResMgr();
-    if( ! pMgr )
-        throw std::bad_alloc();
+    throw std::bad_alloc();
+}
 
-    return ResId( nId, *pMgr );
+OUString VclResStr(const char* pId)
+{
+    std::locale const &loc = ImplGetResLocale();
+    std::string ret = boost::locale::gettext(pId, loc);
+    return OUString::fromUtf8(ret.c_str());
 }
 
 FieldUnitStringList* ImplGetFieldUnits()
@@ -198,6 +205,7 @@ FieldUnitStringList* ImplGetFieldUnits()
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->maCtrlData.mpFieldUnitStrings )
     {
+#if 0
         ResMgr* pResMgr = ImplGetResMgr();
         if( pResMgr )
         {
@@ -211,6 +219,7 @@ FieldUnitStringList* ImplGetFieldUnits()
                 pSVData->maCtrlData.mpFieldUnitStrings->push_back( aElement );
             }
         }
+#endif
     }
     return pSVData->maCtrlData.mpFieldUnitStrings;
 }

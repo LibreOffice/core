@@ -421,12 +421,14 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
                 SAL_WARN_IF(eType != SymbolType::IMAGE, "vcl.layout", "inimplemented symbol type for radiobuttons");
             if (eType == SymbolType::IMAGE)
             {
+#if 0
                 Bitmap aBitmap(VclResId(mapStockToImageResource(rImageInfo.m_sStock)));
                 Image const aImage(aBitmap);
                 if (!aI->m_bRadio)
                     pTargetButton->SetModeImage(aImage);
                 else
                     pTargetRadio->SetModeRadioImage(aImage);
+#endif
             }
             switch (rImageInfo.m_nSize)
             {
@@ -723,55 +725,55 @@ namespace
     OUString getStockText(const OString &rType)
     {
         if (rType == "gtk-ok")
-            return (VclResId(SV_BUTTONTEXT_OK).toString());
+            return VclResStr(SV_BUTTONTEXT_OK);
         else if (rType == "gtk-cancel")
-            return (VclResId(SV_BUTTONTEXT_CANCEL).toString());
+            return VclResStr(SV_BUTTONTEXT_CANCEL);
         else if (rType == "gtk-help")
-            return (VclResId(SV_BUTTONTEXT_HELP).toString());
+            return VclResStr(SV_BUTTONTEXT_HELP);
         else if (rType == "gtk-close")
-            return (VclResId(SV_BUTTONTEXT_CLOSE).toString());
+            return VclResStr(SV_BUTTONTEXT_CLOSE);
         else if (rType == "gtk-revert-to-saved")
-            return (VclResId(SV_BUTTONTEXT_RESET).toString());
+            return VclResStr(SV_BUTTONTEXT_RESET);
         else if (rType == "gtk-add")
-            return (VclResId(SV_BUTTONTEXT_ADD).toString());
+            return VclResStr(SV_BUTTONTEXT_ADD);
         else if (rType == "gtk-delete")
-            return (VclResId(SV_BUTTONTEXT_DELETE).toString());
+            return VclResStr(SV_BUTTONTEXT_DELETE);
         else if (rType == "gtk-remove")
-            return (VclResId(SV_BUTTONTEXT_REMOVE).toString());
+            return VclResStr(SV_BUTTONTEXT_REMOVE);
         else if (rType == "gtk-new")
-            return (VclResId(SV_BUTTONTEXT_NEW).toString());
+            return VclResStr(SV_BUTTONTEXT_NEW);
         else if (rType == "gtk-edit")
-            return (VclResId(SV_BUTTONTEXT_EDIT).toString());
+            return VclResStr(SV_BUTTONTEXT_EDIT);
         else if (rType == "gtk-apply")
-            return (VclResId(SV_BUTTONTEXT_APPLY).toString());
+            return VclResStr(SV_BUTTONTEXT_APPLY);
         else if (rType == "gtk-save")
-            return (VclResId(SV_BUTTONTEXT_SAVE).toString());
+            return VclResStr(SV_BUTTONTEXT_SAVE);
         else if (rType == "gtk-open")
-            return (VclResId(SV_BUTTONTEXT_OPEN).toString());
+            return VclResStr(SV_BUTTONTEXT_OPEN);
         else if (rType == "gtk-undo")
-            return (VclResId(SV_BUTTONTEXT_UNDO).toString());
+            return VclResStr(SV_BUTTONTEXT_UNDO);
         else if (rType == "gtk-paste")
-            return (VclResId(SV_BUTTONTEXT_PASTE).toString());
+            return VclResStr(SV_BUTTONTEXT_PASTE);
         else if (rType == "gtk-media-next")
-            return (VclResId(SV_BUTTONTEXT_NEXT).toString());
+            return VclResStr(SV_BUTTONTEXT_NEXT);
         else if (rType == "gtk-go-up")
-            return (VclResId(SV_BUTTONTEXT_GO_UP).toString());
+            return VclResStr(SV_BUTTONTEXT_GO_UP);
         else if (rType == "gtk-go-down")
-            return (VclResId(SV_BUTTONTEXT_GO_DOWN).toString());
+            return VclResStr(SV_BUTTONTEXT_GO_DOWN);
         else if (rType == "gtk-clear")
-            return (VclResId(SV_BUTTONTEXT_CLEAR).toString());
+            return VclResStr(SV_BUTTONTEXT_CLEAR);
         else if (rType == "gtk-media-play")
-            return (VclResId(SV_BUTTONTEXT_PLAY).toString());
+            return VclResStr(SV_BUTTONTEXT_PLAY);
         else if (rType == "gtk-find")
-            return (VclResId(SV_BUTTONTEXT_FIND).toString());
+            return VclResStr(SV_BUTTONTEXT_FIND);
         else if (rType == "gtk-stop")
-            return (VclResId(SV_BUTTONTEXT_STOP).toString());
+            return VclResStr(SV_BUTTONTEXT_STOP);
         else if (rType == "gtk-connect")
-            return (VclResId(SV_BUTTONTEXT_CONNECT).toString());
+            return VclResStr(SV_BUTTONTEXT_CONNECT);
         else if (rType == "gtk-yes")
-            return (VclResId(SV_BUTTONTEXT_YES).toString());
+            return VclResStr(SV_BUTTONTEXT_YES);
         else if (rType == "gtk-no")
-            return (VclResId(SV_BUTTONTEXT_NO).toString());
+            return VclResStr(SV_BUTTONTEXT_NO);
         SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
         return OUString();
     }

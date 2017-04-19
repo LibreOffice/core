@@ -2328,20 +2328,20 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         tools::Rectangle   aHelpRect;
-        sal_uInt16      nHelpResId = 0;
+        const char* pHelpResId = nullptr;
 
         ImplGetFadeInRect( aHelpRect, true );
         if ( aHelpRect.IsInside( aMousePosPixel ) )
-            nHelpResId = SV_HELPTEXT_FADEIN;
+            pHelpResId = SV_HELPTEXT_FADEIN;
         else
         {
             ImplGetFadeOutRect( aHelpRect, true );
             if ( aHelpRect.IsInside( aMousePosPixel ) )
-                nHelpResId = SV_HELPTEXT_FADEOUT;
+                pHelpResId = SV_HELPTEXT_FADEOUT;
         }
 
         // get rectangle
-        if ( nHelpResId )
+        if (pHelpResId)
         {
             Point aPt = OutputToScreenPixel( aHelpRect.TopLeft() );
             aHelpRect.Left()   = aPt.X();
@@ -2351,10 +2351,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             aHelpRect.Bottom() = aPt.Y();
 
             // get and draw text
-            OUString aStr;
-            ResMgr* pResMgr = ImplGetResMgr();
-            if( pResMgr )
-                aStr = ResId( nHelpResId, *pResMgr ).toString();
+            OUString aStr = VclResStr(pHelpResId);
             if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                 Help::ShowBalloon( this, aHelpRect.Center(), aHelpRect, aStr );
             else

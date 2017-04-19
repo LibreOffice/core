@@ -24,36 +24,6 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text [ en-US ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option.";
 };
 
-String SV_STDTEXT_DONTASKAGAIN
-{
-    Text [ en-US ] = "Do not show this question again.";
-};
-
-String SV_STDTEXT_DONTWARNAGAIN
-{
-    Text [ en-US ] = "Do not show warning again.";
-};
-
-String SV_ACCESSERROR_NO_FONTS
-{
-    Text [ en-US ] = "No fonts could be found on the system.";
-};
-
-String SV_STDTEXT_ABOUT
-{
-    Text [ en-US ] = "About %PRODUCTNAME";
-};
-
-String SV_STDTEXT_PREFERENCES
-{
-    Text [ en-US ] = "Preferences...";
-};
-
-String SV_EDIT_WARNING_STR
-{
-    Text [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
-};
-
 String SV_STDTEXT_ALLFILETYPES
 {
     Text [en-US] = "Any type";
