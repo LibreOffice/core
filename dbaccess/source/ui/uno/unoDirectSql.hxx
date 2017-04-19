@@ -25,7 +25,7 @@
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace dbaui
@@ -40,7 +40,7 @@ namespace dbaui
             :public ODirectSQLDialog_BASE
             ,public ODirectSQLDialog_PBASE
     {
-        OModuleClient m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         OUString      m_sInitialSelection;
         css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
     protected:

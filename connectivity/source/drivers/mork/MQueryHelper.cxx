@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <string.h>
 
-#include "resource/mork_res.hrc"
+#include "strings.hrc"
 
 #include <unotools/textsearch.hxx>
 

@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include "dp_registry.hxx"
+#include "dp_shared.hxx"
 #include "dp_ucb.h"
 #include "dp_resource.h"
 #include "dp_platform.hxx"
@@ -740,7 +741,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         Reference<deployment::XPackage> xPackage;
         // copy file:
         progressUpdate(
-            getResourceString(RID_STR_COPYING_PACKAGE) + title, xCmdEnv );
+            DP_RESSTR(RID_STR_COPYING_PACKAGE) + title, xCmdEnv );
         if (m_activePackages.isEmpty())
         {
             ::ucbhelper::Content docFolderContent;
@@ -831,7 +832,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
-            getResourceString(RID_STR_ERROR_WHILE_ADDING) + url,
+            DP_RESSTR(RID_STR_ERROR_WHILE_ADDING) + url,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -930,7 +931,7 @@ void PackageManagerImpl::removePackage(
         Any exc( ::cppu::getCaughtException() );
         logIntern( exc );
         throw deployment::DeploymentException(
-            getResourceString(RID_STR_ERROR_WHILE_REMOVING) + id,
+            DP_RESSTR(RID_STR_ERROR_WHILE_REMOVING) + id,
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -964,7 +965,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
         return getDeployedPackage_( id, val, xCmdEnv );
     }
     throw lang::IllegalArgumentException(
-        getResourceString(RID_STR_NO_SUCH_PACKAGE) + id,
+        DP_RESSTR(RID_STR_NO_SUCH_PACKAGE) + id,
         static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
 }
 
@@ -982,7 +983,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
             auto const iter = params.find(OString("platform"));
             if (iter != params.end() && !platform_fits(iter->second.m_sValue))
                 throw lang::IllegalArgumentException(
-                    getResourceString(RID_STR_NO_SUCH_PACKAGE) + id,
+                    DP_RESSTR(RID_STR_NO_SUCH_PACKAGE) + id,
                     static_cast<OWeakObject *>(this),
                     static_cast<sal_Int16>(-1) );
         }
