@@ -42,7 +42,8 @@ public:
     static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell* pOtherView, int nType, const OString& rKey, const OString& rPayload);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload);
-
+    /// Emits a LOK_CALLBACK_INVALIDATE_COLUMN_HEADER or LOK_CALLBACK_INVALIDATE_ROW_HEADER for all views.
+    static void notifyAllViewsHeaderInvalidation(bool bColumnHeader, const OString& rPayload = OString());
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
     static const long MaxTwips = 1e9;

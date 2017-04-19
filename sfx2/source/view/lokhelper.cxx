@@ -154,4 +154,17 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell* pThisView, const OString& rP
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aPayload.getStr());
 }
 
+void SfxLokHelper::notifyAllViewsHeaderInvalidation(bool bColumnHeader, const OString& rPayload)
+{
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (bColumnHeader)
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_COLUMN_HEADER, rPayload.getStr());
+        else
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_ROW_HEADER, rPayload.getStr());
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
