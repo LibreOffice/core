@@ -19,6 +19,7 @@
 
 #include "ControllerCommandDispatch.hxx"
 #include "ChartModelHelper.hxx"
+#include "ChartModel.hxx"
 #include "DiagramHelper.hxx"
 #include "AxisHelper.hxx"
 #include "TitleHelper.hxx"
@@ -329,6 +330,7 @@ struct ModelState
     bool bIsReadOnly;
     bool bIsThreeD;
     bool bHasOwnData;
+    bool bHasDataFromPivotTable;
 
     bool bHasMainTitle;
     bool bHasSubTitle;
@@ -361,34 +363,34 @@ struct ModelState
 };
 
 ModelState::ModelState() :
-        bIsReadOnly( true ),
-        bIsThreeD( false ),
-        bHasOwnData( false ),
-        bHasMainTitle( false ),
-        bHasSubTitle( false ),
-        bHasXAxisTitle( false ),
-        bHasYAxisTitle( false ),
-        bHasZAxisTitle( false ),
-        bHasSecondaryXAxisTitle( false ),
-        bHasSecondaryYAxisTitle( false ),
-        bHasXAxis( false ),
-        bHasYAxis( false ),
-        bHasZAxis( false ),
-        bHasAAxis( false ),
-        bHasBAxis( false ),
-        bHasMainXGrid( false ),
-        bHasMainYGrid( false ),
-        bHasMainZGrid( false ),
-        bHasHelpXGrid( false ),
-        bHasHelpYGrid( false ),
-        bHasHelpZGrid( false ),
-        bHasAutoScaledText( false ),
-        bHasLegend( false ),
-        bHasWall( false ),
-        bHasFloor( false ),
-        bSupportsStatistics( false ),
-        bSupportsAxes( false )
-
+        bIsReadOnly(true),
+        bIsThreeD(false),
+        bHasOwnData(false),
+        bHasDataFromPivotTable(false),
+        bHasMainTitle(false),
+        bHasSubTitle(false),
+        bHasXAxisTitle(false),
+        bHasYAxisTitle(false),
+        bHasZAxisTitle(false),
+        bHasSecondaryXAxisTitle(false),
+        bHasSecondaryYAxisTitle(false),
+        bHasXAxis(false),
+        bHasYAxis(false),
+        bHasZAxis(false),
+        bHasAAxis(false),
+        bHasBAxis(false),
+        bHasMainXGrid(false),
+        bHasMainYGrid(false),
+        bHasMainZGrid(false),
+        bHasHelpXGrid(false),
+        bHasHelpYGrid(false),
+        bHasHelpZGrid(false),
+        bHasAutoScaledText(false),
+        bHasLegend(false),
+        bHasWall(false),
+        bHasFloor(false),
+        bSupportsStatistics(false),
+        bSupportsAxes(false)
 {}
 
 void ModelState::update( const Reference< frame::XModel > & xModel )
@@ -408,7 +410,12 @@ void ModelState::update( const Reference< frame::XModel > & xModel )
     bSupportsAxes = ChartTypeHelper::isSupportingMainAxis( xFirstChartType, nDimensionCount, 0 );
 
     bIsThreeD = (nDimensionCount == 3);
-    bHasOwnData = (xChartDoc.is() && xChartDoc->hasInternalDataProvider());
+    if (xChartDoc.is())
+    {
+        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
+        bHasOwnData = pModel->hasInternalDataProvider();
+        bHasDataFromPivotTable = pModel->isDataFromPivotTable();
+    }
 
     bHasMainTitle =  TitleHelper::getTitle( TitleHelper::MAIN_TITLE, xModel ).is();
     bHasSubTitle =   TitleHelper::getTitle( TitleHelper::SUB_TITLE, xModel ).is();
@@ -613,7 +620,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:FormatLegend" ] = m_aCommandAvailability[ ".uno:Legend" ];
 
     // depending on own data
-    m_aCommandAvailability[ ".uno:DataRanges" ] = bIsWritable && bModelStateIsValid && (! m_apModelState->bHasOwnData);
+    m_aCommandAvailability[ ".uno:DataRanges" ] = bIsWritable && bModelStateIsValid &&
+                                                  (!m_apModelState->bHasOwnData) && (!m_apModelState->bHasDataFromPivotTable);
     m_aCommandAvailability[ ".uno:DiagramData" ] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData && bEnableDataTableDialog;
 
     // titles
