@@ -3598,6 +3598,7 @@ SfxBoolItem HideNote FID_HIDE_NOTE
     GroupId = GID_VIEW;
 ]
 
+
 SfxVoidItem ShowAllNotes FID_SHOW_ALL_NOTES
 
 [

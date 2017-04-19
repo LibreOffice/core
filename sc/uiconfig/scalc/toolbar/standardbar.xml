@@ -77,6 +77,7 @@
  <toolbar:toolbaritem xlink:href=".uno:DeletePrintArea" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FreezePanes"/>
  <toolbar:toolbaritem xlink:href=".uno:SplitWindow"/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowAnnotations"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:visible="false"/>

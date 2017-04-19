@@ -1098,6 +1098,7 @@ public:
      */
     void      CreateAllNoteCaptions();
     void      ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveData );
+    bool      AreAllNoteCaptionsShown( const ScRangeList& rRanges);
 
     ScAddress GetNotePosition( size_t nIndex ) const;
     ScAddress GetNotePosition( size_t nIndex, SCTAB nTab ) const;

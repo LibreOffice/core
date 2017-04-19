@@ -6502,6 +6502,28 @@ void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveD
     }
 }
 
+bool ScDocument::AreAllNoteCaptionsShown( const ScRangeList& rRanges )
+{
+    std::vector<sc::NoteEntry> aNotes;
+
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    {
+        const ScRange* p = rRanges[i];
+        GetNotesInRange( ScRange(*p) , aNotes );
+    }
+
+    bool bAllNotesInShown = aNotes.begin()->mpNote->IsCaptionShown();
+
+    for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
+             itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+    {
+        if (bAllNotesInShown != itr->mpNote->IsCaptionShown())
+            return false;
+    }
+
+    return bAllNotesInShown;
+}
+
 ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
