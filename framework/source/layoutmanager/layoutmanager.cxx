@@ -418,10 +418,7 @@ bool LayoutManager::implts_isEmbeddedLayoutManager() const
     aReadLock.clear();
 
     Reference< awt::XWindow > xFrameContainerWindow = xFrame->getContainerWindow();
-    if ( xFrameContainerWindow == xContainerWindow )
-        return false;
-    else
-        return true;
+    return xFrameContainerWindow != xContainerWindow;
 }
 
 void LayoutManager::implts_destroyElements()

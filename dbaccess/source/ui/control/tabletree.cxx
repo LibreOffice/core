@@ -87,12 +87,9 @@ void OTableTreeListBox::implSetDefaultImages()
 bool  OTableTreeListBox::isFolderEntry( const SvTreeListEntry* _pEntry )
 {
     sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
-    if  (   ( nEntryType == DatabaseObjectContainer::TABLES )
+    return ( nEntryType == DatabaseObjectContainer::TABLES )
         ||  ( nEntryType == DatabaseObjectContainer::CATALOG )
-        ||  ( nEntryType == DatabaseObjectContainer::SCHEMA )
-        )
-        return true;
-    return false;
+        ||  ( nEntryType == DatabaseObjectContainer::SCHEMA );
 }
 
 void OTableTreeListBox::notifyHiContrastChanged()

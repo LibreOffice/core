@@ -89,10 +89,7 @@ bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo )
 {
     sal_Int32 nComp = aOne.pCollatorWrapper->compareString( aOne.aUIName, aTwo.aUIName );
 
-    if ( nComp < 0 )
-        return true;
-    else
-        return false;
+    return nComp < 0;
 }
 
 Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< XFrame >& rFrame )

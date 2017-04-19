@@ -174,10 +174,7 @@ bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
         if ( nPrimKeysCount != aKeyColumns.getLength() )
             return false;
     }
-    if ( !nPrimKeysCount || nPrimKeysCount != nValidLinesCount )
-        return false;
-
-    return true;
+    return nPrimKeysCount && nPrimKeysCount == nValidLinesCount;
 }
 
 bool ORelationTableConnectionData::IsConnectionPossible()

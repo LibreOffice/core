@@ -130,14 +130,8 @@ namespace svt
     bool OFilePickerInteractionHandler::wasAccessDenied() const
     {
         InteractiveIOException aIoException;
-        if (
-            (m_aException              >>= aIoException     ) &&
-            (IOErrorCode_ACCESS_DENIED  == aIoException.Code)
-           )
-        {
-            return true;
-        }
-        return false;
+        return (m_aException              >>= aIoException     ) &&
+               (IOErrorCode_ACCESS_DENIED  == aIoException.Code);
     }
 
 

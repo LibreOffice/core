@@ -152,10 +152,7 @@ bool LicenseView::IsEndReached() const
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = true;
-    else
-        bEndReached = false;
+    bEndReached = pView->GetDocPos( aBottom ).Y() >= nHeight - 1;
 
     return bEndReached;
 }

@@ -55,9 +55,7 @@ struct FindWeakRef
 bool FindWeakRef::operator () (uno::WeakReference< deployment::XPackage >  const & ref)
 {
     const uno::Reference<deployment::XPackage> ext(ref);
-    if (ext == m_extension)
-        return true;
-    return false;
+    return ext == m_extension;
 }
 
 } // end namespace
