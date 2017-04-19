@@ -38,7 +38,8 @@
 #include <vcl/vclstatuslistener.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
-#include <svids.hrc>
+#include <strings.hrc>
+#include <bitmaps.hrc>
 #include <svdata.hxx>
 #include <window.h>
 #include <controldata.hxx>
@@ -122,46 +123,32 @@ void Button::Click()
     ImplCallEventListenersAndHandler( VclEventId::ButtonClick, [this] () { maClickHdl.Call(this); } );
 }
 
-OUString Button::GetStandardText( StandardButtonType eButton )
+OUString Button::GetStandardText(StandardButtonType eButton)
 {
-    static struct
+    static const char* aResIdAry[static_cast<int>(StandardButtonType::Count)] =
     {
-        sal_uInt32 nResId;
-        const char* pDefText;
-    } aResIdAry[static_cast<int>(StandardButtonType::Count)] =
-    {
-        { SV_BUTTONTEXT_OK, "~OK" },
-        { SV_BUTTONTEXT_CANCEL, "~Cancel" },
-        { SV_BUTTONTEXT_YES, "~Yes" },
-        { SV_BUTTONTEXT_NO, "~No" },
-        { SV_BUTTONTEXT_RETRY, "~Retry" },
-        { SV_BUTTONTEXT_HELP, "~Help" },
-        { SV_BUTTONTEXT_CLOSE, "~Close" },
-        { SV_BUTTONTEXT_MORE, "~More" },
-        { SV_BUTTONTEXT_IGNORE, "~Ignore" },
-        { SV_BUTTONTEXT_ABORT, "~Abort" },
-        { SV_BUTTONTEXT_LESS, "~Less" }
+        // http://lists.freedesktop.org/archives/libreoffice/2013-January/044513.html
+        // Under windows we don't want accelerators on ok/cancel but do on other
+        // buttons
+#ifdef _WIN32
+        SV_BUTTONTEXT_OK_NOMNEMONIC,
+        SV_BUTTONTEXT_CANCEL_NOMNEMONIC,
+#else
+        SV_BUTTONTEXT_OK,
+        SV_BUTTONTEXT_CANCEL,
+#endif
+        SV_BUTTONTEXT_YES,
+        SV_BUTTONTEXT_NO,
+        SV_BUTTONTEXT_RETRY,
+        SV_BUTTONTEXT_HELP,
+        SV_BUTTONTEXT_CLOSE,
+        SV_BUTTONTEXT_MORE,
+        SV_BUTTONTEXT_IGNORE,
+        SV_BUTTONTEXT_ABORT,
+        SV_BUTTONTEXT_LESS,
     };
 
-    ResMgr* pResMgr = ImplGetResMgr();
-
-    if (!pResMgr)
-    {
-        OString aT( aResIdAry[(sal_uInt16)eButton].pDefText );
-        return OStringToOUString(aT, RTL_TEXTENCODING_ASCII_US);
-    }
-
-    sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
-#ifdef _WIN32
-    // http://lists.freedesktop.org/archives/libreoffice/2013-January/044513.html
-    // Under windows we don't want accelerators on ok/cancel but do on other
-    // buttons
-    if (nResId == SV_BUTTONTEXT_OK)
-        nResId = SV_BUTTONTEXT_OK_NOMNEMONIC;
-    else if (nResId == SV_BUTTONTEXT_CANCEL)
-        nResId = SV_BUTTONTEXT_CANCEL_NOMNEMONIC;
-#endif
-    return ResId(nResId, *pResMgr).toString();
+    return VclResStr(aResIdAry[(sal_uInt16)eButton]);
 }
 
 bool Button::SetModeImage( const Image& rImage )
@@ -2740,7 +2727,7 @@ Size RadioButton::ImplGetRadioImageSize() const
 }
 
 static void LoadThemedImageList(const StyleSettings &rStyleSettings,
-                                std::vector<Image>& rList, const std::vector<ResId> &rResources)
+                                std::vector<Image>& rList, const std::vector<OUString> &rResources)
 {
     Color aColorAry1[6];
     Color aColorAry2[6];
@@ -2788,18 +2775,27 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
         pSVData->maCtrlData.mnLastRadioWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastRadioLColor = rStyleSettings.GetLightColor().GetColor();
 
-        ResMgr* pResMgr = ImplGetResMgr();
-        if (pResMgr)
+        std::vector<OUString> aResources;
+        if (nStyle == STYLE_RADIOBUTTON_MONO)
         {
-            std::vector<ResId> aResources;
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO1 : SV_RESID_BITMAP_RADIO1, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO2 : SV_RESID_BITMAP_RADIO2, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO3 : SV_RESID_BITMAP_RADIO3, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO4 : SV_RESID_BITMAP_RADIO4, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO5 : SV_RESID_BITMAP_RADIO5, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_RADIOMONO6 : SV_RESID_BITMAP_RADIO6, *pResMgr));
-            LoadThemedImageList( rStyleSettings, pSVData->maCtrlData.maRadioImgList, aResources);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO1);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO2);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO3);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO4);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO5);
+            aResources.push_back(SV_RESID_BITMAP_RADIOMONO6);
         }
+        else
+        {
+            aResources.push_back(SV_RESID_BITMAP_RADIO1);
+            aResources.push_back(SV_RESID_BITMAP_RADIO2);
+            aResources.push_back(SV_RESID_BITMAP_RADIO3);
+            aResources.push_back(SV_RESID_BITMAP_RADIO4);
+            aResources.push_back(SV_RESID_BITMAP_RADIO5);
+            aResources.push_back(SV_RESID_BITMAP_RADIO6);
+        }
+        LoadThemedImageList(rStyleSettings, pSVData->maCtrlData.maRadioImgList, aResources);
+
         pSVData->maCtrlData.mnRadioStyle = nStyle;
     }
 
@@ -3624,22 +3620,32 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
         pSVData->maCtrlData.mnLastCheckFColor = rStyleSettings.GetFaceColor().GetColor();
         pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor().GetColor();
-
-        ResMgr* pResMgr = ImplGetResMgr();
-        if( pResMgr )
+        std::vector<OUString> aResources;
+        if (nStyle == STYLE_CHECKBOX_MONO)
         {
-            std::vector<ResId> aResources;
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO1 : SV_RESID_BITMAP_CHECK1, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO2 : SV_RESID_BITMAP_CHECK2, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO3 : SV_RESID_BITMAP_CHECK3, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO4 : SV_RESID_BITMAP_CHECK4, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO5 : SV_RESID_BITMAP_CHECK5, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO6 : SV_RESID_BITMAP_CHECK6, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO7 : SV_RESID_BITMAP_CHECK7, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO8 : SV_RESID_BITMAP_CHECK8, *pResMgr));
-            aResources.push_back(ResId(nStyle ? SV_RESID_BITMAP_CHECKMONO9 : SV_RESID_BITMAP_CHECK9, *pResMgr));
-            LoadThemedImageList(rStyleSettings, pSVData->maCtrlData.maCheckImgList, aResources);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO1);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO2);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO3);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO4);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO5);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO6);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO7);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO8);
+            aResources.push_back(SV_RESID_BITMAP_CHECKMONO9);
         }
+        else
+        {
+            aResources.push_back(SV_RESID_BITMAP_CHECK1);
+            aResources.push_back(SV_RESID_BITMAP_CHECK2);
+            aResources.push_back(SV_RESID_BITMAP_CHECK3);
+            aResources.push_back(SV_RESID_BITMAP_CHECK4);
+            aResources.push_back(SV_RESID_BITMAP_CHECK5);
+            aResources.push_back(SV_RESID_BITMAP_CHECK6);
+            aResources.push_back(SV_RESID_BITMAP_CHECK7);
+            aResources.push_back(SV_RESID_BITMAP_CHECK8);
+            aResources.push_back(SV_RESID_BITMAP_CHECK9);
+        }
+        LoadThemedImageList(rStyleSettings, pSVData->maCtrlData.maCheckImgList, aResources);
         pSVData->maCtrlData.mnCheckStyle = nStyle;
     }
 
@@ -3829,9 +3835,9 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
     {
         ImplSVCtrlData& rCtrlData(ImplGetSVData()->maCtrlData);
         if (!rCtrlData.mpDisclosurePlus)
-            rCtrlData.mpDisclosurePlus = new Image(BitmapEx(VclResId(SV_DISCLOSURE_PLUS)));
+            rCtrlData.mpDisclosurePlus = new Image(BitmapEx(SV_DISCLOSURE_PLUS));
         if (!rCtrlData.mpDisclosureMinus)
-            rCtrlData.mpDisclosureMinus = new Image(BitmapEx(VclResId(SV_DISCLOSURE_MINUS)));
+            rCtrlData.mpDisclosureMinus = new Image(BitmapEx(SV_DISCLOSURE_MINUS));
 
         Image* pImg = nullptr;
         pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;

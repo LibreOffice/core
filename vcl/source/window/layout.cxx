@@ -21,7 +21,7 @@
 #include <vcl/abstdlg.hxx>
 
 #include "svdata.hxx"
-#include <svids.hrc>
+#include <strings.hrc>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WindowType::CONTAINER)
@@ -262,10 +262,10 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         aMenu->InsertItem(
                             nLocalID,
-                            VclResId(SV_BUTTONTEXT_SCREENSHOT).toString());
+                            VclResStr(SV_BUTTONTEXT_SCREENSHOT));
                         aMenu->SetHelpText(
                             nLocalID,
-                            VclResId(SV_HELPTEXT_SCREENSHOT).toString());
+                            VclResStr(SV_HELPTEXT_SCREENSHOT));
                         aMenu->SetHelpId(
                             nLocalID,
                             "InteractiveScreenshotMode");
