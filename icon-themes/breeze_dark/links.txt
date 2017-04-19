@@ -610,6 +610,8 @@ cmd/lc_scrolltonext.png cmd/lc_downsearch.png
 cmd/sc_scrolltonext.png cmd/sc_downsearch.png
 cmd/lc_scrolltoprevious.png cmd/lc_upsearch.png
 cmd/sc_scrolltoprevious.png cmd/sc_upsearch.png
+cmd/lc_findbar.png cmd/lc_recsearch.png
+cmd/sc_findbar.png cmd/sc_recsearch.png
 
 # File Menu
 cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
