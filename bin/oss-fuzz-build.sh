@@ -20,6 +20,8 @@ export ASAN_OPTIONS="detect_leaks=0"
 
 make fuzzers
 
+rm -rf workdir
+
 #some minimal fonts required
 cp $SRC/libreoffice/extras/source/truetype/symbol/opens___.ttf instdir/share/fonts/truetype/Liberation* $OUT
 #minimal runtime requirements
