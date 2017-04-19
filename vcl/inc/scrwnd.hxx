@@ -54,8 +54,9 @@ private:
     sal_uLong           mnActDist;
     long                mnActDeltaX;
     long                mnActDeltaY;
-
+#if 0
     void                ImplCreateImageList();
+#endif
     void                ImplSetRegion( const Bitmap& rRegionBmp );
     using Window::ImplGetMousePointer;
     PointerStyle        ImplGetMousePointer( long nDistX, long nDistY );

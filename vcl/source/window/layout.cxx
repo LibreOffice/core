@@ -262,10 +262,10 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         aMenu->InsertItem(
                             nLocalID,
-                            VclResId(SV_BUTTONTEXT_SCREENSHOT).toString());
+                            VclResStr(SV_BUTTONTEXT_SCREENSHOT));
                         aMenu->SetHelpText(
                             nLocalID,
-                            VclResId(SV_HELPTEXT_SCREENSHOT).toString());
+                            VclResStr(SV_HELPTEXT_SCREENSHOT));
                         aMenu->SetHelpId(
                             nLocalID,
                             "InteractiveScreenshotMode");
