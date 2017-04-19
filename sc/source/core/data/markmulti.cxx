@@ -296,6 +296,80 @@ bool ScMultiSel::HasAnyMarks() const
     return false;
 }
 
+void ScMultiSel::ShiftCols(SCCOL nStartCol, long nColOffset)
+{
+    if (nStartCol > MAXCOL)
+        return;
+
+    ScMultiSel aNewMultiSel(*this);
+    Clear();
+
+    if (nColOffset < 0)
+    {
+        // columns that would be moved on the left of nStartCol must be removed
+        const SCCOL nEndPos = nStartCol - nColOffset;
+        for (SCCOL nSearchPos = nStartCol; nSearchPos < nEndPos; ++nSearchPos)
+        {
+            const auto& aColIt = aNewMultiSel.aMultiSelContainer.find(nSearchPos);
+            if (aColIt != aNewMultiSel.aMultiSelContainer.end())
+            {
+                aNewMultiSel.aMultiSelContainer.erase(aColIt);
+            }
+        }
+    }
+
+    MapType::iterator aDestEnd = aMultiSelContainer.end();
+    MapType::iterator aDestIter = aDestEnd;
+    for (const auto& aSourcePair : aNewMultiSel.aMultiSelContainer)
+    {
+        SCCOL nCol = aSourcePair.first;
+        if (aSourcePair.first >= nStartCol)
+        {
+            nCol += nColOffset;
+            if (nCol < 0)
+                nCol = 0;
+            else if (nCol > MAXCOL)
+                nCol = MAXCOL;
+        }
+        // correct hint is always aDestEnd as keys come in ascending order
+        // Amortized constant time operation as we always give the correct hint
+        aDestIter = aMultiSelContainer.emplace_hint( aDestEnd, nCol, ScMarkArray() );
+        aSourcePair.second.CopyMarksTo(aDestIter->second);
+    }
+    aNewMultiSel.aRowSel.CopyMarksTo(aRowSel);
+
+    if (nColOffset > 0 && nStartCol > 0)
+    {
+        // insert nColOffset new columns, and select their cells if they are selected
+        // both in the old column at nStartPos and in the previous column
+        const auto& aPrevPosIt = aNewMultiSel.aMultiSelContainer.find(nStartCol - 1);
+        if (aPrevPosIt != aNewMultiSel.aMultiSelContainer.end())
+        {
+            const auto& aStartPosIt = aNewMultiSel.aMultiSelContainer.find(nStartCol);
+            if (aStartPosIt != aNewMultiSel.aMultiSelContainer.end())
+            {
+                MapType::iterator aNewColIt = aMultiSelContainer.emplace_hint(aDestEnd, nStartCol, ScMarkArray());
+                aStartPosIt->second.CopyMarksTo(aNewColIt->second);
+                aNewColIt->second.Intersect(aPrevPosIt->second);
+                for (long i = 1; i < nColOffset; ++i)
+                {
+                    aDestIter = aMultiSelContainer.emplace_hint(aDestEnd, nStartCol + i, ScMarkArray());
+                    aNewColIt->second.CopyMarksTo(aDestIter->second);
+                }
+            }
+        }
+    }
+}
+
+void ScMultiSel::ShiftRows(SCROW nStartRow, long nRowOffset)
+{
+    for (auto& aPair: aMultiSelContainer)
+    {
+        aPair.second.Shift(nStartRow, nRowOffset);
+    }
+    aRowSel.Shift(nStartRow, nRowOffset);
+}
+
 const ScMarkArray& ScMultiSel::GetRowSelArray() const
 {
     return aRowSel;

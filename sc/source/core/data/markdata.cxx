@@ -623,6 +623,33 @@ void ScMarkData::DeleteTab( SCTAB nTab )
     maTabMarked.swap(tabMarked);
 }
 
+void ScMarkData::ShiftCols(SCCOL nStartCol, long nColOffset)
+{
+    if (bMarked)
+    {
+        aMarkRange.IncColIfNotLessThan(nStartCol, nColOffset);
+    }
+    else if (bMultiMarked)
+    {
+        aMultiSel.ShiftCols(nStartCol, nColOffset);
+        aMultiRange.IncColIfNotLessThan(nStartCol, nColOffset);
+    }
+}
+
+void ScMarkData::ShiftRows(SCROW nStartRow, long nRowOffset)
+{
+    if (bMarked)
+    {
+        aMarkRange.IncRowIfNotLessThan(nStartRow, nRowOffset);
+    }
+    else if (bMultiMarked)
+    {
+        aMultiSel.ShiftRows(nStartRow, nRowOffset);
+        aMultiRange.IncRowIfNotLessThan(nStartRow, nRowOffset);
+    }
+
+}
+
 static void lcl_AddRanges(ScRange& rRangeDest, const ScRange& rNewRange )
 {
     SCCOL nStartCol = rNewRange.aStart.Col();

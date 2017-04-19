@@ -2382,6 +2382,46 @@ bool ScRange::MoveSticky( SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange )
     return b1 && b2;
 }
 
+void ScRange::IncColIfNotLessThan(SCCOL nStartCol, SCCOL nOffset)
+{
+    if (aStart.Col() >= nStartCol)
+    {
+        aStart.IncCol(nOffset);
+        if (aStart.Col() < 0)
+            aStart.SetCol(0);
+        else if(aStart.Col() > MAXCOL)
+            aStart.SetCol(MAXCOL);
+    }
+    if (aEnd.Col() >= nStartCol)
+    {
+        aEnd.IncCol(nOffset);
+        if (aEnd.Col() < 0)
+            aEnd.SetCol(0);
+        else if(aEnd.Col() > MAXCOL)
+            aEnd.SetCol(MAXCOL);
+    }
+}
+
+void ScRange::IncRowIfNotLessThan(SCROW nStartRow, SCROW nOffset)
+{
+    if (aStart.Row() >= nStartRow)
+    {
+        aStart.IncRow(nOffset);
+        if (aStart.Row() < 0)
+            aStart.SetRow(0);
+        else if(aStart.Row() > MAXROW)
+            aStart.SetRow(MAXROW);
+    }
+    if (aEnd.Row() >= nStartRow)
+    {
+        aEnd.IncRow(nOffset);
+        if (aEnd.Row() < 0)
+            aEnd.SetRow(0);
+        else if(aEnd.Row() > MAXROW)
+            aEnd.SetRow(MAXROW);
+    }
+}
+
 void ScRange::IncEndColSticky( SCCOL nDelta )
 {
     SCCOL nCol = aEnd.Col();
