@@ -1,0 +1,127 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_CORE_RESOURCE_HRC
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_CORE_RESOURCE_HRC
+
+#define N_(String) (u8##String)
+
+#define RID_STR_CONNECTION_INVALID              N_("No connection could be established.")
+#define RID_STR_TABLE_IS_FILTERED               N_("The table $name$ already exists. It is not visible because it has been filtered out.")
+#define RID_STR_COULDNOTCONNECT_UNSPECIFIED     N_("The connection to the external data source could not be established. An unknown error occurred. The driver is probably defective.")
+#define RID_STR_COULDNOTCONNECT_NODRIVER        N_("The connection to the external data source could not be established. No SDBC driver was found for the URL '$name$'.")
+#define RID_STR_COULDNOTLOAD_MANAGER            N_("The connection to the external data source could not be established. The SDBC driver manager could not be loaded.")
+#define RID_STR_FORM                            N_("Form")
+#define RID_STR_REPORT                          N_("Report")
+#define RID_STR_DATASOURCE_NOT_STORED           N_("The data source was not saved. Please use the interface XStorable to save the data source.")
+#define RID_STR_ONLY_QUERY                      N_("The given command is not a SELECT statement.\nOnly queries are allowed.")
+#define RID_STR_NO_VALUE_CHANGED                N_("No values were modified.")
+#define RID_STR_NO_XROWUPDATE                   N_("Values could not be inserted. The XRowUpdate interface is not supported by ResultSet.")
+#define RID_STR_NO_XRESULTSETUPDATE             N_("Values could not be inserted. The XResultSetUpdate interface is not supported by ResultSet.")
+#define RID_STR_NO_UPDATE_MISSING_CONDITION     N_("Values could not be modified, due to a missing condition statement.")
+#define RID_STR_NO_COLUMN_ADD                   N_("The adding of columns is not supported.")
+#define RID_STR_NO_COLUMN_DROP                  N_("The dropping of columns is not supported.")
+#define RID_STR_NO_CONDITION_FOR_PK             N_("The WHERE condition could not be created for the primary key.")
+#define RID_STR_COLUMN_UNKNOWN_PROP             N_("The column does not support the property '%value'.")
+#define RID_STR_COLUMN_NOT_SEARCHABLE           N_("The column is not searchable!")
+#define RID_STR_NOT_SEQUENCE_INT8               N_("The value of the columns is not of the type Sequence<sal_Int8>.")
+#define RID_STR_COLUMN_NOT_VALID                N_("The column is not valid.")
+#define RID_STR_COLUMN_MUST_VISIBLE             N_("The column '%name' must be visible as a column.")
+#define RID_STR_NO_XQUERIESSUPPLIER             N_("The interface XQueriesSupplier is not available.")
+#define RID_STR_NO_ABS_ZERO                     N_("An 'absolute(0)' call is not allowed.")
+#define RID_STR_NO_RELATIVE                     N_("Relative positioning is not allowed in this state.")
+#define RID_STR_NO_REFESH_AFTERLAST             N_("A row cannot be refreshed when the ResultSet is positioned after the last row.")
+#define RID_STR_NO_MOVETOINSERTROW_CALLED       N_("A new row cannot be inserted when the ResultSet is not first moved to the insert row.")
+#define RID_STR_NO_UPDATEROW                    N_("A row cannot be modified in this state")
+#define RID_STR_NO_DELETEROW                    N_("A row cannot be deleted in this state.")
+#define RID_STR_NO_TABLE_RENAME                 N_("The driver does not support table renaming.")
+#define RID_STR_COLUMN_ALTER_BY_NAME            N_("The driver does not support the modification of column descriptions by changing the name.")
+#define RID_STR_COLUMN_ALTER_BY_INDEX           N_("The driver does not support the modification of column descriptions by changing the index.")
+#define RID_STR_FILE_DOES_NOT_EXIST             N_("The file \"$file$\" does not exist.")
+#define RID_STR_TABLE_DOES_NOT_EXIST            N_("There exists no table named \"$table$\".")
+#define RID_STR_QUERY_DOES_NOT_EXIST            N_("There exists no query named \"$table$\".")
+#define RID_STR_CONFLICTING_NAMES               N_("There are tables in the database whose names conflict with the names of existing queries. To make full use of all queries and tables, make sure they have distinct names.")
+#define RID_STR_COMMAND_LEADING_TO_ERROR        N_("The SQL command leading to this error is:\n\n$command$")
+#define RID_STR_STATEMENT_WITHOUT_RESULT_SET    N_("The SQL command does not describe a result set.")
+#define RID_STR_NAME_MUST_NOT_BE_EMPTY          N_("The name must not be empty.")
+#define RID_STR_NO_NULL_OBJECTS_IN_CONTAINER    N_("The container cannot contain NULL objects.")
+#define RID_STR_NAME_ALREADY_USED               N_("There already is an object with the given name.")
+#define RID_STR_OBJECT_CONTAINER_MISMATCH       N_("This object cannot be part of this container.")
+#define RID_STR_OBJECT_ALREADY_CONTAINED        N_("The object already is, with a different name, part of the container.")
+#define RID_STR_NAME_NOT_FOUND                  N_("Unable to find the document '$name$'.")
+#define RID_STR_ERROR_WHILE_SAVING              N_("Could not save the document to $location$:\n$message$")
+#define RID_NO_SUCH_DATA_SOURCE                 N_("Error accessing data source '$name$':\n$error$")
+#define RID_STR_NO_SUB_FOLDER                   N_("There exists no folder named \"$folder$\".")
+#define RID_STR_NO_DELETE_BEFORE_AFTER          N_("Cannot delete the before-first or after-last row.")
+#define RID_STR_NO_DELETE_INSERT_ROW            N_("Cannot delete the insert-row.")
+#define RID_STR_RESULT_IS_READONLY              N_("Result set is read only.")
+#define RID_STR_NO_DELETE_PRIVILEGE             N_("DELETE privilege not available.")
+#define RID_STR_ROW_ALREADY_DELETED             N_("Current row is already deleted.")
+#define RID_STR_UPDATE_FAILED                   N_("Current row could not be updated.")
+#define RID_STR_NO_INSERT_PRIVILEGE             N_("INSERT privilege not available.")
+#define RID_STR_INTERNAL_ERROR                  N_("Internal error: no statement object provided by the database driver.")
+#define RID_STR_EXPRESSION1                     N_("Expression1")
+#define RID_STR_NO_SQL_COMMAND                  N_("No SQL command was provided.")
+#define RID_STR_INVALID_INDEX                   N_("Invalid column index.")
+#define RID_STR_INVALID_CURSOR_STATE            N_("Invalid cursor state.")
+#define RID_STR_CURSOR_BEFORE_OR_AFTER          N_("The cursor points to before the first or after the last row.")
+#define RID_STR_NO_BOOKMARK_BEFORE_OR_AFTER     N_("The rows before the first and after the last row don't have a bookmark.")
+#define RID_STR_NO_BOOKMARK_DELETED             N_("The current row is deleted, and thus doesn't have a bookmark.")
+#define RID_STR_CONNECTION_REQUEST              N_("A connection for the following URL was requested \"$name$\".")
+#define RID_STR_MISSING_EXTENSION               N_("The extension is not installed.")
+
+#define STR_QUERY_AND_TABLE_DISTINCT_NAMES      N_("You cannot give a table and a query the same name. Please use a name which is not yet used by a query or table.")
+#define STR_BASENAME_TABLE                      N_("Table")
+#define STR_BASENAME_QUERY                      N_("Query")
+#define STR_CONN_WITHOUT_QUERIES_OR_TABLES      N_("The given connection is no valid query and/or tables supplier.")
+#define STR_NO_TABLE_OBJECT                     N_("The given object is no table object.")
+#define STR_INVALID_COMPOSITION_TYPE            N_("Invalid composition type - need a value from com.sun.star.sdb.tools.CompositionType.")
+#define STR_INVALID_COMMAND_TYPE                N_("Invalid command type - only TABLE and QUERY from com.sun.star.sdb.CommandType are allowed.")
+
+#define STR_STATE_CLOSE_SUB_DOCS                N_("Prepare")
+#define STR_STATE_BACKUP_DBDOC                  N_("Backup Document")
+#define STR_STATE_MIGRATE                       N_("Migrate")
+#define STR_STATE_SUMMARY                       N_("Summary")
+// To translators: This refers to a form document inside a database document.
+#define STR_FORM                                N_("Form '$name$'")
+// To translators: This refers to a report document inside a database document.
+#define STR_REPORT                              N_("Report '$name$'")
+#define STR_OVERALL_PROGRESS                    N_("document $current$ of $overall$")
+#define STR_DATABASE_DOCUMENT                   N_("Database Document")
+#define STR_SAVED_COPY_TO                       N_("saved copy to $location$")
+#define STR_MOVED_LIBRARY                       N_("migrated $type$ library '$old$' to '$new$'")
+#define STR_LIBRARY_TYPE_AND_NAME               N_("$type$ library '$library$'")
+#define STR_MIGRATING_LIBS                      N_("migrating libraries ...")
+#define STR_OOO_BASIC                           N_("%PRODUCTNAME Basic")
+#define STR_JAVA_SCRIPT                         N_("JavaScript")
+#define STR_BEAN_SHELL                          N_("BeanShell")
+#define STR_JAVA                                N_("Java")
+#define STR_PYTHON                              N_("Python")
+#define STR_DIALOG                              N_("dialog")
+#define STR_ERRORS                              N_("Error(s)")
+#define STR_WARNINGS                            N_("Warnings")
+#define STR_EXCEPTION                           N_("caught exception:")
+#define STR_INVALID_BACKUP_LOCATION             N_("You need to choose a backup location other than the document location itself.")
+#define STR_INVALID_NUMBER_ARGS                 N_("Invalid number of initialization arguments. Expected 1.")
+#define STR_NO_DATABASE                         N_("No database document found in the initialization arguments.")
+#define STR_NOT_READONLY                        N_("Not applicable to read-only documents.")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

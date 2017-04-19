@@ -11,6 +11,7 @@ $(eval $(call gb_Library_Library,dbaxml))
 
 $(eval $(call gb_Library_set_include,dbaxml,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/dbaccess/inc \
     -I$(SRCDIR)/dbaccess/source/inc \
 ))
 

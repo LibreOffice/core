@@ -29,7 +29,7 @@
 #include "UndoGuard.hxx"
 #include "ControllerLockGuard.hxx"
 #include "ObjectNameProvider.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "macros.hxx"
 #include "DragMethod_PieSegment.hxx"
 #include "DragMethod_RotateDiagram.hxx"
@@ -1527,7 +1527,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         bReturn = executeDispatch_Delete();
         if( ! bReturn )
         {
-            ScopedVclPtrInstance<InfoBox>(pChartWindow, SCH_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+            ScopedVclPtrInstance<InfoBox>(pChartWindow, SchResId(STR_ACTION_NOTPOSSIBLE))->Execute();
         }
     }
 

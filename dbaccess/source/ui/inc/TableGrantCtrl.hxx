@@ -43,8 +43,6 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 
     typedef std::map<OUString, TPrivileges> TTablePrivilegeMap;
 
-    OModuleClient        m_aModuleClient;
-
     css::uno::Reference< css::container::XNameAccess >    m_xUsers;
     css::uno::Reference< css::container::XNameAccess >    m_xTables;
     css::uno::Reference< css::uno::XComponentContext>     m_xContext;

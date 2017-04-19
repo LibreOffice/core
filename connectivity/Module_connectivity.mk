@@ -32,11 +32,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_sdbc2 \
 ))
 
-$(eval $(call gb_Module_add_l10n_targets,connectivity,\
-	AllLangResTarget_cnr \
-	AllLangResTarget_sdberr \
-))
-
 ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_hsqldb \

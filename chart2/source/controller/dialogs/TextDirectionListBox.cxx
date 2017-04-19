@@ -19,7 +19,7 @@
 
 #include "TextDirectionListBox.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include <svl/languageoptions.hxx>
 #include <vcl/window.hxx>
 #include <vcl/builderfactory.hxx>
@@ -30,9 +30,9 @@ namespace chart
 TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent ) :
     svx::FrameDirectionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_DROPDOWN)
 {
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_LTR ), SvxFrameDirection::Horizontal_LR_TB );
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_RTL ), SvxFrameDirection::Horizontal_RL_TB );
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_SUPER ), SvxFrameDirection::Environment );
+    InsertEntryValue( SchResId( STR_TEXT_DIRECTION_LTR ), SvxFrameDirection::Horizontal_LR_TB );
+    InsertEntryValue( SchResId( STR_TEXT_DIRECTION_RTL ), SvxFrameDirection::Horizontal_RL_TB );
+    InsertEntryValue( SchResId( STR_TEXT_DIRECTION_SUPER ), SvxFrameDirection::Environment );
 
     if( !SvtLanguageOptions().IsCTLFontEnabled() )
     {

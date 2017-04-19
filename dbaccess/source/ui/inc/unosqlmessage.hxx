@@ -32,7 +32,6 @@ class OSQLMessageDialog
         :public OSQLMessageDialogBase
         ,public ::comphelper::OPropertyArrayUsageHelper< OSQLMessageDialog >
 {
-    OModuleClient        m_aModuleClient;
 protected:
     // <properties>
     css::uno::Any        m_aException;

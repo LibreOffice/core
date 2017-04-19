@@ -43,9 +43,8 @@ namespace dbaui
 
     /** implements the user admin dialog
     */
-    class OUserAdminDlg : public SfxTabDialog, public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
+    class OUserAdminDlg : public SfxTabDialog, public IItemSetHelper, public IDatabaseSettingsDialog
     {
-        OModuleClient m_aModuleClient;
         std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         SfxItemSet*   m_pItemSet;
         css::uno::Reference< css::sdbc::XConnection>          m_xConnection;

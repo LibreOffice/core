@@ -31,8 +31,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/builderfactory.hxx>
+#include <strings.hrc>
 #include <bitmaps.hlst>
-#include <svids.hrc>
 
 #include "controldata.hxx"
 #include "svdata.hxx"

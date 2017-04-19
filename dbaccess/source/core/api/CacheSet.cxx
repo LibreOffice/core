@@ -19,7 +19,7 @@
 
 #include "CacheSet.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -292,7 +292,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     }
     else
         ::dbtools::throwSQLException(
-            DBACORE_RESSTRING( RID_STR_NO_UPDATE_MISSING_CONDITION ), StandardSQLState::GENERAL_ERROR, *this );
+            DBA_RES( RID_STR_NO_UPDATE_MISSING_CONDITION ), StandardSQLState::GENERAL_ERROR, *this );
 
     // now create end execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));

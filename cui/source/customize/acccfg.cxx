@@ -36,6 +36,7 @@
 #include <vcl/builderfactory.hxx>
 
 #include "cuires.hrc"
+#include "strings.hrc"
 
 #include <svx/svxids.hrc>
 

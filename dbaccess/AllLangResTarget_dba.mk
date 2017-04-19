@@ -22,8 +22,4 @@ $(eval $(call gb_SrsTarget_set_include,dbaccess/dba,\
 	-I$(SRCDIR)/dbaccess/source/core/inc \
 ))
 
-$(eval $(call gb_SrsTarget_add_files,dbaccess/dba,\
-    dbaccess/source/core/resource/strings.src \
-))
-
 # vim: set noet sw=4 ts=4:

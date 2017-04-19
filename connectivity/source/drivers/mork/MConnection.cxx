@@ -16,8 +16,7 @@
 
 #include <connectivity/dbexception.hxx>
 
-#include "resource/mork_res.hrc"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 
@@ -407,11 +406,11 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
 }
 
 
-void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const Reference< XInterface >& _rxContext )
+void OConnection::throwSQLException( const char* pErrorResourceId, const Reference< XInterface >& _rxContext )
 {
     ErrorDescriptor aError;
-    aError.setResId( _nErrorResourceId );
-    throwSQLException( aError, _rxContext );
+    aError.setResId(pErrorResourceId);
+    throwSQLException(aError, _rxContext);
 }
 
 } } // namespace connectivity::mork

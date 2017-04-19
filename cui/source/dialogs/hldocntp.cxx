@@ -39,6 +39,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include "bitmaps.hlst"
+#include "strings.hrc"
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
@@ -275,7 +276,7 @@ bool SvxHyperlinkNewDocTp::AskApply()
     bool bRet = ImplGetURLObject( m_pCbbPath->GetText(), m_pCbbPath->GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
-        ScopedVclPtrInstance< WarningBox > aWarning( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
+        ScopedVclPtrInstance< WarningBox > aWarning( this, WB_OK, CUI_RES(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
         aWarning->Execute();
     }
     return bRet;
@@ -323,7 +324,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
                 if( bOk )
                 {
-                    ScopedVclPtrInstance<WarningBox> aWarning( this, WB_YES_NO, CUI_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
+                    ScopedVclPtrInstance<WarningBox> aWarning( this, WB_YES_NO, CUI_RES(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
                     bCreate = aWarning->Execute() == RET_YES;
                 }
             }

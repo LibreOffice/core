@@ -23,7 +23,7 @@
 #include "propertyids.hxx"
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include "resource/macab_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
 
 using namespace connectivity::macab;

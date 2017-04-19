@@ -18,8 +18,8 @@
  */
 
 #include "tablename.hxx"
-#include "sdbt_resource.hrc"
-#include "module_sdbt.hxx"
+#include "core_resource.hxx"
+#include "strings.hrc"
 #include "sdbtstrings.hrc"
 
 #include <com/sun/star/sdb/tools/CompositionType.hpp>
@@ -53,8 +53,6 @@ namespace sdbtools
     // TableName
     struct TableName_Impl
     {
-        SdbtClient      m_aModuleClient;    // keep the module alive as long as this instance lives
-
         OUString sCatalog;
         OUString sSchema;
         OUString sName;
@@ -152,7 +150,7 @@ namespace sdbtools
             ||  !xPSI->hasPropertyByName( PROPERTY_NAME )
             )
             throw IllegalArgumentException(
-                SdbtRes( STR_NO_TABLE_OBJECT ),
+                DBA_RES( STR_NO_TABLE_OBJECT ),
                 *this,
                 0
             );
@@ -199,7 +197,7 @@ namespace sdbtools
                     found = true;
             if ( !found )
                 throw IllegalArgumentException(
-                    SdbtRes( STR_INVALID_COMPOSITION_TYPE ),
+                    DBA_RES( STR_INVALID_COMPOSITION_TYPE ),
                     nullptr,
                     0
                 );

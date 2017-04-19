@@ -63,7 +63,6 @@ namespace dbaui
             ,public OTextConnectionSettingsDialog_PBASE
             ,public ::cppu::WeakImplHelper< css::sdb::XTextConnectionSettings >
     {
-        OModuleClient   m_aModuleClient;
         PropertyValues  m_aPropertyValues;
 
     protected:

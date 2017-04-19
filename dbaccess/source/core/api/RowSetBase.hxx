@@ -73,7 +73,6 @@ namespace dbaccess
                         public ::comphelper::OPropertyStateContainer,
                         public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
     {
-        OModuleClient                           m_aModuleClient;
     protected:
         typedef std::vector<ORowSetDataColumn*>   TDataColumns;
         ::osl::Mutex*                           m_pMutex;           // this the mutex form the rowset itself

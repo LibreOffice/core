@@ -41,7 +41,6 @@ namespace dbaui
             :public svt::OGenericUnoDialog
             ,public ComposerDialog_PBASE
     {
-        OModuleClient m_aModuleClient;
     protected:
         // <properties>
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer >

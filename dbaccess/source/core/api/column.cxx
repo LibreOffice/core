@@ -20,7 +20,7 @@
 #include "ContainerMediator.hxx"
 #include "apitools.hxx"
 #include "column.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "dbastrings.hrc"
 #include "sdbcoretools.hxx"

@@ -35,7 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <connectivity/sqlerror.hxx>
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 

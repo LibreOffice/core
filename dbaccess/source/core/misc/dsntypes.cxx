@@ -25,7 +25,7 @@
 #include <osl/file.hxx>
 #include "dbastrings.hrc"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 

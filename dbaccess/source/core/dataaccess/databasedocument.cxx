@@ -18,7 +18,7 @@
  */
 
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "datasource.hxx"
 #include "databasedocument.hxx"
 #include "dbastrings.hrc"

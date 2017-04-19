@@ -35,7 +35,6 @@ namespace dbaui
     class ORelationDialog : public ModalDialog
                             ,public IRelationControlInterface
     {
-        OModuleClient                           m_aModuleClient;
         std::unique_ptr<OTableListBoxControl> m_xTableControl;
         OJoinTableView::OTableWindowMap*        m_pTableMap;
 

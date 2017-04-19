@@ -19,7 +19,6 @@
 
 
 #include <macrodlg.hxx>
-#include <macrodlg.hrc>
 #include <basidesh.hxx>
 #include <basidesh.hrc>
 
@@ -354,7 +353,7 @@ SbMethod* MacroChooser::CreateMacro()
         if ( !aModName.isEmpty() )
         {
             // extract the module name from the string like "Sheet1 (Example1)"
-            if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
+            if( aDesc.GetLibSubName() == IDEResId(RID_STR_DOCUMENT_OBJECTS) )
             {
                 sal_Int32 nIndex = 0;
                 aModName = aModName.getToken( 0, ' ', nIndex );
@@ -444,7 +443,7 @@ void MacroChooser::CheckButtons()
     bNewDelIsDel = pMethod != nullptr;
     if (bPrev != bNewDelIsDel && nMode == All)
     {
-        OUString aBtnText( bNewDelIsDel ? IDEResId(RID_STR_BTNDEL).toString() : IDEResId(RID_STR_BTNNEW).toString() );
+        OUString aBtnText( bNewDelIsDel ? IDEResId(RID_STR_BTNDEL) : IDEResId(RID_STR_BTNNEW) );
         m_pDelButton->SetText( aBtnText );
     }
 
@@ -652,7 +651,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
         OUString aLib( aDesc.GetLibName() );
         OUString aMod( aDesc.GetName() );
         // extract the module name from the string like "Sheet1 (Example1)"
-        if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
+        if( aDesc.GetLibSubName() == IDEResId(RID_STR_DOCUMENT_OBJECTS) )
         {
             sal_Int32 nIndex = 0;
             aMod = aMod.getToken( 0, ' ', nIndex );
@@ -805,7 +804,7 @@ void MacroChooser::SetMode (Mode nM)
     {
         case All:
         {
-            m_pRunButton->SetText(IDEResId(RID_STR_RUN).toString());
+            m_pRunButton->SetText(IDEResId(RID_STR_RUN));
             EnableButton(*m_pDelButton, true);
             EnableButton(*m_pOrganizeButton, true);
             break;
@@ -813,7 +812,7 @@ void MacroChooser::SetMode (Mode nM)
 
         case ChooseOnly:
         {
-            m_pRunButton->SetText(IDEResId(RID_STR_CHOOSE).toString());
+            m_pRunButton->SetText(IDEResId(RID_STR_CHOOSE));
             EnableButton(*m_pDelButton, false);
             EnableButton(*m_pOrganizeButton, false);
             break;
@@ -821,7 +820,7 @@ void MacroChooser::SetMode (Mode nM)
 
         case Recording:
         {
-            m_pRunButton->SetText(IDEResId(RID_STR_RECORD).toString());
+            m_pRunButton->SetText(IDEResId(RID_STR_RECORD));
             EnableButton(*m_pDelButton, false);
             EnableButton(*m_pOrganizeButton, false);
 

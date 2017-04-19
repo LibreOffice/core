@@ -21,7 +21,7 @@
 #include "dbastrings.hrc"
 #include "apitools.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>

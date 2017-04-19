@@ -24,6 +24,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include "helpid.hrc"
 
@@ -970,10 +971,10 @@ sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
     return ppnImgIds[ nLine ][ nValueSetIdx - 1 ];
 }
 
-sal_uInt16 SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
+const char* SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
 {
     // string resource IDs for each image (in order of the IID_PRE_* image IDs)
-    static const sal_uInt16 pnStrIds[] =
+    static const char* pnStrIds[] =
     {
         RID_SVXSTR_TABLE_PRESET_NONE,
         RID_SVXSTR_PARA_PRESET_ALL,
@@ -1014,7 +1015,7 @@ void SvxBorderTabPage::FillPresetVS()
     {
         m_pWndPresets->InsertItem( nVSIdx );
         m_pWndPresets->SetItemImage(nVSIdx, Image(m_aBorderImgVec[nVSIdx-1]));
-        m_pWndPresets->SetItemText( nVSIdx, CUI_RESSTR( GetPresetStringId( nVSIdx ) ) );
+        m_pWndPresets->SetItemText( nVSIdx, CUI_RES( GetPresetStringId( nVSIdx ) ) );
     }
 
     // show the control
@@ -1029,7 +1030,7 @@ void SvxBorderTabPage::FillShadowVS()
     m_pWndShadows->SetColCount( SVX_BORDER_SHADOW_COUNT );
 
     // string resource IDs for each image
-    static const sal_uInt16 pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
+    static const char* pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
         { RID_SVXSTR_SHADOW_STYLE_NONE, RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT, RID_SVXSTR_SHADOW_STYLE_TOPRIGHT, RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT, RID_SVXSTR_SHADOW_STYLE_TOPLEFT };
 
     // insert images and help texts
@@ -1037,7 +1038,7 @@ void SvxBorderTabPage::FillShadowVS()
     {
         m_pWndShadows->InsertItem( nVSIdx );
         m_pWndShadows->SetItemImage(nVSIdx, Image(m_aShadowImgVec[nVSIdx-1]));
-        m_pWndShadows->SetItemText( nVSIdx, CUI_RESSTR( pnStrIds[ nVSIdx - 1 ] ) );
+        m_pWndShadows->SetItemText( nVSIdx, CUI_RES( pnStrIds[ nVSIdx - 1 ] ) );
     }
 
     // show the control

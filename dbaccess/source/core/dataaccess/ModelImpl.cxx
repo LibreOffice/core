@@ -19,7 +19,7 @@
 
 #include "commandcontainer.hxx"
 #include "connection.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "databasecontext.hxx"
 #include "databasedocument.hxx"

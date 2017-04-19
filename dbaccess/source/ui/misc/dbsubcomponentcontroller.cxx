@@ -124,7 +124,6 @@ namespace dbaui
         ::boost::optional< bool >       m_aDocScriptSupport;
 
     public:
-        OModuleClient                   m_aModuleClient;
         ::dbtools::SQLExceptionInfo     m_aCurrentError;
 
         ::comphelper::OInterfaceContainerHelper2

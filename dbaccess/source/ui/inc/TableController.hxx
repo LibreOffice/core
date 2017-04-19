@@ -38,7 +38,6 @@ namespace dbaui
     class OTableController : public OTableController_BASE
     {
     private:
-        OModuleClient                                   m_aModuleClient;
         std::vector< std::shared_ptr<OTableRow> > m_vRowList;
         OTypeInfoMap                                    m_aTypeInfo;
         std::vector<OTypeInfoMap::iterator>           m_aTypeInfoIndex;

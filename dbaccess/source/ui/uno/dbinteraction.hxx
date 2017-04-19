@@ -62,7 +62,6 @@ namespace dbaui
     class BasicInteractionHandler
                 :public BasicInteractionHandler_Base
     {
-        const OModuleClient m_aModuleClient;
         const css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;
         const bool          m_bFallbackToGeneric;
