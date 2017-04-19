@@ -264,29 +264,6 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
         if( bVis )    // display SV-Cursor again
             m_pVisibleCursor->Show();
 
-        // If there is still a ChgCall and just the "basic
-        // parenthising(?)" exists, call it. This
-        // decouples the internal with the Basic-parenthising, the
-        // Shells are switched.
-        if( !BasicActionPend() )
-        {
-            // Within a Basic action, one needs to update the cursor,
-            // to e.g. create the table cursor. This is being done in
-            // UpdateCursor.
-            UpdateCursor( eFlags, bIdleEnd );
-
-            {
-                // watch Cursor-Moves, call Link if needed, the DTOR is key here!
-                SwCallLink aLk( *this, m_nAktNode, m_nAktContent, m_nAktNdTyp,
-                                m_nLeftFramePos, m_bAktSelection );
-
-            }
-            if( m_bCallChgLnk && m_bChgCallFlag && m_aChgLnk.IsSet() )
-            {
-                m_aChgLnk.Call( this );
-                m_bChgCallFlag = false; // reset flag
-            }
-        }
         return;
     }
 
@@ -1434,9 +1411,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     SET_CURR_SHELL( this );
     ClearUpCursors();
 
-    // In a BasicAction the cursor must be updated, e.g. to create the
-    // TableCursor. EndAction now calls UpdateCursor!
-    if( ActionPend() && BasicActionPend() )
+    if (ActionPend())
     {
         if ( eFlags & SwCursorShell::READONLY )
             m_bIgnoreReadonly = true;
@@ -2275,9 +2250,9 @@ bool SwCursorShell::HasSelection() const
 
 void SwCursorShell::CallChgLnk()
 {
-    // Do not make any call in start/end action but just remember the change.
-    // This will be taken care of in the end action.
-    if( BasicActionPend() )
+    // Do not make any call in StartAction/EndAction but just set the flag.
+    // This will be handled in EndAction.
+    if (ActionPend())
         m_bChgCallFlag = true; // remember change
     else if( m_aChgLnk.IsSet() )
     {
@@ -2662,7 +2637,6 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     , m_nAktNdTyp(SwNodeType::NONE)
     , m_bAktSelection(false)
     , m_nCursorMove( 0 )
-    , m_nBasicActionCnt( 0 )
     , m_eMvState( MV_NONE )
     , m_sMarkedListId()
     , m_nMarkedListLevel( 0 )
@@ -2700,7 +2674,6 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     , m_nAktNdTyp(SwNodeType::NONE)
     , m_bAktSelection(false)
     , m_nCursorMove( 0 )
-    , m_nBasicActionCnt( 0 )
     , m_eMvState( MV_NONE ) // state for crsr-travelling - GetCursorOfst
     , m_sMarkedListId()
     , m_nMarkedListLevel( 0 )

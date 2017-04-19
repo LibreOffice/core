@@ -415,7 +415,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         // when pending we will not get the correct type, but SelectionType::Text
         // as fallback. This *happens* during D&D, so we need to check if we are in
         // the fallback and just try to get a graphic
-        const bool bPending(m_pWrtShell->BasicActionPend());
+        const bool bPending(m_pWrtShell->ActionPend());
 
         // SEL_GRF is from ContentType of editsh
         if(bPending || ((SelectionType::Graphic | SelectionType::DbForm) & nSelectionType))

@@ -475,7 +475,7 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify, SwCursorShell*, void)
 
     if( !m_bAttrChgNotified )
     {
-        if ( m_pWrtShell->BasicActionPend() || g_bNoInterrupt ||
+        if (m_pWrtShell->ActionPend() || g_bNoInterrupt ||
              GetDispatcher().IsLocked() ||               //do not confuse the SFX
              GetViewFrame()->GetBindings().IsInUpdate() )//do not confuse the SFX
         {
@@ -508,7 +508,7 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify, SwCursorShell*, void)
 
 IMPL_LINK_NOARG(SwView, TimeoutHdl, Timer *, void)
 {
-    if( m_pWrtShell->BasicActionPend() || g_bNoInterrupt )
+    if (m_pWrtShell->ActionPend() || g_bNoInterrupt)
     {
         m_aTimer.Start();
         return;

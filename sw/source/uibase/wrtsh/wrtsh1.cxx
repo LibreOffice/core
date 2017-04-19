@@ -1352,12 +1352,11 @@ void SwWrtShell::BulletOn()
 
 SelectionType SwWrtShell::GetSelectionType() const
 {
-    // ContentType cannot be determined within a
-    // Start-/Endaction parentheses.
+    // ContentType cannot be determined within a Start-/EndAction.
     // Because there is no invalid value TEXT will be returned.
-    // The value does not matter, it may be updated in endaction anyway.
+    // The value does not matter, it may be updated in EndAction anyway.
 
-    if ( BasicActionPend() )
+    if (ActionPend())
         return IsSelFrameMode() ? SelectionType::Frame : SelectionType::Text;
 
     SwView &_rView = const_cast<SwView&>(GetView());

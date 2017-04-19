@@ -203,7 +203,6 @@ private:
      * (via Find()) can be realised.
      */
     sal_uInt16 m_nCursorMove;
-    sal_uInt16 m_nBasicActionCnt;     ///< Actions which are parenthesized by Basic
     CursorMoveState m_eMvState;     ///< Status for Cursor-Travelling - GetCursorOfst
 
     OUString m_sMarkedListId;
@@ -746,8 +745,6 @@ public:
 
     // is the whole document protected/hidden (for UI...)
     bool IsAllProtect() const { return m_bAllProtect; }
-
-    bool BasicActionPend() const    { return m_nBasicActionCnt != mnStartAction; }
 
     bool GotoRegion( const OUString& rName );
 
