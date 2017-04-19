@@ -224,6 +224,10 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
             sHelpId = HID_FILESAVE_SAVEWITHPASSWORD;
             break;
 
+        case ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS :
+            sHelpId = HID_FILESAVE_EMBEDFONTS;
+            break;
+
         case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS :
             sHelpId = HID_FILESAVE_CUSTOMIZEFILTER;
             break;
@@ -881,6 +885,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mnError                 = ERRCODE_NONE;
     mbHasAutoExt            = false;
     mbHasPassword           = false;
+    mbHasEmbedFonts         = false;
     m_bHaveFilterOptions    = false;
     mbIsPwdEnabled          = true;
     mbHasVersions           = false;
@@ -949,6 +954,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
             case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
                 mbHasPassword = true;
+                mbHasEmbedFonts = true;
 
                 m_bHaveFilterOptions = true;
                 if( xFactory.is() )

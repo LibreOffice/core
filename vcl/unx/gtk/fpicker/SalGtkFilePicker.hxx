@@ -161,6 +161,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         enum {
             AUTOEXTENSION,
             PASSWORD,
+            EMBEDFONTS,
             FILTEROPTIONS,
             READONLY,
             LINK,

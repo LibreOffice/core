@@ -79,6 +79,10 @@ published constants ExtendedFilePickerElementIds
     */
     const short CHECKBOX_SELECTION     = 110;
 
+     /***
+    */
+    const short CHECKBOX_EMBEDFONTS = 206;
+
     /**
     */
     const short LISTBOX_VERSION_LABEL  = 207;

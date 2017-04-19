@@ -52,6 +52,7 @@ struct Entry
 Entry const CtrlIdToResIdTable[] = {
     { CHECKBOX_AUTOEXTENSION,                   STR_SVT_FILEPICKER_AUTO_EXTENSION },
     { CHECKBOX_PASSWORD,                        STR_SVT_FILEPICKER_PASSWORD },
+    { CHECKBOX_EMBEDFONTS,                      STR_SVT_FILEPICKER_EMBEDFONTS},
     { CHECKBOX_FILTEROPTIONS,                   STR_SVT_FILEPICKER_FILTER_OPTIONS },
     { CHECKBOX_READONLY,                        STR_SVT_FILEPICKER_READONLY },
     { CHECKBOX_LINK,                            STR_SVT_FILEPICKER_INSERT_AS_LINK },

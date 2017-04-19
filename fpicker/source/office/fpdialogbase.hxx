@@ -52,6 +52,7 @@ enum class PickerFlags {
     Password          = 0x001000,
     ReadOnly          = 0x002000,
     MultiSelection    = 0x004000,
+    embedFontsCheckbox= 0x008000,
 };
 namespace o3tl {
     template<> struct typed_flags<PickerFlags> : is_typed_flags<PickerFlags, 0x007fff> {};

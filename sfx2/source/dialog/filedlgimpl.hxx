@@ -77,6 +77,7 @@ namespace sfx2
         FileDialogHelper::Context   meContext;
 
         bool                    mbHasPassword           : 1;
+        bool                    mbHasEmbedFonts         : 1;
         bool                    mbIsPwdEnabled          : 1;
         bool                    m_bHaveFilterOptions    : 1;
         bool                    mbHasVersions           : 1;
@@ -103,6 +104,7 @@ namespace sfx2
                                            const OUString& rExtension );
         void                    addGraphicFilter();
         void                    enablePasswordBox( bool bInit );
+        void                    enableEmbedFontsBox();
         void                    updateFilterOptionsBox();
         void                    updateExportButton();
         void                    updateSelectionBox();
@@ -211,7 +213,6 @@ namespace sfx2
         bool             isSystemFilePicker() const { return mbSystemPicker; }
         bool             isPasswordEnabled() const { return mbIsPwdEnabled; }
     };
-
 }   // end of namespace sfx2
 
 #endif // INCLUDED_SFX2_SOURCE_DIALOG_FILEDLGIMPL_HXX
