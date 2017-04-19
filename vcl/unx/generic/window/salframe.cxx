@@ -212,7 +212,7 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
         else
             nIconSizeOffset = SV_ICON_SIZE16_START;
 
-        BitmapEx aIcon = vcl::bitmap::loadFromResource(ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()),
+        BitmapEx aIcon = vcl::bitmap::loadFromResource(VclResId(nIconSizeOffset + nIcon),
                                                        ImageLoadFlags::IgnoreScalingFactor);
 
         if( aIcon.IsEmpty())
@@ -255,9 +255,6 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
                                          sal_uInt16 nIcon, sal_uInt16 iconSize,
                                          Pixmap& icon_pixmap, Pixmap& icon_mask, NetWmIconData& netwm_icon)
 {
-    if( ! ImplGetResMgr() )
-        return false;
-
     PreDefaultWinNoOpenGLZone aGuard;
 
     CreateNetWmAppIcon( nIcon, netwm_icon );
@@ -273,7 +270,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
     else
         return false;
 
-    BitmapEx aIcon = vcl::bitmap::loadFromResource(ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()),
+    BitmapEx aIcon = vcl::bitmap::loadFromResource(VclResId(nIconSizeOffset + nIcon),
                                                    ImageLoadFlags::IgnoreScalingFactor);
 
     if( aIcon.IsEmpty() )

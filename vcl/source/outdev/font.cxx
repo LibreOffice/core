@@ -984,14 +984,10 @@ void OutputDevice::ImplInitFontList() const
             if( !mpFontCollection->Count() )
             {
                 OUString aError( "Application error: no fonts and no vcl resource found on your system" );
-                ResMgr* pMgr = ImplGetResMgr();
-                if( pMgr )
-                {
-                    OUString aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr).toString());
-                    if( !aResStr.isEmpty() )
-                        aError = aResStr;
-                }
-                Application::Abort( aError );
+                OUString aResStr(VclResStr(SV_ACCESSERROR_NO_FONTS));
+                if (!aResStr.isEmpty())
+                    aError = aResStr;
+                Application::Abort(aError);
             }
         }
     }

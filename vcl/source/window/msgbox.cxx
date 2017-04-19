@@ -38,6 +38,7 @@ static void ImplInitMsgBoxImageList()
     ImplSVData* pSVData = ImplGetSVData();
     if (pSVData->maWinData.maMsgBoxImgList.empty())
     {
+#if 0
         ResMgr* pResMgr = ImplGetResMgr();
         if (pResMgr)
         {
@@ -46,6 +47,7 @@ static void ImplInitMsgBoxImageList()
             pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WARNINGBOX, *pResMgr))));
             pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_INFOBOX, *pResMgr))));
         }
+#endif
     }
 }
 
@@ -408,9 +410,7 @@ WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
 
 void WarningBox::SetDefaultCheckBoxText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr).toString();
+    maCheckBoxText = VclResStr(SV_STDTEXT_DONTWARNAGAIN);
 }
 
 Image WarningBox::GetStandardImage()
@@ -457,9 +457,7 @@ QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessa
 
 void QueryBox::SetDefaultCheckBoxText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr).toString();
+    maCheckBoxText = VclResStr(SV_STDTEXT_DONTASKAGAIN);
 }
 
 Image QueryBox::GetStandardImage()

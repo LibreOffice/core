@@ -241,7 +241,7 @@ static OUString queryFile( Printer* pPrinter )
         xFilePicker->appendFilter( "*.PRN", "*.prn" );
 #endif
         // add arbitrary files
-        xFilePicker->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), "*.*");
+        xFilePicker->appendFilter(VclResStr(SV_STDTEXT_ALLFILETYPES), "*.*");
     }
     catch (const css::lang::IllegalArgumentException&)
     {

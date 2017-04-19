@@ -1498,6 +1498,7 @@ OUString Printer::GetPaperName( Paper ePaper )
     if( ! pSVData->mpPaperNames )
     {
         pSVData->mpPaperNames = new std::unordered_map< int, OUString >;
+#if 0
         if( ImplGetResMgr() )
         {
             ResStringArray aPaperStrings( VclResId( RID_STR_PAPERNAMES ) );
@@ -1516,6 +1517,7 @@ OUString Printer::GetPaperName( Paper ePaper )
             for( int i = 0; i < int(SAL_N_ELEMENTS(PaperIndex)); i++ )
                 (*pSVData->mpPaperNames)[PaperIndex[i]] = aPaperStrings.GetString(i);
         }
+#endif
     }
 
     std::unordered_map<int,OUString>::const_iterator it = pSVData->mpPaperNames->find( (int)ePaper );

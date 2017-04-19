@@ -370,7 +370,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
     if (!nItemsCount)
     {
         gchar* aNativeCommand = GetCommandForItem(this, 0xFFFF);
-        OUString aPlaceholderText(VclResId(SV_RESID_STRING_NOSELECTIONPOSSIBLE));
+        OUString aPlaceholderText(VclResStr(SV_RESID_STRING_NOSELECTIONPOSSIBLE));
         g_lo_menu_insert_in_section(pLOMenu, nSection-1, 0,
                                     OUStringToOString(aPlaceholderText, RTL_TEXTENCODING_UTF8).getStr());
         NativeSetItemCommand(nSection-1, 0, 0xFFFF, aNativeCommand, MenuItemBits::NONE, false, false);
@@ -648,7 +648,7 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
     gtk_widget_show(image);
     g_object_unref(icon);
 
-    OUString sToolTip(VclResId(SV_HELPTEXT_CLOSEDOCUMENT));
+    OUString sToolTip(VclResStr(SV_HELPTEXT_CLOSEDOCUMENT));
     gtk_widget_set_tooltip_text(mpCloseButton,
         OUStringToOString(sToolTip, RTL_TEXTENCODING_UTF8).getStr());
 
