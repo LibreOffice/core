@@ -131,13 +131,9 @@ namespace sdbtools
                 m_xConnection->getMetaData(), _rName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InTableDefinitions );
 
             OUString sExtraNameCharacters( m_xConnection->getMetaData()->getExtraNameCharacters() );
-            if  (   ( !sCatalog.isEmpty() && !::dbtools::isValidSQLName( sCatalog, sExtraNameCharacters ) )
-                ||  ( !sSchema.isEmpty() && !::dbtools::isValidSQLName( sSchema, sExtraNameCharacters ) )
-                ||  ( !sName.isEmpty() && !::dbtools::isValidSQLName( sName, sExtraNameCharacters ) )
-                )
-                return false;
-
-            return true;
+            return !(   ( !sCatalog.isEmpty() && !::dbtools::isValidSQLName( sCatalog, sExtraNameCharacters ) )
+                     || ( !sSchema.isEmpty() && !::dbtools::isValidSQLName( sSchema, sExtraNameCharacters ) )
+                     || ( !sName.isEmpty() && !::dbtools::isValidSQLName( sName, sExtraNameCharacters ) ));
         }
 
         virtual void validateName_throw( const OUString& _rName ) override
@@ -182,9 +178,7 @@ namespace sdbtools
 
         virtual bool validateName( const OUString& _rName ) override
         {
-            if ( validateName_getErrorCondition( _rName ) != 0 )
-                return false;
-            return true;
+            return validateName_getErrorCondition( _rName ) == 0;
         }
 
         virtual void validateName_throw( const OUString& _rName ) override

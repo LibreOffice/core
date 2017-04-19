@@ -2694,13 +2694,9 @@ bool EditEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
 
 bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
 {
-    if( EditEngine::IsPrintable( rKeyEvent.GetCharCode() ) &&
+    return EditEngine::IsPrintable( rKeyEvent.GetCharCode() ) &&
         ( KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) ) &&
-        ( KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) ) )
-    {
-        return true;
-    }
-    return false;
+        ( KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) );
 }
 
 bool EditEngine::HasValidData( const css::uno::Reference< css::datatransfer::XTransferable >& rTransferable )

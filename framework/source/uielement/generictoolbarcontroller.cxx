@@ -57,11 +57,8 @@ static bool isEnumCommand( const OUString& rCommand )
 {
     INetURLObject aURL( rCommand );
 
-    if (( aURL.GetProtocol() == INetProtocol::Uno ) &&
-        ( aURL.GetURLPath().indexOf( '.' ) != -1))
-        return true;
-
-    return false;
+    return ( aURL.GetProtocol() == INetProtocol::Uno ) &&
+           ( aURL.GetURLPath().indexOf( '.' ) != -1);
 }
 
 static OUString getEnumCommand( const OUString& rCommand )
@@ -203,10 +200,7 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
         {
             if ( m_bEnumCommand )
             {
-                if ( aStrValue == m_aEnumCommand )
-                    bValue = true;
-                else
-                    bValue = false;
+                bValue = aStrValue == m_aEnumCommand;
 
                 m_pToolbar->CheckItem( m_nID, bValue );
                 if ( bValue )

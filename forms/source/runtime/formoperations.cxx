@@ -486,10 +486,7 @@ namespace frm
                 }
             }
 
-            if(!commit1Form(xCntrl, needConfirmation, shouldCommit))
-                return false;
-
-            return true;
+            return commit1Form(xCntrl, needConfirmation, shouldCommit);
         }
 
         bool commit1Form(const Reference< XForm >& xFrm, bool &needConfirmation, bool &shouldCommit)
@@ -531,10 +528,7 @@ namespace frm
                 }
             }
 
-            if(!commit1Form(xFrm, needConfirmation, shouldCommit))
-                return false;
-
-            return true;
+            return commit1Form(xFrm, needConfirmation, shouldCommit);
         }
     }
 

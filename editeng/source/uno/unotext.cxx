@@ -510,10 +510,7 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxIt
     case EE_PARA_NUMBULLET:
         {
             uno::Reference< container::XIndexReplace > xRule;
-            if( !aValue.hasValue() || ((aValue >>= xRule) && !xRule.is()) )
-                return true;
-
-            return false;
+            return !aValue.hasValue() || ((aValue >>= xRule) && !xRule.is());
         }
 
     case WID_NUMLEVEL:

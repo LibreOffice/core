@@ -665,10 +665,7 @@ bool BackendImpl::PackageImpl::checkLicense(
                 throw css::deployment::DeploymentException(
                     "Could not interact with user.", nullptr, Any());
 
-            if (approve)
-                return true;
-            else
-                return false;
+            return approve;
         }
         return true;
     } catch (const css::ucb::CommandFailedException&) {

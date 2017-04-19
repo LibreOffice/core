@@ -371,10 +371,7 @@ OUString DialogHelper::getResourceString(sal_uInt16 id)
 
 bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    if ( xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER )
-        return true;
-    else
-        return false;
+    return xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER;
 }
 
 
@@ -390,10 +387,7 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
                                                      VclMessageType::Warning, VclButtonsType::OkCancel);
         bHadWarning = true;
 
-        if ( RET_OK == aInfoBox->Execute() )
-            return true;
-        else
-            return false;
+        return RET_OK == aInfoBox->Execute();
     }
     else
         return true;
