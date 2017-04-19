@@ -115,6 +115,7 @@ endif
 
 $(eval $(call gb_Library_use_externals,vcl,\
 	boost_headers \
+	boost_locale \
 	gio \
 	glm_headers \
 	graphite \
@@ -720,9 +721,6 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 endif
-
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,vcl,vcl))
 
 ifeq ($(OS),WNT)
 # HACK: dependency on icon themes so running unit tests don't

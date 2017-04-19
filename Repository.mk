@@ -1102,7 +1102,6 @@ $(eval $(call gb_Helper_register_resources,\
 	upd \
 	$(if $(ENABLE_ONLINE_UPDATE),updchk) \
 	uui \
-	vcl \
 	writerperfect \
 	wzi \
 	$(if $(ENABLE_NSS),xmlsec) \
