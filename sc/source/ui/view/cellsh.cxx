@@ -1047,16 +1047,11 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case FID_HIDE_ALL_NOTES:
                 {
                     bool bHasNotes = false;
-                    SCTAB nFirstSelected = rMark.GetFirstSelected();
-                    SCTAB nLastSelected = rMark.GetLastSelected();
 
-                    for ( SCTAB nSelTab = nFirstSelected; nSelTab <= nLastSelected && !bHasNotes; nSelTab++ )
+                    for (auto const& nSelTab : rMark.GetSelectedTabs())
                     {
-                        if (rMark.GetTableSelect( nSelTab ))
-                        {
-                            if (pDoc->HasTabNotes( nSelTab ))
-                                bHasNotes = true;
-                        }
+                        if (pDoc->HasTabNotes( nSelTab ))
+                            bHasNotes = true;
                     }
 
                     if ( !bHasNotes )
