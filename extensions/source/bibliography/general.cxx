@@ -33,7 +33,7 @@
 #include "datman.hxx"
 #include "bibconfig.hxx"
 #include "bibprop.hrc"
-#include "bib.hrc"
+#include "strings.hrc"
 #include "bibmod.hxx"
 #include "bibview.hxx"
 #include "bibtools.hxx"
@@ -167,7 +167,7 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/)
 BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     TabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
     BibShortCutHandler( this ),
-    sErrorPrefix(BIB_RESSTR(ST_ERROR_PREFIX)),
+    sErrorPrefix(BibResId(ST_ERROR_PREFIX)),
     mxBibGeneralPageFocusListener(new BibGeneralPageFocusListener(this)),
     pDatMan(pMan)
 {
@@ -334,7 +334,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     if(!sTableErrorString.isEmpty())
         sTableErrorString = sErrorPrefix + sTableErrorString;
 
-    SetText(BIB_RESSTR(ST_TYPE_TITLE));
+    SetText(BibResId(ST_TYPE_TITLE));
 
     Size aSize(LogicToPixel(Size(0, 209), MapMode(MapUnit::MapAppFont)));
     set_height_request(aSize.Height());

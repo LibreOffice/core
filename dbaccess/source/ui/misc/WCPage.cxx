@@ -24,7 +24,8 @@
 
 #include "defaultobjectnamecheck.hxx"
 #include "dbaccess_helpid.hrc"
-#include "dbu_misc.hrc"
+#include "strings.hrc"
+#include "core_resource.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -35,7 +36,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include "UITools.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::dbaui;
@@ -97,7 +98,7 @@ OCopyTable::OCopyTable(vcl::Window * pParent)
         m_pEdKeyName->SetMaxTextLen(nMaxLen ? nMaxLen : EDIT_NOLIMIT);
     }
 
-    SetText(ModuleRes(STR_COPYTABLE_TITLE_COPY));
+    SetText(DBA_RES(STR_COPYTABLE_TITLE_COPY));
 }
 
 OCopyTable::~OCopyTable()
@@ -173,7 +174,7 @@ bool OCopyTable::LeavePage()
         SQLExceptionInfo aErrorInfo;
         if ( !aNameCheck.isNameValid( m_pEdTableName->GetText(), aErrorInfo ) )
         {
-            aErrorInfo.append( SQLExceptionInfo::TYPE::SQLContext, ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) );
+            aErrorInfo.append( SQLExceptionInfo::TYPE::SQLContext, DBA_RES( STR_SUGGEST_APPEND_TABLE_DATA ) );
             m_pParent->showError(aErrorInfo.get());
 
             return false;
@@ -193,7 +194,7 @@ bool OCopyTable::LeavePage()
         sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
         if ( nMaxLength && sTable.getLength() > nMaxLength )
         {
-            m_pParent->showError(ModuleRes(STR_INVALID_TABLE_NAME_LENGTH));
+            m_pParent->showError(DBA_RES(STR_INVALID_TABLE_NAME_LENGTH));
             return false;
         }
 
@@ -201,7 +202,7 @@ bool OCopyTable::LeavePage()
         if (    m_pParent->m_bCreatePrimaryKeyColumn
             &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
-            m_pParent->showError(OUString(ModuleRes(STR_WIZ_NAME_ALREADY_DEFINED)) + " " + m_pParent->m_aKeyName);
+            m_pParent->showError(DBA_RES(STR_WIZ_NAME_ALREADY_DEFINED) + " " + m_pParent->m_aKeyName);
             return false;
         }
     }
@@ -232,7 +233,7 @@ bool OCopyTable::LeavePage()
 
     if(m_pParent->m_sName.isEmpty())
     {
-        m_pParent->showError(ModuleRes(STR_INVALID_TABLE_NAME));
+        m_pParent->showError(DBA_RES(STR_INVALID_TABLE_NAME));
         return false;
     }
 
@@ -249,7 +250,7 @@ void OCopyTable::ActivatePage()
 
 OUString OCopyTable::GetTitle() const
 {
-    return ModuleRes(STR_WIZ_TABLE_COPY);
+    return DBA_RES(STR_WIZ_TABLE_COPY);
 }
 
 void OCopyTable::Reset()
@@ -305,7 +306,7 @@ bool OCopyTable::checkAppendData()
 
     if ( !xTable.is() )
     {
-        m_pParent->showError(ModuleRes(STR_INVALID_TABLE_NAME));
+        m_pParent->showError(DBA_RES(STR_INVALID_TABLE_NAME));
         return false;
     }
     return true;

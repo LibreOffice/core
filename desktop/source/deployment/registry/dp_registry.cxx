@@ -19,8 +19,9 @@
 
 #include <sal/config.h>
 
+#include "dp_shared.hxx"
 #include "dp_package.hxx"
-#include "dp_registry.hrc"
+#include "strings.hrc"
 #include "dp_registry.hxx"
 #include "dp_misc.h"
 #include "dp_resource.h"
@@ -499,7 +500,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
             }
         }
         throw lang::IllegalArgumentException(
-            getResourceString(RID_STR_CANNOT_DETECT_MEDIA_TYPE) + url,
+            DP_RESSTR(RID_STR_CANNOT_DETECT_MEDIA_TYPE) + url,
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
     else
@@ -519,7 +520,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
         }
         if (iFind == m_mediaType2backend.end()) {
             throw lang::IllegalArgumentException(
-                getResourceString(RID_STR_UNSUPPORTED_MEDIA_TYPE) + mediaType,
+                DP_RESSTR(RID_STR_UNSUPPORTED_MEDIA_TYPE) + mediaType,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
         }
         return iFind->second->bindPackage( url, mediaType, bRemoved,

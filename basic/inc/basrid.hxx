@@ -20,13 +20,7 @@
 #ifndef INCLUDED_BASIC_INC_BASRID_HXX
 #define INCLUDED_BASIC_INC_BASRID_HXX
 
-#include <tools/resid.hxx>
-
-class BasResId : public ResId
-{
-    public:
-    BasResId( sal_uInt32 nId );
-};
+OUString BasResId(const char* pId);
 
 #endif // INCLUDED_BASIC_INC_BASRID_HXX
 

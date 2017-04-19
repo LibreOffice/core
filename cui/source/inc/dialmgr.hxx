@@ -19,18 +19,9 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_DIALMGR_HXX
 #define INCLUDED_CUI_SOURCE_INC_DIALMGR_HXX
 
-#include <tools/resid.hxx>
+#include <rtl/ustring.hxx>
 
-// forward ---------------------------------------------------------------
-
-#define CUI_MGR()       (*CuiResMgr::GetResMgr())
-#define CUI_RES(i)      ResId(i,CUI_MGR())
-
-class ResMgr;
-struct CuiResMgr
-{
-    static ResMgr*      GetResMgr();
-};
+OUString CUI_RES(const char *pKey);
 
 #endif
 

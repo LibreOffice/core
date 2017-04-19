@@ -20,7 +20,7 @@
 #include <memory>
 #include <config_features.h>
 
-#include "dp_help.hrc"
+#include "strings.hrc"
 #include "dp_backend.h"
 #include "dp_helpbackenddb.hxx"
 #include "dp_services.hxx"
@@ -131,7 +131,7 @@ BackendImpl::BackendImpl(
     : PackageRegistryBackend( args, xComponentContext ),
       m_xHelpTypeInfo( new Package::TypeInfo("application/vnd.sun.star.help",
                                OUString(),
-                               getResourceString(RID_STR_HELP)
+                               DP_RESSTR(RID_STR_HELP)
                                ) ),
       m_typeInfos( 1 )
 {
@@ -176,7 +176,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     // we don't support auto detection:
     if (mediaType_.isEmpty())
         throw lang::IllegalArgumentException(
-            StrCannotDetectMediaType::get() + url,
+            StrCannotDetectMediaType() + url,
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
 
     OUString type, subType;
@@ -202,7 +202,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
     }
     throw lang::IllegalArgumentException(
-        StrUnsupportedMediaType::get() + mediaType_,
+        StrUnsupportedMediaType() + mediaType_,
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }
@@ -377,7 +377,7 @@ void BackendImpl::implProcessHelp(
                 OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl( aHelpURL );
                 if( !xSFA->isFolder( aExpandedHelpURL ) )
                 {
-                    OUString aErrStr = getResourceString( RID_STR_HELPPROCESSING_GENERAL_ERROR );
+                    OUString aErrStr = DP_RESSTR( RID_STR_HELPPROCESSING_GENERAL_ERROR );
                     aErrStr += "No help folder";
                     OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
                     throw deployment::DeploymentException( OUString(), oWeakThis,
@@ -484,18 +484,18 @@ void BackendImpl::implProcessHelp(
 
                         if( !bSuccess )
                         {
-                            sal_uInt16 nErrStrId = 0;
+                            const char* pErrStrId = nullptr;
                             switch( aErrorInfo.m_eErrorClass )
                             {
-                            case HelpProcessingErrorClass::General:      nErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
-                            case HelpProcessingErrorClass::XmlParsing:   nErrStrId = RID_STR_HELPPROCESSING_XMLPARSING_ERROR; break;
+                            case HelpProcessingErrorClass::General:      pErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
+                            case HelpProcessingErrorClass::XmlParsing:   pErrStrId = RID_STR_HELPPROCESSING_XMLPARSING_ERROR; break;
                             default: ;
                             };
 
                             OUString aErrStr;
-                            if( nErrStrId != 0 )
+                            if (pErrStrId)
                             {
-                                aErrStr = getResourceString( nErrStrId );
+                                aErrStr = DP_RESSTR(pErrStrId);
 
                                 // Remove CR/LF
                                 OUString aErrMsg( aErrorInfo.m_aErrorMsg );
@@ -515,7 +515,7 @@ void BackendImpl::implProcessHelp(
                                     aErrMsg = aErrMsg.copy( 0, nCopy );
                                 }
                                 aErrStr += aErrMsg;
-                                if( nErrStrId == RID_STR_HELPPROCESSING_XMLPARSING_ERROR && !aErrorInfo.m_aXMLParsingFile.isEmpty() )
+                                if (!strcmp(pErrStrId, RID_STR_HELPPROCESSING_XMLPARSING_ERROR) && !aErrorInfo.m_aXMLParsingFile.isEmpty() )
                                 {
                                     aErrStr += " in ";
 

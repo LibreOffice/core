@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "sqlmessage.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -34,7 +36,7 @@
 #include <sfx2/sfxuno.hxx>
 #include "dbaccess_helpid.hrc"
 #include "UITools.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 #include <tools/urlobj.hxx>
 
@@ -82,8 +84,8 @@ namespace
     private:
         OUString  m_label;
     public:
-        explicit LabelProvider( sal_uInt16 _labelResourceID )
-            :m_label( ModuleRes( _labelResourceID ) )
+        explicit LabelProvider(const char* labelResourceID)
+            : m_label(DBA_RES(labelResourceID))
         {
         }
 
@@ -137,25 +139,25 @@ namespace
         std::shared_ptr< LabelProvider > const & getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
         {
             std::shared_ptr< LabelProvider >* ppProvider( &m_pErrorLabel );
-            sal_uInt16 nLabelID( STR_EXCEPTION_ERROR );
+            const char* pLabelID( STR_EXCEPTION_ERROR );
 
             switch ( _eType )
             {
             case SQLExceptionInfo::TYPE::SQLWarning:
                 ppProvider = &m_pWarningsLabel;
-                nLabelID = STR_EXCEPTION_WARNING;
+                pLabelID = STR_EXCEPTION_WARNING;
                 break;
 
             case SQLExceptionInfo::TYPE::SQLContext:
                 ppProvider = &m_pInfoLabel;
-                nLabelID = _bSubLabel ? STR_EXCEPTION_DETAILS : STR_EXCEPTION_INFO;
+                pLabelID = _bSubLabel ? STR_EXCEPTION_DETAILS : STR_EXCEPTION_INFO;
                 break;
             default:
                 break;
             }
 
             if ( !ppProvider->get() )
-                ppProvider->reset( new LabelProvider( nLabelID ) );
+                ppProvider->reset( new LabelProvider( pLabelID ) );
             return *ppProvider;
         }
 
@@ -312,8 +314,8 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
     m_pExceptionText->set_width_request(aTextSize.Width());
     m_pExceptionText->set_height_request(aTextSize.Height());
 
-    m_sStatusLabel = ModuleRes( STR_EXCEPTION_STATUS );
-    m_sErrorCodeLabel = ModuleRes( STR_EXCEPTION_ERRORCODE );
+    m_sStatusLabel = DBA_RES( STR_EXCEPTION_STATUS );
+    m_sErrorCodeLabel = DBA_RES( STR_EXCEPTION_ERRORCODE );
 
     m_pExceptionList->SetSelectionMode(SelectionMode::Single);
     m_pExceptionList->SetDragDropMode(DragDropMode::NONE);
@@ -342,7 +344,7 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
         ProviderFactory aProviderFactory;
 
         ExceptionDisplayInfo aInfo22018;
-        aInfo22018.sMessage = ModuleRes( STR_EXPLAN_STRINGCONVERSION_ERROR );
+        aInfo22018.sMessage = DBA_RES( STR_EXPLAN_STRINGCONVERSION_ERROR );
         aInfo22018.pLabelProvider = aProviderFactory.getLabelProvider( SQLExceptionInfo::TYPE::SQLContext, false );
         aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::TYPE::SQLContext );
         m_aExceptions.push_back( aInfo22018 );
@@ -690,13 +692,13 @@ IMPL_LINK_NOARG( OSQLMessageBox, ButtonClickHdl, Button *, void )
 // OSQLWarningBox
 OSQLWarningBox::OSQLWarningBox( vcl::Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
-    :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_WARNING ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
+    :OSQLMessageBox( _pParent, DBA_RES( STR_EXCEPTION_WARNING ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
 {
 }
 
 // OSQLErrorBox
 OSQLErrorBox::OSQLErrorBox( vcl::Window* _pParent, const OUString& _rMessage )
-    :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_ERROR ), _rMessage, WB_OK | WB_DEF_OK, OSQLMessageBox::Error, nullptr )
+    :OSQLMessageBox( _pParent, DBA_RES( STR_EXCEPTION_ERROR ), _rMessage, WB_OK | WB_DEF_OK, OSQLMessageBox::Error, nullptr )
 {
 }
 

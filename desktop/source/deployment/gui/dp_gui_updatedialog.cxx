@@ -107,11 +107,11 @@
 #include "dp_update.hxx"
 
 #include "dp_gui.h"
-#include "dp_gui.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
-#include "dp_gui_shared.hxx"
+#include "dp_shared.hxx"
 
 class KeyEvent;
 class MouseEvent;
@@ -482,17 +482,17 @@ UpdateDialog::UpdateDialog(
     std::vector< dp_gui::UpdateData > * updateData):
     ModalDialog(parent, "UpdateDialog", "desktop/ui/updatedialog.ui"),
     m_context(context),
-    m_none(DPGUI_RESSTR(RID_DLG_UPDATE_NONE)),
-    m_noInstallable(DPGUI_RESSTR(RID_DLG_UPDATE_NOINSTALLABLE)),
-    m_failure(DPGUI_RESSTR(RID_DLG_UPDATE_FAILURE)),
-    m_unknownError(DPGUI_RESSTR(RID_DLG_UPDATE_UNKNOWNERROR)),
-    m_noDescription(DPGUI_RESSTR(RID_DLG_UPDATE_NODESCRIPTION)),
-    m_noInstall(DPGUI_RESSTR(RID_DLG_UPDATE_NOINSTALL)),
-    m_noDependency(DPGUI_RESSTR(RID_DLG_UPDATE_NODEPENDENCY)),
-    m_noDependencyCurVer(DPGUI_RESSTR(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER)),
-    m_browserbased(DPGUI_RESSTR(RID_DLG_UPDATE_BROWSERBASED)),
-    m_version(DPGUI_RESSTR(RID_DLG_UPDATE_VERSION)),
-    m_ignoredUpdate(DPGUI_RESSTR(RID_DLG_UPDATE_IGNORED_UPDATE)),
+    m_none(DP_RESSTR(RID_DLG_UPDATE_NONE)),
+    m_noInstallable(DP_RESSTR(RID_DLG_UPDATE_NOINSTALLABLE)),
+    m_failure(DP_RESSTR(RID_DLG_UPDATE_FAILURE)),
+    m_unknownError(DP_RESSTR(RID_DLG_UPDATE_UNKNOWNERROR)),
+    m_noDescription(DP_RESSTR(RID_DLG_UPDATE_NODESCRIPTION)),
+    m_noInstall(DP_RESSTR(RID_DLG_UPDATE_NOINSTALL)),
+    m_noDependency(DP_RESSTR(RID_DLG_UPDATE_NODEPENDENCY)),
+    m_noDependencyCurVer(DP_RESSTR(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER)),
+    m_browserbased(DP_RESSTR(RID_DLG_UPDATE_BROWSERBASED)),
+    m_version(DP_RESSTR(RID_DLG_UPDATE_VERSION)),
+    m_ignoredUpdate(DP_RESSTR(RID_DLG_UPDATE_IGNORED_UPDATE)),
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
@@ -598,9 +598,9 @@ short UpdateDialog::Execute() {
 
 UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & dialog):
     SvxCheckListBox( pParent, WinBits(WB_BORDER) ),
-    m_ignoreUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE ) ),
-    m_ignoreAllUpdates( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE_ALL ) ),
-    m_enableUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_ENABLE ) ),
+    m_ignoreUpdate( DP_RESSTR( RID_DLG_UPDATE_IGNORE ) ),
+    m_ignoreAllUpdates( DP_RESSTR( RID_DLG_UPDATE_IGNORE_ALL ) ),
+    m_enableUpdate( DP_RESSTR( RID_DLG_UPDATE_ENABLE ) ),
     m_dialog(dialog)
 {
     SetNormalStaticImage(Image(BitmapEx(RID_DLG_UPDATE_NORMALALERT)));

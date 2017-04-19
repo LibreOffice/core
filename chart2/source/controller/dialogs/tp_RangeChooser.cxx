@@ -18,7 +18,7 @@
  */
 
 #include "tp_RangeChooser.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ResId.hxx"
 #include "macros.hxx"
 #include "DataSourceHelper.hxx"

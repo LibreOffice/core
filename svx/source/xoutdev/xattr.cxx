@@ -1045,7 +1045,7 @@ bool XLineWidthItem::GetPresentation
 {
     rText = GetMetricText( (long) GetValue(),
                             eCoreUnit, ePresUnit, pIntl) +
-            " " + EditResId::GetString( GetMetricId( ePresUnit) );
+            " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
 
@@ -1936,7 +1936,7 @@ bool XLineStartWidthItem::GetPresentation
 {
     rText = GetMetricText( (long) GetValue(),
                             eCoreUnit, ePresUnit, pIntl) +
-            " " + EditResId::GetString( GetMetricId( ePresUnit) );
+            " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
 
@@ -1984,7 +1984,7 @@ bool XLineEndWidthItem::GetPresentation
 {
     rText = GetMetricText( (long) GetValue(),
                             eCoreUnit, ePresUnit, pIntl) +
-            " " + EditResId::GetString( GetMetricId( ePresUnit) );
+            " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
 

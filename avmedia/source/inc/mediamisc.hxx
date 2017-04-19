@@ -21,10 +21,9 @@
 #define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 
 #include <config_features.h>
+#include <tools/simplerm.hxx>
 
-class ResMgr;
-
-#define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
+#define AVMEDIA_RESID(pId) Translate::get(pId, ::avmedia::GetResLocale())
 
 #define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
 #ifdef _WIN32
@@ -51,7 +50,7 @@ class ResMgr;
 
 namespace avmedia
 {
-    ResMgr* GetResMgr();
+    const std::locale& GetResLocale();
 }
 
 #endif

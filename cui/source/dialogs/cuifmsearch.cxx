@@ -27,7 +27,7 @@
 #include <cuires.hrc>
 #include <svx/fmsrccfg.hxx>
 #include <svx/fmsrcimp.hxx>
-#include "fmsearch.hrc"
+#include "strings.hrc"
 #include "cuifmsearch.hxx"
 #include <svx/srchdlg.hxx>
 #include <svl/cjkoptions.hxx>
@@ -240,14 +240,14 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
 
     // fill the listboxes
     // method of field comparison
-    sal_uInt16 nResIds[] = {
+    const char* aResIds[] = {
         RID_STR_SEARCH_ANYWHERE,
         RID_STR_SEARCH_BEGINNING,
         RID_STR_SEARCH_END,
         RID_STR_SEARCH_WHOLE
     };
-    for (unsigned short nResId : nResIds)
-        m_plbPosition->InsertEntry( OUString( CUI_RES( nResId ) ) );
+    for (auto pResId : aResIds)
+        m_plbPosition->InsertEntry(CUI_RES(pResId));
     m_plbPosition->SelectEntryPos(MATCHING_ANYWHERE);
 
     // the field listbox
@@ -727,10 +727,10 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
         case FmSearchProgress::State::Error:
         case FmSearchProgress::State::NothingFound:
         {
-            sal_uInt16 nErrorId = (FmSearchProgress::State::Error == pProgress->aSearchState)
+            const char* pErrorId = (FmSearchProgress::State::Error == pProgress->aSearchState)
                 ? RID_STR_SEARCH_GENERAL_ERROR
                 : RID_STR_SEARCH_NORECORD;
-            ScopedVclPtrInstance<MessageDialog>(this, CUI_RES(nErrorId))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, CUI_RES(pErrorId))->Execute();
             SAL_FALLTHROUGH;
         }
         case FmSearchProgress::State::Canceled:

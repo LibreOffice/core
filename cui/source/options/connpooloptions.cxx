@@ -25,6 +25,7 @@
 #include <svl/eitem.hxx>
 #include <cuires.hrc>
 #include "helpid.hrc"
+#include <strings.hrc>
 #include <dialmgr.hxx>
 
 using ::svt::EditBrowseBox;

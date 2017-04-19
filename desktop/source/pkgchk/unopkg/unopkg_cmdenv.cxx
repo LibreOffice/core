@@ -18,8 +18,8 @@
  */
 
 
-#include "dp_gui.hrc"
-#include "dp_gui_shared.hxx"
+#include "strings.hrc"
+#include "dp_shared.hxx"
 #include "unopkg_shared.h"
 #include <osl/thread.h>
 #include <tools/resmgr.hxx>
@@ -40,7 +40,8 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
 #include <stdio.h>
-#include "deployment.hrc"
+#include "strings.hrc"
+#include "dp_shared.hxx"
 #include "dp_version.hxx"
 
 using namespace ::com::sun::star;
@@ -136,16 +137,15 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
 void CommandEnvironmentImpl::printLicense(
     const OUString & sName, const OUString& sLicense, bool & accept, bool &decline)
 {
-    ResMgr * pResMgr = DeploymentResMgr::get();
-    OUString s1tmp(ResId(RID_STR_UNOPKG_ACCEPT_LIC_1, *pResMgr).toString());
+    OUString s1tmp(DP_RESSTR(RID_STR_UNOPKG_ACCEPT_LIC_1));
     OUString s1(s1tmp.replaceAll("$NAME", sName));
-    OUString s2 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_2, *pResMgr).toString();
-    OUString s3 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_3, *pResMgr).toString();
-    OUString s4 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_4, *pResMgr).toString();
-    OUString sYES = ResId(RID_STR_UNOPKG_ACCEPT_LIC_YES, *pResMgr).toString();
-    OUString sY = ResId(RID_STR_UNOPKG_ACCEPT_LIC_Y, *pResMgr).toString();
-    OUString sNO = ResId(RID_STR_UNOPKG_ACCEPT_LIC_NO, *pResMgr).toString();
-    OUString sN = ResId(RID_STR_UNOPKG_ACCEPT_LIC_N, *pResMgr).toString();
+    OUString s2 = DP_RESSTR(RID_STR_UNOPKG_ACCEPT_LIC_2);
+    OUString s3 = DP_RESSTR(RID_STR_UNOPKG_ACCEPT_LIC_3);
+    OUString s4 = DP_RESSTR(RID_STR_UNOPKG_ACCEPT_LIC_4);
+    OUString sYES = DP_RESSTR(RID_STR_UNOPKG_ACCEPT_LIC_YES);
+    OUString sY = DP_RESSTR(RID_STR_UNOPKG_ACCEPT_LIC_Y);
+    OUString sNO = DP_RESSTR(RID_STR_UNOPKG_ACCEPT_LIC_NO);
+    OUString sN = DP_RESSTR(RID_STR_UNOPKG_ACCEPT_LIC_N);
 
     OUString sNewLine("\n");
 
@@ -264,7 +264,7 @@ void CommandEnvironmentImpl::handle(
     }
     else if (request >>= platExc)
     {
-        OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *dp_gui::DeploymentGuiResMgr::get()).toString());
+        OUString sMsg(DP_RESSTR(RID_STR_UNSUPPORTED_PLATFORM));
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
         dp_misc::writeConsole("\n" + sMsg + "\n\n");
         approve = true;

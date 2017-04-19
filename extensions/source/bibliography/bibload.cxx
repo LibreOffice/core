@@ -53,7 +53,7 @@
 #include <svtools/svmedit.hxx>
 
 #include "bibresid.hxx"
-#include "bib.hrc"
+#include "strings.hrc"
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
 #include "bibmod.hxx"
@@ -233,7 +233,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
     if(xPrSet.is())
     {
         Any aTitle;
-        aTitle <<= BibResId(RID_BIB_STR_FRAME_TITLE).toString();
+        aTitle <<= BibResId(RID_BIB_STR_FRAME_TITLE);
         xPrSet->setPropertyValue("Title", aTitle);
     }
     if(aPartName == "View" || aPartName == "View1")

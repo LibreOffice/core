@@ -70,7 +70,7 @@
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
 #include "general.hxx"
-#include "bib.hrc"
+#include "strings.hrc"
 #include "bibliography.hrc"
 #include <connectivity/dbtools.hxx>
 #include <memory>
@@ -258,7 +258,7 @@ static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
 MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMan)
     : ModalDialog(pParent, "MappingDialog", "modules/sbibliography/ui/mappingdialog.ui")
     , pDatMan(pMan)
-    , sNone(BIB_RESSTR(RID_BIB_STR_NONE))
+    , sNone(BibResId(RID_BIB_STR_NONE))
     , bModified(false)
 {
     get(pOKBT, "ok");
@@ -1336,28 +1336,28 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
                 uno::Sequence<OUString> aValues(TYPE_COUNT + 1);
                 OUString* pValuesArr = aValues.getArray();
-                pValuesArr[0] = BIB_RESSTR(ST_TYPE_ARTICLE);
-                pValuesArr[1] = BIB_RESSTR(ST_TYPE_BOOK);
-                pValuesArr[2] = BIB_RESSTR(ST_TYPE_BOOKLET);
-                pValuesArr[3] = BIB_RESSTR(ST_TYPE_CONFERENCE);
-                pValuesArr[4] = BIB_RESSTR(ST_TYPE_INBOOK );
-                pValuesArr[5] = BIB_RESSTR(ST_TYPE_INCOLLECTION);
-                pValuesArr[6] = BIB_RESSTR(ST_TYPE_INPROCEEDINGS);
-                pValuesArr[7] = BIB_RESSTR(ST_TYPE_JOURNAL       );
-                pValuesArr[8] = BIB_RESSTR(ST_TYPE_MANUAL    );
-                pValuesArr[9] = BIB_RESSTR(ST_TYPE_MASTERSTHESIS);
-                pValuesArr[10] = BIB_RESSTR(ST_TYPE_MISC      );
-                pValuesArr[11] = BIB_RESSTR(ST_TYPE_PHDTHESIS );
-                pValuesArr[12] = BIB_RESSTR(ST_TYPE_PROCEEDINGS   );
-                pValuesArr[13] = BIB_RESSTR(ST_TYPE_TECHREPORT    );
-                pValuesArr[14] = BIB_RESSTR(ST_TYPE_UNPUBLISHED   );
-                pValuesArr[15] = BIB_RESSTR(ST_TYPE_EMAIL     );
-                pValuesArr[16] = BIB_RESSTR(ST_TYPE_WWW           );
-                pValuesArr[17] = BIB_RESSTR(ST_TYPE_CUSTOM1       );
-                pValuesArr[18] = BIB_RESSTR(ST_TYPE_CUSTOM2       );
-                pValuesArr[19] = BIB_RESSTR(ST_TYPE_CUSTOM3       );
-                pValuesArr[20] = BIB_RESSTR(ST_TYPE_CUSTOM4       );
-                pValuesArr[21] = BIB_RESSTR(ST_TYPE_CUSTOM5       );
+                pValuesArr[0] = BibResId(ST_TYPE_ARTICLE);
+                pValuesArr[1] = BibResId(ST_TYPE_BOOK);
+                pValuesArr[2] = BibResId(ST_TYPE_BOOKLET);
+                pValuesArr[3] = BibResId(ST_TYPE_CONFERENCE);
+                pValuesArr[4] = BibResId(ST_TYPE_INBOOK );
+                pValuesArr[5] = BibResId(ST_TYPE_INCOLLECTION);
+                pValuesArr[6] = BibResId(ST_TYPE_INPROCEEDINGS);
+                pValuesArr[7] = BibResId(ST_TYPE_JOURNAL       );
+                pValuesArr[8] = BibResId(ST_TYPE_MANUAL    );
+                pValuesArr[9] = BibResId(ST_TYPE_MASTERSTHESIS);
+                pValuesArr[10] = BibResId(ST_TYPE_MISC      );
+                pValuesArr[11] = BibResId(ST_TYPE_PHDTHESIS );
+                pValuesArr[12] = BibResId(ST_TYPE_PROCEEDINGS   );
+                pValuesArr[13] = BibResId(ST_TYPE_TECHREPORT    );
+                pValuesArr[14] = BibResId(ST_TYPE_UNPUBLISHED   );
+                pValuesArr[15] = BibResId(ST_TYPE_EMAIL     );
+                pValuesArr[16] = BibResId(ST_TYPE_WWW           );
+                pValuesArr[17] = BibResId(ST_TYPE_CUSTOM1       );
+                pValuesArr[18] = BibResId(ST_TYPE_CUSTOM2       );
+                pValuesArr[19] = BibResId(ST_TYPE_CUSTOM3       );
+                pValuesArr[20] = BibResId(ST_TYPE_CUSTOM4       );
+                pValuesArr[21] = BibResId(ST_TYPE_CUSTOM5       );
                 // empty string if an invalid value no values is set
                 pValuesArr[TYPE_COUNT].clear();
 

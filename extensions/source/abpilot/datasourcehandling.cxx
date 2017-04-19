@@ -18,7 +18,7 @@
  */
 
 
-#include "abpresid.hrc"
+#include "strings.hrc"
 #include "abptypes.hxx"
 #include "componentmodule.hxx"
 #include "datasourcehandling.hxx"
@@ -584,8 +584,8 @@ namespace abp
                   {
                     // prepend some context info
                     SQLContext aDetailedError;
-                    aDetailedError.Message = ModuleRes(RID_STR_NOCONNECTION).toString();
-                    aDetailedError.Details = ModuleRes(RID_STR_PLEASECHECKSETTINGS).toString();
+                    aDetailedError.Message = ModuleRes(RID_STR_NOCONNECTION);
+                    aDetailedError.Details = ModuleRes(RID_STR_PLEASECHECKSETTINGS);
                     aDetailedError.NextException = aError;
                     // handle (aka display) the new context info
                     xInteractions->handle( new OInteractionRequest( makeAny( aDetailedError ) ) );

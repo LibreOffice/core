@@ -25,6 +25,7 @@
 #include <sfx2/module.hxx>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <svx/colorbox.hxx>
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
