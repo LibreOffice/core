@@ -29,6 +29,10 @@ from com.sun.star.frame import TerminationVetoException
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
 from com.sun.star.awt.FontWeight import BOLD
 
+import imp, os
+imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+import strings
+
 class WizardDialog(UnoDialog2):
 
     __metaclass__ = ABCMeta
@@ -162,7 +166,7 @@ class WizardDialog(UnoDialog2):
                 ItemListenerProcAdapter(method))
 
             self.oRoadmap.Text = \
-                self.oWizardResource.getResText(UIConsts.RID_COMMON + 16)
+                self.oWizardResource.getResText(strings.RID_COMMON_16)
         except NoSuchMethodException:
             Resource.showCommonResourceError(xMSF)
         except Exception:
@@ -272,26 +276,26 @@ class WizardDialog(UnoDialog2):
                     PropertyNames.PROPERTY_TABINDEX,
                     PropertyNames.PROPERTY_WIDTH),
                 (True, iButtonHeight,
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 15),
+                    self.oWizardResource.getResText(strings.RID_COMMON_15),
                     iHelpPosX, iBtnPosY,
                     uno.Any("short",HELP), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardBack",
                 WizardDialog.__BACK_ACTION_PERFORMED, propNames,
                 (False, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 2),
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 13),
+                    self.oWizardResource.getResText(strings.RID_COMMON_13),
                     iBackPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardNext",
                 WizardDialog.__NEXT_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 3),
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 14),
+                    self.oWizardResource.getResText(strings.RID_COMMON_14),
                     iNextPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardFinish",
                 WizardDialog.__FINISH_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 4),
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 12),
+                    self.oWizardResource.getResText(strings.RID_COMMON_12),
                         iFinishPosX, iBtnPosY, uno.Any("short",STANDARD),
                         iCurStep,
                         uno.Any("short",(curtabindex + 1)),
@@ -299,7 +303,7 @@ class WizardDialog(UnoDialog2):
             self.insertButton("btnWizardCancel",
                 WizardDialog.__CANCEL_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 5),
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 11),
+                    self.oWizardResource.getResText(strings.RID_COMMON_11),
                     iCancelPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)),
                     iButtonWidth), self)

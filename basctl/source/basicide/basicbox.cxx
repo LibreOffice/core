@@ -25,7 +25,6 @@
 
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
-#include "dlgresid.hrc"
 
 #include <sfx2/dispatch.hxx>
 #include <svtools/langtab.hxx>

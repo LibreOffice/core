@@ -18,7 +18,7 @@
  */
 
 #include "tp_Wizard_TitlesAndObjects.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "res_Titles.hxx"
 #include "res_LegendPosition.hxx"
 #include "ResId.hxx"

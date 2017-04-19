@@ -20,13 +20,16 @@ class AgendaWizardDialogResources(object):
 
     RID_AGENDAWIZARDDIALOG_START = 5000
     RID_AGENDAWIZARDROADMAP_START = 5049
-    RID_COMMON_START = 500
     SECTION_ITEMS = "AGENDA_ITEMS"
     SECTION_TOPICS = "AGENDA_TOPICS"
     SECTION_MINUTES_ALL = "MINUTES_ALL"
     SECTION_MINUTES = "MINUTES"
 
     def __init__(self, oWizardResource):
+        import imp, os
+        imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+        import strings
+
         self.resAgendaWizardDialog_title = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 1)
         self.resoptMakeChanges_value = oWizardResource.getResText(
@@ -212,10 +215,8 @@ class AgendaWizardDialogResources(object):
                 AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 96)}
 
         #Common Resources
-        self.resOverwriteWarning = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_COMMON_START + 19)
-        self.resTemplateDescription = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_COMMON_START + 20)
+        self.resOverwriteWarning = strings.RID_COMMON_START_19
+        self.resTemplateDescription = strings.RID_COMMON_START_20
 
         self.RoadmapLabels = []
         self.RoadmapLabels.append(oWizardResource.getResText(AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 1))

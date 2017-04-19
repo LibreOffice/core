@@ -20,13 +20,13 @@
 #include <config_features.h>
 
 #include "apitools.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "databasecontext.hxx"
 #include "databasedocument.hxx"
 #include "databaseregistrations.hxx"
 #include "datasource.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

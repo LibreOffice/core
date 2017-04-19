@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 
 #include "kfields.hxx"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
 
 using namespace ::connectivity::kab;
