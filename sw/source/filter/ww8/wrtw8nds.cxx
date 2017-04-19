@@ -805,11 +805,8 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
      other, so we make a guess based upon the first character of the text,
      defaulting to asian.
      */
-    sal_uInt16 nRubyScript;
-    if( g_pBreakIt->GetBreakIter().is() )
-        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
-    else
-        nRubyScript = i18n::ScriptType::ASIAN;
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+    sal_uInt16 nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
 
     const SwTextRuby* pRubyText = rRuby.GetTextRuby();
     const SwCharFormat* pFormat = pRubyText ? pRubyText->GetCharFormat() : nullptr;
@@ -853,11 +850,9 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
     }
     aStr += "(\\s\\up ";
 
-    if ( g_pBreakIt->GetBreakIter().is() )
-        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rNode.GetText(),
-                pRubyText->GetStart() );
-    else
-        nRubyScript = i18n::ScriptType::ASIAN;
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+    nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rNode.GetText(),
+            pRubyText->GetStart() );
 
     const SwAttrSet& rSet = rNode.GetSwAttrSet();
     const SvxFontHeightItem &rHeightItem  =
@@ -1652,9 +1647,8 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
 
     if (SvxCaseMap::Capitalize == static_cast<const SvxCaseMapItem&>(rItem).GetValue())
     {
-        sal_uInt16 nScriptType = i18n::ScriptType::LATIN;
-        if (g_pBreakIt->GetBreakIter().is())
-            nScriptType = g_pBreakIt->GetBreakIter()->getScriptType(aSnippet, 0);
+        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+        sal_uInt16 nScriptType = g_pBreakIt->GetBreakIter()->getScriptType(aSnippet, 0);
 
         LanguageType nLanguage;
         switch (nScriptType)
@@ -1679,7 +1673,7 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
         //If we weren't at the begin of a word undo the case change.
         //not done before doing the casemap because the sequence might start
         //with whitespace
-        if (g_pBreakIt->GetBreakIter().is() && !g_pBreakIt->GetBreakIter()->isBeginWord(
+        if (!g_pBreakIt->GetBreakIter()->isBeginWord(
             rStr, nAktPos, g_pBreakIt->GetLocale(nLanguage),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {

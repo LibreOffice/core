@@ -3195,11 +3195,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
         return;
 
     uno::Reference<i18n::XBreakIterator> xBI(g_pBreakIt->GetBreakIter());
-    if (!xBI.is())
-    {
-        simpleAddTextToParagraph(rAddString);
-        return;
-    }
+    assert(xBI.is());
 
     sal_Int16 nScript = lcl_getScriptType(xBI, rAddString, 0);
     sal_Int32 nLen = rAddString.getLength();

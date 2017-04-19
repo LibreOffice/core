@@ -533,7 +533,8 @@ namespace sw
             using namespace ::com::sun::star::i18n;
 
             sal_uInt16 nScript = i18n::ScriptType::LATIN;
-            if (!rText.isEmpty() && g_pBreakIt && g_pBreakIt->GetBreakIter().is())
+            assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+            if (!rText.isEmpty())
                 nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, 0);
 
             rtl_TextEncoding eChrSet = ItemGet<SvxFontItem>(rTextNd,
@@ -591,21 +592,19 @@ namespace sw
             }
             ubidi_close(pBidi);
 
+            assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
-            if (g_pBreakIt && g_pBreakIt->GetBreakIter().is())
+            sal_Int32 nLen = rText.getLength();
+            sal_Int32 nPos = 0;
+            while (nPos < nLen)
             {
-                sal_Int32 nLen = rText.getLength();
-                sal_Int32 nPos = 0;
-                while (nPos < nLen)
-                {
-                    sal_Int32 nEnd2 = g_pBreakIt->GetBreakIter()->endOfScript(rText, nPos,
-                        nScript);
-                    if (nEnd2 < 0)
-                        break;
-                    nPos = nEnd2;
-                    aScripts.push_back(ScriptEntry(nPos, nScript));
-                    nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, nPos);
-                }
+                sal_Int32 nEnd2 = g_pBreakIt->GetBreakIter()->endOfScript(rText, nPos,
+                    nScript);
+                if (nEnd2 < 0)
+                    break;
+                nPos = nEnd2;
+                aScripts.push_back(ScriptEntry(nPos, nScript));
+                nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, nPos);
             }
 
             cDirIter aBiDiEnd = aDirChanges.end();

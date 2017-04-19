@@ -475,47 +475,37 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
     if( m_pSentences == nullptr )
     {
-        OSL_ENSURE( g_pBreakIt != nullptr, "We always need a break." );
-        OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
-        if( g_pBreakIt->GetBreakIter().is() )
+        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+
+        m_pSentences.reset( new Positions_t );
+        m_pSentences->reserve(10);
+
+        // use xBreak->endOfSentence to iterate over all words; store
+        // positions in pSentences
+        sal_Int32 nCurrent = 0;
+        sal_Int32 nLength = m_sAccessibleString.getLength();
+        do
         {
-            m_pSentences.reset( new Positions_t );
-            m_pSentences->reserve(10);
+            m_pSentences->push_back( nCurrent );
 
-            // use xBreak->endOfSentence to iterate over all words; store
-            // positions in pSentences
-            sal_Int32 nCurrent = 0;
-            sal_Int32 nLength = m_sAccessibleString.getLength();
-            do
-            {
-                m_pSentences->push_back( nCurrent );
+            const sal_Int32 nModelPos = GetModelPosition( nCurrent );
 
-                const sal_Int32 nModelPos = GetModelPosition( nCurrent );
+            sal_Int32 nNew = g_pBreakIt->GetBreakIter()->endOfSentence(
+                m_sAccessibleString, nCurrent,
+                g_pBreakIt->GetLocale(m_pTextNode->GetLang(nModelPos)) ) + 1;
 
-                sal_Int32 nNew = g_pBreakIt->GetBreakIter()->endOfSentence(
-                    m_sAccessibleString, nCurrent,
-                    g_pBreakIt->GetLocale(m_pTextNode->GetLang(nModelPos)) ) + 1;
+            if( (nNew < 0) && (nNew > nLength) )
+                nNew = nLength;
+            else if (nNew <= nCurrent)
+                nNew = nCurrent + 1;   // ensure forward progress
 
-                if( (nNew < 0) && (nNew > nLength) )
-                    nNew = nLength;
-                else if (nNew <= nCurrent)
-                    nNew = nCurrent + 1;   // ensure forward progress
-
-                nCurrent = nNew;
-            }
-            while (nCurrent < nLength);
-
-            // finish with two terminators
-            m_pSentences->push_back( nLength );
-            m_pSentences->push_back( nLength );
+            nCurrent = nNew;
         }
-        else
-        {
-            // no break iterator -> empty word
-            rBound.startPos = 0;
-            rBound.endPos = 0;
-            return;
-        }
+        while (nCurrent < nLength);
+
+        // finish with two terminators
+        m_pSentences->push_back( nLength );
+        m_pSentences->push_back( nLength );
     }
 
     FillBoundary( rBound, *m_pSentences, FindBreak( *m_pSentences, nPos ) );

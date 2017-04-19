@@ -194,7 +194,7 @@ SwFieldSlot::~SwFieldSlot()
 void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
 {
     OUString aText;
-    if( GetExpText( rInf, aText ) && !aText.isEmpty() && g_pBreakIt->GetBreakIter().is() )
+    if (GetExpText(rInf, aText) && !aText.isEmpty())
     {
         SwFontScript nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, 0 );
@@ -1074,24 +1074,19 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
 
     // Initialization of the scripttype array,
     // the arrays of width and position are filled by the format function
-    if( g_pBreakIt->GetBreakIter().is() )
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+
+    SwFontScript nScr = SW_SCRIPTS;
+    for( sal_Int32 i = 0; i < rText.getLength(); ++i )
     {
-        SwFontScript nScr = SW_SCRIPTS;
-        for( sal_Int32 i = 0; i < rText.getLength(); ++i )
-        {
-            switch ( g_pBreakIt->GetBreakIter()->getScriptType( rText, i ) ) {
-                case i18n::ScriptType::LATIN : nScr = SwFontScript::Latin; break;
-                case i18n::ScriptType::ASIAN : nScr = SwFontScript::CJK; break;
-                case i18n::ScriptType::COMPLEX : nScr = SwFontScript::CTL; break;
-            }
-            aScrType[i] = nScr;
+        switch ( g_pBreakIt->GetBreakIter()->getScriptType( rText, i ) ) {
+            case i18n::ScriptType::LATIN : nScr = SwFontScript::Latin; break;
+            case i18n::ScriptType::ASIAN : nScr = SwFontScript::CJK; break;
+            case i18n::ScriptType::COMPLEX : nScr = SwFontScript::CTL; break;
         }
+        aScrType[i] = nScr;
     }
-    else
-    {
-        for(SwFontScript & rn : aScrType)
-            rn = SwFontScript::Latin;
-    }
+
     memset( &aWidth, 0, sizeof(aWidth) );
 }
 

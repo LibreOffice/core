@@ -296,7 +296,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt1
         {
             rPam.SetMark();
             bAlphaNum = bIsAlphaNum;
-            if( bChkNxtWrd && g_pBreakIt->GetBreakIter().is() )
+            if (bChkNxtWrd)
             {
                 // search the end of this word
                 nWordEnd = g_pBreakIt->GetBreakIter()->getWordBoundary(

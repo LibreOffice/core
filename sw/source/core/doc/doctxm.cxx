@@ -1160,12 +1160,8 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 if(TOX_INDEX == eTOXTyp)
                 {
                     // index entry mark
-                    lang::Locale aLocale;
-                    if ( g_pBreakIt->GetBreakIter().is() )
-                    {
-                        aLocale = g_pBreakIt->GetLocale(
-                                        pTOXSrc->GetLang( pTextMark->GetStart() ) );
-                    }
+                    assert(g_pBreakIt);
+                    lang::Locale aLocale = g_pBreakIt->GetLocale(pTOXSrc->GetLang(pTextMark->GetStart()));
 
                     pBase = new SwTOXIndex( *pTOXSrc, pTextMark,
                                             GetOptions(), FORM_ENTRY, rIntl, aLocale );

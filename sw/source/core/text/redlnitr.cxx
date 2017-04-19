@@ -89,41 +89,35 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     if ( m_pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
          m_pScriptInfo->InitScriptInfo( rTextNode, bRTL );
 
-    if ( g_pBreakIt->GetBreakIter().is() )
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+
+    m_pFont->SetActual( SwScriptInfo::WhichFont( 0, nullptr, m_pScriptInfo ) );
+
+    sal_Int32 nChg = 0;
+    size_t nCnt = 0;
+
+    do
     {
-        m_pFont->SetActual( SwScriptInfo::WhichFont( 0, nullptr, m_pScriptInfo ) );
-
-        sal_Int32 nChg = 0;
-        size_t nCnt = 0;
-
-        do
-        {
-            if ( nCnt >= m_pScriptInfo->CountScriptChg() )
+        if ( nCnt >= m_pScriptInfo->CountScriptChg() )
+            break;
+        nChg = m_pScriptInfo->GetScriptChg( nCnt );
+        SwFontScript nTmp = SW_SCRIPTS;
+        switch ( m_pScriptInfo->GetScriptType( nCnt++ ) ) {
+            case i18n::ScriptType::ASIAN :
+                if( !m_aMagicNo[SwFontScript::CJK] ) nTmp = SwFontScript::CJK;
                 break;
-            nChg = m_pScriptInfo->GetScriptChg( nCnt );
-            SwFontScript nTmp = SW_SCRIPTS;
-            switch ( m_pScriptInfo->GetScriptType( nCnt++ ) ) {
-                case i18n::ScriptType::ASIAN :
-                    if( !m_aMagicNo[SwFontScript::CJK] ) nTmp = SwFontScript::CJK;
-                    break;
-                case i18n::ScriptType::COMPLEX :
-                    if( !m_aMagicNo[SwFontScript::CTL] ) nTmp = SwFontScript::CTL;
-                    break;
-                default:
-                    if( !m_aMagicNo[SwFontScript::Latin ] ) nTmp = SwFontScript::Latin;
-            }
-            if( nTmp < SW_SCRIPTS )
-            {
-                m_pFont->ChkMagic( m_pViewShell, nTmp );
-                m_pFont->GetMagic( m_aMagicNo[ nTmp ], m_aFontIdx[ nTmp ], nTmp );
-            }
-        } while (nChg < rTextNode.GetText().getLength());
-    }
-    else
-    {
-        m_pFont->ChkMagic( m_pViewShell, SwFontScript::Latin );
-        m_pFont->GetMagic( m_aMagicNo[ SwFontScript::Latin ], m_aFontIdx[ SwFontScript::Latin ], SwFontScript::Latin );
-    }
+            case i18n::ScriptType::COMPLEX :
+                if( !m_aMagicNo[SwFontScript::CTL] ) nTmp = SwFontScript::CTL;
+                break;
+            default:
+                if( !m_aMagicNo[SwFontScript::Latin ] ) nTmp = SwFontScript::Latin;
+        }
+        if( nTmp < SW_SCRIPTS )
+        {
+            m_pFont->ChkMagic( m_pViewShell, nTmp );
+            m_pFont->GetMagic( m_aMagicNo[ nTmp ], m_aFontIdx[ nTmp ], nTmp );
+        }
+    } while (nChg < rTextNode.GetText().getLength());
 
     m_nStartIndex = m_nEndIndex = m_nPosition = m_nChgCnt = 0;
     m_nPropFont = 0;

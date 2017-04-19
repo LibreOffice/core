@@ -1086,10 +1086,8 @@ void MSWord_SdrAttrIter::NextPara( sal_Int32 nPar )
     pEditPool = aSet.GetPool();
     eNdChrSet = ItemGet<SvxFontItem>(aSet,EE_CHAR_FONTINFO).GetCharSet();
 
-    if( g_pBreakIt->GetBreakIter().is() )
-        nScript = g_pBreakIt->GetBreakIter()->getScriptType( pEditObj->GetText(nPara), 0);
-    else
-        nScript = i18n::ScriptType::LATIN;
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+    nScript = g_pBreakIt->GetBreakIter()->getScriptType( pEditObj->GetText(nPara), 0);
 
     pEditObj->GetCharAttribs( nPara, aTextAtrArr );
     nAktSwPos = SearchNext( 1 );

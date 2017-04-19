@@ -75,7 +75,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
     // first we get the script type
     if ( pSI )
         nScript = pSI->ScriptType( nPos );
-    else if ( g_pBreakIt->GetBreakIter().is() )
+    else
         nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos );
 
     // Note: rInf.GetIdx() can differ from nPos,
@@ -177,7 +177,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
         if ( pPor && pPor->IsKernPortion() )
             pPor = pPor->GetPortion();
 
-        if ( ! g_pBreakIt->GetBreakIter().is() || ! pPor || pPor->InFixMargGrp() )
+        if (!pPor || pPor->InFixMargGrp())
             return nCnt;
 
         // next character is inside a field?

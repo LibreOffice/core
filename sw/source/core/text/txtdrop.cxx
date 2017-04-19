@@ -127,7 +127,7 @@ sal_Int32 SwTextNode::GetDropLen( sal_Int32 nWishLen ) const
     if( nWishLen && nWishLen < nEnd )
         nEnd = nWishLen;
 
-    if ( ! nWishLen && g_pBreakIt->GetBreakIter().is() )
+    if (! nWishLen)
     {
         // find first word
         const SwAttrSet& rAttrSet = GetSwAttrSet();

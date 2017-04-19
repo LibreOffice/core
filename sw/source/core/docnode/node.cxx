@@ -1186,33 +1186,27 @@ bool SwContentNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
         {
             const SwTextNode& rTNd = *GetTextNode();
             sal_Int32 nPos = pIdx->GetIndex();
-            if( g_pBreakIt->GetBreakIter().is() )
+            assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+            sal_Int32 nDone = 0;
+            sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
+                                    CharacterIteratorMode::SKIPCELL :
+                                    CharacterIteratorMode::SKIPCONTROLCHARACTER;
+            nPos = g_pBreakIt->GetBreakIter()->nextCharacters( rTNd.GetText(), nPos,
+                               g_pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
+                               nItrMode, 1, nDone );
+
+            // Check if nPos is inside hidden text range:
+            if ( CRSR_SKIP_HIDDEN & nMode )
             {
-                sal_Int32 nDone = 0;
-                sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
-                                        CharacterIteratorMode::SKIPCELL :
-                                        CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = g_pBreakIt->GetBreakIter()->nextCharacters( rTNd.GetText(), nPos,
-                                   g_pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
-                                   nItrMode, 1, nDone );
-
-                // Check if nPos is inside hidden text range:
-                if ( CRSR_SKIP_HIDDEN & nMode )
-                {
-                    sal_Int32 nHiddenStart;
-                    sal_Int32 nHiddenEnd;
-                    SwScriptInfo::GetBoundsOfHiddenRange( rTNd, nPos, nHiddenStart, nHiddenEnd );
-                    if ( nHiddenStart != COMPLETE_STRING && nHiddenStart != nPos )
-                         nPos = nHiddenEnd;
-                }
-
-                if( 1 == nDone )
-                    *pIdx = nPos;
-                else
-                    bRet = false;
+                sal_Int32 nHiddenStart;
+                sal_Int32 nHiddenEnd;
+                SwScriptInfo::GetBoundsOfHiddenRange( rTNd, nPos, nHiddenStart, nHiddenEnd );
+                if ( nHiddenStart != COMPLETE_STRING && nHiddenStart != nPos )
+                     nPos = nHiddenEnd;
             }
-            else if (nPos < rTNd.GetText().getLength())
-                ++(*pIdx);
+
+            if( 1 == nDone )
+                *pIdx = nPos;
             else
                 bRet = false;
         }
@@ -1233,33 +1227,27 @@ bool SwContentNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
         {
             const SwTextNode& rTNd = *GetTextNode();
             sal_Int32 nPos = pIdx->GetIndex();
-            if( g_pBreakIt->GetBreakIter().is() )
+            assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+            sal_Int32 nDone = 0;
+            sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
+                                    CharacterIteratorMode::SKIPCELL :
+                                    CharacterIteratorMode::SKIPCONTROLCHARACTER;
+            nPos = g_pBreakIt->GetBreakIter()->previousCharacters( rTNd.GetText(), nPos,
+                               g_pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
+                               nItrMode, 1, nDone );
+
+            // Check if nPos is inside hidden text range:
+            if ( CRSR_SKIP_HIDDEN & nMode )
             {
-                sal_Int32 nDone = 0;
-                sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
-                                        CharacterIteratorMode::SKIPCELL :
-                                        CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = g_pBreakIt->GetBreakIter()->previousCharacters( rTNd.GetText(), nPos,
-                                   g_pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
-                                   nItrMode, 1, nDone );
-
-                // Check if nPos is inside hidden text range:
-                if ( CRSR_SKIP_HIDDEN & nMode )
-                {
-                    sal_Int32 nHiddenStart;
-                    sal_Int32 nHiddenEnd;
-                    SwScriptInfo::GetBoundsOfHiddenRange( rTNd, nPos, nHiddenStart, nHiddenEnd );
-                    if ( nHiddenStart != COMPLETE_STRING )
-                         nPos = nHiddenStart;
-                }
-
-                if( 1 == nDone )
-                    *pIdx = nPos;
-                else
-                    bRet = false;
+                sal_Int32 nHiddenStart;
+                sal_Int32 nHiddenEnd;
+                SwScriptInfo::GetBoundsOfHiddenRange( rTNd, nPos, nHiddenStart, nHiddenEnd );
+                if ( nHiddenStart != COMPLETE_STRING )
+                     nPos = nHiddenStart;
             }
-            else if( nPos )
-                --(*pIdx);
+
+            if( 1 == nDone )
+                *pIdx = nPos;
             else
                 bRet = false;
         }

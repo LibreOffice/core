@@ -743,38 +743,23 @@ bool SwAccessibleParagraph::GetWordBoundary(
     const OUString& rText,
     sal_Int32 nPos )
 {
-    bool bRet = false;
-
     // now ask the Break-Iterator for the word
-    OSL_ENSURE( g_pBreakIt != nullptr, "We always need a break." );
-    OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
-    if( g_pBreakIt->GetBreakIter().is() )
-    {
-        // get locale for this position
-        const sal_Int32 nModelPos = GetPortionData().GetModelPosition( nPos );
-        lang::Locale aLocale = g_pBreakIt->GetLocale(
-                              GetTextNode()->GetLang( nModelPos ) );
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
-        // which type of word are we interested in?
-        // (DICTIONARY_WORD includes punctuation, ANY_WORD doesn't.)
-        const sal_Int16 nWordType = i18n::WordType::ANY_WORD;
+    // get locale for this position
+    const sal_Int32 nModelPos = GetPortionData().GetModelPosition( nPos );
+    lang::Locale aLocale = g_pBreakIt->GetLocale(
+                          GetTextNode()->GetLang( nModelPos ) );
 
-        // get word boundary, as the Break-Iterator sees fit.
-        rBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
-            rText, nPos, aLocale, nWordType, true );
+    // which type of word are we interested in?
+    // (DICTIONARY_WORD includes punctuation, ANY_WORD doesn't.)
+    const sal_Int16 nWordType = i18n::WordType::ANY_WORD;
 
-        // If we have a break-iterator let's trust that it
-        // does the right thing.
-        bRet = true;
-    }
-    else
-    {
-        // no break Iterator -> no word
-        rBound.startPos = nPos;
-        rBound.endPos = nPos;
-    }
+    // get word boundary, as the Break-Iterator sees fit.
+    rBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
+        rText, nPos, aLocale, nWordType, true );
 
-    return bRet;
+    return true;
 }
 
 bool SwAccessibleParagraph::GetSentenceBoundary(
@@ -829,36 +814,25 @@ bool SwAccessibleParagraph::GetGlyphBoundary(
     const OUString& rText,
     sal_Int32 nPos )
 {
-    bool bRet = false;
-
     // ask the Break-Iterator for the glyph by moving one cell
     // forward, and then one cell back
-    OSL_ENSURE( g_pBreakIt != nullptr, "We always need a break." );
-    OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
-    if( g_pBreakIt->GetBreakIter().is() )
-    {
-        // get locale for this position
-        const sal_Int32 nModelPos = GetPortionData().GetModelPosition( nPos );
-        lang::Locale aLocale = g_pBreakIt->GetLocale(
-                              GetTextNode()->GetLang( nModelPos ) );
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
-        // get word boundary, as the Break-Iterator sees fit.
-        const sal_Int16 nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
-        sal_Int32 nDone = 0;
-        rBound.endPos = g_pBreakIt->GetBreakIter()->nextCharacters(
-             rText, nPos, aLocale, nIterMode, 1, nDone );
-        rBound.startPos = g_pBreakIt->GetBreakIter()->previousCharacters(
-             rText, rBound.endPos, aLocale, nIterMode, 1, nDone );
-        bRet = ((rBound.startPos <= nPos) && (nPos <= rBound.endPos));
-        OSL_ENSURE( rBound.startPos <= nPos, "start pos too high" );
-        OSL_ENSURE( rBound.endPos >= nPos, "end pos too low" );
-    }
-    else
-    {
-        // no break Iterator -> no glyph
-        rBound.startPos = nPos;
-        rBound.endPos = nPos;
-    }
+    // get locale for this position
+    const sal_Int32 nModelPos = GetPortionData().GetModelPosition( nPos );
+    lang::Locale aLocale = g_pBreakIt->GetLocale(
+                          GetTextNode()->GetLang( nModelPos ) );
+
+    // get word boundary, as the Break-Iterator sees fit.
+    const sal_Int16 nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
+    sal_Int32 nDone = 0;
+    rBound.endPos = g_pBreakIt->GetBreakIter()->nextCharacters(
+         rText, nPos, aLocale, nIterMode, 1, nDone );
+    rBound.startPos = g_pBreakIt->GetBreakIter()->previousCharacters(
+         rText, rBound.endPos, aLocale, nIterMode, 1, nDone );
+    bool bRet = ((rBound.startPos <= nPos) && (nPos <= rBound.endPos));
+    OSL_ENSURE( rBound.startPos <= nPos, "start pos too high" );
+    OSL_ENSURE( rBound.endPos >= nPos, "end pos too low" );
 
     return bRet;
 }
@@ -880,7 +854,7 @@ bool SwAccessibleParagraph::GetTextBoundary(
     switch( nTextType )
     {
         case AccessibleTextType::WORD:
-            bRet = GetWordBoundary( rBound, rText, nPos );
+            bRet = GetWordBoundary(rBound, rText, nPos);
             break;
 
         case AccessibleTextType::SENTENCE:

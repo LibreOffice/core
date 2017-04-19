@@ -748,15 +748,13 @@ bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const Sw
 
     SwBreakIt *pBreakIter = SwBreakIt::Get();
     uno::Reference < i18n::XBreakIterator > xBI = pBreakIter->GetBreakIter();
+    assert(xBI.is());
     long nCTLScriptPos = -1;
 
-    if (xBI.is())
-    {
-        if (xBI->getScriptType( rText, 0 ) == i18n::ScriptType::COMPLEX)
-            nCTLScriptPos = 0;
-        else
-            nCTLScriptPos = xBI->nextScript( rText, 0, i18n::ScriptType::COMPLEX );
-    }
+    if (xBI->getScriptType( rText, 0 ) == i18n::ScriptType::COMPLEX)
+        nCTLScriptPos = 0;
+    else
+        nCTLScriptPos = xBI->nextScript( rText, 0, i18n::ScriptType::COMPLEX );
 
     return (0 <= nCTLScriptPos && nCTLScriptPos <= rText.getLength());
 }

@@ -472,11 +472,8 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
      other, so we make a guess based upon the first character of the text,
      defaulting to asian.
      */
-    sal_uInt16 nRubyScript;
-    if (g_pBreakIt->GetBreakIter().is())
-        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rRuby.GetText(), 0);
-    else
-        nRubyScript = i18n::ScriptType::ASIAN;
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+    sal_uInt16 nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rRuby.GetText(), 0);
 
     const SwTextRuby* pRubyText = rRuby.GetTextRuby();
     const SwCharFormat* pFormat = pRubyText ? pRubyText->GetCharFormat() : nullptr;
@@ -516,7 +513,7 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     }
     aStr += "(\\s\\up ";
 
-    if (g_pBreakIt->GetBreakIter().is() && pRubyText)
+    if (pRubyText)
         nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rNode.GetText(),
                       pRubyText->GetStart());
     else

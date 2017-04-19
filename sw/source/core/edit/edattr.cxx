@@ -677,7 +677,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
-            else if ( g_pBreakIt->GetBreakIter().is() )
+            else
             {
                 sal_uLong nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
