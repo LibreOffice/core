@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #define UNICODE
 #include "ddeimp.hxx"
 #include <algorithm>
+#include <memory>
 #include <comphelper/string.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/svdde.hxx>
@@ -111,9 +111,9 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             if( !nTopics )
                 return nullptr;
 
-            HSZPAIR* pPairs = new HSZPAIR [nTopics + 1];
+            auto pPairs = std::unique_ptr<HSZPAIR[]>(new HSZPAIR [nTopics + 1]);
 
-            HSZPAIR* q = pPairs;
+            HSZPAIR* q = pPairs.get();
             for (DdeServices::iterator aI = rAll.begin(); aI != rAll.end(); ++aI)
             {
                 pService = *aI;
@@ -143,10 +143,10 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             q->hszSvc   = nullptr;
             q->hszTopic = nullptr;
             HDDEDATA h = DdeCreateDataHandle(
-                            pInst->hDdeInstSvr, reinterpret_cast<LPBYTE>(pPairs),
+                            pInst->hDdeInstSvr,
+                            reinterpret_cast<LPBYTE>(pPairs.get()),
                             sizeof(HSZPAIR) * (nTopics+1),
                             0, nullptr, nCbType, 0);
-            delete [] pPairs;
             return h;
         }
 
