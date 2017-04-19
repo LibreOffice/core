@@ -25,7 +25,7 @@
 #include "formmetadata.hxx"
 #include "xsddatatypes.hxx"
 #include "modulepcr.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "propctrlr.hrc"
 #include "newdatatype.hxx"
 #include "xsdvalidationhelper.hxx"
@@ -523,7 +523,7 @@ namespace pcr
         }
 
         // confirmation message
-        OUString sConfirmation( PcrRes( RID_STR_CONFIRM_DELETE_DATA_TYPE ).toString() );
+        OUString sConfirmation( PcrRes( RID_STR_CONFIRM_DELETE_DATA_TYPE ) );
         sConfirmation = sConfirmation.replaceFirst( "#type#", pType->getName() );
         ScopedVclPtrInstance<QueryBox> aQuery( nullptr, WB_YES_NO, sConfirmation ); // TODO/eForms: proper parent
         if ( aQuery->Execute() != RET_YES )

@@ -21,9 +21,9 @@
 
 #include "TableDeco.hxx"
 #include <definitioncolumn.hxx>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include <osl/diagnose.h>
 
 #include <cppuhelper/typeprovider.hxx>
@@ -394,7 +394,7 @@ void SAL_CALL ODBTableDecorator::rename( const OUString& _rNewName )
         xRename->rename(_rNewName);
     }
     else // not supported
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 }
 
 // XAlterTable,
@@ -408,7 +408,7 @@ void SAL_CALL ODBTableDecorator::alterColumnByName( const OUString& _rName, cons
         xAlter->alterColumnByName(_rName,_rxDescriptor);
     }
     else
-        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_ALTER_BY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_COLUMN_ALTER_BY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
     if(m_pColumns)
         m_pColumns->refresh();
 }
@@ -425,7 +425,7 @@ void SAL_CALL ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Re
             m_pColumns->refresh();
     }
     else // not supported
-        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_ALTER_BY_INDEX),*this,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_COLUMN_ALTER_BY_INDEX),*this,SQLSTATE_GENERAL,1000,Any() );
 }
 
 Reference< XNameAccess> ODBTableDecorator::getIndexes()

@@ -8,10 +8,9 @@
  */
 
 #include "GL3DBarChartDialogController.hxx"
-#include <Strings.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <ResId.hxx>
-
 #include <svtools/valueset.hxx>
 
 namespace chart {
@@ -27,7 +26,7 @@ bool GL3DBarChartDialogController::shouldShow_GL3DResourceGroup() const
 
 OUString GL3DBarChartDialogController::getName()
 {
-    return SchResId(STR_TYPE_GL3D_BAR).toString();
+    return SchResId(STR_TYPE_GL3D_BAR);
 }
 
 Image GL3DBarChartDialogController::getImage()
@@ -50,7 +49,7 @@ void GL3DBarChartDialogController::fillSubTypeList(
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_GL3D_BAR_ROUNDRECT)));
 
-    rSubTypeList.SetItemText(1, SchResId(STR_GL3D_BAR).toString());
+    rSubTypeList.SetItemText(1, SchResId(STR_GL3D_BAR));
 }
 
 }

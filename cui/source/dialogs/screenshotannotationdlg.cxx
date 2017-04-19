@@ -20,6 +20,7 @@
 #include "screenshotannotationdlg.hxx"
 
 #include "cuires.hrc"
+#include "strings.hrc"
 #include "dialmgr.hxx"
 
 #include <basegfx/range/b2irange.hxx>

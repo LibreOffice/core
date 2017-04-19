@@ -18,7 +18,9 @@
  */
 
 #include "ConnectionPageSetup.hxx"
-#include "dbu_dlg.hrc"
+#include "strings.hrc"
+#include "core_resource.hxx"
+#include "dbu_dlg.hxx"
 #include <svl/itemset.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/stritem.hxx>
@@ -32,11 +34,11 @@
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>
 #include "sqlmessage.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "odbcconfig.hxx"
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -85,29 +87,29 @@ namespace dbaui
 
     VclPtr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateUserDefinedTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return VclPtr<OConnectionTabPageSetup>::Create( pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, USHRT_MAX, USHRT_MAX, STR_COMMONURL );
+        return VclPtr<OConnectionTabPageSetup>::Create(pParent, "ConnectionPage", "dbaccess/ui/dbwizconnectionpage.ui", _rAttrSet, nullptr, nullptr, STR_COMMONURL);
     }
 
-    OConnectionTabPageSetup::OConnectionTabPageSetup(vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
+    OConnectionTabPageSetup::OConnectionTabPageSetup(vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId)
         :OConnectionHelper(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
     {
         get(m_pHelpText, "helptext");
         get(m_pHeaderText, "header");
 
-        if ( USHRT_MAX != _nHelpTextResId )
+        if (pHelpTextResId != nullptr)
         {
-            OUString sHelpText = ModuleRes(_nHelpTextResId);
+            OUString sHelpText = DBA_RES(pHelpTextResId);
             m_pHelpText->SetText(sHelpText);
         }
         else
             m_pHelpText->Hide();
 
-        if ( USHRT_MAX != _nHeaderResId )
-            m_pHeaderText->SetText(ModuleRes(_nHeaderResId));
+        if (pHeaderResId != nullptr)
+            m_pHeaderText->SetText(DBA_RES(pHeaderResId));
 
-        if ( USHRT_MAX != _nUrlResId )
+        if (pUrlResId != nullptr)
         {
-            OUString sLabelText = ModuleRes(_nUrlResId);
+            OUString sLabelText = DBA_RES(pUrlResId);
             m_pFT_Connection->SetText(sLabelText);
         }
         else

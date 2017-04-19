@@ -11,33 +11,33 @@
 
 #include <rtl/instance.hxx>
 #include <osl/getglobalmutex.hxx>
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 namespace fpicker
 {
-    struct ResMgrHolder
+    struct ResLocaleHolder
     {
-        ResMgr * operator ()()
+        std::locale* operator ()()
         {
-            return ResMgr::CreateResMgr ("fps_office");
+            return new std::locale(Translate::Create("fps", Application::GetSettings().GetUILanguageTag()));
         }
 
-        static ResMgr * getOrCreate()
+        static std::locale* getOrCreate()
         {
             return rtl_Instance<
-                ResMgr, ResMgrHolder,
+                std::locale, ResLocaleHolder,
                 osl::MutexGuard, osl::GetGlobalMutex >::create (
-                    ResMgrHolder(), osl::GetGlobalMutex());
+                    ResLocaleHolder(), osl::GetGlobalMutex());
         }
-    };
-
-    struct SvtResId : public ResId
-    {
-        explicit SvtResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
     };
 }
 
-#define SVT_RESSTR(i)    SvtResId(i).toString()
+inline OUString FpsResId(const char* pId)
+{
+    return Translate::get(pId, *fpicker::ResLocaleHolder::getOrCreate());
+};
 
 #endif
 

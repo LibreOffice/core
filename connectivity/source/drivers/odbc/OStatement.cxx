@@ -35,7 +35,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <algorithm>
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;

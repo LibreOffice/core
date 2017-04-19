@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,accessibility,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,accessibility,\
-    AllLangResTarget_acc \
+    AllLangMoTarget_acc \
 ))
 
 # vim:set noet sw=4 ts=4:

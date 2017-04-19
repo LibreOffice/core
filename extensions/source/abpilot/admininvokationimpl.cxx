@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <vcl/stdtext.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "abpresid.hrc"
+#include "strings.hrc"
 #include "componentmodule.hxx"
 #include <vcl/waitobj.hxx>
 
@@ -74,7 +74,7 @@ namespace abp
             *pArguments++ <<= PropertyValue("ParentWindow", -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
 
             // the title of the dialog
-            OUString sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE).toString());
+            OUString sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE));
             *pArguments++ <<= PropertyValue("Title", -1, makeAny(sAdminDialogTitle), PropertyState_DIRECT_VALUE);
 
             // the name of the new data source
