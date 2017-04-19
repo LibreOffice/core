@@ -2078,7 +2078,13 @@ bool SwCursorShell::Pop( bool bOldCursor )
         if( !m_pCurrentCursor->IsInProtectTable( true ) &&
             !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
                                  SwCursorSelOverFlags::ChangePos ) )
+        {
             UpdateCursor(); // update current cursor
+            if (m_pTableCursor)
+            { // tdf#106929 ensure m_pCurrentCursor ring is recreated from table
+                m_pTableCursor->SetChgd();
+            }
+        }
     }
     return true;
 }
