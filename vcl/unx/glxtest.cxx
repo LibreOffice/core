@@ -25,6 +25,7 @@
 #include <fcntl.h>
 #include "stdint.h"
 #include <string.h>
+#include <signal.h>
 
 #include "opengl/x11/glxtest.hxx"
 
@@ -98,6 +99,7 @@ x_error_handler(Display *, XErrorEvent *ev)
 
 void glxtest()
 {
+  signal(SIGPIPE, SIG_IGN);
   // we want to redirect to /dev/null stdout, stderr, and while we're at it,
   // any PR logging file descriptors. To that effect, we redirect all positive
   // file descriptors up to what open() returns here. In particular, 1 is stdout and 2 is stderr.
