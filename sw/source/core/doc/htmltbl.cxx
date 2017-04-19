@@ -168,8 +168,8 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
                                       sal_uInt16 nRightBWidth,
                                       sal_uInt16 nInhLeftBWidth,
                                       sal_uInt16 nInhRightBWidth )
-    : m_aColumns( new SwHTMLTableLayoutColumn*[nCls] )
-    , m_aCells( new SwHTMLTableLayoutCell*[static_cast<size_t>(nRws)*nCls] )
+    : m_aColumns( nCls )
+    , m_aCells( static_cast<size_t>(nRws)*nCls )
     , m_pSwTable( pTable )
     , m_pLeftFillerBox( nullptr )
     , m_pRightFillerBox( nullptr )
@@ -216,16 +216,6 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
 
 SwHTMLTableLayout::~SwHTMLTableLayout()
 {
-    sal_uInt16 i;
-
-    for( i = 0; i < m_nCols; i++ )
-        delete m_aColumns[i];
-    delete[] m_aColumns;
-
-    sal_uInt16 nCount = m_nRows*m_nCols;
-    for( i=0; i<nCount; i++ )
-        delete m_aCells[i];
-    delete[] m_aCells;
 }
 
 /// The border widths are calculated like in Netscape:
