@@ -28,8 +28,11 @@
 #include "DriverSettings.hxx"
 #include "IItemSetHelper.hxx"
 #include "UITools.hxx"
-#include "dbu_dlg.hrc"
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "dbu_dlg.hxx"
+#include "stringconstants.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
 #include "moduledbu.hxx"
@@ -250,7 +253,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             }
 
             OUString sName = pName ? pName->GetValue() : OUString();
-            OUString sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
+            OUString sLoginRequest(DBA_RES(STR_ENTER_CONNECTION_PASSWORD));
             OUString sTemp = sName;
             sName = ::dbaui::getStrippedDatabaseName(nullptr,sTemp);
             if ( !sName.isEmpty() )
@@ -386,7 +389,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     // get the global DriverManager
     Reference< XConnectionPool > xDriverManager;
 
-    OUString sCurrentActionError = ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER);
+    OUString sCurrentActionError = DBA_RES(STR_COULDNOTCREATE_DRIVERMANAGER);
     sCurrentActionError = sCurrentActionError.replaceFirst("#servicename#", "com.sun.star.sdbc.ConnectionPool");
 
     try
@@ -403,7 +406,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);
     if (!xDriver.is())
     {
-        sCurrentActionError = ModuleRes(STR_NOREGISTEREDDRIVER);
+        sCurrentActionError = DBA_RES(STR_NOREGISTEREDDRIVER);
         sCurrentActionError = sCurrentActionError.replaceFirst("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
         throw SQLException(sCurrentActionError, getORB(), "S1000", 0, Any());

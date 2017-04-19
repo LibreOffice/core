@@ -43,7 +43,6 @@ namespace dbaui
 
     class OJoinController : public OJoinController_BASE
     {
-        OModuleClient                    m_aModuleClient;
     protected:
         TTableConnectionData m_vTableConnectionData;
         TTableWindowData     m_vTableData;

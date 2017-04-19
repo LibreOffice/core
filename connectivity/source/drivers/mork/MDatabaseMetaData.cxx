@@ -12,7 +12,7 @@
 
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include <vector>
 
 #include "MDatabaseMetaDataHelper.hxx"
