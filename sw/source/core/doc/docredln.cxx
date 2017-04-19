@@ -1197,12 +1197,15 @@ void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, sal_Int32& rStart, sal_Int3
             rStart = 0;             // Paragraph is completely enclosed
             rEnd = COMPLETE_STRING;
         }
-        else
+        else if (pREnd->nNode == nNdIdx)
         {
-            OSL_ENSURE( pREnd->nNode == nNdIdx,
-                "SwRedlineItr::Seek: GetRedlinePos Error" );
             rStart = 0;             // Paragraph is overlapped in the beginning
             rEnd = pREnd->nContent.GetIndex();
+        }
+        else // redline ends before paragraph
+        {
+            rStart = COMPLETE_STRING;
+            rEnd = COMPLETE_STRING;
         }
     }
     else if( pRStt->nNode == nNdIdx )
@@ -1414,7 +1417,6 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
                 // current ones can be affected.
                 const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
                 size_t n = nMyPos;
-                OSL_ENSURE( n != USHRT_MAX, "How strange. We don't exist!" );
                 for( bool bBreak = false; !bBreak && n > 0; )
                 {
                     --n;
