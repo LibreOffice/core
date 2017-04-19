@@ -25,7 +25,6 @@
 #include <vcl/button.hxx>
 
 namespace vcl { class Window; }
-class ResMgr;
 
 class filter_info_impl;
 class XMLFilterTabPageBasic;
@@ -34,7 +33,7 @@ class XMLFilterTabPageXSLT;
 class XMLFilterTabDialog: public TabDialog
 {
 public:
-    XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr, const css::uno::Reference< css::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
+    XMLFilterTabDialog(vcl::Window *pParent, const std::locale& rResLocale, const css::uno::Reference< css::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
     virtual ~XMLFilterTabDialog() override;
     virtual void dispose() override;
 
@@ -48,7 +47,7 @@ private:
     DECL_STATIC_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl*, void );
     DECL_LINK(OkHdl, Button*, void);
 
-    ResMgr& mrResMgr;
+    const std::locale& mrResLocale;
 
     const filter_info_impl* mpOldInfo;
     filter_info_impl* mpNewInfo;

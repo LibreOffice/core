@@ -21,17 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 
 #include <config_features.h>
-#include <tools/resid.hxx>
-
-namespace avmedia
-{
-    ResMgr* GetResMgr();
-}
-
-inline OUString AvmResId(sal_uInt16 nId)
-{
-    return ResId(nId, * ::avmedia::GetResMgr());
-}
+#include <tools/simplerm.hxx>
 
 #define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
 #ifdef _WIN32
@@ -54,6 +44,16 @@ inline OUString AvmResId(sal_uInt16 nId)
 #if HAVE_FEATURE_GLTF
 #define AVMEDIA_MIMETYPE_JSON             "model/vnd.gltf+json"
 #endif
+
+namespace avmedia
+{
+    const std::locale& GetResLocale();
+}
+
+inline OUString AvmResId(const char* pId)
+{
+    return Translate::get(pId, ::avmedia::GetResLocale());
+}
 
 #endif
 

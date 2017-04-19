@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "apitools.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/types.hxx>
