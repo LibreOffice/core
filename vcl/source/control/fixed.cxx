@@ -391,7 +391,7 @@ void FixedText::setMinWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool FixedText::set_property(const OString &rKey, const OString &rValue)
+bool FixedText::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "max-width-chars")
         setMaxWidthChars(rValue.toInt32());
@@ -968,14 +968,13 @@ bool FixedImage::SetModeImage( const Image& rImage )
     return true;
 }
 
-
-Image FixedImage::loadThemeImage(const OString &rFileName)
+Image FixedImage::loadThemeImage(const OUString &rFileName)
 {
-    BitmapEx aBitmap(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
+    BitmapEx aBitmap(rFileName);
     return Image(aBitmap);
 }
 
-bool FixedImage::set_property(const OString &rKey, const OString &rValue)
+bool FixedImage::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "pixbuf")
     {
