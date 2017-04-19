@@ -492,7 +492,21 @@ typedef enum
      * - 'action' can be 'Add', 'Remove' or 'Modify' depending on whether
      *    comment has been added, removed or modified.
      */
-    LOK_CALLBACK_COMMENT = 32
+    LOK_CALLBACK_COMMENT = 32,
+
+    /**
+     * The column header is no more valid because of a column insertion
+     * or a similar event. Clients must query a new column header set.
+     *
+     */
+    LOK_CALLBACK_INVALIDATE_COLUMN_HEADER = 33,
+
+    /**
+     * The row headers is no more valid because of a row insertion
+     * or a similar event. Clients must query a new row header set.
+     *
+     */
+    LOK_CALLBACK_INVALIDATE_ROW_HEADER = 34
 }
 LibreOfficeKitCallbackType;
 

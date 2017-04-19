@@ -142,7 +142,10 @@ public:
     void        InsertTab( SCTAB nTab );
     void        DeleteTab( SCTAB nTab );
 
-    // Generate envelopes if mutimarked and fills the passed ScRange object with
+    void        ShiftCols(SCCOL nStartCol, long nColOffset);
+    void        ShiftRows(SCROW nStartRow, long nRowOffset);
+
+    // Generate envelopes if multimarked and fills the passed ScRange object with
     // the smallest range that includes the marked area plus its envelopes.
     void        GetSelectionCover( ScRange& rRange );
     // Get top, bottom, left and right envelopes
