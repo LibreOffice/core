@@ -530,6 +530,7 @@ void Window::dispose()
     }
 
     delete mpWindowImpl->mpWinData;
+    mpWindowImpl->mpWinData = nullptr;
 
     // remove BorderWindow or Frame window data
     mpWindowImpl->mpBorderWindow.disposeAndClear();
@@ -556,11 +557,16 @@ void Window::dispose()
                 SAL_WARN("vcl", "Window " << this << " marked as frame window, "
                          "is missing from list of " << nWindows << " frames");
         }
-        mpWindowImpl->mpFrame->SetCallback( nullptr, nullptr );
-        pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
+        if (mpWindowImpl->mpFrame) // otherwise exception during init
+        {
+            mpWindowImpl->mpFrame->SetCallback( nullptr, nullptr );
+            pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
+        }
         assert (mpWindowImpl->mpFrameData->mnFocusId == nullptr);
         assert (mpWindowImpl->mpFrameData->mnMouseMoveId == nullptr);
+
         delete mpWindowImpl->mpFrameData;
+        mpWindowImpl->mpFrameData = nullptr;
     }
 
     // should be the last statements
