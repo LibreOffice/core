@@ -789,7 +789,7 @@ interface BaseTextEditView
         Export = FALSE;
     ]
 
-    FN_VIEW_NOTES
+    SID_TOGGLE_NOTES
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;

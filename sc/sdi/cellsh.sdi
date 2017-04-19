@@ -209,6 +209,7 @@ interface CellSelection
     FID_NOTE_VISIBLE        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_HIDE_NOTE           [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_SHOW_NOTE           [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_TOGGLE_NOTES        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_HIDE_ALL_NOTES      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_SHOW_ALL_NOTES      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_DELETE_ALL_NOTES    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
