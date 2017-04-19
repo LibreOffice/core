@@ -19,13 +19,13 @@
 
 #include "ResId.hxx"
 #include "ResourceManager.hxx"
-#include <tools/resid.hxx>
+#include <tools/simplerm.hxx>
 
 namespace chart
 {
-    OUString SchResId(sal_uInt16 nId)
+    OUString SchResId(const char *pId)
     {
-        return ResId(nId, ResourceManager::getResourceManager());
+        return Translate::get(pId, ResourceManager::getResourceLocale());
     }
 } //  namespace chart
 

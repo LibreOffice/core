@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
 #include <unotools/streamwrap.hxx>
@@ -42,7 +42,7 @@
 #include <algorithm>
 #include <memory>
 
-#include "xmlfilterdialogstrings.hrc"
+#include "strings.hrc"
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltertestdialog.hxx"
@@ -61,34 +61,34 @@ using namespace com::sun::star::util;
 using ::rtl::Uri;
 
 namespace {
-    static ResMgr* pXSLTResMgr = nullptr;
+    static std::locale* pXSLTResLocale = nullptr;
 
-    ResMgr* getXSLTDialogResMgr()
+    const std::locale* getXSLTDialogResLocale()
     {
-        return pXSLTResMgr;
+        return pXSLTResLocale;
     }
 }
 
-EnsureResMgr::EnsureResMgr()
+EnsureResLocale::EnsureResLocale()
 {
-    if (!pXSLTResMgr)
+    if (!pXSLTResLocale)
     {
-        m_xResMgr.reset(ResMgr::CreateResMgr("xsltdlg", Application::GetSettings().GetUILanguageTag()));
-        pXSLTResMgr = m_xResMgr.get();
+        m_xResLocale.reset(new std::locale(Translate::Create("flt", Application::GetSettings().GetUILanguageTag())));
+        pXSLTResLocale = m_xResLocale.get();
     }
 }
 
-EnsureResMgr::~EnsureResMgr()
+EnsureResLocale::~EnsureResLocale()
 {
-    if (m_xResMgr)
-        pXSLTResMgr = nullptr;
+    if (m_xResLocale)
+        pXSLTResLocale = nullptr;
 }
 
 namespace
 {
-    OUString XsltResId(sal_uInt16 nId)
+    OUString XsltResId(const char* pId)
     {
-        return ResId(nId, *getXSLTDialogResMgr());
+        return Translate::get(pId, *getXSLTDialogResLocale());
     }
 }
 
@@ -265,7 +265,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
+    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResLocale(), mxContext, &aTempInfo );
     if ( aDlg->Execute() == RET_OK )
     {
         // insert the new filter
@@ -284,7 +284,7 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         // execute XML Filter Dialog
-        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
+        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResLocale(), mxContext, pOldInfo );
         if ( aDlg->Execute() == RET_OK )
         {
             filter_info_impl* pNewInfo = aDlg->getNewFilterInfo();

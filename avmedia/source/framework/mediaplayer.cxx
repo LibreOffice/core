@@ -21,7 +21,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/mediaitem.hxx>
 #include "mediamisc.hxx"
-#include "mediacontrol.hrc"
+#include "strings.hrc"
 #include "helpids.hrc"
 
 #include <svl/stritem.hxx>
