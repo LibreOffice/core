@@ -116,6 +116,7 @@ endif
 
 $(eval $(call gb_Library_use_externals,vcl,\
 	boost_headers \
+	boost_locale \
 	gio \
 	glm_headers \
 	graphite \
