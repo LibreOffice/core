@@ -19,7 +19,8 @@
 
 #include "printdlg.hxx"
 #include "svdata.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
+#include "bitmaps.hrc"
 
 #include <vcl/print.hxx>
 #include <vcl/dialog.hxx>
@@ -69,7 +70,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
     , maOrigSize( 10, 10 )
     , maPageVDev( VclPtr<VirtualDevice>::Create(*this) )
-    , maToolTipString(VclResId( SV_PRINT_PRINTPREVIEW_TXT).toString())
+    , maToolTipString(VclResId(SV_PRINT_PRINTPREVIEW_TXT))
     , mbGreyscale( false )
     , maHorzDim(VclPtr<FixedLine>::Create(this, WB_HORZ | WB_CENTER))
     , maVertDim(VclPtr<FixedLine>::Create(this, WB_VERT | WB_VCENTER))
@@ -475,8 +476,8 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
 }
 
 PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
-    : maCollateBmp(VclResId(SV_PRINT_COLLATE_BMP))
-    , maNoCollateBmp(VclResId(SV_PRINT_NOCOLLATE_BMP))
+    : maCollateBmp(SV_PRINT_COLLATE_BMP)
+    , maNoCollateBmp(SV_PRINT_NOCOLLATE_BMP)
     , mnCollateUIMode(0)
 {
     pUIBuilder->get(mpPrinters, "printers");
@@ -572,11 +573,11 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     , maNUpPage(m_pUIBuilder.get())
     , maJobPage(m_pUIBuilder.get())
     , maOptionsPage(m_pUIBuilder.get())
-    , maNoPageStr( VclResId( SV_PRINT_NOPAGES ).toString() )
+    , maNoPageStr(VclResId(SV_PRINT_NOPAGES))
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
-    , maPrintToFileText( VclResId( SV_PRINT_TOFILE_TXT ).toString() )
-    , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ).toString() )
+    , maPrintToFileText(VclResId(SV_PRINT_TOFILE_TXT))
+    , maDefPrtText(VclResId(SV_PRINT_DEFPRT_TXT))
     , mbShowLayoutPage( true )
 {
     get(mpOKButton, "ok");
@@ -1468,6 +1469,9 @@ void PrintDialog::updateNupFromPages()
 
     updateNup();
 }
+
+#define SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT           1
+#define SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE          2
 
 void PrintDialog::updateNup()
 {
