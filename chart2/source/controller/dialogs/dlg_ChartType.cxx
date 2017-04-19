@@ -20,7 +20,7 @@
 #include "dlg_ChartType.hxx"
 #include "ResId.hxx"
 #include "ResourceIds.hrc"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "tp_ChartType.hxx"
 #include "macros.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>

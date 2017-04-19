@@ -22,7 +22,9 @@
 #include <unotools/syslocale.hxx>
 #include <connectivity/dbtools.hxx>
 #include "UITools.hxx"
-#include "dbu_resource.hrc"
+#include "core_resource.hxx"
+#include "dbu_pageids.hxx"
+#include "strings.hrc"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
@@ -39,7 +41,7 @@ OColumnControlWindow::OColumnControlWindow(vcl::Window* pParent
                                            ,const Reference<XComponentContext>& _rxContext)
             : OFieldDescControl(pParent,nullptr)
             , m_xContext(_rxContext)
-            , m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
+            , m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(true)
 {
 
