@@ -29,6 +29,11 @@ String STR_SVT_FILEPICKER_PASSWORD
     Text [ en-US ] = "Save with pass~word" ;
 };
 
+String STR_SVT_FILEPICKER_EMBEDFONTS
+{
+   Text [ en-US ] = "Embed fonts in the document" ;
+};
+
 String STR_SVT_FILEPICKER_FILTER_OPTIONS
 {
     Text [ en-US ] = "~Edit filter settings";

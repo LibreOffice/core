@@ -27,6 +27,7 @@
 #include <sfx2/passwd.hxx>
 
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/objsh.hxx>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -205,8 +206,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
         short nDlgType = m_pFileDlg->GetDialogType();
         bool bHasPassword = (
                TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD == nDlgType
-            || TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS == nDlgType );
-
+                 || TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS == nDlgType );
         // check, whether or not we have to display a password box
         if ( bHasPassword && m_pFileDlg->IsPasswordEnabled() )
         {
@@ -233,6 +233,34 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
             }
             catch( const IllegalArgumentException& ){}
         }
+         bool bHasEmbed = (
+                TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS == nDlgType );
+        if( bHasEmbed )
+        {
+           try{
+               Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS, 0 );
+               bool bEmbed = false;
+                if ( ( aValue >>= bEmbed ) && bEmbed )
+                {
+                    // ask for the password
+                     SfxObjectShell* pDocSh = SfxObjectShell::Current();
+                  if ( pDocSh )
+                  {
+                     try
+                     {
+                         uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
+                         uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW );
+                         xProps->setPropertyValue("EmbedFonts", uno::makeAny( bEmbed ) );
+                       }
+                       catch( uno::Exception& )
+                       {
+                       }
+                  }
+                  m_pItemSet->Put( SfxBoolItem( SID_EMBEDFONT, bEmbed ) );
+                }
+            }
+            catch( const IllegalArgumentException& ){}
+            }
 
         if ( m_nDlgFlags & FileDialogFlags::Export )
         {

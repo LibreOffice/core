@@ -89,6 +89,7 @@
 #include <vector>
 #include <memory>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui::dialogs;
@@ -556,6 +557,8 @@ void SvtFileDialog::Init_Impl
     get(pImpl->_pBtnConnectToServer, "connect_to_server");
     get(pImpl->_pBtnNewFolder, "new_folder");
     get(pImpl->_pCbPassword, "password");
+    get(pImpl->_pCbembedFontsCheckbox, "embedFonts");
+    get(pImpl->_pCbAutoExtension, "extension");
     get(pImpl->_pCbAutoExtension, "extension");
     get(pImpl->_pFtFileVersion, "shared_label");
     get(pImpl->_pLbFileVersion, "shared");
@@ -640,6 +643,11 @@ void SvtFileDialog::Init_Impl
         pImpl->_pCbPassword->Show();
     }
 
+    if( nStyle & PickerFlags::embedFontsCheckbox ){
+      pImpl->_pCbembedFontsCheckbox->SetText( SvtResId( STR_SVT_FILEPICKER_EMBEDFONTS ) );
+      pImpl->_pCbembedFontsCheckbox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+      pImpl->_pCbembedFontsCheckbox->Show();
+    }
     // set the ini file for extracting the size
     pImpl->_aIniKey = "FileDialog";
 
@@ -718,6 +726,7 @@ void SvtFileDialog::Init_Impl
             pImpl->_pLbImageTemplates->SetHelpId( HID_FILESAVE_TEMPLATE );
 
         if ( pImpl->_pCbPassword ) pImpl->_pCbPassword->SetHelpId( HID_FILESAVE_SAVEWITHPASSWORD );
+        if ( pImpl->_pCbembedFontsCheckbox ) pImpl->_pCbembedFontsCheckbox->SetHelpId( HID_FILESAVE_EMBEDFONTS );
         if ( pImpl->_pCbAutoExtension ) pImpl->_pCbAutoExtension->SetHelpId( HID_FILESAVE_AUTOEXTENSION );
         if ( pImpl->_pCbOptions ) pImpl->_pCbOptions->SetHelpId( HID_FILESAVE_CUSTOMIZEFILTER );
         if ( _pCbSelection ) _pCbSelection->SetHelpId( HID_FILESAVE_SELECTION );
@@ -1530,6 +1539,8 @@ IMPL_LINK( SvtFileDialog, ClickHdl_Impl, Button*, pCheckBox, void )
         nId = CHECKBOX_READONLY;
     else if ( pCheckBox == pImpl->_pCbPassword )
         nId = CHECKBOX_PASSWORD;
+    else if ( pCheckBox == pImpl->_pCbembedFontsCheckbox )
+        nId = CHECKBOX_EMBEDFONTS;
     else if ( pCheckBox == _pCbLinkBox )
         nId = CHECKBOX_LINK;
     else if ( pCheckBox == _pCbPreviewBox )
@@ -2321,6 +2332,10 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl )
 
         case CHECKBOX_PASSWORD:
             pReturn = pImpl->_pCbPassword;
+            break;
+
+        case CHECKBOX_EMBEDFONTS:
+            pReturn = pImpl->_pCbembedFontsCheckbox;
             break;
 
         case CHECKBOX_FILTEROPTIONS:

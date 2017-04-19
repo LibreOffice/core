@@ -45,6 +45,13 @@ published constants ExtendedFilePickerElementIds
     const short LISTBOX_TEMPLATE       = 108;
     const short LISTBOX_IMAGE_TEMPLATE = 109;
     const short CHECKBOX_SELECTION     = 110;
+
+     /***
+    */
+    const short CHECKBOX_EMBEDFONTS = 206;
+
+    /**
+    */
     const short LISTBOX_VERSION_LABEL  = 207;
     const short LISTBOX_TEMPLATE_LABEL = 208;
     const short LISTBOX_IMAGE_TEMPLATE_LABEL = 209;

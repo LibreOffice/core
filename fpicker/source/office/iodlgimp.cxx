@@ -222,6 +222,7 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()   :
     _pBtnUp             ( nullptr ),
     _pBtnNewFolder      ( nullptr ),
     _pCbPassword        ( nullptr ),
+    _pCbembedFontsCheckbox (nullptr),
     _pEdCurrentPath     ( nullptr ),
     _pCbAutoExtension   ( nullptr ),
     _pCbOptions         ( nullptr ),

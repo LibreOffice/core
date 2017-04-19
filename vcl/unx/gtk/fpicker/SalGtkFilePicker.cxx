@@ -156,6 +156,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         switch( i ) {
         LABEL_TOGGLE( AUTOEXTENSION );
         LABEL_TOGGLE( PASSWORD );
+        LABEL_TOGGLE( EMBEDFONTS );
         LABEL_TOGGLE( FILTEROPTIONS );
         LABEL_TOGGLE( READONLY );
         LABEL_TOGGLE( LINK );
@@ -1059,6 +1060,7 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
     {
         MAP_TOGGLE( AUTOEXTENSION );
         MAP_TOGGLE( PASSWORD );
+        MAP_TOGGLE( EMBEDFONTS );
         MAP_TOGGLE( FILTEROPTIONS );
         MAP_TOGGLE( READONLY );
         MAP_TOGGLE( LINK );
@@ -1587,6 +1589,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
             first_button_text = GTK_STOCK_SAVE;
             mbToggleVisibility[PASSWORD] = true;
+            mbToggleVisibility[EMBEDFONTS] = true;
             mbToggleVisibility[FILTEROPTIONS] = true;
             // TODO
                 break;
