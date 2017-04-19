@@ -120,7 +120,6 @@ namespace dbaui
         ,public SbaXFormAdapter_BASE3
     {
     private:
-        OModuleClient                m_aModuleClient;
         css::uno::Reference< css::sdbc::XRowSet >                             m_xMainForm;
         ::osl::Mutex                        m_aMutex;
 

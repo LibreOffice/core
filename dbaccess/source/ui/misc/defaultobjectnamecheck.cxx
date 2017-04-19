@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "defaultobjectnamecheck.hxx"
 
-#include "dbu_misc.hrc"
+#include "strings.hrc"
 
 #include "moduledbu.hxx"
 
@@ -61,7 +62,7 @@ namespace dbaui
         void lcl_fillNameExistsError( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
         {
             SQLException aError;
-            OUString sErrorMessage = ModuleRes(STR_NAMED_OBJECT_ALREADY_EXISTS).toString();
+            OUString sErrorMessage = DBA_RES(STR_NAMED_OBJECT_ALREADY_EXISTS);
             aError.Message = sErrorMessage.replaceAll("$#$", _rObjectName);
             _out_rErrorToDisplay = aError;
         }

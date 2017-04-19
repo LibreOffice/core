@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbu_tbl.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "core_resource.hxx"
 #include "queryorder.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -49,7 +51,7 @@ DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
     const Reference< XSingleSelectQueryComposer >& _rxComposer,
     const Reference< XNameAccess>& _rxCols)
     : ModalDialog(pParent, "SortDialog", "dbaccess/ui/sortdialog.ui")
-    , aSTR_NOENTRY(ModuleRes(STR_VALUE_NONE))
+    , aSTR_NOENTRY(DBA_RES(STR_VALUE_NONE))
     , m_xQueryComposer(_rxComposer)
     , m_xColumns(_rxCols)
     , m_xConnection(_rxConnection)

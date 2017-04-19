@@ -1230,13 +1230,13 @@ sal_Bool ExtensionManager::synchronize(
     try
     {
         ::osl::MutexGuard guard(getMutex());
-        OUString sSynchronizingShared(StrSyncRepository::get());
+        OUString sSynchronizingShared(StrSyncRepository());
         sSynchronizingShared = sSynchronizingShared.replaceAll("%NAME", "shared");
         dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
         bool bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressShared.update("\n\n");
 
-        OUString sSynchronizingBundled(StrSyncRepository::get());
+        OUString sSynchronizingBundled(StrSyncRepository());
         sSynchronizingBundled = sSynchronizingBundled.replaceAll("%NAME", "bundled");
         dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
         bModified |= (bool)getBundledRepository()->synchronize(xAbortChannel, xCmdEnv);
@@ -1315,12 +1315,12 @@ void ExtensionManager::checkInstall(
         {
             OSL_ASSERT( !approve && !abort );
             throw css::deployment::DeploymentException(
-                dp_misc::getResourceString(RID_STR_ERROR_WHILE_ADDING) + displayName,
+                DP_RESSTR(RID_STR_ERROR_WHILE_ADDING) + displayName,
                 static_cast<OWeakObject *>(this), request );
         }
         if (abort || !approve)
             throw ucb::CommandFailedException(
-                dp_misc::getResourceString(RID_STR_ERROR_WHILE_ADDING) + displayName,
+                DP_RESSTR(RID_STR_ERROR_WHILE_ADDING) + displayName,
                 static_cast<OWeakObject *>(this), request );
 }
 
@@ -1337,7 +1337,7 @@ void ExtensionManager::checkUpdate(
     // package already deployed, interact --force:
     uno::Any request(
         (css::deployment::VersionException(
-            dp_misc::getResourceString(
+            DP_RESSTR(
                 RID_STR_PACKAGE_ALREADY_ADDED ) + newDisplayName,
             static_cast<OWeakObject *>(this), newVersion, newDisplayName,
             oldExtension ) ) );
@@ -1347,13 +1347,13 @@ void ExtensionManager::checkUpdate(
             xCmdEnv, &replace, &abort )) {
         OSL_ASSERT( !replace && !abort );
         throw css::deployment::DeploymentException(
-            dp_misc::getResourceString(
+            DP_RESSTR(
                 RID_STR_ERROR_WHILE_ADDING) + newDisplayName,
             static_cast<OWeakObject *>(this), request );
     }
     if (abort || !replace)
         throw ucb::CommandFailedException(
-            dp_misc::getResourceString(
+            DP_RESSTR(
                 RID_STR_PACKAGE_ALREADY_ADDED) + newDisplayName,
             static_cast<OWeakObject *>(this), request );
 }
