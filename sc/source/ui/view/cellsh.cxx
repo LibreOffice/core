@@ -1045,19 +1045,28 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_SHOW_ALL_NOTES:
             case FID_HIDE_ALL_NOTES:
+            case SID_SHOW_POSTIT:
                 {
                     bool bHasNotes = false;
+                    ScRangeList aRanges;
+                    bool bAllNotesInShown;
+
                     for (auto const& rTab : rMark.GetSelectedTabs())
                     {
                         if (pDoc->HasTabNotes( rTab ))
                         {
                             bHasNotes = true;
-                            break;
+                            aRanges.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
                         }
                     }
 
                     if ( !bHasNotes )
                         rSet.DisableItem( nWhich );
+                    else
+                    {
+                         bAllNotesInShown = pDoc->AreAllNoteCaptionsShown( aRanges );
+                         rSet.Put( SfxBoolItem( SID_SHOW_POSTIT, bAllNotesInShown) );
+                    }
                 }
                 break;
 

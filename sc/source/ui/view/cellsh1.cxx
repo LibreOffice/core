@@ -2356,6 +2356,37 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_SHOW_POSTIT:
+            {
+                 ScViewData* pData  = GetViewData();
+                 ScMarkData& rMark  = pData->GetMarkData();
+                 ScDocument* pDoc   = pData->GetDocument();
+                 ScRangeList aRanges;
+                 bool bAllNotesInShown;
+                 std::vector<sc::NoteEntry> aNotes;
+
+                 for (auto const& rTab : rMark.GetSelectedTabs())
+                     aRanges.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+
+                 bAllNotesInShown = pDoc->AreAllNoteCaptionsShown( aRanges );
+                 pDoc->GetNotesInRange(aRanges, aNotes);
+                 bool bShowNote = !bAllNotesInShown;
+
+                 for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
+                     itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+                 {
+                     const ScAddress& rAdr = itr->maPos;
+                     pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                 }
+
+                 if (!pReqArgs)
+                     rReq.AppendItem( SfxBoolItem( SID_SHOW_POSTIT, bShowNote ) );
+
+                 rReq.Done();
+                 rBindings.Invalidate( SID_SHOW_POSTIT );
+            }
+            break;
+
         case SID_DELETE_NOTE:
         {
             const SfxPoolItem* pId;
