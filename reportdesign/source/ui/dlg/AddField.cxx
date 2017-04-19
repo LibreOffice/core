@@ -33,10 +33,10 @@
 #include "rptui_slotid.hrc"
 
 #include <connectivity/dbtools.hxx>
+#include "core_resource.hxx"
 #include "helpids.hrc"
-#include "RptResId.hrc"
-#include "ModuleHelper.hxx"
-#include "uistrings.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "ColumnInfo.hxx"
 
 #include <comphelper/property.hxx>
@@ -321,7 +321,7 @@ void OAddFieldWindow::Update()
             m_aActions->EnableItem(m_aActions->GetItemId(j),false);
         }
 
-        OUString aTitle(ModuleRes(RID_STR_FIELDSELECTION));
+        OUString aTitle(RptResId(RID_STR_FIELDSELECTION));
         SetText(aTitle);
         if ( m_xRowSet.is() )
         {

@@ -30,36 +30,11 @@
 #include <rtl/uri.hxx>
 
 #include <svl/solar.hrc>
-#include "ModuleHelper.hxx"
 
-namespace reportdesign
+OUString RptResId(const char* pId)
 {
-    using namespace ::com::sun::star;
-
-    //= ResourceManager
-
-    SimpleResMgr* ResourceManager::m_pImpl = nullptr;
-
-
-    ResourceManager::EnsureDelete::~EnsureDelete()
-    {
-        delete ResourceManager::m_pImpl;
-    }
-
-    OUString ResourceManager::loadString(sal_uInt16 _nResId)
-    {
-        if (!m_pImpl)
-        {
-            // now that we have an impl class make sure it's deleted on unloading the library
-            static ResourceManager::EnsureDelete    s_aDeleteTheImplClass;
-
-            m_pImpl = SimpleResMgr::Create("rpt", Application::GetSettings().GetUILanguageTag());
-        }
-        return m_pImpl->ReadString(_nResId);
-    }
-
-
+    static std::locale loc = Translate::Create("rpt", Application::GetSettings().GetUILanguageTag());
+    return Translate::get(pId, loc);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

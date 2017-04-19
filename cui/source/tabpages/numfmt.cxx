@@ -31,6 +31,7 @@
 #include <svtools/colorcfg.hxx>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 
 #include <svx/numinf.hxx>
 

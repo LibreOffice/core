@@ -10,15 +10,15 @@
 #ifndef INCLUDED_WRITERPERFECT_INC_STRINGS_HRC
 #define INCLUDED_WRITERPERFECT_INC_STRINGS_HRC
 
-#define RES_START   1000
+#define N_(String) (u8##String)
 
-#define STR_ENCODING_DIALOG_TITLE                (RES_START + 1)
-#define STR_ENCODING_DIALOG_TITLE_MSWORKS        (RES_START + 2)
-#define STR_ENCODING_DIALOG_TITLE_MSWRITE        (RES_START + 3)
-#define STR_ENCODING_DIALOG_TITLE_DOSWORD        (RES_START + 4)
-#define STR_ENCODING_DIALOG_TITLE_LOTUS          (RES_START + 5)
-#define STR_ENCODING_DIALOG_TITLE_SYMPHONY       (RES_START + 6)
-#define STR_ENCODING_DIALOG_TITLE_QUATTROPRO     (RES_START + 7)
+#define STR_ENCODING_DIALOG_TITLE               N_("Import file")
+#define STR_ENCODING_DIALOG_TITLE_MSWORKS       N_("Import MS Works file")
+#define STR_ENCODING_DIALOG_TITLE_MSWRITE       N_("Import MS Write file")
+#define STR_ENCODING_DIALOG_TITLE_DOSWORD       N_("Import MS Word for DOS file")
+#define STR_ENCODING_DIALOG_TITLE_LOTUS         N_("Import Lotus file")
+#define STR_ENCODING_DIALOG_TITLE_SYMPHONY      N_("Import Symphony file")
+#define STR_ENCODING_DIALOG_TITLE_QUATTROPRO    N_("Import Quattro Pro file")
 
 #endif
 

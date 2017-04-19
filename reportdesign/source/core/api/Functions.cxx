@@ -19,7 +19,7 @@
 #include "Functions.hxx"
 #include "Function.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <comphelper/property.hxx>
 #include <algorithm>
@@ -77,7 +77,7 @@ void SAL_CALL OFunctions::insertByIndex( ::sal_Int32 Index, const uno::Any& aEle
             checkIndex(Index);
         uno::Reference< report::XFunction > xFunction(aElement,uno::UNO_QUERY);
         if ( !xFunction.is() )
-            throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL),*this,2);
+            throw lang::IllegalArgumentException(RptResId(RID_STR_ARGUMENT_IS_NULL),*this,2);
 
         if ( bAdd )
             m_aFunctions.push_back(xFunction);
@@ -120,7 +120,7 @@ void SAL_CALL OFunctions::replaceByIndex( ::sal_Int32 Index, const uno::Any& Ele
         checkIndex(Index);
         uno::Reference< report::XFunction > xFunction(Element,uno::UNO_QUERY);
         if ( !xFunction.is() )
-            throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL),*this,2);
+            throw lang::IllegalArgumentException(RptResId(RID_STR_ARGUMENT_IS_NULL),*this,2);
         TFunctions::iterator aPos = m_aFunctions.begin();
         ::std::advance(aPos,Index);
         aOldElement <<= *aPos;

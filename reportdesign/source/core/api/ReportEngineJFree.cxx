@@ -45,8 +45,8 @@
 #include <unotools/sharedunocomponent.hxx>
 
 #include "Tools.hxx"
-#include "corestrings.hrc"
-#include "core_resource.hrc"
+#include "strings.hxx"
+#include "strings.hrc"
 #include "core_resource.hxx"
 
 #include <connectivity/CommonTools.hxx>
@@ -195,7 +195,7 @@ OUString OReportEngineJFree::getNewOutputName()
                 ::utl::TempFile aTestFile(sName, false, &sExt);
                 if ( !aTestFile.IsValid() )
                 {
-                    sName = RPT_RESSTRING(RID_STR_REPORT);
+                    sName = RptResId(RID_STR_REPORT);
                     ::utl::TempFile aFile(sName, false, &sExt);
                     sFileURL = aFile.GetURL();
                 }

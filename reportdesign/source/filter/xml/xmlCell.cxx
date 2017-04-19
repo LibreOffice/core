@@ -31,7 +31,7 @@
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 #include "xmlTable.hxx"
 #include "xmlFormattedField.hxx"
 #include "xmlImage.hxx"

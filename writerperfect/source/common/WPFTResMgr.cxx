@@ -2,14 +2,13 @@
 
 #include "WPFTResMgr.hxx"
 
-#include <tools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-ResMgr &WPFTResMgr::GetResMgr()
+std::locale &WPFTResLocale::GetResLocale()
 {
-    static ResMgr *const pResMgr(ResMgr::CreateResMgr("writerperfect", Application::GetSettings().GetUILanguageTag()));
-    return *pResMgr;
+    static std::locale loc(Translate::Create("wpt", Application::GetSettings().GetUILanguageTag()));
+    return loc;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

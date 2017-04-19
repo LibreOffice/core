@@ -375,7 +375,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     }
     else
     {
-        SAL_WARN( "sal.bootstrap", "couldn't open file: " <<  _iniName );
+        SAL_INFO( "sal.bootstrap", "couldn't open file: " <<  _iniName );
     }
 }
 

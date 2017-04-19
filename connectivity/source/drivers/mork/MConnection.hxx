@@ -97,7 +97,7 @@ namespace connectivity
             css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
 
             void throwSQLException( const ErrorDescriptor& _rError, const css::uno::Reference< css::uno::XInterface >& _rxContext );
-            void throwSQLException( const sal_uInt16 _nErrorResourceId, const css::uno::Reference< css::uno::XInterface >& _rxContext );
+            void throwSQLException( const char* pErrorResourceId, const css::uno::Reference< css::uno::XInterface >& _rxContext );
         };
     }
 }

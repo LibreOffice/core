@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "dlgedfac.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "RptObject.hxx"
 #include <RptDef.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>

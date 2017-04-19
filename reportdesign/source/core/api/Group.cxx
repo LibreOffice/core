@@ -22,8 +22,8 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
-#include "corestrings.hrc"
-#include "core_resource.hrc"
+#include "strings.hxx"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "Tools.hxx"
 #include <comphelper/property.hxx>
@@ -118,7 +118,7 @@ void SAL_CALL OGroup::setHeaderOn( sal_Bool _headeron )
 {
     if ( bool(_headeron) != m_xHeader.is() )
     {
-        OUString sName(RPT_RESSTRING(RID_STR_GROUP_HEADER));
+        OUString sName(RptResId(RID_STR_GROUP_HEADER));
         setSection(PROPERTY_HEADERON,_headeron,sName,m_xHeader);
     }
 }
@@ -133,7 +133,7 @@ void SAL_CALL OGroup::setFooterOn( sal_Bool _footeron )
 {
     if ( bool(_footeron) != m_xFooter.is() )
     {
-        OUString sName(RPT_RESSTRING(RID_STR_GROUP_FOOTER));
+        OUString sName(RptResId(RID_STR_GROUP_FOOTER));
         setSection(PROPERTY_FOOTERON,_footeron,sName,m_xFooter);
     }
 }

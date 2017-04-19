@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <xmloff/prstylei.hxx>
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 #include "xmlEnums.hxx"
 #include <xmloff/contextid.hxx>
 #include <xmloff/txtprmap.hxx>
