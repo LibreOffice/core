@@ -1620,13 +1620,17 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #endif
 
-            if( !rKeyCode.IsMod2() && '=' == aCh &&
+            if (!comphelper::LibreOfficeKit::isActive() &&
+                !rKeyCode.IsMod2() && '=' == aCh &&
                 !rSh.IsTableMode() && rSh.GetTableFormat() &&
                 rSh.IsSttPara() &&
-                !rSh.HasReadonlySel() )
+                !rSh.HasReadonlySel())
             {
                 // at the beginning of the table's cell a '=' ->
                 // call EditRow (F2-functionality)
+                // [Avoid this for LibreOfficeKit, as the separate input window
+                // steals the focus & things go wrong - the user never gets
+                // the focus back.]
                 rSh.Push();
                 if( !rSh.MoveSection( GoCurrSection, fnSectionStart) &&
                     !rSh.IsTableBoxTextFormat() )
