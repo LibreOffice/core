@@ -18,6 +18,7 @@
  */
 
 #include <editeng/writingmodeitem.hxx>
+#include <editeng/frmdir.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 
@@ -69,7 +70,7 @@ bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
         OUString &rText,
         const IntlWrapper *  ) const
 {
-    rText = EditResId::GetString(RID_SVXITEMS_FRMDIR_BEGIN + (int)GetValue());
+    rText = EditResId(getFrmDirResId((int)GetValue()));
     return true;
 }
 

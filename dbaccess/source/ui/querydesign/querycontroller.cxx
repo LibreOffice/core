@@ -19,9 +19,12 @@
 
 #include "adtabdlg.hxx"
 #include "browserids.hxx"
-#include "dbu_qry.hrc"
+#include "core_resource.hxx"
+#include "strings.hrc"
+#include "query.hrc"
 #include "dbu_reghelper.hxx"
-#include "dbustrings.hrc"
+#include "dbu_pageids.hxx"
+#include "stringconstants.hxx"
 #include "defaultobjectnamecheck.hxx"
 #include "dlgsave.hxx"
 #include "uiservices.hxx"
@@ -211,12 +214,10 @@ namespace dbaui
 
     namespace
     {
-        OUString lcl_getObjectResourceString( sal_uInt16 _nResId, sal_Int32 _nCommandType )
+        OUString lcl_getObjectResourceString(const char* pResId, sal_Int32 _nCommandType)
         {
-            OUString sMessageText = ModuleRes( _nResId );
-            ModuleRes aResId(RSC_QUERY_OBJECT_TYPE);
-            ResStringArray aResList(aResId);
-            OUString sObjectType = aResList.GetString(_nCommandType);
+            OUString sMessageText = DBA_RES(pResId);
+            OUString sObjectType = DBA_RES(RSC_QUERY_OBJECT_TYPE[_nCommandType]);
             sMessageText = sMessageText.replaceFirst( "$object$", sObjectType );
             return sMessageText;
         }
@@ -608,7 +609,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             if ( m_pSqlIterator->getStatementType() != OSQLStatementType::Select || rTabs.begin() == rTabs.end() )
                             {
                                 aError = SQLException(
-                                    ModuleRes( STR_QRY_NOSELECT ),
+                                    DBA_RES(STR_QRY_NOSELECT),
                                     nullptr,
                                     "S1000",
                                     1000,
@@ -631,7 +632,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     else
                     {
                         aError = SQLException(
-                            ModuleRes( STR_QRY_SYNTAX ),
+                            DBA_RES(STR_QRY_SYNTAX),
                             nullptr,
                             "S1000",
                             1000,
@@ -661,7 +662,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         break;
         case SID_BROWSER_CLEAR_QUERY:
             {
-                GetUndoManager().EnterListAction( OUString( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), OUString(), 0, ViewShellId(-1) );
+                GetUndoManager().EnterListAction(DBA_RES(STR_QUERY_UNDO_TABWINDELETE), OUString(), 0, ViewShellId(-1) );
                 getContainer()->clear();
                 GetUndoManager().LeaveListAction();
 
@@ -945,8 +946,8 @@ void OQueryController::impl_initialize()
             m_nCommandType = CommandType::QUERY;
             bool bClose = false;
             {
-                OUString aTitle( ModuleRes( STR_QUERYDESIGN_NO_VIEW_SUPPORT ) );
-                OUString aMessage( ModuleRes( STR_QUERYDESIGN_NO_VIEW_ASK ) );
+                OUString aTitle(DBA_RES(STR_QUERYDESIGN_NO_VIEW_SUPPORT));
+                OUString aMessage(DBA_RES(STR_QUERYDESIGN_NO_VIEW_ASK));
                 ODataView* pWindow = getView();
                 ScopedVclPtrInstance< OSQLMessageBox > aDlg( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query );
                 bClose = aDlg->Execute() == RET_NO;
@@ -963,7 +964,7 @@ void OQueryController::impl_initialize()
             if ( !( aView >>= m_xAlterView ) )
             {
                 throw IllegalArgumentException(
-                    ModuleRes( STR_NO_ALTER_VIEW_SUPPORT ),
+                    DBA_RES(STR_NO_ALTER_VIEW_SUPPORT),
                     *this,
                     1
                 );
@@ -1041,7 +1042,7 @@ OUString OQueryController::getPrivateTitle( ) const
         {
             SolarMutexGuard aSolarGuard;
             ::osl::MutexGuard aGuard( getMutex() );
-            OUString aDefaultName = ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE );
+            OUString aDefaultName = DBA_RES(editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE);
             sName = aDefaultName.getToken(0,' ');
             sName += OUString::number(getCurrentStartNumber());
         }
@@ -1338,7 +1339,7 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
             aDefaultName = m_sName;
         else
         {
-            OUString sName = ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE );
+            OUString sName = DBA_RES(editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE);
             aDefaultName = sName.getToken(0,' ');
             aDefaultName = ::dbtools::createUniqueName(_xElements,aDefaultName);
         }
@@ -1372,7 +1373,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
     if ( !editingCommand() && !haveDataSource() )
     {
-        OUString aMessage(ModuleRes(STR_DATASOURCE_DELETED));
+        OUString aMessage(DBA_RES(STR_DATASOURCE_DELETED));
         ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage)->Execute();
         return false;
     }
@@ -1722,9 +1723,7 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
     }
     else if(m_sStatement.isEmpty())
     {
-        ModuleRes aModuleRes(STR_QRY_NOSELECT);
-        OUString sTmpStr(aModuleRes);
-        showError(SQLException(sTmpStr,nullptr,"S1000",1000,Any()));
+        showError(SQLException(DBA_RES(STR_QRY_NOSELECT), nullptr, "S1000", 1000, Any()));
     }
     else
         sTranslatedStmt = m_sStatement;
@@ -1858,7 +1857,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                 {
                     if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
-                        OUString aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
+                        OUString aTitle(DBA_RES(STR_SVT_SQL_SYNTAX_ERROR));
                         ScopedVclPtrInstance< OSQLMessageBox > aDlg(getView(),aTitle,aErrorMsg);
                         aDlg->Execute();
                     }

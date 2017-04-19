@@ -19,6 +19,11 @@
 
 $(eval $(call gb_Library_Library,t602filter))
 
+$(eval $(call gb_Library_set_include,t602filter,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/filter/inc \
+))
+
 $(eval $(call gb_Library_set_componentfile,t602filter,filter/source/t602/t602filter))
 
 $(eval $(call gb_Library_use_external,t602filter,boost_headers))

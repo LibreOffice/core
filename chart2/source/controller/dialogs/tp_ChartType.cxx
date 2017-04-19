@@ -18,7 +18,7 @@
  */
 
 #include "tp_ChartType.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ResId.hxx"
 #include "ChartModelHelper.hxx"
 #include "DiagramHelper.hxx"

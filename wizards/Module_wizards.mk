@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_targets,wizards,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,wizards,\
+	AllLangMoTarget_wiz \
 	AllLangResTarget_dbw \
 	AllLangResTarget_eur \
 	AllLangResTarget_imp \

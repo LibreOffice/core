@@ -23,9 +23,11 @@ class FaxWizardDialogResources(object):
     RID_FAXWIZARDGREETING_START = 3280
     RID_FAXWIZARDSALUTATION_START = 3290
     RID_FAXWIZARDROADMAP_START = 3300
-    RID_RID_COMMON_START = 500
 
     def __init__(self, oWizardResource):
+        import imp, os
+        imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+        import strings
 
         self.resFaxWizardDialog_title = oWizardResource.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 1)
@@ -148,10 +150,8 @@ class FaxWizardDialogResources(object):
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 55)}
 
         #Common Resources
-        self.resOverwriteWarning = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_RID_COMMON_START + 19)
-        self.resTemplateDescription = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_RID_COMMON_START + 20)
+        self.resOverwriteWarning = strings.RID_COMMON_START_19
+        self.resTemplateDescription = strings.RID_COMMON_START_20
 
         self.RoadmapLabels = []
         self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 1))
