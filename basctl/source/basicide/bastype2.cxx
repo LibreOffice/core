@@ -383,10 +383,10 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
 void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     auto const aEntries = {
-        std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ),
-        std::make_pair( OBJ_TYPE_USERFORMS, IDE_RESSTR(RID_STR_USERFORMS) ),
-        std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDE_RESSTR(RID_STR_NORMAL_MODULES) ),
-        std::make_pair( OBJ_TYPE_CLASS_MODULES, IDE_RESSTR(RID_STR_CLASS_MODULES) ) };
+        std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDEResId(RID_STR_DOCUMENT_OBJECTS) ),
+        std::make_pair( OBJ_TYPE_USERFORMS, IDEResId(RID_STR_USERFORMS) ),
+        std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDEResId(RID_STR_NORMAL_MODULES) ),
+        std::make_pair( OBJ_TYPE_CLASS_MODULES, IDEResId(RID_STR_CLASS_MODULES) ) };
     for( auto const & iter: aEntries )
     {
         EntryType eType = iter.first;

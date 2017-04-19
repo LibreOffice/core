@@ -42,10 +42,10 @@
 #include "svtools/treelistentry.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include "fpicker/fpicker.hrc"
 #include "svtools/helpid.hrc"
 #include <svtools/svtools.hrc>
-#include "OfficeFilePicker.hrc"
-#include "iodlg.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
@@ -628,14 +628,14 @@ void SvtFileDialog::Init_Impl
     if ( nStyle & PickerFlags::ReadOnly )
     {
         _pCbReadOnly->SetHelpId( HID_FILEOPEN_READONLY );
-        _pCbReadOnly->SetText( SvtResId( STR_SVT_FILEPICKER_READONLY ) );
+        _pCbReadOnly->SetText( FpsResId( STR_SVT_FILEPICKER_READONLY ) );
         _pCbReadOnly->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         _pCbReadOnly->Show();
     }
 
     if ( nStyle & PickerFlags::Password )
     {
-        pImpl->_pCbPassword->SetText( SvtResId( STR_SVT_FILEPICKER_PASSWORD ) );
+        pImpl->_pCbPassword->SetText( FpsResId( STR_SVT_FILEPICKER_PASSWORD ) );
         pImpl->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         pImpl->_pCbPassword->Show();
     }
@@ -646,26 +646,26 @@ void SvtFileDialog::Init_Impl
     AddControls_Impl( );
 
     // adjust the labels to the mode
-    sal_uInt16 nResId = STR_EXPLORERFILE_OPEN;
-    sal_uInt16 nButtonResId = 0;
+    const char* pResId = STR_EXPLORERFILE_OPEN;
+    const char* pButtonResId = nullptr;
 
     if ( nStyle & PickerFlags::SaveAs )
     {
-        nResId = STR_EXPLORERFILE_SAVE;
-        nButtonResId = STR_EXPLORERFILE_BUTTONSAVE;
+        pResId = STR_EXPLORERFILE_SAVE;
+        pButtonResId = STR_EXPLORERFILE_BUTTONSAVE;
     }
 
     if ( nStyle & PickerFlags::PathDialog )
     {
-        pImpl->_pFtFileName->SetText( SvtResId( STR_PATHNAME ) );
-        nResId = STR_PATHSELECT;
-        nButtonResId = STR_BUTTONSELECT;
+        pImpl->_pFtFileName->SetText( FpsResId( STR_PATHNAME ) );
+        pResId = STR_PATHSELECT;
+        pButtonResId = STR_BUTTONSELECT;
     }
 
-    SetText( SvtResId( nResId ) );
+    SetText( FpsResId( pResId ) );
 
-    if ( nButtonResId )
-        pImpl->_pBtnFileOpen->SetText( SvtResId( nButtonResId ) );
+    if ( pButtonResId )
+        pImpl->_pBtnFileOpen->SetText( FpsResId( pButtonResId ) );
 
     if ( FILEDLG_TYPE_FILEDLG != pImpl->_eDlgType )
     {
@@ -742,7 +742,7 @@ IMPL_LINK_NOARG( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
     SmartContent aContent( _pFileView->GetViewURL( ) );
     OUString aTitle;
     aContent.getTitle( aTitle );
-    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg(this, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER));
+    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg(this, aTitle, FpsResId(STR_SVT_NEW_FOLDER));
     bool bHandled = false;
 
     while ( !bHandled )
@@ -1068,7 +1068,7 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
         {
             if ( ::utl::UCBContentHelper::Exists( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
             {
-                OUString aMsg = SVT_RESSTR( STR_SVT_ALREADYEXISTOVERWRITE );
+                OUString aMsg = FpsResId(STR_SVT_ALREADYEXISTOVERWRITE);
                 aMsg = aMsg.replaceFirst(
                     "$filename$",
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset)
@@ -1106,7 +1106,7 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
 
                 if ( !bExists )
                 {
-                    OUString sError( SVT_RESSTR( RID_FILEOPEN_NOTEXISTENTFILE ) );
+                    OUString sError(FpsResId(RID_FILEOPEN_NOTEXISTENTFILE));
 
                     OUString sInvalidFile( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
                     if ( INetProtocol::File == aFileObj.GetProtocol() )
@@ -1825,7 +1825,7 @@ short SvtFileDialog::PrepareExecute()
 
                 if ( bEmpty )
                 {
-                    ScopedVclPtrInstance< MessageDialog > aBox(this, SVT_RESSTR(STR_SVT_NOREMOVABLEDEVICE));
+                    ScopedVclPtrInstance< MessageDialog > aBox(this, FpsResId(STR_SVT_NOREMOVABLEDEVICE));
                     aBox->Execute();
                     return 0;
                 }
@@ -1881,7 +1881,7 @@ short SvtFileDialog::PrepareExecute()
 
     // set up initial filter
     sal_uInt16 nFilterCount = GetFilterCount();
-    OUString aAll = SvtResId( STR_FILTERNAME_ALL ).toString();
+    OUString aAll = FpsResId( STR_FILTERNAME_ALL );
     bool bHasAll = pImpl->HasFilterListEntry( aAll );
     if ( pImpl->GetCurFilter() || nFilterCount == 1 || ( nFilterCount == 2 && bHasAll ) )
     {
@@ -2434,7 +2434,7 @@ void SvtFileDialog::AddControls_Impl( )
     // create the "insert as link" checkbox, if needed
     if ( _nPickerFlags & PickerFlags::InsertAsLink )
     {
-        _pCbLinkBox ->SetText( SvtResId( STR_SVT_FILEPICKER_INSERT_AS_LINK ) );
+        _pCbLinkBox ->SetText( FpsResId( STR_SVT_FILEPICKER_INSERT_AS_LINK ) );
         _pCbLinkBox ->SetHelpId( HID_FILEDLG_LINK_CB );
         _pCbLinkBox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         _pCbLinkBox->Show();
@@ -2449,7 +2449,7 @@ void SvtFileDialog::AddControls_Impl( )
         pImpl->DisableFilterBoxAutoWidth();
 
         // "preview"
-        _pCbPreviewBox->SetText( SvtResId( STR_SVT_FILEPICKER_SHOW_PREVIEW ) );
+        _pCbPreviewBox->SetText( FpsResId( STR_SVT_FILEPICKER_SHOW_PREVIEW ) );
         _pCbPreviewBox->SetHelpId( HID_FILEDLG_PREVIEW_CB );
         _pCbPreviewBox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         _pCbPreviewBox->Show();
@@ -2462,12 +2462,12 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevBmp->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
         _pPrevBmp->SetSizePixel(_pPrevWin->GetSizePixel());
         _pPrevBmp->Show();
-        _pPrevBmp->SetAccessibleName(SVT_RESSTR(STR_PREVIEW));
+        _pPrevBmp->SetAccessibleName(FpsResId(STR_PREVIEW));
     }
 
     if ( _nPickerFlags & PickerFlags::AutoExtension )
     {
-        pImpl->_pCbAutoExtension->SetText( SvtResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
+        pImpl->_pCbAutoExtension->SetText( FpsResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
         pImpl->_pCbAutoExtension->Check();
         pImpl->_pCbAutoExtension->SetClickHdl( LINK( this, SvtFileDialog, AutoExtensionHdl_Impl ) );
         pImpl->_pCbAutoExtension->Show();
@@ -2475,21 +2475,21 @@ void SvtFileDialog::AddControls_Impl( )
 
     if ( _nPickerFlags & PickerFlags::FilterOptions )
     {
-        pImpl->_pCbOptions->SetText( SvtResId( STR_SVT_FILEPICKER_FILTER_OPTIONS ) );
+        pImpl->_pCbOptions->SetText( FpsResId( STR_SVT_FILEPICKER_FILTER_OPTIONS ) );
         pImpl->_pCbOptions->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         pImpl->_pCbOptions->Show();
     }
 
     if ( _nPickerFlags & PickerFlags::Selection )
     {
-        _pCbSelection->SetText( SvtResId( STR_SVT_FILEPICKER_SELECTION ) );
+        _pCbSelection->SetText( FpsResId( STR_SVT_FILEPICKER_SELECTION ) );
         _pCbSelection->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         _pCbSelection->Show();
     }
 
     if ( _nPickerFlags & PickerFlags::PlayButton )
     {
-        _pPbPlay->SetText( SvtResId( STR_SVT_FILEPICKER_PLAY ) );
+        _pPbPlay->SetText( FpsResId( STR_SVT_FILEPICKER_PLAY ) );
         _pPbPlay->SetHelpId( HID_FILESAVE_DOPLAY );
         _pPbPlay->SetClickHdl( LINK( this, SvtFileDialog, PlayButtonHdl_Impl ) );
         _pPbPlay->Show();
@@ -2497,7 +2497,7 @@ void SvtFileDialog::AddControls_Impl( )
 
     if ( _nPickerFlags & PickerFlags::ShowVersions )
     {
-        pImpl->_pFtFileVersion->SetText( SvtResId( STR_SVT_FILEPICKER_VERSION ) );
+        pImpl->_pFtFileVersion->SetText( FpsResId( STR_SVT_FILEPICKER_VERSION ) );
         pImpl->_pFtFileVersion->Show();
 
         pImpl->_pLbFileVersion->SetHelpId( HID_FILEOPEN_VERSION );
@@ -2505,7 +2505,7 @@ void SvtFileDialog::AddControls_Impl( )
     }
     else if ( _nPickerFlags & PickerFlags::Templates )
     {
-        pImpl->_pFtTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_TEMPLATES ) );
+        pImpl->_pFtTemplates->SetText( FpsResId( STR_SVT_FILEPICKER_TEMPLATES ) );
         pImpl->_pFtTemplates->Show();
 
         pImpl->_pLbTemplates->SetHelpId( HID_FILEOPEN_VERSION );
@@ -2516,14 +2516,14 @@ void SvtFileDialog::AddControls_Impl( )
     }
     else if ( _nPickerFlags & PickerFlags::ImageTemplate )
     {
-        pImpl->_pFtImageTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_IMAGE_TEMPLATE ) );
+        pImpl->_pFtImageTemplates->SetText( FpsResId( STR_SVT_FILEPICKER_IMAGE_TEMPLATE ) );
         pImpl->_pFtImageTemplates->Show();
 
         pImpl->_pLbImageTemplates->SetHelpId( HID_FILEOPEN_IMAGE_TEMPLATE );
         pImpl->_pLbImageTemplates->Show();
     }
 
-    pImpl->_pPlaces = VclPtr<PlacesListBox>::Create(_pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER);
+    pImpl->_pPlaces = VclPtr<PlacesListBox>::Create(_pContainer, this, FpsResId(STR_PLACES_TITLE), WB_BORDER);
     pImpl->_pPlaces->SetHelpId("SVT_HID_FILESAVE_PLACES_LISTBOX");
     Size aSize(LogicToPixel(Size(50, 85), MapUnit::MapAppFont));
     pImpl->_pPlaces->set_height_request(aSize.Height());
@@ -2692,7 +2692,7 @@ void SvtFileDialog::appendDefaultExtension(OUString& _rFileName,
 
 void SvtFileDialog::initDefaultPlaces( )
 {
-    PlacePtr pRootPlace( new Place( SVT_RESSTR(STR_DEFAULT_DIRECTORY), GetStandardDir() ) );
+    PlacePtr pRootPlace( new Place( FpsResId(STR_DEFAULT_DIRECTORY), GetStandardDir() ) );
     pImpl->_pPlaces->AppendPlace( pRootPlace );
 
     // Load from user settings

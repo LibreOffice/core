@@ -23,13 +23,13 @@
 
 #include "advancedsettings.hxx"
 #include "advancedsettingsdlg.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "dsitems.hxx"
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"
 #include "optionalboolitem.hxx"
-#include "dbu_resource.hrc"
-#include "dbu_dlg.hrc"
+#include "dbu_pageids.hxx"
+#include "dbu_dlg.hxx"
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

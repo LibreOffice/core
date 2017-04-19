@@ -21,8 +21,8 @@
 
 #include "services.h"
 
-#include <classes/resource.hrc>
-#include <classes/fwlresid.hxx>
+#include <strings.hrc>
+#include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -159,7 +159,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
                 if ( bAllOneState && ( nCount > 1 ))
                 {
                     // Insert special item for all command
-                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwlResId(STR_MENU_HEADFOOTALL).toString(), MenuItemBits::NONE, OString(), 0 );
+                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwkResId(STR_MENU_HEADFOOTALL), MenuItemBits::NONE, OString(), 0 );
 
                     OUStringBuffer aStrBuf( aCmd );
                     aStrBuf.append( "?On:bool=" );

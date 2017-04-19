@@ -25,7 +25,7 @@
 #include <classes/fwkresid.hxx>
 #include <helper/mischelper.hxx>
 #include <framework/menuextensionsupplier.hxx>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -422,19 +422,19 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                         // Replacement for place holders
                         if ( aItemText.startsWith("($1)") )
                         {
-                            OUString aTmp(FWK_RESSTR(STR_UPDATEDOC));
+                            OUString aTmp(FwkResId(STR_UPDATEDOC));
                             aTmp += " " + aItemText.copy( 4 );
                             aItemText = aTmp;
                         }
                         else if ( aItemText.startsWith("($2)") )
                         {
-                            OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
+                            OUString aTmp(FwkResId(STR_CLOSEDOC_ANDRETURN));
                             aTmp += aItemText.copy( 4 );
                             aItemText = aTmp;
                         }
                         else if ( aItemText.startsWith("($3)") )
                         {
-                            OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
+                            OUString aTmp(FwkResId(STR_SAVECOPYDOC));
                             aTmp += aItemText.copy( 4 );
                             aItemText = aTmp;
                         }
@@ -1233,7 +1233,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                             pPopup->InsertSeparator();
 
                         // Use resource to load popup menu title
-                        OUString aAddonsStrRes(FWK_RESSTR(STR_MENU_ADDONS));
+                        OUString aAddonsStrRes(FwkResId(STR_MENU_ADDONS));
                         pPopup->InsertItem( ITEMID_ADDONLIST, aAddonsStrRes );
                         pPopup->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
 

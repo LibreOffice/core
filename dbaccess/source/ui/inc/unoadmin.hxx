@@ -23,7 +23,7 @@
 #include <svtools/genericunodialog.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include "dsntypes.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 class SfxItemSet;
 class SfxItemPool;
@@ -37,7 +37,7 @@ typedef ::svt::OGenericUnoDialog ODatabaseAdministrationDialogBase;
 class ODatabaseAdministrationDialog
         :public ODatabaseAdministrationDialogBase
 {
-    OModuleClient           m_aModuleClient;
+    dbaccess::OModuleClient m_aModuleClient;
 protected:
     SfxItemSet*             m_pDatasourceItems;     // item set for the dialog
     SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog

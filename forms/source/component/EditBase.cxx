@@ -25,7 +25,7 @@
 #include <comphelper/basicio.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include "frm_resource.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <com/sun/star/util/Time.hpp>

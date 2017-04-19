@@ -22,7 +22,7 @@
 #include <algorithm>
 
 #include "services.h"
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <uiconfiguration/windowstateproperties.hxx>
@@ -454,7 +454,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             }
         }
 
-        OUString aLabelStr(FWK_RESSTR(STR_RESTORE_TOOLBARS));
+        OUString aLabelStr(FwkResId(STR_RESTORE_TOOLBARS));
         OUString aRestoreCmd( CMD_RESTOREVISIBILITY );
         addCommand( m_xPopupMenu, aRestoreCmd, aLabelStr );
     }

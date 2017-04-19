@@ -18,6 +18,7 @@
  */
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -59,7 +60,7 @@ SvxConnectionDialog::SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet
     _pPage->Construct();
 
     SetTabPage( _pPage );
-    SetText(CUI_RESSTR( RID_SVXSTR_CONNECTOR ));
+    SetText(CUI_RES( RID_SVXSTR_CONNECTOR ));
 }
 
 /*************************************************************************

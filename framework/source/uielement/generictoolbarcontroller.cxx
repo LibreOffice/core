@@ -36,7 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <tools/urlobj.hxx>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <uielement/menubarmanager.hxx>
@@ -216,13 +216,13 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
                 }
                 else if ( aStrValue.startsWith("($2)") )
                 {
-                    OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
+                    OUString aTmp(FwkResId(STR_CLOSEDOC_ANDRETURN));
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 else if ( aStrValue.startsWith("($3)") )
                 {
-                    OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
+                    OUString aTmp(FwkResId(STR_SAVECOPYDOC));
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }

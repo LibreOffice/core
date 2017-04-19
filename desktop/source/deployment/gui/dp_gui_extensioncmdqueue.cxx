@@ -69,7 +69,7 @@
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_gui_dependencydialog.hxx"
 #include "dp_gui_dialog2.hxx"
-#include "dp_gui_shared.hxx"
+#include "dp_shared.hxx"
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_updateinstalldialog.hxx"
@@ -405,7 +405,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     }
     else if (request >>= verExc)
     {
-        sal_uInt32 id;
+        const char* id;
         switch (dp_misc::compareVersions(
                     verExc.NewVersion, verExc.Deployed->getVersion() ))
         {
@@ -425,26 +425,26 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         {
             SolarMutexGuard guard;
             ScopedVclPtrInstance<MessageDialog> box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr,
-                                                    ResId(id, *DeploymentGuiResMgr::get()), VclMessageType::Warning, VclButtonsType::OkCancel);
+                                                    DP_RESSTR(id), VclMessageType::Warning, VclButtonsType::OkCancel);
             OUString s;
             if (bEqualNames)
             {
                 s = box->get_primary_text();
             }
-            else if (id == RID_STR_WARNING_VERSION_EQUAL)
+            else if (!strcmp(id, RID_STR_WARNING_VERSION_EQUAL))
             {
                 //hypothetical: requires two instances of an extension with the same
                 //version to have different display names. Probably the developer forgot
                 //to change the version.
-                s = ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
+                s = DP_RESSTR(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES);
             }
-            else if (id == RID_STR_WARNING_VERSION_LESS)
+            else if (!strcmp(id, RID_STR_WARNING_VERSION_LESS))
             {
-                s = ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
+                s = DP_RESSTR(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES);
             }
-            else if (id == RID_STR_WARNING_VERSION_GREATER)
+            else if (!strcmp(id, RID_STR_WARNING_VERSION_GREATER))
             {
-               s = ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
+               s = DP_RESSTR(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES);
             }
             s = s.replaceAll("$NAME", verExc.NewDisplayName);
             s = s.replaceAll("$OLDNAME", verExc.Deployed->getDisplayName());
@@ -477,7 +477,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     else if (request >>= platExc)
     {
         SolarMutexGuard guard;
-        OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()).toString());
+        OUString sMsg(DP_RESSTR(RID_STR_UNSUPPORTED_PLATFORM));
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
         ScopedVclPtrInstance< MessageDialog > box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, sMsg);
         box->Execute();
@@ -569,12 +569,12 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
     m_xContext( rContext ),
     m_pDialogHelper( pDialogHelper ),
     m_pManager( pManager ),
-    m_sEnablingPackages( DialogHelper::getResourceString( RID_STR_ENABLING_PACKAGES ) ),
-    m_sDisablingPackages( DialogHelper::getResourceString( RID_STR_DISABLING_PACKAGES ) ),
-    m_sAddingPackages( DialogHelper::getResourceString( RID_STR_ADDING_PACKAGES ) ),
-    m_sRemovingPackages( DialogHelper::getResourceString( RID_STR_REMOVING_PACKAGES ) ),
-    m_sDefaultCmd( DialogHelper::getResourceString( RID_STR_ADD_PACKAGES ) ),
-    m_sAcceptLicense( DialogHelper::getResourceString( RID_STR_ACCEPT_LICENSE ) ),
+    m_sEnablingPackages( DP_RESSTR( RID_STR_ENABLING_PACKAGES ) ),
+    m_sDisablingPackages( DP_RESSTR( RID_STR_DISABLING_PACKAGES ) ),
+    m_sAddingPackages( DP_RESSTR( RID_STR_ADDING_PACKAGES ) ),
+    m_sRemovingPackages( DP_RESSTR( RID_STR_REMOVING_PACKAGES ) ),
+    m_sDefaultCmd( DP_RESSTR( RID_STR_ADD_PACKAGES ) ),
+    m_sAcceptLicense( DP_RESSTR( RID_STR_ACCEPT_LICENSE ) ),
     m_eInput( NONE ),
     m_bStopped( false ),
     m_bWorking( false )
