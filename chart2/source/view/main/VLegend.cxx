@@ -778,8 +778,6 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
     if (!xPivotTableDataProvider->getColumnFields().hasElements())
         return aButtons;
 
-    uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
-
     awt::Size aSize(2000, 700);
     int y = 100;
     for (chart2::data::PivotTableFieldEntry const & sColumnFieldEntry : xPivotTableDataProvider->getColumnFields())
@@ -790,8 +788,13 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
         awt::Point aNewPosition = awt::Point(100, y);
         pButton->setLabel(sColumnFieldEntry.Name);
         pButton->setCID("FieldButton.Column." + OUString::number(sColumnFieldEntry.DimensionIndex));
-        pButton->createShapes(aNewPosition, aSize, xModelPage);
-        y += aSize.Height + 100;;
+        pButton->setPosition(aNewPosition);
+        pButton->setSize(aSize);
+        if (sColumnFieldEntry.Name == "Data")
+            pButton->showArrow(false);
+        if (sColumnFieldEntry.HasHiddenMembers)
+            pButton->setArrowColor(0x0000FF);
+        y += aSize.Height + 100;
     }
     nUsedHeight += y + 100;
 
@@ -936,9 +939,13 @@ void VLegend::createShapes(
                 aLegendSize = lcl_placeLegendEntries(aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize, aMaxSymbolExtent,
                                                      aTextProperties, xLegendContainer, m_xShapeFactory, aRectangle);
 
+
+                uno::Reference<beans::XPropertySet> xModelPage(mrModel.getPageBackground());
+
                 for (std::shared_ptr<VButton> const & pButton : aButtons)
                 {
-                    pButton->setWidth(aLegendSize.Width - 200);
+                    pButton->setSize({aLegendSize.Width - 200, pButton->getSize().Height});
+                    pButton->createShapes(xModelPage);
                 }
             }
 
