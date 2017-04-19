@@ -19,7 +19,7 @@
 
 #include "ObjectNameProvider.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "macros.hxx"
 #include "AxisHelper.hxx"
 #include "ChartModelHelper.hxx"
@@ -488,9 +488,9 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
     {
         if( bVerbose )
         {
-            aRet= OUString(SchResId(STR_TIP_DATAPOINT_INDEX)) + "\n"
-                + OUString(SchResId(STR_TIP_DATASERIES)) + "\n"
-                + OUString(SchResId(STR_TIP_DATAPOINT_VALUES));
+            aRet = SchResId(STR_TIP_DATAPOINT_INDEX) + "\n"
+                 + SchResId(STR_TIP_DATASERIES) + "\n"
+                 + SchResId(STR_TIP_DATAPOINT_VALUES);
         }
         else
             aRet=SchResId(STR_TIP_DATAPOINT);

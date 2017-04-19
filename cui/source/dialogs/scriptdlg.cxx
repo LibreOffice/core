@@ -28,6 +28,7 @@
 #include <osl/mutex.hxx>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include "scriptdlg.hxx"
 #include <dialmgr.hxx>

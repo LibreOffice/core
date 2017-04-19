@@ -21,9 +21,9 @@
 
 #include "TableDeco.hxx"
 #include <definitioncolumn.hxx>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include <osl/diagnose.h>
 
 #include <cppuhelper/typeprovider.hxx>

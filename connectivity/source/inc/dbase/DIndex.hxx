@@ -86,7 +86,7 @@ namespace connectivity
             OUString getCompletePath();
             void closeImpl();
             // Closes and kills the index file and throws an error
-            void impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const OUString& _sFile);
+            void impl_killFileAndthrowError_throw(const char* pErrorId, const OUString& _sFile);
         protected:
             virtual ~ODbaseIndex() override;
         public:

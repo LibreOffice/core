@@ -28,7 +28,7 @@
 #include "dlg_DataSource.hxx"
 #include "ChartModelHelper.hxx"
 #include "ControllerCommandDispatch.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "ChartViewHelper.hxx"
 
