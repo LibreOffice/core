@@ -332,22 +332,12 @@ void SwFlyFrame::DeleteCnt()
 
 void SwFlyFrame::InitDrawObj()
 {
-    // Find ContactObject from the Format. If there's already one, we just
-    // need to create a new Ref, else we create the Contact now.
-
-    IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
-    SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFormat>( *GetFormat() ).First();
-    if ( !pContact )
-    {
-        // #i52858# - method name changed
-        pContact = new SwFlyDrawContact( GetFormat(),
-                                          rIDDMA.GetOrCreateDrawModel() );
-    }
     // OD 2004-03-22 #i26791#
-    SetDrawObj(*pContact->CreateNewRef(this));
+    SetDrawObj(*SwFlyDrawContact::CreateNewRef(this, GetFormat()));
 
     // Set the right Layer
     // OD 2004-01-19 #110582#
+    IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
     SdrLayerID nHeavenId = rIDDMA.GetHeavenId();
     SdrLayerID nHellId = rIDDMA.GetHellId();
     // OD 2004-03-22 #i26791#
