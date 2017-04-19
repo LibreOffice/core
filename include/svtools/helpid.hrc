@@ -34,6 +34,7 @@
 #define HID_FILESAVE_DOSAVE                                    "SVT_HID_FILESAVE_DOSAVE"
 #define HID_FILESAVE_AUTOEXTENSION                             "SVT_HID_FILESAVE_AUTOEXTENSION"
 #define HID_FILESAVE_SAVEWITHPASSWORD                          "SVT_HID_FILESAVE_SAVEWITHPASSWORD"
+#define HID_FILESAVE_EMBEDFONTS                                "SVT_HID_FILESAVE_EMBEDFONTS"
 #define HID_FILESAVE_CUSTOMIZEFILTER                           "SVT_HID_FILESAVE_CUSTOMIZEFILTER"
 #define HID_FILESAVE_SELECTION                                 "SVT_HID_FILESAVE_SELECTION"
 #define HID_FILESAVE_DIALOG                                    "SVT_HID_FILESAVE_DIALOG"

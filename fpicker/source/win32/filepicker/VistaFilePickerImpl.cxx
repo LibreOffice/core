@@ -589,6 +589,13 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
         setLabelToControl(m_ResProvider, iCustom, nControlId);
     }
 
+      if ((nFeatures & FEATURE_EMBEDFONTS) == FEATURE_EMBEDFONTS)
+    {
+        nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS;
+        iCustom->AddCheckButton (nControlId, L"EmbedFonts", false);
+        setLabelToControl(m_ResProvider, iCustom, nControlId);
+    }
+
     if ((nFeatures & FEATURE_READONLY) == FEATURE_READONLY)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY;
@@ -1035,6 +1042,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
     {
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD :
+        case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK :
@@ -1109,6 +1117,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
         switch (nId)
         {
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD :
+        case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS :
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK :
