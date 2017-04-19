@@ -3436,7 +3436,7 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol, bool& rbInvalidE
     }
 
     const OUString* pRealName = pRefMgr->getRealRangeName(nFileId, aName);
-    maRawToken.SetExternalName(nFileId, pRealName ? *pRealName : OUString(aTmp));
+    maRawToken.SetExternalName(nFileId, pRealName ? *pRealName : aTmp);
     maExternalFiles.push_back(nFileId);
     return true;
 }
