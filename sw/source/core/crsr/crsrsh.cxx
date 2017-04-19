@@ -119,8 +119,8 @@ void CheckRange( SwCursor* pCurrentCursor )
 
 SwPaM * SwCursorShell::CreateCursor()
 {
-    // don't create Cursor in a table Selection (sic!)
-    OSL_ENSURE( !IsTableMode(), "in table Selection" );
+    // don't create new Cursor with active table Selection
+    assert(!IsTableMode());
 
     // New cursor as copy of current one. Add to the ring.
     // Links point to previously created one, ie forward.
@@ -143,8 +143,8 @@ SwPaM * SwCursorShell::CreateCursor()
  */
 bool SwCursorShell::DestroyCursor()
 {
-    // don't delete Cursor within table selection
-    OSL_ENSURE( !IsTableMode(), "in table Selection" );
+    // don't delete Cursor with active table Selection
+    assert(!IsTableMode());
 
     // Is there a next one? Don't do anything if not.
     if(!m_pCurrentCursor->IsMultiSelection())
@@ -406,8 +406,8 @@ void SwCursorShell::UpdateMarkedListLevel()
         {
             if ( pTextNd->IsInList() )
             {
-                OSL_ENSURE( pTextNd->GetActualListLevel() >= 0 &&
-                        pTextNd->GetActualListLevel() < MAXLEVEL, "Which level?");
+                assert(pTextNd->GetActualListLevel() >= 0 &&
+                       pTextNd->GetActualListLevel() < MAXLEVEL);
                 MarkListLevel( pTextNd->GetListId(),
                                pTextNd->GetActualListLevel() );
             }
@@ -846,14 +846,14 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
 
 void SwCursorShell::TableCursorToCursor()
 {
-    OSL_ENSURE( m_pTableCursor, "TableCursorToCursor: Why?" );
+    assert(m_pTableCursor);
     delete m_pTableCursor;
     m_pTableCursor = nullptr;
 }
 
 void SwCursorShell::BlockCursorToCursor()
 {
-    OSL_ENSURE( m_pBlockCursor, "BlockCursorToCursor: Why?" );
+    assert(m_pBlockCursor);
     if( m_pBlockCursor && !HasSelection() )
     {
         SwPaM& rPam = m_pBlockCursor->getShellCursor();
@@ -1871,7 +1871,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
 void SwCursorShell::RefreshBlockCursor()
 {
-    OSL_ENSURE( m_pBlockCursor, "Don't call me without a block cursor" );
+    assert(m_pBlockCursor);
     SwShellCursor &rBlock = m_pBlockCursor->getShellCursor();
     Point aPt = rBlock.GetPtPos();
     SwContentFrame* pFrame = rBlock.GetContentNode()->getLayoutFrame( GetLayout(), &aPt, rBlock.GetPoint(), false );
@@ -2333,7 +2333,7 @@ bool SwCursorShell::ExtendSelection( bool bEnd, sal_Int32 nCount )
 
     SwPosition* pPos = bEnd ? m_pCurrentCursor->End() : m_pCurrentCursor->Start();
     SwTextNode* pTextNd = pPos->nNode.GetNode().GetTextNode();
-    OSL_ENSURE( pTextNd, "no text node; how should this then be extended?" );
+    assert(pTextNd);
 
     sal_Int32 nPos = pPos->nContent.GetIndex();
     if( bEnd )
@@ -2809,7 +2809,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
 {
     if( m_pTableCursor )
     {
-        OSL_ENSURE( false, "Did not remove table selection!" );
+        assert(!"Did not remove table selection!");
         return false;
     }
 
@@ -3311,7 +3311,7 @@ void SwCursorShell::ClearUpCursors()
         }
         bool bFound = (pNode != nullptr);
 
-        OSL_ENSURE(bFound, "no content node found");
+        assert(bFound);
 
         if (bFound)
         {
