@@ -602,6 +602,9 @@ public:
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool MoveSticky( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ,
             ScRange& rErrorRange );
 
+    SC_DLLPUBLIC void IncColIfNotLessThan(SCCOL nStartCol, SCsCOL nOffset);
+    SC_DLLPUBLIC void IncRowIfNotLessThan(SCROW nStartRow, SCsROW nOffset);
+
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 
