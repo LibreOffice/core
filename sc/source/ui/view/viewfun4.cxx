@@ -248,9 +248,19 @@ void ScViewFunc::DoRefConversion()
                     continue;
 
                 ScFormulaCell* pCell = aIter.getFormulaCell();
+                sal_uInt8 eMatrixMode = pCell->GetMatrixFlag();
+                if (eMatrixMode == MM_REFERENCE)
+                    continue;
+
                 OUString aOld;
                 pCell->GetFormula(aOld);
                 sal_Int32 nLen = aOld.getLength();
+                if (eMatrixMode == MM_FORMULA)
+                {
+                    assert(nLen >= 2 && aOld[0] == '{' && aOld[nLen-1] == '}');
+                    nLen -= 2;
+                    aOld = aOld.copy( 1, nLen);
+                }
                 ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
                 aFinder.ToggleRel( 0, nLen );
                 if (aFinder.GetFound())
@@ -262,7 +272,7 @@ void ScViewFunc::DoRefConversion()
                     std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aNew));
                     ScFormulaCell* pNewCell =
                         new ScFormulaCell(
-                            pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
+                            pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, eMatrixMode);
 
                     pDoc->SetFormulaCell(aPos, pNewCell);
                     bOk = true;
