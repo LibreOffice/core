@@ -502,32 +502,36 @@ sal_uInt32 SwFlyDrawContact::GetOrdNumForNewRef(const SwFlyFrame* pFly)
     return GetMaster()->GetOrdNumDirect();
 }
 
-SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly)
+SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFormat* pFormat)
 {
-    SwVirtFlyDrawObj* pDrawObj(new SwVirtFlyDrawObj(*GetMaster(), pFly));
-    pDrawObj->SetModel(GetMaster()->GetModel());
-    pDrawObj->SetUserCall(this);
+    // Find ContactObject from the Format. If there's already one, we just
+    // need to create a new Ref, else we create the Contact now.
+
+    IDocumentDrawModelAccess& rIDDMA = pFormat->getIDocumentDrawModelAccess();
+    SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFormat>( *pFormat ).First();
+    if ( !pContact )
+        pContact = new SwFlyDrawContact(pFormat, rIDDMA.GetOrCreateDrawModel());
+    SwVirtFlyDrawObj* pDrawObj(new SwVirtFlyDrawObj(*pContact->GetMaster(), pFly));
+    pDrawObj->SetModel(pContact->GetMaster()->GetModel());
+    pDrawObj->SetUserCall(pContact);
 
     // The Reader creates the Masters and inserts them into the Page in
     // order to transport the z-order.
     // After creating the first Reference the Masters are removed from the
     // List and are not important anymore.
     SdrPage* pPg(nullptr);
-    if(nullptr != (pPg = GetMaster()->GetPage()))
+    if(nullptr != (pPg = pContact->GetMaster()->GetPage()))
     {
-        const size_t nOrdNum = GetMaster()->GetOrdNum();
+        const size_t nOrdNum = pContact->GetMaster()->GetOrdNum();
         pPg->ReplaceObject(pDrawObj, nOrdNum);
     }
     // #i27030# - insert new <SwVirtFlyDrawObj> instance
     // into drawing page with correct order number
     else
-    {
-        GetFormat()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0)->
-                InsertObject(pDrawObj, GetOrdNumForNewRef(pFly));
-    }
+        rIDDMA.GetDrawModel()->GetPage(0)->InsertObject(pDrawObj, pContact->GetOrdNumForNewRef(pFly));
     // #i38889# - assure, that new <SwVirtFlyDrawObj> instance
     // is in a visible layer.
-    MoveObjToVisibleLayer(pDrawObj);
+    pContact->MoveObjToVisibleLayer(pDrawObj);
     return pDrawObj;
 }
 

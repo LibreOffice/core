@@ -197,7 +197,7 @@ public:
 
     /// Creates DrawObject and registers it with the Model.
     SwFlyDrawContact( SwFlyFrameFormat* pToRegisterIn, SdrModel* pMod );
-    SwVirtFlyDrawObj* CreateNewRef(SwFlyFrame* pFly);
+    static SwVirtFlyDrawObj* CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFormat* pFormat);
     virtual ~SwFlyDrawContact() override;
 
     virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const override;
