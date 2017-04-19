@@ -92,6 +92,8 @@
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
+#include <officecfg/Office/Calc.hxx>
+
 using namespace com::sun::star;
 using ::editeng::SvxBorderLine;
 
@@ -1096,11 +1098,12 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
     }
 
     bool bOk = true;
-    bool bEmptyMergedCells = false;
+    bool bEmptyMergedCells = officecfg::Office::Calc::Compatibility::MergeCells::EmptyMergedCells::get();
 
     if (bAskDialog)
     {
-        if (!bApi)
+        bool bShowDialog = officecfg::Office::Calc::Compatibility::MergeCells::ShowDialog::get();
+        if (!bApi && bShowDialog)
         {
             VclPtr<ScMergeCellsDialog> aBox = VclPtr<ScMergeCellsDialog>::Create( GetViewData().GetDialogParent() );
             sal_uInt16 nRetVal = aBox->Execute();
@@ -1113,7 +1116,8 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
                         rDoContents = true;
                         break;
                     case KeepContentHiddenCells:
-                        break; // keep default values
+                        bEmptyMergedCells = false;
+                        break;
                     case EmptyContentHiddenCells:
                         bEmptyMergedCells = true;
                         break;
