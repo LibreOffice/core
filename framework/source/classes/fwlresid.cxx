@@ -19,10 +19,10 @@
 
 #include "classes/fwlresid.hxx"
 #include <osl/mutex.hxx>
+#include <rtl/strbuf.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-
-#include <rtl/strbuf.hxx>
 
 namespace framework
 {

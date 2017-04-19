@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -47,32 +48,7 @@
 #include "svx/svxids.hrc"
 #include "svx/fmresids.hrc"
 
-// Copied from svx
-// Function-Id's
-#define RID_FMSHELL_CONVERSIONMENU (RID_FORMS_START + 4)
-
-static const sal_Int16 nConvertSlots[] =
-{
-    SID_FM_CONVERTTO_EDIT,
-    SID_FM_CONVERTTO_BUTTON,
-    SID_FM_CONVERTTO_FIXEDTEXT,
-    SID_FM_CONVERTTO_LISTBOX,
-    SID_FM_CONVERTTO_CHECKBOX,
-    SID_FM_CONVERTTO_RADIOBUTTON,
-    SID_FM_CONVERTTO_GROUPBOX,
-    SID_FM_CONVERTTO_COMBOBOX,
-    SID_FM_CONVERTTO_IMAGEBUTTON,
-    SID_FM_CONVERTTO_FILECONTROL,
-    SID_FM_CONVERTTO_DATE,
-    SID_FM_CONVERTTO_TIME,
-    SID_FM_CONVERTTO_NUMERIC,
-    SID_FM_CONVERTTO_CURRENCY,
-    SID_FM_CONVERTTO_PATTERN,
-    SID_FM_CONVERTTO_IMAGECONTROL,
-    SID_FM_CONVERTTO_FORMATTED,
-    SID_FM_CONVERTTO_SCROLLBAR,
-    SID_FM_CONVERTTO_SPINBUTTON
-};
+// See svx/source/form/fmshimp.cxx for other use of this .ui
 
 static const char* aCommands[] =
 {
@@ -94,7 +70,8 @@ static const char* aCommands[] =
     ".uno:ConvertToImageControl",
     ".uno:ConvertToFormatted",
     ".uno:ConvertToScrollBar",
-    ".uno:ConvertToSpinButton"
+    ".uno:ConvertToSpinButton",
+    ".uno:ConvertToNavigationBar"
 };
 
 static const sal_Int16 nImgIds[] =
@@ -185,13 +162,13 @@ private:
     void fillPopupMenu( uno::Reference< awt::XPopupMenu >& rPopupMenu );
 
     bool                m_bShowMenuImages : 1;
-    VclPtr<PopupMenu>   m_pResPopupMenu;
+    std::unique_ptr<VclBuilder> m_xBuilder;
+    VclPtr<PopupMenu>   m_xResPopupMenu;
     UrlToDispatchMap    m_aURLToDispatchMap;
 };
 
-ControlMenuController::ControlMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
-    svt::PopupMenuControllerBase( xContext ),
-    m_pResPopupMenu( nullptr )
+ControlMenuController::ControlMenuController(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+    : svt::PopupMenuControllerBase(xContext)
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
@@ -202,13 +179,16 @@ ControlMenuController::ControlMenuController( const css::uno::Reference< css::un
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
     std::unique_ptr<ResMgr> xResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
-    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(nConvertSlots); ++i)
+    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
+        //ident is .uno:Command without .uno:
+        OString sIdent = OString(aCommands[i]).copy(5);
+        sal_uInt16 nId = pPopupMenu->GetItemId(sIdent);
         ResId aResId(nImgIds[i], *xResMgr);
         if (m_bShowMenuImages && xResMgr->IsAvailable(aResId))
-            pPopupMenu->SetItemImage(nConvertSlots[i], Image(BitmapEx(aResId)));
+            pPopupMenu->SetItemImage(nId, Image(BitmapEx(aResId)));
         else
-            pPopupMenu->SetItemImage(nConvertSlots[i], Image());
+            pPopupMenu->SetItemImage(nId, Image());
     }
 }
 
@@ -224,8 +204,8 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rP
     if ( pPopupMenu )
         pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
-    if ( pVCLPopupMenu && m_pResPopupMenu )
-        *pVCLPopupMenu = *m_pResPopupMenu;
+    if (pVCLPopupMenu && m_xResPopupMenu)
+        *pVCLPopupMenu = *m_xResPopupMenu;
 }
 
 // XEventListener
@@ -240,7 +220,8 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& )
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
     m_xPopupMenu.clear();
-    m_pResPopupMenu.disposeAndClear();
+    m_xResPopupMenu.clear();
+    m_xBuilder.reset();
 }
 
 // XStatusListener
@@ -248,20 +229,26 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 
-    sal_uInt16 nMenuId = 0;
+    OString sIdent;
     for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
         {
-            nMenuId = nConvertSlots[i];
+            //ident is .uno:Command without .uno:
+            sIdent = OString(aCommands[i]).copy(5);
             break;
         }
     }
 
+    sal_uInt16 nMenuId = 0;
+
     VCLXPopupMenu*  pPopupMenu = nullptr;
 
-    if ( nMenuId )
+    if (!sIdent.isEmpty() && m_xResPopupMenu)
+    {
         pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( m_xPopupMenu ));
+        nMenuId = m_xResPopupMenu->GetItemId(sIdent);
+    }
 
     if (pPopupMenu)
     {
@@ -273,12 +260,12 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
             pVCLPopupMenu->RemoveItem( pVCLPopupMenu->GetItemPos( nMenuId ));
         else if ( Event.IsEnabled && pVCLPopupMenu->GetItemPos( nMenuId ) == MENU_ITEM_NOTFOUND )
         {
-            sal_Int16 nSourcePos = m_pResPopupMenu->GetItemPos(nMenuId);
+            sal_Int16 nSourcePos = m_xResPopupMenu->GetItemPos(nMenuId);
             sal_Int16 nPrevInSource = nSourcePos;
             sal_uInt16 nPrevInConversion = MENU_ITEM_NOTFOUND;
             while (nPrevInSource>0)
             {
-                sal_Int16 nPrevId = m_pResPopupMenu->GetItemId(--nPrevInSource);
+                sal_Int16 nPrevId = m_xResPopupMenu->GetItemId(--nPrevInSource);
 
                 // do we have the source's predecessor in our conversion menu, too ?
                 nPrevInConversion = pVCLPopupMenu->GetItemPos( nPrevId );
@@ -290,9 +277,9 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
                 nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
 
-            pVCLPopupMenu->InsertItem( nMenuId, m_pResPopupMenu->GetItemText( nMenuId ), m_pResPopupMenu->GetItemBits( nMenuId ), OString(), ++nPrevInConversion );
-            pVCLPopupMenu->SetItemImage( nMenuId, m_pResPopupMenu->GetItemImage( nMenuId ));
-            pVCLPopupMenu->SetHelpId( nMenuId, m_pResPopupMenu->GetHelpId( nMenuId ));
+            pVCLPopupMenu->InsertItem(nMenuId, m_xResPopupMenu->GetItemText(nMenuId), m_xResPopupMenu->GetItemBits(nMenuId), OString(), ++nPrevInConversion);
+            pVCLPopupMenu->SetItemImage(nMenuId, m_xResPopupMenu->GetItemImage(nMenuId));
+            pVCLPopupMenu->SetHelpId(nMenuId, m_xResPopupMenu->GetHelpId(nMenuId));
         }
     }
 }
@@ -329,20 +316,12 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
 // XPopupMenuController
 void ControlMenuController::impl_setPopupMenu()
 {
-    if ( m_pResPopupMenu == nullptr )
+    if (!m_xResPopupMenu)
     {
-        std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
-        if ( pResMgr )
-        {
-            ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );
-            aResId.SetRT( RSC_MENU );
-            if ( pResMgr->IsAvailable( aResId ))
-            {
-                m_pResPopupMenu = VclPtr<PopupMenu>::Create( aResId );
-                updateImagesPopupMenu( m_pResPopupMenu );
-            }
-        }
-    } // if ( m_pResPopupMenu == 0 )
+        m_xBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/convertmenu.ui", ""));
+        m_xResPopupMenu = m_xBuilder->get_menu("menu");
+        updateImagesPopupMenu(m_xResPopupMenu);
+    }
 }
 
 void SAL_CALL ControlMenuController::updatePopupMenu()
