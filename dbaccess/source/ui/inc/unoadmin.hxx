@@ -37,7 +37,6 @@ typedef ::svt::OGenericUnoDialog ODatabaseAdministrationDialogBase;
 class ODatabaseAdministrationDialog
         :public ODatabaseAdministrationDialogBase
 {
-    OModuleClient           m_aModuleClient;
 protected:
     SfxItemSet*             m_pDatasourceItems;     // item set for the dialog
     SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog

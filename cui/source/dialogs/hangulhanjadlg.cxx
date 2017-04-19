@@ -22,6 +22,7 @@
 
 #include <cuires.hrc>
 #include "helpid.hrc"
+#include "strings.hrc"
 
 #include <algorithm>
 #include <vcl/controllayout.hxx>
@@ -574,8 +575,8 @@ namespace svx
         m_pSuggestions->set_height_request( m_pSuggestions->GetTextHeight() * 5 );
         m_pSuggestions->set_width_request( m_pSuggestions->approximate_char_width() * 48 );
 
-        const OUString sHangul(CUI_RESSTR(RID_SVXSTR_HANGUL));
-        const OUString sHanja(CUI_RESSTR(RID_SVXSTR_HANJA));
+        const OUString sHangul(CUI_RES(RID_SVXSTR_HANGUL));
+        const OUString sHanja(CUI_RES(RID_SVXSTR_HANJA));
         m_pHanjaAbove->init( sHangul, sHanja, PseudoRubyText::eAbove );
         m_pHanjaBelow->init( sHangul, sHanja, PseudoRubyText::eBelow );
         m_pHangulAbove->init( sHanja, sHangul, PseudoRubyText::eAbove );
@@ -1730,7 +1731,7 @@ namespace svx
 
     HangulHanjaEditDictDialog::HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict )
         :ModalDialog            ( _pParent, "HangulHanjaEditDictDialog", "cui/ui/hangulhanjaeditdictdialog.ui" )
-        ,m_aEditHintText        ( CUI_RESSTR(RID_SVXSTR_EDITHINT) )
+        ,m_aEditHintText        ( CUI_RES(RID_SVXSTR_EDITHINT) )
         ,m_rDictList            ( _rDictList )
         ,m_nCurrentDict         ( 0xFFFFFFFF )
         ,m_pSuggestions         ( nullptr )

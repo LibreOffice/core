@@ -70,6 +70,7 @@
 #include "sfx2/opengrf.hxx"
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>

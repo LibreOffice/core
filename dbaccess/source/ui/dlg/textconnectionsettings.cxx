@@ -19,10 +19,10 @@
 
 #include "textconnectionsettings.hxx"
 #include "TextConnectionHelper.hxx"
-#include "dbu_resource.hrc"
+#include "dbu_pageids.hxx"
 #include "moduledbu.hxx"
 #include "dsitems.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 
 #include <vcl/msgbox.hxx>
 

@@ -48,7 +48,7 @@
 #include "UndoGuard.hxx"
 #include "ObjectNameProvider.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ReferenceSizeProvider.hxx"
 #include "RegressionCurveHelper.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -817,7 +817,7 @@ void ChartController::executeDispatch_View3D()
     try
     {
         UndoLiveUpdateGuard aUndoGuard(
-            SCH_RESSTR( STR_ACTION_EDIT_3D_VIEW ),
+            SchResId( STR_ACTION_EDIT_3D_VIEW ),
             m_xUndoManager );
 
         //open dialog
