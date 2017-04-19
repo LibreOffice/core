@@ -792,7 +792,7 @@ bool ZipPackageStream::saveChild(
         uno::Reference< io::XSeekable > xSeek(xStream, uno::UNO_QUERY);
         // It's not worth to deflate jpegs to save ~1% in a slow process
         // Unfortunately, does not work for streams protected by password
-        if (xSeek.is() && msMediaType.endsWith("/jpeg") && !m_bToBeEncrypted)
+        if (xSeek.is() && msMediaType.endsWith("/jpeg") && !m_bToBeEncrypted && !m_bToBeCompressed)
         {
             ImplSetStoredData(*pTempEntry, xStream);
             xSeek->seek(0);
