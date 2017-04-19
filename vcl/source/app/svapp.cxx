@@ -693,11 +693,10 @@ void Application::SetSettings( const AllSettings& rSettings )
     else
     {
         AllSettings aOldSettings = *pSVData->maAppData.mpSettings;
-        if( aOldSettings.GetUILanguageTag().getLanguageType() != rSettings.GetUILanguageTag().getLanguageType() &&
-                pSVData->mpResMgr )
+        if (aOldSettings.GetUILanguageTag().getLanguageType() != rSettings.GetUILanguageTag().getLanguageType() &&
+                pSVData->mbResLocaleSet)
         {
-            delete pSVData->mpResMgr;
-            pSVData->mpResMgr = nullptr;
+            pSVData->mbResLocaleSet = false;
         }
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
         *pSVData->maAppData.mpSettings = rSettings;

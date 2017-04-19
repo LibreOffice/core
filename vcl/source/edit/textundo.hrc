@@ -20,11 +20,11 @@
 #ifndef VCL_TEXTUNDO_HRC
 #define VCL_TEXTUNDO_HRC
 
-#define STR_TEXTUNDO_DELPARA                 3000
-#define STR_TEXTUNDO_CONNECTPARAS            3001
-#define STR_TEXTUNDO_SPLITPARA               3002
-#define STR_TEXTUNDO_INSERTCHARS             3003
-#define STR_TEXTUNDO_REMOVECHARS             3004
+#define STR_TEXTUNDO_DELPARA                  "delete line"
+#define STR_TEXTUNDO_CONNECTPARAS             "delete multiple lines"
+#define STR_TEXTUNDO_SPLITPARA                "insert multiple lines"
+#define STR_TEXTUNDO_INSERTCHARS              "insert '$1'"
+#define STR_TEXTUNDO_REMOVECHARS              "delete '$1'"
 
 #endif // VCL_TEXTUNDO_HRC
 
