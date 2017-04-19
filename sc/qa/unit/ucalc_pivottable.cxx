@@ -927,12 +927,8 @@ void Test::testPivotTableCache()
 
         for (sal_Int32 i = 0; i < nRows; ++i)
         {
-            if (!aFilteredCache.isRowActive(i))
-            {
-                std::ostringstream os;
-                os << "Row " << i << " should be visible but it isn't.";
-                CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), false);
-            }
+            bool bSuccess = aFilteredCache.isRowActive(i);
+            CPPUNIT_ASSERT_MESSAGE("Row should be visible but it isn't.", bSuccess);
         }
     }
 
