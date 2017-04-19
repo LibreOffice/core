@@ -20,7 +20,7 @@
 #include "MovingAverageRegressionCurveCalculator.hxx"
 #include "RegressionCalculationHelper.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "macros.hxx"
 
 #include <rtl/math.hxx>
@@ -98,7 +98,7 @@ OUString MovingAverageRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& /*xNumFormatter*/,
     sal_Int32 /*nNumberFormatKey*/, sal_Int32* /*pFormulaLength = nullptr */ ) const
 {
-    return SCH_RESSTR( STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS );
+    return SchResId( STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS );
 }
 
 } //  namespace chart

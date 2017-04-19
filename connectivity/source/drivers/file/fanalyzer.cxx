@@ -24,7 +24,7 @@
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/dbexception.hxx>
 #include "file/FConnection.hxx"
-#include "resource/file_res.hrc"
+#include "strings.hrc"
 
 using namespace ::connectivity;
 using namespace ::connectivity::file;

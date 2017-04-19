@@ -25,10 +25,6 @@ $(eval $(call gb_Module_add_targets,svl,\
     Library_svl \
 ))
 
-$(eval $(call gb_Module_add_l10n_targets,svl,\
-    AllLangResTarget_svl \
-))
-
 $(eval $(call gb_Module_add_check_targets,svl,\
 	CppunitTest_svl_inetcontenttype \
 	CppunitTest_svl_itempool \

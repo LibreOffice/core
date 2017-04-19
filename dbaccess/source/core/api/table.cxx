@@ -21,9 +21,9 @@
 
 #include "table.hxx"
 #include <definitioncolumn.hxx>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "CIndexes.hxx"
 
 #include <osl/diagnose.h>
@@ -281,7 +281,7 @@ void SAL_CALL ODBTable::rename( const OUString& _rNewName )
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
     if ( !getRenameService().is() )
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 
     Reference<XPropertySet> xTable(this);
     getRenameService()->rename(xTable,_rNewName);
@@ -294,10 +294,10 @@ void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Referen
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
     if ( !getAlterService().is() )
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 
     if ( !m_pColumns->hasByName(_rName) )
-        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
     Reference<XPropertySet> xTable(this);
     getAlterService()->alterColumnByName(xTable,_rName,_rxDescriptor);

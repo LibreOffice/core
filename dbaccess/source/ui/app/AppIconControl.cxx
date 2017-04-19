@@ -19,8 +19,9 @@
 
 #include "AppIconControl.hxx"
 #include "dbaccess_helpid.hrc"
+#include "core_resource.hxx"
 #include "moduledbu.hxx"
-#include "dbu_app.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include <vcl/image.hxx>
 #include "callbacks.hxx"
@@ -38,7 +39,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
 
     const struct CategoryDescriptor
     {
-        sal_uInt16 nLabelResId;
+        const char* pLabelResId;
         ElementType eType;
         const char* aImageResId;
     }   aCategories[] = {
@@ -50,7 +51,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
     for (const CategoryDescriptor& aCategorie : aCategories)
     {
         SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
-            OUString( ModuleRes( aCategorie.nLabelResId ) ) ,
+            DBA_RES(aCategorie.pLabelResId) ,
             Image(BitmapEx(OUString::createFromAscii(aCategorie.aImageResId))));
         if ( pEntry )
             pEntry->SetUserData( new ElementType( aCategorie.eType ) );

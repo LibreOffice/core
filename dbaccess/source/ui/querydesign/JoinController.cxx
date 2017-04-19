@@ -18,10 +18,10 @@
  */
 
 #include <sfx2/sfxsids.hrc>
-#include "dbu_qry.hrc"
+#include "strings.hrc"
 #include "browserids.hxx"
 #include <comphelper/types.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <comphelper/extract.hxx>
