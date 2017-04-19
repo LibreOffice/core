@@ -300,6 +300,7 @@ public:
     }
 
     bool IsChgd() const { return m_bChanged; }
+    void SetChgd() { m_bChanged = true; }
 
     // Park table cursor at start node of boxes.
     void ParkCursor();
