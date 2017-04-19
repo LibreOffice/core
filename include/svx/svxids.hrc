@@ -903,7 +903,7 @@
 #define SID_NEXT_POSTIT                                 ( SID_SVX_START + 1095 )
 #define SID_PREVIOUS_POSTIT                             ( SID_SVX_START + 1096 )
 #define SID_DELETEALL_POSTIT                            ( SID_SVX_START + 1097 )
-#define SID_SHOW_POSTIT                                 ( SID_SVX_START + 1098 )
+#define SID_TOGGLE_NOTES                                ( SID_SVX_START + 1098 )
 #define SID_REPLYTO_POSTIT                              ( SID_SVX_START + 1099 )
 #define SID_DELETEALLBYAUTHOR_POSTIT                    ( SID_SVX_START + 1100 )
 #define SID_INSERT_POSTIT                               ( SID_SVX_START + 1101 )

@@ -364,7 +364,7 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
     case SID_REPLYTO_POSTIT:
         ExecuteReplyToAnnotation( rReq );
         break;
-    case SID_SHOW_POSTIT:
+    case SID_TOGGLE_NOTES:
         ShowAnnotations( !mbShowAnnotations );
         break;
     }
@@ -752,7 +752,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     if( bReadOnly || bWrongPageKind || (nCurrentODFVersion <= SvtSaveOptions::ODFVER_012) )
         rSet.DisableItem( SID_INSERT_POSTIT );
 
-    rSet.Put(SfxBoolItem(SID_SHOW_POSTIT, mbShowAnnotations));
+    rSet.Put(SfxBoolItem(SID_TOGGLE_NOTES, mbShowAnnotations));
 
     Reference< XAnnotation > xAnnotation;
     GetSelectedAnnotation( xAnnotation );
