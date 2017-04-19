@@ -19,7 +19,7 @@
 
 #include "prtsetup.hxx"
 #include "svdata.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
 
 #include "osl/thread.h"
 
@@ -76,7 +76,7 @@ RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
     , m_aJobData(rJobData)
     , m_pPaperPage(nullptr)
     , m_pDevicePage(nullptr)
-    , m_aInvalidString(VclResId(SV_PRINT_INVALID_TXT))
+    , m_aInvalidString(VclResStr(SV_PRINT_INVALID_TXT))
     , mbDataModified(false)
 {
     get(m_pOKButton, "ok");
@@ -493,7 +493,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
         {
             OUString aEntry;
             if (pValue->m_bCustomOption)
-                aEntry = VclResId(SV_PRINT_CUSTOM_TXT);
+                aEntry = VclResStr(SV_PRINT_CUSTOM_TXT);
             else
                 aEntry = m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption);
             sal_uInt16 nPos = m_pPPDValueBox->InsertEntry( aEntry );
