@@ -29,6 +29,11 @@ String STR_FPICKER_PASSWORD
     Text [ en-US ] = "Save with pass~word" ;
 };
 
+String STR_FPICKER_EMBEDFONTS
+{
+   Text [ en-US ] = "Embed fonts in the document" ;
+};
+
 String STR_FPICKER_FILTER_OPTIONS
 {
     Text [ en-US ] = "~Edit filter settings";

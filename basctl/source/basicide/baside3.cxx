@@ -682,6 +682,7 @@ void DialogWindow::SaveDialog()
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS, false);
     Any aValue;
     aValue <<= true;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
@@ -923,6 +924,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS, false);
     Any aValue;
     aValue <<= true;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);

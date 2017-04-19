@@ -260,7 +260,7 @@ PickerFlags SvtFilePicker::getPickerFlags()
     }
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS )
     {
-        nBits = PickerFlags::SaveAs | PickerFlags::Password | PickerFlags::AutoExtension | PickerFlags::FilterOptions;
+        nBits = PickerFlags::SaveAs | PickerFlags::Password | PickerFlags::AutoExtension | PickerFlags::FilterOptions | PickerFlags::embedFontsCheckbox;
     }
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE )
     {
