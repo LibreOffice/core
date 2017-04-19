@@ -26,7 +26,7 @@ $(eval $(call gb_Module_add_targets,svl,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,svl,\
-    AllLangResTarget_svl \
+    AllLangMoTarget_svl \
 ))
 
 $(eval $(call gb_Module_add_check_targets,svl,\

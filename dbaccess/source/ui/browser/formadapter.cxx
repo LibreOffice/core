@@ -23,8 +23,9 @@
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "dbu_brw.hrc"
-#include "dbustrings.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "stringconstants.hxx"
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>

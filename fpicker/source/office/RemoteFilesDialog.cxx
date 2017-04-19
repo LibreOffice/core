@@ -229,7 +229,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits )
     m_pOk_btn->SetClickHdl( LINK( this, RemoteFilesDialog, OkHdl ) );
     m_pCancel_btn->SetClickHdl( LINK( this, RemoteFilesDialog, CancelHdl ) );
 
-    m_sRootLabel = fpicker::SvtResId( STR_SVT_ROOTLABEL );
+    m_sRootLabel = FpsResId( STR_SVT_ROOTLABEL );
     m_pPath = VclPtr<Breadcrumb>::Create( get< vcl::Window >( "breadcrumb_container" ) );
     m_pPath->set_hexpand( true );
     m_pPath->SetClickHdl( LINK( this, RemoteFilesDialog, SelectBreadcrumbHdl ) );
@@ -853,7 +853,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
 
         if( nPos >= 0 )
         {
-            OUString sMsg = fpicker::SvtResId( STR_SVT_DELETESERVICE );
+            OUString sMsg = FpsResId( STR_SVT_DELETESERVICE );
             sMsg = sMsg.replaceFirst( "$servicename$", m_pServices_lb->GetSelectEntry() );
             ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VclMessageType::Question, VclButtonsType::YesNo );
 
@@ -1086,7 +1086,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl, Button*, void )
 
     OUString aTitle;
     aContent.getTitle( aTitle );
-    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg( this, aTitle, fpicker::SVT_RESSTR( STR_SVT_NEW_FOLDER ) );
+    ScopedVclPtrInstance< QueryFolderNameDialog > aDlg(this, aTitle, FpsResId(STR_SVT_NEW_FOLDER));
     bool bHandled = false;
 
     while( !bHandled )
@@ -1158,7 +1158,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl, Button*, void )
     {
         if( m_eMode == REMOTEDLG_MODE_SAVE )
         {
-            OUString sMsg = fpicker::SvtResId( STR_SVT_ALREADYEXISTOVERWRITE );
+            OUString sMsg = FpsResId( STR_SVT_ALREADYEXISTOVERWRITE );
             sMsg = sMsg.replaceFirst( "$filename$", sName );
             ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VclMessageType::Question, VclButtonsType::YesNo );
             if( aBox->Execute() != RET_YES )

@@ -21,7 +21,7 @@
 #include "formlinkdialog.hxx"
 
 #include "modulepcr.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "formstrings.hxx"
 #include <sal/log.hxx>
 #include <vcl/combobox.hxx>
@@ -296,7 +296,7 @@ namespace pcr
         {
             if ( m_sDetailLabel.isEmpty() )
             {
-                m_sDetailLabel = PcrRes(STR_DETAIL_FORM).toString();
+                m_sDetailLabel = PcrRes(STR_DETAIL_FORM);
             }
             sDetailType = m_sDetailLabel;
         }
@@ -308,7 +308,7 @@ namespace pcr
         {
             if ( m_sMasterLabel.isEmpty() )
             {
-                m_sMasterLabel = PcrRes(STR_MASTER_FORM).toString();
+                m_sMasterLabel = PcrRes(STR_MASTER_FORM);
             }
             sMasterType = m_sMasterLabel;
         }
@@ -450,7 +450,7 @@ namespace pcr
         {
             OUString sErrorMessage;
             {
-                sErrorMessage = PcrRes(STR_ERROR_RETRIEVING_COLUMNS).toString();
+                sErrorMessage = PcrRes(STR_ERROR_RETRIEVING_COLUMNS);
                 sErrorMessage = sErrorMessage.replaceFirst("#", sCommand);
             }
 

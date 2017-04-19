@@ -25,9 +25,10 @@
 #include "TypeInfo.hxx"
 #include "UITools.hxx"
 #include "browserids.hxx"
+#include "core_resource.hxx"
 #include "dbu_reghelper.hxx"
-#include "dbu_tbl.hrc"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hrc"
 #include "defaultobjectnamecheck.hxx"
 #include "dlgsave.hxx"
 #include "dsmeta.hxx"
@@ -135,7 +136,7 @@ Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMulti
 }
 
 OTableController::OTableController(const Reference< XComponentContext >& _rM) : OTableController_BASE(_rM)
-    ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
+    ,m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_pTypeInfo()
     ,m_bAllowAutoIncrementValue(false)
     ,m_bNew(true)
@@ -273,7 +274,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
 
     if (!xTablesSup.is())
     {
-        OUString aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
+        OUString aMessage(DBA_RES(STR_TABLEDESIGN_CONNECTION_MISSING));
         ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage )->Execute();
         return false;
     }
@@ -301,7 +302,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
                  aDefaultName = m_sName;
             else
             {
-                OUString aName = ModuleRes(STR_TBL_TITLE);
+                OUString aName = DBA_RES(STR_TBL_TITLE);
                 aDefaultName = aName.getToken(0,' ');
                 aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
             }
@@ -402,9 +403,9 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     }
     catch(const ElementExistException& )
     {
-        OUString sText( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
+        OUString sText( DBA_RES( STR_NAME_ALREADY_EXISTS ) );
         sText = sText.replaceFirst( "#" , m_sName);
-        ScopedVclPtrInstance< OSQLMessageBox > aDlg( getView(), OUString( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg( getView(), OUString( DBA_RES( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
 
         aDlg->Execute();
         bError = true;
@@ -416,7 +417,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     }
 
     if ( aInfo.isValid() )
-        aInfo.prepend( OUString( ModuleRes( STR_TABLEDESIGN_SAVE_ERROR ) ) );
+        aInfo.prepend( OUString( DBA_RES( STR_TABLEDESIGN_SAVE_ERROR ) ) );
     showError(aInfo);
 
     if (aInfo.isValid() || bError)
@@ -436,7 +437,7 @@ void OTableController::doEditIndexes()
     // table needs to be saved before editing indexes
     if (m_bNew || isModified())
     {
-        ScopedVclPtrInstance< MessageDialog > aAsk(getView(), ModuleRes(STR_QUERY_SAVE_TABLE_EDIT_INDEXES), VclMessageType::Question, VclButtonsType::YesNo);
+        ScopedVclPtrInstance< MessageDialog > aAsk(getView(), DBA_RES(STR_QUERY_SAVE_TABLE_EDIT_INDEXES), VclMessageType::Question, VclButtonsType::YesNo);
         if (RET_YES != aAsk->Execute())
             return;
 
@@ -511,7 +512,7 @@ void OTableController::impl_initialize()
     }
     catch(const SQLException&)
     {
-        ScopedVclPtrInstance<OSQLWarningBox>(getView(), ModuleRes( STR_NO_TYPE_INFO_AVAILABLE ))->Execute();
+        ScopedVclPtrInstance<OSQLWarningBox>(getView(), DBA_RES( STR_NO_TYPE_INFO_AVAILABLE ))->Execute();
         throw;
     }
     try
@@ -922,7 +923,7 @@ bool OTableController::checkColumns(bool _bNew)
                 OFieldDescription* pCompareDesc = (*aIter2)->GetActFieldDescr();
                 if (pCompareDesc && bCase(pCompareDesc->GetName(),pFieldDesc->GetName()))
                 {
-                    OUString strMessage = ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME);
+                    OUString strMessage = DBA_RES(STR_TABLEDESIGN_DUPLICATE_NAME);
                     strMessage = strMessage.replaceFirst("$column$", pFieldDesc->GetName());
                     ScopedVclPtrInstance<OSQLWarningBox>(getView(), strMessage)->Execute();
                     return false;
@@ -932,8 +933,8 @@ bool OTableController::checkColumns(bool _bNew)
     }
     if ( _bNew && !bFoundPKey && aMetaData.supportsPrimaryKeys() )
     {
-        OUString sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
-        OUString sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
+        OUString sTitle(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
+        OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));
         ScopedVclPtrInstance< OSQLMessageBox > aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
 
         switch ( aBox->Execute() )
@@ -1062,7 +1063,7 @@ void OTableController::alterColumns()
                 {
                     if(xDrop.is() && xAppend.is())
                     {
-                        OUString aMessage( ModuleRes( STR_TABLEDESIGN_ALTER_ERROR ) );
+                        OUString aMessage( DBA_RES( STR_TABLEDESIGN_ALTER_ERROR ) );
                         aMessage = aMessage.replaceFirst( "$column$", pField->GetName() );
 
                         SQLExceptionInfo aError( ::cppu::getCaughtException() );
@@ -1120,7 +1121,7 @@ void OTableController::alterColumns()
                 bReload = true;
                 if(xDrop.is() && xAppend.is())
                 {
-                    OUString aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
+                    OUString aMessage(DBA_RES(STR_TABLEDESIGN_ALTER_ERROR));
                     aMessage = aMessage.replaceFirst("$column$",pField->GetName());
                     ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES );
                     if ( aMsg->Execute() != RET_YES )
@@ -1186,9 +1187,9 @@ void OTableController::alterColumns()
             {
                 if(xKeyColumns.is() && xKeyColumns->hasByName(*pIter)) // check if this column is a member of the primary key
                 {
-                    OUString aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
+                    OUString aMsgT(DBA_RES(STR_TBL_COLUMN_IS_KEYCOLUMN));
                     aMsgT = aMsgT.replaceFirst("$column$",*pIter);
-                    OUString aTitle(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
+                    OUString aTitle(DBA_RES(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
                     ScopedVclPtrInstance< OSQLMessageBox > aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
                     if(aMsg->Execute() == RET_YES)
                     {
@@ -1207,7 +1208,7 @@ void OTableController::alterColumns()
                 }
                 catch (const SQLException&)
                 {
-                    OUString sError( ModuleRes( STR_TABLEDESIGN_COULD_NOT_DROP_COL ) );
+                    OUString sError( DBA_RES( STR_TABLEDESIGN_COULD_NOT_DROP_COL ) );
                     sError = sError.replaceFirst( "$column$", *pIter );
 
                     SQLException aNewException;
@@ -1490,7 +1491,7 @@ OUString OTableController::getPrivateTitle() const
         }
         if ( sTitle.isEmpty() )
         {
-            OUString aName = ModuleRes(STR_TBL_TITLE);
+            OUString aName = DBA_RES(STR_TBL_TITLE);
             sTitle = aName.getToken(0,' ') + OUString::number(getCurrentStartNumber());
         }
     }

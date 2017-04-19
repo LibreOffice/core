@@ -60,7 +60,7 @@ namespace pcr
             const sal_Char* _pListenerNamespaceAscii,
             const sal_Char* _pListenerClassAsciiName,
             const sal_Char* _pListenerMethodAsciiName,
-            sal_uInt16 _nDisplayNameResId,
+            const char* pDisplayNameResId,
             const OString& _sHelpId,
             const OString& _sUniqueBrowseId );
     };

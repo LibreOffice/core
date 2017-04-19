@@ -38,19 +38,10 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 
-
 class ImpPDFTabGeneralPage;
 class ImpPDFTabViewerPage;
 class ImpPDFTabOpnFtrPage;
 class ImpPDFTabLinksPage;
-
-
-class PDFFilterResId : public ResId
-{
-public:
-    explicit                    PDFFilterResId( sal_uInt32 nId );
-};
-
 
 class ImplErrorDialog : public MessageDialog
 {

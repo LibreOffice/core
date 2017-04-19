@@ -20,7 +20,7 @@
 #include <uielement/macrosmenucontroller.hxx>
 #include <uielement/menubarmanager.hxx>
 #include "services.h"
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
