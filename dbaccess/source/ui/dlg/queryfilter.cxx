@@ -35,7 +35,8 @@
 #include <osl/diagnose.h>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/dbtools.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
 using namespace dbaui;

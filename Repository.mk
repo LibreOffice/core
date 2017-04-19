@@ -1049,25 +1049,13 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 # Resources
 $(eval $(call gb_Helper_register_resources,\
 	abp \
-	acc \
 	analysis \
-	avmedia \
-	$(call gb_Helper_optional,SCRIPTING,basctl) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,bib) \
-	chartcontroller \
-	cnr \
-	cui \
 	date \
 	$(call gb_Helper_optional,DBCONNECTIVITY,\
-		dba \
-		dbmm \
 		dbp \
-		dbu \
 	) \
 	dbw \
-	deployment \
-	deploymentgui \
-	dkt \
 	editeng \
 	eps \
 	eur \
@@ -1084,16 +1072,12 @@ $(eval $(call gb_Helper_register_resources,\
 	pricing \
 	rpt \
 	rptui \
-	$(call gb_Helper_optional,SCRIPTING,sb) \
 	sc \
 	scn \
 	sd \
-	sdberr \
-	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	sfx \
 	sm \
 	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),solver) \
-	svl \
 	svt \
 	svx \
 	sw \
@@ -1101,7 +1085,6 @@ $(eval $(call gb_Helper_register_resources,\
 	tpl \
 	upd \
 	uui \
-	vcl \
 	writerperfect \
 	$(if $(ENABLE_NSS),xmlsec) \
 	xsltdlg \

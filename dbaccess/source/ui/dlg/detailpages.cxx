@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include "core_resource.hxx"
 #include "detailpages.hxx"
 #include "sqlmessage.hxx"
 #include "dsmeta.hxx"
@@ -29,7 +30,8 @@
 #include "moduledbu.hxx"
 
 #include "dbaccess_helpid.hrc"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
@@ -540,9 +542,9 @@ namespace dbaui
         {
         }
 #endif
-        const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
+        ScopedVclPtrInstance<OSQLMessageBox> aMsg(this, DBA_RES(pMessage), OUString(), WB_OK | WB_DEF_OK, mt);
         aMsg->Execute();
     }
     void OGeneralSpecialJDBCDetailsPage::callModifiedHdl(void* pControl)

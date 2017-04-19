@@ -52,7 +52,6 @@ namespace dbaui
     class IContextMenuProvider;
     class DBTreeListBox     :public SvTreeListBox
     {
-        OModuleClient               m_aModuleClient;
         OScrollHelper               m_aScrollHelper;
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;

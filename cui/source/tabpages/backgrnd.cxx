@@ -33,6 +33,7 @@
 #include <svx/dialogs.hrc>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <editeng/memberids.hrc>
 #include <editeng/editrids.hrc>
