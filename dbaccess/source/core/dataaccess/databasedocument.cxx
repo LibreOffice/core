@@ -18,10 +18,10 @@
  */
 
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "datasource.hxx"
 #include "databasedocument.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "documenteventexecutor.hxx"
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"

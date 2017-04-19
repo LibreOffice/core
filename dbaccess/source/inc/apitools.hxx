@@ -30,6 +30,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/CommonTools.hxx>
+#include "strings.hxx"
 
 // OSubComponent - a component which holds a hard ref to its parent
 //                 and is been hold itself (by the parent) with a weak ref

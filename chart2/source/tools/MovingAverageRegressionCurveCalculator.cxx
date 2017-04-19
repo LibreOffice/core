@@ -20,7 +20,7 @@
 #include "MovingAverageRegressionCurveCalculator.hxx"
 #include "RegressionCalculationHelper.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "macros.hxx"
 
 #include <rtl/math.hxx>

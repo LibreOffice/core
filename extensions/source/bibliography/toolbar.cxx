@@ -34,7 +34,7 @@
 #include "bibbeam.hxx"
 #include "bibview.hxx"
 #include "bibresid.hxx"
-#include "bib.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 
 #include "bibtools.hxx"
