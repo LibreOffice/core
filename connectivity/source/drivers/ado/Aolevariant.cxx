@@ -364,12 +364,12 @@ void OLEVariant::set(double n)
 {
     if( n >= 0 )
     {
-        cyVal.Hi = (sal_Int32)(n / (double)4294967296.0);
-        cyVal.Lo  = (sal_uInt32)(n - ((double)cyVal.Hi * (double)4294967296.0));
+        cyVal.Hi = (sal_Int32)(n / 4294967296.0);
+        cyVal.Lo  = (sal_uInt32)(n - ((double)cyVal.Hi * 4294967296.0));
     }
     else {
-        cyVal.Hi = (sal_Int32)(-n / (double)4294967296.0);
-        cyVal.Lo  = (sal_uInt32)(-n - ((double)cyVal.Hi * (double)4294967296.0));
+        cyVal.Hi = (sal_Int32)(-n / 4294967296.0);
+        cyVal.Lo  = (sal_uInt32)(-n - ((double)cyVal.Hi * 4294967296.0));
         CHS();
     }
 }

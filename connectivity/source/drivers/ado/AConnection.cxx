@@ -438,7 +438,7 @@ void OConnection::buildTypeInfo()
                 aInfo->eType                        = (DataTypeEnum)ADOS::getField(pRecordset,nPos++).get_Value().getInt32();
                 if ( aInfo->eType == adWChar && aInfo->aSimpleType.aTypeName == s_sVarChar )
                     aInfo->eType = adVarWChar;
-                aInfo->aSimpleType.nType            = (sal_Int16)ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
+                aInfo->aSimpleType.nType            = (sal_Int16)ADOS::MapADOType2Jdbc(aInfo->eType);
                 aInfo->aSimpleType.nPrecision       = ADOS::getField(pRecordset,nPos++).get_Value().getInt32();
                 aInfo->aSimpleType.aLiteralPrefix   = ADOS::getField(pRecordset,nPos++).get_Value().getString();
                 aInfo->aSimpleType.aLiteralSuffix   = ADOS::getField(pRecordset,nPos++).get_Value().getString();
