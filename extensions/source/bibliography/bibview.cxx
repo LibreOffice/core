@@ -18,7 +18,7 @@
  */
 
 
-#include "bib.hrc"
+#include "strings.hrc"
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
 #include "general.hxx"
@@ -140,7 +140,7 @@ namespace bib
             else if(bExecute)
             {
                 sErrorString += "\n";
-                sErrorString += BIB_RESSTR(RID_MAP_QUESTION);
+                sErrorString += BibResId(RID_MAP_QUESTION);
                 ScopedVclPtrInstance< QueryBox > aQuery(this, WB_YES_NO, sErrorString);
                 aQuery->SetDefaultCheckBoxText();
                 short nResult = aQuery->Execute();

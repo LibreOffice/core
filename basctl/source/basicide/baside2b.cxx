@@ -39,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urihelper.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/xtextedt.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
@@ -478,7 +479,7 @@ bool EditorWindow::ImpCanModify()
     {
         // If in Trace-mode, abort the trace or refuse input
         // Remove markers in the modules in Notify at Basic::Stopped
-        if (ScopedVclPtrInstance<QueryBox>(nullptr, WB_OK_CANCEL, IDEResId(RID_STR_WILLSTOPPRG).toString())->Execute() == RET_OK)
+        if (ScopedVclPtrInstance<QueryBox>(nullptr, WB_OK_CANCEL, IDEResId(RID_STR_WILLSTOPPRG))->Execute() == RET_OK)
         {
             rModulWindow.GetBasicStatus().bIsRunning = false;
             StopBasic();
@@ -980,7 +981,7 @@ void EditorWindow::CreateEditEngine()
     // it could be cut down on one formatting but you would wait even longer
     // for the text then if the source code is long...
     pProgress.reset(new ProgressInfo(GetShell()->GetViewFrame()->GetObjectShell(),
-                                     IDEResId(RID_STR_GENERATESOURCE).toString(),
+                                     IDEResId(RID_STR_GENERATESOURCE),
                                      nLines * 4));
     setTextEngineText(*pEditEngine, aOUSource);
 
@@ -1552,10 +1553,10 @@ WatchWindow::WatchWindow (Layout* pParent)
                                                           WB_HASLINESATROOT | WB_HASBUTTONSATROOT))
     , aHeaderBar(VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BORDER))
 {
-    aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
+    aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME));
     aXEdit->SetHelpId(HID_BASICIDE_WATCHWINDOW_EDIT);
     aXEdit->SetSizePixel(aXEdit->LogicToPixel(Size(80, 12), MapUnit::MapAppFont));
-    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME).toString());
+    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME));
 
     long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
     aXEdit->SetPosPixel( Point( nTextLen, 3 ) );
@@ -1597,9 +1598,9 @@ WatchWindow::WatchWindow (Layout* pParent)
     long nVarTabWidth = 220;
     long nValueTabWidth = 100;
     long nTypeTabWidth = 1250;
-    aHeaderBar->InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE).toString(), nVarTabWidth );
-    aHeaderBar->InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE).toString(), nValueTabWidth );
-    aHeaderBar->InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE).toString(), nTypeTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE), nVarTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE), nValueTabWidth );
+    aHeaderBar->InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE), nTypeTabWidth );
 
     long tabs[ 4 ];
     tabs[ 0 ] = 3; // two tabs
@@ -1615,7 +1616,7 @@ WatchWindow::WatchWindow (Layout* pParent)
 
     aTreeListBox->Show();
 
-    SetText(IDEResId(RID_STR_WATCHNAME).toString());
+    SetText(IDEResId(RID_STR_WATCHNAME));
 
     SetHelpId( HID_BASICIDE_WATCHWINDOW );
 
@@ -1832,14 +1833,14 @@ StackWindow::StackWindow (Layout* pParent) :
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
     aTreeListBox->SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
-    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_STACKNAME).toString());
+    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_STACKNAME));
     aTreeListBox->SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox->SetHighlightRange();
     aTreeListBox->SetSelectionMode( SelectionMode::NONE );
     aTreeListBox->InsertEntry( OUString() );
     aTreeListBox->Show();
 
-    SetText(IDEResId(RID_STR_STACKNAME).toString());
+    SetText(IDEResId(RID_STR_STACKNAME));
 
     SetHelpId( HID_BASICIDE_STACKWINDOW );
 

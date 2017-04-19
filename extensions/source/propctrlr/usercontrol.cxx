@@ -27,7 +27,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include "modulepcr.hxx"
-#include "propresid.hrc"
+#include "strings.hrc"
 
 
 namespace pcr
@@ -107,7 +107,7 @@ namespace pcr
 
             const bool bIsTextFormat = ( pEntry && pEntry->IsTextFormat() );
             if ( bIsTextFormat )
-                getTypedControlWindow()->SetText( PcrRes( RID_STR_TEXT_FORMAT ).toString() );
+                getTypedControlWindow()->SetText( PcrRes( RID_STR_TEXT_FORMAT ) );
             else
                 getTypedControlWindow()->SetValue( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
         }
@@ -265,7 +265,7 @@ namespace pcr
         :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN )
     {
         getTypedControlWindow()->SetDropDownLineCount( 10 );
-        getTypedControlWindow()->SetPlaceHolder( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ).toString() ) ;
+        getTypedControlWindow()->SetPlaceHolder( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) ) ;
     }
 
 

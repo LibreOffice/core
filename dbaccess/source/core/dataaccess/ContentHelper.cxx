@@ -34,7 +34,7 @@
 #include "myucp_resultset.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "sdbcoretools.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 
 namespace dbaccess
 {
