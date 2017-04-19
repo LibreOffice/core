@@ -18,14 +18,14 @@
  */
 
 #include "tablecontainer.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "table.hxx"
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/enumhelper.hxx>
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -265,7 +265,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
     OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(aName))
     {
-        OUString sMessage(DBACORE_RESSTRING(RID_STR_TABLE_IS_FILTERED));
+        OUString sMessage(DBA_RES(RID_STR_TABLE_IS_FILTERED));
         throw SQLException(sMessage.replaceAll("$name$", aName),static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)),SQLSTATE_GENERAL,1000,Any());
     }
 

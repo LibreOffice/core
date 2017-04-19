@@ -18,7 +18,7 @@
  */
 
 #include "apitools.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

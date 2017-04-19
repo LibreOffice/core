@@ -23,7 +23,7 @@
 #include "moduledbu.hxx"
 #include "apitools.hxx"
 #include "unoadmin.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "propertystorage.hxx"
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -63,7 +63,6 @@ namespace dbaui
             ,public OTextConnectionSettingsDialog_PBASE
             ,public ::cppu::WeakImplHelper< css::sdb::XTextConnectionSettings >
     {
-        OModuleClient   m_aModuleClient;
         PropertyValues  m_aPropertyValues;
 
     protected:

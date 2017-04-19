@@ -27,7 +27,7 @@
 #include "xmlEnums.hxx"
 #include "xmlDatabaseDescription.hxx"
 #include "xmlConnectionResource.hxx"
-#include "xmlstrings.hrc"
+#include "stringconstants.hxx"
 #include <tools/diagnose_ex.h>
 
 namespace dbaxml

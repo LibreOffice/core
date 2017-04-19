@@ -51,7 +51,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\
-    AllLangResTarget_vcl \
     UIConfig_vcl \
 ))
 

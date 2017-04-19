@@ -25,7 +25,6 @@
 
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
-#include "dlgresid.hrc"
 
 #include <sfx2/dispatch.hxx>
 #include <svtools/langtab.hxx>
@@ -165,7 +164,7 @@ void LibBox::Update( const SfxStringItem* pItem )
     {
         aCurText = pItem->GetValue();
         if ( aCurText.isEmpty() )
-            aCurText = OUString( IDEResId( RID_STR_ALL ) );
+            aCurText = IDEResId(RID_STR_ALL);
     }
 
     if ( GetSelectEntry() != aCurText )
@@ -198,7 +197,7 @@ void LibBox::FillBox()
     ClearBox();
 
     // create list box entries
-    sal_Int32 nPos = InsertEntry( OUString( IDEResId( RID_STR_ALL ) ) );
+    sal_Int32 nPos = InsertEntry(IDEResId(RID_STR_ALL));
     SetEntryData( nPos, new LibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, OUString() ) );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );

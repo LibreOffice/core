@@ -167,7 +167,6 @@ public:
     };
 
 private:
-    OModuleClient                                                               m_aModuleClient;
     css::uno::WeakReference< css::frame::XModel >                     m_xModel;
     css::uno::WeakReference< css::sdbc::XDataSource >                 m_xDataSource;
 
