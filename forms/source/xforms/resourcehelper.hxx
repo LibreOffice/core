@@ -20,7 +20,7 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_RESOURCEHELPER_HXX
 
 // include resource IDs
-#include <frm_resource.hrc>
+#include <strings.hrc>
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -28,15 +28,15 @@
 namespace xforms
 {
     /// get a resource string for the current language
-    OUString getResource( sal_uInt16 );
+    OUString getResource(const char*);
 
     // overloaded: get a resource string, and substitute parameters
-    OUString getResource( sal_uInt16, const OUString& );
-    OUString getResource( sal_uInt16, const OUString&,
-                                           const OUString& );
-    OUString getResource( sal_uInt16, const OUString&,
+    OUString getResource(const char*, const OUString&);
+    OUString getResource(const char*, const OUString&,
+                                           const OUString&);
+    OUString getResource(const char*, const OUString&,
                                            const OUString&,
-                                           const OUString& );
+                                           const OUString&);
 
 } // namespace
 

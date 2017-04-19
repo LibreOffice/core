@@ -18,9 +18,9 @@
  */
 
 #include "admincontrols.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include "dsitems.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

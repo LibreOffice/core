@@ -19,7 +19,7 @@
 
 #include "InternalData.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 
 #include <rtl/math.hxx>
 #ifdef DEBUG_CHART2_TOOLS

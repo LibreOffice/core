@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
 #include <unotools/streamwrap.hxx>
@@ -42,7 +42,7 @@
 #include <algorithm>
 #include <memory>
 
-#include "xmlfilterdialogstrings.hrc"
+#include "strings.hrc"
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltertestdialog.hxx"
@@ -61,31 +61,30 @@ using namespace com::sun::star::util;
 using ::rtl::Uri;
 
 namespace {
-    static ResMgr* pXSLTResMgr = nullptr;
+    static std::locale* pXSLTResLocale = nullptr;
 
-    ResMgr* getXSLTDialogResMgr()
+    const std::locale* getXSLTDialogResLocale()
     {
-        return pXSLTResMgr;
+        return pXSLTResLocale;
     }
 }
 
-EnsureResMgr::EnsureResMgr()
+EnsureResLocale::EnsureResLocale()
 {
-    if (!pXSLTResMgr)
+    if (!pXSLTResLocale)
     {
-        m_xResMgr.reset(ResMgr::CreateResMgr("xsltdlg", Application::GetSettings().GetUILanguageTag()));
-        pXSLTResMgr = m_xResMgr.get();
+        m_xResLocale.reset(new std::locale(Translate::Create("flt", Application::GetSettings().GetUILanguageTag())));
+        pXSLTResLocale = m_xResLocale.get();
     }
 }
 
-EnsureResMgr::~EnsureResMgr()
+EnsureResLocale::~EnsureResLocale()
 {
-    if (m_xResMgr)
-        pXSLTResMgr = nullptr;
+    if (m_xResLocale)
+        pXSLTResLocale = nullptr;
 }
 
-#define RESID(x) ResId(x, *getXSLTDialogResMgr())
-#define RESIDSTR(x) RESID(x).toString()
+#define RESID(x) Translate::get(x, *getXSLTDialogResLocale())
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -109,7 +108,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     m_pFilterListBox->SetSelectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     m_pFilterListBox->SetDeselectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     m_pFilterListBox->SetDoubleClickHdl( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
-    m_pFilterListBox->SetAccessibleName(RESIDSTR(STR_XML_FILTER_LISTBOX));
+    m_pFilterListBox->SetAccessibleName(RESID(STR_XML_FILTER_LISTBOX));
     m_pFilterListBox->SetHelpId(m_pCtrlFilterList->GetHelpId());
 
     m_pPBNew->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
@@ -248,19 +247,19 @@ void XMLFilterSettingsDialog::onNew()
     filter_info_impl aTempInfo;
 
     // create a unique filter name
-    aTempInfo.maFilterName = createUniqueFilterName(RESIDSTR(STR_DEFAULT_FILTER_NAME));
+    aTempInfo.maFilterName = createUniqueFilterName(RESID(STR_DEFAULT_FILTER_NAME));
 
     // init default extension
     aTempInfo.maExtension = STR_DEFAULT_EXTENSION;
 
     // set default ui name
-    aTempInfo.maInterfaceName = createUniqueInterfaceName(RESIDSTR(STR_DEFAULT_UI_NAME));
+    aTempInfo.maInterfaceName = createUniqueInterfaceName(RESID(STR_DEFAULT_UI_NAME));
 
     // set default application
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
+    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResLocale(), mxContext, &aTempInfo );
     if ( aDlg->Execute() == RET_OK )
     {
         // insert the new filter
@@ -279,7 +278,7 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         // execute XML Filter Dialog
-        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
+        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResLocale(), mxContext, pOldInfo );
         if ( aDlg->Execute() == RET_OK )
         {
             filter_info_impl* pNewInfo = aDlg->getNewFilterInfo();
@@ -802,7 +801,7 @@ void XMLFilterSettingsDialog::onDelete()
         filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         OUString aPlaceHolder( "%s" );
-        OUString aMessage(RESIDSTR(STR_WARN_DELETE));
+        OUString aMessage(RESID(STR_WARN_DELETE));
         aMessage = aMessage.replaceFirst( aPlaceHolder, pInfo->maFilterName );
 
         ScopedVclPtrInstance< WarningBox > aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES), aMessage );
@@ -904,7 +903,7 @@ void XMLFilterSettingsDialog::onSave()
         css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION );
 
     OUString aExtensions( "*.jar" );
-    OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
+    OUString aFilterName(RESID(STR_FILTER_PACKAGE));
     aFilterName += " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
@@ -921,13 +920,13 @@ void XMLFilterSettingsDialog::onSave()
         OUString aMsg;
         if( nFilters > 0 )
         {
-            aMsg = RESIDSTR(STR_FILTERS_HAVE_BEEN_SAVED);
+            aMsg = RESID(STR_FILTERS_HAVE_BEEN_SAVED);
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
         else
         {
-            aMsg = RESIDSTR(STR_FILTER_HAS_BEEN_SAVED);
+            aMsg = RESID(STR_FILTER_HAS_BEEN_SAVED);
             aMsg = aMsg.replaceFirst( sPlaceholder, (*aFilters.begin())->maFilterName );
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
@@ -946,7 +945,7 @@ void XMLFilterSettingsDialog::onOpen()
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
     OUString aExtensions( "*.jar" );
-    OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
+    OUString aFilterName(RESID(STR_FILTER_PACKAGE));
     aFilterName += " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
@@ -981,18 +980,18 @@ void XMLFilterSettingsDialog::onOpen()
         if( nFilters == 0 )
         {
             INetURLObject aURLObj( aURL );
-            aMsg = RESIDSTR(STR_NO_FILTERS_FOUND);
+            aMsg = RESID(STR_NO_FILTERS_FOUND);
             aMsg = aMsg.replaceFirst( sPlaceholder, aURLObj.GetName() );
         }
         else if( nFilters == 1 )
         {
-            aMsg = RESIDSTR(STR_FILTER_INSTALLED);
+            aMsg = RESID(STR_FILTER_INSTALLED);
             aMsg = aMsg.replaceFirst( sPlaceholder, aFilterName );
 
         }
         else
         {
-            aMsg = RESIDSTR(STR_FILTERS_INSTALLED);
+            aMsg = RESID(STR_FILTERS_INSTALLED);
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
         }
 
@@ -1306,7 +1305,7 @@ OUString getApplicationUIName( const OUString& rServiceName )
     }
     else
     {
-        OUString aRet = RESIDSTR(STR_UNKNOWN_APPLICATION);
+        OUString aRet = RESID(STR_UNKNOWN_APPLICATION);
         if( !rServiceName.isEmpty() )
         {
             aRet += " (" + rServiceName + ")";
@@ -1410,8 +1409,8 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
 
     m_pHeaderBar->SetEndDragHdl( LINK( this, XMLFilterListBox, HeaderEndDrag_Impl ) );
 
-    OUString aStr1(RESIDSTR(STR_COLUMN_HEADER_NAME));
-    OUString aStr2(RESIDSTR(STR_COLUMN_HEADER_TYPE));
+    OUString aStr1(RESID(STR_COLUMN_HEADER_NAME));
+    OUString aStr2(RESID(STR_COLUMN_HEADER_TYPE));
 
     long nTabSize = aBoxSize.Width() / 2;
 
@@ -1510,20 +1509,20 @@ OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo )
     {
         if( pInfo->maFlags & 2 )
         {
-            aEntryStr += RESIDSTR(STR_IMPORT_EXPORT);
+            aEntryStr += RESID(STR_IMPORT_EXPORT);
         }
         else
         {
-            aEntryStr += RESIDSTR(STR_IMPORT_ONLY);
+            aEntryStr += RESID(STR_IMPORT_ONLY);
         }
     }
     else if( pInfo->maFlags & 2 )
     {
-        aEntryStr += RESIDSTR(STR_EXPORT_ONLY);
+        aEntryStr += RESID(STR_EXPORT_ONLY);
     }
     else
     {
-        aEntryStr += RESIDSTR(STR_UNDEFINED_FILTER);
+        aEntryStr += RESID(STR_UNDEFINED_FILTER);
     }
 
     return aEntryStr;

@@ -46,6 +46,7 @@
 #include <svl/srchitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -133,7 +134,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
         if( bOutput )
         {
-            OUString aPageStr = " [" + OUString(IDEResId(RID_STR_PAGE)) + " " + OUString::number( nCurPage ) + "]";
+            OUString aPageStr = " [" + IDEResId(RID_STR_PAGE) + " " + OUString::number( nCurPage ) + "]";
             pPrinter->DrawText( aPos, aPageStr );
         }
     }

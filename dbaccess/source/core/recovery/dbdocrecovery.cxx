@@ -22,7 +22,7 @@
 #include "storagetextstream.hxx"
 #include "subcomponentrecovery.hxx"
 #include "subcomponents.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
