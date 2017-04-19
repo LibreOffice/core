@@ -347,17 +347,18 @@ void PivotTableDataProvider::collectPivotTableData()
             uno::Reference<container::XNamed> xLevelName(xLevel, uno::UNO_QUERY);
             uno::Reference<sheet::XDataPilotMemberResults> xLevelResult(xLevel, uno::UNO_QUERY );
 
-            bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_ISDATALAYOUT);
-            sal_Int32 nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
-            sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
-
             if (xLevelName.is() && xLevelResult.is())
             {
+                bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_ISDATALAYOUT);
+                sal_Int32 nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
+                sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
+                bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_HAS_HIDDEN_MEMBER);
+
                 switch (eDimOrient)
                 {
                     case sheet::DataPilotFieldOrientation_COLUMN:
                     {
-                        m_aColumnFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos});
+                        m_aColumnFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
 
                         uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
                         size_t i = 0;
@@ -395,7 +396,7 @@ void PivotTableDataProvider::collectPivotTableData()
 
                     case sheet::DataPilotFieldOrientation_ROW:
                     {
-                        m_aRowFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos});
+                        m_aRowFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
 
                         uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
                         m_aCategoriesRowOrientation.resize(aSequence.getLength());
@@ -448,14 +449,14 @@ void PivotTableDataProvider::collectPivotTableData()
 
                     case sheet::DataPilotFieldOrientation_PAGE:
                     {
-                        m_aPageFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos});
+                        m_aPageFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
                     }
                     break;
 
                     case sheet::DataPilotFieldOrientation_DATA:
                     {
                         aDataFieldNumberFormatMap[xLevelName->getName()] = nNumberFormat;
-                        m_aDataFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos});
+                        m_aDataFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
                     }
                     break;
 
