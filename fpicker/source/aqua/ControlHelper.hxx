@@ -70,6 +70,7 @@ public:
     enum ToggleType {
         AUTOEXTENSION, //but autoextension is handled differently on MacOSX
         PASSWORD,
+        EMBEDFONTS,
         FILTEROPTIONS,
         READONLY,
         LINK,

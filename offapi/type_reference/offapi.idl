@@ -16849,6 +16849,7 @@ module com {
       const short CHECKBOX_FILTEROPTIONS = 102;
       const short CHECKBOX_LINK = 104;
       const short CHECKBOX_PASSWORD = 101;
+      const short CHECKBOX_EMBEDFONTS = 206;
       const short CHECKBOX_PREVIEW = 105;
       const short CHECKBOX_READONLY = 103;
       const short CHECKBOX_SELECTION = 110;

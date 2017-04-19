@@ -446,6 +446,7 @@ void ModulWindow::SaveBasicSource()
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS, false);
     Any aValue;
     aValue <<= true;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);

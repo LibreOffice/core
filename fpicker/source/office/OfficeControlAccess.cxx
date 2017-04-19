@@ -85,6 +85,7 @@ namespace svt
             { "NewFolderButton",        TOOLBOXBUTOON_NEW_FOLDER,       PROPERTY_FLAGS_COMMON                               },
             { "OkButton",               PUSHBUTTON_OK ,                 PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "PasswordBox",            CHECKBOX_PASSWORD,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
+            { "EmbedFontsBox",          CHECKBOX_EMBEDFONTS,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "PlayButton",             PUSHBUTTON_PLAY,                PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "PreviewBox",             CHECKBOX_PREVIEW,               PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "ReadOnlyBox",            CHECKBOX_READONLY,              PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
@@ -352,6 +353,7 @@ namespace svt
                 {
                     case CHECKBOX_AUTOEXTENSION:
                     case CHECKBOX_PASSWORD:
+                    case CHECKBOX_EMBEDFONTS:
                     case CHECKBOX_FILTEROPTIONS:
                     case CHECKBOX_READONLY:
                     case CHECKBOX_LINK:
@@ -405,6 +407,7 @@ namespace svt
                 {
                     case CHECKBOX_AUTOEXTENSION:
                     case CHECKBOX_PASSWORD:
+                    case CHECKBOX_EMBEDFONTS:
                     case CHECKBOX_FILTEROPTIONS:
                     case CHECKBOX_READONLY:
                     case CHECKBOX_LINK:

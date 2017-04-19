@@ -410,6 +410,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
             bFileOpenDialog = false;
             nFeatures        |= FEATURE_AUTOEXTENSION;
             nFeatures        |= FEATURE_PASSWORD;
+            nFeatures        |= FEATURE_EMBEDFONTS;
             nFeatures        |= FEATURE_FILTEROPTIONS;
         }
         break;

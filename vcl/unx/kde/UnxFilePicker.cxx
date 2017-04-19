@@ -128,6 +128,7 @@ bool controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId )
 
         { ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &aCheckBox,   STR_SVT_FILEPICKER_AUTO_EXTENSION },
         { ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,      &aCheckBox,   STR_SVT_FILEPICKER_PASSWORD },
+        { ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS,      &aCheckBox,   STR_SVT_FILEPICKER_EMBEDFONTS },
         { ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, &aCheckBox,   STR_SVT_FILEPICKER_FILTER_OPTIONS },
         { ExtendedFilePickerElementIds::CHECKBOX_READONLY,      &aCheckBox,   STR_SVT_FILEPICKER_READONLY },
         { ExtendedFilePickerElementIds::CHECKBOX_LINK,          &aCheckBox,   STR_SVT_FILEPICKER_INSERT_AS_LINK },
@@ -654,6 +655,7 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
 
             sendAppendControlCommand( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             sendAppendControlCommand( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD );
+            sendAppendControlCommand( ExtendedFilePickerElementIds::CHECKBOX_EMBEDFONTS );
             sendAppendControlCommand( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS );
             break;
 
