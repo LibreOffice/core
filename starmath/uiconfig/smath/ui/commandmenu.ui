@@ -268,42 +268,42 @@
               <object class="GtkMenuItem" id="&lt;?&gt; prop &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a prop b</property>
+                <property name="label">a prop b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; parallel &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a parallel b</property>
+                <property name="label">a parallel b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; ortho &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a ortho b</property>
+                <property name="label">a ortho b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; divides &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a divides b</property>
+                <property name="label">a divides b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; ndivides &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a ndivides b</property>
+                <property name="label">a ndivides b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; toward &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a toward b</property>
+                <property name="label">a toward b</property>
               </object>
             </child>
             <child>
@@ -316,21 +316,21 @@
               <object class="GtkMenuItem" id="&lt;?&gt; dlarrow &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a dlarrow b</property>
+                <property name="label">a dlarrow b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; dlrarrow &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a dlrarrow b</property>
+                <property name="label">a dlrarrow b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; drarrow &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a drarrow b</property>
+                <property name="label">a drarrow b</property>
               </object>
             </child>
             <child>
@@ -343,56 +343,56 @@
               <object class="GtkMenuItem" id="&lt;?&gt; prec &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a prec b</property>
+                <property name="label">a prec b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; succ &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a succ b</property>
+                <property name="label">a succ b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; preccurlyeq &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a preccurlyeq b</property>
+                <property name="label">a preccurlyeq b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; succcurlyeq &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a succcurlyeq b</property>
+                <property name="label">a succcurlyeq b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; precsim &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a precsim b</property>
+                <property name="label">a precsim b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; succsim &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a succsim b</property>
+                <property name="label">a succsim b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; nprec &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a nprec b</property>
+                <property name="label">a nprec b</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="&lt;?&gt; nsucc &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a nsucc b</property>
+                <property name="label">a nsucc b</property>
               </object>
             </child>
           </object>
@@ -468,56 +468,56 @@
               <object class="GtkMenuItem" id="item63">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">A subset B</property>
+                <property name="label">A subset B</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item64">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">A subseteq B</property>
+                <property name="label">A subseteq B</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item65">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">A supset B</property>
+                <property name="label">A supset B</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item66">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">A supseteq B</property>
+                <property name="label">A supseteq B</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item67">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">A nsubset B</property>
+                <property name="label">A nsubset B</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item68">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">A nsubseteq B</property>
+                <property name="label">A nsubseteq B</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item69">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">A nsupset B</property>
+                <property name="label">A nsupset B</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item70">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">A nsupseteq B</property>
+                <property name="label">A nsupseteq B</property>
               </object>
             </child>
             <child>
@@ -530,49 +530,49 @@
               <object class="GtkMenuItem" id="item72">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">emptyset</property>
+                <property name="label">emptyset</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item73">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">aleph</property>
+                <property name="label">aleph</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item74">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">setN</property>
+                <property name="label">setN</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item75">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">setZ</property>
+                <property name="label">setZ</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item76">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">setQ</property>
+                <property name="label">setQ</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item77">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">setR</property>
+                <property name="label">setR</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="item78">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">setC</property>
+                <property name="label">setC</property>
               </object>
             </child>
           </object>
@@ -642,14 +642,14 @@
               <object class="GtkMenuItem" id="exp(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">exp(x)</property>
+                <property name="label">exp(x)</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="log(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">log(x)</property>
+                <property name="label">log(x)</property>
               </object>
             </child>
             <child>
@@ -662,56 +662,56 @@
               <object class="GtkMenuItem" id="sin(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">sin(x)</property>
+                <property name="label">sin(x)</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="cos(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">cos(x)</property>
+                <property name="label">cos(x)</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="tan(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">tan(x)</property>
+                <property name="label">tan(x)</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="cot(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">cot(x)</property>
+                <property name="label">cot(x)</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="sinh(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">sinh(x)</property>
+                <property name="label">sinh(x)</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="cosh(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">cosh(x)</property>
+                <property name="label">cosh(x)</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="tanh(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">tanh(x)</property>
+                <property name="label">tanh(x)</property>
               </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="coth(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">coth(x)</property>
+                <property name="label">coth(x)</property>
               </object>
             </child>
             <child>
@@ -782,7 +782,7 @@
                       <object class="GtkMenuItem" id="arcoth(&lt;?&gt;) ">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">arcoth(x)</property>
+                        <property name="label">arcoth(x)</property>
                       </object>
                     </child>
                   </object>
