@@ -136,7 +136,7 @@ void SvxNoSpaceEdit::Modify()
     }
 }
 
-bool SvxNoSpaceEdit::set_property(const OString &rKey, const OString &rValue)
+bool SvxNoSpaceEdit::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "only-numeric")
         bOnlyNumeric = toBool(rValue);

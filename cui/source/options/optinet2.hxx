@@ -49,7 +49,7 @@ public:
     {}
     virtual void KeyInput(const KeyEvent& rKEvent) override;
     virtual void Modify() override;
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 };
 
 // class SvxProxyTabPage -------------------------------------------------

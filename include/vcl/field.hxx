@@ -451,7 +451,7 @@ public:
     virtual void            Down() override;
     virtual void            First() override;
     virtual void            Last() override;
-    virtual bool            set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
     virtual void            dispose() override;
 };
 
@@ -514,7 +514,7 @@ public:
                                                 MapUnit eInUnit, FieldUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
 
-    virtual bool            set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
     virtual void            dispose() override;
 };
 

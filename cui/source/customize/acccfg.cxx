@@ -657,7 +657,7 @@ VCL_BUILDER_DECL_FACTORY(SfxAccCfgTabListBox)
 {
     WinBits nWinBits = WB_TABSTOP;
 
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 

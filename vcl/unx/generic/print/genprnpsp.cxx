@@ -47,7 +47,7 @@
 #include <vcl/pdfwriter.hxx>
 #include <vcl/printerinfomanager.hxx>
 #include <vcl/settings.hxx>
-#include "svids.hrc"
+#include "strings.hrc"
 #include "saldatabasic.hxx"
 #include "unx/genprn.h"
 #include "unx/geninst.h"

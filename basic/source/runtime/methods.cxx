@@ -72,9 +72,7 @@ using namespace com::sun::star::uno;
 #include "stdobj.hxx"
 #include "sbstdobj.hxx"
 #include "rtlproto.hxx"
-#include "basrid.hxx"
 #include "image.hxx"
-#include "sb.hrc"
 #include "iosys.hxx"
 #include "ddectrl.hxx"
 #include <sbintern.hxx>
