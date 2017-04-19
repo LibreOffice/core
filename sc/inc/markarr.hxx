@@ -60,6 +60,9 @@ public:
     /// Including current row, may return -1 if bUp and not found
     SCsROW  GetNextMarked( SCsROW nRow, bool bUp ) const;
     SCROW   GetMarkEnd( SCROW nRow, bool bUp ) const;
+
+    void    Shift( SCROW nStartRow, long nOffset );
+    void    Intersect( const ScMarkArray& rOther );
 };
 
 class ScMarkArrayIter                   // iterate over selected range
