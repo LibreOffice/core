@@ -416,7 +416,6 @@ void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
     {
         static_cast<SvxGradientTabPage*>(pTab)->SetColorList( m_pColorList );
         static_cast<SvxGradientTabPage*>(pTab)->SetGradientList( m_pGradientList );
-        static_cast<SvxGradientTabPage*>(pTab)->SetPos( &m_nPos );
         static_cast<SvxGradientTabPage*>(pTab)->SetGrdChgd( m_pnGradientListState );
         static_cast<SvxGradientTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
         static_cast<SvxGradientTabPage*>(pTab)->Construct();
@@ -428,7 +427,6 @@ void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
     {
         static_cast<SvxHatchTabPage*>(pTab)->SetColorList( m_pColorList );
         static_cast<SvxHatchTabPage*>(pTab)->SetHatchingList( m_pHatchingList );
-        static_cast<SvxHatchTabPage*>(pTab)->SetPos(&m_nPos);
         static_cast<SvxHatchTabPage*>(pTab)->SetHtchChgd( m_pnHatchingListState );
         static_cast<SvxHatchTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
         static_cast<SvxHatchTabPage*>(pTab)->Construct();

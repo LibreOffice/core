@@ -58,7 +58,6 @@ SvxHatchTabPage::SvxHatchTabPage
     m_rOutAttrs           ( rInAttrs ),
     m_pnHatchingListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
-    m_pPos                ( nullptr ),
 
     m_aXFStyleItem        ( drawing::FillStyle_HATCH ),
     m_aXHatchItem         ( OUString(), XHatch() ),
@@ -188,16 +187,14 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aURL.getBase();
 
-        *m_pPos = SearchHatchList( ( &static_cast<const XFillHatchItem&>( rSet.Get(XATTR_FILLHATCH)) )->GetName() );
-        if( *m_pPos != LISTBOX_ENTRY_NOTFOUND )
+        sal_Int32 nPos = SearchHatchList( ( &static_cast<const XFillHatchItem&>( rSet.Get(XATTR_FILLHATCH)) )->GetName() );
+        if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            sal_uInt16 nId = m_pHatchLB->GetItemId( static_cast<size_t>( *m_pPos ) );
+            sal_uInt16 nId = m_pHatchLB->GetItemId( static_cast<size_t>( nPos ) );
             m_pHatchLB->SelectItem( nId );
         }
         // colors could have been deleted
         ChangeHatchHdl_Impl();
-
-        *m_pPos = LISTBOX_ENTRY_NOTFOUND;
     }
 
     XFillBackgroundItem aBckItem( static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)));
