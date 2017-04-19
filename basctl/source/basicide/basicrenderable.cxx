@@ -44,12 +44,12 @@ Renderable::Renderable (BaseWindow* pWin)
     aPrintRangeOpt.maGroupHint = "PrintRange" ;
     aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[0].Value = setSubgroupControlOpt("printrange",
-        IDE_RESSTR( RID_STR_PRINTDLG_RANGE ), OUString(), aPrintRangeOpt);
+        IDEResId( RID_STR_PRINTDLG_RANGE ), OUString(), aPrintRangeOpt);
 
     // create a choice for the range to print
     OUString aPrintContentName( "PrintContent" );
-    const Sequence<OUString> aChoices{IDE_RESSTR(RID_STR_PRINTDLG_ALLPAGES),
-                                      IDE_RESSTR(RID_STR_PRINTDLG_PAGES)};
+    const Sequence<OUString> aChoices{IDEResId(RID_STR_PRINTDLG_ALLPAGES),
+                                      IDEResId(RID_STR_PRINTDLG_PAGES)};
     const Sequence<OUString> aHelpIds{".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
                                       ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"};
     const Sequence<OUString> aWidgetIds{"printallpages",
