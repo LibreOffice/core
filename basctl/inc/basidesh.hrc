@@ -24,18 +24,6 @@
 
 #define RID_BASICIDE_OBJECTBAR          ( RID_BASICIDE_START +  0 )
 
-#define RID_BMP_REMOVEWATCH             ( RID_BASICIDE_START +  8 )
-#define RID_BMP_INSTALLATION            ( RID_BASICIDE_START + 20 )
-#define RID_BMP_DOCUMENT                ( RID_BASICIDE_START + 22 )
-#define RID_BMP_MODLIB                  ( RID_BASICIDE_START + 24 )
-#define RID_BMP_MODLIBNOTLOADED         ( RID_BASICIDE_START + 26 )
-#define RID_BMP_MODULE                  ( RID_BASICIDE_START + 28 )
-#define RID_BMP_MACRO                   ( RID_BASICIDE_START + 30 )
-#define RID_BMP_DLGLIB                  ( RID_BASICIDE_START + 32 )
-#define RID_BMP_DLGLIBNOTLOADED         ( RID_BASICIDE_START + 34 )
-#define RID_BMP_DIALOG                  ( RID_BASICIDE_START + 36 )
-#define RID_BMP_LOCKED                  ( RID_BASICIDE_START + 41 )
-
 #define RID_STR_SEARCHALLMODULES        ( RID_BASICIDE_START +  1 )
 #define RID_STR_SEARCHFROMSTART         ( RID_BASICIDE_START +  2 )
 #define RID_STR_NOMODULE                ( RID_BASICIDE_START +  3 )
@@ -122,10 +110,6 @@
 #define RID_STR_USERFORMS               ( RID_BASICIDE_START + 119 )
 #define RID_STR_NORMAL_MODULES          ( RID_BASICIDE_START + 120 )
 #define RID_STR_CLASS_MODULES           ( RID_BASICIDE_START + 121 )
-#define RID_BMP_BRKENABLED              ( SID_BASICIDE_START + 122 )
-#define RID_BMP_BRKDISABLED             ( SID_BASICIDE_START + 123 )
-#define RID_BMP_STEPMARKER              ( SID_BASICIDE_START + 124 )
-#define RID_BMP_ERRORMARKER             ( SID_BASICIDE_START + 125 )
 //free slots
 #define RID_STR_PRINTDLG_RANGE          ( RID_BASICIDE_START + 130 )
 #define RID_STR_PRINTDLG_ALLPAGES       ( RID_BASICIDE_START + 131 )

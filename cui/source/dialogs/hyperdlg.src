@@ -94,49 +94,4 @@ String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
-Bitmap RID_SVXBMP_HLINETTP
-{
-    File = "hlinettp.png";
-};
-
-Bitmap RID_SVXBMP_HLMAILTP
-{
-    File = "hlmailtp.png";
-};
-
-Bitmap RID_SVXBMP_HLDOCTP
-{
-    File = "hldoctp.png";
-};
-
-Bitmap RID_SVXBMP_HLDOCNTP
-{
-    File = "hldocntp.png";
-};
-
-Bitmap RID_SVXBMP_SCRIPT
-{
-    File = "script.png";
-};
-
-Bitmap RID_SVXBMP_ADRESSBOOK
-{
-    File = "adrbook.png";
-};
-
-Bitmap RID_SVXBMP_FILEOPEN
-{
-    File = "fileopen.png";
-};
-
-Bitmap RID_SVXBMP_TARGET
-{
-    File = "target.png";
-};
-
-Bitmap RID_SVXBMP_NEWDOC
-{
-    File = "newdoc.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,9 +29,4 @@ String RID_SVXSTR_PATH
     Text [ en-US ] = "Database file" ;
 };
 
-Bitmap RID_SVXBMP_LOCK
-{
-    File = "lock.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

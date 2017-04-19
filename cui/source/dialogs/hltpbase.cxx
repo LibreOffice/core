@@ -32,6 +32,7 @@
 #include "macroass.hxx"
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
+#include <bitmaps.hlst>
 #include <vcl/builderfactory.hxx>
 
 using namespace ::ucbhelper;
@@ -173,7 +174,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         get(mpEdIndication, "indication");
         get(mpEdText, "name");
         get(mpBtScript, "script");
-        BitmapEx aBitmap(CUI_RES(RID_SVXBMP_SCRIPT));
+        BitmapEx aBitmap(RID_SVXBMP_SCRIPT);
         aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
         mpBtScript->SetModeImage(Image(aBitmap));
 

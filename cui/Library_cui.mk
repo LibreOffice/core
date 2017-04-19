@@ -13,6 +13,7 @@ $(eval $(call gb_Library_set_componentfile,cui,cui/util/cui))
 
 $(eval $(call gb_Library_set_include,cui,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/cui/inc \
     -I$(SRCDIR)/cui/source/inc \
 ))
 

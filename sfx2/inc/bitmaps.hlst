@@ -1,0 +1,46 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_SFX2_INC_BITMAPS_HRC
+#define INCLUDED_SFX2_INC_BITMAPS_HRC
+
+//start, sfx2/source/sidebar/Theme.cxx
+#define CLOSEDOC                       "sfx2/res/closedoc.png"
+#define GRIP                           "sfx2/res/grip.png"
+#define OPEN_MORE                      "sfx2/res/symphony/open_more.png"
+#define MOREBUTTON                     "sfx2/res/symphony/morebutton.png"
+#define SIDEBAR_3D_LARGE               "sfx2/res/symphony/sidebar-3d-large.png"
+#define SIDEBAR_3D_SMALL               "sfx2/res/symphony/sidebar-3d-small.png"
+#define SIDEBAR_ANIMATION_LARGE        "sfx2/res/symphony/sidebar-animation-large.png"
+#define SIDEBAR_ANIMATION_SMALL        "sfx2/res/symphony/sidebar-animation-small.png"
+#define SIDEBAR_COLORS_LARGE           "sfx2/res/symphony/sidebar-colors-large.png"
+#define SIDEBAR_COLORS_SMALL           "sfx2/res/symphony/sidebar-colors-small.png"
+#define SIDEBAR_EYEDROPPER_LARGE       "sfx2/res/symphony/sidebar-eyedropper-large.png"
+#define SIDEBAR_EYEDROPPER_SMALL       "sfx2/res/symphony/sidebar-eyedropper-small.png"
+#define SIDEBAR_GALLERY_LARGE          "sfx2/res/symphony/sidebar-gallery-large.png"
+#define SIDEBAR_GALLERY_SMALL          "sfx2/res/symphony/sidebar-gallery-small.png"
+#define SIDEBAR_IMGANIM_LARGE          "sfx2/res/symphony/sidebar-imganim-large.png"
+#define SIDEBAR_IMGANIM_SMALL          "sfx2/res/symphony/sidebar-imganim-small.png"
+#define SIDEBAR_NAVIGATOR_LARGE        "sfx2/res/symphony/sidebar-navigator-large.png"
+#define SIDEBAR_NAVIGATOR_SMALL        "sfx2/res/symphony/sidebar-navigator-small.png"
+#define SIDEBAR_PROPERTY_LARGE         "sfx2/res/symphony/sidebar-property-large.png"
+#define SIDEBAR_PROPERTY_SMALL         "sfx2/res/symphony/sidebar-property-small.png"
+#define SIDEBAR_STYLE_LARGE            "sfx2/res/symphony/sidebar-style-large.png"
+#define SIDEBAR_STYLE_SMALL            "sfx2/res/symphony/sidebar-style-small.png"
+#define SIDEBAR_TEMPLATE_LARGE         "sfx2/res/symphony/sidebar-template-large.png"
+#define SIDEBAR_TEMPLATE_SMALL         "sfx2/res/symphony/sidebar-template-small.png"
+#define SIDEBAR_TRANSITION_LARGE       "sfx2/res/symphony/sidebar-transition-large.png"
+#define SIDEBAR_TRANSITION_SMALL       "sfx2/res/symphony/sidebar-transition-small.png"
+#define SIDEBAR_FUNCTIONS_LARGE        "sfx2/res/symphony/sidebar-functions-large.png"
+#define SIDEBAR_FUNCTIONS_SMALL        "sfx2/res/symphony/sidebar-functions-small.png"
+//end, sfx2/source/sidebar/Theme.cxx
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

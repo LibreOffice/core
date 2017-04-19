@@ -28,6 +28,7 @@
 #include <osl/mutex.hxx>
 
 #include <cuires.hrc>
+#include <bitmaps.hlst>
 #include "scriptdlg.hxx"
 #include <dialmgr.hxx>
 #include "selector.hxx"
@@ -77,10 +78,10 @@ void ShowErrorDialog( const Any& aException )
 
 SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
     : SvTreeListBox(pParent)
-    , m_hdImage(BitmapEx(CUI_RES(RID_CUIBMP_HARDDISK)))
-    , m_libImage(BitmapEx(CUI_RES(RID_CUIBMP_LIB)))
-    , m_macImage(BitmapEx(CUI_RES(RID_CUIBMP_MACRO)))
-    , m_docImage(BitmapEx(CUI_RES(RID_CUIBMP_DOC)))
+    , m_hdImage(BitmapEx(RID_CUIBMP_HARDDISK))
+    , m_libImage(BitmapEx(RID_CUIBMP_LIB))
+    , m_macImage(BitmapEx(RID_CUIBMP_MACRO))
+    , m_docImage(BitmapEx(RID_CUIBMP_DOC))
     , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
     , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
 {
@@ -238,7 +239,7 @@ void SFTreeListBox::Init( const OUString& language  )
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
-        insertEntry( uiName, app ? RID_CUIBMP_HARDDISK : RID_CUIBMP_DOC,
+        insertEntry( uiName, app ? OUStringLiteral(RID_CUIBMP_HARDDISK) : OUStringLiteral(RID_CUIBMP_DOC),
             nullptr, true, o3tl::make_unique< SFEntry >( OBJTYPE_SFROOT, langEntries, xDocumentModel ), factoryURL );
     }
 
@@ -335,11 +336,11 @@ bool SFTreeListBox::ExpandingHdl()
 }
 
 SvTreeListEntry * SFTreeListBox::insertEntry(
-    OUString const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
+    OUString const & rText, OUString const & rBitmap, SvTreeListEntry * pParent,
     bool bChildrenOnDemand, std::unique_ptr< SFEntry > && aUserData, const OUString& factoryURL )
 {
     SvTreeListEntry * p;
-    if( nBitmap == RID_CUIBMP_DOC && !factoryURL.isEmpty() )
+    if (rBitmap == RID_CUIBMP_DOC && !factoryURL.isEmpty())
     {
         Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL) );
         p = InsertEntry(
@@ -348,29 +349,29 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     }
     else
     {
-        p = insertEntry( rText, nBitmap, pParent, bChildrenOnDemand, std::move(aUserData) );
+        p = insertEntry(rText, rBitmap, pParent, bChildrenOnDemand, std::move(aUserData));
     }
     return p;
 }
 
 SvTreeListEntry * SFTreeListBox::insertEntry(
-    OUString const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
+    OUString const & rText, const OUString &rBitmap, SvTreeListEntry * pParent,
     bool bChildrenOnDemand, std::unique_ptr< SFEntry > && aUserData )
 {
     Image aImage;
-    if( nBitmap == RID_CUIBMP_HARDDISK )
+    if (rBitmap == RID_CUIBMP_HARDDISK)
     {
         aImage = m_hdImage;
     }
-    else if( nBitmap == RID_CUIBMP_LIB )
+    else if (rBitmap == RID_CUIBMP_LIB)
     {
         aImage = m_libImage;
     }
-    else if( nBitmap == RID_CUIBMP_MACRO )
+    else if (rBitmap == RID_CUIBMP_MACRO)
     {
         aImage = m_macImage;
     }
-    else if( nBitmap == RID_CUIBMP_DOC )
+    else if (rBitmap == RID_CUIBMP_DOC)
     {
         aImage = m_docImage;
     }

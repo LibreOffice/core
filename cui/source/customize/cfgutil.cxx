@@ -46,6 +46,7 @@
 #include <basic/basmgr.hxx>
 #include <tools/urlobj.hxx>
 #include "cuires.hrc"
+#include "bitmaps.hlst"
 #include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>
 #include <comphelper/documentinfo.hxx>
@@ -354,17 +355,17 @@ struct SvxConfigGroupBoxResource_Impl
 };
 
 SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
-    m_hdImage(BitmapEx(CUI_RES(RID_CUIBMP_HARDDISK))),
-    m_libImage(BitmapEx(CUI_RES(RID_CUIBMP_LIB))),
-    m_macImage(BitmapEx(CUI_RES(RID_CUIBMP_MACRO))),
-    m_docImage(BitmapEx(CUI_RES(RID_CUIBMP_DOC))),
+    m_hdImage(BitmapEx(RID_CUIBMP_HARDDISK)),
+    m_libImage(BitmapEx(RID_CUIBMP_LIB)),
+    m_macImage(BitmapEx(RID_CUIBMP_MACRO)),
+    m_docImage(BitmapEx(RID_CUIBMP_DOC)),
     m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS)),
     m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
     m_sMacros(CUI_RESSTR(RID_SVXSTR_BASICMACROS)),
     m_sDlgMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
     m_aStrGroupStyles(CUI_RESSTR(RID_SVXSTR_GROUP_STYLES)),
-    m_collapsedImage(BitmapEx(CUI_RES(RID_CUIBMP_COLLAPSED))),
-    m_expandedImage(BitmapEx(CUI_RES(RID_CUIBMP_EXPANDED)))
+    m_collapsedImage(BitmapEx(RID_CUIBMP_COLLAPSED)),
+    m_expandedImage(BitmapEx(RID_CUIBMP_EXPANDED))
 {
 }
 

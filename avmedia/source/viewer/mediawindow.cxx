@@ -20,6 +20,7 @@
 #include <avmedia/mediawindow.hxx>
 #include "mediawindow_impl.hxx"
 #include "mediamisc.hxx"
+#include "bitmaps.hlst"
 #include "mediawindow.hrc"
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
@@ -392,7 +393,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 
             if( !aPrefSize.Width && !aPrefSize.Height )
             {
-                const BitmapEx aBmpEx( AVMEDIA_RESID(AVMEDIA_BMP_AUDIOLOGO) );
+                const BitmapEx aBmpEx(AVMEDIA_BMP_AUDIOLOGO);
                 xGraphic.reset( new Graphic( aBmpEx ) );
             }
         }
@@ -400,7 +401,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 
     if( !xRet.is() && !xGraphic.get() )
     {
-        const BitmapEx aBmpEx( AVMEDIA_RESID(AVMEDIA_BMP_EMPTYLOGO) );
+        const BitmapEx aBmpEx(AVMEDIA_BMP_EMPTYLOGO);
         xGraphic.reset( new Graphic( aBmpEx ) );
     }
 

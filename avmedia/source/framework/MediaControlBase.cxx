@@ -26,6 +26,7 @@
 #include <svtools/miscopt.hxx>
 #include <tools/time.hxx>
 #include <vcl/lstbox.hxx>
+#include "bitmaps.hlst"
 #include "mediacontrol.hrc"
 #include "helpids.hrc"
 #include "mediamisc.hxx"
@@ -268,34 +269,67 @@ Image MediaControlBase::GetImage(sal_Int32 nImageId)
 {
     const bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
 
-    switch (nImageId)
-    {
-        default:
-        case AVMEDIA_TOOLBOXITEM_PLAY:
-            nImageId = bLarge ? AVMEDIA_IMG_PLAY_LARGE : AVMEDIA_IMG_PLAY_NORMAL;
-            break;
-        case AVMEDIA_TOOLBOXITEM_PAUSE:
-            nImageId = bLarge ? AVMEDIA_IMG_PAUSE_LARGE : AVMEDIA_IMG_PAUSE_NORMAL;
-            break;
-        case AVMEDIA_TOOLBOXITEM_STOP:
-            nImageId = bLarge ? AVMEDIA_IMG_STOP_LARGE : AVMEDIA_IMG_STOP_NORMAL;
-            break;
-        case AVMEDIA_TOOLBOXITEM_MUTE:
-            nImageId = bLarge ? AVMEDIA_IMG_MUTE_LARGE : AVMEDIA_IMG_MUTE_NORMAL;
-            break;
-        case AVMEDIA_TOOLBOXITEM_LOOP:
-            nImageId = bLarge ? AVMEDIA_IMG_LOOP_LARGE : AVMEDIA_IMG_LOOP_NORMAL;
-            break;
-        case AVMEDIA_TOOLBOXITEM_OPEN:
-            nImageId = bLarge ? AVMEDIA_IMG_OPEN_LARGE : AVMEDIA_IMG_OPEN_NORMAL;
-            break;
-        case AVMEDIA_TOOLBOXITEM_INSERT:
-            nImageId = bLarge ? AVMEDIA_IMG_INSERT_LARGE : AVMEDIA_IMG_INSERT_NORMAL;
-            break;
+    OUString sImageId;
 
+    if (bLarge)
+    {
+        switch (nImageId)
+        {
+            default:
+            case AVMEDIA_TOOLBOXITEM_PLAY:
+                sImageId = AVMEDIA_IMG_PLAY_LARGE;
+                break;
+            case AVMEDIA_TOOLBOXITEM_PAUSE:
+                sImageId = AVMEDIA_IMG_PAUSE_LARGE;
+                break;
+            case AVMEDIA_TOOLBOXITEM_STOP:
+                sImageId = AVMEDIA_IMG_STOP_LARGE;
+                break;
+            case AVMEDIA_TOOLBOXITEM_MUTE:
+                sImageId = AVMEDIA_IMG_MUTE_LARGE;
+                break;
+            case AVMEDIA_TOOLBOXITEM_LOOP:
+                sImageId = AVMEDIA_IMG_LOOP_LARGE;
+                break;
+            case AVMEDIA_TOOLBOXITEM_OPEN:
+                sImageId = AVMEDIA_IMG_OPEN_LARGE;
+                break;
+            case AVMEDIA_TOOLBOXITEM_INSERT:
+                sImageId = AVMEDIA_IMG_INSERT_LARGE;
+                break;
+
+        }
+    }
+    else
+    {
+        switch (nImageId)
+        {
+            default:
+            case AVMEDIA_TOOLBOXITEM_PLAY:
+                sImageId = AVMEDIA_IMG_PLAY_NORMAL;
+                break;
+            case AVMEDIA_TOOLBOXITEM_PAUSE:
+                sImageId = AVMEDIA_IMG_PAUSE_NORMAL;
+                break;
+            case AVMEDIA_TOOLBOXITEM_STOP:
+                sImageId = AVMEDIA_IMG_STOP_NORMAL;
+                break;
+            case AVMEDIA_TOOLBOXITEM_MUTE:
+                sImageId = AVMEDIA_IMG_MUTE_NORMAL;
+                break;
+            case AVMEDIA_TOOLBOXITEM_LOOP:
+                sImageId = AVMEDIA_IMG_LOOP_NORMAL;
+                break;
+            case AVMEDIA_TOOLBOXITEM_OPEN:
+                sImageId = AVMEDIA_IMG_OPEN_NORMAL;
+                break;
+            case AVMEDIA_TOOLBOXITEM_INSERT:
+                sImageId = AVMEDIA_IMG_INSERT_NORMAL;
+                break;
+        }
     }
 
-    return Image(BitmapEx(AVMEDIA_RESID(nImageId)));
+    return Image(BitmapEx(sImageId));
 }
 
 }
