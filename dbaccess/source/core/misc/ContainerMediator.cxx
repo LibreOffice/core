@@ -18,7 +18,7 @@
  */
 
 #include "ContainerMediator.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "PropertyForward.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

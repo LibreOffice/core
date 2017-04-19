@@ -20,7 +20,7 @@
 #include <string.h>
 
 #include "impdialog.hxx"
-#include "impdialog.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include <officecfg/Office/Common.hxx>
 #include <vcl/layout.hxx>
@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include "sfx2/passwd.hxx"
 #include "svtools/miscopt.hxx"
+#include "tools/simplerm.hxx"
 
 #include "comphelper/propertyvalue.hxx"
 #include "comphelper/sequence.hxx"
@@ -41,16 +42,16 @@
 #include "com/sun/star/security/DocumentDigitalSignatures.hpp"
 #include "com/sun/star/security/XCertificate.hpp"
 
-static ResMgr& getPDFFilterResMgr()
+static std::locale& getPDFFilterResLocale()
 {
-    static ResMgr *pRes = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag());
-    return *pRes;
+    static std::locale loc = Translate::Create("flt", Application::GetSettings().GetUILanguageTag());
+    return loc;
 }
 
-PDFFilterResId::PDFFilterResId( sal_uInt32 nId ) : ResId( nId, getPDFFilterResMgr() )
+OUString PDFFilterResId(const char* pId)
 {
+    return Translate::get(pId, getPDFFilterResLocale());
 }
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
