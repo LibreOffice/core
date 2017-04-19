@@ -522,6 +522,10 @@ void update_checker()
     {
         SAL_WARN("desktop.updater", "error during the update check");
     }
+    catch (...)
+    {
+        SAL_WARN("desktop.updater", "unknown error during the update check");
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
