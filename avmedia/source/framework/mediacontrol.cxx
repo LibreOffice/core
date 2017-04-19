@@ -18,7 +18,7 @@
  */
 
 #include "mediacontrol.hxx"
-#include "mediacontrol.hrc"
+#include "strings.hrc"
 #include "mediamisc.hxx"
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/mediaplayer.hxx>
@@ -98,7 +98,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpZoomToolBox->Show();
     maMinSize.Width() += mpZoomToolBox->GetSizePixel().Width();
 
-    const OUString aMediaPath( AVMEDIA_RESSTR( AVMEDIA_MEDIA_PATH_DEFAULT ) );
+    const OUString aMediaPath( AVMEDIA_RESID( AVMEDIA_MEDIA_PATH_DEFAULT ) );
     mpMediaPath->SetText(aMediaPath);
     mpMediaPath->SetUpdateMode( false );
     mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aMediaPath ) + 400, mpPlayToolBox->GetSizePixel().Height() ) ); // maybe extend the no. 400 to span the screen width
@@ -170,7 +170,7 @@ const Size& MediaControl::getMinSizePixel() const
 
 void MediaControl::UpdateURLField(MediaItem tempItem)
 {
-    const OUString aURL( AVMEDIA_RESSTR( AVMEDIA_MEDIA_PATH ) + ":  " + tempItem.getURL() ) ;
+    const OUString aURL( AVMEDIA_RESID( AVMEDIA_MEDIA_PATH ) + ":  " + tempItem.getURL() ) ;
     mpMediaPath->SetText(aURL);
     mpMediaPath->SetUpdateMode( false );
     mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aURL ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );

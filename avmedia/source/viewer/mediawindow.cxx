@@ -21,7 +21,7 @@
 #include "mediawindow_impl.hxx"
 #include "mediamisc.hxx"
 #include "bitmaps.hlst"
-#include "mediawindow.hrc"
+#include "strings.hrc"
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 #include <unotools/pathoptions.hxx>
@@ -219,7 +219,7 @@ bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
     static const char               aSeparator[] = ";";
     OUString                        aAllTypes;
 
-    aDlg.SetTitle( AVMEDIA_RESSTR( (o_pbLink)
+    aDlg.SetTitle( AVMEDIA_RESID( (o_pbLink)
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
     getMediaFilters( aFilters );
@@ -236,7 +236,7 @@ bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
     }
 
     // add filter for all media types
-    aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
+    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
 
     for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
     {
@@ -255,7 +255,7 @@ bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
     }
 
     // add filter for all types
-    aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_FILES ), "*.*" );
+    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_FILES ), "*.*" );
 
     uno::Reference<ui::dialogs::XFilePicker2> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,

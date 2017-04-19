@@ -39,7 +39,7 @@ SvxRelativeField::SvxRelativeField(
 
 VCL_BUILDER_DECL_FACTORY(SvxRelativeField)
 {
-    OString const custom(VclBuilder::extractCustomProperty(rMap));
+    OUString const custom(VclBuilder::extractCustomProperty(rMap));
     FieldUnit const eUnit(VclBuilder::detectUnit(custom));
     rRet = VclPtr<SvxRelativeField>::Create(pParent,
                                             WB_BORDER | WB_SPIN | WB_REPEAT |

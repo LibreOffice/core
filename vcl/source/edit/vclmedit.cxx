@@ -27,7 +27,7 @@
 #include <svl/undo.hxx>
 #include <svl/lstner.hxx>
 
-#include <svids.hrc>
+#include <strings.hrc>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 
@@ -1590,7 +1590,7 @@ void VclMultiLineEdit::EnableCursor( bool bEnable )
     GetTextView()->EnableCursor( bEnable );
 }
 
-bool VclMultiLineEdit::set_property(const OString &rKey, const OString &rValue)
+bool VclMultiLineEdit::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "cursor-visible")
         EnableCursor(toBool(rValue));

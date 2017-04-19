@@ -36,7 +36,7 @@
 #include "osx/salframe.h"
 #include "osx/a11ywrapper.h"
 #include "quartz/utils.h"
-#include "svids.hrc"
+#include "strings.hrc"
 #include "window.h"
 
 namespace {
@@ -117,106 +117,102 @@ static void initAppMenu()
     {
         bOnce = false;
 
-        ResMgr* pMgr = ImplGetResMgr();
-        if( pMgr )
+        // get the main menu
+        NSMenu* pMainMenu = [NSApp mainMenu];
+        if( pMainMenu != nil )
         {
-            // get the main menu
-            NSMenu* pMainMenu = [NSApp mainMenu];
-            if( pMainMenu != nil )
+            // create the action selector
+            pMainMenuSelector = [[MainMenuSelector alloc] init];
+
+            // get the proper submenu
+            NSMenu* pAppMenu = [[pMainMenu itemAtIndex: 0] submenu];
+            if( pAppMenu )
             {
-                // create the action selector
-                pMainMenuSelector = [[MainMenuSelector alloc] init];
-
-                // get the proper submenu
-                NSMenu* pAppMenu = [[pMainMenu itemAtIndex: 0] submenu];
-                if( pAppMenu )
+                // insert about entry
+                OUString aAbout(VclResId(SV_STDTEXT_ABOUT));
+                NSString* pString = CreateNSString( aAbout );
+                NSMenuItem* pNewItem = [pAppMenu insertItemWithTitle: pString
+                                                 action: @selector(showAbout:)
+                                                 keyEquivalent: @""
+                                                 atIndex: 0];
+                if (pString)
+                    [pString release];
+                if( pNewItem )
                 {
-                    // insert about entry
-                    OUString aAbout( ResId( SV_STDTEXT_ABOUT, *pMgr ) );
-                    NSString* pString = CreateNSString( aAbout );
-                    NSMenuItem* pNewItem = [pAppMenu insertItemWithTitle: pString
-                                                     action: @selector(showAbout:)
-                                                     keyEquivalent: @""
-                                                     atIndex: 0];
-                    if (pString)
-                        [pString release];
-                    if( pNewItem )
-                    {
-                        [pNewItem setTarget: pMainMenuSelector];
-                        [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 1];
-                    }
+                    [pNewItem setTarget: pMainMenuSelector];
+                    [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 1];
+                }
 
-                    // insert preferences entry
-                    OUString aPref( ResId( SV_STDTEXT_PREFERENCES, *pMgr ) );
-                    pString = CreateNSString( aPref );
-                    pNewItem = [pAppMenu insertItemWithTitle: pString
-                                         action: @selector(showPreferences:)
-                                         keyEquivalent: @","
-                                         atIndex: 2];
-                    if (pString)
-                        [pString release];
-                    if( pNewItem )
-                    {
+                // insert preferences entry
+                OUString aPref(VclResId(SV_STDTEXT_PREFERENCES));
+                pString = CreateNSString( aPref );
+                pNewItem = [pAppMenu insertItemWithTitle: pString
+                                     action: @selector(showPreferences:)
+                                     keyEquivalent: @","
+                                     atIndex: 2];
+                if (pString)
+                    [pString release];
+                if( pNewItem )
+                {
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-                        [pNewItem setKeyEquivalentModifierMask: NSCommandKeyMask];
+// 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
+                    [pNewItem setKeyEquivalentModifierMask: NSCommandKeyMask];
 SAL_WNODEPRECATED_DECLARATIONS_POP
-                        [pNewItem setTarget: pMainMenuSelector];
-                        [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 3];
-                    }
+                    [pNewItem setTarget: pMainMenuSelector];
+                    [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 3];
+                }
 
-                    // WARNING: ultra ugly code ahead
+                // WARNING: ultra ugly code ahead
 
-                    // rename standard entries
-                    // rename "Services"
-                    pNewItem = [pAppMenu itemAtIndex: 4];
-                    if( pNewItem )
-                    {
-                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_SERVICES, *pMgr ) ) );
-                        [pNewItem  setTitle: pString];
-                        if( pString )
-                            [pString release];
-                    }
+                // rename standard entries
+                // rename "Services"
+                pNewItem = [pAppMenu itemAtIndex: 4];
+                if( pNewItem )
+                {
+                    pString = CreateNSString(VclResId(SV_MENU_MAC_SERVICES));
+                    [pNewItem  setTitle: pString];
+                    if( pString )
+                        [pString release];
+                }
 
-                    // rename "Hide NewApplication"
-                    pNewItem = [pAppMenu itemAtIndex: 6];
-                    if( pNewItem )
-                    {
-                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_HIDEAPP, *pMgr ) ) );
-                        [pNewItem  setTitle: pString];
-                        if( pString )
-                            [pString release];
-                    }
+                // rename "Hide NewApplication"
+                pNewItem = [pAppMenu itemAtIndex: 6];
+                if( pNewItem )
+                {
+                    pString = CreateNSString(VclResId(SV_MENU_MAC_HIDEAPP));
+                    [pNewItem  setTitle: pString];
+                    if( pString )
+                        [pString release];
+                }
 
-                    // rename "Hide Others"
-                    pNewItem = [pAppMenu itemAtIndex: 7];
-                    if( pNewItem )
-                    {
-                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_HIDEALL, *pMgr ) ) );
-                        [pNewItem  setTitle: pString];
-                        if( pString )
-                            [pString release];
-                    }
+                // rename "Hide Others"
+                pNewItem = [pAppMenu itemAtIndex: 7];
+                if( pNewItem )
+                {
+                    pString = CreateNSString(VclResId(SV_MENU_MAC_HIDEALL));
+                    [pNewItem  setTitle: pString];
+                    if( pString )
+                        [pString release];
+                }
 
-                    // rename "Show all"
-                    pNewItem = [pAppMenu itemAtIndex: 8];
-                    if( pNewItem )
-                    {
-                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_SHOWALL, *pMgr ) ) );
-                        [pNewItem  setTitle: pString];
-                        if( pString )
-                            [pString release];
-                    }
+                // rename "Show all"
+                pNewItem = [pAppMenu itemAtIndex: 8];
+                if( pNewItem )
+                {
+                    pString = CreateNSString(VclResId(SV_MENU_MAC_SHOWALL));
+                    [pNewItem  setTitle: pString];
+                    if( pString )
+                        [pString release];
+                }
 
-                    // rename "Quit NewApplication"
-                    pNewItem = [pAppMenu itemAtIndex: 10];
-                    if( pNewItem )
-                    {
-                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_QUITAPP, *pMgr ) ) );
-                        [pNewItem  setTitle: pString];
-                        if( pString )
-                            [pString release];
-                    }
+                // rename "Quit NewApplication"
+                pNewItem = [pAppMenu itemAtIndex: 10];
+                if( pNewItem )
+                {
+                    pString = CreateNSString(VclResId(SV_MENU_MAC_QUITAPP));
+                    [pNewItem  setTitle: pString];
+                    if( pString )
+                        [pString release];
                 }
             }
         }

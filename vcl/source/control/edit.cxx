@@ -30,7 +30,7 @@
 
 #include <window.h>
 #include <svdata.hxx>
-#include <svids.hrc>
+#include <strings.hrc>
 #include <controldata.hxx>
 
 #include <osl/mutex.hxx>
@@ -179,7 +179,7 @@ void Edit::setMaxWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool Edit::set_property(const OString &rKey, const OString &rValue)
+bool Edit::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "width-chars")
         SetWidthInChars(rValue.toInt32());
@@ -212,7 +212,7 @@ bool Edit::set_property(const OString &rKey, const OString &rValue)
         SetStyle(nBits);
     }
     else if (rKey == "placeholder-text")
-        SetPlaceholderText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetPlaceholderText(rValue);
     else
         return Control::set_property(rKey, rValue);
     return true;
@@ -778,12 +778,8 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > const & Edit::ImplGetInpu
 
 void Edit::ShowTruncationWarning( vcl::Window* pParent )
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-    {
-        ScopedVclPtrInstance< MessageDialog > aBox( pParent, ResId(SV_EDIT_WARNING_STR, *pResMgr), VclMessageType::Warning );
-        aBox->Execute();
-    }
+    ScopedVclPtrInstance< MessageDialog > aBox(pParent, VclResId(SV_EDIT_WARNING_STR), VclMessageType::Warning);
+    aBox->Execute();
 }
 
 bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_Int32 nSelectionLen ) const
