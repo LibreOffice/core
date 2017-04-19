@@ -32,7 +32,7 @@
 #include "svdata.hxx"
 #include "salinst.hxx"
 #include "salprn.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
@@ -241,7 +241,7 @@ static OUString queryFile( Printer* pPrinter )
         xFilePicker->appendFilter( "*.PRN", "*.prn" );
 #endif
         // add arbitrary files
-        xFilePicker->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), "*.*");
+        xFilePicker->appendFilter(VclResStr(SV_STDTEXT_ALLFILETYPES), "*.*");
     }
     catch (const css::lang::IllegalArgumentException&)
     {
