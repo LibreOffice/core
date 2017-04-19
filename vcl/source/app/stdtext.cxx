@@ -23,21 +23,10 @@
 #include <svids.hrc>
 #include <svdata.hxx>
 
-OUString GetStandardText( sal_uInt16 nStdText )
-{
-    ResMgr* pResMgr = ImplGetResMgr();
-    if (pResMgr)
-    {
-        return ResId(nStdText-STANDARD_TEXT_FIRST+SV_STDTEXT_FIRST, *pResMgr).
-            toString();
-    }
-    return OUString();
-}
-
 void ShowServiceNotAvailableError(vcl::Window* pParent,
     const OUString& rServiceName, bool bError)
 {
-    OUString aText  = GetStandardText(STANDARD_TEXT_SERVICE_NOT_AVAILABLE).
+    OUString aText  = VclResId(SV_STDTEXT_SERVICENOTAVAILABLE).toString().
         replaceAll("%s", rServiceName);
     ScopedVclPtrInstance< MessageDialog > aBox( pParent, aText, bError ? VclMessageType::Error : VclMessageType::Warning );
     aBox->Execute();

@@ -132,7 +132,6 @@
 #define SV_BUTTONTEXT_CONNECT                       10131
 #define SV_BUTTONTEXT_SCREENSHOT                    10132
 
-#define SV_STDTEXT_FIRST                            SV_STDTEXT_SERVICENOTAVAILABLE
 #define SV_STDTEXT_SERVICENOTAVAILABLE              10210
 
 #define SV_STDTEXT_DONTASKAGAIN                     10212

@@ -25,11 +25,6 @@
 
 namespace vcl { class Window; }
 
-#define STANDARD_TEXT_FIRST                     STANDARD_TEXT_SERVICE_NOT_AVAILABLE
-#define STANDARD_TEXT_SERVICE_NOT_AVAILABLE     ((sal_uInt16)0)
-
-OUString VCL_DLLPUBLIC GetStandardText(sal_uInt16 nStdText);
-
 void VCL_DLLPUBLIC ShowServiceNotAvailableError(vcl::Window* pParent, const OUString& rServiceName, bool bError);
 
 #endif // INCLUDED_VCL_STDTEXT_HXX
