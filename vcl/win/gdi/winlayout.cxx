@@ -261,7 +261,7 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
         }
         else
         {
-            pSalData->m_pTextOutRenderer.reset(new ExTextOutRenderer());
+            pSalData->m_pTextOutRenderer.reset(new ExTextOutRenderer);
         }
     }
     return *pSalData->m_pTextOutRenderer;
