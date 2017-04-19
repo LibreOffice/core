@@ -1416,7 +1416,6 @@ void DateFormatter::ImplInit()
     mbLongFormat        = false;
     mbShowDateCentury   = true;
     mpCalendarWrapper   = nullptr;
-    mnDateFormat        = 0xFFFF;
     mnExtDateFormat     = ExtDateFieldFormat::SystemShort;
 }
 

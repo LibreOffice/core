@@ -277,7 +277,6 @@ private:
     Date                    maMax;
     bool                    mbLongFormat;
     bool                    mbShowDateCentury;
-    sal_uInt16              mnDateFormat;
     ExtDateFieldFormat      mnExtDateFormat;
     bool                    mbEnforceValidValue;
 
