@@ -60,10 +60,6 @@ cmd/lc_alignvcenter.png cmd/lc_alignverticalcenter.png
 cmd/sc_alignvcenter.png cmd/sc_alignverticalcenter.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
 sd/res/sc05928.png cmd/sc_autoformat.png
-vcl/source/src/error.png vcl/res/errorbox.png
-vcl/source/src/warningbox.png vcl/res/warningbox.png
-vcl/source/src/infobox.png vcl/res/infobox.png
-vcl/source/src/querybox.png vcl/res/querybox.png
 desktop/res/extension_16.png cmd/sc_addons.png
 res/sx03256.png cmd/sc_addons.png
 res/extension_plus_26.png cmd/lc_addons.png

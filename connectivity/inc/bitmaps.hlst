@@ -17,17 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_INC_SB_HRC
-#define INCLUDED_BASIC_INC_SB_HRC
+#ifndef CONNECTIVITY_HSQLUI_HRC
+#define CONNECTIVITY_HSQLUI_HRC
 
-#include <svl/solar.hrc>
+#define LINKED_TEXT_TABLE_IMAGE_RESOURCE        "database/linked_text_table.png"
 
-#ifndef IDS_SBERR_START
- #define IDS_SBERR_START RID_BASIC_START
-#endif
-
-#define IDS_SBERR_TERMINATED        IDS_SBERR_START+2000
-
-#endif
+#endif // CONNECTIVITY_HSQLUI_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

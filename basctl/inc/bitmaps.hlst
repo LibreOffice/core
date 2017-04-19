@@ -17,59 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svids.hrc>
+#ifndef INCLUDED_BASCTL_INC_BITMAPS_HRC
+#define INCLUDED_BASCTL_INC_BITMAPS_HRC
 
-String SV_HELPTEXT_CLOSE
-{
-    Text [ en-US ] = "Close";
-};
-String SV_HELPTEXT_CLOSEDOCUMENT
-{
-    Text [ en-US ] = "Close Document";
-};
-String SV_HELPTEXT_MINIMIZE
-{
-    Text [ en-US ] = "Minimize";
-};
+#define RID_BMP_BRKENABLED      "res/im30838.png"
+#define RID_BMP_BRKDISABLED     "res/im30839.png"
+#define RID_BMP_STEPMARKER      "res/im30840.png"
+#define RID_BMP_ERRORMARKER     "res/im30841.png"
+#define RID_BMP_LOCKED          "res/lock.png"
+#define RID_BMP_INSTALLATION    "res/harddisk_16.png"
+#define RID_BMP_DOCUMENT        "res/im30826.png"
+#define RID_BMP_MODLIB          "res/im30820.png"
+#define RID_BMP_MODLIBNOTLOADED "res/im30827.png"
+#define RID_BMP_MODULE          "res/im30821.png"
+#define RID_BMP_MACRO           "res/im30822.png"
+#define RID_BMP_DLGLIB          "res/dialogfolder_16.png"
+#define RID_BMP_DLGLIBNOTLOADED "res/dialogfoldernot_16.png"
+#define RID_BMP_DIALOG          "res/im30823.png"
+#define RID_BMP_REMOVEWATCH     "res/baswatr.png"
 
-String SV_HELPTEXT_MAXIMIZE
-{
-    Text [ en-US ] = "Maximize";
-};
-
-String SV_HELPTEXT_RESTORE
-{
-    Text [ en-US ] = "Restore";
-};
-
-String SV_HELPTEXT_ROLLDOWN
-{
-    Text [ en-US ] = "Drop down";
-};
-
-String SV_HELPTEXT_ROLLUP
-{
-    Text [ en-US ] = "Roll up";
-};
-
-String SV_HELPTEXT_HELP
-{
-    Text [ en-US ] = "Help";
-};
-
-String SV_HELPTEXT_SCREENSHOT
-{
-    Text [ en-US ] = "Take and annotate a screenshot";
-};
-
-String SV_HELPTEXT_FADEIN
-{
-    Text [ en-US ] = "Show";
-};
-
-String SV_HELPTEXT_FADEOUT
-{
-    Text [ en-US ] = "Hide";
-};
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

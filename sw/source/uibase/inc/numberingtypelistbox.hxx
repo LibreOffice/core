@@ -49,7 +49,7 @@ public:
     virtual ~SwNumberingTypeListBox() override;
     virtual void dispose() override;
 
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
     void          Reload(SwInsertNumTypes nTypeFlags);
 

@@ -87,7 +87,7 @@ public:
     {
         m_bHomogeneous = bHomogeneous;
     }
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const override;
     void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
@@ -202,7 +202,7 @@ public:
         , m_eLayoutStyle(VclButtonBoxStyle::Default)
     {
     }
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     void sort_native_button_order();
 protected:
     virtual Size calculateRequisition() const override;
@@ -350,7 +350,7 @@ public:
     {
         return m_nColumnSpacing;
     }
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 };
 
 class VCL_DLLPUBLIC VclBin : public VclContainer
@@ -426,7 +426,7 @@ public:
         , m_fYScale(1.0)
     {
     }
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 protected:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
@@ -456,7 +456,7 @@ public:
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     bool get_expanded() const
     {
         return m_pDisclosureButton->IsChecked();
@@ -489,7 +489,7 @@ public:
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     ScrollBar& getVertScrollBar() { return *m_pVScroll; }
     ScrollBar& getHorzScrollBar() { return *m_pHScroll; }
     Size getVisibleChildSize() const;
@@ -615,7 +615,7 @@ public:
     {
         return m_eMode;
     }
-    bool set_property(const OString &rKey, const OString &rValue);
+    bool set_property(const OString &rKey, const OUString &rValue);
 };
 
 enum class VclButtonsType
@@ -665,7 +665,7 @@ public:
         VclMessageType eMessageType = VclMessageType::Error,
         VclButtonsType eButtonsType = VclButtonsType::Ok);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     virtual short Execute() override;
     ///Emitted when an action widget is clicked
     virtual void response(short nResponseId);

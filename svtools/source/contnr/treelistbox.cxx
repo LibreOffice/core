@@ -3739,7 +3739,7 @@ void SvTreeListBox::set_min_width_in_chars(sal_Int32 nChars)
     queue_resize();
 }
 
-bool SvTreeListBox::set_property(const OString &rKey, const OString &rValue)
+bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "min-width-chars")
     {

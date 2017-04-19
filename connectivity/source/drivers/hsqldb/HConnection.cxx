@@ -20,7 +20,7 @@
 
 #include "hsqldb/HConnection.hxx"
 #include "hsqldb/HTools.hxx"
-#include "hsqlui.hrc"
+#include "bitmaps.hlst"
 
 #include <connectivity/dbtools.hxx>
 

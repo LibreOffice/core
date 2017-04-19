@@ -1035,7 +1035,7 @@ HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
 VCL_BUILDER_DECL_FACTORY(HatchingLB)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
     VclPtrInstance<HatchingLB> pListBox(pParent, nWinStyle);
@@ -1075,7 +1075,7 @@ GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
 VCL_BUILDER_DECL_FACTORY(GradientLB)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
     VclPtrInstance<GradientLB> pListBox(pParent, nWinStyle);
@@ -1115,7 +1115,7 @@ BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
 VCL_BUILDER_DECL_FACTORY(BitmapLB)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
     VclPtrInstance<BitmapLB> pListBox(pParent, nWinStyle);
@@ -1252,7 +1252,7 @@ VCL_BUILDER_DECL_FACTORY(LineLB)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
     VclPtrInstance<LineLB> pListBox(pParent, nWinBits);
@@ -1350,7 +1350,7 @@ VCL_BUILDER_DECL_FACTORY(LineEndLB)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
     VclPtrInstance<LineEndLB> pListBox(pParent, nWinBits);

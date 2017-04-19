@@ -89,7 +89,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     VclButtonBox* get_action_area() { return mpActionArea; }
     VclBox* get_content_area() { return mpContentArea; }
 

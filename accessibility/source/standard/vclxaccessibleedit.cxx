@@ -22,7 +22,7 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <helper/accresmgr.hxx>
-#include <helper/accessiblestrings.hrc>
+#include <accessiblestrings.hrc>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>

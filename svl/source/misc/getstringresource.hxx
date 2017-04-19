@@ -31,8 +31,7 @@ namespace com { namespace sun { namespace star { namespace lang {
 namespace svl {
 
 OUString getStringResource(
-    sal_uInt16 id, LanguageTag const & locale);
-
+    const char* id, LanguageTag const & locale);
 }
 
 #endif
