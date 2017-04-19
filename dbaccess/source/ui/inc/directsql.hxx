@@ -32,7 +32,7 @@
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <unotools/eventlisteneradapter.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <osl/mutex.hxx>
 
 #include <svtools/editbrowsebox.hxx>
@@ -46,7 +46,7 @@ namespace dbaui
             ,public ::utl::OEventListenerAdapter
     {
     protected:
-        OModuleClient m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         ::osl::Mutex    m_aMutex;
 
         VclPtr<MultiLineEditSyntaxHighlight>    m_pSQL;

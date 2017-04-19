@@ -11,6 +11,7 @@ $(eval $(call gb_Pyuno_Pyuno,commonwizards,$(SRCDIR)/wizards/com/sun/star/wizard
 
 $(eval $(call gb_Pyuno_add_files,commonwizards,wizards,\
     __init__.py \
+    common/strings.hrc \
     common/ConfigGroup.py \
     common/ConfigSet.py \
     common/Configuration.py \
@@ -21,7 +22,6 @@ $(eval $(call gb_Pyuno_add_files,commonwizards,wizards,\
     common/NumberFormatter.py \
     common/Properties.py \
     common/PropertyNames.py \
-    common/Resource.py \
     common/SystemDialog.py \
     common/IRenderer.py \
     common/UCB.py \

@@ -19,6 +19,11 @@
 
 $(eval $(call gb_Library_Library,gie))
 
+$(eval $(call gb_Library_set_include,gie,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/filter/inc \
+))
+
 $(eval $(call gb_Library_use_external,gie,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,gie))

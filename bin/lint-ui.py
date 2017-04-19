@@ -98,6 +98,8 @@ def main():
     tree = ET.parse(sys.argv[1])
     root = tree.getroot()
 
+    lint_assert('domain' in root.attrib, "interface needs to specific translation domain")
+
     top_level_widgets = [element for element in root.findall('object') if element.attrib['class'] not in IGNORED_TOP_LEVEL_WIDGETS]
     assert len(top_level_widgets) == 1
 

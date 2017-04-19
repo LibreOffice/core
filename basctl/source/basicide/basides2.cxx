@@ -108,7 +108,7 @@ void Shell::SetMDITitle()
     DocumentSignature aCurSignature( m_aCurDocument );
     if ( aCurSignature.getScriptingSignatureState() == SignatureState::OK )
     {
-        aTitle += " " + OUString(IDEResId(RID_STR_SIGNED)) + " ";
+        aTitle += " " + IDEResId(RID_STR_SIGNED) + " ";
     }
 
     SfxViewFrame* pViewFrame = GetViewFrame();
