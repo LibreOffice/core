@@ -32,7 +32,7 @@
 #include "RptDef.hxx"
 #include "dlgedfunc.hxx"
 #include "RptModel.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "RptPage.hxx"
 #include "ReportController.hxx"
 #include "EndMarker.hxx"

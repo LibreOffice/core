@@ -19,7 +19,8 @@
 
 #include "flt_reghelper.hxx"
 #include "xmlservices.hxx"
-#include "xmlstrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

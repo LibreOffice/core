@@ -152,8 +152,7 @@ namespace rptui
         ::dbaui::IController*   m_pController;
 
     public:
-        OCommentUndoAction( SdrModel& rMod
-                            ,sal_uInt16 nCommentID);
+        OCommentUndoAction(SdrModel& rMod, const char* pCommentID);
         virtual ~OCommentUndoAction() override;
 
         virtual OUString GetComment() const override { return m_strComment; }
@@ -181,7 +180,7 @@ namespace rptui
                             ,Action _eAction
                             ,const css::uno::Reference< css::container::XIndexContainer >& rContainer
                             ,const css::uno::Reference< css::uno::XInterface>& xElem
-                            ,sal_uInt16 _nCommentId);
+                            ,const char* pCommentId);
         virtual ~OUndoContainerAction() override;
 
         virtual void Undo() override;
@@ -207,7 +206,7 @@ namespace rptui
                                 ,OReportHelper> _pMemberFunction
                             ,const css::uno::Reference< css::report::XReportDefinition >& _xReport
                             ,const css::uno::Reference< css::uno::XInterface>& xElem
-                            ,sal_uInt16 _nCommentId);
+                            ,const char* pCommentId);
 
     protected:
         virtual void    implReInsert( ) override;
@@ -228,7 +227,7 @@ namespace rptui
                                             ,OGroupHelper> _pMemberFunction
                             ,const css::uno::Reference< css::report::XGroup >& _xGroup
                             ,const css::uno::Reference< css::uno::XInterface>& xElem
-                            ,sal_uInt16 _nCommentId);
+                            ,const char* pCommentId);
 
     protected:
         virtual void    implReInsert( ) override;

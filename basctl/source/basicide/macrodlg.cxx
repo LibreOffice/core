@@ -19,7 +19,6 @@
 
 
 #include <macrodlg.hxx>
-#include <macrodlg.hrc>
 #include <basidesh.hxx>
 #include <basidesh.hrc>
 

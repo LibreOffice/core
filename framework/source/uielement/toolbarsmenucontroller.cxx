@@ -22,7 +22,7 @@
 #include <algorithm>
 
 #include "services.h"
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <uiconfiguration/windowstateproperties.hxx>
