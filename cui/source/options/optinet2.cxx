@@ -54,6 +54,7 @@
 #include <svx/ofaitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>
+#include <strings.hrc>
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 

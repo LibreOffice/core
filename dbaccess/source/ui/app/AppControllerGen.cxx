@@ -20,9 +20,10 @@
 #include "AppController.hxx"
 #include "AppDetailView.hxx"
 #include "AppView.hxx"
+#include "core_resource.hxx"
 #include "dbaccess_slotid.hrc"
-#include "dbu_app.hrc"
-#include "dbustrings.hrc"
+#include "strings.hrc"
+#include "stringconstants.hxx"
 #include "defaultobjectnamecheck.hxx"
 #include "dlgsave.hxx"
 #include "UITools.hxx"
@@ -104,7 +105,7 @@ void OApplicationController::convertToView(const OUString& _sName)
 
         Reference< XDatabaseMetaData  > xMeta = xConnection->getMetaData();
 
-        OUString aName = OUString(ModuleRes(STR_TBL_TITLE));
+        OUString aName = DBA_RES(STR_TBL_TITLE);
         aName = aName.getToken(0,' ');
         OUString aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
 
@@ -119,7 +120,7 @@ void OApplicationController::convertToView(const OUString& _sName)
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, false, ::dbtools::EComposeRule::InTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
             if ( !xView.is() )
-                throw SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE),*this, "S1000",0,Any());
+                throw SQLException(DBA_RES(STR_NO_TABLE_FORMAT_INSIDE),*this, "S1000",0,Any());
             getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView));
         }
     }
@@ -329,7 +330,7 @@ void SAL_CALL OApplicationController::connect(  )
             aError.doThrow();
 
         // no particular error, but nonetheless could not connect -> throw a generic exception
-        OUString sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
+        OUString sConnectingContext( DBA_RES( STR_COULDNOTCONNECT_DATASOURCE ) );
         ::dbtools::throwGenericSQLException( sConnectingContext.replaceFirst( "$name$", getStrippedDatabaseName() ), *this );
     }
 }
@@ -517,7 +518,7 @@ void OApplicationController::askToReconnect()
         bool bClear = true;
         if ( !m_pSubComponentManager->empty() )
         {
-            ScopedVclPtrInstance< MessageDialog > aQry(getView(), ModuleRes(STR_QUERY_CLOSEDOCUMENTS), VclMessageType::Question, VclButtonsType::YesNo);
+            ScopedVclPtrInstance< MessageDialog > aQry(getView(), DBA_RES(STR_QUERY_CLOSEDOCUMENTS), VclMessageType::Question, VclButtonsType::YesNo);
             switch (aQry->Execute())
             {
                 case RET_YES:

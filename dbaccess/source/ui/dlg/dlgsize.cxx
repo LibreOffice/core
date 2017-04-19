@@ -18,7 +18,7 @@
  */
 
 #include "dlgsize.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include "moduledbu.hxx"
 
 namespace dbaui

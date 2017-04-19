@@ -9,10 +9,11 @@
 
 #include <vcl/builderfactory.hxx>
 #include "LimitBox.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
+#include "core_resource.hxx"
 #include "moduledbu.hxx"
 
-#define ALL_STRING ModuleRes(STR_QUERY_LIMIT_ALL).toString()
+#define ALL_STRING DBA_RES(STR_QUERY_LIMIT_ALL)
 #define ALL_INT -1
 
 namespace global{

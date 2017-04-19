@@ -83,12 +83,10 @@ public:
     virtual void    prepareChecking() = 0;
     virtual void    checkEntries() = 0;
 
-    static ResId    getResId( sal_uInt16 nId );
-    static OUString getResourceString( sal_uInt16 id );
     static bool     IsSharedPkgMgr( const css::uno::Reference< css::deployment::XPackage > &);
     static bool     continueOnSharedExtension( const css::uno::Reference< css::deployment::XPackage > &,
                                                vcl::Window *pParent,
-                                               const sal_uInt16 nResID,
+                                               const char* pResID,
                                                bool &bHadWarning );
 
     void            setBusy( const bool bBusy ) { m_bIsBusy = bBusy; }
