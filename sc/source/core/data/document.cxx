@@ -6502,6 +6502,36 @@ void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveD
     }
 }
 
+CommentCaptionState ScDocument::GetAllNoteCaptionsState( const ScRangeList& rRanges )
+{
+    CommentCaptionState aState, aOldState;
+    std::vector<sc::NoteEntry> aNotes;
+
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    {
+        const ScRange* pRange = rRanges[i];
+
+        for( SCTAB nTab = pRange->aStart.Tab(); nTab <= pRange->aEnd.Tab(); ++nTab )
+        {
+            aState = maTabs[nTab]->GetAllNoteCaptionsState( *pRange, aNotes );
+            if (aState == CommentCaptionState::MIXED)
+                return aState;
+
+            if (nTab - 1 >= 0)
+            {
+                aOldState = maTabs[nTab-1]->GetAllNoteCaptionsState( *pRange, aNotes );
+
+                if (aState != aOldState)
+                {
+                    aState = CommentCaptionState::MIXED;
+                    return aState;
+                }
+            }
+        }
+    }
+    return aState;
+}
+
 ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
