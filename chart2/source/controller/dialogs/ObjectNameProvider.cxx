@@ -19,7 +19,7 @@
 
 #include "ObjectNameProvider.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "macros.hxx"
 #include "AxisHelper.hxx"
 #include "ChartModelHelper.hxx"
