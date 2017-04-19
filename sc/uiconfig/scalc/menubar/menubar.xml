@@ -147,6 +147,7 @@
             <menu:menuitem menu:id=".uno:ViewRowColumnHeaders"/>
             <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
             <menu:menuitem menu:id=".uno:ToggleFormula"/>
+            <menu:menuitem menu:id=".uno:ShowAnnotations"/>
             <menu:menu menu:id=".uno:GridMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:GridVisible"/>

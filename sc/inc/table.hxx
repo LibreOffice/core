@@ -36,6 +36,7 @@
 #include <formula/types.hxx>
 #include "calcmacros.hxx"
 #include "formula/errorcodes.hxx"
+#include "document.hxx"
 
 #include <set>
 #include <map>
@@ -432,6 +433,7 @@ public:
 
     void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
     void GetNotesInRange( const ScRange& rRange, std::vector<sc::NoteEntry>& rNotes ) const;
+    CommentCaptionState GetAllNoteCaptionsState( const ScRange& rRange, std::vector<sc::NoteEntry>& rNotes );
     bool ContainsNotesInRange( const ScRange& rRange ) const;
 
     bool TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize ) const;

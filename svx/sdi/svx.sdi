@@ -4445,7 +4445,7 @@ SfxVoidItem EditAnnotation SID_EDIT_POSTIT
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem ShowAnnotations SID_SHOW_POSTIT
+SfxVoidItem ShowAnnotations SID_TOGGLE_NOTES
 ()
 [
     AutoUpdate = FALSE,
