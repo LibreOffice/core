@@ -18,7 +18,7 @@
  */
 
 #include "tp_DataSource.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "macros.hxx"
@@ -219,7 +219,7 @@ DataSourceTabPage::DataSourceTabPage(
     m_pFT_CAPTION->Show(!bHideDescription);
 
     m_aFixedTextRange = m_pFT_RANGE->GetText();
-    this->SetText( SCH_RESSTR( STR_OBJECT_DATASERIES_PLURAL ) );
+    this->SetText( SchResId( STR_OBJECT_DATASERIES_PLURAL ) );
 
     // set handlers
     m_pLB_SERIES->SetSelectHdl( LINK( this, DataSourceTabPage, SeriesSelectionChangedHdl ));
@@ -415,7 +415,7 @@ void DataSourceTabPage::fillSeriesListBox()
         {
             if( nUnnamedSeriesIndex > 1 )
             {
-                OUString aResString(::chart::SchResId( STR_DATA_UNNAMED_SERIES_WITH_INDEX ).toString());
+                OUString aResString(::chart::SchResId( STR_DATA_UNNAMED_SERIES_WITH_INDEX ));
 
                 // replace index of unnamed series
                 const OUString aReplacementStr( "%NUMBER" );
@@ -426,7 +426,7 @@ void DataSourceTabPage::fillSeriesListBox()
                                          OUString::number(nUnnamedSeriesIndex));
             }
             if( aLabel.isEmpty() )
-                aLabel = ::chart::SchResId( STR_DATA_UNNAMED_SERIES ).toString();
+                aLabel = ::chart::SchResId( STR_DATA_UNNAMED_SERIES );
 
             ++nUnnamedSeriesIndex;
         }
@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, Button*, void)
 
     if( bHasSelectedEntry && (m_pLB_ROLE->FirstSelected() != nullptr))
     {
-        OUString aUIStr(SCH_RESSTR(STR_DATA_SELECT_RANGE_FOR_SERIES));
+        OUString aUIStr(SchResId(STR_DATA_SELECT_RANGE_FOR_SERIES));
 
         // replace role
         OUString aReplacement( "%VALUETYPE" );
@@ -613,7 +613,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl, Button*, voi
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
         return;
 
-    OUString aStr( SCH_RESSTR( m_pFT_CATEGORIES->IsVisible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS ));
+    OUString aStr( SchResId( m_pFT_CATEGORIES->IsVisible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS ));
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange(
         m_rDialogModel.getCategoriesRange(), aStr, *this );

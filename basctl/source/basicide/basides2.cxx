@@ -103,12 +103,12 @@ void Shell::SetMDITitle()
         aTitle = m_aCurDocument.getTitle(eLocation) + "." + m_aCurLibName ;
     }
     else
-        aTitle = IDE_RESSTR(RID_STR_ALL) ;
+        aTitle = IDEResId(RID_STR_ALL) ;
 
     DocumentSignature aCurSignature( m_aCurDocument );
     if ( aCurSignature.getScriptingSignatureState() == SignatureState::OK )
     {
-        aTitle += " " + IDE_RESSTR(RID_STR_SIGNED) + " ";
+        aTitle += " " + IDEResId(RID_STR_SIGNED) + " ";
     }
 
     SfxViewFrame* pViewFrame = GetViewFrame();

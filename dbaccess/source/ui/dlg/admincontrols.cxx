@@ -18,7 +18,7 @@
  */
 
 #include "admincontrols.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include "dsitems.hxx"
 #include "moduledbu.hxx"
 

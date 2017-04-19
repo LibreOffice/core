@@ -33,7 +33,6 @@ namespace dbaui
     // IndexFieldsControl
     class IndexFieldsControl : public ::svt::EditBrowseBox
     {
-        OModuleClient               m_aModuleClient;
     protected:
         IndexFields                 m_aSavedValue;
 
