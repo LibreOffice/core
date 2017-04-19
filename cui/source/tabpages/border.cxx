@@ -24,6 +24,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <cuires.hrc>
+#include <bitmaps.hlst>
 #include "helpid.hrc"
 
 #include <svx/xtable.hxx>
@@ -136,7 +137,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     get(m_pRemoveAdjcentCellBordersCB, "rmadjcellborders");
     get(m_pRemoveAdjcentCellBordersFT, "rmadjcellbordersft");
 
-    static const sal_uInt16 pnBorderImgIds[] =
+    static const OUStringLiteral pnBorderImgIds[] =
     {
         RID_SVXBMP_CELL_NONE,
         RID_SVXBMP_CELL_ALL,
@@ -162,9 +163,9 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(pnBorderImgIds); ++i)
-        m_aBorderImgVec.push_back(BitmapEx(CUI_RES(pnBorderImgIds[i])));
+        m_aBorderImgVec.push_back(BitmapEx(pnBorderImgIds[i]));
 
-    static const sal_uInt16 pnShadowImgIds[SVX_BORDER_SHADOW_COUNT] =
+    static const OUStringLiteral pnShadowImgIds[SVX_BORDER_SHADOW_COUNT] =
     {
         RID_SVXBMP_SHADOWNONE,
         RID_SVXBMP_SHADOW_BOT_RIGHT,
@@ -174,7 +175,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(pnShadowImgIds); ++i)
-        m_aShadowImgVec.push_back(BitmapEx(CUI_RES(pnShadowImgIds[i])));
+        m_aShadowImgVec.push_back(BitmapEx(pnShadowImgIds[i]));
     assert(m_aShadowImgVec.size() == SVX_BORDER_SHADOW_COUNT);
 
     if ( GetDPIScaleFactor() > 1 )

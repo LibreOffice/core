@@ -1,0 +1,69 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_CUI_INC_BITMAPS_HRC
+#define INCLUDED_CUI_INC_BITMAPS_HRC
+
+#define RID_SVXBMP_CELL_NONE            "svx/res/pr01.png"
+#define RID_SVXBMP_CELL_ALL             "svx/res/pr02.png"
+#define RID_SVXBMP_CELL_LR              "svx/res/pr03.png"
+#define RID_SVXBMP_CELL_TB              "svx/res/pr04.png"
+#define RID_SVXBMP_CELL_L               "svx/res/pr05.png"
+#define RID_SVXBMP_CELL_DIAG            "svx/res/pr06.png"
+#define RID_SVXBMP_HOR_NONE             "svx/res/pr07.png"
+#define RID_SVXBMP_HOR_OUTER            "svx/res/pr08.png"
+#define RID_SVXBMP_HOR_HOR              "svx/res/pr09.png"
+#define RID_SVXBMP_HOR_ALL              "svx/res/pr010.png"
+#define RID_SVXBMP_HOR_OUTER2           "svx/res/pr011.png"
+#define RID_SVXBMP_VER_NONE             "svx/res/pr012.png"
+#define RID_SVXBMP_VER_OUTER            "svx/res/pr013.png"
+#define RID_SVXBMP_VER_VER              "svx/res/pr014.png"
+#define RID_SVXBMP_VER_ALL              "svx/res/pr015.png"
+#define RID_SVXBMP_VER_OUTER2           "svx/res/pr016.png"
+#define RID_SVXBMP_TABLE_NONE           "svx/res/pr017.png"
+#define RID_SVXBMP_TABLE_OUTER          "svx/res/pr018.png"
+#define RID_SVXBMP_TABLE_OUTERH         "svx/res/pr019.png"
+#define RID_SVXBMP_TABLE_ALL            "svx/res/pr020.png"
+#define RID_SVXBMP_TABLE_OUTER2         "svx/res/pr021.png"
+#define RID_SVXBMP_SHADOWNONE           "svx/res/sh01.png"
+#define RID_SVXBMP_SHADOW_BOT_RIGHT     "svx/res/sh02.png"
+#define RID_SVXBMP_SHADOW_BOT_LEFT      "svx/res/sh03.png"
+#define RID_SVXBMP_SHADOW_TOP_RIGHT     "svx/res/sh04.png"
+#define RID_SVXBMP_SHADOW_TOP_LEFT      "svx/res/sh05.png"
+
+#define RID_SVXBMP_BOTTOMLOCK           "svx/res/lo01.png"
+#define RID_SVXBMP_TOPLOCK              "svx/res/lo02.png"
+#define RID_SVXBMP_CELLLOCK             "svx/res/lo03.png"
+
+#define RID_SVXBMP_LOCK                 "res/lock.png"
+
+#define RID_SVXBMP_THEME_NORMAL_BIG     "svx/res/galnorl.png"
+#define RID_SVXBMP_THEME_READONLY_BIG   "svx/res/galrdol.png"
+#define RID_SVXBMP_THEME_DEFAULT_BIG    "svx/res/galdefl.png"
+
+#define RID_CUIBMP_HARDDISK             "res/harddisk_16.png"
+#define RID_CUIBMP_LIB                  "res/im30820.png"
+#define RID_CUIBMP_MACRO                "res/im30821.png"
+#define RID_CUIBMP_DOC                  "res/im30826.png"
+#define RID_CUIBMP_COLLAPSED            "res/plus.png"
+#define RID_CUIBMP_EXPANDED             "res/minus.png"
+
+#define RID_SVXBMP_HLINETTP             "res/hlinettp.png"
+#define RID_SVXBMP_HLMAILTP             "res/hlmailtp.png"
+#define RID_SVXBMP_HLDOCTP              "res/hldoctp.png"
+#define RID_SVXBMP_HLDOCNTP             "res/hldocntp.png"
+#define RID_SVXBMP_SCRIPT               "res/script.png"
+#define RID_SVXBMP_ADRESSBOOK           "res/adrbook.png"
+#define RID_SVXBMP_FILEOPEN             "res/fileopen.png"
+#define RID_SVXBMP_TARGET               "res/target.png"
+#define RID_SVXBMP_NEWDOC               "res/newdoc.png"
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

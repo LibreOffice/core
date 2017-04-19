@@ -28,6 +28,7 @@
 #include <unotools/moduleoptions.hxx>
 
 #include "hlmailtp.hxx"
+#include "bitmaps.hlst"
 
 using namespace ::com::sun::star;
 
@@ -44,7 +45,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
     get(m_pCbbReceiver, "receiver");
     m_pCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
     get(m_pBtAdrBook, "adressbook");
-    BitmapEx aBitmap(CUI_RES(RID_SVXBMP_ADRESSBOOK));
+    BitmapEx aBitmap(RID_SVXBMP_ADRESSBOOK);
     aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
     m_pBtAdrBook->SetModeImage(Image(aBitmap));
     get(m_pFtSubject, "subject_label");

@@ -23,6 +23,7 @@
 
 #include "helpid.hrc"
 #include <basidesh.hrc>
+#include "bitmaps.hlst"
 
 #include "baside2.hxx"
 #include "brkdlg.hxx"
@@ -74,9 +75,9 @@ SbxVariable* IsSbxVariable (SbxBase* pBase)
     return nullptr;
 }
 
-Image GetImage (unsigned nId)
+Image GetImage(const OUString& rId)
 {
-    return Image(BitmapEx(IDEResId(nId)));
+    return Image(BitmapEx(rId));
 }
 
 int const nScrollLine = 12;
@@ -1378,7 +1379,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     Size const aOutSz = GetOutputSize();
     long const nLineHeight = GetTextHeight();
 
-    Image aMarker = GetImage(bErrorMarker ? RID_BMP_ERRORMARKER : RID_BMP_STEPMARKER);
+    Image aMarker = GetImage(bErrorMarker ? OUStringLiteral(RID_BMP_ERRORMARKER) : OUStringLiteral(RID_BMP_STEPMARKER));
 
     Size aMarkerSz(aMarker.GetSizePixel());
     aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);
@@ -1568,7 +1569,7 @@ WatchWindow::WatchWindow (Layout* pParent)
     aRemoveWatchButton->SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton->SetPosPixel( Point( nTextLen + aXEdit->GetSizePixel().Width() + 4, 2 ) );
     aRemoveWatchButton->SetHelpId(HID_BASICIDE_REMOVEWATCH);
-    aRemoveWatchButton->SetModeImage(Image(BitmapEx(IDEResId(RID_BMP_REMOVEWATCH))));
+    aRemoveWatchButton->SetModeImage(Image(BitmapEx(RID_BMP_REMOVEWATCH)));
     aRemoveWatchButton->SetQuickHelpText(IDEResId(RID_STR_REMOVEWATCHTIP));
     Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
     aSz.Width() += 6;

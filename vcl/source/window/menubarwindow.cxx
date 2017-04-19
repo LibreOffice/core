@@ -29,6 +29,7 @@
 #include <salmenu.hxx>
 #include <svdata.hxx>
 #include <svids.hrc>
+#include <bitmaps.hlst>
 #include <window.h>
 
 // document closing button
@@ -58,12 +59,8 @@ void DecoToolBox::calcMinSize()
     ScopedVclPtrInstance<ToolBox> aTbx( GetParent() );
     if( GetItemCount() == 0 )
     {
-        ResMgr* pResMgr = ImplGetResMgr();
-
-        Bitmap aBitmap;
-        if( pResMgr )
-            aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
-        aTbx->InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
+        BitmapEx aBitmap(SV_RESID_BITMAP_CLOSEDOC);
+        aTbx->InsertItem(IID_DOCUMENTCLOSE, Image(aBitmap));
     }
     else
     {
@@ -132,7 +129,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
 
     if(pResMgr)
     {
-        BitmapEx aBitmap(ResId(SV_RESID_BITMAP_CLOSEDOC, *pResMgr));
+        BitmapEx aBitmap(SV_RESID_BITMAP_CLOSEDOC);
         aCloseBtn->maImage = Image(aBitmap);
 
         aCloseBtn->SetOutStyle(TOOLBOX_STYLE_FLAT);

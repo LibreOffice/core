@@ -70,36 +70,6 @@ String RID_SVXSTR_EDIT_GRAPHIC
     Text [ en-US ] = "Link" ;
 };
 
-Bitmap RID_CUIBMP_HARDDISK
-{
-    File = "harddisk_16.png";
-};
-
-Bitmap RID_CUIBMP_LIB
-{
-    File = "im30820.png";
-};
-
-Bitmap RID_CUIBMP_MACRO
-{
-    File = "im30821.png";
-};
-
-Bitmap RID_CUIBMP_DOC
-{
-    File = "im30826.png";
-};
-
-Bitmap RID_CUIBMP_COLLAPSED
-{
-    File = "plus.bmp" ;
-};
-
-Bitmap RID_CUIBMP_EXPANDED
-{
-    File = "minus.bmp" ;
-};
-
 String RID_SVXSTR_LOADACCELCONFIG
 {
     Text [ en-US ] = "Load Keyboard Configuration" ;

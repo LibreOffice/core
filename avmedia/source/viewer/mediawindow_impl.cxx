@@ -23,6 +23,7 @@
 #include "mediawindow_impl.hxx"
 #include "mediaevent_impl.hxx"
 #include "mediamisc.hxx"
+#include "bitmaps.hlst"
 #include "mediawindow.hrc"
 #include "helpids.hrc"
 
@@ -605,14 +606,14 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     if (!mxPlayer.is())
     {
         if (!mpEmptyBmpEx)
-            mpEmptyBmpEx = new BitmapEx(AVMEDIA_RESID(AVMEDIA_BMP_EMPTYLOGO));
+            mpEmptyBmpEx = new BitmapEx(AVMEDIA_BMP_EMPTYLOGO);
 
         pLogo = mpEmptyBmpEx;
     }
     else if (!mxPlayerWindow.is())
     {
         if (!mpAudioBmpEx)
-            mpAudioBmpEx = new BitmapEx(AVMEDIA_RESID(AVMEDIA_BMP_AUDIOLOGO));
+            mpAudioBmpEx = new BitmapEx(AVMEDIA_BMP_AUDIOLOGO);
 
         pLogo = mpAudioBmpEx;
     }

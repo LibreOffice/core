@@ -21,6 +21,7 @@
 #include <moduldlg.hxx>
 #include <basidesh.hxx>
 #include <basidesh.hrc>
+#include <bitmaps.hlst>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <o3tl/make_unique.hxx>
@@ -1434,7 +1435,7 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
 
     if (bProtected)
     {
-        Image aImage(BitmapEx(IDEResId(RID_BMP_LOCKED)));
+        Image aImage(BitmapEx(RID_BMP_LOCKED));
         m_pLibBox->SetExpandedEntryBmp(pNewEntry, aImage);
         m_pLibBox->SetCollapsedEntryBmp(pNewEntry, aImage);
     }
@@ -1527,10 +1528,10 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 
                     BrowseMode nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
-                    const sal_uInt16 nId = bDlgMode ? RID_BMP_DLGLIB : RID_BMP_MODLIB;
+                    const OUString sId = bDlgMode ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_MODLIB);
                     SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
-                        Image(BitmapEx(IDEResId(nId))),
+                        Image(BitmapEx(sId)),
                         pRootEntry, false,
                         o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
                     DBG_ASSERT( pNewLibEntry, "Insert entry failed!" );
@@ -1539,7 +1540,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     {
                         SvTreeListEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
-                            Image(BitmapEx(IDEResId(RID_BMP_MODULE))),
+                            Image(BitmapEx(RID_BMP_MODULE)),
                             pNewLibEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
                         DBG_ASSERT( pEntry_, "Insert entry failed!" );

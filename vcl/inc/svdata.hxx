@@ -88,6 +88,18 @@ class VclEventListeners2;
 class SalData;
 class OpenGLContext;
 
+#define SV_ICON_ID_OFFICE                               1
+#define SV_ICON_ID_TEXT                                 2
+#define SV_ICON_ID_TEXT_TEMPLATE                        3
+#define SV_ICON_ID_SPREADSHEET                          4
+#define SV_ICON_ID_SPREADSHEET_TEMPLATE                 5
+#define SV_ICON_ID_DRAWING                              6
+#define SV_ICON_ID_PRESENTATION                         8
+#define SV_ICON_ID_MASTER_DOCUMENT                     10
+#define SV_ICON_ID_TEMPLATE                            11
+#define SV_ICON_ID_DATABASE                            12
+#define SV_ICON_ID_FORMULA                             13
+
 namespace vcl { class DisplayConnectionDispatch; class SettingsConfigItem; class DeleteOnDeinitBase; }
 
 class LocaleConfigurationListener : public utl::ConfigurationListener

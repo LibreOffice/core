@@ -27,11 +27,9 @@ $(packimages_DIR)/images%.zip : INDUSTRIAL_FALLBACK :=
 $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
-		$(SRCDIR)/sfx2/source/sidebar/sidebar.ilst \
-		$(SRCDIR)/vcl/source/control/throbber.ilst \
+		$(packimages_DIR)/sourceimagelist.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/screenshotimg.ilst) \
-		$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),$(SRCDIR)/connectivity/source/drivers/hsqldb/hsqlui.ilst)) \
 		$(call gb_Helper_get_imagelists)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
@@ -47,6 +45,16 @@ $(packimages_DIR)/%.zip : \
 			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null) && \
 		rm -rf $${ILSTFILE})
+
+# turn the #defines foo "resource.png" of hlst into the final ilst format
+$(packimages_DIR)/sourceimagelist.ilst : \
+		$(SRCDIR)/avmedia/inc/bitmaps.hlst \
+		$(SRCDIR)/basctl/inc/bitmaps.hlst \
+		$(SRCDIR)/connectivity/inc/bitmaps.hlst \
+		$(SRCDIR)/cui/inc/bitmaps.hlst \
+		$(SRCDIR)/sfx2/inc/bitmaps.hlst \
+		$(SRCDIR)/vcl/inc/bitmaps.hlst
+	grep res $^ | cut -d'"' -f2 | sed "s/^/%MODULE%\//" | sed "s/%MODULE%.res/%GLOBALRES%/g" > $@
 
 # commandimagelist.ilst and sorted.lst are phony to rebuild everything each time
 .PHONY : $(packimages_DIR)/commandimagelist.ilst $(packimages_DIR)/sorted.lst

@@ -20,6 +20,7 @@
 #include "printdlg.hxx"
 #include "svdata.hxx"
 #include "svids.hrc"
+#include "bitmaps.hlst"
 
 #include <vcl/print.hxx>
 #include <vcl/dialog.hxx>
@@ -475,8 +476,8 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
 }
 
 PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
-    : maCollateBmp(VclResId(SV_PRINT_COLLATE_BMP))
-    , maNoCollateBmp(VclResId(SV_PRINT_NOCOLLATE_BMP))
+    : maCollateBmp(SV_PRINT_COLLATE_BMP)
+    , maNoCollateBmp(SV_PRINT_NOCOLLATE_BMP)
     , mnCollateUIMode(0)
 {
     pUIBuilder->get(mpPrinters, "printers");

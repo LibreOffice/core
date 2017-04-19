@@ -29,6 +29,7 @@
 #include <svx/fmresids.hrc>
 #include <svx/dialmgr.hxx>
 #include <cuires.hrc>
+#include <bitmaps.hlst>
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
@@ -202,10 +203,10 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     , m_bShowSlots(false)
     , pFunctionListBox(nullptr)
     , m_pImageProvider(nullptr)
-    , m_hdImage(BitmapEx(CUI_RES(RID_CUIBMP_HARDDISK)))
-    , m_libImage(BitmapEx(CUI_RES(RID_CUIBMP_LIB)))
-    , m_macImage(BitmapEx(CUI_RES(RID_CUIBMP_MACRO)))
-    , m_docImage(BitmapEx(CUI_RES(RID_CUIBMP_DOC)))
+    , m_hdImage(BitmapEx(RID_CUIBMP_HARDDISK))
+    , m_libImage(BitmapEx(RID_CUIBMP_LIB))
+    , m_macImage(BitmapEx(RID_CUIBMP_MACRO))
+    , m_docImage(BitmapEx(RID_CUIBMP_DOC))
     , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
     , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
 {

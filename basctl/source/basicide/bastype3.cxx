@@ -21,6 +21,7 @@
 #include <basic/sbmod.hxx>
 #include <bastype2.hxx>
 #include <basidesh.hrc>
+#include "bitmaps.hlst"
 #include <bastypes.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
@@ -106,7 +107,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 
                 // exchange image
                 const bool bDlgMode = (nMode & BrowseMode::Dialogs) && !(nMode & BrowseMode::Modules);
-                Image aImage(BitmapEx(IDEResId(bDlgMode ? RID_BMP_DLGLIB : RID_BMP_MODLIB)));
+                Image aImage(BitmapEx(bDlgMode ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_MODLIB)));
                 SetEntryBitmaps( pEntry, aImage );
             }
             else

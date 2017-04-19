@@ -1,0 +1,104 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_VCL_INC_BITMAPS_HRC
+#define INCLUDED_VCL_INC_BITMAPS_HRC
+
+#define SV_RESID_BITMAP_CHECK1                       "vcl/res/check1.png"
+#define SV_RESID_BITMAP_CHECK2                       "vcl/res/check2.png"
+#define SV_RESID_BITMAP_CHECK3                       "vcl/res/check3.png"
+#define SV_RESID_BITMAP_CHECK4                       "vcl/res/check4.png"
+#define SV_RESID_BITMAP_CHECK5                       "vcl/res/check5.png"
+#define SV_RESID_BITMAP_CHECK6                       "vcl/res/check6.png"
+#define SV_RESID_BITMAP_CHECK7                       "vcl/res/check7.png"
+#define SV_RESID_BITMAP_CHECK8                       "vcl/res/check8.png"
+#define SV_RESID_BITMAP_CHECK9                       "vcl/res/check9.png"
+#define SV_RESID_BITMAP_CHECKMONO1                   "vcl/res/checkmono1.png"
+#define SV_RESID_BITMAP_CHECKMONO2                   "vcl/res/checkmono2.png"
+#define SV_RESID_BITMAP_CHECKMONO3                   "vcl/res/checkmono3.png"
+#define SV_RESID_BITMAP_CHECKMONO4                   "vcl/res/checkmono4.png"
+#define SV_RESID_BITMAP_CHECKMONO5                   "vcl/res/checkmono5.png"
+#define SV_RESID_BITMAP_CHECKMONO6                   "vcl/res/checkmono6.png"
+#define SV_RESID_BITMAP_CHECKMONO7                   "vcl/res/checkmono7.png"
+#define SV_RESID_BITMAP_CHECKMONO8                   "vcl/res/checkmono8.png"
+#define SV_RESID_BITMAP_CHECKMONO9                   "vcl/res/checkmono9.png"
+#define SV_RESID_BITMAP_RADIO1                       "vcl/res/radio1.png"
+#define SV_RESID_BITMAP_RADIO2                       "vcl/res/radio2.png"
+#define SV_RESID_BITMAP_RADIO3                       "vcl/res/radio3.png"
+#define SV_RESID_BITMAP_RADIO4                       "vcl/res/radio4.png"
+#define SV_RESID_BITMAP_RADIO5                       "vcl/res/radio5.png"
+#define SV_RESID_BITMAP_RADIO6                       "vcl/res/radio6.png"
+#define SV_RESID_BITMAP_RADIOMONO1                   "vcl/res/radiomono1.png"
+#define SV_RESID_BITMAP_RADIOMONO2                   "vcl/res/radiomono2.png"
+#define SV_RESID_BITMAP_RADIOMONO3                   "vcl/res/radiomono3.png"
+#define SV_RESID_BITMAP_RADIOMONO4                   "vcl/res/radiomono4.png"
+#define SV_RESID_BITMAP_RADIOMONO5                   "vcl/res/radiomono5.png"
+#define SV_RESID_BITMAP_RADIOMONO6                   "vcl/res/radiomono6.png"
+
+#define SV_RESID_BITMAP_ERRORBOX                     "vcl/res/errorbox.png"
+#define SV_RESID_BITMAP_QUERYBOX                     "vcl/res/querybox.png"
+#define SV_RESID_BITMAP_WARNINGBOX                   "vcl/res/warningbox.png"
+#define SV_RESID_BITMAP_INFOBOX                      "vcl/res/infobox.png"
+
+#define SV_RESID_BITMAP_SCROLLMSK                    "vcl/res/scrmsk.png"
+#define SV_RESID_BITMAP_WHEELVH                      "vcl/res/wheelvh.png"
+#define SV_RESID_BITMAP_WHEELV                       "vcl/res/wheelv.png"
+#define SV_RESID_BITMAP_WHEELH                       "vcl/res/wheelh.png"
+#define SV_RESID_BITMAP_SCROLLVH                     "vcl/res/scrollvh.png"
+#define SV_RESID_BITMAP_SCROLLV                      "vcl/res/scrollv.png"
+#define SV_RESID_BITMAP_SCROLLH                      "vcl/res/scrollh.png"
+#define SV_RESID_BITMAP_CLOSEDOC                     "vcl/res/closedoc.png"
+#define SV_RESID_BITMAP_INDEX                        "vcl/res/index.png"
+#define SV_RESID_BITMAP_REFRESH                      "res/reload.png"
+#define SV_RESID_BITMAP_NOTEBOOKBAR                  "res/notebookbar.png"
+
+#define SV_DISCLOSURE_PLUS                           "res/plus.png"
+#define SV_DISCLOSURE_MINUS                          "res/minus.png"
+
+#define SV_PRINT_COLLATE_BMP                         "vcl/res/collate.png"
+#define SV_PRINT_NOCOLLATE_BMP                       "vcl/res/ncollate.png"
+
+//start, Throbber::getDefaultImageURLs
+#define SPINNER_16_01                                "vcl/res/spinner-16-01.png"
+#define SPINNER_16_02                                "vcl/res/spinner-16-02.png"
+#define SPINNER_16_03                                "vcl/res/spinner-16-03.png"
+#define SPINNER_16_04                                "vcl/res/spinner-16-04.png"
+#define SPINNER_16_05                                "vcl/res/spinner-16-05.png"
+#define SPINNER_16_06                                "vcl/res/spinner-16-06.png"
+
+#define SPINNER_32_01                                "vcl/res/spinner-32-01.png"
+#define SPINNER_32_02                                "vcl/res/spinner-32-02.png"
+#define SPINNER_32_03                                "vcl/res/spinner-32-03.png"
+#define SPINNER_32_04                                "vcl/res/spinner-32-04.png"
+#define SPINNER_32_05                                "vcl/res/spinner-32-05.png"
+#define SPINNER_32_06                                "vcl/res/spinner-32-06.png"
+#define SPINNER_32_07                                "vcl/res/spinner-32-07.png"
+#define SPINNER_32_08                                "vcl/res/spinner-32-08.png"
+#define SPINNER_32_09                                "vcl/res/spinner-32-09.png"
+#define SPINNER_32_10                                "vcl/res/spinner-32-10.png"
+#define SPINNER_32_11                                "vcl/res/spinner-32-11.png"
+#define SPINNER_32_12                                "vcl/res/spinner-32-12.png"
+
+#define SPINNER_64_01                                "vcl/res/spinner-64-01.png"
+#define SPINNER_64_02                                "vcl/res/spinner-64-02.png"
+#define SPINNER_64_03                                "vcl/res/spinner-64-03.png"
+#define SPINNER_64_04                                "vcl/res/spinner-64-04.png"
+#define SPINNER_64_05                                "vcl/res/spinner-64-05.png"
+#define SPINNER_64_06                                "vcl/res/spinner-64-06.png"
+#define SPINNER_64_07                                "vcl/res/spinner-64-07.png"
+#define SPINNER_64_08                                "vcl/res/spinner-64-08.png"
+#define SPINNER_64_09                                "vcl/res/spinner-64-09.png"
+#define SPINNER_64_10                                "vcl/res/spinner-64-10.png"
+#define SPINNER_64_11                                "vcl/res/spinner-64-11.png"
+#define SPINNER_64_12                                "vcl/res/spinner-64-12.png"
+//end, Throbber::getDefaultImageURLs
+
+#endif // INCLUDED_VCL_INC_BITMAPS_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

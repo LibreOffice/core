@@ -38,6 +38,7 @@
 #include <vcl/slider.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
+#include <bitmaps.hlst>
 #include <svids.hrc>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
@@ -48,14 +49,13 @@
 
 namespace
 {
-    sal_uInt16 mapStockToImageResource(const OString& sType)
+    OUString mapStockToImageResource(const OString& sType)
     {
-        sal_uInt16 nRet = 0;
         if (sType == "gtk-index")
-            nRet = SV_RESID_BITMAP_INDEX;
+            return OUString(SV_RESID_BITMAP_INDEX);
         else if (sType == "gtk-refresh")
-            nRet = SV_RESID_BITMAP_REFRESH;
-        return nRet;
+            return OUString(SV_RESID_BITMAP_REFRESH);
+        return OUString();
     }
 
     SymbolType mapStockToSymbol(const OString& sType)
@@ -87,7 +87,7 @@ namespace
             eRet = SymbolType::HELP;
         else if (sType == "gtk-close")
             eRet = SymbolType::CLOSE;
-        else if (mapStockToImageResource(sType))
+        else if (!mapStockToImageResource(sType).isEmpty())
             eRet = SymbolType::IMAGE;
         return eRet;
     }
@@ -422,7 +422,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
                 SAL_WARN_IF(eType != SymbolType::IMAGE, "vcl.layout", "inimplemented symbol type for radiobuttons");
             if (eType == SymbolType::IMAGE)
             {
-                Bitmap aBitmap(VclResId(mapStockToImageResource(rImageInfo.m_sStock)));
+                BitmapEx aBitmap(mapStockToImageResource(rImageInfo.m_sStock));
                 Image const aImage(aBitmap);
                 if (!aI->m_bRadio)
                     pTargetButton->SetModeImage(aImage);

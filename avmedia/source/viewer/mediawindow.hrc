@@ -23,7 +23,4 @@
 #define AVMEDIA_STR_ALL_FILES           16387
 #define AVMEDIA_STR_ERR_URL             16388
 
-#define AVMEDIA_BMP_AUDIOLOGO           20000
-#define AVMEDIA_BMP_EMPTYLOGO           20001
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
