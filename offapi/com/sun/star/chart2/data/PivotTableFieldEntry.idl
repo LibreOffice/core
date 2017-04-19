@@ -22,16 +22,31 @@ module data
 {
 
 /**
+ * Pivot table field entry data.
  *
  * @since LibreOffice 5.4
  */
 struct PivotTableFieldEntry
 {
+    /**
+     * Name of the field entry.
+     */
     string Name;
 
+    /**
+     * The index of the field entry.
+     */
     long DimensionIndex;
 
+    /**
+     * The output position of the field entry in its field type.
+     */
     long DimensionPositionIndex;
+
+    /**
+     * Does it have some members that are hidded (filtered).
+     */
+    boolean HasHiddenMembers;
 };
 
 }; // data
