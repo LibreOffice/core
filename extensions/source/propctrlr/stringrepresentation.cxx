@@ -37,7 +37,8 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <tools/resary.hxx>
-#include "formresid.hrc"
+#include "strings.hrc"
+#include "yesno.hrc"
 #include "pcrservices.hxx"
 #include <comphelper/types.hxx>
 #include "modulepcr.hxx"
@@ -379,11 +380,10 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
 
     case uno::TypeClass_BOOLEAN:
     {
-        ResStringArray aListEntries(PcrRes(RID_RSC_ENUM_YESNO));
         bool bValue = false;
         _rValue >>= bValue;
-        _rStringRep = bValue ? aListEntries.GetString(1)
-                             : aListEntries.GetString(0);
+        _rStringRep = bValue ? PcrRes(RID_RSC_ENUM_YESNO[1])
+                             : PcrRes(RID_RSC_ENUM_YESNO[0]);
     }
     break;
 
@@ -518,8 +518,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
     case uno::TypeClass_BOOLEAN:
     {
-        ResStringArray aListEntries(PcrRes(RID_RSC_ENUM_YESNO));
-        _rValue <<= aListEntries.GetString(0) != _rStringRep;
+        _rValue <<= PcrRes(RID_RSC_ENUM_YESNO[0]) != _rStringRep;
     }
     break;
 

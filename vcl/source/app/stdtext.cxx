@@ -20,7 +20,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
 
-#include <svids.hrc>
+#include <strings.hrc>
 #include <svdata.hxx>
 
 void ShowServiceNotAvailableError(vcl::Window* pParent,

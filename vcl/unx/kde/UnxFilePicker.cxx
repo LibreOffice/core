@@ -41,7 +41,7 @@
 #include <UnxCommandThread.hxx>
 #include <UnxNotifyThread.hxx>
 
-#include <vcl/fpicker.hrc>
+#include <fpicker/fpicker.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/syswin.hxx>
