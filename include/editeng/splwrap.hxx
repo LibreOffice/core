@@ -107,7 +107,7 @@ protected:
     virtual void SpellStart( SvxSpellArea eSpell ); // Preparing the area
     virtual void SpellContinue();     // Check Areas
                                           // Result available through GetLast
-    virtual void ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
+    virtual void ReplaceAll( const OUString &rNewText ); //Replace word from the replace list
     static css::uno::Reference< css::linguistic2::XDictionary >
                  GetAllRightDic();
     virtual void SpellEnd();                        // Finish area

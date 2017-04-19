@@ -253,7 +253,7 @@ void SvxSpellWrapper::SpellContinue()
 {
 }
 
-void SvxSpellWrapper::ReplaceAll( const OUString &, sal_Int16 )
+void SvxSpellWrapper::ReplaceAll( const OUString & )
 {   // Replace Word from the Replace list
 }
 
@@ -471,8 +471,7 @@ bool SvxSpellWrapper::FindSpellError()
                 if (xEntry.is())
                 {
                     // replace word without asking
-                    ReplaceAll( xEntry->getReplacementText(),
-                                LanguageTag( xAlt->getLocale() ).getLanguageType() );
+                    ReplaceAll( xEntry->getReplacementText() );
                 }
                 else
                     bSpell = false;
