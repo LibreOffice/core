@@ -34,9 +34,9 @@
 #include <vcl/threadex.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include "dp_gui_shared.hxx"
+#include "dp_shared.hxx"
 #include "license_dialog.hxx"
-#include "dp_gui.hrc"
+#include "strings.hrc"
 
 #include <functional>
 

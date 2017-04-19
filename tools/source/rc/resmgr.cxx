@@ -46,6 +46,9 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/simplerm.hxx>
 
+#include <boost/locale.hpp>
+#include <boost/locale/gnu_gettext.hpp>
+
 #include <algorithm>
 #include <functional>
 #include <list>
@@ -1304,6 +1307,30 @@ SimpleResMgr::~SimpleResMgr()
 SimpleResMgr* SimpleResMgr::Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
 {
     return new SimpleResMgr(pPrefixName, rLocale);
+}
+
+namespace Translate
+{
+    std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
+    {
+        boost::locale::generator gen;
+        gen.characters(boost::locale::char_facet);
+        gen.categories(boost::locale::message_facet);
+        OUString uri("$BRAND_BASE_DIR/" LIBO_SHARE_RESOURCE_FOLDER);
+        rtl::Bootstrap::expandMacros(uri);
+        OUString path;
+        osl::File::getSystemPathFromFileURL(uri, path);
+        gen.add_messages_path(OUStringToOString(path, osl_getThreadTextEncoding()).getStr());
+        gen.add_messages_domain(pPrefixName);
+        OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
+        return gen(sIdentifier.getStr());
+    }
+
+    OUString get(const char* pId, const std::locale &loc)
+    {
+        std::string ret = boost::locale::gettext(pId, loc);
+        return ResMgr::ExpandVariables(OUString::fromUtf8(ret.c_str()));
+    }
 }
 
 bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )
