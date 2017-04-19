@@ -298,8 +298,11 @@ public:
     SCROW           GetPosY( ScVSplitPos eWhich ) const     { return pThisTab->nPosY[eWhich]; }
     SCCOL           GetCurX() const                         { return pThisTab->nCurX; }
     SCROW           GetCurY() const                         { return pThisTab->nCurY; }
+    SCCOL           GetCurXForTab( SCTAB nTabIndex ) const;
+    SCROW           GetCurYForTab( SCTAB nTabIndex ) const;
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
+
     ScSplitMode     GetHSplitMode() const                   { return pThisTab->eHSplitMode; }
     ScSplitMode     GetVSplitMode() const                   { return pThisTab->eVSplitMode; }
     long            GetHSplitPos() const                    { return pThisTab->nHSplitPos; }
@@ -317,6 +320,8 @@ public:
     void            SetPosY( ScVSplitPos eWhich, SCROW nNewPosY );
     void            SetCurX( SCCOL nNewCurX )                       { pThisTab->nCurX = nNewCurX; }
     void            SetCurY( SCROW nNewCurY )                       { pThisTab->nCurY = nNewCurY; }
+    void            SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex );
+    void            SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex );
     void            SetOldCursor( SCCOL nNewX, SCROW nNewY );
     void            ResetOldCursor();
     void            SetHSplitMode( ScSplitMode eMode )              { pThisTab->eHSplitMode = eMode; }

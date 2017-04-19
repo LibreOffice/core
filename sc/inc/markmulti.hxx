@@ -63,6 +63,8 @@ public:
     void Clear();
     void MarkAllCols( SCROW nStartRow, SCROW nEndRow );
     bool HasAnyMarks() const;
+    void ShiftCols(SCCOL nStartCol, long nColOffset);
+    void ShiftRows(SCROW nStartRow, long nRowOffset);
 
     // For faster access from within ScMarkData, instead of creating
     // ScMultiSelIter with ScFlatBoolRowSegments bottleneck.
