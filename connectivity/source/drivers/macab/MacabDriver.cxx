@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
-#include "resource/macab_res.hrc"
+#include "strings.hrc"
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

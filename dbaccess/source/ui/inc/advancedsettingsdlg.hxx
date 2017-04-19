@@ -38,7 +38,6 @@ namespace dbaui
                                     ,public IItemSetHelper
                                     ,public IDatabaseSettingsDialog
     {
-        OModuleClient                                       m_aModuleClient;
         std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
     protected:

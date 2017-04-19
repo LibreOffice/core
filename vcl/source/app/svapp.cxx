@@ -63,7 +63,8 @@
 #include "displayconnectiondispatch.hxx"
 #include "window.h"
 #include "accmgr.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
@@ -690,11 +691,10 @@ void Application::SetSettings( const AllSettings& rSettings )
     else
     {
         AllSettings aOldSettings = *pSVData->maAppData.mpSettings;
-        if( aOldSettings.GetUILanguageTag().getLanguageType() != rSettings.GetUILanguageTag().getLanguageType() &&
-                pSVData->mpResMgr )
+        if (aOldSettings.GetUILanguageTag().getLanguageType() != rSettings.GetUILanguageTag().getLanguageType() &&
+                pSVData->mbResLocaleSet)
         {
-            delete pSVData->mpResMgr;
-            pSVData->mpResMgr = nullptr;
+            pSVData->mbResLocaleSet = false;
         }
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
         *pSVData->maAppData.mpSettings = rSettings;
@@ -1176,7 +1176,7 @@ OUString Application::GetHWOSConfInfo()
     ImplSVData* pSVData = ImplGetSVData();
     OUStringBuffer aDetails;
 
-    aDetails.append( VclResId(SV_APP_CPUTHREADS).toString() );
+    aDetails.append( VclResId(SV_APP_CPUTHREADS) );
     aDetails.append( (sal_Int32)
         std::thread::hardware_concurrency() );
     aDetails.append( "; " );
@@ -1187,22 +1187,22 @@ OUString Application::GetHWOSConfInfo()
     else
         aVersion = "-";
 
-    aDetails.append( VclResId(SV_APP_OSVERSION).toString() );
+    aDetails.append( VclResId(SV_APP_OSVERSION) );
     aDetails.append( aVersion );
     aDetails.append( "; " );
 
-    aDetails.append( VclResId(SV_APP_UIRENDER).toString() );
+    aDetails.append( VclResId(SV_APP_UIRENDER) );
 #if HAVE_FEATURE_OPENGL
     if ( OpenGLWrapper::isVCLOpenGLEnabled() )
-        aDetails.append( VclResId(SV_APP_GL).toString() );
+        aDetails.append( VclResId(SV_APP_GL) );
     else
 #endif
-        aDetails.append( VclResId(SV_APP_DEFAULT).toString() );
+        aDetails.append( VclResId(SV_APP_DEFAULT) );
     aDetails.append( "; " );
 
 #ifdef LINUX
     // Only linux has different backends, so don't show blank for others.
-    aDetails.append( VclResId(SV_APP_VCLBACKEND).toString() );
+    aDetails.append( SV_APP_VCLBACKEND );
     aDetails.append( GetToolkitName() );
     aDetails.append( "; " );
 #endif

@@ -54,10 +54,11 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "AppView.hxx"
 #include "dbaccess_helpid.hrc"
-#include "dbu_app.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "callbacks.hxx"
 #include <dbaccess/IController.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "dbaccess_slotid.hrc"
 #include "databaseobjectview.hxx"
 #include "imageprovider.hxx"

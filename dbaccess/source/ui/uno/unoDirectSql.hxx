@@ -40,7 +40,6 @@ namespace dbaui
             :public ODirectSQLDialog_BASE
             ,public ODirectSQLDialog_PBASE
     {
-        OModuleClient m_aModuleClient;
         OUString      m_sInitialSelection;
         css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
     protected:
