@@ -25,7 +25,7 @@
 #include <classes/fwkresid.hxx>
 #include <helper/mischelper.hxx>
 #include <framework/menuextensionsupplier.hxx>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -213,7 +213,7 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
 
 /** A mapping from type IDs to presentation resource IDs.  Sorted by type ID.
  */
-sal_uInt16 const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
+const char* aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
     = { STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_UNKNOWN
         STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_APP_OCTSTREAM
         STR_SVT_MIMETYPE_APP_PDF, // CONTENT_TYPE_APP_PDF
@@ -604,18 +604,18 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
                                             const LanguageTag& aLocale)
 {
-    sal_uInt16 nResID = sal_uInt16();
+    const char* pResID = nullptr;
     if (eTypeID <= CONTENT_TYPE_LAST)
-        nResID = aStaticResourceIDMap[eTypeID];
+        pResID = aStaticResourceIDMap[eTypeID];
     else
     {
         OUString aPresentation = Registration::GetPresentation(eTypeID);
         if (aPresentation.isEmpty())
-            nResID = STR_SVT_MIMETYPE_APP_OCTSTREAM;
+            pResID = STR_SVT_MIMETYPE_APP_OCTSTREAM;
         else
             return aPresentation;
     }
-    return svl::getStringResource(nResID, aLocale);
+    return svl::getStringResource(pResID, aLocale);
 }
 
 //static

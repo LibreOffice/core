@@ -39,7 +39,7 @@
 #include "VLegendSymbolFactory.hxx"
 #include "FormattedStringHelper.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "RelativePositionHelper.hxx"
 #include "DateHelper.hxx"
 #include "DiagramHelper.hxx"
