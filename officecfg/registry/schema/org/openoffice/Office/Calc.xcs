@@ -1911,14 +1911,14 @@
             <desc>Specifies whether the Merge Cells dialog box is shown, when some cells are not empty.</desc>
             <label>Show Merge Cells dialog</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="EmptyMergedCells" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether to empty the contents of the hidden cells (like Excel does).</desc>
             <label>Empty merged cells</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
       </group>
       <group oor:name="KeyBindings">
