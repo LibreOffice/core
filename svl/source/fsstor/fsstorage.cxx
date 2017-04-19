@@ -69,7 +69,7 @@ struct FSStorage_Impl
 {
     OUString m_aURL;
 
-    ::ucbhelper::Content* m_pContent;
+    ::ucbhelper::Content m_aContent;
     sal_Int32 m_nMode;
 
     ::comphelper::OInterfaceContainerHelper2* m_pListenersContainer; // list of listeners
@@ -80,7 +80,7 @@ struct FSStorage_Impl
 
     FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< uno::XComponentContext > const & xContext )
     : m_aURL( aContent.getURL() )
-    , m_pContent( new ::ucbhelper::Content( aContent ) )
+    , m_aContent( aContent )
     , m_nMode( nMode )
     , m_pListenersContainer( nullptr )
     , m_pTypeCollection( nullptr )
@@ -100,7 +100,6 @@ FSStorage_Impl::~FSStorage_Impl()
 {
     delete m_pListenersContainer;
     delete m_pTypeCollection;
-    delete m_pContent;
 }
 
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
@@ -148,20 +147,7 @@ bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
 ::ucbhelper::Content* FSStorage::GetContent()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( !m_pImpl->m_pContent )
-    {
-        uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
-
-        try
-        {
-            m_pImpl->m_pContent = new ::ucbhelper::Content( m_pImpl->m_aURL, xDummyEnv, comphelper::getProcessComponentContext() );
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
-
-    return m_pImpl->m_pContent;
+    return &m_pImpl->m_aContent;
 }
 
 void FSStorage::CopyStreamToSubStream( const OUString& aSourceURL,
