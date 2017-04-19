@@ -1492,7 +1492,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             if( !( nImportFlags & GraphicFilterImportFlags::DontSetLogsizeForJpeg ) )
                 nImportFlags |= GraphicFilterImportFlags::SetLogsizeForJpeg;
 
-            if( !ImportJPEG( rIStream, rGraphic, nullptr, nImportFlags ) )
+            if( !ImportJPEG( rIStream, rGraphic, nImportFlags ) )
                 nStatus = GRFILTER_FILTERERROR;
             else
                 eLinkType = GfxLinkType::NativeJpg;

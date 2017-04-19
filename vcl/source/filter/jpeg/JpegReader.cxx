@@ -161,7 +161,7 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
     source->pub.next_input_byte = nullptr; /* until buffer loaded */
 }
 
-JPEGReader::JPEGReader( SvStream& rStream, void* /*pCallData*/, bool bSetLogSize ) :
+JPEGReader::JPEGReader( SvStream& rStream, bool bSetLogSize ) :
     mrStream         ( rStream ),
     mnLastPos        ( rStream.Tell() ),
     mnLastLines      ( 0 ),
