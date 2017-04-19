@@ -126,9 +126,7 @@ bool ChartTypeDialogController::isSubType( const OUString& rServiceName )
 {
     const tTemplateServiceChartTypeParameterMap& rTemplateMap = this->getTemplateMap();
     tTemplateServiceChartTypeParameterMap::const_iterator aIt( rTemplateMap.find( rServiceName ));
-    if( aIt != rTemplateMap.end())
-        return true;
-    return false;
+    return aIt != rTemplateMap.end();
 }
 ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
                                                     const OUString& rServiceName

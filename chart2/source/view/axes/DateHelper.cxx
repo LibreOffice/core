@@ -56,9 +56,7 @@ bool DateHelper::IsLessThanOneMonthAway( const Date& rD1, const Date& rD2 )
     Date aDMin( DateHelper::GetDateSomeMonthsAway( rD1, -1 ) );
     Date aDMax( DateHelper::GetDateSomeMonthsAway( rD1, 1 ) );
 
-    if( rD2 > aDMin && rD2 < aDMax )
-        return true;
-    return false;
+    return rD2 > aDMin && rD2 < aDMax;
 }
 
 bool DateHelper::IsLessThanOneYearAway( const Date& rD1, const Date& rD2 )
@@ -66,9 +64,7 @@ bool DateHelper::IsLessThanOneYearAway( const Date& rD1, const Date& rD2 )
     Date aDMin( DateHelper::GetDateSomeYearsAway( rD1, -1 ) );
     Date aDMax( DateHelper::GetDateSomeYearsAway( rD1, 1 ) );
 
-    if( rD2 > aDMin && rD2 < aDMax )
-        return true;
-    return false;
+    return rD2 > aDMin && rD2 < aDMax;
 }
 
 double DateHelper::RasterizeDateValue( double fValue, const Date& rNullDate, long TimeResolution )

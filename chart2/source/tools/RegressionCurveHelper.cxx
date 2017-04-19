@@ -262,11 +262,9 @@ bool RegressionCurveHelper::isMeanValueLine(
     const uno::Reference< chart2::XRegressionCurve > & xRegCurve )
 {
     uno::Reference< XServiceName > xServName( xRegCurve, uno::UNO_QUERY );
-    if( xServName.is() &&
+    return xServName.is() &&
         xServName->getServiceName() ==
-            "com.sun.star.chart2.MeanValueRegressionCurve" )
-        return true;
-    return false;
+            "com.sun.star.chart2.MeanValueRegressionCurve";
 }
 
 uno::Reference< chart2::XRegressionCurve >

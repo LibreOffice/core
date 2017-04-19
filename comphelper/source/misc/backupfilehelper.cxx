@@ -137,12 +137,7 @@ namespace
         aArray[2] = sal_uInt8((nSource & 0x0000ff00) >> 8);
         aArray[3] = sal_uInt8(nSource & 0x000000ff);
 
-        if (osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
-        {
-            return true;
-        }
-
-        return false;
+        return osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten;
     }
 
     bool read_OString(FileSharedPtr& rFile, OString& rTarget)
@@ -178,12 +173,7 @@ namespace
 
         sal_uInt64 nBaseWritten(0);
 
-        if (osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(rSource.getStr()), nLength, &nBaseWritten) && nLength == nBaseWritten)
-        {
-            return true;
-        }
-
-        return false;
+        return osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(rSource.getStr()), nLength, &nBaseWritten) && nLength == nBaseWritten;
     }
 
     OUString createFileURL(const OUString& rURL, const OUString& rName, const OUString& rExt)
@@ -535,12 +525,7 @@ namespace
             // write mbEnabled
             nState = static_cast< sal_uInt32 >(mbEnabled);
 
-            if (!write_sal_uInt32(rHandle, nState))
-            {
-                return false;
-            }
-
-            return true;
+            return write_sal_uInt32(rHandle, nState);
         }
 
         const OString& getName() const

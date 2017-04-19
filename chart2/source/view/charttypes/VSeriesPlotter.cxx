@@ -1502,9 +1502,7 @@ namespace
         // default implementation: true for Y axes, and for value X axis
         if( nDimensionIndex == 0 )
             return !bCategoryXAxis;
-        if( nDimensionIndex == 1 )
-            return true;
-        return false;
+        return nDimensionIndex == 1;
     }
 }
 
@@ -2103,9 +2101,7 @@ bool VSeriesPlotter::WantToPlotInFrontOfAxisLine()
 
 bool VSeriesPlotter::shouldSnapRectToUsedArea()
 {
-    if( m_nDimension == 3 )
-        return false;
-    return true;
+    return m_nDimension != 3;
 }
 
 std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(

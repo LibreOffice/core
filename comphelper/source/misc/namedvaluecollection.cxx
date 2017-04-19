@@ -118,13 +118,10 @@ namespace comphelper
     bool NamedValueCollection::canExtractFrom( css::uno::Any const & i_value )
     {
         Type const & aValueType = i_value.getValueType();
-        if  (   aValueType.equals( ::cppu::UnoType< PropertyValue >::get() )
+        return aValueType.equals( ::cppu::UnoType< PropertyValue >::get() )
             ||  aValueType.equals( ::cppu::UnoType< NamedValue >::get() )
             ||  aValueType.equals( ::cppu::UnoType< Sequence< PropertyValue > >::get() )
-            ||  aValueType.equals( ::cppu::UnoType< Sequence< NamedValue > >::get() )
-            )
-            return true;
-        return false;
+            ||  aValueType.equals( ::cppu::UnoType< Sequence< NamedValue > >::get() );
     }
 
 
