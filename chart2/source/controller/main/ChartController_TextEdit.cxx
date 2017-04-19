@@ -28,7 +28,7 @@
 #include "macros.hxx"
 #include "ControllerLockGuard.hxx"
 #include "AccessibleTextHelper.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "chartview/DrawModelWrapper.hxx"
 
 #include <svx/svdotext.hxx>
@@ -63,7 +63,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 
     OSL_PRECOND( !m_pTextActionUndoGuard.get(), "ChartController::StartTextEdit: already have a TextUndoGuard!?" );
     m_pTextActionUndoGuard.reset( new UndoGuard(
-        SCH_RESSTR( STR_ACTION_EDIT_TEXT ), m_xUndoManager ) );
+        SchResId( STR_ACTION_EDIT_TEXT ), m_xUndoManager ) );
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
 
     //#i77362 change notification for changes on additional shapes are missing

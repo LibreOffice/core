@@ -24,7 +24,7 @@
 #include <svx/numinf.hxx>
 
 #include <svx/dialogs.hrc>
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svxids.hrc>
