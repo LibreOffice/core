@@ -26,13 +26,7 @@
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS SchResId : public ResId
-{
-public:
-    SchResId( sal_Int16 nId );
-};
-
-#define SCH_RESSTR(x) SchResId(x).toString()
+OOO_DLLPUBLIC_CHARTTOOLS OUString SchResId(const char *pId);
 
 } //  namespace chart
 

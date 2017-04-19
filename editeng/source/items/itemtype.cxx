@@ -125,17 +125,15 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
     return sRet.makeStringAndClear();
 }
 
-
-OUString GetSvxString( sal_uInt16 nId )
+OUString GetSvxString(const char* pId)
 {
-    return EditResId::GetString( nId );
+    return EditResId(pId);
 }
-
 
 OUString GetColorString( const Color& rCol )
 {
     if (rCol.GetColor() == COL_AUTO)
-        return EditResId::GetString(RID_SVXSTR_AUTOMATIC);
+        return EditResId(RID_SVXSTR_AUTOMATIC);
 
     OUString sStr;
 
@@ -155,8 +153,30 @@ OUString GetColorString( const Color& rCol )
         nColor += 1;
     }
 
+    static const char* RID_SVXITEMS_COLORS[] =
+    {
+        RID_SVXITEMS_COLOR_BLACK,
+        RID_SVXITEMS_COLOR_BLUE,
+        RID_SVXITEMS_COLOR_GREEN,
+        RID_SVXITEMS_COLOR_CYAN,
+        RID_SVXITEMS_COLOR_RED,
+        RID_SVXITEMS_COLOR_MAGENTA,
+        RID_SVXITEMS_COLOR_BROWN,
+        RID_SVXITEMS_COLOR_GRAY,
+        RID_SVXITEMS_COLOR_LIGHTGRAY,
+        RID_SVXITEMS_COLOR_LIGHTBLUE,
+        RID_SVXITEMS_COLOR_LIGHTGREEN,
+        RID_SVXITEMS_COLOR_LIGHTCYAN,
+        RID_SVXITEMS_COLOR_LIGHTRED,
+        RID_SVXITEMS_COLOR_LIGHTMAGENTA,
+        RID_SVXITEMS_COLOR_YELLOW,
+        RID_SVXITEMS_COLOR_WHITE
+    };
+
+    static_assert(SAL_N_ELEMENTS(aColAry) == SAL_N_ELEMENTS(RID_SVXITEMS_COLORS), "must match");
+
     if ( nColor < SAL_N_ELEMENTS(aColAry) )
-        sStr = EditResId::GetString( RID_SVXITEMS_COLOR_BEGIN + nColor + 1 );
+        sStr = EditResId(RID_SVXITEMS_COLORS[nColor]);
 
     if ( sStr.isEmpty() )
     {
@@ -168,47 +188,45 @@ OUString GetColorString( const Color& rCol )
     return sStr;
 }
 
-
-sal_uInt16 GetMetricId( MapUnit eUnit )
+const char* GetMetricId( MapUnit eUnit )
 {
-    sal_uInt16 nId = RID_SVXITEMS_METRIC_MM;
+    const char* pId = RID_SVXITEMS_METRIC_MM;
 
     switch ( eUnit )
     {
         case MapUnit::Map100thMM:
         case MapUnit::Map10thMM:
         case MapUnit::MapMM:
-            nId = RID_SVXITEMS_METRIC_MM;
+            pId = RID_SVXITEMS_METRIC_MM;
             break;
 
         case MapUnit::MapCM:
-            nId = RID_SVXITEMS_METRIC_CM;
+            pId = RID_SVXITEMS_METRIC_CM;
             break;
 
         case MapUnit::Map1000thInch:
         case MapUnit::Map100thInch:
         case MapUnit::Map10thInch:
         case MapUnit::MapInch:
-            nId = RID_SVXITEMS_METRIC_INCH;
+            pId = RID_SVXITEMS_METRIC_INCH;
             break;
 
         case MapUnit::MapPoint:
-            nId = RID_SVXITEMS_METRIC_POINT;
+            pId = RID_SVXITEMS_METRIC_POINT;
             break;
 
         case MapUnit::MapTwip:
-            nId = RID_SVXITEMS_METRIC_TWIP;
+            pId = RID_SVXITEMS_METRIC_TWIP;
             break;
 
         case MapUnit::MapPixel:
-            nId = RID_SVXITEMS_METRIC_PIXEL;
+            pId = RID_SVXITEMS_METRIC_PIXEL;
             break;
 
         default:
             OSL_FAIL( "not supported mapunit" );
     }
-    return nId;
+    return pId;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

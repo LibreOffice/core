@@ -27,7 +27,7 @@
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 
 using namespace connectivity::evoab;
 using namespace com::sun::star::uno;

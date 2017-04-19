@@ -18,6 +18,7 @@
  */
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -69,7 +70,7 @@ SvxMeasureDialog::SvxMeasureDialog( vcl::Window* pParent, const SfxItemSet& rInA
     _pPage->Construct();
 
     SetTabPage(_pPage );
-    SetText(CUI_RESSTR(RID_SVXSTR_DIMENSION_LINE));
+    SetText(CUI_RES(RID_SVXSTR_DIMENSION_LINE));
 }
 
 /*************************************************************************

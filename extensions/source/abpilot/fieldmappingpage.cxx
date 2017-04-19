@@ -67,7 +67,7 @@ namespace abp
         const AddressSettings& rSettings = getSettings();
         OUString sHint;
         if ( rSettings.aFieldMapping.empty() )
-            sHint = ModuleRes(RID_STR_NOFIELDSASSIGNED).toString();
+            sHint = ModuleRes(RID_STR_NOFIELDSASSIGNED);
         m_pHint->SetText( sHint );
     }
 

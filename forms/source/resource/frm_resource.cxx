@@ -20,56 +20,19 @@
 #include "frm_resource.hxx"
 #include <tools/simplerm.hxx>
 
-// needed as long as we have no contexts for components
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <svl/solar.hrc>
-
-
 namespace frm
 {
-
-
-    //= ResourceManager
-
-    SimpleResMgr* ResourceManager::m_pImpl = nullptr;
-
-
-    ResourceManager::EnsureDelete::~EnsureDelete()
+    namespace ResourceManager
     {
-        delete ResourceManager::m_pImpl;
-    }
-
-
-    void ResourceManager::ensureImplExists()
-    {
-        if (m_pImpl)
-            return;
-
-        m_pImpl = SimpleResMgr::Create("frm", Application::GetSettings().GetUILanguageTag());
-
-        if (m_pImpl)
+        OUString loadString(const char* pResId)
         {
-            // no that we have a impl class make sure it's deleted on unloading the library
-            static ResourceManager::EnsureDelete    s_aDeleteTheImplClas;
+            static std::locale loc = Translate::Create("frm", Application::GetSettings().GetUILanguageTag());
+            return Translate::get(pResId, loc);
         }
     }
-
-
-    OUString ResourceManager::loadString(sal_uInt16 _nResId)
-    {
-        OUString sReturn;
-
-        ensureImplExists();
-        if (m_pImpl)
-            sReturn = m_pImpl->ReadString(_nResId);
-
-        return sReturn;
-    }
-
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
