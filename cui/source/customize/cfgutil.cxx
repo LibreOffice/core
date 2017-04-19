@@ -119,10 +119,7 @@ bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
     else if (sArg.startsWith(CMDURL_FPART_ONLY))
         aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
 
-    if (!(aStyle.sFamily.isEmpty() || aStyle.sStyle.isEmpty()))
-        return true;
-
-    return false;
+    return !(aStyle.sFamily.isEmpty() || aStyle.sStyle.isEmpty());
 }
 
 void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)

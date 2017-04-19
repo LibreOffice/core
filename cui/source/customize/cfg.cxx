@@ -401,11 +401,7 @@ void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry )
 bool
 SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
-    if  ( aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography" )
-    {
-        return false;
-    }
-    return true;
+    return !(aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography");
 }
 
 OUString GetModuleName( const OUString& aModuleId )
@@ -3095,29 +3091,17 @@ SvxConfigEntry::~SvxConfigEntry()
 
 bool SvxConfigEntry::IsMovable()
 {
-    if ( IsPopup() && !IsMain() )
-    {
-        return false;
-    }
-    return true;
+    return !IsPopup() || IsMain();
 }
 
 bool SvxConfigEntry::IsDeletable()
 {
-    if ( IsMain() && !IsUserDefined() )
-    {
-        return false;
-    }
-    return true;
+    return !IsMain() || IsUserDefined();
 }
 
 bool SvxConfigEntry::IsRenamable()
 {
-    if ( IsMain() && !IsUserDefined() )
-    {
-        return false;
-    }
-    return true;
+    return !IsMain() || IsUserDefined();
 }
 
 SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
@@ -4067,10 +4051,7 @@ ToolbarSaveInData::HasURL( const OUString& rURL )
 
         if ( pEntry->GetCommand().equals( rURL ) )
         {
-            if ( pEntry->IsParentData() )
-                return false;
-            else
-                return true;
+            return !pEntry->IsParentData();
         }
 
         ++iter;
@@ -4081,11 +4062,7 @@ ToolbarSaveInData::HasURL( const OUString& rURL )
 bool ToolbarSaveInData::HasSettings()
 {
     // return true if there is at least one toolbar entry
-    if ( GetEntries()->size() > 0 )
-    {
-        return true;
-    }
-    return false;
+    return GetEntries()->size() > 0;
 }
 
 void ToolbarSaveInData::Reset()

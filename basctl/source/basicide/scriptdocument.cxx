@@ -156,9 +156,7 @@ namespace basctl
             Reference< XEmbeddedScripts > xScripts( _rDocument.xModel, UNO_QUERY );
             if ( !xScripts.is() )
                 return false;
-            if ( !m_bFilterInvisible || impl_isDocumentVisible_nothrow( _rDocument ) )
-                return true;
-            return false;
+            return !m_bFilterInvisible || impl_isDocumentVisible_nothrow( _rDocument );
         }
 
         void lcl_getAllModels_throw( docs::Documents& _out_rModels, bool _bVisibleOnly )

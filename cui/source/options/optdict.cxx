@@ -567,7 +567,7 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTreeListBox*, pBox, void)
         // entries in the list box should exactly correspond to those from the
         // dictionary. Thus:
         pNewReplacePB->Enable(false);
-        pDeletePB->Enable( true && !IsDicReadonly_Impl() );
+        pDeletePB->Enable( !IsDicReadonly_Impl() );
     }
 };
 

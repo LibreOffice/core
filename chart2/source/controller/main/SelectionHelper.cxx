@@ -375,9 +375,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
         return false;
     SolarMutexGuard aSolarGuard;
     SdrObject* pObj = rDrawViewWrapper.getNamedSdrObject( rNameOfSelectedObject );
-    if( !DrawViewWrapper::IsObjectHit( pObj, rMPos ) )
-        return false;
-    return true;
+    return DrawViewWrapper::IsObjectHit( pObj, rMPos );
 }
 
 OUString SelectionHelper::getHitObjectCID(
@@ -452,9 +450,7 @@ bool SelectionHelper::isRotateableObject( const OUString& rCID
 
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( ChartModelHelper::findDiagram( xChartModel ) );
 
-    if( nDimensionCount == 3 )
-        return true;
-    return false;
+    return nDimensionCount == 3;
 }
 
 SelectionHelper::SelectionHelper( SdrObject* pSelectedObj )
