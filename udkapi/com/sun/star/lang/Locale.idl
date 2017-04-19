@@ -40,11 +40,6 @@ module com {  module sun {  module star {  module lang {
     the com::sun::star::resource::XLocale::getAvailableLocales() method to ask for the
     locales it supports.</p>
 
-    <p> <strong>Note:</strong> When you ask for a resource for a
-    particular locale, you get the best available match, not necessarily
-    precisely what you asked for. For more information, see
-    com::sun::star::resource::XResourceBundle.</p>
-
     <p> Each implementation that performs locale-sensitive operations
     allows you to get all the available objects of that type. Use the
     com::sun::star::resource::XLocale interface to set the locale. </p>

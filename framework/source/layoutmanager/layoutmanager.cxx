@@ -27,7 +27,7 @@
 #include <uielement/menubarwrapper.hxx>
 #include <framework/addonsoptions.hxx>
 #include <classes/fwkresid.hxx>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <toolkit/helper/convert.hxx>
 #include <uielement/progressbarwrapper.hxx>
 #include <uiconfiguration/globalsettings.hxx>
