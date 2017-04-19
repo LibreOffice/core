@@ -29,7 +29,7 @@
 // ScCompiler::IsOpCode() in the if (mxSymbols->isODFF()) block.
 StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
 {
-    ItemList [ en-US ] =
+    ItemList =
     {
         < "IF" ; SC_OPCODE_IF; >;
         < "IFERROR" ; SC_OPCODE_IF_ERROR; >;
@@ -465,7 +465,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
 /** These function names are used in the OOXML XLSX import/export. */
 StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
 {
-    ItemList [ en-US ] =
+    ItemList =
     {
         < "IF" ; SC_OPCODE_IF; >;
         < "IFERROR" ; SC_OPCODE_IF_ERROR; >;
@@ -910,7 +910,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
 // ScCompiler::IsOpCode() in the else if (mxSymbols->isPODF()) block.
 StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF
 {
-    ItemList [ en-US ] =
+    ItemList =
     {
         < "IF" ; SC_OPCODE_IF; >;
         < "IFERROR" ; SC_OPCODE_IF_ERROR; >;
@@ -1356,7 +1356,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF
 // ScCompiler::IsOpCode().
 StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_API
 {
-    ItemList [ en-US ] =
+    ItemList =
     {
         < "IF" ; SC_OPCODE_IF; >;
         < "IFERROR" ; SC_OPCODE_IF_ERROR; >;
@@ -1800,7 +1800,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_API
 // at the same time.
 StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH
 {
-    ItemList [ en-US ] =
+    ItemList =
     {
         < "IF" ; SC_OPCODE_IF; >;
         < "IFERROR" ; SC_OPCODE_IF_ERROR; >;
