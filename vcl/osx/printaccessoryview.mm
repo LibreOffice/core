@@ -33,7 +33,8 @@
 #include "quartz/utils.h"
 
 #include "svdata.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
+#include "printaccessoryview.hrc"
 
 #include "com/sun/star/i18n/XBreakIterator.hpp"
 #include "com/sun/star/i18n/WordType.hpp"
@@ -156,31 +157,29 @@ class ControllerProperties
     std::vector< NSObject* >            maViews;
     int                                 mnNextTag;
     sal_Int32                           mnLastPageCount;
-    ResStringArray                      maLocalizedStrings;
     AquaPrintPanelAccessoryController*  mpAccessoryController;
 
 public:
     ControllerProperties( AquaPrintPanelAccessoryController* i_pAccessoryController )
     : mnNextTag( 0 )
     , mnLastPageCount( [i_pAccessoryController printerController]->getFilteredPageCount() )
-    , maLocalizedStrings( VclResId( SV_PRINT_NATIVE_STRINGS ) )
     , mpAccessoryController( i_pAccessoryController )
     {
-        assert( maLocalizedStrings.Count() >= 5 && "resources not found" );
+        assert( SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 5 && "resources not found" );
     }
 
     rtl::OUString getMoreString()
     {
-        return maLocalizedStrings.Count() >= 4
-               ? OUString( maLocalizedStrings.GetString( 3 ) )
-               : OUString( "More" );
+        return SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 4
+               ? VclResId(SV_PRINT_NATIVE_STRINGS[3])
+               : OUString("More");
     }
 
     rtl::OUString getPrintSelectionString()
     {
-        return maLocalizedStrings.Count() >= 5
-               ? OUString( maLocalizedStrings.GetString( 4 ) )
-               : OUString( "Print selection only" );
+        return SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 5
+               ? VclResId(SV_PRINT_NATIVE_STRINGS[4])
+               : OUString("Print selection only");
     }
 
     int addNameTag( const rtl::OUString& i_rPropertyName )

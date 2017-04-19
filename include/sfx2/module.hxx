@@ -52,6 +52,7 @@ class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
 private:
     ResMgr*                     pResMgr;
+    std::locale                 m_aResLocale;
 
     // Warning this cannot be turned into a unique_ptr.
     // SfxInterface destruction in the SfxSlotPool refers again to pImpl after deletion of pImpl has commenced. See tdf#100270
@@ -68,10 +69,12 @@ private:
 
 public:
 
-                                SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pFactoryList);
-                                virtual ~SfxModule() override;
+    SfxModule(ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pFactoryList);
+    SfxModule(const std::locale& rResLocale, std::initializer_list<SfxObjectFactory*> pFactoryList);
+    virtual ~SfxModule() override;
 
-    ResMgr*                     GetResMgr();
+    ResMgr*                     GetResMgr() { return pResMgr; }
+    const std::locale&          GetResLocale() const { return m_aResLocale; }
     SfxSlotPool*                GetSlotPool() const;
 
     void                        RegisterToolBoxControl(const SfxTbxCtrlFactory&);

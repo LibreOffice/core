@@ -20,7 +20,8 @@
 #include <avmedia/mediawindow.hxx>
 #include "mediawindow_impl.hxx"
 #include "mediamisc.hxx"
-#include "mediawindow.hrc"
+#include "strings.hrc"
+#include "bitmaps.hrc"
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 #include <unotools/pathoptions.hxx>
@@ -219,7 +220,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window*,
     static const char               aSeparator[] = ";";
     OUString                        aAllTypes;
 
-    aDlg.SetTitle( AVMEDIA_RESSTR( (o_pbLink)
+    aDlg.SetTitle( AVMEDIA_RESID( (o_pbLink)
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
     getMediaFilters( aFilters );
@@ -236,7 +237,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window*,
     }
 
     // add filter for all media types
-    aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
+    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
 
     for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
     {
@@ -255,7 +256,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window*,
     }
 
     // add filter for all types
-    aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_FILES ), "*.*" );
+    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_FILES ), "*.*" );
 
     uno::Reference<ui::dialogs::XFilePicker2> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
@@ -392,7 +393,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 
             if( !aPrefSize.Width && !aPrefSize.Height )
             {
-                const BitmapEx aBmpEx( AVMEDIA_RESID(AVMEDIA_BMP_AUDIOLOGO) );
+                const BitmapEx aBmpEx(AVMEDIA_BMP_AUDIOLOGO);
                 xGraphic.reset( new Graphic( aBmpEx ) );
             }
         }
@@ -400,7 +401,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 
     if( !xRet.is() && !xGraphic.get() )
     {
-        const BitmapEx aBmpEx( AVMEDIA_RESID(AVMEDIA_BMP_EMPTYLOGO) );
+        const BitmapEx aBmpEx(AVMEDIA_BMP_EMPTYLOGO);
         xGraphic.reset( new Graphic( aBmpEx ) );
     }
 
