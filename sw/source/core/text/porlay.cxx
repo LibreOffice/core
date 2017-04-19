@@ -698,8 +698,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode )
 
 void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 {
-    if( !g_pBreakIt->GetBreakIter().is() )
-        return;
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
     const OUString& rText = rNode.GetText();
 
@@ -2215,7 +2214,7 @@ void SwScriptInfo::CalcHiddenRanges( const SwTextNode& rNode, MultiSelection& rH
 sal_Int32 SwScriptInfo::CountCJKCharacters( const OUString &rText, sal_Int32 nPos, sal_Int32 nEnd, LanguageType aLang)
 {
     sal_Int32 nCount = 0;
-    if ( nEnd > nPos && g_pBreakIt->GetBreakIter().is() )
+    if (nEnd > nPos)
     {
         sal_Int32 nDone = 0;
         const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
@@ -2239,7 +2238,7 @@ void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
                                      long nSpaceAdd, bool bIsSpaceStop )
 {
     assert( pKernArray != nullptr && nStt >= 0 );
-    if ( nLen > 0 && g_pBreakIt->GetBreakIter().is() )
+    if (nLen > 0)
     {
         long nSpaceSum = 0;
         const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );

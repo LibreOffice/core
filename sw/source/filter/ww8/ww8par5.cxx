@@ -2704,11 +2704,8 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         SwFormatRuby aRuby(sRuby);
         const SwCharFormat *pCharFormat=nullptr;
         //Make a guess at which of asian of western we should be setting
-        sal_uInt16 nScript;
-        if (g_pBreakIt->GetBreakIter().is())
-            nScript = g_pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
-        else
-            nScript = i18n::ScriptType::ASIAN;
+        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
 
         //Check to see if we already have a ruby charstyle that this fits
         std::vector<const SwCharFormat*>::const_iterator aEnd =

@@ -60,8 +60,7 @@ bool SwTextFrame::Hyphenate( SwInterHyphInfo &rHyphInf )
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTextFrame::Hyphenate" );
 
-    if( !g_pBreakIt->GetBreakIter().is() )
-        return false;
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
     // We lock it, to start with
     OSL_ENSURE( !IsLocked(), "SwTextFrame::Hyphenate: this is locked" );

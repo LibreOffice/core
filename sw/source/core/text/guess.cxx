@@ -266,7 +266,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
         nBreakStart = nCutPos;
     }
-    else if( g_pBreakIt->GetBreakIter().is() )
+    else
     {
         // New: We should have a look into the last portion, if it was a
         // field portion. For this, we expand the text of the field portion

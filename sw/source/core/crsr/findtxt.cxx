@@ -513,8 +513,7 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
     sal_uInt16 nSearchScript = 0;
     sal_uInt16 nCurrScript = 0;
 
-    if ( SearchAlgorithms2::APPROXIMATE == rSearchOpt.AlgorithmType2 &&
-         g_pBreakIt->GetBreakIter().is() )
+    if (SearchAlgorithms2::APPROXIMATE == rSearchOpt.AlgorithmType2)
     {
         pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
         nSearchScript = g_pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );

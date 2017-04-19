@@ -361,32 +361,19 @@ static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &
         sal_Int32 nStop = nIdx;
         bool bClear = false;
         LanguageType eLang = pFnt->GetLanguage();
-        if( g_pBreakIt->GetBreakIter().is() )
-        {
-            bClear = CH_BLANK == rText[ nStop ];
-            Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary( rText, nIdx,
-                             g_pBreakIt->GetLocale( eLang ),
-                             WordType::DICTIONARY_WORD, true ) );
-            nStop = aBndry.endPos;
-            if( nIdx <= aBndry.startPos && nIdx && nIdx-1 != rArg.nNoLineBreak )
-                rArg.NewWord();
-            if( nStop == nIdx )
-                ++nStop;
-            if( nStop > nEnd )
-                nStop = nEnd;
-        }
-        else
-        {
-            while( nStop < nEnd && CH_BLANK != rText[ nStop ] )
-                ++nStop;
-            bClear = nStop == nIdx;
-            if ( bClear )
-            {
-                rArg.NewWord();
-                while( nStop < nEnd && CH_BLANK == rText[ nStop ] )
-                    ++nStop;
-            }
-        }
+        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+
+        bClear = CH_BLANK == rText[ nStop ];
+        Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary( rText, nIdx,
+                         g_pBreakIt->GetLocale( eLang ),
+                         WordType::DICTIONARY_WORD, true ) );
+        nStop = aBndry.endPos;
+        if( nIdx <= aBndry.startPos && nIdx && nIdx-1 != rArg.nNoLineBreak )
+            rArg.NewWord();
+        if( nStop == nIdx )
+            ++nStop;
+        if( nStop > nEnd )
+            nStop = nEnd;
 
         SwDrawTextInfo aDrawInf( rArg.pSh, *rArg.pOut, nullptr, rText, nIdx, nStop - nIdx );
         long nAktWidth = pFnt->GetTextSize_( aDrawInf ).Width();
@@ -807,8 +794,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
 
     if ( nStt == nEnd )
     {
-        if ( !g_pBreakIt->GetBreakIter().is() )
-            return 100;
+        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
         SwScriptInfo aScriptInfo;
         SwAttrIter aIter( *const_cast<SwTextNode*>(this), aScriptInfo );

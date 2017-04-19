@@ -1159,7 +1159,7 @@ bool SwCursor::IsStartWordWT( sal_Int16 nWordType ) const
 {
     bool bRet = false;
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         bRet = g_pBreakIt->GetBreakIter()->isBeginWord(
@@ -1174,7 +1174,7 @@ bool SwCursor::IsEndWordWT( sal_Int16 nWordType ) const
 {
     bool bRet = false;
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         bRet = g_pBreakIt->GetBreakIter()->isEndWord(
@@ -1190,7 +1190,7 @@ bool SwCursor::IsInWordWT( sal_Int16 nWordType ) const
 {
     bool bRet = false;
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         Boundary aBoundary = g_pBreakIt->GetBreakIter()->getWordBoundary(
@@ -1231,7 +1231,7 @@ bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
 {
     bool bRet = false;
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
@@ -1255,7 +1255,7 @@ bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
 {
     bool bRet = false;
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
@@ -1280,7 +1280,7 @@ bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
 {
     bool bRet = false;
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
@@ -1304,7 +1304,7 @@ bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
 {
     bool bRet = false;
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
@@ -1342,7 +1342,7 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
     }
 
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         // Should we select the whole fieldmark?
         const IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
@@ -1457,7 +1457,7 @@ bool SwCursor::GoSentence( SentenceMoveType eMoveType )
 {
     bool bRet = false;
     const SwTextNode* pTextNd = GetNode().GetTextNode();
-    if( pTextNd && g_pBreakIt->GetBreakIter().is() )
+    if (pTextNd)
     {
         OUString sNodeText( lcl_MaskDeletedRedlines( pTextNd ) );
 
@@ -1520,7 +1520,7 @@ bool SwCursor::ExpandToSentenceBorders()
     bool bRes = false;
     const SwTextNode* pStartNd = Start()->nNode.GetNode().GetTextNode();
     const SwTextNode* pEndNd   = End()->nNode.GetNode().GetTextNode();
-    if (pStartNd && pEndNd && g_pBreakIt->GetBreakIter().is())
+    if (pStartNd && pEndNd)
     {
         if (!HasMark())
             SetMark();

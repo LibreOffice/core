@@ -2828,11 +2828,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         asian or western text based up on the first character and use the
         font size of that script as our default.
         */
-        sal_uInt16 nScript;
-        if( g_pBreakIt->GetBreakIter().is() )
-            nScript = g_pBreakIt->GetBreakIter()->getScriptType( pField->GetPar1(), 0);
-        else
-            nScript = i18n::ScriptType::ASIAN;
+        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( pField->GetPar1(), 0);
 
         long nHeight = static_cast<const SvxFontHeightItem&>((GetExport().GetItem(
             GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();
@@ -4313,11 +4310,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                 {
                     const SwTextNode* pNd = static_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
                     pSet = &pNd->GetSwAttrSet();
-                    if ( g_pBreakIt->GetBreakIter().is() )
-                    {
-                        nScript = g_pBreakIt->GetBreakIter()->
-                            getScriptType(pNd->GetText(), 0);
-                    }
+                    nScript = g_pBreakIt->GetBreakIter()->getScriptType(pNd->GetText(), 0);
                 }
                 OSL_ENSURE( pSet, "No attrset for lineheight :-(" );
                 if ( pSet )

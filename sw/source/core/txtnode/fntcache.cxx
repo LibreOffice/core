@@ -2134,19 +2134,13 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
     }
 
     sal_Int32 nDone = 0;
-    LanguageType aLang = LANGUAGE_NONE;
-    bool bSkipCharacterCells = false;
     sal_Int32 nIdx = rInf.GetIdx();
     sal_Int32 nLastIdx = nIdx;
     const sal_Int32 nEnd = rInf.GetIdx() + rInf.GetLen();
 
     // #i105901#
     // skip character cells for all script types
-    if ( g_pBreakIt->GetBreakIter().is() )
-    {
-        aLang = rInf.GetFont()->GetLanguage();
-        bSkipCharacterCells = true;
-    }
+    LanguageType aLang = rInf.GetFont()->GetLanguage();
 
     while ( ( nRight < long( rInf.GetOfst() ) ) && ( nIdx < nEnd ) )
     {
@@ -2156,16 +2150,11 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
         // go to next character (cell).
         nLastIdx = nIdx;
 
-        if ( bSkipCharacterCells )
-        {
-            nIdx = g_pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
-                        nIdx, g_pBreakIt->GetLocale( aLang ),
-                        i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
-            if ( nIdx <= nLastIdx )
-                break;
-        }
-        else
-            ++nIdx;
+        nIdx = g_pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
+                    nIdx, g_pBreakIt->GetLocale( aLang ),
+                    i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
+        if ( nIdx <= nLastIdx )
+            break;
 
         nLeft = nRight;
         nRight = pKernArray[ nIdx - rInf.GetIdx() - 1 ] + nKernSum + nSpaceSum;
@@ -2398,8 +2387,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         {
             const OUString aSnippet(rInf.GetText().copy(rInf.GetIdx(), nLn));
             aTmpText = m_aSub[m_nActual].CalcCaseMap( aSnippet );
-            const bool bTitle = SvxCaseMap::Capitalize == m_aSub[m_nActual].GetCaseMap() &&
-                                g_pBreakIt->GetBreakIter().is();
+            const bool bTitle = SvxCaseMap::Capitalize == m_aSub[m_nActual].GetCaseMap();
 
             // Uaaaaahhhh!!! In title case mode, we would get wrong results
             if ( bTitle && nLn )

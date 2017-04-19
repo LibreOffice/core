@@ -1339,13 +1339,12 @@ namespace //local functions originally from docfmt.cxx
                 }
                 else
                 {
-                    Boundary aBndry;
-                    if( g_pBreakIt->GetBreakIter().is() )
-                        aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                                    pTextNd->GetText(), nPtPos,
-                                    g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
-                                    WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
-                                    true );
+                    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+                    Boundary aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
+                                        pTextNd->GetText(), nPtPos,
+                                        g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
+                                        WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
+                                        true);
 
                     if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
                     {
@@ -2565,13 +2564,12 @@ void DocumentContentOperationsManager::TransliterateText(
     {
         // set current word as 'area of effect'
 
-        Boundary aBndry;
-        if( g_pBreakIt->GetBreakIter().is() )
-            aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                        pTNd->GetText(), nSttCnt,
-                        g_pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
-                        WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
-                        true );
+        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+        Boundary aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
+                            pTNd->GetText(), nSttCnt,
+                            g_pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
+                            WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
+                            true);
 
         if( aBndry.startPos < nSttCnt && nSttCnt < aBndry.endPos )
         {

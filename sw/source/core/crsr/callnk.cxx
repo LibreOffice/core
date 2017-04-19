@@ -191,16 +191,14 @@ SwCallLink::~SwCallLink()
                 }
             }
 
-            if( g_pBreakIt->GetBreakIter().is() )
+            assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+            const OUString rText = pCNd->GetTextNode()->GetText();
+            if( !nCmp ||
+                g_pBreakIt->GetBreakIter()->getScriptType( rText, nContent )
+                != g_pBreakIt->GetBreakIter()->getScriptType(rText, nAktContent))
             {
-                const OUString rText = pCNd->GetTextNode()->GetText();
-                if( !nCmp ||
-                    g_pBreakIt->GetBreakIter()->getScriptType( rText, nContent )
-                    != g_pBreakIt->GetBreakIter()->getScriptType(rText, nAktContent))
-                {
-                    rShell.CallChgLnk();
-                    return;
-                }
+                rShell.CallChgLnk();
+                return;
             }
         }
         else

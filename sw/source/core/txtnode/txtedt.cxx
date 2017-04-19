@@ -699,26 +699,23 @@ OUString SwTextNode::GetCurWord( sal_Int32 nPos ) const
     if (m_Text.isEmpty())
         return m_Text;
 
-    Boundary aBndry;
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
     const uno::Reference< XBreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
-    if (rxBreak.is())
-    {
-        sal_Int16 nWordType = WordType::DICTIONARY_WORD;
-        lang::Locale aLocale( g_pBreakIt->GetLocale( GetLang( nPos ) ) );
+    sal_Int16 nWordType = WordType::DICTIONARY_WORD;
+    lang::Locale aLocale( g_pBreakIt->GetLocale( GetLang( nPos ) ) );
 #if OSL_DEBUG_LEVEL > 1
-        sal_Bool bBegin = rxBreak->isBeginWord( m_Text, nPos, aLocale, nWordType );
-        sal_Bool bEnd   = rxBreak->isEndWord  ( m_Text, nPos, aLocale, nWordType );
-        (void)bBegin;
-        (void)bEnd;
+    sal_Bool bBegin = rxBreak->isBeginWord( m_Text, nPos, aLocale, nWordType );
+    sal_Bool bEnd   = rxBreak->isEndWord  ( m_Text, nPos, aLocale, nWordType );
+    (void)bBegin;
+    (void)bEnd;
 #endif
-        aBndry =
-            rxBreak->getWordBoundary( m_Text, nPos, aLocale, nWordType, true );
+    Boundary aBndry =
+        rxBreak->getWordBoundary( m_Text, nPos, aLocale, nWordType, true );
 
-        // if no word was found use previous word (if any)
-        if (aBndry.startPos == aBndry.endPos)
-        {
-            aBndry = rxBreak->previousWord( m_Text, nPos, aLocale, nWordType );
-        }
+    // if no word was found use previous word (if any)
+    if (aBndry.startPos == aBndry.endPos)
+    {
+        aBndry = rxBreak->previousWord( m_Text, nPos, aLocale, nWordType );
     }
 
     // check if word was found and if it uses a symbol font, if so
@@ -1679,7 +1676,7 @@ void SwTextNode::TransliterateText(
     sal_Int32 nStt, sal_Int32 nEnd,
     SwUndoTransliterate* pUndo )
 {
-    if (nStt < nEnd && g_pBreakIt->GetBreakIter().is())
+    if (nStt < nEnd)
     {
         // since we don't use Hiragana/Katakana or half-width/full-width transliterations here
         // it is fine to use ANYWORD_IGNOREWHITESPACES. (ANY_WORD btw is broken and will
@@ -2049,29 +2046,28 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
     // count words in masked and expanded text:
     if (!aExpandText.isEmpty())
     {
-        if (g_pBreakIt->GetBreakIter().is())
+        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+
+        // zero is NULL for pLanguage -----------v               last param = true for clipping
+        SwScanner aScanner( *this, aExpandText, nullptr, aConversionMap, i18n::WordType::WORD_COUNT,
+                            nExpandBegin, nExpandEnd, true );
+
+        // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
+        const OUString aBreakWord( CH_TXTATR_BREAKWORD );
+
+        while ( aScanner.NextWord() )
         {
-            // zero is NULL for pLanguage -----------v               last param = true for clipping
-            SwScanner aScanner( *this, aExpandText, nullptr, aConversionMap, i18n::WordType::WORD_COUNT,
-                                nExpandBegin, nExpandEnd, true );
-
-            // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
-            const OUString aBreakWord( CH_TXTATR_BREAKWORD );
-
-            while ( aScanner.NextWord() )
+            if( !aExpandText.match(aBreakWord, aScanner.GetBegin() ))
             {
-                if( !aExpandText.match(aBreakWord, aScanner.GetBegin() ))
-                {
-                    ++nTmpWords;
-                    const OUString &rWord = aScanner.GetWord();
-                    if (g_pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
-                        ++nTmpAsianWords;
-                    nTmpCharsExcludingSpaces += g_pBreakIt->getGraphemeCount(rWord);
-                }
+                ++nTmpWords;
+                const OUString &rWord = aScanner.GetWord();
+                if (g_pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
+                    ++nTmpAsianWords;
+                nTmpCharsExcludingSpaces += g_pBreakIt->getGraphemeCount(rWord);
             }
-
-            nTmpCharsExcludingSpaces += aScanner.getOverriddenDashCount();
         }
+
+        nTmpCharsExcludingSpaces += aScanner.getOverriddenDashCount();
 
         nTmpChars = g_pBreakIt->getGraphemeCount(aExpandText, nExpandBegin, nExpandEnd);
     }
