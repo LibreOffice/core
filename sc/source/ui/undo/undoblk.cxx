@@ -156,6 +156,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
 
     // refresh of merged cells has to be after inserting/deleting
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     switch (eCmd)
     {
         case INS_INSROWS_BEFORE:
@@ -163,12 +164,19 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
         case INS_CELLSDOWN:
             for( i=0; i<nCount; i++ )
             {
+
                 if (bUndo)
                     rDoc.DeleteRow( aEffRange.aStart.Col(), pTabs[i], aEffRange.aEnd.Col(), pTabs[i]+pScenarios[i],
                     aEffRange.aStart.Row(), static_cast<SCSIZE>(aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
                 else
                     rDoc.InsertRow( aEffRange.aStart.Col(), pTabs[i], aEffRange.aEnd.Col(), pTabs[i]+pScenarios[i],
                     aEffRange.aStart.Row(), static_cast<SCSIZE>(aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+
+                if (pViewShell)
+                {
+                    const long nSign = bUndo ? -1 : 1;
+                    pViewShell->OnLOKInsertDeleteRow(aEffRange.aStart.Row(), nSign * (aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+                }
             }
             break;
         case INS_INSCOLS_BEFORE:
@@ -182,6 +190,12 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
                 else
                     rDoc.InsertCol( aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
                     aEffRange.aStart.Col(), static_cast<SCSIZE>(aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+
+                if (pViewShell)
+                {
+                    const long nSign = bUndo ? -1 : 1;
+                    pViewShell->OnLOKInsertDeleteColumn(aEffRange.aStart.Col(), nSign * (aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+                }
             }
             break;
         default:
@@ -207,7 +221,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
     // Undo for displaced attributes?
 
     PaintPartFlags nPaint = PaintPartFlags::Grid;
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+
     switch (eCmd)
     {
         case INS_INSROWS_BEFORE:
@@ -380,6 +394,8 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     else
         SetChangeTrack();
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+
     switch (eCmd)
     {
         case DEL_DELROWS:
@@ -392,6 +408,12 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                 else
                     rDoc.DeleteRow( aEffRange.aStart.Col(), pTabs[i], aEffRange.aEnd.Col(), pTabs[i]+pScenarios[i],
                     aEffRange.aStart.Row(), static_cast<SCSIZE>(aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+
+                if (pViewShell)
+                {
+                    const long nSign = bUndo ? 1 : -1;
+                    pViewShell->OnLOKInsertDeleteRow(aEffRange.aStart.Row(), nSign * (aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
+                }
             }
             break;
         case DEL_DELCOLS:
@@ -404,6 +426,12 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                 else
                     rDoc.DeleteCol( aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
                     aEffRange.aStart.Col(), static_cast<SCSIZE>(aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+
+                if (pViewShell)
+                {
+                    const long nSign = bUndo ? 1 : -1;
+                    pViewShell->OnLOKInsertDeleteColumn(aEffRange.aStart.Col(), nSign * (aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+                }
             }
             break;
         default:
@@ -502,6 +530,20 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
 
     pDocShell->PostDataChanged();
     //  CellContentChanged comes with the selection
+
+    if (pViewShell)
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (eCmd == DEL_DELCOLS || eCmd == DEL_CELLSLEFT)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation("column",  pViewShell->GetViewData().GetTabNo());
+
+            if (eCmd == DEL_DELROWS || eCmd == DEL_CELLSUP)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation("row",  pViewShell->GetViewData().GetTabNo());
+        }
+
+    }
+
 }
 
 void ScUndoDeleteCells::Undo()

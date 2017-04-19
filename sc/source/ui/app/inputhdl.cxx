@@ -2590,6 +2590,10 @@ static void lcl_SelectionToEnd( EditView* pView )
 
 void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 {
+    if (!mbDocumentDisposing && comphelper::LibreOfficeKit::isActive()
+        && pActiveViewSh != SfxViewShell::Current())
+        return;
+
     // Macro calls for validity can cause a lot of problems, so inhibit
     // nested calls of EnterHandler().
     if (bInEnterHandler) return;
