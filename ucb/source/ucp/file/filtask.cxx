@@ -2528,13 +2528,14 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
 // directoryitem, which is returned by osl::DirectoryItem::getNextItem()
 
 
-uno::Reference< sdbc::XRow > SAL_CALL
+bool SAL_CALL
 TaskManager::getv(
     Notifier* pNotifier,
     const uno::Sequence< beans::Property >& properties,
     osl::DirectoryItem& aDirItem,
     OUString& aUnqPath,
-    bool& aIsRegular )
+    bool& aIsRegular,
+    uno::Reference< sdbc::XRow > & row )
 {
     uno::Sequence< uno::Any > seq( properties.getLength() );
 
@@ -2548,57 +2549,64 @@ TaskManager::getv(
                                  osl_FileStatus_Mask_LinkTargetURL );
 
     osl::FileBase::RC aRes = aDirItem.getFileStatus( aFileStatus );
-    if ( aRes == osl::FileBase::E_None )
+    if ( aRes != osl::FileBase::E_None )
     {
-        aUnqPath = aFileStatus.getFileURL();
-
-        // If the directory item type is a link retrieve the type of the target
-
-        if ( aFileStatus.getFileType() == osl::FileStatus::Link )
-        {
-            // Assume failure
-            aIsRegular = false;
-            osl::FileBase::RC result = osl::FileBase::E_INVAL;
-            osl::DirectoryItem aTargetItem;
-            osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
-            if ( aTargetItem.is() )
-            {
-                osl::FileStatus aTargetStatus( osl_FileStatus_Mask_Type );
-
-                if ( osl::FileBase::E_None ==
-                     ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
-                    aIsRegular =
-                        aTargetStatus.getFileType() == osl::FileStatus::Regular;
-            }
-        }
-        else
-            aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
-
-        registerNotifier( aUnqPath,pNotifier );
-        insertDefaultProperties( aUnqPath );
-        {
-            osl::MutexGuard aGuard( m_aMutex );
-
-            TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
-            commit( it,aFileStatus );
-
-            TaskManager::PropertySet::iterator it1;
-            PropertySet& propset = *(it->second.properties);
-
-            for( sal_Int32 i = 0; i < seq.getLength(); ++i )
-            {
-                MyProperty readProp( properties[i].Name );
-                it1 = propset.find( readProp );
-                if( it1 == propset.end() )
-                    seq[i] = uno::Any();
-                else
-                    seq[i] = it1->getValue();
-            }
-        }
-        deregisterNotifier( aUnqPath,pNotifier );
+        SAL_WARN(
+            "ucb.ucp.file",
+            "osl::DirectoryItem::getFileStatus failed with " << +aRes);
+        return false;
     }
+
+    aUnqPath = aFileStatus.getFileURL();
+
+    // If the directory item type is a link retrieve the type of the target
+
+    if ( aFileStatus.getFileType() == osl::FileStatus::Link )
+    {
+        // Assume failure
+        aIsRegular = false;
+        osl::FileBase::RC result = osl::FileBase::E_INVAL;
+        osl::DirectoryItem aTargetItem;
+        osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
+        if ( aTargetItem.is() )
+        {
+            osl::FileStatus aTargetStatus( osl_FileStatus_Mask_Type );
+
+            if ( osl::FileBase::E_None ==
+                 ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
+                aIsRegular =
+                    aTargetStatus.getFileType() == osl::FileStatus::Regular;
+        }
+    }
+    else
+        aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
+
+    registerNotifier( aUnqPath,pNotifier );
+    insertDefaultProperties( aUnqPath );
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+
+        TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
+        commit( it,aFileStatus );
+
+        TaskManager::PropertySet::iterator it1;
+        PropertySet& propset = *(it->second.properties);
+
+        for( sal_Int32 i = 0; i < seq.getLength(); ++i )
+        {
+            MyProperty readProp( properties[i].Name );
+            it1 = propset.find( readProp );
+            if( it1 == propset.end() )
+                seq[i] = uno::Any();
+            else
+                seq[i] = it1->getValue();
+        }
+    }
+    deregisterNotifier( aUnqPath,pNotifier );
+
     XRow_impl* p = new XRow_impl( this,seq );
-    return uno::Reference< sdbc::XRow >( p );
+    row = uno::Reference< sdbc::XRow >( p );
+    return true;
 }
 
 

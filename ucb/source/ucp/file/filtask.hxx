@@ -585,12 +585,13 @@ namespace fileaccess
         // Special optimized method for getting the properties of a directoryitem, which
         // is returned by osl::DirectoryItem::getNextItem()
 
-        css::uno::Reference< css::sdbc::XRow > SAL_CALL
+        bool SAL_CALL
         getv( Notifier* pNotifier,
               const css::uno::Sequence< css::beans::Property >& properties,
               osl::DirectoryItem& DirItem,
               OUString& aUnqPath,
-              bool&      bIsRegular );
+              bool&      bIsRegular,
+              css::uno::Reference< css::sdbc::XRow > & row );
 
 
         /**

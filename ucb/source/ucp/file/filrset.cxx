@@ -228,8 +228,14 @@ XResultSet_impl::OneMore()
         }
         else if( err == osl::FileBase::E_None )
         {
-            aRow = m_pMyShell->getv(
-                this, m_sProperty, aDirIte, aUnqPath, IsRegular );
+            if (!m_pMyShell->getv(
+                    this, m_sProperty, aDirIte, aUnqPath, IsRegular, aRow ))
+            {
+                SAL_WARN(
+                    "ucb.ucp.file",
+                    "getting dir item in <" << m_aBaseDirectory << "> failed");
+                continue;
+            }
 
             if( m_nOpenMode == ucb::OpenMode::DOCUMENTS && IsRegular )
             {
