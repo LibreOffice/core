@@ -500,8 +500,8 @@ SwDoc::~SwDoc()
     mpFootnoteInfo->ReleaseCollection();
     mpEndNoteInfo->ReleaseCollection();
 
-    OSL_ENSURE( mpDfltTextFormatColl == (*mpTextFormatCollTable)[0],
-            "Default-Text-Collection must always be at the start" );
+    assert(mpDfltTextFormatColl == (*mpTextFormatCollTable)[0]
+            && "Default-Text-Collection must always be at the start");
 
     // Optimization: Based on the fact that Standard is always 2nd in the
     // array, we should delete it as the last. With this we avoid
@@ -511,8 +511,8 @@ SwDoc::~SwDoc()
     mpTextFormatCollTable->DeleteAndDestroy(1, mpTextFormatCollTable->size());
     delete mpTextFormatCollTable;
 
-    OSL_ENSURE( mpDfltGrfFormatColl == (*mpGrfFormatCollTable)[0],
-            "DefaultGrfCollection must always be at the start" );
+    assert(mpDfltGrfFormatColl == (*mpGrfFormatCollTable)[0]
+            && "DefaultGrfCollection must always be at the start");
 
     mpGrfFormatCollTable->DeleteAndDestroy(1, mpGrfFormatCollTable->size());
     delete mpGrfFormatCollTable;
@@ -607,9 +607,8 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
 
         // set DocShell pointer also on DrawModel
         InitDrawModelAndDocShell(mpDocShell, GetDocumentDrawModelManager().GetDrawModel());
-        OSL_ENSURE(!GetDocumentDrawModelManager().GetDrawModel() ||
-            GetDocumentDrawModelManager().GetDrawModel()->GetPersist() == GetPersist(),
-            "draw model's persist is out of sync");
+        assert(!GetDocumentDrawModelManager().GetDrawModel() ||
+            GetDocumentDrawModelManager().GetDrawModel()->GetPersist() == GetPersist());
     }
 }
 
@@ -643,8 +642,8 @@ void SwDoc::ClearDoc()
     // if there are still FlyFrames dangling around, delete them too
     while ( !mpSpzFrameFormatTable->empty() )
         getIDocumentLayoutAccess().DelLayoutFormat((*mpSpzFrameFormatTable)[mpSpzFrameFormatTable->size()-1]);
-    OSL_ENSURE( !GetDocumentDrawModelManager().GetDrawModel() || !GetDocumentDrawModelManager().GetDrawModel()->GetPage(0)->GetObjCount(),
-                "not all DrawObjects removed from the page" );
+    assert(!GetDocumentDrawModelManager().GetDrawModel()
+        || !GetDocumentDrawModelManager().GetDrawModel()->GetPage(0)->GetObjCount());
 
     getIDocumentRedlineAccess().GetRedlineTable().DeleteAndDestroyAll();
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
