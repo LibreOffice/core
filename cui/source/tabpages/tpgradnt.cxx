@@ -58,7 +58,6 @@ SvxGradientTabPage::SvxGradientTabPage
 
     m_pnGradientListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
-    m_pPos                ( nullptr ),
 
     m_aXFStyleItem        ( drawing::FillStyle_GRADIENT ),
     m_aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
@@ -201,16 +200,14 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aURL.getBase();
 
-        *m_pPos = SearchGradientList( ( &static_cast<const XFillGradientItem&>( rSet.Get(XATTR_FILLGRADIENT) ) )->GetName() );
-        if ( *m_pPos != LISTBOX_ENTRY_NOTFOUND )
+        sal_Int32 nPos = SearchGradientList( ( &static_cast<const XFillGradientItem&>( rSet.Get(XATTR_FILLGRADIENT) ) )->GetName() );
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            sal_uInt16 nId = m_pGradientLB->GetItemId( static_cast<size_t>( *m_pPos ) );
+            sal_uInt16 nId = m_pGradientLB->GetItemId( static_cast<size_t>( nPos ) );
             m_pGradientLB->SelectItem( nId );
         }
         // colors could have been deleted
         ChangeGradientHdl_Impl();
-
-        *m_pPos = LISTBOX_ENTRY_NOTFOUND;
     }
 }
 
