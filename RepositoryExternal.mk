@@ -577,6 +577,11 @@ $(call gb_LinkTarget_add_libs,$(1),$(2))
 
 endef
 
+define gb_LinkTarget__use_boost_locale
+$(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_LOCALE_LIB))
+
+endef
+
 define gb_LinkTarget__use_boost_date_time
 $(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_DATE_TIME_LIB))
 
@@ -621,6 +626,14 @@ $(call gb_LinkTarget_add_defs,$(1),\
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),$(2))
+
+endef
+
+define gb_LinkTarget__use_boost_locale
+$(call gb_LinkTarget__use_boost_lib,$(1),boost_locale)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(if $(filter $(OS),MACOSX),-liconv) \
+)
 
 endef
 
