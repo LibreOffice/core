@@ -2811,6 +2811,12 @@ DECLARE_RTFIMPORT_TEST(testTdf106694, "tdf106694.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14605), aTabs[0].Position);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf107116, "tdf107116.rtf")
+{
+    // This was 0, upper border around text (and its distance) was missing.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(120)), getProperty<sal_Int32>(getParagraph(2), "TopBorderDistance"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
