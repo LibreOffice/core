@@ -1703,6 +1703,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     {
                         sDiv += sStrArray[j++];
                     }
+                    assert(j > 0 && "if i is 0, first iteration through loop is guaranteed by surrounding if condition");
                     if (OUString::number(sDiv.toInt32()) == sDiv)
                     {
                         // Found a Divisor
