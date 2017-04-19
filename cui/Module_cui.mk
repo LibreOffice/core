@@ -14,7 +14,6 @@ $(eval $(call gb_Module_add_targets,cui,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,cui,\
-	AllLangResTarget_cui \
 	UIConfig_cui \
 ))
 

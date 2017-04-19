@@ -29,6 +29,7 @@
 #include <svx/fmresids.hrc>
 #include <svx/dialmgr.hxx>
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
@@ -207,8 +208,8 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     , m_libImage(BitmapEx(RID_CUIBMP_LIB))
     , m_macImage(BitmapEx(RID_CUIBMP_MACRO))
     , m_docImage(BitmapEx(RID_CUIBMP_DOC))
-    , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
-    , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
+    , m_sMyMacros(CUI_RES(RID_SVXSTR_MYMACROS))
+    , m_sProdMacros(CUI_RES(RID_SVXSTR_PRODMACROS))
 {
     SetNodeBitmaps(
         Image(BitmapEx(RID_SVXBMP_COLLAPSEDNODE)),
@@ -520,7 +521,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
             SvxGroupInfo_Impl *pInfo =
                 new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
 
-            OUString aTitle = CUI_RESSTR(RID_SVXSTR_PRODMACROS);
+            OUString aTitle = CUI_RES(RID_SVXSTR_PRODMACROS);
 
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle );
             pNewEntry->SetUserData( pInfo );
@@ -899,7 +900,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     {
         // If we are showing Slot API commands update labels in the UI, and
         // enable drag'n'drop
-        SetText(CUI_RESSTR(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
+        SetText(CUI_RES(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
         m_pCommands->SetDragDropMode( DragDropMode::APP_COPY );
 
         get(m_pCancelButton, "close");
@@ -1023,7 +1024,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
 void
 SvxScriptSelectorDialog::SetRunLabel()
 {
-    m_pOKButton->SetText(CUI_RESSTR(RID_SVXSTR_SELECTOR_RUN));
+    m_pOKButton->SetText(CUI_RES(RID_SVXSTR_SELECTOR_RUN));
 }
 
 void

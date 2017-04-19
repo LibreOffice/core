@@ -62,6 +62,7 @@
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include "helpid.hrc"
+#include <strings.hrc>
 
 #include <ucbhelper/content.hxx>
 

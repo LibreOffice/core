@@ -46,6 +46,7 @@
 #include <basic/basmgr.hxx>
 #include <tools/urlobj.hxx>
 #include "cuires.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>
@@ -359,11 +360,11 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_libImage(BitmapEx(RID_CUIBMP_LIB)),
     m_macImage(BitmapEx(RID_CUIBMP_MACRO)),
     m_docImage(BitmapEx(RID_CUIBMP_DOC)),
-    m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS)),
-    m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
-    m_sMacros(CUI_RESSTR(RID_SVXSTR_BASICMACROS)),
-    m_sDlgMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
-    m_aStrGroupStyles(CUI_RESSTR(RID_SVXSTR_GROUP_STYLES)),
+    m_sMyMacros(CUI_RES(RID_SVXSTR_MYMACROS)),
+    m_sProdMacros(CUI_RES(RID_SVXSTR_PRODMACROS)),
+    m_sMacros(CUI_RES(RID_SVXSTR_BASICMACROS)),
+    m_sDlgMacros(CUI_RES(RID_SVXSTR_PRODMACROS)),
+    m_aStrGroupStyles(CUI_RES(RID_SVXSTR_GROUP_STYLES)),
     m_collapsedImage(BitmapEx(RID_CUIBMP_COLLAPSED)),
     m_expandedImage(BitmapEx(RID_CUIBMP_EXPANDED))
 {

@@ -24,8 +24,8 @@
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
 
-#include "dlgresid.hrc"
 #include "helpid.hrc"
+#include "basidesh.hrc"
 
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -58,8 +58,8 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
 ManageLanguageDialog::ManageLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr)
     : ModalDialog(pParent, "ManageLanguagesDialog", "modules/BasicIDE/ui/managelanguages.ui")
     , m_xLocalizationMgr(xLMgr)
-    , m_sDefLangStr(IDE_RESSTR(RID_STR_DEF_LANG))
-    , m_sCreateLangStr(IDE_RESSTR(RID_STR_CREATE_LANG))
+    , m_sDefLangStr(IDEResId(RID_STR_DEF_LANG))
+    , m_sCreateLangStr(IDEResId(RID_STR_CREATE_LANG))
 {
     get(m_pLanguageLB, "treeview");
     m_pLanguageLB->set_height_request(m_pLanguageLB->GetTextHeight() * 10);

@@ -40,6 +40,7 @@
 #include "svtools/treelistentry.hxx"
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include "hlmarkwn.hxx"
 #include "hltpbase.hxx"
 
@@ -109,10 +110,10 @@ void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const ::tools:
         switch (mpParentWnd->mnError)
         {
         case LERR_NOENTRIES :
-            aStrMessage = CUI_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
+            aStrMessage = CUI_RES( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
             break;
         case LERR_DOCNOTOPEN :
-            aStrMessage = CUI_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
+            aStrMessage = CUI_RES( RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
             break;
         }
 
