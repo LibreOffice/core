@@ -114,7 +114,7 @@ try_again:
             {
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) ImportJPEG(aFileStream, aGraphic, nullptr, GraphicFilterImportFlags::NONE);
+                ret = (int) ImportJPEG(aFileStream, aGraphic, GraphicFilterImportFlags::NONE);
                 BitmapEx aTarget = aGraphic.GetBitmapEx();
                 aTarget.Convert(BmpConversion::N24Bit);
             }
