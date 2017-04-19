@@ -400,7 +400,8 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 
             OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
-            OUString aTmp(rRef.Format(ScRefFlags::VALID|ScRefFlags::TAB_3D, pRefDoc));     // immer 3d
+            // Always 3D and absolute.
+            OUString aTmp( rRef.Format( ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, pRefDoc));
 
             SfxObjectShell* pObjSh = pRefDoc->GetDocumentShell();
 
@@ -420,7 +421,10 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             aRefData.InitRangeRel(rRef, m_CursorPos);
             bool bSingle = aRefData.Ref1 == aRefData.Ref2;
             if (m_CursorPos.Tab() != rRef.aStart.Tab())
+            {
                 aRefData.Ref1.SetFlag3D(true);
+                aRefData.Ref1.SetTabRel(false);     // pointer-selected => absolute sheet reference
+            }
             if (bSingle)
                 aArray.AddSingleReference(aRefData.Ref1);
             else

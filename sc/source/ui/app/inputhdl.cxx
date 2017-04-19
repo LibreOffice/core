@@ -3071,7 +3071,8 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
         // Reference to other document
         OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
-        OUString aTmp(rRef.Format(ScRefFlags::VALID|ScRefFlags::TAB_3D, pDoc, aAddrDetails)); // Always 3D
+        // Always 3D and absolute.
+        OUString aTmp(rRef.Format( ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, pDoc, aAddrDetails));
 
         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
@@ -3095,7 +3096,8 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     {
         if ( rRef.aStart.Tab() != aCursorPos.Tab() ||
              rRef.aStart.Tab() != rRef.aEnd.Tab() )
-            aRefStr = rRef.Format(ScRefFlags::VALID|ScRefFlags::TAB_3D, pDoc, aAddrDetails);
+            // pointer-selected => absolute sheet reference
+            aRefStr = rRef.Format(ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, pDoc, aAddrDetails);
         else
             aRefStr = rRef.Format(ScRefFlags::VALID, pDoc, aAddrDetails);
     }

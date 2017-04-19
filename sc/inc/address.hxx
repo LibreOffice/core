@@ -158,6 +158,8 @@ enum class ScRefFlags : sal_uInt16
     TAB2_VALID    = 0x4000,
     VALID         = 0x8000,
 
+    TAB_ABS_3D    = TAB_ABS | TAB_3D,
+
     ADDR_ABS      = VALID | COL_ABS | ROW_ABS | TAB_ABS,
 
     RANGE_ABS     = ADDR_ABS | COL2_ABS | ROW2_ABS | TAB2_ABS,
