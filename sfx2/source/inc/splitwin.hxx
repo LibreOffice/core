@@ -38,8 +38,6 @@ struct SfxDock_Impl
     long              nSize;
 };
 
-typedef std::vector<std::unique_ptr<SfxDock_Impl> > SfxDockArr_Impl;
-
 class SfxSplitWindow : public SplitWindow
 {
 friend class SfxEmptySplitWin_Impl;
@@ -47,7 +45,8 @@ friend class SfxEmptySplitWin_Impl;
 private:
     SfxChildAlignment   eAlign;
     SfxWorkWindow*      pWorkWin;
-    SfxDockArr_Impl*    pDockArr;
+    std::vector<std::unique_ptr<SfxDock_Impl> >
+                        maDockArr;
     bool                bLocked;
     bool                bPinned;
     VclPtr<SfxEmptySplitWin_Impl>  pEmptyWin;
