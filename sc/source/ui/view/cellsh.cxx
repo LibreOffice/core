@@ -1041,6 +1041,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case FID_DELETE_ALL_NOTES:
                 {
                     bool bHasNotes = false;
+
                     for (auto const& rTab : rMark.GetSelectedTabs())
                     {
                         if (pDoc->HasTabNotes( rTab ))
@@ -1052,6 +1053,31 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     if ( !bHasNotes )
                         rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case SID_TOGGLE_NOTES:
+                {
+                    bool bHasNotes = false;
+                    ScRangeList aRanges;
+
+                    for (auto const& rTab : rMark.GetSelectedTabs())
+                    {
+                        if (pDoc->HasTabNotes( rTab ))
+                        {
+                            bHasNotes = true;
+                            aRanges.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+                        }
+                    }
+
+                    if ( !bHasNotes )
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                         CommentCaptionState eState = pDoc->GetAllNoteCaptionsState( aRanges );
+                         bool bAllNotesInShown = !(eState == ALLHIDDEN || eState == MIXED);
+                         rSet.Put( SfxBoolItem( SID_TOGGLE_NOTES, bAllNotesInShown) );
+                    }
                 }
                 break;
 

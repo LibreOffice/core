@@ -1614,6 +1614,39 @@ void ScTable::GetNotesInRange( const ScRange& rRange, std::vector<sc::NoteEntry>
     }
 }
 
+CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std::vector<sc::NoteEntry>& rNotes )
+{
+    SCROW nStartRow = rRange.aStart.Row();
+    SCROW nEndRow = rRange.aEnd.Row();
+    bool bIsFirstNoteShownState = true; // because of error: -Werror=maybe-uninitialized
+    bool bFirstControl = true;
+
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        if (bFirstControl && pDocument->HasColNotes(nCol, nTab)) // detect status of first note caption
+        {
+            aCol[nCol].GetNotesInRange(nStartRow, nEndRow, rNotes);
+            bIsFirstNoteShownState = rNotes.begin()->mpNote->IsCaptionShown();
+            bFirstControl = false;
+        }
+
+        if (pDocument->HasColNotes(nCol, nTab))
+        {
+            aCol[nCol].GetNotesInRange(nStartRow, nEndRow, rNotes);
+
+            for(std::vector<sc::NoteEntry>::const_iterator itr = rNotes.begin(),
+                         itrEnd = rNotes.end(); itr != itrEnd; ++itr)
+            {
+                if ( bIsFirstNoteShownState != itr->mpNote->IsCaptionShown())  // compare the first note caption with others
+                {
+                    return CommentCaptionState::MIXED;
+                }
+            }
+        }
+    }
+    return (bIsFirstNoteShownState) ? CommentCaptionState::ALLSHOWN : CommentCaptionState::ALLHIDDEN;
+}
+
 bool ScTable::ContainsNotesInRange( const ScRange& rRange ) const
 {
     SCROW nStartRow = rRange.aStart.Row();

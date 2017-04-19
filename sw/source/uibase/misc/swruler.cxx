@@ -237,7 +237,7 @@ void SwCommentRuler::MouseButtonDown( const MouseEvent& rMEvt )
 
     // Toggle notes visibility
     SwView &rView = mpSwWin->GetView();
-    SfxRequest aRequest( rView.GetViewFrame(), FN_VIEW_NOTES );
+    SfxRequest aRequest( rView.GetViewFrame(), SID_TOGGLE_NOTES );
     rView.ExecViewOptions( aRequest );
 
     // It is inside comment control, so update help text

@@ -2356,6 +2356,41 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_TOGGLE_NOTES:
+            {
+                 ScViewData* pData  = GetViewData();
+                 ScMarkData& rMark  = pData->GetMarkData();
+                 ScDocument* pDoc   = pData->GetDocument();
+                 ScRangeList aRanges;
+                 std::vector<sc::NoteEntry> aNotes;
+
+                 for (auto const& rTab : rMark.GetSelectedTabs())
+                     aRanges.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+
+                 CommentCaptionState eState = pDoc->GetAllNoteCaptionsState( aRanges );
+                 pDoc->GetNotesInRange(aRanges, aNotes);
+                 bool bShowNote = (eState == ALLHIDDEN || eState == MIXED);
+
+                 OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
+                 pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
+
+                 for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
+                     itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+                 {
+                     const ScAddress& rAdr = itr->maPos;
+                     pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                 }
+
+                 pData->GetDocShell()->GetUndoManager()->LeaveListAction();
+
+                 if (!pReqArgs)
+                     rReq.AppendItem( SfxBoolItem( SID_TOGGLE_NOTES, bShowNote ) );
+
+                 rReq.Done();
+                 rBindings.Invalidate( SID_TOGGLE_NOTES );
+            }
+            break;
+
         case SID_DELETE_NOTE:
         {
             const SfxPoolItem* pId;

@@ -497,7 +497,7 @@ void SwPostItMgr::Focus(SfxBroadcaster& rBC)
 {
     if (!mpWrtShell->GetViewOptions()->IsPostIts())
     {
-        SfxRequest aRequest(mpView->GetViewFrame(),FN_VIEW_NOTES);
+        SfxRequest aRequest(mpView->GetViewFrame(), SID_TOGGLE_NOTES);
         mpView->ExecViewOptions(aRequest);
     }
 

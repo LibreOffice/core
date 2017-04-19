@@ -61,17 +61,6 @@
           <value>8</value>
         </prop>
       </node>
-      <node oor:name=".uno:ShowAnnotations" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Show Comments</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Comments</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
-        </prop>
-      </node>
       <node oor:name=".uno:InsertScript" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">S~cript...</value>

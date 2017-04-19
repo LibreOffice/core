@@ -5349,23 +5349,6 @@ SfxUInt16Item ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
 ]
-SfxBoolItem ShowAnnotations FN_VIEW_NOTES
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
 
 SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
 

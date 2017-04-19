@@ -39,7 +39,7 @@ shell GraphicViewShell
         ExecMethod = ExecuteAnnotation;
         StateMethod = GetAnnotationState;
     ]
-    SID_SHOW_POSTIT
+    SID_TOGGLE_NOTES
     [
         ExecMethod = ExecuteAnnotation;
         StateMethod = GetAnnotationState;
