@@ -4595,4 +4595,54 @@ void ScFormulaCell::SyncSharedCode()
     pCode = mxGroup->mpCode;
 }
 
+#if DUMP_COLUMN_STORAGE
+
+void ScFormulaCell::Dump() const
+{
+    cout << "-- formula cell (" << aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocument) << ")" << endl;
+    cout << "  * shared: " << (mxGroup ? "true" : "false") << endl;
+    if (mxGroup)
+    {
+        cout << "    * shared length: " << mxGroup->mnLength << endl;
+        cout << "    * shared calc state: " << mxGroup->meCalcState << endl;
+    }
+
+    sc::TokenStringContext aCxt(pDocument, pDocument->GetGrammar());
+    cout << "  * code: " << pCode->CreateString(aCxt, aPos) << endl;
+
+    FormulaError nErrCode = pCode->GetCodeError();
+    cout << "  * code error: ";
+    if (nErrCode == FormulaError::NONE)
+        cout << "(none)";
+    else
+    {
+        OUString aStr = ScGlobal::GetErrorString(nErrCode);
+        cout << "  * code error: " << aStr << " (" << int(nErrCode) << ")";
+    }
+    cout << endl;
+
+    cout << "  * result: ";
+    sc::FormulaResultValue aRV = aResult.GetResult();
+    switch (aRV.meType)
+    {
+        case sc::FormulaResultValue::Value:
+            cout << aRV.mfValue << " (value)";
+            break;
+        case sc::FormulaResultValue::String:
+            cout << aRV.maString.getString() << " (string)";
+            break;
+        case sc::FormulaResultValue::Error:
+            cout << ScGlobal::GetErrorString(aRV.mnError) << " (error: " << int(aRV.mnError) << ")";
+            break;
+        case sc::FormulaResultValue::Invalid:
+            cout << "(invalid)";
+            break;
+        default:
+            ;
+    }
+    cout << endl;
+}
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

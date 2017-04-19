@@ -428,6 +428,10 @@ public:
     bool IsPostponedDirty() const { return mbPostponedDirty;}
 
     void SetIsExtRef() { mbIsExtRef = true; }
+
+#if DUMP_COLUMN_STORAGE
+    void Dump() const;
+#endif
 };
 
 #endif
