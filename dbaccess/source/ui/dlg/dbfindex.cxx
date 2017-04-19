@@ -23,7 +23,7 @@
 #include <tools/config.hxx>
 #include <sfx2/app.hxx>
 #include "moduledbu.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include <osl/diagnose.h>
 #include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>

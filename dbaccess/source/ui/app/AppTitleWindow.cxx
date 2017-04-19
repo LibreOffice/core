@@ -18,6 +18,7 @@
  */
 
 #include "AppTitleWindow.hxx"
+#include "core_resource.hxx"
 #include "moduledbu.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -25,7 +26,7 @@
 namespace dbaui
 {
 
-OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift)
+OTitleWindow::OTitleWindow(vcl::Window* _pParent, const char* pTitleId, WinBits _nBits, bool _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
 , m_aSpace1(VclPtr<FixedText>::Create(this))
 , m_aSpace2(VclPtr<FixedText>::Create(this))
@@ -33,8 +34,7 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
 , m_pChild(nullptr)
 , m_bShift(_bShift)
 {
-
-    setTitle(_nTitleId);
+    setTitle(pTitleId);
     SetBorderStyle(WindowBorderStyle::MONO);
     ImplInitSettings();
 
@@ -100,11 +100,11 @@ void OTitleWindow::Resize()
     }
 }
 
-void OTitleWindow::setTitle(sal_uInt16 _nTitleId)
+void OTitleWindow::setTitle(const char* pTitleId)
 {
-    if ( _nTitleId != 0 )
+    if (pTitleId)
     {
-        m_aTitle->SetText(ModuleRes(_nTitleId));
+        m_aTitle->SetText(DBA_RES(pTitleId));
     }
 }
 

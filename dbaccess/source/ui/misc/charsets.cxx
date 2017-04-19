@@ -18,8 +18,9 @@
  */
 
 #include "charsets.hxx"
+#include "core_resource.hxx"
 #include <osl/diagnose.h>
-#include "dbu_misc.hrc"
+#include "strings.hrc"
 #include <rtl/tencinfo.h>
 #include <tools/rcid.h>
 #include "moduledbu.hxx"
@@ -32,7 +33,7 @@ namespace dbaui
     OCharsetDisplay::OCharsetDisplay()
         :OCharsetMap()
         ,SvxTextEncodingTable()
-        , m_aSystemDisplayName(ModuleRes( STR_RSC_CHARSETS ))
+        , m_aSystemDisplayName(DBA_RES( STR_RSC_CHARSETS ))
     {
     }
 

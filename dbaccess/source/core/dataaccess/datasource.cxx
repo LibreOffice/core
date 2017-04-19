@@ -20,9 +20,9 @@
 #include "datasource.hxx"
 #include "userinformation.hxx"
 #include "commandcontainer.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "connection.hxx"
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"
@@ -594,7 +594,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             sPwd = m_pImpl->m_aPassword;
     }
 
-    sal_uInt16 nExceptionMessageId = RID_STR_COULDNOTCONNECT_UNSPECIFIED;
+    const char* pExceptionMessageId = RID_STR_COULDNOTCONNECT_UNSPECIFIED;
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);
@@ -630,7 +630,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             // Nowadays, it's allowed for a driver to be registered for a given URL, but actually not to accept it.
             // This is because registration nowadays happens at compile time (by adding respective configuration data),
             // but acceptance is decided at runtime.
-            nExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
+            pExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
         }
         else
         {
@@ -672,15 +672,15 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         }
     }
     else
-        nExceptionMessageId = RID_STR_COULDNOTLOAD_MANAGER;
+        pExceptionMessageId = RID_STR_COULDNOTLOAD_MANAGER;
 
     if ( !xReturn.is() )
     {
-        OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId )
+        OUString sMessage = DBA_RES(pExceptionMessageId)
             .replaceAll("$name$", m_pImpl->m_sConnectURL);
 
         SQLContext aContext;
-        aContext.Message = DBACORE_RESSTRING(RID_STR_CONNECTION_REQUEST).
+        aContext.Message = DBA_RES(RID_STR_CONNECTION_REQUEST).
             replaceFirst("$name$", m_pImpl->m_sConnectURL);
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );

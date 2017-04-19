@@ -94,7 +94,6 @@ namespace dbaui
         css::uno::Reference< css::sdbc::XDatabaseMetaData >
                                 m_xMetaData;
 
-        OModuleClient           m_aModuleClient;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         css::uno::Reference< css::beans::XPropertySet >
                                 m_xDataSource;

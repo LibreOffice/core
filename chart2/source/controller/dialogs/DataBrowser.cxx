@@ -22,7 +22,7 @@
 
 #include "DataBrowser.hxx"
 #include "DataBrowserModel.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "DataSeriesHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"
@@ -132,7 +132,7 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
 
     if( m_bShowWarningBox )
         ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ),
-                   SCH_RESSTR(STR_INVALID_NUMBER))->Execute();
+                   SchResId(STR_INVALID_NUMBER))->Execute();
 }
 
 class SeriesHeader
@@ -577,7 +577,7 @@ void DataBrowser::RenewTable()
     InsertHandleColumn( static_cast< sal_uInt16 >(
                             GetDataWindow().LogicToPixel( Size( 42, 0 )).getWidth() ));
 
-    OUString aDefaultSeriesName(SCH_RESSTR(STR_COLUMN_LABEL));
+    OUString aDefaultSeriesName(SchResId(STR_COLUMN_LABEL));
     replaceParamterInString( aDefaultSeriesName, "%COLUMNNUMBER", OUString::number( 24 ) );
     sal_Int32 nColumnWidth = GetDataWindow().GetTextWidth( aDefaultSeriesName )
         + GetDataWindow().LogicToPixel( Point( 4 + impl::SeriesHeader::GetRelativeAppFontXPosForNameField(), 0 ), MapUnit::MapAppFont ).X();
@@ -767,12 +767,12 @@ void DataBrowser::MouseButtonDown( const BrowserMouseEvent& rEvt )
 void DataBrowser::ShowWarningBox()
 {
     ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ),
-                                     SCH_RESSTR(STR_INVALID_NUMBER))->Execute();
+                                     SchResId(STR_INVALID_NUMBER))->Execute();
 }
 
 bool DataBrowser::ShowQueryBox()
 {
-    ScopedVclPtrInstance<QueryBox> pQueryBox(this, WB_YES_NO, SCH_RESSTR(STR_DATA_EDITOR_INCORRECT_INPUT));
+    ScopedVclPtrInstance<QueryBox> pQueryBox(this, WB_YES_NO, SchResId(STR_DATA_EDITOR_INCORRECT_INPUT));
 
     return pQueryBox->Execute() == RET_YES;
 }

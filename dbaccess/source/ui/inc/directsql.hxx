@@ -46,7 +46,6 @@ namespace dbaui
             ,public ::utl::OEventListenerAdapter
     {
     protected:
-        OModuleClient m_aModuleClient;
         ::osl::Mutex    m_aMutex;
 
         VclPtr<MultiLineEditSyntaxHighlight>    m_pSQL;
