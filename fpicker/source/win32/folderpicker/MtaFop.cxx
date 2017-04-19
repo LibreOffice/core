@@ -138,14 +138,8 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     m_bi.lpfn    = CMtaFolderPicker::FolderPickerCallback;
     m_bi.lParam  = reinterpret_cast< LPARAM >( this );
 
-
-    // read the default strings for title and
-    // description from a resource file
-
-    CResourceProvider ResProvider;
-
-    m_dialogTitle = ResProvider.getResString(FOLDERPICKER_TITLE);
-    m_Description = ResProvider.getResString(FOLDER_PICKER_DEF_DESCRIPTION);
+    m_dialogTitle = CResourceProvider::getResString(FOLDERPICKER_TITLE);
+    m_Description = CResourceProvider::getResString(FOLDER_PICKER_DEF_DESCRIPTION);
 
     // signals that the thread was successfully set up
     m_hEvtThrdReady  = CreateEventA(

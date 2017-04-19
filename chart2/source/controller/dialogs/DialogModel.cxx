@@ -24,7 +24,7 @@
 #include "DataSourceHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "macros.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ResId.hxx"
 #include "ContainerHelper.hxx"
 #include "CommonFunctors.hxx"

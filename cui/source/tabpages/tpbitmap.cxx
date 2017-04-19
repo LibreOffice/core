@@ -26,6 +26,7 @@
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <svx/xflbckit.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/xtable.hxx>
@@ -757,7 +758,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, Edit&, void)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
 {
-    ResMgr& rMgr = CUI_MGR();
     SvxOpenGraphicDialog aDlg( "Import" );
     aDlg.EnableLink(false);
     long nCount = m_pBitmapList->Count();
@@ -772,7 +772,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
 
         if( !nError )
         {
-            OUString aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
+            OUString aDesc(CUI_RES(RID_SVXSTR_DESC_EXT_BITMAP));
             ScopedVclPtr<MessageDialog> pWarnBox;
 
             // convert file URL to UI name

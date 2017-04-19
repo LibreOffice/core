@@ -22,7 +22,8 @@
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
-#include "dbu_misc.hrc"
+#include "core_resource.hxx"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
@@ -201,7 +202,7 @@ bool OWizNameMatching::LeavePage()
     return true;
 }
 
-OUString OWizNameMatching::GetTitle() const { return ModuleRes(STR_WIZ_NAME_MATCHING_TITEL); }
+OUString OWizNameMatching::GetTitle() const { return DBA_RES(STR_WIZ_NAME_MATCHING_TITEL); }
 
 IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton, void )
 {

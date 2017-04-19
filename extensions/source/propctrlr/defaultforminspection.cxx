@@ -20,8 +20,8 @@
 #include "defaultforminspection.hxx"
 #include "pcrcommon.hxx"
 #include "pcrservices.hxx"
-#include "propresid.hrc"
-#include "formresid.hrc"
+#include "strings.hrc"
+#include "strings.hrc"
 #include "modulepcr.hxx"
 #include "propctrlr.hrc"
 #include "formmetadata.hxx"
@@ -159,7 +159,7 @@ namespace pcr
         struct
         {
             const sal_Char* programmaticName;
-            sal_uInt16          uiNameResId;
+            const char* uiNameResId;
             const sal_Char* helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_FM_PROPDLG_TAB_GENERAL },
@@ -173,7 +173,7 @@ namespace pcr
         for ( sal_Int32 i=0; i<nCategories; ++i, ++pReturn )
         {
             pReturn->ProgrammaticName = OUString::createFromAscii( aCategories[i].programmaticName );
-            pReturn->UIName = PcrRes( aCategories[i].uiNameResId ).toString();
+            pReturn->UIName = PcrRes( aCategories[i].uiNameResId );
             pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId );
         }
 

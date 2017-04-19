@@ -24,7 +24,7 @@
 #include <loadenv/targethelper.hxx>
 #include <pattern/frame.hxx>
 
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 #include <protocols.h>
 #include <properties.h>
