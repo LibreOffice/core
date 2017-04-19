@@ -66,7 +66,8 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 #include "svdata.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
+#include "bitmaps.hrc"
 #include "impbmp.hxx"
 
 #include <boost/optional.hpp>
@@ -197,6 +198,57 @@ void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
 
 typedef std::vector< unsigned long > NetWmIconData;
 
+namespace
+{
+    const OUStringLiteral SV_ICON_SIZE48[] =
+    {
+        "vcl/res/mainapp_48_8.png",
+        "vcl/res/mainapp_48_8.png",
+        "vcl/res/odt_48_8.png",
+        "vcl/res/ott_48_8.png",
+        "vcl/res/ods_48_8.png",
+        "vcl/res/ots_48_8.png",
+        "vcl/res/odg_48_8.png",
+        "vcl/res/odp_48_8.png",
+        "vcl/res/odm_48_8.png",
+        "vcl/res/odb_48_8.png",
+        "vcl/res/odf_48_8.png",
+        "vcl/res/mainapp_48_8.png"
+    };
+
+    const OUStringLiteral SV_ICON_SIZE32[] =
+    {
+        "vcl/res/mainapp_32_8.png",
+        "vcl/res/mainapp_32_8.png",
+        "vcl/res/odt_32_8.png",
+        "vcl/res/ott_32_8.png",
+        "vcl/res/ods_32_8.png",
+        "vcl/res/ots_32_8.png",
+        "vcl/res/odg_32_8.png",
+        "vcl/res/odp_32_8.png",
+        "vcl/res/odm_32_8.png",
+        "vcl/res/odb_32_8.png",
+        "vcl/res/odf_32_8.png",
+        "vcl/res/mainapp_32_8.png"
+    };
+
+    const OUStringLiteral SV_ICON_SIZE16[] =
+    {
+        "vcl/res/mainapp_16_8.png",
+        "vcl/res/mainapp_16_8.png",
+        "vcl/res/odt_16_8.png",
+        "vcl/res/ott_16_8.png",
+        "vcl/res/ods_16_8.png",
+        "vcl/res/ots_16_8.png",
+        "vcl/res/odg_16_8.png",
+        "vcl/res/odp_16_8.png",
+        "vcl/res/odm_16_8.png",
+        "vcl/res/odb_16_8.png",
+        "vcl/res/odf_16_8.png",
+        "vcl/res/mainapp_16_8.png"
+    };
+}
+
 static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
 {
     const int sizes[ 3 ] = { 48, 32, 16 };
@@ -204,16 +256,15 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
     int pos = 0;
     for(int size : sizes)
     {
-        sal_uInt16 nIconSizeOffset;
+        OUString sIcon;
         if( size >= 48 )
-            nIconSizeOffset = SV_ICON_SIZE48_START;
+            sIcon = SV_ICON_SIZE48[nIcon];
         else if( size >= 32 )
-            nIconSizeOffset = SV_ICON_SIZE32_START;
+            sIcon = SV_ICON_SIZE32[nIcon];
         else
-            nIconSizeOffset = SV_ICON_SIZE16_START;
+            sIcon = SV_ICON_SIZE16[nIcon];
 
-        BitmapEx aIcon = vcl::bitmap::loadFromResource(ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()),
-                                                       ImageLoadFlags::IgnoreScalingFactor);
+        BitmapEx aIcon = vcl::bitmap::loadFromName(sIcon, ImageLoadFlags::IgnoreScalingFactor);
 
         if( aIcon.IsEmpty())
             continue;
@@ -255,26 +306,22 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
                                          sal_uInt16 nIcon, sal_uInt16 iconSize,
                                          Pixmap& icon_pixmap, Pixmap& icon_mask, NetWmIconData& netwm_icon)
 {
-    if( ! ImplGetResMgr() )
-        return false;
-
     PreDefaultWinNoOpenGLZone aGuard;
 
     CreateNetWmAppIcon( nIcon, netwm_icon );
 
-    sal_uInt16 nIconSizeOffset;
+    OUString sIcon;
 
     if( iconSize >= 48 )
-        nIconSizeOffset = SV_ICON_SIZE48_START;
+        sIcon = SV_ICON_SIZE48[nIcon];
     else if( iconSize >= 32 )
-        nIconSizeOffset = SV_ICON_SIZE32_START;
+        sIcon = SV_ICON_SIZE32[nIcon];
     else if( iconSize >= 16 )
-        nIconSizeOffset = SV_ICON_SIZE16_START;
+         sIcon = SV_ICON_SIZE16[nIcon];
     else
         return false;
 
-    BitmapEx aIcon = vcl::bitmap::loadFromResource(ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()),
-                                                   ImageLoadFlags::IgnoreScalingFactor);
+    BitmapEx aIcon = vcl::bitmap::loadFromName(sIcon, ImageLoadFlags::IgnoreScalingFactor);
 
     if( aIcon.IsEmpty() )
         return false;

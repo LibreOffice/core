@@ -33,7 +33,7 @@
 #include "quartz/utils.h"
 
 #include "svdata.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
 
 #include "com/sun/star/i18n/XBreakIterator.hpp"
 #include "com/sun/star/i18n/WordType.hpp"

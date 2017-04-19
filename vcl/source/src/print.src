@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svids.hrc"
+#include "strings.hrc"
+#include "bitmaps.hrc"
 
 StringArray SV_PRINT_NATIVE_STRINGS
 {
@@ -73,51 +74,6 @@ StringArray RID_STR_PAPERNAMES
         < "B6 (JIS)"; >;
         < "Japanese Postcard"; >;
     };
-};
-
-String SV_PRINT_NOPAGES
-{
-    Text [en-US] = "No pages";
-};
-
-String SV_PRINT_TOFILE_TXT
-{
-    Text [en-US] = "Print to File...";
-};
-
-String SV_PRINT_DEFPRT_TXT
-{
-    Text [en-US] = "Default printer";
-};
-
-String SV_PRINT_PRINTPREVIEW_TXT
-{
-    Text [en-US] = "Print preview";
-};
-
-Bitmap SV_PRINT_COLLATE_BMP
-{
-    File = "collate.png" ;
-};
-
-Bitmap SV_PRINT_NOCOLLATE_BMP
-{
-    File = "ncollate.png" ;
-};
-
-String SV_PRINT_QUERYFAXNUMBER_TXT
-{
-    Text [ en-US ] = "Please enter the fax number";
-};
-
-String SV_PRINT_INVALID_TXT
-{
-    Text [ en-US ] = "<ignore>";
-};
-
-String SV_PRINT_CUSTOM_TXT
-{
-    Text [ en-US ] = "Custom";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

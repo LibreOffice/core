@@ -32,7 +32,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/builderfactory.hxx>
-#include <svids.hrc>
+#include <strings.hrc>
+#include <bitmaps.hrc>
 
 #include "controldata.hxx"
 #include "svdata.hxx"
@@ -2208,7 +2209,7 @@ NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Any)
 {
-    BitmapEx aBitmap(VclResId(SV_RESID_BITMAP_NOTEBOOKBAR), Color());
+    BitmapEx aBitmap(SV_RESID_BITMAP_NOTEBOOKBAR);
     InsertPage(1, "");
     SetPageImage(1, Image(aBitmap));
 }
