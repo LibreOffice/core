@@ -159,7 +159,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     if (mediaType.isEmpty())
     {
         throw lang::IllegalArgumentException(
-            StrCannotDetectMediaType::get() + url,
+            StrCannotDetectMediaType() + url,
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 

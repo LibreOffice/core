@@ -41,10 +41,10 @@ typedef std::unordered_map< OUString, std::pair< OUString, OUString >,
 struct EventDisplayName
 {
     const sal_Char* pAsciiEventName;
-    sal_uInt16          nEventResourceID;
-    EventDisplayName( const sal_Char* _pAsciiName, const sal_uInt16 _nResId )
-        : pAsciiEventName( _pAsciiName )
-        , nEventResourceID( _nResId )
+    const char*     pEventResourceID;
+    EventDisplayName(const sal_Char* pAsciiName, const char* pResId)
+        : pAsciiEventName(pAsciiName)
+        , pEventResourceID(pResId)
     {
     }
 };

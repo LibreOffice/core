@@ -54,6 +54,7 @@
 #include <comphelper/seqstream.hxx>
 
 #include "cuires.hrc"
+#include "strings.hrc"
 
 #include <osl/file.hxx>
 
