@@ -57,7 +57,7 @@ class JPEGReader : public GraphicReader
     Graphic CreateIntermediateGraphic(long nLines);
 
 public:
-            JPEGReader( SvStream& rStream, void* pCallData, bool bSetLogSize );
+            JPEGReader( SvStream& rStream, bool bSetLogSize );
     virtual ~JPEGReader() override;
 
     ReadState Read(Graphic& rGraphic);
