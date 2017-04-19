@@ -1,0 +1,263 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_EXTENSIONS_INC_STRINGARRAYS_HRC
+#define INCLUDED_EXTENSIONS_INC_STRINGARRAYS_HRC
+
+#define N_(String) (u8##String)
+
+const char* RID_RSC_ENUM_VERTICAL_ALIGN[] =
+{
+    N_("Top"),
+    N_("Middle"),
+    N_("Bottom")
+};
+
+const char* RID_RSC_ENUM_ICONSIZE_TYPE[] =
+{
+    N_("Small"),
+    N_("Large")
+};
+
+const char* RID_RSC_ENUM_BORDER_TYPE[] =
+{
+    N_("Without frame"),
+    N_("3D look"),
+    N_("Flat")
+};
+
+const char* RID_RSC_ENUM_LISTSOURCE_TYPE[] =
+{
+    N_("Valuelist"),
+    N_("Table"),
+    N_("Query"),
+    N_("Sql"),
+    N_("Sql [Native]"),
+    N_("Tablefields" )
+};
+
+const char* RID_RSC_ENUM_ALIGNMENT[] =
+{
+    N_("Left"),
+    N_("Center"),
+    N_("Right" )
+};
+
+const char* RID_RSC_ENUM_BUTTONTYPE[] =
+{
+    N_("None"),
+    N_("Submit form"),
+    N_("Reset form"),
+    N_("Open document/web page"),
+    N_("First record"),
+    N_("Previous record"),
+    N_("Next record"),
+    N_("Last record"),
+    N_("Save record"),
+    N_("Undo data entry"),
+    N_("New record"),
+    N_("Delete record"),
+    N_("Refresh form")
+};
+
+const char* RID_RSC_ENUM_SUBMIT_METHOD[] =
+{
+    N_("Get"),
+    N_("Post" )
+};
+
+const char* RID_RSC_ENUM_SUBMIT_ENCODING[] =
+{
+    N_("URL"),
+    N_("Multipart"),
+    N_("Text" )
+};
+
+const char* RID_RSC_ENUM_DATEFORMAT_LIST[] =
+{
+    N_("Standard (short)"),
+    N_("Standard (short YY)"),
+    N_("Standard (short YYYY)"),
+    N_("Standard (long)"),
+    N_("DD/MM/YY"),
+    N_("MM/DD/YY"),
+    N_("YY/MM/DD"),
+    N_("DD/MM/YYYY"),
+    N_("MM/DD/YYYY"),
+    N_("YYYY/MM/DD"),
+    N_("YY-MM-DD"),
+    N_("YYYY-MM-DD" ),
+};
+
+const char* RID_RSC_ENUM_TIMEFORMAT_LIST[] =
+{
+    N_("13:45"),
+    N_("13:45:00"),
+    N_("01:45 PM"),
+    N_("01:45:00 PM" ),
+};
+
+const char* RID_RSC_ENUM_CHECKED[] =
+{
+    N_("Not Selected"),
+    N_("Selected"),
+    N_("Not Defined" )
+};
+
+const char* RID_RSC_ENUM_CYCLE[] =
+{
+    N_("All records"),
+    N_("Active record"),
+    N_("Current page" )
+};
+
+const char* RID_RSC_ENUM_NAVIGATION[] =
+{
+    N_("No"),
+    N_("Yes"),
+    N_("Parent Form")
+};
+
+const char* RID_RSC_ENUM_SUBMIT_TARGET[] =
+{
+    N_("_blank"),
+    N_("_parent"),
+    N_("_self"),
+    N_("_top")
+};
+
+const char* RID_RSC_ENUM_SELECTION_TYPE[] =
+{
+    N_("None" ),
+    N_("Single" ),
+    N_("Multi" ),
+    N_("Range" )
+};
+
+const char* RID_RSC_ENUM_ORIENTATION[] =
+{
+    N_("Horizontal"),
+    N_("Vertical")
+};
+
+const char* RID_RSC_ENUM_PUSHBUTTONTYPE[] =
+{
+    N_("Default"),
+    N_("OK"),
+    N_("Cancel"),
+    N_("Help")
+};
+
+const char* RID_RSC_ENUM_CELL_EXCHANGE_TYPE[] =
+{
+    N_("The selected entry"),
+    N_("Position of the selected entry")
+};
+
+const char* RID_RSC_ENUM_TEXTTYPE[] =
+{
+    N_("Single-line"),
+    N_("Multi-line"),
+    N_("Multi-line with formatting")
+};
+
+const char* RID_RSC_ENUM_LINEEND_FORMAT[] =
+{
+    N_("LF (Unix)"),
+    N_("CR+LF (Windows)")
+};
+
+const char* RID_RSC_ENUM_SCROLLBARS[] =
+{
+    N_("None"),
+    N_("Horizontal"),
+    N_("Vertical"),
+    N_("Both")
+};
+
+const char* RID_RSC_ENUM_VISUALEFFECT[] =
+{
+    N_("3D"),
+    N_("Flat"),
+};
+
+const char* RID_RSC_ENUM_IMAGE_POSITION[] =
+{
+    N_("Left top"),
+    N_("Left centered"),
+    N_("Left bottom"),
+    N_("Right top"),
+    N_("Right centered"),
+    N_("Right bottom"),
+    N_("Above left"),
+    N_("Above centered"),
+    N_("Above right"),
+    N_("Below left"),
+    N_("Below centered"),
+    N_("Below right"),
+    N_("Centered"),
+    nullptr,
+};
+
+const char* RID_RSC_ENUM_WHITESPACE_HANDLING[] =
+{
+    N_("Preserve"),
+    N_("Replace"),
+    N_("Collapse")
+};
+
+const char* RID_RSC_ENUM_SCALE_MODE[] =
+{
+    N_("No"),
+    N_("Keep Ratio"),
+    N_("Fit to Size")
+};
+
+const char* RID_RSC_ENUM_WRITING_MODE[] =
+{
+    N_("Left-to-right"),
+    N_("Right-to-left"),
+    N_("Use superordinate object settings")
+};
+
+const char* RID_RSC_ENUM_WHEEL_BEHAVIOR[] =
+{
+    N_("Never"),
+    N_("When focused"),
+    N_("Always")
+};
+
+const char* RID_RSC_ENUM_TEXT_ANCHOR_TYPE[] =
+{
+    N_("To Paragraph"),
+    N_("As Character"),
+    N_("To Page"),
+    N_("To Frame"),
+    N_("To Character")
+};
+
+const char* RID_RSC_ENUM_SHEET_ANCHOR_TYPE[] =
+{
+    N_("To Page"),
+    N_("To Cell")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

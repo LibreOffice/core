@@ -29,7 +29,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/stdtext.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
-#include "abpresid.hrc"
+#include "strings.hrc"
 #include "componentmodule.hxx"
 #include <unotools/confignode.hxx>
 #include "sal/macros.h"
@@ -73,7 +73,7 @@ namespace abp
 
                 // create an instance of the dialog service
                 Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface( _pParent );
-                OUString sTitle(ModuleRes(RID_STR_FIELDDIALOGTITLE).toString());
+                OUString sTitle(ModuleRes(RID_STR_FIELDDIALOGTITLE));
                 Reference< XExecutableDialog > xDialog = AddressBookSourceDialog::createWithDataSource(_rxORB,
                                                            // the parent window
                                                            xDialogParent,

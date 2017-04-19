@@ -11,6 +11,7 @@ $(eval $(call gb_Library_Library,dba))
 
 $(eval $(call gb_Library_set_include,dba,\
     $$(INCLUDE) \
+	-I$(SRCDIR)/dbaccess/inc \
 	-I$(SRCDIR)/dbaccess/source/inc \
 	-I$(SRCDIR)/dbaccess/source/core/inc \
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
