@@ -103,9 +103,9 @@ private:
 
     /** shows a warning window due to an invalid input.
 
-        @param nResIdMessage
+        @param pResIdMessage
             The resource identifier that represents the localized warning text.
-            If this is 0, no warning is shown and false is returned.
+            If this is nullptr, no warning is shown and false is returned.
 
         @param pControl
             If non-NULL, contains a pointer to the control in which the
@@ -114,7 +114,7 @@ private:
 
         @return false, if nResIdMessage was 0, true otherwise
      */
-    bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl );
+    bool ShowWarning(const char* pResIdMessage, Control* pControl);
 
     void HideAllControls();
 };

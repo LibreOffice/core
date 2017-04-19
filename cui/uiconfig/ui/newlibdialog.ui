@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Sat Jan  4 16:52:18 2014 -->
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="NewLibDialog">
     <property name="can_focus">False</property>

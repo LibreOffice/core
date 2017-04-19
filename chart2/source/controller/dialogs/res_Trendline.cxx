@@ -19,7 +19,7 @@
 
 #include "res_Trendline.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "chartview/ChartSfxItemIds.hxx"
 

@@ -25,7 +25,7 @@
 #include <unotools/viewoptions.hxx>
 
 #include <vcl/button.hxx>
-#include <vcl/fpicker.hrc>
+#include <fpicker/fpicker.hrc>
 #include <vcl/menubtn.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
@@ -42,9 +42,8 @@
 
 #include "fpdialogbase.hxx"
 #include "fpsofficeResMgr.hxx"
-#include "OfficeFilePicker.hrc"
 #include "QueryFolderName.hxx"
-#include "iodlg.hrc"
+#include "strings.hrc"
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
