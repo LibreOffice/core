@@ -30,7 +30,7 @@
 #include "TConnection.hxx"
 #include <connectivity/dbexception.hxx>
 #include "resource/sharedresources.hxx"
-#include "resource/macab_res.hrc"
+#include "strings.hrc"
 
 using namespace connectivity::macab;
 using namespace com::sun::star::uno;
@@ -46,10 +46,10 @@ namespace connectivity
 {
     namespace macab
     {
-    void impl_throwError(sal_uInt16 _nErrorId)
+    void impl_throwError(const char* pErrorId)
     {
         ::connectivity::SharedResources aResources;
-        const OUString sError( aResources.getResourceString(_nErrorId) );
+        const OUString sError( aResources.getResourceString(pErrorId) );
         ::dbtools::throwGenericSQLException(sError,nullptr);
     }
     }

@@ -46,9 +46,8 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
-#include "resource/file_res.hrc"
 #include "resource/sharedresources.hxx"
-
+#include "strings.hrc"
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -64,10 +63,10 @@ using namespace com::sun::star::container;
 
 namespace
 {
-    void lcl_throwError(sal_uInt16 _nErrorId,const css::uno::Reference< css::uno::XInterface>& _xContext)
+    void lcl_throwError(const char* pErrorId, const css::uno::Reference< css::uno::XInterface>& _xContext)
     {
         ::connectivity::SharedResources aResources;
-        const OUString sMessage = aResources.getResourceString(_nErrorId);
+        const OUString sMessage = aResources.getResourceString(pErrorId);
         ::dbtools::throwGenericSQLException(sMessage ,_xContext);
     }
 }

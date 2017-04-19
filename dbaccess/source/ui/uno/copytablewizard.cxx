@@ -19,10 +19,12 @@
 
 #include <memory>
 #include "dbu_reghelper.hxx"
-#include "dbu_resource.hrc"
-#include "dbu_uno.hrc"
-#include "dbustrings.hrc"
-#include "moduledbu.hxx"
+#include "dbu_pageids.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "stringconstants.hxx"
+#include "core_resource.hxx"
+#include "core_resource.hxx"
 #include "sqlmessage.hxx"
 #include "uiservices.hxx"
 #include "WCopyTable.hxx"
@@ -460,7 +462,7 @@ void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation )
         &&  !OCopyTableWizard::supportsViews( m_xDestConnection )
         )
         throw IllegalArgumentException(
-            ModuleRes( STR_CTW_NO_VIEWS_SUPPORT ),
+            DBA_RES( STR_CTW_NO_VIEWS_SUPPORT ),
             *this,
             1
         );
@@ -492,7 +494,7 @@ void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& 
 
     if ( _newPrimaryKey.IsPresent && !OCopyTableWizard::supportsPrimaryKey( m_xDestConnection ) )
         throw IllegalArgumentException(
-            ModuleRes( STR_CTW_NO_PRIMARY_KEY_SUPPORT ),
+            DBA_RES( STR_CTW_NO_PRIMARY_KEY_SUPPORT ),
             *this,
             1
         );
@@ -657,7 +659,7 @@ Reference< XPropertySet > CopyTableWizard::impl_ensureDataAccessDescriptor_throw
     if ( !bIsValid )
     {
         throw IllegalArgumentException(
-            ModuleRes( STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR ),
+            DBA_RES( STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR ),
             *const_cast< CopyTableWizard* >( this ),
             _nArgPos + 1
         );
@@ -701,7 +703,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
     if ( !sUnsupportedSetting.isEmpty() )
     {
         OUString sMessage(
-            OUString(ModuleRes(STR_CTW_ERROR_UNSUPPORTED_SETTING)).
+            DBA_RES(STR_CTW_ERROR_UNSUPPORTED_SETTING).
             replaceFirst("$name$", sUnsupportedSetting));
         throw IllegalArgumentException(
             sMessage,
@@ -749,7 +751,7 @@ std::unique_ptr< ICopyTableSourceObject > CopyTableWizard::impl_extractSourceObj
     break;
     default:
         throw IllegalArgumentException(
-            ModuleRes( STR_CTW_ONLY_TABLES_AND_QUERIES_SUPPORT ),
+            DBA_RES( STR_CTW_ONLY_TABLES_AND_QUERIES_SUPPORT ),
             *const_cast< CopyTableWizard* >( this ),
             1
         );
@@ -768,7 +770,7 @@ std::unique_ptr< ICopyTableSourceObject > CopyTableWizard::impl_extractSourceObj
         if ( _out_rCommandType == CommandType::QUERY )
             // we cannot copy a query if the connection cannot provide it ...
             throw IllegalArgumentException(
-                ModuleRes( STR_CTW_ERROR_NO_QUERY ),
+                DBA_RES( STR_CTW_ERROR_NO_QUERY ),
                 *const_cast< CopyTableWizard* >( this ),
                 1
             );
@@ -806,7 +808,7 @@ void CopyTableWizard::impl_extractSourceResultSet_throw( const Reference< XPrope
         if ( !xRowLocate.is() )
         {
             ::dbtools::throwGenericSQLException(
-                OUString( ModuleRes( STR_CTW_COPY_SOURCE_NEEDS_BOOKMARKS ) ),
+                DBA_RES(STR_CTW_COPY_SOURCE_NEEDS_BOOKMARKS),
                 *this
             );
         }
@@ -1045,7 +1047,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
     {
         SQLContext aError;
         aError.Context = *this;
-        aError.Message = OUString( ModuleRes( STR_ERROR_OCCURRED_WHILE_COPYING ) );
+        aError.Message = DBA_RES(STR_ERROR_OCCURRED_WHILE_COPYING);
 
         ::dbtools::SQLExceptionInfo aInfo( _rEvent.Error );
         if ( aInfo.isValid() )
@@ -1276,7 +1278,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
                     default:
                     {
-                        OUString aMessage( ModuleRes( STR_CTW_UNSUPPORTED_COLUMN_TYPE ) );
+                        OUString aMessage( DBA_RES( STR_CTW_UNSUPPORTED_COLUMN_TYPE ) );
 
                         aMessage = aMessage.replaceFirst( "$type$", OUString::number( aSourceColTypes[ nSourceColumn ] ) );
                         aMessage = aMessage.replaceFirst( "$pos$", OUString::number( nSourceColumn ) );
@@ -1458,7 +1460,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     sal_Int32 nArgCount( _rArguments.getLength() );
     if ( ( nArgCount != 2 ) && ( nArgCount != 3 ) )
         throw IllegalArgumentException(
-            ModuleRes( STR_CTW_ILLEGAL_PARAMETER_COUNT ),
+            DBA_RES( STR_CTW_ILLEGAL_PARAMETER_COUNT ),
             *this,
             1
         );
@@ -1469,7 +1471,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
         {   // ->createWithInteractionHandler
             if ( !( _rArguments[2] >>= m_xInteractionHandler ) )
                 throw IllegalArgumentException(
-                    ModuleRes( STR_CTW_ERROR_INVALID_INTERACTIONHANDLER ),
+                    DBA_RES( STR_CTW_ERROR_INVALID_INTERACTIONHANDLER ),
                     *this,
                     3
                 );
@@ -1494,7 +1496,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            ModuleRes( STR_CTW_ERROR_DURING_INITIALIZATION ),
+            DBA_RES( STR_CTW_ERROR_DURING_INITIALIZATION ),
             *this,
             ::cppu::getCaughtException()
         );

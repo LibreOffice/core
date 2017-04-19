@@ -18,7 +18,7 @@
  */
 
 #include "t602filter.hxx"
-#include "t602filter.hrc"
+#include "strings.hrc"
 
 #include <stdio.h>
 
@@ -37,6 +37,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/character.hxx>
+#include <tools/simplerm.hxx>
 #include <unotools/streamwrap.hxx>
 
 using namespace ::cppu;
@@ -885,8 +886,10 @@ Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Referenc
     return static_cast<cppu::OWeakObject*>(new T602ImportFilter( rSMgr ));
 }
 
-T602ImportFilterDialog::T602ImportFilterDialog() :
-    mpResMgr( nullptr ) {}
+T602ImportFilterDialog::T602ImportFilterDialog()
+    : mpResLocale(nullptr)
+{
+}
 
 T602ImportFilterDialog::~T602ImportFilterDialog()
 {
@@ -1088,14 +1091,14 @@ bool T602ImportFilterDialog::OptionsDlg()
 
 void T602ImportFilterDialog::initLocale()
 {
-    mpResMgr.reset( ResMgr::CreateResMgr( "t602filter", LanguageTag( meLocale) ) );
+    mpResLocale.reset(new std::locale(Translate::Create("flt", LanguageTag(meLocale))));
 }
 
-ResMgr* T602ImportFilterDialog::getResMgr()
+const std::locale* T602ImportFilterDialog::getResLocale()
 {
-    if( !mpResMgr )
+    if (!mpResLocale)
         initLocale();
-    return mpResMgr.get();
+    return mpResLocale.get();
 }
 
 void SAL_CALL T602ImportFilterDialog::setTitle( const OUString& )
@@ -1110,10 +1113,9 @@ sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
         return css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-OUString T602ImportFilterDialog::getResStr( sal_Int16 resid )
+OUString T602ImportFilterDialog::getResStr(const char* resid)
 {
-    OUString sStr( ResId( resid, *getResMgr() ) );
-    return sStr;
+    return Translate::get(resid, *getResLocale());
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL T602ImportFilterDialog::getPropertyValues()
