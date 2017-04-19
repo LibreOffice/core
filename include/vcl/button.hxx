@@ -92,7 +92,7 @@ public:
     void                SetFocusRect( const tools::Rectangle& rFocusRect );
     bool                IsSmallSymbol() const;
     void                SetSmallSymbol();
-    virtual bool        set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool        set_property(const OString &rKey, const OUString &rValue) override;
 
     /// Sets the button state according to the FeatureStateEvent emitted by an Uno state change.
     virtual void        statusChanged(const css::frame::FeatureStateEvent& rEvent);
@@ -162,7 +162,7 @@ public:
     Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize() const override;
 
-    virtual bool    set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
     virtual void    ShowFocus(const tools::Rectangle& rRect) override;
 
 protected:
@@ -381,7 +381,7 @@ public:
     */
     std::vector<VclPtr<RadioButton> > GetRadioButtonGroup(bool bIncludeThis = true) const;
 
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
     /*
      * Group this RadioButton with another
@@ -474,7 +474,7 @@ public:
     void            SetToggleHdl( const Link<CheckBox&,void>& rLink ) { maToggleHdl = rLink; }
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 
-    virtual bool set_property(const OString &rKey, const OString &rValue) override;
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     virtual void ShowFocus(const tools::Rectangle& rRect) override;
 
     virtual FactoryFunction GetUITestFactory() const override;

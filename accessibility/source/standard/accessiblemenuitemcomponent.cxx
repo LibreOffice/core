@@ -21,7 +21,7 @@
 
 
 #include <helper/accresmgr.hxx>
-#include <helper/accessiblestrings.hrc>
+#include <accessiblestrings.hrc>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>

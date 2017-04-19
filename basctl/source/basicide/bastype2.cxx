@@ -21,6 +21,7 @@
 #include <bastypes.hxx>
 #include <bastype2.hxx>
 #include <basidesh.hrc>
+#include "bitmaps.hlst"
 #include <iderid.hxx>
 #include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
@@ -254,15 +255,15 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
             }
 
             // create tree list box entry
-            sal_uInt16 nId;
+            OUString aId;
             if ( ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules ) )
-                nId = bLoaded ? RID_BMP_DLGLIB : RID_BMP_DLGLIBNOTLOADED;
+                aId = bLoaded ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_DLGLIBNOTLOADED);
             else
-                nId = bLoaded ? RID_BMP_MODLIB : RID_BMP_MODLIBNOTLOADED;
+                aId = bLoaded ? OUStringLiteral(RID_BMP_MODLIB) : OUStringLiteral(RID_BMP_MODLIBNOTLOADED);
             SvTreeListEntry* pLibRootEntry = FindEntry( pDocumentRootEntry, aLibName, OBJ_TYPE_LIBRARY );
             if ( pLibRootEntry )
             {
-                SetEntryBitmaps(pLibRootEntry, Image(BitmapEx(IDEResId(nId))));
+                SetEntryBitmaps(pLibRootEntry, Image(BitmapEx(aId)));
                 if ( IsExpanded(pLibRootEntry))
                     ImpCreateLibSubEntries( pLibRootEntry, rDocument, aLibName );
             }
@@ -270,7 +271,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
             {
                 AddEntry(
                     aLibName,
-                    Image(BitmapEx(IDEResId(nId))),
+                    Image(BitmapEx(aId)),
                     pDocumentRootEntry, true,
                     o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
             }
@@ -306,7 +307,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                         {
                             pModuleEntry = AddEntry(
                                 aModName,
-                                Image(BitmapEx(IDEResId(RID_BMP_MODULE))),
+                                Image(BitmapEx(RID_BMP_MODULE)),
                                 pLibRootEntry, false,
                                 o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
                         }
@@ -326,7 +327,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                                 {
                                     AddEntry(
                                         aName,
-                                        Image(BitmapEx(IDEResId(RID_BMP_MACRO))),
+                                        Image(BitmapEx(RID_BMP_MACRO)),
                                         pModuleEntry, false,
                                         o3tl::make_unique<Entry>(
                                             OBJ_TYPE_METHOD));
@@ -365,7 +366,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                     {
                         AddEntry(
                             aDlgName,
-                            Image(BitmapEx(IDEResId(RID_BMP_DIALOG))),
+                            Image(BitmapEx(RID_BMP_DIALOG)),
                             pLibRootEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_DIALOG));
                     }
@@ -382,10 +383,10 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
 void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     auto const aEntries = {
-        std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ),
-        std::make_pair( OBJ_TYPE_USERFORMS, IDE_RESSTR(RID_STR_USERFORMS) ),
-        std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDE_RESSTR(RID_STR_NORMAL_MODULES) ),
-        std::make_pair( OBJ_TYPE_CLASS_MODULES, IDE_RESSTR(RID_STR_CLASS_MODULES) ) };
+        std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDEResId(RID_STR_DOCUMENT_OBJECTS) ),
+        std::make_pair( OBJ_TYPE_USERFORMS, IDEResId(RID_STR_USERFORMS) ),
+        std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDEResId(RID_STR_NORMAL_MODULES) ),
+        std::make_pair( OBJ_TYPE_CLASS_MODULES, IDEResId(RID_STR_CLASS_MODULES) ) };
     for( auto const & iter: aEntries )
     {
         EntryType eType = iter.first;
@@ -393,7 +394,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntr
         SvTreeListEntry* pLibSubRootEntry = FindEntry( pLibRootEntry, aEntryName, eType );
         if( pLibSubRootEntry )
         {
-            SetEntryBitmaps(pLibSubRootEntry, Image(BitmapEx(IDEResId(RID_BMP_MODLIB))));
+            SetEntryBitmaps(pLibSubRootEntry, Image(BitmapEx(RID_BMP_MODLIB)));
             if ( IsExpanded( pLibSubRootEntry ) )
                 ImpCreateLibSubSubEntriesInVBAMode( pLibSubRootEntry, rDocument, rLibName );
         }
@@ -401,7 +402,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntr
         {
             AddEntry(
                 aEntryName,
-                Image(BitmapEx(IDEResId(RID_BMP_MODLIB))),
+                Image(BitmapEx(RID_BMP_MODLIB)),
                 pLibRootEntry, true, o3tl::make_unique<Entry>(eType));
         }
     }
@@ -462,7 +463,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
             {
                 pModuleEntry = AddEntry(
                     aEntryName,
-                    Image(BitmapEx(IDEResId(RID_BMP_MODULE))),
+                    Image(BitmapEx(RID_BMP_MODULE)),
                     pLibSubRootEntry, false,
                     o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
             }
@@ -482,7 +483,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
                     {
                         AddEntry(
                             aName,
-                            Image(BitmapEx(IDEResId(RID_BMP_MACRO))),
+                            Image(BitmapEx(RID_BMP_MACRO)),
                             pModuleEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_METHOD));
                     }
@@ -770,12 +771,12 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
         else
         {
             // default icon
-            rImage = Image(BitmapEx(IDEResId(RID_BMP_DOCUMENT)));
+            rImage = Image(BitmapEx(RID_BMP_DOCUMENT));
         }
     }
     else
     {
-        rImage = Image(BitmapEx(IDEResId(RID_BMP_INSTALLATION)));
+        rImage = Image(BitmapEx(RID_BMP_INSTALLATION));
     }
 }
 

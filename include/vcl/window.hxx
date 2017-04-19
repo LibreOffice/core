@@ -1469,14 +1469,14 @@ public:
      *
      * @return false if property is unknown
      */
-    virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual bool set_property(const OString &rKey, const OUString &rValue);
 
     /*
      * Sets a font attribute
      *
      * @return false if attribute is unknown
      */
-    bool set_font_attribute(const OString &rKey, const OString &rValue);
+    bool set_font_attribute(const OString &rKey, const OUString &rValue);
 
     /*
      * Adds this widget to the xGroup VclSizeGroup

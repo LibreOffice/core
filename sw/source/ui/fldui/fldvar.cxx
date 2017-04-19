@@ -1265,7 +1265,7 @@ VCL_BUILDER_DECL_FACTORY(SelectionListBox)
     if (bDropdown)
         nBits |= WB_DROPDOWN;
 
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nBits |= WB_BORDER;
 

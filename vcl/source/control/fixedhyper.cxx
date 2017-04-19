@@ -140,10 +140,10 @@ void FixedHyperlink::SetText(const OUString& rNewDescription)
     m_nTextLen = GetCtrlTextWidth(GetText());
 }
 
-bool FixedHyperlink::set_property(const OString &rKey, const OString &rValue)
+bool FixedHyperlink::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "uri")
-        SetURL(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetURL(rValue);
     else
         return FixedText::set_property(rKey, rValue);
     return true;

@@ -709,13 +709,12 @@ LibInfo::Item::Item (
 LibInfo::Item::~Item ()
 { }
 
-bool QueryDel( const OUString& rName, const ResId& rId, vcl::Window* pParent )
+bool QueryDel(const OUString& rName, const OUString &rStr, vcl::Window* pParent)
 {
-    OUString aQuery(rId.toString());
     OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(0, '\'');
-    aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
+    OUString aQuery = rStr.replaceAll("XX", aNameBuf.makeStringAndClear());
     ScopedVclPtrInstance< MessageDialog > aQueryBox(pParent, aQuery, VclMessageType::Question, VclButtonsType::YesNo);
     return ( aQueryBox->Execute() == RET_YES );
 }
@@ -759,7 +758,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         // set new title
         if ( bNewTitle )
         {
-            OUString aTitle(IDE_RESSTR(RID_STR_ENTERPASSWORD));
+            OUString aTitle(IDEResId(RID_STR_ENTERPASSWORD));
             aTitle = aTitle.replaceAll("XX", rLibName);
             aDlg->SetText( aTitle );
         }
@@ -781,7 +780,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 
                     if ( !bOK )
                     {
-                        ScopedVclPtrInstance< MessageDialog > aErrorBox(Application::GetDefDialogParent(), IDE_RESSTR(RID_STR_WRONGPASSWORD));
+                        ScopedVclPtrInstance< MessageDialog > aErrorBox(Application::GetDefDialogParent(), IDEResId(RID_STR_WRONGPASSWORD));
                         aErrorBox->Execute();
                     }
                 }

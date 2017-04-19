@@ -25,8 +25,8 @@
 
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>
-#include <basrid.hxx>
-#include <sb.hrc>
+#include <tools/simplerm.hxx>
+#include "strings.hrc"
 #include <sbxbase.hxx>
 
 struct BasicDLL::Impl
@@ -34,13 +34,13 @@ struct BasicDLL::Impl
     bool        bDebugMode;
     bool        bBreakEnabled;
 
-    std::unique_ptr<ResMgr> xBasResMgr;
+    std::locale aBasResLocale;
     std::unique_ptr<SbxAppData> xSbxAppData;
 
     Impl()
         : bDebugMode(false)
         , bBreakEnabled(true)
-        , xBasResMgr(ResMgr::CreateResMgr("sb", Application::GetSettings().GetUILanguageTag()))
+        , aBasResLocale(Translate::Create("sb", Application::GetSettings().GetUILanguageTag()))
         , xSbxAppData(new SbxAppData)
     { }
 };
@@ -51,9 +51,9 @@ BasicDLL * BASIC_DLL;
 
 }
 
-BasResId::BasResId( sal_uInt32 nId ) :
-    ResId( nId, *(BASIC_DLL->GetBasResMgr()) )
+OUString BasResId(const char* pId)
 {
+    return Translate::get(pId, BASIC_DLL->GetBasResLocale());
 }
 
 BasicDLL::BasicDLL()
@@ -66,7 +66,7 @@ BasicDLL::~BasicDLL()
 {
 }
 
-ResMgr* BasicDLL::GetBasResMgr() const { return m_xImpl->xBasResMgr.get(); }
+const std::locale& BasicDLL::GetBasResLocale() const { return m_xImpl->aBasResLocale; }
 
 void BasicDLL::EnableBreak( bool bEnable )
 {
@@ -103,7 +103,7 @@ void BasicDLL::BasicBreak()
         {
             bJustStopping = true;
             StarBASIC::Stop();
-            ScopedVclPtrInstance<InfoBox>(nullptr, BasResId(IDS_SBERR_TERMINATED).toString())->Execute();
+            ScopedVclPtrInstance<InfoBox>(nullptr, BasResId(IDS_SBERR_TERMINATED))->Execute();
             bJustStopping = false;
         }
     }

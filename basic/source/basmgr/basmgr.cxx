@@ -40,9 +40,7 @@
 #include <basic/basmgr.hxx>
 #include "global.hxx"
 #include <sbunoobj.hxx>
-#include "basrid.hxx"
 #include "sbintern.hxx"
-#include <sb.hrc>
 
 #include <memory>
 #include <vector>

@@ -28,7 +28,8 @@
 #include <salframe.hxx>
 #include <salmenu.hxx>
 #include <svdata.hxx>
-#include <svids.hrc>
+#include <strings.hrc>
+#include <bitmaps.hlst>
 #include <window.h>
 
 // document closing button
@@ -58,12 +59,8 @@ void DecoToolBox::calcMinSize()
     ScopedVclPtrInstance<ToolBox> aTbx( GetParent() );
     if( GetItemCount() == 0 )
     {
-        ResMgr* pResMgr = ImplGetResMgr();
-
-        Bitmap aBitmap;
-        if( pResMgr )
-            aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
-        aTbx->InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
+        BitmapEx aBitmap(SV_RESID_BITMAP_CLOSEDOC);
+        aTbx->InsertItem(IID_DOCUMENTCLOSE, Image(aBitmap));
     }
     else
     {
@@ -128,29 +125,24 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     SetMBWHideAccel(true);
     SetMBWMenuKey(false);
 
-    ResMgr* pResMgr = ImplGetResMgr();
+    BitmapEx aBitmap(SV_RESID_BITMAP_CLOSEDOC);
+    aCloseBtn->maImage = Image(aBitmap);
 
-    if(pResMgr)
-    {
-        BitmapEx aBitmap(ResId(SV_RESID_BITMAP_CLOSEDOC, *pResMgr));
-        aCloseBtn->maImage = Image(aBitmap);
+    aCloseBtn->SetOutStyle(TOOLBOX_STYLE_FLAT);
+    aCloseBtn->SetBackground();
+    aCloseBtn->SetPaintTransparent(true);
+    aCloseBtn->SetParentClipMode(ParentClipMode::NoClip);
 
-        aCloseBtn->SetOutStyle(TOOLBOX_STYLE_FLAT);
-        aCloseBtn->SetBackground();
-        aCloseBtn->SetPaintTransparent(true);
-        aCloseBtn->SetParentClipMode(ParentClipMode::NoClip);
+    aCloseBtn->InsertItem(IID_DOCUMENTCLOSE, aCloseBtn->maImage);
+    aCloseBtn->SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
+    aCloseBtn->AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
+    aCloseBtn->SetQuickHelpText(IID_DOCUMENTCLOSE, VclResId(SV_HELPTEXT_CLOSEDOCUMENT));
 
-        aCloseBtn->InsertItem(IID_DOCUMENTCLOSE, aCloseBtn->maImage);
-        aCloseBtn->SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
-        aCloseBtn->AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
-        aCloseBtn->SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr).toString());
+    aFloatBtn->SetSymbol( SymbolType::FLOAT );
+    aFloatBtn->SetQuickHelpText(VclResId(SV_HELPTEXT_RESTORE));
 
-        aFloatBtn->SetSymbol( SymbolType::FLOAT );
-        aFloatBtn->SetQuickHelpText( ResId(SV_HELPTEXT_RESTORE, *pResMgr).toString() );
-
-        aHideBtn->SetSymbol( SymbolType::HIDE );
-        aHideBtn->SetQuickHelpText( ResId(SV_HELPTEXT_MINIMIZE, *pResMgr).toString() );
-    }
+    aHideBtn->SetSymbol( SymbolType::HIDE );
+    aHideBtn->SetQuickHelpText(VclResId(SV_HELPTEXT_MINIMIZE));
 
     ImplInitStyleSettings();
 

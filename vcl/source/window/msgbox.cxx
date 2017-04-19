@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svids.hrc>
+#include <strings.hrc>
+#include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <brdwin.hxx>
 #include <window.h>
@@ -38,14 +39,10 @@ static void ImplInitMsgBoxImageList()
     ImplSVData* pSVData = ImplGetSVData();
     if (pSVData->maWinData.maMsgBoxImgList.empty())
     {
-        ResMgr* pResMgr = ImplGetResMgr();
-        if (pResMgr)
-        {
-            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_ERRORBOX, *pResMgr))));
-            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_QUERYBOX, *pResMgr))));
-            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_WARNINGBOX, *pResMgr))));
-            pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(ResId(SV_RESID_BITMAP_INFOBOX, *pResMgr))));
-        }
+        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_ERRORBOX)));
+        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_QUERYBOX)));
+        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_WARNINGBOX)));
+        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_INFOBOX)));
     }
 }
 
@@ -408,9 +405,7 @@ WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
 
 void WarningBox::SetDefaultCheckBoxText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr).toString();
+    maCheckBoxText = VclResId(SV_STDTEXT_DONTWARNAGAIN);
 }
 
 Image WarningBox::GetStandardImage()
@@ -457,9 +452,7 @@ QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessa
 
 void QueryBox::SetDefaultCheckBoxText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr).toString();
+    maCheckBoxText = VclResId(SV_STDTEXT_DONTASKAGAIN);
 }
 
 Image QueryBox::GetStandardImage()
