@@ -170,6 +170,23 @@ static bool isSPRMDeduplicateBlacklist(Id nId)
     }
 }
 
+/// Should this SPRM be removed if all its children is removed?
+static bool isSPRMChildrenExpected(Id nId)
+{
+    switch (nId)
+    {
+    case NS_ooxml::LN_CT_PBdr_top:
+    case NS_ooxml::LN_CT_PBdr_left:
+    case NS_ooxml::LN_CT_PBdr_bottom:
+    case NS_ooxml::LN_CT_PBdr_right:
+        // Expected children are NS_ooxml::LN_CT_Border_*.
+        return true;
+
+    default:
+        return false;
+    }
+}
+
 /// Does the clone / deduplication of a single sprm.
 static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t>& rSprm, RTFSprms& ret)
 {
@@ -185,7 +202,9 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t>& rSprm, R
         {
             RTFSprms const sprms(pValue->getSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
             RTFSprms const attributes(pValue->getAttributes().cloneAndDeduplicate(rSprm.second->getAttributes()));
-            ret.set(rSprm.first, RTFValue::Pointer_t(pValue->CloneWithSprms(attributes, sprms)));
+            // Don't copy the sprm in case we expect it to have children but it doesn't have some.
+            if (!isSPRMChildrenExpected(rSprm.first) || !sprms.empty() || !attributes.empty())
+                ret.set(rSprm.first, RTFValue::Pointer_t(pValue->CloneWithSprms(attributes, sprms)));
         }
     }
     else
