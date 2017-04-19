@@ -21,7 +21,7 @@
 
 #include <classes/fwkresid.hxx>
 
-#include "classes/resource.hrc"
+#include "strings.hrc"
 #include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -149,16 +149,16 @@ OUString lcl_getLocalizedMessage(::sal_Int32 nID)
     switch(nID)
     {
         case ID_CORRUPT_UICONFIG_SHARE :
-                sMessage = FWK_RESSTR(STR_CORRUPT_UICFG_SHARE);
+                sMessage = FwkResId(STR_CORRUPT_UICFG_SHARE);
 
                 break;
 
         case ID_CORRUPT_UICONFIG_USER :
-                sMessage = FWK_RESSTR(STR_CORRUPT_UICFG_USER);
+                sMessage = FwkResId(STR_CORRUPT_UICFG_USER);
                 break;
 
         case ID_CORRUPT_UICONFIG_GENERAL :
-                sMessage = FWK_RESSTR(STR_CORRUPT_UICFG_GENERAL);
+                sMessage = FwkResId(STR_CORRUPT_UICFG_GENERAL);
                 break;
     }
 

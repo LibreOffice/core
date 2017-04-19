@@ -20,8 +20,8 @@
 #include <uielement/footermenucontroller.hxx>
 
 #include "services.h"
-#include <classes/resource.hrc>
-#include <classes/fwlresid.hxx>
+#include <strings.hrc>
+#include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

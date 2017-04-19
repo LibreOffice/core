@@ -26,7 +26,7 @@
 #include <dbaccess/dataview.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <vcl/stdtext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>

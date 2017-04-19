@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
@@ -37,7 +37,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-using namespace framework;
 
 #define MAX_MENU_ITEMS  99
 
@@ -204,11 +203,11 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             pVCLPopupMenu->InsertSeparator();
             // Clear List menu entry
             pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 1 ),
-                                       FWK_RESSTR(STR_CLEAR_RECENT_FILES) );
+                                       FwkResId(STR_CLEAR_RECENT_FILES) );
             pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 1 ),
                                            CMD_CLEAR_LIST );
             pVCLPopupMenu->SetHelpText( sal_uInt16( nCount + 1 ),
-                                        FWK_RESSTR(STR_CLEAR_RECENT_FILES_HELP) );
+                                        FwkResId(STR_CLEAR_RECENT_FILES_HELP) );
 
             // Open remote menu entry
             if ( m_bShowToolbarEntries )
@@ -228,7 +227,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             else
             {
                 // No recent documents => insert "no document" string
-                pVCLPopupMenu->InsertItem( 1, FWK_RESSTR(STR_NODOCUMENT) );
+                pVCLPopupMenu->InsertItem( 1, FwkResId(STR_NODOCUMENT) );
                 // Do not disable it, otherwise the Toolbar controller and MenuButton
                 // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
                 pVCLPopupMenu->SetItemBits( 1, pVCLPopupMenu->GetItemBits( 1 ) | MenuItemBits::NOSELECT );

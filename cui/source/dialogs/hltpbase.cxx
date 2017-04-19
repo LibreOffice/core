@@ -32,6 +32,7 @@
 #include "macroass.hxx"
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/builderfactory.hxx>
 
@@ -246,8 +247,8 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
         mpCbbFrame->SetText ( pHyperlinkItem->GetTargetFrame() );
 
     // Form
-    OUString aStrFormText = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FROM_TEXT );
-    OUString aStrFormButton = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
+    OUString aStrFormText = CUI_RES( RID_SVXSTR_HYPERDLG_FROM_TEXT );
+    OUString aStrFormButton = CUI_RES( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
 
     if( pHyperlinkItem->GetInsertMode() & HLINK_HTMLMODE )
     {
@@ -340,13 +341,13 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, void)
         SfxMacroTabPage *pMacroPage = static_cast<SfxMacroTabPage*>( aDlg->GetTabPage() );
 
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOverObject )
-            pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
+            pMacroPage->AddEvent( OUString( CUI_RES(RID_SVXSTR_HYPDLG_MACROACT1) ),
                                   SFX_EVENT_MOUSEOVER_OBJECT );
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseClickObject )
-            pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT2) ),
+            pMacroPage->AddEvent( OUString( CUI_RES(RID_SVXSTR_HYPDLG_MACROACT2) ),
                                   SFX_EVENT_MOUSECLICK_OBJECT);
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOutObject )
-            pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT3) ),
+            pMacroPage->AddEvent( OUString( CUI_RES(RID_SVXSTR_HYPDLG_MACROACT3) ),
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
         if ( bIsInputEnabled )

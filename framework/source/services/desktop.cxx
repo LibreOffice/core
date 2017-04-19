@@ -32,7 +32,7 @@
 #include <general.h>
 #include <properties.h>
 
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -116,7 +116,7 @@ void Desktop::constructorInit()
     m_xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
     OUStringBuffer sUntitledPrefix (256);
-    sUntitledPrefix.append      (FWK_RESSTR(STR_UNTITLED_DOCUMENT));
+    sUntitledPrefix.append      (FwkResId(STR_UNTITLED_DOCUMENT));
     sUntitledPrefix.append (" ");
 
     ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();

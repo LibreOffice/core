@@ -29,7 +29,8 @@
 #include "properties.h"
 #include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
-#include <classes/resource.hrc>
+#include <classes/resource.hxx>
+#include <strings.hrc>
 #include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
 
@@ -1434,14 +1435,14 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
 
     if (MenuItemAllowed(MENUITEM_TOOLBAR_VISIBLEBUTTON))
     {
-        pMenu->InsertItem(MENUITEM_TOOLBAR_VISIBLEBUTTON, FWK_RESSTR(STR_TOOLBAR_VISIBLE_BUTTONS));
+        pMenu->InsertItem(MENUITEM_TOOLBAR_VISIBLEBUTTON, FwkResId(STR_TOOLBAR_VISIBLE_BUTTONS));
         xVisibleItemsPopupMenu = VclPtr<PopupMenu>::Create();
         pMenu->SetPopupMenu(MENUITEM_TOOLBAR_VISIBLEBUTTON, xVisibleItemsPopupMenu);
     }
 
     if (MenuItemAllowed(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR) && m_pToolBar->IsCustomize())
     {
-        pMenu->InsertItem(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, FWK_RESSTR(STR_TOOLBAR_CUSTOMIZE_TOOLBAR));
+        pMenu->InsertItem(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, FwkResId(STR_TOOLBAR_CUSTOMIZE_TOOLBAR));
         pMenu->SetItemCommand(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, ".uno:ConfigureToolboxVisible");
     }
 
@@ -1452,10 +1453,10 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
     }
 
     if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKTOOLBAR))
-        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, FWK_RESSTR(STR_TOOLBAR_DOCK_TOOLBAR));
+        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_TOOLBAR));
 
     if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKALLTOOLBAR))
-        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, FWK_RESSTR(STR_TOOLBAR_DOCK_ALL_TOOLBARS));
+        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_ALL_TOOLBARS));
 
     if (nGroupLen != pMenu->GetItemCount())
     {
@@ -1464,10 +1465,10 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
     }
 
     if (MenuItemAllowed(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION))
-        pMenu->InsertItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, FWK_RESSTR(STR_TOOLBAR_LOCK_TOOLBAR));
+        pMenu->InsertItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, FwkResId(STR_TOOLBAR_LOCK_TOOLBAR));
 
     if (MenuItemAllowed(MENUITEM_TOOLBAR_CLOSE))
-        pMenu->InsertItem(MENUITEM_TOOLBAR_CLOSE, FWK_RESSTR(STR_TOOLBAR_CLOSE_TOOLBAR));
+        pMenu->InsertItem(MENUITEM_TOOLBAR_CLOSE, FwkResId(STR_TOOLBAR_CLOSE_TOOLBAR));
 
     if (m_pToolBar->IsCustomize())
     {

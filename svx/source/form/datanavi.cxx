@@ -27,9 +27,11 @@
 
 #include "fmhelp.hrc"
 #include "bitmaps.hlst"
+#include "fpicker/fpicker.hrc"
 #include <svx/svxids.hrc>
 #include <tools/rcid.h>
 #include <tools/diagnose_ex.h>
+#include <tools/simplerm.hxx>
 #include <svx/xmlexchg.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>
@@ -3365,8 +3367,8 @@ namespace svxform
         m_pURLED->DisableHistory();
         m_pFilePickerBtn->SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
 
-        // load the filter name from fps_office resource
-        m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office")).toString();
+        // load the filter name from fps resource
+        m_sAllFilterName = Translate::get(STR_FILTERNAME_ALL, Translate::Create("fps", Application::GetSettings().GetUILanguageTag()));
     }
 
     AddInstanceDialog::~AddInstanceDialog()

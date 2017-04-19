@@ -18,7 +18,7 @@
  */
 #include "inspectorhelpwindow.hxx"
 #include "modulepcr.hxx"
-#include "propresid.hrc"
+#include "strings.hrc"
 
 
 namespace pcr
@@ -36,7 +36,7 @@ namespace pcr
     {
         SetBackground();
         SetPaintTransparent(true);
-        m_aSeparator->SetText( PcrRes(RID_STR_HELP_SECTION_LABEL).toString() );
+        m_aSeparator->SetText( PcrRes(RID_STR_HELP_SECTION_LABEL) );
         m_aSeparator->SetBackground();
         m_aSeparator->Show();
 

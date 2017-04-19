@@ -20,9 +20,10 @@
 #include "FieldDescriptions.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include "dbu_tbl.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 #include "UITools.hxx"

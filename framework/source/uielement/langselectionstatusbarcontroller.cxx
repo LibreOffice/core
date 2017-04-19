@@ -19,7 +19,7 @@
 
 #include <classes/fwkresid.hxx>
 #include <services.h>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -124,8 +124,8 @@ void SAL_CALL LangSelectionStatusbarController::initialize( const css::uno::Sequ
 
     if ( m_xStatusbarItem.is() )
     {
-        m_xStatusbarItem->setText( FWK_RESSTR(STR_LANGSTATUS_MULTIPLE_LANGUAGES) );
-        m_xStatusbarItem->setQuickHelpText(FWK_RESSTR(STR_LANGSTATUS_HINT));
+        m_xStatusbarItem->setText( FwkResId(STR_LANGSTATUS_MULTIPLE_LANGUAGES) );
+        m_xStatusbarItem->setQuickHelpText(FwkResId(STR_LANGSTATUS_HINT));
     }
 }
 
@@ -171,11 +171,11 @@ void LangSelectionStatusbarController::LangMenu(
         }
     }
 
-    xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FWK_RESSTR(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
+    xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
     if ( sNone == m_aCurLang )
         xPopupMenu->checkItem( MID_LANG_SEL_NONE, true );
-    xPopupMenu->insertItem( MID_LANG_SEL_RESET, FWK_RESSTR(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
-    xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FWK_RESSTR(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
+    xPopupMenu->insertItem( MID_LANG_SEL_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
+    xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
 
     // add entries to submenu ('set language for paragraph')
     nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
@@ -193,13 +193,13 @@ void LangSelectionStatusbarController::LangMenu(
             ++nItemId;
         }
     }
-    subPopupMenu->insertItem( MID_LANG_PARA_NONE,  FWK_RESSTR(STR_LANGSTATUS_NONE), 0, MID_LANG_PARA_NONE );
-    subPopupMenu->insertItem( MID_LANG_PARA_RESET, FWK_RESSTR(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_PARA_RESET );
-    subPopupMenu->insertItem( MID_LANG_PARA_MORE,  FWK_RESSTR(STR_LANGSTATUS_MORE), 0, MID_LANG_PARA_MORE );
+    subPopupMenu->insertItem( MID_LANG_PARA_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_PARA_NONE );
+    subPopupMenu->insertItem( MID_LANG_PARA_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_PARA_RESET );
+    subPopupMenu->insertItem( MID_LANG_PARA_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_PARA_MORE );
 
     // add last two entries to main menu
     xPopupMenu->insertSeparator( MID_LANG_PARA_SEPARATOR );
-    xPopupMenu->insertItem( MID_LANG_PARA_STRING, FWK_RESSTR(STR_SET_LANGUAGE_FOR_PARAGRAPH), 0, MID_LANG_PARA_STRING );
+    xPopupMenu->insertItem( MID_LANG_PARA_STRING, FwkResId(STR_SET_LANGUAGE_FOR_PARAGRAPH), 0, MID_LANG_PARA_STRING );
     xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
 
     // now display the popup menu and execute every command ...
@@ -310,7 +310,7 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
                 OUString aStatusText = aSeq[0];
                 if (aStatusText == "*")
                 {
-                    aStatusText = FWK_RESSTR(STR_LANGSTATUS_MULTIPLE_LANGUAGES);
+                    aStatusText = FwkResId(STR_LANGSTATUS_MULTIPLE_LANGUAGES);
                 }
                 m_xStatusbarItem->setText( aStatusText );
 
