@@ -1783,6 +1783,8 @@ public:
         ScAddress aSrcPos(mnSrcCol, nRow, mnSrcTab);
         ScAddress aDestPos(mnDestCol, nDestRow, mnDestTab);
         miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(aSrcPos, mrDestCol.GetDoc(), aDestPos, mbCloneCaption));
+        // Notify our LOK clients also
+        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &mrDestCol.GetDoc(), aDestPos, p);
     }
 };
 
