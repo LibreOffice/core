@@ -1133,16 +1133,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             {
                                 nSpaceSum += nSpaceAdd;
                                 if( j < i)
-                                    rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
-                                    rInf.GetIdx() + j, i - j );
+                                    rInf.GetOut().DrawTextArray( aTmpPos, rInf.GetText(),
+                                    pKernArray.get() + j, rInf.GetIdx() + j, i - j );
                                 j = i + 1;
                                 pKernArray[i] = pKernArray[i] + nSpaceSum;
                                 aTmpPos.X() = aTextOriginPos.X() + pKernArray[ i ] + nKernSum;
                             }
                         }
                         if( j < i )
-                            rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
-                            rInf.GetIdx() +j , i - j );
+                            rInf.GetOut().DrawTextArray( aTmpPos, rInf.GetText(),
+                            pKernArray.get() + j, rInf.GetIdx() +j , i - j );
                     }
                 }
             }
