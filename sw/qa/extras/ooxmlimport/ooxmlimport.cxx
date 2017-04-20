@@ -1304,6 +1304,14 @@ DECLARE_OOXMLIMPORT_TEST( testTdf106606, "tdf106606.docx" )
     CPPUNIT_ASSERT( FindGraphicBitmapPropertyInNumStyle("WWNum2") );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf101627, "tdf101627.docx")
+{
+    // Do not shrink the textbox in the footer
+    uno::Reference<text::XTextRange> xFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame->getString().startsWith( "1" ) );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(466), getProperty<sal_Int32>(xFrame, "Height"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
