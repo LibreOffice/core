@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_eaa57eb5",
+        "filename": "sw/source/core/text/porfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-20T17:25:32Z",
+      "side": 0,
+      "message": "Seeing that ScriptType here and that it was obtained from BreakIterator::getScriptType() which in turn may ask unicode::getScriptClassFromUScriptCode() in i18nutil/source/utility/unicode.cxx I wonder if one of those blocks should be marked as COMPLEX where it isn\u0027t, or if getCompatibilityScriptClassByBlock() in i18npool/source/breakiterator/breakiteratorImpl.cxx already returns a wrong value.\n\nI think any RTL Bidi Unicode block should be COMPLEX in our context.\n\nFor new Unicode blocks unicode::getScriptClassFromUScriptCode() also assumes COMPLEX so we should be fairly safe on that side.",
+      "range": {
+        "startLine": 231,
+        "startChar": 53,
+        "endLine": 231,
+        "endChar": 89
+      },
+      "revId": "d11746a8f4dfa443a404add08ff8bfe51590c607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
