@@ -33,7 +33,6 @@
 #include <math.h>
 
 #include <tools/resid.hxx>
-#include <tools/rc.hxx>
 
 #include "analysisdefs.hxx"
 

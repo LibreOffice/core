@@ -57,17 +57,6 @@ public:
         virtual ~ItemUpdateReceiverInterface();
     };
 
-    /** This is the preferred constructor that allows the created
-        controller item to return non-empty values for GetLabel() and
-        GetIcon() calls.
-    */
-    ControllerItem (
-        const sal_uInt16 nSlotId,
-        SfxBindings &rBindings,
-        ItemUpdateReceiverInterface& rItemUpdateReceiver,
-        const ::rtl::OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
-
     /** This is the simpler constructor variant that still exists for
         compatibility resons.  Note that GetLabel() and GetIcon() will
         return empty strings/images.

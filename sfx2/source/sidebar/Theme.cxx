@@ -22,7 +22,6 @@
 #include <sfx2/app.hxx>
 
 #include <tools/svborder.hxx>
-#include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

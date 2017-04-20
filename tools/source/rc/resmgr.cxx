@@ -30,7 +30,6 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <osl/endian.h>
 #include <osl/process.h>
@@ -389,14 +388,6 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
         }
     }
 }
-
-#ifdef DBG_UTIL
-void Resource::TestRes()
-{
-    if( m_pResMgr )
-        m_pResMgr->TestStack();
-}
-#endif
 
 struct ImpContent
 {

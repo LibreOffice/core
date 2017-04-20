@@ -21,7 +21,6 @@
 
 #include <swdllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/rc.hxx>
 #include <vcl/bitmap.hxx>
 
 struct SW_DLLPUBLIC ShellResource

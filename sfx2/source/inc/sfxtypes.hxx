@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <sal/log.hxx>
-#include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
 #include <vcl/svapp.hxx>

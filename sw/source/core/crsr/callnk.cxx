@@ -36,14 +36,6 @@
 #include <breakit.hxx>
 #include <vcl/window.hxx>
 
-SwCallLink::SwCallLink( SwCursorShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
-                        SwNodeType nAktNdTyp, long nLRPos, bool bAktSelection )
-    : rShell( rSh ), nNode( nAktNode ), nContent( nAktContent ),
-      nNdTyp( nAktNdTyp ), nLeftFramePos( nLRPos ),
-      bHasSelection( bAktSelection )
-{
-}
-
 SwCallLink::SwCallLink( SwCursorShell & rSh )
     : rShell( rSh )
 {

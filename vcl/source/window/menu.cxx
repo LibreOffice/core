@@ -559,11 +559,6 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
     }
 }
 
-void Menu::CopyItem( const Menu& rMenu, sal_uInt16 nPos )
-{
-    ImplCopyItem( this, rMenu, nPos, MENU_APPEND );
-}
-
 void Menu::Clear()
 {
     for ( sal_uInt16 i = GetItemCount(); i; i-- )

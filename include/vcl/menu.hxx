@@ -250,7 +250,6 @@ public:
                     const css::uno::Reference<css::frame::XFrame>& rFrame);
     void InsertSeparator(const OString &rIdent = OString(), sal_uInt16 nPos = MENU_APPEND);
     void RemoveItem( sal_uInt16 nPos );
-    void CopyItem(const Menu& rMenu, sal_uInt16 nPos );
     void Clear();
 
     void CreateAutoMnemonics();

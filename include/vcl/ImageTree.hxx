@@ -59,10 +59,6 @@ public:
         BitmapEx & bitmap, bool localized,
         const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
-    bool loadDefaultImage(
-        OUString const & style,
-        BitmapEx& bitmap);
-
     VCL_DLLPUBLIC css::uno::Reference<css::container::XNameAccess> getNameAccess();
 
 

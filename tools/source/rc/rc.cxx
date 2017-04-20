@@ -21,8 +21,8 @@
 #include <rtl/ustring.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <tools/rc.hxx>
 #include <tools/rcid.h>
+#include <tools/resmgr.hxx>
 
 OUString ResId::toString() const
 {
