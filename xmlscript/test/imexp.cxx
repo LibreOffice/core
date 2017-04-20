@@ -148,7 +148,7 @@ void MyApp::Main()
 {
     if (GetCommandLineParamCount() < 2)
     {
-        OSL_FAIL( "usage: imexp inst_dir inputfile [outputfile]\n" );
+        OSL_FAIL( "usage: imexp inst_dir inputfile [outputfile]" );
         return;
     }
 

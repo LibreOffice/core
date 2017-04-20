@@ -168,7 +168,7 @@ void LwpFoundry::RegisterAllLayouts()
 {
     if (m_bRegisteredAll)
     {
-        OSL_FAIL("recursive LwpFoundry::RegisterAllLayouts!\n");
+        OSL_FAIL("recursive LwpFoundry::RegisterAllLayouts!");
         return;
     }
 

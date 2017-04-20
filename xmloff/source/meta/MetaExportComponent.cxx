@@ -113,7 +113,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         }
         catch( css::uno::Exception& )
         {
-            OSL_FAIL( "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
+            OSL_FAIL( "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!");
         }
     }
 

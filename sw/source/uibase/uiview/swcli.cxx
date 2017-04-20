@@ -125,7 +125,7 @@ void SwOleClient::ViewChanged()
     }
     catch (const uno::Exception&)
     {
-        OSL_FAIL( "Something goes wrong on requesting object size!\n" );
+        OSL_FAIL( "Something goes wrong on requesting object size!" );
     }
 
     Size aVisSize( aSz.Width, aSz.Height );

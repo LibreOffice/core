@@ -52,7 +52,7 @@ ZipPackageEntry::ZipPackageEntry()
 ZipPackageEntry::~ZipPackageEntry()
 {
     // When the entry is destroyed it must be already disconnected from the parent
-    OSL_ENSURE( !mpParent, "The parent must be disconnected already! Memory corruption is possible!\n" );
+    OSL_ENSURE( !mpParent, "The parent must be disconnected already! Memory corruption is possible!" );
 }
 
 // XChild

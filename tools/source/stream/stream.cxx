@@ -105,7 +105,7 @@ inline static void SwapDouble( double& r )
     {
         if( sizeof(double) != 8 )
         {
-          SAL_WARN( "tools.stream", "Can only swap 8-Byte-doubles\n" );
+          SAL_WARN( "tools.stream", "Can only swap 8-Byte-doubles" );
         }
         else
         {

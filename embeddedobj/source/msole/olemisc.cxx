@@ -283,7 +283,7 @@ void OleEmbeddedObject::Dispose()
     if ( m_xObjectStream.is() )
     {
         uno::Reference< lang::XComponent > xComp( m_xObjectStream, uno::UNO_QUERY );
-        OSL_ENSURE( xComp.is(), "Storage stream doesn't support XComponent!\n" );
+        OSL_ENSURE( xComp.is(), "Storage stream doesn't support XComponent!" );
 
         if ( xComp.is() )
         {

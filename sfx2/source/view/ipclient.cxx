@@ -598,7 +598,7 @@ void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
         if ( m_xImp->m_nAspect == embed::Aspects::MSOLE_ICON
           && ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE ) )
         {
-            OSL_FAIL( "Iconified object should not be activated inplace!\n" );
+            OSL_FAIL( "Iconified object should not be activated inplace!" );
             return;
         }
 
@@ -643,7 +643,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( "Can not clean the client site!\n" );
+                OSL_FAIL( "Can not clean the client site!" );
             }
         }
     }
@@ -667,7 +667,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Can not set the client site!\n" );
+            OSL_FAIL( "Can not set the client site!" );
         }
 
         m_xImp->m_aTimer.Start();

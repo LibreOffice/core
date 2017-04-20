@@ -771,7 +771,7 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
            aContainer.InsertGraphicStream( xStream, aName, aMediaType );
     }
     else
-        OSL_FAIL( "Export of graphic is failed!\n" );
+        OSL_FAIL( "Export of graphic is failed!" );
 }
 
 uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStream(

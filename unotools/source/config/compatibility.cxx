@@ -251,7 +251,7 @@ Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() co
 
 void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 {
-    SAL_WARN( "unotools.config", "SvtCompatibilityOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
+    SAL_WARN( "unotools.config", "SvtCompatibilityOptions_Impl::Notify() Not implemented yet! I don't know how I can handle a dynamical list of unknown properties ..." );
 }
 
 void SvtCompatibilityOptions_Impl::ImplCommit()

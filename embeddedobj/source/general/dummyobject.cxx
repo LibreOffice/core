@@ -204,7 +204,7 @@ void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const 
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
@@ -221,7 +221,7 @@ awt::Size SAL_CALL ODummyEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
@@ -241,7 +241,7 @@ sal_Int32 SAL_CALL ODummyEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_Runtime();
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
@@ -373,11 +373,11 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( !m_bWaitSaveCompleted && !bUseNew )
         return;
 
-    OSL_ENSURE( m_bWaitSaveCompleted, "Unexpected saveCompleted() call!\n" );
+    OSL_ENSURE( m_bWaitSaveCompleted, "Unexpected saveCompleted() call!" );
     if ( !m_bWaitSaveCompleted )
         throw io::IOException(); // TODO: illegal call
 
-    OSL_ENSURE( m_xNewParentStorage.is() , "Internal object information is broken!\n" );
+    OSL_ENSURE( m_xNewParentStorage.is() , "Internal object information is broken!" );
     if ( !m_xNewParentStorage.is() )
         throw uno::RuntimeException(); // TODO: broken internal information
 

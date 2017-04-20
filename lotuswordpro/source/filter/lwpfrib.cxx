@@ -339,7 +339,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
             case FRIB_MTAG_FONT:
                 if (len != sizeof(pModInfo->FontID))
                 {
-                    OSL_FAIL("FRIB_MTAG_FONT entry wrong size\n");
+                    OSL_FAIL("FRIB_MTAG_FONT entry wrong size");
                     pObjStrm->SeekRel(len);
                 }
                 else
@@ -356,7 +356,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
             case FRIB_MTAG_CODEPAGE:
                 if (len != sizeof(pModInfo->CodePage))
                 {
-                    OSL_FAIL("FRIB_MTAG_CODEPAGE entry wrong size\n");
+                    OSL_FAIL("FRIB_MTAG_CODEPAGE entry wrong size");
                     pObjStrm->SeekRel(len);
                 }
                 else

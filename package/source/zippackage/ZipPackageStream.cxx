@@ -357,7 +357,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
 
 bool ZipPackageStream::ParsePackageRawStream()
 {
-    OSL_ENSURE( GetOwnSeekStream().is(), "A stream must be provided!\n" );
+    OSL_ENSURE( GetOwnSeekStream().is(), "A stream must be provided!" );
 
     if ( !GetOwnSeekStream().is() )
         return false;
@@ -590,7 +590,7 @@ bool ZipPackageStream::saveChild(
                 if ( !bToBeCompressed || m_bRawStream )
                 {
                     // The raw stream can neither be encrypted nor connected
-                    OSL_ENSURE( !m_bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!\n" );
+                    OSL_ENSURE( !m_bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!" );
                     xSeek->seek ( m_bRawStream ? m_nMagicalHackPos : 0 );
                     ImplSetStoredData ( *pTempEntry, xStream );
 
@@ -671,7 +671,7 @@ bool ZipPackageStream::saveChild(
             aPropSet[PKG_MNFST_ITERATION].Value <<= m_xBaseEncryptionData->m_nIterationCount;
 
             // Need to store the uncompressed size in the manifest
-            OSL_ENSURE( m_nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
+            OSL_ENSURE( m_nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!" );
             aPropSet[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
             aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= m_nOwnStreamOrigSize;
 
@@ -958,7 +958,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
     }
     catch ( Exception & )
     {
-        OSL_FAIL( "Exception is thrown during stream wrapping!\n" );
+        OSL_FAIL( "Exception is thrown during stream wrapping!" );
         return uno::Reference < io::XInputStream > ();
     }
 }
@@ -985,7 +985,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
     }
     catch ( Exception &ex )
     {
-        OSL_FAIL( "Exception is thrown during stream wrapping!\n" );
+        OSL_FAIL( "Exception is thrown during stream wrapping!" );
         OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
         (void)ex;
         return uno::Reference < io::XInputStream > ();

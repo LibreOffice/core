@@ -697,7 +697,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
         bSuccess = true;
     }
     else
-        SAL_WARN("vcl", "Could not OpenTTFont \"" << aFile.getStr() << "\"\n");
+        SAL_WARN("vcl", "Could not OpenTTFont \"" << aFile.getStr() << "\"");
 
     return bSuccess;
 }

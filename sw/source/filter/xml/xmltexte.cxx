@@ -343,7 +343,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 catch(const uno::Exception&)
                 {
                     // TODO/LATER: error handling
-                    OSL_FAIL( "Link detection or retrieving of the URL of OOo link is failed!\n" );
+                    OSL_FAIL( "Link detection or retrieving of the URL of OOo link is failed!" );
                 }
             }
 

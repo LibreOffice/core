@@ -87,7 +87,7 @@ namespace cppcanvas
         {
 #if OSL_DEBUG_LEVEL > 1
             if (width == 0.0) {
-                SAL_INFO("cppcanvas.emf", "TODO: pen with zero width - using minimal which might not be correct\n");
+                SAL_INFO("cppcanvas.emf", "TODO: pen with zero width - using minimal which might not be correct");
             }
 #endif
             rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize(width == 0.0 ? 0.05 : width, 0)).getLength());

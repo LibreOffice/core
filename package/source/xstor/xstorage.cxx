@@ -373,7 +373,7 @@ OStorage_Impl::~OStorage_Impl()
 void OStorage_Impl::SetReadOnlyWrap( OStorage& aStorage )
 {
     // Weak reference is used inside the holder so the refcount must not be zero at this point
-    OSL_ENSURE( aStorage.GetRefCount_Impl(), "There must be a reference alive to use this method!\n" );
+    OSL_ENSURE( aStorage.GetRefCount_Impl(), "There must be a reference alive to use this method!" );
     m_aReadOnlyWrapList.push_back( StorageHolder_Impl( &aStorage ) );
 }
 
@@ -1135,7 +1135,7 @@ void OStorage_Impl::Commit()
             {
                 if ((*pElementIter)->m_xStorage->m_bCommited)
                 {
-                    OSL_ENSURE((*pElementIter)->m_xStorage, "An inserted storage is incomplete!\n");
+                    OSL_ENSURE((*pElementIter)->m_xStorage, "An inserted storage is incomplete!");
                     if (!(*pElementIter)->m_xStorage)
                         throw uno::RuntimeException( THROW_WHERE );
 
@@ -1146,7 +1146,7 @@ void OStorage_Impl::Commit()
             }
             else
             {
-                OSL_ENSURE((*pElementIter)->m_xStream, "An inserted stream is incomplete!\n");
+                OSL_ENSURE((*pElementIter)->m_xStream, "An inserted stream is incomplete!");
                 if (!(*pElementIter)->m_xStream)
                     throw uno::RuntimeException( THROW_WHERE );
 
@@ -1328,7 +1328,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
 
     uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xNewElement, uno::UNO_QUERY_THROW );
 
-    OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE || !bEncr, "Only package storage supports encryption!\n" );
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE || !bEncr, "Only package storage supports encryption!" );
     if ( m_nStorageType != embed::StorageFormats::PACKAGE && bEncr )
         throw packages::NoEncryptionException( THROW_WHERE );
 
@@ -1800,7 +1800,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 : m_pImpl( pImpl )
 {
     // this call can be done only from OStorage_Impl implementation to create child storage
-    OSL_ENSURE( m_pImpl && m_pImpl->m_rMutexRef.is(), "The provided pointer & mutex MUST NOT be empty!\n" );
+    OSL_ENSURE( m_pImpl && m_pImpl->m_rMutexRef.is(), "The provided pointer & mutex MUST NOT be empty!" );
 
     m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, bReadOnlyWrap));
 
@@ -1982,7 +1982,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
            while ( pIterator.hasMoreElements( ) )
            {
-            OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!\n" );
+            OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!" );
 
             switch( nMessage )
             {

@@ -89,7 +89,7 @@ Content::Content(
     : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (nullptr), mpInfo( nullptr ), mbTransient(false)
 {
-    SAL_INFO("ucb.ucp.gio", "New Content ('" << m_xIdentifier->getContentIdentifier() << "')\n");
+    SAL_INFO("ucb.ucp.gio", "New Content ('" << m_xIdentifier->getContentIdentifier() << "')");
 }
 
 Content::Content(
@@ -100,7 +100,7 @@ Content::Content(
     : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (nullptr), mpInfo( nullptr ), mbTransient(true)
 {
-    SAL_INFO("ucb.ucp.gio", "Create Content ('" << m_xIdentifier->getContentIdentifier() << "')\n");
+    SAL_INFO("ucb.ucp.gio", "Create Content ('" << m_xIdentifier->getContentIdentifier() << "')");
     mpInfo = g_file_info_new();
     g_file_info_set_file_type(mpInfo, bIsFolder ? G_FILE_TYPE_DIRECTORY : G_FILE_TYPE_REGULAR);
 }
@@ -732,7 +732,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else
         {
-            SAL_WARN("ucb.ucp.gio", "Unknown property " << rValue.Name << "\n");
+            SAL_WARN("ucb.ucp.gio", "Unknown property " << rValue.Name);
             aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
             //TODO
         }
@@ -921,7 +921,7 @@ uno::Any SAL_CALL Content::execute(
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
-    SAL_INFO("ucb.ucp.gio", "Content::execute " << aCommand.Name << "\n");
+    SAL_INFO("ucb.ucp.gio", "Content::execute " << aCommand.Name);
     uno::Any aRet;
 
     if ( aCommand.Name == "getPropertyValues" )
@@ -992,7 +992,7 @@ uno::Any SAL_CALL Content::execute(
     }
     else
     {
-        SAL_WARN("ucb.ucp.gio", "Unknown command " << aCommand.Name << "\n");
+        SAL_WARN("ucb.ucp.gio", "Unknown command " << aCommand.Name);
 
         ucbhelper::cancelCommandExecution
             ( uno::makeAny( ucb::UnsupportedCommandException

@@ -27,7 +27,7 @@ OleWrapperAdviseSink::OleWrapperAdviseSink( OleComponent* pOleComp )
 : m_nRefCount( 0 )
 , m_pOleComp( pOleComp )
 {
-    OSL_ENSURE( m_pOleComp, "No ole component is provided!\n" );
+    OSL_ENSURE( m_pOleComp, "No ole component is provided!" );
 }
 
 OleWrapperAdviseSink::~OleWrapperAdviseSink()

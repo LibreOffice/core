@@ -673,7 +673,7 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
 
         // if we have a digest, then this file is an encrypted one and we should
         // check if we can decrypt it or not
-        OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!\n" );
+        OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!" );
         if ( rData->m_aDigest.getLength() && !hasValidPassword ( rEntry, rData ) )
                 throw packages::WrongPasswordException(THROW_WHERE );
     }

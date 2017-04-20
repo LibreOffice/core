@@ -1591,7 +1591,7 @@ bool SfxMedium::StorageCommit_Impl()
                     // since the temporary file is created always now, the scenario is close to be impossible
                     if ( !pImpl->pTempFile )
                     {
-                        OSL_ENSURE( !pImpl->m_aBackupURL.isEmpty(), "No backup on storage commit!\n" );
+                        OSL_ENSURE( !pImpl->m_aBackupURL.isEmpty(), "No backup on storage commit!" );
                         if ( !pImpl->m_aBackupURL.isEmpty()
                             && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                                         xDummyEnv, comphelper::getProcessComponentContext(),
@@ -1605,7 +1605,7 @@ bool SfxMedium::StorageCommit_Impl()
                                 // connect the medium to the temporary file of the storage
                                 pImpl->aContent = ::ucbhelper::Content();
                                 pImpl->m_aName = aBackupExc.TemporaryFileURL;
-                                OSL_ENSURE( !pImpl->m_aName.isEmpty(), "The exception _must_ contain the temporary URL!\n" );
+                                OSL_ENSURE( !pImpl->m_aName.isEmpty(), "The exception _must_ contain the temporary URL!" );
                             }
                         }
                     }
@@ -2542,7 +2542,7 @@ void SfxMedium::Init_Impl()
           || !pImpl->m_aLogicName.startsWith("private:stream")) )
     {
         pImpl->m_pSet->ClearItem( SID_OUTPUTSTREAM );
-        SAL_WARN( "sfx.doc", "Unexpected Output stream parameter!\n" );
+        SAL_WARN( "sfx.doc", "Unexpected Output stream parameter!" );
     }
 
     if (!pImpl->m_aLogicName.isEmpty())
@@ -2977,7 +2977,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
             }
             else
             {
-                SAL_WARN( "sfx.doc", "Can not create a new temporary file for crash recovery!\n" );
+                SAL_WARN( "sfx.doc", "Can not create a new temporary file for crash recovery!" );
             }
         }
     }
@@ -3571,7 +3571,7 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
             }
             catch ( const uno::Exception& )
             {
-                SAL_WARN( "sfx.doc", "Couldn't use signing functionality!\n" );
+                SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
             }
 
             CloseAndRelease();
@@ -3597,7 +3597,7 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
             }
             catch( const uno::Exception& )
             {
-                SAL_WARN( "sfx.doc", "Couldn't use signing functionality!\n" );
+                SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
             }
         }
 

@@ -104,7 +104,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_FAIL( "Couldn't set the visual area for the object!\n" );
+                    OSL_FAIL( "Couldn't set the visual area for the object!" );
                 }
             }
 

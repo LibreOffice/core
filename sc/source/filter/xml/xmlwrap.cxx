@@ -346,7 +346,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     }
 
     // Set base URI
-    OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
+    OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!" );
     OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : OUString();
     // needed for relative URLs, but in clipboard copy/paste there may be none
     SAL_INFO_IF(aBaseURL.isEmpty(), "sc.filter", "ScXMLImportWrapper: no base URL");
@@ -785,7 +785,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         const OUString sTargetStorage("TargetStorage");
         xInfoSet->setPropertyValue( sTargetStorage, uno::Any( xStorage ) );
 
-        OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
+        OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!" );
         OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : OUString();
         OUString sPropName("BaseURI");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );

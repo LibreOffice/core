@@ -65,7 +65,7 @@ SAL_IMPLEMENT_MAIN()
     try {
 
         Reference< XComponentContext > xContext(::cppu::defaultBootstrap_InitialComponentContext());
-        OSL_ENSURE( xContext.is(), "### bootstrap failed!\n" );
+        OSL_ENSURE( xContext.is(), "### bootstrap failed!" );
 
         Reference< XMultiComponentFactory > xMgr = xContext->getServiceManager();
         OSL_ENSURE( xMgr.is(), "### cannot get initial service manager!" );

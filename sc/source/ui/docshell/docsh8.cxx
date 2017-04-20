@@ -1071,7 +1071,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                         }
                         nLen = aOString.getLength();
                         if (!bTest)
-                            SAL_WARN("sc", "ScDocShell::DBaseExport encoding error, string with default replacements: ``" << aString << "''\n");
+                            SAL_WARN("sc", "ScDocShell::DBaseExport encoding error, string with default replacements: ``" << aString << "''");
                     }
                     else
                         nLen = aString.getLength() * sizeof(sal_Unicode);
@@ -1080,7 +1080,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                             pColLengths[nCol] < nLen)
                     {
                         bTest = false;
-                        SAL_INFO("sc", "ScDocShell::DBaseExport: field width: " << pColLengths[nCol] << ", encoded length: " << nLen << "\n");
+                        SAL_INFO("sc", "ScDocShell::DBaseExport: field width: " << pColLengths[nCol] << ", encoded length: " << nLen);
                     }
                 }
                 else

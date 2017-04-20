@@ -288,8 +288,8 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
     SAL_WARN_IF( !xPackageStream.is(), "package.xstor", "No package stream is provided!" );
     SAL_WARN_IF( !xPackage.is(), "package.xstor", "No package component is provided!" );
     SAL_WARN_IF( !m_xContext.is(), "package.xstor", "No package stream is provided!" );
-    OSL_ENSURE( pParent, "No parent storage is provided!\n" );
-    OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML || !m_xOrigRelInfoStream.is(), "The Relations info makes sense only for OFOPXML format!\n" );
+    OSL_ENSURE( pParent, "No parent storage is provided!" );
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML || !m_xOrigRelInfoStream.is(), "The Relations info makes sense only for OFOPXML format!" );
 }
 
 OWriteStream_Impl::~OWriteStream_Impl()
@@ -340,7 +340,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
     SAL_WARN_IF( !m_bFlushed, "package.xstor", "This method must not be called for nonflushed streams!" );
     if ( m_bFlushed )
     {
-        SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!\n" );
+        SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!" );
         uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY_THROW );
         xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
 
@@ -704,7 +704,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     if ( m_bHasDataToFlush )
         throw io::IOException();
 
-    OSL_ENSURE( m_aTempURL.isEmpty() && !m_xCacheStream.is(), "The temporary must not exist!\n" );
+    OSL_ENSURE( m_aTempURL.isEmpty() && !m_xCacheStream.is(), "The temporary must not exist!" );
 
     // use new file as current persistent representation
     // the new file will be removed after it's stream is closed
@@ -882,7 +882,7 @@ void OWriteStream_Impl::Revert()
     if ( !m_bHasDataToFlush )
         return; // nothing to do
 
-    OSL_ENSURE( !m_aTempURL.isEmpty() || m_xCacheStream.is(), "The temporary must exist!\n" );
+    OSL_ENSURE( !m_aTempURL.isEmpty() || m_xCacheStream.is(), "The temporary must exist!" );
 
     if ( m_xCacheStream.is() )
     {
@@ -1526,7 +1526,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStorage >& xRelStorage, const OUString& aOrigStreamName, const OUString& aNewStreamName )
 {
     // at this point of time the old stream must be already cleaned
-    OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML, "The method should be used only with OFOPXML format!\n" );
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML, "The method should be used only with OFOPXML format!" );
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
@@ -1632,8 +1632,8 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted )
 , m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
-    OSL_ENSURE( pImpl, "No base implementation!\n" );
-    OSL_ENSURE( m_pImpl->m_rMutexRef.is(), "No mutex!\n" );
+    OSL_ENSURE( pImpl, "No base implementation!" );
+    OSL_ENSURE( m_pImpl->m_rMutexRef.is(), "No mutex!" );
 
     if ( !m_pImpl || !m_pImpl->m_rMutexRef.is() )
         throw uno::RuntimeException(); // just a disaster
@@ -1648,8 +1648,8 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
 , m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
-    OSL_ENSURE( pImpl && xStream.is(), "No base implementation!\n" );
-    OSL_ENSURE( m_pImpl->m_rMutexRef.is(), "No mutex!\n" );
+    OSL_ENSURE( pImpl && xStream.is(), "No base implementation!" );
+    OSL_ENSURE( m_pImpl->m_rMutexRef.is(), "No mutex!" );
 
     if ( !m_pImpl || !m_pImpl->m_rMutexRef.is() )
         throw uno::RuntimeException(); // just a disaster
@@ -1661,7 +1661,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
         m_xInStream = xStream->getInputStream();
         m_xOutStream = xStream->getOutputStream();
         m_xSeekable.set( xStream, uno::UNO_QUERY );
-        OSL_ENSURE( m_xInStream.is() && m_xOutStream.is() && m_xSeekable.is(), "Stream implementation is incomplete!\n" );
+        OSL_ENSURE( m_xInStream.is() && m_xOutStream.is() && m_xSeekable.is(), "Stream implementation is incomplete!" );
     }
 }
 
@@ -2426,7 +2426,7 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const OUString& aPass )
         throw lang::DisposedException();
     }
 
-    OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!\n" );
+    OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!" );
 
     m_pImpl->SetEncrypted( ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
 
@@ -2445,7 +2445,7 @@ void SAL_CALL OWriteStream::removeEncryption()
         throw lang::DisposedException();
     }
 
-    OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!\n" );
+    OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!" );
 
     m_pImpl->SetDecrypted();
 
@@ -2464,7 +2464,7 @@ void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::Named
         throw lang::DisposedException();
     }
 
-    OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!\n" );
+    OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!" );
 
     m_pImpl->SetEncrypted( aEncryptionData );
 
@@ -3117,7 +3117,7 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
            while ( pIterator.hasMoreElements( ) )
            {
-            OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!\n" );
+            OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!" );
 
             switch( nMessage )
             {

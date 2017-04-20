@@ -956,7 +956,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             OUString aMime("text/plain");
 
             uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
-            OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!\n" );
+            OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!" );
             if ( xProps.is() )
             {
                 xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );

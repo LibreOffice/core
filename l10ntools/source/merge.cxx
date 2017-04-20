@@ -47,7 +47,7 @@ namespace
         }
         catch (const PoIfstream::Exception&)
         {
-            SAL_WARN("l10ntools", rFileName.getStr() << " contains invalid entry\n");
+            SAL_WARN("l10ntools", rFileName.getStr() << " contains invalid entry");
             return false;
         }
         return true;

@@ -52,7 +52,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
     if ( pParentComponent )
         pParent = pParentComponent->GetWindow();
 
-    OSL_ENSURE( pParent, "No parent window is provided!\n" );
+    OSL_ENSURE( pParent, "No parent window is provided!" );
     if ( !pParent )
         throw lang::IllegalArgumentException(); // TODO
 
@@ -79,7 +79,7 @@ void VCLXHatchWindow::QueryObjAreaPixel( tools::Rectangle & aRect )
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Can't adjust rectangle size!\n" );
+            OSL_FAIL( "Can't adjust rectangle size!" );
         }
     }
 }
@@ -95,7 +95,7 @@ void VCLXHatchWindow::RequestObjAreaPixel( const tools::Rectangle & aRect )
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Can't request resizing!\n" );
+            OSL_FAIL( "Can't request resizing!" );
         }
     }
 }

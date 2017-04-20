@@ -30,7 +30,7 @@ public:
     TargetStateControl_Impl( sal_Int32& nVariable, sal_Int32 nValue )
     : m_nTargetStateVariable( nVariable )
     {
-        OSL_ENSURE( m_nTargetStateVariable == -1, "The target state variable is not initialized properly!\n" );
+        OSL_ENSURE( m_nTargetStateVariable == -1, "The target state variable is not initialized properly!" );
         m_nTargetStateVariable = nValue;
     }
 

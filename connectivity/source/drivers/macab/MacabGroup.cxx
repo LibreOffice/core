@@ -81,7 +81,7 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
                         }
                     }
                 }
-                OSL_ENSURE(bFound, "MacabGroup::MacabGroup : Could not find group member based on UID!\n");
+                OSL_ENSURE(bFound, "MacabGroup::MacabGroup : Could not find group member based on UID!");
                 CFRelease(sGroupMemberUID);
             }
         }

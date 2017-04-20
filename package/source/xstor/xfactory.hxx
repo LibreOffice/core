@@ -34,7 +34,7 @@ public:
     explicit OStorageFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
     {
-        OSL_ENSURE( xContext.is(), "No service manager is provided!\n" );
+        OSL_ENSURE( xContext.is(), "No service manager is provided!" );
     }
 
     static css::uno::Sequence< OUString > SAL_CALL

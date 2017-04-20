@@ -109,7 +109,7 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactor
 OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream,
                                       const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
-    OSL_ENSURE( xInStream.is() && xFactory.is(), "Wrong parameters are provided!\n" );
+    OSL_ENSURE( xInStream.is() && xFactory.is(), "Wrong parameters are provided!" );
 
     OUString aResult = GetNewTempFileURL_Impl( xFactory );
 
@@ -363,7 +363,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
 void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream,
                                                 const uno::Reference< io::XStream >& xCachedVisualRepresentation )
 {
-    OSL_ENSURE( xTargetStream.is() && xCachedVisualRepresentation.is(), "Invalid arguments!\n" );
+    OSL_ENSURE( xTargetStream.is() && xCachedVisualRepresentation.is(), "Invalid arguments!" );
 
     if ( !xTargetStream.is() || !xCachedVisualRepresentation.is() )
         throw uno::RuntimeException();
@@ -507,7 +507,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
 void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream )
 {
-    OSL_ENSURE( xTargetStream.is(), "Invalid argument!\n" );
+    OSL_ENSURE( xTargetStream.is(), "Invalid argument!" );
     if ( !xTargetStream.is() )
         throw uno::RuntimeException();
 
@@ -551,7 +551,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
 
             uno::Reference< io::XInputStream > xStream;
 
-            OSL_ENSURE( !m_pOleComponent || !m_aTempURL.isEmpty(), "The temporary file must exist if there is a component!\n" );
+            OSL_ENSURE( !m_pOleComponent || !m_aTempURL.isEmpty(), "The temporary file must exist if there is a component!" );
             if ( !m_aTempURL.isEmpty() )
             {
                 try
@@ -1059,7 +1059,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                     "The object waits for saveCompleted() call!",
                     static_cast< ::cppu::OWeakObject* >(this) );
 
-    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
+    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!" );
 
     bool bVisReplIsStored = false;
 
@@ -1531,11 +1531,11 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( !m_bWaitSaveCompleted && !bUseNew )
         return;
 
-    SAL_WARN_IF( !m_bWaitSaveCompleted, "embeddedobj.ole", "Unexpected saveCompleted() call!\n" );
+    SAL_WARN_IF( !m_bWaitSaveCompleted, "embeddedobj.ole", "Unexpected saveCompleted() call!" );
     if ( !m_bWaitSaveCompleted )
         throw io::IOException(); // TODO: illegal call
 
-    OSL_ENSURE( m_xNewObjectStream.is() && m_xNewParentStorage.is() , "Internal object information is broken!\n" );
+    OSL_ENSURE( m_xNewObjectStream.is() && m_xNewParentStorage.is() , "Internal object information is broken!" );
     if ( !m_xNewObjectStream.is() || !m_xNewParentStorage.is() )
         throw uno::RuntimeException(); // TODO: broken internal information
 
@@ -1704,7 +1704,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     {
         bStoreLoaded = false;
 
-        OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
+        OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!" );
 
         if ( !m_xObjectStream.is() )
             throw io::IOException(); //TODO: access denied

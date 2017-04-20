@@ -264,7 +264,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     else
         throw ucb::CommandAbortedException();
 
-    OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!\n" );
+    OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!" );
     if ( !aObjectInfo.Object.is() )
         throw uno::RuntimeException();
 
@@ -308,7 +308,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 
     // TODO/LATER: in case of iconify object the icon should be stored in aObjectInfo
 
-    OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!\n" );
+    OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!" );
     if ( !aObjectInfo.Object.is() )
         throw uno::RuntimeException();
 

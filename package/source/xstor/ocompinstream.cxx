@@ -41,7 +41,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 , m_bDisposed( false )
 , m_nStorageType( nStorageType )
 {
-    OSL_ENSURE( m_pImpl->m_rMutexRef.is(), "No mutex is provided!\n" );
+    OSL_ENSURE( m_pImpl->m_rMutexRef.is(), "No mutex is provided!" );
     if ( !m_pImpl->m_rMutexRef.is() )
         throw uno::RuntimeException(); // just a disaster
 

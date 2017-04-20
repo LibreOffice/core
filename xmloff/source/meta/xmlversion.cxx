@@ -378,7 +378,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             InputSource aParserInput;
 
             uno::Reference< beans::XPropertySet > xProps( xRoot, uno::UNO_QUERY );
-            OSL_ENSURE( xProps.is(), "Storage must implement XPropertySet!\n" );
+            OSL_ENSURE( xProps.is(), "Storage must implement XPropertySet!" );
             if ( xProps.is() )
             {
                 try {

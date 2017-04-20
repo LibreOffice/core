@@ -298,7 +298,7 @@ SalDisplay::SalDisplay( Display *display ) :
 #endif
     SalGenericData *pData = GetGenericData();
 
-    SAL_WARN_IF(  pData->GetDisplay(), "vcl", "Second SalDisplay created !!!\n" );
+    SAL_WARN_IF(  pData->GetDisplay(), "vcl", "Second SalDisplay created !!!" );
     pData->SetDisplay( this );
 
     m_nXDefaultScreen = SalX11Screen( DefaultScreen( pDisp_ ) );
@@ -2236,7 +2236,7 @@ void SalDisplay::PrintInfo() const
 
         char sHostname[ 120 ];
         gethostname (sHostname, 120 );
-        SAL_INFO( "vcl", "Client\n" );
+        SAL_INFO( "vcl", "Client" );
         SAL_INFO( "vcl", "\tHost              \t\"" << sHostname << "\"");
 
         SAL_INFO( "vcl", "Display" );

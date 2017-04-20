@@ -198,7 +198,7 @@ bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseab
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Could not register close listener!\n" );
+            OSL_FAIL( "Could not register close listener!" );
         }
     }
 
@@ -557,7 +557,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             xStatusIndicator = xStatFactory->createStatusIndicator();
                     }
 
-                    OSL_ENSURE( xStatusIndicator.is(), "Can not retrieve default status indicator!\n" );
+                    OSL_ENSURE( xStatusIndicator.is(), "Can not retrieve default status indicator!" );
 
                     if ( xStatusIndicator.is() )
                     {

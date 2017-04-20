@@ -681,7 +681,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                 }
                 catch(const uno::Exception& )
                 {
-                    OSL_FAIL( "Problem on storing of password library!\n" );
+                    OSL_FAIL( "Problem on storing of password library!" );
                     // TODO: error handling
                 }
             }
@@ -898,7 +898,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             }
             catch(const uno::Exception& )
             {
-                OSL_FAIL( "### couldn't open sub storage for library\n" );
+                OSL_FAIL( "### couldn't open sub storage for library" );
                 return false;
             }
         }

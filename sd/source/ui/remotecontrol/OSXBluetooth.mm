@@ -37,7 +37,7 @@
 {
     (void) rfcommChannel;
 
-    SAL_INFO( "sdremote.bluetooth", "ChannelDelegate::rfcommChannelClosed()\n");
+    SAL_INFO( "sdremote.bluetooth", "ChannelDelegate::rfcommChannelClosed()");
 
     if ( pSocket )
     {

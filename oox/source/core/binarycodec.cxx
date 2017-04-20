@@ -176,7 +176,7 @@ bool BinaryCodec_XOR::initCodec( const uno::Sequence< beans::NamedValue >& aData
         mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95PasswordHash", (sal_Int16)0 );
     }
     else
-        OSL_FAIL( "Unexpected key size!\n" );
+        OSL_FAIL( "Unexpected key size!" );
 
     return bResult;
 }
@@ -239,10 +239,10 @@ bool BinaryCodec_RCF::initCodec( const uno::Sequence< beans::NamedValue >& aData
             bResult = false;
         }
         else
-            OSL_FAIL( "Unexpected document ID!\n" );
+            OSL_FAIL( "Unexpected document ID!" );
     }
     else
-        OSL_FAIL( "Unexpected key size!\n" );
+        OSL_FAIL( "Unexpected key size!" );
 
     return bResult;
 }

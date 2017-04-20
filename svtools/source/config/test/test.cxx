@@ -99,7 +99,7 @@ void TestApplication::Main()
     // Init global servicemanager and set it for external services.
     ::comphelper::setProcessServiceFactory( TestApplication::getUNOServiceManager() );
     // Control success of operation.
-    OSL_ENSURE( !(::comphelper::getProcessServiceFactory()!=TestApplication::getUNOServiceManager()), "TestApplication::Main()\nGlobal servicemanager not right initialized.\n" );
+    OSL_ENSURE( !(::comphelper::getProcessServiceFactory()!=TestApplication::getUNOServiceManager()), "TestApplication::Main() Global servicemanager not right initialized." );
 
     /**-***********************************************************************************************************
         test area
@@ -110,7 +110,7 @@ void TestApplication::Main()
     #endif
 
 //  Execute();
-    OSL_FAIL( "Test was successful!\n" );
+    OSL_FAIL( "Test was successful!" );
 }
 
 

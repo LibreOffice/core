@@ -96,7 +96,7 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
             }
             else
             {
-                OSL_FAIL( "The backslash is not guarded!\n" );
+                OSL_FAIL( "The backslash is not guarded!" );
                 aPattern[nInd] += "\\";
             }
         }
@@ -176,7 +176,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     if ( !aArguments.getLength() )
         throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
-    OSL_ENSURE( aArguments.getLength() == 1, "Too many arguments are provided, only the first one will be used!\n" );
+    OSL_ENSURE( aArguments.getLength() == 1, "Too many arguments are provided, only the first one will be used!" );
 
     OUString aParamURL;
     uno::Reference< io::XStream > xStream;
@@ -319,7 +319,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
     {
         if ( aNames.getLength() < ++nLen )
         {
-            OSL_FAIL( "The size must be the same!\n" );
+            OSL_FAIL( "The size must be the same!" );
             aNames.realloc( nLen );
         }
 
@@ -328,7 +328,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
 
     if ( aNames.getLength() != nLen )
     {
-        OSL_FAIL( "The size must be the same!\n" );
+        OSL_FAIL( "The size must be the same!" );
         aNames.realloc( nLen );
     }
 

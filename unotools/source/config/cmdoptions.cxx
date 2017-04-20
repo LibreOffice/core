@@ -252,7 +252,7 @@ bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, co
             return m_aDisabledCommands.Lookup( aCommand );
         }
         default:
-            SAL_WARN( "unotools.config", "SvtCommandOptions_Impl::Lookup()\nUnknown option type given!\n" );
+            SAL_WARN( "unotools.config", "SvtCommandOptions_Impl::Lookup() Unknown option type given!" );
     }
 
     return false;

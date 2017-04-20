@@ -163,7 +163,7 @@ bool AquaSalGraphics::CheckContext()
         }
     }
 
-    SAL_WARN_IF( !mrContext && !mbPrinter, "vcl", "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
+    SAL_WARN_IF( !mrContext && !mbPrinter, "vcl", "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!" );
     return (mrContext != nullptr);
 }
 

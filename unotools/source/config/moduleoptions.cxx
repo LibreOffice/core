@@ -335,7 +335,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 *//*-*************************************************************************************************************/
 void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
 {
-    OSL_FAIL( "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
+    OSL_FAIL( "SvtModuleOptions_Impl::Notify() Not implemented yet!" );
 }
 
 /*-****************************************************************************************************
@@ -695,7 +695,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
     // Safe impossible cases.
     // We need values from ALL configuration keys.
     // Follow assignment use order of values in relation to our list of key names!
-    OSL_ENSURE( !(lProperties.getLength()!=lValues.getLength()), "SvtModuleOptions_Impl::impl_Read()\nI miss some values of configuration keys!\n" );
+    OSL_ENSURE( !(lProperties.getLength()!=lValues.getLength()), "SvtModuleOptions_Impl::impl_Read()\nI miss some values of configuration keys!" );
 
     // Algorithm:   We step over all given factory names and classify it. These enum value can be used as direct index
     //              in our member list m_lFactories! VAriable nPropertyStart marks start position of every factory

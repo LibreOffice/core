@@ -74,12 +74,12 @@ SheetDataContext::SheetDataContext( WorksheetFragmentBase& rFragment ) :
     mnRow( -1 ),
     mnCol( -1 )
 {
-    SAL_INFO( "sc.filter",  "start safe sheet data context - unlock\n" );
+    SAL_INFO( "sc.filter",  "start safe sheet data context - unlock" );
 }
 
 SheetDataContext::~SheetDataContext()
 {
-    SAL_INFO( "sc.filter",  "end safe sheet data context - relock\n" );
+    SAL_INFO( "sc.filter",  "end safe sheet data context - relock" );
 }
 
 ContextHandlerRef SheetDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
