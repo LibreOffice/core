@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_8af15ad0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-20T17:06:20Z",
+      "side": 0,
+      "message": "Moving this to a generic command and changing the number of properties from 8 to 1 looks wrong to me. But I don\u0027t know Writer.",
+      "revId": "6c73ca4671958cb066beecade5661e124c497e25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
