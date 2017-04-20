@@ -748,7 +748,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     // there is ambiguity which medium should be used here
     // for now the own medium has a preference
     SfxMedium* pMedDescrMedium = pMedium ? pMedium : pDocSh->GetMedium();
-    OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!\n" );
+    OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!" );
 
     xInfoSet->setPropertyValue( "BaseURI", makeAny( rBaseURL ) );
 

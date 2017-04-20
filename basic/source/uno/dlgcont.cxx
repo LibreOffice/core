@@ -271,7 +271,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     //Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
     //if( !xMSF.is() )
     //{
-    //  OSL_FAIL( "### couldn't get ProcessServiceFactory\n" );
+    //  OSL_FAIL( "### couldn't get ProcessServiceFactory" );
     //  return aRetAny;
     //}
 
@@ -282,7 +282,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
         UNO_QUERY );
     if( !xDialogModel.is() )
     {
-        OSL_FAIL( "### couldn't create com.sun.star.awt.UnoControlDialogModel component\n" );
+        OSL_FAIL( "### couldn't create com.sun.star.awt.UnoControlDialogModel component" );
         return aRetAny;
     }
 
@@ -321,7 +321,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     }
     catch(const Exception& )
     {
-        OSL_FAIL( "Parsing error\n" );
+        OSL_FAIL( "Parsing error" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
         return aRetAny;

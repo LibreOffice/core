@@ -978,7 +978,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
     // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
-    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
+    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!" );
     if ( m_bIsLink )
     {
         m_aEntryName = sEntName;
@@ -1157,11 +1157,11 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
     // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
-    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
+    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!" );
     if ( m_bIsLink )
         return;
 
-    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!\n" );
+    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!" );
 
     sal_Int32 nTargetStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
     sal_Int32 nOriginalStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
@@ -1285,14 +1285,14 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
     // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
-    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
+    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!" );
     if ( m_bIsLink )
     {
         m_aNewEntryName = sEntName;
         return;
     }
 
-    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!\n" );
+    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!" );
 
     sal_Int32 nTargetStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
     sal_Int32 nOriginalStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
@@ -1417,7 +1417,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
     // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
-    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
+    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!" );
     if ( m_bIsLink )
     {
         if ( bUseNew )
@@ -1434,7 +1434,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( !m_bWaitSaveCompleted )
         throw io::IOException(); // TODO: illegal call
 
-    OSL_ENSURE( m_xNewObjectStorage.is() && m_xNewParentStorage.is() , "Internal object information is broken!\n" );
+    OSL_ENSURE( m_xNewObjectStorage.is() && m_xNewParentStorage.is() , "Internal object information is broken!" );
     if ( !m_xNewObjectStorage.is() || !m_xNewParentStorage.is() )
         throw uno::RuntimeException(); // TODO: broken internal information
 
@@ -1569,7 +1569,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     }
     else
     {
-        OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!\n" );
+        OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!" );
 
         if ( !m_xObjectStorage.is() )
             throw io::IOException(); //TODO: access denied

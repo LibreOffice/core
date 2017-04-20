@@ -437,7 +437,7 @@ SvResizeWindow::SvResizeWindow
     , m_bActive( false )
     , m_pWrapper( pWrapper )
 {
-    OSL_ENSURE( pParent != nullptr && pWrapper != nullptr, "Wrong initialization of hatch window!\n" );
+    OSL_ENSURE( pParent != nullptr && pWrapper != nullptr, "Wrong initialization of hatch window!" );
     SetBackground();
     SetAccessibleRole( css::accessibility::AccessibleRole::EMBEDDED_OBJECT );
     m_aResizer.SetOuterRectPixel( tools::Rectangle( Point(), GetOutputSizePixel() ) );

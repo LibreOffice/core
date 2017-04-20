@@ -94,7 +94,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 
 void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedValue >& aObjectProps )
 {
-    OSL_ENSURE( m_xContext.is(), "No ServiceFactory is provided!\n" );
+    OSL_ENSURE( m_xContext.is(), "No ServiceFactory is provided!" );
     if ( !m_xContext.is() )
         throw uno::RuntimeException();
 
@@ -227,7 +227,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
         else if ( aMediaDescr[nInd].Name == "FilterName" )
             aMediaDescr[nInd].Value >>= m_aLinkFilterName;
 
-    OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!\n" );
+    OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!" );
 
     m_bReadOnly = true;
     if ( m_aLinkFilterName.getLength() )
@@ -295,12 +295,12 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
 {
     // the method is called in case object is inplace active and the object window was resized
 
-    OSL_ENSURE( m_xClientSite.is(), "The client site must be set for inplace active object!\n" );
+    OSL_ENSURE( m_xClientSite.is(), "The client site must be set for inplace active object!" );
     if ( m_xClientSite.is() )
     {
         uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
 
-        OSL_ENSURE( xInplaceClient.is(), "The client site must support XInplaceClient to allow inplace activation!\n" );
+        OSL_ENSURE( xInplaceClient.is(), "The client site must support XInplaceClient to allow inplace activation!" );
         if ( xInplaceClient.is() )
         {
             try {
@@ -308,7 +308,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "Exception on request to resize!\n" );
+                OSL_FAIL( "Exception on request to resize!" );
             }
         }
     }
@@ -552,7 +552,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
     if ( m_xObjectStorage.is() )
     {
         uno::Reference< lang::XComponent > xComp( m_xObjectStorage, uno::UNO_QUERY );
-        OSL_ENSURE( xComp.is(), "Storage does not support XComponent!\n" );
+        OSL_ENSURE( xComp.is(), "Storage does not support XComponent!" );
 
         if ( xComp.is() )
         {

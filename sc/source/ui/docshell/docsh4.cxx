@@ -1081,7 +1081,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
                             catch ( uno::Exception& )
                             {
-                                OSL_FAIL( "SID_SHARE_DOC: caught exception\n" );
+                                OSL_FAIL( "SID_SHARE_DOC: caught exception" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try
@@ -2465,7 +2465,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL( "ScDocShell::LoadSharedDocument(): caught exception\n" );
+        OSL_FAIL( "ScDocShell::LoadSharedDocument(): caught exception" );
         SC_MOD()->SetInSharedDocLoading( false );
         try
         {

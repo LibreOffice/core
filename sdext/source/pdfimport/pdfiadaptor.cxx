@@ -157,7 +157,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             catch(const uno::Exception& e)
             {
                 (void)e;
-                SAL_INFO("sdext.pdfimport", "subfilter exception: " << e.Message << "\n");
+                SAL_INFO("sdext.pdfimport", "subfilter exception: " << e.Message);
             }
 
             SAL_INFO("sdext.pdfimport", "subfilter: " << xSubFilter.get() );

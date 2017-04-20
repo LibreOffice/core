@@ -1861,7 +1861,7 @@ void PowerPointExport::WriteShapeTree( const FSHelperPtr& pFS, PageType ePageTyp
         }
 
         if ( GetShapeByIndex( GetCurrentGroupIndex(), true ) ) {
-            SAL_INFO("sd.eppt", "mType: \"" << mType.getStr() << "\"\n");
+            SAL_INFO("sd.eppt", "mType: " << mType);
             aDML.WriteShape( mXShape );
         }
     }

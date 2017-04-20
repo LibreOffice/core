@@ -569,7 +569,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
         hr = pStg->DestroyElement( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()) );
         hr = pStg->DestroyElement( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()) );
 
-        OSL_ENSURE( SUCCEEDED( hr ), "Can not destroy created stream!\n" );
+        OSL_ENSURE( SUCCEEDED( hr ), "Can not destroy created stream!" );
         if ( FAILED( hr ) )
             hr = E_FAIL;
     }
@@ -587,7 +587,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 
     if ( !fSameAsLoad && pStgSave != m_pMasterStorage )
     {
-        OSL_ENSURE( m_pMasterStorage, "How could the document be initialized without storage!??\n" );
+        OSL_ENSURE( m_pMasterStorage, "How could the document be initialized without storage!??" );
         HRESULT hr = m_pMasterStorage->CopyTo( NULL, nullptr, nullptr, pStgSave );
         if ( FAILED( hr ) ) return E_FAIL;
 

@@ -1398,7 +1398,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
 css::uno::Reference<css::accessibility::XAccessible>
 ViewShell::CreateAccessibleDocumentView (::sd::Window* )
 {
-    OSL_FAIL("ViewShell::CreateAccessibleDocumentView should not be called!, perhaps Meyers, 3rd edition, Item 9:\n");
+    OSL_FAIL("ViewShell::CreateAccessibleDocumentView should not be called!, perhaps Meyers, 3rd edition, Item 9:");
 
     return css::uno::Reference<css::accessibility::XAccessible> ();
 }

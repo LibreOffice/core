@@ -202,7 +202,7 @@ void ScClient::ViewChanged()
         aSz = xObj->getVisualAreaSize( GetAspect() );
     } catch ( embed::NoVisualAreaSizeException& )
     {
-        OSL_FAIL("The visual area size must be available!\n");
+        OSL_FAIL("The visual area size must be available!");
     }
 
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );

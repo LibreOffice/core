@@ -173,7 +173,7 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
     {
         // the link URL was not changed
         uno::Reference< embed::XEmbeddedObject > xObject = pOleNode->GetOLEObj().GetOleRef();
-        OSL_ENSURE( xObject.is(), "The object must exist always!\n" );
+        OSL_ENSURE( xObject.is(), "The object must exist always!" );
         if ( xObject.is() )
         {
             // let the object reload the link
@@ -306,7 +306,7 @@ bool SwOLENode::SavePersistentData()
         if( p )
         {
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
-            OSL_ENSURE( !pCnt || &rCnt == pCnt, "The helper is assigned to unexpected container!\n" );
+            OSL_ENSURE( !pCnt || &rCnt == pCnt, "The helper is assigned to unexpected container!" );
         }
 #endif
 
@@ -524,7 +524,7 @@ bool SwOLENode::UpdateLinkURL_Impl()
 
             uno::Reference< embed::XEmbeddedObject > xObj = aOLEObj.xOLERef.GetObject();
             uno::Reference< embed::XCommonEmbedPersist > xPersObj( xObj, uno::UNO_QUERY );
-            OSL_ENSURE( xPersObj.is(), "The object must exist!\n" );
+            OSL_ENSURE( xPersObj.is(), "The object must exist!" );
             if ( xPersObj.is() )
             {
                 try
@@ -789,7 +789,7 @@ SwOLEObj::~SwOLEObj()
         if( p )
         {
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
-            OSL_ENSURE( !pCnt || &rCnt == pCnt, "The helper is assigned to unexpected container!\n" );
+            OSL_ENSURE( !pCnt || &rCnt == pCnt, "The helper is assigned to unexpected container!" );
         }
 #endif
 

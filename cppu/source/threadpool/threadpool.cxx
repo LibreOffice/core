@@ -60,7 +60,7 @@ namespace cppu_threadpool
 
     DisposedCallerAdmin::~DisposedCallerAdmin()
     {
-        SAL_WARN_IF( !m_lst.empty(), "cppu.threadpool", "DisposedCallerList :  " << m_lst.size() << " left\n");
+        SAL_WARN_IF( !m_lst.empty(), "cppu.threadpool", "DisposedCallerList :  " << m_lst.size() << " left");
     }
 
     void DisposedCallerAdmin::dispose( sal_Int64 nDisposeId )
@@ -107,7 +107,7 @@ namespace cppu_threadpool
 
     ThreadPool::~ThreadPool()
     {
-        SAL_WARN_IF( m_mapQueue.size(), "cppu.threadpool", "ThreadIdHashMap:  " << m_mapQueue.size() << " left\n");
+        SAL_WARN_IF( m_mapQueue.size(), "cppu.threadpool", "ThreadIdHashMap:  " << m_mapQueue.size() << " left");
     }
 
     void ThreadPool::dispose( sal_Int64 nDisposeId )

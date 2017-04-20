@@ -114,7 +114,7 @@ void Communicator::execute()
         }
     }
 
-    SAL_INFO ("sdremote", "Exiting transmission loop\n");
+    SAL_INFO ("sdremote", "Exiting transmission loop");
 
     disposeListener();
 

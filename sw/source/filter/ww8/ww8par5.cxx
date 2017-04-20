@@ -516,7 +516,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
     const SvtFilterOptions &rOpt = SvtFilterOptions::Get();
     bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
-    OSL_ENSURE(!m_aFieldStack.empty(), "Empty field stack\n");
+    OSL_ENSURE(!m_aFieldStack.empty(), "Empty field stack");
     if (!m_aFieldStack.empty())
     {
         /*
@@ -861,7 +861,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     WW8FieldDesc aF;
     bool bOk = pF->GetPara(pRes->nCp2OrIdx, aF);
 
-    OSL_ENSURE(bOk, "WW8: Bad Field!\n");
+    OSL_ENSURE(bOk, "WW8: Bad Field!");
     if (aF.nId == 33) aF.bCodeNest=false; // do not recurse into nested page fields
     bool bCodeNest = aF.bCodeNest;
     if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and lose the inner data

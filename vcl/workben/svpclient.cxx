@@ -267,7 +267,7 @@ IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
 
         Bitmap aBitmap = aGraphicResult.GetBitmap();
 
-        SAL_INFO("vcl", "got bitmap of size " << aBitmap.GetSizePixel().Width() << "x" << aBitmap.GetSizePixel().Height() << "\n");
+        SAL_INFO("vcl", "got bitmap of size " << aBitmap.GetSizePixel().Width() << "x" << aBitmap.GetSizePixel().Height());
         Size aFixedSize( aBitmap.GetSizePixel() );
         aFixedSize.Width() += 10;
         aFixedSize.Height() += 10;

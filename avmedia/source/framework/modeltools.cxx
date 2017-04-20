@@ -74,7 +74,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
     const bool bIsKMZ = rSourceURL.endsWithIgnoreAsciiCase(".kmz");
     if( !bIsDAE && !bIsKMZ )
     {
-        SAL_WARN("avmedia.opengl", "KmzDae2Gltf converter got a file with wrong extension\n" << rSourceURL);
+        SAL_WARN("avmedia.opengl", "KmzDae2Gltf converter got a file with wrong extension " << rSourceURL);
         return false;
     }
 
@@ -108,7 +108,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN("avmedia.opengl", "Exception while trying to copy source file to the temp folder for conversion:\n" << sInput);
+            SAL_WARN("avmedia.opengl", "Exception while trying to copy source file to the temp folder for conversion: " << sInput);
             return false;
         }
     }
@@ -121,7 +121,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
         lcl_UnzipKmz(sInput, sOutput, sDaeFilePath);
         if ( sDaeFilePath.isEmpty() )
         {
-            SAL_WARN("avmedia.opengl", "Cannot find dae file in kmz:\n" << rSourceURL);
+            SAL_WARN("avmedia.opengl", "Cannot find the file in kmz: " << rSourceURL);
             return false;
         }
 
