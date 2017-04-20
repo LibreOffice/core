@@ -37,8 +37,7 @@ public:
 private:
     virtual sal_uLong Read( SwDoc&, const OUString&, SwPaM&, const OUString& ) override;
 
-    uno::Reference<css::xml::dom::XDocument> OpenDocument() const;
-    static comphelper::SequenceAsHashMap GetGrabBag( const uno::Reference<lang::XComponent>& xDocument );
+    static bool MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks );
 };
 
 #endif
