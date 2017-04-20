@@ -25,9 +25,13 @@
 #include <rsctop.hxx>
 #include <tools/resid.hxx>
 
-class RscConst : public RscTop
+class RscEnum : public RscTop
 {
-protected:
+    struct RscEnumInst
+    {
+        sal_uInt32  nValue; // constant position in the array
+        bool        bDflt;  // is default
+    };
     struct VarEle
     {
         Atom    nId;    // constant name
@@ -36,24 +40,14 @@ protected:
     VarEle *        pVarArray;  // pointer to the field with constant
     sal_uInt32      nEntries;   // number of entries in field
 public:
-                    RscConst( Atom nId, RESOURCE_TYPE nTypId );
-                    virtual ~RscConst() override;
+                    RscEnum( Atom nId, RESOURCE_TYPE nTypId );
+                    virtual ~RscEnum() override;
                     // sets the allowed values
     void            SetConstant( Atom nVarName, sal_Int32 lValue );
     bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;
     bool            GetValueConst( sal_Int32 nValue, Atom  * pConstId ) const;
     sal_uInt32      GetConstPos( Atom nConstId );
-};
 
-class RscEnum : public RscConst
-{
-    struct RscEnumInst
-    {
-        sal_uInt32  nValue; // constant position in the array
-        bool        bDflt;  // is default
-    };
-public:
-                    RscEnum( Atom nId, RESOURCE_TYPE nTypId );
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
     sal_uInt32      Size() const override { return ALIGNED_SIZE(sizeof(RscEnumInst)); }
 

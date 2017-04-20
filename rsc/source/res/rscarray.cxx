@@ -339,7 +339,7 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 
 static void WriteSrc( RscInstNode * pNode, FILE * fOutput, RscTypCont * pTC,
                       sal_uInt32 nTab, const char * pVarName,
-                      CLASS_DATA pDfltData, RscConst * pTypeClass )
+                      CLASS_DATA pDfltData, RscEnum * pTypeClass )
 {
     if( pNode )
     {

@@ -44,7 +44,7 @@
 
 #include <unordered_map>
 
-void RscTypCont::SETCONST( RscConst * pClass, const char * szString, sal_uInt32 nVal )
+void RscTypCont::SETCONST( RscEnum * pClass, const char * szString, sal_uInt32 nVal )
 {
 #if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "setconst : %s\n", szString );
@@ -53,7 +53,7 @@ void RscTypCont::SETCONST( RscConst * pClass, const char * szString, sal_uInt32 
                          CONSTNAME, nVal ), nVal );
 }
 
-void RscTypCont::SETCONST( RscConst * pClass, Atom nName, sal_uInt32 nVal )
+void RscTypCont::SETCONST( RscEnum * pClass, Atom nName, sal_uInt32 nVal )
 {
 #if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "setconst hash: %u\n", (unsigned int)nName );

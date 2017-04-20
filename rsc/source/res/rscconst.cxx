@@ -26,19 +26,19 @@
 #include <rschash.hxx>
 #include <tools/resid.hxx>
 
-RscConst::RscConst( Atom nId, RESOURCE_TYPE nTypeId )
+RscEnum::RscEnum( Atom nId, RESOURCE_TYPE nTypeId )
     : RscTop( nId, nTypeId )
     , pVarArray(nullptr), nEntries(0)
 {
 }
 
-RscConst::~RscConst()
+RscEnum::~RscEnum()
 {
     if( pVarArray )
         rtl_freeMemory( static_cast<void *>(pVarArray) );
 }
 
-void RscConst::SetConstant( Atom nVarName, sal_Int32 lValue )
+void RscEnum::SetConstant( Atom nVarName, sal_Int32 lValue )
 {
     if( pVarArray )
         pVarArray = static_cast<VarEle *>(rtl_reallocateMemory( static_cast<void *>(pVarArray),
@@ -50,7 +50,7 @@ void RscConst::SetConstant( Atom nVarName, sal_Int32 lValue )
     nEntries++;
 }
 
-bool RscConst::GetConstValue( Atom nConst, sal_Int32 * pValue ) const
+bool RscEnum::GetConstValue( Atom nConst, sal_Int32 * pValue ) const
 {
     sal_uInt32 i = 0;
 
@@ -65,7 +65,7 @@ bool RscConst::GetConstValue( Atom nConst, sal_Int32 * pValue ) const
     return false;
 }
 
-bool RscConst::GetValueConst( sal_Int32 lValue, Atom * pConst ) const
+bool RscEnum::GetValueConst( sal_Int32 lValue, Atom * pConst ) const
 {
     sal_uInt32 i = 0;
 
@@ -80,7 +80,7 @@ bool RscConst::GetValueConst( sal_Int32 lValue, Atom * pConst ) const
     return false;
 }
 
-sal_uInt32 RscConst::GetConstPos( Atom nConst )
+sal_uInt32 RscEnum::GetConstPos( Atom nConst )
 {
     sal_uInt32 i = 0;
 
@@ -91,11 +91,6 @@ sal_uInt32 RscConst::GetConstPos( Atom nConst )
     }
 
     return nEntries;
-}
-
-RscEnum::RscEnum( Atom nId, RESOURCE_TYPE nTypeId )
-    : RscConst( nId, nTypeId )
-{
 }
 
 ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*/ )
