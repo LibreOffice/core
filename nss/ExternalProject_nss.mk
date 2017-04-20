@@ -72,8 +72,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(if $(filter YES,$(CROSS_COMPILING)),\
 		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py") \
 		NSDISTMODE=copy \
-		$(MAKE) -j1 nss_build_all \
-		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
+		$(MAKE) -j1 CCC="$(CXX)" nss_build_all \
 		$(if $(filter MACOSX,$(OS)),\
 			&& chmod u+w $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dylib \
 			&& $(PERL) \
