@@ -39,8 +39,8 @@ public:
     virtual ~ScImportOptionsDlg() override;
     virtual void dispose() override;
 
-    virtual void GetImportOptions( ScImportOptions& rOptions ) const;
-    virtual void SaveImportOptions() const;
+    void GetImportOptions( ScImportOptions& rOptions ) const;
+    void SaveImportOptions() const;
     virtual OString GetScreenshotId() const override;
 
 private:
