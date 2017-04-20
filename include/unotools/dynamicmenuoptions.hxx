@@ -39,11 +39,10 @@
 /*-************************************************************************************************************
     @descr          You can use these enum values to specify right menu if you call our interface methods.
 *//*-*************************************************************************************************************/
-enum EDynamicMenuType
+enum class EDynamicMenuType
 {
-    E_NEWMENU       =   0,
-    E_WIZARDMENU    =   1,
-    E_HELPBOOKMARKS =   2
+    NewMenu       =   0,
+    WizardMenu    =   1
 };
 
 /*-************************************************************************************************************

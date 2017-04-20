@@ -322,7 +322,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
             return;
 
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aDynamicMenuEntries =
-            SvtDynamicMenuOptions().GetMenu( m_bNewMenu ? E_NEWMENU : E_WIZARDMENU );
+            SvtDynamicMenuOptions().GetMenu( m_bNewMenu ? EDynamicMenuType::NewMenu : EDynamicMenuType::WizardMenu );
 
         OUString aTitle;
         OUString aURL;
