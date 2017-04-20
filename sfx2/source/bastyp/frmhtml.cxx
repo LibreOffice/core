@@ -63,39 +63,39 @@ void SfxFrameHTMLParser::ParseFrameOptions(
     {
         switch( rOption.GetToken() )
         {
-        case HTML_O_BORDERCOLOR:
+        case HtmlOptionId::BORDERCOLOR:
             {
                 Color aColor;
                 rOption.GetColor( aColor );
                 pFrame->SetWallpaper( Wallpaper( aColor ) );
                 break;
             }
-        case HTML_O_SRC:
+        case HtmlOptionId::SRC:
             pFrame->SetURL(
                     INetURLObject::GetAbsURL(
                         rBaseURL, rOption.GetString()) );
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             pFrame->SetName( rOption.GetString() );
             break;
-        case HTML_O_MARGINWIDTH:
+        case HtmlOptionId::MARGINWIDTH:
             aMargin.Width() = rOption.GetNumber();
 
             if( !bMarginHeight )
                 aMargin.Height() = 0;
             bMarginWidth = true;
             break;
-        case HTML_O_MARGINHEIGHT:
+        case HtmlOptionId::MARGINHEIGHT:
             aMargin.Height() = rOption.GetNumber();
 
             if( !bMarginWidth )
                 aMargin.Width() = 0;
             bMarginHeight = true;
             break;
-        case HTML_O_SCROLLING:
+        case HtmlOptionId::SCROLLING:
             pFrame->SetScrollingMode( rOption.GetEnum( aScrollingTable, ScrollingMode::Auto ) );
             break;
-        case HTML_O_FRAMEBORDER:
+        case HtmlOptionId::FRAMEBORDER:
         {
             const OUString& aStr = rOption.GetString();
             bool bBorder = true;
@@ -105,7 +105,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             pFrame->SetFrameBorder( bBorder );
             break;
         }
-        case HTML_O_NORESIZE:
+        case HtmlOptionId::NORESIZE:
             pFrame->SetResizable( false );
             break;
         default:

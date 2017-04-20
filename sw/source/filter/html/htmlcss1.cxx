@@ -1671,7 +1671,7 @@ void SwHTMLParser::NewStyle()
     for (size_t i = rOptions2.size(); i; )
     {
         const HTMLOption& rOption = rOptions2[--i];
-        if( HTML_O_TYPE == rOption.GetToken() )
+        if( HtmlOptionId::TYPE == rOption.GetToken() )
             sType = rOption.GetString();
     }
 
@@ -1752,15 +1752,16 @@ void SwHTMLParser::InsertLink()
             const HTMLOption& rOption = rOptions2[--i];
             switch( rOption.GetToken() )
             {
-                case HTML_O_REL:
+                case HtmlOptionId::REL:
                     sRel = rOption.GetString();
                     break;
-                case HTML_O_HREF:
+                case HtmlOptionId::HREF:
                     sHRef = URIHelper::SmartRel2Abs( INetURLObject( m_sBaseURL ), rOption.GetString(), Link<OUString *, bool>(), false );
                     break;
-                case HTML_O_TYPE:
+                case HtmlOptionId::TYPE:
                     sType = rOption.GetString();
                     break;
+                default: break;
             }
         }
 

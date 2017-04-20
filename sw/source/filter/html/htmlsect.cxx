@@ -70,29 +70,29 @@ void SwHTMLParser::NewDivision( int nToken )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             if( HTML_DIVISION_ON==nToken )
                 eAdjust = rOption.GetEnum( aHTMLPAlignTable, eAdjust );
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_LANG:
+        case HtmlOptionId::LANG:
             aLang = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
-        case HTML_O_HREF:
+        case HtmlOptionId::HREF:
             aHRef =  rOption.GetString();
             break;
-        case HTML_O_TITLE:
+        case HtmlOptionId::TITLE:
             {
                 const OUString& rType = rOption.GetString();
                 if( rType.equalsIgnoreAsciiCase("header") )
@@ -100,6 +100,8 @@ void SwHTMLParser::NewDivision( int nToken )
                 else if( rType.equalsIgnoreAsciiCase("footer") )
                     bFooter = true;
             }
+            break;
+        default: break;
         }
     }
 
@@ -544,34 +546,34 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_LANG:
+        case HtmlOptionId::LANG:
             aLang = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
-        case HTML_O_COLS:
+        case HtmlOptionId::COLS:
             nCols = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             nWidth = rOption.GetNumber();
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             if( bPrcWidth && nWidth>100 )
                 nWidth = 100;
             break;
-        case HTML_O_GUTTER:
+        case HtmlOptionId::GUTTER:
             nGutter = (sal_uInt16)rOption.GetNumber();
             break;
-
+        default: break;
         }
     }
 

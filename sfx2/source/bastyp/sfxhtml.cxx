@@ -91,12 +91,8 @@ bool SfxHTMLParser::ParseMapOptions(
     for (size_t i = rOptions.size(); i; )
     {
         const HTMLOption& aOption = rOptions[--i];
-        switch( aOption.GetToken() )
-        {
-        case HTML_O_NAME:
+        if ( aOption.GetToken() == HtmlOptionId::NAME )
             aName = aOption.GetString();
-            break;
-        }
     }
 
     if( !aName.isEmpty() )
@@ -125,39 +121,39 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
         const HTMLOption& rOption = rOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             aName = rOption.GetString();
             break;
-        case HTML_O_SHAPE:
+        case HtmlOptionId::SHAPE:
             rOption.GetEnum( nShape, aAreaShapeOptEnums );
             break;
-        case HTML_O_COORDS:
+        case HtmlOptionId::COORDS:
             rOption.GetNumbers( aCoords );
             break;
-        case HTML_O_HREF:
+        case HtmlOptionId::HREF:
             aHRef = INetURLObject::GetAbsURL( rBaseURL, rOption.GetString() );
             break;
-        case HTML_O_NOHREF:
+        case HtmlOptionId::NOHREF:
             bNoHRef = true;
             break;
-        case HTML_O_ALT:
+        case HtmlOptionId::ALT:
             aAlt = rOption.GetString();
             break;
-        case HTML_O_TARGET:
+        case HtmlOptionId::TARGET:
             aTarget = rOption.GetString();
             break;
 
-        case HTML_O_ONMOUSEOVER:
+        case HtmlOptionId::ONMOUSEOVER:
             eScrpType = JAVASCRIPT;
             SAL_FALLTHROUGH;
-        case HTML_O_SDONMOUSEOVER:
+        case HtmlOptionId::SDONMOUSEOVER:
             nEvent = nEventMouseOver;
             goto IMAPOBJ_SETEVENT;
 
-        case HTML_O_ONMOUSEOUT:
+        case HtmlOptionId::ONMOUSEOUT:
             eScrpType = JAVASCRIPT;
             SAL_FALLTHROUGH;
-        case HTML_O_SDONMOUSEOUT:
+        case HtmlOptionId::SDONMOUSEOUT:
             nEvent = nEventMouseOut;
             goto IMAPOBJ_SETEVENT;
 IMAPOBJ_SETEVENT:
@@ -171,6 +167,7 @@ IMAPOBJ_SETEVENT:
                 }
             }
             break;
+        default: break;
         }
     }
 

@@ -34,6 +34,7 @@ namespace com { namespace sun { namespace star {
 class Color;
 class SvNumberFormatter;
 class SvKeyValueIterator;
+enum class HtmlOptionId;
 
 #define HTMLFONTSZ1_DFLT 7
 #define HTMLFONTSZ2_DFLT 10
@@ -86,14 +87,14 @@ class SVT_DLLPUBLIC HTMLOption
 {
     OUString aValue;          // value of the option (always as string)
     OUString aToken;          // name of the option as string
-    sal_uInt16 nToken;        // and respective token
+    HtmlOptionId nToken;        // and respective token
 
 public:
 
-    HTMLOption( sal_uInt16 nTyp, const OUString& rToken, const OUString& rValue );
+    HTMLOption( HtmlOptionId nTyp, const OUString& rToken, const OUString& rValue );
 
     // name of the option...
-    sal_uInt16 GetToken() const { return nToken; }  // ... as enum
+    HtmlOptionId GetToken() const { return nToken; }  // ... as enum
     const OUString& GetTokenString() const { return aToken; } // ... as string
 
     // value of the option ...
@@ -226,7 +227,7 @@ public:
     // Determine the options. pNoConvertToken is the optional token
     // of an option, for which the CR/LFs are not deleted from the value
     // of the option.
-    const HTMLOptions& GetOptions( sal_uInt16 *pNoConvertToken=nullptr );
+    const HTMLOptions& GetOptions( HtmlOptionId *pNoConvertToken=nullptr );
 
     // for asynchronous reading from the SvStream
     virtual void Continue( int nToken ) override;

@@ -113,12 +113,12 @@ void EditHTMLParser::NextToken( int nToken )
             const HTMLOption& aOption = aOptions[i];
             switch( aOption.GetToken() )
             {
-                case HTML_O_HTTPEQUIV:
+                case HtmlOptionId::HTTPEQUIV:
                 {
                     bEquiv = true;
                 }
                 break;
-                case HTML_O_CONTENT:
+                case HtmlOptionId::CONTENT:
                 {
                     if ( bEquiv )
                     {
@@ -128,6 +128,7 @@ void EditHTMLParser::NextToken( int nToken )
                     }
                 }
                 break;
+                default: break;
             }
         }
 
@@ -700,21 +701,17 @@ void EditHTMLParser::StartPara( bool bReal )
         SvxAdjust eAdjust = SvxAdjust::Left;
         for (const auto & aOption : aOptions)
         {
-            switch( aOption.GetToken() )
+            if( aOption.GetToken() == HtmlOptionId::ALIGN )
             {
-                case HTML_O_ALIGN:
-                {
-                    OUString const& rTmp(aOption.GetString());
-                    if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_right))
-                        eAdjust = SvxAdjust::Right;
-                    else if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_middle))
-                        eAdjust = SvxAdjust::Center;
-                    else if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_center))
-                        eAdjust = SvxAdjust::Center;
-                    else
-                        eAdjust = SvxAdjust::Left;
-                }
-                break;
+                OUString const& rTmp(aOption.GetString());
+                if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_right))
+                    eAdjust = SvxAdjust::Right;
+                else if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_middle))
+                    eAdjust = SvxAdjust::Center;
+                else if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_center))
+                    eAdjust = SvxAdjust::Center;
+                else
+                    eAdjust = SvxAdjust::Left;
             }
         }
         SfxItemSet aItemSet = mpEditEngine->GetEmptyItemSet();
@@ -758,12 +755,8 @@ void EditHTMLParser::AnchorStart()
 
         for (const auto & aOption : aOptions)
         {
-            switch( aOption.GetToken() )
-            {
-                case HTML_O_HREF:
-                    aRef = aOption.GetString();
-                break;
-            }
+            if( aOption.GetToken() == HtmlOptionId::HREF)
+                aRef = aOption.GetString();
         }
 
         if ( !aRef.isEmpty() )

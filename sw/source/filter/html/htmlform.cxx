@@ -1249,34 +1249,34 @@ void SwHTMLParser::NewForm( bool bAppend )
 
         switch( rOption.GetToken() )
         {
-        case HTML_O_ACTION:
+        case HtmlOptionId::ACTION:
             aAction = rOption.GetString();
             break;
-        case HTML_O_METHOD:
+        case HtmlOptionId::METHOD:
             nMethod = rOption.GetEnum( aHTMLFormMethodTable, nMethod );
             break;
-        case HTML_O_ENCTYPE:
+        case HtmlOptionId::ENCTYPE:
             nEncType = rOption.GetEnum( aHTMLFormEncTypeTable, nEncType );
             break;
-        case HTML_O_TARGET:
+        case HtmlOptionId::TARGET:
             sTarget = rOption.GetString();
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             sName = rOption.GetString();
             break;
 
-        case HTML_O_SDONSUBMIT:
+        case HtmlOptionId::SDONSUBMIT:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONSUBMIT:
+        case HtmlOptionId::ONSUBMIT:
             nEvent = HTML_ET_ONSUBMITFORM;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONRESET:
+        case HtmlOptionId::SDONRESET:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONRESET:
+        case HtmlOptionId::ONRESET:
             nEvent = HTML_ET_ONRESETFORM;
             bSetEvent = true;
             break;
@@ -1405,7 +1405,7 @@ void SwHTMLParser::InsertInput()
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
     const OUString& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
-    sal_uInt16 nKeepCRLFToken = HTML_O_VALUE;
+    HtmlOptionId nKeepCRLFToken = HtmlOptionId::VALUE;
     const HTMLOptions& rHTMLOptions = GetOptions( &nKeepCRLFToken );
     for (size_t i = rHTMLOptions.size(); i; )
     {
@@ -1416,95 +1416,95 @@ void SwHTMLParser::InsertInput()
 
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_TYPE:
+        case HtmlOptionId::TYPE:
             eType = rOption.GetInputType();
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             sName = rOption.GetString();
             break;
-        case HTML_O_VALUE:
+        case HtmlOptionId::VALUE:
             sText = rOption.GetString();
             bValue = true;
             break;
-        case HTML_O_CHECKED:
+        case HtmlOptionId::CHECKED:
             nChecked = TRISTATE_TRUE;
             break;
-        case HTML_O_DISABLED:
+        case HtmlOptionId::DISABLED:
             bDisabled = true;
             break;
-        case HTML_O_MAXLENGTH:
+        case HtmlOptionId::MAXLENGTH:
             nMaxLen = (sal_Int16)rOption.GetNumber();
             break;
-        case HTML_O_SIZE:
+        case HtmlOptionId::SIZE:
             nSize = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_SRC:
+        case HtmlOptionId::SRC:
             sImgSrc = rOption.GetString();
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             // erstmal nur als Pixelwerte merken!
             nWidth = rOption.GetNumber();
             break;
-        case HTML_O_HEIGHT:
+        case HtmlOptionId::HEIGHT:
             // erstmal nur als Pixelwerte merken!
             nHeight = rOption.GetNumber();
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             eVertOri =
                 rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
             eHoriOri =
                 rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
-        case HTML_O_TABINDEX:
+        case HtmlOptionId::TABINDEX:
             // erstmal nur als Pixelwerte merken!
             nTabIndex = rOption.GetNumber();
             break;
 
-        case HTML_O_SDONFOCUS:
+        case HtmlOptionId::SDONFOCUS:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONFOCUS:
+        case HtmlOptionId::ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONBLUR:               // eigtl. nur EDIT
+        case HtmlOptionId::SDONBLUR:               // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONBLUR:
+        case HtmlOptionId::ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONCLICK:
+        case HtmlOptionId::SDONCLICK:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONCLICK:
+        case HtmlOptionId::ONCLICK:
             nEvent = HTML_ET_ONCLICK;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONCHANGE:             // eigtl. nur EDIT
+        case HtmlOptionId::SDONCHANGE:             // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONCHANGE:
+        case HtmlOptionId::ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONSELECT:             // eigtl. nur EDIT
+        case HtmlOptionId::SDONSELECT:             // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONSELECT:
+        case HtmlOptionId::ONSELECT:
             nEvent = HTML_ET_ONSELECT;
             bSetEvent = true;
             break;
@@ -1894,71 +1894,71 @@ void SwHTMLParser::NewTextArea()
 
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             sName = rOption.GetString();
             break;
-        case HTML_O_DISABLED:
+        case HtmlOptionId::DISABLED:
             bDisabled = true;
             break;
-        case HTML_O_ROWS:
+        case HtmlOptionId::ROWS:
             nRows = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_COLS:
+        case HtmlOptionId::COLS:
             nCols = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_WRAP:
+        case HtmlOptionId::WRAP:
             nWrap = rOption.GetEnum( aHTMLTextAreaWrapTable, nWrap );
             break;
 
-        case HTML_O_TABINDEX:
+        case HtmlOptionId::TABINDEX:
             nTabIndex = rOption.GetSNumber();
             break;
 
-        case HTML_O_SDONFOCUS:
+        case HtmlOptionId::SDONFOCUS:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONFOCUS:
+        case HtmlOptionId::ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONBLUR:
+        case HtmlOptionId::SDONBLUR:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONBLUR:
+        case HtmlOptionId::ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONCLICK:
+        case HtmlOptionId::SDONCLICK:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONCLICK:
+        case HtmlOptionId::ONCLICK:
             nEvent = HTML_ET_ONCLICK;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONCHANGE:
+        case HtmlOptionId::SDONCHANGE:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONCHANGE:
+        case HtmlOptionId::ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONSELECT:
+        case HtmlOptionId::SDONSELECT:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONSELECT:
+        case HtmlOptionId::ONSELECT:
             nEvent = HTML_ET_ONSELECT;
             bSetEvent = true;
             break;
@@ -2173,60 +2173,60 @@ void SwHTMLParser::NewSelect()
 
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             sName = rOption.GetString();
             break;
-        case HTML_O_MULTIPLE:
+        case HtmlOptionId::MULTIPLE:
             bMultiple = true;
             break;
-        case HTML_O_DISABLED:
+        case HtmlOptionId::DISABLED:
             bDisabled = true;
             break;
-        case HTML_O_SIZE:
+        case HtmlOptionId::SIZE:
             m_nSelectEntryCnt = (sal_uInt16)rOption.GetNumber();
             break;
 
-        case HTML_O_TABINDEX:
+        case HtmlOptionId::TABINDEX:
             nTabIndex = rOption.GetSNumber();
             break;
 
-        case HTML_O_SDONFOCUS:
+        case HtmlOptionId::SDONFOCUS:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONFOCUS:
+        case HtmlOptionId::ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONBLUR:
+        case HtmlOptionId::SDONBLUR:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONBLUR:
+        case HtmlOptionId::ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONCLICK:
+        case HtmlOptionId::SDONCLICK:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONCLICK:
+        case HtmlOptionId::ONCLICK:
             nEvent = HTML_ET_ONCLICK;
             bSetEvent = true;
             break;
 
-        case HTML_O_SDONCHANGE:
+        case HtmlOptionId::SDONCHANGE:
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
-        case HTML_O_ONCHANGE:
+        case HtmlOptionId::ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = true;
             break;
@@ -2446,17 +2446,18 @@ void SwHTMLParser::InsertSelectOption()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             // erstmal weglassen!!!
             break;
-        case HTML_O_SELECTED:
+        case HtmlOptionId::SELECTED:
             m_bLBEntrySelected = true;
             break;
-        case HTML_O_VALUE:
+        case HtmlOptionId::VALUE:
             aValue = rOption.GetString();
             if( aValue.isEmpty() )
                 aValue = "$$$empty$$$";
             break;
+        default: break;
         }
     }
 

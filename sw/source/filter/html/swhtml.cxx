@@ -1286,10 +1286,10 @@ void SwHTMLParser::NextToken( int nToken )
                 const HTMLOption& rOption = rHTMLOptions[--i];
                 switch( rOption.GetToken() )
                 {
-                case HTML_O_HREF:
+                case HtmlOptionId::HREF:
                     m_sBaseURL = rOption.GetString();
                     break;
-                case HTML_O_TARGET:
+                case HtmlOptionId::TARGET:
                     if( IsNewDoc() )
                     {
                         SwDocShell *pDocShell(m_xDoc->GetDocShell());
@@ -1307,6 +1307,7 @@ void SwHTMLParser::NextToken( int nToken )
                         }
                     }
                     break;
+                default: break;
                 }
             }
         }
@@ -1897,7 +1898,7 @@ void SwHTMLParser::NextToken( int nToken )
             for (size_t i = rHTMLOptions.size(); i; )
             {
                 const HTMLOption& rOption = rHTMLOptions[--i];
-                if( HTML_O_DIR == rOption.GetToken() )
+                if( HtmlOptionId::DIR == rOption.GetToken() )
                 {
                     const OUString& rDir = rOption.GetString();
                     SfxItemSet aItemSet( m_xDoc->GetAttrPool(),
@@ -3409,21 +3410,22 @@ void SwHTMLParser::NewStdAttr( int nToken )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_LANG:
+        case HtmlOptionId::LANG:
             aLang = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
+        default: break;
         }
     }
 
@@ -3462,21 +3464,22 @@ void SwHTMLParser::NewStdAttr( int nToken,
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_LANG:
+        case HtmlOptionId::LANG:
             aLang = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
+        default: break;
         }
     }
 
@@ -3542,24 +3545,25 @@ void SwHTMLParser::NewBasefontAttr()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_SIZE:
+        case HtmlOptionId::SIZE:
             nSize = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_LANG:
+        case HtmlOptionId::LANG:
             aLang = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
+        default: break;
         }
     }
 
@@ -3643,7 +3647,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_SIZE:
+        case HtmlOptionId::SIZE:
             if( HTML_FONT_ON==nToken && !rOption.GetString().isEmpty() )
             {
                 sal_Int32 nSSize;
@@ -3662,32 +3666,33 @@ void SwHTMLParser::NewFontAttr( int nToken )
                 nFontHeight = m_aFontHeights[nSize-1];
             }
             break;
-        case HTML_O_COLOR:
+        case HtmlOptionId::COLOR:
             if( HTML_FONT_ON==nToken )
             {
                 rOption.GetColor( aColor );
                 bColor = true;
             }
             break;
-        case HTML_O_FACE:
+        case HtmlOptionId::FACE:
             if( HTML_FONT_ON==nToken )
                 aFace = rOption.GetString();
             break;
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_LANG:
+        case HtmlOptionId::LANG:
             aLang = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
+        default: break;
         }
     }
 
@@ -3862,24 +3867,25 @@ void SwHTMLParser::NewPara()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_ALIGN:
+            case HtmlOptionId::ALIGN:
                 m_eParaAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eParaAdjust );
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
-            case HTML_O_LANG:
+            case HtmlOptionId::LANG:
                 aLang = rOption.GetString();
                 break;
-            case HTML_O_DIR:
+            case HtmlOptionId::DIR:
                 aDir = rOption.GetString();
                 break;
+            default: break;
         }
     }
 
@@ -3981,24 +3987,25 @@ void SwHTMLParser::NewHeading( int nToken )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_ALIGN:
+            case HtmlOptionId::ALIGN:
                 m_eParaAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eParaAdjust );
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
-            case HTML_O_LANG:
+            case HtmlOptionId::LANG:
                 aLang = rOption.GetString();
                 break;
-            case HTML_O_DIR:
+            case HtmlOptionId::DIR:
                 aDir = rOption.GetString();
                 break;
+            default: break;
         }
     }
 
@@ -4105,21 +4112,22 @@ void SwHTMLParser::NewTextFormatColl( int nToken, sal_uInt16 nColl )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
-            case HTML_O_LANG:
+            case HtmlOptionId::LANG:
                 aLang = rOption.GetString();
                 break;
-            case HTML_O_DIR:
+            case HtmlOptionId::DIR:
                 aDir = rOption.GetString();
                 break;
+            default: break;
         }
     }
 
@@ -4233,21 +4241,22 @@ void SwHTMLParser::NewDefList()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
-            case HTML_O_LANG:
+            case HtmlOptionId::LANG:
                 aLang = rOption.GetString();
                 break;
-            case HTML_O_DIR:
+            case HtmlOptionId::DIR:
                 aDir = rOption.GetString();
                 break;
+            default: break;
         }
     }
 
@@ -4742,21 +4751,22 @@ void SwHTMLParser::NewCharFormat( int nToken )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_LANG:
+        case HtmlOptionId::LANG:
             aLang = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
+        default: break;
         }
     }
 
@@ -4810,13 +4820,13 @@ void SwHTMLParser::InsertSpacer()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_TYPE:
+        case HtmlOptionId::TYPE:
             rOption.GetEnum( nType, aHTMLSpacerTypeTable );
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             eVertOri =
                 rOption.GetEnum( aHTMLImgVAlignTable,
                                   eVertOri );
@@ -4824,20 +4834,21 @@ void SwHTMLParser::InsertSpacer()
                 rOption.GetEnum( aHTMLImgHAlignTable,
                                   eHoriOri );
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             // erstmal nur als Pixelwerte merken!
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
-        case HTML_O_HEIGHT:
+        case HtmlOptionId::HEIGHT:
             // erstmal nur als Pixelwerte merken!
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
-        case HTML_O_SIZE:
+        case HtmlOptionId::SIZE:
             // erstmal nur als Pixelwerte merken!
             nSize = rOption.GetNumber();
             break;
+        default: break;
         }
     }
 
@@ -5010,7 +5021,7 @@ void SwHTMLParser::InsertIDOption()
     for (size_t i = rHTMLOptions.size(); i; )
     {
         const HTMLOption& rOption = rHTMLOptions[--i];
-        if( HTML_O_ID==rOption.GetToken() )
+        if( HtmlOptionId::ID==rOption.GetToken() )
         {
             aId = rOption.GetString();
             break;
@@ -5050,7 +5061,7 @@ void SwHTMLParser::InsertLineBreak()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-            case HTML_O_CLEAR:
+            case HtmlOptionId::CLEAR:
                 {
                     const OUString &rClear = rOption.GetString();
                     if( rClear.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_all ) )
@@ -5064,15 +5075,16 @@ void SwHTMLParser::InsertLineBreak()
                         bClearRight = true;
                 }
                 break;
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
+            default: break;
         }
     }
 
@@ -5197,13 +5209,13 @@ void SwHTMLParser::InsertHorzRule()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_SIZE:
+        case HtmlOptionId::SIZE:
             nSize = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             nWidth = (sal_uInt16)rOption.GetNumber();
             if( bPrcWidth && nWidth>=100 )
@@ -5213,16 +5225,17 @@ void SwHTMLParser::InsertHorzRule()
                 bPrcWidth = false;
             }
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             eAdjust = rOption.GetEnum( aHTMLPAlignTable, eAdjust );
             break;
-        case HTML_O_NOSHADE:
+        case HtmlOptionId::NOSHADE:
             bNoShade = true;
             break;
-        case HTML_O_COLOR:
+        case HtmlOptionId::COLOR:
             rOption.GetColor( aColor );
             bColor = true;
             break;
+        default: break;
         }
     }
 
@@ -5349,17 +5362,18 @@ void SwHTMLParser::ParseMoreMetaOptions()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             aName = rOption.GetString();
             bHTTPEquiv = false;
             break;
-        case HTML_O_HTTPEQUIV:
+        case HtmlOptionId::HTTPEQUIV:
             aName = rOption.GetString();
             bHTTPEquiv = true;
             break;
-        case HTML_O_CONTENT:
+        case HtmlOptionId::CONTENT:
             aContent = rOption.GetString();
             break;
+        default: break;
         }
     }
 

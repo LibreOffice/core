@@ -3030,33 +3030,33 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
             const HTMLOption& rOption = rOptions[--i];
             switch( rOption.GetToken() )
             {
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 m_aId = rOption.GetString();
                 break;
-            case HTML_O_COLSPAN:
+            case HtmlOptionId::COLSPAN:
                 m_nColSpan = (sal_uInt16)rOption.GetNumber();
                 break;
-            case HTML_O_ROWSPAN:
+            case HtmlOptionId::ROWSPAN:
                 m_nRowSpan = (sal_uInt16)rOption.GetNumber();
                 break;
-            case HTML_O_ALIGN:
+            case HtmlOptionId::ALIGN:
                 m_eAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eAdjust );
                 break;
-            case HTML_O_VALIGN:
+            case HtmlOptionId::VALIGN:
                 m_eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, m_eVertOri );
                 break;
-            case HTML_O_WIDTH:
+            case HtmlOptionId::WIDTH:
                 m_nWidth = (sal_uInt16)rOption.GetNumber();   // Just for Netscape
                 m_bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 if( m_bPrcWidth && m_nWidth>100 )
                     m_nWidth = 100;
                 break;
-            case HTML_O_HEIGHT:
+            case HtmlOptionId::HEIGHT:
                 m_nHeight = (sal_uInt16)rOption.GetNumber();  // Just for Netscape
                 if( rOption.GetString().indexOf('%') != -1)
                     m_nHeight = 0;    // don't consider % attributes
                 break;
-            case HTML_O_BGCOLOR:
+            case HtmlOptionId::BGCOLOR:
                 // Ignore empty BGCOLOR on <TABLE>, <TR> and <TD>/<TH> like Netscape
                 // *really* not on other tags
                 if( !rOption.GetString().isEmpty() )
@@ -3065,32 +3065,33 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                     m_bBGColor = true;
                 }
                 break;
-            case HTML_O_BACKGROUND:
+            case HtmlOptionId::BACKGROUND:
                 m_aBGImage = rOption.GetString();
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 m_aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 m_aClass = rOption.GetString();
                 break;
-            case HTML_O_LANG:
+            case HtmlOptionId::LANG:
                 m_aLang = rOption.GetString();
                 break;
-            case HTML_O_DIR:
+            case HtmlOptionId::DIR:
                 m_aDir = rOption.GetString();
                 break;
-            case HTML_O_SDNUM:
+            case HtmlOptionId::SDNUM:
                 aNumFormat = rOption.GetString();
                 m_bHasNumFormat = true;
                 break;
-            case HTML_O_SDVAL:
+            case HtmlOptionId::SDVAL:
                 m_bHasValue = true;
                 aValue = rOption.GetString();
                 break;
-            case HTML_O_NOWRAP:
+            case HtmlOptionId::NOWRAP:
                 m_bNoWrap = true;
                 break;
+            default: break;
             }
         }
 
@@ -3754,7 +3755,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         const HTMLOptions& rHTMLOptions = GetOptions();
                         for (const auto & rOption : rHTMLOptions)
                         {
-                            if( HTML_O_ALIGN==rOption.GetToken() )
+                            if( HtmlOptionId::ALIGN==rOption.GetToken() )
                             {
                                 SvxAdjust eAdjust = rOption.GetEnum( aHTMLPAlignTable, SvxAdjust::End );
                                 bNeedsSection = SvxAdjust::Left == eAdjust ||
@@ -4039,16 +4040,16 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                 const HTMLOption& rOption = rHTMLOptions[--i];
                 switch( rOption.GetToken() )
                 {
-                case HTML_O_ID:
+                case HtmlOptionId::ID:
                     aId = rOption.GetString();
                     break;
-                case HTML_O_ALIGN:
+                case HtmlOptionId::ALIGN:
                     eAdjust = rOption.GetEnum( aHTMLPAlignTable, eAdjust );
                     break;
-                case HTML_O_VALIGN:
+                case HtmlOptionId::VALIGN:
                     eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, eVertOri );
                     break;
-                case HTML_O_BGCOLOR:
+                case HtmlOptionId::BGCOLOR:
                     // Ignore empty BGCOLOR on <TABLE>, <TR> and <TD>/>TH> like Netscape
                     // *really* not on other tags
                     if( !rOption.GetString().isEmpty() )
@@ -4057,15 +4058,16 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                         bBGColor = true;
                     }
                     break;
-                case HTML_O_BACKGROUND:
+                case HtmlOptionId::BACKGROUND:
                     aBGImage = rOption.GetString();
                     break;
-                case HTML_O_STYLE:
+                case HtmlOptionId::STYLE:
                     aStyle = rOption.GetString();
                     break;
-                case HTML_O_CLASS:
+                case HtmlOptionId::CLASS:
                     aClass= rOption.GetString();
                     break;
+                default: break;
                 }
             }
         }
@@ -4234,18 +4236,19 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                 const HTMLOption& rOption = rHTMLOptions[--i];
                 switch( rOption.GetToken() )
                 {
-                case HTML_O_ID:
+                case HtmlOptionId::ID:
                     InsertBookmark( rOption.GetString() );
                     break;
-                case HTML_O_ALIGN:
+                case HtmlOptionId::ALIGN:
                     pSaveStruct->eAdjust =
                         rOption.GetEnum( aHTMLPAlignTable, pSaveStruct->eAdjust );
                     break;
-                case HTML_O_VALIGN:
+                case HtmlOptionId::VALIGN:
                     pSaveStruct->eVertOri =
                         rOption.GetEnum( aHTMLTableVAlignTable,
                                           pSaveStruct->eVertOri );
                     break;
+                default: break;
                 }
             }
         }
@@ -4419,26 +4422,27 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                 const HTMLOption& rOption = rColGrpOptions[--i];
                 switch( rOption.GetToken() )
                 {
-                case HTML_O_ID:
+                case HtmlOptionId::ID:
                     InsertBookmark( rOption.GetString() );
                     break;
-                case HTML_O_SPAN:
+                case HtmlOptionId::SPAN:
                     pSaveStruct->nColGrpSpan = (sal_uInt16)rOption.GetNumber();
                     break;
-                case HTML_O_WIDTH:
+                case HtmlOptionId::WIDTH:
                     pSaveStruct->nColGrpWidth = (sal_uInt16)rOption.GetNumber();
                     pSaveStruct->bRelColGrpWidth =
                         (rOption.GetString().indexOf('*') != -1);
                     break;
-                case HTML_O_ALIGN:
+                case HtmlOptionId::ALIGN:
                     pSaveStruct->eColGrpAdjust =
                         rOption.GetEnum( aHTMLPAlignTable, pSaveStruct->eColGrpAdjust );
                     break;
-                case HTML_O_VALIGN:
+                case HtmlOptionId::VALIGN:
                     pSaveStruct->eColGrpVertOri =
                         rOption.GetEnum( aHTMLTableVAlignTable,
                                                 pSaveStruct->eColGrpVertOri );
                     break;
+                default: break;
                 }
             }
         }
@@ -4500,24 +4504,25 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                     const HTMLOption& rOption = rColOptions[--i];
                     switch( rOption.GetToken() )
                     {
-                    case HTML_O_ID:
+                    case HtmlOptionId::ID:
                         InsertBookmark( rOption.GetString() );
                         break;
-                    case HTML_O_SPAN:
+                    case HtmlOptionId::SPAN:
                         nColSpan = (sal_uInt16)rOption.GetNumber();
                         break;
-                    case HTML_O_WIDTH:
+                    case HtmlOptionId::WIDTH:
                         nColWidth = (sal_uInt16)rOption.GetNumber();
                         bRelColWidth =
                             (rOption.GetString().indexOf('*') != -1);
                         break;
-                    case HTML_O_ALIGN:
+                    case HtmlOptionId::ALIGN:
                         eColAdjust = rOption.GetEnum( aHTMLPAlignTable, eColAdjust );
                         break;
-                    case HTML_O_VALIGN:
+                    case HtmlOptionId::VALIGN:
                         eColVertOri =
                             rOption.GetEnum( aHTMLTableVAlignTable, eColVertOri );
                         break;
+                    default: break;
                     }
                 }
                 pCurTable->InsertCol( nColSpan, nColWidth, bRelColWidth,
@@ -4634,7 +4639,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         for ( size_t i = rHTMLOptions.size(); i; )
         {
             const HTMLOption& rOption = rHTMLOptions[--i];
-            if( HTML_O_ALIGN == rOption.GetToken() )
+            if( HtmlOptionId::ALIGN == rOption.GetToken() )
             {
                 if (rOption.GetString().equalsIgnoreAsciiCase(
                         OOO_STRING_SVTOOLS_HTML_VA_bottom))
@@ -4853,30 +4858,30 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
         const HTMLOption& rOption = rOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_COLS:
+        case HtmlOptionId::COLS:
             nCols = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             nWidth = (sal_uInt16)rOption.GetNumber();
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             if( bPrcWidth && nWidth>100 )
                 nWidth = 100;
             break;
-        case HTML_O_HEIGHT:
+        case HtmlOptionId::HEIGHT:
             nHeight = (sal_uInt16)rOption.GetNumber();
             if( rOption.GetString().indexOf('%') != -1 )
                 nHeight = 0;    // don't use % attributes
             break;
-        case HTML_O_CELLPADDING:
+        case HtmlOptionId::CELLPADDING:
             nCellPadding = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_CELLSPACING:
+        case HtmlOptionId::CELLSPACING:
             nCellSpacing = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             {
                 if( rOption.GetEnum( eAdjust, aHTMLPAlignTable ) )
                 {
@@ -4884,10 +4889,10 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
                 }
             }
             break;
-        case HTML_O_VALIGN:
+        case HtmlOptionId::VALIGN:
             eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, eVertOri );
             break;
-        case HTML_O_BORDER:
+        case HtmlOptionId::BORDER:
             // Handle BORDER and BORDER=BORDER like BORDER=1
             if (!rOption.GetString().isEmpty() &&
                 !rOption.GetString().equalsIgnoreAsciiCase(
@@ -4903,15 +4908,15 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             if( !bHasRules )
                 eRules = ( nBorder ? HTMLTableRules::All : HTMLTableRules::NONE );
             break;
-        case HTML_O_FRAME:
+        case HtmlOptionId::FRAME:
             eFrame = rOption.GetTableFrame();
             bHasFrame = true;
             break;
-        case HTML_O_RULES:
+        case HtmlOptionId::RULES:
             eRules = rOption.GetTableRules();
             bHasRules = true;
             break;
-        case HTML_O_BGCOLOR:
+        case HtmlOptionId::BGCOLOR:
             // Ignore empty BGCOLOR on <TABLE>, <TR> and <TD>/<TH> like Netscape
             // *really* not on other tags
             if( !rOption.GetString().isEmpty() )
@@ -4920,32 +4925,33 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
                 bBGColor = true;
             }
             break;
-        case HTML_O_BACKGROUND:
+        case HtmlOptionId::BACKGROUND:
             aBGImage = rOption.GetString();
             break;
-        case HTML_O_BORDERCOLOR:
+        case HtmlOptionId::BORDERCOLOR:
             rOption.GetColor( aBorderColor );
             bBorderColor = true;
             break;
-        case HTML_O_BORDERCOLORDARK:
+        case HtmlOptionId::BORDERCOLORDARK:
             if( !bBorderColor )
                 rOption.GetColor( aBorderColor );
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
-        case HTML_O_HSPACE:
+        case HtmlOptionId::HSPACE:
             nHSpace = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_VSPACE:
+        case HtmlOptionId::VSPACE:
             nVSpace = (sal_uInt16)rOption.GetNumber();
             break;
+        default: break;
         }
     }
 
