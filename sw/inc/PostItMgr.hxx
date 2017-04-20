@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_INC_POSTITMGR_HXX
 #define INCLUDED_SW_INC_POSTITMGR_HXX
 
+#include "swdllapi.h"
+
 #include <list>
 #include <vector>
 #include <editeng/outlobj.hxx>
@@ -247,10 +249,10 @@ class SwPostItMgr: public SfxListener
 
         sw::sidebarwindows::SwSidebarWin* GetActiveSidebarWin() { return mpActivePostIt; }
         void SetActiveSidebarWin( sw::sidebarwindows::SwSidebarWin* p);
-        bool HasActiveSidebarWin() const;
+        SW_DLLPUBLIC bool HasActiveSidebarWin() const;
         bool HasActiveAnnotationWin() const;
         void GrabFocusOnActiveSidebarWin();
-        void UpdateDataOnActiveSidebarWin();
+        SW_DLLPUBLIC void UpdateDataOnActiveSidebarWin();
         void DeleteActiveSidebarWin();
         void HideActiveSidebarWin();
         void ToggleInsModeOnActiveSidebarWin();
