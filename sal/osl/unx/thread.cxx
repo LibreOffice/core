@@ -56,7 +56,8 @@
  * (2) 'oslThreadIdentifier' and '{insert|remove|lookup}ThreadId()'
  *     - cannot reliably be applied to 'alien' threads;
  *     - memory leak for 'alien' thread 'HashEntry's;
- *     - use 'PTHREAD_VALUE(pthread_t)' as identifier instead (?)
+ *     - use 'reinterpret_cast<unsigned long>(pthread_t)' as identifier
+ *       instead (?)
  *     - if yes, change 'oslThreadIdentifier' to 'intptr_t' or similar
  * (3) 'oslSigAlarmHandler()' (#71232#)
  *     - [Under Solaris we get SIGALRM in e.g. pthread_join which terminates
@@ -552,7 +553,7 @@ void SAL_CALL osl_setThreadName(char const * name) {
 /* osl_getThreadIdentifier @@@ see TODO @@@ */
 /*****************************************************************************/
 
-#define HASHID(x) (PTHREAD_VALUE(x) % HashSize)
+#define HASHID(x) (reinterpret_cast<unsigned long>(x) % HashSize)
 
 struct HashEntry
 {
