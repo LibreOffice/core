@@ -274,7 +274,7 @@ int macxp_resolveAlias(char *path, int buflen);
 #if defined MACOSX
 #define PTHREAD_VALUE(t) reinterpret_cast<unsigned long>(t)
 #else
-#define PTHREAD_VALUE(t) (t)
+#define PTHREAD_VALUE(t) ((unsigned long) (t))
 #endif
 
 #ifndef PTHREAD_NONE

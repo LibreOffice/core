@@ -552,7 +552,7 @@ void SAL_CALL osl_setThreadName(char const * name) {
 /* osl_getThreadIdentifier @@@ see TODO @@@ */
 /*****************************************************************************/
 
-#define HASHID(x) ((unsigned long)PTHREAD_VALUE(x) % HashSize)
+#define HASHID(x) (PTHREAD_VALUE(x) % HashSize)
 
 struct HashEntry
 {
