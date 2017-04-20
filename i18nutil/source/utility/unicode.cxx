@@ -36,13 +36,6 @@
 
 using namespace ::com::sun::star::i18n;
 
-struct DefaultScriptTypeList {
-    com::sun::star::i18n::UnicodeScript from;
-    com::sun::star::i18n::UnicodeScript to;
-    com::sun::star::i18n::UnicodeScript value;
-};
-
-
 template<class L, typename T>
 T getScriptType( const sal_Unicode ch, const L* typeList, T unknownType ) {
 

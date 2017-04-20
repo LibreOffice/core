@@ -97,7 +97,9 @@ for d in definitionSet:
     if srcLoc.startswith("cppu/source/uno/check.cxx"):
         continue
     fieldType = definitionToTypeMap[d]
-    if fieldType in set([ "class rptui::OModuleClient" ]):
+    if "ModuleClient" in fieldType:
+        continue
+    if "::sfx2::sidebar::ControllerItem" in fieldType:
         continue
     untouchedSet.add((d[0] + " " + d[1] + " " + fieldType, srcLoc))
 
@@ -117,6 +119,11 @@ for d in definitionSet:
         or srcLoc.startswith("include/svl/svdde.hxx")
         or srcLoc.startswith("lotuswordpro/source/filter/lwpsdwdrawheader.hxx")
         or srcLoc.startswith("svtools/source/dialogs/insdlg.cxx")):
+        continue
+    fieldType = definitionToTypeMap[d]
+    if "ModuleClient" in fieldType:
+        continue
+    if "::sfx2::sidebar::ControllerItem" in fieldType:
         continue
 
     writeonlySet.add((clazz + " " + definitionToTypeMap[d], srcLoc))
