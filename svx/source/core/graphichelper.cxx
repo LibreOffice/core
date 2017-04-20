@@ -217,7 +217,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
         Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
 
-        aDialogHelper.SetTitle( "Save as Image" );
+        aDialogHelper.SetTitle( SVX_RESSTR(RID_SVXSTR_SAVEAS_IMAGE) );
 
         INetURLObject aPath;
         aPath.SetSmartURL( sGraphicPath );

@@ -24,4 +24,8 @@ String RID_SVXSTR_EXPORT_GRAPHIC_TITLE
     Text [ en-US ] = "Image Export" ;
 };
 
+String RID_SVXSTR_SAVEAS_IMAGE
+{
+    Text [ en-US ] = "Save as Image" ;
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
