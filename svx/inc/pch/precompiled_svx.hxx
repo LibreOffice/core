@@ -388,7 +388,6 @@
 #include <tools/globname.hxx>
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
-#include <tools/rc.hxx>
 #include <tools/resary.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>

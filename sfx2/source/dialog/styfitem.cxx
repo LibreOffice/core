@@ -19,7 +19,6 @@
 
 #include <osl/diagnose.h>
 #include <sfx2/styfitem.hxx>
-#include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/debug.hxx>
 

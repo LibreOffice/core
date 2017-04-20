@@ -28,7 +28,7 @@ usedReturnSet = set() # set of tuple(return_type, name_and_params)
 unusedMethodsExclusionSet = set([
     # only used by Windows build
     "_Bool basegfx::B2ITuple::equalZero() const",
-    "class basegfx::B2DPolyPolygon basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const",
+    "const class basegfx::B2DPolyPolygon & basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const",
     "void basegfx::B2IRange::expand(const class basegfx::B2IRange &)",
     "void OpenGLContext::requestSingleBufferedRendering()",
 	"_Bool TabitemValue::isBothAligned() const",
@@ -263,6 +263,10 @@ for d in definitionSet:
     if location.startswith("include/test"): continue
     # leave the debug/dump alone
     if location.startswith("include/oox/dump"): continue
+    # plugin testing stuff
+    if location.startswith("compilerplugins/clang/test"): continue
+    # leave this alone for now
+    if location.startswith("include/LibreOfficeKit"): continue
 
     unusedSet.add(d) # used by the "unused return types" analysis
     tmp1set.add((method, location))

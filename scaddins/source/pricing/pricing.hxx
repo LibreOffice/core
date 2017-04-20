@@ -38,7 +38,6 @@
 #include <com/sun/star/sheet/addin/XPricingFunctions.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/resid.hxx>
-#include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
 #define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()

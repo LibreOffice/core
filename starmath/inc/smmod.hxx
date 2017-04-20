@@ -24,7 +24,6 @@
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include "tools/rc.hxx"
 #include <sfx2/module.hxx>
 
 #include "starmath.hrc"

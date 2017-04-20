@@ -375,7 +375,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/multisel.hxx>
 #include <tools/poly.hxx>
-#include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/ref.hxx>
 #include <tools/resid.hxx>

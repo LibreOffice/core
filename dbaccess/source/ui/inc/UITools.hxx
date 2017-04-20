@@ -401,10 +401,6 @@ namespace dbaui
     */
     css::uno::Reference< css::util::XNumberFormatter > getNumberFormatter(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
-    // this completes a help url with the system parameters "Language" and "System"
-    // detect installed locale
-    void AppendConfigToken( OUString& _rURL, bool _bQuestionMark );
-
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UITOOLS_HXX
 

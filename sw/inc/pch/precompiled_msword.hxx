@@ -647,7 +647,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/mempool.hxx>
 #include <tools/poly.hxx>
-#include <tools/rc.hxx>
 #include <tools/ref.hxx>
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>

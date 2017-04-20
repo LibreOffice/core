@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <osl/mutex.hxx>
 #include <osl/module.hxx>
-#include "tools/rc.hxx"
+#include <tools/resmgr.hxx>
 #include <sfx2/app.hxx>
 #include "app.hrc"
 #include "shutdownicon.hxx"
