@@ -658,7 +658,7 @@ Reference< XResultSet > Content::createSortedCursor(
                                                               rAnyCompareFactory );
         }
 
-        OSL_ENSURE( aDynResult.is(), "Content::createSortedCursor - no sorted cursor!\n" );
+        OSL_ENSURE( aDynResult.is(), "Content::createSortedCursor - no sorted cursor!" );
 
         if( aDynResult.is() )
             aResult = aDynResult->getStaticResultSet();

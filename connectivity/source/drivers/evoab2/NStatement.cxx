@@ -579,7 +579,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryDa
 
 Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const OUString& _rSql )
 {
-    SAL_INFO( "connectivity.evoab2", "OCommonStatement::impl_executeQuery_throw(" << _rSql << "%s)\n" );
+    SAL_INFO( "connectivity.evoab2", "OCommonStatement::impl_executeQuery_throw " << _rSql );
 
 #if OSL_DEBUG_LEVEL > 1
     g_message( "Parse SQL '%s'\n",

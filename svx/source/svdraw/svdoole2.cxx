@@ -244,13 +244,13 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
             }
             catch( embed::NoVisualAreaSizeException& )
             {
-                OSL_FAIL( "No visual area size!\n" );
+                OSL_FAIL( "No visual area size!" );
                 aSz.Width = 5000;
                 aSz.Height = 5000;
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( "Unexpected exception!\n" );
+                OSL_FAIL( "Unexpected exception!" );
                 aSz.Width = 5000;
                 aSz.Height = 5000;
             }
@@ -277,7 +277,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Unexpected exception!\n" );
+            OSL_FAIL( "Unexpected exception!" );
         }
     }
 }
@@ -555,7 +555,7 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
     {
         // the link URL was not changed
         uno::Reference< embed::XEmbeddedObject > xObject = pObj->GetObjRef();
-        OSL_ENSURE( xObject.is(), "The object must exist always!\n" );
+        OSL_ENSURE( xObject.is(), "The object must exist always!" );
         if ( xObject.is() )
         {
             // let the object reload the link
@@ -837,7 +837,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
             {
                 GetObjRef_Impl();
                 uno::Reference<embed::XCommonEmbedPersist> xPersObj( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY );
-                OSL_ENSURE( xPersObj.is(), "The object must exist!\n" );
+                OSL_ENSURE( xPersObj.is(), "The object must exist!" );
                 if ( xPersObj.is() )
                 {
                     try

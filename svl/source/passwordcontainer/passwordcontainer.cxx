@@ -110,7 +110,7 @@ static vector< OUString > getInfoFromInd( const OUString& aInd )
                          && ( pLine[i] < 'a' || pLine[i] > 'f' )
                          && ( pLine[i] < 'A' || pLine[i] > 'F' ) ) )
                     {
-                        OSL_FAIL( "Wrong index syntax!\n" );
+                        OSL_FAIL( "Wrong index syntax!" );
                         return aResult;
                     }
 
@@ -125,7 +125,7 @@ static vector< OUString > getInfoFromInd( const OUString& aInd )
     } while( pLine[0] == '_' && pLine[1] == '_' );
 
     if( *pLine )
-        OSL_FAIL( "Wrong index syntax!\n" );
+        OSL_FAIL( "Wrong index syntax!" );
 
     return aResult;
 }
@@ -165,7 +165,7 @@ static OUString getAsciiLine( const ::rtl::ByteSequence& buf )
 
 static ::rtl::ByteSequence getBufFromAsciiLine( const OUString& line )
 {
-    OSL_ENSURE( line.getLength() % 2 == 0, "Wrong syntax!\n" );
+    OSL_ENSURE( line.getLength() % 2 == 0, "Wrong syntax!" );
     OString tmpLine = OUStringToOString( line, RTL_TEXTENCODING_ASCII_US );
     ::rtl::ByteSequence aResult(line.getLength()/2);
 
@@ -196,7 +196,7 @@ PassMap StorageItem::getInfo()
 
     if( aPropertyValues.getLength() != aNodeNames.getLength() )
     {
-        OSL_ENSURE( aPropertyValues.getLength() == aNodeNames.getLength(), "Problems during reading\n" );
+        OSL_ENSURE( aPropertyValues.getLength() == aNodeNames.getLength(), "Problems during reading" );
         return aResult;
     }
 
@@ -224,7 +224,7 @@ PassMap StorageItem::getInfo()
             }
         }
         else
-            OSL_FAIL( "Wrong index syntax!\n" );
+            OSL_FAIL( "Wrong index syntax!" );
     }
 
     return aResult;
@@ -253,7 +253,7 @@ bool StorageItem::useStorage()
 
     if( aPropertyValues.getLength() != aNodeNames.getLength() )
     {
-        OSL_ENSURE( aPropertyValues.getLength() == aNodeNames.getLength(), "Problems during reading\n" );
+        OSL_ENSURE( aPropertyValues.getLength() == aNodeNames.getLength(), "Problems during reading" );
         return false;
     }
 
@@ -280,7 +280,7 @@ bool StorageItem::getEncodedMP( OUString& aResult )
 
     if( aPropertyValues.getLength() != aNodeNames.getLength() )
     {
-        OSL_ENSURE( aPropertyValues.getLength() == aNodeNames.getLength(), "Problems during reading\n" );
+        OSL_ENSURE( aPropertyValues.getLength() == aNodeNames.getLength(), "Problems during reading" );
         return false;
     }
 
@@ -424,11 +424,11 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
     if( !aMasterPasswd.isEmpty() )
     {
         rtlCipher aDecoder = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream );
-        OSL_ENSURE( aDecoder, "Can't create decoder\n" );
+        OSL_ENSURE( aDecoder, "Can't create decoder" );
 
         if( aDecoder )
         {
-            OSL_ENSURE( aMasterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!\n" );
+            OSL_ENSURE( aMasterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!" );
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
@@ -459,12 +459,12 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
     }
     else
     {
-        OSL_FAIL( "No master password provided!\n" );
+        OSL_FAIL( "No master password provided!" );
         // throw special exception
     }
 
     // problems with decoding
-    OSL_FAIL( "Problem with decoding\n" );
+    OSL_FAIL( "Problem with decoding" );
     throw RuntimeException("Can't decode!" );
 }
 
@@ -475,11 +475,11 @@ OUString PasswordContainer::EncodePasswords(const vector< OUString >& lines, con
         OString aSeq = OUStringToOString( createIndex( lines ), RTL_TEXTENCODING_UTF8 );
 
         rtlCipher aEncoder = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream );
-        OSL_ENSURE( aEncoder, "Can't create encoder\n" );
+        OSL_ENSURE( aEncoder, "Can't create encoder" );
 
         if( aEncoder )
         {
-            OSL_ENSURE( aMasterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!\n" );
+            OSL_ENSURE( aMasterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!" );
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
@@ -536,12 +536,12 @@ OUString PasswordContainer::EncodePasswords(const vector< OUString >& lines, con
     }
     else
     {
-        OSL_FAIL( "No master password provided!\n" );
+        OSL_FAIL( "No master password provided!" );
         // throw special exception
     }
 
     // problems with encoding
-    OSL_FAIL( "Problem with encoding\n" );
+    OSL_FAIL( "Problem with encoding" );
     throw RuntimeException("Can't encode!" );
 }
 

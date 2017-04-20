@@ -39,7 +39,7 @@ public:
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
     {
-        OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
+        OSL_ENSURE( xFactory.is(), "No service manager is provided!" );
     }
 
     static css::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();

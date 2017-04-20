@@ -608,7 +608,7 @@ void ScParameterClassification::GenerateDocumentation()
                 break;
                 default:;
             }
-            SAL_INFO( "sc.core", "" << aStr << "\n");
+            SAL_INFO( "sc.core", "" << aStr);
         }
     }
     fflush( stdout);

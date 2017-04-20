@@ -197,7 +197,7 @@ void ScShareDocumentDlg::UpdateView()
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL( "ScShareDocumentDlg::UpdateView(): caught exception\n" );
+            OSL_FAIL( "ScShareDocumentDlg::UpdateView(): caught exception" );
             m_pLbUsers->Clear();
             m_pLbUsers->InsertEntry( m_aStrNoUserData );
         }

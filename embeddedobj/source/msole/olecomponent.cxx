@@ -434,7 +434,7 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
     OSL_ENSURE( m_pUnoOleObject, "No owner object is provided!" );
 
     HRESULT hr = OleInitialize( nullptr );
-    OSL_ENSURE( hr == S_OK || hr == S_FALSE, "The ole can not be successfully initialized\n" );
+    OSL_ENSURE( hr == S_OK || hr == S_FALSE, "The ole can not be successfully initialized" );
     if ( hr == S_OK || hr == S_FALSE )
         m_bOleInitialized = true;
 
@@ -968,7 +968,7 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
 
 void OleComponent::RunObject()
 {
-    OSL_ENSURE( m_pNativeImpl->m_pOleObject, "The pointer can not be set to NULL here!\n" );
+    OSL_ENSURE( m_pNativeImpl->m_pOleObject, "The pointer can not be set to NULL here!" );
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 

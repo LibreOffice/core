@@ -187,7 +187,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( ((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
+    OSL_ENSURE( ((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales), "ConfigItem::impl_packLocalizedProperties() Wrong call of this method detected!" );
 
     sal_Int32                   nSourceCounter;      // used to step during input lists
     sal_Int32                   nSourceSize;         // marks end of loop over input lists
@@ -255,7 +255,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( ((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
+    OSL_ENSURE( ((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales), "ConfigItem::impl_unpackLocalizedProperties() Wrong call of this method detected!" );
 
     sal_Int32                   nSourceCounter;      // used to step during input lists
     sal_Int32                   nSourceSize;         // marks end of loop over input lists
@@ -353,7 +353,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
             (void)::utl::splitLastFromConfigurationPath(sName,sPath,sProperty);
             if (sPath.isEmpty() && sProperty.isEmpty())
             {
-                OSL_FAIL("ConfigItem::IsReadonly()\nsplit failed\n");
+                OSL_FAIL("ConfigItem::IsReadonly() split failed");
                 continue;
             }
 
@@ -365,7 +365,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
                 Any aNode = xHierarchyAccess->getByHierarchicalName(sPath);
                 if (!(aNode >>= xNode) || !xNode.is())
                 {
-                    OSL_FAIL("ConfigItem::IsReadonly()\nno set available\n");
+                    OSL_FAIL("ConfigItem::IsReadonly() no set available");
                     continue;
                 }
             }
@@ -378,17 +378,17 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
             if (xSet.is())
             {
                 xInfo = xSet->getPropertySetInfo();
-                OSL_ENSURE(xInfo.is(), "ConfigItem::IsReadonly()\ngetPropertySetInfo failed ...\n");
+                OSL_ENSURE(xInfo.is(), "ConfigItem::IsReadonly() getPropertySetInfo failed ...");
             }
             else
             {
                 xInfo.set(xNode, UNO_QUERY);
-                OSL_ENSURE(xInfo.is(), "ConfigItem::IsReadonly()\nUNO_QUERY failed ...\n");
+                OSL_ENSURE(xInfo.is(), "ConfigItem::IsReadonly() UNO_QUERY failed ...");
             }
 
             if (!xInfo.is())
             {
-                OSL_FAIL("ConfigItem::IsReadonly()\nno prop info available\n");
+                OSL_FAIL("ConfigItem::IsReadonly() no prop info available");
                 continue;
             }
 

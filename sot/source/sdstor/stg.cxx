@@ -408,7 +408,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
     SvStream* pStream = rStrm.GetModifySvStream();
     if ( !pStream )
     {
-        OSL_FAIL( "UCBStorageStream can not provide SvStream implementation!\n" );
+        OSL_FAIL( "UCBStorageStream can not provide SvStream implementation!" );
         SetError( SVSTREAM_GENERALERROR );
         pEntry = nullptr;
         return;

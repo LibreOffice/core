@@ -85,7 +85,7 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
         throw embed::WrongStateException( "The own object has no model!",
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
@@ -102,7 +102,7 @@ void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, cons
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
@@ -117,7 +117,7 @@ awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect 
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
@@ -136,7 +136,7 @@ sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",

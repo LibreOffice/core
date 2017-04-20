@@ -238,16 +238,16 @@ public:
         // We hold the solar mutex in all threads except for
         // the small safe section of the inner loop in
         // sheetdatacontext.cxx
-        SAL_INFO( "sc.filter",  "start wait on solar\n" );
+        SAL_INFO( "sc.filter",  "start wait on solar" );
         SolarMutexGuard aGuard;
-        SAL_INFO( "sc.filter",  "got solar\n" );
+        SAL_INFO( "sc.filter",  "got solar" );
 
         std::unique_ptr<oox::core::FastParser> xParser(
                 oox::core::XmlFilterBase::createParser() );
 
-        SAL_INFO( "sc.filter",  "start import\n" );
+        SAL_INFO( "sc.filter",  "start import" );
         mrWorkbookHandler.importOoxFragment( mxHandler, *xParser );
-        SAL_INFO( "sc.filter",  "end import, release solar\n" );
+        SAL_INFO( "sc.filter",  "end import, release solar" );
         mrSheetsLeft--;
         assert( mrSheetsLeft >= 0 );
         if( mrSheetsLeft == 0 )

@@ -1150,7 +1150,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
     }
     catch(const uno::Exception&)
     {
-        SAL_WARN( "sfx.bastyp", "SfxFilterContainer::ReadFilter()\nException detected. Possible not all filters could be cached.\n" );
+        SAL_WARN( "sfx.bastyp", "SfxFilterContainer::ReadFilter()\nException detected. Possible not all filters could be cached." );
     }
 
     if ( bUpdate )

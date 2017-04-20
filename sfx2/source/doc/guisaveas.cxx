@@ -140,7 +140,7 @@ sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
     else if ( nStoreMode == SAVEASREMOTE_REQUESTED )
         nResult = SID_SAVEASREMOTE;
     else {
-        SAL_WARN( "sfx.doc", "Unacceptable slot name is provided!\n" );
+        SAL_WARN( "sfx.doc", "Unacceptable slot name is provided!" );
     }
 
     return nResult;
@@ -1425,7 +1425,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         }
         else
         {
-            OSL_FAIL( "XStorable2 is not supported by the model!\n" );
+            OSL_FAIL( "XStorable2 is not supported by the model!" );
             aModelData.GetStorable()->store();
         }
 
@@ -1595,7 +1595,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
     }
     else
     {
-        SAL_WARN( "sfx.doc", "This code must be unreachable!\n" );
+        SAL_WARN( "sfx.doc", "This code must be unreachable!" );
         throw task::ErrorCodeIOException(
             "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_INVALIDPARAMETER",
             uno::Reference< uno::XInterface >(), ERRCODE_IO_INVALIDPARAMETER);
@@ -1642,7 +1642,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             bDialogUsed = true;
         else
         {
-            OSL_FAIL( "Can't execute document info dialog!\n" );
+            OSL_FAIL( "Can't execute document info dialog!" );
         }
 
         try {

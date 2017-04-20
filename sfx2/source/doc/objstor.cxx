@@ -157,7 +157,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
     }
     catch ( uno::Exception& )
     {
-        SAL_WARN( "sfx.doc", "The document seems to be in the collection already!\n" );
+        SAL_WARN( "sfx.doc", "The document seems to be in the collection already!" );
     }
 }
 
@@ -601,7 +601,7 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
                     SetReadOnlyUI();
 
                 bResult = true;
-                OSL_ENSURE( pImpl->m_xDocStorage == xStorage, "Wrong storage is used!\n" );
+                OSL_ENSURE( pImpl->m_xDocStorage == xStorage, "Wrong storage is used!" );
             }
         }
 
@@ -1387,7 +1387,7 @@ bool SfxObjectShell::SaveTo_Impl
             // currently the case that the storage is the same should be impossible
             if ( xMedStorage == GetStorage() )
             {
-                OSL_ENSURE( !pVersionItem, "This scenario is impossible currently!\n" );
+                OSL_ENSURE( !pVersionItem, "This scenario is impossible currently!" );
                 // usual save procedure
                 bOk = Save();
             }
@@ -1635,7 +1635,7 @@ bool SfxObjectShell::SaveTo_Impl
                 else if (!pMedium->GetName().isEmpty()
                   || ( pMedium->HasStorage_Impl() && pMedium->WillDisposeStorageOnClose_Impl() ) )
                 {
-                    OSL_ENSURE(!pMedium->GetName().isEmpty(), "Fallback is used, the medium without name should not dispose the storage!\n");
+                    OSL_ENSURE(!pMedium->GetName().isEmpty(), "Fallback is used, the medium without name should not dispose the storage!");
                     // copy storage of old medium to new temporary storage and take this over
                     if( !ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
                     {
@@ -2226,7 +2226,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             {
                 OUString aName = aNames[n];
                 uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
-                OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+                OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
                 if ( xObj.is() )
                 {
                     sal_Int32 nState = xObj->getCurrentState();
@@ -3024,7 +3024,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 {
     if ( !pImpl->m_xDocStorage.is() )
     {
-        OSL_ENSURE( pImpl->m_bCreateTempStor, "The storage must exist already!\n" );
+        OSL_ENSURE( pImpl->m_bCreateTempStor, "The storage must exist already!" );
         try {
             // no notification is required the storage is set the first time
             pImpl->m_xDocStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
@@ -3092,7 +3092,7 @@ bool SfxObjectShell::SaveCompletedChildren()
         for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
-            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
             if ( xObj.is() )
             {
                 uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
@@ -3191,7 +3191,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
 bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XStorage >& xSource,
                                                    const uno::Reference< embed::XStorage >& xTarget )
 {
-    OSL_ENSURE( xSource.is() && xTarget.is(), "Source and/or target storages are not available!\n" );
+    OSL_ENSURE( xSource.is() && xTarget.is(), "Source and/or target storages are not available!" );
     if ( !xSource.is() || !xTarget.is() || xSource == xTarget )
         return true;
 

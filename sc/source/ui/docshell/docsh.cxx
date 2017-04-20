@@ -918,7 +918,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             }
                             catch ( uno::Exception& )
                             {
-                                OSL_FAIL( "SfxEventHintId::SaveDoc: caught exception\n" );
+                                OSL_FAIL( "SfxEventHintId::SaveDoc: caught exception" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try
