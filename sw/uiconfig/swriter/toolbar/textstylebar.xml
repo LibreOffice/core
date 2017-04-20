@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+-->
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:DesignerDialog"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditStyle"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CharFontName" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FontHeight" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles" toolbar:text="Default" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=ParagraphStyles" toolbar:text="H1"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=ParagraphStyles" toolbar:text="H2"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles" toolbar:text="H3"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%204&amp;FamilyName:string=ParagraphStyles" toolbar:text="H4" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles" toolbar:text="H5" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%204&amp;FamilyName:string=ParagraphStyles" toolbar:text="H6" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Text%20body&amp;FamilyName:string=ParagraphStyles" toolbar:text="Text"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles" toolbar:text="Quote"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Preformatted%20Text&amp;FamilyName:string=ParagraphStyles" toolbar:text="Pre"/>
+ <toolbar:toolbarseparator/>
+ <!-- These commands can be enabled when tdf#88512 and tdf#106782 are fixed -->
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="Character Styles" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditStyle" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Default%20Style&amp;FamilyName:string=CharacterStyles" toolbar:text="Default"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Strong%20Emphasis&amp;FamilyName:string=CharacterStyles" toolbar:text="Strong"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Quotation&amp;FamilyName:string=CharacterStyles" toolbar:text="Quote" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Source%20Text&amp;FamilyName:string=CharacterStyles" toolbar:text="Code"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=User%20Entry&amp;FamilyName:string=CharacterStyles" toolbar:text="User" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:UnderlineSimple" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FontColor" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackColor" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
+ <toolbar:toolbarseparator/>
+ <!-- These command can be enabled when tdf#107000 is fixed -->
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="List Styles" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=List%201&amp;FamilyName:string=NumberingStyles" toolbar:text="Bullet"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Numbering%201&amp;FamilyName:string=NumberingStyles" toolbar:text="Number"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Numbering%204&amp;FamilyName:string=NumberingStyles" toolbar:text="Roman"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
+ <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
+</toolbar:toolbar>
