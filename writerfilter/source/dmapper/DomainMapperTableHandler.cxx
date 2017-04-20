@@ -1266,6 +1266,11 @@ void DomainMapperTableHandler::setHadFootOrEndnote(bool bHadFootOrEndnote)
     m_bHadFootOrEndnote = bHadFootOrEndnote;
 }
 
+DomainMapper_Impl& DomainMapperTableHandler::getDomainMapperImpl()
+{
+    return m_rDMapper_Impl;
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

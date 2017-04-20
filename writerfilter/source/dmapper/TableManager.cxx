@@ -19,6 +19,7 @@
 
 #include <TableManager.hxx>
 #include <DomainMapperTableHandler.hxx>
+#include <DomainMapper_Impl.hxx>
 #include <util.hxx>
 
 namespace writerfilter
@@ -201,6 +202,9 @@ void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& r
         TableData::Pointer_t pTableData = mTableDataStack.top();
 
         pTableData->endCell(rHandle);
+
+        if (mpTableDataHandler)
+            mpTableDataHandler->getDomainMapperImpl().ClearPreviousParagraph();
     }
 }
 
