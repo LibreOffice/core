@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_ca2a82e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-04-20T21:13:45Z",
+      "side": 1,
+      "message": "Please do NOT push patches like this! You know that the # is required!!",
+      "revId": "16e4d8004f1d6cb53efbaf026eafbea70504b154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
