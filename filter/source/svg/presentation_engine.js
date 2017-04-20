@@ -10644,6 +10644,7 @@ SnakeWipePath.prototype.perform = function(nT) {
 }
 
 /** Class ParallelSnakesWipePath
+ *  Generates a parallel snakes wipe:
  *
  *  @param nElements
  *  @param bDiagonal
@@ -10682,8 +10683,8 @@ ParallelSnakesWipePath.prototype.perform = function( nT ) {
         half = SnakeWipePath.prototype.calcSnake.call(this, nT / 2.0 );
         // rotate 90 degrees
         aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
-        aTransform.rotate(Math.PI/2);
-        aTransform.translate(0.5, 0.5);
+        aTransform = aTransform.rotate(Math.PI/2);
+        aTransform = aTransform.translate(0.5, 0.5);
         half.matrixTransform(aTransform);
         res.appendPath(flipOnYAxis(half));
         res.appendPath(this.bOpposite ? flipOnXAxis(half) : half);
@@ -10713,11 +10714,11 @@ SpiralWipePath.prototype.calcNegSpiral = function( nT ) {
     var aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
     var edge_ = pruneScaleValue(edge / this.sqrtElements);
 
-    aTransform.scale(edge_, edge_);
-    aTransform.translate(0.5, 0.5);
+    aTransform = aTransform.scale(edge_, edge_);
+    aTransform = aTransform.translate(0.5, 0.5);
     var poly = createUnitSquarePath();
     poly.matrixTransform(aTransform);
-    var res = poly;
+    var res = poly.cloneNode(true);
 
     if(1.0 - nT != 0) {
         var edge1 = edge + 1;
@@ -10731,12 +10732,12 @@ SpiralWipePath.prototype.calcNegSpiral = function( nT ) {
             aTransform = SVGIdentityMatrix.scale(
                             pruneScaleValue( alen / this.sqrtElements ),
                             pruneScaleValue( 1.0 / this.sqrtElements ));
-            aTransform.translate(
+            aTransform = aTransform.translate(
                             - pruneScaleValue( (edge / 2) / this.sqrtElements ),
                             pruneScaleValue( (edge / 2) / this.sqrtElements ));
-            aTransform.rotate( w );
+            aTransform = aTransform.rotate( w );
             w -= Math.PI / 2;
-            aTransform.translate(0.5, 0.5);
+            aTransform = aTransform.translate(0.5, 0.5);
             poly.matrixTransform(aTransform);
             res.appendPath(poly);
         }
