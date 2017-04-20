@@ -78,6 +78,7 @@
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
 #include <docfuncutil.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <memory>
 
@@ -1458,17 +1459,26 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
         bool bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, &rMark, eCmd, bRecord, false, bPartOfPaste );
         if (bSuccess)
         {
+            bool bInsertCols = ( eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
+            bool bInsertRows = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER );
+
             pDocSh->UpdateOle(&GetViewData());
             CellContentChanged();
             ResetAutoSpell();
 
-            if ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_INSCOLS_AFTER )
+            if ( bInsertCols || bInsertRows )
             {
-                OUString aOperation = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER ) ?
+                OUString aOperation = bInsertRows ?
                     OUString("insert-rows"):
                     OUString("insert-columns");
                 HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
             }
+
+            if (bInsertCols)
+                SfxLokHelper::notifyAllViewsHeaderInvalidation("column");
+
+            if (bInsertRows)
+                SfxLokHelper::notifyAllViewsHeaderInvalidation("row");
         }
         return bSuccess;
     }
@@ -1535,6 +1545,12 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         else
             nCurY = aRange.aStart.Row();
         SetCursor( nCurX, nCurY );
+
+        if (eCmd == DEL_DELCOLS)
+            SfxLokHelper::notifyAllViewsHeaderInvalidation("column");
+
+        if (eCmd == DEL_DELROWS)
+            SfxLokHelper::notifyAllViewsHeaderInvalidation("row");
     }
     else
     {
@@ -2127,6 +2143,12 @@ void ScViewFunc::SetWidthOrHeight(
             }
             HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "column-resize");
         }
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        OString aPayload = bWidth ? "column" : "row";
+        SfxLokHelper::notifyAllViewsHeaderInvalidation(aPayload);
     }
 }
 
