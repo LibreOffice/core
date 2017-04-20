@@ -151,13 +151,13 @@ public:
                               sal_Int32 nValue );
 
                     // an assignment to a variable
-    virtual ERRTYPE SetNotConst( const RSCINST & rInst, Atom nId );
+    ERRTYPE SetNotConst( const RSCINST & rInst, Atom nId );
 
     virtual ERRTYPE SetString( const RSCINST & rInst, const char * pStr );
 
     virtual ERRTYPE GetNumber( const RSCINST & rInst, sal_Int32 * pN );
 
-    virtual ERRTYPE GetBool( const RSCINST & rInst, bool * pB );
+    ERRTYPE GetBool( const RSCINST & rInst, bool * pB );
 
     virtual ERRTYPE GetConst( const RSCINST & rInst, Atom * pH );
 
