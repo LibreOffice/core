@@ -93,6 +93,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_2f96b894",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-04-20T05:27:45Z",
+      "side": 1,
+      "message": "I tried doing that but there are more than 4 places that treat these constants as if they are LanguageType values, so it seems better to leave them that way",
+      "parentUuid": "5a3905b3_39028a3f",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_99f9be50",
         "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
         "patchSetId": 1
@@ -201,6 +219,24 @@
       "writtenOn": "2017-04-18T19:14:36Z",
       "side": 1,
       "message": "Defines starting with two underscores are reserved, aren\u0027t they? Why not keep the original?",
+      "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4f9304a4",
+        "filename": "svtools/source/misc/langtab.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-04-20T05:27:45Z",
+      "side": 1,
+      "message": "we already use __RSC all over the place to control other stuff when including it from inside .src files. But you\u0027re right, that belongs in it\u0027s own patch",
+      "parentUuid": "5a3905b3_99745efe",
       "revId": "ac0470a485ccbc2b5224bb37153b3e8e4fa3aeeb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
