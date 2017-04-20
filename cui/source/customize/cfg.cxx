@@ -1354,8 +1354,6 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
 {
     if ( !m_pRootEntry )
     {
-        bool bExperimental = SvtMiscOptions().IsExperimentalMode();
-
         typedef std::unordered_map< OUString, bool, OUStringHash > MenuInfo;
         MenuInfo aMenuInfo;
 
@@ -1379,9 +1377,6 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
                     break;
                 }
             }
-
-            if ( !bExperimental && aUrl.endsWith("notebookbar") )
-                continue;
 
             css::uno::Reference< css::container::XIndexAccess > xPopupMenu;
             try
@@ -1430,9 +1425,6 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
                     break;
                 }
             }
-
-            if ( !bExperimental && aUrl.endsWith("notebookbar") )
-                continue;
 
             css::uno::Reference< css::container::XIndexAccess > xPopupMenu;
             try
