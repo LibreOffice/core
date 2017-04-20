@@ -51,7 +51,10 @@ namespace writerfilter {
 namespace ooxml
 {
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream,
+                                     const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
+                                     bool bSkipImages, bool bReadGlossaries,
+                                     const uno::Sequence<beans::PropertyValue>& rDescriptor)
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
@@ -59,6 +62,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, con
     , mxThemeDom(nullptr)
     , mbIsSubstream(false)
     , mbSkipImages(bSkipImages)
+    , mbReadGlossaries(bReadGlossaries)
     , mnPercentSize(0)
     , mnProgressLastPos(0)
     , mnProgressCurrentPos(0)
@@ -269,7 +273,7 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
 
     OOXMLDocumentImpl * pTemp;
     // Do not pass status indicator to sub-streams: they are typically marginal in size, so we just track the main document for now.
-    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor));
+    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, mbReadGlossaries, maMediaDescriptor));
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
     pTemp->mbIsSubstream = true;
@@ -283,7 +287,7 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, Id aType,
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
     // See above, no status indicator for the note stream, either.
-    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor);
+    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, mbReadGlossaries, maMediaDescriptor);
     pDocument->setXNoteId(nId);
     pDocument->setXNoteType(aType);
     pDocument->setModel(getModel());
@@ -437,6 +441,12 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
+    if (mbReadGlossaries)
+    {
+        resolveFastSubStream(rStream, OOXMLStream::GLOSSARY);
+        return;
+    }
+
     uno::Reference< xml::sax::XFastParser > xParser
         (mpStream->getFastParser());
 
@@ -945,9 +955,10 @@ OOXMLDocument *
 OOXMLDocumentFactory::createDocument
 (const OOXMLStream::Pointer_t& pStream,
  const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
- bool mbSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
+ bool bSkipImages, bool bReadGlossaries,
+ const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
-    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rDescriptor);
+    return new OOXMLDocumentImpl(pStream, xStatusIndicator, bSkipImages, bReadGlossaries, rDescriptor);
 }
 
 }}
