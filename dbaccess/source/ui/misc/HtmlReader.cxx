@@ -134,13 +134,9 @@ void OHTMLReader::NextToken( int nToken )
                     const HTMLOptions& rHtmlOptions = GetOptions();
                     for (const auto & rOption : rHtmlOptions)
                     {
-                        switch( rOption.GetToken() )
-                        {
-                            case HTML_O_WIDTH:
-                            {   // percentage: of document width respectively outer cell
-                                m_nColumnWidth = GetWidthPixel( rOption );
-                            }
-                            break;
+                        if( rOption.GetToken() == HtmlOptionId::WIDTH )
+                        {   // percentage: of document width respectively outer cell
+                            m_nColumnWidth = GetWidthPixel( rOption );
                         }
                     }
                 }
@@ -292,15 +288,16 @@ void OHTMLReader::fetchOptions()
     {
         switch( rOption.GetToken() )
         {
-            case HTML_O_SDVAL:
+            case HtmlOptionId::SDVAL:
             {
                 m_sValToken = rOption.GetString();
                 m_bSDNum = true;
             }
             break;
-            case HTML_O_SDNUM:
+            case HtmlOptionId::SDNUM:
                 m_sNumToken = rOption.GetString();
             break;
+            default: break;
         }
     }
 }
@@ -312,7 +309,7 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
     {
         switch( rOption.GetToken() )
         {
-            case HTML_O_ALIGN:
+            case HtmlOptionId::ALIGN:
             {
                 const OUString& rOptVal = rOption.GetString();
                 if (rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ))
@@ -325,9 +322,10 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
                     eVal = SvxCellHorJustify::Standard;
             }
             break;
-            case HTML_O_WIDTH:
+            case HtmlOptionId::WIDTH:
                 m_nWidth = GetWidthPixel( rOption );
             break;
+            default: break;
         }
     }
 }
@@ -339,14 +337,14 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
     {
         switch( rOption.GetToken() )
         {
-        case HTML_O_COLOR:
+        case HtmlOptionId::COLOR:
             {
                 Color aColor;
                 rOption.GetColor( aColor );
                 _rTextColor = aColor.GetRGBColor();
             }
             break;
-        case HTML_O_FACE :
+        case HtmlOptionId::FACE :
             {
                 const OUString& rFace = rOption.GetString();
                 OUString aFontName;
@@ -364,7 +362,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
                     _rFont.Name = aFontName;
             }
             break;
-        case HTML_O_SIZE :
+        case HtmlOptionId::SIZE :
             {
                 sal_Int16 nSize = (sal_Int16) rOption.GetNumber();
                 if ( nSize == 0 )
@@ -375,6 +373,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
                 _rFont.Height = nSize;
             }
             break;
+        default: break;
         }
     }
 }

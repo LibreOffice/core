@@ -218,32 +218,33 @@ void SwHTMLParser::NewField()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_TYPE:
+        case HtmlOptionId::TYPE:
             bKnownType = rOption.GetEnum( nType, aHTMLFieldTypeTable );
             break;
-        case HTML_O_SUBTYPE:
+        case HtmlOptionId::SUBTYPE:
             pSubOption = &rOption;
             break;
-        case HTML_O_FORMAT:
+        case HtmlOptionId::FORMAT:
             pFormatOption = &rOption;
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             aName = rOption.GetString();
             break;
-        case HTML_O_VALUE:
+        case HtmlOptionId::VALUE:
             aValue = rOption.GetString();
             break;
-        case HTML_O_SDNUM:
+        case HtmlOptionId::SDNUM:
             aNumFormat = rOption.GetString();
             bHasNumFormat = true;
             break;
-        case HTML_O_SDVAL:
+        case HtmlOptionId::SDVAL:
             aNumValue = rOption.GetString();
             bHasNumValue = true;
             break;
-        case HTML_O_SDFIXED:
+        case HtmlOptionId::SDFIXED:
             bFixed = true;
             break;
+        default: break;
         }
     }
 

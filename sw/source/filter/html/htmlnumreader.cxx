@@ -136,10 +136,10 @@ void SwHTMLParser::NewNumBulList( int nToken )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_TYPE:
+        case HtmlOptionId::TYPE:
             if( bNewNumFormat && !rOption.GetString().isEmpty() )
             {
                 switch( nToken )
@@ -164,7 +164,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                 }
             }
             break;
-        case HTML_O_START:
+        case HtmlOptionId::START:
             {
                 sal_uInt16 nStart = (sal_uInt16)rOption.GetNumber();
                 if( bNewNumFormat )
@@ -178,19 +178,19 @@ void SwHTMLParser::NewNumBulList( int nToken )
                 }
             }
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_LANG:
+        case HtmlOptionId::LANG:
             aLang = rOption.GetString();
             break;
-        case HTML_O_DIR:
+        case HtmlOptionId::DIR:
             aDir = rOption.GetString();
             break;
-        case HTML_O_SRC:
+        case HtmlOptionId::SRC:
             if( bNewNumFormat )
             {
                 aBulletSrc = rOption.GetString();
@@ -198,15 +198,16 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     aBulletSrc = URIHelper::SmartRel2Abs( INetURLObject( m_sBaseURL ), aBulletSrc, Link<OUString *, bool>(), false );
             }
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             nWidth = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_HEIGHT:
+        case HtmlOptionId::HEIGHT:
             nHeight = (sal_uInt16)rOption.GetNumber();
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
             break;
+        default: break;
         }
     }
 
@@ -441,24 +442,25 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-            case HTML_O_VALUE:
+            case HtmlOptionId::VALUE:
                 nStart = (sal_uInt16)rOption.GetNumber();
                 break;
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
-            case HTML_O_LANG:
+            case HtmlOptionId::LANG:
                 aLang = rOption.GetString();
                 break;
-            case HTML_O_DIR:
+            case HtmlOptionId::DIR:
                 aDir = rOption.GetString();
                 break;
+            default: break;
         }
     }
 

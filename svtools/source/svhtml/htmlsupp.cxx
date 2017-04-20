@@ -52,7 +52,7 @@ void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
         const HTMLOption& aOption = aScriptOptions[--i];
         switch( aOption.GetToken() )
         {
-        case HTML_O_LANGUAGE:
+        case HtmlOptionId::LANGUAGE:
             {
                 rLangString = aOption.GetString();
                 HTMLScriptLanguage nLang;
@@ -63,16 +63,17 @@ void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
             }
             break;
 
-        case HTML_O_SRC:
+        case HtmlOptionId::SRC:
             rSrc = INetURLObject::GetAbsURL( rBaseURL, aOption.GetString() );
             break;
-        case HTML_O_SDLIBRARY:
+        case HtmlOptionId::SDLIBRARY:
             rLibrary = aOption.GetString();
             break;
 
-        case HTML_O_SDMODULE:
+        case HtmlOptionId::SDMODULE:
             rModule = aOption.GetString();
             break;
+        default: break;
         }
     }
 }

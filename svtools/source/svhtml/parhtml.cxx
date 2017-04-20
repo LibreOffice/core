@@ -93,23 +93,23 @@ static HTMLOptionEnum<HTMLTableRules> const aTableRulesOptEnums[] =
 };
 
 
-HTMLOption::HTMLOption( sal_uInt16 nTok, const OUString& rToken,
+HTMLOption::HTMLOption( HtmlOptionId nTok, const OUString& rToken,
                         const OUString& rValue )
     : aValue(rValue)
     , aToken(rToken)
     , nToken( nTok )
 {
-    DBG_ASSERT( nToken>=HTML_OPTION_START && nToken<HTML_OPTION_END,
+    DBG_ASSERT( nToken>=HtmlOptionId::BOOL_START && nToken<HtmlOptionId::END,
         "HTMLOption: unknown token" );
 }
 
 sal_uInt32 HTMLOption::GetNumber() const
 {
-    DBG_ASSERT( (nToken>=HTML_OPTION_NUMBER_START &&
-                 nToken<HTML_OPTION_NUMBER_END) ||
-                (nToken>=HTML_OPTION_CONTEXT_START &&
-                 nToken<HTML_OPTION_CONTEXT_END) ||
-                nToken==HTML_O_VALUE,
+    DBG_ASSERT( (nToken>=HtmlOptionId::NUMBER_START &&
+                 nToken<HtmlOptionId::NUMBER_END) ||
+                (nToken>=HtmlOptionId::CONTEXT_START &&
+                 nToken<HtmlOptionId::CONTEXT_END) ||
+                nToken==HtmlOptionId::VALUE,
         "GetNumber: Option not numerical" );
     OUString aTmp(comphelper::string::stripStart(aValue, ' '));
     sal_Int32 nTmp = aTmp.toInt32();
@@ -118,8 +118,8 @@ sal_uInt32 HTMLOption::GetNumber() const
 
 sal_Int32 HTMLOption::GetSNumber() const
 {
-    DBG_ASSERT( (nToken>=HTML_OPTION_NUMBER_START && nToken<HTML_OPTION_NUMBER_END) ||
-                (nToken>=HTML_OPTION_CONTEXT_START && nToken<HTML_OPTION_CONTEXT_END),
+    DBG_ASSERT( (nToken>=HtmlOptionId::NUMBER_START && nToken<HtmlOptionId::NUMBER_END) ||
+                (nToken>=HtmlOptionId::CONTEXT_START && nToken<HtmlOptionId::CONTEXT_END),
         "GetSNumber: Option not numerical" );
     OUString aTmp(comphelper::string::stripStart(aValue, ' '));
     return aTmp.toInt32();
@@ -157,7 +157,7 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers ) const
 
 void HTMLOption::GetColor( Color& rColor ) const
 {
-    DBG_ASSERT( (nToken>=HTML_OPTION_COLOR_START && nToken<HTML_OPTION_COLOR_END) || nToken==HTML_O_SIZE,
+    DBG_ASSERT( (nToken>=HtmlOptionId::COLOR_START && nToken<HtmlOptionId::COLOR_END) || nToken==HtmlOptionId::SIZE,
         "GetColor: Option is not a color." );
 
     OUString aTmp(aValue.toAsciiLowerCase());
@@ -195,19 +195,19 @@ void HTMLOption::GetColor( Color& rColor ) const
 
 HTMLInputType HTMLOption::GetInputType() const
 {
-    DBG_ASSERT( nToken==HTML_O_TYPE, "GetInputType: Option not TYPE" );
+    DBG_ASSERT( nToken==HtmlOptionId::TYPE, "GetInputType: Option not TYPE" );
     return (HTMLInputType)GetEnum( aInputTypeOptEnums, HTMLInputType::Text );
 }
 
 HTMLTableFrame HTMLOption::GetTableFrame() const
 {
-    DBG_ASSERT( nToken==HTML_O_FRAME, "GetTableFrame: Option not FRAME" );
+    DBG_ASSERT( nToken==HtmlOptionId::FRAME, "GetTableFrame: Option not FRAME" );
     return (HTMLTableFrame)GetEnum( aTableFrameOptEnums );
 }
 
 HTMLTableRules HTMLOption::GetTableRules() const
 {
-    DBG_ASSERT( nToken==HTML_O_RULES, "GetTableRules: Option not RULES" );
+    DBG_ASSERT( nToken==HtmlOptionId::RULES, "GetTableRules: Option not RULES" );
     return (HTMLTableRules)GetEnum( aTableRulesOptEnums );
 }
 
@@ -1360,7 +1360,7 @@ void HTMLParser::UnescapeToken()
     }
 }
 
-const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
+const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId *pNoConvertToken )
 {
     // If the options for the current token have already been returned,
     // return them once again.
@@ -1373,7 +1373,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
         // A letter? Option beginning here.
         if( HTML_ISALPHA( aToken[nPos] ) )
         {
-            int nToken;
+            HtmlOptionId nToken;
             OUString aValue;
             sal_Int32 nStt = nPos;
             sal_Unicode cChar = 0;
@@ -1389,10 +1389,10 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
 
             // PlugIns require original token name. Convert to lower case only for searching.
             nToken = GetHTMLOption( sName.toAsciiLowerCase() ); // Name is ready
-            SAL_WARN_IF( nToken==HTML_O_UNKNOWN, "svtools",
+            SAL_WARN_IF( nToken==HtmlOptionId::UNKNOWN, "svtools",
                         "GetOption: unknown HTML option '" << sName << "'" );
-            bool bStripCRLF = (nToken < HTML_OPTION_SCRIPT_START ||
-                               nToken >= HTML_OPTION_SCRIPT_END) &&
+            bool bStripCRLF = (nToken < HtmlOptionId::SCRIPT_START ||
+                               nToken >= HtmlOptionId::SCRIPT_END) &&
                               (!pNoConvertToken || nToken != *pNoConvertToken);
 
             while( nPos < aToken.getLength() &&
@@ -1526,8 +1526,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
             }
 
             // Token is known and can be saved
-            maOptions.push_back(
-                HTMLOption(sal::static_int_cast<sal_uInt16>(nToken), sName, aValue));
+            maOptions.push_back(HTMLOption(nToken, sName, aValue));
 
         }
         else
@@ -1879,25 +1878,28 @@ bool HTMLParser::ParseMetaOptionsImpl(
         const HTMLOption& aOption = aOptions[--i];
         switch ( aOption.GetToken() )
         {
-            case HTML_O_NAME:
+            case HtmlOptionId::NAME:
                 aName = aOption.GetString();
                 if ( HtmlMeta::NONE==nAction )
                 {
                     aOption.GetEnum( nAction, aHTMLMetaNameTable );
                 }
                 break;
-            case HTML_O_HTTPEQUIV:
+            case HtmlOptionId::HTTPEQUIV:
                 aName = aOption.GetString();
                 aOption.GetEnum( nAction, aHTMLMetaNameTable );
                 bHTTPEquiv = true;
                 break;
-            case HTML_O_CONTENT:
+            case HtmlOptionId::CONTENT:
                 aContent = aOption.GetString();
                 break;
-            case HTML_O_CHARSET:
+            case HtmlOptionId::CHARSET:
+            {
                 OString sValue(OUStringToOString(aOption.GetString(), RTL_TEXTENCODING_ASCII_US));
                 o_rEnc = GetExtendedCompatibilityTextEncoding(rtl_getTextEncodingFromMimeCharset(sValue.getStr()));
                 break;
+            }
+            default: break;
         }
     }
 
@@ -2016,7 +2018,7 @@ bool HTMLParser::ParseMetaOptions(
         const uno::Reference<document::XDocumentProperties> & i_xDocProps,
         SvKeyValueIterator *i_pHeader )
 {
-    sal_uInt16 nContentOption = HTML_O_CONTENT;
+    HtmlOptionId nContentOption = HtmlOptionId::CONTENT;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
     bool bRet = ParseMetaOptionsImpl( i_xDocProps, i_pHeader,

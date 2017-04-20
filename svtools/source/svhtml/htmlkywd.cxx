@@ -553,173 +553,182 @@ sal_Unicode GetHTMLCharName( const OUString& rName )
 // Flag: Options table has already been sorted
 static bool bSortOptionKeyWords = false;
 
-static HTML_TokenEntry aHTMLOptionTab[] = {
+struct HTML_OptionEntry
+{
+    union
+    {
+        const sal_Char *sToken;
+        const OUString *pUToken;
+    };
+    HtmlOptionId nToken;
+};
+static HTML_OptionEntry aHTMLOptionTab[] = {
 
 // Attributes without value
-    {{OOO_STRING_SVTOOLS_HTML_O_checked},   HTML_O_CHECKED},
-    {{OOO_STRING_SVTOOLS_HTML_O_compact},   HTML_O_COMPACT},
-    {{OOO_STRING_SVTOOLS_HTML_O_declare},   HTML_O_DECLARE},
-    {{OOO_STRING_SVTOOLS_HTML_O_disabled},  HTML_O_DISABLED},
-    {{OOO_STRING_SVTOOLS_HTML_O_ismap},     HTML_O_ISMAP},
-    {{OOO_STRING_SVTOOLS_HTML_O_mayscript}, HTML_O_MAYSCRIPT},
-    {{OOO_STRING_SVTOOLS_HTML_O_multiple},  HTML_O_MULTIPLE},
-    {{OOO_STRING_SVTOOLS_HTML_O_nohref},        HTML_O_NOHREF}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_noresize},  HTML_O_NORESIZE}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_noshade},   HTML_O_NOSHADE}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_nowrap},        HTML_O_NOWRAP},
-    {{OOO_STRING_SVTOOLS_HTML_O_sdfixed},   HTML_O_SDFIXED},
-    {{OOO_STRING_SVTOOLS_HTML_O_selected},      HTML_O_SELECTED},
+    {{OOO_STRING_SVTOOLS_HTML_O_checked},   HtmlOptionId::CHECKED},
+    {{OOO_STRING_SVTOOLS_HTML_O_compact},   HtmlOptionId::COMPACT},
+    {{OOO_STRING_SVTOOLS_HTML_O_declare},   HtmlOptionId::DECLARE},
+    {{OOO_STRING_SVTOOLS_HTML_O_disabled},  HtmlOptionId::DISABLED},
+    {{OOO_STRING_SVTOOLS_HTML_O_ismap},     HtmlOptionId::ISMAP},
+    {{OOO_STRING_SVTOOLS_HTML_O_mayscript}, HtmlOptionId::MAYSCRIPT},
+    {{OOO_STRING_SVTOOLS_HTML_O_multiple},  HtmlOptionId::MULTIPLE},
+    {{OOO_STRING_SVTOOLS_HTML_O_nohref},        HtmlOptionId::NOHREF}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_noresize},  HtmlOptionId::NORESIZE}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_noshade},   HtmlOptionId::NOSHADE}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_nowrap},        HtmlOptionId::NOWRAP},
+    {{OOO_STRING_SVTOOLS_HTML_O_sdfixed},   HtmlOptionId::SDFIXED},
+    {{OOO_STRING_SVTOOLS_HTML_O_selected},      HtmlOptionId::SELECTED},
 
 // Attributes with a string value
-    {{OOO_STRING_SVTOOLS_HTML_O_accept},        HTML_O_ACCEPT},
-    {{OOO_STRING_SVTOOLS_HTML_O_accesskey}, HTML_O_ACCESSKEY},
-    {{OOO_STRING_SVTOOLS_HTML_O_alt},       HTML_O_ALT},
-    {{OOO_STRING_SVTOOLS_HTML_O_axis},      HTML_O_AXIS},
-    {{OOO_STRING_SVTOOLS_HTML_O_char},      HTML_O_CHAR}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_charset},   HTML_O_CHARSET},
-    {{OOO_STRING_SVTOOLS_HTML_O_class},     HTML_O_CLASS},
-    {{OOO_STRING_SVTOOLS_HTML_O_code},      HTML_O_CODE}, // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_O_codetype},  HTML_O_CODETYPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_content},   HTML_O_CONTENT},
-    {{OOO_STRING_SVTOOLS_HTML_O_coords},        HTML_O_COORDS}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_enctype},   HTML_O_ENCTYPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_face},      HTML_O_FACE}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_frameborder}, HTML_O_FRAMEBORDER}, // IExplorer 3.0
-    {{OOO_STRING_SVTOOLS_HTML_O_httpequiv}, HTML_O_HTTPEQUIV},
-    {{OOO_STRING_SVTOOLS_HTML_O_language},  HTML_O_LANGUAGE}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_name},      HTML_O_NAME},
-    {{OOO_STRING_SVTOOLS_HTML_O_prompt},        HTML_O_PROMPT},
-    {{OOO_STRING_SVTOOLS_HTML_O_shape},     HTML_O_SHAPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_standby},   HTML_O_STANDBY},
-    {{OOO_STRING_SVTOOLS_HTML_O_style},     HTML_O_STYLE},
-    {{OOO_STRING_SVTOOLS_HTML_O_title},     HTML_O_TITLE},
-    {{OOO_STRING_SVTOOLS_HTML_O_value},     HTML_O_VALUE},
-    {{OOO_STRING_SVTOOLS_HTML_O_SDval},     HTML_O_SDVAL}, // StarDiv NumberValue
-    {{OOO_STRING_SVTOOLS_HTML_O_SDnum},     HTML_O_SDNUM}, // StarDiv NumberFormat
-    {{OOO_STRING_SVTOOLS_HTML_O_sdlibrary}, HTML_O_SDLIBRARY},
-    {{OOO_STRING_SVTOOLS_HTML_O_sdmodule},  HTML_O_SDMODULE},
+    {{OOO_STRING_SVTOOLS_HTML_O_accept},        HtmlOptionId::ACCEPT},
+    {{OOO_STRING_SVTOOLS_HTML_O_accesskey}, HtmlOptionId::ACCESSKEY},
+    {{OOO_STRING_SVTOOLS_HTML_O_alt},       HtmlOptionId::ALT},
+    {{OOO_STRING_SVTOOLS_HTML_O_axis},      HtmlOptionId::AXIS},
+    {{OOO_STRING_SVTOOLS_HTML_O_char},      HtmlOptionId::CHAR}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_charset},   HtmlOptionId::CHARSET},
+    {{OOO_STRING_SVTOOLS_HTML_O_class},     HtmlOptionId::CLASS},
+    {{OOO_STRING_SVTOOLS_HTML_O_code},      HtmlOptionId::CODE}, // HotJava
+    {{OOO_STRING_SVTOOLS_HTML_O_codetype},  HtmlOptionId::CODETYPE},
+    {{OOO_STRING_SVTOOLS_HTML_O_content},   HtmlOptionId::CONTENT},
+    {{OOO_STRING_SVTOOLS_HTML_O_coords},        HtmlOptionId::COORDS}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_enctype},   HtmlOptionId::ENCTYPE},
+    {{OOO_STRING_SVTOOLS_HTML_O_face},      HtmlOptionId::FACE}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_frameborder}, HtmlOptionId::FRAMEBORDER}, // IExplorer 3.0
+    {{OOO_STRING_SVTOOLS_HTML_O_httpequiv}, HtmlOptionId::HTTPEQUIV},
+    {{OOO_STRING_SVTOOLS_HTML_O_language},  HtmlOptionId::LANGUAGE}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_name},      HtmlOptionId::NAME},
+    {{OOO_STRING_SVTOOLS_HTML_O_prompt},        HtmlOptionId::PROMPT},
+    {{OOO_STRING_SVTOOLS_HTML_O_shape},     HtmlOptionId::SHAPE},
+    {{OOO_STRING_SVTOOLS_HTML_O_standby},   HtmlOptionId::STANDBY},
+    {{OOO_STRING_SVTOOLS_HTML_O_style},     HtmlOptionId::STYLE},
+    {{OOO_STRING_SVTOOLS_HTML_O_title},     HtmlOptionId::TITLE},
+    {{OOO_STRING_SVTOOLS_HTML_O_value},     HtmlOptionId::VALUE},
+    {{OOO_STRING_SVTOOLS_HTML_O_SDval},     HtmlOptionId::SDVAL}, // StarDiv NumberValue
+    {{OOO_STRING_SVTOOLS_HTML_O_SDnum},     HtmlOptionId::SDNUM}, // StarDiv NumberFormat
+    {{OOO_STRING_SVTOOLS_HTML_O_sdlibrary}, HtmlOptionId::SDLIBRARY},
+    {{OOO_STRING_SVTOOLS_HTML_O_sdmodule},  HtmlOptionId::SDMODULE},
 
 // Attributes with a SGML identifier value
-    {{OOO_STRING_SVTOOLS_HTML_O_id},            HTML_O_ID},
-    {{OOO_STRING_SVTOOLS_HTML_O_target},        HTML_O_TARGET}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_to},            HTML_O_TO},
+    {{OOO_STRING_SVTOOLS_HTML_O_id},            HtmlOptionId::ID},
+    {{OOO_STRING_SVTOOLS_HTML_O_target},        HtmlOptionId::TARGET}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_to},            HtmlOptionId::TO},
 
 // Attributes with an URI value
-    {{OOO_STRING_SVTOOLS_HTML_O_action},        HTML_O_ACTION},
-    {{OOO_STRING_SVTOOLS_HTML_O_archive},       HTML_O_ARCHIVE},
-    {{OOO_STRING_SVTOOLS_HTML_O_background},    HTML_O_BACKGROUND},
-    {{OOO_STRING_SVTOOLS_HTML_O_classid},   HTML_O_CLASSID},
-    {{OOO_STRING_SVTOOLS_HTML_O_codebase},  HTML_O_CODEBASE}, // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_O_data},      HTML_O_DATA},
-    {{OOO_STRING_SVTOOLS_HTML_O_href},      HTML_O_HREF},
-    {{OOO_STRING_SVTOOLS_HTML_O_script},        HTML_O_SCRIPT},
-    {{OOO_STRING_SVTOOLS_HTML_O_src},       HTML_O_SRC},
-    {{OOO_STRING_SVTOOLS_HTML_O_usemap},        HTML_O_USEMAP}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_action},        HtmlOptionId::ACTION},
+    {{OOO_STRING_SVTOOLS_HTML_O_archive},       HtmlOptionId::ARCHIVE},
+    {{OOO_STRING_SVTOOLS_HTML_O_background},    HtmlOptionId::BACKGROUND},
+    {{OOO_STRING_SVTOOLS_HTML_O_classid},   HtmlOptionId::CLASSID},
+    {{OOO_STRING_SVTOOLS_HTML_O_codebase},  HtmlOptionId::CODEBASE}, // HotJava
+    {{OOO_STRING_SVTOOLS_HTML_O_data},      HtmlOptionId::DATA},
+    {{OOO_STRING_SVTOOLS_HTML_O_href},      HtmlOptionId::HREF},
+    {{OOO_STRING_SVTOOLS_HTML_O_script},        HtmlOptionId::SCRIPT},
+    {{OOO_STRING_SVTOOLS_HTML_O_src},       HtmlOptionId::SRC},
+    {{OOO_STRING_SVTOOLS_HTML_O_usemap},        HtmlOptionId::USEMAP}, // Netscape 2.0
 
 // Attributes with a color value (all Netscape versions)
-    {{OOO_STRING_SVTOOLS_HTML_O_alink},     HTML_O_ALINK},
-    {{OOO_STRING_SVTOOLS_HTML_O_bgcolor},   HTML_O_BGCOLOR},
-    {{OOO_STRING_SVTOOLS_HTML_O_bordercolor}, HTML_O_BORDERCOLOR}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_bordercolorlight}, HTML_O_BORDERCOLORLIGHT}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_bordercolordark}, HTML_O_BORDERCOLORDARK}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_color},     HTML_O_COLOR},
-    {{OOO_STRING_SVTOOLS_HTML_O_link},      HTML_O_LINK},
-    {{OOO_STRING_SVTOOLS_HTML_O_text},      HTML_O_TEXT},
-    {{OOO_STRING_SVTOOLS_HTML_O_vlink},     HTML_O_VLINK},
+    {{OOO_STRING_SVTOOLS_HTML_O_alink},     HtmlOptionId::ALINK},
+    {{OOO_STRING_SVTOOLS_HTML_O_bgcolor},   HtmlOptionId::BGCOLOR},
+    {{OOO_STRING_SVTOOLS_HTML_O_bordercolor}, HtmlOptionId::BORDERCOLOR}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_bordercolorlight}, HtmlOptionId::BORDERCOLORLIGHT}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_bordercolordark}, HtmlOptionId::BORDERCOLORDARK}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_color},     HtmlOptionId::COLOR},
+    {{OOO_STRING_SVTOOLS_HTML_O_link},      HtmlOptionId::LINK},
+    {{OOO_STRING_SVTOOLS_HTML_O_text},      HtmlOptionId::TEXT},
+    {{OOO_STRING_SVTOOLS_HTML_O_vlink},     HtmlOptionId::VLINK},
 
 // Attributes with a numerical value
-    {{OOO_STRING_SVTOOLS_HTML_O_border},        HTML_O_BORDER},
-    {{OOO_STRING_SVTOOLS_HTML_O_cellspacing},HTML_O_CELLSPACING}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_cellpadding},HTML_O_CELLPADDING}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_charoff},   HTML_O_CHAROFF}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_colspan},   HTML_O_COLSPAN},
-    {{OOO_STRING_SVTOOLS_HTML_O_framespacing}, HTML_O_FRAMESPACING}, // IExplorer 3.0
-    {{OOO_STRING_SVTOOLS_HTML_O_gutter},        HTML_O_GUTTER}, // Netscape 3.0b5
-    {{OOO_STRING_SVTOOLS_HTML_O_height},        HTML_O_HEIGHT},
-    {{OOO_STRING_SVTOOLS_HTML_O_hspace},        HTML_O_HSPACE}, // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_O_left},      HTML_O_LEFT},
-    {{OOO_STRING_SVTOOLS_HTML_O_loop},      HTML_O_LOOP}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_marginheight},HTML_O_MARGINHEIGHT}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_marginwidth},HTML_O_MARGINWIDTH}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_maxlength}, HTML_O_MAXLENGTH},
-    {{OOO_STRING_SVTOOLS_HTML_O_rowspan},   HTML_O_ROWSPAN},
-    {{OOO_STRING_SVTOOLS_HTML_O_scrollamount}, HTML_O_SCROLLAMOUNT}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_scrolldelay}, HTML_O_SCROLLDELAY}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_span},      HTML_O_SPAN}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_tabindex},  HTML_O_TABINDEX},
-    {{OOO_STRING_SVTOOLS_HTML_O_vspace},        HTML_O_VSPACE}, // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_O_width},     HTML_O_WIDTH},
-    {{OOO_STRING_SVTOOLS_HTML_O_zindex},        HTML_O_ZINDEX},
+    {{OOO_STRING_SVTOOLS_HTML_O_border},        HtmlOptionId::BORDER},
+    {{OOO_STRING_SVTOOLS_HTML_O_cellspacing},HtmlOptionId::CELLSPACING}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_cellpadding},HtmlOptionId::CELLPADDING}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_charoff},   HtmlOptionId::CHAROFF}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_colspan},   HtmlOptionId::COLSPAN},
+    {{OOO_STRING_SVTOOLS_HTML_O_framespacing}, HtmlOptionId::FRAMESPACING}, // IExplorer 3.0
+    {{OOO_STRING_SVTOOLS_HTML_O_gutter},        HtmlOptionId::GUTTER}, // Netscape 3.0b5
+    {{OOO_STRING_SVTOOLS_HTML_O_height},        HtmlOptionId::HEIGHT},
+    {{OOO_STRING_SVTOOLS_HTML_O_hspace},        HtmlOptionId::HSPACE}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_O_left},      HtmlOptionId::LEFT},
+    {{OOO_STRING_SVTOOLS_HTML_O_loop},      HtmlOptionId::LOOP}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_marginheight},HtmlOptionId::MARGINHEIGHT}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_marginwidth},HtmlOptionId::MARGINWIDTH}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_maxlength}, HtmlOptionId::MAXLENGTH},
+    {{OOO_STRING_SVTOOLS_HTML_O_rowspan},   HtmlOptionId::ROWSPAN},
+    {{OOO_STRING_SVTOOLS_HTML_O_scrollamount}, HtmlOptionId::SCROLLAMOUNT}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_scrolldelay}, HtmlOptionId::SCROLLDELAY}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_span},      HtmlOptionId::SPAN}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_tabindex},  HtmlOptionId::TABINDEX},
+    {{OOO_STRING_SVTOOLS_HTML_O_vspace},        HtmlOptionId::VSPACE}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_O_width},     HtmlOptionId::WIDTH},
+    {{OOO_STRING_SVTOOLS_HTML_O_zindex},        HtmlOptionId::ZINDEX},
 
 // Attributes with enum values
-    {{OOO_STRING_SVTOOLS_HTML_O_behavior},  HTML_O_BEHAVIOR}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_clear},     HTML_O_CLEAR},
-    {{OOO_STRING_SVTOOLS_HTML_O_dir},       HTML_O_DIR}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_direction},     HTML_O_DIRECTION}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_format},        HTML_O_FORMAT},
-    {{OOO_STRING_SVTOOLS_HTML_O_frame},     HTML_O_FRAME}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_lang},      HTML_O_LANG},
-    {{OOO_STRING_SVTOOLS_HTML_O_method},        HTML_O_METHOD},
-    {{OOO_STRING_SVTOOLS_HTML_O_rel},       HTML_O_REL},
-    {{OOO_STRING_SVTOOLS_HTML_O_rev},       HTML_O_REV},
-    {{OOO_STRING_SVTOOLS_HTML_O_rules},     HTML_O_RULES}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_O_scrolling}, HTML_O_SCROLLING}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_sdreadonly},    HTML_O_SDREADONLY},
-    {{OOO_STRING_SVTOOLS_HTML_O_subtype},   HTML_O_SUBTYPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_type},      HTML_O_TYPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_valign},        HTML_O_VALIGN},
-    {{OOO_STRING_SVTOOLS_HTML_O_valuetype}, HTML_O_VALUETYPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_wrap},      HTML_O_WRAP},
+    {{OOO_STRING_SVTOOLS_HTML_O_behavior},  HtmlOptionId::BEHAVIOR}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_clear},     HtmlOptionId::CLEAR},
+    {{OOO_STRING_SVTOOLS_HTML_O_dir},       HtmlOptionId::DIR}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_direction},     HtmlOptionId::DIRECTION}, // IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_format},        HtmlOptionId::FORMAT},
+    {{OOO_STRING_SVTOOLS_HTML_O_frame},     HtmlOptionId::FRAME}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_lang},      HtmlOptionId::LANG},
+    {{OOO_STRING_SVTOOLS_HTML_O_method},        HtmlOptionId::METHOD},
+    {{OOO_STRING_SVTOOLS_HTML_O_rel},       HtmlOptionId::REL},
+    {{OOO_STRING_SVTOOLS_HTML_O_rev},       HtmlOptionId::REV},
+    {{OOO_STRING_SVTOOLS_HTML_O_rules},     HtmlOptionId::RULES}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_O_scrolling}, HtmlOptionId::SCROLLING}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_sdreadonly},    HtmlOptionId::SDREADONLY},
+    {{OOO_STRING_SVTOOLS_HTML_O_subtype},   HtmlOptionId::SUBTYPE},
+    {{OOO_STRING_SVTOOLS_HTML_O_type},      HtmlOptionId::TYPE},
+    {{OOO_STRING_SVTOOLS_HTML_O_valign},        HtmlOptionId::VALIGN},
+    {{OOO_STRING_SVTOOLS_HTML_O_valuetype}, HtmlOptionId::VALUETYPE},
+    {{OOO_STRING_SVTOOLS_HTML_O_wrap},      HtmlOptionId::WRAP},
 
 // Attributes with script code value
-    {{OOO_STRING_SVTOOLS_HTML_O_onblur},        HTML_O_ONBLUR}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onchange},  HTML_O_ONCHANGE}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onclick},   HTML_O_ONCLICK}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onfocus},   HTML_O_ONFOCUS}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onload},    HTML_O_ONLOAD}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onmouseover}, HTML_O_ONMOUSEOVER}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onreset},   HTML_O_ONRESET}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onselect},  HTML_O_ONSELECT}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onsubmit},  HTML_O_ONSUBMIT}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onunload},  HTML_O_ONUNLOAD}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onabort},   HTML_O_ONABORT}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onerror},   HTML_O_ONERROR}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_onmouseout},    HTML_O_ONMOUSEOUT}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onblur},        HtmlOptionId::ONBLUR}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onchange},  HtmlOptionId::ONCHANGE}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onclick},   HtmlOptionId::ONCLICK}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onfocus},   HtmlOptionId::ONFOCUS}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onload},    HtmlOptionId::ONLOAD}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onmouseover}, HtmlOptionId::ONMOUSEOVER}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onreset},   HtmlOptionId::ONRESET}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onselect},  HtmlOptionId::ONSELECT}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onsubmit},  HtmlOptionId::ONSUBMIT}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onunload},  HtmlOptionId::ONUNLOAD}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onabort},   HtmlOptionId::ONABORT}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onerror},   HtmlOptionId::ONERROR}, // JavaScript
+    {{OOO_STRING_SVTOOLS_HTML_O_onmouseout},    HtmlOptionId::ONMOUSEOUT}, // JavaScript
 
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonblur},      HTML_O_SDONBLUR}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonchange},    HTML_O_SDONCHANGE}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonclick},         HTML_O_SDONCLICK}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonfocus},         HTML_O_SDONFOCUS}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonload},      HTML_O_SDONLOAD}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseover},     HTML_O_SDONMOUSEOVER}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonreset},     HTML_O_SDONRESET}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonselect},        HTML_O_SDONSELECT}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonsubmit},        HTML_O_SDONSUBMIT}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonunload},        HTML_O_SDONUNLOAD}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonabort},     HTML_O_SDONABORT}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonerror},         HTML_O_SDONERROR}, // StarBasic
-    {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseout},  HTML_O_SDONMOUSEOUT}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonblur},      HtmlOptionId::SDONBLUR}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonchange},    HtmlOptionId::SDONCHANGE}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonclick},         HtmlOptionId::SDONCLICK}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonfocus},         HtmlOptionId::SDONFOCUS}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonload},      HtmlOptionId::SDONLOAD}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseover},     HtmlOptionId::SDONMOUSEOVER}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonreset},     HtmlOptionId::SDONRESET}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonselect},        HtmlOptionId::SDONSELECT}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonsubmit},        HtmlOptionId::SDONSUBMIT}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonunload},        HtmlOptionId::SDONUNLOAD}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonabort},     HtmlOptionId::SDONABORT}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonerror},         HtmlOptionId::SDONERROR}, // StarBasic
+    {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseout},  HtmlOptionId::SDONMOUSEOUT}, // StarBasic
 
 // Attributes with context sensitive values
-    {{OOO_STRING_SVTOOLS_HTML_O_align},     HTML_O_ALIGN},
-    {{OOO_STRING_SVTOOLS_HTML_O_cols},      HTML_O_COLS}, // Netscape 2.0 vs HTML 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_rows},      HTML_O_ROWS}, // Netscape 2.0 vs HTML 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_size},      HTML_O_SIZE},
-    {{OOO_STRING_SVTOOLS_HTML_O_start},     HTML_O_START}, // Netscape 2.0 vs IExplorer 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_align},     HtmlOptionId::ALIGN},
+    {{OOO_STRING_SVTOOLS_HTML_O_cols},      HtmlOptionId::COLS}, // Netscape 2.0 vs HTML 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_rows},      HtmlOptionId::ROWS}, // Netscape 2.0 vs HTML 2.0
+    {{OOO_STRING_SVTOOLS_HTML_O_size},      HtmlOptionId::SIZE},
+    {{OOO_STRING_SVTOOLS_HTML_O_start},     HtmlOptionId::START}, // Netscape 2.0 vs IExplorer 2.0
 };
 
-int GetHTMLOption( const OUString& rName )
+HtmlOptionId GetHTMLOption( const OUString& rName )
 {
     if( !bSortOptionKeyWords )
     {
         qsort( static_cast<void*>(aHTMLOptionTab),
-                sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
-                sizeof( HTML_TokenEntry ),
+                sizeof( aHTMLOptionTab ) / sizeof( HTML_OptionEntry ),
+                sizeof( HTML_OptionEntry ),
                 HTMLKeyCompare );
         bSortOptionKeyWords = true;
     }
 
-    int nRet = HTML_O_UNKNOWN;
+    HtmlOptionId nRet = HtmlOptionId::UNKNOWN;
     void* pFound;
     HTML_TokenEntry aSrch;
     aSrch.pUToken = &rName;
@@ -727,10 +736,10 @@ int GetHTMLOption( const OUString& rName )
 
     if( nullptr != ( pFound = bsearch( &aSrch,
                         static_cast<void*>(aHTMLOptionTab),
-                        sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
-                        sizeof( HTML_TokenEntry ),
+                        sizeof( aHTMLOptionTab ) / sizeof( HTML_OptionEntry ),
+                        sizeof( HTML_OptionEntry ),
                         HTMLKeyCompare )))
-        nRet = static_cast<HTML_TokenEntry*>(pFound)->nToken;
+        nRet = static_cast<HTML_OptionEntry*>(pFound)->nToken;
     return nRet;
 }
 

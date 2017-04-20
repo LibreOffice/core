@@ -324,28 +324,28 @@ void SwHTMLParser::InsertImage()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
-            case HTML_O_SRC:
+            case HtmlOptionId::SRC:
                 sGrfNm = rOption.GetString();
                 if( !InternalImgToPrivateURL(sGrfNm) )
                     sGrfNm = INetURLObject::GetAbsURL( m_sBaseURL, sGrfNm );
                 break;
-            case HTML_O_ALIGN:
+            case HtmlOptionId::ALIGN:
                 eVertOri =
                     rOption.GetEnum( aHTMLImgVAlignTable,
                                                     text::VertOrientation::TOP );
                 eHoriOri =
                     rOption.GetEnum( aHTMLImgHAlignTable );
                 break;
-            case HTML_O_WIDTH:
+            case HtmlOptionId::WIDTH:
                 // for now only store as pixel value!
                 nWidth = rOption.GetNumber();
                 bPrcWidth = (rOption.GetString().indexOf('%') != -1);
@@ -353,7 +353,7 @@ void SwHTMLParser::InsertImage()
                     nWidth = 100;
                 bWidthProvided = true;
                 break;
-            case HTML_O_HEIGHT:
+            case HtmlOptionId::HEIGHT:
                 // for now only store as pixel value!
                 nHeight = rOption.GetNumber();
                 bPrcHeight = (rOption.GetString().indexOf('%') != -1);
@@ -361,46 +361,46 @@ void SwHTMLParser::InsertImage()
                     nHeight = 100;
                 bHeightProvided = true;
                 break;
-            case HTML_O_VSPACE:
+            case HtmlOptionId::VSPACE:
                 nVSpace = rOption.GetNumber();
                 break;
-            case HTML_O_HSPACE:
+            case HtmlOptionId::HSPACE:
                 nHSpace = rOption.GetNumber();
                 break;
-            case HTML_O_ALT:
+            case HtmlOptionId::ALT:
                 sAltNm = rOption.GetString();
                 break;
-            case HTML_O_BORDER:
+            case HtmlOptionId::BORDER:
                 nBorder = (sal_uInt16)rOption.GetNumber();
                 break;
-            case HTML_O_ISMAP:
+            case HtmlOptionId::ISMAP:
                 bIsMap = true;
                 break;
-            case HTML_O_USEMAP:
+            case HtmlOptionId::USEMAP:
                 aMap = rOption.GetString();
                 break;
-            case HTML_O_NAME:
+            case HtmlOptionId::NAME:
                 sHTMLGrfName = rOption.GetString();
                 break;
 
-            case HTML_O_SDONLOAD:
+            case HtmlOptionId::SDONLOAD:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONLOAD:
+            case HtmlOptionId::ONLOAD:
                 nEvent = SVX_EVENT_IMAGE_LOAD;
                 goto IMAGE_SETEVENT;
 
-            case HTML_O_SDONABORT:
+            case HtmlOptionId::SDONABORT:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONABORT:
+            case HtmlOptionId::ONABORT:
                 nEvent = SVX_EVENT_IMAGE_ABORT;
                 goto IMAGE_SETEVENT;
 
-            case HTML_O_SDONERROR:
+            case HtmlOptionId::SDONERROR:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONERROR:
+            case HtmlOptionId::ONERROR:
                 nEvent = SVX_EVENT_IMAGE_ERROR;
                 goto IMAGE_SETEVENT;
 IMAGE_SETEVENT:
@@ -417,6 +417,7 @@ IMAGE_SETEVENT:
                     }
                 }
                 break;
+            default: break;
         }
     }
 
@@ -836,74 +837,75 @@ void SwHTMLParser::InsertBodyOptions()
 
         switch( rOption.GetToken() )
         {
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_BACKGROUND:
+            case HtmlOptionId::BACKGROUND:
                 aBackGround = rOption.GetString();
                 break;
-            case HTML_O_BGCOLOR:
+            case HtmlOptionId::BGCOLOR:
                 rOption.GetColor( aBGColor );
                 bBGColor = true;
                 break;
-            case HTML_O_TEXT:
+            case HtmlOptionId::TEXT:
                 rOption.GetColor( aTextColor );
                 bTextColor = true;
                 break;
-            case HTML_O_LINK:
+            case HtmlOptionId::LINK:
                 rOption.GetColor( aLinkColor );
                 bLinkColor = true;
                 break;
-            case HTML_O_VLINK:
+            case HtmlOptionId::VLINK:
                 rOption.GetColor( aVLinkColor );
                 bVLinkColor = true;
                 break;
 
-            case HTML_O_SDONLOAD:
+            case HtmlOptionId::SDONLOAD:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONLOAD:
+            case HtmlOptionId::ONLOAD:
                 aEvent = GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC );
                 bSetEvent = true;
                 break;
 
-            case HTML_O_SDONUNLOAD:
+            case HtmlOptionId::SDONUNLOAD:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONUNLOAD:
+            case HtmlOptionId::ONUNLOAD:
                 aEvent = GlobalEventConfig::GetEventName( GlobalEventId::PREPARECLOSEDOC );
                 bSetEvent = true;
                 break;
 
-            case HTML_O_SDONFOCUS:
+            case HtmlOptionId::SDONFOCUS:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONFOCUS:
+            case HtmlOptionId::ONFOCUS:
                 aEvent = GlobalEventConfig::GetEventName( GlobalEventId::ACTIVATEDOC );
                 bSetEvent = true;
                 break;
 
-            case HTML_O_SDONBLUR:
+            case HtmlOptionId::SDONBLUR:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONBLUR:
+            case HtmlOptionId::ONBLUR:
                 aEvent = GlobalEventConfig::GetEventName( GlobalEventId::DEACTIVATEDOC );
                 bSetEvent = true;
                 break;
 
-            case HTML_O_ONERROR:
+            case HtmlOptionId::ONERROR:
                 break;
 
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 bTextColor = true;
                 break;
-            case HTML_O_LANG:
+            case HtmlOptionId::LANG:
                 aLang = rOption.GetString();
                 break;
-            case HTML_O_DIR:
+            case HtmlOptionId::DIR:
                 aDir = rOption.GetString();
                 break;
+            default: break;
         }
 
         if( bSetEvent )
@@ -1071,55 +1073,55 @@ void SwHTMLParser::NewAnchor()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-            case HTML_O_NAME:
+            case HtmlOptionId::NAME:
                 aName = rOption.GetString();
                 break;
 
-            case HTML_O_HREF:
+            case HtmlOptionId::HREF:
                 sHRef = rOption.GetString();
                 bHasHRef = true;
                 break;
-            case HTML_O_TARGET:
+            case HtmlOptionId::TARGET:
                 sTarget = rOption.GetString();
                 break;
 
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
-            case HTML_O_SDFIXED:
+            case HtmlOptionId::SDFIXED:
                 bFixed = true;
                 break;
-            case HTML_O_LANG:
+            case HtmlOptionId::LANG:
                 aLang = rOption.GetString();
                 break;
-            case HTML_O_DIR:
+            case HtmlOptionId::DIR:
                 aDir = rOption.GetString();
                 break;
 
-            case HTML_O_SDONCLICK:
+            case HtmlOptionId::SDONCLICK:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONCLICK:
+            case HtmlOptionId::ONCLICK:
                 nEvent = SFX_EVENT_MOUSECLICK_OBJECT;
                 goto ANCHOR_SETEVENT;
 
-            case HTML_O_SDONMOUSEOVER:
+            case HtmlOptionId::SDONMOUSEOVER:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONMOUSEOVER:
+            case HtmlOptionId::ONMOUSEOVER:
                 nEvent = SFX_EVENT_MOUSEOVER_OBJECT;
                 goto ANCHOR_SETEVENT;
 
-            case HTML_O_SDONMOUSEOUT:
+            case HtmlOptionId::SDONMOUSEOUT:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
-            case HTML_O_ONMOUSEOUT:
+            case HtmlOptionId::ONMOUSEOUT:
                 nEvent = SFX_EVENT_MOUSEOUT_OBJECT;
                 goto ANCHOR_SETEVENT;
 ANCHOR_SETEVENT:
@@ -1135,7 +1137,7 @@ ANCHOR_SETEVENT:
                     }
                 }
                 break;
-
+            default: break;
         }
     }
 

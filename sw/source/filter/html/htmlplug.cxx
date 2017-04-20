@@ -307,59 +307,59 @@ void SwHTMLParser::InsertEmbed()
     {
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             aName = rOption.GetString();
             break;
-        case HTML_O_SRC:
+        case HtmlOptionId::SRC:
             if( aURL.isEmpty() )
                 aURL = rOption.GetString();
             break;
-        case HTML_O_ALT:
+        case HtmlOptionId::ALT:
             aAlt = rOption.GetString();
             break;
-        case HTML_O_TYPE:
+        case HtmlOptionId::TYPE:
             if( aType.isEmpty() )
                 aType = rOption.GetString();
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             if( eVertOri==text::VertOrientation::NONE && eHoriOri==text::HoriOrientation::NONE )
             {
                 eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
                 eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             }
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             if( USHRT_MAX==aSize.Width() )
             {
                 bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 aSize.Width() = (long)rOption.GetNumber();
             }
             break;
-        case HTML_O_HEIGHT:
+        case HtmlOptionId::HEIGHT:
             if( USHRT_MAX==aSize.Height() )
             {
                 bPrcHeight = (rOption.GetString().indexOf('%') != -1);
                 aSize.Height() = (long)rOption.GetNumber();
             }
             break;
-        case HTML_O_HSPACE:
+        case HtmlOptionId::HSPACE:
             if( USHRT_MAX==aSpace.Width() )
                 aSpace.Width() = (long)rOption.GetNumber();
             break;
-        case HTML_O_VSPACE:
+        case HtmlOptionId::VSPACE:
             if( USHRT_MAX==aSpace.Height() )
                 aSpace.Height() = (long)rOption.GetNumber();
             break;
-        case HTML_O_UNKNOWN:
+        case HtmlOptionId::UNKNOWN:
             if (rOption.GetTokenString().equalsIgnoreAsciiCase(
                         OOO_STRING_SW_HTML_O_Hidden))
             {
@@ -367,6 +367,7 @@ void SwHTMLParser::InsertEmbed()
                                 "FALSE");
             }
             break;
+        default: break;
         }
 
         // Es werden alle Parameter an das Plugin weitergereicht
@@ -502,68 +503,69 @@ void SwHTMLParser::NewObject()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_DECLARE:
+        case HtmlOptionId::DECLARE:
             bDeclare = true;
             break;
-        case HTML_O_CLASSID:
+        case HtmlOptionId::CLASSID:
             aClassID = rOption.GetString();
             break;
-        case HTML_O_CODEBASE:
+        case HtmlOptionId::CODEBASE:
             break;
-        case HTML_O_DATA:
+        case HtmlOptionId::DATA:
             break;
-        case HTML_O_TYPE:
+        case HtmlOptionId::TYPE:
             break;
-        case HTML_O_CODETYPE:
+        case HtmlOptionId::CODETYPE:
             break;
-        case HTML_O_ARCHIVE:
-        case HTML_O_UNKNOWN:
+        case HtmlOptionId::ARCHIVE:
+        case HtmlOptionId::UNKNOWN:
             break;
-        case HTML_O_STANDBY:
+        case HtmlOptionId::STANDBY:
             aStandBy = rOption.GetString();
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
-        case HTML_O_HEIGHT:
+        case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
             eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
-        case HTML_O_USEMAP:
+        case HtmlOptionId::USEMAP:
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             aName = rOption.GetString();
             break;
-        case HTML_O_HSPACE:
+        case HtmlOptionId::HSPACE:
             aSpace.Width() = (long)rOption.GetNumber();
             break;
-        case HTML_O_VSPACE:
+        case HtmlOptionId::VSPACE:
             aSpace.Height() = (long)rOption.GetNumber();
             break;
-        case HTML_O_BORDER:
+        case HtmlOptionId::BORDER:
             break;
 
-        case HTML_O_SDONCLICK:
-        case HTML_O_ONCLICK:
-        case HTML_O_SDONMOUSEOVER:
-        case HTML_O_ONMOUSEOVER:
-        case HTML_O_SDONMOUSEOUT:
-        case HTML_O_ONMOUSEOUT:
+        case HtmlOptionId::SDONCLICK:
+        case HtmlOptionId::ONCLICK:
+        case HtmlOptionId::SDONMOUSEOVER:
+        case HtmlOptionId::ONMOUSEOVER:
+        case HtmlOptionId::SDONMOUSEOUT:
+        case HtmlOptionId::ONMOUSEOUT:
             break;
+        default: break;
         }
         // Es werden alle Parameter auch an das Applet weitergereicht
         m_pAppletImpl->AppendParam( rOption.GetTokenString(),
@@ -670,48 +672,49 @@ void SwHTMLParser::InsertApplet()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_CODEBASE:
+        case HtmlOptionId::CODEBASE:
             aCodeBase = rOption.GetString();
             break;
-        case HTML_O_CODE:
+        case HtmlOptionId::CODE:
             aCode = rOption.GetString();
             break;
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             aName = rOption.GetString();
             break;
-        case HTML_O_ALT:
+        case HtmlOptionId::ALT:
             aAlt = rOption.GetString();
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
             eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
-        case HTML_O_HEIGHT:
+        case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
-        case HTML_O_HSPACE:
+        case HtmlOptionId::HSPACE:
             aSpace.Width() = (long)rOption.GetNumber();
             break;
-        case HTML_O_VSPACE:
+        case HtmlOptionId::VSPACE:
             aSpace.Height() = (long)rOption.GetNumber();
             break;
-        case HTML_O_MAYSCRIPT:
+        case HtmlOptionId::MAYSCRIPT:
             bMayScript = true;
             break;
+        default: break;
         }
 
         // Es werden alle Parameter auch an das Applet weitergereicht
@@ -795,12 +798,13 @@ void SwHTMLParser::InsertParam()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HTML_O_NAME:
+        case HtmlOptionId::NAME:
             aName = rOption.GetString();
             break;
-        case HTML_O_VALUE:
+        case HtmlOptionId::VALUE:
             aValue = rOption.GetString();
             break;
+        default: break;
         }
     }
 
@@ -829,36 +833,37 @@ void SwHTMLParser::InsertFloatingFrame()
     {
         switch( rOption.GetToken() )
         {
-        case HTML_O_ID:
+        case HtmlOptionId::ID:
             aId = rOption.GetString();
             break;
-        case HTML_O_STYLE:
+        case HtmlOptionId::STYLE:
             aStyle = rOption.GetString();
             break;
-        case HTML_O_CLASS:
+        case HtmlOptionId::CLASS:
             aClass = rOption.GetString();
             break;
-        case HTML_O_ALT:
+        case HtmlOptionId::ALT:
             aAlt = rOption.GetString();
             break;
-        case HTML_O_ALIGN:
+        case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
             eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
-        case HTML_O_WIDTH:
+        case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
-        case HTML_O_HEIGHT:
+        case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
-        case HTML_O_HSPACE:
+        case HtmlOptionId::HSPACE:
             aSpace.Width() = (long)rOption.GetNumber();
             break;
-        case HTML_O_VSPACE:
+        case HtmlOptionId::VSPACE:
             aSpace.Height() = (long)rOption.GetNumber();
             break;
+        default: break;
         }
     }
 

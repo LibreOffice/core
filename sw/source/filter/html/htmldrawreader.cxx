@@ -270,31 +270,31 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     {
         switch( rOption.GetToken() )
         {
-            case HTML_O_ID:
+            case HtmlOptionId::ID:
                 aId = rOption.GetString();
                 break;
-            case HTML_O_STYLE:
+            case HtmlOptionId::STYLE:
                 aStyle = rOption.GetString();
                 break;
-            case HTML_O_CLASS:
+            case HtmlOptionId::CLASS:
                 aClass = rOption.GetString();
                 break;
 
-            case HTML_O_BEHAVIOR:
+            case HtmlOptionId::BEHAVIOR:
                 eAniKind = rOption.GetEnum( aHTMLMarqBehaviorTable, eAniKind );
                 break;
 
-            case HTML_O_BGCOLOR:
+            case HtmlOptionId::BGCOLOR:
                 rOption.GetColor( aBGColor );
                 bBGColor = true;
                 break;
 
-            case HTML_O_DIRECTION:
+            case HtmlOptionId::DIRECTION:
                 eAniDir = rOption.GetEnum( aHTMLMarqDirectionTable, eAniDir );
                 bDirection = true;
                 break;
 
-            case HTML_O_LOOP:
+            case HtmlOptionId::LOOP:
                 if (rOption.GetString().
                     equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_LOOP_infinite))
                 {
@@ -307,15 +307,15 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 }
                 break;
 
-            case HTML_O_SCROLLAMOUNT:
+            case HtmlOptionId::SCROLLAMOUNT:
                 nAmount = -((sal_Int16)rOption.GetNumber());
                 break;
 
-            case HTML_O_SCROLLDELAY:
+            case HtmlOptionId::SCROLLDELAY:
                 nDelay = (sal_uInt16)rOption.GetNumber();
                 break;
 
-            case HTML_O_WIDTH:
+            case HtmlOptionId::WIDTH:
                 // erstmal nur als Pixelwerte merken!
                 nWidth = rOption.GetNumber();
                 bPrcWidth = rOption.GetString().indexOf('%') != -1;
@@ -323,30 +323,31 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                     nWidth = 100;
                 break;
 
-            case HTML_O_HEIGHT:
+            case HtmlOptionId::HEIGHT:
                 // erstmal nur als Pixelwerte merken!
                 nHeight = rOption.GetNumber();
                 if( rOption.GetString().indexOf('%') != -1 )
                     nHeight = 0;
                 break;
 
-            case HTML_O_HSPACE:
+            case HtmlOptionId::HSPACE:
                 // erstmal nur als Pixelwerte merken!
                 aSpace.Height() = rOption.GetNumber();
                 break;
 
-            case HTML_O_VSPACE:
+            case HtmlOptionId::VSPACE:
                 // erstmal nur als Pixelwerte merken!
                 aSpace.Width() = rOption.GetNumber();
                 break;
 
-            case HTML_O_ALIGN:
+            case HtmlOptionId::ALIGN:
                 eVertOri =
                     rOption.GetEnum( aHTMLImgVAlignTable,
                                                     text::VertOrientation::TOP );
                 eHoriOri =
                     rOption.GetEnum( aHTMLImgHAlignTable );
                 break;
+            default: break;
         }
     }
 

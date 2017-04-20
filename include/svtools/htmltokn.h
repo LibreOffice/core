@@ -26,6 +26,7 @@
 namespace rtl {
     class OUString;
 };
+enum class HtmlOptionId;
 
 // search the char for the CharName
 sal_Unicode GetHTMLCharName( const rtl::OUString& rName );
@@ -34,7 +35,7 @@ sal_Unicode GetHTMLCharName( const rtl::OUString& rName );
 SVT_DLLPUBLIC int GetHTMLToken( const rtl::OUString& rName );
 
 // search the TokenId for an attribute token
-int GetHTMLOption( const rtl::OUString& rName );
+HtmlOptionId GetHTMLOption( const rtl::OUString& rName );
 
 // search the 24-bit color for a color name (not found = ULONG_MAX)
 SVT_DLLPUBLIC sal_uInt32 GetHTMLColor( const rtl::OUString& rName );
@@ -278,185 +279,183 @@ enum HTML_TOKEN_IDS
 
 // HTML attribute token (=Options)
 
-// always starting from 256 on, greater than a char
-const int HTML_OPTION_START = 0x100;
-
-enum HTML_OPTION_IDS
+enum class HtmlOptionId
 {
-HTML_OPTION_BOOL_START          = HTML_OPTION_START,
+// always starting from 256 on, greater than a char
+BOOL_START          = 0x100,
 
 // attributes without value
-    HTML_O_CHECKED              = HTML_OPTION_BOOL_START,
-    HTML_O_COMPACT,
-    HTML_O_DECLARE, // IExplorer 3.0b5
-    HTML_O_DISABLED,
-    HTML_O_ISMAP,
-    HTML_O_MAYSCRIPT, // Netscape 3.0
-    HTML_O_MULTIPLE,
-    HTML_O_NOHREF, // Netscape
-    HTML_O_NORESIZE, // Netscape 2.0
-    HTML_O_NOSHADE, // Netscape
-    HTML_O_NOWRAP,
-    HTML_O_SDFIXED,
-    HTML_O_SELECTED,
-HTML_OPTION_BOOL_END,
+    CHECKED              = BOOL_START,
+    COMPACT,
+    DECLARE, // IExplorer 3.0b5
+    DISABLED,
+    ISMAP,
+    MAYSCRIPT, // Netscape 3.0
+    MULTIPLE,
+    NOHREF, // Netscape
+    NORESIZE, // Netscape 2.0
+    NOSHADE, // Netscape
+    NOWRAP,
+    SDFIXED,
+    SELECTED,
+BOOL_END,
 
 // attributes with a string as value
-HTML_OPTION_STRING_START        = HTML_OPTION_BOOL_END,
-    HTML_O_ACCEPT               = HTML_OPTION_STRING_START,
-    HTML_O_ACCESSKEY,
-    HTML_O_ALT,
-    HTML_O_AXIS,
-    HTML_O_CHAR, // HTML3 Table Model Draft
-    HTML_O_CHARSET,
-    HTML_O_CLASS,
-    HTML_O_CODE, // HotJava
-    HTML_O_CODETYPE,
-    HTML_O_CONTENT,
-    HTML_O_COORDS, // Netscape 2.0
-    HTML_O_ENCTYPE,
-    HTML_O_FACE, // IExplorer 2.0
-    HTML_O_FRAMEBORDER, // IExplorer 3.0
-    HTML_O_HTTPEQUIV,
-    HTML_O_LANGUAGE, // JavaScript
-    HTML_O_NAME,
-    HTML_O_PROMPT,
-    HTML_O_SHAPE,
-    HTML_O_STANDBY,
-    HTML_O_STYLE, // Style Sheets
-    HTML_O_TITLE,
-    HTML_O_VALUE,
-    HTML_O_SDVAL, // StarDiv NumberValue
-    HTML_O_SDNUM, // StarDiv NumberFormat
-    HTML_O_SDLIBRARY,
-    HTML_O_SDMODULE,
-HTML_OPTION_STRING_END,
+STRING_START        = BOOL_END,
+    ACCEPT               = STRING_START,
+    ACCESSKEY,
+    ALT,
+    AXIS,
+    CHAR, // HTML3 Table Model Draft
+    CHARSET,
+    CLASS,
+    CODE, // HotJava
+    CODETYPE,
+    CONTENT,
+    COORDS, // Netscape 2.0
+    ENCTYPE,
+    FACE, // IExplorer 2.0
+    FRAMEBORDER, // IExplorer 3.0
+    HTTPEQUIV,
+    LANGUAGE, // JavaScript
+    NAME,
+    PROMPT,
+    SHAPE,
+    STANDBY,
+    STYLE, // Style Sheets
+    TITLE,
+    VALUE,
+    SDVAL, // StarDiv NumberValue
+    SDNUM, // StarDiv NumberFormat
+    SDLIBRARY,
+    SDMODULE,
+STRING_END,
 
 // attributes with an SGML identifier as value
-HTML_OPTION_SGMLID_START        = HTML_OPTION_STRING_END,
-    HTML_O_ID                   = HTML_OPTION_SGMLID_START,
-    HTML_O_TARGET, // Netscape 2.0
-    HTML_O_TO,
-HTML_OPTION_SGMLID_END,
+SGMLID_START        = STRING_END,
+    ID                   = SGMLID_START,
+    TARGET, // Netscape 2.0
+    TO,
+SGMLID_END,
 
 // attributes with a URI as value
-HTML_OPTION_URI_START           = HTML_OPTION_SGMLID_END,
-    HTML_O_ACTION               = HTML_OPTION_URI_START,
-    HTML_O_ARCHIVE,
-    HTML_O_BACKGROUND,
-    HTML_O_CLASSID,
-    HTML_O_CODEBASE, // HotJava
-    HTML_O_DATA,
-    HTML_O_HREF,
-    HTML_O_SCRIPT,
-    HTML_O_SRC,
-    HTML_O_USEMAP, // Netscape 2.0
-HTML_OPTION_URI_END,
+URI_START           = SGMLID_END,
+    ACTION               = URI_START,
+    ARCHIVE,
+    BACKGROUND,
+    CLASSID,
+    CODEBASE, // HotJava
+    DATA,
+    HREF,
+    SCRIPT,
+    SRC,
+    USEMAP, // Netscape 2.0
+URI_END,
 
 // attributes with a color as value (all Netscape)
-HTML_OPTION_COLOR_START         = HTML_OPTION_URI_END,
-    HTML_O_ALINK                = HTML_OPTION_COLOR_START,
-    HTML_O_BGCOLOR,
-    HTML_O_BORDERCOLOR, // IExplorer 2.0
-    HTML_O_BORDERCOLORLIGHT, // IExplorer 2.0
-    HTML_O_BORDERCOLORDARK, // IExplorer 2.0
-    HTML_O_COLOR,
-    HTML_O_LINK,
-    HTML_O_TEXT,
-    HTML_O_VLINK,
-HTML_OPTION_COLOR_END,
+COLOR_START         = URI_END,
+    ALINK                = COLOR_START,
+    BGCOLOR,
+    BORDERCOLOR, // IExplorer 2.0
+    BORDERCOLORLIGHT, // IExplorer 2.0
+    BORDERCOLORDARK, // IExplorer 2.0
+    COLOR,
+    LINK,
+    TEXT,
+    VLINK,
+COLOR_END,
 
 // attributes with a numeric value
-HTML_OPTION_NUMBER_START        = HTML_OPTION_COLOR_END,
-    HTML_O_BORDER               = HTML_OPTION_NUMBER_START,
-    HTML_O_CELLSPACING, // HTML3 Table Model Draft
-    HTML_O_CELLPADDING, // HTML3 Table Model Draft
-    HTML_O_CHAROFF, // HTML3 Table Model Draft
-    HTML_O_COLSPAN,
-    HTML_O_FRAMESPACING, // IExplorer 3.0
-    HTML_O_GUTTER, // Netscape 3.0b5
-    HTML_O_HEIGHT,
-    HTML_O_HSPACE,          // Netscape
-    HTML_O_LEFT,
-    HTML_O_LOOP, // IExplorer 2.0
-    HTML_O_MARGINWIDTH, // Netscape 2.0
-    HTML_O_MARGINHEIGHT, // Netscape 2.0
-    HTML_O_MAXLENGTH,
-    HTML_O_ROWSPAN,
-    HTML_O_SCROLLAMOUNT, // IExplorer 2.0
-    HTML_O_SCROLLDELAY, // IExplorer 2.0
-    HTML_O_SPAN, // HTML3 Table Model Draft
-    HTML_O_TABINDEX,
-    HTML_O_VSPACE,          // Netscape
-    HTML_O_WIDTH,
-    HTML_O_ZINDEX,
-HTML_OPTION_NUMBER_END,
+NUMBER_START        = COLOR_END,
+    BORDER               = NUMBER_START,
+    CELLSPACING, // HTML3 Table Model Draft
+    CELLPADDING, // HTML3 Table Model Draft
+    CHAROFF, // HTML3 Table Model Draft
+    COLSPAN,
+    FRAMESPACING, // IExplorer 3.0
+    GUTTER, // Netscape 3.0b5
+    HEIGHT,
+    HSPACE,          // Netscape
+    LEFT,
+    LOOP, // IExplorer 2.0
+    MARGINWIDTH, // Netscape 2.0
+    MARGINHEIGHT, // Netscape 2.0
+    MAXLENGTH,
+    ROWSPAN,
+    SCROLLAMOUNT, // IExplorer 2.0
+    SCROLLDELAY, // IExplorer 2.0
+    SPAN, // HTML3 Table Model Draft
+    TABINDEX,
+    VSPACE,          // Netscape
+    WIDTH,
+    ZINDEX,
+NUMBER_END,
 
 // attributes with Enum values
-HTML_OPTION_ENUM_START          = HTML_OPTION_NUMBER_END,
-    HTML_O_BEHAVIOR             = HTML_OPTION_ENUM_START, // IExplorer 2.0
-    HTML_O_CLEAR,
-    HTML_O_DIR,
-    HTML_O_DIRECTION, // IExplorer 2.0
-    HTML_O_FORMAT,
-    HTML_O_FRAME, // HTML3 Table Model Draft
-    HTML_O_LANG,
-    HTML_O_METHOD,
-    HTML_O_REL,
-    HTML_O_REV,
-    HTML_O_RULES, // HTML3 Table Model Draft
-    HTML_O_SCROLLING, // Netscape 2.0
-    HTML_O_SDREADONLY,
-    HTML_O_SUBTYPE,
-    HTML_O_TYPE,
-    HTML_O_VALIGN,
-    HTML_O_VALUETYPE,
-    HTML_O_WRAP,
-HTML_OPTION_ENUM_END,
+ENUM_START          = NUMBER_END,
+    BEHAVIOR             = ENUM_START, // IExplorer 2.0
+    CLEAR,
+    DIR,
+    DIRECTION, // IExplorer 2.0
+    FORMAT,
+    FRAME, // HTML3 Table Model Draft
+    LANG,
+    METHOD,
+    REL,
+    REV,
+    RULES, // HTML3 Table Model Draft
+    SCROLLING, // Netscape 2.0
+    SDREADONLY,
+    SUBTYPE,
+    TYPE,
+    VALIGN,
+    VALUETYPE,
+    WRAP,
+ENUM_END,
 
 // attributes with script code as value
-HTML_OPTION_SCRIPT_START        = HTML_OPTION_ENUM_END,
-    HTML_O_ONABORT              = HTML_OPTION_SCRIPT_START, // JavaScript
-    HTML_O_ONBLUR,      // JavaScript
-    HTML_O_ONCHANGE,    // JavaScript
-    HTML_O_ONCLICK,     // JavaScript
-    HTML_O_ONERROR,     // JavaScript
-    HTML_O_ONFOCUS,     // JavaScript
-    HTML_O_ONLOAD,      // JavaScript
-    HTML_O_ONMOUSEOUT,  // JavaScript
-    HTML_O_ONMOUSEOVER, // JavaScript
-    HTML_O_ONRESET,     // JavaScript
-    HTML_O_ONSELECT,    // JavaScript
-    HTML_O_ONSUBMIT,    // JavaScript
-    HTML_O_ONUNLOAD,    // JavaScript
+SCRIPT_START        = ENUM_END,
+    ONABORT              = SCRIPT_START, // JavaScript
+    ONBLUR,      // JavaScript
+    ONCHANGE,    // JavaScript
+    ONCLICK,     // JavaScript
+    ONERROR,     // JavaScript
+    ONFOCUS,     // JavaScript
+    ONLOAD,      // JavaScript
+    ONMOUSEOUT,  // JavaScript
+    ONMOUSEOVER, // JavaScript
+    ONRESET,     // JavaScript
+    ONSELECT,    // JavaScript
+    ONSUBMIT,    // JavaScript
+    ONUNLOAD,    // JavaScript
 
-    HTML_O_SDONABORT,       // StarBasic
-    HTML_O_SDONBLUR,        // StarBasic
-    HTML_O_SDONCHANGE,      // StarBasic
-    HTML_O_SDONCLICK,       // StarBasic
-    HTML_O_SDONERROR,       // StarBasic
-    HTML_O_SDONFOCUS,       // StarBasic
-    HTML_O_SDONLOAD,        // StarBasic
-    HTML_O_SDONMOUSEOUT,    // StarBasic
-    HTML_O_SDONMOUSEOVER,   // StarBasic
-    HTML_O_SDONRESET,       // StarBasic
-    HTML_O_SDONSELECT,      // StarBasic
-    HTML_O_SDONSUBMIT,      // StarBasic
-    HTML_O_SDONUNLOAD,      // StarBasic
-HTML_OPTION_SCRIPT_END,
+    SDONABORT,       // StarBasic
+    SDONBLUR,        // StarBasic
+    SDONCHANGE,      // StarBasic
+    SDONCLICK,       // StarBasic
+    SDONERROR,       // StarBasic
+    SDONFOCUS,       // StarBasic
+    SDONLOAD,        // StarBasic
+    SDONMOUSEOUT,    // StarBasic
+    SDONMOUSEOVER,   // StarBasic
+    SDONRESET,       // StarBasic
+    SDONSELECT,      // StarBasic
+    SDONSUBMIT,      // StarBasic
+    SDONUNLOAD,      // StarBasic
+SCRIPT_END,
 
 // attributes with context dependent values
-HTML_OPTION_CONTEXT_START       = HTML_OPTION_SCRIPT_END,
-    HTML_O_ALIGN                = HTML_OPTION_CONTEXT_START,
-    HTML_O_COLS, // Netscape 2.0 vs HTML 2.0
-    HTML_O_ROWS, // Netscape 2.0 vs HTML 2.0
-    HTML_O_SIZE,
-    HTML_O_START,
-HTML_OPTION_CONTEXT_END,
+CONTEXT_START       = SCRIPT_END,
+    ALIGN                = CONTEXT_START,
+    COLS, // Netscape 2.0 vs HTML 2.0
+    ROWS, // Netscape 2.0 vs HTML 2.0
+    SIZE,
+    START,
+CONTEXT_END,
 
 // an unknown option
-HTML_O_UNKNOWN                  = HTML_OPTION_CONTEXT_END,
-HTML_OPTION_END
+UNKNOWN                  = CONTEXT_END,
+END
 };
 
 #endif // INCLUDED_SVTOOLS_HTMLTOKN_H

@@ -954,17 +954,17 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
     {
         switch( rOption.GetToken() )
         {
-            case HTML_O_COLSPAN:
+            case HtmlOptionId::COLSPAN:
             {
                 pActEntry->nColOverlap = ( SCCOL ) rOption.GetString().toInt32();
             }
             break;
-            case HTML_O_ROWSPAN:
+            case HtmlOptionId::ROWSPAN:
             {
                 pActEntry->nRowOverlap = ( SCROW ) rOption.GetString().toInt32();
             }
             break;
-            case HTML_O_ALIGN:
+            case HtmlOptionId::ALIGN:
             {
                 bHorJustifyCenterTH = false;
                 SvxCellHorJustify eVal;
@@ -981,7 +981,7 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                     pActEntry->aItemSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY) );
             }
             break;
-            case HTML_O_VALIGN:
+            case HtmlOptionId::VALIGN:
             {
                 SvxCellVerJustify eVal;
                 const OUString& rOptVal = rOption.GetString();
@@ -996,12 +996,12 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                 pActEntry->aItemSet.Put( SvxVerJustifyItem( eVal, ATTR_VER_JUSTIFY) );
             }
             break;
-            case HTML_O_WIDTH:
+            case HtmlOptionId::WIDTH:
             {
                 pActEntry->nWidth = GetWidthPixel( rOption );
             }
             break;
-            case HTML_O_BGCOLOR:
+            case HtmlOptionId::BGCOLOR:
             {
                 Color aColor;
                 rOption.GetColor( aColor );
@@ -1009,16 +1009,17 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                     SvxBrushItem( aColor, ATTR_BACKGROUND ) );
             }
             break;
-            case HTML_O_SDVAL:
+            case HtmlOptionId::SDVAL:
             {
                 pActEntry->pValStr = new OUString( rOption.GetString() );
             }
             break;
-            case HTML_O_SDNUM:
+            case HtmlOptionId::SDNUM:
             {
                 pActEntry->pNumStr = new OUString( rOption.GetString() );
             }
             break;
+            default: break;
         }
     }
     pActEntry->nCol = nColCnt;
@@ -1075,17 +1076,18 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             {
                 switch( rOption.GetToken() )
                 {
-                    case HTML_O_WIDTH:
+                    case HtmlOptionId::WIDTH:
                     {   // Percent: of document width or outer cell
                         nTableWidth = GetWidthPixel( rOption );
                     }
                     break;
-                    case HTML_O_BORDER:
+                    case HtmlOptionId::BORDER:
                         // Border is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
-                    case HTML_O_ID:
+                    case HtmlOptionId::ID:
                         aTabName = rOption.GetString();
                     break;
+                    default: break;
                 }
             }
         }
@@ -1134,17 +1136,18 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             {
                 switch( rOption.GetToken() )
                 {
-                    case HTML_O_WIDTH:
+                    case HtmlOptionId::WIDTH:
                     {   // Percent: of document width or outer cell
                         nTableWidth = GetWidthPixel( rOption );
                     }
                     break;
-                    case HTML_O_BORDER:
+                    case HtmlOptionId::BORDER:
                         //BorderOn is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
-                    case HTML_O_ID:
+                    case HtmlOptionId::ID:
                         aTabName = rOption.GetString();
                     break;
+                    default: break;
                 }
             }
         }
@@ -1325,12 +1328,12 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     {
         switch( rOption.GetToken() )
         {
-            case HTML_O_SRC:
+            case HtmlOptionId::SRC:
             {
                 pImage->aURL = INetURLObject::GetAbsURL( aBaseURL, rOption.GetString() );
             }
             break;
-            case HTML_O_ALT:
+            case HtmlOptionId::ALT:
             {
                 if ( !pActEntry->bHasGraphic )
                 {   // ALT text only if not any image loaded
@@ -1341,26 +1344,27 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
                 }
             }
             break;
-            case HTML_O_WIDTH:
+            case HtmlOptionId::WIDTH:
             {
                 pImage->aSize.Width() = (long)rOption.GetNumber();
             }
             break;
-            case HTML_O_HEIGHT:
+            case HtmlOptionId::HEIGHT:
             {
                 pImage->aSize.Height() = (long)rOption.GetNumber();
             }
             break;
-            case HTML_O_HSPACE:
+            case HtmlOptionId::HSPACE:
             {
                 pImage->aSpace.X() = (long)rOption.GetNumber();
             }
             break;
-            case HTML_O_VSPACE:
+            case HtmlOptionId::VSPACE:
             {
                 pImage->aSpace.Y() = (long)rOption.GetNumber();
             }
             break;
+            default: break;
         }
     }
     if (pImage->aURL.isEmpty())
@@ -1413,15 +1417,11 @@ void ScHTMLLayoutParser::ColOn( HtmlImportInfo* pInfo )
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
     for (const auto & rOption : rOptions)
     {
-        switch( rOption.GetToken() )
+        if( rOption.GetToken() == HtmlOptionId::WIDTH )
         {
-            case HTML_O_WIDTH:
-            {
-                sal_uInt16 nVal = GetWidthPixel( rOption );
-                MakeCol( pLocalColOffset, nColOffset, nVal, 0, 0 );
-                nColOffset = nColOffset + nVal;
-            }
-            break;
+            sal_uInt16 nVal = GetWidthPixel( rOption );
+            MakeCol( pLocalColOffset, nColOffset, nVal, 0, 0 );
+            nColOffset = nColOffset + nVal;
         }
     }
 }
@@ -1451,14 +1451,8 @@ void ScHTMLLayoutParser::AnchorOn( HtmlImportInfo* pInfo )
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
     for (const auto & rOption : rOptions)
     {
-        switch( rOption.GetToken() )
-        {
-            case HTML_O_NAME:
-            {
-                pActEntry->pName = new OUString(rOption.GetString());
-            }
-            break;
-        }
+        if( rOption.GetToken() == HtmlOptionId::NAME )
+            pActEntry->pName = new OUString(rOption.GetString());
     }
 }
 
@@ -1479,7 +1473,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
         {
             switch( rOption.GetToken() )
             {
-                case HTML_O_FACE :
+                case HtmlOptionId::FACE :
                 {
                     const OUString& rFace = rOption.GetString();
                     OUString aFontName;
@@ -1500,7 +1494,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                             RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
                 }
                 break;
-                case HTML_O_SIZE :
+                case HtmlOptionId::SIZE :
                 {
                     sal_uInt16 nSize = (sal_uInt16) rOption.GetNumber();
                     if ( nSize == 0 )
@@ -1511,13 +1505,14 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                         maFontHeights[nSize-1], 100, ATTR_FONT_HEIGHT ) );
                 }
                 break;
-                case HTML_O_COLOR :
+                case HtmlOptionId::COLOR :
                 {
                     Color aColor;
                     rOption.GetColor( aColor );
                     pActEntry->aItemSet.Put( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
                 }
                 break;
+                default: break;
             }
         }
     }
@@ -1899,12 +1894,13 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const HtmlImportInfo& rInfo
         {
             switch( itr->GetToken() )
             {
-                case HTML_O_BORDER:
+                case HtmlOptionId::BORDER:
                     mbBorderOn = itr->GetString().isEmpty() || (itr->GetNumber() != 0);
                 break;
-                case HTML_O_ID:
+                case HtmlOptionId::ID:
                     maTableName = itr->GetString();
                 break;
+                default: break;
             }
         }
     }
@@ -2123,19 +2119,19 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
         {
             switch (itr->GetToken())
             {
-                case HTML_O_COLSPAN:
+                case HtmlOptionId::COLSPAN:
                     aSpanSize.mnCols = static_cast<SCCOL>( getLimitedValue<sal_Int32>( itr->GetString().toInt32(), 1, 256 ) );
                 break;
-                case HTML_O_ROWSPAN:
+                case HtmlOptionId::ROWSPAN:
                     aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( itr->GetString().toInt32(), 1, 256 ) );
                 break;
-                case HTML_O_SDVAL:
+                case HtmlOptionId::SDVAL:
                     pValStr.reset(new OUString(itr->GetString()));
                 break;
-                case HTML_O_SDNUM:
+                case HtmlOptionId::SDNUM:
                     pNumStr.reset(new OUString(itr->GetString()));
                 break;
-                case HTML_O_CLASS:
+                case HtmlOptionId::CLASS:
                 {
                     // Pick up the number format associated with this class (if
                     // any).
@@ -2160,6 +2156,7 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                     }
                 }
                 break;
+                default: break;
             }
         }
 
@@ -2545,7 +2542,7 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const HtmlImportIn
     {
         switch( itr->GetToken() )
         {
-            case HTML_O_ALIGN:
+            case HtmlOptionId::ALIGN:
             {
                 SvxCellHorJustify eVal = SvxCellHorJustify::Standard;
                 const OUString& rOptVal = itr->GetString();
@@ -2560,7 +2557,7 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const HtmlImportIn
             }
             break;
 
-            case HTML_O_VALIGN:
+            case HtmlOptionId::VALIGN:
             {
                 SvxCellVerJustify eVal = SVX_VER_JUSTIFY_STANDARD;
                 const OUString& rOptVal = itr->GetString();
@@ -2575,13 +2572,14 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const HtmlImportIn
             }
             break;
 
-            case HTML_O_BGCOLOR:
+            case HtmlOptionId::BGCOLOR:
             {
                 Color aColor;
                 itr->GetColor( aColor );
                 rItemSet.Put( SvxBrushItem( aColor, ATTR_BACKGROUND ) );
             }
             break;
+            default: break;
         }
     }
 }
@@ -2969,7 +2967,7 @@ void ScHTMLQueryParser::FontOn( const HtmlImportInfo& rInfo )
     {
         switch( itr->GetToken() )
         {
-            case HTML_O_FACE :
+            case HtmlOptionId::FACE :
             {
                 const OUString& rFace = itr->GetString();
                 OUString aFontName;
@@ -2986,19 +2984,20 @@ void ScHTMLQueryParser::FontOn( const HtmlImportInfo& rInfo )
                         RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
             }
             break;
-            case HTML_O_SIZE :
+            case HtmlOptionId::SIZE :
             {
                 sal_uInt32 nSize = getLimitedValue< sal_uInt32 >( itr->GetNumber(), 1, SC_HTML_FONTSIZES );
                 mpCurrTable->PutItem( SvxFontHeightItem( maFontHeights[ nSize - 1 ], 100, ATTR_FONT_HEIGHT ) );
             }
             break;
-            case HTML_O_COLOR :
+            case HtmlOptionId::COLOR :
             {
                 Color aColor;
                 itr->GetColor( aColor );
                 mpCurrTable->PutItem( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
             }
             break;
+            default: break;
         }
     }
 }
