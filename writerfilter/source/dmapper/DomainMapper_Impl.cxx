@@ -2181,6 +2181,11 @@ bool DomainMapper_Impl::IsDiscardHeaderFooter()
     return m_bDiscardHeaderFooter;
 }
 
+void DomainMapper_Impl::ClearPreviousParagraph()
+{
+    m_xPreviousParagraph.clear();
+}
+
 sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;

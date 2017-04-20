@@ -882,6 +882,10 @@ public:
 
     void SetParaAutoBefore(bool bParaAutoBefore) { m_bParaAutoBefore = bParaAutoBefore; }
 
+    /// Forget about the previous paragraph, as it's not inside the same
+    /// start/end node.
+    void ClearPreviousParagraph();
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;

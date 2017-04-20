@@ -70,6 +70,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106690, "tdf106690.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(2), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106690Cell, "tdf106690-cell.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was 0, bottom margin of the second paragraph in the A1 table cell
+    // had a reduced auto-space, just because of a next paragraph in the A2
+    // cell.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraphOfText(2, xCell->getText()), "ParaBottomMargin"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
 {
     // The second paragraph (first numbered one) had 0 bottom margin:

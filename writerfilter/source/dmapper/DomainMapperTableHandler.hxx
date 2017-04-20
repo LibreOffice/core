@@ -116,6 +116,8 @@ public:
     void endCell(const css::uno::Reference< css::text::XTextRange > & end);
 
     void setHadFootOrEndnote(bool bHadFootOrEndnote);
+
+    DomainMapper_Impl& getDomainMapperImpl();
 };
 
 }}
