@@ -9,30 +9,30 @@
  /*  determine if hybrid platform, then actually load the DSO. */
  static PRStatus
 @@ -136,9 +136,9 @@
-     return PR_FAILURE;
-   }
+         return PR_FAILURE;
+     }
  
--  handle = loader_LoadLibrary(name);
--  if (handle) {
--    PRFuncPtr address = PR_FindFunctionSymbol(handle, "FREEBL_GetVector");
-+  handle = 0;
-+  {
-+    PRFuncPtr address = FREEBL_GetVector;
-     PRStatus status;
-     if (address) {
-       FREEBLGetVectorFn  * getVector = (FREEBLGetVectorFn *)address;
+-    handle = loader_LoadLibrary(name);
+-    if (handle) {
+-        PRFuncPtr address = PR_FindFunctionSymbol(handle, "FREEBL_GetVector");
++    handle = 0;
++    {
++        PRFuncPtr address = FREEBL_GetVector;
+         if (address) {
+             FREEBLGetVectorFn *getVector = (FREEBLGetVectorFn *)address;
+             const FREEBLVector *dsoVector = getVector();
 @@ -887,6 +887,7 @@
  void
  BL_Unload(void)
  {
 +#if 0
-   /* This function is not thread-safe, but doesn't need to be, because it is
-    * only called from functions that are also defined as not thread-safe,
-    * namely C_Finalize in softoken, and the SSL bypass shutdown callback called
+     /* This function is not thread-safe, but doesn't need to be, because it is
+      * only called from functions that are also defined as not thread-safe,
+      * namely C_Finalize in softoken, and the SSL bypass shutdown callback called
 @@ -905,6 +905,7 @@
-       blLib = NULL;
-   }
-   loadFreeBLOnce = pristineCallOnce;
+     }
+     blLib = NULL;
+     loadFreeBLOnce = pristineCallOnce;
 +#endif
  }
  

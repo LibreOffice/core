@@ -54,24 +54,16 @@ diff -ru a/nss/cmd/platlibs.mk b/nss/cmd/platlibs.mk
 diff -ru nss.orig/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
 --- a/nss.orig/nss/coreconf/arch.mk	2016-02-12 15:36:18.000000000 +0100
 +++ b/nss/nss/coreconf/arch.mk	2016-02-23 20:48:31.595941079 +0100
-@@ -280,15 +280,21 @@
- # IMPL_STRATEGY may be defined too.
- #
- 
--ifdef CROSS_COMPILE
--OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
--else
--OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
--endif
+@@ -280,11 +280,17 @@
+     OBJDIR_NAME_COMPILER = $(COMPILER_TAG)
+ endif
+ OBJDIR_NAME_BASE = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(OBJDIR_NAME_COMPILER)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG)
+-OBJDIR_NAME = $(OBJDIR_NAME_BASE).OBJ
 +# OBJDIR_NAME is used to build the directory containing the built objects, for 
 +# example mozilla/dist/Linux2.6_x86_glibc_PTH_DBG.OBJ
 +# We need to deliver the contents of that folder into instdir. To make that 
 +# easier in the makefile we rename this directory to "out". 
-+#ifdef CROSS_COMPILE
-+#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
-+#else
-+#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
-+#endif
++#OBJDIR_NAME = $(OBJDIR_NAME_BASE).OBJ
 +OBJDIR_NAME = out
  
  
@@ -96,20 +88,6 @@ diff -ru a/nss/coreconf/FreeBSD.mk b/nss/coreconf/FreeBSD.mk
 diff -ru a/nss/coreconf/Linux.mk b/nss/coreconf/Linux.mk
 --- a/a/nss/coreconf/Linux.mk	2014-09-29 16:46:38.189421588 +0100
 +++ b/b/nss/coreconf/Linux.mk	2014-09-29 16:47:42.985012235 +0100
-@@ -16,8 +16,11 @@
- 	IMPL_STRATEGY = _PTH
- endif
- 
--CC			= gcc
--CCC			= g++
-+# CC is taken from environment automatically.
-+#CC			= gcc
-+# Use CCC from environment.
-+#CCC			= g++
-+CCC		= $(CXX)
- RANLIB			= ranlib
- 
- DEFAULT_COMPILER = gcc
 @@ -157,7 +160,7 @@
  # against the libsanitizer runtime built into the main executable.
  ZDEFS_FLAG		= -Wl,-z,defs
@@ -172,6 +150,19 @@ diff -ru a/nss/Makefile b/nss/Makefile
  #! gmake
  #
  # This Source Code Form is subject to the terms of the Mozilla Public
+@@ -91,10 +91,10 @@
+ NSPR_CONFIGURE_ENV = CC=gcc CXX=g++
+ endif
+ ifdef CC
+-NSPR_CONFIGURE_ENV = CC=$(CC)
++NSPR_CONFIGURE_ENV = CC="$(CC) "
+ endif
+ ifdef CCC
+-NSPR_CONFIGURE_ENV += CXX=$(CCC)
++NSPR_CONFIGURE_ENV += CXX="$(CCC) "
+ endif
+ # Remove -arch definitions. NSPR can't handle that.
+ NSPR_CONFIGURE_ENV := $(filter-out -arch x86_64,$(NSPR_CONFIGURE_ENV))
 diff -ru nss.orig/nss/coreconf/Werror.mk nss/nss/coreconf/Werror.mk
 --- a/nss.orig/nss/coreconf/Werror.mk	2016-02-12 15:36:18.000000000 +0100
 +++ b/nss/nss/coreconf/Werror.mk	2016-02-23 23:58:15.119584046 +0100

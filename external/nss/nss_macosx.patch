@@ -13,21 +13,6 @@ diff -ru a/nspr/configure b/nspr/configure
 diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
 --- a/a/nss/coreconf/Darwin.mk	2014-09-29 16:50:22.992304799 +0100
 +++ b/b/nss/coreconf/Darwin.mk	2014-09-29 16:51:59.214931953 +0100
-@@ -8,8 +8,12 @@
- 
- DEFAULT_COMPILER = gcc
- 
--CC		= gcc
--CCC		= g++
-+# CC is taken from environment automatically.
-+#CC		= cc
-+# Use CCC from environment.
-+#CCC		= c++
-+CCC		= $(CXX)
-+
- RANLIB		= ranlib
- 
- ifndef CPU_ARCH
 @@ -20,13 +24,17 @@
  
  ifeq (,$(filter-out i%86,$(CPU_ARCH)))
@@ -71,8 +56,8 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
 -DSO_LDOPTS	= -dynamiclib $(DARWIN_DYLIB_VERSIONS) -install_name @executable_path/$(notdir $@) -headerpad_max_install_names
 +DSO_LDOPTS	= -dynamiclib $(DARWIN_DYLIB_VERSIONS) -install_name @__________________________________________________OOO/$(notdir $@) -headerpad_max_install_names
  
- MKSHLIB		= $(CC) $(DSO_LDOPTS) $(DARWIN_SDK_SHLIBFLAGS)
- DLL_SUFFIX	= dylib
+ ifdef USE_GCOV
+    OS_CFLAGS += --coverage
 diff -ru a/nss/Makefile b/nss/Makefile
 --- a/a/nss/Makefile	2014-09-29 16:50:22.990304789 +0100
 +++ b/b/nss/Makefile	2014-09-29 16:51:59.207931908 +0100
