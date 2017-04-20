@@ -55,6 +55,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
     bool mbIsSubstream;
     bool mbSkipImages;
+    bool mbReadGlossaries;
     /// How many paragraphs equal to 1 percent?
     sal_Int32 mnPercentSize;
     /// Position progress when it was last updated, possibly not after every paragraph in case of large documents.
@@ -92,7 +93,10 @@ protected:
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
 public:
-    OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
+    OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream,
+                      const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator,
+                      bool bSkipImages, bool bReadGlossaries,
+                      const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
     virtual ~OOXMLDocumentImpl() override;
 
     virtual void resolve(Stream & rStream) override;
