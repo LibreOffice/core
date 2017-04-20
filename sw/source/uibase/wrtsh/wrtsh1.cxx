@@ -239,7 +239,7 @@ void SwWrtShell::Insert( const OUString &rStr )
 
 void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
                          const Graphic &rGrf, SwFlyFrameAttrMgr *pFrameMgr,
-                         sal_uInt16 nAnchorType )
+                         RndStdIds nAnchorType )
 {
     ResetCursorStack();
     if ( !CanInsert() )
@@ -275,9 +275,9 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         // These must be removed explicitly for the optimal size.
         pFrameMgr->DelAttr(RES_FRM_SIZE);
 
-        if (nAnchorType != 0)
+        if (nAnchorType != RndStdIds::FLY_AT_PARA)
             // Something other than at-para was requested.
-            pFrameMgr->SetAnchor(static_cast<RndStdIds>(nAnchorType));
+            pFrameMgr->SetAnchor(nAnchorType);
     }
     else
     {
