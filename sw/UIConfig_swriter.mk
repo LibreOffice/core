@@ -79,6 +79,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/toolbar/symbolshapes \
 	sw/uiconfig/swriter/toolbar/tableobjectbar \
 	sw/uiconfig/swriter/toolbar/textobjectbar \
+	sw/uiconfig/swriter/toolbar/textstylebar \
 	sw/uiconfig/swriter/toolbar/toolbar \
 	sw/uiconfig/swriter/toolbar/viewerbar \
 ))
