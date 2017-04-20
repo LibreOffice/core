@@ -743,7 +743,7 @@ void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const
     aStream.Open( aFontMRUEntriesFile, StreamMode::WRITE | StreamMode::TRUNC );
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
-        SAL_INFO("svtools.control", "FontNameBox::SaveMRUEntries: opening mru entries file " << aFontMRUEntriesFile << " failed\n");
+        SAL_INFO("svtools.control", "FontNameBox::SaveMRUEntries: opening mru entries file " << aFontMRUEntriesFile << " failed");
         return;
     }
 
@@ -764,7 +764,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
     SvFileStream aStream( aFontMRUEntriesFile, StreamMode::READ );
     if( ! aStream.IsOpen() )
     {
-        SAL_INFO("svtools.control", "FontNameBox::LoadMRUEntries: opening mru entries file " << aFontMRUEntriesFile << " failed\n");
+        SAL_INFO("svtools.control", "FontNameBox::LoadMRUEntries: opening mru entries file " << aFontMRUEntriesFile << " failed");
         return;
     }
 

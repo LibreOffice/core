@@ -317,7 +317,7 @@ void SAL_CALL SwitchablePersistenceStream::flush(  )
 
     if ( !m_pStreamData || m_pStreamData->m_bInStreamBased )
     {
-        OSL_FAIL( "flush() is not acceptable!\n" );
+        OSL_FAIL( "flush() is not acceptable!" );
         return;
         // in future throw exception, for now some code might call flush() on closed stream
         // since file ucp implementation allows it

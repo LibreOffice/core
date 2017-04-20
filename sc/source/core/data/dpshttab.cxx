@@ -286,7 +286,7 @@ const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDi
     sal_uLong nErrId = CheckSourceRange();
     if (nErrId)
     {
-        OSL_FAIL( "Error Create Cache\n" );
+        OSL_FAIL( "Error Create Cache" );
         return nullptr;
     }
 

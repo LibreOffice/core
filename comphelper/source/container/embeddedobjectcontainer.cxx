@@ -179,7 +179,7 @@ void EmbeddedObjectContainer::ReleaseImageSubStorage()
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN( "comphelper.container", "Problems releasing image substorage!\n" );
+            SAL_WARN( "comphelper.container", "Problems releasing image substorage!" );
         }
     }
 }
@@ -786,7 +786,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                         {
                             // impossibility to copy readonly property is not treated as an error for now
                             // but the assertion is helpful to detect such scenarios and review them
-                            SAL_WARN( "comphelper.container", "Could not copy readonly property!\n" );
+                            SAL_WARN( "comphelper.container", "Could not copy readonly property!" );
                         }
                     }
                 }
@@ -811,7 +811,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
         }
     }
 
-    SAL_WARN_IF( !xResult.is(), "comphelper.container", "Can not copy embedded object that has no persistence!\n" );
+    SAL_WARN_IF( !xResult.is(), "comphelper.container", "Can not copy embedded object that has no persistence!" );
 
     if ( xResult.is() )
     {
@@ -992,7 +992,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
                     static const OUStringLiteral s_sMediaType("MediaType");
                     xStorProps->getPropertyValue( s_sMediaType ) >>= aOrigStorMediaType;
 
-                    SAL_WARN_IF( aOrigStorMediaType.isEmpty(), "comphelper.container", "No valuable media type in the storage!\n" );
+                    SAL_WARN_IF( aOrigStorMediaType.isEmpty(), "comphelper.container", "No valuable media type in the storage!" );
 
                     uno::Reference< beans::XPropertySet > xTargetStorProps(
                                                                 pImpl->mpTempObjectContainer->pImpl->mxStorage,
@@ -1001,7 +1001,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
                 }
                 catch (const uno::Exception&)
                 {
-                    SAL_WARN( "comphelper.container", "Can not set the new media type to a storage!\n" );
+                    SAL_WARN( "comphelper.container", "Can not set the new media type to a storage!" );
                 }
             }
 
@@ -1221,7 +1221,7 @@ namespace {
                                             const uno::Reference< io::XInputStream >& xInStream,
                                             const OUString& aStreamName )
     {
-        OSL_ENSURE( !aStreamName.isEmpty() && xInStream.is() && xDocStor.is(), "Misuse of the method!\n" );
+        OSL_ENSURE( !aStreamName.isEmpty() && xInStream.is() && xDocStor.is(), "Misuse of the method!" );
 
         try
         {
@@ -1243,7 +1243,7 @@ namespace {
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN( "comphelper.container", "The images storage is not available!\n" );
+            SAL_WARN( "comphelper.container", "The images storage is not available!" );
         }
     }
 
@@ -1261,7 +1261,7 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
         for(;pIter != pEnd;++pIter)
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
-            SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!\n" );
+            SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!" );
             if ( xObj.is() )
             {
                 bool bSwitchBackToLoaded = false;
@@ -1381,7 +1381,7 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
     for(;pIter != pEnd;++pIter)
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
-        SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!\n" );
+        SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!" );
         if ( xObj.is() )
         {
             sal_Int32 nCurState = xObj->getCurrentState();
@@ -1528,7 +1528,7 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
     for(;pIter != pEnd;++pIter)
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
-        SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!\n" );
+        SAL_WARN_IF( !xObj.is(), "comphelper.container", "An empty entry in the embedded objects list!" );
         if ( xObj.is() )
         {
             uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );

@@ -42,7 +42,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     sal_uInt16 nStyle;
     bool bEndOfSheet = false;
 
-    SAL_INFO("sc", "Read sheet " << nTab << "\n");
+    SAL_INFO("sc", "Read sheet " << nTab);
 
     while( eERR_OK == eRet && !bEndOfSheet && nextRecord() )
     {

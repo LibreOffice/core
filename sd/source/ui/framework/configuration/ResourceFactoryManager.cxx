@@ -82,9 +82,7 @@ void ResourceFactoryManager::AddFactory (
         maFactoryPatternList.push_back(FactoryPatternList::value_type(rsURL, rxFactory));
 
 #if defined VERBOSE && VERBOSE>=1
-        SAL_INFO("sd",("ResourceFactoryManager::AddFactory pattern %s %x\n",
-            OUStringToOString(rsURL, RTL_TEXTENCODING_UTF8).getStr(),
-            rxFactory.get());
+        SAL_INFO("sd","ResourceFactoryManager::AddFactory pattern " << rsURL << std::hex << rxFactory.get());
 #endif
     }
     else

@@ -637,7 +637,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
             break;
         }
 
-    OSL_ENSURE( !aDocName.isEmpty(), "The name must exist at this point!\n" );
+    OSL_ENSURE( !aDocName.isEmpty(), "The name must exist at this point!" );
 
 
     bool bNeedsAddition = true;

@@ -924,7 +924,7 @@ ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
     if( n < nP_MatrixAkt )
         return ppP_Matrix[ n ];
     else
-        SAL_WARN("sc.filter", "GetMatrix: " << n << " >= " << nP_MatrixAkt << "\n");
+        SAL_WARN("sc.filter", "GetMatrix: " << n << " >= " << nP_MatrixAkt);
     return nullptr;
 }
 

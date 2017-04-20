@@ -410,7 +410,7 @@ SelfTest::SelfTest()
     if (bRet)
         JFW_TRACE2("Testing class SunVersion succeeded.");
     else
-        OSL_ENSURE(bRet, "[Java framework] sunjavaplugin: SunVersion self test failed.\n");
+        OSL_ENSURE(bRet, "[Java framework] sunjavaplugin: SunVersion self test failed.");
 }
 #endif
 

@@ -62,7 +62,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
         if( reinterpret_cast<sal_Unicode const *>(aData.getConstArray())[nLen-1] == 0 )
             nLen--;
         OUString aString( reinterpret_cast<sal_Unicode const *>(aData.getConstArray()), nLen );
-        SAL_INFO( "vcl.unx.dtrans", "X11Transferable::getTransferData( \"" << rFlavor.MimeType << "\" )\n -> \"" << aString << "\"\n");
+        SAL_INFO( "vcl.unx.dtrans", "X11Transferable::getTransferData( \"" << rFlavor.MimeType << "\" )\n -> \"" << aString << "\"");
         aRet <<= aString.replaceAll("\r\n", "\n");
     }
     else

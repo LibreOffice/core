@@ -176,7 +176,7 @@ ResMgr* ImplGetResMgr()
             const char pMsg[] =
                 "Missing vcl resource. This indicates that files vital to localization are missing. "
                 "You might have a corrupt installation.";
-            SAL_WARN("vcl", "" << pMsg << "\n");
+            SAL_WARN("vcl", "" << pMsg);
             ScopedVclPtrInstance< MessageDialog > aBox( nullptr, pMsg );
             aBox->Execute();
         }

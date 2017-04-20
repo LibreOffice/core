@@ -39,7 +39,7 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
 
             if (equal == 0)
                 m_bValid = false;
-            OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer()\nFound non boolean query parameter ... but its key is empty. Will be ignored!\n");
+            OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer() Found non boolean query parameter ... but its key is empty. Will be ignored!");
 
             OUString sKey;
             OUString sVal;
@@ -53,7 +53,7 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
 
             if (find(sKey) != end())
                 m_bValid = false;
-            OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer()\nQuery contains same param more than once. Last one wins :-)\n");
+            OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer() Query contains same param more than once. Last one wins :-)");
 
             (*this)[sKey] = sVal;
         }

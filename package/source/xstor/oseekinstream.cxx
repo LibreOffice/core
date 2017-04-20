@@ -34,7 +34,7 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
 : OInputCompStream( pImpl, xStream, aProps, nStorageType )
 {
     m_xSeekable.set( m_xStream, uno::UNO_QUERY );
-    OSL_ENSURE( m_xSeekable.is(), "No seeking support!\n" );
+    OSL_ENSURE( m_xSeekable.is(), "No seeking support!" );
 }
 
 OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > const & xStream,
@@ -43,7 +43,7 @@ OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > const & 
 : OInputCompStream( xStream, aProps, nStorageType )
 {
     m_xSeekable.set( m_xStream, uno::UNO_QUERY );
-    OSL_ENSURE( m_xSeekable.is(), "No seeking support!\n" );
+    OSL_ENSURE( m_xSeekable.is(), "No seeking support!" );
 }
 
 OInputSeekStream::~OInputSeekStream()

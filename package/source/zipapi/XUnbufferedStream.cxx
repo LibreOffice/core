@@ -125,7 +125,7 @@ XUnbufferedStream::XUnbufferedStream(
 , mbCheckCRC( false )
 {
     // for this scenario maEntry is not set !!!
-    OSL_ENSURE( mxZipSeek.is(), "The stream must be seekable!\n" );
+    OSL_ENSURE( mxZipSeek.is(), "The stream must be seekable!" );
 
     // skip raw header, it must be already parsed to rData
     mnZipCurrent = n_ConstHeaderSize + rData->m_aInitVector.getLength() +

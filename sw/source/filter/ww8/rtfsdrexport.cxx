@@ -331,7 +331,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                     case msopathEnd:
                         break;
                     default:
-                        SAL_WARN("sw.rtf", "Totally b0rked\n");
+                        SAL_WARN("sw.rtf", "Totally b0rked");
                         break;
                     }
                 }

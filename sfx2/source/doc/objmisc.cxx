@@ -270,7 +270,7 @@ bool SfxObjectShell::IsModified()
         for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
-            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
             if ( xObj.is() )
             {
                 try

@@ -626,7 +626,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     }
                                 }
                                 break;
-        default             :   OSL_FAIL( "SvtViewOptions::SvtViewOptions()\nThese view type is unknown! All following calls at these instance will do nothing!\n" );
+        default             :   OSL_FAIL( "SvtViewOptions::SvtViewOptions()\nThese view type is unknown! All following calls at these instance will do nothing!" );
     }
 }
 
@@ -804,7 +804,7 @@ sal_Int32 SvtViewOptions::GetPageID() const
 
     // Safe impossible cases.
     // These call isn't allowed for dialogs, tab-pages or windows!
-    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabPage||m_eViewType==EViewType::Window), "SvtViewOptions::GetPageID()\nCall not allowed for Dialogs, TabPages or Windows! I do nothing!\n" );
+    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabPage||m_eViewType==EViewType::Window), "SvtViewOptions::GetPageID()\nCall not allowed for Dialogs, TabPages or Windows! I do nothing!" );
 
     sal_Int32 nID = 0;
     if( m_eViewType == EViewType::TabDialog )
@@ -821,7 +821,7 @@ void SvtViewOptions::SetPageID( sal_Int32 nID )
 
     // Safe impossible cases.
     // These call isn't allowed for dialogs, tab-pages or windows!
-    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabPage||m_eViewType==EViewType::Window), "SvtViewOptions::SetPageID()\nCall not allowed for Dialogs, TabPages or Windows! I do nothing!\n" );
+    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabPage||m_eViewType==EViewType::Window), "SvtViewOptions::SetPageID()\nCall not allowed for Dialogs, TabPages or Windows! I do nothing!" );
 
     if( m_eViewType == EViewType::TabDialog )
         m_pDataContainer_TabDialogs->SetPageID( m_sViewName, nID );
@@ -836,7 +836,7 @@ bool SvtViewOptions::IsVisible() const
 
     // Safe impossible cases.
     // These call isn't allowed for dialogs, tab-dialogs or tab-pages!
-    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabDialog||m_eViewType==EViewType::TabPage), "SvtViewOptions::IsVisible()\nCall not allowed for Dialogs, TabDialogs or TabPages! I do nothing!\n" );
+    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabDialog||m_eViewType==EViewType::TabPage), "SvtViewOptions::IsVisible()\nCall not allowed for Dialogs, TabDialogs or TabPages! I do nothing!" );
 
     bool bState = false;
     if( m_eViewType == EViewType::Window )
@@ -854,7 +854,7 @@ void SvtViewOptions::SetVisible( bool bState )
 
     // Safe impossible cases.
     // These call isn't allowed for dialogs, tab-dialogs or tab-pages!
-    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabDialog||m_eViewType==EViewType::TabPage), "SvtViewOptions::SetVisible()\nCall not allowed for Dialogs, TabDialogs or TabPages! I do nothing!\n" );
+    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabDialog||m_eViewType==EViewType::TabPage), "SvtViewOptions::SetVisible()\nCall not allowed for Dialogs, TabDialogs or TabPages! I do nothing!" );
 
     if( m_eViewType == EViewType::Window )
         m_pDataContainer_Windows->SetVisible( m_sViewName, bState );
@@ -869,7 +869,7 @@ bool SvtViewOptions::HasVisible() const
 
     // Safe impossible cases.
     // These call isn't allowed for dialogs, tab-dialogs or tab-pages!
-    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabDialog||m_eViewType==EViewType::TabPage), "SvtViewOptions::IsVisible()\nCall not allowed for Dialogs, TabDialogs or TabPages! I do nothing!\n" );
+    OSL_ENSURE( !(m_eViewType==EViewType::Dialog||m_eViewType==EViewType::TabDialog||m_eViewType==EViewType::TabPage), "SvtViewOptions::IsVisible()\nCall not allowed for Dialogs, TabDialogs or TabPages! I do nothing!" );
 
     bool bState = false;
     if( m_eViewType == EViewType::Window )

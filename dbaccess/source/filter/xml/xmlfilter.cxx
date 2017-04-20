@@ -112,7 +112,7 @@ sal_Int32 ReadThroughComponent(
     catch (const SAXParseException& r)
     {
 #if OSL_DEBUG_LEVEL > 0
-        SAL_WARN("dbaccess", "SAX parse exception catched while importing:\n" << r.Message << r.LineNumber << "," << r.ColumnNumber);
+        SAL_WARN("dbaccess", "SAX parse exception catched while importing: " << r.Message << r.LineNumber << "," << r.ColumnNumber);
 #else
         (void)r;
 #endif

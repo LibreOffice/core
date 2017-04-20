@@ -40,7 +40,7 @@ public:
     : m_xContext( rxContext )
     , m_aConfigHelper( rxContext )
     {
-        OSL_ENSURE( rxContext.is(), "No service manager is provided!\n" );
+        OSL_ENSURE( rxContext.is(), "No service manager is provided!" );
     }
 
     static css::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();

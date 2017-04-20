@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
 {
-    SAL_INFO("avmedia", "create VLC Media player !\n");
+    SAL_INFO("avmedia", "create VLC Media player !");
 
     // Experimental for now - code is neither elegant nor well tested.
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -52,7 +52,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediavlc_component_getFactory( 
     if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
         return nullptr;
 
-    SAL_INFO("avmedia", "Create VLC Media component: '" << pImplName << "'\n");
+    SAL_INFO("avmedia", "Create VLC Media component: " << pImplName);
     if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
         const OUString aServiceName( SERVICE_NAME );

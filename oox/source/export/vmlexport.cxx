@@ -545,7 +545,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                     aPath.append( "e" );
                                     break;
                                 default:
-                                    SAL_WARN("oox", "Totally b0rked\n");
+                                    SAL_WARN("oox", "Totally b0rked");
                                     break;
                                 case msopathInvalid:
                                     SAL_WARN("oox", "Invalid - should never be found");

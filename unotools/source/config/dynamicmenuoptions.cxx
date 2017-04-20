@@ -341,7 +341,7 @@ SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
 
 void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& )
 {
-    SAL_WARN( "unotools.config", "SvtDynamicMenuOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
+    SAL_WARN( "unotools.config", "SvtDynamicMenuOptions_Impl::Notify() Not implemented yet! I don't know how I can handle a dynamical list of unknown properties ..." );
 }
 
 //  public method
