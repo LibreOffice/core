@@ -148,6 +148,16 @@ enum EmfPlusFontStyle
     FontStyleStrikeout = 0x00000008
 };
 
+enum UnitType
+{
+    UnitTypeWorld = 0x00,
+    UnitTypeDisplay = 0x01,
+    UnitTypePixel = 0x02,
+    UnitTypePoint = 0x03,
+    UnitTypeInch = 0x04,
+    UnitTypeDocument = 0x05,
+    UnitTypeMillimeter = 0x06
+};
 
 const char* emfTypeToName(sal_uInt16 type)
 {
@@ -1314,12 +1324,28 @@ namespace cppcanvas
                             }
                         }
                         break;
-                    case EmfPlusRecordTypeSetPageTransform:
-                        rMF.ReadFloat( fPageScale );
 
-                        SAL_INFO("cppcanvas.emf", "EMF+ SetPageTransform");
-                        SAL_INFO("cppcanvas.emf", "EMF+\tscale: " << fPageScale << " unit: " << flags);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                    case EmfPlusRecordTypeSetPageTransform:
+                        {
+                            rMF.ReadFloat( fPageScale );
+
+                            SAL_INFO("cppcanvas.emf", "EMF+ SetPageTransform");
+                            SAL_INFO("cppcanvas.emf", "EMF+\tscale: " << fPageScale << " unit: " << flags);
+
+                            if (flags != UnitTypePixel)
+                                SAL_WARN("cppcanvas.emf", "EMF+\t TODO Only UnitTypePixel is supported. ");
+
+                            XForm transform = XForm();
+                            transform.eM11 = fPageScale;
+                            transform.eM22 = fPageScale;
+
+                            SAL_INFO("cppcanvas.emf",
+                                     "EMF+\t m11: " << aBaseTransform.eM11 << ", m12: " << aBaseTransform.eM12 <<
+                                     "EMF+\t m21: " << aBaseTransform.eM21 << ", m22: " << aBaseTransform.eM22 <<
+                                     "EMF+\t dx: "  << aBaseTransform.eDx  << ", dy: "  << aBaseTransform.eDy);
+
+                            aBaseTransform.Multiply (transform);
+                        }
                         break;
                     case EmfPlusRecordTypeSetRenderingOrigin:
                         rMF.ReadInt32( nOriginX ).ReadInt32( nOriginY );
