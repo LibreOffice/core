@@ -1132,7 +1132,7 @@ bool SwTransferable::IsPaste( const SwWrtShell& rSh,
     return bIsPaste;
 }
 
-bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, sal_uInt16 nAnchorType)
+bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType)
 {
     sal_uInt8 nEventAction, nAction=0;
     SotExchangeDest nDestination = SwTransferable::GetSotDestination( rSh );
@@ -1189,7 +1189,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             SotExchangeDest nDestination, bool bIsPasteFormat,
                             bool bIsDefault,
                             const Point* pPt, sal_Int8 nDropAction,
-                            bool bPasteSelection, sal_uInt16 nAnchorType )
+                            bool bPasteSelection, RndStdIds nAnchorType )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
     std::unique_ptr<SwTrnsfrActionAndUndo> pAction;
@@ -2246,7 +2246,7 @@ bool SwTransferable::PasteSdrFormat(  TransferableDataHelper& rData,
 
 bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
-                                SotExchangeActionFlags nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, sal_uInt16 nAnchorType )
+                                SotExchangeActionFlags nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, RndStdIds nAnchorType )
 {
     bool bRet = false;
 

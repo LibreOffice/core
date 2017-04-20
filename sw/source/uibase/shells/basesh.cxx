@@ -288,7 +288,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
                     const SfxUInt16Item* pAnchorType = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
                     if (pAnchorType)
-                        SwTransferable::Paste(rSh, aDataHelper, pAnchorType->GetValue());
+                        SwTransferable::Paste(rSh, aDataHelper, static_cast<RndStdIds>(pAnchorType->GetValue()));
                     else
                         SwTransferable::Paste(rSh, aDataHelper);
 
