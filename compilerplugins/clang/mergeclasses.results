@@ -135,7 +135,6 @@ merge StarSymbolToMSMultiFont with StarSymbolToMSMultiFontImpl
 merge StgAvlIterator with StgIterator
 merge StgAvlNode with StgDirEntry
 merge StgCache with StgIo
-merge StgReader with WW8Reader
 merge SvListView with SvTreeListBox
 merge SvXMLExportItemMapper with SwXMLTableItemMapper_Impl
 merge SvXMLImportItemMapper with SwXMLImportTableItemMapper_Impl
@@ -357,7 +356,6 @@ merge sw::util::WrtRedlineAuthor with WW8_WrtRedlineAuthor
 merge unographic::GraphicTransformer with unographic::Graphic
 merge vcl::DeletionNotifier with SalFrame
 merge vcl::ExtOutDevData with vcl::PDFExtOutDevData
-merge vcl::IPrioritable with VclContainer
 merge vcl::SolarThreadExecutor with vcl::solarthread::detail::GenericSolarThreadExecutor
 merge vclcanvas::Sprite with vclcanvas::CanvasCustomSpriteSpriteBase_Base
 merge webdav_ucp::DAVAuthListener with webdav_ucp::DAVAuthListener_Impl
