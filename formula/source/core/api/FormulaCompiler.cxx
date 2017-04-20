@@ -27,7 +27,6 @@
 #include "osl/mutex.hxx"
 
 #include <svl/zforlist.hxx>
-#include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>

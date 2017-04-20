@@ -35,55 +35,6 @@
 using namespace css;
 using namespace css::uno;
 
-namespace
-{
-    typedef ::cppu::WeakComponentImplHelper <
-        css::frame::XFrameActionListener
-        > FrameActionListenerInterfaceBase;
-
-    class FrameActionListener
-        : public ::cppu::BaseMutex,
-          public FrameActionListenerInterfaceBase
-    {
-    public:
-        FrameActionListener (
-            sfx2::sidebar::ControllerItem& rControllerItem,
-            const Reference<frame::XFrame>& rxFrame)
-            : FrameActionListenerInterfaceBase(m_aMutex),
-              mrControllerItem(rControllerItem),
-              mxFrame(rxFrame)
-        {
-            if (mxFrame.is())
-                mxFrame->addFrameActionListener(this);
-        }
-
-        virtual void SAL_CALL disposing() override
-        {
-            SolarMutexGuard g;
-            if (mxFrame.is())
-                mxFrame->removeFrameActionListener(this);
-        }
-        virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override
-        {
-            (void)rEvent;
-
-            SolarMutexGuard g;
-            mrControllerItem.ResetFrame();
-            mxFrame = nullptr;
-        }
-        virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent) override
-        {
-            SolarMutexGuard g;
-            if (rEvent.Action == frame::FrameAction_CONTEXT_CHANGED)
-                mrControllerItem.NotifyFrameContextChange();
-        }
-
-    private:
-        sfx2::sidebar::ControllerItem& mrControllerItem;
-        Reference<frame::XFrame> mxFrame;
-    };
-}
-
 namespace sfx2 { namespace sidebar {
 
 ControllerItem::ControllerItem (
@@ -95,20 +46,6 @@ ControllerItem::ControllerItem (
       mxFrame(),
       mxFrameActionListener(),
       msCommandName()
-{
-}
-
-ControllerItem::ControllerItem (
-    const sal_uInt16 nSlotId,
-    SfxBindings &rBindings,
-    ItemUpdateReceiverInterface& rItemUpdateReceiver,
-    const ::rtl::OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame)
-    : SfxControllerItem(nSlotId, rBindings),
-      mrItemUpdateReceiver(rItemUpdateReceiver),
-      mxFrame(rxFrame),
-      mxFrameActionListener(new FrameActionListener(*this, mxFrame)),
-      msCommandName(rsCommandName)
 {
 }
 

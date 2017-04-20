@@ -1582,21 +1582,4 @@ void INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
     writeSequence(pSequence, pSequence + nLength);
 }
 
-void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
-                                       const sal_Unicode * pEnd)
-{
-    assert(pBegin && pBegin <= pEnd &&
-               "INetMIMEOutputSink::writeSequence(): Bad sequence");
-
-    std::unique_ptr<sal_Char[]> pBufferBegin( new sal_Char[pEnd - pBegin] );
-    sal_Char * pBufferEnd = pBufferBegin.get();
-    while (pBegin != pEnd)
-    {
-        DBG_ASSERT(*pBegin < 256,
-                   "INetMIMEOutputSink::writeSequence(): Bad octet");
-        *pBufferEnd++ = sal_Char(*pBegin++);
-    }
-    writeSequence(pBufferBegin.get(), pBufferEnd);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

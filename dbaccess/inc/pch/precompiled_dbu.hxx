@@ -139,7 +139,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/rc.hxx>
 #include <tools/ref.hxx>
 #include <tools/resid.hxx>
 #include <tools/solar.h>

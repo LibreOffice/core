@@ -24,7 +24,6 @@
 #include <tools/errinf.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <basic/sbx.hxx>
-#include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include "image.hxx"

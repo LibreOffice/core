@@ -34,7 +34,6 @@
 #include <com/sun/star/sheet/addin/XMiscFunctions.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/resid.hxx>
-#include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
 class ScaResId : public ResId

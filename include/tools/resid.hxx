@@ -58,10 +58,6 @@ class SAL_WARN_UNUSED ResId
     }
 
 public:
-    ResId( RSHEADER_TYPE * pRc, ResMgr& rMgr )
-    {
-        ImplInit( 0, rMgr, pRc );
-    }
     ResId( sal_uInt32 nId, ResMgr& rMgr )
     {
         ImplInit( nId, rMgr, nullptr );

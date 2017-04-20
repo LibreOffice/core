@@ -37,9 +37,6 @@ public:
     bool bHasSelection;
 
     explicit SwCallLink( SwCursorShell & rSh );
-    SwCallLink( SwCursorShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
-                                    SwNodeType nAktNdTyp, long nLRPos,
-                                    bool bAktSelection );
     ~SwCallLink();
 
     static long getLayoutFrame( const SwRootFrame*, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrame );

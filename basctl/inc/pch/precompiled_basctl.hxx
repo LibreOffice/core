@@ -544,7 +544,6 @@
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
-#include <tools/rc.hxx>
 #include <tools/ref.hxx>
 #include <tools/resary.hxx>
 #include <tools/resid.hxx>

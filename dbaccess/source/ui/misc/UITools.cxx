@@ -1083,23 +1083,6 @@ OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUS
     return sName;
 }
 
-void AppendConfigToken( OUString& _rURL, bool _bQuestionMark )
-{
-    // query part exists?
-    if ( _bQuestionMark )
-        // no, so start with '?'
-        _rURL += "?";
-    else
-        // yes, so only append with '&'
-        _rURL += "&";
-
-    // set parameters
-    _rURL += "Language=";
-    _rURL += utl::ConfigManager::getLocale();
-    _rURL += "&System=";
-    _rURL += SvtHelpOptions().GetSystem();
-}
-
 void setEvalDateFormatForFormatter(Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
     OSL_ENSURE( _rxFormatter.is(),"setEvalDateFormatForFormatter: Formatter is NULL!");

@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
