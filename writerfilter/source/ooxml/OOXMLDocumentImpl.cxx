@@ -436,6 +436,12 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
+    if (utl::MediaDescriptor(maMediaDescriptor).getUnpackedValueOrDefault("ReadGlossaries", false))
+    {
+        resolveFastSubStream(rStream, OOXMLStream::GLOSSARY);
+        return;
+    }
+
     uno::Reference< xml::sax::XFastParser > xParser
         (mpStream->getFastParser());
 
