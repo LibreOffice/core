@@ -22,6 +22,24 @@
       "revId": "d11746a8f4dfa443a404add08ff8bfe51590c607",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_8af23a99",
+        "filename": "sw/source/core/text/porfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-04-20T20:46:21Z",
+      "side": 0,
+      "message": "That is possible, but I still think this check is wrong to begin with. First we need an evidence this have any real world performance impact, for all I know ICU might be already optimized and skips doing the full bidi algorithm when appropriate. If it turns out to have per impact, then proper optimization would be checking the bidi class for the characters not the unrelated script property.",
+      "parentUuid": "5a3905b3_eaa57eb5",
+      "revId": "d11746a8f4dfa443a404add08ff8bfe51590c607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
