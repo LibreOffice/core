@@ -1191,7 +1191,7 @@ void SvXMLExport::ImplExportContent()
     CheckAttrList();
 
     {
-        SvXMLElementExport aElemrnt( *this, XML_NAMESPACE_OFFICE, XML_BODY,
+        SvXMLElementExport aElement( *this, XML_NAMESPACE_OFFICE, XML_BODY,
                                   true, true );
         {
             XMLTokenEnum eClass = meClass;
