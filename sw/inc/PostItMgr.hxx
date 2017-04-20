@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_POSTITMGR_HXX
 
 #include <sal/config.h>
+#include "swdllapi.h"
 
 #include <cstddef>
 #include <list>
@@ -249,10 +250,10 @@ class SwPostItMgr: public SfxListener
 
         sw::annotation::SwAnnotationWin* GetActiveSidebarWin() { return mpActivePostIt; }
         void SetActiveSidebarWin( sw::annotation::SwAnnotationWin* p);
-        bool HasActiveSidebarWin() const;
+        SW_DLLPUBLIC bool HasActiveSidebarWin() const;
         bool HasActiveAnnotationWin() const;
         void GrabFocusOnActiveSidebarWin();
-        void UpdateDataOnActiveSidebarWin();
+        SW_DLLPUBLIC void UpdateDataOnActiveSidebarWin();
         void DeleteActiveSidebarWin();
         void HideActiveSidebarWin();
         void ToggleInsModeOnActiveSidebarWin();

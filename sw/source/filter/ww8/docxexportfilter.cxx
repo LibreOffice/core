@@ -24,6 +24,7 @@
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <pam.hxx>
+#include <PostItMgr.hxx>
 #include <unotxdoc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
@@ -53,6 +54,14 @@ bool DocxExportFilter::exportDocument()
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if (pViewShell != nullptr)
         pViewShell->CalcLayout();
+
+    // if we have an active postit window, update the document model
+    if (pViewShell &&
+        pViewShell->GetPostItMgr() &&
+        pViewShell->GetPostItMgr()->HasActiveSidebarWin())
+    {
+        pViewShell->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
+    }
 
     // get SwPaM*
     // FIXME so far we get SwPaM for the entire document; probably we should
