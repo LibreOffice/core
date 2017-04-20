@@ -55,23 +55,9 @@ Image Tools::GetImage (
 {
     if (rsURL.getLength() > 0)
     {
-        const sal_Char  sUnoCommandPrefix[] = ".uno:";
-        const sal_Char  sCommandImagePrefix[] = "private:commandimage/";
-        const sal_Int32 nCommandImagePrefixLength = strlen(sCommandImagePrefix);
-
-        if (rsURL.startsWith(sUnoCommandPrefix))
+        if (rsURL.startsWith(".uno:"))
         {
             const Image aPanelImage (::GetImage(rxFrame, rsURL, false));
-            return aPanelImage;
-        }
-        else if (rsURL.startsWith(sCommandImagePrefix))
-        {
-            ::rtl::OUStringBuffer aCommandName;
-            aCommandName.append(sUnoCommandPrefix);
-            aCommandName.append(rsURL.copy(nCommandImagePrefixLength));
-            const ::rtl::OUString sCommandName (aCommandName.makeStringAndClear());
-
-            const Image aPanelImage (::GetImage(rxFrame, sCommandName, false));
             return aPanelImage;
         }
         else
