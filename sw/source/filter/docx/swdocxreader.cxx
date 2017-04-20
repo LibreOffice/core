@@ -29,6 +29,10 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <docsh.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <ndtxt.hxx>
+#include <poolfmt.hxx>
+#include <svl/urihelper.hxx>
 #include <swerror.h>
 #include <tools/ref.hxx>
 #include <unotxdoc.hxx>
@@ -59,34 +63,6 @@ bool SwDOCXReader::HasGlossaries() const
 
 bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles */ ) const
 {
-    bool bRet = false;
-
-    uno::Reference<xml::dom::XDocument> xDoc = OpenDocument();
-
-    if( xDoc.is() )
-    {
-        uno::Reference<xml::dom::XNodeList> xList = xDoc->getElementsByTagName( "docPartBody" );
-        for( int i = 0; i < xList->getLength(); i++ )
-        {
-            uno::Reference<xml::dom::XNode> xBody = xList->item( i );
-            uno::Reference<xml::dom::XNode> xP = xBody->getFirstChild();
-            uno::Reference<xml::dom::XNode> xR = xP->getFirstChild();
-            uno::Reference<xml::dom::XNode> xT = xR->getFirstChild();
-            uno::Reference<xml::dom::XNode> xText = xT->getFirstChild();
-            OUString aText = xText->getNodeValue();
-            if( !aText.isEmpty() )
-            {
-                rBlocks.PutText( aText, aText, aText );
-                bRet = true;
-            }
-        }
-    }
-
-    return bRet;
-}
-
-uno::Reference<xml::dom::XDocument> SwDOCXReader::OpenDocument() const
-{
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
                 comphelper::getProcessServiceFactory() );
 
@@ -98,54 +74,121 @@ uno::Reference<xml::dom::XDocument> SwDOCXReader::OpenDocument() const
     uno::Reference<document::XImporter> xImporter( xFilter, uno::UNO_QUERY_THROW );
 
     SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::INTERNAL ) );
-    xDocSh->DoInitNew();
-
-    uno::Reference<lang::XComponent> xDstDoc( xDocSh->GetModel(), uno::UNO_QUERY_THROW );
-    xImporter->setTargetDocument( xDstDoc );
-
-    uno::Sequence<beans::PropertyValue> aDescriptor( 1 );
-    aDescriptor[0].Name = "InputStream";
-    uno::Reference<io::XStream> xStream( new utl::OStreamWrapper( *pMedium->GetInStream() ) );
-    aDescriptor[0].Value <<= xStream;
-
-    uno::Reference<xml::dom::XDocument> xDoc;
-
-    try
+    if( xDocSh->DoInitNew() )
     {
-        xFilter->filter( aDescriptor );
+        uno::Reference<lang::XComponent> xDstDoc( xDocSh->GetModel(), uno::UNO_QUERY_THROW );
+        xImporter->setTargetDocument( xDstDoc );
 
-        comphelper::SequenceAsHashMap aGrabBag = GetGrabBag( xDstDoc );
-        aGrabBag["OOXGlossary"] >>= xDoc;
-    }
-    catch (uno::Exception const& e)
-    {
-        SAL_WARN("sw.docx", "SwDOCXReader::OpenDocument(): exception: " << e.Message);
+        uno::Reference<io::XStream> xStream( new utl::OStreamWrapper( *pMedium->GetInStream() ) );
+
+        uno::Sequence<beans::PropertyValue> aDescriptor( 2 );
+        aDescriptor[0].Name = "InputStream";
+        aDescriptor[0].Value <<= xStream;
+        aDescriptor[1].Name = "ReadGlossaries";
+        aDescriptor[1].Value <<= true;
+
+        try
+        {
+            xFilter->filter( aDescriptor );
+        }
+        catch( uno::Exception const& e )
+        {
+            SAL_WARN("sw.docx", "SwDOCXReader::ReadGlossaries(): exception: " << e.Message);
+        }
+
+        return MakeEntries( static_cast<SwDocShell*>( &xDocSh )->GetDoc(), rBlocks );
     }
 
-    return xDoc;
+    return false;
 }
 
-comphelper::SequenceAsHashMap SwDOCXReader::GetGrabBag( const uno::Reference<lang::XComponent>& xDocument )
+bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
 {
-    if( xDocument.is() )
-    {
-        // get glossar document from the GrabBag
-        uno::Reference<beans::XPropertySet> xDocProps( xDocument, uno::UNO_QUERY );
-        if( xDocProps.is() )
-        {
-            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+    const OUString aOldURL( rBlocks.GetBaseURL() );
+    rBlocks.SetBaseURL( OUString() );
 
-            const OUString aGrabBagPropName = "InteropGrabBag";
-            if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
+    bool bRet = false;
+
+    SwNodeIndex aDocEnd( pD->GetNodes().GetEndOfContent() );
+    SwNodeIndex aStart( *aDocEnd.GetNode().StartOfSectionNode() );
+
+    if( aStart < aDocEnd && ( aDocEnd.GetIndex() - aStart.GetIndex() > 2 ) )
+    {
+        SwTextFormatColl* pColl = pD->getIDocumentStylePoolAccess().GetTextCollFromPool
+            (RES_POOLCOLL_STANDARD, false);
+        sal_uInt16 nGlosEntry = 0;
+        SwContentNode* pCNd = nullptr;
+        do {
+            SwPaM aPam( aStart );
             {
-                // get existing grab bag
-                comphelper::SequenceAsHashMap aGrabBag( xDocProps->getPropertyValue( aGrabBagPropName ) );
-                return aGrabBag;
+                SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
+                ++rIdx;
+                if( nullptr == ( pCNd = rIdx.GetNode().GetTextNode() ) )
+                {
+                    pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
+                    rIdx = *pCNd;
+                }
             }
-        }
+
+            aPam.GetPoint()->nContent.Assign( pCNd, 0 );
+            aPam.SetMark();
+            {
+                SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
+                rIdx = aStart.GetNode().EndOfSectionIndex() - 1;
+                if( ( nullptr == ( pCNd = rIdx.GetNode().GetContentNode() ) ) )
+                {
+                    ++rIdx;
+                    pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
+                    rIdx = *pCNd;
+                }
+            }
+            aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+
+            rBlocks.ClearDoc();
+
+            // TODO: correct entry name
+            const OUString rLNm = "ImportedAutoText";
+
+            OUString sShortcut = rLNm;
+
+            // Need to check make sure the shortcut is not already being used
+            sal_Int32 nStart = 0;
+            sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
+            sal_Int32 nLen = sShortcut.getLength();
+
+            while( (sal_uInt16)-1 != nCurPos )
+            {
+                sShortcut = sShortcut.copy( 0, nLen );
+                // add an Number to it
+                sShortcut += OUString::number( ++nStart );
+                nCurPos = rBlocks.GetIndex( sShortcut );
+            }
+
+            if( rBlocks.BeginPutDoc( sShortcut, sShortcut ) )
+            {
+                SwDoc* pGlDoc = rBlocks.GetDoc();
+                SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(), -1 );
+                pCNd = aIdx.GetNode().GetContentNode();
+                SwPosition aPos( aIdx, SwIndex( pCNd, ( pCNd ) ? pCNd->Len() : 0 ) );
+                pD->getIDocumentContentOperations().CopyRange( aPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
+                rBlocks.PutDoc();
+            }
+
+            if( aStart.GetNodes().Count() <= aStart.GetNode().GetIndex() )
+                aStart = aStart.GetNode().EndOfSectionIndex() + 1;
+            else
+                break;
+
+            ++nGlosEntry;
+
+        } while( aStart < aDocEnd );
+
+        bRet = true;
     }
 
-    return comphelper::SequenceAsHashMap();
+    rBlocks.SetBaseURL( aOldURL );
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
