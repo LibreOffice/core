@@ -129,25 +129,25 @@ void TestApplication::impl_testDynamicMenuOptions()
     //      }
     //      output content
 
-    Sequence< Sequence< PropertyValue > > lNewMenu    = aCFG.GetMenu( E_NEWMENU    );
-    Sequence< Sequence< PropertyValue > > lWizardMenu = aCFG.GetMenu( E_WIZARDMENU );
+    Sequence< Sequence< PropertyValue > > lNewMenu    = aCFG.GetMenu( EDynamicMenuType::NewMenu    );
+    Sequence< Sequence< PropertyValue > > lWizardMenu = aCFG.GetMenu( EDynamicMenuType::WizardMenu );
 
     if( lNewMenu.getLength() < 1 )
     {
-        aCFG.AppendItem( E_NEWMENU, "private:factory/swriter", "new writer", "icon_writer", "_blank");
-        aCFG.AppendItem( E_NEWMENU, "private:factory/scalc",   "new calc",   "icon_calc",   "_blank");
-        aCFG.AppendItem( E_NEWMENU, "private:factory/sdraw",   "new draw",   "icon_draw",   "_blank");
+        aCFG.AppendItem( EDynamicMenuType::NewMenu, "private:factory/swriter", "new writer", "icon_writer", "_blank");
+        aCFG.AppendItem( EDynamicMenuType::NewMenu, "private:factory/scalc",   "new calc",   "icon_calc",   "_blank");
+        aCFG.AppendItem( EDynamicMenuType::NewMenu, "private:factory/sdraw",   "new draw",   "icon_draw",   "_blank");
 
-        lNewMenu = aCFG.GetMenu( E_NEWMENU );
+        lNewMenu = aCFG.GetMenu( EDynamicMenuType::NewMenu );
     }
 
     if( lWizardMenu.getLength() < 1 )
     {
-        aCFG.AppendItem( E_WIZARDMENU, "file://a", "system file", "icon_file", "_self");
-        aCFG.AppendItem( E_WIZARDMENU, "ftp://b",  "ftp host",    "icon_ftp",  "_self");
-        aCFG.AppendItem( E_WIZARDMENU, "http://c", "www",         "icon_www",  "_self");
+        aCFG.AppendItem( EDynamicMenuType::WizardMenu, "file://a", "system file", "icon_file", "_self");
+        aCFG.AppendItem( EDynamicMenuType::WizardMenu, "ftp://b",  "ftp host",    "icon_ftp",  "_self");
+        aCFG.AppendItem( EDynamicMenuType::WizardMenu, "http://c", "www",         "icon_www",  "_self");
 
-        lWizardMenu = aCFG.GetMenu( E_WIZARDMENU );
+        lWizardMenu = aCFG.GetMenu( EDynamicMenuType::WizardMenu );
     }
 
     sal_uInt32     nItemCount    ;

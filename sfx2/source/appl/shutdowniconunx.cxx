@@ -155,7 +155,7 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
                               sal_uInt16 nResId, GCallback pFnCallback )
 {
     SvtDynamicMenuOptions aOpt;
-    Sequence < Sequence < PropertyValue > > aMenu = aOpt.GetMenu( E_NEWMENU );
+    Sequence < Sequence < PropertyValue > > aMenu = aOpt.GetMenu( EDynamicMenuType::NewMenu );
     for ( sal_Int32 n=0; n<aMenu.getLength(); n++ )
     {
         OUString aURL;

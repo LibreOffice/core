@@ -166,7 +166,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
     EnterWait();
 
     uno::Sequence< uno::Sequence< beans::PropertyValue > >
-        aDynamicMenuEntries( SvtDynamicMenuOptions().GetMenu( E_NEWMENU ) );
+        aDynamicMenuEntries( SvtDynamicMenuOptions().GetMenu( EDynamicMenuType::NewMenu ) );
 
     sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; i++ )
