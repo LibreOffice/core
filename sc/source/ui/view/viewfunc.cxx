@@ -78,6 +78,7 @@
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
 #include <docfuncutil.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <memory>
 
@@ -1469,6 +1470,12 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
                     OUString("insert-columns");
                 HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
             }
+
+            if (bInsertCols)
+                SfxLokHelper::notifyAllViewsHeaderInvalidation("column");
+
+            if (bInsertRows)
+                SfxLokHelper::notifyAllViewsHeaderInvalidation("row");
         }
         return bSuccess;
     }
@@ -1535,6 +1542,12 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         else
             nCurY = aRange.aStart.Row();
         SetCursor( nCurX, nCurY );
+
+        if (eCmd == DEL_DELCOLS)
+            SfxLokHelper::notifyAllViewsHeaderInvalidation("column");
+
+        if (eCmd == DEL_DELROWS)
+            SfxLokHelper::notifyAllViewsHeaderInvalidation("row");
     }
     else
     {
@@ -2127,6 +2140,12 @@ void ScViewFunc::SetWidthOrHeight(
             }
             HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "column-resize");
         }
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        OString aPayload = bWidth ? "column" : "row";
+        SfxLokHelper::notifyAllViewsHeaderInvalidation(aPayload);
     }
 }
 
