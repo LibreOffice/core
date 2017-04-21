@@ -23,6 +23,7 @@
 
 #include <sfx2/sfxhtml.hxx>
 #include <svl/macitem.hxx>
+#include <svtools/htmltokn.h>
 #include <editeng/svxenum.hxx>
 #include <rtl/ref.hxx>
 #include <fmtornt.hxx>
@@ -202,7 +203,7 @@ class HTMLAttrContext
     HTMLAttrContext_SaveDoc *pSaveDocContext;
     SfxItemSet *pFrameItemSet;
 
-    sal_uInt16  nToken;         // the token of the context
+    HtmlTokenId nToken;         // the token of the context
 
     sal_uInt16  nTextFormatColl;    // a style created in the context or zero
 
@@ -228,7 +229,7 @@ class HTMLAttrContext
 public:
     void ClearSaveDocContext();
 
-    HTMLAttrContext( sal_uInt16 nTokn, sal_uInt16 nPoolId, const OUString& rClass,
+    HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const OUString& rClass,
                       bool bDfltColl=false ) :
         aClass( rClass ),
         pSaveDocContext( nullptr ),
@@ -252,7 +253,7 @@ public:
         bRestartListing( false )
     {}
 
-    explicit HTMLAttrContext( sal_uInt16 nTokn ) :
+    explicit HTMLAttrContext( HtmlTokenId nTokn ) :
         pSaveDocContext( nullptr ),
         pFrameItemSet( nullptr ),
         nToken( nTokn ),
@@ -276,7 +277,7 @@ public:
 
     ~HTMLAttrContext() { ClearSaveDocContext(); delete pFrameItemSet; }
 
-    sal_uInt16 GetToken() const { return nToken; }
+    HtmlTokenId GetToken() const { return nToken; }
 
     sal_uInt16 GetTextFormatColl() const { return bDfltTextFormatColl ? 0 : nTextFormatColl; }
     sal_uInt16 GetDfltTextFormatColl() const { return bDfltTextFormatColl ? nTextFormatColl : 0; }
@@ -426,7 +427,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     size_t m_nContextStMin;           // lower limit of PopContext
     size_t m_nContextStAttrMin;       // lower limit of attributes
     sal_uInt16  m_nSelectEntryCnt;    // Number of entries in the actual listbox
-    sal_uInt16  m_nOpenParaToken;     // opened paragraph element
+    HtmlTokenId m_nOpenParaToken;     // opened paragraph element
 
     enum JumpToMarks { JUMPTO_NONE, JUMPTO_MARK, JUMPTO_TABLE, JUMPTO_FRAME,
                         JUMPTO_REGION, JUMPTO_GRAPHIC } m_eJumpTo;
@@ -561,7 +562,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     // Fetch top/specified context but not outside the context with token
     // nLimit. If bRemove set then remove it.
-    HTMLAttrContext *PopContext( sal_uInt16 nToken=0 );
+    HTMLAttrContext *PopContext( HtmlTokenId nToken = HtmlTokenId::NONE );
 
     bool GetMarginsFromContext( sal_uInt16 &nLeft, sal_uInt16 &nRight, short& nIndent,
                                 bool bIgnoreCurrent=false ) const;
@@ -576,16 +577,16 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // <P> and <H1> to <H6>
     void NewPara();
     void EndPara( bool bReal = false );
-    void NewHeading( int nToken );
+    void NewHeading( HtmlTokenId nToken );
     void EndHeading();
 
     // <ADDRESS>, <BLOCKQUOTE> and <PRE>
-    void NewTextFormatColl( int nToken, sal_uInt16 nPoolId );
-    void EndTextFormatColl( int nToken );
+    void NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nPoolId );
+    void EndTextFormatColl( HtmlTokenId nToken );
 
     // <DIV> and <CENTER>
-    void NewDivision( int nToken );
-    void EndDivision( int nToken );
+    void NewDivision( HtmlTokenId nToken );
+    void EndDivision();
 
     // insert/close Fly-Frames
     void InsertFlyFrame( const SfxItemSet& rItemSet, HTMLAttrContext *pCntxt,
@@ -609,37 +610,37 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // Handling of lists
 
     // order list <OL> and unordered list <UL> with <LI>
-    void NewNumBulList( int nToken );
-    void EndNumBulList( int nToken=0 );
-    void NewNumBulListItem( int nToken );
-    void EndNumBulListItem( int nToken, bool bSetColl,
+    void NewNumBulList( HtmlTokenId nToken );
+    void EndNumBulList( HtmlTokenId nToken = HtmlTokenId::NONE );
+    void NewNumBulListItem( HtmlTokenId nToken );
+    void EndNumBulListItem( HtmlTokenId nToken, bool bSetColl,
                             bool bLastPara=false );
 
     // definitions lists <DL> with <DD>, <DT>
     void NewDefList();
     void EndDefList();
-    void NewDefListItem( int nToken );
-    void EndDefListItem( int nToken=0, bool bLastPara=false );
+    void NewDefListItem( HtmlTokenId nToken );
+    void EndDefListItem( HtmlTokenId nToken = HtmlTokenId::NONE );
 
     // Handling of tags on character level
 
     // handle tags like <B>, <I> and so, which enable/disable a certain
     // attribute or like <SPAN> get attributes from styles
-    void NewStdAttr( int nToken );
-    void NewStdAttr( int nToken,
+    void NewStdAttr( HtmlTokenId nToken );
+    void NewStdAttr( HtmlTokenId nToken,
                      HTMLAttr **ppAttr, const SfxPoolItem & rItem,
                      HTMLAttr **ppAttr2=nullptr, const SfxPoolItem *pItem2=nullptr,
                      HTMLAttr **ppAttr3=nullptr, const SfxPoolItem *pItem3=nullptr );
-    void EndTag( int nToken );
+    void EndTag( HtmlTokenId nToken );
 
     // handle font attributes
     void NewBasefontAttr();             // for <BASEFONT>
     void EndBasefontAttr();
-    void NewFontAttr( int nToken ); // for <FONT>, <BIG> and <SMALL>
-    void EndFontAttr( int nToken );
+    void NewFontAttr( HtmlTokenId nToken ); // for <FONT>, <BIG> and <SMALL>
+    void EndFontAttr( HtmlTokenId nToken );
 
     // tags realized via character styles
-    void NewCharFormat( int nToken );
+    void NewCharFormat( HtmlTokenId nToken );
 
     // <SDFIELD>
 public:
@@ -793,7 +794,7 @@ private:
     void InsertInput();
 
     void NewTextArea();
-    void InsertTextAreaText( sal_uInt16 nToken );
+    void InsertTextAreaText( HtmlTokenId nToken );
     void EndTextArea();
 
     void NewSelect();
@@ -868,7 +869,7 @@ public:         // used in tables
 
 protected:
     // Executed for each token recognized by CallParser
-    virtual void NextToken( int nToken ) override;
+    virtual void NextToken( HtmlTokenId nToken ) override;
     virtual ~SwHTMLParser() override;
 
     // If the document is removed, remove the parser as well
@@ -890,7 +891,7 @@ public:
     static sal_uInt16 ToTwips( sal_uInt16 nPixel );
 
     // for reading asynchronously from SvStream
-    virtual void Continue( int nToken ) override;
+    virtual void Continue( HtmlTokenId nToken ) override;
 
     virtual bool ParseMetaOptions( const css::uno::Reference<css::document::XDocumentProperties>&,
             SvKeyValueIterator* ) override;
@@ -903,11 +904,11 @@ struct SwPendingStackData
 
 struct SwPendingStack
 {
-    int nToken;
+    HtmlTokenId nToken;
     SwPendingStackData* pData;
     SwPendingStack* pNext;
 
-    SwPendingStack( int nTkn, SwPendingStack* pNxt )
+    SwPendingStack( HtmlTokenId nTkn, SwPendingStack* pNxt )
         : nToken( nTkn ), pData( nullptr ), pNext( pNxt )
         {}
 };
