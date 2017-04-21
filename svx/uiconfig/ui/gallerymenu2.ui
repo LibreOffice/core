@@ -61,5 +61,27 @@
         <property name="label" translatable="yes">_Delete</property>
       </object>
     </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="menuitem4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="copy">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Copy</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="paste">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Insert</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
   </object>
 </interface>

@@ -247,11 +247,18 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     {
         mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("delete"), false);
         mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("title"), false);
+        if (mpTheme->IsReadOnly())
+            mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("paste"), false);
+
+        if (!mpTheme->GetObjectCount())
+            mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("copy"), false);
     }
     else
     {
         mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("delete"), !mbPreview);
         mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("title"));
+        mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("copy"));
+        mpPopupMenu->EnableItem(mpPopupMenu->GetItemId("paste"));
     }
 
     // update status
@@ -1130,6 +1137,31 @@ void GalleryBrowser2::Execute(const OString &rIdent)
                     GalleryTheme::ReleaseObject( pObj );
                 }
             }
+        }
+        else if (rIdent == "copy")
+        {
+            vcl::Window* pWindow;
+
+            switch( GetMode() )
+            {
+                case GALLERYBROWSERMODE_ICON: pWindow = static_cast<vcl::Window*>(mpIconView); break;
+                case GALLERYBROWSERMODE_LIST: pWindow = static_cast<vcl::Window*>(mpListView); break;
+                case GALLERYBROWSERMODE_PREVIEW: pWindow = static_cast<vcl::Window*>(mpPreview); break;
+
+                default:
+                    pWindow = nullptr;
+                break;
+            }
+
+            mpCurTheme->CopyToClipboard( pWindow, mnCurActionPos );
+        }
+        else if (rIdent == "paste")
+        {
+            if( !mpCurTheme->IsReadOnly() )
+            {
+                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
+                mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
+             }
         }
     }
 }
