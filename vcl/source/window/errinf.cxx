@@ -224,11 +224,29 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
+bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)
+{
+    OUString aErr;
+
+    if(!nErrCodeId || nErrCodeId == ERRCODE_ABORT)
+        return false;
+
+    ErrorInfo *pInfo = ErrorInfo::GetErrorInfo(nErrCodeId);
+
+    if (ErrorHandler_Impl::CreateString(pInfo,aErr))
+    {
+        rErrStr = aErr;
+        return true;
+    }
+
+    delete pInfo;
+    return false;
+}
+
 /** Handles an error.
 
     If nFlags is not set, the DynamicErrorInfo flags or the
-    resource flags will be used.
-    Thus:
+    resource flags will be used. Thus the order is:
 
     1. nFlags,
     2. Resource Flags
@@ -237,23 +255,19 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 
     @param nErrCodeId        error id
     @param nFlags            error flags.
-    @param bJustCreateString ???
-    @param rError            ???
 
-    @return ???
+    @return what sort of dialog to use, with what buttons
 */
-DialogMask ErrorHandler::HandleError_Impl(
-    sal_uInt32 nErrCodeId, DialogMask nFlags, bool bJustCreateString, OUString & rError)
+DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
 {
-    OUString aErr;
-    OUString aAction;
-
     if(!nErrCodeId || nErrCodeId == ERRCODE_ABORT)
         return DialogMask::NONE;
 
     ErrorRegistry &rData = TheErrorRegistry::get();
     vcl::Window *pParent = nullptr;
     ErrorInfo *pInfo = ErrorInfo::GetErrorInfo(nErrCodeId);
+    OUString aAction;
+
     if (!rData.contexts.empty())
     {
         rData.contexts.front()->GetString(pInfo->GetErrorCode(), aAction);
@@ -283,66 +297,45 @@ DialogMask ErrorHandler::HandleError_Impl(
             nErrFlags = nDynFlags;
     }
 
-    if(ErrorHandler_Impl::CreateString(pInfo,aErr))
+    OUString aErr;
+    if (ErrorHandler::GetErrorString(nErrCodeId, aErr))
     {
-        if (bJustCreateString)
+        if(!rData.pDsp)
         {
-            rError = aErr;
-            return DialogMask::ButtonsOk;
+            OStringBuffer aStr("Action: ");
+            aStr.append(OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
+            aStr.append("\nError: ");
+            aStr.append(OUStringToOString(aErr, RTL_TEXTENCODING_ASCII_US));
+            OSL_FAIL(aStr.getStr());
         }
         else
         {
-            if(!rData.pDsp)
+            delete pInfo;
+
+            if(!rData.bIsWindowDsp)
             {
-                OStringBuffer aStr("Action: ");
-                aStr.append(OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
-                aStr.append("\nError: ");
-                aStr.append(OUStringToOString(aErr, RTL_TEXTENCODING_ASCII_US));
-                OSL_FAIL(aStr.getStr());
+                (*reinterpret_cast<BasicDisplayErrorFunc*>(rData.pDsp))(aErr,aAction);
+                return DialogMask::NONE;
             }
             else
             {
-                delete pInfo;
-                if(!rData.bIsWindowDsp)
-                {
-                    (*reinterpret_cast<BasicDisplayErrorFunc*>(rData.pDsp))(aErr,aAction);
-                    return DialogMask::NONE;
-                }
-                else
-                {
-                    if (nFlags != DialogMask::MAX)
-                        nErrFlags = nFlags;
-                    return (*reinterpret_cast<WindowDisplayErrorFunc*>(rData.pDsp))(
-                        pParent, nErrFlags, aErr, aAction);
-                }
+                if (nFlags != DialogMask::MAX)
+                    nErrFlags = nFlags;
+                return (*reinterpret_cast<WindowDisplayErrorFunc*>(rData.pDsp))(
+                    pParent, nErrFlags, aErr, aAction);
             }
         }
     }
 
     OSL_FAIL("Error not handled");
     // Error 1 is classified as a General Error in sfx
-    if(pInfo->GetErrorCode()!=1)
-        HandleError_Impl(1, DialogMask::MAX, bJustCreateString, rError);
+    if (pInfo->GetErrorCode()!=1)
+        HandleError(1);
     else
         OSL_FAIL("Error 1 not handled");
 
     delete pInfo;
     return DialogMask::NONE;
-}
-
-bool ErrorHandler::GetErrorString(sal_uInt32 lId, OUString& rStr)
-{
-    return HandleError_Impl( lId, DialogMask::MAX, true, rStr ) != DialogMask::NONE;
-}
-
-/** Handles an error.
-
-    @see ErrorHandler::HandleError_Impl
-*/
-DialogMask ErrorHandler::HandleError(sal_uInt32 lId, DialogMask nFlags)
-{
-    OUString aDummy;
-    return HandleError_Impl( lId, nFlags, false, aDummy );
 }
 
 bool ErrorHandler_Impl::CreateString(const ErrorInfo* pInfo, OUString& rStr)
