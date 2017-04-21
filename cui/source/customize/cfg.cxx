@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
@@ -569,9 +570,7 @@ bool GetToolbarItemData(
 }
 
 uno::Sequence< beans::PropertyValue >
-ConvertSvxConfigEntry(
-    const uno::Reference< container::XNameAccess >& xCommandToLabelMap,
-    const SvxConfigEntry* pEntry )
+ConvertSvxConfigEntry( const SvxConfigEntry* pEntry )
 {
     uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
@@ -581,50 +580,13 @@ ConvertSvxConfigEntry(
     aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
     aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
 
-    // If the name has not been changed and the name is the same as
-    // in the default command to label map then the label can be stored
+    // If the name has not been changed, then the label can be stored
     // as an empty string.
     // It will be initialised again later using the command to label map.
     aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
     if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
-        bool isDefaultName = false;
-        try
-        {
-            uno::Any a( xCommandToLabelMap->getByName( pEntry->GetCommand() ) );
-            uno::Sequence< beans::PropertyValue > tmpPropSeq;
-            if ( a >>= tmpPropSeq )
-            {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
-                {
-                    if ( tmpPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
-                    {
-                        OUString tmpLabel;
-                        tmpPropSeq[i].Value >>= tmpLabel;
-
-                        if ( tmpLabel.equals( pEntry->GetName() ) )
-                        {
-                            isDefaultName = true;
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
-        catch ( container::NoSuchElementException& )
-        {
-            // isDefaultName is left as FALSE
-        }
-
-        if ( isDefaultName )
-        {
-            aPropSeq[2].Value <<= OUString();
-        }
-        else
-        {
-            aPropSeq[2].Value <<= OUString( pEntry->GetName() );
-        }
+        aPropSeq[2].Value <<= OUString();
     }
     else
     {
@@ -635,9 +597,7 @@ ConvertSvxConfigEntry(
 }
 
 uno::Sequence< beans::PropertyValue >
-ConvertToolbarEntry(
-    const uno::Reference< container::XNameAccess >& xCommandToLabelMap,
-    const SvxConfigEntry* pEntry )
+ConvertToolbarEntry( const SvxConfigEntry* pEntry )
 {
     uno::Sequence< beans::PropertyValue > aPropSeq( 4 );
 
@@ -647,50 +607,13 @@ ConvertToolbarEntry(
     aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
     aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
 
-    // If the name has not been changed and the name is the same as
-    // in the default command to label map then the label can be stored
+    // If the name has not been changed, then the label can be stored
     // as an empty string.
     // It will be initialised again later using the command to label map.
     aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
     if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
-        bool isDefaultName = false;
-        try
-        {
-            uno::Any a( xCommandToLabelMap->getByName( pEntry->GetCommand() ) );
-            uno::Sequence< beans::PropertyValue > tmpPropSeq;
-            if ( a >>= tmpPropSeq )
-            {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
-                {
-                    if ( tmpPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
-                    {
-                        OUString tmpLabel;
-                        tmpPropSeq[i].Value >>= tmpLabel;
-
-                        if ( tmpLabel.equals( pEntry->GetName() ) )
-                        {
-                            isDefaultName = true;
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
-        catch ( container::NoSuchElementException& )
-        {
-            // isDefaultName is left as FALSE
-        }
-
-        if ( isDefaultName )
-        {
-            aPropSeq[2].Value <<= OUString();
-        }
-        else
-        {
-            aPropSeq[2].Value <<= OUString( pEntry->GetName() );
-        }
+        aPropSeq[2].Value <<= OUString();
     }
     else
     {
@@ -1078,6 +1001,8 @@ bool SaveInData::LoadSubMenus(
         if ( bItem )
         {
             bool bIsUserDefined = true;
+            bool bUseDefaultLabel = false;
+
             if ( nType == css::ui::ItemType::DEFAULT )
             {
                 uno::Any a;
@@ -1095,6 +1020,7 @@ bool SaveInData::LoadSubMenus(
                 // to info service
                 if ( aLabel.isEmpty() )
                 {
+                    bUseDefaultLabel = true;
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
@@ -1109,16 +1035,18 @@ bool SaveInData::LoadSubMenus(
                     }
                 }
 
+                SvxConfigEntry* pEntry = new SvxConfigEntry(
+                    aLabel, aCommandURL, xSubMenu.is() );
+
+                pEntry->SetUserDefined( bIsUserDefined );
+                if ( !bUseDefaultLabel )
+                    pEntry->SetName( aLabel );
+
+                pEntries->push_back( pEntry );
+
                 if ( xSubMenu.is() )
                 {
                     // popup menu
-                    SvxConfigEntry* pEntry = new SvxConfigEntry(
-                        aLabel, aCommandURL, true );
-
-                    pEntry->SetUserDefined( bIsUserDefined );
-
-                    pEntries->push_back( pEntry );
-
                     OUString subMenuTitle( rBaseTitle );
 
                     if ( !subMenuTitle.isEmpty() )
@@ -1133,13 +1061,6 @@ bool SaveInData::LoadSubMenus(
                     subMenuTitle += stripHotKey( aLabel );
 
                     LoadSubMenus( xSubMenu, subMenuTitle, pEntry );
-                }
-                else
-                {
-                    SvxConfigEntry* pEntry = new SvxConfigEntry(
-                        aLabel, aCommandURL, false );
-                    pEntry->SetUserDefined( bIsUserDefined );
-                    pEntries->push_back( pEntry );
                 }
             }
             else
@@ -1218,7 +1139,7 @@ void MenuSaveInData::Apply(
         SvxConfigEntry* pEntryData = *iter;
 
         uno::Sequence< beans::PropertyValue > aPropValueSeq =
-            ConvertSvxConfigEntry( m_xCommandToLabelMap, pEntryData );
+            ConvertSvxConfigEntry( pEntryData );
 
         uno::Reference< container::XIndexContainer > xSubMenuBar(
             rFactory->createInstanceWithContext( xContext ),
@@ -1251,7 +1172,7 @@ void SaveInData::ApplyMenu(
         if ( pEntry->IsPopup() )
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                ConvertSvxConfigEntry( m_xCommandToLabelMap, pEntry );
+                ConvertSvxConfigEntry( pEntry );
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
                 rFactory->createInstanceWithContext( xContext ),
@@ -1276,7 +1197,7 @@ void SaveInData::ApplyMenu(
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                ConvertSvxConfigEntry( m_xCommandToLabelMap, pEntry );
+                ConvertSvxConfigEntry( pEntry );
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::Any( aPropValueSeq ));
         }
@@ -2200,7 +2121,6 @@ SvxEntries* SvxConfigPage::FindParentForChild(
 SvTreeListEntry* SvxConfigPage::AddFunction(
     SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
 {
-    OUString aDisplayName = m_pSelectorDlg->GetSelectedDisplayName();
     OUString aURL = m_pSelectorDlg->GetScriptURL();
 
     if ( aURL.isEmpty() )
@@ -2208,9 +2128,15 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
         return nullptr;
     }
 
+    OUString aModuleId = vcl::CommandInfoProvider::GetModuleIdentifier( m_xFrame );
+    OUString aDisplayName = vcl::CommandInfoProvider::GetMenuLabelForCommand( aURL, aModuleId );
+
     SvxConfigEntry* pNewEntryData =
         new SvxConfigEntry( aDisplayName, aURL, false );
     pNewEntryData->SetUserDefined();
+
+    if ( aDisplayName.isEmpty() )
+        pNewEntryData->SetName( m_pSelectorDlg->GetSelectedDisplayName() );
 
     // check that this function is not already in the menu
     SvxConfigEntry* pParent = GetTopLevelSelection();
@@ -2812,6 +2738,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddSubmenuHdl, Button *, void )
 
         SvxConfigEntry* pNewEntryData =
             new SvxConfigEntry( aNewName, aNewName, true );
+        pNewEntryData->SetName( aNewName );
         pNewEntryData->SetUserDefined();
 
         InsertEntry( pNewEntryData );
@@ -2891,6 +2818,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
 
         SvxConfigEntry* pNewEntryData =
             new SvxConfigEntry( newname, newurl, true );
+        pNewEntryData->SetName( newname );
         pNewEntryData->SetUserDefined();
         pNewEntryData->SetMain();
 
@@ -4121,7 +4049,7 @@ void ToolbarSaveInData::ApplyToolbar(
         if ( pEntry->IsPopup() )
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                ConvertToolbarEntry( m_xCommandToLabelMap, pEntry );
+                ConvertToolbarEntry( pEntry );
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
                 rFactory->createInstanceWithContext( xContext ),
@@ -4144,7 +4072,7 @@ void ToolbarSaveInData::ApplyToolbar(
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                ConvertToolbarEntry( m_xCommandToLabelMap, pEntry );
+                ConvertToolbarEntry( pEntry );
 
             rToolbarBar->insertByIndex(
                 rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
@@ -4359,6 +4287,8 @@ void ToolbarSaveInData::LoadToolbar(
         if ( bItem )
         {
             bool bIsUserDefined = true;
+            bool bUseDefaultLabel = false;
+
             if ( nType == css::ui::ItemType::DEFAULT )
             {
                 uno::Any a;
@@ -4376,6 +4306,7 @@ void ToolbarSaveInData::LoadToolbar(
                 // to info service
                 if ( aLabel.isEmpty() )
                 {
+                    bUseDefaultLabel = true;
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
@@ -4390,27 +4321,21 @@ void ToolbarSaveInData::LoadToolbar(
                     }
                 }
 
-                if ( xSubMenu.is() )
-                {
-                    SvxConfigEntry* pEntry = new SvxConfigEntry(
-                        aLabel, aCommandURL, true );
+                SvxConfigEntry* pEntry = new SvxConfigEntry(
+                    aLabel, aCommandURL, xSubMenu.is() );
 
-                    pEntry->SetUserDefined( bIsUserDefined );
-                    pEntry->SetVisible( bIsVisible );
+                pEntry->SetUserDefined( bIsUserDefined );
+                pEntry->SetVisible( bIsVisible );
 
-                    pEntries->push_back( pEntry );
-
-                    LoadToolbar( xSubMenu, pEntry );
-                }
-                else
-                {
-                    SvxConfigEntry* pEntry = new SvxConfigEntry(
-                        aLabel, aCommandURL, false );
-                    pEntry->SetUserDefined( bIsUserDefined );
-                    pEntry->SetVisible( bIsVisible );
+                if ( !bUseDefaultLabel )
+                    pEntry->SetName( aLabel );
+                if ( !xSubMenu.is() )
                     pEntry->SetStyle( nStyle );
-                    pEntries->push_back( pEntry );
-                }
+
+                pEntries->push_back( pEntry );
+
+                if ( xSubMenu.is() )
+                    LoadToolbar( xSubMenu, pEntry );
             }
             else
             {
