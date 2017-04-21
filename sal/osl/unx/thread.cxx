@@ -20,6 +20,9 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstddef>
+#include <functional>
+
 #include "system.hxx"
 #include <string.h>
 #if defined(OPENBSD)
@@ -553,8 +556,6 @@ void SAL_CALL osl_setThreadName(char const * name) {
 /* osl_getThreadIdentifier @@@ see TODO @@@ */
 /*****************************************************************************/
 
-#define HASHID(x) (reinterpret_cast<unsigned long>(x) % HashSize)
-
 struct HashEntry
 {
     pthread_t         Handle;
@@ -568,6 +569,13 @@ static int HashSize = SAL_N_ELEMENTS(HashTable);
 static pthread_mutex_t HashLock = PTHREAD_MUTEX_INITIALIZER;
 
 static sal_uInt16 LastIdent = 0;
+
+namespace {
+
+std::size_t HASHID(pthread_t x)
+{ return std::hash<pthread_t>()(x) % HashSize; }
+
+}
 
 static sal_uInt16 lookupThreadId (pthread_t hThread)
 {
