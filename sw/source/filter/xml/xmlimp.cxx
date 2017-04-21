@@ -52,6 +52,7 @@
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <editsh.hxx>
+#include <poolfmt.hrc>
 #include "xmlimp.hxx"
 #include "xmltexti.hxx"
 #include <xmloff/DocumentSettingsContext.hxx>
@@ -138,6 +139,29 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
                 const Reference< xml::sax::XAttributeList > & /*xAttrList*/ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    // tdf#107211: if at this point we don't have a defined char style "Default"
+    // or "Default Style", add a mapping for it as it is not written
+    // into the file since it's not really a style but "no style"
+    // (hence referencing it actually makes no sense except for hyperlinks
+    // which default to something other than "Default")
+    OUString const sDefault(SW_RES(STR_POOLCOLL_STANDARD));
+    uno::Reference<container::XNameContainer> const& xStyles(
+            rImport.GetTextImport()->GetTextStyles());
+    if (!xStyles->hasByName("Default"))
+    {   // this old name was used before LO 4.0
+        rImport.AddStyleDisplayName(XML_STYLE_FAMILY_TEXT_TEXT, "Default", sDefault);
+    }
+    if (!xStyles->hasByName("Default_20_Style"))
+    {   // this new name contains a space which is converted to _20_ on export
+        rImport.AddStyleDisplayName(XML_STYLE_FAMILY_TEXT_TEXT, "Default_20_Style", sDefault);
+    }
+    bool isEncoded(false);
+    OUString const defaultEncoded(
+        rImport.GetMM100UnitConverter().encodeStyleName(sDefault, &isEncoded));
+    if (isEncoded && !xStyles->hasByName(defaultEncoded))
+    {   // new name may contain a space which is converted to _20_ on export
+        rImport.AddStyleDisplayName(XML_STYLE_FAMILY_TEXT_TEXT, defaultEncoded, sDefault);
+    }
 }
 
 SwXMLBodyContext_Impl::~SwXMLBodyContext_Impl()
