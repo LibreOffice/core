@@ -1,0 +1,14 @@
+--- src/dispatch_common.c
++++ src/dispatch_common.c
+@@ -190,7 +190,11 @@
+ #endif
+ };
+ 
++#if defined _MSC_VER && defined __clang__
++static bool library_initialized = true;
++#else
+ static bool library_initialized;
++#endif
+ 
+ static bool epoxy_current_context_is_glx(void);
+ 
