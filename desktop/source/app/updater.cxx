@@ -54,6 +54,10 @@ const char* pSofficeExeName = "soffice.exe";
 #error "Need implementation"
 #endif
 
+OUString normalizePath(const OUString& rPath)
+{
+    return rPath.replaceAll("//", "/");
+}
 
 void CopyFileToDir(const OUString& rTempDirURL, const OUString rFileName, const OUString& rOldDir)
 {
@@ -73,7 +77,7 @@ OUString getPathFromURL(const OUString& rURL)
     OUString aPath;
     osl::FileBase::getSystemPathFromFileURL(rURL, aPath);
 
-    return aPath;
+    return normalizePath(aPath);
 }
 
 void CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempDirURL)
