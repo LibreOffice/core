@@ -356,13 +356,7 @@ IMPL_LINK_NOARG( OWizTypeSelect, ButtonClickHdl, Button *, void )
     {
         sal_uInt64 const nTell = m_pParserStream->Tell(); // might change seek position of stream
 
-        SvParser *pReader = createReader(nRows);
-        if(pReader)
-        {
-            pReader->AddFirstRef();
-            pReader->CallParser();
-            pReader->ReleaseRef();
-        }
+        createReaderAndCallParser(nRows);
         m_pParserStream->Seek(nTell);
     }
 

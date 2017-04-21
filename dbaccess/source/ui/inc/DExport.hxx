@@ -107,9 +107,8 @@ namespace dbaui
         bool                m_bAppendFirstLine;
 
 
-        virtual bool    CreateTable(int nToken)         = 0;
         virtual TypeSelectionPageFactory
-                            getTypeSelectionPageFactory()   = 0;
+                            getTypeSelectionPageFactory() = 0;
 
         void                CreateDefaultColumn(const OUString& _rColumnName);
         sal_Int16           CheckString(const OUString& aToken, sal_Int16 _nOldNumberFormat);

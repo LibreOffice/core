@@ -949,7 +949,7 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
         TableOn( pInfo );
     }
     bInCell = true;
-    bool bHorJustifyCenterTH = (pInfo->nToken == HTML_TABLEHEADER_ON);
+    bool bHorJustifyCenterTH = (pInfo->nToken == HtmlTokenId::TABLEHEADER_ON);
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
     for (const auto & rOption : rOptions)
     {
@@ -1070,7 +1070,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             nTableWidth = nLastWidth / static_cast<sal_uInt16>((nMaxCol - nColCntStart));
         }
         nLastWidth = nTableWidth;
-        if ( pInfo->nToken == HTML_TABLE_ON )
+        if ( pInfo->nToken == HtmlTokenId::TABLE_ON )
         {   // It can still be TD or TH, if we didn't have a TABLE earlier
             const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
             for (const auto & rOption : rOptions)
@@ -1129,7 +1129,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
         if (nMaxTable > 0)
             nOffsetTolerance = SC_HTML_OFFSET_TOLERANCE_LARGE;
         nTableWidth = 0;
-        if ( pInfo->nToken == HTML_TABLE_ON )
+        if ( pInfo->nToken == HtmlTokenId::TABLE_ON )
         {
             // It can still be TD or TH, if we didn't have a TABLE earlier
             const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
@@ -1524,7 +1524,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
     bool bSetLastToken = true;
     switch ( pInfo->nToken )
     {
-        case HTML_META:
+        case HtmlTokenId::META:
         {
             HTMLParser* pParser = static_cast<HTMLParser*>(pInfo->pParser);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -1534,13 +1534,13 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
                 mpDoc->GetDocumentShell()->GetHeaderAttributes() );
         }
         break;
-        case HTML_TITLE_ON:
+        case HtmlTokenId::TITLE_ON:
         {
             bInTitle = true;
             aString.clear();
         }
         break;
-        case HTML_TITLE_OFF:
+        case HtmlTokenId::TITLE_OFF:
         {
             if ( bInTitle && !aString.isEmpty() )
             {
@@ -1554,17 +1554,17 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
             bInTitle = false;
         }
         break;
-        case HTML_TABLE_ON:
+        case HtmlTokenId::TABLE_ON:
         {
             TableOn( pInfo );
         }
         break;
-        case HTML_COL_ON:
+        case HtmlTokenId::COL_ON:
         {
             ColOn( pInfo );
         }
         break;
-        case HTML_TABLEHEADER_ON:       // Opens row
+        case HtmlTokenId::TABLEHEADER_ON:       // Opens row
         {
             if ( bInCell )
                 CloseEntry( pInfo );
@@ -1573,54 +1573,54 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
                 SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT) );
             SAL_FALLTHROUGH;
         }
-        case HTML_TABLEDATA_ON:         // Opens cell
+        case HtmlTokenId::TABLEDATA_ON:         // Opens cell
         {
             TableDataOn( pInfo );
         }
         break;
-        case HTML_TABLEHEADER_OFF:
-        case HTML_TABLEDATA_OFF:        // Closes cell
+        case HtmlTokenId::TABLEHEADER_OFF:
+        case HtmlTokenId::TABLEDATA_OFF:        // Closes cell
         {
             TableDataOff( pInfo );
         }
         break;
-        case HTML_TABLEROW_ON:          // Before first cell in row
+        case HtmlTokenId::TABLEROW_ON:          // Before first cell in row
         {
             TableRowOn( pInfo );
         }
         break;
-        case HTML_TABLEROW_OFF:         // After last cell in row
+        case HtmlTokenId::TABLEROW_OFF:         // After last cell in row
         {
             TableRowOff( pInfo );
         }
         break;
-        case HTML_TABLE_OFF:
+        case HtmlTokenId::TABLE_OFF:
         {
             TableOff( pInfo );
         }
         break;
-        case HTML_IMAGE:
+        case HtmlTokenId::IMAGE:
         {
             Image( pInfo );
         }
         break;
-        case HTML_PARABREAK_OFF:
+        case HtmlTokenId::PARABREAK_OFF:
         {   // We continue vertically after an image
             if ( pActEntry->maImageList.size() > 0 )
                 pActEntry->maImageList.back()->nDir = nVertical;
         }
         break;
-        case HTML_ANCHOR_ON:
+        case HtmlTokenId::ANCHOR_ON:
         {
             AnchorOn( pInfo );
         }
         break;
-        case HTML_FONT_ON :
+        case HtmlTokenId::FONT_ON :
         {
             FontOn( pInfo );
         }
         break;
-        case HTML_BIGPRINT_ON :
+        case HtmlTokenId::BIGPRINT_ON :
         {
             // TODO: Remember current font size and increase by 1
             if ( IsAtBeginningOfText( pInfo ) )
@@ -1628,7 +1628,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
                     maFontHeights[3], 100, ATTR_FONT_HEIGHT ) );
         }
         break;
-        case HTML_SMALLPRINT_ON :
+        case HtmlTokenId::SMALLPRINT_ON :
         {
             // TODO: Remember current font size and decrease by 1
             if ( IsAtBeginningOfText( pInfo ) )
@@ -1636,28 +1636,28 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
                     maFontHeights[0], 100, ATTR_FONT_HEIGHT ) );
         }
         break;
-        case HTML_BOLD_ON :
-        case HTML_STRONG_ON :
+        case HtmlTokenId::BOLD_ON :
+        case HtmlTokenId::STRONG_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxWeightItem( WEIGHT_BOLD,
                     ATTR_FONT_WEIGHT ) );
         }
         break;
-        case HTML_ITALIC_ON :
-        case HTML_EMPHASIS_ON :
-        case HTML_ADDRESS_ON :
-        case HTML_BLOCKQUOTE_ON :
-        case HTML_BLOCKQUOTE30_ON :
-        case HTML_CITIATION_ON :
-        case HTML_VARIABLE_ON :
+        case HtmlTokenId::ITALIC_ON :
+        case HtmlTokenId::EMPHASIS_ON :
+        case HtmlTokenId::ADDRESS_ON :
+        case HtmlTokenId::BLOCKQUOTE_ON :
+        case HtmlTokenId::BLOCKQUOTE30_ON :
+        case HtmlTokenId::CITIATION_ON :
+        case HtmlTokenId::VARIABLE_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxPostureItem( ITALIC_NORMAL,
                     ATTR_FONT_POSTURE ) );
         }
         break;
-        case HTML_DEFINSTANCE_ON :
+        case HtmlTokenId::DEFINSTANCE_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
             {
@@ -1668,26 +1668,26 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
             }
         }
         break;
-        case HTML_UNDERLINE_ON :
+        case HtmlTokenId::UNDERLINE_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE,
                     ATTR_FONT_UNDERLINE ) );
         }
         break;
-        case HTML_TEXTTOKEN:
+        case HtmlTokenId::TEXTTOKEN:
         {
             if ( bInTitle )
                 aString += pInfo->aText;
         }
         break;
         default:
-        {   // Don't set nLastToken!
+        {   // Don't set nHtmlLastToken!
             bSetLastToken = false;
         }
     }
     if ( bSetLastToken )
-        nLastToken = pInfo->nToken;
+        nHtmlLastToken = pInfo->nToken;
 }
 
 // HTML DATA QUERY PARSER
@@ -2335,7 +2335,7 @@ bool ScHTMLTable::IsEmptyCell() const
 
 bool ScHTMLTable::IsSpaceCharInfo( const HtmlImportInfo& rInfo )
 {
-    return (rInfo.nToken == HTML_TEXTTOKEN) && (rInfo.aText.getLength() == 1) && (rInfo.aText[ 0 ] == ' ');
+    return (rInfo.nToken == HtmlTokenId::TEXTTOKEN) && (rInfo.aText.getLength() == 1) && (rInfo.aText[ 0 ] == ' ');
 }
 
 ScHTMLTable::ScHTMLEntryPtr ScHTMLTable::CreateEntry() const
@@ -2531,7 +2531,7 @@ void ScHTMLTable::ImplDataOff()
 void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const HtmlImportInfo& rInfo )
 {
     // special handling for table header cells
-    if( rInfo.nToken == HTML_TABLEHEADER_ON )
+    if( rInfo.nToken == HtmlTokenId::TABLEHEADER_ON )
     {
         rItemSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
         rItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY ) );
@@ -2876,80 +2876,81 @@ void ScHTMLQueryParser::ProcessToken( const HtmlImportInfo& rInfo )
     switch( rInfo.nToken )
     {
 // --- meta data ---
-        case HTML_META:             MetaOn( rInfo );                break;  // <meta>
+        case HtmlTokenId::META:             MetaOn( rInfo );                break;  // <meta>
 
 // --- title handling ---
-        case HTML_TITLE_ON:         TitleOn( rInfo );               break;  // <title>
-        case HTML_TITLE_OFF:        TitleOff( rInfo );              break;  // </title>
+        case HtmlTokenId::TITLE_ON:         TitleOn( rInfo );               break;  // <title>
+        case HtmlTokenId::TITLE_OFF:        TitleOff( rInfo );              break;  // </title>
 
-        case HTML_STYLE_ON:                                         break;
-        case HTML_STYLE_OFF:        ParseStyle(rInfo.aText);        break;
+        case HtmlTokenId::STYLE_ON:                                         break;
+        case HtmlTokenId::STYLE_OFF:        ParseStyle(rInfo.aText);        break;
 
 // --- body handling ---
-        case HTML_BODY_ON:          mpCurrTable->BodyOn( rInfo );   break;  // <body>
-        case HTML_BODY_OFF:         mpCurrTable->BodyOff( rInfo );  break;  // </body>
+        case HtmlTokenId::BODY_ON:          mpCurrTable->BodyOn( rInfo );   break;  // <body>
+        case HtmlTokenId::BODY_OFF:         mpCurrTable->BodyOff( rInfo );  break;  // </body>
 
 // --- insert text ---
-        case HTML_TEXTTOKEN:        InsertText( rInfo );            break;  // any text
-        case HTML_LINEBREAK:        mpCurrTable->BreakOn();         break;  // <br>
-        case HTML_HEAD1_ON:                                                 // <h1>
-        case HTML_HEAD2_ON:                                                 // <h2>
-        case HTML_HEAD3_ON:                                                 // <h3>
-        case HTML_HEAD4_ON:                                                 // <h4>
-        case HTML_HEAD5_ON:                                                 // <h5>
-        case HTML_HEAD6_ON:                                                 // <h6>
-        case HTML_PARABREAK_ON:     mpCurrTable->HeadingOn();       break;  // <p>
+        case HtmlTokenId::TEXTTOKEN:        InsertText( rInfo );            break;  // any text
+        case HtmlTokenId::LINEBREAK:        mpCurrTable->BreakOn();         break;  // <br>
+        case HtmlTokenId::HEAD1_ON:                                                 // <h1>
+        case HtmlTokenId::HEAD2_ON:                                                 // <h2>
+        case HtmlTokenId::HEAD3_ON:                                                 // <h3>
+        case HtmlTokenId::HEAD4_ON:                                                 // <h4>
+        case HtmlTokenId::HEAD5_ON:                                                 // <h5>
+        case HtmlTokenId::HEAD6_ON:                                                 // <h6>
+        case HtmlTokenId::PARABREAK_ON:     mpCurrTable->HeadingOn();       break;  // <p>
 
 // --- misc. contents ---
-        case HTML_ANCHOR_ON:        mpCurrTable->AnchorOn();        break;  // <a>
+        case HtmlTokenId::ANCHOR_ON:        mpCurrTable->AnchorOn();        break;  // <a>
 
 // --- table handling ---
-        case HTML_TABLE_ON:         TableOn( rInfo );               break;  // <table>
-        case HTML_TABLE_OFF:        TableOff( rInfo );              break;  // </table>
-        case HTML_TABLEROW_ON:      mpCurrTable->RowOn( rInfo );    break;  // <tr>
-        case HTML_TABLEROW_OFF:     mpCurrTable->RowOff( rInfo );   break;  // </tr>
-        case HTML_TABLEHEADER_ON:                                           // <th>
-        case HTML_TABLEDATA_ON:     mpCurrTable->DataOn( rInfo );   break;  // <td>
-        case HTML_TABLEHEADER_OFF:                                          // </th>
-        case HTML_TABLEDATA_OFF:    mpCurrTable->DataOff( rInfo );  break;  // </td>
-        case HTML_PREFORMTXT_ON:    PreOn( rInfo );                 break;  // <pre>
-        case HTML_PREFORMTXT_OFF:   PreOff( rInfo );                break;  // </pre>
+        case HtmlTokenId::TABLE_ON:         TableOn( rInfo );               break;  // <table>
+        case HtmlTokenId::TABLE_OFF:        TableOff( rInfo );              break;  // </table>
+        case HtmlTokenId::TABLEROW_ON:      mpCurrTable->RowOn( rInfo );    break;  // <tr>
+        case HtmlTokenId::TABLEROW_OFF:     mpCurrTable->RowOff( rInfo );   break;  // </tr>
+        case HtmlTokenId::TABLEHEADER_ON:                                           // <th>
+        case HtmlTokenId::TABLEDATA_ON:     mpCurrTable->DataOn( rInfo );   break;  // <td>
+        case HtmlTokenId::TABLEHEADER_OFF:                                          // </th>
+        case HtmlTokenId::TABLEDATA_OFF:    mpCurrTable->DataOff( rInfo );  break;  // </td>
+        case HtmlTokenId::PREFORMTXT_ON:    PreOn( rInfo );                 break;  // <pre>
+        case HtmlTokenId::PREFORMTXT_OFF:   PreOff( rInfo );                break;  // </pre>
 
 // --- formatting ---
-        case HTML_FONT_ON:          FontOn( rInfo );                break;  // <font>
+        case HtmlTokenId::FONT_ON:          FontOn( rInfo );                break;  // <font>
 
-        case HTML_BIGPRINT_ON:      // <big>
+        case HtmlTokenId::BIGPRINT_ON:      // <big>
             //! TODO: store current font size, use following size
             mpCurrTable->PutItem( SvxFontHeightItem( maFontHeights[ 3 ], 100, ATTR_FONT_HEIGHT ) );
         break;
-        case HTML_SMALLPRINT_ON:    // <small>
+        case HtmlTokenId::SMALLPRINT_ON:    // <small>
             //! TODO: store current font size, use preceding size
             mpCurrTable->PutItem( SvxFontHeightItem( maFontHeights[ 0 ], 100, ATTR_FONT_HEIGHT ) );
         break;
 
-        case HTML_BOLD_ON:          // <b>
-        case HTML_STRONG_ON:        // <strong>
+        case HtmlTokenId::BOLD_ON:          // <b>
+        case HtmlTokenId::STRONG_ON:        // <strong>
             mpCurrTable->PutItem( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
         break;
 
-        case HTML_ITALIC_ON:        // <i>
-        case HTML_EMPHASIS_ON:      // <em>
-        case HTML_ADDRESS_ON:       // <address>
-        case HTML_BLOCKQUOTE_ON:    // <blockquote>
-        case HTML_BLOCKQUOTE30_ON:  // <bq>
-        case HTML_CITIATION_ON:     // <cite>
-        case HTML_VARIABLE_ON:      // <var>
+        case HtmlTokenId::ITALIC_ON:        // <i>
+        case HtmlTokenId::EMPHASIS_ON:      // <em>
+        case HtmlTokenId::ADDRESS_ON:       // <address>
+        case HtmlTokenId::BLOCKQUOTE_ON:    // <blockquote>
+        case HtmlTokenId::BLOCKQUOTE30_ON:  // <bq>
+        case HtmlTokenId::CITIATION_ON:     // <cite>
+        case HtmlTokenId::VARIABLE_ON:      // <var>
             mpCurrTable->PutItem( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
         break;
 
-        case HTML_DEFINSTANCE_ON:   // <dfn>
+        case HtmlTokenId::DEFINSTANCE_ON:   // <dfn>
             mpCurrTable->PutItem( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
             mpCurrTable->PutItem( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
         break;
 
-        case HTML_UNDERLINE_ON:     // <u>
+        case HtmlTokenId::UNDERLINE_ON:     // <u>
             mpCurrTable->PutItem( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
         break;
+        default: break;
     }
 }
 
