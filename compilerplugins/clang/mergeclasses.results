@@ -190,7 +190,6 @@ merge chart::ExplicitValueProvider with chart::ChartView
 merge chart::LegendEntryProvider with chart::VSeriesPlotter
 merge chart::MarkHandleProvider with chart::SelectionHelper
 merge chart::ResourceChangeListener with chart::ChartTypeTabPage
-merge comphelper::ChainablePropertySet with comphelper::ChainableHelperNoState
 merge comphelper::OAccessibleContextHelper with comphelper::OCommonAccessibleComponent
 merge comphelper::OAnyEnumeration_BASE with comphelper::OAnyEnumeration
 merge comphelper::OComponentProxyAggregation with comphelper::OAccessibleWrapper

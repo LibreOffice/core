@@ -85,7 +85,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::frame;
 
 using ::com::sun::star::util::URL;
-using comphelper::HelperBaseNoState;
 
 SwXTextView::SwXTextView(SwView* pSwView) :
     SfxBaseController(pSwView),
@@ -107,7 +106,7 @@ void SwXTextView::Invalidate()
 {
     if(mxViewSettings.is())
     {
-        HelperBaseNoState *pSettings = static_cast < HelperBaseNoState * > ( mxViewSettings.get() );
+        comphelper::ChainablePropertySet *pSettings = static_cast < comphelper::ChainablePropertySet * > ( mxViewSettings.get() );
         static_cast < SwXViewSettings* > ( pSettings )->Invalidate();
         mxViewSettings.clear();
     }
@@ -504,7 +503,7 @@ uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings()
     {
         if(!mxViewSettings.is())
         {
-            mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( m_pView ) );
+            mxViewSettings = new SwXViewSettings( m_pView );
         }
     }
     else
