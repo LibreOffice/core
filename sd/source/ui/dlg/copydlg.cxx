@@ -124,6 +124,25 @@ void CopyDlg::dispose()
  */
 void CopyDlg::Reset()
 {
+    // Set Min/Max values
+    ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
+    Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
+    SetMetricValue( *m_pMtrFldMoveX, Fraction(1000000L) / maUIScale, MapUnit::Map100thMM);
+    double fScaleFactor = m_pMtrFldMoveX->GetValue()/1000000.0;
+
+    long nPageWidth  = aPageSize.Width()  * fScaleFactor;
+    long nPageHeight = aPageSize.Height() * fScaleFactor;
+    long nRectWidth  = aRect.GetWidth()   * fScaleFactor;
+    long nRectHeight = aRect.GetHeight()  * fScaleFactor;
+    m_pMtrFldMoveX->SetMin( -nPageWidth );
+    m_pMtrFldMoveX->SetMax(  nPageWidth );
+    m_pMtrFldMoveY->SetMin( -nPageHeight );
+    m_pMtrFldMoveY->SetMax(  nPageHeight );
+    m_pMtrFldWidth->SetMin( -nRectWidth );
+    m_pMtrFldWidth->SetMax(  nPageWidth );
+    m_pMtrFldHeight->SetMin( -nRectHeight );
+    m_pMtrFldHeight->SetMax(  nPageHeight );
+
     const SfxPoolItem* pPoolItem = nullptr;
     OUString aStr( GetExtraData() );
 
