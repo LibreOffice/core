@@ -9014,7 +9014,7 @@ SYSTEM_GENBRK=
 SYSTEM_GENCCODE=
 SYSTEM_GENCMN=
 
-ICU_MAJOR=58
+ICU_MAJOR=59
 ICU_MINOR=1
 ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
 ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="TRUE"
@@ -9102,6 +9102,15 @@ else
     ICU_CFLAGS="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
     ICU_LIBS="-L${WORKDIR}/UnpackedTarball/icu/source/lib"
 fi
+if test "$ICU_MAJOR" -ge "59"; then
+    # As of ICU 59 it defaults to typedef char16_t UChar; which is available
+    # with -std=c++11 but not all external libraries can be built with that,
+    # for those use a bit-compatible typedef uint16_t UChar; see
+    # icu/source/common/unicode/umachine.h
+    ICU_UCHAR_TYPE="-DUCHAR_TYPE=uint16_t"
+else
+    ICU_UCHAR_TYPE=""
+fi
 AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
@@ -9113,6 +9122,7 @@ AC_SUBST(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)
 AC_SUBST(ICU_RECLASSIFIED_HEBREW_LETTER)
 AC_SUBST(ICU_CFLAGS)
 AC_SUBST(ICU_LIBS)
+AC_SUBST(ICU_UCHAR_TYPE)
 
 dnl ==================================================================
 dnl Breakpad

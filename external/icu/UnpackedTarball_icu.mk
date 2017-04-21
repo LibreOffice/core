@@ -11,22 +11,31 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,icu))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,icu,$(ICU_TARBALL)))
 
+# Data zip contains data/... and needs to end up in icu/source/data/...
+# Some files are overwritten with identical content.
+# -a to convert line endings from CrLf to LF (hopefully no binary identified as
+# text ...) so existing patches still apply and can be generated.
+$(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
+	unzip -q -a -d source -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(ICU_DATA_TARBALL) \
+))
+
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
-	external/icu/icu4c-build.patch \
-	external/icu/icu4c-aix.patch \
-	external/icu/icu4c-warnings.patch \
-	external/icu/icu4c-macosx.patch \
-	external/icu/icu4c-solarisgcc.patch \
-	external/icu/icu4c-mkdir.patch \
-	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
-	external/icu/icu-ubsan.patch.0 \
+	external/icu/icu4c-build.patch.1 \
+	external/icu/icu4c-aix.patch.1 \
+	external/icu/icu4c-warnings.patch.1 \
+	external/icu/icu4c-macosx.patch.1 \
+	external/icu/icu4c-solarisgcc.patch.1 \
+	external/icu/icu4c-mkdir.patch.1 \
+	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch.1 \
+	external/icu/icu4c-ubsan.patch.1 \
 	external/icu/icu4c-icu11100.patch.1 \
-	external/icu/icu4c-scriptrun.patch \
-	external/icu/rtti.patch.0 \
-	external/icu/clang-cl.patch.0 \
-	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.diff) \
-	external/icu/khmerbreakengine.patch \
-	external/icu/icu4c-changeset-39671.patch.1 \
+	external/icu/icu4c-scriptrun.patch.1 \
+	external/icu/icu4c-rtti.patch.1 \
+	external/icu/icu4c-clang-cl.patch.1 \
+	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
+	external/icu/icu4c-khmerbreakengine.patch.1 \
+	external/icu/icu4c-59-werror-undef.patch.1 \
+	external/icu/icu4c-59-werror-shadow.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))

@@ -1,6 +1,19 @@
---- misc/icu/source/config/mh-linux	2013-10-05 03:50:00.000000000 +0700
-+++ misc/build/icu/source/config/mh-linux	2013-11-10 17:11:46.856222557 +0700
-@@ -25,7 +25,7 @@
+diff -ur icu.org/source/common/unicode/platform.h icu/source/common/unicode/platform.h
+--- icu.org/source/common/unicode/platform.h	2017-03-22 20:06:26.000000000 +0100
++++ icu/source/common/unicode/platform.h	2017-04-21 22:32:31.656693147 +0200
+@@ -818,7 +818,7 @@
+ #elif defined(U_STATIC_IMPLEMENTATION)
+ #   define U_EXPORT
+ #elif defined(__GNUC__)
+-#   define U_EXPORT __attribute__((visibility("default")))
++#   define U_EXPORT
+ #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
+    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
+ #   define U_EXPORT __global
+diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
+--- icu.org/source/config/mh-linux	2016-06-15 20:58:17.000000000 +0200
++++ icu/source/config/mh-linux	2017-04-21 22:32:31.653693154 +0200
+@@ -27,7 +27,7 @@
  
  ## Compiler switch to embed a library name
  # The initial tab in the next line is to prevent icu-config from reading it.
@@ -9,9 +22,10 @@
  #SH# # We can't depend on MIDDLE_SO_TARGET being set.
  #SH# LD_SONAME=
  
---- misc/icu/source/configure	2013-10-05 03:54:58.000000000 +0700
-+++ misc/build/icu/source/configure	2013-11-10 17:19:19.200218763 +0700
-@@ -4872,7 +4872,7 @@
+diff -ur icu.org/source/configure icu/source/configure
+--- icu.org/source/configure	2017-04-07 09:40:30.000000000 +0200
++++ icu/source/configure	2017-04-21 22:32:31.656693147 +0200
+@@ -5134,7 +5134,7 @@
  	else
  		icu_cv_host_frag=mh-linux-va
  	fi ;;
@@ -20,7 +34,7 @@
  i[34567]86-*-cygwin)
  	if test "$GCC" = yes; then
  		icu_cv_host_frag=mh-cygwin
-@@ -6032,6 +6032,10 @@
+@@ -6358,6 +6358,10 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
  case "${host}" in
@@ -31,7 +45,7 @@
  *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
      if test "$GCC" = yes; then
          # We're using gcc, and the simple -a gcc command line works for genccode
-@@ -7104,6 +7108,10 @@
+@@ -7445,6 +7449,10 @@
      # wchar_t can be used
      CHECK_UTF16_STRING_RESULT="available"
      ;;
@@ -42,16 +56,3 @@
  *)
      ;;
  esac
-
---- misc/icu/source/common/unicode/platform.h	2013-10-05 03:49:10.000000000 +0700
-+++ misc/build/icu/source/common/unicode/platform.h	2013-11-10 17:22:27.160217186 +0700
-@@ -703,7 +703,7 @@
- #elif defined(U_STATIC_IMPLEMENTATION)
- #   define U_EXPORT
- #elif defined(__GNUC__)
--#   define U_EXPORT __attribute__((visibility("default")))
-+#   define U_EXPORT
- #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
-    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
- #   define U_EXPORT __global
-
