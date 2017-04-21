@@ -316,8 +316,6 @@ struct FBox: public HBox
     short     pgx, pgy;                           // physical xpos, ypos
     short     pgno, showpg;                       // pageno where code is
 
-    FBox      *prev, *next;
-
     explicit FBox( hchar hch );
     virtual ~FBox() override;
 };
