@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_eaf2de6e",
+        "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-21T06:59:14Z",
+      "side": 1,
+      "message": "Here and at other places: the rDescriptor contains the \"should we read glossaries\" info, correct?\n\nIf so, it would be nice to not pass around a redundant bool parameter when rDescriptor already provides that info. If later you would just pass around rDescriptor to read that single bool out of it, then it\u0027s fine to go with a simple bool instead.",
+      "revId": "fa065c4b87ff1bcacc9539b0f94d74ae449c34d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
