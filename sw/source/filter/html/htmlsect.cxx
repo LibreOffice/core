@@ -55,12 +55,12 @@
 
 using namespace ::com::sun::star;
 
-void SwHTMLParser::NewDivision( int nToken )
+void SwHTMLParser::NewDivision( HtmlTokenId nToken )
 {
     OUString aId, aHRef;
     OUString aStyle, aLang, aDir;
     OUString aClass;
-    SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SvxAdjust::Center
+    SvxAdjust eAdjust = HtmlTokenId::CENTER_ON==nToken ? SvxAdjust::Center
                                                : SvxAdjust::End;
 
     bool bHeader=false, bFooter=false;
@@ -74,7 +74,7 @@ void SwHTMLParser::NewDivision( int nToken )
             aId = rOption.GetString();
             break;
         case HtmlOptionId::ALIGN:
-            if( HTML_DIVISION_ON==nToken )
+            if( HtmlTokenId::DIVISION_ON==nToken )
                 eAdjust = rOption.GetEnum( aHTMLPAlignTable, eAdjust );
             break;
         case HtmlOptionId::STYLE:
@@ -113,7 +113,7 @@ void SwHTMLParser::NewDivision( int nToken )
         bAppended = true;
     }
 
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
     bool bStyleParsed = false, bPositioned = false;
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -130,7 +130,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 NewMultiCol( aPropInfo.m_nColumnCount );
                 return;
             }
-            bPositioned = HTML_DIVISION_ON == nToken && !aClass.isEmpty() &&
+            bPositioned = HtmlTokenId::DIVISION_ON == nToken && !aClass.isEmpty() &&
                           CreateContainer( aClass, aItemSet, aPropInfo,
                                            pCntxt );
             if( !bPositioned )
@@ -378,7 +378,7 @@ void SwHTMLParser::NewDivision( int nToken )
     PushContext( pCntxt );
 }
 
-void SwHTMLParser::EndDivision( int /*nToken*/ )
+void SwHTMLParser::EndDivision()
 {
     // search for the stack entry of the token (because we still have the div stack
     // we don't make a difference between DIV and CENTER)
@@ -388,11 +388,12 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
     {
         switch( m_aContexts[--nPos]->GetToken() )
         {
-        case HTML_CENTER_ON:
-        case HTML_DIVISION_ON:
+        case HtmlTokenId::CENTER_ON:
+        case HtmlTokenId::DIVISION_ON:
             pCntxt = m_aContexts[nPos];
             m_aContexts.erase( m_aContexts.begin() + nPos );
             break;
+        default: break;
         }
     }
 
@@ -577,7 +578,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
     }
 
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_MULTICOL_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::MULTICOL_ON );
 
     //.is the multicol element contained in a container? That may be the
     // case for 5.0 documents.
