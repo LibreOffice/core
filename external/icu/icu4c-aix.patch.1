@@ -1,6 +1,7 @@
---- misc/icu/source/config/mh-aix-gcc	2010-06-24 20:58:16.000000000 -0500
-+++ misc/build/icu/source/config/mh-aix-gcc	2013-10-31 20:34:16.607982310 +0700
-@@ -13,84 +13,29 @@
+diff -ur icu.org/source/config/mh-aix-gcc icu/source/config/mh-aix-gcc
+--- icu.org/source/config/mh-aix-gcc	2016-06-15 20:58:17.000000000 +0200
++++ icu/source/config/mh-aix-gcc	2017-04-21 21:58:49.731432198 +0200
+@@ -18,84 +18,29 @@
  GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
  GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
  
@@ -97,7 +98,7 @@
  
  ## Compilation rules
  %.$(STATIC_O): $(srcdir)/%.c
-@@ -118,10 +63,10 @@
+@@ -123,10 +68,10 @@
  		[ -s $@ ] || rm -f $@'
  
  ## Versioned libraries rules
@@ -112,9 +113,10 @@
  
  
  ## BIR  - bind with internal references [so app data and icu data doesn't collide]
---- misc/icu/source/tools/pkgdata/pkgdata.cpp	2013-04-06 20:56:00.935656635 +0100
-+++ misc/build/icu/source/tools/pkgdata/pkgdata.cpp	2013-10-31 20:38:10.623984554 +0700
-@@ -902,7 +902,7 @@
+diff -ur icu.org/source/tools/pkgdata/pkgdata.cpp icu/source/tools/pkgdata/pkgdata.cpp
+--- icu.org/source/tools/pkgdata/pkgdata.cpp	2017-03-21 02:03:49.000000000 +0100
++++ icu/source/tools/pkgdata/pkgdata.cpp	2017-04-21 21:58:49.732432195 +0200
+@@ -934,7 +934,7 @@
  
          uprv_strcat(pkgDataFlags[SO_EXT], ".");
          uprv_strcat(pkgDataFlags[SO_EXT], pkgDataFlags[A_EXT]);
@@ -123,7 +125,7 @@
          sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s",
                  libFileNames[LIB_FILE],
                  FILE_EXTENSION_SEP,
-@@ -1375,15 +1375,6 @@
+@@ -1407,15 +1407,6 @@
                  pkgDataFlags[LDICUDTFLAGS],
                  targetDir,
                  libFileNames[LIB_FILE_CYGWIN_VERSION],

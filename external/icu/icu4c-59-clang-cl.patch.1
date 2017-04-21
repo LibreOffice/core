@@ -1,0 +1,24 @@
+diff -ur icu.org/source/configure icu/source/configure
+--- icu.org/source/configure	2017-04-07 09:40:30.000000000 +0200
++++ icu/source/configure	2017-04-24 13:38:14.598389539 +0200
+@@ -5987,7 +5987,7 @@
+ 	as_fn_error $? "C++ compiler $CXX does not work or no compiler found" "$LINENO" 5
+ fi
+ 
+-if [ "$GXX" = yes ]; then
++if [ "$GXX" = yes -o "$CXX" = "clang++" ]; then
+     # if CXXFLAGS does not have a "-std=" setting, set it now to -std=c++11,
+     # and check that the compiler still works.
+     if ! echo "$CXXFLAGS" | grep '\-std=' >/dev/null 2>&1; then
+diff -ur icu.org/source/configure.ac icu/source/configure.ac
+--- icu.org/source/configure.ac	2017-04-07 09:40:30.000000000 +0200
++++ icu/source/configure.ac	2017-04-24 13:38:19.377378465 +0200
+@@ -494,7 +494,7 @@
+ 	AC_MSG_ERROR([[C++ compiler $CXX does not work or no compiler found]])
+ fi
+ 
+-if [[ "$GXX" = yes ]]; then
++if [[ "$GXX" = yes -o "$CXX" = "clang++" ]]; then
+     # if CXXFLAGS does not have a "-std=" setting, set it now to -std=c++11,
+     # and check that the compiler still works.
+     if ! echo "$CXXFLAGS" | grep '\-std=' >/dev/null 2>&1; then
