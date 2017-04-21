@@ -1868,6 +1868,11 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
             SwFrame *pOldNext = pTmpFrame->GetNext();
             pTmpFrame->RemoveFromLayout();
             pTmpFrame->InsertBefore( pNewUpper, nullptr );
+            // tdf#107126 for a section in a footnote, we have only inserted
+            // the SwTextFrame but no SwSectionFrame - reset mbInfSct flag
+            // to avoid crashing (but perhaps we should create a temp
+            // SwSectionFrame here because WidowsAndOrphans checks for that?)
+            pTmpFrame->InvalidateInfFlags();
             if ( pFrame->IsTextFrame() &&
                  ( bTstMove ||
                    static_cast<SwTextFrame*>(pFrame)->HasFollow() ||
@@ -1885,6 +1890,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
 
             pTmpFrame->RemoveFromLayout();
             pTmpFrame->InsertBefore( pUp, pOldNext );
+            pTmpFrame->InvalidateInfFlags(); // restore flags
         }
         else
         {
