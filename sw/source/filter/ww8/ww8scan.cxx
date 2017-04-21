@@ -3430,7 +3430,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     else
     {
         sal_uInt32 nPo =  SVBT32ToUInt32( static_cast<sal_uInt8*>(pData)+2 );
-        if (nPo == 0xFFFFFFFF)
+        if (nPo == 0xFFFFFFFF || !checkSeek(*pStrm, nPo))
         {
             p->nStartPos = p->nEndPos = WW8_CP_MAX;   // Sepx empty
             p->pMemPos = nullptr;
@@ -3438,8 +3438,6 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
         }
         else
         {
-            pStrm->Seek( nPo );
-
             // read len
             if (GetFIBVersion() <= ww::eWW2)    // eWW6 ?, docs say yes, but...
             {
