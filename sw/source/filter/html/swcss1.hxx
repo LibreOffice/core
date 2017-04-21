@@ -84,7 +84,7 @@ public:
     virtual const FontList *GetFontList() const override;
 
     // determine the character format of a token and a maybe empty class
-    SwCharFormat* GetChrFormat( sal_uInt16 nToken, const OUString& rClass ) const;
+    SwCharFormat* GetChrFormat( HtmlTokenId nToken, const OUString& rClass ) const;
 
     // determine a TextFormatColl of a Pool-Id
     SwTextFormatColl *GetTextFormatColl( sal_uInt16 nTextColl, const OUString& rClass );

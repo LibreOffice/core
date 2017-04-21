@@ -117,18 +117,18 @@ SvParserState OHTMLReader::CallParser()
     return m_bFoundTable ? eParseState : SvParserState::Error;
 }
 
-void OHTMLReader::NextToken( int nToken )
+void OHTMLReader::NextToken( HtmlTokenId nToken )
 {
     if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediately
         return;
-    if ( nToken ==  HTML_META )
+    if ( nToken ==  HtmlTokenId::META )
         setTextEncoding();
 
     if(m_xConnection.is())    // names, which CTOR was called and hence, if a table should be created
     {
         switch(nToken)
         {
-            case HTML_TABLE_ON:
+            case HtmlTokenId::TABLE_ON:
                 ++m_nTableCount;
                 {   // can also be TD or TH, if there was no TABLE before
                     const HTMLOptions& rHtmlOptions = GetOptions();
@@ -141,8 +141,8 @@ void OHTMLReader::NextToken( int nToken )
                     }
                 }
                 SAL_FALLTHROUGH;
-            case HTML_THEAD_ON:
-            case HTML_TBODY_ON:
+            case HtmlTokenId::THEAD_ON:
+            case HtmlTokenId::TBODY_ON:
                 {
                     sal_uInt64 const nTell = rInput.Tell(); // perhaps alters position of the stream
                     if ( !m_xTable.is() )
@@ -153,13 +153,13 @@ void OHTMLReader::NextToken( int nToken )
                     }
                 }
                 break;
-            case HTML_TABLE_OFF:
+            case HtmlTokenId::TABLE_OFF:
                 if(!--m_nTableCount)
                 {
                     m_xTable = nullptr;
                 }
                 break;
-            case HTML_TABLEROW_ON:
+            case HtmlTokenId::TABLEROW_ON:
                 if ( m_pUpdateHelper.get() )
                 {
                     try
@@ -175,21 +175,21 @@ void OHTMLReader::NextToken( int nToken )
                 else
                     m_bError = true;
                 break;
-            case HTML_TEXTTOKEN:
-            case HTML_SINGLECHAR:
+            case HtmlTokenId::TEXTTOKEN:
+            case HtmlTokenId::SINGLECHAR:
                 if ( m_bInTbl ) //&& !m_bSDNum ) // important, as otherwise we also get the names of the fonts
                     m_sTextToken += aToken;
                 break;
-            case HTML_PARABREAK_OFF:
+            case HtmlTokenId::PARABREAK_OFF:
                 m_sCurrent += m_sTextToken;
                 break;
-            case HTML_PARABREAK_ON:
+            case HtmlTokenId::PARABREAK_ON:
                 m_sTextToken.clear();
                 break;
-            case HTML_TABLEDATA_ON:
+            case HtmlTokenId::TABLEDATA_ON:
                 fetchOptions();
                 break;
-            case HTML_TABLEDATA_OFF:
+            case HtmlTokenId::TABLEDATA_OFF:
                 {
                     if ( !m_sCurrent.isEmpty() )
                         m_sTextToken = m_sCurrent;
@@ -208,7 +208,7 @@ void OHTMLReader::NextToken( int nToken )
                     m_bSDNum = m_bInTbl = false;
                 }
                 break;
-            case HTML_TABLEROW_OFF:
+            case HtmlTokenId::TABLEROW_OFF:
                 if ( !m_pUpdateHelper.get() )
                 {
                     m_bError = true;
@@ -228,39 +228,40 @@ void OHTMLReader::NextToken( int nToken )
                 }
                 m_nColumnPos = 0;
                 break;
+            default: break;
         }
     }
     else // branch only valid for type checking
     {
         switch(nToken)
         {
-            case HTML_THEAD_ON:
-            case HTML_TBODY_ON:
+            case HtmlTokenId::THEAD_ON:
+            case HtmlTokenId::TBODY_ON:
                 // The head of the column is not included
                 if(m_bHead)
                 {
                     do
                     {}
-                    while(GetNextToken() != HTML_TABLEROW_OFF);
+                    while(GetNextToken() != HtmlTokenId::TABLEROW_OFF);
                     m_bHead = false;
                 }
                 break;
-            case HTML_TABLEDATA_ON:
-            case HTML_TABLEHEADER_ON:
+            case HtmlTokenId::TABLEDATA_ON:
+            case HtmlTokenId::TABLEHEADER_ON:
                 fetchOptions();
                 break;
-            case HTML_TEXTTOKEN:
-            case HTML_SINGLECHAR:
+            case HtmlTokenId::TEXTTOKEN:
+            case HtmlTokenId::SINGLECHAR:
                 if ( m_bInTbl ) // && !m_bSDNum ) // important, as otherwise we also get the names of the fonts
                     m_sTextToken += aToken;
                 break;
-            case HTML_PARABREAK_OFF:
+            case HtmlTokenId::PARABREAK_OFF:
                 m_sCurrent += m_sTextToken;
                 break;
-            case HTML_PARABREAK_ON:
+            case HtmlTokenId::PARABREAK_ON:
                 m_sTextToken.clear();
                 break;
-            case HTML_TABLEDATA_OFF:
+            case HtmlTokenId::TABLEDATA_OFF:
                 if ( !m_sCurrent.isEmpty() )
                     m_sTextToken = m_sCurrent;
                 adjustFormat();
@@ -268,7 +269,7 @@ void OHTMLReader::NextToken( int nToken )
                 m_bSDNum = m_bInTbl = false;
                 m_sCurrent.clear();
                 break;
-            case HTML_TABLEROW_OFF:
+            case HtmlTokenId::TABLEROW_OFF:
                 if ( !m_sCurrent.isEmpty() )
                     m_sTextToken = m_sCurrent;
                 adjustFormat();
@@ -276,6 +277,7 @@ void OHTMLReader::NextToken( int nToken )
                 m_nRows--;
                 m_sCurrent.clear();
                 break;
+            default: break;
         }
     }
 }
@@ -398,7 +400,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
     }
 }
 
-bool OHTMLReader::CreateTable(int nToken)
+bool OHTMLReader::CreateTable(HtmlTokenId nToken)
 {
     OUString aTempName(ModuleRes(STR_TBL_TITLE));
     aTempName = aTempName.getToken(0,' ');
@@ -416,26 +418,26 @@ bool OHTMLReader::CreateTable(int nToken)
     {
         switch (nToken)
         {
-            case HTML_TEXTTOKEN:
-            case HTML_SINGLECHAR:
+            case HtmlTokenId::TEXTTOKEN:
+            case HtmlTokenId::SINGLECHAR:
                 if(bTableHeader)
                     aColumnName += aToken;
                 if(bCaption)
                     aTableName += aToken;
                 break;
-            case HTML_PARABREAK_OFF:
+            case HtmlTokenId::PARABREAK_OFF:
                 m_sCurrent += aColumnName;
                 break;
-            case HTML_PARABREAK_ON:
+            case HtmlTokenId::PARABREAK_ON:
                 m_sTextToken.clear();
                 break;
-            case HTML_TABLEDATA_ON:
-            case HTML_TABLEHEADER_ON:
+            case HtmlTokenId::TABLEDATA_ON:
+            case HtmlTokenId::TABLEHEADER_ON:
                 TableDataOn(eVal);
                 bTableHeader = true;
                 break;
-            case HTML_TABLEDATA_OFF:
-            case HTML_TABLEHEADER_OFF:
+            case HtmlTokenId::TABLEDATA_OFF:
+            case HtmlTokenId::TABLEHEADER_OFF:
                 {
                     aColumnName = comphelper::string::strip(aColumnName, ' ' );
                     if (aColumnName.isEmpty() || m_bAppendFirstLine )
@@ -453,12 +455,12 @@ bool OHTMLReader::CreateTable(int nToken)
                 }
                 break;
 
-            case HTML_TITLE_ON:
-            case HTML_CAPTION_ON:
+            case HtmlTokenId::TITLE_ON:
+            case HtmlTokenId::CAPTION_ON:
                 bCaption = true;
                 break;
-            case HTML_TITLE_OFF:
-            case HTML_CAPTION_OFF:
+            case HtmlTokenId::TITLE_OFF:
+            case HtmlTokenId::CAPTION_OFF:
                 aTableName = comphelper::string::strip(aTableName, ' ');
                 if(aTableName.isEmpty())
                     aTableName = ::dbtools::createUniqueName(m_xTables, aTableName);
@@ -466,25 +468,26 @@ bool OHTMLReader::CreateTable(int nToken)
                     aTableName = aTempName;
                 bCaption = false;
                 break;
-            case HTML_FONT_ON:
+            case HtmlTokenId::FONT_ON:
                 TableFontOn(aFont,nTextColor);
                 break;
-            case HTML_BOLD_ON:
+            case HtmlTokenId::BOLD_ON:
                 aFont.Weight = css::awt::FontWeight::BOLD;
                 break;
-            case HTML_ITALIC_ON:
+            case HtmlTokenId::ITALIC_ON:
                 aFont.Slant = css::awt::FontSlant_ITALIC;
                 break;
-            case HTML_UNDERLINE_ON:
+            case HtmlTokenId::UNDERLINE_ON:
                 aFont.Underline = css::awt::FontUnderline::SINGLE;
                 break;
-            case HTML_STRIKE_ON:
+            case HtmlTokenId::STRIKE_ON:
                 aFont.Strikeout = css::awt::FontStrikeout::SINGLE;
                 break;
+            default: break;
         }
         nToken = GetNextToken();
     }
-    while (nToken != HTML_TABLEROW_OFF);
+    while (nToken != HtmlTokenId::TABLEROW_OFF);
 
     if ( !m_sCurrent.isEmpty() )
         aColumnName = m_sCurrent;
