@@ -295,7 +295,7 @@ DialogMask ErrorHandler::HandleError_Impl(
             {
                 OStringBuffer aStr("Action: ");
                 aStr.append(OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
-                aStr.append("\nFehler: ");
+                aStr.append("\nError: ");
                 aStr.append(OUStringToOString(aErr, RTL_TEXTENCODING_ASCII_US));
                 OSL_FAIL(aStr.getStr());
             }
@@ -319,7 +319,7 @@ DialogMask ErrorHandler::HandleError_Impl(
     }
 
     OSL_FAIL("Error not handled");
-    // Error 1 is General Error in the Sfx
+    // Error 1 is classified as a General Error in sfx
     if(pInfo->GetErrorCode()!=1)
         HandleError_Impl(1, DialogMask::MAX, bJustCreateString, rError);
     else
