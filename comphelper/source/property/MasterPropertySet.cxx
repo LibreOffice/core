@@ -325,13 +325,8 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& Prop
 
     PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
 
-    if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
-    {
-        _preGetPropertyState();
-        _getPropertyState( *((*aIter).second->mpInfo), aState );
-        _postGetPropertyState();
-    }
-    else
+    // 0 means it's one of ours !
+    if ( (*aIter).second->mnMapId != 0 )
     {
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
@@ -339,14 +334,6 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& Prop
         std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
         if (pSlave->mpMutex)
             xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpMutex) );
-
-        // FIXME: Each of these three methods does OSL_FAIL( "you have
-        // to implement this yourself!") and nothing else, so this
-        // can't make much sense. Is this whole else branch in fact
-        // dead code?
-        ChainablePropertySet::_preGetPropertyState();
-        ChainablePropertySet::_getPropertyState( *((*aIter).second->mpInfo), aState );
-        ChainablePropertySet::_postGetPropertyState();
     }
 
     return aState;
@@ -362,7 +349,6 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
         PropertyState * pState = aStates.getArray();
         const OUString * pString = rPropertyNames.getConstArray();
         PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
-        _preGetPropertyState();
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pState )
         {
@@ -370,25 +356,20 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
             if ( aIter == aEnd )
                 throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
 
-            if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
-                _getPropertyState( *((*aIter).second->mpInfo), *pState );
-            else
+            // 0 means it's one of ours !
+            if ( (*aIter).second->mnMapId != 0 )
             {
                 SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
                 if (!pSlave->IsInit())
                 {
-                    comphelper::ChainablePropertySet::_preGetPropertyState();
                     pSlave->SetInit ( true );
                 }
-                comphelper::ChainablePropertySet::_getPropertyState( *((*aIter).second->mpInfo), *pState );
             }
         }
-        _postGetPropertyState();
         for( const auto& rSlave : maSlaveMap )
         {
             if( rSlave.second->IsInit() )
             {
-                comphelper::ChainablePropertySet::_postGetPropertyState();
                 rSlave.second->SetInit( false );
             }
         }
@@ -402,7 +383,6 @@ void SAL_CALL MasterPropertySet::setPropertyToDefault( const OUString& rProperty
 
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
-    _setPropertyToDefault( *((*aIter).second->mpInfo) );
 }
 
 Any SAL_CALL MasterPropertySet::getPropertyDefault( const OUString& rPropertyName )
@@ -411,34 +391,7 @@ Any SAL_CALL MasterPropertySet::getPropertyDefault( const OUString& rPropertyNam
 
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
-    return _getPropertyDefault( *((*aIter).second->mpInfo) );
-}
-
-void MasterPropertySet::_preGetPropertyState ()
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
-void MasterPropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& )
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
-void MasterPropertySet::_postGetPropertyState ()
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
-void MasterPropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
-Any MasterPropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
-{
-    OSL_FAIL( "you have to implement this yourself!");
-    Any aAny;
-    return aAny;
+    return Any();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

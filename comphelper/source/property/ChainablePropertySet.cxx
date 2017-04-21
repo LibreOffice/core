@@ -197,10 +197,6 @@ PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const OUString& P
 
     PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
 
-    _preGetPropertyState();
-    _getPropertyState( *((*aIter).second), aState );
-    _postGetPropertyState();
-
     return aState;
 }
 
@@ -214,17 +210,13 @@ Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( cons
         PropertyState * pState = aStates.getArray();
         const OUString * pString = rPropertyNames.getConstArray();
         PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
-        _preGetPropertyState();
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pState )
         {
             aIter = mxInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
                 throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
-
-            _getPropertyState ( *((*aIter).second), *pState );
         }
-        _postGetPropertyState();
     }
     return aStates;
 }
@@ -235,7 +227,6 @@ void SAL_CALL ChainablePropertySet::setPropertyToDefault( const OUString& rPrope
 
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
-    _setPropertyToDefault( *((*aIter).second) );
 }
 
 Any SAL_CALL ChainablePropertySet::getPropertyDefault( const OUString& rPropertyName )
@@ -244,35 +235,7 @@ Any SAL_CALL ChainablePropertySet::getPropertyDefault( const OUString& rProperty
 
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
-    return _getPropertyDefault( *((*aIter).second) );
-}
-
-void ChainablePropertySet::_preGetPropertyState ()
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
-void ChainablePropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& )
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
-void ChainablePropertySet::_postGetPropertyState ()
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
-void ChainablePropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
-{
-    OSL_FAIL( "you have to implement this yourself!");
-}
-
-Any ChainablePropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
-{
-    OSL_FAIL( "you have to implement this yourself!");
-
-    Any aAny;
-    return aAny;
+    return Any();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
