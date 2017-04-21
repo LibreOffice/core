@@ -85,7 +85,7 @@ public:
 
     // das Zeichen-Format zu einem Token und einer ggf leeren Klasse
     // ermitteln
-    SwCharFormat* GetChrFormat( sal_uInt16 nToken, const OUString& rClass ) const;
+    SwCharFormat* GetChrFormat( HtmlTokenId nToken, const OUString& rClass ) const;
 
     // eine TextFormatColl zu einer Pool-Id ermitteln
     SwTextFormatColl *GetTextFormatColl( sal_uInt16 nTextColl, const OUString& rClass );
