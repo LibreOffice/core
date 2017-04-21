@@ -95,7 +95,7 @@ SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent ) :
 
 void SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // Fuer Mac noch anders handlen !
+    // For Mac still handle differently!
     if( rMEvt.IsLeft() )
     {
         mbLeftButton = true;
@@ -117,7 +117,7 @@ void SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    // Fuer Mac noch anders handlen !
+    // For Mac still handle differently!
     if( rMEvt.IsLeft() )
     {
         mbLeftButton = true;
@@ -162,8 +162,8 @@ void SvxColorValueSet_docking::DoDrag()
 
 IMPL_LINK_NOARG(SvxColorValueSet_docking, ExecDragHdl, void*, void)
 {
-    // Als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch die
-    // Farbleiste geloescht werden darf
+    // As a link, so that asynchronously without ImpMouseMoveMsg on the
+    // stack the color bar may also be deleted
     DoDrag();
 }
 
@@ -250,7 +250,7 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
     if ( pPoolItemHint
          && ( dynamic_cast<const SvxColorListItem*>(pPoolItemHint->GetObject()) != nullptr ) )
     {
-        // Die Liste der Farben hat sich geaendert
+        // The list of colors has changed
         pColorList = static_cast<SvxColorListItem*>( pPoolItemHint->GetObject() )->GetColorList();
         FillValueSet();
     }
@@ -285,18 +285,18 @@ void SvxColorDockingWindow::FillValueSet()
 
 void SvxColorDockingWindow::SetSize()
 {
-    // Groesse fuer ValueSet berechnen
+    // calculate the size for ValueSet
     Size aSize = GetOutputSizePixel();
     aSize.Width()  -= 4;
     aSize.Height() -= 4;
 
-    // Zeilen und Spalten berechnen
+    // calculate rows and columns
     nCols = (sal_uInt16) ( aSize.Width() / aItemSize.Width() );
     nLines = (sal_uInt16) ( (float) aSize.Height() / (float) aItemSize.Height() /*+ 0.35*/ );
     if( nLines == 0 )
         nLines++;
 
-    // Scrollbar setzen/entfernen
+    // set/remove scroll bar
     WinBits nBits = aColorSet->GetStyle();
     if ( static_cast<long>(nLines) * nCols >= nCount )
         nBits &= ~WB_VSCROLL;
@@ -304,11 +304,11 @@ void SvxColorDockingWindow::SetSize()
         nBits |= WB_VSCROLL;
     aColorSet->SetStyle( nBits );
 
-    // ScrollBar ?
+    // scroll bar?
     long nScrollWidth = aColorSet->GetScrollWidth();
     if( nScrollWidth > 0 )
     {
-        // Spalten mit ScrollBar berechnen
+        // calculate columns with scroll bar
         nCols = (sal_uInt16) ( ( aSize.Width() - nScrollWidth ) / aItemSize.Width() );
     }
     aColorSet->SetColCount( nCols );
@@ -317,7 +317,7 @@ void SvxColorDockingWindow::SetSize()
         aColorSet->SetLineCount( nLines );
     else
     {
-        aColorSet->SetLineCount(); // sonst wird LineHeight ignoriert
+        aColorSet->SetLineCount(); // otherwise line height is ignored
         aColorSet->SetItemHeight( aItemSize.Height() );
     }
 
@@ -344,7 +344,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
     {
         if ( nLeftSlot == SID_ATTR_FILL_COLOR )
         {
-            if ( nPos == 1 )        // unsichtbar
+            if ( nPos == 1 )        // invisible
             {
                 XFillStyleItem aXFillStyleItem( drawing::FillStyle_NONE );
                 pDispatcher->ExecuteList(nLeftSlot, SfxCallMode::RECORD,
@@ -354,8 +354,8 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
             {
                 bool bDone = false;
 
-                // Wenn wir eine DrawView haben und uns im TextEdit-Modus befinden,
-                // wird nicht die Flaechen-, sondern die Textfarbe zugewiesen
+                // If we have a DrawView and we are in TextEdit mode, then
+                // not the area color but the text color is assigned
                 SfxViewShell* pViewSh = SfxViewShell::Current();
                 if ( pViewSh )
                 {
@@ -377,7 +377,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                 }
             }
         }
-        else if ( nPos != 1 )       // unsichtbar
+        else if ( nPos != 1 )       // invisible
         {
             SvxColorItem aLeftColorItem( aColor, nLeftSlot );
             pDispatcher->ExecuteList(nLeftSlot, SfxCallMode::RECORD,
@@ -388,7 +388,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
     {
         if ( nRightSlot == SID_ATTR_LINE_COLOR )
         {
-            if( nPos == 1 )     // unsichtbar
+            if( nPos == 1 )     // invisible
             {
                 XLineStyleItem aXLineStyleItem( drawing::LineStyle_NONE );
                 pDispatcher->ExecuteList(nRightSlot, SfxCallMode::RECORD,
@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
             }
             else
             {
-                // Sollte der LineStyle unsichtbar sein, so wird er auf SOLID gesetzt
+                // If the LineStyle is invisible, it is set to SOLID
                 SfxViewShell* pViewSh = SfxViewShell::Current();
                 if ( pViewSh )
                 {
@@ -424,7 +424,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                         { &aXLineColorItem });
             }
         }
-        else if ( nPos != 1 )       // unsichtbar
+        else if ( nPos != 1 )       // invisible
         {
             SvxColorItem aRightColorItem( aColor, nRightSlot );
             pDispatcher->ExecuteList(nRightSlot, SfxCallMode::RECORD,
@@ -438,13 +438,13 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
     rNewSize.Width()  -= 4;
     rNewSize.Height() -= 4;
 
-    // Spalten und Reihen ermitteln
+    // determine columns and rows
     nCols = (sal_uInt16) ( (float) rNewSize.Width() / (float) aItemSize.Width() + 0.5 );
     nLines = (sal_uInt16) ( (float) rNewSize.Height() / (float) aItemSize.Height() + 0.5 );
     if( nLines == 0 )
         nLines = 1;
 
-    // Scrollbar setzen/entfernen
+    // set/remove scroll bar
     WinBits nBits = aColorSet->GetStyle();
     if ( static_cast<long>(nLines) * nCols >= nCount )
         nBits &= ~WB_VSCROLL;
@@ -452,18 +452,18 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
         nBits |= WB_VSCROLL;
     aColorSet->SetStyle( nBits );
 
-    // ScrollBar ?
+    // scroll bar?
     long nScrollWidth = aColorSet->GetScrollWidth();
     if( nScrollWidth > 0 )
     {
-        // Spalten mit ScrollBar berechnen
+        // calculate columns with scroll bar
         nCols = (sal_uInt16) ( ( ( (float) rNewSize.Width() - (float) nScrollWidth ) )
                             / (float) aItemSize.Width() + 0.5 );
     }
     if( nCols <= 1 )
         nCols = 2;
 
-    // Max. Reihen anhand der gegebenen Spalten berechnen
+    // calculate max. rows using the given columns
     long nMaxLines = nCount / nCols;
     if( nCount %  nCols )
         nMaxLines++;
@@ -471,7 +471,7 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
     nLines = sal::static_int_cast< sal_uInt16 >(
         std::min< long >( nLines, nMaxLines ) );
 
-    // Groesse des Windows setzen
+    // set size of the window
     rNewSize.Width()  = nCols * aItemSize.Width() + nScrollWidth + 4;
     rNewSize.Height() = nLines * aItemSize.Height() + 4;
 }

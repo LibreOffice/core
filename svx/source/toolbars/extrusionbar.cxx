@@ -47,8 +47,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
-// Standardinterface deklarieren (Die Slotmap darf nicht leer sein, also
-// tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
+// Declare the default interface. (The slotmap must not be empty, so
+// we enter something which never occurs here (hopefully).)
 static SfxSlot aExtrusionBarSlots_Impl[] =
 {
     { 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }

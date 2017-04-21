@@ -181,7 +181,7 @@ void TableEdgeHdl::CreateB2dIAObject()
 
                             if(aInvisible.count())
                             {
-                                // also create overlay object vor invisible parts to allow
+                                // also create overlay object for invisible parts to allow
                                 // a standard HitTest using the primitives from that overlay object
                                 // (see OverlayTableEdge implementation)
                                 sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aInvisible, false);

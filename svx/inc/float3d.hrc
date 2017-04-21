@@ -18,7 +18,7 @@
  */
 #include <svx/dialogs.hrc>
 
-// Unterer Teil
+// Lower part
 #define CTL_PREVIEW             12
 #define CTL_LIGHT_PREVIEW       13
 
