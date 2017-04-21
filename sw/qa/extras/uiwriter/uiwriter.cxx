@@ -234,6 +234,7 @@ public:
     void testTdf105625();
     void testTdf106736();
     void testMsWordCompTrailingBlanks();
+    void testCreateDocxAnnotation();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -359,6 +360,7 @@ public:
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
+    CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4553,6 +4555,32 @@ void SwUiWriterTest::testMsWordCompTrailingBlanks()
     // The option should be true if a .docx, .doc or .rtf document is opened
     pDoc = createDoc( "MsWordCompTrailingBlanks.docx" );
     CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) );
+}
+
+void SwUiWriterTest::testCreateDocxAnnotation()
+{
+    createDoc();
+
+    // insert an annotation with a text
+    const OUString aSomeText("some text");
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"Text", uno::makeAny(aSomeText)},
+        {"Author", uno::makeAny(OUString("me"))},
+    });
+    lcl_dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
+
+    // Save it as DOCX & load it again
+    reload("Office Open XML Text", "create-docx-annotation.docx");
+
+    // get the annotation
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    // this was empty insetad of "some text"
+    CPPUNIT_ASSERT_EQUAL(aSomeText, xField->getPropertyValue("Content").get<OUString>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
