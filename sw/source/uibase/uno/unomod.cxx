@@ -209,7 +209,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings()
     if(!mxViewSettings.is())
     {
         OSL_FAIL("Web or Text?");
-        mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( nullptr ) );
+        mxViewSettings = new SwXViewSettings( nullptr );
     }
     return mxViewSettings;
 }
@@ -220,7 +220,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings()
     if(!mxPrintSettings.is())
     {
         OSL_FAIL("Web or Text?");
-        mxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( SwXPrintSettingsType::Module ) );
+        mxPrintSettings = new SwXPrintSettings( SwXPrintSettingsType::Module );
     }
     return mxPrintSettings;
 }
@@ -243,7 +243,7 @@ Sequence< OUString > SwXModule::getSupportedServiceNames()
 }
 
 SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
-: ChainableHelperNoState ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
+: ChainablePropertySet ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
 , meType(eType)
 , mpPrtOpt ( nullptr )
 , mpDoc ( pDoc )
@@ -516,7 +516,7 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames()
 }
 
 SwXViewSettings::SwXViewSettings(SwView* pVw)
-    : ChainableHelperNoState( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
+    : ChainablePropertySet( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
     , pView(pVw)
     , mpViewOption(nullptr)
     , mpConstViewOption(nullptr)

@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/ChainablePropertySet.hxx>
-#include <comphelper/SettingsHelper.hxx>
 #include <usrpref.hxx>
 
 class SwView;
@@ -70,7 +69,7 @@ enum class SwXPrintSettingsType
     Document
 };
 
-class SwXPrintSettings : public comphelper::ChainableHelperNoState
+class SwXPrintSettings : public comphelper::ChainablePropertySet
 {
     friend class SwXDocumentSettings;
 protected:
@@ -98,7 +97,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class SwXViewSettings : public comphelper::ChainableHelperNoState
+class SwXViewSettings : public comphelper::ChainablePropertySet
 {
 
     friend class SwXDocumentSettings;

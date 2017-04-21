@@ -23,9 +23,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/PropertyInfoHash.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/solarmutex.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 namespace comphelper
@@ -54,9 +56,15 @@ namespace comphelper
 
 namespace comphelper
 {
-    class COMPHELPER_DLLPUBLIC ChainablePropertySet : public css::beans::XPropertySet,
-                                 public css::beans::XPropertyState,
-                                 public css::beans::XMultiPropertySet
+    typedef cppu::WeakImplHelper
+    <
+        css::beans::XPropertySet,
+        css::beans::XMultiPropertySet,
+        css::lang::XServiceInfo
+    >
+    ChainablePropertySetBase;
+    class COMPHELPER_DLLPUBLIC ChainablePropertySet : public ChainablePropertySetBase,
+                                 public css::beans::XPropertyState
     {
         friend class MasterPropertySet;
     protected:
@@ -102,7 +110,14 @@ namespace comphelper
         ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, SolarMutex* pMutex = nullptr )
             throw();
         virtual ~ChainablePropertySet()
-            throw();
+            throw() override;
+
+        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override
+        { return ChainablePropertySetBase::queryInterface( aType ); }
+        void SAL_CALL acquire(  ) throw () override
+        { ChainablePropertySetBase::acquire( ); }
+        void SAL_CALL release(  ) throw () override
+        { ChainablePropertySetBase::release( ); }
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
