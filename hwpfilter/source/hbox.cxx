@@ -331,8 +331,6 @@ FBox::FBox(hchar hch)
     , pgy(0)
     , pgno(0)
     , showpg(0)
-    , prev(nullptr)
-    , next(nullptr)
 {
 }
 
