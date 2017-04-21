@@ -164,16 +164,16 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
 {
     if ( !bErase )
     {
-        // Metric Umrechnen
+        // convert the metric
         long nVal = nPoint;
 
-        // ge"andert => neuen Wert setzen
+        // changed => set new value
         if ( GetValue() != nVal )
             SetValue( nVal );
     }
     else
     {
-        // Wert in der Anzeige l"oschen
+        // delete value in the display
         SetValue( -1L );
         SetText( "" );
     }
@@ -183,8 +183,8 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
 
 void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFont )
 {
-    // Sizes-Liste auff"ullen
-    sal_Int64 nOldVal = GetValue(); // alten Wert merken
+    // filling up the sizes list
+    sal_Int64 nOldVal = GetValue(); // memorize old value
     const FontList* _pFontList = nullptr;
     std::unique_ptr<FontList> aHold( new FontList( this ));
     _pFontList = aHold.get();
@@ -201,8 +201,8 @@ void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFo
     {
         Fill( nullptr, _pFontList );
     }
-    SetValue( nOldVal ); // alten Wert wiederherstellen
-    m_aCurText = GetText(); // zum R"ucksetzen bei ESC merken
+    SetValue( nOldVal ); // restore old value
+    m_aCurText = GetText(); // memorize to reset at ESC
 }
 
 

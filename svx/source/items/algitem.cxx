@@ -138,7 +138,7 @@ SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
 
 sal_uInt16 SvxOrientationItem::GetValueCount() const
 {
-    return SVX_ORIENTATION_STACKED + 1; // letzter Enum-Wert + 1
+    return SVX_ORIENTATION_STACKED + 1; // last enum value + 1
 }
 
 
@@ -292,7 +292,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
-        //  jetzt alles signed
+        //  now sign everything
         case MID_MARGIN_L_MARGIN:
             rVal <<= (sal_Int32)( bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin );
             break;
@@ -316,7 +316,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );
-    long nMaxVal = bConvert ? convertTwipToMm100(SHRT_MAX) : SHRT_MAX;   // Members sind sal_Int16
+    long nMaxVal = bConvert ? convertTwipToMm100(SHRT_MAX) : SHRT_MAX;   // members are sal_Int16
     sal_Int32 nVal = 0;
     if(!(rVal >>= nVal) || (nVal > nMaxVal))
         return false;

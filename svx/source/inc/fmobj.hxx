@@ -31,7 +31,7 @@ class SVX_DLLPUBLIC FmFormObj: public SdrUnoObj
 {
     FmFormObj( const FmFormObj& ) = delete;
 
-    css::uno::Sequence< css::script::ScriptEventDescriptor >  aEvts;  // events des Objects
+    css::uno::Sequence< css::script::ScriptEventDescriptor >  aEvts;  // events of the object
     css::uno::Sequence< css::script::ScriptEventDescriptor>   m_aEventsHistory;
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
                 // m_pEnvironmentHistory was created

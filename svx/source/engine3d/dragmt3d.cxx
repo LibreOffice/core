@@ -611,7 +611,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                         break;
                     case SdrHdlKind::Upper:
                     case SdrHdlKind::Lower:
-                        // constrain to auf Y -> X equal
+                        // constrain to Y -> X equal
                         aScNext.setX(aScFixPos.getX());
                         break;
                     default:
