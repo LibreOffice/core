@@ -120,7 +120,8 @@ namespace connectivity
             // work around a clang 3.5 optimization bug: if the bNoDelete is *first*
             // it mis-compiles "if (--nRefCount == 0)" and never deletes any object
             unsigned int    nRefCount : 31;
-            bool            bNoDelete : 1;
+            // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
+            unsigned int    bNoDelete : 1;
             sal_uInt32      nPagePos;       // Position in the index file
             bool            bModified : 1;
             sal_uInt16      nCount;
@@ -189,7 +190,7 @@ namespace connectivity
                     {
                         assert( nRefCount < (1 << 30) && "Do not add refs to dead objects" );
                         if( bNoDelete )
-                            bNoDelete = false;
+                            bNoDelete = 0;
                         ++nRefCount;
                     }
 
