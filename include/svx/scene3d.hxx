@@ -158,7 +158,7 @@ public:
 
     // create moves
     virtual bool BegCreate(SdrDragStat& rStat) override;
-    virtual bool MovCreate(SdrDragStat& rStat) override; // true=Xor muss repainted werden
+    virtual bool MovCreate(SdrDragStat& rStat) override; // true=Xor must be repainted
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
     virtual bool BckCreate(SdrDragStat& rStat) override;
     virtual void BrkCreate(SdrDragStat& rStat) override;

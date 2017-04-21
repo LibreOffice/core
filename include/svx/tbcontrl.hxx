@@ -128,7 +128,7 @@
 
 \*--------------------------------------------------------------*/
 
-// ITEMID_...-Defines i *.cxx
+// ITEMID_... defines in the *.cxx
 
 #include <rsc/rscsfx.hxx>
 #include <svl/lstner.hxx>
@@ -140,7 +140,7 @@
 #include <svx/PaletteManager.hxx>
 #include <memory>
 
-// important im tbxctrls.hxx created HeDaBu !!!
+// important in the tbxctrls.hxx created with HeDaBu !!!
 class SvxLineItem;
 class SvxBoxInfoItem;
 class SvxFontItem;
