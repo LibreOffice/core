@@ -468,64 +468,67 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
 // think it should be, do nothing, and just let the implicit loading
 // that happens when loading the JVM take care of it.
 
-static void load_msvcr(LPCWSTR jvm_dll, wchar_t const* msvcr)
+static void load_msvcr(OUString const & jvm_dll, OUStringLiteral msvcr)
 {
-    wchar_t msvcr_dll[MAX_PATH];
-    wchar_t *slash;
-
-    if (wcslen(jvm_dll) > MAX_PATH - 15)
-        return;
-
-    wcscpy(msvcr_dll, jvm_dll);
-
     // First check if msvcr71.dll is in the same folder as jvm.dll. It
     // normally isn't, at least up to 1.6.0_22, but who knows if it
     // might be in the future.
-    slash = wcsrchr(msvcr_dll, L'\\');
+    sal_Int32 slash = jvm_dll.lastIndexOf('\\');
 
-    if (!slash)
+    if (slash == -1)
     {
         // Huh, weird path to jvm.dll. Oh well.
+        SAL_WARN("jfw", "JVM pathname <" + jvm_dll + "> w/o backslash");
         return;
     }
 
-    wcscpy(slash+1, msvcr);
-    if (LoadLibraryW(msvcr_dll))
+    if (LoadLibraryW(
+            reinterpret_cast<wchar_t const *>(
+                OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr())))
         return;
 
     // Then check if msvcr71.dll is in the parent folder of where
     // jvm.dll is. That is currently (1.6.0_22) as far as I know the
     // normal case.
-    *slash = 0;
-    slash = wcsrchr(msvcr_dll, L'\\');
+    slash = jvm_dll.lastIndexOf('\\', slash);
 
-    if (!slash)
+    if (slash == -1)
         return;
 
-    wcscpy(slash+1, msvcr);
-    LoadLibraryW(msvcr_dll);
+    LoadLibraryW(
+        reinterpret_cast<wchar_t const *>(
+            OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr()));
 }
 
 // Check if the jvm DLL imports msvcr71.dll, and in that case try
 // loading it explicitly. In case something goes wrong, do nothing,
 // and just let the implicit loading try to take care of it.
-static void do_msvcr_magic(rtl_uString *jvm_dll)
+static void do_msvcr_magic(OUString const &jvm_dll)
 {
-    rtl_uString* Module(nullptr);
     struct stat st;
 
-    oslFileError nError = osl_getSystemPathFromFileURL(jvm_dll, &Module);
+    OUString Module;
+    osl::FileBase::RC nError = osl::FileBase::getSystemPathFromFileURL(
+        jvm_dll, Module);
 
-    if ( osl_File_E_None != nError )
-        rtl_uString_assign(&Module, jvm_dll);
+    if ( osl::FileBase::E_None != nError )
+    {
+        SAL_WARN(
+            "jfw", "getSystemPathFromFileURL(" << jvm_dll << "): " << +nError);
+        return;
+    }
 
-    FILE *f = _wfopen(reinterpret_cast<LPCWSTR>(Module->buffer), L"rb");
+    FILE *f = _wfopen(reinterpret_cast<LPCWSTR>(Module.getStr()), L"rb");
 
     if (!f)
+    {
+        SAL_WARN("jfw", "_wfopen(" << Module << ") failed");
         return;
+    }
 
     if (fstat(fileno(f), &st) == -1)
     {
+        SAL_WARN("jfw", "fstat(" << Module << ") failed");
         fclose(f);
         return;
     }
@@ -537,6 +540,7 @@ static void do_msvcr_magic(rtl_uString *jvm_dll)
         dos_hdr->e_lfanew < 0 ||
         dos_hdr->e_lfanew > (LONG) (st.st_size - sizeof(IMAGE_NT_HEADERS)))
     {
+        SAL_WARN("jfw", "analyzing <" << Module << "> failed");
         free(dos_hdr);
         fclose(f);
         return;
@@ -564,6 +568,7 @@ static void do_msvcr_magic(rtl_uString *jvm_dll)
     }
     if (-1 == VAtoPhys) // not found?
     {
+        SAL_WARN("jfw", "analyzing <" << Module << "> failed");
         free(dos_hdr);
         return;
     }
@@ -574,20 +579,20 @@ static void do_msvcr_magic(rtl_uString *jvm_dll)
            imports->Name != 0 &&
            imports->Name + VAtoPhys < (DWORD) st.st_size)
     {
-        static struct { char const * name; wchar_t const * wname; } msvcrts[] =
+        static OUStringLiteral msvcrts[] =
         {
-            { "msvcr71.dll" , L"msvcr71.dll"  },
-            { "msvcr100.dll", L"msvcr100.dll" },
+            "msvcr71.dll",
+            "msvcr100.dll"
         };
         char const* importName = reinterpret_cast<char *>(dos_hdr) + imports->Name + VAtoPhys;
+        sal_Int32 importNameLen = rtl_str_getLength(importName);
         for (size_t i = 0; i < SAL_N_ELEMENTS(msvcrts); ++i)
         {
-            if (0 == strnicmp(importName,
-                // Intentional strlen() + 1 here to include terminating zero
-                        msvcrts[i].name, strlen(msvcrts[i].name) + 1))
+            if (0 == rtl_str_compareIgnoreAsciiCase_WithLength(
+                    importName, importNameLen,
+                    msvcrts[i].data, msvcrts[i].size))
             {
-                load_msvcr(reinterpret_cast<LPCWSTR>(Module->buffer),
-                        msvcrts[i].wname);
+                load_msvcr(Module, msvcrts[i]);
                 free(dos_hdr);
                 return;
             }
@@ -656,7 +661,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if (!moduleRt.load(sRuntimeLib, SAL_LOADMODULE_GLOBAL))
 #else
 #if defined(_WIN32)
-    do_msvcr_magic(sRuntimeLib.pData);
+    do_msvcr_magic(sRuntimeLib);
 #endif
     if (!moduleRt.load(sRuntimeLib))
 #endif
