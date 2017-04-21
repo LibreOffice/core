@@ -105,7 +105,8 @@ protected:
     ::std::vector< ScEEParseEntry* > maList;
     ScEEParseEntry*     pActEntry;
     ColWidthsMap        maColWidths;
-    int                 nLastToken;
+    int                 nRtfLastToken;
+    HtmlTokenId         nHtmlLastToken;
     SCCOL               nColCnt;
     SCROW               nRowCnt;
     SCCOL               nColMax;

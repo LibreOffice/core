@@ -305,7 +305,7 @@ public:
     sal_uInt32 m_nWarn;                   // Result-Code fuer Warnungen
     sal_uInt32 m_nLastLFPos;              // letzte Position eines LF
 
-    sal_uInt16 m_nLastParaToken;          // fuers Absaetze zusammenhalten
+    HtmlTokenId m_nLastParaToken;         // fuers Absaetze zusammenhalten
     sal_Int32 m_nBkmkTabPos;              // akt. Position in der Bookmark-Tabelle
     sal_uInt16 m_nImgMapCnt;              // zum eindeutig
     sal_uInt16 m_nFormCntrlCnt;
@@ -477,7 +477,7 @@ public:
                                      const SfxItemSet *pItemSet=nullptr );
     void OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFormat );
 
-    void ChangeParaToken( sal_uInt16 nNew );
+    void ChangeParaToken( HtmlTokenId nNew );
 
     void IncIndentLevel()
     {
