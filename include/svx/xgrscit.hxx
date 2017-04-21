@@ -25,7 +25,7 @@
 
 /*************************************************************************
 |*
-|* GradientenSchritte-Item fuer Gradienten-Fuellungen
+|* Gradient step item for gradient fills
 |*
 \************************************************************************/
 

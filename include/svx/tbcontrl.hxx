@@ -98,7 +98,7 @@
                         -> SvxBoxItem & SvxBoxInfoItem
         Additional information
         from DocShell:  none
-        Bemerkung:      provides dependent of chosen ValueSet-Item
+        Note:           provides, depending on chosen ValueSet-Item,
                         only SvxBoxItem or additionally SvxBoxInfoItem
                         If the Controller in SfxUInt16Item receives a
                         value != 0, paragraph mode will be switched on,
@@ -112,7 +112,7 @@
                         -> SvxLineItem
         Additional information
         from DocShell:  none
-        Bemerkung:      provides a SvxLineItem, which provides a SvxBorderLine
+        Note:           provides a SvxLineItem, which provides a SvxBorderLine
                         without color information.
 
         SvxStyleToolBoxControl
@@ -123,12 +123,12 @@
                         -> eStyleFamily (SfxUInt16Item)
         Additional information
         from DocShell:  none
-        Bemerkung:      Switch family by Invalidate
+        Note:           Switch family by Invalidate
                         at the Bindings (->SfxStyleControllerItem)
 
 \*--------------------------------------------------------------*/
 
-// ITEMID_...-Defines i *.cxx
+// ITEMID_... defines in the *.cxx
 
 #include <rsc/rscsfx.hxx>
 #include <svl/lstner.hxx>
@@ -140,7 +140,7 @@
 #include <svx/PaletteManager.hxx>
 #include <memory>
 
-// important im tbxctrls.hxx created HeDaBu !!!
+// important in the tbxctrls.hxx created with HeDaBu !!!
 class SvxLineItem;
 class SvxBoxInfoItem;
 class SvxFontItem;

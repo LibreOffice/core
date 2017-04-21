@@ -40,7 +40,7 @@ enum class ProjectionType { Parallel, Perspective };
 
 /*************************************************************************
 |*
-|* 3D-Viewport nach PHIGS
+|* 3D viewport according to PHIGS
 |*
 \************************************************************************/
 

@@ -222,7 +222,7 @@ public:
     void    Update( SfxItemSet& rSet );
     void    GetAttr( SfxItemSet& rSet );
 
-    void UpdatePreview(); // nach oben (private)
+    void UpdatePreview(); // upward (private)
     void DocumentReload();
 };
 

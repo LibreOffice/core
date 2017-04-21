@@ -38,7 +38,7 @@ public:
     void                    SetBookMode( bool bNew ) {mbBookMode = bNew; }
     bool                    IsBookMode() const {return mbBookMode; }
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "purely virtual methods" from the SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rStrm, sal_uInt16 nVersion ) const override;                       // leer
