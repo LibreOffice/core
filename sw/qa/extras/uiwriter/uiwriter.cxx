@@ -229,7 +229,9 @@ public:
     void testTdf35021_tabOverMarginDemo();
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
+#if defined(_WIN32)
     void testTdf107025();
+#endif
     void testTdf105417();
     void testTdf105625();
     void testTdf106736();
@@ -354,7 +356,9 @@ public:
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
+#if defined(_WIN32)
     CPPUNIT_TEST(testTdf107025);
+#endif
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
@@ -4436,11 +4440,13 @@ void SwUiWriterTest::testTdf104492()
     assertXPath(pXmlDoc, "//page", 3);
 }
 
+#if defined(_WIN32)
 void SwUiWriterTest::testTdf107025()
 {
     // Tdf107025 - characters advance with wrong distance, so that
     // they are cluttered because of negative value or
     // break into multiple lines because of overflow.
+    // The test document uses DFKAI-SB shipped with Windows.
     createDoc("tdf107025.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // Verify the number of characters in each line.
@@ -4457,6 +4463,7 @@ void SwUiWriterTest::testTdf107025()
     CPPUNIT_ASSERT( nWidth1 != 0 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9), nWidth2 / nWidth1 );
 }
+#endif
 
 void SwUiWriterTest::testTdf105417()
 {
