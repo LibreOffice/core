@@ -129,7 +129,7 @@
 #define RID_SC_TP_DEFAULTS              (RID_OFA_START + 253)
 #define SID_SC_TP_STAT                  (RID_OFA_START + 254)
 
-// ResId's fuer Dialoge aus StarDraw
+// ResIds for dialogs from StarDraw
 #define RID_SVXSW_FRAMEPOSITIONS            (RID_SVX_START + 289)
 
 #define RID_SVXBMP_LAMP_ON                  (RID_SVX_START + 210)

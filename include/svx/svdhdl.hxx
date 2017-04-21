@@ -421,7 +421,7 @@ protected:
 
     bool                        bRotateShear : 1;
     bool                        bDistortShear : 1;
-    bool                        bMoveOutside : 1;      // Handles nach aussen ruecken (fuer TextEdit)
+    bool                        bMoveOutside : 1;      // move handles outwards (for TextEdit)
 
 private:
     SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&) = delete;

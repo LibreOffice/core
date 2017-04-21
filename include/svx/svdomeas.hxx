@@ -185,7 +185,7 @@ public:
 // Dragging:                    Handle          Shift
 // ~~~~~~~~~
 // -  reference points        SolidQuadHdl   only the length
-// 1.+2. Anpacken des Textes
+// 1.+2. Seizing the text
 // 3.+4. Hdl on arrow (2x)    SolidQuadHdl   only the  Bool
 // 5.    Hdl one end point      CircHdl        both lengths ?
 // 6.+7. no dragging
