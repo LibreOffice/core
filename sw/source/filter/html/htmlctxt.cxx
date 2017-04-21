@@ -619,8 +619,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 HTMLAttrs &rAttrs = pContext->GetAttrs();
                 rAttrs.push_back( m_aAttrTab.pCharBrush );
             }
-            else if( pContext->GetToken() != HTML_TABLEHEADER_ON &&
-                     pContext->GetToken() != HTML_TABLEDATA_ON )
+            else if( pContext->GetToken() != HtmlTokenId::TABLEHEADER_ON &&
+                     pContext->GetToken() != HtmlTokenId::TABLEDATA_ON )
             {
                 ppAttr = &m_aAttrTab.pBrush;
             }
