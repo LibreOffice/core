@@ -111,17 +111,22 @@ char** createCommandLine()
         createStr(pUpdaterName, pArgs, 0);
     }
     {
+        // directory with the patch log
         OUString aPatchDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
         rtl::Bootstrap::expandMacros(aPatchDir);
         OUString aTempDirPath = getPathFromURL(aPatchDir);
         createStr(aTempDirPath, pArgs, 1);
     }
     {
+        // the actual update directory
         OUString aInstallPath = getPathFromURL(aLibExecDirURL);
         createStr(aInstallPath, pArgs, 2);
     }
     {
-        OUString aWorkingDir = getPathFromURL(aLibExecDirURL + "/updated");
+        // the temporary updated build
+        OUString aPatchDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/update_dir/");
+        rtl::Bootstrap::expandMacros(aPatchDir);
+        OUString aWorkingDir = getPathFromURL(aPatchDir);
         createStr(aWorkingDir, pArgs, 3);
     }
     {
@@ -134,6 +139,7 @@ char** createCommandLine()
         createStr(aSofficePath, pArgs, 5);
     }
     {
+        // the executable to start after the successful update
         OUString aSofficeDir( "$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/" );
         rtl::Bootstrap::expandMacros(aSofficeDir);
         OUString aSofficePathURL = aSofficeDir + OUString::fromUtf8(pSofficeExeName);
@@ -202,7 +208,9 @@ void CreateValidUpdateDir(const update_info& update_info)
     OUString aInstallDir("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aInstallDir);
     OUString aInstallPath = getPathFromURL(aInstallDir);
-    OUString aWorkdirPath = getPathFromURL(aInstallDir + "/updated");
+    OUString aUpdatedBuildDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/update_dir/");
+    rtl::Bootstrap::expandMacros(aUpdatedBuildDir);
+    OUString aWorkdirPath = getPathFromURL(aUpdatedBuildDir);
 
     OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
     rtl::Bootstrap::expandMacros(aPatchDirURL);
