@@ -34,128 +34,128 @@ struct HTML_TokenEntry
         const sal_Char *sToken;
         const OUString *pUToken;
     };
-    int nToken;
+    HtmlTokenId nToken;
 };
 
 // Flag: RTF token table has already been sorted
 static bool bSortKeyWords = false;
 
 static HTML_TokenEntry aHTMLTokenTab[] = {
-    {{OOO_STRING_SVTOOLS_HTML_area},            HTML_AREA}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_base},            HTML_BASE}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_comment},     HTML_COMMENT},
-    {{OOO_STRING_SVTOOLS_HTML_doctype},      HTML_DOCTYPE},
-    {{OOO_STRING_SVTOOLS_HTML_embed},       HTML_EMBED},    // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_horzrule},        HTML_HORZRULE},
-    {{OOO_STRING_SVTOOLS_HTML_image},          HTML_IMAGE},
-    {{OOO_STRING_SVTOOLS_HTML_input},          HTML_INPUT},
-    {{OOO_STRING_SVTOOLS_HTML_linebreak},      HTML_LINEBREAK},
-    {{OOO_STRING_SVTOOLS_HTML_link},            HTML_LINK}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_meta},            HTML_META}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_option},        HTML_OPTION},
-    {{OOO_STRING_SVTOOLS_HTML_param},       HTML_PARAM},    // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_spacer},      HTML_SPACER},   // Netscape 3.0b5
+    {{OOO_STRING_SVTOOLS_HTML_area},            HtmlTokenId::AREA}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_base},            HtmlTokenId::BASE}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_comment},     HtmlTokenId::COMMENT},
+    {{OOO_STRING_SVTOOLS_HTML_doctype},      HtmlTokenId::DOCTYPE},
+    {{OOO_STRING_SVTOOLS_HTML_embed},       HtmlTokenId::EMBED},    // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_horzrule},        HtmlTokenId::HORZRULE},
+    {{OOO_STRING_SVTOOLS_HTML_image},          HtmlTokenId::IMAGE},
+    {{OOO_STRING_SVTOOLS_HTML_input},          HtmlTokenId::INPUT},
+    {{OOO_STRING_SVTOOLS_HTML_linebreak},      HtmlTokenId::LINEBREAK},
+    {{OOO_STRING_SVTOOLS_HTML_link},            HtmlTokenId::LINK}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_meta},            HtmlTokenId::META}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_option},        HtmlTokenId::OPTION},
+    {{OOO_STRING_SVTOOLS_HTML_param},       HtmlTokenId::PARAM},    // HotJava
+    {{OOO_STRING_SVTOOLS_HTML_spacer},      HtmlTokenId::SPACER},   // Netscape 3.0b5
 
-    {{OOO_STRING_SVTOOLS_HTML_abbreviation},    HTML_ABBREVIATION_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_acronym},     HTML_ACRONYM_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_address},      HTML_ADDRESS_ON},
-    {{OOO_STRING_SVTOOLS_HTML_anchor},        HTML_ANCHOR_ON},
-    {{OOO_STRING_SVTOOLS_HTML_applet},      HTML_APPLET_ON},    // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_author},      HTML_AUTHOR_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_banner},      HTML_BANNER_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_basefont},        HTML_BASEFONT_ON},  // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_bigprint},        HTML_BIGPRINT_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_blink},       HTML_BLINK_ON}, // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_blockquote},    HTML_BLOCKQUOTE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_blockquote30},    HTML_BLOCKQUOTE30_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_body},            HTML_BODY_ON},
-    {{OOO_STRING_SVTOOLS_HTML_bold},            HTML_BOLD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_caption},     HTML_CAPTION_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_center},      HTML_CENTER_ON},    // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_citiation},      HTML_CITIATION_ON},
-    {{OOO_STRING_SVTOOLS_HTML_col},             HTML_COL_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_colgroup},        HTML_COLGROUP_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_code},            HTML_CODE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_credit},      HTML_CREDIT_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_dd},            HTML_DD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_deflist},      HTML_DEFLIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_deletedtext}, HTML_DELETEDTEXT_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_dirlist},      HTML_DIRLIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_division},        HTML_DIVISION_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_dt},            HTML_DT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_emphasis},        HTML_EMPHASIS_ON},
-    {{OOO_STRING_SVTOOLS_HTML_figure},      HTML_FIGURE_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_font},            HTML_FONT_ON}, // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_footnote},        HTML_FOOTNOTE_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_form},            HTML_FORM_ON},
-    {{OOO_STRING_SVTOOLS_HTML_frame},       HTML_FRAME_ON}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_frameset},        HTML_FRAMESET_ON},  // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_head},            HTML_HEAD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head1},          HTML_HEAD1_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head2},          HTML_HEAD2_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head3},          HTML_HEAD3_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head4},          HTML_HEAD4_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head5},          HTML_HEAD5_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head6},          HTML_HEAD6_ON},
-    {{OOO_STRING_SVTOOLS_HTML_html},            HTML_HTML_ON},
-    {{OOO_STRING_SVTOOLS_HTML_iframe},      HTML_IFRAME_ON},    // IE 3.0b2
-    {{OOO_STRING_SVTOOLS_HTML_insertedtext},    HTML_INSERTEDTEXT_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_italic},        HTML_ITALIC_ON},
-    {{OOO_STRING_SVTOOLS_HTML_keyboard},        HTML_KEYBOARD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_language},        HTML_LANGUAGE_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_li},            HTML_LI_ON},
-    {{OOO_STRING_SVTOOLS_HTML_listheader},  HTML_LISTHEADER_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_map},         HTML_MAP_ON},   // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_menulist},        HTML_MENULIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_multicol},        HTML_MULTICOL_ON},  // Netscape 3.0b5
-    {{OOO_STRING_SVTOOLS_HTML_nobr},            HTML_NOBR_ON},  // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_noembed},     HTML_NOEMBED_ON},   // Netscape 2.0 ???
-    {{OOO_STRING_SVTOOLS_HTML_noframe},     HTML_NOFRAMES_ON},  // Netscape 2.0 ???
-    {{OOO_STRING_SVTOOLS_HTML_noframes},        HTML_NOFRAMES_ON},  // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_noscript},        HTML_NOSCRIPT_ON},  // Netscape 3.0
-    {{OOO_STRING_SVTOOLS_HTML_note},            HTML_NOTE_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_object},     HTML_OBJECT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_orderlist},      HTML_ORDERLIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_parabreak},      HTML_PARABREAK_ON},
-    {{OOO_STRING_SVTOOLS_HTML_person},      HTML_PERSON_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_plaintext},   HTML_PLAINTEXT_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_preformtxt},    HTML_PREFORMTXT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_sample},        HTML_SAMPLE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_script},        HTML_SCRIPT_ON}, // HTML 3.2
-    {{OOO_STRING_SVTOOLS_HTML_select},        HTML_SELECT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_shortquote},  HTML_SHORTQUOTE_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_smallprint},  HTML_SMALLPRINT_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_span},            HTML_SPAN_ON},  // Style Sheets
-    {{OOO_STRING_SVTOOLS_HTML_strikethrough},HTML_STRIKETHROUGH_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_strong},        HTML_STRONG_ON},
-    {{OOO_STRING_SVTOOLS_HTML_style},       HTML_STYLE_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_subscript},   HTML_SUBSCRIPT_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_superscript}, HTML_SUPERSCRIPT_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_table},       HTML_TABLE_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tabledata},   HTML_TABLEDATA_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tableheader}, HTML_TABLEHEADER_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tablerow},        HTML_TABLEROW_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tbody},          HTML_TBODY_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_teletype},        HTML_TELETYPE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_textarea},        HTML_TEXTAREA_ON},
-    {{OOO_STRING_SVTOOLS_HTML_tfoot},          HTML_TFOOT_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_thead},          HTML_THEAD_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_title},          HTML_TITLE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_underline},      HTML_UNDERLINE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_unorderlist},  HTML_UNORDERLIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_variable},        HTML_VARIABLE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_abbreviation},    HtmlTokenId::ABBREVIATION_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_acronym},     HtmlTokenId::ACRONYM_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_address},      HtmlTokenId::ADDRESS_ON},
+    {{OOO_STRING_SVTOOLS_HTML_anchor},        HtmlTokenId::ANCHOR_ON},
+    {{OOO_STRING_SVTOOLS_HTML_applet},      HtmlTokenId::APPLET_ON},    // HotJava
+    {{OOO_STRING_SVTOOLS_HTML_author},      HtmlTokenId::AUTHOR_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_banner},      HtmlTokenId::BANNER_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_basefont},        HtmlTokenId::BASEFONT_ON},  // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_bigprint},        HtmlTokenId::BIGPRINT_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_blink},       HtmlTokenId::BLINK_ON}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_blockquote},    HtmlTokenId::BLOCKQUOTE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_blockquote30},    HtmlTokenId::BLOCKQUOTE30_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_body},            HtmlTokenId::BODY_ON},
+    {{OOO_STRING_SVTOOLS_HTML_bold},            HtmlTokenId::BOLD_ON},
+    {{OOO_STRING_SVTOOLS_HTML_caption},     HtmlTokenId::CAPTION_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_center},      HtmlTokenId::CENTER_ON},    // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_citiation},      HtmlTokenId::CITIATION_ON},
+    {{OOO_STRING_SVTOOLS_HTML_col},             HtmlTokenId::COL_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_colgroup},        HtmlTokenId::COLGROUP_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_code},            HtmlTokenId::CODE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_credit},      HtmlTokenId::CREDIT_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_dd},            HtmlTokenId::DD_ON},
+    {{OOO_STRING_SVTOOLS_HTML_deflist},      HtmlTokenId::DEFLIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_deletedtext}, HtmlTokenId::DELETEDTEXT_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_dirlist},      HtmlTokenId::DIRLIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_division},        HtmlTokenId::DIVISION_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_dt},            HtmlTokenId::DT_ON},
+    {{OOO_STRING_SVTOOLS_HTML_emphasis},        HtmlTokenId::EMPHASIS_ON},
+    {{OOO_STRING_SVTOOLS_HTML_figure},      HtmlTokenId::FIGURE_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_font},            HtmlTokenId::FONT_ON}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_footnote},        HtmlTokenId::FOOTNOTE_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_form},            HtmlTokenId::FORM_ON},
+    {{OOO_STRING_SVTOOLS_HTML_frame},       HtmlTokenId::FRAME_ON}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_frameset},        HtmlTokenId::FRAMESET_ON},  // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_head},            HtmlTokenId::HEAD_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head1},          HtmlTokenId::HEAD1_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head2},          HtmlTokenId::HEAD2_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head3},          HtmlTokenId::HEAD3_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head4},          HtmlTokenId::HEAD4_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head5},          HtmlTokenId::HEAD5_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head6},          HtmlTokenId::HEAD6_ON},
+    {{OOO_STRING_SVTOOLS_HTML_html},            HtmlTokenId::HTML_ON},
+    {{OOO_STRING_SVTOOLS_HTML_iframe},      HtmlTokenId::IFRAME_ON},    // IE 3.0b2
+    {{OOO_STRING_SVTOOLS_HTML_insertedtext},    HtmlTokenId::INSERTEDTEXT_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_italic},        HtmlTokenId::ITALIC_ON},
+    {{OOO_STRING_SVTOOLS_HTML_keyboard},        HtmlTokenId::KEYBOARD_ON},
+    {{OOO_STRING_SVTOOLS_HTML_language},        HtmlTokenId::LANGUAGE_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_li},            HtmlTokenId::LI_ON},
+    {{OOO_STRING_SVTOOLS_HTML_listheader},  HtmlTokenId::LISTHEADER_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_map},         HtmlTokenId::MAP_ON},   // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_menulist},        HtmlTokenId::MENULIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_multicol},        HtmlTokenId::MULTICOL_ON},  // Netscape 3.0b5
+    {{OOO_STRING_SVTOOLS_HTML_nobr},            HtmlTokenId::NOBR_ON},  // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_noembed},     HtmlTokenId::NOEMBED_ON},   // Netscape 2.0 ???
+    {{OOO_STRING_SVTOOLS_HTML_noframe},     HtmlTokenId::NOFRAMES_ON},  // Netscape 2.0 ???
+    {{OOO_STRING_SVTOOLS_HTML_noframes},        HtmlTokenId::NOFRAMES_ON},  // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_noscript},        HtmlTokenId::NOSCRIPT_ON},  // Netscape 3.0
+    {{OOO_STRING_SVTOOLS_HTML_note},            HtmlTokenId::NOTE_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_object},     HtmlTokenId::OBJECT_ON},
+    {{OOO_STRING_SVTOOLS_HTML_orderlist},      HtmlTokenId::ORDERLIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_parabreak},      HtmlTokenId::PARABREAK_ON},
+    {{OOO_STRING_SVTOOLS_HTML_person},      HtmlTokenId::PERSON_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_plaintext},   HtmlTokenId::PLAINTEXT_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_preformtxt},    HtmlTokenId::PREFORMTXT_ON},
+    {{OOO_STRING_SVTOOLS_HTML_sample},        HtmlTokenId::SAMPLE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_script},        HtmlTokenId::SCRIPT_ON}, // HTML 3.2
+    {{OOO_STRING_SVTOOLS_HTML_select},        HtmlTokenId::SELECT_ON},
+    {{OOO_STRING_SVTOOLS_HTML_shortquote},  HtmlTokenId::SHORTQUOTE_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_smallprint},  HtmlTokenId::SMALLPRINT_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_span},            HtmlTokenId::SPAN_ON},  // Style Sheets
+    {{OOO_STRING_SVTOOLS_HTML_strikethrough}, HtmlTokenId::STRIKETHROUGH_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_strong},        HtmlTokenId::STRONG_ON},
+    {{OOO_STRING_SVTOOLS_HTML_style},       HtmlTokenId::STYLE_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_subscript},   HtmlTokenId::SUBSCRIPT_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_superscript}, HtmlTokenId::SUPERSCRIPT_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_table},       HtmlTokenId::TABLE_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_tabledata},   HtmlTokenId::TABLEDATA_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_tableheader}, HtmlTokenId::TABLEHEADER_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_tablerow},        HtmlTokenId::TABLEROW_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_tbody},          HtmlTokenId::TBODY_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_teletype},        HtmlTokenId::TELETYPE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_textarea},        HtmlTokenId::TEXTAREA_ON},
+    {{OOO_STRING_SVTOOLS_HTML_tfoot},          HtmlTokenId::TFOOT_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_thead},          HtmlTokenId::THEAD_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_title},          HtmlTokenId::TITLE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_underline},      HtmlTokenId::UNDERLINE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_unorderlist},  HtmlTokenId::UNORDERLIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_variable},        HtmlTokenId::VARIABLE_ON},
 
-    {{OOO_STRING_SVTOOLS_HTML_xmp},         HTML_XMP_ON},
-    {{OOO_STRING_SVTOOLS_HTML_listing},     HTML_LISTING_ON},
+    {{OOO_STRING_SVTOOLS_HTML_xmp},         HtmlTokenId::XMP_ON},
+    {{OOO_STRING_SVTOOLS_HTML_listing},     HtmlTokenId::LISTING_ON},
 
-    {{OOO_STRING_SVTOOLS_HTML_definstance},  HTML_DEFINSTANCE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_strike},        HTML_STRIKE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_definstance},  HtmlTokenId::DEFINSTANCE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_strike},        HtmlTokenId::STRIKE_ON},
 
-    {{OOO_STRING_SVTOOLS_HTML_comment2},        HTML_COMMENT2_ON},
-    {{OOO_STRING_SVTOOLS_HTML_marquee},         HTML_MARQUEE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_plaintext2},    HTML_PLAINTEXT2_ON},
+    {{OOO_STRING_SVTOOLS_HTML_comment2},        HtmlTokenId::COMMENT2_ON},
+    {{OOO_STRING_SVTOOLS_HTML_marquee},         HtmlTokenId::MARQUEE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_plaintext2},    HtmlTokenId::PLAINTEXT2_ON},
 
-    {{OOO_STRING_SVTOOLS_HTML_sdfield},     HTML_SDFIELD_ON}
+    {{OOO_STRING_SVTOOLS_HTML_sdfield},     HtmlTokenId::SDFIELD_ON}
 };
 
 
@@ -167,16 +167,16 @@ static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
     HTML_TokenEntry const * pFirstEntry = static_cast<HTML_TokenEntry const *>(pFirst);
     HTML_TokenEntry const * pSecondEntry = static_cast<HTML_TokenEntry const *>(pSecond);
     int nRet = 0;
-    if( -1 == pFirstEntry->nToken )
+    if( HtmlTokenId::INVALID == pFirstEntry->nToken )
     {
-        if( -1 == pSecondEntry->nToken )
+        if( HtmlTokenId::INVALID == pSecondEntry->nToken )
             nRet = pFirstEntry->pUToken->compareTo( *pSecondEntry->pUToken );
         else
             nRet = pFirstEntry->pUToken->compareToAscii( pSecondEntry->sToken );
     }
     else
     {
-        if( -1 == pSecondEntry->nToken )
+        if( HtmlTokenId::INVALID == pSecondEntry->nToken )
             nRet = -1 * pSecondEntry->pUToken->compareToAscii( pFirstEntry->sToken );
         else
             nRet = strcmp( pFirstEntry->sToken, pSecondEntry->sToken );
@@ -187,7 +187,7 @@ static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
 
 }
 
-int GetHTMLToken( const OUString& rName )
+HtmlTokenId GetHTMLToken( const OUString& rName )
 {
     if( !bSortKeyWords )
     {
@@ -198,15 +198,15 @@ int GetHTMLToken( const OUString& rName )
         bSortKeyWords = true;
     }
 
-    int nRet = 0;
+    HtmlTokenId nRet = HtmlTokenId::NONE;
 
     if( !rName.compareTo( OOO_STRING_SVTOOLS_HTML_comment, 3  ) )
-        return HTML_COMMENT;
+        return HtmlTokenId::COMMENT;
 
     void* pFound;
     HTML_TokenEntry aSrch;
     aSrch.pUToken = &rName;
-    aSrch.nToken = -1;
+    aSrch.nToken = HtmlTokenId::INVALID;
 
     pFound = bsearch( &aSrch,
                       static_cast<void*>(aHTMLTokenTab),
@@ -732,7 +732,7 @@ HtmlOptionId GetHTMLOption( const OUString& rName )
     void* pFound;
     HTML_TokenEntry aSrch;
     aSrch.pUToken = &rName;
-    aSrch.nToken = -1;
+    aSrch.nToken = HtmlTokenId::INVALID;
 
     if( nullptr != ( pFound = bsearch( &aSrch,
                         static_cast<void*>(aHTMLOptionTab),

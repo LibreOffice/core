@@ -170,7 +170,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         }
     }
 
-    OSL_ENSURE( rWrt.m_nLastParaToken == 0,
+    OSL_ENSURE( rWrt.m_nLastParaToken == HtmlTokenId::NONE,
                 "<PRE> was not closed before <OL>." );
     sal_uInt16 nPrevDepth =
         (bSameRule && !rInfo.IsRestart()) ? rPrevInfo.GetDepth() : 0;
@@ -291,7 +291,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
         return rWrt;
     }
 
-    OSL_ENSURE( rWrt.m_nLastParaToken == 0,
+    OSL_ENSURE( rWrt.m_nLastParaToken == HtmlTokenId::NONE,
                 "<PRE> was not closed before </OL>." );
     sal_uInt16 nNextDepth =
         (bSameRule && !rNextInfo.IsRestart()) ? rNextInfo.GetDepth() : 0;

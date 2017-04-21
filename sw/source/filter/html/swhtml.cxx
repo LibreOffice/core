@@ -213,7 +213,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
     // damit keiner das Doc klaut!
     rDoc.acquire();
     sal_uLong nRet = 0;
-    tools::SvRef<SvParser> xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
+    tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
                                             rName, rBaseURL, !bInsertMode, pMedium,
                                             IsReadUTF8(),
                                             bIgnoreHTMLComments );
@@ -271,7 +271,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_nContextStMin( 0 ),
     m_nContextStAttrMin( 0 ),
     m_nSelectEntryCnt( 0 ),
-    m_nOpenParaToken( 0 ),
+    m_nOpenParaToken( HtmlTokenId::NONE ),
     m_eJumpTo( JUMPTO_NONE ),
 #ifdef DBG_UTIL
     m_nContinue( 0 ),
@@ -554,7 +554,7 @@ SvParserState SwHTMLParser::CallParser()
     return eRet;
 }
 
-void SwHTMLParser::Continue( int nToken )
+void SwHTMLParser::Continue( HtmlTokenId nToken )
 {
 #ifdef DBG_UTIL
     OSL_ENSURE(!m_nContinue, "Continue im Continue - not supposed to happen");
@@ -613,9 +613,9 @@ void SwHTMLParser::Continue( int nToken )
     // beendet wird.
     if( SvParserState::Error == eState )
     {
-        OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken,
+        OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken != HtmlTokenId::NONE,
                 "SwHTMLParser::Continue: Pending-Stack ohne Token" );
-        if( m_pPendStack && m_pPendStack->nToken )
+        if( m_pPendStack && m_pPendStack->nToken != HtmlTokenId::NONE )
             NextToken( m_pPendStack->nToken );
         OSL_ENSURE( !m_pPendStack,
                 "SwHTMLParser::Continue: Es gibt wieder einen Pend-Stack" );
@@ -937,7 +937,7 @@ void SwHTMLParser::DocumentDetected()
 }
 
 // is called for every token that is recognised in CallParser
-void SwHTMLParser::NextToken( int nToken )
+void SwHTMLParser::NextToken( HtmlTokenId nToken )
 {
     if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
         || 1 == m_xDoc->getReferenceCount() )
@@ -945,7 +945,7 @@ void SwHTMLParser::NextToken( int nToken )
         // Was the import cancelled by SFX? If a pending stack
         // exists, clean it.
         eState = SvParserState::Error;
-        OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken,
+        OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken != HtmlTokenId::NONE,
                 "SwHTMLParser::NextToken: Pending-Stack without token" );
         if( 1 == m_xDoc->getReferenceCount() || !m_pPendStack )
             return ;
@@ -957,15 +957,15 @@ void SwHTMLParser::NextToken( int nToken )
         switch( nToken )
         {
             // tables are read by recursive method calls
-        case HTML_TABLE_ON:
+        case HtmlTokenId::TABLE_ON:
             // For CSS declarations we might have to wait
             // for a file download to finish
-        case HTML_LINK:
+        case HtmlTokenId::LINK:
             // For controls we might have to set the size.
-        case HTML_INPUT:
-        case HTML_TEXTAREA_ON:
-        case HTML_SELECT_ON:
-        case HTML_SELECT_OFF:
+        case HtmlTokenId::INPUT:
+        case HtmlTokenId::TEXTAREA_ON:
+        case HtmlTokenId::SELECT_ON:
+        case HtmlTokenId::SELECT_OFF:
             break;
         default:
             OSL_ENSURE( !m_pPendStack, "Unbekanntes Token fuer Pending-Stack" );
@@ -983,7 +983,7 @@ void SwHTMLParser::NextToken( int nToken )
         {
             switch( nToken )
             {
-            case HTML_TITLE_OFF:
+            case HtmlTokenId::TITLE_OFF:
                 if( IsNewDoc() && !m_sTitle.isEmpty() )
                 {
                     if( m_xDoc->GetDocShell() ) {
@@ -1004,21 +1004,21 @@ void SwHTMLParser::NextToken( int nToken )
                 m_sTitle.clear();
                 break;
 
-            case HTML_NONBREAKSPACE:
+            case HtmlTokenId::NONBREAKSPACE:
                 m_sTitle += " ";
                 break;
 
-            case HTML_SOFTHYPH:
+            case HtmlTokenId::SOFTHYPH:
                 m_sTitle += "-";
                 break;
 
-            case HTML_TEXTTOKEN:
+            case HtmlTokenId::TEXTTOKEN:
                 m_sTitle += aToken;
                 break;
 
             default:
                 m_sTitle += "<";
-                if( (HTML_TOKEN_ONOFF & nToken) && (1 & nToken) )
+                if( (nToken >= HtmlTokenId::ONOFF_START) && isOffToken(nToken) )
                     m_sTitle += "/";
                 m_sTitle += sSaveToken;
                 if( !aToken.isEmpty() )
@@ -1052,7 +1052,7 @@ void SwHTMLParser::NextToken( int nToken )
         {
             // <SCRIPT> is ignored here (from us), because it is ignored in
             // Applets as well
-            if( HTML_IFRAME_OFF == nToken )
+            if( HtmlTokenId::IFRAME_OFF == nToken )
             {
                 m_bCallNextToken = false;
                 m_bInFloatingFrame = false;
@@ -1064,7 +1064,7 @@ void SwHTMLParser::NextToken( int nToken )
         {
             switch( nToken )
             {
-            case HTML_NOEMBED_OFF:
+            case HtmlTokenId::NOEMBED_OFF:
                 m_aContents = convertLineEnd(m_aContents, GetSystemLineEnd());
                 InsertComment( m_aContents, OOO_STRING_SVTOOLS_HTML_noembed );
                 m_aContents.clear();
@@ -1072,7 +1072,7 @@ void SwHTMLParser::NextToken( int nToken )
                 m_bInNoEmbed = false;
                 break;
 
-            case HTML_RAWDATA:
+            case HtmlTokenId::RAWDATA:
                 InsertCommentText( OOO_STRING_SVTOOLS_HTML_noembed );
                 break;
 
@@ -1091,18 +1091,18 @@ void SwHTMLParser::NextToken( int nToken )
 
             switch( nToken )
             {
-            case HTML_APPLET_OFF:
+            case HtmlTokenId::APPLET_OFF:
                 m_bCallNextToken = false;
                 EndApplet();
                 break;
-            case HTML_OBJECT_OFF:
+            case HtmlTokenId::OBJECT_OFF:
                 m_bCallNextToken = false;
                 EndObject();
                 break;
-
-            case HTML_PARAM:
+            case HtmlTokenId::PARAM:
                 InsertParam();
                 break;
+            default: break;
             }
 
             return;
@@ -1114,13 +1114,13 @@ void SwHTMLParser::NextToken( int nToken )
 
             switch( nToken )
             {
-            case HTML_TEXTAREA_OFF:
+            case HtmlTokenId::TEXTAREA_OFF:
                 m_bCallNextToken = false;
                 EndTextArea();
                 break;
 
             default:
-                InsertTextAreaText( static_cast< sal_uInt16 >(nToken) );
+                InsertTextAreaText( nToken );
                 break;
             }
 
@@ -1131,25 +1131,25 @@ void SwHTMLParser::NextToken( int nToken )
             // HAS to be treated after bNoScript!
             switch( nToken )
             {
-            case HTML_SELECT_OFF:
+            case HtmlTokenId::SELECT_OFF:
                 m_bCallNextToken = false;
                 EndSelect();
                 return;
 
-            case HTML_OPTION:
+            case HtmlTokenId::OPTION:
                 InsertSelectOption();
                 return;
 
-            case HTML_TEXTTOKEN:
+            case HtmlTokenId::TEXTTOKEN:
                 InsertSelectText();
                 return;
 
-            case HTML_INPUT:
-            case HTML_SCRIPT_ON:
-            case HTML_SCRIPT_OFF:
-            case HTML_NOSCRIPT_ON:
-            case HTML_NOSCRIPT_OFF:
-            case HTML_RAWDATA:
+            case HtmlTokenId::INPUT:
+            case HtmlTokenId::SCRIPT_ON:
+            case HtmlTokenId::SCRIPT_OFF:
+            case HtmlTokenId::NOSCRIPT_ON:
+            case HtmlTokenId::NOSCRIPT_OFF:
+            case HtmlTokenId::RAWDATA:
                 // treat in normal switch
                 break;
 
@@ -1165,14 +1165,15 @@ void SwHTMLParser::NextToken( int nToken )
             // script.
             switch( nToken )
             {
-            case HTML_MARQUEE_OFF:
+            case HtmlTokenId::MARQUEE_OFF:
                 m_bCallNextToken = false;
                 EndMarquee();
                 break;
 
-            case HTML_TEXTTOKEN:
+            case HtmlTokenId::TEXTTOKEN:
                 InsertMarqueeText();
                 break;
+            default: break;
             }
 
             return;
@@ -1181,14 +1182,15 @@ void SwHTMLParser::NextToken( int nToken )
         {
             switch( nToken )
             {
-            case HTML_SDFIELD_OFF:
+            case HtmlTokenId::SDFIELD_OFF:
                 m_bCallNextToken = false;
                 EndField();
                 break;
 
-            case HTML_TEXTTOKEN:
+            case HtmlTokenId::TEXTTOKEN:
                 InsertFieldText();
                 break;
+            default: break;
             }
 
             return;
@@ -1197,14 +1199,15 @@ void SwHTMLParser::NextToken( int nToken )
         {
             switch( nToken )
             {
-            case HTML_ANCHOR_OFF:
+            case HtmlTokenId::ANCHOR_OFF:
                 EndAnchor();
                 m_bCallNextToken = false;
                 break;
 
-            case HTML_TEXTTOKEN:
+            case HtmlTokenId::TEXTTOKEN:
                 InsertFootEndNoteText();
                 break;
+            default: break;
             }
             return;
         }
@@ -1231,17 +1234,17 @@ void SwHTMLParser::NextToken( int nToken )
             // end-token, </HEAD> or <BODY>. Text inside is ignored.
             switch( nToken )
             {
-            case HTML_UNKNOWNCONTROL_OFF:
+            case HtmlTokenId::UNKNOWNCONTROL_OFF:
                 if( m_aUnknownToken != sSaveToken )
                     return;
                 SAL_FALLTHROUGH;
-            case HTML_FRAMESET_ON:
-            case HTML_HEAD_OFF:
-            case HTML_BODY_ON:
-            case HTML_IMAGE:        // Don't know why Netscape acts this way.
+            case HtmlTokenId::FRAMESET_ON:
+            case HtmlTokenId::HEAD_OFF:
+            case HtmlTokenId::BODY_ON:
+            case HtmlTokenId::IMAGE:        // Don't know why Netscape acts this way.
                 m_aUnknownToken.clear();
                 break;
-            case HTML_TEXTTOKEN:
+            case HtmlTokenId::TEXTTOKEN:
                 return;
             default:
                 m_aUnknownToken.clear();
@@ -1252,7 +1255,7 @@ void SwHTMLParser::NextToken( int nToken )
 
     switch( nToken )
     {
-    case HTML_BODY_ON:
+    case HtmlTokenId::BODY_ON:
         if( !m_aStyleSource.isEmpty() )
         {
             m_pCSS1Parser->ParseStyleSheet( m_aStyleSource );
@@ -1276,11 +1279,11 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_LINK:
+    case HtmlTokenId::LINK:
         InsertLink();
         break;
 
-    case HTML_BASE:
+    case HtmlTokenId::BASE:
         {
             const HTMLOptions& rHTMLOptions = GetOptions();
             for (size_t i = rHTMLOptions.size(); i; )
@@ -1315,7 +1318,7 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_META:
+    case HtmlTokenId::META:
         {
             SvKeyValueIterator *pHTTPHeader = nullptr;
             if( IsNewDoc() )
@@ -1341,32 +1344,32 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_TITLE_ON:
+    case HtmlTokenId::TITLE_ON:
         m_bInTitle = true;
         break;
 
-    case HTML_SCRIPT_ON:
+    case HtmlTokenId::SCRIPT_ON:
         NewScript();
         break;
 
-    case HTML_SCRIPT_OFF:
+    case HtmlTokenId::SCRIPT_OFF:
         EndScript();
         break;
 
-    case HTML_NOSCRIPT_ON:
-    case HTML_NOSCRIPT_OFF:
+    case HtmlTokenId::NOSCRIPT_ON:
+    case HtmlTokenId::NOSCRIPT_OFF:
         bInsertUnknown = true;
         break;
 
-    case HTML_STYLE_ON:
+    case HtmlTokenId::STYLE_ON:
         NewStyle();
         break;
 
-    case HTML_STYLE_OFF:
+    case HtmlTokenId::STYLE_OFF:
         EndStyle();
         break;
 
-    case HTML_RAWDATA:
+    case HtmlTokenId::RAWDATA:
         if( !m_bIgnoreRawData )
         {
             if( IsReadScript() )
@@ -1382,26 +1385,26 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_OBJECT_ON:
+    case HtmlTokenId::OBJECT_ON:
 #if HAVE_FEATURE_JAVA
         NewObject();
         m_bCallNextToken = m_pAppletImpl!=nullptr && m_pTable!=nullptr;
 #endif
         break;
 
-    case HTML_APPLET_ON:
+    case HtmlTokenId::APPLET_ON:
 #if HAVE_FEATURE_JAVA
         InsertApplet();
         m_bCallNextToken = m_pAppletImpl!=nullptr && m_pTable!=nullptr;
 #endif
         break;
 
-    case HTML_IFRAME_ON:
+    case HtmlTokenId::IFRAME_ON:
         InsertFloatingFrame();
         m_bCallNextToken = m_bInFloatingFrame && m_pTable!=nullptr;
         break;
 
-    case HTML_LINEBREAK:
+    case HtmlTokenId::LINEBREAK:
         if( !IsReadPRE() )
         {
             InsertLineBreak();
@@ -1412,10 +1415,10 @@ void SwHTMLParser::NextToken( int nToken )
             // <BR>s in <PRE> resemble true LFs, hence no break
         SAL_FALLTHROUGH;
 
-    case HTML_NEWPARA:
+    case HtmlTokenId::NEWPARA:
         // CR in PRE/LISTING/XMP
         {
-            if( HTML_NEWPARA==nToken ||
+            if( HtmlTokenId::NEWPARA==nToken ||
                 m_pPam->GetPoint()->nContent.GetIndex() )
             {
                 AppendTextNode(); // there is no LF at this place
@@ -1428,15 +1431,15 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_NONBREAKSPACE:
+    case HtmlTokenId::NONBREAKSPACE:
         m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, OUString(CHAR_HARDBLANK) );
         break;
 
-    case HTML_SOFTHYPH:
+    case HtmlTokenId::SOFTHYPH:
         m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, OUString(CHAR_SOFTHYPHEN) );
         break;
 
-    case HTML_LINEFEEDCHAR:
+    case HtmlTokenId::LINEFEEDCHAR:
         if( m_pPam->GetPoint()->nContent.GetIndex() )
             AppendTextNode();
         if( !m_pTable && !m_xDoc->IsInHeaderFooter( m_pPam->GetPoint()->nNode ) )
@@ -1446,7 +1449,7 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_TEXTTOKEN:
+    case HtmlTokenId::TEXTTOKEN:
         // insert string without spanning attributes at the end.
         if( !aToken.isEmpty() && ' '==aToken[0] && !IsReadPRE() )
         {
@@ -1485,11 +1488,11 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_HORZRULE:
+    case HtmlTokenId::HORZRULE:
         InsertHorzRule();
         break;
 
-    case HTML_IMAGE:
+    case HtmlTokenId::IMAGE:
         InsertImage();
         // if only the parser references the doc, we can break and set
         // an error code
@@ -1499,183 +1502,183 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_SPACER:
+    case HtmlTokenId::SPACER:
         InsertSpacer();
         break;
 
-    case HTML_EMBED:
+    case HtmlTokenId::EMBED:
         InsertEmbed();
         break;
 
-    case HTML_NOEMBED_ON:
+    case HtmlTokenId::NOEMBED_ON:
         m_bInNoEmbed = true;
         m_bCallNextToken = m_pTable!=nullptr;
         ReadRawData( OOO_STRING_SVTOOLS_HTML_noembed );
         break;
 
-    case HTML_DEFLIST_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::DEFLIST_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
         NewDefList();
         break;
-    case HTML_DEFLIST_OFF:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::DEFLIST_OFF:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        EndDefListItem( 0, 1==m_nDefListDeep );
+        EndDefListItem( HtmlTokenId::NONE );
         EndDefList();
         break;
 
-    case HTML_DD_ON:
-    case HTML_DT_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::DD_ON:
+    case HtmlTokenId::DT_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
         EndDefListItem();// close <DD>/<DT> and set no template
         NewDefListItem( nToken );
         break;
 
-    case HTML_DD_OFF:
-    case HTML_DT_OFF:
-        // c.f. HTML_LI_OFF
+    case HtmlTokenId::DD_OFF:
+    case HtmlTokenId::DT_OFF:
+        // c.f. HtmlTokenId::LI_OFF
         // Actually we should close a DD/DT now.
         // But neither Netscape nor Microsoft do this and so don't we.
         EndDefListItem( nToken );
         break;
 
     // divisions
-    case HTML_DIVISION_ON:
-    case HTML_CENTER_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::DIVISION_ON:
+    case HtmlTokenId::CENTER_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
         {
             if( IsReadPRE() )
-                m_nOpenParaToken = 0;
+                m_nOpenParaToken = HtmlTokenId::NONE;
             else
                 EndPara();
         }
         NewDivision( nToken );
         break;
 
-    case HTML_DIVISION_OFF:
-    case HTML_CENTER_OFF:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::DIVISION_OFF:
+    case HtmlTokenId::CENTER_OFF:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
         {
             if( IsReadPRE() )
-                m_nOpenParaToken = 0;
+                m_nOpenParaToken = HtmlTokenId::NONE;
             else
                 EndPara();
         }
-        EndDivision( nToken );
+        EndDivision();
         break;
 
-    case HTML_MULTICOL_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::MULTICOL_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
         NewMultiCol();
         break;
 
-    case HTML_MULTICOL_OFF:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::MULTICOL_OFF:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        EndTag( HTML_MULTICOL_ON );
+        EndTag( HtmlTokenId::MULTICOL_ON );
         break;
 
-    case HTML_MARQUEE_ON:
+    case HtmlTokenId::MARQUEE_ON:
         NewMarquee();
         m_bCallNextToken = m_pMarquee!=nullptr && m_pTable!=nullptr;
         break;
 
-    case HTML_FORM_ON:
+    case HtmlTokenId::FORM_ON:
         NewForm();
         break;
-    case HTML_FORM_OFF:
+    case HtmlTokenId::FORM_OFF:
         EndForm();
         break;
 
     // templates
-    case HTML_PARABREAK_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::PARABREAK_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara( true );
         NewPara();
         break;
 
-    case HTML_PARABREAK_OFF:
+    case HtmlTokenId::PARABREAK_OFF:
         EndPara( true );
         break;
 
-    case HTML_ADDRESS_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::ADDRESS_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        NewTextFormatColl( HTML_ADDRESS_ON, RES_POOLCOLL_SENDADRESS );
+        NewTextFormatColl( HtmlTokenId::ADDRESS_ON, RES_POOLCOLL_SENDADRESS );
         break;
 
-    case HTML_ADDRESS_OFF:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::ADDRESS_OFF:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        EndTextFormatColl( HTML_ADDRESS_OFF );
+        EndTextFormatColl( HtmlTokenId::ADDRESS_OFF );
         break;
 
-    case HTML_BLOCKQUOTE_ON:
-    case HTML_BLOCKQUOTE30_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::BLOCKQUOTE_ON:
+    case HtmlTokenId::BLOCKQUOTE30_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        NewTextFormatColl( HTML_BLOCKQUOTE_ON, RES_POOLCOLL_HTML_BLOCKQUOTE );
+        NewTextFormatColl( HtmlTokenId::BLOCKQUOTE_ON, RES_POOLCOLL_HTML_BLOCKQUOTE );
         break;
 
-    case HTML_BLOCKQUOTE_OFF:
-    case HTML_BLOCKQUOTE30_OFF:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::BLOCKQUOTE_OFF:
+    case HtmlTokenId::BLOCKQUOTE30_OFF:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        EndTextFormatColl( HTML_BLOCKQUOTE_ON );
+        EndTextFormatColl( HtmlTokenId::BLOCKQUOTE_ON );
         break;
 
-    case HTML_PREFORMTXT_ON:
-    case HTML_LISTING_ON:
-    case HTML_XMP_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::PREFORMTXT_ON:
+    case HtmlTokenId::LISTING_ON:
+    case HtmlTokenId::XMP_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
         NewTextFormatColl( nToken, RES_POOLCOLL_HTML_PRE );
         break;
 
-    case HTML_PREFORMTXT_OFF:
+    case HtmlTokenId::PREFORMTXT_OFF:
         m_bNoParSpace = true; // the last PRE-paragraph gets a spacing
-        EndTextFormatColl( HTML_PREFORMTXT_OFF );
+        EndTextFormatColl( HtmlTokenId::PREFORMTXT_OFF );
         break;
 
-    case HTML_LISTING_OFF:
-    case HTML_XMP_OFF:
+    case HtmlTokenId::LISTING_OFF:
+    case HtmlTokenId::XMP_OFF:
         EndTextFormatColl( nToken );
         break;
 
-    case HTML_HEAD1_ON:
-    case HTML_HEAD2_ON:
-    case HTML_HEAD3_ON:
-    case HTML_HEAD4_ON:
-    case HTML_HEAD5_ON:
-    case HTML_HEAD6_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::HEAD1_ON:
+    case HtmlTokenId::HEAD2_ON:
+    case HtmlTokenId::HEAD3_ON:
+    case HtmlTokenId::HEAD4_ON:
+    case HtmlTokenId::HEAD5_ON:
+    case HtmlTokenId::HEAD6_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
         {
             if( IsReadPRE() )
-                m_nOpenParaToken = 0;
+                m_nOpenParaToken = HtmlTokenId::NONE;
             else
                 EndPara();
         }
         NewHeading( nToken );
         break;
 
-    case HTML_HEAD1_OFF:
-    case HTML_HEAD2_OFF:
-    case HTML_HEAD3_OFF:
-    case HTML_HEAD4_OFF:
-    case HTML_HEAD5_OFF:
-    case HTML_HEAD6_OFF:
+    case HtmlTokenId::HEAD1_OFF:
+    case HtmlTokenId::HEAD2_OFF:
+    case HtmlTokenId::HEAD3_OFF:
+    case HtmlTokenId::HEAD4_OFF:
+    case HtmlTokenId::HEAD5_OFF:
+    case HtmlTokenId::HEAD6_OFF:
         EndHeading();
         break;
 
-    case HTML_TABLE_ON:
+    case HtmlTokenId::TABLE_ON:
         if( m_pPendStack )
             BuildTable( SvxAdjust::End );
         else
         {
-            if( m_nOpenParaToken )
+            if( m_nOpenParaToken != HtmlTokenId::NONE )
                 EndPara();
             OSL_ENSURE( !m_pTable, "table in table not allowed here" );
             if( !m_pTable && (IsNewDoc() || !m_pPam->GetNode().FindTableNode()) &&
@@ -1698,189 +1701,189 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     // lists
-    case HTML_DIRLIST_ON:
-    case HTML_MENULIST_ON:
-    case HTML_ORDERLIST_ON:
-    case HTML_UNORDERLIST_ON:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::DIRLIST_ON:
+    case HtmlTokenId::MENULIST_ON:
+    case HtmlTokenId::ORDERLIST_ON:
+    case HtmlTokenId::UNORDERLIST_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
         NewNumBulList( nToken );
         break;
 
-    case HTML_DIRLIST_OFF:
-    case HTML_MENULIST_OFF:
-    case HTML_ORDERLIST_OFF:
-    case HTML_UNORDERLIST_OFF:
-        if( m_nOpenParaToken )
+    case HtmlTokenId::DIRLIST_OFF:
+    case HtmlTokenId::MENULIST_OFF:
+    case HtmlTokenId::ORDERLIST_OFF:
+    case HtmlTokenId::UNORDERLIST_OFF:
+        if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        EndNumBulListItem( 0, true, GetNumInfo().GetDepth()==1 );
+        EndNumBulListItem( HtmlTokenId::NONE, true, GetNumInfo().GetDepth()==1 );
         EndNumBulList( nToken );
         break;
 
-    case HTML_LI_ON:
-    case HTML_LISTHEADER_ON:
-        if( m_nOpenParaToken &&
+    case HtmlTokenId::LI_ON:
+    case HtmlTokenId::LISTHEADER_ON:
+        if( m_nOpenParaToken != HtmlTokenId::NONE &&
             (m_pPam->GetPoint()->nContent.GetIndex()
-            || HTML_PARABREAK_ON==m_nOpenParaToken) )
+            || HtmlTokenId::PARABREAK_ON==m_nOpenParaToken) )
         {
             // only finish paragraph for <P><LI>, not for <DD><LI>
             EndPara();
         }
 
-        EndNumBulListItem( 0, false );// close <LI>/<LH> and don't set a template
+        EndNumBulListItem( HtmlTokenId::NONE, false );// close <LI>/<LH> and don't set a template
         NewNumBulListItem( nToken );
         break;
 
-    case HTML_LI_OFF:
-    case HTML_LISTHEADER_OFF:
+    case HtmlTokenId::LI_OFF:
+    case HtmlTokenId::LISTHEADER_OFF:
         EndNumBulListItem( nToken, false );
         break;
 
     // Attribute :
-    case HTML_ITALIC_ON:
+    case HtmlTokenId::ITALIC_ON:
         {
             SvxPostureItem aPosture( ITALIC_NORMAL, RES_CHRATR_POSTURE );
             SvxPostureItem aPostureCJK( ITALIC_NORMAL, RES_CHRATR_CJK_POSTURE );
             SvxPostureItem aPostureCTL( ITALIC_NORMAL, RES_CHRATR_CTL_POSTURE );
-            NewStdAttr( HTML_ITALIC_ON,
+            NewStdAttr( HtmlTokenId::ITALIC_ON,
                            &m_aAttrTab.pItalic, aPosture,
                            &m_aAttrTab.pItalicCJK, &aPostureCJK,
                            &m_aAttrTab.pItalicCTL, &aPostureCTL );
         }
         break;
 
-    case HTML_BOLD_ON:
+    case HtmlTokenId::BOLD_ON:
         {
             SvxWeightItem aWeight( WEIGHT_BOLD, RES_CHRATR_WEIGHT );
             SvxWeightItem aWeightCJK( WEIGHT_BOLD, RES_CHRATR_CJK_WEIGHT );
             SvxWeightItem aWeightCTL( WEIGHT_BOLD, RES_CHRATR_CTL_WEIGHT );
-            NewStdAttr( HTML_BOLD_ON,
+            NewStdAttr( HtmlTokenId::BOLD_ON,
                         &m_aAttrTab.pBold, aWeight,
                         &m_aAttrTab.pBoldCJK, &aWeightCJK,
                         &m_aAttrTab.pBoldCTL, &aWeightCTL );
         }
         break;
 
-    case HTML_STRIKE_ON:
-    case HTML_STRIKETHROUGH_ON:
+    case HtmlTokenId::STRIKE_ON:
+    case HtmlTokenId::STRIKETHROUGH_ON:
         {
-            NewStdAttr( HTML_STRIKE_ON, &m_aAttrTab.pStrike,
+            NewStdAttr( HtmlTokenId::STRIKE_ON, &m_aAttrTab.pStrike,
                         SvxCrossedOutItem(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT) );
         }
         break;
 
-    case HTML_UNDERLINE_ON:
+    case HtmlTokenId::UNDERLINE_ON:
         {
-            NewStdAttr( HTML_UNDERLINE_ON, &m_aAttrTab.pUnderline,
+            NewStdAttr( HtmlTokenId::UNDERLINE_ON, &m_aAttrTab.pUnderline,
                         SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE) );
         }
         break;
 
-    case HTML_SUPERSCRIPT_ON:
+    case HtmlTokenId::SUPERSCRIPT_ON:
         {
-            NewStdAttr( HTML_SUPERSCRIPT_ON, &m_aAttrTab.pEscapement,
+            NewStdAttr( HtmlTokenId::SUPERSCRIPT_ON, &m_aAttrTab.pEscapement,
                         SvxEscapementItem(HTML_ESC_SUPER,HTML_ESC_PROP, RES_CHRATR_ESCAPEMENT) );
         }
         break;
 
-    case HTML_SUBSCRIPT_ON:
+    case HtmlTokenId::SUBSCRIPT_ON:
         {
-            NewStdAttr( HTML_SUBSCRIPT_ON, &m_aAttrTab.pEscapement,
+            NewStdAttr( HtmlTokenId::SUBSCRIPT_ON, &m_aAttrTab.pEscapement,
                         SvxEscapementItem(HTML_ESC_SUB,HTML_ESC_PROP, RES_CHRATR_ESCAPEMENT) );
         }
         break;
 
-    case HTML_BLINK_ON:
+    case HtmlTokenId::BLINK_ON:
         {
-            NewStdAttr( HTML_BLINK_ON, &m_aAttrTab.pBlink,
+            NewStdAttr( HtmlTokenId::BLINK_ON, &m_aAttrTab.pBlink,
                         SvxBlinkItem( true, RES_CHRATR_BLINK ) );
         }
         break;
 
-    case HTML_SPAN_ON:
-        NewStdAttr( HTML_SPAN_ON );
+    case HtmlTokenId::SPAN_ON:
+        NewStdAttr( HtmlTokenId::SPAN_ON );
         break;
 
-    case HTML_ITALIC_OFF:
-    case HTML_BOLD_OFF:
-    case HTML_STRIKE_OFF:
-    case HTML_UNDERLINE_OFF:
-    case HTML_SUPERSCRIPT_OFF:
-    case HTML_SUBSCRIPT_OFF:
-    case HTML_BLINK_OFF:
-    case HTML_SPAN_OFF:
+    case HtmlTokenId::ITALIC_OFF:
+    case HtmlTokenId::BOLD_OFF:
+    case HtmlTokenId::STRIKE_OFF:
+    case HtmlTokenId::UNDERLINE_OFF:
+    case HtmlTokenId::SUPERSCRIPT_OFF:
+    case HtmlTokenId::SUBSCRIPT_OFF:
+    case HtmlTokenId::BLINK_OFF:
+    case HtmlTokenId::SPAN_OFF:
         EndTag( nToken );
         break;
 
-    case HTML_STRIKETHROUGH_OFF:
-        EndTag( HTML_STRIKE_OFF );
+    case HtmlTokenId::STRIKETHROUGH_OFF:
+        EndTag( HtmlTokenId::STRIKE_OFF );
         break;
 
-    case HTML_BASEFONT_ON:
+    case HtmlTokenId::BASEFONT_ON:
         NewBasefontAttr();
         break;
-    case HTML_BASEFONT_OFF:
+    case HtmlTokenId::BASEFONT_OFF:
         EndBasefontAttr();
         break;
-    case HTML_FONT_ON:
-    case HTML_BIGPRINT_ON:
-    case HTML_SMALLPRINT_ON:
+    case HtmlTokenId::FONT_ON:
+    case HtmlTokenId::BIGPRINT_ON:
+    case HtmlTokenId::SMALLPRINT_ON:
         NewFontAttr( nToken );
         break;
-    case HTML_FONT_OFF:
-    case HTML_BIGPRINT_OFF:
-    case HTML_SMALLPRINT_OFF:
+    case HtmlTokenId::FONT_OFF:
+    case HtmlTokenId::BIGPRINT_OFF:
+    case HtmlTokenId::SMALLPRINT_OFF:
         EndFontAttr( nToken );
         break;
 
-    case HTML_EMPHASIS_ON:
-    case HTML_CITIATION_ON:
-    case HTML_STRONG_ON:
-    case HTML_CODE_ON:
-    case HTML_SAMPLE_ON:
-    case HTML_KEYBOARD_ON:
-    case HTML_VARIABLE_ON:
-    case HTML_DEFINSTANCE_ON:
-    case HTML_SHORTQUOTE_ON:
-    case HTML_LANGUAGE_ON:
-    case HTML_AUTHOR_ON:
-    case HTML_PERSON_ON:
-    case HTML_ACRONYM_ON:
-    case HTML_ABBREVIATION_ON:
-    case HTML_INSERTEDTEXT_ON:
-    case HTML_DELETEDTEXT_ON:
+    case HtmlTokenId::EMPHASIS_ON:
+    case HtmlTokenId::CITIATION_ON:
+    case HtmlTokenId::STRONG_ON:
+    case HtmlTokenId::CODE_ON:
+    case HtmlTokenId::SAMPLE_ON:
+    case HtmlTokenId::KEYBOARD_ON:
+    case HtmlTokenId::VARIABLE_ON:
+    case HtmlTokenId::DEFINSTANCE_ON:
+    case HtmlTokenId::SHORTQUOTE_ON:
+    case HtmlTokenId::LANGUAGE_ON:
+    case HtmlTokenId::AUTHOR_ON:
+    case HtmlTokenId::PERSON_ON:
+    case HtmlTokenId::ACRONYM_ON:
+    case HtmlTokenId::ABBREVIATION_ON:
+    case HtmlTokenId::INSERTEDTEXT_ON:
+    case HtmlTokenId::DELETEDTEXT_ON:
 
-    case HTML_TELETYPE_ON:
+    case HtmlTokenId::TELETYPE_ON:
         NewCharFormat( nToken );
         break;
 
-    case HTML_SDFIELD_ON:
+    case HtmlTokenId::SDFIELD_ON:
         NewField();
         m_bCallNextToken = m_bInField && m_pTable!=nullptr;
         break;
 
-    case HTML_EMPHASIS_OFF:
-    case HTML_CITIATION_OFF:
-    case HTML_STRONG_OFF:
-    case HTML_CODE_OFF:
-    case HTML_SAMPLE_OFF:
-    case HTML_KEYBOARD_OFF:
-    case HTML_VARIABLE_OFF:
-    case HTML_DEFINSTANCE_OFF:
-    case HTML_SHORTQUOTE_OFF:
-    case HTML_LANGUAGE_OFF:
-    case HTML_AUTHOR_OFF:
-    case HTML_PERSON_OFF:
-    case HTML_ACRONYM_OFF:
-    case HTML_ABBREVIATION_OFF:
-    case HTML_INSERTEDTEXT_OFF:
-    case HTML_DELETEDTEXT_OFF:
+    case HtmlTokenId::EMPHASIS_OFF:
+    case HtmlTokenId::CITIATION_OFF:
+    case HtmlTokenId::STRONG_OFF:
+    case HtmlTokenId::CODE_OFF:
+    case HtmlTokenId::SAMPLE_OFF:
+    case HtmlTokenId::KEYBOARD_OFF:
+    case HtmlTokenId::VARIABLE_OFF:
+    case HtmlTokenId::DEFINSTANCE_OFF:
+    case HtmlTokenId::SHORTQUOTE_OFF:
+    case HtmlTokenId::LANGUAGE_OFF:
+    case HtmlTokenId::AUTHOR_OFF:
+    case HtmlTokenId::PERSON_OFF:
+    case HtmlTokenId::ACRONYM_OFF:
+    case HtmlTokenId::ABBREVIATION_OFF:
+    case HtmlTokenId::INSERTEDTEXT_OFF:
+    case HtmlTokenId::DELETEDTEXT_OFF:
 
-    case HTML_TELETYPE_OFF:
+    case HtmlTokenId::TELETYPE_OFF:
         EndTag( nToken );
         break;
 
-    case HTML_HEAD_OFF:
+    case HtmlTokenId::HEAD_OFF:
         if( !m_aStyleSource.isEmpty() )
         {
             m_pCSS1Parser->ParseStyleSheet( m_aStyleSource );
@@ -1888,13 +1891,13 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_DOCTYPE:
-    case HTML_BODY_OFF:
-    case HTML_HTML_OFF:
-    case HTML_HEAD_ON:
-    case HTML_TITLE_OFF:
+    case HtmlTokenId::DOCTYPE:
+    case HtmlTokenId::BODY_OFF:
+    case HtmlTokenId::HTML_OFF:
+    case HtmlTokenId::HEAD_ON:
+    case HtmlTokenId::TITLE_OFF:
         break;      // don't evaluate further???
-    case HTML_HTML_ON:
+    case HtmlTokenId::HTML_ON:
         {
             const HTMLOptions& rHTMLOptions = GetOptions();
             for (size_t i = rHTMLOptions.size(); i; )
@@ -1917,29 +1920,29 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_INPUT:
+    case HtmlTokenId::INPUT:
         InsertInput();
         break;
 
-    case HTML_TEXTAREA_ON:
+    case HtmlTokenId::TEXTAREA_ON:
         NewTextArea();
         m_bCallNextToken = m_bTextArea && m_pTable!=nullptr;
         break;
 
-    case HTML_SELECT_ON:
+    case HtmlTokenId::SELECT_ON:
         NewSelect();
         m_bCallNextToken = m_bSelect && m_pTable!=nullptr;
         break;
 
-    case HTML_ANCHOR_ON:
+    case HtmlTokenId::ANCHOR_ON:
         NewAnchor();
         break;
 
-    case HTML_ANCHOR_OFF:
+    case HtmlTokenId::ANCHOR_OFF:
         EndAnchor();
         break;
 
-    case HTML_COMMENT:
+    case HtmlTokenId::COMMENT:
         if( ( aToken.getLength() > 5 ) && ( ! m_bIgnoreHTMLComments ) )
         {
             // insert as Post-It
@@ -1960,7 +1963,7 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_MAP_ON:
+    case HtmlTokenId::MAP_ON:
         // Image Maps are read asynchronously: At first only an image map is created
         // Areas are processed later. Nevertheless the
         // ImageMap is inserted into the IMap-Array, because it might be used
@@ -1979,29 +1982,29 @@ void SwHTMLParser::NextToken( int nToken )
         }
         break;
 
-    case HTML_MAP_OFF:
+    case HtmlTokenId::MAP_OFF:
         // there is no ImageMap anymore (don't delete IMap, because it's
         // already contained in the array!)
         m_pImageMap = nullptr;
         break;
 
-    case HTML_AREA:
+    case HtmlTokenId::AREA:
         if( m_pImageMap )
             ParseAreaOptions( m_pImageMap, m_sBaseURL, SFX_EVENT_MOUSEOVER_OBJECT,
                                          SFX_EVENT_MOUSEOUT_OBJECT );
         break;
 
-    case HTML_FRAMESET_ON:
+    case HtmlTokenId::FRAMESET_ON:
         bInsertUnknown = m_bKeepUnknown;
         break;
 
-    case HTML_NOFRAMES_ON:
+    case HtmlTokenId::NOFRAMES_ON:
         if( IsInHeader() )
             FinishHeader( true );
         bInsertUnknown = m_bKeepUnknown;
         break;
 
-    case HTML_UNKNOWNCONTROL_ON:
+    case HtmlTokenId::UNKNOWNCONTROL_ON:
         // Ignore content of unknown token in the header, if the token
         // does not start with a '!'.
         // (but judging from the code, also if does not start with a '%')
@@ -2023,7 +2026,7 @@ void SwHTMLParser::NextToken( int nToken )
     if( bInsertUnknown )
     {
         OUString aComment("HTML: <");
-        if( (HTML_TOKEN_ONOFF & nToken) != 0 && (1 & nToken) != 0 )
+        if( (nToken >= HtmlTokenId::ONOFF_START) && isOffToken(nToken) )
             aComment += "/";
         aComment += sSaveToken;
         if( !aToken.isEmpty() )
@@ -3401,7 +3404,7 @@ void SwHTMLParser::InsertAttrs( HTMLAttrs& rAttrs )
     }
 }
 
-void SwHTMLParser::NewStdAttr( int nToken )
+void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
 {
     OUString aId, aStyle, aLang, aDir;
     OUString aClass;
@@ -3432,7 +3435,7 @@ void SwHTMLParser::NewStdAttr( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3442,7 +3445,7 @@ void SwHTMLParser::NewStdAttr( int nToken )
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            if( HTML_SPAN_ON != nToken || aClass.isEmpty() ||
+            if( HtmlTokenId::SPAN_ON != nToken || aClass.isEmpty() ||
                 !CreateContainer( aClass, aItemSet, aPropInfo, pCntxt ) )
                 DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
@@ -3453,7 +3456,7 @@ void SwHTMLParser::NewStdAttr( int nToken )
     PushContext( pCntxt );
 }
 
-void SwHTMLParser::NewStdAttr( int nToken,
+void SwHTMLParser::NewStdAttr( HtmlTokenId nToken,
                                HTMLAttr **ppAttr, const SfxPoolItem & rItem,
                                HTMLAttr **ppAttr2, const SfxPoolItem *pItem2,
                                HTMLAttr **ppAttr3, const SfxPoolItem *pItem3 )
@@ -3486,7 +3489,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
     }
 
     // einen neuen Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3524,10 +3527,10 @@ void SwHTMLParser::NewStdAttr( int nToken,
     PushContext( pCntxt );
 }
 
-void SwHTMLParser::EndTag( int nToken )
+void SwHTMLParser::EndTag( HtmlTokenId nToken )
 {
     // den Kontext holen
-    HTMLAttrContext *pCntxt = PopContext( static_cast< sal_uInt16 >(nToken & ~1) );
+    HTMLAttrContext *pCntxt = PopContext( getOnToken(nToken) );
     if( pCntxt )
     {
         // und ggf. die Attribute beenden
@@ -3576,7 +3579,7 @@ void SwHTMLParser::NewBasefontAttr()
         nSize = 7;
 
     // einen neuen Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_BASEFONT_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::BASEFONT_ON );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3619,14 +3622,14 @@ void SwHTMLParser::NewBasefontAttr()
 
 void SwHTMLParser::EndBasefontAttr()
 {
-    EndTag( HTML_BASEFONT_ON );
+    EndTag( HtmlTokenId::BASEFONT_ON );
 
     // Stack-Unterlauf in Tabellen vermeiden
     if( m_aBaseFontStack.size() > m_nBaseFontStMin )
         m_aBaseFontStack.erase( m_aBaseFontStack.begin() + m_aBaseFontStack.size() - 1 );
 }
 
-void SwHTMLParser::NewFontAttr( int nToken )
+void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
 {
     sal_uInt16 nBaseSize =
         ( m_aBaseFontStack.size() > m_nBaseFontStMin
@@ -3650,7 +3653,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         switch( rOption.GetToken() )
         {
         case HtmlOptionId::SIZE:
-            if( HTML_FONT_ON==nToken && !rOption.GetString().isEmpty() )
+            if( HtmlTokenId::FONT_ON==nToken && !rOption.GetString().isEmpty() )
             {
                 sal_Int32 nSSize;
                 if( '+' == rOption.GetString()[0] ||
@@ -3669,14 +3672,14 @@ void SwHTMLParser::NewFontAttr( int nToken )
             }
             break;
         case HtmlOptionId::COLOR:
-            if( HTML_FONT_ON==nToken )
+            if( HtmlTokenId::FONT_ON==nToken )
             {
                 rOption.GetColor( aColor );
                 bColor = true;
             }
             break;
         case HtmlOptionId::FACE:
-            if( HTML_FONT_ON==nToken )
+            if( HtmlTokenId::FONT_ON==nToken )
                 aFace = rOption.GetString();
             break;
         case HtmlOptionId::ID:
@@ -3698,7 +3701,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         }
     }
 
-    if( HTML_FONT_ON != nToken )
+    if( HtmlTokenId::FONT_ON != nToken )
     {
         // HTML_BIGPRINT_ON oder HTML_SMALLPRINT_ON
 
@@ -3716,7 +3719,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         else
             nPoolId = 0;
 
-        if( HTML_BIGPRINT_ON == nToken )
+        if( HtmlTokenId::BIGPRINT_ON == nToken )
             nSize = ( nFontSize<7 ? nFontSize+1 : 7 );
         else
             nSize = ( nFontSize>1 ? nFontSize-1 : 1 );
@@ -3780,7 +3783,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext(nToken );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3844,7 +3847,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     m_aFontStack.push_back( nSize );
 }
 
-void SwHTMLParser::EndFontAttr( int nToken )
+void SwHTMLParser::EndFontAttr( HtmlTokenId nToken )
 {
     EndTag( nToken );
 
@@ -3893,9 +3896,9 @@ void SwHTMLParser::NewPara()
 
     // einen neuen Kontext anlegen
     HTMLAttrContext *pCntxt =
-        !aClass.isEmpty() ? new HTMLAttrContext( HTML_PARABREAK_ON,
+        !aClass.isEmpty() ? new HTMLAttrContext( HtmlTokenId::PARABREAK_ON,
                                              RES_POOLCOLL_TEXT, aClass )
-                     : new HTMLAttrContext( HTML_PARABREAK_ON );
+                     : new HTMLAttrContext( HtmlTokenId::PARABREAK_ON );
 
     // Styles parsen (Class nicht beruecksichtigen. Das geht nur, solange
     // keine der CSS1-Properties der Klasse hart formatiert werden muss!!!)
@@ -3925,13 +3928,13 @@ void SwHTMLParser::NewPara()
     // Laufbalkenanzeige
     ShowStatline();
 
-    OSL_ENSURE( !m_nOpenParaToken, "Jetzt geht ein offenes Absatz-Element verloren" );
-    m_nOpenParaToken = HTML_PARABREAK_ON;
+    OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE, "Jetzt geht ein offenes Absatz-Element verloren" );
+    m_nOpenParaToken = HtmlTokenId::PARABREAK_ON;
 }
 
 void SwHTMLParser::EndPara( bool bReal )
 {
-    if( HTML_LI_ON==m_nOpenParaToken && m_pTable )
+    if( HtmlTokenId::LI_ON==m_nOpenParaToken && m_pTable )
     {
 #if OSL_DEBUG_LEVEL > 0
         const SwNumRule *pNumRule = m_pPam->GetNode().GetTextNode()->GetNumRule();
@@ -3950,7 +3953,7 @@ void SwHTMLParser::EndPara( bool bReal )
 
     // wenn ein DD oder DT offen war, handelt es sich um eine
     // implizite Def-Liste, die jetzt beendet werden muss
-    if( (m_nOpenParaToken==HTML_DT_ON || m_nOpenParaToken==HTML_DD_ON) &&
+    if( (m_nOpenParaToken == HtmlTokenId::DT_ON || m_nOpenParaToken == HtmlTokenId::DD_ON) &&
         m_nDefListDeep)
     {
         m_nDefListDeep--;
@@ -3959,8 +3962,7 @@ void SwHTMLParser::EndPara( bool bReal )
     // den Kontext vom Stack holen. Er kann auch von einer implizit
     // geoeffneten Definitionsliste kommen
     HTMLAttrContext *pCntxt =
-        PopContext( static_cast< sal_uInt16 >(m_nOpenParaToken ? (m_nOpenParaToken & ~1)
-                                   : HTML_PARABREAK_ON) );
+        PopContext( m_nOpenParaToken != HtmlTokenId::NONE ? getOnToken(m_nOpenParaToken) : HtmlTokenId::PARABREAK_ON );
 
     // Attribute beenden
     if( pCntxt )
@@ -3974,10 +3976,10 @@ void SwHTMLParser::EndPara( bool bReal )
     if( bReal )
         SetTextCollAttrs();
 
-    m_nOpenParaToken = 0;
+    m_nOpenParaToken = HtmlTokenId::NONE;
 }
 
-void SwHTMLParser::NewHeading( int nToken )
+void SwHTMLParser::NewHeading( HtmlTokenId nToken )
 {
     m_eParaAdjust = SvxAdjust::End;
 
@@ -4021,17 +4023,17 @@ void SwHTMLParser::NewHeading( int nToken )
     sal_uInt16 nTextColl;
     switch( nToken )
     {
-    case HTML_HEAD1_ON:         nTextColl = RES_POOLCOLL_HEADLINE1;  break;
-    case HTML_HEAD2_ON:         nTextColl = RES_POOLCOLL_HEADLINE2;  break;
-    case HTML_HEAD3_ON:         nTextColl = RES_POOLCOLL_HEADLINE3;  break;
-    case HTML_HEAD4_ON:         nTextColl = RES_POOLCOLL_HEADLINE4;  break;
-    case HTML_HEAD5_ON:         nTextColl = RES_POOLCOLL_HEADLINE5;  break;
-    case HTML_HEAD6_ON:         nTextColl = RES_POOLCOLL_HEADLINE6;  break;
+    case HtmlTokenId::HEAD1_ON:         nTextColl = RES_POOLCOLL_HEADLINE1;  break;
+    case HtmlTokenId::HEAD2_ON:         nTextColl = RES_POOLCOLL_HEADLINE2;  break;
+    case HtmlTokenId::HEAD3_ON:         nTextColl = RES_POOLCOLL_HEADLINE3;  break;
+    case HtmlTokenId::HEAD4_ON:         nTextColl = RES_POOLCOLL_HEADLINE4;  break;
+    case HtmlTokenId::HEAD5_ON:         nTextColl = RES_POOLCOLL_HEADLINE5;  break;
+    case HtmlTokenId::HEAD6_ON:         nTextColl = RES_POOLCOLL_HEADLINE6;  break;
     default:                    nTextColl = RES_POOLCOLL_STANDARD;   break;
     }
 
     // den Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nTextColl, aClass );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nTextColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4078,15 +4080,16 @@ void SwHTMLParser::EndHeading()
     {
         switch( m_aContexts[--nPos]->GetToken() )
         {
-        case HTML_HEAD1_ON:
-        case HTML_HEAD2_ON:
-        case HTML_HEAD3_ON:
-        case HTML_HEAD4_ON:
-        case HTML_HEAD5_ON:
-        case HTML_HEAD6_ON:
+        case HtmlTokenId::HEAD1_ON:
+        case HtmlTokenId::HEAD2_ON:
+        case HtmlTokenId::HEAD3_ON:
+        case HtmlTokenId::HEAD4_ON:
+        case HtmlTokenId::HEAD5_ON:
+        case HtmlTokenId::HEAD6_ON:
             pCntxt = m_aContexts[nPos];
             m_aContexts.erase( m_aContexts.begin() + nPos );
             break;
+        default: break;
         }
     }
 
@@ -4104,7 +4107,7 @@ void SwHTMLParser::EndHeading()
     m_nFontStHeadStart = m_nFontStMin;
 }
 
-void SwHTMLParser::NewTextFormatColl( int nToken, sal_uInt16 nColl )
+void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
 {
     OUString aId, aStyle, aClass, aLang, aDir;
 
@@ -4137,23 +4140,23 @@ void SwHTMLParser::NewTextFormatColl( int nToken, sal_uInt16 nColl )
     SwHTMLAppendMode eMode = AM_NORMAL;
     switch( nToken )
     {
-    case HTML_LISTING_ON:
-    case HTML_XMP_ON:
+    case HtmlTokenId::LISTING_ON:
+    case HtmlTokenId::XMP_ON:
         // Diese beiden Tags werden jetzt auf die PRE-Vorlage gemappt.
         // Fuer dem Fall, dass ein CLASS angegeben ist, loeschen wir
         // es damit wir nicht die CLASS der PRE-Vorlage bekommen.
         aClass = aEmptyOUStr;
         SAL_FALLTHROUGH;
-    case HTML_BLOCKQUOTE_ON:
-    case HTML_BLOCKQUOTE30_ON:
-    case HTML_PREFORMTXT_ON:
+    case HtmlTokenId::BLOCKQUOTE_ON:
+    case HtmlTokenId::BLOCKQUOTE30_ON:
+    case HtmlTokenId::PREFORMTXT_ON:
         eMode = AM_SPACE;
         break;
-    case HTML_ADDRESS_ON:
+    case HtmlTokenId::ADDRESS_ON:
         eMode = AM_NOSPACE; // ADDRESS kann auf einen <P> ohne </P> folgen
         break;
-    case HTML_DT_ON:
-    case HTML_DD_ON:
+    case HtmlTokenId::DT_ON:
+    case HtmlTokenId::DD_ON:
         eMode = AM_SOFTNOSPACE;
         break;
     default:
@@ -4166,7 +4169,7 @@ void SwHTMLParser::NewTextFormatColl( int nToken, sal_uInt16 nColl )
         AddParSpace();
 
     // ... und in einem Kontext merken
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nColl, aClass );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4192,21 +4195,21 @@ void SwHTMLParser::NewTextFormatColl( int nToken, sal_uInt16 nColl )
     ShowStatline();
 }
 
-void SwHTMLParser::EndTextFormatColl( int nToken )
+void SwHTMLParser::EndTextFormatColl( HtmlTokenId nToken )
 {
     SwHTMLAppendMode eMode = AM_NORMAL;
-    switch( nToken & ~1 )
+    switch( getOnToken(nToken) )
     {
-    case HTML_BLOCKQUOTE_ON:
-    case HTML_BLOCKQUOTE30_ON:
-    case HTML_PREFORMTXT_ON:
-    case HTML_LISTING_ON:
-    case HTML_XMP_ON:
+    case HtmlTokenId::BLOCKQUOTE_ON:
+    case HtmlTokenId::BLOCKQUOTE30_ON:
+    case HtmlTokenId::PREFORMTXT_ON:
+    case HtmlTokenId::LISTING_ON:
+    case HtmlTokenId::XMP_ON:
         eMode = AM_SPACE;
         break;
-    case HTML_ADDRESS_ON:
-    case HTML_DT_ON:
-    case HTML_DD_ON:
+    case HtmlTokenId::ADDRESS_ON:
+    case HtmlTokenId::DT_ON:
+    case HtmlTokenId::DD_ON:
         eMode = AM_SOFTNOSPACE;
         break;
     default:
@@ -4219,7 +4222,7 @@ void SwHTMLParser::EndTextFormatColl( int nToken )
         AddParSpace();
 
     // den aktuellen Kontext vom Stack holen
-    HTMLAttrContext *pCntxt = PopContext( static_cast< sal_uInt16 >(nToken & ~1) );
+    HTMLAttrContext *pCntxt = PopContext( getOnToken(nToken) );
 
     // und noch Attribute beenden
     if( pCntxt )
@@ -4276,24 +4279,25 @@ void SwHTMLParser::NewDefList()
     auto nPos = m_aContexts.size();
     while( !bInDD && !bNotInDD && nPos>m_nContextStMin )
     {
-        sal_uInt16 nCntxtToken = m_aContexts[--nPos]->GetToken();
+        HtmlTokenId nCntxtToken = m_aContexts[--nPos]->GetToken();
         switch( nCntxtToken )
         {
-        case HTML_DEFLIST_ON:
-        case HTML_DIRLIST_ON:
-        case HTML_MENULIST_ON:
-        case HTML_ORDERLIST_ON:
-        case HTML_UNORDERLIST_ON:
+        case HtmlTokenId::DEFLIST_ON:
+        case HtmlTokenId::DIRLIST_ON:
+        case HtmlTokenId::MENULIST_ON:
+        case HtmlTokenId::ORDERLIST_ON:
+        case HtmlTokenId::UNORDERLIST_ON:
             bNotInDD = true;
             break;
-        case HTML_DD_ON:
+        case HtmlTokenId::DD_ON:
             bInDD = true;
             break;
+        default: break;
         }
     }
 
     // ... und in einem Kontext merken
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_DEFLIST_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::DEFLIST_ON );
 
     // darin auch die Raender merken
     sal_uInt16 nLeft=0, nRight=0;
@@ -4349,7 +4353,7 @@ void SwHTMLParser::EndDefList()
         m_nDefListDeep--;
 
     // den aktuellen Kontext vom Stack holen
-    HTMLAttrContext *pCntxt = PopContext( HTML_DEFLIST_ON );
+    HTMLAttrContext *pCntxt = PopContext( HtmlTokenId::DEFLIST_ON );
 
     // und noch Attribute beenden
     if( pCntxt )
@@ -4363,25 +4367,26 @@ void SwHTMLParser::EndDefList()
     SetTextCollAttrs();
 }
 
-void SwHTMLParser::NewDefListItem( int nToken )
+void SwHTMLParser::NewDefListItem( HtmlTokenId nToken )
 {
     // festellen, ob das DD/DT in einer DL vorkommt
     bool bInDefList = false, bNotInDefList = false;
     auto nPos = m_aContexts.size();
     while( !bInDefList && !bNotInDefList && nPos>m_nContextStMin )
     {
-        sal_uInt16 nCntxtToken = m_aContexts[--nPos]->GetToken();
+        HtmlTokenId nCntxtToken = m_aContexts[--nPos]->GetToken();
         switch( nCntxtToken )
         {
-        case HTML_DEFLIST_ON:
+        case HtmlTokenId::DEFLIST_ON:
             bInDefList = true;
             break;
-        case HTML_DIRLIST_ON:
-        case HTML_MENULIST_ON:
-        case HTML_ORDERLIST_ON:
-        case HTML_UNORDERLIST_ON:
+        case HtmlTokenId::DIRLIST_ON:
+        case HtmlTokenId::MENULIST_ON:
+        case HtmlTokenId::ORDERLIST_ON:
+        case HtmlTokenId::UNORDERLIST_ON:
             bNotInDefList = true;
             break;
+        default: break;
         }
     }
 
@@ -4389,47 +4394,48 @@ void SwHTMLParser::NewDefListItem( int nToken )
     if( !bInDefList )
     {
         m_nDefListDeep++;
-        OSL_ENSURE( !m_nOpenParaToken,
+        OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE,
                 "Jetzt geht ein offenes Absatz-Element verloren" );
-        m_nOpenParaToken = static_cast< sal_uInt16 >(nToken);
+        m_nOpenParaToken = nToken;
     }
 
-    NewTextFormatColl( nToken, static_cast< sal_uInt16 >(nToken==HTML_DD_ON ? RES_POOLCOLL_HTML_DD
+    NewTextFormatColl( nToken, static_cast< sal_uInt16 >(nToken==HtmlTokenId::DD_ON ? RES_POOLCOLL_HTML_DD
                                               : RES_POOLCOLL_HTML_DT) );
 }
 
-void SwHTMLParser::EndDefListItem( int nToken, bool /*bLastPara*/ )
+void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
 {
     // einen neuen Absatz aufmachen
-    if( !nToken && m_pPam->GetPoint()->nContent.GetIndex() )
+    if( nToken == HtmlTokenId::NONE && m_pPam->GetPoint()->nContent.GetIndex() )
         AppendTextNode( AM_SOFTNOSPACE );
 
     // Kontext zu dem Token suchen und vom Stack holen
-    nToken &= ~1;
+    nToken = getOnToken(nToken);
     HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     while( !pCntxt && nPos>m_nContextStMin )
     {
-        sal_uInt16 nCntxtToken = m_aContexts[--nPos]->GetToken();
+        HtmlTokenId nCntxtToken = m_aContexts[--nPos]->GetToken();
         switch( nCntxtToken )
         {
-        case HTML_DD_ON:
-        case HTML_DT_ON:
-            if( !nToken || nToken == nCntxtToken  )
+        case HtmlTokenId::DD_ON:
+        case HtmlTokenId::DT_ON:
+            if( nToken == HtmlTokenId::NONE || nToken == nCntxtToken  )
             {
                 pCntxt = m_aContexts[nPos];
                 m_aContexts.erase( m_aContexts.begin() + nPos );
             }
             break;
-        case HTML_DEFLIST_ON:
+        case HtmlTokenId::DEFLIST_ON:
             // keine DD/DT ausserhalb der aktuelen DefListe betrachten
-        case HTML_DIRLIST_ON:
-        case HTML_MENULIST_ON:
-        case HTML_ORDERLIST_ON:
-        case HTML_UNORDERLIST_ON:
+        case HtmlTokenId::DIRLIST_ON:
+        case HtmlTokenId::MENULIST_ON:
+        case HtmlTokenId::ORDERLIST_ON:
+        case HtmlTokenId::UNORDERLIST_ON:
             // und auch nicht ausserhalb einer anderen Liste
             nPos = m_nContextStMin;
             break;
+        default: break;
         }
     }
 
@@ -4742,7 +4748,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     }
 }
 
-void SwHTMLParser::NewCharFormat( int nToken )
+void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
 {
     OUString aId, aStyle, aLang, aDir;
     OUString aClass;
@@ -4773,10 +4779,10 @@ void SwHTMLParser::NewCharFormat( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
     // die Vorlage setzen und im Kontext merken
-    SwCharFormat* pCFormat = m_pCSS1Parser->GetChrFormat( static_cast< sal_uInt16 >(nToken), aClass );
+    SwCharFormat* pCFormat = m_pCSS1Parser->GetChrFormat( nToken, aClass );
     OSL_ENSURE( pCFormat, "keine Zeichenvorlage zu Token gefunden" );
 
     // Styles parsen (zu Class siehe auch NewPara)
@@ -5243,14 +5249,14 @@ void SwHTMLParser::InsertHorzRule()
 
     if( m_pPam->GetPoint()->nContent.GetIndex() )
         AppendTextNode( AM_NOSPACE );
-    if( m_nOpenParaToken )
+    if( m_nOpenParaToken != HtmlTokenId::NONE )
         EndPara();
     AppendTextNode();
     m_pPam->Move( fnMoveBackward );
 
     // ... und in einem Kontext merken
     HTMLAttrContext *pCntxt =
-        new HTMLAttrContext( HTML_HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr );
+        new HTMLAttrContext( HtmlTokenId::HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr );
 
     PushContext( pCntxt );
 
@@ -5343,7 +5349,7 @@ void SwHTMLParser::InsertHorzRule()
         InsertBookmark( aId );
 
     // den aktuellen Kontext vom Stack holen
-    HTMLAttrContext *pPoppedContext = PopContext( HTML_HORZRULE );
+    HTMLAttrContext *pPoppedContext = PopContext( HtmlTokenId::HORZRULE );
     OSL_ENSURE( pPoppedContext==pCntxt, "wo kommt denn da ein HR-Kontext her?" );
     delete pPoppedContext;
 
