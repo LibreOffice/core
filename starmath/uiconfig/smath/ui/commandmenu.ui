@@ -410,21 +410,21 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkMenuItem" id="item51">
+              <object class="GtkMenuItem" id="&lt;?&gt; in &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">a in A</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item52">
+              <object class="GtkMenuItem" id="&lt;?&gt; notin &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">a notin A</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item53">
+              <object class="GtkMenuItem" id="&lt;?&gt; owns &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A owns a</property>
@@ -437,84 +437,84 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item59">
+              <object class="GtkMenuItem" id="&lt;?&gt; intersection &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A intersection B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item60">
+              <object class="GtkMenuItem" id="&lt;?&gt; union &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A union B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item61">
+              <object class="GtkMenuItem" id="&lt;?&gt; setminus &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A \ B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item62">
+              <object class="GtkMenuItem" id="&lt;?&gt; slash &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A / B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item63">
+              <object class="GtkMenuItem" id="&lt;?&gt; subset &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A subset B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item64">
+              <object class="GtkMenuItem" id="&lt;?&gt; subseteq &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A subseteq B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item65">
+              <object class="GtkMenuItem" id="&lt;?&gt; supset &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A supset B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item66">
+              <object class="GtkMenuItem" id="&lt;?&gt; supseteq &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A supseteq B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item67">
+              <object class="GtkMenuItem" id="&lt;?&gt; nsubset &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A nsubset B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item68">
+              <object class="GtkMenuItem" id="&lt;?&gt; nsubseteq &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A nsubseteq B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item69">
+              <object class="GtkMenuItem" id="&lt;?&gt; nsupset &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A nsupset B</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item70">
+              <object class="GtkMenuItem" id="&lt;?&gt; nsupseteq &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">A nsupseteq B</property>
@@ -527,49 +527,49 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item72">
+              <object class="GtkMenuItem" id="emptyset ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">emptyset</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item73">
+              <object class="GtkMenuItem" id="aleph ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">aleph</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item74">
+              <object class="GtkMenuItem" id="setN ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">setN</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item75">
+              <object class="GtkMenuItem" id="setZ ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">setZ</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item76">
+              <object class="GtkMenuItem" id="setQ ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">setQ</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item77">
+              <object class="GtkMenuItem" id="setR ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">setR</property>
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item78">
+              <object class="GtkMenuItem" id="setC ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">setC</property>
@@ -971,7 +971,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="item122">
+              <object class="GtkMenuItem" id="bar &lt;?&gt; ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label">bar a</property>
