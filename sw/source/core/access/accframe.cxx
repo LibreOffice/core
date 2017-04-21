@@ -418,6 +418,7 @@ SwAccessibleFrame::SwAccessibleFrame( const SwRect& rVisArea,
     mbIsInPagePreview( bIsPagePreview ),
     bIsAccDocUse( false )
 {
+    assert(mpFrame);
 }
 
 SwAccessibleFrame::~SwAccessibleFrame()
