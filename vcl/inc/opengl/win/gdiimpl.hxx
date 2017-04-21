@@ -13,7 +13,9 @@
 #include <vcl/dllapi.h>
 
 #include "openglgdiimpl.hxx"
+#include "svdata.hxx"
 #include "win/salgdi.h"
+#include <o3tl/lru_map.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include "ControlCacheKey.hxx"
 
@@ -45,6 +47,18 @@ public:
     bool RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
                                      int nX, int nY , ControlCacheKey& aControlCacheKey);
 
+};
+
+typedef std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
+typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
+
+class TheTextureCache {
+    ControlCacheType cache;
+
+    TheTextureCache();
+
+public:
+    static ControlCacheType & get();
 };
 
 #endif

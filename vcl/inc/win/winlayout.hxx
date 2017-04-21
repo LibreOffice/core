@@ -72,28 +72,29 @@ struct GlobalGlyphCache
 
     PackedTextureAtlasManager maPackedTextureAtlas;
     std::unordered_set<GlyphCache*> maGlyphCaches;
+
+    static GlobalGlyphCache * get();
 };
 
 class GlyphCache
 {
 private:
-    static std::unique_ptr<GlobalGlyphCache> gGlobalGlyphCache;
     std::unordered_map<int, OpenGLGlyphDrawElement> maOpenGLTextureCache;
 
 public:
     GlyphCache()
     {
-        gGlobalGlyphCache.get()->maGlyphCaches.insert(this);
+        GlobalGlyphCache::get()->maGlyphCaches.insert(this);
     }
 
     ~GlyphCache()
     {
-        gGlobalGlyphCache.get()->maGlyphCaches.erase(this);
+        GlobalGlyphCache::get()->maGlyphCaches.erase(this);
     }
 
     static bool ReserveTextureSpace(OpenGLGlyphDrawElement& rElement, int nWidth, int nHeight)
     {
-        GlobalGlyphCache* pGlobalGlyphCache = gGlobalGlyphCache.get();
+        GlobalGlyphCache* pGlobalGlyphCache = GlobalGlyphCache::get();
         rElement.maTexture = pGlobalGlyphCache->maPackedTextureAtlas.Reserve(nWidth, nHeight);
         if (!rElement.maTexture)
             return false;

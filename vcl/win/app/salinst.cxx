@@ -31,6 +31,7 @@
 #include <vcl/timer.hxx>
 
 #include "opengl/salbmp.hxx"
+#include "opengl/win/gdiimpl.hxx"
 #include "win/wincomp.hxx"
 #include "win/salids.hrc"
 #include "win/saldata.hxx"

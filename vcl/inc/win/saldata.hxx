@@ -37,9 +37,11 @@ class WinSalFrame;
 class WinSalVirtualDevice;
 class WinSalPrinter;
 namespace vcl { class Font; }
+struct GlobalGlyphCache;
 struct HDCCache;
 struct TempFontItem;
 class TextOutRenderer;
+class TheTextureCache;
 
 #define MAX_STOCKPEN            4
 #define MAX_STOCKBRUSH          4
@@ -122,6 +124,8 @@ public:
 
     // must be deleted before exit(), so delete it in DeInitSalData()
     std::unique_ptr<TextOutRenderer> m_pTextOutRenderer;
+    std::unique_ptr<GlobalGlyphCache> m_pGlobalGlyphCache;
+    std::unique_ptr<TheTextureCache> m_pTextureCache;
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }

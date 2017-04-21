@@ -44,8 +44,13 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-// static initialization
-std::unique_ptr<GlobalGlyphCache> GlyphCache::gGlobalGlyphCache(new GlobalGlyphCache);
+GlobalGlyphCache * GlobalGlyphCache::get() {
+    SalData * data = GetSalData();
+    if (!data->m_pGlobalGlyphCache) {
+        data->m_pGlobalGlyphCache.reset(new GlobalGlyphCache);
+    }
+    return data->m_pGlobalGlyphCache.get();
+}
 
 bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics)
 {
