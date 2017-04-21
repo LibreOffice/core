@@ -1,0 +1,11 @@
+diff -ur icu.org/source/common/unicode/utf16.h icu/source/common/unicode/utf16.h
+--- icu.org/source/common/unicode/utf16.h	2017-02-03 19:57:23.000000000 +0100
++++ icu/source/common/unicode/utf16.h	2017-04-21 22:05:57.414397617 +0200
+@@ -321,6 +321,7 @@
+         (s)[(i)++]=(uint16_t)(((c)&0x3ff)|0xdc00); \
+     } else /* c>0x10ffff or not enough space */ { \
+         (isError)=TRUE; \
++        (void)(isError); \
+     } \
+ }
+ 
