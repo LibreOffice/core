@@ -18,11 +18,13 @@
 class TestHash : public CppUnit::TestFixture
 {
 public:
+    void testMD5();
     void testSHA1();
     void testSHA256();
     void testSHA512();
 
     CPPUNIT_TEST_SUITE(TestHash);
+    CPPUNIT_TEST(testMD5);
     CPPUNIT_TEST(testSHA1);
     CPPUNIT_TEST(testSHA256);
     CPPUNIT_TEST(testSHA512);
@@ -42,6 +44,16 @@ std::string tostring(const std::vector<unsigned char>& a)
     return aStrm.str();
 }
 
+}
+
+void TestHash::testMD5()
+{
+    comphelper::Hash aHash(comphelper::HashType::MD5);
+    const char* const pInput = "";
+    aHash.update(reinterpret_cast<const unsigned char*>(pInput), 0);
+    std::vector<unsigned char> calculate_hash = aHash.finalize();
+    CPPUNIT_ASSERT_EQUAL(size_t(16), calculate_hash.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("d41d8cd98f00b204e9800998ecf8427e"), tostring(calculate_hash));
 }
 
 void TestHash::testSHA1()
