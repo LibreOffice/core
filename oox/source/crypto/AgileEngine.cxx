@@ -13,6 +13,8 @@
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
 
+#include <comphelper/hash.hxx>
+
 namespace oox {
 namespace core {
 
@@ -25,9 +27,17 @@ bool hashCalc(std::vector<sal_uInt8>& output,
               const OUString& sAlgorithm )
 {
     if (sAlgorithm == "SHA1")
-        return Digest::sha1(output, input);
+    {
+        std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA1);
+        output = out;
+        return true;
+    }
     else if (sAlgorithm == "SHA512")
-        return Digest::sha512(output, input);
+    {
+        std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA512);
+        output = out;
+        return true;
+    }
     return false;
 }
 
