@@ -142,7 +142,7 @@ public:
 
 typedef ::std::vector<HTMLOption> HTMLOptions;
 
-class SVT_DLLPUBLIC HTMLParser : public SvParser
+class SVT_DLLPUBLIC HTMLParser : public SvParserHtmlTokenId
 {
 private:
     mutable HTMLOptions maOptions; // options of the start tag
@@ -164,19 +164,19 @@ private:
 
     sal_uInt32 nPre_LinePos;            // Pos in the line in the PRE-Tag
 
-    int mnPendingOffToken;          ///< OFF token pending for a <XX.../> ON/OFF ON token
+    HtmlTokenId mnPendingOffToken;          ///< OFF token pending for a <XX.../> ON/OFF ON token
 
     OUString aEndToken;
 
 protected:
     OUString sSaveToken;             // the read tag as string
 
-    int ScanText( const sal_Unicode cBreak = 0U );
+    HtmlTokenId ScanText( const sal_Unicode cBreak = 0U );
 
-    int GetNextRawToken();
+    HtmlTokenId GetNextRawToken();
 
     // scan next token
-    virtual int GetNextToken_() override;
+    virtual HtmlTokenId GetNextToken_() override;
 
     virtual ~HTMLParser() override;
 
@@ -198,15 +198,15 @@ public:
     // start PRE-/LISTING or XMP mode or filter tags respectively
     inline void StartPRE();
     void FinishPRE() { bReadPRE = false; }
-    int FilterPRE( int nToken );
+    HtmlTokenId FilterPRE( HtmlTokenId nToken );
 
     inline void StartListing();
     void FinishListing() { bReadListing = false; }
-    int FilterListing( int nToken );
+    HtmlTokenId FilterListing( HtmlTokenId nToken );
 
     inline void StartXMP();
     void FinishXMP() { bReadXMP = false; }
-    int FilterXMP( int nToken );
+    HtmlTokenId FilterXMP( HtmlTokenId nToken );
 
     void FinishTextArea() { bReadTextArea = false; }
 
@@ -217,7 +217,7 @@ public:
     // (PRE, XMP, ...) and set the flags. Is called by Continue before
     // NextToken is called. If you implement own loops or call
     // NextToken yourself, you should call this method beforehand.
-    int FilterToken( int nToken );
+    HtmlTokenId FilterToken( HtmlTokenId nToken );
 
     void ReadRawData( const OUString &rEndToken ) { aEndToken = rEndToken; }
 
@@ -230,7 +230,7 @@ public:
     const HTMLOptions& GetOptions( HtmlOptionId *pNoConvertToken=nullptr );
 
     // for asynchronous reading from the SvStream
-    virtual void Continue( int nToken ) override;
+    virtual void Continue( HtmlTokenId nToken ) override;
 
 
 protected:

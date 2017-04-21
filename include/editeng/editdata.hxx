@@ -27,9 +27,10 @@
 
 class SfxItemSet;
 class SfxPoolItem;
-class SvParser;
+template<typename T> class SvParser;
 class SvxFieldItem;
 class SvxRTFItemStackType;
+enum class HtmlTokenId : sal_Int16;
 
 enum EETextFormat       { EE_FORMAT_TEXT = 0x20, EE_FORMAT_RTF, EE_FORMAT_BIN = 0x31, EE_FORMAT_HTML, EE_FORMAT_XML };
 enum EEHorizontalTextDirection { EE_HTEXTDIR_DEFAULT, EE_HTEXTDIR_L2R, EE_HTEXTDIR_R2L };
@@ -219,24 +220,24 @@ enum class HtmlImportState {
 
 struct HtmlImportInfo
 {
-    SvParser*               pParser;
+    SvParserHtmlTokenId*    pParser;
     ESelection              aSelection;
     HtmlImportState         eState;
 
-    int                     nToken;
+    HtmlTokenId             nToken;
     short                   nTokenValue;
 
     OUString                aText;
 
     SfxItemSet*             pAttrs;
 
-    HtmlImportInfo( HtmlImportState eState, SvParser* pPrsrs, const ESelection& rSel );
+    HtmlImportInfo( HtmlImportState eState, SvParserHtmlTokenId* pPrsrs, const ESelection& rSel );
     ~HtmlImportInfo();
 };
 
 struct RtfImportInfo
 {
-    SvParser*               pParser;
+    SvParserInt*            pParser;
     ESelection              aSelection;
     RtfImportState          eState;
 
@@ -247,7 +248,7 @@ struct RtfImportInfo
 
     SvxRTFItemStackType*    pAttrs;
 
-    RtfImportInfo( RtfImportState eState, SvParser* pPrsrs, const ESelection& rSel );
+    RtfImportInfo( RtfImportState eState, SvParserInt* pPrsrs, const ESelection& rSel );
     ~RtfImportInfo();
 };
 

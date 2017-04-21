@@ -39,8 +39,8 @@ namespace dbaui
         bool            m_bSDNum;
 
     protected:
-        virtual void        NextToken( int nToken ) override; // base class
-        virtual bool        CreateTable(int nToken) override;
+        virtual void        NextToken( HtmlTokenId nToken ) override; // base class
+        bool                CreateTable( HtmlTokenId nToken );
         virtual TypeSelectionPageFactory
                             getTypeSelectionPageFactory() override;
 

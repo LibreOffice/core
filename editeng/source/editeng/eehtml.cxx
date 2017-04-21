@@ -99,11 +99,11 @@ SvParserState EditHTMLParser::CallParser(EditEngine* pEE, const EditPaM& rPaM)
     return _eState;
 }
 
-void EditHTMLParser::NextToken( int nToken )
+void EditHTMLParser::NextToken( HtmlTokenId nToken )
 {
     switch( nToken )
     {
-    case HTML_META:
+    case HtmlTokenId::META:
     {
         const HTMLOptions& aOptions = GetOptions();
         size_t nArrLen = aOptions.size();
@@ -134,33 +134,33 @@ void EditHTMLParser::NextToken( int nToken )
 
     }
     break;
-    case HTML_PLAINTEXT_ON:
-    case HTML_PLAINTEXT2_ON:
+    case HtmlTokenId::PLAINTEXT_ON:
+    case HtmlTokenId::PLAINTEXT2_ON:
         bInPara = true;
     break;
-    case HTML_PLAINTEXT_OFF:
-    case HTML_PLAINTEXT2_OFF:
+    case HtmlTokenId::PLAINTEXT_OFF:
+    case HtmlTokenId::PLAINTEXT2_OFF:
         bInPara = false;
     break;
 
-    case HTML_LINEBREAK:
-    case HTML_NEWPARA:
+    case HtmlTokenId::LINEBREAK:
+    case HtmlTokenId::NEWPARA:
     {
         if ( ( bInPara || nInTable ) &&
-            ( ( nToken == HTML_LINEBREAK ) || HasTextInCurrentPara() ) )
+            ( ( nToken == HtmlTokenId::LINEBREAK ) || HasTextInCurrentPara() ) )
         {
             ImpInsertParaBreak();
         }
     }
     break;
-    case HTML_HORZRULE:
+    case HtmlTokenId::HORZRULE:
     {
         if ( HasTextInCurrentPara() )
             ImpInsertParaBreak();
         ImpInsertParaBreak();
     }
     break;
-    case HTML_NONBREAKSPACE:
+    case HtmlTokenId::NONBREAKSPACE:
     {
         if ( bInPara )
         {
@@ -168,7 +168,7 @@ void EditHTMLParser::NextToken( int nToken )
         }
     }
     break;
-    case HTML_RAWDATA:
+    case HtmlTokenId::RAWDATA:
         if (IsReadStyle() && !aToken.isEmpty())
         {
             // Each token represents a single line.
@@ -176,7 +176,7 @@ void EditHTMLParser::NextToken( int nToken )
             maStyleSource.append('\n');
         }
     break;
-    case HTML_TEXTTOKEN:
+    case HtmlTokenId::TEXTTOKEN:
     {
         // #i110937# for <title> content, call aImportHdl (no SkipGroup), but don't insert the text into the EditEngine
         if (!bInTitle)
@@ -210,98 +210,98 @@ void EditHTMLParser::NextToken( int nToken )
     }
     break;
 
-    case HTML_CENTER_ON:
-    case HTML_CENTER_OFF:
+    case HtmlTokenId::CENTER_ON:
+    case HtmlTokenId::CENTER_OFF:
                             {
                                 sal_Int32 nNode = mpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
                                 SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
                                 aItems.ClearItem( EE_PARA_JUST );
-                                if ( nToken == HTML_CENTER_ON )
+                                if ( nToken == HtmlTokenId::CENTER_ON )
                                     aItems.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
                                 mpEditEngine->SetParaAttribsOnly(nNode, aItems);
                             }
                             break;
 
-    case HTML_ANCHOR_ON:    AnchorStart();
+    case HtmlTokenId::ANCHOR_ON:    AnchorStart();
                             break;
-    case HTML_ANCHOR_OFF:   AnchorEnd();
+    case HtmlTokenId::ANCHOR_OFF:   AnchorEnd();
                             break;
 
-    case HTML_PARABREAK_ON:
+    case HtmlTokenId::PARABREAK_ON:
         if( bInPara && HasTextInCurrentPara() )
             EndPara( true );
         StartPara( true );
         break;
 
-    case HTML_PARABREAK_OFF:
+    case HtmlTokenId::PARABREAK_OFF:
         if( bInPara )
             EndPara( true );
         break;
 
-    case HTML_HEAD1_ON:
-    case HTML_HEAD2_ON:
-    case HTML_HEAD3_ON:
-    case HTML_HEAD4_ON:
-    case HTML_HEAD5_ON:
-    case HTML_HEAD6_ON:
+    case HtmlTokenId::HEAD1_ON:
+    case HtmlTokenId::HEAD2_ON:
+    case HtmlTokenId::HEAD3_ON:
+    case HtmlTokenId::HEAD4_ON:
+    case HtmlTokenId::HEAD5_ON:
+    case HtmlTokenId::HEAD6_ON:
     {
         HeadingStart( nToken );
     }
     break;
 
-    case HTML_HEAD1_OFF:
-    case HTML_HEAD2_OFF:
-    case HTML_HEAD3_OFF:
-    case HTML_HEAD4_OFF:
-    case HTML_HEAD5_OFF:
-    case HTML_HEAD6_OFF:
+    case HtmlTokenId::HEAD1_OFF:
+    case HtmlTokenId::HEAD2_OFF:
+    case HtmlTokenId::HEAD3_OFF:
+    case HtmlTokenId::HEAD4_OFF:
+    case HtmlTokenId::HEAD5_OFF:
+    case HtmlTokenId::HEAD6_OFF:
     {
-        HeadingEnd( nToken );
+        HeadingEnd();
     }
     break;
 
-    case HTML_PREFORMTXT_ON:
-    case HTML_XMP_ON:
-    case HTML_LISTING_ON:
+    case HtmlTokenId::PREFORMTXT_ON:
+    case HtmlTokenId::XMP_ON:
+    case HtmlTokenId::LISTING_ON:
     {
         StartPara( true );
         ImpSetStyleSheet( STYLE_PRE );
     }
     break;
 
-    case HTML_DEFLIST_ON:
+    case HtmlTokenId::DEFLIST_ON:
     {
         nDefListLevel++;
     }
     break;
 
-    case HTML_DEFLIST_OFF:
+    case HtmlTokenId::DEFLIST_OFF:
     {
         if( nDefListLevel )
             nDefListLevel--;
     }
     break;
 
-    case HTML_TABLE_ON:     nInTable++;
+    case HtmlTokenId::TABLE_ON:     nInTable++;
                             break;
-    case HTML_TABLE_OFF:    DBG_ASSERT( nInTable, "Not in Table, but TABLE_OFF?" );
+    case HtmlTokenId::TABLE_OFF:    DBG_ASSERT( nInTable, "Not in Table, but TABLE_OFF?" );
                             nInTable--;
                             break;
 
-    case HTML_TABLEHEADER_ON:
-    case HTML_TABLEDATA_ON:
+    case HtmlTokenId::TABLEHEADER_ON:
+    case HtmlTokenId::TABLEDATA_ON:
         nInCell++;
         SAL_FALLTHROUGH;
-    case HTML_BLOCKQUOTE_ON:
-    case HTML_BLOCKQUOTE_OFF:
-    case HTML_BLOCKQUOTE30_ON:
-    case HTML_BLOCKQUOTE30_OFF:
-    case HTML_LISTHEADER_ON:
-    case HTML_LI_ON:
-    case HTML_DD_ON:
-    case HTML_DT_ON:
-    case HTML_ORDERLIST_ON:
-    case HTML_UNORDERLIST_ON:
+    case HtmlTokenId::BLOCKQUOTE_ON:
+    case HtmlTokenId::BLOCKQUOTE_OFF:
+    case HtmlTokenId::BLOCKQUOTE30_ON:
+    case HtmlTokenId::BLOCKQUOTE30_OFF:
+    case HtmlTokenId::LISTHEADER_ON:
+    case HtmlTokenId::LI_ON:
+    case HtmlTokenId::DD_ON:
+    case HtmlTokenId::DT_ON:
+    case HtmlTokenId::ORDERLIST_ON:
+    case HtmlTokenId::UNORDERLIST_ON:
     {
         bool bHasText = HasTextInCurrentPara();
         if ( bHasText )
@@ -310,182 +310,182 @@ void EditHTMLParser::NextToken( int nToken )
     }
     break;
 
-    case HTML_TABLEHEADER_OFF:
-    case HTML_TABLEDATA_OFF:
+    case HtmlTokenId::TABLEHEADER_OFF:
+    case HtmlTokenId::TABLEDATA_OFF:
     {
         if ( nInCell )
             nInCell--;
         SAL_FALLTHROUGH;
     }
-    case HTML_LISTHEADER_OFF:
-    case HTML_LI_OFF:
-    case HTML_DD_OFF:
-    case HTML_DT_OFF:
-    case HTML_ORDERLIST_OFF:
-    case HTML_UNORDERLIST_OFF:  EndPara( false );
+    case HtmlTokenId::LISTHEADER_OFF:
+    case HtmlTokenId::LI_OFF:
+    case HtmlTokenId::DD_OFF:
+    case HtmlTokenId::DT_OFF:
+    case HtmlTokenId::ORDERLIST_OFF:
+    case HtmlTokenId::UNORDERLIST_OFF:  EndPara( false );
                                 break;
 
-    case HTML_TABLEROW_ON:
-    case HTML_TABLEROW_OFF: // A RETURN only after a CELL, for Calc
+    case HtmlTokenId::TABLEROW_ON:
+    case HtmlTokenId::TABLEROW_OFF: // A RETURN only after a CELL, for Calc
 
-    case HTML_COL_ON:
-    case HTML_COLGROUP_ON:
-    case HTML_COLGROUP_OFF: break;
+    case HtmlTokenId::COL_ON:
+    case HtmlTokenId::COLGROUP_ON:
+    case HtmlTokenId::COLGROUP_OFF: break;
 
-    case HTML_FONT_ON:
+    case HtmlTokenId::FONT_ON:
                             break;
-    case HTML_FONT_OFF:
+    case HtmlTokenId::FONT_OFF:
                             break;
 
-    case HTML_TITLE_ON:
+    case HtmlTokenId::TITLE_ON:
         bInTitle = true;
         break;
-    case HTML_TITLE_OFF:
+    case HtmlTokenId::TITLE_OFF:
         bInTitle = false;
         break;
 
     // globals
-    case HTML_HTML_ON:
-    case HTML_HTML_OFF:
-    case HTML_STYLE_ON:
-    case HTML_STYLE_OFF:
-    case HTML_BODY_ON:
-    case HTML_BODY_OFF:
-    case HTML_HEAD_ON:
-    case HTML_HEAD_OFF:
-    case HTML_FORM_ON:
-    case HTML_FORM_OFF:
-    case HTML_THEAD_ON:
-    case HTML_THEAD_OFF:
-    case HTML_TBODY_ON:
-    case HTML_TBODY_OFF:
+    case HtmlTokenId::HTML_ON:
+    case HtmlTokenId::HTML_OFF:
+    case HtmlTokenId::STYLE_ON:
+    case HtmlTokenId::STYLE_OFF:
+    case HtmlTokenId::BODY_ON:
+    case HtmlTokenId::BODY_OFF:
+    case HtmlTokenId::HEAD_ON:
+    case HtmlTokenId::HEAD_OFF:
+    case HtmlTokenId::FORM_ON:
+    case HtmlTokenId::FORM_OFF:
+    case HtmlTokenId::THEAD_ON:
+    case HtmlTokenId::THEAD_OFF:
+    case HtmlTokenId::TBODY_ON:
+    case HtmlTokenId::TBODY_OFF:
     // inline elements, structural markup
     // HTML 3.0
-    case HTML_BANNER_ON:
-    case HTML_BANNER_OFF:
-    case HTML_DIVISION_ON:
-    case HTML_DIVISION_OFF:
-//  case HTML_LISTHEADER_ON:        //! special handling
-//  case HTML_LISTHEADER_OFF:
-    case HTML_NOTE_ON:
-    case HTML_NOTE_OFF:
+    case HtmlTokenId::BANNER_ON:
+    case HtmlTokenId::BANNER_OFF:
+    case HtmlTokenId::DIVISION_ON:
+    case HtmlTokenId::DIVISION_OFF:
+//  case HtmlTokenId::LISTHEADER_ON:        //! special handling
+//  case HtmlTokenId::LISTHEADER_OFF:
+    case HtmlTokenId::NOTE_ON:
+    case HtmlTokenId::NOTE_OFF:
     // inline elements, logical markup
     // HTML 2.0
-    case HTML_ADDRESS_ON:
-    case HTML_ADDRESS_OFF:
-//  case HTML_BLOCKQUOTE_ON:        //! special handling
-//  case HTML_BLOCKQUOTE_OFF:
-    case HTML_CITIATION_ON:
-    case HTML_CITIATION_OFF:
-    case HTML_CODE_ON:
-    case HTML_CODE_OFF:
-    case HTML_DEFINSTANCE_ON:
-    case HTML_DEFINSTANCE_OFF:
-    case HTML_EMPHASIS_ON:
-    case HTML_EMPHASIS_OFF:
-    case HTML_KEYBOARD_ON:
-    case HTML_KEYBOARD_OFF:
-    case HTML_SAMPLE_ON:
-    case HTML_SAMPLE_OFF:
-    case HTML_STRIKE_ON:
-    case HTML_STRIKE_OFF:
-    case HTML_STRONG_ON:
-    case HTML_STRONG_OFF:
-    case HTML_VARIABLE_ON:
-    case HTML_VARIABLE_OFF:
+    case HtmlTokenId::ADDRESS_ON:
+    case HtmlTokenId::ADDRESS_OFF:
+//  case HtmlTokenId::BLOCKQUOTE_ON:        //! special handling
+//  case HtmlTokenId::BLOCKQUOTE_OFF:
+    case HtmlTokenId::CITIATION_ON:
+    case HtmlTokenId::CITIATION_OFF:
+    case HtmlTokenId::CODE_ON:
+    case HtmlTokenId::CODE_OFF:
+    case HtmlTokenId::DEFINSTANCE_ON:
+    case HtmlTokenId::DEFINSTANCE_OFF:
+    case HtmlTokenId::EMPHASIS_ON:
+    case HtmlTokenId::EMPHASIS_OFF:
+    case HtmlTokenId::KEYBOARD_ON:
+    case HtmlTokenId::KEYBOARD_OFF:
+    case HtmlTokenId::SAMPLE_ON:
+    case HtmlTokenId::SAMPLE_OFF:
+    case HtmlTokenId::STRIKE_ON:
+    case HtmlTokenId::STRIKE_OFF:
+    case HtmlTokenId::STRONG_ON:
+    case HtmlTokenId::STRONG_OFF:
+    case HtmlTokenId::VARIABLE_ON:
+    case HtmlTokenId::VARIABLE_OFF:
     // HTML 3.0
-    case HTML_ABBREVIATION_ON:
-    case HTML_ABBREVIATION_OFF:
-    case HTML_ACRONYM_ON:
-    case HTML_ACRONYM_OFF:
-    case HTML_AUTHOR_ON:
-    case HTML_AUTHOR_OFF:
-//  case HTML_BLOCKQUOTE30_ON:      //! special handling
-//  case HTML_BLOCKQUOTE30_OFF:
-    case HTML_DELETEDTEXT_ON:
-    case HTML_DELETEDTEXT_OFF:
-    case HTML_INSERTEDTEXT_ON:
-    case HTML_INSERTEDTEXT_OFF:
-    case HTML_LANGUAGE_ON:
-    case HTML_LANGUAGE_OFF:
-    case HTML_PERSON_ON:
-    case HTML_PERSON_OFF:
-    case HTML_SHORTQUOTE_ON:
-    case HTML_SHORTQUOTE_OFF:
-    case HTML_SUBSCRIPT_ON:
-    case HTML_SUBSCRIPT_OFF:
-    case HTML_SUPERSCRIPT_ON:
-    case HTML_SUPERSCRIPT_OFF:
+    case HtmlTokenId::ABBREVIATION_ON:
+    case HtmlTokenId::ABBREVIATION_OFF:
+    case HtmlTokenId::ACRONYM_ON:
+    case HtmlTokenId::ACRONYM_OFF:
+    case HtmlTokenId::AUTHOR_ON:
+    case HtmlTokenId::AUTHOR_OFF:
+//  case HtmlTokenId::BLOCKQUOTE30_ON:      //! special handling
+//  case HtmlTokenId::BLOCKQUOTE30_OFF:
+    case HtmlTokenId::DELETEDTEXT_ON:
+    case HtmlTokenId::DELETEDTEXT_OFF:
+    case HtmlTokenId::INSERTEDTEXT_ON:
+    case HtmlTokenId::INSERTEDTEXT_OFF:
+    case HtmlTokenId::LANGUAGE_ON:
+    case HtmlTokenId::LANGUAGE_OFF:
+    case HtmlTokenId::PERSON_ON:
+    case HtmlTokenId::PERSON_OFF:
+    case HtmlTokenId::SHORTQUOTE_ON:
+    case HtmlTokenId::SHORTQUOTE_OFF:
+    case HtmlTokenId::SUBSCRIPT_ON:
+    case HtmlTokenId::SUBSCRIPT_OFF:
+    case HtmlTokenId::SUPERSCRIPT_ON:
+    case HtmlTokenId::SUPERSCRIPT_OFF:
     // inline elements, visual markup
     // HTML 2.0
-    case HTML_BOLD_ON:
-    case HTML_BOLD_OFF:
-    case HTML_ITALIC_ON:
-    case HTML_ITALIC_OFF:
-    case HTML_TELETYPE_ON:
-    case HTML_TELETYPE_OFF:
-    case HTML_UNDERLINE_ON:
-    case HTML_UNDERLINE_OFF:
+    case HtmlTokenId::BOLD_ON:
+    case HtmlTokenId::BOLD_OFF:
+    case HtmlTokenId::ITALIC_ON:
+    case HtmlTokenId::ITALIC_OFF:
+    case HtmlTokenId::TELETYPE_ON:
+    case HtmlTokenId::TELETYPE_OFF:
+    case HtmlTokenId::UNDERLINE_ON:
+    case HtmlTokenId::UNDERLINE_OFF:
     // HTML 3.0
-    case HTML_BIGPRINT_ON:
-    case HTML_BIGPRINT_OFF:
-    case HTML_STRIKETHROUGH_ON:
-    case HTML_STRIKETHROUGH_OFF:
-    case HTML_SMALLPRINT_ON:
-    case HTML_SMALLPRINT_OFF:
+    case HtmlTokenId::BIGPRINT_ON:
+    case HtmlTokenId::BIGPRINT_OFF:
+    case HtmlTokenId::STRIKETHROUGH_ON:
+    case HtmlTokenId::STRIKETHROUGH_OFF:
+    case HtmlTokenId::SMALLPRINT_ON:
+    case HtmlTokenId::SMALLPRINT_OFF:
     // figures
-    case HTML_FIGURE_ON:
-    case HTML_FIGURE_OFF:
-    case HTML_CAPTION_ON:
-    case HTML_CAPTION_OFF:
-    case HTML_CREDIT_ON:
-    case HTML_CREDIT_OFF:
+    case HtmlTokenId::FIGURE_ON:
+    case HtmlTokenId::FIGURE_OFF:
+    case HtmlTokenId::CAPTION_ON:
+    case HtmlTokenId::CAPTION_OFF:
+    case HtmlTokenId::CREDIT_ON:
+    case HtmlTokenId::CREDIT_OFF:
     // misc
-    case HTML_DIRLIST_ON:
-    case HTML_DIRLIST_OFF:
-    case HTML_FOOTNOTE_ON:          //! land so im Text
-    case HTML_FOOTNOTE_OFF:
-    case HTML_MENULIST_ON:
-    case HTML_MENULIST_OFF:
-//  case HTML_PLAINTEXT_ON:         //! special handling
-//  case HTML_PLAINTEXT_OFF:
-//  case HTML_PREFORMTXT_ON:        //! special handling
-//  case HTML_PREFORMTXT_OFF:
-    case HTML_SPAN_ON:
-    case HTML_SPAN_OFF:
+    case HtmlTokenId::DIRLIST_ON:
+    case HtmlTokenId::DIRLIST_OFF:
+    case HtmlTokenId::FOOTNOTE_ON:          //! land so im Text
+    case HtmlTokenId::FOOTNOTE_OFF:
+    case HtmlTokenId::MENULIST_ON:
+    case HtmlTokenId::MENULIST_OFF:
+//  case HtmlTokenId::PLAINTEXT_ON:         //! special handling
+//  case HtmlTokenId::PLAINTEXT_OFF:
+//  case HtmlTokenId::PREFORMTXT_ON:        //! special handling
+//  case HtmlTokenId::PREFORMTXT_OFF:
+    case HtmlTokenId::SPAN_ON:
+    case HtmlTokenId::SPAN_OFF:
     // obsolete
-//  case HTML_XMP_ON:               //! special handling
-//  case HTML_XMP_OFF:
-//  case HTML_LISTING_ON:           //! special handling
-//  case HTML_LISTING_OFF:
+//  case HtmlTokenId::XMP_ON:               //! special handling
+//  case HtmlTokenId::XMP_OFF:
+//  case HtmlTokenId::LISTING_ON:           //! special handling
+//  case HtmlTokenId::LISTING_OFF:
     // Netscape
-    case HTML_BLINK_ON:
-    case HTML_BLINK_OFF:
-    case HTML_NOBR_ON:
-    case HTML_NOBR_OFF:
-    case HTML_NOEMBED_ON:
-    case HTML_NOEMBED_OFF:
-    case HTML_NOFRAMES_ON:
-    case HTML_NOFRAMES_OFF:
+    case HtmlTokenId::BLINK_ON:
+    case HtmlTokenId::BLINK_OFF:
+    case HtmlTokenId::NOBR_ON:
+    case HtmlTokenId::NOBR_OFF:
+    case HtmlTokenId::NOEMBED_ON:
+    case HtmlTokenId::NOEMBED_OFF:
+    case HtmlTokenId::NOFRAMES_ON:
+    case HtmlTokenId::NOFRAMES_OFF:
     // Internet Explorer
-    case HTML_MARQUEE_ON:
-    case HTML_MARQUEE_OFF:
-//  case HTML_PLAINTEXT2_ON:        //! special handling
-//  case HTML_PLAINTEXT2_OFF:
+    case HtmlTokenId::MARQUEE_ON:
+    case HtmlTokenId::MARQUEE_OFF:
+//  case HtmlTokenId::PLAINTEXT2_ON:        //! special handling
+//  case HtmlTokenId::PLAINTEXT2_OFF:
     break;
 
     default:
     {
-        if ( nToken & HTML_TOKEN_ONOFF )
+        if ( nToken >= HtmlTokenId::ONOFF_START )
         {
-            if ( ( nToken == HTML_UNKNOWNCONTROL_ON ) || ( nToken == HTML_UNKNOWNCONTROL_OFF ) )
+            if ( ( nToken == HtmlTokenId::UNKNOWNCONTROL_ON ) || ( nToken == HtmlTokenId::UNKNOWNCONTROL_OFF ) )
             {
                 ;
             }
-            else if ( !(nToken & 1) )
+            else if ( !isOffToken(nToken) )
             {
-                DBG_ASSERT( !( nToken & 1 ), "No Start-Token ?!" );
-                SkipGroup( nToken + 1 );
+                DBG_ASSERT( !isOffToken( nToken ), "No Start-Token ?!" );
+                SkipGroup( static_cast<HtmlTokenId>((int)nToken + 1) );
             }
         }
     }
@@ -496,9 +496,9 @@ void EditHTMLParser::NextToken( int nToken )
         HtmlImportInfo aImportInfo(HtmlImportState::NextToken, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.nToken = nToken;
         aImportInfo.nTokenValue = (short)nTokenValue;
-        if ( nToken == HTML_TEXTTOKEN )
+        if ( nToken == HtmlTokenId::TEXTTOKEN )
             aImportInfo.aText = aToken;
-        else if (nToken == HTML_STYLE_OFF)
+        else if (nToken == HtmlTokenId::STYLE_OFF)
             aImportInfo.aText = maStyleSource.makeStringAndClear();
         mpEditEngine->CallHtmlImportHandler(aImportInfo);
     }
@@ -669,26 +669,27 @@ void EditHTMLParser::ImpInsertText( const OUString& rText )
     aCurSel = mpEditEngine->InsertText(aCurSel, rText);
 }
 
-void EditHTMLParser::SkipGroup( int nEndToken )
+void EditHTMLParser::SkipGroup( HtmlTokenId nEndToken )
 {
     // groups in cells are closed upon leaving the cell, because those
     // ******* web authors don't know their job
     // for example: <td><form></td>   lacks a closing </form>
     sal_uInt8 nCellLevel = nInCell;
-    int nToken;
-    while( nCellLevel <= nInCell && ( (nToken = GetNextToken() ) != nEndToken ) && nToken )
+    HtmlTokenId nToken;
+    while( nCellLevel <= nInCell && ( (nToken = GetNextToken() ) != nEndToken ) && nToken != HtmlTokenId::NONE )
     {
         switch ( nToken )
         {
-            case HTML_TABLEHEADER_ON:
-            case HTML_TABLEDATA_ON:
+            case HtmlTokenId::TABLEHEADER_ON:
+            case HtmlTokenId::TABLEDATA_ON:
                 nInCell++;
             break;
-            case HTML_TABLEHEADER_OFF:
-            case HTML_TABLEDATA_OFF:
+            case HtmlTokenId::TABLEHEADER_OFF:
+            case HtmlTokenId::TABLEDATA_OFF:
                 if ( nInCell )
                     nInCell--;
             break;
+            default: break;
         }
     }
 }
@@ -793,7 +794,7 @@ void EditHTMLParser::AnchorEnd()
     }
 }
 
-void EditHTMLParser::HeadingStart( int nToken )
+void EditHTMLParser::HeadingStart( HtmlTokenId nToken )
 {
     bWasInPara = bInPara;
     StartPara( false );
@@ -802,12 +803,12 @@ void EditHTMLParser::HeadingStart( int nToken )
         ImpInsertParaBreak();
 
     sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(
-        1 + ( ( nToken - HTML_HEAD1_ON ) / 2 ) );
+        1 + ( ( (int)nToken - (int)HtmlTokenId::HEAD1_ON ) / 2 ) );
     DBG_ASSERT( (nId >= 1) && (nId <= 9), "HeadingStart: ID can not be correct!" );
     ImpSetStyleSheet( nId );
 }
 
-void EditHTMLParser::HeadingEnd( int )
+void EditHTMLParser::HeadingEnd()
 {
     EndPara( false );
     ImpSetStyleSheet( 0 );
