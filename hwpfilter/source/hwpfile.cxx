@@ -466,18 +466,8 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
     return nullptr;
 }
 
-
 void HWPFile::AddBox(FBox * box)
 {
-// LATER if we don't use box->next(),
-// AddBox() and GetBoxHead() are useless;
-    if (!blist.empty())
-    {
-        box->prev = blist.back();
-        box->prev->next = box;
-    }
-    else
-        box->prev = nullptr;
     blist.push_back(box);
 }
 
