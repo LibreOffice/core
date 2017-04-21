@@ -9,10 +9,11 @@
 
 
 #include "ooxmlsecparser.hxx"
+#include "xmlsignaturehelper.hxx"
 
 using namespace com::sun::star;
 
-OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
+OOXMLSecParser::OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecController* pXSecController)
     : m_pXSecController(pXSecController)
     ,m_bInDigestValue(false)
     ,m_bInSignatureValue(false)
@@ -23,6 +24,7 @@ OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     ,m_bInX509SerialNumber(false)
     ,m_bInCertDigest(false)
     ,m_bReferenceUnresolved(false)
+    ,m_rXMLSignatureHelper(rXMLSignatureHelper)
 {
 }
 
@@ -50,6 +52,7 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
 
     if (rName == "Signature")
     {
+        m_rXMLSignatureHelper.StartVerifySignatureElement();
         m_pXSecController->addSignature();
         if (!aId.isEmpty())
             m_pXSecController->setId(aId);

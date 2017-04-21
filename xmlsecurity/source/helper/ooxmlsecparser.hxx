@@ -50,9 +50,10 @@ class OOXMLSecParser: public cppu::WeakImplHelper
     OUString m_aReferenceURI;
     /// Already called addStreamReference() for this reference.
     bool m_bReferenceUnresolved;
+    XMLSignatureHelper& m_rXMLSignatureHelper;
 
 public:
-    explicit OOXMLSecParser(XSecController* pXSecController);
+    explicit OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecController* pXSecController);
     virtual ~OOXMLSecParser() override;
 
     // XDocumentHandler

@@ -36,47 +36,6 @@ namespace embed {
     class XStorage; }
 }}}
 
-// MT: Not needed any more, remove later...
-
-// FIXME: I certainly would love to remove as much as possible of this steaming pile of
-// over-engineering, but I wonder what exactly the above comment means. Certainly it is not
-// straightforward to remove this class, it is used.
-
-class ImplXMLSignatureListener : public cppu::WeakImplHelper
-<
-    css::xml::sax::XDocumentHandler
->
-{
-private:
-    XMLSignatureHelper& m_rXMLSignatureHelper;
-
-    css::uno::Reference<
-        css::xml::sax::XDocumentHandler > m_xNextHandler;
-
-public:
-    ImplXMLSignatureListener(XMLSignatureHelper& rXMLSignatureHelper);
-    virtual ~ImplXMLSignatureListener() override;
-
-    void setNextHandler(const css::uno::Reference< css::xml::sax::XDocumentHandler >& xNextHandler);
-
-    // css::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
-
-    virtual void SAL_CALL startDocument(  ) override;
-
-    virtual void SAL_CALL endDocument(  ) override;
-
-    virtual void SAL_CALL endElement( const OUString& aName ) override;
-
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
-
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
-
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-
-    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
-};
-
 // XUriBinding
 
 class UriBindingHelper : public cppu::WeakImplHelper< css::xml::crypto::XUriBinding >

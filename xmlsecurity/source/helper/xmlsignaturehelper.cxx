@@ -244,23 +244,13 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
      * create a signature reader
      */
     uno::Reference< xml::sax::XDocumentHandler > xHandler
-        = mpXSecController->createSignatureReader( );
-
-    /*
-     * create a signature listener
-     */
-    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(*this);
-
-    /*
-     * configure the signature verify listener
-     */
+        = mpXSecController->createSignatureReader(*this);
 
     /*
      * setup the connection:
-     * Parser -> SignatureListener -> SignatureReader
+     * Parser -> SignatureReader
      */
-    pSignatureListener->setNextHandler(xHandler);
-    xParser->setDocumentHandler( pSignatureListener );
+    xParser->setDocumentHandler( xHandler );
 
     /*
      * parser the stream
@@ -273,15 +263,6 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
     {
         mbError = true;
     }
-
-    /*
-     * clear up the connection
-     */
-    pSignatureListener->setNextHandler( nullptr );
-
-    /*
-     * clear up the signature verify listener
-     */
 
     /*
      * release the signature reader
@@ -409,15 +390,10 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(mxCtx);
 
     // Create the signature reader.
-    uno::Reference<xml::sax::XDocumentHandler> xHandler = mpXSecController->createSignatureReader(embed::StorageFormats::OFOPXML);
+    uno::Reference<xml::sax::XDocumentHandler> xHandler = mpXSecController->createSignatureReader(*this, embed::StorageFormats::OFOPXML);
 
-    // Create the signature listener.
-    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(*this);
-    uno::Reference<xml::sax::XDocumentHandler> xSignatureListener(pSignatureListener);
-
-    // Parser -> signature listener -> signature reader.
-    pSignatureListener->setNextHandler(xHandler);
-    xParser->setDocumentHandler(xSignatureListener);
+    // Parser -> signature reader.
+    xParser->setDocumentHandler(xHandler);
 
     // Parse the stream.
     try
@@ -429,7 +405,6 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
         SAL_WARN("xmlsecurity.helper", "XMLSignatureHelper::ReadAndVerifySignatureStorageStream: " << rException.Message);
     }
 
-    pSignatureListener->setNextHandler(nullptr);
     mpXSecController->releaseSignatureReader();
 
     return !mbError;
