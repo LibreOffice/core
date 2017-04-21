@@ -66,7 +66,7 @@ ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
 // index page
 ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
     : nRefCount(0)
-    , bNoDelete(true)
+    , bNoDelete(1)
     , nPagePos(nPos)
     , bModified(false)
     , nCount(0)
@@ -110,7 +110,7 @@ void ONDXPage::QueryDelete()
 
             ppNodes[i] = ONDXNode();
         }
-        bNoDelete = true;
+        bNoDelete = 1;
 
         nCount = 0;
         aParent.Clear();
