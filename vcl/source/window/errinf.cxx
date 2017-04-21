@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
-#include <vcl/errinf.hxx>
-#include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
+
+#include <vcl/errinf.hxx>
 #include <vcl/window.hxx>
+
 #include <vector>
+#include <limits.h>
 
 class ErrorHandler;
 
