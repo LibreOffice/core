@@ -219,6 +219,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     hwpf.AddBox(this);
     hwpf.Read2b(&style.cap_len, 1);
     hwpf.Read2b(&dummy1, 1);
+    unsigned short next;
     hwpf.Read2b(&next, 1);
     hwpf.Read2b(&dummy2, 1);
 
