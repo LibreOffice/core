@@ -155,6 +155,7 @@ String STR_POOLFRM_LABEL
 
  // Template names
 
+// tdf#107211 please don't change STANDARD, except back to "Default"
 String STR_POOLCOLL_STANDARD
 {
     Text [ en-US ] = "Default Style" ;
