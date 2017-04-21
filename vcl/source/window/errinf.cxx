@@ -163,10 +163,9 @@ static void aDspFunc(const OUString &rErr, const OUString &rAction)
     OSL_FAIL(aErr.getStr());
 }
 
-// FIXME: this is a horrible reverse dependency on VCL
 struct ErrorContextImpl
 {
-    vcl::Window  *pWin; // should be VclPtr for strong lifecycle
+    vcl::Window  *pWin; // FIXME: should be VclPtr for strong lifecycle
 };
 
 ErrorContext::ErrorContext(vcl::Window *pWinP)
