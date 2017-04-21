@@ -4443,20 +4443,23 @@ void SwUiWriterTest::testTdf107025()
     // Tdf107025 - characters advance with wrong distance, so that
     // they are cluttered because of negative value or
     // break into multiple lines because of overflow.
+    // The test document uses DFKAI-SB shipped with Windows.
     createDoc("tdf107025.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // Verify the number of characters in each line.
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]", "nLength").toInt32());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9), getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nLength").toInt32());
 
+    // Do the subsequent test only if the first line can be displayed,
+    // in case that the required font does not exist.
+    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]", "nWidth").toInt32();
+    if (!nWidth1)
+        return;
 
-    CPPUNIT_ASSERT(!parseDump("(//Text[@nType='POR_TXT'])[1]", "nWidth").isEmpty());
     CPPUNIT_ASSERT(!parseDump("(//Text[@nType='POR_TXT'])[2]", "nWidth").isEmpty());
     // Width of the second line is expected to be 9 times of the first.
-    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]", "nWidth").toInt32();
     sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nWidth").toInt32();
 
-    CPPUNIT_ASSERT( nWidth1 != 0 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9), nWidth2 / nWidth1 );
 }
 
