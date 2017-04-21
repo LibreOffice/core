@@ -1,8 +1,7 @@
-diff --git a/source/common/dictbe.cpp b/source/common/dictbe.cpp
-index f1c874d..3ad1b3f 100644
---- misc/icu/source/common/dictbe.cpp
-+++ build/icu/source/common/dictbe.cpp
-@@ -27,8 +27,17 @@ U_NAMESPACE_BEGIN
+diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
+--- icu.org/source/common/dictbe.cpp	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/common/dictbe.cpp	2017-04-21 23:14:23.845894374 +0200
+@@ -29,8 +29,17 @@
   ******************************************************************
   */
  
@@ -21,7 +20,7 @@ index f1c874d..3ad1b3f 100644
  }
  
  DictionaryBreakEngine::~DictionaryBreakEngine() {
-@@ -90,7 +99,7 @@ DictionaryBreakEngine::findBreaks( UText *text,
+@@ -92,7 +101,7 @@
          result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks);
          utext_setNativeIndex(text, current);
      }
@@ -30,7 +29,7 @@ index f1c874d..3ad1b3f 100644
      return result;
  }
  
-@@ -101,6 +110,169 @@ DictionaryBreakEngine::setCharacters( const UnicodeSet &set ) {
+@@ -103,6 +112,169 @@
      fSet.compact();
  }
  
@@ -200,7 +199,7 @@ index f1c874d..3ad1b3f 100644
  /*
   ******************************************************************
   * PossibleWord
-@@ -128,35 +302,35 @@ private:
+@@ -130,35 +302,35 @@
  public:
      PossibleWord() : count(0), prefix(0), offset(-1), mark(0), current(0) {};
      ~PossibleWord() {};
@@ -245,7 +244,7 @@ index f1c874d..3ad1b3f 100644
          // Dictionary leaves text after longest prefix, not longest word. Back up.
          if (count <= 0) {
              utext_setNativeIndex(text, start);
-@@ -828,51 +1002,28 @@ foundBest:
+@@ -830,51 +1002,28 @@
   * KhmerBreakEngine
   */
  
@@ -308,14 +307,22 @@ index f1c874d..3ad1b3f 100644
  }
  
  KhmerBreakEngine::~KhmerBreakEngine() {
-@@ -884,180 +1036,204 @@ KhmerBreakEngine::divideUpDictionaryRange( UText *text,
+@@ -886,180 +1035,204 @@
                                                  int32_t rangeStart,
                                                  int32_t rangeEnd,
                                                  UStack &foundBreaks ) const {
 -    if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
 -        return 0;       // Not enough characters for two words
+-    }
+-
+-    uint32_t wordsFound = 0;
+-    int32_t cpWordLength = 0;
+-    int32_t cuWordLength = 0;
+-    int32_t current;
 +    uint32_t wordsFound = foundBreaks.size();
-+    UErrorCode status = U_ZERO_ERROR;
+     UErrorCode status = U_ZERO_ERROR;
+-    PossibleWord words[KHMER_LOOKAHEAD];
+-
 +    int32_t before = 0;
 +    int32_t after = 0;
 +    int32_t finalBefore = 0;
@@ -331,7 +338,7 @@ index f1c874d..3ad1b3f 100644
 +        --scanStart;
 +        startZwsp = scanBeforeStart(text, scanStart, breakStart);
 +    }
-+    utext_setNativeIndex(text, rangeStart);
+     utext_setNativeIndex(text, rangeStart);
 +    scanFwdClusters(text, rangeEnd, initAfter);
 +    bool endZwsp = scanAfterEnd(text, utext_nativeLength(text), scanEnd, breakEnd);
 +    utext_setNativeIndex(text, rangeEnd - 1);
@@ -342,14 +349,8 @@ index f1c874d..3ad1b3f 100644
 +        if (breakEnd || fTypes < UBRK_LINE)
 +            foundBreaks.push(rangeEnd, status);
 +        return foundBreaks.size() - wordsFound;
-     }
- 
--    uint32_t wordsFound = 0;
--    int32_t cpWordLength = 0;
--    int32_t cuWordLength = 0;
--    int32_t current;
--    UErrorCode status = U_ZERO_ERROR;
--    PossibleWord words[KHMER_LOOKAHEAD];
++    }
++
 +    scanStart = rangeStart;
 +    scanWJ(text, scanStart, rangeEnd, before, after);
 +    if (startZwsp || initAfter >= before) {
@@ -361,43 +362,20 @@ index f1c874d..3ad1b3f 100644
 +    if (endZwsp && before > finalBefore)
 +        before = finalBefore;
  
-     utext_setNativeIndex(text, rangeStart);
-+    int32_t numCodePts = rangeEnd - rangeStart;
-+    // bestSnlp[i] is the snlp of the best segmentation of the first i
-+    // code points in the range to be matched.
-+    UVector32 bestSnlp(numCodePts + 1, status);
-+    bestSnlp.addElement(0, status);
-+    for(int32_t i = 1; i <= numCodePts; i++) {
-+        bestSnlp.addElement(kuint32max, status);
-+    }
- 
 -    while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
 -        cuWordLength = 0;
 -        cpWordLength = 0;
-+    // prev[i] is the index of the last code point in the previous word in
-+    // the best segmentation of the first i characters. Note negative implies
-+	// that the code point is part of an unknown word.
-+    UVector32 prev(numCodePts + 1, status);
-+    for(int32_t i = 0; i <= numCodePts; i++) {
-+        prev.addElement(kuint32max, status);
-+    }
- 
+-
 -        // Look for candidate words at the current position
 -        int32_t candidates = words[wordsFound%KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
-+    const int32_t maxWordSize = 20;
-+    UVector32 values(maxWordSize, status);
-+    values.setSize(maxWordSize);
-+    UVector32 lengths(maxWordSize, status);
-+    lengths.setSize(maxWordSize);
- 
+-
 -        // If we found exactly one, use that
 -        if (candidates == 1) {
 -            cuWordLength = words[wordsFound % KHMER_LOOKAHEAD].acceptMarked(text);
 -            cpWordLength = words[wordsFound % KHMER_LOOKAHEAD].markedCPLength();
 -            wordsFound += 1;
 -        }
-+    // Dynamic programming to find the best segmentation.
- 
+-
 -        // If there was more than one, see which one can take us forward the most words
 -        else if (candidates > 1) {
 -            // If we're already at the end of the range, we're done
@@ -412,25 +390,12 @@ index f1c874d..3ad1b3f 100644
 -                        words[wordsFound % KHMER_LOOKAHEAD].markCurrent();
 -                        wordsMatched = 2;
 -                    }
-+    // In outer loop, i  is the code point index,
-+    //                ix is the corresponding string (code unit) index.
-+    //    They differ when the string contains supplementary characters.
-+    int32_t ix = rangeStart;
-+    for (int32_t i = 0;  i < numCodePts;  ++i, utext_setNativeIndex(text, ++ix)) {
-+        if ((uint32_t)bestSnlp.elementAti(i) == kuint32max) {
-+            continue;
-+        }
- 
+-
 -                    // If we're already at the end of the range, we're done
 -                    if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
 -                        goto foundBest;
 -                    }
-+        int32_t count;
-+        count = fDictionary->matches(text, numCodePts - i, maxWordSize,
-+                             NULL, lengths.getBuffer(), values.getBuffer(), NULL, &fIgnoreSet, 2);
-+                             // Note: lengths is filled with code point lengths
-+                             //       The NULL parameter is the ignored code unit lengths.
- 
+-
 -                    // See if any of the possible second words is followed by a third word
 -                    do {
 -                        // If we find a third word, stop right away
@@ -441,6 +406,47 @@ index f1c874d..3ad1b3f 100644
 -                    }
 -                    while (words[(wordsFound + 1) % KHMER_LOOKAHEAD].backUp(text));
 -                }
++    utext_setNativeIndex(text, rangeStart);
++    int32_t numCodePts = rangeEnd - rangeStart;
++    // bestSnlp[i] is the snlp of the best segmentation of the first i
++    // code points in the range to be matched.
++    UVector32 bestSnlp(numCodePts + 1, status);
++    bestSnlp.addElement(0, status);
++    for(int32_t i = 1; i <= numCodePts; i++) {
++        bestSnlp.addElement(kuint32max, status);
++    }
++
++    // prev[i] is the index of the last code point in the previous word in
++    // the best segmentation of the first i characters. Note negative implies
++	// that the code point is part of an unknown word.
++    UVector32 prev(numCodePts + 1, status);
++    for(int32_t i = 0; i <= numCodePts; i++) {
++        prev.addElement(kuint32max, status);
++    }
++
++    const int32_t maxWordSize = 20;
++    UVector32 values(maxWordSize, status);
++    values.setSize(maxWordSize);
++    UVector32 lengths(maxWordSize, status);
++    lengths.setSize(maxWordSize);
++
++    // Dynamic programming to find the best segmentation.
++
++    // In outer loop, i  is the code point index,
++    //                ix is the corresponding string (code unit) index.
++    //    They differ when the string contains supplementary characters.
++    int32_t ix = rangeStart;
++    for (int32_t i = 0;  i < numCodePts;  ++i, utext_setNativeIndex(text, ++ix)) {
++        if ((uint32_t)bestSnlp.elementAti(i) == kuint32max) {
++            continue;
++        }
++
++        int32_t count;
++        count = fDictionary->matches(text, numCodePts - i, maxWordSize,
++                             NULL, lengths.getBuffer(), values.getBuffer(), NULL, &fIgnoreSet, 2);
++                             // Note: lengths is filled with code point lengths
++                             //       The NULL parameter is the ignored code unit lengths.
++
 +        for (int32_t j = 0; j < count; j++) {
 +            int32_t ln = lengths.elementAti(j);
 +            if (ln + i >= numCodePts)
@@ -522,17 +528,27 @@ index f1c874d..3ad1b3f 100644
 -                if (cuWordLength <= 0) {
 -                    wordsFound += 1;
 -                }
+-
+-                // Update the length with the passed-over characters
+-                cuWordLength += chars;
+-            }
+-            else {
+-                // Back up to where we were for next iteration
+-                utext_setNativeIndex(text, current+cuWordLength);
 +                } while (fMarkSet.contains(c) || fIgnoreSet.contains(c));
 +                values.setElementAt(BADSNLP, count);
 +                lengths.setElementAt(utext_getNativeIndex(text) - currix, count++);
 +            } else {
 +                values.setElementAt(BADSNLP, count);
 +                lengths.setElementAt(1, count++);
-+            }
-+        }
+             }
+         }
  
--                // Update the length with the passed-over characters
--                cuWordLength += chars;
+-        // Never stop before a combining mark.
+-        int32_t currPos;
+-        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+-            utext_next32(text);
+-            cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
 +        for (int32_t j = 0; j < count; j++) {
 +            uint32_t v = values.elementAti(j);
 +            int32_t newSnlp = bestSnlp.elementAti(i) + v;
@@ -543,10 +559,7 @@ index f1c874d..3ad1b3f 100644
 +                ++ln;
 +                utext_next32(text);
 +                c = utext_current32(text);
-             }
--            else {
--                // Back up to where we were for next iteration
--                utext_setNativeIndex(text, current+cuWordLength);
++            }
 +            int32_t ln_j_i = ln + i;   // yes really i!
 +            if (newSnlp < bestSnlp.elementAti(ln_j_i)) {
 +                if (v == BADSNLP) {
@@ -559,37 +572,9 @@ index f1c874d..3ad1b3f 100644
 +                else
 +                    prev.setElementAt(i, ln_j_i);
 +                bestSnlp.setElementAt(newSnlp, ln_j_i);
-             }
++            }
          }
-+    }
-+    // Start pushing the optimal offset index into t_boundary (t for tentative).
-+    // prev[numCodePts] is guaranteed to be meaningful.
-+    // We'll first push in the reverse order, i.e.,
-+    // t_boundary[0] = numCodePts, and afterwards do a swap.
-+    UVector32 t_boundary(numCodePts+1, status);
- 
--        // Never stop before a combining mark.
--        int32_t currPos;
--        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
--            utext_next32(text);
--            cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
-+    int32_t numBreaks = 0;
-+    // No segmentation found, set boundary to end of range
-+    while (numCodePts >= 0 && (uint32_t)bestSnlp.elementAti(numCodePts) == kuint32max) {
-+        --numCodePts;
-+    }
-+    if (numCodePts < 0) {
-+        t_boundary.addElement(numCodePts, status);
-+        numBreaks++;
-+    } else {
-+        for (int32_t i = numCodePts; (uint32_t)i != kuint32max; i = prev.elementAti(i)) {
-+            if (i < 0) i = -i;
-+            t_boundary.addElement(i, status);
-+            numBreaks++;
-         }
-+        U_ASSERT(prev.elementAti(t_boundary.elementAti(numBreaks - 1)) == 0);
-+    }
- 
+-
 -        // Look ahead for possible suffixes if a dictionary word does not follow.
 -        // We do this in code rather than using a rule so that the heuristic
 -        // resynch continues to function. For example, one of the suffix characters
@@ -631,6 +616,30 @@ index f1c874d..3ad1b3f 100644
 -        // Did we find a word on this iteration? If so, push it on the break stack
 -        if (cuWordLength > 0) {
 -            foundBreaks.push((current+cuWordLength), status);
++    }
++    // Start pushing the optimal offset index into t_boundary (t for tentative).
++    // prev[numCodePts] is guaranteed to be meaningful.
++    // We'll first push in the reverse order, i.e.,
++    // t_boundary[0] = numCodePts, and afterwards do a swap.
++    UVector32 t_boundary(numCodePts+1, status);
++
++    int32_t numBreaks = 0;
++    // No segmentation found, set boundary to end of range
++    while (numCodePts >= 0 && (uint32_t)bestSnlp.elementAti(numCodePts) == kuint32max) {
++        --numCodePts;
++    }
++    if (numCodePts < 0) {
++        t_boundary.addElement(numCodePts, status);
++        numBreaks++;
++    } else {
++        for (int32_t i = numCodePts; (uint32_t)i != kuint32max; i = prev.elementAti(i)) {
++            if (i < 0) i = -i;
++            t_boundary.addElement(i, status);
++            numBreaks++;
++        }
++        U_ASSERT(prev.elementAti(t_boundary.elementAti(numBreaks - 1)) == 0);
++    }
++
 +    // Now that we're done, convert positions in t_boundary[] (indices in
 +    // the normalized input string) back to indices in the original input UText
 +    // while reversing t_boundary and pushing values to foundBreaks.
@@ -659,11 +668,10 @@ index f1c874d..3ad1b3f 100644
  }
  
  #if !UCONFIG_NO_NORMALIZATION
-diff --git a/source/common/dictbe.h b/source/common/dictbe.h
-index d3488cd..26caa75 100644
---- misc/icu/source/common/dictbe.h
-+++ build/icu/source/common/dictbe.h
-@@ -32,6 +32,15 @@ class Normalizer2;
+diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
+--- icu.org/source/common/dictbe.h	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/common/dictbe.h	2017-04-21 23:14:23.845894374 +0200
+@@ -34,6 +34,15 @@
   */
  class DictionaryBreakEngine : public LanguageBreakEngine {
   private:
@@ -679,7 +687,7 @@ index d3488cd..26caa75 100644
      /**
       * The set of characters handled by this engine
       * @internal
-@@ -46,11 +55,63 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
+@@ -48,11 +57,63 @@
  
    uint32_t      fTypes;
  
@@ -746,7 +754,7 @@ index d3488cd..26caa75 100644
  
   public:
  
-@@ -81,7 +142,7 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
+@@ -83,7 +144,7 @@
     * <p>Find any breaks within a run in the supplied text.</p>
     *
     * @param text A UText representing the text. The iterator is left at
@@ -755,7 +763,7 @@ index d3488cd..26caa75 100644
     * that starts from the first (or last) character in the range.
     * @param startPos The start of the run within the supplied text.
     * @param endPos The end of the run within the supplied text.
-@@ -243,118 +304,120 @@ class LaoBreakEngine : public DictionaryBreakEngine {
+@@ -245,118 +306,120 @@
  
  };
  
@@ -988,11 +996,10 @@ index d3488cd..26caa75 100644
  #if !UCONFIG_NO_NORMALIZATION
  
  /*******************************************************************
-diff --git a/source/common/dictionarydata.cpp b/source/common/dictionarydata.cpp
-index cb594c6..82f2e77 100644
---- misc/icu/source/common/dictionarydata.cpp
-+++ build/icu/source/common/dictionarydata.cpp
-@@ -42,7 +42,7 @@ int32_t UCharsDictionaryMatcher::getType() const {
+diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionarydata.cpp
+--- icu.org/source/common/dictionarydata.cpp	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/common/dictionarydata.cpp	2017-04-21 23:14:23.846894372 +0200
+@@ -44,7 +44,7 @@
  
  int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
                              int32_t *lengths, int32_t *cpLengths, int32_t *values,
@@ -1001,7 +1008,7 @@ index cb594c6..82f2e77 100644
  
      UCharsTrie uct(characters);
      int32_t startingTextIndex = (int32_t)utext_getNativeIndex(text);
-@@ -53,7 +53,13 @@ int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t
+@@ -55,7 +55,13 @@
          UStringTrieResult result = (codePointsMatched == 0) ? uct.first(c) : uct.next(c);
          int32_t lengthMatched = (int32_t)utext_getNativeIndex(text) - startingTextIndex;
          codePointsMatched += 1;
@@ -1015,7 +1022,7 @@ index cb594c6..82f2e77 100644
              if (wordCount < limit) {
                  if (values != NULL) {
                      values[wordCount] = uct.getValue();
-@@ -110,7 +116,7 @@ int32_t BytesDictionaryMatcher::getType() const {
+@@ -112,7 +118,7 @@
  
  int32_t BytesDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
                              int32_t *lengths, int32_t *cpLengths, int32_t *values,
@@ -1024,7 +1031,7 @@ index cb594c6..82f2e77 100644
      BytesTrie bt(characters);
      int32_t startingTextIndex = (int32_t)utext_getNativeIndex(text);
      int32_t wordCount = 0;
-@@ -120,7 +126,13 @@ int32_t BytesDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t
+@@ -122,7 +128,13 @@
          UStringTrieResult result = (codePointsMatched == 0) ? bt.first(transform(c)) : bt.next(transform(c));
          int32_t lengthMatched = (int32_t)utext_getNativeIndex(text) - startingTextIndex;
          codePointsMatched += 1;
@@ -1038,11 +1045,10 @@ index cb594c6..82f2e77 100644
              if (wordCount < limit) {
                  if (values != NULL) {
                      values[wordCount] = bt.getValue();
-diff --git a/source/common/dictionarydata.h b/source/common/dictionarydata.h
-index 0216ab0..ee9e571 100644
---- misc/icu/source/common/dictionarydata.h
-+++ build/icu/source/common/dictionarydata.h
-@@ -19,6 +19,7 @@
+diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata.h
+--- icu.org/source/common/dictionarydata.h	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/common/dictionarydata.h	2017-04-21 23:14:23.846894372 +0200
+@@ -21,6 +21,7 @@
  #include "unicode/utext.h"
  #include "unicode/udata.h"
  #include "udataswp.h"
@@ -1050,7 +1056,7 @@ index 0216ab0..ee9e571 100644
  #include "unicode/uobject.h"
  #include "unicode/ustringtrie.h"
  
-@@ -90,7 +91,7 @@ public:
+@@ -92,7 +93,7 @@
       */
      virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
                              int32_t *lengths, int32_t *cpLengths, int32_t *values,
@@ -1059,7 +1065,7 @@ index 0216ab0..ee9e571 100644
  
      /** @return DictionaryData::TRIE_TYPE_XYZ */
      virtual int32_t getType() const = 0;
-@@ -105,7 +106,7 @@ public:
+@@ -107,7 +108,7 @@
      virtual ~UCharsDictionaryMatcher();
      virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
                              int32_t *lengths, int32_t *cpLengths, int32_t *values,
@@ -1068,7 +1074,7 @@ index 0216ab0..ee9e571 100644
      virtual int32_t getType() const;
  private:
      const UChar *characters;
-@@ -123,7 +124,7 @@ public:
+@@ -125,7 +126,7 @@
      virtual ~BytesDictionaryMatcher();
      virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
                              int32_t *lengths, int32_t *cpLengths, int32_t *values,
@@ -1077,11 +1083,10 @@ index 0216ab0..ee9e571 100644
      virtual int32_t getType() const;
  private:
      UChar32 transform(UChar32 c) const;
-diff --git a/source/data/Makefile.in b/source/data/Makefile.in
-index 816c82d..c637d70 100644
---- misc/icu/source/data/Makefile.in
-+++ build/icu/source/data/Makefile.in
-@@ -181,7 +181,7 @@ endif
+diff -ur icu.org/source/data/Makefile.in icu/source/data/Makefile.in
+--- icu.org/source/data/Makefile.in	2017-04-21 23:13:03.248087545 +0200
++++ icu/source/data/Makefile.in	2017-04-21 23:14:23.846894372 +0200
+@@ -183,7 +183,7 @@
  endif
  endif
  
@@ -1090,9 +1095,9 @@ index 816c82d..c637d70 100644
  ifneq ($(ENABLE_STATIC),)
  ifeq ($(PKGDATA_MODE),dll)
  	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
-@@ -564,8 +564,14 @@ $(BRKBLDDIR)/burmesedict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
+@@ -567,8 +567,14 @@
  	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1000 -c -i $(BUILDDIR) $(DICTSRCDIR)/burmesedict.txt $(BRKBLDDIR)/burmesedict.dict
-
+ 
  # TODO: figure out why combining characters are here?
 -$(BRKBLDDIR)/khmerdict.dict: $(TOOLBINDIR)/gendict$(TOOLEXEEXT) $(DAT_FILES)
 -	$(INVOKE) $(TOOLBINDIR)/gendict --bytes --transform offset-0x1780 -c -i $(BUILDDIR) $(DICTSRCDIR)/khmerdict.txt $(BRKBLDDIR)/khmerdict.dict
@@ -1104,7 +1109,6 @@ index 816c82d..c637d70 100644
 +$(MAINBUILDDIR)/khmerdict.stamp: $(BRKSRCDIR)/khmerdict.dict build-local
 +	cp $< $(BRKBLDDIR)
 +	echo "timestamp" > $@
-
+ 
  ####################################################    CFU
  # CFU FILES
-

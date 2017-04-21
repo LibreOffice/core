@@ -1,0 +1,36 @@
+diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
+--- icu.org/source/config/mh-linux	2016-06-15 20:58:17.000000000 +0200
++++ icu/source/config/mh-linux	2017-04-21 22:38:18.893927819 +0200
+@@ -22,6 +22,10 @@
+ LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN 
+ LD_RPATH_PRE = -Wl,-rpath,
+ 
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH:
++ENABLE_RPATH=YES
++RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN'
++
+ ## These are the library specific LDFLAGS
+ LDFLAGSICUDT=-nodefaultlibs -nostdlib
+ 
+diff -ur icu.org/source/data/pkgdataMakefile.in icu/source/data/pkgdataMakefile.in
+--- icu.org/source/data/pkgdataMakefile.in	2016-06-15 20:58:17.000000000 +0200
++++ icu/source/data/pkgdataMakefile.in	2017-04-21 22:38:18.892927822 +0200
+@@ -17,6 +17,9 @@
+ OUTPUTFILE=icupkg.inc
+ MIDDLE_SO_TARGET=
+ 
++# escape $ with \ when passing to echo; needed to preserve $ORIGIN
++SHLIB.c.shell := $(subst $$,\$$,$(SHLIB.c))
++
+ all : clean 
+ 	@echo GENCCODE_ASSEMBLY_TYPE=$(GENCCODE_ASSEMBLY) >> $(OUTPUTFILE)
+ 	@echo SO=$(SO) >> $(OUTPUTFILE)
+@@ -26,7 +29,7 @@
+ 	@echo LIB_EXT_ORDER=$(FINAL_SO_TARGET) >> $(OUTPUTFILE)
+ 	@echo COMPILE="$(COMPILE.c)" >> $(OUTPUTFILE)
+ 	@echo LIBFLAGS="-I$(top_srcdir)/common -I$(top_builddir)/common $(SHAREDLIBCPPFLAGS) $(SHAREDLIBCFLAGS)" >> $(OUTPUTFILE)
+-	@echo GENLIB="$(SHLIB.c)" >> $(OUTPUTFILE)
++	@echo GENLIB="$(SHLIB.c.shell)" >> $(OUTPUTFILE)
+ 	@echo LDICUDTFLAGS=$(LDFLAGSICUDT) >> $(OUTPUTFILE)
+ 	@echo LD_SONAME=$(LD_SONAME) >> $(OUTPUTFILE)
+ 	@echo RPATH_FLAGS=$(RPATH_FLAGS) >> $(OUTPUTFILE)
