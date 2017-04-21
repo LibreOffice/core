@@ -113,40 +113,6 @@ public:
                     sal_uInt32 inputLength = 0) override;
 };
 
-class Digest final
-{
-public:
-    enum DigestType
-    {
-        UNKNOWN,
-        SHA1,
-        SHA512
-    };
-
-private:
-    DigestType meType;
-
-#if USE_TLS_OPENSSL
-    EVP_MD_CTX* mpContext;
-#endif
-
-#if USE_TLS_NSS
-    HASHContext* mpContext;
-#endif
-
-public:
-    Digest(DigestType eType);
-    ~Digest();
-
-    void update(std::vector<sal_uInt8>& input);
-    void finalize(std::vector<sal_uInt8>& digest);
-
-    sal_uInt32 getLength();
-
-    static bool sha1(  std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
-    static bool sha512(std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
-};
-
 } // namespace core
 } // namespace oox
 
