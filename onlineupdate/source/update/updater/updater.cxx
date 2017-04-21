@@ -2357,8 +2357,8 @@ ProcessReplaceRequest()
                  NS_T("%s/Contents"),
                  gWorkingDirPath);
 #else
-                 NS_T("%s.bak/updated"),
-                 gInstallDirPath);
+                 NS_T("%s"),
+                 gWorkingDirPath);
 #endif
 
     // First try to remove the possibly existing temp directory, because if this
