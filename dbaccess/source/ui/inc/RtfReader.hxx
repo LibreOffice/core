@@ -32,7 +32,7 @@ namespace dbaui
         std::vector<sal_Int32>    m_vecColor;
 
     protected:
-        virtual bool            CreateTable(int nToken) override;
+        bool                    CreateTable(int nToken);
         virtual void            NextToken( int nToken ) override; // base class
         virtual TypeSelectionPageFactory
                                 getTypeSelectionPageFactory() override;

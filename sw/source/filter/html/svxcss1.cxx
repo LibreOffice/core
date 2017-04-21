@@ -767,10 +767,10 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
 
     aWhichMap.insert( aWhichMap.begin(), 0 );
-    SvParser::BuildWhichTable( aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
+    BuildWhichTable( aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
                              sizeof(aItemIds) / sizeof(sal_uInt16) );
     if( pWhichIds && nWhichIds )
-        SvParser::BuildWhichTable( aWhichMap, pWhichIds, nWhichIds );
+        BuildWhichTable( aWhichMap, pWhichIds, nWhichIds );
 
     pSheetItemSet = new SfxItemSet( rPool, &aWhichMap[0] );
     pSheetPropInfo = new SvxCSS1PropertyInfo;

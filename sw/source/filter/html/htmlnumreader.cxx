@@ -52,7 +52,7 @@ static HTMLOptionEnum<sal_Unicode> aHTMLULTypeTable[] =
 };
 
 
-void SwHTMLParser::NewNumBulList( int nToken )
+void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
 {
     SwHTMLNumRuleInfo& rInfo = GetNumInfo();
 
@@ -85,7 +85,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     if( bNewNumFormat )
     {
         sal_uInt16 nChrFormatPoolId = 0;
-        if( HTML_ORDERLIST_ON == nToken )
+        if( HtmlTokenId::ORDERLIST_ON == nToken )
         {
             aNumFormat.SetNumberingType(SVX_NUM_ARABIC);
             nChrFormatPoolId = RES_POOLCHR_NUM_LEVEL;
@@ -144,7 +144,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             {
                 switch( nToken )
                 {
-                case HTML_ORDERLIST_ON:
+                case HtmlTokenId::ORDERLIST_ON:
                     bChangeNumFormat = true;
                     switch( rOption.GetString()[0] )
                     {
@@ -156,11 +156,12 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     }
                     break;
 
-                case HTML_UNORDERLIST_ON:
+                case HtmlTokenId::UNORDERLIST_ON:
                     aNumFormat.SetBulletChar( rOption.GetEnum(
                                     aHTMLULTypeTable,aNumFormat.GetBulletChar() ) );
                     bChangeNumFormat = true;
                     break;
+                default: break;
                 }
             }
             break;
@@ -249,7 +250,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     }
 
     // create a new context
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
     // Parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -330,7 +331,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     SetTextCollAttrs( pCntxt );
 }
 
-void SwHTMLParser::EndNumBulList( int nToken )
+void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
 {
     SwHTMLNumRuleInfo& rInfo = GetNumInfo();
 
@@ -354,10 +355,10 @@ void SwHTMLParser::EndNumBulList( int nToken )
         AddParSpace();
 
     // get current context from stack
-    HTMLAttrContext *pCntxt = nToken!=0 ? PopContext( static_cast< sal_uInt16 >(nToken & ~1) ) : nullptr;
+    HTMLAttrContext *pCntxt = nToken != HtmlTokenId::NONE ? PopContext( getOnToken(nToken) ) : nullptr;
 
     // Don't end a list because of a token, if the context wasn't created or mustn't be ended
-    if( rInfo.GetDepth()>0 && (!nToken || pCntxt) )
+    if( rInfo.GetDepth()>0 && (nToken == HtmlTokenId::NONE || pCntxt) )
     {
         rInfo.DecDepth();
         if( !rInfo.GetDepth() )     // was that the last level?
@@ -418,7 +419,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         bSetAttrs = true;
     }
 
-    if( nToken )
+    if( nToken != HtmlTokenId::NONE )
         SetTextCollAttrs();
 
     if( bSetAttrs )
@@ -426,11 +427,11 @@ void SwHTMLParser::EndNumBulList( int nToken )
 
 }
 
-void SwHTMLParser::NewNumBulListItem( int nToken )
+void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
 {
     sal_uInt8 nLevel = GetNumInfo().GetLevel();
     OUString aId, aStyle, aClass, aLang, aDir;
-    sal_uInt16 nStart = HTML_LISTHEADER_ON != nToken
+    sal_uInt16 nStart = HtmlTokenId::LISTHEADER_ON != nToken
                         ? GetNumInfo().GetNodeStartValue( nLevel )
                         : USHRT_MAX;
     if( USHRT_MAX != nStart )
@@ -469,9 +470,9 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         AppendTextNode( AM_NOSPACE, false );
     m_bNoParSpace = false;    // no space in <LI>!
 
-    const bool bCountedInList = nToken != HTML_LISTHEADER_ON;
+    const bool bCountedInList = nToken != HtmlTokenId::LISTHEADER_ON;
 
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
     OUString aNumRuleName;
     if( GetNumInfo().GetNumRule() )
@@ -497,11 +498,11 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
         m_xDoc->MakeNumRule( aNumRuleName, &aNumRule );
 
-        OSL_ENSURE( !m_nOpenParaToken,
+        OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE,
                 "Jetzt geht ein offenes Absatz-Element verloren" );
         // We'll act like we're in a paragraph. On the next paragraph, at least numbering is gone,
         // that's gonna be taken over by the next AppendTextNode
-        m_nOpenParaToken = static_cast< sal_uInt16 >(nToken);
+        m_nOpenParaToken = nToken;
     }
 
     SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
@@ -548,37 +549,38 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     ShowStatline();
 }
 
-void SwHTMLParser::EndNumBulListItem( int nToken, bool bSetColl,
+void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl,
                                       bool /*bLastPara*/ )
 {
     // Create a new paragraph
-    if( !nToken && m_pPam->GetPoint()->nContent.GetIndex() )
+    if( nToken == HtmlTokenId::NONE && m_pPam->GetPoint()->nContent.GetIndex() )
         AppendTextNode( AM_NOSPACE );
 
     // Get context to that token and pop it from stack
     HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
-    nToken &= ~1;
+    nToken = getOnToken(nToken);
     while( !pCntxt && nPos>m_nContextStMin )
     {
-        sal_uInt16 nCntxtToken = m_aContexts[--nPos]->GetToken();
+        HtmlTokenId nCntxtToken = m_aContexts[--nPos]->GetToken();
         switch( nCntxtToken )
         {
-        case HTML_LI_ON:
-        case HTML_LISTHEADER_ON:
-            if( !nToken || nToken == nCntxtToken  )
+        case HtmlTokenId::LI_ON:
+        case HtmlTokenId::LISTHEADER_ON:
+            if( nToken == HtmlTokenId::NONE || nToken == nCntxtToken  )
             {
                 pCntxt = m_aContexts[nPos];
                 m_aContexts.erase( m_aContexts.begin() + nPos );
             }
             break;
-        case HTML_ORDERLIST_ON:
-        case HTML_UNORDERLIST_ON:
-        case HTML_MENULIST_ON:
-        case HTML_DIRLIST_ON:
+        case HtmlTokenId::ORDERLIST_ON:
+        case HtmlTokenId::UNORDERLIST_ON:
+        case HtmlTokenId::MENULIST_ON:
+        case HtmlTokenId::DIRLIST_ON:
             // Don't care about LI/LH outside the current list
             nPos = m_nContextStMin;
             break;
+        default: break;
         }
     }
 

@@ -744,7 +744,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     OUString aClass;
     Css1ScriptFlags nScript;
     eSelType = GetTokenAndClass( pSelector, aToken2, aClass, nScript );
-    int nToken2 = GetHTMLToken( aToken2 );
+    HtmlTokenId nToken2 = GetHTMLToken( aToken2 );
 
     // and also some information of the next element
     CSS1SelectorType eNextType = pNext ? pNext->GetType()
@@ -755,7 +755,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         switch( nToken2 )
         {
-        case HTML_ANCHOR_ON:
+        case HtmlTokenId::ANCHOR_ON:
             if( !pNext )
             {
                 InsertTag( aToken2, rItemSet, rPropInfo );
@@ -800,7 +800,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 }
             }
             break;
-        case HTML_BODY_ON:
+        case HtmlTokenId::BODY_ON:
             if( !pNext )
             {
                 // BODY
@@ -838,9 +838,10 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 return;
             }
             break;
+        default: break;
         }
     }
-    else if( CSS1_SELTYPE_ELEM_CLASS==eSelType &&  HTML_ANCHOR_ON==nToken2 &&
+    else if( CSS1_SELTYPE_ELEM_CLASS==eSelType &&  HtmlTokenId::ANCHOR_ON==nToken2 &&
              !pNext && aClass.getLength() >= 9 &&
              ('s' == aClass[0] || 'S' == aClass[0]) )
     {
@@ -870,25 +871,25 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     sal_uInt16 nPoolCollId = 0;
     switch( nToken2 )
     {
-    case HTML_HEAD1_ON:
+    case HtmlTokenId::HEAD1_ON:
         nPoolCollId = RES_POOLCOLL_HEADLINE1;
         break;
-    case HTML_HEAD2_ON:
+    case HtmlTokenId::HEAD2_ON:
         nPoolCollId = RES_POOLCOLL_HEADLINE2;
         break;
-    case HTML_HEAD3_ON:
+    case HtmlTokenId::HEAD3_ON:
         nPoolCollId = RES_POOLCOLL_HEADLINE3;
         break;
-    case HTML_HEAD4_ON:
+    case HtmlTokenId::HEAD4_ON:
         nPoolCollId = RES_POOLCOLL_HEADLINE4;
         break;
-    case HTML_HEAD5_ON:
+    case HtmlTokenId::HEAD5_ON:
         nPoolCollId = RES_POOLCOLL_HEADLINE5;
         break;
-    case HTML_HEAD6_ON:
+    case HtmlTokenId::HEAD6_ON:
         nPoolCollId = RES_POOLCOLL_HEADLINE6;
         break;
-    case HTML_PARABREAK_ON:
+    case HtmlTokenId::PARABREAK_ON:
         if( aClass.getLength() >= 9 &&
             ('s' == aClass[0] || 'S' == aClass[0]) )
         {
@@ -907,23 +908,23 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             nPoolCollId = RES_POOLCOLL_TEXT;
         }
         break;
-    case HTML_ADDRESS_ON:
+    case HtmlTokenId::ADDRESS_ON:
         nPoolCollId = RES_POOLCOLL_SENDADRESS;
         break;
-    case HTML_BLOCKQUOTE_ON:
+    case HtmlTokenId::BLOCKQUOTE_ON:
         nPoolCollId = RES_POOLCOLL_HTML_BLOCKQUOTE;
         break;
-    case HTML_DT_ON:
+    case HtmlTokenId::DT_ON:
         nPoolCollId = RES_POOLCOLL_HTML_DT;
         break;
-    case HTML_DD_ON:
+    case HtmlTokenId::DD_ON:
         nPoolCollId = RES_POOLCOLL_HTML_DD;
         break;
-    case HTML_PREFORMTXT_ON:
+    case HtmlTokenId::PREFORMTXT_ON:
         nPoolCollId = RES_POOLCOLL_HTML_PRE;
         break;
-    case HTML_TABLEHEADER_ON:
-    case HTML_TABLEDATA_ON:
+    case HtmlTokenId::TABLEHEADER_ON:
+    case HtmlTokenId::TABLEDATA_ON:
         if( CSS1_SELTYPE_ELEMENT==eSelType && !pNext )
         {
             InsertTag( aToken2, rItemSet, rPropInfo );
@@ -936,7 +937,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             // not TH and TD, but TH P and TD P
             OUString aSubToken, aSubClass;
             GetTokenAndClass( pNext, aSubToken, aSubClass, nScript );
-            if( HTML_PARABREAK_ON == GetHTMLToken( aSubToken ) )
+            if( HtmlTokenId::PARABREAK_ON == GetHTMLToken( aSubToken ) )
             {
                 aClass = aSubClass;
                 pNext = pNext->GetNext();
@@ -945,7 +946,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 if( !aClass.isEmpty() || pNext )
                 {
                     nPoolCollId = static_cast< sal_uInt16 >(
-                        HTML_TABLEHEADER_ON == nToken2 ? RES_POOLCOLL_TABLE_HDLN
+                        HtmlTokenId::TABLEHEADER_ON == nToken2 ? RES_POOLCOLL_TABLE_HDLN
                                                       : RES_POOLCOLL_TABLE );
                 }
                 else
@@ -1077,7 +1078,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     if( pNext )
         return;
 
-    SwCharFormat *pCFormat = GetChrFormat( static_cast< sal_uInt16 >(nToken2), aEmptyOUStr );
+    SwCharFormat *pCFormat = GetChrFormat( nToken2, aEmptyOUStr );
     if( pCFormat )
     {
         SwCharFormat *pParentCFormat = nullptr;
@@ -1129,31 +1130,32 @@ const FontList *SwCSS1Parser::GetFontList() const
     return pFList;
 }
 
-SwCharFormat* SwCSS1Parser::GetChrFormat( sal_uInt16 nToken2, const OUString& rClass ) const
+SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& rClass ) const
 {
     // search the corresponding style
     sal_uInt16 nPoolId = 0;
     const sal_Char* sName = nullptr;
     switch( nToken2 )
     {
-    case HTML_EMPHASIS_ON:      nPoolId = RES_POOLCHR_HTML_EMPHASIS;    break;
-    case HTML_CITIATION_ON:     nPoolId = RES_POOLCHR_HTML_CITIATION;   break;
-    case HTML_STRONG_ON:        nPoolId = RES_POOLCHR_HTML_STRONG;      break;
-    case HTML_CODE_ON:          nPoolId = RES_POOLCHR_HTML_CODE;        break;
-    case HTML_SAMPLE_ON:        nPoolId = RES_POOLCHR_HTML_SAMPLE;      break;
-    case HTML_KEYBOARD_ON:      nPoolId = RES_POOLCHR_HTML_KEYBOARD;    break;
-    case HTML_VARIABLE_ON:      nPoolId = RES_POOLCHR_HTML_VARIABLE;    break;
-    case HTML_DEFINSTANCE_ON:   nPoolId = RES_POOLCHR_HTML_DEFINSTANCE; break;
-    case HTML_TELETYPE_ON:      nPoolId = RES_POOLCHR_HTML_TELETYPE;    break;
+    case HtmlTokenId::EMPHASIS_ON:      nPoolId = RES_POOLCHR_HTML_EMPHASIS;    break;
+    case HtmlTokenId::CITIATION_ON:     nPoolId = RES_POOLCHR_HTML_CITIATION;   break;
+    case HtmlTokenId::STRONG_ON:        nPoolId = RES_POOLCHR_HTML_STRONG;      break;
+    case HtmlTokenId::CODE_ON:          nPoolId = RES_POOLCHR_HTML_CODE;        break;
+    case HtmlTokenId::SAMPLE_ON:        nPoolId = RES_POOLCHR_HTML_SAMPLE;      break;
+    case HtmlTokenId::KEYBOARD_ON:      nPoolId = RES_POOLCHR_HTML_KEYBOARD;    break;
+    case HtmlTokenId::VARIABLE_ON:      nPoolId = RES_POOLCHR_HTML_VARIABLE;    break;
+    case HtmlTokenId::DEFINSTANCE_ON:   nPoolId = RES_POOLCHR_HTML_DEFINSTANCE; break;
+    case HtmlTokenId::TELETYPE_ON:      nPoolId = RES_POOLCHR_HTML_TELETYPE;    break;
 
-    case HTML_SHORTQUOTE_ON:    sName = OOO_STRING_SVTOOLS_HTML_shortquote;     break;
-    case HTML_LANGUAGE_ON:      sName = OOO_STRING_SVTOOLS_HTML_language;   break;
-    case HTML_AUTHOR_ON:        sName = OOO_STRING_SVTOOLS_HTML_author;         break;
-    case HTML_PERSON_ON:        sName = OOO_STRING_SVTOOLS_HTML_person;         break;
-    case HTML_ACRONYM_ON:       sName = OOO_STRING_SVTOOLS_HTML_acronym;        break;
-    case HTML_ABBREVIATION_ON:  sName = OOO_STRING_SVTOOLS_HTML_abbreviation;   break;
-    case HTML_INSERTEDTEXT_ON:  sName = OOO_STRING_SVTOOLS_HTML_insertedtext;   break;
-    case HTML_DELETEDTEXT_ON:   sName = OOO_STRING_SVTOOLS_HTML_deletedtext;    break;
+    case HtmlTokenId::SHORTQUOTE_ON:    sName = OOO_STRING_SVTOOLS_HTML_shortquote;     break;
+    case HtmlTokenId::LANGUAGE_ON:      sName = OOO_STRING_SVTOOLS_HTML_language;   break;
+    case HtmlTokenId::AUTHOR_ON:        sName = OOO_STRING_SVTOOLS_HTML_author;         break;
+    case HtmlTokenId::PERSON_ON:        sName = OOO_STRING_SVTOOLS_HTML_person;         break;
+    case HtmlTokenId::ACRONYM_ON:       sName = OOO_STRING_SVTOOLS_HTML_acronym;        break;
+    case HtmlTokenId::ABBREVIATION_ON:  sName = OOO_STRING_SVTOOLS_HTML_abbreviation;   break;
+    case HtmlTokenId::INSERTEDTEXT_ON:  sName = OOO_STRING_SVTOOLS_HTML_insertedtext;   break;
+    case HtmlTokenId::DELETEDTEXT_ON:   sName = OOO_STRING_SVTOOLS_HTML_deletedtext;    break;
+    default: break;
     }
 
     // search or create the style (only possible with name)
@@ -1777,7 +1779,7 @@ void SwHTMLParser::InsertLink()
                     // The style was load asynchronously and is only available
                     // on the next continue call. Therefore we must create a
                     // Pending stack, so that we will return to here.
-                    m_pPendStack = new SwPendingStack( HTML_LINK, m_pPendStack );
+                    m_pPendStack = new SwPendingStack( HtmlTokenId::LINK, m_pPendStack );
                 }
             }
             else
@@ -2114,25 +2116,25 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
     }
 }
 
-HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken )
+HTMLAttrContext *SwHTMLParser::PopContext( HtmlTokenId nToken )
 {
     HTMLAttrContexts::size_type nPos = m_aContexts.size();
     if( nPos <= m_nContextStMin )
         return nullptr;
 
-    bool bFound = 0==nToken;
-    if( nToken )
+    bool bFound = HtmlTokenId::NONE == nToken;
+    if( nToken != HtmlTokenId::NONE )
     {
         // search for stack entry of token ...
         while( nPos > m_nContextStMin )
         {
-            sal_uInt16 nCntxtToken = m_aContexts[--nPos]->GetToken();
+            HtmlTokenId nCntxtToken = m_aContexts[--nPos]->GetToken();
             if( nCntxtToken == nToken )
             {
                 bFound = true;
                 break;
             }
-            else if( nCntxtToken == 0 ) // zero as token doesn't occur
+            else if( nCntxtToken == HtmlTokenId::NONE ) // zero as token doesn't occur
             {
                 break;
             }

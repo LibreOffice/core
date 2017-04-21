@@ -33,15 +33,16 @@
 #include "editeng/editeng.hxx"
 
 #include <svtools/rtftoken.h>
+#include <svtools/htmltokn.h>
 
 using namespace com::sun::star;
 
-HtmlImportInfo::HtmlImportInfo( HtmlImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
+HtmlImportInfo::HtmlImportInfo( HtmlImportState eSt, SvParser<HtmlTokenId>* pPrsrs, const ESelection& rSel )
     : aSelection( rSel )
 {
     pParser     = pPrsrs;
     eState      = eSt;
-    nToken      = 0;
+    nToken      = HtmlTokenId::NONE;
     nTokenValue = 0;
     pAttrs      = nullptr;
 }
@@ -50,7 +51,7 @@ HtmlImportInfo::~HtmlImportInfo()
 {
 }
 
-RtfImportInfo::RtfImportInfo( RtfImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
+RtfImportInfo::RtfImportInfo( RtfImportState eSt, SvParser<int>* pPrsrs, const ESelection& rSel )
     : aSelection( rSel )
 {
     pParser     = pPrsrs;
