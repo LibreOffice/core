@@ -19,7 +19,7 @@
 
 
 // #i13033#
-// New mechanism to hold a ist of all original and cloned objects for later
+// New mechanism to hold a list of all original and cloned objects for later
 // re-creating the connections for contained connectors
 #include <clonelist.hxx>
 #include <svx/svdoedge.hxx>

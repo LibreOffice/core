@@ -717,7 +717,7 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
 
     vcl::Window *pTabPage = getNonLayoutParent(this);
     if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
-        static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, RectPoint::MM ); // RectPoint ist dummy
+        static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, RectPoint::MM ); // RectPoint is dummy
 
     return GetFocusPosIndex();
 

@@ -335,7 +335,7 @@ protected:
             const FmFormObj& i_rKnownFormObj
         );
 
-    // sammelt in strNames die Namen aller Formulare
+    // collects in strNames the names of all forms
     SAL_DLLPRIVATE static void impl_collectFormSearchContexts_nothrow(
         const css::uno::Reference< css::uno::XInterface>& _rxStartingPoint,
         const OUString& _rCurrentLevelPrefix,
