@@ -369,7 +369,7 @@ public:
     FmXGridPeer(const css::uno::Reference< css::uno::XComponentContext >&);
     virtual ~FmXGridPeer() override;
 
-    // spaeter Constructor, immer nach dem realen Constructor zu rufen !
+    // late constructor, to always be called after the real constructor!
     void Create(vcl::Window* pParent, WinBits nStyle);
 
 // css::lang::XUnoTunnel

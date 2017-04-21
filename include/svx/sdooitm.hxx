@@ -24,7 +24,7 @@
 
 
 // class SdrOnOffItem
-// here GetValueTextByVal() returns "an" or "aus" instead
+// here GetValueTextByVal() returns "on" or "off" instead
 // of "TRUE" or "FALSE"
 
 class SVX_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
