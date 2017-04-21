@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c0fee304",
+        "filename": "include/svx/tbcontrl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-04-21T22:34:42Z",
+      "side": 1,
+      "message": "This is a correction to the translation on commit afc2de3e042401cee079b0bb65873ac7beca1769 ( https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dafc2de3e042401cee079b0bb65873ac7beca1769 )",
+      "revId": "3e775bf9143b36e03e2de2cf80cb4fa4c2cea992",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
