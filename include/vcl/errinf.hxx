@@ -151,14 +151,6 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
 {
     friend class ErrorHandler_Impl;
 
-private:
-    static DialogMask HandleError_Impl( sal_uInt32 lId,
-                              DialogMask nFlags,
-                              bool bJustCreateString,
-                              OUString & rError);
-protected:
-    virtual bool        CreateString(const ErrorInfo *, OUString &) const = 0;
-
 public:
                         ErrorHandler();
     virtual             ~ErrorHandler();
@@ -168,6 +160,10 @@ public:
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );
     static void         RegisterDisplay( WindowDisplayErrorFunc* );
+
+protected:
+    virtual bool        CreateString(const ErrorInfo *, OUString &) const = 0;
+
 };
 
 #endif
