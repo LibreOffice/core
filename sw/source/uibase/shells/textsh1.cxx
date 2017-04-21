@@ -1847,8 +1847,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case SID_INSERT_RLM :
             case SID_INSERT_LRM :
-            case SID_INSERT_ZWNBSP :
-            case SID_INSERT_ZWSP:
             {
                 SvtCTLOptions aCTLOptions;
                 bool bEnabled = aCTLOptions.IsCTLFontEnabled();

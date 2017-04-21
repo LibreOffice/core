@@ -323,8 +323,6 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
 
         case SID_INSERT_RLM:
         case SID_INSERT_LRM:
-        case SID_INSERT_ZWNBSP:
-        case SID_INSERT_ZWSP:
             bEnabled = aCTLOptions.IsCTLFontEnabled();
         break;
 

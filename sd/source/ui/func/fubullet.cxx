@@ -315,6 +315,8 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFra
             rSet.DisableItem(FN_INSERT_SOFT_HYPHEN);
             rSet.DisableItem(FN_INSERT_HARDHYPHEN);
             rSet.DisableItem(FN_INSERT_HARD_SPACE);
+            rSet.DisableItem(SID_INSERT_ZWNBSP);
+            rSet.DisableItem(SID_INSERT_ZWSP);
         }
 
         if( !bTextEdit && (dynamic_cast<OutlineViewShell*>( pViewShell ) == nullptr) )
@@ -324,8 +326,6 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFra
         {
             rSet.DisableItem(SID_INSERT_RLM);
             rSet.DisableItem(SID_INSERT_LRM);
-            rSet.DisableItem(SID_INSERT_ZWNBSP);
-            rSet.DisableItem(SID_INSERT_ZWSP);
         }
 
         if( pViewFrame )
@@ -334,8 +334,6 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFra
 
             rBindings.SetVisibleState( SID_INSERT_RLM, bCtlEnabled );
             rBindings.SetVisibleState( SID_INSERT_LRM, bCtlEnabled );
-            rBindings.SetVisibleState( SID_INSERT_ZWNBSP, bCtlEnabled );
-            rBindings.SetVisibleState( SID_INSERT_ZWSP, bCtlEnabled );
         }
     }
 }

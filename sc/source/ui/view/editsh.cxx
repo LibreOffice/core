@@ -751,8 +751,6 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_TRANSLITERATE_KATAGANA:
             case SID_INSERT_RLM:
             case SID_INSERT_LRM:
-            case SID_INSERT_ZWNBSP:
-            case SID_INSERT_ZWSP:
                 ScViewUtil::HideDisabledSlot( rSet, pViewData->GetBindings(), nWhich );
             break;
 
