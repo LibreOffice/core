@@ -98,25 +98,6 @@ namespace comphelper
         /// @throws css::lang::WrappedTargetException
         virtual void _postGetValues () = 0;
 
-        /// @throws css::beans::UnknownPropertyException
-        /// @throws css::beans::PropertyVetoException
-        /// @throws css::lang::IllegalArgumentException
-        /// @throws css::lang::WrappedTargetException
-        static void _preGetPropertyState ();
-        /// @throws css::beans::UnknownPropertyException
-        static void _getPropertyState( const comphelper::PropertyInfo& rInfo, css::beans::PropertyState& rState );
-        /// @throws css::beans::UnknownPropertyException
-        /// @throws css::beans::PropertyVetoException
-        /// @throws css::lang::IllegalArgumentException
-        /// @throws css::lang::WrappedTargetException
-        static void _postGetPropertyState ();
-
-        /// @throws css::beans::UnknownPropertyException
-        static void _setPropertyToDefault( const comphelper::PropertyInfo& rEntry );
-        /// @throws css::beans::UnknownPropertyException
-        /// @throws css::lang::WrappedTargetException
-        static css::uno::Any _getPropertyDefault( const comphelper::PropertyInfo& rEntry );
-
     public:
         ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, SolarMutex* pMutex = nullptr )
             throw();
