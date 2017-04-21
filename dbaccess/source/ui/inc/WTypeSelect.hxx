@@ -29,7 +29,7 @@
 #include <vcl/lstbox.hxx>
 
 class SvStream;
-class SvParser;
+
 namespace dbaui
 {
     class OTableDesignHelpBar;
@@ -109,7 +109,7 @@ namespace dbaui
         bool                    m_bAutoIncrementEnabled;
         bool                    m_bDuplicateName;
 
-        virtual SvParser*       createReader(sal_Int32 _nRows) = 0;
+        virtual void            createReaderAndCallParser(sal_Int32 _nRows) = 0;
 
         void                    EnableAuto(bool bEnable);
     public:

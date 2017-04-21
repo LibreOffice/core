@@ -60,7 +60,7 @@ sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
     Link<RtfImportInfo&,void> aOldLink = pEdit->GetRtfImportHdl();
     pEdit->SetRtfImportHdl( LINK( this, ScRTFParser, RTFImportHdl ) );
     sal_uLong nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_RTF );
-    if ( nLastToken == RTF_PAR )
+    if ( nRtfLastToken == RTF_PAR )
     {
         if ( !maList.empty() )
         {
@@ -274,14 +274,14 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
             nColCnt = 0;
             maDefaultList.clear();
             pDefMerge = nullptr;
-            nLastToken = pInfo->nToken;
+            nRtfLastToken = pInfo->nToken;
             mnCurPos = 0;
         }
         break;
         case RTF_CLMGF:         // The first cell of cells to be merged
         {
             pDefMerge = pInsDefault;
-            nLastToken = pInfo->nToken;
+            nRtfLastToken = pInfo->nToken;
         }
         break;
         case RTF_CLMRG:         // A cell to be merged with the preceding cell
@@ -295,7 +295,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
             if ( pDefMerge ) // Else broken RTF
                 pDefMerge->nColOverlap++;   // multiple successive ones possible
             pInsDefault->nColOverlap = 0;   // Flag: ignore these
-            nLastToken = pInfo->nToken;
+            nRtfLastToken = pInfo->nToken;
         }
         break;
         case RTF_CELLX:         // closes cell default
@@ -308,17 +308,17 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
             pInsDefault = new ScRTFCellDefault( pPool );
             if ( ++nColCnt > nColMax )
                 nColMax = nColCnt;
-            nLastToken = pInfo->nToken;
+            nRtfLastToken = pInfo->nToken;
         }
         break;
         case RTF_INTBL:         // before the first RTF_CELL
         {
             // Once over NextToken and once over UnknownAttrToken
             // or e.g. \intbl ... \cell \pard \intbl ... \cell
-            if ( nLastToken != RTF_INTBL && nLastToken != RTF_CELL && nLastToken != RTF_PAR )
+            if ( nRtfLastToken != RTF_INTBL && nRtfLastToken != RTF_CELL && nRtfLastToken != RTF_PAR )
             {
                 NewCellRow( pInfo );
-                nLastToken = pInfo->nToken;
+                nRtfLastToken = pInfo->nToken;
             }
         }
         break;
@@ -360,13 +360,13 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
             if (!maDefaultList.empty() && (mnCurPos+1) < maDefaultList.size())
                 pActDefault = maDefaultList[++mnCurPos].get();
 
-            nLastToken = pInfo->nToken;
+            nRtfLastToken = pInfo->nToken;
         }
         break;
         case RTF_ROW:           // denotes the end of a row
         {
             NextRow();
-            nLastToken = pInfo->nToken;
+            nRtfLastToken = pInfo->nToken;
         }
         break;
         case RTF_PAR:           // Paragraph
@@ -381,11 +381,11 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
                 NewActEntry( pActEntry );   // new pActEntry
                 NextRow();
             }
-            nLastToken = pInfo->nToken;
+            nRtfLastToken = pInfo->nToken;
         }
         break;
         default:
-        {   // do not set nLastToken
+        {   // do not set nRtfLastToken
             switch ( pInfo->nToken & ~(0xff | RTF_TABLEDEF) )
             {
                 case RTF_SHADINGDEF:

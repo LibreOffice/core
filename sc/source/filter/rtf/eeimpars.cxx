@@ -31,6 +31,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svtools/parhtml.hxx>
+#include <svtools/htmltokn.h>
 #include <svl/zforlist.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
@@ -610,7 +611,8 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
         pEdit( pEditP ),
         pPool( EditEngine::CreatePool() ),
         pDocPool( new ScDocumentPool ),
-        nLastToken(0),
+        nRtfLastToken(0),
+        nHtmlLastToken(HtmlTokenId::NONE),
         nColCnt(0),
         nRowCnt(0),
         nColMax(0),
