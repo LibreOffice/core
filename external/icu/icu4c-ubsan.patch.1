@@ -1,6 +1,7 @@
---- source/common/rbbidata.h
-+++ source/common/rbbidata.h
-@@ -113,7 +113,7 @@
+diff -ur icu.org/source/common/rbbidata.h icu/source/common/rbbidata.h
+--- icu.org/source/common/rbbidata.h	2017-02-03 19:57:23.000000000 +0100
++++ icu/source/common/rbbidata.h	2017-04-21 22:46:25.371651160 +0200
+@@ -115,7 +115,7 @@
                                      /*     StatusTable of the set of matching             */
                                      /*     tags (rule status values)                      */
      int16_t          fReserved;
@@ -9,7 +10,7 @@
                                      /*  This array does not have two elements             */
                                      /*    Array Size is actually fData->fHeader->fCatCount         */
                                      /*    CAUTION:  see RBBITableBuilder::getTableSize()  */
-@@ -126,7 +126,7 @@
+@@ -128,7 +128,7 @@
      uint32_t         fRowLen;       /*  Length of a state table row, in bytes.            */
      uint32_t         fFlags;        /*  Option Flags for this state table                 */
      uint32_t         fReserved;     /*  reserved                                          */
@@ -18,9 +19,10 @@
                                      /*    (making it char[] simplifies ugly address       */
                                      /*     arithmetic for indexing variable length rows.) */
  };
---- source/common/rbbitblb.cpp
-+++ source/common/rbbitblb.cpp
-@@ -1067,15 +1067,15 @@
+diff -ur icu.org/source/common/rbbitblb.cpp icu/source/common/rbbitblb.cpp
+--- icu.org/source/common/rbbitblb.cpp	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/common/rbbitblb.cpp	2017-04-21 22:46:25.373651159 +0200
+@@ -1095,15 +1095,15 @@
          return 0;
      }
  
@@ -40,7 +42,7 @@
      size   += numRows * rowSize;
      return size;
  }
-@@ -1105,7 +1105,7 @@
+@@ -1133,7 +1133,7 @@
      }
  
      table->fRowLen    = sizeof(RBBIStateTableRow) +
@@ -49,8 +51,9 @@
      table->fNumStates = fDStates->size();
      table->fFlags     = 0;
      if (fRB->fLookAheadHardBreak) {
---- source/common/ubidiimp.h
-+++ source/common/ubidiimp.h
+diff -ur icu.org/source/common/ubidiimp.h icu/source/common/ubidiimp.h
+--- icu.org/source/common/ubidiimp.h	2017-02-03 19:57:23.000000000 +0100
++++ icu/source/common/ubidiimp.h	2017-04-21 22:46:25.374651159 +0200
 @@ -198,8 +198,8 @@
  /* in a Run, logicalStart will get this bit set if the run level is odd */
  #define INDEX_ODD_BIT (1UL<<31)
@@ -62,9 +65,10 @@
  #define REMOVE_ODD_BIT(x)                 ((x)&=~INDEX_ODD_BIT)
  
  #define GET_INDEX(x)   ((x)&~INDEX_ODD_BIT)
---- source/common/ucharstriebuilder.cpp
-+++ source/common/ucharstriebuilder.cpp
-@@ -285,7 +285,7 @@
+diff -ur icu.org/source/common/ucharstriebuilder.cpp icu/source/common/ucharstriebuilder.cpp
+--- icu.org/source/common/ucharstriebuilder.cpp	2017-02-03 19:57:23.000000000 +0100
++++ icu/source/common/ucharstriebuilder.cpp	2017-04-21 22:46:25.375651159 +0200
+@@ -287,7 +287,7 @@
  
  UCharsTrieBuilder::UCTLinearMatchNode::UCTLinearMatchNode(const UChar *units, int32_t len, Node *nextNode)
          : LinearMatchNode(len, nextNode), s(units) {
@@ -73,9 +77,10 @@
  }
  
  UBool
---- source/common/ucmndata.c
-+++ source/common/ucmndata.c
-@@ -75,7 +75,7 @@
+diff -ur icu.org/source/common/ucmndata.cpp icu/source/common/ucmndata.cpp
+--- icu.org/source/common/ucmndata.cpp	2017-03-08 16:34:47.000000000 +0100
++++ icu/source/common/ucmndata.cpp	2017-04-21 22:46:25.376651159 +0200
+@@ -77,7 +77,7 @@
  typedef struct  {
      uint32_t          count;
      uint32_t          reserved;
@@ -84,9 +89,10 @@
  }  PointerTOC;
  
  
---- source/common/ucmndata.h
-+++ source/common/ucmndata.h
-@@ -50,7 +50,7 @@
+diff -ur icu.org/source/common/ucmndata.h icu/source/common/ucmndata.h
+--- icu.org/source/common/ucmndata.h	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/common/ucmndata.h	2017-04-21 22:46:25.377651159 +0200
+@@ -52,7 +52,7 @@
  
  typedef struct {
      uint32_t count;
@@ -95,9 +101,10 @@
  } UDataOffsetTOC;
  
  /**
---- source/common/unicode/stringtriebuilder.h
-+++ source/common/unicode/stringtriebuilder.h
-@@ -269,7 +269,7 @@
+diff -ur icu.org/source/common/unicode/stringtriebuilder.h icu/source/common/unicode/stringtriebuilder.h
+--- icu.org/source/common/unicode/stringtriebuilder.h	2017-03-10 23:01:34.000000000 +0100
++++ icu/source/common/unicode/stringtriebuilder.h	2017-04-21 22:47:43.395634383 +0200
+@@ -276,7 +276,7 @@
          void setValue(int32_t v) {
              hasValue=TRUE;
              value=v;
@@ -106,7 +113,7 @@
          }
      protected:
          UBool hasValue;
-@@ -296,7 +296,7 @@
+@@ -307,7 +307,7 @@
      class LinearMatchNode : public ValueNode {
      public:
          LinearMatchNode(int32_t len, Node *nextNode)
@@ -115,7 +122,7 @@
                    length(len), next(nextNode) {}
          virtual UBool operator==(const Node &other) const;
          virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
-@@ -330,7 +330,7 @@
+@@ -342,7 +342,7 @@
              equal[length]=NULL;
              values[length]=value;
              ++length;
@@ -124,7 +131,7 @@
          }
          // Adds a unit which leads to another match node.
          void add(int32_t c, Node *node) {
-@@ -338,7 +338,7 @@
+@@ -350,7 +350,7 @@
              equal[length]=node;
              values[length]=0;
              ++length;
@@ -133,16 +140,16 @@
          }
      protected:
          Node *equal[kMaxBranchLinearSubNodeLength];  // NULL means "has final value".
-@@ -353,7 +353,7 @@
+@@ -365,7 +365,7 @@
      class SplitBranchNode : public BranchNode {
      public:
-         SplitBranchNode(UChar middleUnit, Node *lessThanNode, Node *greaterOrEqualNode)
+         SplitBranchNode(char16_t middleUnit, Node *lessThanNode, Node *greaterOrEqualNode)
 -                : BranchNode(((0x555555*37+middleUnit)*37+
 +                : BranchNode(((0x555555U*37+middleUnit)*37+
                                hashCode(lessThanNode))*37+hashCode(greaterOrEqualNode)),
                    unit(middleUnit), lessThan(lessThanNode), greaterOrEqual(greaterOrEqualNode) {}
          virtual UBool operator==(const Node &other) const;
-@@ -370,7 +370,7 @@
+@@ -382,7 +382,7 @@
      class BranchHeadNode : public ValueNode {
      public:
          BranchHeadNode(int32_t len, Node *subNode)
@@ -151,8 +158,9 @@
                    length(len), next(subNode) {}
          virtual UBool operator==(const Node &other) const;
          virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
---- source/i18n/collationdatareader.cpp
-+++ source/i18n/collationdatareader.cpp
+diff -ur icu.org/source/i18n/collationdatareader.cpp icu/source/i18n/collationdatareader.cpp
+--- icu.org/source/i18n/collationdatareader.cpp	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/i18n/collationdatareader.cpp	2017-04-21 22:46:25.380651158 +0200
 @@ -419,6 +419,7 @@
              tailoring.data, ts, fastLatinPrimaries, UPRV_LENGTHOF(fastLatinPrimaries));
      if(options == ts.options && ts.variableTop != 0 &&

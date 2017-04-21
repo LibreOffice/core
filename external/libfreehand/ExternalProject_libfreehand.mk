@@ -25,6 +25,7 @@ $(eval $(call gb_ExternalProject_use_externals,libfreehand,\
 $(call gb_ExternalProject_get_state_target,libfreehand,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
+		&& export CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11)" \
 		&& MAKE=$(MAKE) ./configure \
 			--with-pic \
 			--enable-static \

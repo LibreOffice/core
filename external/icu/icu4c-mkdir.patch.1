@@ -1,6 +1,7 @@
---- misc/icu/source/dataMakefile.in.sav	2012-04-05 22:49:20.000000000 +0200
-+++ build/icu/source/data/Makefile.in	2012-12-04 14:24:40.548026700 +0100
-@@ -363,6 +363,7 @@
+diff -ur icu.org/source/data/Makefile.in icu/source/data/Makefile.in
+--- icu.org/source/data/Makefile.in	2016-06-15 20:58:17.000000000 +0200
++++ icu/source/data/Makefile.in	2017-04-21 22:29:00.747158002 +0200
+@@ -367,6 +367,7 @@
  ifeq ($(PKGDATA_MODE),dll)
  SO_VERSION_DATA = $(OUTTMPDIR)/icudata.res
  $(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc
