@@ -1866,7 +1866,7 @@ void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, Tbl
 
             if(nParaAnz==1 && p1stPara)
             {
-                // Bei nur einem Paragraph
+                // with only one paragraph
                 if (pOutl->GetText(p1stPara).isEmpty())
                 {
                     bEmptyOutliner = true;
@@ -2521,7 +2521,7 @@ bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAtt
             OutlinerView* pTextEditOutlinerView = mpView->GetTextEditOutlinerView();
             if(pTextEditOutlinerView)
             {
-                // FALSE= InvalidItems nicht al Default, sondern als "Loecher" betrachten
+                // FALSE= consider InvalidItems not as the default, but as "holes"
                 rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), false);
                 rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ) );
             }

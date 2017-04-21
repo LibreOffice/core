@@ -499,7 +499,7 @@ void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGe
 
     long nShW=GetAngle(aPt3);
     nShW-=27000; // ShearWink is measured against a vertical line
-    nShW=-nShW;  // Negieren, denn '+' ist Rechtskursivierung
+    nShW=-nShW;  // negating, because '+' is shearing clock-wise
 
     bool bMirr=aPt3.Y()<0;
     if (bMirr) { // "exchange of points" when mirroring

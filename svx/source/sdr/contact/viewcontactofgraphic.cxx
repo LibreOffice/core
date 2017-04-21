@@ -73,7 +73,7 @@ namespace sdr
 
         void ViewContactOfGraphic::flushGraphicObjects()
         {
-            // #i102380# The graphic is swapped out. To let that have an effect ist is necessary to
+            // #i102380# The graphic is swapped out. To let that have an effect, it is necessary to
             // delete copies of the GraphicObject which are not swapped out and have no SwapHandler set
             // (this is what happens when the GraphicObject gets copied to a SdrGrafPrimitive2D). This
             // is best achieved for the VC by clearing the local decomposition cache. It would be possible

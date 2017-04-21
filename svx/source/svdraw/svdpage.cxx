@@ -409,7 +409,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
         pObj->GetViewContact().flushViewObjectContacts();
 
         DBG_ASSERT(pObj->IsInserted(),"The object does not have the status Inserted.");
-        pObj->SetInserted(false); // Ruft u.a. den UserCall
+        pObj->SetInserted(false); // calls UserCall, among other
         pObj->SetObjList(nullptr);
         pObj->SetPage(nullptr);
         if (!bObjOrdNumsDirty) { // optimizing for the case that the last object has to be removed

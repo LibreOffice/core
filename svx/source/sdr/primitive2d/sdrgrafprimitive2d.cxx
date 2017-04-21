@@ -39,7 +39,7 @@ namespace drawinglayer
             // create unit outline polygon
             basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
 
-            // add fill, but only when graphic ist transparent
+            // add fill, but only when graphic is transparent
             if(!getSdrLFSTAttribute().getFill().isDefault() && isTransparent())
             {
                 basegfx::B2DPolyPolygon aTransformed(aUnitOutline);

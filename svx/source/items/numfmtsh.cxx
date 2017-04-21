@@ -159,13 +159,12 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
 SvxNumberFormatShell::~SvxNumberFormatShell()
 {
     /*
-     * An dieser Stelle wird abhaengig davon, ob die
-     * hinzugefuegten, benutzerdefinierten als gueltig
-     * erklaert wurden (ValidateNewEntries()), die
-     * Add-Liste wieder aus dem Zahlenformatierer entfernt.
+     * At this point, depending on whether the added user-defined were
+     * validated (ValidateNewEntries()), the add list is removed from
+     * the number formatter again.
      *
-     * Loeschen von Formaten aus dem Formatierer passiert
-     * aus Undo-Gruenden nur in der aufrufenden Instanz.
+     * Deleting formats from the formatter happens for Undo reasons
+     * only in the calling instance.
      */
 
     if ( bUndoAddList )
@@ -538,11 +537,11 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
 
     short                   nSelPos     = SELPOS_NONE;
 
-    // Sonderbehandlung fuer undefiniertes Zahlenformat:
+    // special treatment for undefined number format:
     if ( (eValType == SvxNumberValueType::Undefined) && (nCurFormatKey == 0) )
-        PosToCategory_Impl( CAT_ALL, nCurCategory );        // Kategorie = Alle
+        PosToCategory_Impl( CAT_ALL, nCurCategory );        // category = all
     else
-        nCurCategory = css::util::NumberFormat::UNDEFINED;      // Kategorie = Undefiniert
+        nCurCategory = css::util::NumberFormat::UNDEFINED;      // category = undefined
 
     pCurFmtTable =  &(pFormatter->GetFirstEntryTable( nCurCategory,
                                                       nCurFormatKey,
@@ -563,10 +562,9 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
 
 short SvxNumberFormatShell::FillEntryList_Impl( std::vector<OUString>& rList )
 {
-    /* Erstellen einer aktuellen Liste von Format-Eintraegen.
-     * Rueckgabewert ist die Listenposition des aktuellen Formates.
-     * Ist die Liste leer oder gibt es kein aktuelles Format,
-     * so wird SELPOS_NONE geliefert.
+    /* Create a current list of format entries. The return value is
+     * the list position of the current format. If the list is empty
+     * or if there is no current format, SELPOS_NONE is delivered.
      */
     short nSelPos=0;
     sal_uInt16 nPrivCat = CAT_CURRENCY;
@@ -601,10 +599,9 @@ short SvxNumberFormatShell::FillEntryList_Impl( std::vector<OUString>& rList )
 void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
                                                   sal_uInt16 nPrivCat,short &nSelPos )
 {
-    /* Erstellen einer aktuellen Liste von Format-Eintraegen.
-     * Rueckgabewert ist die Listenposition des aktuellen Formates.
-     * Ist die Liste leer oder gibt es kein aktuelles Format,
-     * so wird SELPOS_NONE geliefert.
+    /* Create a current list of format entries. The return value is
+     * the list position of the current format. If the list is empty
+     * or if there is no current format, SELPOS_NONE is delivered.
      */
     DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
@@ -669,10 +666,9 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
                                                        NfIndexTableOffset eOffsetStart,
                                                        NfIndexTableOffset eOffsetEnd)
 {
-    /* Erstellen einer aktuellen Liste von Format-Eintraegen.
-     * Rueckgabewert ist die Listenposition des aktuellen Formates.
-     * Ist die Liste leer oder gibt es kein aktuelles Format,
-     * so wird SELPOS_NONE geliefert.
+    /* Create a current list of format entries. The return value is
+     * the list position of the current format. If the list is empty
+     * or if there is no current format, SELPOS_NONE is delivered.
      */
     sal_uInt16  nMyType;
 
@@ -748,10 +744,9 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
 short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<OUString>& rList,
                                                         short nSelPos)
 {
-    /* Erstellen einer aktuellen Liste von Format-Eintraegen.
-     * Rueckgabewert ist die Listenposition des aktuellen Formates.
-     * Ist die Liste leer oder gibt es kein aktuelles Format,
-     * so wird SELPOS_NONE geliefert.
+    /* Create a current list of format entries. The return value is
+     * the list position of the current format. If the list is empty
+     * or if there is no current format, SELPOS_NONE is delivered.
      */
     DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
@@ -782,10 +777,9 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<OUString>& r
 short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rList,
                                                        short nSelPos)
 {
-    /* Erstellen einer aktuellen Liste von Format-Eintraegen.
-     * Rueckgabewert ist die Listenposition des aktuellen Formates.
-     * Ist die Liste leer oder gibt es kein aktuelles Format,
-     * so wird SELPOS_NONE geliefert.
+    /* Create a current list of format entries. The return value is
+     * the list position of the current format. If the list is empty
+     * or if there is no current format, SELPOS_NONE is delivered.
      */
     sal_uInt16  nMyType;
 
@@ -868,10 +862,9 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& rList,
                                                         short nSelPos)
 {
-    /* Erstellen einer aktuellen Liste von Format-Eintraegen.
-     * Rueckgabewert ist die Listenposition des aktuellen Formates.
-     * Ist die Liste leer oder gibt es kein aktuelles Format,
-     * so wird SELPOS_NONE geliefert.
+    /* Create a current list of format entries. The return value is
+     * the list position of the current format. If the list is empty
+     * or if there is no current format, SELPOS_NONE is delivered.
      */
     sal_uInt16 nMyType;
 
@@ -1060,10 +1053,9 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
                                                    sal_uInt16 nPrivCat, short nSelPos )
 {
-    /* Erstellen einer aktuellen Liste von Format-Eintraegen.
-     * Rueckgabewert ist die Listenposition des aktuellen Formates.
-     * Ist die Liste leer oder gibt es kein aktuelles Format,
-     * so wird SELPOS_NONE geliefert.
+    /* Create a current list of format entries. The return value is
+     * the list position of the current format. If the list is empty
+     * or if there is no current format, SELPOS_NONE is delivered.
      */
     sal_uInt16 nMyType;
 
@@ -1148,10 +1140,10 @@ bool SvxNumberFormatShell::IsRemoved_Impl( size_t nKey )
 }
 
 
-// Konvertierungs-Routinen:
+// Conversion routines:
 void SvxNumberFormatShell::PosToCategory_Impl(sal_uInt16 nPos, short& rCategory)
 {
-    // Kategorie css::form-Positionen abbilden (->Resource)
+    // map category css::form positions (->resource)
     switch ( nPos )
     {
         case CAT_USERDEFINED:   rCategory = css::util::NumberFormat::DEFINED;       break;
@@ -1171,7 +1163,7 @@ void SvxNumberFormatShell::PosToCategory_Impl(sal_uInt16 nPos, short& rCategory)
 
 void SvxNumberFormatShell::CategoryToPos_Impl(short nCategory, sal_uInt16& rPos)
 {
-    // Kategorie auf css::form-Positionen abbilden (->Resource)
+    // map category to css::form positions (->resource)
     switch ( nCategory )
     {
         case css::util::NumberFormat::DEFINED:      rPos = CAT_USERDEFINED; break;
@@ -1191,10 +1183,10 @@ void SvxNumberFormatShell::CategoryToPos_Impl(short nCategory, sal_uInt16& rPos)
 }
 
 /*
- * Funktion:   Formatiert die Zahl nValue abhaengig von rFormatStr
- *             und speichert das Ergebnis in rPreviewStr.
- * Input:      FormatString, Farbe, zu formatierende Zahl
- * Output:     Ausgabestring rPreviewStr
+ * Function:   Formats the number nValue dependent on rFormatStr
+ *             and stores the result in rPreviewStr.
+ * Input:      FormatString, color, number to format
+ * Output:     Output string rPreviewStr
  */
 void SvxNumberFormatShell::MakePrevStringFromVal(
         const OUString& rFormatStr,
@@ -1207,10 +1199,9 @@ void SvxNumberFormatShell::MakePrevStringFromVal(
 }
 
 /*
- * Funktion:   Liefert den Kommentar fuer einen gegebenen
- *             Eintrag zurueck.
- * Input:      Nummer des Eintrags
- * Output:     Kommentar-String
+ * Function:   Returns the comment for a given entry.
+ * Input:      Number of the entry
+ * Output:     Comment string
  */
 void SvxNumberFormatShell::SetComment4Entry(short nEntry, const OUString& aEntStr)
 {
@@ -1222,10 +1213,9 @@ void SvxNumberFormatShell::SetComment4Entry(short nEntry, const OUString& aEntSt
 }
 
 /*
- * Funktion:   Liefert den Kommentar fuer einen gegebenen
- *             Eintrag zurueck.
- * Input:      Nummer des Eintrags
- * Output:     Kommentar-String
+ * Function:   Returns the comment for a given entry.
+ * Input:      Number of the entry
+ * Output:     Comment string
  */
 OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
 {
@@ -1244,10 +1234,9 @@ OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
 }
 
 /*
- * Funktion:   Liefert die Kategorie- Nummer fuer einen gegebenen
- *             Eintrag zurueck.
- * Input:      Nummer des Eintrags
- * Output:     Kategorie- Nummer
+ * Function:   Returns the category number for a given entry.
+ * Input:      Number of the entry
+ * Output:     Category number
  */
 short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
 {
@@ -1279,10 +1268,9 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
 }
 
 /*
- * Funktion:   Liefert die Information, ob ein Eintrag
- *             benutzerspezifisch ist zurueck.
- * Input:      Nummer des Eintrags
- * Output:     Benutzerspezifisch?
+ * Function:   Returns the information about whether an entry is user-specific.
+ * Input:      Number of the entry
+ * Output:     User-specific?
  */
 bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 {
@@ -1304,10 +1292,9 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 }
 
 /*
- * Funktion:   Liefert den Format- String fuer einen gegebenen
- *             Eintrag zurueck.
- * Input:      Nummer des Eintrags
- * Output:     Format- String
+ * Function:   Returns the format string for a given entry.
+ * Input:      Number of the entry
+ * Output:     Format string
  */
 OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 {
@@ -1331,10 +1318,9 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 }
 
 /*
- * Funktion:   Liefert die Listen- Nummer fuer einen gegebenen
- *             Formatindex zurueck.
- * Input:      Nummer des Eintrags
- * Output:     Kategorie- Nummer
+ * Function:   Returns the list number for a given format index.
+ * Input:      Number of the entry
+ * Output:     Category number
  */
 short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
 {

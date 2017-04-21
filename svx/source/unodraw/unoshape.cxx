@@ -1304,7 +1304,7 @@ void SAL_CALL SvxShape::dispose()
                 // Why isn't this checked here?
 
             SdrPage* pPage = mpObj->GetPage();
-            // SdrObject aus der Page loeschen
+            // delete the SdrObject from the page
             const size_t nCount = pPage->GetObjCount();
             for ( size_t nNum = 0; nNum < nCount; ++nNum )
             {

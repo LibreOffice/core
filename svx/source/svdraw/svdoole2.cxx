@@ -1036,7 +1036,7 @@ void SdrOle2Obj::Connect_Impl()
         if (pModel && pModel->GetRefDevice() &&
             pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
         {
-            // Kein RefDevice oder RefDevice kein Printer
+            // no RefDevice or RefDevice is not a printer
             bool bModified = (*ppObjRef)->IsModified();
             Printer* pPrinter = (Printer*) pModel->GetRefDevice();
             (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
@@ -1924,7 +1924,7 @@ void SdrOle2Obj::GetObjRef_Impl()
                         if ( bWasEnabled )
                             (*ppObjRef)->EnableSetModified( false );
 
-                        // Kein RefDevice oder RefDevice kein Printer
+                        // no RefDevice or RefDevice is not a printer
                         Printer* pPrinter = (Printer*) pModel->GetRefDevice();
                         (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
 

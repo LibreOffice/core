@@ -106,10 +106,10 @@ void FontWorkGalleryDialog::dispose()
 
 void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 {
-    // Ueber die Gallery werden die Favoriten eingelesen
+    // the favorites are read via the gallery
     sal_uInt32 nFavCount = GalleryExplorer::GetSdrObjCount( nThemeId );
 
-    // Gallery thema locken
+    // lock gallery theme
     GalleryExplorer::BeginLocking(nThemeId);
 
     sal_uInt32 nModelPos;
@@ -142,7 +142,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
         }
     }
 
-    // Gallery thema freigeben
+    // release gallery theme
     GalleryExplorer::EndLocking(nThemeId);
 }
 
@@ -158,7 +158,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
 
     std::vector< Bitmap * >::size_type nFavCount = maFavoritesHorizontal.size();
 
-    // ValueSet Favoriten
+    // ValueSet favorites
     if( nFavCount > (nColCount * nLineCount) )
     {
         WinBits nWinBits = mpCtlFavorites->GetStyle();

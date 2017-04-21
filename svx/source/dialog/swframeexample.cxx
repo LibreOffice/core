@@ -447,13 +447,13 @@ tools::Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRen
 {
     DrawRect_Impl(rRenderContext, rRect, rFillColor, rBorderColor);
 
-    // Bereich, zu dem relativ positioniert wird, bestimmen
+    // determine the area relative to which the positioning happens
     tools::Rectangle aRect(rRect); // aPagePrtArea = Default
     CalcBoundRect_Impl(aRect);
 
     if (nAnchor == RndStdIds::FLY_AT_FLY && &rRect == &aPagePrtArea)
     {
-        // Testabsatz zeichnen
+        // draw text paragraph
         tools::Rectangle aTxt(aTextLine);
         sal_Int32 nStep = aTxt.GetHeight() + 2;
         sal_uInt16 nLines = static_cast<sal_uInt16>(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
