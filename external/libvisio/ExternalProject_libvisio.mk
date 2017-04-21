@@ -35,7 +35,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(CXXFLAGS) $(BOOST_CPPFLAGS)" \
+			CXXFLAGS="$(CXXFLAGS) $(ICU_UCHAR_TYPE) $(BOOST_CPPFLAGS)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
