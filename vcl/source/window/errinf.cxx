@@ -328,7 +328,6 @@ DialogMask ErrorHandler::HandleError_Impl(
     return DialogMask::NONE;
 }
 
-// static
 bool ErrorHandler::GetErrorString(sal_uInt32 lId, OUString& rStr)
 {
     return HandleError_Impl( lId, DialogMask::MAX, true, rStr ) != DialogMask::NONE;
