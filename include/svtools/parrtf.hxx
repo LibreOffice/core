@@ -34,7 +34,7 @@ struct RtfParserState_Impl
     {}
 };
 
-class SVT_DLLPUBLIC SvRTFParser : public SvParser
+class SVT_DLLPUBLIC SvRTFParser : public SvParser<int>
 {
     std::stack< RtfParserState_Impl > aParserStates;
     int              nOpenBrakets;
