@@ -29,6 +29,7 @@
 #include <vcl/wrkwin.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
+#include <svtools/htmltokn.h>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/htmlcfg.hxx>
@@ -1544,7 +1545,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    rHTMLWrt.ChangeParaToken( 0 );
+    rHTMLWrt.ChangeParaToken( HtmlTokenId::NONE );
 
     // Close the current <DL>!
     rHTMLWrt.OutAndSetDefList( 0 );
@@ -1652,7 +1653,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     const sal_Char *pStr = nullptr;
     if( !bSpan )
     {
-        rHTMLWrt.ChangeParaToken( 0 );
+        rHTMLWrt.ChangeParaToken( HtmlTokenId::NONE );
 
         // Close the current <DL>!
         rHTMLWrt.OutAndSetDefList( 0 );
