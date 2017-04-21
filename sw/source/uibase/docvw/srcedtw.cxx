@@ -145,8 +145,8 @@ static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
                     // some string was found
                     OUString sToken = rSource.copy(nActPos + 1, nSrchPos - nActPos - 1 );
                     sToken = sToken.toAsciiUpperCase();
-                    int nToken = ::GetHTMLToken(sToken);
-                    if(nToken)
+                    HtmlTokenId nToken = ::GetHTMLToken(sToken);
+                    if(nToken != HtmlTokenId::NONE)
                     {
                         // Token was found
                         eFoundType = svtools::HTMLKEYWORD;
