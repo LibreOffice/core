@@ -1,6 +1,7 @@
---- icu/source/common/ubidi.c.orig	2014-08-09 20:54:39.338833533 +0100
-+++ icu/source/common/ubidi.c	2014-08-09 20:55:48.625469055 +0100
-@@ -2096,6 +2096,14 @@
+diff -ur icu.org/source/common/ubidi.cpp icu/source/common/ubidi.cpp
+--- icu.org/source/common/ubidi.cpp	2017-03-07 23:57:46.000000000 +0100
++++ icu/source/common/ubidi.cpp	2017-04-21 22:55:11.352659142 +0200
+@@ -2125,6 +2125,14 @@
      return DirProp_ON;
  }
  
@@ -15,7 +16,7 @@
  static void
  resolveImplicitLevels(UBiDi *pBiDi,
                        int32_t start, int32_t limit,
-@@ -2239,7 +2247,7 @@
+@@ -2271,7 +2279,7 @@
      /* look for the last char not a BN or LRE/RLE/LRO/RLO/PDF */
      for(i=limit-1; i>start&&(DIRPROP_FLAG(dirProps[i])&MASK_BN_EXPLICIT); i--);
      dirProp=dirProps[i];
