@@ -11,7 +11,6 @@
 
 #include <comphelper/windowserrorstring.hxx>
 #include <opengl/zone.hxx>
-#include <o3tl/lru_map.hxx>
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salframe.h>
@@ -729,14 +728,14 @@ void WinOpenGLSalGraphicsImpl::Init()
     OpenGLSalGraphicsImpl::Init();
 }
 
-namespace
-{
+TheTextureCache::TheTextureCache(): cache(200) {}
 
-typedef std::pair<ControlCacheKey, std::unique_ptr<TextureCombo>> ControlCachePair;
-typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCacheHashFunction> ControlCacheType;
-
-ControlCacheType gTextureCache(200);
-
+ControlCacheType & TheTextureCache::get() {
+    SalData * data = GetSalData();
+    if (!data->m_pTextureCache) {
+        data->m_pTextureCache.reset(new TheTextureCache);
+    }
+    return data->m_pTextureCache->cache;
 }
 
 bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
@@ -746,6 +745,7 @@ bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rCo
     if (!gbCacheEnabled)
         return false;
 
+    auto & gTextureCache = TheTextureCache::get();
     ControlCacheType::const_iterator iterator = gTextureCache.find(rControlCacheKey);
 
     if (iterator == gTextureCache.end())
@@ -805,7 +805,7 @@ bool WinOpenGLSalGraphicsImpl::RenderAndCacheNativeControl(OpenGLCompatibleDC& r
         return true;
 
     ControlCachePair pair(aControlCacheKey, std::move(pCombo));
-    gTextureCache.insert(std::move(pair));
+    TheTextureCache::get().insert(std::move(pair));
 
     return bResult;
 }
