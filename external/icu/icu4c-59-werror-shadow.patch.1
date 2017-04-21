@@ -1,0 +1,41 @@
+diff -ur icu.org/source/common/unicode/char16ptr.h icu/source/common/unicode/char16ptr.h
+--- icu.org/source/common/unicode/char16ptr.h	2017-03-29 06:44:37.000000000 +0200
++++ icu/source/common/unicode/char16ptr.h	2017-04-21 23:55:56.826062357 +0200
+@@ -107,14 +107,14 @@
+ 
+ #ifdef U_ALIASING_BARRIER
+ 
+-Char16Ptr::Char16Ptr(char16_t *p) : p(p) {}
++Char16Ptr::Char16Ptr(char16_t *p_) : p(p_) {}
+ #if !U_CHAR16_IS_TYPEDEF
+-Char16Ptr::Char16Ptr(uint16_t *p) : p(cast(p)) {}
++Char16Ptr::Char16Ptr(uint16_t *p_) : p(cast(p_)) {}
+ #endif
+ #if U_SIZEOF_WCHAR_T==2
+-Char16Ptr::Char16Ptr(wchar_t *p) : p(cast(p)) {}
++Char16Ptr::Char16Ptr(wchar_t *p_) : p(cast(p_)) {}
+ #endif
+-Char16Ptr::Char16Ptr(std::nullptr_t p) : p(p) {}
++Char16Ptr::Char16Ptr(std::nullptr_t p_) : p(p_) {}
+ Char16Ptr::~Char16Ptr() {
+     U_ALIASING_BARRIER(p);
+ }
+@@ -215,14 +215,14 @@
+ 
+ #ifdef U_ALIASING_BARRIER
+ 
+-ConstChar16Ptr::ConstChar16Ptr(const char16_t *p) : p(p) {}
++ConstChar16Ptr::ConstChar16Ptr(const char16_t *p_) : p(p_) {}
+ #if !U_CHAR16_IS_TYPEDEF
+-ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) : p(cast(p)) {}
++ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p_) : p(cast(p_)) {}
+ #endif
+ #if U_SIZEOF_WCHAR_T==2
+-ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) : p(cast(p)) {}
++ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p_) : p(cast(p_)) {}
+ #endif
+-ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) : p(p) {}
++ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p_) : p(p_) {}
+ ConstChar16Ptr::~ConstChar16Ptr() {
+     U_ALIASING_BARRIER(p);
+ }

@@ -1,17 +1,54 @@
---- misc/icu/source/tools/toolutil/pkg_genc.h
-+++ misc/build/icu/source/tools/toolutil/pkg_genc.h
-@@ -58,7 +58,7 @@
- #endif
+diff -ur icu.org/source/config/mh-darwin icu/source/config/mh-darwin
+--- icu.org/source/config/mh-darwin	2016-06-15 20:58:17.000000000 +0200
++++ icu/source/config/mh-darwin	2017-04-21 21:30:23.584568210 +0200
+@@ -30,11 +30,7 @@
+ SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) $(LD_SOOPTIONS)
  
- #define LARGE_BUFFER_MAX_SIZE 2048
--#define SMALL_BUFFER_MAX_SIZE 512
-+#define SMALL_BUFFER_MAX_SIZE 2048
- #define SMALL_BUFFER_FLAG_NAMES 32
- #define BUFFER_PADDING_SIZE 20
-
---- misc/icu/source/tools/toolutil/pkg_genc.c
-+++ misc/build/icu/source/tools/toolutil/pkg_genc.c
-@@ -152,6 +152,28 @@
+ ## Compiler switches to embed a library name and version information
+-ifeq ($(ENABLE_RPATH),YES)
+-LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(libdir)/$(notdir $(MIDDLE_SO_TARGET))
+-else
+-LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(notdir $(MIDDLE_SO_TARGET))
+-endif
++LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @__________________________________________________URELIB/$(notdir $(MIDDLE_SO_TARGET))
+ 
+ ## Compiler switch to embed a runtime search path
+ LD_RPATH=
+@@ -50,10 +46,6 @@
+ ## Non-shared intermediate object suffix
+ STATIC_O = ao
+ 
+-## Override Versioned target for a shared library.
+-FINAL_SO_TARGET=  $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
+-MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
+-
+ ## Compilation and dependency rules
+ %.$(STATIC_O): $(srcdir)/%.c
+ 	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -MMD -MT "$*.d $*.o $*.$(STATIC_O)" -o $@ $<)
+@@ -67,16 +59,10 @@
+ 
+ ## Versioned libraries rules
+ 
+-%.$(SO_TARGET_VERSION_MAJOR).$(SO): %.$(SO_TARGET_VERSION).$(SO)
++%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+ 	$(RM) $@ && ln -s ${<F} $@
+-%.$(SO): %.$(SO_TARGET_VERSION_MAJOR).$(SO)
+-	$(RM) $@ && ln -s ${*F}.$(SO_TARGET_VERSION).$(SO) $@
+-
+-# tzcode option
+-TZORIG_EXTRA_CFLAGS=-DSTD_INSPIRED
+-
+-# genren opts
+-GENREN_PL_OPTS=-x Mach-O -n '-g' -p '| c++filt'
++%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
++	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
+ 
+ ## Remove shared library 's'
+ STATIC_PREFIX_WHEN_USED = 
+diff -ur icu.org/source/tools/toolutil/pkg_genc.cpp icu/source/tools/toolutil/pkg_genc.cpp
+--- icu.org/source/tools/toolutil/pkg_genc.cpp	2017-04-13 11:46:02.000000000 +0200
++++ icu/source/tools/toolutil/pkg_genc.cpp	2017-04-21 21:30:23.583568212 +0200
+@@ -160,6 +160,28 @@
  
          ".long ","",HEX_0X
      },
@@ -40,49 +77,15 @@
  /* 16 bytes alignment. */
  /* http://docs.oracle.com/cd/E19641-01/802-1947/802-1947.pdf */
      {"sun",
---- misc/icu/source/config/mh-darwin	2010-09-29 20:37:36.000000000 +0200
-+++ misc/build/icu/source/config/mh-darwin	2011-03-15 10:56:26.653056004 +0100
-@@ -28,11 +28,7 @@
- SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) $(LD_SOOPTIONS)
+diff -ur icu.org/source/tools/toolutil/pkg_genc.h icu/source/tools/toolutil/pkg_genc.h
+--- icu.org/source/tools/toolutil/pkg_genc.h	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/tools/toolutil/pkg_genc.h	2017-04-21 21:30:23.582568215 +0200
+@@ -60,7 +60,7 @@
+ #endif
  
- ## Compiler switches to embed a library name and version information
--ifeq ($(ENABLE_RPATH),YES)
--LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(libdir)/$(notdir $(MIDDLE_SO_TARGET))
--else
--LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(notdir $(MIDDLE_SO_TARGET))
--endif
-+LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @__________________________________________________URELIB/$(notdir $(MIDDLE_SO_TARGET))
+ #define LARGE_BUFFER_MAX_SIZE 2048
+-#define SMALL_BUFFER_MAX_SIZE 512
++#define SMALL_BUFFER_MAX_SIZE 2048
+ #define SMALL_BUFFER_FLAG_NAMES 32
+ #define BUFFER_PADDING_SIZE 20
  
- ## Compiler switch to embed a runtime search path
- LD_RPATH=
-@@ -48,10 +44,6 @@
- ## Non-shared intermediate object suffix
- STATIC_O = ao
- 
--## Override Versioned target for a shared library.
--FINAL_SO_TARGET=  $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
--MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
--
- ## Compilation and dependency rules
- %.$(STATIC_O): $(srcdir)/%.c
- 	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -MMD -MT "$*.d $*.o $*.$(STATIC_O)" -o $@ $<)
-@@ -65,16 +57,10 @@
- 
- ## Versioned libraries rules
- 
--%.$(SO_TARGET_VERSION_MAJOR).$(SO): %.$(SO_TARGET_VERSION).$(SO)
-+%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
- 	$(RM) $@ && ln -s ${<F} $@
--%.$(SO): %.$(SO_TARGET_VERSION_MAJOR).$(SO)
--	$(RM) $@ && ln -s ${*F}.$(SO_TARGET_VERSION).$(SO) $@
--
--# tzcode option
--TZORIG_EXTRA_CFLAGS=-DSTD_INSPIRED
--
--# genren opts
--GENREN_PL_OPTS=-x Mach-O -n '-g' -p '| c++filt'
-+%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-+	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
- 
- ## Remove shared library 's'
- STATIC_PREFIX_WHEN_USED = 
