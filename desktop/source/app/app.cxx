@@ -1490,8 +1490,7 @@ int Desktop::Main()
                     update();
                 }
             }
-
-            if (isTimeForUpdateCheck())
+            else if (isTimeForUpdateCheck())
             {
                 sal_uInt64 nNow = tools::Time::GetSystemTicks();
                 std::shared_ptr< comphelper::ConfigurationChanges > batch(
