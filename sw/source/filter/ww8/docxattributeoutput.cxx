@@ -6762,7 +6762,7 @@ void DocxAttributeOutput::WritePostitFieldReference()
 
 void DocxAttributeOutput::WritePostitFields()
 {
-    for(const std::pair<const SwPostItField*,int> & rPair : m_postitFields)
+    for (const std::pair<const SwPostItField*,int> & rPair : m_postitFields)
     {
         OString idstr = OString::number( rPair.second);
         const SwPostItField* f = rPair.first;
@@ -6770,11 +6770,23 @@ void DocxAttributeOutput::WritePostitFields()
             FSNS( XML_w, XML_author ), OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSNS( XML_w, XML_date ), DateTimeToOString(f->GetDateTime()).getStr(),
             FSNS( XML_w, XML_initials ), OUStringToOString( f->GetInitials(), RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
-        // Check for the text object existing, it seems that it can be NULL when saving a newly created
-        // comment without giving focus back to the main document. As GetText() is empty in that case as well,
-        // that is probably a bug in the Writer core.
-        if( f->GetTextObject() != nullptr )
-            GetExport().WriteOutliner( *f->GetTextObject(), TXT_ATN );
+
+        if (f->GetTextObject() != nullptr)
+        {
+            // richtext
+            GetExport().WriteOutliner(*f->GetTextObject(), TXT_ATN);
+        }
+        else
+        {
+            // just plain text - eg. when the field was created via the
+            // .uno:InsertAnnotation API
+            m_pSerializer->startElementNS(XML_w, XML_p, FSEND);
+            m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
+            RunText(f->GetText());
+            m_pSerializer->endElementNS(XML_w, XML_r);
+            m_pSerializer->endElementNS(XML_w, XML_p);
+        }
+
         m_pSerializer->endElementNS( XML_w, XML_comment );
     }
 }
