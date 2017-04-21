@@ -47,15 +47,17 @@ struct TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};
 
 class DynamicErrorInfo_Impl
 {
+private:
+    friend class DynamicErrorInfo;
+    friend class ErrorInfo;
+
     ErrCode                     lErrId;
-    DialogMask           nMask;
+    DialogMask                  nMask;
 
     void                        RegisterError(DynamicErrorInfo *);
     static void                 UnRegisterError(DynamicErrorInfo const *);
     static ErrorInfo*           GetDynamicErrorInfo(sal_uInt32 lId);
 
-friend class DynamicErrorInfo;
-friend class ErrorInfo;
 };
 
 ErrorRegistry::ErrorRegistry()
@@ -75,10 +77,10 @@ void DynamicErrorInfo_Impl::RegisterError(DynamicErrorInfo *pDynErrInfo)
              pDynErrInfo->GetErrorCode();
 
     if(rData.ppDynErrInfo[rData.nNextError])
-    {
         delete rData.ppDynErrInfo[rData.nNextError];
-    }
+
     rData.ppDynErrInfo[rData.nNextError] = pDynErrInfo;
+
     if(++rData.nNextError>=ERRCODE_DYNAMIC_COUNT)
         rData.nNextError=0;
 }
@@ -86,8 +88,8 @@ void DynamicErrorInfo_Impl::RegisterError(DynamicErrorInfo *pDynErrInfo)
 void DynamicErrorInfo_Impl::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
 {
     DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
-    sal_uInt32 lIdx = (((sal_uIntPtr)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
-    DBG_ASSERT(ppDynErrInfo[lIdx] == pDynErrInfo, "ErrHdl: Error not found");
+    sal_uInt32 lIdx = (((sal_uInt32)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
+    DBG_ASSERT(ppDynErrInfo[lIdx] == pDynErrInfo,"ErrHdl: Error not found");
 
     if(ppDynErrInfo[lIdx]==pDynErrInfo)
         ppDynErrInfo[lIdx]=nullptr;
@@ -128,6 +130,7 @@ ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uInt32 lId)
 {
     sal_uInt32 lIdx = ((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[lIdx];
+
     if(pDynErrInfo && (sal_uInt32)(*pDynErrInfo)==lId)
         return pDynErrInfo;
     else
@@ -189,6 +192,7 @@ ErrorHandler::ErrorHandler()
 {
     ErrorRegistry &rData = TheErrorRegistry::get();
     rData.errorHandlers.insert(rData.errorHandlers.begin(), this);
+
     if(!rData.pDsp)
         RegisterDisplay(&aDspFunc);
 }
@@ -196,7 +200,8 @@ ErrorHandler::ErrorHandler()
 ErrorHandler::~ErrorHandler()
 {
     auto &rErrorHandlers = TheErrorRegistry::get().errorHandlers;
-    rErrorHandlers.erase( ::std::remove(rErrorHandlers.begin(), rErrorHandlers.end(), this), rErrorHandlers.end());
+    rErrorHandlers.erase( ::std::remove(rErrorHandlers.begin(), rErrorHandlers.end(), this),
+                          rErrorHandlers.end());
 }
 
 vcl::Window* ErrorContext::GetParent()
@@ -208,14 +213,14 @@ void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
     ErrorRegistry &rData    = TheErrorRegistry::get();
     rData.bIsWindowDsp = true;
-    rData.pDsp         = reinterpret_cast< DisplayFnPtr >(aDsp);
+    rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
-    ErrorRegistry &rData    = TheErrorRegistry::get();
+    ErrorRegistry &rData = TheErrorRegistry::get();
     rData.bIsWindowDsp = false;
-    rData.pDsp         = reinterpret_cast< DisplayFnPtr >(aDsp);
+    rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 /** Handles an error.
@@ -241,11 +246,13 @@ DialogMask ErrorHandler::HandleError_Impl(
 {
     OUString aErr;
     OUString aAction;
+
     if(!nErrCodeId || nErrCodeId == ERRCODE_ABORT)
         return DialogMask::NONE;
-    ErrorRegistry &rData      = TheErrorRegistry::get();
+
+    ErrorRegistry &rData = TheErrorRegistry::get();
     vcl::Window *pParent = nullptr;
-    ErrorInfo *pInfo     = ErrorInfo::GetErrorInfo(nErrCodeId);
+    ErrorInfo *pInfo = ErrorInfo::GetErrorInfo(nErrCodeId);
     if (!rData.contexts.empty())
     {
         rData.contexts.front()->GetString(pInfo->GetErrorCode(), aAction);
@@ -267,7 +274,7 @@ DialogMask ErrorHandler::HandleError_Impl(
     else
         nErrFlags |= DialogMask::MessageError;
 
-    DynamicErrorInfo* pDynPtr=dynamic_cast<DynamicErrorInfo*>(pInfo);
+    DynamicErrorInfo* pDynPtr = dynamic_cast<DynamicErrorInfo*>(pInfo);
     if(pDynPtr)
     {
         DialogMask nDynFlags = pDynPtr->GetDialogMask();
@@ -310,16 +317,14 @@ DialogMask ErrorHandler::HandleError_Impl(
             }
         }
     }
+
     OSL_FAIL("Error not handled");
     // Error 1 is classified as a General Error in sfx
     if(pInfo->GetErrorCode()!=1)
-    {
         HandleError_Impl(1, DialogMask::MAX, bJustCreateString, rError);
-    }
     else
-    {
         OSL_FAIL("Error 1 not handled");
-    }
+
     delete pInfo;
     return DialogMask::NONE;
 }
