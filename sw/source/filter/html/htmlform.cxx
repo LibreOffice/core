@@ -2071,7 +2071,7 @@ void SwHTMLParser::NewTextArea()
         SetControlSize( xShape, aTextSz, false, false );
 
     // einen neuen Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_TEXTAREA_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::TEXTAREA_ON );
 
     // und PRE/Listing/XMP voruebergehend aussetzen
     SplitPREListingXMP( pCntxt );
@@ -2098,7 +2098,7 @@ void SwHTMLParser::EndTextArea()
     m_pFormImpl->ReleaseFCompPropSet();
 
     // den Kontext holen
-    HTMLAttrContext *pCntxt = PopContext( HTML_TEXTAREA_ON );
+    HTMLAttrContext *pCntxt = PopContext( HtmlTokenId::TEXTAREA_ON );
     if( pCntxt )
     {
         // und ggf. die Attribute beenden
@@ -2109,7 +2109,7 @@ void SwHTMLParser::EndTextArea()
     m_bTextArea = false;
 }
 
-void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
+void SwHTMLParser::InsertTextAreaText( HtmlTokenId nToken )
 {
     OSL_ENSURE( m_bTextArea, "keine TextArea oder falscher Typ" );
     OSL_ENSURE( m_pFormImpl && m_pFormImpl->GetFCompPropSet().is(),
@@ -2118,10 +2118,10 @@ void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
     OUString& rText = m_pFormImpl->GetText();
     switch( nToken)
     {
-    case HTML_TEXTTOKEN:
+    case HtmlTokenId::TEXTTOKEN:
         rText += aToken;
         break;
-    case HTML_NEWPARA:
+    case HtmlTokenId::NEWPARA:
         if( !m_bTAIgnoreNewPara )
             rText += "\n";    // das ist hier richtig!!!
         break;
@@ -2344,7 +2344,7 @@ void SwHTMLParser::NewSelect()
         SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
 
     // einen neuen Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_SELECT_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::SELECT_ON );
 
     // und PRE/Listing/XMP voruebergehend aussetzen
     SplitPREListingXMP( pCntxt );
@@ -2420,7 +2420,7 @@ void SwHTMLParser::EndSelect()
     m_pFormImpl->ReleaseFCompPropSet();
 
     // den Kontext holen
-    HTMLAttrContext *pCntxt = PopContext( HTML_SELECT_ON );
+    HTMLAttrContext *pCntxt = PopContext( HtmlTokenId::SELECT_ON );
     if( pCntxt )
     {
         // und ggf. die Attribute beenden

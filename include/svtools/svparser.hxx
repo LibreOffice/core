@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_SVPARSER_HXX
 
 #include <svtools/svtdllapi.h>
+#include <svtools/htmltokn.h>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -29,7 +30,7 @@
 #include <vector>
 #include <memory>
 
-struct SvParser_Impl;
+template<typename T> struct SvParser_Impl;
 class SvStream;
 
 enum class SvParserState
@@ -41,6 +42,7 @@ enum class SvParserState
     Error
 };
 
+template<typename T>
 class SVT_DLLPUBLIC SvParser : public SvRefBase
 {
     DECL_LINK( NewDataRead, LinkParamNone*, void );
@@ -51,7 +53,7 @@ protected:
     sal_uLong           nlLineNr;           // current line number
     sal_uLong           nlLinePos;          // current column number
 
-    std::unique_ptr<SvParser_Impl> pImplData; // internal data
+    std::unique_ptr<SvParser_Impl<T>> pImplData; // internal data
     long                nTokenValue;        // additional value (RTF)
     bool                bTokenHasValue;     // indicates whether nTokenValue is valid
     SvParserState       eState;             // status also in derived classes
@@ -72,28 +74,23 @@ protected:
         OUString    sToken;
         long        nTokenValue;
         bool        bTokenHasValue;
-        int         nTokenId;
+        T           nTokenId;
 
-        TokenStackType()
-            : nTokenValue(0)
-            , bTokenHasValue(false)
-            , nTokenId(0)
-        {
-        }
+        TokenStackType();
     };
 
     // methods for Token stack
-    int SkipToken( short nCnt = -1 );       // "skip" n Tokens back
+    T SkipToken( short nCnt = -1 );       // "skip" n Tokens back
     TokenStackType* GetStackPtr( short nCnt );
 
     // scan the next token:
     //  work off Token stack and call GetNextToken_() if necessary.
     //  That one is responsible for the recognition of new Tokens.
-    int GetNextToken();
-    virtual int GetNextToken_() = 0;
+    T GetNextToken();
+    virtual T GetNextToken_() = 0;
 
     // is called for each Token that is recognized in CallParser
-    virtual void NextToken( int nToken );
+    virtual void NextToken( T nToken );
 
     // at times of SvRefBase derivation, not everybody may delete
     virtual ~SvParser() override;
@@ -110,42 +107,41 @@ public:
 
     virtual  SvParserState CallParser() = 0; // calling of the parser
 
-    SvParserState GetStatus() const  { return eState; }  // StatusInfo
+    SvParserState GetStatus() const;  // StatusInfo
 
-    sal_uLong    GetLineNr() const       { return nlLineNr; }
-    sal_uLong    GetLinePos() const      { return nlLinePos; }
-    void         IncLineNr()             { ++nlLineNr; }
-    sal_uLong    IncLinePos()            { return ++nlLinePos; }
-    inline void         SetLineNr( sal_uLong nlNum );           // inline bottom
-    inline void         SetLinePos( sal_uLong nlPos );          // inline bottom
+    sal_uLong    GetLineNr() const;
+    sal_uLong    GetLinePos() const;
+    void         IncLineNr();
+    sal_uLong    IncLinePos();
+    void         SetLineNr( sal_uLong nlNum );
+    void         SetLinePos( sal_uLong nlPos );
 
     sal_uInt32 GetNextChar();   // Return next Unicode codepoint in UTF32.
     void RereadLookahead();
 
-    bool IsParserWorking() const { return SvParserState::Working == eState; }
+    bool IsParserWorking() const;
 
-    Link<LinkParamNone*,void> GetAsynchCallLink() const
-        { return LINK( const_cast<SvParser*>(this), SvParser, NewDataRead ); }
+    Link<LinkParamNone*,void> GetAsynchCallLink() const;
 
     // for asynchronous reading from the SvStream
-    void SaveState( int nToken );
+    void SaveState( T nToken );
     void RestoreState();
-    virtual void Continue( int nToken );
+    virtual void Continue( T nToken );
 
     // Set/get source encoding. The UCS2BEncoding flag is valid if source
     // encoding is UCS2. It specifies a big endian encoding.
     void SetSrcEncoding( rtl_TextEncoding eSrcEnc );
-    rtl_TextEncoding GetSrcEncoding() const { return eSrcEnc; }
+    rtl_TextEncoding GetSrcEncoding() const;
 
     // May the character set be switched to UCS/2, if a BOM
     // is in the first two characters of the stream?
-    void SetSwitchToUCS2( bool bSet ) { bSwitchToUCS2 = bSet; }
-    bool IsSwitchToUCS2() const { return bSwitchToUCS2; }
+    void SetSwitchToUCS2( bool bSet );
+    bool IsSwitchToUCS2() const;
 
     // how many bytes a character consists of
-    inline sal_uInt16 GetCharSize() const;
+    sal_uInt16 GetCharSize() const;
 
-    int GetSaveToken() const;
+    T GetSaveToken() const;
 
     // build a Which-Map 'rWhichMap' from an array of WhichIds
     // 'pWhichIds'. It has the length 'nWhichIds'.
@@ -155,18 +151,17 @@ public:
                                sal_uInt16 nWhichIds );
 };
 
-
-inline void SvParser::SetLineNr( sal_uLong nlNum )
-{   nlLineNr = nlNum; }
-
-inline void SvParser::SetLinePos( sal_uLong nlPos )
-{   nlLinePos = nlPos; }
-
-inline sal_uInt16 SvParser::GetCharSize() const
-{
-    return (RTL_TEXTENCODING_UCS2 == eSrcEnc) ? 2 : 1;
-}
-
+// MSVC2015 has a problem with extern templates where the template parameter is a scoped enum
+class SVT_DLLPUBLIC SvParserInt : public SvParser<int> {
+public:
+    SvParserInt( SvStream& rIn, sal_uInt8 nStackSize = 3 );
+    virtual ~SvParserInt() override;
+};
+class SVT_DLLPUBLIC SvParserHtmlTokenId : public SvParser<HtmlTokenId> {
+public:
+    SvParserHtmlTokenId( SvStream& rIn, sal_uInt8 nStackSize = 3 );
+    virtual ~SvParserHtmlTokenId() override;
+};
 
 /*========================================================================
  *
