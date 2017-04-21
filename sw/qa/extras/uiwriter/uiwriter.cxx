@@ -360,7 +360,7 @@ public:
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
-    // FIXME breaks on Windows CPPUNIT_TEST(testCreateDocxAnnotation);
+    CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4559,6 +4559,7 @@ void SwUiWriterTest::testMsWordCompTrailingBlanks()
 
 void SwUiWriterTest::testCreateDocxAnnotation()
 {
+    if (true) return; // FIXME breaks on Windows
     createDoc();
 
     // insert an annotation with a text
