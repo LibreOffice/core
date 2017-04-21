@@ -67,8 +67,6 @@ interface StarCalc
 
     SID_INSERT_RLM              [ StateMethod = HideDisabledSlots; Export = FALSE; ]
     SID_INSERT_LRM              [ StateMethod = HideDisabledSlots; Export = FALSE; ]
-    SID_INSERT_ZWSP             [ StateMethod = HideDisabledSlots; Export = FALSE; ]
-    SID_INSERT_ZWNBSP           [ StateMethod = HideDisabledSlots; Export = FALSE; ]
 
 }
 
