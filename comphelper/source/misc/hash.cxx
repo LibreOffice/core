@@ -31,6 +31,8 @@ struct HashImpl
     {
         switch (meType)
         {
+            case HashType::MD5:
+                return HASH_AlgMD5;
             case HashType::SHA1:
                 return HASH_AlgSHA1;
             case HashType::SHA256:
@@ -48,6 +50,8 @@ struct HashImpl
     {
         switch (meType)
         {
+            case HashType::MD5:
+                return EVP_md5();
             case HashType::SHA1:
                 return EVP_sha1();
             case HashType::SHA256:
@@ -121,6 +125,8 @@ size_t Hash::getLength() const
 {
     switch (mpImpl->meType)
     {
+        case HashType::MD5:
+            return 16;
         case HashType::SHA1:
             return 20;
         case HashType::SHA256:
