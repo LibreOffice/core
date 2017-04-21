@@ -168,8 +168,8 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
     rSet.Put( SfxStringItem( SID_FONTWORK_SHAPE_TYPE, aFontWorkShapeType ) );
 }
 
-// Standardinterface deklarieren (Die Slotmap darf nicht leer sein, also
-// tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
+// Declare the default interface. (The slotmap must not be empty, so
+// we enter something which never occurs here (hopefully).)
 static SfxSlot aFontworkBarSlots_Impl[] =
 {
     { 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }
