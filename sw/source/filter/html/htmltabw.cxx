@@ -601,7 +601,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     }
 
     // vorhergende Aufzaehlung etc. beenden
-    rWrt.ChangeParaToken( 0 );
+    rWrt.ChangeParaToken( HtmlTokenId::NONE );
 
     if( rWrt.m_bLFPossible )
         rWrt.OutNewLine();  // <TABLE> in neue Zeile

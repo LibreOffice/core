@@ -2943,7 +2943,7 @@ void SectionSaveStruct::Restore( SwHTMLParser& rParser )
 
     // Reset a few flags
     rParser.m_bNoParSpace = false;
-    rParser.m_nOpenParaToken = 0;
+    rParser.m_nOpenParaToken = HtmlTokenId::NONE;
 
     if( !rParser.m_aParaAttrs.empty() )
         rParser.m_aParaAttrs.clear();
@@ -3110,15 +3110,16 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
 
     // Create a new context but don't anchor the drawing::Alignment attribute there,
     // since there's no section yet
-    sal_uInt16 nToken, nColl;
+    HtmlTokenId nToken;
+    sal_uInt16 nColl;
     if( m_bHead )
     {
-        nToken = HTML_TABLEHEADER_ON;
+        nToken = HtmlTokenId::TABLEHEADER_ON;
         nColl = RES_POOLCOLL_TABLE_HDLN;
     }
     else
     {
-        nToken = HTML_TABLEDATA_ON;
+        nToken = HtmlTokenId::TABLEDATA_ON;
         nColl = RES_POOLCOLL_TABLE;
     }
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nColl, aEmptyOUStr, true );
@@ -3315,7 +3316,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
     CellSaveStruct* pSaveStruct;
 
-    int nToken = 0;
+    HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
     if( m_pPendStack )
     {
@@ -3334,7 +3335,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         // <TH> resp. <TD> were already read
         if( m_pTable->IsOverflowing() )
         {
-            SaveState( 0 );
+            SaveState( HtmlTokenId::NONE );
             return;
         }
 
@@ -3479,7 +3480,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 bParentLFStripped = StripTrailingLF() > 0;
 
                 // Close paragraph resp. headers
-                m_nOpenParaToken = 0;
+                m_nOpenParaToken = HtmlTokenId::NONE;
                 m_nFontStHeadStart = m_nFontStMin;
 
                 // The hard attributes on that paragraph are never gonna be invalid anymore
@@ -3698,10 +3699,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                             bReadOptions );
 
         // If the first GetNextToken() doesn't succeed (pending input), must re-read from the beginning.
-        SaveState( 0 );
+        SaveState( HtmlTokenId::NONE );
     }
 
-    if( !nToken )
+    if( nToken == HtmlTokenId::NONE )
         nToken = GetNextToken();    // Token after <TABLE>
 
     bool bDone = false;
@@ -3720,24 +3721,24 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         }
         else switch( nToken )
         {
-        case HTML_TABLEHEADER_ON:
-        case HTML_TABLEDATA_ON:
-        case HTML_TABLEROW_ON:
-        case HTML_TABLEROW_OFF:
-        case HTML_THEAD_ON:
-        case HTML_THEAD_OFF:
-        case HTML_TFOOT_ON:
-        case HTML_TFOOT_OFF:
-        case HTML_TBODY_ON:
-        case HTML_TBODY_OFF:
-        case HTML_TABLE_OFF:
+        case HtmlTokenId::TABLEHEADER_ON:
+        case HtmlTokenId::TABLEDATA_ON:
+        case HtmlTokenId::TABLEROW_ON:
+        case HtmlTokenId::TABLEROW_OFF:
+        case HtmlTokenId::THEAD_ON:
+        case HtmlTokenId::THEAD_OFF:
+        case HtmlTokenId::TFOOT_ON:
+        case HtmlTokenId::TFOOT_OFF:
+        case HtmlTokenId::TBODY_ON:
+        case HtmlTokenId::TBODY_OFF:
+        case HtmlTokenId::TABLE_OFF:
             SkipToken();
             SAL_FALLTHROUGH;
-        case HTML_TABLEHEADER_OFF:
-        case HTML_TABLEDATA_OFF:
+        case HtmlTokenId::TABLEHEADER_OFF:
+        case HtmlTokenId::TABLEDATA_OFF:
             bDone = true;
             break;
-        case HTML_TABLE_ON:
+        case HtmlTokenId::TABLE_ON:
             {
                 bool bHasToFly = false;
                 SvxAdjust eTabAdjust = SvxAdjust::End;
@@ -3851,22 +3852,22 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             }
             break;
 
-        case HTML_NOBR_ON:
+        case HtmlTokenId::NOBR_ON:
             // HACK for MS: Is the <NOBR> at the start of the cell?
             pSaveStruct->StartNoBreak( *m_pPam->GetPoint() );
             break;
 
-        case HTML_NOBR_OFF:
+        case HtmlTokenId::NOBR_OFF:
                 pSaveStruct->EndNoBreak( *m_pPam->GetPoint() );
             break;
 
-        case HTML_COMMENT:
+        case HtmlTokenId::COMMENT:
             // Spaces are not gonna be deleted with comment fields,
             // and we don't want a new cell for a comment
             NextToken( nToken );
             break;
 
-        case HTML_MARQUEE_ON:
+        case HtmlTokenId::MARQUEE_ON:
             if( !pSaveStruct->IsInSection() )
             {
                 // create a new section, the PaM is gonna be there
@@ -3877,7 +3878,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             NewMarquee( pCurTable );
             break;
 
-        case HTML_TEXTTOKEN:
+        case HtmlTokenId::TEXTTOKEN:
             // Don't add a section for an empty string
             if( !pSaveStruct->IsInSection() && 1==aToken.getLength() &&
                 ' '==aToken[0] )
@@ -3900,7 +3901,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 "SwHTMLParser::BuildTableCell: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
-            SaveState( 0 );
+            SaveState( HtmlTokenId::NONE );
 
         if( !bDone )
             nToken = GetNextToken();
@@ -3908,8 +3909,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( bHead ? HTML_TABLEHEADER_ON
-                                               : HTML_TABLEDATA_ON, m_pPendStack );
+        m_pPendStack = new SwPendingStack( bHead ? HtmlTokenId::TABLEHEADER_ON
+                                               : HtmlTokenId::TABLEDATA_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
 
         return;
@@ -4008,7 +4009,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
     if( !IsParserWorking() && !m_pPendStack )
         return;
 
-    int nToken = 0;
+    HtmlTokenId nToken = HtmlTokenId::NONE;
     RowSaveStruct* pSaveStruct;
 
     bool bPending = false;
@@ -4081,10 +4082,10 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                              aId, aClass );
         pCurTable->OpenRow( eAdjust, eVertOri, pBrushItem );
         // If the first GetNextToken() doesn't succeed (pending input), must re-read from the beginning.
-        SaveState( 0 );
+        SaveState( HtmlTokenId::NONE );
     }
 
-    if( !nToken )
+    if( nToken == HtmlTokenId::NONE )
         nToken = GetNextToken();
 
     bool bDone = false;
@@ -4105,7 +4106,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         }
         else switch( nToken )
         {
-        case HTML_TABLE_ON:
+        case HtmlTokenId::TABLE_ON:
             if( !pCurTable->GetContext()  )
             {
                 SkipToken();
@@ -4113,59 +4114,59 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
             }
 
             break;
-        case HTML_TABLEROW_ON:
-        case HTML_THEAD_ON:
-        case HTML_THEAD_OFF:
-        case HTML_TBODY_ON:
-        case HTML_TBODY_OFF:
-        case HTML_TFOOT_ON:
-        case HTML_TFOOT_OFF:
-        case HTML_TABLE_OFF:
+        case HtmlTokenId::TABLEROW_ON:
+        case HtmlTokenId::THEAD_ON:
+        case HtmlTokenId::THEAD_OFF:
+        case HtmlTokenId::TBODY_ON:
+        case HtmlTokenId::TBODY_OFF:
+        case HtmlTokenId::TFOOT_ON:
+        case HtmlTokenId::TFOOT_OFF:
+        case HtmlTokenId::TABLE_OFF:
             SkipToken();
             SAL_FALLTHROUGH;
-        case HTML_TABLEROW_OFF:
+        case HtmlTokenId::TABLEROW_OFF:
             bDone = true;
             break;
-        case HTML_TABLEHEADER_ON:
-        case HTML_TABLEDATA_ON:
-            BuildTableCell( pCurTable, true, HTML_TABLEHEADER_ON==nToken );
+        case HtmlTokenId::TABLEHEADER_ON:
+        case HtmlTokenId::TABLEDATA_ON:
+            BuildTableCell( pCurTable, true, HtmlTokenId::TABLEHEADER_ON==nToken );
             if( SvParserState::Pending != GetStatus() )
             {
                 pSaveStruct->bHasCells = true;
                 bDone = m_pTable->IsOverflowing();
             }
             break;
-        case HTML_CAPTION_ON:
+        case HtmlTokenId::CAPTION_ON:
             BuildTableCaption( pCurTable );
             bDone = m_pTable->IsOverflowing();
             break;
-        case HTML_CAPTION_OFF:
-        case HTML_TABLEHEADER_OFF:
-        case HTML_TABLEDATA_OFF:
-        case HTML_COLGROUP_ON:
-        case HTML_COLGROUP_OFF:
-        case HTML_COL_ON:
-        case HTML_COL_OFF:
+        case HtmlTokenId::CAPTION_OFF:
+        case HtmlTokenId::TABLEHEADER_OFF:
+        case HtmlTokenId::TABLEDATA_OFF:
+        case HtmlTokenId::COLGROUP_ON:
+        case HtmlTokenId::COLGROUP_OFF:
+        case HtmlTokenId::COL_ON:
+        case HtmlTokenId::COL_OFF:
             // Where no cell started, there can't be a cell ending
             // all the other tokens are bogus anyway and only break the table
             break;
-        case HTML_MULTICOL_ON:
+        case HtmlTokenId::MULTICOL_ON:
             // we can't add columned text frames here
             break;
-        case HTML_FORM_ON:
+        case HtmlTokenId::FORM_ON:
             NewForm( false );   // don't create a new paragraph
             break;
-        case HTML_FORM_OFF:
+        case HtmlTokenId::FORM_OFF:
             EndForm( false );   // don't create a new paragraph
             break;
-        case HTML_COMMENT:
+        case HtmlTokenId::COMMENT:
             NextToken( nToken );
             break;
-        case HTML_MAP_ON:
+        case HtmlTokenId::MAP_ON:
             // an image map doesn't add anything, so we can parse it without a cell
             NextToken( nToken );
             break;
-        case HTML_TEXTTOKEN:
+        case HtmlTokenId::TEXTTOKEN:
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
@@ -4181,7 +4182,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                 "SwHTMLParser::BuildTableRow: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
-            SaveState( 0 );
+            SaveState( HtmlTokenId::NONE );
 
         if( !bDone )
             nToken = GetNextToken();
@@ -4189,7 +4190,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( HTML_TABLEROW_ON, m_pPendStack );
+        m_pPendStack = new SwPendingStack( HtmlTokenId::TABLEROW_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
     }
     else
@@ -4209,7 +4210,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
     if( !IsParserWorking() && !m_pPendStack )
         return;
 
-    int nToken = 0;
+    HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
     RowSaveStruct* pSaveStruct;
 
@@ -4255,10 +4256,10 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         }
 
         // If the first GetNextToken() doesn't succeed (pending input), must re-read from the beginning.
-        SaveState( 0 );
+        SaveState( HtmlTokenId::NONE );
     }
 
-    if( !nToken )
+    if( nToken == HtmlTokenId::NONE )
         nToken = GetNextToken();
 
     bool bDone = false;
@@ -4279,7 +4280,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         }
         else switch( nToken )
         {
-        case HTML_TABLE_ON:
+        case HtmlTokenId::TABLE_ON:
             if( !pCurTable->GetContext()  )
             {
                 SkipToken();
@@ -4287,45 +4288,45 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             }
 
             break;
-        case HTML_THEAD_ON:
-        case HTML_TFOOT_ON:
-        case HTML_TBODY_ON:
-        case HTML_TABLE_OFF:
+        case HtmlTokenId::THEAD_ON:
+        case HtmlTokenId::TFOOT_ON:
+        case HtmlTokenId::TBODY_ON:
+        case HtmlTokenId::TABLE_OFF:
             SkipToken();
             SAL_FALLTHROUGH;
-        case HTML_THEAD_OFF:
-        case HTML_TBODY_OFF:
-        case HTML_TFOOT_OFF:
+        case HtmlTokenId::THEAD_OFF:
+        case HtmlTokenId::TBODY_OFF:
+        case HtmlTokenId::TFOOT_OFF:
             bDone = true;
             break;
-        case HTML_CAPTION_ON:
+        case HtmlTokenId::CAPTION_ON:
             BuildTableCaption( pCurTable );
             bDone = m_pTable->IsOverflowing();
             break;
-        case HTML_CAPTION_OFF:
+        case HtmlTokenId::CAPTION_OFF:
             break;
-        case HTML_TABLEHEADER_ON:
-        case HTML_TABLEDATA_ON:
+        case HtmlTokenId::TABLEHEADER_ON:
+        case HtmlTokenId::TABLEDATA_ON:
             SkipToken();
             BuildTableRow( pCurTable, false, pSaveStruct->eAdjust,
                            pSaveStruct->eVertOri );
             bDone = m_pTable->IsOverflowing();
             break;
-        case HTML_TABLEROW_ON:
+        case HtmlTokenId::TABLEROW_ON:
             BuildTableRow( pCurTable, true, pSaveStruct->eAdjust,
                            pSaveStruct->eVertOri );
             bDone = m_pTable->IsOverflowing();
             break;
-        case HTML_MULTICOL_ON:
+        case HtmlTokenId::MULTICOL_ON:
             // we can't add columned text frames here
             break;
-        case HTML_FORM_ON:
+        case HtmlTokenId::FORM_ON:
             NewForm( false );   // don't create a new paragraph
             break;
-        case HTML_FORM_OFF:
+        case HtmlTokenId::FORM_OFF:
             EndForm( false );   // don't create a new paragraph
             break;
-        case HTML_TEXTTOKEN:
+        case HtmlTokenId::TEXTTOKEN:
             // blank strings may be a series of CR+LF and no text
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
@@ -4341,7 +4342,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                 "SwHTMLParser::BuildTableSection: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
-            SaveState( 0 );
+            SaveState( HtmlTokenId::NONE );
 
         if( !bDone )
             nToken = GetNextToken();
@@ -4349,8 +4350,8 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( bHead ? HTML_THEAD_ON
-                                               : HTML_TBODY_ON, m_pPendStack );
+        m_pPendStack = new SwPendingStack( bHead ? HtmlTokenId::THEAD_ON
+                                               : HtmlTokenId::TBODY_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
     }
     else
@@ -4395,7 +4396,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
     if( !IsParserWorking() && !m_pPendStack )
         return;
 
-    int nToken = 0;
+    HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
     TableColGrpSaveStruct* pSaveStruct;
 
@@ -4448,10 +4449,10 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
             }
         }
         // If the first GetNextToken() doesn't succeed (pending input), must re-read from the beginning.
-        SaveState( 0 );
+        SaveState( HtmlTokenId::NONE );
     }
 
-    if( !nToken )
+    if( nToken == HtmlTokenId::NONE )
         nToken = GetNextToken();    // naechstes Token
 
     bool bDone = false;
@@ -4472,7 +4473,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         }
         else switch( nToken )
         {
-        case HTML_TABLE_ON:
+        case HtmlTokenId::TABLE_ON:
             if( !pCurTable->GetContext()  )
             {
                 SkipToken();
@@ -4480,18 +4481,18 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
             }
 
             break;
-        case HTML_COLGROUP_ON:
-        case HTML_THEAD_ON:
-        case HTML_TFOOT_ON:
-        case HTML_TBODY_ON:
-        case HTML_TABLEROW_ON:
-        case HTML_TABLE_OFF:
+        case HtmlTokenId::COLGROUP_ON:
+        case HtmlTokenId::THEAD_ON:
+        case HtmlTokenId::TFOOT_ON:
+        case HtmlTokenId::TBODY_ON:
+        case HtmlTokenId::TABLEROW_ON:
+        case HtmlTokenId::TABLE_OFF:
             SkipToken();
             SAL_FALLTHROUGH;
-        case HTML_COLGROUP_OFF:
+        case HtmlTokenId::COLGROUP_OFF:
             bDone = true;
             break;
-        case HTML_COL_ON:
+        case HtmlTokenId::COL_ON:
             {
                 sal_uInt16 nColSpan = 1;
                 sal_uInt16 nColWidth = pSaveStruct->nColGrpWidth;
@@ -4533,12 +4534,12 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                 pSaveStruct->nColGrpSpan = 0;
             }
             break;
-        case HTML_COL_OFF:
+        case HtmlTokenId::COL_OFF:
             break;      // Ignore
-        case HTML_MULTICOL_ON:
+        case HtmlTokenId::MULTICOL_ON:
             // we can't add columned text frames here
             break;
-        case HTML_TEXTTOKEN:
+        case HtmlTokenId::TEXTTOKEN:
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
@@ -4553,7 +4554,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                 "SwHTMLParser::BuildTableColGrp: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
-            SaveState( 0 );
+            SaveState( HtmlTokenId::NONE );
 
         if( !bDone )
             nToken = GetNextToken();
@@ -4561,7 +4562,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( HTML_COL_ON, m_pPendStack );
+        m_pPendStack = new SwPendingStack( HtmlTokenId::COL_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
     }
     else
@@ -4612,7 +4613,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     if( !IsParserWorking() && !m_pPendStack )
         return;
 
-    int nToken = 0;
+    HtmlTokenId nToken = HtmlTokenId::NONE;
     CaptionSaveStruct* pSaveStruct;
 
     if( m_pPendStack )
@@ -4631,7 +4632,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     {
         if( m_pTable->IsOverflowing() )
         {
-            SaveState( 0 );
+            SaveState( HtmlTokenId::NONE );
             return;
         }
 
@@ -4661,7 +4662,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         else
             pStNd = InsertTableSection( RES_POOLCOLL_TEXT );
 
-        HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_CAPTION_ON );
+        HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::CAPTION_ON );
 
         // Table headers are always centered
         NewAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST) );
@@ -4675,10 +4676,10 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         pCurTable->SetCaption( pStNd, bTop );
 
         // If the first GetNextToken() doesn't succeed (pending input), must re-read from the beginning.
-        SaveState( 0 );
+        SaveState( HtmlTokenId::NONE );
     }
 
-    if( !nToken )
+    if( nToken == HtmlTokenId::NONE )
         nToken = GetNextToken();
 
     // </CAPTION> is needed according to DTD
@@ -4691,7 +4692,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
         switch( nToken )
         {
-        case HTML_TABLE_ON:
+        case HtmlTokenId::TABLE_ON:
             if( !m_pPendStack )
             {
                 pSaveStruct->m_pTable = m_pTable;
@@ -4708,17 +4709,17 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
                 m_pTable = pSaveStruct->m_pTable;
             }
             break;
-        case HTML_TABLE_OFF:
-        case HTML_COLGROUP_ON:
-        case HTML_THEAD_ON:
-        case HTML_TFOOT_ON:
-        case HTML_TBODY_ON:
-        case HTML_TABLEROW_ON:
+        case HtmlTokenId::TABLE_OFF:
+        case HtmlTokenId::COLGROUP_ON:
+        case HtmlTokenId::THEAD_ON:
+        case HtmlTokenId::TFOOT_ON:
+        case HtmlTokenId::TBODY_ON:
+        case HtmlTokenId::TABLEROW_ON:
             SkipToken();
             bDone = true;
             break;
 
-        case HTML_CAPTION_OFF:
+        case HtmlTokenId::CAPTION_OFF:
             bDone = true;
             break;
         default:
@@ -4737,7 +4738,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         }
 
         if( IsParserWorking() )
-            SaveState( 0 );
+            SaveState( HtmlTokenId::NONE );
 
         if( !bDone )
             nToken = GetNextToken();
@@ -4745,7 +4746,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
     if( SvParserState::Pending==GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( HTML_CAPTION_ON, m_pPendStack );
+        m_pPendStack = new SwPendingStack( HtmlTokenId::CAPTION_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
         return;
     }
@@ -4978,7 +4979,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
     if( !IsParserWorking() && !m_pPendStack )
         return nullptr;
 
-    int nToken = 0;
+    HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
     TableSaveStruct* pSaveStruct;
 
@@ -5016,13 +5017,13 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         delete pTableOptions;
 
         // Is pending on the first GetNextToken, needs to be re-read on each construction
-        SaveState( 0 );
+        SaveState( HtmlTokenId::NONE );
     }
 
     HTMLTable *pCurTable = pSaveStruct->m_pCurrentTable;
 
     // </TABLE> is needed according to DTD
-    if( !nToken )
+    if( nToken == HtmlTokenId::NONE )
         nToken = GetNextToken();
 
     bool bDone = false;
@@ -5043,7 +5044,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         }
         else switch( nToken )
         {
-        case HTML_TABLE_ON:
+        case HtmlTokenId::TABLE_ON:
             if( !pCurTable->GetContext() )
             {
                 // If there's no table added, read the next table'
@@ -5052,43 +5053,43 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             }
 
             break;
-        case HTML_TABLE_OFF:
+        case HtmlTokenId::TABLE_OFF:
             bDone = true;
             break;
-        case HTML_CAPTION_ON:
+        case HtmlTokenId::CAPTION_ON:
             BuildTableCaption( pCurTable );
             bDone = m_pTable->IsOverflowing();
             break;
-        case HTML_COL_ON:
+        case HtmlTokenId::COL_ON:
             SkipToken();
             BuildTableColGroup( pCurTable, false );
             break;
-        case HTML_COLGROUP_ON:
+        case HtmlTokenId::COLGROUP_ON:
             BuildTableColGroup( pCurTable, true );
             break;
-        case HTML_TABLEROW_ON:
-        case HTML_TABLEHEADER_ON:
-        case HTML_TABLEDATA_ON:
+        case HtmlTokenId::TABLEROW_ON:
+        case HtmlTokenId::TABLEHEADER_ON:
+        case HtmlTokenId::TABLEDATA_ON:
             SkipToken();
             BuildTableSection( pCurTable, false, false );
             bDone = m_pTable->IsOverflowing();
             break;
-        case HTML_THEAD_ON:
-        case HTML_TFOOT_ON:
-        case HTML_TBODY_ON:
-            BuildTableSection( pCurTable, true, HTML_THEAD_ON==nToken );
+        case HtmlTokenId::THEAD_ON:
+        case HtmlTokenId::TFOOT_ON:
+        case HtmlTokenId::TBODY_ON:
+            BuildTableSection( pCurTable, true, HtmlTokenId::THEAD_ON==nToken );
             bDone = m_pTable->IsOverflowing();
             break;
-        case HTML_MULTICOL_ON:
+        case HtmlTokenId::MULTICOL_ON:
             // we can't add columned text frames here
             break;
-        case HTML_FORM_ON:
+        case HtmlTokenId::FORM_ON:
             NewForm( false );   // don't add a new paragraph
             break;
-        case HTML_FORM_OFF:
+        case HtmlTokenId::FORM_OFF:
             EndForm( false );   // don't add a new paragraph
             break;
-        case HTML_TEXTTOKEN:
+        case HtmlTokenId::TEXTTOKEN:
             // blank strings may be a series of CR+LF and no text
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
@@ -5105,7 +5106,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 "SwHTMLParser::BuildTable: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
-            SaveState( 0 );
+            SaveState( HtmlTokenId::NONE );
 
         if( !bDone )
             nToken = GetNextToken();
@@ -5113,7 +5114,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( HTML_TABLE_ON, m_pPendStack );
+        m_pPendStack = new SwPendingStack( HtmlTokenId::TABLE_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
         return nullptr;
     }
