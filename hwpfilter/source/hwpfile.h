@@ -212,7 +212,7 @@ class DLLEXPORT HWPFile
         void AddPage(){ m_nCurrentPage++;}
         void AddColumnInfo();
         void SetColumnDef(ColumnDef *coldef);
-        void AddParaShape(ParaShape *);
+        void AddParaShape(std::shared_ptr<ParaShape>&);
         void AddCharShape(std::shared_ptr<CharShape>&);
         void AddFBoxStyle(FBoxStyle *);
         void AddDateFormat(DateCode *);
@@ -283,7 +283,7 @@ class DLLEXPORT HWPFile
         std::list<EmPicture*> emblist;
         std::list<HyperText*> hyperlist;
         int currenthyper;
-        std::vector<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
+        std::vector<std::shared_ptr<ParaShape>> pslist;             /* 스타오피스의 구조상 필요 */
         std::vector<std::shared_ptr<CharShape>> cslist;
         std::vector<FBoxStyle*> fbslist;
         std::vector<DateCode*> datecodes;

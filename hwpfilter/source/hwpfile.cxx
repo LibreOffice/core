@@ -264,9 +264,9 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
                      spNode->reuse_shape = 0;
                 }
         }
-          spNode->pshape.pagebreak = spNode->etcflag;
-          if( spNode->nch )
-                AddParaShape( &spNode->pshape );
+        spNode->pshape->pagebreak = spNode->etcflag;
+        if (spNode->nch)
+            AddParaShape(spNode->pshape);
 
         if (!aplist.empty())
             aplist.back()->SetNext(spNode.get());
@@ -485,7 +485,7 @@ ParaShape *HWPFile::getParaShape(int index)
 {
     if (index < 0 || static_cast<unsigned int>(index) >= pslist.size())
         return nullptr;
-    return pslist[index];
+    return pslist[index].get();
 }
 
 CharShape *HWPFile::getCharShape(int index)
@@ -530,7 +530,7 @@ Table *HWPFile::getTable(int index)
     return tables[index];
 }
 
-void HWPFile::AddParaShape(ParaShape * pshape)
+void HWPFile::AddParaShape(std::shared_ptr<ParaShape>& pshape)
 {
     int nscount = 0;
     for(int j = 0 ; j < MAXTABS-1 ; j++)
@@ -551,7 +551,7 @@ void HWPFile::AddParaShape(ParaShape * pshape)
     if( nscount )
         pshape->tabs[MAXTABS-1].type = sal::static_int_cast<char>(nscount);
 
-    int value = compareParaShape(pshape);
+    int value = compareParaShape(pshape.get());
 
     if( value == 0 || nscount )
     {
