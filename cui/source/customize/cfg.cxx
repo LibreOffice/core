@@ -523,8 +523,7 @@ bool GetToolbarItemData(
     OUString& rLabel,
     sal_uInt16& rType,
     bool& rIsVisible,
-    sal_Int32& rStyle,
-    uno::Reference< container::XIndexAccess >& rSubMenu )
+    sal_Int32& rStyle )
 {
     try
     {
@@ -540,10 +539,6 @@ bool GetToolbarItemData(
                 else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
                 {
                     aProp[i].Value >>= rStyle;
-                }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
-                {
-                    aProp[i].Value >>= rSubMenu;
                 }
                 else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
                 {
@@ -4273,7 +4268,6 @@ void ToolbarSaveInData::LoadToolbar(
 
     for ( sal_Int32 nIndex = 0; nIndex < xToolbarSettings->getCount(); ++nIndex )
     {
-        uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
         OUString                aLabel;
         bool                bIsVisible;
@@ -4282,7 +4276,7 @@ void ToolbarSaveInData::LoadToolbar(
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
         bool bItem = GetToolbarItemData( xToolbarSettings, nIndex, aCommandURL,
-            aLabel, nType, bIsVisible, nStyle, xSubMenu );
+            aLabel, nType, bIsVisible, nStyle );
 
         if ( bItem )
         {
@@ -4322,20 +4316,16 @@ void ToolbarSaveInData::LoadToolbar(
                 }
 
                 SvxConfigEntry* pEntry = new SvxConfigEntry(
-                    aLabel, aCommandURL, xSubMenu.is() );
+                    aLabel, aCommandURL, false );
 
                 pEntry->SetUserDefined( bIsUserDefined );
                 pEntry->SetVisible( bIsVisible );
+                pEntry->SetStyle( nStyle );
 
                 if ( !bUseDefaultLabel )
                     pEntry->SetName( aLabel );
-                if ( !xSubMenu.is() )
-                    pEntry->SetStyle( nStyle );
 
                 pEntries->push_back( pEntry );
-
-                if ( xSubMenu.is() )
-                    LoadToolbar( xSubMenu, pEntry );
             }
             else
             {
