@@ -56,9 +56,9 @@ private:
     void                    EndPara();
     void                    AnchorStart();
     void                    AnchorEnd();
-    void                    HeadingStart( int nToken );
+    void                    HeadingStart( HtmlTokenId nToken );
     void                    HeadingEnd();
-    void                    SkipGroup( int nEndToken );
+    void                    SkipGroup( HtmlTokenId nEndToken );
     bool                    ThrowAwayBlank();
     bool                    HasTextInCurrentPara();
 
@@ -68,7 +68,7 @@ private:
     void                    ImpSetStyleSheet( sal_uInt16 nHeadingLevel );
 
 protected:
-    virtual void            NextToken( int nToken ) override;
+    virtual void            NextToken( HtmlTokenId nToken ) override;
 
 public:
     EditHTMLParser(SvStream& rIn, const OUString& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs);
