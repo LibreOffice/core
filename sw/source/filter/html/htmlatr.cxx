@@ -125,11 +125,11 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
     {
         // output </pre> for the previous(!) paragraph, if required.
         // Preferable, the <pre> is exported by OutHTML_SwFormatOff for the
-           // previous  paragraph already, but that's not possible, because a very
+        // previous  paragraph already, but that's not possible, because a very
         // deep look at the next paragraph (this one) is required to figure
         // out that a def list starts here.
 
-        ChangeParaToken( 0 );
+        ChangeParaToken( HtmlTokenId::NONE );
 
         // write according to the level difference
         for( sal_uInt16 i=m_nDefListLvl; i<nNewLvl; i++ )
@@ -156,9 +156,9 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
     m_nDefListLvl = nNewLvl;
 }
 
-void SwHTMLWriter::ChangeParaToken( sal_uInt16 nNew )
+void SwHTMLWriter::ChangeParaToken( HtmlTokenId nNew )
 {
-    if( nNew != m_nLastParaToken && HTML_PREFORMTXT_ON == m_nLastParaToken )
+    if( nNew != m_nLastParaToken && HtmlTokenId::PREFORMTXT_ON == m_nLastParaToken )
     {
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_preformtxt, false );
         m_bLFPossible = true;
@@ -478,7 +478,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
             {
                 nNumStart = static_cast< sal_uInt16 >(pTextNd->GetActualListStartValue());
             }
-            OSL_ENSURE( rHWrt.m_nLastParaToken == 0,
+            OSL_ENSURE( rHWrt.m_nLastParaToken == HtmlTokenId::NONE,
                 "<PRE> was not closed before <LI>." );
         }
     }
@@ -502,7 +502,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
 
     // Now, we define what is possible due to the token
-    sal_uInt16 nToken = 0;          // token for tag change
+    HtmlTokenId nToken = HtmlTokenId::NONE;          // token for tag change
     bool bOutNewLine = false;   // only output a single LF?
     if( !pFormatInfo->aToken.isEmpty() )
     {
@@ -526,13 +526,13 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         }
         else if (rInfo.aToken == OOO_STRING_SVTOOLS_HTML_preformtxt)
         {
-            if (HTML_PREFORMTXT_ON == rHWrt.m_nLastParaToken)
+            if (HtmlTokenId::PREFORMTXT_ON == rHWrt.m_nLastParaToken)
             {
                 bOutNewLine = true;
             }
             else
             {
-                nToken = HTML_PREFORMTXT_ON;
+                nToken = HtmlTokenId::PREFORMTXT_ON;
                 rHWrt.m_bNoAlign = true;
                 bNoEndTag = true;
             }
@@ -971,11 +971,11 @@ void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& rInfo )
             if( rNextInfo.GetNumRule() != rNRInfo.GetNumRule() ||
                 rNextInfo.GetDepth() != rNRInfo.GetDepth() ||
                 rNextInfo.IsNumbered() || rNextInfo.IsRestart() )
-                rHWrt.ChangeParaToken( 0 );
+                rHWrt.ChangeParaToken( HtmlTokenId::NONE );
             OutHTML_NumBulListEnd( rHWrt, rNextInfo );
         }
         else if( rNextInfo.GetNumRule() != nullptr )
-            rHWrt.ChangeParaToken( 0 );
+            rHWrt.ChangeParaToken( HtmlTokenId::NONE );
 
         return;
     }
@@ -2008,7 +2008,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         // MIB 8.7.97: We enclose the line in a <PRE>. This means that the
         // spacings are wrong, but otherwise we get an empty paragraph
         // after the <HR> which is even uglier.
-        rHTMLWrt.ChangeParaToken( 0 );
+        rHTMLWrt.ChangeParaToken( HtmlTokenId::NONE );
 
         // Output all the nodes that are anchored to a frame
         rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Any );
@@ -2120,7 +2120,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             {
                 // ... and it is located before a table or a section
                 rHTMLWrt.OutBookmarks();
-                rHTMLWrt.m_bLFPossible = !rHTMLWrt.m_nLastParaToken;
+                rHTMLWrt.m_bLFPossible = rHTMLWrt.m_nLastParaToken == HtmlTokenId::NONE;
 
                 // Output all frames that are anchored to this node
                 rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Any );
@@ -2200,7 +2200,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     OutHTML_SwFormat( rWrt, rFormat, pNd->GetpSwAttrSet(), aFormatInfo );
 
     // If we didn't open a new line before the paragraph tag, we do that now
-    rHTMLWrt.m_bLFPossible = !rHTMLWrt.m_nLastParaToken;
+    rHTMLWrt.m_bLFPossible = rHTMLWrt.m_nLastParaToken == HtmlTokenId::NONE;
     if( !bOldLFPossible && rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
 
@@ -2333,7 +2333,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         aEndPosLst.OutStartAttrs( rHTMLWrt, nStrPos + nOffset );
     }
 
-    bool bWriteBreak = (HTML_PREFORMTXT_ON != rHTMLWrt.m_nLastParaToken);
+    bool bWriteBreak = (HtmlTokenId::PREFORMTXT_ON != rHTMLWrt.m_nLastParaToken);
     if( bWriteBreak && pNd->GetNumRule()  )
         bWriteBreak = false;
 
@@ -2412,7 +2412,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
             if( pTextHt )
             {
-                rHTMLWrt.m_bLFPossible = !rHTMLWrt.m_nLastParaToken && nStrPos > 0 &&
+                rHTMLWrt.m_bLFPossible = rHTMLWrt.m_nLastParaToken == HtmlTokenId::NONE &&
+                                       nStrPos > 0 &&
                                        rStr[nStrPos-1] == ' ';
                 sal_uInt16 nCSS1Script = rHTMLWrt.m_nCSS1Script;
                 rHTMLWrt.m_nCSS1Script = aEndPosLst.GetScriptAtPos(
@@ -2438,10 +2439,10 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
                 // try to split a line after about 255 characters
                 // at a space character unless in a PRE-context
-                if( ' '==c && !rHTMLWrt.m_nLastParaToken  )
+                if( ' ' == c && rHTMLWrt.m_nLastParaToken == HtmlTokenId::NONE  )
                 {
                     sal_Int32 nLineLen;
-                    if( rHTMLWrt.m_nLastParaToken )
+                    if( rHTMLWrt.m_nLastParaToken != HtmlTokenId::NONE )
                         nLineLen = nStrPos - nPreSplitPos;
                     else
                         nLineLen = rHTMLWrt.GetLineLen();
@@ -2457,7 +2458,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
                         rHTMLWrt.OutNewLine();
                         bOutChar = false;
-                        if( rHTMLWrt.m_nLastParaToken )
+                        if( rHTMLWrt.m_nLastParaToken != HtmlTokenId::NONE )
                             nPreSplitPos = nStrPos+1;
                     }
                 }
@@ -2485,7 +2486,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                     // then we need to add an extra <br>
                     // because browsers like Mozilla wouldn't add a line for the next paragraph
                     bWriteBreak = (0x0a == c) &&
-                                  (HTML_PREFORMTXT_ON != rHTMLWrt.m_nLastParaToken);
+                                  (HtmlTokenId::PREFORMTXT_ON != rHTMLWrt.m_nLastParaToken);
                 }
             }
         }
@@ -2558,7 +2559,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     // if an LF is not allowed already, it is allowed once the paragraphs
     // ends with a ' '
-    if( !rHTMLWrt.m_bLFPossible && !rHTMLWrt.m_nLastParaToken &&
+    if( !rHTMLWrt.m_bLFPossible &&
+        rHTMLWrt.m_nLastParaToken == HtmlTokenId::NONE &&
         nEnd > 0 && ' ' == rStr[nEnd-1] )
         rHTMLWrt.m_bLFPossible = true;
 

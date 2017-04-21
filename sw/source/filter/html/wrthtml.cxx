@@ -26,6 +26,7 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <svtools/htmlcfg.hxx>
+#include <svtools/htmltokn.h>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/frmhtmlw.hxx>
@@ -97,7 +98,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , m_pFormatFootnote(nullptr)
     , m_nWarn(0)
     , m_nLastLFPos(0)
-    , m_nLastParaToken(0)
+    , m_nLastParaToken(HtmlTokenId::NONE)
     , m_nBkmkTabPos(-1)
     , m_nImgMapCnt(1)
     , m_nFormCntrlCnt(0)
@@ -375,7 +376,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     // document is saved
     m_pHTMLPosFlyFrames = nullptr;
     CollectFlyFrames();
-    m_nLastParaToken = 0;
+    m_nLastParaToken = HtmlTokenId::NONE;
     GetControls();
     CollectLinkTargets();
 
@@ -666,7 +667,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 
     // End <PRE> and any <DL>, because a definition list's level may
     // change inside the section.
-    rHTMLWrt.ChangeParaToken( 0 );
+    rHTMLWrt.ChangeParaToken( HtmlTokenId::NONE );
     rHTMLWrt.OutAndSetDefList( 0 );
 
     const SwSection& rSection = rSectNd.GetSection();
@@ -811,7 +812,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             m_bOutFooter = false; // after one node no footer anymore
         }
 
-        ChangeParaToken( 0 ); // MIB 8.7.97: We're doing it here and not at the caller
+        ChangeParaToken( HtmlTokenId::NONE ); // MIB 8.7.97: We're doing it here and not at the caller
         OutAndSetDefList( 0 );
 
     } while( CopyNextPam( &pPam ) );        // until all PaM's processed
@@ -1471,7 +1472,7 @@ HTMLSaveData::~HTMLSaveData()
     rWrt.SetEndPaM( pOldEnd );
     rWrt.bWriteAll = bOldWriteAll;
     rWrt.m_nBkmkTabPos = bOldWriteAll ? rWrt.FindPos_Bkmk( *pOldPam->GetPoint() ) : -1;
-    rWrt.m_nLastParaToken = 0;
+    rWrt.m_nLastParaToken = HtmlTokenId::NONE;
     rWrt.m_nDefListLvl = nOldDefListLvl;
     rWrt.m_nDirection = nOldDirection;
     rWrt.m_bOutHeader = bOldOutHeader;
