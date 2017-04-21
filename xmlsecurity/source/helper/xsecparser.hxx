@@ -103,13 +103,14 @@ private:
     // Relevant for ODF. The digest algorithm selected by the current DigestMethod element's
     // Algorithm attribute in the current Reference element. From css::xml::crypto::DigestID.
     sal_Int32 m_nReferenceDigestID;
+    XMLSignatureHelper& m_rXMLSignatureHelper;
 
 private:
     static OUString getIdAttr(const css::uno::Reference<
             css::xml::sax::XAttributeList >& xAttribs );
 
 public:
-    XSecParser( XSecController* pXSecController,
+    XSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecController* pXSecController,
         const css::uno::Reference<
             css::xml::sax::XDocumentHandler >& xNextHandler );
 

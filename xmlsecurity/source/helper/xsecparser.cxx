@@ -19,6 +19,7 @@
 
 
 #include "xsecparser.hxx"
+#include "xmlsignaturehelper.hxx"
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -28,7 +29,8 @@ namespace cssu = com::sun::star::uno;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 
-XSecParser::XSecParser(XSecController* pXSecController,
+XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
+    XSecController* pXSecController,
     const cssu::Reference< cssxs::XDocumentHandler >& xNextHandler)
     : m_bInX509IssuerName(false)
     , m_bInX509SerialNumber(false)
@@ -44,6 +46,7 @@ XSecParser::XSecParser(XSecController* pXSecController,
     , m_xNextHandler(xNextHandler)
     , m_bReferenceUnresolved(false)
     , m_nReferenceDigestID(cssxc::DigestID::SHA1)
+    , m_rXMLSignatureHelper(rXMLSignatureHelper)
 {
 }
 
@@ -100,6 +103,7 @@ void SAL_CALL XSecParser::startElement(
 
         if ( aName == "Signature" )
         {
+            m_rXMLSignatureHelper.StartVerifySignatureElement();
             m_pXSecController->addSignature();
             if (!ouIdAttr.isEmpty())
             {

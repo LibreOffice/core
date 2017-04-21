@@ -62,6 +62,7 @@
 class XSecParser;
 class XMLDocumentWrapper_XmlSecImpl;
 class SAXEventKeeperImpl;
+class XMLSignatureHelper;
 
 class InternalSignatureInformation
 {
@@ -395,7 +396,7 @@ public:
      */
     void collectToVerify( const OUString& referenceId );
     void addSignature( sal_Int32 nSignatureId );
-    css::uno::Reference< css::xml::sax::XDocumentHandler > const & createSignatureReader(sal_Int32 nType = 0);
+    css::uno::Reference< css::xml::sax::XDocumentHandler > const & createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType = 0);
     void releaseSignatureReader();
 
 public:

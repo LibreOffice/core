@@ -400,12 +400,12 @@ void XSecController::addSignature( sal_Int32 nSignatureId )
     m_bVerifyCurrentSignature = true;
 }
 
-cssu::Reference< cssxs::XDocumentHandler > const & XSecController::createSignatureReader(sal_Int32 nType)
+cssu::Reference< cssxs::XDocumentHandler > const & XSecController::createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType)
 {
     if (nType == embed::StorageFormats::OFOPXML)
-        m_xSecParser = new OOXMLSecParser(this);
+        m_xSecParser = new OOXMLSecParser(rXMLSignatureHelper, this);
     else
-        m_xSecParser = new XSecParser( this, nullptr );
+        m_xSecParser = new XSecParser(rXMLSignatureHelper, this, nullptr);
     cssu::Reference< cssl::XInitialization > xInitialization(m_xSecParser, uno::UNO_QUERY);
 
     setSAXChainConnector(xInitialization, nullptr, nullptr);
