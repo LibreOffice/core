@@ -212,7 +212,7 @@ HTMLTableRules HTMLOption::GetTableRules() const
 }
 
 HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
-    SvParser( rIn ),
+    SvParserHtmlTokenId( rIn ),
     bNewDoc(bReadNewDoc),
     bIsInHeader(true),
     bIsInBody(false),
@@ -227,7 +227,7 @@ HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
     bReadNextChar(false),
     bReadComment(false),
     nPre_LinePos(0),
-    mnPendingOffToken(0)
+    mnPendingOffToken(HtmlTokenId::NONE)
 {
     //#i76649, default to UTF-8 for HTML unless we know differently
     SetSrcEncoding(RTL_TEXTENCODING_UTF8);
@@ -241,22 +241,22 @@ SvParserState HTMLParser::CallParser()
 {
     eState = SvParserState::Working;
     nNextCh = GetNextChar();
-    SaveState( 0 );
+    SaveState( HtmlTokenId::NONE );
 
     nPre_LinePos = 0;
     bPre_IgnoreNewPara = false;
 
     AddFirstRef();
-    Continue( 0 );
+    Continue( HtmlTokenId::NONE );
     if( SvParserState::Pending != eState )
         ReleaseRef();       // Parser not needed anymore
 
     return eState;
 }
 
-void HTMLParser::Continue( int nToken )
+void HTMLParser::Continue( HtmlTokenId nToken )
 {
-    if( !nToken )
+    if( nToken == HtmlTokenId::NONE )
         nToken = GetNextToken();
 
     while( IsParserWorking() )
@@ -264,73 +264,73 @@ void HTMLParser::Continue( int nToken )
         SaveState( nToken );
         nToken = FilterToken( nToken );
 
-        if( nToken )
+        if( nToken != HtmlTokenId::NONE )
             NextToken( nToken );
 
         if( IsParserWorking() )
-            SaveState( 0 );         // continue with new token
+            SaveState( HtmlTokenId::NONE );         // continue with new token
 
         nToken = GetNextToken();
     }
 }
 
-int HTMLParser::FilterToken( int nToken )
+HtmlTokenId HTMLParser::FilterToken( HtmlTokenId nToken )
 {
     switch( nToken )
     {
-    case sal_Unicode(EOF):
-        nToken = 0;
+    case HtmlTokenId(EOF):
+        nToken = HtmlTokenId::NONE;
         break;          // don't pass
 
-    case HTML_HEAD_OFF:
+    case HtmlTokenId::HEAD_OFF:
         bIsInBody = true;
         bIsInHeader = false;
         break;
 
-    case HTML_HEAD_ON:
+    case HtmlTokenId::HEAD_ON:
         bIsInHeader = true;
         break;
 
-    case HTML_BODY_ON:
+    case HtmlTokenId::BODY_ON:
         bIsInHeader = false;
         bIsInBody = true;
         break;
 
-    case HTML_FRAMESET_ON:
+    case HtmlTokenId::FRAMESET_ON:
         bIsInHeader = false;
         bIsInBody = false;
         break;
 
-    case HTML_BODY_OFF:
+    case HtmlTokenId::BODY_OFF:
         bIsInBody = bReadPRE = bReadListing = bReadXMP = false;
         break;
 
-    case HTML_HTML_OFF:
-        nToken = 0;
+    case HtmlTokenId::HTML_OFF:
+        nToken = HtmlTokenId::NONE;
         bReadPRE = bReadListing = bReadXMP = false;
-        break;      // HTML_ON hasn't been passed either !
+        break;      // HtmlTokenId::ON hasn't been passed either !
 
-    case HTML_PREFORMTXT_ON:
+    case HtmlTokenId::PREFORMTXT_ON:
         StartPRE();
         break;
 
-    case HTML_PREFORMTXT_OFF:
+    case HtmlTokenId::PREFORMTXT_OFF:
         FinishPRE();
         break;
 
-    case HTML_LISTING_ON:
+    case HtmlTokenId::LISTING_ON:
         StartListing();
         break;
 
-    case HTML_LISTING_OFF:
+    case HtmlTokenId::LISTING_OFF:
         FinishListing();
         break;
 
-    case HTML_XMP_ON:
+    case HtmlTokenId::XMP_ON:
         StartXMP();
         break;
 
-    case HTML_XMP_OFF:
+    case HtmlTokenId::XMP_OFF:
         FinishXMP();
         break;
 
@@ -355,7 +355,7 @@ int HTMLParser::FilterToken( int nToken )
 #define HTML_ISPRINTABLE( c ) ( c >= 32 && c != 127)
 #define HTML_ISHEXDIGIT( c ) rtl::isAsciiHexDigit(c)
 
-int HTMLParser::ScanText( const sal_Unicode cBreak )
+HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
 {
     OUStringBuffer sTmpBuffer( MAX_LEN );
     bool bContinue = true;
@@ -530,7 +530,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                     rInput.Seek( nStreamPos );
                                     nlLinePos = nLinePos;
                                     ClearTxtConvContext();
-                                    return HTML_TEXTTOKEN;
+                                    return HtmlTokenId::TEXTTOKEN;
                                 }
 
                                 // Hack: _GetNextChar shall not read the
@@ -538,9 +538,9 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                 if( ';' != nNextCh )
                                     aToken += " ";
                                 if( 1U == cChar )
-                                    return HTML_NONBREAKSPACE;
+                                    return HtmlTokenId::NONBREAKSPACE;
                                 else //2U
-                                    return HTML_SOFTHYPH;
+                                    return HtmlTokenId::SOFTHYPH;
                             }
                         }
                     }
@@ -700,12 +700,12 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         {
                             // Have seen s.th. aside from blanks?
                             aToken += sTmpBuffer.makeStringAndClear();
-                            return HTML_TEXTTOKEN;
+                            return HtmlTokenId::TEXTTOKEN;
                         }
                         else
                             // Only read blanks: no text must be returned
                             // and GetNextToken_ has to read until EOF
-                            return 0;
+                            return HtmlTokenId::NONE;
                     }
                 } while ( ' ' == nNextCh || '\t' == nNextCh ||
                           '\r' == nNextCh || '\n' == nNextCh ||
@@ -733,7 +733,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     {
                         if( !sTmpBuffer.isEmpty() )
                             aToken += sTmpBuffer.makeStringAndClear();
-                        return HTML_TEXTTOKEN;
+                        return HtmlTokenId::TEXTTOKEN;
                     }
                 } while( HTML_ISALPHA( nNextCh ) || HTML_ISDIGIT( nNextCh ) );
                 bNextCh = false;
@@ -750,10 +750,10 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
     if( !sTmpBuffer.isEmpty() )
         aToken += sTmpBuffer.makeStringAndClear();
 
-    return HTML_TEXTTOKEN;
+    return HtmlTokenId::TEXTTOKEN;
 }
 
-int HTMLParser::GetNextRawToken()
+HtmlTokenId HTMLParser::GetNextRawToken()
 {
     OUStringBuffer sTmpBuffer( MAX_LEN );
 
@@ -766,13 +766,13 @@ int HTMLParser::GetNextRawToken()
         aEndToken.clear();
         bEndTokenFound = false;
 
-        return 0;
+        return HtmlTokenId::NONE;
     }
 
-    // Default return value: HTML_RAWDATA
+    // Default return value: HtmlTokenId::RAWDATA
     bool bContinue = true;
-    int nToken = HTML_RAWDATA;
-    SaveState( 0 );
+    HtmlTokenId nToken = HtmlTokenId::RAWDATA;
+    SaveState( HtmlTokenId::NONE );
     while( bContinue && IsParserWorking() )
     {
         bool bNextCh = true;
@@ -863,7 +863,7 @@ int HTMLParser::GetNextRawToken()
                         bReadScript = false;
                         bReadStyle = false;
                         aEndToken.clear();
-                        nToken = 0;
+                        nToken = HtmlTokenId::NONE;
                     }
                     else
                     {
@@ -943,7 +943,7 @@ int HTMLParser::GetNextRawToken()
                     bReadScript = false;
                     bReadStyle = false;
                     aEndToken.clear();
-                    nToken = 0;
+                    nToken = HtmlTokenId::NONE;
                 }
                 break;
             }
@@ -963,24 +963,24 @@ int HTMLParser::GetNextRawToken()
     }
 
     if( IsParserWorking() )
-        SaveState( 0 );
+        SaveState( HtmlTokenId::NONE );
     else
-        nToken = 0;
+        nToken = HtmlTokenId::NONE;
 
     return nToken;
 }
 
 // Scan next token
-int HTMLParser::GetNextToken_()
+HtmlTokenId HTMLParser::GetNextToken_()
 {
-    int nRet = 0;
+    HtmlTokenId nRet = HtmlTokenId::NONE;
     sSaveToken.clear();
 
-    if (mnPendingOffToken)
+    if (mnPendingOffToken != HtmlTokenId::NONE)
     {
-        // HTML_<TOKEN>_OFF generated for HTML_<TOKEN>_ON
+        // HtmlTokenId::<TOKEN>_OFF generated for HtmlTokenId::<TOKEN>_ON
         nRet = mnPendingOffToken;
-        mnPendingOffToken = 0;
+        mnPendingOffToken = HtmlTokenId::NONE;
         aToken.clear();
         return nRet;
     }
@@ -990,7 +990,7 @@ int HTMLParser::GetNextToken_()
         maOptions.clear();
 
     if( !IsParserWorking() )        // Don't continue if already an error occurred
-        return 0;
+        return HtmlTokenId::NONE;
 
     bool bReadNextCharSave = bReadNextChar;
     if( bReadNextChar )
@@ -999,14 +999,14 @@ int HTMLParser::GetNextToken_()
                     "Read a character despite </SCRIPT> was read?" );
         nNextCh = GetNextChar();
         if( !IsParserWorking() )        // Don't continue if already an error occurred
-            return 0;
+            return HtmlTokenId::NONE;
         bReadNextChar = false;
     }
 
     if( bReadScript || bReadStyle || !aEndToken.isEmpty() )
     {
         nRet = GetNextRawToken();
-        if( nRet || !IsParserWorking() )
+        if( nRet != HtmlTokenId::NONE || !IsParserWorking() )
             return nRet;
     }
 
@@ -1054,27 +1054,27 @@ int HTMLParser::GetNextToken_()
                     // Search token in table:
                     sSaveToken = aToken;
                     aToken = aToken.toAsciiLowerCase();
-                    if( 0 == (nRet = GetHTMLToken( aToken )) )
+                    if( HtmlTokenId::NONE == (nRet = GetHTMLToken( aToken )) )
                         // Unknown control
-                        nRet = HTML_UNKNOWNCONTROL_ON;
+                        nRet = HtmlTokenId::UNKNOWNCONTROL_ON;
 
                     // If it's a token which can be switched off...
                     if( bOffState )
                     {
-                         if( HTML_TOKEN_ONOFF & nRet )
+                         if( nRet >= HtmlTokenId::ONOFF_START )
                          {
                             // and there is an off token, return off token instead
-                            ++nRet;
+                            nRet = (HtmlTokenId)((int)nRet + 1);
                          }
-                         else if( HTML_LINEBREAK!=nRet )
+                         else if( HtmlTokenId::LINEBREAK!=nRet )
                          {
                             // and there is no off token, return unknown token.
                             // (except for </BR>, that is treated like <BR>)
-                            nRet = HTML_UNKNOWNCONTROL_OFF;
+                            nRet = HtmlTokenId::UNKNOWNCONTROL_OFF;
                          }
                     }
 
-                    if( nRet == HTML_COMMENT )
+                    if( nRet == HtmlTokenId::COMMENT )
                     {
                         // fix: due to being case sensitive use sSaveToken as start of comment
                         //      and append a blank.
@@ -1130,12 +1130,12 @@ int HTMLParser::GetNextToken_()
                         ScanText( '>' );
 
                         // fdo#34666 fdo#36080 fdo#36390: closing "/>"?:
-                        // generate pending HTML_<TOKEN>_OFF for HTML_<TOKEN>_ON
-                        // Do not convert this to a single HTML_<TOKEN>_OFF
+                        // generate pending HtmlTokenId::<TOKEN>_OFF for HtmlTokenId::<TOKEN>_ON
+                        // Do not convert this to a single HtmlTokenId::<TOKEN>_OFF
                         // which lead to fdo#56772.
-                        if ((HTML_TOKEN_ONOFF & nRet) && aToken.endsWith("/"))
+                        if ((nRet >= HtmlTokenId::ONOFF_START) && aToken.endsWith("/"))
                         {
-                            mnPendingOffToken = nRet + 1;       // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF
+                            mnPendingOffToken = (HtmlTokenId)((int)nRet + 1);       // HtmlTokenId::<TOKEN>_ON -> HtmlTokenId::<TOKEN>_OFF
                             aToken = aToken.replaceAt( aToken.getLength()-1, 1, "");   // remove trailing '/'
                         }
                         if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
@@ -1148,7 +1148,7 @@ int HTMLParser::GetNextToken_()
                             ClearTxtConvContext();
 
                             aToken = "<";
-                            nRet = HTML_TEXTTOKEN;
+                            nRet = HtmlTokenId::TEXTTOKEN;
                             nNextCh = GetNextChar();
                             bNextCh = false;
                             break;
@@ -1173,7 +1173,7 @@ int HTMLParser::GetNextToken_()
                             ClearTxtConvContext();
 
                             aToken = "<";
-                            nRet = HTML_TEXTTOKEN;
+                            nRet = HtmlTokenId::TEXTTOKEN;
                             nNextCh = GetNextChar();
                             bNextCh = false;
                             break;
@@ -1184,7 +1184,7 @@ int HTMLParser::GetNextToken_()
                     }
                     else if( '%' == nNextCh )
                     {
-                        nRet = HTML_UNKNOWNCONTROL_ON;
+                        nRet = HtmlTokenId::UNKNOWNCONTROL_ON;
 
                         sal_uLong nCStreamPos = rInput.Tell();
                         sal_uLong nCLineNr = GetLineNr(), nCLinePos = GetLinePos();
@@ -1207,7 +1207,7 @@ int HTMLParser::GetNextToken_()
                             SetLinePos( nCLinePos );
                             ClearTxtConvContext();
                             aToken = "<%";
-                            nRet = HTML_TEXTTOKEN;
+                            nRet = HtmlTokenId::TEXTTOKEN;
                             break;
                         }
                         if( IsParserWorking() )
@@ -1219,7 +1219,7 @@ int HTMLParser::GetNextToken_()
                     else
                     {
                         aToken = "<";
-                        nRet = HTML_TEXTTOKEN;
+                        nRet = HtmlTokenId::TEXTTOKEN;
                         bNextCh = false;
                         break;
                     }
@@ -1230,17 +1230,17 @@ int HTMLParser::GetNextToken_()
                     bNextCh = '>' == nNextCh;
                     switch( nRet )
                     {
-                    case HTML_TEXTAREA_ON:
+                    case HtmlTokenId::TEXTAREA_ON:
                         bReadTextArea = true;
                         break;
-                    case HTML_TEXTAREA_OFF:
+                    case HtmlTokenId::TEXTAREA_OFF:
                         bReadTextArea = false;
                         break;
-                    case HTML_SCRIPT_ON:
+                    case HtmlTokenId::SCRIPT_ON:
                         if( !bReadTextArea )
                             bReadScript = true;
                         break;
-                    case HTML_SCRIPT_OFF:
+                    case HtmlTokenId::SCRIPT_OFF:
                         if( !bReadTextArea )
                         {
                             bReadScript = false;
@@ -1251,12 +1251,13 @@ int HTMLParser::GetNextToken_()
                         }
                         break;
 
-                    case HTML_STYLE_ON:
+                    case HtmlTokenId::STYLE_ON:
                         bReadStyle = true;
                         break;
-                    case HTML_STYLE_OFF:
+                    case HtmlTokenId::STYLE_OFF:
                         bReadStyle = false;
                         break;
+                    default: break;
                     }
                 }
             }
@@ -1266,7 +1267,7 @@ int HTMLParser::GetNextToken_()
             if( rInput.IsEof() )
             {
                 eState = SvParserState::Accepted;
-                nRet = nNextCh;
+                nRet = HtmlTokenId(nNextCh);
             }
             else
             {
@@ -1277,7 +1278,7 @@ int HTMLParser::GetNextToken_()
 
         case '\f':
             // form feeds are passed upwards separately
-            nRet = HTML_LINEFEEDCHAR; // !!! should be FORMFEEDCHAR
+            nRet = HtmlTokenId::LINEFEEDCHAR; // !!! should be FORMFEEDCHAR
             break;
 
         case '\n':
@@ -1291,14 +1292,14 @@ int HTMLParser::GetNextToken_()
                     bNextCh = false;
                     nNextCh = c;
                 }
-                nRet = HTML_NEWPARA;
+                nRet = HtmlTokenId::NEWPARA;
                 break;
             }
             SAL_FALLTHROUGH;
         case '\t':
             if( bReadPRE )
             {
-                nRet = HTML_TABCHAR;
+                nRet = HtmlTokenId::TABCHAR;
                 break;
             }
             SAL_FALLTHROUGH;
@@ -1324,17 +1325,17 @@ scan_text:
         if( bNextCh && SvParserState::Working == eState )
         {
             nNextCh = GetNextChar();
-            if( SvParserState::Pending == eState && nRet && HTML_TEXTTOKEN != nRet )
+            if( SvParserState::Pending == eState && nRet != HtmlTokenId::NONE && HtmlTokenId::TEXTTOKEN != nRet )
             {
                 bReadNextChar = true;
                 eState = SvParserState::Working;
             }
         }
 
-    } while( !nRet && SvParserState::Working == eState );
+    } while( nRet == HtmlTokenId::NONE && SvParserState::Working == eState );
 
     if( SvParserState::Pending == eState )
-        nRet = -1;      // s.th. invalid
+        nRet = HtmlTokenId::INVALID;      // s.th. invalid
 
     return nRet;
 }
@@ -1537,22 +1538,22 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId *pNoConvertToken )
     return maOptions;
 }
 
-int HTMLParser::FilterPRE( int nToken )
+HtmlTokenId HTMLParser::FilterPRE( HtmlTokenId nToken )
 {
     switch( nToken )
     {
     // in Netscape they only have impact in not empty paragraphs
-    case HTML_PARABREAK_ON:
-        nToken = HTML_LINEBREAK;
+    case HtmlTokenId::PARABREAK_ON:
+        nToken = HtmlTokenId::LINEBREAK;
         SAL_FALLTHROUGH;
-    case HTML_LINEBREAK:
-    case HTML_NEWPARA:
+    case HtmlTokenId::LINEBREAK:
+    case HtmlTokenId::NEWPARA:
         nPre_LinePos = 0;
         if( bPre_IgnoreNewPara )
-            nToken = 0;
+            nToken = HtmlTokenId::NONE;
         break;
 
-    case HTML_TABCHAR:
+    case HtmlTokenId::TABCHAR:
         {
             sal_Int32 nSpaces = (8 - (nPre_LinePos % 8));
             DBG_ASSERT( aToken.isEmpty(), "Why is the token not empty?" );
@@ -1563,152 +1564,152 @@ int HTMLParser::FilterPRE( int nToken )
                 aToken = padToLength(aBuf, nSpaces, ' ').makeStringAndClear();
             }
             nPre_LinePos += nSpaces;
-            nToken = HTML_TEXTTOKEN;
+            nToken = HtmlTokenId::TEXTTOKEN;
         }
         break;
     // Keep those
-    case HTML_TEXTTOKEN:
+    case HtmlTokenId::TEXTTOKEN:
         nPre_LinePos += aToken.getLength();
         break;
 
-    case HTML_SELECT_ON:
-    case HTML_SELECT_OFF:
-    case HTML_BODY_ON:
-    case HTML_FORM_ON:
-    case HTML_FORM_OFF:
-    case HTML_INPUT:
-    case HTML_OPTION:
-    case HTML_TEXTAREA_ON:
-    case HTML_TEXTAREA_OFF:
+    case HtmlTokenId::SELECT_ON:
+    case HtmlTokenId::SELECT_OFF:
+    case HtmlTokenId::BODY_ON:
+    case HtmlTokenId::FORM_ON:
+    case HtmlTokenId::FORM_OFF:
+    case HtmlTokenId::INPUT:
+    case HtmlTokenId::OPTION:
+    case HtmlTokenId::TEXTAREA_ON:
+    case HtmlTokenId::TEXTAREA_OFF:
 
-    case HTML_IMAGE:
-    case HTML_APPLET_ON:
-    case HTML_APPLET_OFF:
-    case HTML_PARAM:
-    case HTML_EMBED:
+    case HtmlTokenId::IMAGE:
+    case HtmlTokenId::APPLET_ON:
+    case HtmlTokenId::APPLET_OFF:
+    case HtmlTokenId::PARAM:
+    case HtmlTokenId::EMBED:
 
-    case HTML_HEAD1_ON:
-    case HTML_HEAD1_OFF:
-    case HTML_HEAD2_ON:
-    case HTML_HEAD2_OFF:
-    case HTML_HEAD3_ON:
-    case HTML_HEAD3_OFF:
-    case HTML_HEAD4_ON:
-    case HTML_HEAD4_OFF:
-    case HTML_HEAD5_ON:
-    case HTML_HEAD5_OFF:
-    case HTML_HEAD6_ON:
-    case HTML_HEAD6_OFF:
-    case HTML_BLOCKQUOTE_ON:
-    case HTML_BLOCKQUOTE_OFF:
-    case HTML_ADDRESS_ON:
-    case HTML_ADDRESS_OFF:
-    case HTML_HORZRULE:
+    case HtmlTokenId::HEAD1_ON:
+    case HtmlTokenId::HEAD1_OFF:
+    case HtmlTokenId::HEAD2_ON:
+    case HtmlTokenId::HEAD2_OFF:
+    case HtmlTokenId::HEAD3_ON:
+    case HtmlTokenId::HEAD3_OFF:
+    case HtmlTokenId::HEAD4_ON:
+    case HtmlTokenId::HEAD4_OFF:
+    case HtmlTokenId::HEAD5_ON:
+    case HtmlTokenId::HEAD5_OFF:
+    case HtmlTokenId::HEAD6_ON:
+    case HtmlTokenId::HEAD6_OFF:
+    case HtmlTokenId::BLOCKQUOTE_ON:
+    case HtmlTokenId::BLOCKQUOTE_OFF:
+    case HtmlTokenId::ADDRESS_ON:
+    case HtmlTokenId::ADDRESS_OFF:
+    case HtmlTokenId::HORZRULE:
 
-    case HTML_CENTER_ON:
-    case HTML_CENTER_OFF:
-    case HTML_DIVISION_ON:
-    case HTML_DIVISION_OFF:
+    case HtmlTokenId::CENTER_ON:
+    case HtmlTokenId::CENTER_OFF:
+    case HtmlTokenId::DIVISION_ON:
+    case HtmlTokenId::DIVISION_OFF:
 
-    case HTML_SCRIPT_ON:
-    case HTML_SCRIPT_OFF:
-    case HTML_RAWDATA:
+    case HtmlTokenId::SCRIPT_ON:
+    case HtmlTokenId::SCRIPT_OFF:
+    case HtmlTokenId::RAWDATA:
 
-    case HTML_TABLE_ON:
-    case HTML_TABLE_OFF:
-    case HTML_CAPTION_ON:
-    case HTML_CAPTION_OFF:
-    case HTML_COLGROUP_ON:
-    case HTML_COLGROUP_OFF:
-    case HTML_COL_ON:
-    case HTML_COL_OFF:
-    case HTML_THEAD_ON:
-    case HTML_THEAD_OFF:
-    case HTML_TFOOT_ON:
-    case HTML_TFOOT_OFF:
-    case HTML_TBODY_ON:
-    case HTML_TBODY_OFF:
-    case HTML_TABLEROW_ON:
-    case HTML_TABLEROW_OFF:
-    case HTML_TABLEDATA_ON:
-    case HTML_TABLEDATA_OFF:
-    case HTML_TABLEHEADER_ON:
-    case HTML_TABLEHEADER_OFF:
+    case HtmlTokenId::TABLE_ON:
+    case HtmlTokenId::TABLE_OFF:
+    case HtmlTokenId::CAPTION_ON:
+    case HtmlTokenId::CAPTION_OFF:
+    case HtmlTokenId::COLGROUP_ON:
+    case HtmlTokenId::COLGROUP_OFF:
+    case HtmlTokenId::COL_ON:
+    case HtmlTokenId::COL_OFF:
+    case HtmlTokenId::THEAD_ON:
+    case HtmlTokenId::THEAD_OFF:
+    case HtmlTokenId::TFOOT_ON:
+    case HtmlTokenId::TFOOT_OFF:
+    case HtmlTokenId::TBODY_ON:
+    case HtmlTokenId::TBODY_OFF:
+    case HtmlTokenId::TABLEROW_ON:
+    case HtmlTokenId::TABLEROW_OFF:
+    case HtmlTokenId::TABLEDATA_ON:
+    case HtmlTokenId::TABLEDATA_OFF:
+    case HtmlTokenId::TABLEHEADER_ON:
+    case HtmlTokenId::TABLEHEADER_OFF:
 
-    case HTML_ANCHOR_ON:
-    case HTML_ANCHOR_OFF:
-    case HTML_BOLD_ON:
-    case HTML_BOLD_OFF:
-    case HTML_ITALIC_ON:
-    case HTML_ITALIC_OFF:
-    case HTML_STRIKE_ON:
-    case HTML_STRIKE_OFF:
-    case HTML_STRIKETHROUGH_ON:
-    case HTML_STRIKETHROUGH_OFF:
-    case HTML_UNDERLINE_ON:
-    case HTML_UNDERLINE_OFF:
-    case HTML_BASEFONT_ON:
-    case HTML_BASEFONT_OFF:
-    case HTML_FONT_ON:
-    case HTML_FONT_OFF:
-    case HTML_BLINK_ON:
-    case HTML_BLINK_OFF:
-    case HTML_SPAN_ON:
-    case HTML_SPAN_OFF:
-    case HTML_SUBSCRIPT_ON:
-    case HTML_SUBSCRIPT_OFF:
-    case HTML_SUPERSCRIPT_ON:
-    case HTML_SUPERSCRIPT_OFF:
-    case HTML_BIGPRINT_ON:
-    case HTML_BIGPRINT_OFF:
-    case HTML_SMALLPRINT_OFF:
-    case HTML_SMALLPRINT_ON:
+    case HtmlTokenId::ANCHOR_ON:
+    case HtmlTokenId::ANCHOR_OFF:
+    case HtmlTokenId::BOLD_ON:
+    case HtmlTokenId::BOLD_OFF:
+    case HtmlTokenId::ITALIC_ON:
+    case HtmlTokenId::ITALIC_OFF:
+    case HtmlTokenId::STRIKE_ON:
+    case HtmlTokenId::STRIKE_OFF:
+    case HtmlTokenId::STRIKETHROUGH_ON:
+    case HtmlTokenId::STRIKETHROUGH_OFF:
+    case HtmlTokenId::UNDERLINE_ON:
+    case HtmlTokenId::UNDERLINE_OFF:
+    case HtmlTokenId::BASEFONT_ON:
+    case HtmlTokenId::BASEFONT_OFF:
+    case HtmlTokenId::FONT_ON:
+    case HtmlTokenId::FONT_OFF:
+    case HtmlTokenId::BLINK_ON:
+    case HtmlTokenId::BLINK_OFF:
+    case HtmlTokenId::SPAN_ON:
+    case HtmlTokenId::SPAN_OFF:
+    case HtmlTokenId::SUBSCRIPT_ON:
+    case HtmlTokenId::SUBSCRIPT_OFF:
+    case HtmlTokenId::SUPERSCRIPT_ON:
+    case HtmlTokenId::SUPERSCRIPT_OFF:
+    case HtmlTokenId::BIGPRINT_ON:
+    case HtmlTokenId::BIGPRINT_OFF:
+    case HtmlTokenId::SMALLPRINT_OFF:
+    case HtmlTokenId::SMALLPRINT_ON:
 
-    case HTML_EMPHASIS_ON:
-    case HTML_EMPHASIS_OFF:
-    case HTML_CITIATION_ON:
-    case HTML_CITIATION_OFF:
-    case HTML_STRONG_ON:
-    case HTML_STRONG_OFF:
-    case HTML_CODE_ON:
-    case HTML_CODE_OFF:
-    case HTML_SAMPLE_ON:
-    case HTML_SAMPLE_OFF:
-    case HTML_KEYBOARD_ON:
-    case HTML_KEYBOARD_OFF:
-    case HTML_VARIABLE_ON:
-    case HTML_VARIABLE_OFF:
-    case HTML_DEFINSTANCE_ON:
-    case HTML_DEFINSTANCE_OFF:
-    case HTML_SHORTQUOTE_ON:
-    case HTML_SHORTQUOTE_OFF:
-    case HTML_LANGUAGE_ON:
-    case HTML_LANGUAGE_OFF:
-    case HTML_AUTHOR_ON:
-    case HTML_AUTHOR_OFF:
-    case HTML_PERSON_ON:
-    case HTML_PERSON_OFF:
-    case HTML_ACRONYM_ON:
-    case HTML_ACRONYM_OFF:
-    case HTML_ABBREVIATION_ON:
-    case HTML_ABBREVIATION_OFF:
-    case HTML_INSERTEDTEXT_ON:
-    case HTML_INSERTEDTEXT_OFF:
-    case HTML_DELETEDTEXT_ON:
-    case HTML_DELETEDTEXT_OFF:
-    case HTML_TELETYPE_ON:
-    case HTML_TELETYPE_OFF:
+    case HtmlTokenId::EMPHASIS_ON:
+    case HtmlTokenId::EMPHASIS_OFF:
+    case HtmlTokenId::CITIATION_ON:
+    case HtmlTokenId::CITIATION_OFF:
+    case HtmlTokenId::STRONG_ON:
+    case HtmlTokenId::STRONG_OFF:
+    case HtmlTokenId::CODE_ON:
+    case HtmlTokenId::CODE_OFF:
+    case HtmlTokenId::SAMPLE_ON:
+    case HtmlTokenId::SAMPLE_OFF:
+    case HtmlTokenId::KEYBOARD_ON:
+    case HtmlTokenId::KEYBOARD_OFF:
+    case HtmlTokenId::VARIABLE_ON:
+    case HtmlTokenId::VARIABLE_OFF:
+    case HtmlTokenId::DEFINSTANCE_ON:
+    case HtmlTokenId::DEFINSTANCE_OFF:
+    case HtmlTokenId::SHORTQUOTE_ON:
+    case HtmlTokenId::SHORTQUOTE_OFF:
+    case HtmlTokenId::LANGUAGE_ON:
+    case HtmlTokenId::LANGUAGE_OFF:
+    case HtmlTokenId::AUTHOR_ON:
+    case HtmlTokenId::AUTHOR_OFF:
+    case HtmlTokenId::PERSON_ON:
+    case HtmlTokenId::PERSON_OFF:
+    case HtmlTokenId::ACRONYM_ON:
+    case HtmlTokenId::ACRONYM_OFF:
+    case HtmlTokenId::ABBREVIATION_ON:
+    case HtmlTokenId::ABBREVIATION_OFF:
+    case HtmlTokenId::INSERTEDTEXT_ON:
+    case HtmlTokenId::INSERTEDTEXT_OFF:
+    case HtmlTokenId::DELETEDTEXT_ON:
+    case HtmlTokenId::DELETEDTEXT_OFF:
+    case HtmlTokenId::TELETYPE_ON:
+    case HtmlTokenId::TELETYPE_OFF:
 
         break;
 
     // The remainder is treated as an unknown token.
     default:
-        if( nToken )
+        if( nToken != HtmlTokenId::NONE )
         {
             nToken =
-                ( ((HTML_TOKEN_ONOFF & nToken) && (1 & nToken))
-                    ? HTML_UNKNOWNCONTROL_OFF
-                    : HTML_UNKNOWNCONTROL_ON );
+                ( ((nToken >= HtmlTokenId::ONOFF_START) && isOffToken(nToken))
+                    ? HtmlTokenId::UNKNOWNCONTROL_OFF
+                    : HtmlTokenId::UNKNOWNCONTROL_ON );
         }
         break;
     }
@@ -1718,23 +1719,23 @@ int HTMLParser::FilterPRE( int nToken )
     return nToken;
 }
 
-int HTMLParser::FilterXMP( int nToken )
+HtmlTokenId HTMLParser::FilterXMP( HtmlTokenId nToken )
 {
     switch( nToken )
     {
-    case HTML_NEWPARA:
+    case HtmlTokenId::NEWPARA:
         if( bPre_IgnoreNewPara )
-            nToken = 0;
+            nToken = HtmlTokenId::NONE;
         SAL_FALLTHROUGH;
-    case HTML_TEXTTOKEN:
-    case HTML_NONBREAKSPACE:
-    case HTML_SOFTHYPH:
+    case HtmlTokenId::TEXTTOKEN:
+    case HtmlTokenId::NONBREAKSPACE:
+    case HtmlTokenId::SOFTHYPH:
         break;              // kept
 
     default:
-        if( nToken )
+        if( nToken != HtmlTokenId::NONE )
         {
-            if( (HTML_TOKEN_ONOFF & nToken) && (1 & nToken) )
+            if( (nToken >= HtmlTokenId::ONOFF_START) && isOffToken(nToken) )
             {
                 sSaveToken = "</" + sSaveToken;
             }
@@ -1749,7 +1750,7 @@ int HTMLParser::FilterXMP( int nToken )
             else
                 aToken = sSaveToken;
             aToken += ">";
-            nToken = HTML_TEXTTOKEN;
+            nToken = HtmlTokenId::TEXTTOKEN;
         }
         break;
     }
@@ -1759,26 +1760,26 @@ int HTMLParser::FilterXMP( int nToken )
     return nToken;
 }
 
-int HTMLParser::FilterListing( int nToken )
+HtmlTokenId HTMLParser::FilterListing( HtmlTokenId nToken )
 {
     switch( nToken )
     {
-    case HTML_NEWPARA:
+    case HtmlTokenId::NEWPARA:
         if( bPre_IgnoreNewPara )
-            nToken = 0;
+            nToken = HtmlTokenId::NONE;
         SAL_FALLTHROUGH;
-    case HTML_TEXTTOKEN:
-    case HTML_NONBREAKSPACE:
-    case HTML_SOFTHYPH:
+    case HtmlTokenId::TEXTTOKEN:
+    case HtmlTokenId::NONBREAKSPACE:
+    case HtmlTokenId::SOFTHYPH:
         break;      // kept
 
     default:
-        if( nToken )
+        if( nToken != HtmlTokenId::NONE )
         {
             nToken =
-                ( ((HTML_TOKEN_ONOFF & nToken) && (1 & nToken))
-                    ? HTML_UNKNOWNCONTROL_OFF
-                    : HTML_UNKNOWNCONTROL_ON );
+                ( ((nToken >= HtmlTokenId::ONOFF_START) && isOffToken(nToken))
+                    ? HtmlTokenId::UNKNOWNCONTROL_OFF
+                    : HtmlTokenId::UNKNOWNCONTROL_ON );
         }
         break;
     }

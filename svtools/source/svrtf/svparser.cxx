@@ -28,6 +28,7 @@
 #include <climits>
 
 // structure to store the actuel data
+template<typename T>
 struct SvParser_Impl
 {
     OUString        aToken;             // gescanntes Token
@@ -35,10 +36,10 @@ struct SvParser_Impl
     sal_uLong       nlLineNr;           // actual line number
     sal_uLong       nlLinePos;          // actual column number
     long            nTokenValue;        // extra value (RTF)
-    bool        bTokenHasValue;     // indicates whether nTokenValue is valid
-    int             nToken;             // actual Token
+    bool            bTokenHasValue;     // indicates whether nTokenValue is valid
+    T               nToken;             // actual Token
     sal_uInt32      nNextCh;            // actual character
-    int             nSaveToken;         // the token from Continue
+    T               nSaveToken;         // the token from Continue
 
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
@@ -49,9 +50,9 @@ struct SvParser_Impl
         , nlLinePos(0)
         , nTokenValue(0)
         , bTokenHasValue(false)
-        , nToken(0)
+        , nToken(static_cast<T>(0))
         , nNextCh(0)
-        , nSaveToken(0)
+        , nSaveToken(static_cast<T>(0))
         , hConv( nullptr )
         , hContext( reinterpret_cast<rtl_TextToUnicodeContext>(1) )
     {
@@ -60,8 +61,17 @@ struct SvParser_Impl
 };
 
 
-// Construktor
-SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
+template<typename T>
+SvParser<T>::TokenStackType::TokenStackType()
+  : nTokenValue(0)
+    , bTokenHasValue(false)
+    , nTokenId(static_cast<T>(0))
+{
+}
+
+// Constructor
+template<typename T>
+SvParser<T>::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     : rInput( rIn )
     , nlLineNr( 1 )
     , nlLinePos( 1 )
@@ -85,7 +95,8 @@ SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     pTokenStackPos = pTokenStack;
 }
 
-SvParser::~SvParser()
+template<typename T>
+SvParser<T>::~SvParser()
 {
     if( pImplData && pImplData->hConv )
     {
@@ -97,13 +108,32 @@ SvParser::~SvParser()
     delete [] pTokenStack;
 }
 
-void SvParser::ClearTxtConvContext()
+template<typename T> SvParserState SvParser<T>::GetStatus() const { return eState; }
+template<typename T> sal_uLong  SvParser<T>::GetLineNr() const       { return nlLineNr; }
+template<typename T> sal_uLong  SvParser<T>::GetLinePos() const      { return nlLinePos; }
+template<typename T> void       SvParser<T>::IncLineNr()             { ++nlLineNr; }
+template<typename T> sal_uLong  SvParser<T>::IncLinePos()            { return ++nlLinePos; }
+template<typename T> void       SvParser<T>::SetLineNr( sal_uLong nlNum ) { nlLineNr = nlNum; }
+template<typename T> void       SvParser<T>::SetLinePos( sal_uLong nlPos ) {   nlLinePos = nlPos; }
+template<typename T> bool       SvParser<T>::IsParserWorking() const { return SvParserState::Working == eState; }
+template<typename T> rtl_TextEncoding SvParser<T>::GetSrcEncoding() const { return eSrcEnc; }
+template<typename T> void       SvParser<T>::SetSwitchToUCS2( bool bSet ) { bSwitchToUCS2 = bSet; }
+template<typename T> bool       SvParser<T>::IsSwitchToUCS2() const { return bSwitchToUCS2; }
+template<typename T> sal_uInt16 SvParser<T>::GetCharSize() const { return (RTL_TEXTENCODING_UCS2 == eSrcEnc) ? 2 : 1; }
+template<typename T> Link<LinkParamNone*,void> SvParser<T>::GetAsynchCallLink() const
+{
+    return LINK( const_cast<SvParser*>(this), SvParser, NewDataRead );
+}
+
+template<typename T>
+void SvParser<T>::ClearTxtConvContext()
 {
     if( pImplData && pImplData->hConv )
         rtl_resetTextToUnicodeContext( pImplData->hConv, pImplData->hContext );
 }
 
-void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
+template<typename T>
+void SvParser<T>::SetSrcEncoding( rtl_TextEncoding eEnc )
 {
     if( eEnc != eSrcEnc )
     {
@@ -121,7 +151,7 @@ void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
         {
             eSrcEnc = eEnc;
             if( !pImplData )
-                pImplData.reset(new SvParser_Impl);
+                pImplData.reset(new SvParser_Impl<T>);
             pImplData->hConv = rtl_createTextToUnicodeConverter( eSrcEnc );
             DBG_ASSERT( pImplData->hConv,
                         "SvParser::SetSrcEncoding: no converter for source encoding" );
@@ -140,13 +170,15 @@ void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
     }
 }
 
-void SvParser::RereadLookahead()
+template<typename T>
+void SvParser<T>::RereadLookahead()
 {
     rInput.Seek(nNextChPos);
     nNextCh = GetNextChar();
 }
 
-sal_uInt32 SvParser::GetNextChar()
+template<typename T>
+sal_uInt32 SvParser<T>::GetNextChar()
 {
     sal_uInt32 c = 0U;
 
@@ -416,9 +448,10 @@ sal_uInt32 SvParser::GetNextChar()
     return c;
 }
 
-int SvParser::GetNextToken()
+template<typename T>
+T SvParser<T>::GetNextToken()
 {
-    int nRet = 0;
+    T nRet = static_cast<T>(0);
 
     if( !nTokenStackPos )
     {
@@ -458,7 +491,8 @@ int SvParser::GetNextToken()
     return nRet;
 }
 
-int SvParser::SkipToken( short nCnt )       // "skip" n Tokens backward
+template<typename T>
+T SvParser<T>::SkipToken( short nCnt )       // "skip" n Tokens backward
 {
     pTokenStackPos = GetStackPtr( nCnt );
     short nTmp = nTokenStackPos - nCnt;
@@ -476,7 +510,8 @@ int SvParser::SkipToken( short nCnt )       // "skip" n Tokens backward
     return pTokenStackPos->nTokenId;
 }
 
-SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
+template<typename T>
+typename SvParser<T>::TokenStackType* SvParser<T>::GetStackPtr( short nCnt )
 {
     sal_uInt8 nAktPos = sal_uInt8(pTokenStackPos - pTokenStack );
     if( nCnt > 0 )
@@ -503,25 +538,28 @@ SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
 }
 
 // is called for each token which is recognised by CallParser
-void SvParser::NextToken( int )
+template<typename T>
+void SvParser<T>::NextToken( T )
 {
 }
 
 
 // to read asynchronous from SvStream
 
-int SvParser::GetSaveToken() const
+template<typename T>
+T SvParser<T>::GetSaveToken() const
 {
-    return pImplData ? pImplData->nSaveToken : 0;
+    return pImplData ? pImplData->nSaveToken : static_cast<T>(0);
 }
 
-void SvParser::SaveState( int nToken )
+template<typename T>
+void SvParser<T>::SaveState( T nToken )
 {
     // save actual status
     if( !pImplData )
     {
-        pImplData.reset(new SvParser_Impl);
-        pImplData->nSaveToken = 0;
+        pImplData.reset(new SvParser_Impl<T>);
+        pImplData->nSaveToken = static_cast<T>(0);
     }
 
     pImplData->nFilePos = rInput.Tell();
@@ -535,7 +573,8 @@ void SvParser::SaveState( int nToken )
     pImplData->nNextCh = nNextCh;
 }
 
-void SvParser::RestoreState()
+template<typename T>
+void SvParser<T>::RestoreState()
 {
     // restore old status
     if( pImplData )
@@ -555,11 +594,13 @@ void SvParser::RestoreState()
     }
 }
 
-void SvParser::Continue( int )
+template<typename T>
+void SvParser<T>::Continue( T )
 {
 }
 
-void SvParser::BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
+template<typename T>
+void SvParser<T>::BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
                               sal_uInt16 *pWhichIds,
                               sal_uInt16 nWhichIds )
 {
@@ -615,7 +656,15 @@ void SvParser::BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
 }
 
 
-IMPL_LINK_NOARG( SvParser, NewDataRead, LinkParamNone*, void )
+// expanded out version of
+//   IMPL_LINK_NOARG( SvParser, NewDataRead, LinkParamNone*, void )
+// since it can't cope with template methods
+template<typename T>
+void SvParser<T>::LinkStubNewDataRead(void * instance, LinkParamNone* data) {
+    return static_cast<SvParser<T> *>(instance)->NewDataRead(data);
+}
+template<typename T>
+void SvParser<T>::NewDataRead(SAL_UNUSED_PARAMETER LinkParamNone*)
 {
     switch( eState )
     {
@@ -641,6 +690,17 @@ IMPL_LINK_NOARG( SvParser, NewDataRead, LinkParamNone*, void )
         break;
     }
 }
+
+template class SVT_DLLPUBLIC SvParser<int>;
+template class SVT_DLLPUBLIC SvParser<HtmlTokenId>;
+
+SvParserInt::SvParserInt(SvStream& rIn, sal_uInt8 nStackSize) : SvParser<int>(rIn, nStackSize) {}
+
+SvParserInt::~SvParserInt() {}
+
+SvParserHtmlTokenId::SvParserHtmlTokenId(SvStream& rIn, sal_uInt8 nStackSize) : SvParser<HtmlTokenId>(rIn, nStackSize) {}
+
+SvParserHtmlTokenId::~SvParserHtmlTokenId() {}
 
 /*========================================================================
  *
