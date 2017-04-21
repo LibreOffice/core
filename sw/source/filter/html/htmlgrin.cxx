@@ -1049,7 +1049,7 @@ void SwHTMLParser::InsertBodyOptions()
 void SwHTMLParser::NewAnchor()
 {
     // end previous link if there was one
-    HTMLAttrContext *pOldCntxt = PopContext( HTML_ANCHOR_ON );
+    HTMLAttrContext *pOldCntxt = PopContext( HtmlTokenId::ANCHOR_ON );
     if( pOldCntxt )
     {
         // and maybe end attributes
@@ -1170,7 +1170,7 @@ ANCHOR_SETEVENT:
     }
 
     // einen neuen Kontext anlegen
-    HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_ANCHOR_ON );
+    HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::ANCHOR_ON );
 
     bool bEnAnchor = false, bFootnoteAnchor = false, bFootnoteEnSymbol = false;
     OUString aFootnoteName;
@@ -1262,7 +1262,7 @@ void SwHTMLParser::EndAnchor()
         m_bInFootEndNoteSymbol = false;
     }
 
-    EndTag( HTML_ANCHOR_OFF );
+    EndTag( HtmlTokenId::ANCHOR_OFF );
 }
 
 /*  */

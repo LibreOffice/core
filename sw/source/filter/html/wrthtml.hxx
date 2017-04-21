@@ -305,7 +305,7 @@ public:
     sal_uInt32 m_nWarn;                   // warning code
     sal_uInt32 m_nLastLFPos;              // last position of LF
 
-    sal_uInt16 m_nLastParaToken;          // to hold paragraphs together
+    HtmlTokenId m_nLastParaToken;         // to hold paragraphs together
     sal_Int32 m_nBkmkTabPos;              // current position in bookmark table
     sal_uInt16 m_nImgMapCnt;
     sal_uInt16 m_nFormCntrlCnt;
@@ -476,7 +476,7 @@ public:
                                      const SfxItemSet *pItemSet=nullptr );
     void OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFormat );
 
-    void ChangeParaToken( sal_uInt16 nNew );
+    void ChangeParaToken( HtmlTokenId nNew );
 
     void IncIndentLevel()
     {
