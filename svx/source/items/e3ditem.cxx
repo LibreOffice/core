@@ -88,7 +88,7 @@ bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) con
 
     drawing::Direction3D aDirection;
 
-    // Werte eintragen
+    // enter values
     aDirection.DirectionX = aVal.getX();
     aDirection.DirectionY = aVal.getY();
     aDirection.DirectionZ = aVal.getZ();

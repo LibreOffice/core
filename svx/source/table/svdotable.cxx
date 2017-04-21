@@ -1572,7 +1572,7 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
     TakeTextAnchorRect( rPos, aViewInit );
 
     Size aAnkSiz(aViewInit.GetSize());
-    aAnkSiz.Width()--; aAnkSiz.Height()--; // weil GetSize() ein draufaddiert
+    aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() increments by one
 
     Size aMaxSiz(aAnkSiz.Width(),1000000);
     if (pModel!=nullptr)
@@ -2271,7 +2271,7 @@ bool SdrTableObj::MovCreate(SdrDragStat& rStat)
     rStat.TakeCreateRect(aRect1);
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
-    maRect = aRect1; // fuer ObjName
+    maRect = aRect1; // for ObjName
     SetBoundRectDirty();
     bSnapRectDirty=true;
     return true;

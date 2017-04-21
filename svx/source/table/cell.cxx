@@ -70,7 +70,7 @@ using namespace ::com::sun::star::container;
 
 static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
 {
-    // Propertymap fuer einen Outliner Text
+    // property map for an outliner text
     static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] =
     {
         FILL_PROPERTIES
@@ -1150,7 +1150,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                 {
                     if( aSet.GetItemState( pMap->nWID ) != SfxItemState::SET )
                     {
-                        // Default aus ItemPool holen
+                        // fetch the default from ItemPool
                         if(SfxItemPool::IsWhich(pMap->nWID))
                             aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                     }
@@ -1243,7 +1243,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
             {
                 if(!aSet.Count())
                 {
-                    // Default aus ItemPool holen
+                    // fetch the default from ItemPool
                     if(SfxItemPool::IsWhich(pMap->nWID))
                         aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                 }
