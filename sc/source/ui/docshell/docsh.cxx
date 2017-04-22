@@ -599,7 +599,10 @@ bool ScDocShell::Load( SfxMedium& rMedium )
                 ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
 
                 if (pOrcus)
+                {
                     pOrcus->importODS_Styles(aDocument, aPath);
+                    aDocument.GetStyleSheetPool()->setAllStandard();
+                }
             }
 
             bRet = LoadXML( &rMedium, nullptr );

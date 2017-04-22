@@ -56,6 +56,8 @@ public:
     virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
                                      sal_uInt16 nMask = SFXSTYLEBIT_ALL) override;
 
+    void setAllStandard();
+
 protected:
     virtual             ~ScStyleSheetPool() override;
 

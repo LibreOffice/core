@@ -440,4 +440,14 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
     return nullptr;
 }
 
+void ScStyleSheetPool::setAllStandard()
+{
+    SfxStyleSheetBase* pSheet = First();
+    while (pSheet)
+    {
+        pSheet->SetMask(SCSTYLEBIT_STANDARD);
+        pSheet = Next();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
