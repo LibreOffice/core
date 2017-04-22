@@ -220,6 +220,11 @@ String STR_REMOVE_WARNING
     Text [ en-US ] = "The following characters are not valid and have been removed: ";
 };
 
+String STR_BOOKMARK_DEF_NAME
+{
+    Text [ en-US ] = "Bookmark";
+};
+
 String STR_BOOKMARK_NAME
 {
     Text [ en-US ] = "Name";

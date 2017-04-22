@@ -93,7 +93,7 @@
 #define STR_CENTER_BASE             (RC_GLOBALS_BEGIN + 33)
 
 // free
-
+#define STR_BOOKMARK_DEF_NAME       (RC_GLOBALS_BEGIN + 35)
 #define STR_BOOKMARK_NAME           (RC_GLOBALS_BEGIN + 36)
 #define STR_BOOKMARK_TEXT           (RC_GLOBALS_BEGIN + 37)
 
