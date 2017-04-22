@@ -159,8 +159,8 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
 
         m_aElementsSeq.push_back( aName );
 
-        sal_Int32 nNewEntryNum = m_aResultSeq.size() + 1;
-        m_aResultSeq.resize( nNewEntryNum );
+        const auto nNewEntryNum = m_aResultSeq.size();
+        m_aResultSeq.resize( nNewEntryNum+1 );
 
         const OUString aNameValue = xAttribs->getValueByName( g_sNameAttr );
         if ( aNameValue.isEmpty() )
@@ -170,8 +170,8 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
         if ( aUINameValue.isEmpty() )
             throw xml::sax::SAXException(); // TODO: the ID value must present
 
-        m_aResultSeq[nNewEntryNum-1].First = aNameValue;
-        m_aResultSeq[nNewEntryNum-1].Second = aUINameValue;
+        m_aResultSeq[nNewEntryNum].First = aNameValue;
+        m_aResultSeq[nNewEntryNum].Second = aUINameValue;
     }
     else
     {
