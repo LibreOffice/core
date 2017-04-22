@@ -272,8 +272,17 @@ namespace {
 
 inline bool isValue( formula::StackVar sv )
 {
-    return sv == formula::svDouble || sv == formula::svError
-        || sv == formula::svEmptyCell;
+    switch (sv)
+    {
+        case formula::svDouble:
+        case formula::svError:
+        case formula::svEmptyCell:
+        case formula::svHybridCell:
+            return true;
+        default:
+            ;
+    }
+    return false;
 }
 
 inline bool isString( formula::StackVar sv )
