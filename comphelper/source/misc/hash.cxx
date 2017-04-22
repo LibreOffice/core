@@ -44,7 +44,7 @@ struct HashImpl
 #elif USE_TLS_OPENSSL
     EVP_MD_CTX* mpContext;
 
-    EVP_MD* getOpenSSLType() const
+    const EVP_MD* getOpenSSLType() const
     {
         switch (meType)
         {
