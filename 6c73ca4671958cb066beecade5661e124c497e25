@@ -16,6 +16,24 @@
       "revId": "6c73ca4671958cb066beecade5661e124c497e25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_207327b3",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-04-22T01:16:26Z",
+      "side": 0,
+      "message": "From what i\u0027m aware of, it doesnt matter which value you put in it, setting it to anything just make the icon appear in the menubar.",
+      "parentUuid": "5a3905b3_8af15ad0",
+      "revId": "6c73ca4671958cb066beecade5661e124c497e25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
