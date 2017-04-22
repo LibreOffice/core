@@ -27,6 +27,7 @@
 #include <list>
 
 class SwFlyFrame;
+class SwFlyDrawContact;
 class SwAnchoredObject;
 class Graphic;
 class ImageMap;
@@ -185,6 +186,7 @@ class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
        so it can be used to move frames of non-resizable objects to align them correctly
        when they get borders (this is done in SwWrtShell::CalcAndGetScale) */
     Point   m_aLastFlyFramePrtRectPos;
+    SwFlyDrawContact* m_pContact;
 
     SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) = delete;
     SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
@@ -193,6 +195,7 @@ protected:
     SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
+        , m_pContact(nullptr)
     {}
 
 public:
@@ -244,6 +247,8 @@ public:
     void SetLastFlyFramePrtRectPos( const Point &rPoint ) { m_aLastFlyFramePrtRectPos = rPoint; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrameFormat)
+    SwFlyDrawContact* GetOrCreateContact();
+    void ClearContact();
 };
 
 //The DrawFrame-Format
