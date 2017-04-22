@@ -532,6 +532,7 @@ cmd/sc_sortdialog.png cmd/sc_sortascending.png
 cmd/sc_mailmergewizard.png cmd/sc_autoformat.png
 cmd/sc_macrosmenu.png cmd/sc_trackchanges.png
 cmd/sc_showannotations.png cmd/sc_insertannotation.png
+cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
 
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png

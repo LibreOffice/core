@@ -2081,7 +2081,10 @@
       </node>
       <node oor:name=".uno:SheetCommentMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Cell ~Comment</value>
+          <value xml:lang="en-US">Cell ~Comments</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:MergeCellsMenu" oor:op="replace">

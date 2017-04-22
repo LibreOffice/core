@@ -543,8 +543,6 @@
                     <menu:menuitem menu:id=".uno:EditAnnotation"/>
                     <menu:menuitem menu:id=".uno:HideNote"/>
                     <menu:menuitem menu:id=".uno:ShowNote"/>
-                    <menu:menuitem menu:id=".uno:HideAllNotes"/>
-                    <menu:menuitem menu:id=".uno:ShowAllNotes"/>
                     <menu:menuitem menu:id=".uno:DeleteNote"/>
                     <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
                 </menu:menupopup>
