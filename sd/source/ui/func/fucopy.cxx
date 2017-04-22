@@ -242,7 +242,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                 mpView->ResizeAllMarked( aRect.TopLeft(), aWidth, aHeight );
 
             if( mpView->IsRotateAllowed() )
-                mpView->RotateAllMarked( aRect.Center(), lAngle * 100 );
+                mpView->RotateAllMarked( aRect.Center(), lAngle );
 
             if( mpView->IsMoveAllowed() )
                 mpView->MoveAllMarked( Size( lSizeX, lSizeY ) );
