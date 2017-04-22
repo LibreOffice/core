@@ -277,7 +277,7 @@ inline bool isValue( formula::StackVar sv )
         case formula::svDouble:
         case formula::svError:
         case formula::svEmptyCell:
-        case formula::svHybridCell:
+//      case formula::svHybridCell:
             return true;
         default:
             ;

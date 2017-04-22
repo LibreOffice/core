@@ -324,7 +324,7 @@ public:
 
     CPPUNIT_TEST(testMiscRowHeights);
     CPPUNIT_TEST(testOptimalHeightReset);
-    CPPUNIT_TEST(testCustomNumFormatHybridCellODS);
+//  CPPUNIT_TEST(testCustomNumFormatHybridCellODS);
     CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
