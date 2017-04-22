@@ -77,6 +77,7 @@
 #include <HandleAnchorNodeChg.hxx>
 #include <calbck.hxx>
 #include <pagedeschint.hxx>
+#include <drawdoc.hxx>
 
 #ifndef NDEBUG
 #include <ndtxt.hxx>
@@ -2845,7 +2846,30 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
         } while( nullptr != ( pLast = aIter.Next() ));
 
     CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::DYING_FLYFRAMEFORMAT));
+    ClearContact();
 }
+
+SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
+{
+    IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
+#ifdef DBG_UTIL
+    SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFormat>( *this ).First();
+    assert(pContact == m_pContact);
+#endif
+    if(!m_pContact)
+        m_pContact = new SwFlyDrawContact(this, rIDDMA.GetOrCreateDrawModel());
+    return m_pContact;
+}
+
+void SwFlyFrameFormat::ClearContact()
+{
+#ifdef DBG_UTIL
+    SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFormat>( *this ).First();
+    assert(pContact == m_pContact);
+#endif
+    delete m_pContact;
+    m_pContact = nullptr;
+};
 
 /// Creates the Frames if the format describes a paragraph-bound frame.
 /// MA: 1994-02-14: creates the Frames also for frames anchored at page.

@@ -1364,9 +1364,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
     {
         SwDoc *pDoc = rFormat.GetDoc();
         // #i52858# - method name changed
-        SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        SwFlyDrawContact* pContactObject
-                    = new SwFlyDrawContact( &rFormat, pDrawModel );
+        SwFlyDrawContact* pContactObject(rFormat.GetOrCreateContact());
         pObject = pContactObject->GetMaster();
 
         const ::SwFormatSurround& rSurround = rFormat.GetSurround();
@@ -1374,6 +1372,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
             ( css::text::WrapTextMode_THROUGH == rSurround.GetSurround() &&
               !rFormat.GetOpaque().GetValue() ) ? pDoc->getIDocumentDrawModelAccess().GetHellId()
                                              : pDoc->getIDocumentDrawModelAccess().GetHeavenId() );
+        SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         pDrawModel->GetPage(0)->InsertObject( pObject );
     }
 
