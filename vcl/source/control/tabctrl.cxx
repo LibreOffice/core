@@ -2353,6 +2353,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         return false;
 
     long nMaxWidth = nWidth;
+    long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() : 0;
 
     const long nOffsetX = 2 + GetItemsOffset().X();
     const long nOffsetY = 2 + GetItemsOffset().Y();
@@ -2362,10 +2363,14 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
     //collect widths
     std::vector<sal_Int32> aWidths;
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
+    aWidths.push_back(ImplGetItemSize( &(*(mpTabCtrlData->maItemList.begin())), nMaxWidth ).Width() + nShortcutsWidth);
+    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin() + 1;
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
-        aWidths.push_back(ImplGetItemSize( &(*it), nMaxWidth ).Width());
+        long aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
+        if( !it->maText.isEmpty() && aSize < 100)
+            aSize = 100;
+        aWidths.push_back(aSize);
     }
 
     //aBreakIndexes will contain the indexes of the last tab on each row
@@ -2375,7 +2380,6 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         nMaxWidth = mnMaxPageWidth;
     nMaxWidth -= GetItemsOffset().X();
 
-    long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() : 0;
     long nX = nOffsetX;
     long nY = nOffsetY;
 
@@ -2394,9 +2398,6 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
     {
-        if( it == mpTabCtrlData->maItemList.begin() + 1 )
-            nX += nShortcutsWidth;
-
         Size aSize = ImplGetItemSize( &(*it), nMaxWidth );
 
         bool bNewLine = false;
@@ -2441,6 +2442,12 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
         nLineWidthAry[nLines] += aSize.Width();
         nX += aSize.Width();
+
+        if( it == mpTabCtrlData->maItemList.begin() )
+        {
+            nLineWidthAry[nLines] += nShortcutsWidth;
+            nX += nShortcutsWidth;
+        }
 
         if ( it->mnId == mnCurPageId )
             nCurLine = nLines;
@@ -2492,17 +2499,20 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
                 n++;
             }
 
-            if( m_pShortcuts && ( it == mpTabCtrlData->maItemList.begin() ) )
-            {
-                Point aPos(nIDX + nDX + nDX, nLineHeightAry[n-1]);
-                m_pShortcuts->SetPosPixel(aPos);
-            }
-
             it->maRect.Left() += nIDX;
-            it->maRect.Right() += nIDX + nDX;
+            if( it == mpTabCtrlData->maItemList.begin() )
+                it->maRect.Right() += nIDX;
+            else
+                it->maRect.Right() += nIDX + nDX;
             it->maRect.Top() = nLineHeightAry[n-1];
             it->maRect.Bottom() = nLineHeightAry[n-1] + nIH;
             nIDX += nDX;
+
+            if( m_pShortcuts && ( it == mpTabCtrlData->maItemList.begin() ) )
+            {
+                Point aPos(it->maRect.Right(), nLineHeightAry[n-1]);
+                m_pShortcuts->SetPosPixel(aPos);
+            }
 
             if ( nModDX )
             {

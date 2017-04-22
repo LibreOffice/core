@@ -19,6 +19,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/tabpage.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/notebookbar/NotebookbarTabControl.hxx>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
@@ -258,6 +259,29 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         if (xComponent.is())
             xComponent->dispose();
     }
+}
+
+Size NotebookbarTabControl::calculateRequisition() const
+{
+    Size aSize = NotebookbarTabControlBase::calculateRequisition();
+
+    for (int i = 0; i < GetPageCount(); i++)
+    {
+        vcl::Window* pChild = static_cast<vcl::Window*>(GetTabPage(TabControl::GetPageId(i)));
+
+        if (pChild)
+        {
+            Size aChildSize = VclAlignment::getLayoutRequisition(*pChild);
+
+            if (aChildSize.getWidth() < aSize.getWidth())
+                aSize.Width() = aChildSize.Width();
+        }
+    }
+
+    if (aSize.Width() < 400)
+        aSize.Width() = 400;
+
+    return aSize;
 }
 
 VCL_BUILDER_FACTORY( NotebookbarTabControl )

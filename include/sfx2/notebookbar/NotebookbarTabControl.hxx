@@ -25,6 +25,7 @@ public:
     NotebookbarTabControl( Window* pParent );
 
     virtual void StateChanged(StateChangedType nStateChange) override;
+    virtual Size calculateRequisition() const override;
 
 private:
     static void FillShortcutsToolBox(css::uno::Reference<css::uno::XComponentContext>& xContext,
