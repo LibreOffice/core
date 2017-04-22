@@ -294,6 +294,9 @@ inline bool isString( formula::StackVar sv )
 
 bool ScFormulaResult::IsValue() const
 {
+    if (IsEmptyDisplayedAsString())
+        return true;
+
     return isValue(GetCellResultType());
 }
 
