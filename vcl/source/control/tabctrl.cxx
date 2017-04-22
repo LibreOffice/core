@@ -2421,6 +2421,9 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         if( !it->maText.isEmpty() && aSize.getWidth() < 100)
             aSize.Width() = 100;
 
+        if( !it->maText.isEmpty() && aSize.getHeight() < 28 )
+            aSize.Height() = 28;
+
         tools::Rectangle aNewRect( Point( nX, nY ), aSize );
         if ( mbSmallInvalidate && (it->maRect != aNewRect) )
             mbSmallInvalidate = false;
