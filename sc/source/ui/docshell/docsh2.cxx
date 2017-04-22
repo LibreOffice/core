@@ -71,7 +71,10 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
         ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
         if (pOrcus)
+        {
             pOrcus->importODS_Styles(aDocument, aPath);
+            aDocument.GetStyleSheetPool()->setAllStandard();
+        }
     }
 
     //  SetDocumentModified is not allowed anymore in Load/InitNew!
