@@ -122,7 +122,7 @@ StringArray RID_ERRHDL
         < "Function not possible: path contains current directory." ; ERRCODE_IO_CURRENTDIR ; >;
         < "Function not possible: device (drive) not identical." ; ERRCODE_IO_NOTSAMEDEVICE ; >;
         < "Device (drive) not ready." ; ERRCODE_IO_DEVICENOTREADY ; >;
-        < "Wrong check amount." ; ERRCODE_IO_BADCRC ; >;
+        < "Wrong checksum." ; ERRCODE_IO_BADCRC ; >;
         < "Function not possible: write protected." ; ERRCODE_IO_WRITEPROTECTED ; >;
         < "The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first."; ERRCODE_SFX_SHARED_NOPASSWORDCHANGE ; >;
         < "File format error found at $(ARG1)(row,col)."; ERRCODE_SFX_FORMAT_ROWCOL ; >;
