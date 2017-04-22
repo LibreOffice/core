@@ -508,9 +508,7 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFor
     // need to create a new Ref, else we create the Contact now.
 
     IDocumentDrawModelAccess& rIDDMA = pFormat->getIDocumentDrawModelAccess();
-    SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFormat>( *pFormat ).First();
-    if ( !pContact )
-        pContact = new SwFlyDrawContact(pFormat, rIDDMA.GetOrCreateDrawModel());
+    SwFlyDrawContact* pContact = pFormat->GetOrCreateContact();
     SwVirtFlyDrawObj* pDrawObj(new SwVirtFlyDrawObj(*pContact->GetMaster(), pFly));
     pDrawObj->SetModel(pContact->GetMaster()->GetModel());
     pDrawObj->SetUserCall(pContact);
@@ -660,7 +658,7 @@ void SwFlyDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
         switch(pDrawFrameFormatHint->m_eId)
         {
             case sw::DrawFrameFormatHintId::DYING_FLYFRAMEFORMAT:
-                delete this;
+                const_cast<SwFlyFrameFormat*>(dynamic_cast<const SwFlyFrameFormat*>(&rMod))->ClearContact();
                 break;
             default:
                 ;
