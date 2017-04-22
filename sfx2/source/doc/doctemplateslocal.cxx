@@ -46,8 +46,7 @@ const OUStringLiteral g_sUINameAttr("groupuinames:default-ui-name");
 
 std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext >& xContext )
 {
-    OUString aStringID = "groupuinames.xml";
-    return ReadLocalizationSequence_Impl( xInStream, aStringID, xContext );
+    return ReadLocalizationSequence_Impl( xInStream, "groupuinames.xml", xContext );
 }
 
 
@@ -61,8 +60,8 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 
     xWriterHandler->setOutputStream( xOutStream );
 
-    OUString aCDATAString( "CDATA" );
-    OUString aWhiteSpace( " " );
+    const OUString aCDATAString( "CDATA" );
+    const OUString aWhiteSpace( " " );
 
     // write the namespace
     ::comphelper::AttributeList* pRootAttrList = new ::comphelper::AttributeList;
@@ -163,11 +162,11 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
         sal_Int32 nNewEntryNum = m_aResultSeq.size() + 1;
         m_aResultSeq.resize( nNewEntryNum );
 
-        OUString aNameValue = xAttribs->getValueByName( g_sNameAttr );
+        const OUString aNameValue = xAttribs->getValueByName( g_sNameAttr );
         if ( aNameValue.isEmpty() )
             throw xml::sax::SAXException(); // TODO: the ID value must present
 
-        OUString aUINameValue = xAttribs->getValueByName( g_sUINameAttr );
+        const OUString aUINameValue = xAttribs->getValueByName( g_sUINameAttr );
         if ( aUINameValue.isEmpty() )
             throw xml::sax::SAXException(); // TODO: the ID value must present
 
