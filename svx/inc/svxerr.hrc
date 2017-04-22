@@ -50,7 +50,7 @@ const ErrMsgCode RID_SVXERRCODE[] =
 {
     { NC_("RID_SVXERRCODE", "No thesaurus available for the current language.\nPlease check your installation and install the desired language.") ,
       ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS },
-    { NC_("RID_SVXERRCODE", "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\n or activate it under 'Tools - Options -  Language Settings - Writing Aids'."),
+    { NC_("RID_SVXERRCODE", "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\nor activate it under 'Tools - Options - Language Settings - Writing Aids'."),
       ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS },
     { NC_("RID_SVXERRCODE", "Spellcheck is not available.") ,
       ERRCODE_SVX_LINGU_LINGUNOTEXISTS },
