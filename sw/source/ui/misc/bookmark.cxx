@@ -40,7 +40,6 @@ using namespace ::com::sun::star;
 
 const OUString BookmarkTable::aForbiddenChars("/\\@*?\",#");
 const char BookmarkTable::cSeparator(';');
-const OUString BookmarkTable::sDefaultBookmarkName("Bookmark");
 
 // callback to modify EditBox
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
@@ -429,6 +428,7 @@ void BookmarkTable::SelectByName(const OUString& sName)
 
 OUString BookmarkTable::GetNameProposal()
 {
+    OUString sDefaultBookmarkName = SW_RES(STR_BOOKMARK_DEF_NAME);
     sal_Int32 nHighestBookmarkId = 0;
     SvTreeListEntry* pEntry = First();
     while (pEntry)

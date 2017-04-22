@@ -43,7 +43,6 @@ public:
     OUString            GetNameProposal();
 
     static const OUString aForbiddenChars;
-    static const OUString sDefaultBookmarkName;
     static const char     cSeparator;
 };
 
