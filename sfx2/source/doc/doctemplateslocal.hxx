@@ -30,12 +30,6 @@
 
 class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
-    // Relations info related strings
-    OUString m_aGroupListElement;
-    OUString m_aGroupElement;
-    OUString m_aNameAttr;
-    OUString m_aUINameAttr;
-
     std::vector< css::beans::StringPair > m_aResultSeq;
     std::vector< OUString > m_aElementsSeq; // stack of elements being parsed
 

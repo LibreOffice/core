@@ -33,6 +33,16 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+
+// Relations info related strings
+const OUStringLiteral g_sGroupListElement("groupuinames:template-group-list");
+const OUStringLiteral g_sGroupElement("groupuinames:template-group");
+const OUStringLiteral g_sNameAttr("groupuinames:name");
+const OUStringLiteral g_sUINameAttr("groupuinames:default-ui-name");
+
+}
 
 std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext >& xContext )
 {
@@ -51,10 +61,6 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 
     xWriterHandler->setOutputStream( xOutStream );
 
-    OUString aGroupListElement( "groupuinames:template-group-list" );
-    OUString aGroupElement( "groupuinames:template-group" );
-    OUString aNameAttr( "groupuinames:name" );
-    OUString aUINameAttr( "groupuinames:default-ui-name" );
     OUString aCDATAString( "CDATA" );
     OUString aWhiteSpace( " " );
 
@@ -67,22 +73,22 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
         "http://openoffice.org/2006/groupuinames" );
 
     xWriterHandler->startDocument();
-    xWriterHandler->startElement( aGroupListElement, xRootAttrList );
+    xWriterHandler->startElement( g_sGroupListElement, xRootAttrList );
 
     for (const auto & i : aSequence)
     {
         ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
         uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
-        pAttrList->AddAttribute( aNameAttr, aCDATAString, i.First );
-        pAttrList->AddAttribute( aUINameAttr, aCDATAString, i.Second );
+        pAttrList->AddAttribute( g_sNameAttr, aCDATAString, i.First );
+        pAttrList->AddAttribute( g_sUINameAttr, aCDATAString, i.Second );
 
-        xWriterHandler->startElement( aGroupElement, xAttrList );
+        xWriterHandler->startElement( g_sGroupElement, xAttrList );
         xWriterHandler->ignorableWhitespace( aWhiteSpace );
-        xWriterHandler->endElement( aGroupElement );
+        xWriterHandler->endElement( g_sGroupElement );
     }
 
     xWriterHandler->ignorableWhitespace( aWhiteSpace );
-    xWriterHandler->endElement( aGroupListElement );
+    xWriterHandler->endElement( g_sGroupListElement );
     xWriterHandler->endDocument();
 }
 
@@ -108,10 +114,6 @@ std::vector< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalization
 
 
 DocTemplLocaleHelper::DocTemplLocaleHelper()
-: m_aGroupListElement( "groupuinames:template-group-list" )
-, m_aGroupElement( "groupuinames:template-group" )
-, m_aNameAttr( "groupuinames:name" )
-, m_aUINameAttr( "groupuinames:default-ui-name" )
 {
 }
 
@@ -142,7 +144,7 @@ void SAL_CALL DocTemplLocaleHelper::endDocument()
 
 void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
 {
-    if ( aName == m_aGroupListElement )
+    if ( aName == g_sGroupListElement )
     {
         if ( m_aElementsSeq.size() != 0 )
             throw xml::sax::SAXException(); // TODO: this element must be the first level element
@@ -151,7 +153,7 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
 
         return; // nothing to do
     }
-    else if ( aName == m_aGroupElement )
+    else if ( aName == g_sGroupElement )
     {
         if ( m_aElementsSeq.size() != 1 )
             throw xml::sax::SAXException(); // TODO: this element must be the second level element
@@ -161,11 +163,11 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
         sal_Int32 nNewEntryNum = m_aResultSeq.size() + 1;
         m_aResultSeq.resize( nNewEntryNum );
 
-        OUString aNameValue = xAttribs->getValueByName( m_aNameAttr );
+        OUString aNameValue = xAttribs->getValueByName( g_sNameAttr );
         if ( aNameValue.isEmpty() )
             throw xml::sax::SAXException(); // TODO: the ID value must present
 
-        OUString aUINameValue = xAttribs->getValueByName( m_aUINameAttr );
+        OUString aUINameValue = xAttribs->getValueByName( g_sUINameAttr );
         if ( aUINameValue.isEmpty() )
             throw xml::sax::SAXException(); // TODO: the ID value must present
 
