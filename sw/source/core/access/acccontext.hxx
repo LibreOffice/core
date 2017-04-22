@@ -112,8 +112,6 @@ protected:
     bool IsDisposing() const { return m_isDisposing; }
 
     vcl::Window *GetWindow();
-    SwAccessibleMap *GetMap() { return m_pMap; }
-    const SwAccessibleMap *GetMap() const { return m_pMap; }
 
     /** convenience method to get the SwViewShell through accessibility map */
     SwViewShell* GetShell()
@@ -171,6 +169,8 @@ protected:
 
 public:
     void FireAccessibleEvent( css::accessibility::AccessibleEventObject& rEvent );
+    SwAccessibleMap *GetMap() { return m_pMap; }
+    const SwAccessibleMap *GetMap() const { return m_pMap; }
 
 protected:
     // broadcast visual data event
