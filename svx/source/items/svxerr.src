@@ -75,7 +75,7 @@ Resource RID_SVXERRCODE
     };
     String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\n or activate it under 'Tools - Options -  Language Settings - Writing Aids'.";
+        Text [ en-US ] = "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\nor activate it under 'Tools - Options - Language Settings - Writing Aids'.";
     };
     String ERRCODE_SVX_LINGU_LINGUNOTEXISTS&ERRCODE_RES_MASK
     {
