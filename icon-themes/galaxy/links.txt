@@ -51,6 +51,7 @@ cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_functiondialog.png cmd/sc_insertformula.png
+cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
 
 # image/object context menu entries
 cmd/sc_wrapmenu.png cmd/sc_wrapon.png
