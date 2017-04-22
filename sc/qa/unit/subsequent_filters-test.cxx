@@ -205,6 +205,7 @@ public:
     void testRichTextContentODS();
     void testMiscRowHeights();
     void testOptimalHeightReset();
+    void testCustomNumFormatHybridCellODS();
 
     void testPrintRangeODS();
     void testOutlineODS();
@@ -323,6 +324,7 @@ public:
 
     CPPUNIT_TEST(testMiscRowHeights);
     CPPUNIT_TEST(testOptimalHeightReset);
+    CPPUNIT_TEST(testCustomNumFormatHybridCellODS);
     CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
@@ -3143,6 +3145,37 @@ void ScFiltersTest::testOptimalHeightReset()
 
     // check if the new height of A1 ( after delete ) is now the optimal height of an empty cell
     CPPUNIT_ASSERT_EQUAL(nOptimalHeight, nHeight );
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCustomNumFormatHybridCellODS()
+{
+    ScDocShellRef xDocSh = loadDoc("custom-numfmt-hybrid-cell.", FORMAT_ODS, false);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.SetAutoCalc(true);
+
+    // All of B14, B16 and B18 should be displaying empty strings by virture
+    // of the custom number format being set on those cells.
+
+    for (SCROW nRow : {13, 15, 17})
+    {
+        ScAddress aPos(1, nRow, 0);
+        OUString aStr = rDoc.GetString(aPos);
+        CPPUNIT_ASSERT(aStr.isEmpty());
+    }
+
+    // Now, set value of 1 to B15.  This should trigger re-calc on B18 and B18
+    // should now show a value of 1.
+    rDoc.SetValue(ScAddress(1,15,0), 1.0);
+
+    OUString aStr = rDoc.GetString(ScAddress(1,17,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), aStr);
+
+    // Make sure the cell doesn't have an error value.
+    ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1,17,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(pFC->GetErrCode() == FormulaError::NONE);
+
     xDocSh->DoClose();
 }
 
