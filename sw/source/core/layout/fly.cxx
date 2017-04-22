@@ -382,7 +382,9 @@ void SwFlyFrame::FinitDrawObj()
         pContact->GetMaster()->SetUserCall(nullptr);
     GetVirtDrawObj()->SetUserCall(nullptr); // Else calls delete of the ContactObj
     delete GetVirtDrawObj();            // Deregisters itself at the Master
-    delete pContact;                  // Destroys the Master itself
+    assert(dynamic_cast<SwFlyFrameFormat*>(pFormat));
+    if(pContact)
+        static_cast<SwFlyFrameFormat*>(pFormat)->ClearContact();
 }
 
 void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )

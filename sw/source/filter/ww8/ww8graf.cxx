@@ -2150,9 +2150,7 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrameFormat* pFlyFormat)
             pNewObject = pFlyFormat->FindSdrObject();
         if (!pNewObject && dynamic_cast< const SwFlyFrameFormat *>( pFlyFormat ) !=  nullptr)
         {
-            SwFlyDrawContact* pContactObject
-                = new SwFlyDrawContact(static_cast<SwFlyFrameFormat*>(pFlyFormat),
-                m_pDrawModel);
+            SwFlyDrawContact* pContactObject(static_cast<SwFlyFrameFormat*>(pFlyFormat)->GetOrCreateContact());
             pNewObject = pContactObject->GetMaster();
         }
         return pNewObject;
