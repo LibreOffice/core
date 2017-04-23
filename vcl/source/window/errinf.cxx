@@ -320,6 +320,7 @@ DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
             {
                 if (nFlags != DialogMask::MAX)
                     nErrFlags = nFlags;
+
                 return (*reinterpret_cast<WindowDisplayErrorFunc*>(rData.pDsp))(
                     pParent, nErrFlags, aErr, aAction);
             }
