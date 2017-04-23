@@ -13,13 +13,15 @@
 #include "PivotTableDataSource.hxx"
 #include "PivotTableDataSequence.hxx"
 
-#include <vcl/svapp.hxx>
-
 #include "miscuno.hxx"
 #include "document.hxx"
 #include "unonames.hxx"
 #include "docsh.hxx"
+#include "globstr.hrc"
+#include "dpobject.hxx"
+#include "hints.hxx"
 
+#include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -33,10 +35,6 @@
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
-
-#include "dpobject.hxx"
-
-#include "hints.hxx"
 
 #include <com/sun/star/chart/ChartDataChangeEvent.hpp>
 
@@ -600,7 +598,7 @@ uno::Reference<chart2::data::XDataSource>
 
             if (m_aLabels.empty())
             {
-                aLabel = "Total";
+                aLabel = ScGlobal::GetRscString(STR_PIVOT_TOTAL);
             }
             else
             {
