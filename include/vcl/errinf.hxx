@@ -104,7 +104,7 @@ namespace o3tl
 }
 
 typedef DialogMask WindowDisplayErrorFunc(
-    vcl::Window *, DialogMask nMask, const OUString &rErr, const OUString &rAction);
+    vcl::Window*, DialogMask nMask, const OUString &rErr, const OUString &rAction);
 
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
@@ -117,8 +117,8 @@ public:
                         ErrorHandler();
     virtual             ~ErrorHandler();
 
-    static DialogMask   HandleError ( sal_uInt32 lId, DialogMask nMask = DialogMask::MAX );
-    static bool         GetErrorString( sal_uInt32 lId, OUString& rStr );
+    static DialogMask   HandleError(sal_uInt32 lId, DialogMask nMask = DialogMask::MAX);
+    static bool         GetErrorString(sal_uInt32 lId, OUString& rStr);
 
 protected:
     virtual bool        CreateString(const ErrorInfo*, OUString &) const = 0;
@@ -132,7 +132,7 @@ private:
 
 public:
 
-                            ErrorInfo( sal_uInt32 lArgUserId ) :
+                            ErrorInfo(sal_uInt32 lArgUserId) :
                                 lUserId( lArgUserId ){}
     virtual                 ~ErrorInfo();
 
@@ -164,7 +164,7 @@ private:
 
 public:
 
-                            StringErrorInfo( sal_uInt32 lUserId,
+                            StringErrorInfo(sal_uInt32 lUserId,
                                             const OUString& aStringP,
                                             DialogMask nMask = DialogMask::NONE);
     const OUString&         GetErrorString() const { return aString; }
@@ -199,7 +199,7 @@ public:
                             ErrorContext(vcl::Window *pWin);
     virtual                 ~ErrorContext();
 
-    virtual bool            GetString( sal_uInt32 nErrId, OUString& rCtxStr ) = 0;
+    virtual bool            GetString(sal_uInt32 nErrId, OUString& rCtxStr) = 0;
     vcl::Window*            GetParent();
 
     static ErrorContext*    GetContext();
