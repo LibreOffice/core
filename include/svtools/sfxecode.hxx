@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_SFXECODE_HXX
 #define INCLUDED_SVTOOLS_SFXECODE_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #define ERRCODE_SFX_NOTATEMPLATE            (ERRCODE_AREA_SFX|ERRCODE_CLASS_FORMAT|2)
 #define ERRCODE_SFX_GENERAL                 (ERRCODE_AREA_SFX|ERRCODE_CLASS_GENERAL|3)

@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/svapp.hxx>
 
 #include <basic/sbx.hxx>
