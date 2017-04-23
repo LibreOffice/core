@@ -202,3 +202,8 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
 cmd/lc_rowoperations.png cmd/lc_entirerow.png 
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+
+cmd/lc_objectforwardone.png cmd/lc_forward.png
+cmd/sc_objectforwardone.png cmd/sc_forward.png
+cmd/lc_objectbackone.png cmd/lc_backward.png
+cmd/sc_objectbackone.png cmd/sc_backward.png
