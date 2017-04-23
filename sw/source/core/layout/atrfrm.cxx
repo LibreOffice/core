@@ -78,6 +78,7 @@
 #include <calbck.hxx>
 #include <pagedeschint.hxx>
 #include <drawdoc.hxx>
+#include <dcontact.hxx>
 
 #ifndef NDEBUG
 #include <ndtxt.hxx>
@@ -2835,6 +2836,13 @@ void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) cons
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrameFormat )
 
+
+
+SwFlyFrameFormat::SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrame )
+    : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
+    , m_pContact(nullptr)
+{}
+
 SwFlyFrameFormat::~SwFlyFrameFormat()
 {
     SwIterator<SwFlyFrame,SwFormat> aIter( *this );
@@ -2852,23 +2860,14 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
 SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
 {
     IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
-#ifdef DBG_UTIL
-    SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFormat>( *this ).First();
-    assert(pContact == m_pContact);
-#endif
     if(!m_pContact)
-        m_pContact = new SwFlyDrawContact(this, rIDDMA.GetOrCreateDrawModel());
-    return m_pContact;
+        m_pContact.reset(new SwFlyDrawContact(this, rIDDMA.GetOrCreateDrawModel()));
+    return m_pContact.get();
 }
 
 void SwFlyFrameFormat::ClearContact()
 {
-#ifdef DBG_UTIL
-    SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFormat>( *this ).First();
-    assert(pContact == m_pContact);
-#endif
-    delete m_pContact;
-    m_pContact = nullptr;
+    m_pContact.reset(nullptr);
 };
 
 /// Creates the Frames if the format describes a paragraph-bound frame.
