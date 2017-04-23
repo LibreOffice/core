@@ -221,11 +221,6 @@ void SwTextFrame::CheckDirection( bool bVert )
 void SwFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     SwClient::SwClientNotify(rMod, rHint);
-    if (auto pKillDrawHint = dynamic_cast<const sw::KillDrawHint*>(&rHint))
-    {
-        if(this != pKillDrawHint->m_pKillingFrame)
-            pKillDrawHint->m_rbOtherFramesAround = true;
-    }
 }
 
 void SwFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )

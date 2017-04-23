@@ -243,7 +243,6 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrameFormat)
     SwFlyDrawContact* GetOrCreateContact();
-    void ClearContact();
 };
 
 //The DrawFrame-Format
@@ -343,14 +342,6 @@ namespace sw
         const SwRootFrame* m_pRoot;
         GetObjectConnectedHint(bool& risConnected, const SwRootFrame* pRoot) : m_risConnected(risConnected), m_pRoot(pRoot) {};
         virtual ~GetObjectConnectedHint() override;
-    };
-    struct SW_DLLPUBLIC KillDrawHint final : SfxHint
-    {
-        const SwFrame* m_pKillingFrame;
-        bool& m_rbOtherFramesAround;
-        SwFlyDrawContact*& m_rpContact;
-        KillDrawHint(const SwFrame* pKillingFrame, bool& rbOtherFramesAround, SwFlyDrawContact*& rpContact) : m_pKillingFrame(pKillingFrame), m_rbOtherFramesAround(rbOtherFramesAround), m_rpContact(rpContact) {};
-        virtual ~KillDrawHint() override;
     };
 }
 
