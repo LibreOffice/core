@@ -1965,8 +1965,6 @@ void GtkData::initNWF()
     pSVData->maNWFData.mbDDListBoxNoTextArea = true;
     pSVData->maNWFData.mbNoFocusRects = true;
     pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
-    pSVData->maNWFData.mbAutoAccel = true;
-    pSVData->maNWFData.mbEnableAccel = true;
 }
 
 void GtkData::deInitNWF()

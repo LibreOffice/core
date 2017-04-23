@@ -585,31 +585,6 @@ IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
     return 0;
 }
 
-bool Dialog::ImplHandleCmdEvent( const CommandEvent& rCEvent )
-{
-    if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
-    {
-        const CommandModKeyData *pCData = rCEvent.GetModKeyData ();
-
-        Window *pGetChild = firstLogicalChildOfParent(this);
-        while (pGetChild)
-        {
-            Control *pControl = dynamic_cast<Control*>(pGetChild->ImplGetWindow());
-            if (pControl && pControl->GetText().indexOf('~') != -1)
-            {
-                if (pCData && pCData->IsMod2())
-                    pControl->SetShowAccelerator(true);
-                else
-                    pControl->SetShowAccelerator(false);
-                pControl->Invalidate(INVALIDATE_UPDATE);
-            }
-            pGetChild = nextLogicalChildOfParent(this, pGetChild);
-        }
-        return true;
-    }
-    return false;
-}
-
 bool Dialog::Notify( NotifyEvent& rNEvt )
 {
     // first call the base class due to Tab control
@@ -652,11 +627,6 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
                 }
 
             }
-        }
-        else if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
-        {
-            if (ImplHandleCmdEvent( *rNEvt.GetCommandEvent()))
-                return true;
         }
     }
 
