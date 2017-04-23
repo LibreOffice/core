@@ -55,6 +55,16 @@ KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
             }
             break;
 
+        case TextDirectionality::BottomToTop_LeftToRight:
+            switch (nCode)
+            {
+                case KEY_DOWN:  aClone.maKeyCode = vcl::KeyCode(KEY_LEFT, nMod); break;
+                case KEY_UP:    aClone.maKeyCode = vcl::KeyCode(KEY_RIGHT, nMod); break;
+                case KEY_LEFT:  aClone.maKeyCode = vcl::KeyCode(KEY_UP, nMod); break;
+                case KEY_RIGHT: aClone.maKeyCode = vcl::KeyCode(KEY_DOWN, nMod); break;
+            }
+            break;
+
         case TextDirectionality::LeftToRight_TopToBottom:
             /* do nothing */
             break;
