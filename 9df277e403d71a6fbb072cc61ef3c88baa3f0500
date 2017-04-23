@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_00e8eb7b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-04-23T05:54:45Z",
+      "side": 1,
+      "message": "Given that unit numbers are not stable references (they change each time Pootle templates are updated), I question the merit of including them in permanent commit messages.",
+      "revId": "9df277e403d71a6fbb072cc61ef3c88baa3f0500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
