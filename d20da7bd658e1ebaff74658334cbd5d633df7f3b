@@ -16,6 +16,24 @@
       "revId": "d20da7bd658e1ebaff74658334cbd5d633df7f3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c0626316",
+        "filename": "sc/sdi/app.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-04-23T09:33:16Z",
+      "side": 0,
+      "message": "For all those who installed LO before CTL was enabled by default, they would have to reset their user profile for these to get enabled. :D",
+      "parentUuid": "5a3905b3_c0c6e315",
+      "revId": "d20da7bd658e1ebaff74658334cbd5d633df7f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
