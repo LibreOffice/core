@@ -186,18 +186,13 @@ class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
        so it can be used to move frames of non-resizable objects to align them correctly
        when they get borders (this is done in SwWrtShell::CalcAndGetScale) */
     Point   m_aLastFlyFramePrtRectPos;
-    SwFlyDrawContact* m_pContact;
+    std::unique_ptr<SwFlyDrawContact> m_pContact;
 
     SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) = delete;
     SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
 
 protected:
-    SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
-        , m_pContact(nullptr)
-    {}
-
+    SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrame );
 public:
     virtual ~SwFlyFrameFormat() override;
 
