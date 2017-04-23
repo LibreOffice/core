@@ -270,7 +270,7 @@ DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
     if (!rData.contexts.empty())
     {
         rData.contexts.front()->GetString(pInfo->GetErrorCode(), aAction);
-        // Remove parent from context
+
         for(ErrorContext *pCtx : rData.contexts)
         {
             if(pCtx->GetParent())
