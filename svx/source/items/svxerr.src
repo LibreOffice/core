@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define __RSC
 #include "svx/svxerr.hxx"
 #include <svx/dialogs.hrc>
 #include <editeng/editerr.hxx>
