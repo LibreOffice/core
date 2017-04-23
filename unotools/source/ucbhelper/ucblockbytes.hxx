@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <tools/link.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/datetime.hxx>
 
 namespace com
