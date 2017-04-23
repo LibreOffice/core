@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_SWERROR_H
 #define INCLUDED_SW_INC_SWERROR_H
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #define ERROR_SW_BASE           (ERRCODE_AREA_SW)
 #define ERROR_SW_READ_BASE      (ERROR_SW_BASE | ERRCODE_CLASS_READ)

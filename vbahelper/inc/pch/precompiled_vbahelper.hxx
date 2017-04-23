@@ -127,7 +127,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>

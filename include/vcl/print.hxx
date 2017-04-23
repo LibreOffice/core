@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
