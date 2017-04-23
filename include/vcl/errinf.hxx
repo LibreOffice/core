@@ -22,17 +22,33 @@
 #ifndef INCLUDED_VCL_ERRINF_HXX
 #define INCLUDED_VCL_ERRINF_HXX
 
-#include <limits.h>
 #include <rtl/ustring.hxx>
 #include <tools/errcode.hxx>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <vector>
 #include <memory>
+#include <limits.h>
 
 namespace vcl { class Window; }
 
-class DynamicErrorInfo_Impl;
+class ErrorHandler;
+class ErrorContext;
 class ErrorStringFactory;
+class DynamicErrorInfo;
+class DynamicErrorInfo_Impl;
+enum class DialogMask;
+
+namespace {
+  typedef void (* DisplayFnPtr)();
+}
+
+typedef DialogMask WindowDisplayErrorFunc(
+    vcl::Window *, DialogMask eMask, const OUString &rErr, const OUString &rAction);
+
+typedef void BasicDisplayErrorFunc(
+    const OUString &rErr, const OUString &rAction);
 
 enum class DialogMask
 {
@@ -61,6 +77,30 @@ namespace o3tl
 {
     template<> struct typed_flags<DialogMask> : is_typed_flags<DialogMask, 0xffff> {};
 }
+
+class VCL_DLLPUBLIC ErrorRegistry
+{
+    friend class ErrorHandler;
+    friend class ErrorContext;
+    friend class ErrorStringFactory;
+    friend class DynamicErrorInfo_Impl;
+
+public:
+                                ErrorRegistry();
+
+    static void                 RegisterDisplay(BasicDisplayErrorFunc*);
+    static void                 RegisterDisplay(WindowDisplayErrorFunc*);
+
+private:
+    DisplayFnPtr                pDsp;
+    bool                        bIsWindowDsp;
+    sal_uInt16                  nNextError;
+
+    std::vector<ErrorHandler*>  errorHandlers;
+    std::vector<ErrorContext*>  contexts;
+
+    DynamicErrorInfo*           ppDynErrInfo[ERRCODE_DYNAMIC_COUNT];
+};
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorInfo
 {
@@ -157,9 +197,6 @@ public:
 
     static DialogMask   HandleError ( sal_uInt32 lId, DialogMask nMask = DialogMask::MAX );
     static bool         GetErrorString( sal_uInt32 lId, OUString& rStr );
-
-    static void         RegisterDisplay( BasicDisplayErrorFunc* );
-    static void         RegisterDisplay( WindowDisplayErrorFunc* );
 
 protected:
     virtual bool        CreateString(const ErrorInfo *, OUString &) const = 0;
