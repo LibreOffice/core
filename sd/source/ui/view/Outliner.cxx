@@ -963,7 +963,7 @@ void SdOutliner::RememberStartPosition()
         {
             meStartViewMode = pDrawViewShell->GetPageKind();
             meStartEditMode = pDrawViewShell->GetEditMode();
-            mnStartPageIndex = pDrawViewShell->GetCurPageId() - 1;
+            mnStartPageIndex = pDrawViewShell->GetCurPagePos();
         }
 
         if (mpView != nullptr)

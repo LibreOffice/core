@@ -985,8 +985,7 @@ int ViewShellBase::getPart() const
 
     if (DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell))
     {
-        // curPageId seems to start at 1
-        return pDrawViewShell->GetCurPageId() - 1;
+        return pDrawViewShell->GetCurPagePos();
     }
 
     return 0;

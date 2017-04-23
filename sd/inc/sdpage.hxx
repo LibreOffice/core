@@ -371,9 +371,15 @@ public:
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     OString stringify() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    sal_uInt16 getPageId() { return mnPageId; }
+
+    static sal_uInt16 mnLastPageId;
 
 private:
     bool mbIsPrecious;
+
+    // page id of this page
+    sal_uInt16 mnPageId;
 
     /** clone the animations from this and set them to rTargetPage
     */

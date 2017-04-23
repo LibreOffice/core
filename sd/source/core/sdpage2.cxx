@@ -370,6 +370,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
 :   FmFormPage(rSrcPage)
 ,   SdrObjUserCall()
 ,   mpItems(nullptr)
+,   mnPageId(mnLastPageId++)
 {
     mePageKind           = rSrcPage.mePageKind;
     meAutoLayout         = rSrcPage.meAutoLayout;
