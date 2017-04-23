@@ -70,7 +70,6 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>

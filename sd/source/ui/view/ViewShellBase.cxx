@@ -19,12 +19,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/frame/UnknownModuleException.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
-
 #include "ViewShellBase.hxx"
 #include <algorithm>
 #include "EventMultiplexer.hxx"
