@@ -29,27 +29,21 @@
 class ErrorHandler;
 class TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};
 
-void ErrorRegistry::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
+class ErrorStringFactory
 {
-    ErrorRegistry &rData = TheErrorRegistry::get();
-    rData.bIsWindowDsp = true;
-    rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
-}
-
-class DynamicErrorInfo_Impl
-{
-private:
-    friend class DynamicErrorInfo;
-    friend class ErrorInfo;
-
-    ErrCode                     nErrId;
-    DialogMask                  nMask;
-
-    void                        RegisterError(DynamicErrorInfo *);
-    static void                 UnRegisterError(DynamicErrorInfo const *);
-    static ErrorInfo*           GetDynamicErrorInfo(sal_uInt32 nId);
-
+public:
+    static bool CreateString(const ErrorInfo*, OUString&);
 };
+
+bool ErrorStringFactory::CreateString(const ErrorInfo* pInfo, OUString& rStr)
+{
+    for(const ErrorHandler *pHdlr : TheErrorRegistry::get().errorHandlers)
+    {
+        if(pHdlr->CreateString(pInfo, rStr))
+            return true;
+    }
+    return false;
+}
 
 ErrorRegistry::ErrorRegistry()
     : pDsp(nullptr)
@@ -67,89 +61,12 @@ void ErrorRegistry::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
-void DynamicErrorInfo_Impl::RegisterError(DynamicErrorInfo *pDynErrInfo)
+void ErrorRegistry::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
-    // Register dynamic identifier
-    ErrorRegistry& rData = TheErrorRegistry::get();
-    nErrId = (((sal_uInt32)rData.nNextError + 1) << ERRCODE_DYNAMIC_SHIFT) +
-             pDynErrInfo->GetErrorCode();
-
-    if(rData.ppDynErrInfo[rData.nNextError])
-        delete rData.ppDynErrInfo[rData.nNextError];
-
-    rData.ppDynErrInfo[rData.nNextError] = pDynErrInfo;
-
-    if(++rData.nNextError>=ERRCODE_DYNAMIC_COUNT)
-        rData.nNextError=0;
+    ErrorRegistry &rData = TheErrorRegistry::get();
+    rData.bIsWindowDsp = true;
+    rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
-
-void DynamicErrorInfo_Impl::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
-{
-    DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
-    sal_uInt32 nIdx = (((sal_uInt32)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
-    DBG_ASSERT(ppDynErrInfo[nIdx] == pDynErrInfo, "ErrHdl: Error not found");
-
-    if(ppDynErrInfo[nIdx]==pDynErrInfo)
-        ppDynErrInfo[nIdx]=nullptr;
-}
-
-ErrorInfo::~ErrorInfo()
-{
-}
-
-ErrorInfo *ErrorInfo::GetErrorInfo(sal_uInt32 nId)
-{
-    if(nId & ERRCODE_DYNAMIC_MASK)
-        return DynamicErrorInfo_Impl::GetDynamicErrorInfo(nId);
-    else
-        return new ErrorInfo(nId);
-}
-
-DynamicErrorInfo::operator sal_uInt32() const
-{
-    return pImpl->nErrId;
-}
-
-DynamicErrorInfo::DynamicErrorInfo(sal_uInt32 nArgUserId, DialogMask nMask)
-: ErrorInfo(nArgUserId),
-  pImpl(new DynamicErrorInfo_Impl)
-{
-    pImpl->RegisterError(this);
-    pImpl->nMask=nMask;
-}
-
-DynamicErrorInfo::~DynamicErrorInfo()
-{
-    DynamicErrorInfo_Impl::UnRegisterError(this);
-}
-
-ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uInt32 nId)
-{
-    sal_uInt32 nIdx = ((nId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
-    DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[nIdx];
-
-    if(pDynErrInfo && (sal_uInt32)(*pDynErrInfo)==nId)
-        return pDynErrInfo;
-    else
-        return new ErrorInfo(nId & ~ERRCODE_DYNAMIC_MASK);
-}
-
-DialogMask DynamicErrorInfo::GetDialogMask() const
-{
-    return pImpl->nMask;
-}
-
-StringErrorInfo::StringErrorInfo(
-    sal_uInt32 nUserId, const OUString& aStringP, DialogMask nMask)
-: DynamicErrorInfo(nUserId, nMask), aString(aStringP)
-{
-}
-
-class ErrorStringFactory
-{
-public:
-    static bool CreateString(const ErrorInfo*, OUString&);
-};
 
 static void aDspFunc(const OUString &rErr, const OUString &rAction)
 {
@@ -159,30 +76,6 @@ static void aDspFunc(const OUString &rErr, const OUString &rAction)
     aErr.append(OUStringToOString(rErr, RTL_TEXTENCODING_ASCII_US));
     OSL_FAIL(aErr.getStr());
 }
-
-struct ErrorContextImpl
-{
-    vcl::Window *pWin; // FIXME: should be VclPtr for strong lifecycle
-};
-
-ErrorContext::ErrorContext(vcl::Window *pWinP)
-    : pImpl( new ErrorContextImpl )
-{
-    pImpl->pWin = pWinP;
-    TheErrorRegistry::get().contexts.insert(TheErrorRegistry::get().contexts.begin(), this);
-}
-
-ErrorContext::~ErrorContext()
-{
-    auto &rContexts = TheErrorRegistry::get().contexts;
-    rContexts.erase( ::std::remove(rContexts.begin(), rContexts.end(), this), rContexts.end());
-}
-
-ErrorContext *ErrorContext::GetContext()
-{
-    return TheErrorRegistry::get().contexts.empty() ? nullptr : TheErrorRegistry::get().contexts.front();
-}
-
 
 ErrorHandler::ErrorHandler()
 {
@@ -198,11 +91,6 @@ ErrorHandler::~ErrorHandler()
     auto &rErrorHandlers = TheErrorRegistry::get().errorHandlers;
     rErrorHandlers.erase( ::std::remove(rErrorHandlers.begin(), rErrorHandlers.end(), this),
                           rErrorHandlers.end());
-}
-
-vcl::Window* ErrorContext::GetParent()
-{
-    return pImpl ? pImpl->pWin : nullptr;
 }
 
 bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)
@@ -320,14 +208,125 @@ DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
     return DialogMask::NONE;
 }
 
-bool ErrorStringFactory::CreateString(const ErrorInfo* pInfo, OUString& rStr)
+struct ErrorContextImpl
 {
-    for(const ErrorHandler *pHdlr : TheErrorRegistry::get().errorHandlers)
-    {
-        if(pHdlr->CreateString(pInfo, rStr))
-            return true;
-    }
-    return false;
+    vcl::Window *pWin; // FIXME: should be VclPtr for strong lifecycle
+};
+
+ErrorContext::ErrorContext(vcl::Window *pWinP)
+    : pImpl( new ErrorContextImpl )
+{
+    pImpl->pWin = pWinP;
+    TheErrorRegistry::get().contexts.insert(TheErrorRegistry::get().contexts.begin(), this);
+}
+
+ErrorContext::~ErrorContext()
+{
+    auto &rContexts = TheErrorRegistry::get().contexts;
+    rContexts.erase( ::std::remove(rContexts.begin(), rContexts.end(), this), rContexts.end());
+}
+
+ErrorContext *ErrorContext::GetContext()
+{
+    return TheErrorRegistry::get().contexts.empty() ? nullptr : TheErrorRegistry::get().contexts.front();
+}
+
+vcl::Window* ErrorContext::GetParent()
+{
+    return pImpl ? pImpl->pWin : nullptr;
+}
+
+class DynamicErrorInfo_Impl
+{
+    friend class DynamicErrorInfo;
+    friend class ErrorInfo;
+
+private:
+    void                        RegisterError(DynamicErrorInfo *);
+    static void                 UnRegisterError(DynamicErrorInfo const *);
+    static ErrorInfo*           GetDynamicErrorInfo(sal_uInt32 nId);
+
+    ErrCode                     nErrId;
+    DialogMask                  nMask;
+
+};
+
+void DynamicErrorInfo_Impl::RegisterError(DynamicErrorInfo *pDynErrInfo)
+{
+    // Register dynamic identifier
+    ErrorRegistry& rData = TheErrorRegistry::get();
+    nErrId = (((sal_uInt32)rData.nNextError + 1) << ERRCODE_DYNAMIC_SHIFT) +
+             pDynErrInfo->GetErrorCode();
+
+    if(rData.ppDynErrInfo[rData.nNextError])
+        delete rData.ppDynErrInfo[rData.nNextError];
+
+    rData.ppDynErrInfo[rData.nNextError] = pDynErrInfo;
+
+    if(++rData.nNextError>=ERRCODE_DYNAMIC_COUNT)
+        rData.nNextError=0;
+}
+
+void DynamicErrorInfo_Impl::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
+{
+    DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
+    sal_uInt32 nIdx = (((sal_uInt32)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
+    DBG_ASSERT(ppDynErrInfo[nIdx] == pDynErrInfo, "ErrHdl: Error not found");
+
+    if(ppDynErrInfo[nIdx]==pDynErrInfo)
+        ppDynErrInfo[nIdx]=nullptr;
+}
+
+ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uInt32 nId)
+{
+    sal_uInt32 nIdx = ((nId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
+    DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[nIdx];
+
+    if(pDynErrInfo && (sal_uInt32)(*pDynErrInfo)==nId)
+        return pDynErrInfo;
+    else
+        return new ErrorInfo(nId & ~ERRCODE_DYNAMIC_MASK);
+}
+
+ErrorInfo *ErrorInfo::GetErrorInfo(sal_uInt32 nId)
+{
+    if(nId & ERRCODE_DYNAMIC_MASK)
+        return DynamicErrorInfo_Impl::GetDynamicErrorInfo(nId);
+    else
+        return new ErrorInfo(nId);
+}
+
+ErrorInfo::~ErrorInfo()
+{
+}
+
+DynamicErrorInfo::DynamicErrorInfo(sal_uInt32 nArgUserId, DialogMask nMask)
+: ErrorInfo(nArgUserId),
+  pImpl(new DynamicErrorInfo_Impl)
+{
+    pImpl->RegisterError(this);
+    pImpl->nMask=nMask;
+}
+
+DynamicErrorInfo::~DynamicErrorInfo()
+{
+    DynamicErrorInfo_Impl::UnRegisterError(this);
+}
+
+DynamicErrorInfo::operator sal_uInt32() const
+{
+    return pImpl->nErrId;
+}
+
+DialogMask DynamicErrorInfo::GetDialogMask() const
+{
+    return pImpl->nMask;
+}
+
+StringErrorInfo::StringErrorInfo(
+    sal_uInt32 nUserId, const OUString& aStringP, DialogMask nMask)
+: DynamicErrorInfo(nUserId, nMask), aString(aStringP)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
