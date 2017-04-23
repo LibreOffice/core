@@ -112,21 +112,6 @@ bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)
     return false;
 }
 
-/** Handles an error.
-
-    If nFlags is not set, the DynamicErrorInfo flags or the
-    resource flags will be used. Thus the order is:
-
-    1. nFlags,
-    2. Resource Flags
-    3. Dynamic Flags
-    4. Default ButtonsOk, MessageError
-
-    @param nErrCodeId        error id
-    @param nFlags            error flags.
-
-    @return what sort of dialog to use, with what buttons
-*/
 DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
 {
     if(nErrCodeId != ERRCODE_NONE || nErrCodeId == ERRCODE_ABORT)
