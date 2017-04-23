@@ -140,7 +140,7 @@ char** createCommandLine()
     }
     {
         // directory with the patch log
-        OUString aPatchDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
+        OUString aPatchDir = Updater::getPatchDirURL();
         rtl::Bootstrap::expandMacros(aPatchDir);
         OUString aTempDirPath = getPathFromURL(aPatchDir);
         createStr(aTempDirPath, pArgs, 1);
@@ -152,9 +152,8 @@ char** createCommandLine()
     }
     {
         // the temporary updated build
-        OUString aPatchDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/update_dir/");
-        rtl::Bootstrap::expandMacros(aPatchDir);
-        OUString aWorkingDir = getPathFromURL(aPatchDir);
+        OUString aUpdateDirURL = Updater::getUpdateDirURL();
+        OUString aWorkingDir = getPathFromURL(aUpdateDirURL);
         createStr(aWorkingDir, pArgs, 3);
     }
     {
@@ -162,15 +161,14 @@ char** createCommandLine()
         createStr(pPID, pArgs, 4);
     }
     {
-        OUString aExeDir( "$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/" );
+        OUString aExeDir = Updater::getExecutableDirURL();
         OUString aSofficePath = getPathFromURL(aExeDir);
         createStr(aSofficePath, pArgs, 5);
     }
     {
         // the executable to start after the successful update
-        OUString aSofficeDir( "$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/" );
-        rtl::Bootstrap::expandMacros(aSofficeDir);
-        OUString aSofficePathURL = aSofficeDir + OUString::fromUtf8(pSofficeExeName);
+        OUString aExeDir = Updater::getExecutableDirURL();
+        OUString aSofficePathURL = aExeDir + OUString::fromUtf8(pSofficeExeName);
         OUString aSofficePath = getPathFromURL(aSofficePathURL);
         createStr(aSofficePath, pArgs, 6);
     }
@@ -562,6 +560,38 @@ void update_checker()
     {
         SAL_WARN("desktop.updater", "unknown error during the update check");
     }
+}
+
+OUString Updater::getUpdateInfoURL()
+{
+    OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/update.info");
+    rtl::Bootstrap::expandMacros(aUpdateInfoURL);
+
+    return aUpdateInfoURL;
+}
+
+OUString Updater::getPatchDirURL()
+{
+    OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
+    rtl::Bootstrap::expandMacros(aPatchDirURL);
+
+    return aPatchDirURL;
+}
+
+OUString Updater::getUpdateDirURL()
+{
+    OUString aUpdateDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/update_dir/");
+    rtl::Bootstrap::expandMacros(aUpdateDirURL);
+
+    return aUpdateDirURL;
+}
+
+OUString Updater::getExecutableDirURL()
+{
+    OUString aExeDir( "$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/" );
+    rtl::Bootstrap::expandMacros(aExeDir);
+
+    return aExeDir;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
