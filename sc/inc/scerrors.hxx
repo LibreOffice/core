@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_SCERRORS_HXX
 #define INCLUDED_SC_INC_SCERRORS_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #define SCERR_NONE 0
 

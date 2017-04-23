@@ -21,7 +21,7 @@
 
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <rtl/ustring.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #include <vector>
 

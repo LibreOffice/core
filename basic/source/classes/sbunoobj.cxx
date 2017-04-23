@@ -22,7 +22,7 @@
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <svl/hint.hxx>
 
 #include <cppuhelper/implbase.hxx>

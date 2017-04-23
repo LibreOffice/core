@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_INC_SDERROR_HXX
 #define INCLUDED_SD_INC_SDERROR_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #define ERROR_SD_BASE           (ERRCODE_AREA_SD)
 #define ERROR_SD_READ_BASE      (ERROR_SD_BASE | ERRCODE_CLASS_READ)

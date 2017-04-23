@@ -313,7 +313,7 @@
 #include <svtools/svtdllapi.h>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>

@@ -37,7 +37,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 class SfxObjectShell;
 

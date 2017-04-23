@@ -24,7 +24,7 @@
 
 #include <limits.h>
 #include <rtl/ustring.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>

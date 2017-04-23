@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #define __RSC
-#include <tools/errcode.hxx>
-#include "sb.hrc"
+#include <vcl/errcode.hxx>
 #include <basic/sberrors.hxx>
+
+#include "sb.hrc"
 
 Resource RID_BASIC_START
 {

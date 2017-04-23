@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SVXERR_HXX
 #define INCLUDED_SVX_SVXERR_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 // define ----------------------------------------------------------------
 

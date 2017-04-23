@@ -25,7 +25,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <sot/object.hxx>
 #include <tools/stream.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 
