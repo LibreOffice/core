@@ -149,7 +149,7 @@ StringErrorInfo::StringErrorInfo(
 {
 }
 
-class ErrorHandler_Impl
+class ErrorStringFactory
 {
 public:
     static bool CreateString(const ErrorInfo*, OUString&);
@@ -232,7 +232,7 @@ bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)
 
     ErrorInfo *pInfo = ErrorInfo::GetErrorInfo(nErrCodeId);
 
-    if (ErrorHandler_Impl::CreateString(pInfo,aErr))
+    if (ErrorStringFactory::CreateString(pInfo,aErr))
     {
         rErrStr = aErr;
         return true;
@@ -337,7 +337,7 @@ DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
     return DialogMask::NONE;
 }
 
-bool ErrorHandler_Impl::CreateString(const ErrorInfo* pInfo, OUString& rStr)
+bool ErrorStringFactory::CreateString(const ErrorInfo* pInfo, OUString& rStr)
 {
     for(const ErrorHandler *pHdlr : TheErrorRegistry::get().errorHandlers)
     {
