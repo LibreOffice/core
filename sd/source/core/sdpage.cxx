@@ -89,6 +89,8 @@ using namespace com::sun::star::xml::dom;
 using ::com::sun::star::uno::Reference;
 
 
+sal_uInt16 SdPage::mnLastPageId = 1;
+
 /*************************************************************************
 |*
 |*      Ctor
@@ -119,6 +121,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 ,   mnTransitionFadeColor(0)
 ,   mfTransitionDuration(2.0)
 ,   mbIsPrecious(true)
+,   mnPageId(mnLastPageId++)
 {
     // The name of the layout of the page is used by SVDRAW to determine the
     // presentation template of the outline objects. Therefore, it already
