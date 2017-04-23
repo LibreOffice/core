@@ -266,7 +266,7 @@ void PivotChartTest::testRoundtrip()
     {
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference2, xSequence, 1E-4);
-        CPPUNIT_ASSERT_EQUAL(OUString(""), lclGetLabel(xChartDoc, 0));
+        CPPUNIT_ASSERT_EQUAL(OUString("Total"), lclGetLabel(xChartDoc, 0));
     }
 
     reload("calc8");
@@ -280,7 +280,7 @@ void PivotChartTest::testRoundtrip()
     {
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference2, xSequence, 1E-4);
-        CPPUNIT_ASSERT_EQUAL(OUString(""), lclGetLabel(xChartDoc, 0));
+        CPPUNIT_ASSERT_EQUAL(OUString("Total"), lclGetLabel(xChartDoc, 0));
     }
 }
 
