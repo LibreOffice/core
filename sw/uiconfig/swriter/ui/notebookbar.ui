@@ -6252,7 +6252,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="vcllo-SmallButton" id="BringToFont">
+                  <object class="vcllo-SmallButton" id="BringToFront">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>

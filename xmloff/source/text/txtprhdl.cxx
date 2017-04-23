@@ -1056,7 +1056,7 @@ bool XMLTextRotationAnglePropHdl_Impl::importXML(
             nAngle = 0;
         else if( nValue < 180 )
             nAngle = 900;
-        else /* if nValalue <= 315 ) */
+        else /* if nValue <= 315 ) */
             nAngle = 2700;
         rValue <<= nAngle;
     }
