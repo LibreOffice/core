@@ -2172,6 +2172,27 @@ DECLARE_OOXMLEXPORT_TEST( testTablePosition15, "table-position-15.docx" )
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST( testTdf107359, "tdf107359-char-pitch.docx" )
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+
+    bool bGridSnapToChars;
+    xPropertySet->getPropertyValue("GridSnapToChars") >>= bGridSnapToChars;
+    CPPUNIT_ASSERT_EQUAL( false, bGridSnapToChars );
+
+    sal_Int32 nRubyHeight;
+    xPropertySet->getPropertyValue("GridRubyHeight") >>= nRubyHeight;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), nRubyHeight );
+
+    sal_Int32 nBaseHeight;
+    xPropertySet->getPropertyValue("GridBaseHeight") >>= nBaseHeight;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(convertTwipToMm100(18 * 20)), nBaseHeight );
+
+    sal_Int32 nBaseWidth;
+    xPropertySet->getPropertyValue("GridBaseWidth") >>= nBaseWidth;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(convertTwipToMm100(24 * 20)), nBaseWidth );
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
