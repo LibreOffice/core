@@ -2853,7 +2853,6 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
             SwFrame::DestroyFrame(pLast);
         } while( nullptr != ( pLast = aIter.Next() ));
 
-    CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::DYING_FLYFRAMEFORMAT));
     ClearContact();
 }
 
