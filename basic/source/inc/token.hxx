@@ -114,25 +114,7 @@ enum SbiToken {
 #undef SbiTokenSHAREDTMPUNDEF
 #endif
 
-// #i109076
-class TokenLabelInfo
-{
-    std::unique_ptr<bool[]> m_pTokenCanBeLabelTab;
-
-public:
-    TokenLabelInfo();
-    TokenLabelInfo( const TokenLabelInfo& rInfo )
-        : m_pTokenCanBeLabelTab( nullptr )
-            { (void)rInfo; }
-    ~TokenLabelInfo();
-
-    bool canTokenBeLabel( SbiToken eTok )
-        { return m_pTokenCanBeLabelTab[eTok]; }
-};
-
 class SbiTokenizer : public SbiScanner {
-    TokenLabelInfo  m_aTokenLabelInfo;
-
 protected:
     SbiToken eCurTok;
     SbiToken ePush;
