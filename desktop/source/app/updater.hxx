@@ -16,6 +16,19 @@ void update();
 
 void update_checker();
 
+class Updater
+{
+private:
+
+public:
+
+    static OUString getUpdateInfoURL();
+    static OUString getPatchDirURL();
+    static OUString getUpdateDirURL();
+    static OUString getExecutableDirURL();
+
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
