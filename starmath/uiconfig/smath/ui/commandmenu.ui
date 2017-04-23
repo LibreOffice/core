@@ -1312,7 +1312,7 @@
               <object class="GtkMenuItem" id="&lt;?&gt;_{&lt;?&gt;} ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">_x</property>
+                <property name="label">__x</property>
               </object>
             </child>
             <child>
