@@ -213,20 +213,6 @@ void PivotTableDataProvider::setLabeledDataSequenceValues(uno::Reference<chart2:
     xResult->setValues(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
 }
 
-void PivotTableDataProvider::setLabeledDataSequence(uno::Reference<chart2::data::XLabeledDataSequence> & xResult,
-                                                    OUString const & sRoleValues, OUString const & sIdValues,
-                                                    std::vector<ValueAndFormat> const & rValues,
-                                                    OUString const & sRoleLabel,  OUString const & sIdLabel,
-                                                    std::vector<ValueAndFormat> const & rLabel)
-{
-    setLabeledDataSequenceValues(xResult, sRoleValues, sIdValues, rValues);
-
-    std::unique_ptr<PivotTableDataSequence> pLabelSequence(
-        new PivotTableDataSequence(m_pDocument, m_sPivotTableName, sIdLabel, rLabel));
-    pLabelSequence->setRole(sRoleLabel);
-    xResult->setLabel(uno::Reference<chart2::data::XDataSequence>(pLabelSequence.release()));
-}
-
 uno::Reference<chart2::data::XDataSource>
 PivotTableDataProvider::createCategoriesDataSource(bool bOrientationIsColumn)
 {
@@ -362,8 +348,7 @@ void PivotTableDataProvider::collectPivotTableData()
                         size_t i = 0;
                         OUString sCaption;
                         OUString sName;
-                        m_aLabels.resize(aSequence.getLength());
-                        for (sheet::MemberResult & rMember : aSequence)
+                        for (sheet::MemberResult const & rMember : aSequence)
                         {
                             if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
                                 rMember.Flags & sheet::MemberResultFlags::CONTINUE)
@@ -373,6 +358,9 @@ void PivotTableDataProvider::collectPivotTableData()
                                     sCaption = rMember.Caption;
                                     sName = rMember.Name;
                                 }
+
+                                if (i >= m_aLabels.size())
+                                    m_aLabels.resize(i + 1);
 
                                 if (size_t(nDimPos) >= m_aLabels[i].size())
                                     m_aLabels[i].resize(nDimPos + 1);
@@ -397,9 +385,9 @@ void PivotTableDataProvider::collectPivotTableData()
                         m_aRowFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
 
                         uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
-                        m_aCategoriesRowOrientation.resize(aSequence.getLength());
+
                         size_t i = 0;
-                        for (sheet::MemberResult & rMember : aSequence)
+                        for (sheet::MemberResult const & rMember : aSequence)
                         {
                             bool bHasContinueFlag = rMember.Flags & sheet::MemberResultFlags::CONTINUE;
 
@@ -421,6 +409,9 @@ void PivotTableDataProvider::collectPivotTableData()
                                     else
                                         pItem.reset(new ValueAndFormat(fValue, nNumberFormat));
                                 }
+
+                                if (i >= m_aCategoriesRowOrientation.size())
+                                    m_aCategoriesRowOrientation.resize(i + 1);
 
                                 if (size_t(nDimPos) >= m_aCategoriesColumnOrientation.size())
                                     m_aCategoriesColumnOrientation.resize(nDimPos + 1);
@@ -518,11 +509,12 @@ void PivotTableDataProvider::collectPivotTableData()
     m_bNeedsUpdate = false;
 }
 
-void PivotTableDataProvider::assignValuesToDataSequence(uno::Reference<chart2::data::XDataSequence> & rDataSequence,
-                                                        size_t nIndex)
+uno::Reference<chart2::data::XDataSequence>
+PivotTableDataProvider::assignValuesToDataSequence(size_t nIndex)
 {
+    uno::Reference<chart2::data::XDataSequence> xDataSequence;
     if (nIndex >= m_aDataRowVector.size())
-        return;
+        return xDataSequence;
 
     OUString sDataID = lcl_identifierForData(nIndex);
 
@@ -530,29 +522,37 @@ void PivotTableDataProvider::assignValuesToDataSequence(uno::Reference<chart2::d
     std::unique_ptr<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument, m_sPivotTableName,
                                                                                  sDataID, rRowOfData));
     pSequence->setRole("values-y");
-    rDataSequence.set(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
+    xDataSequence.set(pSequence.release());
+    return xDataSequence;
 }
 
-void PivotTableDataProvider::assignLabelsToDataSequence(uno::Reference<chart2::data::XDataSequence> & rDataSequence,
-                                                        size_t nIndex)
+uno::Reference<chart2::data::XDataSequence>
+PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
 {
-    if (nIndex >= m_aLabels.size())
-        return;
+    uno::Reference<chart2::data::XDataSequence> xDataSequence;
 
     OUString sLabelID = lcl_identifierForLabel(nIndex);
 
     OUString aLabel;
     bool bFirst = true;
-    for (ValueAndFormat const & rItem : m_aLabels[size_t(nIndex)])
+
+    if (m_aLabels.empty())
     {
-        if (bFirst)
+        aLabel = ScGlobal::GetRscString(STR_PIVOT_TOTAL);
+    }
+    else
+    {
+        for (ValueAndFormat const & rItem : m_aLabels[nIndex])
         {
-            aLabel += rItem.m_aString;
-            bFirst = false;
-        }
-        else
-        {
-            aLabel += " - " + rItem.m_aString;
+            if (bFirst)
+            {
+                aLabel += rItem.m_aString;
+                bFirst = false;
+            }
+            else
+            {
+                aLabel += " - " + rItem.m_aString;
+            }
         }
     }
 
@@ -561,7 +561,8 @@ void PivotTableDataProvider::assignLabelsToDataSequence(uno::Reference<chart2::d
     std::unique_ptr<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument, m_sPivotTableName,
                                                                                  sLabelID, aLabelVector));
     pSequence->setRole("values-y");
-    rDataSequence.set(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
+    xDataSequence.set(pSequence.release());
+    return xDataSequence;
 }
 
 uno::Reference<chart2::data::XDataSource>
@@ -587,42 +588,14 @@ uno::Reference<chart2::data::XDataSource>
     }
 
     {
-        int i = 0;
-        for (std::vector<ValueAndFormat> const & rRowOfData : m_aDataRowVector)
+        for (size_t i = 0; i < m_aDataRowVector.size(); ++i)
         {
-            OUString aValuesId = lcl_identifierForData(i);
-            OUString aLabelsId = lcl_identifierForLabel(i);
-
-            OUString aLabel;
-            bool bFirst = true;
-
-            if (m_aLabels.empty())
-            {
-                aLabel = ScGlobal::GetRscString(STR_PIVOT_TOTAL);
-            }
-            else
-            {
-                for (ValueAndFormat const & rItem : m_aLabels[i])
-                {
-                    if (bFirst)
-                    {
-                        aLabel += rItem.m_aString;
-                        bFirst = false;
-                    }
-                    else
-                    {
-                        aLabel += " - " + rItem.m_aString;
-                    }
-                }
-            }
-
-            std::vector<ValueAndFormat> aLabelVector { ValueAndFormat(aLabel) };
-
             uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
-            setLabeledDataSequence(xResult, "values-y", aValuesId, rRowOfData,
-                                            "values-y", aLabelsId, aLabelVector);
+
+            xResult->setValues(assignValuesToDataSequence(i));
+            xResult->setLabel(assignLabelsToDataSequence(i));
+
             aLabeledSequences.push_back(xResult);
-            i++;
         }
     }
 
@@ -731,9 +704,7 @@ uno::Reference<chart2::data::XDataSequence>
     if (m_bNeedsUpdate)
         collectPivotTableData();
 
-    uno::Reference<chart2::data::XDataSequence> xDataSequence;
-    assignValuesToDataSequence(xDataSequence, size_t(nIndex));
-    return xDataSequence;
+    return assignValuesToDataSequence(size_t(nIndex));
 }
 
 uno::Reference<css::chart2::data::XDataSequence>
@@ -744,9 +715,7 @@ uno::Reference<css::chart2::data::XDataSequence>
     if (m_bNeedsUpdate)
         collectPivotTableData();
 
-    uno::Reference<chart2::data::XDataSequence> xDataSequence;
-    assignLabelsToDataSequence(xDataSequence, size_t(nIndex));
-    return xDataSequence;
+    return assignLabelsToDataSequence(size_t(nIndex));
 }
 
 uno::Reference<css::chart2::data::XDataSequence>

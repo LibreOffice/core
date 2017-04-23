@@ -153,11 +153,9 @@ private:
                                 OUString const & sRoleLabel,  OUString const & sIdLabel,
                                 std::vector<ValueAndFormat> const & rLabel);
 
-    void assignLabelsToDataSequence(css::uno::Reference<css::chart2::data::XDataSequence> & rDataSequence,
-                                    size_t nIndex);
+    css::uno::Reference<css::chart2::data::XDataSequence> assignLabelsToDataSequence(size_t nIndex);
 
-    void assignValuesToDataSequence(css::uno::Reference<css::chart2::data::XDataSequence> & rDataSequence,
-                                    size_t nIndex);
+    css::uno::Reference<css::chart2::data::XDataSequence> assignValuesToDataSequence(size_t nIndex);
 
     void collectPivotTableData();
 
