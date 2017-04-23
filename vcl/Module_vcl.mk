@@ -152,6 +152,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_jpeg_read_write_test \
 	CppunitTest_vcl_svm_test \
 	CppunitTest_vcl_pdfexport \
+    CppunitTest_vcl_errorhandler \
 ))
 
 
