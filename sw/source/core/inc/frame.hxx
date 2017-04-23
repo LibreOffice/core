@@ -322,7 +322,6 @@ protected:
     // draw shadow and borders
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
-    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) override;
 
     virtual const IDocumentDrawModelAccess& getIDocumentDrawModelAccess( );
 
