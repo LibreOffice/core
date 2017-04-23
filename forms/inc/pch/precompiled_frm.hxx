@@ -249,7 +249,7 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <tools/gen.hxx>
 #include <tools/inetmime.hxx>

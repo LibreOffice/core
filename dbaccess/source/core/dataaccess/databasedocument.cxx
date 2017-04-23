@@ -80,7 +80,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #include <functional>
 #include <list>

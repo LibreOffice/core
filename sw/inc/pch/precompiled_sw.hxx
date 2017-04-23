@@ -513,7 +513,7 @@
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
 #include <tools/debug.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>

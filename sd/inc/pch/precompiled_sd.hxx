@@ -482,7 +482,7 @@
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>

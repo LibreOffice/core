@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #include <memory>
 
