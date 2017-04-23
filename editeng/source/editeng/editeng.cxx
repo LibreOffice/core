@@ -1926,8 +1926,16 @@ Point EditEngine::GetDocPos( const Point& rPaperPos ) const
     Point aDocPos( rPaperPos );
     if ( IsVertical() )
     {
-        aDocPos.X() = rPaperPos.Y();
-        aDocPos.Y() = GetPaperSize().Width() - rPaperPos.X();
+        if ( IsTopToBottom() )
+        {
+            aDocPos.X() = rPaperPos.Y();
+            aDocPos.Y() = GetPaperSize().Width() - rPaperPos.X();
+        }
+        else
+        {
+            aDocPos.X() = rPaperPos.Y();
+            aDocPos.Y() = rPaperPos.X();
+        }
     }
     return aDocPos;
 }
