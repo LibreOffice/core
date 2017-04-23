@@ -650,10 +650,6 @@ void SwFlyDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
         if (pFormat && pFormat->Which() == RES_FLYFRMFMT && !pFormat->getIDocumentLayoutAccess().GetCurrentViewShell())
             pGetZOrdnerHint->m_rnZOrder = GetMaster()->GetOrdNum();
     }
-    else if (auto pKillDrawHint = dynamic_cast<const sw::KillDrawHint*>(&rHint))
-    {
-        pKillDrawHint->m_rpContact = this;
-    }
 }
 
 // SwDrawContact

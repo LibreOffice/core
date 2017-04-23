@@ -2853,7 +2853,6 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
             SwFrame::DestroyFrame(pLast);
         } while( nullptr != ( pLast = aIter.Next() ));
 
-    ClearContact();
 }
 
 SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
@@ -2863,11 +2862,6 @@ SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
         m_pContact.reset(new SwFlyDrawContact(this, rIDDMA.GetOrCreateDrawModel()));
     return m_pContact.get();
 }
-
-void SwFlyFrameFormat::ClearContact()
-{
-    m_pContact.reset(nullptr);
-};
 
 /// Creates the Frames if the format describes a paragraph-bound frame.
 /// MA: 1994-02-14: creates the Frames also for frames anchored at page.
@@ -3305,7 +3299,6 @@ namespace sw
     CollectTextObjectsHint::~CollectTextObjectsHint() {}
     GetZOrderHint::~GetZOrderHint() {}
     GetObjectConnectedHint::~GetObjectConnectedHint() {}
-    KillDrawHint::~KillDrawHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()
