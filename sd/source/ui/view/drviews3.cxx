@@ -142,7 +142,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                 if (! pArgs)
                 {
-                    nSelectedPage = maTabControl->GetCurPageId() - 1;
+                    nSelectedPage = maTabControl->GetCurPagePos();
                 }
                 else if (pArgs->Count () == 2)
                 {

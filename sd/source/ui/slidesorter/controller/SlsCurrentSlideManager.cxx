@@ -173,7 +173,8 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
         {
             sal_uInt16 nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
             pDrawViewShell->SwitchPage(nPageNumber);
-            pDrawViewShell->GetPageTabControl().SetCurPageId(nPageNumber+1);
+            TabControl& rPageTabControl = pDrawViewShell->GetPageTabControl();
+            rPageTabControl.SetCurPageId(rPageTabControl.GetPageId(nPageNumber));
         }
     }
 }
@@ -190,7 +191,8 @@ void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescripto
         if (pDrawViewShell)
         {
             sal_uInt16 nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
-            pDrawViewShell->GetPageTabControl().SetCurPageId(nPageNumber+1);
+            TabControl& rPageTabControl = pDrawViewShell->GetPageTabControl();
+            rPageTabControl.SetCurPageId(rPageTabControl.GetPageId(nPageNumber));
         }
     }
 }

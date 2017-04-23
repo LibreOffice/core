@@ -45,6 +45,8 @@
 #include <undo/undomanager.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
+#include <DrawViewShell.hxx>
+#include <pres.hxx>
 
 #include <chrono>
 
@@ -92,6 +94,7 @@ public:
     void testTdf81754();
     void testTdf105502();
     void testCommentCallbacks();
+    void testMultiViewInsertDeletePage();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -127,6 +130,7 @@ public:
     CPPUNIT_TEST(testTdf81754);
     CPPUNIT_TEST(testTdf105502);
     CPPUNIT_TEST(testCommentCallbacks);
+    CPPUNIT_TEST(testMultiViewInsertDeletePage);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1701,6 +1705,54 @@ void SdTiledRenderingTest::testCommentCallbacks()
     mxComponent.clear();
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testMultiViewInsertDeletePage()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    uno::Sequence<beans::PropertyValue> aArgs;
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+
+    // Create second view
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(aArgs);
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    int nView2 = SfxLokHelper::getView();
+
+    // the document has 8 slides
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pDoc->GetSdPageCount(PageKind::Standard));
+
+    // Switch to 5th page in 2nd view
+    pXImpressDocument->setPart(4);
+
+    // Insert slide in 1st view
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:InsertPage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // See if the current slide number changed in 2nd view too
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT_EQUAL(5, pXImpressDocument->getPart());
+
+    // Delete the page in 1st view now
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:DeletePage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // See if current slide number changed in 2nd view too
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT_EQUAL(4, pXImpressDocument->getPart());
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 

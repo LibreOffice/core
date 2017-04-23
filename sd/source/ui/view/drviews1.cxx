@@ -328,7 +328,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
     {
         ViewShellManager::UpdateLock aLock (GetViewShellBase().GetViewShellManager());
 
-        sal_uInt16 nActualPageNum = 0;
+        sal_uInt16 nActualPageId = maTabControl->GetPageId(0);
 
         GetViewShellBase().GetDrawController().FireChangeEditMode (eEMode == EditMode::MasterPage);
         GetViewShellBase().GetDrawController().FireChangeLayerMode (bIsLayerModeActive);
@@ -397,17 +397,17 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             {
                 pPage = GetDoc()->GetSdPage(i, mePageKind);
                 OUString aPageName = pPage->GetName();
-                maTabControl->InsertPage(i + 1, aPageName);
+                maTabControl->InsertPage(pPage->getPageId(), aPageName);
 
-                if ( pPage->IsSelected() && nActualPageNum == 0 )
+                if ( pPage->IsSelected() )
                 {
-                    nActualPageNum = i;
+                    nActualPageId = pPage->getPageId();
                 }
             }
 
-            maTabControl->SetCurPageId(nActualPageNum + 1);
+            maTabControl->SetCurPageId(nActualPageId);
 
-            SwitchPage(nActualPageNum);
+            SwitchPage(maTabControl->GetPagePos(nActualPageId));
 
             //tdf#102343 re-enable common undo on switch back from master mode
             mpDrawView->GetModel()->SetDisableTextEditUsesCommonUndoManager(false);
@@ -427,7 +427,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             }
 
             maTabControl->Clear();
-            sal_uInt16 nActualMasterPageNum = 0;
+            sal_uInt16 nActualMasterPageId = maTabControl->GetPageId(0);
             sal_uInt16 nMasterPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
 
             for (sal_uInt16 i = 0; i < nMasterPageCnt; i++)
@@ -438,16 +438,16 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 if (nPos != -1)
                     aLayoutName = aLayoutName.copy(0, nPos);
 
-                maTabControl->InsertPage(i + 1, aLayoutName);
+                maTabControl->InsertPage(pMaster->getPageId(), aLayoutName);
 
                 if (&(mpActualPage->TRG_GetMasterPage()) == pMaster)
                 {
-                    nActualMasterPageNum = i;
+                    nActualMasterPageId = pMaster->getPageId();
                 }
             }
 
-            maTabControl->SetCurPageId(nActualMasterPageNum + 1);
-            SwitchPage(nActualMasterPageNum);
+            maTabControl->SetCurPageId(nActualMasterPageId);
+            SwitchPage(maTabControl->GetPagePos(nActualMasterPageId));
 
             //tdf#102343 changing attributes of textboxes in master typically
             //changes the stylesheet they are linked to, so if the common
@@ -477,7 +477,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             // Set the tab control only for draw pages.  For master page
             // this has been done already above.
             if (meEditMode == EditMode::Page)
-                maTabControl->SetCurPageId (nActualPageNum + 1);
+                maTabControl->SetCurPageId (nActualPageId);
         }
 
         ResetActualLayer();
@@ -494,6 +494,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         SetContextName(GetSidebarContextName());
     }
+
 }
 
 /**
@@ -625,7 +626,7 @@ SdPage* DrawViewShell::getCurrentPage() const
                                     GetDoc()->GetSdPageCount(mePageKind):
                                     GetDoc()->GetMasterSdPageCount(mePageKind);
 
-    sal_Int32 nCurrentPage = maTabControl->GetCurPageId() - 1;
+    sal_Int32 nCurrentPage = maTabControl->GetCurPagePos();
     DBG_ASSERT( (nPageCount>0) && (nCurrentPage<nPageCount), "sd::DrawViewShell::getCurrentPage(), illegal page index!" );
     if( (nPageCount < 0) || (nCurrentPage>=nPageCount) )
         nCurrentPage = 0; // play safe here
@@ -649,12 +650,9 @@ void DrawViewShell::ResetActualPage()
     if (!GetDoc())
         return;
 
-    sal_uInt16 nCurrentPage = maTabControl->GetCurPageId() - 1;
+    sal_uInt16 nCurrentPageId = maTabControl->GetCurPageId();
+    sal_uInt16 nCurrentPageNum = maTabControl->GetPagePos(nCurrentPageId);
     sal_uInt16 nPageCount   = (meEditMode == EditMode::Page)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
-    if (nPageCount > 0)
-        nCurrentPage = std::min((sal_uInt16)(nPageCount - 1), nCurrentPage);
-    else
-        nCurrentPage = 0;
 
     if (meEditMode == EditMode::Page)
     {
@@ -668,19 +666,22 @@ void DrawViewShell::ResetActualPage()
         {
             pPage = GetDoc()->GetSdPage(i, mePageKind);
             OUString aPageName = pPage->GetName();
-            maTabControl->InsertPage(i + 1, aPageName);
+            maTabControl->InsertPage(pPage->getPageId(), aPageName);
 
-            // correct selection recognition of the pages
-            GetDoc()->SetSelected(pPage, i == nCurrentPage);
+            if (nCurrentPageId == pPage->getPageId())
+            {
+                nCurrentPageNum = i;
+                GetDoc()->SetSelected(pPage, true);
+            }
+            else
+                GetDoc()->SetSelected(pPage, false);
         }
 
-        maTabControl->SetCurPageId(nCurrentPage + 1);
+        maTabControl->SetCurPageId(maTabControl->GetPageId(nCurrentPageNum));
     }
     else // EditMode::MasterPage
     {
-        SdPage* pActualPage = GetDoc()->GetMasterSdPage(nCurrentPage, mePageKind);
         maTabControl->Clear();
-        sal_uInt16 nActualMasterPageNum = 0;
 
         sal_uInt16 nMasterPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
         for (sal_uInt16 i = 0; i < nMasterPageCnt; i++)
@@ -690,14 +691,14 @@ void DrawViewShell::ResetActualPage()
             sal_Int32 nPos = aLayoutName.indexOf(SD_LT_SEPARATOR);
             if (nPos != -1)
                 aLayoutName = aLayoutName.copy(0, nPos);
-            maTabControl->InsertPage(i + 1, aLayoutName);
+            maTabControl->InsertPage(pMaster->getPageId(), aLayoutName);
 
-            if (pActualPage == pMaster)
-                nActualMasterPageNum = i;
+            if (pMaster->getPageId() == nCurrentPageId)
+                nCurrentPageNum = i;
         }
 
-        maTabControl->SetCurPageId(nActualMasterPageNum + 1);
-        SwitchPage(nActualMasterPageNum);
+        maTabControl->SetCurPageId(maTabControl->GetPageId(nCurrentPageNum));
+        SwitchPage(nCurrentPageNum);
     }
 
     GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
@@ -767,6 +768,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         83888 for details.)  Therefore the nested calls are ignored (they
         would jump to the wrong page anyway.)
     */
+
     if (mbIsInSwitchPage)
         return false;
     mbIsInSwitchPage = true;
@@ -831,7 +833,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                         sPageText = sPageText.copy(0, nPos);
                     if (pPV
                         && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() )
-                        && sPageText == maTabControl->GetPageText(nSelectedPage+1))
+                        && sPageText == maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)))
                     {
                         // this slide is already visible
                         return true;
@@ -853,7 +855,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                     SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : nullptr;
                     if (pCurrentPage
                         && pNewPage == pCurrentPage
-                        && maTabControl->GetPageText(nSelectedPage+1).equals(pNewPage->GetName()))
+                        && maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)).equals(pNewPage->GetName()))
                     {
                         // this slide is already visible
                         return true;
@@ -965,7 +967,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
 
             mpDrawView->HideSdrPage();
-            maTabControl->SetCurPageId(nSelectedPage+1);
+            maTabControl->SetCurPageId(maTabControl->GetPageId(nSelectedPage));
             mpDrawView->ShowSdrPage(mpActualPage);
             GetViewShellBase().GetDrawController().FireSwitchCurrentPage(mpActualPage);
 
@@ -993,9 +995,9 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
             OUString aPageName = mpActualPage->GetName();
 
-            if (maTabControl->GetPageText(nSelectedPage+1) != aPageName)
+            if (maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) != aPageName)
             {
-                maTabControl->SetPageText(nSelectedPage+1, aPageName);
+                maTabControl->SetPageText(maTabControl->GetPageId(nSelectedPage), aPageName);
             }
         }
         else
@@ -1026,7 +1028,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
 
             mpDrawView->HideSdrPage();
-            maTabControl->SetCurPageId(nSelectedPage+1);
+            maTabControl->SetCurPageId(maTabControl->GetPageId(nSelectedPage));
 
             SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
 
@@ -1065,9 +1067,9 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             if (nPos != -1)
                 aLayoutName = aLayoutName.copy(0, nPos);
 
-            if (maTabControl->GetPageText(nSelectedPage+1) != aLayoutName)
+            if (maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) != aLayoutName)
             {
-                maTabControl->SetPageText(nSelectedPage+1, aLayoutName);
+                maTabControl->SetPageText(maTabControl->GetPageId(nSelectedPage), aLayoutName);
             }
 
             if( mePageKind == PageKind::Handout )

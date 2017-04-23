@@ -74,7 +74,7 @@ using namespace ::com::sun::star::drawing;
 
 void DrawViewShell::DeleteActualPage()
 {
-    sal_uInt16          nPage = maTabControl->GetCurPageId() - 1;
+    sal_uInt16          nPage = maTabControl->GetCurPagePos();
 
     mpDrawView->SdrEndTextEdit();
 

@@ -666,7 +666,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         // Always show the slide/page number.
         OUString aOUString = (nPageCount == nActivePageCount) ? SD_RESSTR(STR_SD_PAGE_COUNT) : SD_RESSTR(STR_SD_PAGE_COUNT_CUSTOM);
 
-        aOUString = aOUString.replaceFirst("%1", OUString::number(maTabControl->GetCurPageId()));
+        aOUString = aOUString.replaceFirst("%1", OUString::number(maTabControl->GetCurPagePos() + 1));
         aOUString = aOUString.replaceFirst("%2", OUString::number(nPageCount));
         if(nPageCount != nActivePageCount)
             aOUString = aOUString.replaceFirst("%3", OUString::number(nActivePageCount));

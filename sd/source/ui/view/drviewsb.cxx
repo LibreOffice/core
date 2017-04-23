@@ -76,7 +76,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
 
     if( GetEditMode() == EditMode::Page )
     {
-        pPageToRename = GetDoc()->GetSdPage( nPageId - 1, ePageKind );
+        pPageToRename = GetDoc()->GetSdPage( maTabControl->GetPagePos(nPageId), ePageKind );
 
         // Undo
         SdPage* pUndoPage = pPageToRename;
@@ -98,14 +98,14 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         if( ePageKind == PageKind::Standard )
         {
             // also rename notes-page
-            SdPage* pNotesPage = GetDoc()->GetSdPage( nPageId - 1, PageKind::Notes );
+            SdPage* pNotesPage = GetDoc()->GetSdPage( maTabControl->GetPagePos(nPageId), PageKind::Notes );
             pNotesPage->SetName( rName );
         }
     }
     else
     {
         // rename MasterPage -> rename LayoutTemplate
-        pPageToRename = GetDoc()->GetMasterSdPage( nPageId - 1, ePageKind );
+        pPageToRename = GetDoc()->GetMasterSdPage( maTabControl->GetPagePos(nPageId), ePageKind );
         GetDoc()->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
     }
 
@@ -131,7 +131,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         if (pSlideSorterViewShell != nullptr)
         {
             pSlideSorterViewShell->GetSlideSorter().GetController().PageNameHasChanged(
-                nPageId-1, rName);
+                maTabControl->GetPagePos(nPageId), rName);
         }
     }
 
@@ -143,7 +143,7 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool 
     OUString aNewName;
     rDialog.GetName( aNewName );
 
-    SdPage* pCurrentPage = GetDoc()->GetSdPage( maTabControl->GetCurPageId() - 1, GetPageKind() );
+    SdPage* pCurrentPage = GetDoc()->GetSdPage( maTabControl->GetCurPagePos(), GetPageKind() );
 
     return pCurrentPage && ( aNewName == pCurrentPage->GetName() || GetDocSh()->IsNewPageNameValid( aNewName ) );
 }

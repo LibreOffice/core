@@ -409,6 +409,7 @@ public:
     sal_uInt16      GetPageCount() const;
     sal_uInt16      GetPageId( sal_uInt16 nPos ) const;
     sal_uInt16      GetPagePos( sal_uInt16 nPageId ) const;
+    sal_uInt16      GetCurPagePos() const { return GetPagePos(GetCurPageId()); }
     sal_uInt16      GetPageId( const Point& rPos ) const;
     Rectangle       GetPageRect( sal_uInt16 nPageId ) const;
     // returns the rectangle in which page tabs are drawn
