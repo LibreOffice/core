@@ -869,7 +869,7 @@ bool XMLSdRotationAngleTypeHdl::importXML(
             nAngle = 0;
         else if (nValue < 180)
             nAngle = 9000;
-        else /* if nValalue <= 315 ) */
+        else /* if nValue <= 315 ) */
             nAngle = 27000;
 
         rValue <<= nAngle;

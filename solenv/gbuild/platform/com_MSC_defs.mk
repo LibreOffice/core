@@ -155,7 +155,7 @@ gb_CFLAGS := \
 
 ifneq ($(COM_IS_CLANG),TRUE)
 
-# clang-cl doesn't suport -Wv:18 for now
+# clang-cl doesn't support -Wv:18 for now
 gb_CFLAGS += \
 	-Wv:18 \
 

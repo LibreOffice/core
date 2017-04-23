@@ -4583,7 +4583,7 @@ void SwUiWriterTest::testCreateDocxAnnotation()
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
 
-    // this was empty insetad of "some text"
+    // this was empty instead of "some text"
     CPPUNIT_ASSERT_EQUAL(aSomeText, xField->getPropertyValue("Content").get<OUString>());
 }
 
