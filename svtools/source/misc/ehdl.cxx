@@ -145,7 +145,7 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
     lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( nullptr )
 
 {
-    RegisterDisplay(&aWndFunc);
+    ErrorRegistry::RegisterDisplay(&aWndFunc);
     if( ! pMgr )
     {
         pMgr = ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() );
