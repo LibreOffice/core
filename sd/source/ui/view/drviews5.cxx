@@ -354,7 +354,7 @@ void DrawViewShell::WriteFrameViewData()
         mpFrameView->SetSelectedPage(0);
     else
     {
-        mpFrameView->SetSelectedPage( maTabControl->GetCurPageId() - 1 );
+        mpFrameView->SetSelectedPage( maTabControl->GetCurPagePos() );
     }
 
     mpFrameView->SetViewShEditMode(meEditMode);
