@@ -34,7 +34,7 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 using namespace com::sun::star;
 

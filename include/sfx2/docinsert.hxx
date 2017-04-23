@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/link.hxx>
 #include <memory>
 #include <vector>

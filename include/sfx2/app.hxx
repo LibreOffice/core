@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
