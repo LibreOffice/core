@@ -36,6 +36,7 @@ namespace vcl { class Window; }
 class ErrorHandler;
 class ErrorContext;
 class ErrorStringFactory;
+class ErrorInfo;
 class DynamicErrorInfo;
 class DynamicErrorInfo_Impl;
 enum class DialogMask;
@@ -49,6 +50,30 @@ typedef DialogMask WindowDisplayErrorFunc(
 
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
+
+class VCL_DLLPUBLIC ErrorRegistry
+{
+    friend class ErrorHandler;
+    friend class ErrorContext;
+    friend class ErrorStringFactory;
+    friend class DynamicErrorInfo_Impl;
+
+public:
+                                ErrorRegistry();
+
+    static void                 RegisterDisplay(BasicDisplayErrorFunc*);
+    static void                 RegisterDisplay(WindowDisplayErrorFunc*);
+
+private:
+    DisplayFnPtr                pDsp;
+    bool                        bIsWindowDsp;
+    sal_uInt16                  nNextError;
+
+    std::vector<ErrorHandler*>  errorHandlers;
+    std::vector<ErrorContext*>  contexts;
+
+    DynamicErrorInfo*           ppDynErrInfo[ERRCODE_DYNAMIC_COUNT];
+};
 
 enum class DialogMask
 {
@@ -78,28 +103,26 @@ namespace o3tl
     template<> struct typed_flags<DialogMask> : is_typed_flags<DialogMask, 0xffff> {};
 }
 
-class VCL_DLLPUBLIC ErrorRegistry
+typedef DialogMask WindowDisplayErrorFunc(
+    vcl::Window *, DialogMask nMask, const OUString &rErr, const OUString &rAction);
+
+typedef void BasicDisplayErrorFunc(
+    const OUString &rErr, const OUString &rAction);
+
+class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
 {
-    friend class ErrorHandler;
-    friend class ErrorContext;
     friend class ErrorStringFactory;
-    friend class DynamicErrorInfo_Impl;
 
 public:
-                                ErrorRegistry();
+                        ErrorHandler();
+    virtual             ~ErrorHandler();
 
-    static void                 RegisterDisplay(BasicDisplayErrorFunc*);
-    static void                 RegisterDisplay(WindowDisplayErrorFunc*);
+    static DialogMask   HandleError ( sal_uInt32 lId, DialogMask nMask = DialogMask::MAX );
+    static bool         GetErrorString( sal_uInt32 lId, OUString& rStr );
 
-private:
-    DisplayFnPtr                pDsp;
-    bool                        bIsWindowDsp;
-    sal_uInt16                  nNextError;
+protected:
+    virtual bool        CreateString(const ErrorInfo*, OUString &) const = 0;
 
-    std::vector<ErrorHandler*>  errorHandlers;
-    std::vector<ErrorContext*>  contexts;
-
-    DynamicErrorInfo*           ppDynErrInfo[ERRCODE_DYNAMIC_COUNT];
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorInfo
@@ -164,6 +187,7 @@ public:
 };
 
 struct ErrorContextImpl;
+
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorContext
 {
     friend class ErrorHandler;
@@ -179,28 +203,6 @@ public:
     vcl::Window*            GetParent();
 
     static ErrorContext*    GetContext();
-};
-
-typedef DialogMask WindowDisplayErrorFunc(
-    vcl::Window *, DialogMask nMask, const OUString &rErr, const OUString &rAction);
-
-typedef void BasicDisplayErrorFunc(
-    const OUString &rErr, const OUString &rAction);
-
-class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
-{
-    friend class ErrorStringFactory;
-
-public:
-                        ErrorHandler();
-    virtual             ~ErrorHandler();
-
-    static DialogMask   HandleError ( sal_uInt32 lId, DialogMask nMask = DialogMask::MAX );
-    static bool         GetErrorString( sal_uInt32 lId, OUString& rStr );
-
-protected:
-    virtual bool        CreateString(const ErrorInfo *, OUString &) const = 0;
-
 };
 
 #endif
