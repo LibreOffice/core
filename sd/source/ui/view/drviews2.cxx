@@ -383,7 +383,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     mpDrawView->SdrEndTextEdit();
                 }
-                sal_uInt16 nPage = maTabControl->GetCurPageId() - 1;
+                sal_uInt16 nPage = maTabControl->GetCurPagePos();
                 mpActualPage = GetDoc()->GetSdPage(nPage, mePageKind);
                 ::sd::ViewShell::mpImpl->ProcessModifyPageSlot (
                     rReq,
@@ -420,10 +420,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     mpDrawView->SdrEndTextEdit();
                 }
 
-                sal_uInt16 nPageId = maTabControl->GetCurPageId();
+                sal_uInt16 nPage = maTabControl->GetCurPagePos();
                 SdPage* pCurrentPage = ( GetEditMode() == EditMode::Page )
-                    ? GetDoc()->GetSdPage( nPageId - 1, GetPageKind() )
-                    : GetDoc()->GetMasterSdPage( nPageId - 1, GetPageKind() );
+                    ? GetDoc()->GetSdPage( nPage, GetPageKind() )
+                    : GetDoc()->GetMasterSdPage( nPage, GetPageKind() );
 
                 OUString aTitle = SD_RESSTR(STR_TITLE_RENAMESLIDE);
                 OUString aDescr = SD_RESSTR(STR_DESC_RENAMESLIDE);
@@ -443,7 +443,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     aNameDlg->GetName( aNewName );
                     if (aNewName != aPageName)
                     {
-                        bool bResult = RenameSlide( nPageId, aNewName );
+                        bool bResult = RenameSlide( maTabControl->GetPageId(nPage), aNewName );
                         DBG_ASSERT( bResult, "Couldn't rename slide" );
                     }
                 }

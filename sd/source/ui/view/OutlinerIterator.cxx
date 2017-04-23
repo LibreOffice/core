@@ -316,7 +316,7 @@ sal_Int32 OutlinerContainer::GetPageIndex (
     {
         case CURRENT:
             if (pDrawViewShell.get())
-                nPageIndex = pDrawViewShell->GetCurPageId() - 1;
+                nPageIndex = pDrawViewShell->GetCurPagePos();
             else
             {
                 const SdPage* pPage = rpViewShell->GetActualPage();
