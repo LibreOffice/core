@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SBMETH_HXX
 #define INCLUDED_BASIC_SBMETH_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <basic/sbxmeth.hxx>
 #include <basic/sbdef.hxx>
 #include <basic/basicdllapi.h>

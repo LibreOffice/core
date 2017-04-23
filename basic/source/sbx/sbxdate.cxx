@@ -20,7 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/zforlist.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/color.hxx>
 #include <i18nlangtag/lang.h>
 #include <basic/sbx.hxx>
