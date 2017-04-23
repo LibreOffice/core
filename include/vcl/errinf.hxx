@@ -32,7 +32,7 @@
 namespace vcl { class Window; }
 
 class DynamicErrorInfo_Impl;
-class ErrorHandler_Impl;
+class ErrorStringFactory;
 
 enum class DialogMask
 {
@@ -149,7 +149,7 @@ typedef void BasicDisplayErrorFunc(
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
 {
-    friend class ErrorHandler_Impl;
+    friend class ErrorStringFactory;
 
 public:
                         ErrorHandler();
