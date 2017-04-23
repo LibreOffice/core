@@ -39,7 +39,7 @@
 #include <svx/msdffdef.hxx>
 #include <tools/color.hxx>
 #include <tools/colordata.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
