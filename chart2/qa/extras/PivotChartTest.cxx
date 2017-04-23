@@ -705,9 +705,9 @@ void PivotChartTest::testPivotTableDataProvider_PivotTableFields()
 
     aFieldEntries = xPivotTableDataProvider->getDataFields();
 
-    //CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
-    //CPPUNIT_ASSERT_EQUAL(OUString("Sum - Sales T1"), aFieldEntries[0].Name);
-    //CPPUNIT_ASSERT_EQUAL(OUString("Sum - Sales T2"), aFieldEntries[1].Name);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFieldEntries.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("Sum - Sales T1"), aFieldEntries[0].Name);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sum - Sales T2"), aFieldEntries[1].Name);
 }
 
 
