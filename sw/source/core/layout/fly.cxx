@@ -365,26 +365,8 @@ void SwFlyFrame::FinitDrawObj()
             }
         }
     }
-
-    bool bOtherFramesAround(false);
-    SwFlyDrawContact* pContact(nullptr);
-    pFormat->CallSwClientNotify(sw::KillDrawHint(this, bOtherFramesAround, pContact));
-
-    // Take VirtObject to the grave.
-    // If the last VirtObject is destroyed, the DrawObject and the DrawContact
-    // also need to be destroyed.
-    // OD, OS 2004-03-31 #116203# - clear user call of Writer fly frame 'master'
-    // <SdrObject> to assure, that a <SwXFrame::dispose()> doesn't delete the
-    // Writer fly frame again.
-    if(bOtherFramesAround)
-        pContact = nullptr;
-    if(pContact)
-        pContact->GetMaster()->SetUserCall(nullptr);
     GetVirtDrawObj()->SetUserCall(nullptr); // Else calls delete of the ContactObj
     delete GetVirtDrawObj();            // Deregisters itself at the Master
-    assert(dynamic_cast<SwFlyFrameFormat*>(pFormat));
-    if(pContact)
-        static_cast<SwFlyFrameFormat*>(pFormat)->ClearContact();
 }
 
 void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
