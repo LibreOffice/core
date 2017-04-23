@@ -25,8 +25,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
@@ -148,20 +148,20 @@ void WrapPropertyPanel::Initialize()
     mpEnableContour->SetClickHdl(EnableContourLink);
     mpSpacingLB->SetSelectHdl(LINK(this, WrapPropertyPanel, SpacingLBHdl));
 
-    mpRBNoWrap->SetModeRadioImage(::GetImage(mxFrame, UNO_WRAPOFF, false));
+    mpRBNoWrap->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPOFF, mxFrame));
     if ( AllSettings::GetLayoutRTL() )
     {
-        mpRBWrapLeft->SetModeRadioImage(::GetImage(mxFrame, UNO_WRAPRIGHT, false));
-        mpRBWrapRight->SetModeRadioImage(::GetImage(mxFrame, UNO_WRAPLEFT, false));
+        mpRBWrapLeft->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPRIGHT, mxFrame));
+        mpRBWrapRight->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPLEFT, mxFrame));
     }
     else
     {
-        mpRBWrapLeft->SetModeRadioImage(::GetImage(mxFrame, UNO_WRAPLEFT, false));
-        mpRBWrapRight->SetModeRadioImage(::GetImage(mxFrame, UNO_WRAPRIGHT, false));
+        mpRBWrapLeft->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPLEFT, mxFrame));
+        mpRBWrapRight->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPRIGHT, mxFrame));
     }
-    mpRBWrapParallel->SetModeRadioImage(::GetImage(mxFrame, UNO_WRAPON, false));
-    mpRBWrapThrough->SetModeRadioImage(::GetImage(mxFrame, UNO_WRAPTHROUGH, false));
-    mpRBIdealWrap->SetModeRadioImage(::GetImage(mxFrame, UNO_WRAPIDEAL, false));
+    mpRBWrapParallel->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPON, mxFrame));
+    mpRBWrapThrough->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPTHROUGH, mxFrame));
+    mpRBIdealWrap->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPIDEAL, mxFrame));
 
     aCustomEntry = mpCustomEntry->GetText();
 

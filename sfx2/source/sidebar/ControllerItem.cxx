@@ -20,7 +20,6 @@
 
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/commandinfoprovider.hxx>

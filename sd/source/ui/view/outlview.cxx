@@ -20,6 +20,7 @@
 #include "OutlineView.hxx"
 #include <editeng/forbiddencharacterstable.hxx>
 #include <sfx2/progress.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/outliner.hxx>
@@ -28,7 +29,6 @@
 #include <editeng/lrspitem.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/itempool.hxx>
@@ -146,9 +146,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     maBulletFont.SetShadow(false);
 
     Reference<XFrame> xFrame (mrOutlineViewShell.GetViewShellBase().GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY);
-
-    const OUString aSlotURL( ".uno:ShowSlide" );
-    maSlideImage = GetImage( xFrame, aSlotURL, true );
+    maSlideImage = vcl::CommandInfoProvider::GetImageForCommand(".uno:ShowSlide", xFrame, vcl::ImageType::Size26);
 
     // Tell undo manager of the document about the undo manager of the
     // outliner, so that the former can synchronize with the later.

@@ -21,9 +21,9 @@
 
 #include <sfx2/sidebar/Theme.hxx>
 
-#include <sfx2/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/gradient.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -57,7 +57,7 @@ Image Tools::GetImage (
     {
         if (rsURL.startsWith(".uno:"))
         {
-            const Image aPanelImage (::GetImage(rxFrame, rsURL, false));
+            const Image aPanelImage(vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame));
             return aPanelImage;
         }
         else

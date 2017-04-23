@@ -19,7 +19,6 @@
 #include "DefaultShapesPanel.hxx"
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <sfx2/imagemgr.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -131,7 +130,7 @@ void DefaultShapesPanel::populateShapes()
         for(std::map<sal_uInt16, rtl::OUString>::size_type i = 0; i < aSet.second.size(); i++)
         {
             sSlotStr = aSet.second[i];
-            aSlotImage = ::GetImage(mxFrame, sSlotStr, false);
+            aSlotImage = vcl::CommandInfoProvider::GetImageForCommand(sSlotStr, mxFrame);
             sLabel = vcl::CommandInfoProvider::GetTooltipForCommand(sSlotStr, mxFrame);
             aSet.first->InsertItem(i, aSlotImage, sLabel);
         }

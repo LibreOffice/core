@@ -87,7 +87,6 @@
 #include <sfx2/unoctitm.hxx>
 #include "helpid.hrc"
 #include "workwin.hxx"
-#include <sfx2/imagemgr.hxx>
 #include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star;
@@ -570,11 +569,6 @@ Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( con
 {
     SolarMutexGuard aGuard;
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
-}
-
-bool SfxToolBoxControl::hasBigImages() const
-{
-    return (GetToolBox().GetToolboxButtonSize() == ToolBoxButtonSize::Large);
 }
 
 void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )

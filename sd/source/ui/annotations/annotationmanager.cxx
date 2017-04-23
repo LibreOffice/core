@@ -32,6 +32,7 @@
 #include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
 
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
@@ -46,7 +47,6 @@
 
 #include <tools/datetime.hxx>
 
-#include <sfx2/imagemgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
@@ -1206,12 +1206,8 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
             sal_uInt16 nId = pMenu->GetItemId( nPos );
             if (!pMenu->IsItemEnabled(nId))
                 continue;
-            OString sIdent = pMenu->GetItemIdent(nId);
-            sal_uInt16 nSID = IdentToSID(sIdent);
-            OUString sSlotURL( "slot:" );
-            sSlotURL += OUString::number(nSID);
 
-            Image aImage( GetImage( xFrame, sSlotURL, false ) );
+            Image aImage( vcl::CommandInfoProvider::GetImageForCommand( pMenu->GetItemCommand( nId ), xFrame ) );
             if( !!aImage )
                 pMenu->SetItemImage( nId, aImage );
         }
