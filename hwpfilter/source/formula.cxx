@@ -36,7 +36,7 @@ extern std::list<Node*> nodelist;
 #define rstartEl(x,y) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(false)
 #define rendEl(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(false)
 #define rchars(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(false)
-#define runistr(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(OUString(x)); } while(false)
+#define runistr(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(false)
 #define reucstr(x,y) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(OUString(x,y, RTL_TEXTENCODING_EUC_KR)); } while(false)
 #define padd(x,y,z)  pList->addAttribute(x,y,z)
 #else
@@ -178,9 +178,8 @@ void Formula::makeExpr(Node *res)
              break;
          case ID_BLOCK:
              makeBlock(tmp);
-             //fall-through
+             break;
          case ID_BEGIN:
-             //fall-through
          case ID_END:
              break;
     }
@@ -221,7 +220,7 @@ void Formula::makeIdentifier(Node *res)
           indo;
 #else
           rstartEl("math:mi", rList);
-          runistr(getMathMLEntity(tmp->value).c_str());
+          runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
           rendEl("math:mi");
 #endif
           break;
@@ -243,7 +242,7 @@ void Formula::makeIdentifier(Node *res)
           inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value); indo;
 #else
           rstartEl("math:mo", rList);
-          runistr(getMathMLEntity(tmp->value).c_str());
+          runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
           rendEl("math:mo");
 #endif
           break;
@@ -383,7 +382,7 @@ void Formula::makeDecoration(Node *res)
      else
           fprintf(stderr,"<math:munder>\n");
 #else
-     /* accent는 언제 true이고, 언제, false인지 모르겠다. */
+     /* FIXME: no idea when 'accent' is true or false. */
      if( isover ){
           padd("accent","CDATA","true");
           rstartEl("math:mover", rList);
@@ -404,7 +403,7 @@ void Formula::makeDecoration(Node *res)
      indo;
 #else
      rstartEl("math:mo", rList);
-     runistr(getMathMLEntity(tmp->value).c_str());
+     runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
      rendEl("math:mo");
 #endif
 
@@ -526,9 +525,9 @@ void Formula::makeFence(Node *res)
                 getMathMLEntity(tmp->next->next->value).c_str());
 #else
      padd("open", "CDATA",
-             OUString(getMathMLEntity(tmp->value).c_str()) );
+             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str())));
      padd("close", "CDATA",
-             OUString(getMathMLEntity(tmp->next->next->value).c_str()) );
+             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->next->next->value).c_str())));
      rstartEl("math:mfenced", rList);
      pList->clear();
 #endif
@@ -568,10 +567,10 @@ void Formula::makeBlock(Node *res)
 #endif
 }
 
-int Formula::parse()
+void Formula::parse()
 {
-     Node *res = 0L;
-     if( !eq ) return 0;
+     Node *res = nullptr;
+     if( !eq ) return;
      if( isHwpEQ ){
           MzString a;
          // fprintf(stderr,"\n\n[BEFORE]\n[%s]\n",eq);
@@ -611,7 +610,7 @@ int Formula::parse()
           if( buf[0] != '\0' )
                 res = mainParse( a.c_str() );
           else
-                res = 0L;
+                res = nullptr;
           free(buf);
      }
      else{
@@ -627,8 +626,6 @@ int Formula::parse()
          nodelist.pop_front();
          delete tmpNode;
      }
-
-     return 0;
 }
 
 void Formula::trim()
@@ -659,7 +656,7 @@ void Formula::trim()
      if( buf[0] != '\0' )
           strcpy(eq, buf);
      else
-          eq = 0L;
+          eq = nullptr;
      free(buf);
 }
 

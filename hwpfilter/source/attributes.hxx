@@ -22,20 +22,15 @@
 #define INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <cppuhelper/implbase1.hxx>
-
-/*----------------------------------------
-*
-*   Attributlist implementation
-*
-*----------------------------------------*/
+#include <cppuhelper/implbase.hxx>
+#include <memory>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
 struct AttributeListImpl_impl;
-class AttributeListImpl : public WeakImplHelper1< XAttributeList >
+class AttributeListImpl : public WeakImplHelper< XAttributeList >
 {
 protected:
     virtual ~AttributeListImpl();
@@ -45,19 +40,19 @@ public:
     AttributeListImpl( const AttributeListImpl & );
 
 public:
-    virtual sal_Int16 SAL_CALL getLength() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString  SAL_CALL getNameByIndex(sal_Int16 i) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString  SAL_CALL getTypeByIndex(sal_Int16 i) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString  SAL_CALL getTypeByName(const OUString& aName) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString  SAL_CALL getValueByIndex(sal_Int16 i) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString  SAL_CALL getValueByName(const OUString& aName) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL getLength() throw (RuntimeException, std::exception) override;
+    virtual OUString  SAL_CALL getNameByIndex(sal_Int16 i) throw (RuntimeException, std::exception) override;
+    virtual OUString  SAL_CALL getTypeByIndex(sal_Int16 i) throw (RuntimeException, std::exception) override;
+    virtual OUString  SAL_CALL getTypeByName(const OUString& aName) throw (RuntimeException, std::exception) override;
+    virtual OUString  SAL_CALL getValueByIndex(sal_Int16 i) throw (RuntimeException, std::exception) override;
+    virtual OUString  SAL_CALL getValueByName(const OUString& aName) throw (RuntimeException, std::exception) override;
 
 public:
     void addAttribute( const OUString &sName , const OUString &sType , const OUString &sValue );
     void clear();
 
 private:
-    struct AttributeListImpl_impl *m_pImpl;
+    std::unique_ptr<AttributeListImpl_impl> m_pImpl;
 };
 
 #endif // INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX

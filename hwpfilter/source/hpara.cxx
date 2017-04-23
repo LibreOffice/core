@@ -29,29 +29,29 @@
 #include "hbox.h"
 #include "hutil.h"
 
-bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
+void LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
 {
     if (!hwpf.Read2b(pos))
-        return false;
+        return;
     unsigned short tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     space_width = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     height = tmp16;
 // internal information
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     pgy = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     sx = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     psx = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     pex = tmp16;
     height_sp = 0;
 
@@ -62,12 +62,10 @@ bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
         pPara->pshape.reserved[0] = sal::static_int_cast<unsigned char>(pex & 0x01);
         pPara->pshape.reserved[1] = sal::static_int_cast<unsigned char>(pex & 0x02);
     }
-
-    return (!hwpf.State());
 }
 
 HWPPara::HWPPara()
-    : _next(NULL)
+    : _next(nullptr)
     , reuse_shape(0)
     , nch(0)
     , nline(0)
@@ -77,31 +75,17 @@ HWPPara::HWPPara()
     , etcflag(0)
     , ctrlflag(0)
     , pstyno(0)
-    , pno(0)
-    , linfo(NULL)
-    , cshapep(NULL)
-    , hhstr(NULL)
+    , cshape(new CharShape)
+    , linfo(nullptr)
 {
-    memset(&cshape, 0, sizeof(cshape));
+    memset(cshape.get(), 0, sizeof(CharShape));
     memset(&pshape, 0, sizeof(pshape));
 }
 
 HWPPara::~HWPPara()
 {
     delete[] linfo;
-    delete[] cshapep;
-    if (hhstr)
-    {
-// virtual destructor
-/* C++은 null에 대해서도 동작한다. */
-        for (int ii = 0; ii < nch; ++ii)
-            delete hhstr[ii];
-
-        delete[]hhstr;
-    }
-
 }
-
 
 bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 {
@@ -117,18 +101,17 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read4b(&ctrlflag, 1);
     hwpf.Read1b(&pstyno, 1);
 
-
-/* Paragraph 대표 글자 */
-    cshape.Read(hwpf);
+/* Paragraph representative character */
+    cshape->Read(hwpf);
     if (nch > 0)
-        hwpf.AddCharShape(&cshape);
+        hwpf.AddCharShape(cshape);
 
-/* Paragraph 문단 모양 */
+/* Paragraph paragraphs shape  */
     if (nch && !reuse_shape)
     {
         pshape.Read(hwpf);
-        pshape.cshape = &cshape;
-          pshape.pagebreak = etcflag;
+        pshape.cshape = cshape.get();
+        pshape.pagebreak = etcflag;
     }
 
     linfo = ::comphelper::newArray_null<LineInfo>(nline);
@@ -159,22 +142,19 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 
     if (contain_cshape)
     {
-        cshapep = ::comphelper::newArray_null<CharShape>(nch);
-        if (!cshapep)
-        {
-            perror("Memory Allocation: cshape\n");
-            return false;
-        }
+        cshapep.resize(nch);
 
         for (ii = 0; ii < nch; ii++)
         {
+            cshapep[ii].reset(new CharShape);
+            memset(cshapep[ii].get(), 0, sizeof(CharShape));
 
             hwpf.Read1b(&same_cshape, 1);
             if (!same_cshape)
             {
-                cshapep[ii].Read(hwpf);
+                cshapep[ii]->Read(hwpf);
                 if (nch > 1)
-                    hwpf.AddCharShape(&cshapep[ii]);
+                    hwpf.AddCharShape(cshapep[ii]);
             }
             else if (ii == 0)
                 cshapep[ii] = cshape;
@@ -183,14 +163,12 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
         }
     }
 // read string
-    hhstr = ::comphelper::newArray_null<HBox *>(nch);
-    if (!hhstr) { return false; }
-    for (ii = 0; ii < nch; ii++)
-        hhstr[ii] = 0;
+    hhstr.resize(nch);
     ii = 0;
     while (ii < nch)
     {
-        if (0 == (hhstr[ii] = readHBox(hwpf)))
+        hhstr[ii] = readHBox(hwpf);
+        if (!hhstr[ii])
             return false;
         if (hhstr[ii]->hh == CH_END_PARA)
             break;
@@ -201,106 +179,100 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     return nch && !hwpf.State();
 }
 
-
-
-
 CharShape *HWPPara::GetCharShape(int pos)
 {
     if (contain_cshape == 0)
-        return &cshape;
-    return cshapep + pos;
+        return cshape.get();
+    return cshapep[pos].get();
 }
 
-
-
-
-HBox *HWPPara::readHBox(HWPFile & hwpf)
+std::unique_ptr<HBox> HWPPara::readHBox(HWPFile & hwpf)
 {
+    std::unique_ptr<HBox> hbox;
+
     hchar hh;
     if (!hwpf.Read2b(hh))
-        return 0;
-
-    HBox *hbox = 0;
+        return hbox;
 
     if (hwpf.State() != HWP_NoError)
-        return 0;
+        return hbox;
 
     if (hh > 31 || hh == CH_END_PARA)
-        hbox = new HBox(hh);
+        hbox.reset(new HBox(hh));
     else if (IS_SP_SKIP_BLOCK(hh))
-        hbox = new SkipData(hh);
+        hbox.reset(new SkipData(hh));
     else
     {
         switch (hh)
         {
             case CH_FIELD:                        // 5
-                hbox = new FieldCode;
+                hbox.reset(new FieldCode);
                 break;
             case CH_BOOKMARK:                     // 6
-                hbox = new Bookmark;
+                hbox.reset(new Bookmark);
                 break;
             case CH_DATE_FORM:                    // 7
-                hbox = new DateFormat;
+                hbox.reset(new DateFormat);
                 break;
             case CH_DATE_CODE:                    // 8
-                hbox = new DateCode;
+                hbox.reset(new DateCode);
                 break;
             case CH_TAB:                          // 9
-                hbox = new Tab;
+                hbox.reset(new Tab);
                 break;
             case CH_TEXT_BOX:                     // 10
-                hbox = new TxtBox;
+                hbox.reset(new TxtBox);
                 break;
             case CH_PICTURE:                      // 11
-                hbox = new Picture;
+                hbox.reset(new Picture);
                 break;
             case CH_LINE:                         // 14
-                hbox = new Line;
+                hbox.reset(new Line);
                 break;
             case CH_HIDDEN:                       // 15
-                hbox = new Hidden;
+                hbox.reset(new Hidden);
                 break;
             case CH_HEADER_FOOTER:                // 16
-                hbox = new HeaderFooter;
+                hbox.reset(new HeaderFooter);
                 break;
             case CH_FOOTNOTE:                     // 17
-                hbox = new Footnote;
+                hbox.reset(new Footnote);
                 break;
             case CH_AUTO_NUM:                     // 18
-                hbox = new AutoNum;
+                hbox.reset(new AutoNum);
                 break;
             case CH_NEW_NUM:                      // 19
-                hbox = new NewNum;
+                hbox.reset(new NewNum);
                 break;
             case CH_SHOW_PAGE_NUM:                // 20
-                hbox = new ShowPageNum;
+                hbox.reset(new ShowPageNum);
                 break;
             case CH_PAGE_NUM_CTRL:                // 21
-                hbox = new PageNumCtrl;
+                hbox.reset(new PageNumCtrl);
                 break;
             case CH_MAIL_MERGE:                   // 22
-                hbox = new MailMerge;
+                hbox.reset(new MailMerge);
                 break;
             case CH_COMPOSE:                      // 23
-                hbox = new Compose;
+                hbox.reset(new Compose);
                 break;
             case CH_HYPHEN:                       // 24
-                hbox = new Hyphen;
+                hbox.reset(new Hyphen);
                 break;
             case CH_TOC_MARK:                     // 25
-                hbox = new TocMark;
+                hbox.reset(new TocMark);
                 break;
             case CH_INDEX_MARK:                   // 26
-                hbox = new IndexMark;
+                hbox.reset(new IndexMark);
                 break;
             case CH_OUTLINE:                      // 28
-                hbox = new Outline;
+                hbox.reset(new Outline);
                 break;
             case CH_KEEP_SPACE:                   // 30
-                hbox = new KeepSpace;
+                hbox.reset(new KeepSpace);
                 break;
             case CH_FIXED_SPACE:                  // 31
-                hbox = new FixedSpace;
+                hbox.reset(new FixedSpace);
                 break;
             default:
                 break;
@@ -308,13 +280,12 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
     }
     if (!hbox || !hbox->Read(hwpf))
     {
-        delete hbox;
-
-        return 0;
+        hbox.reset();
+        return hbox;
     }
     if( hh == CH_TEXT_BOX || hh == CH_PICTURE || hh == CH_LINE )
     {
-        FBox *fbox = static_cast<FBox *>(hbox);
+        FBox *fbox = static_cast<FBox *>(hbox.get());
         if( ( fbox->style.anchor_type == 1) && ( fbox->pgy >= begin_ypos) )
         {
             //strange construct to compile without warning

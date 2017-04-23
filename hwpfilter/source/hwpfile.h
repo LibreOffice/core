@@ -26,6 +26,7 @@
 #define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
 #include <list>
+#include <vector>
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -70,10 +71,10 @@ struct ColumnInfo{
     int start_page;
     bool bIsSet;
     ColumnDef *coldef;
-    ColumnInfo(int num){
+    explicit ColumnInfo(int num){
         start_page = num;
         bIsSet = false;
-        coldef = 0;
+        coldef = NULL;
     }
 };
 
@@ -142,11 +143,11 @@ class DLLEXPORT HWPFile
 /**
  * Reads nmemb short type array from HIODev
  */
-        int Read2b( void *ptr, size_t nmemb );
+        void Read2b( void *ptr, size_t nmemb );
 /**
  * Reads nmemb long type array from HIODev
  */
-        int Read4b( void *ptr, size_t nmemb );
+        void Read4b( void *ptr, size_t nmemb );
 /**
  * Reads some bytes from HIODev not regarding endian's way
  * @param size Amount for reading
@@ -163,7 +164,7 @@ class DLLEXPORT HWPFile
 /**
  * Sets if the stream is compressed
  */
-        bool SetCompressed( bool );
+        void SetCompressed( bool );
 /**
  * Sets current HIODev
  */
@@ -176,19 +177,19 @@ class DLLEXPORT HWPFile
 /**
  * Reads document information of hwp file from HIODev
  */
-        bool InfoRead(void);
+        void InfoRead(void);
 /**
  * Reads font list of hwp file from HIODev
  */
-        bool FontRead(void);
+        void FontRead(void);
 /**
  * Reads style list of hwp file from HIODev
  */
-        bool StyleRead(void);
+        void StyleRead(void);
 /**
  * Reads paragraph list of hwp file from HIODev
  */
-        bool ParaListRead();
+        void ParaListRead();
 /* 그림 등의 추가 정보를 읽는다. */
 /**
  * Reads additional information like embedded image of hwp file from HIODev
@@ -213,7 +214,7 @@ class DLLEXPORT HWPFile
         void AddColumnInfo();
         void SetColumnDef(ColumnDef *coldef);
         void AddParaShape(ParaShape *);
-        void AddCharShape(CharShape *);
+        void AddCharShape(std::shared_ptr<CharShape>&);
         void AddFBoxStyle(FBoxStyle *);
         void AddDateFormat(DateCode *);
         void AddHeaderFooter(HeaderFooter *);
@@ -228,12 +229,10 @@ class DLLEXPORT HWPFile
         HWPFont& GetHWPFont(void) { return _hwpFont; }
         HWPStyle& GetHWPStyle(void) { return _hwpStyle; }
         HWPPara *GetFirstPara(void) { return plist.front(); }
-        HWPPara *GetLastPara(void) { return plist.back(); }
 
         EmPicture *GetEmPicture(Picture *pic);
         EmPicture *GetEmPictureByName(char * name);
         HyperText *GetHyperText();
-        FBox *GetBoxHead (void) { return blist.size()?blist.front():0; }
         ParaShape *getParaShape(int);
         CharShape *getCharShape(int);
         FBoxStyle *getFBoxStyle(int);
@@ -254,7 +253,7 @@ class DLLEXPORT HWPFile
           int getMaxSettedPage(){ return m_nMaxSettedPage; }
           void setMaxSettedPage(){ m_nMaxSettedPage = m_nCurrentPage; }
 
-    private :
+    private:
         int compareCharShape(CharShape *shape);
         int compareParaShape(ParaShape *shape);
 
@@ -285,13 +284,13 @@ class DLLEXPORT HWPFile
         std::list<EmPicture*> emblist;
         std::list<HyperText*> hyperlist;
         int currenthyper;
-        std::list<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
-        std::list<CharShape*> cslist;
-        std::list<FBoxStyle*> fbslist;
-        std::list<DateCode*> datecodes;
-        std::list<HeaderFooter*> headerfooters;
-        std::list<ShowPageNum*> pagenumbers;
-        std::list<Table*> tables;
+        std::vector<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
+        std::vector<std::shared_ptr<CharShape>> cslist;
+        std::vector<FBoxStyle*> fbslist;
+        std::vector<DateCode*> datecodes;
+        std::vector<HeaderFooter*> headerfooters;
+        std::vector<ShowPageNum*> pagenumbers;
+        std::vector<Table*> tables;
 
 // for global document handling
         static HWPFile *cur_doc;

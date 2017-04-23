@@ -31,7 +31,7 @@ struct EmPicture
     char  type[16];
     uchar *data;
 
-    EmPicture(size_t size);
+    explicit EmPicture(size_t size);
     ~EmPicture(void);
 
     bool Read(HWPFile& hwpf);
@@ -46,7 +46,7 @@ struct HyperText
     char  macro[325];
     uchar type;
     char reserve[3];
-    bool Read(HWPFile& hwpf);
+    void Read(HWPFile& hwpf);
 };
 /**
  * @short Win32 OLE object
@@ -55,15 +55,15 @@ struct OlePicture
 {
     int   size;
     uint signature;
-#ifdef WIN32
+#ifdef _WIN32
     IStorage *pis;
 #else
     char *pis;
 #endif
-    OlePicture(int tsize);
+    explicit OlePicture(int tsize);
     ~OlePicture(void);
 
-    bool Read(HWPFile& hwpf);
+    void Read(HWPFile& hwpf);
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 

@@ -1,21 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * This file is part of the LibreOffice project.
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * This file incorporates work covered by the following license notice:
- *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+* This file is part of the LibreOffice project.
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*
+* This file incorporates work covered by the following license notice:
+*
+*   Licensed to the Apache Software Foundation (ASF) under one or more
+*   contributor license agreements. See the NOTICE file distributed
+*   with this work for additional information regarding copyright
+*   ownership. The ASF licenses this file to you under the Apache
+*   License, Version 2.0 (the "License"); you may not use this file
+*   except in compliance with the License. You may obtain a copy of
+*   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+*/
 
 #ifndef INCLUDED_HWPFILTER_SOURCE_HBOX_H
 #define INCLUDED_HWPFILTER_SOURCE_HBOX_H
@@ -32,63 +32,56 @@
 #include "hpara.h"
 
 /**
- * The HBox class is the base class for all date classes in hwp document.
- * For example, there are special character, table, image, etc.
- * It has one character. The ascii code value of special characters are smaller than 32. General character is greater than 32.
- *
- * @short Base class for characters
- */
+* The HBox class is the base class for all date classes in hwp document.
+* For example, there are special character, table, image, etc.
+* It has one character. The ascii code value of special characters are smaller than 32. General character is greater than 32.
+*
+* @short Base class for characters
+*/
 struct HBox
 {
-    public:
-        hchar hh;
+public:
+    hchar hh;
 
 /**
- * Construct a HBox object with parameter hch.
- * @param hch 16bit character being able to have Korean character.
- */
-        HBox( hchar hch );
-        virtual ~HBox();
+* Construct a HBox object with parameter hch.
+* @param hch 16bit character being able to have Korean character.
+*/
+    explicit HBox( hchar hch );
+    virtual ~HBox();
 /**
- * @returns The Size of HBox object
- */
-        int           WSize();
+* @returns The Size of HBox object
+*/
+    int           WSize();
 /**
- * @returns The Height of HBox object as hunit value.
- */
-        virtual hunit Height(CharShape *csty);
-/**
- * Read properties from HIODevice object like stream, file, memory.
- *
- * @param hwpf HWPFile Object having all information for a hwp file.
- * @returns True if reading from stream is successful.
- */
-        virtual bool Read(HWPFile &hwpf);
+* Read properties from HIODevice object like stream, file, memory.
+*
+* @param hwpf HWPFile Object having all information for a hwp file.
+* @returns True if reading from stream is successful.
+*/
+    virtual bool Read(HWPFile &hwpf);
 
-        virtual hchar_string GetString();
-    private:
-        static int boxCount;
+    virtual hchar_string GetString();
+private:
+    static int boxCount;
 };
 
 /**
- * @short Class for saving data to be skipped.
- */
+* @short Class for skipping data.
+*/
 struct SkipData: public HBox
 {
-    uint data_block_len;
-    hchar dummy;
-    char  *data_block;
-
-    SkipData(hchar);
+    explicit SkipData(hchar);
     virtual ~SkipData();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
+
 struct DateCode;
 struct FieldCode : public HBox
 {
-    uchar type[2];                    /* 2/0 - 계산식, 3/0-문서요약, 3/1-개인정보, 3/2-만든날짜, 4/0-누름틀 */
+    uchar type[2];                    /* 2/0 - Formula, 3/0-document summary, 3/1 Personal Information, 3/2-creation date, 4/0-pressing mold */
     char *reserved1;
-    unsigned short location_info;     /* 0 - 끝코드, 1 - 시작코드 */
+    unsigned short location_info;     /* 0 - End code, 1 - start code */
     char *reserved2;
     hchar *str1;
     hchar *str2;
@@ -99,7 +92,7 @@ struct FieldCode : public HBox
 
     FieldCode();
     virtual ~FieldCode();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 /**
  * Kind of BOOKMARK
@@ -124,7 +117,7 @@ struct Bookmark: public HBox
 
     Bookmark();
     virtual ~Bookmark();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // date format(7)
@@ -139,7 +132,7 @@ struct DateFormat: public HBox
     hchar dummy;
 
     DateFormat();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /**
@@ -161,9 +154,9 @@ struct DateCode: public HBox
     unsigned char key;
 
     DateCode();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 
-    virtual hchar_string GetString() SAL_OVERRIDE;
+    virtual hchar_string GetString() override;
 };
 
 /**
@@ -176,7 +169,7 @@ struct Tab: public HBox
     hchar dummy;
 
     Tab();
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
@@ -202,7 +195,7 @@ enum
 struct CellLine
 {
     unsigned char key;
-    unsigned char top;                            // 0 - 라인없음, 1-single, 2-thick, 3-double
+    unsigned char top;                            // 0-No line, 1-single, 2-thick, 3-double
     unsigned char bottom;
     unsigned char left;
     unsigned char right;
@@ -250,7 +243,7 @@ struct FBoxStyle
 /**
  * Kind of wrap
  */
-    unsigned char txtflow;                        /* 그림피함. 0-2(자리차지,투명,어울림) */
+    unsigned char txtflow;                        /* Avoid painting. 0-2 (seat occupied, transparency, harmony) */
 /**
  * Horizontal alignment
  */
@@ -268,12 +261,12 @@ struct FBoxStyle
 /**
  * Index of floating object
  */
-    short     boxnum;                             /* 스타오피스에서 스타일 이름으로 사용될 숫자 */
+    short     boxnum;                             /* Numbers used as style-name in Libre Office */
 /**
  * Type of floating object : line, txtbox, image, table, equalizer and button
  */
     unsigned char boxtype;                        // (L)ine, t(X)tbox, Picture - (G)
-    short     cap_len; /* 캡션의 길이 */
+    short     cap_len; /* The length of the caption */
 
     void *cell;
 
@@ -311,8 +304,8 @@ struct FBox: public HBox
     char      xpos_type, ypos_type;
     unsigned char smart_linesp;
 
-/*  이 자료는 tbox나 pic에서는 파일에 기록하지 않고 실행시만 있으며,
-    line에서는 파일에 기록한다.
+/* In tbox or pic, this data exists in memory when running, isn't written to a file.
+   But in line, it will be written to a file.
  */
     short     boundsy, boundey;
     unsigned char boundx, draw;
@@ -323,9 +316,7 @@ struct FBox: public HBox
     short     pgx, pgy;                           // physical xpos, ypos
     short     pgno, showpg;                       // pageno where code is
 
-    FBox      *prev, *next;
-
-    FBox( hchar hch );
+    explicit FBox( hchar hch );
     virtual ~FBox();
 };
 
@@ -340,7 +331,7 @@ struct TxtBox: public FBox
 
     short     dummy1;                             // to not change structure size */
     short     cap_len;
-    short     next;
+    short     next_box;
     short     dummy2;                             // to not change structure size */
     unsigned char reserved1;
 /**
@@ -384,15 +375,8 @@ struct TxtBox: public FBox
  * @returns Count of cell.
  */
     int NCell()   { return nCell; }
-/**
- * This is one of table, text-box, equalizer and button
- * @returns Type of this object.
- */
-    int Type()    { return type;  }
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
-
-    virtual hunit  Height(CharShape *csty) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 #define ALLOWED_GAP 5
@@ -545,7 +529,7 @@ struct Table
      TxtBox *box;
 };
 
-/* picture (11) 그림, OLE그림, 삽입그림, 그리기 */
+/* picture (11) graphics, OLE graphics, inserted graphics, drawing */
 enum pictype
 {
     PICTYPE_FILE, PICTYPE_OLE, PICTYPE_EMBED,
@@ -623,7 +607,7 @@ struct Picture: public FBox
  * follow_block_size is the size information of the Drawing object of hwp.
  * It's value is greater than 0 if the pictype is PICTYPE_DRAW.
  */
-    uint      follow_block_size;                  /* 추가정보 길이. */
+    uint      follow_block_size;                  /* Additional information length. */
     short     dummy1;                             // to not change structure size */
     short     dummy2;                             // to not change structure size */
     uchar     reserved1;
@@ -653,17 +637,14 @@ struct Picture: public FBox
 /**
  * It's for the Drawing object
  */
-    unsigned char *follow;                        /* 그림종류가 drawing일때, 추가정보. */
+    unsigned char *follow;                        /* When the type of image is drawing, gives additional information. */
 
     bool ishyper;
 
     Picture();
     virtual ~Picture();
 
-    int   Type    ();
-    virtual bool Read    (HWPFile &hwpf) SAL_OVERRIDE;
-
-    virtual hunit  Height (CharShape *sty) SAL_OVERRIDE;
+    virtual bool Read    (HWPFile &hwpf) override;
 };
 
 // line (14)
@@ -682,7 +663,7 @@ struct Line: public FBox
 
     Line();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // hidden(15)
@@ -700,7 +681,7 @@ struct Hidden: public HBox
     Hidden();
     virtual ~Hidden();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /**
@@ -729,7 +710,7 @@ struct HeaderFooter: public HBox
     HeaderFooter();
     virtual ~HeaderFooter();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /**
@@ -762,7 +743,7 @@ struct Footnote: public HBox
     Footnote();
     virtual ~Footnote();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // auto number(18)
@@ -790,7 +771,7 @@ struct AutoNum: public HBox
 
     AutoNum();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 /**
@@ -804,10 +785,10 @@ struct NewNum: public HBox
 
     NewNum();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
-// page numger(20)
+// page number(20)
 /**
  * @short Input page index in footer or header
  */
@@ -826,10 +807,10 @@ struct ShowPageNum: public HBox
 
     ShowPageNum();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
-/* 홀수쪽시작 (21) */
+/* Start odd side (21) */
 /**
  * Controls the display of page number, header, footer and border.
  */
@@ -847,7 +828,7 @@ struct PageNumCtrl: public HBox
 
     PageNumCtrl();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // mail merge(22)
@@ -862,8 +843,8 @@ struct MailMerge: public HBox
 
     MailMerge();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
-    virtual hchar_string GetString() SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
+    virtual hchar_string GetString() override;
 };
 
 // char compositon(23)
@@ -878,7 +859,7 @@ struct Compose: public HBox
 
     Compose();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // hyphen(24)
@@ -895,7 +876,7 @@ struct Hyphen: public HBox
 
     Hyphen();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // toc mark(25)
@@ -911,7 +892,7 @@ struct TocMark: public HBox
 
     TocMark();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // index mark(26)
@@ -929,7 +910,7 @@ struct IndexMark: public HBox
 
     IndexMark();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
 // outline(28)
@@ -995,16 +976,16 @@ class Outline: public HBox
 /**
  * decoration character for the level type
  */
-        hchar     deco[MAX_OUTLINE_LEVEL][2];     /* 사용자 정의시 앞뒤 문자 */
+        hchar     deco[MAX_OUTLINE_LEVEL][2];     /* Prefix/postfix for Customize */
         hchar     dummy;
 
         Outline();
 
-        virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+        virtual bool Read(HWPFile &hwpf) override;
         hchar_string GetUnicode() const;
 };
 
-/* 묶음 빈칸(30) */
+/* Bundle of spaces (30) */
 /**
  * The Special space to be treated non-space when a string is
  * cut at the end of line
@@ -1016,10 +997,10 @@ struct KeepSpace: public HBox
 
     KeepSpace();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 
-/* 고정폭 빈칸(31) */
+/* Fixed-width spaces (31) */
 /**
  * @short Space with always same width not relation with fonts.
  */
@@ -1029,7 +1010,7 @@ struct FixedSpace: public HBox
 
     FixedSpace();
 
-    virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
+    virtual bool Read(HWPFile &hwpf) override;
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HBOX_H
 

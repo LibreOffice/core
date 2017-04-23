@@ -85,44 +85,9 @@ HWPDOFuncType HWPDOFuncTbl[] =
     HWPDOFreeFormFunc,
 };
 
-static HMemIODev *hmem = 0;
+static HMemIODev *hmem = NULL;
 
 static int count = 0;
-
-inline bool HAVE_FCOLOR(HWPDrawingObject * hdo)
-{
-    return hdo->property.fill_color != HWPDO_COLOR_NONE;
-}
-
-
-inline bool HAVE_PATTERN(HWPDrawingObject * hdo)
-{
-    return (hdo->property.pattern_type & HWPDO_PAT_TYPE_BITS)
-        != HWPDO_PAT_SOLID && hdo->property.pattern_color != HWPDO_COLOR_NONE;
-}
-
-
-inline bool HAVE_GRADATION(HWPDrawingObject * hdo)
-{
-    return hdo->property.gstyle > BEGIN_GRADATION &&
-        hdo->property.gstyle < END_GRADATION &&
-        hdo->property.fromcolor != HWPDO_COLOR_NONE &&
-        hdo->property.tocolor != HWPDO_COLOR_NONE;
-}
-
-
-inline bool HAVE_BITMAP_PATTERN(HWPDrawingObject * hdo)
-{
-    return hdo->property.gstyle == BITMAP_PATTERN &&
-        hdo->property.szPatternFile[0];
-}
-
-
-inline bool HAS_PAT(HWPDrawingObject * hdo)
-{
-    return HAVE_FCOLOR(hdo) || HAVE_PATTERN(hdo) ||
-        HAVE_GRADATION(hdo) || HAVE_BITMAP_PATTERN(hdo);
-}
 
 static void SetHdoParallRgn(HWPDrawingObject * hdo, int width, int height)
 {
@@ -334,7 +299,7 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
         hdo->property.contrast = 0;
         hdo->property.greyscale = 0;
     }
-    hdo->property.pPara = 0L;
+    hdo->property.pPara = NULL;
 
     if( ( size > common_size ) && (hdo->property.flag & HWPDO_FLAG_AS_TEXTBOX) )
     {
@@ -356,7 +321,6 @@ static HWPDrawingObject *LoadDrawingObject(void)
     fprintf(stderr, "LoadDrawingObject\n");
 
     HWPDrawingObject *hdo, *head, *prev;
-    int res;
 
     unsigned short link_info;
 
@@ -378,7 +342,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
         }
         else
         {
-            switch (res = HWPDOFunc(hdo, OBJFUNC_LOAD, NULL, 0))
+            switch (int res = HWPDOFunc(hdo, OBJFUNC_LOAD, NULL, 0))
             {
                 case OBJRET_FILE_ERROR:
                     goto error;
@@ -428,7 +392,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
         return head;
     }
     else
-        return 0;
+        return NULL;
 }
 
 
@@ -459,7 +423,7 @@ static bool LoadDrawingObjectBlock(Picture * pic)
         return false;
 
     pic->picinfo.picdraw.hdo = LoadDrawingObject();
-    if (pic->picinfo.picdraw.hdo == 0)
+    if (pic->picinfo.picdraw.hdo == NULL)
         return false;
     return true;
 }
@@ -593,7 +557,7 @@ int cmd, void *argp, int argv)
     {
         case OBJFUNC_LOAD:
         {
-            hdo->u.freeform.pt = 0;
+            hdo->u.freeform.pt = NULL;
             if (ReadSizeField(4) < 4)
                 return OBJRET_FILE_ERROR;
             if (!hmem->read4b(hdo->u.freeform.npt))
@@ -661,7 +625,7 @@ static void FreeParaList(HWPPara * para)
 static HWPPara *LoadParaList()
 {
     if (!hmem)
-        return 0;
+        return NULL;
 
     HWPFile *hwpf = GetCurrentDoc();
     HIODev *hio = hwpf->SetIODevice(hmem);
@@ -671,7 +635,7 @@ static HWPPara *LoadParaList()
     hwpf->ReadParaList(plist);
     hwpf->SetIODevice(hio);
 
-    return plist.size()? plist.front() : 0;
+    return plist.size()? plist.front() : NULL;
 }
 
 

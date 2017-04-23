@@ -53,9 +53,9 @@ public:
     void setAttributeListImpl( AttributeListImpl *p )
     {
         pList = p;
-        rList = (XAttributeList *) pList;
+        rList = static_cast<XAttributeList *>(pList);
     }
-    int parse();
+    void parse();
 private:
      void trim();
      void makeMathML(Node *res);
@@ -68,7 +68,6 @@ private:
      void makeSubSup(Node *res);
      void makeFraction(Node *res);
      void makeDecoration(Node *res);
-     void makeFunction(Node *res);
      void makeRoot(Node *res);
      void makeAccent(Node *res);
      void makeParenth(Node *res);

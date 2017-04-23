@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <sal/types.h>
 
 #include "hwplib.h"
@@ -67,7 +67,7 @@ class DLLEXPORT HIODev
 
 struct gz_stream;
 
-/* 파일 입출력 장치 */
+/* File input and output devices */
 
 /**
  * This controls the HStream given by constructor
@@ -77,64 +77,64 @@ class HStreamIODev : public HIODev
 {
     private:
 /* zlib으로 압축을 풀기 위한 자료 구조 */
-        boost::scoped_ptr<HStream> _stream;
+        std::unique_ptr<HStream> _stream;
         gz_stream *_gzfp;
     public:
-        HStreamIODev(HStream* stream);
+        explicit HStreamIODev(HStream* stream);
         virtual ~HStreamIODev();
 /**
  * Check whether the stream is available
  */
-        virtual bool open() SAL_OVERRIDE;
+        virtual bool open() override;
 /**
  * Free stream object
  */
-        virtual void close() SAL_OVERRIDE;
+        virtual void close() override;
 /**
  * If the stream is gzipped, flush the stream.
  */
-        virtual void flush() SAL_OVERRIDE;
+        virtual void flush() override;
 /**
  * Not implemented.
  */
-        virtual int  state() const SAL_OVERRIDE;
+        virtual int  state() const override;
 /**
  * Set whether the stream is compressed or not
  */
-        virtual bool setCompressed( bool ) SAL_OVERRIDE;
+        virtual bool setCompressed( bool ) override;
 /**
  * Read one byte from stream
  */
         using HIODev::read1b;
-        virtual bool read1b(unsigned char &out) SAL_OVERRIDE;
-        virtual bool read1b(char &out) SAL_OVERRIDE;
+        virtual bool read1b(unsigned char &out) override;
+        virtual bool read1b(char &out) override;
 /**
  * Read 2 bytes from stream
  */
         using HIODev::read2b;
-        virtual bool read2b(unsigned short &out) SAL_OVERRIDE;
+        virtual bool read2b(unsigned short &out) override;
 /**
  * Read 4 bytes from stream
  */
         using HIODev::read4b;
-        virtual bool read4b(unsigned int &out) SAL_OVERRIDE;
-        virtual bool read4b(int &out) SAL_OVERRIDE;
+        virtual bool read4b(unsigned int &out) override;
+        virtual bool read4b(int &out) override;
 /**
  * Read some bytes from stream to given pointer as amount of size
  */
-        virtual size_t readBlock( void *ptr, size_t size ) SAL_OVERRIDE;
+        virtual size_t readBlock( void *ptr, size_t size ) override;
 /**
  * Move current pointer of stream as amount of size
  */
-        virtual size_t skipBlock( size_t size ) SAL_OVERRIDE;
+        virtual size_t skipBlock( size_t size ) override;
     protected:
 /**
  * Initialize this object
  */
-        virtual void init() SAL_OVERRIDE;
+        virtual void init() override;
 };
 
-/* 메모리 입출력 장치 */
+/* Memory, input and output devices */
 /**
  * The HMemIODev class controls the Input/Output device.
  * @short Memory IO device
@@ -147,24 +147,24 @@ class HMemIODev : public HIODev
         HMemIODev(char *s, size_t len);
         virtual ~HMemIODev();
 
-        virtual bool open() SAL_OVERRIDE;
-        virtual void close() SAL_OVERRIDE;
-        virtual void flush() SAL_OVERRIDE;
-        virtual int  state() const SAL_OVERRIDE;
+        virtual bool open() override;
+        virtual void close() override;
+        virtual void flush() override;
+        virtual int  state() const override;
 /* gzip routine wrapper */
-        virtual bool setCompressed( bool ) SAL_OVERRIDE;
+        virtual bool setCompressed( bool ) override;
         using HIODev::read1b;
-        virtual bool read1b(unsigned char &out) SAL_OVERRIDE;
-        virtual bool read1b(char &out) SAL_OVERRIDE;
+        virtual bool read1b(unsigned char &out) override;
+        virtual bool read1b(char &out) override;
         using HIODev::read2b;
-        virtual bool read2b(unsigned short &out) SAL_OVERRIDE;
+        virtual bool read2b(unsigned short &out) override;
         using HIODev::read4b;
-        virtual bool read4b(unsigned int &out) SAL_OVERRIDE;
-        virtual bool read4b(int &out) SAL_OVERRIDE;
-        virtual size_t readBlock( void *ptr, int size ) SAL_OVERRIDE;
-        virtual size_t skipBlock( int size ) SAL_OVERRIDE;
+        virtual bool read4b(unsigned int &out) override;
+        virtual bool read4b(int &out) override;
+        virtual size_t readBlock( void *ptr, size_t size ) override;
+        virtual size_t skipBlock( size_t size ) override;
     protected:
-        virtual void init() SAL_OVERRIDE;
+        virtual void init() override;
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HIODEV_H
 

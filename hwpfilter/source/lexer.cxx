@@ -48,7 +48,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <io.h>
@@ -185,7 +185,7 @@ struct yy_buffer_state
 #define YY_BUFFER_EOF_PENDING 2
     };
 
-static YY_BUFFER_STATE yy_current_buffer = 0;
+static YY_BUFFER_STATE yy_current_buffer = nullptr;
 
 /* We provide macros for accessing buffer states in case in the
  * future we want to put the buffer states in a more general
@@ -203,7 +203,7 @@ static int yy_n_chars;      /* number of characters read into yy_ch_buf */
 int yyleng;
 
 /* Points to current character in buffer. */
-static char *yy_c_buf_p = (char *) 0;
+static char *yy_c_buf_p = nullptr;
 static int yy_init = 1;     /* whether we need to initialize */
 static int yy_start = 0;    /* start state number */
 
@@ -230,7 +230,7 @@ static void *yy_flex_realloc YY_PROTO(( void *, yy_size_t ));
 static void yy_flex_free YY_PROTO(( void * ));
 
 typedef unsigned char YY_CHAR;
-FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;
+FILE *yyin = nullptr, *yyout = nullptr;
 typedef int yy_state_type;
 extern char *yytext;
 #define yytext_ptr yytext
@@ -960,7 +960,7 @@ char *yytext;
 #include <string.h>
 #include "nodes.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #define strdup _strdup
 #define fileno _fileno
 #define isatty _isatty
@@ -975,7 +975,7 @@ int yywrap();
 }
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 extern YYSTYPE yylval;
 #endif
 #ifdef TOKEN_DEBUG
@@ -1023,7 +1023,7 @@ static int yy_top_state YY_PROTO(( void ));
 #ifdef YY_MALLOC_DECL
 YY_MALLOC_DECL
 #else
-#if __STDC__
+#if defined __STDC__ && __STDC__
 #ifndef __cplusplus
 #include <stdlib.h>
 #endif
@@ -1590,12 +1590,12 @@ static int yy_get_next_buffer()
 
                 b->yy_ch_buf = static_cast<char *>(
                     /* Include room in for 2 EOB chars. */
-                    yy_flex_realloc( (void *) b->yy_ch_buf,
+                    yy_flex_realloc( static_cast<void *>(b->yy_ch_buf),
                              b->yy_buf_size + 2 ));
                 }
             else
                 /* Can't grow it, we don't own it. */
-                b->yy_ch_buf = 0;
+                b->yy_ch_buf = nullptr;
 
             if ( ! b->yy_ch_buf )
                 YY_FATAL_ERROR(
@@ -1811,12 +1811,12 @@ YY_BUFFER_STATE b;
         return;
 
     if ( b == yy_current_buffer )
-        yy_current_buffer = (YY_BUFFER_STATE) 0;
+        yy_current_buffer = nullptr;
 
     if ( b->yy_is_our_buffer )
-        yy_flex_free( (void *) b->yy_ch_buf );
+        yy_flex_free( static_cast<void *>(b->yy_ch_buf) );
 
-    yy_flex_free( (void *) b );
+    yy_flex_free( static_cast<void *>(b) );
     }
 
 
@@ -1898,7 +1898,7 @@ yy_size_t size;
          base[size-2] != YY_END_OF_BUFFER_CHAR ||
          base[size-1] != YY_END_OF_BUFFER_CHAR )
         /* They forgot to leave room for the EOB's. */
-        return 0;
+        return nullptr;
 
     b = static_cast<YY_BUFFER_STATE>(yy_flex_alloc( sizeof( struct yy_buffer_state ) ));
     if ( ! b )
@@ -1907,7 +1907,7 @@ yy_size_t size;
     b->yy_buf_size = size - 2;  /* "- 2" to take care of EOB's */
     b->yy_buf_pos = b->yy_ch_buf = base;
     b->yy_is_our_buffer = 0;
-    b->yy_input_file = 0;
+    b->yy_input_file = nullptr;
     b->yy_n_chars = b->yy_buf_size;
     b->yy_is_interactive = false;
     b->yy_at_bol = 1;
@@ -2043,7 +2043,6 @@ char msg[];
     (void) fprintf( stderr, "%s\n", msg );
     exit( YY_EXIT_FAILURE );
     }
-
 
 
 /* Internal utility routines. */

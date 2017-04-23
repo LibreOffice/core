@@ -17,6 +17,7 @@ $(eval $(call gb_Library_use_libraries,hwp,\
     cppuhelper \
     sal \
     utl \
+    tl \
 	$(gb_UWINAPI) \
 ))
 

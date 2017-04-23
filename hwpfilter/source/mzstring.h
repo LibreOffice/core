@@ -82,8 +82,6 @@ class MzString
 {
     public:
         MzString();                               // Create an empty string
-// if len = 0, len becomes s.length)
-        MzString(MzString const &s, int len = 0);
         ~MzString();
 
         int       length() const;
@@ -95,13 +93,10 @@ class MzString
         bool      resize(int len);
 
 // Assignment
-        MzString  &operator = (MzString &s);
+        MzString  &operator = (const MzString &s);
         MzString  &operator = (const char *s);
 
 // Appending
-        MzString  &operator += (char);
-        MzString  &operator += (const char *);
-        MzString  &operator += (MzString const &);
 
         MzString  &operator << (const char *);
         MzString  &operator << (char);
@@ -118,7 +113,6 @@ class MzString
 // Access to specific characters
 //char      &operator [] (int n);
         char      operator [] (int n);
-        char      last();
 
 // Comparison
 //  Return:
@@ -130,8 +124,6 @@ class MzString
 // Searching for parts
         int       find    (char c);
         int       find    (char c, int pos);
-        int       find    (char *);
-        int       find    (char *, int pos);
         int       rfind   (char c);
         int       rfind   (char c, int pos);
 
@@ -163,7 +155,7 @@ inline const char* MzString::c_str() const
     if (Data)
     {
         Data[Length] = '\0';                      // We always leave room for this.
-        return (const char *)Data;
+        return Data;
     } else
     return "";
 }

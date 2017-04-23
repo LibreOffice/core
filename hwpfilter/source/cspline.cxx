@@ -48,6 +48,7 @@
 // usage.
 
 #include <sal/config.h>
+#include <memory>
 
 #include "cspline.h"
 #include "solver.h"
@@ -58,9 +59,9 @@ void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
   const double oneThird = 1.0/3.0;
 
   int i;
-  double* h = new double[N];
-  double* hdiff = new double[N];
-  double* alpha = new double[N];
+  std::unique_ptr<double[]> h(new double[N]);
+  std::unique_ptr<double[]> hdiff(new double[N]);
+  std::unique_ptr<double[]> alpha(new double[N]);
 
   for (i = 0; i < N; i++){
     h[i] = x[i+1]-x[i];
@@ -76,9 +77,9 @@ void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
     alpha[i] = numer/denom;
   }
 
-  double* ell = new double[N+1];
-  double* mu = new double[N];
-  double* z = new double[N+1];
+  std::unique_ptr<double[]> ell(new double[N+1]);
+  std::unique_ptr<double[]> mu(new double[N]);
+  std::unique_ptr<double[]> z(new double[N+1]);
   double recip;
 
   ell[0] = 1.0;
@@ -108,19 +109,12 @@ void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
     b[i] = recip*(a[i+1]-a[i])-h[i]*(c[i+1]+2.0*c[i])*oneThird;
     d[i] = oneThird*recip*(c[i+1]-c[i]);
   }
-
-  delete[] h;
-  delete[] hdiff;
-  delete[] alpha;
-  delete[] ell;
-  delete[] mu;
-  delete[] z;
 }
 
 void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
     double*& d)
 {
-  double* h = new double[N];
+  std::unique_ptr<double[]> h(new double[N]);
   int i;
   for (i = 0; i < N; i++)
     h[i] = x[i+1]-x[i];
@@ -163,7 +157,6 @@ void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
     d[i] = oneThird*(c[i+1]-c[i])/h[i];
   }
 
-  delete[] h;
   mgcLinearSystemD::DeleteMatrix(N+1,mat);
 }
 

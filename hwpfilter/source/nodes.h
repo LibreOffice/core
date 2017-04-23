@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.hxx"
+#include <osl/diagnose.h>
 
 enum IDLIST {
      ID_MATHML,
@@ -62,11 +62,11 @@ enum IDLIST {
 
 class Node{
 public:
-     Node(int _id) : id(_id)
+     explicit Node(int _id) : id(_id)
      {
-          value = 0L;
-          child = 0L;
-          next = 0L;
+          value = NULL;
+          child = NULL;
+          next = NULL;
 #ifdef NODE_DEBUG
           count++;
           printf("Node count : [%d]\n",count);
@@ -77,8 +77,8 @@ public:
           if( value ) free( value );
          // if( child ) delete child;
          // if( next ) delete next;
-          next = 0L;
-          child = 0L;
+          next = NULL;
+          child = NULL;
 #ifdef NODE_DEBUG
           count--;
           printf("Node count : [%d]\n",count);

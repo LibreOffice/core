@@ -23,6 +23,7 @@
 #include <hwplib.h>
 #include <hwpfile.h>
 #include <hinfo.h>
+#include <memory>
 
 struct HBox;
 
@@ -53,7 +54,7 @@ class HWPPara;
 
 struct LineInfo
 {
-/* 시작하는 글자의 위치 : 콘트롤은 여러 길이를 가진다 */
+/* the position of the starting character: the control has a different length */
 /**
  * Starting character position
  */
@@ -68,7 +69,7 @@ struct LineInfo
     hunit         height_sp;
     unsigned short    softbreak;                  // column, page, section
 
-    bool  Read(HWPFile &hwpf, HWPPara *para);
+    void  Read(HWPFile &hwpf, HWPPara *para);
 };
 /**
  * It represents the paragraph.
@@ -84,7 +85,7 @@ class DLLEXPORT HWPPara
 /**
  * Zero is for the new paragraph style.
  */
-        unsigned char     reuse_shape;            /* 0이면 새모양 */
+        unsigned char     reuse_shape;            /* the new shape if 0 */
         unsigned short    nch;
         unsigned short    nline;
 
@@ -95,34 +96,31 @@ class DLLEXPORT HWPPara
 /**
  * If the value is 0, all character of paragraph have same style given cshape
  */
-        unsigned char     contain_cshape;         /* 0이면 모든 글자가 대표 글자 모양 */
+        unsigned char     contain_cshape;         /* if it's 0, all the characters are representing with representative shape */
         unsigned char     etcflag;
 /**
  * Checks the special characters in the paragraph
  */
         unsigned long     ctrlflag;
         unsigned char     pstyno;
-        CharShape     cshape;                     /* 글자가 모두 같은 모양일때  */
-        ParaShape     pshape;                     /* reuse flag가 0이면     */
-        int           pno;                        /* run-time only      */
+        std::shared_ptr<CharShape> cshape;                     /* When characters are all the same shape */
+        ParaShape     pshape;                     /* if reuse flag is 0, */
 
         LineInfo      *linfo;
-        CharShape     *cshapep;
+        std::vector<std::shared_ptr<CharShape>>   cshapep;
 /**
  * Box object list
  */
-        HBox          **hhstr;
+        std::vector<std::unique_ptr<HBox>> hhstr;
 
         HWPPara(void);
         ~HWPPara(void);
 
         bool  Read(HWPFile &hwpf, unsigned char flag = 0);
-        int   Write(CTextOut &txtf);
-        int   Write(CHTMLOut &html);
 
         void  SetNext(HWPPara *n) { _next = n; };
 
-/* layout을 위한 함수 */
+/* Functions for layout */
 /**
  * Returns the character style of paragraph.
  */
@@ -133,42 +131,14 @@ class DLLEXPORT HWPPara
         ParaShape& GetParaShape(void) { return pshape;}
 
 /**
- * Returns previous paragraph.
- */
-        HWPPara *Prev(void);
-/**
  * Returns next paragraph.
  */
         HWPPara *Next(void) { return _next;}
 
-        int HomePos(int line) const;
-        int EndPos(int line) const;
-        int LineLen(int line) const;
-
     private:
-        HBox *readHBox(HWPFile &);
+        std::unique_ptr<HBox> readHBox(HWPFile &);
 };
 
-// inline functions
-
-inline int HWPPara::HomePos(int line) const
-{
-    if( nline < line + 1 ) return nch;
-    return linfo[line].pos;
-}
-
-
-inline int HWPPara::EndPos(int line) const
-{
-    if( nline <= line + 1 ) return nch;
-    else return HomePos(line + 1);
-}
-
-
-inline int HWPPara::LineLen(int line) const
-{
-    return EndPos(line) - HomePos(line);
-}
 #endif // INCLUDED_HWPFILTER_SOURCE_HPARA_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

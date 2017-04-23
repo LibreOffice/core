@@ -28,7 +28,7 @@ HWPFont::HWPFont()
     for (int ii = 0; ii < NLanguage; ii++)
     {
         nFonts[ii] = 0;
-        fontnames[ii] = NULL;
+        fontnames[ii] = nullptr;
     }
 }
 
@@ -43,34 +43,33 @@ HWPFont::~HWPFont()
 }
 
 
-int HWPFont::AddFont(int lang, const char *font)
+void HWPFont::AddFont(int lang, const char *font)
 {
     int nfonts;
 
     if (!(lang >= 0 && lang < NLanguage))
-        return 0;
+        return;
     nfonts = nFonts[lang];
     if (MAXFONTS <= nfonts)
-        return 0;
+        return;
     strncpy(fontnames[lang] + FONTNAMELEN * nfonts, font, FONTNAMELEN - 1);
     nFonts[lang]++;
-    return nfonts;
 }
 
 
 const char *HWPFont::GetFontName(int lang, int id)
 {
     if (!(lang >= 0 && lang < NLanguage))
-        return 0;
+        return nullptr;
     if (id < 0 || nFonts[lang] <= id)
-        return 0;
+        return nullptr;
     return fontnames[lang] + id * FONTNAMELEN;
 }
 
 
 static char buffer[FONTNAMELEN];
 
-bool HWPFont::Read(HWPFile & hwpf)
+void HWPFont::Read(HWPFile & hwpf)
 {
     int lang = 0;
     short nfonts = 0;
@@ -81,7 +80,8 @@ bool HWPFont::Read(HWPFile & hwpf)
         hwpf.Read2b(&nfonts, 1);
         if (!(nfonts > 0 && nfonts < MAXFONTS))
         {
-            return !hwpf.SetState(HWP_InvalidFileFormat);
+            (void)hwpf.SetState(HWP_InvalidFileFormat);
+            return;
         }
         fontnames[lang] = new char[nfonts * FONTNAMELEN];
 
@@ -92,8 +92,6 @@ bool HWPFont::Read(HWPFile & hwpf)
             AddFont(lang, buffer);
         }
     }
-
-    return !hwpf.State();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

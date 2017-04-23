@@ -45,7 +45,7 @@ class DLLEXPORT HWPStyle
         void SetCharShape( int n, CharShape *cshapep );
         void SetParaShape( int n, ParaShape *pshapep );
 
-        bool Read( HWPFile &hwpf );
+        void Read( HWPFile &hwpf );
 };
 #endif
 /* _HWPSTYLE+H_ */

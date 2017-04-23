@@ -40,7 +40,7 @@ std::list<Node*> nodelist;
 
 void yyerror(const char *);
 
-Node *top=0L;
+Node *top=nullptr;
 
 int Node::count = 0;
 
@@ -63,7 +63,6 @@ typedef union {
 #define const
 #endif
 #endif
-
 
 
 #define YYFINAL     102
@@ -362,33 +361,6 @@ static const short yycheck[] = {    11,
   It was written by Richard Stallman by simplifying the hairy parser
   used when %semantic_parser is specified.  */
 
-#ifndef YYSTACK_USE_ALLOCA
-#ifdef alloca
-#define YYSTACK_USE_ALLOCA
-#else /* alloca not defined */
-#ifdef __GNUC__
-#define YYSTACK_USE_ALLOCA
-#define alloca __builtin_alloca
-#else /* not GNU C.  */
-#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || (defined (__sun) && defined (__i386))
-#define YYSTACK_USE_ALLOCA
-#include <sal/alloca.h>
-#else /* not sparc */
-#if defined(_AIX)
- #pragma alloca
-#define YYSTACK_USE_ALLOCA
-#endif /* not _AIX */
-#endif /* not sparc */
-#endif /* not GNU C */
-#endif /* alloca not defined */
-#endif /* YYSTACK_USE_ALLOCA not defined */
-
-#ifdef YYSTACK_USE_ALLOCA
-#define YYSTACK_ALLOC alloca
-#else
-#define YYSTACK_ALLOC malloc
-#endif
-
 /* Note: there must be only one dollar sign in this file.
    It is replaced by the list of actions, each action
    as one case of the switch.  */
@@ -525,7 +497,7 @@ yyparse(YYPARSE_PARAM_ARG)
 #endif
 
   YYSTYPE yyval;        /*  the variable used to return     */
-  yyval.dval = 0;
+  yyval.dval = nullptr;
                 /*  semantic values from the action */
                 /*  routines                */
 
@@ -612,17 +584,15 @@ yynewstate:
       yystacksize *= 2;
       if (yystacksize > YYMAXDEPTH)
     yystacksize = YYMAXDEPTH;
-#ifndef YYSTACK_USE_ALLOCA
       yyfree_stacks = 1;
-#endif
-      yyss = static_cast<short *>(YYSTACK_ALLOC (yystacksize * sizeof (*yyssp)));
+      yyss = static_cast<short *>(malloc (yystacksize * sizeof (*yyssp)));
       memcpy (yyss, yyss1,
            size * (unsigned int) sizeof (*yyssp));
-      yyvs = static_cast<YYSTYPE *>(YYSTACK_ALLOC (yystacksize * sizeof (*yyvsp)));
+      yyvs = static_cast<YYSTYPE *>(malloc (yystacksize * sizeof (*yyvsp)));
       memcpy (yyvs, yyvs1,
            size * (unsigned int) sizeof (*yyvsp));
 #ifdef YYLSP_NEEDED
-      yyls = (YYLTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yylsp));
+      yyls = (YYLTYPE *) malloc (yystacksize * sizeof (*yylsp));
       memcpy ((char *)yyls, (char *)yyls1,
            size * (unsigned int) sizeof (*yylsp));
 #endif
@@ -965,40 +935,40 @@ case 60:
 { yyval.ptr = new Node(ID_EXPRLIST); yyval.ptr->child = yyvsp[-1].ptr; yyvsp[-1].ptr->next = yyvsp[0].ptr;  debug("ExprList : ExprList Expr\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 61:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Block\n"); nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Block\n"); nodelist.push_back(yyval.ptr);
     break;}
 case 62:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Parenth\n");  nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Parenth\n");  nodelist.push_back(yyval.ptr);
     break;}
 case 63:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Fence\n");  nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Fence\n");  nodelist.push_back(yyval.ptr);
     break;}
 case 64:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : SubSupExpr\n"); nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : SubSupExpr\n"); nodelist.push_back(yyval.ptr);
     break;}
 case 65:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : FractionExpr\n"); nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : FractionExpr\n"); nodelist.push_back(yyval.ptr);
     break;}
 case 66:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : OverExpr\n"); nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : OverExpr\n"); nodelist.push_back(yyval.ptr);
     break;}
 case 67:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : DecorationExpr\n"); nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : DecorationExpr\n"); nodelist.push_back(yyval.ptr);
     break;}
 case 68:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : RootExpr\n"); nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : RootExpr\n"); nodelist.push_back(yyval.ptr);
     break;}
 case 69:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : AccentExpr\n"); nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : AccentExpr\n"); nodelist.push_back(yyval.ptr);
     break;}
 case 70:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : PrimaryExpr\n"); nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : PrimaryExpr\n"); nodelist.push_back(yyval.ptr);
     break;}
 case 71:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : BeginExpr\n");  nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : BeginExpr\n");  nodelist.push_back(yyval.ptr);
     break;}
 case 72:
-{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : EndExpr\n");  nodelist.push_back(yyval.ptr);;
+{ yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : EndExpr\n");  nodelist.push_back(yyval.ptr);
     break;}
 }
    /* the action file gets copied in place of this dollarsign */
@@ -1226,26 +1196,25 @@ yyerrhandle:
 Node *mainParse(const char *_code)
 {
     initFlex( _code );
-    top = 0L;
+    top = nullptr;
     yyparse();
     if( top )
         return top;
     else
-        return 0L;
+        return nullptr;
 }
 
 void yyerror(const char * /*err*/)
 {
 //  printf("REALKING ERR[%s]\n",err);
     // if error, delete all nodes.
-    Node *pNode = 0L;
     int ncount = nodelist.size();
     for( int i = 0 ; i < ncount ; i++){
-	pNode = nodelist.front();
-	nodelist.pop_front();
+        Node *pNode = nodelist.front();
+        nodelist.pop_front();
         delete pNode;
     }
-    top = 0L;
+    top = nullptr;
 }
 
 #ifndef PARSE_DEBUG

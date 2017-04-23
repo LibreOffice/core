@@ -31,7 +31,7 @@ class CTextOut;
 class CHTMLOut;
 
 /**
- * Information of page (phisical)
+ * Information of page (physical)
  */
 struct PaperInfo
 {
@@ -205,9 +205,7 @@ class DLLEXPORT HWPInfo
         HWPInfo(void);
         ~HWPInfo(void);
 
-        bool Read(HWPFile &hwpf);
-        bool Write(CTextOut &txtf);
-        bool Write(CHTMLOut &html);
+        void Read(HWPFile &hwpf);
 
 };
 
@@ -233,7 +231,7 @@ struct CharShape
     unsigned char attr;
     unsigned char reserved[4];
 
-    bool Read(HWPFile &);
+    void Read(HWPFile &);
 };
 
 /* ?? ?????? ???? ?????? */
@@ -286,7 +284,7 @@ struct ParaShape
     CharShape *cshape;
      unsigned char pagebreak;
 
-    bool  Read(HWPFile &);
+    void  Read(HWPFile &);
 //  virtual ~ParaShape();
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HINFO_H
