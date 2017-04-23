@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c0c6e315",
+        "filename": "sc/sdi/app.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-04-23T01:30:16Z",
+      "side": 0,
+      "message": "I think RLM and LRM should be treated the same as well. Though I don’t think the original issue is less important now since CTL is enabled by default.",
+      "revId": "d20da7bd658e1ebaff74658334cbd5d633df7f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
