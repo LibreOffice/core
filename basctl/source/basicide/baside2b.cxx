@@ -1118,7 +1118,7 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
             }
         }
     }
-    return OUString("");
+    return OUString();
 }
 
 void EditorWindow::SetScrollBarRanges()

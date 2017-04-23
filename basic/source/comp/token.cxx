@@ -579,7 +579,7 @@ OUString SbiTokenizer::GetKeywordCase( const OUString& sKeyword )
             return sStr;
         }
     }
-    return OUString("");
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
