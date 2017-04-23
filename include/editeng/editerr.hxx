@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_EDITERR_HXX
 #define INCLUDED_EDITENG_EDITERR_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS    (2UL | ERRCODE_AREA_SVX)
 

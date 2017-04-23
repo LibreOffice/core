@@ -22,7 +22,7 @@
 
 #include <osl/conditn.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
