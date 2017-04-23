@@ -134,6 +134,7 @@ enum PropertyIds
         ,PROP_GRAPHIC
         ,PROP_GRAPHIC_COLOR_MODE
         ,PROP_GRID_BASE_HEIGHT
+        ,PROP_GRID_BASE_WIDTH
         ,PROP_GRID_DISPLAY
         ,PROP_GRID_LINES
         ,PROP_GRID_MODE

@@ -1258,8 +1258,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
-                                    //todo: is '0' the right index here?
-        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD( OUString::number( 0, 16 ) );
+        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( "Standard" );
         if ( pEntry.get() )
         {
             boost::optional< PropertyMap::Property > pPropHeight = pEntry->pProperties->getProperty( PROP_CHAR_HEIGHT_ASIAN );
@@ -1284,11 +1283,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             nFraction = (nFraction * 20) / 0xFFF;
             nCharWidth += ConversionHelper::convertTwipToMM100( nFraction );
         }
-        Insert( PROP_GRID_BASE_HEIGHT, uno::makeAny( nCharWidth ) );
-        sal_Int32 nRubyHeight = nGridLinePitch - nCharWidth;
-        if ( nRubyHeight < 0 )
-            nRubyHeight = 0;
-        Insert( PROP_GRID_RUBY_HEIGHT, uno::makeAny( nRubyHeight ) );
 
         if ( m_nPageNumberType >= 0 )
             Insert( PROP_NUMBERING_TYPE, uno::makeAny( m_nPageNumberType ) );
@@ -1308,6 +1302,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             OSL_ENSURE( false, "Exception in SectionPropertyMap::CloseSectionGroup" );
             (void)rEx;
         }
+
+        Insert( PROP_GRID_BASE_HEIGHT, uno::makeAny( nGridLinePitch ) );
+        Insert( PROP_GRID_BASE_WIDTH, uno::makeAny( nCharWidth ) );
+        Insert( PROP_GRID_RUBY_HEIGHT, uno::makeAny( sal_Int32( 0 ) ) );
 
         if ( rDM_Impl.IsNewDoc() )
             ApplyProperties_( xFollowPageStyle );

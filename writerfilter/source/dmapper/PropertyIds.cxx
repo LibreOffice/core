@@ -196,6 +196,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_GRID_PRINT            :    sName = "GridPrint"; break;
         case PROP_GRID_LINES            :    sName = "GridLines"; break;
         case PROP_GRID_BASE_HEIGHT      :    sName = "GridBaseHeight"; break;
+        case PROP_GRID_BASE_WIDTH       :    sName = "GridBaseWidth"; break;
         case PROP_GRID_RUBY_HEIGHT      :    sName = "GridRubyHeight"; break;
         case PROP_GRID_STANDARD_MODE     :    sName = "StandardPageMode"; break;
         case PROP_IS_ON                  :    sName = "IsOn"; break;
