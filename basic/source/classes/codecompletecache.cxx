@@ -165,7 +165,7 @@ OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName ) const
         if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
             return aIt->second;
     }
-    return OUString(""); //not found
+    return OUString(); //not found
 }
 
 OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName, const OUString& sActProcName ) const
@@ -187,7 +187,7 @@ OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName,
         if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
             return aIt->first;
     }
-    return OUString(""); //not found
+    return OUString(); //not found
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
