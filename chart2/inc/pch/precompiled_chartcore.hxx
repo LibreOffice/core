@@ -184,7 +184,7 @@
 #include <svx/xpoly.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SD_INC_SDXMLWRP_HXX
 #define INCLUDED_SD_INC_SDXMLWRP_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include "sdfilter.hxx"
 
 // SdXMLFilter
