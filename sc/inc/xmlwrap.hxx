@@ -26,7 +26,7 @@
 #include "importfilterdata.hxx"
 #include <sal/types.h>
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }

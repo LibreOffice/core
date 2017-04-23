@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/errcode.hxx>
-#include "sb.hrc"
+#define __RSC
+
+#include <vcl/errcode.hxx>
 #include <basic/sberrors.hxx>
+
+#include "sb.hrc"
 
 StringArray RID_BASIC_START
 {

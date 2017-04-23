@@ -139,7 +139,7 @@
 #include <token.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
