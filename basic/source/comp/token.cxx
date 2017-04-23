@@ -18,6 +18,8 @@
  */
 
 
+#include <array>
+
 #include "basiccharclass.hxx"
 #include "token.hxx"
 
@@ -182,30 +184,35 @@ static const TokenTable aTokTable_Basic [] = {
     { NIL,      "" }
 };
 
+// #i109076
+class TokenLabelInfo
+{
+    std::array<bool,VBASUPPORT+1> m_pTokenCanBeLabelTab;
+
+public:
+    TokenLabelInfo();
+
+    bool canTokenBeLabel( SbiToken eTok )
+        { return m_pTokenCanBeLabelTab[eTok]; }
+};
+
+class StaticTokenLabelInfo: public ::rtl::Static< TokenLabelInfo, StaticTokenLabelInfo >{};
 
 // #i109076
 TokenLabelInfo::TokenLabelInfo()
 {
-    m_pTokenCanBeLabelTab.reset( new bool[VBASUPPORT+1] );
-    for( int i = 0 ; i <= VBASUPPORT ; ++i )
-    {
-        m_pTokenCanBeLabelTab[i] = false;
-    }
+    m_pTokenCanBeLabelTab.fill(false);
+
     // Token accepted as label by VBA
-    SbiToken eLabelToken[] = { ACCESS, ALIAS, APPEND, BASE, BINARY, CLASSMODULE,
+    static const SbiToken eLabelToken[] = { ACCESS, ALIAS, APPEND, BASE, BINARY, CLASSMODULE,
                                COMPARE, COMPATIBLE, DEFERR, ERROR_, BASIC_EXPLICIT, LIB, LINE, LPRINT, NAME,
                                TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT, NIL };
     SbiToken eTok;
-    for( SbiToken* pTok = eLabelToken ; (eTok = *pTok) != NIL ; ++pTok )
+    for( const SbiToken* pTok = eLabelToken ; (eTok = *pTok) != NIL ; ++pTok )
     {
         m_pTokenCanBeLabelTab[eTok] = true;
     }
 }
-
-TokenLabelInfo::~TokenLabelInfo()
-{
-}
-
 
 // the constructor detects the length of the token table
 
@@ -542,7 +549,7 @@ special:
 
 bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
 {
-    if( eCurTok == SYMBOL || m_aTokenLabelInfo.canTokenBeLabel( eCurTok ) )
+    if( eCurTok == SYMBOL || StaticTokenLabelInfo::get().canTokenBeLabel( eCurTok ) )
     {
         return !bNeedsColon || DoesColonFollow();
     }
