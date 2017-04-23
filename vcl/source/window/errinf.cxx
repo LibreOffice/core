@@ -259,7 +259,7 @@ bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)
 */
 DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
 {
-    if(!nErrCodeId || nErrCodeId == ERRCODE_ABORT)
+    if(nErrCodeId != ERRCODE_NONE || nErrCodeId == ERRCODE_ABORT)
         return DialogMask::NONE;
 
     ErrorRegistry &rData = TheErrorRegistry::get();
@@ -327,11 +327,11 @@ DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
     }
 
     OSL_FAIL("Error not handled");
-    // Error 1 is classified as a General Error in sfx
-    if (pInfo->GetErrorCode()!=1)
-        HandleError(1);
+    // Error 1 (ERRCODE_ABORT) is classified as a General Error in sfx
+    if (pInfo->GetErrorCode() != ERRCODE_ABORT)
+        HandleError(ERRCODE_ABORT);
     else
-        OSL_FAIL("Error 1 not handled");
+        OSL_FAIL("ERRCODE_ABORT not handled");
 
     delete pInfo;
     return DialogMask::NONE;
