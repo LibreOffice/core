@@ -65,7 +65,7 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
         lang::XMultiServiceFactory * pSFactory)
 {
     if (bAssertOnDialog)
-        ErrorHandler::RegisterDisplay( aBasicErrorFunc );
+        ErrorRegistry::RegisterDisplay( aBasicErrorFunc );
 
     // Make GraphicConverter work, normally done in desktop::Desktop::Main()
     Application::SetFilterHdl(
