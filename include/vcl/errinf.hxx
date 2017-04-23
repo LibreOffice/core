@@ -29,6 +29,7 @@
 
 #include <vector>
 #include <memory>
+
 #include <limits.h>
 
 namespace vcl { class Window; }
@@ -46,7 +47,7 @@ namespace {
 }
 
 typedef DialogMask WindowDisplayErrorFunc(
-    vcl::Window *, DialogMask eMask, const OUString &rErr, const OUString &rAction);
+    vcl::Window*, DialogMask eMask, const OUString &rErr, const OUString &rAction);
 
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
@@ -114,76 +115,76 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
     friend class ErrorStringFactory;
 
 public:
-                        ErrorHandler();
-    virtual             ~ErrorHandler();
+                            ErrorHandler();
+    virtual                 ~ErrorHandler();
 
-    static DialogMask   HandleError(sal_uInt32 lId, DialogMask nMask = DialogMask::MAX);
-    static bool         GetErrorString(sal_uInt32 lId, OUString& rStr);
+    static DialogMask       HandleError(sal_uInt32 nId, DialogMask nMask = DialogMask::MAX);
+    static bool             GetErrorString(sal_uInt32 nId, OUString& rStr);
 
 protected:
-    virtual bool        CreateString(const ErrorInfo*, OUString &) const = 0;
+    virtual bool            CreateString(const ErrorInfo*, OUString &) const = 0;
 
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorInfo
 {
-private:
-    sal_uInt32             lUserId;
-
 public:
-
-                            ErrorInfo(sal_uInt32 lArgUserId) :
-                                lUserId( lArgUserId ){}
+                            ErrorInfo(sal_uInt32 nArgUserId) :
+                                nUserId(nArgUserId) {}
     virtual                 ~ErrorInfo();
 
-    sal_uInt32             GetErrorCode() const { return lUserId; }
+    sal_uInt32              GetErrorCode() const { return nUserId; }
 
     static ErrorInfo*       GetErrorInfo(sal_uInt32);
+
+private:
+    sal_uInt32              nUserId;
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
 {
     friend class DynamicErrorInfo_Impl;
 
-private:
-    std::unique_ptr<DynamicErrorInfo_Impl>   pImpl;
-
 public:
-
-                            DynamicErrorInfo(sal_uInt32 lUserId, DialogMask nMask);
+                            DynamicErrorInfo(sal_uInt32 nUserId, DialogMask nMask);
     virtual                 ~DynamicErrorInfo() override;
 
     operator                sal_uInt32() const;
-    DialogMask       GetDialogMask() const;
+    DialogMask              GetDialogMask() const;
+
+private:
+    std::unique_ptr<DynamicErrorInfo_Impl> pImpl;
+
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
 {
+public:
+                            StringErrorInfo(sal_uInt32 nUserId,
+                                            const OUString& aStringP,
+                                            DialogMask nMask = DialogMask::NONE);
+
+    const OUString&         GetErrorString() const { return aString; }
+
 private:
     OUString                aString;
 
-public:
-
-                            StringErrorInfo(sal_uInt32 lUserId,
-                                            const OUString& aStringP,
-                                            DialogMask nMask = DialogMask::NONE);
-    const OUString&         GetErrorString() const { return aString; }
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
 {
-private:
-    OUString aArg1;
-    OUString aArg2;
-
 public:
-
     TwoStringErrorInfo(sal_uInt32 nUserID, const OUString & rTheArg1,
                        const OUString & rTheArg2, DialogMask nMask):
         DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
 
     const OUString& GetArg1() const { return aArg1; }
     const OUString& GetArg2() const { return aArg2; }
+
+private:
+    OUString aArg1;
+    OUString aArg2;
+
 };
 
 struct ErrorContextImpl;
@@ -191,9 +192,6 @@ struct ErrorContextImpl;
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorContext
 {
     friend class ErrorHandler;
-
-private:
-    std::unique_ptr<ErrorContextImpl> pImpl;
 
 public:
                             ErrorContext(vcl::Window *pWin);
@@ -203,6 +201,10 @@ public:
     vcl::Window*            GetParent();
 
     static ErrorContext*    GetContext();
+
+private:
+    std::unique_ptr<ErrorContextImpl> pImpl;
+
 };
 
 #endif
