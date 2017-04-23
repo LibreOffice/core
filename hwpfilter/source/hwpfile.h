@@ -143,11 +143,11 @@ class DLLEXPORT HWPFile
 /**
  * Reads nmemb short type array from HIODev
  */
-        int Read2b( void *ptr, size_t nmemb );
+        void Read2b( void *ptr, size_t nmemb );
 /**
  * Reads nmemb long type array from HIODev
  */
-        int Read4b( void *ptr, size_t nmemb );
+        void Read4b( void *ptr, size_t nmemb );
 /**
  * Reads some bytes from HIODev not regarding endian's way
  * @param size Amount for reading
@@ -164,7 +164,7 @@ class DLLEXPORT HWPFile
 /**
  * Sets if the stream is compressed
  */
-        bool SetCompressed( bool );
+        void SetCompressed( bool );
 /**
  * Sets current HIODev
  */
@@ -177,19 +177,19 @@ class DLLEXPORT HWPFile
 /**
  * Reads document information of hwp file from HIODev
  */
-        bool InfoRead(void);
+        void InfoRead(void);
 /**
  * Reads font list of hwp file from HIODev
  */
-        bool FontRead(void);
+        void FontRead(void);
 /**
  * Reads style list of hwp file from HIODev
  */
-        bool StyleRead(void);
+        void StyleRead(void);
 /**
  * Reads paragraph list of hwp file from HIODev
  */
-        bool ParaListRead();
+        void ParaListRead();
 /* 그림 등의 추가 정보를 읽는다. */
 /**
  * Reads additional information like embedded image of hwp file from HIODev
@@ -214,7 +214,7 @@ class DLLEXPORT HWPFile
         void AddColumnInfo();
         void SetColumnDef(ColumnDef *coldef);
         void AddParaShape(ParaShape *);
-        void AddCharShape(CharShape *);
+        void AddCharShape(std::shared_ptr<CharShape>&);
         void AddFBoxStyle(FBoxStyle *);
         void AddDateFormat(DateCode *);
         void AddHeaderFooter(HeaderFooter *);
@@ -285,7 +285,7 @@ class DLLEXPORT HWPFile
         std::list<HyperText*> hyperlist;
         int currenthyper;
         std::vector<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
-        std::vector<CharShape*> cslist;
+        std::vector<std::shared_ptr<CharShape>> cslist;
         std::vector<FBoxStyle*> fbslist;
         std::vector<DateCode*> datecodes;
         std::vector<HeaderFooter*> headerfooters;

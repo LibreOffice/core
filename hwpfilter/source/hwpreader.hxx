@@ -106,7 +106,7 @@ private:
     void makeTextDecls();
 
     /* -------- Paragraph Parsing --------- */
-    void parsePara(HWPPara *para, bool bParaStart = false);
+    void parsePara(HWPPara *para);
     void make_text_p0(HWPPara *para, bool bParaStart = false);
     void make_text_p1(HWPPara *para, bool bParaStart = false);
     void make_text_p3(HWPPara *para, bool bParaStart = false);
@@ -152,7 +152,7 @@ private:
 class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
 {
 public:
-    HwpImportFilter(const Reference< XMultiServiceFactory >& rFact);
+    explicit HwpImportFilter(const Reference< XMultiServiceFactory >& rFact);
     virtual ~HwpImportFilter();
 
 public:

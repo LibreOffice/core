@@ -69,7 +69,7 @@ struct LineInfo
     hunit         height_sp;
     unsigned short    softbreak;                  // column, page, section
 
-    bool  Read(HWPFile &hwpf, HWPPara *para);
+    void  Read(HWPFile &hwpf, HWPPara *para);
 };
 /**
  * It represents the paragraph.
@@ -103,12 +103,11 @@ class DLLEXPORT HWPPara
  */
         unsigned long     ctrlflag;
         unsigned char     pstyno;
-        CharShape     cshape;                     /* When characters are all the same shape */
+        std::shared_ptr<CharShape> cshape;                     /* When characters are all the same shape */
         ParaShape     pshape;                     /* if reuse flag is 0, */
-        int           pno;                        /* then run-time only */
 
         LineInfo      *linfo;
-        CharShape     *cshapep;
+        std::vector<std::shared_ptr<CharShape>>   cshapep;
 /**
  * Box object list
  */

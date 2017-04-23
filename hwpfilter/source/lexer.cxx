@@ -48,7 +48,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <io.h>
@@ -960,7 +960,7 @@ char *yytext;
 #include <string.h>
 #include "nodes.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #define strdup _strdup
 #define fileno _fileno
 #define isatty _isatty
@@ -975,7 +975,7 @@ int yywrap();
 }
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 extern YYSTYPE yylval;
 #endif
 #ifdef TOKEN_DEBUG
@@ -1023,7 +1023,7 @@ static int yy_top_state YY_PROTO(( void ));
 #ifdef YY_MALLOC_DECL
 YY_MALLOC_DECL
 #else
-#if __STDC__
+#if defined __STDC__ && __STDC__
 #ifndef __cplusplus
 #include <stdlib.h>
 #endif
@@ -1288,6 +1288,7 @@ case 23:
 YY_RULE_SETUP
 { token_debug(" ==>Ignore[\\rm]\n"); }
     //YY_BREAK
+SAL_FALLTHROUGH;
 case 24:
 YY_RULE_SETUP
 { yylval.str = yytext+1; token_debug("  ==>General_Iden[%s]\n",yytext+1); return GENERAL_IDEN; }
@@ -1332,10 +1333,12 @@ case 34:
 YY_RULE_SETUP
 { yylval.str = yytext+1; token_debug("  ==>Space_Symbol[%s]\n",yytext+1); /*return SPACE_SYMBOL;*/ }
     //YY_BREAK
+SAL_FALLTHROUGH;
 case 35:
 YY_RULE_SETUP
 { yylval.str = strdup("quad"); token_debug("    ==>Space_Symbol[quad]\n"); /* return SPACE_SYMBOL;*/ }
     //YY_BREAK
+SAL_FALLTHROUGH;
 case 36:
 YY_RULE_SETUP
 { yylval.dval = yytext;  token_debug("  ==>Digit[%s]\n",yytext); return DIGIT; }

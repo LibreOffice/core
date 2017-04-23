@@ -157,10 +157,10 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
         nTotal += nRead;
     }
 
-    if( nTotal == 0 ) return sal_False;
+    if( nTotal == 0 ) return false;
 
     if (hwpfile.ReadHwpFile(stream.release()))
-          return sal_False;
+          return false;
 
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->startDocument();
@@ -198,7 +198,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
 
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->endDocument();
-    return sal_True;
+    return true;
 }
 
 
@@ -1718,7 +1718,7 @@ void HwpReader::makePageStyle()
              if( hwpinfo.back_info.type == 1 ){
 #ifdef _WIN32
                  padd("xlink:href", sXML_CDATA,
-                      hconv(kstr2hstr((uchar*) urltowin(hwpinfo.back_info.filename).c_str()).c_str()));
+                      reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr((uchar*) urltowin(hwpinfo.back_info.filename).c_str()).c_str())));
 #else
                  padd("xlink:href", sXML_CDATA,
                     reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(hwpinfo.back_info.filename).c_str())).c_str())));
@@ -2736,7 +2736,7 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
         d->bInHeader = false;
     }
     padd("text:style-name", sXML_CDATA,
-        ascii(getTStyleName(para->cshape.index, buf)));
+        ascii(getTStyleName(para->cshape->index, buf)));
     rstartEl("text:span", mxList.get());
     mxList->clear();
 
@@ -2780,8 +2780,8 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
     hchar_string str;
     int n;
     int res;
-     hchar dest[3];
-    int curr = para->cshape.index;
+    hchar dest[3];
+    int curr = para->cshape->index;
     unsigned char firstspace = 0;
 
     if( !bParaStart )
@@ -3829,9 +3829,9 @@ void HwpReader::makePicture(Picture * hbox)
                 padd("xlink:type", sXML_CDATA, "simple");
 #ifdef _WIN32
                 if( hbox->follow[4] != 0 )
-                    padd("xlink:href", sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 4).c_str())));
+                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow + 4).c_str())));
                 else
-                    padd("xlink:href", sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 5).c_str())));
+                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow + 5).c_str())));
 #else
                 if( hbox->follow[4] != 0 )
                     padd("xlink:href", sXML_CDATA,
@@ -3890,7 +3890,7 @@ void HwpReader::makePicture(Picture * hbox)
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
                 sprintf(buf, "file:///%s", hbox->picinfo.picun.path );
-                padd("xlink:href", sXML_CDATA, (hconv(kstr2hstr((uchar *) buf).c_str())));
+                padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr((uchar *) buf).c_str())));
 #else
                 padd("xlink:href", sXML_CDATA,
                     reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str())));
@@ -3919,7 +3919,7 @@ void HwpReader::makePicture(Picture * hbox)
                      }
                      else{
                          if( hwpfile.oledata ){
-#ifdef WIN32
+#ifdef _WIN32
                              LPSTORAGE srcsto;
                              LPUNKNOWN pObj;
                              wchar_t pathname[200];
@@ -4780,9 +4780,9 @@ void HwpReader::makeOutline(Outline * hbox)
 }
 
 
-void HwpReader::parsePara(HWPPara * para, bool bParaStart)
+void HwpReader::parsePara(HWPPara * para)
 {
-
+    bool bParaStart = false;
     while (para)
     {
         if( para->nch == 1)

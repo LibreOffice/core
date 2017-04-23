@@ -331,7 +331,7 @@ struct TxtBox: public FBox
 
     short     dummy1;                             // to not change structure size */
     short     cap_len;
-    short     next;
+    short     next_box;
     short     dummy2;                             // to not change structure size */
     unsigned char reserved1;
 /**
@@ -375,11 +375,6 @@ struct TxtBox: public FBox
  * @returns Count of cell.
  */
     int NCell()   { return nCell; }
-/**
- * This is one of table, text-box, equalizer and button
- * @returns Type of this object.
- */
-    int Type()    { return type;  }
 
     virtual bool Read(HWPFile &hwpf) override;
 };
@@ -649,7 +644,6 @@ struct Picture: public FBox
     Picture();
     virtual ~Picture();
 
-    int   Type    ();
     virtual bool Read    (HWPFile &hwpf) override;
 };
 

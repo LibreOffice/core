@@ -55,7 +55,7 @@ public:
         pList = p;
         rList = static_cast<XAttributeList *>(pList);
     }
-    int parse();
+    void parse();
 private:
      void trim();
      void makeMathML(Node *res);

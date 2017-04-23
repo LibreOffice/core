@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.hxx"
+#include <osl/diagnose.h>
 
 enum IDLIST {
      ID_MATHML,

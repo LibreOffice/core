@@ -82,7 +82,6 @@ class MzString
 {
     public:
         MzString();                               // Create an empty string
-// if len = 0, len becomes s.length)
         ~MzString();
 
         int       length() const;
@@ -94,13 +93,10 @@ class MzString
         bool      resize(int len);
 
 // Assignment
-        MzString  &operator = (MzString &s);
+        MzString  &operator = (const MzString &s);
         MzString  &operator = (const char *s);
 
 // Appending
-        MzString  &operator += (char);
-        MzString  &operator += (const char *);
-        MzString  &operator += (MzString const &);
 
         MzString  &operator << (const char *);
         MzString  &operator << (char);

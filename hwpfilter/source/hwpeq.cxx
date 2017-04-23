@@ -33,7 +33,7 @@ using namespace std;
 #include <sal/macros.h>
 
 /* @Man: change the hwp formula to LaTeX */
-#ifdef WIN32
+#ifdef _WIN32
 # define ENDL  "\r\n"
 #else /* !WIN32 */
 # define ENDL  "\n"
@@ -48,7 +48,7 @@ using namespace std;
 #define IS_WS(ch)   (strchr(WS, ch))
 #define IS_BINARY(ch)   (strchr("+-<=>", ch))
 
-#ifdef WIN32
+#ifdef _WIN32
 #define STRICMP stricmp
 #else
 #define STRICMP strcasecmp

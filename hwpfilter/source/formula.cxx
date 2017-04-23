@@ -178,9 +178,8 @@ void Formula::makeExpr(Node *res)
              break;
          case ID_BLOCK:
              makeBlock(tmp);
-             //fall-through
+             break;
          case ID_BEGIN:
-             //fall-through
          case ID_END:
              break;
     }
@@ -568,10 +567,10 @@ void Formula::makeBlock(Node *res)
 #endif
 }
 
-int Formula::parse()
+void Formula::parse()
 {
      Node *res = nullptr;
-     if( !eq ) return 0;
+     if( !eq ) return;
      if( isHwpEQ ){
           MzString a;
          // fprintf(stderr,"\n\n[BEFORE]\n[%s]\n",eq);
@@ -627,8 +626,6 @@ int Formula::parse()
          nodelist.pop_front();
          delete tmpNode;
      }
-
-     return 0;
 }
 
 void Formula::trim()

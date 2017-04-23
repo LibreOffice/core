@@ -29,29 +29,29 @@
 #include "hbox.h"
 #include "hutil.h"
 
-bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
+void LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
 {
     if (!hwpf.Read2b(pos))
-        return false;
+        return;
     unsigned short tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     space_width = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     height = tmp16;
 // internal information
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     pgy = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     sx = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     psx = tmp16;
     if (!hwpf.Read2b(tmp16))
-        return false;
+        return;
     pex = tmp16;
     height_sp = 0;
 
@@ -62,8 +62,6 @@ bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
         pPara->pshape.reserved[0] = sal::static_int_cast<unsigned char>(pex & 0x01);
         pPara->pshape.reserved[1] = sal::static_int_cast<unsigned char>(pex & 0x02);
     }
-
-    return (!hwpf.State());
 }
 
 HWPPara::HWPPara()
@@ -77,18 +75,16 @@ HWPPara::HWPPara()
     , etcflag(0)
     , ctrlflag(0)
     , pstyno(0)
-    , pno(0)
+    , cshape(new CharShape)
     , linfo(nullptr)
-    , cshapep(nullptr)
 {
-    memset(&cshape, 0, sizeof(cshape));
+    memset(cshape.get(), 0, sizeof(CharShape));
     memset(&pshape, 0, sizeof(pshape));
 }
 
 HWPPara::~HWPPara()
 {
     delete[] linfo;
-    delete[] cshapep;
 }
 
 bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
@@ -105,18 +101,17 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read4b(&ctrlflag, 1);
     hwpf.Read1b(&pstyno, 1);
 
-
 /* Paragraph representative character */
-    cshape.Read(hwpf);
+    cshape->Read(hwpf);
     if (nch > 0)
-        hwpf.AddCharShape(&cshape);
+        hwpf.AddCharShape(cshape);
 
 /* Paragraph paragraphs shape  */
     if (nch && !reuse_shape)
     {
         pshape.Read(hwpf);
-        pshape.cshape = &cshape;
-          pshape.pagebreak = etcflag;
+        pshape.cshape = cshape.get();
+        pshape.pagebreak = etcflag;
     }
 
     linfo = ::comphelper::newArray_null<LineInfo>(nline);
@@ -147,23 +142,19 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 
     if (contain_cshape)
     {
-        cshapep = ::comphelper::newArray_null<CharShape>(nch);
-        if (!cshapep)
-        {
-            perror("Memory Allocation: cshape\n");
-            return false;
-        }
-        memset(cshapep, 0, nch * sizeof(CharShape));
+        cshapep.resize(nch);
 
         for (ii = 0; ii < nch; ii++)
         {
+            cshapep[ii].reset(new CharShape);
+            memset(cshapep[ii].get(), 0, sizeof(CharShape));
 
             hwpf.Read1b(&same_cshape, 1);
             if (!same_cshape)
             {
-                cshapep[ii].Read(hwpf);
+                cshapep[ii]->Read(hwpf);
                 if (nch > 1)
-                    hwpf.AddCharShape(&cshapep[ii]);
+                    hwpf.AddCharShape(cshapep[ii]);
             }
             else if (ii == 0)
                 cshapep[ii] = cshape;
@@ -188,14 +179,12 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     return nch && !hwpf.State();
 }
 
-
 CharShape *HWPPara::GetCharShape(int pos)
 {
     if (contain_cshape == 0)
-        return &cshape;
-    return cshapep + pos;
+        return cshape.get();
+    return cshapep[pos].get();
 }
-
 
 std::unique_ptr<HBox> HWPPara::readHBox(HWPFile & hwpf)
 {

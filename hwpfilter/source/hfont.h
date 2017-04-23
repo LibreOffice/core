@@ -54,7 +54,7 @@ class DLLEXPORT HWPFont
  * @param lang Language index
  * @param font Name of font family
  */
-        int       AddFont( int lang, const char *font );
+        void       AddFont( int lang, const char *font );
 /**
  * @param lang Language index
  * @param id Index of font
@@ -62,7 +62,7 @@ class DLLEXPORT HWPFont
  */
         const char    *GetFontName( int lang, int id );
 
-        bool Read( HWPFile &hwpf );
+        void Read( HWPFile &hwpf );
 };
 #endif                                            /* _HWPFONTS+H_ */
 

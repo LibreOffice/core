@@ -176,15 +176,17 @@ int HWPFile::Read1b(void *ptr, size_t nmemb)
     return hiodev ? hiodev->read1b(ptr, nmemb) : 0;
 }
 
-int HWPFile::Read2b(void *ptr, size_t nmemb)
+void HWPFile::Read2b(void *ptr, size_t nmemb)
 {
-    return hiodev ? hiodev->read2b(ptr, nmemb) : 0;
+    if (hiodev)
+        hiodev->read2b(ptr, nmemb);
 }
 
 
-int HWPFile::Read4b(void *ptr, size_t nmemb)
+void HWPFile::Read4b(void *ptr, size_t nmemb)
 {
-    return hiodev ? hiodev->read4b(ptr, nmemb) : 0;
+    if (hiodev)
+        hiodev->read4b(ptr, nmemb);
 }
 
 
@@ -200,9 +202,10 @@ size_t HWPFile::SkipBlock(size_t size)
 }
 
 
-bool HWPFile::SetCompressed(bool flag)
+void HWPFile::SetCompressed(bool flag)
 {
-    return hiodev && hiodev->setCompressed(flag);
+    if (hiodev)
+        hiodev->setCompressed(flag);
 }
 
 
@@ -218,34 +221,34 @@ HIODev *HWPFile::SetIODevice(HIODev * new_hiodev)
 
 // end of HIODev wrapper
 
-bool HWPFile::InfoRead()
+void HWPFile::InfoRead()
 {
-    return _hwpInfo.Read(*this);
+    _hwpInfo.Read(*this);
 }
 
 
-bool HWPFile::FontRead()
+void HWPFile::FontRead()
 {
-    return _hwpFont.Read(*this);
+    _hwpFont.Read(*this);
 }
 
 
-bool HWPFile::StyleRead()
+void HWPFile::StyleRead()
 {
-    return _hwpStyle.Read(*this);
+    _hwpStyle.Read(*this);
 }
 
 
-bool HWPFile::ParaListRead()
+void HWPFile::ParaListRead()
 {
-    return ReadParaList(plist);
+    ReadParaList(plist);
 }
 
 bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
 {
     std::unique_ptr<HWPPara> spNode( new HWPPara );
-     unsigned char tmp_etcflag;
-     unsigned char prev_etcflag = 0;
+    unsigned char tmp_etcflag;
+    unsigned char prev_etcflag = 0;
     while (spNode->Read(*this, flag))
     {
          if( !(spNode->etcflag & 0x04) ){
@@ -380,7 +383,7 @@ ColumnDef *HWPFile::GetColumnDef(int num)
 
     for(int i = 0; it != columnlist.end() ; ++it, i++){
         if( i == num )
-	  break;
+            break;
     }
 
     if( it != columnlist.end() )
@@ -407,8 +410,8 @@ HyperText *HWPFile::GetHyperText()
     std::list<HyperText*>::iterator it = hyperlist.begin();
 
     for( int i = 0; it != hyperlist.end(); ++it, i++ ){
-	if( i == currenthyper )
-	  break;
+        if( i == currenthyper )
+          break;
     }
 
     currenthyper++;
@@ -459,7 +462,7 @@ CharShape *HWPFile::getCharShape(int index)
 {
     if (index < 0 || static_cast<unsigned int>(index) >= cslist.size())
         return nullptr;
-    return cslist[index];
+    return cslist[index].get();
 }
 
 FBoxStyle *HWPFile::getFBoxStyle(int index)
@@ -502,22 +505,24 @@ void HWPFile::AddParaShape(ParaShape * pshape)
     int nscount = 0;
     for(int j = 0 ; j < MAXTABS-1 ; j++)
     {
-          if( j > 0 && pshape->tabs[j].position == 0 )
-                break;
-          if( pshape->tabs[0].position == 0 ){
-                if( pshape->tabs[j].type || pshape->tabs[j].dot_continue ||
-                     (pshape->tabs[j].position != 1000 *j) )
-                          nscount = j;
-          }
-          else{
-                if( pshape->tabs[j].type || pshape->tabs[j].dot_continue ||
-                     (pshape->tabs[j].position != 1000 * (j + 1)) )
-                          nscount = j;
+        if( j > 0 && pshape->tabs[j].position == 0 )
+          break;
+        if( pshape->tabs[0].position == 0 ){
+            if( pshape->tabs[j].type || pshape->tabs[j].dot_continue ||
+                 (pshape->tabs[j].position != 1000 *j) )
+                      nscount = j;
+        }
+        else {
+            if( pshape->tabs[j].type || pshape->tabs[j].dot_continue ||
+                (pshape->tabs[j].position != 1000 * (j + 1)) )
+                    nscount = j;
           }
     }
     if( nscount )
         pshape->tabs[MAXTABS-1].type = sal::static_int_cast<char>(nscount);
-     int value = compareParaShape(pshape);
+
+    int value = compareParaShape(pshape);
+
     if( value == 0 || nscount )
     {
         pshape->index = ++pcount;
@@ -527,11 +532,10 @@ void HWPFile::AddParaShape(ParaShape * pshape)
         pshape->index = value;
 }
 
-
-void HWPFile::AddCharShape(CharShape * cshape)
+void HWPFile::AddCharShape(std::shared_ptr<CharShape>& cshape)
 {
-    int value = compareCharShape(cshape);
-    if( value == 0 )
+    int value = compareCharShape(cshape.get());
+    if (value == 0)
     {
         cshape->index = ++ccount;
         cslist.push_back(cshape);
