@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/resary.hxx>
 #include <tools/wintypes.hxx>
 

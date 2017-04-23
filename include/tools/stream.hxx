@@ -24,7 +24,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/lineend.hxx>
 #include <tools/ref.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <rtl/string.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
