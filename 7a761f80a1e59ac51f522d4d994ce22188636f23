@@ -16,6 +16,24 @@
       "revId": "7a761f80a1e59ac51f522d4d994ce22188636f23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_60ad2f31",
+        "filename": "qadevOOo/runner/base/java_fat.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-04-23T09:04:23Z",
+      "side": 1,
+      "message": "Yep, since 1.7: https://docs.oracle.com/javase/8/docs/api/java/nio/charset/StandardCharsets.html\n\nApparently, Java 5 (1.5) is the minimum version supported by LO, at least according to the XML files in https://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dtree;f\u003djvmfwk/distributions/OpenOfficeorg",
+      "parentUuid": "fa48f94a_39953040",
+      "revId": "7a761f80a1e59ac51f522d4d994ce22188636f23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
