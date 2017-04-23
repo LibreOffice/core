@@ -1469,19 +1469,13 @@ int Desktop::Main()
 #if HAVE_FEATURE_UPDATE_MAR
         if (officecfg::Office::Update::Update::Enabled::get())
         {
-            OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
-            rtl::Bootstrap::expandMacros(aPatchDirURL);
-
             osl::DirectoryItem aPatchInfo;
-            osl::DirectoryItem::get(aPatchDirURL + "/update.info", aPatchInfo);
+            osl::DirectoryItem::get(Updater::getUpdateInfoURL(), aPatchInfo);
 
             if (aPatchInfo.is())
             {
-                OUString aInstallationDir( "$BRAND_BASE_DIR/");
-                rtl::Bootstrap::expandMacros(aInstallationDir);
-
                 osl::DirectoryItem aDirectoryItem;
-                osl::DirectoryItem::get(aInstallationDir + "/updated", aDirectoryItem);
+                osl::DirectoryItem::get(Updater::getUpdateDirURL(), aDirectoryItem);
                 bool bValidUpdateDirExists = aDirectoryItem.is();
                 if (bValidUpdateDirExists)
                 {
