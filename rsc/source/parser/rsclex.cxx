@@ -65,6 +65,7 @@ static bool bTargetDefined;
 
 StringContainer* pStringContainer = nullptr;
 
+static RscDefine RSC_GLOBAL_DEFINE(RscFileTab::Index(0), OString("__RSC"), 1);
 
 sal_uInt32 GetNumber()
 {
@@ -275,7 +276,11 @@ int MakeToken( YYSTYPE * pTokenVal )
             // Symbol
             RscDefine  * pDef;
 
-            pDef = pTC->aFileTab.FindDef( aBuf.getStr() );
+            // this #define symbol is used to indicate to various code that it is being processed with the RSC compiler
+            if (strcmp(aBuf.getStr(), "__RSC") == 0)
+                pDef = &RSC_GLOBAL_DEFINE;
+            else
+                pDef = pTC->aFileTab.FindDef( aBuf.getStr() );
             if( pDef )
             {
                 pTokenVal->defineele = pDef;

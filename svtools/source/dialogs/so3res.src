@@ -18,8 +18,8 @@
  */
 
 #include "svtools/sores.hxx"
-#define __RSC
 #include <svtools/soerr.hxx>
+
 #define S_MAX   0x7fff
 
 StringArray RID_SO_ERROR_HANDLER

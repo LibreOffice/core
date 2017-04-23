@@ -461,6 +461,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Executable_get_target,makedepend) \
 		$(INCLUDE) \
 		$(DEFS) \
+		-D__RSC \
 		$(2) \
 		-o .src \
 		-p $(dir $(call gb_SrsPartTarget_get_target,$(1))) \
