@@ -23,7 +23,7 @@
 
 
 #ifndef __RSC
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 enum class SbxClassType {         // SBX-class-IDs (order is important!)
