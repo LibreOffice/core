@@ -350,6 +350,10 @@ void PivotTableDataProvider::collectPivotTableData()
                         OUString sName;
                         for (sheet::MemberResult const & rMember : aSequence)
                         {
+                            if (rMember.Flags & sheet::MemberResultFlags::SUBTOTAL ||
+                                rMember.Flags & sheet::MemberResultFlags::GRANDTOTAL)
+                                    continue;
+
                             if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
                                 rMember.Flags & sheet::MemberResultFlags::CONTINUE)
                             {
@@ -390,6 +394,9 @@ void PivotTableDataProvider::collectPivotTableData()
                         for (sheet::MemberResult const & rMember : aSequence)
                         {
                             bool bHasContinueFlag = rMember.Flags & sheet::MemberResultFlags::CONTINUE;
+                            if (rMember.Flags & sheet::MemberResultFlags::SUBTOTAL ||
+                                rMember.Flags & sheet::MemberResultFlags::GRANDTOTAL)
+                                    continue;
 
                             if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER || bHasContinueFlag)
                             {
