@@ -193,13 +193,13 @@ DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
     return DialogMask::NONE;
 }
 
-struct ErrorContextImpl
+struct ImplErrorContext
 {
     vcl::Window *pWin; // FIXME: should be VclPtr for strong lifecycle
 };
 
 ErrorContext::ErrorContext(vcl::Window *pWinP)
-    : pImpl( new ErrorContextImpl )
+    : pImpl( new ImplErrorContext )
 {
     pImpl->pWin = pWinP;
     TheErrorRegistry::get().contexts.insert(TheErrorRegistry::get().contexts.begin(), this);
@@ -221,7 +221,7 @@ vcl::Window* ErrorContext::GetParent()
     return pImpl ? pImpl->pWin : nullptr;
 }
 
-class DynamicErrorInfo_Impl
+class ImplDynamicErrorInfo
 {
     friend class DynamicErrorInfo;
     friend class ErrorInfo;
@@ -236,7 +236,7 @@ private:
 
 };
 
-void DynamicErrorInfo_Impl::RegisterError(DynamicErrorInfo *pDynErrInfo)
+void ImplDynamicErrorInfo::RegisterError(DynamicErrorInfo *pDynErrInfo)
 {
     // Register dynamic identifier
     ErrorRegistry& rData = TheErrorRegistry::get();
@@ -252,7 +252,7 @@ void DynamicErrorInfo_Impl::RegisterError(DynamicErrorInfo *pDynErrInfo)
         rData.nNextError=0;
 }
 
-void DynamicErrorInfo_Impl::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
+void ImplDynamicErrorInfo::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
 {
     DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
     sal_uInt32 nIdx = (((sal_uInt32)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
@@ -262,7 +262,7 @@ void DynamicErrorInfo_Impl::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
         ppDynErrInfo[nIdx]=nullptr;
 }
 
-ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uInt32 nId)
+ErrorInfo* ImplDynamicErrorInfo::GetDynamicErrorInfo(sal_uInt32 nId)
 {
     sal_uInt32 nIdx = ((nId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[nIdx];
@@ -276,7 +276,7 @@ ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uInt32 nId)
 ErrorInfo *ErrorInfo::GetErrorInfo(sal_uInt32 nId)
 {
     if(nId & ERRCODE_DYNAMIC_MASK)
-        return DynamicErrorInfo_Impl::GetDynamicErrorInfo(nId);
+        return ImplDynamicErrorInfo::GetDynamicErrorInfo(nId);
     else
         return new ErrorInfo(nId);
 }
@@ -287,7 +287,7 @@ ErrorInfo::~ErrorInfo()
 
 DynamicErrorInfo::DynamicErrorInfo(sal_uInt32 nArgUserId, DialogMask nMask)
 : ErrorInfo(nArgUserId),
-  pImpl(new DynamicErrorInfo_Impl)
+  pImpl(new ImplDynamicErrorInfo)
 {
     pImpl->RegisterError(this);
     pImpl->nMask=nMask;
@@ -295,7 +295,7 @@ DynamicErrorInfo::DynamicErrorInfo(sal_uInt32 nArgUserId, DialogMask nMask)
 
 DynamicErrorInfo::~DynamicErrorInfo()
 {
-    DynamicErrorInfo_Impl::UnRegisterError(this);
+    ImplDynamicErrorInfo::UnRegisterError(this);
 }
 
 DynamicErrorInfo::operator sal_uInt32() const

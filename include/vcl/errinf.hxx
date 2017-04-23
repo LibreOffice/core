@@ -39,7 +39,7 @@ class ErrorContext;
 class ErrorStringFactory;
 class ErrorInfo;
 class DynamicErrorInfo;
-class DynamicErrorInfo_Impl;
+class ImplDynamicErrorInfo;
 enum class DialogMask;
 
 namespace {
@@ -57,7 +57,7 @@ class VCL_DLLPUBLIC ErrorRegistry
     friend class ErrorHandler;
     friend class ErrorContext;
     friend class ErrorStringFactory;
-    friend class DynamicErrorInfo_Impl;
+    friend class ImplDynamicErrorInfo;
 
 public:
                                 ErrorRegistry();
@@ -158,7 +158,7 @@ private:
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
 {
-    friend class DynamicErrorInfo_Impl;
+    friend class ImplDynamicErrorInfo;
 
 public:
                             DynamicErrorInfo(sal_uInt32 nUserId, DialogMask nMask);
@@ -168,7 +168,7 @@ public:
     DialogMask              GetDialogMask() const;
 
 private:
-    std::unique_ptr<DynamicErrorInfo_Impl> pImpl;
+    std::unique_ptr<ImplDynamicErrorInfo> pImpl;
 
 };
 
@@ -202,7 +202,7 @@ private:
 
 };
 
-struct ErrorContextImpl;
+struct ImplErrorContext;
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorContext
 {
@@ -218,7 +218,7 @@ public:
     static ErrorContext*    GetContext();
 
 private:
-    std::unique_ptr<ErrorContextImpl> pImpl;
+    std::unique_ptr<ImplErrorContext> pImpl;
 
 };
 
