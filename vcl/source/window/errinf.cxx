@@ -27,25 +27,14 @@
 #include <limits.h>
 
 class ErrorHandler;
+class TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};
 
-namespace {
-  typedef void (* DisplayFnPtr)();
-}
-
-struct ErrorRegistry
+void ErrorRegistry::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
-public:
-    std::vector<ErrorHandler*>  errorHandlers;
-    std::vector<ErrorContext*>  contexts;
-    DisplayFnPtr                pDsp;
-    bool                        bIsWindowDsp;
-
-    DynamicErrorInfo*           ppDynErrInfo[ERRCODE_DYNAMIC_COUNT];
-    sal_uInt16                  nNextError;
-                                ErrorRegistry();
-};
-
-struct TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};
+    ErrorRegistry &rData = TheErrorRegistry::get();
+    rData.bIsWindowDsp = true;
+    rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
+}
 
 class DynamicErrorInfo_Impl
 {
@@ -69,6 +58,13 @@ ErrorRegistry::ErrorRegistry()
 {
     for(DynamicErrorInfo*& rp : ppDynErrInfo)
         rp = nullptr;
+}
+
+void ErrorRegistry::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
+{
+    ErrorRegistry &rData = TheErrorRegistry::get();
+    rData.bIsWindowDsp = false;
+    rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void DynamicErrorInfo_Impl::RegisterError(DynamicErrorInfo *pDynErrInfo)
@@ -194,7 +190,7 @@ ErrorHandler::ErrorHandler()
     rData.errorHandlers.insert(rData.errorHandlers.begin(), this);
 
     if(!rData.pDsp)
-        RegisterDisplay(&aDspFunc);
+        ErrorRegistry::RegisterDisplay(&aDspFunc);
 }
 
 ErrorHandler::~ErrorHandler()
@@ -207,20 +203,6 @@ ErrorHandler::~ErrorHandler()
 vcl::Window* ErrorContext::GetParent()
 {
     return pImpl ? pImpl->pWin : nullptr;
-}
-
-void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
-{
-    ErrorRegistry &rData    = TheErrorRegistry::get();
-    rData.bIsWindowDsp = true;
-    rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
-}
-
-void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
-{
-    ErrorRegistry &rData = TheErrorRegistry::get();
-    rData.bIsWindowDsp = false;
-    rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)

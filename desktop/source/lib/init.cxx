@@ -3240,7 +3240,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         }
 
         if (eStage != SECOND_INIT)
-            ErrorHandler::RegisterDisplay(aBasicErrorFunc);
+            ErrorRegistry::RegisterDisplay(aBasicErrorFunc);
 
         SAL_INFO("lok", "LOK Initialized");
         if (eStage == PRE_INIT)
