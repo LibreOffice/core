@@ -78,7 +78,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/stream.hxx>

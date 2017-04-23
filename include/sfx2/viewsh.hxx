@@ -34,7 +34,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <sfx2/shell.hxx>
 #include <tools/gen.hxx>
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/jobset.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/vclptr.hxx>

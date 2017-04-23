@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_SOERR_HXX
 #define INCLUDED_SVTOOLS_SOERR_HXX
 
-#include <tools/errcode.hxx>
+#include <vcl/errcode.hxx>
 
 // error codes
 #define RID_SO_ERROR_HANDLER    32000
