@@ -86,6 +86,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE) \
 		-I$(dir $(3)) \
 		$(DEFS) \
+		-D__RSC \
 		-fp=$(1) \
 		$(if $(MERGEDFILE),$(MERGEDFILE),$<)" > $${RESPONSEFILE} && \
 	$(gb_ResTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \

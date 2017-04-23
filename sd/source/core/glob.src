@@ -18,8 +18,6 @@
  */
 /* StarView resource file */
 
-#define __RSC
-
 #include "glob.hrc"
 #include "sderror.hxx"
 

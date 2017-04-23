@@ -255,13 +255,14 @@ friend class RscId;
     virtual COMPARE Compare( const NameNode * ) const override;
     virtual COMPARE Compare( const void * ) const override;
 
-protected:
-
+public:
     RscDefine( RscFileTab::Index lFileKey, const OString& rDefName,
                            sal_Int32 lDefId );
+    virtual ~RscDefine() override;
+
+protected:
     RscDefine( RscFileTab::Index lFileKey, const OString& rDefName,
                            RscExpression * pExpression );
-    virtual ~RscDefine() override;
 
     void          IncRef() { nRefCount++; }
     void          DecRef();

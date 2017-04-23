@@ -18,9 +18,8 @@
  */
 
 #include <svx/dialogs.hrc>
-
-#define _SOLAR_RSC_INVOKED
 #include <rtl/textenc.h>
+
 #define PairedList ItemList
 // Encodings for which no conversion exist yet are commented out.
 

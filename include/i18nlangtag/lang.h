@@ -85,7 +85,7 @@
  * comments are used. Do NOT use // C++ style comments. */
 
 /* disable typedef for usage in svtools/source/misc/langtab.src */
-#ifndef RSC_RESOURCE_USAGE
+#ifndef __RSC
 typedef unsigned short LanguageType;
 #endif
 
