@@ -65,8 +65,8 @@ class SwMultiTOXTabDialog : public SfxTabDialog
 {
     VclPtr<vcl::Window>     m_pExampleContainerWIN;
     VclPtr<CheckBox>        m_pShowExampleCB;
-    SwTOXMgr*               pMgr;
-    SwWrtShell&             rSh;
+    SwTOXMgr*               m_pMgr;
+    SwWrtShell&             m_rWrtShell;
 
     sal_uInt16              m_nSelectId;
     sal_uInt16              m_nStylesId;
@@ -74,23 +74,23 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     sal_uInt16              m_nBackGroundId;
     sal_uInt16              m_nEntriesId;
 
-    SwOneExampleFrame*      pExampleFrame;
+    SwOneExampleFrame*      m_pExampleFrame;
 
-    SwTOXDescription**      pDescArr;
-    SwForm**                pFormArr;
-    SwIndexSections_Impl**  pxIndexSectionsArr;
+    SwTOXDescription**      m_pDescriptionArray;
+    SwForm**                m_pFormArray;
+    SwIndexSections_Impl**  m_pxIndexSectionsArray;
 
-    SwTOXBase*              pParamTOXBase;
+    SwTOXBase*              m_pParamTOXBase;
 
-    CurTOXType              eCurrentTOXType;
+    CurTOXType              m_eCurrentTOXType;
 
-    OUString                sUserDefinedIndex;
-    sal_uInt16              nTypeCount;
-    sal_uInt16              nInitialTOXType;
+    OUString                m_sUserDefinedIndex;
+    sal_uInt16              m_nTypeCount;
+    sal_uInt16              m_nInitialTOXType;
 
-    bool                bEditTOX;
-    bool                bExampleCreated;
-    bool                bGlobalFlag;
+    bool                m_bEditTOX;
+    bool                m_bExampleCreated;
+    bool                m_bGlobalFlag;
 
     virtual short       Ok() override;
     SwTOXDescription*   CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
@@ -110,15 +110,15 @@ public:
 
     SwForm*             GetForm(CurTOXType eType);
 
-    const CurTOXType&   GetCurrentTOXType() const { return eCurrentTOXType;}
+    const CurTOXType&   GetCurrentTOXType() const { return m_eCurrentTOXType;}
     void                SetCurrentTOXType(const CurTOXType& eSet)
                                 {
-                                    eCurrentTOXType = eSet;
+                                    m_eCurrentTOXType = eSet;
                                 }
 
-    bool                IsTOXEditMode() const { return bEditTOX;}
+    bool                IsTOXEditMode() const { return m_bEditTOX;}
 
-    SwWrtShell&         GetWrtShell() {return rSh;}
+    SwWrtShell&         GetWrtShell() {return m_rWrtShell;}
 
     SwTOXDescription&   GetTOXDescription(CurTOXType eTOXTypes);
     void                CreateOrUpdateExample(
