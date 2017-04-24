@@ -426,13 +426,13 @@ inline void SwHTMLTableLayout::SetColumn( std::unique_ptr<SwHTMLTableLayoutColum
 
 inline SwHTMLTableLayoutCell *SwHTMLTableLayout::GetCell( sal_uInt16 nRow, sal_uInt16 nCol ) const
 {
-    return m_aCells[nRow*m_nCols+nCol].get();
+    return m_aCells[static_cast<size_t>(nRow)*m_nCols+nCol].get();
 }
 
 inline void SwHTMLTableLayout::SetCell( std::unique_ptr<SwHTMLTableLayoutCell> pCell,
                                sal_uInt16 nRow, sal_uInt16 nCol )
 {
-    m_aCells[nRow*m_nCols+nCol] = std::move(pCell);
+    m_aCells[static_cast<size_t>(nRow)*m_nCols+nCol] = std::move(pCell);
 }
 
 inline long SwHTMLTableLayout::GetBrowseWidthMin() const
