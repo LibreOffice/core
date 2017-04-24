@@ -218,15 +218,15 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
                     sal_uInt16 nToxType, bool bGlobal)
     : SfxTabDialog(pParent, "TocDialog",
         "modules/swriter/ui/tocdialog.ui", &rSet)
-    , pMgr( new SwTOXMgr( &rShell ) )
-    , rSh(rShell)
-    , pExampleFrame(nullptr)
-    , pParamTOXBase(pCurTOX)
-    , sUserDefinedIndex(SW_RESSTR(STR_USER_DEFINED_INDEX))
-    , nInitialTOXType(nToxType)
-    , bEditTOX(false)
-    , bExampleCreated(false)
-    , bGlobalFlag(bGlobal)
+    , m_pMgr( new SwTOXMgr( &rShell ) )
+    , m_rWrtShell(rShell)
+    , m_pExampleFrame(nullptr)
+    , m_pParamTOXBase(pCurTOX)
+    , m_sUserDefinedIndex(SW_RESSTR(STR_USER_DEFINED_INDEX))
+    , m_nInitialTOXType(nToxType)
+    , m_bEditTOX(false)
+    , m_bExampleCreated(false)
+    , m_bGlobalFlag(bGlobal)
 {
     get(m_pShowExampleCB, "showexample");
     get(m_pExampleContainerWIN, "example");
@@ -235,49 +235,49 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
     m_pExampleContainerWIN->set_height_request(aWinSize.Height());
     m_pExampleContainerWIN->SetSizePixel(aWinSize);
 
-    eCurrentTOXType.eType = TOX_CONTENT;
-    eCurrentTOXType.nIndex = 0;
+    m_eCurrentTOXType.eType = TOX_CONTENT;
+    m_eCurrentTOXType.nIndex = 0;
 
-    const sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
-    nTypeCount = nUserTypeCount + 6;
-    pFormArr = new SwForm*[nTypeCount];
-    pDescArr = new SwTOXDescription*[nTypeCount];
-    pxIndexSectionsArr = new SwIndexSections_Impl*[nTypeCount];
+    const sal_uInt16 nUserTypeCount = m_rWrtShell.GetTOXTypeCount(TOX_USER);
+    m_nTypeCount = nUserTypeCount + 6;
+    m_pFormArray = new SwForm*[m_nTypeCount];
+    m_pDescriptionArray = new SwTOXDescription*[m_nTypeCount];
+    m_pxIndexSectionsArray = new SwIndexSections_Impl*[m_nTypeCount];
     //the standard user index is on position TOX_USER
     //all user indexes follow after position TOX_AUTHORITIES
     if(pCurTOX)
     {
-        bEditTOX = true;
+        m_bEditTOX = true;
     }
-    for(int i = nTypeCount - 1; i > -1; i--)
+    for(int i = m_nTypeCount - 1; i > -1; i--)
     {
-        pFormArr[i] = nullptr;
-        pDescArr[i] = nullptr;
-        pxIndexSectionsArr[i] = new SwIndexSections_Impl;
+        m_pFormArray[i] = nullptr;
+        m_pDescriptionArray[i] = nullptr;
+        m_pxIndexSectionsArray[i] = new SwIndexSections_Impl;
         if(pCurTOX)
         {
-            eCurrentTOXType.eType = pCurTOX->GetType();
-            sal_uInt16 nArrayIndex = static_cast< sal_uInt16 >(eCurrentTOXType.eType);
-            if(eCurrentTOXType.eType == TOX_USER)
+            m_eCurrentTOXType.eType = pCurTOX->GetType();
+            sal_uInt16 nArrayIndex = static_cast< sal_uInt16 >(m_eCurrentTOXType.eType);
+            if(m_eCurrentTOXType.eType == TOX_USER)
             {
                 //which user type is it?
                 for(sal_uInt16 nUser = 0; nUser < nUserTypeCount; nUser++)
                 {
-                    const SwTOXType* pTemp = rSh.GetTOXType(TOX_USER, nUser);
+                    const SwTOXType* pTemp = m_rWrtShell.GetTOXType(TOX_USER, nUser);
                     if(pCurTOX->GetTOXType() == pTemp)
                     {
-                        eCurrentTOXType.nIndex = nUser;
+                        m_eCurrentTOXType.nIndex = nUser;
                         nArrayIndex = static_cast< sal_uInt16 >(nUser > 0 ? TOX_AUTHORITIES + nUser : TOX_USER);
                         break;
                     }
                 }
             }
-            pFormArr[nArrayIndex] = new SwForm(pCurTOX->GetTOXForm());
-            pDescArr[nArrayIndex] = CreateTOXDescFromTOXBase(pCurTOX);
-            if(TOX_AUTHORITIES == eCurrentTOXType.eType)
+            m_pFormArray[nArrayIndex] = new SwForm(pCurTOX->GetTOXForm());
+            m_pDescriptionArray[nArrayIndex] = CreateTOXDescFromTOXBase(pCurTOX);
+            if(TOX_AUTHORITIES == m_eCurrentTOXType.eType)
             {
                 const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                                rSh.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
+                                                m_rWrtShell.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
                 if(pFType)
                 {
                     OUString sBrackets;
@@ -285,12 +285,12 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
                         sBrackets += OUStringLiteral1(pFType->GetPrefix());
                     if(pFType->GetSuffix())
                         sBrackets += OUStringLiteral1(pFType->GetSuffix());
-                    pDescArr[nArrayIndex]->SetAuthBrackets(sBrackets);
-                    pDescArr[nArrayIndex]->SetAuthSequence(pFType->IsSequence());
+                    m_pDescriptionArray[nArrayIndex]->SetAuthBrackets(sBrackets);
+                    m_pDescriptionArray[nArrayIndex]->SetAuthSequence(pFType->IsSequence());
                 }
                 else
                 {
-                    pDescArr[nArrayIndex]->SetAuthBrackets("[]");
+                    m_pDescriptionArray[nArrayIndex]->SetAuthBrackets("[]");
                 }
             }
         }
@@ -330,18 +330,18 @@ void SwMultiTOXTabDialog::dispose()
     // fdo#38515 Avoid setting focus on deleted controls in the destructors
     EnableInput( false );
 
-    for(sal_uInt16 i = 0; i < nTypeCount; i++)
+    for(sal_uInt16 i = 0; i < m_nTypeCount; i++)
     {
-        delete pFormArr[i];
-        delete pDescArr[i];
-        delete pxIndexSectionsArr[i];
+        delete m_pFormArray[i];
+        delete m_pDescriptionArray[i];
+        delete m_pxIndexSectionsArray[i];
     }
-    delete[] pxIndexSectionsArr;
+    delete[] m_pxIndexSectionsArray;
 
-    delete[] pFormArr;
-    delete[] pDescArr;
-    delete pMgr;
-    delete pExampleFrame;
+    delete[] m_pFormArray;
+    delete[] m_pDescriptionArray;
+    delete m_pMgr;
+    delete m_pExampleFrame;
     m_pExampleContainerWIN.clear();
     m_pShowExampleCB.clear();
     SfxTabDialog::dispose();
@@ -362,37 +362,37 @@ void SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SwColumnPage&>(rPage).SetPageWidth(rSize.GetWidth());
     }
     else if (nId == m_nEntriesId)
-        static_cast<SwTOXEntryTabPage&>(rPage).SetWrtShell(rSh);
+        static_cast<SwTOXEntryTabPage&>(rPage).SetWrtShell(m_rWrtShell);
     else if (nId == m_nSelectId)
     {
-        static_cast<SwTOXSelectTabPage&>(rPage).SetWrtShell(rSh);
-        if(USHRT_MAX != nInitialTOXType)
-            static_cast<SwTOXSelectTabPage&>(rPage).SelectType((TOXTypes)nInitialTOXType);
+        static_cast<SwTOXSelectTabPage&>(rPage).SetWrtShell(m_rWrtShell);
+        if(USHRT_MAX != m_nInitialTOXType)
+            static_cast<SwTOXSelectTabPage&>(rPage).SelectType((TOXTypes)m_nInitialTOXType);
     }
 }
 
 short SwMultiTOXTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
-    SwTOXDescription& rDesc = GetTOXDescription(eCurrentTOXType);
-    SwTOXBase aNewDef(*rSh.GetDefaultTOXBase( eCurrentTOXType.eType, true ));
+    SwTOXDescription& rDesc = GetTOXDescription(m_eCurrentTOXType);
+    SwTOXBase aNewDef(*m_rWrtShell.GetDefaultTOXBase( m_eCurrentTOXType.eType, true ));
 
-    const sal_uInt16 nIndex = eCurrentTOXType.GetFlatIndex();
-    if(pFormArr[nIndex])
+    const sal_uInt16 nIndex = m_eCurrentTOXType.GetFlatIndex();
+    if(m_pFormArray[nIndex])
     {
-        rDesc.SetForm(*pFormArr[nIndex]);
-        aNewDef.SetTOXForm(*pFormArr[nIndex]);
+        rDesc.SetForm(*m_pFormArray[nIndex]);
+        aNewDef.SetTOXForm(*m_pFormArray[nIndex]);
     }
     rDesc.ApplyTo(aNewDef);
-    if(!bGlobalFlag)
-        pMgr->UpdateOrInsertTOX(
+    if(!m_bGlobalFlag)
+        m_pMgr->UpdateOrInsertTOX(
                 rDesc, nullptr, GetOutputItemSet());
-    else if(bEditTOX)
-        pMgr->UpdateOrInsertTOX(
-                rDesc, &pParamTOXBase, GetOutputItemSet());
+    else if(m_bEditTOX)
+        m_pMgr->UpdateOrInsertTOX(
+                rDesc, &m_pParamTOXBase, GetOutputItemSet());
 
-    if(!eCurrentTOXType.nIndex)
-        rSh.SetDefaultTOXBase(aNewDef);
+    if(!m_eCurrentTOXType.nIndex)
+        m_rWrtShell.SetDefaultTOXBase(aNewDef);
 
     return nRet;
 }
@@ -400,48 +400,48 @@ short SwMultiTOXTabDialog::Ok()
 SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
 {
     const sal_uInt16 nIndex = eType.GetFlatIndex();
-    if(!pFormArr[nIndex])
-        pFormArr[nIndex] = new SwForm(eType.eType);
-    return pFormArr[nIndex];
+    if(!m_pFormArray[nIndex])
+        m_pFormArray[nIndex] = new SwForm(eType.eType);
+    return m_pFormArray[nIndex];
 }
 
 SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
 {
     const sal_uInt16 nIndex = eType.GetFlatIndex();
-    if(!pDescArr[nIndex])
+    if(!m_pDescriptionArray[nIndex])
     {
-        const SwTOXBase* pDef = rSh.GetDefaultTOXBase( eType.eType );
+        const SwTOXBase* pDef = m_rWrtShell.GetDefaultTOXBase( eType.eType );
         if(pDef)
-            pDescArr[nIndex] = CreateTOXDescFromTOXBase(pDef);
+            m_pDescriptionArray[nIndex] = CreateTOXDescFromTOXBase(pDef);
         else
         {
-            pDescArr[nIndex] = new SwTOXDescription(eType.eType);
+            m_pDescriptionArray[nIndex] = new SwTOXDescription(eType.eType);
             if(eType.eType == TOX_USER)
-                pDescArr[nIndex]->SetTitle(sUserDefinedIndex);
+                m_pDescriptionArray[nIndex]->SetTitle(m_sUserDefinedIndex);
             else
-                pDescArr[nIndex]->SetTitle(
-                    rSh.GetTOXType(eType.eType, 0)->GetTypeName());
+                m_pDescriptionArray[nIndex]->SetTitle(
+                    m_rWrtShell.GetTOXType(eType.eType, 0)->GetTypeName());
         }
         if(TOX_AUTHORITIES == eType.eType)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                            rSh.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
+                                            m_rWrtShell.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
             if(pFType)
             {
-                pDescArr[nIndex]->SetAuthBrackets(OUStringLiteral1(pFType->GetPrefix()) +
+                m_pDescriptionArray[nIndex]->SetAuthBrackets(OUStringLiteral1(pFType->GetPrefix()) +
                                                   OUStringLiteral1(pFType->GetSuffix()));
-                pDescArr[nIndex]->SetAuthSequence(pFType->IsSequence());
+                m_pDescriptionArray[nIndex]->SetAuthSequence(pFType->IsSequence());
             }
             else
             {
-                pDescArr[nIndex]->SetAuthBrackets("[]");
+                m_pDescriptionArray[nIndex]->SetAuthBrackets("[]");
             }
         }
         else if(TOX_INDEX == eType.eType)
-            pDescArr[nIndex]->SetMainEntryCharStyle(SW_RESSTR(STR_POOLCHR_IDX_MAIN_ENTRY));
+            m_pDescriptionArray[nIndex]->SetMainEntryCharStyle(SW_RESSTR(STR_POOLCHR_IDX_MAIN_ENTRY));
 
     }
-    return *pDescArr[nIndex];
+    return *m_pDescriptionArray[nIndex];
 }
 
 SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
@@ -450,7 +450,7 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     SwTOXDescription * pDesc = new SwTOXDescription(pCurTOX->GetType());
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         pDesc->SetStyleNames(pCurTOX->GetStyleNames(i), i);
-    pDesc->SetAutoMarkURL(rSh.GetTOIAutoMarkURL());
+    pDesc->SetAutoMarkURL(m_rWrtShell.GetTOIAutoMarkURL());
     pDesc->SetTitle(pCurTOX->GetTitle());
 
     pDesc->SetContentOptions(pCurTOX->GetCreateType());
@@ -475,9 +475,9 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl, Button*, void )
 {
     if(m_pShowExampleCB->IsChecked())
     {
-        if(!pExampleFrame && !bExampleCreated)
+        if(!m_pExampleFrame && !m_bExampleCreated)
         {
-            bExampleCreated = true;
+            m_bExampleCreated = true;
             OUString sTemplate("internal/idxexample.odt");
 
             SvtPathOptions aOpt;
@@ -494,19 +494,19 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl, Button*, void )
             else
             {
                 Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
-                pExampleFrame = new SwOneExampleFrame(
+                m_pExampleFrame = new SwOneExampleFrame(
                         *m_pExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate);
 
-                if(!pExampleFrame->IsServiceAvailable())
+                if(!m_pExampleFrame->IsServiceAvailable())
                 {
                     SwOneExampleFrame::CreateErrorMessage();
                 }
             }
-            m_pShowExampleCB->Show(pExampleFrame && pExampleFrame->IsServiceAvailable());
+            m_pShowExampleCB->Show(m_pExampleFrame && m_pExampleFrame->IsServiceAvailable());
         }
     }
     bool bSetViewWindow = m_pShowExampleCB->IsChecked()
-        && pExampleFrame && pExampleFrame->IsServiceAvailable();
+        && m_pExampleFrame && m_pExampleFrame->IsServiceAvailable();
 
     m_pExampleContainerWIN->Show( bSetViewWindow );
     SetViewWindow( bSetViewWindow ? m_pExampleContainerWIN.get() : nullptr );
