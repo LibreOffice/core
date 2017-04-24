@@ -290,15 +290,9 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
 
     // recalculate any needed scrollbars
     long nMaxWidthPos = aPageSize.Width() - aWindowSize.Width();
-    if ( nMaxWidthPos<0 )
-        bHori = false;
-    else
-        bHori = true;
+    bHori = nMaxWidthPos >= 0;
     long nMaxHeightPos = aPageSize.Height() - aWindowSize.Height();
-    if ( nMaxHeightPos < 0 )
-        bVert = false;
-    else
-        bVert = true;
+    bVert = nMaxHeightPos >= 0;
 
     // see if having a scroll bar requires the other
     if ( bVert != bHori && ( bVert || bHori ) )

@@ -180,11 +180,9 @@ bool
 ScVbaWorkbooks::isSpreadSheetFile( const OUString& sType )
 {
     // include calc_QPro etc. ? ( not for the moment anyway )
-    if ( sType.startsWith( "calc_MS" )
+    return sType.startsWith( "calc_MS" )
       || sType.startsWith( "calc8" )
-      || sType.startsWith( "calc_StarOffice" ) )
-        return true;
-    return false;
+      || sType.startsWith( "calc_StarOffice" );
 }
 
 OUString

@@ -1912,10 +1912,7 @@ bool ScAttrArray::IsEmpty() const
 
     if (nCount == 1)
     {
-        if ( pData[0].pPattern != pDocument->GetDefPattern() )
-            return false;
-        else
-            return true;
+        return pData[0].pPattern == pDocument->GetDefPattern();
     }
     else
         return false;
@@ -2238,11 +2235,8 @@ bool ScAttrArray::TestInsertRow( SCSIZE nSize ) const
     while ( nFirstLost && pData[nFirstLost-1].nRow >= sal::static_int_cast<SCROW>(MAXROW + 1 - nSize) )
         --nFirstLost;
 
-    if ( static_cast<const ScMergeFlagAttr&>(pData[nFirstLost].pPattern->
-                GetItem(ATTR_MERGE_FLAG)).IsVerOverlapped() )
-        return false;
-
-    return true;
+    return !static_cast<const ScMergeFlagAttr&>(pData[nFirstLost].pPattern->
+                GetItem(ATTR_MERGE_FLAG)).IsVerOverlapped();
 }
 
 void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )

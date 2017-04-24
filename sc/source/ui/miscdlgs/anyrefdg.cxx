@@ -112,8 +112,7 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
                         if(pParent)
                         {
                             pParent->EnableInput(bEnable);
-                            if(true)
-                                pViewSh->EnableRefInput(bEnable);
+                            pViewSh->EnableRefInput(bEnable);
                         }
                     }
                 }

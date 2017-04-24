@@ -176,13 +176,9 @@ bool ShapeAnchor::isAnchorValid() const
     // Checks whether the shape is visible based on the anchor
     // if From and To anchor has the same attribute values, the shape will not have width and height
     // and thus we can assume that such kind of shape will be not be visible
-    if (meAnchorType == ANCHOR_TWOCELL &&
+    return !(meAnchorType == ANCHOR_TWOCELL &&
         (maTo.mnRow == maFrom.mnRow && maTo.mnCol == maFrom.mnCol) &&
-        (maTo.mnColOffset == maFrom.mnColOffset && maTo.mnRowOffset == maFrom.mnRowOffset))
-    {
-        return false;
-    }
-    return true;
+        (maTo.mnColOffset == maFrom.mnColOffset && maTo.mnRowOffset == maFrom.mnRowOffset));
 }
 
 EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm ) const

@@ -1348,10 +1348,7 @@ void ScExportTest::testRichTextExportODS()
 
             // The last section should be unformatted.
             pAttr = &aSecAttrs[1];
-            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 6 || pAttr->mnEnd != 9)
-                return false;
-
-            return true;
+            return pAttr->mnParagraph == 0 && pAttr->mnStart == 6 && pAttr->mnEnd == 9;
         }
 
         bool checkB7(const EditTextObject* pText) const

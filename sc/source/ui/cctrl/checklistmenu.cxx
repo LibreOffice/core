@@ -1641,9 +1641,7 @@ void ScCheckListBox::Init()
 bool ScCheckListBox::IsChecked( const OUString& sName, SvTreeListEntry* pParent )
 {
     SvTreeListEntry* pEntry = FindEntry( pParent, sName );
-    if ( pEntry && GetCheckButtonState( pEntry ) == SvButtonState::Checked)
-        return true;
-    return false;
+    return pEntry && GetCheckButtonState( pEntry ) == SvButtonState::Checked;
 }
 
 void ScCheckListBox::CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck )

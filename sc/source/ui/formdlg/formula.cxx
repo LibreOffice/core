@@ -451,10 +451,7 @@ bool ScFormulaDlg::IsDocAllowed(SfxObjectShell* pDocSh) const
 {
     //  not allowed: different from this doc, and no name
     //  pDocSh is always a ScDocShell
-    if (pDocSh && &static_cast<ScDocShell*>(pDocSh)->GetDocument() != m_pDoc && !pDocSh->HasName())
-        return false;
-
-    return true;        // everything else is allowed
+    return !(pDocSh && &static_cast<ScDocShell*>(pDocSh)->GetDocument() != m_pDoc && !pDocSh->HasName());        // everything else is allowed
 }
 
 void ScFormulaDlg::SetActive()

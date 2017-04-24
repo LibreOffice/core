@@ -1749,18 +1749,14 @@ void RangeAnalyzer::analyzeRange( sal_Int32& rnDataInRows,
 
 bool RangeAnalyzer::inSameSingleRow( RangeAnalyzer& rOther )
 {
-    if( mnStartRow==rOther.mnStartRow &&
-        mnRowCount==1 && rOther.mnRowCount==1 )
-        return true;
-    return false;
+    return mnStartRow==rOther.mnStartRow &&
+        mnRowCount==1 && rOther.mnRowCount==1;
 }
 
 bool RangeAnalyzer::inSameSingleColumn( RangeAnalyzer& rOther )
 {
-    if( mnStartColumn==rOther.mnStartColumn &&
-        mnColumnCount==1 && rOther.mnColumnCount==1 )
-        return true;
-    return false;
+    return mnStartColumn==rOther.mnStartColumn &&
+        mnColumnCount==1 && rOther.mnColumnCount==1;
 }
 
 std::pair<OUString, OUString> constructKey(const uno::Reference< chart2::data::XLabeledDataSequence>& xNew)
@@ -3156,17 +3152,11 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
     {
         if (nRows > nCols)
         {
-            if (eOrigin == chart2::data::LabelOrigin_SHORT_SIDE)
-                bColumn = true;
-            else
-                bColumn = false;
+            bColumn = eOrigin == chart2::data::LabelOrigin_SHORT_SIDE;
         }
         else if (nCols > nRows)
         {
-            if (eOrigin == chart2::data::LabelOrigin_SHORT_SIDE)
-                bColumn = false;
-            else
-                bColumn = true;
+            bColumn = eOrigin != chart2::data::LabelOrigin_SHORT_SIDE;
         }
         else
             return Sequence<OUString>();

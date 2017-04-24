@@ -1135,10 +1135,7 @@ bool ScContentTree::NoteStringsChanged()
         pEntry = NextSibling(pEntry);
     }
 
-    if ( pEntry )
-        return true;
-
-    return false;
+    return pEntry != nullptr;
 }
 
 bool ScContentTree::DrawNamesChanged( ScContentId nType )
