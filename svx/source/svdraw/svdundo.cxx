@@ -216,24 +216,16 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
 
 OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, bool bRepeat )
 {
-    OUString rStr = ImpGetResStr(nStrCacheID);
+    const OUString rStr {ImpGetResStr(nStrCacheID)};
 
-    sal_Int32 nPos = rStr.indexOf("%1");
+    const sal_Int32 nPos = rStr.indexOf("%1");
+    if (nPos < 0)
+        return rStr;
 
-    if(nPos != -1)
-    {
-        if(bRepeat)
-        {
-            rStr = rStr.replaceAt(nPos, 2, ImpGetResStr(STR_ObjNameSingulPlural));
-        }
-        else
-        {
-            OUString aStr(_rForObject.TakeObjNameSingul());
-            rStr = rStr.replaceAt(nPos, 2, aStr);
-        }
-    }
+    if (bRepeat)
+        return rStr.replaceAt(nPos, 2, ImpGetResStr(STR_ObjNameSingulPlural));
 
-    return rStr;
+    return rStr.replaceAt(nPos, 2, _rForObject.TakeObjNameSingul());
 }
 
 void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, bool bRepeat) const
