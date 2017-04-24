@@ -412,9 +412,9 @@ void ModelState::update( const Reference< frame::XModel > & xModel )
     bIsThreeD = (nDimensionCount == 3);
     if (xChartDoc.is())
     {
-        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartDoc.get());
-        bHasOwnData = pModel->hasInternalDataProvider();
-        bHasDataFromPivotTable = pModel->isDataFromPivotTable();
+        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc.get());
+        bHasOwnData = rModel.hasInternalDataProvider();
+        bHasDataFromPivotTable = rModel.isDataFromPivotTable();
     }
 
     bHasMainTitle =  TitleHelper::getTitle( TitleHelper::MAIN_TITLE, xModel ).is();
