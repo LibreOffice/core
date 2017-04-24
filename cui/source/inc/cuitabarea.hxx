@@ -396,7 +396,6 @@ private:
 
     ChangeType*         m_pnGradientListState;
     ChangeType*         m_pnColorListState;
-    sal_Int32*          m_pPos;
 
     XFillStyleItem      m_aXFStyleItem;
     XFillGradientItem   m_aXGradientItem;
@@ -436,7 +435,6 @@ public:
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetGradientList( XGradientListRef const & pGrdLst)
                 { m_pGradientList = pGrdLst; }
-    void    SetPos( sal_Int32* pPos ) { m_pPos = pPos; }
     void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 };
@@ -468,7 +466,6 @@ private:
 
     ChangeType*         m_pnHatchingListState;
     ChangeType*         m_pnColorListState;
-    sal_Int32*          m_pPos;
 
     XFillStyleItem      m_aXFStyleItem;
     XFillHatchItem      m_aXHatchItem;
@@ -513,7 +510,6 @@ public:
     void    SetHatchingList( XHatchListRef const & pHtchLst)
                 { m_pHatchingList = pHtchLst; }
 
-    void    SetPos( sal_Int32* pPos ) { m_pPos = pPos; }
     void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 
