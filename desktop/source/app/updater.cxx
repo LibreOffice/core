@@ -194,6 +194,7 @@ struct update_info
 {
     OUString aFromBuildID;
     OUString aSeeAlsoURL;
+    OUString aMessage;
 
     update_file aUpdateFile;
     std::vector<language_file> aLanguageFiles;
@@ -355,6 +356,13 @@ update_info parse_response(const std::string& rResponse)
     if (std::find(aRootKeys.begin(), aRootKeys.end(), "error") != aRootKeys.end())
     {
         throw invalid_update_info();
+    }
+    else if (std::find(aRootKeys.begin(), aRootKeys.end(), "response") != aRootKeys.end())
+    {
+        update_info aUpdateInfo;
+        auto aMsgNode = aDocumentRoot.child("response");
+        aUpdateInfo.aMessage = toOUString(aMsgNode.string_value().str());
+        return aUpdateInfo;
     }
 
     orcus::json::detail::node aFromNode = aDocumentRoot.child("from");
@@ -544,8 +552,17 @@ void update_checker()
         if (!response_body.empty())
         {
             update_info aUpdateInfo = parse_response(response_body);
-            download_file(aUpdateInfo.aUpdateFile.aURL, aUpdateInfo.aUpdateFile.nSize, aUpdateInfo.aUpdateFile.aHash, "update.mar");
-            CreateValidUpdateDir(aUpdateInfo);
+            if (aUpdateInfo.aUpdateFile.aURL.isEmpty())
+            {
+                // No update currently available
+                // add entry to updating.log with the message
+                SAL_WARN("desktop.updater", "Message received from the updater: " << aUpdateInfo.aMessage);
+            }
+            else
+            {
+                download_file(aUpdateInfo.aUpdateFile.aURL, aUpdateInfo.aUpdateFile.nSize, aUpdateInfo.aUpdateFile.aHash, "update.mar");
+                CreateValidUpdateDir(aUpdateInfo);
+            }
         }
     }
     catch (const invalid_update_info&)
