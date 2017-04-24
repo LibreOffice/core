@@ -159,8 +159,7 @@ uno::Reference<rdf::XURI> createBaseURI(
         const sal_Int32 count( xBaseURI->getPathSegmentCount() );
         if (count > 0)
         {
-            const OUString last( xBaseURI->getPathSegment(count - 1) );
-            buf.append(last);
+            buf.append(xBaseURI->getPathSegment(count - 1));
         }
         buf.append('/');
     }
@@ -169,11 +168,10 @@ uno::Reference<rdf::XURI> createBaseURI(
         buf.append(i_rSubDocument);
         buf.append('/');
     }
-    const OUString Path(buf.makeStringAndClear());
-    if (!Path.isEmpty())
+    if (!buf.isEmpty())
     {
         const uno::Reference< uri::XUriReference > xPathURI(
-            xUriFactory->parse(Path), uno::UNO_SET_THROW );
+            xUriFactory->parse(buf.makeStringAndClear()), uno::UNO_SET_THROW );
         xBaseURI.set(
             xUriFactory->makeAbsolute(xBaseURI, xPathURI,
                 true, uri::RelativeUriExcessParentSegments_ERROR),
@@ -549,9 +547,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                         return;
                     }
                 } catch (const uno::Exception &) { }
-                OUStringBuffer buf(i_rBaseURI);
-                buf.append(dir).append('/');
-                readStream(i_rImpl, xDir, rest, buf.makeStringAndClear() );
+                readStream(i_rImpl, xDir, rest, i_rBaseURI+dir+"/" );
             } else {
                 throw mkException(
                     "readStream: is not a directory",
@@ -650,10 +646,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                     return;
                 }
             } catch (const uno::Exception &) { }
-            OUStringBuffer buf(i_rBaseURI);
-            buf.append(dir).append('/');
-            writeStream(i_rImpl, xDir, i_xGraphName, rest,
-                buf.makeStringAndClear());
+            writeStream(i_rImpl, xDir, i_xGraphName, rest, i_rBaseURI+dir+"/");
             uno::Reference<embed::XTransactedObject> const xTransaction(
                 xDir, uno::UNO_QUERY);
             if (xTransaction.is()) {
@@ -684,7 +677,6 @@ retry:
     i_rImpl.m_xRepository.set(rdf::Repository::create(i_rImpl.m_xContext),
             uno::UNO_SET_THROW);
 
-    const OUString baseURI( i_xBaseURI->getStringValue() );
     // try to delay raising errors until after initialization is done
     uno::Any rterr;
     ucb::InteractiveAugmentedIOException iaioe;
@@ -693,7 +685,7 @@ retry:
     const uno::Reference <rdf::XURI> xManifest(
         getURIForStream(i_rImpl, s_manifest));
     try {
-        readStream(i_rImpl, i_xStorage, s_manifest, baseURI);
+        readStream(i_rImpl, i_xStorage, s_manifest, i_xBaseURI->getStringValue());
     } catch (const ucb::InteractiveAugmentedIOException & e) {
         // no manifest.rdf: this is not an error in ODF < 1.2
         if (!(ucb::IOErrorCode_NOT_EXISTING_PATH == e.Code)) {
@@ -852,10 +844,9 @@ DocumentMetadataAccess::getElementByURI(
     if (!name.match(baseURI)) {
         return nullptr;
     }
-    const OUString relName( name.copy(baseURI.getLength()) );
     OUString path;
     OUString idref;
-    if (!splitXmlId(relName, path, idref)) {
+    if (!splitXmlId(name.copy(baseURI.getLength()), path, idref)) {
         return nullptr;
     }
 
