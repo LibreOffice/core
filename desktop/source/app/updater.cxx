@@ -402,6 +402,7 @@ std::string download_content(const OString& rURL, bool bFile)
     curl_slist* headerlist = nullptr;
     headerlist = curl_slist_append(headerlist, buf);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1); // follow redirects
 
     std::string response_body;
     utl::TempFile aTempFile;
