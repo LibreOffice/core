@@ -21,11 +21,11 @@
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
 
 #include <sal/types.h>
-#include <vcl/region.hxx>
+#include <tools/gen.hxx>
+#include <vector>
 
 class SdrObject;
 class SfxItemSet;
-namespace tools { class Rectangle; }
 class Fraction;
 
 // class to remember broadcast start positions
@@ -35,21 +35,19 @@ namespace sdr
     {
         class ItemChangeBroadcaster
         {
-            bool                                            mbSingleRect;
-            union {
-                RectangleVector*                            mpRectangleVector;
-                tools::Rectangle*                           mpRectangle;
-            };
+            std::vector< tools::Rectangle > maRectangles;
 
         public:
             explicit ItemChangeBroadcaster(const SdrObject& rObj);
-            ~ItemChangeBroadcaster();
 
             sal_uInt32 GetRectangleCount() const
             {
-                return mbSingleRect ? 1 : mpRectangleVector->size();
+                return maRectangles.size();
             }
-            const tools::Rectangle& GetRectangle(sal_uInt32 nIndex) const;
+            const tools::Rectangle& GetRectangle(sal_uInt32 nIndex) const
+            {
+                return maRectangles[nIndex];
+            }
         };
     } // end of namespace properties
 } // end of namespace sdr

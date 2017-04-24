@@ -38,8 +38,7 @@ namespace sdr
             if (const SdrObjGroup* pGroupObj = dynamic_cast<const SdrObjGroup*>(&rObj))
             {
                 SdrObjListIter aIter(*pGroupObj, SdrIterMode::DeepNoGroups);
-                mpRectangleVector = new RectangleVector;
-                mpRectangleVector->reserve(aIter.Count());
+                maRectangles.reserve(aIter.Count());
 
                 while(aIter.IsMore())
                 {
@@ -47,40 +46,13 @@ namespace sdr
 
                     if(pObj)
                     {
-                        mpRectangleVector->push_back(pObj->GetLastBoundRect());
+                        maRectangles.push_back(pObj->GetLastBoundRect());
                     }
                 }
-
-                mbSingleRect = false;
             }
             else
             {
-                mpRectangle = new tools::Rectangle(rObj.GetLastBoundRect());
-                mbSingleRect = true;
-            }
-        }
-
-        ItemChangeBroadcaster::~ItemChangeBroadcaster()
-        {
-            if (!mbSingleRect)
-            {
-                delete mpRectangleVector;
-            }
-            else
-            {
-                delete mpRectangle;
-            }
-        }
-
-        const tools::Rectangle& ItemChangeBroadcaster::GetRectangle(sal_uInt32 nIndex) const
-        {
-            if (!mbSingleRect)
-            {
-                return (*mpRectangleVector)[nIndex];
-            }
-            else
-            {
-                return *mpRectangle;
+                maRectangles.push_back(rObj.GetLastBoundRect());
             }
         }
     } // end of namespace properties
