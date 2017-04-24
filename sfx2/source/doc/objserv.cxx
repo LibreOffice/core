@@ -631,7 +631,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                                          OUString::createFromAscii( pSlot->GetUnoName() ),
                                                          aDispatchArgs,
                                                          bPreselectPassword,
-                                                         GetSharedFileURL(),
                                                          GetDocumentSignatureState() );
                 }
                 else

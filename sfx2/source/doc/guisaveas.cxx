@@ -1254,10 +1254,8 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
                                             const OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             bool bPreselectPassword,
-                                            const OUString& _aSuggestedName,
                                             SignatureState nDocumentSignatureState )
 {
-    OUString aSuggestedName = _aSuggestedName;
     ModelData_Impl aModelData( *this, xModel, aArgsSequence );
 
     bool bDialogUsed = false;
@@ -1454,7 +1452,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
                 aSuggestedDir = aModelData.GetDocProps().getUnpackedValueOrDefault("SuggestedSaveAsDir", OUString() );
         }
 
-        aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault("SuggestedSaveAsName", OUString() );
+        OUString aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault("SuggestedSaveAsName", OUString() );
         if ( aSuggestedName.isEmpty() )
             aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault("SuggestedSaveAsName", OUString() );
 

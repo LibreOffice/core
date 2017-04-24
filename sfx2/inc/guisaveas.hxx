@@ -62,7 +62,6 @@ public:
                     const OUString& aSlotName,
                     css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
-                    const OUString& aUserSelectedName,
                     SignatureState nDocumentSignatureState );
 
     static bool CheckFilterOptionsAppearance(
