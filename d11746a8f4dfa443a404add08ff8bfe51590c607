@@ -40,6 +40,24 @@
       "revId": "d11746a8f4dfa443a404add08ff8bfe51590c607",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_db7895fb",
+        "filename": "sw/source/core/text/porfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-24T13:59:01Z",
+      "side": 0,
+      "message": "May make sense, I\u0027d just like to have an opinion of a Writer guy.. Cc\u0027ing Michael.",
+      "parentUuid": "5a3905b3_8af23a99",
+      "revId": "d11746a8f4dfa443a404add08ff8bfe51590c607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
