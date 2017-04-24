@@ -721,72 +721,59 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="More">
+              <object class="GtkMenuItem" id="arcsin(&lt;?&gt;) ">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_underline">True</property>
-                <child type="submenu">
-                  <object class="GtkMenu">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkMenuItem" id="arcsin(&lt;?&gt;) ">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">arcsin(x)</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="arccos(&lt;?&gt;) ">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">arccos(x)</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="arctan(&lt;?&gt;) ">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">arctan(x)</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="arccot(&lt;?&gt;) ">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">arccot(x)</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="arsinh(&lt;?&gt;) ">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">arsinh(x)</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="arcosh(&lt;?&gt;) ">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">arcosh(x)</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="artanh(&lt;?&gt;) ">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">artanh(x)</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="arcoth(&lt;?&gt;) ">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label">arcoth(x)</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="label">arcsin(x)</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="arccos(&lt;?&gt;) ">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">arccos(x)</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="arctan(&lt;?&gt;) ">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">arctan(x)</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="arccot(&lt;?&gt;) ">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">arccot(x)</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="arsinh(&lt;?&gt;) ">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">arsinh(x)</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="arcosh(&lt;?&gt;) ">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">arcosh(x)</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="artanh(&lt;?&gt;) ">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">artanh(x)</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="arcoth(&lt;?&gt;) ">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">arcoth(x)</property>
               </object>
             </child>
           </object>
