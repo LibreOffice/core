@@ -170,7 +170,7 @@ struct update_info
 
 }
 
-void Update()
+void update()
 {
     OUString aLibExecDirURL( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER );
     rtl::Bootstrap::expandMacros(aLibExecDirURL);

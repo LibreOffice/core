@@ -1485,7 +1485,7 @@ int Desktop::Main()
                 bool bValidUpdateDirExists = aDirectoryItem.is();
                 if (bValidUpdateDirExists)
                 {
-                    Update();
+                    update();
                 }
             }
 
