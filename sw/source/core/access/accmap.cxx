@@ -2390,7 +2390,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrame *pFrame,
             else
             {
                 FireEvents();
-                if (xAccImpl->GetMap()) // not if disposed by FireEvents()
+                if (xAccImpl->GetFrame()) // not if disposed by FireEvents()
                 {
                     xAccImpl->InvalidatePosOrSize(rOldBox);
                 }
