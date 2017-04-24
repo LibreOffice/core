@@ -1228,8 +1228,14 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 {
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pRedl );
-                                    if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    //pNewRedl may have been deleted, check for existence before attempting
+                                    //removal which will deref pNewRedl in an attempt to find where it
+                                    //should be in the vector
+                                    if (std::find(mpRedlineTable->begin(), mpRedlineTable->end(), pNewRedl) == mpRedlineTable->end() ||
+                                        !mpRedlineTable->Remove(pNewRedl))
+                                    {
                                         pNewRedl = nullptr;
+                                    }
                                 }
                                 delete pRedl;
                             }
@@ -1255,8 +1261,14 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     // also dealt with when moving the indices.
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                                    if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    //pNewRedl may have been deleted, check for existence before attempting
+                                    //removal which will deref pNewRedl in an attempt to find where it
+                                    //should be in the vector
+                                    if (std::find(mpRedlineTable->begin(), mpRedlineTable->end(), pNewRedl) == mpRedlineTable->end() ||
+                                        !mpRedlineTable->Remove(pNewRedl))
+                                    {
                                         pNewRedl = nullptr;
+                                    }
                                     n = 0;      // re-initialize
                                 }
                                 bDec = true;
@@ -1281,8 +1293,14 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     // also dealt with when moving the indices.
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                                    if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    //pNewRedl may have been deleted, check for existence before attempting
+                                    //removal which will deref pNewRedl in an attempt to find where it
+                                    //should be in the vector
+                                    if (std::find(mpRedlineTable->begin(), mpRedlineTable->end(), pNewRedl) == mpRedlineTable->end() ||
+                                        !mpRedlineTable->Remove(pNewRedl))
+                                    {
                                         pNewRedl = nullptr;
+                                    }
                                     n = 0;      // re-initialize
                                     bDec = true;
                                 }
