@@ -38,17 +38,22 @@ class error_updater : public std::exception
 {
 };
 
-static const char kUserAgent[] = "UpdateChecker/1.0 (Linux)";
+#ifdef UNX
+static const char kUserAgent[] = "LibreOffice UpdateChecker/1.0 (Linux)";
+#else
+static const char kUserAgent[] = "LibreOffice UpdateChecker/1.0 (unknown platform)";
+#endif
 
 #ifdef UNX
 const char* pUpdaterName = "updater";
+const char* pSofficeExeName = "soffice";
 #elif defined(WNT)
 const char* pUpdaterName = "updater.exe";
+const char* pSofficeExeName = "soffice.exe";
 #else
 #error "Need implementation"
 #endif
 
-const char* pSofficeExeName = "soffice";
 
 void CopyFileToDir(const OUString& rTempDirURL, const OUString rFileName, const OUString& rOldDir)
 {
