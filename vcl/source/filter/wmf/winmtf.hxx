@@ -581,12 +581,7 @@ public:
                             const Point& rStartAngle,
                             const Point& rEndAngle
                         );
-    void                DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath = false );
-    void                DrawPolygon( tools::Polygon& rPolygon, bool /*bDrawTo*/, bool bRecordPath)
-                        {
-                            //For ReadAndDrawPolygon template compatibility
-                            DrawPolygon(rPolygon, bRecordPath);
-                        }
+    void                DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath );
     void                DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bRecordPath = false );
     void                DrawPolyLine( tools::Polygon& rPolygon,
                                       bool bDrawTo = false,

@@ -736,8 +736,8 @@ bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_POLYGON :
-                    ReadAndDrawPolygon<sal_Int32>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
-                                                   { pWinMtfOutput->DrawPolygon( rPolygon, aTo, aRecordPath ); }, false );
+                    ReadAndDrawPolygon<sal_Int32>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool /*aTo*/, bool aRecordPath )
+                                                   { pWinMtfOutput->DrawPolygon( rPolygon, aRecordPath ); }, false );
                 break;
 
                 case EMR_POLYLINETO :
@@ -1682,8 +1682,8 @@ bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_POLYGON16 :
-                    ReadAndDrawPolygon<sal_Int16>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool aTo, bool aRecordPath )
-                                                   { pWinMtfOutput->DrawPolygon( rPolygon, aTo, aRecordPath ); }, false );
+                    ReadAndDrawPolygon<sal_Int16>( [] ( std::unique_ptr<WinMtfOutput> &pWinMtfOutput, tools::Polygon& rPolygon, bool /*aTo*/, bool aRecordPath )
+                                                   { pWinMtfOutput->DrawPolygon( rPolygon, aRecordPath ); }, false );
                 break;
 
                 case EMR_POLYLINETO16 :

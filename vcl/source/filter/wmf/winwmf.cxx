@@ -354,7 +354,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 tools::Polygon aPoly(nPoints);
                 for (sal_uInt16 i(0); i < nPoints && pWMF->good(); ++i)
                     aPoly[ i ] = ReadPoint();
-                pOut->DrawPolygon(aPoly);
+                pOut->DrawPolygon(aPoly, false/*bRecordPath*/);
             }
 
             SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polygon record has more points than we can handle");
