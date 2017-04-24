@@ -29,9 +29,11 @@ def main(argv):
     r1 = session.post(login_url, data=login_data, headers={"Referer": login_url})
 
     url = base_address + "update/upload/release"
+    data = {}
+    data['csrfmiddlewaretoken'] = csrftoken
 
     build_config = os.path.join(sys.argv[1], "build_config.json")
-    r = session.post(url, files={'release_config': open(build_config, "r")})
+    r = session.post(url, files={'release_config': open(build_config, "r")}, data=data)
     print(r.content)
     if r.status_code != 200:
         sys.exit(1)
