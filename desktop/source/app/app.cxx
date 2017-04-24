@@ -1473,16 +1473,12 @@ int Desktop::Main()
         {
             osl::DirectoryItem aPatchInfo;
             osl::DirectoryItem::get(Updater::getUpdateInfoURL(), aPatchInfo);
+            osl::DirectoryItem aDirectoryItem;
+            osl::DirectoryItem::get(Updater::getUpdateDirURL(), aDirectoryItem);
 
-            if (aPatchInfo.is())
+            if (aPatchInfo.is() && aDirectoryItem.is())
             {
-                osl::DirectoryItem aDirectoryItem;
-                osl::DirectoryItem::get(Updater::getUpdateDirURL(), aDirectoryItem);
-                bool bValidUpdateDirExists = aDirectoryItem.is();
-                if (bValidUpdateDirExists)
-                {
-                    update();
-                }
+                update();
             }
             else if (isTimeForUpdateCheck())
             {
