@@ -351,10 +351,7 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
             case oslCheckMode::ReadAccess:
                 //rc = pDir->getNextItem( rItem, 0 );
                 rc = aDir.getNextItem( rItem );
-                if ( ( rc == ::osl::FileBase::E_None ) || ( rc == ::osl::FileBase::E_NOENT ) )
-                    bCheckResult = true;
-                else
-                    bCheckResult = false;
+                bCheckResult = ( rc == ::osl::FileBase::E_None ) || ( rc == ::osl::FileBase::E_NOENT );
                 break;
             case oslCheckMode::WriteAccess:
                 ( ( aUString += str ) += aSlashURL ) += aTmpName2;

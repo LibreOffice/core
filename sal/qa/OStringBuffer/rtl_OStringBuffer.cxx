@@ -14661,11 +14661,7 @@ namespace rtl_OStringBuffer
 
                 OString sBufferString(_sStrBuf.getStr());
                 sal_Int32 nPos = sBufferString.indexOf(sFloatValue);
-                if ( nPos >= 0 && nPos == _nLen)
-                {
-                    return true;
-                }
-                return false;
+                return nPos >= 0 && nPos == _nLen;
             }
     };
 
@@ -15829,11 +15825,7 @@ namespace rtl_OStringBuffer
 
                 OString sBufferString(_sStrBuf.getStr());
                 sal_Int32 nPos = sBufferString.indexOf(sDoubleValue);
-                if ( nPos >= 0 && nPos == _nLen)
-                {
-                    return true;
-                }
-                return false;
+                return nPos >= 0 && nPos == _nLen;
             }
     };
 
