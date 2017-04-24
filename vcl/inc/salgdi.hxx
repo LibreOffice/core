@@ -268,8 +268,7 @@ public:
 
     bool                        DrawGradient(
                                     const tools::PolyPolygon& rPolyPoly,
-                                    const Gradient& rGradient,
-                                    OutputDevice* );
+                                    const Gradient& rGradient );
 
 
     // CopyArea --> No RasterOp, but ClipRegion

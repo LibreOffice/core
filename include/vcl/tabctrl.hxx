@@ -63,7 +63,7 @@ protected:
     Link<TabControl*,bool> maDeactivateHdl;
 
     using Control::ImplInitSettings;
-    SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    SAL_DLLPRIVATE void         ImplInitSettings( bool bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
     SAL_DLLPRIVATE tools::Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
@@ -73,7 +73,7 @@ protected:
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem,
                                              const tools::Rectangle& rCurRect, bool bFirstInGroup,
-                                             bool bLastInGroup, bool bIsCurrentItem);
+                                             bool bLastInGroup);
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 

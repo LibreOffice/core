@@ -693,8 +693,7 @@ FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-void FixedBitmap::ImplDraw( OutputDevice* pDev, DrawFlags /* nDrawFlags */,
-                            const Point& rPos, const Size& rSize )
+void FixedBitmap::ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& rSize )
 {
     Bitmap* pBitmap = &maBitmap;
 
@@ -736,7 +735,7 @@ void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, Point(), GetOutputSizePixel());
 }
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
@@ -756,7 +755,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         aRect = aDecoView.DrawFrame( aRect, DrawFrameStyle::DoubleIn );
     }
     pDev->IntersectClipRegion( aRect );
-    ImplDraw( pDev, nFlags, aRect.TopLeft(), aRect.GetSize() );
+    ImplDraw( pDev, aRect.TopLeft(), aRect.GetSize() );
 
     pDev->Pop();
 }

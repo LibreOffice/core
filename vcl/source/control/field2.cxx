@@ -997,7 +997,7 @@ static OUString ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, Ext
         return rLocaleDataWrapper.getDateSep();
 }
 
-static bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldFormat eFormat,
+static bool ImplDateProcessKeyInput( const KeyEvent& rKEvt, ExtDateFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
     sal_Unicode cChar = rKEvt.GetCharCode();
@@ -1012,8 +1012,7 @@ static bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldF
 }
 
 static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateOrder,
-                              const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper,
-                              const AllSettings& )
+                              const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper )
 {
     sal_uInt16 nDay = 0;
     sal_uInt16 nMonth = 0;
@@ -1121,10 +1120,10 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
     return false;
 }
 
-bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr, const AllSettings& rSettings )
+bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr )
 {
     Date aDate( Date::EMPTY );
-    if ( !ImplDateGetValue( rStr, aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
+    if ( !ImplDateGetValue( rStr, aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
         return true;
 
     Date aTempDate = aDate;
@@ -1133,13 +1132,12 @@ bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr, c
     else if ( aTempDate < GetMin() )
         aTempDate = GetMin();
 
-    rOutStr = ImplGetDateAsText( aTempDate, rSettings );
+    rOutStr = ImplGetDateAsText( aTempDate );
 
     return true;
 }
 
-OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
-                                           const AllSettings& ) const
+OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
 {
     bool bShowCentury = false;
     switch ( GetExtDateFormat() )
@@ -1582,7 +1580,7 @@ void DateFormatter::ImplSetUserDate( const Date& rNewDate, Selection* pNewSelect
     maLastDate = aNewDate;
 
     if ( GetField() )
-        ImplSetText( ImplGetDateAsText( aNewDate, GetFieldSettings() ), pNewSelection );
+        ImplSetText( ImplGetDateAsText( aNewDate ), pNewSelection );
 }
 
 void DateFormatter::ImplNewFieldValue( const Date& rDate )
@@ -1620,7 +1618,7 @@ Date DateFormatter::GetDate() const
 
     if ( GetField() )
     {
-        if ( ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
+        if ( ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
         {
             if ( aDate > maMax )
                 aDate = maMax;
@@ -1665,7 +1663,7 @@ bool DateFormatter::IsEmptyDate() const
         else if ( !maLastDate.GetDate() )
         {
             Date aDate( Date::EMPTY );
-            bEmpty = !ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
+            bEmpty = !ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() );
         }
     }
     return bEmpty;
@@ -1680,14 +1678,14 @@ void DateFormatter::Reformat()
         return;
 
     OUString aStr;
-    bool bOK = ImplDateReformat( GetField()->GetText(), aStr, GetFieldSettings() );
+    bool bOK = ImplDateReformat( GetField()->GetText(), aStr );
     if( !bOK )
         return;
 
     if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr );
-        (void)ImplDateGetValue(aStr, maLastDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings());
+        (void)ImplDateGetValue(aStr, maLastDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper());
     }
     else
     {
@@ -1743,7 +1741,7 @@ bool DateField::PreNotify( NotifyEvent& rNEvt )
          ( GetExtDateFormat() != ExtDateFieldFormat::SystemLong ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( true ), ImplGetLocaleDataWrapper() ) )
+        if ( ImplDateProcessKeyInput( *rNEvt.GetKeyEvent(), GetExtDateFormat( true ), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 
@@ -1769,7 +1767,7 @@ bool DateField::EventNotify( NotifyEvent& rNEvt )
                 else
                 {
                     Date aDate( 0, 0, 0 );
-                    if ( ImplDateGetValue( GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
+                    if ( ImplDateGetValue( GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper() ) )
                         // even with strict text analysis, our text is a valid date -> do a complete
                         // reformat
                         Reformat();
@@ -1848,7 +1846,7 @@ bool DateBox::PreNotify( NotifyEvent& rNEvt )
          ( GetExtDateFormat() != ExtDateFieldFormat::SystemLong ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( true ), ImplGetLocaleDataWrapper() ) )
+        if ( ImplDateProcessKeyInput( *rNEvt.GetKeyEvent(), GetExtDateFormat( true ), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 
@@ -1902,7 +1900,7 @@ void DateBox::ReformatAll()
     const sal_Int32 nEntryCount = GetEntryCount();
     for ( sal_Int32 i=0; i < nEntryCount; ++i )
     {
-        ImplDateReformat( GetEntry( i ), aStr, GetFieldSettings() );
+        ImplDateReformat( GetEntry( i ), aStr );
         RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }
@@ -1910,7 +1908,7 @@ void DateBox::ReformatAll()
     SetUpdateMode( true );
 }
 
-static bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
+static bool ImplTimeProcessKeyInput( const KeyEvent& rKEvt,
                                      bool bStrictFormat, bool bDuration,
                                      TimeFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
@@ -2524,7 +2522,7 @@ bool TimeField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplTimeProcessKeyInput( *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 
@@ -2641,7 +2639,7 @@ bool TimeBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplTimeProcessKeyInput( *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 

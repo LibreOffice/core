@@ -184,7 +184,7 @@ private:
     void HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void WriteRecords(const GDIMetaFile & rMTF);
 
-    void WriteHeader(const GDIMetaFile & rMTF, bool bPlaceable);
+    void WriteHeader(bool bPlaceable);
     void UpdateHeader();
 
     void WriteEmbeddedEMF( const GDIMetaFile& rMTF );

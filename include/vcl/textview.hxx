@@ -69,7 +69,7 @@ protected:
     void                ShowSelection();
     void                HideSelection();
     void                ShowSelection( const TextSelection& rSel );
-    void                ImpShowHideSelection( bool bShow, const TextSelection* pRange = nullptr );
+    void                ImpShowHideSelection( const TextSelection* pRange = nullptr );
 
     TextSelection       ImpMoveCursor( const KeyEvent& rKeyEvent );
     TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );

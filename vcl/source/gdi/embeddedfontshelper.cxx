@@ -209,7 +209,7 @@ bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, long size, Font
 }
 
 OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
-    FontWeight weight, FontPitch pitch, rtl_TextEncoding, FontRights rights )
+    FontWeight weight, FontPitch pitch, FontRights rights )
 {
     OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );

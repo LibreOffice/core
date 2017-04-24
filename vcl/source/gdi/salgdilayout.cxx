@@ -523,7 +523,7 @@ bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
     return bRet;
 }
 
-bool SalGraphics::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, OutputDevice* )
+bool SalGraphics::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient )
 {
     return drawGradient( rPolyPoly, rGradient );
 }

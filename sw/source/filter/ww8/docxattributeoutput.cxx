@@ -5951,14 +5951,14 @@ void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
                 FSEND );
 }
 
-void DocxAttributeOutput::EmbedFont( const OUString& name, FontFamily family, FontPitch pitch, rtl_TextEncoding encoding )
+void DocxAttributeOutput::EmbedFont( const OUString& name, FontFamily family, FontPitch pitch )
 {
     if( !m_rExport.m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         return; // no font embedding with this document
-    EmbedFontStyle( name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_NORMAL, pitch, encoding );
-    EmbedFontStyle( name, XML_embedBold, family, ITALIC_NONE, WEIGHT_BOLD, pitch, encoding );
-    EmbedFontStyle( name, XML_embedItalic, family, ITALIC_NORMAL, WEIGHT_NORMAL, pitch, encoding );
-    EmbedFontStyle( name, XML_embedBoldItalic, family, ITALIC_NORMAL, WEIGHT_BOLD, pitch, encoding );
+    EmbedFontStyle( name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_NORMAL, pitch );
+    EmbedFontStyle( name, XML_embedBold, family, ITALIC_NONE, WEIGHT_BOLD, pitch );
+    EmbedFontStyle( name, XML_embedItalic, family, ITALIC_NORMAL, WEIGHT_NORMAL, pitch );
+    EmbedFontStyle( name, XML_embedBoldItalic, family, ITALIC_NORMAL, WEIGHT_BOLD, pitch );
 }
 
 static inline char toHexChar( int value )
@@ -5967,11 +5967,11 @@ static inline char toHexChar( int value )
 }
 
 void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic,
-    FontWeight weight, FontPitch pitch, rtl_TextEncoding encoding )
+    FontWeight weight, FontPitch pitch )
 {
     // Embed font if at least viewing is allowed (in which case the opening app must check
     // the font license rights too and open either read-only or not use the font for editing).
-    OUString fontUrl = EmbeddedFontsHelper::fontFileUrl( name, family, italic, weight, pitch, encoding,
+    OUString fontUrl = EmbeddedFontsHelper::fontFileUrl( name, family, italic, weight, pitch,
         EmbeddedFontsHelper::FontRights::ViewingAllowed );
     if( fontUrl.isEmpty())
         return;

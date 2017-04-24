@@ -8847,8 +8847,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                                                  nEmphYOff,
                                                  nEmphWidth,
                                                  nEmphMark,
-                                                 m_pReferenceDevice->ImplDevicePixelToLogicWidth(nEmphHeight),
-                                                 m_pReferenceDevice->mpFontInstance->mnOrientation );
+                                                 m_pReferenceDevice->ImplDevicePixelToLogicWidth(nEmphHeight) );
         if ( bEmphPolyLine )
         {
             setLineColor( m_aCurrentPDFState.m_aFont.GetColor() );

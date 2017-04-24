@@ -93,9 +93,9 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
     return aTemplate.makeStringAndClear();
 }
 
-bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
-                                        bool bStrictFormat, bool bThousandSep,
-                                        const LocaleDataWrapper& rLocaleDataWrapper )
+bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
+                                 bool bStrictFormat, bool bThousandSep,
+                                 const LocaleDataWrapper& rLocaleDataWrapper )
 {
     if ( !bStrictFormat )
         return false;
@@ -240,11 +240,11 @@ bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
     return true;
 }
 
-bool ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                             bool, bool bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
+bool ImplLongCurrencyProcessKeyInput( const KeyEvent& rKEvt,
+                                      bool bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     // There's no StrictFormat that makes sense here, thus allow all chars
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, false, bUseThousandSep, rLocaleDataWrapper  );
+    return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rLocaleDataWrapper  );
 }
 
 } // namespace
@@ -451,7 +451,7 @@ bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
-        if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
+        if ( ImplLongCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return true;
     }
     return SpinField::PreNotify( rNEvt );
@@ -525,7 +525,7 @@ bool LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
-        if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
+        if ( ImplLongCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return true;
     }
     return ComboBox::PreNotify( rNEvt );

@@ -658,7 +658,7 @@ void PushButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( nStyle & WB_NOLIGHTBORDER )
         ImplGetButtonState() |= DrawButtonFlags::NoLightBorder;
 
-    ImplInitSettings( true, true, true );
+    ImplInitSettings( true );
 }
 
 WinBits PushButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle )
@@ -692,10 +692,9 @@ const Color& PushButton::GetCanonicalTextColor( const StyleSettings& _rStyle ) c
     return _rStyle.GetButtonTextColor();
 }
 
-void PushButton::ImplInitSettings( bool bFont,
-                                   bool bForeground, bool bBackground )
+void PushButton::ImplInitSettings( bool bBackground )
 {
-    Button::ImplInitSettings( bFont, bForeground );
+    Button::ImplInitSettings();
 
     if ( bBackground )
     {
@@ -1453,17 +1452,17 @@ void PushButton::StateChanged( StateChangedType nType )
     else if ( (nType == StateChangedType::Zoom) ||
               (nType == StateChangedType::ControlFont) )
     {
-        ImplInitSettings( true, false, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
@@ -1477,7 +1476,7 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
@@ -1835,7 +1834,7 @@ void RadioButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
     Button::ImplInit( pParent, nStyle, nullptr );
 
-    ImplInitSettings( true, true, true );
+    ImplInitSettings( true );
 }
 
 WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle )
@@ -1863,10 +1862,9 @@ const Color& RadioButton::GetCanonicalTextColor( const StyleSettings& _rStyle ) 
     return _rStyle.GetRadioCheckTextColor();
 }
 
-void RadioButton::ImplInitSettings( bool bFont,
-                                    bool bForeground, bool bBackground )
+void RadioButton::ImplInitSettings( bool bBackground )
 {
-    Button::ImplInitSettings( bFont, bForeground );
+    Button::ImplInitSettings();
 
     if ( bBackground )
     {
@@ -2557,17 +2555,17 @@ void RadioButton::StateChanged( StateChangedType nType )
     else if ( (nType == StateChangedType::Zoom) ||
               (nType == StateChangedType::ControlFont) )
     {
-        ImplInitSettings( true, false, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
@@ -2581,7 +2579,7 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
@@ -2939,7 +2937,7 @@ void CheckBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
     Button::ImplInit( pParent, nStyle, nullptr );
 
-    ImplInitSettings( true, true, true );
+    ImplInitSettings( true );
 }
 
 WinBits CheckBox::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle )
@@ -2962,10 +2960,9 @@ const Color& CheckBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) con
     return _rStyle.GetRadioCheckTextColor();
 }
 
-void CheckBox::ImplInitSettings( bool bFont,
-                                 bool bForeground, bool bBackground )
+void CheckBox::ImplInitSettings( bool bBackground )
 {
-    Button::ImplInitSettings( bFont, bForeground );
+    Button::ImplInitSettings();
 
     if ( bBackground )
     {
@@ -3479,17 +3476,17 @@ void CheckBox::StateChanged( StateChangedType nType )
     else if ( (nType == StateChangedType::Zoom) ||
               (nType == StateChangedType::ControlFont) )
     {
-        ImplInitSettings( true, false, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
@@ -3503,7 +3500,7 @@ void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }

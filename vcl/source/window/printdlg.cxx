@@ -1300,7 +1300,7 @@ void PrintDialog::updatePrinterText()
     }
 }
 
-void PrintDialog::setPreviewText( sal_Int32 )
+void PrintDialog::setPreviewText()
 {
     OUString aNewText( searchAndReplace( maPageStr, "%n", 2, OUString::number( mnCachedPages )  ) );
     mpNumPagesText->SetText( aNewText );
@@ -1317,7 +1317,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     if( mnCurPage < 0 )
         mnCurPage = 0;
 
-    setPreviewText( mnCurPage );
+    setPreviewText();
 
     mpPageEdit->SetMin( 1 );
     mpPageEdit->SetMax( nPages );

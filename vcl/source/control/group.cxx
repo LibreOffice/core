@@ -33,7 +33,7 @@ void GroupBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, nullptr );
     SetMouseTransparent( true );
-    ImplInitSettings( true, true, true );
+    ImplInitSettings( true );
 }
 
 WinBits GroupBox::ImplInitStyle( WinBits nStyle )
@@ -53,10 +53,9 @@ const Color& GroupBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) con
     return _rStyle.GetGroupTextColor();
 }
 
-void GroupBox::ImplInitSettings( bool bFont,
-                                 bool bForeground, bool bBackground )
+void GroupBox::ImplInitSettings( bool bBackground )
 {
-    Control::ImplInitSettings( bFont, bForeground );
+    Control::ImplInitSettings();
 
     if ( bBackground )
     {
@@ -238,17 +237,17 @@ void GroupBox::StateChanged( StateChangedType nType )
     else if ( (nType == StateChangedType::Zoom)  ||
               (nType == StateChangedType::ControlFont) )
     {
-        ImplInitSettings( true, false, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
@@ -262,7 +261,7 @@ void GroupBox::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
