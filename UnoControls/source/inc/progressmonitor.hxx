@@ -278,8 +278,8 @@ private:
 
 private:
 
-    static bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText, bool bbeforeProgress );    // addText, updateText
-    static bool impl_debug_checkParameter( const OUString& rTopic, bool bbeforeProgress );                              // removeText
+    static bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText );    // addText, updateText
+    static bool impl_debug_checkParameter( const OUString& rTopic );                           // removeText
 
 // private variables
 

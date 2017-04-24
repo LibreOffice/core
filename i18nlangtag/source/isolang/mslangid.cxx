@@ -518,7 +518,7 @@ bool MsLangId::isLegacy( LanguageType nLang )
 
 
 // static
-LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bool /*bUserInterfaceSelection*/ )
+LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
 {
     switch (nLang)
     {

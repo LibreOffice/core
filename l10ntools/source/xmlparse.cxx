@@ -788,10 +788,10 @@ SimpleXMLParser::SimpleXMLParser()
 {
     m_aParser = XML_ParserCreate( nullptr );
     XML_SetUserData( m_aParser, this );
-    XML_SetElementHandler( m_aParser, reinterpret_cast<XML_StartElementHandler>(StartElementHandler), reinterpret_cast<XML_EndElementHandler>(EndElementHandler) );
-    XML_SetCharacterDataHandler( m_aParser, reinterpret_cast<XML_CharacterDataHandler>(CharacterDataHandler) );
-    XML_SetCommentHandler( m_aParser, reinterpret_cast<XML_CommentHandler>(CommentHandler) );
-    XML_SetDefaultHandler( m_aParser, reinterpret_cast<XML_DefaultHandler>(DefaultHandler) );
+    XML_SetElementHandler( m_aParser, StartElementHandler, EndElementHandler );
+    XML_SetCharacterDataHandler( m_aParser, CharacterDataHandler );
+    XML_SetCommentHandler( m_aParser, CommentHandler );
+    XML_SetDefaultHandler( m_aParser, DefaultHandler );
 }
 
 SimpleXMLParser::~SimpleXMLParser()
@@ -806,9 +806,9 @@ void SimpleXMLParser::StartElementHandler(
 }
 
 void SimpleXMLParser::EndElementHandler(
-    void *userData, const XML_Char *name )
+    void *userData, const XML_Char * /*name*/ )
 {
-    static_cast<SimpleXMLParser *>(userData)->EndElement( name );
+    static_cast<SimpleXMLParser *>(userData)->EndElement();
 }
 
 void SimpleXMLParser::CharacterDataHandler(
@@ -844,7 +844,7 @@ void SimpleXMLParser::StartElement(
     }
 }
 
-void SimpleXMLParser::EndElement( const XML_Char * /*name*/ )
+void SimpleXMLParser::EndElement()
 {
     m_pCurNode = m_pCurNode->GetParent();
     m_pCurData = nullptr;
