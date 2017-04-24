@@ -321,7 +321,7 @@ void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OStrin
     const sal_Int32 nCheck= SAL_N_ELEMENTS(aPrefix) - 1;
     const sal_Int32 nStart= SAL_N_ELEMENTS("Name = \"") - 1 + rName.getLength();
 
-    if (rValue.copy(nStart , nCheck).equalsL(aPrefix, nCheck))
+    if (rValue.copy(nStart, nCheck).equalsL(aPrefix, nCheck))
     {
         sal_Int32 nIndex = nStart + nCheck;
         beans::PropertyValue aPropertyValue;

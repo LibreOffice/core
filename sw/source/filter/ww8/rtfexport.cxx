@@ -698,8 +698,7 @@ void RtfExport::ExportDocument_Impl()
         // Seeking the first SwFormatPageDesc. If no set, the default is valid
         const SwFormatPageDesc* pSttPgDsc = nullptr;
         {
-            const SwNode& rSttNd = *m_pDoc->GetNodes()[
-                                       m_pDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 ];
+            const SwNode& rSttNd = *m_pDoc->GetNodes()[m_pDoc->GetNodes().GetEndOfExtras().GetIndex() + 2];
             const SfxItemSet* pSet = nullptr;
 
             if (rSttNd.IsContentNode())
@@ -1165,7 +1164,7 @@ void RtfExport::OutColorTable()
         nMaxItem = rPool.GetItemCount2(*pIds);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if ((pBackground = static_cast<const SvxBrushItem*>(rPool.GetItem2(*pIds , n))))
+            if ((pBackground = static_cast<const SvxBrushItem*>(rPool.GetItem2(*pIds, n))))
             {
                 InsColor(pBackground->GetColor());
             }

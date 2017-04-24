@@ -770,8 +770,7 @@ void SdTiledRenderingTest::testInsertTable()
     {
         { "Rows", uno::makeAny(sal_Int32(3)) },
         { "Columns", uno::makeAny(sal_Int32(5)) }
-    }
-    ));
+    }));
 
     comphelper::dispatchCommand(".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();

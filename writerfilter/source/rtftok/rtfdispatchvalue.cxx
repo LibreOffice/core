@@ -67,7 +67,7 @@ int getNumberFormat(int nParam)
         NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth,
         NS_ooxml::LN_Value_ST_NumberFormat_decimalHalfWidth,
         NS_ooxml::LN_Value_ST_NumberFormat_japaneseLegal,
-        NS_ooxml::LN_Value_ST_NumberFormat_japaneseDigitalTenThousand ,
+        NS_ooxml::LN_Value_ST_NumberFormat_japaneseDigitalTenThousand,
         NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircleChinese,
         NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth2,
         NS_ooxml::LN_Value_ST_NumberFormat_aiueoFullWidth,

@@ -37,7 +37,7 @@ RtfSdrExport::RtfSdrExport(RtfExport& rExport)
       m_rAttrOutput(static_cast<RtfAttributeOutput&>(m_rExport.AttrOutput())),
       m_pSdrObject(nullptr),
       m_nShapeType(ESCHER_ShpInst_Nil),
-      m_nShapeFlags(0) ,
+      m_nShapeFlags(0),
       m_aShapeStyle(200),
       m_pShapeTypeWritten(new bool[ ESCHER_ShpInst_COUNT ])
 {
