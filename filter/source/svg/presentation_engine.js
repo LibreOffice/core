@@ -5080,6 +5080,7 @@ var SINGLESWEEPWIPE_TRANSITION      = 21; // 24
 var WATERFALLWIPE_TRANSITION        = 22; // 34
 var SPIRALWIPE_TRANSITION           = 23; // 31
 var MISCDIAGONALWIPE_TRANSITION     = 24; // 7
+var BOXSNAKESWIPE_TRANSITION        = 25; // 33
 
 var aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5101,6 +5102,7 @@ var aTransitionTypeInMap = {
     'snakeWipe'         : SNAKEWIPE_TRANSITION,
     'parallelSnakesWipe': PARALLELSNAKESWIPE_TRANSITION,
     'spiralWipe'        : SPIRALWIPE_TRANSITION,
+    'boxSnakesWipe'     : BOXSNAKESWIPE_TRANSITION,
     'irisWipe'          : IRISWIPE_TRANSITION,
     'veeWipe'           : VEEWIPE_TRANSITION,
     'zigZagWipe'        : ZIGZAGWIPE_TRANSITION,
@@ -5199,6 +5201,12 @@ var HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE     = 81; // 83
 var HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE    = 82; // 84
 var DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 83; // 85
 var DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 84; // 86
+var TWOBOXTOP_TRANS_SUBTYPE                     = 85; // 87
+var TWOBOXBOTTOM_TRANS_SUBTYPE                  = 86; // 88
+var TWOBOXLEFT_TRANS_SUBTYPE                    = 87; // 89
+var TWOBOXRIGHT_TRANS_SUBTYPE                   = 88; // 90
+var FOURBOXVERTICAL_TRANS_SUBTYPE               = 89; // 91
+var FOURBOXHORIZONTAL_TRANS_SUBTYPE             = 90; // 92
 
 var aTransitionSubtypeInMap = {
     'default'                       : DEFAULT_TRANS_SUBTYPE,
@@ -5285,7 +5293,13 @@ var aTransitionSubtypeInMap = {
     'horizontalTopLeftOpposite'     : HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE,
     'horizontalTopRightOpposite'    : HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE,
     'diagonalBottomLeftOpposite'    : DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE,
-    'diagonalTopLeftOpposite'       : DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE
+    'diagonalTopLeftOpposite'       : DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE,
+    'twoBoxTop'                     : TWOBOXTOP_TRANS_SUBTYPE,
+    'twoBoxBottom'                  : TWOBOXBOTTOM_TRANS_SUBTYPE,
+    'twoBoxLeft'                    : TWOBOXLEFT_TRANS_SUBTYPE,
+    'twoBoxRight'                   : TWOBOXRIGHT_TRANS_SUBTYPE,
+    'fourBoxVertical'               : FOURBOXVERTICAL_TRANS_SUBTYPE,
+    'fourBoxHorizontal'             : FOURBOXHORIZONTAL_TRANS_SUBTYPE
 };
 
 // Transition Modes
@@ -5575,6 +5589,68 @@ aTransitionInfoTable[SPIRALWIPE_TRANSITION][BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUB
     'scaleX' : 1.0,
     'scaleY' : 1.0,
     'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[BOXSNAKESWIPE_TRANSITION] = {};
+aTransitionInfoTable[BOXSNAKESWIPE_TRANSITION][TWOBOXTOP_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXSNAKESWIPE_TRANSITION][TWOBOXBOTTOM_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXSNAKESWIPE_TRANSITION][TWOBOXLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXSNAKESWIPE_TRANSITION][TWOBOXRIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXSNAKESWIPE_TRANSITION][FOURBOXVERTICAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BOXSNAKESWIPE_TRANSITION][FOURBOXHORIZONTAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
     'outInvertSweep' : true,
     'scaleIsotropically' : false
 };
@@ -9796,6 +9872,13 @@ function createClipPolyPolygon( nType, nSubtype )
                 nSubtype == TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE    ||
                 nSubtype == BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE ||
                 nSubtype == BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE );
+        case BOXSNAKESWIPE_TRANSITION:
+            return new BoxSnakesWipePath(
+                // elements
+                8 * 8,
+                // fourBox
+                nSubtype == FOURBOXVERTICAL_TRANS_SUBTYPE ||
+                nSubtype == FOURBOXHORIZONTAL_TRANS_SUBTYPE );
 
     }
 }
@@ -10469,6 +10552,46 @@ function RandomWipePath( nElements, bRandomBars )
     }
 }
 
+/** perform
+ *
+ *  @param nT
+ *      A parameter in [0,1] representing the width of the generated bars or squares.
+ *  @return SVGPathElement
+ *      A svg <path> element representing a multi bars or a multi squared cells.
+ */
+RandomWipePath.prototype.perform = function( nT )
+{
+    var aPolyPath = createEmptyPath();
+    var aPoint;
+    var aPath;
+    var aTransform;
+    var nElements = Math.round( nT * this.nElements );
+    if( nElements === 0 )
+    {
+        return aPolyPath;
+    }
+    // check if we need to reset the clip path
+    if( this.nAlreadyAppendedElements >= nElements )
+    {
+        this.nAlreadyAppendedElements = 0;
+        this.aClipPath = createEmptyPath();
+    }
+    var nPos;
+    for( nPos = this.nAlreadyAppendedElements; nPos < nElements; ++nPos )
+    {
+        aPoint = this.aPositionArray[nPos];
+        aPath = this.aBasePath.cloneNode( true );
+        aTransform = SVGIdentityMatrix.translate( aPoint.x, aPoint.y );
+        aPath.matrixTransform( aTransform );
+        aPolyPath.appendPath( aPath );
+    }
+
+    this.nAlreadyAppendedElements = nElements;
+    this.aClipPath.appendPath( aPolyPath );
+
+    return this.aClipPath.cloneNode( true );
+};
+
 /** Class SnakeWipeSlide
  *
  *  @param nElements
@@ -10755,45 +10878,39 @@ SpiralWipePath.prototype.perform = function( nT ) {
     return this.bFlipOnYAxis ? flipOnYAxis(res) : res;
 }
 
-/** perform
+/** Class BoxSnakesWipePath
+ *  Generates a twoBoxLeft or fourBoxHorizontal wipe:
  *
- *  @param nT
- *      A parameter in [0,1] representing the width of the generated bars or squares.
- *  @return SVGPathElement
- *      A svg <path> element representing a multi bars or a multi squared cells.
  */
-RandomWipePath.prototype.perform = function( nT )
-{
-    var aPolyPath = createEmptyPath();
-    var aPoint;
-    var aPath;
-    var aTransform;
-    var nElements = Math.round( nT * this.nElements );
-    if( nElements === 0 )
-    {
-        return aPolyPath;
-    }
-    // check if we need to reset the clip path
-    if( this.nAlreadyAppendedElements >= nElements )
-    {
-        this.nAlreadyAppendedElements = 0;
-        this.aClipPath = createEmptyPath();
-    }
-    var nPos;
-    for( nPos = this.nAlreadyAppendedElements; nPos < nElements; ++nPos )
-    {
-        aPoint = this.aPositionArray[nPos];
-        aPath = this.aBasePath.cloneNode( true );
-        aTransform = SVGIdentityMatrix.translate( aPoint.x, aPoint.y );
-        aPath.matrixTransform( aTransform );
-        aPolyPath.appendPath( aPath );
-    }
+function BoxSnakesWipePath(nElements, bFourBox) {
+    SpiralWipePath.call(this, nElements);
+    this.bFourBox = bFourBox;
+}
 
-    this.nAlreadyAppendedElements = nElements;
-    this.aClipPath.appendPath( aPolyPath );
+BoxSnakesWipePath.prototype = Object.create(SpiralWipePath);
 
-    return this.aClipPath.cloneNode( true );
-};
+BoxSnakesWipePath.prototype.perform = function( nT ) {
+    var res = createUnitSquarePath(), aTransform;
+    var innerSpiral = SpiralWipePath.prototype.calcNegSpiral.call(this, 1.0 - nT);
+    innerSpiral.changeOrientation();
+
+    if(this.bFourBox) {
+        aTransform = SVGIdentityMatrix.scale(0.5, 0.5);
+        innerSpiral.matrixTransform(aTransform);
+        res.appendPath(innerSpiral);
+        res.appendPath(flipOnXAxis(innerSpiral));
+        innerSpiral = flipOnYAxis(innerSpiral);
+        res.appendPath(innerSpiral);
+        res.appendPath(flipOnXAxis(innerSpiral));
+    }
+    else {
+        aTransform = SVGIdentityMatrix.scale(1.0, 0.5);
+        innerSpiral.matrixTransform(aTransform);
+        res.appendPath(innerSpiral);
+        res.appendPath(flipOnXAxis(innerSpiral));
+    }
+    return this.bFlipOnYAxis ? flipOnYAxis(res) : res;
+}
 
 /** Class VeeWipePath
   *
