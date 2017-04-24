@@ -588,10 +588,7 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
 bool ScTabControl::StartRenaming()
 {
-    if ( pViewData->GetDocument()->IsDocEditable() )
-        return true;
-    else
-        return false;
+    return pViewData->GetDocument()->IsDocEditable();
 }
 
 TabBarAllowRenamingReturnCode ScTabControl::AllowRenaming()

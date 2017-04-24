@@ -2484,10 +2484,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         {
                             // if scientific, bThousand is used for engineering notation
                             const sal_uInt16 nIntegerDigits = pFormatEntry->GetFormatIntegerDigits();
-                            if (nIntegerDigits > 0 && ((nIntegerDigits % 3) == 0))
-                                bThousand = true;
-                            else
-                                bThousand = false;
+                            bThousand = nIntegerDigits > 0 && ((nIntegerDigits % 3) == 0);
                         }
                         OUString aFormat;
                         static OUString sBreak = ",";

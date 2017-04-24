@@ -299,10 +299,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
         }
     }
 
-    if (bOpen)
-        return true;
-
-    return false;
+    return bOpen;
 }
 
 bool ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const

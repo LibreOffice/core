@@ -897,10 +897,7 @@ bool ScConditionEntry::IsDuplicate( double nArg, const OUString& rStr ) const
             return false;
         else
         {
-            if(itr->second > 1)
-                return true;
-            else
-                return false;
+            return itr->second > 1;
         }
     }
     else
@@ -910,10 +907,7 @@ bool ScConditionEntry::IsDuplicate( double nArg, const OUString& rStr ) const
             return false;
         else
         {
-            if(itr->second > 1)
-                return true;
-            else
-                return false;
+            return itr->second > 1;
         }
     }
 }

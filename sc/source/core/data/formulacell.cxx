@@ -303,11 +303,7 @@ lcl_checkRangeDimensions(
         ++aCur;
     }
 
-    if (bOk && aCur == rEnd)
-    {
-        return true;
-    }
-    return false;
+    return bOk && aCur == rEnd;
 }
 
 class LessByReference : public std::binary_function<const formula::FormulaToken*, const formula::FormulaToken*, bool>

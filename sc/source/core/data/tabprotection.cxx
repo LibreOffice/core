@@ -438,10 +438,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
         }
     }
     ScRangeList aResultList( aRangeList.GetIntersectedRange( rRange));
-    if (aResultList.size() == 1 && *aResultList[0] == rRange)
-        return true;
-
-    return false;
+    return aResultList.size() == 1 && *aResultList[0] == rRange;
 }
 
 bool ScTableProtectionImpl::isSelectionEditable( const ScRangeList& rRangeList ) const

@@ -237,10 +237,7 @@ bool equals( const formula::VectorRefArray& rArray, size_t nPos, double fVal )
         // This is a string cell.
         return false;
 
-    if (rArray.mpNumericArray && rArray.mpNumericArray[nPos] == fVal)
-        return true;
-
-    return false;
+    return rArray.mpNumericArray && rArray.mpNumericArray[nPos] == fVal;
 }
 
 bool equals( const formula::VectorRefArray& rArray, size_t nPos, const OUString& rVal )
