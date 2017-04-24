@@ -1659,16 +1659,14 @@ bool SfxStoringHelper::CheckFilterOptionsAppearance(
     if( xFilterCFG.is() )
     {
         try {
-               uno::Sequence < beans::PropertyValue > aProps;
+            uno::Sequence < beans::PropertyValue > aProps;
             uno::Any aAny = xFilterCFG->getByName( aFilterName );
-               if ( aAny >>= aProps )
-               {
+            if ( aAny >>= aProps )
+            {
                 ::comphelper::SequenceAsHashMap aPropsHM( aProps );
-                   OUString aServiceName = aPropsHM.getUnpackedValueOrDefault(
-                                                    "UIComponent",
-                                                    OUString() );
+                OUString aServiceName = aPropsHM.getUnpackedValueOrDefault( "UIComponent", OUString() );
                 if( !aServiceName.isEmpty() )
-                       bUseFilterOptions = true;
+                    bUseFilterOptions = true;
             }
         }
         catch( const uno::Exception& )
