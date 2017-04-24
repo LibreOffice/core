@@ -435,6 +435,7 @@ class SwTextGridItem;
 SwTextGridItem const* GetGridItem(SwPageFrame const*const);
 
 sal_uInt16 GetGridWidth(SwTextGridItem const&, SwDoc const&);
+sal_uInt16 GetCharPitch(SwTextGridItem const*, SwDoc*);
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
 

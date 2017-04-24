@@ -230,6 +230,7 @@ public:
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
     void testTdf107025();
+    void testTdf107362();
     void testTdf105417();
     void testTdf105625();
     void testTdf106736();
@@ -356,6 +357,7 @@ public:
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf107025);
+    CPPUNIT_TEST(testTdf107362);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
@@ -4461,6 +4463,19 @@ void SwUiWriterTest::testTdf107025()
     sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nWidth").toInt32();
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9), nWidth2 / nWidth1 );
+}
+
+void SwUiWriterTest::testTdf107362()
+{
+    createDoc("tdf107362.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Do the subsequent test only if the first line can be displayed,
+    if (!getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]", "nWidth").toInt32())
+        return;
+
+    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//LineBreak)[1]", "nWidth").toInt32();
+    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//LineBreak)[2]", "nWidth").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("First line should be longer.", nWidth1 > nWidth2 );
 }
 
 void SwUiWriterTest::testTdf105417()

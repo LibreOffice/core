@@ -57,6 +57,8 @@
 #include <sortedobjs.hxx>
 #include <calbck.hxx>
 #include <txtfly.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <poolfmt.hrc>
 
 using namespace ::com::sun::star;
 
@@ -2378,6 +2380,28 @@ SwTextGridItem const* GetGridItem(SwPageFrame const*const pPage)
 sal_uInt16 GetGridWidth(SwTextGridItem const& rG, SwDoc const& rDoc)
 {
     return (rDoc.IsSquaredPageMode()) ? rG.GetBaseHeight() : rG.GetBaseWidth();
+}
+
+
+sal_uInt16 GetCharPitch( SwTextGridItem const* pGrid, SwDoc *pDoc )
+{
+    assert( pGrid );
+    assert( pDoc );
+
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SfxStyleSheetBasePool* pBasePool = pDocShell->GetStyleSheetPool();
+
+    OUString sString(SW_RESSTR(STR_POOLCOLL_STANDARD));
+
+    SfxStyleSheetBase* pStyle = pBasePool->Find(sString, SfxStyleFamily::Para);
+    SfxItemSet& aTmpSet = pStyle->GetItemSet();
+    const SvxFontHeightItem &aDefaultFontItem = static_cast<const SvxFontHeightItem&>(aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE));
+
+    const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
+    const sal_uInt32 nFontHeight = aDefaultFontItem.GetHeight();
+    const long nGridWidthAdd = nGridWidth > nFontHeight ? nGridWidth - nFontHeight : 0;
+
+    return nGridWidthAdd;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

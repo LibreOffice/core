@@ -371,8 +371,13 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     const bool bHasGrid = pGrid && rInf.SnapToGrid() &&
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
-    const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
+    SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
     const sal_uInt16 nGridWidth = (bHasGrid) ? GetGridWidth(*pGrid, *pDoc) : 0;
+
+    const bool bFixPitch = bHasGrid && !pGrid->IsSquaredMode()
+                                && !pGrid->IsSnapToChars();
+
+    const sal_uInt16 nCharPitch = bFixPitch ? GetCharPitch(pGrid, pDoc) : 0;
 
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
@@ -499,7 +504,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             }
 
             const SwTwips nOfst = nStartX - nGridOrigin;
-            if ( nOfst )
+            if ( nOfst && !bFixPitch )
             {
                 const sal_uLong i = ( nOfst > 0 ) ?
                                 ( ( nOfst - 1 ) / nGridWidth + 1 ) :
@@ -636,32 +641,44 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 ! rInf.IsUnderflow() && ( bFull || SwFontScript::CJK == nNextScript ) )
             {
                 OSL_ENSURE( pGridKernPortion, "No GridKernPortion available" );
-
-                // calculate size
-                SwLinePortion* pTmpPor = pGridKernPortion->GetPortion();
-                sal_uInt16 nSumWidth = pPor->Width();
-                while ( pTmpPor )
+                if ( bFixPitch )
                 {
-                    nSumWidth = nSumWidth + pTmpPor->Width();
-                    pTmpPor = pTmpPor->GetPortion();
+                    if ( nCharPitch > pGridKernPortion->Width())
+                    {
+                        SwTwips nDiff = std::min( SwTwips(nCharPitch - pGridKernPortion->Width()),
+                                nRestWidth );
+                        new SwKernPortion( *pPor, nDiff , false, true );
+                        rInf.X( rInf.X() + nDiff);
+                    }
                 }
+                else
+                {
+                    // calculate size
+                    SwLinePortion* pTmpPor = pGridKernPortion->GetPortion();
+                    sal_uInt16 nSumWidth = pPor->Width();
+                    while ( pTmpPor )
+                    {
+                        nSumWidth = nSumWidth + pTmpPor->Width();
+                        pTmpPor = pTmpPor->GetPortion();
+                    }
 
-                const SwTwips i = nSumWidth ?
-                                 ( nSumWidth - 1 ) / nGridWidth + 1 :
-                                 0;
-                const SwTwips nTmpWidth = i * nGridWidth;
-                const SwTwips nKernWidth = std::min(nTmpWidth - nSumWidth, nRestWidth);
-                const sal_uInt16 nKernWidth_1 = (sal_uInt16)(nKernWidth / 2);
+                    const SwTwips i = nSumWidth ?
+                                     ( nSumWidth - 1 ) / nGridWidth + 1 :
+                                     0;
+                    const SwTwips nTmpWidth = i * nGridWidth;
+                    const SwTwips nKernWidth = std::min(nTmpWidth - nSumWidth, nRestWidth);
+                    const sal_uInt16 nKernWidth_1 = (sal_uInt16)(nKernWidth / 2);
 
-                OSL_ENSURE( nKernWidth <= nRestWidth,
-                        "Not enough space left for adjusting non-asian text in grid mode" );
+                    OSL_ENSURE( nKernWidth <= nRestWidth,
+                            "Not enough space left for adjusting non-asian text in grid mode" );
 
-                pGridKernPortion->Width( pGridKernPortion->Width() + nKernWidth_1 );
-                rInf.X( rInf.X() + nKernWidth_1 );
+                    pGridKernPortion->Width( pGridKernPortion->Width() + nKernWidth_1 );
+                    rInf.X( rInf.X() + nKernWidth_1 );
 
-                if ( ! bFull )
-                    new SwKernPortion( *pPor, (short)(nKernWidth - nKernWidth_1),
-                                       false, true );
+                    if ( ! bFull )
+                        new SwKernPortion( *pPor, (short)(nKernWidth - nKernWidth_1),
+                                           false, true );
+                }
 
                 pGridKernPortion = nullptr;
             }

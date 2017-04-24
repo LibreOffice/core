@@ -53,7 +53,6 @@
 #include <doc.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <docsh.hxx>
-#include <poolfmt.hrc>
 #include <fntcap.hxx>
 
 using namespace ::com::sun::star;
@@ -71,32 +70,6 @@ Color *pWaveCol = nullptr;
 long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = nullptr;
 static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut( new VclPtr<OutputDevice> );
-
-namespace
-{
-
-long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &rInf )
-{
-    SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
-    SfxStyleSheetBasePool* pBasePool = pDocShell->GetStyleSheetPool();
-
-    OUString sString(SW_RESSTR(STR_POOLCOLL_STANDARD));
-
-    SfxStyleSheetBase* pStyle = pBasePool->Find(sString, SfxStyleFamily::Para);
-    SfxItemSet& aTmpSet = pStyle->GetItemSet();
-    const SvxFontHeightItem &aDefaultFontItem = static_cast<const SvxFontHeightItem&>(aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE));
-
-    const SwDoc* pDoc = rInf.GetShell()->GetDoc();
-    const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
-    const sal_uInt32 nFontHeight = aDefaultFontItem.GetHeight();
-    const long nGridWidthAdd = nGridWidth > nFontHeight ? nGridWidth - nFontHeight : 0;
-    if( SwFontScript::Latin == rInf.GetFont()->GetActual() )
-        return nGridWidthAdd / 2;
-
-    return nGridWidthAdd;
-}
-
-}
 
 void SwFntCache::Flush( )
 {
@@ -1036,7 +1009,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // ASIAN LINE AND CHARACTER GRID MODE - do not snap to characters
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
-            const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
+            const long nGridWidthAdd = GetCharPitch( pGrid, rInf.GetShell()->GetDoc() );
 
             std::unique_ptr<long[]> pKernArray( new long[rInf.GetLen()] );
 
@@ -1858,7 +1831,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
-            const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
+            const long nGridWidthAdd = GetCharPitch( pGrid, rInf.GetShell()->GetDoc() );
             OutputDevice* pOutDev;
             if ( m_pPrinter )
             {
@@ -2118,7 +2091,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
 
-            const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
+            const long nGridWidthAdd = GetCharPitch( pGrid, rInf.GetShell()->GetDoc() );
 
             for(sal_Int32 j = 0; j < rInf.GetLen(); j++)
             {
@@ -2346,7 +2319,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
-            const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
+            const long nGridWidthAdd = GetCharPitch( pGrid, rInf.GetShell()->GetDoc() );
 
             std::unique_ptr<long[]> pKernArray( new long[rInf.GetLen()] );
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray.get(),
