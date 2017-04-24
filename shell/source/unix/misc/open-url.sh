@@ -33,18 +33,7 @@ which() {
 # checks for the original mozilla start script(s)
 # and restrict the "-remote" semantics to those.
 run_mozilla() {
-  if file "$1" | grep script > /dev/null && grep NPL "$1" > /dev/null; then
-    "$1" -remote 'ping()' 2>/dev/null >/dev/null
-    if [ $? -eq 2 ]; then
-      "$1" "$2" &
-    else
-      "$1" -remote \
-        "openURL($(printf '%s' "$2" \
-          | sed -e 's/(/%28/g' -e 's/)/%29/g' -e 's/,/%2C/g'),new-window)" &
-    fi
-  else
-    "$1" "$2" &
-  fi
+    "$1" -new-tab "$2" &
 }
 
 # special handling for mailto: uris
