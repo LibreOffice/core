@@ -91,7 +91,7 @@ private:
     SAL_DLLPRIVATE void ImplSplitMousePos( Point& rMousePos );
     SAL_DLLPRIVATE void ImplGetButtonRect( tools::Rectangle& rRect, bool bTest ) const;
     SAL_DLLPRIVATE void ImplGetFadeInRect( tools::Rectangle& rRect, bool bTest = false ) const;
-    SAL_DLLPRIVATE void ImplGetFadeOutRect( tools::Rectangle& rRect, bool bTest = false ) const;
+    SAL_DLLPRIVATE void ImplGetFadeOutRect( tools::Rectangle& rRect ) const;
     SAL_DLLPRIVATE void ImplDrawFadeIn(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawFadeOut(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplNewAlign();
@@ -101,13 +101,13 @@ private:
     SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawBorderLine(vcl::RenderContext& rRenderContext);
     static SAL_DLLPRIVATE void ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool bHide,
-                                             bool bRows, bool bDown = true );
+                                             bool bRows );
     SAL_DLLPRIVATE void ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet );
     SAL_DLLPRIVATE static void ImplDrawBack(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
                                              const Wallpaper* pWall, const Bitmap* pBitmap );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
-                                                bool bRows, bool bDown = true );
+                                                bool bRows );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos );
     SAL_DLLPRIVATE void ImplDrawSplitTracking(const Point& rPos);

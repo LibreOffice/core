@@ -1627,7 +1627,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
     }
 }
 
-void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
+void WMFWriter::WriteHeader( bool bPlaceable )
 {
     if( bPlaceable )
     {
@@ -1745,7 +1745,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     CountActionsAndBitmaps(rMTF);
 
-    WriteHeader(rMTF,bPlaceable);
+    WriteHeader(bPlaceable);
     if( bEmbedEMF )
         WriteEmbeddedEMF( rMTF );
     WMFRecord_SetWindowOrg(Point(0,0));

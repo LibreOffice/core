@@ -407,7 +407,7 @@ void Control::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetTextFillColor();
 }
 
-void Control::ImplInitSettings(const bool, const bool)
+void Control::ImplInitSettings()
 {
     ApplySettings(*this);
 }

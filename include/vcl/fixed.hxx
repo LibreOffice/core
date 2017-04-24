@@ -127,8 +127,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
-                              const Point& rPos, const Size& rSize );
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& rSize );
 
 public:
     explicit        FixedBitmap( vcl::Window* pParent, WinBits nStyle = 0 );

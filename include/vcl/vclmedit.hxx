@@ -51,7 +51,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     using Control::ImplInitSettings;
-    void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    void            ImplInitSettings( bool bBackground );
     static WinBits  ImplInitStyle( WinBits nStyle );
 
     ExtTextEngine*  GetTextEngine() const;

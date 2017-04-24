@@ -366,7 +366,7 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
 }
 
 
-ImplNoBorderWindowView::ImplNoBorderWindowView( ImplBorderWindow* )
+ImplNoBorderWindowView::ImplNoBorderWindowView()
 {
 }
 
@@ -1698,7 +1698,7 @@ void ImplBorderWindow::Paint( vcl::RenderContext& rRenderContext, const tools::R
         mpBorderView->DrawWindow(rRenderContext);
 }
 
-void ImplBorderWindow::Draw( const tools::Rectangle&, OutputDevice* pOutDev, const Point& rPos )
+void ImplBorderWindow::Draw( OutputDevice* pOutDev, const Point& rPos )
 {
     if (mpBorderView)
         mpBorderView->DrawWindow(*pOutDev, &rPos);
@@ -1841,7 +1841,7 @@ void ImplBorderWindow::InitView()
         if( mbFrameBorder )
             mpBorderView = new ImplStdBorderWindowView( this );
         else
-            mpBorderView = new ImplNoBorderWindowView( this );
+            mpBorderView = new ImplNoBorderWindowView;
     }
     else if ( !mbFrameBorder )
         mpBorderView = new ImplSmallBorderWindowView( this );

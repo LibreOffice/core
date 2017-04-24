@@ -98,7 +98,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpTabCtrlData               = new ImplTabCtrlData;
     mpTabCtrlData->mpListBox    = nullptr;
 
-    ImplInitSettings( true, true, true );
+    ImplInitSettings( true );
 
     if( (nStyle & WB_DROPDOWN) )
     {
@@ -127,10 +127,9 @@ const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) c
     return _rStyle.GetTabTextColor();
 }
 
-void TabControl::ImplInitSettings( bool bFont,
-                                   bool bForeground, bool bBackground )
+void TabControl::ImplInitSettings( bool bBackground )
 {
-    Control::ImplInitSettings( bFont, bForeground );
+    Control::ImplInitSettings();
 
     if ( bBackground )
     {
@@ -764,7 +763,7 @@ void TabControl::ImplShowFocus()
 }
 
 void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem, const tools::Rectangle& rCurRect,
-                              bool bFirstInGroup, bool bLastInGroup, bool /* bIsCurrentItem */ )
+                              bool bFirstInGroup, bool bLastInGroup )
 {
     if (pItem->maRect.IsEmpty())
         return;
@@ -1209,7 +1208,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
                 if (!aClipRgn.IsEmpty())
                 {
                     ImplDrawItem(rRenderContext, pItem, aCurRect, false/*bLayout*/,
-                                    pItem == pFirstTab, pItem == pLastTab);
+                                    pItem == pFirstTab);
                 }
             }
 
@@ -1228,7 +1227,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
             if (!aClipRgn.IsEmpty())
             {
                 ImplDrawItem(rRenderContext, pCurItem, aCurRect,
-                             pCurItem == pFirstTab, pCurItem == pLastTab, true);
+                             pCurItem == pFirstTab, pCurItem == pLastTab);
             }
         }
     }
@@ -1491,17 +1490,17 @@ void TabControl::StateChanged( StateChangedType nType )
     else if ( (nType == StateChangedType::Zoom)  ||
               (nType == StateChangedType::ControlFont) )
     {
-        ImplInitSettings( true, false, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
@@ -1515,7 +1514,7 @@ void TabControl::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
+        ImplInitSettings( true );
         Invalidate();
     }
 }
@@ -2717,7 +2716,7 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
                 if (!aClipRgn.IsEmpty())
                 {
                     ImplDrawItem(rRenderContext, pItem, aCurRect, false/*bLayout*/,
-                                    pItem == pFirstTab, pItem == pLastTab);
+                                    pItem == pFirstTab);
                 }
             }
 
@@ -2736,7 +2735,7 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
             if (!aClipRgn.IsEmpty())
             {
                 ImplDrawItem(rRenderContext, pCurItem, aCurRect,
-                             pCurItem == pFirstTab, pCurItem == pLastTab, true);
+                             pCurItem == pFirstTab, pCurItem == pLastTab);
             }
         }
     }

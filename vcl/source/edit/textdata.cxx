@@ -195,17 +195,15 @@ void TEParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
     mbInvalid = true;
 }
 
-void TEParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /*nEnd*/ )
+void TEParaPortion::MarkSelectionInvalid( sal_Int32 nStart )
 {
     if ( !mbInvalid )
     {
         mnInvalidPosStart = nStart;
-//      nInvalidPosEnd = nEnd;
     }
     else
     {
         mnInvalidPosStart = std::min( mnInvalidPosStart, nStart );
-//      nInvalidPosEnd = pNode->Len();
     }
 
     maWritingDirectionInfos.clear();

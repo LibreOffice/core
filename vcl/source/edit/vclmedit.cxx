@@ -947,7 +947,7 @@ VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
 {
     SetType( WindowType::MULTILINEEDIT );
     pImpVclMEdit = new ImpVclMEdit( this, nWinStyle );
-    ImplInitSettings( true, true, true );
+    ImplInitSettings( true );
     pUpdateDataTimer = nullptr;
 
     SetCompoundControl( true );
@@ -1034,7 +1034,7 @@ void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void VclMultiLineEdit::ImplInitSettings(bool /*bFont*/, bool /*bForeground*/, bool bBackground)
+void VclMultiLineEdit::ImplInitSettings(bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1308,7 +1308,7 @@ void VclMultiLineEdit::StateChanged( StateChangedType nType )
     if( nType == StateChangedType::Enable )
     {
         pImpVclMEdit->Enable( IsEnabled() );
-        ImplInitSettings( true, false, false );
+        ImplInitSettings( false );
     }
     else if( nType == StateChangedType::ReadOnly )
     {
@@ -1317,23 +1317,23 @@ void VclMultiLineEdit::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::Zoom )
     {
         pImpVclMEdit->GetTextWindow()->SetZoom( GetZoom() );
-        ImplInitSettings( true, false, false );
+        ImplInitSettings( false );
         Resize();
     }
     else if ( nType == StateChangedType::ControlFont )
     {
-        ImplInitSettings( true, false, false );
+        ImplInitSettings( false );
         Resize();
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
+        ImplInitSettings( false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
+        ImplInitSettings( true );
         Invalidate();
     }
     else if ( nType == StateChangedType::Style )
@@ -1361,7 +1361,7 @@ void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        ImplInitSettings( true, true, true );
+        ImplInitSettings( true );
         Resize();
         Invalidate();
     }
@@ -1371,7 +1371,7 @@ void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
 
 void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
-    ImplInitSettings(true, true, true);
+    ImplInitSettings(true);
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );

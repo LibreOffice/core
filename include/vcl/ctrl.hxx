@@ -98,7 +98,7 @@ protected:
     virtual const Color&
                 GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
-    void ImplInitSettings( const bool _bFont, const bool _bForeground );
+    void ImplInitSettings();
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 

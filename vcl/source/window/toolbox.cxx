@@ -304,7 +304,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
     }
 }
 
-void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext, ImplDockingWindowWrapper*)
+void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
 {
     // draw a nice gradient
 
@@ -429,7 +429,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext, Imp
 
 }
 
-bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const vcl::Region& /*rRegion*/)
+bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext)
 {
     // use NWF
     Point aPt;
@@ -440,7 +440,7 @@ bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const
                                     aCtrlRegion, nState, ImplControlValue(), OUString() );
 }
 
-void ToolBox::ImplDrawTransparentBackground(vcl::RenderContext& /*rRenderContext*/, const vcl::Region &rRegion)
+void ToolBox::ImplDrawTransparentBackground(const vcl::Region &rRegion)
 {
     // just invalidate to trigger paint of the parent
     const bool bOldPaintLock = mpData->mbIsPaintLocked;
@@ -490,9 +490,9 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
     {
         // no gradient for ordinary toolbars (not dockable)
         if( !IsBackground() && !IsInPaint() )
-            ImplDrawTransparentBackground(rRenderContext, aPaintRegion);
+            ImplDrawTransparentBackground(aPaintRegion);
         else
-            ImplDrawConstantBackground(rRenderContext,  aPaintRegion, bIsInPopupMode);
+            ImplDrawConstantBackground(rRenderContext, aPaintRegion, bIsInPopupMode);
     }
     else
     {
@@ -501,7 +501,7 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
         // so NWF is used here for floating toolbars only
         bool bNativeOk = false;
         if( ImplIsFloatingMode() && rRenderContext.IsNativeControlSupported( ControlType::Toolbar, ControlPart::Entire) )
-            bNativeOk = ImplDrawNativeBackground(rRenderContext, aPaintRegion);
+            bNativeOk = ImplDrawNativeBackground(rRenderContext);
         if (!bNativeOk)
         {
             const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
@@ -510,10 +510,10 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
             if (!IsBackground() || isHeader || isFooter)
             {
                 if (!IsInPaint())
-                    ImplDrawTransparentBackground(rRenderContext, aPaintRegion);
+                    ImplDrawTransparentBackground(aPaintRegion);
             }
             else
-                ImplDrawGradientBackground(rRenderContext, pWrapper);
+                ImplDrawGradientBackground(rRenderContext);
         }
     }
 

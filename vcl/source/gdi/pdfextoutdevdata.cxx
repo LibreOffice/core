@@ -404,15 +404,13 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                             GfxLinkType eType = rGraphic.GetLink().GetType();
                             if ( eType == GfxLinkType::NativeJpg && mParaRects.size() >= 2 )
                             {
-                                mbGroupIgnoreGDIMtfActions =
-                                rOutDevData.HasAdequateCompression(
-                                        rGraphic, mParaRects[0], mParaRects[1]);
+                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic);
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
                             else if ((eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf) && mParaRects.size() >= 2)
                             {
-                                if ( rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]) || eType == GfxLinkType::NativePdf )
+                                if ( rOutDevData.HasAdequateCompression(rGraphic) || eType == GfxLinkType::NativePdf )
                                     mCurrentGraphic = rGraphic;
                             }
                         }
@@ -809,9 +807,7 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 }
 
 // Avoids expensive de-compression and re-compression of large images.
-bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
-                                               const tools::Rectangle & /* rOutputRect */,
-                                               const tools::Rectangle & /* rVisibleOutputRect */ ) const
+bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
 {
     bool bReduceResolution = false;
 

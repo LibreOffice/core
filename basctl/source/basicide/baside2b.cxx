@@ -340,7 +340,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                 Point aWindowPos = rHEvt.GetMousePosPixel();
                 aWindowPos = ScreenToOutputPixel( aWindowPos );
                 Point aDocPos = GetEditView()->GetDocPos( aWindowPos );
-                TextPaM aCursor = GetEditView()->GetTextEngine()->GetPaM(aDocPos, false);
+                TextPaM aCursor = GetEditView()->GetTextEngine()->GetPaM(aDocPos);
                 TextPaM aStartOfWord;
                 OUString aWord = GetEditView()->GetTextEngine()->GetWord( aCursor, &aStartOfWord );
                 if ( !aWord.isEmpty() && !comphelper::string::isdigitAsciiString(aWord) )

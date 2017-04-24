@@ -187,9 +187,7 @@ public:
                           const tools::Rectangle&  rVisibleOutputRect );
 
     /// Detect if stream is compressed enough to avoid de-compress / scale & re-compress
-    bool        HasAdequateCompression( const Graphic &rGraphic,
-                                        const tools::Rectangle &rOutputRect,
-                                        const tools::Rectangle &rVisibleOutputRect ) const;
+    bool        HasAdequateCompression( const Graphic &rGraphic ) const;
 
 //--->i56629
     /** Create a new named destination to be used in a link to this document from another PDF document

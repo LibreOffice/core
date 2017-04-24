@@ -195,7 +195,7 @@ public:
     void                SetValid()                  { mbInvalid = false; mbSimple = true;}
 
     void                MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff );
-    void                MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 nEnd );
+    void                MarkSelectionInvalid( sal_Int32 nStart );
 
     sal_Int32           GetInvalidPosStart() const  { return mnInvalidPosStart; }
     sal_Int32           GetInvalidDiff() const      { return mnInvalidDiff; }
