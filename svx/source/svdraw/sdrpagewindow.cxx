@@ -409,23 +409,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
 // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
 void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // we don't really have a paint window with LOK; OTOH we know that the
-        // drawinglayer units are 100ths of mm, so they are easy to convert to
-        // twips
-        const tools::Rectangle aRect100thMM(
-            static_cast<long>(floor(rRange.getMinX())),
-            static_cast<long>(floor(rRange.getMinY())),
-            static_cast<long>(ceil(rRange.getMaxX())),
-            static_cast<long>(ceil(rRange.getMaxY())));
-
-        const tools::Rectangle aRectTwips = OutputDevice::LogicToLogic(aRect100thMM, MapUnit::Map100thMM, MapUnit::MapTwip);
-
-        if (SfxViewShell* pViewShell = SfxViewShell::Current())
-            SfxLokHelper::notifyInvalidation(pViewShell, aRectTwips.toString());
-    }
-    else if (GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
+    if (GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
     {
         const SvtOptionsDrawinglayer aDrawinglayerOpt;
         vcl::Window& rWindow(static_cast< vcl::Window& >(GetPaintWindow().GetOutputDevice()));
@@ -449,6 +433,22 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         rWindow.EnableMapMode(false);
         rWindow.Invalidate(aVCLDiscreteRectangle, InvalidateFlags::NoErase);
         rWindow.EnableMapMode(bWasMapModeEnabled);
+    }
+    else if (comphelper::LibreOfficeKit::isActive())
+    {
+        // we don't really have to have a paint window with LOK; OTOH we know
+        // that the drawinglayer units are 100ths of mm, so they are easy to
+        // convert to twips
+        const tools::Rectangle aRect100thMM(
+            static_cast<long>(floor(rRange.getMinX())),
+            static_cast<long>(floor(rRange.getMinY())),
+            static_cast<long>(ceil(rRange.getMaxX())),
+            static_cast<long>(ceil(rRange.getMaxY())));
+
+        const tools::Rectangle aRectTwips = OutputDevice::LogicToLogic(aRect100thMM, MapUnit::Map100thMM, MapUnit::MapTwip);
+
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+            SfxLokHelper::notifyInvalidation(pViewShell, aRectTwips.toString());
     }
 }
 
