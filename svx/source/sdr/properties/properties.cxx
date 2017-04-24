@@ -132,13 +132,6 @@ namespace sdr
         {
             const sal_uInt32 nCount(rChange.GetRectangleCount());
 
-            // #110094#-14 Reduce to do only second change
-            //// invalidate all remembered rectangles
-            //for(sal_uInt32 a(0); a < nCount; a++)
-            //{
-            //  GetSdrObject().BroadcastObjectChange(rChange.GetRectangle(a));
-            //}
-
             // invalidate all new rectangles
             if(dynamic_cast<const SdrObjGroup*>( &GetSdrObject() ) != nullptr)
             {
@@ -147,15 +140,11 @@ namespace sdr
                 while(aIter.IsMore())
                 {
                     SdrObject* pObj = aIter.Next();
-                    // This is done with ItemSetChanged
-                    // pObj->SetChanged();
                     pObj->BroadcastObjectChange();
                 }
             }
             else
             {
-                // This is done with ItemSetChanged
-                // GetSdrObject().SetChanged();
                 GetSdrObject().BroadcastObjectChange();
             }
 
