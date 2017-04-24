@@ -482,9 +482,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 {
     uno::Sequence< beans::PropertyValue > aProps;
 
-    OUString aFilterName = GetModuleProps().getUnpackedValueOrDefault(
-                                                                "ooSetupFactoryDefaultFilter",
-                                                                OUString() );
+    const OUString aFilterName = GetModuleProps().getUnpackedValueOrDefault( "ooSetupFactoryDefaultFilter", OUString() );
 
     m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aProps;
 
@@ -697,12 +695,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
         GetMediaDescr() = aAcceptedArgs;
 
     // check that the old filter is acceptable
-    OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    aFilterNameString,
-                                                    OUString() );
-    sal_Int8 nResult = CheckFilter( aOldFilterName );
-
-    return nResult;
+    return CheckFilter( GetDocProps().getUnpackedValueOrDefault(aFilterNameString, OUString()) );
 }
 
 sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
@@ -774,10 +767,7 @@ bool ModelData_Impl::CheckFilterOptionsDialogExistence()
         if ( xFilterEnum->nextElement() >>= aProps )
         {
             ::comphelper::SequenceAsHashMap aPropsHM( aProps );
-            OUString aUIServName = aPropsHM.getUnpackedValueOrDefault(
-                                            "UIComponent",
-                                            OUString() );
-            if ( !aUIServName.isEmpty() )
+            if ( !aPropsHM.getUnpackedValueOrDefault("UIComponent", OUString()).isEmpty() )
                 return true;
         }
     }
@@ -1289,7 +1279,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
     sal_Int8 nStatusSave = STATUS_NO_ACTION;
 
     ::comphelper::SequenceAsHashMap::const_iterator aSaveACopyIter =
-                        aModelData.GetMediaDescr().find( ::rtl::OUString("SaveACopy") );
+                        aModelData.GetMediaDescr().find( OUString("SaveACopy") );
     if ( aSaveACopyIter != aModelData.GetMediaDescr().end() )
     {
         bool bSaveACopy = false;
@@ -1664,8 +1654,7 @@ bool SfxStoringHelper::CheckFilterOptionsAppearance(
             if ( aAny >>= aProps )
             {
                 ::comphelper::SequenceAsHashMap aPropsHM( aProps );
-                OUString aServiceName = aPropsHM.getUnpackedValueOrDefault( "UIComponent", OUString() );
-                if( !aServiceName.isEmpty() )
+                if( !aPropsHM.getUnpackedValueOrDefault( "UIComponent", OUString() ).isEmpty() )
                     bUseFilterOptions = true;
             }
         }
