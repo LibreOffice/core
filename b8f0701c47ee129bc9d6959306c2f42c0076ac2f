@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3b7279e6",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 4888,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2017-04-24T14:50:40Z",
+      "side": 1,
+      "message": "Ellipsis indicate that a dialog follows. But in this case we open a link in the default browser, right? So how about \"Donate to LibreOffice (Link)\" or just plain \"Donate to LibreOffice\")",
+      "range": {
+        "startLine": 4888,
+        "startChar": 55,
+        "endLine": 4888,
+        "endChar": 58
+      },
+      "revId": "b8f0701c47ee129bc9d6959306c2f42c0076ac2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
