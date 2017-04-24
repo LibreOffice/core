@@ -24,13 +24,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-icu11100.patch.1 \
 	external/icu/icu4c-scriptrun.patch \
 	external/icu/rtti.patch.0 \
-	external/icu/clang-cl.patch.0 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.diff) \
 	$(if $(filter EMSCRIPTEN,$(OS)),external/icu/icu4c-emscripten.patch.1) \
-	external/icu/khmerbreakengine.patch \
-	external/icu/icu4c-changeset-39671.patch.1 \
 ))
-
-$(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
 
 # vim: set noet sw=4 ts=4:
