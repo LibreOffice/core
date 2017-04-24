@@ -481,7 +481,7 @@ sal_uLong SwASCIIParser::ReadChars()
         {
             // We found a CR/LF, thus save the text
             InsertText( OUString( pLastStt ));
-            pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
+            pDoc->getIDocumentContentOperations().AppendTextNode( *pPam->GetPoint() );
             pLastStt = pStt;
             nLineLen = 0;
         }
@@ -498,8 +498,6 @@ sal_uLong SwASCIIParser::ReadChars()
 void SwASCIIParser::InsertText( const OUString& rStr )
 {
     pDoc->getIDocumentContentOperations().InsertString( *pPam, rStr );
-    pDoc->UpdateRsid( *pPam, rStr.getLength() );
-    pDoc->UpdateParRsid( pPam->GetPoint()->nNode.GetNode().GetTextNode() );
 
     if( pItemSet && g_pBreakIt && nScript != ( SvtScriptType::LATIN |
                                              SvtScriptType::ASIAN |
