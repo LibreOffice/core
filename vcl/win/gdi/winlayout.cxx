@@ -3080,18 +3080,24 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
         abort();
     }
 
-    if (!pSalData->m_pTextOutRenderer)
+    if (bUseDWrite)
     {
-        if (bUseDWrite && D2DWriteTextOutRenderer::InitModules())
+        static bool const bSuccess(D2DWriteTextOutRenderer::InitModules());
+        if (bSuccess && !pSalData->m_pD2DWriteTextOutRenderer)
         {
-            pSalData->m_pTextOutRenderer.reset(new D2DWriteTextOutRenderer());
+            pSalData->m_pD2DWriteTextOutRenderer.reset(new D2DWriteTextOutRenderer());
         }
-        else
+        if (pSalData->m_pD2DWriteTextOutRenderer)
         {
-            pSalData->m_pTextOutRenderer.reset(new ExTextOutRenderer());
+            return *pSalData->m_pD2DWriteTextOutRenderer;
         }
+        // else: fall back to GDI
     }
-    return *pSalData->m_pTextOutRenderer;
+    if (!pSalData->m_pExTextOutRenderer)
+    {
+        pSalData->m_pExTextOutRenderer.reset(new ExTextOutRenderer);
+    }
+    return *pSalData->m_pExTextOutRenderer;
 }
 
 
