@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_be0017ac",
+        "filename": "tools/qa/cppunit/test_inetmime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-04-24T19:37:04Z",
+      "side": 1,
+      "message": "fails with:\n\u003e test_inetmime.cxx:153:Assertion\n\u003e Test name: (anonymous namespace)::Test::test_scanContentType_rfc2231\n\u003e equality assertion failed\n\u003e - Expected: value2 â¬\n\u003e - Actual  : value2 €",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 61
+      },
+      "revId": "34f258e696e8c860a886aefecfc530054ef863cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
