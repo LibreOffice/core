@@ -287,6 +287,40 @@ class invalid_update_info : public std::exception
 {
 };
 
+class invalid_hash : public std::exception
+{
+    OString maMessage;
+public:
+
+    invalid_hash(const OUString& rExpectedHash, const OUString& rReceivedHash)
+    {
+        OUString aMsg = "Invalid hash found.\nExpected: " + rExpectedHash + ";\nReceived: " + rReceivedHash;
+        maMessage = OUStringToOString(aMsg, RTL_TEXTENCODING_UTF8);
+    }
+
+    const char* what() const noexcept override
+    {
+        return maMessage.getStr();
+    }
+};
+
+class invalid_size : public std::exception
+{
+    OString maMessage;
+public:
+
+    invalid_size(const size_t nExpectedSize, const size_t nReceivedSize)
+    {
+        OUString aMsg = "Invalid file size found.\nExpected: " + OUString::number(nExpectedSize) + ";\nReceived: " + OUString::number(nReceivedSize);
+        maMessage = OUStringToOString(aMsg, RTL_TEXTENCODING_UTF8);
+    }
+
+    const char* what() const noexcept override
+    {
+        return maMessage.getStr();
+    }
+};
+
 OUString toOUString(const std::string& rStr)
 {
     return OUString::fromUtf8(rStr.c_str());
@@ -538,11 +572,13 @@ void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash
     if (nSize != nFileSize)
     {
         SAL_WARN("desktop.updater", "File sizes don't match. File might be corrupted.");
+        throw invalid_size(nFileSize, nSize);
     }
 
     if (aHash != rHash)
     {
         SAL_WARN("desktop.updater", "File hash don't match. File might be corrupted.");
+        throw invalid_hash(rHash, aHash);
     }
 
     OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
@@ -599,6 +635,14 @@ void update_checker()
     catch (const error_updater&)
     {
         SAL_WARN("desktop.updater", "error during the update check");
+    }
+    catch (const invalid_size& e)
+    {
+        SAL_WARN("desktop.updater", e.what());
+    }
+    catch (const invalid_hash& e)
+    {
+        SAL_WARN("desktop.updater", e.what());
     }
     catch (...)
     {
