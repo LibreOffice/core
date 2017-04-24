@@ -346,10 +346,7 @@ bool MSWordExportBase::FormatHdFtContainsChapterField(const SwFrameFormat &rForm
         return true;
 
     pFormat = rFormat.GetFooter().GetFooterFormat();
-    if ( pFormat && ContentContainsChapterField( pFormat->GetContent() ) )
-        return true;
-
-    return false;
+    return pFormat && ContentContainsChapterField( pFormat->GetContent() );
 }
 
 bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)

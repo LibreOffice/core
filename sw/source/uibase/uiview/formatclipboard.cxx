@@ -268,10 +268,9 @@ bool SwFormatClipboard::HasContentForThisType( SelectionType nSelectionType ) co
 
 bool SwFormatClipboard::CanCopyThisType( SelectionType nSelectionType )
 {
-    if( nSelectionType & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic
-         | SelectionType::Text | SelectionType::DrawObject | SelectionType::Table | SelectionType::TableCell ) )
-         return true;
-    return false;
+    return bool(nSelectionType
+                & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic
+                   | SelectionType::Text | SelectionType::DrawObject | SelectionType::Table | SelectionType::TableCell ));
 }
 
 void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bPersistentCopy )

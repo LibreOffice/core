@@ -216,11 +216,7 @@ bool SwMacroField::isScriptURL( const OUString& str )
     uno::Reference< uri::XVndSunStarScriptUrl >
         xUrl( xFactory->parse( str ), uno::UNO_QUERY );
 
-    if ( xUrl.is() )
-    {
-        return true;
-    }
-    return false;
+    return xUrl.is();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

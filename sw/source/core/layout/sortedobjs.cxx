@@ -169,10 +169,7 @@ struct ObjAnchorOrder
                     _pNewAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
         if ( bWrapThroughOrHellListed != bWrapThroughOrHellNew )
         {
-            if ( bWrapThroughOrHellListed )
-                return false;
-            else
-                return true;
+            return !bWrapThroughOrHellListed;
         }
         else if ( bWrapThroughOrHellListed && bWrapThroughOrHellNew )
         {
@@ -190,11 +187,8 @@ struct ObjAnchorOrder
                 pWrapInfluenceOnObjPosNew->GetWrapInfluenceOnObjPos( true ) )
         {
             // #i35017# - constant name has changed
-            if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true )
-                            == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE )
-                return true;
-            else
-                return false;
+            return pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true )
+                            == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE;
         }
 
         // objects anchored at the same content position/page/fly with same

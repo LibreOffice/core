@@ -43,9 +43,7 @@ bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< text::XText >& xT
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
     OUString aImplName = xServiceInfo->getImplementationName();
-    if ( aImplName == "SwXHeadFootText" )
-        return true;
-    return false;
+    return aImplName == "SwXHeadFootText";
 }
 
 bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xModel )

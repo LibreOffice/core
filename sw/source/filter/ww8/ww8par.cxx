@@ -6432,10 +6432,7 @@ bool SwWW8ImplReader::InEqualOrHigherApo(int nLvl) const
         return false;
     }
     mycApoIter aIter = std::find(m_aApos.begin() + nLvl, m_aApos.end(), true);
-    if (aIter != m_aApos.end())
-        return true;
-    else
-        return false;
+    return aIter != m_aApos.end();
 }
 
 bool SwWW8ImplReader::InEqualApo(int nLvl) const
