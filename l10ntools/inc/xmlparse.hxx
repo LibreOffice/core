@@ -345,7 +345,7 @@ private:
 
 
     void StartElement( const XML_Char *name, const XML_Char **atts );
-    void EndElement( const XML_Char *name );
+    void EndElement();
     void CharacterData( const XML_Char *s, int len );
     void Comment( const XML_Char *data );
     void Default( const XML_Char *s, int len );

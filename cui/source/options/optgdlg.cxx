@@ -1156,7 +1156,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
 
     OUString aUILang = m_sSystemDefaultString +
                        " - " +
-                       SvtLanguageTable::GetLanguageString(GetInstalledLocaleForSystemUILanguage().getLanguageType(), true);
+                       SvtLanguageTable::GetLanguageString(GetInstalledLocaleForSystemUILanguage().getLanguageType());
 
     m_pUserInterfaceLB->InsertEntry(aUILang);
     m_pUserInterfaceLB->SetEntryData(0, nullptr);
@@ -1180,8 +1180,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
             aLang = LanguageTag::convertToLanguageTypeWithFallback(seqInstalledLanguages[i]);
             if (aLang != LANGUAGE_DONTKNOW)
             {
-                //sal_uInt16 p = m_pUserInterfaceLB->InsertLanguage(aLang);
-                OUString aLangStr( SvtLanguageTable::GetLanguageString( aLang, true ) );
+                OUString aLangStr( SvtLanguageTable::GetLanguageString( aLang ) );
                 const sal_Int32 p = m_pUserInterfaceLB->InsertEntry(aLangStr);
                 m_pUserInterfaceLB->SetEntryData(p, reinterpret_cast<void*>(i+1));
             }

@@ -163,14 +163,8 @@ public:
         Also used to map UI localizations using reserved ISO codes to something
         "official" but not identical in order to not pollute documents with
         invalid ISO codes.
-
-        @param bUserInterfaceSelection
-            If TRUE, don't replace such UI-only locale. Only use for
-                     Tools->Options->LanguageSettings->UserInterface listbox.
-            If FALSE, do replace.
      */
-    static LanguageType getReplacementForObsoleteLanguage( LanguageType nLang,
-            bool bUserInterfaceSelection = false );
+    static LanguageType getReplacementForObsoleteLanguage( LanguageType nLang );
 
     /** Whether locale is legacy, i.e. country ot confederation doesn't exist anymore. */
     static bool isLegacy( LanguageType nLang );

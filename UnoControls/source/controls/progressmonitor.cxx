@@ -205,8 +205,8 @@ void SAL_CALL ProgressMonitor::addText(
 {
     // Safe impossible cases
     // Check valid call of this method.
-    DBG_ASSERT ( impl_debug_checkParameter ( rTopic, rText, bbeforeProgress )   , "ProgressMonitor::addText()\nCall without valid parameters!\n");
-    DBG_ASSERT ( !(impl_searchTopic ( rTopic, bbeforeProgress ) != nullptr )       , "ProgressMonitor::addText()\nThe text already exist.\n"        );
+    DBG_ASSERT ( impl_debug_checkParameter ( rTopic, rText ),                 "ProgressMonitor::addText()\nCall without valid parameters!\n");
+    DBG_ASSERT ( !(impl_searchTopic ( rTopic, bbeforeProgress ) != nullptr ), "ProgressMonitor::addText()\nThe text already exist.\n"        );
 
     // Do nothing (in Release), if topic already exist.
     if ( impl_searchTopic ( rTopic, bbeforeProgress ) != nullptr )
@@ -244,7 +244,7 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
 {
     // Safe impossible cases
     // Check valid call of this method.
-    DBG_ASSERT ( impl_debug_checkParameter ( rTopic, bbeforeProgress ), "ProgressMonitor::removeText()\nCall without valid parameters!\n" );
+    DBG_ASSERT ( impl_debug_checkParameter ( rTopic ), "ProgressMonitor::removeText()\nCall without valid parameters!\n" );
 
     // Search the topic ...
     IMPL_TextlistItem* pSearchItem = impl_searchTopic ( rTopic, bbeforeProgress );
@@ -287,7 +287,7 @@ void SAL_CALL ProgressMonitor::updateText (
 {
     // Safe impossible cases
     // Check valid call of this method.
-    DBG_ASSERT ( impl_debug_checkParameter ( rTopic, rText, bbeforeProgress ), "ProgressMonitor::updateText()\nCall without valid parameters!\n" );
+    DBG_ASSERT ( impl_debug_checkParameter ( rTopic, rText ), "ProgressMonitor::updateText()\nCall without valid parameters!\n" );
 
     // Search topic ...
     IMPL_TextlistItem* pSearchItem = impl_searchTopic ( rTopic, bbeforeProgress );
@@ -863,25 +863,20 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, b
 // addText, updateText
 bool ProgressMonitor::impl_debug_checkParameter (
     const OUString& rTopic,
-    const OUString& rText,
-    bool /*bbeforeProgress*/
+    const OUString& rText
 ) {
     if ( rTopic.isEmpty()       ) return false;    // ""
 
     if ( rText.isEmpty()       ) return false;    // ""
-
-    // "bbeforeProgress" is valid in everyway!
 
     // Parameter OK ... return true.
     return true;
 }
 
 // removeText
-bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, bool /*bbeforeProgress*/ )
+bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic )
 {
     if ( rTopic.isEmpty()      ) return false;    // ""
-
-    // "bbeforeProgress" is valid in everyway!
 
     // Parameter OK ... return true.
     return true;

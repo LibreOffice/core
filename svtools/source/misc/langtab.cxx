@@ -44,7 +44,7 @@ public:
     virtual ~SvtLanguageTableImpl();
 
     bool            HasType( const LanguageType eType ) const;
-    const OUString  GetString( const LanguageType eType, bool bUserInterfaceSelection ) const;
+    const OUString  GetString( const LanguageType eType ) const;
     LanguageType    GetType( const OUString& rStr ) const;
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
@@ -187,9 +187,9 @@ OUString lcl_getDescription( const OUString& rBcp47 )
     return "{" + rBcp47 + "}";
 }
 
-const OUString SvtLanguageTableImpl::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
+const OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
 {
-    LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType, bUserInterfaceSelection);
+    LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType );
     sal_uInt32 nPos = FindIndex( eLang );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
@@ -212,14 +212,8 @@ const OUString SvtLanguageTableImpl::GetString( const LanguageType eType, bool b
 
 OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
-    return theLanguageTable::get().GetString( eType, false );
+    return theLanguageTable::get().GetString( eType );
 }
-
-OUString SvtLanguageTable::GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection )
-{
-    return theLanguageTable::get().GetString( eType, bUserInterfaceSelection );
-}
-
 
 LanguageType SvtLanguageTableImpl::GetType( const OUString& rStr ) const
 {
