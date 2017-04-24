@@ -563,7 +563,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
         uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
         if ( aAny >>= aProps )
         {
-            sal_Int32 nPropertyCount = aProps.getLength();
+            const sal_Int32 nPropertyCount = aProps.getLength();
             for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
             {
                 if( aProps[nProperty].Name == "UIComponent" )
@@ -593,7 +593,8 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
                             {
                                 uno::Sequence< beans::PropertyValue > aPropsFromDialog =
                                                                             xFilterProperties->getPropertyValues();
-                                for ( sal_Int32 nInd = 0; nInd < aPropsFromDialog.getLength(); nInd++ )
+                                const sal_Int32 nPropsLen {aPropsFromDialog.getLength()};
+                                for ( sal_Int32 nInd = 0; nInd < nPropsLen; ++nInd )
                                     GetMediaDescr()[aPropsFromDialog[nInd].Name] = aPropsFromDialog[nInd].Value;
                             }
                             else
@@ -1480,8 +1481,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         if ( aBlackListIter != aModelData.GetMediaDescr().end() )
             aBlackListIter->second >>= aBlackList;
 
-        bool bExit = false;
-        while ( !bExit )
+        for (;;)
         {
             // in case the dialog is opened a second time the folder should be the same as previously navigated to by the user, not what was handed over by initial parameters
             bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aBlackList );
@@ -1498,11 +1498,11 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
                 else if ( nStatusFilterSave == STATUS_SAVE )
                 {
                     // user confirmed alien filter or "good" filter is used
-                    bExit = true;
+                    break;
                 }
             }
             else
-                bExit = true;
+                break;
         }
 
         bDialogUsed = true;
@@ -1705,9 +1705,8 @@ void SfxStoringHelper::SetDocInfoState(
         uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
         uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
         const beans::Property* pProps = lProps.getConstArray();
-        sal_Int32 c = lProps.getLength();
-        sal_Int32 i = 0;
-        for (i=0; i<c; ++i)
+        const sal_Int32 nPropLen = lProps.getLength();
+        for (sal_Int32 i=0; i<nPropLen; ++i)
         {
             uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
             if ( pProps[i].Attributes & css::beans::PropertyAttribute::REMOVABLE )
