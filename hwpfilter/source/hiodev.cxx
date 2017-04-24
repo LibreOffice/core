@@ -133,9 +133,7 @@ void HStreamIODev::init()
 
 bool HStreamIODev::open()
 {
-    if (!(_stream->available()))
-        return false;
-    return true;
+    return _stream->available() != 0;
 }
 
 

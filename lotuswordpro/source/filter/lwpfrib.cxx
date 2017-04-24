@@ -385,9 +385,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 */
 bool LwpFrib::HasNextFrib()
 {
-    if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)
-        return false;
-    return true;
+    return GetNext() && GetNext()->GetType() != FRIB_TAG_EOP;
 }
 
 void LwpFrib::ConvertChars(XFContentContainer* pXFPara,const OUString& text)

@@ -455,13 +455,9 @@ void LwpMasterPage::RegisterFillerPageStyle()
 bool LwpMasterPage::IsNextPageType()
 {
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
-    if(eUserType == LwpLayout::StartOnNextPage
+    return eUserType == LwpLayout::StartOnNextPage
         || eUserType == LwpLayout::StartOnOddPage
-        || eUserType == LwpLayout::StartOnEvenPage )
-    {
-        return true;
-    }
-    return false;
+        || eUserType == LwpLayout::StartOnEvenPage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

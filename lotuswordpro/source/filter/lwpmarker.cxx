@@ -290,9 +290,7 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
 
 bool LwpCHBlkMarker::IsHasFilled()
 {
-    if (CHB_PROMPT & m_nFlag)
-        return false;
-    return true;
+    return (CHB_PROMPT & m_nFlag) == 0;
 }
 
 bool LwpCHBlkMarker::IsBubbleHelp()
@@ -341,9 +339,7 @@ void LwpBookMark::Read()
 
 bool LwpBookMark::IsRightMarker(LwpObjectID objMarker)
 {
-    if (objMarker == m_objMarker)
-        return true;
-    return false;
+    return objMarker == m_objMarker;
 }
 
 OUString LwpBookMark::GetName()
@@ -419,9 +415,7 @@ void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
 
 bool LwpFieldMark::IsFormulaInsert()
 {
-    if (m_nFlag & FF_FORMULAINSERTED)
-        return true;
-    return false;
+    return (m_nFlag & FF_FORMULAINSERTED) != 0;
 }
 
 bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)

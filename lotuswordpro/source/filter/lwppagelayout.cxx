@@ -688,10 +688,7 @@ bool LwpPageLayout::operator<(LwpPageLayout& Other)
         }
     }
 
-    if(!pThisPara)
-        return true;
-
-    return false;
+    return pThisPara == nullptr;
 }
 
 /**

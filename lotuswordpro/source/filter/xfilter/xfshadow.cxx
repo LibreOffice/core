@@ -103,12 +103,9 @@ void    XFShadow::ToXml(IXFStream *pStrm)
 
 bool operator==(XFShadow& s1, XFShadow& s2)
 {
-    if( (s1.m_ePosition == s2.m_ePosition) &&
+    return (s1.m_ePosition == s2.m_ePosition) &&
         (s1.m_fOffset == s2.m_fOffset) &&
-        (s1.m_aColor == s2.m_aColor)
-        )
-        return true;
-    return false;
+        (s1.m_aColor == s2.m_aColor);
 }
 
 bool operator!=(XFShadow& s1, XFShadow& s2)

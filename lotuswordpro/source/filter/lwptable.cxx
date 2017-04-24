@@ -125,9 +125,7 @@ void LwpTable::Read()
 
 bool LwpTable::IsNumberDown()
 {
-    if (m_nAttributes & NUMBER_DOWN)
-        return true;
-    return false;
+    return (m_nAttributes & NUMBER_DOWN) != 0;
 }
 
 void  LwpTable::Parse(IXFStream* /*pOutputStream*/)
