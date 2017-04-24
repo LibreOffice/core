@@ -31,6 +31,7 @@
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
+#include <comphelper/hash.hxx>
 
 namespace {
 
@@ -280,18 +281,6 @@ static size_t WriteCallback(void *ptr, size_t size,
   return real_size;
 }
 
-// Callback to get the response data from server to a file.
-static size_t WriteCallbackFile(void *ptr, size_t size,
-                            size_t nmemb, void *userp)
-{
-  if (!userp)
-    return 0;
-
-  SvStream* response = static_cast<SvStream *>(userp);
-  size_t real_size = size * nmemb;
-  response->WriteBytes(static_cast<char *>(ptr), real_size);
-  return real_size;
-}
 
 
 class invalid_update_info : public std::exception
@@ -408,7 +397,45 @@ update_info parse_response(const std::string& rResponse)
     return aUpdateInfo;
 }
 
-std::string download_content(const OString& rURL, bool bFile)
+struct WriteDataFile
+{
+    comphelper::Hash maHash;
+    SvStream* mpStream;
+
+    WriteDataFile(SvStream* pStream):
+        maHash(comphelper::HashType::SHA512),
+        mpStream(pStream)
+    {
+    }
+
+    OUString getHash()
+    {
+        auto final_hash = maHash.finalize();
+        std::stringstream aStrm;
+        for (auto& i: final_hash)
+        {
+            aStrm << std::setw(2) << std::setfill('0') << std::hex << (int)i;
+        }
+
+        return toOUString(aStrm.str());
+    }
+};
+
+// Callback to get the response data from server to a file.
+size_t WriteCallbackFile(void *ptr, size_t size,
+                            size_t nmemb, void *userp)
+{
+  if (!userp)
+    return 0;
+
+  WriteDataFile* response = static_cast<WriteDataFile *>(userp);
+  size_t real_size = size * nmemb;
+  response->mpStream->WriteBytes(static_cast<char *>(ptr), real_size);
+  response->maHash.update(static_cast<const unsigned char*>(ptr), real_size);
+  return real_size;
+}
+
+std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
 {
     CURL* curl = curl_easy_init();
 
@@ -434,6 +461,7 @@ std::string download_content(const OString& rURL, bool bFile)
 
     std::string response_body;
     utl::TempFile aTempFile;
+    WriteDataFile aFile(aTempFile.GetStream(StreamMode::WRITE));
     if (!bFile)
     {
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -452,7 +480,7 @@ std::string download_content(const OString& rURL, bool bFile)
 
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallbackFile);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA,
-                static_cast<void *>(aTempFile.GetStream(StreamMode::WRITE)));
+                static_cast<void *>(&aFile));
     }
 
     // Fail if 400+ is returned from the web server.
@@ -473,12 +501,10 @@ std::string download_content(const OString& rURL, bool bFile)
         throw error_updater();
     }
 
-    return response_body;
-}
+    if (bFile)
+        rHash = aFile.getHash();
 
-OUString generateHash(const OUString& /*rURL*/)
-{
-    return OUString();
+    return response_body;
 }
 
 void handle_file_error(osl::FileBase::RC eError)
@@ -496,7 +522,8 @@ void handle_file_error(osl::FileBase::RC eError)
 void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash, const OUString& aFileName)
 {
     OString aURL = OUStringToOString(rURL, RTL_TEXTENCODING_UTF8);
-    std::string temp_file = download_content(aURL, true);
+    OUString aHash;
+    std::string temp_file = download_content(aURL, true, aHash);
     if (temp_file.empty())
         throw error_updater();
 
@@ -513,7 +540,6 @@ void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash
         SAL_WARN("desktop.updater", "File sizes don't match. File might be corrupted.");
     }
 
-    OUString aHash = generateHash(aTempFile);
     if (aHash != rHash)
     {
         SAL_WARN("desktop.updater", "File hash don't match. File might be corrupted.");
@@ -548,7 +574,8 @@ void update_checker()
 
     try
     {
-        std::string response_body = download_content(aURL, false);
+        OUString aHash;
+        std::string response_body = download_content(aURL, false, aHash);
         if (!response_body.empty())
         {
             update_info aUpdateInfo = parse_response(response_body);
