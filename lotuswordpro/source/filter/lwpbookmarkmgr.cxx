@@ -95,10 +95,7 @@ bool LwpBookmarkMgr::FindBookmark(const OUString& sName)
 {
     std::map<OUString,XFBookmarkStart*>::iterator iter;
     iter = m_MapStart.find(sName);
-    if (iter != m_MapStart.end())
-        return true;
-    else
-        return false;
+    return iter != m_MapStart.end();
 }
 
 LwpBookmarkMgr::LwpBookmarkMgr()

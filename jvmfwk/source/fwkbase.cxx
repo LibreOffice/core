@@ -532,9 +532,7 @@ void setJavaSelected()
 bool wasJavaSelectedInSameProcess()
 {
     //g_setJavaProcId not set means no Java selected
-    if (g_bJavaSet)
-        return true;
-    return false;
+    return g_bJavaSet;
 }
 
 

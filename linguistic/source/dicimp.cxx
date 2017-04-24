@@ -130,10 +130,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
             // type: negative / positive
             if (getTag(aLine, "type: ", aTagValue))
             {
-                if (aTagValue == "negative")
-                    bNeg = true;
-                else
-                    bNeg = false;
+                bNeg = aTagValue == "negative";
             }
 
             if (aLine.indexOf("---") != -1) // end of header

@@ -974,12 +974,8 @@ bool LwpMiddleLayout::CanSizeRight()
 {
     sal_uInt8 RelType = GetRelativeType();
 
-    if (RelType == LwpLayoutRelativityGuts::LAY_INLINE || RelType == LwpLayoutRelativityGuts::LAY_PARA_RELATIVE
-    || RelType == LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL)
-    {
-        return false;
-    }
-    return true;
+    return !(RelType == LwpLayoutRelativityGuts::LAY_INLINE || RelType == LwpLayoutRelativityGuts::LAY_PARA_RELATIVE
+             || RelType == LwpLayoutRelativityGuts::LAY_INLINE_VERTICAL);
 }
 sal_Int32 LwpMiddleLayout::GetMinimumWidth()
 {
@@ -1453,9 +1449,7 @@ bool LwpMiddleLayout::GetUsePrinterSettings()
 bool LwpMiddleLayout::HasContent()
 {
     rtl::Reference<LwpObject> content = m_Content.obj();
-    if(content.is())
-        return true;
-    return false;
+    return content.is();
 }
 
 LwpLayout::LwpLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm ) :
@@ -2084,11 +2078,7 @@ bool LwpPlacableLayout::IsAnchorPage()
         return false;
 
     rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
-    if (xLayout.is() && (xLayout->IsPage() || xLayout->IsHeader() || xLayout->IsFooter()))
-    {
-        return true;
-    }
-    return false;
+    return xLayout.is() && (xLayout->IsPage() || xLayout->IsHeader() || xLayout->IsFooter());
 }
 /**
 * @descr:   whether the parent layout is frame layout
@@ -2100,11 +2090,7 @@ bool LwpPlacableLayout::IsAnchorFrame()
         return false;
 
     rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
-    if (xLayout.is() && (xLayout->IsFrame() || xLayout->IsGroupHead()))
-    {
-        return true;
-    }
-    return false;
+    return xLayout.is() && (xLayout->IsFrame() || xLayout->IsGroupHead());
 }
 /**
 * @descr:   whether the parent layout is cell layout
@@ -2116,11 +2102,7 @@ bool LwpPlacableLayout::IsAnchorCell()
         return false;
 
     rtl::Reference<LwpVirtualLayout> xLayout = GetParentLayout();
-    if (xLayout.is() && xLayout->IsCell())
-    {
-        return true;
-    }
-    return false;
+    return xLayout.is() && xLayout->IsCell();
 }
 
 /**
