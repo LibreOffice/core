@@ -68,13 +68,6 @@ extern "C" {
 #   endif
 #endif
 
-#ifdef EMSCRIPTEN
-#   include <endian.h>
-#   ifndef _LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   endif
-#endif
-
 #ifdef NETBSD
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
@@ -139,8 +132,7 @@ extern "C" {
     !defined(AIX)     && !defined(OPENBSD) && \
     !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \
     !defined(DRAGONFLY) && \
-    !defined(IOS)     && !defined(ANDROID) && \
-    !defined(EMSCRIPTEN)
+    !defined(IOS)     && !defined(ANDROID)
 #   error "Target platform not specified !"
 #endif
 

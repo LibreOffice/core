@@ -39,28 +39,29 @@ public:
     void testWeak();
     void testAsian();
     void testThai();
-#if (U_ICU_VERSION_MAJOR_NUM > 51)
     void testLao();
 #ifdef TODO
     void testNorthernThai();
+#endif
     void testKhmer();
-#endif
-#endif
     void testJapanese();
     void testChinese();
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
-    CPPUNIT_TEST(testWordBoundaries);
     CPPUNIT_TEST(testGraphemeIteration);
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
     CPPUNIT_TEST(testThai);
-#if (U_ICU_VERSION_MAJOR_NUM > 51)
-    CPPUNIT_TEST(testLao);
 #ifdef TODO
-    CPPUNIT_TEST(testKhmer);
     CPPUNIT_TEST(testNorthernThai);
 #endif
+
+    CPPUNIT_TEST(testWordBoundaries);
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
+    CPPUNIT_TEST(testKhmer);
+#endif
+#if (U_ICU_VERSION_MAJOR_NUM > 51)
+    CPPUNIT_TEST(testLao);
 #endif
     CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST(testChinese);
@@ -883,12 +884,11 @@ void TestBreakIterator::testNorthernThai()
     CPPUNIT_ASSERT_MESSAGE("Should skip full word",
         aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
 }
+#endif
 
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
 // Not sure if any version earlier than 49 did have Khmer word boundary
 // dictionaries, 4.6 does not.
-
-// As of icu 54, word boundary detection for Khmer is still considered
-// insufficient, so icu khmer stuff is disabled
 
 //A test to ensure that our khmer word boundary detection is useful
 //https://bugs.libreoffice.org/show_bug.cgi?id=52020

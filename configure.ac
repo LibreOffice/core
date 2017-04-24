@@ -792,27 +792,6 @@ linux-android*)
     BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     ;;
 
-emscripten*)
-    build_gstreamer_1_0=no
-    build_gstreamer_0_10=no
-    enable_lotuswordpro=no
-    enable_mpl_subset=yes
-    enable_coinmp=yes
-    enable_lpsolve=no
-    enable_report_builder=no
-    with_theme="tango"
-    test_cups=no
-    test_dbus=no
-    test_fontconfig=no
-    test_freetype=no
-    test_gtk=no
-    test_tde=no
-    test_kde4=no
-    test_randr=no
-    test_xrender=no
-    _os=Emscripten
-    ;;
-
 *)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
@@ -4318,17 +4297,6 @@ linux-android*)
     esac
     ;;
 
-emscripten*)
-    COM=emcc
-    USING_X11=
-    OS=EMSCRIPTEN
-    RTL_OS=Emscripten
-    P_SEP=:
-    CPUNAME=INTEL
-    RTL_ARCH=x86
-    PLATFORMID=linux_x86
-    ;;
-
 mingw*)
     COM=GCC
     GUIBASE=not-used
@@ -5394,7 +5362,7 @@ else
 fi
 
 dnl check for GNU C++ compiler version
-if test "$GXX" = "yes" -a $CXX != "emcc"; then
+if test "$GXX" = "yes"; then
     AC_MSG_CHECKING([the GNU C++ compiler version])
 
     _gpp_version=`$CXX -dumpversion`
@@ -8935,7 +8903,7 @@ SYSTEM_GENBRK=
 SYSTEM_GENCCODE=
 SYSTEM_GENCMN=
 
-ICU_MAJOR=57
+ICU_MAJOR=54
 ICU_MINOR=1
 ICU_RECLASSIFIED_CLOSE_PARENTHESIS="TRUE"
 ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
@@ -10015,7 +9983,7 @@ fi
 AC_SUBST(ENABLE_KDE4)
 
 ENABLE_HEADLESS=""
-if test "x$with_x" = "xno" -o $CXX = "emcc"; then
+if test "x$with_x" = "xno"; then
     ENABLE_HEADLESS="TRUE"
     SCPDEFS="$SCPDEFS -DLIBO_HEADLESS"
     R="headless"

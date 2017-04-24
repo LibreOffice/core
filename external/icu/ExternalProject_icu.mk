@@ -22,7 +22,7 @@ ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" \
-		&& CFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUG_CFLAGS)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUG_CFLAGS)" \
+		&& CFLAGS="-arch:SSE $(SOLARINC) $(gb_DEBUG_CFLAGS)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-arch:SSE $(SOLARINC) $(gb_DEBUG_CFLAGS)" \
 			INSTALL=`cygpath -m /usr/bin/install` \
 			./runConfigureICU \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
@@ -55,14 +55,14 @@ icu_CFLAGS:=" \
 	$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
-	$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
+	$(if $(filter $(true),$(gb_SYMBOL)),-g) \
 	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
-icu_CXXFLAGS:="$(CXXFLAGS) $(CXXFLAGS_CXX11) \
+icu_CXXFLAGS:="$(CXXFLAGS_CXX11) \
 	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
-	$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
+	$(if $(filter $(true),$(gb_SYMBOL)),-g) \
 	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
 icu_LDFLAGS:=" \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
@@ -80,7 +80,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			--disable-layout --disable-samples \
 			$(if $(CROSS_COMPILING),--disable-tools --disable-extras) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-dyload) \
-			$(if $(filter ANDROID EMSCRIPTEN,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
+			$(if $(filter ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
 			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
 				--enable-static --disable-shared,\
