@@ -135,6 +135,7 @@ struct Value
 
     Value(OUString const & rString)
         : maString(rString)
+        , mfValue(0.0)
         , mbIsValue(false)
     {}
 
