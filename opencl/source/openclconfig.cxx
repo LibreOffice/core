@@ -38,8 +38,7 @@ bool OpenCLConfig::operator== (const OpenCLConfig& r) const
 {
     return (mbUseOpenCL == r.mbUseOpenCL &&
             maBlackList == r.maBlackList &&
-            maWhiteList == r.maWhiteList &&
-            true);
+            maWhiteList == r.maWhiteList);
 }
 
 bool OpenCLConfig::operator!= (const OpenCLConfig& r) const
@@ -122,10 +121,7 @@ bool match(const OUString& rPattern, const OUString& rInput)
     icu::UnicodeString sIcuInput(reinterpret_cast<const UChar*>(rInput.getStr()), rInput.getLength());
     RegexMatcher aMatcher(sIcuPattern, sIcuInput, 0, nIcuError);
 
-    if (U_SUCCESS(nIcuError) && aMatcher.matches(nIcuError) && U_SUCCESS(nIcuError))
-        return true;
-
-    return false;
+    return U_SUCCESS(nIcuError) && aMatcher.matches(nIcuError) && U_SUCCESS(nIcuError);
 }
 
 bool match(const OpenCLConfig::ImplMatcher& rListEntry, const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
