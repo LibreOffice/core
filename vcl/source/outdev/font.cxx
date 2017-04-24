@@ -290,7 +290,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                                         tools::Rectangle& rRect1, tools::Rectangle& rRect2,
                                         long& rYOff, long& rWidth,
                                         FontEmphasisMark eEmphasis,
-                                        long nHeight, short /*nOrient*/ )
+                                        long nHeight )
 {
     static const PolyFlags aAccentPolyFlags[24] =
     {
@@ -1261,7 +1261,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
                          aRect1, aRect2,
                          nEmphasisYOff, nEmphasisWidth,
                          nEmphasisMark,
-                         nEmphasisHeight, mpFontInstance->mnOrientation );
+                         nEmphasisHeight );
 
     if ( bPolyLine )
     {

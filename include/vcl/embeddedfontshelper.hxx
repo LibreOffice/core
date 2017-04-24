@@ -36,7 +36,7 @@ public:
       Returns URL for a font file for the given font, or empty if it does not exist.
     */
     static OUString fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
-        FontWeight weight, FontPitch pitch, rtl_TextEncoding encoding, FontRights rights );
+        FontWeight weight, FontPitch pitch, FontRights rights );
 
     /**
       Reads a font from the input stream, saves it to a temporary font file and activates the font.

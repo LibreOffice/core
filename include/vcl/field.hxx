@@ -286,12 +286,10 @@ protected:
                             DateFormatter();
 
     SAL_DLLPRIVATE const Date& ImplGetFieldDate() const    { return maFieldDate; }
-    SAL_DLLPRIVATE bool     ImplDateReformat( const OUString& rStr, OUString& rOutStr,
-                                              const AllSettings& rSettings );
+    SAL_DLLPRIVATE bool     ImplDateReformat( const OUString& rStr, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplSetUserDate( const Date& rNewDate,
                                              Selection* pNewSelection = nullptr );
-    SAL_DLLPRIVATE OUString ImplGetDateAsText( const Date& rDate,
-                                               const AllSettings& rSettings ) const;
+    SAL_DLLPRIVATE OUString ImplGetDateAsText( const Date& rDate ) const;
     SAL_DLLPRIVATE void     ImplNewFieldValue( const Date& rDate );
     CalendarWrapper&        GetCalendarWrapper() const;
 

@@ -859,7 +859,7 @@ void SkipObjkList(SvStream& rInp)
     } while (aObjk.Next!=0L && !rInp.GetError());
 }
 
-bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
+bool SgfFilterSDrw( SvStream& rInp, GDIMetaFile& rMtf )
 {
     bool          bRet = false;
     PageType      aPage;
@@ -929,7 +929,7 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, const INetURLObject& _aIni
             ReadSgfEntry( rInp, aEntr );
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
-                bRet=SgfFilterSDrw( rInp,aHead,aEntr,rMtf );
+                bRet=SgfFilterSDrw( rInp,rMtf );
             }
         } // while(nNext)
     }

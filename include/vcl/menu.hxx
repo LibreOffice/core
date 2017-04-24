@@ -439,7 +439,7 @@ public:
 
     virtual void SelectItem(sal_uInt16 nId) override;
     bool HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
-    bool HandleMenuButtonEvent(Menu *pMenu, sal_uInt16 nEventId);
+    bool HandleMenuButtonEvent(sal_uInt16 nEventId);
 
     void SetCloseButtonClickHdl( const Link<void*,void>& rLink ) { maCloseHdl = rLink; }
     const Link<void*,void>& GetCloseButtonClickHdl() const       { return maCloseHdl; }

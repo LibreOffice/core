@@ -434,20 +434,20 @@ void TextView::ImpSetSelection( const TextSelection& rSelection )
 
 void TextView::ShowSelection()
 {
-    ImpShowHideSelection( true );
+    ImpShowHideSelection();
 }
 
 void TextView::HideSelection()
 {
-    ImpShowHideSelection( false );
+    ImpShowHideSelection();
 }
 
 void TextView::ShowSelection( const TextSelection& rRange )
 {
-    ImpShowHideSelection( true, &rRange );
+    ImpShowHideSelection( &rRange );
 }
 
-void TextView::ImpShowHideSelection(bool /*bShow*/, const TextSelection* pRange)
+void TextView::ImpShowHideSelection(const TextSelection* pRange)
 {
     const TextSelection* pRangeOrSelection = pRange ? pRange : &mpImpl->maSelection;
 
@@ -854,7 +854,7 @@ void TextView::Command( const CommandEvent& rCEvt )
         if( mpImpl->mpTextEngine->mpIMEInfos )
         {
             TEParaPortion* pPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetPara() );
-            pPortion->MarkSelectionInvalid( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
+            pPortion->MarkSelectionInvalid( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex() );
 
             bool bInsertMode = !mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite;
 
@@ -922,7 +922,7 @@ void TextView::Command( const CommandEvent& rCEvt )
                 }
 
                 TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetPara() );
-                pPPortion->MarkSelectionInvalid( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
+                pPPortion->MarkSelectionInvalid( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex() );
                 mpImpl->mpTextEngine->FormatAndUpdate( this );
             }
 
@@ -1762,17 +1762,13 @@ bool TextView::SetCursorAtPoint( const Point& rPosPixel )
 
 bool TextView::IsSelectionAtPoint( const Point& rPosPixel )
 {
-//  if ( !Rectangle( Point(), mpImpl->mpWindow->GetOutputSizePixel() ).IsInside( rPosPixel ) && !mbInSelection )
-//      return false;
-
     Point aDocPos = GetDocPos( rPosPixel );
-    TextPaM aPaM = mpImpl->mpTextEngine->GetPaM( aDocPos, false );
+    TextPaM aPaM = mpImpl->mpTextEngine->GetPaM( aDocPos );
     // For Hyperlinks D&D also start w/o a selection.
     // BeginDrag is only called, however, if IsSelectionAtPoint()
     // Problem: IsSelectionAtPoint is not called by Command()
     // if before MBDown returned false.
-    return ( IsInSelection( aPaM ) ||
-            ( /* mpImpl->mpSelEngine->IsInCommand() && */ mpImpl->mpTextEngine->FindAttrib( aPaM, TEXTATTR_HYPERLINK ) ) );
+    return IsInSelection( aPaM ) || mpImpl->mpTextEngine->FindAttrib( aPaM, TEXTATTR_HYPERLINK );
 }
 
 bool TextView::IsInSelection( const TextPaM& rPaM )

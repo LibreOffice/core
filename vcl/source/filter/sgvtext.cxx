@@ -652,7 +652,6 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
 void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& AktAtr,
                 sal_uInt16 UmbWdt, sal_uInt16 AdjWdt,
                 short* Line, sal_uInt16& nChars,
-                double, double,
                 UCHAR* cLine, bool TextFit)
 {
     ScopedVclPtrInstance< VirtualDevice > vOut;
@@ -931,7 +930,7 @@ void TextType::Draw(OutputDevice& rOut)
 
     do {
         T2=T1; Index2=Index1;
-        FormatLine(Buf,Index2,T,T2,xSize,xSAdj,xLine.get(),l,sn,cs,cLine.get(),LineFit);
+        FormatLine(Buf,Index2,T,T2,xSize,xSAdj,xLine.get(),l,cLine.get(),LineFit);
         Fehler=(Index2==Index1);
         if (!Fehler) {
             lc=GetLineFeed(Buf,Index1,T,T1,l,LF,MaxGrad);

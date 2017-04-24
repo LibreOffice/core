@@ -1158,7 +1158,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dra
         aImplWin->SetDisplayActive( true );
         aImplWin->InitView();
 
-        aImplWin->Draw( tools::Rectangle( aPos, aSize ), pDev, aPos );
+        aImplWin->Draw( pDev, aPos );
     }
 
     pDev->Pop();

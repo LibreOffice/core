@@ -2627,7 +2627,7 @@ tools::Rectangle MenuBar::GetMenuBarButtonRectPixel( sal_uInt16 nId )
     return pMenuWin ? pMenuWin->GetMenuBarButtonRectPixel(nId) : tools::Rectangle();
 }
 
-bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId )
+bool MenuBar::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
 {
     MenuBarWindow* pMenuWin = getMenuBarWindow();
     return pMenuWin && pMenuWin->HandleMenuButtonEvent(i_nButtonId);

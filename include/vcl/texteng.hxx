@@ -177,7 +177,7 @@ protected:
 
     bool                CreateLines( sal_uInt32 nPara );
     void                CreateAndInsertEmptyLine( sal_uInt32 nPara );
-    void                ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion* pPortion, sal_Int32 nPortionStart, long nRemainingWidth );
+    void                ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nPortionStart, long nRemainingWidth );
     std::size_t         SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos );
     void                CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos );
     void                RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_Int32 nNewChars );
@@ -193,9 +193,9 @@ protected:
 
     bool                IsFormatted() const { return mbFormatted; }
 
-    sal_Int32           GetCharPos( sal_uInt32 nPara, std::vector<TextLine>::size_type nLine, long nDocPosX, bool bSmart = false );
-    tools::Rectangle           GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
-    sal_Int32           ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara, bool bSmart );
+    sal_Int32           GetCharPos( sal_uInt32 nPara, std::vector<TextLine>::size_type nLine, long nDocPosX );
+    tools::Rectangle    GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
+    sal_Int32           ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara );
     long                ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, std::size_t nTextPortion );
     long                ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
@@ -289,8 +289,8 @@ public:
 
     bool                Write( SvStream& rOutput, const TextSelection* pSel = nullptr, bool bHTML = false );
 
-    TextPaM             GetPaM( const Point& rDocPos, bool bSmart = true );
-    tools::Rectangle           PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );
+    TextPaM             GetPaM( const Point& rDocPos );
+    tools::Rectangle    PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );
     OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = nullptr );
 
     bool                HasAttrib( sal_uInt16 nWhich ) const;

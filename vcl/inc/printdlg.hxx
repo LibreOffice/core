@@ -215,7 +215,7 @@ namespace vcl
         void updateNup();
         void updateNupFromPages();
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
-        void setPreviewText( sal_Int32 );
+        void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();
         void checkOptionalControlDependencies();

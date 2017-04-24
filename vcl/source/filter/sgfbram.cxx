@@ -185,7 +185,7 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
     return Data;
 }
 
-bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
+bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead)
 {
     BmpFileHeader  aBmpHead;
     BmpInfoHeader  aBmpInfo;
@@ -350,7 +350,7 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
                     case SgfBitImag0:
                     case SgfBitImag1:
                     case SgfBitImag2:
-                    case SgfBitImgMo: bRet=SgfFilterBMap(rInp,rOut,aHead,aEntr); break;
+                    case SgfBitImgMo: bRet=SgfFilterBMap(rInp,rOut,aHead); break;
                 }
             }
         } // while(nNext)
@@ -386,7 +386,7 @@ Color Hpgl2SvFarbe( sal_uInt8 nFarb )
     return aColor;
 }
 
-bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
+bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, GDIMetaFile& rMtf)
 {
     ScopedVclPtrInstance< VirtualDevice > aOutDev;
     SgfVector aVect;
@@ -468,7 +468,7 @@ bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
             ReadSgfEntry( rInp, aEntr );
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
-                bRet=SgfFilterVect(rInp,aHead,aEntr,rMtf);
+                bRet=SgfFilterVect(rInp,aHead,rMtf);
             }
         } // while(nNext)
     }

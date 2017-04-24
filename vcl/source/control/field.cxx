@@ -60,9 +60,9 @@ sal_Int64 ImplPower10( sal_uInt16 n )
     return nValue;
 }
 
-bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
-                                        bool bStrictFormat, bool bThousandSep,
-                                        const LocaleDataWrapper& rLocaleDataWrappper )
+bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
+                                 bool bStrictFormat, bool bThousandSep,
+                                 const LocaleDataWrapper& rLocaleDataWrappper )
 {
     if ( !bStrictFormat )
         return false;
@@ -775,7 +775,7 @@ bool NumericField::PreNotify( NotifyEvent& rNEvt )
 {
         if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplNumericProcessKeyInput( *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 
@@ -914,7 +914,7 @@ bool NumericBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplNumericProcessKeyInput( *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 
@@ -978,11 +978,11 @@ void NumericBox::InsertValue( sal_Int64 nValue, sal_Int32 nPos )
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
 
-static bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                       bool, bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
+static bool ImplMetricProcessKeyInput( const KeyEvent& rKEvt,
+                                       bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
     // no meaningfull strict format; therefore allow all characters
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, false, bUseThousandSep, rWrapper );
+    return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rWrapper );
 }
 
 static OUString ImplMetricGetUnitText(const OUString& rStr)
@@ -1595,7 +1595,7 @@ bool MetricField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplMetricProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 
@@ -1698,7 +1698,7 @@ bool MetricBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2()  )
     {
-        if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplMetricProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 
@@ -1803,11 +1803,11 @@ sal_Int64 MetricBox::GetValue() const
     return GetValue( FUNIT_NONE );
 }
 
-static bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                         bool, bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
+static bool ImplCurrencyProcessKeyInput( const KeyEvent& rKEvt,
+                                         bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
     // no strict format set; therefore allow all characters
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, false, bUseThousandSep, rWrapper );
+    return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rWrapper );
 }
 
 inline bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
@@ -1910,7 +1910,7 @@ bool CurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 
@@ -1994,7 +1994,7 @@ bool CurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
-        if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
+        if ( ImplCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return true;
     }
 

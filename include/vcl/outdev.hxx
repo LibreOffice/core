@@ -1225,7 +1225,7 @@ public:
     SystemFontData              GetSysFontData( int nFallbacklevel ) const;
 
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine, tools::Rectangle& rRect1, tools::Rectangle& rRect2,
-                                                     long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
+                                                     long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight );
     SAL_DLLPRIVATE static FontEmphasisMark
                                 ImplGetEmphasisMarkStyle( const vcl::Font& rFont );
 

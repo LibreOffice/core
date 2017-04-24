@@ -236,9 +236,9 @@ public:
                                             WindowAlign eAlign, bool bHorz);
 
     SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void ImplDrawGradientBackground(vcl::RenderContext& rRenderContext, ImplDockingWindowWrapper *pWrapper);
-    SAL_DLLPRIVATE bool ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion);
-    SAL_DLLPRIVATE void ImplDrawTransparentBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion);
+    SAL_DLLPRIVATE void ImplDrawGradientBackground(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE bool ImplDrawNativeBackground(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawTransparentBackground(const vcl::Region &rRegion);
     SAL_DLLPRIVATE static void ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
     SAL_DLLPRIVATE void ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
 

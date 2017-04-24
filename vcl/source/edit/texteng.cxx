@@ -520,7 +520,7 @@ TextPaM TextEngine::ImpConnectParagraphs( sal_uInt32 nLeft, sal_uInt32 nRight )
     TextPaM aPaM = mpDoc->ConnectParagraphs( pLeft, pRight );
     ImpParagraphRemoved( nRight );
 
-    pLeftPortion->MarkSelectionInvalid( aPaM.GetIndex(), pLeft->GetText().getLength() );
+    pLeftPortion->MarkSelectionInvalid( aPaM.GetIndex() );
 
     mpTEParaPortions->Remove( nRight );
     delete pRightPortion;
@@ -565,7 +565,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
             ImpRemoveChars( aStartPaM, nChars );
             TEParaPortion* pPortion = mpTEParaPortions->GetObject( nStartNode );
             SAL_WARN_IF( !pPortion, "vcl", "ImpDeleteText(3): bad Index" );
-            pPortion->MarkSelectionInvalid( aStartPaM.GetIndex(), pLeft->GetText().getLength() );
+            pPortion->MarkSelectionInvalid( aStartPaM.GetIndex() );
         }
 
         // the beginning of EndNodes....
@@ -578,7 +578,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
             ImpRemoveChars( aEndPaM, nChars );
             TEParaPortion* pPortion = mpTEParaPortions->GetObject( nEndNode );
             SAL_WARN_IF( !pPortion, "vcl", "ImpDeleteText(4): bad Index" );
-            pPortion->MarkSelectionInvalid( 0, pPortion->GetNode()->GetText().getLength() );
+            pPortion->MarkSelectionInvalid( 0 );
         }
 
         // connect....
@@ -1028,7 +1028,7 @@ bool TextEngine::HasAttrib( sal_uInt16 nWhich ) const
     return bAttr;
 }
 
-TextPaM TextEngine::GetPaM( const Point& rDocPos, bool bSmart )
+TextPaM TextEngine::GetPaM( const Point& rDocPos )
 {
     SAL_WARN_IF( !GetUpdateMode(), "vcl", "GetPaM: GetUpdateMode()" );
 
@@ -1045,7 +1045,7 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos, bool bSmart )
             aPosInPara.Y() -= nY;
 
             TextPaM aPaM( nPortion, 0 );
-            aPaM.GetIndex() = ImpFindIndex( nPortion, aPosInPara, bSmart );
+            aPaM.GetIndex() = ImpFindIndex( nPortion, aPosInPara );
             return aPaM;
         }
     }
@@ -1056,7 +1056,7 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos, bool bSmart )
     return TextPaM( nLastNode, pLast->GetText().getLength() );
 }
 
-sal_Int32 TextEngine::ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara, bool bSmart )
+sal_Int32 TextEngine::ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara )
 {
     SAL_WARN_IF( !IsFormatted(), "vcl", "GetPaM: Not formatted" );
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );
@@ -1079,7 +1079,7 @@ sal_Int32 TextEngine::ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara
 
     assert(pLine && "ImpFindIndex: pLine ?");
 
-    nCurIndex = GetCharPos( nPortion, nLine, rPosInPara.X(), bSmart );
+    nCurIndex = GetCharPos( nPortion, nLine, rPosInPara.X() );
 
     if ( nCurIndex && ( nCurIndex == pLine->GetEnd() ) &&
          ( pLine != &( pPortion->GetLines().back() ) ) )
@@ -1091,7 +1091,7 @@ sal_Int32 TextEngine::ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara
     return nCurIndex;
 }
 
-sal_Int32 TextEngine::GetCharPos( sal_uInt32 nPortion, std::vector<TextLine>::size_type nLine, long nXPos, bool )
+sal_Int32 TextEngine::GetCharPos( sal_uInt32 nPortion, std::vector<TextLine>::size_type nLine, long nXPos )
 {
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );
@@ -1514,8 +1514,7 @@ void TextEngine::FormatFullDoc()
     for ( sal_uInt32 nPortion = 0; nPortion < mpTEParaPortions->Count(); ++nPortion )
     {
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPortion );
-        const sal_Int32 nLen = pTEParaPortion->GetNode()->GetText().getLength();
-        pTEParaPortion->MarkSelectionInvalid( 0, nLen );
+        pTEParaPortion->MarkSelectionInvalid( 0 );
     }
     mbFormatted = false;
     FormatDoc();
@@ -1641,7 +1640,7 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
     pTEParaPortion->GetLines().push_back( aTmpLine );
 }
 
-void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*, sal_Int32 nPortionStart, long nRemainingWidth )
+void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nPortionStart, long nRemainingWidth )
 {
     TextNode* pNode = mpDoc->GetNodes()[ nPara ];
 
@@ -2268,7 +2267,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         {
             SAL_WARN_IF( (nPortionEnd-nPortionStart) != pPortion->GetLen(), "vcl", "CreateLines: There is a Portion after all?!" );
             const long nRemainingWidth = mnMaxTextWidth - nTmpWidth;
-            ImpBreakLine( nPara, pLine, pPortion, nPortionStart, nRemainingWidth );
+            ImpBreakLine( nPara, pLine, nPortionStart, nRemainingWidth );
         }
 
         if ( ( ImpGetAlign() == TxtAlign::Center ) || ( ImpGetAlign() == TxtAlign::Right ) )
@@ -2549,7 +2548,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara )
             pNode->GetCharAttribs().Clear();
 
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-            pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().getLength() );
+            pTEParaPortion->MarkSelectionInvalid( 0 );
 
             mbFormatted = false;
 
@@ -2572,7 +2571,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich )
                     rAttribs.RemoveAttrib( nAttr -1 );
             }
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-            pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().getLength() );
+            pTEParaPortion->MarkSelectionInvalid( 0 );
             mbFormatted = false;
             IdleFormatAndUpdate( nullptr, 0xFFFF );
         }
@@ -2596,7 +2595,7 @@ void TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
                 }
             }
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-            pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().getLength() );
+            pTEParaPortion->MarkSelectionInvalid( 0 );
             mbFormatted = false;
             FormatAndUpdate();
         }
@@ -2623,7 +2622,7 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32
             nEnd = nMax;
 
         pNode->GetCharAttribs().InsertAttrib( new TextCharAttrib( rAttr, nStart, nEnd ) );
-        pTEParaPortion->MarkSelectionInvalid( nStart, nEnd );
+        pTEParaPortion->MarkSelectionInvalid( nStart );
 
         mbFormatted = false;
         if ( bIdleFormatAndUpdate )

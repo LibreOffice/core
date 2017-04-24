@@ -138,7 +138,7 @@ public:
     void                    InvalidateBorder();
 
     using Window::Draw;
-    void                    Draw( const tools::Rectangle& rRect, OutputDevice* pDev, const Point& rPos );
+    void                    Draw( OutputDevice* pDev, const Point& rPos );
 
     void                    SetDisplayActive( bool bActive );
     void                    SetTitleType( BorderWindowTitleType nTitleType, const Size& rSize );
@@ -237,7 +237,7 @@ public:
 class ImplNoBorderWindowView : public ImplBorderWindowView
 {
 public:
-                            ImplNoBorderWindowView( ImplBorderWindow* pBorderWindow );
+                            ImplNoBorderWindowView();
 
     virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) override;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,

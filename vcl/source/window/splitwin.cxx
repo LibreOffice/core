@@ -806,7 +806,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
 }
 
 void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool bHide,
-                                bool bRows, bool /*bDown*/ )
+                                bool bRows )
 {
     size_t              nItems = pSet->mpItems.size();
     std::vector< ImplSplitItem* >&     rItems = pSet->mpItems;
@@ -1107,7 +1107,7 @@ static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet
 
 sal_uInt16 SplitWindow::ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
                                    long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
-                                   bool bRows, bool /*bDown*/ )
+                                   bool bRows )
 {
     if ( pSet->mpItems.empty() )
         return 0;
@@ -1241,7 +1241,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
     }
 
     return ImplTestSplit( pWindow->mpMainSet, rPos, rMouseOff, ppFoundSet, rFoundPos,
-                         pWindow->mbHorz, !pWindow->mbBottomRight );
+                         pWindow->mbHorz );
 }
 
 void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
@@ -1567,7 +1567,7 @@ void SplitWindow::ImplCalcLayout()
 
     // calculate sets recursive
     ImplCalcSet( mpMainSet, nL, nT, nW, nH, mbHorz, !mbBottomRight );
-    ImplCalcSet2( this, mpMainSet, false, mbHorz, !mbBottomRight );
+    ImplCalcSet2( this, mpMainSet, false, mbHorz );
     mbCalc = false;
 }
 
@@ -1686,7 +1686,7 @@ void SplitWindow::ImplGetFadeInRect( tools::Rectangle& rRect, bool bTest ) const
     rRect = aRect;
 }
 
-void SplitWindow::ImplGetFadeOutRect( tools::Rectangle& rRect, bool ) const
+void SplitWindow::ImplGetFadeOutRect( tools::Rectangle& rRect ) const
 {
     tools::Rectangle aRect;
 
@@ -2050,7 +2050,7 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
     mbFadeNoButtonMode = false;
 
-    ImplGetFadeOutRect( aTestRect, true );
+    ImplGetFadeOutRect( aTestRect );
     if ( aTestRect.IsInside( aMousePosPixel ) )
     {
         mbFadeOutDown = true;
@@ -2159,7 +2159,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         else
         {
             tools::Rectangle aTestRect;
-            ImplGetFadeOutRect( aTestRect, true );
+            ImplGetFadeOutRect( aTestRect );
             bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
             if ( !bNewPressed )
             {
@@ -2335,7 +2335,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             nHelpResId = SV_HELPTEXT_FADEIN;
         else
         {
-            ImplGetFadeOutRect( aHelpRect, true );
+            ImplGetFadeOutRect( aHelpRect );
             if ( aHelpRect.IsInside( aMousePosPixel ) )
                 nHelpResId = SV_HELPTEXT_FADEOUT;
         }

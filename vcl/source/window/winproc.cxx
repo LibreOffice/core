@@ -1212,7 +1212,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
     return !ImplCallCommand( pChild, CommandEventId::ExtTextInput, &aData );
 }
 
-static bool ImplHandleEndExtTextInput( vcl::Window* /* pWindow */ )
+static bool ImplHandleEndExtTextInput()
 {
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
@@ -2056,7 +2056,7 @@ static bool ImplHandleMenuEvent( vcl::Window* pWindow, SalMenuEvent* pEvent, Sal
                     bRet = pMenuBar->HandleMenuHighlightEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
                     break;
                 case SalEvent::MenuButtonCommand:
-                    bRet = pMenuBar->HandleMenuButtonEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
+                    bRet = pMenuBar->HandleMenuButtonEvent( pEvent->mnId );
                     break;
                 case SalEvent::MenuCommand:
                     bRet = pMenuBar->HandleMenuCommandEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
@@ -2513,7 +2513,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             }
             break;
         case SalEvent::EndExtTextInput:
-            bRet = ImplHandleEndExtTextInput( pWindow );
+            bRet = ImplHandleEndExtTextInput();
             break;
         case SalEvent::ExtTextInputPos:
             ImplHandleSalExtTextInputPos( pWindow, const_cast<SalExtTextInputPosEvent *>(static_cast<SalExtTextInputPosEvent const *>(pEvent)) );
