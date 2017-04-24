@@ -338,12 +338,10 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 , m_bRecommendReadOnly( false )
 {
     CheckInteractionHandler();
-    OUString sModuleName;
     try
     {
         uno::Reference< lang::XComponent > xCurrentComponent = frame::Desktop::create( comphelper::getProcessComponentContext() )->getCurrentComponent();
-        sModuleName = aOwner.GetModuleManager()->identify(xCurrentComponent);
-        if(sModuleName == "com.sun.star.chart2.ChartDocument")
+        if (aOwner.GetModuleManager()->identify(xCurrentComponent) == "com.sun.star.chart2.ChartDocument")
         {
             // let us switch the model and set the xStorable and
             // XStorable2 to the old model.
@@ -458,13 +456,14 @@ OUString ModelData_Impl::GetDocServiceName()
 
 void ModelData_Impl::CheckInteractionHandler()
 {
+    const OUString sInteractionHandler {"InteractionHandler"};
     ::comphelper::SequenceAsHashMap::const_iterator aInteractIter =
-            m_aMediaDescrHM.find( OUString("InteractionHandler") );
+            m_aMediaDescrHM.find( sInteractionHandler );
 
     if ( aInteractIter == m_aMediaDescrHM.end() )
     {
         try {
-            m_aMediaDescrHM[ OUString("InteractionHandler") ]
+            m_aMediaDescrHM[ sInteractionHandler ]
                 <<= task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr);
         }
         catch( const uno::Exception& )
@@ -643,9 +642,8 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
         // the saving is acceptable
         // in case the configuration entry is not set or set to false
         // or in case of version creation
-        OUString aVersionCommentString = "VersionComment";
         if ( officecfg::Office::Common::Save::Document::AlwaysSaveAs::get()
-          && GetMediaDescr().find( aVersionCommentString ) == GetMediaDescr().end() )
+          && GetMediaDescr().find( OUString("VersionComment") ) == GetMediaDescr().end() )
         {
             // notify the user that SaveAs is going to be done
             vcl::Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
@@ -671,12 +669,12 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     // check acceptable entries for media descriptor
     ::comphelper::SequenceAsHashMap aAcceptedArgs;
 
-    OUString aVersionCommentString("VersionComment");
-    OUString aAuthorString("Author");
-    OUString aDontTerminateEdit("DontTerminateEdit");
-    OUString aInteractionHandlerString("InteractionHandler");
-    OUString aStatusIndicatorString("StatusIndicator");
-    OUString aFailOnWarningString("FailOnWarning");
+    const OUString aVersionCommentString("VersionComment");
+    const OUString aAuthorString("Author");
+    const OUString aDontTerminateEdit("DontTerminateEdit");
+    const OUString aInteractionHandlerString("InteractionHandler");
+    const OUString aStatusIndicatorString("StatusIndicator");
+    const OUString aFailOnWarningString("FailOnWarning");
 
     if ( GetMediaDescr().find( aVersionCommentString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aVersionCommentString ] = GetMediaDescr()[ aVersionCommentString ];
@@ -744,16 +742,11 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
     {
         // the default filter is acceptable and the old filter is alien one
         // so ask to make a saveAs operation
-        OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault("UIName",
-                                                                                OUString() );
-        OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault("UIName",
-                                                                                OUString() );
-        OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    "PreusedFilterName",
-                                                    OUString() );
-
-        OUString aDefType = aDefFiltPropsHM.getUnpackedValueOrDefault( "Type", OUString() );
-        OUString aDefExtension = GetRecommendedExtension( aDefType );
+        const OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault("UIName", OUString() );
+        const OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault("UIName", OUString() );
+        const OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault("PreusedFilterName", OUString() );
+        const OUString aDefType = aDefFiltPropsHM.getUnpackedValueOrDefault( "Type", OUString() );
+        const OUString aDefExtension = GetRecommendedExtension( aDefType );
 
         if ( !aPreusedFilterName.equals( aFilterName ) && !aUIName.equals( aDefUIName ) )
         {
@@ -854,7 +847,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     std::unique_ptr<sfx2::FileDialogHelper> pFileDlg;
 
-    OUString aDocServiceName = GetDocServiceName();
+    const OUString aDocServiceName {GetDocServiceName()};
     DBG_ASSERT( !aDocServiceName.isEmpty(), "No document service for this module set!" );
 
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
@@ -867,10 +860,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         {
             // this is a PDF export
             // the filter options has been shown already
-            OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                                        "UIName",
-                                                        OUString() );
-
+            const OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() );
             pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, "pdf", rStandardDir, rBlackList ));
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
@@ -898,11 +888,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
         if ( xControlAccess.is() )
         {
-            OUString aCtrlText = SfxResId(STR_EXPORTBUTTON).toString();
-            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aCtrlText );
-
-            aCtrlText = SfxResId(STR_LABEL_FILEFORMAT).toString();
-            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, aCtrlText );
+            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, SfxResId(STR_EXPORTBUTTON).toString() );
+            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, SfxResId(STR_LABEL_FILEFORMAT).toString() );
         }
     }
     else
@@ -921,21 +908,14 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
         // it is export, set the preselected filter
-        OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                        "UIName",
-                                        OUString() );
-        pFileDlg->SetCurrentFilter( aFilterUIName );
-        aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                        "Type",
-                                        OUString() );
+        pFileDlg->SetCurrentFilter( aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() ) );
+        aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "Type", OUString() );
     }
     // it is no export, bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
     else if ( bSetStandardName || GetStorable()->hasLocation() )
     {
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
-        OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                        sFilterNameString,
-                                                        OUString() );
+        const OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault( sFilterNameString, OUString() );
 
         if ( !aOldFilterName.isEmpty() )
             m_pOwner->GetFilterConfiguration()->getByName( aOldFilterName ) >>= aOldFilterProps;
@@ -946,14 +926,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || bool(nOldFiltFlags & nDont) )
         {
             // the suggested type will be changed, the extension should be adjusted
-            aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                            "Type",
-                                            OUString() );
-
-            OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                            "UIName",
-                                            OUString() );
-            pFileDlg->SetCurrentFilter( aFilterUIName );
+            aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "Type", OUString() );
+            pFileDlg->SetCurrentFilter( aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() ) );
         }
         else
         {
@@ -963,10 +937,10 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         }
     }
 
-    OUString aRecommendedDir = GetRecommendedDir( aSuggestedDir );
+    const OUString aRecommendedDir {GetRecommendedDir( aSuggestedDir )};
     if ( !aRecommendedDir.isEmpty() )
         pFileDlg->SetDisplayFolder( aRecommendedDir );
-    OUString aRecommendedName = GetRecommendedName( aSuggestedName, aAdjustToType );
+    const OUString aRecommendedName {GetRecommendedName( aSuggestedName, aAdjustToType )};
     if ( !aRecommendedName.isEmpty() )
         pFileDlg->SetFileName( aRecommendedName );
 
@@ -996,16 +970,14 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         aDialogParams.Put( SfxBoolItem( SID_PASSWORDINTERACTION, true ) );
     }
 
-    // aStringTypeFN is a pure output parameter, pDialogParams is an in/out parameter
-    OUString aStringTypeFN;
-    if ( pFileDlg->Execute( pDialogParams, aStringTypeFN ) != ERRCODE_NONE )
+    // aFilterName is a pure output parameter, pDialogParams is an in/out parameter
+    OUString aFilterName;
+    if ( pFileDlg->Execute( pDialogParams, aFilterName ) != ERRCODE_NONE )
     {
         throw task::ErrorCodeIOException(
             "ModelData_Impl::OutputFileDialog: ERRCODE_IO_ABORT",
             uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT);
     }
-
-    OUString aFilterName = aStringTypeFN;
 
     // the following two arguments can not be converted in MediaDescriptor,
     // so they should be removed from the ItemSet after retrieving
@@ -1025,12 +997,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     // old filter options should be cleared in case different filter is used
 
-    OUString aFilterFromMediaDescr = GetMediaDescr().getUnpackedValueOrDefault(
-                                                    sFilterNameString,
-                                                    OUString() );
-    OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    sFilterNameString,
-                                                    OUString() );
+    const OUString aFilterFromMediaDescr = GetMediaDescr().getUnpackedValueOrDefault( sFilterNameString, OUString() );
+    const OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault( sFilterNameString, OUString() );
 
     const OUString sFilterOptionsString(aFilterOptionsString);
     const OUString sFilterDataString(aFilterDataString);
@@ -1102,8 +1070,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     // merge in results of the dialog execution
-    GetMediaDescr()[OUString("URL")] <<=
-                                                OUString( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
+    GetMediaDescr()[OUString("URL")] <<= aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     GetMediaDescr()[sFilterNameString] <<= aFilterName;
 
     return bUseFilterOptions;
@@ -1176,8 +1143,6 @@ OUString ModelData_Impl::GetRecommendedExtension( const OUString& aTypeName )
 
 OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
 {
-    OUString aRecommendedDir;
-
     if ( ( !aSuggestedDir.isEmpty() || GetStorable()->hasLocation() )
       && !GetMediaDescr().getUnpackedValueOrDefault("RepairPackage", false ) )
     {
@@ -1186,7 +1151,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
             aLocation = INetURLObject( aSuggestedDir );
         else
         {
-            OUString aOldURL = GetStorable()->getLocation();
+            const OUString aOldURL = GetStorable()->getLocation();
             if ( !aOldURL.isEmpty() )
             {
                 INetURLObject aTmp( aOldURL );
@@ -1204,52 +1169,46 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
 
         aLocation.setFinalSlash();
         if ( !aLocation.HasError() )
-            aRecommendedDir = aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-    }
-    else
-    {
-        aRecommendedDir = INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
+            return aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+
+        return OUString();
     }
 
-    return aRecommendedDir;
+    return INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
 
 
 OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, const OUString& aTypeName )
 {
     // the last used name might be provided by aSuggestedName from the old selection, or from the MediaDescriptor
-    OUString aRecommendedName;
-
     if ( !aSuggestedName.isEmpty() )
-        aRecommendedName = aSuggestedName;
-    else
+        return aSuggestedName;
+
+    OUString aRecommendedName {INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DecodeMechanism::WithCharset )};
+    if ( aRecommendedName.isEmpty() )
     {
-        aRecommendedName = INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DecodeMechanism::WithCharset );
-        if ( aRecommendedName.isEmpty() )
+        try {
+            uno::Reference< frame::XTitle > xTitle( GetModel(), uno::UNO_QUERY_THROW );
+            aRecommendedName = xTitle->getTitle();
+        } catch( const uno::Exception& ) {}
+    }
+
+    if ( !aRecommendedName.isEmpty() && !aTypeName.isEmpty() )
+    {
+        // adjust the extension to the type
+        uno::Reference< container::XNameAccess > xTypeDetection(
+            comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"),
+            uno::UNO_QUERY );
+        if ( xTypeDetection.is() )
         {
-            try {
-                uno::Reference< frame::XTitle > xTitle( GetModel(), uno::UNO_QUERY_THROW );
-                aRecommendedName = xTitle->getTitle();
-            } catch( const uno::Exception& ) {}
-        }
+            INetURLObject aObj( "c:/" + aRecommendedName, INetProtocol::File,
+                    INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_UTF8, FSysStyle::Dos );
 
-        if ( !aRecommendedName.isEmpty() && !aTypeName.isEmpty() )
-        {
-            // adjust the extension to the type
-            uno::Reference< container::XNameAccess > xTypeDetection(
-                comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"),
-                uno::UNO_QUERY );
-            if ( xTypeDetection.is() )
-            {
-                INetURLObject aObj( "c:/" + aRecommendedName, INetProtocol::File,
-                        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_UTF8, FSysStyle::Dos );
+            const OUString aExtension = GetRecommendedExtension( aTypeName );
+            if ( !aExtension.isEmpty() )
+                aObj.SetExtension( aExtension );
 
-                OUString aExtension = GetRecommendedExtension( aTypeName );
-                if ( !aExtension.isEmpty() )
-                    aObj.SetExtension( aExtension );
-
-                aRecommendedName = aObj.GetName( INetURLObject::DecodeMechanism::WithCharset );
-            }
+            aRecommendedName = aObj.GetName( INetURLObject::DecodeMechanism::WithCharset );
         }
     }
 
@@ -1442,18 +1401,12 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             uno::Reference< uno::XInterface >(), ERRCODE_IO_INVALIDPARAMETER);
 
     ::comphelper::SequenceAsHashMap aFilterPropsHM( aFilterProps );
-    OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                                    "Name",
-                                                                    OUString() );
+    OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault( "Name", OUString() );
 
     const OUString sFilterNameString(aFilterNameString);
 
-    OUString aFilterFromMediaDescr = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
-                                                    sFilterNameString,
-                                                    OUString() );
-    OUString aOldFilterName = aModelData.GetDocProps().getUnpackedValueOrDefault(
-                                                    sFilterNameString,
-                                                    OUString() );
+    const OUString aFilterFromMediaDescr = aModelData.GetMediaDescr().getUnpackedValueOrDefault( sFilterNameString, OUString() );
+    const OUString aOldFilterName = aModelData.GetDocProps().getUnpackedValueOrDefault( sFilterNameString, OUString() );
 
     bool bUseFilterOptions = false;
     ::comphelper::SequenceAsHashMap::const_iterator aFileNameIter = aModelData.GetMediaDescr().find( OUString("URL") );
@@ -1535,9 +1488,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning
-                OUString aSelFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
-                                                                                sFilterNameString,
-                                                                                OUString() );
+                const OUString aSelFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault( sFilterNameString, OUString() );
                 sal_Int8 nStatusFilterSave = aModelData.CheckFilter( aSelFilterName );
                 if ( nStatusFilterSave == STATUS_SAVEAS_STANDARDNAME )
                 {
