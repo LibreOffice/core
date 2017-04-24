@@ -3731,12 +3731,7 @@ bool WW8PLCFx_FLD::StartPosIsFieldStart()
 {
     void* pData;
     sal_Int32 nTest;
-    if (
-         (!pPLCF || !pPLCF->Get(nTest, pData) ||
-         ((static_cast<sal_uInt8*>(pData)[0] & 0x1f) != 0x13))
-       )
-        return false;
-    return true;
+    return pPLCF && pPLCF->Get(nTest, pData) && ((static_cast<sal_uInt8*>(pData)[0] & 0x1f) == 0x13);
 }
 
 bool WW8PLCFx_FLD::EndPosIsFieldEnd(WW8_CP& nCP)

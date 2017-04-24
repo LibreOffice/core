@@ -131,9 +131,7 @@ bool SwTableLine::hasSoftPageBreak() const
             if( pRow == pLast )
             {
                 // The last check: no soft page break for "follow" table lines
-                if( pTab->IsFollow() && pTab->FindMaster()->HasFollowFlowLine() )
-                    return false;
-                return true;
+                return !pTab->IsFollow() || !pTab->FindMaster()->HasFollowFlowLine();
             }
             return false;
         }

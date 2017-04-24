@@ -736,9 +736,7 @@ bool SwFieldRefPage::MatchSubstring( const OUString& rListString, const OUString
         return true;
     OUString aListString = rListString.toAsciiLowerCase();
     OUString aSubstr = rSubstr.toAsciiLowerCase();
-    if(aListString.indexOf(aSubstr) >= 0)
-        return true;
-    return false;
+    return aListString.indexOf(aSubstr) >= 0;
 }
 
 sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)

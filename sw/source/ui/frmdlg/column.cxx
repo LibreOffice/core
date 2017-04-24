@@ -861,7 +861,7 @@ void SwColumnPage::UpdateCols()
     const bool bEdit = !m_pAutoWidthBox->IsChecked();
     if ( m_nCols > nVisCols )
     {
-        bEnableBtns = true && !m_bHtmlMode;
+        bEnableBtns = !m_bHtmlMode;
         bEnable12 = bEnable3 = bEdit;
     }
     else if( bEdit )

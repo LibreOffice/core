@@ -2929,10 +2929,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
     if (rFormat.IsInline())
     {
         ww8::Frame::WriterSource eType = rFormat.GetWriterType();
-        if ((eType == ww8::Frame::eGraphic) || (eType == ww8::Frame::eOle))
-            bUseEscher = false;
-        else
-            bUseEscher = true;
+        bUseEscher = eType != ww8::Frame::eGraphic && eType != ww8::Frame::eOle;
 
         /*
          A special case for converting some inline form controls to form fields

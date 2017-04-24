@@ -1687,15 +1687,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // for MoveBwd. Robust: We also check the bMovedBwd flag again.
         // If pOldUp was a footnote frame, it has been deleted inside MoveFwd.
         // Therefore we only check for growing body frames.
-        if ( bCheckForGrownBody && ! bMovedBwd && pOldUp != GetUpper() &&
-             aRectFnSet.GetHeight(pOldUp->Frame()) > nOldBodyHeight )
-        {
-            bMovedFwd = false;
-        }
-        else
-        {
-            bMovedFwd = true;
-        }
+        bMovedFwd = !bCheckForGrownBody || bMovedBwd || pOldUp == GetUpper() ||
+                    aRectFnSet.GetHeight(pOldUp->Frame()) <= nOldBodyHeight;
 
         bFormatted = false;
         if ( bMoveOrFit && GetUpper() == pOldUp )

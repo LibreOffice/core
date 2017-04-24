@@ -115,10 +115,7 @@ DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTextNode& targetNod
         return false;
     }
     const SwPageFrame* pageFrame = static_cast<const SwPageFrame*>(pFrame);
-    if (pageDescription != pageFrame->GetPageDesc()) {
-        return false;
-    }
-    return true;
+    return pageDescription == pageFrame->GetPageDesc();
 }
 
 }

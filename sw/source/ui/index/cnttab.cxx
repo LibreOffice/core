@@ -522,11 +522,8 @@ bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
 
     const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
         rName, SwGetPoolIdFromName::TxtColl);
-    if(nId != USHRT_MAX &&
-        ! rSh.GetTextCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())
-        return true;
-
-    return false;
+    return nId != USHRT_MAX &&
+        ! rSh.GetTextCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle();
 }
 
 class SwIndexTreeLB : public SvSimpleTable
