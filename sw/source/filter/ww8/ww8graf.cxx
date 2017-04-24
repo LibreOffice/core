@@ -1301,7 +1301,7 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     else                                                // nein -> Nimm Linie
         SetStdAttr( rSet, aCallB.dpPolyLine.aLnt, aCallB.dptxbx.aShd );
     SetFill( rSet, aCallB.dptxbx.aFill );
-    rSet.Put( SdrCaptionTypeItem( aCaptA[nTyp] ) );
+    rSet.Put(SdrCaptionTypeItem(aCaptA[nTyp % SAL_N_ELEMENTS(aCaptA)]));
 
     return pObj;
 }
