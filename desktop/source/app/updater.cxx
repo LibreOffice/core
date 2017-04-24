@@ -114,7 +114,7 @@ char** createCommandLine()
         OUString aPatchDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
         rtl::Bootstrap::expandMacros(aPatchDir);
         OUString aTempDirPath = getPathFromURL(aPatchDir);
-        createStr(aPatchDir, pArgs, 1);
+        createStr(aTempDirPath, pArgs, 1);
     }
     {
         OUString aInstallPath = getPathFromURL(aLibExecDirURL);
