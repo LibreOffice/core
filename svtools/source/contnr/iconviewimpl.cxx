@@ -262,10 +262,7 @@ bool IconViewImpl::IsEntryInView( SvTreeListEntry* pEntry ) const
         return false;
 
     long nStart = GetEntryLine( pEntry ) - GetEntryLine( pStartEntry );
-    if( nStart < 0 )
-        return false;
-
-    return true;
+    return nStart >= 0;
 }
 
 void IconViewImpl::AdjustScrollBars( Size& rSize )

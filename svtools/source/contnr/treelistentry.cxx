@@ -91,9 +91,7 @@ bool SvTreeListEntry::HasChildren() const
 
 bool SvTreeListEntry::HasChildListPos() const
 {
-    if( pParent && !(pParent->nListPos & 0x80000000) )
-        return true;
-    else return false;
+    return pParent && !(pParent->nListPos & 0x80000000);
 }
 
 sal_uLong SvTreeListEntry::GetChildListPos() const

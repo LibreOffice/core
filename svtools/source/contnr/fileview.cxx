@@ -1973,10 +1973,7 @@ bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl* co
 
     if ( aOne->mbIsFolder != aTwo->mbIsFolder )
     {
-        if ( aOne->mbIsFolder )
-            bRet = true;
-        else
-            bRet = false;
+        bRet = aOne->mbIsFolder;
 
         // !!! pb: #100376# folder always on top
         if ( !gbAscending )

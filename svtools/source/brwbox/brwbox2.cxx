@@ -238,8 +238,6 @@ void BrowseBox::ToggleSelection()
 
     // only highlight painted areas!
     bNotToggleSel = true;
-    if ( false && !pDataWin->bInPaint )
-        pDataWin->Update();
 
     // accumulate areas of rows to highlight
     RectangleList aHighlightList;

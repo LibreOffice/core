@@ -1016,10 +1016,7 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                     while (n < nCurPos)
                     {
                         auto pItem = mpImpl->mpItemList[n];
-                        if (n < nPos)
-                            bSelect = false;
-                        else
-                            bSelect = true;
+                        bSelect = n >= nPos;
 
                         if (pItem->mbSelect != bSelect)
                         {
@@ -1043,10 +1040,7 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         auto pItem = mpImpl->mpItemList[n];
 
-                        if (n <= nPos)
-                            bSelect = true;
-                        else
-                            bSelect = false;
+                        bSelect = n <= nPos;
 
                         if (pItem->mbSelect != bSelect)
                         {
@@ -1777,10 +1771,7 @@ bool TabBar::IsPageEnabled(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
 
-    if (nPos != PAGE_NOT_FOUND)
-        return true;
-    else
-        return false;
+    return nPos != PAGE_NOT_FOUND;
 }
 
 void TabBar::SetPageBits(sal_uInt16 nPageId, TabBarPageBits nBits)

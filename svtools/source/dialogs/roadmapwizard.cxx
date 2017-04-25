@@ -400,10 +400,7 @@ namespace svt
         }
 
         const WizardPath& rPath = m_pImpl->aPaths[ m_pImpl->nActivePath ];
-        if ( *rPath.rbegin() == getCurrentState() )
-            return false;
-
-        return true;
+        return *rPath.rbegin() != getCurrentState();
     }
 
 

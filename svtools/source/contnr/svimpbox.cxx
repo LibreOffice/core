@@ -794,10 +794,7 @@ bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPosPixel, 
 
     Point aPos( rPosPixel );
     aPos -= pView->GetMapMode().GetOrigin();
-    if( aRect.IsInside( aPos ) )
-        bRet = true;
-    else
-        bRet = false;
+    bRet = aRect.IsInside( aPos );
     return bRet;
 }
 
@@ -1444,9 +1441,7 @@ bool SvImpLBox::IsEntryInView( SvTreeListEntry* pEntry ) const
     if( nY < 0 )
         return false;
     long nMax = nVisibleCount * pView->GetEntryHeight();
-    if( nY >= nMax )
-        return false;
-    return true;
+    return nY < nMax;
 }
 
 
@@ -1955,9 +1950,7 @@ bool SvImpLBox::IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) 
     if( nMouseX < nX )
         return false;
     nX += nNodeBmpWidth;
-    if( nMouseX > nX )
-        return false;
-    return true;
+    return nMouseX <= nX;
 }
 
 // false == hit no node button
