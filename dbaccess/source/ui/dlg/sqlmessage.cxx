@@ -19,6 +19,7 @@
 
 #include "sqlmessage.hxx"
 #include "dbu_dlg.hrc"
+#include "bitmaps.hlst"
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <vcl/fixed.hxx>
@@ -58,12 +59,12 @@ namespace
     class ImageProvider
     {
     private:
-        sal_uInt16  m_defaultImageID;
+        OUString m_defaultImageID;
 
         mutable Image   m_defaultImage;
 
     public:
-        explicit ImageProvider( sal_uInt16 _defaultImageID )
+        explicit ImageProvider(const OUString& _defaultImageID)
             :m_defaultImageID( _defaultImageID )
         {
         }
@@ -71,7 +72,7 @@ namespace
         Image const & getImage() const
         {
             if ( !m_defaultImage )
-                m_defaultImage = Image(BitmapEx(ModuleRes(m_defaultImageID)));
+                m_defaultImage = Image(BitmapEx(m_defaultImageID));
             return m_defaultImage;
         }
     };
@@ -110,18 +111,18 @@ namespace
         std::shared_ptr< ImageProvider > const & getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
             std::shared_ptr< ImageProvider >* ppProvider( &m_pErrorImage );
-            sal_uInt16 nNormalImageID( BMP_EXCEPTION_ERROR );
+            OUString sNormalImageID(BMP_EXCEPTION_ERROR);
 
             switch ( _eType )
             {
             case SQLExceptionInfo::TYPE::SQLWarning:
                 ppProvider = &m_pWarningsImage;
-                nNormalImageID = BMP_EXCEPTION_WARNING;
+                sNormalImageID = BMP_EXCEPTION_WARNING;
                 break;
 
             case SQLExceptionInfo::TYPE::SQLContext:
                 ppProvider = &m_pInfoImage;
-                nNormalImageID = BMP_EXCEPTION_INFO;
+                sNormalImageID = BMP_EXCEPTION_INFO;
                 break;
 
             default:
@@ -129,7 +130,7 @@ namespace
             }
 
             if ( !ppProvider->get() )
-                ppProvider->reset( new ImageProvider( nNormalImageID ) );
+                ppProvider->reset(new ImageProvider(sNormalImageID));
             return *ppProvider;
         }
 

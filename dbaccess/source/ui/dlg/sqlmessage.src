@@ -20,21 +20,6 @@
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
 
-Bitmap BMP_EXCEPTION_ERROR
-{
-    File = "exerror.png";
-};
-
-Bitmap BMP_EXCEPTION_WARNING
-{
-    File = "exwarning.png";
-};
-
-Bitmap BMP_EXCEPTION_INFO
-{
-    File = "exinfo.png";
-};
-
 String STR_EXCEPTION_STATUS
 {
     Text [ en-US ] = "SQL Status";

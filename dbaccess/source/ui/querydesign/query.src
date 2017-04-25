@@ -21,11 +21,6 @@
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
 
-Bitmap BMP_PRIMARY_KEY
-{
-    File = "jo01.png";
-};
-
 String STR_QUERY_UNDO_TABWINSHOW
 {
     Text [ en-US ] = "Add Table Window" ;

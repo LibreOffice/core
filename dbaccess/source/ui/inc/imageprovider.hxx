@@ -106,9 +106,7 @@ namespace dbaui
                 the resource ID image to be used for the object type. Must be fed into a
                 ModuleRes instance to actually load the image.
         */
-        static sal_uInt16 getDefaultImageResourceID(
-            sal_Int32 _nDatabaseObjectType
-        );
+        static OUString getDefaultImageResourceID(sal_Int32 _nDatabaseObjectType);
 
         /** retrieves the image to be used for folders of database objects
             @param  _nDatabaseObjectType
