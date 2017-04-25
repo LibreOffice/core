@@ -88,14 +88,4 @@ String STR_ERR_PDF_EXPORT_ABORTED
     Text [en-US] = "PDF export aborted";
 };
 
-Bitmap IMG_WARN
-{
-    File = "ballgreen_7.png";
-};
-
-Bitmap IMG_ERR
-{
-    File = "ballred_7.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
