@@ -122,12 +122,12 @@ if test $? -ne 0 ; then
   exit 1
 fi
 
-if [ ! -f "precomplete" ]; then
-  if [ ! -f "Contents/Resources/precomplete" ]; then
-    notice "precomplete file is missing!"
-    exit 1
-  fi
-fi
+# if [ ! -f "precomplete" ]; then
+#   if [ ! -f "Contents/Resources/precomplete" ]; then
+#     notice "precomplete file is missing!"
+#     exit 1
+#   fi
+# fi
 
 list_dirs newdirs
 list_files newfiles
