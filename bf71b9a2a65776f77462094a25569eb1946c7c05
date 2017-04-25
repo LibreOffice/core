@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_815bfc53",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2826,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-04-25T15:12:14Z",
+      "side": 1,
+      "message": "Uhhm, it\u0027s not you that is blind.\nFixed.",
+      "parentUuid": "5a3905b3_db033575",
+      "range": {
+        "startLine": 2826,
+        "startChar": 21,
+        "endLine": 2826,
+        "endChar": 71
+      },
+      "revId": "bf71b9a2a65776f77462094a25569eb1946c7c05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_5bf8257d",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-04-24T13:44:20Z",
       "side": 1,
       "message": "Actually even in ODFF if I\u0027m not mistaken.\nhttps://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part2.html#LEGACY_CHITEST says that\n\n if r \u003e 1 and c \u003e 1\n     ...\n else\n     df \u003d r * c -1\n\nso here df \u003d -1\nand then LEGACY.CHITEST \u003d LEGACY.CHIDIST(X2,df)\nfor which https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part2.html#LEGACY_CHIDIST says\n\n Constraints: DegreesOfFreedom is a positive integer.\n\nIf that holds then please remove this comment and also from the commit message and the notes in the test case documents.",
+      "range": {
+        "startLine": 2836,
+        "startChar": 11,
+        "endLine": 2836,
+        "endChar": 25
+      },
+      "revId": "bf71b9a2a65776f77462094a25569eb1946c7c05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_213b28ed",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2836,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-04-25T15:12:14Z",
+      "side": 1,
+      "message": "I think we\u0027re not talking about the same sort of \u0027empty array\u0027.\nWithout the code in \n  if ( bEmpty )\na call like \u003dCHITEST(A1:C3,D1:F3) with A1:F3 consisting of empty cells returns 1 and df can be calculated to be \n  df \u003d (3-1)(3-1) \u003d 4.\nThe empty array I meant was not an array with 0 rows and columns, but an array with a valid size and all elements empty.\n\nI added this to get the same behaviour as the actual behaviour of Excel as currently Calc behaves differently.\nCould you have a look at this again from the \u0027other type of empty array\u0027 perspective?",
+      "parentUuid": "5a3905b3_5bf8257d",
       "range": {
         "startLine": 2836,
         "startChar": 11,
