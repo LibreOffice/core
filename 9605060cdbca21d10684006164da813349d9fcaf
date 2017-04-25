@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_418834e8",
+        "filename": "sw/source/filter/ww8/ww8graf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-25T13:06:03Z",
+      "side": 1,
+      "message": "why this duplicate assertion? was there some merge conflict in this file?",
+      "revId": "9605060cdbca21d10684006164da813349d9fcaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
