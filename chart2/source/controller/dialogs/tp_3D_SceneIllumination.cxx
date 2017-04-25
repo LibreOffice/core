@@ -19,7 +19,7 @@
 
 #include "tp_3D_SceneIllumination.hxx"
 #include "ResId.hxx"
-#include "Bitmaps.hrc"
+#include "bitmaps.hlst"
 #include "CommonConverters.hxx"
 
 #include <svx/colorbox.hxx>

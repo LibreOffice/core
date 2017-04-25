@@ -21,7 +21,7 @@
 #include "ResId.hxx"
 #include "HelpIds.hrc"
 #include "Strings.hrc"
-#include "Bitmaps.hrc"
+#include "bitmaps.hlst"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
 #include "DiagramHelper.hxx"
@@ -440,7 +440,7 @@ OUString ColumnChartDialogController::getName()
 
 Image ColumnChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_COLUMN)));
+    return Image(BitmapEx(BMP_TYPE_COLUMN));
 }
 
 const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTemplateMap() const
@@ -464,36 +464,36 @@ void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const
         switch(rParameter.nGeometry3D)
         {
             case DataPointGeometry3D::CYLINDER:
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_SAEULE_3D_1))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_SAEULE_3D_2))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_SAEULE_3D_3))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_SAEULE_3D_4))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_SAEULE_3D_1)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_SAEULE_3D_2)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_SAEULE_3D_3)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_SAEULE_3D_4)));
             break;
             case DataPointGeometry3D::CONE:
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_KEGEL_3D_1))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_KEGEL_3D_2))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_KEGEL_3D_3))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_KEGEL_3D_4))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_KEGEL_3D_1)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_KEGEL_3D_2)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_KEGEL_3D_3)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_KEGEL_3D_4)));
             break;
             case DataPointGeometry3D::PYRAMID:
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_PYRAMID_3D_1))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_PYRAMID_3D_2))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_PYRAMID_3D_3))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_PYRAMID_3D_4))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_PYRAMID_3D_1)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_PYRAMID_3D_2)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_PYRAMID_3D_3)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_PYRAMID_3D_4)));
             break;
             default: //DataPointGeometry3D::CUBOID:
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_COLUMNS_3D_1))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_COLUMNS_3D_2))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_COLUMNS_3D_3))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_COLUMNS_3D))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_COLUMNS_3D_1)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_COLUMNS_3D_2)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_COLUMNS_3D_3)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_COLUMNS_3D)));
             break;
         }
     }
     else
     {
-        rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_COLUMNS_2D_1))));
-        rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_COLUMNS_2D_2))));
-        rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_COLUMNS_2D_3))));
+        rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_COLUMNS_2D_1)));
+        rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_COLUMNS_2D_2)));
+        rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_COLUMNS_2D_3)));
     }
 
     rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_NORMAL ) );
@@ -517,7 +517,7 @@ OUString BarChartDialogController::getName()
 
 Image BarChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_BAR)));
+    return Image(BitmapEx(BMP_TYPE_BAR));
 }
 
 const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTemplateMap() const
@@ -541,36 +541,36 @@ void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
         switch(rParameter.nGeometry3D)
         {
             case DataPointGeometry3D::CYLINDER:
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_ROEHRE_3D_1))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_ROEHRE_3D_2))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_ROEHRE_3D_3))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_ROEHRE_3D_4))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_ROEHRE_3D_1)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_ROEHRE_3D_2)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_ROEHRE_3D_3)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_ROEHRE_3D_4)));
             break;
             case DataPointGeometry3D::CONE:
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_KEGELQ_3D_1))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_KEGELQ_3D_2))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_KEGELQ_3D_3))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_KEGELQ_3D_4))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_KEGELQ_3D_1)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_KEGELQ_3D_2)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_KEGELQ_3D_3)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_KEGELQ_3D_4)));
             break;
             case DataPointGeometry3D::PYRAMID:
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_PYRAMIDQ_3D_1))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_PYRAMIDQ_3D_2))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_PYRAMIDQ_3D_3))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_PYRAMIDQ_3D_4))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_PYRAMIDQ_3D_1)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_PYRAMIDQ_3D_2)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_PYRAMIDQ_3D_3)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_PYRAMIDQ_3D_4)));
             break;
             default: //DataPointGeometry3D::CUBOID:
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_BARS_3D_1))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_BARS_3D_2))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_BARS_3D_3))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_BARS_3D))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_BARS_3D_1)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_BARS_3D_2)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_BARS_3D_3)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_BARS_3D)));
             break;
         }
     }
     else
     {
-        rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_BARS_2D_1))));
-        rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_BARS_2D_2))));
-        rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_BARS_2D_3))));
+        rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_BARS_2D_1)));
+        rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_BARS_2D_2)));
+        rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_BARS_2D_3)));
     }
     rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_NORMAL ) );
     rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_STACKED ) );
@@ -590,7 +590,7 @@ OUString PieChartDialogController::getName()
 }
 Image PieChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_PIE)));
+    return Image(BitmapEx(BMP_TYPE_PIE));
 }
 const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTemplateMap() const
 {
@@ -611,17 +611,17 @@ void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
 
     if( rParameter.b3DLook )
     {
-        rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_CIRCLES_3D))));
-        rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_CIRCLES_3D_EXPLODED))));
-        rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_DONUT_3D))));
-        rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_DONUT_3D_EXPLODED))));
+        rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_CIRCLES_3D)));
+        rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_CIRCLES_3D_EXPLODED)));
+        rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_DONUT_3D)));
+        rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_DONUT_3D_EXPLODED)));
     }
     else
     {
-        rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_CIRCLES_2D))));
-        rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_CIRCLES_2D_EXPLODED))));
-        rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_DONUT_2D))));
-        rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_DONUT_2D_EXPLODED))));
+        rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_CIRCLES_2D)));
+        rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_CIRCLES_2D_EXPLODED)));
+        rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_DONUT_2D)));
+        rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_DONUT_2D_EXPLODED)));
     }
     rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_NORMAL         ) );
     rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_PIE_EXPLODED   ) );
@@ -651,7 +651,7 @@ OUString LineChartDialogController::getName()
 
 Image LineChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_LINE)));
+    return Image(BitmapEx(BMP_TYPE_LINE));
 }
 
 const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTemplateMap() const
@@ -681,17 +681,17 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
         case CurveStyle_B_SPLINES:
             if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
             {
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_XCATEGORY))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_XCATEGORY_SMOOTH))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_XCATEGORY_SMOOTH))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_XCATEGORY_SMOOTH))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XCATEGORY)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XCATEGORY_SMOOTH)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_XCATEGORY_SMOOTH)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_XCATEGORY_SMOOTH)));
             }
             else
             {
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_STACKED))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_STACKED_SMOOTH))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_STACKED_SMOOTH))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_STACKED_SMOOTH))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_STACKED)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_STACKED_SMOOTH)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_STACKED_SMOOTH)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_STACKED_SMOOTH)));
             }
             break;
         case CurveStyle_STEP_START:
@@ -700,34 +700,34 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
         case CurveStyle_STEP_CENTER_Y:
             if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
             {
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_XCATEGORY))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_XCATEGORY_STEPPED))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_XCATEGORY_STEPPED))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_XCATEGORY_STEPPED))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XCATEGORY)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XCATEGORY_STEPPED)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_XCATEGORY_STEPPED)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_XCATEGORY_STEPPED)));
             }
             else
             {
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_STACKED))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_STACKED_STEPPED))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_STACKED_STEPPED))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_STACKED_STEPPED))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_STACKED)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_STACKED_STEPPED)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_STACKED_STEPPED)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_STACKED_STEPPED)));
             }
             break;
         default: // includes CurveStyle_LINES
             //direct lines
             if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
             {
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_XCATEGORY))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_XCATEGORY))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_XCATEGORY))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_XCATEGORY))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XCATEGORY)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XCATEGORY)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_XCATEGORY)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_XCATEGORY)));
             }
             else
             {
-                rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_STACKED))));
-                rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_STACKED))));
-                rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_STACKED))));
-                rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_STACKED))));
+                rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_STACKED)));
+                rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_STACKED)));
+                rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_STACKED)));
+                rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_STACKED)));
             }
     }
 
@@ -802,7 +802,7 @@ OUString XYChartDialogController::getName()
 
 Image XYChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_XY)));
+    return Image(BitmapEx(BMP_TYPE_XY));
 }
 
 const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplateMap() const
@@ -824,10 +824,10 @@ void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Cha
         case CurveStyle_CUBIC_SPLINES:
         case CurveStyle_B_SPLINES:
         {
-            rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_XVALUES))));
-            rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_XVALUES_SMOOTH))));
-            rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_XVALUES_SMOOTH))));
-            rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_XVALUES_SMOOTH))));
+            rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XVALUES)));
+            rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XVALUES_SMOOTH)));
+            rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_XVALUES_SMOOTH)));
+            rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_XVALUES_SMOOTH)));
             break;
         }
         case CurveStyle_STEP_START:
@@ -835,17 +835,17 @@ void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Cha
         case CurveStyle_STEP_CENTER_X:
         case CurveStyle_STEP_CENTER_Y:
         {
-            rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_XVALUES))));
-            rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_XVALUES_STEPPED))));
-            rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_XVALUES_STEPPED))));
-            rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_XVALUES_STEPPED))));
+            rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XVALUES)));
+            rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XVALUES_STEPPED)));
+            rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_XVALUES_STEPPED)));
+            rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_XVALUES_STEPPED)));
             break;
         }
         default: // includes CurveStyle_LINES
-            rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_POINTS_XVALUES))));
-            rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_LINE_P_XVALUES))));
-            rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_LINE_O_XVALUES))));
-            rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_LINE3D_XVALUES))));
+            rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XVALUES)));
+            rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XVALUES)));
+            rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_LINE_O_XVALUES)));
+            rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_XVALUES)));
     }
 
     rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_POINTS_ONLY ) );
@@ -905,7 +905,7 @@ OUString AreaChartDialogController::getName()
 
 Image AreaChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_AREA)));
+    return Image(BitmapEx(BMP_TYPE_AREA));
 }
 
 bool AreaChartDialogController::shouldShow_3DLookControl() const
@@ -931,15 +931,15 @@ void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
 
     if( rParameter.b3DLook )
     {
-        rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_AREAS_3D))));
-        rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_AREAS_3D_1))));
-        rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_AREAS_3D_2))));
+        rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_AREAS_3D)));
+        rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_AREAS_3D_1)));
+        rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_AREAS_3D_2)));
     }
     else
     {
-        rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_AREAS_2D_1))));
-        rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_AREAS_2D))));
-        rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_AREAS_2D_3))));
+        rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_AREAS_2D_1)));
+        rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_AREAS_2D)));
+        rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_AREAS_2D_3)));
     }
 
     rSubTypeList.SetItemText( 1, SCH_RESSTR( rParameter.b3DLook ? STR_DEEP : STR_NORMAL ) );
@@ -992,7 +992,7 @@ OUString NetChartDialogController::getName()
 
 Image NetChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_NET)));
+    return Image(BitmapEx(BMP_TYPE_NET));
 }
 
 bool NetChartDialogController::shouldShow_StackingControl() const
@@ -1027,17 +1027,17 @@ void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
 
     if( GlobalStackMode_NONE == rParameter.eStackMode )
     {
-        rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_NET_SYMB))));
-        rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_NET_LINESYMB))));
-        rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_NET))));
-        rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_NET_FILL))));
+        rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_NET_SYMB)));
+        rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_NET_LINESYMB)));
+        rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_NET)));
+        rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_NET_FILL)));
     }
     else
     {
-        rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_NET_SYMB_STACK))));
-        rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_NET_LINESYMB_STACK))));
-        rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_NET_STACK))));
-        rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_NET_FILL_STACK))));
+        rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_NET_SYMB_STACK)));
+        rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_NET_LINESYMB_STACK)));
+        rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_NET_STACK)));
+        rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_NET_FILL_STACK)));
     }
 
     rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_POINTS_ONLY ) );
@@ -1087,7 +1087,7 @@ OUString StockChartDialogController::getName()
 
 Image StockChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_STOCK)));
+    return Image(BitmapEx(BMP_TYPE_STOCK));
 }
 
 const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemplateMap() const
@@ -1103,10 +1103,10 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
 void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
-    rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_STOCK_1))));
-    rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_STOCK_2))));
-    rSubTypeList.InsertItem(3, Image(Bitmap(SchResId(BMP_STOCK_3))));
-    rSubTypeList.InsertItem(4, Image(Bitmap(SchResId(BMP_STOCK_4))));
+    rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_STOCK_1)));
+    rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_STOCK_2)));
+    rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_STOCK_3)));
+    rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_STOCK_4)));
 
     rSubTypeList.SetItemText( 1, SCH_RESSTR(STR_STOCK_1) );
     rSubTypeList.SetItemText( 2, SCH_RESSTR(STR_STOCK_2) );
@@ -1134,7 +1134,7 @@ OUString CombiColumnLineChartDialogController::getName()
 
 Image CombiColumnLineChartDialogController::getImage( )
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_COLUMN_LINE)));
+    return Image(BitmapEx(BMP_TYPE_COLUMN_LINE));
 }
 
 const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogController::getTemplateMap() const
@@ -1148,8 +1148,8 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
 void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
-    rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_COLUMN_LINE))));
-    rSubTypeList.InsertItem(2, Image(Bitmap(SchResId(BMP_COLUMN_LINE_STACKED))));
+    rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_COLUMN_LINE)));
+    rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_COLUMN_LINE_STACKED)));
 
     rSubTypeList.SetItemText(1, SCH_RESSTR(STR_LINE_COLUMN));
     rSubTypeList.SetItemText(2, SCH_RESSTR(STR_LINE_STACKEDCOLUMN));
@@ -1268,7 +1268,7 @@ OUString BubbleChartDialogController::getName()
 
 Image BubbleChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_BUBBLE)));
+    return Image(BitmapEx(BMP_TYPE_BUBBLE));
 }
 
 const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTemplateMap() const
@@ -1280,7 +1280,7 @@ const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTem
 void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
-    rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_BUBBLE_1))));
+    rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_BUBBLE_1)));
 
     rSubTypeList.SetItemText( 1, SCH_RESSTR(STR_BUBBLE_1) );
 }

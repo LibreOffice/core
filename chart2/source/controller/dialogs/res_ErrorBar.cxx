@@ -19,7 +19,7 @@
 
 #include "res_ErrorBar.hxx"
 #include "ResId.hxx"
-#include "Bitmaps.hrc"
+#include "bitmaps.hlst"
 #include "RangeSelectionHelper.hxx"
 #include "TabPageNotifiable.hxx"
 #include "macros.hxx"
@@ -665,15 +665,15 @@ void ErrorBarResources::FillValueSets()
 {
     if( m_eErrorBarType == ERROR_BAR_Y )
     {
-        m_pFiNegative->SetImage(Image(BitmapEx(SchResId(BMP_INDICATE_DOWN))));
-        m_pFiPositive->SetImage(Image(BitmapEx(SchResId(BMP_INDICATE_UP))));
-        m_pFiBoth->SetImage(Image(BitmapEx(SchResId(BMP_INDICATE_BOTH_VERTI))));
+        m_pFiNegative->SetImage(Image(BitmapEx(BMP_INDICATE_DOWN)));
+        m_pFiPositive->SetImage(Image(BitmapEx(BMP_INDICATE_UP)));
+        m_pFiBoth->SetImage(Image(BitmapEx(BMP_INDICATE_BOTH_VERTI)));
     }
     else if( m_eErrorBarType == ERROR_BAR_X )
     {
-        m_pFiNegative->SetImage(Image(BitmapEx(SchResId(BMP_INDICATE_LEFT))));
-        m_pFiPositive->SetImage(Image(BitmapEx(SchResId(BMP_INDICATE_RIGHT))));
-        m_pFiBoth->SetImage(Image(BitmapEx(SchResId(BMP_INDICATE_BOTH_HORI))));
+        m_pFiNegative->SetImage(Image(BitmapEx(BMP_INDICATE_LEFT)));
+        m_pFiPositive->SetImage(Image(BitmapEx(BMP_INDICATE_RIGHT)));
+        m_pFiBoth->SetImage(Image(BitmapEx(BMP_INDICATE_BOTH_HORI)));
     }
 }
 

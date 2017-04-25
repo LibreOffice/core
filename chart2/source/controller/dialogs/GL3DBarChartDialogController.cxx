@@ -9,7 +9,7 @@
 
 #include "GL3DBarChartDialogController.hxx"
 #include <Strings.hrc>
-#include <Bitmaps.hrc>
+#include <bitmaps.hlst>
 #include <ResId.hxx>
 
 #include <svtools/valueset.hxx>
@@ -32,7 +32,7 @@ OUString GL3DBarChartDialogController::getName()
 
 Image GL3DBarChartDialogController::getImage()
 {
-    return Image(BitmapEx(SchResId(BMP_TYPE_GL3D_BAR)));
+    return Image(BitmapEx(BMP_TYPE_GL3D_BAR));
 }
 
 const tTemplateServiceChartTypeParameterMap&
@@ -48,7 +48,7 @@ void GL3DBarChartDialogController::fillSubTypeList(
     ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
-    rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_GL3D_BAR_ROUNDRECT))));
+    rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_GL3D_BAR_ROUNDRECT)));
 
     rSubTypeList.SetItemText(1, SchResId(STR_GL3D_BAR).toString());
 }

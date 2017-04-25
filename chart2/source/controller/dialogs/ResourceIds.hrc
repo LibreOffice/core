@@ -21,7 +21,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RESOURCEIDS_HRC
 
 //for strings see Strings.hrc
-//for Bitmaps see Bitmaps.hrc
+//for Bitmaps see bitmaps.hlst
 
 //TabPage Ids:
 #define TP_LEGEND_POS   900

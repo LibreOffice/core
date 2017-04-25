@@ -99,6 +99,6 @@
 #define SPINNER_64_12                                "vcl/res/spinner-64-12.png"
 //end, Throbber::getDefaultImageURLs
 
-#endif // INCLUDED_VCL_INC_BITMAPS_HRC
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
