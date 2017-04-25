@@ -170,19 +170,4 @@ String STR_LANGSTATUS_HINT
     Text [ en-US ] = "Text Language. Right-click to set character or paragraph language" ;
 };
 
-Bitmap BMP_SAVEMODIFIED_SMALL
-{
-    File = "savemodified_small.png";
-};
-
-Bitmap BMP_SAVEMODIFIED_LARGE
-{
-    File = "savemodified_large.png";
-};
-
-Bitmap BMP_SAVEMODIFIED_EXTRALARGE
-{
-    File = "savemodified_extralarge.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
