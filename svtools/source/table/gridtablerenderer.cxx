@@ -589,10 +589,7 @@ namespace svt { namespace table
             return false;
 
         long const nTextWidth = i_targetDevice.GetTextWidth( sText );
-        if ( nTextWidth > aTargetArea.GetWidth() )
-            return false;
-
-        return true;
+        return nTextWidth <= aTargetArea.GetWidth();
     }
 
 

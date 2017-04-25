@@ -209,10 +209,7 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
             return nMode;
         }
 
-        if ( pItem->mnBits & HeaderBarItemBits::FIXED )
-            bLastFixed = true;
-        else
-            bLastFixed = false;
+        bLastFixed = static_cast<bool>(pItem->mnBits & HeaderBarItemBits::FIXED);
 
         nX += pItem->mnSize;
     }
@@ -708,10 +705,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
         bool bNewOutDrag;
 
         tools::Rectangle aItemRect = ImplGetItemRect( nPos );
-        if ( aItemRect.IsInside( rMousePos ) )
-            bNewOutDrag = false;
-        else
-            bNewOutDrag = true;
+        bNewOutDrag = !aItemRect.IsInside( rMousePos );
 
         //  if needed switch on ItemDrag
         if ( bNewOutDrag && mbDragable && !mbItemDrag &&
@@ -727,10 +721,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
         sal_uInt16 nOldItemDragPos = mnItemDragPos;
         if ( mbItemDrag )
         {
-            if ( (rMousePos.Y() < -HEADERBAR_DRAGOUTOFF) || (rMousePos.Y() > mnDY+HEADERBAR_DRAGOUTOFF) )
-                bNewOutDrag = true;
-            else
-                bNewOutDrag = false;
+            bNewOutDrag = (rMousePos.Y() < -HEADERBAR_DRAGOUTOFF) || (rMousePos.Y() > mnDY+HEADERBAR_DRAGOUTOFF);
 
             if ( bNewOutDrag )
                 mnItemDragPos = HEADERBAR_ITEM_NOTFOUND;
