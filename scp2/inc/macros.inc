@@ -264,6 +264,26 @@ End
         ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
     End
 
+#define CONDITIONAL_REGISTRY_ENTRY_EXT_MEDIATYPE(name,cond,key,mediatype) \
+    RegistryItem gid_Regitem__MediaType_##name \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT2(.,key)); \
+        Name = STRING(Content Type); \
+        Value = STRING(mediatype); \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_MEDIATYPE_DEF_EXT(name,cond,key,mediatype) \
+    RegistryItem gid_Regitem__MediaType_DefExt_##name \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT2(MIME\Database\Content Type\,mediatype)); \
+        Name = STRING(Extension); \
+        Value = STRING(key); \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
 #define REGISTRY_ENTRY_DOC(name,modid,disp_name) \
     RegistryItem CONCAT2(gid_Regitem_Openoffice_,name) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
