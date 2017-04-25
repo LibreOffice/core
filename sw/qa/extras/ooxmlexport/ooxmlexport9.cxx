@@ -243,6 +243,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103931, "tdf103931.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xTextSections->getCount());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
+{
+    CPPUNIT_ASSERT(getShape(1)->getSize().Width > 0);
+    // This failed: the second arrow was invisible because it had zero height.
+    CPPUNIT_ASSERT(getShape(2)->getSize().Width > 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
