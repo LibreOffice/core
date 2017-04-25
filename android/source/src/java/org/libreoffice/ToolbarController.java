@@ -72,12 +72,16 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     void switchToEditMode() {
         if (!LOKitShell.isEditingEnabled())
             return;
-
         // Ensure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 mMainMenu.setGroupVisible(R.id.group_edit_actions, true);
+                if (!LibreOfficeMainActivity.isDeveloperMode() && mMainMenu.findItem(R.id.action_UNO_commands) != null) {
+                    mMainMenu.findItem(R.id.action_UNO_commands).setVisible(false);
+                } else {
+                    mMainMenu.findItem(R.id.action_UNO_commands).setVisible(true);
+                }
                 mToolbarTop.setNavigationIcon(R.drawable.ic_check);
                 mToolbarTop.setLogo(null);
                 setEditModeOn(true);
@@ -131,9 +135,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
      * Change the toolbar to view mode.
      */
     void switchToViewMode() {
-        if (!LOKitShell.isEditingEnabled())
-            return;
-
         // Ensure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
@@ -210,6 +211,9 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 clipboardManager.setPrimaryClip(clipData);
                 LOKitShell.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
                 mContext.setDocumentChanged(true);
+                return true;
+            case R.id.action_UNO_commands:
+                mContext.showUNOCommandsToolbar();
                 return true;
         }
         return false;
