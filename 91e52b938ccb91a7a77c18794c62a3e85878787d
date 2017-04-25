@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_6120d04a",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2017-04-25T10:42:15Z",
+      "side": 1,
+      "message": "I\u0027ll change it in next patch set.",
+      "parentUuid": "5a3905b3_4723f205",
+      "revId": "91e52b938ccb91a7a77c18794c62a3e85878787d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_871ddabf",
         "filename": "basic/source/comp/scanner.cxx",
         "patchSetId": 4
@@ -59,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_412bd430",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2017-04-25T10:42:15Z",
+      "side": 1,
+      "message": "It\u0027s hard to support DATETIME at the moment. I explained it in bugzilla.",
+      "parentUuid": "5a3905b3_871ddabf",
+      "revId": "91e52b938ccb91a7a77c18794c62a3e85878787d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_27542653",
         "filename": "basic/source/comp/scanner.cxx",
         "patchSetId": 4
@@ -70,6 +106,30 @@
       "writtenOn": "2017-04-14T12:10:03Z",
       "side": 1,
       "message": "If bNumber is removed and eScanType \u003d SbxDATE, then this works IF LanguageSettings-\u003eLocaleSetting \u003d English (USA).\n\nApparently aSym is used for SbxDate, and nVal is used for SbxDOUBLE. So, to use aSym, it would first need to be converted to the current locale string format (or passed along in #literal date# format and parsed later on - something it doesn\u0027t currently do).",
+      "range": {
+        "startLine": 555,
+        "startChar": 28,
+        "endLine": 555,
+        "endChar": 49
+      },
+      "revId": "91e52b938ccb91a7a77c18794c62a3e85878787d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2126c868",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2017-04-25T10:42:15Z",
+      "side": 1,
+      "message": "It does not work with Polish locale. And code cannot be locale-dependent.\nConverting it to different locale and storing as string doesn\u0027t make sense to me - it would be eventually converted to double.\nAfter making some tests I think it\u0027s best to leave it as double.",
+      "parentUuid": "5a3905b3_27542653",
       "range": {
         "startLine": 555,
         "startChar": 28,
