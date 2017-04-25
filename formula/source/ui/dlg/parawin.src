@@ -19,11 +19,6 @@
 
 #include "ForResId.hrc"
 
-Bitmap BMP_FX
-{
-    File = "fx.png";
-};
-
 String STR_OPTIONAL
 {
     Text [ en-US ] = "(optional)" ;

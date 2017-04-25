@@ -28,8 +28,8 @@
 #include "ControlHelper.hxx"
 #include "ModuleHelper.hxx"
 #include "ForResId.hrc"
+#include "bitmaps.hlst"
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
-
 
 namespace formula
 {
@@ -524,9 +524,9 @@ IMPL_LINK_NOARG(RefEdit, UpdateHdl, Timer *, void)
 
 //class RefButton
 RefButton::RefButton( vcl::Window* _pParent, WinBits nStyle ) :
-    ImageButton( _pParent, nStyle ),
-    aImgRefStart(BitmapEx(ModuleRes(RID_BMP_REFBTN1))),
-    aImgRefDone(BitmapEx(ModuleRes(RID_BMP_REFBTN2))),
+    ImageButton(_pParent, nStyle),
+    aImgRefStart(BitmapEx(RID_BMP_REFBTN1)),
+    aImgRefDone(BitmapEx(RID_BMP_REFBTN2)),
     aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( nullptr ),
