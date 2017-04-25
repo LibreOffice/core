@@ -944,7 +944,7 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
     CHECK_GL_ERROR();
 }
 
-void OpenGLSalGraphicsImpl::DrawTextureRect( OpenGLTexture& /*rTexture*/, const SalTwoRect& rPosAry, bool /*bInverted*/ )
+void OpenGLSalGraphicsImpl::DrawTextureRect( const SalTwoRect& rPosAry )
 {
     OpenGLZone aZone;
 
@@ -982,7 +982,7 @@ void OpenGLSalGraphicsImpl::DrawTexture( OpenGLTexture& rTexture, const SalTwoRe
     mpProgram->SetMaskCoord(aTexCoord);
     mpProgram->SetAlphaCoord(aTexCoord);
 
-    DrawTextureRect( rTexture, rPosAry, bInverted );
+    DrawTextureRect( rPosAry );
     mpProgram->Clean();
 }
 
@@ -1212,7 +1212,7 @@ void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const Sal
     mpProgram->SetMaskCoord(aTexCoord);
     mpProgram->SetAlphaCoord(aTexCoord);
 
-    DrawTextureRect( rTexture, rPosAry, bInverted );
+    DrawTextureRect( rPosAry );
     mpProgram->Clean();
 }
 
@@ -1237,7 +1237,7 @@ void OpenGLSalGraphicsImpl::DrawTextureDiff( OpenGLTexture& rTexture, OpenGLText
     rMask.GetCoord(aMaskCoord, rPosAry, bInverted);
     mpProgram->SetMaskCoord(aMaskCoord);
 
-    DrawTextureRect( rTexture, rPosAry, bInverted );
+    DrawTextureRect( rPosAry );
     mpProgram->Clean();
 }
 
@@ -1262,7 +1262,7 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGL
     rMask.GetCoord(aMaskCoord, rPosAry);
     mpProgram->SetMaskCoord(aMaskCoord);
 
-    DrawTextureRect(rTexture, rPosAry);
+    DrawTextureRect(rPosAry);
     mpProgram->Clean();
 }
 
@@ -1290,7 +1290,7 @@ void OpenGLSalGraphicsImpl::DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLT
     mpProgram->SetMaskCoord(aMaskCoord);
 
     mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    DrawTextureRect( rTexture, rPosAry );
+    DrawTextureRect( rPosAry );
     mpProgram->Clean();
 }
 
@@ -1312,7 +1312,7 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
     mpProgram->SetAlphaCoord(aTexCoord);
 
     mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    DrawTextureRect(rMask, rPosAry);
+    DrawTextureRect(rPosAry);
     mpProgram->Clean();
 }
 
@@ -1831,7 +1831,7 @@ bool OpenGLSalGraphicsImpl::blendBitmap(
     mpProgram->SetAlphaCoord(aTexCoord);
 
     mpProgram->SetBlendMode(GL_ZERO, GL_SRC_COLOR);
-    DrawTextureRect(rTexture, rPosAry);
+    DrawTextureRect(rPosAry);
     mpProgram->Clean();
 
     PostDraw();

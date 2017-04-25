@@ -38,8 +38,7 @@ SvpSalFrame* SvpSalFrame::s_pFocusFrame = nullptr;
 
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
-                          SalFrameStyleFlags nSalFrameStyle,
-                          SystemParentData* ) :
+                          SalFrameStyleFlags nSalFrameStyle ) :
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
     m_nStyle( nSalFrameStyle ),

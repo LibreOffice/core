@@ -269,7 +269,7 @@ public:
 
     // clip region
     void            ResetClipRegion ();
-    void            BeginSetClipRegion (sal_uInt32);
+    void            BeginSetClipRegion();
     void            UnionClipRegion (sal_Int32 nX, sal_Int32 nY,
                                      sal_Int32 nDX, sal_Int32 nDY);
     void            EndSetClipRegion ();

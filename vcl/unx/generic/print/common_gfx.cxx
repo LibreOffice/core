@@ -151,7 +151,7 @@ PrinterGfx::ResetClipRegion()
 }
 
 void
-PrinterGfx::BeginSetClipRegion( sal_uInt32 )
+PrinterGfx::BeginSetClipRegion()
 {
     maClipRegion.clear();
 }
@@ -1130,7 +1130,7 @@ PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt3
                  "  } if\n"
                  "}if\n" );
         // set up clip path and scale
-        BeginSetClipRegion( 1 );
+        BeginSetClipRegion();
         UnionClipRegion( rBoundingBox.Left(), rBoundingBox.Top(), rBoundingBox.GetWidth(), rBoundingBox.GetHeight() );
         EndSetClipRegion();
         PSTranslate( aTranslatePoint );

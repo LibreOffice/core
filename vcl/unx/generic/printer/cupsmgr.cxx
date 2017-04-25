@@ -145,13 +145,13 @@ OString CUPSManager::threadedCupsGetPPD( const char* pPrinter )
     return aResult;
 }
 
-static const char* setPasswordCallback( const char* pIn )
+static const char* setPasswordCallback( const char* /*pIn*/ )
 {
     const char* pRet = nullptr;
 
     PrinterInfoManager& rMgr = PrinterInfoManager::get();
     if( rMgr.getType() == PrinterInfoManager::Type::CUPS ) // sanity check
-        pRet = static_cast<CUPSManager&>(rMgr).authenticateUser( pIn );
+        pRet = static_cast<CUPSManager&>(rMgr).authenticateUser();
     return pRet;
 }
 
@@ -892,7 +892,7 @@ namespace
     }
 }
 
-const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
+const char* CUPSManager::authenticateUser()
 {
     const char* pRet = nullptr;
 

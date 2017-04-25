@@ -51,8 +51,7 @@ public:
     xmlreader::XmlReader::Text getTextMode() const;
 
     bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-        std::set< OUString > const *);
+        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
 
     bool endElement();
 

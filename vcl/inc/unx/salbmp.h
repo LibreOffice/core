@@ -163,7 +163,6 @@ private:
                         Drawable aSrcDrawable,
                         long nSrcDrawableDepth,
                         Drawable aDstDrawable,
-                        long nDstDrawableDepth,
                         long nSrcX,
                         long nSrcY,
                         long nDestWidth,
@@ -208,7 +207,6 @@ public:
 
     void            ImplDraw(
                         Drawable aDrawable,
-                        long nDrawableDepth,
                         const SalTwoRect& rTwoRect,
                         const GC& rGC
                     ) const;

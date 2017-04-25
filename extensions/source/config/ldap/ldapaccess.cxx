@@ -61,8 +61,7 @@ void LdapConnection::disconnect()
 
 
 static void checkLdapReturnCode(const sal_Char *aOperation,
-                                LdapErrCode aRetCode,
-                                LDAP * /*aConnection*/)
+                                LdapErrCode aRetCode)
 {
     if (aRetCode == LDAP_SUCCESS) { return ; }
 
@@ -140,7 +139,7 @@ void  LdapConnection::connectSimple()
                                                OUStringToOString( mLdapDefinition.mAnonCredentials, RTL_TEXTENCODING_UTF8 ).getStr()) ;
 #endif
 
-        checkLdapReturnCode("SimpleBind", retCode, mConnection) ;
+        checkLdapReturnCode("SimpleBind", retCode) ;
     }
 }
 
@@ -194,7 +193,7 @@ void LdapConnection::initConnection()
                                       0, // Attributes + values
                                       &result.msg) ;
 #endif
-    checkLdapReturnCode("getUserProfile", retCode,mConnection) ;
+    checkLdapReturnCode("getUserProfile", retCode) ;
 
     BerElement * ptr;
 #ifdef _WIN32
@@ -256,7 +255,7 @@ void LdapConnection::initConnection()
                                       LDAP_SCOPE_SUBTREE,
                                       OUStringToOString( filter.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), attributes, 0, &result.msg) ;
 #endif
-    checkLdapReturnCode("FindUserDn", retCode,mConnection) ;
+    checkLdapReturnCode("FindUserDn", retCode) ;
     OUString userDn ;
     LDAPMessage *entry = ldap_first_entry(mConnection, result.msg) ;
 

@@ -275,8 +275,7 @@ xmlreader::XmlReader::Text ValueParser::getTextMode() const {
 }
 
 bool ValueParser::startElement(
-    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-    std::set< OUString > const *)
+    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name)
 {
     if (!node_.is()) {
         return false;

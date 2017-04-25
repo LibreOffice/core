@@ -29,10 +29,8 @@ using namespace x11;
 
 DropTargetDropContext::DropTargetDropContext(
     ::Window aDropWindow,
-    Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
-        m_nTimestamp( aTimestamp ),
         m_rManager( rManager ),
         m_xManagerRef( static_cast< OWeakObject* >(&rManager) )
 {
@@ -44,17 +42,17 @@ DropTargetDropContext::~DropTargetDropContext()
 
 void DropTargetDropContext::acceptDrop( sal_Int8 dragOperation )
 {
-    m_rManager.accept( dragOperation, m_aDropWindow, m_nTimestamp );
+    m_rManager.accept( dragOperation, m_aDropWindow );
 }
 
 void DropTargetDropContext::rejectDrop()
 {
-    m_rManager.reject( m_aDropWindow, m_nTimestamp );
+    m_rManager.reject( m_aDropWindow );
 }
 
 void DropTargetDropContext::dropComplete( sal_Bool success )
 {
-    m_rManager.dropComplete( success, m_aDropWindow, m_nTimestamp );
+    m_rManager.dropComplete( success, m_aDropWindow );
 }
 
 /*
@@ -63,10 +61,8 @@ void DropTargetDropContext::dropComplete( sal_Bool success )
 
 DropTargetDragContext::DropTargetDragContext(
     ::Window aDropWindow,
-    Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
-        m_nTimestamp( aTimestamp ),
         m_rManager( rManager ),
         m_xManagerRef( static_cast< OWeakObject* >(&rManager) )
 {
@@ -78,12 +74,12 @@ DropTargetDragContext::~DropTargetDragContext()
 
 void DropTargetDragContext::acceptDrag( sal_Int8 dragOperation )
 {
-    m_rManager.accept( dragOperation, m_aDropWindow, m_nTimestamp );
+    m_rManager.accept( dragOperation, m_aDropWindow );
 }
 
 void DropTargetDragContext::rejectDrag()
 {
-    m_rManager.reject( m_aDropWindow, m_nTimestamp );
+    m_rManager.reject( m_aDropWindow );
 }
 
 /*
@@ -92,10 +88,8 @@ void DropTargetDragContext::rejectDrag()
 
 DragSourceContext::DragSourceContext(
     ::Window aDropWindow,
-    Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
-        m_nTimestamp( aTimestamp ),
         m_rManager( rManager ),
         m_xManagerRef( static_cast< OWeakObject* >(&rManager) )
 {
@@ -112,7 +106,7 @@ sal_Int32 DragSourceContext::getCurrentCursor()
 
 void DragSourceContext::setCursor( sal_Int32 cursorId )
 {
-    m_rManager.setCursor( cursorId, m_aDropWindow, m_nTimestamp );
+    m_rManager.setCursor( cursorId, m_aDropWindow );
 }
 
 void DragSourceContext::setImage( sal_Int32 )

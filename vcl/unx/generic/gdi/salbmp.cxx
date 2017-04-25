@@ -698,7 +698,7 @@ void X11SalBitmap::ImplDraw(
 {
     ImplGetDDB( aDrawable, nXScreen, nDrawableDepth, rTwoRect );
     if( mpDDB )
-        mpDDB->ImplDraw( aDrawable, nDrawableDepth, rTwoRect, rGC );
+        mpDDB->ImplDraw( aDrawable, rTwoRect, rGC );
 }
 
 bool X11SalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
@@ -974,7 +974,7 @@ ImplSalDDB::ImplSalDDB(
         }
 
         aGC = XCreateGC( pXDisp, maPixmap, nValues, &aValues );
-        ImplDraw( aDrawable, nDrawableDepth, maPixmap, mnDepth,
+        ImplDraw( aDrawable, nDrawableDepth, maPixmap,
                   nX, nY, nWidth, nHeight, 0, 0, aGC );
         XFreeGC( pXDisp, aGC );
     }
@@ -1027,12 +1027,11 @@ bool ImplSalDDB::ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRe
 
 void ImplSalDDB::ImplDraw(
     Drawable aDrawable,
-    long nDrawableDepth,
     const SalTwoRect& rTwoRect,
     const GC& rGC
 ) const
 {
-    ImplDraw( maPixmap, mnDepth, aDrawable, nDrawableDepth,
+    ImplDraw( maPixmap, mnDepth, aDrawable,
               rTwoRect.mnSrcX - maTwoRect.mnSrcX, rTwoRect.mnSrcY - maTwoRect.mnSrcY,
               rTwoRect.mnDestWidth, rTwoRect.mnDestHeight,
               rTwoRect.mnDestX, rTwoRect.mnDestY, rGC );
@@ -1042,7 +1041,6 @@ void ImplSalDDB::ImplDraw(
     Drawable aSrcDrawable,
     long nSrcDrawableDepth,
     Drawable aDstDrawable,
-    long,
     long nSrcX,
     long nSrcY,
     long nDestWidth,

@@ -277,16 +277,16 @@ void GlyphCache::GarbageCollect()
     }
 }
 
-inline void GlyphCache::UsingGlyph( FreetypeFont&, GlyphData& rGlyphData )
+inline void GlyphCache::UsingGlyph( GlyphData& rGlyphData )
 {
     rGlyphData.SetLruValue( mnLruIndex++ );
 }
 
-inline void GlyphCache::AddedGlyph( FreetypeFont& rFreetypeFont, GlyphData& rGlyphData )
+inline void GlyphCache::AddedGlyph( GlyphData& rGlyphData )
 {
     ++mnGlyphCount;
     mnBytesUsed += sizeof( rGlyphData );
-    UsingGlyph( rFreetypeFont, rGlyphData );
+    UsingGlyph( rGlyphData );
     if( mnBytesUsed > mnMaxSize )
         GarbageCollect();
 }
@@ -320,7 +320,7 @@ const tools::Rectangle& FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph)
     GlyphList::iterator it = maGlyphList.find(rGlyph.maGlyphId);
     if( it != maGlyphList.end() ) {
         GlyphData& rGlyphData = it->second;
-        GlyphCache::GetInstance().UsingGlyph( *this, rGlyphData );
+        GlyphCache::GetInstance().UsingGlyph( rGlyphData );
         return rGlyphData.GetBoundRect();
     }
 
@@ -328,7 +328,7 @@ const tools::Rectangle& FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph)
     GlyphData& rGlyphData = maGlyphList[rGlyph.maGlyphId];
     mnBytesUsed += sizeof( GlyphData );
     InitGlyphData(rGlyph, rGlyphData);
-    GlyphCache::GetInstance().AddedGlyph( *this, rGlyphData );
+    GlyphCache::GetInstance().AddedGlyph( rGlyphData );
     return rGlyphData.GetBoundRect();
 }
 

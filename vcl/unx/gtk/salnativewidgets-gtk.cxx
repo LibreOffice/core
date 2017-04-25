@@ -222,13 +222,11 @@ static void NWCalcArrowRect( const tools::Rectangle& rButton, tools::Rectangle& 
  *
  */
 
-static tools::Rectangle NWGetButtonArea( SalX11Screen nScreen, ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect, ControlState nState,
-                                const ImplControlValue& aValue, const OUString& rCaption );
+static tools::Rectangle NWGetButtonArea( SalX11Screen nScreen, tools::Rectangle aAreaRect, ControlState nState);
 
 static tools::Rectangle NWGetTabItemRect( SalX11Screen nScreen, tools::Rectangle aAreaRect );
 
-static tools::Rectangle NWGetEditBoxPixmapRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect, ControlState nState,
-                            const ImplControlValue& aValue, const OUString& rCaption );
+static tools::Rectangle NWGetEditBoxPixmapRect( SalX11Screen nScreen, tools::Rectangle aAreaRect );
 
 static void NWPaintOneEditBox( SalX11Screen nScreen, GdkDrawable * gdkDrawable, GdkRectangle *gdkRect,
                                ControlType nType, ControlPart nPart, tools::Rectangle aEditBoxRect,
@@ -242,22 +240,15 @@ static void NWPaintOneSpinButton( SalX11Screen nScreen, GdkPixmap * pixmap, Cont
                             ControlState nState, const ImplControlValue& aValue,
                             const OUString& rCaption );
 
-static tools::Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect, ControlState nState,
-                            const ImplControlValue& aValue, const OUString& rCaption );
+static tools::Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen, ControlPart nPart, tools::Rectangle aAreaRect );
 
-static tools::Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect, ControlState nState,
-                            const ImplControlValue& aValue, const OUString& rCaption );
+static tools::Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen, ControlPart nPart, tools::Rectangle aAreaRect);
 
-static tools::Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect, ControlState nState,
-                            const ImplControlValue& aValue, const OUString& rCaption );
+static tools::Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen, tools::Rectangle aAreaRect);
 
 static tools::Rectangle NWGetToolbarRect( SalX11Screen nScreen,
-                                   ControlType nType,
                                    ControlPart nPart,
-                                   tools::Rectangle aAreaRect,
-                                   ControlState nState,
-                                   const ImplControlValue& aValue,
-                                   const OUString& rCaption );
+                                   tools::Rectangle aAreaRect );
 
 static int getFrameWidth(GtkWidget* widget);
 
@@ -1091,10 +1082,8 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         && (rControlRegion.GetWidth() > 16)
     && (rControlRegion.GetHeight() > 16) )
     {
-        rNativeBoundingRegion = NWGetButtonArea( m_nXScreen, nType, nPart, rControlRegion,
-        nState, aValue, rCaption );
+        rNativeBoundingRegion = NWGetButtonArea( m_nXScreen, rControlRegion, nState );
         rNativeContentRegion = rControlRegion;
-
         returnVal = true;
     }
     if (nType == ControlType::TabItem && nPart == ControlPart::Entire)
@@ -1105,8 +1094,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if ( (nType==ControlType::Combobox) && ((nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
-        rNativeBoundingRegion = NWGetComboBoxButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
-        aValue, rCaption );
+        rNativeBoundingRegion = NWGetComboBoxButtonRect( m_nXScreen, nPart, rControlRegion);
         rNativeContentRegion = rNativeBoundingRegion;
 
         returnVal = true;
@@ -1122,8 +1110,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if ( (nType==ControlType::Listbox) && ((nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
-        rNativeBoundingRegion = NWGetListBoxButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
-        aValue, rCaption );
+        rNativeBoundingRegion = NWGetListBoxButtonRect( m_nXScreen, nPart, rControlRegion);
         rNativeContentRegion = rNativeBoundingRegion;
 
         returnVal = true;
@@ -1136,7 +1123,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         (nPart==ControlPart::Button)
         ))
     {
-        rNativeBoundingRegion = NWGetToolbarRect( m_nXScreen, nType, nPart, rControlRegion, nState, aValue, rCaption );
+        rNativeBoundingRegion = NWGetToolbarRect( m_nXScreen, nPart, rControlRegion );
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = true;
     }
@@ -1713,8 +1700,7 @@ bool GtkSalGraphics::NWPaintGTKButton(
 }
 
 static tools::Rectangle NWGetButtonArea( SalX11Screen nScreen,
-                                  ControlType, ControlPart, tools::Rectangle aAreaRect, ControlState nState,
-                                  const ImplControlValue&, const OUString& )
+                                  tools::Rectangle aAreaRect, ControlState nState )
 {
     gboolean        interiorFocus;
     gint            focusWidth;
@@ -2312,8 +2298,7 @@ bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
 
     // Find the overall bounding rect of the buttons's drawing area,
     // plus its actual draw rect excluding adornment
-    pixmapRect = NWGetEditBoxPixmapRect( m_nXScreen, nType, nPart, rControlRectangle,
-                                         nState, aValue, rCaption );
+    pixmapRect = NWGetEditBoxPixmapRect( m_nXScreen, rControlRectangle );
     for( std::list< tools::Rectangle >::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
         clipRect.x = it->Left();
@@ -2332,12 +2317,7 @@ bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
  * any focus requirements.
  */
 static tools::Rectangle NWGetEditBoxPixmapRect(SalX11Screen nScreen,
-                                        ControlType,
-                                        ControlPart,
-                                        tools::Rectangle aAreaRect,
-                                        ControlState,
-                                        const ImplControlValue&,
-                                        const OUString& )
+                                        tools::Rectangle aAreaRect)
 {
     tools::Rectangle        pixmapRect = aAreaRect;
     gboolean        interiorFocus;
@@ -2636,7 +2616,7 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
     NWSetWidgetState( gWidgetData[m_nXScreen].gComboWidget, nState, stateType );
     NWSetWidgetState( gWidgetData[m_nXScreen].gArrowWidget, nState, stateType );
 
-    buttonRect = NWGetComboBoxButtonRect( m_nXScreen, nType, ControlPart::ButtonDown, pixmapRect, nState, aValue, rCaption );
+    buttonRect = NWGetComboBoxButtonRect( m_nXScreen, ControlPart::ButtonDown, pixmapRect );
     if( nPart == ControlPart::ButtonDown )
         buttonRect.Left() += 1;
 
@@ -2684,12 +2664,8 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
 }
 
 static tools::Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
-                                          ControlType,
                                           ControlPart nPart,
-                                          tools::Rectangle                aAreaRect,
-                                          ControlState,
-                                          const ImplControlValue&,
-                                          const OUString& )
+                                          tools::Rectangle                aAreaRect )
 {
     tools::Rectangle    aButtonRect;
     gint        nArrowWidth;
@@ -2892,12 +2868,12 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 }
 
 bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
-                                        ControlType nType, ControlPart nPart,
+                                        ControlType , ControlPart nPart,
                                         const tools::Rectangle& rControlRectangle,
                                         const std::list< tools::Rectangle >& rClipList,
                                         ControlState nState,
-                                        const ImplControlValue& aValue,
-                                        const OUString& rCaption )
+                                        const ImplControlValue& ,
+                                        const OUString&  )
 {
     tools::Rectangle        aIndicatorRect;
     GtkStateType    stateType;
@@ -2947,8 +2923,7 @@ bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
             gtk_paint_box( gWidgetData[m_nXScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
                            gWidgetData[m_nXScreen].gOptionMenuWidget, "optionmenu",
                            x, y, w, h);
-            aIndicatorRect = NWGetListBoxIndicatorRect( m_nXScreen, nType, nPart, rControlRectangle, nState,
-                                                        aValue, rCaption );
+            aIndicatorRect = NWGetListBoxIndicatorRect( m_nXScreen, rControlRectangle);
             gtk_paint_tab( gWidgetData[m_nXScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
                            gWidgetData[m_nXScreen].gOptionMenuWidget, "optionmenutab",
                            aIndicatorRect.Left(), aIndicatorRect.Top(),
@@ -3642,12 +3617,8 @@ static int getFrameWidth(GtkWidget* widget)
 }
 
 static tools::Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen,
-                                         ControlType,
                                          ControlPart    nPart,
-                                         tools::Rectangle      aAreaRect,
-                                         ControlState,
-                                         const ImplControlValue&,
-                                         const OUString& )
+                                         tools::Rectangle      aAreaRect )
 {
     tools::Rectangle       aPartRect;
     GtkRequisition *pIndicatorSize = nullptr;
@@ -3705,12 +3676,7 @@ static tools::Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen,
 }
 
 static tools::Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen,
-                                            ControlType,
-                                            ControlPart,
-                                            tools::Rectangle                aAreaRect,
-                                            ControlState,
-                                            const ImplControlValue&,
-                                            const OUString& )
+                                            tools::Rectangle                aAreaRect )
 {
     tools::Rectangle       aIndicatorRect;
     GtkRequisition *pIndicatorSize = nullptr;
@@ -3755,12 +3721,8 @@ static tools::Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen,
 }
 
 static tools::Rectangle NWGetToolbarRect(  SalX11Screen nScreen,
-                                    ControlType,
                                     ControlPart                nPart,
-                                    tools::Rectangle                aAreaRect,
-                                    ControlState,
-                                    const ImplControlValue&,
-                                    const OUString& )
+                                    tools::Rectangle                aAreaRect )
 {
     tools::Rectangle aRet;
 

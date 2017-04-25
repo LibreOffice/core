@@ -58,8 +58,7 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
 public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
-                 SalFrameStyleFlags nSalFrameStyle,
-                 SystemParentData* pSystemParent = nullptr );
+                 SalFrameStyleFlags nSalFrameStyle );
     virtual ~SvpSalFrame() override;
 
     void GetFocus();

@@ -166,8 +166,7 @@ public:
     virtual ScreenData *initScreen( SalX11Screen nXScreen ) const override;
 #endif
 
-    GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
-                                    GdkEvent* event );
+    GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event );
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
 
     void screenSizeChanged( GdkScreen* );
