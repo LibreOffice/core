@@ -129,19 +129,6 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     return true;
 }
 
-void ImpUpdateOutlParamsForOverflow(SdrOutliner *pOutl, SdrTextObj *pTextObj)
-{
-     // Code from ImpSetTextEditParams
-    Size aPaperMin;
-    Size aPaperMax;
-    tools::Rectangle aEditArea;
-    pTextObj->TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
-
-    pOutl->SetMinAutoPaperSize(aPaperMin);
-    pOutl->SetMaxAutoPaperSize(aPaperMax);
-    pOutl->SetPaperSize(Size());
-}
-
 void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const
 {
     bool bFitToSize(IsFitToSize());
@@ -312,26 +299,6 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 
     /* Beginning Chaining-related code */
     rOutl.ClearOverflowingParaNum();
-
-    /* Flush overflow for next textbox - Necessary for recursive chaining */
-    if (false &&
-        IsChainable() &&
-        GetNextLinkInChain() &&
-        GetTextChain()->GetPendingOverflowCheck(GetNextLinkInChain()) )
-    {
-        GetTextChain()->SetPendingOverflowCheck(GetNextLinkInChain(), false);
-
-        SdrOutliner rDrawOutl = GetNextLinkInChain()->ImpGetDrawOutliner();
-        // Prepare Outliner for overflow check
-        ImpUpdateOutlParamsForOverflow(&rDrawOutl, GetNextLinkInChain());
-        const OutlinerParaObject *pObj = GetNextLinkInChain()->GetOutlinerParaObject();
-        rDrawOutl.SetText(*pObj);
-
-        rDrawOutl.SetUpdateMode(true);
-        // XXX: Change name of method below to impHandleChainingEventsNonEditMode
-        GetNextLinkInChain()->impHandleChainingEventsDuringDecomposition(rDrawOutl);
-    }
-    /* End Chaining-related code */
 
     pEdtOutl = nullptr;
     rOutl.Clear();
