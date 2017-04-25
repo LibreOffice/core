@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_616d3032",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-25T13:00:47Z",
+      "side": 1,
+      "message": "The difference between SplitNode() and AppendTextNode() is that the first does more (handles the needed adjustment of e.g. bookmarks, anchored images, etc) -- but none of that is needed for plain text import.",
+      "revId": "e4d179ce8f91e6ee4be24f030f3d79a8a84357d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

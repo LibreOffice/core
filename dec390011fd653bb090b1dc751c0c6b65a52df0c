@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a1771801",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-25T13:00:47Z",
+      "side": 0,
+      "message": "Indeed not really needed here: even the DOC import doesn\u0027t do that and RSIDs are still generated during editing even after this removal.",
+      "revId": "dec390011fd653bb090b1dc751c0c6b65a52df0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
