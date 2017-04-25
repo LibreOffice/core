@@ -38,10 +38,6 @@ def main():
 
     uncompress_dir = uncompress_file_to_dir(tar_file, temp_dir)
 
-    # on linux we should stip the symbols from the libraries
-    if sys.platform.startswith('linux'):
-        subprocess.call('strip -g ' + os.path.join(uncompress_dir, 'program/') + '*', shell=True)
-
     mar_executable = os.environ.get('MAR', 'mar')
     mar_file = make_mar_name(target_dir, filename_prefix)
     subprocess.call([os.path.join(current_dir_path, 'make_full_update.sh'), mar_file, uncompress_dir])
