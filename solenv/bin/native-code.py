@@ -59,6 +59,8 @@ core_factory_list = [
     ("libxmlfalo.a", "xmlfa_component_getFactory"),
     ("libodfflatxmllo.a", "odfflatxml_component_getFactory"),
     ("libxmlscriptlo.a", "xmlscript_component_getFactory"),
+    ("libmcnttype.a", "mcnttype_component_getFactory"),
+    ("libvcllo.a", "vcl_component_getFactory")
     ]
 
 core_constructor_list = [
@@ -323,7 +325,7 @@ writer_factory_list = [
 writer_constructor_list = [
 # basic/util/sb.component
     ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
-# filter/source/textfilterdetect/textfd.component 
+# filter/source/textfilterdetect/textfd.component
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
 # sw/util/sw.component
     "com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation",

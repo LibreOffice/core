@@ -149,6 +149,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_HEADLESS), \
 		vcl/vcl.headless \
 	) \
+	$(if $(filter ANDROID,$(OS)), \
+		vcl/vcl.android \
+	) \
 	$(if $(filter-out WNT,$(OS)), \
 		embeddedobj/source/msole/emboleobj \
 	) \
