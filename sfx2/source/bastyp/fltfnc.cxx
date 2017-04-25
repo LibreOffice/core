@@ -819,14 +819,10 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4FilterName( const O
 IMPL_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString, bool )
 {
     std::shared_ptr<const SfxFilter> pFilter = GetFilter4Extension( *pString );
-    if (pFilter && !pFilter->GetWildcard().Matches( OUString() ) &&
+    return pFilter &&
+        !pFilter->GetWildcard().Matches("") &&
         !pFilter->GetWildcard().Matches("*.*") &&
-        !pFilter->GetWildcard().Matches(OUString('*'))
-       )
-    {
-        return true;
-    }
-    return false;
+        !pFilter->GetWildcard().Matches("*");
 }
 
 

@@ -300,10 +300,7 @@ namespace
 
 static bool lcl_checkDockingWindowID( sal_uInt16 nID )
 {
-    if (nID < SID_DOCKWIN_START || nID >= sal_uInt16(SID_DOCKWIN_START+NUM_OF_DOCKINGWINDOWS))
-        return false;
-    else
-        return true;
+    return !(nID < SID_DOCKWIN_START || nID >= sal_uInt16(SID_DOCKWIN_START+NUM_OF_DOCKINGWINDOWS));
 }
 
 static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::XFrame >& rFrame )
