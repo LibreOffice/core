@@ -91,7 +91,7 @@ protected:
 
     virtual void    FillURLMenu( PopupMenu* _pMenu ) = 0;
 
-    SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId );
+    SvtFileDialogURLSelector(vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, const OUString& rButtonId);
 
     virtual void        Activate() override;
 };

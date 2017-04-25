@@ -32,6 +32,7 @@
 #include "svtools/inettbc.hxx"
 #include "iodlg.hxx"
 #include "iodlg.hrc"
+#include "bitmaps.hlst"
 #include "svtools/imagemgr.hxx"
 #include <unotools/localfilehelper.hxx>
 #include "unotools/useroptions.hxx"
@@ -86,15 +87,13 @@ SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 
 
 //= SvtFileDialogURLSelector
-
-
-SvtFileDialogURLSelector::SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId )
+SvtFileDialogURLSelector::SvtFileDialogURLSelector(vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, const OUString& rButtonId)
     :MenuButton ( _pParent, nBits )
     ,m_pDlg     ( _pDlg )
     ,m_pMenu    ( VclPtr<PopupMenu>::Create() )
 {
     SetStyle( GetStyle() | WB_NOPOINTERFOCUS | WB_RECTSTYLE | WB_SMALLSTYLE );
-    SetModeImage( SvtFileDialog::GetButtonImage( _nButtonId ) );
+    SetModeImage(SvtFileDialog::GetButtonImage(rButtonId));
     SetDelayMenu(true);
     SetDropDown(PushButtonDropdownStyle::Toolbox);
 }

@@ -6,8 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 #include "RemoteFilesDialog.hxx"
 #include <comphelper/stillreadwriteinteraction.hxx>
+#include "bitmaps.hlst"
 
 class FileViewContainer : public vcl::Window
 {
@@ -214,7 +216,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits )
     {
         get( m_pOk_btn, "save" );
 
-        m_pNewFolder->SetModeImage(Image(BitmapEx(fpicker::SvtResId(BMP_FILEDLG_CREATEFOLDER))));
+        m_pNewFolder->SetModeImage(Image(BitmapEx(BMP_FILEDLG_CREATEFOLDER)));
         m_pNewFolder->SetClickHdl( LINK( this, RemoteFilesDialog, NewFolderHdl ) );
     }
 

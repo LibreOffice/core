@@ -46,6 +46,7 @@
 #include <svtools/svtools.hrc>
 #include "OfficeFilePicker.hrc"
 #include "iodlg.hrc"
+#include "bitmaps.hlst"
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
 #include "svtools/inettbc.hxx"
@@ -2732,9 +2733,9 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl, Splitter*, void )
     _pSplitter->SetPosPixel( Point( placeSize.Width(), _pSplitter->GetPosPixel().Y() ) );
 }
 
-Image SvtFileDialog::GetButtonImage( sal_uInt16 _nButtonId )
+Image SvtFileDialog::GetButtonImage(const OUString& rButtonId)
 {
-    return Image(BitmapEx(SvtResId(_nButtonId)));
+    return Image(BitmapEx(rButtonId));
 }
 
 QueryFolderNameDialog::QueryFolderNameDialog(vcl::Window* _pParent,
