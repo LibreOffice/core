@@ -49,6 +49,8 @@
     <string name="pref_category_general">General</string>
     <string name="pref_experimental_editing">Experimental Mode</string>
     <string name="pref_experimental_editing_summary">Enable the experimental editing mode. Use at your own risk.</string>
+    <string name="pref_developer_mode">Developer Mode</string>
+    <string name="pref_developer_mode_summary">Enable developer mode where you can send UNO commands within app. Use at your own risk.</string>
 
     <string name="action_about">About</string>
     <string name="action_parts">Parts</string>
@@ -91,6 +93,7 @@
     <string name="action_save">Save</string>
     <string name="action_fromat">Enable Format</string>
     <string name="action_search">Search</string>
+    <string name="action_UNO_commands">Send UNO Cmd</string>
 
     <!-- Feedback messages -->
     <string name="message_saved">Save complete</string>
@@ -156,5 +159,11 @@
     <string name="action_pwd_dialog_OK">OK</string>
     <string name="action_pwd_dialog_cancel">Cancel</string>
     <string name="action_pwd_dialog_title">Please enter password</string>
+
+    <!-- UNO cmd controller Strings -->
+    <string name="UNO_commands_string_hint">UNO Command</string>
+    <string name="UNO_commands_string_type_hint">Type</string>
+    <string name="UNO_commands_string_value_hint">Value</string>
+    <string name="UNO_commands_string_parent_value_hint">Parent Value</string>
 
 </resources>
