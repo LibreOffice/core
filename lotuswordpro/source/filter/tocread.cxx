@@ -267,6 +267,13 @@ CBenTOCReader::ReadTOC()
                     if ((Err = cpContainer->SeekToPosition(Pos)) != BenErr_OK)
                         return Err;
 
+                    const auto nRemainingSize = cpContainer->remainingSize();
+                    if (Length > nRemainingSize)
+                    {
+                        SAL_WARN("lwp", "stream too short for claimed no of records");
+                        Length = nRemainingSize;
+                    }
+
                     #define STACK_BUFFER_SIZE 256
                     char sStackBuffer[STACK_BUFFER_SIZE];
                     char * sAllocBuffer;

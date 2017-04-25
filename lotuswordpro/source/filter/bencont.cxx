@@ -332,6 +332,11 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     pStream = pMemStream;
 }
 
+sal_uLong LtcBenContainer::remainingSize() const
+{
+    return m_ulLength - cpStream->Tell();
+}
+
 }// end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

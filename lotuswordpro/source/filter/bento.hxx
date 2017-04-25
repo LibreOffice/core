@@ -209,6 +209,7 @@ public: // Internal methods
     explicit LtcBenContainer(LwpSvStream * pStream);
     ~LtcBenContainer();
 
+    sal_uLong remainingSize() const;
     BenError Read(void * pBuffer, unsigned long MaxSize,
       unsigned long * pAmtRead);
     BenError ReadKnownSize(void * pBuffer, unsigned long Amt);
