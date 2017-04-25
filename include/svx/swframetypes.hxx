@@ -39,8 +39,6 @@ enum class RndStdIds
     FOOTER,
     HEADERL,
     HEADERR,
-    FOOTERL,
-    FOOTERR,
 
     DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
 };

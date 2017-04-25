@@ -123,8 +123,6 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
             SAL_FALLTHROUGH;
         }
     case RndStdIds::FOOTER:
-    case RndStdIds::FOOTERL:
-    case RndStdIds::FOOTERR:
         {
             pFormat = new SwFrameFormat( m_rDoc.GetAttrPool(),
                                  (bHeader ? "Right header" : "Right footer"),
@@ -141,11 +139,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
                                          : eRequest == RndStdIds::HEADERR
                                          ? RES_POOLCOLL_HEADERR
                                          : RES_POOLCOLL_HEADER )
-                                     : ( eRequest == RndStdIds::FOOTERL
-                                         ? RES_POOLCOLL_FOOTERL
-                                         : eRequest == RndStdIds::FOOTERR
-                                         ? RES_POOLCOLL_FOOTERR
-                                         : RES_POOLCOLL_FOOTER )
+                                     : RES_POOLCOLL_FOOTER
                                      ) ) );
             pFormat->SetFormatAttr( SwFormatContent( pSttNd ));
 
