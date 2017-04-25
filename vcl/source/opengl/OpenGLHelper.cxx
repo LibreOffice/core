@@ -801,10 +801,7 @@ bool OpenGLHelper::supportsVCLOpenGL()
     static bool bDisableGL = !!getenv("SAL_DISABLEGL");
     bool bBlacklisted = isDeviceBlacklisted();
 
-    if (bDisableGL || bBlacklisted)
-        return false;
-    else
-        return true;
+    return !bDisableGL && !bBlacklisted;
 }
 
 void OpenGLZone::enter() { gnEnterCount++; }

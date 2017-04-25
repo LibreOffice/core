@@ -248,10 +248,7 @@ static bool is_kde3_desktop( Display* pDisplay )
         }
     }
 
-    if ( KDEVersion( pDisplay ) == 3 )
-        return true;
-
-    return false;
+    return KDEVersion( pDisplay ) == 3;
 }
 
 static bool is_kde4_desktop( Display* pDisplay )

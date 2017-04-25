@@ -104,15 +104,13 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
         sal_Unicode cChar = rKEvt.GetCharCode();
         sal_uInt16      nGroup = rKEvt.GetKeyCode().GetGroup();
 
-        if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
-             (nGroup == KEYGROUP_MISC) ||
-             ((cChar >= '0') && (cChar <= '9')) ||
-             (bThousandSep && string::equals(rLocaleDataWrapper.getNumThousandSep(), cChar)) ||
-             (string::equals(rLocaleDataWrapper.getNumDecimalSep(), cChar) ) ||
-             (cChar == '-') )
-            return false;
-        else
-            return true;
+        return !((nGroup == KEYGROUP_FKEYS) ||
+                 (nGroup == KEYGROUP_CURSOR) ||
+                 (nGroup == KEYGROUP_MISC) ||
+                 ((cChar >= '0') && (cChar <= '9')) ||
+                 (bThousandSep && string::equals(rLocaleDataWrapper.getNumThousandSep(), cChar)) ||
+                 (string::equals(rLocaleDataWrapper.getNumDecimalSep(), cChar) ) ||
+                 (cChar == '-'));
     }
 }
 

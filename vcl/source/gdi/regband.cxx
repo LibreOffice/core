@@ -858,10 +858,7 @@ bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
     }
 
     // different number of separations?
-    if ( pOwnRectBandSep || pSecondRectBandSep )
-        return false;
-
-    return true;
+    return !(pOwnRectBandSep || pSecondRectBandSep);
 }
 
 ImplRegionBand* ImplRegionBand::SplitBand (const sal_Int32 nY)

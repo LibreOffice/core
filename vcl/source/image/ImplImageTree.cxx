@@ -120,9 +120,7 @@ bool urlExists(OUString const & sUrl)
 {
     osl::File aFile(sUrl);
     osl::FileBase::RC eRC = aFile.open(osl_File_OpenFlag_Read);
-    if (osl::FileBase::E_None == eRC)
-        return true;
-    return false;
+    return osl::FileBase::E_None == eRC;
 }
 
 OUString getNameNoExtension(OUString const & sName)
@@ -436,10 +434,7 @@ bool ImplImageTree::iconCacheLookup(ImageRequestParameters& rParameters)
     }
 
     OUString aVariant = createVariant(rParameters);
-    if (!aVariant.isEmpty() && loadDiskCachedVersion(aVariant, rParameters))
-        return true;
-
-    return false;
+    return !aVariant.isEmpty() && loadDiskCachedVersion(aVariant, rParameters);
 }
 
 bool ImplImageTree::findImage(std::vector<OUString> const & paths, ImageRequestParameters& rParameters)

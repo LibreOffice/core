@@ -1516,14 +1516,8 @@ bool ToolBox::ImplCalcItem()
                 bool bText;
 
                 // check if image and/or text exists
-                if ( !(it->maImage) )
-                    bImage = false;
-                else
-                    bImage = true;
-                if ( it->maText.isEmpty() )
-                    bText = false;
-                else
-                    bText = true;
+                bImage = !!it->maImage;
+                bText = !it->maText.isEmpty();
                 ButtonType tmpButtonType = determineButtonType( &(*it), meButtonType ); // default to toolbox setting
                 if ( bImage || bText )
                 {
@@ -1997,10 +1991,7 @@ void ToolBox::ImplFormat( bool bResize )
         aOldDragRect = pWrapper->GetDragArea();
     ImplUpdateDragArea();
 
-    if ( ImplCalcItem() )
-        bMustFullPaint = true;
-    else
-        bMustFullPaint = false;
+    bMustFullPaint = ImplCalcItem();
 
     // calculate new size during interactive resize or
     // set computed size when formatting only
@@ -2625,15 +2616,9 @@ void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext)
     if ( maUpperRect.IsEmpty() || maLowerRect.IsEmpty() )
         return;
 
-    if ( mnCurLine > 1 )
-        bTmpUpper = true;
-    else
-        bTmpUpper = false;
+    bTmpUpper = mnCurLine > 1;
 
-    if ( mnCurLine+mnVisLines-1 < mnCurLines )
-        bTmpLower = true;
-    else
-        bTmpLower = false;
+    bTmpLower = mnCurLine+mnVisLines-1 < mnCurLines;
 
     if ( !IsEnabled() )
     {

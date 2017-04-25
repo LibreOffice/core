@@ -195,14 +195,8 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbIma
     bool bHasText;
 
     // check for image and/or text
-    if ( !(maImage) )
-        bHasImage = false;
-    else
-        bHasImage = true;
-    if ( maText.isEmpty() )
-        bHasText = false;
-    else
-        bHasText = true;
+    bHasImage = !!maImage;
+    bHasText = !maText.isEmpty();
 
     // prefer images if symbolonly buttons are drawn
     // prefer texts if textonly buttons are drawn
@@ -529,10 +523,7 @@ void ToolBox::RemoveItem( ImplToolItems::size_type nPos )
     if( nPos < mpData->m_aItems.size() )
     {
         bool bMustCalc;
-        if ( mpData->m_aItems[nPos].meType == ToolBoxItemType::BUTTON )
-            bMustCalc = true;
-        else
-            bMustCalc = false;
+        bMustCalc = mpData->m_aItems[nPos].meType == ToolBoxItemType::BUTTON;
 
         if ( mpData->m_aItems[nPos].mpWindow )
             mpData->m_aItems[nPos].mpWindow->Hide();

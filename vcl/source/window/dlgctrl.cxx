@@ -959,10 +959,7 @@ bool Window::ImplHasDlgCtrl()
             ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
         pDlgCtrlParent = pDlgCtrlParent->ImplGetParent();
 
-    if ( !pDlgCtrlParent || ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
-        return false;
-    else
-        return true;
+    return pDlgCtrlParent && ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL);
 }
 
 void Window::ImplDlgCtrlNextWindow()

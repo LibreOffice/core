@@ -102,10 +102,7 @@ static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
 
 bool StatusBar::ImplIsItemUpdate()
 {
-    if ( !mbProgressMode && mbVisibleItems && IsReallyVisible() && IsUpdateMode() )
-        return true;
-    else
-        return false;
+    return !mbProgressMode && mbVisibleItems && IsReallyVisible() && IsUpdateMode();
 }
 
 void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )

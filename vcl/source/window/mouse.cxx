@@ -85,10 +85,7 @@ bool Window::ImplTestMousePointerSet()
 
     // if the mouse is over the window, switch it
     tools::Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
-    if ( aClientRect.IsInside( GetPointerPosPixel() ) )
-        return true;
-
-    return false;
+    return aClientRect.IsInside( GetPointerPosPixel() );
 }
 
 PointerStyle Window::ImplGetMousePointer() const
@@ -144,13 +141,10 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
         MouseEventModifiers nMode = mpWindowImpl->mpFrameData->mnMouseMode;
         bool    bLeave;
         // check for MouseLeave
-        if ( ((nX < 0) || (nY < 0) ||
-              (nX >= mpWindowImpl->mpFrameWindow->mnOutWidth) ||
-              (nY >= mpWindowImpl->mpFrameWindow->mnOutHeight)) &&
-             !ImplGetSVData()->maWinData.mpCaptureWin )
-            bLeave = true;
-        else
-            bLeave = false;
+        bLeave = ((nX < 0) || (nY < 0) ||
+                  (nX >= mpWindowImpl->mpFrameWindow->mnOutWidth) ||
+                  (nY >= mpWindowImpl->mpFrameWindow->mnOutHeight)) &&
+                 !ImplGetSVData()->maWinData.mpCaptureWin;
         nMode |= MouseEventModifiers::SYNTHETIC;
         if ( bModChanged )
             nMode |= MouseEventModifiers::MODIFIERCHANGED;
