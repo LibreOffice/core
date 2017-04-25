@@ -1100,7 +1100,6 @@ $(eval $(call gb_Helper_register_resources,\
 	t602filter \
 	tpl \
 	upd \
-	$(if $(ENABLE_ONLINE_UPDATE),updchk) \
 	uui \
 	vcl \
 	writerperfect \

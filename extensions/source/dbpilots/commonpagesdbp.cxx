@@ -19,6 +19,7 @@
 
 #include "commonpagesdbp.hxx"
 #include "dbpresid.hrc"
+#include "bitmaps.hlst"
 #include "componentmodule.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -361,8 +362,8 @@ namespace dbp
             return;
         }
 
-        Image aTableImage(BitmapEx(ModuleRes(BMP_TABLE)));
-        Image aQueryImage(BitmapEx(ModuleRes(BMP_QUERY)));
+        Image aTableImage(BitmapEx(BMP_TABLE));
+        Image aQueryImage(BitmapEx(BMP_QUERY));
 
         lcl_fillEntries( *m_pTable, aTableNames, aTableImage, CommandType::TABLE );
         lcl_fillEntries( *m_pTable, aQueryNames, aQueryImage, CommandType::QUERY );
