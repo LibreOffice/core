@@ -255,16 +255,6 @@ LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const cha
 {
     return FindNextValueStreamWithPropertyName(sPropertyName);
 }
-/**
-*   <description>
-*   @param  pointer to length of bento file
-*   @return BenError
-*/
-BenError LtcBenContainer::GetSize(sal_uLong * pLength)
-{
-    *pLength = m_ulLength;
-    return BenErr_OK;
-}
 
 sal_uInt32 GetSvStreamSize(SvStream * pStream)
 {

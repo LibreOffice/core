@@ -72,9 +72,7 @@ CBenTOCReader::ReadLabelAndTOC()
     if ((Err = ReadLabel(&TOCOffset, &cTOCSize)) != BenErr_OK)
         return Err;
 
-    sal_uLong nLength;
-    if ((Err = cpContainer->GetSize(&nLength)) != BenErr_OK)
-        return Err;
+    sal_uLong nLength = cpContainer->GetSize();
 
     if (TOCOffset > nLength)
         return BenErr_ReadPastEndOfTOC;
@@ -148,9 +146,7 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
 {
     BenError Err;
 
-    sal_uLong Length;
-    if ((Err = cpContainer->GetSize(&Length)) != BenErr_OK)
-        return Err;
+    sal_uLong Length = cpContainer->GetSize();
 
     // Always ready to check for MagicBytes from
     // CurrOffset - BEN_MAGIC_BYTES_SIZE to CurrOffset - 1

@@ -223,7 +223,7 @@ public: // Internal methods
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
     void CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
 
-    BenError GetSize(sal_uLong * pLength);
+    sal_uLong GetSize() const { return m_ulLength; }
 private: // Data
     CUtOwningList cObjects;
     CUtList cNamedObjects;
