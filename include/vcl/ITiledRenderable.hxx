@@ -226,6 +226,13 @@ public:
     {
         return OUString();
     }
+
+    /// Implementation for
+    /// lok::Document::getCommandValues(".uno:ViewAnnotationsPosition");
+    virtual OUString getPostItsPos()
+    {
+        return OUString();
+    }
 };
 
 } // namespace vcl
