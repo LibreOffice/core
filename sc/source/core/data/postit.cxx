@@ -475,26 +475,31 @@ ScNoteData::~ScNoteData()
 {
 }
 
-ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos ) :
+sal_uInt32 ScPostIt::mnLastPostItId = 1;
+
+ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nPostItId ) :
     mrDoc( rDoc ),
     maNoteData( false )
 {
+    mnPostItId = nPostItId == 0 ? mnLastPostItId++ : nPostItId;
     AutoStamp();
     CreateCaption( rPos );
 }
 
-ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNote ) :
+ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNote, sal_uInt32 nPostItId ) :
     mrDoc( rDoc ),
     maNoteData( rNote.maNoteData )
 {
+    mnPostItId = nPostItId == 0 ? mnLastPostItId++ : nPostItId;
     maNoteData.mpCaption = nullptr;
     CreateCaption( rPos, rNote.maNoteData.mpCaption );
 }
 
-ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScNoteData& rNoteData, bool bAlwaysCreateCaption ) :
+ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScNoteData& rNoteData, bool bAlwaysCreateCaption, sal_uInt32 nPostItId ) :
     mrDoc( rDoc ),
     maNoteData( rNoteData )
 {
+    mnPostItId = nPostItId == 0 ? mnLastPostItId++ : nPostItId;
     if( bAlwaysCreateCaption || maNoteData.mbShown )
         CreateCaptionFromInitData( rPos );
 }
@@ -507,7 +512,7 @@ ScPostIt::~ScPostIt()
 ScPostIt* ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, bool bCloneCaption ) const
 {
     CreateCaptionFromInitData( rOwnPos );
-    return bCloneCaption ? new ScPostIt( rDestDoc, rDestPos, *this ) : new ScPostIt( rDestDoc, rDestPos, maNoteData, false );
+    return bCloneCaption ? new ScPostIt( rDestDoc, rDestPos, *this, mnPostItId ) : new ScPostIt( rDestDoc, rDestPos, maNoteData, false, mnPostItId );
 }
 
 void ScPostIt::SetDate( const OUString& rDate )
@@ -867,7 +872,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         ScDocument& rDoc, const ScAddress& rPos, SfxItemSet* pItemSet,
         OutlinerParaObject* pOutlinerObj, const Rectangle& rCaptionRect,
-        bool bShown, bool bAlwaysCreateCaption )
+        bool bShown, bool bAlwaysCreateCaption, sal_uInt32 nPostItId )
 {
     OSL_ENSURE( pItemSet && pOutlinerObj, "ScNoteUtil::CreateNoteFromObjectData - item set and outliner object expected" );
     ScNoteData aNoteData( bShown );
@@ -889,7 +894,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
 
     /*  Create the note and insert it into the document. If the note is
         visible, the caption object will be created automatically. */
-    ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption );
+    ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption, nPostItId );
     pNote->AutoStamp();
 
     rDoc.SetNote(rPos, pNote);
@@ -899,7 +904,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
 
 ScPostIt* ScNoteUtil::CreateNoteFromString(
         ScDocument& rDoc, const ScAddress& rPos, const OUString& rNoteText,
-        bool bShown, bool bAlwaysCreateCaption )
+        bool bShown, bool bAlwaysCreateCaption, sal_uInt32 nPostItId )
 {
     ScPostIt* pNote = nullptr;
     if( !rNoteText.isEmpty() )
@@ -912,7 +917,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
 
         /*  Create the note and insert it into the document. If the note is
             visible, the caption object will be created automatically. */
-        pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption );
+        pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption, nPostItId );
         pNote->AutoStamp();
         //insert takes ownership
         rDoc.SetNote(rPos, pNote);
