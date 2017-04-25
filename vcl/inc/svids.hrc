@@ -130,10 +130,6 @@
 #define SV_APP_DEFAULT                              10804
 #define SV_APP_VCLBACKEND                           10805
 
-#define SV_ICON_SIZE48_START                        20000
-#define SV_ICON_SIZE32_START                        21000
-#define SV_ICON_SIZE16_START                        23000
-
 #endif // INCLUDED_VCL_INC_SVIDS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
