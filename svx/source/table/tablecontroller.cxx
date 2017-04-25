@@ -341,10 +341,7 @@ bool SvxTableController::onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* /
 
     mbLeftButtonDown = false;
 
-    if( rMEvt.GetClicks() == 2 )
-        return true;
-
-    return false;
+    return rMEvt.GetClicks() == 2;
 }
 
 

@@ -2018,10 +2018,7 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
             m_pCurrencyLb->InsertEntry( *i );
             const NfCurrencyEntry& aCurrencyEntry = rCurrencyTable[ rCurrencyIndex ];
 
-            if ( nPos < nLen )
-                bIsSymbol = false;
-            else
-                bIsSymbol = true;
+            bIsSymbol = nPos >= nLen;
 
             sal_uInt16 nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, aCurrencyEntry, bIsSymbol );
             const OUString& rFormatStr = aStringsDtor[ nDefaultFormat ];

@@ -667,18 +667,11 @@ static bool ImplIsMathObj( const uno::Reference < embed::XEmbeddedObject >& rObj
         return false;
 
     SvGlobalName aClassName( rObjRef->getClassID() );
-    if( aClassName == SvGlobalName(SO3_SM_CLASSID_30) ||
+    return aClassName == SvGlobalName(SO3_SM_CLASSID_30) ||
         aClassName == SvGlobalName(SO3_SM_CLASSID_40) ||
         aClassName == SvGlobalName(SO3_SM_CLASSID_50) ||
         aClassName == SvGlobalName(SO3_SM_CLASSID_60) ||
-        aClassName == SvGlobalName(SO3_SM_CLASSID)      )
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+        aClassName == SvGlobalName(SO3_SM_CLASSID);
 }
 
 // BaseProperties section
@@ -2010,18 +2003,13 @@ bool SdrOle2Obj::IsCalc() const
         return false;
 
     SvGlobalName aObjClsId( mpImpl->mxObjRef->getClassID() );
-    if(    SvGlobalName(SO3_SC_CLASSID_30) == aObjClsId
+    return SvGlobalName(SO3_SC_CLASSID_30) == aObjClsId
         || SvGlobalName(SO3_SC_CLASSID_40) == aObjClsId
         || SvGlobalName(SO3_SC_CLASSID_50) == aObjClsId
         || SvGlobalName(SO3_SC_CLASSID_60) == aObjClsId
         || SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_60) == aObjClsId
         || SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_8) == aObjClsId
-        || SvGlobalName(SO3_SC_CLASSID) == aObjClsId )
-    {
-        return true;
-    }
-
-    return false;
+        || SvGlobalName(SO3_SC_CLASSID) == aObjClsId;
 }
 
 uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
