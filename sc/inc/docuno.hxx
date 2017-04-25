@@ -359,6 +359,9 @@ public:
 
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
+
+    /// @see vcl::ITiledRenderable::getPostItsPos().
+    OUString getPostItsPos() override;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper<

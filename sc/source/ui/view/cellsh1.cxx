@@ -2211,14 +2211,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if (!aCellId.isEmpty())
                     {
-                        ScAddress aParsedPos;
-                        ScRefFlags nRes = aParsedPos.Parse(aCellId,
-                                                           GetViewData()->GetDocument(),
-                                                           ScAddress::Details(formula::FormulaGrammar::AddressConvention::CONV_ODF));
-                        if (nRes & ScRefFlags::VALID)
+
+                        ScDocument& rDoc = GetViewData()->GetDocShell()->GetDocument();
+                        std::vector<sc::NoteEntry> aNotes;
+                        rDoc.GetAllNoteEntries(aNotes);
+
+                        sal_uInt32 nId = aCellId.toUInt32();
+                        auto lComp = [nId](const sc::NoteEntry& rNote) { return rNote.mpNote->GetId() == nId; };
+
+                        const auto& aFoundNoteIt = std::find_if(aNotes.begin(), aNotes.end(), lComp);
+                        if (aFoundNoteIt != aNotes.end())
                         {
-                            pTabViewShell->SetTabNo(aParsedPos.Tab());
-                            pTabViewShell->SetCursor(aParsedPos.Col(), aParsedPos.Row());
+                            ScAddress aFoundPos = aFoundNoteIt->maPos;
+                            pTabViewShell->SetTabNo(aFoundPos.Tab());
+                            pTabViewShell->SetCursor(aFoundPos.Col(), aFoundPos.Row());
                         }
                     }
 
@@ -2397,14 +2403,23 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_ID, &pId) )
             {
                 const SvxPostItIdItem* pIdItem = static_cast<const SvxPostItIdItem*>(pId);
-                ScAddress aPos;
-                ScRefFlags nRes = aPos.Parse(pIdItem->GetValue(),
-                                             GetViewData()->GetDocument(),
-                                             ScAddress::Details(formula::FormulaGrammar::AddressConvention::CONV_ODF));
-                if (nRes & ScRefFlags::VALID)
+                OUString aCellId = pIdItem->GetValue();
+                if (!aCellId.isEmpty())
                 {
-                    pTabViewShell->SetTabNo(aPos.Tab());
-                    pTabViewShell->SetCursor(aPos.Col(), aPos.Row());
+                    ScDocument& rDoc = GetViewData()->GetDocShell()->GetDocument();
+                    std::vector<sc::NoteEntry> aNotes;
+                    rDoc.GetAllNoteEntries(aNotes);
+
+                    sal_uInt32 nId = aCellId.toUInt32();
+                    auto lComp = [nId](const sc::NoteEntry& rNote) { return rNote.mpNote->GetId() == nId; };
+
+                    const auto& aFoundNoteIt = std::find_if(aNotes.begin(), aNotes.end(), lComp);
+                    if (aFoundNoteIt != aNotes.end())
+                    {
+                        ScAddress aFoundPos = aFoundNoteIt->maPos;
+                        pTabViewShell->SetTabNo(aFoundPos.Tab());
+                        pTabViewShell->SetCursor(aFoundPos.Col(), aFoundPos.Row());
+                    }
                 }
             }
 

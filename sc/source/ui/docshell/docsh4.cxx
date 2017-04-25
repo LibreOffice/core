@@ -2236,9 +2236,9 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
     aAnnotation.put("action", (nType == LOKCommentNotificationType::Add ? "Add" :
                                (nType == LOKCommentNotificationType::Remove ? "Remove" :
                                 (nType == LOKCommentNotificationType::Modify ? "Modify" : "???"))));
-    OUString aCellId = rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocument,
-                                   ScAddress::Details(formula::FormulaGrammar::AddressConvention::CONV_ODF, rPos));
-    aAnnotation.put("id", aCellId.toUtf8().getStr());
+
+    aAnnotation.put("id", pNote->GetId());
+    aAnnotation.put("tab", rPos.Tab());
     if (nType != LOKCommentNotificationType::Remove && pNote)
     {
         aAnnotation.put("author", pNote->GetAuthor());
