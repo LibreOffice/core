@@ -49,8 +49,4 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/uno/copytablewizard.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,dbaccess/dbu,\
-    dbaccess/source/ui/imagelists/dbimagelists.src \
-))
-
 # vim: set noet sw=4 ts=4:

@@ -53,6 +53,7 @@ $(packimages_DIR)/sourceimagelist.ilst : \
 		$(SRCDIR)/connectivity/inc/bitmaps.hlst \
 		$(SRCDIR)/cui/inc/bitmaps.hlst \
 		$(SRCDIR)/chart2/inc/bitmaps.hlst \
+		$(SRCDIR)/dbaccess/inc/bitmaps.hlst \
 		$(SRCDIR)/sfx2/inc/bitmaps.hlst \
 		$(SRCDIR)/vcl/inc/bitmaps.hlst
 	grep res $^ | cut -d'"' -f2 | sed "s/^/%MODULE%\//" | sed "s/%MODULE%.res/%GLOBALRES%/g" > $@

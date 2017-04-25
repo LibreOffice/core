@@ -23,18 +23,21 @@
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
 #include "dbu_misc.hrc"
+#include "bitmaps.hlst"
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include "svtools/treelistentry.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <o3tl/make_unique.hxx>
+
 using namespace ::dbaui;
+
 // OWizColumnSelect
-OWizNameMatching::OWizNameMatching( vcl::Window* pParent)
-        :OWizardPage( pParent, "NameMatching", "dbaccess/ui/namematchingpage.ui" )
-        , m_aImgUp(BitmapEx(ModuleRes(BMP_UP)))
-        , m_aImgDown(BitmapEx(ModuleRes(BMP_DOWN)))
+OWizNameMatching::OWizNameMatching(vcl::Window* pParent)
+    : OWizardPage(pParent, "NameMatching", "dbaccess/ui/namematchingpage.ui")
+    , m_aImgUp(BitmapEx(BMP_UP))
+    , m_aImgDown(BitmapEx(BMP_DOWN))
 {
     get(m_pTABLE_LEFT, "leftlabel");
     get(m_pTABLE_RIGHT, "rightlabel");

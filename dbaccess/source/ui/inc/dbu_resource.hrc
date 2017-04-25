@@ -94,33 +94,6 @@
 
     // FREE
 
-// images
-
-#define TABLE_TREE_ICON                 RID_IMAGE_START +  0
-#define VIEW_TREE_ICON                  RID_IMAGE_START +  1
-#define TABLEFOLDER_TREE_ICON           RID_IMAGE_START +  2
-#define BMP_EXCEPTION_ERROR             RID_IMAGE_START +  3
-#define BMP_EXCEPTION_WARNING           RID_IMAGE_START +  4
-#define BMP_EXCEPTION_INFO              RID_IMAGE_START +  5
-#define QUERYFOLDER_TREE_ICON           RID_IMAGE_START +  6
-#define QUERY_TREE_ICON                 RID_IMAGE_START +  7
-#define DATABASE_TREE_ICON              RID_IMAGE_START +  8
-#define BMP_PRIMARY_KEY                 RID_IMAGE_START +  9
-// free
-#define BMP_PKEYICON                    RID_IMAGE_START + 12
-// free
-#define REPORTFOLDER_TREE_ICON          RID_IMAGE_START + 24
-#define BMP_FORMFOLDER_TREE_L           RID_IMAGE_START + 39
-#define BMP_REPORTFOLDER_TREE_L         RID_IMAGE_START + 40
-#define BMP_QUERYFOLDER_TREE_L          RID_IMAGE_START + 41
-#define BMP_TABLEFOLDER_TREE_L          RID_IMAGE_START + 42
-#define BMP_NAVIGATION_BTN_UP_SC        RID_IMAGE_START + 47
-#define BMP_NAVIGATION_CREATEFOLDER_SC  RID_IMAGE_START + 49
-#define FORM_TREE_ICON                  RID_IMAGE_START + 51
-#define REPORT_TREE_ICON                RID_IMAGE_START + 52
-// free
-#define FORMFOLDER_TREE_ICON            RID_IMAGE_START + 55
-
 // strings
 #define STR_TBL_TITLE                       RID_STR_GEN_START
 #define STR_ERROR_DURING_CREATION           RID_STR_GEN_START + 1

@@ -583,10 +583,9 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
     setDetailPage(m_pLists[E_TABLE]);
 }
 
-void OAppDetailPageHelper::getElementIcons( ElementType _eType, sal_uInt16& _rImageId)
+OUString OAppDetailPageHelper::getElementIcons(ElementType _eType)
 {
     ImageProvider aImageProvider;
-    _rImageId = 0;
 
     sal_Int32 nDatabaseObjectType( 0 );
     switch(_eType )
@@ -596,16 +595,16 @@ void OAppDetailPageHelper::getElementIcons( ElementType _eType, sal_uInt16& _rIm
         case E_QUERY:   nDatabaseObjectType = DatabaseObject::QUERY; break;
         default:
             OSL_FAIL( "OAppDetailPageHelper::GetElementIcons: invalid element type!" );
-            return;
+            return OUString();
     }
-    _rImageId = ImageProvider::getDefaultImageResourceID( nDatabaseObjectType );
+
+    return ImageProvider::getDefaultImageResourceID(nDatabaseObjectType);
 }
 
 void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameAccess >& _xContainer)
 {
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
-    sal_uInt16 nImageId = 0;
     OString sHelpId;
     ImageProvider aImageProvider;
     Image aFolderImage;
@@ -626,7 +625,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
         default:
             OSL_FAIL("Illegal call!");
     }
-    getElementIcons( _eType, nImageId );
+    OUString sImageId = getElementIcons(_eType);
 
     if ( !m_pLists[_eType] )
     {
@@ -637,7 +636,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     {
         if ( !m_pLists[_eType]->GetEntryCount() && _xContainer.is() )
         {
-            fillNames( _xContainer, _eType, nImageId, nullptr );
+            fillNames( _xContainer, _eType, sImageId, nullptr );
 
             m_pLists[_eType]->SelectAll(false);
         }
@@ -682,7 +681,7 @@ namespace
 }
 
 void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, const ElementType _eType,
-                                      const sal_uInt16 _nImageId, SvTreeListEntry* _pParent )
+                                      const OUString& rImageId, SvTreeListEntry* _pParent )
 {
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
     OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );
@@ -707,13 +706,13 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
             {
                 pEntry = pList->InsertEntry( *pIter, _pParent, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
                 getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
-                fillNames( xSubElements, _eType, _nImageId, pEntry );
+                fillNames( xSubElements, _eType, rImageId, pEntry );
             }
             else
             {
                 pEntry = pList->InsertEntry( *pIter, _pParent );
 
-                Image aImage{BitmapEx(ModuleRes(_nImageId))};
+                Image aImage{BitmapEx(rImageId)};
                 pList->SetExpandedEntryBmp(pEntry, aImage);
                 pList->SetCollapsedEntryBmp(pEntry, aImage);
             }
@@ -829,20 +828,19 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUS
             }
         }
 
-        sal_uInt16 nImageId = 0;
-        getElementIcons( _eType, nImageId );
+        OUString sImageId = getElementIcons(_eType);
         Reference<XNameAccess> xContainer(_rObject,UNO_QUERY);
         if ( xContainer.is() )
         {
             const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
             pRet = pTreeView->InsertEntry( _rName, pEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
-            fillNames( xContainer, _eType, nImageId, pRet );
+            fillNames( xContainer, _eType, sImageId, pRet );
         }
         else
         {
             pRet = pTreeView->InsertEntry( _rName, pEntry );
 
-            Image aImage{BitmapEx(ModuleRes(nImageId))};
+            Image aImage{BitmapEx(sImageId)};
             pTreeView->SetExpandedEntryBmp(  pRet, aImage );
             pTreeView->SetCollapsedEntryBmp( pRet, aImage );
         }

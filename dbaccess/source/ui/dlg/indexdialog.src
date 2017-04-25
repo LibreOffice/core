@@ -52,11 +52,6 @@ String STR_LOGICAL_INDEX_NAME
     Text [ en-US ] = "index";
 };
 
-Bitmap BMP_PKEYICON
-{
-    File = "pkey.png";
-};
-
 String STR_NEED_INDEX_FIELDS
 {
     Text [ en-US ] = "The index must contain at least one field.";

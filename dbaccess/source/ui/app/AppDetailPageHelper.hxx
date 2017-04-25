@@ -105,7 +105,7 @@ namespace dbaui
 
         /** retrieves the resource ids of the images representing elements of the given type
         */
-        static void getElementIcons( ElementType _eType, sal_uInt16& _rImageId);
+        static OUString getElementIcons(ElementType _eType);
 
         /** fills the names in the listbox
             @param  _xContainer
@@ -119,7 +119,7 @@ namespace dbaui
         */
         void fillNames( const css::uno::Reference< css::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
-                        const sal_uInt16 _nImageId,
+                        const OUString& rImageId,
                         SvTreeListEntry* _pParent );
 
         /** sets the detail page

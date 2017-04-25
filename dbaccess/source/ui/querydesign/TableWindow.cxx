@@ -37,6 +37,7 @@
 #include "querycontroller.hxx"
 #include "dbu_qry.hrc"
 #include "dbustrings.hrc"
+#include "bitmaps.hlst"
 #include <comphelper/extract.hxx>
 #include "UITools.hxx"
 #include "TableWindowAccess.hxx"
@@ -194,7 +195,7 @@ bool OTableWindow::FillListBox()
     }
 
     // mark all primary keys with special image
-    Image aPrimKeyImage = Image(BitmapEx(ModuleRes(BMP_PRIMARY_KEY)));
+    Image aPrimKeyImage = Image(BitmapEx(BMP_PRIMARY_KEY));
 
     if (GetData()->IsShowAll())
     {
