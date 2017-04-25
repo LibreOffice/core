@@ -1405,10 +1405,14 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                             if (bIsQuoted && bQuotedAsText)
                                 nFmt = SC_COL_TEXT;
 
-                            bMultiLine |= lcl_PutString(
-                                aDocImport, !mbOverwriting, nCol, nRow, nTab, aCell, nFmt,
-                                &aNumFormatter, bDetectNumFormat, aTransliteration, aCalendar,
-                                pEnglishTransliteration.get(), pEnglishCalendar.get());
+                            size_t rRangeCount = aRanges.size();
+                            for (size_t j = 0; j < rRangeCount; j++) {
+                                nTab = aRanges[j]->aStart.Tab();
+                                bMultiLine |= lcl_PutString(
+                                    aDocImport, !mbOverwriting, nCol, nRow, nTab, aCell, nFmt,
+                                    &aNumFormatter, bDetectNumFormat, aTransliteration, aCalendar,
+                                    pEnglishTransliteration.get(), pEnglishCalendar.get());
+                            }
                         }
                         ++nCol;
                     }
@@ -1448,10 +1452,14 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                             if (bIsQuoted && bQuotedAsText)
                                 nFmt = SC_COL_TEXT;
 
-                            bMultiLine |= lcl_PutString(
-                                aDocImport, !mbOverwriting, nCol, nRow, nTab, aCell, nFmt,
-                                &aNumFormatter, bDetectNumFormat, aTransliteration,
-                                aCalendar, pEnglishTransliteration.get(), pEnglishCalendar.get());
+                            size_t rRangeCount = aRanges.size();
+                            for (size_t j = 0; j < rRangeCount; j++) {
+                                nTab = aRanges[j]->aStart.Tab();
+                                bMultiLine |= lcl_PutString(
+                                    aDocImport, !mbOverwriting, nCol, nRow, nTab, aCell, nFmt,
+                                    &aNumFormatter, bDetectNumFormat, aTransliteration,
+                                    aCalendar, pEnglishTransliteration.get(), pEnglishCalendar.get());
+                            }
                         }
                         ++nCol;
                     }
