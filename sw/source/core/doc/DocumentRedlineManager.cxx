@@ -30,6 +30,7 @@
 #include <swmodule.hxx>
 #include <editsh.hxx>
 #include <vcl/layout.hxx>
+#include <comphelper/flagguard.hxx>
 
 using namespace com::sun::star;
 
@@ -1229,10 +1230,15 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 // also dealt with when moving the indices.
                                 if( bCallDelete )
                                 {
+                                    ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pRedl );
                                     if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    {
+                                        assert(false); // can't happen
                                         pNewRedl = nullptr;
+                                    }
+                                    bCompress = true; // delayed compress
                                 }
                                 delete pRedl;
                             }
@@ -1256,10 +1262,15 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 {
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
+                                    ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
                                     if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    {
+                                        assert(false); // can't happen
                                         pNewRedl = nullptr;
+                                    }
+                                    bCompress = true; // delayed compress
                                     n = 0;      // re-initialize
                                 }
                                 bDec = true;
@@ -1282,10 +1293,15 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 {
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
+                                    ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
                                     if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    {
+                                        assert(false); // can't happen
                                         pNewRedl = nullptr;
+                                    }
+                                    bCompress = true; // delayed compress
                                     n = 0;      // re-initialize
                                     bDec = true;
                                 }
@@ -1780,6 +1796,11 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
 
 void DocumentRedlineManager::CompressRedlines()
 {
+    if (m_isForbidCompressRedlines)
+    {
+        return;
+    }
+
     CHECK_REDLINE( *this )
 
     void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = nullptr;
