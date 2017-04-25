@@ -21,6 +21,7 @@
 
 #include "modulepcr.hxx"
 #include "formresid.hrc"
+#include "bitmaps.hlst"
 #include "formstrings.hxx"
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
@@ -44,39 +45,39 @@ namespace pcr
 
     Image GetImage( const Reference< XPropertySet >& _rxSet )
     {
-        sal_uInt16 nImageId = RID_EXTBMP_CONTROL;
+        OUString sImageId = RID_EXTBMP_CONTROL;
         // TODO: classify controls also in Basic propbrw
         if ( _rxSet.is() && ::comphelper::hasProperty( PROPERTY_CLASSID, _rxSet ) )
         {
             switch( ::comphelper::getINT16( _rxSet->getPropertyValue( PROPERTY_CLASSID ) ) )
             {
-            case FormComponentType::COMMANDBUTTON:  nImageId = RID_EXTBMP_BUTTON; break;
-            case FormComponentType::FIXEDTEXT:      nImageId = RID_EXTBMP_FIXEDTEXT; break;
-            case FormComponentType::TEXTFIELD:      nImageId = RID_EXTBMP_EDITBOX; break;
-            case FormComponentType::RADIOBUTTON:    nImageId = RID_EXTBMP_RADIOBUTTON; break;
-            case FormComponentType::CHECKBOX:       nImageId = RID_EXTBMP_CHECKBOX; break;
-            case FormComponentType::LISTBOX:        nImageId = RID_EXTBMP_LISTBOX; break;
-            case FormComponentType::COMBOBOX:       nImageId = RID_EXTBMP_COMBOBOX; break;
-            case FormComponentType::GROUPBOX:       nImageId = RID_EXTBMP_GROUPBOX; break;
-            case FormComponentType::IMAGEBUTTON:    nImageId = RID_EXTBMP_IMAGEBUTTON; break;
-            case FormComponentType::FILECONTROL:    nImageId = RID_EXTBMP_FILECONTROL; break;
-            case FormComponentType::HIDDENCONTROL:  nImageId = RID_EXTBMP_HIDDEN; break;
-            case FormComponentType::DATEFIELD:      nImageId = RID_EXTBMP_DATEFIELD; break;
-            case FormComponentType::TIMEFIELD:      nImageId = RID_EXTBMP_TIMEFIELD; break;
-            case FormComponentType::NUMERICFIELD:   nImageId = RID_EXTBMP_NUMERICFIELD; break;
-            case FormComponentType::CURRENCYFIELD:  nImageId = RID_EXTBMP_CURRENCYFIELD; break;
-            case FormComponentType::PATTERNFIELD:   nImageId = RID_EXTBMP_PATTERNFIELD; break;
-            case FormComponentType::IMAGECONTROL:   nImageId = RID_EXTBMP_IMAGECONTROL; break;
-            case FormComponentType::GRIDCONTROL:    nImageId = RID_EXTBMP_GRID; break;
-            case FormComponentType::SCROLLBAR:      nImageId = RID_EXTBMP_SCROLLBAR; break;
-            case FormComponentType::SPINBUTTON:     nImageId = RID_EXTBMP_SPINBUTTON; break;
-            case FormComponentType::NAVIGATIONBAR:  nImageId = RID_EXTBMP_NAVIGATIONBAR; break;
+            case FormComponentType::COMMANDBUTTON:  sImageId = RID_EXTBMP_BUTTON; break;
+            case FormComponentType::FIXEDTEXT:      sImageId = RID_EXTBMP_FIXEDTEXT; break;
+            case FormComponentType::TEXTFIELD:      sImageId = RID_EXTBMP_EDITBOX; break;
+            case FormComponentType::RADIOBUTTON:    sImageId = RID_EXTBMP_RADIOBUTTON; break;
+            case FormComponentType::CHECKBOX:       sImageId = RID_EXTBMP_CHECKBOX; break;
+            case FormComponentType::LISTBOX:        sImageId = RID_EXTBMP_LISTBOX; break;
+            case FormComponentType::COMBOBOX:       sImageId = RID_EXTBMP_COMBOBOX; break;
+            case FormComponentType::GROUPBOX:       sImageId = RID_EXTBMP_GROUPBOX; break;
+            case FormComponentType::IMAGEBUTTON:    sImageId = RID_EXTBMP_IMAGEBUTTON; break;
+            case FormComponentType::FILECONTROL:    sImageId = RID_EXTBMP_FILECONTROL; break;
+            case FormComponentType::HIDDENCONTROL:  sImageId = RID_EXTBMP_HIDDEN; break;
+            case FormComponentType::DATEFIELD:      sImageId = RID_EXTBMP_DATEFIELD; break;
+            case FormComponentType::TIMEFIELD:      sImageId = RID_EXTBMP_TIMEFIELD; break;
+            case FormComponentType::NUMERICFIELD:   sImageId = RID_EXTBMP_NUMERICFIELD; break;
+            case FormComponentType::CURRENCYFIELD:  sImageId = RID_EXTBMP_CURRENCYFIELD; break;
+            case FormComponentType::PATTERNFIELD:   sImageId = RID_EXTBMP_PATTERNFIELD; break;
+            case FormComponentType::IMAGECONTROL:   sImageId = RID_EXTBMP_IMAGECONTROL; break;
+            case FormComponentType::GRIDCONTROL:    sImageId = RID_EXTBMP_GRID; break;
+            case FormComponentType::SCROLLBAR:      sImageId = RID_EXTBMP_SCROLLBAR; break;
+            case FormComponentType::SPINBUTTON:     sImageId = RID_EXTBMP_SPINBUTTON; break;
+            case FormComponentType::NAVIGATIONBAR:  sImageId = RID_EXTBMP_NAVIGATIONBAR; break;
             default:
                 OSL_FAIL( "TabOrderDialog::GetImage: unknown control type" );
             }
         }
 
-        return Image(BitmapEx(PcrRes(nImageId)));;
+        return Image(BitmapEx(sImageId));;
     }
 
     }

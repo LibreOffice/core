@@ -1,0 +1,54 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_EXTENSIONS_INC_BITMAPS_HRC
+#define INCLUDED_EXTENSIONS_INC_BITMAPS_HRC
+
+#define RID_EXTBMP_CONTROL                  "res/sx10144.png"
+#define RID_EXTBMP_BUTTON                   "res/sx10594.png"
+#define RID_EXTBMP_RADIOBUTTON              "res/sx10595.png"
+#define RID_EXTBMP_CHECKBOX                 "res/sx10596.png"
+#define RID_EXTBMP_FIXEDTEXT                "res/sx10597.png"
+#define RID_EXTBMP_GROUPBOX                 "res/sx10598.png"
+#define RID_EXTBMP_EDITBOX                  "res/sx10599.png"
+#define RID_EXTBMP_LISTBOX                  "res/sx10600.png"
+#define RID_EXTBMP_COMBOBOX                 "res/sx10601.png"
+#define RID_EXTBMP_GRID                     "res/sx10603.png"
+#define RID_EXTBMP_IMAGEBUTTON              "res/sx10604.png"
+#define RID_EXTBMP_FILECONTROL              "res/sx10605.png"
+#define RID_EXTBMP_DATEFIELD                "res/sx10704.png"
+#define RID_EXTBMP_TIMEFIELD                "res/sx10705.png"
+#define RID_EXTBMP_NUMERICFIELD             "res/sx10706.png"
+#define RID_EXTBMP_CURRENCYFIELD            "res/sx10707.png"
+#define RID_EXTBMP_PATTERNFIELD             "res/sx10708.png"
+#define RID_EXTBMP_IMAGECONTROL             "res/sx10710.png"
+#define RID_EXTBMP_HIDDEN                   "res/sx18022.png"
+#define RID_EXTBMP_FORMATTEDFIELD           "res/sx10728.png"
+#define RID_EXTBMP_FILTER                   "res/sx10715.png"
+#define RID_EXTBMP_FORMS                    "res/sx18013.png"
+#define RID_EXTBMP_FORM                     "res/sx10593.png"
+#define RID_EXTBMP_COLLAPSEDNODE            "res/sx18002.png"
+#define RID_EXTBMP_EXPANDEDNODE             "res/sx18003.png"
+#define RID_EXTBMP_SCROLLBAR                "res/sx10768.png"
+#define RID_EXTBMP_SPINBUTTON               "res/sx10769.png"
+#define RID_EXTBMP_NAVIGATIONBAR            "res/sx10607.png"
+#define RID_UPDATE_AVAILABLE_16             "extensions/source/update/ui/onlineupdate_16.png"
+#define RID_UPDATE_AVAILABLE_26             "extensions/source/update/ui/onlineupdate_26.png"
+#define BMP_TABLE                           "res/sx03188.png"
+#define BMP_QUERY                           "res/sx03202.png"
+#define RID_EXTBMP_AUTOFILTER_SC            "res/sc10716.png"
+#define RID_EXTBMP_FILTERCRIT_SC            "res/sc10715.png"
+#define RID_EXTBMP_REMOVE_FILTER_SORT_SC    "res/sc10711.png"
+#define RID_EXTBMP_AUTOFILTER_LC            "res/lc10716.png"
+#define RID_EXTBMP_FILTERCRIT_LC            "res/lc10715.png"
+#define RID_EXTBMP_REMOVE_FILTER_SORT_LC    "res/lc10711.png"
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
