@@ -32,10 +32,6 @@
 #define STR_PREVIEW                         (RID_FPICKER_START+38)
 #define STR_DEFAULT_DIRECTORY               (RID_FPICKER_START+39)
 #define STR_PLACES_TITLE                    (RID_FPICKER_START+40)
-#define BMP_FILEDLG_BTN_UP                  (RID_FPICKER_START+41)
-#define BMP_FILEDLG_CREATEFOLDER            (RID_FPICKER_START+42)
-#define BMP_FILEDLG_PLACE_LOCAL             (RID_FPICKER_START+43)
-#define BMP_FILEDLG_PLACE_REMOTE            (RID_FPICKER_START+44)
 
 #endif
 

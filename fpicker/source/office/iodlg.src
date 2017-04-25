@@ -22,26 +22,6 @@
 #include "iodlg.hrc"
 #include "OfficeFilePicker.hrc"
 
-Bitmap BMP_FILEDLG_BTN_UP
-{
-    File = "fp010.png";
-};
-
-Bitmap BMP_FILEDLG_CREATEFOLDER
-{
-    File = "fp014.png";
-};
-
-Bitmap BMP_FILEDLG_PLACE_LOCAL
-{
-    File = "fp015.png";
-};
-
-Bitmap BMP_FILEDLG_PLACE_REMOTE
-{
-    File = "fp016.png";
-};
-
 // strings *******************************************************************
 
 String STR_EXPLORERFILE_OPEN

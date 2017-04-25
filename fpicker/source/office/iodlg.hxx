@@ -238,7 +238,7 @@ public:
     inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
 
-    static Image                GetButtonImage( sal_uInt16 _nButtonId );
+    static Image                GetButtonImage(const OUString& rButtonId);
 
     bool                        ContentIsFolder( const OUString& rURL ) override { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
     bool                        ContentHasParentFolder( const OUString& rURL );
