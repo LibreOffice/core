@@ -894,7 +894,7 @@ inline std::unique_ptr<SwHTMLTableLayoutColumn> HTMLTableColumn::CreateLayoutInf
 inline sal_uInt16 HTMLTableColumn::GetFrameFormatIdx( bool bBorderLine,
                                              sal_Int16 eVertOrient )
 {
-    OSL_ENSURE( text::VertOrientation::TOP != eVertOrient, "Top ist nicht erlaubt" );
+    OSL_ENSURE( text::VertOrientation::TOP != eVertOrient, "Top is not allowed" );
     sal_uInt16 n = bBorderLine ? 3 : 0;
     switch( eVertOrient )
     {
@@ -3588,7 +3588,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 // the box section (the adjustment parameter is a dummy for now
                 // and will be corrected later)
                 OSL_ENSURE( !m_pPam->GetPoint()->nContent.GetIndex(),
-                        "Der Absatz hinter der Tabelle ist nicht leer!" );
+                        "The paragraph after the table is not empty!" );
                 const SwTable* pSwTable = m_xDoc->InsertTable(
                         SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
                         *m_pPam->GetPoint(), 1, 1, text::HoriOrientation::LEFT );
