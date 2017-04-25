@@ -21,6 +21,7 @@
 
 #include "impdialog.hxx"
 #include "impdialog.hrc"
+#include "bitmaps.hlst"
 #include <officecfg/Office/Common.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
@@ -1602,8 +1603,8 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
     m_pExplanation->set_height_request(aSize.Height());
 
     // load images
-    Image aWarnImg( BitmapEx( PDFFilterResId( IMG_WARN ) ) );
-    Image aErrImg( BitmapEx( PDFFilterResId( IMG_ERR ) ) );
+    Image aWarnImg(BitmapEx(IMG_WARN));
+    Image aErrImg(BitmapEx(IMG_ERR));
 
     for( std::set<vcl::PDFWriter::ErrorCode>::const_iterator it = rErrors.begin();
          it != rErrors.end(); ++it )
