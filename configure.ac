@@ -5111,13 +5111,14 @@ find_al()
         fi
     done
 
-    # TODO(davido): We need this additional check to detect 4.6.2
-    # This should be made generic, though
-    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/4.6.2\WinSDK-NetFx40Tools/InstallationFolder"
-    if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
-        altest=$regvalue
-        return
-    fi
+    # We need this additional check to detect 4.6.2 or above.
+    for ver in 4.7 4.6.2; do
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
+        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
+            altest=$regvalue
+            return
+        fi
+    done
 }
 
 find_dotnetsdk()
@@ -5139,7 +5140,7 @@ find_dotnetsdk46()
 {
     unset frametest
 
-    for ver in 4.6.2 4.6.1 4.6; do
+    for ver in 4.7 4.6.2 4.6.1 4.6; do
         reg_get_value_64 "HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
