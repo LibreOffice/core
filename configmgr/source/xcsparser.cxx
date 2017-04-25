@@ -125,9 +125,9 @@ xmlreader::XmlReader::Text XcsParser::getTextMode() {
 
 bool XcsParser::startElement(
     xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-    std::set< OUString > const * existingDependencies)
+    std::set< OUString > const * /*existingDependencies*/)
 {
-    if (valueParser_.startElement(reader, nsId, name, existingDependencies)) {
+    if (valueParser_.startElement(reader, nsId, name)) {
         return true;
     }
     if (state_ == STATE_START) {

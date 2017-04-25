@@ -65,8 +65,8 @@ public:
     void UnsetICFocus( SalFrame* pFrame );
     void HandleDestroyIM();
 
-    void EndExtTextInput( EndExtTextInputFlags nFlags );        // unused
-    void  CommitKeyEvent( sal_Unicode* pText, std::size_t nLength );
+    void EndExtTextInput();
+    void CommitKeyEvent( sal_Unicode* pText, std::size_t nLength );
     int  UpdateSpotLocation();
 
     void Map( SalFrame *pFrame );

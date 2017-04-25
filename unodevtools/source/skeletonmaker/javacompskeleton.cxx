@@ -289,7 +289,7 @@ void generateXLocalizableBodies(std::ostream& o) {
         "        return m_locale;\n    }\n\n";
 }
 
-void generateXAddInBodies(std::ostream& o, ProgramOptions const &)
+void generateXAddInBodies(std::ostream& o)
 {
     // com.sun.star.sheet.XAddIn:
     // getProgrammaticFuntionName
@@ -515,7 +515,7 @@ void generateMethodBodies(std::ostream& o,
                     generated.add(u2b(type));
                     continue;
                 } else if (type == "com.sun.star.sheet.XAddIn") {
-                    generateXAddInBodies(o, options);
+                    generateXAddInBodies(o);
                     generated.add(u2b(type));
 
                     // special handling of XLocalizable -> parent of XAddIn

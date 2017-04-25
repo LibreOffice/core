@@ -55,11 +55,11 @@ using namespace vcl_sal;
  ***************************************************************/
 extern "C" {
 GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
-                                     GdkEvent* event,
+                                     GdkEvent* /*event*/,
                                      gpointer data )
 {
     GtkSalDisplay *pDisplay = static_cast<GtkSalDisplay *>(data);
-    return pDisplay->filterGdkEvent( sys_event, event );
+    return pDisplay->filterGdkEvent( sys_event );
 }
 }
 
@@ -116,8 +116,7 @@ void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 
 }
 
-GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
-                                               GdkEvent* )
+GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event )
 {
     GdkFilterReturn aFilterReturn = GDK_FILTER_CONTINUE;
     XEvent *pEvent = static_cast<XEvent *>(sys_event);

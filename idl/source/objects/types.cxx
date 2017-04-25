@@ -156,8 +156,7 @@ SvMetaType * SvMetaType::GetReturnType() const
     return static_cast<SvMetaType *>(GetRef());
 }
 
-bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & ,
-                                  SvTokenStream & rInStm )
+bool SvMetaType::ReadHeaderSvIdl( SvTokenStream & rInStm )
 {
     bool bOk = false;
     sal_uInt32  nTokPos = rInStm.Tell();
@@ -181,7 +180,7 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & ,
 bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
                             SvTokenStream & rInStm )
 {
-    if( ReadHeaderSvIdl( rBase, rInStm ) )
+    if( ReadHeaderSvIdl( rInStm ) )
     {
         rBase.Write(OString('.'));
         return SvMetaReference::ReadSvIdl( rBase, rInStm );

@@ -2370,10 +2370,10 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
     return;
 }
 
-void X11SalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
+void X11SalFrame::EndExtTextInput( EndExtTextInputFlags )
 {
     if (mpInputContext != nullptr)
-          mpInputContext->EndExtTextInput( nFlags );
+          mpInputContext->EndExtTextInput();
 }
 
 OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )

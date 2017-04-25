@@ -74,7 +74,7 @@ public:
     /// wraps cupsGetPPD, so unlink after use !
     const PPDParser* createCUPSParser( const OUString& rPrinter );
 
-    const char* authenticateUser( const char* );
+    const char* authenticateUser();
 
     virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand ) override;
     virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) override;

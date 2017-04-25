@@ -36,11 +36,10 @@ namespace x11 {
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
     {
         ::Window                    m_aDropWindow;
-        Time                        m_nTimestamp;
         SelectionManager&           m_rManager;
         css::uno::Reference< XInterface >     m_xManagerRef;
     public:
-        DropTargetDropContext( ::Window, Time, SelectionManager& );
+        DropTargetDropContext( ::Window, SelectionManager& );
         virtual ~DropTargetDropContext() override;
 
         // XDropTargetDropContext
@@ -53,11 +52,10 @@ namespace x11 {
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
     {
         ::Window                    m_aDropWindow;
-        Time                        m_nTimestamp;
         SelectionManager&           m_rManager;
         css::uno::Reference< XInterface >     m_xManagerRef;
     public:
-        DropTargetDragContext( ::Window, Time, SelectionManager& );
+        DropTargetDragContext( ::Window, SelectionManager& );
         virtual ~DropTargetDragContext() override;
 
         // XDropTargetDragContext
@@ -69,11 +67,10 @@ namespace x11 {
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDragSourceContext>
     {
         ::Window                    m_aDropWindow;
-        Time                        m_nTimestamp;
         SelectionManager&           m_rManager;
         css::uno::Reference< XInterface >     m_xManagerRef;
     public:
-        DragSourceContext( ::Window, Time, SelectionManager& );
+        DragSourceContext( ::Window, SelectionManager& );
         virtual ~DragSourceContext() override;
 
         // XDragSourceContext

@@ -131,7 +131,7 @@ public:
     void DrawLineSegment(float x1, float y1, float x2, float y2);
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA = false );
     void DrawRegionBand( const RegionBand& rRegion );
-    void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
+    void DrawTextureRect( const SalTwoRect& rPosAry );
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTransformedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY );
     void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted, bool pPremultiplied );

@@ -609,7 +609,7 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 // multi byte input method only
 
 void
-SalI18N_InputContext::EndExtTextInput( EndExtTextInputFlags /*nFlags*/ )
+SalI18N_InputContext::EndExtTextInput()
 {
     if ( mbUseable && (maContext != nullptr) && maClientData.pFrame )
     {

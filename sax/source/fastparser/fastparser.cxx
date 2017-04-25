@@ -205,7 +205,7 @@ namespace sax_fastparser {
 class FastSaxParserImpl
 {
 public:
-    explicit FastSaxParserImpl(FastSaxParser* pFront);
+    explicit FastSaxParserImpl();
     ~FastSaxParserImpl();
 
     // XFastParser
@@ -234,8 +234,8 @@ public:
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
-        int numNamespaces, const xmlChar** namespaces, int numAttributes, int defaultedAttributes, const xmlChar **attributes );
-    void callbackEndElement( const xmlChar* localName, const xmlChar* prefix, const xmlChar* URI );
+        int numNamespaces, const xmlChar** namespaces, int numAttributes, const xmlChar **attributes );
+    void callbackEndElement();
     void callbackCharacters( const xmlChar* s, int nLen );
 #if 0
     bool callbackExternalEntityRef( XML_Parser parser, const xmlChar *openEntityNames, const xmlChar *base, const xmlChar *systemId, const xmlChar *publicId);
@@ -309,16 +309,16 @@ private:
 extern "C" {
 
 static void call_callbackStartElement(void *userData, const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
-    int numNamespaces, const xmlChar** namespaces, int numAttributes, int defaultedAttributes, const xmlChar **attributes)
+    int numNamespaces, const xmlChar** namespaces, int numAttributes, int /*defaultedAttributes*/, const xmlChar **attributes)
 {
     FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
-    pFastParser->callbackStartElement( localName, prefix, URI, numNamespaces, namespaces, numAttributes, defaultedAttributes, attributes );
+    pFastParser->callbackStartElement( localName, prefix, URI, numNamespaces, namespaces, numAttributes, attributes );
 }
 
-static void call_callbackEndElement(void *userData, const xmlChar* localName, const xmlChar* prefix, const xmlChar* URI)
+static void call_callbackEndElement(void *userData, const xmlChar* /*localName*/, const xmlChar* /*prefix*/, const xmlChar* /*URI*/)
 {
     FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
-    pFastParser->callbackEndElement( localName, prefix, URI );
+    pFastParser->callbackEndElement();
 }
 
 static void call_callbackCharacters( void *userData , const xmlChar *s , int nLen )
@@ -631,7 +631,7 @@ void Entity::saveException( const Any & e )
 
 namespace sax_fastparser {
 
-FastSaxParserImpl::FastSaxParserImpl( FastSaxParser* ) :
+FastSaxParserImpl::FastSaxParserImpl() :
 #if 0
     mpFront(pFront),
 #endif
@@ -1063,7 +1063,7 @@ void FastSaxParserImpl::parse()
 
 // The C-Callbacks
 void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
-    int numNamespaces, const xmlChar** namespaces, int numAttributes, int /*defaultedAttributes*/, const xmlChar **attributes)
+    int numNamespaces, const xmlChar** namespaces, int numAttributes, const xmlChar **attributes)
 {
     if (!pendingCharacters.isEmpty())
         sendPendingCharacters();
@@ -1218,7 +1218,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     }
 }
 
-void FastSaxParserImpl::callbackEndElement( const xmlChar*, const xmlChar*, const xmlChar* )
+void FastSaxParserImpl::callbackEndElement()
 {
     if (!pendingCharacters.isEmpty())
         sendPendingCharacters();
@@ -1360,7 +1360,7 @@ bool FastSaxParserImpl::callbackExternalEntityRef(
 }
 #endif
 
-FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl(this)) {}
+FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl) {}
 
 FastSaxParser::~FastSaxParser()
 {

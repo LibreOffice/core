@@ -296,7 +296,7 @@ bool GenPspGraphics::setClipRegion( const vcl::Region& i_rClip )
     // TODO: support polygonal clipregions here
     RectangleVector aRectangles;
     i_rClip.GetRegionRectangles(aRectangles);
-    m_pPrinterGfx->BeginSetClipRegion(aRectangles.size());
+    m_pPrinterGfx->BeginSetClipRegion();
 
     for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {

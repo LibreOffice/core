@@ -451,13 +451,13 @@ namespace x11 {
         void deregisterDropTarget( ::Window aXLIB_Window );
 
         // for XDropTarget{Drag|Drop}Context
-        void accept( sal_Int8 dragOperation, ::Window aDropXLIB_Window, Time aTimestamp );
-        void reject( ::Window aDropXLIB_Window, Time aTimestamp );
-        void dropComplete( bool success, ::Window aDropXLIB_Window, Time aTimestamp );
+        void accept( sal_Int8 dragOperation, ::Window aDropXLIB_Window );
+        void reject( ::Window aDropXLIB_Window );
+        void dropComplete( bool success, ::Window aDropXLIB_Window );
 
         // for XDragSourceContext
         sal_Int32 getCurrentCursor() { return m_aCurrentCursor;}
-        void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window, Time aTimestamp );
+        void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window );
         void transferablesFlavorsChanged();
 
         void shutdown() throw();

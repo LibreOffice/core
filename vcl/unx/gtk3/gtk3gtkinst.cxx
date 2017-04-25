@@ -301,9 +301,9 @@ public:
     virtual void SAL_CALL removeClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
-    void ClipboardGet(GtkClipboard *clipboard, GtkSelectionData *selection_data, guint info);
-    void ClipboardClear(GtkClipboard *clipboard);
-    void OwnerPossiblyChanged(GtkClipboard *clipboard, GdkEvent *event);
+    void ClipboardGet(GtkSelectionData *selection_data, guint info);
+    void ClipboardClear();
+    void OwnerPossiblyChanged(GtkClipboard *clipboard);
 };
 
 OUString VclGtkClipboard::getImplementationName()
@@ -334,8 +334,7 @@ Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents()
     return m_aContents;
 }
 
-void VclGtkClipboard::ClipboardGet(GtkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
-                                   guint info)
+void VclGtkClipboard::ClipboardGet(GtkSelectionData *selection_data, guint info)
 {
     if (!m_aContents.is())
         return;
@@ -362,28 +361,28 @@ namespace
 
 namespace
 {
-    void ClipboardGetFunc(GtkClipboard *clipboard, GtkSelectionData *selection_data,
+    void ClipboardGetFunc(GtkClipboard */*clipboard*/, GtkSelectionData *selection_data,
                           guint info,
                           gpointer user_data_or_owner)
     {
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
-        pThis->ClipboardGet(clipboard, selection_data, info);
+        pThis->ClipboardGet(selection_data, info);
     }
 
-    void ClipboardClearFunc(GtkClipboard *clipboard, gpointer user_data_or_owner)
+    void ClipboardClearFunc(GtkClipboard */*clipboard*/, gpointer user_data_or_owner)
     {
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
-        pThis->ClipboardClear(clipboard);
+        pThis->ClipboardClear();
     }
 
-    void handle_owner_change(GtkClipboard *clipboard, GdkEvent *event, gpointer user_data)
+    void handle_owner_change(GtkClipboard *clipboard, GdkEvent */*event*/, gpointer user_data)
     {
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
-        pThis->OwnerPossiblyChanged(clipboard, event);
+        pThis->OwnerPossiblyChanged(clipboard);
     }
 }
 
-void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*event*/)
+void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard)
 {
     if (!m_aContents.is())
         return;
@@ -429,7 +428,7 @@ void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*
     }
 }
 
-void VclGtkClipboard::ClipboardClear(GtkClipboard * /*clipboard*/)
+void VclGtkClipboard::ClipboardClear()
 {
     for (auto &a : m_aGtkTargets)
         g_free(a.target);
@@ -541,7 +540,7 @@ VclGtkClipboard::~VclGtkClipboard()
     if (!m_aGtkTargets.empty())
     {
         gtk_clipboard_clear(clipboard);
-        ClipboardClear(clipboard);
+        ClipboardClear();
     }
     assert(m_aGtkTargets.empty());
 }
@@ -604,7 +603,7 @@ void VclGtkClipboard::setContents(
     if (!m_aGtkTargets.empty())
     {
         gtk_clipboard_clear(clipboard);
-        ClipboardClear(clipboard);
+        ClipboardClear();
     }
     assert(m_aGtkTargets.empty());
     if (m_aContents.is())

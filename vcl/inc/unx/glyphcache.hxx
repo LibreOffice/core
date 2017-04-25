@@ -73,9 +73,9 @@ public:
 private:
     friend class FreetypeFont;
     // used by FreetypeFont class only
-    void                    AddedGlyph( FreetypeFont&, GlyphData& );
+    void                    AddedGlyph( GlyphData& );
     void                    RemovingGlyph();
-    void                    UsingGlyph( FreetypeFont&, GlyphData& );
+    void                    UsingGlyph( GlyphData& );
 
 private:
     void                    GarbageCollect();
