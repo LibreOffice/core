@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_84da2a77",
+        "filename": "svx/source/svdraw/svdotxed.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-04-25T18:29:58Z",
+      "side": 1,
+      "message": "This comment corresponds to the now removed \"End Chaining-related code\" comment on line 334 before the change. Should it therefore be updated or removed?",
+      "revId": "7a581e7451945fc5fd341e474ca7b298b447c015",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
