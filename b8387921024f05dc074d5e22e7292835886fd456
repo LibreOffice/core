@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_bbaae96e",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-25T11:14:01Z",
+      "side": 1,
+      "message": "that doesn\u0027t work, does it?\n\nthe \"\u003c config_host.mk\" needs to go after the grep command and before the \"| sed...\"\n\nah no, it does actually work ... even in dash ... odd that i\u0027ve never seen this before.",
+      "revId": "b8387921024f05dc074d5e22e7292835886fd456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a176383c",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-25T11:14:01Z",
+      "side": 1,
+      "message": "this can be much easier, just replace \"$COREDIR...\" with \"${hook_name}\"",
+      "revId": "b8387921024f05dc074d5e22e7292835886fd456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_21824801",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-25T11:14:01Z",
+      "side": 1,
+      "message": "i think the hook_name variable is a full path now, so this is assign the wrong value to hook",
+      "revId": "b8387921024f05dc074d5e22e7292835886fd456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_81793c32",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-25T11:14:01Z",
+      "side": 1,
+      "message": "this can be much easier, just replace \"$COREDIR...\" with \"${hook_name}\"",
+      "revId": "b8387921024f05dc074d5e22e7292835886fd456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c173444c",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-25T11:14:01Z",
+      "side": 1,
+      "message": "this can be much easier, just replace \"$COREDIR...\" with \"${hook_name}\"",
+      "revId": "b8387921024f05dc074d5e22e7292835886fd456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e18e8026",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-25T11:14:01Z",
+      "side": 1,
+      "message": "this can be much easier, just replace \"$COREDIR...\" with \"${hook_name}\"",
+      "revId": "b8387921024f05dc074d5e22e7292835886fd456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_01946c35",
+        "filename": "g",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-25T11:14:01Z",
+      "side": 1,
+      "message": "this can be much easier, just replace \"$COREDIR...\" with \"${hook_name}\"",
+      "revId": "b8387921024f05dc074d5e22e7292835886fd456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
