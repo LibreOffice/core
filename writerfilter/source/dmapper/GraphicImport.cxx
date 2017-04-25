@@ -543,6 +543,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_PositiveSize2D_cy:
         {
             sal_Int32 nDim = oox::drawingml::convertEmuToHmm(nIntValue);
+            // drawingML equivalent of oox::vml::ShapeType::getAbsRectangle():
+            // make sure a shape isn't hidden implicitly just because it has
+            // zero height or width.
+            if (nDim == 0)
+                nDim = 1;
+
             if( nName == NS_ooxml::LN_CT_PositiveSize2D_cx )
                 m_pImpl->setXSize(nDim);
             else
