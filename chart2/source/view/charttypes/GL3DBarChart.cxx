@@ -592,8 +592,13 @@ GL3DBarChart::~GL3DBarChart()
 
     joinRenderThread();
 
-    if(mbValidContext)
+    if (mbValidContext)
+    {
         mpWindow->setRenderer(nullptr);
+        mpWindow->getContext().makeCurrent();
+        mpRenderer.reset();
+        mpWindow->getContext().resetCurrent();
+    }
 }
 
 void GL3DBarChart::create3DShapes(const std::vector<std::unique_ptr<VDataSeries> >& rDataSeriesContainer,
@@ -1123,6 +1128,9 @@ void GL3DBarChart::contextDestroyed()
 {
     SharedResourceAccess aResGuard(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
+    mpWindow->getContext().makeCurrent();
+    mpRenderer.reset();
+    mpWindow->getContext().resetCurrent();
     mbValidContext = false;
 }
 
