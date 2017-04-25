@@ -13,23 +13,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="3dp"
-            android:background="@color/toolbar_background"
-            app:theme="@style/LibreOfficeTheme.Toolbar"
-            tools:theme="@style/LibreOfficeTheme.Toolbar"
-            app:popupTheme="@style/LibreOfficeTheme" />
-
-        <include layout="@layout/toolbar_bottom"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
             android:orientation="vertical">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="3dp"
+                    android:background="@color/toolbar_background"
+                    app:theme="@style/LibreOfficeTheme.Toolbar"
+                    tools:theme="@style/LibreOfficeTheme.Toolbar"
+                    app:popupTheme="@style/LibreOfficeTheme" />
+
+            </android.support.design.widget.AppBarLayout>
 
             <RelativeLayout
                 android:id="@+id/gecko_layout"
@@ -50,6 +54,8 @@
             </RelativeLayout>
         </LinearLayout>
 
+        <include layout="@layout/toolbar_bottom"/>
+
         <RelativeLayout
             android:id="@+id/loadingPanel"
             android:layout_width="match_parent"
@@ -65,6 +71,7 @@
 
         </RelativeLayout>
 
+        <!--What's the use of this view? Can it be removed?-->
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
