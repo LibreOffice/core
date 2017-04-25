@@ -93,6 +93,30 @@
       "revId": "bf71b9a2a65776f77462094a25569eb1946c7c05",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_24f3360c",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2836,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-25T18:18:58Z",
+      "side": 1,
+      "message": "I interpret the r and c of https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part2.html#LEGACY_CHITEST as being actual rows and columns after elements have been ignored (\"For an empty element or an element of type Text or Boolean in A the element at the corresponding position of E is ignored, and vice versa.\"), otherwise that formula given with actual elements and the resulting degree of freedom IMHO doesn\u0027t make sense, or does it?",
+      "parentUuid": "5a3905b3_213b28ed",
+      "range": {
+        "startLine": 2836,
+        "startChar": 11,
+        "endLine": 2836,
+        "endChar": 25
+      },
+      "revId": "bf71b9a2a65776f77462094a25569eb1946c7c05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
