@@ -40,6 +40,10 @@
         <item android:id="@+id/action_save"
             android:title="@string/action_save"
             android:orderInCategory="100" />
+
+        <item android:id="@+id/action_UNO_commands"
+            android:title="@string/action_UNO_commands"
+            android:orderInCategory="100" />
     </group>
 
     <item android:id="@+id/action_presentation"
