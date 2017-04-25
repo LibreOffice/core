@@ -21,11 +21,6 @@
 
 #include "dp_gui.hrc"
 
-Bitmap RID_DLG_UPDATE_NORMALALERT
-{
-    File = "caution_12.png";
-};
-
 String RID_DLG_UPDATE_NONE {
     Text[en-US] = "No new updates are available.";
 };

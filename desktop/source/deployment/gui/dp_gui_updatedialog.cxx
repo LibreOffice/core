@@ -108,6 +108,7 @@
 
 #include "dp_gui.h"
 #include "dp_gui.hrc"
+#include "bitmaps.hlst"
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_shared.hxx"
@@ -603,7 +604,7 @@ UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & d
     m_enableUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_ENABLE ) ),
     m_dialog(dialog)
 {
-    SetNormalStaticImage(Image(BitmapEx(DpGuiResId(RID_DLG_UPDATE_NORMALALERT))));
+    SetNormalStaticImage(Image(BitmapEx(RID_DLG_UPDATE_NORMALALERT)));
 }
 
 sal_uInt16 UpdateDialog::CheckListBox::getItemCount() const {
