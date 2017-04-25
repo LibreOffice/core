@@ -160,13 +160,14 @@ struct SC_DLLPUBLIC ScNoteData
 class SC_DLLPUBLIC ScPostIt
 {
 public:
+    static sal_uInt32 mnLastPostItId;
 
     /** Creates an empty note and its caption object and places it according to
         the passed cell position. */
-    explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos );
+    explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nPostItId = 0 );
 
     /** Copy constructor. Clones the note and its caption to a new document. */
-    explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNote );
+    explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNote, sal_uInt32 nPostItId = 0  );
 
     /** Creates a note from the passed note data with existing caption object.
 
@@ -180,7 +181,7 @@ public:
      */
     explicit            ScPostIt(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            const ScNoteData& rNoteData, bool bAlwaysCreateCaption );
+                            const ScNoteData& rNoteData, bool bAlwaysCreateCaption, sal_uInt32 nPostItId = 0  );
 
     /** Removes the caption object from drawing layer, if this note is its owner. */
                         ~ScPostIt();
@@ -197,6 +198,9 @@ public:
                             const ScAddress& rOwnPos,
                             ScDocument& rDestDoc, const ScAddress& rDestPos,
                             bool bCloneCaption ) const;
+
+    /** Returns the note id. */
+    sal_uInt32 GetId() const { return mnPostItId; }
 
     /** Returns the data struct containing all note settings. */
     const ScNoteData& GetNoteData() const { return maNoteData;}
@@ -268,6 +272,7 @@ private:
 private:
     ScDocument&         mrDoc;              /// Parent document containing the note.
     mutable ScNoteData  maNoteData;         /// Note data with pointer to caption object.
+    sal_uInt32          mnPostItId;
 };
 
 class SC_DLLPUBLIC ScNoteUtil
@@ -334,7 +339,7 @@ public:
                             ScDocument& rDoc, const ScAddress& rPos,
                             SfxItemSet* pItemSet, OutlinerParaObject* pOutlinerObj,
                             const Rectangle& rCaptionRect, bool bShown,
-                            bool bAlwaysCreateCaption );
+                            bool bAlwaysCreateCaption, sal_uInt32 nPostItId = 0 );
 
     /** Creates a cell note based on the passed string and inserts it into the
         document.
@@ -355,7 +360,7 @@ public:
     static ScPostIt*    CreateNoteFromString(
                             ScDocument& rDoc, const ScAddress& rPos,
                             const OUString& rNoteText, bool bShown,
-                            bool bAlwaysCreateCaption );
+                            bool bAlwaysCreateCaption, sal_uInt32 nPostItId = 0 );
 
 };
 

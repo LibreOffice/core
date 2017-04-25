@@ -2053,6 +2053,18 @@ static char* getPostIts(LibreOfficeKitDocument* pThis)
     return strdup(aComments.toUtf8().getStr());
 }
 
+/// Returns the JSON representation of the positions of all the comments in the document
+static char* getPostItsPos(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+    OUString aComments = pDoc->getPostItsPos();
+    return strdup(aComments.toUtf8().getStr());
+}
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
@@ -2656,6 +2668,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:ViewAnnotations")
     {
         return getPostIts(pThis);
+    }
+    else if (aCommand == ".uno:ViewAnnotationsPosition")
+    {
+        return getPostItsPos(pThis);
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {

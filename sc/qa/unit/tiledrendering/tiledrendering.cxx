@@ -1080,14 +1080,18 @@ void ScTiledRenderingTest::testCommentCallback()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0"), aView1.m_aCommentCallbackResult.get<std::string>("tab"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0"), aView2.m_aCommentCallbackResult.get<std::string>("tab"));
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView1.m_aCommentCallbackResult.get<std::string>("cellPos"));
     CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
+
+    std::string aCommentId = aView1.m_aCommentCallbackResult.get<std::string>("id");
 
     // Edit a comment
     // Select some random cell, we should be able to edit the cell note without
@@ -1097,7 +1101,7 @@ void ScTiledRenderingTest::testCommentCallback()
         pTabViewShell->SetCursor(3, 100);
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", uno::makeAny(OUString("Sheet1.A2"))},
+        {"Id", uno::makeAny(OUString::createFromAscii(aCommentId.c_str()))},
         {"Text", uno::makeAny(OUString("Edited comment"))},
         {"Author", uno::makeAny(OUString("LOK User2"))},
     });
@@ -1107,8 +1111,8 @@ void ScTiledRenderingTest::testCommentCallback()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(aCommentId, aView2.m_aCommentCallbackResult.get<std::string>("id"));
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
@@ -1121,7 +1125,7 @@ void ScTiledRenderingTest::testCommentCallback()
         pTabViewShell->SetCursor(4, 43);
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", uno::makeAny(OUString("Sheet1.A2"))}
+        {"Id", uno::makeAny(OUString::createFromAscii(aCommentId.c_str()))}
     });
     comphelper::dispatchCommand(".uno:DeleteNote", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -1129,8 +1133,8 @@ void ScTiledRenderingTest::testCommentCallback()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(aCommentId, aView2.m_aCommentCallbackResult.get<std::string>("id"));
 
     mxComponent->dispose();
     mxComponent.clear();

@@ -1270,8 +1270,10 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
 
         ScNoteData aOldData;
         ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
+        sal_uInt32 nNoteId = 0;
         if( pOldNote )
         {
+            nNoteId = pOldNote->GetId();
             // ensure existing caption object before draw undo tracking starts
             pOldNote->GetOrCreateCaption( rPos );
             // rescue note data for undo
@@ -1288,7 +1290,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         // create new note (creates drawing undo action for the new caption object)
         ScNoteData aNewData;
         ScPostIt* pNewNote = nullptr;
-        if( (pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true )) )
+        if( (pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true, nNoteId )) )
         {
             if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
             if( pDate ) pNewNote->SetDate( *pDate );
