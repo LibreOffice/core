@@ -49,10 +49,9 @@ SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
     if ((RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
         HtmlPosition::Inside == GetOutPos() )
     {
-        // Auto-gebundene Rahmen werden ein Zeichen weiter hinten
-        // ausgegeben, weil dann die Positionierung mit Netscape
-        // uebereinstimmt.
-        OSL_ENSURE( rAnchor.GetContentAnchor(), "Keine Anker-Position?" );
+        // Output of auto-bound frames will be a character farther back,
+        // because then the position aligns with Netscape.
+        OSL_ENSURE( rAnchor.GetContentAnchor(), "No anchor position?" );
         if( rAnchor.GetContentAnchor() )
         {
             nContentIdx = rAnchor.GetContentAnchor()->nContent.GetIndex();
@@ -61,7 +60,7 @@ SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
             if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
             {
                 const SwContentNode *pCNd = pNdIdx->GetNode().GetContentNode();
-                OSL_ENSURE( pCNd, "Kein Content-Node an PaM-Position" );
+                OSL_ENSURE( pCNd, "No Content-Node at PaM position" );
                 if( pCNd && nContentIdx < pCNd->Len() )
                     nContentIdx++;
             }

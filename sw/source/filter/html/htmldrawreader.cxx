@@ -98,11 +98,11 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         nUpperSpace = nLowerSpace = (sal_uInt16)aTwipSpc.Height();
     }
 
-    // linken/rechten Rand setzen
+    // set left/right border
     const SfxPoolItem *pItem;
     if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
     {
-        // Ggf. den Erstzeilen-Einzug noch plaetten
+        // maybe flatten the first line indentation
         const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
         aLRItem.SetTextFirstLineOfst( 0 );
@@ -126,10 +126,10 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aFrameSet.Put( aLRItem );
     }
 
-    // oberen/unteren Rand setzen
+    // set top/bottom border
     if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true, &pItem ) )
     {
-        // Ggf. den Erstzeilen-Einzug noch plaetten
+        // maybe flatten the first line indentation
         const SvxULSpaceItem *pULItem = static_cast<const SvxULSpaceItem *>(pItem);
         if( rCSS1PropInfo.m_bTopMargin )
         {
@@ -316,7 +316,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 break;
 
             case HtmlOptionId::WIDTH:
-                // erstmal nur als Pixelwerte merken!
+                // first only save as pixel value!
                 nWidth = rOption.GetNumber();
                 bPrcWidth = rOption.GetString().indexOf('%') != -1;
                 if( bPrcWidth && nWidth>100 )
@@ -324,19 +324,19 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 break;
 
             case HtmlOptionId::HEIGHT:
-                // erstmal nur als Pixelwerte merken!
+                // first only save as pixel value!
                 nHeight = rOption.GetNumber();
                 if( rOption.GetString().indexOf('%') != -1 )
                     nHeight = 0;
                 break;
 
             case HtmlOptionId::HSPACE:
-                // erstmal nur als Pixelwerte merken!
+                // first only save as pixel value!
                 aSpace.Height() = rOption.GetNumber();
                 break;
 
             case HtmlOptionId::VSPACE:
-                // erstmal nur als Pixelwerte merken!
+                // first only save as pixel value!
                 aSpace.Width() = rOption.GetNumber();
                 break;
 
@@ -351,7 +351,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         }
     }
 
-    // Ein DrawTextobj anlegen
+    // create a DrawTextobj
     // #i52858# - method name changed
     SwDrawModel* pModel = m_xDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SdrPage* pPg = pModel->GetPage( 0 );
@@ -365,11 +365,11 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( !aId.isEmpty() )
         InsertBookmark( aId );
 
-    // (Nur) Alternate leueft per Default von links nach rechts
+    // (only) Alternate runs from left to right as default
     if( SdrTextAniKind::Alternate==eAniKind && !bDirection )
         eAniDir = SdrTextAniDirection::Right;
 
-    // die fuer das Scrollen benoetigten Attribute umsetzen
+    // re set the attributes needed for scrolling
     sal_uInt16 aWhichMap[7] =   { XATTR_FILL_FIRST,   XATTR_FILL_LAST,
                               SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                               EE_CHAR_START,      EE_CHAR_END,
@@ -384,21 +384,21 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     aItemSet.Put( SdrTextAniAmountItem( nAmount ) );
     if( SdrTextAniKind::Alternate==eAniKind )
     {
-        // (Nur) Alternate startet und stoppt per default Inside
+        // (only) Alternate starts and ends Inside as default
         aItemSet.Put( SdrTextAniStartInsideItem(true) );
         aItemSet.Put( SdrTextAniStopInsideItem(true) );
         if( SdrTextAniDirection::Left==eAniDir )
             aItemSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
     }
 
-    // die Default-Farbe (aus der Standard-Vorlage) setzen, damit ueberhaupt
-    // eine sinnvolle Farbe gesetzt ist.
+    // set the default colour (from the default template), so that a meaningful
+    // colour is set at all
     const Color& rDfltColor =
         m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
             ->GetColor().GetValue();
     aItemSet.Put( SvxColorItem( rDfltColor, EE_CHAR_COLOR ) );
 
-    // Die Attribute der aktuellen Absatzvorlage setzen
+    // set the attributes of the current paragraph style
     sal_uInt16 nWhichIds[] =
     {
         RES_CHRATR_COLOR,   RES_CHRATR_CROSSEDOUT, RES_CHRATR_ESCAPEMENT,
@@ -424,7 +424,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         }
     }
 
-    // die Attribute der Umgebung am Draw-Objekt setzen
+    // set attribute of environment at the Draw object
     HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
     for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
@@ -439,8 +439,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         aItemSet.Put( XFillColorItem(aEmptyOUStr, aBGColor) );
     }
 
-    // Styles parsen (funktioniert hier nur fuer Attribute, die auch
-    // am Zeichen-Objekt gesetzt werden koennen)
+    // parse styles (is here only possible for attributes, which also
+    // can be set at character object)
     SfxItemSet aStyleItemSet( m_xDoc->GetAttrPool(),
                               m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
@@ -457,7 +457,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         }
     }
 
-    // jetzt noch die Groesse setzen
+    // now set the size
     Size aTwipSz( bPrcWidth ? 0 : nWidth, nHeight );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
     {
@@ -481,17 +481,16 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         {
             if( !pCurTable )
             {
-                // Die Laufschrift steht in einer Tabelle, aber nicht
-                // in einer Zelle. Da jetzt keine vernuenftige Zuordung
-                // zu einer Zelle moeglich ist, passen wir hir die
-                // Breite dem Inhalt der Laufschrift an.
+                // The marquee is in a table, but not in a cell. Since now no
+                // reasonable mapping to a cell is possible, we adjust here the
+                // width to the content of the marquee.
                 m_bFixMarqueeWidth = true;
             }
             else if( !nWidth )
             {
-                // Da wir wissen, in welcher Zelle die Laufschrift ist,
-                // koennen wir die Breite auch anpassen. Keine Breitenangabe
-                // wird wie 100% behandelt.
+                // Because we know in which cell the marquee is, we also can
+                // adjust the width. No width specification is treated as
+                // 100 percent.
                 nWidth = 100;
                 bPrcWidth = true;
             }
@@ -505,7 +504,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         }
     }
 
-    // Die Hoehe ist nur eine Mindest-Hoehe
+    // The height is only minimum height
     if( aTwipSz.Height() < MINFLY )
         aTwipSz.Height() = MINFLY;
     aItemSet.Put( makeSdrTextMinFrameHeightItem( aTwipSz.Height() ) );
@@ -516,16 +515,15 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         aTwipSz.Width() = MINFLY;
     m_pMarquee->SetLogicRect( tools::Rectangle( 0, 0, aTwipSz.Width(), aTwipSz.Height() ) );
 
-    // und das Objekt in das Dok einfuegen
+    // and insert the object into the document
     InsertDrawObject( m_pMarquee, aSpace, eVertOri, eHoriOri, aStyleItemSet,
                       aPropInfo );
 
-    // Das Zeichen-Objekt der Tabelle bekanntmachen. Ist ein bisserl
-    // umstaendlich, weil noch ueber den Parser gegangen wird, obwohl die
-    // Tabelle bekannt ist, aber anderenfalls muesste man die Tabelle
-    // oeffentlich machen, und das ist auch nicht schoen. Das globale
-    // pTable kann uebrigens auch nicht verwendet werden, denn die
-    // Laufschrift kann sich auch mal in einer Sub-Tabelle befinden.
+    // Register the drawing object at the table. Is a little bit complicated,
+    // because it is done via the parser, although the table is known, but
+    // otherwise the table would have to be public and that also isn't pretty.
+    // The global pTable also can't be used, because the marquee can also be
+    // in a sub-table.
     if( pCurTable && bPrcWidth)
         RegisterDrawObjectToTable( pCurTable, m_pMarquee, (sal_uInt8)nWidth );
 }
@@ -533,24 +531,24 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 void SwHTMLParser::EndMarquee()
 {
     OSL_ENSURE( m_pMarquee && OBJ_TEXT==m_pMarquee->GetObjIdentifier(),
-            "kein Marquee oder falscher Typ" );
+            "no marquee or wrong type" );
 
     if( m_bFixMarqueeWidth )
     {
-        // Da es keine fixe Hoehe gibt, das Text-Objekt erstmal breiter
-        // als den Text machen, damit nicht umgebrochen wird.
+        // Because there is no fixed height make the text object wider then
+        // the text, so that there is no line break.
         const tools::Rectangle& rOldRect = m_pMarquee->GetLogicRect();
         m_pMarquee->SetLogicRect( tools::Rectangle( rOldRect.TopLeft(),
                                            Size( USHRT_MAX, 240 ) ) );
     }
 
-    // den gesammelten Text einfuegen
+    // insert the collected text
     static_cast<SdrTextObj*>(m_pMarquee)->SetText( m_aContents );
     m_pMarquee->SetMergedItemSetAndBroadcast( m_pMarquee->GetMergedItemSet() );
 
     if( m_bFixMarqueeWidth )
     {
-        // die Groesse dem Text anpassen.
+        // adjust the size to the text
         static_cast<SdrTextObj*>(m_pMarquee)->FitFrameToTextSize();
     }
 
@@ -561,21 +559,21 @@ void SwHTMLParser::EndMarquee()
 void SwHTMLParser::InsertMarqueeText()
 {
     OSL_ENSURE( m_pMarquee && OBJ_TEXT==m_pMarquee->GetObjIdentifier(),
-            "kein Marquee oder falscher Typ" );
+            "no marquee or wrong type" );
 
-    // das akteulle Textstueck an den Text anhaengen
+    // append the current text part to the text
     m_aContents += aToken;
 }
 
 void SwHTMLParser::ResizeDrawObject( SdrObject* pObj, SwTwips nWidth )
 {
     OSL_ENSURE( OBJ_TEXT==pObj->GetObjIdentifier(),
-            "kein Marquee oder falscher Typ" );
+            "no marquee or wrong type" );
 
     if( OBJ_TEXT!=pObj->GetObjIdentifier() )
         return;
 
-    // die alte Groesse
+    // the old size
     const tools::Rectangle& rOldRect = pObj->GetLogicRect();
     Size aNewSz( nWidth, rOldRect.GetSize().Height() );
     pObj->SetLogicRect( tools::Rectangle( rOldRect.TopLeft(), aNewSz ) );
