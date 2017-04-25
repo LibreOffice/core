@@ -1036,10 +1036,7 @@ bool SdrHdl::IsFocusHdl() const
         case SdrHdlKind::LowerRight:
         {
             // if it's an activated TextEdit, it's moved to extended points
-            if(pHdlList && pHdlList->IsMoveOutside())
-                return false;
-            else
-                return true;
+            return !pHdlList || !pHdlList->IsMoveOutside();
         }
 
         case SdrHdlKind::Move:      // handle to move object
@@ -1676,10 +1673,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
     else if (eEdgeKind==SdrEdgeKind::ThreeLines)
     {
         long nAngle=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
-        if (nAngle==0 || nAngle==18000)
-            return true;
-        else
-            return false;
+        return nAngle==0 || nAngle==18000;
     }
     return false;
 }
