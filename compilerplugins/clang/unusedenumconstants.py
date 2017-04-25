@@ -245,15 +245,15 @@ tmp2list = sorted(writeonlySet, key=lambda v: natural_sort_key(v[1]))
 tmp3list = sorted(readonlySet, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
-with open("loplugin.unusedenumconstants.report-untouched", "wt") as f:
+with open("compilerplugins/clang/unusedenumconstants.untouched.results", "wt") as f:
     for t in tmp1list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
-with open("loplugin.unusedenumconstants.report-writeonly", "wt") as f:
+with open("compilerplugins/clang/unusedenumconstants.writeonly.results", "wt") as f:
     for t in tmp2list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
-with open("loplugin.unusedenumconstants.report-readonly", "wt") as f:
+with open("compilerplugins/clang/unusedenumconstants.readonly.results", "wt") as f:
     for t in tmp3list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )

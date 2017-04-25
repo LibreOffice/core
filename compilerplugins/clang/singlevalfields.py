@@ -79,7 +79,7 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 tmp1list.sort(key=lambda v: natural_sort_key(v[2]))
 
 # print out the results
-with open("loplugin.singlevalfields.report", "wt") as f:
+with open("compilerplugins/clang/singlevalfields.results", "wt") as f:
     for v in tmp1list:
         f.write(v[2] + "\n")
         f.write("    " + v[0] + "\n")

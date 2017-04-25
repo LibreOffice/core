@@ -1,0 +1,78 @@
+include/editeng/borderline.hxx:127
+    enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
+include/i18nutil/transliteration.hxx:46
+    enum TransliterationFlags NumToTextLower_zh_CN
+include/i18nutil/transliteration.hxx:48
+    enum TransliterationFlags NumToTextUpper_zh_CN
+include/i18nutil/transliteration.hxx:50
+    enum TransliterationFlags NumToTextLower_zh_TW
+include/i18nutil/transliteration.hxx:52
+    enum TransliterationFlags NumToTextUpper_zh_TW
+include/i18nutil/transliteration.hxx:54
+    enum TransliterationFlags NumToTextFormalHangul_ko
+include/i18nutil/transliteration.hxx:56
+    enum TransliterationFlags NumToTextFormalLower_ko
+include/i18nutil/transliteration.hxx:58
+    enum TransliterationFlags NumToTextFormalUpper_ko
+include/i18nutil/transliteration.hxx:118
+    enum TransliterationFlags smallToLarge_ja_JP
+include/i18nutil/transliteration.hxx:120
+    enum TransliterationFlags largeToSmall_ja_JP
+include/LibreOfficeKit/LibreOfficeKitEnums.h:38
+    LibreOfficeKitTileMode LOK_TILEMODE_RGBA
+include/oox/ole/axfontdata.hxx:39
+    enum AxFontFlags Disabled
+include/oox/ole/axfontdata.hxx:40
+    enum AxFontFlags AutoColor
+include/unotools/eventcfg.hxx:34
+    enum GlobalEventId STARTAPP
+include/unotools/eventcfg.hxx:35
+    enum GlobalEventId CLOSEAPP
+libreofficekit/source/gtk/lokdocview.cxx:286
+    enum (anonymous at /home/noel/libo3/libreofficekit/source/gtk/lokdocview.cxx:284:1) PROP_0
+sw/inc/poolfmt.hxx:96
+    enum RES_POOLFMT RES_POOL_CHRFMT
+sw/inc/poolfmt.hxx:97
+    enum RES_POOLFMT RES_POOL_FRMFMT
+sw/inc/poolfmt.hxx:98
+    enum RES_POOLFMT RES_POOL_TXTCOLL
+sw/inc/poolfmt.hxx:99
+    enum RES_POOLFMT RES_POOL_PAGEFMT
+sw/inc/poolfmt.hxx:101
+    enum RES_POOLFMT RES_POOL_PARFMT
+sw/inc/poolfmt.hxx:102
+    enum RES_POOLFMT RES_POOL_GRFFMT
+sw/inc/poolfmt.hxx:103
+    enum RES_POOLFMT RES_POOLFMT_END
+sw/inc/poolfmt.hxx:208
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLACK1
+sw/inc/poolfmt.hxx:209
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLACK2
+sw/inc/poolfmt.hxx:210
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLUE
+sw/inc/poolfmt.hxx:211
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BROWN
+sw/inc/poolfmt.hxx:212
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY
+sw/inc/poolfmt.hxx:213
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_3D
+sw/inc/poolfmt.hxx:214
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_GRAY
+sw/inc/poolfmt.hxx:215
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_LAVENDER
+sw/inc/poolfmt.hxx:216
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_TURQUOISE
+sw/inc/poolfmt.hxx:217
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_GRAY
+sw/inc/poolfmt.hxx:218
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_GREEN
+sw/inc/poolfmt.hxx:219
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LAVENDER
+sw/inc/poolfmt.hxx:220
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_RED
+sw/inc/poolfmt.hxx:221
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_TURQUOISE
+sw/inc/poolfmt.hxx:222
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_YELLOW
+vcl/source/gdi/CommonSalLayout.cxx:313
+    enum (anonymous namespace)::VerticalOrientation Rotated

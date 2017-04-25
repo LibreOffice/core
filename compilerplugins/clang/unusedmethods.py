@@ -272,7 +272,7 @@ for d in definitionSet:
     tmp1set.add((method, location))
 
 # print out the results, sorted by name and line number
-with open("loplugin.unusedmethods.report-unused-methods", "wt") as f:
+with open("compilerplugins/clang/unusedmethods.results", "wt") as f:
     for t in sort_set_by_natural_key(tmp1set):
         f.write(t[1] + "\n")
         f.write("    " + t[0] + "\n")
@@ -329,7 +329,7 @@ for d in definitionSet:
     tmp2set.add((method, location))
 
 # print output, sorted by name and line number
-with open("loplugin.unusedmethods.report-unused-returns", "wt") as f:
+with open("compilerplugins/clang/unusedmethods.unused-returns.results", "wt") as f:
     for t in sort_set_by_natural_key(tmp2set):
         f.write(t[1] + "\n")
         f.write("    " +  t[0] + "\n")

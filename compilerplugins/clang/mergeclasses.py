@@ -53,7 +53,7 @@ def extractModuleName(clazz):
     idx = filename.find("/")
     return filename[:idx]
 
-with open("loplugin.mergeclasses.report", "wt") as f:
+with open("compilerplugins/clang/mergeclasses.results", "wt") as f:
     # loop over defined, but not instantiated classes
     for clazz in sorted(definitionSet - instantiatedSet):
         # ignore classes without any children, and classes with more than one child

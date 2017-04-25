@@ -57,7 +57,7 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 # sort results by name and line number
 tmp1list = sorted(unnecessaryVirtualSet, key=lambda v: natural_sort_key(v[1]))
 
-with open("loplugin.unnecessaryvirtual.report", "wt") as f:
+with open("compilerplugins/clang/unnecessaryvirtual.results", "wt") as f:
     for t in tmp1list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )

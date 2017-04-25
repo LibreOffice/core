@@ -1,0 +1,298 @@
+chart2/source/view/main/OpenGLRender.hxx:69
+    int OpenGLRender::InitOpenGL()
+chart2/source/view/main/OpenGLRender.hxx:70
+    int OpenGLRender::MoveModelf(const struct PosVecf3 &,const struct PosVecf3 &,const struct PosVecf3 &)
+chart2/source/view/main/OpenGLRender.hxx:74
+    int OpenGLRender::RenderLine2FBO(int)
+chart2/source/view/main/OpenGLRender.hxx:75
+    int OpenGLRender::SetLine2DShapePoint(float,float,int)
+chart2/source/view/main/OpenGLRender.hxx:79
+    int OpenGLRender::Bubble2DShapePoint(float,float,float,float)
+chart2/source/view/main/OpenGLRender.hxx:80
+    int OpenGLRender::RenderBubble2FBO(int)
+chart2/source/view/main/OpenGLRender.hxx:84
+    int OpenGLRender::RenderRectangleShape(_Bool,_Bool)
+chart2/source/view/main/OpenGLRender.hxx:85
+    int OpenGLRender::RectangleShapePoint(float,float,float,float)
+chart2/source/view/main/OpenGLRender.hxx:93
+    int OpenGLRender::CreateTextTexture(const class BitmapEx &,const struct com::sun::star::awt::Point &,const struct com::sun::star::awt::Size &,long,const struct com::sun::star::drawing::HomogenMatrix3 &)
+chart2/source/view/main/OpenGLRender.hxx:96
+    int OpenGLRender::RenderTextShape()
+chart2/source/view/main/OpenGLRender.hxx:98
+    int OpenGLRender::SetArea2DShapePoint(float,float,int)
+chart2/source/view/main/OpenGLRender.hxx:99
+    int OpenGLRender::RenderArea2DShape()
+chart2/source/view/main/OpenGLRender.hxx:103
+    int OpenGLRender::RenderPieSegment2DShape(float,float,float)
+chart2/source/view/main/OpenGLRender.hxx:105
+    int OpenGLRender::RenderSymbol2DShape(float,float,float,float,int)
+chart2/source/view/main/OpenGLRender.hxx:122
+    int OpenGLRender::Create2DCircle(int)
+compilerplugins/clang/test/redundantinline.hxx:35
+    int S3::operator int()
+compilerplugins/clang/test/redundantinline.hxx:64
+    int S4::operator int()
+connectivity/source/inc/java/lang/Object.hxx:118
+    int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
+connectivity/source/inc/OColumn.hxx:131
+    const class rtl::OUString & connectivity::OColumn::getSchemaName() const
+connectivity/source/inc/OColumn.hxx:133
+    const class rtl::OUString & connectivity::OColumn::getCatalogName() const
+connectivity/source/inc/odbc/OConnection.hxx:82
+    short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
+dbaccess/source/ui/browser/genericcontroller.cxx:1267
+    const type-parameter-?-? & dbaui::(anonymous namespace)::SGI_identity::operator()(const type-parameter-?-? &) const
+hwpfilter/source/hwpfile.h:141
+    int HWPFile::Read1b(void *,unsigned long)
+i18nlangtag/source/languagetag/languagetag.cxx:275
+    const class rtl::OUString & LanguageTagImpl::getBcp47() const
+include/basegfx/matrix/b2dhommatrix.hxx:86
+    class basegfx::B2DHomMatrix & basegfx::B2DHomMatrix::operator*=(double)
+include/basegfx/matrix/b2dhommatrix.hxx:87
+    class basegfx::B2DHomMatrix & basegfx::B2DHomMatrix::operator/=(double)
+include/basegfx/matrix/b3dhommatrix.hxx:103
+    class basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator*=(double)
+include/basegfx/matrix/b3dhommatrix.hxx:104
+    class basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator/=(double)
+include/basegfx/point/b2dpoint.hxx:93
+    class basegfx::B2DPoint & basegfx::B2DPoint::operator*=(double)
+include/basegfx/point/b2ipoint.hxx:72
+    class basegfx::B2IPoint & basegfx::B2IPoint::operator*=(const class basegfx::B2IPoint &)
+include/basegfx/point/b2ipoint.hxx:81
+    class basegfx::B2IPoint & basegfx::B2IPoint::operator*=(int)
+include/basegfx/point/b2ipoint.hxx:98
+    class basegfx::B2IPoint & basegfx::B2IPoint::operator*=(const class basegfx::B2DHomMatrix &)
+include/basegfx/point/b3dpoint.hxx:85
+    class basegfx::B3DPoint & basegfx::B3DPoint::operator*=(const class basegfx::B3DPoint &)
+include/basegfx/point/b3dpoint.hxx:95
+    class basegfx::B3DPoint & basegfx::B3DPoint::operator*=(double)
+include/basegfx/tuple/b2i64tuple.hxx:92
+    const long & basegfx::B2I64Tuple::operator[](int) const
+include/basegfx/tuple/b2i64tuple.hxx:101
+    long & basegfx::B2I64Tuple::operator[](int)
+include/basegfx/tuple/b2i64tuple.hxx:126
+    class basegfx::B2I64Tuple & basegfx::B2I64Tuple::operator/=(const class basegfx::B2I64Tuple &)
+include/basegfx/tuple/b2i64tuple.hxx:133
+    class basegfx::B2I64Tuple & basegfx::B2I64Tuple::operator*=(const class basegfx::B2I64Tuple &)
+include/basegfx/tuple/b2i64tuple.hxx:140
+    class basegfx::B2I64Tuple & basegfx::B2I64Tuple::operator*=(long)
+include/basegfx/tuple/b2i64tuple.hxx:147
+    class basegfx::B2I64Tuple & basegfx::B2I64Tuple::operator/=(long)
+include/basegfx/tuple/b2i64tuple.hxx:154
+    class basegfx::B2I64Tuple basegfx::B2I64Tuple::operator-() const
+include/basegfx/tuple/b2ituple.hxx:128
+    class basegfx::B2ITuple & basegfx::B2ITuple::operator/=(const class basegfx::B2ITuple &)
+include/basegfx/tuple/b2ituple.hxx:135
+    class basegfx::B2ITuple & basegfx::B2ITuple::operator*=(const class basegfx::B2ITuple &)
+include/basegfx/tuple/b2ituple.hxx:149
+    class basegfx::B2ITuple & basegfx::B2ITuple::operator/=(int)
+include/basegfx/tuple/b2ituple.hxx:156
+    class basegfx::B2ITuple basegfx::B2ITuple::operator-() const
+include/basegfx/tuple/b3dtuple.hxx:171
+    class basegfx::B3DTuple & basegfx::B3DTuple::operator/=(const class basegfx::B3DTuple &)
+include/basegfx/tuple/b3ituple.hxx:88
+    const int & basegfx::B3ITuple::operator[](int) const
+include/basegfx/tuple/b3ituple.hxx:97
+    int & basegfx::B3ITuple::operator[](int)
+include/basegfx/tuple/b3ituple.hxx:124
+    class basegfx::B3ITuple & basegfx::B3ITuple::operator/=(const class basegfx::B3ITuple &)
+include/basegfx/tuple/b3ituple.hxx:132
+    class basegfx::B3ITuple & basegfx::B3ITuple::operator*=(const class basegfx::B3ITuple &)
+include/basegfx/tuple/b3ituple.hxx:140
+    class basegfx::B3ITuple & basegfx::B3ITuple::operator*=(int)
+include/basegfx/tuple/b3ituple.hxx:148
+    class basegfx::B3ITuple & basegfx::B3ITuple::operator/=(int)
+include/basegfx/tuple/b3ituple.hxx:156
+    class basegfx::B3ITuple basegfx::B3ITuple::operator-() const
+include/basegfx/vector/b2dvector.hxx:115
+    class basegfx::B2DVector & basegfx::B2DVector::setLength(double)
+include/basegfx/vector/b2ivector.hxx:75
+    class basegfx::B2IVector & basegfx::B2IVector::operator*=(const class basegfx::B2IVector &)
+include/basegfx/vector/b2ivector.hxx:84
+    class basegfx::B2IVector & basegfx::B2IVector::operator*=(int)
+include/basegfx/vector/b2ivector.hxx:101
+    class basegfx::B2IVector & basegfx::B2IVector::setLength(double)
+include/basegfx/vector/b2ivector.hxx:118
+    class basegfx::B2IVector & basegfx::B2IVector::operator*=(const class basegfx::B2DHomMatrix &)
+include/basegfx/vector/b3dvector.hxx:85
+    class basegfx::B3DVector & basegfx::B3DVector::operator*=(const class basegfx::B3DVector &)
+include/basegfx/vector/b3dvector.hxx:155
+    class basegfx::B3DVector & basegfx::B3DVector::setLength(double)
+include/basegfx/vector/b3dvector.hxx:180
+    class basegfx::B3DVector & basegfx::B3DVector::normalize()
+include/canvas/base/bufferedgraphicdevicebase.hxx:159
+    const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow2> & canvas::BufferedGraphicDeviceBase::getWindow() const
+include/canvas/rendering/icolorbuffer.hxx:49
+    unsigned char * canvas::IColorBuffer::lock() const
+include/canvas/rendering/icolorbuffer.hxx:68
+    unsigned int canvas::IColorBuffer::getStride() const
+include/canvas/rendering/icolorbuffer.hxx:72
+    enum canvas::IColorBuffer::Format canvas::IColorBuffer::getFormat() const
+include/canvas/rendering/isurfaceproxymanager.hxx:58
+    class std::shared_ptr<struct canvas::ISurfaceProxy> canvas::ISurfaceProxyManager::createSurfaceProxy(const class std::shared_ptr<struct canvas::IColorBuffer> &) const
+include/canvas/rendering/isurfaceproxymanager.hxx:64
+    class std::shared_ptr<struct canvas::ISurfaceProxyManager> createSurfaceProxyManager(const class std::shared_ptr<struct canvas::IRenderModule> &)
+include/canvas/vclwrapper.hxx:135
+    type-parameter-?-? & canvas::vcltools::VCLObject::get()
+include/canvas/vclwrapper.hxx:136
+    const type-parameter-?-? & canvas::vcltools::VCLObject::get() const
+include/comphelper/unique_disposing_ptr.hxx:45
+    type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
+include/connectivity/FValue.hxx:327
+    unsigned short connectivity::ORowSetValue::operator unsigned short() const
+include/o3tl/enumarray.hxx:100
+    typename type-parameter-?-?::value_type * o3tl::enumarray_iterator::operator->()
+include/o3tl/string_view.hxx:844
+    unsigned long std::hash::operator()(class o3tl::basic_string_view<char, struct std::char_traits<char> >)
+include/o3tl/string_view.hxx:849
+    unsigned long std::hash::operator()(class o3tl::basic_string_view<char16_t, struct std::char_traits<char16_t> >)
+include/o3tl/string_view.hxx:854
+    unsigned long std::hash::operator()(class o3tl::basic_string_view<char32_t, struct std::char_traits<char32_t> >)
+include/o3tl/string_view.hxx:859
+    unsigned long std::hash::operator()(class o3tl::basic_string_view<wchar_t, struct std::char_traits<wchar_t> >)
+include/oox/dump/dumperbase.hxx:1392
+    type-parameter-?-? oox::dump::InputObjectBase::dumpName(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1398
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBin(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1400
+    type-parameter-?-? oox::dump::InputObjectBase::dumpFix(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1404
+    type-parameter-?-? oox::dump::InputObjectBase::dumpValue(const struct oox::dump::ItemFormat &)
+include/oox/dump/dumperbase.hxx:1407
+    type-parameter-?-? oox::dump::InputObjectBase::dumpName(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1409
+    type-parameter-?-? oox::dump::InputObjectBase::dumpDec(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1413
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBin(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1415
+    type-parameter-?-? oox::dump::InputObjectBase::dumpFix(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1417
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBool(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1419
+    type-parameter-?-? oox::dump::InputObjectBase::dumpValue(_Bool,const struct oox::dump::ItemFormat &)
+include/oox/dump/oledumper.hxx:312
+    int oox::dump::AxPropertyObjectBase::dumpHmmProperty()
+include/oox/dump/oledumper.hxx:313
+    unsigned char oox::dump::AxPropertyObjectBase::dumpMousePtrProperty()
+include/oox/dump/oledumper.hxx:315
+    type-parameter-?-? oox::dump::AxPropertyObjectBase::dumpBorderStyleProperty(type-parameter-?-?)
+include/oox/dump/oledumper.hxx:317
+    type-parameter-?-? oox::dump::AxPropertyObjectBase::dumpSpecialEffectProperty(type-parameter-?-?)
+include/oox/dump/oledumper.hxx:318
+    unsigned int oox::dump::AxPropertyObjectBase::dumpEnabledProperty()
+include/oox/dump/oledumper.hxx:319
+    int oox::dump::AxPropertyObjectBase::dumpOrientationProperty()
+include/oox/dump/oledumper.hxx:320
+    int oox::dump::AxPropertyObjectBase::dumpDelayProperty()
+include/oox/dump/oledumper.hxx:321
+    unsigned int oox::dump::AxPropertyObjectBase::dumpImagePosProperty()
+include/oox/dump/oledumper.hxx:322
+    unsigned char oox::dump::AxPropertyObjectBase::dumpImageSizeModeProperty()
+include/oox/dump/oledumper.hxx:323
+    unsigned char oox::dump::AxPropertyObjectBase::dumpImageAlignProperty()
+include/oox/dump/oledumper.hxx:326
+    unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
+include/oox/dump/oledumper.hxx:327
+    char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
+include/oox/export/shapes.hxx:158
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
+include/oox/export/shapes.hxx:203
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
+include/oox/export/shapes.hxx:204
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,int)
+include/oox/helper/binaryoutputstream.hxx:78
+    class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
+include/oox/helper/binaryoutputstream.hxx:79
+    class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteUInt16(unsigned short)
+include/oox/helper/containerhelper.hxx:113
+    typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::reference oox::Matrix::operator()(typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::size_type,typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::size_type)
+include/sax/fshelper.hxx:127
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
+include/sax/fshelper.hxx:128
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
+include/sax/fshelper.hxx:131
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
+include/test/sheet/xnamedrange.hxx:22
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
+include/test/sheet/xsheetannotation.hxx:36
+    class com::sun::star::uno::Reference<class com::sun::star::sheet::XSheetAnnotation> apitest::XSheetAnnotation::getAnnotation(struct com::sun::star::table::CellAddress &)
+include/test/sheet/xspreadsheets2.hxx:40
+    class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
+include/test/sheet/xstyleloader.hxx:27
+    class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XStyleLoader::getTargetComponent()
+include/tools/bigint.hxx:114
+    unsigned short BigInt::operator unsigned short() const
+include/tools/bigint.hxx:115
+    unsigned long BigInt::operator unsigned long() const
+include/tools/color.hxx:141
+    class SvStream & Color::Read(class SvStream &)
+include/tools/color.hxx:142
+    class SvStream & Color::Write(class SvStream &) const
+include/vcl/fontcharmap.hxx:48
+    class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
+include/vcl/gdimtf.hxx:185
+    class SvStream & GDIMetaFile::Read(class SvStream &)
+include/vcl/graphicfilter.hxx:257
+    unsigned short GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
+include/vcl/menu.hxx:464
+    unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
+lotuswordpro/source/filter/lwpsvstream.hxx:76
+    class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
+lotuswordpro/source/filter/lwpsvstream.hxx:77
+    class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
+lotuswordpro/source/filter/lwpsvstream.hxx:78
+    class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
+sc/source/core/opencl/formulagroupcl.cxx:968
+    unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
+sc/source/core/opencl/formulagroupcl.cxx:1413
+    unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
+sc/source/core/tool/scmatrix.cxx:2208
+    type-parameter-?-? * wrapped_iterator::operator->() const
+sc/source/core/tool/scmatrix.cxx:3174
+    const class svl::SharedString & matop::COp::operator()(char,type-parameter-?-?,double,double,const class svl::SharedString &) const
+sc/source/ui/vba/vbaformat.hxx:69
+    class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
+sc/source/ui/vba/vbaformat.hxx:73
+    class com::sun::star::uno::Any ScVbaFormat::Borders(const class com::sun::star::uno::Any &)
+sc/source/ui/vba/vbaformat.hxx:76
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XFont> ScVbaFormat::Font()
+sc/source/ui/vba/vbaformat.hxx:79
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XInterior> ScVbaFormat::Interior()
+sc/source/ui/vba/vbaformat.hxx:85
+    class com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
+sc/source/ui/vba/vbaformat.hxx:91
+    class com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
+sc/source/ui/vba/vbaformat.hxx:97
+    class com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
+sc/source/ui/vba/vbaformat.hxx:103
+    class com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
+sc/source/ui/vba/vbaformat.hxx:109
+    class com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
+sc/source/ui/vba/vbaformat.hxx:115
+    class com::sun::star::uno::Any ScVbaFormat::getOrientation()
+sc/source/ui/vba/vbaformat.hxx:121
+    class com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
+sc/source/ui/vba/vbaformat.hxx:127
+    class com::sun::star::uno::Any ScVbaFormat::getWrapText()
+sc/source/ui/vba/vbaformat.hxx:133
+    class com::sun::star::uno::Any ScVbaFormat::getLocked()
+sc/source/ui/vba/vbaformat.hxx:139
+    class com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
+sc/source/ui/vba/vbaformat.hxx:145
+    class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
+sc/source/ui/vba/vbaformat.hxx:151
+    class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
+sd/source/filter/eppt/pptx-epptooxml.cxx:118
+    class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
+sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
+    int sd::IBluetoothSocket::write(const void *,unsigned int)
+sw/inc/calc.hxx:110
+    class SwSbxValue & SwSbxValue::MakeDouble()
+sw/source/uibase/inc/fldmgr.hxx:114
+    const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
+vcl/inc/PhysicalFontFace.hxx:79
+    int PhysicalFontFace::GetWidth() const
+vcl/inc/unx/gtk/gtkdata.hxx:155
+    int GtkSalDisplay::CaptureMouse(class SalFrame *)
+vcl/source/filter/FilterConfigCache.hxx:89
+    class rtl::OUString FilterConfigCache::GetImportFormatMediaType(unsigned short)

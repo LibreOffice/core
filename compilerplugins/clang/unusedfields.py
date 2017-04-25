@@ -150,14 +150,15 @@ tmp2list = sorted(writeonlySet, key=lambda v: natural_sort_key(v[1]))
 tmp3list = sorted(canBePrivateSet, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
-with open("loplugin.unusedfields.report-untouched", "wt") as f:
+with open("compilerplugins/clang/unusedfields.untouched.results", "wt") as f:
     for t in tmp1list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
-with open("loplugin.unusedfields.report-writeonly", "wt") as f:
+with open("compilerplugins/clang/unusedfields.writeonly.results", "wt") as f:
     for t in tmp2list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
+# this one is not checked in yet because I haven't actually done anything with it
 with open("loplugin.unusedfields.report-can-be-private", "wt") as f:
     for t in tmp3list:
         f.write( t[1] + "\n" )

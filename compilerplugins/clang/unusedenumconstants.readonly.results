@@ -1,0 +1,538 @@
+bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:77
+    enum x86_64_reg_class X86_64_SSEUP_CLASS
+bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:78
+    enum x86_64_reg_class X86_64_X87_CLASS
+bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:79
+    enum x86_64_reg_class X86_64_X87UP_CLASS
+chart2/source/inc/CharacterProperties.hxx:120
+    enum chart::CharacterProperties::(anonymous at /home/noel/libo3/chart2/source/inc/CharacterProperties.hxx:41:5) FAST_PROPERTY_ID_END_CHAR_PROP
+chart2/source/inc/TitleHelper.hxx:47
+    enum chart::TitleHelper::eTitleType NORMAL_TITLE_END
+configmgr/source/access.hxx:454
+    enum configmgr::Access::(anonymous at /home/noel/libo3/configmgr/source/access.hxx:453:5) IS_EXTENSIBLE
+configmgr/source/access.hxx:454
+    enum configmgr::Access::(anonymous at /home/noel/libo3/configmgr/source/access.hxx:453:5) IS_SET
+configmgr/source/access.hxx:455
+    enum configmgr::Access::(anonymous at /home/noel/libo3/configmgr/source/access.hxx:453:5) IS_SET_MEMBER
+configmgr/source/access.hxx:455
+    enum configmgr::Access::(anonymous at /home/noel/libo3/configmgr/source/access.hxx:453:5) IS_GROUP_MEMBER
+configmgr/source/components.hxx:154
+    enum configmgr::Components::ModificationTarget Dconf
+configmgr/source/parsemanager.hxx:47
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo3/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XSI
+configmgr/source/parsemanager.hxx:47
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo3/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_OOR
+configmgr/source/parsemanager.hxx:47
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo3/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XS
+connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:110
+    enum connectivity::ODatabaseMetaDataResultSet::MetaDataResultSetType eUDTs
+cui/source/options/optgenrl.cxx:53
+    enum (anonymous namespace)::RowType nRowCount
+dbaccess/source/filter/xml/xmlEnums.hxx:135
+    enum dbaxml::XMLQueryTable XML_TOK_UPDATE_TABLE
+editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx:28
+    enum SvXMLAutoCorrectToken BLOCK
+editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx:29
+    enum SvXMLAutoCorrectToken BLOCKLIST
+framework/inc/xml/imagesdocumenthandler.hxx:44
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_IMAGECONTAINER
+framework/inc/xml/imagesdocumenthandler.hxx:45
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_IMAGES
+framework/inc/xml/imagesdocumenthandler.hxx:46
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_ENTRY
+framework/inc/xml/imagesdocumenthandler.hxx:47
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_EXTERNALIMAGES
+framework/inc/xml/imagesdocumenthandler.hxx:48
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_EXTERNALENTRY
+framework/inc/xml/imagesdocumenthandler.hxx:49
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HREF
+framework/inc/xml/imagesdocumenthandler.hxx:50
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKCOLOR
+framework/inc/xml/imagesdocumenthandler.hxx:51
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_COMMAND
+framework/inc/xml/imagesdocumenthandler.hxx:52
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_BITMAPINDEX
+framework/inc/xml/imagesdocumenthandler.hxx:53
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKURL
+framework/inc/xml/imagesdocumenthandler.hxx:54
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_MASKMODE
+framework/inc/xml/imagesdocumenthandler.hxx:55
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTURL
+framework/inc/xml/imagesdocumenthandler.hxx:56
+    enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ATTRIBUTE_HIGHCONTRASTMASKURL
+framework/inc/xml/statusbardocumenthandler.hxx:44
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ELEMENT_STATUSBAR
+framework/inc/xml/statusbardocumenthandler.hxx:45
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ELEMENT_STATUSBARITEM
+framework/inc/xml/statusbardocumenthandler.hxx:46
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ATTRIBUTE_URL
+framework/inc/xml/statusbardocumenthandler.hxx:47
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ATTRIBUTE_ALIGN
+framework/inc/xml/statusbardocumenthandler.hxx:48
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ATTRIBUTE_STYLE
+framework/inc/xml/statusbardocumenthandler.hxx:49
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ATTRIBUTE_AUTOSIZE
+framework/inc/xml/statusbardocumenthandler.hxx:50
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ATTRIBUTE_OWNERDRAW
+framework/inc/xml/statusbardocumenthandler.hxx:51
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ATTRIBUTE_WIDTH
+framework/inc/xml/statusbardocumenthandler.hxx:52
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ATTRIBUTE_OFFSET
+framework/inc/xml/statusbardocumenthandler.hxx:53
+    enum framework::OReadStatusBarDocumentHandler::StatusBar_XML_Entry SB_ATTRIBUTE_HELPURL
+framework/inc/xml/toolboxdocumenthandler.hxx:43
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ELEMENT_TOOLBAR
+framework/inc/xml/toolboxdocumenthandler.hxx:44
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ELEMENT_TOOLBARITEM
+framework/inc/xml/toolboxdocumenthandler.hxx:45
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ELEMENT_TOOLBARSPACE
+framework/inc/xml/toolboxdocumenthandler.hxx:46
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ELEMENT_TOOLBARBREAK
+framework/inc/xml/toolboxdocumenthandler.hxx:47
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ELEMENT_TOOLBARSEPARATOR
+framework/inc/xml/toolboxdocumenthandler.hxx:48
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_TEXT
+framework/inc/xml/toolboxdocumenthandler.hxx:49
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_URL
+framework/inc/xml/toolboxdocumenthandler.hxx:50
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_VISIBLE
+framework/inc/xml/toolboxdocumenthandler.hxx:51
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_STYLE
+framework/inc/xml/toolboxdocumenthandler.hxx:52
+    enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_UINAME
+include/desktop/exithelper.h:31
+    int EXITHELPER_CRASH_WITH_RESTART
+include/desktop/exithelper.h:33
+    int EXITHELPER_NORMAL_RESTART
+include/editeng/flditem.hxx:94
+    enum SvxDateFormat SVXDATEFORMAT_SYSTEM
+include/editeng/flditem.hxx:96
+    enum SvxDateFormat SVXDATEFORMAT_STDBIG
+include/editeng/flditem.hxx:251
+    enum SvxTimeFormat SVXTIMEFORMAT_SYSTEM
+include/editeng/flditem.hxx:259
+    enum SvxTimeFormat SVXTIMEFORMAT_AM_HM
+include/editeng/flditem.hxx:260
+    enum SvxTimeFormat SVXTIMEFORMAT_AM_HMS
+include/editeng/flditem.hxx:261
+    enum SvxTimeFormat SVXTIMEFORMAT_AM_HMSH
+include/editeng/flditem.hxx:339
+    enum SvxAuthorFormat SVXAUTHORFORMAT_NAME
+include/editeng/flditem.hxx:340
+    enum SvxAuthorFormat SVXAUTHORFORMAT_FIRSTNAME
+include/LibreOfficeKit/LibreOfficeKitEnums.h:31
+    LibreOfficeKitPartMode LOK_PARTMODE_SLIDES
+include/LibreOfficeKit/LibreOfficeKitEnums.h:32
+    LibreOfficeKitPartMode LOK_PARTMODE_NOTES
+include/LibreOfficeKit/LibreOfficeKitEnums.h:76
+    LibreOfficeKitOptionalFeatures LOK_FEATURE_NO_TILED_ANNOTATIONS
+include/oox/core/filterbase.hxx:82
+    enum oox::core::OoxmlVersion ISOIEC_29500_2008
+include/store/types.h:65
+    enum storeAccessMode ReadCreate
+include/svl/ctloptions.hxx:65
+    enum SvtCTLOptions::TextNumerals NUMERALS_HINDI
+include/svl/ctloptions.hxx:66
+    enum SvtCTLOptions::TextNumerals NUMERALS_SYSTEM
+include/svl/ctloptions.hxx:67
+    enum SvtCTLOptions::TextNumerals NUMERALS_CONTEXT
+include/svl/ctloptions.hxx:78
+    enum SvtCTLOptions::EOption E_CTLSEQUENCECHECKINGRESTRICTED
+include/svl/ctloptions.hxx:79
+    enum SvtCTLOptions::EOption E_CTLSEQUENCECHECKINGTYPEANDREPLACE
+include/svl/languageoptions.hxx:59
+    enum SvtLanguageOptions::EOption E_CJKFONT
+include/svl/languageoptions.hxx:60
+    enum SvtLanguageOptions::EOption E_VERTICALTEXT
+include/svl/languageoptions.hxx:61
+    enum SvtLanguageOptions::EOption E_ASIANTYPOGRAPHY
+include/svl/languageoptions.hxx:62
+    enum SvtLanguageOptions::EOption E_JAPANESEFIND
+include/svl/languageoptions.hxx:63
+    enum SvtLanguageOptions::EOption E_RUBY
+include/svl/languageoptions.hxx:64
+    enum SvtLanguageOptions::EOption E_CHANGECASEMAP
+include/svl/languageoptions.hxx:65
+    enum SvtLanguageOptions::EOption E_DOUBLELINES
+include/svl/languageoptions.hxx:66
+    enum SvtLanguageOptions::EOption E_EMPHASISMARKS
+include/svl/languageoptions.hxx:67
+    enum SvtLanguageOptions::EOption E_VERTICALCALLOUT
+include/svl/languageoptions.hxx:71
+    enum SvtLanguageOptions::EOption E_CTLSEQUENCECHECKING
+include/svl/languageoptions.hxx:72
+    enum SvtLanguageOptions::EOption E_CTLCURSORMOVEMENT
+include/svl/languageoptions.hxx:73
+    enum SvtLanguageOptions::EOption E_CTLTEXTNUMERALS
+include/svl/poolitem.hxx:90
+    enum SfxItemState READONLY
+include/svtools/apearcfg.hxx:30
+    enum SnapType ToMiddle
+include/svtools/apearcfg.hxx:35
+    enum DragMode FullWindow
+include/svtools/apearcfg.hxx:36
+    enum DragMode Frame
+include/svtools/table/tablemodel.hxx:48
+    enum ColumnAttributeGroup ALL
+include/svx/sdtakitm.hxx:31
+    enum SdrTextAniKind Blink
+include/svx/svdhdl.hxx:108
+    enum BitmapMarkerKind RectPlus_7x7
+include/svx/swframeposstrings.hxx:81
+    enum SvxSwFramePosString::StringId STR_MAX
+include/svx/swframetypes.hxx:41
+    enum RndStdIds HEADERR
+include/svx/swframetypes.hxx:42
+    enum RndStdIds FOOTERL
+include/svx/swframetypes.hxx:43
+    enum RndStdIds FOOTERR
+include/tools/errinf.hxx:51
+    enum ErrorHandlerFlags ButtonDefaultsCancel
+include/tools/errinf.hxx:52
+    enum ErrorHandlerFlags ButtonDefaultsYes
+include/tools/errinf.hxx:53
+    enum ErrorHandlerFlags ButtonDefaultsNo
+include/tools/inetmsg.hxx:70
+    enum InetMessageMime NUMHDR
+include/unotools/dynamicmenuoptions.hxx:46
+    enum EDynamicMenuType E_HELPBOOKMARKS
+include/unotools/fontdefs.hxx:77
+    enum DefaultFontType LATIN_DISPLAY
+include/unotools/fontdefs.hxx:78
+    enum DefaultFontType LATIN_FIXED
+include/unotools/fontdefs.hxx:88
+    enum DefaultFontType CTL_DISPLAY
+include/vcl/field.hxx:360
+    enum TimeFormatter::TimeFormat Hour12
+include/vcl/pdfwriter.hxx:107
+    enum vcl::PDFWriter::PDFVersion PDF_1_3
+include/vcl/pdfwriter.hxx:107
+    enum vcl::PDFWriter::PDFVersion PDF_1_2
+include/vcl/pdfwriter.hxx:107
+    enum vcl::PDFWriter::PDFVersion PDF_1_5
+include/vcl/ptrstyle.hxx:56
+    enum PointerStyle Pen
+include/vcl/ptrstyle.hxx:67
+    enum PointerStyle MoveData
+include/vcl/ptrstyle.hxx:71
+    enum PointerStyle CopyDataLink
+include/vcl/ptrstyle.hxx:72
+    enum PointerStyle MoveFile
+include/vcl/ptrstyle.hxx:73
+    enum PointerStyle CopyFile
+include/vcl/ptrstyle.hxx:74
+    enum PointerStyle LinkFile
+include/vcl/ptrstyle.hxx:75
+    enum PointerStyle MoveFileLink
+include/vcl/ptrstyle.hxx:76
+    enum PointerStyle CopyFileLink
+include/vcl/ptrstyle.hxx:77
+    enum PointerStyle MoveFiles
+include/vcl/ptrstyle.hxx:78
+    enum PointerStyle CopyFiles
+include/vcl/ptrstyle.hxx:92
+    enum PointerStyle Chart
+sc/inc/dociter.hxx:254
+    enum ScQueryCellIterator::StopOnMismatchBits nStopOnMismatchExecuted
+sc/inc/dociter.hxx:262
+    enum ScQueryCellIterator::TestEqualConditionBits nTestEqualConditionFulfilled
+sc/inc/token.hxx:218
+    enum ScTableRefToken::Item HEADERS_DATA
+sc/inc/token.hxx:219
+    enum ScTableRefToken::Item DATA_TOTALS
+sc/inc/types.hxx:111
+    enum sc::ListenerGroupType Single
+sc/source/filter/lotus/lotread.cxx:36
+    enum STATE S_WK1
+sc/source/ui/inc/undobase.hxx:142
+    enum ScMoveUndoMode SC_UNDO_REFFIRST
+sc/source/ui/unoobj/condformatuno.cxx:272
+    enum (anonymous namespace)::DateProperties Date_StyleName
+sc/source/ui/unoobj/condformatuno.cxx:273
+    enum (anonymous namespace)::DateProperties DateType
+sc/source/ui/vba/vbasheetobject.hxx:140
+    enum ScVbaControlObjectBase::ListenerType LISTENER_MOUSE
+sc/source/ui/vba/vbasheetobject.hxx:141
+    enum ScVbaControlObjectBase::ListenerType LISTENER_TEXT
+sc/source/ui/vba/vbasheetobject.hxx:142
+    enum ScVbaControlObjectBase::ListenerType LISTENER_VALUE
+sc/source/ui/vba/vbasheetobject.hxx:143
+    enum ScVbaControlObjectBase::ListenerType LISTENER_CHANGE
+scaddins/source/analysis/analysishelper.hxx:489
+    enum sca::analysis::ComplListAppendHandl AH_EmptyAsErr
+scaddins/source/analysis/analysishelper.hxx:490
+    enum sca::analysis::ComplListAppendHandl AH_EmpyAs0
+scaddins/source/datefunc/datefunc.hxx:50
+    enum ScaCategory Finance
+scaddins/source/datefunc/datefunc.hxx:51
+    enum ScaCategory Inf
+scaddins/source/datefunc/datefunc.hxx:52
+    enum ScaCategory Math
+scaddins/source/datefunc/datefunc.hxx:53
+    enum ScaCategory Tech
+scaddins/source/pricing/pricing.hxx:58
+    enum sca::pricing::ScaCategory DateTime
+scaddins/source/pricing/pricing.hxx:59
+    enum sca::pricing::ScaCategory Text
+scaddins/source/pricing/pricing.hxx:61
+    enum sca::pricing::ScaCategory Inf
+scaddins/source/pricing/pricing.hxx:62
+    enum sca::pricing::ScaCategory Math
+scaddins/source/pricing/pricing.hxx:63
+    enum sca::pricing::ScaCategory Tech
+sd/source/ui/slidesorter/cache/SlsRequestPriorityClass.hxx:40
+    enum sd::slidesorter::cache::RequestPriorityClass MAX_CLASS
+sd/source/ui/slidesorter/view/SlsPageObjectPainter.cxx:314
+    enum State Focused
+sd/source/ui/slidesorter/view/SlsPageObjectPainter.cxx:314
+    enum State MouseOver
+sd/source/ui/slidesorter/view/SlsPageObjectPainter.cxx:314
+    enum State Selected
+sfx2/source/sidebar/SidebarController.cxx:78
+    enum sfx2::sidebar::(anonymous namespace)::MenuId MID_FIRST_PANEL
+sfx2/source/sidebar/SidebarController.cxx:79
+    enum sfx2::sidebar::(anonymous namespace)::MenuId MID_FIRST_HIDE
+slideshow/source/engine/shapes/viewshape.hxx:281
+    enum slideshow::internal::ViewShape::(anonymous at /home/noel/libo3/slideshow/source/engine/shapes/viewshape.hxx:281:13) MAX_RENDER_CACHE_ENTRIES
+slideshow/source/engine/slideview.cxx:249
+    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(anonymous at /home/noel/libo3/slideshow/source/engine/slideview.cxx:249:5) SPRITE_ULLAGE
+slideshow/source/engine/slideview.cxx:729
+    enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at /home/noel/libo3/slideshow/source/engine/slideview.cxx:729:5) LAYER_ULLAGE
+soltools/cpp/cpp.h:42
+    int WS
+svgio/inc/svgstyleattributes.hxx:62
+    enum svgio::svgreader::FontSize FontSize_notset
+svl/source/numbers/zformat.cxx:428
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM1
+svl/source/numbers/zformat.cxx:429
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM2
+svl/source/numbers/zformat.cxx:430
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM3
+svl/source/numbers/zformat.cxx:431
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM4
+svl/source/numbers/zformat.cxx:432
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM5
+svl/source/numbers/zformat.cxx:433
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM6
+svl/source/numbers/zformat.cxx:434
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM7
+svl/source/numbers/zformat.cxx:435
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM8
+svl/source/numbers/zformat.cxx:436
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_DBNUM9
+svl/source/numbers/zformat.cxx:438
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM0
+svl/source/numbers/zformat.cxx:439
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM1
+svl/source/numbers/zformat.cxx:440
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM2
+svl/source/numbers/zformat.cxx:441
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM3
+svl/source/numbers/zformat.cxx:442
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM4
+svl/source/numbers/zformat.cxx:443
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM5
+svl/source/numbers/zformat.cxx:444
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM6
+svl/source/numbers/zformat.cxx:445
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM7
+svl/source/numbers/zformat.cxx:446
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM8
+svl/source/numbers/zformat.cxx:447
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM9
+svl/source/numbers/zformat.cxx:448
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM10
+svl/source/numbers/zformat.cxx:449
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM11
+svl/source/numbers/zformat.cxx:450
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM12
+svl/source/numbers/zformat.cxx:451
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM13
+svl/source/numbers/zformat.cxx:452
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM14
+svl/source/numbers/zformat.cxx:453
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM15
+svl/source/numbers/zformat.cxx:454
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM16
+svl/source/numbers/zformat.cxx:455
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM17
+svl/source/numbers/zformat.cxx:456
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM18
+svl/source/numbers/zformat.cxx:457
+    enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM19
+svtools/source/control/valueset.cxx:49
+    enum (anonymous namespace)::(anonymous at /home/noel/libo3/svtools/source/control/valueset.cxx:44:1) NAME_LINE_OFF_Y
+svtools/source/control/valueset.cxx:50
+    enum (anonymous namespace)::(anonymous at /home/noel/libo3/svtools/source/control/valueset.cxx:44:1) NAME_LINE_HEIGHT
+svtools/source/control/valueset.cxx:51
+    enum (anonymous namespace)::(anonymous at /home/noel/libo3/svtools/source/control/valueset.cxx:44:1) NAME_OFFSET
+svtools/source/control/valueset.cxx:52
+    enum (anonymous namespace)::(anonymous at /home/noel/libo3/svtools/source/control/valueset.cxx:44:1) SCRBAR_OFFSET
+sw/inc/dbmgr.hxx:294
+    enum SwDBManager::DBConnURITypes DBCONN_MSJET
+sw/inc/dbmgr.hxx:295
+    enum SwDBManager::DBConnURITypes DBCONN_MSACE
+sw/inc/docary.hxx:79
+    enum SwVectorModifyBase<class SwTextFormatColl *>::DestructorPolicy FreeElements
+sw/inc/docary.hxx:79
+    enum SwVectorModifyBase<class SwFrameFormat *>::DestructorPolicy FreeElements
+sw/inc/docary.hxx:79
+    enum SwVectorModifyBase<class SwGrfFormatColl *>::DestructorPolicy FreeElements
+sw/inc/docufld.hxx:113
+    enum SwExtUserSubType EU_FATHERSNAME
+sw/inc/docufld.hxx:114
+    enum SwExtUserSubType EU_APARTMENT
+sw/inc/hintids.hxx:319
+    enum RES_MSG RES_RESET_FMTWRITTEN
+sw/inc/hintids.hxx:322
+    enum RES_MSG RES_SECTION_RESETHIDDENFLAG
+sw/inc/hintids.hxx:347
+    enum RES_FLTRATTR RES_FLTRATTR_END
+sw/inc/poolfmt.hxx:116
+    enum RES_POOL_CHRFMT_TYPE RES_POOLCHR_LABEL
+sw/inc/poolfmt.hxx:117
+    enum RES_POOL_CHRFMT_TYPE RES_POOLCHR_DROPCAPS
+sw/inc/poolfmt.hxx:124
+    enum RES_POOL_CHRFMT_TYPE RES_POOLCHR_TOXJUMP
+sw/inc/poolfmt.hxx:131
+    enum RES_POOL_CHRFMT_TYPE RES_POOLCHR_VERT_NUM
+sw/inc/poolfmt.hxx:159
+    enum RES_POOL_FRMFMT_TYPE RES_POOLFRM_MARGINAL
+sw/inc/poolfmt.hxx:160
+    enum RES_POOL_FRMFMT_TYPE RES_POOLFRM_WATERSIGN
+sw/inc/poolfmt.hxx:189
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_NUM1
+sw/inc/poolfmt.hxx:190
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_NUM2
+sw/inc/poolfmt.hxx:191
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_NUM3
+sw/inc/poolfmt.hxx:192
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_NUM4
+sw/inc/poolfmt.hxx:193
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_NUM5
+sw/inc/poolfmt.hxx:194
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_BUL1
+sw/inc/poolfmt.hxx:195
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_BUL2
+sw/inc/poolfmt.hxx:196
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_BUL3
+sw/inc/poolfmt.hxx:197
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_BUL4
+sw/inc/poolfmt.hxx:198
+    enum RES_POOL_NUMRULE_TYPE RES_POOLNUMRULE_BUL5
+sw/inc/poolfmt.hxx:207
+    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_3D
+sw/inc/poolfmt.hxx:243
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_GREETING
+sw/inc/poolfmt.hxx:246
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_MARGINAL
+sw/inc/poolfmt.hxx:259
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_HEADLINE10
+sw/inc/poolfmt.hxx:269
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL1S
+sw/inc/poolfmt.hxx:271
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL1E
+sw/inc/poolfmt.hxx:273
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL2S
+sw/inc/poolfmt.hxx:275
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL2E
+sw/inc/poolfmt.hxx:277
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL3S
+sw/inc/poolfmt.hxx:279
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL3E
+sw/inc/poolfmt.hxx:281
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL4S
+sw/inc/poolfmt.hxx:283
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL4E
+sw/inc/poolfmt.hxx:285
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL5S
+sw/inc/poolfmt.hxx:287
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_NUM_LEVEL5E
+sw/inc/poolfmt.hxx:291
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL1S
+sw/inc/poolfmt.hxx:293
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL1E
+sw/inc/poolfmt.hxx:295
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL2S
+sw/inc/poolfmt.hxx:297
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL2E
+sw/inc/poolfmt.hxx:299
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL3S
+sw/inc/poolfmt.hxx:301
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL3E
+sw/inc/poolfmt.hxx:303
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL4S
+sw/inc/poolfmt.hxx:305
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL4E
+sw/inc/poolfmt.hxx:307
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL5S
+sw/inc/poolfmt.hxx:309
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_BUL_LEVEL5E
+sw/inc/poolfmt.hxx:369
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER1
+sw/inc/poolfmt.hxx:370
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER2
+sw/inc/poolfmt.hxx:371
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER3
+sw/inc/poolfmt.hxx:372
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER4
+sw/inc/poolfmt.hxx:373
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER5
+sw/inc/poolfmt.hxx:379
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_CNTNT10
+sw/inc/poolfmt.hxx:383
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_ILLUS1
+sw/inc/poolfmt.hxx:387
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_OBJECT1
+sw/inc/poolfmt.hxx:391
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_TABLES1
+sw/inc/poolfmt.hxx:395
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_AUTHORITIES1
+sw/inc/poolfmt.hxx:398
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER6
+sw/inc/poolfmt.hxx:399
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER7
+sw/inc/poolfmt.hxx:400
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER8
+sw/inc/poolfmt.hxx:401
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER9
+sw/inc/poolfmt.hxx:402
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_TOX_USER10
+sw/inc/poolfmt.hxx:409
+    enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_DOC_TITEL
+sw/inc/reffld.hxx:37
+    enum REFERENCESUBTYPE REF_OUTLINE
+sw/source/core/inc/dbg_lay.hxx:37
+    enum PROT Pos
+sw/source/core/inc/dbg_lay.hxx:45
+    enum PROT Snapshot
+sw/source/core/inc/SwXMLBlockImport.hxx:81
+    enum SwXMLTextBlockToken OFFICE_BODY
+sw/source/core/inc/SwXMLBlockImport.hxx:82
+    enum SwXMLTextBlockToken OFFICE_TEXT
+sw/source/core/inc/SwXMLBlockImport.hxx:83
+    enum SwXMLTextBlockToken OFFICE_DOCUMENT
+sw/source/core/inc/SwXMLBlockImport.hxx:84
+    enum SwXMLTextBlockToken OFFICE_DOCUMENT_CONTENT
+sw/source/core/inc/SwXMLBlockImport.hxx:85
+    enum SwXMLTextBlockToken TEXT_P
+sw/source/core/inc/SwXMLBlockImport.hxx:107
+    enum SwXMLBlockListToken BLOCK
+sw/source/core/inc/SwXMLBlockImport.hxx:108
+    enum SwXMLBlockListToken BLOCK_LIST
+sw/source/core/unocore/unosett.cxx:1606
+    enum (anonymous at /home/noel/libo3/sw/source/core/unocore/unosett.cxx:1605:5) NotInChapterFirst
+sw/source/core/unocore/unosett.cxx:1607
+    enum (anonymous at /home/noel/libo3/sw/source/core/unocore/unosett.cxx:1605:5) NotInChapterLast
+sw/source/core/unocore/unosett.cxx:1608
+    enum (anonymous at /home/noel/libo3/sw/source/core/unocore/unosett.cxx:1605:5) InChapterFirst
+sw/source/core/unocore/unosett.cxx:1609
+    enum (anonymous at /home/noel/libo3/sw/source/core/unocore/unosett.cxx:1605:5) InChapterLast
+sw/source/filter/ww8/ww8scan.hxx:599
+    enum WW8PLCFx_Fc_FKP::Limits eMaxCache
+tools/source/generic/poly.cxx:1017
+    enum (anonymous at /home/noel/libo3/tools/source/generic/poly.cxx:1017:5) maxRecursionDepth
+vcl/source/gdi/CommonSalLayout.cxx:312
+    enum (anonymous namespace)::VerticalOrientation Upright
+vcl/source/gdi/CommonSalLayout.cxx:315
+    enum (anonymous namespace)::VerticalOrientation TransformedRotated
