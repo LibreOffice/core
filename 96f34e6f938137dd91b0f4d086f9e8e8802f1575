@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3e17c752",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-25T07:38:40Z",
+      "side": 1,
+      "message": "both bugs are covered by the one fix to ParameterList::find?",
+      "revId": "96f34e6f938137dd91b0f4d086f9e8e8802f1575",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9e2fdba0",
+        "filename": "include/tools/inetmime.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-25T07:38:40Z",
+      "side": 1,
+      "message": "*T*he key is *the* name of ...",
+      "revId": "96f34e6f938137dd91b0f4d086f9e8e8802f1575",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5e0c9342",
+        "filename": "tools/qa/cppunit/test_inetmime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-25T07:38:40Z",
+      "side": 1,
+      "message": "What do you mean with \"catching\" vs. \"non catching\" scan?\n\nAlso, if a comment pertains to the code following it (rather than code preceding it), a subtle hint to the reader is to make it a capitalized sentence ending in a colon.",
+      "revId": "96f34e6f938137dd91b0f4d086f9e8e8802f1575",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_81377ce2",
+        "filename": "tools/qa/cppunit/test_inetmime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-25T07:38:40Z",
+      "side": 1,
+      "message": "The easiest fix today is to use\n\n  OUString value2(u\"value2 \\u20AC\");\n\nAn alternative would be\n\n  OUString value2(RTL_CONSTASCII_STRINGPARAM(\"value2 \\xE2\\x82\\xAC\"), RTL_TEXTENCODING_UTF8);",
+      "revId": "96f34e6f938137dd91b0f4d086f9e8e8802f1575",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
