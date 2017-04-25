@@ -340,4 +340,25 @@
             android:src="@drawable/ic_search_direction_up" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/UNO_commands_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/UNO_commands_string"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:inputType="" />
+        <ImageButton
+            android:id="@+id/button_send_UNO_commands"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:background="@drawable/image_button_background"
+            android:padding="10dp"
+            android:src="@drawable/ic_search" />
+    </LinearLayout>
+
 </LinearLayout>

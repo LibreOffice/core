@@ -29,5 +29,11 @@
             android:key="ENABLE_EXPERIMENTAL"
             android:summary="@string/pref_experimental_editing_summary"
             android:defaultValue="false" />
+        <CheckBoxPreference
+            android:title="@string/pref_developer_mode"
+            android:key="ENABLE_DEVELOPER"
+            android:dependency="ENABLE_EXPERIMENTAL"
+            android:summary="@string/pref_developer_mode_summary"
+            android:defaultValue="false" />
     </PreferenceCategory>
 </PreferenceScreen>
