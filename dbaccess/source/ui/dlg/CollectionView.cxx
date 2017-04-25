@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/msgbox.hxx>
 #include "dbustrings.hrc"
+#include "bitmaps.hlst"
 #include "UITools.hxx"
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
@@ -80,8 +81,8 @@ OCollectionView::OCollectionView( vcl::Window * pParent
     m_pName->GrabFocus();
 
     m_pNewFolder->SetStyle( m_pNewFolder->GetStyle() | WB_NOPOINTERFOCUS );
-    m_pUp->SetModeImage(Image(BitmapEx(ModuleRes(BMP_NAVIGATION_BTN_UP_SC))));
-    m_pNewFolder->SetModeImage(Image(BitmapEx(ModuleRes(BMP_NAVIGATION_CREATEFOLDER_SC))));
+    m_pUp->SetModeImage(Image(BitmapEx(BMP_NAVIGATION_BTN_UP_SC)));
+    m_pNewFolder->SetModeImage(Image(BitmapEx(BMP_NAVIGATION_CREATEFOLDER_SC)));
 
     m_pView->SetDoubleClickHdl( LINK( this, OCollectionView, Dbl_Click_FileView ) );
     m_pView->EnableAutoResize();

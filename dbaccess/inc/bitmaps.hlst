@@ -1,0 +1,39 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_DBACCESS_INC_BITMAPS_HRC
+#define INCLUDED_DBACCESS_INC_BITMAPS_HRC
+
+#define BMP_FORMFOLDER_TREE_L           "dbaccess/res/forms_32.png"
+#define BMP_REPORTFOLDER_TREE_L         "dbaccess/res/reports_32.png"
+#define BMP_QUERYFOLDER_TREE_L          "dbaccess/res/queries_32.png"
+#define BMP_TABLEFOLDER_TREE_L          "dbaccess/res/tables_32.png"
+#define DATABASE_TREE_ICON              "dbaccess/res/db.png"
+#define TABLE_TREE_ICON                 "res/sx03188.png"
+#define TABLEFOLDER_TREE_ICON           "res/sx03187.png"
+#define VIEW_TREE_ICON                  "res/sx16670.png"
+#define QUERY_TREE_ICON                 "res/sx03202.png"
+#define QUERYFOLDER_TREE_ICON           "res/sx03201.png"
+#define FORM_TREE_ICON                  "dbaccess/res/form_16.png"
+#define FORMFOLDER_TREE_ICON            "dbaccess/res/forms_16.png"
+#define REPORT_TREE_ICON                "dbaccess/res/report_16.png"
+#define REPORTFOLDER_TREE_ICON          "dbaccess/res/reports_16.png"
+#define BMP_NAVIGATION_BTN_UP_SC        "res/fp010.png"
+#define BMP_NAVIGATION_CREATEFOLDER_SC  "res/fp015.png"
+#define BMP_EXCEPTION_ERROR             "dbaccess/res/exerror.png"
+#define BMP_EXCEPTION_WARNING           "dbaccess/res/exwarning.png"
+#define BMP_EXCEPTION_INFO              "dbaccess/res/exinfo.png"
+#define BMP_PRIMARY_KEY                 "dbaccess/res/jo01.png"
+#define BMP_PKEYICON                    "dbaccess/res/pkey.png"
+#define BMP_UP                          "dbaccess/res/sortup.png"
+#define BMP_DOWN                        "dbaccess/res/sortdown.png"
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

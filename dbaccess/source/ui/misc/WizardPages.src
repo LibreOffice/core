@@ -56,16 +56,6 @@ String STR_WIZ_PB_OK
     Text [ en-US ] = "C~reate";
 };
 
-Bitmap BMP_UP
-{
-    File = "sortup.png" ;
-};
-
-Bitmap BMP_DOWN
-{
-    File = "sortdown.png" ;
-};
-
 String STR_WIZ_TABLE_COPY
 {
     Text [ en-US ] = "Copy table" ;

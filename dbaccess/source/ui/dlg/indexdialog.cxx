@@ -23,6 +23,7 @@
 
 #include "indexdialog.hxx"
 #include "dbu_dlg.hrc"
+#include "bitmaps.hlst"
 #include "dbaccess_helpid.hrc"
 #include "indexfieldscontrol.hxx"
 #include "indexcollection.hxx"
@@ -281,7 +282,7 @@ namespace dbaui
 
     void DbaIndexDialog::fillIndexList()
     {
-        Image aPKeyIcon(BitmapEx(ModuleRes(BMP_PKEYICON)));
+        Image aPKeyIcon(BitmapEx(BMP_PKEYICON));
         // fill the list with the index names
         m_pIndexList->Clear();
         Indexes::const_iterator aIndexLoop = m_pIndexes->begin();
