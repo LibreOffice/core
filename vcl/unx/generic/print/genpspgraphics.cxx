@@ -781,10 +781,7 @@ bool GenPspGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     if( !pSF )
         return false;
 
-    if (pSF->GetGlyphOutline(rGlyph, rB2DPolyPoly))
-        return true;
-
-    return false;
+    return pSF->GetGlyphOutline(rGlyph, rB2DPolyPoly);
 }
 
 SalLayout* GenPspGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)

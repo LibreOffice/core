@@ -247,9 +247,7 @@ bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
     else
         rxFontCharMap = xFontCharMap;
 
-    if( rxFontCharMap->IsDefaultMap() )
-        return false;
-    return true;
+    return !rxFontCharMap->IsDefaultMap();
 }
 
 bool OutputDevice::GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const

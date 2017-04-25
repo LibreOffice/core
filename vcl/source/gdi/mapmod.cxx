@@ -63,12 +63,10 @@ MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
 
 bool MapMode::ImplMapMode::operator==( const ImplMapMode& rImpMapMode ) const
 {
-    if (meUnit == rImpMapMode.meUnit
+    return meUnit == rImpMapMode.meUnit
         && maOrigin == rImpMapMode.maOrigin
         && maScaleX == rImpMapMode.maScaleX
-        && maScaleY == rImpMapMode.maScaleY)
-        return true;
-    return false;
+        && maScaleY == rImpMapMode.maScaleY;
 }
 
 namespace

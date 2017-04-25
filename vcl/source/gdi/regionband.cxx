@@ -1213,14 +1213,7 @@ bool RegionBand::IsInside(const Point& rPoint) const
         if((pBand->mnYTop <= rPoint.Y()) && (pBand->mnYBottom >= rPoint.Y()))
         {
             // is point within separation of the band?
-            if(pBand->IsInside(rPoint.X()))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return pBand->IsInside(rPoint.X());
         }
 
         pBand = pBand->mpNextBand;

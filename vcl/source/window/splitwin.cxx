@@ -1839,10 +1839,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
         bool            bPropSmaller;
 
         mnMouseModifier = rMEvt.GetModifier();
-        if ( !(mnMouseModifier & KEY_SHIFT) || (static_cast<sal_uInt16>(mnSplitPos+1) >= mpSplitSet->mpItems.size()) )
-            bPropSmaller = false;
-        else
-            bPropSmaller = true;
+        bPropSmaller = (mnMouseModifier & KEY_SHIFT) && (static_cast<sal_uInt16>(mnSplitPos+1) < mpSplitSet->mpItems.size());
 
         // here we can set the maximum size
         StartSplit();
@@ -2865,10 +2862,7 @@ bool SplitWindow::IsItemValid( sal_uInt16 nId ) const
     sal_uInt16          nPos;
     ImplSplitSet* pSet = mpBaseSet ? ImplFindItem(mpBaseSet, nId, nPos) : nullptr;
 
-    if ( pSet )
-        return true;
-    else
-        return false;
+    return pSet != nullptr;
 }
 
 sal_uInt16 SplitWindow::GetItemId( vcl::Window* pWindow ) const

@@ -436,10 +436,7 @@ bool CommonSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSe
         }
     }
 
-    if (hb_set_has(mpVertGlyphs, nGlyphIndex))
-        return true;
-
-    return false;
+    return hb_set_has(mpVertGlyphs, nGlyphIndex) != 0;
 }
 
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)

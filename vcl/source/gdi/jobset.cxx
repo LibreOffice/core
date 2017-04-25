@@ -170,7 +170,7 @@ JobSetup& JobSetup::operator=( JobSetup&& rJobSetup )
 
 bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
 {
-    if ( mnSystem          == rImplJobSetup.mnSystem        &&
+    return mnSystem          == rImplJobSetup.mnSystem        &&
          maPrinterName     == rImplJobSetup.maPrinterName   &&
          maDriver          == rImplJobSetup.maDriver        &&
          meOrientation     == rImplJobSetup.meOrientation   &&
@@ -181,9 +181,7 @@ bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
          mnPaperHeight     == rImplJobSetup.mnPaperHeight   &&
          mnDriverDataLen   == rImplJobSetup.mnDriverDataLen &&
          maValueMap        == rImplJobSetup.maValueMap      &&
-         memcmp( mpDriverData, rImplJobSetup.mpDriverData, mnDriverDataLen ) == 0)
-        return true;
-    return false;
+         memcmp( mpDriverData, rImplJobSetup.mpDriverData, mnDriverDataLen ) == 0;
 }
 
 namespace

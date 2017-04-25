@@ -500,7 +500,8 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
     if ( mxData == rSet.mxData )
         return true;
 
-    if ( (mxData->mnOptions             == rSet.mxData->mnOptions)              &&
+    return
+         (mxData->mnOptions             == rSet.mxData->mnOptions)              &&
          (mxData->mnDoubleClkTime       == rSet.mxData->mnDoubleClkTime)        &&
          (mxData->mnDoubleClkWidth      == rSet.mxData->mnDoubleClkWidth)       &&
          (mxData->mnDoubleClkHeight     == rSet.mxData->mnDoubleClkHeight)      &&
@@ -516,10 +517,7 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
          (mxData->mnActionDelay         == rSet.mxData->mnActionDelay)          &&
          (mxData->mnMenuDelay           == rSet.mxData->mnMenuDelay)            &&
          (mxData->mnFollow              == rSet.mxData->mnFollow)               &&
-         (mxData->mnWheelBehavior       == rSet.mxData->mnWheelBehavior ) )
-        return true;
-    else
-        return false;
+         (mxData->mnWheelBehavior       == rSet.mxData->mnWheelBehavior );
 }
 
 ImplStyleData::ImplStyleData() :
@@ -2279,7 +2277,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
         return false;
     }
 
-    if ( (mxData->mnOptions                 == rSet.mxData->mnOptions)                  &&
+    return (mxData->mnOptions                 == rSet.mxData->mnOptions)                  &&
          (mxData->mbAutoMnemonic            == rSet.mxData->mbAutoMnemonic)             &&
          (mxData->mnDragFullOptions         == rSet.mxData->mnDragFullOptions)          &&
          (mxData->mnSelectionOptions        == rSet.mxData->mnSelectionOptions)         &&
@@ -2376,10 +2374,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maListBoxPreviewDefaultLogicSize  == rSet.mxData->maListBoxPreviewDefaultLogicSize)   &&
          (mxData->maListBoxPreviewDefaultPixelSize  == rSet.mxData->maListBoxPreviewDefaultPixelSize)   &&
          (mxData->mnListBoxPreviewDefaultLineWidth  == rSet.mxData->mnListBoxPreviewDefaultLineWidth)   &&
-         (mxData->mbPreviewUsesCheckeredBackground == rSet.mxData->mbPreviewUsesCheckeredBackground))
-        return true;
-    else
-        return false;
+         (mxData->mbPreviewUsesCheckeredBackground == rSet.mxData->mbPreviewUsesCheckeredBackground);
 }
 
 ImplMiscData::ImplMiscData()
@@ -2416,12 +2411,9 @@ bool MiscSettings::operator ==( const MiscSettings& rSet ) const
     if ( mxData == rSet.mxData )
         return true;
 
-    if ( (mxData->mnEnableATT           == rSet.mxData->mnEnableATT ) &&
+    return (mxData->mnEnableATT           == rSet.mxData->mnEnableATT ) &&
          (mxData->mnDisablePrinting     == rSet.mxData->mnDisablePrinting ) &&
-         (mxData->mbEnableLocalizedDecimalSep == rSet.mxData->mbEnableLocalizedDecimalSep ) )
-        return true;
-    else
-        return false;
+         (mxData->mbEnableLocalizedDecimalSep == rSet.mxData->mbEnableLocalizedDecimalSep );
 }
 
 bool
@@ -2615,12 +2607,9 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
     if ( mxData == rSet.mxData )
         return true;
 
-    if ( (mxData->mnTipDelay        == rSet.mxData->mnTipDelay ) &&
+    return (mxData->mnTipDelay        == rSet.mxData->mnTipDelay ) &&
          (mxData->mnTipTimeout      == rSet.mxData->mnTipTimeout ) &&
-         (mxData->mnBalloonDelay    == rSet.mxData->mnBalloonDelay ) )
-        return true;
-    else
-        return false;
+         (mxData->mnBalloonDelay    == rSet.mxData->mnBalloonDelay );
 }
 
 sal_uLong

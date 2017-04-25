@@ -315,9 +315,7 @@ bool PNGReaderImpl::ReadNextChunk()
     }
 
     ++maChunkIter;
-    if( mnChunkType == PNGCHUNK_IEND )
-        return false;
-    return true;
+    return mnChunkType != PNGCHUNK_IEND;
 }
 
 // read the remaining chunks from mrPNGStream
