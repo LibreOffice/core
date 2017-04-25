@@ -560,6 +560,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                     hideBottomToolbar();
                 } else {
                     showBottomToolbar();
+                    findViewById(R.id.search_toolbar).setVisibility(View.GONE);
                     findViewById(R.id.formatting_toolbar).setVisibility(View.VISIBLE);
                     hideSoftKeyboardDirect();
                     isSearchToolbarOpen=false;
@@ -649,7 +650,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     public void openDrawer() {
         mDrawerLayout.openDrawer(mDrawerList);
         hideBottomToolbar();
-        hideFormattingToolbar();
     }
 
     public void showAbout() {
