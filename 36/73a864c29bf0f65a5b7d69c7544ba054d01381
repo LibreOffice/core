@@ -1,0 +1,9 @@
+Code-Review+1: Michael Stahl <mstahl@redhat.com>
+Code-Review+1: Miklos Vajna <vmiklos@collabora.co.uk>
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Verified+1: Eike Rathke <erack@redhat.com>
+Submitted-by: Eike Rathke <erack@redhat.com>
+Submitted-at: Tue, 25 Apr 2017 14:51:30 +0200
+Reviewed-on: https://gerrit.libreoffice.org/36894
+Project: core
+Branch: refs/heads/libreoffice-5-2-7
