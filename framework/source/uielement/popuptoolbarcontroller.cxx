@@ -18,6 +18,7 @@
  */
 
 #include <classes/resource.hrc>
+#include "bitmaps.hlst"
 #include <classes/fwkresid.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -496,11 +497,11 @@ void SaveToolbarController::updateImage()
     else if ( m_bModified )
     {
         if (eImageType == vcl::ImageType::Size26)
-            aImage = Image(BitmapEx(FwkResId(BMP_SAVEMODIFIED_LARGE)));
+            aImage = Image(BitmapEx(BMP_SAVEMODIFIED_LARGE));
         else if (eImageType == vcl::ImageType::Size32)
-            aImage = Image(BitmapEx(FwkResId(BMP_SAVEMODIFIED_EXTRALARGE)));
+            aImage = Image(BitmapEx(BMP_SAVEMODIFIED_EXTRALARGE));
         else
-            aImage = Image(BitmapEx(FwkResId(BMP_SAVEMODIFIED_SMALL)));
+            aImage = Image(BitmapEx(BMP_SAVEMODIFIED_SMALL));
     }
 
     if ( !aImage )
