@@ -134,9 +134,7 @@ namespace sfx2
                 if ( ( _rArgument >>= aNamedValue ) && isSpecialArgumentName( aNamedValue.Name ) )
                     return true;
                 PropertyValue aPropertyValue;
-                if ( ( _rArgument >>= aPropertyValue ) && isSpecialArgumentName( aPropertyValue.Name ) )
-                    return true;
-                return false;
+                return ( _rArgument >>= aPropertyValue ) && isSpecialArgumentName( aPropertyValue.Name );
             }
         };
     }

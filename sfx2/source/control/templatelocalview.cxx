@@ -748,10 +748,7 @@ bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nReg
             {
                 if (aIter->nId == nItemId)
                 {
-                    if (!mpDocTemplates->CopyTo(pRegItem->mnRegionId,aIter->nDocId,rName))
-                        return false;
-
-                    return true;
+                    return mpDocTemplates->CopyTo(pRegItem->mnRegionId,aIter->nDocId,rName);
                 }
             }
 

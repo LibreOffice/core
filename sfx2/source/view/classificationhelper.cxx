@@ -554,10 +554,7 @@ bool SfxClassificationHelper::HasImpactLevel()
         return false;
 
     it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
-    if (it == rCategory.m_aLabels.end())
-        return false;
-
-    return true;
+    return it != rCategory.m_aLabels.end();
 }
 
 bool SfxClassificationHelper::HasDocumentHeader()
@@ -568,10 +565,7 @@ bool SfxClassificationHelper::HasDocumentHeader()
 
     SfxClassificationCategory& rCategory = itCategory->second;
     auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCHEADER());
-    if (it == rCategory.m_aLabels.end() || it->second.isEmpty())
-        return false;
-
-    return true;
+    return it != rCategory.m_aLabels.end() && !it->second.isEmpty();
 }
 
 bool SfxClassificationHelper::HasDocumentFooter()
@@ -582,10 +576,7 @@ bool SfxClassificationHelper::HasDocumentFooter()
 
     SfxClassificationCategory& rCategory = itCategory->second;
     auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCFOOTER());
-    if (it == rCategory.m_aLabels.end() || it->second.isEmpty())
-        return false;
-
-    return true;
+    return it != rCategory.m_aLabels.end() && !it->second.isEmpty();
 }
 
 InfoBarType SfxClassificationHelper::GetImpactLevelType()
