@@ -1003,11 +1003,9 @@ OUString ScModelObj::getPostIts()
     for (const sc::NoteEntry& aNote : aNotes)
     {
         boost::property_tree::ptree aAnnotation;
-        OStringBuffer aBuf;
-        aNote.maPos.Format(aBuf, ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc,
-                           ScAddress::Details(formula::FormulaGrammar::AddressConvention::CONV_ODF, aNote.maPos));
 
-        aAnnotation.put("id", aBuf.toString());
+        aAnnotation.put("id", aNote.mpNote->GetId());
+        aAnnotation.put("tab", aNote.maPos.Tab());
         aAnnotation.put("author", aNote.mpNote->GetAuthor());
         aAnnotation.put("dateTime", aNote.mpNote->GetDate());
         aAnnotation.put("text", aNote.mpNote->GetText());
@@ -1042,6 +1040,55 @@ OUString ScModelObj::getPostIts()
 
     return OUString::fromUtf8(aStream.str().c_str());
 }
+
+OUString ScModelObj::getPostItsPos()
+{
+    if (!pDocShell)
+        return OUString();
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    std::vector<sc::NoteEntry> aNotes;
+    rDoc.GetAllNoteEntries(aNotes);
+
+    boost::property_tree::ptree aAnnotations;
+    for (const sc::NoteEntry& aNote : aNotes)
+    {
+        boost::property_tree::ptree aAnnotation;
+
+        aAnnotation.put("id", aNote.mpNote->GetId());
+        aAnnotation.put("tab", aNote.maPos.Tab());
+
+        // Calculating the cell cursor position
+        ScViewData* pViewData = ScDocShell::GetViewData();
+        ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+        if (pGridWindow)
+        {
+            SCCOL nX = aNote.maPos.Col();
+            SCROW nY = aNote.maPos.Row();
+            Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
+            long nSizeXPix;
+            long nSizeYPix;
+            pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
+
+            double fPPTX = pViewData->GetPPTX();
+            double fPPTY = pViewData->GetPPTY();
+            Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
+                            Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
+
+            aAnnotation.put("cellPos", aRect.toString());
+        }
+
+        aAnnotations.push_back(std::make_pair("", aAnnotation));
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("commentsPos", aAnnotations);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    return OUString::fromUtf8(aStream.str().c_str());
+}
+
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
