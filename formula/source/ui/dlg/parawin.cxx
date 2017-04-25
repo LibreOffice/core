@@ -27,6 +27,7 @@
 #include "formula/IFunctionDescription.hxx"
 #include "ModuleHelper.hxx"
 #include "ForResId.hrc"
+#include "bitmaps.hlst"
 
 #define VAR_ARGS 30
 #define PAIRED_VAR_ARGS (VAR_ARGS + VAR_ARGS)
@@ -58,13 +59,13 @@ ParaWin::ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg):
     m_pFtArgDesc->SetText("");
 
     get(m_pBtnFx1, "FX1");
-    m_pBtnFx1->SetModeImage(Image(BitmapEx(ModuleRes(BMP_FX))));
+    m_pBtnFx1->SetModeImage(Image(BitmapEx(BMP_FX)));
     get(m_pBtnFx2, "FX2");
-    m_pBtnFx2->SetModeImage(Image(BitmapEx(ModuleRes(BMP_FX))));
+    m_pBtnFx2->SetModeImage(Image(BitmapEx(BMP_FX)));
     get(m_pBtnFx3, "FX3");
-    m_pBtnFx3->SetModeImage(Image(BitmapEx(ModuleRes(BMP_FX))));
+    m_pBtnFx3->SetModeImage(Image(BitmapEx(BMP_FX)));
     get(m_pBtnFx4, "FX4");
-    m_pBtnFx4->SetModeImage(Image(BitmapEx(ModuleRes(BMP_FX))));
+    m_pBtnFx4->SetModeImage(Image(BitmapEx(BMP_FX)));
 
     get(m_pFtArg1, "FT_ARG1");
     get(m_pFtArg2, "FT_ARG2");

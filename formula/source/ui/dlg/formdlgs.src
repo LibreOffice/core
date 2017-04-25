@@ -20,26 +20,6 @@
 #include "formdlgs.hrc"
 #include "ForResId.hrc"
 
-Bitmap BMP_STR_CLOSE
-{
-    File = "fapclose.png";
-};
-
-Bitmap BMP_STR_OPEN
-{
-    File = "fapopen.png";
-};
-
-Bitmap BMP_STR_END
-{
-    File = "fapok.png";
-};
-
-Bitmap BMP_STR_ERROR
-{
-    File = "faperror.png";
-};
-
 String STR_TITLE1
 {
     Text [ en-US ] = "Function Wizard" ;
@@ -54,20 +34,9 @@ String STR_END
 {
     Text [ en-US ] = "~End" ;
 };
-
-Bitmap RID_BMP_REFBTN1
-{
-    File = "refinp1.png";
-};
-
 String RID_STR_SHRINK
 {
     Text [ en-US ] = "Shrink" ;
-};
-
-Bitmap RID_BMP_REFBTN2
-{
-    File = "refinp2.png";
 };
 
 String RID_STR_EXPAND
