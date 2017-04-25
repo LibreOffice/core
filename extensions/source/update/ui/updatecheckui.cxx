@@ -52,7 +52,7 @@
 #include <sfx2/sfx.hrc>
 #include "rtl/ustrbuf.hxx"
 
-#include "updatecheckui.hrc"
+#include "bitmaps.hlst"
 
 #define STR_NO_WEBBROWSER_FOUND  (RID_SFX_APP_START + 7)
 
@@ -126,7 +126,6 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
     VclPtr<BubbleWindow> mpBubbleWin;
     VclPtr<SystemWindow> mpIconSysWin;
     VclPtr<MenuBar>     mpIconMBar;
-    ResMgr*             mpUpdResMgr;
     ResMgr*             mpSfxResMgr;
     Idle                maWaitIdle;
     Timer               maTimeoutTimer;
@@ -179,7 +178,6 @@ public:
                                                        const uno::Reference< beans::XVetoableChangeListener > & aListener) override;
 };
 
-
 UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xContext) :
       m_xContext(xContext)
     , mpIconMBar( nullptr )
@@ -188,7 +186,6 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     , mbBubbleChanged( false )
     , mnIconID( 0 )
 {
-    mpUpdResMgr = ResMgr::CreateResMgr( "updchk" );
     mpSfxResMgr = ResMgr::CreateResMgr( "sfx" );
 
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
@@ -207,15 +204,12 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     Application::AddEventListener( maApplicationEventHdl );
 }
 
-
 UpdateCheckUI::~UpdateCheckUI()
 {
     Application::RemoveEventListener( maApplicationEventHdl );
     RemoveBubbleWindow( true );
-    delete mpUpdResMgr;
     delete mpSfxResMgr;
 }
-
 
 OUString SAL_CALL
 UpdateCheckUI::getImplementationName()
@@ -237,19 +231,19 @@ UpdateCheckUI::supportsService( OUString const & serviceName )
 
 Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
 {
-    sal_uInt32 nResID;
+    OUString sResID;
     vcl::Window *pMBarWin = pMBar->GetWindow();
     sal_uInt32 nMBarHeight = 20;
 
     if ( pMBarWin )
         nMBarHeight = pMBarWin->GetOutputSizePixel().getHeight();
 
-    if ( nMBarHeight >= 35 )
-        nResID = RID_UPDATE_AVAILABLE_26;
+    if (nMBarHeight >= 35)
+        sResID = RID_UPDATE_AVAILABLE_26;
     else
-        nResID = RID_UPDATE_AVAILABLE_16;
+        sResID = RID_UPDATE_AVAILABLE_16;
 
-    return Image(BitmapEx(ResId(nResID, *mpUpdResMgr)));
+    return Image(BitmapEx(sResID));
 }
 
 Image UpdateCheckUI::GetBubbleImage( OUString &rURL )

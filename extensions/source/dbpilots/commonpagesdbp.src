@@ -19,16 +19,6 @@
 
 #include "dbpresid.hrc"
 
-Bitmap BMP_TABLE
-{
-    File = "sx03188.png";
-};
-
-Bitmap BMP_QUERY
-{
-    File = "sx03202.png";
-};
-
 String RID_STR_OPTION_DB_FIELD_TITLE
 {
     Text [ en-US ] = "Database Field";

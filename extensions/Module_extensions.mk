@@ -56,9 +56,6 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_updatecheckui \
 	Library_updchk \
 ))
-$(eval $(call gb_Module_add_l10n_targets,extensions,\
-	AllLangResTarget_updchk \
-))
 
 $(eval $(call gb_Module_add_check_targets,extensions,\
     CppunitTest_extensions_test_update \

@@ -35,6 +35,7 @@
 #include "bibview.hxx"
 #include "bibresid.hxx"
 #include "bib.hrc"
+#include "bitmaps.hlst"
 
 #include "bibtools.hxx"
 #include <osl/mutex.hxx>
@@ -573,9 +574,9 @@ void BibToolBar::RebuildToolbar()
 
 void BibToolBar::ApplyImageList()
 {
-    SetItemImage(nTBC_BT_AUTOFILTER, Image(BitmapEx(BibResId(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? RID_EXTBMP_AUTOFILTER_SC : RID_EXTBMP_AUTOFILTER_LC))));
-    SetItemImage(nTBC_BT_FILTERCRIT, Image(BitmapEx(BibResId(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? RID_EXTBMP_FILTERCRIT_SC : RID_EXTBMP_FILTERCRIT_LC))));
-    SetItemImage(nTBC_BT_REMOVEFILTER, Image(BitmapEx(BibResId(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? RID_EXTBMP_REMOVE_FILTER_SORT_SC : RID_EXTBMP_REMOVE_FILTER_SORT_LC))));
+    SetItemImage(nTBC_BT_AUTOFILTER, Image(BitmapEx(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_AUTOFILTER_SC) : OUStringLiteral(RID_EXTBMP_AUTOFILTER_LC))));
+    SetItemImage(nTBC_BT_FILTERCRIT, Image(BitmapEx(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_FILTERCRIT_SC) : OUStringLiteral(RID_EXTBMP_FILTERCRIT_LC))));
+    SetItemImage(nTBC_BT_REMOVEFILTER, Image(BitmapEx(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_REMOVE_FILTER_SORT_SC) : OUStringLiteral(RID_EXTBMP_REMOVE_FILTER_SORT_LC))));
     AdjustToolBox();
 }
 

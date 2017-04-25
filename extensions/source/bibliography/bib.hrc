@@ -25,15 +25,6 @@
 #define RID_BIB_START                   RID_EXTENSIONS_START
 #endif
 
-//Bitmaps(100)
-#define RID_BIB_IMAGES                   (RID_BIB_START + 100)
-#define RID_EXTBMP_AUTOFILTER_SC         (RID_BIB_IMAGES + 1)
-#define RID_EXTBMP_FILTERCRIT_SC         (RID_BIB_IMAGES + 2)
-#define RID_EXTBMP_REMOVE_FILTER_SORT_SC (RID_BIB_IMAGES + 3)
-#define RID_EXTBMP_AUTOFILTER_LC         (RID_BIB_IMAGES + 4)
-#define RID_EXTBMP_FILTERCRIT_LC         (RID_BIB_IMAGES + 5)
-#define RID_EXTBMP_REMOVE_FILTER_SORT_LC (RID_BIB_IMAGES + 6)
-
 // Strings (500)
 #define RID_BIB_STRING              (RID_BIB_START + 200)
 #define RID_BIB_STR_NONE            (RID_BIB_STRING +  1)
