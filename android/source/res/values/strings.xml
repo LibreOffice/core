@@ -136,6 +136,9 @@
     <string name="alert_copy_svg_slide_show_to_clipboard">Your Android device doesn\'t support in-app svg slideshow. We copied the slideshow link to clipboard. Please press home button, open a modern web browser, paste in the address bar, and go.</string>
     <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
     <string name="slideshow_action_back">Back</string>
+    <string name="action_UNO_commands">Send UNO Cmd</string>
+    <string name="pref_developer_mode">Developer Mode</string>
+    <string name="pref_developer_mode_summary">Enable developer mode where you can send UNO commands within app. Use at your own risk.</string>
 
     <!-- Calc Header Menu Strings -->
     <string name="calc_insert_before">Insert</string>
@@ -151,5 +154,11 @@
     <string name="calc_optimal_length_confirm">OK</string>
     <string name="calc_optimal_length_default_text">Enter Extra Length in 100th/mm</string>
     <string name="calc_alert_double_click_optimal_length">Hint: Double tap on a header sets optimal width/height.</string>
+
+    <!-- UNO cmd controller Strings -->
+    <string name="UNO_commands_string_hint">UNO Command</string>
+    <string name="UNO_commands_string_type_hint">Type</string>
+    <string name="UNO_commands_string_value_hint">Value</string>
+    <string name="UNO_commands_string_parent_value_hint">Parent Value</string>
 
 </resources>

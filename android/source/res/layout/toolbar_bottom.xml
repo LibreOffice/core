@@ -369,4 +369,96 @@
             android:src="@drawable/ic_search_direction_up" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/UNO_commands_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/UNO_commands_string"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:inputType="textNoSuggestions"
+                android:hint="@string/UNO_commands_string_hint" />
+
+            <ImageButton
+                android:id="@+id/button_send_UNO_commands"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/image_button_background"
+                android:padding="10dp"
+                app:srcCompat="@drawable/ic_check" />
+
+            <ImageButton
+                android:id="@+id/button_send_UNO_commands_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/image_button_background"
+                android:padding="10dp"
+                app:srcCompat="@drawable/ic_filter_list_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_send_UNO_commands_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/image_button_background"
+                android:padding="10dp"
+                app:srcCompat="@drawable/ic_undo" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/UNO_commands_string_parent_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:inputType="textNoSuggestions"
+                android:hint="@string/UNO_commands_string_parent_value_hint" />
+
+            <EditText
+                android:id="@+id/UNO_commands_string_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:inputType="textNoSuggestions"
+                android:hint="@string/UNO_commands_string_type_hint" />
+
+            <EditText
+                android:id="@+id/UNO_commands_string_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:inputType="textNoSuggestions"
+                android:hint="@string/UNO_commands_string_value_hint" />
+
+            <ImageButton
+                android:id="@+id/button_add_property"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/image_button_background"
+                android:padding="10dp"
+                app:srcCompat="@drawable/ic_add_black_24dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>
