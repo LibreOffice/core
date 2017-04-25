@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_e473eeb2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-04-25T22:04:07Z",
+      "side": 1,
+      "message": "if you see the changes in ParameterList::find as one fix then yes.\n\nwe use the ::find result to do an insert_before\n\nwith the old ::find behaviour we used to do \nif greater: insert_before_next (insert_after)\nelse: insert_at_end\n\nthis fails with attributes like a*0* a*1* a*2*,\nthe ParameterList would sort to a*0* a*2* a*1*\nand a*0* a*1* b*0* would sort to a*0* b*0* a*1*\n(sorting only matters when joining the value sections)\n\nnow it changed to\nif lesser: insert_before \nelse: insert_at_end\n\nI plan to use a std container for ParameterList when I find some time.",
+      "parentUuid": "5a3905b3_3e17c752",
+      "revId": "96f34e6f938137dd91b0f4d086f9e8e8802f1575",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_9e2fdba0",
         "filename": "include/tools/inetmime.hxx",
         "patchSetId": 2

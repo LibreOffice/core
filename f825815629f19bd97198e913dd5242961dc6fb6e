@@ -16,6 +16,24 @@
       "revId": "f825815629f19bd97198e913dd5242961dc6fb6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_84930aa3",
+        "filename": "tools/qa/cppunit/test_inetmime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-04-25T22:04:07Z",
+      "side": 0,
+      "message": "yes, didn\u0027t notice that suffix is printed in case of failure.\n\nIf we check for\n\u003e input.getStr() + input.getLength()\nwe would not get to the second CPPUNIT_ASSERT_EQUAL.\nI will stick with your version because it\u0027s more useful and don\u0027t check the end pointer.",
+      "parentUuid": "5a3905b3_01046c13",
+      "revId": "f825815629f19bd97198e913dd5242961dc6fb6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
