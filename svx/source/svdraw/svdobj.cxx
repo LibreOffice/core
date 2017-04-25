@@ -1295,14 +1295,9 @@ bool SdrObject::beginSpecialDrag(SdrDragStat& rDrag) const
 
     SdrHdlKind eHdl = (pHdl == nullptr) ? SdrHdlKind::Move : pHdl->GetKind();
 
-    if(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperRight ||
+    return eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperRight ||
         eHdl==SdrHdlKind::Left || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerLeft ||
-        eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerRight)
-    {
-        return true;
-    }
-
-    return false;
+        eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerRight;
 }
 
 bool SdrObject::applySpecialDrag(SdrDragStat& rDrag)

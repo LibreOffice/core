@@ -311,12 +311,7 @@ bool ViewObjectContactOfOuterPageBorder::isPrimitiveVisible(const DisplayInfo& r
 
     const SdrView& rView = pSdrPageView->GetView();
 
-    if(!rView.IsPageVisible() && rView.IsPageBorderVisible())
-    {
-        return false;
-    }
-
-    return true;
+    return rView.IsPageVisible() || !rView.IsPageBorderVisible();
 }
 
 ViewObjectContactOfInnerPageBorder::ViewObjectContactOfInnerPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact)

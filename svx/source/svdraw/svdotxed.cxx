@@ -297,7 +297,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             delete pNewText;
     }
 
-    /* Beginning Chaining-related code */
+    /* Chaining-related code */
     rOutl.ClearOverflowingParaNum();
 
     pEdtOutl = nullptr;
