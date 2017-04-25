@@ -24,6 +24,7 @@
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_dialog2.hxx"
 #include "dp_dependencies.hxx"
+#include "bitmaps.hlst"
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -181,10 +182,10 @@ ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
-    m_aSharedImage(BitmapEx(DialogHelper::getResId(RID_BMP_SHARED))),
-    m_aLockedImage(BitmapEx(DialogHelper::getResId(RID_BMP_LOCKED))),
-    m_aWarningImage(BitmapEx(DialogHelper::getResId(RID_BMP_WARNING))),
-    m_aDefaultImage(BitmapEx(DialogHelper::getResId(RID_BMP_EXTENSION))),
+    m_aSharedImage(BitmapEx(RID_BMP_SHARED)),
+    m_aLockedImage(BitmapEx(RID_BMP_LOCKED)),
+    m_aWarningImage(BitmapEx(RID_BMP_WARNING)),
+    m_aDefaultImage(BitmapEx(RID_BMP_EXTENSION)),
     m_pScrollBar( nullptr ),
     m_pManager( nullptr )
 {
