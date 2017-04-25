@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6441be39",
+        "filename": "android/source/res/layout/activity_main.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-04-25T16:09:41Z",
+      "side": 1,
+      "message": "Side panel or progress panel wasn\u0027t visible without it for some reason. Maybe it is not needed anymore, IDK",
+      "range": {
+        "startLine": 74,
+        "startChar": 58,
+        "endLine": 74,
+        "endChar": 62
+      },
+      "revId": "ddd5da67e835af1c284b730fa5b7f8097486ddfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
