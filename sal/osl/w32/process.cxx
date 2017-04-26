@@ -29,6 +29,7 @@
 #endif
 
 #include <cassert>
+#include <memory>
 
 #include <osl/diagnose.h>
 #include <osl/security.h>
@@ -497,12 +498,12 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *u
     LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ustrValue->buffer);
     if (SetEnvironmentVariableW(lpName, lpValue))
     {
-        wchar_t *buffer = new wchar_t[wcslen(lpName) + 1 + wcslen(lpValue) + 1];
-        wcscpy(buffer, lpName);
-        wcscat(buffer, L"=");
-        wcscat(buffer, lpValue);
-        _wputenv(buffer);
-        delete[] buffer;
+        auto buffer = std::unique_ptr<wchar_t[]>(
+            new wchar_t[wcslen(lpName) + 1 + wcslen(lpValue) + 1]);
+        wcscpy(buffer.get(), lpName);
+        wcscat(buffer.get(), L"=");
+        wcscat(buffer.get(), lpValue);
+        _wputenv(buffer.get());
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
@@ -515,11 +516,11 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
     if (SetEnvironmentVariableW(lpName, nullptr))
     {
-        wchar_t *buffer = new wchar_t[wcslen(lpName) + 1 + 1];
-        wcscpy(buffer, lpName);
-        wcscat(buffer, L"=");
-        _wputenv(buffer);
-        delete[] buffer;
+        auto buffer = std::unique_ptr<wchar_t[]>(
+            new wchar_t[wcslen(lpName) + 1 + 1]);
+        wcscpy(buffer.get(), lpName);
+        wcscat(buffer.get(), L"=");
+        _wputenv(buffer.get());
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
