@@ -3697,7 +3697,7 @@ uno::Sequence<uno::Sequence<uno::Any>> SAL_CALL SwXCellRange::getDataArray()
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
             if(!pCell)
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
             rCellAny = pCell->GetAny();
             ++pCurrentCell;
         }
@@ -3764,6 +3764,8 @@ SwXCellRange::getData() throw (uno::RuntimeException, std::exception)
         rRow = uno::Sequence<double>(nColCount);
         for(auto& rValue : rRow)
         {
+            if (!(*pCurrentCell).is())
+                throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
             rValue = (*pCurrentCell)->getValue();
             ++pCurrentCell;
         }
