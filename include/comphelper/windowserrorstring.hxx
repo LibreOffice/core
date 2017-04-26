@@ -29,13 +29,8 @@ inline OUString WindowsErrorString(DWORD nErrorCode)
                        nullptr) == 0)
         return OUString::number(nErrorCode, 16);
 
-    if (pMsgBuf[wcslen(pMsgBuf)-1] == '\n')
-        pMsgBuf[wcslen(pMsgBuf)-1] = '\0';
-
-    if (pMsgBuf[wcslen(pMsgBuf)-1] == '\r')
-        pMsgBuf[wcslen(pMsgBuf)-1] = '\0';
-
-    OUString result(SAL_U(pMsgBuf));
+    OUString result(reinterpret_cast<sal_Unicode const *>(pMsgBuf));
+    result.endsWith("\r\n", &result);
 
     LocalFree(pMsgBuf);
 
