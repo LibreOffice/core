@@ -596,7 +596,7 @@ rtl_arena_constructor (void * obj)
 
     QUEUE_START_NAMED(arena, arena_);
 
-    (void) RTL_MEMORY_LOCK_INIT(&(arena->m_lock));
+    RTL_MEMORY_LOCK_INIT(&(arena->m_lock));
 
     head = &(arena->m_segment_reserve_span_head);
     rtl_arena_segment_constructor (head);

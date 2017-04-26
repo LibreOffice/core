@@ -736,7 +736,7 @@ rtl_cache_constructor (void * obj)
     QUEUE_START_NAMED(cache, cache_);
 
     /* slab layer */
-    (void)RTL_MEMORY_LOCK_INIT(&(cache->m_slab_lock));
+    RTL_MEMORY_LOCK_INIT(&(cache->m_slab_lock));
 
     QUEUE_START_NAMED(&(cache->m_free_head), slab_);
     QUEUE_START_NAMED(&(cache->m_used_head), slab_);
@@ -746,7 +746,7 @@ rtl_cache_constructor (void * obj)
     cache->m_hash_shift = highbit(cache->m_hash_size) - 1;
 
     /* depot layer */
-    (void)RTL_MEMORY_LOCK_INIT(&(cache->m_depot_lock));
+    RTL_MEMORY_LOCK_INIT(&(cache->m_depot_lock));
 
     return 1;
 }
@@ -762,7 +762,7 @@ rtl_cache_destructor (void * obj)
     assert(QUEUE_STARTED_NAMED(cache, cache_));
 
     /* slab layer */
-    (void)RTL_MEMORY_LOCK_DESTROY(&(cache->m_slab_lock));
+    RTL_MEMORY_LOCK_DESTROY(&(cache->m_slab_lock));
 
     assert(QUEUE_STARTED_NAMED(&(cache->m_free_head), slab_));
     assert(QUEUE_STARTED_NAMED(&(cache->m_used_head), slab_));
@@ -772,7 +772,7 @@ rtl_cache_destructor (void * obj)
     assert(cache->m_hash_shift == highbit(cache->m_hash_size) - 1);
 
     /* depot layer */
-    (void)RTL_MEMORY_LOCK_DESTROY(&(cache->m_depot_lock));
+    RTL_MEMORY_LOCK_DESTROY(&(cache->m_depot_lock));
 }
 
 /* ================================================================= */
