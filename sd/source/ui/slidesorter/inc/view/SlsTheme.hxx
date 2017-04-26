@@ -143,7 +143,7 @@ private:
     /** Guarded initialization of the specified icon in the maIcons
         container.
     */
-    void InitializeIcon (const IconType eType, sal_uInt16 nResourceId);
+    void InitializeIcon(const IconType eType, const OUString& rResourceId);
 };
 
 } } } // end of namespace ::sd::slidesorter::view

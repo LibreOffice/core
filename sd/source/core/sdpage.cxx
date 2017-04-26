@@ -70,6 +70,7 @@
 #include "sdresid.hxx"
 #include "stlsheet.hxx"
 #include "glob.hrc"
+#include "bitmaps.hlst"
 #include "glob.hxx"
 #include "helpids.h"
 #include "anminfo.hxx"
@@ -329,7 +330,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PRESOBJ_GRAPHIC:
         {
-            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_GRAPHIC ) );
+            BitmapEx aBmpEx(BMP_PRESOBJ_GRAPHIC);
             Graphic  aGraphic( aBmpEx );
             OutputDevice &aOutDev = *Application::GetDefaultDevice();
             aOutDev.Push();
@@ -350,7 +351,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PRESOBJ_OBJECT:
         {
             pSdrObj = new SdrOle2Obj();
-            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_OBJECT ) );
+            BitmapEx aBmpEx(BMP_PRESOBJ_OBJECT);
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
         }
@@ -360,7 +361,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         {
             pSdrObj = new SdrOle2Obj();
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarChart" );
-            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_CHART ) );
+            BitmapEx aBmpEx(BMP_PRESOBJ_CHART);
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
         }
@@ -370,7 +371,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         {
             pSdrObj = new SdrOle2Obj();
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarOrg" );
-            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_ORGCHART ) );
+            BitmapEx aBmpEx(BMP_PRESOBJ_ORGCHART);
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
         }
@@ -381,7 +382,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         {
             pSdrObj = new SdrOle2Obj();
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarCalc" );
-            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
+            BitmapEx aBmpEx(BMP_PRESOBJ_TABLE);
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
         }

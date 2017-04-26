@@ -69,6 +69,7 @@
 #include "DrawViewShell.hxx"
 #include "unoobj.hxx"
 #include "res_bmp.hrc"
+#include "bitmaps.hlst"
 #include "unokywds.hxx"
 #include "unopback.hxx"
 #include <vcl/dibtools.hxx>
@@ -1094,8 +1095,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     }
     case WID_PAGE_LDBITMAP:
         {
-            Reference< awt::XBitmap > xBitmap(
-                VCLUnoHelper::CreateBitmap( BitmapEx( SdResId( BMP_PAGE ) ) ) );
+            Reference< awt::XBitmap > xBitmap(VCLUnoHelper::CreateBitmap(BitmapEx(BMP_PAGE)));
             aAny <<= xBitmap;
         }
         break;

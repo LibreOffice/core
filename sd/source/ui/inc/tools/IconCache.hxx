@@ -50,7 +50,7 @@ public:
             given id or an error occurred.  Should not happen under normal
             circumstances.
     */
-    Image GetIcon (sal_uInt16 nResourceId);
+    Image GetIcon(const OUString& rResourceId);
 
 private:
     class Implementation;

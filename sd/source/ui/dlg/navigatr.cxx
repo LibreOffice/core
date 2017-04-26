@@ -44,6 +44,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
+#include "bitmaps.hlst"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "sdresid.hxx"
@@ -266,7 +267,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 
         for (sal_uInt16 nID = NAVIGATOR_DRAGTYPE_URL; nID < NAVIGATOR_DRAGTYPE_COUNT; ++nID)
         {
-            sal_uInt16 nRId = GetDragTypeSdResId( (NavigatorDragType)nID, false );
+            sal_uInt16 nRId = GetDragTypeSdStrId((NavigatorDragType)nID);
             if( nRId > 0 )
             {
                 DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
@@ -616,21 +617,38 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
     maLbDocs->SelectEntryPos( nPos );
 }
 
-sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, bool bImage )
+sal_uInt16 SdNavigatorWin::GetDragTypeSdStrId(NavigatorDragType eDT)
 {
     switch( eDT )
     {
         case NAVIGATOR_DRAGTYPE_NONE:
-                return( bImage ? 0 : STR_NONE );
+                return STR_NONE;
         case NAVIGATOR_DRAGTYPE_URL:
-                return( bImage ? BMP_HYPERLINK : STR_DRAGTYPE_URL );
+                return STR_DRAGTYPE_URL;
         case NAVIGATOR_DRAGTYPE_EMBEDDED:
-                return( bImage ? BMP_EMBEDDED : STR_DRAGTYPE_EMBEDDED );
+                return STR_DRAGTYPE_EMBEDDED;
         case NAVIGATOR_DRAGTYPE_LINK:
-                return( bImage ? BMP_LINK : STR_DRAGTYPE_LINK );
+                return STR_DRAGTYPE_LINK;
         default: OSL_FAIL( "No resource for DragType available!" );
     }
     return 0;
+}
+
+OUString SdNavigatorWin::GetDragTypeSdBmpId(NavigatorDragType eDT)
+{
+    switch( eDT )
+    {
+        case NAVIGATOR_DRAGTYPE_NONE:
+                return OUString();
+        case NAVIGATOR_DRAGTYPE_URL:
+                return OUString(BMP_HYPERLINK);
+        case NAVIGATOR_DRAGTYPE_EMBEDDED:
+                return OUString(BMP_EMBEDDED);
+        case NAVIGATOR_DRAGTYPE_LINK:
+                return OUString(BMP_LINK);
+        default: OSL_FAIL( "No resource for DragType available!" );
+    }
+    return OUString();
 }
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()
@@ -721,7 +739,7 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
 void SdNavigatorWin::SetDragImage()
 {
     const sal_uInt16 nDragTypeId = maToolbox->GetItemId("dragmode");
-    maToolbox->SetItemImage(nDragTypeId, Image(BitmapEx(SdResId(GetDragTypeSdResId(meDragType, true)))));
+    maToolbox->SetItemImage(nDragTypeId, Image(BitmapEx(GetDragTypeSdBmpId(meDragType))));
 }
 
 /**
