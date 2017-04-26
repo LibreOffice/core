@@ -1050,10 +1050,6 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     // format
     SvtSaveOptions().SetWarnAlienFormat(false);
 
-    // If annotations are turned off in tiled rendering case
-    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
-        ScDocShell::GetViewData()->SetNotesMode(false);
-
     // default tile size in pixels
     mnTilePixelWidth = 256;
     mnTilePixelHeight = 256;
