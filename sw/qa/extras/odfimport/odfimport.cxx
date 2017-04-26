@@ -772,5 +772,17 @@ DECLARE_ODFIMPORT_TEST(testTdf101729, "tdf101729.odt")
     CPPUNIT_ASSERT( x < l + 3 * w / 4);
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf107392, "tdf107392.odt")
+{
+    // Shapes from bottom to top were Frame, SVG, Bitmap, i.e. in the order as
+    // they appeared in the document, not according to their requested z-index,
+    // as sorting failed.
+    // So instead of 0, 1, 2 these were 2, 0, 1.
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShapeByName("Bitmap"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(getShapeByName("Frame"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getShapeByName("SVG"), "ZOrder"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

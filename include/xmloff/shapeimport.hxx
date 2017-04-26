@@ -319,6 +319,9 @@ public:
 
     void shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape >& rShape,
                                sal_Int32 nZIndex );
+    /// Updates the z-order of other shapes to be consistent again, needed due
+    /// to the removal of rShape.
+    void shapeRemoved(const css::uno::Reference<css::drawing::XShape>& rShape);
 
     void addShapeConnection( css::uno::Reference< css::drawing::XShape >& rConnectorShape,
                              bool bStart,
