@@ -3687,6 +3687,8 @@ SwXCellRange::getData()
         rRow = uno::Sequence<double>(nColCount);
         for(auto& rValue : rRow)
         {
+            if(!(*pCurrentCell))
+                throw uno::RuntimeException();
             rValue = (*pCurrentCell)->getValue();
             ++pCurrentCell;
         }
