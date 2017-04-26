@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_2f814f4b",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-04-26T11:36:27Z",
+      "side": 1,
+      "message": "Shouldn\u0027t that go into the if(pSalData) ?",
+      "revId": "03272091aa3528d93f0757b9358f7dd2a9cab97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
