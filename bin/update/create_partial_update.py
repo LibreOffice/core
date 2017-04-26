@@ -10,11 +10,18 @@ import json
 
 from config import parse_config
 from uncompress_mar import extract_mar
-from tools import get_file_info
+from tools import get_file_info, get_hash
 from signing import sign_mar_file
+
+from path import UpdaterPath, mkdir_p
 
 BUF_SIZE = 1024
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
+
+def InvalidFileException(Exception):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
 
 def download_file(filepath, url, hash_string):
     with open(filepath, "wb") as f:
@@ -26,26 +33,10 @@ def download_file(filepath, url, hash_string):
         for block in response.iter_content(1024):
             f.write(block)
 
-    with open(filepath, "rb") as f:
-        sha512 = hashlib.sha512()
-        while True:
-            data = f.read(BUF_SIZE)
-            if not data:
-                break
-            sha512.update(data)
-        file_hash = sha512.hexdigest()
+    file_hash = get_hash(filepath)
 
     if file_hash != hash_string:
-        pass
-
-def mkdir_p(path):
-    try:
-        os.makedirs(path)
-    except OSError as exc:  # Python >2.5
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
-        else:
-            raise
+        raise InvalidFileException()
 
 def handle_language(lang_entries, filedir):
     mar = os.environ.get('MAR', 'mar')
@@ -109,16 +100,20 @@ def add_single_dir(path):
     return dir_name[0]
 
 def main():
-    product_name = sys.argv[1]
-    workdir = sys.argv[2]
-    update_dir = sys.argv[3]
-    temp_dir = sys.argv[4]
-    mar_name_prefix = sys.argv[5]
-    update_config = sys.argv[6]
-    platform = sys.argv[7]
-    current_build_path = sys.argv[8]
-    build_id = sys.argv[9]
-    mar_dir = sys.argv[10]
+    workdir = sys.argv[1]
+
+    updater_path = UpdaterPath(workdir)
+    updater_path.ensure_dir_exist()
+
+    mar_name_prefix = sys.argv[2]
+    update_config = sys.argv[3]
+    platform = sys.argv[4]
+    build_id = sys.argv[5]
+
+    current_build_path = updater_path.get_current_build_dir()
+    mar_dir = updater_path.get_mar_dir()
+    temp_dir = updater_path.get_previous_build_dir()
+    update_dir = updater_path.get_update_dir()
 
     current_build_path = add_single_dir(current_build_path)
 
