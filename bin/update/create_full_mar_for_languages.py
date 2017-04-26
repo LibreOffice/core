@@ -9,6 +9,7 @@ from tools import uncompress_file_to_dir, get_file_info
 
 from config import parse_config
 from path import UpdaterPath
+from signing import sign_mar_file
 
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -38,8 +39,6 @@ def main():
 
     config = parse_config(update_config)
 
-    mar_executable = os.environ.get('MAR', 'mar')
-
     language_pack_dir = os.path.join(workdir, "installation", product_name + "_languagepack", "archive", "install")
     language_packs = os.listdir(language_pack_dir)
     lang_infos = []
@@ -56,9 +55,7 @@ def main():
 
         subprocess.call([os.path.join(current_dir_path, 'make_full_update.sh'), mar_file_name, directory])
 
-        signed_mar_file = make_complete_mar_name(target_dir, filename_prefix + '_signed', language)
-        subprocess.call([mar_executable, '-C', target_dir, '-d', config.certificate_path, '-n', config.certificate_name, '-s', mar_file_name, signed_mar_file])
-        os.rename(signed_mar_file, mar_file_name)
+        sign_mar_file(target_dir, config, mar_file_name, filename_prefix)
 
         lang_infos.append(create_lang_infos(mar_file_name, language, config.base_url))
 
