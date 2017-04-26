@@ -46,6 +46,7 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 #include "eventhandler.hxx"
+#include "bitmaps.hlst"
 
 namespace sdr
 {
@@ -192,7 +193,7 @@ namespace sdr
             aTranslate.setY(aTranslate.getY() + fDistance);
 
             // draw a draft bitmap
-            const Bitmap aDraftBitmap(ResId(BMAP_GrafikEi, *ImpGetResMgr()));
+            const BitmapEx aDraftBitmap(BMAP_GrafikEi);
 
             if(!aDraftBitmap.IsEmpty())
             {

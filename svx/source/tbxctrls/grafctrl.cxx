@@ -51,6 +51,7 @@
 #include <svx/svdtrans.hxx>
 #include "svx/grafctrl.hxx"
 #include "svx/tbxcolor.hxx"
+#include "bitmaps.hlst"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -183,10 +184,10 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
 struct CommandToRID
 {
     const char* pCommand;
-    sal_uInt16      nResId;
+    const char* sResId;
 };
 
-static sal_uInt16 ImplGetRID( const OUString& aCommand )
+static OUString ImplGetRID( const OUString& aCommand )
 {
     static const CommandToRID aImplCommandToResMap[] =
     {
@@ -197,23 +198,23 @@ static sal_uInt16 ImplGetRID( const OUString& aCommand )
         { ".uno:GrafContrast",      RID_SVXBMP_GRAF_CONTRAST        },
         { ".uno:GrafGamma",         RID_SVXBMP_GRAF_GAMMA           },
         { ".uno:GrafTransparence",  RID_SVXBMP_GRAF_TRANSPARENCE    },
-        { nullptr, 0 }
+        { nullptr, "" }
     };
 
-    sal_uInt16 nRID = 0;
+    OUString sRID;
 
     sal_Int32 i( 0 );
     while ( aImplCommandToResMap[ i ].pCommand )
     {
         if ( aCommand.equalsAscii( aImplCommandToResMap[ i ].pCommand ))
         {
-            nRID = aImplCommandToResMap[ i ].nResId;
+            sRID = OUString::createFromAscii(aImplCommandToResMap[i].sResId);
             break;
         }
         ++i;
     }
 
-    return nRID;
+    return sRID;
 }
 
 class ImplGrafControl : public Control
@@ -246,8 +247,8 @@ ImplGrafControl::ImplGrafControl(
     , maImage( VclPtr<FixedImage>::Create(this) )
     , maField( VclPtr<ImplGrafMetricField>::Create(this, rCmd, rFrame) )
 {
-    ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
-    BitmapEx aBitmapEx(aResId);
+    OUString sResId(ImplGetRID(rCmd));
+    BitmapEx aBitmapEx(sResId);
 
     Size    aImgSize(aBitmapEx.GetSizePixel());
     Size    aFldSize(maField->GetSizePixel());

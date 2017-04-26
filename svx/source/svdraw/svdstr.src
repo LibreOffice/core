@@ -1159,9 +1159,6 @@ String STR_ItemValCIRC_ARC
     Text [ en-US ] = "Arc" ;
 };
 
- // Now: bitmaps:
-Bitmap BMAP_GrafikEi { File = "grafikei.png" ; };
-
 // Strings for the templates dialog
 String SIP_UNKNOWN_ATTR
 {
@@ -2156,22 +2153,6 @@ String SIP_SA_GRAFCROP
 
 };
 
-Bitmap SIP_SA_PAGESHADOW35X35
-{
-    File = "pageshadow35x35.png";
-};
-
-
-Bitmap SIP_SA_MARKERS
-{
-    File = "markers.png";
-};
-
-Bitmap BMP_SVXOLEOBJ
-{
-    File = "oleobj.png" ;
-};
-
 String STR_ObjNameSingulMEDIA
 {
     Text [ en-US ] = "Media object" ;
@@ -2244,11 +2225,6 @@ String STR_ObjNameSingulTable
 String STR_ObjNamePluralTable
 {
     Text [ en-US ] = "Tables";
-};
-
-Bitmap SIP_SA_CROP_MARKERS
-{
-    File = "cropmarkers.png";
 };
 
 String STR_ObjNameSingulFONTWORK

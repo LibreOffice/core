@@ -2235,41 +2235,6 @@ String RID_SVXSTR_GALLERY_PREVIEW
     Text [ en-US ] = "Preview";
 };
 
-Bitmap RID_SVXBMP_GREENCHECK
-{
-    File = "nu01.png";
-};
-
-Bitmap RID_SVXBMP_YELLOWCHECK
-{
-    File = "nu04.png";
-};
-
-Bitmap RID_SVXBMP_REDCROSS
-{
-    File = "nu02.png";
-};
-
-Bitmap RID_SVXBMP_SHADOW_ANGLE
-{
-    File = "fw018.png";
-};
-
-Bitmap RID_SVXBMP_SHADOW_SIZE
-{
-    File = "fw019.png";
-};
-
-Bitmap RID_SVXBMP_SHADOW_XDIST
-{
-    File = "fw016.png";
-};
-
-Bitmap RID_SVXBMP_SHADOW_YDIST
-{
-    File = "fw017.png";
-};
-
 String RID_SVXSTR_SUCCESSRECOV
 {
     Text[ en-US ] = "Successfully recovered";

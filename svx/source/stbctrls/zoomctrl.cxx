@@ -34,6 +34,7 @@
 #include "stbctrls.h"
 #include <svx/dialmgr.hxx>
 #include "modctrl_internal.hxx"
+#include "bitmaps.hlst"
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 
@@ -181,7 +182,7 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxZoomPageStatusBarControl,SfxVoidItem);
 SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
     sal_uInt16 _nId, StatusBar& rStb)
     : SfxStatusBarControl(_nSlotId, _nId, rStb)
-    , maImage(BitmapEx(SVX_RES(RID_SVXBMP_ZOOM_PAGE)))
+    , maImage(BitmapEx(RID_SVXBMP_ZOOM_PAGE))
 {
     GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_FIT_SLIDE));
 }

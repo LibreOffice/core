@@ -31,6 +31,7 @@
 #include "svx/dlgutil.hxx"
 
 #include <svx/dialogs.hrc>
+#include "bitmaps.hlst"
 #include <svx/fontwork.hxx>
 #include <editeng/outlobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -803,13 +804,13 @@ void SvxFontWorkDialog::ApplyImageList()
 {
     if (nLastShadowTbxId == nShadowSlantId)
     {
-        m_pFbShadowX->SetImage(Image(BitmapEx(SVX_RES(RID_SVXBMP_SHADOW_ANGLE))));
-        m_pFbShadowY->SetImage(Image(BitmapEx(SVX_RES(RID_SVXBMP_SHADOW_SIZE))));
+        m_pFbShadowX->SetImage(Image(BitmapEx(RID_SVXBMP_SHADOW_ANGLE)));
+        m_pFbShadowY->SetImage(Image(BitmapEx(RID_SVXBMP_SHADOW_SIZE)));
     }
     else
     {
-        m_pFbShadowX->SetImage(Image(BitmapEx(SVX_RES(RID_SVXBMP_SHADOW_XDIST))));
-        m_pFbShadowY->SetImage(Image(BitmapEx(SVX_RES(RID_SVXBMP_SHADOW_YDIST))));
+        m_pFbShadowX->SetImage(Image(BitmapEx(RID_SVXBMP_SHADOW_XDIST)));
+        m_pFbShadowY->SetImage(Image(BitmapEx(RID_SVXBMP_SHADOW_YDIST)));
     }
 }
 

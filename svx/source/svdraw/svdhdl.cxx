@@ -67,8 +67,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <memory>
-
-
+#include "bitmaps.hlst"
 
 // #i15222#
 // Due to the resource problems in Win95/98 with bitmap resources I
@@ -101,7 +100,7 @@ public:
 #define INDIVIDUAL_COUNT    (5)
 
 SdrHdlBitmapSet::SdrHdlBitmapSet()
-    :   maMarkersBitmap(ResId(SIP_SA_MARKERS, *ImpGetResMgr())),
+    :   maMarkersBitmap(SIP_SA_MARKERS),
         // 15 kinds (BitmapMarkerKind) use index [0..5] + 5 extra
         maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
@@ -2364,7 +2363,7 @@ void SdrCropHdl::CreateB2dIAObject()
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         int nHdlSize = pHdlList->GetHdlSize();
 
-        const BitmapEx aHandlesBitmap( ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()) );
+        const BitmapEx aHandlesBitmap(SIP_SA_CROP_MARKERS);
         BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
 
         for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)

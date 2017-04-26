@@ -121,6 +121,10 @@
 #define BMP_ICON_SET_POSITIVE_YELLOW_SMILIE     "sc/res/icon-set-positive-yellow-smilie.png"
 #define BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE     "sc/res/icon-set-negative-yellow-smilie.png"
 
+#define RID_SVXBMP_SLIDERBUTTON                 "svx/res/slidezoombutton_10.png"
+#define RID_SVXBMP_SLIDERDECREASE               "svx/res/slidezoomout_10.png"
+#define RID_SVXBMP_SLIDERINCREASE               "svx/res/slidezoomin_10.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

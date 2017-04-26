@@ -44,6 +44,8 @@
 #include "extrusioncontrols.hrc"
 #include "extrusiondepthdialog.hxx"
 
+#include "bitmaps.hlst"
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -57,18 +59,70 @@ static const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45
 static const char g_sExtrusionDirection[] = ".uno:ExtrusionDirection";
 static const char g_sExtrusionProjection[] = ".uno:ExtrusionProjection";
 
+static const OUStringLiteral aLightOffBmps[] =
+{
+    RID_SVXBMP_LIGHT_OFF_FROM_TOP_LEFT,
+    RID_SVXBMP_LIGHT_OFF_FROM_TOP,
+    RID_SVXBMP_LIGHT_OFF_FROM_TOP_RIGHT,
+    RID_SVXBMP_LIGHT_OFF_FROM_LEFT,
+    "",
+    RID_SVXBMP_LIGHT_OFF_FROM_RIGHT,
+    RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_LEFT,
+    RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM,
+    RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_RIGHT
+};
+
+static const OUStringLiteral aLightOnBmps[] =
+{
+    RID_SVXBMP_LIGHT_ON_FROM_TOP_LEFT,
+    RID_SVXBMP_LIGHT_ON_FROM_TOP,
+    RID_SVXBMP_LIGHT_ON_FROM_TOP_RIGHT,
+    RID_SVXBMP_LIGHT_ON_FROM_LEFT,
+    "",
+    RID_SVXBMP_LIGHT_ON_FROM_RIGHT,
+    RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_LEFT,
+    RID_SVXBMP_LIGHT_ON_FROM_BOTTOM,
+    RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_RIGHT
+};
+
+static const OUStringLiteral aLightPreviewBmps[] =
+{
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_LEFT,
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP,
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_RIGHT,
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_LEFT,
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_RIGHT,
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_FRONT,
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_LEFT,
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM,
+    RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_RIGHT
+};
+
+static const OUStringLiteral aDirectionBmps[] =
+{
+    RID_SVXBMP_DIRECTION_DIRECTION_NW,
+    RID_SVXBMP_DIRECTION_DIRECTION_N,
+    RID_SVXBMP_DIRECTION_DIRECTION_NE,
+    RID_SVXBMP_DIRECTION_DIRECTION_W,
+    RID_SVXBMP_DIRECTION_DIRECTION_NONE,
+    RID_SVXBMP_DIRECTION_DIRECTION_E,
+    RID_SVXBMP_DIRECTION_DIRECTION_SW,
+    RID_SVXBMP_DIRECTION_DIRECTION_S,
+    RID_SVXBMP_DIRECTION_DIRECTION_SE
+};
+
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     svt::ToolboxController& rController,
     vcl::Window* pParentWindow
 )
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgPerspective(BitmapEx(SVX_RES(RID_SVXBMP_PERSPECTIVE)))
-    , maImgParallel(BitmapEx(SVX_RES(RID_SVXBMP_PARALLEL)))
+    , maImgPerspective(BitmapEx(RID_SVXBMP_PERSPECTIVE))
+    , maImgParallel(BitmapEx(RID_SVXBMP_PARALLEL))
 {
-    for(sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; ++i)
+    for (sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; ++i)
     {
-        maImgDirection[i] = Image(BitmapEx(SVX_RES(RID_SVXBMP_DIRECTION + i)));
+        maImgDirection[i] = Image(BitmapEx(aDirectionBmps[i]));
     }
 
     SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectToolbarMenuHdl ) );
@@ -321,12 +375,12 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     vcl::Window* pParentWindow
 )   : ToolbarMenu( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP )
     , mrController( rController )
-    , maImgDepth0(BitmapEx(SVX_RES(RID_SVXBMP_DEPTH_0)))
-    , maImgDepth1(BitmapEx(SVX_RES(RID_SVXBMP_DEPTH_1)))
-    , maImgDepth2(BitmapEx(SVX_RES(RID_SVXBMP_DEPTH_2)))
-    , maImgDepth3(BitmapEx(SVX_RES(RID_SVXBMP_DEPTH_3)))
-    , maImgDepth4(BitmapEx(SVX_RES(RID_SVXBMP_DEPTH_4)))
-    , maImgDepthInfinity(BitmapEx(SVX_RES(RID_SVXBMP_DEPTH_INFINITY)))
+    , maImgDepth0(BitmapEx(RID_SVXBMP_DEPTH_0))
+    , maImgDepth1(BitmapEx(RID_SVXBMP_DEPTH_1))
+    , maImgDepth2(BitmapEx(RID_SVXBMP_DEPTH_2))
+    , maImgDepth3(BitmapEx(RID_SVXBMP_DEPTH_3))
+    , maImgDepth4(BitmapEx(RID_SVXBMP_DEPTH_4))
+    , maImgDepthInfinity(BitmapEx(RID_SVXBMP_DEPTH_INFINITY))
     , meUnit(FUNIT_NONE)
     , mfDepth( -1.0 )
     , msExtrusionDepth( ".uno:ExtrusionDepth" )
@@ -526,9 +580,9 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
                                                  vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgBright(BitmapEx(SVX_RES(RID_SVXBMP_LIGHTING_BRIGHT)))
-    , maImgNormal(BitmapEx(SVX_RES(RID_SVXBMP_LIGHTING_NORMAL)))
-    , maImgDim(BitmapEx(SVX_RES(RID_SVXBMP_LIGHTING_DIM)))
+    , maImgBright(BitmapEx(RID_SVXBMP_LIGHTING_BRIGHT))
+    , maImgNormal(BitmapEx(RID_SVXBMP_LIGHTING_NORMAL))
+    , maImgDim(BitmapEx(RID_SVXBMP_LIGHTING_DIM))
     , mnLevel(0)
     , mbLevelEnabled(false)
     , mnDirection(FROM_FRONT)
@@ -538,10 +592,10 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
     {
         if( i != FROM_FRONT )
         {
-            maImgLightingOff[i] = Image(BitmapEx(SVX_RES(RID_SVXBMP_LIGHT_OFF + i)));
-            maImgLightingOn[i] = Image(BitmapEx(SVX_RES(RID_SVXBMP_LIGHT_ON + i)));
+            maImgLightingOff[i] = Image(BitmapEx(aLightOffBmps[i]));
+            maImgLightingOn[i] = Image(BitmapEx(aLightOnBmps[i]));
         }
-        maImgLightingPreview[i] = Image(BitmapEx(SVX_RES(RID_SVXBMP_LIGHT_PREVIEW + i)));
+        maImgLightingPreview[i] = Image(BitmapEx(aLightPreviewBmps[i]));
     }
 
     SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectToolbarMenuHdl ) );
@@ -794,10 +848,10 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgSurface1(BitmapEx(SVX_RES(RID_SVXBMP_WIRE_FRAME)))
-    , maImgSurface2(BitmapEx(SVX_RES(RID_SVXBMP_MATTE)))
-    , maImgSurface3(BitmapEx(SVX_RES(RID_SVXBMP_PLASTIC)))
-    , maImgSurface4(BitmapEx(SVX_RES(RID_SVXBMP_METAL)))
+    , maImgSurface1(BitmapEx(RID_SVXBMP_WIRE_FRAME))
+    , maImgSurface2(BitmapEx(RID_SVXBMP_MATTE))
+    , maImgSurface3(BitmapEx(RID_SVXBMP_PLASTIC))
+    , maImgSurface4(BitmapEx(RID_SVXBMP_METAL))
 {
     SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
 

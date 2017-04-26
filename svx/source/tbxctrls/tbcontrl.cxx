@@ -105,7 +105,7 @@
 #include <cppu/unotype.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/typed_flags_set.hxx>
-
+#include "bitmaps.hlst"
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
@@ -1952,18 +1952,18 @@ void SvxFrameWindow_Impl::CalcSizeValueSet()
 void SvxFrameWindow_Impl::InitImageList()
 {
     aImgVec.clear();
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME1)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME2)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME3)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME4)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME5)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME6)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME7)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME8)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME9)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME10)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME11)));
-    aImgVec.push_back(BitmapEx(SVX_RES(RID_SVXBMP_FRAME12)));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME1));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME2));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME3));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME4));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME5));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME6));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME7));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME8));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME9));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME10));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME11));
+    aImgVec.push_back(BitmapEx(RID_SVXBMP_FRAME12));
 
     if (GetParent()->GetDPIScaleFactor() > 1)
     {

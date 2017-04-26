@@ -19,10 +19,6 @@
 
 #include <svx/dialogs.hrc>
 
-Bitmap RID_SVXCTRL_RECTBTNS
-{
-    File = "rectbtns.bmp" ;
-};
 String STR_SWITCH
 {
     Text [ en-US ] = "Switch" ;

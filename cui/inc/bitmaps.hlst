@@ -64,6 +64,9 @@
 #define RID_SVXBMP_TARGET               "res/target.png"
 #define RID_SVXBMP_NEWDOC               "res/newdoc.png"
 
+#define RID_SVXBMP_COLLAPSEDNODE        "res/sx18002.png"
+#define RID_SVXBMP_EXPANDEDNODE         "res/sx18003.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

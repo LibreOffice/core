@@ -131,6 +131,10 @@
 #define BMP_REGRESSION_POWER            "chart2/res/regpow.png"
 #define BMP_REGRESSION_POLYNOMIAL       "chart2/res/regpoly.png"
 #define BMP_REGRESSION_MOVING_AVERAGE   "chart2/res/regavg.png"
+
+#define RID_SVXBMP_LAMP_ON              "svx/res/lighton.png"
+#define RID_SVXBMP_LAMP_OFF             "svx/res/light.bmp"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

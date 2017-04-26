@@ -40,6 +40,7 @@
 #include <svdglob.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include "bitmaps.hlst"
 
 namespace sdr { namespace contact {
 
@@ -138,10 +139,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createV
     {
         static vcl::DeleteOnDeinit< drawinglayer::primitive2d::DiscreteShadow > aDiscreteShadow(
             new drawinglayer::primitive2d::DiscreteShadow(
-                BitmapEx(
-                    ResId(
-                        SIP_SA_PAGESHADOW35X35,
-                        *ImpGetResMgr()))));
+                BitmapEx(SIP_SA_PAGESHADOW35X35)));
 
         if(aDiscreteShadow.get())
         {
