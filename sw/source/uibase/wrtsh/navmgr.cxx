@@ -46,6 +46,34 @@ SwNavigationMgr::SwNavigationMgr(SwWrtShell & rShell)
 {
 }
 
+SwNavigationMgr::~SwNavigationMgr()
+{
+    SolarMutexGuard g;
+    for (auto & it : m_entries)
+    {
+        it.get()->Remove(this);
+    }
+    m_entries.clear();
+}
+
+void SwNavigationMgr::SwClientNotify(SwModify const& rModify, const SfxHint& rHint)
+{
+    // our cursors may now spontaneously self-destruct: remove from
+    // m_entries if that happens
+    if (typeid(rHint) == typeid(sw::LegacyModifyHint))
+    {
+        for (auto it = m_entries.begin(); it != m_entries.end(); ++it)
+        {
+            if (!it->get() || & rModify == it->get())
+            {
+                const_cast<SwModify&>(rModify).Remove(this);
+                m_entries.erase(it);
+                break;
+            }
+        }
+    }
+}
+
 // This method is used by the navigation shell - defined in sw/source/uibase/inc/navsh.hxx
 // and implemented in sw/source/uibase/shells/navsh.cxx
 // It is called when we want to check if the back button should be enabled or not.
@@ -163,6 +191,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
         if (*m_entries.back()->GetPoint() != rPos)
         {
             sw::UnoCursorPointer pCursor(m_rMyShell.GetDoc()->CreateUnoCursor(rPos));
+            pCursor->Add(this);
             m_entries.push_back(pCursor);
         }
         bRet = true;
@@ -170,6 +199,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
     else {
         if ( (!m_entries.empty() && *m_entries.back()->GetPoint() != rPos) || m_entries.empty() ) {
             sw::UnoCursorPointer pCursor(m_rMyShell.GetDoc()->CreateUnoCursor(rPos));
+            pCursor->Add(this);
             m_entries.push_back(pCursor);
             bRet = true;
         }
