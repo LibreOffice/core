@@ -698,6 +698,8 @@ struct ZOrderHint
 {
     sal_Int32 nIs;
     sal_Int32 nShould;
+    /// The hint is for this shape.
+    uno::Reference<drawing::XShape> xShape;
 
     bool operator<(const ZOrderHint& rComp) const { return nShould < rComp.nShould; }
 };
@@ -832,22 +834,23 @@ void XMLShapeImportHelper::popGroupAndSort()
     {
         mpImpl->mpSortContext->popGroupAndSort();
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& rException )
     {
-        OSL_FAIL("exception while sorting shapes, sorting failed!");
+        SAL_WARN("xmloff", "exception while sorting shapes, sorting failed: " << rException.Message);
     }
 
     // put parent on top and drop current context, we are done
     mpImpl->mpSortContext = mpImpl->mpSortContext->mpParentContext;
 }
 
-void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape >&, sal_Int32 nZIndex )
+void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nZIndex )
 {
     if( mpImpl->mpSortContext)
     {
         ZOrderHint aNewHint;
         aNewHint.nIs = mpImpl->mpSortContext->mnCurrentZ++;
         aNewHint.nShould = nZIndex;
+        aNewHint.xShape = xShape;
 
         if( nZIndex == -1 )
         {
@@ -859,6 +862,37 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawi
             // insert into sort list
             mpImpl->mpSortContext->maZOrderList.push_back(aNewHint);
         }
+    }
+}
+
+void XMLShapeImportHelper::shapeRemoved(const uno::Reference<drawing::XShape>& xShape)
+{
+    auto it = std::find_if(mpImpl->mpSortContext->maZOrderList.begin(), mpImpl->mpSortContext->maZOrderList.end(), [&xShape](const ZOrderHint& rHint)
+    {
+        return rHint.xShape == xShape;
+    });
+    if (it == mpImpl->mpSortContext->maZOrderList.end())
+        // Part of the unsorted list, nothing to do.
+        return;
+
+    sal_Int32 nZIndex = it->nIs;
+
+    for (it = mpImpl->mpSortContext->maZOrderList.begin(); it != mpImpl->mpSortContext->maZOrderList.end();)
+    {
+        if (it->nIs == nZIndex)
+        {
+            // This is xShape: remove it and adjust the max of indexes
+            // accordingly.
+            it = mpImpl->mpSortContext->maZOrderList.erase(it);
+            mpImpl->mpSortContext->mnCurrentZ--;
+            continue;
+        }
+        else if (it->nIs > nZIndex)
+            // On top of xShape: adjust actual index to reflect removal.
+            it->nIs--;
+
+        // On top of or below xShape.
+        ++it;
     }
 }
 
