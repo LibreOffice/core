@@ -2550,6 +2550,8 @@ void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
             }
             else
             {
+                pTmpDel->GetPoint()->nContent.Assign(nullptr, 0);
+                pTmpDel->GetPoint()->nNode = 0;
                 pTmpDel->DeleteMark();
             }
             pTmpDel = nullptr;
@@ -2610,6 +2612,8 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
                 SwNode* pTableNd = pTCursor->GetPoint()->nNode.GetNode().FindTableNode();
                 if ( pTableNd )
                 {
+                    pTCursor->GetPoint()->nContent.Assign(nullptr, 0);
+                    pTCursor->GetPoint()->nNode = 0;
                     pTCursor->DeleteMark();
                     pSh->m_pCurrentCursor->GetPoint()->nNode = *pTableNd;
                 }
