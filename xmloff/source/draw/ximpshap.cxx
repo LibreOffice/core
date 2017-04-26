@@ -3414,7 +3414,7 @@ SdXMLFrameShapeContext::~SdXMLFrameShapeContext()
 {
 }
 
-void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext) const
+void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext)
 {
     const SdXMLGraphicObjectShapeContext* pSdXMLGraphicObjectShapeContext = dynamic_cast< const SdXMLGraphicObjectShapeContext* >(&rContext);
 
