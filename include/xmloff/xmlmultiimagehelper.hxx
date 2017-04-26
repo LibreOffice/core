@@ -33,7 +33,7 @@ private:
 protected:
     /// helper to get the created xShape instance, override this
     virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const = 0;
-    virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const = 0;
+    virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) = 0;
 
 public:
     MultiImageImportHelper();

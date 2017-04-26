@@ -550,7 +550,7 @@ private:
 protected:
     /// helper to get the created xShape instance, needs to be overridden
     virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const override;
-    virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const override;
+    virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) override;
 
 public:
 

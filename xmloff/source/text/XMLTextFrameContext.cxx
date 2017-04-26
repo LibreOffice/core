@@ -728,7 +728,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
     }
 }
 
-void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext) const
+void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext)
 {
     const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
 
@@ -738,6 +738,11 @@ void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContex
         {
             // just dispose to delete
             uno::Reference< lang::XComponent > xComp(pXMLTextFrameContext_Impl->GetPropSet(), UNO_QUERY);
+
+            // Inform shape importer about the removal so it can adjust
+            // z-indxes.
+            uno::Reference<drawing::XShape> xShape(xComp, uno::UNO_QUERY);
+            GetImport().GetShapeImport()->shapeRemoved(xShape);
 
             if(xComp.is())
             {
