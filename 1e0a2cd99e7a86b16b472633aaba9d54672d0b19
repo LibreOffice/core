@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_44d682c6",
+        "filename": "sc/sdi/cellsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-04-26T06:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_6ae42e0d",
+      "revId": "1e0a2cd99e7a86b16b472633aaba9d54672d0b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_0add6a42",
         "filename": "sc/source/core/data/document.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_64db7eee",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6522,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-04-26T06:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_0add6a42",
+      "revId": "1e0a2cd99e7a86b16b472633aaba9d54672d0b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_ea301ea1",
         "filename": "sc/source/ui/view/cellsh.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2017-04-20T17:06:20Z",
       "side": 1,
       "message": "This should not be squeezed into the FID_SHOW_ALL_NOTES / FID_HIDE_ALL_NOTES state handling, for which a call to AreAllNoteCaptionsShown() is unnecessary. Unless we want to disable those slots if already all notes are shown or hidden, but then AreAllNoteCaptionsShown() needs further enhancement to return three states AllShown/AllHidden/Mixed and I\u0027d leave that part out for another change. Until then please use a different case block.",
+      "revId": "1e0a2cd99e7a86b16b472633aaba9d54672d0b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a1ad588a",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-04-26T06:57:22Z",
+      "side": 1,
+      "message": "When I shrink the control to the columns it is hard to implement without mixed state. So i have to use it now.",
+      "parentUuid": "5a3905b3_ea301ea1",
       "revId": "1e0a2cd99e7a86b16b472633aaba9d54672d0b19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_84d86af1",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2379,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-04-26T06:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_cad28234",
+      "revId": "1e0a2cd99e7a86b16b472633aaba9d54672d0b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_60652fe0",
         "filename": "sc/uiconfig/scalc/toolbar/standardbar.xml",
         "patchSetId": 1
@@ -98,6 +170,30 @@
       "writtenOn": "2017-04-22T01:19:57Z",
       "side": 1,
       "message": "it shouldnt be added to the toolbar and it should be in the View menu above grid lines.",
+      "range": {
+        "startLine": 80,
+        "startChar": 1,
+        "endLine": 80,
+        "endChar": 57
+      },
+      "revId": "1e0a2cd99e7a86b16b472633aaba9d54672d0b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a4e566a9",
+        "filename": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-04-26T06:57:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_60652fe0",
       "range": {
         "startLine": 80,
         "startChar": 1,

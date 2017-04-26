@@ -106,6 +106,24 @@
       "revId": "6c73ca4671958cb066beecade5661e124c497e25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_24d176ce",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-04-26T06:57:22Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "5a3905b3_7ecb0f73",
+      "revId": "6c73ca4671958cb066beecade5661e124c497e25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
