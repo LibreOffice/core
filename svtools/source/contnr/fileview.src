@@ -62,14 +62,4 @@ String STR_SVT_GB
     Text [ en-US ] = "GB" ;
 };
 
-Bitmap RID_BMP_FOLDER
-{
-    File = "folder.png";
-};
-
-Bitmap RID_BMP_FOLDER_OPEN
-{
-    File = "folderop.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

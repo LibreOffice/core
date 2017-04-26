@@ -11,11 +11,12 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/dialog.hxx>
 #include "contentenumeration.hxx"
+#include "bitmaps.hlst"
 
 FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits | WB_SORT | WB_TABSTOP )
-    , m_aFolderImage(BitmapEx(SvtResId(RID_BMP_FOLDER)))
-    , m_aFolderExpandedImage(BitmapEx(SvtResId(RID_BMP_FOLDER_OPEN)))
+    , m_aFolderImage(BitmapEx(RID_BMP_FOLDER))
+    , m_aFolderExpandedImage(BitmapEx(RID_BMP_FOLDER_OPEN))
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(

@@ -57,7 +57,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,svt/res,\
     svtools/source/misc/ehdl.src \
-    svtools/source/brwbox/editbrowsebox.src \
 ))
 
 # vim: set noet sw=4 ts=4:

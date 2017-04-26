@@ -28,6 +28,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/svtools.hrc>
+#include "bitmaps.hlst"
 #include <svtools/viewdataentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "contentenumeration.hxx"
@@ -1456,7 +1457,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mnSuspendSelectCallback    ( 0 )
     ,mbIsFirstResort            ( true )
     ,aIntlWrapper               ( Application::GetSettings().GetLanguageTag() )
-    ,maFolderImage              (BitmapEx(SvtResId(RID_BMP_FOLDER)))
+    ,maFolderImage              (BitmapEx(RID_BMP_FOLDER))
     ,mxCmdEnv ( xEnv )
 
 {

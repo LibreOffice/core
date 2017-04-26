@@ -21,6 +21,7 @@
 #include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/svtools.hrc>
+#include "bitmaps.hlst"
 #include <svtools/svtresid.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
@@ -667,7 +668,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
             break;
     }
 
-    Bitmap aBmp( SvtResId( BMP_PLUGIN ) );
+    BitmapEx aBmp(BMP_PLUGIN);
     long nHeight = rRect.GetHeight() - pOut->GetTextHeight();
     long nWidth = rRect.GetWidth();
     if(nHeight > 0 && nWidth > 0 && aBmp.GetSizePixel().Width() > 0)
@@ -696,7 +697,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
             nWidth = nW;
         }
 
-        pOut->DrawBitmap( aP, Size( nWidth, nHeight ), aBmp );
+        pOut->DrawBitmap(aP, Size( nWidth, nHeight ), aBmp.GetBitmap());
     }
 
     pOut->IntersectClipRegion( rRect );

@@ -35,6 +35,7 @@
 #include <svtools/svtresid.hxx>
 #include <tools/wintypes.hxx>
 #include <svtools/svtools.hrc>
+#include "bitmaps.hlst"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
@@ -3336,8 +3337,8 @@ void SvImpLBox::implInitDefaultNodeImages()
         // assume that all or nothing is initialized
         return;
 
-    s_pDefCollapsed = new Image(BitmapEx(SvtResId(RID_BMP_TREENODE_COLLAPSED)));
-    s_pDefExpanded = new Image(BitmapEx(SvtResId(RID_BMP_TREENODE_EXPANDED)));
+    s_pDefCollapsed = new Image(BitmapEx(RID_BMP_TREENODE_COLLAPSED));
+    s_pDefExpanded = new Image(BitmapEx(RID_BMP_TREENODE_EXPANDED));
 }
 
 

@@ -30,6 +30,7 @@
 #include <svtools/svtresid.hxx>
 
 #include <svtools/svtools.hrc>
+#include "bitmaps.hlst"
 
 #include <algorithm>
 #include <tools/multisel.hxx>
@@ -257,32 +258,32 @@ namespace svt
         switch (eStatus)
         {
             case CURRENT:
-                aBitmap = BitmapEx(SvtResId((BMP_CURRENT)));
+                aBitmap = BitmapEx(BMP_CURRENT);
                 break;
             case CURRENTNEW:
-                aBitmap = BitmapEx(SvtResId((BMP_CURRENTNEW)));
+                aBitmap = BitmapEx(BMP_CURRENTNEW);
                 break;
             case MODIFIED:
-                aBitmap = BitmapEx(SvtResId((BMP_MODIFIED)));
+                aBitmap = BitmapEx(BMP_MODIFIED);
                 bNeedMirror = false;    // the pen is not mirrored
                 break;
             case NEW:
-                aBitmap = BitmapEx(SvtResId((BMP_NEW)));
+                aBitmap = BitmapEx(BMP_NEW);
                 break;
             case DELETED:
-                aBitmap = BitmapEx(SvtResId((BMP_DELETED)));
+                aBitmap = BitmapEx(BMP_DELETED);
                 break;
             case PRIMARYKEY:
-                aBitmap = BitmapEx(SvtResId((BMP_PRIMARYKEY)));
+                aBitmap = BitmapEx(BMP_PRIMARYKEY);
                 break;
             case CURRENT_PRIMARYKEY:
-                aBitmap = BitmapEx(SvtResId((BMP_CURRENT_PRIMARYKEY)));
+                aBitmap = BitmapEx(BMP_CURRENT_PRIMARYKEY);
                 break;
             case FILTER:
-                aBitmap = BitmapEx(SvtResId((BMP_FILTER)));
+                aBitmap = BitmapEx(BMP_FILTER);
                 break;
             case HEADERFOOTER:
-                aBitmap = BitmapEx(SvtResId((BMP_HEADERFOOTER)));
+                aBitmap = BitmapEx(BMP_HEADERFOOTER);
                 break;
             case CLEAN:
                 break;
