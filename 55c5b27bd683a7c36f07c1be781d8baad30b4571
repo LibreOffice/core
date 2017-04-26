@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_0f9f3304",
+        "filename": "g",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-26T20:31:45Z",
+      "side": 1,
+      "message": "any particular reason to drop the necessary quoting of ${COREDIR?} here?",
+      "revId": "55c5b27bd683a7c36f07c1be781d8baad30b4571",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
