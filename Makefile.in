@@ -426,6 +426,9 @@ create-update-info:
 upload-update-info:
 	$(MAKE) -f $(SRCDIR)/Makefile.gbuild upload-update-info
 
+create-partial-info:
+	$(MAKE) -f $(SRCDIR)/Makefile.gbuild create-partial-info
+
 dump-deps:
 	@$(SRCDIR)/bin/module-deps.pl $(MAKE) $(SRCDIR)/Makefile.gbuild
 
