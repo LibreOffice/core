@@ -1160,7 +1160,7 @@ void SmXMLFencedContext_Impl::EndElement()
 
 
     pSNode->SetSubNodes(pLeft,pBody,pRight);
-    pSNode->SetScaleMode(SCALE_HEIGHT);
+    pSNode->SetScaleMode(SmScaleMode::Height);
     GetSmImport().GetNodeStack().push_front(std::move(pSNode));
 }
 
@@ -1438,7 +1438,7 @@ void SmXMLOperatorContext_Impl::EndElement()
     //and applied to the expression itself so as to get the expression
     //to scale the operator to the height of the expression itself
     if (bIsStretchy)
-        pNode->SetScaleMode(SCALE_HEIGHT);
+        pNode->SetScaleMode(SmScaleMode::Height);
     GetSmImport().GetNodeStack().push_front(std::move(pNode));
 
     // TODO: apply to non-alphabetic characters too
@@ -1716,7 +1716,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
 
     SmNode *pSecond = popOrZero(rNodeStack);
     pNode->SetSubNodes(pFirst, pSecond);
-    pNode->SetScaleMode(SCALE_WIDTH);
+    pNode->SetScaleMode(SmScaleMode::Width);
     rNodeStack.push_front(std::move(pNode));
 }
 
@@ -1779,7 +1779,7 @@ void SmXMLOverContext_Impl::HandleAccent()
     SmNode *pFirst = popOrZero(rNodeStack);
     SmNode *pSecond = popOrZero(rNodeStack);
     pNode->SetSubNodes(pFirst, pSecond);
-    pNode->SetScaleMode(SCALE_WIDTH);
+    pNode->SetScaleMode(SmScaleMode::Width);
     rNodeStack.push_front(std::move(pNode));
 
 }
@@ -2410,9 +2410,9 @@ void SmXMLRowContext_Impl::EndElement()
         //removing the stretchness from the operators and applying it to
         //ourselves, and creating the appropriate dummy StarMath none bracket
         //to balance the arrangement
-        if (((aRelationArray[0]->GetScaleMode() == SCALE_HEIGHT)
+        if (((aRelationArray[0]->GetScaleMode() == SmScaleMode::Height)
             && (aRelationArray[0]->GetType() == SmNodeType::Math))
-        || ((aRelationArray[nSize-1]->GetScaleMode() == SCALE_HEIGHT)
+        || ((aRelationArray[nSize-1]->GetScaleMode() == SmScaleMode::Height)
             && (aRelationArray[nSize-1]->GetType() == SmNodeType::Math)))
         {
             SmToken aToken;
@@ -2420,7 +2420,7 @@ void SmXMLRowContext_Impl::EndElement()
             aToken.nLevel = 5;
 
             int nLeft=0,nRight=0;
-            if ((aRelationArray[0]->GetScaleMode() == SCALE_HEIGHT)
+            if ((aRelationArray[0]->GetScaleMode() == SmScaleMode::Height)
                 && (aRelationArray[0]->GetType() == SmNodeType::Math))
             {
                 aToken = aRelationArray[0]->GetToken();
@@ -2432,7 +2432,7 @@ void SmXMLRowContext_Impl::EndElement()
             aToken.eType = TLPARENT;
             SmNode *pLeft = new SmMathSymbolNode(aToken);
 
-            if ((aRelationArray[nSize-1]->GetScaleMode() == SCALE_HEIGHT)
+            if ((aRelationArray[nSize-1]->GetScaleMode() == SmScaleMode::Height)
                 && (aRelationArray[nSize-1]->GetType() == SmNodeType::Math))
             {
                 aToken = aRelationArray[nSize-1]->GetToken();
@@ -2461,7 +2461,7 @@ void SmXMLRowContext_Impl::EndElement()
             pBody->SetSubNodes(aRelationArray2);
 
             pSNode->SetSubNodes(pLeft,pBody,pRight);
-            pSNode->SetScaleMode(SCALE_HEIGHT);
+            pSNode->SetScaleMode(SmScaleMode::Height);
             rNodeStack.push_front(std::move(pSNode));
             return;
         }

@@ -77,7 +77,12 @@ class SmStructureNode;
 
 typedef std::vector< SmNode * > SmNodeArray;
 
-enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
+enum class SmScaleMode
+{
+    None,
+    Width,
+    Height
+};
 
 enum class SmNodeType
 {

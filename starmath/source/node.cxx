@@ -58,7 +58,7 @@ void ForEachNonNull(SmNode *pNode, F && f)
 SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     : maNodeToken( rNodeToken )
     , meType( eNodeType )
-    , meScaleMode( SCALE_NONE )
+    , meScaleMode( SmScaleMode::None )
     , meRectHorAlign( RectHorAlign::Left )
     , mnFlags( FontChangeMask::None )
     , mnAttributes( FontAttribute::None )
@@ -1293,7 +1293,7 @@ void SmSubSupNode::CreateTextFromNode(OUString &rText)
 
 void SmBraceNode::CreateTextFromNode(OUString &rText)
 {
-    if (GetScaleMode() == SCALE_HEIGHT)
+    if (GetScaleMode() == SmScaleMode::Height)
         rText += "left ";
     {
         OUString aStr;
@@ -1316,7 +1316,7 @@ void SmBraceNode::CreateTextFromNode(OUString &rText)
             rText += "none ";
     }
     Body()->CreateTextFromNode(rText);
-    if (GetScaleMode() == SCALE_HEIGHT)
+    if (GetScaleMode() == SmScaleMode::Height)
         rText += "right ";
     {
         OUString aStr;
@@ -1355,7 +1355,7 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     bool  bIsScaleNormal = rFormat.IsScaleNormalBrackets(),
           bScale         = pBody->GetHeight() > 0  &&
-                           (GetScaleMode() == SCALE_HEIGHT  ||  bIsScaleNormal),
+                           (GetScaleMode() == SmScaleMode::Height  ||  bIsScaleNormal),
           bIsABS         = GetToken().eType == TABS;
 
     long  nFaceHeight = GetFont().GetFontSize().Height();
@@ -1364,7 +1364,7 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     sal_uInt16  nPerc = 0;
     if (!bIsABS && bScale)
     {   // in case of oversize braces...
-        sal_uInt16 nIndex = GetScaleMode() == SCALE_HEIGHT ?
+        sal_uInt16 nIndex = GetScaleMode() == SmScaleMode::Height ?
                             DIS_BRACKETSIZE : DIS_NORMALBRACKETSIZE;
         nPerc = rFormat.GetDistance(nIndex);
     }
@@ -1459,9 +1459,9 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     mnBodyHeight = aRefRect.GetHeight();
 
     // scale separators to required height and arrange them
-    bool bScale  = GetScaleMode() == SCALE_HEIGHT  ||  rFormat.IsScaleNormalBrackets();
+    bool bScale  = GetScaleMode() == SmScaleMode::Height  ||  rFormat.IsScaleNormalBrackets();
     long nHeight = bScale ? aRefRect.GetHeight() : GetFont().GetFontSize().Height();
-    sal_uInt16 nIndex  = GetScaleMode() == SCALE_HEIGHT ?
+    sal_uInt16 nIndex  = GetScaleMode() == SmScaleMode::Height ?
                         DIS_BRACKETSIZE : DIS_NORMALBRACKETSIZE;
     sal_uInt16 nPerc   = rFormat.GetDistance(nIndex);
     if (bScale)
@@ -1681,7 +1681,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     pBody->Arrange(rDev, rFormat);
 
-    if (GetScaleMode() == SCALE_WIDTH)
+    if (GetScaleMode() == SmScaleMode::Width)
         pAttr->AdaptToX(rDev, pBody->GetItalicWidth());
     pAttr->Arrange(rDev, rFormat);
 
@@ -2450,7 +2450,7 @@ void SmMathSymbolNode::CreateTextFromNode(OUString &rText)
 {
     OUString sStr;
     sal_Unicode cChar = GetToken().cMathChar;
-    if (cChar == MS_INT && GetScaleMode() == SCALE_HEIGHT)
+    if (cChar == MS_INT && GetScaleMode() == SmScaleMode::Height)
         sStr = "intd ";
     else
         MathType::LookupChar(cChar, sStr, 3);
