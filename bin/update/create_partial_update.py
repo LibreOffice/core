@@ -6,9 +6,12 @@ import hashlib
 import os
 import subprocess
 import errno
+import json
 
 from config import parse_config
 from uncompress_mar import extract_mar
+from tools import get_file_info
+from signing import sign_mar_file
 
 BUF_SIZE = 1024
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -94,12 +97,16 @@ def download_mar_for_update_channel_and_platform(config, platform, temp_dir):
     return downloaded_updates
 
 def generate_file_name(current_build_id, old_build_id, mar_name_prefix):
-    name = "%s_from_%s_to_%s_partial.mar" %(mar_name_prefix, current_build_id, old_build_id)
+    name = "%s_from_%s_partial.mar" %(mar_name_prefix, old_build_id)
     return name
 
 def generate_lang_file_name(current_build_id, old_build_id, mar_name_prefix, lang):
-    name = "%s_%s_from_%s_to_%s_partial.mar" %(mar_name_prefix, lang, current_build_id, old_build_id)
+    name = "%s_%s_from_%s_partial.mar" %(mar_name_prefix, lang, old_build_id)
     return name
+
+def add_single_dir(path):
+    dir_name =  [os.path.join(path, name) for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
+    return dir_name[0]
 
 def main():
     product_name = sys.argv[1]
@@ -111,25 +118,42 @@ def main():
     platform = sys.argv[7]
     current_build_path = sys.argv[8]
     build_id = sys.argv[9]
-    dir_name =  [os.path.join(current_build_path, name) for name in os.listdir(current_build_path) if os.path.isdir(os.path.join(current_build_path, name))]
-    current_build_path = dir_name[0]
+    mar_dir = sys.argv[10]
+
+    current_build_path = add_single_dir(current_build_path)
 
     config = parse_config(update_config)
 
     updates = download_mar_for_update_channel_and_platform(config, platform, temp_dir)
 
-    print(updates)
+    data = {"partials": []}
+
     for build, update in updates.items():
         file_name = generate_file_name(build_id, build, mar_name_prefix)
-        mar_file = os.path.join(temp_dir, build, file_name)
-        print(mar_file)
-        print(current_build_path)
-        print(update["complete"])
-        subprocess.call([os.path.join(current_dir_path, 'make_incremental_update.sh'), mar_file, current_build_path, update["complete"]])
-        for lang in update["languages"].items():
+        mar_file = os.path.join(update_dir, file_name)
+        subprocess.call([os.path.join(current_dir_path, 'make_incremental_update.sh'), mar_file, update["complete"], current_build_path])
+        sign_mar_file(update_dir, config, mar_file, mar_name_prefix)
+
+        partial_info = {"complete":get_file_info(mar_file, config.base_url), "from": build, "to": build_id, "languages": {}}
+        for lang, lang_info in update["languages"].items():
             lang_name = generate_lang_file_name(build_id, build, mar_name_prefix, lang)
-            lang_mar_file = os.path.join(temp_dir, build, lang_name)
-            #subprocess.call([os.path.join(current_dir_path, 'make_incremental_update.sh'), mar_file, current_build_path, update["complete"]])
+
+            # write the file into the final directory
+            lang_mar_file = os.path.join(update_dir, lang_name)
+
+            # the directory of the old language file is of the form
+            # workdir/mar/language/en-US/LibreOffice_<version>_<os>_archive_langpack_<lang>/
+            language_dir = add_single_dir(os.path.join(mar_dir, "language", lang))
+            subprocess.call([os.path.join(current_dir_path, 'make_incremental_update.sh'), lang_mar_file, lang_info, language_dir])
+            sign_mar_file(update_dir, config, lang_mar_file, mar_name_prefix)
+
+            # add the partial language info
+            partial_info["languages"][lang] = get_file_info(lang_mar_file, config.base_url)
+
+        data["partials"].append(partial_info)
+
+    with open(os.path.join(update_dir, "partial_update_info.json"), "w") as f:
+        json.dump(data, f)
 
 
 if __name__ == '__main__':

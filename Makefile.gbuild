@@ -56,6 +56,6 @@ create-partial-info:
 	$(eval CURRENT_BUILD := $(WORKDIR)/mar/current-build/)
 	mkdir -p $(UPDATE_DIR)
 	mkdir -p $(UPDATE_DIR)/previous-builds
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_partial_update.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/previous-builds/" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" "$(PLATFORM)" "$(CURRENT_BUILD)" "$(BUILDID)"
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_partial_update.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/previous-builds/" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" "$(PLATFORM)" "$(CURRENT_BUILD)" "$(BUILDID)" "$(MAR_DIR)"
 
 # vim: set noet sw=4 ts=4:
