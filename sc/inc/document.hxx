@@ -199,7 +199,7 @@ class BitmapEx;
 
 namespace sc {
 
-typedef std::map<sal_Int32, BitmapEx> IconSetBitmapMap;
+typedef std::map<OUString, BitmapEx> IconSetBitmapMap;
 
 }
 

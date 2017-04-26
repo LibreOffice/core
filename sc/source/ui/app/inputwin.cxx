@@ -49,6 +49,7 @@
 #include "scresid.hxx"
 #include "scres.hrc"
 #include "globstr.hrc"
+#include "bitmaps.hlst"
 #include "reffact.hxx"
 #include "editutil.hxx"
 #include "inputhdl.hxx"
@@ -186,9 +187,9 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     // Position window, 3 buttons, input window
     InsertWindow    (1, aWndPos.get(), ToolBoxItemBits::NONE, 0);
     InsertSeparator (1);
-    InsertItem      (SID_INPUT_FUNCTION, Image(BitmapEx(ScResId(RID_BMP_INPUT_FUNCTION))), ToolBoxItemBits::NONE, 2);
-    InsertItem      (SID_INPUT_SUM,      Image(BitmapEx(ScResId(RID_BMP_INPUT_SUM))), ToolBoxItemBits::NONE, 3);
-    InsertItem      (SID_INPUT_EQUAL,    Image(BitmapEx(ScResId(RID_BMP_INPUT_EQUAL))), ToolBoxItemBits::NONE, 4);
+    InsertItem      (SID_INPUT_FUNCTION, Image(BitmapEx(RID_BMP_INPUT_FUNCTION)), ToolBoxItemBits::NONE, 2);
+    InsertItem      (SID_INPUT_SUM,      Image(BitmapEx(RID_BMP_INPUT_SUM)), ToolBoxItemBits::NONE, 3);
+    InsertItem      (SID_INPUT_EQUAL,    Image(BitmapEx(RID_BMP_INPUT_EQUAL)), ToolBoxItemBits::NONE, 4);
     InsertSeparator (5);
     InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 6);
 
@@ -505,8 +506,8 @@ void ScInputWindow::SetOkCancelMode()
     {
         RemoveItem( 3 ); // Remove SID_INPUT_SUM and SID_INPUT_EQUAL
         RemoveItem( 3 );
-        InsertItem( SID_INPUT_CANCEL, Image(BitmapEx(ScResId(RID_BMP_INPUT_CANCEL))), ToolBoxItemBits::NONE, 3 );
-        InsertItem( SID_INPUT_OK,     Image(BitmapEx(ScResId(RID_BMP_INPUT_OK))),     ToolBoxItemBits::NONE, 4 );
+        InsertItem( SID_INPUT_CANCEL, Image(BitmapEx(RID_BMP_INPUT_CANCEL)), ToolBoxItemBits::NONE, 3 );
+        InsertItem( SID_INPUT_OK,     Image(BitmapEx(RID_BMP_INPUT_OK)),     ToolBoxItemBits::NONE, 4 );
         SetItemText ( SID_INPUT_CANCEL, aTextCancel );
         SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
         SetItemText ( SID_INPUT_OK,     aTextOk );
@@ -526,8 +527,8 @@ void ScInputWindow::SetSumAssignMode()
         // Remove SID_INPUT_CANCEL, and SID_INPUT_OK
         RemoveItem( 3 );
         RemoveItem( 3 );
-        InsertItem( SID_INPUT_SUM,   Image(BitmapEx(ScResId(RID_BMP_INPUT_SUM))),   ToolBoxItemBits::NONE, 3 );
-        InsertItem( SID_INPUT_EQUAL, Image(BitmapEx(ScResId(RID_BMP_INPUT_EQUAL))), ToolBoxItemBits::NONE, 4 );
+        InsertItem( SID_INPUT_SUM,   Image(BitmapEx(RID_BMP_INPUT_SUM)),   ToolBoxItemBits::NONE, 3 );
+        InsertItem( SID_INPUT_EQUAL, Image(BitmapEx(RID_BMP_INPUT_EQUAL)), ToolBoxItemBits::NONE, 4 );
         SetItemText ( SID_INPUT_SUM,   aTextSum );
         SetHelpId   ( SID_INPUT_SUM,   HID_INSWIN_SUMME );
         SetItemText ( SID_INPUT_EQUAL, aTextEqual );
@@ -622,16 +623,16 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         //  update item images
-        SetItemImage(SID_INPUT_FUNCTION, Image(BitmapEx(ScResId(RID_BMP_INPUT_FUNCTION))));
+        SetItemImage(SID_INPUT_FUNCTION, Image(BitmapEx(RID_BMP_INPUT_FUNCTION)));
         if ( bIsOkCancelMode )
         {
-            SetItemImage(SID_INPUT_CANCEL, Image(BitmapEx(ScResId(RID_BMP_INPUT_CANCEL))));
-            SetItemImage(SID_INPUT_OK,     Image(BitmapEx(ScResId(RID_BMP_INPUT_OK))));
+            SetItemImage(SID_INPUT_CANCEL, Image(BitmapEx(RID_BMP_INPUT_CANCEL)));
+            SetItemImage(SID_INPUT_OK,     Image(BitmapEx(RID_BMP_INPUT_OK)));
         }
         else
         {
-            SetItemImage(SID_INPUT_SUM,   Image(BitmapEx(ScResId(RID_BMP_INPUT_SUM))));
-            SetItemImage(SID_INPUT_EQUAL, Image(BitmapEx(ScResId(RID_BMP_INPUT_EQUAL))));
+            SetItemImage(SID_INPUT_SUM,   Image(BitmapEx(RID_BMP_INPUT_SUM)));
+            SetItemImage(SID_INPUT_EQUAL, Image(BitmapEx(RID_BMP_INPUT_EQUAL)));
         }
     }
 

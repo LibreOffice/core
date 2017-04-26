@@ -27,6 +27,7 @@
 #include "dbfunc.hxx"
 #include "scres.hrc"
 #include "scresid.hxx"
+#include "bitmaps.hlst"
 
 const long SC_OL_BITMAPSIZE                 = 12;
 const long SC_OL_POSOFFSET                  = 2;
@@ -529,15 +530,15 @@ void ScOutlineWindow::DrawRectRel(
 
 namespace
 {
-    Image GetImage(sal_uInt16 nId)
+    Image GetImage(const OUString& rId)
     {
-        return Image(BitmapEx(ScResId(nId)));
+        return Image(BitmapEx(rId));
     }
 }
 
-void ScOutlineWindow::DrawImageRel(long nLevelPos, long nEntryPos, sal_uInt16 nId)
+void ScOutlineWindow::DrawImageRel(long nLevelPos, long nEntryPos, const OUString& rId)
 {
-    const Image& rImage = GetImage(nId);
+    const Image& rImage = GetImage(rId);
     SetLineColor();
     SetFillColor( GetBackground().GetColor() );
     Point aPos( GetPoint( nLevelPos, nEntryPos ) );
@@ -550,11 +551,11 @@ void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed
     Point aPos;
     if ( GetImagePos( nLevel, nEntry, aPos ) )
     {
-        sal_uInt16 nId = bPressed ? RID_BMP_PRESSED : RID_BMP_NOTPRESSED;
+        OUString sId = bPressed ? OUString(RID_BMP_PRESSED) : OUString(RID_BMP_NOTPRESSED);
         bool bClip = (nEntry != SC_OL_HEADERENTRY);
         if ( bClip )
             SetEntryAreaClipRegion();
-        DrawImage(aPos, GetImage(nId));
+        DrawImage(aPos, GetImage(sId));
         if ( bClip )
             SetClipRegion();
     }
@@ -600,6 +601,18 @@ void ScOutlineWindow::HideFocus()
     }
 }
 
+static const OUStringLiteral aLevelBmps[]=
+{
+    RID_BMP_LEVEL1,
+    RID_BMP_LEVEL2,
+    RID_BMP_LEVEL3,
+    RID_BMP_LEVEL4,
+    RID_BMP_LEVEL5,
+    RID_BMP_LEVEL6,
+    RID_BMP_LEVEL7,
+    RID_BMP_LEVEL8
+};
+
 void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
 {
     long nEntriesSign = mbMirrorEntries ? -1 : 1;
@@ -624,7 +637,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     {
         long nEntryPos = GetHeaderEntryPos();
         for ( size_t nLevel = 0; nLevel < nLevelCount; ++nLevel )
-            DrawImageRel(GetLevelPos(nLevel), nEntryPos, RID_BMP_LEVEL1 + nLevel);
+            DrawImageRel(GetLevelPos(nLevel), nEntryPos, aLevelBmps[nLevel]);
 
         SetLineColor( maLineColor );
         long nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));
@@ -696,8 +709,8 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             // draw, if not hidden by higher levels
             if ( bDraw )
             {
-                sal_uInt16 nImageId = pEntry->IsHidden() ? RID_BMP_PLUS : RID_BMP_MINUS;
-                DrawImageRel( nLevelPos, nImagePos, nImageId );
+                OUString sImageId = pEntry->IsHidden() ? OUString(RID_BMP_PLUS) : OUString(RID_BMP_MINUS);
+                DrawImageRel(nLevelPos, nImagePos, sImageId);
             }
         }
     }

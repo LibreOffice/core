@@ -28,7 +28,7 @@
 #include "attrib.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
-#include "pagedlg.hrc"
+#include "bitmaps.hlst"
 
 // Static Data
 
@@ -117,7 +117,7 @@ ScTablePage::ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
 void ScTablePage::ShowImage()
 {
-    Image aImg(BitmapEx(ScResId((m_pBtnLeftRight->IsChecked()) ? BMP_LEFTRIGHT : BMP_TOPDOWN)));
+    Image aImg(BitmapEx(m_pBtnLeftRight->IsChecked() ? OUString(BMP_LEFTRIGHT) : OUString(BMP_TOPDOWN)));
     m_pBmpPageDir->SetImage( aImg );
     m_pBmpPageDir->SetOutputSizePixel( aImg.GetSizePixel() );
 }

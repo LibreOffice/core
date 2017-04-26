@@ -21,6 +21,7 @@
 #include "globstr.hrc"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "bitmaps.hlst"
 
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
@@ -1102,7 +1103,7 @@ void ScCheckListMenuWindow::packWindow()
 
     float fScaleFactor = GetDPIScaleFactor();
 
-    BitmapEx aSingleSelectBmp(ScResId(RID_BMP_SELECT_CURRENT));
+    BitmapEx aSingleSelectBmp(RID_BMP_SELECT_CURRENT);
     if (fScaleFactor > 1)
         aSingleSelectBmp.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
     Image aSingleSelect(aSingleSelectBmp);
@@ -1114,7 +1115,7 @@ void ScCheckListMenuWindow::packWindow()
     maBtnSelectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnSelectSingle->Show();
 
-    BitmapEx aSingleUnselectBmp(ScResId(RID_BMP_UNSELECT_CURRENT));
+    BitmapEx aSingleUnselectBmp(RID_BMP_UNSELECT_CURRENT);
     if (fScaleFactor > 1)
         aSingleUnselectBmp.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
     Image aSingleUnselect(aSingleUnselectBmp);

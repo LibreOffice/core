@@ -51,6 +51,7 @@
 #include "scres.hrc"
 #include "scresid.hxx"
 #include "globstr.hrc"
+#include "bitmaps.hlst"
 #include "arealink.hxx"
 #include "navicfg.hxx"
 #include "navsett.hxx"
@@ -75,6 +76,18 @@ static const ScContentId pTypeList[(int)ScContentId::LAST + 1] =
     ScContentId::OLEOBJECT,
     ScContentId::NOTE,
     ScContentId::DRAWING
+};
+
+static const OUStringLiteral aContentBmps[]=
+{
+    RID_BMP_CONTENT_TABLE,
+    RID_BMP_CONTENT_RANGENAME,
+    RID_BMP_CONTENT_DBAREA,
+    RID_BMP_CONTENT_GRAPHIC,
+    RID_BMP_CONTENT_OLEOBJECT,
+    RID_BMP_CONTENT_NOTE,
+    RID_BMP_CONTENT_AREALINK,
+    RID_BMP_CONTENT_DRAWING
 };
 
 bool ScContentTree::bIsInDrag = false;
@@ -224,7 +237,8 @@ void ScContentTree::InitRoot( ScContentId nType )
         return;
     }
 
-    Image aImage(BitmapEx(ScResId(RID_BMP_CONTENT_ROOT + (int)nType)));
+    BitmapEx aBitmap(aContentBmps[(int)nType - 1]);
+    Image aImage(aBitmap);
     OUString aName(ScResId(SCSTR_CONTENT_ROOT + (int)nType));
     // wieder an die richtige Position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;

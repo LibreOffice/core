@@ -9,6 +9,7 @@
 
 #include "xmlsourcedlg.hxx"
 #include "sc.hrc"
+#include "bitmaps.hlst"
 #include "scresid.hxx"
 #include "document.hxx"
 #include "orcusfilters.hxx"
@@ -90,9 +91,9 @@ ScXMLSourceDlg::ScXMLSourceDlg(
 
     mpActiveEdit = mpRefEdit;
 
-    maXMLParam.maImgElementDefault = Image(BitmapEx(ScResId(RID_BMP_ELEMENT_DEFAULT)));
-    maXMLParam.maImgElementRepeat = Image(BitmapEx(ScResId(RID_BMP_ELEMENT_REPEAT)));
-    maXMLParam.maImgAttribute = Image(BitmapEx(ScResId(RID_BMP_ELEMENT_ATTRIBUTE)));
+    maXMLParam.maImgElementDefault = Image(BitmapEx(RID_BMP_ELEMENT_DEFAULT));
+    maXMLParam.maImgElementRepeat = Image(BitmapEx(RID_BMP_ELEMENT_REPEAT));
+    maXMLParam.maImgAttribute = Image(BitmapEx(RID_BMP_ELEMENT_ATTRIBUTE));
 
     Link<Button*,void> aBtnHdl = LINK(this, ScXMLSourceDlg, BtnPressedHdl);
     mpBtnSelectSource->SetClickHdl(aBtnHdl);

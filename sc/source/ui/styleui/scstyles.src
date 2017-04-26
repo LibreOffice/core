@@ -41,14 +41,4 @@ StringArray RID_PAGESTYLEFAMILY
     };
 };
 
-Bitmap BMP_STYLES_FAMILY_CELL
-{
-    File = "sf01.png";
-};
-
-Bitmap BMP_STYLES_FAMILY_PAGE
-{
-    File = "sf02.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

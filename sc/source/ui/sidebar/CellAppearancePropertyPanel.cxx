@@ -21,6 +21,7 @@
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "CellAppearancePropertyPanel.hxx"
 #include "scres.hrc"
+#include "bitmaps.hlst"
 #include "scresid.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -58,16 +59,16 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     maBorderTLBRControl(SID_ATTR_BORDER_DIAG_TLBR, *pBindings, *this),
     maBorderBLTRControl(SID_ATTR_BORDER_DIAG_BLTR, *pBindings, *this),
 
-    maIMGCellBorder(BitmapEx(ScResId(RID_BMP_CELL_BORDER))),
-    maIMGLineStyle1(BitmapEx(ScResId(RID_BMP_LINE_STYLE1))),
-    maIMGLineStyle2(BitmapEx(ScResId(RID_BMP_LINE_STYLE2))),
-    maIMGLineStyle3(BitmapEx(ScResId(RID_BMP_LINE_STYLE3))),
-    maIMGLineStyle4(BitmapEx(ScResId(RID_BMP_LINE_STYLE4))),
-    maIMGLineStyle5(BitmapEx(ScResId(RID_BMP_LINE_STYLE5))),
-    maIMGLineStyle6(BitmapEx(ScResId(RID_BMP_LINE_STYLE6))),
-    maIMGLineStyle7(BitmapEx(ScResId(RID_BMP_LINE_STYLE7))),
-    maIMGLineStyle8(BitmapEx(ScResId(RID_BMP_LINE_STYLE8))),
-    maIMGLineStyle9(BitmapEx(ScResId(RID_BMP_LINE_STYLE9))),
+    maIMGCellBorder(BitmapEx(RID_BMP_CELL_BORDER)),
+    maIMGLineStyle1(BitmapEx(RID_BMP_LINE_STYLE1)),
+    maIMGLineStyle2(BitmapEx(RID_BMP_LINE_STYLE2)),
+    maIMGLineStyle3(BitmapEx(RID_BMP_LINE_STYLE3)),
+    maIMGLineStyle4(BitmapEx(RID_BMP_LINE_STYLE4)),
+    maIMGLineStyle5(BitmapEx(RID_BMP_LINE_STYLE5)),
+    maIMGLineStyle6(BitmapEx(RID_BMP_LINE_STYLE6)),
+    maIMGLineStyle7(BitmapEx(RID_BMP_LINE_STYLE7)),
+    maIMGLineStyle8(BitmapEx(RID_BMP_LINE_STYLE8)),
+    maIMGLineStyle9(BitmapEx(RID_BMP_LINE_STYLE9)),
 
     mnIn(0),
     mnOut(0),
