@@ -33,6 +33,7 @@
 #include "svx/fmgridcl.hxx"
 #include "svx/svxdlg.hxx"
 #include "svx/svxids.hrc"
+#include "bitmaps.hlst"
 
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -97,9 +98,10 @@ struct FmGridHeaderData
     Reference< XInterface > xDroppedResultSet;
 };
 
-void SetMenuItem(sal_uInt16 nImgID, const OString &rID, Menu& rMenu, bool bDesignMode)
+void SetMenuItem(const OUString& rImgID, const OString &rID, Menu& rMenu, bool bDesignMode)
 {
-    Image aImage(BitmapEx(SVX_RES(nImgID)));
+    BitmapEx aBitmap(rImgID);
+    Image aImage(aBitmap);
     sal_uInt16 nID = rMenu.GetItemId(rID);
     rMenu.SetItemImage(nID, aImage);
     rMenu.EnableItem(nID, bDesignMode);
@@ -413,7 +415,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
 
         // Create Column based on type, default textfield
         std::vector<OString> aPossibleTypes;
-        std::vector<sal_uInt16> aImgResId;
+        std::vector<OUString> aImgResId;
         switch (nDataType)
         {
             case DataType::BIT:
@@ -498,7 +500,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                 PopupMenu* pTypeMenu = aInsertMenu->GetPopupMenu(aInsertMenu->GetItemId("insert"));
                 pTypeMenu->ShowItem(pTypeMenu->GetItemId("dateandtimefield"));
                 std::vector<OString>::const_iterator iter;
-                std::vector<sal_uInt16>::const_iterator imgiter;
+                std::vector<OUString>::const_iterator imgiter;
                 for (iter = aPossibleTypes.begin(), imgiter = aImgResId.begin();
                      iter != aPossibleTypes.end(); ++iter, ++imgiter)
                 {

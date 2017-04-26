@@ -66,12 +66,13 @@ ResMgr* GetGalleryResMgr()
     return pGalleryResMgr;
 }
 
-BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
+BitmapEx GalleryResGetBitmapEx(const OUString &rId)
 {
-    BitmapEx aBmpEx( GAL_RES( nId ) );
+    BitmapEx aBmpEx(rId);
 
-    if( !aBmpEx.IsTransparent() )
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap(), COL_LIGHTMAGENTA );
+    //TODO, check if any of these have no transparency layer
+    if (!aBmpEx.IsTransparent())
+        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), COL_LIGHTMAGENTA);
 
     return aBmpEx;
 }

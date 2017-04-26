@@ -37,8 +37,8 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svx/tbcontrl.hxx>
 #include "sfx2/opengrf.hxx"
-
 #include <o3tl/make_unique.hxx>
+#include "bitmaps.hlst"
 
 using namespace css;
 using namespace css::uno;
@@ -85,12 +85,12 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mpFillGradientItem(),
       mpHatchItem(),
       mpBitmapItem(),
-      maImgAxial(BitmapEx(SVX_RES(BMP_AXIAL))),
-      maImgElli(BitmapEx(SVX_RES(BMP_ELLI))),
-      maImgQuad(BitmapEx(SVX_RES(BMP_QUAD))),
-      maImgRadial(BitmapEx(SVX_RES(BMP_RADIAL))),
-      maImgSquare(BitmapEx(SVX_RES(BMP_SQUARE))),
-      maImgLinear(BitmapEx(SVX_RES(BMP_LINEAR))),
+      maImgAxial(BitmapEx(BMP_AXIAL)),
+      maImgElli(BitmapEx(BMP_ELLI)),
+      maImgQuad(BitmapEx(BMP_QUAD)),
+      maImgRadial(BitmapEx(BMP_RADIAL)),
+      maImgSquare(BitmapEx(BMP_SQUARE)),
+      maImgLinear(BitmapEx(BMP_LINEAR)),
       mpFloatTransparenceItem(),
       mpTransparanceItem()
 {

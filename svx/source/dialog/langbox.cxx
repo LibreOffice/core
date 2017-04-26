@@ -31,6 +31,7 @@
 #include <svx/langbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include "bitmaps.hlst"
 #include <vcl/builderfactory.hxx>
 #include <vcl/i18nhelp.hxx>
 
@@ -146,8 +147,8 @@ SvxLanguageBoxBase::SvxLanguageBoxBase()
 
 void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
 {
-    m_aNotCheckedImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_NOTCHECKED)));
-    m_aCheckedImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_CHECKED)));
+    m_aNotCheckedImage = Image(BitmapEx(RID_SVXBMP_NOTCHECKED));
+    m_aCheckedImage = Image(BitmapEx(RID_SVXBMP_CHECKED));
     m_aAllString            = SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL );
     m_nLangList             = SvxLanguageListFlags::EMPTY;
     m_bHasLangNone          = false;

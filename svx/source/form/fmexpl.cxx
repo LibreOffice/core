@@ -32,6 +32,7 @@
 #include <svx/svxids.hrc>
 
 #include "fmprop.hrc"
+#include "bitmaps.hlst"
 #include <svx/dialmgr.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
@@ -253,7 +254,7 @@ FmFormData::FmFormData(const Reference< XForm >& _rxForm, FmFormData* _pParent)
     , m_xForm(_rxForm)
 {
     // Images setzen
-    m_aNormalImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_FORM)));
+    m_aNormalImage = Image(RID_SVXBMP_FORM);
 
     // Titel setzen
     if (m_xForm.is())
@@ -338,7 +339,7 @@ FmEntryData* FmControlData::Clone()
 Image FmControlData::GetImage() const
 {
     // Default-Image
-    Image aImage(BitmapEx(SVX_RES(RID_SVXBMP_CONTROL)));
+    Image aImage(BitmapEx(RID_SVXBMP_CONTROL));
 
     Reference< XServiceInfo > xInfo( m_xFormComponent, UNO_QUERY );
     if (!m_xFormComponent.is())
@@ -350,91 +351,91 @@ Image FmControlData::GetImage() const
     switch (nObjectType)
     {
     case OBJ_FM_BUTTON:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_BUTTON)));
+        aImage = Image(BitmapEx(RID_SVXBMP_BUTTON));
         break;
 
     case OBJ_FM_FIXEDTEXT:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_FIXEDTEXT)));
+        aImage = Image(BitmapEx(RID_SVXBMP_FIXEDTEXT));
         break;
 
     case OBJ_FM_EDIT:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_EDITBOX)));
+        aImage = Image(BitmapEx(RID_SVXBMP_EDITBOX));
         break;
 
     case OBJ_FM_RADIOBUTTON:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_RADIOBUTTON)));
+        aImage = Image(BitmapEx(RID_SVXBMP_RADIOBUTTON));
         break;
 
     case OBJ_FM_CHECKBOX:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_CHECKBOX)));
+        aImage = Image(BitmapEx(RID_SVXBMP_CHECKBOX));
         break;
 
     case OBJ_FM_LISTBOX:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_LISTBOX)));
+        aImage = Image(BitmapEx(RID_SVXBMP_LISTBOX));
         break;
 
     case OBJ_FM_COMBOBOX:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_COMBOBOX)));
+        aImage = Image(BitmapEx(RID_SVXBMP_COMBOBOX));
         break;
 
     case OBJ_FM_NAVIGATIONBAR:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_NAVIGATIONBAR)));
+        aImage = Image(BitmapEx(RID_SVXBMP_NAVIGATIONBAR));
         break;
 
     case OBJ_FM_GROUPBOX:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_GROUPBOX)));
+        aImage = Image(BitmapEx(RID_SVXBMP_GROUPBOX));
         break;
 
     case OBJ_FM_IMAGEBUTTON:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_IMAGEBUTTON)));
+        aImage = Image(BitmapEx(RID_SVXBMP_IMAGEBUTTON));
         break;
 
     case OBJ_FM_FILECONTROL:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_FILECONTROL)));
+        aImage = Image(BitmapEx(RID_SVXBMP_FILECONTROL));
         break;
 
     case OBJ_FM_HIDDEN:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_HIDDEN)));
+        aImage = Image(BitmapEx(RID_SVXBMP_HIDDEN));
         break;
 
     case OBJ_FM_DATEFIELD:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_DATEFIELD)));
+        aImage = Image(BitmapEx(RID_SVXBMP_DATEFIELD));
         break;
 
     case OBJ_FM_TIMEFIELD:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_TIMEFIELD)));
+        aImage = Image(BitmapEx(RID_SVXBMP_TIMEFIELD));
         break;
 
     case OBJ_FM_NUMERICFIELD:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_NUMERICFIELD)));
+        aImage = Image(BitmapEx(RID_SVXBMP_NUMERICFIELD));
         break;
 
     case OBJ_FM_CURRENCYFIELD:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_CURRENCYFIELD)));
+        aImage = Image(BitmapEx(RID_SVXBMP_CURRENCYFIELD));
         break;
 
     case OBJ_FM_PATTERNFIELD:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_PATTERNFIELD)));
+        aImage = Image(BitmapEx(RID_SVXBMP_PATTERNFIELD));
         break;
 
     case OBJ_FM_IMAGECONTROL:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_IMAGECONTROL)));
+        aImage = Image(BitmapEx(RID_SVXBMP_IMAGECONTROL));
         break;
 
     case OBJ_FM_FORMATTEDFIELD:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_FORMATTEDFIELD)));
+        aImage = Image(BitmapEx(RID_SVXBMP_FORMATTEDFIELD));
         break;
 
     case OBJ_FM_GRID:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_GRID)));
+        aImage = Image(BitmapEx(RID_SVXBMP_GRID));
         break;
 
     case OBJ_FM_SCROLLBAR:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_SCROLLBAR)));
+        aImage = Image(BitmapEx(RID_SVXBMP_SCROLLBAR));
         break;
 
     case OBJ_FM_SPINBUTTON:
-        aImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_SPINBUTTON)));
+        aImage = Image(BitmapEx(RID_SVXBMP_SPINBUTTON));
         break;
     }
 

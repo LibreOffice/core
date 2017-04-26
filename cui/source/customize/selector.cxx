@@ -211,8 +211,8 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyl
     , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
 {
     SetNodeBitmaps(
-        Image(BitmapEx(SVX_RES(RID_SVXBMP_COLLAPSEDNODE))),
-        Image(BitmapEx(SVX_RES(RID_SVXBMP_EXPANDEDNODE)))
+        Image(BitmapEx(RID_SVXBMP_COLLAPSEDNODE)),
+        Image(BitmapEx(RID_SVXBMP_EXPANDEDNODE))
     );
 }
 

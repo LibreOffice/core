@@ -45,31 +45,6 @@ String RID_SVXSTR_ALIGN_STRETCH
     Text [ en-US ] = "S~tretch Justify";
 };
 
-Bitmap RID_SVXBMP_FONTWORK_ALIGN_LEFT
-{
-    File = "fontworkalignleft_16.png";
-};
-
-Bitmap RID_SVXBMP_FONTWORK_ALIGN_CENTER
-{
-    File = "fontworkaligncentered_16.png";
-};
-
-Bitmap RID_SVXBMP_FONTWORK_ALIGN_RIGHT
-{
-    File = "fontworkalignright_16.png";
-};
-
-Bitmap RID_SVXBMP_FONTWORK_ALIGN_WORD
-{
-    File = "fontworkalignjustified_16.png";
-};
-
-Bitmap RID_SVXBMP_FONTWORK_ALIGN_STRETCH
-{
-    File = "fontworkalignstretch_16.png";
-};
-
 String RID_SVXSTR_CHARS_SPACING_VERY_TIGHT
 {
     Text [ en-US ] = "~Very Tight";

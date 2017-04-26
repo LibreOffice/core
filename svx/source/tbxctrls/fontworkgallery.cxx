@@ -54,6 +54,7 @@
 #include <memory>
 
 #include "helpid.hrc"
+#include "bitmaps.hlst"
 
 using ::svtools::ToolbarMenu;
 
@@ -268,11 +269,11 @@ private:
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgAlgin1(BitmapEx(SVX_RES(RID_SVXBMP_FONTWORK_ALIGN_LEFT)))
-    , maImgAlgin2(BitmapEx(SVX_RES(RID_SVXBMP_FONTWORK_ALIGN_CENTER)))
-    , maImgAlgin3(BitmapEx(SVX_RES(RID_SVXBMP_FONTWORK_ALIGN_RIGHT)))
-    , maImgAlgin4(BitmapEx(SVX_RES(RID_SVXBMP_FONTWORK_ALIGN_WORD)))
-    , maImgAlgin5(BitmapEx(SVX_RES(RID_SVXBMP_FONTWORK_ALIGN_STRETCH)))
+    , maImgAlgin1(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_LEFT))
+    , maImgAlgin2(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_CENTER))
+    , maImgAlgin3(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_RIGHT))
+    , maImgAlgin4(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_WORD))
+    , maImgAlgin5(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_STRETCH))
     , msFontworkAlignment(".uno:FontworkAlignment")
 {
     SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );

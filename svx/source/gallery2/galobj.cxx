@@ -41,6 +41,7 @@
 #include <vcl/dibtools.hxx>
 #include "gallerydrawmodel.hxx"
 #include <memory>
+#include "bitmaps.hlst"
 
 using namespace ::com::sun::star;
 
@@ -58,7 +59,7 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
     {
         if(SgaObjKind::Sound == GetObjKind())
         {
-            aRetval = GAL_RES(RID_SVXBMP_GALLERY_MEDIA);
+            aRetval = BitmapEx(RID_SVXBMP_GALLERY_MEDIA);
         }
         else if(IsThumbBitmap())
         {
@@ -340,25 +341,25 @@ SgaObjectSound::~SgaObjectSound()
 
 BitmapEx SgaObjectSound::GetThumbBmp() const
 {
-    sal_uInt16 nId;
+    OUString sId;
 
     switch( eSoundType )
     {
-        case SOUND_COMPUTER: nId = RID_SVXBMP_GALLERY_SOUND_1; break;
-        case SOUND_MISC: nId = RID_SVXBMP_GALLERY_SOUND_2; break;
-        case SOUND_MUSIC: nId = RID_SVXBMP_GALLERY_SOUND_3; break;
-        case SOUND_NATURE: nId = RID_SVXBMP_GALLERY_SOUND_4; break;
-        case SOUND_SPEECH: nId = RID_SVXBMP_GALLERY_SOUND_5; break;
-        case SOUND_TECHNIC: nId = RID_SVXBMP_GALLERY_SOUND_6; break;
-        case SOUND_ANIMAL: nId = RID_SVXBMP_GALLERY_SOUND_7; break;
+        case SOUND_COMPUTER: sId = RID_SVXBMP_GALLERY_SOUND_1; break;
+        case SOUND_MISC: sId = RID_SVXBMP_GALLERY_SOUND_2; break;
+        case SOUND_MUSIC: sId = RID_SVXBMP_GALLERY_SOUND_3; break;
+        case SOUND_NATURE: sId = RID_SVXBMP_GALLERY_SOUND_4; break;
+        case SOUND_SPEECH: sId = RID_SVXBMP_GALLERY_SOUND_5; break;
+        case SOUND_TECHNIC: sId = RID_SVXBMP_GALLERY_SOUND_6; break;
+        case SOUND_ANIMAL: sId = RID_SVXBMP_GALLERY_SOUND_7; break;
 
         // standard
         default:
-             nId = RID_SVXBMP_GALLERY_MEDIA;
+             sId = RID_SVXBMP_GALLERY_MEDIA;
         break;
     }
 
-    const BitmapEx  aBmpEx( GAL_RES( nId ) );
+    const BitmapEx  aBmpEx(sId);
 
     return aBmpEx;
 }

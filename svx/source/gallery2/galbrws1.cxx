@@ -39,7 +39,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <memory>
-
+#include "bitmaps.hlst"
 
 using namespace ::com::sun::star;
 

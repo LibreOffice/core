@@ -35,6 +35,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include "bitmaps.hlst"
 
 #define GALLERY_BRWBOX_TITLE    1
 
@@ -61,7 +62,7 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
     Graphic aGraphic;
     if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
     {
-        aGraphic = BitmapEx( GAL_RES( RID_SVXBMP_GALLERY_MEDIA ) );
+        aGraphic = BitmapEx(RID_SVXBMP_GALLERY_MEDIA);
     }
     else
     {

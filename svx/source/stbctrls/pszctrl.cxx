@@ -42,6 +42,7 @@
 #include "stbctrls.h"
 
 #include <svx/dialogs.hrc>
+#include "bitmaps.hlst"
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -221,8 +222,8 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     pImpl->bTable = false;
     pImpl->bHasMenu = false;
     pImpl->nFunctionSet = 0;
-    pImpl->aPosImage = Image(BitmapEx(ResId(RID_SVXBMP_POSITION, DIALOG_MGR())));
-    pImpl->aSizeImage = Image(BitmapEx(ResId(RID_SVXBMP_SIZE, DIALOG_MGR())));
+    pImpl->aPosImage = Image(BitmapEx(RID_SVXBMP_POSITION));
+    pImpl->aSizeImage = Image(BitmapEx(RID_SVXBMP_SIZE));
 
     addStatusListener( STR_POSITION);         // SID_ATTR_POSITION
     addStatusListener( STR_TABLECELL);   // SID_TABLE_CELL

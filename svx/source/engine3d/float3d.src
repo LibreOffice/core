@@ -21,16 +21,6 @@
 #include "float3d.hrc"
 #include <svx/svxcommands.h>
 
-Bitmap RID_SVXBMP_LAMP_ON
-{
-    File = "lighton.png";
-};
-
-Bitmap RID_SVXBMP_LAMP_OFF
-{
-    File = "light.bmp";
-};
-
 String RID_SVXFLOAT3D_FAVORITE
 {
     Text [ en-US ] = "Favorite";

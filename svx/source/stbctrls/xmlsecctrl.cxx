@@ -37,6 +37,7 @@
 #include <svx/dialmgr.hxx>
 #include "svx/xmlsecctrl.hxx"
 #include <tools/urlobj.hxx>
+#include "bitmaps.hlst"
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 
@@ -55,9 +56,9 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
 {
     mpImpl->mnState = SignatureState::UNKNOWN;
 
-    mpImpl->maImage             = Image(BitmapEx(SVX_RES(RID_SVXBMP_SIGNET)));
-    mpImpl->maImageBroken       = Image(BitmapEx(SVX_RES(RID_SVXBMP_SIGNET_BROKEN)));
-    mpImpl->maImageNotValidated = Image(BitmapEx(SVX_RES(RID_SVXBMP_SIGNET_NOTVALIDATED)));
+    mpImpl->maImage             = Image(BitmapEx(RID_SVXBMP_SIGNET));
+    mpImpl->maImageBroken       = Image(BitmapEx(RID_SVXBMP_SIGNET_BROKEN));
+    mpImpl->maImageNotValidated = Image(BitmapEx(RID_SVXBMP_SIGNET_NOTVALIDATED));
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()

@@ -60,12 +60,9 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/engine3d/float3d.src \
     svx/source/engine3d/string3d.src \
     svx/source/form/datanavi.src \
-    svx/source/form/fmexpl.src \
     svx/source/form/fmstring.src \
     svx/source/items/svxerr.src \
     svx/source/items/svxitems.src \
-    svx/source/sidebar/area/AreaPropertyPanel.src \
-    svx/source/sidebar/line/LinePropertyPanel.src \
     svx/source/stbctrls/stbctrls.src \
     svx/source/svdraw/svdstr.src \
     svx/source/table/table.src \
@@ -78,11 +75,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/tbxctrls/tbunosearchcontrollers.src \
     svx/source/toolbars/extrusionbar.src \
     svx/source/toolbars/fontworkbar.src \
-))
-
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,svx/res,\
-    svx/source/dialog/langbox.src \
-    svx/source/unodraw/unodraw.src \
 ))
 
 # vim: set noet sw=4 ts=4:

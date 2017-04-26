@@ -46,7 +46,8 @@
 #include <memory>
 
 #include "svx/svxids.hrc"
-#include "svx/fmresids.hrc"
+
+#include "bitmaps.hlst"
 
 // See svx/source/form/fmshimp.cxx for other use of this .ui
 
@@ -74,7 +75,7 @@ static const char* aCommands[] =
     ".uno:ConvertToNavigationBar"
 };
 
-static const sal_Int16 nImgIds[] =
+static const OUStringLiteral aImgIds[] =
 {
     RID_SVXBMP_EDITBOX,
     RID_SVXBMP_BUTTON,
@@ -184,9 +185,8 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
         //ident is .uno:Command without .uno:
         OString sIdent = OString(aCommands[i]).copy(5);
         sal_uInt16 nId = pPopupMenu->GetItemId(sIdent);
-        ResId aResId(nImgIds[i], *xResMgr);
-        if (m_bShowMenuImages && xResMgr->IsAvailable(aResId))
-            pPopupMenu->SetItemImage(nId, Image(BitmapEx(aResId)));
+        if (m_bShowMenuImages)
+            pPopupMenu->SetItemImage(nId, Image(BitmapEx(aImgIds[i])));
         else
             pPopupMenu->SetItemImage(nId, Image());
     }
