@@ -8,6 +8,7 @@ import subprocess
 import errno
 
 from config import parse_config
+from uncompress_mar import extract_mar
 
 BUF_SIZE = 1024
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -53,7 +54,7 @@ def handle_language(lang_entries, filedir):
         download_file(lang_file , data["url"], data["hash"])
         dir_path = os.path.join(lang_dir, "lang")
         mkdir_p(dir_path)
-        subprocess.call([mar, "-C", dir_path, "-x", lang_file])
+        extract_mar(lang_file, dir_path)
         langs[lang] = dir_path
 
     return langs
@@ -83,7 +84,7 @@ def download_mar_for_update_channel_and_platform(config, platform, temp_dir):
 
         dir_path = os.path.join(filedir, "complete")
         mkdir_p(dir_path)
-        subprocess.call([mar, "-C", dir_path, "-x", filepath])
+        extract_mar(filepath, dir_path)
 
         downloaded_updates[build] = {"complete": dir_path}
 
