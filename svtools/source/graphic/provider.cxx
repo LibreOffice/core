@@ -269,7 +269,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
             {
                 BitmapEx aBmpEx;
 
-                if( aResourceType == "bitmap" || aResourceType == "bitmapex" )
+                if (aResourceType == "bitmapex")
                 {
                     aResId.SetRT( RSC_BITMAP );
 
