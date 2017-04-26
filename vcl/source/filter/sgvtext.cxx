@@ -891,7 +891,7 @@ void TextType::Draw(OutputDevice& rOut)
     sal_uInt16 FitXDiv;
     sal_uInt16 FitYMul;
     sal_uInt16 FitYDiv;
-    bool   Fehler;
+    bool   Error;
     UCHAR* Buf=Buffer; // pointer to the letters
 
     pSgfFonts->ReadList();
@@ -931,8 +931,8 @@ void TextType::Draw(OutputDevice& rOut)
     do {
         T2=T1; Index2=Index1;
         FormatLine(Buf,Index2,T,T2,xSize,xSAdj,xLine.get(),l,cLine.get(),LineFit);
-        Fehler=(Index2==Index1);
-        if (!Fehler) {
+        Error=(Index2==Index1);
+        if (!Error) {
             lc=GetLineFeed(Buf,Index1,T,T1,l,LF,MaxGrad);
             if (TextFit) {
                 if (LineFit) FitXDiv=xLine[lc+1];
@@ -974,8 +974,8 @@ void TextType::Draw(OutputDevice& rOut)
                 yPos=yPos0+LF;
                 T1=T2; Index1=Index2; // for next line
             } // if ObjMin.y+yPos<=Obj_Max.y
-        } // if !Fehler
-    } while (c!=TextEnd && !Ende && !Fehler);
+        } // if !Error
+    } while (c!=TextEnd && !Ende && !Error);
 }
 
 // End of DrawText.Pas
