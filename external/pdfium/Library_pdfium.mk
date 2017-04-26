@@ -15,12 +15,14 @@ $(eval $(call gb_Library_set_warnings_not_errors,pdfium))
 
 $(eval $(call gb_Library_set_include,pdfium,\
     -I$(WORKDIR)/UnpackedTarball/pdfium \
+    -I$(WORKDIR)/UnpackedTarball/pdfium/third_party \
     $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,pdfium,\
     -DPDFIUM_DLLIMPLEMENTATION \
     -DUSE_SYSTEM_LIBJPEG \
+    -DUNICODE \
 ))
 
 # Don't show warnings upstream doesn't care about.
@@ -324,24 +326,26 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 
 # fxcrt
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fxcrt/fx_basic_array \
-    UnpackedTarball/pdfium/core/fxcrt/fx_basic_bstring \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_blockbuffer \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_bytestring \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_widestring \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_buffer \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_coords \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_gcc \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_memmgr \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_utf \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_util \
-    UnpackedTarball/pdfium/core/fxcrt/fx_basic_wstring \
     UnpackedTarball/pdfium/core/fxcrt/fx_bidi \
     UnpackedTarball/pdfium/core/fxcrt/fx_extension \
     UnpackedTarball/pdfium/core/fxcrt/fx_ucddata \
     UnpackedTarball/pdfium/core/fxcrt/fx_unicode \
-    UnpackedTarball/pdfium/core/fxcrt/fx_xml_composer \
-    UnpackedTarball/pdfium/core/fxcrt/fx_xml_parser \
     UnpackedTarball/pdfium/core/fxcrt/fxcrt_posix \
     UnpackedTarball/pdfium/core/fxcrt/fxcrt_stream \
     UnpackedTarball/pdfium/core/fxcrt/fxcrt_windows \
+    UnpackedTarball/pdfium/core/fxcrt/xml/cxml_attritem \
+    UnpackedTarball/pdfium/core/fxcrt/xml/cxml_attrmap \
+    UnpackedTarball/pdfium/core/fxcrt/xml/cxml_element \
+    UnpackedTarball/pdfium/core/fxcrt/xml/cxml_parser \
 ))
 
 # fxedit
@@ -353,11 +357,18 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fxge/dib/fx_dib_composite \
-    UnpackedTarball/pdfium/core/fxge/dib/fx_dib_convert \
-    UnpackedTarball/pdfium/core/fxge/dib/fx_dib_engine \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_bitmapcomposer \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_bitmapstorer \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_dibextractor \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_dibitmap \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_dibsource \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_filtereddib \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_imagerenderer \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_imagestretcher \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_imagetransformer \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_scanlinecompositor \
+    UnpackedTarball/pdfium/core/fxge/dib/cstretchengine \
     UnpackedTarball/pdfium/core/fxge/dib/fx_dib_main \
-    UnpackedTarball/pdfium/core/fxge/dib/fx_dib_transform \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitDingbats \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitFixed \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitFixedBold \
@@ -488,6 +499,14 @@ $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
     UnpackedTarball/pdfium/third_party/libopenjpeg20/tgt \
 ))
 
+# pdfium_base
+$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/address_space_randomization \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/page_allocator \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/spin_lock \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_alloc \
+))
+
 $(eval $(call gb_Library_use_externals,pdfium,\
     jpeg \
     zlib \
@@ -504,32 +523,35 @@ $(eval $(call gb_Library_use_external,pdfium,freetype))
 else
 $(eval $(call gb_Library_set_include,pdfium,\
     -I$(WORKDIR)/UnpackedTarball/pdfium/third_party/freetype/include/ \
+    -I$(WORKDIR)/UnpackedTarball/pdfium/third_party/freetype/src/include/ \
     $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,pdfium,\
     -DFT2_BUILD_LIBRARY \
+    -DFT_CONFIG_MODULES_H='<freetype-custom-config/ftmodule.h>' \
+    -DFT_CONFIG_OPTIONS_H='<freetype-custom-config/ftoption.h>' \
 ))
 
 # third_party/freetype
 $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
-    UnpackedTarball/pdfium/third_party/freetype/src/base/ftbase \
-    UnpackedTarball/pdfium/third_party/freetype/src/base/ftbitmap \
-    UnpackedTarball/pdfium/third_party/freetype/src/base/ftglyph \
-    UnpackedTarball/pdfium/third_party/freetype/src/base/ftinit \
-    UnpackedTarball/pdfium/third_party/freetype/src/base/ftlcdfil \
-    UnpackedTarball/pdfium/third_party/freetype/src/base/ftmm \
-    UnpackedTarball/pdfium/third_party/freetype/src/base/ftsystem \
-    UnpackedTarball/pdfium/third_party/freetype/src/cff/cff \
-    UnpackedTarball/pdfium/third_party/freetype/src/cid/type1cid \
-    UnpackedTarball/pdfium/third_party/freetype/src/psaux/psaux \
-    UnpackedTarball/pdfium/third_party/freetype/src/pshinter/pshinter \
-    UnpackedTarball/pdfium/third_party/freetype/src/psnames/psmodule \
-    UnpackedTarball/pdfium/third_party/freetype/src/raster/raster \
-    UnpackedTarball/pdfium/third_party/freetype/src/sfnt/sfnt \
-    UnpackedTarball/pdfium/third_party/freetype/src/smooth/smooth \
-    UnpackedTarball/pdfium/third_party/freetype/src/truetype/truetype \
-    UnpackedTarball/pdfium/third_party/freetype/src/type1/type1 \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftbase \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftbitmap \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftglyph \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftinit \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftlcdfil \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftmm \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftsystem \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/cff/cff \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/cid/type1cid \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/psaux/psaux \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/pshinter/pshinter \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/psnames/psmodule \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/raster/raster \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/sfnt/sfnt \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/smooth/smooth \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/truetype/truetype \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/type1/type1 \
 ))
 endif
 
