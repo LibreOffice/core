@@ -380,6 +380,9 @@
 #define RID_SVXSTR_EDITHINT                                 (RID_SVX_START + 1266)
 #define RID_SVXSTR_SAVE_SCREENSHOT_AS                       (RID_SVX_START + 1267)
 
+#define RID_SVXSTR_STARTQUOTE                               (RID_SVX_START + 1268)
+#define RID_SVXSTR_ENDQUOTE                                 (RID_SVX_START + 1269)
+
 // Hangul/Hanja Dialog
 #define RID_SVXSTR_HANGUL                                   (RID_SVX_START + 1270)
 #define RID_SVXSTR_HANJA                                    (RID_SVX_START + 1271)

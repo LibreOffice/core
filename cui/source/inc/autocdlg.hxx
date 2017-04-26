@@ -381,9 +381,6 @@ private:
     VclPtr<FixedText>  m_pDblEndExFT;
     VclPtr<PushButton> m_pDblStandardPB;
 
-    OUString    m_sStartQuoteDlg;
-    OUString    m_sEndQuoteDlg;
-
     OUString    m_sStandard;
 
 

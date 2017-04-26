@@ -1843,10 +1843,6 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pDblEndExFT, "doubleendex");
     get(m_pDblStandardPB, "defaultdouble");
 
-    using comphelper::string::strip;
-
-    m_sStartQuoteDlg = strip(get<FixedText>("startquoteft")->GetText(), ':');
-    m_sEndQuoteDlg = strip(get<FixedText>("endquoteft")->GetText(), ':');
     m_sStandard = get<FixedText>("singlestartex")->GetText();
 
     bool bShowSWOptions = false;
@@ -2064,7 +2060,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, Button*, pBtn, void )
     ScopedVclPtrInstance< SvxCharacterMap > pMap( this, true );
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, GetDefaultFontFlags::OnlyOne ));
-    pMap->SetText(nMode < SGL_END ? m_sStartQuoteDlg  : m_sEndQuoteDlg );
+    pMap->SetText(nMode < SGL_END ? CUI_RESSTR(RID_SVXSTR_STARTQUOTE)  : CUI_RESSTR(RID_SVXSTR_ENDQUOTE) );
     sal_UCS4 cDlg;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
