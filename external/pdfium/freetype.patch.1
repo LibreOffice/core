@@ -1,0 +1,18 @@
+Upstream provides this define from the commandline, but while this define is
+needed for fxge, it breaks the build for the bundled freetype. gbuild doesn't
+support having different defines within the same Library, so just patch the
+single translation unit that actually needs the define.
+
+Long-term perhaps the solution is to enable freetype on all platforms inside
+LO, then we don't have to build freetype as part of pdfium, so we can let
+gbuild define this from the commandline.
+
+diff --git a/core/fxge/freetype/fx_freetype.cpp b/core/fxge/freetype/fx_freetype.cpp
+index 0ae207b02..879bf5ab9 100644
+--- a/core/fxge/freetype/fx_freetype.cpp
++++ b/core/fxge/freetype/fx_freetype.cpp
+@@ -1,3 +1,4 @@
++#define DEFINE_PS_TABLES
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
