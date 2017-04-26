@@ -324,10 +324,8 @@ void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xContext.is() &&
              !m_aCommandURL.isEmpty() )
         {
-
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );
             if ( pIter != m_aListenerMap.end() )

@@ -81,7 +81,6 @@ void SAL_CALL GenericToolboxController::dispose()
 void SAL_CALL GenericToolboxController::execute( sal_Int16 /*KeyModifier*/ )
 {
     Reference< XDispatch >       xDispatch;
-    Reference< XURLTransformer > xURLTransformer;
     OUString                     aCommandURL;
 
     {
@@ -92,11 +91,8 @@ void SAL_CALL GenericToolboxController::execute( sal_Int16 /*KeyModifier*/ )
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xContext.is() &&
              !m_aCommandURL.isEmpty() )
         {
-            xURLTransformer = URLTransformer::create( m_xContext );
-
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );
             if ( pIter != m_aListenerMap.end() )
@@ -104,13 +100,14 @@ void SAL_CALL GenericToolboxController::execute( sal_Int16 /*KeyModifier*/ )
         }
     }
 
-    if ( xDispatch.is() && xURLTransformer.is() )
+    if ( xDispatch.is() )
     {
         css::util::URL aTargetURL;
         Sequence<PropertyValue>   aArgs;
 
         aTargetURL.Complete = aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
+        if ( m_xUrlTransformer.is() )
+            m_xUrlTransformer->parseStrict( aTargetURL );
 
         // Execute dispatch asynchronously
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;

@@ -123,7 +123,6 @@ void SAL_CALL GenericToolbarController::dispose()
 void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
 {
     Reference< XDispatch >       xDispatch;
-    Reference< XURLTransformer > xURLTransformer;
     OUString                     aCommandURL;
 
     {
@@ -136,8 +135,6 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
              m_xFrame.is() &&
              !m_aCommandURL.isEmpty() )
         {
-            xURLTransformer = URLTransformer::create(m_xContext);
-
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );
             if ( pIter != m_aListenerMap.end() )
@@ -145,7 +142,7 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
         }
     }
 
-    if ( xDispatch.is() && xURLTransformer.is() )
+    if ( xDispatch.is() )
     {
         css::util::URL aTargetURL;
         Sequence<PropertyValue>   aArgs( 1 );
@@ -155,7 +152,8 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
         aArgs[0].Value <<= KeyModifier;
 
         aTargetURL.Complete = aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
+        if ( m_xUrlTransformer.is() )
+            m_xUrlTransformer->parseStrict( aTargetURL );
 
         // Execute dispatch asynchronously
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
