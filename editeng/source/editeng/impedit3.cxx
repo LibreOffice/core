@@ -3981,14 +3981,16 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
 
         ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
         ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
+        if (pUpperPortion && pLowerPortion)
+        {
+            aInvalidRect = tools::Rectangle();  // make empty
+            aInvalidRect.Left() = 0;
+            aInvalidRect.Right() = aPaperSize.Width();
+            aInvalidRect.Top() = GetParaPortions().GetYOffset( pUpperPortion );
+            aInvalidRect.Bottom() = GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight();
 
-        aInvalidRect = tools::Rectangle();  // make empty
-        aInvalidRect.Left() = 0;
-        aInvalidRect.Right() = aPaperSize.Width();
-        aInvalidRect.Top() = GetParaPortions().GetYOffset( pUpperPortion );
-        aInvalidRect.Bottom() = GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight();
-
-        UpdateViews( pCurView );
+            UpdateViews( pCurView );
+        }
     }
     else
     {

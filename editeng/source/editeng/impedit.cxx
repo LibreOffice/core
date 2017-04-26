@@ -253,7 +253,12 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ParaPortion* pTmpPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
-        DBG_ASSERT( pTmpPortion, "Portion in Selection not found!" );
+        if (!pTmpPortion)
+        {
+            SAL_WARN( "editeng", "Portion in Selection not found!" );
+            continue;
+        }
+
         DBG_ASSERT( !pTmpPortion->IsInvalid(), "Portion in Selection not formatted!" );
 
         if ( !pTmpPortion->IsVisible() || pTmpPortion->IsInvalid() )
@@ -2087,21 +2092,24 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
             {
                 sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
                 ParaPortion* pPPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
-                long nDestParaStartY = pEditEngine->GetParaPortions().GetYOffset( pPPortion );
-                long nRel = aDocPos.Y() - nDestParaStartY;
-                if ( nRel < ( pPPortion->GetHeight() / 2 ) )
+                if (pPPortion)
                 {
-                    pDragAndDropInfo->nOutlinerDropDest = nPara;
-                }
-                else
-                {
-                    pDragAndDropInfo->nOutlinerDropDest = nPara+1;
-                }
+                    long nDestParaStartY = pEditEngine->GetParaPortions().GetYOffset( pPPortion );
+                    long nRel = aDocPos.Y() - nDestParaStartY;
+                    if ( nRel < ( pPPortion->GetHeight() / 2 ) )
+                    {
+                        pDragAndDropInfo->nOutlinerDropDest = nPara;
+                    }
+                    else
+                    {
+                        pDragAndDropInfo->nOutlinerDropDest = nPara+1;
+                    }
 
-                if( ( pDragAndDropInfo->nOutlinerDropDest >= pDragAndDropInfo->aBeginDragSel.nStartPara ) &&
-                    ( pDragAndDropInfo->nOutlinerDropDest <= (pDragAndDropInfo->aBeginDragSel.nEndPara+1) ) )
-                {
-                    bAccept = false;
+                    if( ( pDragAndDropInfo->nOutlinerDropDest >= pDragAndDropInfo->aBeginDragSel.nStartPara ) &&
+                            ( pDragAndDropInfo->nOutlinerDropDest <= (pDragAndDropInfo->aBeginDragSel.nEndPara+1) ) )
+                    {
+                        bAccept = false;
+                    }
                 }
             }
             else if ( HasSelection() )
@@ -2125,7 +2133,8 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     if ( pDragAndDropInfo->nOutlinerDropDest < pEditEngine->GetEditDoc().Count() )
                     {
                         ParaPortion* pPPortion = pEditEngine->GetParaPortions().SafeGetObject( pDragAndDropInfo->nOutlinerDropDest );
-                        nDDYPos = pEditEngine->GetParaPortions().GetYOffset( pPPortion );
+                        if (pPPortion)
+                            nDDYPos = pEditEngine->GetParaPortions().GetYOffset( pPPortion );
                     }
                     else
                     {

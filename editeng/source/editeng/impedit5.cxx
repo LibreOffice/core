@@ -657,7 +657,7 @@ void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool 
     DBG_ASSERT( pNode, "Node not found: RemoveCharAttribs" );
     DBG_ASSERT( pPortion, "Portion not found: RemoveCharAttribs" );
 
-    if ( !pNode )
+    if ( !pNode || !pPortion )
         return;
 
     size_t nAttr = 0;

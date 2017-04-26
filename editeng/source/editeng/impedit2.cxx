@@ -491,13 +491,16 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 FormatDoc();
 
             ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
-            sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
-            const EditLine& rLine = pParaPortion->GetLines()[nLine];
-            if ( nInputEnd > rLine.GetEnd() )
-                nInputEnd = rLine.GetEnd();
-            tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GetCursorFlags::EndOfLine );
-            tools::Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
-            pView->GetWindow()->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
+            if (pParaPortion)
+            {
+                sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
+                const EditLine& rLine = pParaPortion->GetLines()[nLine];
+                if ( nInputEnd > rLine.GetEnd() )
+                    nInputEnd = rLine.GetEnd();
+                tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GetCursorFlags::EndOfLine );
+                tools::Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
+                pView->GetWindow()->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
+            }
         }
         else
         {
@@ -549,18 +552,21 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 FormatDoc();
 
             ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
-            sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
-            const EditLine& rLine = pParaPortion->GetLines()[nLine];
-            std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ mpIMEInfos->nLen ]);
-            for (sal_Int32 i = 0; i < mpIMEInfos->nLen; ++i)
+            if (pParaPortion)
             {
-                sal_Int32 nInputPos = mpIMEInfos->aPos.GetIndex() + i;
-                if ( nInputPos > rLine.GetEnd() )
-                    nInputPos = rLine.GetEnd();
-                tools::Rectangle aR2 = GetEditCursor( pParaPortion, nInputPos );
-                aRects[ i ] = pView->GetImpEditView()->GetWindowPos( aR2 );
+                sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
+                const EditLine& rLine = pParaPortion->GetLines()[nLine];
+                std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ mpIMEInfos->nLen ]);
+                for (sal_Int32 i = 0; i < mpIMEInfos->nLen; ++i)
+                {
+                    sal_Int32 nInputPos = mpIMEInfos->aPos.GetIndex() + i;
+                    if ( nInputPos > rLine.GetEnd() )
+                        nInputPos = rLine.GetEnd();
+                    tools::Rectangle aR2 = GetEditCursor( pParaPortion, nInputPos );
+                    aRects[ i ] = pView->GetImpEditView()->GetWindowPos( aR2 );
+                }
+                pView->GetWindow()->SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
             }
-            pView->GetWindow()->SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
         }
     }
 
@@ -926,6 +932,8 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
 
     sal_Int32 nPara = GetEditDoc().GetPos( aPaM.GetNode() );
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
+    if (!pParaPortion)
+        return aPaM;
 
     sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), false );
     const EditLine& rLine = pParaPortion->GetLines()[nLine];
@@ -981,6 +989,8 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
 
     sal_Int32 nPara = GetEditDoc().GetPos( aPaM.GetNode() );
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
+    if (!pParaPortion)
+        return aPaM;
 
     sal_Int32 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), false );
     const EditLine& rLine = pParaPortion->GetLines()[nLine];
@@ -1361,6 +1371,8 @@ EditPaM ImpEditEngine::CursorEndOfDoc()
     ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count()-1 );
     ParaPortion* pLastPortion = GetParaPortions().SafeGetObject( aEditDoc.Count()-1 );
     OSL_ENSURE( pLastNode && pLastPortion, "CursorEndOfDoc: Node or Portion not found" );
+    if (!(pLastNode && pLastPortion))
+        return EditPaM();
 
     if ( !pLastPortion->IsVisible() )
     {
@@ -1598,6 +1610,9 @@ static  bool lcl_HasStrongLTR ( const OUString& rTxt, sal_Int32 nStart, sal_Int3
 void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
+    if (!pParaPortion)
+        return;
+
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     rTypes.clear();
 
@@ -1792,6 +1807,9 @@ SvtScriptType ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) cons
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
+        if (!pParaPortion)
+            continue;
+
         if ( pParaPortion->aScriptInfos.empty() )
             const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
@@ -1836,17 +1854,20 @@ bool ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
     {
         sal_Int32 nPara = GetEditDoc().GetPos( rPaM.GetNode() );
         const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
-        if ( pParaPortion->aScriptInfos.empty() )
-            const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
-
-        const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-        const sal_Int32 nPos = rPaM.GetIndex();
-        for (const ScriptTypePosInfo & rType : rTypes)
+        if (pParaPortion)
         {
-            if ( rType.nStartPos == nPos )
-               {
-                bScriptChange = true;
-                break;
+            if ( pParaPortion->aScriptInfos.empty() )
+                const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
+
+            const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+            const sal_Int32 nPos = rPaM.GetIndex();
+            for (const ScriptTypePosInfo & rType : rTypes)
+            {
+                if ( rType.nStartPos == nPos )
+                {
+                    bScriptChange = true;
+                    break;
+                }
             }
         }
     }
@@ -1858,14 +1879,17 @@ bool ImpEditEngine::HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const
     bool bTypeFound = false;
 
     const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
-    if ( pParaPortion->aScriptInfos.empty() )
-        const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
-
-    const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    for ( size_t n = rTypes.size(); n && !bTypeFound; )
+    if (pParaPortion)
     {
-        if ( rTypes[--n].nScriptType == nType )
+        if ( pParaPortion->aScriptInfos.empty() )
+            const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
+
+        const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+        for ( size_t n = rTypes.size(); n && !bTypeFound; )
+        {
+            if ( rTypes[--n].nScriptType == nType )
                 bTypeFound = true;
+        }
     }
     return bTypeFound;
 }
@@ -1873,6 +1897,9 @@ bool ImpEditEngine::HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const
 void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
+    if (!pParaPortion)
+        return;
+
     WritingDirectionInfos& rInfos = pParaPortion->aWritingDirectionInfos;
     rInfos.clear();
 
@@ -1961,19 +1988,21 @@ bool ImpEditEngine::IsRightToLeft( sal_Int32 nPara ) const
 
 bool ImpEditEngine::HasDifferentRTLLevels( const ContentNode* pNode )
 {
-    sal_Int32 nPara = GetEditDoc().GetPos( pNode );
-    ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
-
     bool bHasDifferentRTLLevels = false;
 
-    sal_uInt16 nRTLLevel = IsRightToLeft( nPara ) ? 1 : 0;
-    for ( sal_Int32 n = 0; n < pParaPortion->GetTextPortions().Count(); n++ )
+    sal_Int32 nPara = GetEditDoc().GetPos( pNode );
+    ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
+    if (pParaPortion)
     {
-        const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
-        if ( rTextPortion.GetRightToLeftLevel() != nRTLLevel )
+        sal_uInt16 nRTLLevel = IsRightToLeft( nPara ) ? 1 : 0;
+        for ( sal_Int32 n = 0; n < pParaPortion->GetTextPortions().Count(); n++ )
         {
-            bHasDifferentRTLLevels = true;
-            break;
+            const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
+            if ( rTextPortion.GetRightToLeftLevel() != nRTLLevel )
+            {
+                bHasDifferentRTLLevels = true;
+                break;
+            }
         }
     }
     return bHasDifferentRTLLevels;
@@ -1988,20 +2017,23 @@ sal_uInt8 ImpEditEngine::GetRightToLeft( sal_Int32 nPara, sal_Int32 nPos, sal_In
     if ( pNode && pNode->Len() )
     {
         ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
-        if ( pParaPortion->aWritingDirectionInfos.empty() )
-            InitWritingDirections( nPara );
-
-        WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
-        for (const WritingDirectionInfo & rDirInfo : rDirInfos)
+        if (pParaPortion)
         {
-            if ( ( rDirInfo.nStartPos <= nPos ) && ( rDirInfo.nEndPos >= nPos ) )
+            if ( pParaPortion->aWritingDirectionInfos.empty() )
+                InitWritingDirections( nPara );
+
+            WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
+            for (const WritingDirectionInfo & rDirInfo : rDirInfos)
             {
-                nRightToLeft = rDirInfo.nType;
-                if ( pStart )
-                    *pStart = rDirInfo.nStartPos;
-                if ( pEnd )
-                    *pEnd = rDirInfo.nEndPos;
-                break;
+                if ( ( rDirInfo.nStartPos <= nPos ) && ( rDirInfo.nEndPos >= nPos ) )
+                {
+                    nRightToLeft = rDirInfo.nType;
+                    if ( pStart )
+                        *pStart = rDirInfo.nStartPos;
+                    if ( pEnd )
+                        *pEnd = rDirInfo.nEndPos;
+                    break;
+                }
             }
         }
     }
@@ -4074,54 +4106,57 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
             if ( nPortion && !aStatus.ULSpaceSummation() )
             {
                 ParaPortion* pPrev = GetParaPortions().SafeGetObject( nPortion-1 );
-                const SvxULSpaceItem& rPrevULItem = static_cast<const SvxULSpaceItem&>(pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE ));
-                const SvxLineSpacingItem& rPrevLSItem = static_cast<const SvxLineSpacingItem&>(pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
-
-                // In relation between WinWord6/Writer3:
-                // With a proportional line spacing the paragraph spacing is
-                // also manipulated.
-                // Only Writer3: Do not add up, but minimum distance.
-
-                // check if distance by LineSpacing > Upper:
-                sal_uInt16 nExtraSpace = GetYValue( lcl_CalcExtraSpace( pPortion, rLSItem ) );
-                if ( nExtraSpace > pPortion->nFirstLineOffset )
+                if (pPrev)
                 {
-                    // Paragraph becomes 'bigger':
-                    pPortion->nHeight += ( nExtraSpace - pPortion->nFirstLineOffset );
-                    pPortion->nFirstLineOffset = nExtraSpace;
-                }
+                    const SvxULSpaceItem& rPrevULItem = static_cast<const SvxULSpaceItem&>(pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE ));
+                    const SvxLineSpacingItem& rPrevLSItem = static_cast<const SvxLineSpacingItem&>(pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
 
-                // Determine nFirstLineOffset now f(pNode) => now f(pNode, pPrev):
-                sal_uInt16 nPrevLower = GetYValue( rPrevULItem.GetLower() );
+                    // In relation between WinWord6/Writer3:
+                    // With a proportional line spacing the paragraph spacing is
+                    // also manipulated.
+                    // Only Writer3: Do not add up, but minimum distance.
 
-                // This PrevLower is still in the height of PrevPortion ...
-                if ( nPrevLower > pPortion->nFirstLineOffset )
-                {
-                    // Paragraph is 'small':
-                    pPortion->nHeight -= pPortion->nFirstLineOffset;
-                    pPortion->nFirstLineOffset = 0;
-                }
-                else if ( nPrevLower )
-                {
-                    // Paragraph becomes 'somewhat smaller':
-                    pPortion->nHeight -= nPrevLower;
-                    pPortion->nFirstLineOffset =
-                        pPortion->nFirstLineOffset - nPrevLower;
-                }
-                // I find it not so good, but Writer3 feature:
-                // Check if distance by LineSpacing > Lower: this value is not
-                // stuck in the height of PrevPortion.
-                if ( !pPrev->IsInvalid() )
-                {
-                    nExtraSpace = GetYValue( lcl_CalcExtraSpace( pPrev, rPrevLSItem ) );
-                    if ( nExtraSpace > nPrevLower )
+                    // check if distance by LineSpacing > Upper:
+                    sal_uInt16 nExtraSpace = GetYValue( lcl_CalcExtraSpace( pPortion, rLSItem ) );
+                    if ( nExtraSpace > pPortion->nFirstLineOffset )
                     {
-                        sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;
-                        // Paragraph becomes 'bigger', 'grows' downwards:
-                        if ( nMoreLower > pPortion->nFirstLineOffset )
+                        // Paragraph becomes 'bigger':
+                        pPortion->nHeight += ( nExtraSpace - pPortion->nFirstLineOffset );
+                        pPortion->nFirstLineOffset = nExtraSpace;
+                    }
+
+                    // Determine nFirstLineOffset now f(pNode) => now f(pNode, pPrev):
+                    sal_uInt16 nPrevLower = GetYValue( rPrevULItem.GetLower() );
+
+                    // This PrevLower is still in the height of PrevPortion ...
+                    if ( nPrevLower > pPortion->nFirstLineOffset )
+                    {
+                        // Paragraph is 'small':
+                        pPortion->nHeight -= pPortion->nFirstLineOffset;
+                        pPortion->nFirstLineOffset = 0;
+                    }
+                    else if ( nPrevLower )
+                    {
+                        // Paragraph becomes 'somewhat smaller':
+                        pPortion->nHeight -= nPrevLower;
+                        pPortion->nFirstLineOffset =
+                            pPortion->nFirstLineOffset - nPrevLower;
+                    }
+                    // I find it not so good, but Writer3 feature:
+                    // Check if distance by LineSpacing > Lower: this value is not
+                    // stuck in the height of PrevPortion.
+                    if ( !pPrev->IsInvalid() )
+                    {
+                        nExtraSpace = GetYValue( lcl_CalcExtraSpace( pPrev, rPrevLSItem ) );
+                        if ( nExtraSpace > nPrevLower )
                         {
-                            pPortion->nHeight += ( nMoreLower - pPortion->nFirstLineOffset );
-                            pPortion->nFirstLineOffset = nMoreLower;
+                            sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;
+                            // Paragraph becomes 'bigger', 'grows' downwards:
+                            if ( nMoreLower > pPortion->nFirstLineOffset )
+                            {
+                                pPortion->nHeight += ( nMoreLower - pPortion->nFirstLineOffset );
+                                pPortion->nFirstLineOffset = nMoreLower;
+                            }
                         }
                     }
                 }
