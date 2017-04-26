@@ -2129,7 +2129,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                 tools::Rectangle aEditCursor;
                 if ( pDragAndDropInfo->bOutlinerMode )
                 {
-                    long nDDYPos;
+                    long nDDYPos(0);
                     if ( pDragAndDropInfo->nOutlinerDropDest < pEditEngine->GetEditDoc().Count() )
                     {
                         ParaPortion* pPPortion = pEditEngine->GetParaPortions().SafeGetObject( pDragAndDropInfo->nOutlinerDropDest );
