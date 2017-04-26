@@ -43,7 +43,7 @@ private:
 public:
     /* Constructor that initializes the shell to the current shell */
     SwNavigationMgr( SwWrtShell & rShell );
-    ~SwNavigationMgr();
+    ~SwNavigationMgr() override;
     /* Can we go back in the history ? */
     bool backEnabled() ;
     /* Can we go forward in the history ? */
