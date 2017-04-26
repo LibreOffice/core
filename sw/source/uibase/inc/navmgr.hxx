@@ -21,7 +21,7 @@ class   SwWrtShell;
 struct  SwPosition;
 class SwUnoCursor;
 
-class SwNavigationMgr final
+class SwNavigationMgr final : public SfxListener
 {
 private:
     /*
@@ -43,11 +43,7 @@ private:
 public:
     /* Constructor that initializes the shell to the current shell */
     SwNavigationMgr( SwWrtShell & rShell );
-    ~SwNavigationMgr()
-    {
-        SolarMutexGuard g;
-        m_entries.clear();
-    }
+    ~SwNavigationMgr();
     /* Can we go back in the history ? */
     bool backEnabled() ;
     /* Can we go forward in the history ? */
@@ -58,6 +54,9 @@ public:
     void goForward() ;
     /* The method that adds the position pPos to the navigation history */
     bool addEntry(const SwPosition& rPos);
+    /* to get notified if our cursors self-destruct */
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };
 #endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
