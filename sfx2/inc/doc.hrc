@@ -55,13 +55,6 @@
 
 #define STR_LABEL_FILEFORMAT                (RID_SFX_DOC_START+96)
 
-// some icons are commented out since they are removed
-#define BMP_128X128_CALC_DOC                (RID_SFX_DOC_START+99)
-#define BMP_128X128_DRAW_DOC                (RID_SFX_DOC_START+102)
-#define BMP_128X128_IMPRESS_DOC             (RID_SFX_DOC_START+104)
-#define BMP_128X128_MATH_DOC                (RID_SFX_DOC_START+107)
-#define BMP_128X128_WRITER_DOC              (RID_SFX_DOC_START+108)
-
 #define STR_HIDDENINFO_CONTAINS             (RID_SFX_DOC_START+110)
 #define STR_HIDDENINFO_RECORDCHANGES        (RID_SFX_DOC_START+111)
 #define STR_HIDDENINFO_NOTES                (RID_SFX_DOC_START+112)
@@ -91,7 +84,6 @@
 #define STR_QMSG_SEL_FOLDER_DELETE          (RID_SFX_DOC_START+146)
 #define STR_QMSG_TEMPLATE_OVERWRITE         (RID_SFX_DOC_START+147)
 #define STR_QMSG_SEL_TEMPLATE_DELETE        (RID_SFX_DOC_START+148)
-#define BMP_ACTION_REFRESH                  (RID_SFX_DOC_START+150)
 
 #define STR_OPEN                            (RID_SFX_DOC_START+151)
 #define STR_EDIT_TEMPLATE                   (RID_SFX_DOC_START+152)

@@ -22,6 +22,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include "sfxlocal.hrc"
+#include "bitmaps.hlst"
 #include <sfx2/sfxresid.hxx>
 
 #include <svl/eitem.hxx>
@@ -214,7 +215,7 @@ namespace sfx2
         m_aToolbox->Clear();
 
         // Get the closer bitmap and set it as right most button.
-        BitmapEx aBitmapEx(SfxResId(SFX_BMP_CLOSE_DOC));
+        BitmapEx aBitmapEx(SFX_BMP_CLOSE_DOC);
         m_aToolbox->InsertItem(1, Image(aBitmapEx));
         m_aToolbox->ShowItem( 1 );
     }

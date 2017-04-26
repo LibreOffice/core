@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 
 #include <templateview.hrc>
+#include "bitmaps.hlst"
 
 using namespace basegfx;
 using namespace com::sun::star;
@@ -36,8 +37,8 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     : ThumbnailViewItem(rView, nId),
       maURL(rURL),
       m_bRemoveIconHighlighted(false),
-      m_aRemoveRecentBitmap(SfxResId(BMP_RECENTDOC_REMOVE)),
-      m_aRemoveRecentBitmapHighlighted(SfxResId(BMP_RECENTDOC_REMOVE_HIGHLIGHTED))
+      m_aRemoveRecentBitmap(BMP_RECENTDOC_REMOVE),
+      m_aRemoveRecentBitmapHighlighted(BMP_RECENTDOC_REMOVE_HIGHLIGHTED)
 {
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);

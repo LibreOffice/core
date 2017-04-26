@@ -52,11 +52,11 @@ public:
             GDIMetaFile* pMetaFile,
             const css::uno::Reference< css::io::XStream >& xStream );
 
-    static sal_uInt16 getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName,
-                                                                    bool bIsTemplate );
+    static OUString getThumbnailReplacementIDByFactoryName_Impl(const OUString& aFactoryShortName,
+                                                                bool bIsTemplate);
 
     static bool getThumbnailReplacement_Impl(
-            sal_Int32 nResID,
+            const OUString& rResID,
             const css::uno::Reference< css::io::XStream >& xStream );
 
 };

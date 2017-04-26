@@ -36,6 +36,7 @@
 
 #include <doc.hrc>
 #include "templateview.hrc"
+#include "bitmaps.hlst"
 
 #define MNI_OPEN               1
 #define MNI_EDIT               2
@@ -1020,13 +1021,13 @@ BitmapEx TemplateLocalView::getDefaultThumbnail( const OUString& rPath )
     OUString aExt = aUrl.getExtension();
 
     if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::WRITER, aExt) )
-        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
+        aImg = BitmapEx(SFX_THUMBNAIL_TEXT);
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::CALC, aExt) )
-        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_SHEET ) );
+        aImg = BitmapEx(SFX_THUMBNAIL_SHEET);
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::IMPRESS, aExt) )
-        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_PRESENTATION ) );
+        aImg = BitmapEx(SFX_THUMBNAIL_PRESENTATION);
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::DRAW, aExt) )
-        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_DRAWING ) );
+        aImg = BitmapEx(SFX_THUMBNAIL_DRAWING);
 
     return aImg;
 }

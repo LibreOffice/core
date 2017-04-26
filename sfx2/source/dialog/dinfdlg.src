@@ -93,11 +93,6 @@ String STR_SFX_REMOVE_PROPERTY
     Text [ en-US ] = "Remove Property" ;
 };
 
-Bitmap SFX_BMP_PROPERTY_REMOVE
-{
-    File = "deleterow.bmp";
-};
-
 String STR_SFX_QUERY_WRONG_TYPE
 {
     Text [ en-US ] = "The value entered does not match the specified type.\nThe value will be stored as text." ;

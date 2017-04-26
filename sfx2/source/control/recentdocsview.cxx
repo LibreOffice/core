@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <templateview.hrc>
+#include "bitmaps.hlst"
 
 #include <officecfg/Office/Common.hxx>
 
@@ -62,7 +63,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
-    , maWelcomeImage(BitmapEx(SfxResId(BMP_WELCOME)))
+    , maWelcomeImage(BitmapEx(BMP_WELCOME))
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
     , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
 {
@@ -140,19 +141,19 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     OUString aExt = aUrl.getExtension();
 
     if (typeMatchesExtension(ApplicationType::TYPE_WRITER, aExt))
-        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_TEXT ) );
+        aImg = BitmapEx(SFX_FILE_THUMBNAIL_TEXT);
     else if (typeMatchesExtension(ApplicationType::TYPE_CALC, aExt))
-        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_SHEET ) );
+        aImg = BitmapEx(SFX_FILE_THUMBNAIL_SHEET);
     else if (typeMatchesExtension(ApplicationType::TYPE_IMPRESS, aExt))
-        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_PRESENTATION ) );
+        aImg = BitmapEx(SFX_FILE_THUMBNAIL_PRESENTATION);
     else if (typeMatchesExtension(ApplicationType::TYPE_DRAW, aExt))
-        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DRAWING ) );
+        aImg = BitmapEx(SFX_FILE_THUMBNAIL_DRAWING);
     else if (typeMatchesExtension(ApplicationType::TYPE_DATABASE, aExt))
-        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DATABASE ) );
+        aImg = BitmapEx(SFX_FILE_THUMBNAIL_DATABASE);
     else if (typeMatchesExtension(ApplicationType::TYPE_MATH, aExt))
-        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_MATH ) );
+        aImg = BitmapEx(SFX_FILE_THUMBNAIL_MATH);
     else
-        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DEFAULT ) );
+        aImg = BitmapEx(SFX_FILE_THUMBNAIL_DEFAULT);
 
     return aImg;
 }

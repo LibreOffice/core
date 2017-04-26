@@ -19,24 +19,4 @@ String STR_WELCOME_LINE2
     Text [ en-US ] = "Drop a document here or pick an app from the left side to create one.";
 };
 
-Bitmap BMP_WELCOME
-{
-    File = "logo.png";
-};
-
-Bitmap BMP_RECENTDOC_REMOVE
-{
-    File = "recentdoc_remove.png";
-};
-
-Bitmap BMP_RECENTDOC_REMOVE_HIGHLIGHTED
-{
-    File = "recentdoc_remove_highlighted.png";
-};
-
-Bitmap BMP_DEFAULT
-{
-    File = "templatestar.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

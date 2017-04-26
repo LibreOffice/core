@@ -39,10 +39,6 @@
 #define SFX_LB_PROPERTY_STRINGARRAY         (RID_SFX_SFXLOCAL_START + 12)
 #define SFX_CB_PROPERTY_STRINGARRAY         (RID_SFX_SFXLOCAL_START + 13)
 
-// Images ----------------------------------------------------------------
-#define SFX_BMP_PROPERTY_REMOVE             (RID_SFX_SFXLOCAL_START +  0)
-#define SFX_BMP_CLOSE_DOC                   (RID_SFX_SFXLOCAL_START +  2)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

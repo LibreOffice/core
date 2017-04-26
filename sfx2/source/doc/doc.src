@@ -304,9 +304,4 @@ String STR_QMSG_ERROR_OPENING_FILE_CONTINUE
     Text [ en-US ] = "\nProceeding with import may cause data loss or corruption, and application may become unstable or crash.\n\nDo you want to ignore the error and attempt to continue loading the file?";
 };
 
-Bitmap BMP_ACTION_REFRESH
-{
-    File = "reload.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

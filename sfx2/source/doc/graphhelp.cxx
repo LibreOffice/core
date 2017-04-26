@@ -52,6 +52,7 @@
 #include <sfx2/sfxresid.hxx>
 #include "graphhelp.hxx"
 #include "doc.hrc"
+#include "bitmaps.hlst"
 
 #include <memory>
 
@@ -205,16 +206,16 @@ bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile* pMetaFile, const
 }
 
 // static
-bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const uno::Reference< io::XStream >& xStream )
+bool GraphicHelper::getThumbnailReplacement_Impl(const OUString& rResID, const uno::Reference< io::XStream >& xStream )
 {
     bool bResult = false;
-    if ( nResID && xStream.is() )
+    if (!rResID.isEmpty() && xStream.is())
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         try
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
-            const OUString aURL{"private:resource/sfx/bitmapex/"+OUString::number( nResID )};
+            const OUString aURL{"private:graphicrepository/" + rResID};
 
             uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
             aMediaProps[0].Name = "URL";
@@ -241,34 +242,33 @@ bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const uno::R
     return bResult;
 }
 
-
 // static
-sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName, bool /*bIsTemplate*/ )
+OUString GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName, bool /*bIsTemplate*/ )
 {
-    sal_uInt16 nResult = 0;
+    OUString sResult;
 
     if ( aFactoryShortName == "scalc" )
     {
-        nResult = BMP_128X128_CALC_DOC;
+        sResult = BMP_128X128_CALC_DOC;
     }
     else if ( aFactoryShortName == "sdraw" )
     {
-        nResult = BMP_128X128_DRAW_DOC;
+        sResult = BMP_128X128_DRAW_DOC;
     }
     else if ( aFactoryShortName == "simpress" )
     {
-        nResult = BMP_128X128_IMPRESS_DOC;
+        sResult = BMP_128X128_IMPRESS_DOC;
     }
     else if ( aFactoryShortName == "smath" )
     {
-        nResult = BMP_128X128_MATH_DOC;
+        sResult = BMP_128X128_MATH_DOC;
     }
     else if ( aFactoryShortName == "swriter" || aFactoryShortName.startsWith("swriter/") )
     {
-        nResult = BMP_128X128_WRITER_DOC;
+        sResult = BMP_128X128_WRITER_DOC;
     }
 
-    return nResult;
+    return sResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

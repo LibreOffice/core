@@ -24,6 +24,7 @@
 #include <sfx2/sfxresid.hxx>
 
 #include <templateview.hrc>
+#include "bitmaps.hlst"
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -34,7 +35,7 @@ TemplateViewItem::TemplateViewItem (ThumbnailView &rView, sal_uInt16 nId)
     : ThumbnailViewItem(rView, nId),
       mnRegionId(USHRT_MAX),
       mnDocId(USHRT_MAX),
-      maDefaultBitmap(SfxResId(BMP_DEFAULT)),
+      maDefaultBitmap(BMP_DEFAULT),
       mbIsDefaultTemplate(false)
 {
 }

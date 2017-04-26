@@ -57,8 +57,6 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,sfx/res,\
     sfx2/source/bastyp/bastyp.src \
-    sfx2/source/dialog/titledockwin.src \
-    sfx2/source/doc/graphhelp.src \
 ))
 
 # vim: set noet sw=4 ts=4:

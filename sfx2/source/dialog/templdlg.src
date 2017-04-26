@@ -21,21 +21,6 @@
 #include "dialog.hrc"
 #include "helpid.hrc"
 
-Bitmap RID_SFXBMP_WATERCAN
-{
-    File = "sc05554.png";
-};
-
-Bitmap RID_SFXBMP_NEW_BY_EXAMPLE
-{
-    File = "sc05555.png";
-};
-
-Bitmap RID_SFXBMP_UPDATE_BY_EXAMPLE
-{
-    File = "sc05556.png";
-};
-
 // Strings ---------------------------------------------------------------
 String STR_STYLE_ELEMTLIST
 {

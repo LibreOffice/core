@@ -53,9 +53,6 @@
 #define STR_STYLE_ELEMTLIST             ( RC_DIALOG_BEGIN + 125 )
 #define STR_FONT_TABPAGE                ( RC_DIALOG_BEGIN + 126 )
 #define STR_PREVIEW_CHECKBOX            ( RC_DIALOG_BEGIN + 127 )
-#define RID_SFXBMP_WATERCAN             ( RC_DIALOG_BEGIN + 128 )
-#define RID_SFXBMP_NEW_BY_EXAMPLE       ( RC_DIALOG_BEGIN + 129 )
-#define RID_SFXBMP_UPDATE_BY_EXAMPLE    ( RC_DIALOG_BEGIN + 130 )
 
 #endif
 
