@@ -12,11 +12,9 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,icu))
 $(eval $(call gb_UnpackedTarball_set_tarball,icu,$(ICU_TARBALL)))
 
 # Data zip contains data/... and needs to end up in icu/source/data/...
-# Some files are overwritten with identical content.
-# -a to convert line endings from CrLf to LF (hopefully no binary identified as
-# text ...) so existing patches still apply and can be generated.
+# Only data/misc/icudata.rc is needed for a Cygwin/MSVC build.
 $(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
-	unzip -q -a -d source -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(ICU_DATA_TARBALL) \
+	unzip -q -d source -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(ICU_DATA_TARBALL) data/misc/icudata.rc \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
