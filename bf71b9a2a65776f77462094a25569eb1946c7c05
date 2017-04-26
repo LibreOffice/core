@@ -117,6 +117,30 @@
       "revId": "bf71b9a2a65776f77462094a25569eb1946c7c05",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4f413b39",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2836,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-04-26T10:30:08Z",
+      "side": 1,
+      "message": "IMHO the problem lies in mathematical approach vs MS Excel\u0027s approach.\nMathematically, you are right, and it can be explained why 1 (the current result in Calc) is a good result with empty arrays. It\u0027s just that MS Excel does not follow the mathematical approach and LEGACY.CHITEST (essentially) and CHISQ.TEST (fully) are in Calc for Excel-interoperability.\n\nAnother problem -that I haven\u0027t been able to solve- is that with random empty elements in the datasets it is not possible to calculate the mathematical degree of freedom. ODFF (and Excel) state that an empty element is to be treated mathematically as a good result (i.e. no difference between actual and expected result), which in turn means that empty elements, let alone empty rows or columns may not be ignored. (Ergo the result 1 for empty arrays).\nThe results from both Calc and Excel show that empty rows or columns are treated as full no-actual-expected-differences rows/columns and not ignored. I the case of all rows/columns being empty, Calc is consistent and result 1, but Excel is not and returns and error.\nAFAICS the formula given to get the resulting degree of freedom is needed to be able to pass the correct value to CHIDIST.\n\nPersonally I would like to follow ODFF, but I know that interoperability often is more important.\nWhat I also can do is differentiate between LEGACY.CHITEST (ODFF) and CHISQ.TEST (MS Excel); that can be simply fixed in a new patch set.",
+      "parentUuid": "5a3905b3_24f3360c",
+      "range": {
+        "startLine": 2836,
+        "startChar": 11,
+        "endLine": 2836,
+        "endChar": 25
+      },
+      "revId": "bf71b9a2a65776f77462094a25569eb1946c7c05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
