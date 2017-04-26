@@ -14,6 +14,7 @@ pdfium_patches += macos.patch.1
 pdfium_patches += ubsan.patch
 # Upstreamed as <https://pdfium-review.googlesource.com/4070>.
 pdfium_patches += system-zlib.patch.1
+pdfium_patches += freetype.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
@@ -29,7 +30,11 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/bigint/BigInteger.cc third_party/bigint/BigInteger.cpp && \
     mv third_party/bigint/BigIntegerUtils.cc third_party/bigint/BigIntegerUtils.cpp && \
     mv third_party/bigint/BigUnsigned.cc third_party/bigint/BigUnsigned.cpp && \
-    mv third_party/bigint/BigUnsignedInABase.cc third_party/bigint/BigUnsignedInABase.cpp \
+    mv third_party/bigint/BigUnsignedInABase.cc third_party/bigint/BigUnsignedInABase.cpp && \
+    mv third_party/base/allocator/partition_allocator/address_space_randomization.cc third_party/base/allocator/partition_allocator/address_space_randomization.cpp && \
+    mv third_party/base/allocator/partition_allocator/page_allocator.cc third_party/base/allocator/partition_allocator/page_allocator.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_alloc.cc third_party/base/allocator/partition_allocator/partition_alloc.cpp && \
+    mv third_party/base/allocator/partition_allocator/spin_lock.cc third_party/base/allocator/partition_allocator/spin_lock.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:
