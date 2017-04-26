@@ -46,4 +46,16 @@ upload-update-info:
 	$(SRCDIR)/bin/update/upload_builds.py "$(PRODUCTNAME)" "$(BUILDID)" "$(PLATFORM)" "$(UPDATE_DIR)" "$(UPDATE_CONFIG)"
 	$(SRCDIR)/bin/update/upload_build_config.py "$(UPDATE_DIR)" "$(UPDATE_CONFIG)"
 
+create-partial-info:
+	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
+	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
+	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
+	$(eval MAR_NAME_PREFIX := $(PRODUCTNAME)_$(VERSION)_$(PLATFORM)_$(BUILDID))
+	$(eval UPDATE_DIR := $(WORKDIR)/update-info)
+	$(eval MAR_DIR := $(WORKDIR)/mar)
+	$(eval CURRENT_BUILD := $(WORKDIR)/mar/current-build/)
+	mkdir -p $(UPDATE_DIR)
+	mkdir -p $(UPDATE_DIR)/previous-builds
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_partial_update.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/previous-builds/" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" "$(PLATFORM)" "$(CURRENT_BUILD)" "$(BUILDID)"
+
 # vim: set noet sw=4 ts=4:
