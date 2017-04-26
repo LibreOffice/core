@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <stdlib.h>
 #include <time.h>
 #ifndef _WIN32
@@ -47,12 +51,11 @@ static OString impl_getHostname()
        hostname by using the netbios name
        */
     DWORD sz = MAX_COMPUTERNAME_LENGTH + 1;
-    char* szHost = new char[sz];
-    if (GetComputerName(szHost, &sz))
-        aHost = OString(szHost);
+    auto szHost = std::unique_ptr<char[]>(new char[sz]);
+    if (GetComputerName(szHost.get(), &sz))
+        aHost = OString(szHost.get());
     else
         aHost = OString("UNKNOWN");
-    delete[] szHost;
 #else
     /* Don't do dns lookup on Linux either */
     sal_Char pHostName[1024];
