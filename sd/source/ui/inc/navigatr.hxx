@@ -127,7 +127,8 @@ private:
     */
     //    bool                        mbShowAllShapes;
 
-    static sal_uInt16           GetDragTypeSdResId( NavigatorDragType eDT, bool bImage );
+    static sal_uInt16           GetDragTypeSdStrId(NavigatorDragType eDT);
+    static OUString             GetDragTypeSdBmpId(NavigatorDragType eDT);
     NavDocInfo*                 GetDocInfo();
 
                                 DECL_LINK( SelectToolboxHdl, ToolBox *, void );

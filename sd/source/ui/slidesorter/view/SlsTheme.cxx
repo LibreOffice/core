@@ -18,6 +18,7 @@
  */
 
 #include "glob.hrc"
+#include "bitmaps.hlst"
 #include "view/SlsTheme.hxx"
 #include "controller/SlsProperties.hxx"
 #include "sdresid.hxx"
@@ -238,11 +239,11 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
     }
 }
 
-void Theme::InitializeIcon (const IconType eType, sal_uInt16 nResourceId)
+void Theme::InitializeIcon(const IconType eType, const OUString& rResourceId)
 {
     if (eType>=0 && size_t(eType)<maIcons.size())
     {
-        const BitmapEx aIcon((SdResId(nResourceId)));
+        const BitmapEx aIcon(rResourceId);
         maIcons[eType] = aIcon;
     }
     else

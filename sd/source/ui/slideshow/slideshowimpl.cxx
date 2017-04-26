@@ -62,6 +62,7 @@
 
 #include "glob.hrc"
 #include "res_bmp.hrc"
+#include "bitmaps.hlst"
 #include "sdresid.hxx"
 #include <vcl/canvastools.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -1072,7 +1073,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             mxView->getCanvas() );
         if (xSpriteCanvas.is())
         {
-            BitmapEx waitSymbolBitmap( SdResId(BMP_WAIT_ICON) );
+            BitmapEx waitSymbolBitmap(BMP_WAIT_ICON);
             const Reference<rendering::XBitmap> xBitmap(
                 vcl::unotools::xBitmapFromBitmapEx(
                     xSpriteCanvas->getDevice(), waitSymbolBitmap ) );
@@ -1085,7 +1086,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         beans::PropertyState_DIRECT_VALUE ) );
             }
 
-            BitmapEx pointerSymbolBitmap( SdResId(BMP_POINTER_ICON) );
+            BitmapEx pointerSymbolBitmap(BMP_POINTER_ICON);
             const Reference<rendering::XBitmap> xPointerBitmap(
                 vcl::unotools::xBitmapFromBitmapEx(
                     xSpriteCanvas->getDevice(), pointerSymbolBitmap ) );

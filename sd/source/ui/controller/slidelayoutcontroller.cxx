@@ -47,6 +47,7 @@
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
+#include "bitmaps.hlst"
 #include "sdresid.hxx"
 #include "pres.hxx"
 #include "slidelayoutcontroller.hxx"
@@ -83,7 +84,7 @@ private:
 
 struct snewfoil_value_info_layout
 {
-    sal_uInt16 mnBmpResId;
+    const char* msBmpResId;
     sal_uInt16 mnStrResId;
     AutoLayout maAutoLayout;
 };
@@ -91,7 +92,7 @@ struct snewfoil_value_info_layout
 static const snewfoil_value_info_layout notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, AUTOLAYOUT_NOTES},
-    {0, 0, AUTOLAYOUT_NONE},
+    {"", 0, AUTOLAYOUT_NONE},
 };
 
 static const snewfoil_value_info_layout handout[] =
@@ -102,7 +103,7 @@ static const snewfoil_value_info_layout handout[] =
     {BMP_FOILH_04, STR_AUTOLAYOUT_HANDOUT4, AUTOLAYOUT_HANDOUT4},
     {BMP_FOILH_06, STR_AUTOLAYOUT_HANDOUT6, AUTOLAYOUT_HANDOUT6},
     {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, AUTOLAYOUT_HANDOUT9},
-    {0, 0, AUTOLAYOUT_NONE},
+    {"", 0, AUTOLAYOUT_NONE},
 };
 
 static const snewfoil_value_info_layout standard[] =
@@ -119,7 +120,7 @@ static const snewfoil_value_info_layout standard[] =
     {BMP_LAYOUT_HEAD02B,  STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT },
     {BMP_LAYOUT_HEAD04,   STR_AUTOLAYOUT_4CONTENT,             AUTOLAYOUT_TITLE_4CONTENT },
     {BMP_LAYOUT_HEAD06,   STR_AUTOLAYOUT_6CONTENT,             AUTOLAYOUT_TITLE_6CONTENT },
-    {0, 0, AUTOLAYOUT_NONE}
+    {"", 0, AUTOLAYOUT_NONE}
 };
 
 static const snewfoil_value_info_layout v_standard[] =
@@ -129,16 +130,16 @@ static const snewfoil_value_info_layout v_standard[] =
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE,    AUTOLAYOUT_VTITLE_VCONTENT                 },
     {BMP_LAYOUT_HEAD02,     STR_AL_TITLE_VERT_OUTLINE,         AUTOLAYOUT_TITLE_VCONTENT                  },
     {BMP_LAYOUT_HEAD02A,    STR_AL_TITLE_VERT_OUTLINE_CLIPART, AUTOLAYOUT_TITLE_2VTEXT                    },
-    {0, 0, AUTOLAYOUT_NONE}
+    {"", 0, AUTOLAYOUT_NONE}
 };
 
 static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layout* pInfo )
 {
     Size aLayoutItemSize;
-    for( ; pInfo->mnBmpResId; pInfo++ )
+    for( ; pInfo->mnStrResId; pInfo++ )
     {
         OUString aText( SD_RESSTR( pInfo->mnStrResId ) );
-        BitmapEx aBmp(  SdResId( pInfo->mnBmpResId ) );
+        BitmapEx aBmp(OUString::createFromAscii(pInfo->msBmpResId));
 
         pValue->InsertItem(static_cast<sal_uInt16>(pInfo->maAutoLayout)+1,
                 Image(aBmp), aText);

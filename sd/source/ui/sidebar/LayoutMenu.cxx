@@ -30,6 +30,7 @@
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
+#include "bitmaps.hlst"
 #include "tools/SlotStateListener.hxx"
 #include "DrawController.hxx"
 #include "DrawDocShell.hxx"
@@ -68,7 +69,7 @@ namespace sd { namespace sidebar {
 
 struct snewfoil_value_info
 {
-    sal_uInt16 mnBmpResId;
+    const char* msBmpResId;
     sal_uInt16 mnStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
@@ -78,7 +79,7 @@ static const snewfoil_value_info notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {"", 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static const snewfoil_value_info handout[] =
@@ -95,7 +96,7 @@ static const snewfoil_value_info handout[] =
      AUTOLAYOUT_HANDOUT6},
     {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT9},
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {"", 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static const snewfoil_value_info standard[] =
@@ -118,7 +119,7 @@ static const snewfoil_value_info standard[] =
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VTITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02A, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_2VTEXT},
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
+    {"", 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 LayoutMenu::LayoutMenu (
@@ -538,11 +539,11 @@ void LayoutMenu::Fill()
     }
 
     Clear();
-    for (sal_uInt16 i=1; pInfo!=nullptr&&pInfo->mnBmpResId!=0; i++,pInfo++)
+    for (sal_uInt16 i=1; pInfo!=nullptr && pInfo->mnStrResId !=0; i++, pInfo++)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            BitmapEx aBmp(SdResId(pInfo->mnBmpResId));
+            BitmapEx aBmp(OUString::createFromAscii(pInfo->msBmpResId));
 
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BmpMirrorFlags::Horizontal);

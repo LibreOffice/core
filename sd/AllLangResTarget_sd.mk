@@ -36,8 +36,4 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/view/DocumentRenderer.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,sd/res,\
-    sd/source/ui/slidesorter/view/SlsResource.src \
-))
-
 # vim: set noet sw=4 ts=4:

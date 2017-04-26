@@ -46,6 +46,7 @@
 #include "DrawController.hxx"
 #include "glob.hrc"
 #include "strings.hrc"
+#include "bitmaps.hlst"
 #include "sdresid.hxx"
 #include "EventMultiplexer.hxx"
 #include "ViewShellManager.hxx"
@@ -64,25 +65,43 @@ class ImageButtonHdl;
 static const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static const sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
-static BitmapEx loadImageResource( sal_uInt16 nId )
+static const OUStringLiteral aSmallPlaceHolders[] =
 {
-    SdResId aResId( nId );
-    aResId.SetRT( RSC_BITMAP );
+    BMP_PLACEHOLDER_TABLE_SMALL,
+    BMP_PLACEHOLDER_CHART_SMALL,
+    BMP_PLACEHOLDER_IMAGE_SMALL,
+    BMP_PLACEHOLDER_MOVIE_SMALL,
+    BMP_PLACEHOLDER_TABLE_SMALL_HOVER,
+    BMP_PLACEHOLDER_CHART_SMALL_HOVER,
+    BMP_PLACEHOLDER_IMAGE_SMALL_HOVER,
+    BMP_PLACEHOLDER_MOVIE_SMALL_HOVER
+};
 
-    return BitmapEx( aResId );
-}
+static const OUStringLiteral aBigPlaceHolders[] =
+{
+    BMP_PLACEHOLDER_TABLE_LARGE,
+    BMP_PLACEHOLDER_CHART_LARGE,
+    BMP_PLACEHOLDER_IMAGE_LARGE,
+    BMP_PLACEHOLDER_MOVIE_LARGE,
+    BMP_PLACEHOLDER_TABLE_LARGE_HOVER,
+    BMP_PLACEHOLDER_CHART_LARGE_HOVER,
+    BMP_PLACEHOLDER_IMAGE_LARGE_HOVER,
+    BMP_PLACEHOLDER_MOVIE_LARGE_HOVER
+};
 
 static BitmapEx* getButtonImage( int index, bool large )
 {
-    static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[BMP_PLACEHOLDER_SMALL_END - BMP_PLACEHOLDER_SMALL_START] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-    static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[BMP_PLACEHOLDER_LARGE_END - BMP_PLACEHOLDER_LARGE_START] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+    static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+    static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+
+    assert(SAL_N_ELEMENTS(aSmallPlaceHolders) == SAL_N_ELEMENTS(aBigPlaceHolders));
 
     if( !gSmallButtonImages[0].get() )
     {
-        for( sal_uInt16 i = 0; i < (BMP_PLACEHOLDER_SMALL_END-BMP_PLACEHOLDER_SMALL_START); i++ )
+        for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aSmallPlaceHolders); i++ )
         {
-            gSmallButtonImages[i].set( new BitmapEx( loadImageResource( BMP_PLACEHOLDER_SMALL_START + i ) ) );
-            gLargeButtonImages[i].set( new BitmapEx( loadImageResource( BMP_PLACEHOLDER_LARGE_START + i ) ) );
+            gSmallButtonImages[i].set(new BitmapEx(aSmallPlaceHolders[i]));
+            gLargeButtonImages[i].set(new BitmapEx(aBigPlaceHolders[i]));
         }
     }
 
