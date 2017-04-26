@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
 #include <stdexcept>
 #include <osl/diagnose.h>
 #include "FilterContainer.hxx"
@@ -238,10 +241,10 @@ OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer )
     if ( !reqBuffSize )
         return OUString( );
 
-    sal_Unicode* pBuff = new sal_Unicode[reqBuffSize];
+    auto pBuff = std::unique_ptr<sal_Unicode[]>(new sal_Unicode[reqBuffSize]);
 
     // initialize the buffer with 0
-    ZeroMemory( pBuff, sizeof( sal_Unicode ) * reqBuffSize );
+    ZeroMemory( pBuff.get(), sizeof( sal_Unicode ) * reqBuffSize );
 
     OUString winFilterBuff;
     CFilterContainer::FILTER_ENTRY_T nextFilter;
@@ -252,24 +255,21 @@ OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer )
     while( aFilterContainer.getNextFilter( nextFilter ) )
     {
         wcsmemcpy(
-            pBuff + memPos,
+            pBuff.get() + memPos,
             nextFilter.first.getStr( ),
             nextFilter.first.getLength( ) );
 
         memPos += nextFilter.first.getLength( ) + 1;
 
         wcsmemcpy(
-            pBuff + memPos,
+            pBuff.get() + memPos,
             nextFilter.second.getStr( ),
             nextFilter.second.getLength( ) );
 
         memPos += nextFilter.second.getLength( ) + 1 ;
     }
 
-    winFilterBuff = OUString( pBuff, reqBuffSize );
-
-    // remove the allocated buffer
-    delete [] pBuff;
+    winFilterBuff = OUString( pBuff.get(), reqBuffSize );
 
     return winFilterBuff;
 }
