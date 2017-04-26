@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 
 #include <svx/dialogs.hrc>
+#include "bitmaps.hlst"
 
 #include <tools/rcid.h>
 
@@ -300,7 +301,7 @@ void FrameSelectorImpl::InitColors()
     maHCLineCol = rSettings.GetLabelTextColor();
 }
 
-static const sal_uInt16 aImageIds[] =
+static const OUStringLiteral aImageIds[] =
 {
     RID_SVXBMP_FRMSEL_ARROW1,
     RID_SVXBMP_FRMSEL_ARROW2,
@@ -337,7 +338,7 @@ void FrameSelectorImpl::InitArrowImageList()
     assert(SAL_N_ELEMENTS(aImageIds) == 16);
     for (size_t i = 0; i < SAL_N_ELEMENTS(aImageIds); ++i)
     {
-        BitmapEx aBmpEx(SVX_RES(aImageIds[i]));
+        BitmapEx aBmpEx(aImageIds[i]);
         aBmpEx.Replace(pColorAry1, pColorAry2, 3);
         maArrows.push_back(Image(aBmpEx));
     }

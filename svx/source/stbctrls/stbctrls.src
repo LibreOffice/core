@@ -36,11 +36,6 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text [ en-US ] = "Overwrite" ;
 };
 
-Bitmap RID_SVXBMP_SELECTION
-{
-    File = "selection_10x22.png" ;
-};
-
 String RID_SVXSTR_XMLSEC_SIG_OK
 {
     Text [ en-US ] = "Digital Signature: The document signature is OK.";
@@ -155,65 +150,4 @@ String RID_SIDEBAR_EMPTY_PANEL_TEXT
 {
     Text [ en-US ] = "Properties for the task that you are performing are not available for the current selection" ;
 };
-
-Bitmap RID_SVXBMP_POSITION
-{
-    File = "sc10223.png" ;
-};
-
-Bitmap RID_SVXBMP_SIZE
-{
-    File = "sc10224.png" ;
-};
-
-Bitmap RID_SVXBMP_SIGNET
-{
-    File = "signet_11x16.png" ;
-};
-
-Bitmap RID_SVXBMP_SIGNET_BROKEN
-{
-    File = "caution_11x16.png" ;
-};
-
-Bitmap RID_SVXBMP_SIGNET_NOTVALIDATED
-{
-    File = "notcertificate_16.png" ;
-};
-
-Bitmap RID_SVXBMP_SLIDERBUTTON
-{
-    File = "slidezoombutton_10.png" ;
-};
-
-Bitmap RID_SVXBMP_SLIDERDECREASE
-{
-    File = "slidezoomout_10.png" ;
-};
-
-Bitmap RID_SVXBMP_SLIDERINCREASE
-{
-    File = "slidezoomin_10.png" ;
-};
-
-Bitmap RID_SVXBMP_DOC_MODIFIED_YES
-{
-    File = "doc_modified_yes_14.png" ;
-};
-
-Bitmap RID_SVXBMP_DOC_MODIFIED_NO
-{
-    File = "doc_modified_no_14.png" ;
-};
-
-Bitmap RID_SVXBMP_DOC_MODIFIED_FEEDBACK
-{
-    File = "doc_modified_feedback.png" ;
-};
-
-Bitmap RID_SVXBMP_ZOOM_PAGE
-{
-    File = "zoom_page_statusbar.png" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

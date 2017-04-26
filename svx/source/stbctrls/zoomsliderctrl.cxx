@@ -27,6 +27,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <basegfx/tools/zoomtools.hxx>
+#include "bitmaps.hlst"
 
 #include <set>
 
@@ -156,9 +157,9 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
     SfxStatusBarControl( _nSlotId, _nId, rStatusBar ),
     mxImpl( new SvxZoomSliderControl_Impl )
 {
-    mxImpl->maSliderButton   = Image(BitmapEx(SVX_RES(RID_SVXBMP_SLIDERBUTTON)));
-    mxImpl->maIncreaseButton = Image(BitmapEx(SVX_RES(RID_SVXBMP_SLIDERINCREASE)));
-    mxImpl->maDecreaseButton = Image(BitmapEx(SVX_RES(RID_SVXBMP_SLIDERDECREASE)));
+    mxImpl->maSliderButton   = Image(BitmapEx(RID_SVXBMP_SLIDERBUTTON));
+    mxImpl->maIncreaseButton = Image(BitmapEx(RID_SVXBMP_SLIDERINCREASE));
+    mxImpl->maDecreaseButton = Image(BitmapEx(RID_SVXBMP_SLIDERDECREASE));
 }
 
 SvxZoomSliderControl::~SvxZoomSliderControl()

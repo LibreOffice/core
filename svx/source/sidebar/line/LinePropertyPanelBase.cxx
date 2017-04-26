@@ -45,6 +45,7 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
+#include "bitmaps.hlst"
 
 using namespace css;
 using namespace css::uno;
@@ -170,7 +171,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mpStartItem(),
     mpEndItem(),
     mxLineWidthPopup(VclPtr<LineWidthPopup>::Create(*this)),
-    maIMGNone(BitmapEx(SVX_RES(BMP_NONE_ICON))),
+    maIMGNone(BitmapEx(BMP_NONE_ICON)),
     mpIMGWidthIcon(),
     mbWidthValuable(true),
     mbArrowSupported(true)
@@ -222,14 +223,14 @@ void LinePropertyPanelBase::dispose()
 void LinePropertyPanelBase::Initialize()
 {
     mpIMGWidthIcon.reset(new Image[8]);
-    mpIMGWidthIcon[0] = Image(BitmapEx(SVX_RES(BMP_WIDTH1_ICON)));
-    mpIMGWidthIcon[1] = Image(BitmapEx(SVX_RES(BMP_WIDTH2_ICON)));
-    mpIMGWidthIcon[2] = Image(BitmapEx(SVX_RES(BMP_WIDTH3_ICON)));
-    mpIMGWidthIcon[3] = Image(BitmapEx(SVX_RES(BMP_WIDTH4_ICON)));
-    mpIMGWidthIcon[4] = Image(BitmapEx(SVX_RES(BMP_WIDTH5_ICON)));
-    mpIMGWidthIcon[5] = Image(BitmapEx(SVX_RES(BMP_WIDTH6_ICON)));
-    mpIMGWidthIcon[6] = Image(BitmapEx(SVX_RES(BMP_WIDTH7_ICON)));
-    mpIMGWidthIcon[7] = Image(BitmapEx(SVX_RES(BMP_WIDTH8_ICON)));
+    mpIMGWidthIcon[0] = Image(BitmapEx(BMP_WIDTH1_ICON));
+    mpIMGWidthIcon[1] = Image(BitmapEx(BMP_WIDTH2_ICON));
+    mpIMGWidthIcon[2] = Image(BitmapEx(BMP_WIDTH3_ICON));
+    mpIMGWidthIcon[3] = Image(BitmapEx(BMP_WIDTH4_ICON));
+    mpIMGWidthIcon[4] = Image(BitmapEx(BMP_WIDTH5_ICON));
+    mpIMGWidthIcon[5] = Image(BitmapEx(BMP_WIDTH6_ICON));
+    mpIMGWidthIcon[6] = Image(BitmapEx(BMP_WIDTH7_ICON));
+    mpIMGWidthIcon[7] = Image(BitmapEx(BMP_WIDTH8_ICON));
 
     FillLineStyleList();
     SelectLineStyle();

@@ -48,6 +48,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "GalleryControl.hxx"
+#include "bitmaps.hlst"
 
 #include <svx/svxcommands.h>
 #include <svx/galleryitem.hxx>
@@ -1266,8 +1267,8 @@ IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl, LinkParamNone*, void)
 {
     maViewBox->SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
-    BitmapEx aIconBmpEx(GAL_RES(RID_SVXBMP_GALLERY_VIEW_ICON));
-    BitmapEx aListBmpEx(GAL_RES(RID_SVXBMP_GALLERY_VIEW_LIST));
+    BitmapEx aIconBmpEx(RID_SVXBMP_GALLERY_VIEW_ICON);
+    BitmapEx aListBmpEx(RID_SVXBMP_GALLERY_VIEW_LIST);
 
     if( maMiscOptions.AreCurrentSymbolsLarge() )
     {

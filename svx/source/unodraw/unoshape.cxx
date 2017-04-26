@@ -97,6 +97,9 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+
+#include "bitmaps.hlst"
+
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -2605,22 +2608,22 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_LDBITMAP:
     {
-        sal_uInt16 nId;
+        OUString sId;
         if( mpObj->GetObjInventor() == SdrInventor::Default && mpObj->GetObjIdentifier() == OBJ_OLE2 )
         {
-            nId = RID_UNODRAW_OLE2;
+            sId = RID_UNODRAW_OLE2;
         }
         else if( mpObj->GetObjInventor() == SdrInventor::Default && mpObj->GetObjIdentifier() == OBJ_GRAF )
         {
-            nId = RID_UNODRAW_GRAPHICS;
+            sId = RID_UNODRAW_GRAPHICS;
         }
         else
         {
-            nId = RID_UNODRAW_OBJECTS;
+            sId = RID_UNODRAW_OBJECTS;
         }
 
-        BitmapEx aBmp( SVX_RES(nId) );
-        Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap( aBmp ) );
+        BitmapEx aBmp(sId);
+        Reference<awt::XBitmap> xBmp(VCLUnoHelper::CreateBitmap(aBmp));
 
         rValue <<= xBmp;
         break;

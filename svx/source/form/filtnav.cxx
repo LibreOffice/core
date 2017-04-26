@@ -57,6 +57,8 @@
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 
+#include "bitmaps.hlst"
+
 #include <functional>
 
 #define DROP_ACTION_TIMER_INITIAL_TICKS     10
@@ -145,7 +147,7 @@ FmParentData::~FmParentData()
 
 Image FmFormItem::GetImage() const
 {
-    return Image(BitmapEx(SVX_RES(RID_SVXBMP_FORM)));
+    return Image(BitmapEx(RID_SVXBMP_FORM));
 }
 
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
@@ -165,7 +167,7 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
 
 Image FmFilterItems::GetImage() const
 {
-    return Image(BitmapEx(SVX_RES(RID_SVXBMP_FILTER)));
+    return Image(BitmapEx(RID_SVXBMP_FILTER));
 }
 
 FmFilterItem::FmFilterItem( FmFilterItems* pParent,
@@ -180,7 +182,7 @@ FmFilterItem::FmFilterItem( FmFilterItems* pParent,
 
 Image FmFilterItem::GetImage() const
 {
-    return Image(BitmapEx(SVX_RES(RID_SVXBMP_FIELD)));
+    return Image(BitmapEx(RID_SVXBMP_FIELD));
 }
 
 // Hints for communication between model and view
@@ -1083,8 +1085,8 @@ FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
     SetHelpId( HID_FILTER_NAVIGATOR );
 
     SetNodeBitmaps(
-        Image(BitmapEx(SVX_RES(RID_SVXBMP_COLLAPSEDNODE))),
-        Image(BitmapEx(SVX_RES(RID_SVXBMP_EXPANDEDNODE)))
+        Image(BitmapEx(RID_SVXBMP_COLLAPSEDNODE)),
+        Image(BitmapEx(RID_SVXBMP_EXPANDEDNODE))
     );
 
     m_pModel = new FmFilterModel();
@@ -1950,6 +1952,5 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( vcl::Window *_pParent, sal_uIn
 
 
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

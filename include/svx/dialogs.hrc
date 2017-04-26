@@ -132,78 +132,13 @@
 // ResIds for dialogs from StarDraw
 #define RID_SVXSW_FRAMEPOSITIONS            (RID_SVX_START + 289)
 
-#define RID_SVXBMP_LAMP_ON                  (RID_SVX_START + 210)
-#define RID_SVXBMP_LAMP_OFF                 (RID_SVX_START + 211)
-
 #define RID_SVXFLOAT3D_FAVORITE             (RID_SVX_START + 73)
 #define RID_SVXFLOAT3D_FIX_R                (RID_SVX_START + 77)
 #define RID_SVXFLOAT3D_FIX_G                (RID_SVX_START + 78)
 #define RID_SVXFLOAT3D_FIX_B                (RID_SVX_START + 84)
 
-#define RID_SVXBMP_SLIDERBUTTON             (RID_SVX_START +  66)
-#define RID_SVXBMP_SLIDERDECREASE           (RID_SVX_START +  67)
-#define RID_SVXBMP_SLIDERINCREASE           (RID_SVX_START +  68)
-
-#define RID_SVXBMP_ELEMENT                  (RID_SVX_START +  71)
-#define RID_SVXBMP_ATTRIBUTE                (RID_SVX_START +  72)
-#define RID_SVXBMP_TEXT                     (RID_SVX_START +  73)
-#define RID_SVXBMP_OTHER                    (RID_SVX_START +  74)
-
-#define RID_SVXBMP_FRAME1                   (RID_SVX_START +  75)
-#define RID_SVXBMP_FRAME2                   (RID_SVX_START +  76)
-#define RID_SVXBMP_FRAME3                   (RID_SVX_START +  77)
-#define RID_SVXBMP_FRAME4                   (RID_SVX_START +  78)
-#define RID_SVXBMP_FRAME5                   (RID_SVX_START +  79)
-#define RID_SVXBMP_FRAME6                   (RID_SVX_START +  80)
-#define RID_SVXBMP_FRAME7                   (RID_SVX_START +  81)
-#define RID_SVXBMP_FRAME8                   (RID_SVX_START +  82)
-#define RID_SVXBMP_FRAME9                   (RID_SVX_START +  83)
-#define RID_SVXBMP_FRAME10                  (RID_SVX_START +  84)
-#define RID_SVXBMP_FRAME11                  (RID_SVX_START +  85)
-#define RID_SVXBMP_FRAME12                  (RID_SVX_START +  86)
-
-#define RID_SVXBMP_ADD                      (RID_SVX_START +  87)
-#define RID_SVXBMP_ADD_ELEMENT              (RID_SVX_START +  88)
-#define RID_SVXBMP_ADD_ATTRIBUTE            (RID_SVX_START +  89)
-#define RID_SVXBMP_EDIT                     (RID_SVX_START +  90)
-#define RID_SVXBMP_REMOVE                   (RID_SVX_START +  91)
-
 #define RID_SVXSTR_FRMSEL_TEXTS             (RID_SVX_START +  93)
 #define RID_SVXSTR_FRMSEL_DESCRIPTIONS      (RID_SVX_START +  94)
-#define RID_SVXBMP_FRMSEL_ARROW1            (RID_SVX_START +  95)
-#define RID_SVXBMP_FRMSEL_ARROW2            (RID_SVX_START +  96)
-#define RID_SVXBMP_FRMSEL_ARROW3            (RID_SVX_START +  97)
-#define RID_SVXBMP_FRMSEL_ARROW4            (RID_SVX_START +  98)
-#define RID_SVXBMP_FRMSEL_ARROW5            (RID_SVX_START +  99)
-#define RID_SVXBMP_FRMSEL_ARROW6            (RID_SVX_START + 100)
-#define RID_SVXBMP_FRMSEL_ARROW7            (RID_SVX_START + 101)
-#define RID_SVXBMP_FRMSEL_ARROW8            (RID_SVX_START + 102)
-#define RID_SVXBMP_FRMSEL_ARROW9            (RID_SVX_START + 103)
-#define RID_SVXBMP_FRMSEL_ARROW10           (RID_SVX_START + 104)
-#define RID_SVXBMP_FRMSEL_ARROW11           (RID_SVX_START + 105)
-#define RID_SVXBMP_FRMSEL_ARROW12           (RID_SVX_START + 106)
-#define RID_SVXBMP_FRMSEL_ARROW13           (RID_SVX_START + 107)
-#define RID_SVXBMP_FRMSEL_ARROW14           (RID_SVX_START + 108)
-#define RID_SVXBMP_FRMSEL_ARROW15           (RID_SVX_START + 109)
-#define RID_SVXBMP_FRMSEL_ARROW16           (RID_SVX_START + 110)
-
-// ResId for position and size bitmap
-#define RID_SVXBMP_POSITION                 (RID_SVX_START + 111)
-#define RID_SVXBMP_SIZE                     (RID_SVX_START + 112)
-
-#define RID_SVXBMP_SIGNET                   (RID_SVX_START + 113)
-#define RID_SVXBMP_SIGNET_BROKEN            (RID_SVX_START + 114)
-#define RID_SVXBMP_SIGNET_NOTVALIDATED      (RID_SVX_START + 115)
-
-#define RID_SVXCTRL_RECTBTNS                (RID_SVX_START + 226)
-
-// ResId's for Starone impl. bitmaps
-#define RID_UNODRAW_OBJECTS                 (RID_SVX_START + 233)
-#define RID_UNODRAW_OLE2                    (RID_SVX_START + 234)
-#define RID_UNODRAW_GRAPHICS                (RID_SVX_START + 235)
-
-#define RID_SVXBMP_NOTCHECKED               (RID_SVX_START + 243)
-#define RID_SVXBMP_CHECKED                  (RID_SVX_START + 244)
 
 #define RID_SIDEBAR_EMPTY_PANEL_TEXT        (RID_SVX_START + 321)
 
@@ -246,9 +181,6 @@
 #define RID_SVXSTR_INSERT_HELPTEXT          (RID_SVX_START + 210)
 #define RID_SVXSTR_OVERWRITE_HELPTEXT       (RID_SVX_START + 211)
 #define RID_SVXSTR_OVERWRITE_TEXT           (RID_SVX_START + 212)
-
-// Strings for the selection mode
-#define RID_SVXBMP_SELECTION                (RID_SVX_START + 215)
 
 #define RID_SVXSTR_XMLSEC_SIG_OK            (RID_SVX_START + 222)
 #define RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY  (RID_SVX_START + 223)
@@ -313,21 +245,6 @@
 #define RID_SVX_CONTOUR_START               (RID_SVX_START + 461)
 //      RID_SVX_CONTOUR_END                 (RID_SVX_START + 471)
 
-#define RID_SVXBMP_GRAF_RED                 (RID_SVX_START + 472)
-#define RID_SVXBMP_GRAF_GREEN               (RID_SVX_START + 473)
-#define RID_SVXBMP_GRAF_BLUE                (RID_SVX_START + 474)
-#define RID_SVXBMP_GRAF_LUMINANCE           (RID_SVX_START + 475)
-#define RID_SVXBMP_GRAF_CONTRAST            (RID_SVX_START + 476)
-#define RID_SVXBMP_GRAF_GAMMA               (RID_SVX_START + 477)
-#define RID_SVXBMP_GRAF_TRANSPARENCE        (RID_SVX_START + 478)
-
-#define RID_SVXBMP_DEPTH_INFINITY           (RID_SVX_START + 482)
-#define RID_SVXBMP_DEPTH_0                  (RID_SVX_START + 483)
-#define RID_SVXBMP_DEPTH_1                  (RID_SVX_START + 484)
-#define RID_SVXBMP_DEPTH_2                  (RID_SVX_START + 485)
-#define RID_SVXBMP_DEPTH_3                  (RID_SVX_START + 486)
-#define RID_SVXBMP_DEPTH_4                  (RID_SVX_START + 487)
-
 // Defines for the 3D engine
 #define RID_SVX_3D_UNDO_EXCHANGE_PASTE      (RID_SVX_START + 489)
 #define RID_SVX_3D_UNDO_ROTATE              (RID_SVX_START + 495)
@@ -340,11 +257,6 @@
 #define RID_SVXSTR_GRAFMODE_GREYS           (RID_SVX_START + 521)
 #define RID_SVXSTR_GRAFMODE_MONO            (RID_SVX_START + 522)
 #define RID_SVXSTR_GRAFMODE_WATERMARK       (RID_SVX_START + 523)
-
-#define RID_SVXBMP_WIRE_FRAME               (RID_SVX_START + 532)
-#define RID_SVXBMP_MATTE                    (RID_SVX_START + 533)
-#define RID_SVXBMP_PLASTIC                  (RID_SVX_START + 534)
-#define RID_SVXBMP_METAL                    (RID_SVX_START + 535)
 
 // BM: some additional standard colors
 #define RID_SVXSTR_COLOR_VIOLET             (RID_SVX_START + 540)
@@ -910,40 +822,14 @@
 // ooo-build specific resources
 
 #define SVX_OOO_BUILD_START              (RID_SVX_START + 1230)
-#define RID_SVXBMP_DOC_MODIFIED_YES      (SVX_OOO_BUILD_START + 1) // 1231
-#define RID_SVXBMP_DOC_MODIFIED_NO       (SVX_OOO_BUILD_START + 2) // 1232
-#define RID_SVXBMP_DOC_MODIFIED_FEEDBACK (SVX_OOO_BUILD_START + 3) // 1233
 #define RID_SVXSTR_DOC_MODIFIED_YES      (SVX_OOO_BUILD_START + 4) // 1234
 #define RID_SVXSTR_DOC_MODIFIED_NO       (SVX_OOO_BUILD_START + 5) // 1235
 #define RID_SVXSTR_DOC_LOAD              (SVX_OOO_BUILD_START + 6) // 1236
 #define RID_SVXSTR_ERR_OLD_PASSWD        (SVX_OOO_BUILD_START + 7) // 1237
 #define RID_SVXSTR_ERR_REPEAT_PASSWD     (SVX_OOO_BUILD_START + 8) // 1238
-#define RID_SVXBMP_ZOOM_PAGE             (SVX_OOO_BUILD_START + 9) // 1239
 #define RID_SVXSTR_FIT_SLIDE             (SVX_OOO_BUILD_START + 10) // 1240
 #define RID_SVXSTR_WARN_MISSING_SMARTART (SVX_OOO_BUILD_START + 11) // 1241
 
-// sidebar-related resources
-#define RID_SVX_SIDEBAR_BEGIN            (RID_SVX_START + 1242)
-#define BMP_NONE_ICON                    (RID_SVX_SIDEBAR_BEGIN + 21)
-#define BMP_WIDTH1_ICON                  (RID_SVX_SIDEBAR_BEGIN + 22)
-#define BMP_WIDTH2_ICON                  (RID_SVX_SIDEBAR_BEGIN + 23)
-#define BMP_WIDTH3_ICON                  (RID_SVX_SIDEBAR_BEGIN + 24)
-#define BMP_WIDTH4_ICON                  (RID_SVX_SIDEBAR_BEGIN + 25)
-#define BMP_WIDTH5_ICON                  (RID_SVX_SIDEBAR_BEGIN + 26)
-#define BMP_WIDTH6_ICON                  (RID_SVX_SIDEBAR_BEGIN + 27)
-#define BMP_WIDTH7_ICON                  (RID_SVX_SIDEBAR_BEGIN + 28)
-#define BMP_WIDTH8_ICON                  (RID_SVX_SIDEBAR_BEGIN + 29)
-#define BMP_AXIAL                        (RID_SVX_SIDEBAR_BEGIN + 30)
-#define BMP_ELLI                         (RID_SVX_SIDEBAR_BEGIN + 31)
-#define BMP_QUAD                         (RID_SVX_SIDEBAR_BEGIN + 32)
-#define BMP_RADIAL                       (RID_SVX_SIDEBAR_BEGIN + 33)
-#define BMP_SQUARE                       (RID_SVX_SIDEBAR_BEGIN + 34)
-#define BMP_LINEAR                       (RID_SVX_SIDEBAR_BEGIN + 35)
-#define RID_SVX_SIDEBAR_END              (RID_SVX_START + 1279)
-
-#define RID_SVXBMP_GREENCHECK            (RID_SVX_START + 1280)
-#define RID_SVXBMP_YELLOWCHECK           (RID_SVX_START + 1281)
-#define RID_SVXBMP_REDCROSS              (RID_SVX_START + 1282)
 #define RID_SVXSTR_SUCCESSRECOV          (RID_SVX_START + 1283)
 #define RID_SVXSTR_ORIGDOCRECOV          (RID_SVX_START + 1284)
 #define RID_SVXSTR_RECOVFAILED           (RID_SVX_START + 1285)
@@ -968,35 +854,17 @@
 #define RID_SVXSTR_CHARS_SPACING_VERY_LOOSE (RID_SVX_START + 1305)
 #define RID_SVXSTR_CHARS_SPACING_CUSTOM   (RID_SVX_START + 1306)
 #define RID_SVXSTR_CHARS_SPACING_KERN_PAIRS (RID_SVX_START + 1307)
-#define RID_SVXBMP_DIRECTION             (RID_SVX_START + 1308)  // needs 10 resource ids
-#define RID_SVXBMP_PERSPECTIVE           (RID_SVX_START + 1318)
-#define RID_SVXBMP_PARALLEL              (RID_SVX_START + 1319)
 #define RID_SVXSTR_DIRECTION             (RID_SVX_START + 1320)  // needs 10 resource ids
 #define RID_SVXSTR_PERSPECTIVE           (RID_SVX_START + 1330)
 #define RID_SVXSTR_PARALLEL              (RID_SVX_START + 1331)
 #define RID_SVXSTR_BRIGHT                (RID_SVX_START + 1332)
 #define RID_SVXSTR_NORMAL                (RID_SVX_START + 1333)
 #define RID_SVXSTR_DIM                   (RID_SVX_START + 1334)
-#define RID_SVXBMP_LIGHT_OFF             (RID_SVX_START + 1335)  // needs 10 resource ids
-#define RID_SVXBMP_LIGHT_ON              (RID_SVX_START + 1345)  // needs 10 resource ids
-#define RID_SVXBMP_LIGHT_PREVIEW         (RID_SVX_START + 1355)  // needs 10 resource ids
-#define RID_SVXBMP_LIGHTING_BRIGHT       (RID_SVX_START + 1365)
-#define RID_SVXBMP_LIGHTING_NORMAL       (RID_SVX_START + 1366)
-#define RID_SVXBMP_LIGHTING_DIM          (RID_SVX_START + 1367)
 #define RID_SVXSTR_ALIGN_LEFT            (RID_SVX_START + 1368)
 #define RID_SVXSTR_ALIGN_CENTER          (RID_SVX_START + 1369)
 #define RID_SVXSTR_ALIGN_RIGHT           (RID_SVX_START + 1370)
 #define RID_SVXSTR_ALIGN_WORD            (RID_SVX_START + 1371)
 #define RID_SVXSTR_ALIGN_STRETCH         (RID_SVX_START + 1372)
-#define RID_SVXBMP_FONTWORK_ALIGN_LEFT   (RID_SVX_START + 1373)
-#define RID_SVXBMP_FONTWORK_ALIGN_CENTER (RID_SVX_START + 1374)
-#define RID_SVXBMP_FONTWORK_ALIGN_RIGHT  (RID_SVX_START + 1375)
-#define RID_SVXBMP_FONTWORK_ALIGN_WORD   (RID_SVX_START + 1376)
-#define RID_SVXBMP_FONTWORK_ALIGN_STRETCH (RID_SVX_START + 1377)
-#define RID_SVXBMP_SHADOW_ANGLE          (RID_SVX_START + 1378)
-#define RID_SVXBMP_SHADOW_SIZE           (RID_SVX_START + 1379)
-#define RID_SVXBMP_SHADOW_XDIST          (RID_SVX_START + 1380)
-#define RID_SVXBMP_SHADOW_YDIST          (RID_SVX_START + 1381)
 #define RID_SVXSTR_ZOOM_25               (RID_SVX_START + 1382)
 #define RID_SVXSTR_ZOOM_50               (RID_SVX_START + 1383)
 #define RID_SVXSTR_ZOOM_75               (RID_SVX_START + 1384)
@@ -1009,8 +877,6 @@
 
 #define RID_SVXSTR_WIDTH_LAST_CUSTOM     (RID_SVX_START + 1391)
 #define RID_SVXSTR_PT                    (RID_SVX_START + 1392)
-#define RID_SVXBMP_WIDTH_CUSTOM          (RID_SVX_START + 1393)
-#define RID_SVXBMP_WIDTH_CUSTOM_GRAY     (RID_SVX_START + 1394)
 #define RID_SVXSTRARY_PAPERSIZE_STD      (RID_SVX_START + 1395)
 #define RID_SVXSTRARY_PAPERSIZE_DRAW     (RID_SVX_START + 1396)
 #define RID_SVXSTRARY_NUMBERINGTYPE      (RID_SVX_START + 1397)

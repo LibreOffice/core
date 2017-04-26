@@ -30,6 +30,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "modctrl_internal.hxx"
+#include "bitmaps.hlst"
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
@@ -54,9 +55,9 @@ struct SvxModifyControl::ImplData
     ImplData():
         mnModState(MODIFICATION_STATE_NO)
     {
-        maImages[MODIFICATION_STATE_NO]       = Image(BitmapEx(SVX_RES(RID_SVXBMP_DOC_MODIFIED_NO)));
-        maImages[MODIFICATION_STATE_YES]      = Image(BitmapEx(SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES)));
-        maImages[MODIFICATION_STATE_FEEDBACK] = Image(BitmapEx(SVX_RES(RID_SVXBMP_DOC_MODIFIED_FEEDBACK)));
+        maImages[MODIFICATION_STATE_NO]       = Image(BitmapEx(RID_SVXBMP_DOC_MODIFIED_NO));
+        maImages[MODIFICATION_STATE_YES]      = Image(BitmapEx(RID_SVXBMP_DOC_MODIFIED_YES));
+        maImages[MODIFICATION_STATE_FEEDBACK] = Image(BitmapEx(RID_SVXBMP_DOC_MODIFIED_FEEDBACK));
 
         maIdle.SetPriority(TaskPriority::LOWEST);
     }

@@ -21,51 +21,6 @@
 #include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 
-Bitmap RID_SVXBMP_ADD
-{
-    File = "tb01.png";
-};
-
-Bitmap RID_SVXBMP_ADD_ELEMENT
-{
-    File = "tb02.png";
-};
-
-Bitmap RID_SVXBMP_ADD_ATTRIBUTE
-{
-    File = "tb03.png";
-};
-
-Bitmap RID_SVXBMP_EDIT
-{
-    File = "tb04.png";
-};
-
-Bitmap RID_SVXBMP_REMOVE
-{
-    File = "tb05.png";
-};
-
-Bitmap RID_SVXBMP_ELEMENT
-{
-    File = "da03.png";
-};
-
-Bitmap RID_SVXBMP_ATTRIBUTE
-{
-    File = "da04.png";
-};
-
-Bitmap RID_SVXBMP_TEXT
-{
-    File = "da05.png";
-};
-
-Bitmap RID_SVXBMP_OTHER
-{
-    File = "da06.png";
-};
-
 String RID_STR_QRY_REMOVE_MODEL
 {
     Text [ en-US ] = "Deleting the model '$MODELNAME' affects all controls currently bound to this model.\nDo you really want to delete this model?" ;

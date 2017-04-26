@@ -24,6 +24,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/svapp.hxx>
 #include "LineWidthValueSet.hxx"
+#include "bitmaps.hlst"
 
 namespace svx { namespace sidebar {
 
@@ -38,8 +39,8 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     , m_bCloseByEdit(false)
     , m_nCustomWidth(0)
     , m_nTmpCustomWidth(0)
-    , m_aIMGCus(BitmapEx(SVX_RES(RID_SVXBMP_WIDTH_CUSTOM)))
-    , m_aIMGCusGray(BitmapEx(SVX_RES(RID_SVXBMP_WIDTH_CUSTOM_GRAY)))
+    , m_aIMGCus(BitmapEx(RID_SVXBMP_WIDTH_CUSTOM))
+    , m_aIMGCusGray(BitmapEx(RID_SVXBMP_WIDTH_CUSTOM_GRAY))
 {
     get(m_xMFWidth, "spin");
 

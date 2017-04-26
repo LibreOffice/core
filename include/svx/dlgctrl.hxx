@@ -75,7 +75,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public Control
 private:
     SVX_DLLPRIVATE void             InitSettings(vcl::RenderContext& rRenderContext);
     SVX_DLLPRIVATE void             InitRectBitmap();
-    SVX_DLLPRIVATE Bitmap&          GetRectBitmap();
+    SVX_DLLPRIVATE BitmapEx&        GetRectBitmap();
     SVX_DLLPRIVATE void             Resize_Impl();
 
 protected:
@@ -88,7 +88,7 @@ protected:
     Point aPtLB, aPtMB, aPtRB;
     Point aPtNew;
     RectPoint eRP, eDefRP;
-    Bitmap* pBitmap;
+    BitmapEx* pBitmap;
     CTL_STATE m_nState;
 
     bool mbCompleteDisable : 1;

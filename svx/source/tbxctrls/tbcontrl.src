@@ -20,70 +20,6 @@
 #include <svx/dialogs.hrc>
 #include <helpid.hrc>
 
-/*
- * Bitmaps for SvxFrameWindow
- */
-
-Bitmap RID_SVXBMP_FRAME1
-{
-    File = "fr01.png";
-};
-
-Bitmap RID_SVXBMP_FRAME2
-{
-    File = "fr02.png";
-};
-
-Bitmap RID_SVXBMP_FRAME3
-{
-    File = "fr03.png";
-};
-
-Bitmap RID_SVXBMP_FRAME4
-{
-    File = "fr04.png";
-};
-
-Bitmap RID_SVXBMP_FRAME5
-{
-    File = "fr05.png";
-};
-
-Bitmap RID_SVXBMP_FRAME6
-{
-    File = "fr06.png";
-};
-
-Bitmap RID_SVXBMP_FRAME7
-{
-    File = "fr07.png";
-};
-
-Bitmap RID_SVXBMP_FRAME8
-{
-    File = "fr08.png";
-};
-
-Bitmap RID_SVXBMP_FRAME9
-{
-    File = "fr09.png";
-};
-
-Bitmap RID_SVXBMP_FRAME10
-{
-    File = "fr010.png";
-};
-
-Bitmap RID_SVXBMP_FRAME11
-{
-    File = "fr011.png";
-};
-
-Bitmap RID_SVXBMP_FRAME12
-{
-    File = "fr012.png";
-};
-
 String RID_SVXSTR_NOFILL
 {
     Text [ en-US ] = "No Fill" ;
@@ -122,41 +58,6 @@ String RID_SVXSTR_BY_AUTHOR
 String RID_SVXSTR_PAGES
 {
     Text [ en-US ] = "Pages";
-};
-
-Bitmap RID_SVXBMP_GRAF_RED
-{
-    File = "sc10865.png";
-};
-
-Bitmap RID_SVXBMP_GRAF_GREEN
-{
-    File = "sc10866.png";
-};
-
-Bitmap RID_SVXBMP_GRAF_BLUE
-{
-    File = "sc10867.png";
-};
-
-Bitmap RID_SVXBMP_GRAF_LUMINANCE
-{
-    File = "sc10863.png";
-};
-
-Bitmap RID_SVXBMP_GRAF_CONTRAST
-{
-    File = "sc10864.png";
-};
-
-Bitmap RID_SVXBMP_GRAF_GAMMA
-{
-    File = "sc10868.png";
-};
-
-Bitmap RID_SVXBMP_GRAF_TRANSPARENCE
-{
-    File = "sc10869.png";
 };
 
 String RID_SVXSTR_CLEARFORM

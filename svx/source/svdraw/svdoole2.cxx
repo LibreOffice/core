@@ -86,6 +86,7 @@
 #include <editeng/outlobj.hxx>
 #include <svx/svdpage.hxx>
 #include <rtl/ref.hxx>
+#include "bitmaps.hlst"
 
 using namespace ::com::sun::star;
 
@@ -2074,7 +2075,7 @@ bool SdrOle2Obj::AddOwnLightClient()
 
 Graphic SdrOle2Obj::GetEmptyOLEReplacementGraphic()
 {
-    return Graphic(BitmapEx(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr())));
+    return Graphic(BitmapEx(BMP_SVXOLEOBJ));
 }
 
 void SdrOle2Obj::SetWindow(const css::uno::Reference < css::awt::XWindow >& _xWindow)

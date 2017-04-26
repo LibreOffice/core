@@ -45,6 +45,7 @@
 #include "svx/svdpagv.hxx"
 #include "svx/svxdlg.hxx"
 #include "svx/svxids.hrc"
+#include "bitmaps.hlst"
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
@@ -203,7 +204,7 @@ static const char* aConvertSlots[] =
     "ConvertToNavigationBar"
 };
 
-static const sal_Int16 nImgIds[] =
+static const OUStringLiteral aImgIds[] =
 {
     RID_SVXBMP_EDITBOX,
     RID_SVXBMP_BUTTON,
@@ -1035,7 +1036,7 @@ VclBuilder* FmXFormShell::GetConversionMenu()
     for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
     {
         // das entsprechende Image dran
-        pNewMenu->SetItemImage(pNewMenu->GetItemId(aConvertSlots[i]), Image(BitmapEx(SVX_RES(nImgIds[i]))));
+        pNewMenu->SetItemImage(pNewMenu->GetItemId(aConvertSlots[i]), Image(BitmapEx(aImgIds[i])));
     }
     return pBuilder;
 }

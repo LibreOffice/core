@@ -23,6 +23,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include "bitmaps.hlst"
 #include "docrecovery.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -803,9 +804,9 @@ void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::Re
 
 RecovDocList::RecovDocList(SvSimpleTableContainer& rParent, ResMgr &rResMgr)
     : SvSimpleTable      ( rParent )
-    , m_aGreenCheckImg    (BitmapEx(ResId(RID_SVXBMP_GREENCHECK, rResMgr)))
-    , m_aYellowCheckImg   (BitmapEx(ResId(RID_SVXBMP_YELLOWCHECK, rResMgr)))
-    , m_aRedCrossImg      (BitmapEx(ResId(RID_SVXBMP_REDCROSS, rResMgr)))
+    , m_aGreenCheckImg    (BitmapEx(RID_SVXBMP_GREENCHECK))
+    , m_aYellowCheckImg   (BitmapEx(RID_SVXBMP_YELLOWCHECK))
+    , m_aRedCrossImg      (BitmapEx(RID_SVXBMP_REDCROSS))
     , m_aSuccessRecovStr  ( ResId(RID_SVXSTR_SUCCESSRECOV, rResMgr ) )
     , m_aOrigDocRecovStr  ( ResId(RID_SVXSTR_ORIGDOCRECOV, rResMgr ) )
     , m_aRecovFailedStr   ( ResId(RID_SVXSTR_RECOVFAILED, rResMgr ) )
