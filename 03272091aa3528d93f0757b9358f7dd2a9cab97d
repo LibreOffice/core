@@ -16,6 +16,24 @@
       "revId": "03272091aa3528d93f0757b9358f7dd2a9cab97d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_8f908397",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-26T11:43:11Z",
+      "side": 1,
+      "message": "i suppose that\u0027s technically true, but the idea of not having a pSalData seems quite crazy, that could only happen if DeInitVCL is called twice?",
+      "parentUuid": "5a3905b3_2f814f4b",
+      "revId": "03272091aa3528d93f0757b9358f7dd2a9cab97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
