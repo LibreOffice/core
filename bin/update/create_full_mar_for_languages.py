@@ -8,6 +8,7 @@ import json
 from tools import uncompress_file_to_dir, get_file_info
 
 from config import parse_config
+from path import UpdaterPath
 
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -22,17 +23,18 @@ def create_lang_infos(mar_file_name, language, url):
     return data
 
 def main():
-    print(sys.argv)
-    if len(sys.argv) < 7:
+    if len(sys.argv) < 5:
         print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX $UPDATE_CONFIG")
         sys.exit(1)
 
-    update_config = sys.argv[6]
-    filename_prefix = sys.argv[5]
-    temp_dir = sys.argv[4]
-    target_dir = sys.argv[3]
+    update_config = sys.argv[4]
+    filename_prefix = sys.argv[3]
     workdir = sys.argv[2]
     product_name = sys.argv[1]
+
+    updater_path = UpdaterPath(workdir)
+    target_dir = updater_path.get_update_dir()
+    temp_dir = updater_path.get_language_dir()
 
     config = parse_config(update_config)
 

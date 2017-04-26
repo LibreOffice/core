@@ -8,25 +8,31 @@ import json
 from tools import uncompress_file_to_dir, get_file_info, make_complete_mar_name
 from config import parse_config
 from signing import sign_mar_file
+from path import UpdaterPath
 
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
 
+def ensure_dir_exist()
+
 def main():
-    print(sys.argv)
-    if len(sys.argv) < 7:
-        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX $UPDATE_CONFIG")
+    if len(sys.argv) < 5:
+        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $FILENAMEPREFIX $UPDATE_CONFIG")
         sys.exit(1)
 
-    update_config = sys.argv[6]
-    filename_prefix = sys.argv[5]
-    temp_dir = sys.argv[4]
-    target_dir = sys.argv[3]
+    update_config = sys.argv[4]
+    filename_prefix = sys.argv[3]
     workdir = sys.argv[2]
     product_name = sys.argv[1]
 
     if len(update_config) == 0:
         print("missing update config")
         sys.exit(1)
+
+    update_path = UpdaterPath(workdir)
+    update_path.ensure_dir_exist()
+
+    target_dir = update_path.get_update_dir()
+    temp_dir = update_path.get_current_build_dir()
 
     config = parse_config(update_config)
 
