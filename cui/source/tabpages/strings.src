@@ -183,5 +183,13 @@ String RID_SVXSTR_LOAD_ERROR
 {
     Text [ en-US ] = "The selected module could not be loaded.";
 };
+String RID_SVXSTR_STARTQUOTE
+{
+    Text [ en-US ] = "Start Quote";
+};
+String RID_SVXSTR_ENDQUOTE
+{
+    Text [ en-US ] = "End Quote";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
