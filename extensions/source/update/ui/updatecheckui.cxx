@@ -82,6 +82,22 @@ static OUString getImplementationName()
 namespace
 {
 
+Image GetMenuBarIcon( MenuBar* pMBar )
+{
+    OUString sResID;
+    vcl::Window *pMBarWin = pMBar->GetWindow();
+    sal_uInt32 nMBarHeight = 20;
+
+    if ( pMBarWin )
+        nMBarHeight = pMBarWin->GetOutputSizePixel().getHeight();
+
+    if (nMBarHeight >= 35)
+        sResID = RID_UPDATE_AVAILABLE_26;
+    else
+        sResID = RID_UPDATE_AVAILABLE_16;
+
+    return Image(BitmapEx(sResID));
+}
 
 class BubbleWindow : public FloatingWindow
 {
@@ -147,7 +163,6 @@ private:
 
     VclPtr<BubbleWindow> GetBubbleWindow();
     void            RemoveBubbleWindow( bool bRemoveIcon );
-    Image           GetMenuBarIcon( MenuBar* pMBar );
     void            AddMenuBarIcon( SystemWindow* pSysWin, bool bAddEventHdl );
     Image           GetBubbleImage( OUString &rURL );
 
@@ -227,23 +242,6 @@ sal_Bool SAL_CALL
 UpdateCheckUI::supportsService( OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
-}
-
-Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
-{
-    OUString sResID;
-    vcl::Window *pMBarWin = pMBar->GetWindow();
-    sal_uInt32 nMBarHeight = 20;
-
-    if ( pMBarWin )
-        nMBarHeight = pMBarWin->GetOutputSizePixel().getHeight();
-
-    if (nMBarHeight >= 35)
-        sResID = RID_UPDATE_AVAILABLE_26;
-    else
-        sResID = RID_UPDATE_AVAILABLE_16;
-
-    return Image(BitmapEx(sResID));
 }
 
 Image UpdateCheckUI::GetBubbleImage( OUString &rURL )
