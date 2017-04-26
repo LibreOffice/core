@@ -54,7 +54,7 @@ unsigned long BufferStream::sread (unsigned char *buf, unsigned long size)
 
     hr = stream->Read (buf, size, &newsize);
     if (hr == S_OK)
-        return (unsigned long)newsize;
+        return newsize;
     else
         return (unsigned long)0;
 }

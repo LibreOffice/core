@@ -150,7 +150,7 @@ std::wstring formatSizeOfFile( DWORD dwSize )
 
     char *buffer=nullptr;
     int  decimal, sign;
-    double dFileSize = (double)dwSize/(double)KB;
+    double dFileSize = (double)dwSize/KB;
 
     buffer = _fcvt( dFileSize, 1, &decimal, &sign );
 
