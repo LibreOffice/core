@@ -5,14 +5,10 @@ import os
 import subprocess
 import json
 
-from tools import uncompress_file_to_dir, get_file_info
+from tools import uncompress_file_to_dir, get_file_info, make_complete_mar_name
 from config import parse_config
 
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
-
-def make_mar_name(target_dir, filename_prefix):
-    filename = filename_prefix + "_complete.mar"
-    return os.path.join(target_dir, filename)
 
 def main():
     print(sys.argv)
@@ -38,8 +34,7 @@ def main():
 
     uncompress_dir = uncompress_file_to_dir(tar_file, temp_dir)
 
-    mar_executable = os.environ.get('MAR', 'mar')
-    mar_file = make_mar_name(target_dir, filename_prefix)
+    mar_file = make_complete_mar_name(target_dir, filename_prefix)
     subprocess.call([os.path.join(current_dir_path, 'make_full_update.sh'), mar_file, uncompress_dir])
 
     signed_mar_file = make_mar_name(target_dir, filename_prefix + '_signed')
