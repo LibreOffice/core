@@ -1617,7 +1617,7 @@ SmStructureNode *SmParser::DoUnOper()
     if (eType == TABS)
     {
         pSNode.reset(new SmBraceNode(aNodeToken));
-        pSNode->SetScaleMode(SCALE_HEIGHT);
+        pSNode->SetScaleMode(SmScaleMode::Height);
 
         // build nodes for left & right lines
         // (text, group, level of the used token are of no interest here)
@@ -1656,7 +1656,7 @@ SmAttributNode *SmParser::DoAttribut()
 
     auto pSNode = o3tl::make_unique<SmAttributNode>(m_aCurToken);
     SmNode      *pAttr;
-    SmScaleMode  eScaleMode = SCALE_NONE;
+    SmScaleMode  eScaleMode = SmScaleMode::None;
 
     // get appropriate node for the attribute itself
     switch (m_aCurToken.eType)
@@ -1664,14 +1664,14 @@ SmAttributNode *SmParser::DoAttribut()
         case TOVERLINE :
         case TOVERSTRIKE :
             pAttr = new SmRectangleNode(m_aCurToken);
-            eScaleMode = SCALE_WIDTH;
+            eScaleMode = SmScaleMode::Width;
             break;
 
         case TWIDEVEC :
         case TWIDEHAT :
         case TWIDETILDE :
             pAttr = new SmMathSymbolNode(m_aCurToken);
-            eScaleMode = SCALE_WIDTH;
+            eScaleMode = SmScaleMode::Width;
             break;
 
         default :
@@ -1849,13 +1849,13 @@ SmStructureNode *SmParser::DoBrace()
 
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(m_aCurToken));
     std::unique_ptr<SmNode> pBody, pLeft, pRight;
-    SmScaleMode   eScaleMode = SCALE_NONE;
+    SmScaleMode   eScaleMode = SmScaleMode::None;
     SmParseError  eError     = SmParseError::None;
 
     if (m_aCurToken.eType == TLEFT)
     {   NextToken();
 
-        eScaleMode = SCALE_HEIGHT;
+        eScaleMode = SmScaleMode::Height;
 
         // check for left bracket
         if (TokenInGroup(TG::LBrace) || TokenInGroup(TG::RBrace))
@@ -1968,7 +1968,7 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
     }
 
     pBody->SetSubNodes(aNodes);
-    pBody->SetScaleMode(bIsLeftRight ? SCALE_HEIGHT : SCALE_NONE);
+    pBody->SetScaleMode(bIsLeftRight ? SmScaleMode::Height : SmScaleMode::None);
     return pBody.release();
 }
 

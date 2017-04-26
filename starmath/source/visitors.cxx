@@ -1975,13 +1975,13 @@ void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
         Append( "abs" );
         LineToText( pBody );
     } else {
-        if( pNode->GetScaleMode( ) == SCALE_HEIGHT )
+        if( pNode->GetScaleMode( ) == SmScaleMode::Height )
             Append( "left " );
         pLeftBrace->Accept( this );
         Separate( );
         pBody->Accept( this );
         Separate( );
-        if( pNode->GetScaleMode( ) == SCALE_HEIGHT )
+        if( pNode->GetScaleMode( ) == SmScaleMode::Height )
             Append( "right " );
         pRightBrace->Accept( this );
     }

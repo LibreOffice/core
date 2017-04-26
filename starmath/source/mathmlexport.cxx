@@ -1052,7 +1052,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     if (pLeft && (pLeft->GetToken().eType != TNONE))
     {
         AddAttribute(XML_NAMESPACE_MATH, XML_FENCE, XML_TRUE);
-        if (pNode->GetScaleMode() == SCALE_HEIGHT)
+        if (pNode->GetScaleMode() == SmScaleMode::Height)
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         else
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
@@ -1072,7 +1072,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     if (pRight && (pRight->GetToken().eType != TNONE))
     {
         AddAttribute(XML_NAMESPACE_MATH, XML_FENCE, XML_TRUE);
-        if (pNode->GetScaleMode() == SCALE_HEIGHT)
+        if (pNode->GetScaleMode() == SmScaleMode::Height)
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         else
             AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);

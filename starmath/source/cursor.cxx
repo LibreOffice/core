@@ -694,7 +694,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     //Create SmBraceNode
     SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
     SmBraceNode *pBrace = new SmBraceNode(aTok);
-    pBrace->SetScaleMode(SCALE_HEIGHT);
+    pBrace->SetScaleMode(SmScaleMode::Height);
     SmNode *pLeft = CreateBracket(eBracketType, true),
            *pRight = CreateBracket(eBracketType, false);
     SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
@@ -741,7 +741,7 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
         }
     }
     SmNode* pRetVal = new SmMathSymbolNode(aTok);
-    pRetVal->SetScaleMode(SCALE_HEIGHT);
+    pRetVal->SetScaleMode(SmScaleMode::Height);
     return pRetVal;
 }
 
@@ -1317,7 +1317,7 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
         //Wrap pLine in scalable round brackets
         SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
         SmBraceNode *pBrace = new SmBraceNode(aTok);
-        pBrace->SetScaleMode(SCALE_HEIGHT);
+        pBrace->SetScaleMode(SmScaleMode::Height);
         SmNode *pLeft  = CreateBracket(SmBracketType::Round, true),
                *pRight = CreateBracket(SmBracketType::Round, false);
         SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
