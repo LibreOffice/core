@@ -34,6 +34,7 @@
 #include "app.hrc"
 #include "newhelp.hrc"
 #include "helpid.hrc"
+#include "bitmaps.hlst"
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -267,9 +268,9 @@ struct ContentEntry_Impl
 
 ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
-    , aOpenBookImage(BitmapEx(SfxResId(BMP_HELP_CONTENT_BOOK_OPEN)))
-    , aClosedBookImage(BitmapEx(SfxResId(BMP_HELP_CONTENT_BOOK_CLOSED)))
-    , aDocumentImage(BitmapEx(SfxResId(BMP_HELP_CONTENT_DOC)))
+    , aOpenBookImage(BitmapEx(BMP_HELP_CONTENT_BOOK_OPEN))
+    , aClosedBookImage(BitmapEx(BMP_HELP_CONTENT_BOOK_CLOSED))
+    , aDocumentImage(BitmapEx(BMP_HELP_CONTENT_DOC))
 
 {
     SetStyle( GetStyle() | WB_HIDESELECTION | WB_HSCROLL );
@@ -1862,8 +1863,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox            ( VclPtr<ToolBox>::Create(this, 0) ),
     aOnStartupCB        ( VclPtr<CheckBox>::Create(this, WB_HIDE | WB_TABSTOP) ),
     aSelectIdle         ( "sfx2 appl SfxHelpTextWindow_Impl Select" ),
-    aIndexOnImage       (BitmapEx(SfxResId(BMP_HELP_TOOLBOX_INDEX_ON))),
-    aIndexOffImage      (BitmapEx(SfxResId(BMP_HELP_TOOLBOX_INDEX_OFF))),
+    aIndexOnImage       (BitmapEx(BMP_HELP_TOOLBOX_INDEX_ON)),
+    aIndexOffImage      (BitmapEx(BMP_HELP_TOOLBOX_INDEX_OFF)),
     aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ).toString() ),
     aIndexOffText       ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ).toString() ),
     aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ).toString() ),
@@ -1959,33 +1960,33 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
 {
     bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
 
-    aIndexOnImage  = Image(BitmapEx(SfxResId(bLarge ? BMP_HELP_TOOLBOX_L_INDEX_ON : BMP_HELP_TOOLBOX_INDEX_ON)));
-    aIndexOffImage = Image(BitmapEx(SfxResId(bLarge ? BMP_HELP_TOOLBOX_L_INDEX_OFF : BMP_HELP_TOOLBOX_INDEX_OFF)));
+    aIndexOnImage  = Image(BitmapEx(bLarge ? OUString(BMP_HELP_TOOLBOX_L_INDEX_ON) : OUString(BMP_HELP_TOOLBOX_INDEX_ON)));
+    aIndexOffImage = Image(BitmapEx(bLarge ? OUString(BMP_HELP_TOOLBOX_L_INDEX_OFF) : OUString(BMP_HELP_TOOLBOX_INDEX_OFF)));
 
     aToolBox->SetItemImage( TBI_INDEX, bIsIndexOn ? aIndexOffImage : aIndexOnImage );
 
     aToolBox->SetItemImage( TBI_BACKWARD,
-                           Image(BitmapEx(SfxResId(bLarge ? BMP_HELP_TOOLBOX_L_PREV : BMP_HELP_TOOLBOX_PREV)))
+                           Image(BitmapEx(bLarge ? OUString(BMP_HELP_TOOLBOX_L_PREV) : OUString(BMP_HELP_TOOLBOX_PREV)))
     );
 
     aToolBox->SetItemImage( TBI_FORWARD,
-                           Image(BitmapEx(SfxResId(bLarge ? BMP_HELP_TOOLBOX_L_NEXT : BMP_HELP_TOOLBOX_NEXT)))
+                           Image(BitmapEx(bLarge ? OUString(BMP_HELP_TOOLBOX_L_NEXT) : OUString(BMP_HELP_TOOLBOX_NEXT)))
     );
 
     aToolBox->SetItemImage( TBI_START,
-                           Image(BitmapEx(SfxResId(bLarge ? BMP_HELP_TOOLBOX_L_START : BMP_HELP_TOOLBOX_START)))
+                           Image(BitmapEx(bLarge ? OUString(BMP_HELP_TOOLBOX_L_START) : OUString(BMP_HELP_TOOLBOX_START)))
     );
 
     aToolBox->SetItemImage( TBI_PRINT,
-                           Image(BitmapEx(SfxResId(bLarge ? BMP_HELP_TOOLBOX_L_PRINT : BMP_HELP_TOOLBOX_PRINT)))
+                           Image(BitmapEx(bLarge ? OUString(BMP_HELP_TOOLBOX_L_PRINT) : OUString(BMP_HELP_TOOLBOX_PRINT)))
     );
 
     aToolBox->SetItemImage( TBI_BOOKMARKS,
-                           Image(BitmapEx(SfxResId(bLarge ? BMP_HELP_TOOLBOX_L_BOOKMARKS : BMP_HELP_TOOLBOX_BOOKMARKS)))
+                           Image(BitmapEx(bLarge ? OUString(BMP_HELP_TOOLBOX_L_BOOKMARKS) : OUString(BMP_HELP_TOOLBOX_BOOKMARKS)))
     );
 
     aToolBox->SetItemImage( TBI_SEARCHDIALOG,
-                           Image(BitmapEx(SfxResId(bLarge ? BMP_HELP_TOOLBOX_L_SEARCHDIALOG : BMP_HELP_TOOLBOX_SEARCHDIALOG)))
+                           Image(BitmapEx(bLarge ? OUString(BMP_HELP_TOOLBOX_L_SEARCHDIALOG) : OUString(BMP_HELP_TOOLBOX_SEARCHDIALOG)))
     );
 
     Size aSize = aToolBox->CalcWindowSizePixel();
@@ -2344,43 +2345,43 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aPos.Y() += pTextWin->GetPosPixel().Y();
             ScopedVclPtrInstance<PopupMenu> aMenu;
             if ( bIsIndexOn )
-                aMenu->InsertItem(TBI_INDEX, aIndexOffText, Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_INDEX_OFF))));
+                aMenu->InsertItem(TBI_INDEX, aIndexOffText, Image(BitmapEx(BMP_HELP_TOOLBOX_INDEX_OFF)));
             else
-                aMenu->InsertItem(TBI_INDEX, aIndexOnText, Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_INDEX_ON))));
+                aMenu->InsertItem(TBI_INDEX, aIndexOnText, Image(BitmapEx(BMP_HELP_TOOLBOX_INDEX_ON)));
 
             aMenu->SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
             aMenu->InsertSeparator();
             aMenu->InsertItem( TBI_BACKWARD,
                               SfxResId( STR_HELP_BUTTON_PREV  ).toString(),
-                              Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_PREV)))
+                              Image(BitmapEx(BMP_HELP_TOOLBOX_PREV))
             );
             aMenu->SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
             aMenu->EnableItem( TBI_BACKWARD, pHelpWin->HasHistoryPredecessor() );
             aMenu->InsertItem( TBI_FORWARD,
                               SfxResId( STR_HELP_BUTTON_NEXT ).toString(),
-                              Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_NEXT)))
+                              Image(BitmapEx(BMP_HELP_TOOLBOX_NEXT))
             );
             aMenu->SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
             aMenu->EnableItem( TBI_FORWARD, pHelpWin->HasHistorySuccessor() );
             aMenu->InsertItem( TBI_START,
                               SfxResId( STR_HELP_BUTTON_START ).toString(),
-                              Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_START)))
+                              Image(BitmapEx(BMP_HELP_TOOLBOX_START))
             );
             aMenu->SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
             aMenu->InsertSeparator();
             aMenu->InsertItem( TBI_PRINT,
                               SfxResId( STR_HELP_BUTTON_PRINT ).toString(),
-                              Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_PRINT)))
+                              Image(BitmapEx(BMP_HELP_TOOLBOX_PRINT))
             );
             aMenu->SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
             aMenu->InsertItem( TBI_BOOKMARKS,
                               SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ).toString(),
-                              Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_BOOKMARKS)))
+                              Image(BitmapEx(BMP_HELP_TOOLBOX_BOOKMARKS))
              );
             aMenu->SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
             aMenu->InsertItem( TBI_SEARCHDIALOG,
                               SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ).toString(),
-                              Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_SEARCHDIALOG)))
+                              Image(BitmapEx(BMP_HELP_TOOLBOX_SEARCHDIALOG))
             );
             aMenu->SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
             aMenu->InsertSeparator();
@@ -2404,7 +2405,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu->InsertSeparator();
             aMenu->InsertItem( TBI_COPY,
                               SfxResId(STR_HELP_MENU_TEXT_COPY).toString(),
-                              Image(BitmapEx(SfxResId(BMP_HELP_TOOLBOX_COPY)))
+                              Image(BitmapEx(BMP_HELP_TOOLBOX_COPY))
                 );
             aMenu->SetHelpId( TBI_COPY, ".uno:Copy" );
             aMenu->EnableItem( TBI_COPY, HasSelection() );

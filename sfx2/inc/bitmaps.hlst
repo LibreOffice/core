@@ -10,6 +10,27 @@
 #ifndef INCLUDED_SFX2_INC_BITMAPS_HRC
 #define INCLUDED_SFX2_INC_BITMAPS_HRC
 
+#define BMP_HELP_TOOLBOX_INDEX_ON       "sfx2/res/indexon_small.png"
+#define BMP_HELP_TOOLBOX_INDEX_OFF      "sfx2/res/indexoff_small.png"
+#define BMP_HELP_TOOLBOX_START          "res/sc06303.png"
+#define BMP_HELP_TOOLBOX_PREV           "res/sc06301.png"
+#define BMP_HELP_TOOLBOX_NEXT           "res/sc06300.png"
+#define BMP_HELP_TOOLBOX_PRINT          "res/sc05504.png"
+#define BMP_HELP_TOOLBOX_BOOKMARKS      "sfx2/res/favourite.png"
+#define BMP_HELP_TOOLBOX_SEARCHDIALOG   "sfx2/res/sc05961.png"
+#define BMP_HELP_TOOLBOX_COPY           "sfx2/res/sc05711.png"
+#define BMP_HELP_CONTENT_BOOK_OPEN      "sfx2/res/hlpbookopen.png"
+#define BMP_HELP_CONTENT_BOOK_CLOSED    "sfx2/res/hlpbookclosed.png"
+#define BMP_HELP_CONTENT_DOC            "sfx2/res/hlpdoc.png"
+#define BMP_HELP_TOOLBOX_L_INDEX_ON     "sfx2/res/indexon_big.png"
+#define BMP_HELP_TOOLBOX_L_INDEX_OFF    "sfx2/res/indexoff_big.png"
+#define BMP_HELP_TOOLBOX_L_START        "res/lc06303.png"
+#define BMP_HELP_TOOLBOX_L_PREV         "res/lc06301.png"
+#define BMP_HELP_TOOLBOX_L_NEXT         "res/lc06300.png"
+#define BMP_HELP_TOOLBOX_L_PRINT        "res/lc05504.png"
+#define BMP_HELP_TOOLBOX_L_BOOKMARKS    "sfx2/res/favourite_big.png"
+#define BMP_HELP_TOOLBOX_L_SEARCHDIALOG "res/lc05961.png"
+
 //start, sfx2/source/sidebar/Theme.cxx
 #define CLOSEDOC                       "sfx2/res/closedoc.png"
 #define GRIP                           "sfx2/res/grip.png"
