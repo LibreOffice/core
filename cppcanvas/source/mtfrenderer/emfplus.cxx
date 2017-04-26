@@ -771,8 +771,6 @@ namespace cppcanvas
                     EMFPStringFormat *stringFormat;
                     aObjects [index] = stringFormat = new EMFPStringFormat();
                     stringFormat->Read (rObjectStream);
-
-                    SAL_INFO("cppcanvas.emf", "EMF+\t Object type 'string format' not yet implemented");
                     break;
                 }
             case EmfPlusObjectTypeImageAttributes:
@@ -1285,6 +1283,7 @@ namespace cppcanvas
                                 LanguageTag aLanguageTag( static_cast< LanguageType >( stringFormat->language ) );
                                 aFontRequest.Locale = aLanguageTag.getLocale( false );
                                 SAL_INFO("cppcanvas.emf", "EMF+\t\t Font locale, Country:" << aLanguageTag.getCountry() <<" Language:" << aLanguageTag.getLanguage() );
+                                SAL_INFO("cppcanvas.emf", "EMF+\t\t TODO Use all string formatting attributes during drawing");
 
                                 double cellSize = setFont (aFontRequest, flags & 0xff, rFactoryParms, rState);
                                 rState.textColor = COLOR( brushId );
@@ -1335,17 +1334,11 @@ namespace cppcanvas
 
                             if (flags != UnitTypePixel)
                                 SAL_WARN("cppcanvas.emf", "EMF+\t TODO Only UnitTypePixel is supported. ");
-
-                            XForm transform = XForm();
-                            transform.eM11 = fPageScale;
-                            transform.eM22 = fPageScale;
-
-                            SAL_INFO("cppcanvas.emf",
-                                     "EMF+\t m11: " << aBaseTransform.eM11 << ", m12: " << aBaseTransform.eM12 <<
-                                     "EMF+\t m21: " << aBaseTransform.eM21 << ", m22: " << aBaseTransform.eM22 <<
-                                     "EMF+\t dx: "  << aBaseTransform.eDx  << ", dy: "  << aBaseTransform.eDy);
-
-                            aBaseTransform.Multiply (transform);
+                            else
+                            {
+                                nMmX *= fPageScale;
+                                nMmY *= fPageScale;
+                            }
                         }
                         break;
                     case EmfPlusRecordTypeSetRenderingOrigin:
