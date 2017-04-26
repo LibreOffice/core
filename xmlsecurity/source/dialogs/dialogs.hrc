@@ -39,10 +39,6 @@
 
 // --------- tab page Certificate viewer - General ---------
 #define STR_CERTIFICATE_NOT_VALIDATED   269
-#define BMP_STATE_NOT_VALIDATED         270
-
-// --------- tab page Certificate viewer - Certification Path ---------
-
 
 #endif
 

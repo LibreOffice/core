@@ -31,6 +31,7 @@
 
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"
+#include "bitmaps.hlst"
 
 #include <vcl/settings.hxx>
 
@@ -119,7 +120,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
 
     if ( !bCertValid )
     {
-        m_pCertImg->SetImage(Image(BitmapEx(XMLSEC_RES(BMP_STATE_NOT_VALIDATED))));
+        m_pCertImg->SetImage(Image(BitmapEx(BMP_STATE_NOT_VALIDATED)));
         m_pHintNotTrustedFT->SetText( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) );
     }
 

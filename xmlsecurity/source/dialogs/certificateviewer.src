@@ -24,11 +24,6 @@ String STR_CERTIFICATE_NOT_VALIDATED
     Text [ en-US ] = "The certificate could not be validated.";
 };
 
-Bitmap BMP_STATE_NOT_VALIDATED
-{
-    File = "notcertificate_40x56.png";
-};
-
 String STR_HEADERBAR
 {
     Text [ en-US ] = "Field\tValue";
