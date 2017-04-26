@@ -1743,18 +1743,21 @@ sal_uInt16 ImpEditEngine::GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEn
     {
         sal_Int32 nPara = GetEditDoc().GetPos( rPaM.GetNode() );
         const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
-        if ( pParaPortion->aScriptInfos.empty() )
-            const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
-
-        const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-
-        const sal_Int32 nPos = rPaM.GetIndex();
-        ScriptTypePosInfos::const_iterator itr = std::find_if(rTypes.begin(), rTypes.end(), FindByPos(nPos));
-        if(itr != rTypes.end())
+        if (pParaPortion)
         {
-            nScriptType = itr->nScriptType;
-            if( pEndPos )
-                *pEndPos = itr->nEndPos;
+            if ( pParaPortion->aScriptInfos.empty() )
+                const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
+
+            const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+
+            const sal_Int32 nPos = rPaM.GetIndex();
+            ScriptTypePosInfos::const_iterator itr = std::find_if(rTypes.begin(), rTypes.end(), FindByPos(nPos));
+            if(itr != rTypes.end())
+            {
+                nScriptType = itr->nScriptType;
+                if( pEndPos )
+                    *pEndPos = itr->nEndPos;
+            }
         }
     }
     return nScriptType ? nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
