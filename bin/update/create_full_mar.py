@@ -7,6 +7,7 @@ import json
 
 from tools import uncompress_file_to_dir, get_file_info, make_complete_mar_name
 from config import parse_config
+from signing import sign_mar_file
 
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -37,10 +38,8 @@ def main():
     mar_file = make_complete_mar_name(target_dir, filename_prefix)
     subprocess.call([os.path.join(current_dir_path, 'make_full_update.sh'), mar_file, uncompress_dir])
 
-    signed_mar_file = make_mar_name(target_dir, filename_prefix + '_signed')
-    subprocess.check_call([mar_executable, '-C', target_dir, '-d', config.certificate_path, '-n', config.certificate_name, '-s', mar_file, signed_mar_file])
 
-    os.rename(signed_mar_file, mar_file)
+    sign_mar_file(target_dir, config, mar_file, filename_prefix)
 
     file_info = { 'complete' : get_file_info(mar_file, config.base_url) }
 
