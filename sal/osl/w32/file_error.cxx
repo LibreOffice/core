@@ -18,7 +18,6 @@
  */
 
 #define UNICODE
-#define _UNICODE
 #include "systools/win32/uwinapi.h"
 
 #include "file_error.hxx"
