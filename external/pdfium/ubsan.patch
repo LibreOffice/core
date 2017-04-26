@@ -1,12 +1,12 @@
 --- core/fxge/ge/cfx_facecache.cpp
 +++ core/fxge/ge/cfx_facecache.cpp
-@@ -205,7 +205,8 @@
+@@ -206,7 +206,8 @@ CFX_GlyphBitmap* CFX_FaceCache::RenderGlyph(const CFX_Font* pFont,
        }
      }
    } else {
--    FXSYS_memset(pDestBuf, 0, dest_pitch * bmheight);
+-    memset(pDestBuf, 0, dest_pitch * bmheight);
 +    if (dest_pitch != 0 && bmheight != 0)
-+        FXSYS_memset(pDestBuf, 0, dest_pitch * bmheight);
++      memset(pDestBuf, 0, dest_pitch * bmheight);
      if (anti_alias == FXFT_RENDER_MODE_MONO &&
          FXFT_Get_Bitmap_PixelMode(FXFT_Get_Glyph_Bitmap(m_Face)) ==
              FXFT_PIXEL_MODE_MONO) {
