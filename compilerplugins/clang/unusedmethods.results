@@ -4,6 +4,8 @@ connectivity/source/drivers/mork/mork_helper.cxx:36
     int main(int,char **)
 connectivity/source/inc/odbc/OPreparedStatement.hxx:74
     void connectivity::odbc::OPreparedStatement::setScalarParameter(int,int,unsigned long,const type-parameter-?-?)
+connectivity/source/inc/odbc/OPreparedStatement.hxx:75
+    void connectivity::odbc::OPreparedStatement::setScalarParameter(int,int,unsigned long,int,const type-parameter-?-?)
 connectivity/source/inc/OTypeInfo.hxx:52
      connectivity::OTypeInfo::OTypeInfo()
 dbaccess/source/ui/inc/indexcollection.hxx:54
@@ -62,6 +64,8 @@ include/comphelper/configuration.hxx:264
     void comphelper::ConfigurationLocalizedProperty::set(const type-parameter-?-? &,const class std::shared_ptr<class comphelper::ConfigurationChanges> &)
 include/comphelper/configuration.hxx:300
     class com::sun::star::uno::Reference<class com::sun::star::container::XHierarchicalNameReplace> comphelper::ConfigurationGroup::get(const class std::shared_ptr<class comphelper::ConfigurationChanges> &)
+include/comphelper/hash.hxx:40
+    class std::__debug::vector<unsigned char, class std::allocator<unsigned char> > comphelper::Hash::calculateHash(const unsigned char *,unsigned long,enum comphelper::HashType)
 include/comphelper/logging.hxx:57
     class rtl::OUString convertLogArgToString(char16_t)
 include/comphelper/logging.hxx:129
@@ -130,9 +134,9 @@ include/comphelper/unwrapargs.hxx:49
     void unwrapArgs(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,int,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
 include/connectivity/FValue.hxx:396
     unsigned char connectivity::ORowSetValue::getUInt8() const
-include/connectivity/sdbcx/VGroup.hxx:67
-     connectivity::sdbcx::OGroup::OGroup(_Bool)
 include/connectivity/sdbcx/VGroup.hxx:68
+     connectivity::sdbcx::OGroup::OGroup(_Bool)
+include/connectivity/sdbcx/VGroup.hxx:69
      connectivity::sdbcx::OGroup::OGroup(const class rtl::OUString &,_Bool)
 include/desktop/crashreport.hxx:46
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > CrashReporter::getIniFileName()
@@ -148,7 +152,7 @@ include/i18nlangtag/languagetag.hxx:257
     enum LanguageTag::ScriptType LanguageTag::getScriptType() const
 include/o3tl/any.hxx:155
     class boost::optional<const struct o3tl::detail::Void> tryAccess(const class com::sun::star::uno::Any &)
-include/o3tl/cow_wrapper.hxx:309
+include/o3tl/cow_wrapper.hxx:310
     type-parameter-?-? * o3tl::cow_wrapper::get()
 include/o3tl/string_view.hxx:178
      o3tl::basic_string_view::basic_string_view<charT, traits>()
@@ -232,8 +236,6 @@ include/svl/macitem.hxx:96
     class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const unsigned short, class SvxMacro> >, class std::__debug::map<unsigned short, class SvxMacro, struct std::less<unsigned short>, class std::allocator<struct std::pair<const unsigned short, class SvxMacro> > > > SvxMacroTableDtor::begin() const
 include/svl/macitem.hxx:98
     class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const unsigned short, class SvxMacro> >, class std::__debug::map<unsigned short, class SvxMacro, struct std::less<unsigned short>, class std::allocator<struct std::pair<const unsigned short, class SvxMacro> > > > SvxMacroTableDtor::end() const
-include/svl/style.hxx:275
-     SfxStyleSheet::SfxStyleSheet()
 include/tools/bigint.hxx:94
      BigInt::BigInt(unsigned short)
 include/tools/bigint.hxx:103
@@ -264,7 +266,7 @@ include/unotest/assertion_traits.hxx:25
     _Bool CppUnit::assertion_traits::equal(signed char,signed char)
 include/unotest/assertion_traits.hxx:27
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > CppUnit::assertion_traits::toString(signed char)
-include/vcl/commandevent.hxx:248
+include/vcl/commandevent.hxx:249
      CommandMediaData::CommandMediaData(enum MediaCommand)
 include/vcl/menu.hxx:472
     class tools::Rectangle MenuBar::GetMenuBarButtonRectPixel(unsigned short)
@@ -298,6 +300,8 @@ sc/inc/formulacell.hxx:433
     void ScFormulaCell::Dump() const
 sc/inc/formulagroup.hxx:140
     void sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
+sc/inc/PivotTableDataProvider.hxx:150
+    void sc::PivotTableDataProvider::setLabeledDataSequence(class com::sun::star::uno::Reference<class com::sun::star::chart2::data::XLabeledDataSequence> &,const class rtl::OUString &,const class rtl::OUString &,const class std::__debug::vector<struct sc::ValueAndFormat, class std::allocator<struct sc::ValueAndFormat> > &,const class rtl::OUString &,const class rtl::OUString &,const class std::__debug::vector<struct sc::ValueAndFormat, class std::allocator<struct sc::ValueAndFormat> > &)
 sc/inc/postit.hxx:47
      ScCaptionPtr::ScCaptionPtr(class SdrCaptionObj *)
 sc/inc/scdll.hxx:42
@@ -352,22 +356,24 @@ sc/source/core/opencl/opbase.hxx:119
     void sc::opencl::DynamicKernelArgument::GenNumDeclRef(class std::basic_stringstream<char> &) const
 sc/source/core/opencl/opbase.hxx:121
     void sc::opencl::DynamicKernelArgument::GenStringDeclRef(class std::basic_stringstream<char> &) const
-sc/source/ui/inc/dataprovider.hxx:53
+sc/source/ui/inc/dataprovider.hxx:54
      sc::ExternalDataMapper::ExternalDataMapper(class ScDocShell *,const class rtl::OUString &,const class rtl::OUString &,short,short,int,short,int,_Bool &)
-sc/source/ui/inc/dataprovider.hxx:58
+sc/source/ui/inc/dataprovider.hxx:59
     void sc::ExternalDataMapper::StartImport()
-sc/source/ui/inc/dataprovider.hxx:106
-    _Bool sc::CSVFetchThread::IsRequestedTerminate()
 sc/source/ui/inc/dataprovider.hxx:107
+    _Bool sc::CSVFetchThread::IsRequestedTerminate()
+sc/source/ui/inc/dataprovider.hxx:108
     void sc::CSVFetchThread::Terminate()
-sc/source/ui/inc/dataprovider.hxx:109
+sc/source/ui/inc/dataprovider.hxx:110
     void sc::CSVFetchThread::EmptyLineQueue(class std::queue<class std::__debug::vector<struct sc::Line, class std::allocator<struct sc::Line> > *, class std::__debug::deque<class std::__debug::vector<struct sc::Line, class std::allocator<struct sc::Line> > *, class std::allocator<class std::__debug::vector<struct sc::Line, class std::allocator<struct sc::Line> > *> > > &)
-sc/source/ui/inc/dataprovider.hxx:121
-    class ScRange sc::DataProvider::GetRange() const
 sc/source/ui/inc/dataprovider.hxx:122
+    class ScRange sc::DataProvider::GetRange() const
+sc/source/ui/inc/dataprovider.hxx:123
     const class rtl::OUString & sc::DataProvider::GetURL() const
 sc/source/ui/inc/impex.hxx:92
      ScImportExport::ScImportExport(class ScDocument *,const class rtl::OUString &)
+sc/source/ui/inc/RandomNumberGeneratorDialog.hxx:69
+    void ScRandomNumberGeneratorDialog::GenerateNumbers(type-parameter-?-? &,const short,const class boost::optional<signed char>)
 sd/inc/sddll.hxx:50
      SdDLL::SdDLL()
 sd/source/filter/ppt/pptinanimations.hxx:110
@@ -488,9 +494,9 @@ sw/inc/ring.hxx:204
      sw::RingIterator::RingIterator<value_type>()
 sw/inc/swrect.hxx:105
     class SvStream & WriteSwRect(class SvStream &,const class SwRect &)
-sw/qa/extras/inc/swmodeltestbase.hxx:522
+sw/qa/extras/inc/swmodeltestbase.hxx:523
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
-sw/qa/extras/uiwriter/uiwriter.cxx:4559
+sw/qa/extras/uiwriter/uiwriter.cxx:4592
     int main()
 sw/source/core/inc/flowfrm.hxx:171
     class SwFlowFrame * SwFlowFrame::GetPrecede()
@@ -516,11 +522,11 @@ ucb/source/ucp/ftp/ftpurl.hxx:113
     class rtl::OUString ftp::FTPURL::child() const
 vcl/inc/opengl/BufferObject.hxx:50
     void vcl::BufferObject::unbind()
-vcl/inc/opengl/PackedTextureAtlas.hxx:43
+vcl/inc/opengl/PackedTextureAtlas.hxx:44
      PackedTextureAtlasManager::PackedTextureAtlasManager(int,int)
-vcl/inc/opengl/PackedTextureAtlas.hxx:45
+vcl/inc/opengl/PackedTextureAtlas.hxx:46
     class OpenGLTexture PackedTextureAtlasManager::InsertBuffer(int,int,int,int,unsigned char *)
-vcl/inc/opengl/PackedTextureAtlas.hxx:47
+vcl/inc/opengl/PackedTextureAtlas.hxx:48
     class std::__debug::vector<unsigned int, class std::allocator<unsigned int> > PackedTextureAtlasManager::ReduceTextureNumber(int)
 vcl/inc/opengl/salbmp.hxx:86
     const class BitmapPalette & OpenGLSalBitmap::GetBitmapPalette() const
@@ -542,7 +548,7 @@ vcl/inc/salmenu.hxx:46
      SalMenuButtonItem::SalMenuButtonItem()
 vcl/inc/salwtype.hxx:117
      SalMenuEvent::SalMenuEvent()
-vcl/inc/unx/glyphcache.hxx:70
+vcl/inc/unx/glyphcache.hxx:71
     void GlyphCache::ClearFontOptions()
 vcl/inc/unx/gtk/gtkdata.hxx:182
     void GtkSalDisplay::RefreshMenusUnity()
@@ -568,9 +574,9 @@ vcl/source/fontsubset/xlat.hxx:34
     unsigned short TranslateChar15(unsigned short)
 vcl/source/fontsubset/xlat.hxx:35
     unsigned short TranslateChar16(unsigned short)
-vcl/source/gdi/pdfwriter_impl.hxx:1283
+vcl/source/gdi/pdfwriter_impl.hxx:1282
     void vcl::PDFWriterImpl::setAutoAdvanceTime(unsigned int,int)
-workdir/LexTarget/l10ntools/source/srclex.cxx:1380
+workdir/LexTarget/l10ntools/source/xrmlex.cxx:730
     void YYWarning()
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:160
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const

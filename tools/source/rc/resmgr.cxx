@@ -874,26 +874,6 @@ void ResMgr::decStack()
     }
 }
 
-#ifdef DBG_UTIL
-
-void ResMgr::TestStack()
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-
-    int upperLimit = nCurStack;
-
-    if ( upperLimit < 0 )
-    {
-        OSL_FAIL( "resource stack underrun!" );
-    }
-    else if ( upperLimit >=  static_cast<int>(aStack.size()) )
-    {
-        OSL_FAIL( "stack occupation index > allocated stack size" );
-    }
-}
-
-#endif
-
 bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );

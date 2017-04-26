@@ -102,16 +102,6 @@ void ControllerItem::RequestUpdate()
     mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState.get(), IsEnabled(eState));
 }
 
-void ControllerItem::NotifyFrameContextChange()
-{
-    RequestUpdate();
-}
-
-void ControllerItem::ResetFrame()
-{
-    mxFrame = nullptr;
-}
-
 ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
 {
 }

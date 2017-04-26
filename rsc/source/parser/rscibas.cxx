@@ -53,16 +53,6 @@ void RscTypCont::SETCONST( RscEnum * pClass, const char * szString, sal_uInt32 n
                          CONSTNAME, nVal ), nVal );
 }
 
-void RscTypCont::SETCONST( RscEnum * pClass, Atom nName, sal_uInt32 nVal )
-{
-#if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "setconst hash: %u\n", (unsigned int)nName );
-#endif
-    pClass->SetConstant( aNmTb.Put( nName,
-                         CONSTNAME, nVal ), nVal );
-}
-
-
 typedef std::unordered_map< OString, sal_uInt32, OStringHash > langmap;
 static langmap ULong_Iso_map;
 

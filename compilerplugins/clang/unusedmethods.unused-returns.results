@@ -28,10 +28,20 @@ chart2/source/view/main/OpenGLRender.hxx:105
     int OpenGLRender::RenderSymbol2DShape(float,float,float,float,int)
 chart2/source/view/main/OpenGLRender.hxx:122
     int OpenGLRender::Create2DCircle(int)
+compilerplugins/clang/test/externvar.hxx:23
+    int f(int)
 compilerplugins/clang/test/redundantinline.hxx:35
     int S3::operator int()
 compilerplugins/clang/test/redundantinline.hxx:64
     int S4::operator int()
+compilerplugins/clang/test/redundantinline.hxx:68
+    int S4::f5()
+compilerplugins/clang/test/redundantinline.hxx:70
+    int S4::f6()
+compilerplugins/clang/test/redundantinline.hxx:73
+    int f5()
+compilerplugins/clang/test/redundantinline.hxx:75
+    int f6()
 connectivity/source/inc/java/lang/Object.hxx:118
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
 connectivity/source/inc/OColumn.hxx:131
@@ -66,6 +76,8 @@ include/basegfx/point/b3dpoint.hxx:85
     class basegfx::B3DPoint & basegfx::B3DPoint::operator*=(const class basegfx::B3DPoint &)
 include/basegfx/point/b3dpoint.hxx:95
     class basegfx::B3DPoint & basegfx::B3DPoint::operator*=(double)
+include/basegfx/tools/unopolypolygon.hxx:91
+    const class basegfx::B2DPolyPolygon & basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const
 include/basegfx/tuple/b2i64tuple.hxx:92
     const long & basegfx::B2I64Tuple::operator[](int) const
 include/basegfx/tuple/b2i64tuple.hxx:101
@@ -136,10 +148,38 @@ include/canvas/vclwrapper.hxx:135
     type-parameter-?-? & canvas::vcltools::VCLObject::get()
 include/canvas/vclwrapper.hxx:136
     const type-parameter-?-? & canvas::vcltools::VCLObject::get() const
-include/comphelper/unique_disposing_ptr.hxx:45
+include/comphelper/unique_disposing_ptr.hxx:46
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
 include/connectivity/FValue.hxx:327
     unsigned short connectivity::ORowSetValue::operator unsigned short() const
+include/LibreOfficeKit/LibreOfficeKit.hxx:63
+    struct _LibreOfficeKitDocument * lok::Document::get()
+include/LibreOfficeKit/LibreOfficeKit.hxx:71
+    int lok::Document::getDocumentType()
+include/LibreOfficeKit/LibreOfficeKit.hxx:96
+    char * lok::Document::getPartPageRectangles()
+include/LibreOfficeKit/LibreOfficeKit.hxx:102
+    int lok::Document::getPart()
+include/LibreOfficeKit/LibreOfficeKit.hxx:120
+    char * lok::Document::getPartHash(int)
+include/LibreOfficeKit/LibreOfficeKit.hxx:162
+    int lok::Document::getTileMode()
+include/LibreOfficeKit/LibreOfficeKit.hxx:281
+    char * lok::Document::getTextSelection(const char *,char **)
+include/LibreOfficeKit/LibreOfficeKit.hxx:324
+    char * lok::Document::getCommandValues(const char *)
+include/LibreOfficeKit/LibreOfficeKit.hxx:366
+    int lok::Document::createView()
+include/LibreOfficeKit/LibreOfficeKit.hxx:393
+    int lok::Document::getView()
+include/LibreOfficeKit/LibreOfficeKit.hxx:401
+    int lok::Document::getViewsCount()
+include/LibreOfficeKit/LibreOfficeKit.hxx:410
+    unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
+include/LibreOfficeKit/LibreOfficeKit.hxx:543
+    char * lok::Office::getFilterTypes()
+include/LibreOfficeKit/LibreOfficeKit.hxx:593
+    char * lok::Office::getVersionInfo()
 include/o3tl/enumarray.hxx:100
     typename type-parameter-?-?::value_type * o3tl::enumarray_iterator::operator->()
 include/o3tl/string_view.hxx:844
@@ -246,9 +286,9 @@ sc/source/core/opencl/formulagroupcl.cxx:968
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
 sc/source/core/opencl/formulagroupcl.cxx:1413
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
-sc/source/core/tool/scmatrix.cxx:2208
+sc/source/core/tool/scmatrix.cxx:2209
     type-parameter-?-? * wrapped_iterator::operator->() const
-sc/source/core/tool/scmatrix.cxx:3174
+sc/source/core/tool/scmatrix.cxx:3175
     const class svl::SharedString & matop::COp::operator()(char,type-parameter-?-?,double,double,const class svl::SharedString &) const
 sc/source/ui/vba/vbaformat.hxx:69
     class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
@@ -286,7 +326,7 @@ sd/source/filter/eppt/pptx-epptooxml.cxx:118
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
-sw/inc/calc.hxx:110
+sw/inc/calc.hxx:111
     class SwSbxValue & SwSbxValue::MakeDouble()
 sw/source/uibase/inc/fldmgr.hxx:114
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
