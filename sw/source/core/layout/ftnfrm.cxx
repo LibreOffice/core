@@ -835,7 +835,7 @@ void sw_RemoveFootnotes( SwFootnoteBossFrame* pBoss, bool bPageOnly, bool bEndNo
         if ( pCont )
         {
             SwFootnoteFrame *pFootnote = static_cast<SwFootnoteFrame*>(pCont->Lower());
-            OSL_ENSURE( pFootnote, "Footnote content without footnote." );
+            assert(pFootnote);
             if ( bPageOnly )
                 while ( pFootnote->GetMaster() )
                     pFootnote = pFootnote->GetMaster();
@@ -955,10 +955,10 @@ SwFootnoteContFrame *SwFootnoteBossFrame::FindFootnoteCont()
     if ( pFrame )
     {
         SwFrame *pFootnote = pFrame->GetLower();
-        OSL_ENSURE( pFootnote, "Content without footnote." );
+        assert(pFootnote);
         while ( pFootnote )
         {
-            OSL_ENSURE( pFootnote->IsFootnoteFrame(), "Neighbor of footnote is not a footnote." );
+            assert(pFootnote->IsFootnoteFrame() && "Neighbor of footnote must be a footnote");
             pFootnote = pFootnote->GetNext();
         }
     }
