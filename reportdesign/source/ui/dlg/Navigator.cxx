@@ -839,7 +839,7 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
             {
                 if ( bFooterOn )
                     ++nPos;
-                m_pTree->traverseSection(pMemFunSection(&aGroupHelper),pEntry,bFooterOn ? RID_SVXBMP_GROUPFOOTER : RID_SVXBMP_GROUPHEADER,nPos);
+                m_pTree->traverseSection(pMemFunSection(&aGroupHelper),pEntry,bFooterOn ? OUString(RID_SVXBMP_GROUPFOOTER) : OUString(RID_SVXBMP_GROUPHEADER),nPos);
             }
         }
         else if ( PROPERTY_EXPRESSION == _rEvent.PropertyName)
