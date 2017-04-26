@@ -13,6 +13,13 @@ def update_all_url_entries(data, **kwargs):
     for language in data['languages']:
         language['complete']['url'] = replace_variables_in_string(language['complete']['url'], **kwargs)
 
+    if 'partials' in data:
+        for partial in data['partials']:
+            partial['file']['url'] = replace_variables_in_string(partial['file']['url'], **kwargs)
+
+            for lang, lang_file in partial['languages'].iter():
+                lang_file['url'] = replace_variables_in_string(lang_file['url'], **kwargs)
+
 def main(argv):
     if len(argv) < 7:
         print("Usage: create_build_config.py $PRODUCTNAME $VERSION $BUILDID $PLATFORM $TARGETDIR $UPDATE_CONFIG")
@@ -26,7 +33,7 @@ def main(argv):
             'platform' : argv[4]
             }
 
-    extra_data_files = ['complete_info.json', 'complete_lang_info.json']
+    extra_data_files = ['complete_info.json', 'complete_lang_info.json', 'partial_update_info.json']
 
     for extra_file in extra_data_files:
         extra_file_path = os.path.join(argv[5], extra_file)
