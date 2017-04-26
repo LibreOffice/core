@@ -353,7 +353,7 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "soffice.StarImpressDocument.6\shell\open\command";
-    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Print_Command
@@ -447,7 +447,7 @@ RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarImpressTemplate.6\shell\open\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Print_Command
@@ -808,7 +808,7 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "LibreOffice.ImpressDocument.1\shell\open\command";
-    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
     Styles = ();
 End
 
@@ -994,7 +994,7 @@ RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "LibreOffice.ImpressTemplate.1\shell\open\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Print_Command
