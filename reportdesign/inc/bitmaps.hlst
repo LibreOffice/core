@@ -1,0 +1,35 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_REPORTDESIGN_INC_BITMAPS_HRC
+#define INCLUDED_REPORTDESIGN_INC_BITMAPS_HRC
+
+#define RID_SVXBMP_SELECT_REPORT        "reportdesign/res/sx12464.png"
+#define RID_SVXBMP_FM_FIXEDTEXT         "reportdesign/res/sx10597.png"
+#define RID_SVXBMP_INSERT_HFIXEDLINE    "reportdesign/res/sx10928.png"
+#define RID_SVXBMP_INSERT_VFIXEDLINE    "reportdesign/res/sx10929.png"
+#define RID_SVXBMP_FM_IMAGECONTROL      "reportdesign/res/sx10710.png"
+#define RID_SVXBMP_FM_EDIT              "reportdesign/res/sx10599.png"
+#define RID_SVXBMP_RPT_NEW_FUNCTION     "reportdesign/res/sx12594.png"
+#define RID_SVXBMP_REPORTHEADERFOOTER   "reportdesign/res/sx12453.png"
+#define RID_SVXBMP_PAGEHEADERFOOTER     "reportdesign/res/sx12452.png"
+#define RID_SVXBMP_GROUPHEADER          "reportdesign/res/sx12466.png"
+#define RID_SVXBMP_GROUPFOOTER          "reportdesign/res/sx12468.png"
+#define RID_SVXBMP_COLLAPSEDNODE        "reportdesign/res/sx18002.png"
+#define RID_SVXBMP_EXPANDEDNODE         "reportdesign/res/sx18003.png"
+#define RID_SVXBMP_SORTINGANDGROUPING   "reportdesign/res/sx12454.png"
+#define RID_SVXBMP_DRAWTBX_CS_BASIC     "reportdesign/res/sx11047.png"
+#define RID_SVXBMP_GROUP                "reportdesign/res/sx10454.png"
+#define RID_SVXBMP_ICON_DETAIL          "reportdesign/res/sx12603.png"
+#define RID_BMP_TREENODE_COLLAPSED      "res/plus.png"
+#define RID_BMP_TREENODE_EXPANDED       "res/minus.png"
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

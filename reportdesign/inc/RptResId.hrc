@@ -191,27 +191,6 @@
 #define RID_STR_VERTICALALIGN               (RID_STRING_START + 160)
 #define RID_STR_PARAADJUST                  (RID_STRING_START + 161)
 
-// bitmaps
-#define RID_SVXBMP_SELECT_REPORT            (RID_BITMAP_START + 0 )
-#define RID_SVXBMP_FM_FIXEDTEXT             (RID_BITMAP_START + 1 )
-#define RID_SVXBMP_INSERT_HFIXEDLINE        (RID_BITMAP_START + 2 )
-#define RID_SVXBMP_INSERT_VFIXEDLINE        (RID_BITMAP_START + 3 )
-#define RID_SVXBMP_FM_IMAGECONTROL          (RID_BITMAP_START + 4 )
-#define RID_SVXBMP_FM_EDIT                  (RID_BITMAP_START + 5 )
-#define RID_SVXBMP_RPT_NEW_FUNCTION         (RID_BITMAP_START + 6 )
-#define RID_SVXBMP_REPORTHEADERFOOTER       (RID_BITMAP_START + 7 )
-#define RID_SVXBMP_PAGEHEADERFOOTER         (RID_BITMAP_START + 8 )
-#define RID_SVXBMP_GROUPHEADER              (RID_BITMAP_START + 9 )
-#define RID_SVXBMP_GROUPFOOTER              (RID_BITMAP_START + 10)
-#define RID_SVXBMP_COLLAPSEDNODE            (RID_BITMAP_START + 11)
-#define RID_SVXBMP_EXPANDEDNODE             (RID_BITMAP_START + 12)
-#define RID_SVXBMP_SORTINGANDGROUPING       (RID_BITMAP_START + 13)
-#define RID_SVXBMP_DRAWTBX_CS_BASIC         (RID_BITMAP_START + 14)
-#define RID_SVXBMP_GROUP                    (RID_BITMAP_START + 15)
-#define RID_SVXBMP_ICON_DETAIL              (RID_BITMAP_START + 16)
-#define RID_BMP_TREENODE_COLLAPSED          (RID_BITMAP_START + 17)
-#define RID_BMP_TREENODE_EXPANDED           (RID_BITMAP_START + 18)
-
 // untyped ---------------------------------------------------------------------
 #define RID_STR_BOOL                        (RID_UNTYPED_START +  0 )
 #define RID_STR_FORCENEWPAGE_CONST          (RID_UNTYPED_START +  1 )

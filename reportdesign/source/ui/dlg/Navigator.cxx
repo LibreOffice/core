@@ -20,6 +20,7 @@
 #include "Navigator.hxx"
 
 #include "uistrings.hrc"
+#include "bitmaps.hlst"
 #include "ReportController.hxx"
 #include "UITools.hxx"
 #include "RptUndo.hxx"
@@ -60,21 +61,21 @@ using namespace ::com::sun::star;
 using namespace utl;
 using namespace ::comphelper;
 
-sal_uInt16 lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
+OUString lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
 {
-    sal_uInt16 nId = 0;
+    OUString sId;
     uno::Reference< report::XFixedLine> xFixedLine(_xElement,uno::UNO_QUERY);
     if ( uno::Reference< report::XFixedText>(_xElement,uno::UNO_QUERY).is() )
-        nId = RID_SVXBMP_FM_FIXEDTEXT;
+        sId = RID_SVXBMP_FM_FIXEDTEXT;
     else if ( xFixedLine.is() )
-        nId = xFixedLine->getOrientation() ? RID_SVXBMP_INSERT_VFIXEDLINE : RID_SVXBMP_INSERT_HFIXEDLINE;
+        sId = xFixedLine->getOrientation() ? OUStringLiteral(RID_SVXBMP_INSERT_VFIXEDLINE) : OUStringLiteral(RID_SVXBMP_INSERT_HFIXEDLINE);
     else if ( uno::Reference< report::XFormattedField>(_xElement,uno::UNO_QUERY).is() )
-        nId = RID_SVXBMP_FM_EDIT;
+        sId = RID_SVXBMP_FM_EDIT;
     else if ( uno::Reference< report::XImageControl>(_xElement,uno::UNO_QUERY).is() )
-        nId = RID_SVXBMP_FM_IMAGECONTROL;
+        sId = RID_SVXBMP_FM_IMAGECONTROL;
     else if ( uno::Reference< report::XShape>(_xElement,uno::UNO_QUERY).is() )
-        nId = RID_SVXBMP_DRAWTBX_CS_BASIC;
-    return nId;
+        sId = RID_SVXBMP_DRAWTBX_CS_BASIC;
+    return sId;
 }
 
 OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElement)
@@ -148,8 +149,8 @@ class NavigatorTree :   public ::cppu::BaseMutex
     ::rtl::Reference< comphelper::OSelectionChangeMultiplexer>                  m_pSelectionListener;
     unsigned short                                                              m_nTimerCounter;
 
-    SvTreeListEntry* insertEntry(const OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData);
-    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition = TREELIST_APPEND);
+    SvTreeListEntry* insertEntry(const OUString& _sName,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition,UserData* _pData);
+    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition = TREELIST_APPEND);
     void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent);
 
 protected:
@@ -230,8 +231,8 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
     SetHelpId( HID_REPORT_NAVIGATOR_TREE );
 
     SetNodeBitmaps(
-        Image(BitmapEx(ModuleRes(RID_SVXBMP_COLLAPSEDNODE))),
-        Image(BitmapEx(ModuleRes(RID_SVXBMP_EXPANDEDNODE)))
+        Image(BitmapEx(RID_SVXBMP_COLLAPSEDNODE)),
+        Image(BitmapEx(RID_SVXBMP_EXPANDEDNODE))
     );
 
     SetDragDropMode(DragDropMode::ALL);
@@ -518,13 +519,12 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent )
     m_pSelectionListener->unlock();
 }
 
-SvTreeListEntry* NavigatorTree::insertEntry(const OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData)
+SvTreeListEntry* NavigatorTree::insertEntry(const OUString& _sName,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition,UserData* _pData)
 {
     SvTreeListEntry* pEntry = nullptr;
-    if ( _nImageId )
+    if (!rImageId.isEmpty())
     {
-        ModuleRes aRes(_nImageId);
-        BitmapEx aBitmap(aRes);
+        BitmapEx aBitmap(rImageId);
         const Image aImage(aBitmap);
         pEntry = InsertEntry(_sName,aImage,aImage,_pParent,false,_nPosition,_pData);
     }
@@ -533,9 +533,9 @@ SvTreeListEntry* NavigatorTree::insertEntry(const OUString& _sName,SvTreeListEnt
     return pEntry;
 }
 
-void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition)
+void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent, const OUString& rImageId, sal_uLong _nPosition)
 {
-    SvTreeListEntry* pSection = insertEntry(_xSection->getName(),_pParent,_nImageId,_nPosition,new UserData(this,_xSection));
+    SvTreeListEntry* pSection = insertEntry(_xSection->getName(),_pParent, rImageId, _nPosition,new UserData(this,_xSection));
     const sal_Int32 nCount = _xSection->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
@@ -716,7 +716,7 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
         uno::Reference< report::XReportComponent> xElement(xProp,uno::UNO_QUERY);
         if ( xProp.is() )
             sName = lcl_getName(xProp);
-        insertEntry(sName,pEntry,(!xElement.is() ? sal_uInt16(RID_SVXBMP_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),TREELIST_APPEND,new UserData(this,xProp));
+        insertEntry(sName,pEntry,(!xElement.is() ? OUString(RID_SVXBMP_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),TREELIST_APPEND,new UserData(this,xProp));
     }
     if ( !IsExpanded(pEntry) )
         Expand(pEntry);

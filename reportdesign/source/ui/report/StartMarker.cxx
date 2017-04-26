@@ -20,6 +20,7 @@
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include "RptResId.hrc"
+#include "bitmaps.hlst"
 #include "ModuleHelper.hxx"
 #include "ColorChanger.hxx"
 #include "ReportDefines.hxx"
@@ -194,8 +195,8 @@ void OStartMarker::initDefaultNodeImages()
 {
     if ( !s_pDefCollapsed )
     {
-        s_pDefCollapsed = new Image(BitmapEx(ModuleRes(RID_BMP_TREENODE_COLLAPSED)));
-        s_pDefExpanded = new Image(BitmapEx(ModuleRes(RID_BMP_TREENODE_EXPANDED)));
+        s_pDefCollapsed = new Image(BitmapEx(RID_BMP_TREENODE_COLLAPSED));
+        s_pDefExpanded = new Image(BitmapEx(RID_BMP_TREENODE_EXPANDED));
     }
 
     Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
