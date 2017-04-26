@@ -143,7 +143,7 @@ ScPrintAreasDlg::~ScPrintAreasDlg()
 
 void ScPrintAreasDlg::dispose()
 {
-    // Extra-Data an ListBox-Entries abraeumen
+    // clean extra data of ListBox entries
     ListBox* aLb[3] = { pLbPrintArea, pLbRepeatRow, pLbRepeatCol };
 
     for (ListBox* pBox : aLb)
@@ -272,7 +272,7 @@ void ScPrintAreasDlg::Impl_Reset()
 
     Impl_FillLists();
 
-    // Druckbereich
+    // printing area
 
     aStrRange.clear();
     OUString aOne;
@@ -292,12 +292,12 @@ void ScPrintAreasDlg::Impl_Reset()
     }
     pEdPrintArea->SetText( aStrRange );
 
-    // Wiederholungszeile
+    // repeat row
 
     lcl_GetRepeatRangeString(pRepeatRowRange, pDoc, true, aStrRange);
     pEdRepeatRow->SetText( aStrRange );
 
-    // Wiederholungsspalte
+    // repeat column
 
     lcl_GetRepeatRangeString(pRepeatColRange, pDoc, false, aStrRange);
     pEdRepeatCol->SetText( aStrRange );
@@ -308,7 +308,7 @@ void ScPrintAreasDlg::Impl_Reset()
     if( pDoc->IsPrintEntireSheet( nCurTab ) )
         pLbPrintArea->SelectEntryPos( SC_AREASDLG_PR_ENTIRE );
 
-    pEdPrintArea->SaveValue();   // fuer FillItemSet() merken:
+    pEdPrintArea->SaveValue();   // save for FillItemSet():
     pEdRepeatRow->SaveValue();
     pEdRepeatCol->SaveValue();
 }
@@ -370,7 +370,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
     if ( !bRepeatColOk )
         bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, pDoc, false, nullptr);
 
-    // Fehlermeldungen
+    // error messages
 
     bOk = (bPrintAreaOk && bRepeatRowOk && bRepeatColOk);
 
@@ -479,7 +479,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, Button*, pBtn, void )
             SfxStringItem   aRepeatRow( FN_PARAM_2, aStr );
             SfxStringItem   aRepeatCol( FN_PARAM_3, aStr );
 
-            // Druckbereich veraendert?
+            // Printing area changed?
 
             // first try the list box, if "Entire sheet" is selected
             bool bEntireSheet = (pLbPrintArea->GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
@@ -492,11 +492,11 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, Button*, pBtn, void )
                 bDataChanged |= Impl_GetItem( pEdPrintArea, aPrintArea );
             }
 
-            // Wiederholungszeile veraendert?
+            // Repeat row changed?
 
             bDataChanged |= Impl_GetItem( pEdRepeatRow, aRepeatRow );
 
-            // Wiederholungsspalte veraendert?
+            // Repeat column changed?
 
             bDataChanged |= Impl_GetItem( pEdRepeatCol, aRepeatCol );
 

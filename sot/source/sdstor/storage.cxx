@@ -193,14 +193,14 @@ sal_uInt64 SotStorageStream::remainingSize()
 
 void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
 {
-    Flush(); // alle Daten schreiben
+    Flush(); // write all data
     pDestStm->ClearBuffer();
     if( !pOwnStm || !pDestStm->pOwnStm )
     {
-        // Wenn Ole2 oder nicht nur eigene StorageStreams
-        sal_uLong nPos = Tell();    // Position merken
+        // If Ole2 or not only own StorageStreams
+        sal_uLong nPos = Tell();    // save position
         Seek( 0L );
-        pDestStm->SetSize( 0 ); // Ziel-Stream leeren
+        pDestStm->SetSize( 0 ); // empty target stream
 
         std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ 8192 ]);
         sal_uLong  nRead;
@@ -213,7 +213,7 @@ void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
             }
         }
         pMem.reset();
-        // Position setzen
+        // set position
         pDestStm->Seek( nPos );
         Seek( nPos );
     }
@@ -284,7 +284,7 @@ bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& 
 SotStorage::SotStorage( const OUString & rName, StreamMode nMode )
     INIT_SotStorage()
 {
-    m_aName = rName; // Namen merken
+    m_aName = rName; // save name
     CreateStorage( true, nMode );
     if ( IsOLEStorage() )
         m_nVersion = SOFFICE_FILEFORMAT_50;
@@ -383,7 +383,7 @@ SotStorage::SotStorage( BaseStorage * pStor )
 {
     if ( pStor )
     {
-        m_aName = pStor->GetName(); // Namen merken
+        m_aName = pStor->GetName(); // save name
         SignAsRoot( pStor->IsRoot() );
         SetError( pStor->GetError() );
     }
@@ -472,7 +472,7 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
     }
     else
     {
-        aStg.clear(); // Storage vorher freigeben
+        aStg.clear(); // release storage beforehand
         delete pStm;
         pStm = nullptr;
     }
@@ -602,15 +602,15 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
     SotStorageStream * pStm = nullptr;
     if( m_pOwnStg )
     {
-        // volle Ole-Patches einschalten
-        // egal was kommt, nur exclusiv gestattet
+        // enable full Ole patches,
+        // regardless what is coming, only exclusively allowed
         nMode |= StreamMode::SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
         BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode );
         pStm = new SotStorageStream( p );
 
         if( !nE )
-            m_pOwnStg->ResetError(); // kein Fehler setzen
+            m_pOwnStg->ResetError(); // don't set error
         if( nMode & StreamMode::TRUNC )
             pStm->SetSize( 0 );
     }
@@ -633,7 +633,7 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
         {
             SotStorage * pStor = new SotStorage( p );
             if( !nE )
-                m_pOwnStg->ResetError(); // kein Fehler setzen
+                m_pOwnStg->ResetError(); // don't set error
 
             return pStor;
         }
@@ -646,7 +646,7 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
 
 bool SotStorage::IsStorage( const OUString & rEleName ) const
 {
-    // ein bisschen schneller
+    // a little bit faster
     if( m_pOwnStg )
         return m_pOwnStg->IsStorage( rEleName );
 
@@ -655,7 +655,7 @@ bool SotStorage::IsStorage( const OUString & rEleName ) const
 
 bool SotStorage::IsStream( const OUString & rEleName ) const
 {
-    // ein bisschen schneller
+    // a little bit faster
     if( m_pOwnStg )
         return m_pOwnStg->IsStream( rEleName );
 
@@ -664,7 +664,7 @@ bool SotStorage::IsStream( const OUString & rEleName ) const
 
 bool SotStorage::IsContained( const OUString & rEleName ) const
 {
-    // ein bisschen schneller
+    // a little bit faster
     if( m_pOwnStg )
         return m_pOwnStg->IsContained( rEleName );
 
@@ -701,7 +701,7 @@ bool SotStorage::CopyTo( const OUString & rEleName,
 
 bool SotStorage::Validate()
 {
-    DBG_ASSERT( m_bIsRoot, "Validate nur an Rootstorage" );
+    DBG_ASSERT( m_bIsRoot, "Validate only if root storage" );
     if( m_pOwnStg )
         return m_pOwnStg->ValidateFAT();
     else

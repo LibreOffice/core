@@ -554,8 +554,8 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
     OOperand* pOperand = m_aStack.top();
     m_aStack.pop();
 
-    DBG_ASSERT(m_aStack.empty(), "StackFehler");
-    DBG_ASSERT(pOperand, "StackFehler");
+    DBG_ASSERT(m_aStack.empty(), "Stack error");
+    DBG_ASSERT(pOperand, "Stack error");
 
     bResult = pOperand->isValid();
     if (typeid(OOperandResult) == typeid(*pOperand))
@@ -581,8 +581,8 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
     OOperand* pOperand = m_aStack.top();
     m_aStack.pop();
 
-    DBG_ASSERT(m_aStack.empty(), "StackFehler");
-    DBG_ASSERT(pOperand, "StackFehler");
+    DBG_ASSERT(m_aStack.empty(), "Stack error");
+    DBG_ASSERT(pOperand, "Stack error");
 
     (*_rVal) = pOperand->getValue();
     if (typeid(OOperandResult) == typeid(*pOperand))
