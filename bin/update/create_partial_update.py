@@ -129,7 +129,7 @@ def main():
         subprocess.call([os.path.join(current_dir_path, 'make_incremental_update.sh'), mar_file, update["complete"], current_build_path])
         sign_mar_file(update_dir, config, mar_file, mar_name_prefix)
 
-        partial_info = {"complete":get_file_info(mar_file, config.base_url), "from": build, "to": build_id, "languages": {}}
+        partial_info = {"file":get_file_info(mar_file, config.base_url), "from": build, "to": build_id, "languages": {}}
         for lang, lang_info in update["languages"].items():
             lang_name = generate_lang_file_name(build_id, build, mar_name_prefix, lang)
 
