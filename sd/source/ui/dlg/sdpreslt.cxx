@@ -23,6 +23,7 @@
 
 #include "strings.hrc"
 #include "res_bmp.hrc"
+#include "bitmaps.hlst"
 #include "sdpreslt.hxx"
 #include "sdattr.hxx"
 #include "sdresid.hxx"
@@ -272,7 +273,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
                 // empty layout
                 maLayoutNames.push_back(maStrNone);
                 m_pVS->InsertItem( (sal_uInt16) maLayoutNames.size(),
-                        Image(Bitmap(SdResId(BMP_FOIL_NONE))), maStrNone );
+                        Image(BMP_FOIL_NONE), maStrNone );
             }
 
             if (!bCancel)

@@ -21,6 +21,7 @@
 
 #include "strings.hrc"
 #include "res_bmp.hrc"
+#include "bitmaps.hlst"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
@@ -82,8 +83,9 @@ void SdInsertPagesObjsDlg::Reset()
     else
     {
         Color aColor( COL_WHITE );
-        Bitmap aBmpText( SdResId( BMP_DOC_TEXT ) );
-        Image aImgText(BitmapEx(aBmpText, aColor));
+        BitmapEx aBmpText(BMP_DOC_TEXT);
+        //to-do, check if this is already transparent and remove intermedia bitmapex if it is
+        Image aImgText(BitmapEx(aBmpText.GetBitmap(), aColor));
         m_pLbTree->InsertEntry( rName, aImgText, aImgText );
     }
 

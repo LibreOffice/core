@@ -35,6 +35,7 @@
 #include <vcl/wrkwin.hxx>
 
 #include "res_bmp.hrc"
+#include "bitmaps.hlst"
 #include "sdresid.hxx"
 
 using namespace ::com::sun::star;
@@ -186,7 +187,7 @@ namespace {
 
 struct IdMapEntry {
     char const * sid;
-    sal_uInt32 nid;
+    const char* bmpid;
 };
 
 }
@@ -382,14 +383,14 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
           BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_NORMAL },
         { "bitmaps/ViewBackground.png", BMP_PRESENTERSCREEN_VIEW_BACKGROUND }
     };
-    sal_uInt32 nid = 0;
+    OUString bmpid;
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(map); ++i) {
         if (id.equalsAscii(map[i].sid)) {
-            nid = map[i].nid;
+            bmpid = OUString::createFromAscii(map[i].bmpid);
             break;
         }
     }
-    if (nid == 0) {
+    if (bmpid.isEmpty()) {
         return nullptr;
     }
 
@@ -401,7 +402,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
 
     if (pCanvas.get() != nullptr)
     {
-        BitmapEx aBitmapEx = SdResId(nid);
+        BitmapEx aBitmapEx(bmpid);
         cppcanvas::BitmapSharedPtr xBitmap(
             cppcanvas::VCLFactory::createBitmap(pCanvas,
                 aBitmapEx));

@@ -44,6 +44,7 @@
 
 #include "res_bmp.hrc"
 #include "glob.hrc"
+#include "bitmaps.hlst"
 
 #include <algorithm>
 #include <memory>
@@ -268,11 +269,11 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
     sal_Int16 nNodeType = mpEffect->getNodeType();
     if (nNodeType == EffectNodeType::ON_CLICK )
     {
-        rRenderContext.DrawImage( aPos, mpParent->getImage(BMP_CUSTOMANIMATION_ON_CLICK));
+        rRenderContext.DrawImage(aPos, Image(BitmapEx(BMP_CUSTOMANIMATION_ON_CLICK)));
     }
     else if (nNodeType == EffectNodeType::AFTER_PREVIOUS)
     {
-        rRenderContext.DrawImage(aPos, mpParent->getImage(BMP_CUSTOMANIMATION_AFTER_PREVIOUS));
+        rRenderContext.DrawImage(aPos, Image(BitmapEx(BMP_CUSTOMANIMATION_AFTER_PREVIOUS)));
     }
     else if (nNodeType == EffectNodeType::WITH_PREVIOUS)
     {
@@ -286,41 +287,42 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
 
     aPos.Y() += nIconWidth;
 
-    sal_uInt16 nImage;
+    OUString sImage;
     switch (mpEffect->getPresetClass())
     {
     case EffectPresetClass::ENTRANCE:
-        nImage = BMP_CUSTOMANIMATION_ENTRANCE_EFFECT; break;
+        sImage = BMP_CUSTOMANIMATION_ENTRANCE_EFFECT; break;
     case EffectPresetClass::EXIT:
-        nImage = BMP_CUSTOMANIMATION_EXIT_EFFECT; break;
+        sImage = BMP_CUSTOMANIMATION_EXIT_EFFECT; break;
     case EffectPresetClass::EMPHASIS:
-        nImage = BMP_CUSTOMANIMATION_EMPHASIS_EFFECT; break;
+        sImage = BMP_CUSTOMANIMATION_EMPHASIS_EFFECT; break;
     case EffectPresetClass::MOTIONPATH:
-        nImage = BMP_CUSTOMANIMATION_MOTION_PATH; break;
+        sImage = BMP_CUSTOMANIMATION_MOTION_PATH; break;
     case EffectPresetClass::OLEACTION:
-        nImage = BMP_CUSTOMANIMATION_OLE; break;
+        sImage = BMP_CUSTOMANIMATION_OLE; break;
     case EffectPresetClass::MEDIACALL:
         switch (mpEffect->getCommand())
         {
         case EffectCommands::TOGGLEPAUSE:
-            nImage = BMP_CUSTOMANIMATION_MEDIA_PAUSE; break;
+            sImage = BMP_CUSTOMANIMATION_MEDIA_PAUSE; break;
         case EffectCommands::STOP:
-            nImage = BMP_CUSTOMANIMATION_MEDIA_STOP; break;
+            sImage = BMP_CUSTOMANIMATION_MEDIA_STOP; break;
         case EffectCommands::PLAY:
         default:
-            nImage = BMP_CUSTOMANIMATION_MEDIA_PLAY; break;
+            sImage = BMP_CUSTOMANIMATION_MEDIA_PLAY; break;
         }
         break;
     default:
-        nImage = 0xffff;
+        break;
     }
 
-    if (nImage != 0xffff)
+    if (!sImage.isEmpty())
     {
-        const Image& rImage = mpParent->getImage(nImage);
+        BitmapEx aBitmap(sImage);
+        Image aImage(aBitmap);
         Point aImagePos(aPos);
-        aImagePos.Y() += (aSize.Height()/2 - rImage.GetSizePixel().Height()) >> 1;
-        rRenderContext.DrawImage(aImagePos, rImage);
+        aImagePos.Y() += (aSize.Height()/2 - aImage.GetSizePixel().Height()) >> 1;
+        rRenderContext.DrawImage(aImagePos, aImage);
     }
 
     aPos.X() += nIconWidth;
@@ -452,19 +454,6 @@ CustomAnimationList::CustomAnimationList( vcl::Window* pParent )
 }
 
 VCL_BUILDER_FACTORY(CustomAnimationList)
-
-const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
-{
-    DBG_ASSERT( (nId >= BMP_CUSTOMANIMATION_ON_CLICK) && (nId <= BMP_CUSTOMANIMATION_MEDIA_STOP), "sd::CustomAnimationList::getImage(), illegal index!" );
-
-    Image& rImage = maImages[nId - BMP_CUSTOMANIMATION_ON_CLICK];
-
-    // load on demand
-    if( rImage.GetSizePixel().Width() == 0 )
-        rImage = Image(BitmapEx(SdResId(nId)));
-
-    return rImage;
-}
 
 CustomAnimationList::~CustomAnimationList()
 {

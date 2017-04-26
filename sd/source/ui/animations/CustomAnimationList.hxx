@@ -83,8 +83,6 @@ public:
 
     virtual void notify_change() override;
 
-    const Image& getImage( sal_uInt16 nId );
-
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
 
     /// clears all entries from the listbox
@@ -107,8 +105,6 @@ private:
     ICustomAnimationListController* mpController;
 
     MainSequencePtr mpMainSequence;
-
-    Image maImages[ BMP_CUSTOMANIMATION_MEDIA_STOP - BMP_CUSTOMANIMATION_ON_CLICK + 1];
 
     css::uno::Reference< css::drawing::XShape > mxLastTargetShape;
     sal_Int32 mnLastGroupId;
