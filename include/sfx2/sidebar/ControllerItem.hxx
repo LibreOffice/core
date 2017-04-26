@@ -82,15 +82,6 @@ public:
     */
     void RequestUpdate();
 
-    /** Do not call.  Used by local class only.  Should be a member of
-        a local and hidden interface.
-    */
-    void NotifyFrameContextChange();
-    /** Do not call.  Used by local class only.  Should be a member of
-        a local and hidden interface.
-    */
-    void ResetFrame();
-
 protected:
 
     virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;

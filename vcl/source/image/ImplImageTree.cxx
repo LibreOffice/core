@@ -289,12 +289,6 @@ bool ImplImageTree::loadImage(OUString const & name, OUString const & style, Bit
     return false;
 }
 
-bool ImplImageTree::loadDefaultImage(OUString const & style, BitmapEx& bitmap, const ImageLoadFlags eFlags)
-{
-    ImageRequestParameters aParameters("res/grafikde.png", style, bitmap, false, eFlags);
-    return doLoadImage(aParameters);
-}
-
 OUString createVariant(ImageRequestParameters& rParameters)
 {
     bool bConvertToDarkTheme = rParameters.convertToDarkTheme();

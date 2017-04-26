@@ -443,14 +443,6 @@ const LanguageTag& FormatterBase::GetLanguageTag() const
     return mpLocaleDataWrapper->getLanguageTag();
 }
 
-const AllSettings& FormatterBase::GetFieldSettings() const
-{
-    if ( mpField )
-        return mpField->GetSettings();
-    else
-        return Application::GetSettings();
-}
-
 void FormatterBase::ImplSetText( const OUString& rText, Selection* pNewSelection )
 {
     if ( mpField )

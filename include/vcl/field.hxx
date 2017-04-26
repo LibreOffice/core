@@ -79,8 +79,6 @@ public:
     const css::lang::Locale& GetLocale() const;
     const LanguageTag&      GetLanguageTag() const;
 
-    const AllSettings&      GetFieldSettings() const;
-
     void                    SetEmptyFieldValue();
     bool                    IsEmptyFieldValue() const;
 

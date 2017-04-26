@@ -78,7 +78,6 @@ class RscTypCont
 
     void        Init();         // initializes classes and tables
     void        SETCONST( RscEnum *, const char *, sal_uInt32 );
-    void        SETCONST( RscEnum *, Atom, sal_uInt32 );
     RscEnum *   InitFieldUnitsType();
     RscTupel *  InitStringLongTupel();
     static RscCont  *  InitStringLongTupelList( RscTupel * pStringLongTupel );

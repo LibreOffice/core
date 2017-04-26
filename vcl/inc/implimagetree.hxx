@@ -72,11 +72,6 @@ public:
         BitmapEx & bitmap, bool localized,
         const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
-    bool loadDefaultImage(
-        OUString const & style,
-        BitmapEx& bitmap,
-        const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
-
     /** a crude form of life cycle control (called from DeInitVCL; otherwise,
      *  if the ImplImageTree singleton were destroyed during exit that would
      *  be too late for the destructors of the bitmaps in maIconCache)*/
