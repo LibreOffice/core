@@ -26,6 +26,7 @@
 #include <malloc.h>
 #include <algorithm>
 #include <functional>
+#include <memory>
 
 #include <string.h>
 
@@ -130,16 +131,14 @@ std::string readString(StreamInterface *stream, unsigned long size)
 {
     if (!stream || stream->stell() == -1)
         throw IOException(-1);
-    unsigned char *tmp = new unsigned char[size];
-    unsigned long numBytesRead = stream->sread(tmp, size);
+    auto tmp = std::unique_ptr<unsigned char[]>(new unsigned char[size]);
+    unsigned long numBytesRead = stream->sread(tmp.get(), size);
     if (numBytesRead != size)
     {
-        delete [] tmp;
         throw IOException(-1);
     }
 
-    std::string aStr(reinterpret_cast<char *>(tmp), size);
-    delete [] tmp;
+    std::string aStr(reinterpret_cast<char *>(tmp.get()), size);
     return aStr;
 }
 
