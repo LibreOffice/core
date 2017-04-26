@@ -54,14 +54,4 @@ String STR_EDIT_SEARCH_ITEMS
     Text [ en-US ] = "Search items..." ;
 };
 
-Bitmap RID_BMP_SELECT_CURRENT
-{
-    File = "popup_select_current.png";
-};
-
-Bitmap RID_BMP_UNSELECT_CURRENT
-{
-    File = "popup_unselect_current.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

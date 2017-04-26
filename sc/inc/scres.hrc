@@ -369,60 +369,7 @@
 
 #define STR_END                 (STR_EDIT_SEARCH_ITEMS)
 
-#define BMP_START               (STR_END)
-
-// navigator
-#define RID_BMP_DROP_URL        (BMP_START + 2)
-#define RID_BMP_DROP_LINK       (BMP_START + 3)
-#define RID_BMP_DROP_COPY       (BMP_START + 4)
-#define RID_BMP_SELECT_CURRENT   (BMP_START + 8)
-#define RID_BMP_UNSELECT_CURRENT (BMP_START + 9)
-
-#define RID_BMP_CELL_BORDER     (BMP_START + 10)
-#define RID_BMP_LINE_STYLE1     (BMP_START + 11)
-#define RID_BMP_LINE_STYLE2     (BMP_START + 12)
-#define RID_BMP_LINE_STYLE3     (BMP_START + 13)
-#define RID_BMP_LINE_STYLE4     (BMP_START + 14)
-#define RID_BMP_LINE_STYLE5     (BMP_START + 15)
-#define RID_BMP_LINE_STYLE6     (BMP_START + 16)
-#define RID_BMP_LINE_STYLE7     (BMP_START + 17)
-#define RID_BMP_LINE_STYLE8     (BMP_START + 18)
-#define RID_BMP_LINE_STYLE9     (BMP_START + 19)
-#define RID_BMP_ELEMENT_DEFAULT (BMP_START + 20)
-#define RID_BMP_ELEMENT_REPEAT  (BMP_START + 21)
-#define RID_BMP_ELEMENT_ATTRIBUTE (BMP_START + 22)
-#define RID_BMP_LEVEL1          (BMP_START + 23)
-#define RID_BMP_LEVEL2          (BMP_START + 24)
-#define RID_BMP_LEVEL3          (BMP_START + 25)
-#define RID_BMP_LEVEL4          (BMP_START + 26)
-#define RID_BMP_LEVEL5          (BMP_START + 27)
-#define RID_BMP_LEVEL6          (BMP_START + 28)
-#define RID_BMP_LEVEL7          (BMP_START + 29)
-#define RID_BMP_LEVEL8          (BMP_START + 30)
-#define RID_BMP_PLUS            (BMP_START + 31)
-#define RID_BMP_MINUS           (BMP_START + 32)
-#define RID_BMP_NOTPRESSED      (BMP_START + 33)
-#define RID_BMP_PRESSED         (BMP_START + 34)
-#define RID_BMP_INPUT_FUNCTION  (BMP_START + 35)
-#define RID_BMP_INPUT_SUM       (BMP_START + 36)
-#define RID_BMP_INPUT_EQUAL     (BMP_START + 37)
-#define RID_BMP_INPUT_CANCEL    (BMP_START + 38)
-#define RID_BMP_INPUT_OK        (BMP_START + 39)
-
-// navigator - in the same order as SC_CONTENT_...
-#define RID_BMP_CONTENT_ROOT      (BMP_START + 40)
-#define RID_BMP_CONTENT_TABLE     (BMP_START + 41)
-#define RID_BMP_CONTENT_RANGENAME (BMP_START + 42)
-#define RID_BMP_CONTENT_DBAREA    (BMP_START + 43)
-#define RID_BMP_CONTENT_GRAPHIC   (BMP_START + 44)
-#define RID_BMP_CONTENT_OLEOBJECT (BMP_START + 45)
-#define RID_BMP_CONTENT_NOTE      (BMP_START + 46)
-#define RID_BMP_CONTENT_AREALINK  (BMP_START + 47)
-#define RID_BMP_CONTENT_DRAWING   (BMP_START + 48)
-
-#define BMP_END                 (BMP_START + 100)
-
-#define SC_DIALOGS_START        (BMP_END)
+#define SC_DIALOGS_START        (STR_END + 100)
 
 #define RID_SCDLG_STYLES_PAR    (SC_DIALOGS_START + 46)
 #define RID_SCDLG_STYLES_PAGE   (SC_DIALOGS_START + 48)
@@ -443,8 +390,6 @@
 
 #define RID_CELLSTYLEFAMILY             (SC_DIALOGS_START + 138)
 #define RID_PAGESTYLEFAMILY             (SC_DIALOGS_START + 139)
-#define BMP_STYLES_FAMILY_CELL          (SC_DIALOGS_START + 140)
-#define BMP_STYLES_FAMILY_PAGE          (SC_DIALOGS_START + 141)
 
 #define WID_CONDFRMT_REF                (SC_DIALOGS_START + 163)
 

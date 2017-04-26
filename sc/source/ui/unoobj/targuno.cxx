@@ -35,6 +35,7 @@
 #include "content.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "bitmaps.hlst"
 #include "unonames.hxx"
 
 using  namespace ::com::sun::star;
@@ -199,6 +200,18 @@ void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aProperty
     //! exception?
 }
 
+static const OUStringLiteral aContentBmps[]=
+{
+    RID_BMP_CONTENT_TABLE,
+    RID_BMP_CONTENT_RANGENAME,
+    RID_BMP_CONTENT_DBAREA,
+    RID_BMP_CONTENT_GRAPHIC,
+    RID_BMP_CONTENT_OLEOBJECT,
+    RID_BMP_CONTENT_NOTE,
+    RID_BMP_CONTENT_AREALINK,
+    RID_BMP_CONTENT_DRAWING
+};
+
 void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType )
 {
     ScContentId nImgId = ScContentId::ROOT;
@@ -216,7 +229,7 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     }
     if (nImgId != ScContentId::ROOT)
     {
-        BitmapEx aBitmapEx(ScResId(RID_BMP_CONTENT_ROOT + (int)nImgId));
+        BitmapEx aBitmapEx(aContentBmps[(int)nImgId -1 ]);
         rRet <<= uno::Reference< awt::XBitmap > (VCLUnoHelper::CreateBitmap(aBitmapEx));
     }
 }

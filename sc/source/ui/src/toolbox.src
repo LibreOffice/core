@@ -64,29 +64,4 @@ String SCSTR_QHELP_COLLAPSE_FORMULA
     Text [ en-US ] = "Collapse Formula Bar" ;
 };
 
-Bitmap RID_BMP_INPUT_FUNCTION
-{
-    File = "sc26047.png";
-};
-
-Bitmap RID_BMP_INPUT_SUM
-{
-    File = "sc26048.png";
-};
-
-Bitmap RID_BMP_INPUT_EQUAL
-{
-    File = "sc26049.png";
-};
-
-Bitmap RID_BMP_INPUT_CANCEL
-{
-    File = "sc26050.png";
-};
-
-Bitmap RID_BMP_INPUT_OK
-{
-    File = "sc26051.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

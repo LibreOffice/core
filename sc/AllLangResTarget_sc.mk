@@ -22,7 +22,6 @@ $(eval $(call gb_SrsTarget_set_include,sc/res,\
 	-I$(SRCDIR)/sc/source/ui/inc \
 	-I$(SRCDIR)/sc/source/ui/navipi \
 	-I$(SRCDIR)/sc/source/ui/docshell \
-	-I$(SRCDIR)/sc/source/ui/pagedlg \
 	-I$(SRCDIR)/sc/source/ui/dbgui \
 	-I$(SRCDIR)/sc/source/ui/formdlg \
 ))
@@ -41,15 +40,8 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/miscdlgs/retypepassdlg.src \
     sc/source/ui/miscdlgs/conflictsdlg.src \
     sc/source/ui/miscdlgs/acredlin.src \
-    sc/source/ui/sidebar/CellAppearancePropertyPanel.src \
     sc/source/ui/StatisticsDialogs/StatisticsDialogs.src \
     sc/source/core/src/compiler.src \
-))
-
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,sc/res,\
-    sc/source/ui/src/iconsets.src \
-    sc/source/ui/pagedlg/pagedlg.src \
-    sc/source/ui/dbgui/outline.src \
 ))
 
 # vim: set noet sw=4 ts=4:

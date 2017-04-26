@@ -12,7 +12,7 @@
 #include "document.hxx"
 #include "formulacell.hxx"
 #include "fillinfo.hxx"
-#include "iconsets.hrc"
+#include "bitmaps.hlst"
 #include "scresid.hxx"
 #include "tokenarray.hxx"
 #include "refupdatecontext.hxx"
@@ -1142,102 +1142,102 @@ size_t ScIconSetFormat::size() const
 
 namespace {
 
-const sal_Int32 a3TrafficLights1[] = {
+const OUStringLiteral a3TrafficLights1[] = {
     BMP_ICON_SET_CIRCLES1_RED, BMP_ICON_SET_CIRCLES1_YELLOW, BMP_ICON_SET_CIRCLES1_GREEN
 };
 
-const sal_Int32 a3TrafficLights2[] = {
+const OUStringLiteral a3TrafficLights2[] = {
     BMP_ICON_SET_TRAFFICLIGHTS_RED, BMP_ICON_SET_TRAFFICLIGHTS_YELLOW, BMP_ICON_SET_TRAFFICLIGHTS_GREEN
 };
 
-const sal_Int32 a3Arrows[] = {
+const OUStringLiteral a3Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SAME, BMP_ICON_SET_COLORARROWS_UP
 };
 
-const sal_Int32 a3ArrowsGray[] = {
+const OUStringLiteral a3ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SAME, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-const sal_Int32 a3Flags[] = {
+const OUStringLiteral a3Flags[] = {
     BMP_ICON_SET_FLAGS_RED, BMP_ICON_SET_FLAGS_YELLOW, BMP_ICON_SET_FLAGS_GREEN
 };
 
-const sal_Int32 a3Smilies[] = {
+const OUStringLiteral a3Smilies[] = {
     BMP_ICON_SET_POSITIVE_YELLOW_SMILIE, BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE, BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE
 };
 
-const sal_Int32 a3ColorSmilies[] = {
+const OUStringLiteral a3ColorSmilies[] = {
     BMP_ICON_SET_POSITIVE_GREEN_SMILIE, BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE, BMP_ICON_SET_NEGATIVE_RED_SMILIE
 };
 
-const sal_Int32 a3Stars[] = {
+const OUStringLiteral a3Stars[] = {
     BMP_ICON_SET_STARS_EMPTY, BMP_ICON_SET_STARS_HALF, BMP_ICON_SET_STARS_FULL
 };
 
-const sal_Int32 a3Triangles[] = {
+const OUStringLiteral a3Triangles[] = {
     BMP_ICON_SET_TRIANGLES_DOWN, BMP_ICON_SET_TRIANGLES_SAME, BMP_ICON_SET_TRIANGLES_UP
 };
 
-const sal_Int32 a4Arrows[] = {
+const OUStringLiteral a4Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
 };
 
-const sal_Int32 a4ArrowsGray[] = {
+const OUStringLiteral a4ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-const sal_Int32 a5Arrows[] = {
+const OUStringLiteral a5Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN,
     BMP_ICON_SET_COLORARROWS_SAME, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
 };
 
-const sal_Int32 a5ArrowsGray[] = {
+const OUStringLiteral a5ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN,
     BMP_ICON_SET_GRAYARROWS_SAME, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-const sal_Int32 a4TrafficLights[] = {
+const OUStringLiteral a4TrafficLights[] = {
     BMP_ICON_SET_CIRCLES1_GRAY, BMP_ICON_SET_CIRCLES1_RED,
     BMP_ICON_SET_CIRCLES1_YELLOW, BMP_ICON_SET_CIRCLES1_GREEN
 };
 
-const sal_Int32 a5Quarters[] = {
+const OUStringLiteral a5Quarters[] = {
     BMP_ICON_SET_PIES_EMPTY, BMP_ICON_SET_PIES_ONE_QUARTER, BMP_ICON_SET_PIES_HALF,
     BMP_ICON_SET_PIES_THREE_QUARTER, BMP_ICON_SET_PIES_FULL,
 };
 
-const sal_Int32 a5Boxes[] = {
+const OUStringLiteral a5Boxes[] = {
     BMP_ICON_SET_SQUARES_EMPTY, BMP_ICON_SET_SQUARES_ONE_QUARTER,
     BMP_ICON_SET_SQUARES_HALF, BMP_ICON_SET_SQUARES_THREE_QUARTER,
     BMP_ICON_SET_SQUARES_FULL
 };
 
-const sal_Int32 a3Symbols1[] = {
+const OUStringLiteral a3Symbols1[] = {
     BMP_ICON_SET_SYMBOLS1_CROSS, BMP_ICON_SET_SYMBOLS1_EXCLAMATION_MARK, BMP_ICON_SET_SYMBOLS1_CHECK
 };
 
-const sal_Int32 a3Signs[] = {
+const OUStringLiteral a3Signs[] = {
     BMP_ICON_SET_SHAPES_DIAMOND, BMP_ICON_SET_SHAPES_TRIANGLE, BMP_ICON_SET_SHAPES_CIRCLE
 };
 
-const sal_Int32 a4RedToBlack[] = {
+const OUStringLiteral a4RedToBlack[] = {
     BMP_ICON_SET_CIRCLES2_DARK_GRAY, BMP_ICON_SET_CIRCLES2_LIGHT_GRAY,
     BMP_ICON_SET_CIRCLES2_LIGHT_RED, BMP_ICON_SET_CIRCLES2_DARK_RED
 };
 
-const sal_Int32 a4Ratings[] = {
+const OUStringLiteral a4Ratings[] = {
     BMP_ICON_SET_BARS_ONE_QUARTER, BMP_ICON_SET_BARS_HALF,
     BMP_ICON_SET_BARS_THREE_QUARTER, BMP_ICON_SET_BARS_FULL
 };
 
-const sal_Int32 a5Ratings[] = {
+const OUStringLiteral a5Ratings[] = {
     BMP_ICON_SET_BARS_EMPTY, BMP_ICON_SET_BARS_ONE_QUARTER, BMP_ICON_SET_BARS_HALF,
     BMP_ICON_SET_BARS_THREE_QUARTER, BMP_ICON_SET_BARS_FULL
 };
 
 struct ScIconSetBitmapMap {
     ScIconSetType eType;
-    const sal_Int32* nBitmaps;
+    const OUStringLiteral* pBitmaps;
 };
 
 static const ScIconSetBitmapMap aBitmapMap[] = {
@@ -1270,25 +1270,26 @@ static const ScIconSetBitmapMap aBitmapMap[] = {
 BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
         ScIconSetType const eType, sal_Int32 const nIndex)
 {
-    sal_Int32 nBitmap = -1;
+    OUString sBitmap;
 
     for(const ScIconSetBitmapMap & i : aBitmapMap)
     {
         if(i.eType == eType)
         {
-            nBitmap = *(i.nBitmaps + nIndex);
+            sBitmap = *(i.pBitmaps + nIndex);
             break;
         }
     }
-    assert( nBitmap != -1 );
 
-    std::map<sal_Int32, BitmapEx>::iterator itr = rIconSetBitmapMap.find(nBitmap);
+    assert(!sBitmap.isEmpty());
+
+    std::map<OUString, BitmapEx>::iterator itr = rIconSetBitmapMap.find(sBitmap);
     if (itr != rIconSetBitmapMap.end())
         return itr->second;
 
-    BitmapEx aBitmap = BitmapEx(ScResId(nBitmap));
-    std::pair<sal_Int32, BitmapEx> aPair( nBitmap, aBitmap );
-    std::pair<std::map<sal_Int32, BitmapEx>::iterator, bool> itrNew = rIconSetBitmapMap.insert(aPair);
+    BitmapEx aBitmap = BitmapEx(sBitmap);
+    std::pair<OUString, BitmapEx> aPair(sBitmap, aBitmap);
+    std::pair<std::map<OUString, BitmapEx>::iterator, bool> itrNew = rIconSetBitmapMap.insert(aPair);
     assert(itrNew.second);
 
     return itrNew.first->second;

@@ -193,9 +193,9 @@ private:
                                     long nLevelStart, long nEntryStart,
                                     long nLevelEnd, long nEntryEnd );
     /** Draws the specified image unpressed. */
-    void                        DrawImageRel( long nLevelPos, long nEntryPos, sal_uInt16 nId );
+    void                        DrawImageRel(long nLevelPos, long nEntryPos, const OUString& rId);
     /** Draws a pressed or unpressed border. */
-    void                        DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed );
+    void                        DrawBorderRel(size_t nLevel, size_t nEntry, bool bPressed);
 
     /** Draws the focus rectangle into the focused button. */
     void                        ShowFocus();

@@ -38,6 +38,7 @@
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
 #include "scres.hrc"
+#include "bitmaps.hlst"
 #include "scresid.hxx"
 #include "scmod.hxx"
 #include "navicfg.hxx"
@@ -409,20 +410,20 @@ void ScNavigatorDlg::UpdateButtons()
         aTbxCmd->CheckItem(nChangeRootId, bRootSet);
     }
 
-    sal_uInt16 nImageId = 0;
+    OUString sImageId;
     switch (nDropMode)
     {
         case SC_DROPMODE_URL:
-            nImageId = RID_BMP_DROP_URL;
+            sImageId = RID_BMP_DROP_URL;
             break;
         case SC_DROPMODE_LINK:
-            nImageId = RID_BMP_DROP_LINK;
+            sImageId = RID_BMP_DROP_LINK;
             break;
         case SC_DROPMODE_COPY:
-            nImageId = RID_BMP_DROP_COPY;
+            sImageId = RID_BMP_DROP_COPY;
             break;
     }
-    aTbxCmd->SetItemImage(nDragModeId, Image(BitmapEx(ScResId(nImageId))));
+    aTbxCmd->SetItemImage(nDragModeId, Image(BitmapEx(sImageId)));
 }
 
 ScNavigatorSettings::ScNavigatorSettings()
