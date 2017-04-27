@@ -24,6 +24,12 @@
 #include <rtl/textenc.h>
 #include <sal/types.h>
 
+namespace {
+inline OString I32S_(sal_Int32 x) { return OString::number(x); }
+inline OString I64S_(sal_Int64 x) { return OString::number(x); }
+}
+#define I32S(x) I32S_(x).getStr()
+#define I64S(x) I64S_(x).getStr()
 #define IS(x) OString::number( x ).getStr()
 #define BS(x) (x ? "1":"0")
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
