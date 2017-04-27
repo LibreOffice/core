@@ -143,6 +143,7 @@ public:
     void testBookmarkUndo();
     void testFdo85876();
     void testFdo87448();
+    void testTextCursorInvalidation();
     void testTdf68183();
     void testCp1000115();
     void testTdf63214();
@@ -269,6 +270,7 @@ public:
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
     CPPUNIT_TEST(testFdo87448);
+    CPPUNIT_TEST(testTextCursorInvalidation);
     CPPUNIT_TEST(testTdf68183);
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf63214);
@@ -1259,6 +1261,26 @@ void SwUiWriterTest::testFdo87448()
     OString aMsg = "nFirstEnd is " + OString::number(nFirstEnd) + ", nSecondEnd is " + OString::number(nSecondEnd);
     // Assert that the difference is less than half point.
     CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), abs(nFirstEnd - nSecondEnd) < 10);
+}
+
+void SwUiWriterTest::testTextCursorInvalidation()
+{
+    createDoc();
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPageStyle.is());
+    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(true));
+    uno::Reference<text::XText> xHeader(getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText"));
+    CPPUNIT_ASSERT(xHeader.is());
+    // create cursor inside the header text
+    uno::Reference<text::XTextCursor> xCursor(xHeader->createTextCursor());
+    // can't go right in empty header
+    CPPUNIT_ASSERT(!xCursor->goRight(1, false));
+// this does not actually delete the header:    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(false));
+    pWrtShell->ChangeHeaderOrFooter("Default Style", true, false, false);
+    // must be disposed after deleting header
+    CPPUNIT_ASSERT_THROW(xCursor->goRight(1, false), uno::RuntimeException);
 }
 
 void SwUiWriterTest::testTdf68183()
