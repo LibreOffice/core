@@ -686,7 +686,7 @@
       </node>
       <node oor:name=".uno:InsertSlide" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">New Slid~e</value>
+          <value xml:lang="en-US">~New Slide</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:InsertPage</value>
@@ -954,7 +954,7 @@
       </node>
       <node oor:name=".uno:DeleteSlide" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">D~elete Slide</value>
+          <value xml:lang="en-US">~Delete Slide</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:DeletePage</value>
@@ -1577,7 +1577,7 @@
       </node>
       <node oor:name=".uno:MasterLayouts" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Master ~Elements...</value>
+          <value xml:lang="en-US">~Master Elements...</value>
         </prop>
       </node>
       <node oor:name=".uno:MasterLayoutsNotes" oor:op="replace">
