@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <cstddef>
 #include <limits>
+#include <forward_list>
 #include <memory>
 
 #include <osl/diagnose.h>
@@ -366,7 +368,6 @@ void appendISO88591(OUString & rText, sal_Char const * pBegin,
 
 struct Parameter
 {
-    Parameter * m_pNext;
     OString m_aAttribute;
     OString m_aCharset;
     OString m_aLanguage;
@@ -374,49 +375,22 @@ struct Parameter
     sal_uInt32 m_nSection;
     bool m_bExtended;
 
-    inline Parameter(Parameter * pTheNext, const OString& rTheAttribute,
-                     const OString& rTheCharset,
-                     const OString& rTheLanguage,
-                     const OString& rTheValue, sal_uInt32 nTheSection,
-                     bool bTheExtended);
-};
-
-inline Parameter::Parameter(Parameter * pTheNext,
-                            const OString& rTheAttribute,
-                            const OString& rTheCharset,
-                            const OString& rTheLanguage,
-                            const OString& rTheValue,
-                            sal_uInt32 nTheSection, bool bTheExtended):
-    m_pNext(pTheNext),
-    m_aAttribute(rTheAttribute),
-    m_aCharset(rTheCharset),
-    m_aLanguage(rTheLanguage),
-    m_aValue(rTheValue),
-    m_nSection(nTheSection),
-    m_bExtended(bTheExtended)
-{}
-
-struct ParameterList
-{
-    Parameter * m_pList;
-
-    ParameterList(): m_pList(nullptr) {}
-
-    inline ~ParameterList();
-
-    Parameter ** find(const OString& rAttribute, sal_uInt32 nSection,
-                      bool & rPresent);
-};
-
-inline ParameterList::~ParameterList()
-{
-    while (m_pList)
+    bool operator<(const Parameter& rhs) const // is used by std::list<Parameter>::sort
     {
-        Parameter * pNext = m_pList->m_pNext;
-        delete m_pList;
-        m_pList = pNext;
+        int nComp = m_aAttribute.compareTo(rhs.m_aAttribute);
+        return nComp < 0 ||
+                (nComp == 0 && m_nSection < rhs.m_nSection);
     }
-}
+    struct IsSameSection // is used to check container for duplicates with std::any_of
+    {
+        const OString& rAttribute;
+        const sal_uInt32 nSection;
+        bool operator()(const Parameter& r) const
+        { return r.m_aAttribute == rAttribute && r.m_nSection == nSection; }
+    };
+};
+
+typedef std::forward_list<Parameter> ParameterList;
 
 bool parseParameters(ParameterList const & rInput,
                      INetContentTypeParameterList * pOutput);
@@ -433,32 +407,6 @@ void appendISO88591(OUString & rText, sal_Char const * pBegin,
     rText += OUString(pBuffer.get(), nLength);
 }
 
-//  ParameterList
-
-Parameter ** ParameterList::find(const OString& rAttribute,
-                                 sal_uInt32 nSection, bool & rPresent)
-{
-    rPresent = false;
-    Parameter ** p = &m_pList;
-    for (; *p; p = &(*p)->m_pNext)
-    {
-        sal_Int32 nCompare = rAttribute.compareTo((*p)->m_aAttribute);
-        if (nCompare < 0)
-            break;
-        else if (nCompare == 0)
-        {
-            if (nSection < (*p)->m_nSection)
-                break;
-            else if (nSection == (*p)->m_nSection)
-            {
-                rPresent = true;
-                break;
-            }
-        }
-    }
-    return p;
-}
-
 //  parseParameters
 
 bool parseParameters(ParameterList const & rInput,
@@ -467,46 +415,44 @@ bool parseParameters(ParameterList const & rInput,
     if (pOutput)
         pOutput->clear();
 
-    Parameter * pPrev = nullptr;
-    for (Parameter * p = rInput.m_pList; p; p = p->m_pNext)
+    for (auto it = rInput.begin(), itPrev = rInput.end(); it != rInput.end() ; itPrev = it++)
     {
-        if (p->m_nSection > 0
-            && (!pPrev
-                || pPrev->m_nSection != p->m_nSection - 1
-                || pPrev->m_aAttribute != p->m_aAttribute))
+        if (it->m_nSection > 0
+            && (itPrev == rInput.end()
+                || itPrev->m_nSection != it->m_nSection - 1
+                || itPrev->m_aAttribute != it->m_aAttribute))
             return false;
-        pPrev = p;
     }
 
     if (pOutput)
-        for (Parameter * p = rInput.m_pList; p;)
+        for (auto it = rInput.begin(), itNext = rInput.begin(); it != rInput.end(); it = itNext)
         {
-            bool bCharset = !p->m_aCharset.isEmpty();
+            bool bCharset = !it->m_aCharset.isEmpty();
             rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
             if (bCharset)
                 eEncoding
-                    = getCharsetEncoding(p->m_aCharset.getStr(),
-                                                   p->m_aCharset.getStr()
-                                                       + p->m_aCharset.getLength());
+                    = getCharsetEncoding(it->m_aCharset.getStr(),
+                                                   it->m_aCharset.getStr()
+                                                       + it->m_aCharset.getLength());
             OUString aValue;
             bool bBadEncoding = false;
-            Parameter * pNext = p;
+            itNext = it;
             do
             {
                 sal_Size nSize;
                 sal_Unicode * pUnicode
-                    = convertToUnicode(pNext->m_aValue.getStr(),
-                                                 pNext->m_aValue.getStr()
-                                                     + pNext->m_aValue.getLength(),
-                                                 bCharset && p->m_bExtended ?
+                    = convertToUnicode(itNext->m_aValue.getStr(),
+                                                 itNext->m_aValue.getStr()
+                                                     + itNext->m_aValue.getLength(),
+                                                 bCharset && it->m_bExtended ?
                                                      eEncoding :
                                                      RTL_TEXTENCODING_UTF8,
                                                  nSize);
-                if (!pUnicode && !(bCharset && p->m_bExtended))
+                if (!pUnicode && !(bCharset && it->m_bExtended))
                     pUnicode = convertToUnicode(
-                                   pNext->m_aValue.getStr(),
-                                   pNext->m_aValue.getStr()
-                                       + pNext->m_aValue.getLength(),
+                                   itNext->m_aValue.getStr(),
+                                   itNext->m_aValue.getStr()
+                                       + itNext->m_aValue.getLength(),
                                    RTL_TEXTENCODING_ISO_8859_1, nSize);
                 if (!pUnicode)
                 {
@@ -515,38 +461,38 @@ bool parseParameters(ParameterList const & rInput,
                 }
                 aValue += OUString(pUnicode, static_cast<sal_Int32>(nSize));
                 delete[] pUnicode;
-                pNext = pNext->m_pNext;
+                ++itNext;
             }
-            while (pNext && pNext->m_nSection > 0);
+            while (itNext != rInput.end() && itNext->m_nSection != 0);
+
             if (bBadEncoding)
             {
                 aValue.clear();
-                for (pNext = p;;)
+                itNext = it;
+                do
                 {
-                    if (pNext->m_bExtended)
+                    if (itNext->m_bExtended)
                     {
-                        for (sal_Int32 i = 0; i < pNext->m_aValue.getLength(); ++i)
+                        for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
                             aValue += OUStringLiteral1(
                                 sal_Unicode(
-                                    static_cast<unsigned char>(pNext->m_aValue[i]))
-                                | 0xF800);
+                                    static_cast<unsigned char>(itNext->m_aValue[i]))
+                                | 0xF800); // map to unicode corparate use sub area
                     }
                     else
                     {
-                        for (sal_Int32 i = 0; i < pNext->m_aValue.getLength(); ++i)
-                            aValue += OUStringLiteral1( static_cast<unsigned char>(pNext->m_aValue[i]) );
+                        for (sal_Int32 i = 0; i < itNext->m_aValue.getLength(); ++i)
+                            aValue += OUStringLiteral1( static_cast<unsigned char>(itNext->m_aValue[i]) );
                     }
-                    pNext = pNext->m_pNext;
-                    if (!pNext || pNext->m_nSection == 0)
-                        break;
-                };
+                    ++itNext;
+                }
+                while (itNext != rInput.end() && itNext->m_nSection != 0);
             }
             auto const ret = pOutput->insert(
-                {p->m_aAttribute,
-                 {p->m_aCharset, p->m_aLanguage, aValue, !bBadEncoding}});
+                {it->m_aAttribute,
+                 {it->m_aCharset, it->m_aLanguage, aValue, !bBadEncoding}});
             SAL_INFO_IF(!ret.second, "tools",
-                "INetMIME: dropping duplicate parameter: " << p->m_aAttribute);
-            p = pNext;
+                "INetMIME: dropping duplicate parameter: " << it->m_aAttribute);
         }
     return true;
 }
@@ -709,8 +655,8 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                 break;
         }
 
-        bool bPresent;
-        Parameter ** pPos = aList.find(aAttribute, nSection, bPresent);
+        bool bPresent = std::any_of(aList.begin(), aList.end(),
+                                    Parameter::IsSameSection({aAttribute, nSection}));
         if (bPresent)
             break;
 
@@ -881,10 +827,9 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                     pTokenBegin, p - pTokenBegin,
                     RTL_TEXTENCODING_UTF8);
         }
-
-        *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
-                              nSection, bExtended);
+        aList.emplace_front(Parameter{aAttribute, aCharset, aLanguage, aValue, nSection, bExtended});
     }
+    aList.sort();
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
 }
 
