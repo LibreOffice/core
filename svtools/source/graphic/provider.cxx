@@ -83,7 +83,6 @@ private:
 
     static css::uno::Reference< css::graphic::XGraphic > implLoadMemory( const OUString& rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadGraphicObject( const OUString& rResourceURL );
-    static css::uno::Reference< css::graphic::XGraphic > implLoadResource( const OUString& rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( const OUString& rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadBitmap( const css::uno::Reference< css::awt::XBitmap >& rBitmap );
     static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( const OUString& rResourceURL );
@@ -247,53 +246,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
     return xRet;
 }
 
-
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const OUString& rResourceURL )
-{
-    uno::Reference< ::graphic::XGraphic >   xRet;
-    sal_Int32                               nIndex = 0;
-
-    if( rResourceURL.getToken( 0, '/', nIndex ) == "private:resource" )
-    {
-        OString aResMgrName(OUStringToOString(
-            rResourceURL.getToken(0, '/', nIndex), RTL_TEXTENCODING_ASCII_US));
-
-        std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILanguageTag() ));
-
-        if( pResMgr )
-        {
-            const OUString   aResourceType( rResourceURL.getToken( 0, '/', nIndex ) );
-            const ResId             aResId( rResourceURL.getToken( 0, '/', nIndex ).toInt32(), *pResMgr );
-
-            if( !aResourceType.isEmpty() )
-            {
-                BitmapEx aBmpEx;
-
-                if (aResourceType == "bitmapex")
-                {
-                    aResId.SetRT( RSC_BITMAP );
-
-                    if( pResMgr->IsAvailable( aResId ) )
-                    {
-                        aBmpEx = BitmapEx( aResId );
-                    }
-                }
-
-                if( !aBmpEx.IsEmpty() )
-                {
-                    ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
-
-                    pUnoGraphic->init( aBmpEx );
-                    xRet = pUnoGraphic;
-                }
-            }
-        }
-    }
-
-    return xRet;
-}
-
-
 uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDescriptor( const uno::Sequence< beans::PropertyValue >& rMediaProperties )
 {
     uno::Reference< beans::XPropertySet > xRet;
@@ -332,8 +284,6 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
     else if( !aURL.isEmpty() )
     {
         uno::Reference< ::graphic::XGraphic > xGraphic( implLoadMemory( aURL ) );
-        if( !xGraphic.is() )
-            xGraphic = implLoadResource( aURL );
         if( !xGraphic.is() )
             xGraphic = implLoadGraphicObject( aURL );
 
@@ -436,9 +386,6 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
         if( !xRet.is() )
             xRet = implLoadGraphicObject( aPath );
-
-        if( !xRet.is() )
-            xRet = implLoadResource( aPath );
 
         if ( !xRet.is() )
             xRet = implLoadRepositoryImage( aPath );
