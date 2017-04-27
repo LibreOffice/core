@@ -472,15 +472,11 @@ namespace comphelper
 
     //= ResourceBasedEventLogger
 
-    struct ResourceBasedEventLogger_Data;
     /** extends the EventLogger class with functionality to load log messages from
         a resource bundle.
     */
     class COMPHELPER_DLLPUBLIC ResourceBasedEventLogger : public EventLogger
     {
-    private:
-        std::shared_ptr< ResourceBasedEventLogger_Data >    m_pData;
-
     public:
         /** creates a resource based event logger
             @param _rxContext

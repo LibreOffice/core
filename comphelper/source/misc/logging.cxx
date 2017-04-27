@@ -173,24 +173,9 @@ namespace comphelper
         return false;
     }
 
-    struct ResourceBasedEventLogger_Data
-    {
-        /// did we already attempt to load the bundle?
-        bool                            bBundleLoaded;
-        /// the lazily loaded bundle
-        Reference< XResourceBundle >    xBundle;
-
-        ResourceBasedEventLogger_Data()
-            :bBundleLoaded( false )
-            ,xBundle()
-        {
-        }
-    };
-
     ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext,
         const sal_Char* _pAsciiLoggerName )
         :EventLogger( _rxContext, _pAsciiLoggerName )
-        ,m_pData( new ResourceBasedEventLogger_Data )
     {
     }
 } // namespace comphelper
