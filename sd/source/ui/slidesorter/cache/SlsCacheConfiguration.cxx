@@ -61,6 +61,7 @@ std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
             maReleaseTimer.SetInvokeHandler(
                 LINK(rInstancePtr.get(),CacheConfiguration,TimerCallback));
             maReleaseTimer.SetTimeout(5000 /* 5s */);
+            maReleaseTimer.SetDebugName("sd::CacheConfiguration maReleaseTimer");
             maReleaseTimer.Start();
         }
     }
