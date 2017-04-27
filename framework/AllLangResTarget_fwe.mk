@@ -46,7 +46,4 @@ $(eval $(call gb_SrsTarget_set_include,fwe/fwk_services,\
     -I$(SRCDIR)/framework/inc/services \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,fwe/fwk_services,\
-    framework/source/services/fwk_services.src \
-))
 # vim: set noet sw=4 ts=4:
