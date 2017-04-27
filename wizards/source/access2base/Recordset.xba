@@ -161,7 +161,7 @@ Public Function AddNew() As Boolean
 
 Const cstThisSub = &quot;Recordset.AddNew&quot;
 Dim i As Integer, iFieldsCount As Integer, oField As Object
-Dim sdefault As String, oColumn As Object
+Dim sDefault As String, oColumn As Object
 Dim iValue As Integer, lValue As Long, sgValue As Single, dbValue As Double, dValue As Date
 Dim vTemp As Variant
 	If _ErrorHandler() Then On Local Error Goto Error_Function
@@ -192,16 +192,10 @@ Dim vTemp As Variant
 		For i = 0 To iFieldsCount - 1
 			Set oField = Fields(i)
 			Set oColumn = oField.Column
-			If Utils._hasUNOProperty(oColumn, &quot;DefaultValue&quot;) Then			&apos;	Default value in database set via SQL statement
-				sDefault = oColumn.DefaultValue
-			ElseIf Utils._hasUNOProperty(oColumn, &quot;ControlDefault&quot;) Then	&apos;	Default value set in Base via table edition
-					If IsEmpty(oColumn.ControlDefault) Then sdefault = &quot;&quot; Else sDefault = oColumn.ControlDefault
-			Else
-					sdefault = &quot;&quot;
-			End If
-			If sDefault = &quot;&quot; Then
+			sDefault = oField.DefaultValue
+			If sDefault = &quot;&quot; Then				&apos;	No default value
 				If oColumn.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then oColumn.updateNull()
-			Else				&apos;	No default value
+			Else
 				With com.sun.star.sdbc.DataType
 					Select Case oColumn.Type
 						Case .BIT, .BOOLEAN
@@ -232,13 +226,13 @@ Dim vTemp As Variant
 									&apos;If Abs(dbValue) &lt; 1.79769313486232E308 And Abs(dbValue) &gt; 4.94065645841247E-307 Then oColumn.updateDouble(dbValue)
 									oColumn.updateDouble(dbValue)
 								Else
-									oColumn.updateString(sdefault)
+									oColumn.updateString(sDefault)
 								End If
 							Else
-								oColumn.updateString(sdefault)
+								oColumn.updateString(sDefault)
 							End If
 						Case .CHAR, .VARCHAR, .LONGVARCHAR
-							oColumn.updateString(sdefault)						&apos;	vbString
+							oColumn.updateString(sDefault)						&apos;	vbString
 						Case .DATE
 							dValue = DateValue(sDefault)
 							vTemp = New com.sun.star.util.Date

@@ -21,6 +21,8 @@ Private _ParentName				As String
 Private _ParentType				As String
 Private _ParentDatabase			As Object
 Private _ParentRecordset		As Object
+Private _DefaultValue			As String
+Private _DefaultValueSet		As Boolean
 Private Column					As Object				&apos;	com.sun.star.sdb.OTableColumnWrapper
 											&apos;			or	org.openoffice.comp.dbaccess.OQueryColumn
 											&apos;			or	com.sun.star.sdb.ODataColumn
@@ -33,6 +35,8 @@ Private Sub Class_Initialize()
 	_Name = &quot;&quot;
 	_ParentName = &quot;&quot;
 	_ParentType = &quot;&quot;
+	_DefaultValue = &quot;&quot;
+	_DefaultValueSet = False
 	Set Column = Nothing
 End Sub		&apos;	Constructor
 
@@ -379,7 +383,7 @@ Private Function _PropertiesList() As Variant
 								, &quot;Description&quot;, &quot;Name&quot;, &quot;ObjectType&quot;, &quot;Size&quot;, &quot;SourceField&quot;, &quot;SourceTable&quot; _
 								, &quot;TypeName&quot; _
 								)
-		Case OBJRECORDSET
+		Case OBJRECORDSET			
 			_PropertiesList = Array(&quot;DataType&quot;, &quot;DataUpdatable&quot;,  &quot;dbType&quot;, &quot;DefaultValue&quot; _
 								, &quot;Description&quot; , &quot;FieldSize&quot;, &quot;Name&quot;, &quot;ObjectType&quot; _
 								, &quot;Size&quot;, &quot;SourceTable&quot;, &quot;TypeName&quot;, &quot;Value&quot; _
@@ -450,13 +454,18 @@ Const cstMaxBinlength = 2 * 65535
 				If Column.IsAutoIncrement Then _PropertyGet = False			&apos;	Forces False if auto-increment (MSAccess)
 			End If
 		Case UCase(&quot;DefaultValue&quot;)
-			If Utils._hasUNOProperty(Column, &quot;DefaultValue&quot;) Then			&apos;	Default value in database set via SQL statement
-				_PropertyGet = Column.DefaultValue
-			ElseIf Utils._hasUNOProperty(Column, &quot;ControlDefault&quot;) Then		&apos;	Default value set in Base via table edition
-			 	If IsEmpty(Column.ControlDefault) Then _PropertyGet = &quot;&quot; Else _PropertyGet = Column.ControlDefault
-			Else
-			 	_PropertyGet = &quot;&quot;
+			&apos;	default value buffered to avoid multiple calls
+			If Not _DefaultValueSet Then
+				If Utils._hasUNOProperty(Column, &quot;DefaultValue&quot;) Then			&apos;	Default value in database set via SQL statement
+					_DefaultValue = Column.DefaultValue
+				ElseIf Utils._hasUNOProperty(Column, &quot;ControlDefault&quot;) Then		&apos;	Default value set in Base via table edition
+				 	If IsEmpty(Column.ControlDefault) Then _DefaultValue = &quot;&quot; Else _DefaultValue = Column.ControlDefault
+				Else
+				 	_DefaultValue = &quot;&quot;
+				End If
+				_DefaultValueSet = True
 			End If
+			_PropertyGet = _DefaultValue
 		Case UCase(&quot;Description&quot;)
 			bCond1 = Utils._hasUNOProperty(Column, &quot;Description&quot;)
 			bCond2 = Utils._hasUNOProperty(Column, &quot;HelpText&quot;)
@@ -631,6 +640,8 @@ Dim oParent As Object
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
 			If Utils._hasUNOProperty(Column, &quot;ControlDefault&quot;) Then			&apos;	Default value set in Base via table edition
 			 	Column.ControlDefault = pvValue
+			 	_DefaultValue = pvValue
+			 	_DefaultValueSet = True
 			End If
 		Case UCase(&quot;Description&quot;)
 			If _ParentType &lt;&gt; OBJTABLEDEF Then Goto Trace_Error
