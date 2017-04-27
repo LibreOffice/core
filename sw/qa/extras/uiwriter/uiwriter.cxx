@@ -232,6 +232,7 @@ public:
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
     void testTdf107025();
+    void testTdf107362();
     void testTdf105417();
     void testTdf105625();
     void testTdf106736();
@@ -359,6 +360,7 @@ public:
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf107025);
+    CPPUNIT_TEST(testTdf107362);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
@@ -4484,6 +4486,23 @@ void SwUiWriterTest::testTdf107025()
     sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nWidth").toInt32();
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9), nWidth2 / nWidth1 );
+}
+
+void SwUiWriterTest::testTdf107362()
+{
+    createDoc("tdf107362.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nHeight = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]" , "nHeight").toInt32();
+    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]" , "nWidth").toInt32();
+    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]" , "nWidth").toInt32();
+    sal_Int32 nLineWidth = getXPath(pXmlDoc, "//LineBreak" , "nWidth").toInt32();
+    sal_Int32 nKernWidth = nLineWidth - nWidth1 - nWidth2;
+    // Test only if fonts are available
+    if ( nWidth1 > 500 && nWidth2 > 200 )
+    {
+        // Kern width should be smaller than 1/3 of the CJK font height.
+        CPPUNIT_ASSERT( nKernWidth * 3 < nHeight );
+    }
 }
 
 void SwUiWriterTest::testTdf105417()

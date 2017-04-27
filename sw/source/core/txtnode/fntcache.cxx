@@ -1029,8 +1029,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // For text grid refactor
     // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
 
-    if ( rInf.GetFrame() && rInf.SnapToGrid() && rInf.GetFont() &&
-         SwFontScript::CJK == rInf.GetFont()->GetActual() )
+    if ( rInf.GetFrame() && rInf.SnapToGrid() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
 
@@ -1853,8 +1852,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     }
 
     //for textgrid refactor
-    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
-         SwFontScript::CJK == rInf.GetFont()->GetActual() )
+    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
@@ -2112,8 +2110,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
     }
 
     //for textgrid refactor
-    if ( rInf.GetFrame() && rInf.GetLen() && rInf.SnapToGrid() &&
-         rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
+    if ( rInf.GetFrame() && rInf.GetLen() && rInf.SnapToGrid() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
@@ -2341,8 +2338,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
     }
 
     //for text grid enhancement
-    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
-         SwFontScript::CJK == rInf.GetFont()->GetActual() )
+    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
