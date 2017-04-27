@@ -428,7 +428,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (containsVclReferenceBaseSubclass(fieldDecl->getType())) {
         // have to ignore this for now, nasty reverse dependency from tools->vcl
         auto check = loplugin::DeclCheck(pParentRecordDecl);
-        if (!(check.Struct("ErrorContextImpl").GlobalNamespace()
+        if (!(check.Struct("ImplErrorContext").GlobalNamespace()
               || check.Class("ScHFEditPage").GlobalNamespace()))
         {
             report(
