@@ -64,6 +64,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/range/b2drangeclipper \
     basegfx/source/range/b2xrange \
     basegfx/source/range/b3drange \
+    basegfx/source/transformation/b3dtrans \
     basegfx/source/raster/rasterconvert3d \
     basegfx/source/tools/b2dclipstate \
     basegfx/source/tools/canvastools \

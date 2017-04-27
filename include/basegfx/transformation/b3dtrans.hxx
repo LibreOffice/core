@@ -27,10 +27,10 @@
 #include <tools/gen.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <tools/toolsdllapi.h>
+#include <basegfx/basegfxdllapi.h>
 
 /// Transformation sets for 3D output
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dTransformationSet
+class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B3dTransformationSet
 {
 private:
     // Object Matrix Object -> World
@@ -147,7 +147,7 @@ protected:
     Uses a simplified model, in which a point is described using a View
     Reference Point (VRP).
 */
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dViewport : public B3dTransformationSet
+class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B3dViewport : public B3dTransformationSet
 {
 private:
     basegfx::B3DPoint           aVRP;   // View Reference Point
@@ -174,7 +174,7 @@ protected:
 
 // B3D camera
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dCamera : public B3dViewport
+class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B3dCamera : public B3dViewport
 {
 private:
     basegfx::B3DPoint       aPosition;
