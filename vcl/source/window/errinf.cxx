@@ -309,8 +309,8 @@ DialogMask DynamicErrorInfo::GetDialogMask() const
 }
 
 StringErrorInfo::StringErrorInfo(
-    sal_uInt32 nUserId, const OUString& aStringP, DialogMask nMask)
-: DynamicErrorInfo(nUserId, nMask), aString(aStringP)
+    sal_uInt32 nArgUserId, const OUString& aStringP, DialogMask nMask)
+: DynamicErrorInfo(nArgUserId, nMask), aString(aStringP)
 {
 }
 
