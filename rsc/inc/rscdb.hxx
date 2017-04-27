@@ -63,7 +63,6 @@ class RscTypCont
     OString             aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
     OString             aSearchPath;        // search path for bitmap, icon and pointer
-    OString             aSysSearchPath;     // aSearchPath plus language specific paths
     sal_uInt32          nUniqueId;          // unique id for system resources
     sal_uLong           nFilePos;           // position in file (MTF)
     sal_uInt32          nPMId;              // unique id for PR-resource file
@@ -115,7 +114,6 @@ public:
                               nSourceCharSet = aCharSet;
                           }
     const OString&    GetSearchPath() const { return aSearchPath; }
-    void              SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
                       // deletes all resource objects of this file
     void              Delete( RscFileTab::Index lFileKey );
     sal_uInt32        PutSysName( RESOURCE_TYPE nRscTyp, char * pName );

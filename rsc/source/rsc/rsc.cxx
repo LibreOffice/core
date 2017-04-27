@@ -616,27 +616,9 @@ ERRTYPE RscCompiler::Link()
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );
 
             // write file
-            sal_Char cSearchDelim = SAL_PATHSEPARATOR;
-            sal_Char cAccessDelim = SAL_PATHDELIMITER;
             pTC->ChangeLanguage( it->aLangName );
             pTC->SetSourceCharSet( RTL_TEXTENCODING_UTF8 );
             pTC->ClearSysNames();
-            OStringBuffer aSysSearchPath(it->aLangSearchPath);
-            sal_Int32 nIndex = 0;
-            OString aSearchPath = pTC->GetSearchPath();
-            do
-            {
-                OString aToken = aSearchPath.getToken( 0, cSearchDelim, nIndex );
-                if (!aSysSearchPath.isEmpty())
-                    aSysSearchPath.append(cSearchDelim);
-                aSysSearchPath.append(aToken);
-                aSysSearchPath.append(cAccessDelim);
-                aSysSearchPath.append(it->aLangName);
-                aSysSearchPath.append(cSearchDelim);
-                aSysSearchPath.append(aToken);
-            }
-            while ( nIndex >= 0 );
-            pTC->SetSysSearchPath(aSysSearchPath.makeStringAndClear());
 
             WriteRcContext  aContext;
 
