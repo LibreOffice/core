@@ -50,7 +50,9 @@
 #include <functional>
 #include <list>
 #include <set>
+#include <unordered_set>
 #include <unordered_map>
+#include <memory>
 
 using namespace osl;
 
@@ -70,6 +72,18 @@ static osl::Mutex& getResMgrMutex()
 
 struct ImpContent;
 
+// seem to need this to put a std::pair<RESOURCE_TYPE,sal_uInt32> into a std::unordered_set ??
+namespace std
+{
+    template <>
+    struct hash< std::pair<RESOURCE_TYPE,sal_uInt32> >
+    {
+        size_t operator()(const std::pair<RESOURCE_TYPE,sal_uInt32> & x) const
+        {
+            return sal_uInt32(x.first) * 31 + x.second;
+        }
+    };
+}
 class InternalResMgr
 {
     friend class ResMgr;
@@ -87,7 +101,7 @@ class InternalResMgr
     OUString                        aResName;
     bool                            bSingular;
     LanguageTag                     aLocale;
-    std::unordered_map<sal_uInt64, int>* pResUseDump;
+    std::unique_ptr<std::unordered_set<std::pair<RESOURCE_TYPE,sal_uInt32>>> pResUseDump;
 
                             InternalResMgr( const OUString& rFileURL,
                                             const OUString& aPrefix,
@@ -391,15 +405,16 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
 
 struct ImpContent
 {
-    sal_uInt64   nTypeAndId;
-    sal_uInt32   nOffset;
+    RESOURCE_TYPE nType;
+    sal_uInt32    nId;
+    sal_uInt32    nOffset;
 };
 
 struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpContent, bool>
 {
     bool operator() (const ImpContent& lhs, const ImpContent& rhs) const
     {
-        return lhs.nTypeAndId < rhs.nTypeAndId;
+        return std::tie(lhs.nType, lhs.nId) < std::tie(rhs.nType, rhs.nId);
     }
 };
 
@@ -420,7 +435,6 @@ InternalResMgr::InternalResMgr( const OUString& rFileURL,
     , aResName( rResName )
     , bSingular( false )
     , aLocale( rLocale )
-    , pResUseDump( nullptr )
 {
 }
 
@@ -443,21 +457,17 @@ InternalResMgr::~InternalResMgr()
                 RTL_TEXTENCODING_UTF8));
             aStm.WriteLine(aLine.makeStringAndClear());
 
-            for( std::unordered_map<sal_uInt64, int>::const_iterator it = pResUseDump->begin();
-                 it != pResUseDump->end(); ++it )
+            for( auto const & rPair : *pResUseDump )
             {
-                sal_uInt64 nKeyId = it->first;
                 aLine.append("Type/Id: ");
-                aLine.append(sal::static_int_cast< sal_Int32 >((nKeyId >> 32) & 0xFFFFFFFF));
+                aLine.append((sal_Int64)sal_uInt32(rPair.first));
                 aLine.append('/');
-                aLine.append(sal::static_int_cast< sal_Int32 >(nKeyId & 0xFFFFFFFF));
+                aLine.append((sal_Int64)rPair.second);
                 aStm.WriteLine(aLine.makeStringAndClear());
             }
         }
     }
 #endif
-
-    delete pResUseDump;
 }
 
 bool InternalResMgr::Create()
@@ -496,23 +506,25 @@ bool InternalResMgr::Create()
             const sal_Char* pLogFile = getenv( "STAR_RESOURCE_LOGGING" );
             if ( pLogFile )
             {
-                pResUseDump = new std::unordered_map<sal_uInt64, int>;
+                pResUseDump.reset( new std::unordered_set<std::pair<RESOURCE_TYPE, sal_uInt32>> );
                 for( sal_uInt32 i = 0; i < nEntries; ++i )
-                    (*pResUseDump)[pContent[i].nTypeAndId] = 1;
+                    pResUseDump->insert({pContent[i].nType, pContent[i].nId});
             }
 #endif
             // swap the content to the right endian
-            pContent[0].nTypeAndId = ResMgr::GetUInt64( pContentBuf );
-            pContent[0].nOffset = ResMgr::GetLong( pContentBuf+8 );
+            pContent[0].nType = RESOURCE_TYPE(ResMgr::GetLong( pContentBuf ));
+            pContent[0].nId = ResMgr::GetLong( pContentBuf + 4);
+            pContent[0].nOffset = ResMgr::GetLong( pContentBuf + 8 );
             sal_uInt32 nCount = nEntries - 1;
             for( sal_uInt32 i = 0,j=1; i < nCount; ++i,++j )
             {
                 // swap the content to the right endian
-                pContent[j].nTypeAndId = ResMgr::GetUInt64( pContentBuf + (12*j) );
-                pContent[j].nOffset = ResMgr::GetLong( pContentBuf + (12*j+8) );
-                if( pContent[i].nTypeAndId >= pContent[j].nTypeAndId )
+                pContent[j].nType = RESOURCE_TYPE(ResMgr::GetLong( pContentBuf + (12*j) ));
+                pContent[j].nId = ResMgr::GetLong( pContentBuf + (12*j) + 4 );
+                pContent[j].nOffset = ResMgr::GetLong( pContentBuf + (12*j) + 8 );
+                if( std::tie(pContent[i].nType, pContent[i].nId) >= std::tie(pContent[j].nType, pContent[j].nId) )
                     bSorted = false;
-                if( (pContent[i].nTypeAndId & 0xFFFFFFFF00000000LL) == (pContent[j].nTypeAndId & 0xFFFFFFFF00000000LL)
+                if( pContent[i].nId == pContent[j].nId
                     && pContent[i].nOffset >= pContent[j].nOffset )
                     bEqual2Content = false;
             }
@@ -535,12 +547,13 @@ bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) cons
 {
     // search beginning of string
     ImpContent aValue;
-    aValue.nTypeAndId = ((sal_uInt64(sal_uInt32(nRT)) << 32) | nId);
+    aValue.nType = nRT;
+    aValue.nId = nId;
     ImpContent * pFind = ::std::lower_bound(pContent,
                                             pContent + nEntries,
                                             aValue,
                                             ImpContentLessCompare());
-    return (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == aValue.nTypeAndId);
+    return (pFind != (pContent + nEntries)) && (pFind->nType == aValue.nType) && (pFind->nId == aValue.nId);
 }
 
 
@@ -549,17 +562,18 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
 {
 #ifdef DBG_UTIL
     if( pResUseDump )
-        pResUseDump->erase( (sal_uInt64(sal_uInt32(nRT)) << 32) | nId );
+        pResUseDump->erase( { nRT, nId } );
 #endif
     // search beginning of string
     ImpContent aValue;
-    aValue.nTypeAndId = ((sal_uInt64(sal_uInt32(nRT)) << 32) | nId);
+    aValue.nType = nRT;
+    aValue.nId = nId;
     ImpContent* pEnd = (pContent + nEntries);
     ImpContent* pFind = ::std::lower_bound( pContent,
                                             pEnd,
                                             aValue,
                                             ImpContentLessCompare());
-    if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == aValue.nTypeAndId) )
+    if( pFind && (pFind != pEnd) && (pFind->nType == aValue.nType) && (pFind->nId == aValue.nId) )
     {
         if( nRT == RSC_STRING && bEqual2Content )
         {
@@ -569,9 +583,9 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                 // search beginning of string
                 ImpContent * pFirst = pFind;
                 ImpContent * pLast = pFirst;
-                while( pFirst > pContent && RESOURCE_TYPE((pFirst -1)->nTypeAndId >> 32) == RSC_STRING )
+                while( pFirst > pContent && (pFirst -1)->nType == RSC_STRING )
                     --pFirst;
-                while( pLast < pEnd && RESOURCE_TYPE(pLast->nTypeAndId >> 32) == RSC_STRING )
+                while( pLast < pEnd && pLast->nType == RSC_STRING )
                     ++pLast;
                 nOffCorrection = pFirst->nOffset;
                 sal_uInt32 nSize;
