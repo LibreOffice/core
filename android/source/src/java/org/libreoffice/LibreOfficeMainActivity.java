@@ -52,7 +52,7 @@ import java.util.List;
 /**
  * Main activity of the LibreOffice App. It is started in the UI thread.
  */
-public class LibreOfficeMainActivity extends AppCompatActivity {
+public class LibreOfficeMainActivity extends AppCompatActivity implements SettingsListenerModel.OnSettingsPreferenceChangedListener {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
@@ -109,6 +109,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         Log.w(LOGTAG, "onCreate..");
         super.onCreate(savedInstanceState);
 
+        SettingsListenerModel.getInstance().setListener(this);
         SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mIsExperimentalMode = sPrefs.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
 
@@ -665,6 +666,14 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         boolean isDrawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         boolean isDrawerLocked = mDrawerLayout.getDrawerLockMode(mDrawerList) != DrawerLayout.LOCK_MODE_UNLOCKED;
         return !isDrawerOpen && !isDrawerLocked;
+    }
+
+    @Override
+    public void settingsPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.matches(ENABLE_EXPERIMENTAL_PREFS_KEY)) {
+            Log.d(LOGTAG, "Editing Preference Changed");
+            mIsExperimentalMode = sharedPreferences.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
+        }
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
