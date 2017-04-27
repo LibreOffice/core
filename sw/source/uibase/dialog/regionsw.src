@@ -22,26 +22,6 @@
 #include "globals.hrc"
 #include "helpid.h"
 
-Bitmap RID_BMP_HIDE
-{
-    File = "re01.png";
-};
-
-Bitmap RID_BMP_NO_HIDE
-{
-    File = "re02.png";
-};
-
-Bitmap RID_BMP_PROT_HIDE
-{
-    File = "re03.png";
-};
-
-Bitmap RID_BMP_PROT_NO_HIDE
-{
-    File = "re04.png";
-};
-
 String STR_QUERY_CONNECT
 {
     Text[ en-US ] = "A file connection will delete the contents of the current section. Connect anyway?" ;

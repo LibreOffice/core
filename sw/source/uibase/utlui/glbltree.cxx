@@ -56,6 +56,7 @@
 #include <utlui.hrc>
 #include <comcore.hrc>
 #include <globals.hrc>
+#include "bitmaps.hlst"
 #include "swabstdlg.hxx"
 #include <memory>
 
@@ -666,14 +667,14 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
                 {
                     const SwTOXBase* pBase = pCont->GetTOX();
                     sEntry = pBase->GetTitle();
-                    aImage = Image(Bitmap(SW_RES(RID_BMP_NAVI_INDEX)));
+                    aImage = Image(BitmapEx(RID_BMP_NAVI_INDEX));
                 }
                 break;
                 case GLBLDOC_SECTION:
                 {
                     const SwSection* pSect = pCont->GetSection();
                     sEntry = pSect->GetSectionName();
-                    aImage = Image(Bitmap(SW_RES(RID_BMP_DROP_REGION)));
+                    aImage = Image(BitmapEx(RID_BMP_DROP_REGION));
                 }
                 break;
             }

@@ -43,6 +43,7 @@
 #include "edtwin.hxx"
 #include "helpid.h"
 #include "access.hrc"
+#include "bitmaps.hlst"
 
 // Only for the UpdateRange: Delete the box in which the stacked cursor is positioned.
 #include "pam.hxx"
@@ -76,11 +77,11 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     aEdit->SetSizePixel(aEdit->CalcMinimumSize());
     aPos->SetSizePixel(aPos->LogicToPixel(Size(45, 11), MapMode(MapUnit::MapAppFont)));
 
-    InsertItem(FN_FORMULA_CALC, Image(BitmapEx(SW_RES(RID_BMP_FORMULA_CALC))),
+    InsertItem(FN_FORMULA_CALC, Image(BitmapEx(RID_BMP_FORMULA_CALC)),
                SW_RESSTR(STR_FORMULA_CALC));
-    InsertItem(FN_FORMULA_CANCEL, Image(BitmapEx(SW_RES(RID_BMP_FORMULA_CANCEL))),
+    InsertItem(FN_FORMULA_CANCEL, Image(BitmapEx(RID_BMP_FORMULA_CANCEL)),
                SW_RESSTR(STR_FORMULA_CANCEL));
-    InsertItem(FN_FORMULA_APPLY, Image(BitmapEx(SW_RES(RID_BMP_FORMULA_APPLY))),
+    InsertItem(FN_FORMULA_APPLY, Image(BitmapEx(RID_BMP_FORMULA_APPLY)),
                SW_RESSTR(STR_FORMULA_APPLY));
 
     SetHelpId(FN_FORMULA_CALC, HID_TBX_FORMULA_CALC);

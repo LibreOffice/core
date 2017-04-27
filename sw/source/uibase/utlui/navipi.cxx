@@ -54,6 +54,7 @@
 
 #include "access.hrc"
 #include "globals.hrc"
+#include "bitmaps.hlst"
 
 #include <unomid.h>
 #include <memory>
@@ -1092,20 +1093,20 @@ void SwNavigationPI::SetRegionDropMode(RegionMode nNewMode)
     m_nRegionMode = nNewMode;
     m_pConfig->SetRegionMode( m_nRegionMode );
 
-    sal_uInt16 nImageId = 0;
+    OUString sImageId;
     switch (nNewMode)
     {
         case RegionMode::NONE:
-            nImageId = RID_BMP_DROP_REGION;
+            sImageId = RID_BMP_DROP_REGION;
             break;
         case RegionMode::LINK:
-            nImageId = RID_BMP_DROP_LINK;
+            sImageId = RID_BMP_DROP_LINK;
             break;
         case RegionMode::EMBEDDED:
-            nImageId = RID_BMP_DROP_COPY;
+            sImageId = RID_BMP_DROP_COPY;
             break;
     }
-    m_aContentToolBox->SetItemImage(m_aContentToolBox->GetItemId("dragmode"), Image(BitmapEx(SW_RES(nImageId))));
+    m_aContentToolBox->SetItemImage(m_aContentToolBox->GetItemId("dragmode"), Image(BitmapEx(sImageId)));
 }
 
 void SwNavigationPI::ToggleTree()

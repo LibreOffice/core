@@ -134,36 +134,6 @@ StringArray RID_TABLESTYLEFAMILY
     };
 };
 
-Bitmap BMP_STYLES_FAMILY_PARA
-{
-    File = "sf01.png" ;
-};
-
-Bitmap BMP_STYLES_FAMILY_CHAR
-{
-    File = "sf02.png" ;
-};
-
-Bitmap BMP_STYLES_FAMILY_FRAME
-{
-    File = "sf03.png" ;
-};
-
-Bitmap BMP_STYLES_FAMILY_PAGE
-{
-    File = "sf04.png" ;
-};
-
-Bitmap BMP_STYLES_FAMILY_LIST
-{
-    File = "sf05.png" ;
-};
-
-Bitmap BMP_STYLES_FAMILY_TABLE
-{
-    File = "sf06.png" ;
-};
-
 String STR_ENV_TITLE
 {
     Text [ en-US ] = "Envelope" ;
@@ -345,16 +315,6 @@ String STR_STATSTR_SUMMARY
 String STR_STATSTR_SWGPRTOLENOTIFY
 {
     Text [ en-US ] = "Adapt Objects...";
-};
-
-Bitmap RID_GRAPHIC_REPLACEBMP
-{
-    File = "grafikei.bmp" ;
-};
-
-Bitmap RID_GRAPHIC_ERRORBMP
-{
-    File = "grafikde.bmp" ;
 };
 
 String STR_TABLE_DEFNAME

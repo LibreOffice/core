@@ -67,34 +67,6 @@ String STR_REDLINE_AUTOFMT
         Text [ en-US ] = "AutoCorrect";
 };
 
-Bitmap BMP_REDLINE_INSERTED
-{
-    File = "redline_inserted.png";
-};
-
-Bitmap BMP_REDLINE_DELETED
-{
-    File = "redline_deleted.png";
-};
-
-Bitmap BMP_REDLINE_FORMATED
-{
-    // FIXME
-    File = "redline_inserted.png";
-};
-
-Bitmap BMP_REDLINE_TABLECHG
-{
-    // FIXME
-    File = "redline_inserted.png";
-};
-
-Bitmap BMP_REDLINE_FMTCOLLSET
-{
-    // FIXME
-    File = "redline_inserted.png";
-};
-
 String STR_REDLINE_FORMATED
 {
         Text [ en-US ] = "Formats" ;

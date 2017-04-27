@@ -88,6 +88,7 @@
 
 #include "swabstdlg.hxx"
 #include "globals.hrc"
+#include "bitmaps.hlst"
 #include <unomid.h>
 
 #include "navmgr.hxx"
@@ -1531,52 +1532,52 @@ namespace
 {
     BitmapEx GetBitmapForContentTypeId(ContentTypeId eType)
     {
-        sal_uInt16 nResId(0);
+        OUString sResId;
 
         switch (eType)
         {
             case ContentTypeId::OUTLINE:
-                nResId = RID_BMP_NAVI_OUTLINE;
+                sResId = RID_BMP_NAVI_OUTLINE;
                 break;
             case ContentTypeId::TABLE:
-                nResId = RID_BMP_NAVI_TABLE;
+                sResId = RID_BMP_NAVI_TABLE;
                 break;
             case ContentTypeId::FRAME:
-                nResId = RID_BMP_NAVI_FRAME;
+                sResId = RID_BMP_NAVI_FRAME;
                 break;
             case ContentTypeId::GRAPHIC:
-                nResId = RID_BMP_NAVI_GRAPHIC;
+                sResId = RID_BMP_NAVI_GRAPHIC;
                 break;
             case ContentTypeId::OLE:
-                nResId = RID_BMP_NAVI_OLE;
+                sResId = RID_BMP_NAVI_OLE;
                 break;
             case ContentTypeId::BOOKMARK:
-                nResId = RID_BMP_NAVI_BOOKMARK;
+                sResId = RID_BMP_NAVI_BOOKMARK;
                 break;
             case ContentTypeId::REGION:
-                nResId = RID_BMP_NAVI_REGION;
+                sResId = RID_BMP_NAVI_REGION;
                 break;
             case ContentTypeId::URLFIELD:
-                nResId = RID_BMP_NAVI_URLFIELD;
+                sResId = RID_BMP_NAVI_URLFIELD;
                 break;
             case ContentTypeId::REFERENCE:
-                nResId = RID_BMP_NAVI_REFERENCE;
+                sResId = RID_BMP_NAVI_REFERENCE;
                 break;
             case ContentTypeId::INDEX:
-                nResId = RID_BMP_NAVI_INDEX;
+                sResId = RID_BMP_NAVI_INDEX;
                 break;
             case ContentTypeId::POSTIT:
-                nResId = RID_BMP_NAVI_POSTIT;
+                sResId = RID_BMP_NAVI_POSTIT;
                 break;
             case ContentTypeId::DRAWOBJECT:
-                nResId = RID_BMP_NAVI_DRAWOBJECT;
+                sResId = RID_BMP_NAVI_DRAWOBJECT;
                 break;
             case ContentTypeId::UNKNOWN:
                 SAL_WARN("sw.ui", "ContentTypeId::UNKNOWN has no bitmap preview");
                 break;
         }
 
-        return BitmapEx(SW_RES(nResId));
+        return BitmapEx(sResId);
     };
 }
 

@@ -1,0 +1,106 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_SW_INC_BITMAPS_HRC
+#define INCLUDED_SW_INC_BITMAPS_HRC
+
+#define BMP_PAGE_SHADOW_MASK                    "sw/res/page-shadow-mask.png"
+
+#define BMP_STYLES_FAMILY_PARA                  "sw/res/sf01.png"
+#define BMP_STYLES_FAMILY_CHAR                  "sw/res/sf02.png"
+#define BMP_STYLES_FAMILY_FRAME                 "sw/res/sf03.png"
+#define BMP_STYLES_FAMILY_PAGE                  "sw/res/sf04.png"
+#define BMP_STYLES_FAMILY_LIST                  "sw/res/sf05.png"
+#define BMP_STYLES_FAMILY_TABLE                 "sw/res/sf06.png"
+#define RID_GRAPHIC_REPLACEBMP                  "res/grafikei.png"
+#define RID_GRAPHIC_ERRORBMP                    "res/grafikde.png"
+
+#define BMP_HOR_LEFT_LOWER                      "sw/res/envhl_l.png"
+#define BMP_HOR_LEFT_UPPER                      "sw/res/envhl_u.png"
+#define BMP_HOR_CNTR_LOWER                      "sw/res/envhc_l.png"
+#define BMP_HOR_CNTR_UPPER                      "sw/res/envhc_u.png"
+#define BMP_HOR_RGHT_LOWER                      "sw/res/envhr_l.png"
+#define BMP_HOR_RGHT_UPPER                      "sw/res/envhr_u.png"
+#define BMP_VER_LEFT_LOWER                      "sw/res/envvl_l.png"
+#define BMP_VER_LEFT_UPPER                      "sw/res/envvl_u.png"
+#define BMP_VER_CNTR_LOWER                      "sw/res/envvc_l.png"
+#define BMP_VER_CNTR_UPPER                      "sw/res/envvc_u.png"
+#define BMP_VER_RGHT_LOWER                      "sw/res/envvr_l.png"
+#define BMP_VER_RGHT_UPPER                      "sw/res/envvr_u.png"
+
+#define BMP_REDLINE_INSERTED                    "sw/res/redline_inserted.png"
+#define BMP_REDLINE_DELETED                     "sw/res/redline_deleted.png"
+#define BMP_REDLINE_FORMATED                    "sw/res/redline_inserted.png"
+#define BMP_REDLINE_TABLECHG                    "sw/res/redline_inserted.png"
+#define BMP_REDLINE_FMTCOLLSET                  "sw/res/redline_inserted.png"
+
+#define RID_BMP_COLLAPSE                        "res/sx18002.png"
+#define RID_BMP_EXPAND                          "res/sx18003.png"
+#define RID_BMP_DB                              "sw/res/sx01.png"
+#define RID_BMP_DBTABLE                         "sw/res/sx02.png"
+#define RID_BMP_DBQUERY                         "sw/res/sx03.png"
+#define RID_BMP_VIEWLAYOUT_AUTOMATIC            "sw/res/twopages_10x24.png"
+#define RID_BMP_VIEWLAYOUT_AUTOMATIC_ACTIVE     "sw/res/twopages_a_10x24.png"
+#define RID_BMP_VIEWLAYOUT_BOOKMODE             "sw/res/doublepage_10x22.png"
+#define RID_BMP_VIEWLAYOUT_BOOKMODE_ACTIVE      "sw/res/doublepage_a_10x22.png"
+#define RID_BMP_VIEWLAYOUT_SINGLECOLUMN         "sw/res/emptypage_10x14.png"
+#define RID_BMP_VIEWLAYOUT_SINGLECOLUMN_ACTIVE  "sw/res/emptypage_a_10x14.png"
+#define RID_BMP_PAGE_BREAK                      "sw/res/page_break.png"
+
+#define RID_BMP_FORMULA_CALC                    "sw/res/sc20556.png"
+#define RID_BMP_FORMULA_CANCEL                  "sw/res/sc20557.png"
+#define RID_BMP_FORMULA_APPLY                   "sw/res/sc20558.png"
+
+#define RID_BMP_HIDE                            "sw/res/re01.png"
+#define RID_BMP_NO_HIDE                         "sw/res/re02.png"
+#define RID_BMP_PROT_HIDE                       "sw/res/re03.png"
+#define RID_BMP_PROT_NO_HIDE                    "sw/res/re04.png"
+
+#define BMP_INFO_16                             "res/info_16.png"
+
+#define RID_BMP_RIBBAR_NEXT                     "sw/res/sr20000.png"
+#define RID_BMP_RIBBAR_PREV                     "sw/res/sr20001.png"
+#define RID_BMP_RIBBAR_TBL                      "sw/res/sr20002.png"
+#define RID_BMP_RIBBAR_FRM                      "sw/res/sr20003.png"
+#define RID_BMP_RIBBAR_PGE                      "sw/res/sr20004.png"
+#define RID_BMP_RIBBAR_DRW                      "sw/res/sr20005.png"
+#define RID_BMP_RIBBAR_CTRL                     "sw/res/sr20006.png"
+#define RID_BMP_RIBBAR_REG                      "sw/res/sr20007.png"
+#define RID_BMP_RIBBAR_BKM                      "sw/res/sr20008.png"
+#define RID_BMP_RIBBAR_GRF                      "sw/res/sr20009.png"
+#define RID_BMP_RIBBAR_OLE                      "sw/res/sr20010.png"
+#define RID_BMP_RIBBAR_OUTL                     "sw/res/sr20011.png"
+#define RID_BMP_RIBBAR_SEL                      "sw/res/sr20012.png"
+#define RID_BMP_RIBBAR_FTN                      "sw/res/sr20013.png"
+#define RID_BMP_RIBBAR_MARK                     "sw/res/sr20014.png"
+#define RID_BMP_RIBBAR_POSTIT                   "sw/res/sr20015.png"
+#define RID_BMP_RIBBAR_REP                      "sw/res/sr20016.png"
+#define RID_BMP_RIBBAR_ENTRY                    "sw/res/sr20017.png"
+#define RID_BMP_RIBBAR_FORMULA                  "sw/res/sr20018.png"
+#define RID_BMP_RIBBAR_ERROR                    "sw/res/sr20019.png"
+
+#define RID_BMP_NAVI_OUTLINE                    "sw/res/nc20000.png"
+#define RID_BMP_NAVI_TABLE                      "sw/res/nc20001.png"
+#define RID_BMP_NAVI_FRAME                      "sw/res/nc20002.png"
+#define RID_BMP_NAVI_GRAPHIC                    "sw/res/nc20003.png"
+#define RID_BMP_NAVI_OLE                        "sw/res/nc20004.png"
+#define RID_BMP_NAVI_BOOKMARK                   "sw/res/nc20005.png"
+#define RID_BMP_NAVI_REGION                     "sw/res/nc20006.png"
+#define RID_BMP_NAVI_URLFIELD                   "sw/res/nc20007.png"
+#define RID_BMP_NAVI_REFERENCE                  "sw/res/nc20008.png"
+#define RID_BMP_NAVI_INDEX                      "sw/res/nc20009.png"
+#define RID_BMP_NAVI_POSTIT                     "sw/res/nc20010.png"
+#define RID_BMP_NAVI_DRAWOBJECT                 "sw/res/nc20011.png"
+#define RID_BMP_DROP_REGION                     "sw/res/sc20235.png"
+#define RID_BMP_DROP_LINK                       "sw/res/sc20238.png"
+#define RID_BMP_DROP_COPY                       "sw/res/sc20239.png"
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

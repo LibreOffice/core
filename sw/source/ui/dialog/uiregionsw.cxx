@@ -57,6 +57,7 @@
 #include <../../uibase/dialog/regionsw.hrc>
 #include <comcore.hrc>
 #include <globals.hrc>
+#include "bitmaps.hlst"
 #include <sfx2/bindings.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
@@ -72,8 +73,8 @@ namespace {
 Image BuildBitmap(bool bProtect, bool bHidden)
 {
     if (bProtect)
-        return Image(BitmapEx(SW_RES(bHidden ? RID_BMP_PROT_HIDE : RID_BMP_PROT_NO_HIDE)));
-    return Image(BitmapEx(SW_RES(bHidden ? RID_BMP_HIDE : RID_BMP_NO_HIDE)));
+        return Image(BitmapEx(bHidden ? OUString(RID_BMP_PROT_HIDE) : OUString(RID_BMP_PROT_NO_HIDE)));
+    return Image(BitmapEx(bHidden ? OUString(RID_BMP_HIDE) : OUString(RID_BMP_NO_HIDE)));
 }
 
 }

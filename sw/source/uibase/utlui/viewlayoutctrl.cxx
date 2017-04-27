@@ -24,6 +24,7 @@
 #include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <utlui.hrc>
+#include "bitmaps.hlst"
 #include <swtypes.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
@@ -45,12 +46,12 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
 {
     mpImpl->mnState = 1;
 
-    mpImpl->maImageSingleColumn         = Image(BitmapEx(SW_RES(RID_BMP_VIEWLAYOUT_SINGLECOLUMN)));
-    mpImpl->maImageSingleColumn_Active  = Image(BitmapEx(SW_RES(RID_BMP_VIEWLAYOUT_SINGLECOLUMN_ACTIVE)));
-    mpImpl->maImageAutomatic            = Image(BitmapEx(SW_RES(RID_BMP_VIEWLAYOUT_AUTOMATIC)));
-    mpImpl->maImageAutomatic_Active     = Image(BitmapEx(SW_RES(RID_BMP_VIEWLAYOUT_AUTOMATIC_ACTIVE)));
-    mpImpl->maImageBookMode             = Image(BitmapEx(SW_RES(RID_BMP_VIEWLAYOUT_BOOKMODE)));
-    mpImpl->maImageBookMode_Active      = Image(BitmapEx(SW_RES(RID_BMP_VIEWLAYOUT_BOOKMODE_ACTIVE)));
+    mpImpl->maImageSingleColumn         = Image(BitmapEx(RID_BMP_VIEWLAYOUT_SINGLECOLUMN));
+    mpImpl->maImageSingleColumn_Active  = Image(BitmapEx(RID_BMP_VIEWLAYOUT_SINGLECOLUMN_ACTIVE));
+    mpImpl->maImageAutomatic            = Image(BitmapEx(RID_BMP_VIEWLAYOUT_AUTOMATIC));
+    mpImpl->maImageAutomatic_Active     = Image(BitmapEx(RID_BMP_VIEWLAYOUT_AUTOMATIC_ACTIVE));
+    mpImpl->maImageBookMode             = Image(BitmapEx(RID_BMP_VIEWLAYOUT_BOOKMODE));
+    mpImpl->maImageBookMode_Active      = Image(BitmapEx(RID_BMP_VIEWLAYOUT_BOOKMODE_ACTIVE));
 }
 
 SwViewLayoutControl::~SwViewLayoutControl()

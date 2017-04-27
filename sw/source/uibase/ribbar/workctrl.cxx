@@ -48,6 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include "bitmaps.hlst"
 
 // Size check
 #define NAVI_ENTRIES 20
@@ -181,7 +182,7 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_NEXT
 };
 
-static sal_uInt16 aNavigationImgIds[ NAVI_ENTRIES ] =
+static OUStringLiteral aNavigationImgIds[ NAVI_ENTRIES ] =
 {
     // -- first line
     RID_BMP_RIBBAR_TBL,
@@ -265,7 +266,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
                 sText = SW_RESSTR(STR_IMGBTN_PGE_DOWN);
         }
 
-        m_pToolBox->InsertItem(nNaviId, Image(BitmapEx(SW_RES(aNavigationImgIds[i]))),
+        m_pToolBox->InsertItem(nNaviId, Image(BitmapEx(aNavigationImgIds[i])),
                               sText, nTbxBits);
         m_pToolBox->SetHelpId(nNaviId, aNavigationHelpIds[i]);
     }

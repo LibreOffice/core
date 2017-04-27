@@ -22,6 +22,7 @@
 #include <mmconfigitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
+#include "bitmaps.hlst"
 #include <swtypes.hxx>
 
 #include <rtl/ref.hxx>
@@ -458,7 +459,7 @@ void  SwSendMailDialog::IterateMails()
     {
         if(!SwMailMergeHelper::CheckMailAddress( pCurrentMailDescriptor->sEMail ))
         {
-            Image aInsertImg(BitmapEx(SW_RES(RID_BMP_FORMULA_CANCEL)));
+            Image aInsertImg(BitmapEx(RID_BMP_FORMULA_CANCEL));
 
             OUString sMessage = m_sSendingTo;
             OUString sTmp(pCurrentMailDescriptor->sEMail);
@@ -554,7 +555,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
         Application::PostUserEvent( LINK( this, SwSendMailDialog,
                                           StopSendMails ), this, true );
     }
-    Image aInsertImg(BitmapEx(SW_RES(bResult ? RID_BMP_FORMULA_APPLY : RID_BMP_FORMULA_CANCEL)));
+    Image aInsertImg(BitmapEx(bResult ? OUString(RID_BMP_FORMULA_APPLY) : OUString(RID_BMP_FORMULA_CANCEL)));
 
     OUString sMessage = m_sSendingTo;
     OUString sTmp(xMessage->getRecipients()[0]);

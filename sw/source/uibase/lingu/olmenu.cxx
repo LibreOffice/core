@@ -29,6 +29,7 @@
 #include "langhelper.hxx"
 #include "ndtxt.hxx"
 #include "olmenu.hrc"
+#include "bitmaps.hlst"
 #include "olmenu.hxx"
 #include "swabstdlg.hxx"
 #include "swmodule.hxx"
@@ -453,7 +454,7 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->InsertSeparator(OString(), nPos++);
     m_xPopupMenu->InsertItem(MN_SHORT_COMMENT, aMessageText, MenuItemBits::NOSELECT, OString(), nPos++);
     if (bUseImagesInMenus)
-        m_xPopupMenu->SetItemImage(MN_SHORT_COMMENT, Image(BitmapEx(SW_RES(BMP_INFO_16))));
+        m_xPopupMenu->SetItemImage(MN_SHORT_COMMENT, Image(BitmapEx(BMP_INFO_16)));
 
     // Add an item to show detailed infos if the FullCommentURL property is defined
     beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
