@@ -570,7 +570,7 @@ Dim iArgNr As Integer
 	End If
 	
 &apos;Execute
-Dim oDatabase As Object, vBookmark As Variant
+Dim oDatabase As Object, vBookmark As Variant, oObject As Object
 	_PropertyGet = EMPTY
 
 	Select Case UCase(psProperty)
