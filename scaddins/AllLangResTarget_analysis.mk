@@ -35,8 +35,4 @@ $(eval $(call gb_SrsTarget_add_files,scaddins/analysis,\
     scaddins/source/analysis/analysis_funcnames.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,scaddins/analysis,\
-    scaddins/source/analysis/analysis_deffuncnames.src \
-))
-
 # vim: set noet sw=4 ts=4:

@@ -92,16 +92,8 @@ void AnalysisAddIn::InitData()
     pResMgr = ResMgr::CreateResMgr("analysis", LanguageTag(aFuncLoc));
 
     delete pFD;
-
-    if( pResMgr )
-    {
-        pFD = new FuncDataList;
-        InitFuncDataList( *pFD, *pResMgr );
-    }
-    else
-    {
-        pFD = nullptr;
-    }
+    pFD = new FuncDataList;
+    InitFuncDataList(*pFD);
 
     delete pDefLocales;
     pDefLocales = nullptr;
