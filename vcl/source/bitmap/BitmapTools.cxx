@@ -47,19 +47,6 @@ BitmapEx loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
     return aBitmapEx;
 }
 
-BitmapEx loadFromResource(const ResId& rResId, const ImageLoadFlags eFlags)
-{
-    ResMgr* pResMgr = nullptr;
-
-    ResMgr::GetResourceSkipHeader(rResId.SetRT( RSC_BITMAP ), &pResMgr);
-    pResMgr->ReadLong();
-    pResMgr->ReadLong();
-
-    const OUString aFileName(pResMgr->ReadString());
-
-    return loadFromName(aFileName, eFlags);
-}
-
 void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)
 {
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
