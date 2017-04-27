@@ -16,6 +16,24 @@
       "revId": "d7c6c0ca02116a6d76778996d88af83443e9ada0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ca30b90a",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-04-27T18:45:13Z",
+      "side": 1,
+      "message": "Yes, a typo, indeed. Code is correct, but comment is not.\u003ca:ext ...\u003e in the bugdoc has cx\u003d0, not cy\u003d0. I\u0027ll fix the comment on master at least.",
+      "parentUuid": "5a3905b3_8a9311fa",
+      "revId": "d7c6c0ca02116a6d76778996d88af83443e9ada0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
