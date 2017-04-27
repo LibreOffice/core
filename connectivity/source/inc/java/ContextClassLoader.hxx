@@ -24,7 +24,7 @@
 
 namespace comphelper
 {
-    class ResourceBasedEventLogger;
+    class EventLogger;
 }
 
 
@@ -51,7 +51,7 @@ namespace connectivity { namespace jdbc
         ContextClassLoaderScope(
             JNIEnv& environment,
             const GlobalRef< jobject >& newClassLoader,
-            const ::comphelper::ResourceBasedEventLogger& _rLoggerForErrors,
+            const ::comphelper::EventLogger& _rLoggerForErrors,
             const css::uno::Reference< css::uno::XInterface >& _rxErrorContext
         );
 

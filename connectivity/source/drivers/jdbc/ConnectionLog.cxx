@@ -42,7 +42,7 @@ namespace connectivity { namespace java { namespace sql {
         }
     }
 
-    ConnectionLog::ConnectionLog( const ::comphelper::ResourceBasedEventLogger& _rDriverLog )
+    ConnectionLog::ConnectionLog( const ::comphelper::EventLogger& _rDriverLog )
         :ConnectionLog_Base( _rDriverLog )
         ,m_nObjectID( lcl_getFreeID( CONNECTION ) )
     {

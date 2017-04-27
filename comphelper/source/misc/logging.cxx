@@ -22,9 +22,6 @@
 
 #include <com/sun/star/logging/LoggerPool.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
-#include <com/sun/star/resource/OfficeResourceLoader.hpp>
-#include <com/sun/star/resource/XResourceBundle.hpp>
-#include <com/sun/star/resource/XResourceBundleLoader.hpp>
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -32,8 +29,6 @@
 
 namespace comphelper
 {
-
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::logging::XLoggerPool;
@@ -41,8 +36,6 @@ namespace comphelper
     using ::com::sun::star::logging::XLogger;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::resource::XResourceBundle;
-    using ::com::sun::star::resource::XResourceBundleLoader;
 
     class EventLogger_Impl
     {
@@ -171,12 +164,6 @@ namespace comphelper
         }
 
         return false;
-    }
-
-    ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext,
-        const sal_Char* _pAsciiLoggerName )
-        :EventLogger( _rxContext, _pAsciiLoggerName )
-    {
     }
 } // namespace comphelper
 

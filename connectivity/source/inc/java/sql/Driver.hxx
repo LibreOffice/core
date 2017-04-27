@@ -35,7 +35,7 @@ namespace connectivity
     class java_sql_Driver : public ::cppu::WeakImplHelper< css::sdbc::XDriver,css::lang::XServiceInfo>
     {
         css::uno::Reference<css::uno::XComponentContext> m_aContext;
-        ::comphelper::ResourceBasedEventLogger  m_aLogger;
+        ::comphelper::EventLogger m_aLogger;
 
     protected:
         virtual ~java_sql_Driver() override;
@@ -61,7 +61,7 @@ namespace connectivity
         virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
         const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
-        const ::comphelper::ResourceBasedEventLogger&   getLogger() const { return m_aLogger; }
+        const ::comphelper::EventLogger&   getLogger() const { return m_aLogger; }
     };
 
 }

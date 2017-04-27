@@ -35,7 +35,7 @@
 
 namespace comphelper
 {
-    class ResourceBasedEventLogger;
+    class EventLogger;
 }
 
 namespace connectivity
@@ -97,7 +97,7 @@ namespace connectivity
 
         static void ThrowSQLException(JNIEnv * pEnv,const css::uno::Reference< css::uno::XInterface> & _rContext);
         static void ThrowLoggedSQLException(
-            const ::comphelper::ResourceBasedEventLogger& _rLogger,
+            const ::comphelper::EventLogger& _rLogger,
             JNIEnv* pEnvironment,
             const css::uno::Reference< css::uno::XInterface >& _rxContext
         );

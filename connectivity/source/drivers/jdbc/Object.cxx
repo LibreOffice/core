@@ -198,7 +198,7 @@ namespace
 }
 
 
-void java_lang_Object::ThrowLoggedSQLException( const ::comphelper::ResourceBasedEventLogger& _rLogger, JNIEnv* _pEnvironment,
+void java_lang_Object::ThrowLoggedSQLException( const ::comphelper::EventLogger& _rLogger, JNIEnv* _pEnvironment,
     const Reference< XInterface >& _rxContext )
 {
     SQLException aException;

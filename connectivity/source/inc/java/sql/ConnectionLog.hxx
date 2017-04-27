@@ -58,7 +58,7 @@ namespace connectivity
 
 namespace connectivity { namespace java { namespace sql {
 
-    typedef ::comphelper::ResourceBasedEventLogger  ConnectionLog_Base;
+    typedef ::comphelper::EventLogger ConnectionLog_Base;
     class ConnectionLog : public ConnectionLog_Base
     {
     public:
@@ -76,7 +76,7 @@ namespace connectivity { namespace java { namespace sql {
 
     public:
         /// will construct an instance of ObjectType CONNECTION
-        ConnectionLog( const ::comphelper::ResourceBasedEventLogger& _rDriverLog );
+        ConnectionLog( const ::comphelper::EventLogger & _rDriverLog );
         /// will create an instance with the same object ID / ObjectType as a given source instance
         ConnectionLog( const ConnectionLog& _rSourceLog );
         /// will create an instance of arbitrary ObjectType
