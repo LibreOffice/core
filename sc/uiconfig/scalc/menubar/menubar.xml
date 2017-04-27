@@ -128,6 +128,7 @@
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SwitchControlDesignMode"/>
             <menu:menuitem menu:id=".uno:EditDoc"/>
         </menu:menupopup>
     </menu:menu>
@@ -418,6 +419,7 @@
             <menu:menu menu:id=".uno:FormatImageMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Crop"/>
+                    <menu:menuitem menu:id=".uno:OriginalSize"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:ExternalEdit"/>
                     <menu:menuitem menu:id=".uno:ChangePicture"/>
