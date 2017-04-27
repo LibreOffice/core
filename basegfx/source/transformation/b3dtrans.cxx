@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/b3dtrans.hxx>
-
 #include <osl/diagnose.h>
+#include <basegfx/transformation/b3dtrans.hxx>
 
 // B3dTransformationSet --------------------------------------------------------
 // Transformations for all 3D output

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVX_SCENE3D_HXX
 #define INCLUDED_SVX_SCENE3D_HXX
 
+#include <basegfx/transformation/b3dtrans.hxx>
 #include <svx/camera3d.hxx>
-#include <tools/b3dtrans.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>
 
