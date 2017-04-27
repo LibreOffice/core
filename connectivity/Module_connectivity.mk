@@ -34,7 +34,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 
 $(eval $(call gb_Module_add_l10n_targets,connectivity,\
 	AllLangResTarget_cnr \
-	AllLangResTarget_sdbcl \
 	AllLangResTarget_sdberr \
 ))
 

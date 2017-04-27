@@ -1087,7 +1087,6 @@ $(eval $(call gb_Helper_register_resources,\
 	sc \
 	scn \
 	sd \
-	sdbcl \
 	sdberr \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	sfx \

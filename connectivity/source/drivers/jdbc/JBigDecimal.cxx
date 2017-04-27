@@ -19,7 +19,7 @@
 
 #include "java/math/BigDecimal.hxx"
 #include "java/tools.hxx"
-#include "resource/jdbc_log.hrc"
+#include "resource/conn_shared_res.hrc"
 using namespace connectivity;
 
 //************ Class: java.lang.Boolean

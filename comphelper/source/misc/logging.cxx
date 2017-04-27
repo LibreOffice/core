@@ -191,51 +191,6 @@ namespace comphelper
         }
     };
 
-
-    bool    lcl_loadBundle_nothrow( Reference< XComponentContext > const & _rContext, ResourceBasedEventLogger_Data& _rLoggerData )
-    {
-        if ( _rLoggerData.bBundleLoaded )
-            return _rLoggerData.xBundle.is();
-
-        // no matter what happens below, don't attempt creation ever again
-        _rLoggerData.bBundleLoaded = true;
-
-        try
-        {
-            Reference< XResourceBundleLoader > xLoader(
-                css::resource::OfficeResourceLoader::get(
-                    _rContext ) );
-            _rLoggerData.xBundle.set( xLoader->loadBundle_Default( _rLoggerData.sBundleBaseName ), UNO_QUERY_THROW );
-        }
-        catch( const Exception& e )
-        {
-            (void)e;
-            OSL_FAIL( "lcl_loadBundle_nothrow: caught an exception!" );
-        }
-
-        return _rLoggerData.xBundle.is();
-    }
-
-
-    OUString lcl_loadString_nothrow( const Reference< XResourceBundle >& _rxBundle, const sal_Int32 _nMessageResID )
-    {
-        OSL_PRECOND( _rxBundle.is(), "lcl_loadString_nothrow: this will crash!" );
-        OUString sMessage;
-        try
-        {
-            OUStringBuffer aBuffer;
-            aBuffer.append( "string:" );
-            aBuffer.append( _nMessageResID );
-            OSL_VERIFY( _rxBundle->getDirectElement( aBuffer.makeStringAndClear() ) >>= sMessage );
-        }
-        catch( const Exception& e )
-        {
-            (void)e;
-            OSL_FAIL( "lcl_loadString_nothrow: caught an exception!" );
-        }
-        return sMessage;
-    }
-
     ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pResourceBundleBaseName,
         const sal_Char* _pAsciiLoggerName )
         :EventLogger( _rxContext, _pAsciiLoggerName )
@@ -243,27 +198,6 @@ namespace comphelper
     {
         m_pData->sBundleBaseName = OUString::createFromAscii( _pResourceBundleBaseName );
     }
-
-
-    OUString ResourceBasedEventLogger::impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const
-    {
-        OUString sMessage;
-        if ( lcl_loadBundle_nothrow( m_pImpl->getContext(), *m_pData ) )
-            sMessage = lcl_loadString_nothrow( m_pData->xBundle, _nMessageResID );
-        if ( sMessage.isEmpty() )
-        {
-            OUStringBuffer aBuffer;
-            aBuffer.append( "<invalid event resource: '" );
-            aBuffer.append( m_pData->sBundleBaseName );
-            aBuffer.append( ":" );
-            aBuffer.append( _nMessageResID );
-            aBuffer.append( "'>" );
-            sMessage = aBuffer.makeStringAndClear();
-        }
-        return sMessage;
-    }
-
-
 } // namespace comphelper
 
 

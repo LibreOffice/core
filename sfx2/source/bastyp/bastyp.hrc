@@ -24,6 +24,5 @@
 #define RC_BASTYP                                               RID_SFX_BASTYP_START
 #define STR_FILTER_NOT_INSTALLED                (RC_BASTYP +  9)
 #define STR_FILTER_CONSULT_SERVICE              (RC_BASTYP + 10)
-#define STR_HTML_GENERATOR                              (RC_BASTYP + 30)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

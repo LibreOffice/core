@@ -504,10 +504,10 @@ namespace comphelper
         //- resource IDs
 
         /// logs a given message, without any arguments, or source class/method names
-        bool        log( const sal_Int32 _nLogLevel, const sal_Int32 _nMessageResID ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& rMessage ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, nullptr, nullptr, impl_loadStringMessage_nothrow( _nMessageResID ) );
+                return impl_log(_nLogLevel, nullptr, nullptr, rMessage);
             return false;
         }
 
@@ -519,20 +519,20 @@ namespace comphelper
             is searched in the message string, and replaced with the argument string.
         */
         template< typename ARGTYPE1 >
-        bool        log( const sal_Int32 _nLogLevel, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& rMessage, ARGTYPE1 _argument1 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, nullptr, nullptr, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, nullptr, nullptr, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ) );
             return false;
         }
 
         /// logs a given message, replacing 2 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2 >
-        bool        log( const sal_Int32 _nLogLevel, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, nullptr, nullptr, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, nullptr, nullptr, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ) );
             return false;
@@ -540,10 +540,10 @@ namespace comphelper
 
         /// logs a given message, replacing 3 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3 >
-        bool        log( const sal_Int32 _nLogLevel, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, nullptr, nullptr, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, nullptr, nullptr, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ) );
@@ -552,10 +552,10 @@ namespace comphelper
 
         /// logs a given message, replacing 4 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4 >
-        bool        log( const sal_Int32 _nLogLevel, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, nullptr, nullptr, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, nullptr, nullptr, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -565,10 +565,10 @@ namespace comphelper
 
         /// logs a given message, replacing 5 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4, typename ARGTYPE5 >
-        bool        log( const sal_Int32 _nLogLevel, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, nullptr, nullptr, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, nullptr, nullptr, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -579,10 +579,10 @@ namespace comphelper
 
         /// logs a given message, replacing 6 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4, typename ARGTYPE5, typename ARGTYPE6 >
-        bool        log( const sal_Int32 _nLogLevel, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, nullptr, nullptr, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, nullptr, nullptr, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -599,20 +599,20 @@ namespace comphelper
         /** logs a given ASCII message, replacing a placeholder in the message with an argument
         */
         template< typename ARGTYPE1 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& rMessage, ARGTYPE1 _argument1 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ) );
             return false;
         }
 
         /// logs a given ASCII message, replacing 2 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ) );
             return false;
@@ -620,10 +620,10 @@ namespace comphelper
 
         /// logs a given ASCII message, replacing 3 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ) );
@@ -632,10 +632,10 @@ namespace comphelper
 
         /// logs a given ASCII message, replacing 4 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -645,10 +645,10 @@ namespace comphelper
 
         /// logs a given ASCII message, replacing 5 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4, typename ARGTYPE5 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -659,10 +659,10 @@ namespace comphelper
 
         /// logs a given ASCII message, replacing 6 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4, typename ARGTYPE5, typename ARGTYPE6 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Int32 _nMessageResID, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, impl_loadStringMessage_nothrow( _nMessageResID ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, rMessage,
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -671,9 +671,6 @@ namespace comphelper
                     OptionalString( log::convert::convertLogArgToString( _argument6 ) ) );
             return false;
         }
-
-    private:
-        OUString impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const;
     };
 
 

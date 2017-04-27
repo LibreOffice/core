@@ -26,11 +26,12 @@
 #include "java/tools.hxx"
 #include <connectivity/dbexception.hxx>
 #include <jvmfwk/framework.hxx>
-#include "resource/jdbc_log.hrc"
+#include "resource/conn_shared_res.hrc"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include "strings.hxx"
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;

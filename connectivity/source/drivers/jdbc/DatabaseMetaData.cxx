@@ -27,7 +27,8 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <comphelper/types.hxx>
 #include "TPrivilegesResultSet.hxx"
-#include "resource/jdbc_log.hrc"
+#include "resource/conn_shared_res.hrc"
+#include "strings.hxx"
 
 using namespace ::comphelper;
 

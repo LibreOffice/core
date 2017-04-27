@@ -36,7 +36,7 @@
 #include <connectivity/dbexception.hxx>
 #include "java/util/Property.hxx"
 #include "java/LocalRef.hxx"
-#include "resource/jdbc_log.hrc"
+#include "resource/conn_shared_res.hrc"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <jvmaccess/classpath.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -44,6 +44,7 @@
 #include <jni.h>
 #include "resource/common_res.hrc"
 #include <unotools/confignode.hxx>
+#include "strings.hxx"
 
 #include <list>
 #include <memory>

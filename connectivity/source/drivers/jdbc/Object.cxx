@@ -26,7 +26,8 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include "java/LocalRef.hxx"
-#include "resource/jdbc_log.hrc"
+#include "resource/conn_shared_res.hrc"
+#include "strings.hxx"
 
 #include <comphelper/logging.hxx>
 

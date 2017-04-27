@@ -46,6 +46,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <sax/tools/converter.hxx>
+#include "strings.hxx"
 
 using namespace ::com::sun::star;
 
@@ -126,7 +127,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     }
 
     // Who we are
-    OUString sGenerator( SfxResId(STR_HTML_GENERATOR).toString() );
+    OUString sGenerator(STR_HTML_GENERATOR);
     OUString os( "$_OS" );
     ::rtl::Bootstrap::expandMacros(os);
     sGenerator = sGenerator.replaceFirst( "%1", os );
