@@ -30,7 +30,7 @@
 #include <sal/macros.h>
 #include <osl/time.h>
 #include <tools/urlobj.hxx>
-
+#include "bitmaps.hlst"
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
@@ -112,10 +112,7 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 3, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
         InsertRoadmapItem( 4, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
-        // Well, that's messy, but the
-        // BMP_PRESENTATION_MINIMIZER from sd module cannot be used here directly
-        // that UNO wizard dialog should be converted to ui
-        OUString sURL( "private:graphicrepository/sd/res/minimize_presi_80.png" );
+        OUString sURL("private:graphicrepository/" + OUString(BMP_PRESENTATION_MINIMIZER));
 
         xPropertySet->setPropertyValue( "ImageURL", Any( sURL ) );
         xPropertySet->setPropertyValue( "Activated", Any( true ) );

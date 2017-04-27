@@ -177,10 +177,6 @@
 #define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_BOTTOM_NORMAL       "sd/res/presenterscreen-ScrollbarThumbBottomNormal.png"
 #define BMP_PRESENTERSCREEN_BUTTON_PLUS_DISABLED                "sd/res/presenterscreen-ButtonPlusDisabled.png"
 
-// This definition is not used directly.
-// It is only here to be shipped in images.zip.
-// The bitmap itself is used from sdext/source/minimizer.
-#define BMP_PRESENTATION_MINIMIZER                              "sd/res/minimize_presi_80.png"
 #define BMP_EMBEDDED                                            "sd/res/nv08.png" 
 #define BMP_LINK                                                "sd/res/nv09.png" 
 #define BMP_HYPERLINK                                           "sd/res/nv010.png" 
