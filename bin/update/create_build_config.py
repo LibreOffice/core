@@ -17,7 +17,7 @@ def update_all_url_entries(data, **kwargs):
         for partial in data['partials']:
             partial['file']['url'] = replace_variables_in_string(partial['file']['url'], **kwargs)
 
-            for lang, lang_file in partial['languages'].iter():
+            for lang, lang_file in partial['languages'].items():
                 lang_file['url'] = replace_variables_in_string(lang_file['url'], **kwargs)
 
 def main(argv):
