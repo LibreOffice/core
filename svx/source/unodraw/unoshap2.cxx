@@ -1691,6 +1691,9 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             // will free the involved EditEngine and VirtualDevice.
             pTarget->mxCustomShapeEngine.set(nullptr);
         }
+        // since this case is only for the application cores
+        // we should return from this function now
+        return;
     }
 
     bool bCustomShapeGeometry = pObject && aPropertyName == "CustomShapeGeometry";
