@@ -1280,9 +1280,12 @@ namespace cppcanvas
 
                                 EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >( aObjects[ formatId & 0xff ] );
                                 css::rendering::FontRequest aFontRequest;
-                                LanguageTag aLanguageTag( static_cast< LanguageType >( stringFormat->language ) );
-                                aFontRequest.Locale = aLanguageTag.getLocale( false );
-                                SAL_INFO("cppcanvas.emf", "EMF+\t\t Font locale, Country:" << aLanguageTag.getCountry() <<" Language:" << aLanguageTag.getLanguage() );
+                                if (stringFormat)
+                                {
+                                    LanguageTag aLanguageTag( static_cast< LanguageType >( stringFormat->language ) );
+                                    aFontRequest.Locale = aLanguageTag.getLocale( false );
+                                    SAL_INFO("cppcanvas.emf", "EMF+\t\t Font locale, Country:" << aLanguageTag.getCountry() <<" Language:" << aLanguageTag.getLanguage() );
+                                }
                                 SAL_INFO("cppcanvas.emf", "EMF+\t\t TODO Use all string formatting attributes during drawing");
 
                                 double cellSize = setFont (aFontRequest, flags & 0xff, rFactoryParms, rState);
