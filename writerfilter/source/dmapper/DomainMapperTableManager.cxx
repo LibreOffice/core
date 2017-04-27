@@ -376,7 +376,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TblPrBase_bidiVisual:
             {
                 TablePropertyMapPtr pPropMap(new TablePropertyMap());
-                pPropMap->Insert(PROP_WRITING_MODE, uno::makeAny(nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB));
+                pPropMap->Insert(PROP_WRITING_MODE, uno::makeAny(sal_Int16(nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB)));
                 insertTableProps(pPropMap);
                 break;
             }
