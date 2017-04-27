@@ -62,7 +62,6 @@ class RscTypCont
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel or
     OString             aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
-    OString             aSearchPath;        // search path for bitmap, icon and pointer
     sal_uInt32          nUniqueId;          // unique id for system resources
     sal_uLong           nFilePos;           // position in file (MTF)
     sal_uInt32          nPMId;              // unique id for PR-resource file
@@ -97,7 +96,7 @@ public:
     CommandFlags        nFlags;
     std::map<sal_uInt64, sal_uLong> aIdTranslator; // map resources types and ids to an id (under PM9 or to a file position (MTF)
 
-    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const OString& rSearchPath, CommandFlags nFlags );
+    RscTypCont( RscError *, RSCBYTEORDER_TYPE, CommandFlags nFlags );
     ~RscTypCont();
 
     Atom AddLanguage( const char* );
@@ -113,7 +112,6 @@ public:
                           {
                               nSourceCharSet = aCharSet;
                           }
-    const OString&    GetSearchPath() const { return aSearchPath; }
                       // deletes all resource objects of this file
     void              Delete( RscFileTab::Index lFileKey );
     sal_uInt32        PutSysName( RESOURCE_TYPE nRscTyp, char * pName );

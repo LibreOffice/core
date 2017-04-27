@@ -36,11 +36,9 @@
 
 RscTypCont::RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
-                          const OString& rSearchPath,
                           CommandFlags nFlagsP )
     : nSourceCharSet( RTL_TEXTENCODING_UTF8 )
     , nByteOrder( nOrder )
-    , aSearchPath( rSearchPath )
     , nUniqueId(256)
     , nFilePos( 0 )
     , nPMId(RSC_VERSIONCONTROL + RESOURCE_TYPE(1)) // at least one more

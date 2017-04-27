@@ -53,7 +53,6 @@ int rsc2_main( int argc, char **argv )
     std::unique_ptr<RscCmdLine> pCmdLine(new RscCmdLine( argc, argv, pErrHdl.get() ));
     std::unique_ptr<RscTypCont> pTypCont(new RscTypCont( pErrHdl.get(),
                                              pCmdLine->nByteOrder,
-                                             pCmdLine->aPath,
                                              pCmdLine->nCommands ));
 
     if( pErrHdl->nErrors )
