@@ -88,42 +88,6 @@ include/comphelper/logging.hxx:260
     _Bool comphelper::EventLogger::log(const int,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
 include/comphelper/logging.hxx:274
     _Bool comphelper::EventLogger::log(const int,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:299
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?) const
-include/comphelper/logging.hxx:309
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:320
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:332
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:345
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:359
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:384
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?) const
-include/comphelper/logging.hxx:394
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:405
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:417
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:430
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:444
-    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:602
-    _Bool comphelper::ResourceBasedEventLogger::logp(const int,const char *,const char *,const int,type-parameter-?-?) const
-include/comphelper/logging.hxx:612
-    _Bool comphelper::ResourceBasedEventLogger::logp(const int,const char *,const char *,const int,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:623
-    _Bool comphelper::ResourceBasedEventLogger::logp(const int,const char *,const char *,const int,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:635
-    _Bool comphelper::ResourceBasedEventLogger::logp(const int,const char *,const char *,const int,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:648
-    _Bool comphelper::ResourceBasedEventLogger::logp(const int,const char *,const char *,const int,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:662
-    _Bool comphelper::ResourceBasedEventLogger::logp(const int,const char *,const char *,const int,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
 include/comphelper/lok.hxx:44
     _Bool isLocalRendering()
 include/comphelper/proparrhlp.hxx:87
