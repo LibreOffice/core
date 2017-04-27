@@ -74,7 +74,7 @@ void SwUndoFormatColl::DoSetFormatColl(SwDoc & rDoc, SwPaM & rPaM)
     // this array.
 
     // does the format still exist?
-    if( rDoc.GetTextFormatColls()->Contains(static_cast<SwTextFormatColl*>(pFormatColl)) )
+    if( SIZE_MAX != rDoc.GetTextFormatColls()->GetPos(static_cast<SwTextFormatColl*>(pFormatColl)) )
     {
         rDoc.SetTextFormatColl(rPaM, static_cast<SwTextFormatColl*>(pFormatColl), mbReset,
                            mbResetListAttrs);
