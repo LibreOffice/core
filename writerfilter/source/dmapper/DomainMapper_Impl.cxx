@@ -918,9 +918,9 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::FRAME )));
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND),
-                rAppendContext.pLastParagraphProperties->GetWrap() >= text::WrapTextMode_NONE
+                rAppendContext.pLastParagraphProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
                 ? rAppendContext.pLastParagraphProperties->GetWrap()
-                : pStyleProperties->GetWrap() >= text::WrapTextMode_NONE
+                : pStyleProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
                   ? pStyleProperties->GetWrap()
                   : text::WrapTextMode_NONE ));
 
