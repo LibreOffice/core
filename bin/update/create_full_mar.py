@@ -12,8 +12,6 @@ from path import UpdaterPath
 
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
 
-def ensure_dir_exist()
-
 def main():
     if len(sys.argv) < 5:
         print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $FILENAMEPREFIX $UPDATE_CONFIG")
