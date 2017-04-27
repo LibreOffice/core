@@ -44,7 +44,7 @@
 #include <svx/xlnwtit.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
-#include <tools/b3dtrans.hxx>
+#include <basegfx/transformation/b3dtrans.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
