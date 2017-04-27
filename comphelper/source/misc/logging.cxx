@@ -175,27 +175,23 @@ namespace comphelper
 
     struct ResourceBasedEventLogger_Data
     {
-        /// the base name of the resource bundle
-        OUString                 sBundleBaseName;
         /// did we already attempt to load the bundle?
         bool                            bBundleLoaded;
         /// the lazily loaded bundle
         Reference< XResourceBundle >    xBundle;
 
         ResourceBasedEventLogger_Data()
-            :sBundleBaseName()
-            ,bBundleLoaded( false )
+            :bBundleLoaded( false )
             ,xBundle()
         {
         }
     };
 
-    ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pResourceBundleBaseName,
+    ResourceBasedEventLogger::ResourceBasedEventLogger( const Reference< XComponentContext >& _rxContext,
         const sal_Char* _pAsciiLoggerName )
         :EventLogger( _rxContext, _pAsciiLoggerName )
         ,m_pData( new ResourceBasedEventLogger_Data )
     {
-        m_pData->sBundleBaseName = OUString::createFromAscii( _pResourceBundleBaseName );
     }
 } // namespace comphelper
 

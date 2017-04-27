@@ -485,9 +485,6 @@ namespace comphelper
         /** creates a resource based event logger
             @param _rxContext
                 the component context for creating new components
-            @param _pResourceBundleBaseName
-                the ASCII base name of the resource bundle to use. Will be used
-                in conjunction with XResourceBundleLoader::loadResource.
             @param _pAsciiLoggerName
                 the ASCII name of the logger to work with. If NULL, the office-wide
                 default logger will be used.
@@ -495,10 +492,8 @@ namespace comphelper
         */
         ResourceBasedEventLogger(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            const sal_Char* _pResourceBundleBaseName,
             const sal_Char* _pAsciiLoggerName
         );
-
 
         //- XLogger::log equivalents/wrappers
         //- resource IDs

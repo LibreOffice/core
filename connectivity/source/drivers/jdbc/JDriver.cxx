@@ -43,7 +43,7 @@ using namespace ::com::sun::star::lang;
 
 java_sql_Driver::java_sql_Driver(const Reference< css::uno::XComponentContext >& _rxContext)
     :m_aContext( _rxContext )
-    ,m_aLogger( _rxContext, "sdbcl", "org.openoffice.sdbc.jdbcBridge" )
+    ,m_aLogger( _rxContext, "org.openoffice.sdbc.jdbcBridge" )
 {
 }
 
