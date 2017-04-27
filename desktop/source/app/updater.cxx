@@ -233,6 +233,7 @@ void update()
 
 void CreateValidUpdateDir(const update_info& update_info)
 {
+    Updater::log(OString("Create Update Dir"));
     OUString aInstallDir("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aInstallDir);
     OUString aInstallPath = getPathFromURL(aInstallDir);
@@ -255,6 +256,7 @@ void CreateValidUpdateDir(const update_info& update_info)
     {
         // TODO: remove the update directory
         SAL_WARN("desktop.updater", "failed to update");
+        Updater::log(OUString("failed to create update dir"));
     }
     else
     {
@@ -471,6 +473,7 @@ size_t WriteCallbackFile(void *ptr, size_t size,
 
 std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
 {
+    Updater::log("Download: " + rURL);
     CURL* curl = curl_easy_init();
 
     if (!curl)
@@ -606,7 +609,7 @@ void update_checker()
     OUString aDownloadCheckURL = aDownloadCheckBaseURL + "update/check/1/" + aProductName +
         "/" + aBuildID + "/" + aBuildTarget + "/" + "/" + aChannel;
     OString aURL = OUStringToOString(aDownloadCheckURL, RTL_TEXTENCODING_UTF8);
-
+    Updater::log("Update check: " + aURL);
 
     try
     {
@@ -620,10 +623,16 @@ void update_checker()
                 // No update currently available
                 // add entry to updating.log with the message
                 SAL_WARN("desktop.updater", "Message received from the updater: " << aUpdateInfo.aMessage);
+                Updater::log("Server response: " + aUpdateInfo.aMessage);
             }
             else
             {
                 download_file(aUpdateInfo.aUpdateFile.aURL, aUpdateInfo.aUpdateFile.nSize, aUpdateInfo.aUpdateFile.aHash, "update.mar");
+                for (auto& lang_update : aUpdateInfo.aLanguageFiles)
+                {
+                    OUString aFileName = "update_" + lang_update.aLangCode + ".mar";
+                    download_file(lang_update.aUpdateFile.aURL, lang_update.aUpdateFile.nSize, lang_update.aUpdateFile.aHash, aFileName);
+                }
                 CreateValidUpdateDir(aUpdateInfo);
             }
         }
@@ -631,28 +640,41 @@ void update_checker()
     catch (const invalid_update_info&)
     {
         SAL_WARN("desktop.updater", "invalid update information");
+        Updater::log(OString("warning: invalid update info"));
     }
     catch (const error_updater&)
     {
         SAL_WARN("desktop.updater", "error during the update check");
+        Updater::log(OString("warning: error by the updater"));
     }
     catch (const invalid_size& e)
     {
         SAL_WARN("desktop.updater", e.what());
+        Updater::log(OString("warning: invalid size"));
     }
     catch (const invalid_hash& e)
     {
         SAL_WARN("desktop.updater", e.what());
+        Updater::log(OString("warning: invalid hash"));
     }
     catch (...)
     {
         SAL_WARN("desktop.updater", "unknown error during the update check");
+        Updater::log(OString("warning: unknown exception"));
     }
 }
 
 OUString Updater::getUpdateInfoURL()
 {
     OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/update.info");
+    rtl::Bootstrap::expandMacros(aUpdateInfoURL);
+
+    return aUpdateInfoURL;
+}
+
+OUString Updater::getUpdateInfoLog()
+{
+    OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/updating.log");
     rtl::Bootstrap::expandMacros(aUpdateInfoURL);
 
     return aUpdateInfoURL;
@@ -680,6 +702,22 @@ OUString Updater::getExecutableDirURL()
     rtl::Bootstrap::expandMacros(aExeDir);
 
     return aExeDir;
+}
+
+void Updater::log(const OUString& rMessage)
+{
+    OUString aUpdateLog = getUpdateInfoLog();
+    SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
+    aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
+    aLog.WriteLine(OUStringToOString(rMessage, RTL_TEXTENCODING_UTF8));
+}
+
+void Updater::log(const OString& rMessage)
+{
+    OUString aUpdateLog = getUpdateInfoLog();
+    SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
+    aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
+    aLog.WriteLine(rMessage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
