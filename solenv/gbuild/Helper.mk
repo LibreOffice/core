@@ -270,7 +270,6 @@ gb_UIConfig_REGISTERED += $(1)
 endef
 
 define gb_Helper_get_imagelists
-$(foreach res,$(gb_AllLangResTarget_REGISTERED),$(call gb_AllLangResTarget_get_imagelists,$(res))) \
 $(foreach ui,$(gb_UIConfig_REGISTERED),$(call gb_UIConfig_get_imagelist_target,$(ui)))
 endef
 

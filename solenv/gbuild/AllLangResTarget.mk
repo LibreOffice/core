@@ -244,15 +244,13 @@ $(call gb_ResTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f \
 			$(call gb_ResTarget_get_target,$*) \
-			$(call gb_ResTarget_get_install_target,$*) \
-			$(call gb_ResTarget_get_imagelist_target,$*))
+			$(call gb_ResTarget_get_install_target,$*)
 
 $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
 		$(gb_ResTarget_RSCDEPS)
 	$(call gb_Output_announce,$*,$(true),RES,2)
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) \
-			$(dir $(call gb_ResTarget_get_imagelist_target,$*)) && \
+		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
 		echo "-r -p \
 			-lg$(LANGUAGE) \
@@ -265,7 +263,6 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
 			-subMODULE=$(gb_ResTarget_DEFIMAGESLOCATION) \
 			-subGLOBALRES=$(gb_ResTarget_DEFIMAGESLOCATION)res \
-			-oil=$(dir $(call gb_ResTarget_get_imagelist_target,$*)) \
 			$(filter-out $(gb_Helper_MISCDUMMY) $(gb_ResTarget_RSCDEPS),$^)" \
 			> $${RESPONSEFILE} && \
 		$(gb_ResTarget_RSCCOMMAND) @$${RESPONSEFILE} && \
@@ -277,7 +274,6 @@ $(call gb_ResTarget_get_target,$(1)) : LIBRARY = $(2)
 $(call gb_ResTarget_get_target,$(1)) : LANGUAGE = $(3)
 $(call gb_ResTarget_get_target,$(1)) : RESLOCATION = $(2)
 $(call gb_AllLangResTarget_get_clean_target,$(2)) : $(call gb_ResTarget_get_clean_target,$(1))
-$(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,$(1))
 
 endef
 
@@ -363,11 +359,6 @@ define gb_AllLangResTarget_set_reslocation
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_set_reslocation,$(1)$(lang),$(2)))
 
-endef
-
-define gb_AllLangResTarget_get_imagelists
-$(foreach lang,$(gb_AllLangResTarget_LANGS),\
-    $(call gb_ResTarget_get_imagelist_target,$(1)$(lang)))
 endef
 
 # vim: set noet sw=4: 

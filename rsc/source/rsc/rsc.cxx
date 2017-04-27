@@ -197,10 +197,6 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 aOutputSrs = (*ppStr) + 4;
                 bOutputSrsIsSet = true;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "oil=", 4 ) )
-            {
-                aILDir = (*ppStr) + 5;
-            }
             else if( !rsc_stricmp( (*ppStr) + 1, "NoSysResTest" ) )
             { // don't check Bitmap, Pointers, Icons
                 nCommands |= CommandFlags::NoSysResTest;
@@ -588,11 +584,7 @@ ERRTYPE RscCompiler::Link()
 
                 aRcTmp = lcl_getTempFile(sTempDirUrl);
 
-                OUString sOilDirUrl;
-                if(!pCL->aILDir.isEmpty())
-                    sOilDirUrl = lcl_getAbsoluteUrl(sPwdUrl, pCL->aILDir);
-                else
-                    sOilDirUrl = sTempDirUrl;
+                OUString sOilDirUrl = sTempDirUrl;
 
                 aSysListTmp = lcl_getTempFile(sOilDirUrl);
 
