@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_8a9311fa",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-04-27T16:04:51Z",
+      "side": 1,
+      "message": "if it had zero height then why test the width? is that a typo?",
+      "revId": "d7c6c0ca02116a6d76778996d88af83443e9ada0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
