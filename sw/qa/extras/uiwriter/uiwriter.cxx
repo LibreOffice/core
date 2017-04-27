@@ -231,6 +231,7 @@ public:
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
     void testTdf107025();
+    void testTdf107362();
     void testTdf105417();
     void testTdf105625();
     void testTdf106736();
@@ -357,6 +358,7 @@ public:
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf107025);
+    CPPUNIT_TEST(testTdf107362);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
@@ -4462,6 +4464,18 @@ void SwUiWriterTest::testTdf107025()
     sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nWidth").toInt32();
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9), nWidth2 / nWidth1 );
+}
+
+void SwUiWriterTest::testTdf107362()
+{
+    createDoc("tdf107362.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // No kern between CJK and Latin portion if snap to char is not checked
+    // in (non-squared) text grid mode.
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//Special[@nType='POR_KERN']");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
 }
 
 void SwUiWriterTest::testTdf105417()
