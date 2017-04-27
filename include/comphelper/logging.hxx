@@ -496,7 +496,7 @@ namespace comphelper
         ResourceBasedEventLogger(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const sal_Char* _pResourceBundleBaseName,
-            const sal_Char* _pAsciiLoggerName = nullptr
+            const sal_Char* _pAsciiLoggerName
         );
 
 
