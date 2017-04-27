@@ -5848,6 +5848,12 @@ void ScDocument::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& 
                 if (pRange)
                     SetDirty( *pRange, true);
             }
+            //Notify listeners on top and bottom of the group that has been split
+            for (size_t i = 0; i < aGroupPos.size(); ++i) {
+                ScFormulaCell *pFormulaCell = GetFormulaCell(aGroupPos[i]);
+                if (pFormulaCell)
+                    pFormulaCell->SetDirty(true);
+            }
         }
     }
 }
