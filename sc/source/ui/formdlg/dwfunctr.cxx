@@ -58,6 +58,7 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css
 {
     get(aCatBox, "category");
     get(aFuncList, "funclist");
+    aFuncList->set_height_request(10 * aFuncList->GetTextHeight());
     get(aInsertButton, "insert");
     get(aFiFuncDesc, "funcdesc");
 
