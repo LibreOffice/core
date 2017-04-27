@@ -38,7 +38,6 @@ $(eval $(call gb_Pyuno_add_files,commonwizards,wizards,\
     text/__init__.py \
     ui/ControlScroller.py \
     ui/DocumentPreview.py \
-    ui/ImageList.py \
     ui/PathSelection.py \
     ui/PeerConfig.py \
     ui/UIConsts.py \
