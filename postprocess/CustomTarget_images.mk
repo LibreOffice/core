@@ -66,6 +66,7 @@ $(packimages_DIR)/sourceimagelist.ilst : \
 		$(SRCDIR)/sfx2/inc/bitmaps.hlst \
 		$(SRCDIR)/svtools/inc/bitmaps.hlst \
 		$(SRCDIR)/svx/inc/bitmaps.hlst \
+		$(SRCDIR)/sw/inc/bitmaps.hlst \
 		$(SRCDIR)/vcl/inc/bitmaps.hlst \
 		$(SRCDIR)/xmlsecurity/inc/bitmaps.hlst
 	grep res $^ | cut -d'"' -f2 | sed "s/^/%MODULE%\//" | sed "s/%MODULE%.res/%GLOBALRES%/g" > $@

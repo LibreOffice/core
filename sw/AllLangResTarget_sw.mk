@@ -106,8 +106,4 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/web/web.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalizable_files,sw/res,\
-    sw/source/ui/envelp/envprt.src \
-))
-
 # vim: set noet sw=4 ts=4:

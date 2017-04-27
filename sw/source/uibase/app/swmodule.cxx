@@ -124,6 +124,7 @@
 #include <navsh.hxx>
 
 #include <app.hrc>
+#include "bitmaps.hlst"
 #include <svx/xmlsecctrl.hxx>
 ResMgr *pSwResMgr = nullptr;
 bool     g_bNoInterrupt     = false;
@@ -403,32 +404,32 @@ SfxStyleFamilies* SwModule::CreateStyleFamilies()
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     SW_RESSTR(STR_PARAGRAPHSTYLEFAMILY),
-                                                    Image(BitmapEx(SW_RES(BMP_STYLES_FAMILY_PARA))),
+                                                    Image(BitmapEx(BMP_STYLES_FAMILY_PARA)),
                                                     SW_RES(RID_PARAGRAPHSTYLEFAMILY)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Char,
                                                     SW_RESSTR(STR_CHARACTERSTYLEFAMILY),
-                                                    Image(BitmapEx(SW_RES(BMP_STYLES_FAMILY_CHAR))),
+                                                    Image(BitmapEx(BMP_STYLES_FAMILY_CHAR)),
                                                     SW_RES(RID_CHARACTERSTYLEFAMILY)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Frame,
                                                     SW_RESSTR(STR_FRAMESTYLEFAMILY),
-                                                    Image(BitmapEx(SW_RES(BMP_STYLES_FAMILY_FRAME))),
+                                                    Image(BitmapEx(BMP_STYLES_FAMILY_FRAME)),
                                                     SW_RES(RID_FRAMESTYLEFAMILY)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
                                                     SW_RESSTR(STR_PAGESTYLEFAMILY),
-                                                    Image(BitmapEx(SW_RES(BMP_STYLES_FAMILY_PAGE))),
+                                                    Image(BitmapEx(BMP_STYLES_FAMILY_PAGE)),
                                                     SW_RES(RID_PAGESTYLEFAMILY)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
                                                     SW_RESSTR(STR_LISTSTYLEFAMILY),
-                                                    Image(BitmapEx(SW_RES(BMP_STYLES_FAMILY_LIST))),
+                                                    Image(BitmapEx(BMP_STYLES_FAMILY_LIST)),
                                                     SW_RES(RID_LISTSTYLEFAMILY)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Table,
                                                     SW_RESSTR(STR_TABLESTYLEFAMILY),
-                                                    Image(BitmapEx(SW_RES(BMP_STYLES_FAMILY_TABLE))),
+                                                    Image(BitmapEx(BMP_STYLES_FAMILY_TABLE)),
                                                     SW_RES(RID_TABLESTYLEFAMILY)));
 
     return pStyleFamilies;

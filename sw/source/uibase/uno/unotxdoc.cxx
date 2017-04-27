@@ -103,6 +103,7 @@
 #include <modcfg.hxx>
 #include <ndtxt.hxx>
 #include <utlui.hrc>
+#include "bitmaps.hlst"
 #include <swcont.hxx>
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
@@ -4081,26 +4082,26 @@ static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
     OUString sLinkSuffix = _sLinkSuffix;
     if(!sLinkSuffix.isEmpty())
         sLinkSuffix = sLinkSuffix.copy(1);
-    sal_uInt16 nImgId(0);
+    OUString sImgId;
 
     if(sLinkSuffix == "outline")
-        nImgId = RID_BMP_NAVI_OUTLINE;
+        sImgId = RID_BMP_NAVI_OUTLINE;
     else if(sLinkSuffix == "table")
-        nImgId = RID_BMP_NAVI_TABLE;
+        sImgId = RID_BMP_NAVI_TABLE;
     else if(sLinkSuffix == "frame")
-        nImgId = RID_BMP_NAVI_FRAME;
+        sImgId = RID_BMP_NAVI_FRAME;
     else if(sLinkSuffix == "graphic")
-        nImgId = RID_BMP_NAVI_GRAPHIC;
+        sImgId = RID_BMP_NAVI_GRAPHIC;
     else if(sLinkSuffix == "ole")
-        nImgId = RID_BMP_NAVI_OLE;
+        sImgId = RID_BMP_NAVI_OLE;
     else if(sLinkSuffix.isEmpty())
-        nImgId = RID_BMP_NAVI_BOOKMARK;
+        sImgId = RID_BMP_NAVI_BOOKMARK;
     else if(sLinkSuffix == "region")
-        nImgId = RID_BMP_NAVI_REGION;
+        sImgId = RID_BMP_NAVI_REGION;
 
-    if (nImgId)
+    if (!sImgId.isEmpty())
     {
-        aRet <<= VCLUnoHelper::CreateBitmap(BitmapEx(SW_RES(nImgId)));
+        aRet <<= VCLUnoHelper::CreateBitmap(BitmapEx(sImgId));
     }
     return aRet;
 }

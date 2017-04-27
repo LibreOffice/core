@@ -79,6 +79,7 @@
 #include <svtools/borderhelper.hxx>
 
 #include "pagefrm.hrc"
+#include "bitmaps.hlst"
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
@@ -6091,8 +6092,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 
     static vcl::DeleteOnDeinit<drawinglayer::primitive2d::DiscreteShadow> shadowMaskObj(
         new drawinglayer::primitive2d::DiscreteShadow(
-            vcl::bitmap::loadFromResource(SW_RES(BMP_PAGE_SHADOW_MASK),
-                                               ImageLoadFlags::IgnoreDarkTheme | ImageLoadFlags::IgnoreScalingFactor)));
+            vcl::bitmap::loadFromName(BMP_PAGE_SHADOW_MASK,
+                                      ImageLoadFlags::IgnoreDarkTheme | ImageLoadFlags::IgnoreScalingFactor)));
 
     drawinglayer::primitive2d::DiscreteShadow& shadowMask = *shadowMaskObj.get();
     static vcl::DeleteOnDeinit< BitmapEx > aPageTopRightShadowObj( new BitmapEx );

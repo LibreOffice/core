@@ -25,21 +25,6 @@ String     ST_CONTINUE
     Text[ en-US ] = "~Continue";
 };
 
-Bitmap RID_BMP_FORMULA_CALC
-{
-    File = "sc20556.png";
-};
-
-Bitmap RID_BMP_FORMULA_CANCEL
-{
-    File = "sc20557.png";
-};
-
-Bitmap RID_BMP_FORMULA_APPLY
-{
-    File = "sc20558.png";
-};
-
 String ST_TASK
 {
     Text[ en-US ] = "Task";

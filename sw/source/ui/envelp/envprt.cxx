@@ -26,7 +26,7 @@
 #include "envlop.hxx"
 #include "uitool.hxx"
 
-#include "envprt.hrc"
+#include "bitmaps.hlst"
 
 SwEnvPrtPage::SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvPrinterPage",
@@ -89,22 +89,22 @@ IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, Button*, void)
     if (m_pBottomButton->IsChecked())
     {
         // Envelope from botton
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(Bitmap(SW_RES(BMP_HOR_LEFT_LOWER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(Bitmap(SW_RES(BMP_HOR_CNTR_LOWER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(Bitmap(SW_RES(BMP_HOR_RGHT_LOWER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_LEFT], Image(Bitmap(SW_RES(BMP_VER_LEFT_LOWER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Image(Bitmap(SW_RES(BMP_VER_CNTR_LOWER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Image(Bitmap(SW_RES(BMP_VER_RGHT_LOWER))));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(BitmapEx(BMP_HOR_LEFT_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(BitmapEx(BMP_HOR_CNTR_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(BitmapEx(BMP_HOR_RGHT_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_LEFT], Image(BitmapEx(BMP_VER_LEFT_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Image(BitmapEx(BMP_VER_CNTR_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Image(BitmapEx(BMP_VER_RGHT_LOWER)));
     }
     else
     {
         // Envelope from top
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(Bitmap(SW_RES(BMP_HOR_LEFT_UPPER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(Bitmap(SW_RES(BMP_HOR_CNTR_UPPER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(Bitmap(SW_RES(BMP_HOR_RGHT_UPPER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_LEFT], Image(Bitmap(SW_RES(BMP_VER_LEFT_UPPER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Image(Bitmap(SW_RES(BMP_VER_CNTR_UPPER))));
-        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Image(Bitmap(SW_RES(BMP_VER_RGHT_UPPER))));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(BitmapEx(BMP_HOR_LEFT_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(BitmapEx(BMP_HOR_CNTR_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(BitmapEx(BMP_HOR_RGHT_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_LEFT], Image(BitmapEx(BMP_VER_LEFT_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Image(BitmapEx(BMP_VER_CNTR_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Image(BitmapEx(BMP_VER_RGHT_UPPER)));
     }
 }
 

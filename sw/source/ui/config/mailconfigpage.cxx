@@ -35,6 +35,7 @@
 #include <globals.hrc>
 #include <config.hrc>
 #include <dbui.hrc>
+#include "bitmaps.hlst"
 #include <helpid.h>
 
 using namespace ::com::sun::star;
@@ -226,8 +227,8 @@ IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, Button*, void)
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
     : SfxModalDialog(pParent, "TestMailSettings", "modules/swriter/ui/testmailsettings.ui")
-    , m_aCompletedImg(BitmapEx(SW_RES(RID_BMP_FORMULA_APPLY)))
-    , m_aFailedImg(BitmapEx(SW_RES(RID_BMP_FORMULA_CANCEL)))
+    , m_aCompletedImg(BitmapEx(RID_BMP_FORMULA_APPLY))
+    , m_aFailedImg(BitmapEx(RID_BMP_FORMULA_CANCEL))
     , m_pParent(pParent)
     , m_bStop(false)
 {

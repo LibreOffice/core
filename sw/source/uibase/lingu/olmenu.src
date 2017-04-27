@@ -47,9 +47,4 @@ String STR_EXPLANATION_LINK
     Text [ en-US ] = "Explanations..." ;
 };
 
-Bitmap BMP_INFO_16
-{
-    File = "info_16.png";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

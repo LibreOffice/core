@@ -47,6 +47,7 @@
 #include <vector>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include "bitmaps.hlst"
 
 #include <unomid.h>
 
@@ -159,11 +160,11 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     , m_bOnlyFormatedRedlines(false)
     , m_bRedlnAutoFormat(bAutoFormat)
     , m_bInhibitActivate(false)
-    , m_aInserted(BitmapEx(SW_RES(BMP_REDLINE_INSERTED)))
-    , m_aDeleted(BitmapEx(SW_RES(BMP_REDLINE_DELETED)))
-    , m_aFormated(BitmapEx(SW_RES(BMP_REDLINE_FORMATED)))
-    , m_aTableChgd(BitmapEx(SW_RES(BMP_REDLINE_TABLECHG)))
-    , m_aFormatCollSet(BitmapEx(SW_RES(BMP_REDLINE_FMTCOLLSET)))
+    , m_aInserted(BitmapEx(BMP_REDLINE_INSERTED))
+    , m_aDeleted(BitmapEx(BMP_REDLINE_DELETED))
+    , m_aFormated(BitmapEx(BMP_REDLINE_FORMATED))
+    , m_aTableChgd(BitmapEx(BMP_REDLINE_TABLECHG))
+    , m_aFormatCollSet(BitmapEx(BMP_REDLINE_FMTCOLLSET))
 {
     m_aTabPagesCTRL->SetHelpId(HID_REDLINE_CTRL);
     m_pTPView = m_aTabPagesCTRL->GetViewPage();

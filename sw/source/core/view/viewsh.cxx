@@ -66,6 +66,7 @@
 #include <accessibilityoptions.hxx>
 #include <statstr.hrc>
 #include <comcore.hrc>
+#include "bitmaps.hlst"
 #include <pagepreviewlayout.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
@@ -2492,12 +2493,12 @@ const BitmapEx& SwViewShell::GetReplacementBitmap( bool bIsErrorState )
     if (bIsErrorState)
     {
         if (!m_xErrorBmp)
-            m_xErrorBmp.reset(new BitmapEx(SW_RES(RID_GRAPHIC_ERRORBMP)));
+            m_xErrorBmp.reset(new BitmapEx(RID_GRAPHIC_ERRORBMP));
         return *m_xErrorBmp;
     }
 
     if (!m_xReplaceBmp)
-        m_xReplaceBmp.reset(new BitmapEx(SW_RES(RID_GRAPHIC_REPLACEBMP)));
+        m_xReplaceBmp.reset(new BitmapEx(RID_GRAPHIC_REPLACEBMP));
     return *m_xReplaceBmp;
 }
 

@@ -29,8 +29,6 @@
 #define STR_RESET_TO_DEFAULT_LANGUAGE   (RC_LINGU_BEGIN + 9)
 #define STR_EXPLANATION_LINK            (RC_LINGU_BEGIN + 10)
 
-#define BMP_INFO_16                     (RC_LINGU_BEGIN + 100)
-
 //! Don't change these values. You may break context menu modifying extensions!
 #define MN_IGNORE_SELECTION             201
 #define MN_SHORT_COMMENT                208

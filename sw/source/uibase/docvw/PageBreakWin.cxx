@@ -9,6 +9,7 @@
 
 #include <globals.hrc>
 #include <utlui.hrc>
+#include "bitmaps.hlst"
 
 #include <cmdid.h>
 #include <cntfrm.hxx>
@@ -171,7 +172,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
                                         aPolygon, aColor));
 
     // Create the primitive for the image
-    BitmapEx aBmpEx(SW_RES(RID_BMP_PAGE_BREAK));
+    BitmapEx aBmpEx(RID_BMP_PAGE_BREAK);
     double nImgOfstX = 3.0;
     if (bRtl)
         nImgOfstX = aRect.Right() - aBmpEx.GetSizePixel().Width() - 3.0;

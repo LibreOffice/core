@@ -12,8 +12,6 @@
 
 #include "rcid.hrc"
 
-//  Bitmaps for page shadow
-#define BMP_PAGE_SHADOW_MASK                RC_PAGEFRM_BEGIN + 0
 #define STR_COLUMN_BREAK                    RC_PAGEFRM_BEGIN + 2
 
 // If you add resources, don't forget to update this
