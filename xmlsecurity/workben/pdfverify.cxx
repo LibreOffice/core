@@ -9,15 +9,6 @@
 
 #include <iostream>
 
-#ifdef WNT
-#include <prewin.h>
-#endif
-#include <fpdfview.h>
-#include <fpdf_edit.h>
-#ifdef WNT
-#include <postwin.h>
-#endif
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
@@ -26,10 +17,9 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <sal/main.h>
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <xmlsecurity/pdfio/pdfdocument.hxx>
 
@@ -39,88 +29,24 @@ using namespace com::sun::star;
 
 namespace
 {
-/// Convert to inch, then assume 96 DPI.
-double pointToPixel(double fPoint)
-{
-    return fPoint / 72 * 96;
-}
-
 /// Does PDF to PNG conversion using pdfium.
 void generatePreview(const OString& rPdfPath, const OString& rPngPath)
 {
-    FPDF_LIBRARY_CONFIG aConfig;
-    aConfig.version = 2;
-    aConfig.m_pUserFontPaths = nullptr;
-    aConfig.m_pIsolate = nullptr;
-    aConfig.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&aConfig);
-
-    // Read input into a buffer.
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic;
     OUString aInURL;
     osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(rPdfPath), aInURL);
     SvFileStream aInStream(aInURL, StreamMode::READ);
-    SvMemoryStream aInBuffer;
-    aInBuffer.WriteStream(aInStream);
-
-    // Load the buffer using pdfium.
-    FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
-    if (!pPdfDocument)
+    WMF_EXTERNALHEADER* pExtHeader = nullptr;
+    if (rFilter.ImportGraphic(aGraphic, OUString(), aInStream, GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pExtHeader) != GRFILTER_OK)
         return;
 
-    // Render the first page.
-    FPDF_PAGE pPdfPage = FPDF_LoadPage(pPdfDocument, /*page_index=*/0);
-    if (!pPdfPage)
-        return;
-
-    // Returned unit is points, convert that to pixel.
-    int nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
-    int nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
-    FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
-    if (!pPdfBitmap)
-        return;
-
-    FPDF_DWORD nColor = FPDFPage_HasTransparency(pPdfPage) ? 0x00000000 : 0xFFFFFFFF;
-    FPDFBitmap_FillRect(pPdfBitmap, 0, 0, nPageWidth, nPageHeight, nColor);
-    FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);
-
-    // Save the buffer as a PNG file.
-    Bitmap aBitmap(Size(nPageWidth, nPageHeight), 32);
-    {
-        Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
-        const char* pPdfBuffer = static_cast<const char*>(FPDFBitmap_GetBuffer(pPdfBitmap));
-#ifndef MACOSX
-        std::memcpy(pWriteAccess->GetBuffer(), pPdfBuffer, nPageWidth * nPageHeight * 4);
-#else
-        // ARGB -> BGRA
-        for (int nRow = 0; nRow < nPageHeight; ++nRow)
-        {
-            int nStride = FPDFBitmap_GetStride(pPdfBitmap);
-            const char* pPdfLine = pPdfBuffer + (nStride * nRow);
-            Scanline pRow = pWriteAccess->GetBuffer() + (nPageWidth * nRow * 4);
-            for (int nCol = 0; nCol < nPageWidth; ++nCol)
-            {
-                pRow[nCol * 4] = pPdfLine[(nCol * 4) + 3];
-                pRow[(nCol * 4) + 1] = pPdfLine[(nCol * 4) + 2];
-                pRow[(nCol * 4) + 2] = pPdfLine[(nCol * 4) + 1];
-                pRow[(nCol * 4) + 3] = pPdfLine[nCol * 4];
-            }
-        }
-#endif
-    }
-    BitmapEx aBitmapEx(aBitmap);
-#if defined(WNT) || defined(MACOSX)
-    aBitmapEx.Mirror(BmpMirrorFlags::Vertical);
-#endif
+    BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
     vcl::PNGWriter aWriter(aBitmapEx);
     OUString aOutURL;
     osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(rPngPath), aOutURL);
     SvFileStream aOutStream(aOutURL, StreamMode::WRITE);
     aWriter.Write(aOutStream);
-
-    FPDFBitmap_Destroy(pPdfBitmap);
-    FPDF_ClosePage(pPdfPage);
-    FPDF_CloseDocument(pPdfDocument);
-    FPDF_DestroyLibrary();
 }
 
 int pdfVerify(int nArgc, char** pArgv)
