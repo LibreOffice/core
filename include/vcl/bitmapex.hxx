@@ -45,7 +45,6 @@ class VCL_DLLPUBLIC BitmapEx
 public:
 
                         BitmapEx();
-                        BitmapEx( const ResId& rResId );
                         BitmapEx( const OUString& rIconName );
                         BitmapEx( const BitmapEx& rBitmapEx );
                         BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );

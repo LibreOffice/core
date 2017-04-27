@@ -71,21 +71,4 @@ RscTop * RscTypCont::InitClassString( RscTop * pSuper )
     return pClassString;
 }
 
-RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassBitmap;
-
-    nId = pHS->getID( "Bitmap" );
-    pClassBitmap = new RscSysDepend( nId, RSC_BITMAP, pSuper );
-    pClassBitmap->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-    aNmTb.Put( nId, CLASSNAME, pClassBitmap );
-
-    // the class RscSysDepend handles variables "FILE" in a specific way
-    nId = aNmTb.Put( "File", VARNAME );
-    pClassBitmap->SetVariable( nId, &aLangString, nullptr, RSCVAR::NoRc );
-
-    return pClassBitmap;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

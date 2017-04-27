@@ -94,20 +94,6 @@ BitmapEx::BitmapEx( const OUString& rIconName )
     loadFromIconTheme( rIconName );
 }
 
-BitmapEx::BitmapEx( const ResId& rResId ) :
-        eTransparent( TransparentType::NONE ),
-        bAlpha      ( false )
-{
-    ResMgr*                             pResMgr = nullptr;
-
-    ResMgr::GetResourceSkipHeader( rResId.SetRT( RSC_BITMAP ), &pResMgr );
-    pResMgr->ReadLong();
-    pResMgr->ReadLong();
-
-    const OUString aFileName( pResMgr->ReadString() );
-    loadFromIconTheme( aFileName );
-}
-
 void BitmapEx::loadFromIconTheme( const OUString& rIconName )
 {
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();

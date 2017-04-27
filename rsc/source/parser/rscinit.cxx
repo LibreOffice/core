@@ -46,7 +46,6 @@ void RscTypCont::Init()
     RscTop   *  pClassMgr;
     RscTop   *  pClassString;
     RscTop   *  pClassStringArray;
-    RscTop   *  pClassBitmap;
 
     Atom        nId;
 
@@ -99,10 +98,6 @@ void RscTypCont::Init()
     // initialize variables
     nId = aNmTb.Put( "ItemList", VARNAME );
     pClassStringArray->SetVariable( nId, pLangStringLongTupelList );
-
-    pClassBitmap = InitClassBitmap( pClassMgr );
-    pRoot->Insert( pClassBitmap );
-
 }
 
     aNmTb.SetSort();

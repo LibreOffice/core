@@ -188,7 +188,6 @@ class   BitmapWriteAccess;
 class   BitmapPalette;
 class   ImpBitmap;
 class   Color;
-class   ResId;
 class   GDIMetaFile;
 class   AlphaMask;
 class   OutputDevice;
@@ -219,7 +218,6 @@ public:
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
                             Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = nullptr );
-                            Bitmap( const ResId& rResId );
                             Bitmap( SalBitmap* pSalBitmap );
     virtual                 ~Bitmap();
 

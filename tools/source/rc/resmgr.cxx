@@ -1022,17 +1022,6 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     return true;
 }
 
-void * ResMgr::GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr )
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-
-    *ppResMgr = rResId.GetResMgr();
-    assert(*ppResMgr != nullptr);
-    (*ppResMgr)->GetResource( rResId );
-    (*ppResMgr)->Increment( sizeof( RSHEADER_TYPE ) );
-    return (*ppResMgr)->GetClass();
-}
-
 void ResMgr::PopContext( const Resource* pResObj )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );

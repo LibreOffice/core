@@ -37,14 +37,6 @@ Bitmap::Bitmap()
 {
 }
 
-Bitmap::Bitmap( const ResId& rResId )
-{
-    const BitmapEx aBmpEx( rResId );
-
-    if( !aBmpEx.IsEmpty() )
-        *this = aBmpEx.GetBitmap();
-}
-
 Bitmap::Bitmap(const Bitmap& rBitmap)
     : mxImpBmp(rBitmap.mxImpBmp)
     , maPrefMapMode(rBitmap.maPrefMapMode)

@@ -143,7 +143,6 @@ public:
 
     /// Search and load resource, given its ID
     bool                GetResource( const ResId& rId, const Resource * = nullptr );
-    static void *       GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr );
     /// Free resource context
     void                PopContext( const Resource* = nullptr );
 

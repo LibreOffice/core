@@ -34,7 +34,6 @@
 
 #define RSC_RESOURCE            (RSC_NOTYPE + RESOURCE_TYPE(0x10))
 #define RSC_STRING              (RSC_NOTYPE + RESOURCE_TYPE(0x11))
-#define RSC_BITMAP              (RSC_NOTYPE + RESOURCE_TYPE(0x13))
 
 #define RSC_STRINGARRAY         (RSC_NOTYPE + RESOURCE_TYPE(0x79))
 

@@ -85,7 +85,6 @@ class RscTypCont
 
     RscTop *    InitClassMgr();
     RscTop *    InitClassString( RscTop * pSuper );
-    RscTop *    InitClassBitmap( RscTop * pSuper );
 
 public:
     RscLongEnumRange    aEnumLong;
