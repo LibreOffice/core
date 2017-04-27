@@ -1278,7 +1278,7 @@ namespace cppcanvas
 
                                 OUString text = read_uInt16s_ToOUString(rMF, stringLength);
 
-                                EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >( aObjects[ formatId ] );
+                                EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >( aObjects[ formatId & 0xff ] );
                                 css::rendering::FontRequest aFontRequest;
                                 LanguageTag aLanguageTag( static_cast< LanguageType >( stringFormat->language ) );
                                 aFontRequest.Locale = aLanguageTag.getLocale( false );
