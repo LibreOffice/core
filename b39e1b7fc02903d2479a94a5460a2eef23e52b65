@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6affc534",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-04-27T15:49:45Z",
+      "side": 1,
+      "message": "this should probably be something like\n    throw uno::RuntimeException(\n       \"ran out of cell data\", \n        static_cast\u003ccppu::OWeakObject*\u003e(this));",
+      "revId": "b39e1b7fc02903d2479a94a5460a2eef23e52b65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
