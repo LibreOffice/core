@@ -1090,7 +1090,7 @@ public:
      */
     void            InsertAtCurrentPos( sal_uInt32 nBytes );
 
-    void            InsertPersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset ); // It is not being checked if this key is already in the PersistantTable
+    void            InsertPersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset ); // It is not being checked if this key is already in the PersistentTable
     void            ReplacePersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset );
     sal_uInt32      GetPersistOffset( sal_uInt32 nKey );
     bool            SeekToPersistOffset( sal_uInt32 nKey );
