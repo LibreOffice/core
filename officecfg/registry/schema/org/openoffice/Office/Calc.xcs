@@ -1421,21 +1421,18 @@
 	sc/source/core/tool/calcconfig.cxx
 	-->
         <prop oor:name="OpenCLSubsetOnly" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>
             <desc>Whether to use OpenCL only when a formula uses only a subset of operator and function opcodes.</desc>
           </info>
           <value>true</value>
         </prop>
         <prop oor:name="OpenCLMinimumDataSize" oor:type="xs:int">
-          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>
             <desc>An approximate lower limit on the number of data cells a spreadsheet formula should use for OpenCL to be considered.</desc>
           </info>
           <value>100</value>
         </prop>
         <prop oor:name="OpenCLSubsetOpCodes" oor:type="xs:string" oor:nillable="false">
-          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>
             <desc>The list of operator and function opcodes (in
             English) for which to use OpenCL. If OpenCLSubsetOnly is
@@ -1445,14 +1442,12 @@
           <value>+;-;*;/;RAND;SIN;COS;TAN;ATAN;EXP;LN;SQRT;NORMSDIST;NORMSINV;ROUND;POWER;SUMPRODUCT;MIN;MAX;SUM;PRODUCT;AVERAGE;COUNT;VAR;NORMDIST;VLOOKUP;CORREL;COVAR;PEARSON;SLOPE;SUMIFS</value>
         </prop>
         <prop oor:name="OpenCLAutoSelect" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>
             <desc>Whether to automatically select the OpenCL device</desc>
           </info>
           <value>true</value>
         </prop>
         <prop oor:name="OpenCLDevice" oor:type="xs:string" oor:nillable="false">
-          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>
             <desc>The Device ID of the OpenCL device selected if OpenCLAutoSelect is false</desc>
           </info>
