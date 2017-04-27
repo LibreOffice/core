@@ -35,9 +35,9 @@ local repo=$1
 local hook
 local hook_name
 
-    if [ -d ${repo?}/.git ] ; then
+    if [ -d "${repo?}"/.git ] ; then
         # use core's hook by default
-	for hook_name in ${COREDIR?}/.git-hooks/* ; do
+	for hook_name in "${COREDIR?}/.git-hooks"/* ; do
             hook="${repo?}/.git/hooks/${hook_name##*/}"
             if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
 		rm -f "${hook?}"
@@ -45,15 +45,15 @@ local hook_name
             fi
 	done
         # override if need be by the submodules' own hooks
-	for hook_name in ${COREDIR?}/${repo?}/.git-hooks/* ; do
+	for hook_name in "${COREDIR?}/${repo?}/.git-hooks"/* ; do
             hook="${repo?}/.git/hooks/${hook_name##*/}"
             if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
 		rm -f "${hook?}"
 		ln -sf "${hook_name}" "${hook?}"
 	    fi
 	done
-    elif [ -d .git/modules/${repo}/hooks ] ; then
-	for hook_name in ${COREDIR?}/.git-hooks/* ; do
+    elif [ -d .git/modules/"${repo}"/hooks ] ; then
+	for hook_name in "${COREDIR?}/.git-hooks"/* ; do
             hook=".git/modules/${repo?}/hooks/${hook_name##*/}"
             if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
 		rm -f "${hook?}"
@@ -61,7 +61,7 @@ local hook_name
             fi
 	done
         # override if need be by the submodules' own hooks
-	for hook_name in ${COREDIR?}/${repo?}/.git-hooks/* ; do
+	for hook_name in "${COREDIR?}/${repo?}/.git-hooks"/* ; do
             hook=".git/modules/${repo?}/hooks/${hook_name##*/}"
             if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
 		rm -f "${hook?}"
@@ -79,7 +79,7 @@ local hook_name
 local hook
 
     pushd "${COREDIR?}" > /dev/null
-    for hook_name in ${COREDIR?}/.git-hooks/* ; do
+    for hook_name in "${COREDIR?}/.git-hooks"/* ; do
         hook=".git/hooks/${hook_name##*/}"
         if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
             rm -f "${hook?}"
@@ -88,7 +88,7 @@ local hook
     done
 
     for repo in ${SUBMODULES_ALL?} ; do
-        refresh_submodule_hooks $repo
+        refresh_submodule_hooks "$repo"
     done
     # In our workflow, it's always gerrit that does the submodule updates, so
     # better ignoring them to avoid accidentally including those changes in our
@@ -96,7 +96,7 @@ local hook
     # 'git submodule status' can be still used to see if a submodule has such
     # changes.
     for repo in ${SUBMODULES_CONFIGURED?} ; do
-        git config submodule.$repo.ignore all
+        git config submodule."$repo".ignore all
     done
     popd > /dev/null
 
@@ -137,7 +137,7 @@ SUBMODULES_ACTIVE=""
 local repo
 
     for repo in ${SUBMODULES_ALL?} ; do
-	if [ -d ${repo?}/.git ] || [ -f ${repo?}/.git ] ; then
+	if [ -d "${repo?}"/.git ] || [ -f "${repo?}"/.git ] ; then
 	    SUBMODULES_ACTIVE="${repo?} ${SUBMODULES_ACTIVE?}"
 	fi
     done
@@ -149,7 +149,7 @@ get_configured_submodules()
     if [ -f config_host.mk ] ; then
 	SUBMODULES_CONFIGURED=$(< config_host.mk grep -a GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
     else
-	# if we need the configured submoduel before the configuration is done. we assumed you want them all
+	# if we need the configured submodule before the configuration is done. we assumed you want them all
 	SUBMODULES_CONFIGURED=${SUBMODULES_ALL?}
     fi
 }
@@ -172,7 +172,7 @@ local module
 local repo
 
     for module in $SUBMODULES_CONFIGURED ; do
-	if [ ! -d ${module?}/.git ] ; then
+	if [ ! -d "${module?}"/.git ] ; then
 	    case "${module?}" in
 		helpcontent2)
 		    if [ -d clone/help/.git ] ; then
@@ -180,7 +180,7 @@ local repo
 		    fi
 		    ;;
 		*)
-		    if [ -d clone/${module?}/.git ] ; then
+		    if [ -d clone/"${module?}"/.git ] ; then
 			repo="clone/${module?}/.git"
 		    fi
 		    ;;
@@ -194,7 +194,7 @@ local repo
 
 do_git_cmd()
 {
-    echo "cmd:$@"
+    echo "cmd:$*"
     git "$@"
     git submodule foreach git "$@" $KEEP_GOING
 }
@@ -220,14 +220,14 @@ local module
     if [ -f .gitmodules ] ; then
 	git submodule update
 	if [ -n "$branch" ] ; then
-	    git submodule foreach git checkout -b ${branch} HEAD || return $?
+	    git submodule foreach git checkout -b "${branch}" HEAD || return $?
 	fi
     else
 	# now that is the nasty case we moved prior to submodules
 	# delete the submodules left over if any
 	for module in $SUBMODULES_ALL ; do
 	    echo "clean-up submodule $module"
-	    rm -fr ${module}
+	    rm -fr "${module}"
 	done
 	# make sure we have the needed repo in clone
 	./g clone && ./g -f checkout "$@" || return $?
@@ -245,7 +245,7 @@ do_reset()
 	# delete the submodules left over if any
 	for module in $SUBMODULES_ALL ; do
 	    echo "clean-up submodule $module"
-	    rm -fr ${module}
+	    rm -fr "${module}"
 	done
 	# make sure we have the needed repo in clone
 	./g clone && ./g -f reset "$@"
@@ -266,16 +266,16 @@ local configured
 		./bin/git-new-module-workdir "${LINKED_GIT}/${module}" "${module}"
 	    fi
 	fi
-	configured=$(git config --local --get submodule.${module}.url)
+	configured=$(git config --local --get submodule."${module}".url)
 	if [ -z "$configured" ] ; then
-	    git submodule init $module || return $?
+	    git submodule init "$module" || return $?
 	fi
     done
     for module in $SUBMODULES_CONFIGURED ; do
         if [ -n "$REFERENCED_GIT" ] ; then
-            git submodule update --reference $REFERENCED_GIT/.git/modules/$module $module || return $?
+            git submodule update --reference "$REFERENCED_GIT/.git/modules/$module" "$module" || return $?
         else
-            git submodule update $module || return $?
+            git submodule update "$module" || return $?
         fi
     done
     return 0
@@ -346,7 +346,7 @@ shift
 
 case "$COMMAND" in
     branch)
-	do_git_cmd ${COMMAND} "$@"
+	do_git_cmd "${COMMAND}" "$@"
 	;;
     checkout)
 	do_checkout "$@"
@@ -360,7 +360,7 @@ case "$COMMAND" in
 	;;
     grep)
         KEEP_GOING="||:"
-	do_git_cmd ${COMMAND} "$@"
+	do_git_cmd "${COMMAND}" "$@"
 	;;
     pull)
 	git pull "$@" && git submodule update && refresh_all_hooks
@@ -375,7 +375,7 @@ case "$COMMAND" in
 	do_reset
 	;;
     tag)
-	do_git_cmd ${COMMAND} "$@"
+	do_git_cmd "${COMMAND}" "$@"
 	;;
 	"")
 	;;
