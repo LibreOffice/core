@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_0a0f21e2",
+        "filename": "basic/source/classes/sb.src",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-04-27T09:18:09Z",
+      "side": 1,
+      "message": "why re-introduce that line that had been removed with 6b448d3634f26224e480c0f30c617eacd7b4e3ab \"make __RSC a builtin define for the RSC compiler\"?\n\n(if you\u0027re having trouble resolving merge conflicts, then just stop producing potential merge conflicts, by sticking to what actually needs to be changed, not mixing in arbitrary stuff like reordering the overall list of includes)",
+      "revId": "f9f045e7830d184497554e0e438cc478fa990eb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
