@@ -77,6 +77,7 @@ ConfigurationUpdater::ConfigurationUpdater (
     // and the requested configuration differ.  With the timer we try
     // updates until the two configurations are the same.
     maUpdateTimer.SetTimeout(snNormalTimeout);
+    maUpdateTimer.SetDebugName("sd::ConfigurationUpdater maUpdateTimer");
     maUpdateTimer.SetInvokeHandler(LINK(this,ConfigurationUpdater,TimeoutHandler));
     mxControllerManager = rxControllerManager;
 }

@@ -60,6 +60,7 @@ struct SvxModifyControl::ImplData
         maImages[MODIFICATION_STATE_FEEDBACK] = Image(BitmapEx(RID_SVXBMP_DOC_MODIFIED_FEEDBACK));
 
         maIdle.SetPriority(TaskPriority::LOWEST);
+        maIdle.SetDebugName("svx::SvxModifyControl maIdle");
     }
 };
 

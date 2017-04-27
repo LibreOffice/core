@@ -43,6 +43,7 @@ QueueProcessor::QueueProcessor (
 {
     maTimer.SetInvokeHandler (LINK(this,QueueProcessor,ProcessRequestHdl));
     maTimer.SetTimeout (10);
+    maTimer.SetDebugName ("sd::QueueProcessor maTimer");
 }
 
 QueueProcessor::~QueueProcessor()

@@ -831,6 +831,7 @@ GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDispla
 {
     maReleaseTimer.SetInvokeHandler( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
     maReleaseTimer.SetTimeout( 10000 );
+    maReleaseTimer.SetDebugName( "svtools::GraphicCache maReleaseTimer" );
     maReleaseTimer.Start();
 }
 
