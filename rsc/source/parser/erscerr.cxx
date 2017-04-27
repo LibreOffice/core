@@ -151,7 +151,6 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-fs=<filename> Name of the .res file.\n" );
             StdLstOut( "-lip=<path>    additional search path for system dependent files\n" );
             StdLstOut( "-fp=<filename> Renaming of the .srs file.\n" );
-            StdLstOut( "-oil=<dir>     Output directory for image list files\n" );
             StdLstOut( "-sub<ENV>=<path> replace <path> by <ENV> in image list files\n" );
             StdLstOut( "-BIGENDIAN    Format of number values.\n" );
             StdLstOut( "-LITTLEENDIAN Format of number values.\n" );
