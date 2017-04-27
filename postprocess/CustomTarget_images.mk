@@ -28,6 +28,7 @@ $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(packimages_DIR)/sourceimagelist.ilst \
+		$(SRCDIR)/wizards/source/imagelists/imagelists.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/screenshotimg.ilst) \
 		$(call gb_Helper_get_imagelists)

@@ -223,17 +223,6 @@ class ImageList(ListDataListener):
                 i.Visible =  False
 
         focusable = True
-        for index, item in enumerate(self.m_aImages):
-            oResource = self.renderer.getImageUrl(self.getObjectFor(index))
-            if oResource is not None:
-                self.oUnoDialog.getPeerConfiguration().setImageUrl(
-                    item.Model, oResource)
-
-                item.Model.Tabstop = bool(focusable)
-                if self.refreshOverNull:
-                    item.Visible =  True
-
-                focusable = False
 
         self.refreshSelection()
 
@@ -443,14 +432,6 @@ class ImageList(ListDataListener):
 
     def getSelectedObjects(self):
         return[self.listModel.getElementAt(self.selected)]
-
-    class IImageRenderer(IRenderer):
-
-         # @param listItem
-         # @return resource id for an image referenced in the resourcefile of the wizards project
-        @abstractmethod
-        def getImageUrl(self, listItem):
-            pass
 
     class SimpleCounterRenderer(IRenderer):
 

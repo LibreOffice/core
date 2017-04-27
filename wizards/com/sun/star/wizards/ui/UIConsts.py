@@ -22,15 +22,8 @@ class UIConsts():
     RID_FORM = 2200
     RID_QUERY = 2300
     RID_REPORT = 2400
-    RID_IMG_REPORT = 1000
-    RID_IMG_FORM = 1100
-    RID_IMG_WEB = 1200
     INVISIBLESTEP = 99
-    '''
-    This is BMP_EXCEPTION_INFO (RID_IMAGE_START +  5, where RID_IMAGE_START +  5 is
-    RID_DBACCESS_START which is RID_LIB_START+9200 where RID_LIB_START is 10000)
-    '''
-    INFOIMAGEURL = "private:resource/dbu/bitmapex/19205"
+    INFOIMAGEURL = "private:graphicrepository/dbaccess/res/exinfo.png"
 
     '''
     The tabindex of the navigation buttons in a wizard must be assigned a very

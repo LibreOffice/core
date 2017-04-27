@@ -1103,7 +1103,6 @@ $(eval $(call gb_Helper_register_resources,\
 	uui \
 	vcl \
 	writerperfect \
-	wzi \
 	$(if $(ENABLE_NSS),xmlsec) \
 	xsltdlg \
 ))

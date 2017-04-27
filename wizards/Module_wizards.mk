@@ -44,7 +44,6 @@ $(eval $(call gb_Module_add_l10n_targets,wizards,\
 	AllLangResTarget_eur \
 	AllLangResTarget_imp \
 	AllLangResTarget_tpl \
-	AllLangResTarget_wzi \
 ))
 
 ifeq ($(ENABLE_JAVA),TRUE)

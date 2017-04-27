@@ -93,8 +93,6 @@ STD_RES_FILE( gid_File_Res_Vcl, vcl )
 
 STD_RES_FILE( gid_File_Res_Writerperfect, writerperfect )
 
-STD_RES_FILE( gid_File_Res_Wzi, wzi )
-
 STD_RES_FILE( gid_File_Res_Xsltdlg, xsltdlg )
 
 STD_RES_FILE( gid_File_Res_AVMedia, avmedia )

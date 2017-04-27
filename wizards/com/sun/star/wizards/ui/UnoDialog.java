@@ -829,11 +829,6 @@ public class UnoDialog
         return nBlue;
     }
 
-    public String getWizardImageUrl(int _nResId)
-    {
-        return "private:resource/wzi/bitmapex/" + _nResId;
-    }
-
     public static short getListBoxLineCount()
     {
         return (short)20;

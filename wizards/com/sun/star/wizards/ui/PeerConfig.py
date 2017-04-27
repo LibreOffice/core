@@ -54,10 +54,7 @@ class PeerConfig(object):
                 xVclWindowPeer.setProperty(i.propnames, i.propvalues)
 
             for aImageUrlTask in self.aImageUrlTasks:
-                if isinstance(aImageUrlTask.oResource, int):
-                    sImageUrl = self.oUnoDialog.getWizardImageUrl(aImageUrlTask.oResource)
-                elif isinstance(aImageUrlTask.oResource, str):
-                    sImageUrl = aImageUrlTask.oResource
+                sImageUrl = aImageUrlTask.oResource
                 if sImageUrl != "":
                     aImageUrlTask.oModel.ImageURL = sImageUrl
 

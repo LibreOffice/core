@@ -27,13 +27,8 @@ public interface UIConsts
     int RID_QUERY = 2300;
     int RID_REPORT = 2400;
     int RID_TABLE = 2600;
-    int RID_IMG_FORM = 1100;
     Integer INVISIBLESTEP = 99;
-    /*
-    This is BMP_EXCEPTION_INFO (RID_IMAGE_START +  5, where RID_IMAGE_START +  5 is
-    RID_DBACCESS_START which is RID_LIB_START+9200 where RID_LIB_START is 10000)
-    */
-    String INFOIMAGEURL = "private:resource/dbu/bitmapex/19205";
+    String INFOIMAGEURL = "private:graphicrepository/dbaccess/res/exinfo.png";
     /**
      * The tabindex of the navigation buttons in a wizard must be assigned a very
      * high tabindex because on every step their taborder must appear at the end

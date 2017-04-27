@@ -62,7 +62,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private int m_nCurrentSelection = -1;
     private int pageStart = 0;
     public int helpURL = 0;
-    private IImageRenderer renderer;
+    private IRenderer renderer;
     private ListModel listModel;
     private IRenderer counterRenderer = new SimpleCounterRenderer();
     private static final int LINE_HEIGHT = 8;
@@ -195,7 +195,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
         m_aButtons = new XControl[rows * cols];
 
-
         m_aButtonHeight = Integer.valueOf(m_aButtonSize.Height);
         m_aButtonWidth = Integer.valueOf(m_aButtonSize.Width);
 
@@ -285,10 +284,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
         for (int i = 0; i < m_aButtons.length; i++)
         {
-            Object oObj = getObjectFor(i);
-            if (oObj == null)
-                continue;
-            Object oResource = renderer.getImageUrl(oObj);
+            String oResource = getObjectFor(i);
             if (oResource == null)
                 continue;
             oUnoDialog.getPeerConfiguration().setImageUrl(m_aButtons[i].getModel(), oResource);
@@ -329,9 +325,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     /**
      * @param i
-     * @return the Object in the list model corresponding to the given image index.
+     * @return the String in the list model corresponding to the given image url
      */
-    private Object getObjectFor(int i)
+    private String getObjectFor(int i)
     {
         int ii = getIndexFor(i);
         if (listModel.getSize() <= ii)
@@ -340,7 +336,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
         else
         {
-            return listModel.getElementAt(ii);
+            return (String)listModel.getElementAt(ii);
         }
     }
 
@@ -442,7 +438,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         pos = _size;
     }
 
-    public void setRenderer(IImageRenderer _renderer)
+    public void setRenderer(IRenderer _renderer)
     {
         this.renderer = _renderer;
     }
@@ -520,15 +516,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private Object getModel(Object control)
     {
         return UnoRuntime.queryInterface(XControl.class, control).getModel();
-    }
-
-    public interface IImageRenderer extends IRenderer
-    {
-
-        /**
-         * @return a resource ids for an image referenced in the resourcefile of the wizards project
-         */
-        Object getImageUrl(Object listItem);
     }
 
     private static class SimpleCounterRenderer implements IRenderer

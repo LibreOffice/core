@@ -24,6 +24,7 @@ import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.lang.EventObject;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.ui.ButtonList;
@@ -107,15 +108,16 @@ public class UIControlArranger
         HelpTexts[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 39); // In Blocks - Labels Above"
 
         DefaultListModel imageModel = new DefaultListModel();
-        for (int i = 0; i < HelpTexts.length; i++)
-        {
-            imageModel.addElement(Integer.valueOf(i));
-        }
-         String sMainArrangementHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 41); // "Arrangement of the main form"
-         m_aArrangeList[0] = new ArrangeButtonList(0, imageModel, sMainArrangementHeader);
+        imageModel.addElement("private:graphicrepository/wizards/res/formarrangelistside_42.png");
+        imageModel.addElement("private:graphicrepository/wizards/res/formarrangelisttop_42.png");
+        imageModel.addElement("private:graphicrepository/wizards/res/formarrangetable_42.png");
+        imageModel.addElement("private:graphicrepository/wizards/res/formarrangefree_42.png");
 
-         String sSubArrangementHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 42); // "Arrangement of the sub form"
-         m_aArrangeList[1] = new ArrangeButtonList(1, imageModel, sSubArrangementHeader);
+        String sMainArrangementHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 41); // "Arrangement of the main form"
+        m_aArrangeList[0] = new ArrangeButtonList(0, imageModel, sMainArrangementHeader);
+
+        String sSubArrangementHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 42); // "Arrangement of the sub form"
+        m_aArrangeList[1] = new ArrangeButtonList(1, imageModel, sSubArrangementHeader);
         enableAlignControlGroup(false);
     }
 
@@ -124,14 +126,8 @@ public class UIControlArranger
         return m_aArrangeList[_formindex].m_aButtonList.getSelected() + 1;
     }
 
-    private class LayoutRenderer implements ButtonList.IImageRenderer
+    private class LayoutRenderer implements IRenderer
     {
-        public Object getImageUrl(Object listitem)
-        {
-            int ResId = UIConsts.RID_IMG_FORM + (2 * ((Integer) listitem).intValue());
-            return Integer.valueOf(ResId);
-        }
-
         public String render(Object listItem)
         {
             if (listItem == null)

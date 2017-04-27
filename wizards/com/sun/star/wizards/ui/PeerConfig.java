@@ -59,11 +59,10 @@ public class PeerConfig implements XWindowListener
 
     private static class ImageUrlTask
     {
-
         Object oModel;
-        Object oResource;
+        String oResource;
 
-        public ImageUrlTask(Object _oModel, Object _oResource)
+        public ImageUrlTask(Object _oModel, String _oResource)
         {
             oResource = _oResource;
             oModel = _oModel;
@@ -94,15 +93,7 @@ public class PeerConfig implements XWindowListener
             for (int i = 0; i < this.aImageUrlTasks.size(); i++)
             {
                 ImageUrlTask aImageUrlTask = aImageUrlTasks.get(i);
-                String sImageUrl = PropertyNames.EMPTY_STRING;
-                if (AnyConverter.isInt(aImageUrlTask.oResource))
-                {
-                    sImageUrl = oUnoDialog.getWizardImageUrl(((Integer) aImageUrlTask.oResource).intValue());
-                }
-                else if (AnyConverter.isString(aImageUrlTask.oResource))
-                {
-                    sImageUrl = (String) aImageUrlTask.oResource;
-                }
+                String sImageUrl = aImageUrlTask.oResource;
                 if (!sImageUrl.equals(PropertyNames.EMPTY_STRING))
                 {
                     Helper.setUnoPropertyValue(aImageUrlTask.oModel, PropertyNames.PROPERTY_IMAGEURL, sImageUrl);
@@ -155,17 +146,6 @@ public class PeerConfig implements XWindowListener
     public void setImageUrl(Object _ocontrolmodel, String _sResourceUrl)
     {
         ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _sResourceUrl);
-        this.aImageUrlTasks.add(oImageUrlTask);
-    }
-
-    /**
-     * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
-     * within the wizards project
-     * wizards project
-     */
-    public void setImageUrl(Object _ocontrolmodel, Object _oResource)
-    {
-        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _oResource);
         this.aImageUrlTasks.add(oImageUrlTask);
     }
 }

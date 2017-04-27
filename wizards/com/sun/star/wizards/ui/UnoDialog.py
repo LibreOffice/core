@@ -367,6 +367,3 @@ class UnoDialog(object):
         nGreenModulo = (nRedModulo % 256)
         nBlue = nGreenModulo
         return nBlue
-
-    def getWizardImageUrl(self, _nResId):
-        return "private:resource/wzi/bitmapex/" + str(_nResId)
