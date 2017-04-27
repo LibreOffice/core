@@ -147,7 +147,10 @@ void CGM::ImplDoClass2()
             aTempLineBundle.eLineType = (LineType)ImplGetI( pElement->nIndexPrecision );
             aTempLineBundle.nLineWidth = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempLineBundle.SetColor( ImplGetBitmapColor() );
+            const bool bUpdateLineBundle = aTempLineBundle.GetIndex() == pElement->pLineBundle->GetIndex();
             CGMElements::InsertBundle( pElement->aLineList, aTempLineBundle );
+            if (bUpdateLineBundle)
+                pElement->pLineBundle = static_cast<LineBundle*>(CGMElements::GetBundleIndex(aTempLineBundle.GetIndex(), pElement->aLineList, pElement->aLineBundle));
         }
         break;
         case 0x0c : /*Marker Representation*/
@@ -157,7 +160,10 @@ void CGM::ImplDoClass2()
             aTempMarkerBundle.eMarkerType = (MarkerType)ImplGetI( pElement->nIndexPrecision );
             aTempMarkerBundle.nMarkerSize = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempMarkerBundle.SetColor( ImplGetBitmapColor() );
+            const bool bUpdateMarkerBundle = aTempMarkerBundle.GetIndex() == pElement->pMarkerBundle->GetIndex();
             CGMElements::InsertBundle( pElement->aMarkerList, aTempMarkerBundle );
+            if (bUpdateMarkerBundle)
+                pElement->pMarkerBundle = static_cast<MarkerBundle*>(CGMElements::GetBundleIndex(aTempMarkerBundle.GetIndex(), pElement->aMarkerList, pElement->aMarkerBundle));
         }
         break;
         case 0x0d : /*Text Representation*/
@@ -169,7 +175,10 @@ void CGM::ImplDoClass2()
             aTempTextBundle.nCharacterSpacing = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempTextBundle.nCharacterExpansion = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempTextBundle.SetColor( ImplGetBitmapColor() );
+            const bool bUpdateTextBundle = aTempTextBundle.GetIndex() == pElement->pTextBundle->GetIndex();
             CGMElements::InsertBundle( pElement->aTextList, aTempTextBundle );
+            if (bUpdateTextBundle)
+                pElement->pTextBundle = static_cast<TextBundle*>(CGMElements::GetBundleIndex(aTempTextBundle.GetIndex(), pElement->aTextList, pElement->aTextBundle));
         }
         break;
         case 0x0e : /*Fill Representation*/
@@ -180,7 +189,10 @@ void CGM::ImplDoClass2()
             aTempFillBundle.SetColor( ImplGetBitmapColor() );
             aTempFillBundle.nFillPatternIndex = ImplGetI( pElement->nIndexPrecision );
             aTempFillBundle.nFillHatchIndex = ImplGetI( pElement->nIndexPrecision );
+            const bool bUpdateFillBundle = aTempFillBundle.GetIndex() == pElement->pFillBundle->GetIndex();
             CGMElements::InsertBundle( pElement->aFillList, aTempFillBundle );
+            if (bUpdateFillBundle)
+                pElement->pFillBundle = static_cast<FillBundle*>(CGMElements::GetBundleIndex(aTempFillBundle.GetIndex(), pElement->aFillList, pElement->aFillBundle));
         }
         break;
         case 0x0f : /*Edge Representation*/
@@ -190,7 +202,10 @@ void CGM::ImplDoClass2()
             aTempEdgeBundle.eEdgeType = (EdgeType)ImplGetI( pElement->nIndexPrecision );
             aTempEdgeBundle.nEdgeWidth = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             aTempEdgeBundle.SetColor( ImplGetBitmapColor() );
+            const bool bUpdateEdgeBundle = aTempEdgeBundle.GetIndex() == pElement->pEdgeBundle->GetIndex();
             CGMElements::InsertBundle( pElement->aEdgeList, aTempEdgeBundle );
+            if (bUpdateEdgeBundle)
+                pElement->pEdgeBundle = static_cast<EdgeBundle*>(CGMElements::GetBundleIndex(aTempEdgeBundle.GetIndex(), pElement->aEdgeList, pElement->aEdgeBundle));
         }
         break;
         case 0x10 : /*Interior Style Specification Mode */break;    // NS
