@@ -23,10 +23,13 @@ private:
 public:
 
     static OUString getUpdateInfoURL();
+    static OUString getUpdateInfoLog();
     static OUString getPatchDirURL();
     static OUString getUpdateDirURL();
     static OUString getExecutableDirURL();
 
+    static void log(const OUString& rMessage);
+    static void log(const OString& rMessage);
 };
 
 #endif
