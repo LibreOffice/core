@@ -371,6 +371,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     const bool bHasGrid = pGrid && rInf.SnapToGrid() &&
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
+
     const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
     const sal_uInt16 nGridWidth = (bHasGrid) ? GetGridWidth(*pGrid, *pDoc) : 0;
 
@@ -472,7 +473,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 }
             }
         }
-        else if ( bHasGrid && ! pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
+        else if ( bHasGrid && pGrid->IsSnapToChars() && ! pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
         {
             // insert a grid kerning portion
             if ( ! pGridKernPortion )
@@ -618,7 +619,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             }
         }
 
-        if ( bHasGrid && pPor != pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
+        if ( bHasGrid && pGrid->IsSnapToChars() && pPor != pGridKernPortion && ! pMulti && ! pPor->InTabGrp() )
         {
             sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
