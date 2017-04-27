@@ -130,16 +130,18 @@ namespace
             input = "TEST/subTST;"
                     "parm1*0*=us-ascii'en'value;PARM1*1*=1;"
                     "parm2*0*=WINDOWS-1250'en-GB'value2%20%80;"
-                    "parm3*0*=UNKNOWN'EN'value3";
+                    "parm3*0*=UNKNOWN'EN'value3;"
+                    "parm1*1*=2";               // this parameter is a duplicate,
+                                                // the scan should end before this parameter
             // Just scan input for valid string:
             end = INetMIME::scanContentType(input.getStr(), input.getStr()+input.getLength());
             CPPUNIT_ASSERT(end != nullptr);
-            CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
+            CPPUNIT_ASSERT_EQUAL(OUString(";parm1*1*=2"), OUString(end)); // the invalid end of input
             // Scan input and parse type, subType and parameters:
             end = INetMIME::scanContentType(input.getStr(), input.getStr() + input.getLength(),
                                             &type, &subType, &parameters);
             CPPUNIT_ASSERT(end != nullptr);
-            CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
+            CPPUNIT_ASSERT_EQUAL(OUString(";parm1*1*=2"), OUString(end)); // the invalid end of input
             CPPUNIT_ASSERT_EQUAL(OUString("test"), type);
             CPPUNIT_ASSERT_EQUAL(OUString("subtst"), subType);
             CPPUNIT_ASSERT_EQUAL(
