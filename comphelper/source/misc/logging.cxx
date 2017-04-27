@@ -56,7 +56,6 @@ namespace comphelper
 
         bool isValid() const { return m_xLogger.is(); }
         const Reference< XLogger >& getLogger() const { return m_xLogger; }
-        const Reference< XComponentContext >& getContext() const { return m_aContext; }
     };
 
     EventLogger_Impl::EventLogger_Impl( const Reference< XComponentContext >& _rxContext, const OUString& _rLoggerName )
