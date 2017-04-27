@@ -421,8 +421,8 @@ void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( vcl::Window* pWindow, b
     {
         const sal_uInt16 nDownItem = pToolBox->GetDownItemId();
         if ( !nDownItem )
-            // Items with ItemId == 0 are not allowed in ToolBox, which means that currently no item is in down state.
-            // Moreover, running GetItemPos with 0 could find a separator item if there is any.
+            // No item is currently in down state.
+            // Moreover, calling GetItemPos with 0 will find a separator if there is any.
             return;
 
         Reference< XAccessible > xChild( pWindow->GetAccessible() );
@@ -461,7 +461,13 @@ void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWin
         && pToolBox == pChildWindow->GetParent()
         && pChildWindow->GetType() == WindowType::TOOLBOX )
     {
-        ToolBox::ImplToolItems::size_type nIndex = pToolBox->GetItemPos( pToolBox->GetCurItemId() );
+        const sal_uInt16 nCurItemId( pToolBox->GetCurItemId() );
+        if ( !nCurItemId )
+            // No item is currently active (might happen when opening the overflow popup).
+            // Moreover, calling GetItemPos with 0 will find a separator if there is any.
+            return;
+
+        ToolBox::ImplToolItems::size_type nIndex = pToolBox->GetItemPos( nCurItemId );
         Reference< XAccessible > xItem = getAccessibleChild( nIndex );
             //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
         if ( xItem.is() )
