@@ -197,15 +197,20 @@ struct test_name_compare
     std::string maName;
 };
 
-void addRecursiveTests(const std::vector<std::string>& test_names, CppUnit::Test* pTest, CppUnit::TestRunner& rRunner)
+bool addRecursiveTests(const std::vector<std::string>& test_names, CppUnit::Test* pTest, CppUnit::TestRunner& rRunner)
 {
+    bool ret(false);
     for (int i = 0; i < pTest->getChildTestCount(); ++i)
     {
         CppUnit::Test* pNewTest = pTest->getChildTestAt(i);
-        addRecursiveTests(test_names, pNewTest, rRunner);
+        ret |= addRecursiveTests(test_names, pNewTest, rRunner);
         if (std::find_if(test_names.begin(), test_names.end(), test_name_compare(pNewTest->getName())) != test_names.end())
+        {
             rRunner.addTest(pNewTest);
+            ret = true;
+        }
     }
+    return ret;
 }
 
 }
@@ -297,7 +302,12 @@ public:
                 std::vector<std::string> test_names;
                 boost::split(test_names, pVal, boost::is_any_of("\t "));
                 CppUnit::Test* pTest = CppUnit::TestFactoryRegistry::getRegistry().makeTest();
-                addRecursiveTests(test_names, pTest, runner);
+                bool const added(addRecursiveTests(test_names, pTest, runner));
+                if (!added)
+                {
+                    std::cerr << "\nFatal error: CPPUNIT_TEST_NAME contains no valid tests\n";
+                    return false;
+                }
             }
             else
             {
