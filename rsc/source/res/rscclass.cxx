@@ -618,57 +618,6 @@ ERRTYPE RscClass::WriteRc( const RSCINST & rInst,
     return aError;
 }
 
-RscSysDepend::RscSysDepend( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuper )
-            : RscClass( nId, nTypeId, pSuper )
-{
-}
-
-ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem,
-                                        RscTypCont * pTC, sal_uInt32 nDeep )
-{
-    ERRTYPE     aError;
-    RSCINST     aFileName;
-
-    // retrieve instance with file name "FILENAME"
-    aFileName = RscClass::GetCopyVar( rInst, pHS->getID( "FILE", true ) );
-    if( aFileName.IsInst() )
-    {
-        RscWriteRc aTmpMem;
-        aError = aFileName.pClass->WriteRcHeader( aFileName, aTmpMem, pTC,
-                                                  RscId(), nDeep );
-        // Obsolete - need changes in VCL
-        rMem.Put( sal_uInt32(0) );
-
-        // write identifier
-        sal_uInt32  nId = 0xFFFFFFFF;
-        if( aTmpMem.Size() && pTC && (*aTmpMem.GetUTF8( 0 ) != '\0') )
-        {
-            nId = pTC->PutSysName( rInst.pClass->GetTypId(),
-                                   aTmpMem.GetUTF8( 0 ) );
-        }
-        rMem.Put( nId );
-        aError = aFileName.pClass->WriteRcHeader( aFileName, rMem, pTC,
-                                                  RscId(), nDeep );
-    }
-    else
-        aError = ERR_ERROR;
-
-    return aError;
-}
-
-ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                               RscTypCont * pTC, sal_uInt32 nDeep )
-{
-    ERRTYPE     aError = RscClass::WriteRc( rInst, rMem, pTC, nDeep );
-
-    if( this == rInst.pClass )
-    {
-        // only when it is own class
-        aError = WriteSysDependRc( rInst, rMem, pTC, nDeep );
-    }
-    return aError;
-}
-
 RscTupel::RscTupel( Atom nId, RESOURCE_TYPE nTypeId )
     : RscClass( nId, nTypeId, nullptr )
 {
