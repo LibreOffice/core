@@ -163,7 +163,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     {
         throw Unhandled(__FILE__, __LINE__);
     }
-    // Obtain cl context
+
     ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
     cl_int err;
@@ -757,7 +757,7 @@ public:
 size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_program )
 {
     FormulaToken* ref = mFormulaTree->GetFormulaToken();
-    // Obtain cl context
+
     ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
     cl_int err;
@@ -1437,7 +1437,7 @@ public:
     virtual size_t Marshal( cl_kernel k, int argno, int w, cl_program mpProgram )
     {
         assert(Base::mpClmem == nullptr);
-        // Obtain cl context
+
         ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
         cl_int err;
@@ -2225,7 +2225,6 @@ public:
         }
         if (dynamic_cast<OpGeoMean*>(mpCodeGen.get()))
         {
-            // Obtain cl context
             ::opencl::KernelEnv kEnv;
             ::opencl::setKernelEnv(&kEnv);
             cl_int err;
@@ -2287,7 +2286,6 @@ public:
         }
         if (OpSumIfs* OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
         {
-            // Obtain cl context
             ::opencl::KernelEnv kEnv;
             ::opencl::setKernelEnv(&kEnv);
             cl_int err;
@@ -3771,7 +3769,7 @@ void DynamicKernel::CreateKernel()
     cl_int err;
     std::string kname = "DynamicKernel" + mKernelSignature;
     // Compile kernel here!!!
-    // Obtain cl context
+
     ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
     const char* src = mFullProgramSrc.c_str();
@@ -3881,7 +3879,6 @@ void DynamicKernel::CreateKernel()
 
 void DynamicKernel::Launch( size_t nr )
 {
-    // Obtain cl context
     ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
     cl_int err;
@@ -4058,7 +4055,6 @@ public:
         // Map results back
         mpCLResBuf = mpKernel->GetResultBuffer();
 
-        // Obtain cl context
         ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
 
@@ -4084,7 +4080,6 @@ public:
 
         rDoc.SetFormulaResults(rTopPos, mpResBuf, mnGroupLength);
 
-        // Obtain cl context
         ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
 
@@ -4185,7 +4180,6 @@ void genRPNTokens( ScDocument& rDoc, const ScAddress& rTopPos, ScTokenArray& rCo
 
 bool waitForResults()
 {
-    // Obtain cl context
     ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
 
