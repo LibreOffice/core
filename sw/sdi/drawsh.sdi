@@ -19,7 +19,6 @@ interface TextDraw : TextDrawBase
 {
     SID_ATTR_LINEEND_STYLE
     [
-        SlotType = SfxBoolItem ;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = DisableState ;
         Export = FALSE;

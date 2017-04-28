@@ -26,8 +26,6 @@
 class SvMetaSlot : public SvMetaAttribute
 {
 public:
-    tools::SvRef<SvMetaType>      aSlotType;
-    tools::SvRef<SvMetaSlot>      aMethod;
     SvIdentifier     aGroupId;
     SvIdentifier     aExecMethod;
     SvIdentifier     aStateMethod;
@@ -59,7 +57,6 @@ public:
                             size_t nStart,
                             SvIdlDataBase & rBase, SvStream & rOutStm );
 
-    OString         GetMangleName() const;
     bool            IsVariable() const;
     bool            IsMethod() const;
 
@@ -86,8 +83,6 @@ public:
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
 
-    SvMetaAttribute *   GetMethod() const;
-    SvMetaType *        GetSlotType() const;
     const OString&      GetGroupId() const;
     const OString&      GetExecMethod() const;
     const OString&      GetStateMethod() const;

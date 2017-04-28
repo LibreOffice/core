@@ -15,7 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-SfxBoolItem AbsoluteRecord SID_FM_RECORD_ABSOLUTE
+SfxInt32Item AbsoluteRecord SID_FM_RECORD_ABSOLUTE
 (SfxInt32Item Position FN_PARAM_1)
 [
     AutoUpdate = TRUE,
@@ -25,8 +25,6 @@ SfxBoolItem AbsoluteRecord SID_FM_RECORD_ABSOLUTE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxInt32Item
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -235,7 +233,7 @@ SfxVoidItem AlignUp SID_OBJECT_ALIGN_UP
 ]
 
 
-SfxVoidItem Arc SID_DRAW_ARC
+SfxBoolItem Arc SID_DRAW_ARC
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -245,8 +243,6 @@ SfxVoidItem Arc SID_DRAW_ARC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -332,7 +328,7 @@ SfxVoidItem AutoFormat SID_AUTOFORMAT
 
 
 
-SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
+SfxStringItem BackgroundImage SID_GALLERY_BG_BRUSH
 (SvxBrushItem Background SID_GALLERY_BG_BRUSH, SfxUInt16Item Position SID_GALLERY_BG_POS)
 [
     AutoUpdate = FALSE,
@@ -343,8 +339,6 @@ SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -353,7 +347,7 @@ SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
 
 
 
-SfxStringItem TableStyle SID_TABLE_STYLE
+SfxVoidItem TableStyle SID_TABLE_STYLE
 ()
 [
     AutoUpdate = FALSE,
@@ -885,7 +879,7 @@ SvxBoxItem BorderOuter SID_ATTR_BORDER_OUTER
 ]
 
 
-SfxVoidItem SetBorderStyle SID_ATTR_BORDER
+SvxBoxItem SetBorderStyle SID_ATTR_BORDER
 (SvxBoxItem OuterBorder SID_ATTR_BORDER_OUTER,SvxBoxInfoItem InnerBorder SID_ATTR_BORDER_INNER)
 [
     AutoUpdate = TRUE,
@@ -895,8 +889,6 @@ SfxVoidItem SetBorderStyle SID_ATTR_BORDER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SvxBoxItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1357,7 +1349,7 @@ SfxVoidItem ChooseControls SID_CHOOSE_CONTROLS
 ]
 
 
-SfxVoidItem Circle SID_DRAW_CIRCLE
+SfxBoolItem Circle SID_DRAW_CIRCLE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y)
 [
     AutoUpdate = TRUE,
@@ -1367,8 +1359,6 @@ SfxVoidItem Circle SID_DRAW_CIRCLE
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1376,7 +1366,7 @@ SfxVoidItem Circle SID_DRAW_CIRCLE
 ]
 
 
-SfxVoidItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
+SfxBoolItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y)
 [
     AutoUpdate = TRUE,
@@ -1386,8 +1376,6 @@ SfxVoidItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1395,7 +1383,7 @@ SfxVoidItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
 ]
 
 
-SfxVoidItem CircleArc SID_DRAW_CIRCLEARC
+SfxBoolItem CircleArc SID_DRAW_CIRCLEARC
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -1405,8 +1393,6 @@ SfxVoidItem CircleArc SID_DRAW_CIRCLEARC
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1414,7 +1400,7 @@ SfxVoidItem CircleArc SID_DRAW_CIRCLEARC
 ]
 
 
-SfxVoidItem CircleCut SID_DRAW_CIRCLECUT
+SfxBoolItem CircleCut SID_DRAW_CIRCLECUT
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -1425,8 +1411,6 @@ SfxVoidItem CircleCut SID_DRAW_CIRCLECUT
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1434,7 +1418,7 @@ SfxVoidItem CircleCut SID_DRAW_CIRCLECUT
 ]
 
 
-SfxVoidItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
+SfxBoolItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -1444,8 +1428,6 @@ SfxVoidItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1453,7 +1435,7 @@ SfxVoidItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
 ]
 
 
-SfxVoidItem CirclePie SID_DRAW_CIRCLEPIE
+SfxBoolItem CirclePie SID_DRAW_CIRCLEPIE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -1463,8 +1445,6 @@ SfxVoidItem CirclePie SID_DRAW_CIRCLEPIE
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1472,7 +1452,7 @@ SfxVoidItem CirclePie SID_DRAW_CIRCLEPIE
 ]
 
 
-SfxVoidItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
+SfxBoolItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -1481,8 +1461,6 @@ SfxVoidItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2125,8 +2103,6 @@ SfxBoolItem CreateControl SID_FM_CREATE_CONTROL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2228,7 +2204,7 @@ SfxBoolItem DateField SID_FM_DATEFIELD
 ]
 
 
-SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
+SfxBoolItem DefaultBullet FN_NUM_BULLET_ON
 (SfxBoolItem On FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -2238,8 +2214,6 @@ SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2258,8 +2232,6 @@ SfxBoolItem DeleteRecord SID_FM_RECORD_DELETE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2402,7 +2374,7 @@ SfxBoolItem InsertEdit SID_INSERT_EDIT
 ]
 
 
-SfxVoidItem Ellipse SID_DRAW_ELLIPSE
+SfxBoolItem Ellipse SID_DRAW_ELLIPSE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y)
 [
     AutoUpdate = TRUE,
@@ -2413,8 +2385,6 @@ SfxVoidItem Ellipse SID_DRAW_ELLIPSE
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2422,7 +2392,7 @@ SfxVoidItem Ellipse SID_DRAW_ELLIPSE
 ]
 
 
-SfxVoidItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
+SfxBoolItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y)
 [
     AutoUpdate = TRUE,
@@ -2432,8 +2402,6 @@ SfxVoidItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2441,7 +2409,7 @@ SfxVoidItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
 ]
 
 
-SfxVoidItem EllipseCut SID_DRAW_ELLIPSECUT
+SfxBoolItem EllipseCut SID_DRAW_ELLIPSECUT
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -2451,8 +2419,6 @@ SfxVoidItem EllipseCut SID_DRAW_ELLIPSECUT
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2460,7 +2426,7 @@ SfxVoidItem EllipseCut SID_DRAW_ELLIPSECUT
 ]
 
 
-SfxVoidItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
+SfxBoolItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -2469,8 +2435,6 @@ SfxVoidItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2808,8 +2772,6 @@ SfxBoolItem FirstRecord SID_FM_RECORD_FIRST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3393,8 +3355,6 @@ SfxBoolItem FormFiltered SID_FM_FORM_FILTERED
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -3438,7 +3398,7 @@ SfxVoidItem FormFilterExit SID_FM_FILTER_EXIT
 ]
 
 
-SfxBoolItem FormFilterNavigator SID_FM_FILTER_NAVIGATOR
+SfxVoidItem FormFilterNavigator SID_FM_FILTER_NAVIGATOR
 ()
 [
     AutoUpdate = TRUE,
@@ -4345,7 +4305,7 @@ SfxVoidItem RotateRight SID_ROTATE_GRAPHIC_RIGHT
     GroupId = GID_GRAPHIC;
 ]
 
-SfxVoidItem Crop SID_OBJECT_CROP
+SfxBoolItem Crop SID_OBJECT_CROP
 ()
 [
     AutoUpdate = TRUE,
@@ -4355,8 +4315,6 @@ SfxVoidItem Crop SID_OBJECT_CROP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4487,7 +4445,7 @@ SfxVoidItem EditAnnotation SID_EDIT_POSTIT
     GroupId = GID_EDIT;
 ]
 
-SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
+SfxVoidItem ShowAnnotations SID_SHOW_POSTIT
 ()
 [
     AutoUpdate = FALSE,
@@ -4635,7 +4593,7 @@ SfxVoidItem InsertGalleryPic SID_GALLERY_FORMATS
 ]
 
 
-SfxBoolItem InsertGraphic SID_INSERT_GRAPHIC
+SfxVoidItem InsertGraphic SID_INSERT_GRAPHIC
 (SfxStringItem FileName SID_INSERT_GRAPHIC,SfxStringItem FilterName FN_PARAM_FILTER,SfxBoolItem AsLink FN_PARAM_1,SfxStringItem Style FN_PARAM_2)
 [
     AutoUpdate = FALSE,
@@ -4692,7 +4650,7 @@ SfxBoolItem InsertMode SID_ATTR_INSERT
 ]
 
 
-SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
+SfxBoolItem DefaultNumbering FN_NUM_NUMBERING_ON
 (SfxBoolItem On FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -4702,8 +4660,6 @@ SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4837,7 +4793,7 @@ SfxVoidItem InsertSpreadsheet SID_ATTR_TABLE
 
 
 
-SfxVoidItem InsertTable SID_INSERT_TABLE
+SfxUInt16Item InsertTable SID_INSERT_TABLE
 (SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN,SfxUInt16Item Rows SID_ATTR_TABLE_ROW )
 [
     AutoUpdate = FALSE,
@@ -4848,8 +4804,6 @@ SfxVoidItem InsertTable SID_INSERT_TABLE
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxUInt16Item
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5093,8 +5047,6 @@ SfxBoolItem LastRecord SID_FM_RECORD_LAST
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5175,7 +5127,7 @@ SvxLRSpaceItem LeftRightMargin SID_ATTR_LRSPACE
 ]
 
 
-SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
+SvxLRSpaceItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
 (SvxLRSpaceItem LRSpace SID_ATTR_PARA_LRSPACE)
 [
     AutoUpdate = FALSE,
@@ -5186,8 +5138,6 @@ SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SvxLRSpaceItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5195,7 +5145,7 @@ SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
 ]
 
 
-SfxVoidItem LeftParaMargin SID_ATTR_PARA_LEFTSPACE
+SvxLRSpaceItem LeftParaMargin SID_ATTR_PARA_LEFTSPACE
 
 [
     AutoUpdate = FALSE,
@@ -5206,8 +5156,6 @@ SfxVoidItem LeftParaMargin SID_ATTR_PARA_LEFTSPACE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SvxLRSpaceItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5215,7 +5163,7 @@ SfxVoidItem LeftParaMargin SID_ATTR_PARA_LEFTSPACE
 ]
 
 
-SfxVoidItem FirstLineParaMargin SID_ATTR_PARA_FIRSTLINESPACE
+SvxLRSpaceItem FirstLineParaMargin SID_ATTR_PARA_FIRSTLINESPACE
 
 [
     AutoUpdate = FALSE,
@@ -5226,8 +5174,6 @@ SfxVoidItem FirstLineParaMargin SID_ATTR_PARA_FIRSTLINESPACE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SvxLRSpaceItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5235,7 +5181,7 @@ SfxVoidItem FirstLineParaMargin SID_ATTR_PARA_FIRSTLINESPACE
 ]
 
 
-SfxVoidItem RightParaMargin SID_ATTR_PARA_RIGHTSPACE
+SvxLRSpaceItem RightParaMargin SID_ATTR_PARA_RIGHTSPACE
 
 [
     AutoUpdate = FALSE,
@@ -5245,8 +5191,6 @@ SfxVoidItem RightParaMargin SID_ATTR_PARA_RIGHTSPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SvxLRSpaceItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5520,8 +5464,6 @@ SfxBoolItem LineEndStyle SID_ATTR_LINEEND_STYLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -5710,8 +5652,6 @@ SfxBoolItem NewRecord SID_FM_RECORD_NEW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5729,8 +5669,6 @@ SfxBoolItem NextRecord SID_FM_RECORD_NEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6352,7 +6290,7 @@ SfxBoolItem PatternField SID_FM_PATTERNFIELD
 ]
 
 
-SfxVoidItem Pie SID_DRAW_PIE
+SfxBoolItem Pie SID_DRAW_PIE
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -6363,8 +6301,6 @@ SfxVoidItem Pie SID_DRAW_PIE
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6372,7 +6308,7 @@ SfxVoidItem Pie SID_DRAW_PIE
 ]
 
 
-SfxVoidItem Pie_Unfilled SID_DRAW_PIE_NOFILL
+SfxBoolItem Pie_Unfilled SID_DRAW_PIE_NOFILL
 (SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
@@ -6381,8 +6317,6 @@ SfxVoidItem Pie_Unfilled SID_DRAW_PIE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6474,8 +6408,6 @@ SfxBoolItem PrevRecord SID_FM_RECORD_PREV
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6762,8 +6694,6 @@ SfxBoolItem RecFromText SID_FM_RECORD_FROM_TEXT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -6781,8 +6711,6 @@ SfxBoolItem RecSave SID_FM_RECORD_SAVE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6802,8 +6730,6 @@ SfxVoidItem RecSearch SID_FM_SEARCH
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxVoidItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6811,7 +6737,7 @@ SfxVoidItem RecSearch SID_FM_SEARCH
 ]
 
 
-SfxVoidItem Rect SID_DRAW_RECT
+SfxBoolItem Rect SID_DRAW_RECT
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = TRUE,
@@ -6822,8 +6748,6 @@ SfxVoidItem Rect SID_DRAW_RECT
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6831,7 +6755,7 @@ SfxVoidItem Rect SID_DRAW_RECT
 ]
 
 
-SfxVoidItem Rect_Rounded SID_DRAW_RECT_ROUND
+SfxBoolItem Rect_Rounded SID_DRAW_RECT_ROUND
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = TRUE,
@@ -6841,8 +6765,6 @@ SfxVoidItem Rect_Rounded SID_DRAW_RECT_ROUND
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6850,7 +6772,7 @@ SfxVoidItem Rect_Rounded SID_DRAW_RECT_ROUND
 ]
 
 
-SfxVoidItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
+SfxBoolItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = TRUE,
@@ -6860,8 +6782,6 @@ SfxVoidItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6869,7 +6789,7 @@ SfxVoidItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
 ]
 
 
-SfxVoidItem Rect_Unfilled SID_DRAW_RECT_NOFILL
+SfxBoolItem Rect_Unfilled SID_DRAW_RECT_NOFILL
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = TRUE,
@@ -6878,8 +6798,6 @@ SfxVoidItem Rect_Unfilled SID_DRAW_RECT_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6899,8 +6817,6 @@ SfxBoolItem RecText SID_FM_RECORD_TEXT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -6919,8 +6835,6 @@ SfxStringItem RecTotal SID_FM_RECORD_TOTAL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -6938,8 +6852,6 @@ SfxBoolItem RecUndo SID_FM_RECORD_UNDO
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7002,7 +6914,7 @@ SfxVoidItem RemoveFilterSort SID_FM_REMOVE_FILTER_SORT
 ]
 
 
-SfxSetItem ReplaceSet FID_SEARCH_REPLACESET
+SfxVoidItem ReplaceSet FID_SEARCH_REPLACESET
 ()
 [
     AutoUpdate = FALSE,
@@ -7170,7 +7082,7 @@ SfxVoidItem SbaExecuteSql SID_FM_EXECUTE
 ]
 
 
-SfxBoolItem SbaNativeSql SID_FM_NATIVESQL
+SfxVoidItem SbaNativeSql SID_FM_NATIVESQL
 ()
 [
     AutoUpdate = TRUE,
@@ -7315,7 +7227,7 @@ SfxVoidItem SearchOn FID_SEARCH_ON
 ]
 
 
-SfxSetItem SearchSet FID_SEARCH_SEARCHSET
+SfxVoidItem SearchSet FID_SEARCH_SEARCHSET
 ()
 [
     AutoUpdate = FALSE,
@@ -7453,8 +7365,6 @@ SvxLongULSpaceItem SetLongTopBottomMargin SID_ATTR_LONG_ULSPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SvxLongULSpaceItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7740,8 +7650,6 @@ SfxBoolItem ShowPropertyBrowser SID_FM_SHOW_PROPERTY_BROWSER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -7951,7 +7859,7 @@ SfxBoolItem Spinbutton SID_INSERT_SPINBUTTON
 ]
 
 
-SfxVoidItem Square SID_DRAW_SQUARE
+SfxBoolItem Square SID_DRAW_SQUARE
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = TRUE,
@@ -7960,8 +7868,6 @@ SfxVoidItem Square SID_DRAW_SQUARE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7970,7 +7876,7 @@ SfxVoidItem Square SID_DRAW_SQUARE
 ]
 
 
-SfxVoidItem Square_Rounded SID_DRAW_SQUARE_ROUND
+SfxBoolItem Square_Rounded SID_DRAW_SQUARE_ROUND
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = TRUE,
@@ -7979,8 +7885,6 @@ SfxVoidItem Square_Rounded SID_DRAW_SQUARE_ROUND
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7989,7 +7893,7 @@ SfxVoidItem Square_Rounded SID_DRAW_SQUARE_ROUND
 ]
 
 
-SfxVoidItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
+SfxBoolItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = TRUE,
@@ -7998,8 +7902,6 @@ SfxVoidItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8008,7 +7910,7 @@ SfxVoidItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
 ]
 
 
-SfxVoidItem Square_Unfilled SID_DRAW_SQUARE_NOFILL
+SfxBoolItem Square_Unfilled SID_DRAW_SQUARE_NOFILL
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y,SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
     AutoUpdate = TRUE,
@@ -8017,8 +7919,6 @@ SfxVoidItem Square_Unfilled SID_DRAW_SQUARE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8184,9 +8084,6 @@ SfxBoolItem TabDialog SID_FM_TAB_DIALOG
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxBoolItem
-
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -8246,8 +8143,6 @@ SfxBoolItem TestMode SID_DIALOG_TESTMODE
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -8284,9 +8179,6 @@ SfxBoolItem DrawText SID_DRAW_TEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-
-    SlotType = SfxBoolItem
-
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8428,7 +8320,7 @@ SfxBoolItem TimeField SID_FM_TIMEFIELD
 ]
 
 
-SfxBoolItem ToggleObjectBezierMode SID_BEZIER_EDIT
+SfxVoidItem ToggleObjectBezierMode SID_BEZIER_EDIT
 ()
 [
     AutoUpdate = TRUE,
@@ -8447,7 +8339,7 @@ SfxBoolItem ToggleObjectBezierMode SID_BEZIER_EDIT
 ]
 
 
-SfxBoolItem ToggleObjectRotateMode SID_OBJECT_ROTATE
+SfxVoidItem ToggleObjectRotateMode SID_OBJECT_ROTATE
 ()
 [
     AutoUpdate = TRUE,
@@ -8540,7 +8432,7 @@ SfxVoidItem TransformDialog SID_ATTR_TRANSFORM
 ]
 
 
-SfxBoolItem TwainSelect SID_TWAIN_SELECT
+SfxVoidItem TwainSelect SID_TWAIN_SELECT
 ()
 [
     AutoUpdate = FALSE,
@@ -8693,7 +8585,7 @@ SfxBoolItem VFixedLine SID_INSERT_VFIXEDLINE
 ]
 
 
-SfxVoidItem ViewFormAsGrid SID_FM_VIEW_AS_GRID
+SfxBoolItem ViewFormAsGrid SID_FM_VIEW_AS_GRID
 ()
 [
     AutoUpdate = TRUE,
@@ -8703,8 +8595,6 @@ SfxVoidItem ViewFormAsGrid SID_FM_VIEW_AS_GRID
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8946,8 +8836,6 @@ SfxVoidItem ToggleControlFocus SID_FM_TOGGLECONTROLFOCUS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxVoidItem
-
     AccelConfig = TRUE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -8965,8 +8853,6 @@ SfxVoidItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxVoidItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9474,7 +9360,7 @@ SvxColumnItem RulerRowsVertical SID_RULER_ROWS_VERTICAL
 
 
 
-SvxFontListItem FontNameList SID_ATTR_CHAR_FONTLIST
+SfxVoidItem FontNameList SID_ATTR_CHAR_FONTLIST
 ()
 [
     // flags:
@@ -9579,7 +9465,7 @@ SfxVoidItem ExtrusionTiltRight SID_EXTRUSION_TILT_RIGHT
 ]
 
 
-SfxVoidItem ExtrusionDepthFloater SID_EXTRUSION_DEPTH_FLOATER
+SfxBoolItem ExtrusionDepthFloater SID_EXTRUSION_DEPTH_FLOATER
 ()
 [
     AutoUpdate = FALSE,
@@ -9588,8 +9474,6 @@ SfxVoidItem ExtrusionDepthFloater SID_EXTRUSION_DEPTH_FLOATER
     Toggle = FALSE,
     Container = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -9597,7 +9481,7 @@ SfxVoidItem ExtrusionDepthFloater SID_EXTRUSION_DEPTH_FLOATER
 ]
 
 
-SfxVoidItem ExtrusionDepthDialog SID_EXTRUSION_DEPTH_DIALOG
+SvxDoubleItem ExtrusionDepthDialog SID_EXTRUSION_DEPTH_DIALOG
 (SvxDoubleItem Depth SID_EXTRUSION_DEPTH,SfxUInt16Item Metric SID_ATTR_METRIC)
 [
     AutoUpdate = FALSE,
@@ -9606,8 +9490,6 @@ SfxVoidItem ExtrusionDepthDialog SID_EXTRUSION_DEPTH_DIALOG
     Toggle = FALSE,
     Container = FALSE,
 
-    SlotType = SvxDoubleItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -9615,7 +9497,7 @@ SfxVoidItem ExtrusionDepthDialog SID_EXTRUSION_DEPTH_DIALOG
 ]
 
 
-SfxVoidItem ExtrusionDirectionFloater SID_EXTRUSION_DIRECTION_FLOATER
+SfxBoolItem ExtrusionDirectionFloater SID_EXTRUSION_DIRECTION_FLOATER
 ()
 [
     AutoUpdate = FALSE,
@@ -9624,8 +9506,6 @@ SfxVoidItem ExtrusionDirectionFloater SID_EXTRUSION_DIRECTION_FLOATER
     Toggle = FALSE,
     Container = FALSE,
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -9633,26 +9513,7 @@ SfxVoidItem ExtrusionDirectionFloater SID_EXTRUSION_DIRECTION_FLOATER
 ]
 
 
-SfxVoidItem ExtrusionLightingFloater SID_EXTRUSION_LIGHTING_FLOATER
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Asynchron;
-
-    SlotType = SfxBoolItem
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
-
-SfxVoidItem ExtrusionSurfaceFloater SID_EXTRUSION_SURFACE_FLOATER
+SfxBoolItem ExtrusionLightingFloater SID_EXTRUSION_LIGHTING_FLOATER
 ()
 [
     AutoUpdate = FALSE,
@@ -9662,7 +9523,22 @@ SfxVoidItem ExtrusionSurfaceFloater SID_EXTRUSION_SURFACE_FLOATER
     Container = FALSE,
     Asynchron;
 
-    SlotType = SfxBoolItem
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
+
+
+SfxBoolItem ExtrusionSurfaceFloater SID_EXTRUSION_SURFACE_FLOATER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9790,7 +9666,7 @@ SfxInt32Item ExtrusionSurface SID_EXTRUSION_SURFACE
 ]
 
 
-SfxVoidItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
+SfxBoolItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
 ()
 [
     AutoUpdate = FALSE,
@@ -9800,8 +9676,6 @@ SfxVoidItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
     Container = FALSE,
     Asynchron;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -9809,7 +9683,7 @@ SfxVoidItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
 ]
 
 
-SfxBoolItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
+SfxStringItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
 (SfxStringItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE)
 [
     AutoUpdate = TRUE,
@@ -9819,8 +9693,6 @@ SfxBoolItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9846,7 +9718,7 @@ SfxBoolItem FontworkSameLetterHeights SID_FONTWORK_SAME_LETTER_HEIGHTS
 ]
 
 
-SfxVoidItem FontworkAlignmentFloater SID_FONTWORK_ALIGNMENT_FLOATER
+SfxBoolItem FontworkAlignmentFloater SID_FONTWORK_ALIGNMENT_FLOATER
 ()
 [
     AutoUpdate = FALSE,
@@ -9855,8 +9727,6 @@ SfxVoidItem FontworkAlignmentFloater SID_FONTWORK_ALIGNMENT_FLOATER
     Toggle = FALSE,
     Container = FALSE,
     Asynchron;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9865,7 +9735,7 @@ SfxVoidItem FontworkAlignmentFloater SID_FONTWORK_ALIGNMENT_FLOATER
 ]
 
 
-SfxVoidItem FontworkCharacterSpacingFloater SID_FONTWORK_CHARACTER_SPACING_FLOATER
+SfxBoolItem FontworkCharacterSpacingFloater SID_FONTWORK_CHARACTER_SPACING_FLOATER
 ()
 [
     AutoUpdate = FALSE,
@@ -9874,8 +9744,6 @@ SfxVoidItem FontworkCharacterSpacingFloater SID_FONTWORK_CHARACTER_SPACING_FLOAT
     Toggle = FALSE,
     Container = FALSE,
     Asynchron;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9932,7 +9800,7 @@ SfxInt32Item FontworkCharacterSpacing SID_FONTWORK_CHARACTER_SPACING
 ]
 
 
-SfxVoidItem FontworkCharacterSpacingDialog SID_FONTWORK_CHARACTER_SPACING_DIALOG
+SfxInt32Item FontworkCharacterSpacingDialog SID_FONTWORK_CHARACTER_SPACING_DIALOG
 (SfxInt32Item FontworkCharacterSpacing SID_FONTWORK_CHARACTER_SPACING)
 [
     AutoUpdate = FALSE,
@@ -9940,8 +9808,6 @@ SfxVoidItem FontworkCharacterSpacingDialog SID_FONTWORK_CHARACTER_SPACING_DIALOG
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-
-    SlotType = SfxInt32Item
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9966,7 +9832,7 @@ SfxBoolItem FontworkKernCharacterPairs SID_FONTWORK_KERN_CHARACTER_PAIRS
 ]
 
 
-OfaRefItem GetColorTable SID_GET_COLORLIST
+SfxVoidItem GetColorTable SID_GET_COLORLIST
 ()
 [
     AutoUpdate = FALSE,
@@ -10002,7 +9868,7 @@ SfxVoidItem SpellCheckerChanged SID_SPELLCHECKER_CHANGED
 ]
 
 
-SfxUInt16Item Year2000 SID_ATTR_YEAR2000
+SfxVoidItem Year2000 SID_ATTR_YEAR2000
 ()
 [
     AutoUpdate = FALSE,
@@ -10206,7 +10072,7 @@ SfxVoidItem SbaBrwInsert SID_SBA_BRW_INSERT
 ]
 
 
-SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
+SfxStringItem BasicShapes SID_DRAWTBX_CS_BASIC
 (SfxStringItem BasicShapes SID_DRAWTBX_CS_BASIC)
 [
     AutoUpdate = TRUE,
@@ -10217,8 +10083,6 @@ SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -10226,7 +10090,7 @@ SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
 ]
 
 
-SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
+SfxStringItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
 (SfxStringItem SymbolShapes SID_DRAWTBX_CS_SYMBOL)
 [
     AutoUpdate = TRUE,
@@ -10237,8 +10101,6 @@ SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -10246,7 +10108,7 @@ SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
 ]
 
 
-SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
+SfxStringItem ArrowShapes SID_DRAWTBX_CS_ARROW
 (SfxStringItem ArrowShapes SID_DRAWTBX_CS_ARROW)
 [
     AutoUpdate = TRUE,
@@ -10257,8 +10119,6 @@ SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -10266,7 +10126,7 @@ SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
 ]
 
 
-SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
+SfxStringItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
 (SfxStringItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART)
 [
     AutoUpdate = TRUE,
@@ -10277,8 +10137,6 @@ SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -10286,7 +10144,7 @@ SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
 ]
 
 
-SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
+SfxStringItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
 (SfxStringItem CalloutShapes SID_DRAWTBX_CS_CALLOUT)
 [
     AutoUpdate = TRUE,
@@ -10297,8 +10155,6 @@ SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -10306,7 +10162,7 @@ SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
 ]
 
 
-SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
+SfxStringItem StarShapes SID_DRAWTBX_CS_STAR
 (SfxStringItem StarShapes SID_DRAWTBX_CS_STAR)
 [
     AutoUpdate = TRUE,
@@ -10316,8 +10172,6 @@ SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10483,8 +10337,6 @@ SfxBoolItem ShowDataNavigator SID_FM_SHOW_DATANAVIGATOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -10666,7 +10518,7 @@ SfxVoidItem CommonAlignVerticalDefault SID_ALIGN_ANY_VDEFAULT
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem AVMediaToolBox SID_AVMEDIA_TOOLBOX
+avmedia_MediaItem AVMediaToolBox SID_AVMEDIA_TOOLBOX
 ( avmedia_MediaItem AVMediaToolBox SID_AVMEDIA_TOOLBOX )
 [
     AutoUpdate = FALSE,
@@ -10676,7 +10528,6 @@ SfxVoidItem AVMediaToolBox SID_AVMEDIA_TOOLBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    SlotType = avmedia_MediaItem;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -11181,7 +11032,7 @@ SfxVoidItem TableSort SID_TABLE_SORT_DIALOG
 ]
 
 
-SfxVoidItem OpenSmartTagMenuOnCursor SID_OPEN_SMARTTAGMENU
+SvxSmartTagItem OpenSmartTagMenuOnCursor SID_OPEN_SMARTTAGMENU
 ()
 [
         AutoUpdate = FALSE,
@@ -11191,7 +11042,6 @@ SfxVoidItem OpenSmartTagMenuOnCursor SID_OPEN_SMARTTAGMENU
         Container = FALSE,
         RecordAbsolute = FALSE,
         RecordPerSet;
-        SlotType = SvxSmartTagItem;
 
         AccelConfig = FALSE,
         MenuConfig = TRUE,
@@ -11218,7 +11068,7 @@ SvxZoomSliderItem ZoomSlider SID_ATTR_ZOOMSLIDER
 ]
 
 
-SfxVoidItem LanguageStatus SID_LANGUAGE_STATUS
+SfxStringListItem LanguageStatus SID_LANGUAGE_STATUS
 (SfxStringItem Language SID_LANGUAGE_STATUS)
 [
     AutoUpdate = FALSE,
@@ -11228,8 +11078,6 @@ SfxVoidItem LanguageStatus SID_LANGUAGE_STATUS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringListItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -11432,7 +11280,7 @@ SfxVoidItem InsertRowsAfter SID_TABLE_INSERT_ROW_AFTER
     GroupId = GID_TABLE;
 ]
 
-SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
+SfxBoolItem PrepareMailExport SID_MAIL_PREPAREEXPORT
 ()
 [
     AutoUpdate = FALSE,
@@ -11442,8 +11290,6 @@ SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,

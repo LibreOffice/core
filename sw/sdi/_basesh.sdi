@@ -309,15 +309,14 @@ interface BaseTextSelection
     ]
 
     SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN // status()
+    (
+        SfxStringItem Param SID_STYLE_WATERCAN ,
+        SfxUInt16Item Family SID_STYLE_FAMILY
+    )
     [
-        SfxUInt16Item WatercanStyleModeOnOff
-        (
-            SfxStringItem Param SID_STYLE_WATERCAN ,
-            SfxUInt16Item Family SID_STYLE_FAMILY
-        ) ;
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
-            NoRecord;
+        NoRecord;
         GroupId = GID_TEMPLATE ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
@@ -401,7 +400,6 @@ interface BaseTextSelection
 // Methode fuer Rahmen und Objekte
     FN_TOOL_ANCHOR
     [
-        ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
