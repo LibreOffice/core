@@ -192,7 +192,7 @@ struct AnnotatingVisitor
     bool IsAncestorId(const uno::Reference<xml::dom::XNode>& xParentNode, const OUString& rValue)
     {
         bool bSelfCycle = false;
-        if (xParentNode.is())
+        if (xParentNode.is() && xParentNode->getNodeType() == xml::dom::NodeType_ELEMENT_NODE)
         {
             if (xParentNode->hasAttributes())
             {
