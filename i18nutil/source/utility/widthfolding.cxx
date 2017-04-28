@@ -83,7 +83,7 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
     if (useOffset)
         *p ++ = position ++;
   }
-  *dst = (sal_Unicode) 0;
+  *dst = u'\0';
 
   newStr->length = sal_Int32(dst - newStr->buffer);
   if (useOffset)
@@ -187,7 +187,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
     *dst ++ = previousChar;
   }
 
-  *dst = (sal_Unicode) 0;
+  *dst = u'\0';
 
   newStr->length = sal_Int32(dst - newStr->buffer);
  }
