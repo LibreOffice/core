@@ -385,7 +385,7 @@ namespace o3tl {
     template<> struct typed_flags<SwTOOElements> : is_typed_flags<SwTOOElements, 0x9b> {};
 }
 
-#define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)
+#define TOX_STYLE_DELIMITER u'\x0001'
 
 // Class for all indexes
 class SW_DLLPUBLIC SwTOXBase : public SwClient

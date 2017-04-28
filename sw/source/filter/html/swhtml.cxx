@@ -5171,7 +5171,7 @@ void SwHTMLParser::InsertLineBreak()
     {
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
         // ein Zeilenumbruch eingef?gt
-        OUString sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
+        OUString sTmp( u'\x000a' );   // make the Mac happy :-)
         m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, sTmp );
     }
     else if( m_pPam->GetPoint()->nContent.GetIndex() )

@@ -357,7 +357,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
     OUString sContent;
     xTextField->getPropertyValue("Content") >>= sContent;
     // Comment in the first paragraph should not have smiley ( 0xf04a ).
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( -1 ) , sContent.indexOf( sal_Unicode( 0xf04a ) ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -1 ) , sContent.indexOf( u'\xf04a' ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99227, "tdf99227.docx")

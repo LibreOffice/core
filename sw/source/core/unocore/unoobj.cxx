@@ -2513,7 +2513,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     pArray[0] = beans::PropertyValue("IsSortInTable", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= sal_Unicode(' ');
+    aVal <<= u' ';
     pArray[1] = beans::PropertyValue("Delimiter", -1, aVal,
                     beans::PropertyState_DIRECT_VALUE);
 

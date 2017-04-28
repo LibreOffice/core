@@ -3519,18 +3519,18 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             break;
         case 0xf:
             if( !m_bSpec )        // "Satellite"
-                cInsert = sal_Unicode('\xa4');
+                cInsert = u'\x00a4';
             break;
         case 0x14:
             if( !m_bSpec )        // "Para End" char
-                cInsert = sal_Unicode('\xb5');
+                cInsert = u'\x00b5';
             break;
         case 0x15:
             if( !m_bSpec )        // Juristenparagraph
             {
                 cp_set::iterator aItr = m_aTOXEndCps.find((WW8_CP)nPosCp);
                 if (aItr == m_aTOXEndCps.end())
-                    cInsert = sal_Unicode('\xa7');
+                    cInsert = u'\x00a7';
                 else
                     m_aTOXEndCps.erase(aItr);
             }

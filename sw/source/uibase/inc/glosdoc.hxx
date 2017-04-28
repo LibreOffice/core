@@ -38,7 +38,7 @@ typedef tools::SvRef<SwDocShell> SwDocShellRef;
 typedef std::vector< css::uno::WeakReference< css::text::XAutoTextGroup > > UnoAutoTextGroups;
 typedef std::vector< css::uno::WeakReference< css::text::XAutoTextEntry > > UnoAutoTextEntries;
 
-#define GLOS_DELIM (sal_Unicode)'*'
+#define GLOS_DELIM u'*'
 
 class SW_DLLPUBLIC SwGlossaries
 {
