@@ -241,6 +241,13 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
 SchXMLChartContext::~SchXMLChartContext()
 {}
 
+bool lcl_hasServiceName(Reference<lang::XMultiServiceFactory> & xFactory, OUString const & rServiceName)
+{
+    const uno::Sequence<OUString> aServiceNames(xFactory->getAvailableServiceNames());
+
+    return std::find(aServiceNames.begin(), aServiceNames.end(), rServiceName) != aServiceNames.end();
+}
+
 void lcl_setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, OUString const & sDataPilotSource)
 {
     if (!xChartDoc.is())
@@ -264,21 +271,24 @@ void lcl_setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDo
                     if (bHasDataPilotSource)
                         aDataProviderServiceName = "com.sun.star.chart2.data.PivotTableDataProvider";
 
-                    const uno::Sequence<OUString> aServiceNames(xFact->getAvailableServiceNames());
-
-                    if (std::find(aServiceNames.begin(), aServiceNames.end(), aDataProviderServiceName) != aServiceNames.end())
+                    if (lcl_hasServiceName(xFact, aDataProviderServiceName))
                     {
                         Reference<chart2::data::XDataProvider> xProvider(xFact->createInstance(aDataProviderServiceName), uno::UNO_QUERY);
 
                         if (xProvider.is())
                         {
-                            xDataReceiver->attachDataProvider(xProvider);
                             if (bHasDataPilotSource)
                             {
                                 Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xProvider, uno::UNO_QUERY);
                                 xPivotTableDataProvider->setPivotTableName(sDataPilotSource);
+                                xDataReceiver->attachDataProvider(xProvider);
+                                bHasOwnData = !xPivotTableDataProvider->hasPivotTable();
                             }
-                            bHasOwnData = false;
+                            else
+                            {
+                                xDataReceiver->attachDataProvider(xProvider);
+                                bHasOwnData = false;
+                            }
                         }
                     }
                 }

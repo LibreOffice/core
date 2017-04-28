@@ -414,7 +414,7 @@ void ModelState::update( const Reference< frame::XModel > & xModel )
     {
         ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc.get());
         bHasOwnData = rModel.hasInternalDataProvider();
-        bHasDataFromPivotTable = rModel.isDataFromPivotTable();
+        bHasDataFromPivotTable = !bHasOwnData && rModel.isDataFromPivotTable();
     }
 
     bHasMainTitle =  TitleHelper::getTitle( TitleHelper::MAIN_TITLE, xModel ).is();

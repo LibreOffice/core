@@ -58,6 +58,10 @@ interface XPivotTableDataProvider : com::sun::star::uno::XInterface
      */
      void setPivotTableName([in] string sPivotTableName);
 
+    /** check if the associated pivot table exists
+     */
+    boolean hasPivotTable();
+
     /** creates a single data sequence of values for the given data series index.
      *
      *  @param nIndex
