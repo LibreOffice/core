@@ -66,6 +66,7 @@ public:
 
     ScFormulaVectorState GetVectorState() const { return meVectorState;}
     void ResetVectorState() { meVectorState = FormulaVectorEnabled; }
+    bool IsFormulaVectorDisabled() const;
 
     /**
      * If the array contains at least one relative row reference or named

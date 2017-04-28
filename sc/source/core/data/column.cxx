@@ -2682,11 +2682,11 @@ public:
     void operator() (size_t /*nRow*/, ScFormulaCell* p)
     {
         ScTokenArray* pCode = p->GetCode();
-        if (pCode != nullptr && pCode->GetVectorState() == FormulaVectorDisabled)
+        if (pCode && pCode->IsFormulaVectorDisabled())
         {
             pCode->ResetVectorState();
             FormulaToken* pFT = pCode->First();
-            while (pFT != nullptr)
+            while (pFT)
             {
                 pCode->CheckToken(*pFT);
                 pFT = pCode->Next();

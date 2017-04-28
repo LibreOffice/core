@@ -4105,11 +4105,24 @@ bool ScFormulaCell::InterpretFormulaGroup()
         case FormulaVectorCheckReference:
             // Good.
         break;
+
+        // Not good.
+        case FormulaVectorDisabledByOpCode:
+            aScope.addMessage("group calc disabled due to vector state (non-vector-supporting opcode)");
+            return false;
+        case FormulaVectorDisabledNotInSoftwareSubset:
+            aScope.addMessage("group calc disabled due to vector state (opcode not in software subset)");
+            return false;
+        case FormulaVectorDisabledByStackVariable:
+            aScope.addMessage("group calc disabled due to vector state (non-vector-supporting stack variable)");
+            return false;
+        case FormulaVectorDisabledNotInSubSet:
+            aScope.addMessage("group calc disabled due to vector state (opcode not in subset)");
+            return false;
         case FormulaVectorDisabled:
         case FormulaVectorUnknown:
         default:
-            // Not good.
-            aScope.addMessage("group calc disabled due to vector state");
+            aScope.addMessage("group calc disabled due to vector state (unknown)");
             return false;
     }
 
