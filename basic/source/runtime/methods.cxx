@@ -2051,58 +2051,62 @@ RTLFUNC(CDateFromIso)
     (void)pBasic;
     (void)bWrite;
 
-    do
+    if ( rPar.Count() == 2 )
     {
-        if ( rPar.Count() != 2 )
-            break;
-
-        OUString aStr = rPar.Get(1)->GetOUString();
-        const sal_Int32 nLen = aStr.getLength();
-        if (nLen != 8 && nLen != 10)
-            break;
-
-        OUString aYearStr, aMonthStr, aDayStr;
-        if (nLen == 8)
+        do
         {
-            // YYYYMMDD
-            if (!comphelper::string::isdigitAsciiString(aStr))
+            OUString aStr = rPar.Get(1)->GetOUString();
+            const sal_Int32 nLen = aStr.getLength();
+            if (nLen != 8 && nLen != 10)
                 break;
 
-            aYearStr  = aStr.copy( 0, 4 );
-            aMonthStr = aStr.copy( 4, 2 );
-            aDayStr   = aStr.copy( 6, 2 );
+            OUString aYearStr, aMonthStr, aDayStr;
+            if (nLen == 8)
+            {
+                // YYYYMMDD
+                if (!comphelper::string::isdigitAsciiString(aStr))
+                    break;
+
+                aYearStr  = aStr.copy( 0, 4 );
+                aMonthStr = aStr.copy( 4, 2 );
+                aDayStr   = aStr.copy( 6, 2 );
+            }
+            else
+            {
+                // YYYY-MM-DD
+                const sal_Int32 nSep1 = aStr.indexOf('-');
+                if (nSep1 != 4)
+                    break;
+                const sal_Int32 nSep2 = aStr.indexOf('-', nSep1+1);
+                if (nSep2 != 7)
+                    break;
+
+                aYearStr  = aStr.copy( 0, 4 );
+                aMonthStr = aStr.copy( 5, 2 );
+                aDayStr   = aStr.copy( 8, 2 );
+                if (    !comphelper::string::isdigitAsciiString(aYearStr) ||
+                        !comphelper::string::isdigitAsciiString(aMonthStr) ||
+                        !comphelper::string::isdigitAsciiString(aDayStr))
+                    break;
+            }
+
+            double dDate;
+            if (!implDateSerial( (sal_Int16)aYearStr.toInt32(),
+                        (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), dDate ))
+                break;
+
+            rPar.Get(0)->PutDate( dDate );
+
+            return;
         }
-        else
-        {
-            // YYYY-MM-DD
-            const sal_Int32 nSep1 = aStr.indexOf('-');
-            if (nSep1 != 4)
-                break;
-            const sal_Int32 nSep2 = aStr.indexOf('-', nSep1+1);
-            if (nSep2 != 7)
-                break;
+        while (false);
 
-            aYearStr  = aStr.copy( 0, 4 );
-            aMonthStr = aStr.copy( 5, 2 );
-            aDayStr   = aStr.copy( 8, 2 );
-            if (    !comphelper::string::isdigitAsciiString(aYearStr) ||
-                    !comphelper::string::isdigitAsciiString(aMonthStr) ||
-                    !comphelper::string::isdigitAsciiString(aDayStr))
-                break;
-        }
-
-        double dDate;
-        if (!implDateSerial( (sal_Int16)aYearStr.toInt32(),
-                    (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), dDate ))
-            break;
-
-        rPar.Get(0)->PutDate( dDate );
-
-        return;
+        SbxBase::SetError( ERRCODE_SBX_BAD_PARAMETER );
     }
-    while (false);
-
-    StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    else
+    {
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    }
 }
 
 RTLFUNC(DateSerial)
