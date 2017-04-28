@@ -212,15 +212,15 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,XSLTML,XSLTML_TARBALL) \
 		$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
 		$(call fetch_Optional,ZMF,ZMF_TARBALL) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
+	,$(call fetch_Download_item,https://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional,DBGHELP,DBGHELP_DLL) \
 		$(call fetch_Optional,ODK,UNOWINREG_DLL) \
 		$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
 		$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
+	,$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
 	$(if $(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
-	, $(call fetch_Download_item,http://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
+	, $(call fetch_Download_item,https://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
 	@mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4 ts=4:
