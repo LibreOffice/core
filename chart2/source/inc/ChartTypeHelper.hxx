@@ -30,9 +30,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeHelper
 {
 public:
@@ -40,19 +37,19 @@ public:
     static bool isSupportingStatisticProperties( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool isSupportingRegressionProperties(const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool isSupportingMainAxis(            const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
-    static bool isSupportingSecondaryAxis(       const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
+    static bool isSupportingSecondaryAxis(       const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool isSupportingAreaProperties(      const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool isSupportingSymbolProperties(    const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool isSupportingOverlapAndGapWidthProperties( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool isSupportingBarConnectors(       const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool isSupportingRightAngledAxes(     const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    static bool     isSupportingAxisSideBySide(      const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool     isSupportingStartingAngle(       const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    static bool isSupportingAxisSideBySide(      const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
+    static bool isSupportingStartingAngle(       const css::uno::Reference< css::chart2::XChartType >& xChartType );
     //starting value for bars or baseline for areas for example
-    static bool     isSupportingBaseValue(           const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    static bool     shiftCategoryPosAtXAxisPerDefault(     const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    static bool     isSupportingAxisPositioning(     const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
-    static bool     isSupportingDateAxis( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
+    static bool isSupportingBaseValue(           const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    static bool shiftCategoryPosAtXAxisPerDefault(     const css::uno::Reference< css::chart2::XChartType >& xChartType );
+    static bool isSupportingAxisPositioning(     const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
+    static bool isSupportingDateAxis( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
 
     //returns sequence of css::chart::DataLabelPlacement
     static css::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(

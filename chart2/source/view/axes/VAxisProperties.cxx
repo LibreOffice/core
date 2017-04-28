@@ -126,19 +126,19 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
     TickmarkProperties aTickmarkProperties;
     aTickmarkProperties.Length = lcl_calcTickLengthForDepth(nDepth,nTickmarkStyle);
     aTickmarkProperties.RelativePos = static_cast<sal_Int32>(lcl_getTickOffset(aTickmarkProperties.Length,nTickmarkStyle));
-    aTickmarkProperties.aLineProperties = this->makeLinePropertiesForDepth( nDepth );
+    aTickmarkProperties.aLineProperties = makeLinePropertiesForDepth();
     return aTickmarkProperties;
 }
 
 TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
-    sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 /*nTextLevel*/ ) const
+    sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis ) const
 {
     sal_Int32 nTickmarkStyle = (maLabelAlignment.mfLabelDirection == maLabelAlignment.mfInnerTickDirection) ? 2/*outside*/ : 1/*inside*/;
 
     TickmarkProperties aTickmarkProperties;
     aTickmarkProperties.Length = nTickLength;// + nTextLevel*( lcl_calcTickLengthForDepth(0,nTickmarkStyle) );
     aTickmarkProperties.RelativePos = static_cast<sal_Int32>(lcl_getTickOffset(aTickmarkProperties.Length+nTickStartDistanceToAxis,nTickmarkStyle));
-    aTickmarkProperties.aLineProperties = this->makeLinePropertiesForDepth( 0 );
+    aTickmarkProperties.aLineProperties = makeLinePropertiesForDepth();
     return aTickmarkProperties;
 }
 

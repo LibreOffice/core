@@ -77,7 +77,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         xInverseScaling = rScale.Scaling->getInverseScaling();
 
     sal_Int32 nTick = 0;
-    EquidistantTickIter aIter( rAllTickInfos, rIncrement, 0, 0 );
+    EquidistantTickIter aIter( rAllTickInfos, rIncrement, 0 );
     for( TickInfo* pTickInfo = aIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = aIter.nextInfo(), nTick++ )

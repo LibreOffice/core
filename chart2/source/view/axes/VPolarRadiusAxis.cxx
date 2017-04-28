@@ -139,7 +139,7 @@ void VPolarRadiusAxis::createShapes()
     AxisProperties aAxisProperties(m_aAxisProperties);
 
     sal_Int32 nTick = 0;
-    EquidistantTickIter aIter( aAngleTickInfos, rAngleIncrement, 0, 0 );
+    EquidistantTickIter aIter( aAngleTickInfos, rAngleIncrement, 0 );
     for( TickInfo* pTickInfo = aIter.firstInfo()
         ; pTickInfo; pTickInfo = aIter.nextInfo(), nTick++ )
     {

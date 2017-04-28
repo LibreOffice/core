@@ -132,9 +132,9 @@ public:
     /// confirms all pending changes to be ready to be closed
     bool EndEditing();
 
-    bool CellContainsNumbers( sal_Int32 nRow, sal_uInt16 nCol ) const;
+    bool CellContainsNumbers( sal_uInt16 nCol ) const;
 
-    sal_uInt32 GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) const;
+    sal_uInt32 GetNumberFormatKey( sal_uInt16 nCol ) const;
 
     bool IsEnableItem() { return m_bDataValid;}
     bool IsDataValid();

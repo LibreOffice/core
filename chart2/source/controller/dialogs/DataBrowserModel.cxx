@@ -576,7 +576,7 @@ Reference< chart2::XDataSeries >
     return nullptr;
 }
 
-DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ ) const
+DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn ) const
 {
     eCellType eResult = TEXT;
     tDataColumnVector::size_type nIndex( nAtColumn );
@@ -646,7 +646,7 @@ OUString DataBrowserModel::getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow )
     return aResult;
 }
 
-sal_uInt32 DataBrowserModel::getNumberFormatKey( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ )
+sal_uInt32 DataBrowserModel::getNumberFormatKey( sal_Int32 nAtColumn )
 {
     tDataColumnVector::size_type nIndex( nAtColumn );
     if( nIndex < m_aColumns.size())
@@ -697,13 +697,13 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
 
 bool DataBrowserModel::setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, double fValue )
 {
-    return (getCellType( nAtColumn, nAtRow ) == NUMBER) &&
+    return (getCellType( nAtColumn ) == NUMBER) &&
         setCellAny( nAtColumn, nAtRow, uno::Any( fValue ));
 }
 
 bool DataBrowserModel::setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const OUString & rText )
 {
-    return (getCellType( nAtColumn, nAtRow ) == TEXT) &&
+    return (getCellType( nAtColumn ) == TEXT) &&
         setCellAny( nAtColumn, nAtRow, uno::Any( rText ));
 }
 

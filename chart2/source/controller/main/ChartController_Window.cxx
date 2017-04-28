@@ -434,7 +434,7 @@ void SAL_CALL ChartController::removePaintListener(
 }
 
 // impl vcl window controller methods
-void ChartController::PrePaint(vcl::RenderContext& /*rRenderContext*/)
+void ChartController::PrePaint()
 {
     // forward VCLs PrePaint window event to DrawingLayer
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;

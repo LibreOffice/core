@@ -654,7 +654,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
     {
         sal_Int32 nColIndex = static_cast< sal_Int32 >( nColumnId ) - 1;
 
-        if( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::NUMBER )
+        if( m_apDataBrowserModel->getCellType( nColIndex ) == DataBrowserModel::NUMBER )
         {
             double fData( m_apDataBrowserModel->getCellNumber( nColIndex, nRow ));
             sal_Int32 nLabelColor;
@@ -664,11 +664,11 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
             {
                 bool bColorChanged = false;
                 aResult = m_spNumberFormatterWrapper->getFormattedString(
-                                      GetNumberFormatKey( nRow, nColumnId ),
+                                      GetNumberFormatKey( nColumnId ),
                                       fData, nLabelColor, bColorChanged );
             }
         }
-        else if( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXTORDATE )
+        else if( m_apDataBrowserModel->getCellType( nColIndex ) == DataBrowserModel::TEXTORDATE )
         {
             uno::Any aAny = m_apDataBrowserModel->getCellAny( nColIndex, nRow );
             OUString aText;
@@ -694,7 +694,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
         }
         else
         {
-            OSL_ASSERT( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXT );
+            OSL_ASSERT( m_apDataBrowserModel->getCellType( nColIndex ) == DataBrowserModel::TEXT );
             aResult = m_apDataBrowserModel->getCellText( nColIndex, nRow );
         }
     }
@@ -780,10 +780,9 @@ bool DataBrowser::ShowQueryBox()
 bool DataBrowser::IsDataValid()
 {
     bool bValid = true;
-    const sal_Int32 nRow = lcl_getRowInData( GetCurRow());
     const sal_Int32 nCol = lcl_getColumnInData( GetCurColumnId());
 
-    if( m_apDataBrowserModel->getCellType( nCol, nRow ) == DataBrowserModel::NUMBER )
+    if( m_apDataBrowserModel->getCellType( nCol ) == DataBrowserModel::NUMBER )
     {
         sal_uInt32 nDummy = 0;
         double fDummy = 0.0;
@@ -1087,15 +1086,15 @@ bool DataBrowser::IsTabAllowed( bool bForward ) const
              nCol != nBadCol );
 }
 
-::svt::CellController* DataBrowser::GetController( long nRow, sal_uInt16 nCol )
+::svt::CellController* DataBrowser::GetController( long /*nRow*/, sal_uInt16 nCol )
 {
     if( m_bIsReadOnly )
         return nullptr;
 
-    if( CellContainsNumbers( nRow, nCol ))
+    if( CellContainsNumbers( nCol ))
     {
         m_aNumberEditField->UseInputStringForFormatting();
-        m_aNumberEditField->SetFormatKey( GetNumberFormatKey( nRow, nCol ));
+        m_aNumberEditField->SetFormatKey( GetNumberFormatKey( nCol ));
         return m_rNumberEditController.get();
     }
 
@@ -1128,19 +1127,18 @@ void DataBrowser::InitController(
     }
 }
 
-bool DataBrowser::CellContainsNumbers( sal_Int32 nRow, sal_uInt16 nCol ) const
+bool DataBrowser::CellContainsNumbers( sal_uInt16 nCol ) const
 {
     if( ! m_apDataBrowserModel.get())
         return false;
-    return (m_apDataBrowserModel->getCellType( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow )) ==
-            DataBrowserModel::NUMBER);
+    return m_apDataBrowserModel->getCellType( lcl_getColumnInData( nCol )) == DataBrowserModel::NUMBER;
 }
 
-sal_uInt32 DataBrowser::GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) const
+sal_uInt32 DataBrowser::GetNumberFormatKey( sal_uInt16 nCol ) const
 {
     if( ! m_apDataBrowserModel.get())
         return 0;
-    return m_apDataBrowserModel->getNumberFormatKey( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow ));
+    return m_apDataBrowserModel->getNumberFormatKey( lcl_getColumnInData( nCol ) );
 }
 
 bool DataBrowser::isDateTimeString( const OUString& aInputString, double& fOutDateTimeValue )
@@ -1168,7 +1166,7 @@ bool DataBrowser::SaveModified()
     OSL_ENSURE( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );
 
     SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : nullptr;
-    switch( m_apDataBrowserModel->getCellType( nCol, nRow ))
+    switch( m_apDataBrowserModel->getCellType( nCol ))
     {
         case DataBrowserModel::NUMBER:
         {

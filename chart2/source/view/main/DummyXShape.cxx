@@ -469,7 +469,7 @@ void DummySymbol2D::render()
 
     pChart->m_GLRender.SetColor(mnFillColor, 255);
 
-    pChart->m_GLRender.RenderSymbol2DShape(maPosition.X, maPosition.Y, maSize.Width, maSize.Height, mnStandardSymbol);
+    pChart->m_GLRender.RenderSymbol2DShape(maPosition.X, maPosition.Y, mnStandardSymbol);
 }
 
 DummyCircle::DummyCircle(const awt::Point& rPos, const awt::Size& rSize)
@@ -506,7 +506,7 @@ void DummyCircle::render()
 
     pChart->m_GLRender.Bubble2DShapePoint(maPosition.X, maPosition.Y,
                                           maSize.Width, maSize.Height);
-    pChart->m_GLRender.RenderBubble2FBO(GL_TRUE);
+    pChart->m_GLRender.RenderBubble2FBO();
 }
 
 namespace {
@@ -628,7 +628,7 @@ void DummyLine2D::render()
         }
 
     }
-    pChart->m_GLRender.RenderLine2FBO(GL_TRUE);
+    pChart->m_GLRender.RenderLine2FBO();
 
 }
 
@@ -850,7 +850,7 @@ void DummyText::render()
     {
         aTransformation = maTrans.get<drawing::HomogenMatrix3>();
     }
-    pChart->m_GLRender.CreateTextTexture(maBitmap, maPosition, maSize,
+    pChart->m_GLRender.CreateTextTexture(maBitmap, maSize,
             mnRotation, aTransformation);
     pChart->m_GLRender.RenderTextShape();
 }

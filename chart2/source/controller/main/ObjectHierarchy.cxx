@@ -326,7 +326,7 @@ void ImplObjectHierarchy::createAxesTree(
             sal_Int32 nDimensionIndex = 0;
             sal_Int32 nAxisIndex = 0;
             AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex );
-            if( nAxisIndex>0 && !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, nDimensionIndex ) )
+            if( nAxisIndex>0 && !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) )
                 continue;
 
             if( m_bOrderingForElementSelector )

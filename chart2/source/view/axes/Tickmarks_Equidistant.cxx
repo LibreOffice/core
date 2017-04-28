@@ -137,7 +137,7 @@ sal_Int32 EquidistantTickFactory::getTickDepth() const
 
 void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::Sequence< double > >& rParentTicks ) const
 {
-    EquidistantTickIter aIter( rParentTicks, m_rIncrement, 0, nDepth-1 );
+    EquidistantTickIter aIter( rParentTicks, m_rIncrement, nDepth-1 );
     double* pfNextParentTick = aIter.firstValue();
     if(!pfNextParentTick)
         return;
@@ -411,7 +411,7 @@ void EquidistantTickFactory::getAllTicksShifted( TickInfoArraysType& rAllTickInf
 
 EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< double > >& rTicks
                    , const ExplicitIncrementData& rIncrement
-                   , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
+                   , sal_Int32 nMaxDepth )
                 : m_pSimpleTicks(&rTicks)
                 , m_pInfoTicks(nullptr)
                 , m_rIncrement(rIncrement)
@@ -420,12 +420,12 @@ EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< do
                 , m_pnPreParentCount(nullptr), m_pbIntervalFinished(nullptr)
                 , m_nCurrentDepth(-1), m_nCurrentPos(-1), m_fCurrentValue( 0.0 )
 {
-    initIter( nMinDepth, nMaxDepth );
+    initIter( nMaxDepth );
 }
 
 EquidistantTickIter::EquidistantTickIter( TickInfoArraysType& rTicks
                    , const ExplicitIncrementData& rIncrement
-                   , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
+                   , sal_Int32 nMaxDepth )
                 : m_pSimpleTicks(nullptr)
                 , m_pInfoTicks(&rTicks)
                 , m_rIncrement(rIncrement)
@@ -434,10 +434,10 @@ EquidistantTickIter::EquidistantTickIter( TickInfoArraysType& rTicks
                 , m_pnPreParentCount(nullptr), m_pbIntervalFinished(nullptr)
                 , m_nCurrentDepth(-1), m_nCurrentPos(-1), m_fCurrentValue( 0.0 )
 {
-    initIter( nMinDepth, nMaxDepth );
+    initIter( nMaxDepth );
 }
 
-void EquidistantTickIter::initIter( sal_Int32 /*nMinDepth*/, sal_Int32 nMaxDepth )
+void EquidistantTickIter::initIter( sal_Int32 nMaxDepth )
 {
     m_nMaxDepth = nMaxDepth;
     if(nMaxDepth<0 || m_nMaxDepth>getMaxDepth())

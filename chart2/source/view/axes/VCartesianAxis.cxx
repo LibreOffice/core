@@ -1474,7 +1474,7 @@ void VCartesianAxis::hideIdenticalScreenValues( TickInfoArraysType& rTickInfos )
     }
     else
     {
-        EquidistantTickIter aTickIter( rTickInfos, m_aIncrement, 0, -1 );
+        EquidistantTickIter aTickIter( rTickInfos, m_aIncrement, -1 );
         lcl_hideIdenticalScreenValues( aTickIter );
     }
 }
@@ -1780,7 +1780,7 @@ void VCartesianAxis::createShapes()
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
                     B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties ), fRotationAngleDegree ) );
                     sal_Int32 nCurrentLength = static_cast<sal_Int32>(aLabelsDistance.getLength());
-                    aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0, nTextLevel ) );
+                    aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0 ) );
                     nOffset += nCurrentLength;
                 }
             }

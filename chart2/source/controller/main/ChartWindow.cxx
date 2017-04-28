@@ -97,12 +97,12 @@ void ChartWindow::dispose()
     vcl::Window::dispose();
 }
 
-void ChartWindow::PrePaint(vcl::RenderContext& rRenderContext)
+void ChartWindow::PrePaint(vcl::RenderContext& )
 {
     // forward VCLs PrePaint window event to DrawingLayer
     if (m_pWindowController)
     {
-       m_pWindowController->PrePaint(rRenderContext);
+       m_pWindowController->PrePaint();
     }
 }
 

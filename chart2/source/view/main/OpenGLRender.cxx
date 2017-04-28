@@ -186,7 +186,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     return 0;
 }
 
-int OpenGLRender::RenderLine2FBO(int)
+int OpenGLRender::RenderLine2FBO()
 {
     CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
@@ -411,7 +411,7 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
     return 0;
 }
 
-int OpenGLRender::RenderBubble2FBO(int)
+int OpenGLRender::RenderBubble2FBO()
 {
     CHECK_GL_ERROR();
     glm::vec4 edgeColor = glm::vec4(0.0, 0.0, 0.0, 1.0);
@@ -622,7 +622,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 }
 
 
-int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&, const awt::Size& aSize, long rotation,
+int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Size& aSize, long rotation,
         const drawing::HomogenMatrix3& rTrans)
 {
 #if DEBUG_PNG // debug PNG writing
@@ -643,12 +643,11 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(rBitmapEx, bitmapBuf.get());
 
     return CreateTextTexture(bitmapBuf, rBitmapEx.GetSizePixel(),
-                             awt::Point(), aSize, rotation, rTrans);
+                             aSize, rotation, rTrans);
 }
 
 int OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
                                     const ::Size &aPixelSize,
-                                    const awt::Point&,
                                     const awt::Size& aSize,
                                     long rotation,
                                     const drawing::HomogenMatrix3& rTrans)
@@ -988,7 +987,7 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
     return 0;
 }
 
-int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int32 nSymbol)
+int OpenGLRender::RenderSymbol2DShape(float x, float y, sal_Int32 nSymbol)
 {
     CHECK_GL_ERROR();
 

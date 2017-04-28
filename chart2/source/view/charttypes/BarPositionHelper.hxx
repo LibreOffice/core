@@ -26,19 +26,16 @@
 namespace chart
 {
 
-/**
-*/
-
 class BarPositionHelper : public CategoryPositionHelper, public PlottingPositionHelper
 {
 public:
-    explicit BarPositionHelper( bool bSwapXAndY=true );
+    explicit BarPositionHelper();
     BarPositionHelper( const BarPositionHelper& rSource );
     virtual ~BarPositionHelper() override;
 
     virtual PlottingPositionHelper* clone() const override;
 
-    void                updateSeriesCount( double fSeriesCount ); /*only enter the size of x stacked series*/
+    void updateSeriesCount( double fSeriesCount ); /*only enter the size of x stacked series*/
 
     virtual double getScaledSlotPos( double fCategoryX, double fSeriesNumber ) const override;
     virtual void setScaledCategoryWidth( double fScaledCategoryWidth ) override;

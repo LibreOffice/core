@@ -650,7 +650,7 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
             //if not successful canceled
             if(!bLongLastingCallsAreCanceled)
             {
-                m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership, true );
+                m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership );
                 throw aVetoException;
             }
         }

@@ -151,7 +151,7 @@ struct AxisProperties final
     void initAxisPositioning( const css::uno::Reference< css::beans::XPropertySet >& xAxisProp );
 
     static TickmarkProperties getBiggestTickmarkProperties();
-    TickmarkProperties makeTickmarkPropertiesForComplexCategories( sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 nTextLevel ) const;
+    TickmarkProperties makeTickmarkPropertiesForComplexCategories( sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis ) const;
 
 private:
     AxisProperties() = delete;
@@ -159,7 +159,7 @@ private:
     TickmarkProperties  makeTickmarkProperties( sal_Int32 nDepth ) const;
     //@todo get this from somewhere; maybe for each subincrement
     //so far the model does not offer different settings for each tick depth
-    const VLineProperties&  makeLinePropertiesForDepth( sal_Int32 /*nDepth*/ ) const { return m_aLineProperties; }
+    const VLineProperties&  makeLinePropertiesForDepth() const { return m_aLineProperties; }
 };
 
 } //namespace chart

@@ -102,7 +102,7 @@ chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxi
     {
         sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
         AxisHelper::getIndicesForAxis(xAxis, xCooSys, nDimensionIndex, nAxisIndex );
-        bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( xCooSys, 0 ), 2, nDimensionIndex );
+        bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( xCooSys, 0 ), nDimensionIndex );
         if( bChartTypeAllowsDateAxis )
             aScale.AxisType = AxisType::DATE;
     }
@@ -915,7 +915,7 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
         rPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
     for(nIndex=3;nIndex<6;nIndex++)
         if( bAxis )
-            rPossibilityList[nIndex]=ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount,nIndex-3);
+            rPossibilityList[nIndex]=ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount);
         else
             rPossibilityList[nIndex] = rPossibilityList[nIndex-3];
 }
@@ -966,7 +966,7 @@ bool AxisHelper::shouldAxisBeDisplayed( const Reference< XAxis >& xAxis
             if( bMainAxis )
                 bRet = ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nDimensionIndex);
             else
-                bRet = ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount,nDimensionIndex);
+                bRet = ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount);
         }
     }
 

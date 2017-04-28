@@ -1119,7 +1119,7 @@ void DiagramHelper::switchToTextCategories( const Reference< XChartDocument >& x
 bool DiagramHelper::isSupportingDateAxis( const Reference< chart2::XDiagram >& xDiagram )
 {
     return ::chart::ChartTypeHelper::isSupportingDateAxis(
-            DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), DiagramHelper::getDimension( xDiagram ), 0 );
+            DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), 0 );
 }
 
 bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFormats >& xNumberFormats )

@@ -385,7 +385,7 @@ Axis::Axis( const Axis & rOther ) :
 }
 
 // late initialization to call after copy-constructing
-void Axis::Init( const Axis & /* rOther */ )
+void Axis::Init()
 {
     if( m_aScaleData.Categories.is())
         EventListenerHelper::addListener( m_aScaleData.Categories, this );
@@ -543,7 +543,7 @@ Reference< util::XCloneable > SAL_CALL Axis::createClone()
     // hold a reference to the clone
     Reference< util::XCloneable > xResult( pNewAxis );
     // do initialization that uses uno references to the clone
-    pNewAxis->Init( *this );
+    pNewAxis->Init();
     return xResult;
 }
 
