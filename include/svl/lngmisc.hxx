@@ -24,11 +24,11 @@
 
 #include <rtl/ustring.hxx>
 
-#define SVT_SOFT_HYPHEN (static_cast<sal_Unicode>(0x00AD))
-#define SVT_HARD_HYPHEN (static_cast<sal_Unicode>(0x2011))
+#define SVT_SOFT_HYPHEN u'\x00AD'
+#define SVT_HARD_HYPHEN u'\x2011'
 
 // the non-breaking space
-#define SVT_HARD_SPACE  (static_cast<sal_Unicode>(0x00A0))
+#define SVT_HARD_SPACE  u'\x00A0'
 
 namespace linguistic
 {
@@ -40,7 +40,7 @@ namespace linguistic
     inline bool IsControlChar(sal_Unicode cChar)
     {
         // TODO: why doesn't this include 0x0F DEL?
-        return cChar < static_cast<sal_Unicode>(' ');
+        return cChar < u' ';
     }
 
     sal_Int32 GetNumControlChars( const OUString &rTxt );

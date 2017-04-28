@@ -129,7 +129,7 @@ namespace
     CPPUNIT_ASSERT(bModified);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(32), str4.getLength());
     for(int i = 0; i < 32; i++)
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Unicode>(' '), str4[i]);
+        CPPUNIT_ASSERT_EQUAL(u' ', str4[i]);
   }
 
   void LngMiscTest::testGetThesaurusReplaceText()
