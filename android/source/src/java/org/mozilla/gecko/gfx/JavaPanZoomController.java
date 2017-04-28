@@ -985,16 +985,18 @@ class JavaPanZoomController
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
         // Double tap zooms in or out depending on the current zoom factor
-        PointF viewPoint = getMotionInDocumentCoordinates(motionEvent);
-        ZoomConstraints constraints = mTarget.getZoomConstraints();
-        float zoomFactor = getMetrics().getZoomFactor();
-        if (zoomFactor >= DOUBLE_TAP_THRESHOLD) {
-            animatedMove(viewPoint, constraints.getMinZoom());
-        } else {
-            animatedMove(viewPoint, DOUBLE_TAP_THRESHOLD);
-        }
+        PointF pointOfTap = getMotionInDocumentCoordinates(motionEvent);
+        ImmutableViewportMetrics metrics = getMetrics();
+        float newZoom = metrics.getZoomFactor() >=
+                DOUBLE_TAP_THRESHOLD ? mTarget.getZoomConstraints().getMinZoom() : DOUBLE_TAP_THRESHOLD;
+        // calculate new top_left point from the point of tap
+        float ratio = newZoom/metrics.getZoomFactor();
+        float newLeft = pointOfTap.x - 1/ratio * (pointOfTap.x - metrics.getOrigin().x / metrics.getZoomFactor());
+        float newTop = pointOfTap.y - 1/ratio * (pointOfTap.y - metrics.getOrigin().y / metrics.getZoomFactor());
+        // animate move to the new view
+        animatedMove(new PointF(newLeft, newTop), newZoom);
 
-        LOKitShell.sendTouchEvent("DoubleTap", getMotionInDocumentCoordinates(motionEvent));
+        LOKitShell.sendTouchEvent("DoubleTap", pointOfTap);
         return true;
     }
 
