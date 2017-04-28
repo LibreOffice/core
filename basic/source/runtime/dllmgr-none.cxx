@@ -107,7 +107,7 @@ SbError SbiDllMgr::Call(
         return ERRCODE_BASIC_NOT_IMPLEMENTED;
 }
 
-void SbiDllMgr::FreeDll(OUString const &) {}
+void SbiDllMgr::FreeDll((OUString const &) {}
 
 SbiDllMgr::SbiDllMgr(): impl_(new Impl) {}
 

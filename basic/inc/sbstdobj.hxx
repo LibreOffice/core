@@ -43,9 +43,9 @@ protected:
     virtual ~SbStdPicture() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    void    PropType( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
-    void    PropWidth( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
-    void    PropHeight( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropType( SbxVariable* pVar, bool bWrite );
+    void    PropWidth( SbxVariable* pVar, bool bWrite );
+    void    PropHeight( SbxVariable* pVar, bool bWrite );
 
 public:
 
@@ -69,12 +69,12 @@ protected:
     virtual ~SbStdFont() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    void    PropBold( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
-    void    PropItalic( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
-    void    PropStrikeThrough( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
-    void    PropUnderline( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
-    void    PropSize( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
-    void    PropName( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropBold( SbxVariable* pVar, bool bWrite );
+    void    PropItalic( SbxVariable* pVar, bool bWrite );
+    void    PropStrikeThrough( SbxVariable* pVar, bool bWrite );
+    void    PropUnderline( SbxVariable* pVar, bool bWrite );
+    void    PropSize( SbxVariable* pVar, bool bWrite );
+    void    PropName( SbxVariable* pVar, bool bWrite );
 
 public:
 

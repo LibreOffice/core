@@ -287,12 +287,11 @@ void DlgEditor::InitScrollBars()
     pHScroll->SetPageSize( aOutSize.Width() / 2 );
     pVScroll->SetPageSize( aOutSize.Height() / 2 );
 
-    DoScroll( pHScroll );
-    DoScroll( pVScroll );
+    DoScroll();
 }
 
 
-void DlgEditor::DoScroll( ScrollBar* )
+void DlgEditor::DoScroll()
 {
     if( !pHScroll || !pVScroll )
         return;

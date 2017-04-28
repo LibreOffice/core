@@ -69,9 +69,9 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
             pVScroll->SetThumbPos( pVScroll->GetThumbPos() + nDeltaY );
 
         if( nDeltaX )
-            rParent.DoScroll( pHScroll );
+            rParent.DoScroll();
         if( nDeltaY )
-            rParent.DoScroll( pVScroll );
+            rParent.DoScroll();
     }
 
     aScrollTimer.Start();
@@ -310,7 +310,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     if ( nThumbPos > nRangeMax )
                         nThumbPos = nRangeMax;
                     pScrollBar->SetThumbPos( nThumbPos );
-                    rParent.DoScroll( pScrollBar );
+                    rParent.DoScroll();
                 }
             }
 
