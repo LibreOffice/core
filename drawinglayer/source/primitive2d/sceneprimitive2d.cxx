@@ -136,7 +136,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        bool ScenePrimitive2D::impGetShadow3D(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        bool ScenePrimitive2D::impGetShadow3D() const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -225,7 +225,7 @@ namespace drawinglayer
         {
             // create 2D shadows from contained 3D primitives. This creates the shadow primitives on demand and tells if
             // there are some or not. Do this at start, the shadow might still be visible even when the scene is not
-            if(impGetShadow3D(rViewInformation))
+            if(impGetShadow3D())
             {
                 // test visibility
                 const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rViewInformation));
@@ -513,12 +513,12 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DContainer ScenePrimitive2D::getShadow2D(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DContainer ScenePrimitive2D::getShadow2D() const
         {
             Primitive2DContainer aRetval;
 
             // create 2D shadows from contained 3D primitives
-            if(impGetShadow3D(rViewInformation))
+            if(impGetShadow3D())
             {
                 // add extracted 2d shadows (before 3d scene creations itself)
                 aRetval = maShadowPrimitives;
@@ -619,7 +619,7 @@ namespace drawinglayer
             aRetval.transform(rViewInformation.getInverseObjectToViewTransformation());
 
             // expand by evtl. existing shadow primitives
-            if(impGetShadow3D(rViewInformation))
+            if(impGetShadow3D())
             {
                 const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rViewInformation));
 

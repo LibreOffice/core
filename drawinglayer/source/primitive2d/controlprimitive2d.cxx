@@ -220,7 +220,7 @@ namespace drawinglayer
             return xRetval;
         }
 
-        Primitive2DReference ControlPrimitive2D::createPlaceholderDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DReference ControlPrimitive2D::createPlaceholderDecomposition() const
         {
             // create a gray placeholder hairline polygon in object size
             basegfx::B2DRange aObjectRange(0.0, 0.0, 1.0, 1.0);
@@ -242,7 +242,7 @@ namespace drawinglayer
 
             if(!xReference.is())
             {
-                xReference = createPlaceholderDecomposition(rViewInformation);
+                xReference = createPlaceholderDecomposition();
             }
 
             rContainer.push_back(xReference);

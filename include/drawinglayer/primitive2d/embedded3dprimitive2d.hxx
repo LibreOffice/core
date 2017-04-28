@@ -78,7 +78,7 @@ namespace drawinglayer
             bool                                                mbShadow3DChecked : 1;
 
             /// private helpers
-            bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
+            bool impGetShadow3D() const;
 
         protected:
             /// local decomposition.

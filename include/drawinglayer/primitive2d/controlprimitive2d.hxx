@@ -59,7 +59,7 @@ namespace drawinglayer
 
             /// single local decompositions, used from create2DDecomposition()
             Primitive2DReference createBitmapDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-            Primitive2DReference createPlaceholderDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            Primitive2DReference createPlaceholderDecomposition() const;
 
         protected:
             /// local decomposition
