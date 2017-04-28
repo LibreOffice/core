@@ -228,7 +228,7 @@ struct Cell                                       // Cell
     unsigned char diagonal;                       // { 0=none,\=1,/=2,X=3}
     unsigned char protect;
 
-    void  Read( HWPFile &hwpf );
+    bool  Read(HWPFile &hwpf);
 };
 
 /**

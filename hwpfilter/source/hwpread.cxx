@@ -185,7 +185,7 @@ static void UpdateBBox(FBox * fbox)
     fbox->boundey = fbox->pgy + fbox->ys - 1;
 }
 
-void Cell::Read(HWPFile & hwpf)
+bool Cell::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&p, 1);
     hwpf.Read2b(&color, 1);
@@ -203,7 +203,7 @@ void Cell::Read(HWPFile & hwpf)
     hwpf.Read1b(linetype, 4);
     hwpf.Read1b(&shade, 1);
     hwpf.Read1b(&diagonal, 1);
-    hwpf.Read1b(&protect, 1);
+    return hwpf.Read1b(&protect, 1) == 1;
 }
 
 bool TxtBox::Read(HWPFile & hwpf)
@@ -288,11 +288,14 @@ bool TxtBox::Read(HWPFile & hwpf)
     if (!cell) {
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
-    for (ii = 0; ii < ncell; ii++)
+    bool bSuccess = true;
+    for (ii = 0; ii < ncell && bSuccess; ii++)
     {
-        cell[ii].Read(hwpf);
+        bSuccess = cell[ii].Read(hwpf);
         cell[ii].key = sal::static_int_cast<unsigned char>(ii);
     }
+    if (!bSuccess)
+        return false;
     if (ncell == 1)
         style.cell = &cell[0];
     plists.resize(ncell);
