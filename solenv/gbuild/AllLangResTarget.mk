@@ -244,7 +244,7 @@ $(call gb_ResTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f \
 			$(call gb_ResTarget_get_target,$*) \
-			$(call gb_ResTarget_get_install_target,$*)
+			$(call gb_ResTarget_get_install_target,$*))
 
 $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
 		$(gb_ResTarget_RSCDEPS)
