@@ -47,6 +47,7 @@ private:
     struct Field;
     std::vector<std::shared_ptr<Field> > vFields;
     // "name" fields
+    unsigned nNameRow;
     unsigned nShortNameField;
 
     DECL_LINK( ModifyHdl_Impl, Edit&, void );

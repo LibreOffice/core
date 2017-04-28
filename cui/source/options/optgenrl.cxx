@@ -41,6 +41,8 @@ enum RowType
 {
     Row_Company,
     Row_Name,
+    Row_Name_Russian,
+    Row_Name_Eastern,
     Row_Street,
     Row_Street_Russian,
     Row_City,
@@ -58,6 +60,7 @@ namespace Lang
 {
     unsigned const Others = 1;
     unsigned const Russian = 2;
+    unsigned const Eastern = 4;
     unsigned const US = 8;
     unsigned const All = static_cast<unsigned>(-1);
 }
@@ -77,7 +80,9 @@ struct
 const vRowInfo[] =
 {
     { "companyft",   Lang::All },
-    { "nameft",      Lang::All },
+    { "nameft",      Lang::All & ~Lang::Russian & ~Lang::Eastern },
+    { "rusnameft",   Lang::Russian },
+    { "eastnameft",  Lang::Eastern },
     { "streetft",    Lang::All & ~Lang::Russian },
     { "russtreetft", Lang::Russian },
     { "icityft",     Lang::All & ~Lang::US },
@@ -108,8 +113,18 @@ const vFieldInfo[] =
     // Company
     { Row_Company, "company", UserOptToken::Company, EditPosition::COMPANY },
     // Name
+    { Row_Name, "firstname", UserOptToken::FirstName, EditPosition::FIRSTNAME },
     { Row_Name, "lastname", UserOptToken::LastName, EditPosition::LASTNAME  },
     { Row_Name, "shortname", UserOptToken::ID, EditPosition::SHORTNAME },
+    // Name (russian)
+    { Row_Name_Russian, "ruslastname", UserOptToken::LastName, EditPosition::LASTNAME  },
+    { Row_Name_Russian, "rusfirstname", UserOptToken::FirstName, EditPosition::FIRSTNAME },
+    { Row_Name_Russian, "rusfathersname", UserOptToken::FathersName, EditPosition::UNKNOWN },
+    { Row_Name_Russian, "russhortname", UserOptToken::ID, EditPosition::SHORTNAME },
+    // Name (eastern: reversed name ord
+    { Row_Name_Eastern, "eastlastname", UserOptToken::LastName, EditPosition::LASTNAME  },
+    { Row_Name_Eastern, "eastfirstname", UserOptToken::FirstName, EditPosition::FIRSTNAME },
+    { Row_Name_Eastern, "eastshortname", UserOptToken::ID, EditPosition::SHORTNAME },
     // Street
     { Row_Street, "street", UserOptToken::Street, EditPosition::STREET },
     // Street (russian)
@@ -218,7 +233,10 @@ void SvxGeneralTabPage::InitControls ()
         LangBit = Lang::Russian;
     else
     {
-        LangBit = Lang::Others;
+            if (MsLangId::isFamilyNameFirst(l))
+                LangBit = Lang::Eastern;
+            else
+                LangBit = Lang::Others;
     }
 
     // creating rows
@@ -248,6 +266,7 @@ void SvxGeneralTabPage::InitControls ()
             // "short name" field?
             if (vFieldInfo[iField].nUserOptionsId == UserOptToken::ID)
             {
+                nNameRow = vRows.size() - 1;
                 nShortNameField = vFields.size() - 1;
             }
         }
@@ -260,7 +279,7 @@ void SvxGeneralTabPage::SetLinks ()
 {
     // link for updating the initials
     Link<Edit&,void> aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
-    Row& rNameRow = *vRows[Row_Name];
+    Row& rNameRow = *vRows[nNameRow];
     for (unsigned i = rNameRow.nFirstField; i != rNameRow.nLastField - 1; ++i)
         vFields[i]->pEdit->SetModifyHdl(aLink);
 }
@@ -313,22 +332,36 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 
 // ModifyHdl_Impl()
 // This handler updates the initials (short name)
-// when the name field was updated.
+// when one of the name fields was updated.
 IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit&, rEdit, void )
 {
     // short name field and row
     Field& rShortName = *vFields[nShortNameField];
-    if (rShortName.pEdit->IsEnabled())
+    Row& rNameRow = *vRows[nNameRow];
+    // number of initials
+    unsigned const nInits = rNameRow.nLastField - rNameRow.nFirstField - 1;
+    // which field was updated? (in rNameRow)
+    unsigned nField = nInits;
+    for (unsigned i = 0; i != nInits; ++i)
     {
-        sal_Int32 nIndex = 0;
+        if (vFields[rNameRow.nFirstField + i]->pEdit == &rEdit)
+            nField = i;
+    }
+    // updating the initial
+    if (nField < nInits && rShortName.pEdit->IsEnabled())
+    {
+        OUString sShortName = rShortName.pEdit->GetText();
+        // clear short name if it contains more characters than the number of initials
+        if ((unsigned)sShortName.getLength() > nInits)
+        {
+            rShortName.pEdit->SetText(OUString());
+        }
+        while ((unsigned)sShortName.getLength() < nInits)
+            sShortName += " ";
         OUString sName = rEdit.GetText();
-        OUString sShortName;
-        do {
-            OUString sToken = sName.getToken(0, ' ', nIndex);
-            if (!sToken.isEmpty())
-                sShortName += sToken.copy(0, 1);
-        } while (nIndex != -1);
-        rShortName.pEdit->SetText(sShortName);
+        OUString sLetter = sName.isEmpty()
+            ? OUString(sal_Unicode(' ')) : sName.copy(0, 1);
+        rShortName.pEdit->SetText(sShortName.replaceAt(nField, 1, sLetter).trim());
     }
 }
 
@@ -338,18 +371,10 @@ bool SvxGeneralTabPage::GetData_Impl()
     // updating
     SvtUserOptions aUserOpt;
     for (auto const & i: vFields)
-    {
         aUserOpt.SetToken(
             vFieldInfo[i->iField].nUserOptionsId,
             i->pEdit->GetText()
         );
-        // Blank out first name and father's name which aren't kept separately any longer
-        if (vFieldInfo[i->iField].nUserOptionsId == UserOptToken::LastName)
-        {
-            aUserOpt.SetToken(UserOptToken::FirstName, "");
-            aUserOpt.SetToken(UserOptToken::FathersName, "");
-        }
-    }
 
     // modified?
     for (auto const & i: vFields)
@@ -373,40 +398,7 @@ void SvxGeneralTabPage::SetData_Impl()
             Field& rField = *vFields[iField];
             // updating content
             UserOptToken const nToken = vFieldInfo[rField.iField].nUserOptionsId;
-            if (nToken == UserOptToken::LastName)
-            {
-                // When using old-style data (with separated name), if
-                // "family name" comes first in the locale, use that
-                // order. If Russian, use also father's name if
-                // present.
-                OUString sName;
-
-                if (MsLangId::isFamilyNameFirst(Application::GetSettings().GetUILanguageTag().getLanguageType()))
-                {
-                    sName += aUserOpt.GetToken(UserOptToken::LastName);
-                    OUString sFirstName = aUserOpt.GetToken(UserOptToken::FirstName);
-                    if (!sName.isEmpty() && !sFirstName.isEmpty())
-                        sName += " ";
-                    sName += sFirstName;
-                }
-                else
-                {
-                    sName += aUserOpt.GetToken(UserOptToken::FirstName);
-                    OUString sFathersName;
-                    if (Application::GetSettings().GetUILanguageTag().getLanguageType() == LANGUAGE_RUSSIAN)
-                        sFathersName = aUserOpt.GetToken(UserOptToken::FathersName);
-                    if (!sName.isEmpty() && !sFathersName.isEmpty())
-                        sName += " ";
-                    sName += sFathersName;
-                    OUString sLastName = aUserOpt.GetToken(UserOptToken::LastName);
-                    if (!sName.isEmpty() && !sLastName.isEmpty())
-                        sName += " ";
-                    sName += sLastName;
-                }
-                rField.pEdit->SetText(sName);
-            }
-            else
-                rField.pEdit->SetText(aUserOpt.GetToken(nToken));
+            rField.pEdit->SetText(aUserOpt.GetToken(nToken));
             // is enabled?
             bool const bEnableEdit = !aUserOpt.IsTokenReadonly(nToken);
             rField.pEdit->Enable(bEnableEdit);

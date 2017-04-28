@@ -39,9 +39,9 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Name/initials:</property>
+                <property name="label" translatable="yes">First/last _name/initials:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">lastname</property>
+                <property name="mnemonic_widget">firstname</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -143,6 +143,24 @@
                 <property name="no_show_all">True</property>
                 <property name="column_spacing">6</property>
                 <child>
+                  <object class="GtkEntry" id="firstname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="firstname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">First name</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkEntry" id="lastname">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
@@ -151,12 +169,12 @@
                     <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="lastname-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Name</property>
+                        <property name="AtkObject::accessible-name" translatable="yes">Last name</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -174,7 +192,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
@@ -404,6 +422,182 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">12</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="rusnameft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Last name/first _name/father’s name/initials:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">ruslastname</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid8">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="column_spacing">6</property>
+                <child>
+                  <object class="GtkEntry" id="ruslastname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ruslastname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Last name</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="rusfathersname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rusfathersname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Father's name</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="russhortname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
+                    <property name="invisible_char">•</property>
+                    <property name="width_chars">7</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="russhortname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Initials</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="rusfirstname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rusfirstname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">First name</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="eastnameft">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Last/first _name/initials:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">eastlastname</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid9">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="column_spacing">6</property>
+                <child>
+                  <object class="GtkEntry" id="eastlastname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastlastname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Last name</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="eastfirstname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastfirstname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">First name</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="eastshortname">
+                    <property name="can_focus">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="valign">center</property>
+                    <property name="invisible_char">•</property>
+                    <property name="width_chars">7</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastshortname-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Initials</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
               </packing>
             </child>
             <child>
