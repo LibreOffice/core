@@ -230,8 +230,8 @@ namespace
                                         rtl::math::approxEqual(rContext.LineWidth, 28.3) );
 
                 const char sExportString[] = "m53570 7650-35430 24100";
-                CPPUNIT_ASSERT_MESSAGE( "Stroke is m535.7 518.5-354.3-241",
-                                        basegfx::tools::exportToSvgD( aPath, true, true, false ) == sExportString );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is m535.7 518.5-354.3-241",
+                                        OUString(sExportString), basegfx::tools::exportToSvgD( aPath, true, true, false ) );
 
                 m_bGreenStrokeSeen = true;
             }
@@ -252,17 +252,17 @@ namespace
                                         0, rContext.LineWidth, 0.0000001 );
 
                 const char sExportString[] = "m49890 5670.00000000001-35430 24090";
-                CPPUNIT_ASSERT_MESSAGE( "Stroke is m49890 5670.00000000001-35430 24090",
-                                        basegfx::tools::exportToSvgD( aPath, true, true, false ) == sExportString );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is m49890 5670.00000000001-35430 24090",
+                                        OUString(sExportString), basegfx::tools::exportToSvgD( aPath, true, true, false ) );
 
                 m_bDashedLineSeen = true;
             }
-            CPPUNIT_ASSERT_MESSAGE( "Blend mode is normal",
-                                    rContext.BlendMode == rendering::BlendMode::NORMAL );
-            CPPUNIT_ASSERT_MESSAGE( "Join type is round",
-                                    rContext.LineJoin == rendering::PathJoinType::ROUND );
-            CPPUNIT_ASSERT_MESSAGE( "Cap type is butt",
-                                    rContext.LineCap == rendering::PathCapType::BUTT );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Blend mode is normal",
+                                    rendering::BlendMode::NORMAL, rContext.BlendMode );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Join type is round",
+                                    rendering::PathJoinType::ROUND, rContext.LineJoin );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Cap type is butt",
+                                    rendering::PathCapType::BUTT, rContext.LineCap );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line miter limit is 10",
                                     10, rContext.MiterLimit, 0.0000001 );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 0",
@@ -282,8 +282,8 @@ namespace
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Green, 0.00000001);
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Red, 0.00000001);
 
-            CPPUNIT_ASSERT_MESSAGE( "Blend mode is normal",
-                                    rContext.BlendMode == rendering::BlendMode::NORMAL );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Blend mode is normal",
+                                    rendering::BlendMode::NORMAL, rContext.BlendMode );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 10",
                                     10, rContext.Flatness, 0.00000001 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
@@ -301,8 +301,8 @@ namespace
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Green, 0.00000001);
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Red, 0.00000001);
 
-            CPPUNIT_ASSERT_MESSAGE( "Blend mode is normal",
-                                    rContext.BlendMode == rendering::BlendMode::NORMAL );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Blend mode is normal",
+                                    rendering::BlendMode::NORMAL, rContext.BlendMode );
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Flatness is 0",
                                     1, rContext.Flatness, 0.00000001 );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
@@ -310,8 +310,8 @@ namespace
 
             const char sExportString[] = "m12050 49610c-4310 0-7800-3490-7800-7800 0-4300 "
                 "3490-7790 7800-7790 4300 0 7790 3490 7790 7790 0 4310-3490 7800-7790 7800z";
-            CPPUNIT_ASSERT_MESSAGE( "Stroke is a 4-bezier circle",
-                                    basegfx::tools::exportToSvgD( aPath, true, true, false ) == sExportString );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is a 4-bezier circle",
+                                    OUString(sExportString), basegfx::tools::exportToSvgD( aPath, true, true, false ) );
 
             m_bRedCircleSeen = true;
         }
@@ -356,20 +356,20 @@ namespace
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
-            CPPUNIT_ASSERT_MESSAGE( "drawMask got URL param",
-                                    xBitmap[0].Name == "URL" );
-            CPPUNIT_ASSERT_MESSAGE( "drawMask got InputStream param",
-                                    xBitmap[1].Name == "InputStream" );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask got URL param",
+                                    OUString("URL"), xBitmap[0].Name );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask got InputStream param",
+                                    OUString("InputStream"), xBitmap[1].Name );
         }
 
         virtual void drawImage(const uno::Sequence<beans::PropertyValue>& xBitmap ) override
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
-            CPPUNIT_ASSERT_MESSAGE( "drawImage got URL param",
-                                    xBitmap[0].Name == "URL" );
-            CPPUNIT_ASSERT_MESSAGE( "drawImage got InputStream param",
-                                    xBitmap[1].Name == "InputStream" );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage got URL param",
+                                    OUString("URL"), xBitmap[0].Name );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage got InputStream param",
+                                    OUString("InputStream"), xBitmap[1].Name );
             m_bImageSeen = true;
         }
 
@@ -378,10 +378,10 @@ namespace
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
-            CPPUNIT_ASSERT_MESSAGE( "drawColorMaskedImage got URL param",
-                                    xBitmap[0].Name == "URL" );
-            CPPUNIT_ASSERT_MESSAGE( "drawColorMaskedImage got InputStream param",
-                                    xBitmap[1].Name == "InputStream" );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage got URL param",
+                                    OUString("URL"), xBitmap[0].Name );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage got InputStream param",
+                                    OUString("InputStream"), xBitmap[1].Name );
         }
 
         virtual void drawMaskedImage(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -390,17 +390,17 @@ namespace
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #1",
                                     (sal_Int32) 3, xBitmap.getLength() );
-            CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got URL param #1",
-                                    xBitmap[0].Name == "URL" );
-            CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got InputStream param #1",
-                                    xBitmap[1].Name == "InputStream" );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage got URL param #1",
+                                    OUString("URL"), xBitmap[0].Name );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage got InputStream param #1",
+                                    OUString("InputStream"), xBitmap[1].Name );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #2",
                                     (sal_Int32) 3, xMask.getLength() );
-            CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got URL param #2",
-                                    xMask[0].Name == "URL" );
-            CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got InputStream param #2",
-                                    xMask[1].Name == "InputStream" );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage got URL param #2",
+                                    OUString("URL"), xMask[0].Name );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage got InputStream param #2",
+                                    OUString("InputStream"), xMask[1].Name );
         }
 
         virtual void drawAlphaMaskedImage(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -408,17 +408,17 @@ namespace
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #1",
                                     (sal_Int32) 3, xBitmap.getLength() );
-            CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got URL param #1",
-                                    xBitmap[0].Name == "URL" );
-            CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got InputStream param #1",
-                                    xBitmap[1].Name == "InputStream" );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage got URL param #1",
+                                    OUString("URL"), xBitmap[0].Name );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage got InputStream param #1",
+                                    OUString("InputStream"), xBitmap[1].Name );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #2",
                                     (sal_Int32) 3, xMask.getLength() );
-            CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got URL param #2",
-                                    xMask[0].Name == "URL" );
-            CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got InputStream param #2",
-                                    xMask[1].Name == "InputStream" );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage got URL param #2",
+                                    OUString("URL"), xMask[0].Name );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage got InputStream param #2",
+                                    OUString("InputStream"), xMask[1].Name );
         }
 
         virtual void setTextRenderMode( sal_Int32 ) override
@@ -469,7 +469,7 @@ namespace
             xAdaptor->setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
             OUString tempFileURL;
-            CPPUNIT_ASSERT( osl::File::createTempFile( nullptr, nullptr, &tempFileURL ) == osl::File::E_None );
+            CPPUNIT_ASSERT_EQUAL( osl::File::E_None, osl::File::createTempFile( nullptr, nullptr, &tempFileURL ) );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
                                    xAdaptor->odfConvert( m_directories.getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
@@ -484,7 +484,7 @@ namespace
             xAdaptor->setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
             OUString tempFileURL;
-            CPPUNIT_ASSERT( osl::File::createTempFile( nullptr, nullptr, &tempFileURL ) == osl::File::E_None );
+            CPPUNIT_ASSERT_EQUAL( osl::File::E_None, osl::File::createTempFile( nullptr, nullptr, &tempFileURL ) );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
                                    xAdaptor->odfConvert( m_directories.getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
