@@ -462,7 +462,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
                     // Set the end position only here, so later it's enough to check if that is non-zero in incrementProgress().
                     mnProgressEndPos = nValue;
                     static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
-                    OUString aDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr).toString());
+                    OUString aDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr));
                     mxStatusIndicator->start(aDocLoad, mnProgressEndPos);
                     mnPercentSize = mnProgressEndPos / 100;
                 }

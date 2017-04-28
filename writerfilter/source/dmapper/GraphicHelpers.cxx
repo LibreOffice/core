@@ -304,7 +304,7 @@ OUString GraphicNamingHelper::NameGraphic(const OUString& rTemplate)
     {
         // Empty template: then auto-generate a unique name.
         std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
-        OUString aPrefix(ResId(STR_ObjNameSingulGRAF, *pResMgr).toString());
+        OUString aPrefix(ResId(STR_ObjNameSingulGRAF, *pResMgr));
         aRet += aPrefix + OUString::number(++m_nCounter);
     }
 

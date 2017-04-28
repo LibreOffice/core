@@ -66,7 +66,7 @@ RTFError RTFTokenizer::resolveParse()
     if (m_xStatusIndicator.is())
     {
         static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
-        OUString sDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr).toString());
+        OUString sDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr));
 
         sal_uInt64 const nCurrentPos = Strm().Tell();
         sal_uInt64 const nEndPos = nCurrentPos + Strm().remainingSize();
