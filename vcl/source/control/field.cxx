@@ -748,7 +748,7 @@ void NumericField::dispose()
     SpinField::dispose();
 }
 
-bool NumericField::set_property(const OString &rKey, const OString &rValue)
+bool NumericField::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());
@@ -1524,7 +1524,7 @@ Size MetricField::CalcMinimumSize() const
     return calcMinimumSize(*this, *this);
 }
 
-bool MetricField::set_property(const OString &rKey, const OString &rValue)
+bool MetricField::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());

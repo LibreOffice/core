@@ -1408,7 +1408,7 @@ void ListBox::setMaxWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool ListBox::set_property(const OString &rKey, const OString &rValue)
+bool ListBox::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "active")
         SelectEntryPos(rValue.toInt32());

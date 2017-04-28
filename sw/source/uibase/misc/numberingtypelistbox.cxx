@@ -49,7 +49,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( vcl::Window* pWin, WinBits nStyl
     pImpl->xInfo.set(xDefNum, uno::UNO_QUERY);
 }
 
-bool SwNumberingTypeListBox::set_property(const OString &rKey, const OString &rValue)
+bool SwNumberingTypeListBox::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "type")
         Reload(static_cast<SwInsertNumTypes>(rValue.toInt32()));

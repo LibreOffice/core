@@ -48,19 +48,19 @@ namespace xmlreader { class XmlReader; }
 class VCL_DLLPUBLIC VclBuilder
 {
 public:
-    typedef std::map<OString, OString> stringmap;
+    typedef std::map<OString, OUString> stringmap;
     typedef std::map<OString, std::pair<OString, OString>> accelmap;
     /// These functions create a new widget with parent pParent and return it in rRet
     typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
 public:
-                    VclBuilder(
-                            vcl::Window *pParent,
-                            const OUString& sUIRootDir,
-                            const OUString& sUIFile,
-                            const OString& sID = OString(),
-                            const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
-                    ~VclBuilder();
+    VclBuilder(
+            vcl::Window *pParent,
+            const OUString& sUIRootDir,
+            const OUString& sUIFile,
+            const OString& sID = OString(),
+            const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+    ~VclBuilder();
 
     ///releases references and disposes all children.
     void disposeBuilder();
@@ -89,10 +89,10 @@ public:
     static void     set_properties(vcl::Window *pWindow, const stringmap &rProps);
 
     //Convert _ gtk markup to ~ vcl markup
-    static          OString convertMnemonicMarkup(const OString &rIn);
+    static          OUString convertMnemonicMarkup(const OUString &rIn);
 
-    static OString  extractCustomProperty(stringmap &rMap);
-    static FieldUnit detectUnit(OString const&);
+    static OUString extractCustomProperty(stringmap &rMap);
+    static FieldUnit detectUnit(OUString const&);
 
     static bool     extractDropdown(stringmap &rMap);
 
@@ -131,7 +131,7 @@ private:
     //has not been completed during the building, so properties for it
     //are collected here and need to be set afterwards, e.g. during
     //Show or Execute
-    stringmap       m_aDeferredProperties;
+    stringmap      m_aDeferredProperties;
 
     struct PackingData
     {
@@ -180,14 +180,25 @@ private:
         }
     };
 
+    struct UStringPair
+    {
+        OString m_sID;
+        OUString m_sValue;
+        UStringPair(const OString &rId, const OUString &rValue)
+            : m_sID(rId)
+            , m_sValue(rValue)
+        {
+        }
+    };
+
     typedef StringPair RadioButtonGroupMap;
 
     struct ButtonImageWidgetMap
     {
         OString m_sID;
-        OString m_sValue;
+        OUString m_sValue;
         bool m_bRadio;
-        ButtonImageWidgetMap(const OString &rId, const OString &rValue, bool bRadio)
+        ButtonImageWidgetMap(const OString &rId, const OUString &rValue, bool bRadio)
             : m_sID(rId)
             , m_sValue(rValue)
             , m_bRadio(bRadio)
@@ -195,17 +206,17 @@ private:
         }
     };
 
-    typedef StringPair TextBufferMap;
-    typedef StringPair WidgetAdjustmentMap;
-    typedef StringPair ButtonMenuMap;
-    typedef StringPair MnemonicWidgetMap;
+    typedef UStringPair TextBufferMap;
+    typedef UStringPair WidgetAdjustmentMap;
+    typedef UStringPair ButtonMenuMap;
+    typedef UStringPair MnemonicWidgetMap;
 
     struct ComboBoxModelMap
     {
         OString m_sID;
-        OString m_sValue;
+        OUString m_sValue;
         sal_Int32 m_nActiveId;
-        ComboBoxModelMap(const OString &rId, const OString &rValue, sal_Int32 nActiveId)
+        ComboBoxModelMap(const OString &rId, const OUString &rValue, sal_Int32 nActiveId)
             : m_sID(rId)
             , m_sValue(rValue)
             , m_nActiveId(nActiveId)
@@ -215,7 +226,7 @@ private:
 
     struct ListStore
     {
-        typedef std::vector<OString> row;
+        typedef std::vector<OUString> row;
         std::vector<row> m_aEntries;
     };
 
@@ -223,8 +234,7 @@ private:
     static void     mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
     typedef stringmap TextBuffer;
-    const TextBuffer*
-                    get_buffer_by_name(const OString& sID) const;
+    const TextBuffer* get_buffer_by_name(const OString& sID) const;
 
     static void     mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer);
 
@@ -242,7 +252,7 @@ private:
 
     struct stockinfo
     {
-        OString m_sStock;
+        OUString m_sStock;
         int m_nSize;
         stockinfo() : m_nSize(4) {}
     };
@@ -256,7 +266,7 @@ private:
         SizeGroup() {}
     };
 
-    typedef std::map< VclPtr<vcl::Window>, stringmap> AtkMap;
+    typedef std::map<VclPtr<vcl::Window>, stringmap> AtkMap;
 
     struct ParserState
     {
@@ -283,7 +293,7 @@ private:
 
         Translations m_aTranslations;
 
-        std::map< VclPtr<vcl::Window>, VclPtr<vcl::Window> > m_aRedundantParentWidgets;
+        std::map<VclPtr<vcl::Window>, VclPtr<vcl::Window>> m_aRedundantParentWidgets;
 
         std::vector<SizeGroup> m_aSizeGroups;
 
@@ -341,9 +351,9 @@ private:
                     const OString &rClass, const OString &rID,
                     stringmap &rVec);
 
-    void        connectNumericFormatterAdjustment(const OString &id, const OString &rAdjustment);
-    void        connectTimeFormatterAdjustment(const OString &id, const OString &rAdjustment);
-    void        connectDateFormatterAdjustment(const OString &id, const OString &rAdjustment);
+    void        connectNumericFormatterAdjustment(const OString &id, const OUString &rAdjustment);
+    void        connectTimeFormatterAdjustment(const OString &id, const OUString &rAdjustment);
+    void        connectDateFormatterAdjustment(const OString &id, const OUString &rAdjustment);
 
     bool        extractGroup(const OString &id, stringmap &rVec);
     bool        extractModel(const OString &id, stringmap &rVec);
@@ -381,7 +391,7 @@ private:
     void        handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handleMenu(xmlreader::XmlReader &reader, const OString &rID);
-    std::vector<OString> handleItems(xmlreader::XmlReader &reader, const OString &rID);
+    std::vector<OUString> handleItems(xmlreader::XmlReader &reader, const OString &rID);
 
     void        handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID);
 
@@ -483,7 +493,7 @@ protected:
 /*
  * @return true if rValue is "True", "true", "1", etc.
  */
-bool VCL_DLLPUBLIC toBool(const OString &rValue);
+bool VCL_DLLPUBLIC toBool(const OUString &rValue);
 
 #endif
 

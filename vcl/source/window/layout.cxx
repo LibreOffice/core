@@ -262,10 +262,10 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         aMenu->InsertItem(
                             nLocalID,
-                            VclResId(SV_BUTTONTEXT_SCREENSHOT).toString());
+                            VclResId(SV_BUTTONTEXT_SCREENSHOT));
                         aMenu->SetHelpText(
                             nLocalID,
-                            VclResId(SV_HELPTEXT_SCREENSHOT).toString());
+                            VclResId(SV_HELPTEXT_SCREENSHOT));
                         aMenu->SetHelpId(
                             nLocalID,
                             "InteractiveScreenshotMode");
@@ -486,7 +486,7 @@ void VclBox::setAllocation(const Size &rAllocation)
     }
 }
 
-bool VclBox::set_property(const OString &rKey, const OString &rValue)
+bool VclBox::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "spacing")
         set_spacing(rValue.toInt32());
@@ -706,7 +706,7 @@ Size VclButtonBox::calculateRequisition() const
     return addSpacing(addReqGroups(aReq), nVisibleChildren);
 }
 
-bool VclButtonBox::set_property(const OString &rKey, const OString &rValue)
+bool VclButtonBox::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "layout-style")
     {
@@ -1429,12 +1429,12 @@ void VclGrid::setAllocation(const Size& rAllocation)
     }
 }
 
-bool toBool(const OString &rValue)
+bool toBool(const OUString &rValue)
 {
     return (!rValue.isEmpty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
 }
 
-bool VclGrid::set_property(const OString &rKey, const OString &rValue)
+bool VclGrid::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "row-spacing")
         set_row_spacing(rValue.toInt32());
@@ -1646,7 +1646,7 @@ void VclAlignment::setAllocation(const Size &rAllocation)
     setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
-bool VclAlignment::set_property(const OString &rKey, const OString &rValue)
+bool VclAlignment::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "bottom-padding")
         m_nBottomPadding = rValue.toInt32();
@@ -1777,7 +1777,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
     }
 }
 
-bool VclExpander::set_property(const OString &rKey, const OString &rValue)
+bool VclExpander::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "expanded")
         set_expanded(toBool(rValue));
@@ -2005,7 +2005,7 @@ Size VclScrolledWindow::getVisibleChildSize() const
     return aRet;
 }
 
-bool VclScrolledWindow::set_property(const OString &rKey, const OString &rValue)
+bool VclScrolledWindow::set_property(const OString &rKey, const OUString &rValue)
 {
     bool bRet = VclBin::set_property(rKey, rValue);
     m_pVScroll->Show((GetStyle() & WB_VSCROLL) != 0);
@@ -2130,20 +2130,20 @@ void VclSizeGroup::set_mode(VclSizeGroupMode eMode)
 
 }
 
-bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
+bool VclSizeGroup::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "ignore-hidden")
         set_ignore_hidden(toBool(rValue));
     else if (rKey == "mode")
     {
         VclSizeGroupMode eMode = VclSizeGroupMode::Horizontal;
-        if (rValue.equals("none"))
+        if (rValue == "none")
             eMode = VclSizeGroupMode::NONE;
-        else if (rValue.equals("horizontal"))
+        else if (rValue == "horizontal")
             eMode = VclSizeGroupMode::Horizontal;
-        else if (rValue.equals("vertical"))
+        else if (rValue == "vertical")
             eMode = VclSizeGroupMode::Vertical;
-        else if (rValue.equals("both"))
+        else if (rValue == "both")
             eMode = VclSizeGroupMode::Both;
         else
         {
@@ -2454,22 +2454,22 @@ OUString const & MessageDialog::get_secondary_text() const
     return m_sSecondaryString;
 }
 
-bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
+bool MessageDialog::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "text")
-        set_primary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        set_primary_text(rValue);
     else if (rKey == "secondary-text")
-        set_secondary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        set_secondary_text(rValue);
     else if (rKey == "message-type")
     {
         VclMessageType eMode = VclMessageType::Info;
-        if (rValue.equals("info"))
+        if (rValue == "info")
             eMode = VclMessageType::Info;
-        else if (rValue.equals("warning"))
+        else if (rValue == "warning")
             eMode = VclMessageType::Warning;
-        else if (rValue.equals("question"))
+        else if (rValue == "question")
             eMode = VclMessageType::Question;
-        else if (rValue.equals("error"))
+        else if (rValue == "error")
             eMode = VclMessageType::Error;
         else
         {
@@ -2480,17 +2480,17 @@ bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
     else if (rKey == "buttons")
     {
         VclButtonsType eMode = VclButtonsType::NONE;
-        if (rValue.equals("none"))
+        if (rValue == "none")
             eMode = VclButtonsType::NONE;
-        else if (rValue.equals("ok"))
+        else if (rValue == "ok")
             eMode = VclButtonsType::Ok;
-        else if (rValue.equals("cancel"))
+        else if (rValue == "cancel")
             eMode = VclButtonsType::Cancel;
-        else if (rValue.equals("close"))
+        else if (rValue == "close")
             eMode = VclButtonsType::Close;
-        else if (rValue.equals("yes-no"))
+        else if (rValue == "yes-no")
             eMode = VclButtonsType::YesNo;
-        else if (rValue.equals("ok-cancel"))
+        else if (rValue == "ok-cancel")
             eMode = VclButtonsType::OkCancel;
         else
         {

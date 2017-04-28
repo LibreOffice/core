@@ -1168,7 +1168,7 @@ void Dialog::queue_resize(StateChangedType eReason)
     SystemWindow::queue_resize(eReason);
 }
 
-bool Dialog::set_property(const OString &rKey, const OString &rValue)
+bool Dialog::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "border-width")
         set_border_width(rValue.toInt32());
