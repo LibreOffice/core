@@ -356,7 +356,6 @@ void EmbeddedObjectRef::Clear()
         }
 
         mpImpl->mxObj = nullptr;
-        mpImpl->bNeedUpdate = false;
     }
 
     mpImpl->pContainer = nullptr;
