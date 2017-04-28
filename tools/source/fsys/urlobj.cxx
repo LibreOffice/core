@@ -2255,7 +2255,7 @@ bool INetURLObject::setUser(OUString const & rTheUser,
         nDelta = m_aUser.set(m_aAbsURIRef, aNewUser);
     else if (m_aHost.isPresent())
     {
-        m_aAbsURIRef.insert(m_aHost.getBegin(), sal_Unicode('@'));
+        m_aAbsURIRef.insert(m_aHost.getBegin(), u'@');
         nDelta = m_aUser.set(m_aAbsURIRef, aNewUser, m_aHost.getBegin()) + 1;
     }
     else if (getSchemeInfo().m_bHost)
@@ -2310,7 +2310,7 @@ bool INetURLObject::setPassword(OUString const & rThePassword,
         nDelta = m_aAuth.set(m_aAbsURIRef, aNewAuth);
     else if (m_aUser.isPresent())
     {
-        m_aAbsURIRef.insert(m_aUser.getEnd(), sal_Unicode(':'));
+        m_aAbsURIRef.insert(m_aUser.getEnd(), u':');
         nDelta
             = m_aAuth.set(m_aAbsURIRef, aNewAuth, m_aUser.getEnd() + 1) + 1;
     }
@@ -2326,7 +2326,7 @@ bool INetURLObject::setPassword(OUString const & rThePassword,
         return false;
     else
     {
-        m_aAbsURIRef.insert(m_aPath.getBegin(), sal_Unicode(':'));
+        m_aAbsURIRef.insert(m_aPath.getBegin(), u':');
         m_aUser.set(m_aAbsURIRef, OUString(), m_aPath.getBegin());
         nDelta
             = m_aAuth.set(m_aAbsURIRef, aNewAuth, m_aPath.getBegin() + 1) + 1;
@@ -3325,7 +3325,7 @@ bool INetURLObject::setQuery(OUString const & rTheQuery,
         nDelta = m_aQuery.set(m_aAbsURIRef, aNewQuery);
     else
     {
-        m_aAbsURIRef.insert(m_aPath.getEnd(), sal_Unicode('?'));
+        m_aAbsURIRef.insert(m_aPath.getEnd(), u'?');
         nDelta = m_aQuery.set(m_aAbsURIRef, aNewQuery, m_aPath.getEnd() + 1)
                      + 1;
     }
@@ -3944,7 +3944,7 @@ bool INetURLObject::SetPort(sal_uInt32 nThePort)
             nDelta = m_aPort.set(m_aAbsURIRef, aNewPort);
         else
         {
-            m_aAbsURIRef.insert(m_aHost.getEnd(), sal_Unicode(':'));
+            m_aAbsURIRef.insert(m_aHost.getEnd(), u':');
             nDelta = m_aPort.set(m_aAbsURIRef, aNewPort, m_aHost.getEnd() + 1)
                          + 1;
         }
