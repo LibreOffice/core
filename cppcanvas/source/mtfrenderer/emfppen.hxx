@@ -65,7 +65,7 @@ namespace cppcanvas
 
             void SetStrokeAttributes(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes);
 
-            void Read(SvStream& s, ImplRenderer& rR, sal_Int32, sal_Int32);
+            void Read(SvStream& s, ImplRenderer& rR);
 
             static sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke);
             static sal_Int8 lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin);

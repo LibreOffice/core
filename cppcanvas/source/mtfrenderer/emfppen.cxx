@@ -153,7 +153,7 @@ namespace cppcanvas
             }
         }
 
-        void EMFPPen::Read(SvStream& s, ImplRenderer& rR, sal_Int32, sal_Int32)
+        void EMFPPen::Read(SvStream& s, ImplRenderer& rR)
         {
             sal_uInt32 header, unknown, penFlags, unknown2;
             int i;

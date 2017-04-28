@@ -163,7 +163,7 @@ namespace dbaccess
         void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length,ORowSetValueVector::Vector& io_aRow,std::vector<sal_Int32>& o_ChangedColumns
              );
         void updateObject( sal_Int32 columnIndex, const css::uno::Any& x,ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
-        void updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale,ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
+        void updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
         void updateNull(sal_Int32 columnIndex
                         ,ORowSetValueVector::Vector& io_aRow
                         ,std::vector<sal_Int32>& o_ChangedColumns

@@ -121,14 +121,14 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 OUString s1,s2,s3;
-                fillAttributes(nPrefix, rLocalName,xAttrList,m_sFilterStatement,s1,s2,s3);
+                fillAttributes(xAttrList,m_sFilterStatement,s1,s2,s3);
             }
             break;
         case XML_TOK_ORDER_STATEMENT:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 OUString s1,s2,s3;
-                fillAttributes(nPrefix, rLocalName,xAttrList,m_sOrderStatement,s1,s2,s3);
+                fillAttributes(xAttrList,m_sOrderStatement,s1,s2,s3);
             }
             break;
 
@@ -212,9 +212,7 @@ void OXMLTable::EndElement()
 
 }
 
-void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
-                                ,const OUString& /*_sLocalName*/
-                                ,const uno::Reference< XAttributeList > & _xAttrList
+void OXMLTable::fillAttributes(const uno::Reference< XAttributeList > & _xAttrList
                                 ,OUString& _rsCommand
                                 ,OUString& _rsTableName
                                 ,OUString& _rsTableSchema

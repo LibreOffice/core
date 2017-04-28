@@ -152,9 +152,9 @@ namespace dbaui
         virtual void Init() override;
         virtual void DeactivateCell(bool bUpdate = true) override;
 
-        bool IsCutAllowed( long nRow = -1 );
-        bool IsCopyAllowed( long nRow = -1 );
-        bool IsPasteAllowed( long nRow = -1 );
+        bool IsCutAllowed();
+        bool IsCopyAllowed();
+        bool IsPasteAllowed();
         bool IsReadOnly() { return bReadOnly;}
         OFieldDescription* GetFieldDescr( long nRow );
 

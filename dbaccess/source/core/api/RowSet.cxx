@@ -849,7 +849,7 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x )
     }
 }
 
-void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale )
+void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ )
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -857,7 +857,7 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     checkUpdateIterator();
     ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
     ORowSetNotifier aNotify(this,rRow);
-    m_pCache->updateNumericObject(columnIndex,x,scale,rRow,aNotify.getChangedColumns());
+    m_pCache->updateNumericObject(columnIndex,x,rRow,aNotify.getChangedColumns());
     m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
     aNotify.firePropertyChange();
 }

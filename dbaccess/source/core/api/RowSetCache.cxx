@@ -634,7 +634,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
     }
 }
 
-void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/
+void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x
                                        ,ORowSetValueVector::Vector& io_aRow
                                        ,std::vector<sal_Int32>& o_ChangedColumns
                                        )
