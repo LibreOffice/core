@@ -12508,6 +12508,10 @@ if test "x$enable_formula_logger" = "xyes"; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(ENABLE_FORMULA_LOGGER)
     ENABLE_FORMULA_LOGGER=TRUE
+elif test -n "$ENABLE_DBGUTIL" ; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(ENABLE_FORMULA_LOGGER)
+    ENABLE_FORMULA_LOGGER=TRUE
 else
     AC_MSG_RESULT([no])
 fi
