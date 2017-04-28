@@ -224,7 +224,12 @@ namespace dbtools
         {
             OUString colName;
             xDetailField->getPropertyValue("RealName") >>= colName;
-            sFilter += quoteName( m_sIdentifierQuoteString, colName ) + " = :";
+            sal_Bool isFunction(false);
+            xDetailField->getPropertyValue("Function") >>= isFunction;
+            if (isFunction)
+                sFilter += colName;
+            else
+                sFilter += quoteName( m_sIdentifierQuoteString, colName );
         }
 
         // generate a parameter name which is not already used
@@ -235,7 +240,7 @@ namespace dbtools
             o_rNewParamName += "_";
         }
 
-        return sFilter += o_rNewParamName;
+        return sFilter += " =:" + o_rNewParamName;
     }
 
 
