@@ -209,8 +209,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 }
 
 
-bool MediaWindow::executeMediaURLDialog(vcl::Window*,
-        OUString& rURL, bool *const o_pbLink)
+bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
 {
     ::sfx2::FileDialogHelper        aDlg( o_pbLink
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW

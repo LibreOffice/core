@@ -714,7 +714,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 
     bool bLink(true);
     if (bAPI ||
-        ::avmedia::MediaWindow::executeMediaURLDialog(mpWindow, aURL, & bLink))
+        ::avmedia::MediaWindow::executeMediaURLDialog(aURL, & bLink))
     {
         Size aPrefSize;
 

@@ -164,13 +164,8 @@ protected:
 
     /** Call this method when the item list has been changed, i.e. items
         have been deleted or inserted.
-        @param bItemInserted
-            Indicate whether items have been inserted (TRUE) or removed (FALSE).
-        @param nIndex
-            Index of the new or removed item.  A value of -1 indicates that
-            the whole list has been cleared.
     */
-    void HandleChangedItemList (bool bItemInserted, sal_Int32 nIndex);
+    void HandleChangedItemList();
 
     // VCLXAccessibleComponent
     virtual css::awt::Rectangle implGetBounds(  ) override;
