@@ -20,6 +20,10 @@
 #ifndef INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
 #define INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
 
+#include <sal/config.h>
+
+#include <ostream>
+
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
@@ -173,6 +177,15 @@ namespace basegfx
         }
 
     };
+
+    template<typename charT, typename traits>
+    std::basic_ostream<charT, traits> & operator <<(
+        std::basic_ostream<charT, traits> & stream, BColor const & color)
+    {
+        return stream
+            << '[' << color.getRed() << ", " << color.getGreen() << ", "
+            << color.getBlue() << ']';
+    }
 } // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_COLOR_BCOLOR_HXX

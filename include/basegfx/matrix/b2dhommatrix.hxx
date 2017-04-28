@@ -20,6 +20,10 @@
 #ifndef INCLUDED_BASEGFX_MATRIX_B2DHOMMATRIX_HXX
 #define INCLUDED_BASEGFX_MATRIX_B2DHOMMATRIX_HXX
 
+#include <sal/config.h>
+
+#include <ostream>
+
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -103,6 +107,18 @@ namespace basegfx
         B2DHomMatrix aMul(rMatB);
         aMul *= rMatA;
         return aMul;
+    }
+
+    template<typename charT, typename traits>
+    std::basic_ostream<charT, traits> & operator <<(
+        std::basic_ostream<charT, traits> & stream, B2DHomMatrix const & matrix)
+    {
+        return stream
+            << '[' << matrix.get(0, 0) << ' ' << matrix.get(0, 1) << ' '
+            << matrix.get(0, 2) << "; " << matrix.get(1, 0) << ' '
+            << matrix.get(1, 1) << ' ' << matrix.get(1, 2) << "; "
+            << matrix.get(2, 0) << ' ' << matrix.get(2, 1) << ' '
+            << matrix.get(2, 2) << ']';
     }
 } // end of namespace basegfx
 
