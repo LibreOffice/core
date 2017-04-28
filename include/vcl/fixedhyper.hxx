@@ -86,7 +86,7 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
         */
         virtual void        KeyInput( const KeyEvent& rKEvt ) override;
 
-        virtual bool        set_property(const OString &rKey, const OString &rValue) override;
+        virtual bool        set_property(const OString &rKey, const OUString &rValue) override;
 
 
         /** sets m_aClickHdl with rLink.

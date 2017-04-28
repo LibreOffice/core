@@ -179,7 +179,7 @@ void Edit::setMaxWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool Edit::set_property(const OString &rKey, const OString &rValue)
+bool Edit::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "width-chars")
         SetWidthInChars(rValue.toInt32());
@@ -212,7 +212,7 @@ bool Edit::set_property(const OString &rKey, const OString &rValue)
         SetStyle(nBits);
     }
     else if (rKey == "placeholder-text")
-        SetPlaceholderText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetPlaceholderText(rValue);
     else
         return Control::set_property(rKey, rValue);
     return true;

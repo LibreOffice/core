@@ -45,7 +45,7 @@ VCL_BUILDER_DECL_FACTORY(SvxTextEncodingBox)
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
     VclPtrInstance<SvxTextEncodingBox> pListBox(pParent, nWinBits);
