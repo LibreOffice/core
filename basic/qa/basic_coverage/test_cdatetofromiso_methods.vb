@@ -10,7 +10,10 @@ Function doUnitTest as Integer
     ' CDateFromIso CDateToIso
     If ( CDateToIso( CDateFromIso("20161016") ) <> "20161016" ) Then
         doUnitTest = 0
+    ElseIf ( CDateToIso( CDateFromIso("2016-10-16") ) <> "20161016" ) Then
+        doUnitTest = 0
     Else
         doUnitTest = 1
     End If
+    ' TODO: add some failure tests for misformed input, On Error whatever?
 End Function
