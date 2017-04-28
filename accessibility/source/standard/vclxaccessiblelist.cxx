@@ -389,14 +389,9 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
 
         case VclEventId::ListboxItemRemoved:
         case VclEventId::ComboboxItemRemoved:
-            HandleChangedItemList (false, reinterpret_cast<sal_IntPtr>(
-                rVclWindowEvent.GetData()));
-            break;
-
         case VclEventId::ListboxItemAdded:
         case VclEventId::ComboboxItemAdded:
-            HandleChangedItemList (true, reinterpret_cast<sal_IntPtr>(
-                rVclWindowEvent.GetData()));
+            HandleChangedItemList();
             break;
         case VclEventId::ControlGetFocus:
             {
@@ -515,7 +510,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
 }
 
 
-void VCLXAccessibleList::HandleChangedItemList (bool /*bItemInserted*/, sal_Int32 /*nIndex*/)
+void VCLXAccessibleList::HandleChangedItemList()
 {
     clearItems();
     NotifyAccessibleEvent (
