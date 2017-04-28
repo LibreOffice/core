@@ -255,7 +255,7 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage> &rStorage, const rt
 
 tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const rtl::OUString &rPath)
 {
-    const sal_Int32 nDelim = rPath.lastIndexOf(sal_Unicode('/'));
+    const sal_Int32 nDelim = rPath.lastIndexOf(u'/');
 
     if (-1 == nDelim)
         return mxRootStorage.ref->OpenSotStream(rPath, StreamMode::STD_READ);
