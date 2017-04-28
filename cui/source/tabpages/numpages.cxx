@@ -100,8 +100,8 @@ using namespace css::style;
 
 #define MAX_BMP_WIDTH               16
 #define MAX_BMP_HEIGHT              16
-#define SEARCHPATH_DELIMITER        ((sal_Unicode)';')
-#define SEARCHFILENAME_DELIMITER    ((sal_Unicode)'/')
+#define SEARCHPATH_DELIMITER        u';'
+#define SEARCHFILENAME_DELIMITER    u'/'
 
 static bool bLastRelative =         false;
 

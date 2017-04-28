@@ -360,7 +360,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit&, rEdit, void )
             sShortName += " ";
         OUString sName = rEdit.GetText();
         OUString sLetter = sName.isEmpty()
-            ? OUString(sal_Unicode(' ')) : sName.copy(0, 1);
+            ? OUString(u' ') : sName.copy(0, 1);
         rShortName.pEdit->SetText(sShortName.replaceAt(nField, 1, sLetter).trim());
     }
 }
