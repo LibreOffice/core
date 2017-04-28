@@ -51,13 +51,7 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - User Data -->
         <info>
-          <desc>If givenname is empty, specifies the name of the user,
-          in the preferred form the user wants it to be displayed,
-          intentionally without any hints how to split it into "given"
-          name, "family name", "patronym", "middle initial" and other
-          similar culture-dependent components of a person's name. If
-          givenname is non-empty, this is supposed to be the "last
-          name".</desc>
+          <desc>Specifies the last name of the user.</desc>
         </info>
         <value/>
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
