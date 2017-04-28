@@ -56,6 +56,23 @@ void DateTest::testDate()
     CPPUNIT_ASSERT_EQUAL( aMin.GetDate(), (aDate += (kMinDays-10)).GetDate());
     aDate = aBCE;
     CPPUNIT_ASSERT_EQUAL( aMax.GetDate(), (aDate += (kMaxDays+10)).GetDate());
+    aDate = aMax;
+    aDate.SetDay(32);
+    aDate.Normalize();
+    CPPUNIT_ASSERT_EQUAL( aMax.GetDate(), aDate.GetDate());
+
+    // 0001-00-x normalized to -0001-12-x
+    aDate.SetYear(1);
+    aDate.SetMonth(0);
+    aDate.SetDay(22);
+    aDate.Normalize();
+    CPPUNIT_ASSERT_EQUAL( Date(22,12,-1).GetDate(), aDate.GetDate());
+    // 1999-02-32 normalized to 1999-03-04
+    aDate.SetYear(1999);
+    aDate.SetMonth(2);
+    aDate.SetDay(32);
+    aDate.Normalize();
+    CPPUNIT_ASSERT_EQUAL( Date(4,3,1999).GetDate(), aDate.GetDate());
 
     // Year -1 is a leap year.
     aDate = Date(28,2,-1);
