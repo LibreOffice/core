@@ -135,26 +135,26 @@ bool Converter::convertMeasure( sal_Int32& rValue,
             {
                 switch( rString[nPos] )
                 {
-                case sal_Unicode('c'):
-                case sal_Unicode('C'):
+                case u'c':
+                case u'C':
                     aCmpsL[0] = "cm";
                     aCmpsU[0] = "CM";
                     aScales[0] = (72.*20.)/2.54; // twip
                     break;
-                case sal_Unicode('i'):
-                case sal_Unicode('I'):
+                case u'i':
+                case u'I':
                     aCmpsL[0] = "in";
                     aCmpsU[0] = "IN";
                     aScales[0] = 72.*20.; // twip
                     break;
-                case sal_Unicode('m'):
-                case sal_Unicode('M'):
+                case u'm':
+                case u'M':
                     aCmpsL[0] = "mm";
                     aCmpsU[0] = "MM";
                     aScales[0] = (72.*20.)/25.4; // twip
                     break;
-                case sal_Unicode('p'):
-                case sal_Unicode('P'):
+                case u'p':
+                case u'P':
                     aCmpsL[0] = "pt";
                     aCmpsU[0] = "PT";
                     aScales[0] = 20.; // twip
@@ -170,26 +170,26 @@ bool Converter::convertMeasure( sal_Int32& rValue,
                 double nScaleFactor = (MeasureUnit::MM_100TH == nTargetUnit) ? 100.0 : 10.0;
                 switch( rString[nPos] )
                 {
-                case sal_Unicode('c'):
-                case sal_Unicode('C'):
+                case u'c':
+                case u'C':
                     aCmpsL[0] = "cm";
                     aCmpsU[0] = "CM";
                     aScales[0] = 10.0 * nScaleFactor; // mm/100
                     break;
-                case sal_Unicode('i'):
-                case sal_Unicode('I'):
+                case u'i':
+                case u'I':
                     aCmpsL[0] = "in";
                     aCmpsU[0] = "IN";
                     aScales[0] = 1000.*2.54; // mm/100
                     break;
-                case sal_Unicode('m'):
-                case sal_Unicode('M'):
+                case u'm':
+                case u'M':
                     aCmpsL[0] = "mm";
                     aCmpsU[0] = "MM";
                     aScales[0] = 1.0 * nScaleFactor; // mm/100
                     break;
-                case sal_Unicode('p'):
-                case sal_Unicode('P'):
+                case u'p':
+                case u'P':
                     aCmpsL[0] = "pt";
                     aCmpsU[0] = "PT";
                     aScales[0] = (10.0 * nScaleFactor*2.54)/72.; // mm/100
@@ -565,7 +565,7 @@ bool Converter::convertNumber64( sal_Int64& rValue,
     {
         // TODO: check overflow!
         rValue *= 10;
-        rValue += (rString[nPos] - sal_Unicode('0'));
+        rValue += (rString[nPos] - u'0');
         nPos++;
     }
 
@@ -810,7 +810,7 @@ bool Converter::convertDuration(double& rfTime,
                 if ( !bIsFraction )
                 {
                     nTemp *= 10;
-                    nTemp += (c - sal_Unicode('0'));
+                    nTemp += (c - u'0');
                 }
                 else
                 {
@@ -978,7 +978,7 @@ readUnsignedNumber(const OUString & rString,
         if (('0' <= c) && (c <= '9'))
         {
             nTemp *= 10;
-            nTemp += (c - sal_Unicode('0'));
+            nTemp += (c - u'0');
             if (nTemp >= SAL_MAX_INT32)
             {
                 bOverflow = true;
@@ -1020,7 +1020,7 @@ readUnsignedNumberMaxDigits(int maxDigits,
             if (maxDigits > 0)
             {
                 nTemp *= 10;
-                nTemp += (c - sal_Unicode('0'));
+                nTemp += (c - u'0');
                 if (nTemp >= SAL_MAX_INT32)
                 {
                     bOverflow = true;
@@ -1891,21 +1891,21 @@ sal_Int32 Converter::indexOfComma( const OUString& rStr,
         sal_Unicode c = rStr[nPos];
         switch( c )
         {
-        case sal_Unicode('\''):
+        case u'\'':
             if( 0 == cQuote )
                 cQuote = c;
             else if( '\'' == cQuote )
                 cQuote = 0;
             break;
 
-        case sal_Unicode('"'):
+        case u'"':
             if( 0 == cQuote )
                 cQuote = c;
             else if( '\"' == cQuote )
                 cQuote = 0;
             break;
 
-        case sal_Unicode(','):
+        case u',':
             if( 0 == cQuote )
                 return nPos;
             break;
@@ -2474,43 +2474,43 @@ sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefau
     {
         switch(rString[nPos])
         {
-            case sal_Unicode('%') :
+            case u'%' :
             {
                 nRetUnit = MeasureUnit::PERCENT;
                 break;
             }
-            case sal_Unicode('c'):
-            case sal_Unicode('C'):
+            case u'c':
+            case u'C':
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 'm'
                     || rString[nPos+1] == 'M'))
                     nRetUnit = MeasureUnit::CM;
                 break;
             }
-            case sal_Unicode('e'):
-            case sal_Unicode('E'):
+            case u'e':
+            case u'E':
             {
                 // CSS1_EMS or CSS1_EMX later
                 break;
             }
-            case sal_Unicode('i'):
-            case sal_Unicode('I'):
+            case u'i':
+            case u'I':
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 'n'
                     || rString[nPos+1] == 'N'))
                     nRetUnit = MeasureUnit::INCH;
                 break;
             }
-            case sal_Unicode('m'):
-            case sal_Unicode('M'):
+            case u'm':
+            case u'M':
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 'm'
                     || rString[nPos+1] == 'M'))
                     nRetUnit = MeasureUnit::MM;
                 break;
             }
-            case sal_Unicode('p'):
-            case sal_Unicode('P'):
+            case u'p':
+            case u'P':
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 't'
                     || rString[nPos+1] == 'T'))
