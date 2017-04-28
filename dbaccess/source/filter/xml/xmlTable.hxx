@@ -43,10 +43,8 @@ namespace dbaxml
 
         ODBFilter& GetOwnImport();
 
-        void fillAttributes(    sal_uInt16 nPrfx
-                                ,const OUString& _sLocalName
-                                ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
-                                , OUString& _rsCommand
+        void fillAttributes(     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
+                                ,OUString& _rsCommand
                                 ,OUString& _rsTableName
                                 ,OUString& _rsTableSchema
                                 ,OUString& _rsTableCatalog

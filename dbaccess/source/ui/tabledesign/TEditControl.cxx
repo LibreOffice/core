@@ -1085,7 +1085,7 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
     return pRow->GetActFieldDescr();
 }
 
-bool OTableEditorCtrl::IsCutAllowed( long nRow )
+bool OTableEditorCtrl::IsCutAllowed()
 {
     bool bIsCutAllowed = (GetView()->getController().isAddAllowed() && GetView()->getController().isDropAllowed()) ||
                             GetView()->getController().isAlterAllowed();
@@ -1104,7 +1104,7 @@ bool OTableEditorCtrl::IsCutAllowed( long nRow )
                 bIsCutAllowed = !pNameCell->GetSelected().isEmpty();
                 break;
             case ROW:
-                bIsCutAllowed = IsCopyAllowed(nRow);
+                bIsCutAllowed = IsCopyAllowed();
                 break;
             default:
                 bIsCutAllowed = false;
@@ -1115,7 +1115,7 @@ bool OTableEditorCtrl::IsCutAllowed( long nRow )
     return bIsCutAllowed;
 }
 
-bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
+bool OTableEditorCtrl::IsCopyAllowed()
 {
     bool bIsCopyAllowed = false;
     if(m_eChildFocus == DESCRIPTION )
@@ -1148,7 +1148,7 @@ bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
     return bIsCopyAllowed;
 }
 
-bool OTableEditorCtrl::IsPasteAllowed( long /*nRow*/ )
+bool OTableEditorCtrl::IsPasteAllowed()
 {
     bool bAllowed = GetView()->getController().isAddAllowed();
     if ( bAllowed )
@@ -1375,9 +1375,9 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "dbaccess/ui/tabledesignrowmenu.ui", "");
                     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), IsCutAllowed(nRow));
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), IsCopyAllowed(nRow));
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), IsPasteAllowed(nRow));
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), IsCutAllowed());
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), IsCopyAllowed());
+                    aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), IsPasteAllowed());
                     aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed(nRow));
                     aContextMenu->EnableItem(aContextMenu->GetItemId("primarykey"), IsPrimaryKeyAllowed(nRow));
                     aContextMenu->EnableItem(aContextMenu->GetItemId("insert"), IsInsertNewAllowed(nRow));

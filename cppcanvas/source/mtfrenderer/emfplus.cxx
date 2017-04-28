@@ -716,7 +716,7 @@ namespace cppcanvas
                 {
                     EMFPPen *pen;
                     aObjects [index] = pen = new EMFPPen ();
-                    pen->Read (rObjectStream, *this, nHDPI, nVDPI);
+                    pen->Read (rObjectStream, *this);
 
                     break;
                 }

@@ -92,7 +92,7 @@ SvXMLImportContext* OXMLQuery::CreateChildContext(
                 {
                     GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                     OUString s1;
-                    fillAttributes(nPrefix, rLocalName,xAttrList,s1,m_sTable,m_sSchema,m_sCatalog);
+                    fillAttributes(xAttrList,s1,m_sTable,m_sSchema,m_sCatalog);
                 }
                 break;
         }

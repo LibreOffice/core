@@ -68,7 +68,7 @@ namespace dbaui
         typedef list< pair < opcode, pair < OConnectionLineDataVec::size_type, OConnectionLineDataVec::size_type> > > ops_type;
         ops_type                                m_ops;
 
-        void fillListBox(const Reference< XPropertySet>& _xDest,long nRow,sal_uInt16 nColumnId);
+        void fillListBox(const Reference< XPropertySet>& _xDest);
         /** returns the column id for the editbrowsebox
             @param  _nColId
                     the column id SOURCE_COLUMN or DEST_COLUMN
@@ -311,7 +311,7 @@ namespace dbaui
 
         if ( xDef.is() )
         {
-            fillListBox(xDef,nRow,nColumnId);
+            fillListBox(xDef);
             OUString sName = GetCellText( nRow, nColumnId );
             m_pListCell->SelectEntry( sName );
             if ( m_pListCell->GetSelectEntry() != sName )
@@ -353,7 +353,7 @@ namespace dbaui
         if( rDev.IsClipRegion() )
             rDev.SetClipRegion();
     }
-    void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest,long /*_nRow*/,sal_uInt16 /*nColumnId*/)
+    void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest)
     {
         m_pListCell->Clear();
         try
