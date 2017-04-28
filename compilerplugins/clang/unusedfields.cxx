@@ -122,6 +122,11 @@ MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
         aInfo.parentClass = recordDecl->getQualifiedNameAsString();
 
     aInfo.fieldName = fieldDecl->getNameAsString();
+    // sometimes the name (if it's anonymous thing) contains the full path of the build folder, which we don't need
+    size_t idx = aInfo.fieldName.find(SRCDIR);
+    if (idx != std::string::npos) {
+        aInfo.fieldName = aInfo.fieldName.replace(idx, strlen(SRCDIR), "");
+    }
     aInfo.fieldType = fieldDecl->getType().getAsString();
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( fieldDecl->getLocation() );

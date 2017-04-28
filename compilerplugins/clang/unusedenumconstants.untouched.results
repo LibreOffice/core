@@ -29,7 +29,7 @@ include/unotools/eventcfg.hxx:34
 include/unotools/eventcfg.hxx:35
     enum GlobalEventId CLOSEAPP
 libreofficekit/source/gtk/lokdocview.cxx:286
-    enum (anonymous at /home/noel/libo3/libreofficekit/source/gtk/lokdocview.cxx:284:1) PROP_0
+    enum (anonymous at libreofficekit/source/gtk/lokdocview.cxx:284:1) PROP_0
 sw/inc/poolfmt.hxx:96
     enum RES_POOLFMT RES_POOL_CHRFMT
 sw/inc/poolfmt.hxx:97

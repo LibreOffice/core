@@ -5,25 +5,25 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:78
 bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:79
     enum x86_64_reg_class X86_64_X87UP_CLASS
 chart2/source/inc/CharacterProperties.hxx:120
-    enum chart::CharacterProperties::(anonymous at /home/noel/libo3/chart2/source/inc/CharacterProperties.hxx:41:5) FAST_PROPERTY_ID_END_CHAR_PROP
+    enum chart::CharacterProperties::(anonymous at chart2/source/inc/CharacterProperties.hxx:41:5) FAST_PROPERTY_ID_END_CHAR_PROP
 chart2/source/inc/TitleHelper.hxx:47
     enum chart::TitleHelper::eTitleType NORMAL_TITLE_END
 configmgr/source/access.hxx:454
-    enum configmgr::Access::(anonymous at /home/noel/libo3/configmgr/source/access.hxx:453:5) IS_EXTENSIBLE
+    enum configmgr::Access::(anonymous at configmgr/source/access.hxx:453:5) IS_EXTENSIBLE
 configmgr/source/access.hxx:454
-    enum configmgr::Access::(anonymous at /home/noel/libo3/configmgr/source/access.hxx:453:5) IS_SET
+    enum configmgr::Access::(anonymous at configmgr/source/access.hxx:453:5) IS_SET
 configmgr/source/access.hxx:455
-    enum configmgr::Access::(anonymous at /home/noel/libo3/configmgr/source/access.hxx:453:5) IS_SET_MEMBER
+    enum configmgr::Access::(anonymous at configmgr/source/access.hxx:453:5) IS_SET_MEMBER
 configmgr/source/access.hxx:455
-    enum configmgr::Access::(anonymous at /home/noel/libo3/configmgr/source/access.hxx:453:5) IS_GROUP_MEMBER
+    enum configmgr::Access::(anonymous at configmgr/source/access.hxx:453:5) IS_GROUP_MEMBER
 configmgr/source/components.hxx:154
     enum configmgr::Components::ModificationTarget Dconf
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /home/noel/libo3/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XSI
+    enum configmgr::ParseManager::(anonymous at configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XSI
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /home/noel/libo3/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_OOR
+    enum configmgr::ParseManager::(anonymous at configmgr/source/parsemanager.hxx:47:5) NAMESPACE_OOR
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /home/noel/libo3/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XS
+    enum configmgr::ParseManager::(anonymous at configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XS
 connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:110
     enum connectivity::ODatabaseMetaDataResultSet::MetaDataResultSetType eUDTs
 cui/source/options/optgenrl.cxx:53
@@ -293,11 +293,11 @@ sfx2/source/sidebar/SidebarController.cxx:78
 sfx2/source/sidebar/SidebarController.cxx:79
     enum sfx2::sidebar::(anonymous namespace)::MenuId MID_FIRST_HIDE
 slideshow/source/engine/shapes/viewshape.hxx:281
-    enum slideshow::internal::ViewShape::(anonymous at /home/noel/libo3/slideshow/source/engine/shapes/viewshape.hxx:281:13) MAX_RENDER_CACHE_ENTRIES
+    enum slideshow::internal::ViewShape::(anonymous at slideshow/source/engine/shapes/viewshape.hxx:281:13) MAX_RENDER_CACHE_ENTRIES
 slideshow/source/engine/slideview.cxx:249
-    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(anonymous at /home/noel/libo3/slideshow/source/engine/slideview.cxx:249:5) SPRITE_ULLAGE
+    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(anonymous at slideshow/source/engine/slideview.cxx:249:5) SPRITE_ULLAGE
 slideshow/source/engine/slideview.cxx:729
-    enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at /home/noel/libo3/slideshow/source/engine/slideview.cxx:729:5) LAYER_ULLAGE
+    enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at slideshow/source/engine/slideview.cxx:729:5) LAYER_ULLAGE
 soltools/cpp/cpp.h:42
     int WS
 svgio/inc/svgstyleattributes.hxx:62
@@ -361,13 +361,13 @@ svl/source/numbers/zformat.cxx:456
 svl/source/numbers/zformat.cxx:457
     enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM19
 svtools/source/control/valueset.cxx:49
-    enum (anonymous namespace)::(anonymous at /home/noel/libo3/svtools/source/control/valueset.cxx:44:1) NAME_LINE_OFF_Y
+    enum (anonymous namespace)::(anonymous at svtools/source/control/valueset.cxx:44:1) NAME_LINE_OFF_Y
 svtools/source/control/valueset.cxx:50
-    enum (anonymous namespace)::(anonymous at /home/noel/libo3/svtools/source/control/valueset.cxx:44:1) NAME_LINE_HEIGHT
+    enum (anonymous namespace)::(anonymous at svtools/source/control/valueset.cxx:44:1) NAME_LINE_HEIGHT
 svtools/source/control/valueset.cxx:51
-    enum (anonymous namespace)::(anonymous at /home/noel/libo3/svtools/source/control/valueset.cxx:44:1) NAME_OFFSET
+    enum (anonymous namespace)::(anonymous at svtools/source/control/valueset.cxx:44:1) NAME_OFFSET
 svtools/source/control/valueset.cxx:52
-    enum (anonymous namespace)::(anonymous at /home/noel/libo3/svtools/source/control/valueset.cxx:44:1) SCRBAR_OFFSET
+    enum (anonymous namespace)::(anonymous at svtools/source/control/valueset.cxx:44:1) SCRBAR_OFFSET
 sw/inc/dbmgr.hxx:294
     enum SwDBManager::DBConnURITypes DBCONN_MSJET
 sw/inc/dbmgr.hxx:295
@@ -521,17 +521,17 @@ sw/source/core/inc/SwXMLBlockImport.hxx:107
 sw/source/core/inc/SwXMLBlockImport.hxx:108
     enum SwXMLBlockListToken BLOCK_LIST
 sw/source/core/unocore/unosett.cxx:1606
-    enum (anonymous at /home/noel/libo3/sw/source/core/unocore/unosett.cxx:1605:5) NotInChapterFirst
+    enum (anonymous at sw/source/core/unocore/unosett.cxx:1605:5) NotInChapterFirst
 sw/source/core/unocore/unosett.cxx:1607
-    enum (anonymous at /home/noel/libo3/sw/source/core/unocore/unosett.cxx:1605:5) NotInChapterLast
+    enum (anonymous at sw/source/core/unocore/unosett.cxx:1605:5) NotInChapterLast
 sw/source/core/unocore/unosett.cxx:1608
-    enum (anonymous at /home/noel/libo3/sw/source/core/unocore/unosett.cxx:1605:5) InChapterFirst
+    enum (anonymous at sw/source/core/unocore/unosett.cxx:1605:5) InChapterFirst
 sw/source/core/unocore/unosett.cxx:1609
-    enum (anonymous at /home/noel/libo3/sw/source/core/unocore/unosett.cxx:1605:5) InChapterLast
+    enum (anonymous at sw/source/core/unocore/unosett.cxx:1605:5) InChapterLast
 sw/source/filter/ww8/ww8scan.hxx:599
     enum WW8PLCFx_Fc_FKP::Limits eMaxCache
 tools/source/generic/poly.cxx:1017
-    enum (anonymous at /home/noel/libo3/tools/source/generic/poly.cxx:1017:5) maxRecursionDepth
+    enum (anonymous at tools/source/generic/poly.cxx:1017:5) maxRecursionDepth
 vcl/source/gdi/CommonSalLayout.cxx:312
     enum (anonymous namespace)::VerticalOrientation Upright
 vcl/source/gdi/CommonSalLayout.cxx:315

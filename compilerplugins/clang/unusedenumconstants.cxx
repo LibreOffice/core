@@ -98,6 +98,11 @@ MyFieldInfo UnusedEnumConstants::niceName(const EnumConstantDecl* enumConstantDe
 
     aInfo.parentClass = enumConstantDecl->getType().getAsString();
     aInfo.fieldName = enumConstantDecl->getNameAsString();
+    // sometimes the name (if it's anonymous thing) contains the full path of the build folder, which we don't need
+    size_t idx = aInfo.fieldName.find(SRCDIR);
+    if (idx != std::string::npos) {
+        aInfo.fieldName = aInfo.fieldName.replace(idx, strlen(SRCDIR), "");
+    }
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( enumConstantDecl->getLocation() );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
