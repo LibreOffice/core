@@ -45,13 +45,13 @@
 
 namespace sd {
 
-const sal_Unicode CHAR_HARDBLANK    =   ((sal_Unicode)0x00A0);
-const sal_Unicode CHAR_HARDHYPHEN   =   ((sal_Unicode)0x2011);
-const sal_Unicode CHAR_SOFTHYPHEN   =   ((sal_Unicode)0x00AD);
-const sal_Unicode CHAR_RLM          =   ((sal_Unicode)0x200F);
-const sal_Unicode CHAR_LRM          =   ((sal_Unicode)0x200E);
-const sal_Unicode CHAR_ZWSP         =   ((sal_Unicode)0x200B);
-const sal_Unicode CHAR_ZWNBSP       =   ((sal_Unicode)0x2060);
+const sal_Unicode CHAR_HARDBLANK    =   u'\x00A0';
+const sal_Unicode CHAR_HARDHYPHEN   =   u'\x2011';
+const sal_Unicode CHAR_SOFTHYPHEN   =   u'\x00AD';
+const sal_Unicode CHAR_RLM          =   u'\x200F';
+const sal_Unicode CHAR_LRM          =   u'\x200E';
+const sal_Unicode CHAR_ZWSP         =   u'\x200B';
+const sal_Unicode CHAR_ZWNBSP       =   u'\x2060';
 
 
 FuBullet::FuBullet (

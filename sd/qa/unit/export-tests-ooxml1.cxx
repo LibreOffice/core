@@ -623,7 +623,7 @@ void SdOOXMLExportTest1::testBulletCharAndFont()
     uno::Reference<container::XIndexAccess> xLevels(xPropSet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
-    OUString    sBulletChar(sal_Unicode(0xf06c));
+    OUString    sBulletChar(u'\xf06c');
     for (int i = 0; i < aProps.getLength(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];

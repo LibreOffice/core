@@ -241,7 +241,7 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     {
         OUString aPayload = OUString::createFromAscii(pPayload);
         m_aSelection.clear();
-        for (const OUString& rString : lcl_convertSeparated(aPayload, static_cast<sal_Unicode>(';')))
+        for (const OUString& rString : lcl_convertSeparated(aPayload, u';'))
         {
             ::tools::Rectangle aRectangle;
             lcl_convertRectangle(rString, aRectangle);

@@ -616,7 +616,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_CUSTOM );
-    mpMetric->SetCustomUnitText( OUString( sal_Unicode(0xb0)) ); // degree sign
+    mpMetric->SetCustomUnitText( OUString( u'\x00b0') ); // degree sign
     mpMetric->SetMin( -10000 );
     mpMetric->SetMax( 10000 );
 
