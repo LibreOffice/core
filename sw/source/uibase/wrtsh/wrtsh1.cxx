@@ -1763,6 +1763,11 @@ void SwWrtShell::SetReadonlyOption(bool bSet)
 void SwWrtShell::ChangeHeaderOrFooter(
     const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning)
 {
+    SdrView *const pSdrView = GetDrawView();
+    if (pSdrView && pSdrView->IsTextEdit())
+    {   // tdf#107474 deleting header may delete active drawing object
+        pSdrView->SdrEndTextEdit(true);
+    }
     addCurrentPosition();
     StartAllAction();
     StartUndo( SwUndoId::HEADER_FOOTER ); // #i7983#
