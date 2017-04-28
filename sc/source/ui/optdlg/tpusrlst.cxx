@@ -35,8 +35,8 @@
 #include "globstr.hrc"
 #include "tpusrlst.hxx"
 
-#define CR  (sal_Unicode)13
-#define LF  (sal_Unicode)10
+#define CR  u'\x000D'
+#define LF  u'\x000A'
 
 static const sal_Unicode cDelimiter = ',';
 

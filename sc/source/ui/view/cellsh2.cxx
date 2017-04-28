@@ -971,7 +971,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aExport.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::None, 0, false ) );
 
                     // #i87703# text to columns fails with tab separator
-                    aExport.SetDelimiter( static_cast< sal_Unicode >( 0 ) );
+                    aExport.SetDelimiter( u'\0' );
 
                     SvMemoryStream aStream;
                     aStream.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );

@@ -228,7 +228,7 @@ OUString ScFuncDesc::getSignature() const
             aSig.append( "( " );
             aSig.append(aParamList);
             // U+00A0 (NBSP) prevents automatic line break
-            aSig.append( static_cast< sal_Unicode >(0xA0) );
+            aSig.append( u'\x00A0' );
             aSig.append( ")" );
         }
         else

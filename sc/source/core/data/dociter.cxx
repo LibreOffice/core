@@ -1710,7 +1710,7 @@ bool ScQueryCellIterator::BinarySearch()
             ::std::numeric_limits<double>::max();
     OUString aLastInRangeString;
     if (!bLessEqual)
-        aLastInRangeString = OUString(sal_Unicode(0xFFFF));
+        aLastInRangeString = OUString(u'\xFFFF');
 
     aCellData = aIndexer.getCell(nLastInRange);
     aCell = aCellData.first;
