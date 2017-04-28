@@ -1559,6 +1559,11 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
     return xRet;
 }
 
+uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendGlossaryEntry()
+{
+    return appendTextSectionAfter(m_xGlossaryEntryStart);
+}
+
 void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType)
 {
     m_aHeaderFooterStack.push(HeaderFooterContext(m_bTextInserted));

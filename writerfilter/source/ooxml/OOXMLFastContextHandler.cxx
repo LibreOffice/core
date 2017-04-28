@@ -641,6 +641,18 @@ void OOXMLFastContextHandler::positivePercentage(const OUString& rText)
         mpStream->positivePercentage(rText);
 }
 
+void OOXMLFastContextHandler::startGlossaryEntry()
+{
+    if (isForwardEvents())
+        mpStream->startGlossaryEntry();
+}
+
+void OOXMLFastContextHandler::endGlossaryEntry()
+{
+    if (isForwardEvents())
+        mpStream->endGlossaryEntry();
+}
+
 void OOXMLFastContextHandler::propagateCharacterProperties()
 {
     mpParserState->setCharacterProperties(getPropertySet());
