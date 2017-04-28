@@ -82,7 +82,7 @@ inline bool PackageUri::isRootFolder() const
 {
     init();
     return ( ( m_aPath.getLength() == 1 ) &&
-             ( m_aPath.getStr()[ 0 ] == sal_Unicode( '/' ) ) );
+             ( m_aPath.getStr()[ 0 ] == u'/' ) );
 }
 
 }
