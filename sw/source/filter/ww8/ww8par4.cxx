@@ -287,10 +287,10 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
     if (pRet)       // OLE object was inserted
     {
-        if (dynamic_cast< const SdrOle2Obj *>( pRet ) !=  nullptr)
+        if (SdrOle2Obj *pOleObj = dynamic_cast<SdrOle2Obj*>(pRet))
         {
-            pFormat = InsertOle(*static_cast<SdrOle2Obj*>(pRet), *pFlySet, pGrfSet);
-            SdrObject::Free( pRet );        // we don't need this anymore
+            pFormat = InsertOle(*pOleObj, *pFlySet, pGrfSet);
+            SdrObject::Free(pRet);     // we don't need this anymore
         }
         else
             pFormat = m_rDoc.getIDocumentContentOperations().InsertDrawObj(*m_pPaM, *pRet, *pFlySet );
