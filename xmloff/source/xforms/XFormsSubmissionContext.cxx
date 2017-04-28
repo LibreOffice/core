@@ -78,6 +78,8 @@ XFormsSubmissionContext::XFormsSubmissionContext(
     xModel->getSubmissions()->insert( makeAny( mxSubmission ) );
 }
 
+namespace {
+
 Any toBool( const OUString& rValue )
 {
     Any aValue;
@@ -88,6 +90,8 @@ Any toBool( const OUString& rValue )
     }
     return aValue;
 }
+
+} // namespace
 
 void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
                                                const OUString& rValue )
