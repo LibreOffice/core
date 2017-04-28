@@ -146,7 +146,8 @@ void TestInterfaceContainer2::test1()
             while( iterator.hasMoreElements() )
             {
                 Reference< XVetoableChangeListener > r = static_cast<XVetoableChangeListener*>(iterator.next());
-                CPPUNIT_ASSERT( r != r1 && ( r == r2 || r == r3 ) );
+                CPPUNIT_ASSERT( r != r1 );
+                CPPUNIT_ASSERT( r == r2 || r == r3 );
             }
         }
 
