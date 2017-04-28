@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_5068fcba",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-04-28T21:23:53Z",
+      "side": 1,
+      "message": "this loop needs checking for wrap-around I guess",
+      "revId": "09398d13dec54dfe6c59e9c3f7ff3b6be9624ea6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
