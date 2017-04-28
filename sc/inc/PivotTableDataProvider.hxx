@@ -88,6 +88,8 @@ public:
 
     virtual void SAL_CALL setPivotTableName(const OUString& sPivotTableName) override;
 
+    virtual sal_Bool SAL_CALL hasPivotTable() override;
+
     virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
         createDataSequenceOfValuesByIndex(sal_Int32 nIndex) override;
     virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
@@ -146,12 +148,6 @@ private:
     void setLabeledDataSequenceValues(css::uno::Reference<css::chart2::data::XLabeledDataSequence> & xResult,
                                       OUString const & sRoleValues, OUString const & sIdValues,
                                       std::vector<ValueAndFormat> const & rValues);
-
-    void setLabeledDataSequence(css::uno::Reference<css::chart2::data::XLabeledDataSequence> & xResult,
-                                OUString const & sRoleValues, OUString const & sIdValues,
-                                std::vector<ValueAndFormat> const & rValues,
-                                OUString const & sRoleLabel,  OUString const & sIdLabel,
-                                std::vector<ValueAndFormat> const & rLabel);
 
     css::uno::Reference<css::chart2::data::XDataSequence> assignLabelsToDataSequence(size_t nIndex);
 
