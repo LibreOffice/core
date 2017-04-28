@@ -69,6 +69,8 @@ public:
     void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) override;
     void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) override;
     void info(const std::string & info) override;
+    void startGlossaryEntry() override;
+    void endGlossaryEntry() override;
 
 protected:
     virtual void lcl_startSectionGroup() = 0;
@@ -89,6 +91,8 @@ protected:
     virtual void lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref) = 0;
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
     virtual void lcl_info(const std::string & info) = 0;
+    virtual void lcl_startGlossaryEntry() { }
+    virtual void lcl_endGlossaryEntry() { }
 
 #ifdef DEBUG_WRITERFILTER
     LoggedResourcesHelper mHelper;

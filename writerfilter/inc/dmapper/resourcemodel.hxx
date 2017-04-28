@@ -292,6 +292,12 @@ public:
      */
     virtual void info(const std::string & info) = 0;
 
+    /// Receives start mark for glossary document entry.
+    virtual void startGlossaryEntry() = 0;
+
+    /// Receives end mark for glossary document entry.
+    virtual void endGlossaryEntry() = 0;
+
 protected:
     ~Stream() {}
 };

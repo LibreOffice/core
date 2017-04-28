@@ -301,6 +301,32 @@ void LoggedStream::info(const std::string & _info)
 #endif
 }
 
+void LoggedStream::startGlossaryEntry()
+{
+#ifdef DEBUG_WRITERFILTER
+    mHelper.startElement("startGlossaryEntry");
+#endif
+
+    lcl_startGlossaryEntry();
+
+#ifdef DEBUG_WRITERFILTER
+    LoggedResourcesHelper::endElement("startGlossaryEntry");
+#endif
+}
+
+void LoggedStream::endGlossaryEntry()
+{
+#ifdef DEBUG_WRITERFILTER
+    mHelper.startElement("endGlossaryEntry");
+#endif
+
+    lcl_endGlossaryEntry();
+
+#ifdef DEBUG_WRITERFILTER
+    LoggedResourcesHelper::endElement("endGlossaryEntry");
+#endif
+}
+
 // class LoggedProperties
 LoggedProperties::LoggedProperties(
 #ifdef DEBUG_WRITERFILTER
