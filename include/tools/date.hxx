@@ -164,8 +164,8 @@ public:
 
     /** If the represented date is valid (1<=month<=12, 1<=day<=(28,29,30,31)
         depending on month/year) AND is of the Gregorian calendar (1582-10-15
-        <= date) (AND implicitly date <= 9999-12-31 due to internal
-        representation) */
+        <= date)
+     */
     bool            IsValidAndGregorian() const;
 
     /** If the represented date is valid (1<=month<=12, 1<=day<=(28,29,30,31)
@@ -175,8 +175,8 @@ public:
     /** Normalize date, invalid day or month values are adapted such that they
         carry over to the next month or/and year, for example 1999-02-32
         becomes 1999-03-04, 1999-13-01 becomes 2000-01-01, 1999-13-42 becomes
-        2000-02-11. Truncates at 9999-12-31, 0000-00-x will yield the
-        normalized value of 0000-01-max(1,(x-31))
+        2000-02-11. Truncates at -32768-01-01 or 32767-12-31, 0001-00-x will
+        yield the normalized value of -0001-12-x
 
         This may be necessary after Date ctors or if the SetDate(), SetDay(),
         SetMonth(), SetYear() methods set individual non-matching values.
