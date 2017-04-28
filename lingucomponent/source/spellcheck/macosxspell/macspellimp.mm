@@ -223,8 +223,8 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
         sal_Unicode c;
     for (sal_Int32 ix=0; ix < n; ix++) {
         c = rBuf[ix];
-        if ((c == 0x201C) || (c == 0x201D)) rBuf[ix] = (sal_Unicode)0x0022;
-        if ((c == 0x2018) || (c == 0x2019)) rBuf[ix] = (sal_Unicode)0x0027;
+        if ((c == 0x201C) || (c == 0x201D)) rBuf[ix] = u'"';
+        if ((c == 0x2018) || (c == 0x2019)) rBuf[ix] = u'\'';
         }
         OUString nWord(rBuf.makeStringAndClear());
 
@@ -326,8 +326,8 @@ Reference< XSpellAlternatives >
         sal_Unicode c;
     for (sal_Int32 ix=0; ix < n; ix++) {
          c = rBuf[ix];
-         if ((c == 0x201C) || (c == 0x201D)) rBuf[ix] = (sal_Unicode)0x0022;
-         if ((c == 0x2018) || (c == 0x2019)) rBuf[ix] = (sal_Unicode)0x0027;
+         if ((c == 0x201C) || (c == 0x201D)) rBuf[ix] = u'"';
+         if ((c == 0x2018) || (c == 0x2019)) rBuf[ix] = u'\'';
         }
         OUString nWord(rBuf.makeStringAndClear());
 
