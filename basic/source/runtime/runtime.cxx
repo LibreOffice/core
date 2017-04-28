@@ -1240,14 +1240,13 @@ void SbiRuntime::DllCall
     ( const OUString& aFuncName,
       const OUString& aDLLName,
       SbxArray* pArgs,          // parameter (from index 1, can be NULL)
-      SbxDataType eResType,     // return value
-      bool bCDecl )         // true: according to C-conventions
+      SbxDataType eResType)     // return value
 {
     // NOT YET IMPLEMENTED
 
     SbxVariable* pRes = new SbxVariable( eResType );
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();
-    SbError nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
+    SbError nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes );
     if( nErr )
     {
         Error( nErr );
@@ -4111,7 +4110,7 @@ void SbiRuntime::StepCALL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         pArgs = refArgv.get();
     }
-    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, false );
+    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2 );
     aLibName.clear();
     if( nOp1 & 0x8000 )
     {
@@ -4129,7 +4128,7 @@ void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         pArgs = refArgv.get();
     }
-    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, true );
+    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2 );
     aLibName.clear();
     if( nOp1 & 0x8000 )
     {

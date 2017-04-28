@@ -154,7 +154,7 @@ public:
     void            InitScrollBars();
     ScrollBar*      GetHScroll() const { return pHScroll; }
     ScrollBar*      GetVScroll() const { return pVScroll; }
-    void            DoScroll( ScrollBar* pActScroll );
+    void            DoScroll();
     void            UpdateScrollBars();
 
     void            SetDialog (const css::uno::Reference<css::container::XNameContainer>& xUnoControlDialogModel);

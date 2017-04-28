@@ -98,8 +98,7 @@ SbError builtin_kernel32(const OUString &aFuncName, SbxArray *pArgs,
 
 SbError SbiDllMgr::Call(
     const OUString &aFuncName, const OUString &aDllName,
-    SbxArray *pArgs, SbxVariable &rRetVal,
-    bool /* bCDecl */)
+    SbxArray *pArgs, SbxVariable &rRetVal)
 {
     if (aDllName == "kernel32")
         return builtin_kernel32(aFuncName, pArgs, rRetVal);
@@ -107,7 +106,7 @@ SbError SbiDllMgr::Call(
         return ERRCODE_BASIC_NOT_IMPLEMENTED;
 }
 
-void SbiDllMgr::FreeDll(OUString const &) {}
+void SbiDllMgr::FreeDll() {}
 
 SbiDllMgr::SbiDllMgr(): impl_(new Impl) {}
 

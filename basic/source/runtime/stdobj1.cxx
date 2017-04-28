@@ -56,7 +56,7 @@ SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
 }
 
 
-void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdPicture::PropType( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
     {
@@ -76,7 +76,7 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, bool bWrite )
 }
 
 
-void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdPicture::PropWidth( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
     {
@@ -91,7 +91,7 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, bool bWrite )
     pVar->PutInteger( (sal_Int16)aSize.Width() );
 }
 
-void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdPicture::PropHeight( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
     {
@@ -141,16 +141,15 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
 
         SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar_  = pVar->GetParameters();
         const sal_uInt32 nWhich = pVar->GetUserData();
         bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
 
-        // Propteries
+        // Properties
         switch( nWhich )
         {
-            case ATTR_IMP_TYPE:     PropType( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_WIDTH:    PropWidth( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_HEIGHT:   PropHeight( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_TYPE:     PropType( pVar, bWrite ); return;
+            case ATTR_IMP_WIDTH:    PropWidth( pVar, bWrite ); return;
+            case ATTR_IMP_HEIGHT:   PropHeight( pVar, bWrite ); return;
         }
 
         SbxObject::Notify( rBC, rHint );
@@ -158,7 +157,7 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdFont::PropBold( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
         SetBold( pVar->GetBool() );
@@ -166,7 +165,7 @@ void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, bool bWrite )
         pVar->PutBool( IsBold() );
 }
 
-void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdFont::PropItalic( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
         SetItalic( pVar->GetBool() );
@@ -174,7 +173,7 @@ void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, bool bWrite )
         pVar->PutBool( IsItalic() );
 }
 
-void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdFont::PropStrikeThrough( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
         SetStrikeThrough( pVar->GetBool() );
@@ -182,7 +181,7 @@ void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, bool bWrite )
         pVar->PutBool( IsStrikeThrough() );
 }
 
-void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdFont::PropUnderline( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
         SetUnderline( pVar->GetBool() );
@@ -190,7 +189,7 @@ void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, bool bWrite )
         pVar->PutBool( IsUnderline() );
 }
 
-void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdFont::PropSize( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
         SetSize( (sal_uInt16)pVar->GetInteger() );
@@ -198,7 +197,7 @@ void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, bool bWrite )
         pVar->PutInteger( (sal_Int16)GetSize() );
 }
 
-void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, bool bWrite )
+void SbStdFont::PropName( SbxVariable* pVar, bool bWrite )
 {
     if( bWrite )
     {
@@ -259,19 +258,18 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
 
         SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar_  = pVar->GetParameters();
         const sal_uInt32 nWhich = pVar->GetUserData();
         bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
 
         // Propteries
         switch( nWhich )
         {
-            case ATTR_IMP_BOLD:         PropBold( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_ITALIC:       PropItalic( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_STRIKETHROUGH:PropStrikeThrough( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_SIZE:         PropSize( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_NAME:         PropName( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_BOLD:         PropBold( pVar, bWrite ); return;
+            case ATTR_IMP_ITALIC:       PropItalic( pVar, bWrite ); return;
+            case ATTR_IMP_STRIKETHROUGH:PropStrikeThrough(  pVar, bWrite ); return;
+            case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, bWrite ); return;
+            case ATTR_IMP_SIZE:         PropSize( pVar, bWrite ); return;
+            case ATTR_IMP_NAME:         PropName( pVar, bWrite ); return;
         }
 
         SbxObject::Notify( rBC, rHint );

@@ -784,7 +784,7 @@ RTLFUNC(FreeLibrary)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    GetSbData()->pInst->GetDllMgr()->FreeDll( rPar.Get(1)->GetOUString() );
+    GetSbData()->pInst->GetDllMgr()->FreeDll();
 }
 bool IsBaseIndexOne()
 {

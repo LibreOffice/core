@@ -410,7 +410,7 @@ void DockingWindow::DockThis ()
     {
         if (!IsFloatingMode() && GetParent() != pLayout)
             SetParent(pLayout);
-        pLayout->DockaWindow(this);
+        pLayout->ArrangeWindows();
     }
 }
 

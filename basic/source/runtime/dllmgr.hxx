@@ -38,9 +38,9 @@ public:
 
     SbError Call(
         OUString const & function, OUString const &  library,
-        SbxArray * arguments, SbxVariable & result, bool cdeclConvention);
+        SbxArray * arguments, SbxVariable & result);
 
-    void FreeDll(OUString const & library);
+    void FreeDll();
 
 private:
     struct Impl;
