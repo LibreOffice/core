@@ -1160,7 +1160,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent&
     }
 }
 
-void SAL_CALL DlgEdObj::_elementInserted(const css::container::ContainerEvent& )
+void SAL_CALL DlgEdObj::_elementInserted()
 {
     if (isListening())
     {
@@ -1169,7 +1169,7 @@ void SAL_CALL DlgEdObj::_elementInserted(const css::container::ContainerEvent& )
     }
 }
 
-void SAL_CALL DlgEdObj::_elementReplaced(const css::container::ContainerEvent& )
+void SAL_CALL DlgEdObj::_elementReplaced()
 {
     if (isListening())
     {
@@ -1178,7 +1178,7 @@ void SAL_CALL DlgEdObj::_elementReplaced(const css::container::ContainerEvent& )
     }
 }
 
-void SAL_CALL DlgEdObj::_elementRemoved(const css::container::ContainerEvent& )
+void SAL_CALL DlgEdObj::_elementRemoved()
 {
     if (isListening())
     {

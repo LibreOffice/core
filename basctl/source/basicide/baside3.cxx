@@ -233,9 +233,9 @@ void DialogWindow::DoInit()
     m_pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
 }
 
-void DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
+void DialogWindow::DoScroll( ScrollBar*  )
 {
-    m_pEditor->DoScroll( pCurScrollBar );
+    m_pEditor->DoScroll();
 }
 
 void DialogWindow::GetState( SfxItemSet& rSet )

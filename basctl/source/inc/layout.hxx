@@ -42,7 +42,6 @@ class BaseWindow;
 class Layout: public vcl::Window
 {
 public:
-    void DockaWindow (DockingWindow*);
     void ArrangeWindows ();
 
     virtual void Activating (BaseWindow&);
