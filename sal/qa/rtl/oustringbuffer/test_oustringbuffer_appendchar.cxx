@@ -30,7 +30,7 @@ void AppendChar::testAppendChar() {
     rtl::OUStringBuffer s;
     s.append('a');
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), s.getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode('a'), s[0]);
+    CPPUNIT_ASSERT_EQUAL(u'a', s[0]);
 }
 
 } }

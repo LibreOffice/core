@@ -989,13 +989,13 @@ void createFromCodePoints::test() {
     static sal_uInt32 const cp[] = { 0, 0xD800, 0xFFFF, 0x10000, 0x10FFFF };
     rtl::OUString s(cp, sizeof cp / sizeof (sal_uInt32));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), s.getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0), s[0]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xD800), s[1]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xFFFF), s[2]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xD800), s[3]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDC00), s[4]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDBFF), s[5]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDFFF), s[6]);
+    CPPUNIT_ASSERT_EQUAL(u'\0', s[0]);
+    CPPUNIT_ASSERT_EQUAL(u'\xD800', s[1]);
+    CPPUNIT_ASSERT_EQUAL(u'\xFFFF', s[2]);
+    CPPUNIT_ASSERT_EQUAL(u'\xD800', s[3]);
+    CPPUNIT_ASSERT_EQUAL(u'\xDC00', s[4]);
+    CPPUNIT_ASSERT_EQUAL(u'\xDBFF', s[5]);
+    CPPUNIT_ASSERT_EQUAL(u'\xDFFF', s[6]);
 }
 
 class iterateCodePoints: public CppUnit::TestFixture {
