@@ -3175,7 +3175,7 @@ void ScFiltersTest::testCustomNumFormatHybridCellODS()
     // Make sure the cell doesn't have an error value.
     ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1,17,0));
     CPPUNIT_ASSERT(pFC);
-    CPPUNIT_ASSERT(pFC->GetErrCode() == FormulaError::NONE);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pFC->GetErrCode());
 
     xDocSh->DoClose();
 }

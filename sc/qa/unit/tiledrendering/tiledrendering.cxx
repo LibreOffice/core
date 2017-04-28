@@ -33,6 +33,8 @@
 #include <svx/svdpage.hxx>
 
 #include <chrono>
+#include <cstddef>
+
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
@@ -1173,38 +1175,38 @@ void ScTiledRenderingTest::testUndoLimiting()
     Scheduler::ProcessEventsToIdle();
 
     // check that undo action count in not 0
-    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 1);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2
     SfxLokHelper::setView(nView2);
     comphelper::dispatchCommand(".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
     // check that undo has not been executed on view #2
-    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 1);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #1
     SfxLokHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
     // check that undo has been executed on view #1
-    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 0);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 
     // check that redo action count in not 0
-    CPPUNIT_ASSERT(pUndoManager->GetRedoActionCount() == 1);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetRedoActionCount());
 
     // try to execute redo in view #2
     SfxLokHelper::setView(nView2);
     comphelper::dispatchCommand(".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
     // check that redo has not been executed on view #2
-    CPPUNIT_ASSERT(pUndoManager->GetRedoActionCount() == 1);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetRedoActionCount());
 
     // try to execute redo in view #1
     SfxLokHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
     // check that redo has been executed on view #1
-    CPPUNIT_ASSERT(pUndoManager->GetRedoActionCount() == 0);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetRedoActionCount());
 
     mxComponent->dispose();
     mxComponent.clear();
@@ -1244,14 +1246,14 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
     Scheduler::ProcessEventsToIdle();
 
     // check that undo action count in not 0
-    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 1);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2
     SfxLokHelper::setView(nView2);
     comphelper::dispatchCommand(".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
     // check that undo has not been executed on view #2
-    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 1);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2 in repair mode
     SfxLokHelper::setView(nView2);
@@ -1262,7 +1264,7 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
     comphelper::dispatchCommand(".uno:Undo", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     // check that undo has been executed on view #2 in repair mode
-    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() == 0);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 
     mxComponent->dispose();
     mxComponent.clear();
