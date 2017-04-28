@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_952fb6a0",
+        "filename": "tools/source/inet/inetmime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-04-28T19:25:38Z",
+      "side": 1,
+      "message": "I don\u0027t see anything in the old code that implements sorting of this list?",
+      "revId": "ad1024668d3303c1630d8027b33414b36b87d354",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
