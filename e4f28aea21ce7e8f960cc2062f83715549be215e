@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_5589cec9",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3623,
+      "author": {
+        "id": 1000229
+      },
+      "writtenOn": "2017-04-28T16:44:22Z",
+      "side": 0,
+      "message": "this was the error handling i copied, so i fixed this one too",
+      "range": {
+        "startLine": 3623,
+        "startChar": 27,
+        "endLine": 3623,
+        "endChar": 43
+      },
+      "revId": "e4f28aea21ce7e8f960cc2062f83715549be215e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

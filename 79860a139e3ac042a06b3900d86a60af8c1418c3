@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_55770ed4",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000229
+      },
+      "writtenOn": "2017-04-28T16:44:22Z",
+      "side": 1,
+      "message": "corrected the uno RuntimeException for the inserted throw in setDataArray \nand for the parallel throw in setData",
+      "revId": "79860a139e3ac042a06b3900d86a60af8c1418c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
