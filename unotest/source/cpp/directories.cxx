@@ -29,9 +29,11 @@ OUString getFileURLFromSystemPath(OUString const & path) {
 
 test::Directories::Directories() {
     const char* pSrcRoot = getenv( "SRC_ROOT" );
-    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != nullptr && pSrcRoot[0] != 0);
+    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != nullptr);
+    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot[0] != 0);
     const char* pWorkdirRoot = getenv( "WORKDIR_FOR_BUILD" );
-    CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot != nullptr && pWorkdirRoot[0] != 0);
+    CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot != nullptr);
+    CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot[0] != 0);
     m_aSrcRootPath = OUString::createFromAscii( pSrcRoot );
     m_aSrcRootURL = getFileURLFromSystemPath(m_aSrcRootPath);
 
