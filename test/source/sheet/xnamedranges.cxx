@@ -120,10 +120,11 @@ void XNamedRanges::testAddNewFromTitles()
         uno::Reference< sheet::XCellRangeAddressable > xCellRangeAdr(xCellRangeRef->getReferredCells(), UNO_QUERY_THROW);
         table::CellRangeAddress cellRangeAddress = xCellRangeAdr->getRangeAddress();
 
-        CPPUNIT_ASSERT(cellRangeAddress.EndColumn == i && cellRangeAddress.StartColumn == i);
-        CPPUNIT_ASSERT(cellRangeAddress.StartRow == 1);
-        CPPUNIT_ASSERT(cellRangeAddress.EndRow == 3);
-        CPPUNIT_ASSERT(cellRangeAddress.Sheet == 1);
+        CPPUNIT_ASSERT_EQUAL(i, cellRangeAddress.EndColumn);
+        CPPUNIT_ASSERT_EQUAL(i, cellRangeAddress.StartColumn);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), cellRangeAddress.StartRow);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), cellRangeAddress.EndRow);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), cellRangeAddress.Sheet);
     }
 
     xNamedRanges->addNewFromTitles(aCellRangeAddress, sheet::Border_LEFT);
@@ -145,10 +146,11 @@ void XNamedRanges::testAddNewFromTitles()
         uno::Reference< sheet::XCellRangeAddressable > xCellRangeAdr(xCellRangeRef->getReferredCells(), UNO_QUERY_THROW);
         table::CellRangeAddress cellRangeAddress = xCellRangeAdr->getRangeAddress();
 
-        CPPUNIT_ASSERT(cellRangeAddress.EndRow == i && cellRangeAddress.StartRow == i);
-        CPPUNIT_ASSERT(cellRangeAddress.StartColumn == 1);
-        CPPUNIT_ASSERT(cellRangeAddress.EndColumn == 3);
-        CPPUNIT_ASSERT(cellRangeAddress.Sheet == 1);
+        CPPUNIT_ASSERT_EQUAL(i, cellRangeAddress.EndRow);
+        CPPUNIT_ASSERT_EQUAL(i, cellRangeAddress.StartRow);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), cellRangeAddress.StartColumn);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), cellRangeAddress.EndColumn);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), cellRangeAddress.Sheet);
     }
 }
 

@@ -30,9 +30,9 @@ void XSheetAnnotation::testGetPosition()
     aExpectedCellAddress.Row = 1;
     aExpectedCellAddress.Column = 2;
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position", aResultCellAddress.Sheet == aExpectedCellAddress.Sheet);
-    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position", aResultCellAddress.Column == aExpectedCellAddress.Column);
-    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", aResultCellAddress.Row == aExpectedCellAddress.Row);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong SHEET reference position", aExpectedCellAddress.Sheet, aResultCellAddress.Sheet);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong COLUMN reference position", aExpectedCellAddress.Column, aResultCellAddress.Column);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong ROW reference position", aExpectedCellAddress.Row, aResultCellAddress.Row);
 }
 
 void XSheetAnnotation::testGetAuthor()
@@ -40,14 +40,14 @@ void XSheetAnnotation::testGetAuthor()
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     OUString aAuthor = aSheetAnnotation->getAuthor();
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong author", aAuthor == "LG");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong author", OUString("LG"), aAuthor);
 }
 void XSheetAnnotation::testGetDate()
 {
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     OUString aDate = aSheetAnnotation->getDate();
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong date", aDate == "01/17/2013");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong date", OUString("01/17/2013"), aDate);
 }
 void XSheetAnnotation::testGetIsVisible()
 {

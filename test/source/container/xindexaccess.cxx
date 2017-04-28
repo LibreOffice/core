@@ -24,13 +24,13 @@ XIndexAccess::XIndexAccess(sal_Int32 nItems):
 void XIndexAccess::testGetCount()
 {
     uno::Reference< container::XIndexAccess > xIndexAccess(init(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(mnItems == xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(mnItems, xIndexAccess->getCount());
 }
 
 void XIndexAccess::testGetByIndex()
 {
     uno::Reference< container::XIndexAccess > xIndexAccess(init(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(mnItems == xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(mnItems, xIndexAccess->getCount());
 
     if (mnItems > 0)
     {

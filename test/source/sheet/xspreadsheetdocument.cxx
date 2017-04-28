@@ -25,7 +25,7 @@ void XSpreadsheetDocument::testGetSheets()
     CPPUNIT_ASSERT(xSheets.is());
 
     uno::Reference< container::XIndexAccess > xIA(xSheets, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT( xIA->getCount() == mnSheets );
+    CPPUNIT_ASSERT_EQUAL( mnSheets, xIA->getCount() );
 }
 
 }

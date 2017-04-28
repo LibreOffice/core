@@ -48,11 +48,11 @@ void XDatabaseRange::testDataArea()
     xDBRange->setDataArea(aCellAddress);
     table::CellRangeAddress aValue;
     aValue = xDBRange->getDataArea();
-    CPPUNIT_ASSERT( aCellAddress.Sheet == aValue.Sheet );
-    CPPUNIT_ASSERT( aCellAddress.StartRow == aValue.StartRow );
-    CPPUNIT_ASSERT( aCellAddress.EndRow == aValue.EndRow );
-    CPPUNIT_ASSERT( aCellAddress.StartColumn == aValue.StartColumn );
-    CPPUNIT_ASSERT( aCellAddress.EndColumn == aValue.EndColumn );
+    CPPUNIT_ASSERT_EQUAL( aCellAddress.Sheet, aValue.Sheet );
+    CPPUNIT_ASSERT_EQUAL( aCellAddress.StartRow, aValue.StartRow );
+    CPPUNIT_ASSERT_EQUAL( aCellAddress.EndRow, aValue.EndRow );
+    CPPUNIT_ASSERT_EQUAL( aCellAddress.StartColumn, aValue.StartColumn );
+    CPPUNIT_ASSERT_EQUAL( aCellAddress.EndColumn, aValue.EndColumn );
 }
 
 void XDatabaseRange::testGetSubtotalDescriptor()
@@ -121,7 +121,7 @@ void XDatabaseRange::testGetSortDescriptor()
         {
             sal_Int32 nUserListIndex = 1;
             aProp.Value >>= nUserListIndex;
-            CPPUNIT_ASSERT(nUserListIndex == 0);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nUserListIndex);
         }
     }
 }

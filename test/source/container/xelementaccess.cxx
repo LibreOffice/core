@@ -19,7 +19,7 @@ namespace apitest {
 void XElementAccess::testGetElementType()
 {
     uno::Reference< container::XElementAccess > xElementAccess(init(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xElementAccess->getElementType()==maType);
+    CPPUNIT_ASSERT_EQUAL(maType, xElementAccess->getElementType());
 }
 
 void XElementAccess::testHasElements()

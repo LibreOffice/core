@@ -27,7 +27,7 @@ void XSearchable::testFindAll()
 
     uno::Reference< container::XIndexAccess > xIndex = xSearchable->findAll(xSearchDescr);
     CPPUNIT_ASSERT(xIndex.is());
-    CPPUNIT_ASSERT(xIndex->getCount() == mnCount);
+    CPPUNIT_ASSERT_EQUAL(mnCount, xIndex->getCount());
 }
 
 void XSearchable::testFindFirst()

@@ -31,9 +31,9 @@ void XDataPilotTable::testGetOutputRange()
     uno::Reference< sheet::XDataPilotTable > xDPTable(init(),UNO_QUERY_THROW);
 
     table::CellRangeAddress aRange = xDPTable->getOutputRange();
-    CPPUNIT_ASSERT( aRange.Sheet == 0 );
-    CPPUNIT_ASSERT( aRange.StartColumn == 7 );
-    CPPUNIT_ASSERT( aRange.StartRow == 8 );
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(0), aRange.Sheet );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(7), aRange.StartColumn );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(8), aRange.StartRow );
 }
 
 void XDataPilotTable::testRefresh()
