@@ -83,7 +83,7 @@ namespace detail {
             buf.append( seq[nArg].getValueType().getTypeName() );
             buf.append( " } to " );
             buf.append( ::cppu::UnoType<T>::get().getTypeName() );
-            buf.append( static_cast<sal_Unicode>('!') );
+            buf.append( u'!' );
             return unwrapArgsError( buf.makeStringAndClear(), nArg, args... );
         }
         return unwrapArgs( seq, ++nArg, args... );

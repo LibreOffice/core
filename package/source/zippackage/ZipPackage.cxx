@@ -1492,7 +1492,7 @@ void SAL_CALL ZipPackage::commitChanges()
                 {
                     uno::Reference < XPropertySet > xPropSet ( xTempInStream, UNO_QUERY_THROW );
 
-                    OUString sTargetFolder = m_aURL.copy ( 0, m_aURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
+                    OUString sTargetFolder = m_aURL.copy ( 0, m_aURL.lastIndexOf ( u'/' ) );
                     Content aContent(
                         sTargetFolder, uno::Reference< XCommandEnvironment >(),
                         m_xContext );
@@ -1505,7 +1505,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     aInfo.NameClash = NameClash::OVERWRITE;
                     aInfo.MoveData = false;
                     aInfo.SourceURL = sTempURL;
-                    aInfo.NewTitle = rtl::Uri::decode ( m_aURL.copy ( 1 + m_aURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) ),
+                    aInfo.NewTitle = rtl::Uri::decode ( m_aURL.copy ( 1 + m_aURL.lastIndexOf ( u'/' ) ),
                                                         rtl_UriDecodeWithCharset,
                                                         RTL_TEXTENCODING_UTF8 );
                     // if the file is still not corrupted, it can become after the next step

@@ -48,13 +48,13 @@ namespace ucb_impl { namespace urihelper {
         OUString aParams;
         OUString aURI;
 
-        sal_Int32 nFragment = rURI.lastIndexOf( sal_Unicode( '#' ) );
+        sal_Int32 nFragment = rURI.lastIndexOf( u'#' );
         if ( nFragment != -1 )
             aFragment = rURI.copy( nFragment + 1 );
 
         sal_Int32 nParams = ( nFragment == -1 )
-            ? rURI.lastIndexOf( sal_Unicode( '?' ) )
-            : rURI.lastIndexOf( sal_Unicode( '?' ), nFragment );
+            ? rURI.lastIndexOf( u'?' )
+            : rURI.lastIndexOf( u'?', nFragment );
         if ( nParams != -1 )
             aParams = ( nFragment == -1 )
                 ? rURI.copy( nParams + 1 )
@@ -90,19 +90,19 @@ namespace ucb_impl { namespace urihelper {
                                   rtl_UriEncodeKeepEscapes, /* #i81690# */
                                   RTL_TEXTENCODING_UTF8 ) );
             if ( nIndex >= 0 )
-                aResult.append( sal_Unicode( '/' ) );
+                aResult.append( u'/' );
         }
         while ( nIndex >= 0 );
 
         if ( !aParams.isEmpty() )
         {
-            aResult.append( sal_Unicode( '?' ) );
+            aResult.append( u'?' );
             aResult.append( aParams );
         }
 
         if ( !aFragment.isEmpty() )
         {
-            aResult.append( sal_Unicode( '#' ) );
+            aResult.append( u'#' );
             aResult.append( aFragment );
         }
 

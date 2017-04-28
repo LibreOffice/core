@@ -71,13 +71,13 @@
 // The Format names in the list of all names have the
 // following family as their first character:
 
-#define cCHAR       (sal_Unicode)'c'
-#define cPARA       (sal_Unicode)'p'
-#define cFRAME      (sal_Unicode)'f'
-#define cPAGE       (sal_Unicode)'g'
-#define cNUMRULE    (sal_Unicode)'n'
-#define cTABSTYLE   (sal_Unicode)'t'
-#define cCELLSTYLE  (sal_Unicode)'b'
+#define cCHAR       u'c'
+#define cPARA       u'p'
+#define cFRAME      u'f'
+#define cPAGE       u'g'
+#define cNUMRULE    u'n'
+#define cTABSTYLE   u't'
+#define cCELLSTYLE  u'b'
 
 using namespace com::sun::star;
 

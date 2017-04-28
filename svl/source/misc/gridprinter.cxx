@@ -98,7 +98,7 @@ void GridPrinter::print( const char* pHeader ) const
     {
         aBuf.append("-");
         for (sal_Int32 i = 0; i < aColWidths[col]; ++i)
-            aBuf.append(sal_Unicode('-'));
+            aBuf.append(u'-');
         aBuf.append("-+");
     }
 
@@ -115,7 +115,7 @@ void GridPrinter::print( const char* pHeader ) const
             size_t nPadding = aColWidths[col] - aStr.getLength();
             aBuf.append(aStr);
             for (size_t i = 0; i < nPadding; ++i)
-                aBuf.append(sal_Unicode(' '));
+                aBuf.append(u' ');
             cout << aBuf.makeStringAndClear() << " | ";
         }
         cout << endl;

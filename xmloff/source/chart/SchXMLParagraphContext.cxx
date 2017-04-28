@@ -89,11 +89,11 @@ SvXMLImportContext* SchXMLParagraphContext::CreateChildContext(
     {
         if( rLocalName.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP )))
         {
-            maBuffer.append( sal_Unicode( 0x0009 ));  // tabulator
+            maBuffer.append( u'\x0009');  // tabulator
         }
         else if( rLocalName.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK )))
         {
-            maBuffer.append( sal_Unicode( 0x000A ));  // linefeed
+            maBuffer.append( u'\x000A');  // linefeed
         }
     }
 

@@ -1928,7 +1928,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     else if(aChar.isEmpty())
                     {
                         // If w:lvlText's value is null - set bullet char to zero
-                        aFormat.SetBulletChar(sal_Unicode(0x0));
+                        aFormat.SetBulletChar(u'\0');
                     }
                     else
                     {

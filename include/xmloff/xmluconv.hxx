@@ -60,7 +60,7 @@ private:
     sal_Unicode             mcSeparator;
 
 public:
-    SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator = sal_Unicode(' ') );
+    SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator = u' ' );
 
     bool getNextToken( OUString& rToken );
 };

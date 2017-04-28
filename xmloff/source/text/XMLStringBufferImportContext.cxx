@@ -64,7 +64,7 @@ void XMLStringBufferImportContext::EndElement()
                 XML_NAMESPACE_LO_EXT == GetPrefix()) &&
          (IsXMLToken(GetLocalName(), XML_P))    )
     {
-        rTextBuffer.append(sal_Unicode(0x0a));
+        rTextBuffer.append(u'\x000a');
     }
 }
 

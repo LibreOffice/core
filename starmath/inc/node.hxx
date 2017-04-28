@@ -482,7 +482,7 @@ protected:
     :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
     {
         sal_Unicode cChar = GetToken().cMathChar;
-        if (sal_Unicode('\0') != cChar)
+        if (u'\0' != cChar)
             SetText(OUString(cChar));
     }
 

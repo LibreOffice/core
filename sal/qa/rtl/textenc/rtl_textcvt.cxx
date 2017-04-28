@@ -83,7 +83,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(OUString("rSet.m_aMap[" + OUString::number(i) + "] == " +
                                                                   OUString::number(rSet.m_aMap[i], 16)),
                                                          RTL_TEXTENCODING_UTF8).getStr(),
-                                       static_cast<sal_Unicode>(0xFFFF), rSet.m_aMap[i]);
+                                       u'\xFFFF', rSet.m_aMap[i]);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(OUString("aUnicode[" + OUString::number(j) + "] == " +
                                                                   OUString::number(aUnicode[j], 16) +
                                                                   ", rSet.m_aMap[" + OUString::number(i) + "] == " +
@@ -130,7 +130,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(OUString("rSet.m_aMap[" + OUString::number(i) + "] == " +
                                                                   OUString::number(rSet.m_aMap[i], 16)),
                                                          RTL_TEXTENCODING_UTF8).getStr(),
-                                       static_cast<sal_Unicode>(0xFFFF), rSet.m_aMap[i]);
+                                       u'\xFFFF', rSet.m_aMap[i]);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(OUString("aText[" + OUString::number(j) + "] == " +
                                                                   OUString::number(i, 16)),
                                                          RTL_TEXTENCODING_UTF8).getStr(),

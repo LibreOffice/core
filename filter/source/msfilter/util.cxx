@@ -120,7 +120,7 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
           bullet symbol
         */
         rFontName = "Wingdings";
-        cChar = static_cast< sal_Unicode >(0x6C);
+        cChar = u'\x6C';
     }
     return cChar;
 }

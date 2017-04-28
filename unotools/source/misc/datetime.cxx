@@ -56,7 +56,7 @@ namespace
         {
             // TODO: check overflow!
             rValue *= 10;
-            rValue += (rString[nPos] - sal_Unicode('0'));
+            rValue += (rString[nPos] - u'0');
             nPos++;
         }
 

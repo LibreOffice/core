@@ -1254,7 +1254,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                              GetExport() );
 
     OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
-    OUString aPrefix(static_cast<sal_Unicode>('P'));
+    OUString aPrefix(u'P');
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
                               xParaPropMapper, aPrefix );
 

@@ -250,9 +250,9 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
         // append (escape if needed)
         switch(*pCur)
         {
-        case sal_Unicode('&') : aNormalized.append( "&amp;" ); break;
-        case sal_Unicode('\''): aNormalized.append( "&apos;" ); break;
-        case sal_Unicode('\"'): aNormalized.append( "&quot;" ); break;
+        case u'&' : aNormalized.append( "&amp;" ); break;
+        case u'\'': aNormalized.append( "&apos;" ); break;
+        case u'\"': aNormalized.append( "&quot;" ); break;
 
         default: aNormalized.append( *pCur );
         }

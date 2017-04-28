@@ -409,7 +409,7 @@ namespace xforms
         rtl_math_ConversionStatus eStatus;
         sal_Int32 nEnd;
         double f = ::rtl::math::stringToDouble(
-            rValue, '.', sal_Unicode(0), &eStatus, &nEnd );
+            rValue, '.', u'\0', &eStatus, &nEnd );
 
         // error checking...
         bool bReturn = false;

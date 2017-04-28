@@ -146,7 +146,7 @@ void SwAccessiblePortionData::Special(
     {
         case POR_POSTITS:
         case POR_FLYCNT:
-            sDisplay = OUString(sal_Unicode(0xfffc));
+            sDisplay = OUString(u'\xfffc');
             break;
         case POR_FLD:
         case POR_HIDDEN:
@@ -154,7 +154,7 @@ void SwAccessiblePortionData::Special(
         case POR_ISOREF:
             // When the filed content is empty, input a special character.
             if (rText.isEmpty())
-                sDisplay = OUString(sal_Unicode(0xfffc));
+                sDisplay = OUString(u'\xfffc');
             else
                 sDisplay = rText;
             m_aFieldPosition.push_back(m_aBuffer.getLength());

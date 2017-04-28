@@ -2485,7 +2485,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 !rSh.HasReadonlySel() )
             {
                 FlushInBuffer();
-                rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
+                rSh.AutoCorrect( *pACorr, u'\0' );
             }
             eKeyState = eNextKeyState;
         }

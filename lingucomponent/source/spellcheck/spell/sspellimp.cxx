@@ -298,9 +298,9 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
     {
         c = rBuf[ix];
         if ((c == 0x201C) || (c == 0x201D))
-            rBuf[ix] = (sal_Unicode)0x0022;
+            rBuf[ix] = u'"';
         else if ((c == 0x2018) || (c == 0x2019))
-            rBuf[ix] = (sal_Unicode)0x0027;
+            rBuf[ix] = u'\'';
 
         // recognize words with Unicode ligatures and ZWNJ/ZWJ characters (only
         // with 8-bit encoded dictionaries. For UTF-8 encoded dictionaries
@@ -464,9 +464,9 @@ Reference< XSpellAlternatives >
     {
         c = rBuf[ix];
         if ((c == 0x201C) || (c == 0x201D))
-            rBuf[ix] = (sal_Unicode)0x0022;
+            rBuf[ix] = u'"';
         if ((c == 0x2018) || (c == 0x2019))
-            rBuf[ix] = (sal_Unicode)0x0027;
+            rBuf[ix] = u'\'';
     }
     OUString nWord(rBuf.makeStringAndClear());
 

@@ -49,7 +49,7 @@ class OutputDevice;
 #include <rtl/ref.hxx>
 #include <deque>
 
-#define DEGREE_CHAR ((sal_Unicode)0x00B0)   /* U+00B0 DEGREE SIGN */
+#define DEGREE_CHAR u'\x00B0'   /* U+00B0 DEGREE SIGN */
 
 class SdrOutliner;
 class SdrLayerAdmin;

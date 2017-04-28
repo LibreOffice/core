@@ -149,8 +149,8 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8
 OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
 {
     //fdo#37872: we don't allow points in range names any more
-    OUString sName = rName.replace(static_cast<sal_Unicode>('.'),
-        static_cast<sal_Unicode>('_'));
+    OUString sName = rName.replace(u'.',
+        u'_');
     sal_Int32 nLen = sName.getLength();
     if( nLen && !ScCompiler::IsCharFlagAllConventions( sName, 0, ScCharFlags::CharName ) )
         sName = sName.replaceAt( 0, 1, "_" );

@@ -40,7 +40,7 @@
 #define PATH_CASE_SENSITIVE 0x01
 #define PATH_READONLY       0x02
 
-#define RENAME_TOKEN_DELIM      (sal_Unicode)1
+#define RENAME_TOKEN_DELIM      u'\x0001'
 
 SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
     std::vector<OUString> const& rPathArr, SwGlossaryHdl *pHdl)

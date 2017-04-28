@@ -6200,7 +6200,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     {
         // Writer's "zero width space" suffix is necessary, so that LabelFollowedBy shows up, but Word doesn't require that.
         OUString aLevelText = aBuffer.makeStringAndClear();
-        static OUString aZeroWidthSpace(static_cast<sal_Unicode>(0x200B));
+        static OUString aZeroWidthSpace(u'\x200B');
         if (aLevelText == aZeroWidthSpace)
             aLevelText.clear();
         m_pSerializer->singleElementNS(XML_w, XML_lvlText, FSNS(XML_w, XML_val), aLevelText.toUtf8(), FSEND);
@@ -7244,7 +7244,7 @@ static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "dot" ) );
     else if ( '-' == cFillChar )
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "hyphen" ) );
-    else if ( sal_Unicode(0xB7) == cFillChar ) // middle dot
+    else if ( u'\x00B7' == cFillChar ) // middle dot
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "middleDot" ) );
     else if ( '_' == cFillChar )
         pTabElementAttrList->add( FSNS( XML_w, XML_leader ), OString( "underscore" ) );

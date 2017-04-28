@@ -336,7 +336,7 @@ ignoreProlongedSoundMark_ja_JP::folding( const OUString& inStr, sal_Int32 startP
         *dst ++ = previousChar;
     }
 
-    *dst = (sal_Unicode) 0;
+    *dst = u'\0';
 
     newStr->length = sal_Int32(dst - newStr->buffer);
     if (useOffset)

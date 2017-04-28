@@ -3013,7 +3013,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
                     GetString(k, j, aCellStr);
                     OUStringBuffer aBuf(aStr);
                     aBuf.append(aCellStr);
-                    aBuf.append(static_cast<sal_Unicode>(1));
+                    aBuf.append(u'\x0001');
                     aStr = aBuf.makeStringAndClear();
                 }
 

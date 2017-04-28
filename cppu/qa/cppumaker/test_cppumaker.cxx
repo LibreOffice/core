@@ -439,7 +439,7 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(guard.p->m8, static_cast< sal_uInt64 >(0));
     CPPUNIT_ASSERT_EQUAL(guard.p->m9, 0.0f);
     CPPUNIT_ASSERT_EQUAL(guard.p->m10, 0.0);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m11, static_cast< sal_Unicode >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m11, u'\0');
     CPPUNIT_ASSERT_EQUAL(guard.p->m12.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL((sal_Int32)guard.p->m13.getTypeClass(), (sal_Int32)css::uno::TypeClass_VOID);
     CPPUNIT_ASSERT_EQUAL(guard.p->m14.hasValue(), false);

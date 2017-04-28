@@ -457,9 +457,9 @@ OUString SmOoxmlImport::handleGroupChr()
     }
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     m_rStream.ensureClosingTag( M_TOKEN( groupChr ));
-    if( pos == top && chr == sal_Unicode( 0x23de ))
+    if( pos == top && chr == u'\x23de')
         return "{" + e + "} overbrace { }";
-    if( pos == bot && chr == sal_Unicode( 0x23df ))
+    if( pos == bot && chr == u'\x23df')
         return "{" + e + "} underbrace { }";
     if( pos == top )
         return "{" + e + "} csup {" + OUStringLiteral1( chr ) + "}";

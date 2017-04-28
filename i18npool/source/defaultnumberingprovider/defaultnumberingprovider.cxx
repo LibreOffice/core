@@ -413,7 +413,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
         if ((nDigit = nPart % 100) < 20)
         {
             if (!aTemp.isEmpty())
-                aTemp.insert( 0, sal_Unicode(0x0020));
+                aTemp.insert( 0, u' ');
             aTemp.insert( 0, table_PersianWord_decade1[nDigit]);
         }
         else
@@ -449,10 +449,10 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
 // Greek Letter Numbering
 
 // KERAIA separates numerals from other text
-#define STIGMA        (sal_Unicode) 0x03DB
-#define LEFT_KERAIA   (sal_Unicode) 0x0375
-#define MYRIAD_SYM    (sal_Unicode) 0x039C
-#define DOT_SYM       (sal_Unicode) 0x002E
+#define STIGMA        u'\x03DB'
+#define LEFT_KERAIA   u'\x0375'
+#define MYRIAD_SYM    u'\x039C'
+#define DOT_SYM       u'.'
 #define SIGMA_OFFSET  19
 #define TAU_OFFSET    20
 #define MYRIAD        10000

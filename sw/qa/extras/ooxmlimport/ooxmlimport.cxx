@@ -1233,10 +1233,10 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103664, "tdf103664.docx")
 {
     // Wingdings symbols were displayed as rectangles
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf020), xPara->getString()[0] );
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fc), xPara->getString()[1] );
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0dc), xPara->getString()[2] );
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf081), xPara->getString()[3] );
+    CPPUNIT_ASSERT_EQUAL(u'\xf020', xPara->getString()[0] );
+    CPPUNIT_ASSERT_EQUAL(u'\xf0fc', xPara->getString()[1] );
+    CPPUNIT_ASSERT_EQUAL(u'\xf0dc', xPara->getString()[2] );
+    CPPUNIT_ASSERT_EQUAL(u'\xf081', xPara->getString()[3] );
 
     uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontName"));

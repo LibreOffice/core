@@ -1515,9 +1515,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 {
                     SwNumFormat aFormat( aRule.Get( nLvl ) );
                     aFormat.SetStart( static_cast<sal_uInt16>(aPrefix.getToken( 1,
-                                            (sal_Unicode)1 ).toInt32()));
-                    aFormat.SetPrefix( aPrefix.getToken( 0, (sal_Unicode)1 ));
-                    aFormat.SetSuffix( aPostfix.getToken( 0, (sal_Unicode)1 ));
+                                            u'\x0001' ).toInt32()));
+                    aFormat.SetPrefix( aPrefix.getToken( 0, u'\x0001' ));
+                    aFormat.SetSuffix( aPostfix.getToken( 0, u'\x0001' ));
                     aFormat.SetIncludeUpperLevels( 0 );
 
                     if( !aFormat.GetCharFormat() )
@@ -1539,10 +1539,10 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         SwNumFormat aFormat( aRule.Get( n ) );
 
                         aFormat.SetStart( static_cast<sal_uInt16>(aPrefix.getToken( n+1,
-                                                    (sal_Unicode)1 ).toInt32() ));
+                                                    u'\x0001' ).toInt32() ));
                         if( !n )
-                            aFormat.SetPrefix( aPrefix.getToken( n, (sal_Unicode)1 ));
-                        aFormat.SetSuffix( aPostfix.getToken( n, (sal_Unicode)1 ));
+                            aFormat.SetPrefix( aPrefix.getToken( n, u'\x0001' ));
+                        aFormat.SetSuffix( aPostfix.getToken( n, u'\x0001' ));
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );
                         if( n < aNumTypes.getLength() )
                             aFormat.SetNumberingType((SvxNumType)(aNumTypes[ n ] - '0'));

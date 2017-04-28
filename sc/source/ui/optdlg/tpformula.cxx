@@ -71,7 +71,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
 
     // Get the decimal separator for current locale.
     OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
-    mnDecSep = aSep.isEmpty() ? sal_Unicode('.') : aSep[0];
+    mnDecSep = aSep.isEmpty() ? u'.' : aSep[0];
 
     maSavedDocOptions = ScDocOptions(
         static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(

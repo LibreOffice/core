@@ -161,12 +161,12 @@ namespace sdbtools
 
         static ::connectivity::ErrorCondition validateName_getErrorCondition( const OUString& _rName )
         {
-            if  (   ( _rName.indexOf( (sal_Unicode)34  ) >= 0 )  // "
-                ||  ( _rName.indexOf( (sal_Unicode)39  ) >= 0 )  // '
-                ||  ( _rName.indexOf( (sal_Unicode)96  ) >= 0 )
-                ||  ( _rName.indexOf( (sal_Unicode)145 ) >= 0 )
-                ||  ( _rName.indexOf( (sal_Unicode)146 ) >= 0 )
-                ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // removed unparsable chars
+            if  (   ( _rName.indexOf( u'"'      ) >= 0 )
+                ||  ( _rName.indexOf( u'\''     ) >= 0 )
+                ||  ( _rName.indexOf( u'`'      ) >= 0 )
+                ||  ( _rName.indexOf( u'\x0091' ) >= 0 )
+                ||  ( _rName.indexOf( u'\x0092' ) >= 0 )
+                ||  ( _rName.indexOf( u'\x00B4' ) >= 0 )  // removed unparsable chars
                 )
                 return ErrorCondition::DB_QUERY_NAME_WITH_QUOTES;
 

@@ -307,7 +307,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
                     OUString aValueOfi = OUString::number( i );
                     for ( sal_Int32 n = 0; n < aValueOfi.getLength() ; n++ )
                     {
-                        sal_Int32 nIndex = aValueOfi[n] - sal_Unicode ( '0' );
+                        sal_Int32 nIndex = aValueOfi[n] - u'0';
                         aTmpBuf.append( aSuperscriptFigures[ nIndex ] );
                     }
                 }

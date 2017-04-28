@@ -314,7 +314,7 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
 DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 {
     OUString sDsn(comphelper::string::stripEnd(_rDsn, '*'));
-    sal_Int32 nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'));
+    sal_Int32 nSeparator = sDsn.indexOf(u':');
     if (-1 == nSeparator)
     {
         if (!sDsn.isEmpty())
@@ -340,7 +340,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         return DST_EMBEDDED_FIREBIRD;
 
     // find second :
-    nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'), nSeparator + 1);
+    nSeparator = sDsn.indexOf(u':', nSeparator + 1);
     if (-1 == nSeparator)
     {
         // at the moment only jdbc is allowed to have just one separator

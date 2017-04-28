@@ -41,7 +41,7 @@
 #include <algorithm>
 
 #define PATH_SEPARATOR "/"
-#define PATH_SEPARATOR_UNICODE      ((sal_Unicode)'/')
+#define PATH_SEPARATOR_UNICODE      u'/'
 
 namespace framework
 {

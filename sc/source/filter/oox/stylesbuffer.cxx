@@ -784,29 +784,29 @@ void Font::finalizeImport()
             {
                 // #91658# CJK fonts
                 bool bHasAsian =
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3041 ) ) ) ||    // 3040-309F: Hiragana
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x30A1 ) ) ) ||    // 30A0-30FF: Katakana
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3111 ) ) ) ||    // 3100-312F: Bopomofo
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3131 ) ) ) ||    // 3130-318F: Hangul Compatibility Jamo
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3301 ) ) ) ||    // 3300-33FF: CJK Compatibility
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3401 ) ) ) ||    // 3400-4DBF: CJK Unified Ideographs Extension A
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x4E01 ) ) ) ||    // 4E00-9FAF: CJK Unified Ideographs
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x7E01 ) ) ) ||    // 4E00-9FAF: CJK unified ideographs
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xA001 ) ) ) ||    // A001-A48F: Yi Syllables
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xAC01 ) ) ) ||    // AC00-D7AF: Hangul Syllables
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xCC01 ) ) ) ||    // AC00-D7AF: Hangul Syllables
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xF901 ) ) ) ||    // F900-FAFF: CJK Compatibility Ideographs
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFF71 ) ) );      // FF00-FFEF: Halfwidth/Fullwidth Forms
+                    xFont->hasGlyphs( OUString( u'\x3041' ) ) ||    // 3040-309F: Hiragana
+                    xFont->hasGlyphs( OUString( u'\x30A1' ) ) ||    // 30A0-30FF: Katakana
+                    xFont->hasGlyphs( OUString( u'\x3111' ) ) ||    // 3100-312F: Bopomofo
+                    xFont->hasGlyphs( OUString( u'\x3131' ) ) ||    // 3130-318F: Hangul Compatibility Jamo
+                    xFont->hasGlyphs( OUString( u'\x3301' ) ) ||    // 3300-33FF: CJK Compatibility
+                    xFont->hasGlyphs( OUString( u'\x3401' ) ) ||    // 3400-4DBF: CJK Unified Ideographs Extension A
+                    xFont->hasGlyphs( OUString( u'\x4E01' ) ) ||    // 4E00-9FAF: CJK Unified Ideographs
+                    xFont->hasGlyphs( OUString( u'\x7E01' ) ) ||    // 4E00-9FAF: CJK unified ideographs
+                    xFont->hasGlyphs( OUString( u'\xA001' ) ) ||    // A001-A48F: Yi Syllables
+                    xFont->hasGlyphs( OUString( u'\xAC01' ) ) ||    // AC00-D7AF: Hangul Syllables
+                    xFont->hasGlyphs( OUString( u'\xCC01' ) ) ||    // AC00-D7AF: Hangul Syllables
+                    xFont->hasGlyphs( OUString( u'\xF901' ) ) ||    // F900-FAFF: CJK Compatibility Ideographs
+                    xFont->hasGlyphs( OUString( u'\xFF71' ) );      // FF00-FFEF: Halfwidth/Fullwidth Forms
                 // #113783# CTL fonts
                 bool bHasCmplx =
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x05D1 ) ) ) ||    // 0590-05FF: Hebrew
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0631 ) ) ) ||    // 0600-06FF: Arabic
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0721 ) ) ) ||    // 0700-074F: Syriac
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0911 ) ) ) ||    // 0900-0DFF: Indic scripts
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0E01 ) ) ) ||    // 0E00-0E7F: Thai
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFB21 ) ) ) ||    // FB1D-FB4F: Hebrew Presentation Forms
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFB51 ) ) ) ||    // FB50-FDFF: Arabic Presentation Forms-A
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFE71 ) ) );      // FE70-FEFF: Arabic Presentation Forms-B
+                    xFont->hasGlyphs( OUString( u'\x05D1' ) ) ||    // 0590-05FF: Hebrew
+                    xFont->hasGlyphs( OUString( u'\x0631' ) ) ||    // 0600-06FF: Arabic
+                    xFont->hasGlyphs( OUString( u'\x0721' ) ) ||    // 0700-074F: Syriac
+                    xFont->hasGlyphs( OUString( u'\x0911' ) ) ||    // 0900-0DFF: Indic scripts
+                    xFont->hasGlyphs( OUString( u'\x0E01' ) ) ||    // 0E00-0E7F: Thai
+                    xFont->hasGlyphs( OUString( u'\xFB21' ) ) ||    // FB1D-FB4F: Hebrew Presentation Forms
+                    xFont->hasGlyphs( OUString( u'\xFB51' ) ) ||    // FB50-FDFF: Arabic Presentation Forms-A
+                    xFont->hasGlyphs( OUString( u'\xFE71' ) );      // FE70-FEFF: Arabic Presentation Forms-B
                 // Western fonts
                 bool bHasLatin =
                     (!bHasAsian && !bHasCmplx) ||

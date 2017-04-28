@@ -262,10 +262,10 @@ static bool lcl_isWhitespace( const OUString& rString )
     for( sal_Int32 i = 0; bWhitespace && ( i < nLength ); i++ )
     {
         sal_Unicode c = pStr[i];
-        bWhitespace = ( c == sal_Unicode(0x09) ||
-                        c == sal_Unicode(0x0A) ||
-                        c == sal_Unicode(0x0D) ||
-                        c == sal_Unicode(0x20) );
+        bWhitespace = ( c == u'\x0009' ||
+                        c == u'\x000A' ||
+                        c == u'\x000D' ||
+                        c == u' ' );
     }
     return bWhitespace;
 }

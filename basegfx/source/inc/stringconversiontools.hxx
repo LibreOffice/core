@@ -39,10 +39,10 @@ namespace basegfx
                                    bool              bSignAllowed,
                                    bool              bDotAllowed)
         {
-            const bool bPredicate( (sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                                    || (bSignAllowed && sal_Unicode('+') == aChar)
-                                    || (bSignAllowed && sal_Unicode('-') == aChar)
-                                    || (bDotAllowed && sal_Unicode('.') == aChar));
+            const bool bPredicate( (u'0' <= aChar && u'9' >= aChar)
+                                    || (bSignAllowed && u'+' == aChar)
+                                    || (bSignAllowed && u'-' == aChar)
+                                    || (bDotAllowed && u'.' == aChar));
 
             return bPredicate;
         }

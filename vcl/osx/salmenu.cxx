@@ -718,22 +718,22 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
                 nCommandKey=';';
                 break;
             case KEY_BACKSPACE:
-                nCommandKey=sal_Unicode( 0x232b );
+                nCommandKey=u'\x232b';
                 break;
             case KEY_PAGEUP:
-                nCommandKey=sal_Unicode( 0x21de );
+                nCommandKey=u'\x21de';
                 break;
             case KEY_PAGEDOWN:
-                nCommandKey=sal_Unicode( 0x21df );
+                nCommandKey=u'\x21df';
                 break;
             case KEY_UP:
-                nCommandKey=sal_Unicode( 0x21e1 );
+                nCommandKey=u'\x21e1';
                 break;
             case KEY_DOWN:
-                nCommandKey=sal_Unicode( 0x21e3 );
+                nCommandKey=u'\x21e3';
                 break;
             case KEY_RETURN:
-                nCommandKey=sal_Unicode( 0x21a9 );
+                nCommandKey=u'\x21a9';
                 break;
             case KEY_BRACKETLEFT:
                 nCommandKey='[';

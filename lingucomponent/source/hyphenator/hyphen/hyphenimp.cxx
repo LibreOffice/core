@@ -327,9 +327,9 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         {
             ch = rBuf[ix];
             if ((ch == 0x201C) || (ch == 0x201D))
-                rBuf[ix] = (sal_Unicode)0x0022;
+                rBuf[ix] = u'"';
             if ((ch == 0x2018) || (ch == 0x2019))
-                rBuf[ix] = (sal_Unicode)0x0027;
+                rBuf[ix] = u'\'';
         }
         OUString nWord(rBuf.makeStringAndClear());
 
@@ -606,9 +606,9 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         {
             ch = rBuf[ix];
             if ((ch == 0x201C) || (ch == 0x201D))
-                rBuf[ix] = (sal_Unicode)0x0022;
+                rBuf[ix] = u'"';
             if ((ch == 0x2018) || (ch == 0x2019))
-                rBuf[ix] = (sal_Unicode)0x0027;
+                rBuf[ix] = u'\'';
         }
         OUString nWord(rBuf.makeStringAndClear());
 

@@ -182,10 +182,10 @@ void Test::test_Uri() {
 
     // Check surrogate handling:
 
-    aBuffer.append(static_cast< sal_Unicode >(0xD800)); // %ED%A0%80
-    aBuffer.append(static_cast< sal_Unicode >(0xD800)); // %F0%90%8F%BF
-    aBuffer.append(static_cast< sal_Unicode >(0xDFFF));
-    aBuffer.append(static_cast< sal_Unicode >(0xDFFF)); // %ED%BF%BF
+    aBuffer.append(u'\xD800'); // %ED%A0%80
+    aBuffer.append(u'\xD800'); // %F0%90%8F%BF
+    aBuffer.append(u'\xDFFF');
+    aBuffer.append(u'\xDFFF'); // %ED%BF%BF
     aBuffer.append('A'); // A
     aText1 = aBuffer.makeStringAndClear();
     aText2 = "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A";
@@ -210,8 +210,8 @@ void Test::test_Uri() {
 
     aText1 = "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A";
     aBuffer.append("%ED%A0%80");
-    aBuffer.append(static_cast< sal_Unicode >(0xD800));
-    aBuffer.append(static_cast< sal_Unicode >(0xDFFF));
+    aBuffer.append(u'\xD800');
+    aBuffer.append(u'\xDFFF');
     aBuffer.append("%ED%BF%BF");
     aBuffer.append('A');
     aText2 = aBuffer.makeStringAndClear();
@@ -251,7 +251,7 @@ void Test::test_Uri() {
 
     aText1 = "%30%C3%BF";
     aBuffer.append("%30");
-    aBuffer.append(static_cast< sal_Unicode >(0x00FF));
+    aBuffer.append(u'\x00FF');
     aText2 = aBuffer.makeStringAndClear();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 18",

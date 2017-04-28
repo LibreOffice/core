@@ -385,7 +385,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
     if( ! rRange.aLowerRight.empty())
     {
         // we have a range (not a single cell)
-        aBuffer.append( sal_Unicode( ':' ));
+        aBuffer.append( u':');
         lcl_getXMLStringForCell( rRange.aLowerRight, &aBuffer );
     }
 

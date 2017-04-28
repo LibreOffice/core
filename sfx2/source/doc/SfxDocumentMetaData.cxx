@@ -424,7 +424,7 @@ bool isValidDateTime(const css::util::DateTime & i_rDateTime)
 std::pair< OUString, OUString > SAL_CALL
 getQualifier(const char* i_name) {
     OUString nm = OUString::createFromAscii(i_name);
-    sal_Int32 ix = nm.indexOf(static_cast<sal_Unicode> (':'));
+    sal_Int32 ix = nm.indexOf(u':');
     if (ix == -1) {
         return std::make_pair(OUString(), nm);
     } else {

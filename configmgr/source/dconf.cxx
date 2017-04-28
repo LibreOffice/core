@@ -227,7 +227,7 @@ bool decode(OUString * string, bool slash) {
             return true;
         }
         if (string->match("00", i + 1)) {
-            *string = string->replaceAt(i, 3, OUString(sal_Unicode(0)));
+            *string = string->replaceAt(i, 3, OUString(u'\0'));
         } else if (slash && string->match("2F", i + 1)) {
             *string = string->replaceAt(i, 3, "/");
         } else if (string->match("5C", i + 1)) {

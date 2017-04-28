@@ -456,7 +456,7 @@ namespace svgio
 
                     switch(aCharA)
                     {
-                        case sal_Unicode('e') :
+                        case u'e' :
                         {
                             if('m' == aCharB)
                             {
@@ -472,7 +472,7 @@ namespace svgio
                             }
                             break;
                         }
-                        case sal_Unicode('p') :
+                        case u'p' :
                         {
                             if('x' == aCharB)
                             {
@@ -493,7 +493,7 @@ namespace svgio
                             }
                             break;
                         }
-                        case sal_Unicode('i') :
+                        case u'i' :
                         {
                             if('n' == aCharB)
                             {
@@ -503,7 +503,7 @@ namespace svgio
                             }
                             break;
                         }
-                        case sal_Unicode('c') :
+                        case u'c' :
                         {
                             if('m' == aCharB)
                             {
@@ -513,7 +513,7 @@ namespace svgio
                             }
                             break;
                         }
-                        case sal_Unicode('m') :
+                        case u'm' :
                         {
                             if('m' == aCharB)
                             {
@@ -580,8 +580,8 @@ namespace svgio
 
                     switch(aChar)
                     {
-                        case sal_Unicode('g') :
-                        case sal_Unicode('G') :
+                        case u'g' :
+                        case u'G' :
                         {
                             if(rCandidate.matchIgnoreAsciiCase(aStrGrad, nPos))
                             {
@@ -591,8 +591,8 @@ namespace svgio
                             }
                             break;
                         }
-                        case sal_Unicode('r') :
-                        case sal_Unicode('R') :
+                        case u'r' :
+                        case u'R' :
                         {
                             if(rCandidate.matchIgnoreAsciiCase(aStrRad, nPos))
                             {
@@ -626,15 +626,15 @@ namespace svgio
         {
             if(nChar >= '0' && nChar <= '9')
             {
-                return sal_Int32(nChar - sal_Unicode('0'));
+                return sal_Int32(nChar - u'0');
             }
             else if(nChar >= 'A' && nChar <= 'F')
             {
-                return 10 + sal_Int32(nChar - sal_Unicode('A'));
+                return 10 + sal_Int32(nChar - u'A');
             }
             else if(nChar >= 'a' && nChar <= 'f')
             {
-                return 10 + sal_Int32(nChar - sal_Unicode('a'));
+                return 10 + sal_Int32(nChar - u'a');
             }
             else
             {
@@ -1034,7 +1034,7 @@ namespace svgio
 
                     switch(aChar)
                     {
-                        case sal_Unicode('m') :
+                        case u'm' :
                         {
                             if(rCandidate.match(aStrMatrix, nPos))
                             {
@@ -1088,7 +1088,7 @@ namespace svgio
                             }
                             break;
                         }
-                        case sal_Unicode('t') :
+                        case u't' :
                         {
                             if(rCandidate.match(aStrTranslate, nPos))
                             {
@@ -1112,7 +1112,7 @@ namespace svgio
                             }
                             break;
                         }
-                        case sal_Unicode('s') :
+                        case u's' :
                         {
                             if(rCandidate.match(aStrScale, nPos))
                             {
@@ -1166,7 +1166,7 @@ namespace svgio
                             }
                             break;
                         }
-                        case sal_Unicode('r') :
+                        case u'r' :
                         {
                             if(rCandidate.match(aStrRotate, nPos))
                             {

@@ -1820,7 +1820,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             pNewRule->Set( 1, aFormat );
 
             aFormat.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER);
-            aFormat.SetSuffix(OUString(static_cast<sal_Unicode>(')')));
+            aFormat.SetSuffix(OUString(u')'));
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetStart( 3 );
 

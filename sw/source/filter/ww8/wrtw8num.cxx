@@ -603,7 +603,7 @@ void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
     OUString sFontName = rFontName;
 
     // If Bullet char is "", don't change
-    if (rNumStr[0] != sal_Unicode(0x0))
+    if (rNumStr[0] != u'\0')
     {
         rNumStr = rNumStr.replaceAt(0, 1, OUString(
             msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName)));

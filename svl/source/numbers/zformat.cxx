@@ -2052,7 +2052,7 @@ static bool lcl_appendStarFillChar( OUStringBuffer& rBuf, const OUString& rStr )
     // last character before the user enters another one.
     if (rStr.getLength() > 1)
     {
-        rBuf.append((sal_Unicode) 0x1B);
+        rBuf.append(u'\x001B');
         rBuf.append(rStr[1]);
         return true;
     }
@@ -2064,7 +2064,7 @@ static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, const 
     if (rStr.getLength() > 1)
     {
         rBuf.insert( nPos, rStr[1]);
-        rBuf.insert( nPos, (sal_Unicode) 0x1B);
+        rBuf.insert( nPos, u'\x001B');
         return true;
     }
     return false;

@@ -296,7 +296,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
 
 OUString makeURLAppendSysPathSegment( OUString const & baseURL, OUString const & segment )
 {
-    OSL_ASSERT(segment.indexOf(static_cast<sal_Unicode>('/')) == -1);
+    OSL_ASSERT(segment.indexOf(u'/') == -1);
 
     ::rtl::Uri::encode(
         segment, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,

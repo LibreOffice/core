@@ -27,17 +27,17 @@
 
 // For SwTextHints without end index the following char is added:
 
-#define CH_TXTATR_BREAKWORD     ((sal_Unicode)0x01)
-#define CH_TXTATR_INWORD        ((sal_Unicode)0xFFF9)
-#define CH_TXTATR_TAB           ((sal_Unicode)'\t')
-#define CH_TXTATR_NEWLINE       ((sal_Unicode)'\n')
-#define CH_TXT_ATR_INPUTFIELDSTART ((sal_Unicode)0x04)
-#define CH_TXT_ATR_INPUTFIELDEND ((sal_Unicode)0x05)
+#define CH_TXTATR_BREAKWORD     u'\x0001'
+#define CH_TXTATR_INWORD        u'\xFFF9'
+#define CH_TXTATR_TAB           u'\t'
+#define CH_TXTATR_NEWLINE       u'\n'
+#define CH_TXT_ATR_INPUTFIELDSTART u'\x0004'
+#define CH_TXT_ATR_INPUTFIELDEND u'\x0005'
 
-#define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)0x06)
+#define CH_TXT_ATR_FORMELEMENT u'\x0006'
 
-#define CH_TXT_ATR_FIELDSTART ((sal_Unicode)0x07)
-#define CH_TXT_ATR_FIELDEND ((sal_Unicode)0x08)
+#define CH_TXT_ATR_FIELDSTART u'\x0007'
+#define CH_TXT_ATR_FIELDEND u'\x0008'
 #define CH_TXT_ATR_SUBST_FIELDSTART ("[")
 #define CH_TXT_ATR_SUBST_FIELDEND ("]")
 

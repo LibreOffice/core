@@ -597,7 +597,7 @@ DECLARE_RTFIMPORT_TEST(testFdo49692, "fdo49692.rtf")
 
         if (rProp.Name == "Suffix")
         {
-            OUString aExpected(static_cast<sal_Unicode>(0x200B));
+            OUString aExpected(u'\x200B');
             CPPUNIT_ASSERT_EQUAL(aExpected, rProp.Value.get<OUString>());
         }
     }
@@ -1473,10 +1473,10 @@ DECLARE_RTFIMPORT_TEST(testFdo81033, "fdo81033.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), tabs.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5808), tabs[0].Position);
     CPPUNIT_ASSERT_EQUAL(style::TabAlign_LEFT, tabs[0].Alignment);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(' '), tabs[0].FillChar);
+    CPPUNIT_ASSERT_EQUAL(u' ', tabs[0].FillChar);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16002), tabs[1].Position);
     CPPUNIT_ASSERT_EQUAL(style::TabAlign_LEFT, tabs[1].Alignment);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode('_'), tabs[1].FillChar);
+    CPPUNIT_ASSERT_EQUAL(u'_', tabs[1].FillChar);
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo66565, "fdo66565.rtf")

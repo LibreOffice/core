@@ -627,8 +627,8 @@ static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
 
 static bool lcl_IsMonoSpaceFont( const vcl::RenderContext& rOut )
 {
-    const OUString aStr1( sal_Unicode( 0x3008 ) );
-    const OUString aStr2( sal_Unicode( 0x307C ) );
+    const OUString aStr1( u'\x3008' );
+    const OUString aStr2( u'\x307C' );
     const long nWidth1 = rOut.GetTextWidth( aStr1 );
     const long nWidth2 = rOut.GetTextWidth( aStr2 );
     return nWidth1 == nWidth2;
@@ -2415,7 +2415,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         if( rInf.GetHyphPos() ) {
             sal_Int32 nHyphPos = *rInf.GetHyphPos();
             nTextBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
-                             static_cast<sal_Unicode>('-'), nHyphPos,
+                             u'-', nHyphPos,
                              nTmpIdx, nTmpLen, nKern, rInf.GetVclCache());
             *rInf.GetHyphPos() = (nHyphPos == -1) ? COMPLETE_STRING : nHyphPos;
         }

@@ -96,8 +96,8 @@ namespace svgio
                 while(nPos < nLen)
                 {
                     const sal_Int32 nInitPos(nPos);
-                    copyToLimiter(aSelectors, sal_Unicode(' '), nPos, aToken, nLen);
-                    skip_char(aSelectors, sal_Unicode(' '), nPos, nLen);
+                    copyToLimiter(aSelectors, u' ', nPos, aToken, nLen);
+                    skip_char(aSelectors, u' ', nPos, nLen);
                     const OUString aSelectorPart(aToken.makeStringAndClear().trim());
 
                     if(!aSelectorPart.isEmpty())
@@ -164,8 +164,8 @@ namespace svgio
                 while(nPos < nLen)
                 {
                     const sal_Int32 nInitPos(nPos);
-                    copyToLimiter(aSelectors, sal_Unicode(','), nPos, aToken, nLen);
-                    skip_char(aSelectors, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
+                    copyToLimiter(aSelectors, u',', nPos, aToken, nLen);
+                    skip_char(aSelectors, u' ', u',', nPos, nLen);
 
                     const OUString aSingleName(aToken.makeStringAndClear().trim());
 
@@ -196,9 +196,9 @@ namespace svgio
                 {
                     // read the full selectors (may be multiple, comma-separated)
                     const sal_Int32 nInitPos(nPos);
-                    skip_char(aSelectorsAndContent, sal_Unicode(' '), nPos, nLen);
-                    copyToLimiter(aSelectorsAndContent, sal_Unicode('{'), nPos, aToken, nLen);
-                    skip_char(aSelectorsAndContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
+                    skip_char(aSelectorsAndContent, u' ', nPos, nLen);
+                    copyToLimiter(aSelectorsAndContent, u'{', nPos, aToken, nLen);
+                    skip_char(aSelectorsAndContent, u' ', u'{', nPos, nLen);
 
                     const OUString aSelectors(aToken.makeStringAndClear().trim());
                     OUString aContent;
@@ -206,8 +206,8 @@ namespace svgio
                     if(!aSelectors.isEmpty() && nPos < nLen)
                     {
                         // isolate content as text, embraced by '{' and '}'
-                        copyToLimiter(aSelectorsAndContent, sal_Unicode('}'), nPos, aToken, nLen);
-                        skip_char(aSelectorsAndContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
+                        copyToLimiter(aSelectorsAndContent, u'}', nPos, aToken, nLen);
+                        skip_char(aSelectorsAndContent, u' ', u'}', nPos, nLen);
 
                         aContent = aToken.makeStringAndClear().trim();
                     }

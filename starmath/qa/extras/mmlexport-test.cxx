@@ -104,7 +104,7 @@ void MathMLExportTest::testTdf97049()
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]", "stretchy", "true");
     auto aContent = getXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aContent.getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0x222B), aContent[0]);
+    CPPUNIT_ASSERT_EQUAL(u'\x222B', aContent[0]);
 }
 
 void MathMLExportTest::testTdf101022()

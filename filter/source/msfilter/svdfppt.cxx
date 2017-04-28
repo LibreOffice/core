@@ -3612,13 +3612,13 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
             case 29: // Double-byte Arabic numbers with double-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_FULL_WIDTH_ARABIC );
-                rNumberFormat.SetSuffix( OUString( sal_Unicode(0xff0e) ) );
+                rNumberFormat.SetSuffix( OUString( u'\xff0e' ) );
             }
             break;
             case 38: // Japanese with double-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH ); // No such type. Instead with Lower Chinese Number
-                rNumberFormat.SetSuffix( OUString( sal_Unicode(0xff0e) ) );
+                rNumberFormat.SetSuffix( OUString( u'\xff0e' ) );
             }
             break;
         }

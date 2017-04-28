@@ -530,11 +530,11 @@ static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUStr
     case '\\':
         do
         {
-            aTemp.append( *pStr ? *pStr++ : static_cast< sal_Unicode >(' '));
+            aTemp.append( *pStr ? *pStr++ : u' ');
             pFmt++;
         }
         while( *pFmt && *pFmt != '\\' );
-        aTemp.append(*pStr ? *pStr++ : static_cast< sal_Unicode >(' '));
+        aTemp.append(*pStr ? *pStr++ : u' ');
         pFmt++; break;
     case '&':
         aTemp = rStr;

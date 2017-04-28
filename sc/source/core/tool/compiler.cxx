@@ -881,7 +881,7 @@ struct ConventionOOO_A1 : public Convention_A1
                 return '.';
         }
 
-        return sal_Unicode(0);
+        return u'\0';
     }
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
@@ -1114,11 +1114,11 @@ struct ConventionXL
         switch (eSymType)
         {
             case ScCompiler::Convention::ABS_SHEET_PREFIX:
-                return sal_Unicode(0);
+                return u'\0';
             case ScCompiler::Convention::SHEET_SEPARATOR:
                 return '!';
         }
-        return sal_Unicode(0);
+        return u'\0';
     }
 
     static bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,

@@ -1910,9 +1910,9 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAt
     m_pFillCharCB->InsertEntry(OUString('.'));
     m_pFillCharCB->InsertEntry(OUString('-'));
     m_pFillCharCB->InsertEntry(OUString('_'));
-    m_pFillCharCB->InsertEntry(OUString(sal_Unicode(0x2024))); // ONE DOT LEADER
-    m_pFillCharCB->InsertEntry(OUString(sal_Unicode(0x2025))); // TWO DOT LEADER
-    m_pFillCharCB->InsertEntry(OUString(sal_Unicode(0x2026))); // HORIZONTAL ELLIPSIS
+    m_pFillCharCB->InsertEntry(OUString(u'\x2024')); // ONE DOT LEADER
+    m_pFillCharCB->InsertEntry(OUString(u'\x2025')); // TWO DOT LEADER
+    m_pFillCharCB->InsertEntry(OUString(u'\x2026')); // HORIZONTAL ELLIPSIS
 
     m_pEditStylePB->Enable(false);
 

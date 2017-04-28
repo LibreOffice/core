@@ -29,8 +29,8 @@
 #define SVX_TAB_DEFCOUNT    10
 #define SVX_TAB_DEFDIST     1134            // 2cm in twips
 #define SVX_TAB_NOTFOUND    USHRT_MAX
-#define cDfltDecimalChar    (sal_Unicode(0x00)) // Get from IntlWrapper
-#define cDfltFillChar       (sal_Unicode(' '))
+#define cDfltDecimalChar    u'\0' // Get from IntlWrapper
+#define cDfltFillChar       u' '
 
 class EDITENG_DLLPUBLIC SvxTabStop
 {

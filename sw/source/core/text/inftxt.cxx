@@ -72,13 +72,13 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define CHAR_UNDERSCORE ((sal_Unicode)0x005F)
-#define CHAR_LEFT_ARROW ((sal_Unicode)0x25C0)
-#define CHAR_RIGHT_ARROW ((sal_Unicode)0x25B6)
-#define CHAR_TAB ((sal_Unicode)0x2192)
-#define CHAR_TAB_RTL ((sal_Unicode)0x2190)
-#define CHAR_LINEBREAK ((sal_Unicode)0x21B5)
-#define CHAR_LINEBREAK_RTL ((sal_Unicode)0x21B3)
+#define CHAR_UNDERSCORE u'_'
+#define CHAR_LEFT_ARROW u'\x25C0'
+#define CHAR_RIGHT_ARROW u'\x25B6'
+#define CHAR_TAB u'\x2192'
+#define CHAR_TAB_RTL u'\x2190'
+#define CHAR_LINEBREAK u'\x21B5'
+#define CHAR_LINEBREAK_RTL u'\x21B3'
 
 #define DRAW_SPECIAL_OPTIONS_CENTER 1
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2

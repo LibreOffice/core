@@ -104,7 +104,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
-#define NAVI_BOOKMARK_DELIM     (sal_Unicode)1
+#define NAVI_BOOKMARK_DELIM     u'\x0001'
 
 class SwContentArr
     : public o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent>,

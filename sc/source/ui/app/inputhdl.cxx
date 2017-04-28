@@ -1006,7 +1006,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                             {
                                 OUStringBuffer aBuf;
                                 aBuf.append(aNew.copy(0, nStartPosition));
-                                aBuf.append(static_cast<sal_Unicode>(0x25BA));
+                                aBuf.append(u'\x25BA');
                                 aBuf.append(aNew.copy(nStartPosition));
                                 nArgs = ppFDesc->getParameterCount();
                                 sal_Int16 nVarArgsSet = 0;

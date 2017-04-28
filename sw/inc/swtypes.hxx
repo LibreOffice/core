@@ -153,7 +153,7 @@ const sal_Unicode cMarkSeparator = '|';
 // Sequences names for jumps are <name of sequence>!<no>
 const char cSequenceMarkSeparator = '!';
 
-#define DB_DELIM ((sal_Unicode)0xff)        // Database <-> table separator.
+#define DB_DELIM u'\x00ff'        // Database <-> table separator.
 
 enum class SetAttrMode
 {
@@ -189,13 +189,13 @@ namespace o3tl
 #define SW_CONSTASCII_DEF( n, s ) n[sizeof(s)] = s
 #endif
 
-#define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
-#define CHAR_HARDHYPHEN     ((sal_Unicode)0x2011)
-#define CHAR_SOFTHYPHEN     ((sal_Unicode)0x00AD)
-#define CHAR_RLM            ((sal_Unicode)0x200F)
-#define CHAR_LRM            ((sal_Unicode)0x200E)
-#define CHAR_ZWSP           ((sal_Unicode)0x200B)
-#define CHAR_ZWNBSP         ((sal_Unicode)0x2060)
+#define CHAR_HARDBLANK      u'\x00A0'
+#define CHAR_HARDHYPHEN     u'\x2011'
+#define CHAR_SOFTHYPHEN     u'\x00AD'
+#define CHAR_RLM            u'\x200F'
+#define CHAR_LRM            u'\x200E'
+#define CHAR_ZWSP           u'\x200B'
+#define CHAR_ZWNBSP         u'\x2060'
 
 // Returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();

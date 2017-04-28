@@ -1663,7 +1663,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         OUString aToken( aString.getToken( 0, '\n', nStringIx ) );
                         if( nToken > 0 )
                         {
-                            mxString1->Append(OUString(static_cast<sal_Unicode>('\0')));
+                            mxString1->Append(OUString(u'\0'));
                             sFormulaBuf.append( ',' );
                         }
                         mxString1->Append( aToken );

@@ -75,7 +75,7 @@ transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startP
     if (useOffset)
         *p ++ = position ++;
     }
-    *dst = (sal_Unicode) 0;
+    *dst = u'\0';
 
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }

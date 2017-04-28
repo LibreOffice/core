@@ -222,7 +222,7 @@ static bool isFileNameValid(const OUString & i_rFileName)
     sal_Int32 idx(0);
     do {
       const OUString segment(
-        i_rFileName.getToken(0, static_cast<sal_Unicode> ('/'), idx) );
+        i_rFileName.getToken(0, u'/', idx) );
       if (segment.isEmpty()      ||  // no empty segments
           segment == "."         ||  // no . segments
           segment == ".."        ||  // no .. segments
@@ -238,7 +238,7 @@ static bool
 splitPath(OUString const & i_rPath,
     OUString & o_rDir, OUString& o_rRest)
 {
-    const sal_Int32 idx(i_rPath.indexOf(static_cast<sal_Unicode>('/')));
+    const sal_Int32 idx(i_rPath.indexOf(u'/'));
     if (idx < 0 || idx >= i_rPath.getLength()) {
         o_rDir.clear();
         o_rRest = i_rPath;
@@ -257,7 +257,7 @@ static bool
 splitXmlId(OUString const & i_XmlId,
     OUString & o_StreamName, OUString& o_Idref )
 {
-    const sal_Int32 idx(i_XmlId.indexOf(static_cast<sal_Unicode>('#')));
+    const sal_Int32 idx(i_XmlId.indexOf(u'#'));
     if ((idx <= 0) || (idx >= i_XmlId.getLength() - 1)) {
         return false;
     } else {

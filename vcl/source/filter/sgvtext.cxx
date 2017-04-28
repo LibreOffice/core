@@ -608,7 +608,7 @@ sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
         }
         else
         {
-            ChrWidth=(sal_uInt16)rOut.GetTextWidth(OUString(static_cast<sal_Unicode>('A')));
+            ChrWidth=(sal_uInt16)rOut.GetTextWidth(OUString(u'A'));
         }
     }
     return ChrWidth;

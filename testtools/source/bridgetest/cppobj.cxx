@@ -957,7 +957,7 @@ void Test_Impl::testConstructorsService(
     args[7] <<= SAL_MAX_UINT64;
     args[8] <<= 0.123f;
     args[9] <<= 0.456;
-    args[10] <<= sal_Unicode('X');
+    args[10] <<= u'X';
     args[11] <<= OUString("test");
     args[12] <<= UnoType< Any >::get();
     args[13] <<= true;

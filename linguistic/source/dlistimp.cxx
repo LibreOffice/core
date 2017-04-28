@@ -771,7 +771,7 @@ static void AddInternal(
     {
         //! TL TODO: word iterator should be used to break up the text
         OUString aDelim("!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n");
-        OSL_ENSURE(aDelim.indexOf(static_cast<sal_Unicode>('.')) == -1,
+        OSL_ENSURE(aDelim.indexOf(u'.') == -1,
             "ensure no '.'");
 
         OUString      aToken;

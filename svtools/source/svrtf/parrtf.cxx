@@ -385,13 +385,13 @@ void SvRTFParser::ScanText()
                     aStrBuffer.append(sal_Unicode(nNextCh));
                     break;
                 case '~':       // nonbreaking space
-                    aStrBuffer.append(static_cast< sal_Unicode >(0xA0));
+                    aStrBuffer.append(u'\x00A0');
                     break;
                 case '-':       // optional hyphen
-                    aStrBuffer.append(static_cast< sal_Unicode >(0xAD));
+                    aStrBuffer.append(u'\x00AD');
                     break;
                 case '_':       // nonbreaking hyphen
-                    aStrBuffer.append(static_cast< sal_Unicode >(0x2011));
+                    aStrBuffer.append(u'\x2011');
                     break;
 
                 case 'u':

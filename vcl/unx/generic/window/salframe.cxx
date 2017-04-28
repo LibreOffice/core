@@ -3204,12 +3204,12 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         }
         else if( nSeqKeyCode >= KEY_0 && nSeqKeyCode <= KEY_9 )
         {
-            if( appendUnicodeSequence( sal_Unicode( '0' ) + sal_Unicode(nSeqKeyCode - KEY_0) ) )
+            if( appendUnicodeSequence( u'0' + sal_Unicode(nSeqKeyCode - KEY_0) ) )
                 return 1;
         }
         else if( nSeqKeyCode >= KEY_A && nSeqKeyCode <= KEY_F )
         {
-            if( appendUnicodeSequence( sal_Unicode( 'a' ) + sal_Unicode(nSeqKeyCode - KEY_A) ) )
+            if( appendUnicodeSequence( u'a' + sal_Unicode(nSeqKeyCode - KEY_A) ) )
                 return 1;
         }
         else

@@ -603,7 +603,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                         }
 
                         if (bLabelFollowedBy && nNumberFormat == style::NumberingType::NUMBER_NONE)
-                            rSuffix = OUString(static_cast<sal_Unicode>(0x200B));
+                            rSuffix = OUString(u'\x200B');
                     }
                 }
 

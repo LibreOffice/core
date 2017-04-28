@@ -962,20 +962,20 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
             aKeyMap[ i ] = aKey.makeStringAndClear();
         }
 
-        aKeyMap[ KEY_DOWN ]     = OUString( sal_Unicode( 0x21e3 ) );
-        aKeyMap[ KEY_UP ]       = OUString( sal_Unicode( 0x21e1 ) );
-        aKeyMap[ KEY_LEFT ]     = OUString( sal_Unicode( 0x21e0 ) );
-        aKeyMap[ KEY_RIGHT ]    = OUString( sal_Unicode( 0x21e2 ) );
-        aKeyMap[ KEY_HOME ]     = OUString( sal_Unicode( 0x2196 ) );
-        aKeyMap[ KEY_END ]      = OUString( sal_Unicode( 0x2198 ) );
-        aKeyMap[ KEY_PAGEUP ]   = OUString( sal_Unicode( 0x21de ) );
-        aKeyMap[ KEY_PAGEDOWN ] = OUString( sal_Unicode( 0x21df ) );
-        aKeyMap[ KEY_RETURN ]   = OUString( sal_Unicode( 0x21a9 ) );
+        aKeyMap[ KEY_DOWN ]     = OUString( u'\x21e3' );
+        aKeyMap[ KEY_UP ]       = OUString( u'\x21e1' );
+        aKeyMap[ KEY_LEFT ]     = OUString( u'\x21e0' );
+        aKeyMap[ KEY_RIGHT ]    = OUString( u'\x21e2' );
+        aKeyMap[ KEY_HOME ]     = OUString( u'\x2196' );
+        aKeyMap[ KEY_END ]      = OUString( u'\x2198' );
+        aKeyMap[ KEY_PAGEUP ]   = OUString( u'\x21de' );
+        aKeyMap[ KEY_PAGEDOWN ] = OUString( u'\x21df' );
+        aKeyMap[ KEY_RETURN ]   = OUString( u'\x21a9' );
         aKeyMap[ KEY_ESCAPE ]   = "esc";
-        aKeyMap[ KEY_TAB ]      = OUString( sal_Unicode( 0x21e5 ) );
-        aKeyMap[ KEY_BACKSPACE ]= OUString( sal_Unicode( 0x232b ) );
-        aKeyMap[ KEY_SPACE ]    = OUString( sal_Unicode( 0x2423 ) );
-        aKeyMap[ KEY_DELETE ]   = OUString( sal_Unicode( 0x2326 ) );
+        aKeyMap[ KEY_TAB ]      = OUString( u'\x21e5' );
+        aKeyMap[ KEY_BACKSPACE ]= OUString( u'\x232b' );
+        aKeyMap[ KEY_SPACE ]    = OUString( u'\x2423' );
+        aKeyMap[ KEY_DELETE ]   = OUString( u'\x2326' );
         aKeyMap[ KEY_ADD ]      = "+";
         aKeyMap[ KEY_SUBTRACT ] = "-";
         aKeyMap[ KEY_DIVIDE ]   = "/";
@@ -985,7 +985,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aKeyMap[ KEY_LESS ]     = "<";
         aKeyMap[ KEY_GREATER ]  = ">";
         aKeyMap[ KEY_EQUAL ]    = "=";
-        aKeyMap[ KEY_OPEN ]     = OUString( sal_Unicode( 0x23cf ) );
+        aKeyMap[ KEY_OPEN ]     = OUString( u'\x23cf' );
         aKeyMap[ KEY_TILDE ]    = "~";
         aKeyMap[ KEY_BRACKETLEFT ] = "[";
         aKeyMap[ KEY_BRACKETRIGHT ] = "]";
@@ -1022,13 +1022,13 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     if( it != aKeyMap.end() )
     {
         if( (nKeyCode & KEY_SHIFT) != 0 )
-            aResult.append( sal_Unicode( 0x21e7 ) );
+            aResult.append( u'\x21e7' );
         if( (nKeyCode & KEY_MOD1) != 0 )
-            aResult.append( sal_Unicode( 0x2318 ) );
+            aResult.append( u'\x2318' );
         // we do not really handle Alt (see below)
         // we map it to MOD3, which is actually Command
         if( (nKeyCode & (KEY_MOD2|KEY_MOD3)) != 0 )
-            aResult.append( sal_Unicode( 0x2325 ) );
+            aResult.append( u'\x2325' );
 
         aResult.append( it->second );
     }

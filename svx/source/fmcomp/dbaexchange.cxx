@@ -166,7 +166,7 @@ namespace svx
                                             ,const OUString& _rCommand
                                             , const OUString& _rFieldName)
     {
-        const sal_Unicode       cSeparator = sal_Unicode(11);
+        const sal_Unicode       cSeparator = u'\x000B';
         const OUString   sSeparator(&cSeparator, 1);
 
         m_sCompatibleFormat.clear();
@@ -340,7 +340,7 @@ namespace svx
         OUString sFieldDescription;
         (void)const_cast<TransferableDataHelper&>(_rData).GetString(nRecognizedFormat, sFieldDescription);
 
-        const sal_Unicode cSeparator = sal_Unicode(11);
+        const sal_Unicode cSeparator = u'\x000B';
         _rDatasource    = sFieldDescription.getToken(0, cSeparator);
         _rCommand       = sFieldDescription.getToken(1, cSeparator);
         _nCommandType   = sFieldDescription.getToken(2, cSeparator).toInt32();
@@ -575,7 +575,7 @@ namespace svx
         bool bTreatAsStatement = (CommandType::COMMAND == _nCommandType);
             // statements are - in this old and ugly format - described as queries
 
-        const sal_Unicode       cSeparator = sal_Unicode(11);
+        const sal_Unicode       cSeparator = u'\x000B';
         const OUString   sSeparator(&cSeparator, 1);
 
         const sal_Unicode       cTableMark = '1';

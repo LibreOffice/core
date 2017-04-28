@@ -50,7 +50,7 @@ namespace chelp {
                 sal_Int32 sizeOfFile = ( sal_Int32 ) m_ptr[0];
                 OUString Hash( m_ptr+1,sizeOfFile,RTL_TEXTENCODING_UTF8 );
                 sal_Int32 idx;
-                if( ( idx = Hash.indexOf( sal_Unicode( '#' ) ) ) != -1 )
+                if( ( idx = Hash.indexOf( u'#' ) ) != -1 )
                     return Hash.copy( 1+idx );
             }
             return OUString();
@@ -65,7 +65,7 @@ namespace chelp {
             sal_Int32 sizeOfFile = ( sal_Int32 ) m_ptr[0];
             OUString File( m_ptr+1,sizeOfFile,RTL_TEXTENCODING_UTF8 );
             sal_Int32 idx;
-            if( ( idx = File.indexOf( sal_Unicode( '#' ) ) ) != -1 )
+            if( ( idx = File.indexOf( u'#' ) ) != -1 )
                 return File.copy( 0,idx );
             else
                 return File;

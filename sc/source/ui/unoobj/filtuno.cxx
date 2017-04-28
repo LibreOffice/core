@@ -202,7 +202,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
                 aBuf.append(OUString::number(static_cast<sal_uInt16>(eLang)));
                 aBuf.append(' ');
-                aBuf.append(pDlg->IsDateConversionSet() ? sal_Unicode('1') : sal_Unicode('0'));
+                aBuf.append(pDlg->IsDateConversionSet() ? u'1' : u'0');
                 aFilterOptions = aBuf.makeStringAndClear();
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
             }
