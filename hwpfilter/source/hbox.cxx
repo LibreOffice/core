@@ -356,19 +356,18 @@ TxtBox::TxtBox()
     , protect(0)
     , cell(nullptr)
     , m_pTable(nullptr)
-    , plists(nullptr)
 {
     reserved[0] = reserved[1] = 0;
 }
 
 TxtBox::~TxtBox()
 {
-    delete[]cell;
+    delete[] cell;
 
-    for (int ii = 0; ii < nCell; ++ii)
+    for (auto& entry : plists)
     {
-        std::list < HWPPara* >::iterator it = plists[ii].begin();
-        for (; it != plists[ii].end(); ++it)
+        std::list < HWPPara* >::iterator it = entry.begin();
+        for (; it != entry.end(); ++it)
         {
             HWPPara* pPara = *it;
             delete pPara;
@@ -381,10 +380,7 @@ TxtBox::~TxtBox()
         HWPPara* pPara = *it;
         delete pPara;
     }
-
-    delete[]plists;
 }
-
 
 // picture(11)
 

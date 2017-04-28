@@ -360,11 +360,12 @@ struct TxtBox: public FBox
     short     protect;                            //1=size lock
 
     Cell      *cell;
-     Table *m_pTable;
+    Table *m_pTable;
 /**
  * Paragraph list
  */
-    std::list<HWPPara*> *plists;
+    std::vector<std::list<HWPPara*>> plists;
+
 /**
  * Caption
  */

@@ -295,10 +295,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     }
     if (ncell == 1)
         style.cell = &cell[0];
-    plists = ::comphelper::newArray_null< std::list< HWPPara* > >(ncell);
-    if (!plists) {
-        return hwpf.SetState(HWP_InvalidFileFormat);
-    }
+    plists.resize(ncell);
     for (ii = 0; ii < ncell; ii++)
         hwpf.ReadParaList(plists[ii]);
      // caption
