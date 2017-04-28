@@ -89,9 +89,9 @@ public:
                      SalFrame           *pParent,
                      SalFrameStyleFlags  nSalFrameStyle,
                      SystemParentData   *pSysParent )
-        : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
-                       pSysParent )
+        : SvpSalFrame( pInstance, pParent, nSalFrameStyle )
     {
+        pSysParent = NULL;
         if (pParent == NULL && viewWidth > 1 && viewHeight > 1)
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
