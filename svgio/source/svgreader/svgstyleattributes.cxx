@@ -178,7 +178,7 @@ namespace svgio
             {
                 // get TokenName
                 OUStringBuffer aTokenName;
-                skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
+                skip_char(rCandidate, u' ', nPos, nLen);
                 copyString(rCandidate, nPos, aTokenName, nLen);
 
                 if (aTokenName.isEmpty())
@@ -191,9 +191,9 @@ namespace svgio
 
                 // get TokenValue
                 OUStringBuffer aTokenValue;
-                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(':'), nPos, nLen);
-                copyToLimiter(rCandidate, sal_Unicode(';'), nPos, aTokenValue, nLen);
-                skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(';'), nPos, nLen);
+                skip_char(rCandidate, u' ', u':', nPos, nLen);
+                copyToLimiter(rCandidate, u';', nPos, aTokenValue, nLen);
+                skip_char(rCandidate, u' ', u';', nPos, nLen);
 
                 if (aTokenValue.isEmpty())
                 {

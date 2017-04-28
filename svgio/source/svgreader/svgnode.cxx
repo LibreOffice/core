@@ -92,8 +92,8 @@ namespace svgio
                         while(nPos < nLen)
                         {
                             const sal_Int32 nInitPos(nPos);
-                            copyToLimiter(rClassList, sal_Unicode(' '), nPos, aToken, nLen);
-                            skip_char(rClassList, sal_Unicode(' '), nPos, nLen);
+                            copyToLimiter(rClassList, u' ', nPos, aToken, nLen);
+                            skip_char(rClassList, u' ', nPos, nLen);
                             const OUString aPart(aToken.makeStringAndClear().trim());
 
                             if(aPart.getLength())
