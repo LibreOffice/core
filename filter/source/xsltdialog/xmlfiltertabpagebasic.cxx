@@ -67,11 +67,11 @@ static OUString checkExtensions( const OUString& rExtensions )
     {
         switch(*pSource)
         {
-        case sal_Unicode(','):
+        case u',':
             aRet += ";";
             break;
-        case sal_Unicode('.'):
-        case sal_Unicode('*'):
+        case u'.':
+        case u'*':
             break;
         default:
             aRet += OUStringLiteral1( *pSource );
