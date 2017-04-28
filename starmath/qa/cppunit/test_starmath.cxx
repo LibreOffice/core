@@ -217,8 +217,8 @@ void Test::ParseErrorUnexpectedToken()
     m_xDocShRef->SetText("\\foo");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::UnexpectedToken expected",
-                           SmParseError::UnexpectedToken == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::UnexpectedToken expected",
+                           SmParseError::UnexpectedToken, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorPoundExpected()
@@ -226,8 +226,8 @@ void Test::ParseErrorPoundExpected()
     m_xDocShRef->SetText("matrix {1#2##a##b#c}");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::PoundExpected expected",
-                           SmParseError::PoundExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::PoundExpected expected",
+                           SmParseError::PoundExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorColorExpected()
@@ -235,8 +235,8 @@ void Test::ParseErrorColorExpected()
     m_xDocShRef->SetText("color 42 x");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::ColorExpected expected",
-                           SmParseError::ColorExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::ColorExpected expected",
+                           SmParseError::ColorExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorLgroupExpected()
@@ -244,8 +244,8 @@ void Test::ParseErrorLgroupExpected()
     m_xDocShRef->SetText("stack 42");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::LgroupExpected expected",
-                           SmParseError::LgroupExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::LgroupExpected expected",
+                           SmParseError::LgroupExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorRgroupExpected()
@@ -253,8 +253,8 @@ void Test::ParseErrorRgroupExpected()
     m_xDocShRef->SetText("stack {a#b#c)");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::RgroupExpected expected",
-                           SmParseError::RgroupExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RgroupExpected expected",
+                           SmParseError::RgroupExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorLbraceExpected()
@@ -262,8 +262,8 @@ void Test::ParseErrorLbraceExpected()
     m_xDocShRef->SetText("left 42");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::LbraceExpected expected",
-                           SmParseError::LbraceExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::LbraceExpected expected",
+                           SmParseError::LbraceExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorRbraceExpected()
@@ -271,8 +271,8 @@ void Test::ParseErrorRbraceExpected()
     m_xDocShRef->SetText("left ( foo right x");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::RbraceExpected expected",
-                           SmParseError::RbraceExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RbraceExpected expected",
+                           SmParseError::RbraceExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorParentMismatch()
@@ -280,8 +280,8 @@ void Test::ParseErrorParentMismatch()
     m_xDocShRef->SetText("lbrace foo rceil");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::ParentMismatch expected",
-                           SmParseError::ParentMismatch == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::ParentMismatch expected",
+                           SmParseError::ParentMismatch, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorRightExpected()
@@ -289,8 +289,8 @@ void Test::ParseErrorRightExpected()
     m_xDocShRef->SetText("left ( x mline y )");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::RightExpected expected",
-                           SmParseError::RightExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::RightExpected expected",
+                           SmParseError::RightExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorFontExpected()
@@ -298,8 +298,8 @@ void Test::ParseErrorFontExpected()
     m_xDocShRef->SetText("font small bar");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::FontExpected expected",
-                           SmParseError::FontExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::FontExpected expected",
+                           SmParseError::FontExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorSizeExpected()
@@ -307,8 +307,8 @@ void Test::ParseErrorSizeExpected()
     m_xDocShRef->SetText("size small baz");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::SizeExpected expected",
-                           SmParseError::SizeExpected == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::SizeExpected expected",
+                           SmParseError::SizeExpected, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorDoubleAlign()
@@ -316,8 +316,8 @@ void Test::ParseErrorDoubleAlign()
     m_xDocShRef->SetText("alignl alignc x");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::DoubleAlign expected",
-                           SmParseError::DoubleAlign == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::DoubleAlign expected",
+                           SmParseError::DoubleAlign, pErrorDesc->m_eType);
 }
 
 void Test::ParseErrorDoubleSubsupscript()
@@ -325,8 +325,8 @@ void Test::ParseErrorDoubleSubsupscript()
     m_xDocShRef->SetText("x_y_z");
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
     CPPUNIT_ASSERT(pErrorDesc);
-    CPPUNIT_ASSERT_MESSAGE("SmParseError::DoubleSubsupscript expected",
-                           SmParseError::DoubleSubsupscript == pErrorDesc->m_eType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SmParseError::DoubleSubsupscript expected",
+                           SmParseError::DoubleSubsupscript, pErrorDesc->m_eType);
 }
 
 void Test::editUndoRedo()
