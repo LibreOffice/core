@@ -73,54 +73,54 @@ void Test::test_Uri() {
          eCharClass <= eLastCharClass;
          eCharClass = static_cast< rtl_UriCharClass >(eCharClass + 1))
     {
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 1",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeKeepEscapes,
                     RTL_TEXTENCODING_ISO_8859_1),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ASCII_US)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ASCII_US));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 2",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeCheckEscapes,
                     RTL_TEXTENCODING_ISO_8859_1),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ASCII_US)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ASCII_US));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 3",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeKeepEscapes,
                     RTL_TEXTENCODING_ISO_8859_1),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_1)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_1));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 4",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeCheckEscapes,
                     RTL_TEXTENCODING_ISO_8859_1),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_1)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_1));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 5",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeKeepEscapes,
                     RTL_TEXTENCODING_ISO_8859_1),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 6",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeCheckEscapes,
                     RTL_TEXTENCODING_ISO_8859_1),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
-             == aText2));
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8));
     }
 
     aText1 = rtl::OUString(
@@ -146,38 +146,38 @@ void Test::test_Uri() {
          eCharClass <= eLastCharClass;
          eCharClass = static_cast< rtl_UriCharClass >(eCharClass + 1))
     {
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 7",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeKeepEscapes,
                     RTL_TEXTENCODING_ISO_8859_1),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_1)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_1));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 8",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeCheckEscapes,
                     RTL_TEXTENCODING_ISO_8859_1),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_1)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_1));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 9",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeKeepEscapes,
                     RTL_TEXTENCODING_UTF8),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 10",
-            (rtl::Uri::decode(
+            aText2,
+            rtl::Uri::decode(
                 rtl::Uri::encode(
                     aText1, eCharClass, rtl_UriEncodeCheckEscapes,
                     RTL_TEXTENCODING_UTF8),
-                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
-             == aText2));
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8));
     }
 
     // Check surrogate handling:
@@ -189,24 +189,24 @@ void Test::test_Uri() {
     aBuffer.append('A'); // A
     aText1 = aBuffer.makeStringAndClear();
     aText2 = "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A";
-    CPPUNIT_ASSERT_MESSAGE(
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 11",
-        (rtl::Uri::encode(
+        aText2,
+        rtl::Uri::encode(
             aText1, rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes,
-            RTL_TEXTENCODING_UTF8)
-         == aText2));
-    CPPUNIT_ASSERT_MESSAGE(
+            RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 12",
-        (rtl::Uri::encode(
+        aText2,
+        rtl::Uri::encode(
             aText1, rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes,
-            RTL_TEXTENCODING_UTF8)
-         == aText2));
-    CPPUNIT_ASSERT_MESSAGE(
+            RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 13",
-        (rtl::Uri::encode(
+        aText2,
+        rtl::Uri::encode(
             aText1, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes,
-            RTL_TEXTENCODING_UTF8)
-         == aText2));
+            RTL_TEXTENCODING_UTF8));
 
     aText1 = "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A";
     aBuffer.append("%ED%A0%80");
@@ -215,37 +215,37 @@ void Test::test_Uri() {
     aBuffer.append("%ED%BF%BF");
     aBuffer.append('A');
     aText2 = aBuffer.makeStringAndClear();
-    CPPUNIT_ASSERT_MESSAGE(
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 14",
-        (rtl::Uri::decode(aText1, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
-         == aText2));
-    CPPUNIT_ASSERT_MESSAGE(
+        aText2,
+        rtl::Uri::decode(aText1, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 15",
-        (rtl::Uri::decode(
-            aText1, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
-         == aText2));
+        aText2,
+        rtl::Uri::decode(
+            aText1, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8));
 
     // Check UTF-8 handling:
 
     aText1 = "%E0%83%BF";
         // \U+00FF encoded with three instead of two bytes
     aText2 = aText1;
-    CPPUNIT_ASSERT_MESSAGE(
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 16",
-        (rtl::Uri::encode(
+        aText2,
+        rtl::Uri::encode(
             aText1, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes,
-            RTL_TEXTENCODING_UTF8)
-         == aText2));
+            RTL_TEXTENCODING_UTF8));
 
     aText1 = "%EF%BF%BF";
         // \U+FFFF is no legal character
     aText2 = aText1;
-    CPPUNIT_ASSERT_MESSAGE(
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 17",
-        (rtl::Uri::encode(
+        aText2,
+        rtl::Uri::encode(
             aText1, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes,
-            RTL_TEXTENCODING_UTF8)
-         == aText2));
+            RTL_TEXTENCODING_UTF8));
 
     // Check IURI handling:
 
@@ -253,21 +253,21 @@ void Test::test_Uri() {
     aBuffer.append("%30");
     aBuffer.append(static_cast< sal_Unicode >(0x00FF));
     aText2 = aBuffer.makeStringAndClear();
-    CPPUNIT_ASSERT_MESSAGE(
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 18",
-        (rtl::Uri::decode(aText1, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
-         == aText2));
+        aText2,
+        rtl::Uri::decode(aText1, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8));
 
     // Check modified rtl_UriCharClassUnoParamValue (removed '[' and ']'):
 
     aText1 = "[]%5B%5D";
     aText2 = "%5B%5D%5B%5D";
-    CPPUNIT_ASSERT_MESSAGE(
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "failure 19",
-        (rtl::Uri::encode(
+        aText2,
+        rtl::Uri::encode(
             aText1, rtl_UriCharClassUnoParamValue, rtl_UriEncodeCheckEscapes,
-            RTL_TEXTENCODING_ASCII_US)
-         == aText2));
+            RTL_TEXTENCODING_ASCII_US));
 
     // Check Uri::convertRelToAbs:
 
@@ -370,17 +370,17 @@ void Test::test_Uri() {
         sal_Unicode const aText1U[] = { ' ', '!', 0x0401, 0x045F, 0 };
         aText1 = rtl::OUString(aText1U);
         aText2 = "%20!%A1%FF";
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 20",
-            (rtl::Uri::encode(
+            aText2,
+            rtl::Uri::encode(
                 aText1, rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes,
-                RTL_TEXTENCODING_ISO_8859_5)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                RTL_TEXTENCODING_ISO_8859_5));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 20a",
-            (rtl::Uri::decode(
-                aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_5)
-             == aText1));
+            aText1,
+            rtl::Uri::decode(
+                aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_5));
     }
     {
         sal_Unicode const aText1U[] = { ' ', '!', 0x0401, 0x0700, 0x045F, 0 };
@@ -388,34 +388,34 @@ void Test::test_Uri() {
         sal_Unicode const aText2U[] = {
             '%', '2', '0', '!', '%', 'A', '1', 0x0700, '%', 'F', 'F', 0 };
         aText2 = rtl::OUString(aText2U);
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 21",
-            (rtl::Uri::encode(
+            aText2,
+            rtl::Uri::encode(
                 aText1, rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes,
-                RTL_TEXTENCODING_ISO_8859_5)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                RTL_TEXTENCODING_ISO_8859_5));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 21a",
-            (rtl::Uri::decode(
-                aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_5)
-             == aText1));
+            aText1,
+            rtl::Uri::decode(
+                aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_5));
     }
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
     {
         sal_Unicode const aText1U[] = { ' ', '!', 0x028A, 0xD849, 0xDD13, 0 };
         aText1 = rtl::OUString(aText1U);
         aText2 = "%20!%81%30%B1%33%95%39%C5%37";
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 22",
-            (rtl::Uri::encode(
+            aText2,
+            rtl::Uri::encode(
                 aText1, rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes,
-                RTL_TEXTENCODING_GB_18030)
-             == aText2));
-        CPPUNIT_ASSERT_MESSAGE(
+                RTL_TEXTENCODING_GB_18030));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 22a",
-            (rtl::Uri::decode(
-                aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_GB_18030)
-             == aText1));
+            aText1,
+            rtl::Uri::decode(
+                aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_GB_18030));
     }
 #endif
     // Check strict mode:
@@ -424,60 +424,60 @@ void Test::test_Uri() {
         sal_Unicode const aText1U[] = { ' ', '!', 0x0401, 0x0700, 0x045F, 0 };
         aText1 = rtl::OUString(aText1U);
         aText2 = rtl::OUString();
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 23",
-            (rtl::Uri::encode(
+            aText2,
+            rtl::Uri::encode(
                 aText1, rtl_UriCharClassUric, rtl_UriEncodeStrict,
-                RTL_TEXTENCODING_ISO_8859_5)
-             == aText2));
+                RTL_TEXTENCODING_ISO_8859_5));
     }
     {
         aText1 = "%20%C4%80%FF";
         aText2 = rtl::OUString();
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 24",
-            (rtl::Uri::decode(
-                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8)
-             == aText2));
+            aText2,
+            rtl::Uri::decode(
+                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8));
     }
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
     {
         aText1 = "%81 ";
         aText2 = rtl::OUString();
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 25",
-            (rtl::Uri::decode(
-                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030)
-             == aText2));
+            aText2,
+            rtl::Uri::decode(
+                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030));
     }
     {
         aText1 = "%81%20";
         aText2 = rtl::OUString();
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 26",
-            (rtl::Uri::decode(
-                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030)
-             == aText2));
+            aText2,
+            rtl::Uri::decode(
+                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030));
     }
     {
         aText1 = "%81%30%B1%33";
         sal_Unicode const aText2U[] = { 0x028A, 0 };
         aText2 = rtl::OUString(aText2U);
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 27",
-            (rtl::Uri::decode(
-                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030)
-             == aText2));
+            aText2,
+            rtl::Uri::decode(
+                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030));
     }
     {
         aText1 = "%810%B13";
         sal_Unicode const aText2U[] = { 0x028A, 0 };
         aText2 = rtl::OUString(aText2U);
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 28",
-            (rtl::Uri::decode(
-                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030)
-             == aText2));
+            aText2,
+            rtl::Uri::decode(
+                aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030));
     }
 #endif
     // Check rtl_UriEncodeStrictKeepEscapes mode:
@@ -485,34 +485,34 @@ void Test::test_Uri() {
     {
         aText1 = "%%ea%c3%aa";
         aText2 = "%25%EA%C3%AA";
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 29",
-            (rtl::Uri::encode(
+            aText2,
+            rtl::Uri::encode(
                 aText1, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
-                RTL_TEXTENCODING_UTF8)
-             == aText2));
+                RTL_TEXTENCODING_UTF8));
     }
     {
         sal_Unicode const aText1U[] = { 0x00EA, 0 };
         aText1 = rtl::OUString(aText1U);
         aText2 = "%C3%AA";
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 30",
-            (rtl::Uri::encode(
+            aText2,
+            rtl::Uri::encode(
                 aText1, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
-                RTL_TEXTENCODING_UTF8)
-             == aText2));
+                RTL_TEXTENCODING_UTF8));
     }
     {
         sal_Unicode const aText1U[] = { ' ', '!', 0x0401, 0x0700, 0x045F, 0 };
         aText1 = rtl::OUString(aText1U);
         aText2 = rtl::OUString();
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 23",
-            (rtl::Uri::encode(
+            aText2,
+            rtl::Uri::encode(
                 aText1, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
-                RTL_TEXTENCODING_ISO_8859_5)
-             == aText2));
+                RTL_TEXTENCODING_ISO_8859_5));
     }
 }
 

@@ -125,7 +125,9 @@ namespace osl_Module
             }
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test get Module URL from address.",
-                                    bRes && 0 < aFileURL.lastIndexOf('/')  );
+                                    bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test get Module URL from address.",
+                                    0 < aFileURL.lastIndexOf('/')  );
         }
 
         void getUrlFromAddress_002( )
@@ -145,7 +147,11 @@ namespace osl_Module
             aMod.unload( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load an external library, get its function address and get its URL.",
-                                    bRes && 0 < aFileURL.lastIndexOf('/') && aFileURL.equalsIgnoreAsciiCase( getDllURL( ) ) );
+                                    bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load an external library, get its function address and get its URL.",
+                                    0 < aFileURL.lastIndexOf('/') );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load an external library, get its function address and get its URL.",
+                                    aFileURL.equalsIgnoreAsciiCase( getDllURL( ) ) );
 #endif
         }
 
@@ -236,7 +242,9 @@ namespace osl_Module
             aMod.unload( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test if a module is a loaded module.",
-                                    !bRes && bRes1 );
+                                    !bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test if a module is a loaded module.",
+                                    bRes1 );
         }
         CPPUNIT_TEST_SUITE( is );
         CPPUNIT_TEST( is_001 );
@@ -293,7 +301,9 @@ namespace osl_Module
             aMod.unload( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: the m_Module of a Module instance will be NULL when is not loaded, it will not be NULL after loaded.",
-                                    bRes && bRes1 );
+                                    bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: the m_Module of a Module instance will be NULL when is not loaded, it will not be NULL after loaded.",
+                                    bRes1 );
 #endif
         }
 
@@ -340,7 +350,9 @@ namespace osl_Module
             bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
             aMod.unload();
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and get its function addr and get its URL.",
-                 bRes && aLibraryURL.equalsIgnoreAsciiCase( getDllURL() ) );
+                 bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and get its function addr and get its URL.",
+                 aLibraryURL.equalsIgnoreAsciiCase( getDllURL() ) );
 #endif
         }
 
