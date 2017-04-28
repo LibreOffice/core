@@ -2037,7 +2037,7 @@ RTLFUNC(CDateToIso)
     {
         double aDate = rPar.Get(1)->GetDate();
 
-        char Buffer[9];
+        char Buffer[11];
         snprintf( Buffer, sizeof( Buffer ), "%04d%02d%02d",
             implGetDateYear( aDate ),
             implGetDateMonth( aDate ),
