@@ -68,7 +68,6 @@ namespace drawinglayer
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
-            sal_uInt32 /* nSteps */,
             double fBorder)
         :   GeoTexSvx(),
             maGradientInfo(),
@@ -108,7 +107,7 @@ namespace drawinglayer
             sal_uInt32 nSteps,
             double fBorder,
             double fAngle)
-        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder),
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder),
             mfUnitMinX(0.0),
             mfUnitWidth(1.0),
             mfUnitMaxY(1.0)
@@ -203,7 +202,7 @@ namespace drawinglayer
             sal_uInt32 nSteps,
             double fBorder,
             double fAngle)
-        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder),
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder),
             mfUnitMinX(0.0),
             mfUnitWidth(1.0)
         {
@@ -287,7 +286,7 @@ namespace drawinglayer
             double fBorder,
             double fOffsetX,
             double fOffsetY)
-        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
         {
             maGradientInfo = basegfx::tools::createRadialODFGradientInfo(
                 rDefinitionRange,
@@ -344,7 +343,7 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
         {
             maGradientInfo = basegfx::tools::createEllipticalODFGradientInfo(
                 rDefinitionRange,
@@ -420,7 +419,7 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
         {
             maGradientInfo = basegfx::tools::createSquareODFGradientInfo(
                 rDefinitionRange,
@@ -478,7 +477,7 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
         {
             maGradientInfo = basegfx::tools::createRectangularODFGradientInfo(
                 rDefinitionRange,

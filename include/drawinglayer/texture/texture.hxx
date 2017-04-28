@@ -84,7 +84,6 @@ namespace drawinglayer
                 const basegfx::B2DRange& rDefinitionRange,
                 const basegfx::BColor& rStart,
                 const basegfx::BColor& rEnd,
-                sal_uInt32 nSteps,
                 double fBorder);
             virtual ~GeoTexSvxGradient() override;
 

@@ -89,7 +89,7 @@ namespace drawinglayer
             BitmapEx                                            maOldRenderedBitmap;
 
             /// private helpers
-            bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
+            bool impGetShadow3D() const;
             void calculateDiscreteSizes(
                 const geometry::ViewInformation2D& rViewInformation,
                 basegfx::B2DRange& rDiscreteRange,
@@ -107,7 +107,7 @@ namespace drawinglayer
                 helper is useful e.g. for Contour extraction or HitTests.
               */
             Primitive2DContainer getGeometry2D() const;
-            Primitive2DContainer getShadow2D(const geometry::ViewInformation2D& rViewInformation) const;
+            Primitive2DContainer getShadow2D() const;
 
             /** Fast HitTest which uses the last buffered BitmapEx from the last
                 rendered area if available. The return value describes if the check

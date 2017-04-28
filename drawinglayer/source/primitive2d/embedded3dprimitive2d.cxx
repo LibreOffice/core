@@ -36,7 +36,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        bool Embedded3DPrimitive2D::impGetShadow3D(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        bool Embedded3DPrimitive2D::impGetShadow3D() const
         {
             osl::MutexGuard aGuard( m_aMutex );
 
@@ -126,7 +126,7 @@ namespace drawinglayer
 
                 // check for 3D shadows and their 2D projections. If those exist, they need to be
                 // taken into account
-                if(impGetShadow3D(rViewInformation))
+                if(impGetShadow3D())
                 {
                     const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rViewInformation));
 
