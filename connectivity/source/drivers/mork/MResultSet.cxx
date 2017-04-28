@@ -309,13 +309,6 @@ bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload)
         // Check whether we've already fetched the row...
         if ( !(m_aRow->get())[0].isNull() && (sal_Int32)(m_aRow->get())[0] == cardNumber )
             return true;
-        //Check whether the old row has been changed
-        if (cardNumber == m_nUpdatedRow)
-        {
-            //write back the changes first
-            if (!pushCard(cardNumber))  //error write back the changes
-                throw SQLException();
-        }
     }
 //    else
 //        m_aQuery.resyncRow(cardNumber);

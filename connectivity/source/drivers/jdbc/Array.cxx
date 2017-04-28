@@ -56,7 +56,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
-        jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
+        jobject obj = convertTypeMapToJavaMap(typeMap);
         static const char * const cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
         static const char * const cMethodName = "getArray";
         static jmethodID mID(nullptr);
@@ -74,7 +74,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sa
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
-        jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
+        jobject obj = convertTypeMapToJavaMap(typeMap);
         static const char * const cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
         static const char * const cMethodName = "getArray";
         // submit Java-Call
@@ -93,7 +93,7 @@ css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultS
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         // convert Parameter
-        jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
+        jobject obj = convertTypeMapToJavaMap(typeMap);
         // initialize temporary variable
         static const char * const cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * const cMethodName = "getResultSet";
@@ -113,7 +113,7 @@ css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultS
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         // convert parameter
-        jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
+        jobject obj = convertTypeMapToJavaMap(typeMap);
         // initialize temporary variable
         static const char * const cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * const cMethodName = "getResultSetAtIndex";

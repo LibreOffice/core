@@ -173,7 +173,7 @@ OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring Str)
     return aStr;
 }
 
-jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< css::container::XNameAccess > & _rMap)
+jobject connectivity::convertTypeMapToJavaMap(const Reference< css::container::XNameAccess > & _rMap)
 {
     if ( _rMap.is() )
     {
