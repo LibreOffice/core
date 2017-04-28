@@ -233,10 +233,10 @@ void SvxGeneralTabPage::InitControls ()
         LangBit = Lang::Russian;
     else
     {
-            if (MsLangId::isFamilyNameFirst(l))
-                LangBit = Lang::Eastern;
-            else
-                LangBit = Lang::Others;
+        if (MsLangId::isFamilyNameFirst(l))
+            LangBit = Lang::Eastern;
+        else
+            LangBit = Lang::Others;
     }
 
     // creating rows
