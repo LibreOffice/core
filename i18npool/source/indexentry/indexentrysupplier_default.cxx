@@ -187,7 +187,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
             continue;
 
         switch(curr) {
-            case sal_Unicode('-'):
+            case u'-':
                 if (key_count > 0 && i + 1 < len ) {
                     for (curr = keyStr[++i]; key_count < MAX_KEYS && keys[key_count-1].key < curr; key_count++) {
                         keys[key_count].key = keys[key_count-1].key+1;
@@ -196,7 +196,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                 } else
                     throw RuntimeException();
                 break;
-            case sal_Unicode('['):
+            case u'[':
                 for (i++; i < len && keyStr[i] != ']'; i++) {
                     if (unicode::isWhiteSpace(keyStr[i])) {
                         continue;
@@ -209,10 +209,10 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                     }
                 }
                 break;
-            case sal_Unicode('{'):
+            case u'{':
                 close = '}';
                 SAL_FALLTHROUGH;
-            case sal_Unicode('('):
+            case u'(':
                 if (key_count > 0) {
                     sal_Int16 end = i+1;
                     for (; end < len && keyStr[end] != close; end++) ;

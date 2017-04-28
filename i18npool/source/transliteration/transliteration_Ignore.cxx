@@ -190,7 +190,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
     newStr->length = sal_Int32(dst - newStr->buffer);
     if (useOffset)
       offset.realloc(newStr->length);
-    *dst = (sal_Unicode) 0;
+    *dst = u'\0';
 
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }

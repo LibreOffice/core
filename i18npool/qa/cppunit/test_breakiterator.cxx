@@ -380,7 +380,7 @@ void TestBreakIterator::testWordBoundaries()
         }
 
         const sal_Int32 aSingleQuotePositions[] = {0, 1, 9, 10};
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Unicode>('\''), aTests[0]);
+        CPPUNIT_ASSERT_EQUAL(u'\'', aTests[0]);
         {
             OUString aTest = aBase.replaceAll("xx", OUStringLiteral1(aTests[0]));
             sal_Int32 nPos = -1;
