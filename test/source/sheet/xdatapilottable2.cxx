@@ -127,17 +127,17 @@ void XDataPilotTable2::testGetOutputRangeByType()
     CPPUNIT_ASSERT( maRangeWhole.EndRow - maRangeWhole.StartRow > 0);
 
     //table range must be of equal width with the whole range, and the same bottom
-    CPPUNIT_ASSERT( maRangeTable.Sheet == maRangeWhole.Sheet );
-    CPPUNIT_ASSERT( maRangeTable.EndRow == maRangeWhole.EndRow );
-    CPPUNIT_ASSERT( maRangeTable.StartColumn == maRangeWhole.StartColumn );
-    CPPUNIT_ASSERT( maRangeTable.EndColumn == maRangeWhole.EndColumn );
+    CPPUNIT_ASSERT_EQUAL( maRangeWhole.Sheet, maRangeTable.Sheet );
+    CPPUNIT_ASSERT_EQUAL( maRangeWhole.EndRow, maRangeTable.EndRow );
+    CPPUNIT_ASSERT_EQUAL( maRangeWhole.StartColumn, maRangeTable.StartColumn );
+    CPPUNIT_ASSERT_EQUAL( maRangeWhole.EndColumn, maRangeTable.EndColumn );
 
     //result range must be smaller than the table range, and must share the same lower-right corner
-    CPPUNIT_ASSERT( maRangeResult.Sheet == maRangeTable.Sheet );
+    CPPUNIT_ASSERT_EQUAL( maRangeTable.Sheet, maRangeResult.Sheet );
     CPPUNIT_ASSERT( maRangeResult.StartColumn >= maRangeTable.StartColumn );
     CPPUNIT_ASSERT( maRangeResult.StartRow >= maRangeTable.StartRow );
-    CPPUNIT_ASSERT( maRangeResult.EndRow == maRangeTable.EndRow );
-    CPPUNIT_ASSERT( maRangeResult.EndColumn == maRangeTable.EndColumn );
+    CPPUNIT_ASSERT_EQUAL( maRangeTable.EndRow, maRangeResult.EndRow );
+    CPPUNIT_ASSERT_EQUAL( maRangeTable.EndColumn, maRangeResult.EndColumn );
 
 }
 
@@ -269,7 +269,7 @@ bool XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpread
         {
             Any& aCell1 = aSheetData[x][y];
             const Any& aCell2 = aData[x][y];
-            CPPUNIT_ASSERT(aCell1 == aCell2);
+            CPPUNIT_ASSERT_EQUAL(aCell2, aCell1);
         }
     }
     return true;

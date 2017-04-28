@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <ostream>
 
 #include <com/sun/star/uno/Type.h>
 #include <cppu/unotype.hxx>
@@ -91,6 +92,18 @@ inline Type & Type::operator = ( const Type & rType )
 
 template< class T >
 typelib_TypeDescriptionReference * Array< T >::s_pType = NULL;
+
+#if defined LIBO_INTERNAL_ONLY
+/**
+   Support for Type in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
+   macros, for example).
+
+   @since LibreOffice 5.4
+*/
+template<typename charT, typename traits> std::basic_ostream<charT, traits> &
+operator <<(std::basic_ostream<charT, traits> & stream, Type const & type)
+{ return stream << type.getTypeName(); }
+#endif
 
 }
 }

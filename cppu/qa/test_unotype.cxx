@@ -25,7 +25,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <ostream>
 #include <typeinfo>
 
 #include "com/sun/star/beans/Optional.hpp"
@@ -45,16 +44,6 @@
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }
-
-namespace com { namespace sun { namespace star { namespace uno {
-
-template<typename charT, typename traits> std::basic_ostream<charT, traits> &
-operator <<(std::basic_ostream<charT, traits> & stream, Type const & type) {
-    return stream << type.getTypeName();
-}
-
-} } } }
-
 
 namespace {
 

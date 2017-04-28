@@ -131,7 +131,11 @@ namespace osl_Condition
             myThread2.join( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use one thread to set the condition in order to release another thread.",
-                                    bRes && !bRes1 && bRes2 );
+                                    bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: use one thread to set the condition in order to release another thread.",
+                                    !bRes1 );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: use one thread to set the condition in order to release another thread.",
+                                    bRes2 );
         }
 
         CPPUNIT_TEST_SUITE( set );
@@ -163,7 +167,11 @@ namespace osl_Condition
             bRes1 = myThread.isRunning( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait will cause a reset thread block, use set to release it.",
-                                    bRes && !bRes1 && !bRes2 );
+                                    bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait will cause a reset thread block, use set to release it.",
+                                    !bRes1 );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait will cause a reset thread block, use set to release it.",
+                                    !bRes2 );
         }
 
         void reset_002( )
@@ -175,7 +183,9 @@ namespace osl_Condition
             bRes1 = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a condition and reset/set it.",
-                                    !bRes && bRes1 );
+                                    !bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a condition and reset/set it.",
+                                    bRes1 );
         }
 
         CPPUNIT_TEST_SUITE( reset );
@@ -219,10 +229,12 @@ namespace osl_Condition
             osl::Condition::Result r2=cond2.wait();
             osl::Condition::Result r3=cond3.wait(tv1);
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test three types of wait.",
-                                    (r1 == ::osl::Condition::result_ok) &&
-                                    (r2 == ::osl::Condition::result_ok) &&
-                                    (r3 == ::osl::Condition::result_timeout) );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "#test comment#: test three types of wait.",
+                                    ::osl::Condition::result_ok, r1 );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "#test comment#: test three types of wait.",
+                                    ::osl::Condition::result_ok, r2 );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "#test comment#: test three types of wait.",
+                                    ::osl::Condition::result_timeout, r3 );
         }
 
         void wait_002( )
@@ -239,9 +251,13 @@ namespace osl_Condition
             bRes1 = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait a condition after set/reset.",
-                                    !bRes && bRes1 &&
-                                    ( ::osl::Condition::result_timeout == wRes ) &&
-                                    ( ::osl::Condition::result_ok == wRes1 ) );
+                                    !bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: wait a condition after set/reset.",
+                                    bRes1 );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "#test comment#: wait a condition after set/reset.",
+                                    ::osl::Condition::result_timeout, wRes );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "#test comment#: wait a condition after set/reset.",
+                                    ::osl::Condition::result_ok, wRes1 );
         }
 
         CPPUNIT_TEST_SUITE( wait );
@@ -268,7 +284,9 @@ namespace osl_Condition
             bRes1 = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: check the condition states.",
-                                    !bRes && bRes1 );
+                                    !bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: check the condition states.",
+                                    bRes1 );
         }
 
         void check_002( )
@@ -287,7 +305,9 @@ namespace osl_Condition
             bRes1 = aCond.check( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use threads to set/reset Condition and check it in main routine.",
-                                    bRes && !bRes1 );
+                                    bRes );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: use threads to set/reset Condition and check it in main routine.",
+                                    !bRes1 );
         }
 
         CPPUNIT_TEST_SUITE( check );

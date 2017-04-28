@@ -165,13 +165,21 @@ RecursiveTest::~RecursiveTest()
 
 void RecursiveTest::disposing(css::lang::EventObject const & Source)
 {
-    CPPUNIT_ASSERT(properties_.is() && Source.Source == properties_);
+    CPPUNIT_ASSERT(properties_.is());
+    CPPUNIT_ASSERT_EQUAL(
+        css::uno::Reference<css::uno::XInterface>(
+            properties_, css::uno::UNO_QUERY_THROW),
+        Source.Source);
     properties_.clear();
 }
 
 void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const & evt)
 {
-    CPPUNIT_ASSERT( evt.Source == properties_ && evt.PropertyName == "Label" );
+    CPPUNIT_ASSERT_EQUAL(
+        css::uno::Reference<css::uno::XInterface>(
+            properties_, css::uno::UNO_QUERY_THROW),
+        evt.Source);
+    CPPUNIT_ASSERT_EQUAL( OUString("Label"), evt.PropertyName );
     if (count_ > 0) {
         --count_;
         step();

@@ -6,6 +6,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <test/bootstrapfixture.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
@@ -65,7 +69,7 @@ protected:
         deployment::UpdateInformationEntry aEntry;
         if ( aUpdateInfoEnumeration->nextElement() >>= aEntry )
         {
-            CPPUNIT_ASSERT( aEntry.UpdateDocument->getNodeName() == "description" );
+            CPPUNIT_ASSERT_EQUAL( OUString("description"), aEntry.UpdateDocument->getNodeName() );
 
             uno::Reference< dom::XNodeList> xChildNodes = aEntry.UpdateDocument->getChildNodes();
             CPPUNIT_ASSERT( xChildNodes.is() );
@@ -81,7 +85,7 @@ protected:
                 }
             }
 #endif
-            CPPUNIT_ASSERT( xChildNodes->getLength() == 13 );
+            CPPUNIT_ASSERT_EQUAL( sal_Int32(13), xChildNodes->getLength() );
 
             //uno::Reference< dom::XElement > xChildId( xChildNodes->item( 0 ), uno::UNO_QUERY );
             //CPPUNIT_ASSERT( xChildId.is() );
@@ -107,8 +111,8 @@ protected:
                     "111111-222222-333333-444444",
                     "InstallSetID" ) )
         {
-            CPPUNIT_ASSERT( aInfo.Sources.size() == 1 );
-            CPPUNIT_ASSERT( aInfo.Sources[0].URL == "http://www.libreoffice.org/download/" );
+            CPPUNIT_ASSERT_EQUAL( std::size_t(1), aInfo.Sources.size() );
+            CPPUNIT_ASSERT_EQUAL( OUString("http://www.libreoffice.org/download/"), aInfo.Sources[0].URL );
         }
         else
             CPPUNIT_FAIL( "Calling checkForUpdates() failed." );

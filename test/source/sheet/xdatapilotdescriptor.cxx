@@ -31,7 +31,7 @@ void XDataPilotDescriptor::testTag()
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     xDescr->setTag(aTag);
     OUString aNewTag = xDescr->getTag();
-    CPPUNIT_ASSERT( aTag == aNewTag );
+    CPPUNIT_ASSERT_EQUAL( aTag, aNewTag );
 }
 
 void XDataPilotDescriptor::testSourceRange()
@@ -50,11 +50,11 @@ void XDataPilotDescriptor::testSourceRange()
     table::CellRangeAddress aReturn;
     aReturn = xDescr->getSourceRange();
 
-    CPPUNIT_ASSERT(aAddress.Sheet == aReturn.Sheet);
-    CPPUNIT_ASSERT(aAddress.StartColumn == aReturn.StartColumn);
-    CPPUNIT_ASSERT(aAddress.StartRow == aReturn.StartRow);
-    CPPUNIT_ASSERT(aAddress.EndColumn == aReturn.EndColumn);
-    CPPUNIT_ASSERT(aAddress.EndRow == aReturn.EndRow);
+    CPPUNIT_ASSERT_EQUAL(aAddress.Sheet, aReturn.Sheet);
+    CPPUNIT_ASSERT_EQUAL(aAddress.StartColumn, aReturn.StartColumn);
+    CPPUNIT_ASSERT_EQUAL(aAddress.StartRow, aReturn.StartRow);
+    CPPUNIT_ASSERT_EQUAL(aAddress.EndColumn, aReturn.EndColumn);
+    CPPUNIT_ASSERT_EQUAL(aAddress.EndRow, aReturn.EndRow);
 
     //restore old settings
     xDescr->setSourceRange(aOldAddress);

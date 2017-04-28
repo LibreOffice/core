@@ -71,7 +71,7 @@ void XNamedRange::testGetType()
 {
     OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected Type", xNamedRange->getType() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected Type", sal_Int32(0), xNamedRange->getType());
 }
 
 void XNamedRange::testSetType()
@@ -81,23 +81,23 @@ void XNamedRange::testSetType()
 
     sal_Int32 nType = ::sheet::NamedRangeFlag::ROW_HEADER;
     xNamedRange->setType(nType);
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected Type ROW_HEADER after setting it", xNamedRange->getType() == nType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected Type ROW_HEADER after setting it", nType, xNamedRange->getType());
 
     nType = ::sheet::NamedRangeFlag::COLUMN_HEADER;
     xNamedRange->setType(nType);
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected Type COLUMN_HEADER after setting it", xNamedRange->getType() == nType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected Type COLUMN_HEADER after setting it", nType, xNamedRange->getType());
 
     nType = ::sheet::NamedRangeFlag::FILTER_CRITERIA;
     xNamedRange->setType(nType);
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected Type FILTER_CRITERIA after setting it", xNamedRange->getType() == nType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected Type FILTER_CRITERIA after setting it", nType, xNamedRange->getType());
 
     nType = ::sheet::NamedRangeFlag::PRINT_AREA;
     xNamedRange->setType(nType);
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected Type PRINT_AREA after setting it", xNamedRange->getType() == nType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected Type PRINT_AREA after setting it", nType, xNamedRange->getType());
 
     nType = 0;
     xNamedRange->setType(nType);
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected Type 0 after setting it", xNamedRange->getType() == nType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected Type 0 after setting it", nType, xNamedRange->getType());
 }
 
 void XNamedRange::testGetReferencePosition()
@@ -107,9 +107,9 @@ void XNamedRange::testGetReferencePosition()
 
     table::CellAddress aCellAddress = xNamedRange->getReferencePosition();
     // the expected address is on B1, as it was the active cell when initial2 was created
-    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position", aCellAddress.Sheet == 0);
-    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position", aCellAddress.Column == 1);
-    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", aCellAddress.Row == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong SHEET reference position", sal_Int16(0), aCellAddress.Sheet);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong COLUMN reference position", sal_Int32(1), aCellAddress.Column);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong ROW reference position", sal_Int32(0), aCellAddress.Row);
 }
 
 void XNamedRange::testSetReferencePosition()
@@ -122,9 +122,9 @@ void XNamedRange::testSetReferencePosition()
     xNamedRange->setReferencePosition(aBaseAddress);
 
     table::CellAddress aCellAddress = xNamedRange->getReferencePosition();
-    CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position after setting it", aCellAddress.Sheet == 1);
-    CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position after setting it", aCellAddress.Column == 2);
-    CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position after setting it", aCellAddress.Row == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong SHEET reference position after setting it", sal_Int16(1), aCellAddress.Sheet);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong COLUMN reference position after setting it", sal_Int32(2), aCellAddress.Column);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong ROW reference position after setting it", sal_Int32(3), aCellAddress.Row);
 }
 
 }

@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <ostream>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -431,6 +432,19 @@ inline bool BaseReference::operator != ( const BaseReference & rRef ) const
 {
     return (! operator == ( rRef._pInterface ));
 }
+
+#if defined LIBO_INTERNAL_ONLY
+/**
+   Support for BaseReference in std::ostream (and thus in CPPUNIT_ASSERT or
+   SAL_INFO macros, for example).
+
+   @since LibreOffice 5.4
+*/
+template<typename charT, typename traits> std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, BaseReference const & ref)
+{ return stream << ref.get(); }
+#endif
 
 }
 }

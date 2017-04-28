@@ -46,8 +46,9 @@ void DataPilotField::testSortInfo()
     sheet::DataPilotFieldSortInfo aNewSortInfoValue;
     aValue = xPropSet->getPropertyValue(aSortInfo);
     CPPUNIT_ASSERT( aValue >>= aNewSortInfoValue );
-    CPPUNIT_ASSERT_MESSAGE("set value should be the same as got value", aNewSortInfoValue.Field == aSortInfoValue.Field
-            && aNewSortInfoValue.Mode == aSortInfoValue.Mode && aNewSortInfoValue.IsAscending == aSortInfoValue.IsAscending);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as got value", aSortInfoValue.Field, aNewSortInfoValue.Field);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as got value", aSortInfoValue.Mode, aNewSortInfoValue.Mode);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as got value", aSortInfoValue.IsAscending, aNewSortInfoValue.IsAscending);
 
     //setting HasSortInfo only makes sense for false, for true the uno implementation does nothing
     bool bHasSortInfo(false);
@@ -79,8 +80,8 @@ void DataPilotField::testLayoutInfo()
     sheet::DataPilotFieldLayoutInfo aNewLayoutInfoValue;
     aValue = xPropSet->getPropertyValue(aLayoutInfo);
     CPPUNIT_ASSERT( aValue >>= aNewLayoutInfoValue );
-    CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aNewLayoutInfoValue.LayoutMode == aLayoutInfoValue.LayoutMode &&
-            aNewLayoutInfoValue.AddEmptyLines == aLayoutInfoValue.AddEmptyLines);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as the got value", aLayoutInfoValue.LayoutMode, aNewLayoutInfoValue.LayoutMode);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as the got value", aLayoutInfoValue.AddEmptyLines, aNewLayoutInfoValue.AddEmptyLines);
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     bool bHasLayoutInfo(false);
@@ -112,8 +113,8 @@ void DataPilotField::testAutoShowInfo()
     sheet::DataPilotFieldAutoShowInfo aNewAutoShowInfoValue;
     aValue = xPropSet->getPropertyValue(aAutoShowInfo);
     CPPUNIT_ASSERT( aValue >>= aNewAutoShowInfoValue );
-    CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aNewAutoShowInfoValue.DataField == aAutoShowInfoValue.DataField &&
-            aNewAutoShowInfoValue.IsEnabled == aAutoShowInfoValue.IsEnabled);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as the got value", aAutoShowInfoValue.DataField, aNewAutoShowInfoValue.DataField);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as the got value", aAutoShowInfoValue.IsEnabled, aNewAutoShowInfoValue.IsEnabled);
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     bool bHasAutoShowInfo(false);
@@ -145,8 +146,8 @@ void DataPilotField::testReference()
     sheet::DataPilotFieldReference aNewReferenceValue;
     aValue = xPropSet->getPropertyValue(aReference);
     CPPUNIT_ASSERT( aValue >>= aNewReferenceValue );
-    CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aReferenceValue.ReferenceField == aNewReferenceValue.ReferenceField
-            && aReferenceValue.ReferenceItemType == aNewReferenceValue.ReferenceItemType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as the got value", aReferenceValue.ReferenceField, aNewReferenceValue.ReferenceField);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set value should be the same as the got value", aReferenceValue.ReferenceItemType, aNewReferenceValue.ReferenceItemType);
 
     //setting HasReference only makes sense for false, tor true the uno implementation does nothing
     bool bHasReference(false);

@@ -312,15 +312,14 @@ namespace basegfx
                                                      const B2DRange&            rFirst,
                                                      const B2DRange&            rSecond );
 
+    template< typename charT, typename traits >
+    inline std::basic_ostream<charT, traits> & operator <<(
+        std::basic_ostream<charT, traits> & stream, const B2DRange& range )
+    {
+        return stream << range.getWidth() << "x" << range.getHeight() << "@" << range.getMinimum();
+    }
+
 } // end of namespace basegfx
-
-
-template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const basegfx::B2DRange& range )
-{
-    return stream << range.getWidth() << "x" << range.getHeight() << "@" << range.getMinimum();
-}
 
 #endif // INCLUDED_BASEGFX_RANGE_B2DRANGE_HXX
 

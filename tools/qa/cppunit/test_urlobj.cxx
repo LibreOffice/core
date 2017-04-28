@@ -55,9 +55,9 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "file://10.10.1.1/sampledir/sample.file" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
+            CPPUNIT_ASSERT_EQUAL( OUString("file://10.10.1.1/sampledir/sample.file"),
+                            aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::File, aUrl.GetProtocol(  ) );
 #endif
             CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
@@ -81,9 +81,9 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "file://137.65.170.24/c$/Img0001.jpg" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
+            CPPUNIT_ASSERT_EQUAL( OUString("file://137.65.170.24/c$/Img0001.jpg"),
+                            aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::File, aUrl.GetProtocol(  ) );
 #endif
             CPPUNIT_ASSERT_EQUAL(OUString("137.65.170.24"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
@@ -107,9 +107,9 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "file://hive-winxp-x86/pmladek/test2.odt" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
+            CPPUNIT_ASSERT_EQUAL( OUString("file://hive-winxp-x86/pmladek/test2.odt"),
+                            aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::File, aUrl.GetProtocol(  ) );
 #endif
             CPPUNIT_ASSERT_EQUAL(OUString("hive-winxp-x86"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
@@ -126,9 +126,9 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL( INetProtocol::Smb, aUrl.GetProtocol(  ) );
 #endif
 #ifdef _WIN32
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "file://10.10.1.1/sampledir/sample.file" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
+            CPPUNIT_ASSERT_EQUAL( OUString("file://10.10.1.1/sampledir/sample.file"),
+                            aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::File, aUrl.GetProtocol(  ) );
 #endif
             CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
@@ -150,9 +150,9 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "file://137.65.170.24/c$/Img0001.jpg" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
+            CPPUNIT_ASSERT_EQUAL( OUString("file://137.65.170.24/c$/Img0001.jpg"),
+                            aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::File, aUrl.GetProtocol(  ) );
 #endif
             CPPUNIT_ASSERT_EQUAL(OUString("137.65.170.24"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
@@ -175,9 +175,9 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(INetProtocol::Smb, aUrl.GetProtocol());
 #endif
 #ifdef _WIN32
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE )
-                            == "file://hive-winxp-x86/pmladek/test2.odt" );
-            CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
+            CPPUNIT_ASSERT_EQUAL( OUString("file://hive-winxp-x86/pmladek/test2.odt"),
+                            aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            CPPUNIT_ASSERT_EQUAL( INetProtocol::File, aUrl.GetProtocol(  ) );
 #endif
             CPPUNIT_ASSERT_EQUAL(OUString("hive-winxp-x86"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));

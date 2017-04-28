@@ -470,7 +470,11 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Creates a new thread",
-                    nValue >= 1 && isRunning
+                    nValue >= 1
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Creates a new thread",
+                    isRunning
                     );
 
             }
@@ -488,7 +492,11 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Creates a new thread: can not create two threads per instance",
-                    res1 && !res2
+                    res1
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Creates a new thread: can not create two threads per instance",
+                    !res2
                     );
 
             }
@@ -524,9 +532,13 @@ namespace osl_Thread
                 termAndJoinThread(newthread);
                 delete newthread;
 
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Creates a new suspended thread",
+                    sal_Int32(0), nValue
+                    );
                 CPPUNIT_ASSERT_MESSAGE(
                     "Creates a new suspended thread",
-                    nValue == 0 && isRunning
+                    isRunning
                     );
             }
 
@@ -544,7 +556,11 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Creates a new thread: can not create two threads per instance",
-                    res1 && !res2
+                    res1
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Creates a new thread: can not create two threads per instance",
+                    !res2
                     );
             }
 
@@ -604,7 +620,11 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Suspend the thread",
-                    bRes && nValue == nLaterValue
+                    bRes
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Suspend the thread",
+                    nValue, nLaterValue
                     );
 
             }
@@ -656,8 +676,14 @@ namespace osl_Thread
                 /* LLA: this assumption is no longer relevant: nResumeValue ==  nSuspendValue && */
                 CPPUNIT_ASSERT_MESSAGE(
                     "Suspend then resume the thread",
-                    nLaterValue >= 9 &&
-                    nResumeValue > nSuspendValue &&
+                    nLaterValue >= 9
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Suspend then resume the thread",
+                    nResumeValue > nSuspendValue
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Suspend then resume the thread",
                     nLaterValue > nResumeValue
                     );
 
@@ -724,7 +750,11 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Terminate the thread",
-                    !isRunning && nLaterValue >= nValue
+                    !isRunning
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Terminate the thread",
+                    nLaterValue >= nValue
                     );
             }
         /** Check if a suspended thread will terminate after call terminate, different on w32 and on UNX
@@ -865,7 +895,11 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Test isRunning",
-                    bRun && !bTer
+                    bRun
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Test isRunning",
+                    !bTer
                     );
             }
         /** check the value of isRunning when suspending and after resume
@@ -891,7 +925,13 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Test isRunning",
-                    bRes && bRunning_sup && bRunning_res && !bRunning_ter );
+                    bRes && bRunning_sup );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Test isRunning",
+                    bRunning_res );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Test isRunning",
+                    !bRunning_ter );
 
             }
 
@@ -1078,8 +1118,14 @@ namespace osl_Thread
 #ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
-                    nValueHighest     > 0 &&
-                    nValueAboveNormal > 0 &&
+                    nValueHighest     > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
+                    nValueAboveNormal > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
                     nValueNormal > 0
                     );
 #endif
@@ -1157,8 +1203,14 @@ namespace osl_Thread
                     "SetPriority",
                     nValueHighest     > 0 &&
                     nValueAboveNormal > 0 &&
-                    nValueNormal      > 0 &&
-                    nValueBelowNormal > 0 &&
+                    nValueNormal      > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
+                    nValueBelowNormal > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
                     nValueLowest      > 0
                     );
 #endif
@@ -1237,8 +1289,14 @@ namespace osl_Thread
                     "SetPriority",
                     /* nValueHighest     > 0 &&  */
                     nValueAboveNormal > 0 &&
-                    nValueNormal      > 0 &&
-                    nValueBelowNormal > 0 &&
+                    nValueNormal      > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
+                    nValueBelowNormal > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
                     nValueLowest      > 0
                     );
 #endif
@@ -1313,8 +1371,14 @@ namespace osl_Thread
                     "SetPriority",
                     /* nValueHighest     > 0 &&  */
                     /* nValueAboveNormal > 0 &&  */
-                    nValueNormal      > 0 &&
-                    nValueBelowNormal > 0 &&
+                    nValueNormal      > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
+                    nValueBelowNormal > 0
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "SetPriority",
                     nValueLowest      > 0
                     );
 #endif
@@ -1357,9 +1421,9 @@ namespace osl_Thread
 
 // LLA: Priority settings may not work within some OS versions.
 #if defined(_WIN32) || defined(__sun)
-                CPPUNIT_ASSERT_MESSAGE(
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "getPriority",
-                    aPriority == osl_Thread_PriorityHighest
+                    osl_Thread_PriorityHighest, aPriority
                     );
 #else
 // LLA: Linux
@@ -1464,7 +1528,11 @@ namespace osl_Thread
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Wait: Blocks the calling thread for the given number of time.",
-                    nTenthSec >= 5 && nValue == 1
+                    nTenthSec >= 5
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Wait: Blocks the calling thread for the given number of time.",
+                    sal_Int32(1), nValue
                     );
 
             }
@@ -1544,7 +1612,11 @@ namespace osl_Thread
                 //check if thread really terminate after call terminate, if join immediately return
                 CPPUNIT_ASSERT_MESSAGE(
                     "Schedule: Returns False if the thread should terminate.",
-                    nValue_join -  nValue_term <= 1 && nValue_join -  nValue_term >= 0
+                    nValue_join -  nValue_term <= 1
+                    );
+                CPPUNIT_ASSERT_MESSAGE(
+                    "Schedule: Returns False if the thread should terminate.",
+                    nValue_join -  nValue_term >= 0
                     );
 
             }
@@ -1572,9 +1644,9 @@ namespace osl_Thread
 
                 //On windows, suspend works, so the values are same
 #ifdef _WIN32
-                CPPUNIT_ASSERT_MESSAGE(
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "Schedule: don't schedule in thread run method, suspend works.",
-                    nLaterValue == nValue
+                    nValue, nLaterValue
                     );
 #endif
 
@@ -1732,9 +1804,13 @@ namespace osl_ThreadData
                 oslThreadIdentifier aThreadId1 = aThread1.getIdentifier();
                 oslThreadIdentifier aThreadId2 = aThread2.getIdentifier();
 
-                CPPUNIT_ASSERT_MESSAGE(
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "ThreadData setData: ",
-                    aThread1.m_Id == aThreadId1 && aThread2.m_Id == aThreadId2
+                    aThread1.m_Id, aThreadId1
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    aThread2.m_Id, aThreadId2
                     );
 
             }
@@ -1764,9 +1840,17 @@ namespace osl_ThreadData
                 char cData1 = aThread1.m_Char_Test;
                 char cData2 = aThread2.m_Char_Test;
 
-                CPPUNIT_ASSERT_MESSAGE(
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "ThreadData setData: ",
-                    cData1 == 'a' && cData2 == 'b' && aChar == 'm'
+                    'a', cData1
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    'b', cData2
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    'm', aChar
                     );
 
             }
@@ -1803,9 +1887,17 @@ namespace osl_ThreadData
                 char cData1 = aThread1.m_Char_Test;
                 char cData2 = aThread2.m_Char_Test;
 
-                CPPUNIT_ASSERT_MESSAGE(
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "ThreadData setData: ",
-                    cData1 == 'a' && cData2 == 'b' && aChar == 'o'
+                    'a', cData1
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    'b', cData2
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    'o', aChar
                     );
             }
 
@@ -1841,9 +1933,17 @@ namespace osl_ThreadData
                 char* pChar = static_cast<char*>(myThreadData.getData());
                 char aChar = *pChar;
 
-                CPPUNIT_ASSERT_MESSAGE(
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "ThreadData setData: ",
-                    cData1 == 'c' && cData2 == 'd' && aChar == 'i'
+                    'c', cData1
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    'd', cData2
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    'i', aChar
                     );
             }
 
@@ -1879,7 +1979,11 @@ namespace osl_ThreadData
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "ThreadData setData: ",
-                    cData1 == 'a' && cData2 == 'b' && aChar == 'j'
+                    cData1 == 'a' && cData2 == 'b'
+                    );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "ThreadData setData: ",
+                    'j', aChar
                     );
 
             }

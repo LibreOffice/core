@@ -354,7 +354,9 @@ namespace osl_Mutex
             bool bRes2 = myThread.isRunning( );
             myThread.join( );
 
-            CPPUNIT_ASSERT_MESSAGE( "Mutex acquire", bRes && bRes1 && !bRes2 );
+            CPPUNIT_ASSERT_MESSAGE( "Mutex acquire", bRes );
+            CPPUNIT_ASSERT_MESSAGE( "Mutex acquire", bRes1 );
+            CPPUNIT_ASSERT_MESSAGE( "Mutex acquire", !bRes2 );
         }
 
         //in the same thread, acquire twice should success
@@ -369,7 +371,9 @@ namespace osl_Mutex
 
             aMutex.release();
 
-            CPPUNIT_ASSERT_MESSAGE("Mutex acquire", bRes && bRes1 && bRes2);
+            CPPUNIT_ASSERT_MESSAGE("Mutex acquire", bRes);
+            CPPUNIT_ASSERT_MESSAGE("Mutex acquire", bRes1);
+            CPPUNIT_ASSERT_MESSAGE("Mutex acquire", bRes2);
 
         }
 
@@ -408,7 +412,8 @@ namespace osl_Mutex
             if (bRes2)
                 aMutex.release();
 
-        CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex", !bRes1 && bRes2);
+        CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex", !bRes1);
+        CPPUNIT_ASSERT_MESSAGE("Try to acquire Mutex", bRes2);
         }
 
         CPPUNIT_TEST_SUITE(tryToAcquire);
@@ -444,7 +449,11 @@ namespace osl_Mutex
                 aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE( "release Mutex: try to acquire before and after the mutex has been released",
-                !bRes1 && bRes2 && bRunning );
+                !bRes1 );
+            CPPUNIT_ASSERT_MESSAGE( "release Mutex: try to acquire before and after the mutex has been released",
+                bRes2 );
+            CPPUNIT_ASSERT_MESSAGE( "release Mutex: try to acquire before and after the mutex has been released",
+                bRunning );
 
         }
 
@@ -482,7 +491,8 @@ namespace osl_Mutex
             // after release mutex, myThread stops blocking and will terminate immediately
             bool bRes2 = myThread.isRunning();
 
-            CPPUNIT_ASSERT_MESSAGE("Global Mutex works", bRes1 && !bRes2);
+            CPPUNIT_ASSERT_MESSAGE("Global Mutex works", bRes1);
+            CPPUNIT_ASSERT_MESSAGE("Global Mutex works", !bRes2);
         }
 
         void getGlobalMutex_002( )
@@ -559,7 +569,11 @@ namespace osl_Guard
             bool bRes2 = aMutex.tryToAcquire();
 
             CPPUNIT_ASSERT_MESSAGE("GuardThread constructor",
-                !bRes && bRes1 && bRes2);
+                !bRes);
+            CPPUNIT_ASSERT_MESSAGE("GuardThread constructor",
+                bRes1);
+            CPPUNIT_ASSERT_MESSAGE("GuardThread constructor",
+                bRes2);
         }
 
         void ctor_002( )
@@ -694,7 +708,9 @@ namespace osl_ClearableGuard
             myThread.join();
 
             CPPUNIT_ASSERT_MESSAGE("ClearableGuard method: clear",
-                nSec < 7 && nSec > 1);
+                nSec < 7);
+            CPPUNIT_ASSERT_MESSAGE("ClearableGuard method: clear",
+                nSec > 1);
         }
 
         void clear_002( )
@@ -718,7 +734,9 @@ namespace osl_ClearableGuard
             bool bRes1 = myThread.isRunning( );
 
             CPPUNIT_ASSERT_MESSAGE( "ClearableGuard method: clear, control the HoldThread's running status!",
-                bRes && !bRes1 );
+                bRes );
+            CPPUNIT_ASSERT_MESSAGE( "ClearableGuard method: clear, control the HoldThread's running status!",
+                !bRes1 );
         }
 
         CPPUNIT_TEST_SUITE( clear );
@@ -819,7 +837,9 @@ namespace osl_ResettableGuard
             myThread.join( );
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset",
-                bRes && bRes1 );
+                bRes );
+            CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset",
+                bRes1 );
         }
 
 #ifdef LINUX
@@ -837,7 +857,9 @@ namespace osl_ResettableGuard
             bool bRes1 = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without acquire, so it can not passed on (SOLARIS), but not the reason for reset_002",
-                !bRes && bRes1 );
+                !bRes );
+            CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without acquire, so it can not passed on (SOLARIS), but not the reason for reset_002",
+                bRes1 );
         }
 #endif
 

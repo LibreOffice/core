@@ -128,10 +128,10 @@ public:
         {
             sal_uLong oldCount = bparr.Count();
             bparr.Insert(new BigPtrEntryMock(i), 0);
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_insert_entries_at_front failed",
-                (bparr.Count() == oldCount + 1)
+                oldCount + 1, bparr.Count()
             );
         }
 
@@ -198,10 +198,10 @@ public:
         for (sal_uLong i = 0, j = 30; i < 5; i++, j++)
             bparr.Insert(new BigPtrEntryMock(j), i);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "test_insert_at_already_used_index failed",
-            (oldCount + 5 == bparr.Count())
+            oldCount + 5, bparr.Count()
         );
 
         // now, first 5 elements have counts: 30,31,..34
@@ -269,10 +269,10 @@ public:
             delete bparr[0]; // release content
             bparr.Remove(0); // remove item from container
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_remove_at_front failed (wrong count)",
-                (oldCount - 1 == bparr.Count())
+                oldCount - 1, bparr.Count()
             );
 
             for (sal_uLong j = 0, k = i + 1; j < bparr.Count(); j++, k++)
@@ -351,10 +351,10 @@ public:
             delete bparr[bparr.Count() / 2];
             bparr.Remove(bparr.Count() / 2);
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_remove_in_the_middle failed (wrong count)",
-                (oldCount - 1 == bparr.Count())
+                oldCount - 1, bparr.Count()
             );
 
             for (sal_uLong i = 0; i < bparr.Count(); i++)
@@ -395,10 +395,10 @@ public:
 
             bparr.Remove(0, nRemove);
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_remove_multiple_elements_at_once failed",
-                (oldCount - nRemove == bparr.Count())
+                oldCount - nRemove, bparr.Count()
             );
 
             CPPUNIT_ASSERT_MESSAGE

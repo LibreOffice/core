@@ -49,8 +49,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters",
-                aStrBuf.isEmpty() &&
-                *pStr == '\0' && aStrBuf.getCapacity() == 16
+                aStrBuf.isEmpty()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer containing no characters",
+                '\0', *pStr
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer containing no characters",
+                sal_Int32(16), aStrBuf.getCapacity()
             );
         }
 
@@ -66,11 +75,19 @@ namespace rtl_OStringBuffer
             rtl::OString sStr(aStrBuftmp.getStr());
             bool res = aStrtmp.equals( sStr );
 
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer from another OStringBuffer",
+                nLenStrBuftmp, aStrBuf.getLength()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer from another OStringBuffer",
+                aStrBuftmp.getCapacity(), aStrBuf.getCapacity()
+            );
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer from another OStringBuffer",
-                aStrBuf.getLength() == nLenStrBuftmp &&
-                aStrBuf.getCapacity() == aStrBuftmp.getCapacity() &&
                 res
             );
 
@@ -87,12 +104,32 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters and contain assigned capacity",
-                aStrBuf1.isEmpty() &&
-                *pStr1 == '\0' &&
-                aStrBuf1.getCapacity() == kTestStr2Len &&
-                aStrBuf2.isEmpty() &&
-                *pStr2 == '\0' &&
-                aStrBuf2.getCapacity() == 0
+                aStrBuf1.isEmpty()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                '\0', *pStr1
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                kTestStr2Len, aStrBuf1.getCapacity()
+            );
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                aStrBuf2.isEmpty()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                '\0', *pStr2
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                sal_Int32(0), aStrBuf2.getCapacity()
             );
 
         }
@@ -108,9 +145,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters and contain assigned capacity",
-                aStrBuf3.isEmpty() &&
-                *pStr == '\0' &&
-                aStrBuf3.getCapacity() == kNonSInt32Max
+                aStrBuf3.isEmpty()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                '\0', *pStr
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                kNonSInt32Max, aStrBuf3.getCapacity()
             );
         }
 
@@ -120,12 +165,20 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer aStrBuf( aStrtmp );
             sal_Int32 leg = aStrBuf.getLength();
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "New OStringBuffer from OString",
-                aStrBuf.getStr() == aStrtmp &&
-                leg == aStrtmp.pData->length &&
-                aStrBuf.getCapacity() == leg+16
+                aStrtmp, OString(aStrBuf.getStr())
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer from OString",
+                aStrtmp.pData->length, leg
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer from OString",
+                leg+16, aStrBuf.getCapacity()
 
             );
         }
@@ -145,11 +198,15 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer aStrBuf(kTestStr1);
             sal_Int32 leg = aStrBuf.getLength();
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "New OStringBuffer from const char*",
-                leg == rtl_str_getLength(kTestStr1) &&
-                aStrBuf.getCapacity() == leg+16
+                rtl_str_getLength(kTestStr1), leg
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "New OStringBuffer from const char*",
+                leg+16, aStrBuf.getCapacity()
             );
         }
 
@@ -196,8 +253,17 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "two empty strings(def. constructor)",
-                lastRes && ( aStrBuf1.getCapacity() == 0 ) &&
-                        ( *(aStrBuf1.getStr()) == '\0' )
+                lastRes
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "two empty strings(def. constructor)",
+                sal_Int32(0), aStrBuf1.getCapacity()
+            );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
+            (
+                "two empty strings(def. constructor)",
+                '\0', *(aStrBuf1.getStr())
             );
 
         }

@@ -205,7 +205,9 @@ namespace osl_Pipe
                 bRes1 = aAcquirePipe1.is( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle.only validation test, do not know how to test no acquire.",
-                                        bRes && !bRes1 );
+                                        bRes );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle.only validation test, do not know how to test no acquire.",
+                                        !bRes1 );
             }
 
         CPPUNIT_TEST_SUITE( ctors );
@@ -287,7 +289,9 @@ namespace osl_Pipe
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation.",
-                                        bRes && !bRes1);
+                                        bRes);
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation.",
+                                        !bRes1);
             }
 
         void create_named_security_002( )
@@ -299,7 +303,9 @@ namespace osl_Pipe
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation and open.",
-                                        bRes && bRes1);
+                                        bRes);
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation and open.",
+                                        bRes1);
             }
 
         void create_named_001( )
@@ -310,7 +316,9 @@ namespace osl_Pipe
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation.",
-                                        bRes && !bRes1);
+                                        bRes);
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation.",
+                                        !bRes1);
             }
 
         void create_named_002( )
@@ -321,7 +329,9 @@ namespace osl_Pipe
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation and open.",
-                                        bRes && bRes1);
+                                        bRes);
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation and open.",
+                                        bRes1);
             }
 
         void create_named_003( )
@@ -387,7 +397,9 @@ namespace osl_Pipe
                 aPipe1.close( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test assign with reference.",
-                                        bRes && bRes1 );
+                                        bRes );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test assign with reference.",
+                                        bRes1 );
             }
 
         void assign_handle( )
@@ -401,7 +413,9 @@ namespace osl_Pipe
                 aPipe1.close( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test assign with handle.",
-                                        bRes && bRes1 );
+                                        bRes );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test assign with handle.",
+                                        bRes1 );
             }
 
         CPPUNIT_TEST_SUITE( assign );
@@ -449,7 +463,9 @@ namespace osl_Pipe
                 aPipe2.close( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test isEqual(),create one copy instance, and compare.",
-                                        bRes && !bRes1 );
+                                        bRes );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test isEqual(),create one copy instance, and compare.",
+                                        !bRes1 );
             }
 
         CPPUNIT_TEST_SUITE( isEqual );
@@ -476,7 +492,9 @@ namespace osl_Pipe
                 bRes1 = aPipe.is( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: difference between close and clear.",
-                                        bRes && !bRes1);
+                                        bRes);
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: difference between close and clear.",
+                                        !bRes1);
             }
 
         void close_002( )
@@ -617,7 +635,9 @@ namespace osl_StreamPipe
                 aStreamPipe1.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no parameter, before and after assign.",
-                                        !bRes && bRes1 );
+                                        !bRes );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no parameter, before and after assign.",
+                                        bRes1 );
             }
 
         void ctors_handle( )
@@ -846,7 +866,8 @@ namespace osl_StreamPipe
 
                 int nCompare1 = strcmp( myDataSinkThread.buf, m_pTestString1.getStr() );
                 int nCompare2 = strcmp( myDataSourceThread.buf, m_pTestString2.getStr() );
-                CPPUNIT_ASSERT_MESSAGE( "test send/recv/write/read.", nCompare1 == 0 && nCompare2 == 0 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "test send/recv/write/read.", 0, nCompare1 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "test send/recv/write/read.", 0, nCompare2 );
             }
         //close pipe when accept
         void recv_002()

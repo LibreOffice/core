@@ -133,7 +133,8 @@ namespace osl_Security
             aMessage.append(", bRes: ");
             aMessage.append(bRes);
 
-            CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), strUserID.equals(strID) && bRes );
+            CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), strUserID.equals(strID) );
+            CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), bRes );
         }
 
         CPPUNIT_TEST_SUITE( getUserIdent );
@@ -165,7 +166,9 @@ namespace osl_Security
                 nPos = strGetName.indexOf(strName);
             }
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: get UserName and compare it with names got at the beginning of the test.",
-                                    ( nPos >= 0 ) && bRes );
+                                    ( nPos >= 0 ) );
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: get UserName and compare it with names got at the beginning of the test.",
+                                    bRes );
         }
 
         CPPUNIT_TEST_SUITE( getUserName );
@@ -377,15 +380,15 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         lRet = RegQueryValueEx(hRegKey, "AppData", nullptr, &Type, reinterpret_cast<unsigned char *>(PathA), &lSize);
         if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _access( PathA, 0 ) == 0 ) )
         {
-            CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                                    ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strConfigDirectory ) );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
+                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strConfigDirectory ) );
         }
 
         lRet = RegQueryValueEx(hRegKey, "Personal", nullptr, &Type, reinterpret_cast<unsigned char *>(PathA), &lSize);
         if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _access( PathA, 0 ) == 0 ) )
         {
-            CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                                    ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strHomeDirectory ) );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
+                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strHomeDirectory ) );
         }
 
         RegCloseKey(hRegKey);

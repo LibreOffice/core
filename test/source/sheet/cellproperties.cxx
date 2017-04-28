@@ -35,7 +35,7 @@ void CellProperties::testVertJustify()
     uno::Any aVertJustifyControllValue = xCellRangeBase->getPropertyValue(aVertJustify);
     CPPUNIT_ASSERT(aVertJustifyControllValue >>= aValue);
     std::cout << "New VertJustify value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("value has not been changed", sal_Int32(3), aValue);
 }
 
 void CellProperties::testRotateReference()
@@ -53,7 +53,7 @@ void CellProperties::testRotateReference()
     uno::Any aRotateReferenceControllValue = xCellRangeBase->getPropertyValue(aRotateReference);
     CPPUNIT_ASSERT(aRotateReferenceControllValue >>= aValue);
     std::cout << "New RotateReference value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("value has not been changed", aValue == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("value has not been changed", sal_Int32(3), aValue);
 }
 
 }

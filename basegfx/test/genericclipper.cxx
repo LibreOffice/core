@@ -97,8 +97,8 @@ public:
 
         OUString aValid=OUString::createFromAscii(pValidSvgD);
 
-        CPPUNIT_ASSERT_MESSAGE(pName,
-                               basegfx::tools::exportToSvgD(aRes, true, true, false) == aValid);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pName,
+                               aValid, basegfx::tools::exportToSvgD(aRes, true, true, false));
     }
 
     void validateOr()
@@ -136,10 +136,11 @@ public:
         tools::importFromSvgD(aInputPoly, aInput, false, nullptr);
         tools::importFromSvgD(aValidPoly, aValid, false, nullptr);
 
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             pName,
+            aValid,
             basegfx::tools::exportToSvgD(
-                tools::solveCrossovers(aInputPoly), true, true, false) == aValid);
+                tools::solveCrossovers(aInputPoly), true, true, false));
     }
 
     void checkCrossoverSolver()

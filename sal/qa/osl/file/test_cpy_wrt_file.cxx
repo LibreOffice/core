@@ -52,7 +52,9 @@ public:
         sal_uInt64 written = 0;
         err = tmp_file.write(static_cast<void*>(buffer), sizeof(buffer), written);
         CPPUNIT_ASSERT_MESSAGE("write on unconnected file should fail",
-            err != osl::FileBase::E_None && written == 0);
+            err != osl::FileBase::E_None);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("write on unconnected file should fail",
+            sal_uInt64(0), written);
 
         err = tmp_file.sync();
         CPPUNIT_ASSERT_MESSAGE("sync on unconnected file should fail", err != FileBase::E_None);

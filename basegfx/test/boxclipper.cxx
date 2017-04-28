@@ -228,9 +228,9 @@ public:
                                tools::importFromSvgD(
                                    aTmp2, aSvg, false, nullptr));
 
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             sName,
-            normalizePoly(aTmp2) == normalizePoly(aTmp1));
+            normalizePoly(aTmp1), normalizePoly(aTmp2));
     }
 
     void verifyPoly()
@@ -368,8 +368,8 @@ public:
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
-        CPPUNIT_ASSERT_MESSAGE(pName,
-                               genericClipSvg == boxClipSvg);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pName,
+                               boxClipSvg, genericClipSvg);
     }
 
     void validatePoly()

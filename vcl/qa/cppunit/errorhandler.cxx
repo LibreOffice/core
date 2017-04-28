@@ -51,12 +51,12 @@ void ErrorHandlerTest::testGetErrorString()
                            !ErrorHandler::GetErrorString(ERRCODE_ABORT, aErrStr));
     // normally protected, but MockErrorHandler is a friend of this class
     aErrHdlr.CreateString(ErrorInfo::GetErrorInfo(ERRCODE_ABORT), aErrStr);
-    CPPUNIT_ASSERT_MESSAGE("error message should be non-dynamic", aErrStr == "Non-dynamic error");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("error message should be non-dynamic", OUString("Non-dynamic error"), aErrStr);
 
     CPPUNIT_ASSERT_MESSAGE("GetErrorString(ERRCODE_NONE, aErrStr) should return false",
                            !ErrorHandler::GetErrorString(ERRCODE_NONE, aErrStr));
     aErrHdlr.CreateString(ErrorInfo::GetErrorInfo(ERRCODE_NONE), aErrStr);
-    CPPUNIT_ASSERT_MESSAGE("error message should be non-dynamic", aErrStr == "Non-dynamic error");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("error message should be non-dynamic", OUString("Non-dynamic error"), aErrStr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ErrorHandlerTest);

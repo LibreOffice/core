@@ -5415,7 +5415,7 @@ void Test::testNoteLifeCycle()
     ScPostIt* pUndoNoteB4 = m_pDoc->GetNote(aPosB4);
     CPPUNIT_ASSERT_MESSAGE("No cell comment at B4 after Undo.", pUndoNoteB4);
     const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetCaption();
-    CPPUNIT_ASSERT_MESSAGE("Captions not identical after Merge Undo.", pCaptionB4 == pUndoCaptionB4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Captions not identical after Merge Undo.", pCaptionB4, pUndoCaptionB4);
 
 
     // In a second document copy a note from B5 to clipboard, close the

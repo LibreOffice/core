@@ -131,23 +131,23 @@ namespace basegfx
     // typedef for a vector of B2DPolyPolygons
     typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
 
-} // end of namespace basegfx
-
-template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const basegfx::B2DPolyPolygon& poly )
-{
-    stream << "[" << poly.count() << ":";
-    for (sal_uInt32 i = 0; i < poly.count(); i++)
+    template< typename charT, typename traits >
+    inline std::basic_ostream<charT, traits> & operator <<(
+        std::basic_ostream<charT, traits> & stream, const B2DPolyPolygon& poly )
     {
-        if (i > 0)
-            stream << ",";
-        stream << poly.getB2DPolygon(i);
-    }
-    stream << "]";
+        stream << "[" << poly.count() << ":";
+        for (sal_uInt32 i = 0; i < poly.count(); i++)
+        {
+            if (i > 0)
+                stream << ",";
+            stream << poly.getB2DPolygon(i);
+        }
+        stream << "]";
 
-    return stream;
-}
+        return stream;
+    }
+
+} // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGON_HXX
 

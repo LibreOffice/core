@@ -55,22 +55,28 @@ public:
         std::ptrdiff_t nIndex;
 
         std::tie(nIndex,fAlpha) = maKeyStops.lerp(-1.0);
-        CPPUNIT_ASSERT_MESSAGE("-1.0", nIndex==0 && fAlpha==0.0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("-1.0", std::ptrdiff_t(0), nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("-1.0", 0.0, fAlpha);
 
         std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.1);
-        CPPUNIT_ASSERT_MESSAGE("0.1", nIndex==0 && fAlpha==0.0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.1", std::ptrdiff_t(0), nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.1", 0.0, fAlpha);
 
         std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.3);
-        CPPUNIT_ASSERT_MESSAGE("0.3", nIndex==0 && fTools::equal(fAlpha,0.5));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.3", std::ptrdiff_t(0), nIndex);
+        CPPUNIT_ASSERT_MESSAGE("0.3", fTools::equal(fAlpha,0.5));
 
         std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.5);
-        CPPUNIT_ASSERT_MESSAGE("0.5", nIndex==0 && fTools::equal(fAlpha,1.0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.5", std::ptrdiff_t(0), nIndex);
+        CPPUNIT_ASSERT_MESSAGE("0.5", fTools::equal(fAlpha,1.0));
 
         std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.51);
-        CPPUNIT_ASSERT_MESSAGE("0.51", nIndex==1 && fTools::equal(fAlpha,0.025));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.51", std::ptrdiff_t(1), nIndex);
+        CPPUNIT_ASSERT_MESSAGE("0.51", fTools::equal(fAlpha,0.025));
 
         std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.9);
-        CPPUNIT_ASSERT_MESSAGE("0.51", nIndex==1 && fTools::equal(fAlpha,1.0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.51", std::ptrdiff_t(1), nIndex);
+        CPPUNIT_ASSERT_MESSAGE("0.51", fTools::equal(fAlpha,1.0));
 
         std::tie(nIndex,fAlpha) = maKeyStops.lerp(1.0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("0.51", std::ptrdiff_t(1), nIndex);

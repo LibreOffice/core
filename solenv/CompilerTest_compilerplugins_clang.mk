@@ -10,6 +10,7 @@
 $(eval $(call gb_CompilerTest_CompilerTest,compilerplugins_clang))
 
 $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
+    compilerplugins/clang/test/cppunitassertequals \
     compilerplugins/clang/test/datamembershadow \
     compilerplugins/clang/test/externvar \
     compilerplugins/clang/test/finalprotected \
@@ -25,6 +26,10 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/unnecessaryoverride-dtor \
     compilerplugins/clang/test/unoany \
     compilerplugins/clang/test/vclwidgets \
+))
+
+$(eval $(call gb_CompilerTest_use_externals,compilerplugins_clang, \
+    cppunit \
 ))
 
 $(eval $(call gb_CompilerTest_use_udk_api,compilerplugins_clang))
