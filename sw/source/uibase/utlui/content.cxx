@@ -2768,7 +2768,7 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
                     SdrView* pDrawView = m_pActiveShell->GetDrawView();
                     if (pDrawView)
                     {
-                        pDrawView->SdrEndTextEdit();//Change from "EndTextEdit" to "SdrEndTextEdit" for acc migration
+                        pDrawView->SdrEndTextEdit();
 
                         SwDrawModel* pDrawModel = m_pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                         SdrPage* pPage = pDrawModel->GetPage(0);
