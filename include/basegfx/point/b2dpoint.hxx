@@ -123,14 +123,15 @@ namespace basegfx
         matrix are used.
     */
     BASEGFX_DLLPUBLIC B2DPoint operator*( const B2DHomMatrix& rMat, const B2DPoint& rPoint );
-} // end of namespace basegfx
 
-template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const basegfx::B2DPoint& point )
-{
-    return stream << "(" << point.getX() << "," << point.getY() << ")";
-}
+    template< typename charT, typename traits >
+    inline std::basic_ostream<charT, traits> & operator <<(
+        std::basic_ostream<charT, traits> & stream, const B2DPoint& point )
+    {
+        return stream << "(" << point.getX() << "," << point.getY() << ")";
+    }
+
+} // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_POINT_B2DPOINT_HXX
 

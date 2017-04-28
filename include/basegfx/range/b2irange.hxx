@@ -238,18 +238,18 @@ namespace basegfx
                                                      const B2IRange&            rFirst,
                                                      const B2IRange&            rSecond );
 
-} // end of namespace basegfx
+    template< typename charT, typename traits >
+    inline std::basic_ostream<charT, traits> & operator <<(
+        std::basic_ostream<charT, traits> & stream, const B2IRange& range )
+    {
+        if (range.isEmpty())
+            return stream << "EMPTY";
+        else
+            return stream << range.getWidth() << 'x' << range.getHeight()
+                          << "@(" << range.getMinX() << "," << range.getMinY() << ")";
+    }
 
-template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const basegfx::B2IRange& range )
-{
-    if (range.isEmpty())
-        return stream << "EMPTY";
-    else
-        return stream << range.getWidth() << 'x' << range.getHeight()
-                      << "@(" << range.getMinX() << "," << range.getMinY() << ")";
-}
+} // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_RANGE_B2IRANGE_HXX
 
