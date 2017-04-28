@@ -18,14 +18,6 @@ $(eval $(call gb_StaticLibrary_add_defs,boost_locale,\
 	-DBOOST_ALL_NO_LIB -DBOOST_LOCALE_NO_WINAPI_BACKEND -DBOOST_LOCALE_NO_POSIX_BACKEND \
 ))
 
-ifneq ($(OS),WNT)
-
-$(eval $(call gb_StaticLibrary_add_defs,boost_locale,\
-	-DBOOST_LOCALE_WITH_ICONV \
-))
-
-endif
-
 $(eval $(call gb_StaticLibrary_use_external,boost_locale,boost_headers))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boost_locale,cpp))

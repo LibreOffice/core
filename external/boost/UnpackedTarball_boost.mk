@@ -24,6 +24,8 @@ boost_patches += boost.type_index.Wundef.warnings.patch
 
 boost_patches += boost.auto_link.patch
 
+boost_patches += boost.noiconv.patch
+
 boost_patches += ubsan.patch.0
 boost_patches += rtti.patch.0
 
