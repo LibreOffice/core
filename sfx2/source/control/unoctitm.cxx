@@ -609,7 +609,7 @@ void collectUIInformation(const util::URL& rURL, const uno::Sequence<beans::Prop
     if (!pFile)
         return;
 
-    UITestLogger::getInstance().logCommand(rURL.Protocol + rURL.Path);
+    UITestLogger::getInstance().logCommand(rURL.Complete);
 }
 
 }
