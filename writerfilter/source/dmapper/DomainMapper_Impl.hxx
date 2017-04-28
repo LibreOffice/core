@@ -463,6 +463,8 @@ private:
     std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
     SmartTagHandler m_aSmartTagHandler;
 
+    css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
+
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
 private:
@@ -555,6 +557,14 @@ public:
     void appendOLE( const OUString& rStreamName, const OLEHandlerPtr& pOleHandler );
     void appendStarMath( const Value& v );
     css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange>& xBefore);
+
+    /// AutoText import: each entry is placed in the separate section
+    css::uno::Reference<css::beans::XPropertySet> appendGlossaryEntry();
+    /// Remember where entry was started
+    void setGlossaryEntryStart( css::uno::Reference<css::text::XTextRange>& xStart )
+    {
+        m_xGlossaryEntryStart = xStart;
+    }
 
     // push the new properties onto the stack and make it the 'current' property map
     void    PushProperties(ContextType eId);
