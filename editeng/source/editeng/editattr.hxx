@@ -51,7 +51,7 @@ class SvxCaseMapItem;
 class SfxGrabBagItem;
 
 #define CH_FEATURE_OLD  (sal_uInt8)         0xFF
-#define CH_FEATURE      (sal_Unicode)   0x01
+#define CH_FEATURE      u'\x0001'
 
 // DEF_METRIC: For my pool, the DefMetric should always appear when
 // GetMetric (nWhich)!

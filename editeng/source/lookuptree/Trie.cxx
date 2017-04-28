@@ -71,7 +71,7 @@ void TrieNode::addNewChild(TrieNode* pChild)
     if (pChild->mCharacter >= 'a' &&
         pChild->mCharacter <= 'z')
     {
-        mLatinArray[pChild->mCharacter - sal_Unicode('a')] = pChild;
+        mLatinArray[pChild->mCharacter - u'a'] = pChild;
     }
     else
     {
@@ -84,7 +84,7 @@ TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
     if (aInputCharacter >= 'a' &&
         aInputCharacter <= 'z')
     {
-        return mLatinArray[aInputCharacter - sal_Unicode('a')];
+        return mLatinArray[aInputCharacter - u'a'];
     }
 
     vector<TrieNode*>::iterator iNode;
