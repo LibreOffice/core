@@ -107,33 +107,33 @@ void VclFontMetricTest::testEqualityOperator()
 
     aLhs.SetFullstopCenteredFlag(true);
     aRhs.SetFullstopCenteredFlag(true);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fullstop centered flag set same, aLhs == aRhs failed", aRhs, aLhs );
-    CPPUNIT_ASSERT_MESSAGE( "Fullstop centered flag set same, aLhs != aRhs succeeded", !(aLhs != aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "Fullstop centered flag set same, aLhs == aRhs failed", aLhs.operator ==(aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "Fullstop centered flag set same, aLhs != aRhs succeeded", !aLhs.operator !=(aRhs) );
 
     aLhs.SetExternalLeading(10);
     aRhs.SetExternalLeading(10);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "External leading set same, aLHS == aRhs failed", aRhs, aLhs );
-    CPPUNIT_ASSERT_MESSAGE( "External leading set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "External leading set same, aLHS == aRhs failed", aLhs.operator ==(aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "External leading set same, aLHS != aRhs succeeded", !aLhs.operator !=(aRhs) );
 
     aLhs.SetInternalLeading(10);
     aRhs.SetInternalLeading(10);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Internal leading set same, aLHS == aRhs failed", aRhs, aLhs );
-    CPPUNIT_ASSERT_MESSAGE( "Internal leading set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "Internal leading set same, aLHS == aRhs failed", aLhs.operator ==(aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "Internal leading set same, aLHS != aRhs succeeded", !aLhs.operator !=(aRhs) );
 
     aLhs.SetAscent( 100 );
     aRhs.SetAscent( 100 );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Ascent set same, aLHS == aRhs failed", aRhs, aLhs );
-    CPPUNIT_ASSERT_MESSAGE( "Ascent set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "Ascent set same, aLHS == aRhs failed", aLhs.operator ==(aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "Ascent set same, aLHS != aRhs succeeded", !aLhs.operator !=(aRhs) );
 
     aLhs.SetDescent( 100 );
     aRhs.SetDescent( 100 );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Descent set same, aLHS == aRhs failed", aRhs, aLhs);
-    CPPUNIT_ASSERT_MESSAGE( "Descent set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "Descent set same, aLHS == aRhs failed", aLhs.operator ==(aRhs));
+    CPPUNIT_ASSERT_MESSAGE( "Descent set same, aLHS != aRhs succeeded", !aLhs.operator !=(aRhs) );
 
     aLhs.SetSlant( 100 );
     aRhs.SetSlant( 100 );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Slant set same, aLHS == aRhs failed", aRhs, aLhs);
-    CPPUNIT_ASSERT_MESSAGE( "Slant set same, aLHS != aRhs succeeded", !(aLhs != aRhs) );
+    CPPUNIT_ASSERT_MESSAGE( "Slant set same, aLHS == aRhs failed", aLhs.operator ==(aRhs));
+    CPPUNIT_ASSERT_MESSAGE( "Slant set same, aLHS != aRhs succeeded", !aLhs.operator !=(aRhs) );
 }
 
 
