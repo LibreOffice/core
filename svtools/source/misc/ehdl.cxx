@@ -30,7 +30,7 @@
 #include <svtools/svtools.hrc>
 #include <svtools/sfxecode.hxx>
 #include <memory>
-
+#include "strings.hxx"
 
 static DialogMask aWndFunc(
     vcl::Window *pWin,            // Parent of the dialog
@@ -84,7 +84,7 @@ static DialogMask aWndFunc(
       default: break;
     }
 
-    OUString aErr(SvtResId(STR_ERR_HDLMESS).toString());
+    OUString aErr(STR_ERR_HDLMESS);
     OUString aAction(rAction);
     if ( !aAction.isEmpty() )
         aAction += ":\n";
@@ -227,7 +227,7 @@ bool SfxErrorHandler::GetErrorString(sal_uLong lErrId, OUString &rStr) const
     SolarMutexGuard aGuard;
 
     bool bRet = false;
-    rStr = SvtResId(RID_ERRHDL_CLASS).toString();
+    rStr = RID_ERRHDL_CLASS;
 
     ResStringArray aEr(ResId(nId, *pMgr));
     sal_uInt32 nErrIdx = aEr.FindIndex((sal_uInt16)lErrId);

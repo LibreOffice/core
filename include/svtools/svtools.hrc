@@ -124,8 +124,6 @@
 #define STR_SVT_FONTMAP_END                 (STR_SVT_FONTMAP_NOTAVAILABLE)
 
 #define STR_SVT_ERRORCONTEXT_START          (STR_SVT_FONTMAP_END+1)
-#define STR_ERR_HDLMESS                     (STR_SVT_ERRORCONTEXT_START+0)
-#define RID_ERRHDL_CLASS                    (STR_SVT_ERRORCONTEXT_START+1)
 #define RID_ERRCTX                          (STR_SVT_ERRORCONTEXT_START+2)
 #define RID_ERRHDL                          (STR_SVT_ERRORCONTEXT_START+3)
 #define STR_SVT_ERRORCONTEXT_END            (RID_ERRHDL)
