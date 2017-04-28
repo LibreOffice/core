@@ -16,6 +16,24 @@
       "revId": "ad1024668d3303c1630d8027b33414b36b87d354",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_300e1035",
+        "filename": "tools/source/inet/inetmime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-04-28T20:20:12Z",
+      "side": 1,
+      "message": "Yes, it\u0027s a bit obfuscated.\n\nParameterList::find returns the address of a m_pNext field of a Parameter \u0027p \u003d \u0026(*p)-\u003em_pNext\u0027. This m_pNext points to a Parameter which meets some \u003c conditions and nullptr (list end) if none meets the conditions.\n\n\u003e *pPos \u003d new Parameter(*pPos, ...\n\ncreates a Parameter with a m_pNext value from the found address and sets the m_pNext field of the found address to the new Parameter.\n\nThis behaviour can be described as: insert next Parameter before the first Parameter in the list that meets \u003c condition. So the list is always sorted.",
+      "parentUuid": "5a3905b3_952fb6a0",
+      "revId": "ad1024668d3303c1630d8027b33414b36b87d354",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
