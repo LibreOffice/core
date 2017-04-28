@@ -61,7 +61,7 @@ $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) 
 # translations are optional - use "wildcard" to avoid spurious re-builds
 # when they don't exist
 define gb_SrsPartMergeTarget_SrsPartMergeTarget
-$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(if $(2),$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))))
+$(call gb_SrsPartMergeTarget__SrsPartMergeTarget_impl,$(1),$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)))
 endef
 
 define gb_SrsPartMergeTarget__SrsPartMergeTarget_impl
@@ -112,7 +112,7 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_SrsPartMergeTarget,$(1),$(2))
+$(call gb_SrsPartMergeTarget_SrsPartMergeTarget,$(1))
 endif
 
 endef
@@ -196,7 +196,7 @@ define gb_SrsTarget__add_file
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,$(1)) : $(call gb_SrsPartTarget_get_dep_target,$(2))
 endif
-$(call gb_SrsPartTarget_SrsPartTarget,$(2),$(3))
+$(call gb_SrsPartTarget_SrsPartTarget,$(2))
 $(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsPartTarget_get_target,$(2))
 $(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTarget_get_headers_target,$(1))
 $(call gb_SrsTarget_get_clean_target,$(1)) : PARTS += $(2)
@@ -208,7 +208,7 @@ endif
 endef
 
 define gb_SrsTarget_add_file
-$(call gb_SrsTarget__add_file,$(1),$(2),$(true))
+$(call gb_SrsTarget__add_file,$(1),$(2))
 
 endef
 
