@@ -119,13 +119,13 @@ bool SmIsMathAlpha(const OUString &rText)
     // and symbols).
     static std::unordered_set<sal_Unicode> const aMathAlpha({
         MS_ALEPH,               MS_IM,                  MS_RE,
-        MS_WP,                  sal_Unicode(0xE070),    MS_EMPTYSET,
-        sal_Unicode(0x2113),    sal_Unicode(0xE0D6),    sal_Unicode(0x2107),
-        sal_Unicode(0x2127),    sal_Unicode(0x210A),    MS_HBAR,
+        MS_WP,                  u'\xE070',              MS_EMPTYSET,
+        u'\x2113',              u'\xE0D6',              u'\x2107',
+        u'\x2127',              u'\x210A',              MS_HBAR,
         MS_LAMBDABAR,           MS_SETN,                MS_SETZ,
         MS_SETQ,                MS_SETR,                MS_SETC,
-        sal_Unicode(0x2373),    sal_Unicode(0xE0A5),    sal_Unicode(0x2112),
-        sal_Unicode(0x2130),    sal_Unicode(0x2131)
+        u'\x2373',              u'\xE0A5',              u'\x2112',
+        u'\x2130',              u'\x2131'
     });
 
     if (rText.isEmpty())
@@ -135,7 +135,7 @@ bool SmIsMathAlpha(const OUString &rText)
     sal_Unicode cChar = rText[0];
 
     // is it a greek symbol?
-    if (sal_Unicode(0xE0AC) <= cChar  &&  cChar <= sal_Unicode(0xE0D4))
+    if (u'\xE0AC' <= cChar  &&  cChar <= u'\xE0D4')
         return true;
     // or, does it appear in 'aMathAlpha'?
     return aMathAlpha.find(cChar) != aMathAlpha.end();

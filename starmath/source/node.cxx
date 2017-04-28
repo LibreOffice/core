@@ -2348,7 +2348,7 @@ SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 :   SmSpecialNode(SmNodeType::Math, rNodeToken, FNT_MATH)
 {
     sal_Unicode cChar = GetToken().cMathChar;
-    if (sal_Unicode('\0') != cChar)
+    if (u'\0' != cChar)
         SetText(OUString(cChar));
 }
 
@@ -2570,7 +2570,7 @@ static bool lcl_IsFromGreekSymbolSet( const OUString &rTokenText )
     bool bRes = false;
 
     // valid symbol name needs to have a '%' at pos 0 and at least an additional char
-    if (rTokenText.getLength() > 2 && rTokenText[0] == sal_Unicode('%'))
+    if (rTokenText.getLength() > 2 && rTokenText[0] == u'%')
     {
         OUString aName( rTokenText.copy(1) );
         SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );

@@ -90,7 +90,7 @@ sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
     if (IsInPrivateUseArea( cChar ))
     {
         SAL_WARN("starmath", "Error: private use area characters should no longer be in use!" );
-        cRes = sal_Unicode('@'); // just some character that should easily be notice as odd in the context
+        cRes = u'@'; // just some character that should easily be notice as odd in the context
     }
     return cRes;
 }

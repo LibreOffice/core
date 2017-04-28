@@ -34,14 +34,14 @@ sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction *pUN)
     for (nIdx = 0; nIdx < nLen; nIdx++)
     {
         auto cD = rStr[nIdx];
-        if (cD == sal_Unicode('.'))
+        if (cD == u'.')
         {
             if (nDecimalPoint >= 0)
                 return -1;
             nDecimalPoint = nIdx;
             continue;
         }
-        if (cD < sal_Unicode('0') || sal_Unicode('9') < cD)
+        if (cD < u'0' || u'9' < cD)
             break;
     }
     if (nIdx == 0 || (nIdx == 1 && nDecimalPoint == 0))
@@ -72,7 +72,7 @@ sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction *pN)
     assert(pN);
     if (rStr.isEmpty())
         return -1;
-    bool bNegative = (rStr[0] == sal_Unicode('-'));
+    bool bNegative = (rStr[0] == '-');
     sal_Int32 nOffset = bNegative ? 1 : 0;
     Fraction aF;
     auto nIdx = ParseMathMLUnsignedNumber(rStr.copy(nOffset), &aF);
@@ -137,7 +137,7 @@ sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeL
         pV->eUnit = MathMLLengthUnit::Pc;
         return nIdx + 2;
     }
-    if (sRest[0] == sal_Unicode('%'))
+    if (sRest[0] == u'%')
     {
         pV->eUnit = MathMLLengthUnit::Percent;
         return nIdx + 2;
