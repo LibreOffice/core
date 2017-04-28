@@ -871,7 +871,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     {
         // check whether CharStretching is possible at all
         GDIMetaFile* pMtf = pOut->GetConnectMetaFile();
-        OUString aTestString(static_cast<sal_Unicode>('J'));
+        OUString aTestString(u'J');
 
         if(pMtf && (!pMtf->IsRecord() || pMtf->IsPause()))
             pMtf = nullptr;
@@ -1008,7 +1008,7 @@ OUString SdrTextObj::TakeObjNameSingul() const
 
         // avoid non expanded text portions in object name
         // (second condition is new)
-        if(!aStr2.isEmpty() && aStr2.indexOf(sal_Unicode(255)) == -1)
+        if(!aStr2.isEmpty() && aStr2.indexOf(u'\x00FF') == -1)
         {
             // space between ResStr and content text
             aStr += " ";

@@ -403,10 +403,10 @@ SdrObject* FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 
 SdrObject* FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 {
-    OUString sDataSource     = rFieldDesc.getToken(0,sal_Unicode(11));
-    OUString sObjectName     = rFieldDesc.getToken(1,sal_Unicode(11));
-    sal_uInt16 nObjectType   = (sal_uInt16)rFieldDesc.getToken(2,sal_Unicode(11)).toInt32();
-    OUString sFieldName      = rFieldDesc.getToken(3,sal_Unicode(11));
+    OUString sDataSource     = rFieldDesc.getToken(0,u'\x000B');
+    OUString sObjectName     = rFieldDesc.getToken(1,u'\x000B');
+    sal_uInt16 nObjectType   = (sal_uInt16)rFieldDesc.getToken(2,u'\x000B').toInt32();
+    OUString sFieldName      = rFieldDesc.getToken(3,u'\x000B');
 
     if (sFieldName.isEmpty() || sObjectName.isEmpty() || sDataSource.isEmpty())
         return nullptr;

@@ -456,7 +456,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 
     // count an extra hairspace (U+200A) left and right
     const OUString sevenDigits(m_aAbsolute->CreateFieldText(6000000));
-    const OUString hairSpace(static_cast<sal_Unicode>(0x200A));
+    const OUString hairSpace(u'\x200A');
     OUString textPattern(hairSpace);
     textPattern += sevenDigits;
     textPattern += hairSpace;
