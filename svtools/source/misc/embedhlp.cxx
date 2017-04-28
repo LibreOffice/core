@@ -347,17 +347,16 @@ void EmbeddedObjectRef::Clear()
                 }
             }
         }
-
-        if ( mpImpl->xListener )
-        {
-            mpImpl->xListener->pObject = nullptr;
-            mpImpl->xListener->release();
-            mpImpl->xListener = nullptr;
-        }
-
-        mpImpl->mxObj = nullptr;
     }
 
+    if (mpImpl->xListener)
+    {
+        mpImpl->xListener->pObject = nullptr;
+        mpImpl->xListener->release();
+        mpImpl->xListener = nullptr;
+    }
+
+    mpImpl->mxObj = nullptr;
     mpImpl->pContainer = nullptr;
     mpImpl->bIsLocked = false;
     mpImpl->bNeedUpdate = false;
