@@ -1043,8 +1043,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             rSh.CallChgLnk();
         }
         break;
-        case FN_TOOL_ANCHOR:
-            break;
         case FN_TOOL_ANCHOR_PAGE:
         case FN_TOOL_ANCHOR_PARAGRAPH:
         case FN_TOOL_ANCHOR_CHAR:
@@ -1634,39 +1632,11 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             (eSet == RndStdIds::FLY_AT_CHAR))
                         || ((nWhich == FN_TOOL_ANCHOR_CHAR) &&
                             (eSet == RndStdIds::FLY_AS_CHAR));
-                    if(nWhich != FN_TOOL_ANCHOR)
-                    {
-                        if( nWhich == FN_TOOL_ANCHOR_FRAME && !rSh.IsFlyInFly() )
-                            rSet.DisableItem(nWhich);
-                        else
-                            rSet.Put(SfxBoolItem(nWhich, bSet));
-                    }
-                    else
-                    {
-                        sal_uInt16 nSlotId = 0;
 
-                        switch (eSet)
-                        {
-                            case RndStdIds::FLY_AT_PAGE:
-                                nSlotId = FN_TOOL_ANCHOR_PAGE;
-                            break;
-                            case RndStdIds::FLY_AT_PARA:
-                                nSlotId = FN_TOOL_ANCHOR_PARAGRAPH;
-                            break;
-                            case RndStdIds::FLY_AS_CHAR:
-                                nSlotId = FN_TOOL_ANCHOR_CHAR;
-                            break;
-                            case RndStdIds::FLY_AT_CHAR:
-                                nSlotId = FN_TOOL_ANCHOR_AT_CHAR;
-                            break;
-                            case RndStdIds::FLY_AT_FLY:
-                                nSlotId = FN_TOOL_ANCHOR_FRAME;
-                            break;
-                            default:
-                                ;
-                        }
-                        rSet.Put(SfxUInt16Item(nWhich, nSlotId));
-                    }
+                    if( nWhich == FN_TOOL_ANCHOR_FRAME && !rSh.IsFlyInFly() )
+                        rSet.DisableItem(nWhich);
+                    else if(nWhich != FN_TOOL_ANCHOR)
+                        rSet.Put(SfxBoolItem(nWhich, bSet));
                 }
                 else
                     rSet.DisableItem( nWhich );

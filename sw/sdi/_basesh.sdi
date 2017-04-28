@@ -401,7 +401,6 @@ interface BaseTextSelection
 // Methode fuer Rahmen und Objekte
     FN_TOOL_ANCHOR
     [
-        ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]

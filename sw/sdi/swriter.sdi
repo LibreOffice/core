@@ -6036,8 +6036,6 @@ SfxVoidItem AnchorMenu FN_TOOL_ANCHOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxUInt16Item
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
