@@ -491,7 +491,6 @@ bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
     const OString sType = sMsgCtxt.copy( nLastDot + 1 );
     return !rEntry.getReference().isEmpty() &&
             nFirstEndLine > 0 &&
-            (nLastEndLine == nFirstEndLine || nLastEndLine == sMsgCtxt.indexOf('\n',nFirstEndLine+1)) &&
             nLastDot - nLastEndLine > 1 &&
             (sType == "text" || sType == "quickhelptext" || sType == "title")&&
             !rEntry.getMsgId().isEmpty();
