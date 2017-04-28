@@ -241,7 +241,8 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
 
             // #i89825# change the script type also to CTL
             // if there is no strong LTR char in the LTR run (numbers)
-            if ( nCurrDir != UBIDI_RTL )
+            if (nCurrDir != UBIDI_RTL &&
+                (UBIDI_LTR != nFieldDir || i18n::ScriptType::COMPLEX == nScript))
             {
                 nCurrDir = UBIDI_RTL;
                 for( sal_Int32 nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
