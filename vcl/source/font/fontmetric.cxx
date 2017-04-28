@@ -324,7 +324,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     bool bCentered = true;
     if (MsLangId::isCJK(rFont.GetLanguage()))
     {
-        const OUString sFullstop( sal_Unicode( 0x3001 ) ); // Fullwidth fullstop
+        const OUString sFullstop( u'\x3001' ); // Fullwidth fullstop
         tools::Rectangle aRect;
         pDev->GetTextBoundRect( aRect, sFullstop );
         const sal_uInt16 nH = rFont.GetFontSize().Height();
@@ -335,7 +335,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     }
     SetFullstopCenteredFlag( bCentered );
 
-    mnBulletOffset = ( pDev->GetTextWidth( OUString( sal_Unicode( 0x20 ) ) ) - pDev->GetTextWidth( OUString( sal_Unicode( 0xb7 ) ) ) ) >> 1 ;
+    mnBulletOffset = ( pDev->GetTextWidth( OUString( u' ' ) ) - pDev->GetTextWidth( OUString( u'\x00b7' ) ) ) >> 1 ;
 
 }
 

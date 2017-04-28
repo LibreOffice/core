@@ -112,7 +112,7 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
     }
 
       // NULL-terminate the string
-      ptext->pUnicodeBuffer[ptext->nLength] = (sal_Unicode)0;
+      ptext->pUnicodeBuffer[ptext->nLength] = u'\0';
 }
 
 // reallocate the textbuffer with sufficiently large size 2^x
@@ -220,7 +220,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     pText->nLength += howmany;
 
     // NULL-terminate the string
-    pText->pUnicodeBuffer[pText->nLength] = (sal_Unicode)0;
+    pText->pUnicodeBuffer[pText->nLength] = u'\0';
 }
 
 // Handle the change of attributes in a preedit_draw_callback

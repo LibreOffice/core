@@ -245,7 +245,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     Size aLogicPaperSize( LogicToLogic( i_rOrigSize, MapMode( MapUnit::Map100thMM ), MapMode( eUnit ) ) );
     OUString aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
     aBuf.append( aNumText )
-        .append( sal_Unicode( ' ' ) );
+        .append( u' ' );
     aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
     if( !i_rPaperName.isEmpty() )
     {
@@ -257,7 +257,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 
     aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
     aBuf.append( aNumText )
-        .append( sal_Unicode( ' ' ) );
+        .append( u' ' );
     aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
     maVertDim->SetText( aBuf.makeStringAndClear() );
 

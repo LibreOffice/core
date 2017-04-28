@@ -46,7 +46,7 @@ namespace psp
     // parses the first double in the string; decimal is '.' only
     inline double StringToDouble( const OUString& rStr )
     {
-        return rtl::math::stringToDouble(rStr, sal_Unicode('.'), sal_Unicode(0));
+        return rtl::math::stringToDouble(rStr, u'.', u'\0');
     }
 
     inline double StringToDouble(const OString& rStr)

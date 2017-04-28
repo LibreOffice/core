@@ -7591,19 +7591,19 @@ static void escapeStringXML( const OUString& rStr, OUString &rValue)
     {
         switch( *pUni )
         {
-        case sal_Unicode('&'):
+        case u'&':
             rValue += "&amp;";
         break;
-        case sal_Unicode('<'):
+        case u'<':
             rValue += "&lt;";
         break;
-        case sal_Unicode('>'):
+        case u'>':
             rValue += "&gt;";
         break;
-        case sal_Unicode('\''):
+        case u'\'':
             rValue += "&apos;";
         break;
-        case sal_Unicode('"'):
+        case u'"':
             rValue += "&quot;";
         break;
         default:
@@ -7630,7 +7630,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         aMetadataStream.append( "<?xpacket begin=\"" );
         // these lines write Unicode "zero width non-breaking space character" (U+FEFF)
         // (aka byte-order mark ) used as a byte-order marker.
-        aMetadataStream.append( OUStringToOString( OUString( sal_Unicode( 0xFEFF ) ), RTL_TEXTENCODING_UTF8 ) );
+        aMetadataStream.append( OUStringToOString( OUString( u'\xFEFF' ), RTL_TEXTENCODING_UTF8 ) );
         aMetadataStream.append( "\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n" );
         aMetadataStream.append( "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n" );
         aMetadataStream.append( " <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n" );
