@@ -107,9 +107,9 @@ public:
                                tools::importFromSvgD(
                                    aTmp2, aSvg, false, nullptr));
 
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             sName,
-            aTmp2 == aTmp1);
+            aTmp1, aTmp2);
     }
 
     void verifySimpleRange()
