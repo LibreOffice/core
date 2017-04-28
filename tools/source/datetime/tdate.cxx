@@ -228,7 +228,7 @@ Date::Date( DateInitSystem )
             static_cast<sal_uInt16>(aTime.tm_year+1900) );
     }
     else
-        setDateFromDMY( 1, 100, 1900 );
+        setDateFromDMY( 1, 1, 1900 );
 #endif
 }
 
