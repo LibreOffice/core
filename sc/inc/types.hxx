@@ -57,7 +57,12 @@ typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
  */
 enum ScFormulaVectorState
 {
-    FormulaVectorDisabled = 0,
+    FormulaVectorDisabled,
+    FormulaVectorDisabledNotInSubSet,
+    FormulaVectorDisabledNotInSoftwareSubset,
+    FormulaVectorDisabledByOpCode,
+    FormulaVectorDisabledByStackVariable,
+
     FormulaVectorEnabled,
     FormulaVectorCheckReference,
     FormulaVectorUnknown
