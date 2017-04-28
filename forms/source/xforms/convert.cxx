@@ -328,14 +328,14 @@ OUString Convert::collapseWhitespace( const OUString& _rString )
     for( sal_Int32 i = 0; i < nLength; i++ )
     {
         sal_Unicode c = pStr[i];
-        if( c == sal_Unicode(0x08) ||
-            c == sal_Unicode(0x0A) ||
-            c == sal_Unicode(0x0D) ||
-            c == sal_Unicode(0x20) )
+        if( c == u'\x0008' ||
+            c == u'\x000A' ||
+            c == u'\x000D' ||
+            c == u' ' )
         {
             if( ! bStrip )
             {
-                aBuffer.append( sal_Unicode(0x20) );
+                aBuffer.append( u' ' );
                 bStrip = true;
             }
         }
@@ -345,7 +345,7 @@ OUString Convert::collapseWhitespace( const OUString& _rString )
             aBuffer.append( c );
         }
     }
-    if( aBuffer[ aBuffer.getLength() - 1 ] == sal_Unicode( 0x20 ) )
+    if( aBuffer[ aBuffer.getLength() - 1 ] == u' ' )
         aBuffer.setLength( aBuffer.getLength() - 1 );
     return aBuffer.makeStringAndClear();
 }
