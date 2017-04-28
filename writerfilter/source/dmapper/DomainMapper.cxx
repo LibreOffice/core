@@ -3427,6 +3427,17 @@ void DomainMapper::lcl_info(const std::string & /*info_*/)
 {
 }
 
+void DomainMapper::lcl_startGlossaryEntry()
+{
+    uno::Reference< text::XTextRange > xTextRange =  GetCurrentTextRange();
+    m_pImpl->setGlossaryEntryStart(xTextRange);
+}
+
+void DomainMapper::lcl_endGlossaryEntry()
+{
+    m_pImpl->appendGlossaryEntry();
+}
+
 void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext)
 {
     sal_Int16 nUnderline = awt::FontUnderline::NONE;

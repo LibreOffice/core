@@ -87,16 +87,8 @@ bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles 
         aDescriptor[1].Name = "ReadGlossaries";
         aDescriptor[1].Value <<= true;
 
-        try
-        {
-            xFilter->filter( aDescriptor );
-        }
-        catch( uno::Exception const& e )
-        {
-            SAL_WARN("sw.docx", "SwDOCXReader::ReadGlossaries(): exception: " << e.Message);
-        }
-
-        return MakeEntries( static_cast<SwDocShell*>( &xDocSh )->GetDoc(), rBlocks );
+        if( xFilter->filter( aDescriptor ) )
+            return MakeEntries( static_cast<SwDocShell*>( &xDocSh )->GetDoc(), rBlocks );
     }
 
     return false;
@@ -110,7 +102,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
     bool bRet = false;
 
     SwNodeIndex aDocEnd( pD->GetNodes().GetEndOfContent() );
-    SwNodeIndex aStart( *aDocEnd.GetNode().StartOfSectionNode() );
+    SwNodeIndex aStart( *aDocEnd.GetNode().StartOfSectionNode(), 1 );
 
     if( aStart < aDocEnd && ( aDocEnd.GetIndex() - aStart.GetIndex() > 2 ) )
     {
@@ -144,6 +136,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             }
             aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
+            // Now we have the right selection for one entry
             rBlocks.ClearDoc();
 
             // TODO: correct entry name
@@ -174,15 +167,9 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
                 rBlocks.PutDoc();
             }
 
-            if( aStart.GetNodes().Count() <= aStart.GetNode().GetIndex() )
-                aStart = aStart.GetNode().EndOfSectionIndex() + 1;
-            else
-                break;
-
+            aStart = aStart.GetNode().EndOfSectionIndex() + 1;
             ++nGlosEntry;
-
-        } while( aStart < aDocEnd );
-
+        } while( aStart < aDocEnd && aStart.GetNode().IsStartNode() );
         bRet = true;
     }
 

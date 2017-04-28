@@ -168,6 +168,8 @@ public:
     void alignH(const OUString & sText);
     void alignV(const OUString & sText);
     void positivePercentage(const OUString& rText);
+    void startGlossaryEntry();
+    void endGlossaryEntry();
     void startTxbxContent();
     void endTxbxContent();
     void propagateCharacterProperties();
