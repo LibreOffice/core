@@ -206,7 +206,6 @@ void Cell::Read(HWPFile & hwpf)
     hwpf.Read1b(&protect, 1);
 }
 
-
 bool TxtBox::Read(HWPFile & hwpf)
 {
     int ii, ncell;
@@ -292,7 +291,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     for (ii = 0; ii < ncell; ii++)
     {
         cell[ii].Read(hwpf);
-          cell[ii].key = sal::static_int_cast<unsigned char>(ii);
+        cell[ii].key = sal::static_int_cast<unsigned char>(ii);
     }
     if (ncell == 1)
         style.cell = &cell[0];
@@ -305,64 +304,63 @@ bool TxtBox::Read(HWPFile & hwpf)
      // caption
     hwpf.ReadParaList(caption);
 
-     if( type == 0 ){ // if table?
-          TCell* *pArr = ::comphelper::newArray_null<TCell *>(ncell);
-          if (!pArr) {
-                return hwpf.SetState(HWP_InvalidFileFormat);
-          }
-          Table *tbl = new Table;
-          for( ii = 0 ; ii < ncell; ii++)
-          {
-                tbl->columns.insert(cell[ii].x);
-                tbl->columns.insert(cell[ii].x + cell[ii].w);
-                tbl->rows.insert(cell[ii].y);
-                tbl->rows.insert(cell[ii].y + cell[ii].h);
-          }
-          for( ii = 0 ; ii < ncell; ii++)
-          {
-                TCell *tcell = new TCell;
-                tcell->nColumnIndex = tbl->columns.getIndex(cell[ii].x);
-                tcell->nColumnSpan = tbl->columns.getIndex(cell[ii].x + cell[ii].w) -
-                     tcell->nColumnIndex;
-                tcell->nRowIndex = tbl->rows.getIndex(cell[ii].y);
-                tcell->nRowSpan = tbl->rows.getIndex(cell[ii].y + cell[ii].h) -
-                     tcell->nRowIndex;
-                tcell->pCell = &cell[ii];
-                pArr[ii] = tcell;
-          }
-          TCell *tmp;
-          // Sort by row and column
-          for( ii = 0 ; ii < ncell - 1; ii++ ){
-                for( int jj = ii ; jj < ncell ; jj++){
-                     if( pArr[ii]->nRowIndex > pArr[jj]->nRowIndex ){
-                          tmp = pArr[ii];
-                          pArr[ii] = pArr[jj];
-                          pArr[jj] = tmp;
-                     }
-                }
-                for( int kk = ii ; kk > 0 ; kk--){
-                     if( ( pArr[kk]->nRowIndex == pArr[kk-1]->nRowIndex ) &&
-                            (pArr[kk]->nColumnIndex < pArr[kk-1]->nColumnIndex )){
-                          tmp = pArr[kk];
-                          pArr[kk] = pArr[kk-1];
-                          pArr[kk-1] = tmp;
-                     }
-                }
-          }
-          for( ii = 0 ; ii < ncell ; ii++ ){
-                tbl->cells.push_back(pArr[ii]);
-          }
-          tbl->box = this;
-          hwpf.AddTable(tbl);
-          m_pTable = tbl;
-          delete[] pArr;
-     }
-     else
-          m_pTable = nullptr;
+    if( type == 0 ){ // if table?
+        TCell* *pArr = ::comphelper::newArray_null<TCell *>(ncell);
+        if (!pArr) {
+              return hwpf.SetState(HWP_InvalidFileFormat);
+        }
+        Table *tbl = new Table;
+        for( ii = 0 ; ii < ncell; ii++)
+        {
+            tbl->columns.insert(cell[ii].x);
+            tbl->columns.insert(cell[ii].x + cell[ii].w);
+            tbl->rows.insert(cell[ii].y);
+            tbl->rows.insert(cell[ii].y + cell[ii].h);
+        }
+        for( ii = 0 ; ii < ncell; ii++)
+        {
+            TCell *tcell = new TCell;
+            tcell->nColumnIndex = tbl->columns.getIndex(cell[ii].x);
+            tcell->nColumnSpan = tbl->columns.getIndex(cell[ii].x + cell[ii].w) -
+                tcell->nColumnIndex;
+            tcell->nRowIndex = tbl->rows.getIndex(cell[ii].y);
+            tcell->nRowSpan = tbl->rows.getIndex(cell[ii].y + cell[ii].h) -
+                tcell->nRowIndex;
+            tcell->pCell = &cell[ii];
+            pArr[ii] = tcell;
+        }
+        TCell *tmp;
+        // Sort by row and column
+        for( ii = 0 ; ii < ncell - 1; ii++ ){
+            for( int jj = ii ; jj < ncell ; jj++){
+               if( pArr[ii]->nRowIndex > pArr[jj]->nRowIndex ){
+                    tmp = pArr[ii];
+                    pArr[ii] = pArr[jj];
+                    pArr[jj] = tmp;
+               }
+            }
+            for( int kk = ii ; kk > 0 ; kk--){
+               if( ( pArr[kk]->nRowIndex == pArr[kk-1]->nRowIndex ) &&
+                      (pArr[kk]->nColumnIndex < pArr[kk-1]->nColumnIndex )){
+                    tmp = pArr[kk];
+                    pArr[kk] = pArr[kk-1];
+                    pArr[kk-1] = tmp;
+               }
+            }
+        }
+        for( ii = 0 ; ii < ncell ; ii++ ){
+            tbl->cells.push_back(pArr[ii]);
+        }
+        tbl->box = this;
+        hwpf.AddTable(tbl);
+        m_pTable = tbl;
+        delete[] pArr;
+    }
+    else
+        m_pTable = nullptr;
 
     return !hwpf.State();
 }
-
 
 // picture(11)
 bool Picture::Read(HWPFile & hwpf)
