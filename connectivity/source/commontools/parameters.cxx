@@ -224,7 +224,7 @@ namespace dbtools
         {
             OUString colName;
             xDetailField->getPropertyValue("RealName") >>= colName;
-            sal_Bool isFunction(false);
+            bool isFunction(false);
             xDetailField->getPropertyValue("Function") >>= isFunction;
             if (isFunction)
                 sFilter += colName;
