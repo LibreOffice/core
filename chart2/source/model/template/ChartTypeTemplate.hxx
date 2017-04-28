@@ -248,8 +248,7 @@ private:
                           css::chart2::data::XLabeledDataSequence >& xCategories,
                       const css::uno::Sequence<
                               css::uno::Reference<
-                                  css::chart2::XChartType > > & aOldChartTypesSeq,
-                      bool bCreate );
+                                  css::chart2::XChartType > > & aOldChartTypesSeq);
 };
 
 } //  namespace chart

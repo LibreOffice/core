@@ -588,7 +588,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
                 //ignore secondary axis for charttypes that do not support them
                 if( pSeries->getAttachedAxisIndex() != MAIN_AXIS_INDEX &&
-                    !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, 1 ) )
+                    !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) )
                 {
                     pSeries->setAttachedAxisIndex(MAIN_AXIS_INDEX);
                 }
@@ -674,7 +674,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
         for (sal_Int32 nDimIndex = 0; nDimIndex < nDimCount; ++nDimIndex)
         {
             bool bDateAxisAllowed = ChartTypeHelper::isSupportingDateAxis(
-                AxisHelper::getChartTypeByIndex(xCooSys, 0), nDimCount, nDimIndex);
+                AxisHelper::getChartTypeByIndex(xCooSys, 0), nDimIndex);
 
             // Each dimension may have primary and secondary axes.
             const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
@@ -3363,13 +3363,13 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
     bool bDummy = false;
     bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
 
-    if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
+    if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
         rParam.mpVTitleSecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, rParam.mbAutoPosSecondTitleX );
     if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
         return false;
 
-    if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
+    if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
         rParam.mpVTitleSecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, rParam.mbAutoPosSecondTitleY );
     if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)

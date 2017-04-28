@@ -166,7 +166,7 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
         }
 
         Sequence< Reference< XChartType > > aOldChartTypesSeq;
-        FillDiagram( xDia, aData.Series, aData.Categories, aOldChartTypesSeq, true );
+        FillDiagram( xDia, aData.Series, aData.Categories, aOldChartTypesSeq );
     }
     catch( const uno::Exception & ex )
     {
@@ -247,7 +247,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
             }
         }
 
-        FillDiagram( xDiagram, aSeriesSeq, aData.Categories, aOldChartTypesSeq, false );
+        FillDiagram( xDiagram, aSeriesSeq, aData.Categories, aOldChartTypesSeq );
     }
     catch( const uno::Exception & ex )
     {
@@ -628,7 +628,7 @@ void ChartTypeTemplate::adaptScales(
                         {
 
                             Reference< XChartType > xChartType( getChartTypeForNewSeries(Sequence< Reference< XChartType > >() ));
-                            bool bSupportsDates = ::chart::ChartTypeHelper::isSupportingDateAxis( xChartType, 2, nDimensionX );
+                            bool bSupportsDates = ::chart::ChartTypeHelper::isSupportingDateAxis( xChartType, nDimensionX );
                             if( aData.AxisType != AxisType::CATEGORY && ( aData.AxisType != AxisType::DATE || !bSupportsDates) )
                             {
                                 aData.AxisType = AxisType::CATEGORY;
@@ -765,8 +765,7 @@ void ChartTypeTemplate::FillDiagram(
     const Reference< XDiagram >& xDiagram,
     const Sequence< Sequence< Reference< XDataSeries > > >& aSeriesSeq,
     const Reference< data::XLabeledDataSequence >& xCategories,
-    const Sequence< Reference< XChartType > >& aOldChartTypesSeq,
-    bool /* bCreate */ )
+    const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
 {
     adaptDiagram( xDiagram );
 

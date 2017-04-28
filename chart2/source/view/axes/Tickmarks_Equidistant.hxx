@@ -30,10 +30,10 @@ class EquidistantTickIter : public TickIter
 public:
     EquidistantTickIter( const css::uno::Sequence< css::uno::Sequence< double > >& rTicks
                 , const ExplicitIncrementData& rIncrement
-            , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
+                , sal_Int32 nMaxDepth );
     EquidistantTickIter( TickInfoArraysType& rTickInfos
             , const ExplicitIncrementData& rIncrement
-            , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
+            , sal_Int32 nMaxDepth );
     virtual ~EquidistantTickIter() override;
 
     double*     firstValue();
@@ -46,7 +46,7 @@ private: //methods
     sal_Int32   getIntervalCount( sal_Int32 nDepth );
     bool        isAtLastPartTick();
 
-    void        initIter( sal_Int32 nMinDepth, sal_Int32 nMaxDepth );
+    void        initIter( sal_Int32 nMaxDepth );
     sal_Int32   getStartDepth() const;
 
     bool        gotoFirst();

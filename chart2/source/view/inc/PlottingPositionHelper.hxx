@@ -184,7 +184,7 @@ public:
      *  (For a pie chart the origin of the coordinate system is the pie center).
      */
     css::drawing::Position3D
-            transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius, double fLogicZ, bool bDoScaling=true ) const;
+            transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius, double fLogicZ ) const;
 
     using PlottingPositionHelper::transformScaledLogicToScene;
 

@@ -240,13 +240,13 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
     catch( const uno::Exception& )
     {
         //no mutex is acquired
-        g_close_endTryClose(bDeliverOwnership, false);
+        g_close_endTryClose(bDeliverOwnership);
         throw;
     }
     return true;
 }
 
-void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership, bool /* bMyVeto */ )
+void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership )
 {
     //this method is called, if the try to close was not successful
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );

@@ -280,7 +280,7 @@ public:
         const css::uno::Any& aInfo ) override;
 
     // WindowController stuff
-    void PrePaint(vcl::RenderContext& rRenderContext);
+    void PrePaint();
     void execute_Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     void execute_MouseButtonDown( const MouseEvent& rMEvt );
     void execute_MouseMove( const MouseEvent& rMEvt );

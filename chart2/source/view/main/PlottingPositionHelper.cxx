@@ -613,7 +613,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformScaledLogicToScene( do
     return this->transformAngleRadiusToScene( fLogicValueOnAngleAxis, fLogicValueOnRadiusAxis, fZ, false );
 }
 drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius
-                                                                            , double fLogicZ, bool /* bDoScaling */ ) const
+                                                                            , double fLogicZ ) const
 {
     double fAnglePi = fUnitAngleDegree*F_PI/180.0;
 
@@ -632,7 +632,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformAngleRadiusToScene( do
     double fUnitAngleDegree = this->transformToAngleDegree(fLogicValueOnAngleAxis,bDoScaling);
     double fUnitRadius      = this->transformToRadius(fLogicValueOnRadiusAxis,bDoScaling);
 
-    return transformUnitCircleToScene( fUnitAngleDegree, fUnitRadius, fLogicZ, bDoScaling );
+    return transformUnitCircleToScene( fUnitAngleDegree, fUnitRadius, fLogicZ );
 }
 
 double PolarPlottingPositionHelper::getOuterLogicRadius() const

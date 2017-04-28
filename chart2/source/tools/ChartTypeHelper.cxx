@@ -168,7 +168,7 @@ bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType >& 
     return true;
 }
 
-bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 /*nDimensionIndex*/ )
+bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
     //3D, pie and net charts do not support a secondary axis at all
 
@@ -402,7 +402,7 @@ bool ChartTypeHelper::isSupportingAxisPositioning( const uno::Reference< chart2:
     return true;
 }
 
-bool ChartTypeHelper::isSupportingDateAxis( const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 /*nDimensionCount*/, sal_Int32 nDimensionIndex )
+bool ChartTypeHelper::isSupportingDateAxis( const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex )
 {
     if( nDimensionIndex!=0 )
         return false;

@@ -71,13 +71,13 @@ public:
     void SetSize(int width, int height);
     void SetSizePixel(int width, int height);
     void Release();
-    int RenderLine2FBO(int wholeFlag);
+    int RenderLine2FBO();
     int SetLine2DShapePoint(float x, float y, int listLength);
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha);
     void SetLine2DWidth(int width);
     void SetColor(sal_uInt32 color, sal_uInt8 nAlpha);
     int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
-    int RenderBubble2FBO(int wholeFlag);
+    int RenderBubble2FBO();
 
     void prepareToRender();
 
@@ -86,12 +86,11 @@ public:
 
     int CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
                           const ::Size &aPixelSize,
-                          const css::awt::Point&,
                           const css::awt::Size& aSize,
                           long rotation,
                           const css::drawing::HomogenMatrix3& rTrans);
     int CreateTextTexture(const BitmapEx& rBitmapEx,
-            const css::awt::Point& aPos, const css::awt::Size& aSize,
+            const css::awt::Size& aSize,
             long rotation, const css::drawing::HomogenMatrix3& rTrans);
     int RenderTextShape();
 
@@ -102,7 +101,7 @@ public:
     void GeneratePieSegment2D(double, double, double, double);
     int RenderPieSegment2DShape(float, float, float);
 
-    int RenderSymbol2DShape(float, float, float, float, sal_Int32);
+    int RenderSymbol2DShape(float, float, sal_Int32);
 #if DEBUG_POSITIONING
     void renderDebug();
 #endif

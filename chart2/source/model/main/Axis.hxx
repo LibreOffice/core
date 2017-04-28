@@ -71,7 +71,7 @@ protected:
     explicit Axis( const Axis & rOther );
 
     // late initialization to call after copy-constructing
-    void Init( const Axis & rOther );
+    void Init();
 
     // ____ OPropertySet ____
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;

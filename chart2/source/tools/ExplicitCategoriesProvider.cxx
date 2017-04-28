@@ -485,7 +485,7 @@ void ExplicitCategoriesProvider::init()
             {
                 if(m_bIsDateAxis)
                 {
-                    if( ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ), 2, 0 ) )
+                    if( ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ), 0 ) )
                         m_bIsDateAxis = lcl_fillDateCategories( m_xOriginalCategories->getValues(), m_aDateCategories, m_bIsAutoDate, mrModel );
                     else
                         m_bIsDateAxis = false;
