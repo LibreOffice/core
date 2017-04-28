@@ -208,7 +208,7 @@ void VBATest::testMiscOLEStuff()
             fprintf(stderr, "macro returned:\n%s\n", OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.get() != nullptr );
-        CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == "OK" );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"), pReturn->GetOUString() );
     }
 #else
     // Avoid "this method is empty and should be removed" warning
