@@ -36,7 +36,7 @@ compilerplugins/clang/test/salbool.cxx:15
     S b sal_Bool
 compilerplugins/clang/test/unnecessaryoverride-dtor.hxx:42
     IncludedDerived3 m rtl::Reference<Incomplete>
-connectivity/source/drivers/mork/MDatabaseMetaData.hxx:28
+connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 connectivity/source/inc/OTypeInfo.hxx:31
     connectivity::OTypeInfo aTypeName class rtl::OUString
@@ -86,17 +86,11 @@ extensions/source/scanner/scanner.hxx:46
     ScannerManager maProtector osl::Mutex
 framework/inc/dispatch/oxt_handler.hxx:95
     framework::Oxt_Handler m_xSelfHold css::uno::Reference<css::uno::XInterface>
-i18nutil/source/utility/unicode.cxx:40
-    DefaultScriptTypeList from com::sun::star::i18n::UnicodeScript
-i18nutil/source/utility/unicode.cxx:41
-    DefaultScriptTypeList to com::sun::star::i18n::UnicodeScript
-i18nutil/source/utility/unicode.cxx:42
-    DefaultScriptTypeList value com::sun::star::i18n::UnicodeScript
 include/comphelper/MasterPropertySet.hxx:38
     comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
-include/editeng/unotext.hxx:605
+include/editeng/unotext.hxx:606
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
@@ -124,23 +118,23 @@ pyuno/source/module/pyuno_impl.hxx:226
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:326
     pyuno::stRuntimeImpl ob_base PyObject
-reportdesign/source/ui/inc/ReportWindow.hxx:53
+reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac ::std::unique_ptr<DlgEdFactory>
-sal/osl/unx/thread.cxx:93
-    osl_thread_priority_st m_Highest int
-sal/osl/unx/thread.cxx:94
-    osl_thread_priority_st m_Above_Normal int
-sal/osl/unx/thread.cxx:95
-    osl_thread_priority_st m_Normal int
-sal/osl/unx/thread.cxx:96
-    osl_thread_priority_st m_Below_Normal int
 sal/osl/unx/thread.cxx:97
+    osl_thread_priority_st m_Highest int
+sal/osl/unx/thread.cxx:98
+    osl_thread_priority_st m_Above_Normal int
+sal/osl/unx/thread.cxx:99
+    osl_thread_priority_st m_Normal int
+sal/osl/unx/thread.cxx:100
+    osl_thread_priority_st m_Below_Normal int
+sal/osl/unx/thread.cxx:101
     osl_thread_priority_st m_Lowest int
-sal/osl/unx/thread.cxx:115
+sal/osl/unx/thread.cxx:119
     osl_thread_global_st m_priority struct osl_thread_priority_st
 sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
-sc/source/filter/inc/sheetdatacontext.hxx:60
+sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
 sc/source/ui/inc/docsh.hxx:441
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
@@ -148,25 +142,31 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
 sd/source/ui/table/TableDesignPane.hxx:110
     sd::TableDesignPane aImpl class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1334
+sd/source/ui/view/DocumentRenderer.cxx:1335
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1234
-    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
 sd/source/ui/view/viewshel.cxx:1235
-    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
 sd/source/ui/view/viewshel.cxx:1236
-    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
 sd/source/ui/view/viewshel.cxx:1237
+    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
+sd/source/ui/view/viewshel.cxx:1238
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
-sd/source/ui/view/ViewShellBase.cxx:207
+sd/source/ui/view/ViewShellBase.cxx:201
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:118
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 starmath/inc/view.hxx:224
     SmViewShell maGraphicController class SmGraphicController
+svtools/source/svhtml/htmlkywd.cxx:558
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
+svtools/source/svhtml/htmlkywd.cxx:560
+    HTML_OptionEntry::(anonymous) sToken const sal_Char *
+svtools/source/svhtml/htmlkywd.cxx:561
+    HTML_OptionEntry::(anonymous) pUToken const class rtl::OUString *
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
-sw/source/core/frmedt/fetab.cxx:89
+sw/source/core/frmedt/fetab.cxx:90
     TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:164
     SwImplEnterLeave nAction enum DbgAction

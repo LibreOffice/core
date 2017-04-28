@@ -43,7 +43,6 @@ ControllerItem::ControllerItem (
     ItemUpdateReceiverInterface& rItemUpdateReceiver)
     : SfxControllerItem(nSlotId, rBindings),
       mrItemUpdateReceiver(rItemUpdateReceiver),
-      mxFrame(),
       mxFrameActionListener(),
       msCommandName()
 {

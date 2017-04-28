@@ -88,7 +88,6 @@ protected:
 
 private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
     css::uno::Reference<css::lang::XComponent> mxFrameActionListener;
     const ::rtl::OUString msCommandName;
 };
