@@ -1228,7 +1228,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         // and now the Outliner itself
         if (!bTextEditDontDelete) delete pTEOutliner;
         else pTEOutliner->Clear();
-        if (pTEWin!=nullptr) {
+        if (bTextEditDontDelete && pTEWin!=nullptr) {
             pTEWin->SetCursor(pTECursorMerker);
         }
         maHdlList.SetMoveOutside(false);
