@@ -231,84 +231,106 @@ void Test::testVoid() {
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<void>::get()));
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
+        CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
+        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int16", sal_Int16(2), b);
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt16", sal_uInt16(2), b);
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int32", sal_Int32(2), b);
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt32", sal_uInt32(2), b);
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int64", sal_Int64(2), b);
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt64", sal_uInt64(2), b);
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("float", 2.0f, b);
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("double", 2.0, b);
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
         rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "rtl::OUString", OUString("2"), b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
-            !(a >>= b) && b == cppu::UnoType<OUString>::get());
+            !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "css::uno::Type",
+            cppu::UnoType<OUString>::get(), b);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>", !(a >>= b) && b.getLength() == 2);
+            "css::uno::Sequence<rtl::OUString>", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "css::uno::Sequence<rtl::OUString>", sal_Int32(2), b.getLength());
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Enum1", Enum1_M2, b);
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Struct1", sal_Int32(2), b.member);
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Interface1", i, b);
     }
 }
 
@@ -317,85 +339,108 @@ void Test::testBoolean() {
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<bool>::get()));
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", (a >>= b) && !b);
+        CPPUNIT_ASSERT_MESSAGE("bool", (a >>= b));
+        CPPUNIT_ASSERT_MESSAGE("bool", !b);
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", (a >>= b) && !b);
+        CPPUNIT_ASSERT_MESSAGE("sal_Bool", (a >>= b));
+        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !b);
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(2), b);
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int16", sal_Int16(2), b);
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt16", sal_uInt16(2), b);
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int32", sal_Int32(2), b);
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt32", sal_uInt32(2), b);
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int64", sal_Int64(2), b);
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_uInt64", sal_uInt64(2), b);
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("float", 2.0f, b);
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("double", 2.0, b);
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Unicode", u'2', b);
     }
     {
         rtl::OUString b("2");
-        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
+        CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "rtl::OUString", OUString("2"), b );
     }
     {
         css::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Type",
-            !(a >>= b) && b == cppu::UnoType<OUString>::get());
+            !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "css::uno::Type",
+            cppu::UnoType<OUString>::get(), b);
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
             "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+            !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "css::uno::Sequence<rtl::OUString>",
+            sal_Int32(2), b.getLength());
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Enum1", Enum1_M2, b);
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Struct1", sal_Int32(2), b.member);
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception1", sal_Int32(2), b.member);
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Interface1", i, b);
     }
 }
 
@@ -404,15 +449,18 @@ void Test::testByte() {
     CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<sal_Int8>::get()));
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
+        CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
+        CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", (a >>= b) && b == 1);
+        CPPUNIT_ASSERT_MESSAGE("sal_Int8", (a >>= b));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("sal_Int8", sal_Int8(1), b);
     }
     {
         sal_Int16 b = 2;
