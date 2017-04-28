@@ -1292,9 +1292,9 @@ interface DrawView
     [
         ExecMethod = FuPermanent ;
     ]
-    SID_FM_CREATE_FIELDCONTROL
+    SfxBoolItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
+    ()
     [
-    SlotType = SfxBoolItem ;
         ExecMethod = FuPermanent ;
     ]
     SID_ATTR_YEAR2000

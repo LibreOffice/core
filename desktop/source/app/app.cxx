@@ -1469,7 +1469,7 @@ int Desktop::Main()
         SetSplashScreenProgress(30);
 
         // create title string
-        OUString aTitle(ReplaceStringHookProc(OUString(RID_APPTITLE)));
+        OUString aTitle(ReplaceStringHookProc(RID_APPTITLE));
 
 #ifdef DBG_UTIL
         //include buildid in non product builds

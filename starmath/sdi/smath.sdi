@@ -179,7 +179,7 @@ SfxVoidItem Draw SID_DRAW
 ]
 
 
-SfxBoolItem FormelCursor SID_FORMULACURSOR
+SfxVoidItem FormelCursor SID_FORMULACURSOR
 ()
 [
     AutoUpdate = TRUE,
@@ -272,7 +272,7 @@ SfxVoidItem InsertConfigName SID_INSERTSYMBOL
 ]
 
 
-SfxBoolItem ImportFormula SID_IMPORT_FORMULA
+SfxVoidItem ImportFormula SID_IMPORT_FORMULA
 (SfxStringItem Name SID_IMPORT_FORMULA,SfxStringItem Filter FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -290,7 +290,7 @@ SfxBoolItem ImportFormula SID_IMPORT_FORMULA
     GroupId = GID_INSERT;
 ]
 
-SfxBoolItem ImportMathMLClipboard SID_IMPORT_MATHML_CLIPBOARD
+SfxVoidItem ImportMathMLClipboard SID_IMPORT_MATHML_CLIPBOARD
 ()
 [
     AutoUpdate = FALSE,

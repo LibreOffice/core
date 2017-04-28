@@ -381,90 +381,43 @@ bool SvIdlParser::ReadSlot(SvMetaSlot& rSlot)
 
 void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
 {
-    bool bOk = false;
-    bOk |= ReadIfIdAttribute(rSlot.aGroupId, SvHash_GroupId() );
-    bOk |= ReadIfIdAttribute(rSlot.aExecMethod, SvHash_ExecMethod() );
-    bOk |= ReadIfIdAttribute(rSlot.aStateMethod, SvHash_StateMethod() );
-    bOk |= ReadStringSvIdl( SvHash_DisableFlags(), rInStm, rSlot.aDisableFlags );
-    bOk |= ReadIfBoolAttribute(rSlot.aReadOnlyDoc, SvHash_ReadOnlyDoc() );
-    bOk |= ReadIfBoolAttribute(rSlot.aExport, SvHash_Export() );
+    ReadIfIdAttribute(rSlot.aGroupId, SvHash_GroupId() );
+    ReadIfIdAttribute(rSlot.aExecMethod, SvHash_ExecMethod() );
+    ReadIfIdAttribute(rSlot.aStateMethod, SvHash_StateMethod() );
+    ReadStringSvIdl( SvHash_DisableFlags(), rInStm, rSlot.aDisableFlags );
+    ReadIfBoolAttribute(rSlot.aReadOnlyDoc, SvHash_ReadOnlyDoc() );
+    ReadIfBoolAttribute(rSlot.aExport, SvHash_Export() );
 
-    bOk |= ReadIfBoolAttribute(rSlot.aToggle, SvHash_Toggle() );
-    bOk |= ReadIfBoolAttribute(rSlot.aAutoUpdate, SvHash_AutoUpdate() );
-    bOk |= ReadIfBoolAttribute(rSlot.aAsynchron, SvHash_Asynchron() );
-    bOk |= ReadIfBoolAttribute(rSlot.aRecordAbsolute, SvHash_RecordAbsolute() );
+    ReadIfBoolAttribute(rSlot.aToggle, SvHash_Toggle() );
+    ReadIfBoolAttribute(rSlot.aAutoUpdate, SvHash_AutoUpdate() );
+    ReadIfBoolAttribute(rSlot.aAsynchron, SvHash_Asynchron() );
+    ReadIfBoolAttribute(rSlot.aRecordAbsolute, SvHash_RecordAbsolute() );
 
     if( ReadIfBoolAttribute(rSlot.aRecordPerItem, SvHash_RecordPerItem()) )
     {
         if (rSlot.aRecordPerSet.IsSet() || rSlot.aNoRecord.IsSet())
             throw SvParseException(rInStm, "conflicting attributes");
         rSlot.SetRecordPerItem( rSlot.aRecordPerItem );
-        bOk = true;
     }
     if( ReadIfBoolAttribute(rSlot.aRecordPerSet, SvHash_RecordPerSet() ) )
     {
         if (rSlot.aRecordPerItem.IsSet() || rSlot.aNoRecord.IsSet())
             throw SvParseException(rInStm, "conflicting attributes");
         rSlot.SetRecordPerSet( rSlot.aRecordPerSet );
-        bOk = true;
     }
     if( ReadIfBoolAttribute(rSlot.aNoRecord, SvHash_NoRecord() ) )
     {
         if (rSlot.aRecordPerItem.IsSet() || rSlot.aRecordPerSet.IsSet())
             throw SvParseException(rInStm, "conflicting attributes");
         rSlot.SetNoRecord( rSlot.aNoRecord );
-        bOk = true;
     }
 
-    bOk |= ReadIfBoolAttribute(rSlot.aMenuConfig, SvHash_MenuConfig() );
-    bOk |= ReadIfBoolAttribute(rSlot.aToolBoxConfig, SvHash_ToolBoxConfig() );
-    bOk |= ReadIfBoolAttribute(rSlot.aAccelConfig, SvHash_AccelConfig() );
+    ReadIfBoolAttribute(rSlot.aMenuConfig, SvHash_MenuConfig() );
+    ReadIfBoolAttribute(rSlot.aToolBoxConfig, SvHash_ToolBoxConfig() );
+    ReadIfBoolAttribute(rSlot.aAccelConfig, SvHash_AccelConfig() );
 
-    bOk |= ReadIfBoolAttribute(rSlot.aFastCall, SvHash_FastCall() );
-    bOk |= ReadIfBoolAttribute(rSlot.aContainer, SvHash_Container() );
-
-    if( bOk )
-        return;
-
-    if( !rSlot.aSlotType.is() )
-    {
-        sal_uInt32 nTokPos = rInStm.Tell();
-        SvToken& rTok = rInStm.GetToken_Next();
-        if( rTok.Is( SvHash_SlotType() ) )
-        {
-            if( rInStm.ReadIf( '=' ) )
-            {
-                rSlot.aSlotType = rBase.ReadKnownType( rInStm );
-                if( !rSlot.aSlotType.is() )
-                    throw SvParseException( rInStm, "SlotType with unknown item type" );
-                if( !rSlot.aSlotType->IsItem() )
-                    throw SvParseException( rInStm, "the SlotType is not a item" );
-                return;
-            }
-        }
-        rInStm.Seek( nTokPos );
-
-    }
-    if( !rSlot.aMethod.is() )
-    {
-        SvToken& rTok = rInStm.GetToken();
-        if( rTok.IsIdentifier() )
-        {
-            rSlot.aMethod = new SvMetaSlot();
-            sal_uInt32 nTokPos = rInStm.Tell();
-            if( rSlot.aMethod->ReadSvIdl( rBase, rInStm ) )
-            {
-                if( rSlot.aMethod->IsMethod() )
-                {
-                    rSlot.aMethod->SetSlotId( rSlot.GetSlotId() );
-                    if( rSlot.aMethod->Test( rInStm ) )
-                        return;
-                }
-                rInStm.Seek( nTokPos );
-            }
-            rSlot.aMethod.clear();
-        }
-    }
+    ReadIfBoolAttribute(rSlot.aFastCall, SvHash_FastCall() );
+    ReadIfBoolAttribute(rSlot.aContainer, SvHash_Container() );
 }
 
 void SvIdlParser::ReadInterfaceOrShellMethod( SvMetaAttribute& rAttr )

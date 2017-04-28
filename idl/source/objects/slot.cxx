@@ -77,17 +77,8 @@ bool SvMetaSlot::IsVariable() const
 
 bool SvMetaSlot::IsMethod() const
 {
-    bool b = GetType()->GetMetaTypeType() == MetaTypeType::Method;
-    b |= nullptr != GetMethod();
-    return b;
-}
-
-OString SvMetaSlot::GetMangleName() const
-{
-    SvMetaAttribute * pMeth = GetMethod();
-    if( pMeth )
-        return pMeth->GetName();
-    return GetName();
+    SvMetaType * pType = GetType();
+    return pType->GetMetaTypeType() == MetaTypeType::Method;
 }
 
 /*************************************************************************
@@ -97,16 +88,6 @@ OString SvMetaSlot::GetMangleName() const
 |*                      IsSet() provides FALSE (default initialization).
 *************************************************************************/
 /** reference disbandment **/
-SvMetaType * SvMetaSlot::GetSlotType() const
-{
-    if( aSlotType.is() || !GetRef() ) return aSlotType.get();
-    return static_cast<SvMetaSlot *>(GetRef())->GetSlotType();
-}
-SvMetaAttribute * SvMetaSlot::GetMethod() const
-{
-    if( aMethod.is() || !GetRef() ) return aMethod.get();
-    return static_cast<SvMetaSlot *>(GetRef())->GetMethod();
-}
 const OString& SvMetaSlot::GetGroupId() const
 {
     if( !aGroupId.getString().isEmpty() || !GetRef() ) return aGroupId.getString();
@@ -205,95 +186,36 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaAttribute::ReadAttributesSvIdl( rBase, rInStm );
 
-    bool bOk = false;
-    bOk |= aGroupId.ReadSvIdl( SvHash_GroupId(), rInStm );
-    bOk |= aExecMethod.ReadSvIdl( SvHash_ExecMethod(), rInStm );
-    bOk |= aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
-    bOk |= ReadStringSvIdl( SvHash_DisableFlags(), rInStm, aDisableFlags );
-    bOk |= aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
-    bOk |= aExport.ReadSvIdl( SvHash_Export(), rInStm );
+    aGroupId.ReadSvIdl( SvHash_GroupId(), rInStm );
+    aExecMethod.ReadSvIdl( SvHash_ExecMethod(), rInStm );
+    aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
+    ReadStringSvIdl( SvHash_DisableFlags(), rInStm, aDisableFlags );
+    aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
+    aExport.ReadSvIdl( SvHash_Export(), rInStm );
+    aToggle.ReadSvIdl( SvHash_Toggle(), rInStm );
+    aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm );
+    aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm );
+    aRecordAbsolute.ReadSvIdl( SvHash_RecordAbsolute(), rInStm );
 
-    if( aToggle.ReadSvIdl( SvHash_Toggle(), rInStm ) )
-    {
-        bOk = true;
-    }
-    if( aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm ) )
-    {
-        bOk = true;
-    }
-    if( aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm ) )
-    {
-        bOk = true;
-    }
-    if( aRecordAbsolute.ReadSvIdl( SvHash_RecordAbsolute(), rInStm ) )
-    {
-        bOk = true;
-    }
     if( aRecordPerItem.ReadSvIdl( SvHash_RecordPerItem(), rInStm ) )
     {
         SetRecordPerItem( aRecordPerItem );
-        bOk = true;
     }
     if( aRecordPerSet.ReadSvIdl( SvHash_RecordPerSet(), rInStm ) )
     {
         SetRecordPerSet( aRecordPerSet );
-        bOk = true;
     }
     if( aNoRecord.ReadSvIdl( SvHash_NoRecord(), rInStm ) )
     {
         SetNoRecord( aNoRecord );
-        bOk = true;
     }
 
-    bOk |= aMenuConfig.ReadSvIdl( SvHash_MenuConfig(), rInStm );
-    bOk |= aToolBoxConfig.ReadSvIdl( SvHash_ToolBoxConfig(), rInStm );
-    bOk |= aAccelConfig.ReadSvIdl( SvHash_AccelConfig(), rInStm );
+    aMenuConfig.ReadSvIdl( SvHash_MenuConfig(), rInStm );
+    aToolBoxConfig.ReadSvIdl( SvHash_ToolBoxConfig(), rInStm );
+    aAccelConfig.ReadSvIdl( SvHash_AccelConfig(), rInStm );
 
-    bOk |= aFastCall.ReadSvIdl( SvHash_FastCall(), rInStm );
-    bOk |= aContainer.ReadSvIdl( SvHash_Container(), rInStm );
-
-    if( !bOk )
-    {
-        if( !aSlotType.is() )
-        {
-            sal_uInt32 nTokPos = rInStm.Tell();
-            SvToken& rTok = rInStm.GetToken_Next();
-            if( rTok.Is( SvHash_SlotType() ) )
-            {
-                if( rInStm.ReadIf( '=' ) )
-                {
-                    aSlotType = rBase.ReadKnownType( rInStm );
-                    if( !aSlotType.is() )
-                        throw SvParseException( rInStm, "SlotType with unknown item type" );
-                    if( !aSlotType->IsItem() )
-                        throw SvParseException( rInStm, "the SlotType is not a item" );
-                    return;
-                }
-            }
-            rInStm.Seek( nTokPos );
-
-        }
-        if( !aMethod.is() )
-        {
-            SvToken& rTok = rInStm.GetToken();
-            if( rTok.IsIdentifier() )
-            {
-                aMethod = new SvMetaSlot();
-                sal_uInt32 nTokPos = rInStm.Tell();
-                if( aMethod->ReadSvIdl( rBase, rInStm ) )
-                {
-                    if( aMethod->IsMethod() )
-                    {
-                        aMethod->SetSlotId( GetSlotId() );
-                        if( aMethod->Test( rInStm ) )
-                            return;
-                    }
-                    rInStm.Seek( nTokPos );
-                }
-                aMethod.clear();
-            }
-        }
-    }
+    aFastCall.ReadSvIdl( SvHash_FastCall(), rInStm );
+    aContainer.ReadSvIdl( SvHash_Container(), rInStm );
 }
 
 bool SvMetaSlot::Test( SvTokenStream & rInStm )
@@ -620,16 +542,16 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     rOutStm.WriteChar( ',' ) << endl;
     WriteTab( rOutStm, 4 );
 
-    SvMetaType * pT = GetSlotType();
-    if( !pT )
+    SvMetaType * pT = GetType();
+    if( !IsVariable() )
     {
-        if( !IsVariable() )
-            pT = rBase.FindType( "SfxVoidItem" );
-        else
-            pT = GetType();
+        SvMetaType * pRT = GetType()->GetReturnType();
+        pT =  pRT ? pRT : rBase.FindType( "SfxVoidItem" );
     }
+
     if( pT )
     {
+        assert(pT->IsItem());
         rOutStm.WriteOString( pT->GetName() );
         if( !SvIdlDataBase::FindType( pT, rBase.aUsedTypes ) )
             rBase.aUsedTypes.push_back( pT );
@@ -646,12 +568,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
         if( IsMethod() )
         {
-            SvMetaAttribute * pMethod = GetMethod();
-            SvMetaType * pType;
-            if( pMethod )
-                pType = pMethod->GetType();
-            else
-                pType = GetType();
+            SvMetaType * pType = GetType();
             sal_uLong nSCount = pType->GetAttrCount();
             rOutStm
                .WriteOString( OString::number(nSCount) )
@@ -671,7 +588,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
     {
         rOutStm.WriteCharPtr( ",\"" );
-        rOutStm.WriteOString( GetMangleName() );
+        rOutStm.WriteOString( GetName() );
         rOutStm.WriteCharPtr( "\"" );
     }
 
@@ -683,14 +600,9 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
     if ( !GetExport() && !GetHidden() )
         return 0;
 
-    SvMetaAttribute * pMethod = GetMethod();
     if( IsMethod() )
     {
-        SvMetaType * pType;
-        if( pMethod )
-            pType = pMethod->GetType();
-        else
-            pType = GetType();
+        SvMetaType * pType = GetType();
 
         if( !SvIdlDataBase::FindType( pType, rBase.aUsedTypes ) )
             rBase.aUsedTypes.push_back( pType );
@@ -729,13 +641,7 @@ sal_uInt16 SvMetaSlot::WriteSlotMap( const OString& rShellName, sal_uInt16 nCoun
     sal_uInt16 nSCount = 0;
     if( IsMethod() )
     {
-        SvMetaType * pType;
-        SvMetaAttribute * pMethod = GetMethod();
-        if( pMethod )
-            pType = pMethod->GetType();
-        else
-            pType = GetType();
-
+        SvMetaType * pType = GetType();
         nSCount = (sal_uInt16)pType->GetAttrCount();
     }
 
