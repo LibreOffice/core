@@ -217,24 +217,6 @@ $(foreach file,$(2),$(call gb_SrsTarget_add_file,$(1),$(file)))
 
 endef
 
-# Add a srs file that does not have any localizable content.
-# These files will be copied instead of parsing them with transex3.
-#
-# gb_SrsTarget_add_nonlocalizable_file srs file
-define gb_SrsTarget_add_nonlocalizable_file
-$(call gb_SrsTarget__add_file,$(1),$(2),$(false))
-
-endef
-
-# Add srs files that do not have any localizable content.
-#
-# gb_SrsTarget_add_nonlocalizable_files srs file(s)
-define gb_SrsTarget_add_nonlocalizable_files
-$(foreach file,$(2),$(call gb_SrsTarget_add_nonlocalizable_file,$(1),$(file)))
-
-endef
-
-
 # ResTarget
 
 gb_ResTarget_DEFIMAGESLOCATION := $(SRCDIR)/icon-themes/galaxy/
