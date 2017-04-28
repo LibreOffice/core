@@ -1139,7 +1139,7 @@ void XMLTextImportHelper::InsertString( const OUString& rChars,
                 case 0x0a:
                 case 0x0d:
                     if( !rIgnoreLeadingSpace )
-                        sChars.append( (sal_Unicode)0x20 );
+                        sChars.append( u' ' );
                     rIgnoreLeadingSpace = true;
                     break;
                 default:

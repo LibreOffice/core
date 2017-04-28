@@ -483,7 +483,7 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
 static bool splitPath(::rtl::OUString const & i_rPath,
     ::rtl::OUString & o_rDir, ::rtl::OUString& o_rRest)
 {
-    const sal_Int32 idx(i_rPath.indexOf(static_cast<sal_Unicode>('/')));
+    const sal_Int32 idx(i_rPath.indexOf(u'/'));
     if (idx < 0 || idx >= i_rPath.getLength()) {
         o_rDir = ::rtl::OUString();
         o_rRest = i_rPath;
