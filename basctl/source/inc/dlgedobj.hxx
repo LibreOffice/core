@@ -127,11 +127,11 @@ public:
 
     // ContainerListener
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementInserted( const css::container::ContainerEvent& Event );
+    void SAL_CALL _elementInserted();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementReplaced( const css::container::ContainerEvent& Event );
+    void SAL_CALL _elementReplaced();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementRemoved( const css::container::ContainerEvent& Event );
+    void SAL_CALL _elementRemoved();
 
     virtual void SetLayer(SdrLayerID nLayer) override;
     void MakeDataAware( const css::uno::Reference< css::frame::XModel >& xModel );

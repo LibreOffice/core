@@ -113,11 +113,6 @@ void Layout::ArrangeWindows ()
     bInArrangeWindows = false;
 }
 
-void Layout::DockaWindow (DockingWindow*)
-{
-    ArrangeWindows();
-}
-
 void Layout::Activating (BaseWindow& rWindow)
 {
     // first activation

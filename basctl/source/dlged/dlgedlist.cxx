@@ -60,19 +60,19 @@ void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  css::lang::EventObject
 }
 
 // XContainerListener
-void SAL_CALL DlgEdEvtContListenerImpl::elementInserted(const css::container::ContainerEvent& Event)
+void SAL_CALL DlgEdEvtContListenerImpl::elementInserted(const css::container::ContainerEvent& /*Event*/)
 {
-    rDlgEdObj._elementInserted( Event );
+    rDlgEdObj._elementInserted();
 }
 
-void SAL_CALL DlgEdEvtContListenerImpl::elementReplaced(const css::container::ContainerEvent& Event)
+void SAL_CALL DlgEdEvtContListenerImpl::elementReplaced(const css::container::ContainerEvent& /*Event*/)
 {
-    rDlgEdObj._elementReplaced( Event );
+    rDlgEdObj._elementReplaced();
 }
 
-void SAL_CALL DlgEdEvtContListenerImpl::elementRemoved(const css::container::ContainerEvent& Event)
+void SAL_CALL DlgEdEvtContListenerImpl::elementRemoved(const css::container::ContainerEvent& /*Event*/)
 {
-    rDlgEdObj._elementRemoved( Event );
+    rDlgEdObj._elementRemoved();
 }
 
 } // namespace basctl
