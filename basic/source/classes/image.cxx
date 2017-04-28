@@ -660,7 +660,7 @@ OUString SbiImage::GetString( short nId ) const
             if( nLen == 1 )
             {
                 // Force length 1 and make char 0 afterwards
-                OUString aNullCharStr( (sal_Unicode)0);
+                OUString aNullCharStr( u'\0');
                 return aNullCharStr;
             }
         }

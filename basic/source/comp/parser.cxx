@@ -860,7 +860,7 @@ void SbiParser::AddConstants()
     addStringConst( aPublics, "vbVerticalTab", "\x0B" );
 
     // Force length 1 and make char 0 afterwards
-    OUString aNullCharStr((sal_Unicode)0);
+    OUString aNullCharStr(u'\0');
     addStringConst( aPublics, "vbNullChar", aNullCharStr );
 }
 

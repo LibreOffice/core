@@ -220,7 +220,7 @@ namespace o3tl
 // of the implementation. Only type double is greedy and takes
 // what it gets.
 
-#define SbxMAXCHAR  ((sal_Unicode)65535)
+#define SbxMAXCHAR  u'\xFFFF'
 #define SbxMINCHAR  (0)
 #define SbxMAXBYTE  ( 255)
 #define SbxMAXINT   ( 32767)
