@@ -4,6 +4,7 @@
 #!/usr/bin/perl
 
 use strict;
+use warnings;
 use LWP::UserAgent;
 use utf8;
 use File::Temp;
@@ -157,26 +158,24 @@ sub load_git_log($$$$$$$)
 #    }
 
     open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
-    %{$pdata->{$module}} = ();
 
     while (my $line = <GIT>) {
         chomp $line;
 
         if ( $line =~ m/^commit ([0-9a-z]{20})/ ) {
-            $commit_id = "$1";
+            $commit_id = $1;
             $summary=undef;
-            %{$pdata->{$module}{"$commit_id"}} = ();
             next;
         }
 
         if ( $line =~ /^Author:\s*([^\<]*)\<([^\>]*)>/ ) {
             # get rid of extra empty spaces;
-            my $name = "$1";
+            my $name = $1;
+            my $email = $2;
             $name =~ s/\s+$//;
             die "Error: Author already defined for the commit {$commit_id}\n" if defined ($pdata->{$module}{$commit_id}{'author'});
-            %{$pdata->{$module}{$commit_id}{'author'}} = ();
-            $pdata->{$module}{$commit_id}{'author'}{'name'} = "$name";
-            $pdata->{$module}{$commit_id}{'author'}{'email'} = "$2";
+            $pdata->{$module}{$commit_id}{'author'}{'name'} = $name;
+            $pdata->{$module}{$commit_id}{'author'}{'email'} = $email;
             next;
         }
 
@@ -506,7 +505,6 @@ my $branch_name;
 my $git_command = "git log";
 my $git_cherry;
 my $git_args = "";
-my $branch_name;
 my %data;
 my %bugs = ();
 
@@ -555,7 +553,7 @@ foreach my $arg (@ARGV) {
 }
 
 # default log
-if (%generate_log == 0) {
+unless (%generate_log) {
     $generate_log{"commits"} = 1;
 }
 
