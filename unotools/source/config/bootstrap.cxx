@@ -59,77 +59,74 @@ namespace utl
 
 // Implementation class: Bootstrap::Impl
 
-    namespace
+static OUString makeImplName()
+{
+    OUString uri;
+    rtl::Bootstrap::get( "BRAND_BASE_DIR", uri);
+    return uri + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap");
+}
+
+class Bootstrap::Impl
+{
+    const OUString m_aImplName;
+public: // struct to cache the result of a path lookup
+    struct PathData
     {
-        OUString makeImplName()
-        {
-            OUString uri;
-            rtl::Bootstrap::get( "BRAND_BASE_DIR", uri);
-            return uri + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap");
-        }
-    }
+        OUString     path;
+        PathStatus   status;
 
-    class Bootstrap::Impl
-    {
-        const OUString m_aImplName;
-    public: // struct to cache the result of a path lookup
-        struct PathData
-        {
-            OUString     path;
-            PathStatus   status;
-
-            PathData()
-            : path()
-            , status(DATA_UNKNOWN)
-            {}
-        };
-    public: // data members
-        // base install data
-        PathData aBaseInstall_;
-
-        // user install data
-        PathData aUserInstall_;
-
-        // INI files
-        PathData aBootstrapINI_;
-        PathData aVersionINI_;
-
-        // overall status
-        Status status_;
-
-    public: // construction and initialization
-        Impl() : m_aImplName(makeImplName())
-        {
-            initialize();
-        }
-
-        void initialize();
-
-        // access helper
-        OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
-        static bool getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault);
-
-        const OUString& getImplName() const { return m_aImplName; }
-
-    private: // implementation
-        bool initBaseInstallationData(rtl::Bootstrap& _rData);
-        bool initUserInstallationData(rtl::Bootstrap& _rData);
+        PathData()
+        : path()
+        , status(DATA_UNKNOWN)
+        {}
     };
+public: // data members
+    // base install data
+    PathData aBaseInstall_;
 
-    namespace
+    // user install data
+    PathData aUserInstall_;
+
+    // INI files
+    PathData aBootstrapINI_;
+    PathData aVersionINI_;
+
+    // overall status
+    Status status_;
+
+public: // construction and initialization
+    Impl() : m_aImplName(makeImplName())
     {
-        class theImpl : public rtl::Static<Bootstrap::Impl, theImpl> {};
+        initialize();
     }
 
-    const Bootstrap::Impl& Bootstrap::data()
-    {
-        return theImpl::get();
-    }
+    void initialize();
 
-    void Bootstrap::reloadData()
-    {
-        theImpl::get().initialize();
-    }
+    // access helper
+    OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
+    static bool getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault);
+
+    const OUString& getImplName() const { return m_aImplName; }
+
+private: // implementation
+    bool initBaseInstallationData(rtl::Bootstrap& _rData);
+    bool initUserInstallationData(rtl::Bootstrap& _rData);
+};
+
+namespace
+{
+    class theImpl : public rtl::Static<Bootstrap::Impl, theImpl> {};
+}
+
+const Bootstrap::Impl& Bootstrap::data()
+{
+    return theImpl::get();
+}
+
+void Bootstrap::reloadData()
+{
+    theImpl::get().initialize();
+}
 
 // helper
 
@@ -138,8 +135,7 @@ typedef Bootstrap::PathStatus PathStatus;
 sal_Unicode const cURLSeparator = '/';
 
 // path status utility function
-static
-PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirItem)
+static PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirItem)
 {
     using namespace osl;
 
@@ -153,19 +149,19 @@ PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirI
             eStatus = Bootstrap::PATH_EXISTS;
             break;
 
-        case DirectoryItem::E_NOENT:        // No such file or directory<br>
+        case DirectoryItem::E_NOENT:        // No such file or directory
             eStatus = Bootstrap::PATH_VALID;
             break;
 
-        case DirectoryItem::E_INVAL:        // the format of the parameters was not valid<br>
-        case DirectoryItem::E_NAMETOOLONG:  // File name too long<br>
-        case DirectoryItem::E_NOTDIR:       // A component of the path prefix of path is not a directory<p>
+        case DirectoryItem::E_INVAL:        // the format of the parameters was not valid
+        case DirectoryItem::E_NAMETOOLONG:  // File name too long
+        case DirectoryItem::E_NOTDIR:       // A component of the path prefix of path is not a directory
             eStatus = Bootstrap::DATA_INVALID;
             break;
 
         // how to handle these ?
-        case DirectoryItem::E_LOOP:         // Too many symbolic links encountered<br>
-        case DirectoryItem::E_ACCES:        // permission denied<br>
+        case DirectoryItem::E_LOOP:         // Too many symbolic links encountered
+        case DirectoryItem::E_ACCES:        // permission denied
         // any other error - what to do ?
         default:
             eStatus = Bootstrap::DATA_UNKNOWN;
@@ -173,13 +169,14 @@ PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirI
         }
     }
     else
+    {
         eStatus = Bootstrap::DATA_MISSING;
+    }
 
     return eStatus;
 }
 
-static
-bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
+static bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 {
     using namespace osl;
 
@@ -207,8 +204,7 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
     return true;
 }
 
-static
-bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
+static bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
 {
     using osl::File;
 
@@ -228,8 +224,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     }
 }
 
-static
-bool implMakeAbsoluteURL(OUString & _rsPathOrURL)
+static bool implMakeAbsoluteURL(OUString & _rsPathOrURL)
 {
     using namespace osl;
 
@@ -253,8 +248,7 @@ bool implMakeAbsoluteURL(OUString & _rsPathOrURL)
     return bURL && implEnsureAbsolute(_rsPathOrURL);
 }
 
-static
-PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
+static PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 {
     using namespace osl;
 
@@ -263,8 +257,7 @@ PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
     return implCheckStatusOfURL(_sURL,aDirItem);
 }
 
-static
-PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
+static PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
 {
     using namespace osl;
 
@@ -292,8 +285,7 @@ PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
 }
 
 // helpers to build and check a nested URL
-static
-PathStatus getDerivedPath(
+static PathStatus getDerivedPath(
               OUString& _rURL,
               OUString const& _aBaseURL, PathStatus _aBaseStatus,
               OUString const& _sRelativeURL,
@@ -339,20 +331,17 @@ PathStatus getDerivedPath(
     return aStatus;
 }
 
-static
-inline
-PathStatus getDerivedPath(
-              OUString& _rURL,
-              Bootstrap::Impl::PathData const& _aBaseData,
-              OUString const& _sRelativeURL,
-              rtl::Bootstrap& _rData, OUString const& _sBootstrapParameter
-          )
+static inline PathStatus getDerivedPath(
+                      OUString& _rURL,
+                      Bootstrap::Impl::PathData const& _aBaseData,
+                      OUString const& _sRelativeURL,
+                      rtl::Bootstrap& _rData, OUString const& _sBootstrapParameter
+              )
 {
     return getDerivedPath(_rURL,_aBaseData.path,_aBaseData.status,_sRelativeURL,_rData,_sBootstrapParameter);
 }
 
-static
-OUString getExecutableBaseName()
+static OUString getExecutableBaseName()
 {
     OUString sExecutable;
 
@@ -377,23 +366,19 @@ OUString getExecutableBaseName()
     return sExecutable;
 }
 
-static
-inline
-Bootstrap::PathStatus updateStatus(Bootstrap::Impl::PathData & _rResult)
+static inline Bootstrap::PathStatus updateStatus(Bootstrap::Impl::PathData & _rResult)
 {
     return _rResult.status = checkStatusAndNormalizeURL(_rResult.path);
 }
 
-static
-Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rBootstrapFile)
+static Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rBootstrapFile)
 {
     _rData.getIniName(_rBootstrapFile.path);
 
     return updateStatus(_rBootstrapFile);
 }
 
-static
-Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rVersionFile)
+static Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rVersionFile)
 {
     _rData.getFrom(BOOTSTRAP_ITEM_VERSIONFILE, _rVersionFile.path);
 
@@ -560,10 +545,12 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 
     OUString sBuildId;
     // read buildid from version.ini (versionrc), if it doesn't exist or buildid is empty
-    if ( !utl::Bootstrap::Impl::getVersionValue( csBuildIdItem, sBuildId, _sDefault ) ||
-         sBuildId.isEmpty() )
+    if ( !utl::Bootstrap::Impl::getVersionValue( csBuildIdItem, sBuildId, _sDefault )
+            || sBuildId.isEmpty() )
+    {
          // read buildid from bootstrap.ini (bootstraprc)
         sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
+    }
     return sBuildId;
 }
 
