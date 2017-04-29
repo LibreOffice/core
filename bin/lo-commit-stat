@@ -68,7 +68,6 @@ sub search_bugs($$$$)
         # someone mistyped fdo as fd0
         $bug =~ s/^fd0\#/fdo#/;
         # save the bug number
-        %{$pdata->{$module}{$commit_id}{'bugs'}} = () if (! defined %{$pdata->{$module}{$commit_id}{'bugs'}});
         $pdata->{$module}{$commit_id}{'bugs'}{$bug} = 1;
     }
 
@@ -262,7 +261,6 @@ sub get_bug_list($$$)
     foreach my $module ( keys %{$pdata}) {
         foreach my $id ( keys %{$pdata->{$module}}) {
             foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
-                %{$pbugs->{$bug}} = () if (! defined %{$pbugs->{$bug}});
                 my $author = $pdata->{$module}{$id}{'author'}{'name'};
                 my $summary = $pdata->{$module}{$id}{'summary'};
                 $pbugs->{$bug}{'summary'} = $summary;
