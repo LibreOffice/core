@@ -69,7 +69,7 @@
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <swtable.hxx>
-// OTES
+// NOTES
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
@@ -1654,7 +1654,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
                          &aSelector );
 
     // Size: If the only difference is the Landscape-Flag,
-    // only export Portrait oder Landscape. Otherwise export size.
+    // only export Portrait or Landscape. Otherwise export size.
     bool bRefLandscape = pRefPageDesc && pRefPageDesc->GetLandscape();
     Size aRefSz;
     const Size& rSz = rPageDesc.GetMaster().GetFrameSize().GetSize();
@@ -2876,7 +2876,7 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
             bOutHeight = bool(nMode & Css1FrameSize::VarHeight);
             break;
         default:
-            OSL_ENSURE( bOutHeight, "Hoehe wird nicht exportiert" );
+            OSL_ENSURE( bOutHeight, "Height will not be exported" );
             break;
         }
 
@@ -3504,9 +3504,9 @@ static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_CHRATR_WORDLINEMODE  */      nullptr,
 /* RES_CHRATR_AUTOKERN  */          nullptr,
 /* RES_CHRATR_BLINK */              OutCSS1_SvxBlink,
-/* RES_CHRATR_NOHYPHEN  */          nullptr, // Neu: nicht trennen
-/* RES_CHRATR_NOLINEBREAK */        nullptr, // Neu: nicht umbrechen
-/* RES_CHRATR_BACKGROUND */         OutCSS1_SvxBrush, // Neu: Zeichenhintergrund
+/* RES_CHRATR_NOHYPHEN  */          nullptr, // new: don't separate
+/* RES_CHRATR_NOLINEBREAK */        nullptr, // new: don't wrap
+/* RES_CHRATR_BACKGROUND */         OutCSS1_SvxBrush, // new: character background
 /* RES_CHRATR_CJK_FONT */           OutCSS1_SvxFont,
 /* RES_CHRATR_CJK_FONTSIZE */       OutCSS1_SvxFontHeight,
 /* RES_CHRATR_CJK_LANGUAGE */       OutCSS1_SvxLanguage,
@@ -3559,7 +3559,7 @@ static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_PARATR_TABSTOP   */          nullptr,
 /* RES_PARATR_HYPHENZONE*/          nullptr,
 /* RES_PARATR_DROP */               OutCSS1_SwFormatDrop,
-/* RES_PARATR_REGISTER */           nullptr, // neu:  Registerhaltigkeit
+/* RES_PARATR_REGISTER */           nullptr, // new: register-true
 /* RES_PARATR_NUMRULE */            nullptr,
 /* RES_PARATR_SCRIPTSPACE */        nullptr,
 /* RES_PARATR_HANGINGPUNCTUATION */ nullptr,

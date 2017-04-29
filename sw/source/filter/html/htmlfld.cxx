@@ -251,10 +251,9 @@ void SwHTMLParser::NewField()
     if( !bKnownType )
         return;
 
-    // Autor und Absender werden nur als als variables Feld eingefuegt,
-    // wenn man das Dok selbst als letztes geaendert hat oder es noch
-    // niemend geandert hat und man das Dok erstellt hat. Sonst
-    // wird ein Fixed-Feld daraus gemacht.
+    // Author and sender are only inserted as a variable field if the document
+    // was last changed by ourself or nobody changed it and it was created
+    // by ourself. Otherwise it will be a fixed field.
     if( !bFixed &&
         (SwFieldIds::ExtUser == nType ||
          SwFieldIds::Author == nType) )
@@ -536,25 +535,25 @@ void SwHTMLParser::EndField()
         {
         case SwFieldIds::DocInfo:
             OSL_ENSURE( static_cast<SwDocInfoField*>(m_pField)->IsFixed(),
-                    "DokInfo-Feld haette nicht gemerkt werden muessen" );
+                    "Field DocInfo should not have been saved" );
             static_cast<SwDocInfoField*>(m_pField)->SetExpansion( m_aContents );
             break;
 
         case SwFieldIds::ExtUser:
             OSL_ENSURE( static_cast<SwExtUserField*>(m_pField)->IsFixed(),
-                    "ExtUser-Feld haette nicht gemerkt werden muessen" );
+                    "Field ExtUser should not have been saved" );
             static_cast<SwExtUserField*>(m_pField)->SetExpansion( m_aContents );
             break;
 
         case SwFieldIds::Author:
             OSL_ENSURE( static_cast<SwAuthorField*>(m_pField)->IsFixed(),
-                    "Author-Feld haette nicht gemerkt werden muessen" );
+                    "Field Author should not have been saved" );
             static_cast<SwAuthorField*>(m_pField)->SetExpansion( m_aContents );
             break;
 
         case SwFieldIds::Filename:
             OSL_ENSURE( static_cast<SwFileNameField*>(m_pField)->IsFixed(),
-                    "FileName-Feld haette nicht gemerkt werden muessen" );
+                    "Field FileName should not have been saved" );
             static_cast<SwFileNameField*>(m_pField)->SetExpansion( m_aContents );
             break;
         default: break;
@@ -573,7 +572,7 @@ void SwHTMLParser::InsertFieldText()
 {
     if( m_pField )
     {
-        // das aktuelle Textstueck an den Text anhaengen
+        // append the current text part to the text
         m_aContents += aToken;
     }
 }
@@ -602,9 +601,9 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
         aComment += ">";
     }
 
-    // MIB 24.06.97: Wenn ein PostIt nach einen Space eingefuegt
-    // werden soll, fuegen wir es vor dem Space ein. Dann gibt es
-    // weniger Probleme beim Formatieren (bug #40483#)
+    // MIB 24.06.97: If a PostIt should be insert after a space, we
+    // will insert before the space. Then there are less problems
+    // during formatting. (bug #40483#)
     const sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
     SwTextNode *pTextNd = m_pPam->GetNode().GetTextNode();
     bool bMoveFwd = false;
