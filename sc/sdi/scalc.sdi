@@ -520,7 +520,7 @@ SfxVoidItem Cancel SID_CANCEL
 ]
 
 
-SfxObjectItem Cells SID_SC_CELLS
+SfxVoidItem Cells SID_SC_CELLS
 (SfxInt16Item Column SID_SC_CELLS,SfxInt32Item Row FN_PARAM_1,SfxInt16Item Table FN_PARAM_2)
 [
     AutoUpdate = FALSE,
@@ -538,7 +538,7 @@ SfxObjectItem Cells SID_SC_CELLS
 ]
 
 
-SfxStringItem CellText SID_SC_CELLTEXT
+SfxVoidItem CellText SID_SC_CELLTEXT
 (SfxInt16Item Column SID_SC_CELLTEXT,SfxInt32Item Row FN_PARAM_1,SfxInt16Item Table FN_PARAM_2)
 [
     AutoUpdate = FALSE,
@@ -702,7 +702,7 @@ SfxInt16Item Column SID_RANGE_COL
 ]
 
 
-SfxUInt16Item ColumnWidth FID_COL_WIDTH
+SfxVoidItem ColumnWidth FID_COL_WIDTH
 (SfxUInt16Item Column FN_PARAM_1,SfxUInt16Item Width FN_PARAM_2)
 [
     AutoUpdate = FALSE,
@@ -1095,7 +1095,7 @@ SfxVoidItem DataFilterStandardFilter SID_FILTER
 ]
 
 
-SfxObjectItem DataPilotCreate SID_PIVOT_CREATE
+SfxVoidItem DataPilotCreate SID_PIVOT_CREATE
 (SfxStringItem Destination FN_PARAM_1,SfxStringItem Name FN_PARAM_2,SfxBoolItem TotalCol FN_PARAM_3,SfxBoolItem TotalRow FN_PARAM_4)
 [
     AutoUpdate = FALSE,
@@ -2542,7 +2542,7 @@ SfxVoidItem GoRightToEndOfDataSel SID_CURSORBLKRIGHT_SEL
 ]
 
 
-SfxStringItem GoToCell SID_CURRENTCELL
+SfxVoidItem GoToCell SID_CURRENTCELL
 (SfxStringItem ToPoint SID_CURRENTCELL)
 [
     AutoUpdate = FALSE,
@@ -2596,7 +2596,7 @@ SfxVoidItem GotoDocument SID_CURRENTDOC
 ]
 
 
-SfxStringItem GoToObject SID_CURRENTOBJECT
+SfxVoidItem GoToObject SID_CURRENTOBJECT
 (SfxStringItem ToObject SID_CURRENTOBJECT)
 [
     AutoUpdate = FALSE,
@@ -3451,7 +3451,7 @@ SfxVoidItem ToggleMergeCells FID_MERGE_TOGGLE
 ]
 
 
-SfxBoolItem Mirror SID_OBJECT_MIRROR
+SfxVoidItem Mirror SID_OBJECT_MIRROR
 ()
 [
     AutoUpdate = FALSE,
@@ -3487,7 +3487,7 @@ SfxVoidItem Move FID_TAB_MOVE
 ]
 
 
-SfxStringItem Name FID_TAB_RENAME
+SfxVoidItem Name FID_TAB_RENAME
 (SfxStringItem Name FID_TAB_RENAME,SfxUInt16Item Index FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -3964,7 +3964,7 @@ SfxInt32Item ObjectWidth SID_OBJECT_WIDTH
 ]
 
 
-SfxObjectItem Offset SID_RANGE_OFFSET
+SfxVoidItem Offset SID_RANGE_OFFSET
 (SfxInt16Item Column FN_PARAM_1,SfxInt32Item Row FN_PARAM_2,SfxInt16Item Table FN_PARAM_3)
 [
     AutoUpdate = FALSE,
@@ -4147,7 +4147,7 @@ SfxVoidItem PutCell SID_SC_SETTEXT
 ]
 
 
-SfxObjectItem Range SID_SC_RANGE
+SfxVoidItem Range SID_SC_RANGE
 (SfxStringItem Range SID_SC_RANGE,SfxBoolItem KeepSelect FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -4386,7 +4386,7 @@ SfxInt32Item Row SID_RANGE_ROW
 ]
 
 
-SfxUInt16Item RowHeight FID_ROW_HEIGHT
+SfxVoidItem RowHeight FID_ROW_HEIGHT
 (SfxInt32Item Row FN_PARAM_1,SfxUInt16Item Height FN_PARAM_2)
 [
     AutoUpdate = FALSE,
@@ -4727,7 +4727,7 @@ SfxVoidItem SelectRow SID_SELECT_ROW
 ]
 
 
-SfxStringItem SelectScenario SID_SELECT_SCENARIO
+SfxVoidItem SelectScenario SID_SELECT_SCENARIO
 (SfxStringItem Name SID_SELECT_SCENARIO)
 [
     AutoUpdate = FALSE,
@@ -4745,7 +4745,7 @@ SfxStringItem SelectScenario SID_SELECT_SCENARIO
 ]
 
 
-SfxBoolItem SetAnchorToCell SID_ANCHOR_CELL
+SfxVoidItem SetAnchorToCell SID_ANCHOR_CELL
 ()
 [
     AutoUpdate = FALSE,
@@ -4763,7 +4763,7 @@ SfxBoolItem SetAnchorToCell SID_ANCHOR_CELL
 ]
 
 
-SfxBoolItem SetAnchorToPage SID_ANCHOR_PAGE
+SfxVoidItem SetAnchorToPage SID_ANCHOR_PAGE
 ()
 [
     AutoUpdate = FALSE,

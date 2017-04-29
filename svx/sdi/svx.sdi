@@ -15,7 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-SfxBoolItem AbsoluteRecord SID_FM_RECORD_ABSOLUTE
+SfxVoidItem AbsoluteRecord SID_FM_RECORD_ABSOLUTE
 (SfxInt32Item Position FN_PARAM_1)
 [
     AutoUpdate = TRUE,
@@ -353,7 +353,7 @@ SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
 
 
 
-SfxStringItem TableStyle SID_TABLE_STYLE
+SfxVoidItem TableStyle SID_TABLE_STYLE
 ()
 [
     AutoUpdate = FALSE,
@@ -2114,7 +2114,7 @@ SfxBoolItem ConvertToNavigationBar SID_FM_CONVERTTO_NAVIGATIONBAR
 ]
 
 
-SfxBoolItem CreateControl SID_FM_CREATE_CONTROL
+SfxVoidItem CreateControl SID_FM_CREATE_CONTROL
 ()
 [
     AutoUpdate = TRUE,
@@ -2248,7 +2248,7 @@ SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
 ]
 
 
-SfxBoolItem DeleteRecord SID_FM_RECORD_DELETE
+SfxVoidItem DeleteRecord SID_FM_RECORD_DELETE
 ()
 [
     AutoUpdate = TRUE,
@@ -2798,7 +2798,7 @@ SfxVoidItem FilterCrit SID_FM_FILTERCRIT
 ]
 
 
-SfxBoolItem FirstRecord SID_FM_RECORD_FIRST
+SfxVoidItem FirstRecord SID_FM_RECORD_FIRST
 ()
 [
     AutoUpdate = TRUE,
@@ -3382,7 +3382,7 @@ SfxVoidItem FormFilter SID_FM_FILTER_START
 ]
 
 
-SfxBoolItem FormFiltered SID_FM_FORM_FILTERED
+SfxVoidItem FormFiltered SID_FM_FORM_FILTERED
 ()
 [
     AutoUpdate = TRUE,
@@ -3438,7 +3438,7 @@ SfxVoidItem FormFilterExit SID_FM_FILTER_EXIT
 ]
 
 
-SfxBoolItem FormFilterNavigator SID_FM_FILTER_NAVIGATOR
+SfxVoidItem FormFilterNavigator SID_FM_FILTER_NAVIGATOR
 ()
 [
     AutoUpdate = TRUE,
@@ -4487,7 +4487,7 @@ SfxVoidItem EditAnnotation SID_EDIT_POSTIT
     GroupId = GID_EDIT;
 ]
 
-SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
+SfxVoidItem ShowAnnotations SID_SHOW_POSTIT
 ()
 [
     AutoUpdate = FALSE,
@@ -4635,7 +4635,7 @@ SfxVoidItem InsertGalleryPic SID_GALLERY_FORMATS
 ]
 
 
-SfxBoolItem InsertGraphic SID_INSERT_GRAPHIC
+SfxVoidItem InsertGraphic SID_INSERT_GRAPHIC
 (SfxStringItem FileName SID_INSERT_GRAPHIC,SfxStringItem FilterName FN_PARAM_FILTER,SfxBoolItem AsLink FN_PARAM_1,SfxStringItem Style FN_PARAM_2)
 [
     AutoUpdate = FALSE,
@@ -5082,7 +5082,7 @@ SvxLanguageItem LanguageLatin SID_ATTR_CHAR_LATIN_LANGUAGE
 ]
 
 
-SfxBoolItem LastRecord SID_FM_RECORD_LAST
+SfxVoidItem LastRecord SID_FM_RECORD_LAST
 ()
 [
     AutoUpdate = TRUE,
@@ -5509,7 +5509,7 @@ XLineDashItem LineDash SID_ATTR_LINE_DASH
 ]
 
 
-SfxBoolItem LineEndStyle SID_ATTR_LINEEND_STYLE
+SfxVoidItem LineEndStyle SID_ATTR_LINEEND_STYLE
 (XLineStartItem LineStart SID_ATTR_LINE_START,XLineEndItem LineEnd SID_ATTR_LINE_END,SfxUInt32Item StartWidth SID_ATTR_LINE_STARTWIDTH,SfxUInt32Item EndWidth SID_ATTR_LINE_ENDWIDTH)
 [
     AutoUpdate = FALSE,
@@ -5699,7 +5699,7 @@ SfxVoidItem Merge SID_POLY_MERGE
 
 
 
-SfxBoolItem NewRecord SID_FM_RECORD_NEW
+SfxVoidItem NewRecord SID_FM_RECORD_NEW
 ()
 [
     AutoUpdate = TRUE,
@@ -5719,7 +5719,7 @@ SfxBoolItem NewRecord SID_FM_RECORD_NEW
 ]
 
 
-SfxBoolItem NextRecord SID_FM_RECORD_NEXT
+SfxVoidItem NextRecord SID_FM_RECORD_NEXT
 ()
 [
     AutoUpdate = TRUE,
@@ -6464,7 +6464,7 @@ SfxPointItem Position SID_ATTR_POSITION
 ]
 
 
-SfxBoolItem PrevRecord SID_FM_RECORD_PREV
+SfxVoidItem PrevRecord SID_FM_RECORD_PREV
 ()
 [
     AutoUpdate = TRUE,
@@ -6751,7 +6751,7 @@ SfxBoolItem ReadOnlyMode SID_READONLY_MODE
 ]
 
 
-SfxBoolItem RecFromText SID_FM_RECORD_FROM_TEXT
+SfxVoidItem RecFromText SID_FM_RECORD_FROM_TEXT
 ()
 [
     AutoUpdate = TRUE,
@@ -6771,7 +6771,7 @@ SfxBoolItem RecFromText SID_FM_RECORD_FROM_TEXT
 ]
 
 
-SfxBoolItem RecSave SID_FM_RECORD_SAVE
+SfxVoidItem RecSave SID_FM_RECORD_SAVE
 ()
 [
     AutoUpdate = TRUE,
@@ -6888,7 +6888,7 @@ SfxVoidItem Rect_Unfilled SID_DRAW_RECT_NOFILL
 ]
 
 
-SfxBoolItem RecText SID_FM_RECORD_TEXT
+SfxVoidItem RecText SID_FM_RECORD_TEXT
 ()
 [
     AutoUpdate = TRUE,
@@ -6908,7 +6908,7 @@ SfxBoolItem RecText SID_FM_RECORD_TEXT
 ]
 
 
-SfxStringItem RecTotal SID_FM_RECORD_TOTAL
+SfxVoidItem RecTotal SID_FM_RECORD_TOTAL
 ()
 [
     AutoUpdate = TRUE,
@@ -6928,7 +6928,7 @@ SfxStringItem RecTotal SID_FM_RECORD_TOTAL
 ]
 
 
-SfxBoolItem RecUndo SID_FM_RECORD_UNDO
+SfxVoidItem RecUndo SID_FM_RECORD_UNDO
 ()
 [
     AutoUpdate = TRUE,
@@ -7002,7 +7002,7 @@ SfxVoidItem RemoveFilterSort SID_FM_REMOVE_FILTER_SORT
 ]
 
 
-SfxSetItem ReplaceSet FID_SEARCH_REPLACESET
+SfxVoidItem ReplaceSet FID_SEARCH_REPLACESET
 ()
 [
     AutoUpdate = FALSE,
@@ -7170,7 +7170,7 @@ SfxVoidItem SbaExecuteSql SID_FM_EXECUTE
 ]
 
 
-SfxBoolItem SbaNativeSql SID_FM_NATIVESQL
+SfxVoidItem SbaNativeSql SID_FM_NATIVESQL
 ()
 [
     AutoUpdate = TRUE,
@@ -7315,7 +7315,7 @@ SfxVoidItem SearchOn FID_SEARCH_ON
 ]
 
 
-SfxSetItem SearchSet FID_SEARCH_SEARCHSET
+SfxVoidItem SearchSet FID_SEARCH_SEARCHSET
 ()
 [
     AutoUpdate = FALSE,
@@ -7443,7 +7443,7 @@ SvxLongLRSpaceItem SetLongLeftRightMargin SID_ATTR_LONG_LRSPACE
 ]
 
 
-SvxLongULSpaceItem SetLongTopBottomMargin SID_ATTR_LONG_ULSPACE
+SfxVoidItem SetLongTopBottomMargin SID_ATTR_LONG_ULSPACE
 (SvxLongULSpaceItem Space SID_ATTR_LONG_ULSPACE)
 [
     AutoUpdate = FALSE,
@@ -7729,7 +7729,7 @@ SfxBoolItem ShowProperties SID_FM_SHOW_PROPERTIES
 ]
 
 
-SfxBoolItem ShowPropertyBrowser SID_FM_SHOW_PROPERTY_BROWSER
+SfxVoidItem ShowPropertyBrowser SID_FM_SHOW_PROPERTY_BROWSER
 ()
 [
     AutoUpdate = TRUE,
@@ -8234,7 +8234,7 @@ SvxTabStopItem TabstopsVertical SID_ATTR_TABSTOP_VERTICAL
 ]
 
 
-SfxBoolItem TestMode SID_DIALOG_TESTMODE
+SfxVoidItem TestMode SID_DIALOG_TESTMODE
 ()
 [
     AutoUpdate = TRUE,
@@ -8428,7 +8428,7 @@ SfxBoolItem TimeField SID_FM_TIMEFIELD
 ]
 
 
-SfxBoolItem ToggleObjectBezierMode SID_BEZIER_EDIT
+SfxVoidItem ToggleObjectBezierMode SID_BEZIER_EDIT
 ()
 [
     AutoUpdate = TRUE,
@@ -8447,7 +8447,7 @@ SfxBoolItem ToggleObjectBezierMode SID_BEZIER_EDIT
 ]
 
 
-SfxBoolItem ToggleObjectRotateMode SID_OBJECT_ROTATE
+SfxVoidItem ToggleObjectRotateMode SID_OBJECT_ROTATE
 ()
 [
     AutoUpdate = TRUE,
@@ -8540,7 +8540,7 @@ SfxVoidItem TransformDialog SID_ATTR_TRANSFORM
 ]
 
 
-SfxBoolItem TwainSelect SID_TWAIN_SELECT
+SfxVoidItem TwainSelect SID_TWAIN_SELECT
 ()
 [
     AutoUpdate = FALSE,
@@ -9474,7 +9474,7 @@ SvxColumnItem RulerRowsVertical SID_RULER_ROWS_VERTICAL
 
 
 
-SvxFontListItem FontNameList SID_ATTR_CHAR_FONTLIST
+SfxVoidItem FontNameList SID_ATTR_CHAR_FONTLIST
 ()
 [
     // flags:
@@ -9809,7 +9809,7 @@ SfxVoidItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
 ]
 
 
-SfxBoolItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
+SfxVoidItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
 (SfxStringItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE)
 [
     AutoUpdate = TRUE,
@@ -9966,7 +9966,7 @@ SfxBoolItem FontworkKernCharacterPairs SID_FONTWORK_KERN_CHARACTER_PAIRS
 ]
 
 
-OfaRefItem GetColorTable SID_GET_COLORLIST
+SfxVoidItem GetColorTable SID_GET_COLORLIST
 ()
 [
     AutoUpdate = FALSE,
@@ -10002,7 +10002,7 @@ SfxVoidItem SpellCheckerChanged SID_SPELLCHECKER_CHANGED
 ]
 
 
-SfxUInt16Item Year2000 SID_ATTR_YEAR2000
+SfxVoidItem Year2000 SID_ATTR_YEAR2000
 ()
 [
     AutoUpdate = FALSE,
@@ -10206,7 +10206,7 @@ SfxVoidItem SbaBrwInsert SID_SBA_BRW_INSERT
 ]
 
 
-SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
+SfxVoidItem BasicShapes SID_DRAWTBX_CS_BASIC
 (SfxStringItem BasicShapes SID_DRAWTBX_CS_BASIC)
 [
     AutoUpdate = TRUE,
@@ -10226,7 +10226,7 @@ SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
 ]
 
 
-SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
+SfxVoidItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
 (SfxStringItem SymbolShapes SID_DRAWTBX_CS_SYMBOL)
 [
     AutoUpdate = TRUE,
@@ -10246,7 +10246,7 @@ SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
 ]
 
 
-SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
+SfxVoidItem ArrowShapes SID_DRAWTBX_CS_ARROW
 (SfxStringItem ArrowShapes SID_DRAWTBX_CS_ARROW)
 [
     AutoUpdate = TRUE,
@@ -10266,7 +10266,7 @@ SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
 ]
 
 
-SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
+SfxVoidItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
 (SfxStringItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART)
 [
     AutoUpdate = TRUE,
@@ -10286,7 +10286,7 @@ SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
 ]
 
 
-SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
+SfxVoidItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
 (SfxStringItem CalloutShapes SID_DRAWTBX_CS_CALLOUT)
 [
     AutoUpdate = TRUE,
@@ -10306,7 +10306,7 @@ SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
 ]
 
 
-SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
+SfxVoidItem StarShapes SID_DRAWTBX_CS_STAR
 (SfxStringItem StarShapes SID_DRAWTBX_CS_STAR)
 [
     AutoUpdate = TRUE,
@@ -10473,7 +10473,7 @@ SvxEmphasisMarkItem EmphasisMark SID_ATTR_CHAR_EMPHASISMARK
 ]
 
 
-SfxBoolItem ShowDataNavigator SID_FM_SHOW_DATANAVIGATOR
+SfxVoidItem ShowDataNavigator SID_FM_SHOW_DATANAVIGATOR
 ()
 [
     AutoUpdate = TRUE,

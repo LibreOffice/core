@@ -135,7 +135,7 @@ SfxVoidItem About SID_ABOUT
 ]
 
 
-SfxObjectItem Activate SID_ACTIVATE
+SfxVoidItem Activate SID_ACTIVATE
 ()
 [
     AutoUpdate = FALSE,
@@ -191,7 +191,7 @@ SfxUInt16Item ActualStyleFamily SID_STYLE_FAMILY
 ]
 
 
-SfxObjectItem NewDoc SID_NEWDOC
+SfxVoidItem NewDoc SID_NEWDOC
 (SfxStringItem Region SID_TEMPLATE_REGIONNAME,SfxStringItem Name SID_TEMPLATE_NAME)
 [
     AutoUpdate = FALSE,
@@ -230,7 +230,7 @@ SfxVoidItem AddBookmark SID_CREATELINK
 ]
 
 
-SfxObjectItem AddDirect SID_NEWDOCDIRECT
+SfxVoidItem AddDirect SID_NEWDOCDIRECT
 ()
 [
     AutoUpdate = FALSE,
@@ -576,7 +576,7 @@ SfxTemplateItem CharStyle SID_STYLE_FAMILY1
 ]
 
 
-SfxStringItem ChooseMacro SID_BASICIDE_CHOOSEMACRO
+SfxVoidItem ChooseMacro SID_BASICIDE_CHOOSEMACRO
 ()
 [
     AutoUpdate = FALSE,
@@ -631,7 +631,7 @@ SfxVoidItem CloseDocs SID_CLOSEDOCS
 ]
 
 
-SfxBoolItem CloseDoc SID_CLOSEDOC
+SfxVoidItem CloseDoc SID_CLOSEDOC
 (SfxBoolItem saveChanges SID_CLOSEDOC_SAVE,SfxStringItem fileName SID_CLOSEDOC_FILENAME)
 [
     AutoUpdate = FALSE,
@@ -709,7 +709,7 @@ SfxStringItem Comments SID_DOCINFO_COMMENTS
 ]
 
 
-SfxInt32Item CompareDocuments SID_DOCUMENT_COMPARE
+SfxVoidItem CompareDocuments SID_DOCUMENT_COMPARE
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION, SfxBoolItem NoAcceptDialog SID_NO_ACCEPT_DIALOG)
 [
     AutoUpdate = FALSE,
@@ -969,7 +969,7 @@ SfxVoidItem DeleteCurrent SID_BASICIDE_DELETECURRENT
 ]
 
 
-SfxUInt16Item DeleteStyle SID_STYLE_DELETE
+SfxVoidItem DeleteStyle SID_STYLE_DELETE
 (SfxStringItem Param SID_STYLE_DELETE,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
     AutoUpdate = FALSE,
@@ -1025,7 +1025,7 @@ SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
 ]
 
 
-SfxBoolItem EditDoc SID_EDITDOC
+SfxVoidItem EditDoc SID_EDITDOC
 (SfxBoolItem Editable SID_EDITDOC)
 [
     AutoUpdate = TRUE,
@@ -1063,7 +1063,7 @@ SfxVoidItem EditMacro SID_BASICIDE_EDITMACRO
 ]
 
 
-SfxUInt16Item EditStyle SID_STYLE_EDIT
+SfxVoidItem EditStyle SID_STYLE_EDIT
 (SfxStringItem Param SID_STYLE_EDIT,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
     AutoUpdate = FALSE,
@@ -1081,7 +1081,7 @@ SfxUInt16Item EditStyle SID_STYLE_EDIT
 ]
 
 
-SfxUInt16Item HideStyle SID_STYLE_HIDE
+SfxVoidItem HideStyle SID_STYLE_HIDE
 (SfxStringItem Param SID_STYLE_HIDE,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
     AutoUpdate = FALSE,
@@ -1099,7 +1099,7 @@ SfxUInt16Item HideStyle SID_STYLE_HIDE
 ]
 
 
-SfxUInt16Item ShowStyle SID_STYLE_SHOW
+SfxVoidItem ShowStyle SID_STYLE_SHOW
 (SfxStringItem Param SID_STYLE_SHOW,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
     AutoUpdate = FALSE,
@@ -1417,7 +1417,7 @@ SfxVoidItem Zoom50Percent SID_ZOOM_50_PERCENT
 ]
 
 
-SfxObjectItem GetFrameWindow SID_FILLFRAME
+SfxVoidItem GetFrameWindow SID_FILLFRAME
 (SfxStringItem WindowName SID_FILLFRAME)
 [
     AutoUpdate = FALSE,
@@ -1923,7 +1923,7 @@ SfxBoolItem HyperlinkDialog SID_HYPERLINK_DIALOG
 ]
 
 
-SfxBoolItem InsertDoc SID_INSERTDOC
+SfxVoidItem InsertDoc SID_INSERTDOC
 (SfxStringItem Name SID_INSERTDOC,SfxStringItem Filter FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -2005,10 +2005,9 @@ SfxBoolItem IsLoadingImages SID_IMG_LOADING
 ]
 
 
-SfxBoolItem IsPrinting SID_PRINTOUT
+SfxVoidItem PrintOut SID_PRINTOUT
+(SfxInt16Item copies SID_PRINT_COPIES,SfxBoolItem silent SID_SILENT)
 [
-    SfxVoidItem PrintOut(SfxInt16Item copies SID_PRINT_COPIES,SfxBoolItem silent SID_SILENT);
-
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2017,6 +2016,7 @@ SfxBoolItem IsPrinting SID_PRINTOUT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
+    SlotType = SfxBoolItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2062,7 +2062,7 @@ SfxStringItem Keywords SID_DOCINFO_KEYWORDS
 ]
 
 
-SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
+SfxVoidItem LibLoaded SID_BASICIDE_LIBLOADED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
@@ -2082,7 +2082,7 @@ SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
 ]
 
 
-SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
+SfxVoidItem LibRemoved SID_BASICIDE_LIBREMOVED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
@@ -2102,7 +2102,7 @@ SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
 ]
 
 
-SfxStringItem LibSelect SID_BASICIDE_LIBSELECTED
+SfxVoidItem LibSelect SID_BASICIDE_LIBSELECTED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
@@ -2404,7 +2404,7 @@ SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
     GroupId = GID_MACRO;
 ]
 
-SfxInt32Item MergeDocuments SID_DOCUMENT_MERGE
+SfxVoidItem MergeDocuments SID_DOCUMENT_MERGE
 (SfxStringItem URL SID_FILE_NAME,SfxInt16Item Version SID_VERSION)
 [
     AutoUpdate = FALSE,
@@ -2585,7 +2585,7 @@ SfxBoolItem Menubar SID_MENUBAR
     GroupId = GID_VIEW;
 ]
 
-SfxBoolItem Notebookbar SID_NOTEBOOKBAR
+SfxVoidItem Notebookbar SID_NOTEBOOKBAR
 (SfxStringItem File SID_NOTEBOOKBAR)
 [
     AutoUpdate = TRUE,
@@ -2660,7 +2660,7 @@ SfxVoidItem NewModule SID_BASICIDE_NEWMODULE
     GroupId = GID_MACRO;
 ]
 
-SfxUInt16Item NewStyle SID_STYLE_NEW
+SfxVoidItem NewStyle SID_STYLE_NEW
 (SfxStringItem Param SID_STYLE_NEW,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
     AutoUpdate = FALSE,
@@ -2715,7 +2715,7 @@ SfxVoidItem ObjectCatalog SID_BASICIDE_OBJCAT
 ]
 
 
-SfxStringItem ObjectMenue SID_OBJECT
+SfxVoidItem ObjectMenue SID_OBJECT
 (SfxInt16Item VerbID SID_OBJECT)
 [
     AutoUpdate = FALSE,
@@ -2735,7 +2735,7 @@ SfxStringItem ObjectMenue SID_OBJECT
 ]
 
 
-SfxObjectItem Open SID_OPENDOC
+SfxVoidItem Open SID_OPENDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER,SfxStringItem SuggestedSaveAsDir SID_DEFAULTFILEPATH,SfxStringItem SuggestedSaveAsName SID_DEFAULTFILENAME)
 [
     AutoUpdate = FALSE,
@@ -2753,7 +2753,7 @@ SfxObjectItem Open SID_OPENDOC
     GroupId = GID_APPLICATION;
 ]
 
-SfxObjectItem OpenRemote SID_OPENREMOTE
+SfxVoidItem OpenRemote SID_OPENREMOTE
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER,SfxStringItem SuggestedSaveAsDir SID_DEFAULTFILEPATH,SfxStringItem SuggestedSaveAsName SID_DEFAULTFILENAME)
 [
     AutoUpdate = FALSE,
@@ -2771,7 +2771,7 @@ SfxObjectItem OpenRemote SID_OPENREMOTE
     GroupId = GID_APPLICATION;
 ]
 
-SfxObjectItem SignPDF SID_SIGNPDF
+SfxVoidItem SignPDF SID_SIGNPDF
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER,SfxStringItem SuggestedSaveAsDir SID_DEFAULTFILEPATH,SfxStringItem SuggestedSaveAsName SID_DEFAULTFILENAME)
 [
     AutoUpdate = FALSE,
@@ -2789,7 +2789,7 @@ SfxObjectItem SignPDF SID_SIGNPDF
     GroupId = GID_APPLICATION;
 ]
 
-SfxObjectItem WebHtml SID_WEBHTML
+SfxVoidItem WebHtml SID_WEBHTML
 ()
 [
     AutoUpdate = FALSE,
@@ -2808,7 +2808,7 @@ SfxObjectItem WebHtml SID_WEBHTML
 ]
 
 
-SfxObjectItem OpenHyperlink SID_OPENHYPERLINK
+SfxVoidItem OpenHyperlink SID_OPENHYPERLINK
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER)
 [
     AutoUpdate = FALSE,
@@ -2846,7 +2846,7 @@ SfxStringItem DocInfoTitle SID_DOCINFO_TITLE
 ]
 
 
-SfxObjectItem OpenTemplate SID_OPENTEMPLATE
+SfxVoidItem OpenTemplate SID_OPENTEMPLATE
 (SfxStringItem Region SID_TEMPLATE_REGIONNAME,SfxStringItem Name SID_TEMPLATE_NAME)
 [
     AutoUpdate = FALSE,
@@ -3053,7 +3053,7 @@ SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
 ]
 
 
-SfxInt16Item PasteSpecial SID_PASTE_SPECIAL
+SfxVoidItem PasteSpecial SID_PASTE_SPECIAL
 (SfxUInt32Item Format SID_PASTE_SPECIAL)
 [
     AutoUpdate = FALSE,
@@ -3160,7 +3160,7 @@ SfxVoidItem PickList SID_PICKLIST
 ]
 
 
-SfxBoolItem Print SID_PRINTDOC
+SfxVoidItem Print SID_PRINTDOC
 (SfxStringItem PrinterName SID_PRINTER_NAME,SfxStringItem FileName SID_FILE_NAME,SfxInt16Item Copies SID_PRINT_COPIES,SfxStringItem RangeText SID_PRINT_PAGES,SfxBoolItem Selection SID_SELECTION,SfxBoolItem Asynchron SID_ASYNCHRON,SfxBoolItem Collate SID_PRINT_COLLATE,SfxBoolItem Silent SID_SILENT)
 [
     AutoUpdate = FALSE,
@@ -3179,7 +3179,7 @@ SfxBoolItem Print SID_PRINTDOC
 ]
 
 
-SfxBoolItem PrintDefault SID_PRINTDOCDIRECT
+SfxVoidItem PrintDefault SID_PRINTDOCDIRECT
 ()
 [
     AutoUpdate = FALSE,
@@ -3390,7 +3390,7 @@ SfxVoidItem Redo SID_REDO
     GroupId = GID_EDIT;
 ]
 
-SfxBoolItem Reload SID_RELOAD
+SfxVoidItem Reload SID_RELOAD
 ()
 [
     AutoUpdate = TRUE,
@@ -3467,10 +3467,9 @@ SfxVoidItem Repaint SID_REPAINT
 ]
 
 
-SfxStringItem RepeatAction SID_REPEAT
+SfxVoidItem Repeat SID_REPEAT
+()
 [
-    SfxVoidItem Repeat();
-
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3479,6 +3478,7 @@ SfxStringItem RepeatAction SID_REPEAT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
+    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3540,7 +3540,7 @@ SfxVoidItem SaveSimple SID_SAVESIMPLE
     GroupId = GID_DOCUMENT;
 ]
 
-SfxBoolItem Save SID_SAVEDOC
+SfxVoidItem Save SID_SAVEDOC
 (SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR,SfxBoolItem DontTerminateEdit FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -3561,7 +3561,7 @@ SfxBoolItem Save SID_SAVEDOC
 ]
 
 
-SfxBoolItem SaveAll SID_SAVEDOCS
+SfxVoidItem SaveAll SID_SAVEDOCS
 ()
 [
     AutoUpdate = FALSE,
@@ -3579,7 +3579,7 @@ SfxBoolItem SaveAll SID_SAVEDOCS
 ]
 
 
-SfxBoolItem SaveAs SID_SAVEASDOC
+SfxVoidItem SaveAs SID_SAVEASDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxBoolItem PasswordInteraction SID_PASSWORDINTERACTION,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
 [
     AutoUpdate = FALSE,
@@ -3598,7 +3598,7 @@ SfxBoolItem SaveAs SID_SAVEASDOC
     GroupId = GID_DOCUMENT;
 ]
 
-SfxBoolItem SaveAsRemote SID_SAVEASREMOTE
+SfxVoidItem SaveAsRemote SID_SAVEASREMOTE
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxBoolItem PasswordInteraction SID_PASSWORDINTERACTION,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
 [
     AutoUpdate = FALSE,
@@ -3618,7 +3618,7 @@ SfxBoolItem SaveAsRemote SID_SAVEASREMOTE
 ]
 
 
-SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
+SfxVoidItem SaveAsTemplate SID_DOCTEMPLATE
 (SfxStringItem TemplateRegion SID_TEMPLATE_REGIONNAME,SfxStringItem TemplateName SID_TEMPLATE_NAME)
 [
     AutoUpdate = FALSE,
@@ -3637,7 +3637,7 @@ SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
 
 
 
-SfxBoolItem SaveACopy SID_SAVEACOPY
+SfxVoidItem SaveACopy SID_SAVEACOPY
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxBoolItem Overwrite SID_OVERWRITE, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxBoolItem SaveACopy SID_SAVEACOPYITEM)
 [
     AutoUpdate = FALSE,
@@ -3784,7 +3784,7 @@ SfxVoidItem SbxRenamed SID_BASICIDE_SBXRENAMED
 ]
 
 
-SfxBoolItem ScrollBodyPageDown SID_MAIL_SCROLLBODY_PAGEDOWN
+SfxVoidItem ScrollBodyPageDown SID_MAIL_SCROLLBODY_PAGEDOWN
 ()
 [
     AutoUpdate = FALSE,
@@ -3894,7 +3894,7 @@ SfxVoidItem SendFax FN_FAX
 ]
 
 
-SfxBoolItem SendMail SID_MAIL_SENDDOC
+SfxVoidItem SendMail SID_MAIL_SENDDOC
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY )
 [
     AutoUpdate = FALSE,
@@ -3914,7 +3914,7 @@ SfxBoolItem SendMail SID_MAIL_SENDDOC
     GroupId = GID_DOCUMENT;
 ]
 
-SfxBoolItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
+SfxVoidItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY)
 [
     AutoUpdate = FALSE,
@@ -3934,7 +3934,7 @@ SfxBoolItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
     GroupId = GID_DOCUMENT;
 ]
 
-SfxBoolItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
+SfxVoidItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
 ()
 [
     AutoUpdate = FALSE,
@@ -3955,7 +3955,7 @@ SfxBoolItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
 ]
 
 
-SfxBoolItem SendMailDocAsFormat SID_MAIL_SENDDOCASFORMAT
+SfxVoidItem SendMailDocAsFormat SID_MAIL_SENDDOCASFORMAT
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY,SfxStringItem TypeName SID_TYPE_NAME)
 [
     AutoUpdate = FALSE,
@@ -3975,7 +3975,7 @@ SfxBoolItem SendMailDocAsFormat SID_MAIL_SENDDOCASFORMAT
     GroupId = GID_DOCUMENT;
 ]
 
-SfxBoolItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
+SfxVoidItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY)
 [
     AutoUpdate = FALSE,
@@ -3995,7 +3995,7 @@ SfxBoolItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
     GroupId = GID_DOCUMENT;
 ]
 
-SfxBoolItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
+SfxVoidItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY)
 [
     AutoUpdate = FALSE,
@@ -4237,10 +4237,9 @@ SfxVoidItem StylePreview SID_STYLE_PREVIEW
 ]
 
 
-SfxTemplateItem StyleApplyState SID_STYLE_APPLY
+SfxVoidItem StyleApply SID_STYLE_APPLY
+(SfxStringItem Template SID_STYLE_APPLY,SfxUInt16Item Family SID_STYLE_FAMILY,SfxStringItem FamilyName SID_STYLE_FAMILYNAME,SfxStringItem Style SID_APPLY_STYLE)
 [
-    SfxUInt16Item StyleApply(SfxStringItem Template SID_STYLE_APPLY,SfxUInt16Item Family SID_STYLE_FAMILY,SfxStringItem FamilyName SID_STYLE_FAMILYNAME,SfxStringItem Style SID_APPLY_STYLE);
-
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4249,6 +4248,7 @@ SfxTemplateItem StyleApplyState SID_STYLE_APPLY
     RecordAbsolute = FALSE,
     RecordPerSet;
 
+    SlotType = SfxTemplateItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4753,7 +4753,7 @@ SfxVoidItem ZoomToolBox SID_ZOOM_TOOLBOX
 ]
 
 
-SfxBoolItem ExportTo SID_EXPORTDOC
+SfxVoidItem ExportTo SID_EXPORTDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxBoolItem Overwrite SID_OVERWRITE, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxBoolItem SaveACopy SID_SAVEACOPYITEM)
 [
     AutoUpdate = FALSE,
@@ -4771,7 +4771,7 @@ SfxBoolItem ExportTo SID_EXPORTDOC
 ]
 
 
-SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
+SfxVoidItem ExportToPDF SID_EXPORTDOCASPDF
 (SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
 [
     AutoUpdate = FALSE,
@@ -4788,7 +4788,7 @@ SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
     GroupId = GID_DOCUMENT;
 ]
 
-SfxBoolItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
+SfxVoidItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
 (SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
 [
     AutoUpdate = FALSE,
@@ -4961,7 +4961,7 @@ SfxVoidItem InternetDialog SID_INET_DLG
 ]
 
 
-SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
+SfxVoidItem CheckPLZ SID_OFFICE_CHECK_PLZ
 (SfxStringItem PLZ SID_OFFICE_CHECK_PLZ)
 [
     AutoUpdate = FALSE,
@@ -5090,7 +5090,7 @@ SfxVoidItem BibliographyComponent SID_COMP_BIBLIOGRAPHY
 ]
 
 
-SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
+SfxVoidItem CheckPLZ SID_OFFICE_CHECK_PLZ
 (SfxStringItem PLZ SID_OFFICE_CHECK_PLZ)
 [
     AutoUpdate = FALSE,
@@ -5141,7 +5141,7 @@ SfxVoidItem OptionsTreeDialog SID_OPTIONS_TREEDIALOG
     GroupId = GID_OPTIONS;
 ]
 
-SfxBoolItem TerminateInplaceActivation SID_TERMINATE_INPLACEACTIVATION
+SfxVoidItem TerminateInplaceActivation SID_TERMINATE_INPLACEACTIVATION
 ()
 [
     AutoUpdate = FALSE,
@@ -5225,7 +5225,7 @@ SfxVoidItem AVMediaPlayer SID_AVMEDIA_PLAYER
     GroupId = GID_APPLICATION;
 ]
 
-SfxStringItem InsertAVMedia SID_INSERT_AVMEDIA
+SfxVoidItem InsertAVMedia SID_INSERT_AVMEDIA
 ()
 [
     AutoUpdate = FALSE,
@@ -5468,7 +5468,7 @@ SfxBoolItem DockingWindow9 SID_DOCKWIN_9
 ]
 
 
-SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
+SfxVoidItem PasteUnformatted SID_PASTE_UNFORMATTED
 ()
 [
     AutoUpdate = FALSE,
@@ -5488,7 +5488,7 @@ SfxInt16Item PasteUnformatted SID_PASTE_UNFORMATTED
 
 
 // call thesaurus dialog from context menu
-SfxInt16Item ThesaurusFromContext SID_THES
+SfxVoidItem ThesaurusFromContext SID_THES
 (SfxStringItem WordReplace SID_THES)
 [
     AutoUpdate = FALSE,
@@ -5525,7 +5525,7 @@ SvxZoomItem Zoom SID_ATTR_ZOOM
     GroupId = GID_VIEW;
 ]
 
-SfxStringItem Insert3DModel SID_INSERT_3DMODEL
+SfxVoidItem Insert3DModel SID_INSERT_3DMODEL
 ()
 [
     AutoUpdate = FALSE,

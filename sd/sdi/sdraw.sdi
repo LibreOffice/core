@@ -1423,7 +1423,7 @@ SfxVoidItem Forward SID_MOREFRONT
     GroupId = GID_MODIFY;
 ]
 
-SfxUInt32Item GetBlue SID_GETBLUE
+SfxVoidItem GetBlue SID_GETBLUE
 (SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
     AutoUpdate = FALSE,
@@ -1458,7 +1458,7 @@ SfxUInt32Item GetFillStyle SID_GETFILLSTYLE
     GroupId = GID_DRAWING;
 ]
 
-SfxUInt32Item GetGreen SID_GETGREEN
+SfxVoidItem GetGreen SID_GETGREEN
 (SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
     AutoUpdate = FALSE,
@@ -1511,7 +1511,7 @@ SfxUInt32Item GetLineWidth SID_GETLINEWIDTH
     GroupId = GID_DRAWING;
 ]
 
-SfxUInt32Item GetRed SID_GETRED
+SfxVoidItem GetRed SID_GETRED
 (SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
     AutoUpdate = FALSE,
@@ -2541,7 +2541,7 @@ SfxVoidItem ModifyPage SID_MODIFYPAGE
     GroupId = GID_MODIFY;
 ]
 
-SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
+SfxVoidItem AssignLayout SID_ASSIGN_LAYOUT
 (SfxUInt32Item WhatPage ID_VAL_WHATPAGE, SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT)
 [
     AutoUpdate = FALSE,

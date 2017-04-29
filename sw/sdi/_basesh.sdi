@@ -308,16 +308,16 @@ interface BaseTextSelection
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN // status()
+    SfxVoidItem StyleWatercanMode SID_STYLE_WATERCAN // status()
+    (
+        SfxStringItem Param SID_STYLE_WATERCAN ,
+        SfxUInt16Item Family SID_STYLE_FAMILY
+    )
     [
-        SfxUInt16Item WatercanStyleModeOnOff
-        (
-            SfxStringItem Param SID_STYLE_WATERCAN ,
-            SfxUInt16Item Family SID_STYLE_FAMILY
-        ) ;
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
-            NoRecord;
+        NoRecord;
+        SlotType = SfxBoolItem ;
         GroupId = GID_TEMPLATE ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
