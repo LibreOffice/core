@@ -445,7 +445,7 @@ void Writer::CreateBookmarkTable()
     }
 }
 
-// search alle Bookmarks in the range and return it in the Array
+// search all Bookmarks in the range and return it in the Array
 bool Writer::GetBookmarks(const SwContentNode& rNd, sal_Int32 nStt,
     sal_Int32 nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
