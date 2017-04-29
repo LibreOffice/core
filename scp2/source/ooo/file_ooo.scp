@@ -147,6 +147,7 @@ UI_FILELIST(dbtable, "UIConfig/modules/dbtable.filelist")
 UI_FILELIST(dbtdata, "UIConfig/modules/dbtdata.filelist")
 #endif
 UI_FILELIST(desktop, "UIConfig/desktop.filelist")
+UI_FILELIST(editeng, "UIConfig/editeng.filelist")
 UI_FILELIST(filter, "UIConfig/filter.filelist")
 UI_FILELIST(formula, "UIConfig/formula.filelist")
 UI_FILELIST(fps, "UIConfig/fps.filelist")
