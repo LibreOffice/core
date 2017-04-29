@@ -158,14 +158,13 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 
     nWrdStart = FormatLine( nWrdStart );
 
-    // Man muss immer im Hinterkopf behalten, dass es z.B.
-    // Felder gibt, die aufgetrennt werden koennen ...
+    // You always should keep in mind that for example there are fields
+    // which can be hyphenated
     if( m_pCurr->PrtWidth() && m_pCurr->GetLen() )
     {
-        // Wir muessen uns darauf einstellen, dass in der Zeile
-        // FlyFrames haengen, an denen auch umgebrochen werden darf.
-        // Wir suchen also die erste HyphPortion in dem angegebenen
-        // Bereich.
+        // We must be prepared that there are FlyFrames in the line,
+        // at which line breaking is possible. So we search for the first
+        // HyphPortion in the specified range.
 
         SwLinePortion *pPos = m_pCurr->GetPortion();
         const sal_Int32 nPamStart = rHyphInf.nStart;
@@ -173,8 +172,8 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         const sal_Int32 nEnd = rHyphInf.GetEnd();
         while( pPos )
         {
-            // Entweder wir liegen drueber oder wir laufen gerade auf eine
-            // Hyphportion die am Ende der Zeile oder vor einem Flys steht.
+            // Either we are above or we are running into a HyphPortion
+            // at the end of line or before a Fly.
             if( nWrdStart >= nEnd )
             {
                 nWrdStart = 0;
@@ -192,7 +191,7 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
             nWrdStart = nWrdStart + pPos->GetLen();
             pPos = pPos->GetPortion();
         }
-        // Wenn pPos 0 ist, wurde keine Trennstelle ermittelt.
+        // When pPos is null, no hyphen position was found.
         if( !pPos )
             nWrdStart = 0;
     }
@@ -202,7 +201,7 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         // from the loop.
         nWrdStart = 0;
 
-    // Das alte LineLayout wird wieder eingestellt ...
+    // the old LineLayout is set again ...
     delete m_pCurr;
     m_pCurr = pOldCurr;
 
@@ -215,15 +214,13 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( nWrdStart==0 )
         return false;
 
-    // nWrdStart bezeichnet nun die Position im String, der
-    // fuer eine Trennung zur Debatte steht.
-    // Start() hangelt sich zum End()
+    // nWrdStart contains the position in string that should be hyphenated
     rHyphInf.nWordStart = nWrdStart;
 
     sal_Int32 nLen = 0;
     const sal_Int32 nEnd = nWrdStart;
 
-    // Wir suchen vorwaerts
+    // we search forwards
     Reference< XHyphenatedWord > xHyphWord;
 
     Boundary aBound =
@@ -237,7 +234,7 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     OUString aSelText( rInf.GetText().copy(nWrdStart, nLen) );
     const sal_Int32 nMinTrail = ( nWrdStart + nLen > nEnd ) ? nWrdStart + nLen - nEnd - 1 : 0;
 
-    //!! rHyphInf.SetHyphWord( ... ) mu??? hier geschehen
+    //!! rHyphInf.SetHyphWord( ... ) must done here
     xHyphWord = rInf.HyphWord( aSelText, nMinTrail );
     if ( xHyphWord.is() )
     {
@@ -265,7 +262,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess &rGuess )
     if( rInf.IsHyphForbud() ||
         pPortion || // robust
         !xHyphWord.is() || // more robust
-        // Mehrzeilige Felder duerfen nicht interaktiv getrennt werden.
+        // multi-line fields can't be hyphenated interactively
         ( rInf.IsInterHyph() && InFieldGrp() ) )
         return false;
 
@@ -457,7 +454,7 @@ bool SwSoftHyphPortion::Format( SwTextFormatInfo &rInf )
 {
     bool bFull = true;
 
-    // special case for old german spelling
+    // special case for old German spelling
     if( rInf.IsUnderflow()  )
     {
         if( rInf.GetSoftHyphPos() )
@@ -468,8 +465,8 @@ bool SwSoftHyphPortion::Format( SwTextFormatInfo &rInf )
         {
             rInf.SetSoftHyphPos( rInf.GetIdx() );
             Width(0);
-            // if the soft hyphend word has an alternative spelling
-            // when hyphenated (old german spelling), the soft hyphen
+            // if the soft hyphened word has an alternative spelling
+            // when hyphenated (old German spelling), the soft hyphen
             // portion has to trigger an underflow
             SwTextGuess aGuess;
             bFull = rInf.IsInterHyph() ||
