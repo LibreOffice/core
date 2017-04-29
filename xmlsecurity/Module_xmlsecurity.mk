@@ -46,11 +46,13 @@ $(eval $(call gb_Module_add_screenshot_targets,xmlsecurity,\
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq (,$(filter PDFIUM,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
     Executable_pdfverify \
 ))
 
+endif
 endif
 
 endif
