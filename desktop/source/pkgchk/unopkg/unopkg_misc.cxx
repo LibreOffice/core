@@ -19,11 +19,8 @@
 
 #include <config_folders.h>
 
-#include "deployment.hrc"
-#include "unopkg_shared.h"
-#include "dp_identifier.hxx"
-#include "dp_gui.hrc"
-#include "lockfile.hxx"
+#include <stdio.h>
+
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/bootstrap.hxx>
@@ -32,14 +29,20 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
-#include <tools/getprocessworkingdir.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <unotools/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/sequence.hxx>
-#include <stdio.h>
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+
+#include "deployment.hrc"
+#include "unopkg_shared.h"
+#include "dp_identifier.hxx"
+#include "dp_gui.hrc"
+#include "lockfile.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -169,7 +172,7 @@ struct ProcessWorkingDir : public rtl::StaticWithInit<
     OUString, ProcessWorkingDir> {
     const OUString operator () () {
         OUString workingDir;
-        tools::getProcessWorkingDir(workingDir);
+        utl::Bootstrap::getProcessWorkingDir(workingDir);
         return workingDir;
     }
 };

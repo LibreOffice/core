@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 
+#include <cstddef>
 #include <stdio.h>
 
 #include <unotools/bootstrap.hxx>
@@ -33,7 +34,9 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <osl/process.h>
-#include <tools/getprocessworkingdir.hxx>
+
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
 
 // #define this to true, if remembering defaults is not supported properly
 #define RTL_BOOTSTRAP_DEFAULTS_BROKEN true
@@ -123,6 +126,30 @@ const Bootstrap::Impl& Bootstrap::data()
     return theImpl::get();
 }
 
+bool Bootstrap::getProcessWorkingDir(OUString &rUrl)
+{
+    rUrl.clear();
+    OUString s("$OOO_CWD");
+    rtl::Bootstrap::expandMacros(s);
+    if (s.isEmpty())
+    {
+        if (osl_getProcessWorkingDir(&rUrl.pData) == osl_Process_E_None)
+            return true;
+    }
+    else if (s[0] == '1')
+    {
+        rUrl = s.copy(1);
+        return true;
+    }
+    else if (s[0] == '2' &&
+               (osl::FileBase::getFileURLFromSystemPath(s.copy(1), rUrl) ==
+                osl::FileBase::E_None))
+    {
+        return true;
+    }
+    return false;
+}
+
 void Bootstrap::reloadData()
 {
     theImpl::get().initialize();
@@ -209,7 +236,7 @@ static bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !
     using osl::File;
 
     OUString sBasePath;
-    OSL_VERIFY(tools::getProcessWorkingDir(sBasePath));
+    OSL_VERIFY(Bootstrap::getProcessWorkingDir(sBasePath));
 
     OUString sAbsolute;
     if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))

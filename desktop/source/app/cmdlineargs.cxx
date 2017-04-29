@@ -33,7 +33,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
-#include <tools/getprocessworkingdir.hxx>
+#include <unotools/bootstrap.hxx>
 
 #include <svl/documentlockfile.hxx>
 
@@ -79,7 +79,7 @@ public:
         m_index(0)
     {
         OUString url;
-        if (tools::getProcessWorkingDir(url)) {
+        if (utl::Bootstrap::getProcessWorkingDir(url)) {
             m_cwdUrl.reset(url);
         }
     }
