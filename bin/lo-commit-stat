@@ -7,6 +7,9 @@ use strict;
 use LWP::UserAgent;
 use utf8;
 use File::Temp;
+use Encode;
+use open ':encoding(utf8)';
+use open ':std' => ':encoding(utf8)';
 
 my %module_dirname = (
     "core"              => "",
@@ -381,19 +384,16 @@ sub get_bug_name($$)
         $ua->env_proxy;
         my $response = $ua->get($url);
         if ($response->is_success) {
-            my $title = $response->title;
-            if ( $title =~ s/^Bug \d+ \S+ // ) {
+            my $title = decode('utf8', $response->title);
+            if ( $title =~ s/^(?:Bug $bug_number \S+|$bug_number –) // ) {
                 print "$title\n";
                 return $title;
             } else {
-                print "warning: not found; using commit message (only got $title)\n";
+                print "warning: not found; using commit message (only got $title)";
             }
-        } else {
-            print "\n";
         }
-    } else {
-        print "\n";
     }
+    print "\n";
 
     return $summary;
 }
