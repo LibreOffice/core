@@ -11,10 +11,6 @@ $(eval $(call gb_Executable_Executable,pdfverify))
 
 $(eval $(call gb_Executable_use_sdk_api,pdfverify))
 
-$(eval $(call gb_Executable_use_externals,pdfverify,\
-	pdfium \
-))
-
 $(eval $(call gb_Executable_set_include,pdfverify,\
     $$(INCLUDE) \
     -I$(SRCDIR)/xmlsecurity/inc \
