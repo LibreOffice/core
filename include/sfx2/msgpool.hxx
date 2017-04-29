@@ -24,26 +24,23 @@
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/msg.hxx>
-#include <string>
 #include <memory>
 #include <vector>
 
 class SfxInterface;
 class SfxSlot;
 
-typedef std::basic_string< sal_uInt16 > SfxSlotGroupArr_Impl;
-
 class SFX2_DLLPUBLIC SfxSlotPool
 {
-    std::unique_ptr<SfxSlotGroupArr_Impl>       _pGroups;
+    std::vector<sal_uInt16>     _vGroups;
     SfxSlotPool*                _pParentPool;
-    std::unique_ptr< std::vector<SfxInterface*> >       _pInterfaces;
-    sal_uInt16                      _nCurGroup;
-    sal_uInt16                      _nCurInterface;
-    sal_uInt16                      _nCurMsg;
+    std::vector<SfxInterface*>  _vInterfaces;
+    sal_uInt16                  _nCurGroup;
+    sal_uInt16                  _nCurInterface;
+    sal_uInt16                  _nCurMsg;
 
 private:
-    const SfxSlot* SeekSlot( sal_uInt16 nObject );
+    const SfxSlot*      SeekSlot( sal_uInt16 nObject );
 
 public:
     SfxSlotPool(SfxSlotPool* pParent=nullptr);
@@ -55,12 +52,12 @@ public:
 
     static SfxSlotPool& GetSlotPool( SfxViewFrame *pFrame=nullptr );
 
-    sal_uInt16              GetGroupCount();
+    sal_uInt16          GetGroupCount() const;
     OUString            SeekGroup( sal_uInt16 nNo );
     const SfxSlot*      FirstSlot();
     const SfxSlot*      NextSlot();
-    const SfxSlot*      GetSlot( sal_uInt16 nId );
-    const SfxSlot*      GetUnoSlot( const OUString& rUnoName );
+    const SfxSlot*      GetSlot( sal_uInt16 nId ) const;
+    const SfxSlot*      GetUnoSlot( const OUString& rUnoName ) const;
     const std::type_info*  GetSlotType( sal_uInt16 nSlotId ) const;
 };
 
