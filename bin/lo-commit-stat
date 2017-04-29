@@ -402,7 +402,9 @@ sub print_bugs($$$$)
 {
     my ($pbugs, $log, $wiki) = @_;
 
-    foreach my $bug ( sort { $a cmp $b } keys %{$pbugs}) {
+    # sort alphabetically by bugzilla-type, but whithin that numerically
+    foreach my $bug ( sort { ($a =~ /(\D+)/)[0] cmp ($b =~ /(\D+)/)[0] ||
+                             ($a =~ /(\d+)/)[0] <=> ($b =~ /(\d+)/)[0] } keys %{$pbugs}) {
         my $summary = $pbugs->{$bug}{'summary'};
 
         my $authors = "";
