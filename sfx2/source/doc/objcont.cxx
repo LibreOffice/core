@@ -324,9 +324,9 @@ void SfxObjectShell::LoadStyles
 
 {
     SfxStyleSheetBasePool *pSourcePool = rSource.GetStyleSheetPool();
-    DBG_ASSERT(pSourcePool, "Source-DocumentShell ohne StyleSheetPool");
+    DBG_ASSERT(pSourcePool, "Source-DocumentShell without StyleSheetPool");
     SfxStyleSheetBasePool *pMyPool = GetStyleSheetPool();
-    DBG_ASSERT(pMyPool, "Dest-DocumentShell ohne StyleSheetPool");
+    DBG_ASSERT(pMyPool, "Dest-DocumentShell without StyleSheetPool");
     pSourcePool->SetSearchMask(SfxStyleFamily::All);
     std::unique_ptr<Styles_Impl[]> pFound(new Styles_Impl[pSourcePool->Count()]);
     sal_uInt16 nFound = 0;

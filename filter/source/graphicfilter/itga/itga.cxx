@@ -789,7 +789,7 @@ bool TGAReader::ImplReadPalette()
     return mbStatus;
 }
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
 itgGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )

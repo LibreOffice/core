@@ -71,7 +71,7 @@ friend class BindDispatch_Impl;
     SfxPoolItem*            pLastItem;      // Last sent Item, never -1
     SfxItemState            eLastState;     // Last sent State
     bool                    bCtrlDirty:1;   // Update Controller?
-    bool                    bSlotDirty:1;   // Present Funktion, must be updated
+    bool                    bSlotDirty:1;   // Present Function, must be updated
     bool                    bItemVisible:1; // item visibility
     bool                    bItemDirty;     // Validity of pLastItem
 

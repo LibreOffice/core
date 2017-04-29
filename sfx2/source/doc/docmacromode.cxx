@@ -199,7 +199,7 @@ namespace sfx2
         try
         {
             // get document location from medium name and check whether it is a trusted one
-            // the service is created ohne document version, since it is not of interest here
+            // the service is created without document version, since it is not of interest here
             Reference< XDocumentDigitalSignatures > xSignatures(DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
             INetURLObject aURLReferer( m_xData->m_rDocumentAccess.getDocumentLocation() );
 
