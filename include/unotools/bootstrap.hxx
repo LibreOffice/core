@@ -108,6 +108,10 @@ namespace utl
         static Status checkBootstrapStatus(OUString& _rDiagnosticMessage, FailureCode& _rErrCode);
 
     public:
+        /// get the working directory of the process
+        static bool getProcessWorkingDir(OUString &rUrl);
+
+    public:
         // singleton impl-class
         class Impl;
         static const Impl& data(); // the data related to the bootstrap.ini file

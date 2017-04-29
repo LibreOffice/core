@@ -45,7 +45,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
-#include <tools/getprocessworkingdir.hxx>
 
 #include <algorithm>
 #include <cassert>
@@ -494,7 +493,7 @@ RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
             {
                 OStringBuffer buf(ARGUMENT_PREFIX);
                 OUString arg;
-                if (!(tools::getProcessWorkingDir(arg)
+                if (!(utl::Bootstrap::getProcessWorkingDir(arg)
                       && addArgument(buf, '1', arg)))
                 {
                     buf.append('0');
@@ -875,7 +874,7 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
 
         OStringBuffer aArguments(ARGUMENT_PREFIX);
         OUString cwdUrl;
-        if (!(tools::getProcessWorkingDir(cwdUrl) &&
+        if (!(utl::Bootstrap::getProcessWorkingDir(cwdUrl) &&
               addArgument(aArguments, '1', cwdUrl)))
         {
             aArguments.append('0');
@@ -1309,7 +1308,7 @@ static void AddConversionsToDispatchList(
     }
     else
     {
-        ::tools::getProcessWorkingDir( aPWD );
+        utl::Bootstrap::getProcessWorkingDir( aPWD );
     }
 
     if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )

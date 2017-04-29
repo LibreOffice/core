@@ -26,9 +26,9 @@
 #include <osl/process.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/getprocessworkingdir.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <unotools/bootstrap.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
@@ -200,7 +200,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
             OUString aRelative;
             OUString aAbsolute;
 
-            if (!tools::getProcessWorkingDir(aCWD))
+            if (!utl::Bootstrap::getProcessWorkingDir(aCWD))
                 continue;
             if (osl::FileBase::getFileURLFromSystemPath(aSystem, aRelative)
                     != osl::FileBase::E_None)
