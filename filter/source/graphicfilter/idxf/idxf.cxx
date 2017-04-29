@@ -27,7 +27,7 @@
 
 class FilterConfigItem;
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
 idxGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )

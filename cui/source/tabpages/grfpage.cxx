@@ -727,7 +727,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
 
 IMPL_LINK_NOARG(SvxGrfCropPage, Timeout, Timer *, void)
 {
-    DBG_ASSERT(pLastCropField,"Timeout ohne Feld?");
+    DBG_ASSERT(pLastCropField,"Timeout without field?");
     CropHdl(*pLastCropField);
     pLastCropField = nullptr;
 }

@@ -732,7 +732,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     }
     else if ( GetError() == ERRCODE_NONE && InitNew(nullptr) )
     {
-        // Name vor ConvertFrom setzen, damit GetSbxObject() schon funktioniert
+        // set name before ConvertFrom, so that GetSbxObject() already works
         bHasName = true;
         SetName( SfxResId(STR_NONAME).toString() );
 
