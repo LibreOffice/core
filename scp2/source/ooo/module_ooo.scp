@@ -68,6 +68,7 @@ Module gid_Module_Root
              gid_File_Share_Config_Sofficecfg_uiconfig_dbtdata,
 #endif
              gid_File_Share_Config_Sofficecfg_uiconfig_desktop,
+             gid_File_Share_Config_Sofficecfg_uiconfig_editeng,
              gid_File_Share_Config_Sofficecfg_uiconfig_filter,
              gid_File_Share_Config_Sofficecfg_uiconfig_formula,
              gid_File_Share_Config_Sofficecfg_uiconfig_fps,
