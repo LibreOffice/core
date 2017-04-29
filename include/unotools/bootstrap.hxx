@@ -26,10 +26,11 @@
 namespace utl
 {
     /** provides configuration information needed for application startup.
-        <p>This class handles the startup information for the office application.
+
+        This class handles the startup information for the office application.
            It encapsulates knowledge of how to retriev such information and how
-           to diagnose failures to retriev required data.
-        </p>
+           to diagnose failures to retrieve required data.
+
     */
     class UNOTOOLS_DLLPUBLIC Bootstrap
     {
