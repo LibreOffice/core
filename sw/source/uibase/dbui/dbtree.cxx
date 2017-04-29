@@ -43,7 +43,6 @@
 #include <helpid.h>
 #include <utlui.hrc>
 #include "bitmaps.hlst"
-#include "bitmaps.hlst"
 
 #include <unomid.h>
 
