@@ -583,6 +583,42 @@ class CheckTable(unittest.TestCase):
         xCellRangeString = xChartDataProvider.convertRangeFromXML("Table1.$A$1:.$C$3")
         self.assertEqual("Table1.A1:C3", xCellRangeString)
 
+    def test_splitRangeHorizontal(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(2, 2)
+        xText = xDoc.getText()
+        xCursor = xText.createTextCursor()
+        xText.insertTextContent(xCursor, xTable, False)
+        xTable.Data = ((1, 2), (3, 4))
+        xCursor = xTable.createCursorByCellName("A1")
+        xCursor.splitRange(2, True)
+        self.assertEqual(len(xTable.Data), 4)
+        self.assertEqual(xTable.Data[0], (float(1), float(2)))
+        self.assertEqual(xTable.Data[3], (float(3), float(4)))
+        self.assertTrue(math.isnan(xTable.Data[1][0]))
+        self.assertTrue(math.isnan(xTable.Data[1][1]))
+        self.assertTrue(math.isnan(xTable.Data[2][0]))
+        self.assertTrue(math.isnan(xTable.Data[2][1]))
+
+    def test_mergeRangeHorizontal(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(3, 3)
+        xText = xDoc.getText()
+        xCursor = xText.createTextCursor()
+        xText.insertTextContent(xCursor, xTable, False)
+        xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9))
+        xCursor = xTable.createCursorByCellName("A1")
+        xCursor.goDown(1, True)
+        xCursor.mergeRange()
+        self.assertEqual(len(xTable.Data), 3)
+        self.assertEqual(xTable.Data[0], (float(1), float(2), float(3)))
+        self.assertTrue(math.isnan(xTable.Data[1][0]))
+        self.assertEqual(xTable.Data[1][1], float(5))
+        self.assertEqual(xTable.Data[1][2], float(6))
+        self.assertEqual(xTable.Data[2], (float(7), float(8), float(9)))
+
 if __name__ == '__main__':
     unittest.main()
 
