@@ -60,7 +60,6 @@ struct SvGlobalHashNames
     SvStringHashEntry* MM_Container;
     SvStringHashEntry* MM_ReadOnlyDoc;
     SvStringHashEntry* MM_struct;
-    SvStringHashEntry* MM_SlotType;
     SvStringHashEntry* MM_DisableFlags;
 
     SvGlobalHashNames();
@@ -122,7 +121,6 @@ HASH_INLINE(SbxObject)
 HASH_INLINE(Container)
 HASH_INLINE(ReadOnlyDoc)
 HASH_INLINE(struct)
-HASH_INLINE(SlotType)
 HASH_INLINE(DisableFlags)
 
 

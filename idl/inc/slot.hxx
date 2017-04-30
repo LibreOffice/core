@@ -26,7 +26,6 @@
 class SvMetaSlot : public SvMetaAttribute
 {
 public:
-    tools::SvRef<SvMetaType>      aSlotType;
     SvIdentifier     aGroupId;
     SvIdentifier     aExecMethod;
     SvIdentifier     aStateMethod;
@@ -84,7 +83,6 @@ public:
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
 
-    SvMetaType *        GetSlotType() const;
     const OString&      GetGroupId() const;
     const OString&      GetExecMethod() const;
     const OString&      GetStateMethod() const;
