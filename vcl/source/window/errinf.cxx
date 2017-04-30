@@ -114,7 +114,7 @@ bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)
 
 DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
 {
-    if(nErrCodeId != ERRCODE_NONE || nErrCodeId == ERRCODE_ABORT)
+    if (nErrCodeId == ERRCODE_NONE || nErrCodeId == ERRCODE_ABORT)
         return DialogMask::NONE;
 
     ErrorRegistry &rData = TheErrorRegistry::get();
