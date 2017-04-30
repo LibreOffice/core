@@ -217,11 +217,6 @@ String SCSTR_COLUMN_USER
     Text [ en-US ] = "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Hide" ;
 };
 
-String SCSTR_FIELDSEP
-{
-    Text = ",\t44\t;\t59\t:\t58\t{%TAB}\t9\t{%SPACE}\t32 " ;
-};
-
 String SCSTR_FIELDSEP_TAB
 {
     Text [ en-US ] = "Tab" ;
@@ -230,11 +225,6 @@ String SCSTR_FIELDSEP_TAB
 String SCSTR_FIELDSEP_SPACE
 {
     Text [ en-US ] = "space" ;
-};
-
-String SCSTR_TEXTSEP
-{
-    Text = "\"\t34\t'\t39" ;
 };
 
 String SCSTR_FORMULA_AUTOCORRECTION
@@ -294,19 +284,9 @@ String STR_ACC_DOC_NAME
     Text [ en-US ] = "Document view";
 };
 
-String STR_ACC_DOC_DESCR
-{
-    Text = "";
-};
-
 String STR_ACC_TABLE_NAME
 {
     Text [ en-US ] = "Sheet %1";
-};
-
-String STR_ACC_TABLE_DESCR
-{
-    Text = "";
 };
 
 String STR_ACC_CELL_NAME
@@ -314,9 +294,9 @@ String STR_ACC_CELL_NAME
     Text [ en-US ] = "Cell %1";
 };
 
-String STR_ACC_CELL_DESCR
+String STR_ACC_LEFTAREA_NAME
 {
-    Text = "";
+    Text [ en-US ] = "Left area";
 };
 
 String STR_ACC_PREVIEWDOC_NAME
@@ -324,39 +304,9 @@ String STR_ACC_PREVIEWDOC_NAME
     Text [ en-US ] = "Page preview";
 };
 
-String STR_ACC_PREVIEWDOC_DESCR
-{
-    Text = "";
-};
-
-String STR_ACC_HEADERCELL_NAME
-{
-    Text = "";
-};
-
-String STR_ACC_HEADERCELL_DESCR
-{
-    Text = "";
-};
-
-String STR_ACC_LEFTAREA_NAME
-{
-    Text [ en-US ] = "Left area";
-};
-
-String STR_ACC_LEFTAREA_DESCR
-{
-    Text = "";
-};
-
 String STR_ACC_CENTERAREA_NAME
 {
     Text [ en-US ] = "Center area";
-};
-
-String STR_ACC_CENTERAREA_DESCR
-{
-    Text = "";
 };
 
 String STR_ACC_RIGHTAREA_NAME
@@ -364,29 +314,14 @@ String STR_ACC_RIGHTAREA_NAME
     Text [ en-US ] = "Right area";
 };
 
-String STR_ACC_RIGHTAREA_DESCR
-{
-    Text = "";
-};
-
 String STR_ACC_HEADER_NAME
 {
     Text [ en-US ] = "Header of page %1";
 };
 
-String STR_ACC_HEADER_DESCR
-{
-    Text = "";
-};
-
 String STR_ACC_FOOTER_NAME
 {
     Text [ en-US ] = "Footer of page %1";
-};
-
-String STR_ACC_FOOTER_DESCR
-{
-    Text = "";
 };
 
 String STR_ACC_EDITLINE_NAME

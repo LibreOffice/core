@@ -243,8 +243,7 @@ TemplateScanner::State TemplateScanner::ScanEntry()
                         // The following id comes from the bugdoc in #i2764#.
                     ||  (sContentType == "Impress 2.0"))
                 {
-                    OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(
-                        STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, sTitle );
+                    OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(sTitle);
                     mpLastAddedEntry = new TemplateEntry(sLocalisedTitle, sTargetURL);
                     mpTemplateDirectory->InsertEntry(mpLastAddedEntry);
                 }

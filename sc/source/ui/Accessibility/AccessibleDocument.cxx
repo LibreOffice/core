@@ -31,6 +31,7 @@
 #include "userdat.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 #include "table.hxx"
 #include "markdata.hxx"
 
@@ -2110,7 +2111,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
 OUString SAL_CALL
     ScAccessibleDocument::createAccessibleDescription()
 {
-    OUString sDescription = OUString(ScResId(STR_ACC_DOC_DESCR));
+    OUString sDescription = STR_ACC_DOC_DESCR;
     return sDescription;
 }
 

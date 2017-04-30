@@ -69,6 +69,7 @@
 #include "DrawViewShell.hxx"
 #include "unoobj.hxx"
 #include "res_bmp.hrc"
+#include "strings.hxx"
 #include "bitmaps.hlst"
 #include "unokywds.hxx"
 #include "unopback.hxx"
@@ -2907,7 +2908,7 @@ void SdMasterPage::setBackground( const Any& rValue )
             {
                 OUString aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
                 aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4);
-                aLayoutName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
+                aLayoutName += STR_LAYOUT_BACKGROUND;
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
                 if( pStyleSheet )
@@ -2951,7 +2952,7 @@ void SdMasterPage::getBackground( Any& rValue )
             {
                 OUString aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
                 aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4);
-                aLayoutName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
+                aLayoutName += STR_LAYOUT_BACKGROUND;
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
                 if( pStyleSheet )

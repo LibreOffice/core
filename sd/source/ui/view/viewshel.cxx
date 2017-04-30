@@ -89,6 +89,7 @@
 #include <editeng/editeng.hxx>
 #include <svl/poolitem.hxx>
 #include <glob.hrc>
+#include "strings.hxx"
 #include "AccessibleDocumentViewBase.hxx"
 
 using namespace ::com::sun::star;
@@ -908,7 +909,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
             if(bOutliner)
             {
                 SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
-                OUString aStyleName(SD_RESSTR(STR_LAYOUT_OUTLINE) + " 1");
+                OUString aStyleName(STR_LAYOUT_OUTLINE " 1");
                 SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
                 if( pFirstStyleSheet )
                     pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pItem));

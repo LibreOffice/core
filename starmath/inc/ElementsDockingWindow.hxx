@@ -75,15 +75,15 @@ class SmElementsControl : public Control
     friend class ElementSelectorUIObject;
     friend class ElementUIObject;
 
-    static const sal_uInt16 aUnaryBinaryOperatorsList[][2];
-    static const sal_uInt16 aRelationsList[][2];
-    static const sal_uInt16 aSetOperations[][2];
-    static const sal_uInt16 aFunctions[][2];
-    static const sal_uInt16 aOperators[][2];
-    static const sal_uInt16 aAttributes[][2];
-    static const sal_uInt16 aBrackets[][2];
-    static const sal_uInt16 aFormats[][2];
-    static const sal_uInt16 aOthers[][2];
+    static const std::pair<const char*, sal_uInt16> aUnaryBinaryOperatorsList[];
+    static const std::pair<const char*, sal_uInt16> aRelationsList[];
+    static const std::pair<const char*, sal_uInt16> aSetOperations[];
+    static const std::pair<const char*, sal_uInt16> aFunctions[];
+    static const std::pair<const char*, sal_uInt16> aOperators[];
+    static const std::pair<const char*, sal_uInt16> aAttributes[];
+    static const std::pair<const char*, sal_uInt16> aBrackets[];
+    static const std::pair<const char*, sal_uInt16> aFormats[];
+    static const std::pair<const char*, sal_uInt16> aOthers[];
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
@@ -103,7 +103,7 @@ class SmElementsControl : public Control
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
 
-    void addElements(const sal_uInt16 aElementsArray[][2], sal_uInt16 size);
+    void addElements(const std::pair<const char*, sal_uInt16> aElementsArray[], sal_uInt16 size);
 
     void build();
 

@@ -32,6 +32,7 @@
 #include "impex.hxx"
 #include "scuiasciiopt.hxx"
 #include "asciiopt.hrc"
+#include "strings.hxx"
 #include "csvtablebox.hxx"
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
@@ -249,7 +250,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
 
         aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
-        aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
+        aTextSepList(SCSTR_TEXTSEP),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
         meCall(eCall)
 {

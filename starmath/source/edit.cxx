@@ -763,64 +763,6 @@ void SmEditWindow::SelectAll()
     }
 }
 
-void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
-{
-    OSL_ENSURE( pEditView, "EditView missing" );
-    if (pEditView)
-    {
-        ESelection aSelection = pEditView->GetSelection();
-
-        OSL_ENSURE( pEditView, "NULL pointer" );
-        OUString aText = SM_RESSTR(nCommand);
-
-        OUString aCurrentFormula = pEditView->GetEditEngine()->GetText();
-        sal_Int32 nStartIndex = 0;
-        sal_Int32 nEndIndex = 0;
-
-        // get the start position (when we get a multi line formula)
-        for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nStartPara; nParaPos++)
-             nStartIndex = aCurrentFormula.indexOf("\n", nStartIndex) + 1;
-
-        nStartIndex += aSelection.nStartPos;
-
-        // get the end position (when we get a multi line formula)
-        for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nEndPara; nParaPos++)
-             nEndIndex = aCurrentFormula.indexOf("\n", nEndIndex) + 1;
-
-        nEndIndex += aSelection.nEndPos;
-
-        // remove right space of current symbol if there already is one
-        if (nEndIndex < aCurrentFormula.getLength() &&
-            aCurrentFormula[nEndIndex] == ' ')
-            aText = aText.trim();
-
-        // put a space before a new command if not in the beginning of a line
-        if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
-            aText = " " + aText;
-
-        pEditView->InsertText(aText);
-
-        // Remember start of the selection and move the cursor there afterwards.
-        aSelection.nEndPara = aSelection.nStartPara;
-        if (HasMark(aText))
-        {
-            aSelection.nEndPos = aSelection.nStartPos;
-            pEditView->SetSelection(aSelection);
-            SelNextMark();
-        }
-        else
-        {   // set selection after inserted text
-            aSelection.nEndPos = aSelection.nStartPos + aText.getLength();
-            aSelection.nStartPos = aSelection.nEndPos;
-            pEditView->SetSelection(aSelection);
-        }
-
-        aModifyIdle.Start();
-        StartCursorMove();
-        GrabFocus();
-    }
-}
-
 void SmEditWindow::MarkError(const Point &rPos)
 {
     OSL_ENSURE( pEditView, "EditView missing" );

@@ -12,6 +12,7 @@
 #include "document.hxx"
 #include "view.hxx"
 #include "accessibility.hxx"
+#include "strings.hxx"
 #include <comphelper/string.hxx>
 #include <cassert>
 
@@ -1071,27 +1072,6 @@ void SmCursor::InsertSpecial(const OUString& _aString)
     InsertNodes(pList);
 
     EndEdit();
-}
-
-void SmCursor::InsertCommand(sal_uInt16 nCommand) {
-    switch(nCommand){
-        case RID_NEWLINE:
-            InsertRow();
-            break;
-        case RID_FROMX:
-            InsertLimit(CSUB);
-            break;
-        case RID_TOX:
-            InsertLimit(CSUP);
-            break;
-        case RID_FROMXTOY:
-            if(InsertLimit(CSUB))
-                InsertLimit(CSUP);
-            break;
-        default:
-            InsertCommandText(SM_RESSTR(nCommand));
-            break;
-    }
 }
 
 void SmCursor::InsertCommandText(const OUString& aCommandText) {

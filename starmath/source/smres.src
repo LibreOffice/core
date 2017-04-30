@@ -32,15 +32,6 @@ String RID_FONTBOLD
 {
     Text [ en-US ] = "Bold" ;
 };
-String RID_UNDOFORMATNAME
-{
-    Text = "Format" ;
-};
-String GID_MATH
-{
-    Text = "StarMath" ;
-};
-
 String STR_BLACK
 {
     Text [ en-US ] = "black" ;

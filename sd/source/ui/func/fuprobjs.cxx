@@ -29,6 +29,7 @@
 #include "strings.hrc"
 #include "glob.hrc"
 #include "prltempl.hrc"
+#include "strings.hxx"
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
@@ -121,12 +122,12 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         if( bPage )
         {
             ePO = PO_TITLE;
-            aStyleName += SD_RESSTR(STR_LAYOUT_TITLE);
+            aStyleName += STR_LAYOUT_TITLE;
         }
         else
         {
             ePO = (PresentationObjects) ( PO_OUTLINE_1 + nDepth - 1 );
-            aStyleName += SD_RESSTR(STR_LAYOUT_OUTLINE) + " "
+            aStyleName += STR_LAYOUT_OUTLINE " "
                 + OUString::number(nDepth);
         }
 

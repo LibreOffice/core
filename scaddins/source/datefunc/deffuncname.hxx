@@ -17,39 +17,57 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "action.hxx"
-#include "smdll.hxx"
-#include "document.hxx"
-#include "starmath.hrc"
-#include "strings.hxx"
+#ifndef INCLUDED_SCADDINS_SOURCE_DATEFUNC_DEFFUNCTIONNAME_HXX
+#define INCLUDED_SCADDINS_SOURCE_DATEFUNC_DEFFUNCTIONNAME_HXX
 
-SmFormatAction::SmFormatAction(SmDocShell *pDocSh,
-                               const SmFormat& rOldFormat,
-                               const SmFormat& rNewFormat) :
-    pDoc( pDocSh ),
-    aOldFormat( rOldFormat ),
-    aNewFormat( rNewFormat )
+static const char* DATE_DEFFUNCNAME_DiffWeeks[2] =
 {
-}
+    "WOCHEN"
+    "WEEKS"
+};
 
-void SmFormatAction::Undo()
+static const char* DATE_DEFFUNCNAME_DiffMonths[2] =
 {
-    pDoc->SetFormat(aOldFormat);
-}
+    "MONATE"
+    "MONTHS"
+};
 
-void SmFormatAction::Redo()
+static const char* DATE_DEFFUNCNAME_DiffYears[2] =
 {
-    pDoc->SetFormat(aNewFormat);
-}
+    "JAHRE"
+    "YEARS"
+};
 
-void SmFormatAction::Repeat(SfxRepeatTarget& rDocSh)
+static const char* DATE_DEFFUNCNAME_IsLeapYear[2] =
 {
-    dynamic_cast< SmDocShell & >(rDocSh).SetFormat(aNewFormat);
-}
+    "ISTSCHALTJAHR"
+    "ISLEAPYEAR"
+};
 
-OUString SmFormatAction::GetComment() const
+static const char* DATE_DEFFUNCNAME_DaysInMonth[2] =
 {
-    return OUString(RID_UNDOFORMATNAME);
-}
+    "TAGEIMMONAT"
+    "DAYSINMONTH"
+};
+
+static const char* DATE_DEFFUNCNAME_DaysInYear[2] =
+{
+    "TAGEIMJAHR"
+    "DAYSINYEAR"
+};
+
+static const char* DATE_DEFFUNCNAME_WeeksInYear[2] =
+{
+    "WOCHENIMJAHR"
+    "WEEKSINYEAR"
+};
+
+static const char* DATE_DEFFUNCNAME_Rot13[2] =
+{
+    "ROT13"
+    "ROT13"
+};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

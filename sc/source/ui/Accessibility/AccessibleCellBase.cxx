@@ -27,6 +27,7 @@
 #include "formulacell.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 #include "unonames.hxx"
 #include "detfunc.hxx"
 #include "chgtrack.hxx"
@@ -206,7 +207,7 @@ sal_Int32
 OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleDescription()
 {
-    OUString sDescription = OUString(ScResId(STR_ACC_CELL_DESCR));
+    OUString sDescription = STR_ACC_CELL_DESCR;
 
     return sDescription;
 }

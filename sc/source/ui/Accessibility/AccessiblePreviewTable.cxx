@@ -29,6 +29,7 @@
 #include "document.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -579,7 +580,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
 OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription()
 {
-    OUString sDesc(ScResId(STR_ACC_TABLE_DESCR));
+    OUString sDesc(STR_ACC_TABLE_DESCR);
     return sDesc;
 }
 

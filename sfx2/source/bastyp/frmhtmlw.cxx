@@ -25,6 +25,7 @@
 #include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
 #include <tools/stream.hxx>
+#include <tools/resmgr.hxx>
 
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/evntconf.hxx>
@@ -36,6 +37,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfx.hrc>
 #include "bastyp.hrc"
+#include "strings.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -127,7 +129,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     }
 
     // Who we are
-    OUString sGenerator(STR_HTML_GENERATOR);
+    OUString sGenerator(ResMgr::GetReadStringHook()(STR_HTML_GENERATOR));
     OUString os( "$_OS" );
     ::rtl::Bootstrap::expandMacros(os);
     sGenerator = sGenerator.replaceFirst( "%1", os );

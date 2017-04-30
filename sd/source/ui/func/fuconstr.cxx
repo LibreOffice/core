@@ -29,6 +29,7 @@
 
 #include "app.hrc"
 #include "glob.hrc"
+#include "strings.hxx"
 #include "fudraw.hxx"
 #include "View.hxx"
 #include "Window.hxx"
@@ -316,7 +317,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         ***********************************************/
         OUString aName( pPage->GetLayoutName() );
         sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + strlen(SD_LT_SEPARATOR);
-        aName = aName.copy(0, n) + SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS);
+        aName = aName.copy(0, n) + STR_LAYOUT_BACKGROUNDOBJECTS;
         SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pPage->GetModel()->
                                                 GetStyleSheetPool()->
                                                 Find(aName, SD_STYLE_FAMILY_MASTERPAGE));

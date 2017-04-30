@@ -27,6 +27,7 @@
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>
 #include <algorithm>
+#include "deffuncname.hxx"
 
 using namespace ::com::sun::star;
 
@@ -61,7 +62,7 @@ const ScaFuncDataBase pFuncDataArr[] =
 
 #undef FUNCDATA
 
-ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
+ScaFuncData::ScaFuncData(const ScaFuncDataBase& rBaseData) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
     nUINameID( rBaseData.nUINameID ),
     nDescrID( rBaseData.nDescrID ),
@@ -70,9 +71,8 @@ ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     bDouble( rBaseData.bDouble ),
     bWithOpt( rBaseData.bWithOpt )
 {
-    ResStringArray aArr(ScaResId(rBaseData.nCompListID, rResMgr));
-    for (sal_uInt32 nIndex = 0; nIndex < aArr.Count(); ++nIndex)
-        aCompList.push_back(aArr.GetString(nIndex));
+    aCompList.push_back(OUString::createFromAscii(rBaseData.pCompListID[0]));
+    aCompList.push_back(OUString::createFromAscii(rBaseData.pCompListID[1]));
 }
 
 ScaFuncData::~ScaFuncData()
@@ -86,11 +86,10 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
     return (nParam > nParamCount) ? (nParamCount * 2) : (nParam * 2);
 }
 
-
-void InitScaFuncDataList( ScaFuncDataList& rList, ResMgr& rResMgr )
+void InitScaFuncDataList(ScaFuncDataList& rList)
 {
-    for(const auto & nIndex : pFuncDataArr)
-        rList.push_back( ScaFuncData( nIndex, rResMgr ) );
+    for (const auto & nIndex : pFuncDataArr)
+        rList.push_back(ScaFuncData(nIndex));
 }
 
 //  entry points for service registration / instantiation
@@ -175,11 +174,8 @@ void ScaDateAddIn::InitData()
     pResMgr.reset(ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc)));
     pFuncDataList.reset();
 
-    if ( pResMgr )
-    {
-        pFuncDataList.reset(new ScaFuncDataList);
-        InitScaFuncDataList( *pFuncDataList, *pResMgr );
-    }
+    pFuncDataList.reset(new ScaFuncDataList);
+    InitScaFuncDataList(*pFuncDataList);
 
     if( pDefLocales )
     {
