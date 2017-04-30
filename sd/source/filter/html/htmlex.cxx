@@ -79,6 +79,7 @@
 #include "sdpage.hxx"
 #include "sdattr.hxx"
 #include "glob.hrc"
+#include "strings.hxx"
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
 #include "sdresid.hxx"
@@ -363,7 +364,7 @@ HtmlExport::HtmlExport(
         maTextColor(COL_BLACK),
         maBackColor(COL_WHITE),
         mbDocColors(false),
-        maHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
+        maHTMLExtension(STR_HTMLEXP_DEFAULT_EXTENSION),
         maIndexUrl("index"),
         meScript( SCRIPT_ASP ),
         maHTMLHeader(

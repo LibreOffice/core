@@ -29,6 +29,7 @@
 #include "sdxfer.hxx"
 #include "sdresid.hxx"
 #include "glob.hrc"
+#include "strings.hxx"
 
 #include <svx/svdpagv.hxx>
 #include <osl/mutex.hxx>
@@ -141,7 +142,7 @@ void ViewClipboard::AssignMasterPage (
 
     // We have to remove the layout suffix from the layout name which is
     // appended again by SetMasterPage() to the given name.  Don't ask.
-    OUString sLayoutSuffix = SD_LT_SEPARATOR + SD_RESSTR(STR_LAYOUT_OUTLINE);
+    OUString sLayoutSuffix = SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
     sal_Int32 nLength = sLayoutSuffix.getLength();
     OUString sLayoutName = pMasterPage->GetLayoutName();
     if (sLayoutName.endsWith(sLayoutSuffix))

@@ -24,6 +24,7 @@
 #include <svx/svdview.hxx>
 
 #include "strings.hrc"
+#include "strings.hxx"
 #include "glob.hxx"
 #include "glob.hrc"
 #include "app.hrc"
@@ -179,13 +180,13 @@ RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
 
 void RenameLayoutTemplateUndoAction::Undo()
 {
-    OUString aLayoutName(maNewName + SD_LT_SEPARATOR + SD_RESSTR(STR_LAYOUT_OUTLINE));
+    OUString aLayoutName(maNewName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE);
     mpDoc->RenameLayoutTemplate( aLayoutName, maOldName );
 }
 
 void RenameLayoutTemplateUndoAction::Redo()
 {
-    OUString aLayoutName(maOldName + SD_LT_SEPARATOR + SD_RESSTR(STR_LAYOUT_OUTLINE));
+    OUString aLayoutName(maOldName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE);
     mpDoc->RenameLayoutTemplate( aLayoutName, maNewName );
 }
 

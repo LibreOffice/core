@@ -32,7 +32,6 @@
 #define STR_WARN_DELETE                         (RID_XSLT_DIALOG_START + 10)
 
 #define STR_DEFAULT_FILTER_NAME                 (RID_XSLT_DIALOG_START + 13)
-#define STR_DEFAULT_EXTENSION                   (RID_XSLT_DIALOG_START + 14)
 
 #define STR_ERROR_FILTER_NAME_EXISTS            (RID_XSLT_DIALOG_START + 15)
 #define STR_ERROR_TYPE_NAME_EXISTS              (RID_XSLT_DIALOG_START + 16)
@@ -48,15 +47,6 @@
 #define STR_FILTER_INSTALLED                    (RID_XSLT_DIALOG_START + 26)
 #define STR_FILTERS_INSTALLED                   (RID_XSLT_DIALOG_START + 27)
 #define STR_NO_FILTERS_FOUND                    (RID_XSLT_DIALOG_START + 28)
-
-#define STR_APPL_NAME_WRITER                    (RID_XSLT_DIALOG_START + 30)
-#define STR_APPL_NAME_CALC                      (RID_XSLT_DIALOG_START + 31)
-#define STR_APPL_NAME_IMPRESS                   (RID_XSLT_DIALOG_START + 32)
-#define STR_APPL_NAME_DRAW                      (RID_XSLT_DIALOG_START + 33)
-#define STR_APPL_NAME_OASIS_WRITER              (RID_XSLT_DIALOG_START + 34)
-#define STR_APPL_NAME_OASIS_CALC                (RID_XSLT_DIALOG_START + 35)
-#define STR_APPL_NAME_OASIS_IMPRESS             (RID_XSLT_DIALOG_START + 36)
-#define STR_APPL_NAME_OASIS_DRAW                (RID_XSLT_DIALOG_START + 37)
 
 #define STR_XML_FILTER_LISTBOX                  (RID_XSLT_DIALOG_START + 38)
 

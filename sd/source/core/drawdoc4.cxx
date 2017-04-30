@@ -107,6 +107,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svl/itemset.hxx>
 #include "app.hrc"
+#include "strings.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1100,7 +1101,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
     // Now set the layout name of the drawing and the notes page, as well as
     // their master pages.
     OUString aPageLayoutName(rNewName);
-    aPageLayoutName += aSep + SD_RESSTR(STR_LAYOUT_OUTLINE);
+    aPageLayoutName += aSep + STR_LAYOUT_OUTLINE;
 
     // Inform all text objects on pages that use the renamed layout and set the
     // new name.
