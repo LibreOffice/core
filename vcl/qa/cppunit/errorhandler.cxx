@@ -45,17 +45,20 @@ public:
 void ErrorHandlerTest::testGetErrorString()
 {
     MockErrorHandler aErrHdlr;
+    std::unique_ptr<ErrorInfo> xErrorInfo;
     OUString aErrStr;
 
     CPPUNIT_ASSERT_MESSAGE("GetErrorString(ERRCODE_ABORT, aErrStr) should return false",
                            !ErrorHandler::GetErrorString(ERRCODE_ABORT, aErrStr));
     // normally protected, but MockErrorHandler is a friend of this class
-    aErrHdlr.CreateString(ErrorInfo::GetErrorInfo(ERRCODE_ABORT), aErrStr);
+    xErrorInfo.reset(ErrorInfo::GetErrorInfo(ERRCODE_ABORT));
+    aErrHdlr.CreateString(xErrorInfo.get(), aErrStr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("error message should be non-dynamic", OUString("Non-dynamic error"), aErrStr);
 
     CPPUNIT_ASSERT_MESSAGE("GetErrorString(ERRCODE_NONE, aErrStr) should return false",
                            !ErrorHandler::GetErrorString(ERRCODE_NONE, aErrStr));
-    aErrHdlr.CreateString(ErrorInfo::GetErrorInfo(ERRCODE_NONE), aErrStr);
+    xErrorInfo.reset(ErrorInfo::GetErrorInfo(ERRCODE_NONE));
+    aErrHdlr.CreateString(xErrorInfo.get(), aErrStr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("error message should be non-dynamic", OUString("Non-dynamic error"), aErrStr);
 }
 
