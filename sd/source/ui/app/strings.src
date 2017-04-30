@@ -254,10 +254,6 @@ String STR_EXPORT_HTML_NAME
 {
     Text [ en-US ] = "Web Page";
 };
-String STR_HTMLEXP_DEFAULT_EXTENSION
-{
-    Text = ".html";
-};
 String STR_UNDO_COPYOBJECTS
 {
     Text [ en-US ] = "Duplicate" ;

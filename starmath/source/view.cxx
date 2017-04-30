@@ -1550,20 +1550,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 pWin->SelectAll();
             break;
 
-        case SID_INSERTCOMMAND:
-        {
-            const SfxInt16Item& rItem =
-                static_cast<const SfxInt16Item&>(rReq.GetArgs()->Get(SID_INSERTCOMMAND));
-
-            if (pWin && (mbInsertIntoEditWindow || !IsInlineEditEnabled()))
-                pWin->InsertCommand(rItem.GetValue());
-            if (IsInlineEditEnabled() && (GetDoc() && !mbInsertIntoEditWindow)) {
-                GetDoc()->GetCursor().InsertCommand(rItem.GetValue());
-                GetGraphicWindow().GrabFocus();
-            }
-            break;
-        }
-
         case SID_INSERTCOMMANDTEXT:
         {
             const SfxStringItem& rItem = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_INSERTCOMMANDTEXT));
