@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_904ee4bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-04-30T09:33:32Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dcommitdiff;h\u003d2c8a9d8a6e0933bb717d800e6ddfb2b0c6db1f96\n doesnt even seem to touch any diffs?",
+      "revId": "3fc3eb964881f04427d2d201be8462844a3f808e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
