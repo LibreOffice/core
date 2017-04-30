@@ -744,8 +744,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                             pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
                             if ( pItem != nullptr )
                             {
-                                if ( dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr )
-                                    bSuccess = dynamic_cast< const SfxBoolItem *>( pItem )->GetValue();
+                                if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pItem))
+                                    bSuccess = pBoolItem->GetValue();
                                 else if ( dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
                                     bSuccess = true;  // all other types are true
                             }
