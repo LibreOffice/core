@@ -530,7 +530,6 @@ void CppuType::dumpInitializer(
                     << (dynamic_cast< unoidl::EnumTypeEntity * >(ent.get())->
                         getMembers()[0].name);
                 break;
-            break;
             case codemaker::UnoType::Sort::String:
             case codemaker::UnoType::Sort::Type:
             case codemaker::UnoType::Sort::Any:
