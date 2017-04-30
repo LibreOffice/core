@@ -464,14 +464,19 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         fireItemSelected();
     }
 
-
     /**
      * set the text under the button list
      */
     private void refreshImageText()
     {
+        String sText;
         Object item = m_nCurrentSelection >= 0 ? getListModel().getElementAt(m_nCurrentSelection) : null;
-        final String sText = PropertyNames.SPACE + renderer.render(item);
+        if (item != null) {
+            sText = PropertyNames.SPACE + renderer.render(item);
+        }
+        else {
+            sText = "";
+        }
         Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, sText);
     }
 
