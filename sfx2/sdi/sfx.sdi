@@ -191,7 +191,7 @@ SfxUInt16Item ActualStyleFamily SID_STYLE_FAMILY
 ]
 
 
-SfxVoidItem NewDoc SID_NEWDOC
+SfxStringItem NewDoc SID_NEWDOC
 (SfxStringItem Region SID_TEMPLATE_REGIONNAME,SfxStringItem Name SID_TEMPLATE_NAME)
 [
     AutoUpdate = FALSE,
@@ -202,8 +202,6 @@ SfxVoidItem NewDoc SID_NEWDOC
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -230,7 +228,7 @@ SfxVoidItem AddBookmark SID_CREATELINK
 ]
 
 
-SfxVoidItem AddDirect SID_NEWDOCDIRECT
+SfxStringItem AddDirect SID_NEWDOCDIRECT
 ()
 [
     AutoUpdate = FALSE,
@@ -241,8 +239,6 @@ SfxVoidItem AddDirect SID_NEWDOCDIRECT
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -307,7 +303,7 @@ SfxStringItem Author SID_DOCINFO_AUTHOR
     GroupId = ;
 ]
 
-SfxVoidItem AutoPilotMenu SID_AUTOPILOTMENU
+SfxStringItem AutoPilotMenu SID_AUTOPILOTMENU
 ()
 [
     AutoUpdate = FALSE,
@@ -317,8 +313,6 @@ SfxVoidItem AutoPilotMenu SID_AUTOPILOTMENU
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -497,7 +491,7 @@ SfxVoidItem BreakPointsChanged SID_BASICIDE_BRKPNTSCHANGED
 ]
 
 
-SfxVoidItem BrowseBackward SID_BROWSE_BACKWARD
+SfxStringItem BrowseBackward SID_BROWSE_BACKWARD
 (SfxUInt16Item nSteps SID_BROWSE_BACKWARD)
 [
     AutoUpdate = TRUE,
@@ -509,8 +503,6 @@ SfxVoidItem BrowseBackward SID_BROWSE_BACKWARD
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxStringItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -518,7 +510,7 @@ SfxVoidItem BrowseBackward SID_BROWSE_BACKWARD
 ]
 
 
-SfxVoidItem BrowseForward SID_BROWSE_FORWARD
+SfxStringItem BrowseForward SID_BROWSE_FORWARD
 (SfxUInt16Item nSteps SID_BROWSE_FORWARD)
 [
     AutoUpdate = TRUE,
@@ -529,8 +521,6 @@ SfxVoidItem BrowseForward SID_BROWSE_FORWARD
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -631,7 +621,7 @@ SfxVoidItem CloseDocs SID_CLOSEDOCS
 ]
 
 
-SfxVoidItem CloseDoc SID_CLOSEDOC
+SfxStringItem CloseDoc SID_CLOSEDOC
 (SfxBoolItem saveChanges SID_CLOSEDOC_SAVE,SfxStringItem fileName SID_CLOSEDOC_FILENAME)
 [
     AutoUpdate = FALSE,
@@ -642,8 +632,6 @@ SfxVoidItem CloseDoc SID_CLOSEDOC
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1174,7 +1162,7 @@ SfxStringItem FileName SID_FILE_NAME
 ]
 
 
-SfxVoidItem FocusUrlBox SID_FOCUSURLBOX
+SfxStringItem FocusUrlBox SID_FOCUSURLBOX
 ()
 [
     AutoUpdate = FALSE,
@@ -1184,8 +1172,6 @@ SfxVoidItem FocusUrlBox SID_FOCUSURLBOX
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2005,7 +1991,7 @@ SfxBoolItem IsLoadingImages SID_IMG_LOADING
 ]
 
 
-SfxVoidItem PrintOut SID_PRINTOUT
+SfxBoolItem PrintOut SID_PRINTOUT
 (SfxInt16Item copies SID_PRINT_COPIES,SfxBoolItem silent SID_SILENT)
 [
     AutoUpdate = FALSE,
@@ -2015,8 +2001,6 @@ SfxVoidItem PrintOut SID_PRINTOUT
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2062,7 +2046,7 @@ SfxStringItem Keywords SID_DOCINFO_KEYWORDS
 ]
 
 
-SfxVoidItem LibLoaded SID_BASICIDE_LIBLOADED
+SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
@@ -2072,8 +2056,6 @@ SfxVoidItem LibLoaded SID_BASICIDE_LIBLOADED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2082,7 +2064,7 @@ SfxVoidItem LibLoaded SID_BASICIDE_LIBLOADED
 ]
 
 
-SfxVoidItem LibRemoved SID_BASICIDE_LIBREMOVED
+SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
@@ -2092,8 +2074,6 @@ SfxVoidItem LibRemoved SID_BASICIDE_LIBREMOVED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2102,7 +2082,7 @@ SfxVoidItem LibRemoved SID_BASICIDE_LIBREMOVED
 ]
 
 
-SfxVoidItem LibSelect SID_BASICIDE_LIBSELECTED
+SfxStringItem LibSelect SID_BASICIDE_LIBSELECTED
 (SfxUsrAnyItem Document SID_BASICIDE_ARG_DOCUMENT_MODEL,SfxStringItem LibName SID_BASICIDE_ARG_LIBNAME)
 [
     AutoUpdate = FALSE,
@@ -2112,8 +2092,6 @@ SfxVoidItem LibSelect SID_BASICIDE_LIBSELECTED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2255,7 +2233,7 @@ SfxVoidItem LoadToolBox SID_TOOLBOXOPTIONS
 ]
 
 
-SfxVoidItem Logout SID_LOGOUT
+SfxStringItem Logout SID_LOGOUT
 ()
 [
     AutoUpdate = FALSE,
@@ -2267,8 +2245,6 @@ SfxVoidItem Logout SID_LOGOUT
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxStringItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2276,7 +2252,7 @@ SfxVoidItem Logout SID_LOGOUT
 ]
 
 
-SfxVoidItem ScriptOrganizer SID_SCRIPTORGANIZER
+SfxScriptOrganizerItem ScriptOrganizer SID_SCRIPTORGANIZER
 (SfxScriptOrganizerItem ScriptOrganizer SID_SCRIPTORGANIZER)
 [
     AutoUpdate = FALSE,
@@ -2287,8 +2263,6 @@ SfxVoidItem ScriptOrganizer SID_SCRIPTORGANIZER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxScriptOrganizerItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2296,7 +2270,7 @@ SfxVoidItem ScriptOrganizer SID_SCRIPTORGANIZER
 ]
 
 
-SfxVoidItem MacroOrganizer SID_MACROORGANIZER
+SfxScriptOrganizerItem MacroOrganizer SID_MACROORGANIZER
 (SfxUInt16Item TabId SID_MACROORGANIZER)
 [
     AutoUpdate = FALSE,
@@ -2306,8 +2280,6 @@ SfxVoidItem MacroOrganizer SID_MACROORGANIZER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxScriptOrganizerItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2931,9 +2903,6 @@ SfxStringItem OpenUrl SID_OPENURL
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxStringItem
-
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -3033,7 +3002,7 @@ SfxVoidItem Paste SID_PASTE
 ]
 
 
-SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
+SvxClipboardFormatItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
 (SfxUInt32Item SelectedFormat SID_CLIPBOARD_FORMAT_ITEMS)
 [
     AutoUpdate = FALSE,
@@ -3043,8 +3012,6 @@ SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SvxClipboardFormatItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3275,7 +3242,7 @@ SfxVoidItem SetDocumentProperties SID_DOCINFO
 ]
 
 
-SfxVoidItem Quit SID_QUITAPP
+SfxStringItem Quit SID_QUITAPP
 ()
 [
     AutoUpdate = FALSE,
@@ -3286,8 +3253,6 @@ SfxVoidItem Quit SID_QUITAPP
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3371,7 +3336,7 @@ SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
 ]
 
 
-SfxVoidItem Redo SID_REDO
+SfxStringItem Redo SID_REDO
 ( SfxUInt16Item Redo SID_REDO, SfxBoolItem Repair SID_REPAIRPACKAGE )
 [
     AutoUpdate = FALSE,
@@ -3382,15 +3347,13 @@ SfxVoidItem Redo SID_REDO
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem Reload SID_RELOAD
+SfxBoolItem Reload SID_RELOAD
 ()
 [
     AutoUpdate = TRUE,
@@ -3401,8 +3364,6 @@ SfxVoidItem Reload SID_RELOAD
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3467,7 +3428,7 @@ SfxVoidItem Repaint SID_REPAINT
 ]
 
 
-SfxVoidItem Repeat SID_REPEAT
+SfxStringItem Repeat SID_REPEAT
 ()
 [
     AutoUpdate = FALSE,
@@ -3477,8 +3438,6 @@ SfxVoidItem Repeat SID_REPEAT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3540,7 +3499,7 @@ SfxVoidItem SaveSimple SID_SAVESIMPLE
     GroupId = GID_DOCUMENT;
 ]
 
-SfxVoidItem Save SID_SAVEDOC
+SfxStringItem Save SID_SAVEDOC
 (SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR,SfxBoolItem DontTerminateEdit FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -3551,8 +3510,6 @@ SfxVoidItem Save SID_SAVEDOC
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3579,7 +3536,7 @@ SfxVoidItem SaveAll SID_SAVEDOCS
 ]
 
 
-SfxVoidItem SaveAs SID_SAVEASDOC
+SfxStringItem SaveAs SID_SAVEASDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxBoolItem PasswordInteraction SID_PASSWORDINTERACTION,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
 [
     AutoUpdate = FALSE,
@@ -3589,8 +3546,6 @@ SfxVoidItem SaveAs SID_SAVEASDOC
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3598,7 +3553,7 @@ SfxVoidItem SaveAs SID_SAVEASDOC
     GroupId = GID_DOCUMENT;
 ]
 
-SfxVoidItem SaveAsRemote SID_SAVEASREMOTE
+SfxStringItem SaveAsRemote SID_SAVEASREMOTE
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxBoolItem PasswordInteraction SID_PASSWORDINTERACTION,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
 [
     AutoUpdate = FALSE,
@@ -3608,8 +3563,6 @@ SfxVoidItem SaveAsRemote SID_SAVEASREMOTE
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3894,7 +3847,7 @@ SfxVoidItem SendFax FN_FAX
 ]
 
 
-SfxVoidItem SendMail SID_MAIL_SENDDOC
+SfxStringItem SendMail SID_MAIL_SENDDOC
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY )
 [
     AutoUpdate = FALSE,
@@ -3906,15 +3859,13 @@ SfxVoidItem SendMail SID_MAIL_SENDDOC
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
 ]
 
-SfxVoidItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
+SfxStringItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY)
 [
     AutoUpdate = FALSE,
@@ -3926,15 +3877,13 @@ SfxVoidItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
 ]
 
-SfxVoidItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
+SfxStringItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
 ()
 [
     AutoUpdate = FALSE,
@@ -3946,8 +3895,6 @@ SfxVoidItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3955,7 +3902,7 @@ SfxVoidItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
 ]
 
 
-SfxVoidItem SendMailDocAsFormat SID_MAIL_SENDDOCASFORMAT
+SfxStringItem SendMailDocAsFormat SID_MAIL_SENDDOCASFORMAT
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY,SfxStringItem TypeName SID_TYPE_NAME)
 [
     AutoUpdate = FALSE,
@@ -3967,15 +3914,13 @@ SfxVoidItem SendMailDocAsFormat SID_MAIL_SENDDOCASFORMAT
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxStringItem
-
         AccelConfig = FALSE,
         MenuConfig = FALSE,
         ToolBoxConfig = FALSE,
     GroupId = GID_DOCUMENT;
 ]
 
-SfxVoidItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
+SfxStringItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY)
 [
     AutoUpdate = FALSE,
@@ -3986,8 +3931,6 @@ SfxVoidItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3995,7 +3938,7 @@ SfxVoidItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
     GroupId = GID_DOCUMENT;
 ]
 
-SfxVoidItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
+SfxStringItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
 (SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY)
 [
     AutoUpdate = FALSE,
@@ -4006,8 +3949,6 @@ SfxVoidItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4237,7 +4178,7 @@ SfxVoidItem StylePreview SID_STYLE_PREVIEW
 ]
 
 
-SfxVoidItem StyleApply SID_STYLE_APPLY
+SfxTemplateItem StyleApply SID_STYLE_APPLY
 (SfxStringItem Template SID_STYLE_APPLY,SfxUInt16Item Family SID_STYLE_FAMILY,SfxStringItem FamilyName SID_STYLE_FAMILYNAME,SfxStringItem Style SID_APPLY_STYLE)
 [
     AutoUpdate = FALSE,
@@ -4247,8 +4188,6 @@ SfxVoidItem StyleApply SID_STYLE_APPLY
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxTemplateItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4441,7 +4380,7 @@ SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
 ]
 
 
-SfxVoidItem Undo SID_UNDO
+SfxStringItem Undo SID_UNDO
 ( SfxUInt16Item Undo SID_UNDO, SfxBoolItem Repair SID_REPAIRPACKAGE )
 [
     AutoUpdate = FALSE,
@@ -4452,8 +4391,6 @@ SfxVoidItem Undo SID_UNDO
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4461,7 +4398,7 @@ SfxVoidItem Undo SID_UNDO
 ]
 
 
-SfxVoidItem FormatPaintbrush SID_FORMATPAINTBRUSH ( SfxBoolItem PersistentCopy SID_FORMATPAINTBRUSH )
+SfxBoolItem FormatPaintbrush SID_FORMATPAINTBRUSH ( SfxBoolItem PersistentCopy SID_FORMATPAINTBRUSH )
 [
       AutoUpdate = TRUE,
       FastCall = FALSE,
@@ -4470,8 +4407,6 @@ SfxVoidItem FormatPaintbrush SID_FORMATPAINTBRUSH ( SfxBoolItem PersistentCopy S
       Container = FALSE,
       RecordAbsolute = FALSE,
       RecordPerSet;
-
-      SlotType = SfxBoolItem
 
       AccelConfig = TRUE,
       MenuConfig = TRUE,

@@ -226,7 +226,7 @@ SfxVoidItem AlignBottom SID_ALIGNBOTTOM
 ]
 
 
-SfxVoidItem AlignHorizontalCenter SID_ALIGNCENTERHOR
+SfxStringItem AlignHorizontalCenter SID_ALIGNCENTERHOR
 ()
 [
     AutoUpdate = FALSE,
@@ -236,8 +236,6 @@ SfxVoidItem AlignHorizontalCenter SID_ALIGNCENTERHOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3689,7 +3687,7 @@ SfxStringItem NumberFormat SID_NUMBER_FORMAT
 ]
 
 
-SfxVoidItem NumberFormatCurrency SID_NUMBER_CURRENCY
+SfxBoolItem NumberFormatCurrency SID_NUMBER_CURRENCY
 (SfxUInt32Item NumberFormatCurrency SID_NUMBER_CURRENCY)
 [
     AutoUpdate = FALSE,
@@ -3699,7 +3697,6 @@ SfxVoidItem NumberFormatCurrency SID_NUMBER_CURRENCY
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6348,7 +6345,7 @@ SfxVoidItem InsertFieldDateVariable SID_INSERT_FIELD_DATE_VAR
 ]
 
 
-SfxVoidItem OpenFromCalc SID_OPEN_CALC
+SfxStringItem OpenFromCalc SID_OPEN_CALC
 ()
 [
     AutoUpdate = FALSE,
@@ -6360,15 +6357,13 @@ SfxVoidItem OpenFromCalc SID_OPEN_CALC
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxStringItem
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
 
-SfxVoidItem ConvertFormulaToValue SID_CONVERT_FORMULA_TO_VALUE
+SfxStringItem ConvertFormulaToValue SID_CONVERT_FORMULA_TO_VALUE
 ()
 [
     AutoUpdate = FALSE,
@@ -6378,8 +6373,6 @@ SfxVoidItem ConvertFormulaToValue SID_CONVERT_FORMULA_TO_VALUE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,

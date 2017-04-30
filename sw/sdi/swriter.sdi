@@ -102,7 +102,7 @@ SfxVoidItem AddAllUnknownWords FN_ADD_UNKNOWN
     GroupId = GID_OPTIONS;
 ]
 
-SfxVoidItem AlignBottom FN_FRAME_ALIGN_VERT_BOTTOM
+SfxStringItem AlignBottom FN_FRAME_ALIGN_VERT_BOTTOM
 ()
 [
     AutoUpdate = FALSE,
@@ -112,8 +112,6 @@ SfxVoidItem AlignBottom FN_FRAME_ALIGN_VERT_BOTTOM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -121,7 +119,7 @@ SfxVoidItem AlignBottom FN_FRAME_ALIGN_VERT_BOTTOM
     GroupId = GID_FRAME;
 ]
 
-SfxVoidItem AlignCharBottom FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
+SfxStringItem AlignCharBottom FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
 ()
 [
     AutoUpdate = FALSE,
@@ -131,8 +129,6 @@ SfxVoidItem AlignCharBottom FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -140,7 +136,7 @@ SfxVoidItem AlignCharBottom FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
     GroupId = GID_FRAME;
 ]
 
-SfxVoidItem AlignCharTop FN_FRAME_ALIGN_VERT_CHAR_TOP
+SfxStringItem AlignCharTop FN_FRAME_ALIGN_VERT_CHAR_TOP
 ()
 [
     AutoUpdate = FALSE,
@@ -150,8 +146,6 @@ SfxVoidItem AlignCharTop FN_FRAME_ALIGN_VERT_CHAR_TOP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -210,7 +204,7 @@ SfxVoidItem AlignRight FN_FRAME_ALIGN_HORZ_RIGHT
     GroupId = GID_FRAME;
 ]
 
-SfxVoidItem AlignRowBottom FN_FRAME_ALIGN_VERT_ROW_BOTTOM
+SfxStringItem AlignRowBottom FN_FRAME_ALIGN_VERT_ROW_BOTTOM
 ()
 [
     AutoUpdate = FALSE,
@@ -220,8 +214,6 @@ SfxVoidItem AlignRowBottom FN_FRAME_ALIGN_VERT_ROW_BOTTOM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -229,7 +221,7 @@ SfxVoidItem AlignRowBottom FN_FRAME_ALIGN_VERT_ROW_BOTTOM
     GroupId = GID_FRAME;
 ]
 
-SfxVoidItem AlignRowTop FN_FRAME_ALIGN_VERT_ROW_TOP
+SfxStringItem AlignRowTop FN_FRAME_ALIGN_VERT_ROW_TOP
 ()
 [
     AutoUpdate = FALSE,
@@ -239,8 +231,6 @@ SfxVoidItem AlignRowTop FN_FRAME_ALIGN_VERT_ROW_TOP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -248,7 +238,7 @@ SfxVoidItem AlignRowTop FN_FRAME_ALIGN_VERT_ROW_TOP
     GroupId = GID_FRAME;
 ]
 
-SfxVoidItem AlignTop FN_FRAME_ALIGN_VERT_TOP
+SfxStringItem AlignTop FN_FRAME_ALIGN_VERT_TOP
 ()
 [
     AutoUpdate = FALSE,
@@ -258,8 +248,6 @@ SfxVoidItem AlignTop FN_FRAME_ALIGN_VERT_TOP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -267,7 +255,7 @@ SfxVoidItem AlignTop FN_FRAME_ALIGN_VERT_TOP
     GroupId = GID_FRAME;
 ]
 
-SfxVoidItem AlignVerticalCenter FN_FRAME_ALIGN_VERT_CENTER
+SfxStringItem AlignVerticalCenter FN_FRAME_ALIGN_VERT_CENTER
 ()
 [
     AutoUpdate = FALSE,
@@ -277,8 +265,6 @@ SfxVoidItem AlignVerticalCenter FN_FRAME_ALIGN_VERT_CENTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -286,7 +272,7 @@ SfxVoidItem AlignVerticalCenter FN_FRAME_ALIGN_VERT_CENTER
     GroupId = GID_FRAME;
 ]
 
-SfxVoidItem AlignVerticalCharCenter FN_FRAME_ALIGN_VERT_CHAR_CENTER
+SfxStringItem AlignVerticalCharCenter FN_FRAME_ALIGN_VERT_CHAR_CENTER
 ()
 [
     AutoUpdate = FALSE,
@@ -296,8 +282,6 @@ SfxVoidItem AlignVerticalCharCenter FN_FRAME_ALIGN_VERT_CHAR_CENTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -305,7 +289,7 @@ SfxVoidItem AlignVerticalCharCenter FN_FRAME_ALIGN_VERT_CHAR_CENTER
     GroupId = GID_FRAME;
 ]
 
-SfxVoidItem AlignVerticalRowCenter FN_FRAME_ALIGN_VERT_ROW_CENTER
+SfxStringItem AlignVerticalRowCenter FN_FRAME_ALIGN_VERT_ROW_CENTER
 ()
 [
     AutoUpdate = FALSE,
@@ -315,8 +299,6 @@ SfxVoidItem AlignVerticalRowCenter FN_FRAME_ALIGN_VERT_ROW_CENTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -572,7 +554,7 @@ SfxVoidItem ChapterNumberingDialog FN_NUMBERING_OUTLINE_DLG
     GroupId = GID_OPTIONS;
 ]
 
-SfxVoidItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
+SfxBoolItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 (SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
 [
     AutoUpdate = TRUE,
@@ -583,15 +565,13 @@ SfxVoidItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxBoolItem
-
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
+SfxBoolItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
 (SvxColorItem FontColor SID_ATTR_CHAR_COLOR_EXT)
 [
     AutoUpdate = TRUE,
@@ -601,8 +581,6 @@ SfxVoidItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2685,7 +2663,7 @@ SfxVoidItem InsertColumnsAfter FN_TABLE_INSERT_COL_AFTER
     GroupId = GID_TABLE;
 ]
 
-SfxVoidItem InsertSection FN_INSERT_REGION
+SfxUInt16Item InsertSection FN_INSERT_REGION
 (SfxUInt16Item Columns SID_ATTR_COLUMNS,SfxStringItem RegionName FN_PARAM_REGION_NAME,SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,SfxStringItem LinkName FN_PARAM_1,SfxStringItem FilterName FN_PARAM_2,SfxStringItem SubRegion FN_PARAM_3)
 [
     AutoUpdate = FALSE,
@@ -2696,8 +2674,6 @@ SfxVoidItem InsertSection FN_INSERT_REGION
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxUInt16Item
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2862,7 +2838,7 @@ SfxVoidItem InsertFormula FN_EDIT_FORMULA
     GroupId = GID_INSERT;
 ]
 
-SfxVoidItem InsertFrame FN_INSERT_FRAME
+SfxUInt16Item InsertFrame FN_INSERT_FRAME
 (SfxUInt16Item AnchorType FN_INSERT_FRAME,SfxPointItem Pos FN_PARAM_1,SvxSizeItem Size FN_PARAM_2)
 [
     AutoUpdate = FALSE,
@@ -2874,15 +2850,13 @@ SfxVoidItem InsertFrame FN_INSERT_FRAME
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxUInt16Item
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
 
-SfxVoidItem InsertFrameInteract FN_INSERT_FRAME_INTERACT
+SfxUInt16Item InsertFrameInteract FN_INSERT_FRAME_INTERACT
 (SfxUInt16Item Columns SID_ATTR_COLUMNS, SfxUInt16Item Modifier SID_MODIFIER)
 [
     AutoUpdate = FALSE,
@@ -2892,8 +2866,6 @@ SfxVoidItem InsertFrameInteract FN_INSERT_FRAME_INTERACT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxUInt16Item
 
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -3094,7 +3066,7 @@ SfxVoidItem InsertPageCountField FN_INSERT_FLD_PGCOUNT
     GroupId = GID_INSERT;
 ]
 
-SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
+SfxObjectShellItem InsertPageFooter FN_INSERT_PAGEFOOTER
 (SfxStringItem PageStyle FN_INSERT_PAGEFOOTER,SfxBoolItem On FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -3106,15 +3078,13 @@ SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
     RecordPerSet;
     Asynchron;
 
-    SlotType = SfxObjectShellItem
-
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = GID_INSERT;
 ]
 
-SfxVoidItem InsertPageHeader FN_INSERT_PAGEHEADER
+SfxObjectShellItem InsertPageHeader FN_INSERT_PAGEHEADER
 (SfxStringItem PageStyle FN_INSERT_PAGEHEADER,SfxBoolItem On FN_PARAM_1)
 [
     AutoUpdate = FALSE,
@@ -3125,8 +3095,6 @@ SfxVoidItem InsertPageHeader FN_INSERT_PAGEHEADER
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxObjectShellItem
 
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -3277,7 +3245,7 @@ SfxVoidItem InsertScript FN_JAVAEDIT
     GroupId = GID_INSERT;
 ]
 
-SfxVoidItem InsertTable FN_INSERT_TABLE
+SfxUInt16Item InsertTable FN_INSERT_TABLE
 (SfxStringItem TableName FN_INSERT_TABLE,SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN,SfxUInt16Item Rows SID_ATTR_TABLE_ROW,SfxInt32Item Flags FN_PARAM_1,SfxStringItem AutoFormat FN_PARAM_2)
 [
     AutoUpdate = FALSE,
@@ -3288,8 +3256,6 @@ SfxVoidItem InsertTable FN_INSERT_TABLE
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxUInt16Item
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4066,7 +4032,7 @@ SfxVoidItem ApplyStyleTextbody FN_FORMAT_APPLY_TEXTBODY
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem MirrorGraphicOnEvenPages FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
+SfxBoolItem MirrorGraphicOnEvenPages FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
 ()
 [
     AutoUpdate = TRUE,
@@ -4076,8 +4042,6 @@ SfxVoidItem MirrorGraphicOnEvenPages FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4085,7 +4049,7 @@ SfxVoidItem MirrorGraphicOnEvenPages FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem MirrorOnEvenPages FN_FRAME_MIRROR_ON_EVEN_PAGES
+SfxBoolItem MirrorOnEvenPages FN_FRAME_MIRROR_ON_EVEN_PAGES
 ()
 [
     AutoUpdate = TRUE,
@@ -4095,8 +4059,6 @@ SfxVoidItem MirrorOnEvenPages FN_FRAME_MIRROR_ON_EVEN_PAGES
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4173,7 +4135,7 @@ SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
 ]
 
 //-#i68101#------------------------------------------------------------------------
-SfxVoidItem ObjectTitleDescription FN_TITLE_DESCRIPTION_SHAPE
+SfxStringItem ObjectTitleDescription FN_TITLE_DESCRIPTION_SHAPE
 ()
 [
     AutoUpdate = FALSE,
@@ -4184,8 +4146,6 @@ SfxVoidItem ObjectTitleDescription FN_TITLE_DESCRIPTION_SHAPE
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4193,7 +4153,7 @@ SfxVoidItem ObjectTitleDescription FN_TITLE_DESCRIPTION_SHAPE
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem NameGroup FN_NAME_SHAPE
+SfxStringItem NameGroup FN_NAME_SHAPE
 ()
 [
     AutoUpdate = FALSE,
@@ -4204,8 +4164,6 @@ SfxVoidItem NameGroup FN_NAME_SHAPE
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4595,7 +4553,7 @@ SfxVoidItem PageDownSel FN_PAGEDOWN_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-SfxVoidItem PageOffsetDialog FN_CHANGE_PAGENUM
+SfxUInt16Item PageOffsetDialog FN_CHANGE_PAGENUM
 (SfxUInt16Item nOffset FN_CHANGE_PAGENUM)
 [
     AutoUpdate = FALSE,
@@ -4606,8 +4564,6 @@ SfxVoidItem PageOffsetDialog FN_CHANGE_PAGENUM
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxUInt16Item
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4685,7 +4641,7 @@ SfxVoidItem PageUpSel FN_PAGEUP_SEL
     GroupId = GID_NAVIGATOR;
 ]
 
-SfxVoidItem PreviewZoom FN_PREVIEW_ZOOM
+SfxUInt16Item PreviewZoom FN_PREVIEW_ZOOM
 ( SfxUInt16Item PreviewZoom FN_PREVIEW_ZOOM )
 [
     AutoUpdate = FALSE,
@@ -4695,8 +4651,6 @@ SfxVoidItem PreviewZoom FN_PREVIEW_ZOOM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxUInt16Item
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5157,7 +5111,7 @@ SfxVoidItem SendOutlineToStarImpress FN_OUTLINE_TO_IMPRESS
     GroupId = GID_DOCUMENT;
 ]
 
-SfxVoidItem SetAnchorAtChar FN_TOOL_ANCHOR_AT_CHAR
+SfxBoolItem SetAnchorAtChar FN_TOOL_ANCHOR_AT_CHAR
 ()
 [
     AutoUpdate = TRUE,
@@ -5167,8 +5121,6 @@ SfxVoidItem SetAnchorAtChar FN_TOOL_ANCHOR_AT_CHAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5176,7 +5128,7 @@ SfxVoidItem SetAnchorAtChar FN_TOOL_ANCHOR_AT_CHAR
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem SetAnchorToChar FN_TOOL_ANCHOR_CHAR
+SfxBoolItem SetAnchorToChar FN_TOOL_ANCHOR_CHAR
 ()
 [
     AutoUpdate = TRUE,
@@ -5186,8 +5138,6 @@ SfxVoidItem SetAnchorToChar FN_TOOL_ANCHOR_CHAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5195,7 +5145,7 @@ SfxVoidItem SetAnchorToChar FN_TOOL_ANCHOR_CHAR
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem SetAnchorToFrame FN_TOOL_ANCHOR_FRAME
+SfxBoolItem SetAnchorToFrame FN_TOOL_ANCHOR_FRAME
 ()
 [
     AutoUpdate = TRUE,
@@ -5205,8 +5155,6 @@ SfxVoidItem SetAnchorToFrame FN_TOOL_ANCHOR_FRAME
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5214,7 +5162,7 @@ SfxVoidItem SetAnchorToFrame FN_TOOL_ANCHOR_FRAME
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem SetAnchorToPage FN_TOOL_ANCHOR_PAGE
+SfxBoolItem SetAnchorToPage FN_TOOL_ANCHOR_PAGE
 ()
 [
     AutoUpdate = TRUE,
@@ -5224,8 +5172,6 @@ SfxVoidItem SetAnchorToPage FN_TOOL_ANCHOR_PAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5233,7 +5179,7 @@ SfxVoidItem SetAnchorToPage FN_TOOL_ANCHOR_PAGE
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem SetAnchorToPara FN_TOOL_ANCHOR_PARAGRAPH
+SfxBoolItem SetAnchorToPara FN_TOOL_ANCHOR_PARAGRAPH
 ()
 [
     AutoUpdate = TRUE,
@@ -5243,8 +5189,6 @@ SfxVoidItem SetAnchorToPara FN_TOOL_ANCHOR_PARAGRAPH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5389,7 +5333,7 @@ SfxVoidItem ShiftBackspace FN_SHIFT_BACKSPACE
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
+SfxUInt16Item ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
 ( SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN,SfxUInt16Item Rows SID_ATTR_TABLE_ROW )
 [
     AutoUpdate = FALSE,
@@ -5400,7 +5344,6 @@ SfxVoidItem ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    SlotType = SfxUInt16Item
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5896,7 +5839,7 @@ SfxVoidItem TableDialog FN_FORMAT_TABLE_DLG
     GroupId = GID_TABLE;
 ]
 
-SfxVoidItem TableModeFix FN_TABLE_MODE_FIX
+SfxBoolItem TableModeFix FN_TABLE_MODE_FIX
 ()
 [
     AutoUpdate = TRUE,
@@ -5906,8 +5849,6 @@ SfxVoidItem TableModeFix FN_TABLE_MODE_FIX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5915,7 +5856,7 @@ SfxVoidItem TableModeFix FN_TABLE_MODE_FIX
     GroupId = GID_TABLE;
 ]
 
-SfxVoidItem TableModeFixProp FN_TABLE_MODE_FIX_PROP
+SfxBoolItem TableModeFixProp FN_TABLE_MODE_FIX_PROP
 ()
 [
     AutoUpdate = TRUE,
@@ -5925,8 +5866,6 @@ SfxVoidItem TableModeFixProp FN_TABLE_MODE_FIX_PROP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5934,7 +5873,7 @@ SfxVoidItem TableModeFixProp FN_TABLE_MODE_FIX_PROP
     GroupId = GID_TABLE;
 ]
 
-SfxVoidItem TableModeVariable FN_TABLE_MODE_VARIABLE
+SfxBoolItem TableModeVariable FN_TABLE_MODE_VARIABLE
 ()
 [
     AutoUpdate = TRUE,
@@ -5944,8 +5883,6 @@ SfxVoidItem TableModeVariable FN_TABLE_MODE_VARIABLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7130,7 +7067,7 @@ SfxVoidItem DeleteComment FN_DELETE_COMMENT
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_NOTE_AUTHOR )
+SfxStringItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_NOTE_AUTHOR )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -7139,8 +7076,6 @@ SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7199,7 +7134,7 @@ SfxVoidItem HideNote FN_HIDE_NOTE
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR ( SfxStringItem Author FN_HIDE_NOTE_AUTHOR )
+SfxStringItem HideAuthor FN_HIDE_NOTE_AUTHOR ( SfxStringItem Author FN_HIDE_NOTE_AUTHOR )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -7208,8 +7143,6 @@ SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR ( SfxStringItem Author FN_HIDE_NOTE_A
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxStringItem
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7432,7 +7365,7 @@ SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
     GroupId = GID_NAVIGATION;
 ]
 
-SfxVoidItem OpenFromWriter FN_OPEN_FILE
+SfxStringItem OpenFromWriter FN_OPEN_FILE
 ()
 [
     AutoUpdate = FALSE,
@@ -7443,8 +7376,6 @@ SfxVoidItem OpenFromWriter FN_OPEN_FILE
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    SlotType = SfxStringItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7720,7 +7651,7 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     GroupId = GID_OPTIONS;
 ]
 
-SfxVoidItem JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE
+SfxUInt16Item JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE
 ( SfxUInt16Item JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE )
 [
     AutoUpdate = FALSE,
@@ -7730,8 +7661,6 @@ SfxVoidItem JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxUInt16Item
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,

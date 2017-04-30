@@ -308,7 +308,7 @@ interface BaseTextSelection
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SfxVoidItem StyleWatercanMode SID_STYLE_WATERCAN // status()
+    SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN // status()
     (
         SfxStringItem Param SID_STYLE_WATERCAN ,
         SfxUInt16Item Family SID_STYLE_FAMILY
@@ -317,7 +317,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
         NoRecord;
-        SlotType = SfxBoolItem ;
         GroupId = GID_TEMPLATE ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]

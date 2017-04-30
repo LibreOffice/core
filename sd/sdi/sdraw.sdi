@@ -2297,7 +2297,7 @@ SfxVoidItem InteractiveTransparence SID_OBJECT_TRANSPARENCE
     GroupId = GID_MODIFY;
 ]
 
-SfxVoidItem LayerMode SID_LAYERMODE
+SfxBoolItem LayerMode SID_LAYERMODE
 (SfxBoolItem IsActive ID_VAL_ISACTIVE,SfxUInt32Item WhatLayer ID_VAL_WHATLAYER)
 [
     AutoUpdate = FALSE,
@@ -2307,8 +2307,6 @@ SfxVoidItem LayerMode SID_LAYERMODE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2420,7 +2418,7 @@ SfxVoidItem ManageLinks SID_MANAGE_LINKS
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem MasterPage SID_MASTERPAGE
+SfxBoolItem MasterPage SID_MASTERPAGE
 (SfxBoolItem Isactive ID_VAL_ISACTIVE)
 [
     AutoUpdate = FALSE,
@@ -2430,8 +2428,6 @@ SfxVoidItem MasterPage SID_MASTERPAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2987,7 +2983,7 @@ SfxVoidItem PageMargin SID_PAGEMARGIN
     GroupId = GID_MODIFY;
 ]
 
-SfxVoidItem PageMode SID_PAGEMODE
+SfxBoolItem PageMode SID_PAGEMODE
 (SfxBoolItem IsActive ID_VAL_ISACTIVE,SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
     AutoUpdate = FALSE,
@@ -2997,8 +2993,6 @@ SfxVoidItem PageMode SID_PAGEMODE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3843,7 +3837,7 @@ SfxVoidItem ZoomMode SID_ZOOM_MODE
     GroupId = GID_VIEW;
 ]
 
-SfxVoidItem Mirror SID_OBJECT_MIRROR
+SfxBoolItem Mirror SID_OBJECT_MIRROR
 ( SfxBoolItem MirrorVert ID_VAL_MIRRORVERT )
 [
     AutoUpdate = TRUE,
@@ -3853,8 +3847,6 @@ SfxVoidItem Mirror SID_OBJECT_MIRROR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
