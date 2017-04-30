@@ -104,6 +104,10 @@ void VBATest::testMiscVBAFunctions()
         "minute.vb",
         "mirr.vb",
         "month.vb",
+        "monthname.vb",
+        "oct.vb",
+        "nper.vb",
+        "npv.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
