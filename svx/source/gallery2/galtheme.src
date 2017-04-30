@@ -89,18 +89,6 @@ String RID_GALLERYSTR_THEME_SURFACES
     Text [ en-US ] = "Surfaces";
 };
 
-String RID_GALLERYSTR_THEME_HTMLBUTTONS
-{
-    // !!! Don't translate, please !!!
-    Text = "private://gallery/hidden/HtmlExportButtons";
-};
-
-String RID_GALLERYSTR_THEME_POWERPOINT
-{
-    // !!! Don't translate, please !!!
-    Text = "private://gallery/hidden/imgppt";
-};
-
 String RID_GALLERYSTR_THEME_COMPUTERS
 {
        Text [ en-US ] = "Computers";
@@ -144,12 +132,6 @@ String RID_GALLERYSTR_THEME_SYMBOLS
 String RID_GALLERYSTR_THEME_MYTHEME
 {
     Text [ en-US ] = "My Theme";
-};
-
-String RID_GALLERYSTR_THEME_USERSOUNDS
-{
-    // !!! Don't translate, please !!!
-    Text = "private://gallery/hidden/usersounds";
 };
 
 String RID_GALLERYSTR_THEME_ARROWS
@@ -220,24 +202,6 @@ String RID_GALLERYSTR_THEME_TROUBLE
 String RID_GALLERYSTR_THEME_SCREENBEANS
 {
     Text [ en-US ] = "Screen Beans";
-};
-
-String RID_GALLERYSTR_THEME_FONTWORK
-{
-    // !!! Don't translate, please !!!
-    Text = "private://gallery/hidden/fontwork";
-};
-
-String RID_GALLERYSTR_THEME_FONTWORK_VERTICAL
-{
-    // !!! Don't translate, please !!!
-    Text = "private://gallery/hidden/fontworkvertical";
-};
-
-String RID_GALLERYSTR_THEME_DUMMY5
-{
-    // !!! Don't translate, please !!!
-    Text = "Dummy 5";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

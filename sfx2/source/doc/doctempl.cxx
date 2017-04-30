@@ -88,6 +88,7 @@ using namespace ::ucbhelper;
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatelocnames.hrc>
 #include "doc.hrc"
+#include "strings.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
 
@@ -468,25 +469,32 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
 }
 
 
-/** Convert a resource string - a template name - to its localised pair if it exists.
-    @param nSourceResIds
-        Resource ID where the list of original en-US template names begin.
-    @param nDestResIds
-        Resource ID where the list of localised template names begin.
-    @param nCount
-        The number of names that have been localised.
+/** Convert a template name to its localised pair if it exists.
     @param rString
         Name to be translated.
     @return
         The localised pair of rString or rString if the former does not exist.
 */
-OUString SfxDocumentTemplates::ConvertResourceString (
-    int nSourceResIds, int nDestResIds, int nCount, const OUString& rString )
+OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
 {
-    for( int i = 0; i < nCount; ++i )
+    static const OUStringLiteral aTemplateNames[] =
     {
-        if( rString == SFX2_RESSTR(nSourceResIds + i))
-            return SFX2_RESSTR(nDestResIds + i);
+        STR_TEMPLATE_NAME1_DEF,
+        STR_TEMPLATE_NAME2_DEF,
+        STR_TEMPLATE_NAME3_DEF,
+        STR_TEMPLATE_NAME4_DEF,
+        STR_TEMPLATE_NAME5_DEF,
+        STR_TEMPLATE_NAME6_DEF,
+        STR_TEMPLATE_NAME7_DEF,
+        STR_TEMPLATE_NAME8_DEF,
+        STR_TEMPLATE_NAME9_DEF,
+        STR_TEMPLATE_NAME10_DEF
+    };
+
+    for (int i = 0; i < NUM_TEMPLATE_NAMES; ++i)
+    {
+        if (rString == aTemplateNames[i])
+            return SFX2_RESSTR(STR_TEMPLATE_NAME1 + i);
     }
     return rString;
 }
@@ -1202,13 +1210,11 @@ void SfxDocumentTemplates::ReInitFromComponent()
     pImp->ReInitFromComponent();
 }
 
-
 DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                 const OUString& rTitle )
 {
     mpParent    = pParent;
-    maTitle     = SfxDocumentTemplates::ConvertResourceString(
-                  STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, rTitle );
+    maTitle     = SfxDocumentTemplates::ConvertResourceString(rTitle);
 }
 
 

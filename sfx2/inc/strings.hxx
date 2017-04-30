@@ -12,6 +12,18 @@
 
 #define STR_HTML_GENERATOR "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"
 
+// Do not translate STR_TEMPLATE_NAME*_DEF names!!
+#define STR_TEMPLATE_NAME1_DEF  "Abstract Green"
+#define STR_TEMPLATE_NAME2_DEF  "Abstract Red"
+#define STR_TEMPLATE_NAME3_DEF  "Abstract Yellow"
+#define STR_TEMPLATE_NAME4_DEF  "Bright Blue"
+#define STR_TEMPLATE_NAME5_DEF  "DNA"
+#define STR_TEMPLATE_NAME6_DEF  "Inspiration"
+#define STR_TEMPLATE_NAME7_DEF  "Lush Green"
+#define STR_TEMPLATE_NAME8_DEF  "Metropolis"
+#define STR_TEMPLATE_NAME9_DEF  "Sunset"
+#define STR_TEMPLATE_NAME10_DEF "Vintage"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

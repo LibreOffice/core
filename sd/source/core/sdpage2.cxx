@@ -42,6 +42,7 @@
 #include "anminfo.hxx"
 
 #include "strings.hrc"
+#include "strings.hxx"
 #include "DrawDocShell.hxx"
 
 #include <tools/tenccvt.hxx>
@@ -84,7 +85,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     \********************************************************************/
     OUString aOldLayoutName(maLayoutName);    // merken
     OUStringBuffer aBuf(rLayoutName);
-    aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
+    aBuf.append(SD_LT_SEPARATOR).append(STR_LAYOUT_OUTLINE);
     maLayoutName = aBuf.makeStringAndClear();
 
     /*********************************************************************

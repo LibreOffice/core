@@ -57,7 +57,7 @@ struct ScaFuncDataBase
     const sal_Char*             pIntName;           // internal name (get***)
     sal_uInt16                  nUINameID;          // resource ID to UI name
     sal_uInt16                  nDescrID;           // resource ID to description, parameter names and ~ description
-    sal_uInt16                  nCompListID;        // resource ID to list of valid names
+    const char**                pCompListID;        // list of valid names
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
     bool                        bDouble;            // name already exist in Calc
@@ -77,7 +77,7 @@ private:
     bool                    bWithOpt;           // first parameter is internal
 
 public:
-                                ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr );
+                                ScaFuncData(const ScaFuncDataBase& rBaseData);
                                 ~ScaFuncData();
 
     sal_uInt16           GetUINameID() const     { return nUINameID; }

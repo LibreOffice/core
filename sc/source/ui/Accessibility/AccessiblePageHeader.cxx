@@ -29,6 +29,7 @@
 #include "attrib.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -297,7 +298,7 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceName
 
 OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription()
 {
-    OUString sDesc(SC_RESSTR(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR));
+    OUString sDesc(mbHeader ? OUString(STR_ACC_HEADER_DESCR) : OUString(STR_ACC_FOOTER_DESCR));
     return sDesc.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));
 }
 

@@ -44,17 +44,6 @@
 #define DATE_FUNCNAME_WeeksInYear           (DATE_FUNCNAME_START+6)
 #define DATE_FUNCNAME_Rot13                 (DATE_FUNCNAME_START+7)
 
-#define DATE_DEFFUNCNAME_START              (DATE_RESOURCE_START+2000)
-
-#define DATE_DEFFUNCNAME_DiffWeeks          (DATE_DEFFUNCNAME_START)
-#define DATE_DEFFUNCNAME_DiffMonths         (DATE_DEFFUNCNAME_START+1)
-#define DATE_DEFFUNCNAME_DiffYears          (DATE_DEFFUNCNAME_START+2)
-#define DATE_DEFFUNCNAME_IsLeapYear         (DATE_DEFFUNCNAME_START+3)
-#define DATE_DEFFUNCNAME_DaysInMonth        (DATE_DEFFUNCNAME_START+4)
-#define DATE_DEFFUNCNAME_DaysInYear         (DATE_DEFFUNCNAME_START+5)
-#define DATE_DEFFUNCNAME_WeeksInYear        (DATE_DEFFUNCNAME_START+6)
-#define DATE_DEFFUNCNAME_Rot13              (DATE_DEFFUNCNAME_START+7)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

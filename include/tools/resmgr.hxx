@@ -172,6 +172,7 @@ public:
 
     static void         SetReadStringHook( ResHookProc pProc );
     static ResHookProc  GetReadStringHook();
+    static OUString     ExpandVariables(const OUString& rString);
     static void         SetDefaultLocale( const LanguageTag& rLocale );
 };
 

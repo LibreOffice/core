@@ -38,11 +38,6 @@
 #define STR_PRESOBJ_ORGCHART                    RID_GLOB_START+11
 #define STR_PRESOBJ_TABLE                       RID_GLOB_START+12
 
-#define STR_LAYOUT_TITLE                        RID_GLOB_START+27
-#define STR_LAYOUT_OUTLINE                      RID_GLOB_START+28
-#define STR_LAYOUT_BACKGROUNDOBJECTS            RID_GLOB_START+29
-#define STR_LAYOUT_BACKGROUND                   RID_GLOB_START+30
-#define STR_LAYOUT_NOTES                        RID_GLOB_START+31
 #define STR_PRESOBJ_MPTITLE                     RID_GLOB_START+32
 #define STR_PRESOBJ_MPOUTLINE                   RID_GLOB_START+33
 #define STR_PRESOBJ_MPOUTLLAYER2                RID_GLOB_START+34
@@ -60,7 +55,7 @@
 #define STR_HANDOUT                             RID_GLOB_START+48
 
 #define STR_UNDO_MOVEPAGES                      RID_GLOB_START+52
-#define STR_LAYOUT_SUBTITLE                     RID_GLOB_START+54
+//free
 #define STR_POOLSHEET_OBJWITHARROW              RID_GLOB_START+55
 #define STR_POOLSHEET_OBJWITHSHADOW             RID_GLOB_START+56
 #define STR_POOLSHEET_OBJWITHOUTFILL            RID_GLOB_START+57

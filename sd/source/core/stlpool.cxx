@@ -66,6 +66,7 @@
 #include "helpids.h"
 #include <svl/itemset.hxx>
 #include "app.hrc"
+#include "strings.hxx"
 
 #include <com/sun/star/drawing/LineStyle.hpp>
 
@@ -143,7 +144,7 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const OUString& rLayoutName)
 {
     OUString aName(rLayoutName);
     aName += SD_LT_SEPARATOR;
-    aName += SD_RESSTR(STR_LAYOUT_TITLE);
+    aName += STR_LAYOUT_TITLE;
     SfxStyleSheetBase* pResult = Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
     return pResult;
 }
@@ -159,7 +160,7 @@ void SdStyleSheetPool::CreateOutlineSheetList (const OUString& rLayoutName, std:
 {
     OUString aName(rLayoutName);
     aName += SD_LT_SEPARATOR;
-    aName += SD_RESSTR(STR_LAYOUT_OUTLINE);
+    aName += STR_LAYOUT_OUTLINE;
 
     for (sal_Int32 nSheet = 1; nSheet < 10; nSheet++)
     {
@@ -207,7 +208,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     /**************************************************************************
     * outline levels
     **************************************************************************/
-    OUString aName(SD_RESSTR(STR_LAYOUT_OUTLINE));
+    OUString aName(STR_LAYOUT_OUTLINE);
     OUString aHelpFile;
 
     SvxLRSpaceItem aSvxLRSpaceItem( EE_PARA_LRSPACE );
@@ -330,7 +331,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     /**************************************************************************
     * Title
     **************************************************************************/
-    aName = aPrefix + SD_RESSTR(STR_LAYOUT_TITLE);
+    aName = aPrefix + STR_LAYOUT_TITLE;
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
@@ -376,7 +377,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     /**************************************************************************
     * Subtitle
     **************************************************************************/
-    aName = aPrefix + SD_RESSTR(STR_LAYOUT_SUBTITLE);
+    aName = aPrefix + STR_LAYOUT_SUBTITLE;
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
@@ -425,7 +426,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     /**************************************************************************
     * Notes
     **************************************************************************/
-    aName = aPrefix + SD_RESSTR(STR_LAYOUT_NOTES);
+    aName = aPrefix + STR_LAYOUT_NOTES;
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
@@ -470,7 +471,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     /**************************************************************************
     * Background objects
     **************************************************************************/
-    aName = aPrefix + SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS);
+    aName = aPrefix + STR_LAYOUT_BACKGROUNDOBJECTS;
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
@@ -492,7 +493,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     /**************************************************************************
     * Background
     **************************************************************************/
-    aName = aPrefix + SD_RESSTR(STR_LAYOUT_BACKGROUND);
+    aName = aPrefix + STR_LAYOUT_BACKGROUND;
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
     {
@@ -796,16 +797,16 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
 void SdStyleSheetPool::CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList)
 {
     OUString aPrefix(rLayoutName + SD_LT_SEPARATOR);
-    OUString aName(SD_RESSTR(STR_LAYOUT_OUTLINE));
+    OUString aName(STR_LAYOUT_OUTLINE);
 
     for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
         aNameList.push_back( aPrefix + aName + " " + OUString::number( nLevel ) );
 
-    aNameList.push_back( aPrefix + SD_RESSTR(STR_LAYOUT_TITLE) );
-    aNameList.push_back( aPrefix + SD_RESSTR(STR_LAYOUT_SUBTITLE) );
-    aNameList.push_back( aPrefix + SD_RESSTR(STR_LAYOUT_NOTES) );
-    aNameList.push_back( aPrefix + SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS) );
-    aNameList.push_back( aPrefix + SD_RESSTR(STR_LAYOUT_BACKGROUND) );
+    aNameList.push_back(aPrefix + STR_LAYOUT_TITLE);
+    aNameList.push_back(aPrefix + STR_LAYOUT_SUBTITLE);
+    aNameList.push_back(aPrefix + STR_LAYOUT_NOTES);
+    aNameList.push_back(aPrefix + STR_LAYOUT_BACKGROUNDOBJECTS);
+    aNameList.push_back(aPrefix + STR_LAYOUT_BACKGROUND);
 }
 
 /*************************************************************************

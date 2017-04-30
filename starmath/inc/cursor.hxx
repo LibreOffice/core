@@ -106,9 +106,6 @@ public:
     /** Insert an element into the formula */
     void InsertElement(SmFormulaElement element);
 
-    /** Insert a command specified in commands.src*/
-    void InsertCommand(sal_uInt16 nCommand);
-
     /** Insert command text translated into line entries at position
      *
      * Note: This method uses the parser to translate a command text into a

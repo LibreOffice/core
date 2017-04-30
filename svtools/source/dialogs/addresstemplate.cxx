@@ -51,12 +51,11 @@
 #include <algorithm>
 #include <map>
 #include <array>
+#include "strings.hxx"
 
 
 namespace svt
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
@@ -159,7 +158,7 @@ namespace svt
         // first collect all known programmatic names
         StringBag aKnownNames;
 
-        OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
+        OUString sLogicalFieldNames(STR_LOGICAL_FIELD_NAMES);
         sal_Int32 nIndex = 0;
         do
         {
@@ -621,7 +620,7 @@ void AssignmentPersistentData::ImplCommit()
         implScrollFields(0, false, false);
 
         // the logical names
-        OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
+        OUString sLogicalFieldNames(STR_LOGICAL_FIELD_NAMES);
         sal_Int32 nAdjustedTokenCount = comphelper::string::getTokenCount(sLogicalFieldNames, ';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
         DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");

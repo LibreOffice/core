@@ -1259,12 +1259,16 @@ OUString ResMgr::ReadStringWithoutHook()
     return aRet;
 }
 
+OUString ResMgr::ExpandVariables(const OUString& rString)
+{
+    if (pImplResHookProc)
+        return pImplResHookProc(rString);
+    return rString;
+}
+
 OUString ResMgr::ReadString()
 {
-    OUString aRet = ReadStringWithoutHook();
-    if ( pImplResHookProc )
-        aRet = pImplResHookProc( aRet );
-    return aRet;
+    return ExpandVariables(ReadStringWithoutHook());
 }
 
 void ResMgr::SetReadStringHook( ResHookProc pProc )

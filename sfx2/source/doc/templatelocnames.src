@@ -9,57 +9,6 @@
 
 #include <sfx2/templatelocnames.hrc>
 
-// Do not translate STR_TEMPLATE_NAME*_DEF names!!
-String STR_TEMPLATE_NAME1_DEF
-{
-    Text = "Abstract Green" ;
-};
-
-String STR_TEMPLATE_NAME2_DEF
-{
-    Text = "Abstract Red" ;
-};
-
-String STR_TEMPLATE_NAME3_DEF
-{
-    Text = "Abstract Yellow" ;
-};
-
-String STR_TEMPLATE_NAME4_DEF
-{
-    Text = "Bright Blue" ;
-};
-
-String STR_TEMPLATE_NAME5_DEF
-{
-    Text = "DNA" ;
-};
-
-String STR_TEMPLATE_NAME6_DEF
-{
-    Text = "Inspiration" ;
-};
-
-String STR_TEMPLATE_NAME7_DEF
-{
-    Text = "Lush Green" ;
-};
-
-String STR_TEMPLATE_NAME8_DEF
-{
-    Text = "Metropolis" ;
-};
-
-String STR_TEMPLATE_NAME9_DEF
-{
-    Text = "Sunset" ;
-};
-
-String STR_TEMPLATE_NAME10_DEF
-{
-    Text = "Vintage" ;
-};
-
 String STR_TEMPLATE_NAME1
 {
     Text [ en-US ] = "Abstract Green" ;

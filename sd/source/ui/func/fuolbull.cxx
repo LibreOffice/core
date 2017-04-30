@@ -26,6 +26,7 @@
 #include <editeng/numitem.hxx>
 #include "sdresid.hxx"
 #include "glob.hrc"
+#include "strings.hxx"
 
 #include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>
@@ -334,7 +335,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             if(bOutliner)
             {
                 SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
-                OUString aStyleName(SD_RESSTR(STR_LAYOUT_OUTLINE) + " 1");
+                OUString aStyleName(STR_LAYOUT_OUTLINE " 1");
                 SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
                 if( pFirstStyleSheet )
                     pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pItem));

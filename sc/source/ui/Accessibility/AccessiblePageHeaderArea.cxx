@@ -28,6 +28,7 @@
 #include "prevloc.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -207,13 +208,13 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription()
     switch (meAdjust)
     {
     case SvxAdjust::Left :
-        sDesc = OUString(ScResId(STR_ACC_LEFTAREA_DESCR));
+        sDesc = STR_ACC_LEFTAREA_DESCR;
         break;
     case SvxAdjust::Right:
-        sDesc = OUString(ScResId(STR_ACC_RIGHTAREA_DESCR));
+        sDesc = STR_ACC_RIGHTAREA_DESCR;
         break;
     case SvxAdjust::Center:
-        sDesc = OUString(ScResId(STR_ACC_CENTERAREA_DESCR));
+        sDesc = STR_ACC_CENTERAREA_DESCR;
         break;
     default:
         OSL_FAIL("wrong adjustment found");

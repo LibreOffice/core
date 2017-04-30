@@ -216,12 +216,6 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    //idlpp no menu entry, so no texts
-    SID_INSERTCOMMAND //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
     SID_INSERTCOMMANDTEXT
     [
         ExecMethod = Execute ;

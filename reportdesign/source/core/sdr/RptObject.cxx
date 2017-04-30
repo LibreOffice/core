@@ -32,6 +32,7 @@
 #include "ModuleHelper.hxx"
 
 #include <RptResId.hrc>
+#include "strings.hxx"
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
@@ -764,31 +765,26 @@ bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 {
-    sal_uInt16 nResId = 0;
     OUString aDefaultName = "HERE WE HAVE TO INSERT OUR NAME!";
     if ( _pObj->supportsService( SERVICE_FIXEDTEXT ) )
     {
-        nResId = RID_STR_CLASS_FIXEDTEXT;
+        aDefaultName = RID_STR_CLASS_FIXEDTEXT;
     }
     else if ( _pObj->supportsService( SERVICE_FIXEDLINE ) )
     {
-        nResId = RID_STR_CLASS_FIXEDLINE;
+        aDefaultName = RID_STR_CLASS_FIXEDLINE;
     }
     else if ( _pObj->supportsService( SERVICE_IMAGECONTROL ) )
     {
-        nResId = RID_STR_CLASS_IMAGECONTROL;
+        aDefaultName = RID_STR_CLASS_IMAGECONTROL;
     }
     else if ( _pObj->supportsService( SERVICE_FORMATTEDFIELD ) )
     {
-        nResId = RID_STR_CLASS_FORMATTEDFIELD;
+        aDefaultName = RID_STR_CLASS_FORMATTEDFIELD;
     }
-
-    if (nResId)
-        aDefaultName = ModuleRes(nResId);
 
     return aDefaultName;
 }
-
 
 void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt )
 {
