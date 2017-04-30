@@ -49,46 +49,6 @@ String STR_EXPORT_ONLY
     Text [ en-US ]      = "export filter";
 };
 
-String STR_APPL_NAME_WRITER
-{
-    Text                    = "%PRODUCTNAME Writer (.sxw)";
-};
-
-String STR_APPL_NAME_CALC
-{
-    Text                    = "%PRODUCTNAME Calc (.sxc)";
-};
-
-String STR_APPL_NAME_IMPRESS
-{
-    Text                    = "%PRODUCTNAME Impress (.sxi)";
-};
-
-String STR_APPL_NAME_DRAW
-{
-    Text                    = "%PRODUCTNAME Draw (.sxd)";
-};
-
-String STR_APPL_NAME_OASIS_WRITER
-{
-    Text = "%PRODUCTNAME Writer (.odt)";
-};
-
-String STR_APPL_NAME_OASIS_CALC
-{
-    Text = "%PRODUCTNAME Calc (.ods)";
-};
-
-String STR_APPL_NAME_OASIS_IMPRESS
-{
-    Text = "%PRODUCTNAME Impress (.odp)";
-};
-
-String STR_APPL_NAME_OASIS_DRAW
-{
-    Text = "%PRODUCTNAME Draw (.odg)";
-};
-
 String STR_WARN_DELETE
 {
     Text [ en-US ]      = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
@@ -127,11 +87,6 @@ String STR_DEFAULT_FILTER_NAME
 String STR_DEFAULT_UI_NAME
 {
     Text [ en-US ]  = "Untitled";
-};
-
-String STR_DEFAULT_EXTENSION
-{
-    Text                = "xml";
 };
 
 String STR_UNDEFINED_FILTER

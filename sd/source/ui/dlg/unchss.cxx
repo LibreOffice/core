@@ -33,7 +33,7 @@
 #include "drawdoc.hxx"
 #include "stlsheet.hxx"
 #include "glob.hrc"
-
+#include "strings.hxx"
 
 StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
                                            SfxStyleSheet* pTheStyleSheet,
@@ -59,23 +59,23 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     if (nPos != -1)
         aName = aName.copy(nPos + strlen(SD_LT_SEPARATOR));
 
-    if (aName == SD_RESSTR(STR_LAYOUT_TITLE))
+    if (aName == STR_LAYOUT_TITLE)
     {
         aName = SD_RESSTR(STR_PSEUDOSHEET_TITLE);
     }
-    else if (aName == SD_RESSTR(STR_LAYOUT_SUBTITLE))
+    else if (aName == STR_LAYOUT_SUBTITLE)
     {
         aName = SD_RESSTR(STR_PSEUDOSHEET_SUBTITLE);
     }
-    else if (aName == SD_RESSTR(STR_LAYOUT_BACKGROUND))
+    else if (aName == STR_LAYOUT_BACKGROUND)
     {
         aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUND);
     }
-    else if (aName == SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS))
+    else if (aName == STR_LAYOUT_BACKGROUNDOBJECTS)
     {
         aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
     }
-    else if (aName == SD_RESSTR(STR_LAYOUT_NOTES))
+    else if (aName == STR_LAYOUT_NOTES)
     {
         aName = SD_RESSTR(STR_PSEUDOSHEET_NOTES);
     }
@@ -86,7 +86,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
         if (nPos != -1)
         {
             OUString aNumStr(aName.copy(aOutlineStr.getLength()));
-            aName = SD_RESSTR(STR_LAYOUT_OUTLINE) + aNumStr;
+            aName = STR_LAYOUT_OUTLINE + aNumStr;
         }
     }
 

@@ -79,6 +79,7 @@
 #include "sdpage.hxx"
 #include "sdattr.hxx"
 #include "glob.hrc"
+#include "strings.hxx"
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
 #include "sdresid.hxx"

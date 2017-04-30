@@ -48,6 +48,7 @@
 #include "stlpool.hxx"
 #include "glob.hrc"
 #include "app.hrc"
+#include "strings.hxx"
 #include "glob.hxx"
 #include "helpids.h"
 #include "DrawViewShell.hxx"
@@ -418,23 +419,23 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
 
     if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_TITLE)))
     {
-        aInternalName = OUString(SdResId(STR_LAYOUT_TITLE));
+        aInternalName = STR_LAYOUT_TITLE;
     }
     else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_SUBTITLE)))
     {
-        aInternalName = OUString(SdResId(STR_LAYOUT_SUBTITLE));
+        aInternalName = STR_LAYOUT_SUBTITLE;
     }
     else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_BACKGROUND)))
     {
-        aInternalName = OUString(SdResId(STR_LAYOUT_BACKGROUND));
+        aInternalName = STR_LAYOUT_BACKGROUND;
     }
-        else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS)))
+    else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS)))
     {
-        aInternalName = OUString(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
+        aInternalName = STR_LAYOUT_BACKGROUNDOBJECTS;
     }
-        else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_NOTES)))
+    else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_NOTES)))
     {
-        aInternalName = OUString(SdResId(STR_LAYOUT_NOTES));
+        aInternalName = STR_LAYOUT_NOTES;
     }
     else
     {
@@ -443,7 +444,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         if (nPos >= 0)
         {
             OUString aNumStr(aStyleName.copy(aOutlineStr.getLength()));
-            aInternalName = OUString(SdResId(STR_LAYOUT_OUTLINE));
+            aInternalName = OUString(STR_LAYOUT_OUTLINE);
             aInternalName += aNumStr;
         }
     }
@@ -479,29 +480,29 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
         aStyleName = aStyleName.copy (aStyleName.indexOf(aSep) + aSep.getLength());
     }
 
-    if (aStyleName == OUString(SdResId(STR_LAYOUT_TITLE)))
+    if (aStyleName == STR_LAYOUT_TITLE)
     {
         aStyleName = OUString(SdResId(STR_PSEUDOSHEET_TITLE));
     }
-    else if (aStyleName == OUString(SdResId(STR_LAYOUT_SUBTITLE)))
+    else if (aStyleName == STR_LAYOUT_SUBTITLE)
     {
         aStyleName = OUString(SdResId(STR_PSEUDOSHEET_SUBTITLE));
     }
-    else if (aStyleName == OUString(SdResId(STR_LAYOUT_BACKGROUND)))
+    else if (aStyleName == STR_LAYOUT_BACKGROUND)
     {
         aStyleName = OUString(SdResId(STR_PSEUDOSHEET_BACKGROUND));
     }
-    else if (aStyleName == OUString(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS)))
+    else if (aStyleName == STR_LAYOUT_BACKGROUNDOBJECTS)
     {
         aStyleName = OUString(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
     }
-    else if (aStyleName == OUString(SdResId(STR_LAYOUT_NOTES)))
+    else if (aStyleName == STR_LAYOUT_NOTES)
     {
         aStyleName = OUString(SdResId(STR_PSEUDOSHEET_NOTES));
     }
     else
     {
-        OUString aOutlineStr((SdResId(STR_LAYOUT_OUTLINE)));
+        OUString aOutlineStr(STR_LAYOUT_OUTLINE);
         sal_Int32 nPos = aStyleName.indexOf(aOutlineStr);
         if (nPos != -1)
         {
@@ -557,7 +558,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
     }
 
     if (eFamily == SD_STYLE_FAMILY_MASTERPAGE &&
-        aStyleName.indexOf(OUString(SdResId(STR_LAYOUT_OUTLINE))) != -1 &&
+        aStyleName.indexOf(OUString(STR_LAYOUT_OUTLINE)) != -1 &&
         rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET)
     {
         const SfxItemSet* pCurSet = &GetItemSet();
