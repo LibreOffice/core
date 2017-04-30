@@ -108,7 +108,7 @@ using ::com::sun::star::ui::XSidebarProvider;
 
 struct GroupIDToCommandGroup
 {
-    sal_Int16   nGroupID;
+    SfxGroupId  nGroupID;
     sal_Int16   nCommandGroup;
 };
 
@@ -141,19 +141,19 @@ static const GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
     { GID_MODIFY        ,   frame::CommandGroup::MODIFY         },
     { GID_DRAWING       ,   frame::CommandGroup::DRAWING        },
     { GID_CONTROLS      ,   frame::CommandGroup::CONTROLS       },
-    { 0                 ,   0                                                   }
+    { SfxGroupId(0)     ,   0                                                   }
 };
 
-typedef std::unordered_map< sal_Int16, sal_Int16 > GroupHashMap;
+typedef std::unordered_map< SfxGroupId, sal_Int16 > GroupHashMap;
 
-sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
+sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID )
 {
     static GroupHashMap s_aHashMap;
 
     if ( !bGroupIDMapInitialized )
     {
         sal_Int32 i = 0;
-        while ( GroupIDCommandGroupMap[i].nGroupID != 0 )
+        while ( GroupIDCommandGroupMap[i].nGroupID != SfxGroupId(0) )
         {
             s_aHashMap.insert( GroupHashMap::value_type(
                 GroupIDCommandGroupMap[i].nGroupID,

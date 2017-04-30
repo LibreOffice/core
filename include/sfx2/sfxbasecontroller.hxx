@@ -53,12 +53,13 @@
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <sfx2/groupid.hxx>
 
 struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController
 
 class SfxViewFrame;
 
-sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID );
+sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID );
 
 
 //  class declarations

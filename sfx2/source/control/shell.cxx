@@ -537,7 +537,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
 
         SfxSlot *pNewSlot = new SfxSlot;
         pNewSlot->nSlotId = nSlotId;
-        pNewSlot->nGroupId = 0;
+        pNewSlot->nGroupId = SfxGroupId(0);
 
         // Verb slots must be executed asynchronously, so that they can be
         // destroyed while executing.

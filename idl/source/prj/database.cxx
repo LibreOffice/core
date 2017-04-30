@@ -229,7 +229,12 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
                         }
                     }
                     OString aName(aNameBuf.makeStringAndClear());
-                    if (!ReadIdFile(aName))
+                    if (aName == "sfx2/groupid.hxx")
+                    {
+                        // contains C++ code which we cannot parse
+                        // we special-case this by defining a macro internally in ....
+                    }
+                    else if (!ReadIdFile(aName))
                     {
                         throw SvParseException("cannot read file: " + aName, rTok);
                     }
