@@ -124,9 +124,4 @@ String STR_BOOSTRAP_ERR_NOACCESSRIGHTS
     Text [ en-US ] = "%PRODUCTNAME user installation could not be processed due to missing access rights. Please make sure that you have sufficient access rights for the following location and restart %PRODUCTNAME:\n\n";
 };
 
-String RID_APPTITLE
-{
-    Text = "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

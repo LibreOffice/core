@@ -19,41 +19,6 @@
 
 #include <helper/accessiblestrings.hrc>
 
-String RID_STR_ACC_ACTION_CLICK
-{
-    Text = "press";
-};
-
-String RID_STR_ACC_ACTION_TOGGLEPOPUP
-{
-    Text = "togglePopup";
-};
-
-String RID_STR_ACC_ACTION_SELECT
-{
-    Text = "select";
-};
-
-String RID_STR_ACC_ACTION_INCLINE
-{
-    Text = "incrementLine";
-};
-
-String RID_STR_ACC_ACTION_DECLINE
-{
-    Text = "decrementLine";
-};
-
-String RID_STR_ACC_ACTION_INCBLOCK
-{
-    Text = "incrementBlock";
-};
-
-String RID_STR_ACC_ACTION_DECBLOCK
-{
-    Text = "decrementBlock";
-};
-
 String RID_STR_ACC_NAME_BROWSEBUTTON
 {
     Text [ en-US ] = "Browse";

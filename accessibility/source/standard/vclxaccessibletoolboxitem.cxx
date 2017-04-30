@@ -43,6 +43,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include "strings.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
@@ -644,7 +645,7 @@ OUString VCLXAccessibleToolBoxItem::getAccessibleActionDescription ( sal_Int32 n
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
+    return OUString(RID_STR_ACC_ACTION_CLICK);
 }
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleToolBoxItem::getAccessibleActionKeyBinding( sal_Int32 nIndex )

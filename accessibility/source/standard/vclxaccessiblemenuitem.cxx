@@ -37,6 +37,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/settings.hxx>
+#include "strings.hxx"
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
@@ -424,7 +425,7 @@ OUString VCLXAccessibleMenuItem::getAccessibleActionDescription ( sal_Int32 nInd
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return TK_RES_STRING( RID_STR_ACC_ACTION_SELECT );
+    return OUString(RID_STR_ACC_ACTION_SELECT);
 }
 
 

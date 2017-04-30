@@ -33,6 +33,7 @@
 #include <vcl/lstbox.hxx>
 #include <helper/accresmgr.hxx>
 #include <helper/accessiblestrings.hrc>
+#include "strings.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -422,7 +423,7 @@ OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 n
         throw css::lang::IndexOutOfBoundsException();
 
     if (m_bIsDropDownBox)
-        return TK_RES_STRING(RID_STR_ACC_ACTION_TOGGLEPOPUP);
+        return OUString(RID_STR_ACC_ACTION_TOGGLEPOPUP);
 
     return OUString();
 }

@@ -25,6 +25,7 @@
 #include "baside3.hxx"
 
 #include "dlgresid.hrc"
+#include "strings.hxx"
 #include <svx/svxids.hrc>
 
 #include <com/sun/star/awt/PosSize.hpp>
@@ -312,101 +313,101 @@ OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
 
     if (xServiceInfo.is())    // single selection
     {
-        sal_uInt16 nResId = 0;
+        OUString sResId;
         aName = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES);
 
         if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlDialogModel" ) )
         {
-            nResId = RID_STR_CLASS_DIALOG;
+            sResId = RID_STR_CLASS_DIALOG;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlButtonModel" ) )
         {
-            nResId = RID_STR_CLASS_BUTTON;
+            sResId = RID_STR_CLASS_BUTTON;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) )
         {
-            nResId = RID_STR_CLASS_RADIOBUTTON;
+            sResId = RID_STR_CLASS_RADIOBUTTON;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) )
         {
-            nResId = RID_STR_CLASS_CHECKBOX;
+            sResId = RID_STR_CLASS_CHECKBOX;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlListBoxModel" ) )
         {
-            nResId = RID_STR_CLASS_LISTBOX;
+            sResId = RID_STR_CLASS_LISTBOX;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ) )
         {
-            nResId = RID_STR_CLASS_COMBOBOX;
+            sResId = RID_STR_CLASS_COMBOBOX;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) )
         {
-            nResId = RID_STR_CLASS_GROUPBOX;
+            sResId = RID_STR_CLASS_GROUPBOX;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlEditModel" ) )
         {
-            nResId = RID_STR_CLASS_EDIT;
+            sResId = RID_STR_CLASS_EDIT;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
         {
-            nResId = RID_STR_CLASS_FIXEDTEXT;
+            sResId = RID_STR_CLASS_FIXEDTEXT;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlImageControlModel" ) )
         {
-            nResId = RID_STR_CLASS_IMAGECONTROL;
+            sResId = RID_STR_CLASS_IMAGECONTROL;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ) )
         {
-            nResId = RID_STR_CLASS_PROGRESSBAR;
+            sResId = RID_STR_CLASS_PROGRESSBAR;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ) )
         {
-            nResId = RID_STR_CLASS_SCROLLBAR;
+            sResId = RID_STR_CLASS_SCROLLBAR;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ) )
         {
-            nResId = RID_STR_CLASS_FIXEDLINE;
+            sResId = RID_STR_CLASS_FIXEDLINE;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ) )
         {
-            nResId = RID_STR_CLASS_DATEFIELD;
+            sResId = RID_STR_CLASS_DATEFIELD;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ) )
         {
-            nResId = RID_STR_CLASS_TIMEFIELD;
+            sResId = RID_STR_CLASS_TIMEFIELD;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ) )
         {
-            nResId = RID_STR_CLASS_NUMERICFIELD;
+            sResId = RID_STR_CLASS_NUMERICFIELD;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ) )
         {
-            nResId = RID_STR_CLASS_CURRENCYFIELD;
+            sResId = RID_STR_CLASS_CURRENCYFIELD;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
         {
-            nResId = RID_STR_CLASS_FORMATTEDFIELD;
+            sResId = RID_STR_CLASS_FORMATTEDFIELD;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ) )
         {
-            nResId = RID_STR_CLASS_PATTERNFIELD;
+            sResId = RID_STR_CLASS_PATTERNFIELD;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFileControlModel" ) )
         {
-            nResId = RID_STR_CLASS_FILECONTROL;
+            sResId = RID_STR_CLASS_FILECONTROL;
         }
         else if ( xServiceInfo->supportsService( "com.sun.star.awt.tree.TreeControlModel" ) )
         {
-            nResId = RID_STR_CLASS_TREECONTROL;
+            sResId = RID_STR_CLASS_TREECONTROL;
         }
         else
         {
-            nResId = RID_STR_CLASS_CONTROL;
+            sResId = RID_STR_CLASS_CONTROL;
         }
 
-        if (nResId)
+        if (!sResId.isEmpty())
         {
-            aName += IDE_RESSTR(nResId);
+            aName += sResId;
         }
     }
     else if (!_rxObject.is())    // no properties

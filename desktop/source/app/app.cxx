@@ -145,6 +145,8 @@
 #define GETPID getpid
 #endif
 
+#include "strings.hxx"
+
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -1467,8 +1469,7 @@ int Desktop::Main()
         SetSplashScreenProgress(30);
 
         // create title string
-        ResMgr* pLabelResMgr = GetDesktopResManager();
-        OUString aTitle = pLabelResMgr ? ResId(RID_APPTITLE, *pLabelResMgr).toString() : OUString();
+        OUString aTitle(ReplaceStringHookProc(OUString(RID_APPTITLE)));
 
 #ifdef DBG_UTIL
         //include buildid in non product builds

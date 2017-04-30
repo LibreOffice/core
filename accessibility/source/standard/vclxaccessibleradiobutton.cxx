@@ -35,7 +35,7 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/window.hxx>
 #include <vcl/button.hxx>
-
+#include "strings.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -172,7 +172,6 @@ sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex )
     return true;
 }
 
-
 OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
@@ -180,9 +179,8 @@ OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 n
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return TK_RES_STRING( RID_STR_ACC_ACTION_SELECT );
+    return OUString(RID_STR_ACC_ACTION_SELECT);
 }
-
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActionKeyBinding( sal_Int32 nIndex )
 {

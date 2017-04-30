@@ -31,6 +31,7 @@
 #include "localizationmgr.hxx"
 
 #include "dlgresid.hrc"
+#include "strings.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
@@ -636,105 +637,103 @@ bool DlgEdObj::supportsService( OUString const & serviceName ) const
 
 OUString DlgEdObj::GetDefaultName() const
 {
-    sal_uInt16 nResId = 0;
+    OUString sResId;
     OUString aDefaultName;
     if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ) )
     {
-        nResId = RID_STR_CLASS_DIALOG;
+        sResId = RID_STR_CLASS_DIALOG;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlButtonModel" ) )
     {
-        nResId = RID_STR_CLASS_BUTTON;
+        sResId = RID_STR_CLASS_BUTTON;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) )
     {
-        nResId = RID_STR_CLASS_RADIOBUTTON;
+        sResId = RID_STR_CLASS_RADIOBUTTON;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) )
     {
-        nResId = RID_STR_CLASS_CHECKBOX;
+        sResId = RID_STR_CLASS_CHECKBOX;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlListBoxModel" ) )
     {
-        nResId = RID_STR_CLASS_LISTBOX;
+        sResId = RID_STR_CLASS_LISTBOX;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ) )
     {
-        nResId = RID_STR_CLASS_COMBOBOX;
+        sResId = RID_STR_CLASS_COMBOBOX;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) )
     {
-        nResId = RID_STR_CLASS_GROUPBOX;
+        sResId = RID_STR_CLASS_GROUPBOX;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlEditModel" ) )
     {
-        nResId = RID_STR_CLASS_EDIT;
+        sResId = RID_STR_CLASS_EDIT;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
     {
-        nResId = RID_STR_CLASS_FIXEDTEXT;
+        sResId = RID_STR_CLASS_FIXEDTEXT;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlImageControlModel" ) )
     {
-        nResId = RID_STR_CLASS_IMAGECONTROL;
+        sResId = RID_STR_CLASS_IMAGECONTROL;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ) )
     {
-        nResId = RID_STR_CLASS_PROGRESSBAR;
+        sResId = RID_STR_CLASS_PROGRESSBAR;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ) )
     {
-        nResId = RID_STR_CLASS_SCROLLBAR;
+        sResId = RID_STR_CLASS_SCROLLBAR;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ) )
     {
-        nResId = RID_STR_CLASS_FIXEDLINE;
+        sResId = RID_STR_CLASS_FIXEDLINE;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ) )
     {
-        nResId = RID_STR_CLASS_DATEFIELD;
+        sResId = RID_STR_CLASS_DATEFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ) )
     {
-        nResId = RID_STR_CLASS_TIMEFIELD;
+        sResId = RID_STR_CLASS_TIMEFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ) )
     {
-        nResId = RID_STR_CLASS_NUMERICFIELD;
+        sResId = RID_STR_CLASS_NUMERICFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ) )
     {
-        nResId = RID_STR_CLASS_CURRENCYFIELD;
+        sResId = RID_STR_CLASS_CURRENCYFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
     {
-        nResId = RID_STR_CLASS_FORMATTEDFIELD;
+        sResId = RID_STR_CLASS_FORMATTEDFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ) )
     {
-        nResId = RID_STR_CLASS_PATTERNFIELD;
+        sResId = RID_STR_CLASS_PATTERNFIELD;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlFileControlModel" ) )
     {
-        nResId = RID_STR_CLASS_FILECONTROL;
+        sResId = RID_STR_CLASS_FILECONTROL;
     }
     else if ( supportsService( "com.sun.star.awt.tree.TreeControlModel" ) )
     {
-        nResId = RID_STR_CLASS_TREECONTROL;
+        sResId = RID_STR_CLASS_TREECONTROL;
     }
     else if ( supportsService( "com.sun.star.awt.UnoControlSpinButtonModel" ) )
     {
-        nResId = RID_STR_CLASS_SPINCONTROL;
+        sResId = RID_STR_CLASS_SPINCONTROL;
     }
     else
     {
-        nResId = RID_STR_CLASS_CONTROL;
+        sResId = RID_STR_CLASS_CONTROL;
     }
 
-    if (nResId)
-    {
-        aDefaultName = IDE_RESSTR(nResId);
-    }
+    if (!sResId.isEmpty())
+        aDefaultName = sResId;
 
     return aDefaultName;
 }

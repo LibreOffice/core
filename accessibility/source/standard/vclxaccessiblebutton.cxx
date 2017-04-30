@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include "strings.hxx"
 
 #include <vcl/button.hxx>
 
@@ -204,7 +205,7 @@ OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
+    return OUString(RID_STR_ACC_ACTION_CLICK);
 }
 
 

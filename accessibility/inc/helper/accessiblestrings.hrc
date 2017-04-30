@@ -22,15 +22,6 @@
 
 #define RID_TK_ACC_START        1000
 
-// Accessible Action Id's
-#define RID_STR_ACC_ACTION_CLICK            ( RID_TK_ACC_START +    0 )
-#define RID_STR_ACC_ACTION_TOGGLEPOPUP      ( RID_TK_ACC_START +    1 )
-#define RID_STR_ACC_ACTION_SELECT           ( RID_TK_ACC_START +    2 )
-#define RID_STR_ACC_ACTION_INCLINE          ( RID_TK_ACC_START +    3 )
-#define RID_STR_ACC_ACTION_DECLINE          ( RID_TK_ACC_START +    4 )
-#define RID_STR_ACC_ACTION_INCBLOCK         ( RID_TK_ACC_START +    5 )
-#define RID_STR_ACC_ACTION_DECBLOCK         ( RID_TK_ACC_START +    6 )
-
 #define STR_SVT_ACC_ACTION_EXPAND           ( RID_TK_ACC_START +    8 )
 #define STR_SVT_ACC_ACTION_COLLAPSE         ( RID_TK_ACC_START +    9 )
 #define STR_SVT_ACC_LISTENTRY_SELCTED_STATE ( RID_TK_ACC_START +   10 )
