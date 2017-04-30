@@ -22,6 +22,7 @@
 #include "document.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 #include "table.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -342,7 +343,7 @@ uno::Reference< XAccessible > SAL_CALL
 OUString SAL_CALL
     ScAccessibleTableBase::createAccessibleDescription()
 {
-    OUString sDesc(ScResId(STR_ACC_TABLE_DESCR));
+    OUString sDesc(STR_ACC_TABLE_DESCR);
     return sDesc;
 }
 

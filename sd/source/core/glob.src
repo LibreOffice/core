@@ -145,31 +145,6 @@ String STR_PRESOBJ_TABLE
 {
     Text [ en-US ] = "Double-click to add a Spreadsheet" ;
 };
-/* do not translate */
-String STR_LAYOUT_TITLE
-{
-    Text = "Titel" ;
-};
-/* do not translate */
-String STR_LAYOUT_OUTLINE
-{
-    Text = "Gliederung" ;
-};
-/* do not translate */
-String STR_LAYOUT_BACKGROUND
-{
-    Text = "Hintergrund" ;
-};
-/* do not translate */
-String STR_LAYOUT_BACKGROUNDOBJECTS
-{
-    Text = "Hintergrundobjekte" ;
-};
-/* do not translate */
-String STR_LAYOUT_NOTES
-{
-    Text = "Notizen" ;
-};
 String STR_LAYOUT_DEFAULT_NAME
 {
     Text [ en-US ] = "Default" ;
@@ -185,11 +160,6 @@ String STR_STANDARD_STYLESHEET_NAME
 String STR_UNDO_MOVEPAGES
 {
     Text [ en-US ] = "Move slides" ;
-};
-/* do not translate */
-String STR_LAYOUT_SUBTITLE
-{
-    Text = "Untertitel" ;
 };
 String STR_POOLSHEET_MEASURE
 {

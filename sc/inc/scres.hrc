@@ -53,8 +53,8 @@
 
 #define SCSTR_CHARSET_USER      (STR_START + 59)
 #define SCSTR_COLUMN_USER       (STR_START + 60)
-#define SCSTR_FIELDSEP          (STR_START + 61)
-#define SCSTR_TEXTSEP           (STR_START + 62)
+//free
+//free
 #define SCSTR_MULTIPLE          (STR_START + 63)
 
 #define SCSTR_TOP10FILTER       (STR_START + 66)
@@ -103,27 +103,27 @@
 
 // document
 #define STR_ACC_DOC_NAME            (STR_START + 154)
-#define STR_ACC_DOC_DESCR           (STR_START + 155)
+//free
 #define STR_ACC_TABLE_NAME          (STR_START + 156)
-#define STR_ACC_TABLE_DESCR         (STR_START + 157)
+//free
 #define STR_ACC_CELL_NAME           (STR_START + 158)
-#define STR_ACC_CELL_DESCR          (STR_START + 159)
+//free
 
 // preview
 #define STR_ACC_PREVIEWDOC_NAME     (STR_START + 160)
-#define STR_ACC_PREVIEWDOC_DESCR    (STR_START + 161)
-#define STR_ACC_HEADERCELL_NAME     (STR_START + 162)
-#define STR_ACC_HEADERCELL_DESCR    (STR_START + 163)
+//free
+//free
+//free
 #define STR_ACC_LEFTAREA_NAME       (STR_START + 164)
-#define STR_ACC_LEFTAREA_DESCR      (STR_START + 165)
+//free
 #define STR_ACC_CENTERAREA_NAME     (STR_START + 166)
-#define STR_ACC_CENTERAREA_DESCR    (STR_START + 167)
+//free
 #define STR_ACC_RIGHTAREA_NAME      (STR_START + 168)
-#define STR_ACC_RIGHTAREA_DESCR     (STR_START + 169)
+//free
 #define STR_ACC_HEADER_NAME         (STR_START + 170)
-#define STR_ACC_HEADER_DESCR        (STR_START + 171)
+//free
 #define STR_ACC_FOOTER_NAME         (STR_START + 172)
-#define STR_ACC_FOOTER_DESCR        (STR_START + 173)
+//free
 
 // Editline
 #define STR_ACC_EDITLINE_NAME       (STR_START + 174)

@@ -63,10 +63,7 @@ public:
 
     // Convert a resource string - a template name - to its localised pair
     // if it exists in templatelocnames.src
-    static OUString ConvertResourceString(int nSourceResIds,
-                            int nDestResIds,
-                            int nCount,
-                            const OUString& rString);
+    static OUString ConvertResourceString(const OUString& rString);
 
     bool            Copy(sal_uInt16 nTargetRegion,
                          sal_uInt16 nTargetIdx,

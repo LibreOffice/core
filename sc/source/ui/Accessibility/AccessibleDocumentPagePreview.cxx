@@ -29,6 +29,7 @@
 #include "editsrc.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 #include "DrawModelBroadcaster.hxx"
 #include "docsh.hxx"
 #include "drawview.hxx"
@@ -1522,7 +1523,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription()
 {
-    OUString sDescription = OUString(ScResId(STR_ACC_PREVIEWDOC_DESCR));
+    OUString sDescription = STR_ACC_PREVIEWDOC_DESCR;
     return sDescription;
 }
 

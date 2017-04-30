@@ -50,6 +50,7 @@
 #include <sfx2/docinf.hxx>
 
 #include "glob.hrc"
+#include "strings.hxx"
 #include "pptin.hxx"
 #include "Outliner.hxx"
 #include "drawdoc.hxx"
@@ -638,7 +639,7 @@ bool ImplSdPPTImport::Import()
                     }
                     pPage->SetName( aLayoutName );
                     aLayoutName += SD_LT_SEPARATOR;
-                    aLayoutName += SD_RESSTR( STR_LAYOUT_OUTLINE );
+                    aLayoutName += STR_LAYOUT_OUTLINE;
                     pPage->SetLayoutName( aLayoutName );
 
                     // set stylesheets

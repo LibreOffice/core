@@ -47,6 +47,7 @@
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltertestdialog.hxx"
 #include "xmlfilterjar.hxx"
+#include "strings.hxx"
 
 using namespace osl;
 using namespace com::sun::star::lang;
@@ -236,8 +237,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maFilterName = createUniqueFilterName(RESIDSTR(STR_DEFAULT_FILTER_NAME));
 
     // init default extension
-    OUString aDefaultExtension(RESIDSTR(STR_DEFAULT_EXTENSION));
-    aTempInfo.maExtension = aDefaultExtension;
+    aTempInfo.maExtension = STR_DEFAULT_EXTENSION;
 
     // set default ui name
     aTempInfo.maInterfaceName = createUniqueInterfaceName(RESIDSTR(STR_DEFAULT_UI_NAME));
@@ -1201,9 +1201,9 @@ void XMLFilterSettingsDialog::initFilterList()
         m_pFilterListBox->Select( pEntry );
 }
 
-application_info_impl::application_info_impl( const sal_Char * pDocumentService, ResId& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter )
+application_info_impl::application_info_impl( const sal_Char * pDocumentService, const OUString& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter )
 :   maDocumentService( pDocumentService, strlen( pDocumentService ), RTL_TEXTENCODING_ASCII_US ),
-    maDocumentUIName( OUString( rUINameRes ) ),
+    maDocumentUIName(ResMgr::ExpandVariables(rUINameRes)),
     maXMLImporter( mpXMLImporter, strlen( mpXMLImporter ), RTL_TEXTENCODING_ASCII_US ),
     maXMLExporter( mpXMLExporter, strlen( mpXMLExporter ), RTL_TEXTENCODING_ASCII_US )
 {
@@ -1216,63 +1216,55 @@ std::vector< application_info_impl* >& getApplicationInfos()
     if( aInfos.empty() )
     {
         auto resmgr = getXSLTDialogResMgr();
-        ResId aResId1( STR_APPL_NAME_WRITER, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
-            aResId1,
+            STR_APPL_NAME_WRITER,
             "com.sun.star.comp.Writer.XMLImporter",
             "com.sun.star.comp.Writer.XMLExporter" ) );
 
-        ResId aResId2( STR_APPL_NAME_CALC, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.sheet.SpreadsheetDocument",
-            aResId2,
+            STR_APPL_NAME_CALC,
             "com.sun.star.comp.Calc.XMLImporter",
             "com.sun.star.comp.Calc.XMLExporter" ) );
 
-        ResId aResId3( STR_APPL_NAME_IMPRESS, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.presentation.PresentationDocument",
-            aResId3,
+            STR_APPL_NAME_IMPRESS,
             "com.sun.star.comp.Impress.XMLImporter",
             "com.sun.star.comp.Impress.XMLExporter" ) );
 
-        ResId aResId4( STR_APPL_NAME_DRAW, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.drawing.DrawingDocument",
-            aResId4,
+            STR_APPL_NAME_DRAW,
             "com.sun.star.comp.Draw.XMLImporter",
             "com.sun.star.comp.Draw.XMLExporter" ) );
 
         // --- oasis file formats...
-        ResId aResId5( STR_APPL_NAME_OASIS_WRITER, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
-            aResId5,
+            STR_APPL_NAME_OASIS_WRITER,
             "com.sun.star.comp.Writer.XMLOasisImporter",
             "com.sun.star.comp.Writer.XMLOasisExporter" ) );
 
-        ResId aResId6( STR_APPL_NAME_OASIS_CALC, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.sheet.SpreadsheetDocument",
-            aResId6,
+            STR_APPL_NAME_OASIS_CALC,
             "com.sun.star.comp.Calc.XMLOasisImporter",
             "com.sun.star.comp.Calc.XMLOasisExporter" ) );
 
-        ResId aResId7( STR_APPL_NAME_OASIS_IMPRESS, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.presentation.PresentationDocument",
-            aResId7,
+            STR_APPL_NAME_OASIS_IMPRESS,
             "com.sun.star.comp.Impress.XMLOasisImporter",
             "com.sun.star.comp.Impress.XMLOasisExporter" ) );
 
-        ResId aResId8( STR_APPL_NAME_OASIS_DRAW, *resmgr.get() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.drawing.DrawingDocument",
-            aResId8,
+            STR_APPL_NAME_OASIS_DRAW,
             "com.sun.star.comp.Draw.XMLOasisImporter",
             "com.sun.star.comp.Draw.XMLOasisExporter" ) );
-}
+    }
 
     return aInfos;
 }

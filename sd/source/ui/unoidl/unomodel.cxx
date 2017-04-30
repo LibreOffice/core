@@ -87,6 +87,7 @@
 #include <sdpage.hxx>
 
 #include <strings.hrc>
+#include <strings.hxx>
 #include <unolayer.hxx>
 #include <unoprnms.hxx>
 #include <unopage.hxx>
@@ -3135,7 +3136,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
         OUString aLayoutName( aPrefix );
         aLayoutName += SD_LT_SEPARATOR;
-        aLayoutName += SD_RESSTR(STR_LAYOUT_OUTLINE);
+        aLayoutName += STR_LAYOUT_OUTLINE;
 
         // create styles
         static_cast<SdStyleSheetPool*>(pDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );

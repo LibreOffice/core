@@ -32,6 +32,7 @@
 #include "prevloc.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -347,13 +348,13 @@ tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
 
 OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription()
 {
-    OUString sDescription = OUString(ScResId(STR_ACC_HEADERCELL_DESCR));
+    OUString sDescription = STR_ACC_HEADERCELL_DESCR;
     return sDescription;
 }
 
 OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName()
 {
-    OUString sName = OUString(ScResId(STR_ACC_HEADERCELL_NAME));
+    OUString sName = STR_ACC_HEADERCELL_NAME;
 
     if ( mbColumnHeader )
     {

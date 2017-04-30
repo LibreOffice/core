@@ -39,6 +39,7 @@
 #include "sdresid.hxx"
 
 #include "glob.hrc"
+#include "strings.hxx"
 #include "bulmaper.hxx"
 #include "DrawDocShell.hxx"
 #include <svl/aeitem.hxx>
@@ -96,7 +97,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         if(bOutliner)
         {
             SfxStyleSheetBasePool* pSSPool = pView->GetDocSh()->GetStyleSheetPool();
-            OUString aStyleName(SD_RESSTR(STR_LAYOUT_OUTLINE) + " 1");
+            OUString aStyleName(STR_LAYOUT_OUTLINE " 1");
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
             if( pFirstStyleSheet )
                 pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pItem));

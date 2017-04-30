@@ -23,6 +23,7 @@
 #include "tabvwsh.hxx"
 #include "scresid.hxx"
 #include "scres.hrc"
+#include "strings.hxx"
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <osl/thread.h>
@@ -133,13 +134,13 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     get(m_pCbFixed, "fixedwidth");
     get(m_pBtnOk, "ok");
 
-    OUString sFieldSep(SC_RESSTR(SCSTR_FIELDSEP));
+    OUString sFieldSep(SCSTR_FIELDSEP);
     sFieldSep = sFieldSep.replaceFirst( "%TAB",   SC_RESSTR(SCSTR_FIELDSEP_TAB) );
     sFieldSep = sFieldSep.replaceFirst( "%SPACE", SC_RESSTR(SCSTR_FIELDSEP_SPACE) );
 
     // not possible in the Ctor initializer (MSC cannot do that):
-    pFieldSepTab = new ScDelimiterTable( sFieldSep );
-    pTextSepTab  = new ScDelimiterTable( OUString(ScResId(SCSTR_TEXTSEP)) );
+    pFieldSepTab = new ScDelimiterTable(sFieldSep);
+    pTextSepTab  = new ScDelimiterTable(SCSTR_TEXTSEP);
 
     OUString aStr = pFieldSepTab->FirstDel();
     sal_Unicode nCode;

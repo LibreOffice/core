@@ -216,24 +216,6 @@ SfxInt16Item Graphic SID_GAPHIC_SM
 ]
 
 
-SfxVoidItem InsertCommand SID_INSERTCOMMAND
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
 SfxVoidItem InsertCommandText SID_INSERTCOMMANDTEXT
 ()
 [

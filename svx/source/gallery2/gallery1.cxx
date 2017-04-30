@@ -39,6 +39,7 @@
 #include <sfx2/docfile.hxx>
 #include "svx/gallery.hxx"
 #include "gallery.hrc"
+#include "strings.hxx"
 #include "svx/galmisc.hxx"
 #include "svx/galtheme.hxx"
 #include "svx/gallery1.hxx"
@@ -459,13 +460,13 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_HOMEPAGE);
                 break;
             case GALLERY_THEME_POWERPOINT:
-                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_POWERPOINT);
+                aFallback = RID_GALLERYSTR_THEME_POWERPOINT;
                 break;
             case GALLERY_THEME_FONTWORK:
-                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_FONTWORK);
+                aFallback = RID_GALLERYSTR_THEME_FONTWORK;
                 break;
             case GALLERY_THEME_FONTWORK_VERTICAL:
-                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_FONTWORK_VERTICAL);
+                aFallback = RID_GALLERYSTR_THEME_FONTWORK_VERTICAL;
                 break;
             case GALLERY_THEME_SOUNDS:
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_SOUNDS);
