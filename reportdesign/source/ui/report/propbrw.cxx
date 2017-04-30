@@ -54,6 +54,7 @@
 #include "ViewsWindow.hxx"
 #include "UITools.hxx"
 #include <unotools/confignode.hxx>
+#include "strings.hxx"
 
 namespace rptui
 {
@@ -381,7 +382,8 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
             else
             {
                 OSL_FAIL("Unknown service name!");
-                nResId = RID_STR_CLASS_FORMATTEDFIELD;
+                aName += RID_STR_CLASS_FORMATTEDFIELD;
+                return aName;
             }
 
             if (nResId)

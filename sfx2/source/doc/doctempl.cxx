@@ -88,6 +88,7 @@ using namespace ::ucbhelper;
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatelocnames.hrc>
 #include "doc.hrc"
+#include "strings.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
 
@@ -469,8 +470,8 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
 
 
 /** Convert a resource string - a template name - to its localised pair if it exists.
-    @param nSourceResIds
-        Resource ID where the list of original en-US template names begin.
+    @param pSourceNames
+        the list of original en-US template names
     @param nDestResIds
         Resource ID where the list of localised template names begin.
     @param nCount
@@ -481,11 +482,11 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
         The localised pair of rString or rString if the former does not exist.
 */
 OUString SfxDocumentTemplates::ConvertResourceString (
-    int nSourceResIds, int nDestResIds, int nCount, const OUString& rString )
+    const char** pSourceNames, int nDestResIds, int nCount, const OUString& rString )
 {
-    for( int i = 0; i < nCount; ++i )
+    for (int i = 0; i < nCount; ++i)
     {
-        if( rString == SFX2_RESSTR(nSourceResIds + i))
+        if (rString.equalsAscii(pSourceNames[i]))
             return SFX2_RESSTR(nDestResIds + i);
     }
     return rString;
@@ -1202,13 +1203,26 @@ void SfxDocumentTemplates::ReInitFromComponent()
     pImp->ReInitFromComponent();
 }
 
+static const char* pTemplateNames[] =
+{
+    "Abstract Green"
+    "Abstract Red"
+    "Abstract Yellow"
+    "Bright Blue"
+    "DNA"
+    "Inspiration"
+    "Lush Green"
+    "Metropolis"
+    "Sunset"
+    "Vintage"
+};
 
 DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                 const OUString& rTitle )
 {
     mpParent    = pParent;
     maTitle     = SfxDocumentTemplates::ConvertResourceString(
-                  STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, rTitle );
+                  pTemplateNames, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, rTitle );
 }
 
 
