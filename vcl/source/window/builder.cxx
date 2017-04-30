@@ -42,6 +42,7 @@
 #include <svids.hrc>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
+#include <desktop/crashreport.hxx>
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>
@@ -214,6 +215,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     catch (const css::uno::Exception &rExcept)
     {
         SAL_WARN("vcl.layout", "Unable to read .ui file: " << rExcept.Message);
+        CrashReporter::AddKeyValue("VclBuilderException", "Unable to read .ui file: " + rExcept.Message);
         throw;
     }
 
