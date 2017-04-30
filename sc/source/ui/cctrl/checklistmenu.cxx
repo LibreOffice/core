@@ -1399,7 +1399,7 @@ void ScCheckListMenuWindow::updateMemberParents( SvTreeListEntry* pLeaf, size_t 
 
 Reference<XAccessible> ScCheckListMenuWindow::CreateAccessible()
 {
-    if (!mxAccessible.is())
+    if (!mxAccessible.is() && maEdSearch)
     {
         mxAccessible.set(new ScAccessibleFilterTopWindow(
             GetAccessibleParentWindow()->GetAccessible(), this, getName()));
