@@ -63,6 +63,7 @@
 #include "ViewShellBase.hxx"
 #include "cfgids.hxx"
 #include "strings.hrc"
+#include "strings.hxx"
 
 using namespace ::com::sun::star;
 
@@ -1448,7 +1449,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         else
         {
             OUStringBuffer aBuf(rLayoutName);
-            aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
+            aBuf.append(SD_LT_SEPARATOR).append(STR_LAYOUT_OUTLINE);
             OUString aSearchFor(aBuf.makeStringAndClear());
 
             for (sal_uInt16 nMP = 0; nMP < pSourceDoc->GetMasterPageCount(); ++nMP)
@@ -1523,7 +1524,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                 OUString aTemp(aTargetNewLayoutName);
                 aTemp += SD_LT_SEPARATOR;
-                aTemp += SD_RESSTR(STR_LAYOUT_OUTLINE);
+                aTemp += STR_LAYOUT_OUTLINE;
 
                 pMaster->SetName(aTargetNewLayoutName);
                 pMaster->SetLayoutName(aTemp);
@@ -1801,7 +1802,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     {
         // Find a new name for the layout
         OUString aName(createNewMasterPageLayoutName(*this));
-        OUString aPageLayoutName(aName + SD_LT_SEPARATOR + SD_RESSTR(STR_LAYOUT_OUTLINE));
+        OUString aPageLayoutName(aName + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE);
 
         // Generate new stylesheets
         static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->CreateLayoutStyleSheets(aName);
