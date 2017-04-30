@@ -445,26 +445,6 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
         rInStm.Seek( nTokPos );
 
     }
-    if( !rSlot.aMethod.is() )
-    {
-        SvToken& rTok = rInStm.GetToken();
-        if( rTok.IsIdentifier() )
-        {
-            rSlot.aMethod = new SvMetaSlot();
-            sal_uInt32 nTokPos = rInStm.Tell();
-            if( rSlot.aMethod->ReadSvIdl( rBase, rInStm ) )
-            {
-                if( rSlot.aMethod->IsMethod() )
-                {
-                    rSlot.aMethod->SetSlotId( rSlot.GetSlotId() );
-                    if( rSlot.aMethod->Test( rInStm ) )
-                        return;
-                }
-                rInStm.Seek( nTokPos );
-            }
-            rSlot.aMethod.clear();
-        }
-    }
 }
 
 void SvIdlParser::ReadInterfaceOrShellMethod( SvMetaAttribute& rAttr )
