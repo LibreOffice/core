@@ -70,6 +70,7 @@
 #include "sdresid.hxx"
 #include "stlsheet.hxx"
 #include "glob.hrc"
+#include "strings.hxx"
 #include "bitmaps.hlst"
 #include "glob.hxx"
 #include "helpids.h"
@@ -124,8 +125,8 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     // The name of the layout of the page is used by SVDRAW to determine the
     // presentation template of the outline objects. Therefore, it already
     // contains the designator for the outline (STR_LAYOUT_OUTLINE).
-    OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME).toString());
-    aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
+    OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME));
+    aBuf.append(SD_LT_SEPARATOR).append(STR_LAYOUT_OUTLINE);
     maLayoutName = aBuf.makeStringAndClear();
 
     Size aPageSize(GetSize());
@@ -614,7 +615,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
         aName = aName.copy(0, nPos);
     }
 
-    aName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
+    aName += STR_LAYOUT_BACKGROUND;
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
@@ -641,22 +642,22 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
         break;
 
         case PRESOBJ_TITLE:
-            aName += SD_RESSTR(STR_LAYOUT_TITLE);
+            aName += STR_LAYOUT_TITLE;
             break;
 
         case PRESOBJ_NOTES:
-            aName += SD_RESSTR(STR_LAYOUT_NOTES);
+            aName += STR_LAYOUT_NOTES;
             break;
 
         case PRESOBJ_TEXT:
-            aName += SD_RESSTR(STR_LAYOUT_SUBTITLE);
+            aName += STR_LAYOUT_SUBTITLE;
             break;
 
         case PRESOBJ_HEADER:
         case PRESOBJ_FOOTER:
         case PRESOBJ_DATETIME:
         case PRESOBJ_SLIDENUMBER:
-            aName += SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS);
+            aName += STR_LAYOUT_BACKGROUNDOBJECTS;
             break;
 
         default:
@@ -678,11 +679,12 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
     if( nIndex != -1 )
         aStyleName = aStyleName.copy(0, nIndex + aSep.getLength());
 
-    sal_uInt16 nNameId;
+    const char *pNameId;
+    bool bOutline = false;
     switch( nHelpId )
     {
-    case HID_PSEUDOSHEET_TITLE:             nNameId = STR_LAYOUT_TITLE;             break;
-    case HID_PSEUDOSHEET_SUBTITLE:          nNameId = STR_LAYOUT_SUBTITLE;          break;
+    case HID_PSEUDOSHEET_TITLE:             pNameId = STR_LAYOUT_TITLE;             break;
+    case HID_PSEUDOSHEET_SUBTITLE:          pNameId = STR_LAYOUT_SUBTITLE;          break;
     case HID_PSEUDOSHEET_OUTLINE1:
     case HID_PSEUDOSHEET_OUTLINE2:
     case HID_PSEUDOSHEET_OUTLINE3:
@@ -691,17 +693,17 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
     case HID_PSEUDOSHEET_OUTLINE6:
     case HID_PSEUDOSHEET_OUTLINE7:
     case HID_PSEUDOSHEET_OUTLINE8:
-    case HID_PSEUDOSHEET_OUTLINE9:          nNameId = STR_LAYOUT_OUTLINE;           break;
-    case HID_PSEUDOSHEET_BACKGROUNDOBJECTS: nNameId = STR_LAYOUT_BACKGROUNDOBJECTS; break;
-    case HID_PSEUDOSHEET_BACKGROUND:        nNameId = STR_LAYOUT_BACKGROUND;        break;
-    case HID_PSEUDOSHEET_NOTES:             nNameId = STR_LAYOUT_NOTES;             break;
+    case HID_PSEUDOSHEET_OUTLINE9:          pNameId = STR_LAYOUT_OUTLINE; bOutline = true; break;
+    case HID_PSEUDOSHEET_BACKGROUNDOBJECTS: pNameId = STR_LAYOUT_BACKGROUNDOBJECTS; break;
+    case HID_PSEUDOSHEET_BACKGROUND:        pNameId = STR_LAYOUT_BACKGROUND;        break;
+    case HID_PSEUDOSHEET_NOTES:             pNameId = STR_LAYOUT_NOTES;             break;
 
     default:
         OSL_FAIL( "SdPage::getPresentationStyle(), illegal argument!" );
         return nullptr;
     }
-    aStyleName += SD_RESSTR( nNameId );
-    if( nNameId == STR_LAYOUT_OUTLINE )
+    aStyleName += OUString::createFromAscii(pNameId);
+    if (bOutline)
     {
         aStyleName += " ";
         aStyleName += OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ));

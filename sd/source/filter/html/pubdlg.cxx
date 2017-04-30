@@ -51,6 +51,7 @@
 #include "htmlpublishmode.hxx"
 #include "helpids.h"
 #include "buttonset.hxx"
+#include "strings.hxx"
 
 using namespace std;
 using namespace com::sun::star::uno;
@@ -425,7 +426,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
 
     pPage2_ASP->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
     pPage2_PERL->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
-    pPage2_Index->SetText("index" + SD_RESSTR(STR_HTMLEXP_DEFAULT_EXTENSION));
+    pPage2_Index->SetText("index" STR_HTMLEXP_DEFAULT_EXTENSION);
     pPage2_CGI->SetText( "/cgi-bin/" );
 
     pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
