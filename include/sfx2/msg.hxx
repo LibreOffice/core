@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <sfx2/groupid.hxx>
 #include <functional>
 
 class SfxItemPool;
@@ -183,7 +184,7 @@ class SfxSlot
 {
 public:
     sal_uInt16    nSlotId;   // Unique slot-ID in Shell
-    sal_uInt16    nGroupId;  // for configuration region
+    SfxGroupId    nGroupId;  // for configuration region
     SfxSlotMode   nFlags;    // arithmetic ordered Flags
 
     sal_uInt16    nMasterSlotId;  // Enum-Slot for example Which-Id
@@ -209,7 +210,7 @@ public:
     sal_uInt16          GetSlotId() const;
     SfxSlotMode         GetMode() const;
     bool                IsMode( SfxSlotMode nMode ) const;
-    sal_uInt16          GetGroupId() const;
+    SfxGroupId          GetGroupId() const;
     sal_uInt16          GetWhich( const SfxItemPool &rPool ) const;
     const SfxType*  GetType() const { return pType; }
     const char*     GetUnoName() const { return pUnoName; }
@@ -252,7 +253,7 @@ inline bool SfxSlot::IsMode( SfxSlotMode nMode ) const
 
 // returns the id of the associated group
 
-inline sal_uInt16 SfxSlot::GetGroupId() const
+inline SfxGroupId SfxSlot::GetGroupId() const
 {
     return nGroupId;
 

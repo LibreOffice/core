@@ -24,6 +24,7 @@
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/msg.hxx>
+#include <sfx2/groupid.hxx>
 #include <memory>
 #include <vector>
 
@@ -32,7 +33,7 @@ class SfxSlot;
 
 class SFX2_DLLPUBLIC SfxSlotPool
 {
-    std::vector<sal_uInt16>     _vGroups;
+    std::vector<SfxGroupId>     _vGroups;
     SfxSlotPool*                _pParentPool;
     std::vector<SfxInterface*>  _vInterfaces;
     sal_uInt16                  _nCurGroup;

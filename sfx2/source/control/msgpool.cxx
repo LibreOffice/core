@@ -143,7 +143,7 @@ OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
             }
         }
 
-        SfxResId aResId( _vGroups[_nCurGroup] );
+        SfxResId aResId( (sal_uInt16)_vGroups[_nCurGroup] );
         aResId.SetRT(RSC_STRING);
         if ( !SfxResId::GetResMgr()->IsAvailable(aResId) )
         {
