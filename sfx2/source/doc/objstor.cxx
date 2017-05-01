@@ -196,8 +196,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::Named
             const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_PASSWORD, false);
             if ( pPasswordItem )
             {
-                OUString aPassword = pPasswordItem->GetValue();
-                o_rEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPassword );
+                o_rEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( pPasswordItem->GetValue() );
                 bResult = true;
             }
         }
@@ -335,12 +334,14 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 
     if ( xProps.is() )
     {
-        SvGlobalName aName;
-        OUString aFullTypeName, aShortTypeName, aAppName;
         SotClipboardFormatId nClipFormat = SotClipboardFormatId::NONE;
 
         if(!bChart)
+        {
+            SvGlobalName aName;
+            OUString aFullTypeName, aShortTypeName, aAppName;
             FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
+        }
         else
             nClipFormat = GetChartVersion(nVersion, bTemplate);
 
@@ -532,7 +533,7 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             sal_Int32 nLength = aArgs.getLength();
             aArgs.realloc( nLength + 1 );
             aArgs[nLength].Name = "Title";
-            aArgs[nLength].Value <<= OUString( GetTitle( SFX_TITLE_DETECT ) );
+            aArgs[nLength].Value <<= GetTitle( SFX_TITLE_DETECT );
             xModel->attachResource( OUString(), aArgs );
             if (!utl::ConfigManager::IsAvoidConfig())
                 impl_addToModelCollection(xModel);
@@ -644,8 +645,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     {
         if ( pSalvageItem )
         {
-            OUString aName( pMed->GetPhysicalName() );
-            osl::FileBase::getFileURLFromSystemPath( aName, aBaseURL );
+            osl::FileBase::getFileURLFromSystemPath( pMed->GetPhysicalName(), aBaseURL );
         }
         else
             aBaseURL = pMed->GetBaseURL();
@@ -748,7 +748,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) )
             {
                 uno::Reference < beans::XPropertySet > xSet( GetModel(), uno::UNO_QUERY );
-                OUString sLockUpdates("LockUpdates");
+                const OUString sLockUpdates("LockUpdates");
                 bool bSetProperty = true;
                 try
                 {
@@ -790,9 +790,9 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
-                OUString aAuthor( "Author" );
-                OUString aKeywords( "Keywords" );
-                OUString aSubject( "Subject" );
+                const OUString aAuthor( "Author" );
+                const OUString aKeywords( "Keywords" );
+                const OUString aSubject( "Subject" );
                 Any aAny;
                 OUString aValue;
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -1030,8 +1030,8 @@ bool SfxObjectShell::DoSave()
                     if ( !xTmpStorage.is() )
                         throw uno::RuntimeException();
 
-                    OUString aBasicStorageName( "Basic"  );
-                    OUString aDialogsStorageName( "Dialogs"  );
+                    const OUString aBasicStorageName( "Basic"  );
+                    const OUString aDialogsStorageName( "Dialogs"  );
                     if ( GetMedium()->GetStorage()->hasByName( aBasicStorageName ) )
                         GetMedium()->GetStorage()->copyElementTo( aBasicStorageName, xTmpStorage, aBasicStorageName );
                     if ( GetMedium()->GetStorage()->hasByName( aDialogsStorageName ) )
@@ -1426,7 +1426,7 @@ bool SfxObjectShell::SaveTo_Impl
                     if ( aVersions.getLength() )
                     {
                         // copy the version streams
-                        OUString aVersionsName( "Versions"  );
+                        const OUString aVersionsName( "Versions"  );
                         uno::Reference< embed::XStorage > xNewVerStor = xMedStorage->openStorageElement(
                                                         aVersionsName,
                                                         embed::ElementModes::READWRITE );
@@ -1545,7 +1545,7 @@ bool SfxObjectShell::SaveTo_Impl
 
                 xDDSigns = security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion);
 
-                OUString aScriptSignName = xDDSigns->getScriptingContentSignatureDefaultStreamName();
+                const OUString aScriptSignName = xDDSigns->getScriptingContentSignatureDefaultStreamName();
 
                 if ( !aScriptSignName.isEmpty() )
                 {
@@ -1609,9 +1609,9 @@ bool SfxObjectShell::SaveTo_Impl
             rMedium.CloseZipStorage_Impl();
         }
 
-        OUString sName( rMedium.GetName( ) );
+        const OUString sName( rMedium.GetName( ) );
         bOk = rMedium.Commit();
-        OUString sNewName( rMedium.GetName( ) );
+        const OUString sNewName( rMedium.GetName( ) );
 
         if ( sName != sNewName )
             GetMedium( )->SwitchDocumentToFile( sNewName );
@@ -1665,9 +1665,9 @@ bool SfxObjectShell::SaveTo_Impl
             css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
-                OUString aAuthor( "Author" );
-                OUString aKeywords( "Keywords" );
-                OUString aSubject( "Subject" );
+                const OUString aAuthor( "Author" );
+                const OUString aKeywords( "Keywords" );
+                const OUString aSubject( "Subject" );
 
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     GetModel(), uno::UNO_QUERY_THROW);
@@ -1715,7 +1715,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
         try
         {
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
-            OUString aBackupURL = rTargetMedium.GetBackup_Impl();
+            const OUString aBackupURL = rTargetMedium.GetBackup_Impl();
             if ( aBackupURL.isEmpty() )
             {
                 // the backup could not be created, try to disconnect the storage and close the source SfxMedium
@@ -2009,7 +2009,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
             uno::Reference< frame::XModel > xModel = GetModel();
             if ( xModel.is() )
             {
-                OUString aURL = pNewMed->GetOrigURL();
+                const OUString aURL {pNewMed->GetOrigURL()};
                 uno::Sequence< beans::PropertyValue > aMediaDescr;
                 TransformItems( SID_OPENDOC, *pNewMed->GetItemSet(), aMediaDescr );
                 try
@@ -2123,7 +2123,7 @@ bool SfxObjectShell::ConvertFrom
 bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
         css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
 {
-    OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
+    const OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
 
     uno::Reference< lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
     uno::Reference < lang::XMultiServiceFactory > xFilterFact (
@@ -2222,8 +2222,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
             for ( sal_Int32 n = 0; n < aNames.getLength(); ++n )
             {
-                OUString aName = aNames[n];
-                uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
+                uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
                 OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!" );
                 if ( xObj.is() )
                 {
@@ -2260,7 +2259,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
         catch (const std::exception& e)
         {
             const char *msg = e.what();
-            OUString sError(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
+            const OUString sError(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
             SetError(*new StringErrorInfo(ERRCODE_SFX_DOLOADFAILED,
                 sError, DialogMask::ButtonsOk | DialogMask::MessageError));
         }
@@ -2275,7 +2274,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
 
 bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 {
-    OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
+    const OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
     uno::Reference< document::XExporter > xExporter;
 
     {
@@ -2342,7 +2341,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         {
             pNewValue[i] = pOldValue[i];
             if ( pOldValue[i].Name == "FileName" )
-                pNewValue[i].Value <<= OUString ( rMedium.GetName() );
+                pNewValue[i].Value <<= rMedium.GetName();
             else if ( pOldValue[i].Name == sOutputStream )
                 bHasOutputStream = true;
             else if ( pOldValue[i].Name == sStream )
@@ -3201,7 +3200,7 @@ bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XSto
             if ( xSource->isStorageElement( aSubElements[nInd] ) )
             {
                 OUString aMediaType;
-                OUString aMediaTypePropName( "MediaType"  );
+                const OUString aMediaTypePropName( "MediaType"  );
                 bool bGotMediaType = false;
 
                 try
@@ -3333,7 +3332,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
             else if ( xSource->isStorageElement( aSubElements[nInd] ) )
             {
                 OUString aMediaType;
-                OUString aMediaTypePropName( "MediaType"  );
+                const OUString aMediaTypePropName( "MediaType"  );
                 bool bGotMediaType = false;
 
                 try

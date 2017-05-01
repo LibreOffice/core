@@ -354,9 +354,7 @@ void SfxObjectShell::CheckIn( )
         ScopedVclPtrInstance< SfxCheckinDialog > checkinDlg(&GetFrame( )->GetWindow( ));
         if ( checkinDlg->Execute( ) == RET_OK )
         {
-            OUString sComment = checkinDlg->GetComment( );
-            bool bMajor = checkinDlg->IsMajor( );
-            xCmisDoc->checkIn( bMajor, sComment );
+            xCmisDoc->checkIn( checkinDlg->IsMajor(), checkinDlg->GetComment() );
             uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
             if ( xModifiable.is( ) )
                 xModifiable->setModified( false );
@@ -1069,22 +1067,16 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
             break;
 
         case SID_DOCINFO_AUTHOR :
-        {
-            OUString aStr = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
-            getDocProperties()->setAuthor( aStr );
+            getDocProperties()->setAuthor( static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue() );
             break;
-        }
 
         case SID_DOCINFO_COMMENTS :
-        {
-            OUString aStr = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
-            getDocProperties()->setDescription( aStr );
+            getDocProperties()->setDescription( static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue() );
             break;
-        }
 
         case SID_DOCINFO_KEYWORDS :
         {
-            OUString aStr = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            const OUString aStr = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
             getDocProperties()->setKeywords(
                 ::comphelper::string::convertCommaSeparated(aStr) );
             break;
