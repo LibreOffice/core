@@ -631,7 +631,7 @@ css::uno::Reference<css::chart2::data::XDataSequence>
     if (m_aCategoriesColumnOrientation.empty())
         return xDataSequence;
 
-    std::vector<ValueAndFormat> const & rCategories = m_aCategoriesColumnOrientation[0];
+    std::vector<ValueAndFormat> const & rCategories = *m_aCategoriesColumnOrientation.back();
 
     std::unique_ptr<PivotTableDataSequence> pSequence;
     pSequence.reset(new PivotTableDataSequence(m_pDocument, m_sPivotTableName,
