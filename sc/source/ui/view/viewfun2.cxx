@@ -1078,15 +1078,25 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
         SCTAB i = *itr;
         aMergeOption.maTabs.insert(i);
 
-        if ( nEndRow == nStartRow )
+        sc::MultiDataCellState aState = rDoc.HasMultipleDataCells(aMergeOption.getSingleRange(i));
+        switch (aState.meState)
         {
-            if (!rDoc.IsBlockEmpty(i, nStartCol+1, nStartRow, nEndCol, nEndRow))
+            case sc::MultiDataCellState::HasMultipleCells:
+            {
+                // this range contains multiple data cells.
                 bAskDialog = true;
+                break;
+            }
+            case sc::MultiDataCellState::HasOneCell:
+            {
+                // this range contains only one data cell.
+                if (nStartCol != aState.mnCol1 || nStartRow != aState.mnRow1)
+                    rDoContents = true; // move the value to the top-left.
+                break;
+            }
+            default:
+                ;
         }
-        else
-            if (!rDoc.IsBlockEmpty(i, nStartCol, nStartRow+1, nStartCol, nEndRow) ||
-                !rDoc.IsBlockEmpty(i, nStartCol+1, nStartRow, nEndCol, nEndRow))
-                bAskDialog = true;
     }
 
     bool bOk = true;

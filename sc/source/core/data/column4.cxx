@@ -39,6 +39,54 @@ bool ScColumn::IsMerged( SCROW nRow ) const
     return pAttrArray->IsMerged(nRow);
 }
 
+sc::MultiDataCellState::StateType ScColumn::HasDataCellsInRange(
+    SCROW nRow1, SCROW nRow2, SCROW* pRow1 ) const
+{
+    sc::CellStoreType::const_position_type aPos = maCells.position(nRow1);
+    sc::CellStoreType::const_iterator it = aPos.first;
+    size_t nOffset = aPos.second;
+    SCROW nRow = nRow1;
+    bool bHasOne = false; // whether or not we have found a non-empty block of size one.
+
+    for (; it != maCells.end() && nRow <= nRow2; ++it)
+    {
+        if (it->type != sc::element_type_empty)
+        {
+            // non-empty block found.
+            assert(it->size > 0); // mtv should never contain a block of zero length.
+            size_t nSize = it->size - nOffset;
+
+            SCROW nLastRow = nRow + nSize - 1;
+            if (nLastRow > nRow2)
+                // shrink the size to avoid exceeding the specified last row position.
+                nSize -= nLastRow - nRow2;
+
+            if (nSize == 1)
+            {
+                // this block is of size one.
+                if (bHasOne)
+                    return sc::MultiDataCellState::HasMultipleCells;
+
+                bHasOne = true;
+                if (pRow1)
+                    *pRow1 = nRow;
+            }
+            else
+            {
+                // size of this block is greater than one.
+                if (pRow1)
+                    *pRow1 = nRow;
+                return sc::MultiDataCellState::HasMultipleCells;
+            }
+        }
+
+        nRow += it->size - nOffset;
+        nOffset = 0;
+    }
+
+    return bHasOne ? sc::MultiDataCellState::HasOneCell : sc::MultiDataCellState::Empty;
+}
+
 void ScColumn::DeleteBeforeCopyFromClip(
     sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol, sc::ColumnSpanSet& rBroadcastSpans )
 {

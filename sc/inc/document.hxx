@@ -1077,6 +1077,14 @@ public:
     /** Returns true, if there is any data to create a selection list for rPos. */
     bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
+    /**
+     * Check if the specified range contains either: 1) one non-empty cell, 2)
+     * more than one non-empty cells, or 3) totally empty.  In case the range
+     * contains at least one non-empty cell, specify the position of the first
+     * non-empty cell.
+     */
+    sc::MultiDataCellState HasMultipleDataCells( const ScRange& rRange ) const;
+
     /** Notes **/
     SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
