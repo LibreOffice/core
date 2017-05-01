@@ -41,9 +41,9 @@
 <draw:color draw:name="65% Blue (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="65% Azure" draw:color="#007FFE"/>
 <draw:color draw:name="65% Cyan" draw:color="#00CACA"/>
-<draw:color draw:name="65% Sprg Green" draw:color="#00FE7F"/>
+<draw:color draw:name="65% Spring Green" draw:color="#00FE7F"/>
 <draw:color draw:name="65% Green (Out of Gamut)" draw:color="#FFFFFE"/>
-<draw:color draw:name="65% Char Green" draw:color="#7FFE00"/>
+<draw:color draw:name="65% Chartreuse Green" draw:color="#7FFE00"/>
 <draw:color draw:name="65% Yellow" draw:color="#CACA00"/>
 <draw:color draw:name="65% Orange" draw:color="#FE7F00"/>
 <draw:color draw:name="65% Red (Out of Gamut)" draw:color="#FFFFFE"/>
