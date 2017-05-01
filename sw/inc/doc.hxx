@@ -117,7 +117,6 @@ class SwSectionData;
 class SwSelBoxes;
 class SwTableAutoFormatTable;
 class SwTOXBaseSection;
-class SwTOXTypes;
 class SwTabCols;
 class SwTable;
 class SwTableAutoFormat;
