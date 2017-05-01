@@ -1846,7 +1846,7 @@ void VCartesianAxis::createShapes()
         }
     }
 
-    //createLabels();
+    createLabels();
 }
 
 } //namespace chart
