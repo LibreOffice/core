@@ -27,7 +27,7 @@
 <draw:color draw:name="Scarlet Red Medium" draw:color="#cc0000" />
 <draw:color draw:name="Scarlet Red Dark" draw:color="#a40000" />
 <draw:color draw:name="Aluminium 15%" draw:color="#eeeeec" />
-<draw:color draw:name="Aluminium 30$" draw:color="#d3d7cf" />
+<draw:color draw:name="Aluminium 30%" draw:color="#d3d7cf" />
 <draw:color draw:name="Aluminium 45%" draw:color="#babdb6" />
 <draw:color draw:name="Aluminium 60%" draw:color="#888a85" />
 <draw:color draw:name="Aluminium 75%" draw:color="#555753" />
