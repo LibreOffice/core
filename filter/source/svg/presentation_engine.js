@@ -1771,8 +1771,8 @@ var INDEX_MODE = 2;
 
 // Mouse handler actions.
 var MOUSE_UP = 1;
-var MOUSE_DOWN = 2; // TODO
-var MOUSE_MOVE = 3; // TODO
+var MOUSE_DOWN = 2; // eslint-disable-line no-unused-vars
+var MOUSE_MOVE = 3; // eslint-disable-line no-unused-vars
 var MOUSE_WHEEL = 4;
 
 // Key-codes.
@@ -1912,14 +1912,17 @@ function log( message )
 {
     if( typeof console == 'object' )
     {
+        // eslint-disable-next-line no-console
         console.log( message );
     }
     else if( typeof opera == 'object' )
     {
         opera.postError( message );
     }
+    // eslint-disable-next-line no-undef
     else if( typeof java == 'object' && typeof java.lang == 'object' )
     {
+        // eslint-disable-next-line no-undef
         java.lang.System.out.println( message );
     }
 }
@@ -3766,6 +3769,7 @@ function assert( condition, message )
     {
         presentationEngineStop();
         if (typeof console == 'object')
+            // eslint-disable-next-line no-console
             console.trace();
         throw new Error( message );
     }
@@ -4972,7 +4976,7 @@ var aClockDirectionOutMap = [ 'clockwise', 'counter-clockwise' ];
 
 
 // Attribute Value Types
-var UNKNOWN_PROPERTY        = 0; // TODO
+var UNKNOWN_PROPERTY        = 0; // eslint-disable-line no-unused-vars
 var NUMBER_PROPERTY         = 1;
 var ENUM_PROPERTY           = 2;
 var COLOR_PROPERTY          = 3;
@@ -6447,17 +6451,17 @@ function getTransitionTable( eRestartMode, eFillMode )
 
 // Event Triggers
 var EVENT_TRIGGER_UNKNOWN               = 0;
-var EVENT_TRIGGER_ON_SLIDE_BEGIN        = 1; // TODO
-var EVENT_TRIGGER_ON_SLIDE_END          = 2; // TODO
+var EVENT_TRIGGER_ON_SLIDE_BEGIN        = 1; // eslint-disable-line no-unused-vars
+var EVENT_TRIGGER_ON_SLIDE_END          = 2; // eslint-disable-line no-unused-vars
 var EVENT_TRIGGER_BEGIN_EVENT           = 3;
 var EVENT_TRIGGER_END_EVENT             = 4;
 var EVENT_TRIGGER_ON_CLICK              = 5;
-var EVENT_TRIGGER_ON_DBL_CLICK          = 6; // TODO
-var EVENT_TRIGGER_ON_MOUSE_ENTER        = 7; // TODO
-var EVENT_TRIGGER_ON_MOUSE_LEAVE        = 8; // TODO
+var EVENT_TRIGGER_ON_DBL_CLICK          = 6; // eslint-disable-line no-unused-vars
+var EVENT_TRIGGER_ON_MOUSE_ENTER        = 7; // eslint-disable-line no-unused-vars
+var EVENT_TRIGGER_ON_MOUSE_LEAVE        = 8; // eslint-disable-line no-unused-vars
 var EVENT_TRIGGER_ON_NEXT_EFFECT        = 9;
 var EVENT_TRIGGER_ON_PREV_EFFECT        = 10;
-var EVENT_TRIGGER_REPEAT                = 11; // TODO
+var EVENT_TRIGGER_REPEAT                = 11; // eslint-disable-line no-unused-vars
 
 var aEventTriggerOutMap = [ 'unknown', 'slideBegin', 'slideEnd', 'begin', 'end', 'click',
                             'doubleClick', 'mouseEnter', 'mouseLeave', 'next', 'previous', 'repeat' ];
@@ -6486,11 +6490,11 @@ function getEventTriggerType( sEventTrigger )
 // Timing Types
 var UNKNOWN_TIMING          = 0;
 var OFFSET_TIMING           = 1;
-var WALLCLOCK_TIMING        = 2; // TODO
+var WALLCLOCK_TIMING        = 2; // eslint-disable-line no-unused-vars
 var INDEFINITE_TIMING       = 3;
 var EVENT_TIMING            = 4;
 var SYNCBASE_TIMING         = 5;
-var MEDIA_TIMING            = 6; // TODO
+var MEDIA_TIMING            = 6; // eslint-disable-line no-unused-vars
 
 var aTimingTypeOutMap = [ 'unknown', 'offset', 'wallclock', 'indefinite', 'event', 'syncbase', 'media' ];
 
@@ -8922,7 +8926,8 @@ function createIteratedNodes( )
  *      Animation Factory
  **********************************************************************************************/
 
-
+// makeScaler is used in aAttributeMap:
+// eslint-disable-next-line no-unused-vars
 function makeScaler( nScale )
 {
     if( ( typeof( nScale ) !== typeof( 0 ) ) || !isFinite( nScale ) )
