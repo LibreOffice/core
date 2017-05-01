@@ -14,7 +14,6 @@
 
 module com {  module sun {  module star {  module table {
 
-
 /** provides access to the settings of a pivot chart object in a
     table or spreadsheet.
 
@@ -23,9 +22,7 @@ module com {  module sun {  module star {  module table {
 interface XTablePivotChart: com::sun::star::uno::XInterface
 {
     /** returns the pivot table name of the associated pivot table
-
-        @since LibreOffice 5.4
-    */
+     */
     string getPivotTableName();
 };
 

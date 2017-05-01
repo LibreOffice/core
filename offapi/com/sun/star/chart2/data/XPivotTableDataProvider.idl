@@ -23,38 +23,26 @@ module com { module sun { module star { module chart2 { module data {
 interface XPivotTableDataProvider : com::sun::star::uno::XInterface
 {
     /** names of column fields from the associated pivot table
-     *
-     * @since LibreOffice 5.4
      */
     sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getColumnFields();
 
     /** names of row fields from the associated pivot table
-     *
-     * @since LibreOffice 5.4
      */
     sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getRowFields();
 
     /** names of page fields from the associated pivot table
-     *
-     * @since LibreOffice 5.4
      */
     sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getPageFields();
 
     /** names of data fields from the associated pivot table
-     *
-     * @since LibreOffice 5.4
      */
     sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getDataFields();
 
     /** get the associated pivot table name
-     *
-     * @since LibreOffice 5.4
      */
     string getPivotTableName();
 
     /** set the associated pivot table name
-     *
-     * @since LibreOffice 5.4
      */
      void setPivotTableName([in] string sPivotTableName);
 
@@ -66,8 +54,6 @@ interface XPivotTableDataProvider : com::sun::star::uno::XInterface
      *
      *  @param nIndex
      *      index of the data series
-     *
-     *  @since LibreOffice 5.4
      */
     XDataSequence createDataSequenceOfValuesByIndex([in] long nIndex);
 
@@ -75,14 +61,10 @@ interface XPivotTableDataProvider : com::sun::star::uno::XInterface
      *
      *  @param nIndex
      *      index of the data series
-     *
-     *  @since LibreOffice 5.4
      */
      XDataSequence createDataSequenceOfLabelsByIndex([in] long nIndex);
 
     /** creates a single data sequence of categories.
-     *
-     *  @since LibreOffice 5.4
      */
     XDataSequence createDataSequenceOfCategories();
 
