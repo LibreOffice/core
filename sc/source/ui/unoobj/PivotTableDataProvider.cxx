@@ -18,7 +18,9 @@
 #include "document.hxx"
 #include "unonames.hxx"
 #include "docsh.hxx"
+#include "scresid.hxx"
 #include "globstr.hrc"
+#include "scres.hrc"
 #include "dpobject.hxx"
 #include "hints.hxx"
 
@@ -36,6 +38,7 @@
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/sheet/XMembersSupplier.hpp>
 
 #include <com/sun/star/chart/ChartDataChangeEvent.hpp>
 
@@ -84,6 +87,39 @@ OUString lcl_identifierForLabel(sal_Int32 index)
 OUString lcl_identifierForCategories()
 {
     return "PT@" + constIdCategories;
+}
+
+std::vector<OUString> lcl_getVisiblePageMembers(const uno::Reference<uno::XInterface> & xLevel)
+{
+    std::vector<OUString> aResult;
+    if (!xLevel.is())
+        return aResult;
+
+    uno::Reference<sheet::XMembersSupplier> xMembersSupplier(xLevel, uno::UNO_QUERY);
+    if (!xMembersSupplier.is())
+        return aResult;
+
+    uno::Reference<sheet::XMembersAccess> xMembersAccess = xMembersSupplier->getMembers();
+    if (!xMembersAccess.is())
+        return aResult;
+
+    for (OUString const & rMemberNames : xMembersAccess->getElementNames())
+    {
+        uno::Reference<beans::XPropertySet> xProperties(xMembersAccess->getByName(rMemberNames), uno::UNO_QUERY);
+        if (!xProperties.is())
+            continue;
+
+        OUString aCaption = ScUnoHelpFunctions::GetStringProperty(xProperties, SC_UNO_DP_LAYOUTNAME, OUString());
+        if (aCaption.isEmpty())
+            aCaption = rMemberNames;
+
+        bool bVisible = ScUnoHelpFunctions::GetBoolProperty(xProperties, SC_UNO_DP_ISVISIBLE);
+
+        if (bVisible)
+            aResult.push_back(aCaption);
+    }
+
+    return aResult;
 }
 
 } // end anonymous namespace
@@ -261,6 +297,7 @@ void PivotTableDataProvider::collectPivotTableData()
     m_aRowFields.clear();
     m_aPageFields.clear();
     m_aDataFields.clear();
+    m_aFieldOutputDescriptionMap.clear();
 
     uno::Reference<sheet::XDataPilotResults> xDPResults(pDPObject->GetSource(), uno::UNO_QUERY);
     uno::Sequence<uno::Sequence<sheet::DataResult>> xDataResultsSequence = xDPResults->getResults();
@@ -447,6 +484,23 @@ void PivotTableDataProvider::collectPivotTableData()
                     case sheet::DataPilotFieldOrientation_PAGE:
                     {
                         m_aPageFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
+
+                        // Resolve filtering
+                        OUString aFieldOutputDescription;
+                        if (bHasHiddenMember)
+                        {
+                            std::vector<OUString> aMembers = lcl_getVisiblePageMembers(xLevel);
+
+                            if (aMembers.size() == 1)
+                                aFieldOutputDescription = aMembers[0];
+                            else
+                                aFieldOutputDescription = ScResId(SCSTR_MULTIPLE).toString();
+                        }
+                        else
+                        {
+                            aFieldOutputDescription = ScResId(SCSTR_ALL).toString();
+                        }
+                        m_aFieldOutputDescriptionMap[nDim] = aFieldOutputDescription;
                     }
                     break;
 
@@ -761,6 +815,13 @@ uno::Reference<css::chart2::data::XDataSequence>
     xDataSequence.set(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
 
     return xDataSequence;
+}
+
+OUString PivotTableDataProvider::getFieldOutputDescription(sal_Int32 nDimensionIndex)
+{
+    if (nDimensionIndex < 0)
+        return OUString();
+    return m_aFieldOutputDescriptionMap[size_t(nDimensionIndex)];
 }
 
 // XModifyBroadcaster ========================================================

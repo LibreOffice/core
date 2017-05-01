@@ -97,6 +97,8 @@ public:
     virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
         createDataSequenceOfCategories() override;
 
+    virtual OUString SAL_CALL getFieldOutputDescription(sal_Int32 nPageFieldIndex) override;
+
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
 
@@ -169,6 +171,8 @@ private:
     std::vector<css::chart2::data::PivotTableFieldEntry> m_aRowFields;
     std::vector<css::chart2::data::PivotTableFieldEntry> m_aPageFields;
     std::vector<css::chart2::data::PivotTableFieldEntry> m_aDataFields;
+
+    std::unordered_map<sal_Int32, OUString> m_aFieldOutputDescriptionMap;
 
     bool m_bNeedsUpdate;
 

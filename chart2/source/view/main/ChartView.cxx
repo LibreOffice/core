@@ -2498,7 +2498,8 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
         return;
 
     uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
-    awt::Size aSize(3000, 700); // size of the button
+
+    awt::Size aSize(4000, 700); // size of the button
 
     long x = 0;
 
@@ -2511,8 +2512,10 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
             std::unique_ptr<VButton> pButton(new VButton);
             pButton->init(xPageShapes, xShapeFactory);
             awt::Point aNewPosition = awt::Point(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
-            pButton->setLabel(rPageFieldEntry.Name);
-            pButton->setCID("FieldButton.Page." + OUString::number(rPageFieldEntry.DimensionIndex));
+            sal_Int32 nDimensionIndex = rPageFieldEntry.DimensionIndex;
+            OUString aFieldOutputDescription = xPivotTableDataProvider->getFieldOutputDescription(nDimensionIndex);
+            pButton->setLabel(rPageFieldEntry.Name + " | " + aFieldOutputDescription);
+            pButton->setCID("FieldButton.Page." + OUString::number(nDimensionIndex));
             pButton->setPosition(aNewPosition);
             pButton->setSize(aSize);
             if (rPageFieldEntry.HasHiddenMembers)
@@ -2524,6 +2527,8 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
         rRemainingSpace.Y += (aSize.Height + 100 + 100);
         rRemainingSpace.Height -= (aSize.Height + 100 + 100);
     }
+
+    aSize = awt::Size(3000, 700); // size of the button
 
     if (xPivotTableDataProvider->getRowFields().hasElements())
     {
