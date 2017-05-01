@@ -85,6 +85,13 @@ interface XPivotTableDataProvider : com::sun::star::uno::XInterface
      *  @since LibreOffice 5.4
      */
     XDataSequence createDataSequenceOfCategories();
+
+    /** field output description: either "- all -", "- multiple -", or specific value
+     *
+     * @param nDimensionIndex
+     *     dimension index of the field
+     */
+    string getFieldOutputDescription([in] long nDimensionIndex);
 };
 
 };};};};};
