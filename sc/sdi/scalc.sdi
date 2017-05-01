@@ -70,40 +70,6 @@ SfxVoidItem ActivateTable SID_TABLE_ACTIVATE
 ]
 
 
-SfxObjectItem ActiveCell SID_SC_ACTIVECELL
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
-SfxObjectItem ActiveTable SID_SC_ACTIVETAB
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
 SfxVoidItem Add FID_TAB_APPEND
 (SfxStringItem Name FID_TAB_APPEND)
 [
@@ -518,42 +484,6 @@ SfxVoidItem Cancel SID_CANCEL
 ]
 
 
-SfxVoidItem Cells SID_SC_CELLS
-(SfxInt16Item Column SID_SC_CELLS,SfxInt32Item Row FN_PARAM_1,SfxInt16Item Table FN_PARAM_2)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
-SfxVoidItem CellText SID_SC_CELLTEXT
-(SfxInt16Item Column SID_SC_CELLTEXT,SfxInt32Item Row FN_PARAM_1,SfxInt16Item Table FN_PARAM_2)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
 SfxVoidItem ChangeChartData SID_CHART_SOURCE
 (SfxStringItem Name SID_CHART_NAME,SfxStringItem Range SID_CHART_SOURCE,SfxBoolItem ColHeaders FN_PARAM_1,SfxBoolItem RowHeaders FN_PARAM_2)
 [
@@ -930,25 +860,6 @@ SfxVoidItem ColumnOperations SID_COLUMN_OPERATIONS
     GroupId = GID_OPTIONS;
 ]
 
-SfxObjectItem CurrentRegion SID_RANGE_REGION
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxVoidItem DataAreaRefresh SID_REFRESH_DBAREA
 ()
 [
@@ -1093,24 +1004,6 @@ SfxVoidItem DataFilterStandardFilter SID_FILTER
 ]
 
 
-SfxVoidItem DataPilotCreate SID_PIVOT_CREATE
-(SfxStringItem Destination FN_PARAM_1,SfxStringItem Name FN_PARAM_2,SfxBoolItem TotalCol FN_PARAM_3,SfxBoolItem TotalRow FN_PARAM_4)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
 SfxVoidItem DataPilotExec SID_PIVOT_TABLE
 ()
 [
@@ -1126,25 +1019,6 @@ SfxVoidItem DataPilotExec SID_PIVOT_TABLE
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_DATA;
-]
-
-
-SfxObjectItem DataPilotTables SID_PIVOT_GET
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
 ]
 
 
@@ -3961,43 +3835,6 @@ SfxInt32Item ObjectWidth SID_OBJECT_WIDTH
 ]
 
 
-SfxVoidItem Offset SID_RANGE_OFFSET
-(SfxInt16Item Column FN_PARAM_1,SfxInt32Item Row FN_PARAM_2,SfxInt16Item Table FN_PARAM_3)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
-SfxObjectItem OleObject SID_OLE_OBJECT
-
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-
 SfxVoidItem OriginalSize SID_ORIGINALSIZE
 ()
 [
@@ -4128,24 +3965,6 @@ SfxVoidItem ProtectTraceChangeMode SID_CHG_PROTECT
 
 SfxVoidItem PutCell SID_SC_SETTEXT
 (SfxInt16Item Column FN_PARAM_1,SfxInt32Item Row FN_PARAM_2,SfxInt16Item Table FN_PARAM_3,SfxStringItem Text SID_SC_SETTEXT)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
-SfxVoidItem Range SID_SC_RANGE
-(SfxStringItem Range SID_SC_RANGE,SfxBoolItem KeepSelect FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -4649,45 +4468,7 @@ SfxVoidItem ManageXMLSource SID_MANAGE_XML_SOURCE
     GroupId = GID_DATA;
 ]
 
-SfxObjectItem SelectedObject SID_SC_ACTIVEOBJECT
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
 SfxStringItem SelectedObjectName SID_ACTIVE_OBJ_NAME
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
-SfxObjectItem Selection SID_SC_SELECTION
 
 [
     AutoUpdate = FALSE,
@@ -5435,25 +5216,6 @@ SfxVoidItem RenameTable FID_TAB_MENU_RENAME
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
-]
-
-
-SfxObjectItem Tables SID_TABLES_GET
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
 ]
 
 
@@ -6394,23 +6156,6 @@ SfxStringItem ConvertFormulaToValue SID_CONVERT_FORMULA_TO_VALUE
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
-]
-
-SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]

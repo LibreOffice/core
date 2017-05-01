@@ -273,9 +273,6 @@ public:
     void            ExecuteUndo(SfxRequest& rReq);
     void            GetUndoState(SfxItemSet &rSet);
 
-    static void     ExecuteSbx( SfxRequest& rReq );
-    static void     GetSbxState( SfxItemSet& rSet );
-
     void            ExecuteObject(SfxRequest& rReq);
     void            GetObjectState(SfxItemSet &rSet);
 
