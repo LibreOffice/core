@@ -5945,7 +5945,7 @@
         <!-- OldPath: -->
         <!-- OldLocation: -->
         <!-- UIHints: Tools  Options  Asian typography  Asian layout Kerning
-             Western characters only-->
+             Western text only -->
         <info>
           <desc>Determines the kerning of western text and/or punctuation inside
           of Asian text.</desc>
