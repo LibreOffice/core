@@ -20,12 +20,11 @@
 #include <svx/dialogs.hrc>
 #include <rtl/textenc.h>
 
-#define PairedList ItemList
 // Encodings for which no conversion exist yet are commented out.
 
 StringArray RID_SVXSTR_TEXTENCODING_TABLE
 {
-    PairedList [ en-US ] =
+    ItemList [ en-US ] =
     {
          < "Western Europe (Windows-1252/WinLatin 1)"           ; RTL_TEXTENCODING_MS_1252          ; > ;
         < "Western Europe (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_ROMAN      ; > ;

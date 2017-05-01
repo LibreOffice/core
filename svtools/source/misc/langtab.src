@@ -20,11 +20,9 @@
 #include <svtools/svtools.hrc>
 #include <i18nlangtag/lang.h>
 
-#define PairedList ItemList
-
 StringArray STR_ARR_SVT_LANGUAGE_TABLE
 {
-    PairedList [ en-US ] =
+    ItemList [ en-US ] =
     {
         < "[None]" ; LANGUAGE_NONE ; > ;
         < "Unknown" ; LANGUAGE_DONTKNOW ; > ;
