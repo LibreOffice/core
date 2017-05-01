@@ -22,6 +22,13 @@ bool RangeMatrix::isRangeValid() const
         mnCol1 <= mnCol2 && mnRow1 <= mnRow2 && mnTab1 <= mnTab2;
 }
 
+MultiDataCellState::MultiDataCellState() :
+    meState(StateType::Invalid),
+    mnCol1(-1), mnRow1(-1), mnTab1(-1) {}
+MultiDataCellState::MultiDataCellState( StateType eState ) :
+    meState(eState),
+    mnCol1(-1), mnRow1(-1), mnTab1(-1) {}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

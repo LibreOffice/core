@@ -40,6 +40,21 @@ bool ScDocument::IsMerged( const ScAddress& rPos ) const
     return pTab->IsMerged(rPos.Col(), rPos.Row());
 }
 
+sc::MultiDataCellState ScDocument::HasMultipleDataCells( const ScRange& rRange ) const
+{
+    if (rRange.aStart.Tab() != rRange.aEnd.Tab())
+        // Currently we only support a single-sheet range.
+        return sc::MultiDataCellState();
+
+    const ScTable* pTab = FetchTable(rRange.aStart.Tab());
+    if (!pTab)
+        return sc::MultiDataCellState(sc::MultiDataCellState::Empty);
+
+    const ScAddress& s = rRange.aStart;
+    const ScAddress& e = rRange.aEnd;
+    return pTab->HasMultipleDataCells(s.Col(), s.Row(), e.Col(), e.Row());
+}
+
 void ScDocument::DeleteBeforeCopyFromClip(
     sc::CopyFromClipContext& rCxt, const ScMarkData& rMark, sc::ColumnSpanSet& rBroadcastSpans )
 {
