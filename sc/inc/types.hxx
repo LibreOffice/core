@@ -97,6 +97,20 @@ struct RangeMatrix
     bool isRangeValid() const;
 };
 
+struct MultiDataCellState
+{
+    enum StateType { Invalid = 0, Empty, HasOneCell, HasMultipleCells };
+
+    StateType meState;
+
+    SCCOL mnCol1; //< first non-empty column
+    SCROW mnRow1; //< first non-empty row
+    SCTAB mnTab1; //< first non-empty sheet
+
+    MultiDataCellState();
+    MultiDataCellState( StateType eState );
+};
+
 enum AreaOverlapType
 {
     AreaInside,

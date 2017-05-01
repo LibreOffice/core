@@ -20,22 +20,20 @@
 #ifndef INCLUDED_SC_INC_COLCONTAINER_HXX
 #define INCLUDED_SC_INC_COLCONTAINER_HXX
 
-
 #include "types.hxx"
 #include "address.hxx"
 
 #include <vector>
 
-
 class ScColumn;
 class ScDocument;
+
 class ScColContainer
 {
-public:
     typedef std::vector<ScColumn*> ScColumnVector;
-private:
     ScColumnVector    aCols;
     ScDocument*       pDocument;
+
 public:
     ScColContainer( ScDocument* pDoc, const size_t nSize );
     ~ScColContainer();
@@ -53,6 +51,11 @@ public:
     SCCOL size() const
     {
         return static_cast<SCCOL>( aCols.size() );
+    }
+
+    bool empty() const
+    {
+        return aCols.empty();
     }
 
     void Clear();

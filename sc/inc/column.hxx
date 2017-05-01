@@ -381,6 +381,9 @@ public:
     bool    HasValueData( SCROW nRow ) const;
     bool    HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
 
+    sc::MultiDataCellState::StateType HasDataCellsInRange(
+        SCROW nRow1, SCROW nRow2, SCROW* pRow1 = nullptr ) const;
+
     bool IsFormulaDirty( SCROW nRow ) const;
 
     void CheckVectorizationState();

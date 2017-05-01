@@ -529,6 +529,8 @@ public:
     bool        HasStringCells( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow ) const;
 
+    sc::MultiDataCellState HasMultipleDataCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+
     FormulaError    GetErrCode( const ScAddress& rPos ) const
                     {
                         return ValidColRow(rPos.Col(),rPos.Row()) ?

@@ -25,6 +25,70 @@ bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
     return aCol[nCol].IsMerged(nRow);
 }
 
+sc::MultiDataCellState ScTable::HasMultipleDataCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+{
+    if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
+        return sc::MultiDataCellState();
+
+    if (nCol1 > nCol2 || nRow1 > nRow2)
+        // invalid range.
+        return sc::MultiDataCellState();
+
+    if (aCol.empty())
+        return sc::MultiDataCellState(sc::MultiDataCellState::Empty);
+
+    auto setFirstCell = []( sc::MultiDataCellState& rRet, SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
+    {
+        if (rRet.mnCol1 < 0)
+        {
+            // First cell not yet set.  Set it.
+            rRet.mnCol1 = nCurCol;
+            rRet.mnRow1 = nCurRow;
+            rRet.mnTab1 = nCurTab;
+        }
+    };
+
+    SCCOL nMaxCol = aCol.size()-1;
+    bool bHasOne = false;
+    sc::MultiDataCellState aRet(sc::MultiDataCellState::Empty);
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2 && nCol <= nMaxCol; ++nCol)
+    {
+        SCROW nFirstDataRow = -1;
+        switch (aCol[nCol].HasDataCellsInRange(nRow1, nRow2, &nFirstDataRow))
+        {
+            case sc::MultiDataCellState::HasOneCell:
+            {
+                setFirstCell(aRet, nCol, nFirstDataRow, nTab);
+
+                if (bHasOne)
+                {
+                    // We've already found one data cell in another column.
+                    aRet.meState = sc::MultiDataCellState::HasMultipleCells;
+                    return aRet;
+                }
+                bHasOne = true;
+                break;
+            }
+            case sc::MultiDataCellState::HasMultipleCells:
+            {
+                setFirstCell(aRet, nCol, nFirstDataRow, nTab);
+
+                aRet.meState = sc::MultiDataCellState::HasMultipleCells;
+                return aRet;
+            }
+            case sc::MultiDataCellState::Empty:
+            default:
+                ;
+        }
+    }
+
+    if (bHasOne)
+        aRet.meState = sc::MultiDataCellState::HasOneCell;
+
+    return aRet;
+}
+
 void ScTable::DeleteBeforeCopyFromClip(
     sc::CopyFromClipContext& rCxt, const ScTable& rClipTab, sc::ColumnSpanSet& rBroadcastSpans )
 {
