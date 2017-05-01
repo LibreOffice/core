@@ -19062,6 +19062,13 @@
         <action name="start" action="startGlossaryEntry"/>
         <action name="end" action="endGlossaryEntry"/>
     </resource>
+    <resource name="CT_DocPartPr" resource="Properties">
+        <action name="start" action="startSectionGroup"/>
+        <element name="name" tokenid="ooxml:CT_DocPartPr_name"/>
+    </resource>
+    <resource name="CT_DocPartName" resource="Properties">
+        <attribute name="val" tokenid="ooxml:CT_DocPartName_val"/>
+    </resource>
     <resource name="document" resource="Stream"/>
     <resource name="glossaryDocument" resource="Stream"/>
     <resource name="CT_TxbxContent" resource="Stream">

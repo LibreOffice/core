@@ -1080,6 +1080,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Cnf_val:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "val", sStringValue);
             break;
+        case NS_ooxml::LN_CT_DocPartName_val:
+        {
+            // Add glossary entry name as a first paragraph in section
+            PropertyMapPtr pContext = m_pImpl->GetTopContext();
+            m_pImpl->appendTextPortion(sStringValue, pContext);
+            break;
+        }
         default:
             SAL_WARN("writerfilter", "DomainMapper::lcl_attribute: unhandled token: " << nName);
         }
@@ -2751,6 +2758,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties.get() && m_pImpl->GetTopContextType() == CONTEXT_PARAGRAPH)
             pProperties->resolve(m_pImpl->getSmartTagHandler());
+    }
+    break;
+    case NS_ooxml::LN_CT_DocPartPr_name:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get() != nullptr)
+            pProperties->resolve(*this);
     }
     break;
     default:
