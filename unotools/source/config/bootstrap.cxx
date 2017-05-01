@@ -35,9 +35,6 @@
 #include <rtl/instance.hxx>
 #include <osl/process.h>
 
-#include <osl/diagnose.h>
-#include <osl/file.hxx>
-
 // #define this to true, if remembering defaults is not supported properly
 #define RTL_BOOTSTRAP_DEFAULTS_BROKEN true
 
