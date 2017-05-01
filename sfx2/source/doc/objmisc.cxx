@@ -735,7 +735,8 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
         bRecur = false;
         return aTitle;
     }
-    else if (SFX_TITLE_APINAME == nMaxLength )
+
+    if (SFX_TITLE_APINAME == nMaxLength )
         return GetAPIName();
 
     // Picklist/Caption is mapped
@@ -785,9 +786,9 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
     {
         if ( nMaxLength == SFX_TITLE_FULLNAME )
             return aURL.HasMark() ? INetURLObject( aURL.GetURLNoMark() ).PathToFileName() : aURL.PathToFileName();
-        else if ( nMaxLength == SFX_TITLE_FILENAME )
+        if ( nMaxLength == SFX_TITLE_FILENAME )
             return aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
-        else if ( pImpl->aTitle.isEmpty() )
+        if ( pImpl->aTitle.isEmpty() )
             pImpl->aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT,
                                          true, INetURLObject::DecodeMechanism::WithCharset );
     }
@@ -798,15 +799,14 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
             const OUString aComplete( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             if( aComplete.getLength() > nMaxLength )
                 return "..." + aComplete.copy( aComplete.getLength() - nMaxLength + 3, nMaxLength - 3 );
-            else
-                return aComplete;
+            return aComplete;
         }
-        else if ( nMaxLength == SFX_TITLE_FILENAME )
+        if ( nMaxLength == SFX_TITLE_FILENAME )
         {
             const OUString aName = INetURLObject::decode( aURL.GetBase(), INetURLObject::DecodeMechanism::WithCharset );
             return aName.isEmpty() ? aURL.GetURLNoPass() : aName;
         }
-        else if ( nMaxLength == SFX_TITLE_FULLNAME )
+        if ( nMaxLength == SFX_TITLE_FULLNAME )
             return aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
 
         // Generate Title from file name if possible
