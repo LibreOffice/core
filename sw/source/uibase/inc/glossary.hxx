@@ -57,6 +57,8 @@ class SwGlTreeListBox : public SvTreeListBox
 
     SvTreeListEntry*  pDragEntry;
 
+    Link<SwGlTreeListBox*,void> m_aDeleteHdl;
+
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rContainer,
                                             SvTreeListEntry* ) override;
     virtual bool         NotifyAcceptDrop( SvTreeListEntry* ) override;
@@ -82,6 +84,10 @@ public:
     void Clear();
 
     virtual void ExpandedHdl() override;
+
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+
+    void SetDeleteHdl( const Link<SwGlTreeListBox*,void>& rLink ) { m_aDeleteHdl = rLink; }
 };
 
 class SwOneExampleFrame;
@@ -136,6 +142,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK( PathHdl, Button *, void );
     DECL_LINK( CheckBoxHdl, Button*, void );
     DECL_LINK( PreviewLoadedHdl, SwOneExampleFrame&, void );
+    DECL_LINK( DeleteHdl, SwGlTreeListBox*, void );
 
     virtual void    Apply() override;
     void            Init();
@@ -147,6 +154,8 @@ class SwGlossaryDlg : public SvxStandardDialog
                         {rGroup = sResumeGroup; rShortName = sResumeShortName; return bResume;}
     void            SetResumeData(const OUString& rGroup, const OUString& rShortName)
                         {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = true;}
+
+    void            DeleteEntry();
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     virtual ~SwGlossaryDlg() override;
