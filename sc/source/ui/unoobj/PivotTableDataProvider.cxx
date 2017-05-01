@@ -249,16 +249,6 @@ uno::Reference<chart2::data::XLabeledDataSequence>
     return xResult;
 }
 
-void PivotTableDataProvider::setLabeledDataSequenceValues(uno::Reference<chart2::data::XLabeledDataSequence> & xResult,
-                                                          OUString const & sRoleValues, OUString const & sIdValues,
-                                                          std::vector<ValueAndFormat> const & rValues)
-{
-    std::unique_ptr<PivotTableDataSequence> pSequence(
-        new PivotTableDataSequence(m_pDocument, m_sPivotTableName, sIdValues, rValues));
-    pSequence->setRole(sRoleValues);
-    xResult->setValues(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
-}
-
 uno::Reference<chart2::data::XDataSource>
 PivotTableDataProvider::createCategoriesDataSource(bool bOrientationIsColumn)
 {
@@ -274,7 +264,12 @@ PivotTableDataProvider::createCategoriesDataSource(bool bOrientationIsColumn)
     for (std::vector<ValueAndFormat> const & rCategories : rCategoriesVector)
     {
         uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
-        setLabeledDataSequenceValues(xResult, "categories", lcl_identifierForCategories(), rCategories);
+        std::unique_ptr<PivotTableDataSequence> pSequence;
+        pSequence.reset(new PivotTableDataSequence(m_pDocument, m_sPivotTableName,
+                                                   lcl_identifierForCategories(), rCategories));
+        pSequence->setRole("categories");
+        xResult->setValues(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
+
         aLabeledSequences.push_back(xResult);
     }
 
@@ -620,10 +615,30 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
 
     std::vector<ValueAndFormat> aLabelVector { ValueAndFormat(aLabel) };
 
-    std::unique_ptr<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument, m_sPivotTableName,
-                                                                                 sLabelID, aLabelVector));
+    std::unique_ptr<PivotTableDataSequence> pSequence;
+    pSequence.reset(new PivotTableDataSequence(m_pDocument, m_sPivotTableName,
+                                               sLabelID, aLabelVector));
     pSequence->setRole("values-y");
     xDataSequence.set(pSequence.release());
+    return xDataSequence;
+}
+
+css::uno::Reference<css::chart2::data::XDataSequence>
+    PivotTableDataProvider::assignFirstCategoriesToDataSequence()
+{
+    uno::Reference<chart2::data::XDataSequence> xDataSequence;
+
+    if (m_aCategoriesColumnOrientation.empty())
+        return xDataSequence;
+
+    std::vector<ValueAndFormat> const & rCategories = m_aCategoriesColumnOrientation[0];
+
+    std::unique_ptr<PivotTableDataSequence> pSequence;
+    pSequence.reset(new PivotTableDataSequence(m_pDocument, m_sPivotTableName,
+                                               lcl_identifierForCategories(), rCategories));
+    pSequence->setRole("categories");
+    xDataSequence.set(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
+
     return xDataSequence;
 }
 
@@ -636,27 +651,20 @@ uno::Reference<chart2::data::XDataSource>
     uno::Reference<chart2::data::XDataSource> xDataSource;
     std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aLabeledSequences;
 
+    // Fill first sequence of categories
     {
-        std::vector<ValueAndFormat> aFirstCategories;
-        if (!m_aCategoriesColumnOrientation.empty())
-        {
-            std::copy(m_aCategoriesColumnOrientation[0].begin(),
-                      m_aCategoriesColumnOrientation[0].end(),
-                      std::back_inserter(aFirstCategories));
-        }
         uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
-        setLabeledDataSequenceValues(xResult, "categories", lcl_identifierForCategories(), aFirstCategories);
+        xResult->setValues(assignFirstCategoriesToDataSequence());
         aLabeledSequences.push_back(xResult);
     }
 
+    // Fill values and labels
     {
         for (size_t i = 0; i < m_aDataRowVector.size(); ++i)
         {
             uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
-
             xResult->setValues(assignValuesToDataSequence(i));
             xResult->setLabel(assignLabelsToDataSequence(i));
-
             aLabeledSequences.push_back(xResult);
         }
     }
@@ -802,19 +810,7 @@ uno::Reference<css::chart2::data::XDataSequence>
     if (m_bNeedsUpdate)
         collectPivotTableData();
 
-    uno::Reference<chart2::data::XDataSequence> xDataSequence;
-
-    if (m_aCategoriesColumnOrientation.empty())
-        return xDataSequence;
-
-    std::vector<ValueAndFormat> const & rCategories = m_aCategoriesColumnOrientation[0];
-
-    std::unique_ptr<PivotTableDataSequence> pSequence;
-    pSequence.reset(new PivotTableDataSequence(m_pDocument, m_sPivotTableName, lcl_identifierForCategories(), rCategories));
-    pSequence->setRole("categories");
-    xDataSequence.set(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
-
-    return xDataSequence;
+    return assignFirstCategoriesToDataSequence();
 }
 
 OUString PivotTableDataProvider::getFieldOutputDescription(sal_Int32 nDimensionIndex)
