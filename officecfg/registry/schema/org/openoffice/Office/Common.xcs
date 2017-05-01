@@ -1260,12 +1260,13 @@
       <prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold*
-             and _underline_ -->
+        <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold*,
+             /italic/, -strikeout- and _underline_ -->
         <info>
           <desc>Specifies if text should be formatted in bold or underlined when
-          the corresponding characters are entered (*bold*, _underline_).</desc>
-          <label>Apply underline or bold</label>
+          the corresponding characters are entered (*bold*, /italic/, -strikeout-, 
+          _underline_).</desc>
+          <label>Apply bold, italics, strikeout or underline</label>
         </info>
         <value>true</value>
       </prop>

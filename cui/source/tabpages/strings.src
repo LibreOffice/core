@@ -105,7 +105,7 @@ String RID_SVXSTR_CPTL_STT_SENT
 };
 String RID_SVXSTR_BOLD_UNDER
 {
-    Text [ en-US ] = "Automatic *bold* and _underline_" ;
+    Text [ en-US ] = "Automatic *bold*, /italic/, -strikeout- and _underline_" ;
 };
 String RID_SVXSTR_NO_DBL_SPACES
 {
