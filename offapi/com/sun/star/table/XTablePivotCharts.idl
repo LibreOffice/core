@@ -13,9 +13,7 @@
 #include <com/sun/star/container/XNameAccess.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 
-
 module com {  module sun {  module star {  module table {
-
 
 /** provides methods to access pivot charts via name and to insert
     and remove pivot charts.
@@ -24,7 +22,6 @@ module com {  module sun {  module star {  module table {
  */
 interface XTablePivotCharts: com::sun::star::container::XNameAccess
 {
-
     /** creates a pivot chart and adds it to the collection.
 
         @param aName
@@ -37,21 +34,16 @@ interface XTablePivotCharts: com::sun::star::container::XNameAccess
 
         @param aPivotTableName
             the name of the pivot table (data pilot) to associate the pivot chart with
-
-        @since LibreOffice 5.4
      */
     void addNewByName(
             [in] string aName,
             [in] com::sun::star::awt::Rectangle aRect,
             [in] string aPivotTableName);
 
-
     /** removes a pivot chart from the collection.
 
         @param aName
             is the name of the chart to remove.
-
-        @since LibreOffice 5.4
      */
     void removeByName([in] string aName);
 };
