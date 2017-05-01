@@ -85,14 +85,14 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
     GetInfo().SetPaintOfst( 0 );
     SwTwips nPaintOfst = rPaint.Left();
 
-    // nPaintOfst wurde exakt auf das Ende eingestellt, deswegen <=
-    // nPaintOfst ist dokumentglobal, deswegen nLeftMar aufaddieren
+    // nPaintOfst was exactly set to the end, therefore <=
+    // nPaintOfst is document global, therefore add up nLeftMar
     // const sal_uInt16 nLeftMar = sal_uInt16(GetLeftMargin());
-    // 8310: painten von LineBreaks in leeren Zeilen.
+    // 8310: paint of LineBreaks in empty lines.
     if( nPaintOfst && m_pCurr->Width() )
     {
         SwLinePortion *pLast = nullptr;
-        // 7529 und 4757: nicht <= nPaintOfst
+        // 7529 and 4757: not <= nPaintOfst
         while( pPor && GetInfo().X() + pPor->Width() + (pPor->Height()/2)
                        < nPaintOfst )
         {
@@ -111,7 +111,7 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
             pPor = pPor->GetPortion();
         }
 
-        // 7529: bei PostIts auch pLast returnen.
+        // 7529: if PostIts return also pLast.
         if( pLast && !pLast->Width() && pLast->IsPostItsPortion() )
         {
             pPor = pLast;
@@ -121,13 +121,12 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
     return pPor;
 }
 
-// Es gibt zwei Moeglichkeiten bei transparenten Font auszugeben:
-// 1) DrawRect auf die ganze Zeile und die DrawText hinterher
-//    (objektiv schnell, subjektiv langsam).
-// 2) Fuer jede Portion ein DrawRect mit anschliessendem DrawText
-//    ausgefuehrt (objektiv langsam, subjektiv schnell).
-// Da der User in der Regel subjektiv urteilt, wird die 2. Methode
-// als Default eingestellt.
+// There are two possibilities to ouput transparent font:
+// 1) DrawRect on the whole line and DrawText afterwards
+//    (objectively fast, subjective slow)
+// 2) For every portion a DrawRect with subsequently DrawTest is done
+//    (objectively slow, subjective fast)
+// Since the user usually judges subjectively the second method is set as default.
 void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const bool bUnderSz )
 {
@@ -136,7 +135,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 //    sal_uInt16 nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
 #endif
 
-    // Adjustierung ggf. nachholen
+    // maybe catch-up adjustment
     GetAdjusted();
     GetInfo().SetpSpaceAdd( m_pCurr->GetpLLSpaceAdd() );
     GetInfo().ResetSpaceIdx();
@@ -148,7 +147,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     const bool bDrawInWindow = GetInfo().OnWin();
 
-    // 6882: Leerzeilen duerfen nicht wegoptimiert werden bei Paragraphzeichen.
+    // 6882: blank lines can't optimized by removing them by paragraph characters
     const bool bEndPor = GetInfo().GetOpt().IsParagraph() && GetInfo().GetText().isEmpty();
 
     SwLinePortion *pPor = bEndPor ? m_pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
@@ -184,7 +183,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     {
         // 8084: Optimization, less painting
         // AMA: By 8084 7538 has been revived
-        // bDrawInWindow entfernt, damit DropCaps auch gedruckt werden
+        // bDrawInWindow removed, so that DropCaps also can be printed
         bPaintDrop = pPor == m_pCurr->GetFirstPortion()
                      && GetDropLines() >= GetLineNr();
     }
@@ -193,14 +192,13 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
 
     // bClip decides if there's a need to clip
-    // Das Ganze muss vor der Retusche stehen
+    // The whole thing must be before retouching
 
     bool bClip = ( bDrawInWindow || bUnderSz ) && !rClip.IsChg();
     if( bClip && pPor )
     {
-        // Wenn TopLeft oder BottomLeft der Line ausserhalb liegen,
-        // muss geclippt werden. Die Ueberpruefung auf Right() erfolgt
-        // in der folgenden Ausgabeschleife...
+        // If TopLeft or BottomLeft of the line are outside, the we must clip.
+        // The check for Right() is done the output loop ...
 
         if( GetInfo().GetPos().X() < rPaint.Left() ||
             GetInfo().GetPos().Y() < rPaint.Top() ||
@@ -243,7 +241,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if( !pPor && !bEndPor )
         return;
 
-    // Baseline-Ausgabe auch bei nicht-TextPortions (vgl. TabPor mit Fill)
+    // Baseline output also if none TextPortions (compare TabPor with Fill)
     // if no special vertical alignment is used,
     // we calculate Y value for the whole line
     SwTextGridItem const*const pGrid(GetGridItem(GetTextFrame()->FindPageFrame()));
@@ -305,10 +303,10 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 pEndTempl = pPor;
         }
 
-        // Ein Sonderfall sind GluePortions, die Blanks ausgeben.
+        // A special case are GluePortions which output blanks.
 
-        // 6168: Der Rest einer FieldPortion zog sich die Attribute der naechsten
-        // Portion an, dies wird durch SeekAndChgBefore vermieden:
+        // 6168: Avoid that the rest of a FieldPortion gets the attributes of the
+        // next portion with SeekAndChgBefore():
         if( ( bRest && pPor->InFieldGrp() && !pPor->GetLen() ) )
             SeekAndChgBefore( GetInfo() );
         else if ( pPor->IsQuoVadisPortion() )
@@ -335,8 +333,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         // bRest = false;
 
         // Wenn das Ende der Portion hinausragt, wird geclippt.
-        // Es wird ein Sicherheitsabstand von Height-Halbe aufaddiert,
-        // damit die TTF-"f" nicht im Seitenrand haengen...
+        // If the end of the portion juts out the clipping.
+        // A safety distance of half the height is added up, so that
+        // TTF-"f" isn't overlapping into the side edge...
         if( bClip &&
             GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
         {
