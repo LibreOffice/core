@@ -230,6 +230,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
     m_pCategoryBox->SetDoubleClickHdl(LINK(this,SwGlossaryDlg, NameDoubleClick));
     m_pCategoryBox->SetSelectHdl(LINK(this,SwGlossaryDlg,GrpSelect));
+    m_pCategoryBox->SetDeleteHdl(LINK(this,SwGlossaryDlg,DeleteHdl));
     m_pBibBtn->SetClickHdl(LINK(this,SwGlossaryDlg,BibHdl));
 
     m_pInsertBtn->SetClickHdl(LINK(this,SwGlossaryDlg,InsertHdl));
@@ -522,23 +523,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     }
     else if (sItemIdent == "delete")
     {
-        ScopedVclPtrInstance< MessageDialog > aQuery(this, SW_RES(STR_QUERY_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
-        if (RET_YES == aQuery->Execute())
-        {
-            const OUString aShortName(m_pShortNameEdit->GetText());
-            const OUString aTitle(m_pNameED->GetText());
-            if (!aTitle.isEmpty() && pGlossaryHdl->DelGlossary(aShortName))
-            {
-                SvTreeListEntry* pChild = DoesBlockExist(aTitle, aShortName);
-                OSL_ENSURE(pChild, "entry not found!");
-                SvTreeListEntry* pParent = m_pCategoryBox->GetParent(pChild);
-                m_pCategoryBox->Select(pParent);
-
-                m_pCategoryBox->GetModel()->Remove(pChild);
-                m_pNameED->SetText(OUString());
-                NameModify(*m_pNameED);
-            }
-        }
+        DeleteEntry();
     }
     else if (sItemIdent == "macro")
     {
@@ -1028,6 +1013,16 @@ void SwGlTreeListBox::ExpandedHdl()
     SvTreeListBox::ExpandedHdl();
 }
 
+void SwGlTreeListBox::KeyInput( const KeyEvent& rKEvt )
+{
+    if(m_aDeleteHdl.IsSet() && rKEvt.GetKeyCode().GetCode() == KEY_DELETE)
+    {
+        m_aDeleteHdl.Call(nullptr);
+        return;
+    }
+    SvTreeListBox::KeyInput( rKEvt );
+}
+
 OUString SwGlossaryDlg::GetCurrGrpName() const
 {
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
@@ -1067,6 +1062,11 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn, void )
 IMPL_LINK_NOARG(SwGlossaryDlg, InsertHdl, Button*, void)
 {
     EndDialog(RET_OK);
+}
+
+IMPL_LINK_NOARG(SwGlossaryDlg, DeleteHdl, SwGlTreeListBox*, void)
+{
+    DeleteEntry();
 }
 
 void SwGlossaryDlg::ShowPreview()
@@ -1128,6 +1128,27 @@ void SwGlossaryDlg::ResumeShowAutoText()
         }
     }
     bResume = false;
+}
+
+void SwGlossaryDlg::DeleteEntry()
+{
+    ScopedVclPtrInstance< MessageDialog > aQuery(this, SW_RES(STR_QUERY_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
+    if (RET_YES == aQuery->Execute())
+    {
+        const OUString aShortName(m_pShortNameEdit->GetText());
+        const OUString aTitle(m_pNameED->GetText());
+        if (!aTitle.isEmpty() && pGlossaryHdl->DelGlossary(aShortName))
+        {
+            SvTreeListEntry* pChild = DoesBlockExist(aTitle, aShortName);
+            OSL_ENSURE(pChild, "entry not found!");
+            SvTreeListEntry* pParent = m_pCategoryBox->GetParent(pChild);
+            m_pCategoryBox->Select(pParent);
+
+            m_pCategoryBox->GetModel()->Remove(pChild);
+            m_pNameED->SetText(OUString());
+            NameModify(*m_pNameED);
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
