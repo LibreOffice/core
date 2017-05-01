@@ -117,6 +117,8 @@ private:
     bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
     void UpdateLook();
     sal_uInt32 fillAnimationLB( bool bHasText );
+    PathKind getCreatePathKind() const;
+    void createPath( PathKind eKind, std::vector< ::com::sun::star::uno::Any >& rTargets, double fDuration );
 
     DECL_LINK( implControlListBoxHdl, ListBox&, void );
     DECL_LINK( implClickHdl, Button*, void );

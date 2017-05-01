@@ -1988,6 +1988,63 @@ double CustomAnimationPane::getDuration()
     return fDuration;
 }
 
+PathKind CustomAnimationPane::getCreatePathKind() const
+{
+    PathKind eKind = PathKind::NONE;
+
+    if( mpLBAnimation->GetSelectEntryCount() == 1 )
+    {
+        const sal_Int32 nPos = mpLBAnimation->GetSelectEntryPos();
+        if( nPos == mnCurvePathPos )
+        {
+            eKind = PathKind::CURVE;
+        }
+        else if( nPos == mnPolygonPathPos )
+        {
+            eKind = PathKind::POLYGON;
+        }
+        else if( nPos == mnFreeformPathPos )
+        {
+            eKind = PathKind::FREEFORM;
+        }
+    }
+
+    return eKind;
+}
+
+void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTargets, double fDuration)
+{
+    sal_uInt16 nSID = 0;
+
+    switch( eKind )
+    {
+    case PathKind::CURVE:     nSID = SID_DRAW_BEZIER_NOFILL; break;
+    case PathKind::POLYGON:   nSID = SID_DRAW_POLYGON_NOFILL; break;
+    case PathKind::FREEFORM:  nSID = SID_DRAW_FREELINE_NOFILL; break;
+    default: break;
+    }
+
+    if( nSID )
+    {
+        DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
+            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
+
+        if( pViewShell )
+        {
+            DrawView* pView = pViewShell->GetDrawView();
+            if( pView )
+                pView->UnmarkAllObj();
+
+            std::vector< Any > aTargets( 1, Any( fDuration ) );
+            aTargets.insert( aTargets.end(), rTargets.begin(), rTargets.end() );
+            Sequence< Any > aTargetSequence( comphelper::containerToSequence( aTargets ) );
+            const SfxUnoAnyItem aItem( SID_ADD_MOTION_PATH, Any( aTargetSequence ) );
+            pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList( nSID, SfxCallMode::ASYNCHRON, {&aItem} );
+        }
+    }
+}
+
+
 /// this link is called when the property box is modified by the user
 IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
 {
@@ -2054,17 +2111,45 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
     if( maListSelection.size() == 1 )
     {
         CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
+        PathKind ePathKind = getCreatePathKind();
+
         // tdf#99137, the selected entry may also be a subcategory title, so not an effect
         // just leave in this case
-        if (!pPreset)
+        if ( !pPreset && ( ePathKind == PathKind::NONE ) )
             return;
-        const double fDuration = (*pPreset)->getDuration();
+
+        EffectSequence::iterator aIter( maListSelection.begin() );
+        const EffectSequence::iterator aEnd( maListSelection.end() );
+
+        if ( ePathKind != PathKind::NONE )
+        {
+            std::vector< Any > aTargets;
+            MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+            while( aIter != aEnd )
+            {
+                aTargets.push_back( (*aIter)->getTarget() );
+                CustomAnimationEffectPtr pEffect = (*aIter++);
+
+                EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
+                if( !pEffectSequence )
+                    pEffectSequence = mpMainSequence.get();
+
+                // delete the old animation, new one will be appended
+                // by createPath and SID_ADD_MOTION_PATH therein
+                pEffectSequence->remove( pEffect );
+            }
+
+           createPath( ePathKind, aTargets, 0.0 );
+           updateMotionPathTags();
+           return;
+        }
+
         CustomAnimationPresetPtr pDescriptor(*pPreset);
+        const double fDuration = (*pPreset)->getDuration();
         MainSequenceRebuildGuard aGuard( mpMainSequence );
 
         // get selected effect
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
         while( aIter != aEnd )
         {
             CustomAnimationEffectPtr pEffect = (*aIter++);
@@ -2075,6 +2160,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 
             pEffectSequence->replace( pEffect, pDescriptor, fDuration );
         }
+
         onPreview(false);
     }
 }
@@ -2115,18 +2201,19 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 
     sal_uInt32 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
-    if(nPosition == 0)
+    PresetCategoryList::const_iterator aCategoryIter( rCategoryList.begin() );
+    const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
+    mpLBAnimation->Clear();
+
+    if(nPosition == 3)
     {
         OUString sMotionPathLabel( SD_RESSTR( STR_CUSTOMANIMATION_USERPATH ) );
         mpLBAnimation->InsertCategory( sMotionPathLabel );
         mnCurvePathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulCOMBLINE) );
         mnPolygonPathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulPOLY) );
         mnFreeformPathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulFREELINE) );
-
     }
-    PresetCategoryList::const_iterator aCategoryIter( rCategoryList.begin() );
-    const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
-    mpLBAnimation->Clear();
+
     while(aCategoryIter != aCategoryEnd)
     {
         PresetCategoryPtr pCategory( *aCategoryIter++ );
