@@ -32,6 +32,9 @@
 
 namespace {
 
+rtl_TextEncoding getCharsetEncoding(const sal_Char * pBegin,
+                                           const sal_Char * pEnd);
+
 /** Check for US-ASCII white space character.
 
     @param nChar  Some UCS-4 character.
@@ -39,17 +42,10 @@ namespace {
     @return  True if nChar is a US-ASCII white space character (US-ASCII
     0x09 or 0x20).
  */
-inline bool isWhiteSpace(sal_uInt32 nChar);
-
-/** Check whether some character is valid within an RFC 2045 <token>.
-
-    @param nChar  Some UCS-4 character.
-
-    @return  True if nChar is valid within an RFC 2047 <token> (US-ASCII
-    'A'--'Z', 'a'--'z', '0'--'9', '!', '#', '$', '%', '&', ''', '*', '+',
-    '-', '.', '^', '_', '`', '{', '|', '}', or '~').
- */
-bool isTokenChar(sal_uInt32 nChar);
+inline bool isWhiteSpace(sal_uInt32 nChar)
+{
+    return nChar == '\t' || nChar == ' ';
+}
 
 /** Get the Base 64 digit weight of a US-ASCII character.
 
@@ -60,69 +56,6 @@ bool isTokenChar(sal_uInt32 nChar);
     corresponding weight (0--63); if nChar is the US-ASCII Base 64 padding
     character (US-ASCII '='), return -1; otherwise, return -2.
  */
-inline int getBase64Weight(sal_uInt32 nChar);
-
-inline bool startsWithLineFolding(const sal_Unicode * pBegin,
-                                         const sal_Unicode * pEnd);
-
-const sal_Unicode * skipComment(const sal_Unicode * pBegin,
-                                       const sal_Unicode * pEnd);
-
-const sal_Unicode * skipLinearWhiteSpaceComment(const sal_Unicode *
-                                                           pBegin,
-                                                       const sal_Unicode *
-                                                           pEnd);
-
-const sal_Unicode * skipQuotedString(const sal_Unicode * pBegin,
-                                            const sal_Unicode * pEnd);
-
-sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
-                                          sal_Unicode const * pEnd,
-                                          INetContentTypeParameterList *
-                                              pParameters);
-
-inline rtl_TextEncoding translateFromMIME(rtl_TextEncoding
-                                                     eEncoding);
-
-rtl_TextEncoding getCharsetEncoding(const sal_Char * pBegin,
-                                           const sal_Char * pEnd);
-
-inline bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding);
-
-sal_Unicode * convertToUnicode(const sal_Char * pBegin,
-                                      const sal_Char * pEnd,
-                                      rtl_TextEncoding eEncoding,
-                                      sal_Size & rSize);
-
-sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
-                                     const sal_Unicode * pEnd,
-                                     rtl_TextEncoding eEncoding,
-                                     sal_Size & rSize);
-
-void writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar);
-
-bool translateUTF8Char(const sal_Char *& rBegin,
-                              const sal_Char * pEnd,
-                              rtl_TextEncoding eEncoding,
-                              sal_uInt32 & rCharacter);
-
-/** Put the UTF-16 encoding of a UTF-32 character into a buffer.
-
-    @param pBuffer  Points to a buffer, must not be null.
-
-    @param nUTF32  An UTF-32 character, must be in the range 0..0x10FFFF.
-
-    @return  A pointer past the UTF-16 characters put into the buffer
-    (i.e., pBuffer + 1 or pBuffer + 2).
- */
-inline sal_Unicode * putUTF32Character(sal_Unicode * pBuffer,
-                                              sal_uInt32 nUTF32);
-
-inline bool isWhiteSpace(sal_uInt32 nChar)
-{
-    return nChar == '\t' || nChar == ' ';
-}
-
 inline int getBase64Weight(sal_uInt32 nChar)
 {
     return rtl::isAsciiUpperCase(nChar) ? int(nChar - 'A') :
@@ -240,6 +173,15 @@ sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
     return pBuffer;
 }
 
+/** Put the UTF-16 encoding of a UTF-32 character into a buffer.
+
+    @param pBuffer  Points to a buffer, must not be null.
+
+    @param nUTF32  An UTF-32 character, must be in the range 0..0x10FFFF.
+
+    @return  A pointer past the UTF-16 characters put into the buffer
+    (i.e., pBuffer + 1 or pBuffer + 2).
+ */
 inline sal_Unicode * putUTF32Character(sal_Unicode * pBuffer,
                                                  sal_uInt32 nUTF32)
 {
@@ -497,6 +439,14 @@ bool parseParameters(ParameterList const & rInput,
     return true;
 }
 
+/** Check whether some character is valid within an RFC 2045 <token>.
+
+    @param nChar  Some UCS-4 character.
+
+    @return  True if nChar is valid within an RFC 2047 <token> (US-ASCII
+    'A'--'Z', 'a'--'z', '0'--'9', '!', '#', '$', '%', '&', ''', '*', '+',
+    '-', '.', '^', '_', '`', '{', '|', '}', or '~').
+ */
 bool isTokenChar(sal_uInt32 nChar)
 {
     static const bool aMap[128]
