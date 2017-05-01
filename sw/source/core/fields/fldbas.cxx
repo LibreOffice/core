@@ -155,13 +155,11 @@ bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
     return false;
 }
 
-void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
+void dumpAsXml(xmlTextWriterPtr pWriter, SwFieldTypes const & rTypes)
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));
-    sal_uInt16 nCount = size();
-    for (sal_uInt16 nType = 0; nType < nCount; ++nType)
+    for (auto pCurType : rTypes)
     {
-        const SwFieldType *pCurType = (*this)[nType];
         SwIterator<SwFormatField, SwFieldType> aIter(*pCurType);
         for (const SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next())
             pFormatField->dumpAsXml(pWriter);
