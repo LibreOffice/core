@@ -142,18 +142,17 @@ private:
 
     css::uno::Reference<css::chart2::data::XDataSource>
         createValuesDataSource();
+
     css::uno::Reference<css::chart2::data::XDataSource>
         createCategoriesDataSource(bool bOrientationIsColumn);
 
     css::uno::Reference<css::chart2::data::XLabeledDataSequence> newLabeledDataSequence();
 
-    void setLabeledDataSequenceValues(css::uno::Reference<css::chart2::data::XLabeledDataSequence> & xResult,
-                                      OUString const & sRoleValues, OUString const & sIdValues,
-                                      std::vector<ValueAndFormat> const & rValues);
-
     css::uno::Reference<css::chart2::data::XDataSequence> assignLabelsToDataSequence(size_t nIndex);
 
     css::uno::Reference<css::chart2::data::XDataSequence> assignValuesToDataSequence(size_t nIndex);
+
+    css::uno::Reference<css::chart2::data::XDataSequence> assignFirstCategoriesToDataSequence();
 
     void collectPivotTableData();
 
