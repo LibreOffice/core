@@ -1186,13 +1186,13 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         if (bDrawTabsRTL)
         {
             pFirstTab = mpTabCtrlData->maItemList.data();
-            pLastTab = pFirstTab + mpTabCtrlData->maItemList.size();
+            pLastTab = pFirstTab + mpTabCtrlData->maItemList.size() - 1;
             idx = mpTabCtrlData->maItemList.size() - 1;
         }
         else
         {
             pLastTab = mpTabCtrlData->maItemList.data();
-            pFirstTab = pLastTab + mpTabCtrlData->maItemList.size();
+            pFirstTab = pLastTab + mpTabCtrlData->maItemList.size() - 1;
             idx = 0;
         }
 
@@ -1208,8 +1208,8 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
                     aClipRgn.Intersect(rRect);
                 if (!aClipRgn.IsEmpty())
                 {
-                    ImplDrawItem(rRenderContext, pItem, aCurRect, false/*bLayout*/,
-                                    pItem == pFirstTab);
+                    ImplDrawItem(rRenderContext, pItem, aCurRect,
+                                 pItem == pFirstTab, pItem == pLastTab);
                 }
             }
 
@@ -2694,13 +2694,13 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
         if (bDrawTabsRTL)
         {
             pFirstTab = mpTabCtrlData->maItemList.data();
-            pLastTab = pFirstTab + mpTabCtrlData->maItemList.size();
+            pLastTab = pFirstTab + mpTabCtrlData->maItemList.size() - 1;
             idx = mpTabCtrlData->maItemList.size() - 1;
         }
         else
         {
             pLastTab = mpTabCtrlData->maItemList.data();
-            pFirstTab = pLastTab + mpTabCtrlData->maItemList.size();
+            pFirstTab = pLastTab + mpTabCtrlData->maItemList.size() - 1;
             idx = 0;
         }
 
@@ -2716,8 +2716,8 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
                     aClipRgn.Intersect(rRect);
                 if (!aClipRgn.IsEmpty())
                 {
-                    ImplDrawItem(rRenderContext, pItem, aCurRect, false/*bLayout*/,
-                                    pItem == pFirstTab);
+                    ImplDrawItem(rRenderContext, pItem, aCurRect,
+                                 pItem == pFirstTab, pItem == pLastTab);
                 }
             }
 
