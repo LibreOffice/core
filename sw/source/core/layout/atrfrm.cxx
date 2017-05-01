@@ -78,7 +78,6 @@
 #include <calbck.hxx>
 #include <pagedeschint.hxx>
 #include <drawdoc.hxx>
-#include <dcontact.hxx>
 
 #ifndef NDEBUG
 #include <ndtxt.hxx>
