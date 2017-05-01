@@ -35,7 +35,7 @@ class FontList;
 
 enum SvxCSS1Position
 {
-    SVX_CSS1_POS_NONE,          // nichts angegeben
+    SVX_CSS1_POS_NONE,          // nothing specified
     SVX_CSS1_POS_STATIC,        // normal
     SVX_CSS1_POS_ABSOLUTE,      // absolute
     SVX_CSS1_POS_RELATIVE,      // relative
@@ -43,30 +43,30 @@ enum SvxCSS1Position
 
 enum SvxCSS1LengthType
 {
-    SVX_CSS1_LTYPE_NONE,        // nichts angegeben
-    SVX_CSS1_LTYPE_AUTO,        // automatisch
+    SVX_CSS1_LTYPE_NONE,        // nothing specified
+    SVX_CSS1_LTYPE_AUTO,        // automatic
     SVX_CSS1_LTYPE_TWIP,        // twip
-    SVX_CSS1_LTYPE_PERCENTAGE,  // %-Angabe
+    SVX_CSS1_LTYPE_PERCENTAGE,  // percentage value
 };
 
 // Feature: PrintExt
 enum SvxCSS1SizeType
 {
-    SVX_CSS1_STYPE_NONE,        // nichts angegeben
-    SVX_CSS1_STYPE_AUTO,        // automatisch
+    SVX_CSS1_STYPE_NONE,        // nothing specified
+    SVX_CSS1_STYPE_AUTO,        // automatic
     SVX_CSS1_STYPE_TWIP,        // twip
-    SVX_CSS1_STYPE_LANDSCAPE,   // Landscape
-    SVX_CSS1_STYPE_PORTRAIT,    // Landscape
+    SVX_CSS1_STYPE_LANDSCAPE,   // landscape
+    SVX_CSS1_STYPE_PORTRAIT,    // portrait
 };
 
 enum SvxCSS1PageBreak
 {
-    SVX_CSS1_PBREAK_NONE,       // nichts angegeben
-    SVX_CSS1_PBREAK_AUTO,       // automatisch
-    SVX_CSS1_PBREAK_ALWAYS,     // immer
-    SVX_CSS1_PBREAK_AVOID,      // nie
-    SVX_CSS1_PBREAK_LEFT,       // naechste Seite ist eine linke
-    SVX_CSS1_PBREAK_RIGHT,      // naechste Seite ist eine rechte
+    SVX_CSS1_PBREAK_NONE,       // nothing specified
+    SVX_CSS1_PBREAK_AUTO,       // automatic
+    SVX_CSS1_PBREAK_ALWAYS,     // always
+    SVX_CSS1_PBREAK_AVOID,      // never
+    SVX_CSS1_PBREAK_LEFT,       // next page is a left one
+    SVX_CSS1_PBREAK_RIGHT,      // next page is a right one
 };
 
 
@@ -82,8 +82,8 @@ namespace o3tl {
 
 struct CSS1PropertyEnum
 {
-    const sal_Char *pName;  // Wert einer Property
-    sal_uInt16 nEnum;       // und der dazugehoerige Wert eines Enums
+    const sal_Char *pName;  // property value
+    sal_uInt16 nEnum;       // and the corresponding value of enum
 };
 
 namespace editeng { class SvxBorderLine; }
@@ -101,7 +101,7 @@ class SvxCSS1PropertyInfo
 
 public:
 
-    OUString m_aId;             // ID fuer Bookmarks, Rahmen etc.
+    OUString m_aId;             // ID for bookmarks, frame, and so
 
     bool m_bTopMargin : 1;
     bool m_bBottomMargin : 1;
@@ -175,12 +175,11 @@ public:
     SvxCSS1PropertyInfo& GetPropertyInfo() { return aPropInfo; }
 };
 
-// Diese Klasse bereitet den Output des CSS1-Parsers auf,
-// indem die CSS1-Properties in SvxItem(Set)s umgewandelt werden.
-// Ausserdem werden die Selektoren samt zugehoeriger Item-Set
-// gespeichert.
-// Ein abgeleiteter Parser kann dies fuer einzelne Selektoren unterdruecken,
-// indem er die Methode StyleParsed ueberlaed.
+// Class is processing the CSS1-Parser output by converting the CSS1 properties
+// into SvxItem(Set). Also the selectors together with associated ItemSet are
+// saved.
+// A derived parser can suppress this for certain selectors by overriding
+// the method StyleParsed.
 
 class SvxCSS1Parser : public CSS1Parser
 {
@@ -195,14 +194,14 @@ class SvxCSS1Parser : public CSS1Parser
 
     OUString sBaseURL;
 
-    SfxItemSet *pSheetItemSet;  // der Item-Set fuer Style-Sheets
-    SfxItemSet *pItemSet;       // der aktuelle Item-Set
+    SfxItemSet *pSheetItemSet;  // item set of Style-Sheet
+    SfxItemSet *pItemSet;       // current item set
     SvxCSS1MapEntry *pSearchEntry;
 
     SvxCSS1PropertyInfo *pSheetPropInfo;
     SvxCSS1PropertyInfo *pPropInfo;
 
-    sal_uInt16 nMinFixLineSpace;    // Mindest-Abstand fuer festen Zeilenabstand
+    sal_uInt16 nMinFixLineSpace;    // minimum spacing for fixed line spacing
 
     rtl_TextEncoding    eDfltEnc;
     Css1ScriptFlags     nScriptFlags;
@@ -212,7 +211,7 @@ class SvxCSS1Parser : public CSS1Parser
     void ParseProperty( const OUString& rProperty,
                         const CSS1Expression *pExpr );
 
-    std::vector<sal_uInt16> aWhichMap;        // Which-Map des Parser
+    std::vector<sal_uInt16> aWhichMap;        // Which-Map of Parser
 
     using CSS1Parser::ParseStyleOption;
 
@@ -220,13 +219,11 @@ protected:
 
     using CSS1Parser::ParseStyleSheet;
 
-    // Diese Methode wird fuer jeden Selektor mit dem zugehoerigen
-    // Item-Set aufgerufen. Fuer einen Selektor koennen mehrere
-    // Aufrufe erfolgen.
-    // wenn true zuruckgegeben wird, wird der Item-Set bzw. der
-    // Selektor nicht mehr gespeichert!
-    // Der ItemSet darf entsprechend modifiziert werden!
-    // Die Implementierung dieser Methode gibt false zurueck.
+    // This method is called for every selector with according item set.
+    // For a selector multiple calls are possible.
+    // If true is returned then the item set resp. the selector isn't saved anymore!
+    // The ItemSet may be modified accordingly!
+    // The implementation returns false.
     virtual void StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
@@ -253,23 +250,21 @@ public:
     bool IsIgnoreFontFamily() const { return bIgnoreFontFamily; }
     void SetIgnoreFontFamily( bool bSet ) { bIgnoreFontFamily = bSet; }
 
-    // Parsen eines Style-Sheets. Fuer jeden gefundenen Selektor
-    // wird StyleParsed mit dem entsprechenem Item-Set aufgerufen
+    // Parse a style sheet. For every found selector a StyleParsed with
+    // according item set is called.
     virtual bool ParseStyleSheet( const OUString& rIn );
 
-    // Parsen einer Style-Option. Hier wird einfach nur der Item-Set
-    // gefuellt.
+    // Parse style option. Here only the item set is filled.
     void ParseStyleOption( const OUString& rIn, SfxItemSet& rItemSet,
                            SvxCSS1PropertyInfo& rPropInfo );
 
-    // Umwandeln eines Strings in den Wert eines Enums
+    // convert a string to enum value
     static bool GetEnum( const CSS1PropertyEnum *pPropTable,
                          const OUString& rValue, sal_uInt16 &rEnum );
 
-    // Pixel in Twips wandeln
     static void PixelToTwip( long &nWidth, long &nHeight );
 
-    // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
+    // determine the font height of a certain font size (0-6)
     virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const;
 
     virtual const FontList *GetFontList() const;
