@@ -111,6 +111,19 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
         sal_uInt16 nGlosEntry = 0;
         SwContentNode* pCNd = nullptr;
         do {
+            // Get name - first paragraph
+            OUString aLNm;
+            {
+                SwPaM aPam( aStart );
+                SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
+                ++rIdx;
+                aLNm = aPam.GetNode().GetTextNode()->GetText();
+            }
+
+            // Do not copy name
+            aStart++;
+
+            // Get content
             SwPaM aPam( aStart );
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
@@ -139,10 +152,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             // Now we have the right selection for one entry
             rBlocks.ClearDoc();
 
-            // TODO: correct entry name
-            const OUString rLNm = "ImportedAutoText";
-
-            OUString sShortcut = rLNm;
+            OUString sShortcut = aLNm;
 
             // Need to check make sure the shortcut is not already being used
             sal_Int32 nStart = 0;
