@@ -23,7 +23,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <stdarg.h>
-#ifdef XP_WIN
+#ifdef _WIN32
 #include <io.h>
 #include <winsock2.h>
 #else
@@ -213,10 +213,10 @@ int main(int argc,char *argv[])
 {
     int fd;
     unsigned char *old = nullptr,*newbuf = nullptr;
-    int32_t oldsize = 0,newsize = 0;
+    int32_t oldsize = 0, newsize = 0;
     int32_t *I = nullptr,*V = nullptr;
 
-    int32_t scan,pos,len;
+    int32_t scan,pos = 0,len;
     int32_t lastscan,lastpos,lastoffset;
     int32_t oldscore,scsc;
 
@@ -225,7 +225,7 @@ int main(int argc,char *argv[])
     int32_t i;
 
     int32_t dblen,eblen;
-    unsigned char *db,*eb;
+    unsigned char *db,*eb = nullptr;
 
     unsigned int scrc;
 
