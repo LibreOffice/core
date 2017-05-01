@@ -327,12 +327,12 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     {
     case WID_FRAME_URL:
     {
-        aAny <<= OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+        aAny <<= maFrmDescr.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
     break;
     case WID_FRAME_NAME:
     {
-        aAny <<= OUString( maFrmDescr.GetName() );
+        aAny <<= maFrmDescr.GetName();
     }
     break;
     case WID_FRAME_IS_AUTO_SCROLL:

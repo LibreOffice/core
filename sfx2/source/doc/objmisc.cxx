@@ -203,7 +203,7 @@ void SfxObjectShell::FlushDocInfo()
     SetModified();
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
     DoFlushDocInfo(); // call template method
-    OUString url(xDocProps->getAutoloadURL());
+    const OUString url(xDocProps->getAutoloadURL());
     sal_Int32 delay(xDocProps->getAutoloadSecs());
     SetAutoLoad( INetURLObject(url), delay * 1000,
                  (delay > 0) || !url.isEmpty() );
@@ -758,11 +758,11 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
             return pImpl->aTitle;
 
         // must it be numbered?
-        OUString aNoName(SFX2_RESSTR(STR_NONAME));
+        const OUString aNoName(SFX2_RESSTR(STR_NONAME));
         if (pImpl->bIsNamedVisible)
         {
             // Append number
-            aNoName += " " + OUString::number(pImpl->nVisualDocumentNumber);
+            return aNoName + " " + OUString::number(pImpl->nVisualDocumentNumber);
         }
 
         // Document called "Untitled" for the time being

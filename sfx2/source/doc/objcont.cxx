@@ -187,7 +187,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
     }
     else if ( IsModified() )
     {
-        OUString aUserName = SvtUserOptions().GetFullName();
+        const OUString aUserName = SvtUserOptions().GetFullName();
         if ( !IsUseUserData() )
         {
             // remove all data pointing to the current user
@@ -394,7 +394,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
     // created from template?
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
-    OUString aTemplName( xDocProps->getTemplateName() );
+    const OUString aTemplName( xDocProps->getTemplateName() );
     OUString aTemplURL( xDocProps->getTemplateURL() );
     OUString aFoundName;
 
@@ -462,8 +462,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                         bLoad = true;
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
-                        OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString() );
-                        sMessage = sMessage.replaceAll( "$(ARG1)", aTemplName );
+                        const OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString().replaceAll( "$(ARG1)", aTemplName ) );
                         ScopedVclPtrInstance< sfx2::QueryTemplateBox > aBox(GetDialogParent(), sMessage);
                         if ( RET_YES == aBox->Execute() )
                             bLoad = true;
