@@ -295,10 +295,8 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-class SwFieldTypes : public SwVectorModifyBase<SwFieldType*> {
-public:
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
-};
+typedef std::vector<SwFieldType*> SwFieldTypes;
+void dumpAsXml(struct _xmlTextWriter* pWriter, SwFieldTypes const &);
 
 typedef std::vector<SwTOXType*> SwTOXTypes;
 
