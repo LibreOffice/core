@@ -7633,24 +7633,6 @@ SfxVoidItem RemoveTextBox FN_REMOVE_TEXT_BOX
     GroupId = GID_DRAWING;
 ]
 
-SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
-]
-
 SfxUInt16Item JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE
 ( SfxUInt16Item JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE )
 [
