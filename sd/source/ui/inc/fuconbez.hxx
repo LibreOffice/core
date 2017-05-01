@@ -33,6 +33,7 @@ class FuConstructBezierPolygon
 public:
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
+    void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
