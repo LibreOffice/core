@@ -209,11 +209,13 @@ namespace
         ODS_48_8,
         OTS_48_8,
         ODG_48_8,
+        MAINAPP_48_8,
         ODP_48_8,
+        MAINAPP_48_8,
         ODM_48_8,
+        MAINAPP_48_8,
         ODB_48_8,
-        ODF_48_8,
-        MAINAPP_48_8
+        ODF_48_8
     };
 
     const OUStringLiteral SV_ICON_SIZE32[] =
@@ -225,11 +227,13 @@ namespace
         ODS_32_8,
         OTS_32_8,
         ODG_32_8,
+        MAINAPP_32_8,
         ODP_32_8,
+        MAINAPP_32_8,
         ODM_32_8,
+        MAINAPP_32_8,
         ODB_32_8,
-        ODF_32_8,
-        MAINAPP_32_8
+        ODF_32_8
     };
 
     const OUStringLiteral SV_ICON_SIZE16[] =
@@ -241,11 +245,13 @@ namespace
         ODS_16_8,
         OTS_16_8,
         ODG_16_8,
+        MAINAPP_16_8,
         ODP_16_8,
+        MAINAPP_16_8,
         ODM_16_8,
+        MAINAPP_16_8,
         ODB_16_8,
-        ODF_16_8,
-        MAINAPP_16_8
+        ODF_16_8
     };
 }
 
