@@ -28,7 +28,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="charkerning">
-                    <property name="label" translatable="yes">_Western characters only</property>
+                    <property name="label" translatable="yes">_Western text only</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
