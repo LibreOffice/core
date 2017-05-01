@@ -88,7 +88,6 @@ class SwEditShell;
 class SwFieldType;
 class SwField;
 class SwTextField;
-class SwFieldTypes;
 class SwFlyFrameFormat;
 class SwFormatsBase;
 class SwFormat;

@@ -1940,7 +1940,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
     maDBData.dumpAsXml(pWriter);
     mpMarkManager->dumpAsXml(pWriter);
     m_pUndoManager->dumpAsXml(pWriter);
-    getIDocumentFieldsAccess().GetFieldTypes()->dumpAsXml(pWriter);
+    ::dumpAsXml(pWriter, *getIDocumentFieldsAccess().GetFieldTypes());
     mpTextFormatCollTable->dumpAsXml(pWriter);
     mpCharFormatTable->dumpAsXml(pWriter);
     mpFrameFormatTable->dumpAsXml(pWriter, "frmFormatTable");
