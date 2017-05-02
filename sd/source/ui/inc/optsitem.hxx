@@ -342,12 +342,12 @@ private:
     bool    bSnapBorder     : 1;    // Snap/Object/PageMargin
     bool    bSnapFrame      : 1;    // Snap/Object/ObjectFrame
     bool    bSnapPoints     : 1;    // Snap/Object/ObjectPoint
-    bool    bOrtho          : 1;    // Snap/Position/CreatingMoving
-    bool    bBigOrtho       : 1;    // Snap/Position/ExtendEdges
-    bool    bRotate         : 1;    // Snap/Position/Rotating
+    bool    bOrtho          : 1;    // ConstrainObjects/CreatingMoving
+    bool    bBigOrtho       : 1;    // ConstrainObjects/ExtendEdges
+    bool    bRotate         : 1;    // ConstrainObjects/Rotating
     sal_Int16   nSnapArea;              // Snap/Object/Range
-    sal_Int16   nAngle;                 // Snap/Position/RotatingValue
-    sal_Int16   nBezAngle;              // Snap/Position/PointReduction
+    sal_Int16   nAngle;                 // ConstrainObjects/RotatingValue
+    sal_Int16   nBezAngle;              // ConstrainObjects/PointReduction
 
 protected:
 

@@ -791,12 +791,12 @@ void SdOptionsSnap::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "Object/PageMargin",
         "Object/ObjectFrame",
         "Object/ObjectPoint",
-        "Position/CreatingMoving",
-        "Position/ExtendEdges",
-        "Position/Rotating",
+        "ConstrainObjects/CreatingMoving",
+        "ConstrainObjects/ExtendEdges",
+        "ConstrainObjects/Rotating",
         "Object/Range",
-        "Position/RotatingValue",
-        "Position/PointReduction"
+        "ConstrainObjects/RotatingValue",
+        "ConstrainObjects/PointReduction"
     };
 
     rCount = SAL_N_ELEMENTS(aPropNames);
