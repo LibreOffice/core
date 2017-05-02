@@ -16,6 +16,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <svx/svdtrans.hxx>

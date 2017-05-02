@@ -20,6 +20,8 @@
 #include "drawingml/customshapegeometry.hxx"
 #include <drawingml/customshapeproperties.hxx>
 
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <osl/diagnose.h>
 #include "oox/helper/helper.hxx"
@@ -31,7 +33,6 @@
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
 
