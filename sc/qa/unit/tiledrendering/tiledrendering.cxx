@@ -82,6 +82,7 @@ public:
     void testUndoLimiting();
     void testUndoRepairDispatch();
     void testInsertGraphicInvalidations();
+    void testDocumentSizeWithTwoViews();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -107,6 +108,7 @@ public:
     CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST(testUndoRepairDispatch);
     CPPUNIT_TEST(testInsertGraphicInvalidations);
+    CPPUNIT_TEST(testDocumentSizeWithTwoViews);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1311,6 +1313,43 @@ void ScTiledRenderingTest::testInsertGraphicInvalidations()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Open a document that has the cursor far away & paint a tile
+    ScModelObj* pModelObj = createDoc("cursor-away.ods");
+
+    // Set the visible area, and press page down
+    pModelObj->setClientVisibleArea(Rectangle(750, 1861, 20583, 6997));
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    int nCanvasWidth = 256;
+    int nCanvasHeight = 256;
+    std::vector<unsigned char> aBuffer1(nCanvasWidth * nCanvasHeight * 4);
+    ScopedVclPtrInstance<VirtualDevice> pDevice1(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    pDevice1->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer1.data());
+    pModelObj->paintTile(*pDevice1.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    Scheduler::ProcessEventsToIdle();
+
+    // Create a new view
+    SfxLokHelper::createView();
+
+    std::vector<unsigned char> aBuffer2(nCanvasWidth * nCanvasHeight * 4);
+    ScopedVclPtrInstance<VirtualDevice> pDevice2(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    pDevice2->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer2.data());
+    pModelObj->paintTile(*pDevice2.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    Scheduler::ProcessEventsToIdle();
+
+    // Check that the tiles actually have the same content
+    for (size_t i = 0; i < aBuffer1.size(); ++i)
+        CPPUNIT_ASSERT_EQUAL(aBuffer1[i], aBuffer2[i]);
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
