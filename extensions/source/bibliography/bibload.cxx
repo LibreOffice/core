@@ -84,8 +84,7 @@ class BibliographyLoader : public cppu::WeakImplHelper
 
 private:
 
-    void                    loadView(const Reference< XFrame > & aFrame, const OUString& aURL,
-                                const Sequence< PropertyValue >& aArgs,
+    void                    loadView(const Reference< XFrame > & aFrame,
                                 const Reference< XLoadEventListener > & aListener);
 
     BibDataManager*         GetDataManager()const;
@@ -221,7 +220,7 @@ void BibliographyLoader::cancel()
 }
 
 void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
-        const Sequence< PropertyValue >& rArgs,
+        const Sequence< PropertyValue >& /*rArgs*/,
         const Reference< XLoadEventListener > & rListener)
 {
 
@@ -239,13 +238,12 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
     }
     if(aPartName == "View" || aPartName == "View1")
     {
-        loadView(rFrame, rURL, rArgs, rListener);
+        loadView(rFrame, rListener);
     }
 }
 
 
-void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUString& /*rURL*/,
-        const Sequence< PropertyValue >& /*rArgs*/,
+void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
         const Reference< XLoadEventListener > & rListener)
 {
     SolarMutexGuard aGuard;
