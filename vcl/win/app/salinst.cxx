@@ -892,7 +892,7 @@ void WinSalInstance::DestroyObject( SalObject* pObject )
 
 OUString WinSalInstance::GetConnectionIdentifier()
 {
-    return OUString("");
+    return OUString();
 }
 
 /** Add a file to the system shells recent document list if there is any.

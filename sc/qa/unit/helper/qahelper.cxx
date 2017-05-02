@@ -625,7 +625,7 @@ OUString EnsureSeparator(const OUStringBuffer& rFilePath)
 {
     return (rFilePath.getLength() == 0) || (rFilePath[rFilePath.getLength() - 1] != '/') ?
         OUString("/") :
-        OUString("");
+        OUString();
 }
 }
 

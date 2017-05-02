@@ -401,7 +401,7 @@ void TestString::testRemoveAny()
     sal_Unicode const test6 [] = { 'X', 0 };
     CPPUNIT_ASSERT_EQUAL(in, removeAny(in, test6));
     sal_Unicode const test7 [] = { 'A', 'B', 'C', 'a', 'b', 'c', 0 };
-    CPPUNIT_ASSERT_EQUAL(OUString(""), removeAny(in, test7));
+    CPPUNIT_ASSERT_EQUAL(OUString(), removeAny(in, test7));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);

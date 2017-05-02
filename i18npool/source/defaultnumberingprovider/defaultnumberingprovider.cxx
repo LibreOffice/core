@@ -627,10 +627,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                result += OUString::number( number );
                break;
           case NUMBER_NONE:
-               return OUString(""); // ignore prefix and suffix
+               return OUString(); // ignore prefix and suffix
           case CHAR_SPECIAL:
                // apparently, we're supposed to return an empty string in this case...
-               return OUString(""); // ignore prefix and suffix
+               return OUString(); // ignore prefix and suffix
           case PAGE_DESCRIPTOR:
           case BITMAP:
                OSL_ASSERT(false);

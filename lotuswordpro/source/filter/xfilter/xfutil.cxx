@@ -149,7 +149,7 @@ OUString   GetUnderlineName(enumXFUnderline type)
         return OUString("samll-wave");
         break;
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetReliefName(enumXFRelief type)
@@ -165,7 +165,7 @@ OUString   GetReliefName(enumXFRelief type)
         default:
             break;
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetCrossoutName(enumXFCrossout type)
@@ -190,7 +190,7 @@ OUString   GetCrossoutName(enumXFCrossout type)
     default:
         break;
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetTransformName(enumXFTransform type)
@@ -211,7 +211,7 @@ OUString   GetTransformName(enumXFTransform type)
     default:
         break;
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetEmphasizeName(enumXFEmphasize type)
@@ -232,7 +232,7 @@ OUString   GetEmphasizeName(enumXFEmphasize type)
     default:
         break;
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetTextDirName(enumXFTextDir dir)
@@ -266,7 +266,7 @@ OUString   GetTextDirName(enumXFTextDir dir)
     default:
         break;
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetFrameXPos(enumXFFrameXPos pos)
@@ -288,7 +288,7 @@ OUString   GetFrameXPos(enumXFFrameXPos pos)
     default:
         break;
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetFrameXRel(enumXFFrameXRel rel)
@@ -337,7 +337,7 @@ OUString   GetFrameXRel(enumXFFrameXRel rel)
     default:
         break;
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetFrameYPos(enumXFFrameYPos pos)
@@ -355,7 +355,7 @@ OUString   GetFrameYPos(enumXFFrameYPos pos)
     case enumXFFrameYPosBelow:
         return OUString("below");
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetFrameYRel(enumXFFrameYRel rel)
@@ -383,7 +383,7 @@ OUString   GetFrameYRel(enumXFFrameYRel rel)
     case enumXFFrameYRelText:
         return OUString("text");
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetAlignName(enumXFAlignType align)
@@ -405,7 +405,7 @@ OUString   GetAlignName(enumXFAlignType align)
     else if( align == enumXFALignMargins )
         return OUString("margins");
 
-    return OUString("");
+    return OUString();
 }
 
 OUString   GetPageUsageName(enumXFPageUsage usage)
@@ -478,7 +478,7 @@ OUString   GetColorMode(enumXFColorMode mode)
     case enumXFColorMono:
         return OUString("mono");
     }
-    return OUString("");
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

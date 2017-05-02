@@ -440,13 +440,13 @@ DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-test
         CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), getRun( getParagraph( 1 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( lastname, getRun( getParagraph( 2 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( OUString( "Another fixed text." ), getRun( getParagraph( 3 ), 1 )->getString());
-        CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 4 ), 1 )->getString()); // empty para at the end of page 1
+        CPPUNIT_ASSERT_EQUAL( OUString(), getRun( getParagraph( 4 ), 1 )->getString()); // empty para at the end of page 1
         CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), getRun( getParagraph( 5 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( firstname, getRun( getParagraph( 6 ), 1 )->getString());
         // Also verify the layout.
         CPPUNIT_ASSERT_EQUAL( lastname, parseDump("/root/page[1]/body/txt[2]/Special", "rText"));
         CPPUNIT_ASSERT_EQUAL( OUString( "Fixed text." ), parseDump("/root/page[1]/body/txt[1]", ""));
-        CPPUNIT_ASSERT_EQUAL( OUString( "" ), parseDump("/root/page[1]/body/txt[4]", ""));
+        CPPUNIT_ASSERT_EQUAL( OUString(), parseDump("/root/page[1]/body/txt[4]", ""));
         CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), parseDump("/root/page[2]/body/txt[1]", ""));
         CPPUNIT_ASSERT_EQUAL( firstname, parseDump("/root/page[2]/body/txt[2]/Special", "rText"));
     }

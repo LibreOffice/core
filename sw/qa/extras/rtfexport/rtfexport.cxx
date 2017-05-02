@@ -519,9 +519,9 @@ DECLARE_RTFEXPORT_TEST(testBookmark, "bookmark.rtf")
 
 DECLARE_RTFEXPORT_TEST(testHyperlink, "hyperlink.rtf")
 {
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 1, "Hello"), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getRun(getParagraph(1), 1, "Hello"), "HyperLinkURL"));
     CPPUNIT_ASSERT_EQUAL(OUString("http://en.wikipedia.org/wiki/World"), getProperty<OUString>(getRun(getParagraph(1), 2, "world"), "HyperLinkURL"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 3, "!"), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getRun(getParagraph(1), 3, "!"), "HyperLinkURL"));
 }
 
 DECLARE_RTFEXPORT_TEST(testHyperlinkTdf100105, "hyperlink_empty.rtf")
@@ -532,7 +532,7 @@ DECLARE_RTFEXPORT_TEST(testHyperlinkTdf100105, "hyperlink_empty.rtf")
     xCursor->gotoStart(false);
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.net"), getProperty<OUString>(xCursor, "HyperLinkURL"));
     // getRun doesn't provide a 0-length hyperlink
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 1, "foobar"), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getRun(getParagraph(1), 1, "foobar"), "HyperLinkURL"));
 }
 
 DECLARE_RTFEXPORT_TEST(test78758, "fdo78758.rtf")

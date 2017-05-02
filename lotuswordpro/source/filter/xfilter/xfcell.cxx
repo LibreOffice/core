@@ -137,12 +137,12 @@ OUString   XFCell::GetCellName()
     XFRow *pRow = m_pOwnerRow;
 
     if( !pRow )
-        return OUString("");
+        return OUString();
 
     XFTable *pTable = pRow->GetOwnerTable();
 
     if( !pTable )
-        return OUString("");
+        return OUString();
 
     OUString name;
     if( pTable->IsSubTable() )

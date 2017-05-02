@@ -109,7 +109,7 @@ OUString LwpChangeMgr::GetChangeID(LwpFrib* pFrib)
     std::map<LwpFrib*,OUString>::iterator iter;
     iter = m_pFribMap->find(pFrib);
     if (iter == m_pFribMap->end())
-        return OUString("");
+        return OUString();
     else
         return iter->second;
 }

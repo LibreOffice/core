@@ -106,7 +106,7 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFill
     // due to being loaded embedded. BitmapMode is repeat.
     uno::Reference<beans::XPropertySet> xPageProperties1(getStyles("PageStyles")->getByName("HTML"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPageProperties1, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPageProperties1, "FillBitmapName"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xPageProperties1, "FillBitmapName"));
     CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xPageProperties1, "FillBitmapMode"));
 
     // we should have one paragraph
@@ -121,7 +121,7 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFill
 
         // check for Bitmap FillStyle, name empty, repeat
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xParagraphProperties, "FillStyle"));
-        CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xParagraphProperties, "FillBitmapName"));
+        CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xParagraphProperties, "FillBitmapName"));
         CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xParagraphProperties, "FillBitmapMode"));
     }
 }

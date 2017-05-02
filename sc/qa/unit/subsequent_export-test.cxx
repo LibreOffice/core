@@ -3909,7 +3909,7 @@ void ScExportTest::testExtendedLCIDXLSX()
             rDoc.GetNumberFormat(nCol, nRow, 0, nNumberFormat);
             const SvNumberformat* pNumberFormat = pNumFormatter->GetEntry(nNumberFormat);
             const OUString& rFormatStr = pNumberFormat->GetFormatstring();
-            const OUString aExpectedFormatStr = aLang[nRow-1] + ( (nCol==2 && nRow!=3) ? OUString("[NatNum1]") : OUString("") ) + aCalendar[nRow-1];
+            const OUString aExpectedFormatStr = aLang[nRow-1] + ( (nCol==2 && nRow!=3) ? OUString("[NatNum1]") : OUString() ) + aCalendar[nRow-1];
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format lost extended LCID during Excel export", aExpectedFormatStr, rFormatStr);
         }

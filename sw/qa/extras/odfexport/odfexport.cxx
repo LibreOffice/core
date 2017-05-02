@@ -863,14 +863,14 @@ DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
     xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Ruby"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xPortion->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(), xPortion->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), getProperty<OUString>(xPortion, "RubyText"));
     xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
     xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Ruby"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xPortion->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(), xPortion->getString());
     xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
@@ -1318,7 +1318,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharFontName") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Courier"), sString);
     xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
-    CPPUNIT_ASSERT_EQUAL(OUString(""), sString);
+    CPPUNIT_ASSERT_EQUAL(OUString(), sString);
     xCell1Style->getPropertyValue("CharFontFamily") >>= nInt16;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
     xCell1Style->getPropertyValue("CharFontPitch") >>= nInt16;
@@ -1379,7 +1379,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharFontName") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), sString);
     xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
-    CPPUNIT_ASSERT_EQUAL(OUString(""), sString);
+    CPPUNIT_ASSERT_EQUAL(OUString(), sString);
     xCell1Style->getPropertyValue("CharFontFamily") >>= nInt16;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), nInt16);
     xCell1Style->getPropertyValue("CharFontPitch") >>= nInt16;
@@ -1440,7 +1440,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharFontName") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Open Sans"), sString);
     xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
-    CPPUNIT_ASSERT_EQUAL(OUString(""), sString);
+    CPPUNIT_ASSERT_EQUAL(OUString(), sString);
     xCell1Style->getPropertyValue("CharFontFamily") >>= nInt16;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nInt16);
     xCell1Style->getPropertyValue("CharFontPitch") >>= nInt16;

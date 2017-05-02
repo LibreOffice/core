@@ -153,7 +153,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
     {
         utl::MediaDescriptor aMediaDesc(aDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
-        bool bSkipImages = aMediaDesc.getUnpackedValueOrDefault("FilterOptions", OUString("")) == "SkipImages";
+        bool bSkipImages = aMediaDesc.getUnpackedValueOrDefault("FilterOptions", OUString()) == "SkipImages";
 
         uno::Reference< io::XInputStream > xInputStream;
         try
