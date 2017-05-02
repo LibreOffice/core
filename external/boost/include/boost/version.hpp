@@ -3,6 +3,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"  /* first! for clang */
 #pragma GCC diagnostic ignored "-Wpragmas"  /* second! for GCC */
+#pragma GCC diagnostic ignored "-Wunknown-warning-option" // third! for Clang 5
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #pragma GCC diagnostic ignored "-Wextra"
 #pragma GCC diagnostic ignored "-Wignored-qualifiers"
