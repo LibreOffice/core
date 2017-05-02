@@ -40,17 +40,6 @@
 
 using namespace com::sun::star;
 
-void ScTabViewShell::ExecuteSbx( SfxRequest& /* rReq */ )
-{
-    //  SID_RANGE_OFFSET (Offset),
-    //  SID_PIVOT_CREATE (DataPilotCreate) - removed (old Basic)
-}
-
-void ScTabViewShell::GetSbxState( SfxItemSet& /* rSet */ )
-{
-    //  SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
-}
-
 void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
 {
     sal_uInt16 nSlotId = rReq.GetSlot();
@@ -163,8 +152,6 @@ static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pD
 
 void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
 {
-    //  SID_OLE_OBJECT - removed (old Basic)
-
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )

@@ -412,7 +412,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/docshell/docsh4 \
     sc/source/ui/docshell/docsh5 \
     sc/source/ui/docshell/docsh6 \
-    sc/source/ui/docshell/docsh7 \
     sc/source/ui/docshell/docsh8 \
     sc/source/ui/docshell/documentlinkmgr \
     sc/source/ui/docshell/editable \

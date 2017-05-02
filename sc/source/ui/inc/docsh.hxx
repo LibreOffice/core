@@ -225,9 +225,6 @@ public:
 
     void            AsciiSave( SvStream& rStream, const ScImportOptions& rOpt );
 
-    void            GetSbxState( SfxItemSet &rSet );
-    static void     GetDrawObjState( SfxItemSet &rSet );
-
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet &rSet );
     void            ExecutePageStyle ( SfxViewShell& rCaller, SfxRequest& rReq, SCTAB nCurTab );

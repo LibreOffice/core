@@ -21,7 +21,6 @@
 interface TableOLEObject
 {
     SID_ACTIVE_OBJ_NAME [ StateMethod = GetObjectState; ]
-    SID_OLE_OBJECT      [ StateMethod = GetObjectState; ]
     SID_OLE_ACTIVATE    [ ExecMethod = ExecuteObject; ]
     SID_OLE_DEACTIVATE  [ ExecMethod = ExecuteObject; ]
     SID_OLE_SELECT      [ ExecMethod = ExecuteObject; ] // api:
@@ -71,11 +70,6 @@ interface BaseSelection
         StateMethod = GetDrawInsState ;
         Asynchron ;
     ]
-
-    SID_PIVOT_CREATE        [ ExecMethod = ExecuteSbx; StateMethod = GetSbxState; ]
-    SID_RANGE_OFFSET        [ ExecMethod = ExecuteSbx; ]
-    SID_RANGE_REGION        [ StateMethod = GetSbxState; ]
-
 
     SID_INSERT_SMATH        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_GALLERY_FORMATS     [ ExecMethod = ExecGallery; ]

@@ -350,16 +350,8 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (startsWith(aFunctionName, "sc::(anonymous namespace)::CSVHandler::")) {
         return true;
     }
-    // called from SDI file, I don't know what that stuff is about, sc/source/ui/docshell/docsh7.cxx
-    if (aFunctionName == "ScDocShell::GetDrawObjState") {
-        return true;
-    }
     // called from SDI file, I don't know what that stuff is about, sc/source/ui/view/cellsh4.cxx
     if (aFunctionName == "ScCellShell::GetStateCursor") {
-        return true;
-    }
-    // called from SDI file, I don't know what that stuff is about, sc/source/ui/view/tabvwshh.cxx
-    if (aFunctionName == "ScTabViewShell::ExecuteSbx" || aFunctionName == "ScTabViewShell::GetSbxState") {
         return true;
     }
     // template magic, sc/source/filter/excel/xepivot.cxx

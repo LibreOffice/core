@@ -110,10 +110,6 @@ using namespace ::com::sun::star;
 
 void ScDocShell::Execute( SfxRequest& rReq )
 {
-    //  SID_SC_RANGE (Range),
-    //  SID_SC_CELLTEXT (CellText),
-    //  SID_SC_CELLS (Cells) - removed (old Basic)
-
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     SfxBindings* pBindings = GetViewBindings();
     bool bUndo (aDocument.IsUndoEnabled());
@@ -1889,21 +1885,6 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 break;
         }
     }
-}
-
-void ScDocShell::GetSbxState( SfxItemSet &rSet )
-{
-    //  SID_SC_SELECTION (Selection),
-    //  SID_SC_ACTIVECELL (ActiveCell),
-    //  SID_SC_ACTIVETAB (ActiveTable),
-    //  SID_TABLES_GET (Tables),
-    //  SID_PIVOT_GET (DataPilotTables) - removed (old Basic)
-
-        //  If slots from the view shell are executed here, the GetState must also be forwarded!
-
-    ScTabViewShell* pVisibleSh = GetBestViewShell();        // visible view
-    if ( pVisibleSh )
-        pVisibleSh->GetState( rSet );
 }
 
 void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uInt16 nAspect )
