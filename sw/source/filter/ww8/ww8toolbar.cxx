@@ -825,48 +825,48 @@ Tcg255::~Tcg255()
 
 bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
 {
-    Tcg255SubStruct* pSubStruct = nullptr;
+    std::unique_ptr<Tcg255SubStruct> xSubStruct;
     switch ( nId )
     {
         case 0x1:
         {
-            pSubStruct = new PlfMcd;
+            xSubStruct.reset(new PlfMcd);
             break;
         }
         case 0x2:
         {
-            pSubStruct = new PlfAcd;
+            xSubStruct.reset(new PlfAcd);
             break;
         }
         case 0x3:
         case 0x4:
         {
-            pSubStruct = new PlfKme;
+            xSubStruct.reset(new PlfKme);
             break;
         }
         case 0x10:
         {
-            pSubStruct = new TcgSttbf;
+            xSubStruct.reset(new TcgSttbf);
             break;
         }
         case 0x11:
         {
-            pSubStruct = new MacroNames;
+            xSubStruct.reset(new MacroNames);
             break;
         }
         case 0x12:
         {
-            pSubStruct = new SwCTBWrapper;
+            xSubStruct.reset(new SwCTBWrapper);
             break;
         }
         default:
             SAL_INFO("sw.ww8","Unknown id 0x" << std::hex << nId);
             return false;
     }
-    pSubStruct->ch = nId;
-    if ( !pSubStruct->Read( rS ) )
+    xSubStruct->ch = nId;
+    if (!xSubStruct->Read(rS))
         return false;
-    rgtcgData.push_back( pSubStruct );
+    rgtcgData.push_back(xSubStruct.release());
     return true;
 }
 
