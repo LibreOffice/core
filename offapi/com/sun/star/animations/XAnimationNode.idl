@@ -26,8 +26,6 @@
  module com {  module sun {  module star {  module animations {
 
 
-/**
-*/
 interface XAnimationNode : ::com::sun::star::container::XChild
 {
     /**  a value from AnimationNodeType.
@@ -234,8 +232,6 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     */
     [attribute] boolean AutoReverse;
 
-    /**
-    */
     [attribute] sequence< ::com::sun::star::beans::NamedValue > UserData;
 };
 

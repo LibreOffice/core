@@ -329,8 +329,6 @@ void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent )
     ReadConfiguration( bExcludedTypes, bRecognize );
 }
 
-/**
-*/
 void SmartTagMgr::LoadLibraries()
 {
     Reference< container::XContentEnumerationAccess > rContent( mxContext->getServiceManager(), UNO_QUERY_THROW );
@@ -393,8 +391,6 @@ void SmartTagMgr::LoadLibraries()
 
 }
 
-/**
-*/
 void SmartTagMgr::PrepareConfiguration( const OUString& rConfigurationGroupName )
 {
     Any aAny = makeAny( "/org.openoffice.Office.Common/SmartTags/" + rConfigurationGroupName );
@@ -465,8 +461,6 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
     }
 }
 
-/**
-*/
 void SmartTagMgr::RegisterListener()
 {
     // register as listener at package manager

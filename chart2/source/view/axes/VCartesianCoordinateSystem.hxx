@@ -24,8 +24,6 @@
 namespace chart
 {
 
-/**
-*/
 class VCartesianCoordinateSystem : public VCoordinateSystem
 {
 public:

@@ -25,9 +25,6 @@
 namespace chart
 {
 
-/**
-*/
-
 namespace ConfigurationAccess
 {
     /** @descr Retrieve the FieldUnit to be used for the UI.  This unit is retrieved

@@ -34,8 +34,6 @@ module chart2
 module data
 {
 
-/**
- */
 interface XRangeHighlighter : ::com::sun::star::uno::XInterface
 {
     /** Returns a list of ranges that are used by objects that are

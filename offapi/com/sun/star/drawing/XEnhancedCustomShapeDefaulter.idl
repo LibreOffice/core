@@ -26,8 +26,6 @@
 
 
 
-/**
- */
 interface XEnhancedCustomShapeDefaulter: com::sun::star::uno::XInterface
 {
 

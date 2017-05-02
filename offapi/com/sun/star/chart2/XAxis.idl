@@ -34,12 +34,8 @@ module chart2
 
 interface XAxis : ::com::sun::star::uno::XInterface
 {
-    /**
-     */
     void setScaleData( [in] ScaleData aScale );
 
-    /**
-     */
     ScaleData getScaleData();
 
     /** the returned property set must support the service

@@ -36,13 +36,9 @@ module chart2
  */
 struct InterpretedData
 {
-    /**
-     */
-    sequence< sequence< XDataSeries > >         Series;
+    sequence< sequence< XDataSeries > >                Series;
 
-    /**
-     */
-    com::sun::star::chart2::data::XLabeledDataSequence                  Categories;
+    com::sun::star::chart2::data::XLabeledDataSequence Categories;
 };
 
 } ; // chart2

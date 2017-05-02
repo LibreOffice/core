@@ -46,8 +46,6 @@ service Title
     service                ::com::sun::star::beans::PropertySet;
 //FIXME    [optional] service     ::com::sun::star::layout::LayoutElement;
 
-    /**
-     */
     interface              XTitle;
 
     /** the rotation of the title's text in degrees in the range

@@ -116,8 +116,6 @@ public:
     ~UnoInterfaceProxy();
     !UnoInterfaceProxy();
 
-    /**
-     */
     inline System::String ^ getOid()
         { return m_oid; }
 

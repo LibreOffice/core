@@ -23,9 +23,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class ChangingResource;
 class ResourceChangeListener
 {

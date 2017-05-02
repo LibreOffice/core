@@ -365,8 +365,7 @@ public:
 
 };
 
-/**
-*/
+
 class OAddThread : public Thread
 {
     ThreadSafeValue<sal_Int32> m_aFlag;
@@ -1701,8 +1700,6 @@ void SAL_CALL destroyCallback(void * data)
 
 static ThreadData myThreadData(destroyCallback);
 
-/**
-*/
 class myKeyThread : public Thread
 {
 public:

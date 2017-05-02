@@ -29,9 +29,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class SchAxisLabelTabPage : public SfxTabPage
 {
 private:

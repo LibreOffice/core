@@ -32,20 +32,12 @@ module star
 module chart2
 {
 
-/**
- */
 interface XRegressionCurve : com::sun::star::uno::XInterface
 {
-    /**
-     */
     XRegressionCurveCalculator getCalculator();
 
-    /**
-     */
     ::com::sun::star::beans::XPropertySet getEquationProperties();
 
-    /**
-     */
     void setEquationProperties( [in] ::com::sun::star::beans::XPropertySet xEquationProperties );
 };
 

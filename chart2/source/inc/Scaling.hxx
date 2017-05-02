@@ -28,9 +28,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class LogarithmicScaling :
         public ::cppu::WeakImplHelper<
         css::chart2::XScaling,

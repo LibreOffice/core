@@ -25,9 +25,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class OOO_DLLPUBLIC_CHARTTOOLS ChartViewHelper
 {
 public:

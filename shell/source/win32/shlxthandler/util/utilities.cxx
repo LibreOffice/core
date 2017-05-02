@@ -63,32 +63,24 @@ static std::string WStringToString(const std::wstring& String, int codepage)
 }
 
 
-/**
-*/
 std::wstring StringToWString(const std::string& String)
 {
     return StringToWString(String, CP_ACP);
 }
 
 
-/**
-*/
 std::string WStringToString(const std::wstring& String)
 {
     return WStringToString(String, CP_ACP);
 }
 
 
-/**
-*/
 std::wstring UTF8ToWString(const std::string& String)
 {
     return StringToWString(String, CP_UTF8);
 }
 
 
-/**
-*/
 std::wstring GetResString(int ResId)
 {
     wchar_t szResStr[MAX_RES_STRING];
@@ -102,8 +94,6 @@ std::wstring GetResString(int ResId)
 }
 
 
-/**
-*/
 bool is_windows_xp_or_above()
 {
 // the Win32 SDK 8.1 deprecates GetVersionEx()

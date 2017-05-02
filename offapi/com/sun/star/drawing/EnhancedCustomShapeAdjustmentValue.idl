@@ -33,8 +33,6 @@ struct EnhancedCustomShapeAdjustmentValue
     */
     any     Value;
 
-    /**
-    */
     ::com::sun::star::beans::PropertyState State;
 
 

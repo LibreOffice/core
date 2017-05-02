@@ -25,9 +25,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class VPolarAngleAxis : public VPolarAxis
 {
 public:

@@ -961,8 +961,6 @@ void ExtensionManager::enableExtension(
     }
 }
 
-/**
- */
 sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
     Reference<css::deployment::XPackage> const & extension,
     Reference<task::XAbortChannel> const & xAbortChannel,

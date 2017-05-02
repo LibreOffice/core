@@ -27,9 +27,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class VAxisBase : public VAxisOrGridBase
 {
 public:

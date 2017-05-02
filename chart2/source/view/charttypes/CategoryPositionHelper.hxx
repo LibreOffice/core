@@ -23,9 +23,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class CategoryPositionHelper
 {
 public:

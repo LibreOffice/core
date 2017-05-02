@@ -32,40 +32,22 @@ module star
 module chart2
 {
 
-/**
-  */
 interface XLabeled
 {
-    /**
-     */
     void setLabel( [in] XTitle xTitle );
 
-    /**
-     */
     XTitle getLabel();
 
-    /**
-     */
     void setOwnAnchor( [in] ::com::sun::star::drawing::RectanglePoint aAnchorPoint );
 
-    /**
-     */
     ::com::sun::star::drawing::RectanglePoint getOwnAnchor();
 
-    /**
-     */
     void setLabelAnchor( [in] ::com::sun::star::drawing::RectanglePoint aAnchorPoint );
 
-    /**
-     */
     ::com::sun::star::drawing::RectanglePoint getLabelAnchor();
 
-    /**
-     */
     void setOffset( [in] sequence< double > aOffsetVector );
 
-    /**
-     */
     sequence< double > getOffset();
 };
 

@@ -30,8 +30,6 @@ module star
 module chart2
 {
 
-/**
- */
 struct LightSource
 {
     /** the light source's color
@@ -42,8 +40,6 @@ struct LightSource
      */
     ::com::sun::star::drawing::Direction3D   aDirection;
 
-    /**
-     */
     boolean                     bIsEnabled;
 
     /** When `TRUE`, the specularity of material is taken into

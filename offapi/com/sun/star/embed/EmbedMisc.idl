@@ -59,84 +59,44 @@ published constants EmbedMisc
      */
     const hyper MS_EMBED_STATIC = 8;
 
-    /**
-     */
     const hyper MS_EMBED_CANTLINKINSIDE = 16;
 
-    /**
-     */
     const hyper MS_EMBED_CANLINKBYOLE1 = 32;
 
-    /**
-     */
     const hyper MS_EMBED_ISLINKOBJECT = 64;
 
-    /**
-     */
     const hyper MS_EMBED_INSIDEOUT = 128;
 
-    /**
-     */
     const hyper MS_EMBED_ACTIVATEWHENVISIBLE = 256;
 
-    /**
-     */
     const hyper MS_EMBED_RENDERINGISDEVICEINDEPENDENT = 512;
 
-    /**
-     */
     const hyper MS_EMBED_INVISIBLEATRUNTIME = 1024;
 
-    /**
-     */
     const hyper MS_EMBED_ALWAYSRUN = 2048;
 
-    /**
-     */
     const hyper MS_EMBED_ACTSLIKEBUTTON = 4096;
 
-    /**
-     */
     const hyper MS_EMBED_ACTSLIKELABEL = 8192;
 
-    /**
-     */
     const hyper MS_EMBED_NOUIACTIVATE = 16384;
 
-    /**
-     */
     const hyper MS_EMBED_ALIGNABLE = 32768;
 
-    /**
-     */
     const hyper MS_EMBED_SIMPLEFRAME = 65536;
 
-    /**
-     */
     const hyper MS_EMBED_SETCLIENTSITEFIRST = 131072;
 
-    /**
-     */
     const hyper MS_EMBED_IMEMODE = 262144;
 
-    /**
-     */
     const hyper MS_EMBED_IGNOREACTIVATEWHENVISIBLE = 524288;
 
-    /**
-     */
     const hyper MS_EMBED_WANTSTOMENUMERGE = 1048576;
 
-    /**
-     */
     const hyper MS_EMBED_SUPPORTSMULTILEVELUNDO = 2097152;
 
-    /**
-     */
     const hyper EMBED_ACTIVATEIMMEDIATELY = 0x100000000;
 
-    /**
-     */
     const hyper EMBED_NEVERRESIZE = 0x200000000;
 
     /** The object needs the size to be provided from the container after

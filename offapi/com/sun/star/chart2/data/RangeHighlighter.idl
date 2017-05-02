@@ -32,12 +32,8 @@ module chart2
 module data
 {
 
-/**
- */
 service RangeHighlighter
 {
-    /**
-     */
     interface XRangeHighlighter;
 };
 

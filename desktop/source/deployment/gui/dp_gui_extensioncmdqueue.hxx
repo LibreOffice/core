@@ -67,8 +67,6 @@ public:
 
     ~ExtensionCmdQueue();
 
-    /**
-    */
     void addExtension( const OUString &rExtensionURL,
                        const OUString &rRepository,
                        const bool bWarnUser );

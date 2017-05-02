@@ -21,47 +21,35 @@
 #include "zipexcptn.hxx"
 
 
-/**
-*/
 RuntimeException::RuntimeException(int Error) :
     m_Error(Error)
 {
 }
 
 
-/**
-*/
 RuntimeException::~RuntimeException() throw()
 {
 }
 
 
-/**
-*/
 int RuntimeException::GetErrorCode() const
 {
     return m_Error;
 }
 
 
-/**
-*/
 ZipException::ZipException(int Error) :
     RuntimeException(Error)
 {
 }
 
 
-/**
-*/
 const char* ZipException::what() const throw()
 {
     return nullptr;
 }
 
 
-/**
-*/
 Win32Exception::Win32Exception(int Error) :
     RuntimeException(Error),
     m_MsgBuff(nullptr)
@@ -69,8 +57,6 @@ Win32Exception::Win32Exception(int Error) :
 }
 
 
-/**
-*/
 Win32Exception::~Win32Exception() throw()
 {
     if (m_MsgBuff)
@@ -78,8 +64,6 @@ Win32Exception::~Win32Exception() throw()
 }
 
 
-/**
-*/
 const char* Win32Exception::what() const throw()
 {
     if (m_MsgBuff == nullptr)
@@ -100,24 +84,18 @@ const char* Win32Exception::what() const throw()
 }
 
 
-/**
-*/
 ZipContentMissException::ZipContentMissException(int Error) :
     ZipException(Error)
 {
 }
 
 
-/**
-*/
 AccessViolationException::AccessViolationException(int Error) :
     Win32Exception(Error)
 {
 }
 
 
-/**
-*/
 IOException::IOException(int Error) :
     Win32Exception(Error)
 {

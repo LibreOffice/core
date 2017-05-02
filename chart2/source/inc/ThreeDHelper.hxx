@@ -28,9 +28,6 @@
 namespace chart
 {
 
-/**
-*/
-
 enum ThreeDLookScheme
 {
     ThreeDLookScheme_Simple,

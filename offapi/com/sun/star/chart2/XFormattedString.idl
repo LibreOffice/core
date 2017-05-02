@@ -33,12 +33,8 @@ module chart2
 
 interface XFormattedString : ::com::sun::star::uno::XInterface
 {
-    /**
-     */
     string getString();
 
-    /**
-     */
     void setString( [in] string String );
 };
 
