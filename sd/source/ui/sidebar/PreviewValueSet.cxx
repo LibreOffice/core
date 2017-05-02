@@ -72,7 +72,7 @@ void PreviewValueSet::Resize()
     }
 }
 
-void PreviewValueSet::Rearrange (bool /*bForceRequestResize*/)
+void PreviewValueSet::Rearrange()
 {
     sal_uInt16 nNewColumnCount (CalculateColumnCount (
         GetOutputSizePixel().Width()));

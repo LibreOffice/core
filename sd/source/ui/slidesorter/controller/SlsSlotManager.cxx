@@ -405,7 +405,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != nullptr)
             {
-                pViewShell->ImpSidUndo (false, rRequest);
+                pViewShell->ImpSidUndo (rRequest);
             }
             break;
         }
@@ -416,7 +416,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != nullptr)
             {
-                pViewShell->ImpSidRedo (false, rRequest);
+                pViewShell->ImpSidRedo (rRequest);
             }
             break;
         }

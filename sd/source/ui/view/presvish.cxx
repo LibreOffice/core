@@ -74,8 +74,8 @@ void PresentationViewShell::InitInterface_Impl()
 }
 
 
-PresentationViewShell::PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView)
-: DrawViewShell( pFrame, rViewShellBase, pParentWindow, PageKind::Standard, pFrameView)
+PresentationViewShell::PresentationViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView)
+: DrawViewShell( rViewShellBase, pParentWindow, PageKind::Standard, pFrameView)
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );
@@ -140,11 +140,11 @@ void PresentationViewShell::Activate( bool bIsMDIActivate )
     GetDocSh()->Connect( this );
 }
 
-void PresentationViewShell::Paint( const ::tools::Rectangle& rRect, ::sd::Window* )
+void PresentationViewShell::Paint( const ::tools::Rectangle& /*rRect*/, ::sd::Window* )
 {
     rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( xSlideShow.is() )
-        xSlideShow->paint(rRect);
+        xSlideShow->paint();
 }
 
 void PresentationViewShell::Resize()

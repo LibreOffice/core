@@ -180,7 +180,7 @@ class HtmlExport final
 
     OUString CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
     OUString CreateTextForPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
-    OUString CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
+    OUString CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
 
     static OUString CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
                                   sal_uLong nCenterY, const OUString& rHRef );

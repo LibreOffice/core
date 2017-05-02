@@ -112,12 +112,6 @@ public:
     */
     OutputDevice* GetVirtualRefDevice() { return mpVirtualRefDevice;}
 
-    /** Deprecated alias to <member>GetVirtualRefDevice</member>.
-        @param rDocShell
-            Unused dummy parameter.
-    */
-    OutputDevice* GetRefDevice (::sd::DrawDocShell& rDocShell);
-
     SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
     // virtual methods for the option dialog

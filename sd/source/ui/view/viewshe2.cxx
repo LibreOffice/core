@@ -670,7 +670,7 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
     }
 }
 
-bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
+bool ViewShell::RequestHelp(const HelpEvent& rHEvt)
 {
     bool bReturn = false;
 
@@ -890,14 +890,14 @@ const ::tools::Rectangle& ViewShell::GetAllWindowRect()
     return maAllWindowRectangle;
 }
 
-void ViewShell::ReadUserData(const OUString&)
+void ViewShell::ReadUserData()
 {
     // zoom onto VisArea from FrameView
     GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
         SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 }
 
-void ViewShell::WriteUserData(OUString&)
+void ViewShell::WriteUserData()
 {
     // writing of our data is always done in WriteFrameViewData()
     WriteFrameViewData();
@@ -961,7 +961,7 @@ sal_Int8 ViewShell::ExecuteDrop (
     return pView ? pView->ExecuteDrop( rEvt, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE;
 }
 
-void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse)
+void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool /*bBrowse*/)
 {
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
@@ -976,12 +976,12 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     rSequence[nIndex].Name = sUNO_View_ViewId;
     rSequence[nIndex].Value <<= "view" + OUString::number( static_cast<sal_uInt16>(nViewID));
 
-    mpFrameView->WriteUserDataSequence( rSequence, bBrowse );
+    mpFrameView->WriteUserDataSequence( rSequence );
 }
 
-void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )
+void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool /*bBrowse*/ )
 {
-    mpFrameView->ReadUserDataSequence( rSequence, bBrowse );
+    mpFrameView->ReadUserDataSequence( rSequence );
 }
 
 void ViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)

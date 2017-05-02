@@ -126,7 +126,7 @@ void SdDocPreviewWin::ImpPaint( OutputDevice* pVDev )
     pVDev->DrawRect(::tools::Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
 }
 
-void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect )
+void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& /*rRect*/ )
 {
     if( (!mxSlideShow.is()) || (!mxSlideShow->isRunning() ) )
     {
@@ -140,7 +140,7 @@ void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const ::too
     }
     else
     {
-        mxSlideShow->paint( rRect );
+        mxSlideShow->paint();
     }
 }
 

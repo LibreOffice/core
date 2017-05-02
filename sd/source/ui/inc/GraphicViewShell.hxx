@@ -56,7 +56,6 @@ public:
             one view shell to the next.
     */
     GraphicViewShell (
-        SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
         FrameView* pFrameView);

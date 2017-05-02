@@ -334,7 +334,7 @@ public:
 
     SAL_DLLPRIVATE bool InsertBookmarkAsObject(const std::vector<OUString> &rBookmarkList,
                                     const std::vector<OUString> &rExchangeList,
-                                    bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
+                                    ::sd::DrawDocShell* pBookmarkDocSh,
                                     Point* pObjPos, bool bCalcObjCount);
 
     void   CloseBookmarkDoc();
@@ -413,10 +413,10 @@ public:
 
     SAL_DLLPRIVATE void                ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl);
 
-    SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj, SdPage* pPage);
-    SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj, SdPage* pPage);
+    SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj);
+    SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj);
 
-    SAL_DLLPRIVATE sal_uLong               GetLinkCount();
+    SAL_DLLPRIVATE sal_uLong           GetLinkCount();
 
     SAL_DLLPRIVATE std::vector<sd::FrameView*>& GetFrameViewList() { return maFrameViewList; }
     SdCustomShowList* GetCustomShowList(bool bCreate = false);

@@ -901,7 +901,7 @@ void FuPoor::DoCut()
 {
     if (mpView)
     {
-        mpView->DoCut(mpWindow);
+        mpView->DoCut();
     }
 }
 
@@ -912,7 +912,7 @@ void FuPoor::DoCopy()
 {
     if (mpView)
     {
-        mpView->DoCopy(mpWindow);
+        mpView->DoCopy();
     }
 }
 

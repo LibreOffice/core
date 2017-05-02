@@ -581,7 +581,7 @@ void MasterPagesSelector::UpdateAllPreviews()
                 mpContainer->RequestPreview(aToken);
         }
     }
-    PreviewValueSet::Rearrange(true);
+    PreviewValueSet::Rearrange();
 }
 
 void MasterPagesSelector::ClearPageSet()

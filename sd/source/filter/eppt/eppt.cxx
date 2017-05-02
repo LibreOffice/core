@@ -412,8 +412,8 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
                 bSimpleText = true;
                 mpStrm->WriteUInt16( nLev );
             }
-            mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
-            mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
+            mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, nLev, bSimpleText, mXPagePropSet );
+            mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, nLev, bSimpleText, mXPagePropSet );
             bFirst = false;
         }
         mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );

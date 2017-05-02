@@ -56,8 +56,7 @@ public:
     */
     void AddRequest (
         CacheKey aKey,
-        RequestPriorityClass eRequestClass,
-        bool bInsertWithHighestPriority = false);
+        RequestPriorityClass eRequestClass);
 
     /** Remove the specified request from the queue.
         @param aKey
