@@ -79,10 +79,12 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_globalfilter \
 ))
 
+ifneq ($(ENABLE_HEADLESS),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_tiledrendering \
 ))
+endif
 endif
 
 ifneq ($(DISABLE_CVE_TESTS),TRUE)

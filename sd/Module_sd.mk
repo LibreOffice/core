@@ -39,11 +39,13 @@ $(eval $(call gb_Module_add_check_targets,sd,\
 ))
 endif
 
+ifneq ($(ENABLE_HEADLESS),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_check_targets,sd,\
     CppunitTest_sd_svg_export_tests \
     CppunitTest_sd_tiledrendering \
 ))
+endif
 endif
 
 # screenshots

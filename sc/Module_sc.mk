@@ -44,10 +44,12 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_core \
 ))
 
+ifneq ($(ENABLE_HEADLESS),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_check_targets,sc,\
     CppunitTest_sc_tiledrendering \
 ))
+endif
 endif
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
