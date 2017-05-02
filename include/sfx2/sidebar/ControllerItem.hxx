@@ -21,15 +21,7 @@
 
 #include <sfx2/ctrlitem.hxx>
 
-#include <cppuhelper/basemutex.hxx>
-#include <unotools/cmdoptions.hxx>
-#include <vcl/image.hxx>
-
-#include <com/sun/star/frame/XFrame.hpp>
-
-
-class SfxViewFrame;
-class ToolBox;
+#include <com/sun/star/lang/XComponent.hpp>
 
 
 namespace sfx2 { namespace sidebar {
