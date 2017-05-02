@@ -77,6 +77,9 @@
 
 #include "PivotLayoutDialog.hxx"
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/lokhelper.hxx>
+
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {
     //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,
@@ -541,6 +544,20 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
     const ScGridWindow* pWin = GetViewData().GetActiveWin();
     if (pWin)
         pWin->updateLibreOfficeKitCellCursor(pOtherShell);
+}
+
+void ScTabViewShell::notifyAllViewsHeaderInvalidation(const OString& rPayload, SCTAB nCurrentTabIndex)
+{
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, rPayload.getStr());
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
 }
 
 bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
