@@ -1848,8 +1848,7 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
 
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
     if(xDSCnt.is())
-        exportCandleStickSeries(
-                xDSCnt->getDataSeries(), bJapaneseCandleSticks, bPrimaryAxes );
+        exportCandleStickSeries( xDSCnt->getDataSeries(), bPrimaryAxes );
 
     // export stock properties
     Reference< css::chart::XStatisticDisplay > xStockPropProvider( mxDiagram, uno::UNO_QUERY );
@@ -2201,7 +2200,6 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
 
 void ChartExport::exportCandleStickSeries(
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
-    bool /*bJapaneseCandleSticks*/,
     bool& rPrimaryAxes)
 {
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )

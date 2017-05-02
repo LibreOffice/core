@@ -145,7 +145,6 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
 }
 
 void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const Diagram&  /*rDgm*/,
                            const OUString& rName ) const
 {
     switch(mnType)
@@ -513,7 +512,6 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
 class ShapeLayoutingVisitor : public LayoutAtomVisitor
 {
     ShapePtr mpParentShape;
-    const Diagram& mrDgm;
     OUString maName;
 
     virtual void visit(ConstraintAtom& rAtom) override;
@@ -525,10 +523,8 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
 
 public:
     ShapeLayoutingVisitor(const ShapePtr& rParentShape,
-                          const Diagram& rDgm,
                           const OUString& rName) :
         mpParentShape(rParentShape),
-        mrDgm(rDgm),
         maName(rName)
     {}
 
@@ -658,7 +654,6 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     // layout shapes - now all child shapes are created
     ShapeLayoutingVisitor aLayoutingVisitor(pCurrParent,
-                                            mrDgm,
                                             rAtom.getName());
     aLayoutingVisitor.defaultVisit(rAtom);
 }
@@ -678,7 +673,7 @@ void ShapeLayoutingVisitor::visit(ConstraintAtom& /*rAtom*/)
 
 void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
-    rAtom.layoutShape(mpParentShape,mrDgm,maName);
+    rAtom.layoutShape(mpParentShape, maName);
 }
 
 void ShapeLayoutingVisitor::visit(ForEachAtom& /*rAtom*/)

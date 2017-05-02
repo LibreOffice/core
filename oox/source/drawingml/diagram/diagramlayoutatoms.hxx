@@ -158,7 +158,6 @@ public:
     void addParam( sal_Int32 nType, sal_Int32 nVal )
         { maMap[nType]=nVal; }
     void layoutShape( const ShapePtr& rShape,
-                      const Diagram& rDgm,
                       const OUString& rName ) const;
 private:
     sal_Int32 mnType;

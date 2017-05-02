@@ -61,7 +61,7 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
 
     // GeometryGroup
     case A_TOKEN( custGeom ):   // custom geometry "CT_CustomGeometry2D"
-        return new CustomShapeGeometryContext( *this, rAttribs, *(mrShape.getCustomShapeProperties()) );
+        return new CustomShapeGeometryContext( *this, *mrShape.getCustomShapeProperties() );
 
     case A_TOKEN( prstGeom ):   // preset geometry "CT_PresetGeometry2D"
         {

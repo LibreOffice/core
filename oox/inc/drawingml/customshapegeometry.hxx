@@ -32,7 +32,7 @@ namespace oox { namespace drawingml {
 class CustomShapeGeometryContext : public ::oox::core::ContextHandler2
 {
 public:
-    CustomShapeGeometryContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
+    CustomShapeGeometryContext( ::oox::core::ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 private:

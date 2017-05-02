@@ -297,7 +297,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     }
     case DGM_TOKEN( constrLst ):
         // CT_Constraints
-        return new ConstraintListContext( *this, rAttribs, mpNode );
+        return new ConstraintListContext( *this, mpNode );
     case DGM_TOKEN( presOf ):
     {
         // CT_PresentationOf

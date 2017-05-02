@@ -137,7 +137,7 @@ private:
     /** Sets an explicit fill bitmap URL, or creates a named fill bitmap URL. */
     bool                setFillBitmapUrl( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Sets an explicit fill bitmap URL and pushes the name to FillBitmapName */
-    bool                setFillBitmapNameFromUrl( sal_Int32 nPropId, const css::uno::Any& rValue );
+    bool                setFillBitmapNameFromUrl( const css::uno::Any& rValue );
 
     // not implemented, to prevent implicit conversion from enum to int
     css::uno::Any& operator[]( ShapeProperty ePropId ) = delete;

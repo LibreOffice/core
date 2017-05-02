@@ -110,8 +110,7 @@ public:
     CustomShapeProperties();
     ~CustomShapeProperties();
 
-    void pushToPropSet( const ::oox::core::FilterBase& rFilterBase,
-                        const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
+    void pushToPropSet( const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
                         const css::uno::Reference < css::drawing::XShape > & xShape,
                         const css::awt::Size &aSize );
 

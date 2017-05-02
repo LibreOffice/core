@@ -481,7 +481,7 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
 }
 
 void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamDataSequence& rPicData,
-        sal_Int32 nPicSizeMode, sal_Int32 /*nPicAlign*/, bool /*bPicTiling*/ ) const
+        sal_Int32 nPicSizeMode ) const
 {
     // the picture
     convertPicture( rPropMap, rPicData );
@@ -1324,7 +1324,7 @@ void AxImageModel::convertProperties( PropertyMap& rPropMap, const ControlConver
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_FLAGS_ENABLED ) );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, ApiTransparencyMode::Void );
     rConv.convertAxBorder( rPropMap, mnBorderColor, mnBorderStyle, mnSpecialEffect );
-    rConv.convertAxPicture( rPropMap, maPictureData, mnPicSizeMode, mnPicAlign, mbPicTiling );
+    rConv.convertAxPicture( rPropMap, maPictureData, mnPicSizeMode );
     AxControlModelBase::convertProperties( rPropMap, rConv );
 }
 

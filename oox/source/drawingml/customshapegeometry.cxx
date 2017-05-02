@@ -1160,7 +1160,7 @@ ContextHandlerRef Path2DListContext::onCreateContext( sal_Int32 aElementToken, c
 }
 
 // CT_CustomGeometry2D
-CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler2Helper& rParent, const AttributeList& /* rAttribs */, CustomShapeProperties& rCustomShapeProperties )
+CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties )
 : ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {

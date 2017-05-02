@@ -123,19 +123,11 @@ bool QuickDiagrammingLayout::importDocument()
     // don't add pShape itself, but only its children
     pShape->setXShape(getParentShape());
 
-    const awt::Size& rSize=xParentShape->getSize();
-    const awt::Point& rPoint=xParentShape->getPosition();
-    const long nScaleFactor=360;
-    const awt::Rectangle aRect(nScaleFactor*rPoint.X,
-                               nScaleFactor*rPoint.Y,
-                               nScaleFactor*rSize.Width,
-                               nScaleFactor*rSize.Height);
     basegfx::B2DHomMatrix aMatrix;
     pShape->addChildren( *this,
                          mpThemePtr.get(),
                          xParentShapes,
-                         aMatrix,
-                         &aRect );
+                         aMatrix );
 
     return true;
 }
