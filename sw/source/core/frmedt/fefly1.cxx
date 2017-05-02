@@ -703,7 +703,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
             {
                 // calculate new position
                 // JP 24.03.97: also go via page links
-                //              chaos::anchor should not lie in the shifted area
+                //              anchor should not lie in the shifted area
                 pRet->DelFrames();
 
                 const SwFrame* pAnch = ::FindAnchor( GetLayout(), aPt );
@@ -954,7 +954,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr )
             SwFormatAnchor aNewAnchor( pFormat->GetAnchor() );
             if ((RndStdIds::FLY_AT_PAGE != aNewAnchor.GetAnchorId()) ||
                 0 >= ( nNewPage = aNewAnchor.GetPageNum() + 1 ) )
-                // chaos::Anchor has been changed or invalid page number,
+                // Anchor has been changed or invalid page number,
                 // therefore: do not change!
                 continue;
 
