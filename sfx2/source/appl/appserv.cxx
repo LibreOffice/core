@@ -170,7 +170,7 @@ namespace
                 return OUString( "Draw" );
                 break;
             default:
-                return OUString( "" );
+                return OUString();
                 break;
         }
     }

@@ -1789,7 +1789,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
     // B3 -- testing a collapsed bookmark
     uno::Reference<text::XTextContent> xContent3(xBookmarksByName->getByName("B3"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xRange3(xContent3->getAnchor(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(xRange3->getString(), OUString(""));
+    CPPUNIT_ASSERT_EQUAL(xRange3->getString(), OUString());
     uno::Reference<text::XText> xText(xRange3->getText( ), uno::UNO_QUERY);
     uno::Reference<text::XTextCursor> xNeighborhoodCursor(xText->createTextCursor( ), uno::UNO_QUERY);
     xNeighborhoodCursor->gotoRange(xRange3, false);

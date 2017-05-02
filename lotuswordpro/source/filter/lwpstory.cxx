@@ -436,11 +436,11 @@ OUString LwpStory::GetContentText(bool bAllText)
         {
             LwpPara* pPara = dynamic_cast<LwpPara*>(pObj.get());
             if (!pPara || pPara->GetNext().obj() != nullptr)
-                return OUString("");
+                return OUString();
             pPara->SetFoundry(m_pFoundry);
             return pPara->GetContentText();
         }
-        return  OUString("");
+        return  OUString();
     }
 
 }
@@ -448,7 +448,7 @@ OUString LwpStory::RegisterFirstFribStyle()
 {
     LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara().obj().get());
     if (!pPara)
-        return OUString("");
+        return OUString();
     pPara->SetFoundry(m_pFoundry);
     LwpFribPtr& rFribs = pPara->GetFribs();
     LwpFrib* pFirstFrib = rFribs.GetFribs();
@@ -456,7 +456,7 @@ OUString LwpStory::RegisterFirstFribStyle()
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     XFTextStyle* pBaseStyle = pXFStyleManager->FindTextStyle(pFirstFrib->GetStyleName());
     if (pBaseStyle == nullptr)
-        return OUString("");
+        return OUString();
     XFTextStyle* pStyle = new XFTextStyle;
     *pStyle = *pBaseStyle;
     OUString sName = "Ruby" + pFirstFrib->GetStyleName();

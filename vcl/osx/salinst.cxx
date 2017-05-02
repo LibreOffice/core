@@ -916,7 +916,7 @@ void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 
 OUString AquaSalInstance::GetConnectionIdentifier()
 {
-    return OUString("");
+    return OUString();
 }
 
 // We need to re-encode file urls because osl_getFileURLFromSystemPath converts

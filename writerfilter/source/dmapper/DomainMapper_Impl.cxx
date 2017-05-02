@@ -2961,7 +2961,7 @@ if(!bFilled)
             {OUString("BIBLIOGRAPHY"), "com.sun.star.text.Bibliography", FIELD_BIBLIOGRAPHY},
             {OUString("CITATION"), "com.sun.star.text.TextField.Bibliography", FIELD_CITATION},
 
-//            {OUString(""), "", "", FIELD_},
+//            {OUString(), "", "", FIELD_},
 
         };
         size_t nConversions = SAL_N_ELEMENTS(aFields);

@@ -71,7 +71,7 @@ static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
             return OUString( "Impress" );
             break;
         default:
-            return OUString( "" );
+            return OUString();
             break;
     }
 }

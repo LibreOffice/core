@@ -552,7 +552,7 @@ OUString ThemeTable::fromLCIDToScriptTag(LanguageType lang)
         case 0x478  :  // lidYi
             return OUString("Yiii");
         default:
-            return OUString("");
+            return OUString();
     }
 }
 

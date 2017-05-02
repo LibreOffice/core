@@ -44,8 +44,8 @@ SvtCompatibilityEntry::SvtCompatibilityEntry()
     : m_aPropertyValue( SvtCompatibilityEntry::getElementCount() )
 {
     /* Should be in the start. Do not remove it. */
-    setValue<OUString>( Index::Name, OUString("") );
-    setValue<OUString>( Index::Module, OUString("") );
+    setValue<OUString>( Index::Name, OUString() );
+    setValue<OUString>( Index::Module, OUString() );
 
     /* Editable list of default values. Sync it with the SvtCompatibilityEntry::Index enum class. */
     setValue<bool>( Index::UsePrtMetrics, false );

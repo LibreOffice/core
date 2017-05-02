@@ -397,7 +397,7 @@ void Test::testHyperlinkCopyPaste()
 
     // New instance must be empty - no initial text
     CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding Field Item for inserting URLs in text
     // URL 1
@@ -524,7 +524,7 @@ void Test::testCopyPaste()
 
     // Initially no text should be there
     CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Set initial text
     OUString aText = "This is custom initial text";
@@ -556,7 +556,7 @@ void Test::testTabsCopyPaste()
 
     // New instance must be empty - no initial text
     CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding Item for inserting tabs in the text
     SfxVoidItem aTab( EE_FEATURE_TAB );
@@ -725,7 +725,7 @@ void Test::testBoldItalicCopyPaste()
 
     // New instance must be empty - no initial text
     CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding ItemSet for inserting Bold/Italic text
     std::unique_ptr<SfxItemSet> pSet( new SfxItemSet(aEditEngine.GetEmptyItemSet()) );
@@ -931,7 +931,7 @@ void Test::testUnderlineCopyPaste()
 
     // New instance must be empty - no initial text
     CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding ItemSet for inserting Underline text
     std::unique_ptr<SfxItemSet> pSet( new SfxItemSet(aEditEngine.GetEmptyItemSet()) );

@@ -2483,7 +2483,7 @@ static void lcl_AddToPropertyContainer
     {
         uno::Reference<beans::XPropertyContainer>
             xPropContainer(xPropSet, uno::UNO_QUERY);
-        uno::Any aAny(OUString(""));
+        uno::Any aAny((OUString()));
         xPropContainer->addProperty
             (rPropertyName,
              static_cast<sal_Int16>(beans::PropertyAttribute::BOUND |
