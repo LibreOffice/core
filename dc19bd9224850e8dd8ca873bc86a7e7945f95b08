@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_278df331",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-02T13:38:55Z",
+      "side": 1,
+      "message": "this subject line is a bit uninformative",
+      "revId": "dc19bd9224850e8dd8ca873bc86a7e7945f95b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
