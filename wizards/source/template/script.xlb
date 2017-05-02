@@ -3,6 +3,5 @@
  <library:library xmlns:library="http://openoffice.org/2000/library" library:name="Template" library:readonly="true" library:passwordprotected="false">
   <library:element library:name="ModuleAgenda"/>
   <library:element library:name="Correspondence"/>
-  <library:element library:name="Samples"/>
   <library:element library:name="Autotext"/>
  </library:library>

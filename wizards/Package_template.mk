@@ -23,9 +23,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvtemplate,$(LIBO_SHARE_FOLDER)
 	Autotext.xba \
 	Correspondence.xba \
 	dialog.xlb \
-	DialogStyles.xdl \
 	ModuleAgenda.xba \
-	Samples.xba \
 	script.xlb \
 	TemplateDialog.xdl \
 ))
