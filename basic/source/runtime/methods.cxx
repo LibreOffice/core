@@ -4935,7 +4935,11 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bUs
     else
 #endif
     {
-        if ( 0 <= nYear && nYear < 100 && (bUseTwoDigitYear || SbiRuntime::isVBAEnabled()) )
+        if ( 0 <= nYear && nYear < 100 && (bUseTwoDigitYear
+#if HAVE_FEATURE_SCRIPTING
+                    || SbiRuntime::isVBAEnabled()
+#endif
+                    ) )
         {
             nYear += 1900;
         }
