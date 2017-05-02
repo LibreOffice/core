@@ -22,10 +22,9 @@
 
 #include <sal/types.h>
 #include <tools/solar.h>
-#include <vector>
 
+class SwFieldTypes;
 class SwFieldType;
-typedef std::vector<SwFieldType*> SwFieldTypes;
 class SfxPoolItem;
 struct SwPosition;
 class SwDocUpdateField;

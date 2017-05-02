@@ -90,12 +90,11 @@ void SwDBFieldType::ReleaseRef()
 
     if (--nRefCnt <= 0)
     {
-        auto pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
-        auto it = std::find(pFieldTypes->begin(), pFieldTypes->end(), this);
+        size_t nPos = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes()->GetPos(this);
 
-        if (it != pFieldTypes->end())
+        if (nPos != SIZE_MAX)
         {
-            GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(it - pFieldTypes->begin());
+            GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(nPos);
             delete this;
         }
     }
