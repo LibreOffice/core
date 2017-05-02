@@ -37,7 +37,11 @@ class CheckConfigMacros
         explicit CheckConfigMacros( const InstantiationData& data );
         virtual void run() override;
         virtual void MacroDefined( const Token& macroToken, const MacroDirective* info ) override;
-        virtual void MacroUndefined( const Token& macroToken, compat::MacroDefinitionParam ) override;
+        virtual void MacroUndefined( const Token& macroToken, compat::MacroDefinitionParam
+#if CLANG_VERSION >= 50000
+            , MacroDirective const *
+#endif
+            ) override;
         virtual void Ifdef( SourceLocation location, const Token& macroToken, compat::MacroDefinitionParam ) override;
         virtual void Ifndef( SourceLocation location, const Token& macroToken, compat::MacroDefinitionParam ) override;
         virtual void Defined( const Token& macroToken, compat::MacroDefinitionParam, SourceRange Range ) override;
@@ -71,7 +75,11 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
         }
     }
 
-void CheckConfigMacros::MacroUndefined( const Token& macroToken, compat::MacroDefinitionParam )
+void CheckConfigMacros::MacroUndefined( const Token& macroToken, compat::MacroDefinitionParam
+#if CLANG_VERSION >= 50000
+                                        , MacroDirective const *
+#endif
+                                        )
     {
     configMacros.erase( macroToken.getIdentifierInfo()->getName());
     }

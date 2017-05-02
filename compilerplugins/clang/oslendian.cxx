@@ -59,7 +59,11 @@ private:
     }
 
     void MacroUndefined(
-        Token const & MacroNameTok, compat::MacroDefinitionParam) override
+        Token const & MacroNameTok, compat::MacroDefinitionParam
+#if CLANG_VERSION >= 50000
+        , MacroDirective const *
+#endif
+        ) override
     {
         auto id = MacroNameTok.getIdentifierInfo()->getName();
         if (id == "OSL_BIGENDIAN" || id == "OSL_LITENDIAN") {
