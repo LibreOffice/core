@@ -349,7 +349,7 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_RUBYFRAME:
         {
             LwpFribRubyFrame* rubyfrmeFrib = static_cast<LwpFribRubyFrame*>(pFrib);
-            rubyfrmeFrib->XFConvert(m_pXFPara);
+            rubyfrmeFrib->XFConvert();
             break;
         }
         default :

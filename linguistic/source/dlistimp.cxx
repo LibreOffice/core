@@ -89,8 +89,7 @@ public:
     void    DisposeAndClear( const EventObject &rEvtObj );
 
     bool    AddDicListEvtListener(
-                const uno::Reference< XDictionaryListEventListener >& rxListener,
-                bool bReceiveVerbose );
+                const uno::Reference< XDictionaryListEventListener >& rxListener );
     bool    RemoveDicListEvtListener(
                 const uno::Reference< XDictionaryListEventListener >& rxListener );
     sal_Int16   BeginCollectEvents() { return ++nNumCollectEvtListeners;}
@@ -203,8 +202,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
 
 
 bool DicEvtListenerHelper::AddDicListEvtListener(
-            const uno::Reference< XDictionaryListEventListener >& xListener,
-            bool /*bReceiveVerbose*/ )
+            const uno::Reference< XDictionaryListEventListener >& xListener )
 {
     DBG_ASSERT( xListener.is(), "empty reference" );
     sal_Int32   nCount = aDicListEvtListeners.getLength();
@@ -474,8 +472,7 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
     bool bRes = false;
     if (xListener.is()) //! don't add empty references
     {
-        bRes = mxDicEvtLstnrHelper->
-                        AddDicListEvtListener( xListener, bReceiveVerbose );
+        bRes = mxDicEvtLstnrHelper->AddDicListEvtListener( xListener );
     }
     return bRes;
 }
@@ -711,7 +708,7 @@ uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
 }
 
 void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
-        XMultiServiceFactory * pServiceManager, void *  )
+        XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;
     if ( DicList::getImplementationName_Static().equalsAscii( pImplName ) )

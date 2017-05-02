@@ -86,7 +86,7 @@ public:
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpRubyLayout* GetLayout();
     void RegisterStyle(LwpFoundry* pFoundry) override;
-    void XFConvert(XFContentContainer* pCont);
+    void XFConvert();
 private:
     LwpObjectID m_objLayout;
 };

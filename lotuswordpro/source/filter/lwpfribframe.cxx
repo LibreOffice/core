@@ -228,7 +228,7 @@ void LwpFribRubyFrame::RegisterStyle(LwpFoundry* pFoundry)
  *  @descr:  convert Ruby frame
  *
  */
-void LwpFribRubyFrame::XFConvert(XFContentContainer* /*pCont*/)
+void LwpFribRubyFrame::XFConvert()
 {
     LwpRubyLayout* pLayout = GetLayout();
     if (pLayout)

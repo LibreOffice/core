@@ -1988,8 +1988,7 @@ uno::Reference< uno::XInterface > SAL_CALL LngSvcMgr_CreateInstance(
 
 void * SAL_CALL LngSvcMgr_getFactory(
             const sal_Char * pImplName,
-            lang::XMultiServiceFactory * pServiceManager,
-            void * /*pRegistryKey*/ )
+            lang::XMultiServiceFactory * pServiceManager )
 {
 
     void * pRet = nullptr;
