@@ -1537,11 +1537,14 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
                 HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
             }
 
-            if (bInsertCols)
-                SfxLokHelper::notifyAllViewsHeaderInvalidation("column");
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                if (bInsertCols)
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation("column", GetViewData().GetTabNo());
 
-            if (bInsertRows)
-                SfxLokHelper::notifyAllViewsHeaderInvalidation("row");
+                if (bInsertRows)
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation("row", GetViewData().GetTabNo());
+            }
         }
         return bSuccess;
     }
@@ -1673,11 +1676,14 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
             nCurY = aRange.aStart.Row();
         SetCursor( nCurX, nCurY );
 
-        if (eCmd == DEL_DELCOLS)
-            SfxLokHelper::notifyAllViewsHeaderInvalidation("column");
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (eCmd == DEL_DELCOLS)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation("column", GetViewData().GetTabNo());
 
-        if (eCmd == DEL_DELROWS)
-            SfxLokHelper::notifyAllViewsHeaderInvalidation("row");
+            if (eCmd == DEL_DELROWS)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation("row", GetViewData().GetTabNo());
+        }
     }
     else
     {
@@ -2292,7 +2298,7 @@ void ScViewFunc::SetWidthOrHeight(
     if (comphelper::LibreOfficeKit::isActive())
     {
         OString aPayload = bWidth ? "column" : "row";
-        SfxLokHelper::notifyAllViewsHeaderInvalidation(aPayload);
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(aPayload, GetViewData().GetTabNo());
     }
 }
 
