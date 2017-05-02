@@ -365,7 +365,7 @@ void OObjectBase::StartListening()
     }
 }
 
-void OObjectBase::EndListening(bool /*bRemoveListener*/)
+void OObjectBase::EndListening()
 {
     OSL_ENSURE(!m_xReportComponent.is() || isListening(), "OUnoObject::EndListening: not listening currently!");
 
@@ -663,7 +663,7 @@ void OUnoObject::NbcMove( const Size& rSize )
     if ( m_bIsListening )
     {
         // stop listening
-        OObjectBase::EndListening(false);
+        OObjectBase::EndListening();
 
         bool bPositionFixed = false;
         Size aUndoSize(0,0);
@@ -710,7 +710,7 @@ void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Frac
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 
     // stop listening
-    OObjectBase::EndListening(false);
+    OObjectBase::EndListening();
 
     // set geometry properties
     SetPropsFromRect(GetLogicRect());
@@ -723,7 +723,7 @@ void OUnoObject::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     SdrUnoObj::NbcSetLogicRect(rRect);
     // stop listening
-    OObjectBase::EndListening(false);
+    OObjectBase::EndListening();
 
     // set geometry properties
     SetPropsFromRect(rRect);
@@ -796,7 +796,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt )
             Reference<XPropertySet> xControlModel(GetUnoControlModel(),uno::UNO_QUERY);
             if ( xControlModel.is() )
             {
-                OObjectBase::EndListening(false);
+                OObjectBase::EndListening();
                 try
                 {
                     xControlModel->setPropertyValue(PROPERTY_TEXTCOLOR,evt.NewValue);
@@ -823,7 +823,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt )
                 if ( !aNewName.equals(aOldName) )
                 {
                     // set old name property
-                    OObjectBase::EndListening(false);
+                    OObjectBase::EndListening();
                     if ( m_xMediator.is() )
                         m_xMediator.get()->stopListening();
                     try
@@ -938,7 +938,7 @@ void OOle2Obj::NbcMove( const Size& rSize )
     if ( m_bIsListening )
     {
         // stop listening
-        OObjectBase::EndListening(false);
+        OObjectBase::EndListening();
 
         bool bPositionFixed = false;
         Size aUndoSize(0,0);
@@ -990,7 +990,7 @@ void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     SdrOle2Obj::NbcResize( rRef, xFract, yFract );
 
     // stop listening
-    OObjectBase::EndListening(false);
+    OObjectBase::EndListening();
 
     // set geometry properties
     SetPropsFromRect(GetLogicRect());
@@ -1003,7 +1003,7 @@ void OOle2Obj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     SdrOle2Obj::NbcSetLogicRect(rRect);
     // stop listening
-    OObjectBase::EndListening(false);
+    OObjectBase::EndListening();
 
     // set geometry properties
     SetPropsFromRect(rRect);
