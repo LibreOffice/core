@@ -417,10 +417,9 @@ private:
 
     css::uno::Sequence< sal_Int32 > impl_mapPathName2IDList(const OUString& sPath);
 
-    void impl_notifyPropListener(      PathSettings::EChangeOp eOp     ,
-                                       const OUString&        sPath   ,
-                                       const PathSettings::PathInfo* pPathOld,
-                                       const PathSettings::PathInfo* pPathNew);
+    void impl_notifyPropListener( const OUString&        sPath   ,
+                                  const PathSettings::PathInfo* pPathOld,
+                                  const PathSettings::PathInfo* pPathNew);
 
     //  OPropertySetHelper
     virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any&  aConvertedValue,
@@ -782,7 +781,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
                 {
                     pPathOld = nullptr;
                     pPathNew = &aPath;
-                    impl_notifyPropListener(eOp, sPath, pPathOld, pPathNew);
+                    impl_notifyPropListener(sPath, pPathOld, pPathNew);
                 }
                 m_lPaths[sPath] = aPath;
              }
@@ -794,7 +793,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
                 {
                     pPathOld = &(pPath->second);
                     pPathNew = &aPath;
-                    impl_notifyPropListener(eOp, sPath, pPathOld, pPathNew);
+                    impl_notifyPropListener(sPath, pPathOld, pPathNew);
                 }
                 m_lPaths[sPath] = aPath;
              }
@@ -808,7 +807,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
                     {
                         pPathOld = &(pPath->second);
                         pPathNew = nullptr;
-                        impl_notifyPropListener(eOp, sPath, pPathOld, pPathNew);
+                        impl_notifyPropListener(sPath, pPathOld, pPathNew);
                     }
                     m_lPaths.erase(pPath);
                 }
@@ -864,10 +863,9 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUSt
     return lIDs;
 }
 
-void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/     ,
-                                           const OUString&        sPath   ,
-                                           const PathSettings::PathInfo* pPathOld,
-                                           const PathSettings::PathInfo* pPathNew)
+void PathSettings::impl_notifyPropListener( const OUString&               sPath,
+                                            const PathSettings::PathInfo* pPathOld,
+                                            const PathSettings::PathInfo* pPathNew)
 {
     css::uno::Sequence< sal_Int32 >     lHandles(1);
     css::uno::Sequence< css::uno::Any > lOldVals(1);

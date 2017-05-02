@@ -210,7 +210,6 @@ bool StatusbarMerger::ProcessMergeOperation(
 
 bool StatusbarMerger::ProcessMergeFallback(
     StatusBar* pStatusbar,
-    sal_uInt16 /*nPos*/,
     sal_uInt16& rItemId,
     const ::rtl::OUString& rModuleIdentifier,
     const ::rtl::OUString& rMergeCommand,

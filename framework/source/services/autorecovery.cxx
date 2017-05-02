@@ -837,7 +837,7 @@ private:
     };
 
     // TODO document me
-    void implts_resetHandleStates(bool bLoadCache);
+    void implts_resetHandleStates();
 
     // TODO document me
     void implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocumentInfo& rInfo);
@@ -868,7 +868,7 @@ private:
     void implts_doSessionSave(const DispatchParams& aParams);
 
     // TODO document me
-    void implts_doSessionQuietQuit(const DispatchParams& aParams);
+    void implts_doSessionQuietQuit();
 
     // TODO document me
     void implts_doSessionRestore(const DispatchParams& aParams);
@@ -1445,7 +1445,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         {
             SAL_INFO("fwk.autorecovery", "... do session quiet quit ...");
             bAllowAutoSaveReactivation = false;
-            implts_doSessionQuietQuit(aParams);
+            implts_doSessionQuietQuit();
         }
         else
         if (
@@ -2358,7 +2358,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
             (eSuggestedTimer == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
            )
         {
-            implts_resetHandleStates(false);
+            implts_resetHandleStates();
         }
 
         implts_informListener(AutoRecovery::E_AUTO_SAVE,
@@ -3642,7 +3642,7 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     return aEvent;
 }
 
-void AutoRecovery::implts_resetHandleStates(bool /*bLoadCache*/)
+void AutoRecovery::implts_resetHandleStates()
 {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
@@ -3713,7 +3713,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // was already saved during the THIS(!) EmergencySave session.
     // Of course following recovery session must be started without
     // any "handle" state ...
-    implts_resetHandleStates(false);
+    implts_resetHandleStates();
 
     // flush config cached back to disc.
     impl_flushALLConfigChanges();
@@ -3738,7 +3738,7 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
     // was already saved during the THIS(!) Recovery session.
     // Of course a may be following EmergencySave session must be started without
     // any "handle" state ...
-    implts_resetHandleStates(true);
+    implts_resetHandleStates();
 
     // Reset the configuration hint "we was crashed"!
     ::comphelper::ConfigurationHelper::writeDirectKey(
@@ -3782,13 +3782,13 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     // was already saved during the THIS(!) save session.
     // Of course following restore session must be started without
     // any "handle" state ...
-    implts_resetHandleStates(false);
+    implts_resetHandleStates();
 
     // flush config cached back to disc.
     impl_flushALLConfigChanges();
 }
 
-void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
+void AutoRecovery::implts_doSessionQuietQuit()
 {
     SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_doSessionQuietQuit()");
 
@@ -3834,7 +3834,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
     // was already saved during the THIS(!) Restore session.
     // Of course a may be following save session must be started without
     // any "handle" state ...
-    implts_resetHandleStates(true);
+    implts_resetHandleStates();
 
     // make all opened documents visible
     implts_changeAllDocVisibility(true);

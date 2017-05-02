@@ -541,7 +541,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
                 nWidth );
 
             if ( !aCommandURL.isEmpty() )
-                WriteStatusBarItem( aCommandURL, aHelpURL, nOffset, nStyle, nWidth );
+                WriteStatusBarItem( aCommandURL, nOffset, nStyle, nWidth );
         }
     }
 
@@ -555,7 +555,6 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     const OUString& rCommandURL,
-    const OUString& /*rHelpURL*/,
     sal_Int16            nOffset,
     sal_Int16            nStyle,
     sal_Int16            nWidth )

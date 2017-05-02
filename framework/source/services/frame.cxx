@@ -306,12 +306,10 @@ public:
 
 private:
 
-    void SAL_CALL impl_setPropertyValue(const OUString& sProperty,
-                                        sal_Int32 nHandle,
+    void SAL_CALL impl_setPropertyValue(sal_Int32 nHandle,
                                         const css::uno::Any& aValue);
 
-    css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
-                                                 sal_Int32 nHandle);
+    css::uno::Any SAL_CALL impl_getPropertyValue(sal_Int32 nHandle);
 
     /** set a new owner for this helper.
      *
@@ -1860,7 +1858,7 @@ void SAL_CALL Frame::setPropertyValue(const OUString& sProperty,
 
     css::beans::Property aPropInfo = pIt->second;
 
-    css::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
+    css::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Handle);
 
     bool bWillBeChanged = (aCurrentValue != aValue);
     if (! bWillBeChanged)
@@ -1877,7 +1875,7 @@ void SAL_CALL Frame::setPropertyValue(const OUString& sProperty,
     if (impl_existsVeto(aEvent))
         throw css::beans::PropertyVetoException();
 
-    impl_setPropertyValue(aPropInfo.Name, aPropInfo.Handle, aValue);
+    impl_setPropertyValue(aPropInfo.Handle, aValue);
 
     impl_notifyChangeListener(aEvent);
 }
@@ -1895,7 +1893,7 @@ css::uno::Any SAL_CALL Frame::getPropertyValue(const OUString& sProperty)
 
     css::beans::Property aPropInfo = pIt->second;
 
-    return impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
+    return impl_getPropertyValue(aPropInfo.Handle);
 }
 
 void SAL_CALL Frame::addPropertyChangeListener(
@@ -2707,8 +2705,7 @@ sal_Int16 SAL_CALL Frame::resetActionLocks()
     return nCurrentLocks;
 }
 
-void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
-                                           sal_Int32 nHandle,
+void SAL_CALL Frame::impl_setPropertyValue(sal_Int32 nHandle,
                                            const css::uno::Any& aValue)
 
 {
@@ -2765,8 +2762,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
     }
 }
 
-css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*/,
-                                                          sal_Int32 nHandle)
+css::uno::Any SAL_CALL Frame::impl_getPropertyValue(sal_Int32 nHandle)
 {
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "don't release it on calling us" .-)

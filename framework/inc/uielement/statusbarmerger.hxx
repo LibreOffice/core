@@ -63,7 +63,6 @@ namespace StatusbarMerger
                                        const AddonStatusbarItemContainer& rItems );
 
     bool ProcessMergeFallback( StatusBar* pStatusbar,
-                                      sal_uInt16 nPos,
                                       sal_uInt16& rItemId,
                                       const ::rtl::OUString& rModuleIdentifier,
                                       const ::rtl::OUString& rMergeCommand,

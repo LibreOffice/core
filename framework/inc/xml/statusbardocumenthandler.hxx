@@ -117,7 +117,6 @@ class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler final
         /// @throws css::uno::RuntimeException
         void WriteStatusBarItem(
             const OUString& rCommandURL,
-            const OUString& rHelpURL,
             sal_Int16            nOffset,
             sal_Int16            nStyle,
             sal_Int16            nWidth );

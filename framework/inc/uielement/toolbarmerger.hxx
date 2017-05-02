@@ -97,7 +97,6 @@ class ToolBarMerger
                                                  const AddonToolbarItemContainer& rItems );
 
         static bool       ProcessMergeFallback( ToolBox*                         pToolbar,
-                                                ToolBox::ImplToolItems::size_type nPos,
                                                 sal_uInt16&                      rItemId,
                                                 CommandToInfoMap&                rCommandMap,
                                                 const OUString&           rModuleIdentifier,

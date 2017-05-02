@@ -1126,7 +1126,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 else
                 {
                     ToolBarMerger::ProcessMergeFallback( m_pToolBar,
-                                                         aRefPoint.nPos,
                                                          nItemId,
                                                          m_aCommandMap,
                                                          m_aModuleIdentifier,

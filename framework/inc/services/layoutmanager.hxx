@@ -209,7 +209,7 @@ namespace framework
             bool implts_resizeContainerWindow( const css::awt::Size& rContainerSize, const css::awt::Point& rComponentPos );
             ::Size  implts_getContainerWindowOutputSize();
 
-            void implts_setDockingAreaWindowSizes( const css::awt::Rectangle& rBorderSpace );
+            void implts_setDockingAreaWindowSizes();
             css::awt::Rectangle implts_calcDockingAreaSizes();
             bool implts_doLayout( bool bForceRequestBorderSpace, bool bOuterResize );
             void implts_doLayout_notify( bool bOuterResize );
