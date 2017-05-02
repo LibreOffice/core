@@ -18,10 +18,5 @@
  */
 
 #include <basegfx/range/b1drange.hxx>
-#include <basegfx/numeric/ftools.hxx>
-
-namespace basegfx
-{
-} // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

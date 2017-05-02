@@ -40,9 +40,6 @@
 #include <vector>
 
 
-namespace com { namespace sun { namespace star {
-}}}
-
 namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
 }

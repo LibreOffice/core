@@ -1400,11 +1400,6 @@ namespace pcr
     }
 
 
-    namespace
-    {
-    }
-
-
     void OPropertyBrowserController::focusGained( const Reference< XPropertyControl >& Control )
     {
         m_aControlObservers.notifyEach( &XPropertyControlObserver::focusGained, Control );

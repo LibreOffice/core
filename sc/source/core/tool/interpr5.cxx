@@ -1189,10 +1189,6 @@ void ScInterpreter::ScAdd()
     CalculateAddSub(false);
 }
 
-namespace {
-
-}
-
 void ScInterpreter::CalculateAddSub(bool _bSub)
 {
     ScMatrixRef pMat1 = nullptr;

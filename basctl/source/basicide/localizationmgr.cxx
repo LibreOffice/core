@@ -96,11 +96,6 @@ void LocalizationMgr::handleTranslationbar ()
 
 // TODO: -> export from toolkit
 
-namespace
-{
-
-
-}
 
 bool isLanguageDependentProperty( const OUString& aName )
 {

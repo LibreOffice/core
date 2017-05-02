@@ -18,12 +18,5 @@
  */
 
 #include <basegfx/tuple/b2i64tuple.hxx>
-#include <rtl/instance.hxx>
-
-namespace { struct EmptyTuple : public rtl::Static<basegfx::B2I64Tuple, EmptyTuple> {}; }
-
-namespace basegfx
-{
-} // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
