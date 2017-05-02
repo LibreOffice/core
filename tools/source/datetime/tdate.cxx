@@ -104,6 +104,8 @@ inline sal_uInt16 ImplDaysInMonth( sal_uInt16 nMonth, sal_Int16 nYear )
 void Date::setDateFromDMY( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
 {
     SAL_WARN_IF( nYear == 0, "tools.datetime", "Date::setDateFromDMY - sure about 0 year? It's not in the calendar.");
+    assert( nMonth < 100 && "nMonth % 100 not representable" );
+    assert(   nDay < 100 && "nDay % 100 not representable" );
     if (nYear < 0)
         mnDate =
             (static_cast<sal_Int32>( nYear        ) * 10000) -
