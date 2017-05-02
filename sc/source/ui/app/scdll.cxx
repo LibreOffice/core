@@ -154,7 +154,6 @@ void ScDLL::Init()
 
     // Own Controller
     ScZoomSliderControl             ::RegisterControl(SID_PREVIEW_SCALINGFACTOR, pMod);
-    SvxCurrencyToolBoxControl       ::RegisterControl(SID_NUMBER_CURRENCY, pMod);
 
     // SvxToolboxController
     SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW,          pMod);

@@ -1177,6 +1177,17 @@
           <value>com.sun.star.comp.svx.FrameToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="CurrencyToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:NumberFormatCurrency</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.CurrencyToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="c4" oor:op="replace" install:module="reportbuilder">
         <prop oor:name="Command">
           <value>.uno:FontColor</value>

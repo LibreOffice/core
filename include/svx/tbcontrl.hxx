@@ -137,6 +137,7 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svx/colorwindow.hxx>
 #include <svx/PaletteManager.hxx>
 #include <memory>
@@ -248,7 +249,7 @@ public:
                               const SfxPoolItem* pState) override;
 };
 
-class SVX_DLLPUBLIC SvxCurrencyToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxCurrencyToolBoxControl : public svt::PopupWindowController
 {
 private:
     OUString     m_aFormatString;
@@ -257,17 +258,23 @@ private:
 public:
     static void GetCurrencySymbols( std::vector<OUString>& rList, bool bFlag,
                                     std::vector<sal_uInt16>& rCurrencyList );
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
+
+    explicit SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
     virtual ~SvxCurrencyToolBoxControl() override;
-    virtual void Select( sal_uInt16 nSelectModifier ) override;
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+
+    // XToolbarController
+    virtual void SAL_CALL execute( sal_Int16 nSelectModifier ) override;
+
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
-
-
 
 #endif // INCLUDED_SVX_TBCONTRL_HXX
 
