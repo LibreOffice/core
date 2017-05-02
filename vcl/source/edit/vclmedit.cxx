@@ -1220,17 +1220,17 @@ void VclMultiLineEdit::SetText( const OUString& rStr )
 
 OUString VclMultiLineEdit::GetText() const
 {
-    return pImpVclMEdit ? pImpVclMEdit->GetText() : OUString("");
+    return pImpVclMEdit ? pImpVclMEdit->GetText() : OUString();
 }
 
 OUString VclMultiLineEdit::GetText( LineEnd aSeparator ) const
 {
-    return pImpVclMEdit ? pImpVclMEdit->GetText( aSeparator ) : OUString("");
+    return pImpVclMEdit ? pImpVclMEdit->GetText( aSeparator ) : OUString();
 }
 
 OUString VclMultiLineEdit::GetTextLines( LineEnd aSeparator ) const
 {
-    return pImpVclMEdit ? pImpVclMEdit->GetTextLines( aSeparator ) : OUString("");
+    return pImpVclMEdit ? pImpVclMEdit->GetTextLines( aSeparator ) : OUString();
 }
 
 void VclMultiLineEdit::Resize()

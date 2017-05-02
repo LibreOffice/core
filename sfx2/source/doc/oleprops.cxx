@@ -672,7 +672,7 @@ SfxOleDictionaryProperty::SfxOleDictionaryProperty( const SfxOleTextEncoding& rT
 OUString SfxOleDictionaryProperty::GetPropertyName( sal_Int32 nPropId ) const
 {
     SfxOlePropNameMap::const_iterator aIt = maPropNameMap.find( nPropId );
-    return (aIt == maPropNameMap.end()) ? OUString("") : aIt->second;
+    return (aIt == maPropNameMap.end()) ? OUString() : aIt->second;
 }
 
 void SfxOleDictionaryProperty::SetPropertyName( sal_Int32 nPropId, const OUString& rPropName )

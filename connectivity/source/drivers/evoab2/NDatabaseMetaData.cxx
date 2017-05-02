@@ -268,9 +268,9 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     // ****************************************************
 
     // Catalog
-    aRow[1] = new ORowSetValueDecorator(OUString(""));
+    aRow[1] = new ORowSetValueDecorator(OUString());
     // Schema
-    aRow[2] = new ORowSetValueDecorator(OUString(""));
+    aRow[2] = new ORowSetValueDecorator(OUString());
     // COLUMN_SIZE
     aRow[7] = new ORowSetValueDecorator(s_nCOLUMN_SIZE);
     // BUFFER_LENGTH, not used

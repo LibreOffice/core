@@ -46,7 +46,7 @@ OrcusFormatDetect::OrcusFormatDetect()
 
 OUString OrcusFormatDetect::getImplementationName()
 {
-    return OUString("");
+    return OUString();
 }
 
 sal_Bool OrcusFormatDetect::supportsService(const OUString& /*rServiceName*/)

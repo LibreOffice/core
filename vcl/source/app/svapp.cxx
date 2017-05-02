@@ -1229,7 +1229,7 @@ OUString Application::GetDisplayName()
     else if ( pSVData->maWinData.mpAppWin )
         return pSVData->maWinData.mpAppWin->GetText();
     else
-        return OUString("");
+        return OUString();
 }
 
 unsigned int Application::GetScreenCount()

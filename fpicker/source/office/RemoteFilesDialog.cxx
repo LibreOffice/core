@@ -435,7 +435,7 @@ OUString lcl_GetServiceType( const ServicePtr& pService )
         case INetProtocol::Generic:
             return OUString( "SSH" );
         default:
-            return OUString( "" );
+            return OUString();
     }
 }
 

@@ -31,7 +31,7 @@ filename_from_url(const OUString& url)
 {
     sal_Int32 slashPosition = url.lastIndexOf( '/' );
     if (slashPosition < 0) {
-        return OUString("");
+        return OUString();
     }
     OUString filename = url.copy( slashPosition+1 );
     return filename;

@@ -466,7 +466,7 @@ namespace rtl_ustr
                 /* sal_Int32 */ nIndex = rtl_ustr_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
 
-                /* rtl::OString */ aSearchStr = rtl::OUString("");
+                /* rtl::OString */ aSearchStr = rtl::OUString();
                 /* sal_Int32 */ nIndex = rtl_ustr_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1);
             }

@@ -125,7 +125,7 @@ OUString TestDocumentHandler::canonicalform(const OUString &sName, const OUStrin
                 return sDefaultns + ":" + sName;
         }
     }
-    return OUString("");
+    return OUString();
 }
 
 OUString TestDocumentHandler::getNamespace(const OUString &sName)
@@ -136,7 +136,7 @@ OUString TestDocumentHandler::getNamespace(const OUString &sName)
         if (aPair.first == sName)
             return aPair.second;
     }
-    return OUString("");
+    return OUString();
 }
 
 void SAL_CALL TestDocumentHandler::startDocument()

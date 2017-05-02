@@ -82,7 +82,7 @@ OUString createTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString cons
 {
     Color aColor(nR, nG, nB);
     if (sReference != aColor.AsRGBHexString())
-        return OUString("");
+        return OUString();
     aColor.ApplyTintOrShade(nTintShade);
     return aColor.AsRGBHexString();
 }

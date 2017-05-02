@@ -293,7 +293,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                 rOutItemSet.Put( SfxStringItem( nWhichId, aString ) );
             }
             else
-                rOutItemSet.Put( SfxStringItem( nWhichId, OUString("") ) );
+                rOutItemSet.Put( SfxStringItem( nWhichId, OUString() ) );
         }
         break;
 

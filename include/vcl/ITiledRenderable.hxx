@@ -80,7 +80,7 @@ public:
     virtual OUString getPartName(int nPart)
     {
         (void) nPart;
-        return OUString("");
+        return OUString();
     }
 
     /**
