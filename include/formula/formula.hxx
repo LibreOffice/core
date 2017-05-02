@@ -76,7 +76,7 @@ protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
+    void            RefInputStartAfter();
     void            RefInputDoneAfter();
 
     void            SetMeText(const OUString& _sText);
@@ -115,7 +115,7 @@ protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
+    void            RefInputStartAfter();
     void            RefInputDoneAfter( bool bForced );
 
     void            SetMeText(const OUString& _sText);

@@ -212,7 +212,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 
         m_pAddField->Update();
     }
-    RefInputStartAfter( aPair.second, aPair.first );
+    RefInputStartAfter();
     m_pAddField->Show();
 
 }

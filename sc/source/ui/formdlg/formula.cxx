@@ -371,7 +371,7 @@ void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* p
     pEdit->SetSelection(Selection(0, SELECTION_MAX));
     ::std::pair<formula::RefButton*,formula::RefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
     m_aHelper.RefInputStart( aPair.second, aPair.first);
-    RefInputStartAfter( aPair.second, aPair.first );
+    RefInputStartAfter();
 }
 
 void ScFormulaDlg::RefInputDone( bool bForced )
