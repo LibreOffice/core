@@ -16,6 +16,24 @@
       "revId": "aeb9185dd8cd3921c7ad18fa1c2aeca3059f94f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_47b4bff1",
+        "filename": "sd/source/ui/dlg/copydlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2017-05-02T13:07:08Z",
+      "side": 1,
+      "message": "This is what I first did, but it crashes.",
+      "parentUuid": "5a3905b3_0460f534",
+      "revId": "aeb9185dd8cd3921c7ad18fa1c2aeca3059f94f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
