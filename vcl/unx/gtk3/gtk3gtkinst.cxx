@@ -103,6 +103,10 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
         const char* pFinalName = pName;
         css::datatransfer::DataFlavor aFlavor;
 
+        // omit text/plain;charset=unicode since it is not well defined
+        if (rtl_str_compare(pName, "text/plain;charset=unicode") == 0)
+            continue;
+
         for (size_t j = 0; j < SAL_N_ELEMENTS(aConversionTab); ++j)
         {
             if (rtl_str_compare(pName, aConversionTab[j].pNativeType) == 0)
