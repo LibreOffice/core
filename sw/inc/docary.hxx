@@ -300,7 +300,7 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-typedef std::vector<SwTOXType*> SwTOXTypes;
+class SwTOXTypes : public SwVectorModifyBase<SwTOXType*> {};
 
 class SW_DLLPUBLIC SwNumRuleTable : public SwVectorModifyBase<SwNumRule*> {
 public:
