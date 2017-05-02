@@ -372,7 +372,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 }
 
 #define addValue( n, v ) push_back( std::pair< OUString, Any >( OUString( n ), v ) )
-void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rValues, bool )
+void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rValues )
 {
     std::vector< std::pair< OUString, Any > > aUserData;
 
@@ -523,7 +523,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
     }
 }
 
-void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool )
+void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     const sal_Int32 nLength = rSequence.getLength();
     if (nLength)

@@ -2424,7 +2424,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         }
                         else
                         {
-                            SdrObject* pPresObj = pPage->CreatePresObj( ePresObjKind, bVertical, pText->GetLogicRect(), true );
+                            SdrObject* pPresObj = pPage->CreatePresObj( ePresObjKind, bVertical, pText->GetLogicRect() );
                             pPresObj->SetUserCall( pPage );
 
                             SfxItemSet aSet( pSdrModel->GetItemPool() );

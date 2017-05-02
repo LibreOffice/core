@@ -731,7 +731,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_PRESENTATION_END:
         {
-            StopSlideShow(true);
+            StopSlideShow();
 
             rReq.Ignore ();
         }
@@ -1385,13 +1385,13 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_UNDO :
         {
             // moved implementation to BaseClass
-            ImpSidUndo(true, rReq);
+            ImpSidUndo(rReq);
         }
         break;
         case SID_REDO :
         {
             // moved implementation to BaseClass
-            ImpSidRedo(true, rReq);
+            ImpSidRedo(rReq);
         }
         break;
 
@@ -1615,7 +1615,7 @@ namespace slideshowhelp
     }
 }
 
-void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)
+void DrawViewShell::StopSlideShow()
 {
     Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
     if(xPresentation.is() && xPresentation->isRunning())

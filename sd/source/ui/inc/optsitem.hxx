@@ -175,7 +175,7 @@ class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem
 {
 public:
 
-                            SdOptionsContentsItem( SdOptions* pOpts, ::sd::FrameView* pView );
+                            SdOptionsContentsItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

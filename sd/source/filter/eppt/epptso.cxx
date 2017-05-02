@@ -408,12 +408,10 @@ bool PPTWriter::ImplCloseDocument()
             EscherExAtom aTxMasterStyleAtom( aTxMasterStyleAtomStrm, EPP_TxMasterStyleAtom, EPP_TEXTTYPE_Other );
             aTxMasterStyleAtomStrm.WriteUInt16( 5 );        // paragraph count
             sal_uInt16 nLev;
-            bool bFirst = true;
             for ( nLev = 0; nLev < 5; nLev++ )
             {
-                mpStyleSheet->mpParaSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, mpPptEscherEx, nLev, bFirst, false, mXPagePropSet );
-                mpStyleSheet->mpCharSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, mpPptEscherEx, nLev, bFirst, false, mXPagePropSet );
-                bFirst = false;
+                mpStyleSheet->mpParaSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, nLev, false, mXPagePropSet );
+                mpStyleSheet->mpCharSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, nLev, false, mXPagePropSet );
             }
         }
 
@@ -1565,7 +1563,7 @@ bool PPTWriter::ImplGetEffect( const css::uno::Reference< css::beans::XPropertyS
     return bHasEffect;
 };
 
-bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage, const PageType /* ePageType */,
+bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage,
                                                    const sal_uInt32 nStyleInstance, const sal_uInt8 nPlaceHolderId )
 {
     bool bRet = ImplGetText();
@@ -2229,7 +2227,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( ( ePageType == NOTICE ) && mbPresObj )
                 {
-                    if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Notes, EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE ) )
+                    if ( ImplCreatePresentationPlaceholder( bMasterPage, EPP_TEXTTYPE_Notes, EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE ) )
                         continue;
                     else
                         nPlaceHolderAtom = EPP_PLACEHOLDER_NOTESBODY;
@@ -2449,7 +2447,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( ( ePageType == NOTICE ) && mbPresObj )
                 {
-                    if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Notes, EPP_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) )
+                    if ( ImplCreatePresentationPlaceholder( bMasterPage, EPP_TEXTTYPE_Notes, EPP_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) )
                         continue;
                     else
                         nPlaceHolderAtom = EPP_PLACEHOLDER_NOTESSLIDEIMAGE;
@@ -2534,7 +2532,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "presentation.Header" )
             {
-                if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERHEADER ) )
+                if ( ImplCreatePresentationPlaceholder( bMasterPage, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERHEADER ) )
                     continue;
                 else
                 {
@@ -2545,7 +2543,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "presentation.Footer" )
             {
-                if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERFOOTER ) )
+                if ( ImplCreatePresentationPlaceholder( bMasterPage, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERFOOTER ) )
                     continue;
                 else
                 {
@@ -2556,7 +2554,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "presentation.DateTime" )
             {
-                if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERDATE ) )
+                if ( ImplCreatePresentationPlaceholder( bMasterPage, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERDATE ) )
                     continue;
                 else
                 {
@@ -2567,7 +2565,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "presentation.SlideNumber" )
             {
-                if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERSLIDENUMBER ) )
+                if ( ImplCreatePresentationPlaceholder( bMasterPage, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERSLIDENUMBER ) )
                     continue;
                 else
                 {

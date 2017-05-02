@@ -249,7 +249,7 @@ private:
        This method is usually called exactly one time from the
        constructor.
     */
-    void SetupControls (vcl::Window* pParentWindow);
+    void SetupControls();
 
     /** This method is usually called exactly one time from the
         constructor.

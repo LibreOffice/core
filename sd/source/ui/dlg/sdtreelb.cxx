@@ -136,7 +136,7 @@ bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const css::datatransfer::Da
 
 void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 {
-    mrParent.OnDragFinished( nDropAction );
+    mrParent.OnDragFinished();
     SdTransferable::DragFinished(nDropAction);
 }
 
@@ -1238,7 +1238,7 @@ void SdPageObjsTLB::DoDrag()
     }
 }
 
-void SdPageObjsTLB::OnDragFinished( sal_uInt8 )
+void SdPageObjsTLB::OnDragFinished()
 {
     if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
     {

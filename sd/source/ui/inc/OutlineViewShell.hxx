@@ -155,7 +155,7 @@ private:
     bool            bPastePossible;
     bool mbInitialized;
 
-    void Construct (DrawDocShell* pDocSh);
+    void Construct();
     DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );
 };
 

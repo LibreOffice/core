@@ -473,7 +473,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
             if( (pShowWindow == pOutDev) || (xSlideshow->getAnimationMode() == ANIMATIONMODE_PREVIEW) )
             {
                 if( pShowWindow == pOutDev && mpViewSh )
-                    xSlideshow->paint( rReg.GetBoundRect() );
+                    xSlideshow->paint();
                 bStandardPaint = false;
             }
         }

@@ -90,8 +90,8 @@ public:
     virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
     virtual void            MarkListHasChanged() override;
     void                    SelectAll();
-    void                    DoCut(vcl::Window* pWindow=nullptr);
-    void                    DoCopy(vcl::Window* pWindow=nullptr);
+    void                    DoCut();
+    void                    DoCopy();
     void                    DoPaste(vcl::Window* pWindow=nullptr);
     virtual void            DoConnect(SdrOle2Obj* pOleObj) override;
     virtual bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
@@ -110,7 +110,7 @@ public:
         sal_uInt16 nLayer);
 
     css::uno::Reference<css::datatransfer::XTransferable>
-        CreateClipboardDataObject (::sd::View*, vcl::Window& rWindow);
+        CreateClipboardDataObject ();
     css::uno::Reference<css::datatransfer::XTransferable>
         CreateDragDataObject (::sd::View*, vcl::Window& rWindow,
             const Point& rDragPos);

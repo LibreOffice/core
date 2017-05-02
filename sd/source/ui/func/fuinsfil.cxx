@@ -402,7 +402,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
         if( bNameOK )
             bOK = mpDoc->InsertBookmarkAsObject( aObjectBookmarkList, aExchangeList,
-                                bLink, nullptr, nullptr, false );
+                                nullptr, nullptr, false );
 
         if( pDlg->IsRemoveUnnessesaryMasterPages() )
             mpDoc->RemoveUnnecessaryMasterPages();
@@ -442,7 +442,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         std::unique_ptr<SdrOutliner> pOutliner(new SdOutliner( mpDoc, OutlinerMode::TextObject ));
 
         // set reference device
-        pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
+        pOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
         SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
         aLayoutName = pPage->GetLayoutName();
@@ -593,7 +593,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
     // set reference device
-    pOutliner->SetRefDevice(SD_MOD()->GetRefDevice( *mpDocSh ));
+    pOutliner->SetRefDevice(SD_MOD()->GetVirtualRefDevice());
     pOutliner->SetPaperSize(Size(0x7fffffff, 0x7fffffff));
 
     SvStream* pStream = pMedium->GetInStream();

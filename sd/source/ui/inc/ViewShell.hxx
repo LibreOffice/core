@@ -110,7 +110,6 @@ public:
 
 
     ViewShell (
-        SfxViewFrame *pFrame,
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
     virtual ~ViewShell() override;
@@ -180,7 +179,7 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
-    bool RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
+    bool RequestHelp( const HelpEvent& rEvt );
     bool Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
 
     bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
@@ -227,8 +226,8 @@ public:
     void SetFrameView (FrameView* pFrameView);
     virtual void  ReadFrameViewData(FrameView* pView);
     virtual void  WriteFrameViewData();
-    void  WriteUserData(OUString& rString);
-    void  ReadUserData(const OUString& rString);
+    void  WriteUserData();
+    void  ReadUserData();
 
     virtual bool  ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
@@ -313,17 +312,8 @@ public:
 
     /** Return the border that is drawn around the actual document view.
         The border contains typically rulers and scroll bars.
-        @param bOuterResize
-            When this flag is <TRUE/> then the border is used for an
-            OuterResizePixel(), i.e. there is a given window size and the
-            border elements are placed inside so that the document view has
-            the given window size minus the border.
-            When the flag is <FALSE/> then the border is used for an
-            InnerResizePixel(), i.e. the document view has a given size and
-            the border is placed outside.  In this scenario the parent
-            window has the size of the document view plus the border.
     */
-    SvBorder GetBorder (bool bOuterResize);
+    SvBorder GetBorder();
 
     /** Notify the view shell that its parent window has been resized.
         The ViewShell places and resizes its UI elements accordingly.
@@ -503,8 +493,8 @@ protected:
     virtual ::svl::IUndoManager* ImpGetUndoManager() const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
-    void ImpSidUndo(bool bDrawViewShell, SfxRequest& rReq);
-    void ImpSidRedo(bool bDrawViewShell, SfxRequest& rReq);
+    void ImpSidUndo(SfxRequest& rReq);
+    void ImpSidRedo(SfxRequest& rReq);
 
     DECL_LINK( HScrollHdl, ScrollBar *, void );
     DECL_LINK( VScrollHdl, ScrollBar *, void );

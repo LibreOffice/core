@@ -533,7 +533,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
     }
     else
     {
-        pPresObj = GetPage()->CreatePresObj( eObjKind, false, aRect, true );
+        pPresObj = GetPage()->CreatePresObj( eObjKind, false, aRect );
     }
 
     if( pPresObj )

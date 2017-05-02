@@ -336,7 +336,7 @@ void SdDrawDocument::InsertBookmark(
     if ( bOK && !rBookmarkList.empty() )
     {
         // Insert all object bookmarks
-        InsertBookmarkAsObject(rBookmarkList, rExchangeList, bLink,
+        InsertBookmarkAsObject(rBookmarkList, rExchangeList,
                                      pBookmarkDocSh, pObjPos, bCalcObjCount);
     }
 }
@@ -978,7 +978,6 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 bool SdDrawDocument::InsertBookmarkAsObject(
     const std::vector<OUString> &rBookmarkList,
     const std::vector<OUString> &rExchangeList,            // List of names to use
-    bool /* bLink */,
     ::sd::DrawDocShell* pBookmarkDocSh,
     Point* pObjPos,
     bool bCalcObjCount)

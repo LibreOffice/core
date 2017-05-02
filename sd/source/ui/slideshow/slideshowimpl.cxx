@@ -1145,7 +1145,7 @@ void SlideshowImpl::onFirstPaint()
     maUpdateTimer.Start();
 }
 
-void SlideshowImpl::paint( const ::tools::Rectangle& /* rRect */ )
+void SlideshowImpl::paint()
 {
     if( mxView.is() ) try
     {
@@ -1478,7 +1478,7 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor )
 
 // XShapeEventListener
 
-void SlideshowImpl::click( const Reference< XShape >& xShape, const css::awt::MouseEvent& /* aOriginalEvent */ )
+void SlideshowImpl::click( const Reference< XShape >& xShape )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3413,11 +3413,11 @@ void SAL_CALL SlideShowListenerProxy::disposing( const css::lang::EventObject& a
 
 // XShapeEventListener
 
-void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, const css::awt::MouseEvent& aOriginalEvent )
+void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, const css::awt::MouseEvent& /*aOriginalEvent*/ )
 {
     SolarMutexGuard aSolarGuard;
     if( mxController.is() )
-        mxController->click(xShape, aOriginalEvent );
+        mxController->click(xShape );
 }
 
 } // namespace ::sd

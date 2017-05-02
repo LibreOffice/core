@@ -786,7 +786,7 @@ void ViewShellBase::WriteUserData (OUString& rString, bool bBrowse)
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
     if (pShell != nullptr)
-        pShell->WriteUserData (rString);
+        pShell->WriteUserData();
 }
 
 void ViewShellBase::ReadUserData (const OUString& rString, bool bBrowse)
@@ -796,7 +796,7 @@ void ViewShellBase::ReadUserData (const OUString& rString, bool bBrowse)
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
     if (pShell != nullptr)
-        pShell->ReadUserData (rString);
+        pShell->ReadUserData();
 }
 
 SdrView* ViewShellBase::GetDrawView() const
@@ -829,7 +829,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
         SvBorder aCurrentBorder (GetBorderPixel());
         bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
         SvBorder aBorder (GetBorder(bOuterResize));
-        aBorder += pMainViewShell->GetBorder(bOuterResize);
+        aBorder += pMainViewShell->GetBorder();
 
         if (bForce || (aBorder != aCurrentBorder))
         {
@@ -1124,7 +1124,7 @@ void ViewShellBase::Implementation::ResizePixel (
     // Calculate and set the border before the controls are placed.
     SvBorder aBorder;
     if (pMainViewShell != nullptr)
-        aBorder = pMainViewShell->GetBorder(bOuterResize);
+        aBorder = pMainViewShell->GetBorder();
     aBorder += mrBase.GetBorder(bOuterResize);
     if (mrBase.GetBorderPixel() != aBorder)
         mrBase.SetBorderPixel(aBorder);

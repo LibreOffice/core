@@ -264,7 +264,7 @@ void SdOutliner::PrepareSpelling()
     sd::ViewShellBase* pBase = dynamic_cast< sd::ViewShellBase *>( SfxViewShell::Current() );
     if (pBase != nullptr)
         SetViewShell (pBase->GetMainViewShell());
-    SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
+    SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell)
@@ -342,7 +342,7 @@ void SdOutliner::EndSpelling()
     if(IsModified())
     {
         if(mpView && dynamic_cast< const sd::OutlineView *>( mpView ) !=  nullptr)
-            static_cast<sd::OutlineView*>(mpView)->PrepareClose(false);
+            static_cast<sd::OutlineView*>(mpView)->PrepareClose();
         if(mpDrawDocument && !mpDrawDocument->IsChanged())
             mpDrawDocument->SetChanged();
     }
@@ -374,7 +374,7 @@ bool SdOutliner::SpellNextDocument()
     else
     {
         if( dynamic_cast< const sd::OutlineView *>( mpView ) !=  nullptr)
-            static_cast<sd::OutlineView*>(mpView)->PrepareClose(false);
+            static_cast<sd::OutlineView*>(mpView)->PrepareClose();
         mpDrawDocument->GetDocSh()->SetWaitCursor( true );
 
         Initialize (true);
@@ -1612,7 +1612,7 @@ void SdOutliner::PrepareConversion()
 
 void SdOutliner::BeginConversion()
 {
-    SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
+    SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
     sd::ViewShellBase* pBase = dynamic_cast<sd::ViewShellBase*>( SfxViewShell::Current() );
     if (pBase != nullptr)

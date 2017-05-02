@@ -45,7 +45,7 @@
 
 namespace sd {
 
-void DrawViewShell::ScannerEvent( const css::lang::EventObject& )
+void DrawViewShell::ScannerEvent()
 {
     if( mxScannerManager.is() )
     {

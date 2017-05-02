@@ -72,24 +72,23 @@ class AnimationExporter
     static bool getColorAny( const css::uno::Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC );
     static bool exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const css::uno::Any& rAny, const TranslateMode eTranslateMode );
     static void exportAnimPropertyString( SvStream& rStrm, const sal_uInt16 nPropertyId, const OUString& rVal, const TranslateMode eTranslateMode );
-    static void exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt16 nPropertyId, const double& rVal, const TranslateMode eTranslateMode );
+    static void exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt16 nPropertyId, const double& rVal );
     static void exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal, const TranslateMode eTranslateMode );
-    static void exportAnimPropertyByte( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt8 nVal, const TranslateMode eTranslateMode );
+    static void exportAnimPropertyByte( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt8 nVal );
 
     /** if available exportAnimPropertySet
        @return the css::presentation::EffectNodeType*/
     static sal_Int16 exportAnimPropertySet( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     static void exportAnimNode( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode,
-                        const css::uno::Reference< css::animations::XAnimationNode >* pParent, const sal_Int32 nGroupLevel, const sal_Int16 nFillDefault );
+                        const sal_Int16 nFillDefault );
     void exportAnimate( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     void exportAnimateTarget( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_uInt32 nForceAttributeName = 0, int nAfterEffectType = AFTEREFFECT_NONE );
     void exportAnimateSet( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >&  xNode, int nAfterEffectType );
     static void exportAnimAction( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     void exportAnimEvent( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_Int32 nFlags = 0 );
     void exportNode( SvStream& rStrm, css::uno::Reference< css::animations::XAnimationNode > const & xNode,
-                        const css::uno::Reference< css::animations::XAnimationNode >* xParent,
-                            const sal_uInt16 nContainerRecType, const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const bool bTakeBackInteractiveSequenceTiming,
-                                const sal_Int16 nFillDefault );
+                     const sal_uInt16 nContainerRecType, const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const bool bTakeBackInteractiveSequenceTiming,
+                     const sal_Int16 nFillDefault );
     void exportAnimateTargetElement( SvStream& rStrm, const css::uno::Any& rAny, const bool bCreate2b01Atom );
     static void exportAnimateKeyPoints( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimate >& xAnimate );
     static void exportAnimValue( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, const bool bExportAlways );
