@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <vcl/printerinfomanager.hxx>
+#include "printerinfomanager.hxx"
 
 #include "unx/gendata.hxx"
 

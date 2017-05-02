@@ -19,7 +19,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <vcl/jobdata.hxx>
-#include <vcl/printerinfomanager.hxx>
+#include "printerinfomanager.hxx"
 #include "tools/stream.hxx"
 
 #include <rtl/strbuf.hxx>

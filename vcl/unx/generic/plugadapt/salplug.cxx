@@ -28,7 +28,7 @@
 #include "unx/gendata.hxx"
 #include "headless/svpinst.hxx"
 #include "unx/desktops.hxx"
-#include <vcl/printerinfomanager.hxx>
+#include "printerinfomanager.hxx"
 #include <config_vclplug.h>
 #include <desktop/crashreport.hxx>
 
