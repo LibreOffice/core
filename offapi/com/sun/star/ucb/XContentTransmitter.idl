@@ -35,8 +35,6 @@ module com { module sun { module star { module ucb {
 
 published interface XContentTransmitter: com::sun::star::uno::XInterface
 {
-    /**
-    */
     void transmit( [in] string Source,
                             [in] string Destination,
                             [in] long   Flags );

@@ -29,16 +29,12 @@
 typedef HRESULT (__stdcall *lpfnDllRegisterServer)();
 typedef HRESULT (__stdcall *lpfnDllUnregisterServer)();
 
-/**
-*/
 bool IsUnregisterParameter(const char* Param)
 {
     return ((0 == _stricmp(Param, "/u")) ||
             (0 == _stricmp(Param, "-u")));
 }
 
-/**
-*/
 int main(int argc, char* argv[])
 {
     HMODULE hmod;

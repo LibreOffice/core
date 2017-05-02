@@ -25,9 +25,6 @@
 namespace chart
 {
 
-/**
-*/
-
 struct TickmarkProperties
 {
     sal_Int32 RelativePos;//Position in screen values relative to the axis where the tickmark line starts

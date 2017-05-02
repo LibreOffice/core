@@ -28,9 +28,6 @@
 namespace chart
 {
 
-/**
-*/
-
 struct TitleDialogData
 {
     css::uno::Sequence< sal_Bool > aPossibilityList;

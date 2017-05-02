@@ -37,12 +37,8 @@ module chart2
  */
 interface XDiagramProvider : ::com::sun::star::uno::XInterface
 {
-    /**
-     */
     XDiagram getDiagram();
 
-    /**
-     */
     void setDiagram( [in] XDiagram xDiagram );
 };
 

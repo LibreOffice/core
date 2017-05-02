@@ -28,8 +28,6 @@ module star
 module chart2
 {
 
-/**
- */
 enum LegendPosition
 {
     /** In LTR mode this is the left-hand side

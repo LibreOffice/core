@@ -29,8 +29,6 @@
 namespace chart
 {
 
-/**
-*/
 class PlottingPositionHelper;
 class AbstractShapeFactory;
 

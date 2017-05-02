@@ -55,8 +55,6 @@ namespace sd
         /** Sets the internal iterator to the shape at given index. */
         void seekShape( sal_uInt32 nIndex );
 
-        /**
-        */
         bool hasMore() const;
 
         const std::list< SdrObject* >& getList() const { return maShapeList; }

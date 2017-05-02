@@ -33,8 +33,6 @@ module star
 module chart2
 {
 
-/**
- */
 interface XChartType : com::sun::star::uno::XInterface
 {
     /** A string representation of the chart type.

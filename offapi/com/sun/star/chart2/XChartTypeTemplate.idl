@@ -159,8 +159,6 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
      */
     XChartType getChartTypeForNewSeries( [in] sequence< XChartType > aFormerlyUsedChartTypes );
 
-    /**
-     */
     XDataInterpreter getDataInterpreter();
 
     /** Applies a chart-type specific style (e.g. symbols) to all series in the

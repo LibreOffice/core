@@ -272,9 +272,6 @@ void HelpLinker::initIndexerPreProcessor()
          idxCaptionStylesheet, idxContentStylesheet ) );
 }
 
-/**
-*
-*/
 void HelpLinker::link()
 {
 

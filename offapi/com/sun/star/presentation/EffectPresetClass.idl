@@ -35,32 +35,12 @@
 */
 constants EffectPresetClass
 {
-    /**
-    */
     const short CUSTOM = 0;
-
-    /**
-    */
     const short ENTRANCE = 1;
-
-    /**
-    */
     const short EXIT = 2;
-
-    /**
-    */
     const short EMPHASIS = 3;
-
-    /**
-    */
     const short MOTIONPATH = 4;
-
-    /**
-    */
     const short OLEACTION = 5;
-
-    /**
-    */
     const short MEDIACALL = 6;
 };
 

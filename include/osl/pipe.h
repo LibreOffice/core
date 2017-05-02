@@ -52,8 +52,6 @@ typedef sal_uInt32 oslPipeOptions;
 
 typedef struct oslPipeImpl * oslPipe;
 
-/**
- */
 SAL_DLLPUBLIC oslPipe SAL_CALL osl_createPipe(
         rtl_uString *strPipeName, oslPipeOptions Options, oslSecurity Security);
 

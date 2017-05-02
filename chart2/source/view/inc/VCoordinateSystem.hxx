@@ -39,9 +39,8 @@
 namespace chart
 {
 
-/**
-*/
 class VAxisBase;
+
 class VCoordinateSystem
 {
 public:

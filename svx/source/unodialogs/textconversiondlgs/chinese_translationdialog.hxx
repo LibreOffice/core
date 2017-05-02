@@ -29,8 +29,6 @@ namespace textconversiondlgs
 {
 
 
-/**
-*/
 class ChineseDictionaryDialog;
 
 class ChineseTranslationDialog : public ModalDialog

@@ -36,9 +36,6 @@ service CustomShapeEngine
      */
     interface ::com::sun::star::lang::XInitialization;
 
-    /**
-
-     */
     interface com::sun::star::drawing::XCustomShapeEngine;
 };
 

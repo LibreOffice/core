@@ -27,8 +27,6 @@
 namespace chart
 {
 
-/**
-*/
 class PolarPlottingPositionHelper;
 
 class VPolarGrid : public VAxisOrGridBase

@@ -25,9 +25,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class VCartesianGrid : public VAxisOrGridBase
 {
 // public methods

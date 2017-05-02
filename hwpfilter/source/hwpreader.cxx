@@ -4582,9 +4582,6 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 }
 
 
-/**
- *
- */
 void HwpReader::makeLine(Line *   )
 {
     padd("text:style-name", sXML_CDATA, "Horizontal Line");

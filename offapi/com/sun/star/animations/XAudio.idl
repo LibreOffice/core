@@ -25,16 +25,12 @@
  module com {  module sun {  module star {  module animations {
 
 
-/**
-*/
 interface XAudio : XAnimationNode
 {
     /** This attribute specifies the source element that contains the audio.
     */
     [attribute] any Source;
 
-    /**
-    */
     [attribute] double Volume;
 };
 

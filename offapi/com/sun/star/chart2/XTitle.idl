@@ -33,12 +33,8 @@ module chart2
 
 interface XTitle : ::com::sun::star::uno::XInterface
 {
-    /**
-     */
     sequence< XFormattedString > getText();
 
-    /**
-     */
     void setText( [in] sequence< XFormattedString > Strings );
 };
 

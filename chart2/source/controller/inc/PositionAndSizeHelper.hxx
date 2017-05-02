@@ -26,9 +26,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class PositionAndSizeHelper
 {
 public:

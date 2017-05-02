@@ -24,8 +24,6 @@
 namespace chart
 {
 
-/**
-*/
 class VPolarCoordinateSystem : public VCoordinateSystem
 {
 public:

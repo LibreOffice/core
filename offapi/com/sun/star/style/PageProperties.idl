@@ -225,9 +225,6 @@ published service PageProperties
 /** contains the color of the background of the footer.
  */
 [property, maybevoid] com::sun::star::util::Color FooterBackColor;
-/**
- */
-//[property, maybevoid] FooterBackGraphic;
 /** contains the URL of the background graphic in the footer.
  */
 [property, maybevoid] string FooterBackGraphicURL;
@@ -295,8 +292,6 @@ published service PageProperties
  */
 [optional, property, maybevoid] com::sun::star::text::XText FooterTextLeft;
 /** contains the interface to the text of the footer of a right page.
- */
-/** contains .
  */
 [optional, property, maybevoid] com::sun::star::text::XText FooterTextRight;
 /** contains the maximum height of the footnote area. If set to zero then the height

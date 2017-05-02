@@ -35,9 +35,6 @@ namespace chart
 
 class LegendEntryProvider;
 
-/**
-*/
-
 class VLegend
 {
 public:

@@ -38,9 +38,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
 public:

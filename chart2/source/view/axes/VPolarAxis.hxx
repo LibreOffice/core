@@ -24,9 +24,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class PolarPlottingPositionHelper;
 
 class VPolarAxis : public VAxisBase

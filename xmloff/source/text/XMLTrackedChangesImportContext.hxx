@@ -31,8 +31,6 @@ namespace com { namespace sun { namespace star {
     } }
 } } }
 
-/**
- */
 class XMLTrackedChangesImportContext : public SvXMLImportContext
 {
 public:

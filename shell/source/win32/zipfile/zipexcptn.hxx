@@ -25,8 +25,6 @@
 #include <stdexcept>
 
 
-/**
-*/
 class RuntimeException : public std::exception
 {
 public:
@@ -40,8 +38,6 @@ private:
 };
 
 
-/**
-*/
 class ZipException : public RuntimeException
 {
 public:
@@ -51,8 +47,6 @@ public:
 };
 
 
-/**
-*/
 class Win32Exception : public RuntimeException
 {
 public:
@@ -66,8 +60,6 @@ private:
 };
 
 
-/**
-*/
 class ZipContentMissException : public ZipException
 {
 public:
@@ -75,8 +67,6 @@ public:
 };
 
 
-/**
-*/
 class AccessViolationException : public Win32Exception
 {
 public:
@@ -84,8 +74,6 @@ public:
 };
 
 
-/**
-*/
 class IOException : public Win32Exception
 {
 public:

@@ -33,8 +33,6 @@ module chart2
 module data
 {
 
-/**
- */
 service DataProvider
 {
     /** For accessing data a component provides for being used by

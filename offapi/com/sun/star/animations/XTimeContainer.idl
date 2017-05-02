@@ -52,50 +52,29 @@
 */
 interface XTimeContainer : XAnimationNode
 {
-    /*
-    com::sun::star::container::XContainer;
-    com::sun::star::container::XEnumerationAccess;
-    */
-
-    /*
-    [attribute] long PresetId;
-    [attribute] long PresetSubType;
-    [attribute] long PresetClass;
-    */
-
-    /**
-    */
     XAnimationNode insertBefore( [in] XAnimationNode newChild, [in] XAnimationNode refChild )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::NoSuchElementException,
                 com::sun::star::container::ElementExistException,
                 com::sun::star::lang::WrappedTargetException );
 
-    /**
-    */
     XAnimationNode insertAfter( [in] XAnimationNode newChild, [in] XAnimationNode refChild )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::NoSuchElementException,
                 com::sun::star::container::ElementExistException,
                 com::sun::star::lang::WrappedTargetException );
 
-    /**
-    */
     XAnimationNode replaceChild( [in] XAnimationNode newChild, [in] XAnimationNode oldChild )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::NoSuchElementException,
                 com::sun::star::container::ElementExistException,
                 com::sun::star::lang::WrappedTargetException );
 
-    /**
-    */
     XAnimationNode removeChild( [in] XAnimationNode oldChild )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::WrappedTargetException );
 
-    /**
-    */
     XAnimationNode appendChild( [in] XAnimationNode newChild )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::ElementExistException,
