@@ -280,7 +280,7 @@ End
         ModuleID = gid_Module_Root_Reg_##name; \
         Subkey = STRING(CONCAT2(MIME\Database\Content Type\,mediatype)); \
         Name = STRING(Extension); \
-        Value = STRING(key); \
+        Value = STRING(CONCAT2(.,key)); \
         ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
     End
 
