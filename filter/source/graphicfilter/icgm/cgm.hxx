@@ -89,7 +89,7 @@ class CGM
         sal_uInt32              mnElementID;
         sal_uInt32              mnElementSize;  // full parameter size for the latest action
 
-        sal_uInt32          ImplGetUI16( sal_uInt32 nAlign = 0 );
+        sal_uInt32          ImplGetUI16();
         static sal_uInt8    ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision );
         sal_Int32           ImplGetI( sal_uInt32 nPrecision );
         sal_uInt32          ImplGetUI( sal_uInt32 nPrecision );

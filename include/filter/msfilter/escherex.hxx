@@ -576,7 +576,6 @@ public:
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
                     const OString& rGraphicId,
-                    const tools::Rectangle& rBoundRect,
                     const css::awt::Rectangle* pVisArea = nullptr,
                     const GraphicAttr* pGrafikAttr = nullptr,
                     const bool ooxmlExport = false

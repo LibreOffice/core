@@ -129,7 +129,7 @@ public:
     void Flush();
 
     bool exportAll( const css::uno::Reference< css::lang::XComponent >& xDoc, css::uno::Reference< css::io::XOutputStream > &xOutputStream,    css::uno::Reference< css::task::XStatusIndicator> &xStatusIndicator );
-    bool exportSlides( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream, sal_uInt16 nPage);
+    bool exportSlides( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream);
     sal_uInt16 exportBackgrounds( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects );
     sal_uInt16 exportBackgrounds( css::uno::Reference< css::drawing::XDrawPage > const & xDrawPage, sal_uInt16 nPage, bool bExportObjects );
 

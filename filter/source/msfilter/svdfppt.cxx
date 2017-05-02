@@ -2326,7 +2326,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 }
                 boost::optional< sal_Int16 > oStartNumbering;
                 SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
-                pPara->ApplyTo( aParagraphAttribs, oStartNumbering, (SdrPowerPointImport&)*this, nDestinationInstance, pPreviousParagraph );
+                pPara->ApplyTo( aParagraphAttribs, oStartNumbering, (SdrPowerPointImport&)*this, nDestinationInstance );
 
                 sal_uInt32  nIsBullet2 = 0; //, nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : pTextObj->GetInstance();
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
@@ -2496,7 +2496,7 @@ void SdrPowerPointImport::SetPageNum( sal_uInt16 nPageNum, PptPageKind eKind )
 
 Size SdrPowerPointImport::GetPageSize() const
 {
-    Size aRet( IsNoteOrHandout( nAktPageNum, eAktPageKind ) ? aDocAtom.GetNotesPageSize() : aDocAtom.GetSlidesPageSize() );
+    Size aRet( IsNoteOrHandout( nAktPageNum ) ? aDocAtom.GetNotesPageSize() : aDocAtom.GetSlidesPageSize() );
     Scale( aRet );
     // PPT works with units of 576 dpi in any case. To avoid inaccuracies
     // I do round the last decimal digit away.
@@ -2967,7 +2967,7 @@ const PptSlideLayoutAtom* SdrPowerPointImport::GetSlideLayoutAtom() const
     return nullptr;
 }
 
-bool SdrPowerPointImport::IsNoteOrHandout( sal_uInt16 nPageNum, PptPageKind /*ePageKind*/) const
+bool SdrPowerPointImport::IsNoteOrHandout( sal_uInt16 nPageNum ) const
 {
     bool bNote = eAktPageKind == PPT_NOTEPAGE;
     if ( eAktPageKind == PPT_MASTERPAGE )
@@ -3654,7 +3654,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, TSS_Type::Unknown, oStartNumbering, rCharLevel.mnFontHeight, nullptr );
     if ( ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP ) && ( nBulletHeight > 0x7fff ) )
         nBulletHeight = rCharLevel.mnFontHeight ? ((-((sal_Int16)nBulletHeight)) * 100 ) / rCharLevel.mnFontHeight : 100;
-    ImplGetNumberFormat( rManager, rNumberFormat, nLevel );
+    ImplGetNumberFormat( rManager, rNumberFormat );
     switch ( rNumberFormat.GetNumberingType() )
     {
         case SVX_NUM_CHARS_UPPER_LETTER :
@@ -3708,7 +3708,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
         pParaObj->UpdateBulletRelSize( nBulletHeight );
     if ( nHardCount )
-        ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->mxParaSet->mnDepth );
+        ImplGetNumberFormat( rManager, rNumberFormat );
 
     if ( nHardCount )
     {
@@ -3745,7 +3745,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     return nHardCount != 0;
 }
 
-void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, sal_uInt32 /*nLevel*/)
+void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat )
 {
     vcl::Font aFont;
     PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nBulletFont );
@@ -3821,7 +3821,7 @@ PPTCharSheet::PPTCharSheet( const PPTCharSheet& rAttr )
     *this = rAttr;
 }
 
-void PPTCharSheet::Read( SvStream& rIn, bool /*bMasterStyle*/, sal_uInt32 nLevel, bool /*bFirst*/)
+void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
 {
     // Zeichenattribute
     sal_uInt32 nCMask;
@@ -3922,8 +3922,8 @@ void PPTParaSheet::Read( SdrPowerPointImport&
 #ifdef DBG_UTIL
                     rManager
 #endif
-                    , SvStream& rIn, bool /*bMasterStyle*/,
-                    sal_uInt32 nLevel, bool bFirst )
+                    , SvStream& rIn
+                    , sal_uInt32 nLevel, bool bFirst )
 {
     // Absatzattribute
     sal_uInt16  nVal16, i, nMask16;
@@ -4115,7 +4115,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                         mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ nLev - 1 ];
                         mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev - 1 ];
                     }
-                    mpParaSheet[ TSS_Type::TextInShape ]->Read( rManager, rIn, true, nLev, bFirst );
+                    mpParaSheet[ TSS_Type::TextInShape ]->Read( rManager, rIn, nLev, bFirst );
                     if ( !nLev )
                     {
                         // set paragraph defaults for instance 4 (TSS_Type::TextInShape)
@@ -4131,7 +4131,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                                 rParaLevel.mnAsianLineBreak |= 4;
                         }
                     }
-                    mpCharSheet[ TSS_Type::TextInShape ]->Read( rIn, true, nLev, bFirst );
+                    mpCharSheet[ TSS_Type::TextInShape ]->Read( rIn, nLev );
                     mpParaSheet[ TSS_Type::TextInShape ]->UpdateBulletRelSize(  nLev, mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev ].mnFontHeight );
                     bFirst = false;
                     nLev++;
@@ -4229,8 +4229,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     sal_uInt16 nDontKnow;
                     rIn.ReadUInt16( nDontKnow );
                 }
-                mpParaSheet[ nInstance ]->Read( rManager, rIn, true, nLev, bFirst );
-                mpCharSheet[ nInstance ]->Read( rIn, true, nLev, bFirst );
+                mpParaSheet[ nInstance ]->Read( rManager, rIn, nLev, bFirst );
+                mpCharSheet[ nInstance ]->Read( rIn, nLev );
                 mpParaSheet[ nInstance ]->UpdateBulletRelSize(  nLev, mpCharSheet[ nInstance ]->maCharLevel[ nLev ].mnFontHeight );
                 bFirst = false;
                 nLev++;
@@ -4312,7 +4312,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                             mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ nLev - 1 ];
                             mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev - 1 ];
                         }
-                        mpParaSheet[ TSS_Type::TextInShape ]->Read( rManager, rIn, true, nLev, bFirst );
+                        mpParaSheet[ TSS_Type::TextInShape ]->Read( rManager, rIn, nLev, bFirst );
                         if ( !nLev )
                         {
                             // set paragraph defaults for instance 4 (TSS_Type::TextInShape)
@@ -4328,7 +4328,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                                     rParaLevel.mnAsianLineBreak |= 4;
                             }
                         }
-                        mpCharSheet[ TSS_Type::TextInShape ]->Read( rIn, true, nLev, bFirst );
+                        mpCharSheet[ TSS_Type::TextInShape ]->Read( rIn, nLev );
                         mpParaSheet[ TSS_Type::TextInShape ]->UpdateBulletRelSize(  nLev, mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev ].mnFontHeight );
                         bFirst = false;
                         nLev++;
@@ -4620,7 +4620,7 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecord
     }
 }
 
-bool PPTTextRulerInterpreter::GetDefaultTab( sal_uInt32 /*nLevel*/, sal_uInt16& nValue ) const
+bool PPTTextRulerInterpreter::GetDefaultTab( sal_uInt16& nValue ) const
 {
     if ( ! ( mxImplRuler->nFlags & 1 ) )
         return false;
@@ -5069,7 +5069,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
         if ( ( !( aSet.mnAttrSet & 1 << PPT_ParaAttr_BulletOfs ) ) && rRuler.GetBulletOfs( aParaPropSet.mxParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_BulletOfs ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_BulletOfs;
-        if ( rRuler.GetDefaultTab( aParaPropSet.mxParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_DefaultTab ] ) )
+        if ( rRuler.GetDefaultTab( aSet.mpArry[ PPT_ParaAttr_DefaultTab ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_DefaultTab;
 
         if ( ( nCharCount > nStringLen ) || ( nStringLen < nCharAnzRead + nCharCount ) )
@@ -6174,7 +6174,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
     return bIsHardAttribute;
 }
 
-void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport& rManager, TSS_Type nDestinationInstance, const PPTParagraphObj* /*pPrev*/)
+void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport& rManager, TSS_Type nDestinationInstance )
 {
     sal_Int16   nVal2;
     sal_uInt32  nVal, nUpperDist, nLowerDist;

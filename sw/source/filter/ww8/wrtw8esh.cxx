@@ -1627,9 +1627,7 @@ void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
         {
             aSize = OutputDevice::LogicToLogic( aSize,rGrf.GetPrefMapMode(), aMap100mm );
         }
-        Point aEmptyPoint;
-        tools::Rectangle aRect( aEmptyPoint, aSize );
-        sal_uInt32 nBlibId = mxGlobal->GetBlibID( *(mxGlobal->QueryPictureStream()), aUniqueId,aRect );
+        sal_uInt32 nBlibId = mxGlobal->GetBlibID( *(mxGlobal->QueryPictureStream()), aUniqueId );
         if (nBlibId)
             aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
     }
@@ -1715,11 +1713,8 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
                     aGraphic.GetPrefMapMode(), aMap100mm );
             }
 
-            Point aEmptyPoint;
-            tools::Rectangle aRect( aEmptyPoint, aSize );
-
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
-                aUniqueId, aRect );
+                aUniqueId );
             if (nBlibId)
                 aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
         }
@@ -1941,11 +1936,8 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
                     rGraphic.GetPrefMapMode(), aMap100mm);
             }
 
-            Point aEmptyPoint;
-            tools::Rectangle aRect(aEmptyPoint, aSize);
-
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
-                aUniqueId, aRect);
+                aUniqueId);
             if (nBlibId)
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,true);
         }
@@ -3016,7 +3008,7 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
         aRect.Right() = DrawModelToEmu(aRect.Right());
         aRect.Bottom() = DrawModelToEmu(aRect.Bottom());
         sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
-            aId, aRect, pVisArea);    // SJ: the fourth parameter (VisArea) should be set..
+            aId, pVisArea);    // SJ: the fourth parameter (VisArea) should be set..
         if (nBlibId)
             rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
     }

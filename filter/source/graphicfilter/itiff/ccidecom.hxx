@@ -74,7 +74,7 @@ private:
                     sal_uInt16 nHuffmanTableSize,
                     sal_uInt16 nMaxCodeBits);
 
-    bool ReadEOL( sal_uInt32 nMaxFillBits );
+    bool ReadEOL();
 
     bool Read2DTag();
 
