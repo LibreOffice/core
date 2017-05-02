@@ -78,6 +78,35 @@ void DateTest::testDate()
     aDate.Normalize();
     CPPUNIT_ASSERT_EQUAL( Date(4,3,1999).GetDate(), aDate.GetDate());
 
+    // Empty date is not normalized and stays empty date.
+    aDate = Date( Date::EMPTY );
+    aDate.Normalize();
+    CPPUNIT_ASSERT_EQUAL( Date(Date::EMPTY).GetDate(), aDate.GetDate());
+    CPPUNIT_ASSERT( !aDate.IsValidDate());  // GetDate() also shall have no normalizing side effect
+
+    // 0000-01-00 normalized to -0001-12-31
+    // SetYear(0) asserts, use empty date to force.
+    aDate = Date( Date::EMPTY );
+    aDate.SetMonth(1);
+    aDate.SetDay(0);
+    aDate.Normalize();
+    CPPUNIT_ASSERT_EQUAL( Date(31,12,-1).GetDate(), aDate.GetDate());
+
+    // 1999-00-00 normalized to 1998-12-31 (not 1998-11-30, or otherwise
+    // also 0001-00-00 should be -0001-11-30 which it should not, should it?)
+    aDate.SetYear(1999);
+    aDate.SetMonth(0);
+    aDate.SetDay(0);
+    aDate.Normalize();
+    CPPUNIT_ASSERT_EQUAL( Date(31,12,1998).GetDate(), aDate.GetDate());
+
+    // 0001-00-00 normalized to -0001-12-31
+    aDate.SetYear(1);
+    aDate.SetMonth(0);
+    aDate.SetDay(0);
+    aDate.Normalize();
+    CPPUNIT_ASSERT_EQUAL( Date(31,12,-1).GetDate(), aDate.GetDate());
+
     // Year -1 is a leap year.
     aDate = Date(28,2,-1);
     CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), (aDate += 1).GetDate());
